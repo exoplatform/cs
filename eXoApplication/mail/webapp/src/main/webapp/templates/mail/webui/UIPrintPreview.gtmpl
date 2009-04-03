@@ -29,7 +29,7 @@
     <div class="PrintHeader" >
       <div class="PrintLogoMail"><span></span></div>
       <div class="PrintUser"><%=acc.getUserDisplayName()%> &lt; <%=acc.getEmailAddress()%> &gt;</div>
-      <div style="clear: left;"><span></span></div>
+      <div style="clear:left;"><span></span></div>
     </div>
     <div class="PrintSubject"  ><%=msg.getSubject()%> </div>
     <div class="PrintAddress"  >
@@ -38,7 +38,7 @@
           InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
           InternetAddress from = fromAddress[0];
         %>
-        <div class="PrintFrom"><%=_ctx.appRes(uicomponent.id+ ".label.from") %>: <span style="font-weight:bold;"><%=Utils.getPersonal(from)%></span> <% print((from != null) ? ("&lt; " + from.getAddress() + " &gt;") : "")%></div>
+        <div class="PrintFrom"><%=_ctx.appRes(uicomponent.id+ ".label.from") %>:<span style="font-weight:bold;"><%=Utils.getPersonal(from)%></span> <% print((from != null) ? ("&lt; " + from.getAddress() + " &gt;") :"")%></div>
         <div class="PrintTo"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:
         <%
           if (!MailUtils.isFieldEmpty(msg.getMessageTo())) { 
@@ -55,7 +55,7 @@
         </div>
       </div>
       <div class="DateAndTime"><%=MailUtils.formatDate('EEEE, MMMM dd, yyyy HH:mm aaa', msg.getReceivedDate(), locale)%></div>
-      <div style="clear: both;"><span></span></div>
+      <div style="clear:both;"><span></span></div>
     </div>
     <div class="PrintContent"><textarea>
         <%
@@ -95,7 +95,7 @@
             <%
               if (isImage) {
             %> 
-                <img class="AttachmentFile" style="height:auto ;width: 200px;padding-right: 5px" src="$attLink">
+                <img class="AttachmentFile" style="height:auto ;width:200px;padding-right:5px" src="$attLink">
             <%
               } else if (isSupportedIcon) {
             %>
@@ -108,7 +108,7 @@
             <div class="NameImage"><%=attach.getName()%></div>
             <div class="Size"><%=_ctx.appRes(uicomponent.id+ ".label.size") %>: <%=MailUtils.convertSize(attach.getSize())%></div>
             </div>
-            <div style="clear: left;"><span></span></div>
+            <div style="clear:left;"><span></span></div>
           </div>
         <% } %>
       </div>

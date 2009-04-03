@@ -10,7 +10,7 @@
     <div class="WelcomeMail">
       <div class="LabelWelcomeMail"><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.welcome")%></div>
       <div class="LabelComment"><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.comment")%></div>
-      <div style="clear: both;"><span></span></div>
+      <div style="clear:both;"><span></span></div>
     </div>
     <div class="LogoMail">
       <span></span>
@@ -18,7 +18,7 @@
     <div class="OverviewMail">
       <%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.overview")%>
     </div>
-    <div class="ContentMail" style="margin-left: 25px;">
+    <div class="ContentMail" style="margin-left:25px;">
     <%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.label0")%>
     </div>
     <div class="FeaturesMail">

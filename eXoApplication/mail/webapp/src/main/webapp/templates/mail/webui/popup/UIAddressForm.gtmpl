@@ -22,11 +22,11 @@
                   </div>  
                 </div>
                 <div class="AddressesGroup">
-                  <div class="AddressLabel"><%=_ctx.appRes(uicomponent.id+ ".label.addresses-from-group") %> :</div>
+                  <div class="AddressLabel"><%=_ctx.appRes(uicomponent.id+ ".label.addresses-from-group") %> : </div>
                     <% uiform.renderField(uiform.CONTACT_GROUP) %>                   
-                  <div style="clear: left"><span></span></div>
+                  <div style="clear:left"><span></span></div>
                 </div>
-                <div style="clear: left"><span></span></div>
+                <div style="clear:left"><span></span></div>
               </div>
             </div>
           </div>
@@ -40,13 +40,13 @@
         <table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
             <thead>
               <tr>
-                <th style="width: 20px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4" /></th>
+                <th style="width:20px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4" /></th>
                 <th class="BorderAddress">
                   <div class="BlueDownArrowIcon">
                     <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.name") %></div>
                   </div>
                 </th>
-                <th style="width: 48%;" >
+                <th style="width:48%;" >
                   <div class="BlueDownArrowIcon">
                     <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.email") %></div>
                   </div>
@@ -65,7 +65,7 @@
                     %>
                   </td>
                   <td class="text BorderAddress"><%=contact.getFullName()%></td>
-                  <td class="text"><%=(contact.getEmailAddress() != null ? contact.getEmailAddress() : "")%></td>
+                  <td class="text"><%=(contact.getEmailAddress() != null ? contact.getEmailAddress() :"")%></td>
                 </tr>
               <%}%>
         </tbody>
@@ -97,7 +97,6 @@
             </div>
           </a>
           <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
-
             <div class="ButtonLeft">
               <div class="ButtonRight">
                 <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.id+ ".label.cancel") %> </div>

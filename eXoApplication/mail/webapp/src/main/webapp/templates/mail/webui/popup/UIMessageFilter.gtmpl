@@ -28,7 +28,7 @@
         <a href="<%=uicomponent.event("AddFilter")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.add-filter") %>">
           <div class="ControlBarIcon FilterAdd"><span></span></div>
         </a>
-        <div style="clear: both;"><span></span></div>
+        <div style="clear:both;"><span></span></div>
       </div>
       <div class="FilterSettingList">
         <%
@@ -121,7 +121,7 @@
         	</div>
         <%}%>
       </div>
-    <div style="clear: left;"><span></span></div>
+    <div style="clear:left;"><span></span></div>
   </div>  
   
   <div class="UIAction">

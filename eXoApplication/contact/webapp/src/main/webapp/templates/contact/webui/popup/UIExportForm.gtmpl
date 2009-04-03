@@ -111,7 +111,7 @@
 		  	  <a href="<%=uicomponent.event("Save", "all")%>" class="ActionButton LightBlueStyle">
 		        <div class="ButtonLeft">
 		          <div class="ButtonRight">
-		            <div class="ButtonMiddle">  <%=_ctx.appRes(uicomponent.getName() + ".label.exportAll")%>  </div>
+		            <div class="ButtonMiddle"><%=_ctx.appRes(uicomponent.getName() + ".label.exportAll")%>  </div>
 		          </div>
 		        </div>
 		      </a>

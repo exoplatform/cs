@@ -14,11 +14,10 @@
   <div class="Title FolderIcon"><%=_ctx.appRes(uicomponent.id+ ".label.folders") %></div>
   <div class="ActionIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
       <% /*Begin Popup Menu*/ %>
-      <div style="position: relative;">
-        <div class="UIPopupCategory" style="display: none;">
+      <div style="position:relative;">
+        <div class="UIPopupCategory" style="display:none;">
           <div class="PopupCategoryDecorator">
-        
-            <div class="UIRightClickPopupMenu" style="display: block;">
+            <div class="UIRightClickPopupMenu" style="display:block;">
             	<div class="UIContextMenuContainer">
 	              <div class="TopLeftRightClickPopupMenu">
 			            <div class="TopRightRightClickPopupMenu">
@@ -27,22 +26,20 @@
 			          </div>
 			          <div class="MiddleLeftRightClickPopupMenu">
 			            <div class="MiddleRightRightClickPopupMenu">
-		          
 		                <div class="UIRightPopupMenuContainer">
 		                  <%
 		                     for(action in uicomponent.getActions()) {
 		                     String nameItem = _ctx.appRes(uicomponent.getName() + ".action." + action);
 		                     String classIconItem = action + "Icon";
 		                  %>
-		                     <a class="MenuItem" href="<%=uicomponent.event(action)%>" >   
+		                     <div class="MenuItem" onclick="<%=uicomponent.event(action)%>">
 		                      <div class="ItemIcon $classIconItem" >
-		                        $nameItem
+		                        <a href="#">$nameItem</a>
 		                      </div>
-		                     </a>
+		                     </div>
 		                  <%}%>
 		                  <div class="RightClickCustomItem"></div>
 		                </div>
-		          
 		              </div>
 		            </div>
 		            <div class="BottomLeftRightClickPopupMenu">
@@ -58,10 +55,10 @@
 	    </div>
   <% /*End Popup Menu*/ %>
   </div>
-  <div style="clear: both"><span></span></div>
+  <div style="clear:both"><span></span></div>
 </div>
 <div class="MailFolderList">
-  <%for(Folder f : uicomponent.getDefaultFolders()) {
+  <%for(Folder f :uicomponent.getDefaultFolders()) {
     String id = f.getId() ;
     String name = f.getName();
     String status = "" ;
@@ -75,7 +72,7 @@
       cssClass = "SelectedLabel" ;
     }
   %>
-  <a href="$actionLink"  class="Icon Folder $icon $cssClass" folder="$id"><%=_ctx.appRes(uicomponent.getName() + ".label." + name)%>
+  <a href="$actionLink" class="Icon Folder $icon $cssClass" folder="$id"><%=_ctx.appRes(uicomponent.getName() + ".label." + name)%>
     <% 
        print "<span id=\"" + id + "\" class=\"MailQuantity\">" ;
        if(msgQuantity > 0) print "($msgQuantity)";
@@ -93,7 +90,6 @@
 	      <div class="TopCenterRightClickPopupMenu"><span></span></div>
 	    </div>
 	  </div>
-	  
 	  <div class="MiddleLeftRightClickPopupMenu">
 	    <div class="MiddleRightRightClickPopupMenu">
 	      <div class="UIRightPopupMenuContainer">
@@ -204,7 +200,7 @@
 <div class="TitleBar">
   <div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
   <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.my-folders") %></div>
-  <div style="clear: left"><span></span></div>
+  <div style="clear:left"><span></span></div>
 </div>
 <div class="MyFolderContent">
 <% 

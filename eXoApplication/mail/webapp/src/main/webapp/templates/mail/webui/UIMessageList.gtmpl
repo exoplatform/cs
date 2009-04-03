@@ -51,9 +51,9 @@
       <div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.more-actions") %></div>
     </div>
     <% /*Begin Popup Menu*/ %>
-      <div style="position: relative;">
-        <div class="UIPopupCategory" style="display: none;">
-          <div class="UIRightClickPopupMenu" style="display: block;">
+      <div style="position:relative;">
+        <div class="UIPopupCategory" style="display:none;">
+          <div class="UIRightClickPopupMenu" style="display:block;">
           	<div class="UIContextMenuContainer">
 	            <div class="TopLeftRightClickPopupMenu">
 	              <div class="TopRightRightClickPopupMenu">
@@ -107,9 +107,9 @@
       <div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.view") %></div>
     </div>
     <% /*Begin Popup Menu*/ %>
-      <div style="position: relative;">
-        <div class="UIPopupCategory" style="display: none;">
-          <div class="UIRightClickPopupMenu" style="display: block;">
+      <div style="position:relative;">
+        <div class="UIPopupCategory" style="display:none;">
+          <div class="UIRightClickPopupMenu" style="display:block;">
           	<div class="UIContextMenuContainer">
 	            <div class="TopLeftRightClickPopupMenu">
 	              <div class="TopRightRightClickPopupMenu">
@@ -125,8 +125,8 @@
                       </div>
 	                  </a>
                     <!--Submenu-->
-                    <div class="UIPopupCategory" style="display: none ;">
-                       <div class="UIRightClickPopupMenu" style="display: block;">
+                    <div class="UIPopupCategory" style="display:none ;">
+                       <div class="UIRightClickPopupMenu" style="display:block;">
                         <div class="UIContextMenuContainer">
                           <div class="TopLeftRightClickPopupMenu">
                             <div class="TopRightRightClickPopupMenu">
@@ -253,7 +253,7 @@
           <div class="Number">$currentPage / <%=pageList.getAvailablePage()%></div>
           <a title="<%=_ctx.appRes(uicomponent.id+ '.label.next-page') %>" class="$cssNextPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
           <a title="<%=_ctx.appRes(uicomponent.id+ '.label.last-page') %>" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span></span></a>
-          <div style="clear: left;"><span></span></div>
+          <div style="clear:left;"><span></span></div>
         </div>
         <div class="LeftPageIteratorBlock">
           <%
@@ -266,13 +266,13 @@
           	<span class="MailQuantity"> $mailRange </span>
           </div>
         </div>
-        <div style="clear: right;"><span></span></div>
+        <div style="clear:right;"><span></span></div>
       </div>
     </div>
   <%
     }
   %>
-  <div style="clear: left;"><span></span></div>
+  <div style="clear:left;"><span></span></div>
   </div>
   
   <% /*End Message Action Bar*/ %>
@@ -348,16 +348,16 @@
   <div id="uiMessageGrid" class="UIMessageList SpliterResizableListArea" >
     <% /* <div class="AdvancedTooltipTmpl" id="mailAdvancedTooltipTmpl">
       <div class="Item">
-        <div class="Key">Email: </div>
+        <div class="Key">Email:</div>
         <div class="Value">email</div>
       </div>
     </div>*/ %>
-  	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid" style="table-layout: fixed;">
+  	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid" style="table-layout:fixed;">
     	<thead>
     		<tr>
-    			<th style="width: 20px; padding-left: 7px; " class="Border"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.id+ '.label.check-all') %>" value="4"/></th>
-    			<th style="width: 24px;"><div class="StarredIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div></th>
-    		  <th style="padding-left: 8px; width: 20%;">
+    			<th style="width:20px; padding-left:7px; " class="Border"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.id+ '.label.check-all') %>" value="4"/></th>
+    			<th style="width:24px;"><div class="StarredIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div></th>
+    		  <th style="padding-left:8px; width:20%;">
     		    <%
     		      String sortedBySender = uicomponent.event("Sort",Utils.EXO_FROM);
               String classArrowFrom = "";
@@ -374,12 +374,12 @@
                 else classArrowFrom = "DownArrow1Icon" ;
               }
     		    %>
-    		  	<a href = "$sortedBySender" ><div class="$classArrowFrom" style="width: 90%; cursor: pointer; margin-top: 3px;" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-sender') %>">$head</div></a>
+    		  	<a href = "$sortedBySender" ><div class="$classArrowFrom" style="width:90%; cursor:pointer; margin-top:3px;" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-sender') %>">$head</div></a>
     		  </th>
-    		  <th style="width: 24px;">
+    		  <th style="width:24px;">
     		    <a hreft = ""><div class="AttachmentIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.attachment') %>"><span></span></div></a>
     		  </th>
-   	      <th style="padding-left: 24px;width:40%;">
+   	      <th style="padding-left:24px;width:40%;">
        	   <%
              String sortedBySubject = uicomponent.event("Sort",Utils.EXO_SUBJECT);
            	   String classArrowSubject = "";
@@ -388,10 +388,10 @@
                  else classArrowSubject = "DownArrow1Icon"
                }
            %>
-    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-subject') %>" style="width: 95%; cursor: pointer; margin-top: 3px;"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %></div></a>
+    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-subject') %>" style="width:95%; cursor:pointer; margin-top:3px;"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %></div></a>
     		  </th>
-   	      <th style="width: 24px;"><div class="TotalMessageIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.total-messages-in-conversation') %>"><span></span></div></th>
-   	      <th style="width: 80px; padding-left: 8px; border-right: none;" >
+   	      <th style="width:24px;"><div class="TotalMessageIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.total-messages-in-conversation') %>"><span></span></div></th>
+   	      <th style="width:80px; padding-left:8px; border-right:none;" >
          	  <%
          	     String sortedByReceivedDate = uicomponent.event("Sort",Utils.EXO_RECEIVEDDATE);
              	  String classArrowDate = "";
@@ -402,7 +402,7 @@
             %>
     		      <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-date-time') %>" ><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %></div></a>
    	      </th>
-   	      <th style="width: 50px; padding-left: 8px; border-left: 1px solid #d2d4dc;">
+   	      <th style="width:50px; padding-left:8px; border-left:1px solid #d2d4dc;">
        	    <%
                String sortedBySize = uicomponent.event("Sort",Utils.EXO_SIZE);
        	       String classArrowSize = "";
@@ -411,9 +411,9 @@
        	         else classArrowSize = "DownArrow1Icon"
        	       }
             %>
-   	        <a href = "$sortedBySize"><div class="$classArrowSize" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-size') %>" style=" margin-top: 3px;"><%=_ctx.appRes(uicomponent.id+ ".label.size") %></div></a>
+   	        <a href = "$sortedBySize"><div class="$classArrowSize" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-size') %>" style=" margin-top:3px;"><%=_ctx.appRes(uicomponent.id+ ".label.size") %></div></a>
    	      </th>
-   	      <th style="width: 30px;">
+   	      <th style="width:30px;">
        	    <%
                String sortedByPriority = uicomponent.event("Sort",Utils.EXO_PRIORITY);
             %>
@@ -444,7 +444,7 @@
                   if (checkboxField != null) uicomponent.renderField(checkboxField);
                 %>
               </td>
-              <td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
+              <td style="padding:0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
               <td class="$readStatus">
                 <%
                   String sender = "";
@@ -463,7 +463,7 @@
                 %>
                 <a href="$actionLink"> $sender </a>
               </td>
-              <td style="padding: 0px auto;">
+              <td style="padding:0px auto;">
                 <% 
                   if (msg.hasAttachment()) {
                 %>
@@ -471,10 +471,10 @@
                 <%}%>
               </td>
 
-              <td class="$readStatus"><div style="_width: 600%;">
+              <td class="$readStatus"><div style="_width:600%;">
               <% 
                 if (uicomponent.getMessageFilter().getName().equals("Search")) {
-                  print(" <div style=\"border-right:0px; float: left\">") ;
+                  print(" <div style=\"border-right:0px; float:left\">") ;
                   for (Folder folder : uicomponent.getFolders(msg))
                     if (folder != null) print(" [" + folder.getLabel() + "]&nbsp; ")
                   print("</div> ") ;
@@ -501,7 +501,7 @@
                   if (!msg.isRootConversation() && uicomponent.viewMode == uicomponent.MODE_THREAD) {
                     String marginLevel = (l-2)*10 + "px" ;
                 %>
-                  <div class="LevelThreadIcon2" style="margin-left: $marginLevel; padding-left: 25px; width: auto;">
+                  <div class="LevelThreadIcon2" style="margin-left:$marginLevel; padding-left:25px; width:auto;">
                 <% 
                   } else {
                 %>
@@ -509,9 +509,9 @@
                 <%
                   }
                 %>
-                  <%=((msg.getSubject() != null && msg.getSubject().trim().length() > 0) ? MailUtils.encodeHTML(msg.getSubject()) : _ctx.appRes(uicomponent.id+ ".label.no-subject"))%></div>
+                  <%=((msg.getSubject() != null && msg.getSubject().trim().length() > 0) ? MailUtils.encodeHTML(msg.getSubject()) :_ctx.appRes(uicomponent.id+ ".label.no-subject"))%></div>
                 </a>
-                <div style="clear: left;"><span></span></div>
+                <div style="clear:left;"><span></span></div>
                 </div>
               </td>                     
               <td class="text">
@@ -524,7 +524,7 @@
                 %>
                   ( <% 
                       int nom = 1 ;
-                      for (String id : msg.getGroupedMessageIds()) if (uicomponent.messageList_.containsKey(id)) nom++ ;
+                      for (String id :msg.getGroupedMessageIds()) if (uicomponent.messageList_.containsKey(id)) nom++ ;
                       print(nom);
                     %> )
                 <%
@@ -551,7 +551,7 @@
                 else if (msg.getPriority().equals(Utils.PRIORITY_NORMAL)) priClass = "NormalPriority";
                 else if (msg.getPriority().equals(Utils.PRIORITY_HIGH)) priClass = "HighPriority";
               %>
-              <td style="padding: 0px;" >
+              <td style="padding:0px;" >
                 <div class="text $priClass" title ><span></span></div>
               </td>
             </tr>

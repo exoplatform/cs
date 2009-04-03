@@ -381,6 +381,8 @@
 .UIMailPortlet .MailWorkingWorkspace .ControlButton {
 	float: left;
 	line-height: 26px;
+	margin: 4px 1px 0px 1px;
+	display: block;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .SelectButton {
@@ -398,8 +400,18 @@
 
 .UIMailPortlet .MailWorkingWorkspace  .UIActionBar a:hover {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
-	color: #058ee6; border: 1px solid #cbcbcb;
+	color: #058ee6; 
+	border: 1px solid #cbcbcb;
 	margin: 3px 0px 0px 0px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace  .UIActionBar .ControlButton:hover {
+	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
+	color: #058ee6; 
+	border: 1px solid #cbcbcb;
+	margin: 3px 0px 0px 0px;
+	cursor: pointer;
+	display: block;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .SeparatorLine {
@@ -602,7 +614,6 @@
 	border-left: none;
 	border-right: 1px solid #e8e8e8;
 	padding: 0px 0px 0px 6px;
-	white-space
 }
 
 .UIMailPortlet .UIMessageList .UIGrid td a {

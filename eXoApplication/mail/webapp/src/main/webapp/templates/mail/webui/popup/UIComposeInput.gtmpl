@@ -45,7 +45,7 @@
 	<table class="UIFormGrid">
 	  <tr>
 	    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.from") %> :&nbsp;&nbsp;</td>
-	    <td class="FieldComponent" style="width: 62%;"><%uiForm.renderField("from")%></td>
+	    <td class="FieldComponent" style="width:62%;"><%uiForm.renderField("from")%></td>
 	    <td class="FieldCCAndBCC">
 	      <a  href="<%=uiForm.event("ShowCc")%>">|<%=_ctx.appRes(uiForm.id+ ".label.add-cc") %>|</a> 
 	      <a  href="<%=uiForm.event("ShowBcc")%>"><%=_ctx.appRes(uiForm.id+ ".label.add-bcc") %>|</a>

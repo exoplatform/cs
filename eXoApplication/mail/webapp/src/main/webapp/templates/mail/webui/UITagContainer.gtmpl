@@ -9,11 +9,10 @@
 		<div class="TagTitle BlueTag"><%=_ctx.appRes(uicomponent.id+ ".label.tags") %></div>
 		<div class="ActionIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
       <% /*Begin Popup Menu*/ %>
-      <div style="position: relative;">
-        <div class="UIPopupCategory" style="display: none;">
+      <div style="position:relative;">
+        <div class="UIPopupCategory" style="display:none;">
           <div class="PopupCategoryDecorator">
-        
-            <div class="UIRightClickPopupMenu" style="display: block;">
+            <div class="UIRightClickPopupMenu" style="display:block;">
               <div class="UIContextMenuContainer">
                 <div class="TopLeftRightClickPopupMenu">
                   <div class="TopRightRightClickPopupMenu">
@@ -22,7 +21,6 @@
                 </div>
                 <div class="MiddleLeftRightClickPopupMenu">
                   <div class="MiddleRightRightClickPopupMenu">
-              
                     <div class="UIRightPopupMenuContainer">
                       <%
                          for(action in uicomponent.getActions()) {
@@ -37,7 +35,6 @@
                       <%}%>
                       <div class="RightClickCustomItem"></div>
                     </div>
-              
                   </div>
                 </div>
                 <div class="BottomLeftRightClickPopupMenu">
@@ -48,14 +45,12 @@
               </div>
             </div>
           </div>
-        
         </div>
       </div>
       <% /*End Popup Menu*/ %>
     </div>
-  <div style="clear: both"><span></span></div>
+  <div style="clear:both"><span></span></div>
 	</div>	
-	
 	<% /*Popup menu*/ %>
 	<div class="UIRightClickPopupMenu" id="UITagListPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.tagListPopupMenuCallback">
 		<div class="UIContextMenuContainer">
@@ -64,19 +59,18 @@
 	  	    <div class="TopCenterRightClickPopupMenu"><span></span></div>
 	  	  </div>
 	  	</div>
-	  
 	  	<div class="MiddleLeftRightClickPopupMenu">
 	  	  <div class="MiddleRightRightClickPopupMenu">
 	  	    <div class="UIRightPopupMenuContainer">
-	  	      <a class="MenuItem" href="<%=uicomponent.event("EditTag", "id")%>">   
-	  	        <div class="ItemIcon RenameFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.edit") %> </div>
-	  	      </a>
-	  	      <a class="MenuItem" href="<%=uicomponent.event("RemoveTag", uicomponent.id,"id")%>">   
-	  	        <div class="ItemIcon RemoveFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.remove") %> </div>
-	  	      </a>
-	  	      <a class="MenuItem" href="<%=uicomponent.event("EmptyTag", "id")%>">   
-	  	        <div class="ItemIcon EmptyIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.empty") %> </div>
-	  	      </a>
+	  	      <div class="MenuItem">   
+	  	        <div class="ItemIcon RenameFolderIcon"><a href="<%=uicomponent.event("EditTag", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.edit") %></a></div>
+	  	      </div>
+	  	      <div class="MenuItem">   
+	  	        <div class="ItemIcon RemoveFolderIcon"><a href="<%=uicomponent.event("RemoveTag", uicomponent.id,"id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.remove") %></a></div>
+	  	      </div>
+	  	      <div class="MenuItem">   
+	  	        <div class="ItemIcon EmptyIcon"><a href="<%=uicomponent.event("EmptyTag", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.empty") %></a></div>
+	  	      </div>
             <div class="MailTableColor" >
             <%
               int i = 0 ;
@@ -91,7 +85,7 @@
                 while(j <= items && count < size){
                  color = uicomponent.getColors()[count] ;
                  actionLink = uicomponent.event('ChangeColor','id&color=' + color);  
-                 print("<a href=\"" + actionLink + "\" class=\"$color ColorCell\"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>") ;
+                 print("<a href=\"" + actionLink + "\" class=\"$color ColorCell\"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" alt='' /></a>") ;
                  count++
                  j++;
                 }

@@ -55,7 +55,7 @@
         String styleCollapse = "block";
         if (msgIndex == uicomponent.getShowedMessages().size() -1) styleCollapse = "none";
     %>
-      <div id="CollapseMessage" class="CollapseMessage" style="display: $styleCollapse ;" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this)">
+      <div id="CollapseMessage" class="CollapseMessage" style="display:$styleCollapse ;" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this)">
         <div class="ViewBoxStyle">
           <div class="TopLeftViewBoxStyle">
             <div class="TopRightViewBoxStyle">
@@ -66,25 +66,25 @@
             <div class="MiddleRightViewBoxStyle">
               <div class="MiddleCenterViewBoxStyle">
               
-                <table style="width: 100%;">
+                <table style="width:100%;">
                   <body>
                     <tr>
                       <td>
                         <div  class="$starClass" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div>
                       </td>
-                      <td style="width: auto; white-space: nowrap;">
+                      <td style="width:auto; white-space:nowrap;">
                         <div class="SenderAddress">
                         <%
                           if (!MailUtils.isFieldEmpty(msg.getFrom())) {
                             InternetAddress[] fromAddress2 = Utils.getInternetAddress(msg.getFrom());
                             InternetAddress from2 = fromAddress2[0];
                         %>
-                            <%=Utils.getPersonal(from2)%> <% println((from2 != null) ? ("&lt; " + from2.getAddress() + " &gt;") : "")%> 
+                            <%=Utils.getPersonal(from2)%> <% println((from2 != null) ? ("&lt; " + from2.getAddress() + " &gt;") :"")%> 
                         <%} %>    
                         </div>
                       </td>
-                      <td style="width: 100%; white-space: nowrap; oveflow: hidden;">
-                        <table style="white-space: nowrap; width: 100%; table-layout: fixed;">
+                      <td style="width:100%; white-space:nowrap; oveflow:hidden;">
+                        <table style="white-space:nowrap; width:100%; table-layout:fixed;">
                           <tr>
                             <td>
                               <div class="HeadlineText" title="<%=_ctx.appRes(uicomponent.id+ '.label.click-here-to-expand') %>">
@@ -102,7 +102,7 @@
                         <div class="AttachmentIcon"><span></span></div>
                         <% } %>
                       </td>
-                      <td style="width: auto; white-space: nowrap;">
+                      <td style="width:auto; white-space:nowrap;">
                         <div class="MonthDate">
                         <%=MailUtils.formatDate(msg.getReceivedDate(), locale)%>
                         </div>
@@ -141,7 +141,7 @@
   							<div class="MessageHeader">
   								<div class="MessageCheck">
   									<div><a href="<%=uicomponent.event("AddStar", msg.getId())%>"><div  class="$starClass" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div></a></div>
-  									<div style="clear: left;"><span></span></div>
+  									<div style="clear:left;"><span></span></div>
   								</div>
   								<div id="CollapseMessageAddressPreview" class="CollapseMessageAddress" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this);">
   										<span class="LinkAddress">
@@ -150,7 +150,7 @@
   										      InternetAddress[] fromAddress1 = Utils.getInternetAddress(msg.getFrom());
   										      InternetAddress from1 = fromAddress1[0];
   										  %>
-  										      <span><%=Utils.getPersonal(from1)%> <% print((from1 != null) ? ("&lt; " + from1.getAddress() + " &gt;") : "") %> </span>
+  										      <span><%=Utils.getPersonal(from1)%> <% print((from1 != null) ? ("&lt; " + from1.getAddress() + " &gt;") :"") %> </span>
                         <%} %>    
   										</span>
                       <span class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:</span>
@@ -159,7 +159,7 @@
                           try {
                             if (!MailUtils.isFieldEmpty(msg.getMessageTo())) {
                               InternetAddress[] toAddress1 = InternetAddress.parse(msg.getMessageTo());
-                              int lenToAddress = (toAddress1.length < 3) ? toAddress1.length : 3;
+                              int lenToAddress = (toAddress1.length < 3) ? toAddress1.length :3;
                               for (i in 0..(lenToAddress - 1)) {
                                 InternetAddress address1 = toAddress1[i];
                                 if (i > 0) print ",";
@@ -178,7 +178,7 @@
   								</div>
                   
                   <!-- Begin Expand Message Header -->
-                  <div id="MessageAddressPreview" class="MessageAddress" style="display : none;">
+                  <div id="MessageAddressPreview" class="MessageAddress" style="display :none;">
                   <div class="FieldContainer">
                     <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.from") %>:</div>
                     <div class="LinkAddress">
@@ -186,9 +186,9 @@
                         InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
                         InternetAddress from = fromAddress[0];
                       %>
-                      <span><%=Utils.getPersonal(from)%> </span> <% print((from != null) ? ("&lt; " + from.getAddress() + " &gt;") : "")%> 
+                      <span><%=Utils.getPersonal(from)%> </span> <% print((from != null) ? ("&lt; " + from.getAddress() + " &gt;") :"")%> 
                     </div>  
-                    <div style="clear: left;"><span></span></div>
+                    <div style="clear:left;"><span></span></div>
                   </div>
                   <div class="FieldContainer">
                     <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to") %>:</div>
@@ -198,10 +198,10 @@
                         InternetAddress[] replyAddress = Utils.getInternetAddress(msg.getReplyTo());
                         InternetAddress reply = replyAddress[0];
                       %>
-                      <span><%=Utils.getPersonal(reply)%> </span> <%print((reply != null) ? ("&lt; " + reply.getAddress() + " &gt;") : "") %> 
+                      <span><%=Utils.getPersonal(reply)%> </span> <%print((reply != null) ? ("&lt; " + reply.getAddress() + " &gt;") :"") %> 
                       <%} %>
                     </div>
-                    <div style="clear: left;"><span></span></div>
+                    <div style="clear:left;"><span></span></div>
                   </div>
                   <%
                   if (uicomponent.isShowBcc(msg)) {  
@@ -216,7 +216,7 @@
                             InternetAddress address = toAddress[i];
                             if (i > 0 && i < (toAddress.length)) print ", <br>";
                       %>
-                            <span><%=Utils.getPersonal(address)%> </span> <% print((address !=null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
+                            <span><%=Utils.getPersonal(address)%> </span> <% print((address !=null) ? ("&lt; " + address.getAddress() + " &gt;") :"")%> 
                       <%
                           } 
                         } catch (Exception e) { 
@@ -225,7 +225,7 @@
                         <%=msg.getMessageBcc()%>
                       <% } }%>
                       </div>  
-                      <div style="clear: left;"><span></span></div>
+                      <div style="clear:left;"><span></span></div>
                     </div>
                 <%} %>
                   
@@ -240,7 +240,7 @@
                             InternetAddress address = toAddress[i];
                               if (i > 0 && i < (toAddress.length)) print ", <br>";
                       %>
-                              <span><%=Utils.getPersonal(address)%> </span> <% print((address != null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
+                              <span><%=Utils.getPersonal(address)%> </span> <% print((address != null) ? ("&lt; " + address.getAddress() + " &gt;") :"")%> 
                       <%
                           } 
                           }
@@ -250,7 +250,7 @@
                         <%=msg.getMessageTo()%>
                       <% } } %>
                     </div>
-                    <div style="clear: left;"><span></span></div>
+                    <div style="clear:left;"><span></span></div>
                   </div>
                   <%
                     if (!MailUtils.isFieldEmpty(msg.getMessageCc())) {  
@@ -265,7 +265,7 @@
                               InternetAddress address = toAddress[i];
                               if (i > 0 && i < (toAddress.length)) print ", <br>";
                         %>
-                              <span><%=Utils.getPersonal(address)%> </span> <% print((address !=null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
+                              <span><%=Utils.getPersonal(address)%> </span> <% print((address !=null) ? ("&lt; " + address.getAddress() + " &gt;") :"")%> 
                         <%
                             } 
                           } catch (Exception e) { 
@@ -274,13 +274,13 @@
                           <%=msg.getMessageCc()%>
                         <% } }%>
                         </div>  
-                        <div style="clear: left;"><span></span></div>
+                        <div style="clear:left;"><span></span></div>
                       </div>
                   <%} %>
                   <div class="FieldContainer">
                     <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %>:</div>
                     <div class="Address"><%=MailUtils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate(), locale)%></div>
-                    <div style="clear: left;"><span></span></div>
+                    <div style="clear:left;"><span></span></div>
                   </div>
                   </div>
                   <!-- End Expand Message Header-->
@@ -291,11 +291,11 @@
   									<div class="MonthDate"></div>
   									<div class="Actions" title="<%=_ctx.appRes(uicomponent.id+ '.label.action-on-this-messge') %>" onclick="eXo.mail.UIMailPortlet.showMessageAction(this, event);">
                     <% /*Begin Popup Menu*/ %>
-                      <div style="position: relative;">
-                        <div class="UIPopupCategory" style="display: none;">
+                      <div style="position:relative;">
+                        <div class="UIPopupCategory" style="display:none;">
                           <div class="PopupCategoryDecorator">
                         
-                            <div class="UIRightClickPopupMenu" style="display: block;">
+                            <div class="UIRightClickPopupMenu" style="display:block;">
                               <div class="UIContextMenuContainer">
                                 <div class="TopLeftRightClickPopupMenu">
                                   <div class="TopRightRightClickPopupMenu">
@@ -355,9 +355,9 @@
                       </div>
                   <% /*End Popup Menu*/ %>
                     </div>
-  									<div style="clear: both;"><span></span></div>
+  									<div style="clear:both;"><span></span></div>
   								</div>
-  								<div style="clear: both;"><span></span></div>
+  								<div style="clear:both;"><span></span></div>
   							</div>
                 
                 <% 
@@ -374,7 +374,7 @@
                     contentType = "text/plain" ;
                   }
                 %>
-                <iframe src="" style="border: 0px" frameborder="0" class="MessageDetails" id="$frameId"></iframe>
+                <iframe src="" style="border:0px" frameborder="0" class="MessageDetails" id="$frameId"></iframe>
                 <%
                   rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe('" + textAreaId + "', '" + frameId + "', '" + styleExpand + "', '" + contentType + "');") ;
                 %>
@@ -394,7 +394,7 @@
                   <div class="InvitationBG">
                   <%=msg.getMessageBody()%>
                   <div class="ActionBox">
-                    <span style="font-weight: bold ;">Will you attend ?</span> 
+                    <span style="font-weight:bold ;">Will you attend ?</span> 
 	                    <a href="<%=uicomponent.event('AnswerInvitation', '3&messageId=' + msg.getId())%>">Yes and Import</a> -
 	                    <a href="<%=uicomponent.event('AnswerInvitation', '1&messageId=' + msg.getId())%>">Yes</a> - 
 	                    <a href="<%=uicomponent.event('AnswerInvitation', '0&messageId=' + msg.getId())%>">No</a> - 
@@ -432,11 +432,11 @@
                             }
                             if (isImage) {
                         %> 
-      						  		      <img class="AttachmentFile" style="height:auto ;width: 200px;padding-right: 5px" src="$attLink">
+      						  		      <img class="AttachmentFile" style="height:auto; width:200px; padding-right:5px" src="$attLink" alt="">
       						  		<%
                             } else if (isSupportedIcon){
                         %>
-                              <img class="AttachmentFile" src="$attLink">
+                              <img class="AttachmentFile" src="$attLink" alt="">
                         <%     
                             }
                           }
@@ -460,7 +460,7 @@
       										%>
 														<span class="Icon DownloadIcon"> <a href="$downloadAction"><%=_ctx.appRes(uicomponent.id+ ".label.download") %></a></span></div>
       						  		</div>
-      						  		<div style="clear: left;"><span></span></div>
+      						  		<div style="clear:left;"><span></span></div>
       						  	</div>
                     <% 
                       }
@@ -469,10 +469,10 @@
                 <% 
                   } 
                 %>
-                			<div style="border-top: 1px dotted #b7b7b7; padding-top: 3px">
+                			<div style="border-top:1px dotted #b7b7b7; padding-top:3px">
                 				<a href="<%=uicomponent.event("Reply", msg.getId())%>" class="MessageActionIcon ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a>
 			                	<a href="<%=uicomponent.event("Forward", msg.getId())%>" class="MessageActionIcon ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></a>
-			                	<div style="clear: left"><span></span></div>
+			                	<div style="clear:left"><span></span></div>
 			                </div>
   						</div>										
   					</div>

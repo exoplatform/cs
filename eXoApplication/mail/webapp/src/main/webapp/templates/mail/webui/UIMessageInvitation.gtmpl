@@ -13,10 +13,10 @@
         <table class="UIFormGrid" style="line-height:16px;">
           <tbody>
             <tr>
-              <td colspan="2" style="font-size: 12px; text-align: center;"><%=MailUtils.getEventTo(msg)%>, you are invited to</td>
+              <td colspan="2" style="font-size:12px; text-align:center;"><%=MailUtils.getEventTo(msg)%>, you are invited to</td>
             </tr>
             <tr>
-              <td colspan="2" style="font-weight: bold; font-size: 12px; text-align: center; font-size: 17px;"><%=event.getSummary()%></td>
+              <td colspan="2" style="font-weight:bold; font-size:12px; text-align:center; font-size:17px;"><%=event.getSummary()%></td>
             </tr>
             <tr>
               <td class="FieldLabel">When:</td>
@@ -41,7 +41,7 @@
       </form>
       <div class="MoreDetail">More detail >></div>
       <div class="ActionBox">
-        <span style="font-weight: bold ;">Will you attend ?</span> <a href="<%=uicomponent.event('AnswerInvitation', '1')%>">Yes</a> - <a href="<%=uicomponent.event('AnswerInvitation', '0')%>">No</a> - <a href="<%=uicomponent.event('AnswerInvitation', '2')%>">Maybe</a> </span>
+        <span style="font-weight:bold ;">Will you attend ?</span> <a href="<%=uicomponent.event('AnswerInvitation', '1')%>">Yes</a> - <a href="<%=uicomponent.event('AnswerInvitation', '0')%>">No</a> - <a href="<%=uicomponent.event('AnswerInvitation', '2')%>">Maybe</a> </span>
       </div>
       <div class="MoreDetail">View my calendar >></div>
     </div>

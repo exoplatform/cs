@@ -11,9 +11,9 @@
   //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.AutoComplete.ACMain.init("autoComplete", ["to", "cc", "bcc"])');
 %>
 <% uiform.begin() %>
-<div style="overflow-x: auto; width: 99%;">
+<div style="overflow-x:auto; width:99%;">
 <div><div style="width: 680px;" ><span style="display: none;"></span></div></div>
-<div  style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white; _margin: auto;">
+<div  style="_width:expression(this.previousSibling.offsetWidth - 22 + 'px'); !border:1px solid white; _margin:auto;">
 <div class="$uicomponent.id">
   <div class="ApplicationMinWidth">
   
@@ -63,9 +63,9 @@
 											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.message-priority") %></div>
 										</div>
 										<% /*Begin Popup Menu*/ %>
-										<div style="position: relative;">
-					      			<div class="UIPopupCategory" style="display: none; left: 10px;">
-					      				<div class="UIRightClickPopupMenu" style="display: block;">
+										<div style="position:relative;">
+					      			<div class="UIPopupCategory" style="display:none; left:10px;">
+					      				<div class="UIRightClickPopupMenu" style="display:block;">
 					      					<div class="UIContextMenuContainer">
 													  <div class="TopLeftRightClickPopupMenu">
 							          			<div class="TopRightRightClickPopupMenu">
@@ -116,9 +116,9 @@
 											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.editor-options") %></div>
 										</div>
 										<% /*Begin Popup Menu*/ %>
-										<div style="position: relative;left: 80px;">
-					      			<div class="UIPopupCategory" style="display: none;">
-					      				<div class="UIRightClickPopupMenu" style="display: block; ">
+										<div style="position:relative;left:80px;">
+					      			<div class="UIPopupCategory" style="display:none;">
+					      				<div class="UIRightClickPopupMenu" style="display:block; ">
 					      					<div class="UIContextMenuContainer">
 													  <div class="TopLeftRightClickPopupMenu">
 							          			<div class="TopRightRightClickPopupMenu">
@@ -197,7 +197,7 @@
 </div>
 
 <!-- Begin Autocomplete -->
-<div id="autoComplete" style="display: none; ">
+<div id="autoComplete" style="display:none; ">
   <%
     for (Contact contact : uicomponent.getContacts()) {
   %>

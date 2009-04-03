@@ -4,50 +4,46 @@
 			<div class="LeftBar">
 				<div class="RightBar">
 					<div class="CenterBar">
-						<a href="<%=uicomponent.event("CheckMail")%>" class="ControlButton">
+						<div onclick="<%=uicomponent.event("CheckMail")%>" class="ControlButton">
 							<div class="IconHolder CheckMailIcon">
-								<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.check-mail") %></div>
+								<%=_ctx.appRes(uicomponent.id+ ".label.check-mail") %>
 							</div>
-						</a>
+						</div>
 						<!-- a onclick="eXo.mail.MailServiceHandler.stopCheckMail()" class="ControlButton">
 							<div class="IconHolder StopCheckMailIcon">
 								<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.stop-check-mail") %></div>
 							</div>
 						</a -->
-						<a href="<%=uicomponent.event("Compose")%>" class="ControlButton">
+						<div onclick="<%=uicomponent.event("Compose")%>" class="ControlButton">
 							<div class="IconHolder ComposeIcon">
-								<div class="Label"> <%=_ctx.appRes(uicomponent.id+ ".label.compose") %> </div>
+								<%=_ctx.appRes(uicomponent.id+ ".label.compose") %>
 							</div>
-						</a>
+						</div>
 						<div class="SeparatorLine"><span></span></div>
-						
-						<a href="<%=uicomponent.event("Address")%>" class="ControlButton">
+						<div onclick="<%=uicomponent.event("Address")%>" class="ControlButton">
 							<div class="IconHolder AddressIcon">
-								<div class="Label"> <%=_ctx.appRes(uicomponent.id+ ".label.address-book") %> </div>
+								<%=_ctx.appRes(uicomponent.id+ ".label.address-book") %>
 							</div>
-						</a>
-						<a href="<%=uicomponent.event("AddEvent")%>" class="ControlButton">
+						</div>
+						<div onclick="<%=uicomponent.event("AddEvent")%>" class="ControlButton">
 							<div class="IconHolder AddEventIcon">
-								<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.add-event") %></div>
+								<%=_ctx.appRes(uicomponent.id+ ".label.add-event") %>
 							</div>
-						</a>
-            <a href="<%=uicomponent.event("Filter")%>" class="ControlButton">
+						</div>
+            <div onclick="<%=uicomponent.event("Filter")%>" class="ControlButton">
               <div class="IconHolder FilterIcon">
-                <div class="Label"> <%=_ctx.appRes(uicomponent.id+ ".label.filter") %> </div>
+                <%=_ctx.appRes(uicomponent.id+ ".label.filter") %>
               </div>
-            </a>
+            </div>
 						<div class="SeparatorLine"><span></span></div>
-						
-						<div class="ControlButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer;" >
-							<a style="display: block;" >
+						<div class="ControlButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor:pointer;" >
   							<div class="IconHolder CustomViewIcon" title="Custome panels view">
   								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.custom-layout-view") %></div>
   							</div>
-  						</a>
   							<% /*Begin Popup Menu*/ %>
-  							<div style="position: relative;">
-  		      			<div class="UIPopupCategory" style="display: none;">
-  		      				<div class="UIRightClickPopupMenu" style="display: block;">
+  							<div style="position:relative;">
+  		      			<div class="UIPopupCategory" style="display:none;">
+  		      				<div class="UIRightClickPopupMenu" style="display:block;">
   		      					<div class="UIContextMenuContainer">
   										  <div class="TopLeftRightClickPopupMenu">
   				          			<div class="TopRightRightClickPopupMenu">
@@ -57,26 +53,26 @@
   							        <div class="MiddleLeftRightClickPopupMenu">
   							          <div class="MiddleRightRightClickPopupMenu">
   				              		<div class="UIRightPopupMenuContainer" id='_CSMailLayoutSwitchMenu'>
-  														<a class="MenuItem" onclick="eXo.mail.UIMailPortlet.switchLayout(0)" href="#">   
+  														<div class="MenuItem" onclick="eXo.mail.UIMailPortlet.switchLayout(0)">   
   					                    <div class="ItemIcon DefaultLayoutIcon">
-                                  <%=_ctx.appRes(uicomponent.id+ ".label.layout-default") %> 
+                                  <a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.layout-default") %></a>
   					                    </div>
-  				                    </a>
-  				                    <a class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(1)" href="#">   
+  				                    </div>
+  				                    <div class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(1)">   
   					                    <div class="ItemIcon HideFolderListIcon">
-                                  <%=_ctx.appRes(uicomponent.id+ ".label.hide-navigator-pane") %>
+                                  <a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.hide-navigator-pane") %></a>
   					                    </div>
-  				                    </a>
-  				                    <a class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(2)" href="#">   
+  				                    </div>
+  				                    <div class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(2)">   
   					                    <div class="ItemIcon HideMessagesPaneIcon">
-  					                      <%=_ctx.appRes(uicomponent.id+ ".label.hide-messages-pane") %>
+  					                      <a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.hide-messages-pane") %></a>
   					                    </div>
-  				                    </a>
-  				                    <a class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(3)" href="#">   
+  				                    </div>
+  				                    <div class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(3)">   
   					                    <div class="ItemIcon HideReadingPaneIcon">
-                                  <%=_ctx.appRes(uicomponent.id+ ".label.hide-preview-pane") %>
+                                  <a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.hide-preview-pane") %></a>
   					                    </div>
-  				                    </a>
+  				                    </div>
   													</div>
   					          		</div>
   					        		</div>
@@ -91,19 +87,16 @@
   		      		</div>
   		      		<% /*End Popup Menu*/ %>
 						</div>
-						
-            <a href="<%=uicomponent.event("AccountSettings")%>" class="ControlButton">
+            <div onclick="<%=uicomponent.event("AccountSettings")%>" class="ControlButton">
               <div class="IconHolder AccountSettingIcon">
                 <%=_ctx.appRes(uicomponent.id+ ".label.accounts") %>
               </div>
-            </a>
-            
-            <a href="<%=uicomponent.event("MailSettings")%>" class="ControlButton">
+            </div>
+            <div onclick="<%=uicomponent.event("MailSettings")%>" class="ControlButton">
 							<div class="IconHolder SettingsIcon">
                 <%=_ctx.appRes(uicomponent.id+ ".label.settings") %>
               </div>
-						</a>
-           
+						</div>
 						<div style="clear:left;"><span></span></div>
 					</div>
 				</div>
