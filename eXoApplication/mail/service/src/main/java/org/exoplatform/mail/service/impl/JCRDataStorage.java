@@ -335,7 +335,11 @@ public class JCRDataStorage {
       msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
     } catch (Exception e) {
     }
+    try {
     msg.setPath(messageNode.getPath());
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
     try {
       msg.setInReplyToHeader(messageNode.getProperty(Utils.EXO_IN_REPLY_TO_HEADER).getString());
     } catch (Exception e) {
