@@ -58,11 +58,11 @@
       <tbody>
         <tr>
           <td>
-            <a href="$linkDayPrevious">
+            <div onclick="$linkDayPrevious">
               <div class="BackIcon" title="<%=uiform.getLabel('previousWeek')%>">
                 <span></span>
               </div>
-            </a>
+            </div>
           </td>
           <td>
             <div class="Title">
@@ -73,11 +73,11 @@
             </div>
           </td>
           <td>
-            <a href="$linkDayNext">
+            <div onclick="$linkDayNext">
               <div class="NextIcon" title="<%=uiform.getLabel('nextWeek')%>">
                 <span></span>
               </div>
-            </a>
+            </div>
           </td>
         </tr>
       </tbody>

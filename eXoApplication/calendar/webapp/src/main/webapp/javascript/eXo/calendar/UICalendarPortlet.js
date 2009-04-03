@@ -1588,7 +1588,7 @@ UICalendarPortlet.prototype.showView = function(obj, evt){
     var _e = window.event || evt;
     _e.cancelBubble = true;
     var oldmenu = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu");
-    var actions = eXo.core.DOMUtil.findDescendantsByClass(oldmenu, "a", "MenuItem");
+    var actions = eXo.core.DOMUtil.findDescendantsByClass(oldmenu, "a", "ItemLabel");
     if (!this.selectedCategory) 
         this.selectedCategory = null;
     for (var i = 0; i < actions.length; i++) {

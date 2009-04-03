@@ -903,10 +903,12 @@
 
 .UICalendarPortlet .TitleBar .BackIcon {
 	margin:4px 4px 0px 0px;
+	cursor: pointer;
 }
 
 .UICalendarPortlet .TitleBar .NextIcon {
 	margin:4px 0px 0px 4px;
+	cursor: pointer;
 }
 
 .UICalendarPortlet .TitleBar table {
