@@ -50,7 +50,6 @@
           		</div>
           	</div>
 	        </div>
-	      
 	      </div>
 	    </div>
   <% /*End Popup Menu*/ %>
@@ -81,7 +80,6 @@
   </a>
   <%}%>
 </div>
-
 <% /*Popup menu for Default (Inbox, Drafts, Sent, Spam) forder*/ %>
 <div class="UIRightClickPopupMenu" id="UIDefaultFolderPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.defaultFolderPopupMenuCallback">
 	<div class="UIContextMenuContainer">
@@ -93,12 +91,16 @@
 	  <div class="MiddleLeftRightClickPopupMenu">
 	    <div class="MiddleRightRightClickPopupMenu">
 	      <div class="UIRightPopupMenuContainer">
-	        <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
-	          <div class="ItemIcon AddFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %> </div>
-	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "id")%>">   
-	          <div class="ItemIcon MarkAll"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </div>
-	        </a>
+	        <div class="MenuItem">   
+	          <div class="ItemIcon AddFolderIcon">
+	          	<a href="<%=uicomponent.event("AddFolder", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %></a>
+	          </div>
+	        </div>
+	        <div class="MenuItem">   
+	          <div class="ItemIcon MarkAll">
+	          	<a href="<%=uicomponent.event("MarkRead", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %></a>
+          	</div>
+	        </div>
 	        <!--
 	        <a class="MenuItem" href="<%=uicomponent.event("MoveToTrash", "id")%>">   
 	          <div class="ItemIcon MoveToTrash"> <%=_ctx.appRes(uicomponent.id+ ".label.move-all-to-trash") %> </div>
@@ -107,7 +109,6 @@
 	      </div>
 	    </div>
 	  </div>
-	  
 	  <div class="BottomLeftRightClickPopupMenu">
 	    <div class="BottomRightRightClickPopupMenu">
 	      <div class="BottomCenterRightClickPopupMenu"><span></span></div>
@@ -125,23 +126,27 @@
         <div class="TopCenterRightClickPopupMenu"><span></span></div>
       </div>
     </div>
-    
     <div class="MiddleLeftRightClickPopupMenu">
       <div class="MiddleRightRightClickPopupMenu">
         <div class="UIRightPopupMenuContainer">
-          <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
-            <div class="ItemIcon AddFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %> </div>
-          </a>
-          <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "id")%>">   
-            <div class="ItemIcon MarkAll"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </div>
-          </a>
-          <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
-          <div class="ItemIcon EmptyIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.empty-trash") %> </div>
-          </a>
+          <div class="MenuItem">   
+            <div class="ItemIcon AddFolderIcon">
+            	<a href="<%=uicomponent.event("AddFolder", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %></a>
+        		</div>
+          </div>
+          <div class="MenuItem">   
+            <div class="ItemIcon MarkAll">
+            	<a href="<%=uicomponent.event("MarkRead", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %></a>
+        		</div>
+          </div>
+          <div class="MenuItem">   
+	          <div class="ItemIcon EmptyIcon">
+	          	<a href="<%=uicomponent.event("EmptyFolder", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.empty-trash") %></a>
+	          </div>
+          </div>
         </div>
       </div>
     </div>
-    
     <div class="BottomLeftRightClickPopupMenu">
       <div class="BottomRightRightClickPopupMenu">
         <div class="BottomCenterRightClickPopupMenu"><span></span></div>
@@ -149,11 +154,8 @@
     </div>           
   </div>
 </div>  
-
 <% /* End popup menu for Drafts forder*/ %>
-
 <div class="MyFolder">
-
 <% /*Popup menu for Customized forder*/ %>
 <div class="UIRightClickPopupMenu" id="UIFolderListPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.defaultFolderPopupMenuCallback">
 	<div class="UIContextMenuContainer">
@@ -162,22 +164,28 @@
 	      <div class="TopCenterRightClickPopupMenu"><span></span></div>
 	    </div>
 	  </div>
-	  
 	  <div class="MiddleLeftRightClickPopupMenu">
 	    <div class="MiddleRightRightClickPopupMenu">
 	      <div class="UIRightPopupMenuContainer">
-          <a class="MenuItem" href="<%=uicomponent.event("AddSubFolder", "id")%>">   
-            <div class="ItemIcon AddFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.new-subfoder") %> </div>
-          </a>  
-          <a class="MenuItem" href="<%=uicomponent.event("RenameFolder", "id")%>">   
-	          <div class="ItemIcon RenameFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.rename") %> </div>
-	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("RemoveFolder", "id")%>">   
-	          <div class="ItemIcon RemoveFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.remove") %> </div>
-	        </a>
-          <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "id")%>">   
-            <div class="ItemIcon MarkAll"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </div>
-          </a>
+          <div class="MenuItem">   
+            <div class="ItemIcon AddFolderIcon">
+            	<a href="<%=uicomponent.event("AddSubFolder", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.new-subfoder") %></a>
+            </div>
+          </div>  
+          <div class="MenuItem">   
+	          <div class="ItemIcon RenameFolderIcon">
+	          	<a href="<%=uicomponent.event("RenameFolder", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.rename") %></a>
+	          </div>
+	        </div>
+	        <div class="MenuItem">   
+	          <div class="ItemIcon RemoveFolderIcon">
+	          	<a href="<%=uicomponent.event("RemoveFolder", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.remove") %></a>
+          	</div>
+	        </div>
+          <div class="MenuItem">   
+            <div class="ItemIcon MarkAll">
+            	<a href="<%=uicomponent.event("MarkRead", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %></a></div>
+          </div>
           <!--
           <a class="MenuItem" href="<%=uicomponent.event("MoveToTrash", "id")%>">   
            <div class="ItemIcon MoveToTrash"> <%=_ctx.appRes(uicomponent.id+ ".label.move-all-to-trash") %> </div>
@@ -186,7 +194,6 @@
 	      </div>
 	    </div>
 	  </div>
-	  
 	  <div class="BottomLeftRightClickPopupMenu">
 	    <div class="BottomRightRightClickPopupMenu">
 	      <div class="BottomCenterRightClickPopupMenu"><span></span></div>
@@ -195,8 +202,6 @@
 	</div>
 </div>  
 <% /* End popup menu for Customized forder*/ %>
-
-
 <div class="TitleBar">
   <div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
   <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.my-folders") %></div>

@@ -29,7 +29,7 @@
 	                uicomponent.renderField(uicomponent.SEARCH_FROM_CONDITION);
 	              %>
 	          </td>  
-	          <td >&nbsp;</td>
+	          <td>&nbsp;</td>
 				    <td class="FieldComponent Short">
 			          <%
 			            uicomponent.renderField(uicomponent.FIELD_FROM_SEARCH);
@@ -135,22 +135,22 @@
   </div>
 </div>
 <div class="UIAction">
-  <table class="ActionContainer" align="center">
+  <table class="ActionContainer">
     <tr>
-      <td align="center">
+      <td>
         <% for(action in uicomponent.getActions()) { 
                String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
                String link = uicomponent.event(action) ;
         %>
-        <a href="$link" class="ActionButton LightBlueStyle">
+    	<div onclick="$link" class="ActionButton LightBlueStyle">
         <div class="ButtonLeft">
           <div class="ButtonRight">
             <div class="ButtonMiddle">
-              $actionLabel
-                </div>
-              </div>
+              <a href="#">$actionLabel</a>
+            </div>
           </div>
-        </a>
+      	</div>
+    	</div>
         <%}%>
       </td>
     </tr>

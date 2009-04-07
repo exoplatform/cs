@@ -4,10 +4,9 @@
 	uiform.begin() 
 %>
 <div style="overflow-x:auto; width:99%;">
-<div><div style="width:620px;" ><span style="display:none;"></span></div></div>
+<div><div style="width:620px;"><span style="display:none;"></span></div></div>
 <div  style="_width:expression(this.previousSibling.offsetWidth - 22 + 'px'); !border:1px solid white; _margin:auto;">
 <div class="UIAddNewContact"> 
-
 <div class="UIForm AddGroupContact">
   <div class="HorizontalLayout">
     <table class="UIFormGrid">
@@ -23,7 +22,6 @@
     </table>
   </div>
 </div>
-  
 <div class="UIForm ProfileContent">
   <div class="HorizontalLayout">
     <table class="UIFormGrid">
@@ -34,25 +32,25 @@
               <table class="UIFormGrid">
                 <tbody>
                   <tr>
-                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.first-name") %> </td>
+                    <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.first-name") %></td>
                     <td class="FieldComponent">
                       <% uicomponent.renderField(uicomponent.FIRST_NAME)%>
                     </td>
                   </tr>
                   <tr>
-                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.last-name") %> </td>
+                    <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.last-name") %></td>
                     <td class="FieldComponent">
                       <% uicomponent.renderField(uicomponent.LAST_NAME)%>
                     </td>
                   </tr>
                   <tr>
-                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.nick-name") %> </td>
+                    <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.nick-name") %></td>
                     <td class="FieldComponent">
                       <% uicomponent.renderField(uicomponent.NICKNAME)%>
                     </td>
                   </tr>
                   <tr>
-                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.gender") %> </td>
+                    <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.gender") %></td>
                     <td class="FieldComponent">
                     	<% 
                     		maleChecked = "" ;
@@ -61,7 +59,6 @@
                     		if (gender != null && gender.equalsIgnoreCase("male")) maleChecked = "checked" ; 
 												else if (gender != null && gender.equalsIgnoreCase("female"))femaleChecked = "checked" ;
                     	 %>
-                    
                       <input class="radio" type="radio" value="Male" $maleChecked name="gender"/>
           	 					<span style="padding:0px 20px 0px 5px" class="Lable">
 												<%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %>
@@ -69,11 +66,11 @@
 											<input class="radio" type="radio" value="Female" $femaleChecked name="gender"/>
 											<span style="padding-left:3px;" class="Lable">
 											 	 <%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %>
-											 </span>
+											</span>
                     </td>
                   </tr>
                   <tr>
-                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.birthday") %> </td>
+                    <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.birthday") %></td>
                     <td class="FieldComponent">
                       <% uicomponent.renderField(uicomponent.DAY)%>
                       <span>-</span>  
@@ -83,21 +80,19 @@
                     </td>
                   </tr>
                   <tr>
-                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.job-title") %> </td>
+                    <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.job-title") %></td>
                     <td class="FieldComponent">
                     <% uicomponent.renderField(uicomponent.JOBTITLE)%>
                     </td>
                   </tr>
                   <tr>
-                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.email") %> </td>
+                    <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.email") %></td>
                     <td class="FieldComponent">
                     <% uicomponent.renderField(uicomponent.EMAIL)%>
                     </td>
                   </tr>
-                  
                 </tbody>
               </table>
-              
             </div>
           </td>
         </tr>
@@ -119,24 +114,21 @@
 				}
       %>
       <div class="Avatar">
-        <img src="$imageLink" width=63 height=81 class="ImgAvatar"/>
+        <img src="$imageLink" width="63" height="81" class="ImgAvatar" alt=""/>
       </div>
       <div class="Action">  
         <a href="<%=uicomponent.event("ChangeImage")%>"><%=_ctx.appRes(uicomponent.id+ ".label.change") %> | </a>
         <a href="<%=uicomponent.event("DeleteImage")%>"><%=_ctx.appRes(uicomponent.id+ ".label.delete") %></a>      
       </div>
     </div>
-    
     <div style="clear:left;"><span></span></div>
   </div>
 </div>
-
 </div>
-
 <div class="UIAction">
 <table class="ActionContainer">
   <tr>
-    <td align="center">
+    <td>
       <% for(action in uicomponent.getActions()) { 
              String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
              String link = uicomponent.event(action) ;

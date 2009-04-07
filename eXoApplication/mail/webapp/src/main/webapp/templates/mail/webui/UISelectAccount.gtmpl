@@ -23,7 +23,6 @@
 			            </div>
 			            <div class="MiddleLeftRightClickPopupMenu">
 			              <div class="MiddleRightRightClickPopupMenu">
-		            
 		                  <div class="UIRightPopupMenuContainer">
 		                    <%
 		                    		//uicomponent.getActions()
@@ -32,15 +31,14 @@
 		                    	 String nameItem = _ctx.appRes(uicomponent.getName() + ".action." + action);
 		                    	 String classIconItem = action ;
 		                    %>
-		                       <a class="MenuItem" href="<%=uicomponent.event(action)%>">   
+		                       <div class="MenuItem" onclick="<%=uicomponent.event(action)%>">   
 		                        <div class="ItemIcon $classIconItem">
-		                          $nameItem
+		                          <a href="#">$nameItem</a>
 		                        </div>
-		                       </a>
+		                       </div>
 		                    <%}%>
 		                    <div class="RightClickCustomItem"></div>
 		                  </div>
-		            
 			              </div>
 			            </div>
 			            <div class="BottomLeftRightClickPopupMenu">

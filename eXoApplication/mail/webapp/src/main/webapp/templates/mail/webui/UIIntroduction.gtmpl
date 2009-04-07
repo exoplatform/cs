@@ -1,7 +1,5 @@
 <div class="ReadingPaneBar">
-  <div class="Subject">
-    <span> </span>
-  </div>
+  <div class="Subject"><span></span></div>
   <div><a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.showHidePreviewPane(this);"><span id="ActionReadingPane" class="MaximizeReadingPane" title="<%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.action.title.togglePreview")%>"></span></a></div>
   <div style="clear:both;"><span></span></div>
 </div>

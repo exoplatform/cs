@@ -7,11 +7,12 @@
 <div  style="_width:expression(this.previousSibling.offsetWidth - 2 + 'px'); !border:1px solid white; _margin:auto;">
 <div class="UIAccountSetting">
 	<div class="AccountSetting">
-	
 		<div class="AccountSettingCategory">
 			<div class="CategoryControlBar">
 				<div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.accounts") %></div>
-        <a href="<%=uicomponent.event("DeleteAccount", uicomponent.id, "id")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.delete-acc") %>"><div class="DeleteIcon"><span></span></div></a>
+        <div onclick="<%=uicomponent.event("DeleteAccount", uicomponent.id, "id")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.delete-acc") %>">
+        	<div class="DeleteIcon"><span></span></div>
+    		</div>
 				<div style="clear:both;"><span></span></div> 
 			</div>
 			<div class="AccountSettingList">
@@ -25,14 +26,12 @@
 				<%}%>
 			</div>
 		</div>
-		
 		<div class="AccountSettingContainer">
 			<div class="AccountSettingContainerForm">					
   			<%
   		    def rcontext = _ctx.getRequestContext() ;
   		    rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs') ;
   		  %>
-
     		<div class="UIFormTabPane">
     		  <div class="UITabPane">
     		    <div class="TabPaneContent">
@@ -53,7 +52,6 @@
     		                      if(renderResource) {
     		                        tabName = _ctx.appRes(uicomponent.getName() + ".tab.label." + inputSet.name) ;
     		                      }
-    		                      
     		                      //boolean renderTab = uicomponent.hasWithRenderTab();
     		                      //if(renderTab){
     		                  %>
@@ -95,30 +93,28 @@
     		      </div>
     		    </div>  
     		  </div>  
-    		  
     		</div>  			
 	  	</div>
 	  </div>
 		<div style="clear:left;"><span></span></div>
 	</div>	
-	
 	<div class="UIAction">
-    <table class="ActionContainer" align="center">
+    <table class="ActionContainer">
       <tr>
-        <td align="center">
+        <td>
           <%for(action in uicomponent.getActions()) { 
             String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
             String link = uicomponent.event(action) ;
           %>
-          <a href="$link" class="ActionButton LightBlueStyle">
+          <div onclick="$link" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">
                 <div class="ButtonMiddle">
-                 $actionLabel
+                 	<a href="#">$actionLabel</a>
                 </div>
               </div>
             </div>
-          </a>
+          </div>
           <%}%>
         </td>
       </tr>

@@ -41,7 +41,7 @@
       </form>
       <div class="MoreDetail">More detail >></div>
       <div class="ActionBox">
-        <span style="font-weight:bold ;">Will you attend ?</span> <a href="<%=uicomponent.event('AnswerInvitation', '1')%>">Yes</a> - <a href="<%=uicomponent.event('AnswerInvitation', '0')%>">No</a> - <a href="<%=uicomponent.event('AnswerInvitation', '2')%>">Maybe</a> </span>
+        <span style="font-weight:bold ;">Will you attend ?</span><a href="<%=uicomponent.event('AnswerInvitation', '1')%>">Yes</a> - <a href="<%=uicomponent.event('AnswerInvitation', '0')%>">No</a> - <a href="<%=uicomponent.event('AnswerInvitation', '2')%>">Maybe</a> </span>
       </div>
       <div class="MoreDetail">View my calendar >></div>
     </div>

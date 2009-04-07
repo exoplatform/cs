@@ -26,13 +26,13 @@
     if (msg != null) {
   %>
   <div class="PrintPreview">
-    <div class="PrintHeader" >
+    <div class="PrintHeader">
       <div class="PrintLogoMail"><span></span></div>
       <div class="PrintUser"><%=acc.getUserDisplayName()%> &lt; <%=acc.getEmailAddress()%> &gt;</div>
       <div style="clear:left;"><span></span></div>
     </div>
-    <div class="PrintSubject"  ><%=msg.getSubject()%> </div>
-    <div class="PrintAddress"  >
+    <div class="PrintSubject"><%=msg.getSubject()%> </div>
+    <div class="PrintAddress">
       <div class="FromAndTo">
         <%
           InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
@@ -95,11 +95,11 @@
             <%
               if (isImage) {
             %> 
-                <img class="AttachmentFile" style="height:auto ;width:200px;padding-right:5px" src="$attLink">
+                <img class="AttachmentFile" style="height:auto ;width:200px;padding-right:5px" src="$attLink" alt="" />
             <%
               } else if (isSupportedIcon) {
             %>
-                <img class="AttachmentFile" src="$attLink">
+                <img class="AttachmentFile" src="$attLink" alt="" />
             <%     
               }
             %> 
@@ -121,34 +121,34 @@
     .DisablePrint{display:none;}
   </style>
   <div class="UIAction DisablePrint">
-    <table class="ActionContainer" align="center">
+    <table class="ActionContainer">
       <tr>
-        <td align="center">
+        <td>
           <% 
              String actionLabel = _ctx.appRes(uicomponent.getName() + ".action.Print") ;             
           %>
-          <a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.printMessage()" class="ActionButton LightBlueStyle">
+          <div onclick="eXo.mail.UIMailPortlet.printMessage()" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">
                 <div class="ButtonMiddle">
-                  $actionLabel
+                  <a href="javascript:void(0);">$actionLabel</a>
                 </div>
               </div>
             </div>
-          </a>
+          </div>
           <% 
             String actionLabel2 = _ctx.appRes(uicomponent.getName() + ".action.Cancel") ;   
             String link = uicomponent.event("Cancel") ;
           %>
-          <a href="$link" class="ActionButton LightBlueStyle">
+          <div onclick="$link" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">
                 <div class="ButtonMiddle">
-                  $actionLabel2
+                  <a href="#">$actionLabel2</a>
                 </div>
               </div>
             </div>
-          </a>
+          </div>
         </td>
       </tr>
     </table>

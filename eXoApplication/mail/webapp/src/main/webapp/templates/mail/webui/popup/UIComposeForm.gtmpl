@@ -12,52 +12,41 @@
 %>
 <% uiform.begin() %>
 <div style="overflow-x:auto; width:99%;">
-<div><div style="width: 680px;" ><span style="display: none;"></span></div></div>
+<div><div style="width:680px;" ><span style="display: none;"></span></div></div>
 <div  style="_width:expression(this.previousSibling.offsetWidth - 22 + 'px'); !border:1px solid white; _margin:auto;">
 <div class="$uicomponent.id">
   <div class="ApplicationMinWidth">
-  
   	<div class="UIMessageCompose">
-  	
 			<div class="UIToolbar">
 				<div class="HeaderToolbar">
 					<div class="LeftBar">
 						<div class="RightBar">
 							<div class="CenterBar">
 								<div class="MailListActionsbar">
-								
-									<a href="<%=uicomponent.event("Send")%>" class="ControlButton">
+									<div onclick="<%=uicomponent.event("Send")%>" class="ControlButton">
 										<div class="IconHolder SendMailIcon">
-											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.send-mail") %></div>
+											<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.send-mail") %></a>
 										</div>
-									</a>
-									
+									</div>
 									<div class="SeparatorLine"><span></span></div>
-									
-									<a href="<%=uicomponent.event("SaveDraft")%>" class="ControlButton">
+									<div onclick="<%=uicomponent.event("SaveDraft")%>" class="ControlButton">
 										<div class="IconHolder SaveAsADraftIcon">
-											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.save-as-a-draft") %></div>
+											<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.save-as-a-draft") %></a>
 										</div>
-									</a>
-									
+									</div>
 									<div class="SeparatorLine"><span></span></div>
-									
-									<a href="<%=uicomponent.event("DiscardChange")%>" class="ControlButton">
+									<div onclick="<%=uicomponent.event("DiscardChange")%>" class="ControlButton">
 										<div class="IconHolder DiscardIcon">
-											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.discard") %></div>
+											<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.discard") %></a>
 										</div>
-									</a>
-									
+									</div>
 									<div class="SeparatorLine"><span></span></div>
-									
-									<a href="<%=uicomponent.event("Attachment")%>" class="ControlButton">
+									<div onclick="<%=uicomponent.event("Attachment")%>" class="ControlButton">
 										<div class="IconHolder AttachFileIcon">
-											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
+											<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></a>
 										</div>
-									</a>
-									
+									</div>
 									<div class="SeparatorLine"><span></span></div>
-									
 									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
 										<div class="IconHolder PriorityIcon">
 											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.message-priority") %></div>
@@ -80,19 +69,25 @@
 																	  String lowCssClass = "";
 	                                  if (uicomponent.getPriority() == Utils.PRIORITY_LOW) lowCssClass = "CheckItem";
 																	%>
-							                    <a class="MenuItem" href="$lowPriorityLink"> <div class="ItemIcon $lowCssClass"> <%=_ctx.appRes(uicomponent.id+ ".label.low-priority") %> </div> </a>
+							                    <div class="MenuItem" onclick="$lowPriorityLink">
+							                    	<div class="ItemIcon $lowCssClass"><%=_ctx.appRes(uicomponent.id+ ".label.low-priority") %></div>
+						                    	</div>
 							                    <%  
 							                      String normalPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_NORMAL));
 							                      String normalCssClass = "";
 							                      if (uicomponent.getPriority() == Utils.PRIORITY_NORMAL) normalCssClass = "CheckItem";
 							                    %>
-							                    <a class="MenuItem" href="$normalPriorityLink"> <div class="ItemIcon $normalCssClass"><%=_ctx.appRes(uicomponent.id+ ".label.normal-priority") %></div> </a>
+							                    <div class="MenuItem" onclick="$normalPriorityLink">
+							                    	<div class="ItemIcon $normalCssClass"><%=_ctx.appRes(uicomponent.id+ ".label.normal-priority") %></div>
+						                    	</div>
 							                    <%  
 							                      String highPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_HIGH)); 
 							                      String highCssClass = "";
 							                      if (uicomponent.getPriority() == Utils.PRIORITY_HIGH) highCssClass = "CheckItem";
 							                    %>
-							                    <a class="MenuItem" href="$highPriorityLink"> <div class="ItemIcon $highCssClass"> <%=_ctx.appRes(uicomponent.id+ ".label.hight-priority") %> </div> </a>
+							                    <div class="MenuItem" href="$highPriorityLink">
+							                    	<div class="ItemIcon $highCssClass"><%=_ctx.appRes(uicomponent.id+ ".label.hight-priority") %></div>
+						                    	</div>
 																</div>
 								          		</div>
 								        		</div>
@@ -102,15 +97,12 @@
 										        </div>
 										      </div>
 							      			</div>
-							      			
 										    </div>
 					      			</div>
 					      		</div>
 					      		<% /*End Popup Menu*/ %>
 									</div>
-									
 									<div class="SeparatorLine"><span></span></div>
-									
 									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
 										<div class="IconHolder EditorOptionsIcon">
 											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.editor-options") %></div>
@@ -133,21 +125,21 @@
                                     if (uicomponent.isVisualEditor()) checkVisualEditor = "CheckItem";
                                     String chooseEditor = uicomponent.event("UseVisualEdior", "true");
                                   %>
-                                  <a class="MenuItem" href="$chooseEditor">   
+                                  <div class="MenuItem" onclick="$chooseEditor">   
                                     <div class="ItemIcon $checkVisualEditor">
-                                      <%=_ctx.appRes(uicomponent.id+ ".label.rich-text-editor") %>
+                                      <a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.rich-text-editor") %></a>
                                      </div>
-                                  </a>
+                                  </div>
                                   <%
                                     String checkPlainEditor = "";
                                     if (!uicomponent.isVisualEditor()) checkPlainEditor = "CheckItem";
                                     chooseEditor = uicomponent.event("UseVisualEdior", "false");
                                   %>
-                                  <a class="MenuItem" href="$chooseEditor">   
+                                  <div class="MenuItem" onclick="$chooseEditor">   
                                     <div class="ItemIcon $checkPlainEditor">
-                                    <%=_ctx.appRes(uicomponent.id+ ".label.plain-text") %>
+                                    	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.plain-text") %></a>
                                     </div>
-                                  </a>        
+                                  </div>        
 																</div>
 								          		</div>
 								        		</div>
@@ -155,22 +147,19 @@
 										        <div class="BottomRightRightClickPopupMenu">
 										          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 										        </div>
-										      </div>
+										      	</div>
 							      			</div>
 										    </div>
 					      			</div>
 					      		</div>
 					      		<% /*End Popup Menu*/ %>
 									</div>
-									
 									<div style="clear:left;"><span></span></div>
-									
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				
 			</div>
 <!-- End Mail ControlBar -->
 <!-- Start  Message Address -->
@@ -190,7 +179,6 @@
 			</div>
 <!-- End Compose Message Detail -->
   	</div>  	
-  	
   </div>
 </div>
 </div>

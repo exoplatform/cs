@@ -19,33 +19,32 @@
 <% /*Start Message Action Bar*/ %>
 <%uiform.begin()%>  
   <div class="UIMessageActionsBar">
-  <a href="<%=uicomponent.event("Reply")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %>">
+  <div onclick="<%=uicomponent.event("Reply")%>" style="cursor:pointer;" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %>">
     <div class="IconHolder ReplyIcon"><span></span></div>
-  </a>
-  <a href="<%=uicomponent.event("ReplyAll")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %>">
+  </div>
+  <div onclick="<%=uicomponent.event("ReplyAll")%>" style="cursor:pointer;" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %>">
     <div class="IconHolder ReplyAllIcon"><span></span></div>
-  </a>
-  <a href="<%=uicomponent.event("Forward")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.forward") %>">
+  </div>
+  <div onclick="<%=uicomponent.event("Forward")%>" style="cursor:pointer;" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.forward") %>">
     <div class="IconHolder ForwardIcon"><span></span></div>
-  </a>
+  </div>
   <div class="SeparatorLine"><span></span></div>
-  <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$confirmMsg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("Delete", uicomponent.id, "id" )%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.delete") %>">
+  <div style="cursor:pointer;" onclick='eXo.cs.Utils.confirmAction(this,"$confirmMsg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("Delete", uicomponent.id, "id" )%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.delete") %>">
     <div class="IconHolder DeleteIcon"><span></span></div>
-  </a>
+  </div>
   <% if (!uicomponent.selectedSpamFolder()) { %>
-    <a href="<%=uicomponent.event("ReportSpam")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.report-spam") %>">
+    <div onclick="<%=uicomponent.event("ReportSpam")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.report-spam") %>">
       <div class="IconHolder SpamMail"><span></span></div>
-    </a>
+    </div>
   <% } else { %>
-    <a href="<%=uicomponent.event("NotSpam")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.not-spam") %>">
+    <div onclick="<%=uicomponent.event("NotSpam")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.not-spam") %>">
       <div class="IconHolder NotSpamMail"><span></span></div>
-    </a>
+    </div>
   <% } %>
-  <a href="<%=uicomponent.event("Print")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.print") %>">
+  <div onclick="<%=uicomponent.event("Print")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.print") %>">
     <div class="IconHolder PrintIcon"><span></span></div>
-  </a>
+  </div>
   <div class="SeparatorLine"><span></span></div>
-  
   <div class="SelectButton" onclick="eXo.mail.UIMailPortlet.showMenu(this, event);">
     <div class="MoreActionsIcon"  >
       <div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.more-actions") %></div>
@@ -63,30 +62,46 @@
 	            <div class="MiddleLeftRightClickPopupMenu">
 	              <div class="MiddleRightRightClickPopupMenu">
 	                <div class="UIRightPopupMenuContainer">
-	                  <a class="MenuItem" href="<%=uicomponent.event("MarkAsRead")%>">   
-	                    <div class="ItemIcon MarkReadIcon"><%=_ctx.appRes(uicomponent.id+ ".label.mark-as-read") %></div>
-	                  </a>
-	                  <a class="MenuItem ItemHidden" href="<%=uicomponent.event("MarkAsUnRead")%>">   
-	                    <div class="ItemIcon MarkUnreadIcon"><%=_ctx.appRes(uicomponent.id+ ".label.mark-as-unread") %></div>
-	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("AddStar")%>">   
-	                    <div class="ItemIcon StarredIcon"><%=_ctx.appRes(uicomponent.id+ ".label.add-star") %></div>
-	                  </a>
-	                  <a class="MenuItem ItemHidden" href="<%=uicomponent.event("RemoveStar")%>">   
-	                    <div class="ItemIcon RemoveStarIcon"><%=_ctx.appRes(uicomponent.id+ ".label.remove-star") %></div>
-	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("AddTag")%>">   
-	                    <div class="ItemIcon BlueTag"><%=_ctx.appRes(uicomponent.id+ ".label.tag-message") %></div>
-	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("MoveMessages")%>">   
-	                    <div class="ItemIcon MoveMessageIcon"><%=_ctx.appRes(uicomponent.id+ ".label.move-message") %></div>
-	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("Import")%>">   
-	                    <div class="ItemIcon ImportMessageIcon"><%=_ctx.appRes(uicomponent.id+ ".label.import-message") %></div>
-	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("Export")%>">   
-	                    <div class="ItemIcon EmportMessageIcon"><%=_ctx.appRes(uicomponent.id+ ".label.export-message") %></div>
-	                  </a>
+	                  <div class="MenuItem" onclick="<%=uicomponent.event("MarkAsRead")%>">   
+	                    <div class="ItemIcon MarkReadIcon">
+	                    	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.mark-as-read") %></a>
+	                    </div>
+	                  </div>
+	                  <div class="MenuItem ItemHidden" onclick="<%=uicomponent.event("MarkAsUnRead")%>">   
+	                    <div class="ItemIcon MarkUnreadIcon">
+	                    	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.mark-as-unread") %></a>
+	                    </div>
+	                  </div>
+	                  <div class="MenuItem" onclick="<%=uicomponent.event("AddStar")%>">   
+	                    <div class="ItemIcon StarredIcon">
+	                    	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.add-star") %></a>
+                			</div>
+	                  </div>
+	                  <div class="MenuItem ItemHidden" onclick="<%=uicomponent.event("RemoveStar")%>">   
+	                    <div class="ItemIcon RemoveStarIcon">
+	                    	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.remove-star") %></a>
+                    	</div>
+	                  </div>
+	                  <div class="MenuItem" onclick="<%=uicomponent.event("AddTag")%>">   
+	                    <div class="ItemIcon BlueTag">
+	                    	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.tag-message") %></a>
+	                    </div>
+	                  </div>
+	                  <div class="MenuItem" onclick="<%=uicomponent.event("MoveMessages")%>">   
+	                    <div class="ItemIcon MoveMessageIcon">
+	                    	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.move-message") %></a>
+	                    </div>
+	                  </div>
+	                  <div class="MenuItem" onclick="<%=uicomponent.event("Import")%>">   
+	                    <div class="ItemIcon ImportMessageIcon">
+	                    	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.import-message") %></a>
+	                    </div>
+	                  </div>
+	                  <div class="MenuItem" onclick="<%=uicomponent.event("Export")%>">   
+	                    <div class="ItemIcon EmportMessageIcon">
+	                    	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.export-message") %></a>
+	                    </div>
+	                  </div>
 	                </div>
 	              </div>
 	            </div>
@@ -101,7 +116,6 @@
       </div>
       <% /*End Popup Menu*/ %>
   </div>
-  
   <div class="SelectButton" onclick="eXo.mail.UIMailPortlet.showView(this, event);">
     <div class="View" >
       <div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.view") %></div>
@@ -125,7 +139,7 @@
                       </div>
 	                  </a>
                     <!--Submenu-->
-                    <div class="UIPopupCategory" style="display:none ;">
+                    <div class="UIPopupCategory" style="display:none;">
                        <div class="UIRightClickPopupMenu" style="display:block;">
                         <div class="UIContextMenuContainer">
                           <div class="TopLeftRightClickPopupMenu">
@@ -140,23 +154,29 @@
                                 String listSelected = "";
                                 if (uicomponent.viewMode == uicomponent.MODE_LIST) listSelected = "SelectItem" ;  
                               %>
-                              <a class="MenuItem $listSelected" href="<%=uicomponent.event("ViewAsList")%>">   
-                                <div class="ItemIcon ListIcon"><%=_ctx.appRes(uicomponent.id+ ".label.list") %></div>
-                              </a>
+                              <div class="MenuItem $listSelected" onclick="<%=uicomponent.event("ViewAsList")%>">   
+                                <div class="ItemIcon ListIcon">
+                                	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.list") %></a>
+                                </div>
+                              </div>
                               <% 
                                 String threadSelected = "";
                                 if (uicomponent.viewMode == uicomponent.MODE_THREAD) threadSelected = "SelectItem" ;  
                               %>
-                              <a class="MenuItem $threadSelected" href="<%=uicomponent.event("ViewAsThread")%>">   
-                                <div class="ItemIcon ThreadIcon"><%=_ctx.appRes(uicomponent.id+ ".label.thread") %></div>
-                              </a>
+                              <div class="MenuItem $threadSelected" onclick="<%=uicomponent.event("ViewAsThread")%>">   
+                                <div class="ItemIcon ThreadIcon">
+                                	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.thread") %></a>
+                                </div>
+                              </div>
                               <% 
                                 String conversationSelected = "";
                                 if (uicomponent.viewMode == uicomponent.MODE_CONVERSATION) conversationSelected = "SelectItem" ;  
                               %>
-                              <a class="MenuItem $conversationSelected" href="<%=uicomponent.event("ViewAsConversation")%>">   
-                                <div class="ItemIcon ConversationIcon"><%=_ctx.appRes(uicomponent.id+ ".label.conversation") %></div>
-                              </a>
+                              <div class="MenuItem $conversationSelected" onclick="<%=uicomponent.event("ViewAsConversation")%>">   
+                                <div class="ItemIcon ConversationIcon">
+                                	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.conversation") %></a>
+                                </div>
+                              </div>
                               </div>
                             </div>
                           </div>
@@ -173,44 +193,44 @@
                       String viewSelected = "";
                       if (uicomponent.viewing_ == uicomponent.VIEW_ALL) viewSelected = "SelectItem" ;  
                     %>
-                    <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewAll")%>">   
-                      <div class="ItemIcon AllMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-all-messages") %></div>
-                    </a>
+                    <div class="MenuItem $viewSelected" onclick="<%=uicomponent.event("ViewAll")%>">   
+                      <div class="ItemIcon AllMessagesIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view-all-messages") %></a></div>
+                    </div>
                     <% 
                       viewSelected = "";
                       if (uicomponent.viewing_ == uicomponent.VIEW_STARRED) viewSelected = "SelectItem" ;  
                     %>
-	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewStarred")%>">   
-	                    <div class="ItemIcon StarredIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-starred-messages") %></div>
-	                  </a>
+	                  <div class="MenuItem $viewSelected" onclick="<%=uicomponent.event("ViewStarred")%>">   
+	                    <div class="ItemIcon StarredIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view-starred-messages") %></a></div>
+	                  </div>
                     <% 
                       viewSelected = "";
                       if (uicomponent.viewing_ == uicomponent.VIEW_UNSTARRED) viewSelected = "SelectItem" ;  
                     %>
-	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewUnstarred")%>">   
-	                    <div class="ItemIcon UnStarredIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-unstarred-messages") %></div>
-	                  </a>
+	                  <div class="MenuItem $viewSelected" onclick="<%=uicomponent.event("ViewUnstarred")%>">   
+	                    <div class="ItemIcon UnStarredIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view-unstarred-messages") %></a></div>
+	                  </div>
                     <% 
                       viewSelected = "";
                       if (uicomponent.viewing_ == uicomponent.VIEW_UNREAD) viewSelected = "SelectItem" ;  
                     %>
-	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewUnread")%>">   
-	                    <div class="ItemIcon UnreadMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-unread-messages") %></div>
-	                  </a>
+	                  <div class="MenuItem $viewSelected" onclick="<%=uicomponent.event("ViewUnread")%>">   
+	                    <div class="ItemIcon UnreadMessagesIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view-unread-messages") %></a></div>
+	                  </div>
                     <% 
                       viewSelected = "";
                       if (uicomponent.viewing_ == uicomponent.VIEW_READ) viewSelected = "SelectItem" ;  
                     %>
-	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewRead")%>">   
-	                    <div class="ItemIcon ReadMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-read-messages") %></div>
-	                  </a>
+	                  <div class="MenuItem $viewSelected" onclick="<%=uicomponent.event("ViewRead")%>">   
+	                    <div class="ItemIcon ReadMessagesIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view-read-messages") %></a></div>
+	                  </div>
                     <% 
                       viewSelected = "";
                       if (uicomponent.viewing_ == uicomponent.VIEW_ATTACHMENT) viewSelected = "SelectItem" ;  
                     %>
-	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewAttachment")%>">   
-	                    <div class="ItemIcon MessagesAttachmentIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-with-attachment") %></div>
-	                  </a>
+	                  <div class="MenuItem $viewSelected" onclick="<%=uicomponent.event("ViewAttachment")%>">   
+	                    <div class="ItemIcon MessagesAttachmentIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view-with-attachment") %></a></div>
+	                  </div>
 	                </div>
 	              </div>
 	            </div>
@@ -248,11 +268,11 @@
               else if (fromIndex == endIndex) mailRange = fromIndex ;
             }         
           %>
-          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.first-page') %>" class="$cssPreviousPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        
+          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.first-page') %>" class="$cssPreviousPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"></a>        
           <a title="<%=_ctx.appRes(uicomponent.id+ '.label.previous-page') %>" class="$cssPreviousPage PreviousPageArrow" href="<%=uicomponent.event("PreviousPage")%>"></a>
           <div class="Number">$currentPage / <%=pageList.getAvailablePage()%></div>
-          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.next-page') %>" class="$cssNextPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
-          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.last-page') %>" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span></span></a>
+          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.next-page') %>" class="$cssNextPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"></a>
+          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.last-page') %>" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"></a>
           <div style="clear:left;"><span></span></div>
         </div>
         <div class="LeftPageIteratorBlock">
@@ -274,9 +294,7 @@
   %>
   <div style="clear:left;"><span></span></div>
   </div>
-  
   <% /*End Message Action Bar*/ %>
-  
   <% /*Popup menu for the message*/ %>
   <div class="UIRightClickPopupMenu" id="UIMessagePopupMenu" eXoCallback="eXo.mail.UIMailPortlet.msgPopupMenuCallback">
     <div class="UIContextMenuContainer">
@@ -285,51 +303,49 @@
           <div class="TopCenterRightClickPopupMenu"><span></span></div>
         </div>
       </div>
-      
       <div class="MiddleLeftRightClickPopupMenu">
         <div class="MiddleRightRightClickPopupMenu">
           <div class="UIRightPopupMenuContainer">
             <% if (uicomponent.selectedDraftFolder()) { %> 
-            <a class="MenuItem" href="<%=uicomponent.event("EditDraft", "id")%>">   
-              <div class="ItemIcon EditDraftIcon"><%=_ctx.appRes(uicomponent.id+ ".label.edit-draft") %></div>
-            </a>
+            <div class="MenuItem">   
+              <div class="ItemIcon EditDraftIcon"><a href="<%=uicomponent.event("EditDraft", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.edit-draft") %></a></div>
+            </div>
             <% } %>
-            <a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
-              <div class="ItemIcon PrintMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.print") %></div>
-            </a>
+            <div class="MenuItem">   
+              <div class="ItemIcon PrintMailIcon"><a href="<%=uicomponent.event("Print", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.print") %></a></div>
+            </div>
             <% if (!uicomponent.selectedDraftFolder()) { %> 
-            <a class="MenuItem" href="<%=uicomponent.event("Reply", "id")%>">   
-              <div class="ItemIcon ReplyMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %></div>
-            </a>  
-            <a class="MenuItem" href="<%=uicomponent.event("ReplyAll", "id")%>">   
-              <div class="ItemIcon ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("Forward", "id")%>">   
-              <div class="ItemIcon ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></div>
-            </a>
+            <div class="MenuItem">   
+              <div class="ItemIcon ReplyMailIcon"><a href="<%=uicomponent.event("Reply", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %></a></div>
+            </div>  
+            <div class="MenuItem">   
+              <div class="ItemIcon ReplyAllMailIcon"><a href="<%=uicomponent.event("ReplyAll", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a></div>
+            </div>
+            <div class="MenuItem">   
+              <div class="ItemIcon ForwardMailIcon"><a href="<%=uicomponent.event("Forward", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></a></div>
+            </div>
             <% } %>
-            <a class="MenuItem" href="<%=uicomponent.event("CreateFilter", "id")%>">   
-              <div class="ItemIcon CreateFilterIcon"><%=_ctx.appRes(uicomponent.id+ ".label.create-filter-from-this") %></div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", "id")%>">   
-              <div class="ItemIcon MoveMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.move-to-folder") %></div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("AddTag", "id")%>">   
-              <div class="ItemIcon TagMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.tag") %> </div>
-            </a>          
-            <a class="MenuItem" href="<%=uicomponent.event("Delete", uicomponent.id, "id")%>">   
-              <div class="ItemIcon DeleteMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.delete") %></div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("AddContact", "id")%>">   
-              <div class="ItemIcon AddContactIcon"><%=_ctx.appRes(uicomponent.id+ ".label.add-sender-to-contacts") %></div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("Export", "id")%>">   
-              <div class="ItemIcon ExportIcon"><%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %></div>
-            </a>
+            <div class="MenuItem">   
+              <div class="ItemIcon CreateFilterIcon"><a href="<%=uicomponent.event("CreateFilter", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.create-filter-from-this") %></a></div>
+            </div>
+            <div class="MenuItem">   
+              <div class="ItemIcon MoveMailIcon"><a href="<%=uicomponent.event("MoveMessages", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.move-to-folder") %></a></div>
+            </div>
+            <div class="MenuItem">   
+              <div class="ItemIcon TagMailIcon"><a href="<%=uicomponent.event("AddTag", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.tag") %></a></div>
+            </div>          
+            <div class="MenuItem">   
+              <div class="ItemIcon DeleteMailIcon"><a href="<%=uicomponent.event("Delete", uicomponent.id, "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.delete") %></a></div>
+            </div>
+            <div class="MenuItem">   
+              <div class="ItemIcon AddContactIcon"><a href="<%=uicomponent.event("AddContact", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.add-sender-to-contacts") %></a></div>
+            </div>
+            <div class="MenuItem">   
+              <div class="ItemIcon ExportIcon"><a href="<%=uicomponent.event("Export", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %></a></div>
+            </div>
           </div>
         </div>
       </div>
-      
       <div class="BottomLeftRightClickPopupMenu">
         <div class="BottomRightRightClickPopupMenu">
           <div class="BottomCenterRightClickPopupMenu"><span></span></div>
@@ -352,10 +368,10 @@
         <div class="Value">email</div>
       </div>
     </div>*/ %>
-  	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid" style="table-layout:fixed;">
+  	<table cellspacing="0" cellpadding="0" border="0" id="UIListUsers" class="UIGrid" style="table-layout:fixed;">
     	<thead>
     		<tr>
-    			<th style="width:20px; padding-left:7px; " class="Border"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.id+ '.label.check-all') %>" value="4"/></th>
+    			<th style="width:20px; padding-left:7px;" class="Border"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.id+ '.label.check-all') %>" value="4"/></th>
     			<th style="width:24px;"><div class="StarredIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div></th>
     		  <th style="padding-left:8px; width:20%;">
     		    <%
@@ -374,10 +390,14 @@
                 else classArrowFrom = "DownArrow1Icon" ;
               }
     		    %>
-    		  	<a href = "$sortedBySender" ><div class="$classArrowFrom" style="width:90%; cursor:pointer; margin-top:3px;" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-sender') %>">$head</div></a>
+    		  	<div onclick="$sortedBySender">
+    		  		<div class="$classArrowFrom" style="width:90%; cursor:pointer; margin-top:3px;" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-sender') %>">
+    		  			<a href="#">$head</a>
+    		  		</div>
+		  			</div>
     		  </th>
     		  <th style="width:24px;">
-    		    <a hreft = ""><div class="AttachmentIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.attachment') %>"><span></span></div></a>
+    		    <div style="cursor:pointer;"><div class="AttachmentIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.attachment') %>"><span></span></div></div>
     		  </th>
    	      <th style="padding-left:24px;width:40%;">
        	   <%
@@ -388,7 +408,11 @@
                  else classArrowSubject = "DownArrow1Icon"
                }
            %>
-    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-subject') %>" style="width:95%; cursor:pointer; margin-top:3px;"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %></div></a>
+    		  	<div onclick= "$sortedBySubject">
+    		  		<div class="$classArrowSubject" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-subject') %>" style="width:95%; cursor:pointer; margin-top:3px;">
+    		  			<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %></a>
+    		  		</div>
+		  			</div>
     		  </th>
    	      <th style="width:24px;"><div class="TotalMessageIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.total-messages-in-conversation') %>"><span></span></div></th>
    	      <th style="width:80px; padding-left:8px; border-right:none;" >
@@ -400,7 +424,11 @@
                   else classArrowDate = "DownArrow1Icon"
                 }
             %>
-    		      <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-date-time') %>" ><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %></div></a>
+    		      <div onclick="$sortedByReceivedDate">
+    		      	<div class="$classArrowDate" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-date-time') %>" >
+    		      		<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %></a>
+		      			</div>
+		      		</div>
    	      </th>
    	      <th style="width:50px; padding-left:8px; border-left:1px solid #d2d4dc;">
        	    <%
@@ -411,18 +439,22 @@
        	         else classArrowSize = "DownArrow1Icon"
        	       }
             %>
-   	        <a href = "$sortedBySize"><div class="$classArrowSize" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-size') %>" style=" margin-top:3px;"><%=_ctx.appRes(uicomponent.id+ ".label.size") %></div></a>
+   	        <div onclick="$sortedBySize">
+   	        	<div class="$classArrowSize" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-size') %>" style=" margin-top:3px;">
+   	        		<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.size") %></a>
+   	        	</div>
+   	        </div>
    	      </th>
    	      <th style="width:30px;">
        	    <%
                String sortedByPriority = uicomponent.event("Sort",Utils.EXO_PRIORITY);
             %>
-   	        <a href = "$sortedByPriority"><div class="PriorityIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-priority') %>"><span></span></div></a>
+   	        <div onclick="$sortedByPriority">
+   	        	<div class="PriorityIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-priority') %>"><span></span></div>
+   	        </div>
    	      </th>
     	 	</tr>
     	</thead>
-      
-      
       <% 
         public int show(Message msg, int i, int l, Locale locale) {
           if (msg != null && (uicomponent.viewMode != uicomponent.MODE_CONVERSATION || msg.isRootConversation())) {
@@ -444,7 +476,7 @@
                   if (checkboxField != null) uicomponent.renderField(checkboxField);
                 %>
               </td>
-              <td style="padding:0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
+              <td style="padding:0px auto;"><div onclick="$actionAddStar"><div class="$starClass"><span></span></div></div></td>
               <td class="$readStatus">
                 <%
                   String sender = "";
@@ -467,7 +499,7 @@
                 <% 
                   if (msg.hasAttachment()) {
                 %>
-                <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
+                <div onclick="$actionLink"><div class="AttachmentIcon"><span></span></div></div>
                 <%}%>
               </td>
 

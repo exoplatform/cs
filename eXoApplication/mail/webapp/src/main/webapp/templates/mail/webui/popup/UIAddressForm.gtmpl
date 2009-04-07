@@ -18,7 +18,7 @@
                   <div class="QuickSet">
                     <div class="SearchTitle"><%=_ctx.appRes(uicomponent.id+ ".label.contact-search") %>:</div>
                     <% uiform.renderField(uiform.CONTACT_SEARCH) %>
-                    <a class="SearchIcon" href="<%=uicomponent.event("SearchContact")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.quick-search') %>"><span></span></a>
+                    <a class="SearchIcon" href="<%=uicomponent.event("SearchContact")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.quick-search') %>"></a>
                   </div>  
                 </div>
                 <div class="AddressesGroup">
@@ -33,10 +33,8 @@
         </div>
       </div>        
     </div>
-    
     <div class="AddressContainer">
       <div class="ListAddress">
-      
         <table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
             <thead>
               <tr>
@@ -46,7 +44,7 @@
                     <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.name") %></div>
                   </div>
                 </th>
-                <th style="width:48%;" >
+                <th style="width:48%;">
                   <div class="BlueDownArrowIcon">
                     <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.email") %></div>
                   </div>
@@ -72,41 +70,42 @@
         </table>      
         <%_ctx.include("app:/templates/mail/webui/UIPageIterator.gtmpl");%>  
       </div>
-      
     </div>
-
   </div>
-  
   <div class="UIAction"> 
-    <table class="ActionContainer" align="center">
+    <table class="ActionContainer">
       <tr>
-        <td align="center"> 
-      
-         <a href="<%=uicomponent.event("Add")%>" class="ActionButton LightBlueStyle">
+        <td> 
+         <div onclick="<%=uicomponent.event("Add")%>" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">
-                <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.id+ ".label.add-address") %> </div>
+                <div class="ButtonMiddle">
+                	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.add-address") %></a>
+            		</div>
               </div>
             </div>
-          </a>
-          <a href="<%=uicomponent.event("Replace")%>" class="ActionButton LightBlueStyle">
+          </div>
+          <div onclick="<%=uicomponent.event("Replace")%>" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">
-                <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.id+ ".label.replace") %> </div>
+                <div class="ButtonMiddle">
+                	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.replace") %></a>
+            	</div>
               </div>
             </div>
-          </a>
-          <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
+          </div>
+          <div onclick="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">
-                <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.id+ ".label.cancel") %> </div>
+                <div class="ButtonMiddle">
+                	<a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.cancel") %></a>
+                </div>
               </div>
             </div>
-          </a>
+          </div>
         </td>
       </tr>
     </table>
   </div>  
-  
 </div>
 <% uiform.end() %>

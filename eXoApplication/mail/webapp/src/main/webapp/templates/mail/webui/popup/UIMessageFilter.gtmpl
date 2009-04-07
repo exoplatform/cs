@@ -14,20 +14,20 @@
         	String filterId = uicomponent.getSelectedFilterId() ;
         	if(filterId != null && filterId.trim().length() > 0){
         %>
-        <a href="<%=uicomponent.event("DeleteFilter",uicomponent.id,"id")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.delete-filter") %>">
+        <div onclick="<%=uicomponent.event("DeleteFilter",uicomponent.id,"id")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.delete-filter") %>">
           <div class="ControlBarIcon FilterDelete"><span></span></div>
-        </a>
+        </div>
         <%} else { %>
-        <a>
+        <div style="cursor:pointer;">
           <div class="ControlBarIcon FilterDelete"><span></span></div>
-        </a>
+        </div>
         <%}%>
-        <a href="<%=uicomponent.event("EditFilter")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.edit-filter") %>">
+        <div onclick="<%=uicomponent.event("EditFilter")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.edit-filter") %>">
           <div class="ControlBarIcon FilterEdit"><span></span></div>
-        </a>
-        <a href="<%=uicomponent.event("AddFilter")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.add-filter") %>">
+        </div>
+        <div onclick="<%=uicomponent.event("AddFilter")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.add-filter") %>">
           <div class="ControlBarIcon FilterAdd"><span></span></div>
-        </a>
+        </div>
         <div style="clear:both;"><span></span></div>
       </div>
       <div class="FilterSettingList">
@@ -38,7 +38,7 @@
               String cssClass = "NormalItem";
               if (uicomponent.getSelectedFilterId().equals(filter.getId())) cssClass = "SelectedItem";
         %>
-                <a href="$selectFilter"><div class="$cssClass"><%=MailUtils.encodeHTML(filter.getName())%></div></a>
+                <div onclick="$selectFilter"><div class="$cssClass"><a href="#"><%=MailUtils.encodeHTML(filter.getName())%></a></div></div>
         <%  
             } 
           } else { %>
@@ -123,29 +123,27 @@
       </div>
     <div style="clear:left;"><span></span></div>
   </div>  
-  
   <div class="UIAction">
-    <table class="ActionContainer" align="center">
+    <table class="ActionContainer">
       <tr>
-        <td align="center">
+        <td>
           <% for(action in uicomponent.getActions()) { 
                    String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
                    String link = uicomponent.event(action) ;
           %>
-          <a href="$link" class="ActionButton LightBlueStyle">
+          <div onclick="$link" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">
                 <div class="ButtonMiddle">
-                  $actionLabel
+                  <a href="#">$actionLabel</a>
                 </div>
               </div>
             </div>
-          </a>
+          </div>
           <%}%>
         </td>
       </tr>
     </table>
   </div> 
-
 </div>
 <%uiform.end()%>    

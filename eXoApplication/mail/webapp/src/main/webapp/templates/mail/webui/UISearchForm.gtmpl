@@ -5,9 +5,13 @@
 	rcontext.getJavascriptManager().addJavascript('eXo.cs.Utils.captureInput("search") ;') ;
 %>
 <div class="SearchForm">
-	<a href="<%=uicomponent.event("Advanced")%>"><div class="AdvancedSearch" title="<%=_ctx.appRes(uicomponent.id+ '.label.advance-search') %>"><span></span></div></a>
+	<div onclick="<%=uicomponent.event("Advanced")%>">
+		<div class="AdvancedSearch" title="<%=_ctx.appRes(uicomponent.id+ '.label.advance-search') %>"><span></span></div>
+	</div>
 	<div class="SeparatorLine"><span></span></div>
-	<a href="<%=uicomponent.event("Search")%>"><div class="Search" title="<%=_ctx.appRes(uicomponent.id+ '.label.search') %>"><span></span></div></a>
+	<div onclick="<%=uicomponent.event("Search")%>">
+		<div class="Search" title="<%=_ctx.appRes(uicomponent.id+ '.label.search') %>"><span></span></div>
+	</div>
   <input class="Input" type="text" id="search" name="search"/>
   <% 
     String label = _ctx.appRes(uicomponent.getName() + ".label.search") ;

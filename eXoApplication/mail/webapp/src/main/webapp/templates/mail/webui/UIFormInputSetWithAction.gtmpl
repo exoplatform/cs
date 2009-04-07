@@ -53,7 +53,7 @@
 						  	            <div class="ActionField">
 						  	            	<%=listInfor[j]%>
 						  	            	<a href="javascript:eXo.webui.UIForm.submitEvent('<%=formName%>', '<%=actionInfo[0]%>', '&objectId=<%=j%>');" onclick="return confirm('<%=confirm%>');">
-							                  <img class="DeleteIconInfo" src="/eXoResources/skin/DefaultSkin/background/Blank.gif">
+							                  <img class="DeleteIconInfo" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt="" />
 							                </a>
 						  	            </div>      	          
 						              </div>	
@@ -74,7 +74,7 @@
 								                <div class="ActionField">
 								                  <%=arrInfor[i]%>
 								                  <a href="javascript:eXo.webui.UIForm.submitEvent('<%=formName%>', '<%=actionInfo[0]%>', '&objectId=<%=arrInfor[i]%>');" onclick="return confirm('<%=confirm%>');">
-										                <img class="DeleteIconInfo" src="/eXoResources/skin/DefaultSkin/background/Blank.gif">		                  
+										                <img class="DeleteIconInfo" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt="" />		                  
 										              </a>
 								                </div>      	          
 							              <%} else { %>
@@ -82,7 +82,7 @@
 								                  [ <a href="javascript:eXo.webui.UIForm.submitEvent('<%=formName%>', '<%=actionInfo[0]%>', '&objectId=<%=arrInfor[i]%>');">
 								                      <%=arrInfor[i]%>
 							                       <a href="javascript:eXo.webui.UIForm.submitEvent('<%=formName%>', '<%=actionInfo[1]%>', '&objectId=<%=arrInfor[i]%>');" onclick="return confirm('<%=confirm%>');">
-		  									              <img class="DeleteIconInfo" src="/eXoResources/skin/DefaultSkin/background/Blank.gif">                
+		  									              <img class="DeleteIconInfo" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt="" />                
 											              </a>
 								                  </a> ]
 								                </div>
@@ -126,7 +126,7 @@
 							          for(i in 0..actionField.length -1) {
 							      %>      
 						              <a href="javascript:eXo.webui.UIForm.submitForm('<%=formName%>', '<%=actionField[i]%>', true)" title='<%=actionField[i]%>'>
-						                <img class="AddIcon16x16 <%=actionField[i]%>Icon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif">
+						                <img class="AddIcon16x16 <%=actionField[i]%>Icon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt="" />
 						              </a>
 							      <%
 						            }
@@ -135,7 +135,7 @@
 							        for(String action : uicomponent.getFieldActions(inputEntry.getName())) {
 							      %>      
 						              <a href="javascript:eXo.webui.UIForm.submitForm('<%=formName%>', '<%=action%>', true)" title='<%=action%>'>
-						                <img class="AddIcon16x16 <%=action%>Icon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif">
+						                <img class="AddIcon16x16 <%=action%>Icon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt="" />
 						              </a>
 							      <%
 						          }
