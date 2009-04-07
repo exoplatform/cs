@@ -31,8 +31,10 @@ public class UIEmailInput extends UIFormStringInput {
 				w.write("		<div style='clear:both;'><span></span></div>");
 				w.write("	</div>");	
 			}
+			return ;
 		}
-		if(!CalendarUtils.isEmpty(value) && (value.indexOf(",") < 0)){
+		if((!CalendarUtils.isEmpty(value) && (value.indexOf("@") != -1))){
+			System.out.println(value + "-" + CalendarUtils.isEmpty(value));
 			w.write("	<div class='UIEmailAddressItem'>");
 			w.write("		<div class='UIEmailAddressLabel'>" + value + "</div><div class='UIRemoveEmailIcon' onclick='eXo.cs.UIEmailInput.remove(this);'><span></span></div>");
 			w.write("		<div style='clear:both;'><span></span></div>");
