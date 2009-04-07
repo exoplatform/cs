@@ -22,6 +22,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
@@ -262,7 +264,15 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           contact.setEditPermissionUsers(newEditMapUsers.keySet().toArray(new String[] {})) ;
           contact.setViewPermissionGroups(newViewMapGroups.keySet().toArray(new String[] {})) ;
           contact.setEditPermissionGroups(newEditMapGroups.keySet().toArray(new String[] {})) ;
-          contactService.saveContact(username, contact, false) ;
+          //TODO cs-2481
+          try {
+            contactService.saveContact(username, contact, false) ;
+          } catch (PathNotFoundException e) {
+            uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.deleted-contact", null,
+                ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
         }
       	String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
         for (String user : receiverUserByGroup.keySet()) receiverUser.put(user, user) ;
