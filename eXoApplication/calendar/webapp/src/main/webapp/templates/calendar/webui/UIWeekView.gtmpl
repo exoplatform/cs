@@ -225,7 +225,7 @@
         <tbody>
           <% 
 					boolean flag = false ;
-					style = "" ;
+					style = "none" ;
 					if(isShowWorkingTime) {style = "WorkOffTime" ;}	
 					for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
 					String time = full.substring(0,full.lastIndexOf("_")) ;
@@ -294,27 +294,27 @@
 			      				link = uicomponent.event(act,uicomponent.id,"id&$uicomponent.CALENDARID=calId&calType=caltype") ;
 			      				icon = act + "EventIcon" ;
           %>
-          <a href="$link" style="display: none;" class="EventActionMenu">
+          <div onclick="$link" style="display: none;" class="EventActionMenu">
             <div class="ItemIcon $icon">
               <%=_ctx.appRes("ContextMenu.label."+act)%>
             </div>
-          </a>
+          </div>
           <%}%>
-					<a  class="EventActionMenu" style="display: none;" href="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
+					<div  class="EventActionMenu" style="display: none;" onclick="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
             <div class="ItemIcon ExportCalendarIcon">
               <%=_ctx.appRes("ContextMenu.label.ExportEvent")%>
             </div>
-          </a>
-          <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
+          </div>
+          <div onclick="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
             <div class="ItemIcon QuickAddEvent">
               <%=_ctx.appRes("ContextMenu.label.addEvent")%>
             </div>
-          </a>
-					<a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
+          </div>
+					<div onclick="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
             <div class="ItemIcon QuickAddTask">
               <%=_ctx.appRes("ContextMenu.label.addTask")%>
             </div>
-          </a>
+          </div>
         </div>
       </div>
     </div>

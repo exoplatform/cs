@@ -23,6 +23,7 @@
 .UICalendarPortlet .CalendarWorkingWorkspace .RightControlButton {
 	float: right;
 	line-height: 18px;
+	cursor: pointer;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .ControlButton {

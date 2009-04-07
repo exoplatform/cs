@@ -14,7 +14,7 @@ UICombobox.prototype.init = function(textbox) {
 
 UICombobox.prototype.show = function(evt) {
 	var uiCombo = eXo.calendar.UICombobox;
-	uiCombo.items = eXo.core.DOMUtil.findDescendantsByTagName(this.parentNode,"a");
+	uiCombo.items = eXo.core.DOMUtil.findDescendantsByClass(this.parentNode,"div","UIComboboxItem");
 	if(uiCombo.list) uiCombo.list.style.display = "none";
 	uiCombo.list = eXo.core.DOMUtil.findFirstDescendantByClass(this.parentNode,"div","UIComboboxContainer");
 	uiCombo.list.parentNode.style.position = "absolute";

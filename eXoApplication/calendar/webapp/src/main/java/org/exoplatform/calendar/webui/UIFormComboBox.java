@@ -148,11 +148,11 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
     String text = "<div class='UIComboboxComponent'><div class='UIComboboxList'><div class='UIComboboxContainer'><div class='UIComboboxItemContainer'>" ;
         for(SelectItemOption item : options_) {
           options += "'"+item.getValue()+"',";
-          text += "<a href='javascript:void(0);' onclick='eXo.calendar.UICombobox.getValue(this);' value='" + item.getValue()+ "' class='UIComboboxItem'>" ;
+          text += "<div onclick='eXo.calendar.UICombobox.getValue(this);' value='" + item.getValue()+ "' class='UIComboboxItem'>" ;
           text += "<div class='UIComboboxIcon'>" ;
           text += "<div class='UIComboboxLabel'>" + item.getLabel() + "</div>" ;
           text += "</div>";
-          text += "</a>" ;
+          text += "</div>" ;
         }
       text += "</div></div></div>" ;
       options = options.substring(0,options.length() - 1) + "]";

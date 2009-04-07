@@ -31,17 +31,17 @@
 <div class="UIMiniCalendar">
 	<div class="MiniCalendarContainer">
 		<div class="YearSelector">
-			<a href="$linkDayNext" class="RightControlButton">
+			<div onclick="$linkDayNext" class="RightControlButton">
 				<div class="NextYearSelector" title="<%=_ctx.appRes('UIMonthView.label.nextMonth')%>"><span></span></div>
-			</a>
+			</div>
 			<div class="MonthSelector RightControlButton">
 				<table>
 					<body>
 						<tr>
 							<td>
-								<a href="$linkYearPrevious">
+								<div onclick="$linkYearPrevious">
 									<div class="PreviousMonthSelector" title="<%=_ctx.appRes('UIYearView.label.previousYear')%>"><span></span></div>
-								</a>
+								</div>
 							</td>
 							<td>
 								<div class="Title">
@@ -58,17 +58,17 @@
 								</div>
 							</td>
 							<td>
-								<a href="$linkYearNext">
+								<div onclick="$linkYearNext">
 									<div class="NextMonthSelector" title="<%=_ctx.appRes('UIYearView.label.nextYear')%>"><span></span></div>
-								</a>
+								</div>
 							</td>
 						</tr>
 					</body>
 				</table>
 			</div>
-			<a href="$linkDayPrevious" class="RightControlButton">
+			<div onclick="$linkDayPrevious" class="RightControlButton">
 				<div class="PreviousYearSelector" title="<%=_ctx.appRes('UIMonthView.label.previousMonth')%>"><span></span></div>
-			</a>
+			</div>
 			<div style="clear: right;"><span></span></div>
 		</div> 
 		<div class="MonthList">
@@ -125,22 +125,18 @@
 				       %>
 				      
 				        <td class="$highlight $styleClass $dayStyle">
-				        	<a href="$actionLink">
-				        		<div class="MiniCalendarActions">
-                      <%=sdf.format(calendar.getTime())%> 
-				       			</div>
-				       		</a>
+			        		<div class="MiniCalendarActions" onclick="$actionLink">
+  	                <%=sdf.format(calendar.getTime())%> 
+			       			</div>
 				       	</td>
 				       <% 
 				       dayOfMonth++ ;
 				      } else {
 				        %>
 				        <td class="OtherMonth">
-				        	<a href="$actionLink">
-				        		<div class="MiniCalendarActions">
-				       				<%=sdf.format(calendar.getTime())%> 
-				       			</div>
-				       		</a>
+			        		<div class="MiniCalendarActions" onclick="$actionLink">
+			       				<%=sdf.format(calendar.getTime())%> 
+			       			</div>
 				       	</td>
 				      <%
 				      }

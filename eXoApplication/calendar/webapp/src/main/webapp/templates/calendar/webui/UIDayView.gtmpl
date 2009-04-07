@@ -56,9 +56,9 @@
 			<body>
 				<tr>
 					<td>
-						<a href="$linkDayPrevious">
+						<div onclick="$linkDayPrevious">
 							<div class="BackIcon" title="<%=uiform.getLabel('previousDay')%>"><span></span></div>
-						</a>
+						</div>
 					</td>
 					<td>
 						<div class="Title $cssClass">
@@ -72,9 +72,9 @@
 						</div>
 					</td>
 					<td>
-						<a href="$linkDayNext">
+						<div onclick="$linkDayNext">
 							<div class="NextIcon" title="<%=uiform.getLabel('nextDay')%>"><span></span></div>
-						</a>
+						</div>
 					</td>
 				</tr>
 			</body>
@@ -221,16 +221,16 @@
 	  <div class="MiddleLeftRightClickPopupMenu">
 	    <div class="MiddleRightRightClickPopupMenu">
 	      <div class="UIRightPopupMenuContainer">
-	          <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
+	          <div onclick="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
 	           <div class="ItemIcon QuickAddEvent">
 	           	<%=_ctx.appRes("ContextMenu.label.addEvent")%>
 	           </div>
-	          </a>
-	          <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
+	          </div>
+	          <div onclick="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
 	            <div class="ItemIcon QuickAddTask">
 	            	<%=_ctx.appRes("ContextMenu.label.addTask")%>
 	            </div>
-	          </a>
+	          </div>
 	      </div>
 	    </div>
 	  </div>
@@ -262,17 +262,17 @@
 	  				link = uicomponent.event(act,uicomponent.id,"id&$uicomponent.CALENDARID=calId&calType=caltype") ;
 	  				icon = act + "EventIcon" ;
 	        %>
-	        <a href="$link">
+	        <div onclick="$link">
 	          <div class="ItemIcon $icon">
 	            <%=_ctx.appRes("ContextMenu.label."+act)%>
 	          </div>
-	        </a>
+	        </div>
 	        <%}%>
-					<a href="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
+					<div onclick="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
             <div class="ItemIcon ExportCalendarIcon">
             	<%=_ctx.appRes("ContextMenu.label.ExportEvent")%>
             </div>
-          </a>
+          </div>
 	      </div>
 	    </div>
 	  </div>

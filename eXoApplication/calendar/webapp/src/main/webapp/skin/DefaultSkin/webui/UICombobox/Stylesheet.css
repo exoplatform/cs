@@ -27,12 +27,12 @@ position: absolute;
 	outline:none;
 }
 
-.UICalendarPortlet .UIComboboxComponent a:hover{
+.UICalendarPortlet .UIComboboxComponent .UIComboboxItem:hover{
 	background: blue ;
 	color: white ;
 }
 
-.UICalendarPortlet .UIComboboxComponent a:visit{
+.UICalendarPortlet .UIComboboxComponent .UIComboboxItem:visit{
 	background: white ;
 	color: black ;
 }

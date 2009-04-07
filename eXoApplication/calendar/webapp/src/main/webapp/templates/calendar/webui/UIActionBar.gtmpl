@@ -73,13 +73,13 @@
 		      		<% /*End Popup Menu*/ %>
 						</div>
 						<div class="SeparatorLine"><span></span></div>
-						<div href="<%=uicomponent.event("Setting")%>" class="ControlButton">
+						<div onclick="<%=uicomponent.event("Setting")%>" class="ControlButton">
 							<div class="IconHolder SettingCalendarIcon">
 								<%=_ctx.appRes(uicomponent.id + ".label.CalendarSettings")%>
 							</div>
 						</div>
 						<div class="SeparatorLine"><span></span></div>
-						<div href="<%=uicomponent.event("RSS")%>" class="ControlButton">
+						<div onclick="<%=uicomponent.event("RSS")%>" class="ControlButton">
 							<div class="IconHolder CalendarRssIcon">
 								<%=_ctx.appRes(uicomponent.id + ".label.RSS")%>
 							</div>
@@ -141,11 +141,11 @@
 		      		<% /*End Popup Menu*/ %>
 		      		</div>
 		      		<div class="SeparatorLine"><span></span></div>
-		      		<a href="<%=uicomponent.event("Today")%>" class="ControlButton">
+		      		<div onclick="<%=uicomponent.event("Today")%>" class="ControlButton">
 								<div class="IconHolder TodayIcon">
 									<%=_ctx.appRes(uicomponent.id + '.label.Today')%>
 								</div>
-							</a>
+							</div>
 						<div style="clear: both;"><span></span></div>
 					</div>
 				</div>
