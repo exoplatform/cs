@@ -147,7 +147,8 @@
 								  cal.setTime(ce.getToDateTime()) ;
 								  long	endTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
 								 	color = uicomponent.getColors().get(ce.calType +CalendarUtils.COLON+ ce.getCalendarId()) ;
-								 	actionLink =  uicomponent.event("SaveEvent",ce.id+"&calendarId="+ce.calendarId+"&startTime=beginTime&finishTime=endTime") ;
+								 	//actionLink =  uicomponent.event("SaveEvent",ce.id+"&calendarId="+ce.calendarId+"&startTime=beginTime&finishTime=endTime") ;
+									actionLink = uicomponent.url("SaveEvent",ce.id);
                   %>
                   <div class="EventContainerBorder EventBoxes $color" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="$ce.id" calid="$ce.calendarId" actionlink="$actionLink"  starttime="$beginTime" endtime="$endTime">
                     <div class="<%=ce.eventState%>Icon">

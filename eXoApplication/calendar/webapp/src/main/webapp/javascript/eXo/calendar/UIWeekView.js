@@ -9,14 +9,6 @@ UIWeekView.prototype.mousePos = function(evt){
 	} ;
 } ;
 
-//UIWeekView.prototype.onLoad = function(){
-//	if(eXo.core.Browser.browserType != "ie") {
-//		window.setTimeout("eXo.calendar.UICalendarPortlet.checkFilter() ;", 1500) ;
-//		return ;
-//	}
-//	eXo.calendar.UICalendarPortlet.checkFilter() ;	
-//} ;
-
 UIWeekView.prototype.init = function() {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	var DOMUtil = eXo.core.DOMUtil ;
@@ -40,8 +32,7 @@ UIWeekView.prototype.init = function() {
 	for(var i = 0 ; i < len ; i ++){		
 		var height = parseInt(this.items[i].getAttribute("endtime")) - parseInt(this.items[i].getAttribute("starttime")) ;
 		this.items[i].onmousedown = UIWeekView.dragStart ;
-    this.items[i].ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback ;
-		eXo.calendar.UICalendarPortlet.setSize(this.items[i]) ;
+    	this.items[i].ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback ;
 		marker = DOMUtil.findFirstDescendantByClass(this.items[i], "div", "ResizeEventContainer") ;
 		marker.onmousedown = UIWeekView.initResize ;
 	}
@@ -129,6 +120,7 @@ UIWeekView.prototype.adjustWidth = function(el) {
 		}
 		var n = 0 ;
 		for(var j = inter[i]; j < inter[i+1] ; j++) {
+			eXo.calendar.UICalendarPortlet.setSize(el[j]) ;
 			if(mark != null) {				
 				width = parseFloat((totalWidth + left - parseFloat(el[mark].style.left) - parseFloat(el[mark].style.width))/len) ;
 			} else {
@@ -185,7 +177,7 @@ UIWeekView.prototype.drag = function(evt) {
 	var mouseY = eXo.core.Browser.findMouseRelativeY(UIWeekView.container,_e) - UIWeekView.container.scrollTop ;
 	var posY = UIWeekView.dragElement.offsetTop ;
 	var height =  UIWeekView.dragElement.offsetHeight ;
-	var deltaY = null ;	
+	var deltaY = null ;
 	deltaY = _e.clientY - UIWeekView.mouseY ;
 	if (deltaY % eXo.calendar.UICalendarPortlet.interval == 0) {
 		UIWeekView.dragElement.style.top = UIWeekView.mousePos(_e).y - UIWeekView.offset.y - UIWeekView.containerOffset.y + "px" ;
@@ -195,6 +187,7 @@ UIWeekView.prototype.drag = function(evt) {
 		UIWeekView.dragElement.style.left = posX + "px" ;
 	}
 	eXo.calendar.UICalendarPortlet.updateTitle(UIWeekView.dragElement, posY) ;
+	UIWeekView.dragElement.style.width = (UIWeekView.dragElement.parentNode.offsetWidth - 10) + "px";
 } ;
 
 UIWeekView.prototype.dropCallback = function() {
@@ -221,30 +214,13 @@ UIWeekView.prototype.dropCallback = function() {
 	];
 	//console.log(eXo.env.server.createPortalURL("UIWeekView", "UpdateEvent", true, params));
 //	eXo.calendar.UIWeekView.checkFilter();
-	this.setTimeValue(dragElement,currentStart,currentEnd);	
+	eXo.calendar.UICalendarPortlet.setTimeValue(dragElement,currentStart,currentEnd,this.currentCol);	
 	this.setSize();	
-	ajaxAsyncGetRequest(this.createUrl(actionLink,params), false) ;
+	ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(actionLink,params), false) ;
 	
 	//alert(actionLink);return ;	
 	//eval(actionLink) ;	
 } ;
-
-UIWeekView.prototype.setTimeValue = function(event, start,end,currentDate){
-	event.setAttribute("startTime",start);
-	event.setAttribute("endTime",end);
-	event.setAttribute("eventindex",this.currentCol.getAttribute("eventindex"));
-}
-UIWeekView.prototype.createUrl = function(href,params){
-	if(params != null) {
-		var len = params.length ;
-		for(var i = 0 ; i < len ; i++) {
-			href += "&" +  params[i].name + "=" + params[i].value ;
-		}
-	}
-	href += "&ajaxRequest=true";
-	href = href.replace("&op=","&formOp=");
-	return href;
-};
 
 UIWeekView.prototype.drop = function(evt) {
 	document.onmousemove = null ;
@@ -350,11 +326,22 @@ UIWeekView.prototype.resizeCallback = function(evt) {
 	var end =  start + eventBox.offsetHeight ;
 	var calType = parseInt(eventBox.getAttribute("calType")) ;
 	if (eventBox.offsetHeight != UIResizeEvent.beforeHeight) {
-		var actionLink = eXo.calendar.UICalendarPortlet.adjustTime(start, end, eventBox) ;
+		var actionLink = eventBox.getAttribute("actionLink");//eXo.calendar.UICalendarPortlet.adjustTime(start, end, eventBox) ;
 		var currentDate = eventBox.parentNode.getAttribute("starttime").toString() ;
-		actionLink = actionLink.toString().replace(/'\s*\)/,"&currentDate=" + currentDate + "&calType=" + calType + "')") ;
-		eval(actionLink) ;
-	}	
+		//actionLink = actionLink.toString().replace(/'\s*\)/,"&currentDate=" + currentDate + "&calType=" + calType + "')") ;
+		//eval(actionLink) ;
+		var params = [
+			{name:"calendarId",value:eventBox.getAttribute("calid")},
+			{name:"startTime",value:start},
+			{name:"finishTime",value:end},
+			{name:"calType",value:calType},
+			{name:"currentDate",value:currentDate},
+			{name:"eventCategories",value:eventBox.getAttribute("eventcat")}
+		];
+		eXo.calendar.UICalendarPortlet.setTimeValue(eventBox,start,end);	
+		eXo.calendar.UIWeekView.setSize();	
+		ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(actionLink,params), false) ;
+	}
 } ;
 
 UIWeekView.prototype.initAllDayRightResize = function(evt) {

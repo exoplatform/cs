@@ -200,6 +200,18 @@ Utils.prototype.getScrollTop = function(obj){
     return curtop;
 };
 
+Utils.prototype.createUrl = function(href,params){
+	if(params != null) {
+		var len = params.length ;
+		for(var i = 0 ; i < len ; i++) {
+			href += "&" +  params[i].name + "=" + params[i].value ;
+		}
+	}
+	href += "&ajaxRequest=true";
+	href = href.replace("&op=","&formOp=");
+	return href;
+};
+
 /**
  * Gets scrollLeft property of DOM element
  * @param {Object} obj DOM element

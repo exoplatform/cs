@@ -151,19 +151,10 @@ UIContextMenu.prototype.changeAction = function(obj, id) {
 	
 } ;
 
-UIContextMenu.prototype.hide = function() {
-	var ln = eXo.core.DOMUtil.hideElementList.length ;
-	if (ln > 0) {
-		for (var i = 0; i < ln; i++) {
-			eXo.core.DOMUtil.hideElementList[i].style.display = "none" ;
-		}
-	}
-} ;
-
 UIContextMenu.prototype.showHide = function() {
 	if(!this.menuElement) return ;
 	if (this.menuElement.style.display != "block") {
-		this.hide() ;
+		eXo.core.DOMUtil.cleanUpHiddenElements() ;
 		this.menuElement.style.display = "block" ;
 		eXo.core.DOMUtil.listHideElements(this.menuElement) ;
 	} else {
@@ -215,12 +206,7 @@ UIContextMenu.prototype.show = function(evt) {
 	if (menuElementId) {
 		UIContextMenu.menuElement = eXo.core.DOMUtil.findDescendantById(currentPortlet, menuElementId) ; //document.getElementById(menuElementId) ;
 		eXo.core.DOMUtil.listHideElements(UIContextMenu.menuElement) ;
-		var ln = eXo.core.DOMUtil.hideElementList.length ;
-		if (ln > 0) {
-			for (var i = 0; i < ln; i++) {
-				eXo.core.DOMUtil.hideElementList[i].style.display = "none" ;
-			}
-		}
+		eXo.core.DOMUtil.cleanUpHiddenElements();
 		UIContextMenu.swapMenu(document.getElementById(menuElementId), menuPos,_e) ;
 		if(!UIContextMenu.menuElement) return false;
 		UIContextMenu.menuElement.onmouseover = UIContextMenu.autoHide ;

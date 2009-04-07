@@ -140,6 +140,7 @@
 	border-top : solid 1px gray ;
 	border-bottom : solid 1px gray ;
 	cursor: n-resize;
+	margin-bottom:1px;
 }
 
 .UIDayView .UIGrid {
@@ -327,9 +328,12 @@
 .UIWeekView .EventContainerBorder .ResizeEventContainer {
 	background: transparent ;
 	width: 20%;
-	height: 2px;
+	height: 1px;
 	margin:auto;
 	cursor: n-resize;
+	margin-bottom:1px;
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
 }
 
 .UIWeekView .EventContainerBorder .EventContainer {
