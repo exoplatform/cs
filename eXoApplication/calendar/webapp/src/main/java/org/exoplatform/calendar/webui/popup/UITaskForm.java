@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.velocity.io.UnicodeInputStream;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
@@ -379,7 +378,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         errorMsg_ = "UIEventForm.msg.event-email-required" ;
         return false ;
       }
-      else if(!CalendarUtils.isAllEmailValid(getEmailAddress())) {
+      else if(!CalendarUtils.isValidEmailAddresses(getEmailAddress())) {
         errorMsg_ = "UIEventForm.msg.event-email-invalid" ;
         errorValues = CalendarUtils.invalidEmailAddresses(getEmailAddress()) ;
         return false ;

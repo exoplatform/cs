@@ -22,6 +22,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,7 +34,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.jcr.PathNotFoundException;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.calendar.service.Attachment;
@@ -590,31 +590,32 @@ public class CalendarUtils {
   }
 
   public static boolean isValidEmailAddresses(String addressList) {
-    boolean isInvalid = true ;
-    try {
-      InternetAddress[] iAdds = InternetAddress.parse(addressList, true);
-      String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
-      for (int i = 0 ; i < iAdds.length; i ++) {
-        if(!iAdds[i].getAddress().toString().matches(emailRegex)) isInvalid = false;
-      }
-    } catch(AddressException e) {
-      return false ;
+    if (isEmpty(addressList)) return true ;
+    addressList = addressList.replaceAll(SEMICOLON,COMMA) ;
+    List<String> emails = new ArrayList<String>() ;
+    emails.addAll(Arrays.asList(addressList.split(COMMA))) ;
+    String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
+    for (String email : emails) {
+      email = email.trim() ;
+      if(!email.matches(emailRegex)) return false ;
     }
-    return isInvalid ;
+    return true ;
   }
   
   public static String invalidEmailAddresses(String addressList) {
     StringBuilder invalidEmails = new StringBuilder("") ;
-    try {
-      InternetAddress[] iAdds = InternetAddress.parse(addressList, true);
-      String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
-      for (int i = 0 ; i < iAdds.length; i ++) {
-        if(!iAdds[i].getAddress().toString().matches(emailRegex)) {
-          if (invalidEmails.length() > 0) invalidEmails.append(", ") ;
-          invalidEmails.append(iAdds[i].getAddress().toString()) ;
-        }
+    addressList = addressList.replaceAll(SEMICOLON,COMMA) ;
+    List<String> emails = new ArrayList<String>() ;
+    emails.addAll(Arrays.asList(addressList.split(COMMA))) ;
+    String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
+    for (String email : emails) {
+      email = email.trim() ;
+      if(!email.matches(emailRegex)) {
+        if (invalidEmails.length() > 0) invalidEmails.append(", ") ;
+        invalidEmails.append(email) ;
       }
-    } catch(AddressException e) { }
+    }
+    if (invalidEmails.length() ==0) return addressList ;
     return invalidEmails.toString() ;
   }
 
@@ -634,6 +635,7 @@ public class CalendarUtils {
   public static boolean isAllEmailValid(String addressList) {
     boolean isValid = true ;
     if(CalendarUtils.isEmpty(addressList)) return false ;
+    addressList.replaceAll(SEMICOLON, COMMA) ;
     for(String s : addressList.split(CalendarUtils.COMMA)) {
       s = s.trim() ;
       if(!isEmailValid(s)) isValid = false ;

@@ -28,7 +28,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
@@ -432,7 +431,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         errorMsg_ = "UIEventForm.msg.event-email-required" ;
         return false ;
       }
-      else if(!CalendarUtils.isAllEmailValid(getEmailAddress())) {
+      else if(!CalendarUtils.isValidEmailAddresses(getEmailAddress())) {
         errorMsg_ = "UIEventForm.msg.event-email-invalid" ;
         errorValues = CalendarUtils.invalidEmailAddresses(getEmailAddress()) ;
         return false ;
@@ -741,7 +740,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       email.setReminderType(Reminder.TYPE_EMAIL) ;
       email.setAlarmBefore(Long.parseLong(getEmailRemindBefore())) ;
       StringBuffer sbAddress = new StringBuffer() ;
-      for(String s : getEmailAddress().split(CalendarUtils.COMMA)) {
+      for(String s : getEmailAddress().replaceAll(CalendarUtils.SEMICOLON, CalendarUtils.COMMA).split(CalendarUtils.COMMA)) {
         s = s.trim() ;
         if(CalendarUtils.isEmailValid(s)) {
           if(sbAddress.length() > 0) sbAddress.append(CalendarUtils.COMMA) ;
@@ -1368,10 +1367,10 @@ public Attachment getAttachment(String attId) {
             if(CalendarUtils.isEmpty(uiForm.getInvitationEmail())) calendarEvent.setInvitation(null) ;
             else 
               if(CalendarUtils.isValidEmailAddresses(uiForm.getInvitationEmail())) {
-                InternetAddress[] internetAddress = InternetAddress.parse(uiForm.getInvitationEmail(), true);
+                String addressList = uiForm.getInvitationEmail().replaceAll(CalendarUtils.SEMICOLON,CalendarUtils.COMMA) ;
                 List<String> emails = new ArrayList<String>() ;
-                for(InternetAddress ia : internetAddress) {
-                  emails.add(ia.getAddress()) ;
+                for(String email : addressList.split(CalendarUtils.COMMA)) {
+                  emails.add(email) ;
                 }
                 if(!emails.isEmpty()) calendarEvent.setInvitation(emails.toArray(new String[emails.size()])) ;
               } else {
