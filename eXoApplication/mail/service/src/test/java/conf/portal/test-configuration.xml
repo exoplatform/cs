@@ -4,7 +4,10 @@
   <component>
     <type>org.exoplatform.mail.service.impl.JCRDataStorage</type>
   </component>
-  
+  <component>
+	<key>org.exoplatform.services.scheduler.JobSchedulerService</key>
+	<type>org.exoplatform.mail.service.test.FakeJobSchedulerServiceImpl</type>
+ </component>
   <component>
     <key>org.exoplatform.services.log.LogConfigurationInitializer</key>
     <type>org.exoplatform.services.log.LogConfigurationInitializer</type>
@@ -753,10 +756,10 @@
       </init-params>
     </component-plugin>
 -->
-
+  
   
 
   </external-component-plugins>
-  <remove-configuration>org.exoplatform.services.scheduler.JobSchedulerService</remove-configuration>    
+  <!-- remove-configuration>org.exoplatform.services.scheduler.JobSchedulerService</remove-configuration -->    
   <!-- remove-configuration>org.exoplatform.services.transaction.ExoTransactionService</remove-configuration -->  
 </configuration>
