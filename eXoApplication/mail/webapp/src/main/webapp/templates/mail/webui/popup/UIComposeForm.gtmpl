@@ -47,7 +47,7 @@
 										</div>
 									</div>
 									<div class="SeparatorLine"><span></span></div>
-									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
+									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);">
 										<div class="IconHolder PriorityIcon">
 											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.message-priority") %></div>
 										</div>
@@ -103,14 +103,14 @@
 					      		<% /*End Popup Menu*/ %>
 									</div>
 									<div class="SeparatorLine"><span></span></div>
-									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
+									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);">
 										<div class="IconHolder EditorOptionsIcon">
 											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.editor-options") %></div>
 										</div>
 										<% /*Begin Popup Menu*/ %>
 										<div style="position:relative;left:80px;">
 					      			<div class="UIPopupCategory" style="display:none;">
-					      				<div class="UIRightClickPopupMenu" style="display:block; ">
+					      				<div class="UIRightClickPopupMenu" style="display:block;">
 					      					<div class="UIContextMenuContainer">
 													  <div class="TopLeftRightClickPopupMenu">
 							          			<div class="TopRightRightClickPopupMenu">

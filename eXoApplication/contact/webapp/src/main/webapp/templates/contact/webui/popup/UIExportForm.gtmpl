@@ -28,8 +28,6 @@
 		      <%=_ctx.appRes(uicomponent.getName() + ".label.tag")%> <%=text%>
 		  </div>
 		  <%} %>
-
-		 
 	  
 			<div class="UIMessageList">
 				<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
@@ -105,9 +103,9 @@
 	</div>  
         
 	<div class="UIAction"> 
-		<table class="ActionContainer" align="center">
+		<table class="ActionContainer">test
 		  <tr>
-		    <td align="center">		
+		    <td>		
 		  	  <a href="<%=uicomponent.event("Save", "all")%>" class="ActionButton LightBlueStyle">
 		        <div class="ButtonLeft">
 		          <div class="ButtonRight">

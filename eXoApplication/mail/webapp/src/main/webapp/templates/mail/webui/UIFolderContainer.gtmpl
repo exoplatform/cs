@@ -71,13 +71,13 @@
       cssClass = "SelectedLabel" ;
     }
   %>
-  <a href="$actionLink" class="Icon Folder $icon $cssClass" folder="$id"><%=_ctx.appRes(uicomponent.getName() + ".label." + name)%>
+  <div onclick="$actionLink" class="Icon Folder $icon $cssClass" folder="$id"><a href="#"><%=_ctx.appRes(uicomponent.getName() + ".label." + name)%></a>
     <% 
-       print "<span id=\"" + id + "\" class=\"MailQuantity\">" ;
+       print "<a id=\"" + id + "\" class=\"MailQuantity\">" ;
        if(msgQuantity > 0) print "($msgQuantity)";
-       print "</span>" ;
+       print "</a>" ;
     %>
-  </a>
+  </div>
   <%}%>
 </div>
 <% /*Popup menu for Default (Inbox, Drafts, Sent, Spam) forder*/ %>

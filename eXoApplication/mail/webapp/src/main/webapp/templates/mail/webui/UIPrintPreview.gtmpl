@@ -57,10 +57,10 @@
       <div class="DateAndTime"><%=MailUtils.formatDate('EEEE, MMMM dd, yyyy HH:mm aaa', msg.getReceivedDate(), locale)%></div>
       <div style="clear:both;"><span></span></div>
     </div>
-    <div class="PrintContent"><textarea>
+    <div class="PrintContent"><textarea rows="#" cols="#">
         <%
           if (msg.getContentType().toLowerCase().indexOf("text/plain") > -1) {    
-            println(msg.getMessageBody().replaceAll("\n", "<br>")) ;
+            println(msg.getMessageBody().replaceAll("\n", "<br/>")) ;
         } else {    
           println(MailUtils.encodeHTML(msg.getMessageBody())) ; 
         } %>

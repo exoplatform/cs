@@ -505,7 +505,7 @@ UIMailPortlet.prototype.showView = function(obj, evt) {
 	 }
 	 UIMailPortlet.swapMenu(uiPopupCategory,obj) ;
    var uiRightPopupMenuContainer = DOMUtil.findFirstDescendantByClass(UIMailPortlet.menuElement, 'div', 'UIRightPopupMenuContainer') ;
-   var actions = DOMUtil.findChildrenByClass(uiRightPopupMenuContainer,"a", "MenuItem") ;
+   var actions = DOMUtil.findChildrenByClass(uiRightPopupMenuContainer,"div", "MenuItem") ;
    actions[0].onmouseover = UIMailPortlet.showSubmenu ;
    actions[0].onmouseout = UIMailPortlet.hideSubmenu ;
    eXo.mail.UIMailPortlet.subMenu = DOMUtil.findNextElementByTagName(actions[0], "div") ;

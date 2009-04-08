@@ -64,9 +64,9 @@
 	                if(action != null) { 
 	                  if(uicomponent.isUseAjax()){
 	              %>             
-	                    <a href="<%=uicomponent.event(action, beanId)%>" title="$action"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon"></a>		          
+	                    <a href="<%=uicomponent.event(action, beanId)%>" title="$action"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon" alt="" ></a>		          
 	              <%  }else{ %>
-	                    <a href="<%=uicomponent.url(action, beanId)%>" title="$action"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon"></a>		          
+	                    <a href="<%=uicomponent.url(action, beanId)%>" title="$action"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon" alt="" ></a>		          
 	              <%  } %> 
 	              <%} %> 
 	            <%}%>                 

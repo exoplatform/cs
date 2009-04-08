@@ -77,7 +77,7 @@
 	  						<a href="$previousPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.previousPage")%>" class="$cssPreviousPage PreviousPageArrow"></a>
 								<div class="Number">$contactRange</div>
 	  				 		<a href="$nextPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.nextPage")%>" class="$cssNextPage NextPageArrow"/></a>
-	 				  		<a href="$lastPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.lastPage")%>" class="$cssNextPage LastPageArrow"><span></span></a>
+	 				  		<a href="$lastPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.lastPage")%>" class="$cssNextPage LastPageArrow"></a>
 						    <div style="clear: left;"><span></span></div>
 						  </div>
 					  </div>

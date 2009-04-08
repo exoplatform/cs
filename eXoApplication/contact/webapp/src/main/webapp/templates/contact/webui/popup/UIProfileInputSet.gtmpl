@@ -3,14 +3,13 @@
 	import org.exoplatform.contact.service.ContactAttachment;
 	import org.exoplatform.contact.service.Contact;
 %>
-<div id="$uicomponent.id" >
+<div id="$uicomponent.id">
 <div class="Profile">
   <div class="FormContainer ProfileContainer">
 	  <table class="UIFormGrid">
       <tbody>
       	<tr>
           <td colspan="2" class="FieldComponent">
-					   	
 			      <div class="FormContainer">
 			        <table class="UIFormGrid">
 			          <tbody>
@@ -19,7 +18,7 @@
 			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
 							   	%>
 			            <tr>
-		                <td class="FieldLabel"> $label </td>
+		                <td class="FieldLabel">$label</td>
 			              <td class="FieldComponent">
 			              <%uiForm.renderField("firstName")%>
 			              </td>
@@ -29,7 +28,7 @@
 			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
 							   	%>
 			            <tr>
-		                <td class="FieldLabel"> $label </td>
+		                <td class="FieldLabel">$label</td>
 			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
 			            </tr>
 			            <%							
@@ -37,7 +36,7 @@
 			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
 							   	%>
 			            <tr>
-		                <td class="FieldLabel"> $label </td>
+		                <td class="FieldLabel">$label</td>
 			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
 			            </tr>
 			            <%								
@@ -45,7 +44,7 @@
 			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
 			      			%> 
 			      				<tr>
-			      					<td class="FieldLabel"> $label </td>
+			      					<td class="FieldLabel">$label</td>
 			      					
 			      					<td class="FieldComponent">
 			      			<%  
@@ -59,29 +58,29 @@
 										if (maleChecked.equals("checked")) { 
 									%>
           	 					<input class="radio" type="radio" value="Male" checked name="gender"/>
-          	 					<span style="padding: 0px 20px 0px 5px" class="Lable">
+          	 					<span style="padding:0px 20px 0px 5px" class="Lable">
 												<%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %>
 											</span>
 											<input class="radio" type="radio" value="Female" name="gender"/>
-											<span style="padding-left: 3px;" class="Lable">
+											<span style="padding-left:3px;" class="Lable">
 											 	 <%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %>
 											 </span>
           	 			<%} else if (femaleChecked.equals("checked")){ %>		
           	 					<input class="radio" type="radio" value="Male" name="gender"/>
-          	 					<span style="padding: 0px 20px 0px 5px" class="Lable">
+          	 					<span style="padding:0px 20px 0px 5px" class="Lable">
 												<%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %>
 											</span>
 											<input class="radio" type="radio" value="Female" checked name="gender"/>
-											<span style="padding-left: 3px;" class="Lable">
+											<span style="padding-left:3px;" class="Lable">
 											 	 <%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %>
 											 </span>
           	 			<%  } else { %>		
 												<input class="radio" type="radio" value="Male" name="gender"/>
-	          	 					<span style="padding: 0px 20px 0px 5px" class="Lable">
+	          	 					<span style="padding:0px 20px 0px 5px" class="Lable">
 													<%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %>
 												</span>
 												<input class="radio" type="radio" value="Female" name="gender"/>
-												<span style="padding-left: 3px;" class="Lable">
+												<span style="padding-left:3px;" class="Lable">
 												 	 <%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %>
 												 </span>
 									  <%  } %>													  		
@@ -97,7 +96,7 @@
 			      			  yearField = uicomponent.getChildById("year")
 							   	%>
 			            <tr>
-		                <td class="FieldLabel"> $birthdayLabel </td>
+		                <td class="FieldLabel">$birthdayLabel</td>
 			              <td class="FieldComponent">
 			              	<%uicomponent.renderUIComponent(dayField)%>
 			              	<span>-</span>	
@@ -111,7 +110,7 @@
 			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
 							   	%>
 			            <tr>
-		                <td class="FieldLabel"> $label </td>
+		                <td class="FieldLabel">$label</td>
 			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
 			            </tr>
 			            <%								
@@ -119,20 +118,17 @@
 			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
 							   	%>
 			            <tr>
-		                <td class="FieldLabel"> $label </td>
+		                <td class="FieldLabel">$label</td>
 			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
 			            </tr>
-			            
 			          </tbody>
 			        </table>
-			        
 			      </div>
 					</td>
 		    </tr>
 	    </tbody>
 	  </table>
 	</div>
-	
 	<div class="AvatarContent">
 		<div class="Label"><%=_ctx.appRes(uicomponent.getParent().id + ".label.picture")%></div>
 		<% 
@@ -149,7 +145,7 @@
 			}
 		%>
 		<div class="Avatar">
-		<img src='$imageLink' width="63px" height="81px" />
+		<img src='$imageLink' width="63px" height="81px" alt="" />
 			<!--<div class="Avatar"  style="background:transparent url('D:\\java\\exo-working\\exo-tomcat\\temp\\portal\\eXoUpload\\4020402.11copy2.jpg') no-repeat;width:53px; height:81px;"><span></span></div>-->
 		</div>
 		<div class="Action">	
@@ -157,7 +153,6 @@
 			<a href="<%=uicomponent.getParent().event("DeleteImage")%>"><%=_ctx.appRes(uicomponent.getParent().id + ".label.delete")%></a>			
 		</div>
 	</div>
-	
 	<div style="clear: left;"><span></span></div>
 </div> 
 </div>       

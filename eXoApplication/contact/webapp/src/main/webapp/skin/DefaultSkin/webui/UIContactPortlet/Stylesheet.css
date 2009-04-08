@@ -101,8 +101,16 @@
 .UIContactPortlet .SelectButton {
 	float:left;
 	line-height:18px;
-	margin-top:3px;
+	margin: 4px 1px 0px 1px;
 	cursor: pointer;
+}
+
+.UIContactPortlet .SelectButton:hover{
+	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
+	border: 1px solid #9d9d9d;
+	color: #126ca5;
+	line-height: 24px;
+	margin: 3px 0px 0px 0px;
 }
 
 .UIContactPortlet .SelectButton .ItemIcon {
@@ -136,11 +144,7 @@
 }
 
 .UIContactPortlet .UIActionBar a:hover {
-	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
-	border: 1px solid #9d9d9d;
 	color: #126ca5;
-	line-height: 24px;
-	margin: 3px 0px 0px 0px;
 }
 
 .UIContactPortlet .UIActionBar .Label {

@@ -64,7 +64,6 @@
             <div class="MiddleRightViewBoxStyle">
               <div class="MiddleCenterViewBoxStyle">
                 <table style="width:100%;">
-                  <body>
                     <tr>
                       <td>
                         <div class="$starClass" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div>
@@ -105,7 +104,6 @@
                         </div>
                       </td>
                     </tr>
-                  </body>
                 </table>
               </div>
             </div>
@@ -157,7 +155,7 @@
                                 InternetAddress address1 = toAddress1[i];
                                 if (i > 0) print ",";
                         %>
-                                <span><%=Utils.getPersonal(address1)%> </span>
+                                <span><%=Utils.getPersonal(address1)%></span>
                         <%
                                 if ((toAddress1.length > 3) && (i == lenToAddress-1)) print " ..." ;
                               }
@@ -206,7 +204,7 @@
                         InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageBcc());
                           for (i in 0..(toAddress.length-1)) {
                             InternetAddress address = toAddress[i];
-                            if (i > 0 && i < (toAddress.length)) print ", </br>";
+                            if (i > 0 && i < (toAddress.length)) print ", <br/>";
                       %>
                             <span><%=Utils.getPersonal(address)%> </span> <% print((address !=null) ? ("&lt; " + address.getAddress() + " &gt;") :"")%> 
                       <%
@@ -388,7 +386,7 @@
                 <%
                   rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe('" + textAreaId + "', '" + frameId + "', '" + styleExpand + "', '" + contentType + "');") ;
                 %>
-  							<textarea id="$textAreaId" class="MessageDetails" style="display:none">
+  							<textarea rows="#" cols="#" id="$textAreaId" class="MessageDetails" style="display:none">
                   <%
                   String msgBody = msg.getMessageBody();
                     if (contentType.indexOf("text/plain") >= 0) {
@@ -442,11 +440,11 @@
                             }
                             if (isImage) {
                         %> 
-      						  		      <img class="AttachmentFile" style="height:auto; width:200px; padding-right:5px" src="$attLink" alt="">
+      						  		      <img class="AttachmentFile" style="height:auto; width:200px; padding-right:5px" src="$attLink" alt="" />
       						  		<%
                             } else if (isSupportedIcon){
                         %>
-                              <img class="AttachmentFile" src="$attLink" alt="">
+                              <img class="AttachmentFile" src="$attLink" alt="" />
                         <%     
                             }
                           }

@@ -5,18 +5,16 @@
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("'+uiform.id+'") ;') ;
 %>
-  
 <div class="UIExportAddressBookForm">
 	<div class="ExportContact">
 		<div class="WorkingContainer">
   		<div class="Title"><%=_ctx.appRes(uicomponent.getName() + ".label.title")%></div>
-  
 			<div class="UIMessageList" is>
 				<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   				<thead>
   					<tr>
-  			      <th style="text-align: left; padding-left: 7px;" class="text"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/></th>
-  		        <th style="width: 91%; padding-left: 7px;" class="text">
+  			      <th style="text-align:left; padding-left:7px;" class="text"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/></th>
+  		        <th style="width:91%; padding-left:7px;" class="text">
   		        	<div> <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
   		        </th>
   	 	      </tr>
@@ -42,7 +40,7 @@
 							}
 						%>	
 							<tr class="UIContactList">
-  						  <td class="text" style="padding-left: 7px;">
+  						  <td class="text" style="padding-left:7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
@@ -53,14 +51,10 @@
    			     	</tr>
 							
 					<% } %>
-						
-						
   	   			</tbody>
 				</table>
-				
 				<%_ctx.include("app:/templates/contact/webui/popup/UIPageIterator.gtmpl");%>
 			</div>
-
 			<div class="ExportForm">
 				<table class="UIFormGrid">
 	      	<tr>
@@ -76,32 +70,36 @@
     </div>
   </div>    
 			<div class="UIAction"> 
-        <table class="ActionContainer" align="center">
+        <table class="ActionContainer">
           <tr>
-            <td align="center"> 
-          	<a href="<%=uicomponent.event("Save", "all")%>" class="ActionButton LightBlueStyle">
+            <td> 
+          	<div onclick="<%=uicomponent.event("Save", "all")%>" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
-                    <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.getName() + ".label.exportAll")%> </div>
+                    <div class="ButtonMiddle">
+                    	<a href="#"><%=_ctx.appRes(uicomponent.getName() + ".label.exportAll")%></a>
+                    </div>
                   </div>
                 </div>
-              </a>
-          
-             <a href="<%=uicomponent.event("Save", "selected")%>" class="ActionButton LightBlueStyle">
+              </div>
+             <div onclick="<%=uicomponent.event("Save", "selected")%>" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
-                    <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.getName() + ".label.exportSelected")%> </div>
+                    <div class="ButtonMiddle">
+                    	<a href="#"><%=_ctx.appRes(uicomponent.getName() + ".label.exportSelected")%></a>
+                		</div>
                   </div>
                 </div>
-              </a>
-              <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
-
+              </div>
+              <div onclick="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
-                    <div class="ButtonMiddle">  <%=_ctx.appRes(uicomponent.getName() + ".label.cancel")%> </div>
+                    <div class="ButtonMiddle">
+                    	<a href="#"><%=_ctx.appRes(uicomponent.getName() + ".label.cancel")%></a>
+                		</div>
                   </div>
                 </div>
-              </a>
+              </div>
             </td>
           </tr>
         </table>

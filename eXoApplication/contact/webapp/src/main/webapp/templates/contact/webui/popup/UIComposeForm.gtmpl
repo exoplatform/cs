@@ -12,29 +12,24 @@
 <% uiform.begin() %>
 <div class="$uicomponent.id UIApplication">
   <div class="ApplicationMinWidth">
-  
   	<div class="UIMessageCompose">
-  	
 			<div class="UIToolbar">
 				<div class="HeaderToolbar">
 					<div class="LeftBar">
 						<div class="RightBar">
 							<div class="CenterBar">
 								<div class="MailListActionsbar">
-								
-									<a href="<%=uicomponent.event("Send")%>" class="ControlButton">
+									<div onclick="<%=uicomponent.event("Send")%>" class="ControlButton">
 										<div class="IconHolder SendMailIcon">
-											<div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.sendMail")%></div>
+											<a href="#"><%=_ctx.appRes(uicomponent.getName() + ".label.sendMail")%></a>
 										</div>
-									</a>
+									</div>
 									<div class="SeparatorLine"><span></span></div>
-									
-									<a href="<%=uicomponent.event("DiscardChange")%>" class="ControlButton">
+									<div onclick="<%=uicomponent.event("DiscardChange")%>" class="ControlButton">
 										<div class="IconHolder DiscardIcon">
-											<div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.discard")%></div>
+											<a href="#"><%=_ctx.appRes(uicomponent.getName() + ".label.discard")%></a>
 										</div>
-									</a>
-									
+									</div>
 									<div class="SeparatorLine"><span></span></div>
 									<!--
 									<a href="<%=uicomponent.event("Attachment")%>" class="ControlButton">
@@ -46,13 +41,11 @@
 									<div class="SeparatorLine"><span></span></div>
 								-->
 									<div style="clear:left;"><span></span></div>
-									
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				
 			</div>
 <!-- End Mail ControlBar -->
 <!-- Start  Message Address -->
@@ -72,7 +65,6 @@
                   <%uicomponent.renderField(uicomponent.FIELD_TO)%> 
                 </td>
               </tr>
-              
               <tr>
                 <td class="FieldLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.subject")%> :&nbsp;&nbsp;</td>
                 <td class="FieldComponent" colspan="2" style="padding:4px;">
@@ -101,8 +93,6 @@
 			</div>
 <!-- End Compose Message Detail -->
   	</div>  	
-  	
   </div>
 </div>
-
 <% uiform.end() %>

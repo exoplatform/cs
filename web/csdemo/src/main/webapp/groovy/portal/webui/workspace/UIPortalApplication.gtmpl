@@ -60,7 +60,6 @@
         <div class="CenterLoadingContainer">
           <div class="LoadingText"><%=_ctx.appRes("UIPortalApplication.label.Loading")%></div>
           <div class="LoadingProgressBar"><span></span></div>
-          
           <div class="UIAction"> 
 				    <table class="ActionContainer" align="center">
 					    <tr>

@@ -50,7 +50,7 @@
 		          String actionLabel =  uiForm.getLabel("SelectEmail")  ;
 				    	String actionLink = uiForm.event("AddEmailAddress") ;
 				      println "<a title=\"" + actionLabel + "\" href=\"" + actionLink +"\">";
-				      println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" class=\"AddNewNodeIcon\"/>" ;
+				      println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt='' class=\"AddNewNodeIcon\"/>" ;
 				      println  "</a>";
 	          %>
 	          

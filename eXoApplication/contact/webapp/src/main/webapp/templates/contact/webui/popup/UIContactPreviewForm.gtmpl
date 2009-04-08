@@ -40,7 +40,7 @@
 										} catch (Exception e) {}
 									}
 								 %>
-								<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="Avatar"/>						
+								<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width="63" height="81" alt="" class="Avatar"/>						
 								<div class="Member">
 									<div class="State"><%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : ContactUtils.encodeHTML(contact.getFullName()))%></div>
 									<div class="Job"><%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "" : ContactUtils.encodeHTML(contact.getJobTitle()))%></div>
@@ -57,7 +57,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.nickname")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getNickName())%></div>
@@ -73,7 +73,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.gender")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getGender())%></div>
@@ -93,7 +93,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.birthday")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><%=  ContactUtils.formatDate("MM/dd/yyyy", contact.getBirthday())%></div>
@@ -114,7 +114,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                        <% 
 			                        for (String emailAdd : emails) {
 			                        %>
@@ -154,14 +154,11 @@
                           <% } %>
                         </table>
                       </div>
-                      <div style="clear: left;"><span></span></div>
+                      <div style="clear:left;"><span></span></div>
                     </div>
-                    
 								</div>
-								
 								<div class="InfoContainer">
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.work")%></div>
-									
 									  <div class="Content">
                       <div class="LeftContent">
                         <table>
@@ -187,7 +184,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.city")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkCity())%></div>
@@ -203,7 +200,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.state-province")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkStateProvince())%></div>
@@ -219,7 +216,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.postalCode")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkPostalCode()) %></div>
@@ -235,7 +232,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.country")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkCountry())%></div>
@@ -255,7 +252,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.workPhone1")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkPhone1())%></div>
@@ -271,7 +268,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.workPhone2")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkPhone2()) %></div>
@@ -287,7 +284,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.workFax")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkFax()) %></div>
@@ -303,7 +300,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.mobilePhone")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getMobilePhone())%></div>
@@ -319,7 +316,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.webPage")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><a target="_blank" href="<%= contact.getWebPage() %>"><%= ContactUtils.encodeHTML(contact.getWebPage())%></a></div>
@@ -329,17 +326,13 @@
 			                      </td>
                           </tr>
                           <% } %>
-                          
-                          
                         </table>
                       </div>
-                      <div style="clear: left;"><span></span></div>
+                      <div style="clear:left;"><span></span></div>
                     </div>
 								</div>
-								
 								<div class="InfoContainer">
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.instantMessaginContacts")%></div>
-									
 									  <div class="Content">
                       <div class="LeftContent">
                         <table>
@@ -349,7 +342,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.exoChat")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getExoId()) %></div>
@@ -365,7 +358,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.google")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getGoogleId())%></div>
@@ -381,7 +374,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.msn")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getMsnId())%></div>
@@ -407,7 +400,6 @@
                             </td>
                           </tr>
                           <% } %>
-                          
                         </table>
                       </div>
                       <div class="RightContent">
@@ -418,7 +410,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.yahoo")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getYahooId())%></div>
@@ -434,7 +426,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.icr")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getIcrId())%></div>
@@ -450,7 +442,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.skype")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getSkypeId())%></div>
@@ -466,7 +458,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.icq")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getIcqId())%></div>
@@ -476,16 +468,13 @@
 			                      </td>
                           </tr>
                           <% } %>
-                          
                         </table>
                       </div>
-                      <div style="clear: left;"><span></span></div>
+                      <div style="clear:left;"><span></span></div>
                     </div>
-									
 								</div>
 								<div class="InfoContainer">
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.home")%></div>
-									
 									<div class="Content">
                       <div class="LeftContent">
                         <table>
@@ -495,7 +484,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.street")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomeAddress())%></div>
@@ -511,7 +500,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.city")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomeCity())%></div>
@@ -527,7 +516,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.state-province")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomeState_province())%></div>
@@ -543,7 +532,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.postalCode")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomePostalCode())%></div>
@@ -559,7 +548,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.country-region")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomeCountry())%></div>
@@ -579,7 +568,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.homePhone1")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomePhone1())%></div>
@@ -595,7 +584,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.homePhone2")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomePhone2())%></div>
@@ -611,7 +600,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.homeFax")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomeFax())%></div>
@@ -627,7 +616,7 @@
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.webPage")%></div>
                             </td>
                             <td class="InfoTitle1">
-			                        <table class="InfoTitle2" >
+			                        <table class="InfoTitle2">
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3"><a target="_blank" href="<%= contact.getPersonalSite() %>"><%= ContactUtils.encodeHTML(contact.getPersonalSite())%></a></div>
@@ -640,7 +629,7 @@
                           
                         </table>
                       </div>
-                      <div style="clear: left;"><span></span></div>
+                      <div style="clear:left;"><span></span></div>
                     </div>
 								</div>
 								
@@ -648,8 +637,8 @@
 									String note ;
 									if (ContactUtils.isEmpty(contact.getNote())) note = "" ;
 									else {
-										note = ContactUtils.encodeHTML(contact.getNote()).replaceAll("\n", "<br>") ;								
-										note = note.replaceAll("\\\\n", "<br>") ;	
+										note = ContactUtils.encodeHTML(contact.getNote()).replaceAll("\n", "<br/>") ;								
+										note = note.replaceAll("\\\\n", "<br/>") ;	
 									}
 								 %>
 								<div class="InfoContainer">
@@ -663,7 +652,6 @@
 									</div>
 								</div>
 								<div style="clear: left;"><span></span></div>
-								
 							</div>
 							<%}%>
 						</div>	
@@ -685,53 +673,49 @@
 					visibility : hidden ;
 				}
 			</style>
-	
-	
-	
 	<div class="UIAction Printable"> 
-        <table class="ActionContainer" align="center">
+        <table class="ActionContainer">
         	<tr>
         		<td align="center">
 							<%	
           		if (uicomponent.isPrintForm) {
           			rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.printList('"+uiform.id+"') ;") ;
           		%>	
-          		<a href="#" onclick="javascript:window.print() ;" class="ActionButton LightBlueStyle">
+          		<div onclick="javascript:window.print() ;" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
                     <div class="ButtonMiddle">
-                    <%=_ctx.appRes(uicomponent.getName() + ".action.print")%>
+                    	<a href="#"><%=_ctx.appRes(uicomponent.getName() + ".action.print")%></a>
                     </div>
                   </div>
                 </div>
-           		</a>
+           		</div>
            		<% } else { %>
-           		<a href="#" onclick="javascript:eXo.contact.UIContactPortlet.printpreview(this) ;" printLabel="<%=_ctx.appRes(uicomponent.getName() + ".action.print")%>" class="ActionButton LightBlueStyle">
+           		<div onclick="javascript:eXo.contact.UIContactPortlet.printpreview(this) ;" printLabel="<%=_ctx.appRes(uicomponent.getName() + ".action.print")%>" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
                     <div class="ButtonMiddle">
-                    <%=_ctx.appRes(uicomponent.getName() + ".action.printPreview")%>
+	                    <a href="#"><%=_ctx.appRes(uicomponent.getName() + ".action.printPreview")%></a>
                     </div>
                   </div>
                 </div>
-           		</a> 
+           		</div> 
            		<% } %>
-           		
            		<% 
            			// cs-1648
            			for(action in uicomponent.getActions()) { 
                 	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
                    String link = uicomponent.event(action) ;
           		%>
-          		<a href="$link" class="ActionButton LightBlueStyle">
+          		<div onclick="$link" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
                     <div class="ButtonMiddle">
-                      $actionLabel
+                      <a href="#">$actionLabel</a>
                     </div>
                   </div>
                 </div>
-           		</a>
+           		</div>
           		<% } %>  		    
           	</td>
           </tr>  

@@ -133,11 +133,11 @@
 	            <div class="MiddleLeftRightClickPopupMenu">
 	              <div class="MiddleRightRightClickPopupMenu">
 	                <div class="UIRightPopupMenuContainer">
-	                  <a class="MenuItem">   
+	                  <div class="MenuItem">
 	                    <div class="ItemIcon ViewAsIcon">
-                        <div class="NextArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.view-as") %></div>
+                        <div class="NextArrow1Icon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view-as") %></a></div>
                       </div>
-	                  </a>
+	                  </div>
                     <!--Submenu-->
                     <div class="UIPopupCategory" style="display:none;">
                        <div class="UIRightClickPopupMenu" style="display:block;">
@@ -493,7 +493,7 @@
                     sender = Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0]) ;
                   }
                 %>
-                <a href="$actionLink"> $sender </a>
+                <a href="$actionLink">$sender</a>
               </td>
               <td style="padding:0px auto;">
                 <% 
@@ -523,11 +523,11 @@
                     title += "[" + tag.getName() + "] ";
                   }
                 %>
-                  <a href="$actionLink" class="$colorCss SubjectItem" title="$title" >
+                  <div onclick="$actionLink" class="$colorCss SubjectItem" title="$title">
                 <%
                   } else {
                 %>
-                <a href="$actionLink" >
+                <div onclick="$actionLink">
                 <%
                   }
                   if (!msg.isRootConversation() && uicomponent.viewMode == uicomponent.MODE_THREAD) {
@@ -541,8 +541,8 @@
                 <%
                   }
                 %>
-                  <%=((msg.getSubject() != null && msg.getSubject().trim().length() > 0) ? MailUtils.encodeHTML(msg.getSubject()) :_ctx.appRes(uicomponent.id+ ".label.no-subject"))%></div>
-                </a>
+                  <a href="#"><%=((msg.getSubject() != null && msg.getSubject().trim().length() > 0) ? MailUtils.encodeHTML(msg.getSubject()) :_ctx.appRes(uicomponent.id+ ".label.no-subject"))%></a></div>
+                </div>
                 <div style="clear:left;"><span></span></div>
                 </div>
               </td>                     
@@ -583,7 +583,7 @@
                 else if (msg.getPriority().equals(Utils.PRIORITY_NORMAL)) priClass = "NormalPriority";
                 else if (msg.getPriority().equals(Utils.PRIORITY_HIGH)) priClass = "HighPriority";
               %>
-              <td style="padding:0px;" >
+              <td style="padding:0px;">
                 <div class="text $priClass" title ><span></span></div>
               </td>
             </tr>
