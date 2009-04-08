@@ -586,7 +586,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
 
   protected void setEmailAddress(String value) {
     UIEventReminderTab taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
-    taskDetailTab.getUIFormTextAreaInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).setValue(value) ;
+    taskDetailTab.getUIStringInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).setValue(value) ;
   }
 
   protected boolean getPopupReminder() {

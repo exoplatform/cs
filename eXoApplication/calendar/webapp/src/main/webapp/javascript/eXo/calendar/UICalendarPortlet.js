@@ -551,7 +551,9 @@ UICalendarPortlet.prototype.setSize = function(obj){
         "height": (height - 2) + "px"
     };
     eXo.calendar.UICalendarPortlet.setStyle(obj, styles);
-	var extraHeight = domUtil.findFirstDescendantByClass(obj,"div","busyIcon").offsetHeight + domUtil.findFirstDescendantByClass(obj,"div","ResizeEventContainer").offsetHeight;
+	var busyIcon = domUtil.getChildrenByTagName(obj,"div")[0] ;
+	if(!busyIcon ||  (busyIcon.offsetHeight <= 5)) busyIcon = domUtil.findFirstDescendantByClass(obj,"div","EventContainerBar") ;
+	var extraHeight = busyIcon.offsetHeight + domUtil.findFirstDescendantByClass(obj,"div","ResizeEventContainer").offsetHeight;
     height -= (extraHeight + 5);
 	eventContainer.style.height = height + "px";
 };

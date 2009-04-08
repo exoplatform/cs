@@ -20,6 +20,7 @@ public class UIEmailInput extends UIFormStringInput {
 		context.getJavascriptManager().importJavascript("eXo.cs.UIEmailInput","/csResources/javascript/") ;
 		Writer w = context.getWriter();
 		String value = getValue();
+		if(CalendarUtils.isEmpty(value)) value = "";
 		String[] list =  null;
 		if(!CalendarUtils.isEmpty(value) && (value.indexOf(",") != -1)) list = value.split(",");
 		w.write("<div class='UIEmailInput'>");
