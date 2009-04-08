@@ -344,7 +344,7 @@
 												while(j <= items && count < size){
 												 color = uicomponent.getColors()[count] ;
 												 actionLink = uicomponent.event('ChangeColor','id&calColor='+color);	
-												 print "<a href=\"$actionLink\" class=\"$color ColorCell\"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>" ;
+												 print "<a href=\"$actionLink\" class=\"$color ColorCell\"><img alt='' src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>" ;
 												 count++
 												 j++;
 												}
@@ -434,7 +434,7 @@
 												while(j <= items && count < size){
 												 color = uicomponent.getColors()[count] ;
 												 actionLink = uicomponent.event('ChangeColor','id&calColor='+color);	
-												 print "<a href=\"$actionLink\" class=\"$color ColorCell\"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>" ;
+												 print "<a href=\"$actionLink\" class=\"$color ColorCell\"><img alt='' src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>" ;
 												 count++
 												 j++;
 												}

@@ -36,7 +36,7 @@
 			</div>
 			<div class="MonthSelector RightControlButton">
 				<table>
-					<body>
+					<tbody>
 						<tr>
 							<td>
 								<div onclick="$linkYearPrevious">
@@ -63,7 +63,7 @@
 								</div>
 							</td>
 						</tr>
-					</body>
+					</tbody>
 				</table>
 			</div>
 			<div onclick="$linkDayPrevious" class="RightControlButton">
@@ -82,7 +82,7 @@
   					<div style="clear: left;"><span></span></div>
   				</div>
   				<div class="DayList">
-  					<table class="UIGrid" id="" cellspacing="0" borderspacing="0">
+  					<table class="UIGrid" id="" cellspacing="0" cellpadding="0">
   						<tbody>
   						<%
   						 calendar = uicomponent.getInstanceTempCalendar()  ;

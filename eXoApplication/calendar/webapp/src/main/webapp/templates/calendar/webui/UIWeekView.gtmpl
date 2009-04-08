@@ -85,11 +85,9 @@
   </div>
   <div class="EventWeekContainer">
     <div class="EventWeekBar">
-      <table class="UIGrid"  cellspacing="0" borderspacing="0"
-        exocallback="eXo.calendar.UIWeekView.callbackSelectionX();">
-        <thead>
+      <table class="UIGrid"  cellspacing="0" cellpadding="0" exocallback="eXo.calendar.UIWeekView.callbackSelectionX();">
           <tr>
-            <th style="width: 55px;"><div style="width: 55px;"><span></span></div></th>
+            <td style="width: 55px;" class="UIEmtyBlock"><div style="width: 55px;"><span></span></div></td>
             <%			
 							cl = uicomponent.getBeginDateOfWeek() ;				
 						  t = 0 ; 
@@ -106,20 +104,16 @@
 								}
 							 	wf.setCalendar(cl) ;
             %>
-            <th class="$cssClass UICellBlock" style="$styleWidth" starttime="<%=cl.getTimeInMillis()%>"  startTimeFull="<%=tempFormat.format(cl.getTime())%>">
+            <td class="$cssClass UICellBlock" style="$styleWidth" starttime="<%=cl.getTimeInMillis()%>"  startTimeFull="<%=tempFormat.format(cl.getTime())%>">
               <a href="$actionLink" style="$styleCss">
                 <%=wf.format(cl.getTime())%>
               </a>
-            </th>
+            </td>
             <%
 							cl.add(Calendar.DATE,1) ;
 						 }
             %>
           </tr>
-        </thead>
-        <tbody>
-         
-        </tbody>
       </table>
 	  
 		<div id="UIWeekViewGridAllDay" class="EventAllday" style="" numberOfDays="$numberOfDays">
@@ -208,8 +202,7 @@
           <div style="clear: left;">
             <span></span>
           </div>
-          <div unselectable="on" class="EventContainer" title="$event.summary">
-            $event.summary</div>
+          <div unselectable="on" class="EventContainer" title="$event.summary">$event.summary</div>
           <div class="ResizeEventContainer" unselectable="on">
             <span></span>
           </div>
@@ -220,8 +213,7 @@
 					}
         %>
       </div>
-      <table class="UIGrid" style="table-layout: fixed; " id="UIWeekViewGrid" lastupdatedid="<%=uicomponent.getLastUpdatedEventId()%>"
-        cellspacing="0" borderspacing="0">
+      <table class="UIGrid" style="table-layout: fixed;" id="UIWeekViewGrid" lastupdatedid="<%=uicomponent.getLastUpdatedEventId()%>" cellspacing="0" cellpadding="0">
         <tbody>
           <% 
 					boolean flag = false ;
@@ -235,9 +227,9 @@
         			if(time.equals(endWorkingTime)) {style = "WorkOffTime" ;}
         		}
 						if(flag) {styleClass = "TdDotLine" ;}
-						else {styleClass = "TdLine"}
+						else {styleClass = "TdLine";}
           %>
-          <tr class="$style" style="$styleWidth">
+          <tr class="$style">
             <td class="TdTime">
               <div class="TdTime">
                 <%if(!flag) {println display;}%>
@@ -254,7 +246,7 @@
 					 			dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
 					 		  if(uicomponent.isCurrentDay(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR))) {
 						  		cssClass = "Today" ;
-						  	  }else if(dayOfWeek == 1 || dayOfWeek == 7){
+						  	}else if(dayOfWeek == 1 || dayOfWeek == 7){
 					 				cssClass = "Weekend" ;
 					 		  } else {
 					 		  	cssClass = "Weekday" ;
@@ -267,9 +259,11 @@
 					 			cl.add(Calendar.DATE, 1) ;
 					 		}
 					 	flag = ! flag ;
+					 	%>
+          </tr>
+					 	<%
 					 }
             %>
-          </tr>
         </tbody>
       </table>
     </div>

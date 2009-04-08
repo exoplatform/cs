@@ -520,7 +520,7 @@ UIWeekView.prototype.initAllday = function() {
     eventAllday[i].ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback ;
 	}
 	var EventAlldayContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiWeekViewGridAllDay,"td","EventAllday") ;
-	this.weekdays = eXo.core.DOMUtil.findDescendantsByTagName(uiWeekViewGridAllDay, "th") ;
+	this.weekdays = eXo.core.DOMUtil.findDescendantsByClass(uiWeekViewGridAllDay, "td","UICellBlock") ;
 	this.startWeek = 	UIWeekView.weekdays[1] ;
 	this.endWeek = 	UIWeekView.weekdays[UIWeekView.weekdays.length-1] ;
 } ;

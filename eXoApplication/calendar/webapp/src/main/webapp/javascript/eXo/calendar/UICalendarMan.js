@@ -497,7 +497,7 @@ EventMan.prototype.initWeek = function(rootNode) {
     this.events.push(eventObj);
   }
   var table = DOMUtil.findPreviousElementByTagName(this.rootNode,"table");
-  this.dayNodes = DOMUtil.findDescendantsByClass(table, 'th', 'UICellBlock');
+  this.dayNodes = DOMUtil.findDescendantsByClass(table, 'td', 'UICellBlock');
   this.week = new WeekMan();
   this.week.weekIndex = 0;
 //  this.week.startWeek = parseInt(this.dayNodes[0].getAttribute('starttime'));
