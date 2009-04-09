@@ -13,7 +13,7 @@ UIEmailInput.prototype.remove = function(obj){
 };
 
 UIEmailInput.prototype.removeItem = function(str,removeValue){
-	if(str.indexOf(",") <= 0) return str;
+	if(str.indexOf(",") <= 0) return "";
 	var list = str.split(",");
 	list.remove(removeValue);
 	var tmp = "";
@@ -22,6 +22,5 @@ UIEmailInput.prototype.removeItem = function(str,removeValue){
 	}
 	return tmp.substr(1,tmp.length);
 };
-
 
 eXo.cs.UIEmailInput = new UIEmailInput();

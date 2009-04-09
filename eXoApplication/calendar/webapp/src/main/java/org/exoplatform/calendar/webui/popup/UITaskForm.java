@@ -560,16 +560,24 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UIEventReminderTab taskReminderTab =  getChildById(TAB_TASKREMINDER) ;
     return taskReminderTab.getUIStringInput(UIEventReminderTab.EMAIL_REMIND_BEFORE).getValue() ;
   }
-  protected String isEmailRepeat() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
-    return String.valueOf("repeat".equals(eventDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).getValue())) ;
+  protected boolean isEmailRepeat() {
+    UIEventReminderTab eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
+    return Boolean.parseBoolean(eventReminderTab.getUIFormCheckBoxInput(UIEventReminderTab.EMAIL_IS_REPEAT).getValue().toString()) ;
   }
-  public void setEmailRepeat(String value) {
-    UIFormInputWithActions eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
-    if(Boolean.parseBoolean(value)) value = "repeat" ;
-    else value = "no-repeat" ;
-    eventReminderTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).setValue(value) ;
+//  protected String isEmailRepeat() {
+//    UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
+//    return String.valueOf("repeat".equals(eventDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).getValue())) ;
+//  }
+  public void setEmailRepeat(Boolean value) {
+    UIEventReminderTab eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
+    eventReminderTab.getUIFormCheckBoxInput(UIEventReminderTab.EMAIL_IS_REPEAT).setChecked(value) ;
   }
+//  public void setEmailRepeat(String value) {
+//    UIFormInputWithActions eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
+//    if(Boolean.parseBoolean(value)) value = "repeat" ;
+//    else value = "no-repeat" ;
+//    eventReminderTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).setValue(value) ;
+//  }
   protected String getEmailRepeatInterVal() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
     return eventDetailTab.getUIStringInput(UIEventReminderTab.EMAIL_REPEAT_INTERVAL).getValue() ;
@@ -649,7 +657,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       if(Reminder.TYPE_EMAIL.equals(r.getReminderType())) {
         setEmailReminder(true) ;
         setEmailAddress(r.getEmailAddress()) ;
-        setEmailRepeat(String.valueOf(r.isRepeat())) ;
+        setEmailRepeat(r.isRepeat()) ;
         setEmailReminderBefore(String.valueOf(r.getAlarmBefore())) ;
         //taskDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).setValue(String.valueOf(r.isRepeat())) ;
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_REPEAT_INTERVAL).setValue(String.valueOf(r.getRepeatInterval())) ;
@@ -670,7 +678,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       email.setReminderType(Reminder.TYPE_EMAIL) ;
       email.setAlarmBefore(Long.parseLong(getEmailRemindBefore())) ;
       email.setEmailAddress(getEmailAddress()) ;
-      email.setRepeate(Boolean.parseBoolean(isEmailRepeat())) ;
+      email.setRepeate(isEmailRepeat()) ;
       email.setRepeatInterval(Long.parseLong(getEmailRepeatInterVal())) ;
       email.setFromDateTime(fromDateTime) ;
       reminders.add(email) ;
