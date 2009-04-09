@@ -1,0 +1,939 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <javax>
+    <portlet>
+      <title>مدخل جهات الاتّصال</title>
+    </portlet>
+  </javax>
+  <UIContactPopupWindow>
+    <title>
+      <AddNewContact>إضافة / تغيير جهة اتّصال</AddNewContact>
+      <UICategoryForm>إضافة / تغيير دفتر العناوين</UICategoryForm>
+      <AddNewEvent>إضافة حدث</AddNewEvent>
+      <ExportForm>تصدير جهات الاتّصال</ExportForm>
+      <ImportAddress>استيراد دفاتر عناوين</ImportAddress>
+      <ImportContacts>استيراد جهات الاتّصال</ImportContacts>
+      <UIExportAddressBookForm>تصدير دفاتر عناوين</UIExportAddressBookForm>
+      <UITagForm>إضافة / حذف علامة</UITagForm>
+      <ContactDetails>تفاصيل جهة الاتّصال</ContactDetails>
+      <UIMoveContactsForm>نقل جهة الاتّصال</UIMoveContactsForm>
+      <UIEditTagForm>تغيير العلامة</UIEditTagForm>
+      <UIAdvancedSearchForm>عمليّة بحث مُتطوّرة</UIAdvancedSearchForm>
+      <UIPermissionGroupForm>اشتراك في دفتر العناوين</UIPermissionGroupForm>
+      <UIPermissionContactForm>اشتراك في جهة الاتّصال</UIPermissionContactForm>
+      <UIPermissionContactsForm>اشتراك في جهات الاتّصال</UIPermissionContactsForm>
+      <UIMoveToPublicForm>نقلُـه (ــها) إلى دفتر العناوين العُمومي</UIMoveToPublicForm>
+      <UIComposeForm>إرسال بريد الكتروني</UIComposeForm>
+    </title>
+  </UIContactPopupWindow>
+  <contactActionUIPopupWindow>
+    <title>
+      <UIAddressForm>اختيار بريد الكتروني</UIAddressForm>
+      <UICategoryForm>دفتر العناوين</UICategoryForm>
+      <UIImageForm>تحميل صُورة</UIImageForm>
+      <UIComposeForm>إرسال بريد الكتروني</UIComposeForm>
+    </title>
+  </contactActionUIPopupWindow>
+  <UIPopupGroupSelector>
+    <title>
+      <UIGroupSelector>اختر مجموعة</UIGroupSelector>
+    </title>
+  </UIPopupGroupSelector>
+  <UIPopupWindowUserSelect>
+    <title>
+      <UIUserSelector>اختر مُـستخدم</UIUserSelector>
+    </title>
+  </UIPopupWindowUserSelect>
+  <!--
+  #org.exoplatform.contact.webui.popup.UICategorySelect
+  -->
+  <UICategorySelect>
+    <label>
+      <category>دفتر العناوين</category>
+      <action>
+        <AddCategory>إضافة دفتر عناوين</AddCategory>
+      </action>
+    </label>
+  </UICategorySelect>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIContactForm
+  -->
+  <UIContactForm>
+    <label>
+      <contactName>اسم جهة الاتّصال</contactName>
+      <firstName>الاسم</firstName>
+      <lastName>اللّقب</lastName>
+      <nickName>الكنية</nickName>
+      <gender>الجنس</gender>
+      <option>
+        <day>يوم</day>
+        <month>شهر</month>
+        <year>سنة</year>
+      </option>
+      <day>يوم</day>
+      <month>شهر</month>
+      <year>سنة</year>
+      <birthday>تاريخ الولادة</birthday>
+      <jobTitle>المهنة</jobTitle>
+      <multiEmail>عنوان البريد الالكتروني</multiEmail>
+      <exoChat>دردشة إكزو</exoChat>
+      <google>Gtalk</google>
+      <msn>MSN</msn>
+      <aolAim>AOL/AIM</aolAim>
+      <yahoo>Yahoo!</yahoo>
+      <irc>IRC</irc>
+      <skype>Skype</skype>
+      <icq>ICQ</icq>
+      <homeAddress>العنوان</homeAddress>
+      <homeCity>المدينة</homeCity>
+      <homeState_province>الولاية</homeState_province>
+      <homePostalCode>التّرقيم البريدي</homePostalCode>
+      <homeCountry>البلد</homeCountry>
+      <homePhone1>الهاتف</homePhone1>
+      <homePhone2>الهاتف (رقم آخر):</homePhone2>
+      <homeFax>الفاكس</homeFax>
+      <personalSite>موقع الواب</personalSite>
+      <workAddress>العنوان</workAddress>
+      <workCity>المدينة</workCity>
+      <workState_province>الولاية</workState_province>
+      <workPostalCode>التّرقيم البريدي</workPostalCode>
+      <workCountry>البلد</workCountry>
+      <workPhone1>الهاتف</workPhone1>
+      <workPhone2>الهاتف (رقم آخر):</workPhone2>
+      <workFax>الفاكس</workFax>
+      <mobilePhone>الجوّال</mobilePhone>
+      <webPage>موقع الإنترنت</webPage>
+      <note>مُلاحظات</note>
+      <selectGroups>اختيار مجموعات</selectGroups>
+      <editPermission>تغيير الصلاحيّات</editPermission>
+      <male>ذكر</male>
+      <female>أنثى</female>
+      <action>
+        <SelectUser>المستخدم</SelectUser>
+        <SelectMemberShip>العُضويّة</SelectMemberShip>
+      </action>
+      <delete>حذف</delete>
+      <change>تغيير</change>
+      <picture>الصّورة</picture>
+    </label>
+    <action>
+      <Save>حفظ</Save>
+      <Cancel>إلغاء</Cancel>
+    </action>
+    <tab>
+      <label>
+        <protileTab>التّعريفة</protileTab>
+        <imContactTab>الرّسائل الفوريّة</imContactTab>
+        <homeTab>شخصيّ</homeTab>
+        <workTab>مهنيّ</workTab>
+        <noteTab>مُلاحظات</noteTab>
+        <shareContactTab>إشتراك في المجموعة</shareContactTab>
+      </label>
+    </tab>
+    <msg>
+      <firstName-required>الاسم ضروري.</firstName-required>
+      <lastName-required>اللّقب ضروري.</lastName-required>
+      <invalid-birthday>يبدو أنّ صيغة تاريخ الولادة غيرُ صالحة.</invalid-birthday>
+      <contact-deleted>لا يُمكنُك القيام بهذا الإجراء، جهة الاتّصال غير موجودة.</contact-deleted>
+      <address-deleted>لا يُمكنُك حفظ جهة الاتّصال، دفتر العناوين الذي اخترته قد تمّ حذفه من الخارج.</address-deleted>
+      <removedPer>لا يُمكنُك القيام بهذا الإجراء لأنّ صلاحيّتك في التّغيير قد تمّ حذفها.</removedPer>
+      <too-manyField>قمت بإضافة الكثير في هذا المجال.</too-manyField>
+      <nameTooLong>الاسم الذي أدخلته في هذا المجال طويلٌ للغاية.</nameTooLong>
+      <jobTooLong>المهنة التي أدخلتها في هذا المجال طويلةٌ للغاية.</jobTooLong>
+    </msg>
+  </UIContactForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UICategoryForm
+  -->
+  <UICategoryForm>
+    <action>
+      <Save>حفظ</Save>
+      <Cancel>إلغاء</Cancel>
+    </action>
+    <msg>
+      <categoryName-required>اسم دفتر العناوين ضروري.</categoryName-required>
+      <existed-categoryName>اسم دفتر العناوين الذي أدخلته موجود من السابق، حاول أن تختار اسمًـا آخر.</existed-categoryName>
+      <userExisted-categoryName>المستخدم {0}  لديه دفتر عناوين  يَحملُ نفس الاسم، الرّجاء اختر اسمًا آخر.</userExisted-categoryName>
+      <category-deleted>لا يُمكنُك القيام بهذا الإجراء، دفتر العناوين هذا لم يعُد موجودًا.</category-deleted>
+      <non-permission>لا يُمكنُك القيام بهذا الإجراء لأنّ صلاحيّتك في التّغيير قد تمّ حذفها.</non-permission>
+      <nameTooLong>الاسم الذي أدخلته في هذا المجال طويلٌ للغاية. </nameTooLong>
+    </msg>
+    <label>
+      <categoryName>الاسم</categoryName>
+      <description>الوصف</description>
+    </label>
+  </UICategoryForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIImportForm
+  -->
+  <UIImportForm>
+    <action>
+      <Cancel>#{word.cancel}</Cancel>
+      <Save>#{word.save}</Save>
+    </action>
+    <label>
+      <type>شكل الاستيراد</type>
+      <upload>تحميل ملفّ</upload>
+      <category />
+      <action>
+        <AddCategory>إضافة دفتر عناوين</AddCategory>
+      </action>
+      <categoryInput>دفتر العناوين</categoryInput>
+    </label>
+    <msg>
+      <fileName-empty>قُم باختيار ملفّ</fileName-empty>
+      <fileName-error>لا يُمكن استيراد إلاّ الملفـّات ذات شكل " VCF."</fileName-error>
+      <invalid-format>فشل في عمليّة استيراد الملفّ، لم يتمّ التّعرّف على شكل الاستيراد.</invalid-format>
+      <uploadResource-empty>يُرجى اختيار ملفّ، ثمّ الضغط على أيقونة التحميل (التي تحتوي على سهم أخضر).</uploadResource-empty>
+      <addGroup-required>الرّجاء اختيار دفتر العناوين أين تّريد الاستيراد.</addGroup-required>
+      <address-deleted>من المُستحيل القيام بهذا الإجراء،دفتر العناوين هذا قد تمّ حذفه من الخارج !</address-deleted>
+      <too-many-contact>يحتوي هذا الملف على أكثر من {0} جهة اتّصال بحيثُ لا يمكن استيرادها !</too-many-contact>
+    </msg>
+  </UIImportForm>
+  <!--
+  #Please dont delete continuous line
+  -->
+  <!--
+  #org.exoplatform.contact.webui.popup.UIExportForm
+  -->
+  <UIExportForm>
+    <action>
+      <Cancel>#{word.cancel}</Cancel>
+      <Save>#{word.save}</Save>
+    </action>
+    <label>
+      <type>شكل التّصدير</type>
+      <fileName>اسم الملفّ</fileName>
+      <exportSelected>اختيار تصدير</exportSelected>
+      <exportAll>تصدير جميع الصّفحات</exportAll>
+      <cancel>إلغاء</cancel>
+      <email>عنوان البريد الالكتروني</email>
+      <name>الاسم</name>
+      <addressBook>دفتر العناوين :</addressBook>
+      <tag>علامة : </tag>
+      <checkAll>اختيار الكُلّ</checkAll>
+      <available>موجُود</available>
+      <export>تصدير</export>
+    </label>
+    <msg>
+      <check-contact-required>يُرجى وضع إشارة أمام جهات الاتّصال التي تُريد القيام بتصديرها.</check-contact-required>
+      <manyContacts>يجبُ عليك تصدير أقل من {0} جهة اتّصال !</manyContacts>
+      <deletedPer>ليس لديك الصّلاحيّة الكافية للقيام بهذا الإجراء !</deletedPer>
+    </msg>
+  </UIExportForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIExportAddressBookForm
+  -->
+  <UIExportAddressBookForm>
+    <action>
+      <Cancel>#{word.cancel}</Cancel>
+      <Save>#{word.save}</Save>
+    </action>
+    <label>
+      <type>شكل التّصدير</type>
+      <fileName>اسم الملفّ</fileName>
+      <title>يُرجى اختيار دفاتر العناوين التي تُريد القيام بتصديرها...</title>
+      <exportSelected>اختيار تصدير</exportSelected>
+      <exportAll>تصدير الكُلّ</exportAll>
+      <cancel>إلغاء</cancel>
+      <name>الاسم</name>
+      <checkAll>اختيار الكُلّ</checkAll>
+    </label>
+    <checkGroup-required>يُرجى وضع إشارة أمام دفاتر العناوين التي تُريد القيام بتصديرها.</checkGroup-required>
+    <msg>
+      <there-is-not-contacts-exists>هذا الدّفتر فارغ و بالتّالي لا يُمكنُك القيام بتصديره.</there-is-not-contacts-exists>
+    </msg>
+    <many-Contacts>يجبُ عليك تصدير أقل من {0} جهة اتّصال !</many-Contacts>
+  </UIExportAddressBookForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UITagForm
+  -->
+  <UITagForm>
+    <label>
+      <contact>جهة اتّصال</contact>
+      <tagName>علامة</tagName>
+      <color>اللّون</color>
+      <shareContactTab>إدارة الإشتراك</shareContactTab>
+    </label>
+    <msg>
+      <tagName-required>قُم باختيار اسمًا جديدًا لهذه العلامة.</tagName-required>
+      <tagName-existed>هذه العلامة موجودة من السّابق، حاول أن تختار علامةً  أخرى.</tagName-existed>
+      <checkTag-required>قُم بتحديد العلامة التي تُريد حذفها.</checkTag-required>
+      <contact-not-existed>لا يُمكن إضافة علامة، جهة الاتّصال هذه لم  تعُد موجودةً.</contact-not-existed>
+      <contact-not-exist-remove>لا يُمكن إزالة  هذه العلامة، جهة الاتّصال هذه لم  تعُد موجودةً. </contact-not-exist-remove>
+      <nameTooLong>الاسم الذي أدخلته في هذا المجال طويلٌ للغاية. </nameTooLong>
+      <noTagRemoved>العلامة {0} غير موجودة في أيّ جهة اتّصال و بالتـّـالي لا يُمكنُ إزالتها !</noTagRemoved>
+    </msg>
+    <action>
+      <Add>أضف</Add>
+      <Cancel>إلغاء</Cancel>
+      <Remove>حذف</Remove>
+    </action>
+  </UITagForm>
+  <UITag>
+    <msg>
+      <noContactToExport>لم تقُم باختيار أيّ جهة اتّصال تابعة لهذه العلامة قصد تصديرها، أضف على الأقلّ جهة اتّصال.</noContactToExport>
+    </msg>
+  </UITag>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIEditTagForm
+  -->
+  <UIEditTagForm>
+    <label>
+      <tagName>علامة</tagName>
+      <description>الوصف</description>
+      <color>اللّون</color>
+    </label>
+    <msg>
+      <tagName-required>أعط اسمًا لهذه العلامة</tagName-required>
+      <tagName-existed>هذه العلامة موجودة من السّابق</tagName-existed>
+      <tag-deleted>لا يُمكن القيام بهذا الإجراء، هذه العلامة لم تعُد موجودة.</tag-deleted>
+      <nameTooLong>الاسم الذي أدخلته في هذا المجال طويلٌ للغاية. </nameTooLong>
+    </msg>
+    <action>
+      <Save>حفظ</Save>
+      <Cancel>إلغاء</Cancel>
+    </action>
+  </UIEditTagForm>
+  <!--
+  #org.exoplatform.contact.webui.UIContacts
+  -->
+  <UIContacts>
+    <label>
+      <checkContact>اختر جهة الاتّصال</checkContact>
+      <edit>تغيير</edit>
+      <copy>نسخ</copy>
+      <shared>جعلُه (ــها ) مُشترَك (ـــة)</shared>
+      <sendEmail>إرسال بريد</sendEmail>
+      <instantMessage>دردشة</instantMessage>
+      <tag>إضافة علامة</tag>
+      <move>نقل</move>
+      <delete>حذف</delete>
+      <print>طباعة</print>
+      <export>تصدير</export>
+      <vcard>بطاقات العمل</vcard>
+      <jobTitle>المهنة</jobTitle>
+      <workPhone>هاتف العمل</workPhone>
+      <addressBook>دفتر العناوين</addressBook>
+      <email>عنوان البريد الالكتروني</email>
+      <name>الاسم</name>
+      <searchResult>نتيجة البحث</searchResult>
+      <of>على</of>
+      <contacts>جهات اتّصال</contacts>
+      <sharedContacts>(جهات اتّصال مُشتَرَكة)</sharedContacts>
+      <copyContacts>نسخ جهات الاتّصال </copyContacts>
+      <webSite>موقع الإنترنت</webSite>
+      <viewDetails>رُؤية التّفاصيل</viewDetails>
+      <firstPage>الصّفحة الأولى</firstPage>
+      <previousPage>الصّفحة  السّابقة</previousPage>
+      <nextPage>الصّفحة  التّالية</nextPage>
+      <lastPage>الصّفحة  الأخيرة</lastPage>
+      <checkAll>اختيار الكُلّ</checkAll>
+      <sortByName>ترتيب حسب الاسم</sortByName>
+      <sortByEmail>ترتيب حسب عنوان البريد الالكتروني</sortByEmail>
+      <sortByJobTitle>ترتيب حسب المهنة</sortByJobTitle>
+      <available>موجُود</available>
+      <notContactFound>الدفتر فارغ</notContactFound>
+      <mobile>الجوّال</mobile>
+    </label>
+    <msg>
+      <confirm-delete>هل ترغب حقّـًا في حذف جهة الاتّصال هذه ؟</confirm-delete>
+      <cannotMove>"نقل" غير مُمكن</cannotMove>
+      <no-email-found>عنوان البريد الإلكتروني غير موجود</no-email-found>
+      <cannot-move>لا يُمكن القيام بنقل جهات الاتّصال هذه.</cannot-move>
+      <cannot-move-ownerContact>لا يُمكن القيام بنقل صاحب الدّفتر</cannot-move-ownerContact>
+      <cannot-share>جهات الاتّصال هذه لا يُمكن أن تكون مُشتَرَكة.</cannot-share>
+      <cannot-delete>جهات الاتّصال هذه لا يُمكن  حذفُها</cannot-delete>
+      <cannot-delete-ownerContact>لا يُمكن القيام بحذف صاحب الدّفتر</cannot-delete-ownerContact>
+      <non-permission>أنت لا تملك الصّلاحيّات الكافية للقيام بهذا الإجراء.</non-permission>
+      <contact-deleted>تمّ حذف جهة الاتّصال بنجاح</contact-deleted>
+      <checkContact-toDelete>يجب عليك تحديد جهات الاتّصال التّي ترغبُ في حذفها</checkContact-toDelete>
+      <checkContact-toCopy>يجب عليك تحديد جهات الاتّصال التّي ترغبُ في نسخها</checkContact-toCopy>
+      <checkContact-toSendMail>يجب عليك تحديد جهات الاتّصال المُرسَل إليها</checkContact-toSendMail>
+      <checkContact-toPrint>يجب عليك تحديد جهات الاتّصال التّي ترغبُ في طباعتها</checkContact-toPrint>
+      <checkContact-toMove>يجب عليك تحديد جهات الاتّصال التّي ترغبُ في نقلها</checkContact-toMove>
+      <checkContact-toTag>يجب عليك تحديد جهات الاتّصال التّي ترغبُ في إضافة علامة لها</checkContact-toTag>
+      <chatApp-notAvaiable>خدمة دردشة إكزو  غير مُتوفّرة!</chatApp-notAvaiable>
+      <checkContact-toChat>يجب عليك تحديد جهات الاتّصال حتّى تتمكّن من التحاور</checkContact-toChat>
+      <contact-not-existed>لا يُمكن القيام بهذا الإجراء، جهة الاتّصال هذه لم  تعُد موجودة</contact-not-existed>
+    </msg>
+    <action>
+      <print>طباعة</print>
+      <Cancel>إغلاق</Cancel>
+    </action>
+  </UIContacts>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIMoveContactsForm
+  -->
+  <UIMoveContactsForm>
+    <action>
+      <Cancel>إلغاء</Cancel>
+    </action>
+    <msg>
+      <selectGroup-required>قُم باختيار المجموعة التي ستقوم بحفظ جهة الاتّصال فيها</selectGroup-required>
+      <non-permission>أنت لا تملك الصّلاحيّات الكافية للقيام بهذا الإجراء</non-permission>
+      <contact-not-existed>لا يُمكن القيام بهذا الإجراء، جهة الاتّصال هذه لم  تعُد موجودة</contact-not-existed>
+      <contact-deleted>لا يُمكن القيام بهذا الإجراء، رُبّما تمّ حذف جهة الاتّصال هذه من الخارج</contact-deleted>
+    </msg>
+    <label>
+      <contacts>جهات اتّصال :</contacts>
+      <toPrivate>إلى دفاتر العناوين الشخصيّة :</toPrivate>
+      <toShared>إلى دفاتر العناوين المُشتركَة:</toShared>
+    </label>
+  </UIMoveContactsForm>
+  <!--
+  #org.exoplatform.contact.webui.UIAddressBooks
+  -->
+  <UIAddressBooks>
+    <msg>
+      <confirm-delete>هل ترغب حقّـًا في حذف دفتر العناوين هذا ؟</confirm-delete>
+      <groupCannot-deleted>لا يُمكن حذف هذه المجموعة</groupCannot-deleted>
+      <not-already>ليس بَعد</not-already>
+      <noContactToExport>دفتر العناوين الذي أنت بصدد  محاولة تصديره فارغ</noContactToExport>
+      <invalidAddress>لماذا لا تقُم باختيار دفتر عناوين آخر</invalidAddress>
+      <no-email-found>لم نتمكّن من العثور على عنوان بريد الكتروني</no-email-found>
+      <non-permission>أنت لا تملك الصّلاحيّات الكافية للقيام بهذا الإجراء.</non-permission>
+      <removedPer>لا يُمكنُك القيام بهذا الإجراء لأنّ صلاحيّتك في التّغيير قد تمّ حذفها.</removedPer>
+    </msg>
+    <label>
+      <sharedContacts>جهات اتّصال مُشتَرَكة</sharedContacts>
+      <addressBooks>دفاتر العناوين</addressBooks>
+      <addAddress>أضف</addAddress>
+      <importAddress>استيراد</importAddress>
+      <exportAddress>تصدير</exportAddress>
+      <personalAddress>شخصيّة</personalAddress>
+      <publicAddress>عمُوميّة</publicAddress>
+      <addContact>أضف</addContact>
+      <copyContacts>نسخ</copyContacts>
+      <pasteContacts>ألصق</pasteContacts>
+      <share>جعلُه (ــها ) مُشترَك (ـــة)</share>
+      <exportContacts>تصدير</exportContacts>
+      <importContacts>استيراد</importContacts>
+      <edit>تغيير</edit>
+      <sendEmail>عنوان البريد الالكتروني</sendEmail>
+      <delete>حذف</delete>
+      <print>طباعة</print>
+      <collapse-expand>إظهار/إخفاء الجميع</collapse-expand>
+      <defaultAddName>جهات الاتّصال الخاصّة بي</defaultAddName>
+      <defaultAddDes>دفتري الشّخصي</defaultAddDes>
+    </label>
+  </UIAddressBooks>
+  <!--
+  #org.exoplatform.contact.webui.UITags
+  -->
+  <UITags>
+    <msg>
+      <confirm-delete>هل ترغب حقّـًا في حذف هذه العلامة ؟</confirm-delete>
+    </msg>
+    <label>
+      <tags>علامات</tags>
+      <printContacts>طباعة جهات الاتّصال</printContacts>
+      <exportContacts>تصدير جهات الاتّصال</exportContacts>
+      <delete>حذف</delete>
+      <edit>تغيير</edit>
+      <collapse-expand>إظهار/إخفاء الجميع</collapse-expand>
+      <addTag>إضافة علامة جديدة</addTag>
+    </label>
+  </UITags>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIImageForm
+  -->
+  <UIImageForm>
+    <action>
+      <Save>حفظ</Save>
+      <Cancel>إلغاء</Cancel>
+    </action>
+    <label>
+      <upload>تحميل ملفّ</upload>
+    </label>
+  </UIImageForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UISendEmail
+  -->
+  <UISendEmail>
+    <action>
+      <Send>إرسال</Send>
+      <Cancel>إلغاء</Cancel>
+    </action>
+    <label>
+      <to>المُرسَل إليه</to>
+      <subject>الموضوع</subject>
+      <content>الرّسالة</content>
+    </label>
+  </UISendEmail>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIContactPreviewForm
+  -->
+  <UIContactPreviewForm>
+    <action>
+      <Cancel>إغلاق</Cancel>
+      <print>طباعة</print>
+      <printPreview>نظرة عامة</printPreview>
+    </action>
+    <label>
+      <profile>التّعريفة</profile>
+      <nickname>الكنية :</nickname>
+      <gender>الجنس :</gender>
+      <email>عنوان البريد الالكتروني :</email>
+      <birthday>تاريخ الولادة :</birthday>
+      <work>المهنة</work>
+      <city>المدينة :</city>
+      <state-province>الولاية</state-province>
+      <postalCode>التّرقيم البريدي :</postalCode>
+      <country>البلد :</country>
+      <map>الخريطة</map>
+      <workPhone1>الهاتف</workPhone1>
+      <workPhone2>الهاتف (رقم آخر):</workPhone2>
+      <webPage>موقع الواب :</webPage>
+      <instantMessaginContacts>الرّسائل الفوريّة</instantMessaginContacts>
+      <exoChat>دردشة إكزو:</exoChat>
+      <google>Gtalk :</google>
+      <msn>Msn :</msn>
+      <aol-aim>AOL/AIM :</aol-aim>
+      <yahoo>Yahoo :</yahoo>
+      <icr>IRC :</icr>
+      <skype>Skype :</skype>
+      <icq>Icq :</icq>
+      <home>شخصيّ</home>
+      <street>الشّارع:</street>
+      <country-region>البلد / المنطقة :</country-region>
+      <homePhone1>الهاتف :</homePhone1>
+      <homePhone2>الهاتف (رقم آخر):</homePhone2>
+      <homeFax>الفاكس :</homeFax>
+      <note>مُلاحظات</note>
+      <address>العنوان :</address>
+      <workFax>الفاكس :</workFax>
+      <mobilePhone>الجوّال :</mobilePhone>
+    </label>
+  </UIContactPreviewForm>
+  <!--
+  #org.exoplatform.contact.webui.UIContactPreview
+  -->
+  <UIContactPreview>
+    <label>
+      <lastUpdated>آخر عمليّة تحديث</lastUpdated>
+      <profile>التّعريفة</profile>
+      <nickname>الكنية :</nickname>
+      <gender>الجنس :</gender>
+      <email>عنوان البريد الالكتروني :</email>
+      <birthday>تاريخ الولادة :</birthday>
+      <work>مهنيّ</work>
+      <city>المدينة :</city>
+      <state-province>الولاية :</state-province>
+      <postalCode>التّرقيم البريدي :</postalCode>
+      <country>البلد :</country>
+      <map>الخريطة</map>
+      <workPhone1>الهاتف :</workPhone1>
+      <workPhone2>الهاتف (رقم آخر):</workPhone2>
+      <webPage>موقع الإنترنت :</webPage>
+      <instantMessaginContacts>الرّسائل الفوريّة</instantMessaginContacts>
+      <exoChat>دردشة إكزو:</exoChat>
+      <google>Google Talk :</google>
+      <msn>Msn :</msn>
+      <aol-aim>AOL/AIM :</aol-aim>
+      <yahoo>Yahoo :</yahoo>
+      <icr>Icr :</icr>
+      <skype>Skype :</skype>
+      <icq>Icq :</icq>
+      <home>شخصيّ</home>
+      <street>الشّارع:</street>
+      <country-region>البلد / المنطقة :</country-region>
+      <homePhone1>الهاتف :</homePhone1>
+      <homePhone2>الهاتف (رقم آخر):</homePhone2>
+      <homeFax>الفاكس :</homeFax>
+      <note>مُلاَحَظَة</note>
+      <address>العنوان :</address>
+      <contactDetails>تفاصيل جهة الاتّصال</contactDetails>
+      <viewFull>عرض مُفَصَّل</viewFull>
+      <workFax>الفاكس :</workFax>
+      <mobilePhone>الجوّال :</mobilePhone>
+    </label>
+  </UIContactPreview>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIAttachFileForm
+  -->
+  <UIAttachFileForm>
+    <msg>
+      <selectFile-required>يُرجى اختيار صورة، ثمّ الضغط على أيقونة التحميل (التي تحتوي على سهم أخضر).</selectFile-required>
+      <invalid-image>هذه ليست صورة، حاول أن تختار صورة!</invalid-image>
+    </msg>
+  </UIAttachFileForm>
+  <!--
+  #org.exoplatform.contact.webui.UIActionBar
+  -->
+  <UIActionBar>
+    <label>
+      <contactsList>القائمة</contactsList>
+      <vcard>بطاقات العمل</vcard>
+      <contact>جهة اتّصال</contact>
+      <addressBook>دفتر العناوين</addressBook>
+      <addNew>أضف</addNew>
+      <importAddress>استيراد دفتر عناوين</importAddress>
+      <exportAddress>تصدير دفتر عناوين</exportAddress>
+      <default>إفتراضي</default>
+      <navigation>تصَــفّح</navigation>
+      <addressbooks>دفاتر العناوين</addressbooks>
+      <tags>علامات</tags>
+      <details>تفاصيل</details>
+      <customLayoutView>مشهد</customLayoutView>
+      <contactsView>مشهد</contactsView>
+      <layoutView>عَرض</layoutView>
+      <addEvent>إضافة حدث</addEvent>
+      <event>حدث</event>
+    </label>
+  </UIActionBar>
+  <!--
+  #org.exoplatform.contact.webui.UISearchForm
+  -->
+  <UISearchForm>
+    <msg>
+      <no-text-to-search>أدخل عبارةً تُريدُ البحث عنها</no-text-to-search>
+      <text-search-error>لا يمكن البحث عن أحرف خاصّة</text-search-error>
+    </msg>
+    <label>
+      <inputValue>بحث :</inputValue>
+      <advanceSearch>عمليّة بحث مُتطوّرة</advanceSearch>
+      <search>عمليّة بحث سريعة</search>
+    </label>
+  </UISearchForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIAdvancedSearchForm
+  -->
+  <UIAdvancedSearchForm>
+    <action>
+      <Search>بحث </Search>
+      <Cancel>إلغاء</Cancel>
+    </action>
+    <label>
+      <text>نصّ</text>
+      <fullName>الاسم الكامل</fullName>
+      <firstName>الاسم</firstName>
+      <lastName>اللّقب</lastName>
+      <nickName>الكنية</nickName>
+      <gender>الجنس</gender>
+      <jobTitle>المهنة</jobTitle>
+      <email>عنوان البريد الالكتروني</email>
+      <option>
+        <Male>ذكر</Male>
+        <Female>أنثى</Female>
+      </option>
+    </label>
+    <msg>
+      <no-text-to-search>أدخل عبارةً تُريدُ البحث عنها</no-text-to-search>
+      <text-search-error>لا يمكن البحث عن أحرف خاصّة</text-search-error>
+    </msg>
+  </UIAdvancedSearchForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIGroupSelector
+  -->
+  <UIGroupSelector>
+    <label>
+      <selectUser>المستخدم</selectUser>
+      <selectGroup>المجموعة</selectGroup>
+      <selectMemberShip>العُضويّة</selectMemberShip>
+    </label>
+    <msg>
+      <invalid-username>هذا المُستخدم غير موجود</invalid-username>
+    </msg>
+  </UIGroupSelector>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIUserSelector
+  -->
+  <UIUserSelector>
+    <label>
+      <selectUser>اختيار المستخدم</selectUser>
+      <selectGroup>اختيار مجموعة</selectGroup>
+      <selectMemberShip>اختيار العضوية</selectMemberShip>
+    </label>
+  </UIUserSelector>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIComposeForm
+  -->
+  <UIComposeForm>
+    <msg>
+      <to-field-empty>إلى من يجبُ إرسالُه؟</to-field-empty>
+      <send-mail-error>حدث خطأ أثناء عمليّة إرسال البريد</send-mail-error>
+      <send-mail-succsessfuly>لقد تمّ إرسال بريدك بنجاح.</send-mail-succsessfuly>
+      <invalidAcc>لكي تتمكّن من إرسال بريد، يجب أن يكون لديك حساب قُمت بإنشائه في خدمة بريد إكزو</invalidAcc>
+      <save-sent-error>حدث خطأ أثناء عمليّة النّسخ في البريد المُــرسَل.</save-sent-error>
+      <invalid-email>عنوان بريد الكتروني غير صحيح</invalid-email>
+    </msg>
+    <label>
+      <sendMail>إرسال</sendMail>
+      <discard>تخلّي عن العمليّة</discard>
+      <from>من</from>
+      <to>إلى</to>
+      <subject>الموضوع</subject>
+    </label>
+  </UIComposeForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIAddEditPermission
+  -->
+  <UIAddEditPermission>
+    <msg>
+      <confirm-delete>هل ترغب حقّـًا في حذف هذه الصّلاحيّة ؟</confirm-delete>
+      <cannot-deleteShared>لا يمكنُك حذف هذه الصّلاحيّة</cannot-deleteShared>
+    </msg>
+    <header>
+      <viewPermission>جعلُه (ـها) مُشترَك (ـة) لفائدة</viewPermission>
+      <editPermission>السّماح بالتّغيير</editPermission>
+      <action>إجراءات</action>
+    </header>
+    <action>
+      <title>
+        <Edit>تغيير</Edit>
+        <Delete>حذف</Delete>
+      </title>
+    </action>
+    <label>
+      <true>نعم</true>
+      <false>لا</false>
+    </label>
+  </UIAddEditPermission>
+  <!--
+  #org.exoplatform.contact.webui.popup.UISharedForm
+  -->
+  <UISharedForm>
+    <label>
+      <addressName>دفتر العناوين</addressName>
+      <contactName>جهة اتّصال</contactName>
+      <user>المستخدم</user>
+      <group>المجموعة</group>
+      <canEdit>السّماح بالتّغيير</canEdit>
+      <action>
+        <SelectUser>المستخدم</SelectUser>
+        <SelectGroup>المجموعة</SelectGroup>
+      </action>
+      <UIInputUserSelect>UISharedForm</UIInputUserSelect>
+      <UIPopupWindow>UISharedForm</UIPopupWindow>
+    </label>
+    <action>
+      <Save>حفظ</Save>
+      <Cancel>إغلاق</Cancel>
+    </action>
+    <msg>
+      <empty-username>حدّد من من تُريد ان تَشترك في جهة الاتّصال هذه</empty-username>
+      <not-exist-username>المستخدم غير مناسب للاشتراك مع:{0}</not-exist-username>
+      <cannot-change-username>لا يُمكنُك تغيير المستخدم أثناء القيام بتعديل الاشتراك</cannot-change-username>
+      <shared-yourself>لا يُمكنُك أن تشترك فيه بنفسك</shared-yourself>
+    </msg>
+  </UISharedForm>
+  <!--
+  #Please dont edit label "UISharedForm"
+  -->
+  <!--
+  #org.exoplatform.contact.webui.popup.UISharedContactsForm
+  -->
+  <UISharedContactsForm>
+    <label>
+      <contactName>أسماء جهات الاتّصال:</contactName>
+      <user>المستخدم</user>
+      <group>المجموعة</group>
+      <canEdit>السّماح بالتّغيير</canEdit>
+      <action>
+        <SelectUser>اختر</SelectUser>
+        <SelectGroup>مجموعة فرعيّة</SelectGroup>
+      </action>
+      <UIInputUserSelect>UISharedContactsForm</UIInputUserSelect>
+      <UIPopupWindow>UISharedContactsForm</UIPopupWindow>
+    </label>
+    <action>
+      <Save>حفظ</Save>
+      <Cancel>إلغاء</Cancel>
+    </action>
+    <msg>
+      <empty-username>حدّد  لفائدة من تُريد الاشتراك</empty-username>
+      <contacts-shared>من هُنا فصاعدًا ستكون جهات الاتّصال الّتي اخترتها مُشتَرَكة </contacts-shared>
+      <not-exist-username>اسم المستخدم هذا لم يعُد موجودًا</not-exist-username>
+      <invalid-username>لا يُمكنك الاشتراك مع هذا المستخدم</invalid-username>
+    </msg>
+  </UISharedContactsForm>
+  <!--
+  # please dont edit label UISharedContactsForm
+  -->
+  <!--
+  #org.exoplatform.contact.webui.popup.UIIMContactInputSet
+  -->
+  <imContactTab>
+    <label>
+      <googleTalk>Google Talk</googleTalk>
+      <msn>MSN</msn>
+      <aol-aim>AOL/AIM</aol-aim>
+      <yahoo>Yahoo</yahoo>
+      <IRC>IRC</IRC>
+      <skype>Skype</skype>
+      <ICQ>ICQ</ICQ>
+    </label>
+  </imContactTab>
+  <!--
+  #org.exoplatform.contact.webui.popup.UITagInfo
+  -->
+  <UITagInfo>
+    <label>
+      <tag>علامة</tag>
+      <tagName>علامة</tagName>
+    </label>
+  </UITagInfo>
+  <!--
+  #org.exoplatform.contact.webui.UIWelcomeContact
+  -->
+  <UIWelcomeContact>
+    <label>
+      <label0>مرحبًـا بكُم في</label0>
+      <label1>مُتصرّفك في دفتر العناوين</label1>
+      <label2>نظرة عامّة</label2>
+      <label3>يُمكّنُك دفتر عناوين إكزو من رؤية جميع جهات الاتّصال سواءً تلك التي قُمت بإضافتها يدويًّا أو التي تمّ استيرادها من ملف. إلى جانب أنّه يُمكّنُك أيضًا من رُؤية جميع الأشخاص العاملين معكم في نفس المشاريع.</label3>
+      <label4>الوضائف</label4>
+      <label5>جهات اتّصال إكزو هي عبارة عن مُتصرّف في  دفاتر عناوينك. هذا المتصرّف الذي يقوم على أساس eXo WebOS يتضمّن العديد من الوظائف الجديدة و المُصمَّمَة  من أجل أن تجعل تجربَتك مع جهات اتّصالك أكثر إنتاجية وأكثر مُلائَمَة، مع توفير طريقة جديدة لعرض قائمة جهات اتّصالك ، إلى جانب مُساعدتك على الحدّ من المخاطر أو المُضايقات التي يُمكن التعرُّض لها مثل التصيّـد الالكتروني أو جهات الاتّصال الغير مرغوب فيها. جهات اتّصال إكزو هي طريقة سهلة الفهم  بفضل وظائف الكتابة التي تُوفّرها، كيفيّة قرائتها، و حتّى العثور على معلومات تضمَّنَتها هذه الأخيرة و أكثر من ذلك من الميزات...</label5>
+    </label>
+  </UIWelcomeContact>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIEventForm
+  -->
+  <UIEventForm>
+    <tab>
+      <label>
+        <eventDetail>تفاصيل الحدث</eventDetail>
+        <eventReminder>رسائل تذكير</eventReminder>
+        <eventShare>المُشاركون</eventShare>
+        <eventAttender>تخطيط</eventAttender>
+      </label>
+    </tab>
+    <action>
+      <AddAttachment>إرفاق ملف(ــات)</AddAttachment>
+      <Save>#{word.save}</Save>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <label>
+      <eventName>موضوع الحدث</eventName>
+      <description>الوصف</description>
+      <calendar>الرزنامة</calendar>
+      <category>فئة الحدث</category>
+      <mailReminder>تذكير بواسطة رسالة  بريد الكتروني</mailReminder>
+      <mailReminderTime>بعث رسالة الكترونية قبل بداية الحدث بــ:</mailReminderTime>
+      <mailReminderAddress>بعث رسائل تذكير إلى</mailReminderAddress>
+      <popupReminder>عرض إشعار مرئي</popupReminder>
+      <popupReminderTime>قبل بداية الحدث المـُـقبل بـــ</popupReminderTime>
+      <action>
+        <AddCategory>إضافة فئة جديدة</AddCategory>
+        <AddParticipant>البحث على مشارك (اضافة العنوان الخاص به)</AddParticipant>
+        <RemoveAttachment>حذف</RemoveAttachment>
+        <AddEmailAddress>إضافة عنوان بريد الكتروني</AddEmailAddress>
+        <AddAttachment>تحميل ملف</AddAttachment>
+      </action>
+      <from>من</from>
+      <to>إلى</to>
+      <allDay>كامل اليوم</allDay>
+      <repeat>إعادة</repeat>
+      <attachments>الملفّات المـُرفقة</attachments>
+      <place>المكان</place>
+      <reminder>تذكير</reminder>
+      <timeReminder>تذكيري قبل (بحساب الدّقائق):</timeReminder>
+      <shareEvent>خُـصوصية الحدث</shareEvent>
+      <status>المـُـشاركون المُتواجدون</status>
+      <meeting>استدعي أيضـًا عن طريق البريد الالكتروني:</meeting>
+      <participant>المشاركون الذين ستتم دعوتهم</participant>
+      <priority>الأولويّـة</priority>
+      <dateFrom>من</dateFrom>
+      <dateTo>إلى</dateTo>
+      <dateAll>كامل اليوم</dateAll>
+      <snooze>مـُـدّة التّذكير</snooze>
+      <emailIsRepeat>إعادة</emailIsRepeat>
+      <emailRepeatInterval>كُلّ</emailRepeatInterval>
+      <option>
+        <false>بدون إعادة</false>
+        <true>إعادة</true>
+        <norepeat>بدون إعادة</norepeat>
+        <daily>كل يوم</daily>
+        <weekly>كل أسبوع</weekly>
+        <monthly>كل شهر</monthly>
+        <yearly>كل سنة</yearly>
+        <weekend>كل آخر أسبوع</weekend>
+        <workingdays>أيـّام العمل</workingdays>
+      </option>
+      <minutes>دقائق</minutes>
+    </label>
+   <msg>
+      <summary-invalid>خُـلاصة الحدث لا تحتوي على {0}،{1}!</summary-invalid>
+      <event-email-invalid>البريدات الالكترونية التي أدخلتها غير صحيحة!</event-email-invalid>
+      <email-reminder-required>قم بإختيار التذكير بواسطة بريد الكتروني قبل كل شيء.</email-reminder-required>
+      <add-event-successfully>تم إضافة الحدث بنجاح.</add-event-successfully>
+      <update-event-successfully>عملية التحديث الخاصة بهذه  المهمة قد تمت بنجاح</update-event-successfully>
+      <add-event-error>لا يمكن حفظ هذه المهمة</add-event-error>
+      <event-summary-required>اسم المهمة ضروري.</event-summary-required>
+      <event-calendar-required>قم بإضافة رزنامة قبل كل شيء.</event-calendar-required>
+      <event-category-required>قم بإضافة فئة للحدث قبل كل شيء.</event-category-required>
+      <event-fromdate-required>تاريخ البداية ضروري</event-fromdate-required>
+      <event-fromdate-notvalid>شكل تاريخ البداية غير صحيح.</event-fromdate-notvalid>
+      <event-todate-required>تاريخ النهاية ضروري.</event-todate-required>
+      <event-todate-notvalid>شكل تاريخ النهاية غير صحيح.</event-todate-notvalid>
+      <event-date-time-logic>يجب أن يكون توقيت نهاية العمل أكبر من توقيت البداية !</event-date-time-logic>
+      <event-date-time-getvalue>صيغة هذا التوقيت غير صحيحة</event-date-time-getvalue>
+      <event-email-required>قائمة البريدات الالكترونية لا يمكن أن تكون خالية من المعلومات</event-email-required>
+      <have-no-calendar>تم حذف الرزنامة أو لم يتم صُنعها !</have-no-calendar>
+      <have-no-permission-to-edit>غير مسموح لك بتعديل هذا الحدث!</have-no-permission-to-edit>
+    </msg>
+    <optionGroup>
+      <label>
+        <privateCalendar>رزنامات شخصية</privateCalendar>
+        <sharedCalendar>رزنامات مُـشترَكـَة</sharedCalendar>
+        <publicCalendar>رزنامات المجموعة</publicCalendar>
+      </label>
+    </optionGroup>
+  </UIEventForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIEventCategoryForm
+  -->
+  <UIEventCategoryForm>
+    <label>
+      <eventCategoryName>اسم فئة الحدث</eventCategoryName>
+      <description>الوصف</description>
+    </label>
+    <action>
+      <Reset>إعادة ضبط</Reset>
+      <Cancel>غلق</Cancel>
+      <Save>حفظ</Save>
+    </action>
+    <msg>
+      <name-invalid>هذه الفئة غير صالحة أو أنّـها وُجــدت سابقًــا</name-invalid>
+      <name-required>أعط اسمـًا للفئة</name-required>
+    </msg>
+  </UIEventCategoryForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIAddressForm
+  -->
+  <UIAddressForm>
+    <label>
+      <contact-group>المجموعة</contact-group>
+      <contact-search>ابحث</contact-search>
+      <change-group>تغيير المجموعة</change-group>
+      <quick-search>عملية بحث سريعة</quick-search>
+      <addresses-from-group>دفتر العناوين</addresses-from-group>
+      <name>الاسم</name>
+      <email>عنوان البريد الالكتروني</email>
+      <add-address>إضافة عنوان بريد الكتروني</add-address>
+      <replace>استبدل</replace>
+      <cancel>إلغاء</cancel>
+    </label>
+    <optionGroup>
+      <label>
+        <personal-contacts>دفاتر  عناوين شخصيّة</personal-contacts>
+        <public-contacts>دفاتر  عناوين عموميّة</public-contacts>
+        <shared-contacts>دفاتر  عناوين مُشترَكة</shared-contacts>
+      </label>
+    </optionGroup>
+    <msg>
+      <contact-email-required>عليك اختيار 'جهة اتصال' على الأقلّ.</contact-email-required>
+      <search-error-keyword>قم بإدخال نصّ عادي في المجال المخصص للبحث</search-error-keyword>
+    </msg>
+  </UIAddressForm>
+  <!--
+  #org.exoplatform.contact.ContactUtils
+  -->
+  <ContactUtils>
+    <label>
+      <emptyName>(مجال الاسم فارغ)</emptyName>
+    </label>
+  </ContactUtils>
+</bundle>
+
