@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import net.wimpi.pim.contact.io.ContactUnmarshaller;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
@@ -1014,6 +1016,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       message.setAttachements(attachments) ;      
       svr.sendMessage(getSession(), user.getUserName(), acc.getId(), message) ;
+      
+      // TODO cs-1141
+      ContactService contactService = (ContactService)PortalContainer.getComponent(ContactService.class) ;
+      contactService.saveAddress(CalendarUtils.getCurrentUser(), sbAddress.toString()) ;
     } else { // use kernel service
       org.exoplatform.services.mail.Message  message = new org.exoplatform.services.mail.Message(); 
       message.setSubject(sbSubject.toString()) ;
@@ -1042,6 +1048,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       org.exoplatform.services.mail.MailService mService = getApplicationComponent(org.exoplatform.services.mail.impl.MailServiceImpl.class) ;
       mService.sendMessage(message) ;
+//    TODO cs-1141
+      ContactService contactService = (ContactService)PortalContainer.getComponent(ContactService.class) ;
+      contactService.saveAddress(CalendarUtils.getCurrentUser(), sbAddress.toString()) ;
     }
   }
 

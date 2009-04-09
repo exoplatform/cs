@@ -669,6 +669,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class) ;
       try {
         mailSvr.sendMessage(session, usename, message) ;
+//      TODO cs-1141
+        ContactService contactService = (ContactService)PortalContainer.getComponent(ContactService.class) ;
+        contactService.saveAddress(usename, message.getMessageTo()) ;
+        contactService.saveAddress(usename, message.getMessageCc()) ;
+        contactService.saveAddress(usename, message.getMessageBcc()) ;
       } catch (AddressException e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-error-parsing-the-addresses-sending-failed", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

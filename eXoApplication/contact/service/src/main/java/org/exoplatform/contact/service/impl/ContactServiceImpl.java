@@ -502,4 +502,8 @@ public class ContactServiceImpl implements ContactService {
     return removeContacts(username, contactIds);
   }
   
+  public void saveAddress(String username, String emailAddress) throws Exception {
+    storage_.saveAddress(username, emailAddress) ;
+  }
+  
 }

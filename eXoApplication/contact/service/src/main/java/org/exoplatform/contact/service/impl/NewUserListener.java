@@ -37,6 +37,8 @@ import org.exoplatform.services.organization.UserEventListener;
 public class NewUserListener extends UserEventListener {
   private ContactService cservice_ ;
   public static String DEFAULTGROUP = "default".intern() ;
+  public static String ADDRESSESGROUP = "addresses".intern() ;
+  public static String ADDRESSESGROUPNAME = "collected-email-adresses".intern() ;
   public static String DEFAULTGROUPNAME = "My contacts".intern() ;
   public static String DEFAULTGROUPDES = "Default address book".intern() ;
   public NewUserListener(ContactService cservice, NodeHierarchyCreator nodeHierarchyCreator) throws Exception {

@@ -434,5 +434,11 @@ public interface ContactService extends ContactServiceLegacy {
    */
   public void registerNewUser(User user, boolean isNew) throws Exception ;
   
+  /**
+   * save collected email adresses
+   * @param emailAddress collected email
+   * @throws Exception 
+   */
+  public void saveAddress(String username, String emailAddress) throws Exception ;
   
 }

@@ -2422,6 +2422,12 @@ public class JCRDataStorage {
     SessionProvider sysProvider = createSystemProvider() ;
     try {
       if(isNew) {
+        // TODO cs-1141
+        Node addressesGroup = getPersonalAddressBooksHome(
+          sysProvider, user.getUserName()).addNode(NewUserListener.ADDRESSESGROUP + user.getUserName(), "exo:contactGroup");
+        addressesGroup.setProperty("exo:id", NewUserListener.ADDRESSESGROUP + user.getUserName()); 
+        addressesGroup.setProperty("exo:name", NewUserListener.ADDRESSESGROUPNAME);
+        addressesGroup.getSession().save() ;
         AddressBook addressbook = new AddressBook() ;
         addressbook.setId(NewUserListener.DEFAULTGROUP+user.getUserName()) ;
         addressbook.setName(NewUserListener.DEFAULTGROUPNAME) ;
@@ -2550,6 +2556,17 @@ public class JCRDataStorage {
     }
   }
   
- 
+  public void saveAddress(String username, String emailAddress) throws Exception {
+    ContactFilter filter = new ContactFilter() ;
+    for (String email : Utils.parseEmails(emailAddress)) {
+      filter.setEmailAddress(email) ;
+      if (searchContact(username, filter).getAll().size() == 0) {
+        Contact contact = new Contact() ;
+        contact.setEmailAddress(email) ;
+        contact.setAddressBookIds(new String[] {NewUserListener.ADDRESSESGROUP + username}) ;
+        saveContact(username, contact, true) ;
+      }
+    }
+  } 
   
 }

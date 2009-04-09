@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
@@ -256,6 +257,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
           uiChildPopup.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+          
+//        TODO cs-1141
+          ContactUtils.getContactService().saveAddress(username, to) ;          
         }catch (Exception e) {
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null,
               ApplicationMessage.WARNING)) ;
@@ -287,6 +291,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           message.setBody(uiForm.getFieldContentValue()) ;
           org.exoplatform.services.mail.MailService mService = uiForm.getApplicationComponent(org.exoplatform.services.mail.impl.MailServiceImpl.class) ;
           mService.sendMessage(message) ;
+          // TODO cs-1141
+          ContactUtils.getContactService().saveAddress(ContactUtils.getCurrentUser(), to) ;          
+          
           //ContactUtils.sendMessage(message) ;
           /*uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null, ApplicationMessage.INFO)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;*/

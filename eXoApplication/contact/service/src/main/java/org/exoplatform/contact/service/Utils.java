@@ -18,7 +18,9 @@ package org.exoplatform.contact.service ;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by The eXo Platform SARL
@@ -31,6 +33,7 @@ import java.util.Date;
 public class Utils {
   final public static String SPLIT = "::".intern();
   final public static String SEMI_COLON = ";".intern();
+  final public static String COMMA = ",".intern() ;
   final public static String contactTempId = "ContacttempId" ;
   public static int limitExport = 150 ;
   
@@ -42,5 +45,22 @@ public class Utils {
     if (s == null || s.trim().length() == 0) return true ;
     return false ;    
   }
+  
+
+  public static List<String> parseEmails(String emails) {
+    List<String> emailList = new ArrayList<String>() ;
+    if (isEmpty(emails)) return emailList ;
+    for (String email : emails.replaceAll(SEMI_COLON, COMMA).split(COMMA))
+      if (isValidEmailAddresses(email)) emailList.add(email) ;
+    return emailList ;
+  }
+  
+  public static boolean isValidEmailAddresses(String email) {
+    if (isEmpty(email)) return false ;
+    String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
+    if(!email.trim().matches(emailRegex)) return false ;
+    return true ;
+  }
+  
   
 }

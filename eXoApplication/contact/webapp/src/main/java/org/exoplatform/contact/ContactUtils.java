@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import javax.jcr.RepositoryException;
-import java.net.UnknownHostException;
 
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
@@ -38,6 +38,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 public class ContactUtils {
   private static String AKONG = "@" ;
   final public static String COMMA = ",".intern() ;
+  final public static String SEMI_COMMA = ";".intern() ;
   public static final String HTTP = "http://" ; 
   public static String[] specialString = {"!", "#", "%", "&"
                                             , ":", ">", "<", "~", "`", "]", "'", "/", "-"} ;
@@ -180,7 +181,8 @@ public class ContactUtils {
     mService.sendMessage(message) ;
   }
   
-  
-  
+  public static boolean isCollectedAddressBook(String addressId) {
+    return addressId.contains(NewUserListener.ADDRESSESGROUP) ;
+  }
   
 }
