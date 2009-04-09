@@ -207,6 +207,7 @@ public class Utils {
   public static final String FD_SENT = "Sent".intern() ;
   public static final String FD_SPAM = "Spam".intern() ;
   public static final String FD_TRASH = "Trash".intern() ;
+  public static final String[] DEFAULT_FOLDERS = new String[] {FD_INBOX, FD_DRAFTS, FD_SENT, FD_SPAM, FD_TRASH};
   
   public static final String P_HEAD = "Head".intern() ;
   public static final String P_FOOT = "Foot".intern() ;
@@ -329,9 +330,31 @@ public class Utils {
   }
   
   public static String createFolderId(String accountId, String folderName, boolean isPersonal) {
-    String folderId = accountId + "DefaultFolder" + folderName;
-    if (isPersonal) folderId = accountId + "UserFolder" + folderName;
+    String folderId = accountId + "UserFolder" + folderName;
+    if (!isPersonal) {
+      if (folderName.equalsIgnoreCase(Utils.FD_INBOX)) {
+        folderId = accountId + "DefaultFolder" + FD_INBOX;
+      } else if (folderName.equalsIgnoreCase(Utils.FD_DRAFTS)) {
+        folderId = accountId + "DefaultFolder" + FD_DRAFTS;
+      } else if (folderName.equalsIgnoreCase(Utils.FD_SENT)) {
+        folderId = accountId + "DefaultFolder" + FD_SENT;
+      } else if (folderName.equalsIgnoreCase(Utils.FD_TRASH)) {
+        folderId = accountId + "DefaultFolder" + FD_TRASH;
+      } else if (folderName.equalsIgnoreCase(Utils.FD_SPAM)) {
+        folderId = accountId + "DefaultFolder" + FD_SPAM;
+      } else {
+        folderId = accountId + "DefaultFolder" + folderName;
+      }
+    }
     return folderId;
+  }
+  
+  public static String getFolderNameFromFolderId(String folderId) {
+    int index = -1;
+    if (folderId.indexOf("UserFolder") > -1) index = folderId.indexOf("UserFolder") + 10;
+    else if (folderId.indexOf("DefaultFolder") > -1) index = folderId.indexOf("DefaultFolder") + 13;
+    if (index > 0) return folderId.substring(index, folderId.length());
+    else return "";
   }
   
   public static javax.mail.internet.MimeMessage mergeToMimeMessage(Message message, javax.mail.internet.MimeMessage mimeMessage) throws Exception {

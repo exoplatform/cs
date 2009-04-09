@@ -980,8 +980,7 @@ public class JCRDataStorage {
       }
       node.setProperty(Utils.EXO_HEADERS, values.toArray(new String[] {}));
 
-      logger.warn("Saved body and attachment of message .... size : " + Math.abs(msg.getSize())
-          + " B");
+      logger.warn("Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B");
       t2 = System.currentTimeMillis();
       
       MimeMessage cmsg = (MimeMessage) msg;
@@ -1297,6 +1296,26 @@ public class JCRDataStorage {
       folder.setPersonalFolder(node.getProperty(Utils.EXO_PERSONAL).getBoolean());
       folder.setNumberOfUnreadMessage(node.getProperty(Utils.EXO_UNREADMESSAGES).getLong());
       folder.setTotalMessage(node.getProperty(Utils.EXO_TOTALMESSAGE).getLong());
+      try {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(node.getProperty(Utils.EXO_LAST_CHECKED_TIME).getLong());
+        folder.setLastCheckedDate(cal.getTime());
+      } catch (Exception e) {
+        folder.setLastCheckedDate(null);
+      }
+      try {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(node.getProperty(Utils.EXO_LAST_START_CHECKING_TIME).getLong());
+        folder.setLastStartCheckingTime(cal.getTime());
+      } catch (Exception e) {
+        folder.setLastStartCheckingTime(null);
+      }
+      try {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(node.getProperty(Utils.EXO_CHECK_FROM_DATE).getLong());
+        folder.setCheckFromDate(cal.getTime());
+      } catch (Exception e) { }
+
     }
     return folder;
   }
@@ -1339,6 +1358,26 @@ public class JCRDataStorage {
     folder.setPersonalFolder(node.getProperty(Utils.EXO_PERSONAL).getBoolean());
     folder.setNumberOfUnreadMessage(node.getProperty(Utils.EXO_UNREADMESSAGES).getLong());
     folder.setTotalMessage(node.getProperty(Utils.EXO_TOTALMESSAGE).getLong());
+    try {
+      GregorianCalendar cal = new GregorianCalendar();
+      cal.setTimeInMillis(node.getProperty(Utils.EXO_LAST_CHECKED_TIME).getLong());
+      folder.setLastCheckedDate(cal.getTime());
+    } catch (Exception e) {
+      folder.setLastCheckedDate(null);
+    }
+    try {
+      GregorianCalendar cal = new GregorianCalendar();
+      cal.setTimeInMillis(node.getProperty(Utils.EXO_LAST_START_CHECKING_TIME).getLong());
+      folder.setLastStartCheckingTime(cal.getTime());
+    } catch (Exception e) {
+      folder.setLastStartCheckingTime(null);
+    }
+    try {
+      GregorianCalendar cal = new GregorianCalendar();
+      cal.setTimeInMillis(node.getProperty(Utils.EXO_CHECK_FROM_DATE).getLong());
+      folder.setCheckFromDate(cal.getTime());
+    } catch (Exception e) { }
+    
 
     return folder;
   }
@@ -1373,6 +1412,19 @@ public class JCRDataStorage {
     myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
     myFolder.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
     myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder());
+    if (folder.getLastCheckedDate() != null)
+      myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, folder.getLastCheckedDate().getTime());
+    else 
+      myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
+    
+    if (folder.getLastStartCheckingTime() != null)
+      myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, folder.getLastStartCheckingTime().getTime());
+    else 
+      myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
+    if (folder.getCheckFromDate() != null)
+      myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, folder.getCheckFromDate().getTime());
+    else 
+      myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
     home.getSession().save();
   }
 
@@ -1414,6 +1466,19 @@ public class JCRDataStorage {
     myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
     myFolder.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
     myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder());
+    if (folder.getLastCheckedDate() != null)
+      myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, folder.getLastCheckedDate().getTime());
+    else 
+      myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
+    
+    if (folder.getLastStartCheckingTime() != null)
+      myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, folder.getLastStartCheckingTime().getTime());
+    else 
+      myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
+    if (folder.getCheckFromDate() != null)
+      myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, folder.getCheckFromDate().getTime());
+    else 
+      myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
     home.getSession().save();
   }
 

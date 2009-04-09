@@ -97,7 +97,7 @@ MailServiceHandler.prototype.checkMailWrapper = function() {
   eXo.mail.MailServiceHandler.checkMail();
 };
 
-MailServiceHandler.prototype.checkMail = function(isUpdateUI) {
+MailServiceHandler.prototype.checkMail = function(isUpdateUI, folderId) {
   if (!this.accountId ||
       !this.userName) {
     return;
@@ -109,6 +109,11 @@ MailServiceHandler.prototype.checkMail = function(isUpdateUI) {
   this.tryCount = 0;
   eXo.core.Browser.setCookie('cs.mail.checkingmail' + this.accountId, 'true');
   var url = this.SERVICE_BASED_URL + '/checkmail/' + this.userName + '/' + this.accountId + '/';
+  if (folderId) {
+  	url = url + folderId + '/';
+  } else {
+    url = url + "checkall" + '/';
+  }
   this.makeRequest(url, this.HTTP_GET, '', this.CHECK_MAIL_ACTION);
 };
 

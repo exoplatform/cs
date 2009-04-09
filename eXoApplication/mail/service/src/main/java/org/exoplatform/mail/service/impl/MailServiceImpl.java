@@ -94,6 +94,8 @@ import org.picocontainer.Startable;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 
+import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.smtp.SMTPSendFailedException;
 import com.sun.mail.smtp.SMTPTransport;
 
@@ -720,27 +722,324 @@ public class MailServiceImpl implements MailService, Startable {
     return msgMap ;
   }
   
-  private String makeStoreFolder(SessionProvider sProvider, String username, String accountId, String incomingFolder) throws Exception {
-    String folderId = Utils.createFolderId(accountId, incomingFolder, false);
-    Folder storeFolder = storage_.getFolder(sProvider, username, accountId, folderId);
-    if (storeFolder == null) {
-      folderId = Utils.createFolderId(accountId, incomingFolder, true);
-      Folder storeUserFolder = storage_.getFolder(sProvider, username, accountId, folderId);
-      if (storeUserFolder != null) {
-        storeFolder = storeUserFolder;
-      } else {
-        storeFolder = new Folder();
+  private boolean isPersonalFolder(javax.mail.Folder folder) throws Exception {
+    boolean isPersonalFolder = true;
+    for (int j = 0; j < Utils.DEFAULT_FOLDERS.length ; j++) {
+      if (folder.getName().trim().equalsIgnoreCase(Utils.DEFAULT_FOLDERS[j])) { 
+        isPersonalFolder = false;
+        continue;
       }
-      storeFolder.setId(folderId);
-      storeFolder.setName(incomingFolder);
-      storeFolder.setLabel(incomingFolder);
-      storeFolder.setPersonalFolder(true);
-      storage_.saveFolder(sProvider, username, accountId, storeFolder);
     }
-    return folderId;
+    return isPersonalFolder; 
+  }
+  
+  private List<javax.mail.Folder> synchImapFolders(SessionProvider sProvider, String username, String accountId, javax.mail.Folder[] folders) throws Exception {
+    List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
+    for (int i = 0 ; i < folders.length ; i++) {
+      javax.mail.Folder folder = folders[i];
+      if (isPersonalFolder(folder)) {
+        try {
+          ((IMAPFolder) folder).getUIDValidity();
+        } catch (Exception e) { continue; }
+        String storeFolderId = Utils.createFolderId(accountId, String.valueOf(((IMAPFolder) folder).getUIDValidity()), true);
+        Folder storeFolder = storage_.getFolder(sProvider, username, accountId, storeFolderId);
+        if (storeFolder == null) {
+          storeFolder = new Folder();
+          storeFolder.setId(storeFolderId);
+          storeFolder.setName(folder.getName());
+          storeFolder.setLabel(folder.getName());
+          storeFolder.setNumberOfUnreadMessage(0);
+          storeFolder.setTotalMessage(0);
+          storeFolder.setPersonalFolder(true);
+          try {
+            storage_.saveFolder(sProvider, username, accountId, storeFolder);
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+        } else if (!storeFolder.getName().equalsIgnoreCase((folder.getName()))){
+          storeFolder.setName(folder.getName());
+          saveFolder(sProvider, username, accountId, storeFolder);
+        }
+      }
+      folderList.add(folder);
+    }
+    return folderList ;
+  }
+  
+  public IMAPStore openIMAPConnection(SessionProvider sProvider, String username, Account account, CheckingInfo info) {
+    try {
+      logger.warn(" #### Getting mail from " + account.getIncomingHost() + " ... !");
+      info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !");
+      
+      Properties props = System.getProperties();
+      props.setProperty("mail.mime.base64.ignoreerrors", "true"); // this line fix for base64 encode problem with corrupted attachments
+  
+      String socketFactoryClass = "javax.net.SocketFactory";
+      if (account.isIncomingSsl()) socketFactoryClass = Utils.SSL_FACTORY;             
+      props.setProperty("mail.imap.socketFactory.fallback", "false");
+      props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
+      
+      
+      Session session = Session.getInstance(props, null);
+      IMAPStore imapStore = (IMAPStore)session.getStore("imap");
+      try {
+        imapStore.connect(account.getIncomingHost(), Integer.valueOf(account.getIncomingPort()), 
+                        account.getIncomingUser(), account.getIncomingPassword());
+      
+      } catch (AuthenticationFailedException e) {
+        if (!account.isSavePassword()) {   // about remember password, in the first time get email.
+          account.setIncomingPassword("");
+          updateAccount(sProvider, username, account);
+          logger.warn("Exception while connecting to server : " + e.getMessage());
+        }
+        info.setStatusMsg("The username or password may be wrong.");
+        info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
+        return null;
+      } catch (MessagingException e) {
+        logger.warn("Exception while connecting to server : " + e.getMessage());
+        info.setStatusMsg("Connecting failed. Please check server configuration.");
+        info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
+        return null;
+      } catch (Exception e) {
+        logger.warn("Exception while connecting to server : " + e.getMessage());
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        StringBuffer sb = sw.getBuffer();
+        logger.error(sb.toString());
+        info.setStatusMsg("There was an unexpected error. Connecting failed.");
+        info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
+        return null;
+      }
+      
+      return imapStore ;
+    } catch (Exception ex) {
+      System.out.println("Cannot connect to the server, please check your configuration ! ");
+      ex.printStackTrace();
+      return null;
+    }
+  }
+  
+  public void getSynchnizeImapServer(SessionProvider sProvider, String username, String accountId) throws Exception {
+    CheckingInfo info = new CheckingInfo();
+    String key = username + ":" + accountId;
+    checkingLog_.put(key, info);
+    
+    Account account = getAccountById(sProvider, username, accountId);
+    IMAPStore store = openIMAPConnection(sProvider, username, account, info);
+    if (store != null) {
+      List<javax.mail.Folder> folderList = synchImapFolders(sProvider, username, accountId, store.getDefaultFolder().list());
+      for (javax.mail.Folder folder : folderList) {
+        if (!Utils.isEmptyField(info.getRequestingForFolder_()) && !info.getRequestingForFolder_().equals("checkall")) {
+          try {
+            synchImapMessage(sProvider, username, accountId, folderList, info.getRequestingForFolder_(), key);
+          } catch(Exception e) { }          
+          continue;
+        } 
+        if(info.isRequestStop()) {
+          if (logger.isDebugEnabled()) {
+            logger.debug("Stop requested on checkmail for " + account.getId());
+          }
+          break;
+        }
+        try {
+          synchImapMessage(sProvider, username, accountId, folder, key);
+        } catch (MessagingException e){
+          System.err.println("Failed to open '" + folder.getName() + "' folder as read-only");
+          e.printStackTrace();
+        }
+      }
+      logger.warn("/////////////////////////////////////////////////////////////");
+      logger.warn("/////////////////////////////////////////////////////////////");
+      store.close();
+      info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
+      removeCheckingInfo(username, accountId);
+    }
+  }
+  
+  private void synchImapMessage(SessionProvider sProvider, String username, String accountId, List<javax.mail.Folder> folders, String folderId, String key) throws Exception {
+    for (javax.mail.Folder folder : folders) {
+      if (String.valueOf(((IMAPFolder) folder).getUIDValidity()).equalsIgnoreCase(Utils.getFolderNameFromFolderId(folderId))) {
+        try {
+          synchImapMessage(sProvider, username, accountId, folder, key);
+        } catch (MessagingException e){
+          System.err.println("Failed to open '" + folder.getName() + "' folder as read-only");
+          e.printStackTrace();
+        }
+        return;
+      } 
+    }
+  }
+  
+  private void synchImapMessage(SessionProvider sProvider, String username, String accountId, javax.mail.Folder folder, String key) throws Exception {
+    Account account = getAccountById(sProvider, username, accountId) ;
+    int totalNew = -1;
+    ExoContainer container = RootContainer.getInstance();
+    container = ((RootContainer)container).getPortalContainer("portal");
+    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
+    Info infoObj = new Info();
+    boolean saved = false ;
+    
+    try {
+      folder.open(javax.mail.Folder.READ_WRITE);
+      
+      logger.warn(" #### Getting mails from folder " + folder.getName() + " !");
+      checkingLog_.get(key).setStatusMsg("Getting mails from folder " + folder.getName() + " !");
+      
+      String folderId = Utils.createFolderId(accountId, String.valueOf(((IMAPFolder) folder).getUIDValidity()), true);
+      if (!isPersonalFolder(folder)) folderId = Utils.createFolderId(accountId, folder.getName(), false);
+      Folder eXoFolder = getFolder(sProvider, username, accountId, folderId);
+      
+      Date lastCheckedDate = eXoFolder.getLastCheckedDate();
+      Date lastCheckedFromDate = eXoFolder.getLastStartCheckingTime();
+      Date checkFromDate = eXoFolder.getCheckFromDate();
+      if (checkFromDate == null) checkFromDate = account.getCheckFromDate();
+      
+      List<MessageFilter> filters = getFilters(sProvider, username, accountId);
+      LinkedHashMap<javax.mail.Message, List<String>> msgMap = new LinkedHashMap<javax.mail.Message, List<String>>();
+      boolean isImap = account.getProtocol().equals(Utils.IMAP); 
+      boolean markAsDelete = (isImap && Boolean.valueOf(account.getImapServerProperties().get(Utils.SVR_IMAP_MARK_AS_DELETE)));
+      boolean deleteOnServer = (isImap && markAsDelete);
+      
+      if (checkFromDate == null) {
+        if (lastCheckedDate != null && lastCheckedFromDate != null) {
+          msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
+          msgMap = getMessages(msgMap, folder, true, null, lastCheckedDate, filters);
+        } else if (lastCheckedFromDate != null) {
+          msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
+        } else if (lastCheckedDate != null) {
+          msgMap = getMessages(msgMap, folder, true, null, lastCheckedDate, filters);
+        }  else {
+          msgMap = getMessages(msgMap, folder, true, null, null, filters);
+        }
+      } else {
+        if (lastCheckedDate != null && lastCheckedFromDate != null) {
+          msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
+          msgMap = getMessages(msgMap, folder, true, checkFromDate, lastCheckedDate, filters);
+        } else if (lastCheckedFromDate != null) {
+          msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
+        } else if (lastCheckedDate != null && lastCheckedDate.after(checkFromDate)) {
+          msgMap = getMessages(msgMap, folder, true, checkFromDate, lastCheckedDate, filters);
+        }  else {
+          msgMap = getMessages(msgMap, folder, true, checkFromDate, null, filters);
+        }
+      }
+      
+      totalNew = msgMap.size();
+
+      logger.warn("=============================================================");
+      logger.warn(" #### Folder " + folder.getName() + " contains " + totalNew + " messages !");
+
+      if (totalNew > 0) {        
+        int i = 0;
+        javax.mail.Message msg;
+        
+        String[] folderIds = { folderId };
+        List<String> filterList;
+        MessageFilter filter;
+        String folderStr;
+        Date lastFromDate = null;
+        Date receivedDate = null;
+        List<String> folderList, tagList;
+        List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap.keySet()) ;
+        SpamFilter spamFilter = getSpamFilter(sProvider, username, account.getId());
+        
+        while (i < totalNew) {
+          if(checkingLog_.get(key).isRequestStop()) {
+            if (logger.isDebugEnabled()) {
+              logger.debug("Stop requested on checkmail for " + account.getId());
+            }
+            break;
+          }
+          if (!Utils.isEmptyField(checkingLog_.get(key).getRequestingForFolder_()) && 
+              !String.valueOf(((IMAPFolder) folder).getUIDValidity()).equals(Utils.getFolderNameFromFolderId(checkingLog_.get(key).getRequestingForFolder_()))) {
+            break;
+          }
+          
+          msg = msgList.get(i);
+          
+          checkingLog_.get(key).setFetching(i + 1);
+          checkingLog_.get(key).setStatusMsg("Synchronizing  " + folder.getName()+ " : " + (i + 1) + "/" + totalNew);
+          
+          filterList = msgMap.get(msg);
+          try {            
+            folderList = new ArrayList<String>();
+            tagList = new ArrayList<String>();
+            if (filterList != null && filterList.size() > 0) {
+              String tagId;
+              for (int j = 0; j < filterList.size(); j++) {
+                filter = getFilterById(sProvider, username, accountId, filterList.get(j));
+                folderList.add(filter.getApplyFolder());
+                tagId = filter.getApplyTag();
+                if (tagId != null && tagId.trim().length() > 0) tagList.add(tagId);
+              }
+              folderIds = folderList.toArray(new String[] {});
+            }
+            
+            folderStr = "";
+            for (int k = 0; k < folderIds.length; k++) {
+              folderStr += folderIds[k] + ",";
+            }
+            infoObj.setFolders(folderStr);
+            
+            saved = storage_.saveMessage(sProvider, username, accountId, msg, folderIds, null, spamFilter, infoObj, continuation);
+            
+            if (saved) {
+              msg.setFlag(Flags.Flag.SEEN, true);
+              if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
+              
+              folderStr = "";
+              for (int k = 0; k < folderIds.length; k++) {
+                folderStr += folderIds[k] + ",";
+              }                
+            }
+            receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
+            eXoFolder = getFolder(sProvider, username, accountId, folderId);
+            if (i == 0) lastFromDate = receivedDate;                  
+            eXoFolder.setLastCheckedDate(receivedDate);
+            if ((i == (totalNew - 1))) eXoFolder.setCheckFromDate(lastFromDate);
+            
+            if (lastFromDate != null && (eXoFolder.getLastStartCheckingTime() == null || eXoFolder.getLastStartCheckingTime().before(lastFromDate))) {
+              eXoFolder.setLastStartCheckingTime(lastFromDate);
+            }
+          } catch (Exception e) {
+            i++;
+            continue;
+          }
+          i++;
+        }
+      }      
+      logger.warn("#### Synchronization finished for " + folder.getName() + " folder.");
+
+      if (!account.isSavePassword()) account.setIncomingPassword("");
+      updateAccount(sProvider, username, account);
+      
+      saveFolder(sProvider, username, accountId, eXoFolder);
+      
+      
+      folder.close(true);
+    } catch (Exception e) {
+      logger.error("Error while checking emails from folder" + folder.getName() + " of username " + username + " on account " + accountId, e);
+    }
   }
 
   public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception {
+    Account account = getAccountById(sProvider, username, accountId);
+    List<Message> messageList = new ArrayList<Message>();
+    if(account != null) {
+      boolean isPop3 = account.getProtocol().equals(Utils.POP3);
+      boolean isImap = account.getProtocol().equals(Utils.IMAP);
+      if (isPop3) {
+        return checkPop3Server(sProvider, username, accountId);
+      } else if (isImap) {
+        getSynchnizeImapServer(sProvider, username, accountId);
+      }
+    }
+    return messageList ;
+  }
+  
+  //TODO: refactor code for checking mail from POP3 server.
+  public List<Message> checkPop3Server(SessionProvider sProvider, String username, String accountId) throws Exception {
     Account account = getAccountById(sProvider, username, accountId);
     List<Message> messageList = new ArrayList<Message>();
     if(account != null) {
@@ -890,10 +1189,6 @@ public class MailServiceImpl implements MailService, Startable {
             List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap.keySet()) ;
             SpamFilter spamFilter = getSpamFilter(sProvider, username, account.getId());
             String folderId = makeStoreFolder(sProvider, username, accountId, incomingFolder);
-            ExoContainer container = RootContainer.getInstance();
-            container = ((RootContainer)container).getPortalContainer("portal");
-            ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
-            Info infoObj = new Info();
             
             while (i < totalNew) {
               if(info.isRequestStop()) {
@@ -933,13 +1228,7 @@ public class MailServiceImpl implements MailService, Startable {
                   folderIds = folderList.toArray(new String[] {});
                 }
                 
-                folderStr = "";
-                for (int k = 0; k < folderIds.length; k++) {
-                  folderStr += folderIds[k] + ",";
-                }
-                infoObj.setFolders(folderStr);
-                
-                saved = storage_.saveMessage(sProvider, username, accountId, msg, folderIds, tagList, spamFilter, infoObj, continuation);
+                saved = storage_.saveMessage(sProvider, username, accountId, msg, folderIds, tagList, spamFilter);
                 
                 if (saved) {
                   msg.setFlag(Flags.Flag.SEEN, true);
@@ -948,7 +1237,9 @@ public class MailServiceImpl implements MailService, Startable {
                   folderStr = "";
                   for (int k = 0; k < folderIds.length; k++) {
                     folderStr += folderIds[k] + ",";
-                  }                
+                  }
+                  checkingLog_.get(key).setFetchingToFolders(folderStr);
+                  checkingLog_.get(key).setMsgId(MimeMessageParser.getMessageId(msg));
                 }
                 
                 receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
@@ -997,6 +1288,26 @@ public class MailServiceImpl implements MailService, Startable {
       }
     }
     return messageList;
+  } 
+  
+  private String makeStoreFolder(SessionProvider sProvider, String username, String accountId, String incomingFolder) throws Exception {
+    String folderId = Utils.createFolderId(accountId, incomingFolder, false);
+    Folder storeFolder = storage_.getFolder(sProvider, username, accountId, folderId);
+    if (storeFolder == null) {
+      folderId = Utils.createFolderId(accountId, incomingFolder, true);
+      Folder storeUserFolder = storage_.getFolder(sProvider, username, accountId, folderId);
+      if (storeUserFolder != null) {
+        storeFolder = storeUserFolder;
+      } else {
+        storeFolder = new Folder();
+      }
+      storeFolder.setId(folderId);
+      storeFolder.setName(incomingFolder);
+      storeFolder.setLabel(incomingFolder);
+      storeFolder.setPersonalFolder(true);
+      storage_.saveFolder(sProvider, username, accountId, storeFolder);
+    }
+    return folderId;
   }
 
   public SearchTerm getSearchTerm(SearchTerm sTerm, MessageFilter filter) throws Exception {

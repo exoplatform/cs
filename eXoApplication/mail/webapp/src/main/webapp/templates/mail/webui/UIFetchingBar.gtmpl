@@ -8,6 +8,7 @@
 		<div style=" float: left; margin: 2px 0px 0px 5px; color: #00f; cursor: pointer; display:none" class="StopingCheckMail" ><%=_ctx.appRes(uicomponent.id+ ".label.stoping") %>...</div>
 		<div style=" float: right; padding-right: 10px; margin-top: 2px; color: #00f; cursor: pointer; display:none" class="Hide" onclick="document.getElementById('checkMailInfobar').style.display = 'none'">| <%=_ctx.appRes(uicomponent.id+ ".label.hide") %></div>
 		<div style="float: right; padding-right: 5px; margin-top: 2px;" class="Here"><a style=" color: #00f;" href="<%=uicomponent.event("Refresh")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.refresh")%></a></div>
+    <div style="display:none" id="UpdateImapFolder"><a href="<%=uicomponent.event("UpdateFolder")%>"></a></div>
 		<%if (uicomponent.isUpdate()) {%>
 			<div id="UpdateList" style="float: right; padding-right: 5px; margin-top: 2px;" class="UpdateList"><a style=" color: #00f;" href="<%=uicomponent.event("UpdateList", "msgId")%>"></a></div>
 		<%}%>

@@ -16,6 +16,8 @@
  */
 package org.exoplatform.mail.service;
 
+import java.util.Date;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Nam Phung
@@ -33,7 +35,10 @@ public class Folder {
   private long unreadMessage = 0 ;
   private long allMessages = 0;
   private boolean isPersonalFolder = true ;
-
+  private Date lastCheckedDate_ ;
+  private Date lastStartCheckingTime_ ;
+  private Date checkFromDate_;
+  
   /**
    * The id folder should have the form AccountId/DefaultFolder/folderName or AccountId/UserFolder/folderName
    * @return the id of the folder
@@ -58,6 +63,14 @@ public class Folder {
   public String getLabel() { return label ; }
   public void   setLabel(String s) { label = s ; }
   
+  public Date getLastCheckedDate() { return lastCheckedDate_; }
+  public void setLastCheckedDate(Date date) { lastCheckedDate_ = date ; }
+  
+  public Date getLastStartCheckingTime() { return lastStartCheckingTime_; }
+  public void setLastStartCheckingTime(Date date) { lastStartCheckingTime_ = date ; }
+  
+  public Date getCheckFromDate() { return checkFromDate_; }
+  public void setCheckFromDate(Date date) { checkFromDate_ = date ; }
   /**
    * @return  The number of the unread messages
    */

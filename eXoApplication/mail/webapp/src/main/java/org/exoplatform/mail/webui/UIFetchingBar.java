@@ -43,7 +43,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
   template =  "app:/templates/mail/webui/UIFetchingBar.gtmpl",
   events = {
 	@EventConfig(listeners = UIFetchingBar.RefreshActionListener.class),
-	@EventConfig(listeners = UIFetchingBar.UpdateListActionListener.class)
+	@EventConfig(listeners = UIFetchingBar.UpdateListActionListener.class),
+  @EventConfig(listeners = UIFetchingBar.UpdateFolderActionListener.class)
   }
 )
 public class UIFetchingBar extends UIForm {
@@ -122,6 +123,15 @@ public class UIFetchingBar extends UIForm {
       }
       if (updateList) uiMsgList.messageList_.put(msg.getId(), msg);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList);   
+    }
+  }
+  
+  static public class UpdateFolderActionListener extends EventListener<UIFetchingBar> {
+    public void execute(Event<UIFetchingBar> event) throws Exception {
+      UIFetchingBar uiForm = event.getSource() ;  
+      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
+      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
     }
   }
 }

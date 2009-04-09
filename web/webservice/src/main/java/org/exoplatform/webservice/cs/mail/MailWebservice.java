@@ -18,6 +18,7 @@ import org.exoplatform.services.rest.transformer.StringOutputTransformer;
 
 /**
  * @author Uoc Nguyen
+ * Modified by : Phung Nam (phunghainam@gmail.com) 
  * 
  */
 public class MailWebservice implements ResourceContainer {
@@ -28,11 +29,12 @@ public class MailWebservice implements ResourceContainer {
   public MailWebservice() {  }
 
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/cs/mail/checkmail/{username}/{accountId}/")
+  @URITemplate("/cs/mail/checkmail/{username}/{accountId}/{folderId}/")
   @OutputTransformer(StringOutputTransformer.class)
   public Response checkMail(@URIParam("username")
   String userName, @URIParam("accountId")
-  String accountId) throws Exception {
+  String accountId, @URIParam("folderId")
+  String folderId) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
@@ -40,10 +42,12 @@ public class MailWebservice implements ResourceContainer {
         .getCurrentContainer().getComponentInstanceOfType(MailService.class);
     
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
-   
+    
     // try to start if no checking info available
     if (checkingInfo == null) {
       mailService.checkMail(userName, accountId);
+    } else if (folderId != null && folderId.trim().length() > 0 && !folderId.equalsIgnoreCase("checkall")){
+      checkingInfo.setRequestingForFolder_(folderId);
     }
     
     StringBuffer buffer = new StringBuffer();
@@ -161,10 +165,4 @@ public class MailWebservice implements ResourceContainer {
     
     return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
-//
-//  public String getUserName() throws Exception {
-//    AuthenticationService authService = (AuthenticationService) ExoContainerContext
-//        .getCurrentContainer().getComponentInstanceOfType(AuthenticationService.class);
-//    return authService.getCurrentIdentity().getUserId();
-//  }
 }

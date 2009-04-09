@@ -24,6 +24,7 @@ UpdateList.prototype.update = function(obj){
   	var folders = folderIds.split(","); 
   	var folderNumberCountNode ;
   	var numberStr;
+  	var updateImapFolder;
   	for (var i = 0; i < folders.length; i++) {
   	  folderNumberCountNode = document.getElementById(folders[i]);
   	  if (folderNumberCountNode != null) {
@@ -32,6 +33,11 @@ UpdateList.prototype.update = function(obj){
   	  	numberStr = numberStr.substring(numberStr.indexOf("(") + 1, numberStr.indexOf(")"));
       	if (numberStr.length == 0) numberStr = "0";
   	  	folderNumberCountNode.innerHTML = "(" + (parseInt(numberStr) + 1) + ")";
+  	  } else {
+  	    updateImapFolder = document.getElementById("UpdateImapFolder");
+  	    if (updateImapFolder != null) {
+  	    	eval(eXo.core.DOMUtil.findDescendantsByTagName(updateImapFolder, 'a')[0].href.replace("%20", ""));
+  	    }
   	  }
   	}
   	
@@ -99,7 +105,7 @@ UpdateList.prototype.update = function(obj){
 		  	}
 		  }
 		  var form = eXo.core.DOMUtil.findAncestorByTagName(tbodyMsgList,"form");
-			eXo.mail.UpdateList.sendRequest(form.action,data.msgId);
+		  eXo.mail.UpdateList.sendRequest(form.action,data.msgId);
 		}
   }
 } ;
