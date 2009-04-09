@@ -50,6 +50,7 @@
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.profile")%></div>
 									  <div class="Content">
                       <div class="LeftContent">
+                      <% if (!ContactUtils.isEmpty(contact.getNickName()) || !ContactUtils.isEmpty(contact.getGender())) { %>
                         <table>
                           <% if (!ContactUtils.isEmpty(contact.getNickName())) { %>
                           <tr>
@@ -84,8 +85,12 @@
                           </tr>
                           <% } %>
                         </table>
+                      <% } else { %>
+                        		<span></span>
+                        <% } %>
                       </div>
                       <div class="RightContent">
+                      <% if (!ContactUtils.isEmpty(contact.getBirthday()) || !ContactUtils.isEmpty(contact.getEmailAddress())) { %>
                         <table>
                            <% if (contact.getBirthday() != null){ %>
                           <tr>
@@ -153,6 +158,9 @@
                           </tr>
                           <% } %>
                         </table>
+                      <% } else { %>
+                        		<span></span>
+                        <% } %>
                       </div>
                       <div style="clear:left;"><span></span></div>
                     </div>
@@ -161,6 +169,7 @@
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.work")%></div>
 									  <div class="Content">
                       <div class="LeftContent">
+                      <% if (!ContactUtils.isEmpty(contact.getWorkAddress()) || !ContactUtils.isEmpty(contact.getWorkCity()) || !ContactUtils.isEmpty(contact.getWorkStateProvince()) || !ContactUtils.isEmpty(contact.getWorkPostalCode()) || !ContactUtils.isEmpty(contact.getWorkCountry())) { %>
                         <table>
                           <% if (!ContactUtils.isEmpty(contact.getWorkAddress())) { %>
                           <tr>
@@ -243,8 +252,12 @@
                           </tr>
                           <% } %>
                         </table>
+                      <% }else { %>
+                        <span></span>
+                        <% } %>
                       </div>
                       <div class="RightContent">
+                      <% if (!ContactUtils.isEmpty(contact.getWorkPhone1()) || !ContactUtils.isEmpty(contact.getWorkPhone2()) || !ContactUtils.isEmpty(contact.getWorkFax()) || !ContactUtils.isEmpty(contact.getMobilePhone()) || !ContactUtils.isEmpty(contact.getWebPage())) { %>
                         <table>
                            <% if (!ContactUtils.isEmpty(contact.getWorkPhone1())) { %>
                           <tr>
@@ -327,6 +340,9 @@
                           </tr>
                           <% } %>
                         </table>
+                      <% }else { %>
+                        <span></span>
+                        <% } %>
                       </div>
                       <div style="clear:left;"><span></span></div>
                     </div>
@@ -335,6 +351,7 @@
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.instantMessaginContacts")%></div>
 									  <div class="Content">
                       <div class="LeftContent">
+                      <% if (!ContactUtils.isEmpty(contact.getExoId()) || !ContactUtils.isEmpty(contact.getGoogleId()) || !ContactUtils.isEmpty(contact.getMsnId()) || !ContactUtils.isEmpty(contact.getAolId())) { %>
                         <table>
                           <% if (!ContactUtils.isEmpty(contact.getExoId())) { %>
                           <tr>
@@ -401,8 +418,12 @@
                           </tr>
                           <% } %>
                         </table>
+                     	<% }else { %>
+                        <span></span>
+                        <% } %>
                       </div>
                       <div class="RightContent">
+                      <% if (!ContactUtils.isEmpty(contact.getYahooId()) || !ContactUtils.isEmpty(contact.getIcrId()) || !ContactUtils.isEmpty(contact.getSkypeId()) || !ContactUtils.isEmpty(contact.getIcqId())) { %>
                         <table>
                           <% if (!ContactUtils.isEmpty(contact.getYahooId())) { %>
                           <tr>
@@ -469,6 +490,9 @@
                           </tr>
                           <% } %>
                         </table>
+                      <% }else { %>
+                        <span></span>
+                        <% } %>
                       </div>
                       <div style="clear:left;"><span></span></div>
                     </div>
@@ -477,6 +501,7 @@
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.home")%></div>
 									<div class="Content">
                       <div class="LeftContent">
+                      <% if (!ContactUtils.isEmpty(contact.getHomeAddress()) || !ContactUtils.isEmpty(contact.getHomeCity()) || !ContactUtils.isEmpty(contact.getHomeState_province()) || !ContactUtils.isEmpty(contact.getHomePostalCode()) || !ContactUtils.isEmpty(contact.getHomeCountry())) { %>
                         <table>
                           <% if (!ContactUtils.isEmpty(contact.getHomeAddress())) { %>
                           <tr>
@@ -559,8 +584,12 @@
                           </tr>
                           <% } %>
                         </table>
+                      <% }else { %>
+                        <span></span>
+                        <% } %>
                       </div>
                       <div class="RightContent">
+                      <% if (!ContactUtils.isEmpty(contact.getHomePhone1()) || !ContactUtils.isEmpty(contact.getHomePhone2()) || !ContactUtils.isEmpty(contact.getHomeFax()) || !ContactUtils.isEmpty(contact.getPersonalSite())) { %>
                         <table>
                            <% if (!ContactUtils.isEmpty(contact.getHomePhone1())) { %>
                           <tr>
@@ -628,6 +657,9 @@
                           <% } %>
                           
                         </table>
+                      <% }else { %>
+                        <span></span>
+                        <% } %>
                       </div>
                       <div style="clear:left;"><span></span></div>
                     </div>
