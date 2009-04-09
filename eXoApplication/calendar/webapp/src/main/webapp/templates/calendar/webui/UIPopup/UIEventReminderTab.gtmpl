@@ -3,7 +3,7 @@
 	def isEmailReminder = (uiForm.getEmailReminder())?"": "style='display:none;'";
 	def isPopupReminder = (uiForm.getPopupReminder())?"": "style='display:none;'";
 %>
-<div class="UIAddNewEvent">
+<div id="$uicomponent.id" class="UIAddNewEvent">
 	<div class="ReminderByEmail">
 		<div>
 			<div style="float:left;" onclick="eXo.calendar.UICalendarPortlet.showHideSetting(this);">

@@ -55,7 +55,8 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     template = "system:/groovy/webui/form/UIFormTabPane.gtmpl",
     events = {
       @EventConfig(listeners = UIRssForm.GenerateRssActionListener.class),      
-      @EventConfig(listeners = UIRssForm.CancelActionListener.class, phase=Phase.DECODE)
+      @EventConfig(listeners = UIRssForm.CancelActionListener.class, phase=Phase.DECODE),
+      @EventConfig(listeners = UIRssForm.SelectTabActionListener.class, phase=Phase.DECODE)
     }
 )
 public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
@@ -107,6 +108,9 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
   private UIFormDateTimePicker getUIDateTimePicker(String id) {
     UIFormInputWithActions rssInfo = getChildById(INPUT_RSSINFO) ;
     return rssInfo.getChildById(id) ;
+  }
+  public String[] getActions() {
+    return new String[]{"GenerateRss", "Cancel"} ;
   }
   static  public class GenerateRssActionListener extends EventListener<UIRssForm> {
     public void execute(Event<UIRssForm> event) throws Exception {
@@ -177,5 +181,11 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;
     }
-  }  
+  }
+  
+  static public class SelectTabActionListener extends EventListener<UIRssForm> {
+    public void execute(Event<UIRssForm> event) throws Exception {
+      event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
+    }
+  }
 }

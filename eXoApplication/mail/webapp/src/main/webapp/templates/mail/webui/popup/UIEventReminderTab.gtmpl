@@ -1,7 +1,7 @@
 <%
 	uiForm = uicomponent.getParentFrom() ;
 %>	
-<div class="UIAddNewEvent">
+<div id="$uicomponent.id" class="UIAddNewEvent">
 	<div class="ReminderByEmail">
 		<%uiForm.renderField(uicomponent.REMIND_BY_EMAIL); %>
 		<div class="FieldLabel" style="float: left;">

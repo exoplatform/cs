@@ -27,7 +27,6 @@ import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -58,7 +57,8 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     template = "system:/groovy/webui/form/UIFormTabPane.gtmpl",
     events = {
       @EventConfig(listeners = UICalDavForm.GenerateActionListener.class),      
-      @EventConfig(listeners = UICalDavForm.CancelActionListener.class, phase=Phase.DECODE)
+      @EventConfig(listeners = UICalDavForm.CancelActionListener.class, phase=Phase.DECODE),
+      @EventConfig(listeners = UICalDavForm.SelectTabActionListener.class, phase=Phase.DECODE)
     }
 )
 public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
@@ -124,6 +124,10 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
   private UIFormDateTimePicker getUIDateTimePicker(String id) {
     UIFormInputWithActions rssInfo = getChildById("rssInfo") ;
     return rssInfo.getChildById(id) ;
+  }
+  
+  public String[] getActions() {
+    return new String[]{"Generate", "Cancel"} ;
   }
   static  public class GenerateActionListener extends EventListener<UICalDavForm> {
     public void execute(Event<UICalDavForm> event) throws Exception {
@@ -192,4 +196,10 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
       calendarPortlet.cancelAction() ;
     }
   }  
+  
+  static public class SelectTabActionListener extends EventListener<UICalDavForm> {
+    public void execute(Event<UICalDavForm> event) throws Exception {
+      event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
+    }
+  }
 }

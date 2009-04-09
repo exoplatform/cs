@@ -63,8 +63,9 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     events = {
       @EventConfig(listeners = UIContactForm.SaveActionListener.class),      
       @EventConfig(listeners = UIContactForm.CancelActionListener.class, phase=Phase.DECODE),
-      @EventConfig(phase = Phase.DECODE,listeners = UIContactForm.ChangeImageActionListener.class),
-      @EventConfig(phase = Phase.DECODE,listeners = UIContactForm.DeleteImageActionListener.class)
+      @EventConfig(listeners = UIContactForm.ChangeImageActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIContactForm.DeleteImageActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIContactForm.SelectTabActionListener.class, phase=Phase.DECODE)
     }
 )
 public class UIContactForm extends UIFormTabPane {
@@ -428,6 +429,12 @@ public class UIContactForm extends UIFormTabPane {
       if (profileTab.getContact() != null) profileTab.getContact().setAttachment(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(
         uiContactForm.getAncestorOfType(UIPopupAction.class)) ;
+    }
+  }
+  
+  static public class SelectTabActionListener extends EventListener<UIContactForm> {
+    public void execute(Event<UIContactForm> event) throws Exception {
+      event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
     }
   }
 }

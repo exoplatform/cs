@@ -86,7 +86,8 @@ import org.exoplatform.webui.form.UIFormTabPane;
                    @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE),
                    @EventConfig(listeners = UIEventForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
                    @EventConfig(listeners = UIEventForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
-                   @EventConfig(listeners = UIEventForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE)
+                   @EventConfig(listeners = UIEventForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.SelectTabActionListener.class, phase = Phase.DECODE)
                  }
 )
 public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Selector{
@@ -849,6 +850,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_EVENTDETAIL)) ;
       }
+    }
+  }
+  static public class SelectTabActionListener extends EventListener<UIEventForm> {
+    public void execute(Event<UIEventForm> event) throws Exception {
+      event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
     }
   }
 }

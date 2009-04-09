@@ -70,7 +70,8 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
       @EventConfig(listeners = UICalendarForm.AddCategoryActionListener.class,  phase=Phase.DECODE),
       @EventConfig(listeners = UICalendarForm.SelectPermissionActionListener.class, phase=Phase.DECODE),
       @EventConfig(listeners = UICalendarForm.ResetActionListener.class, phase=Phase.DECODE),
-      @EventConfig(listeners = UICalendarForm.CancelActionListener.class, phase=Phase.DECODE)
+      @EventConfig(listeners = UICalendarForm.CancelActionListener.class, phase=Phase.DECODE),
+      @EventConfig(listeners = UICalendarForm.SelectTabActionListener.class, phase=Phase.DECODE)
     }
 )
 public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, UISelector{
@@ -603,6 +604,12 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       UICalendarForm uiForm = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;
+    }
+  }
+  
+  static public class SelectTabActionListener extends EventListener<UICalendarForm> {
+    public void execute(Event<UICalendarForm> event) throws Exception {
+      event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
     }
   }
 }

@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import net.wimpi.pim.contact.io.ContactUnmarshaller;
-
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
@@ -114,7 +112,8 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
                      @EventConfig(listeners = UIEventForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.AddParticipantActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.OnChangeActionListener.class, phase = Phase.DECODE),
-                     @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE)
+                     @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.SelectTabActionListener.class, phase = Phase.DECODE)
                    }
   ),
     @ComponentConfig(
@@ -1566,5 +1565,10 @@ public Attachment getAttachment(String attId) {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
-
+  
+  static public class SelectTabActionListener extends EventListener<UIEventForm> {
+    public void execute(Event<UIEventForm> event) throws Exception {
+      event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
+    }
+  }
 }

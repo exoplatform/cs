@@ -61,7 +61,8 @@ import org.exoplatform.webui.form.UIFormTabPane;
       @EventConfig(listeners = UICalendarSettingForm.SaveActionListener.class),
       @EventConfig(listeners = UICalendarSettingForm.ChangeLocaleActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UICalendarSettingForm.ShowAllTimeZoneActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UICalendarSettingForm.CancelActionListener.class, phase = Phase.DECODE)
+      @EventConfig(listeners = UICalendarSettingForm.CancelActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UICalendarSettingForm.SelectTabActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UICalendarSettingForm extends UIFormTabPane implements UIPopupComponent{
@@ -304,6 +305,12 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       UICalendarSettingForm uiForm = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;
+    }
+  }
+  
+  static public class SelectTabActionListener extends EventListener<UICalendarSettingForm> {
+    public void execute(Event<UICalendarSettingForm> event) throws Exception {
+      event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
     }
   }
 }
