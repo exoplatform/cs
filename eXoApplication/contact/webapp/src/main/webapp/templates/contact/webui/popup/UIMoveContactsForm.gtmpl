@@ -7,7 +7,7 @@
 %>
 
 <div class="UIMoveContactsForm">
-	<div class="MoveContactsName"><span style="font-weight: normal"><%=_ctx.appRes(uicomponent.getName() + ".label.contacts")%></span>
+	<div class="MoveContactsName"><span style="font-weight:normal"><%=_ctx.appRes(uicomponent.getName() + ".label.contacts")%></span>
 		<%=uicomponent.getContactsName()%>
 	</div>
 	<div class="MoveContainer">

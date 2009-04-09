@@ -34,8 +34,7 @@
 				<div class="MiddleLeftViewBoxStyle">
 					<div class="MiddleRightViewBoxStyle">
 						<div class="MiddleCenterViewBoxStyle">
-						
-							<div class="ContactPreviewContainer"	>		
+							<div class="ContactPreviewContainer">		
 								<% 
 								String imageLink = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
 								ContactAttachment att = contact.getAttachment() ;
@@ -46,19 +45,21 @@
 									} catch (Exception e) {}
 								}
 			  				%>
-								<img src="$imageLink" width=63 height=81 class="Avatar"/>
+								<img src="$imageLink" width="63px" height="81px" class="Avatar"/>
 								<div class="Member">
 									<div class="State"><%= ContactUtils.encodeHTML(contact.getFullName()) %></div>
 									<% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
-											 <div class="Job"> <%= ContactUtils.encodeHTML(contact.getJobTitle()) %></div>
+											 <div class="Job"><%= ContactUtils.encodeHTML(contact.getJobTitle()) %></div>
 									<% } %>
 								</div>
 								<div style="clear:left;"><span></span></div>
-								
 								<div class="InfoContainer">
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.profile")%></div>
 									  <div class="Content">
                       <div class="LeftContent">
+                      <% if (!ContactUtils.isEmpty(contact.getNickName()) || !ContactUtils.isEmpty(contact.getGender())) { %>
+                      
+                      
                         <table>
                           <% if (!ContactUtils.isEmpty(contact.getNickName())) { %>
                           <tr>
@@ -93,8 +94,14 @@
                           </tr>
                           <% } %>
                         </table>
+                        
+                        <% } else { %>
+                        		<span></span>
+                        <% } %>
                       </div>
                       <div class="RightContent">
+                        <% if (!ContactUtils.isEmpty(contact.getBirthday()) || !ContactUtils.isEmpty(contact.getEmailAddress())) { %>
+                        
                         <table>
                            <% if (contact.getBirthday() != null){ %>
                           <tr>
@@ -144,17 +151,18 @@
                           </tr>
                           <% } %>
                         </table>
+                        <% } else { %>
+                        		<span></span>
+                        <% } %>
                       </div>
                       <div style="clear:left;"><span></span></div>
                     </div>
-                    
 								</div>
-								
 								<div class="InfoContainer">
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.work")%></div>
-									
 									  <div class="Content">
                       <div class="LeftContent">
+                      <% if (!ContactUtils.isEmpty(contact.getWorkAddress()) || !ContactUtils.isEmpty(contact.getWorkCity()) || !ContactUtils.isEmpty(contact.getWorkStateProvince()) || !ContactUtils.isEmpty(contact.getWorkPostalCode()) || !ContactUtils.isEmpty(contact.getWorkCountry())) { %>
                         <table>
                           <% if (!ContactUtils.isEmpty(contact.getWorkAddress())) { %>
                           <tr>
@@ -182,7 +190,7 @@
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkCity())%></div>
-                                   </td>
+                                  </td>
 			                          </tr>
 			                        </table>
                             </td>
@@ -237,8 +245,13 @@
                           </tr>
                           <% } %>
                         </table>
+                        <% }else { %>
+                        <span></span>
+                        <% } %>
                       </div>
                       <div class="RightContent">
+                      <% if (!ContactUtils.isEmpty(contact.getWorkPhone1()) || !ContactUtils.isEmpty(contact.getWorkPhone2()) || !ContactUtils.isEmpty(contact.getWorkFax()) || !ContactUtils.isEmpty(contact.getMobilePhone()) || !ContactUtils.isEmpty(contact.getWebPage())) { %>
+                      
                         <table>
                            <% if (!ContactUtils.isEmpty(contact.getWorkPhone1())) { %>
                           <tr>
@@ -320,17 +333,16 @@
 			                      </td>
                           </tr>
                           <% } %>
-                          
-                          
                         </table>
+                      <% } else { %>
+                      		<span></span>
+                      <% } %>
                       </div>
                       <div style="clear:left;"><span></span></div>
                     </div>
 								</div>
-								
 								<div class="InfoContainer">
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.instantMessaginContacts")%></div>
-									
 									  <div class="Content">
                       <div class="LeftContent">
                         <table>
@@ -667,11 +679,8 @@
 									</div>
 								</div>
 								<div style="clear:left;"><span></span></div>
-								
 							</div>
-							
 						</div>	
-															
 					</div>
 				</div>
 				<div class="BottomLeftViewBoxStyle">
@@ -696,9 +705,7 @@
 			<div class="MiddleLeftViewBoxStyle">
 				<div class="MiddleRightViewBoxStyle">
 					<div class="MiddleCenterViewBoxStyle">
-					
 						<div class="UIWelcomeContact">
-						
 						  <div class="WelcomeContact">
 						    <div class="LabelWelcomeContact"><%=_ctx.appRes("UIWelcomeContact.label.label0")%></div>
 						    <div class="LabelComment"><%=_ctx.appRes("UIWelcomeContact.label.label1")%></div>
@@ -720,9 +727,7 @@
 						    <%=_ctx.appRes("UIWelcomeContact.label.label5")%>
 						  </div>
 					  </div>
-						
 					</div>	
-														
 				</div>
 			</div>
 			<div class="BottomLeftViewBoxStyle">

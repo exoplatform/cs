@@ -10,7 +10,7 @@
 		<div class="WorkingContainer">
   		<div class="Title"><%=_ctx.appRes(uicomponent.getName() + ".label.title")%></div>
 			<div class="UIMessageList" is>
-				<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+				<table cellspacing="0" cellpadding="0" border="0" id="UIListUsers" class="UIGrid">
   				<thead>
   					<tr>
   			      <th style="text-align:left; padding-left:7px;" class="text"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/></th>

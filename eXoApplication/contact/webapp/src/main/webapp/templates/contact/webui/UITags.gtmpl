@@ -7,9 +7,9 @@
 		<div class="ActionIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 		
 			<% /*Begin Popup Menu*/ %>
-				<div style="position: relative;">
-  			<div class="UIPopupCategory" style="display: none;">
-  				<div class="UIRightClickPopupMenu" style="display: block;">
+				<div style="position:relative;">
+  			<div class="UIPopupCategory" style="display:none;">
+  				<div class="UIRightClickPopupMenu" style="display:block;">
   					<div class="UIContextMenuContainer">
 					  <div class="TopLeftRightClickPopupMenu">
 	          			<div class="TopRightRightClickPopupMenu">
@@ -19,13 +19,13 @@
 				      <div class="MiddleLeftRightClickPopupMenu">
 				        <div class="MiddleRightRightClickPopupMenu">
 	              		  <div class="UIRightPopupMenuContainer">
-		                    <a class="MenuItem" href="<%=uicomponent.event("AddTag")%>">   
+		                    <div class="MenuItem">   
 			                    <div class="ItemIcon AddTagIcon">
-			                      <%=_ctx.appRes(uicomponent.getName() + ".label.addTag")%>
+			                      <a href="<%=uicomponent.event("AddTag")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.addTag")%></a>
 			                    </div>
-		                    </a>
-						  </div>
-		          		</div>
+		                    </div>
+						  				</div>
+		          	</div>
 		        	  </div>
 					  <div class="BottomLeftRightClickPopupMenu">
 				        <div class="BottomRightRightClickPopupMenu">
@@ -37,7 +37,6 @@
   			</div>
   				</div>
   		<% /*End Popup Menu*/ %>
-		
 		
 		</div>
 	</div>
@@ -68,27 +67,27 @@
 		     	<div class="MiddleLeftRightClickPopupMenu">
 	          <div class="MiddleRightRightClickPopupMenu">
 	  					<div class="UIRightPopupMenuContainer">
-	        			<a class="MenuItem" href="<%=uicomponent.event("EditTag", "id")%>">   
+	        			<div class="MenuItem">   
 	            		<div class="ItemIcon EditActionIcon">
-	              		<%=_ctx.appRes(uicomponent.getName() + ".label.edit")%>
+	              		<a href="<%=uicomponent.event("EditTag", "id")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.edit")%></a>
 	            		</div>
-	        			</a>
-	        			<a class="MenuItem" href="<%=uicomponent.event("DeleteTag", "id")%>">   
+	        			</div>
+	        			<div class="MenuItem">   
 	            		<div class="ItemIcon DeleteIcon">
-	              		<%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>
+	              		<a href="<%=uicomponent.event("DeleteTag", "id")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.delete")%></a>
 	            		</div> 
-	        			</a>
-                <a class="MenuItem" href="<%=uicomponent.event("ExportAddress", "id")%>">   
+	        			</div>
+                <div class="MenuItem">   
                   <div class="ItemIcon ExportContactIcon">
-                    <%=_ctx.appRes(uicomponent.getName() + ".label.exportContacts")%>
+                    <a href="<%=uicomponent.event("ExportAddress", "id")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.exportContacts")%></a>
                   </div>
-                </a>
+                </div>
         			
-	        			<a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
+	        			<div class="MenuItem">   
                   <div class="ItemIcon PrintIcon">
-                    <%=_ctx.appRes(uicomponent.getName() + ".label.printContacts")%>
+                    <a href="<%=uicomponent.event("Print", "id")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.printContacts")%></a>
                   </div>
-                </a>	        			
+                </div>	        			
 							</div>
 	  				</div>
 					</div>

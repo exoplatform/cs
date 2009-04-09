@@ -40,7 +40,7 @@
 								</div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
-								<div style="position: relative;">
+								<div style="position:relative;">
 			      			<div class="UIPopupCategory" style="display:none;">
 			      				<div class="UIRightClickPopupMenu" style="display:block;">
 			      					<div class="UIContextMenuContainer">

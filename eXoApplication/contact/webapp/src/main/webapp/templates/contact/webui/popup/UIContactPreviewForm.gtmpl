@@ -45,7 +45,7 @@
 									<div class="State"><%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : ContactUtils.encodeHTML(contact.getFullName()))%></div>
 									<div class="Job"><%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "" : ContactUtils.encodeHTML(contact.getJobTitle()))%></div>
 								</div>
-								<div style="clear: left;"><span></span></div>
+								<div style="clear:left;"><span></span></div>
 								<div class="InfoContainer">
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.profile")%></div>
 									  <div class="Content">
@@ -77,7 +77,7 @@
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getGender())%></div>
-                                   </td>
+                                  </td>
 			                          </tr>
 			                        </table>
                             </td>
@@ -188,7 +188,7 @@
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkCity())%></div>
-                                   </td>
+                                  </td>
 			                          </tr>
 			                        </table>
                             </td>
@@ -204,7 +204,7 @@
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkStateProvince())%></div>
-                                   </td>
+                                  </td>
 			                          </tr>
 			                        </table>
                             </td>
@@ -220,7 +220,7 @@
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkPostalCode()) %></div>
-                                   </td>
+                                  </td>
 			                          </tr>
 			                        </table>
                             </td>
@@ -236,7 +236,7 @@
 			                          <tr>
 			                            <td>
                                     <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkCountry())%></div>
-                                   </td>
+                                  </td>
 			                          </tr>
 			                        </table>
                             </td>

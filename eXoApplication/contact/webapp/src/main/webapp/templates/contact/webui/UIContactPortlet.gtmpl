@@ -20,8 +20,8 @@
 	rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactAlert.init("'+ContactUtils.getCurrentUser()+'","'+uicomponent.getUserToken()+'");') ;
  	
 %>
-<div><div style="width: 940px;" ><span style="display: none;"></span></div></div>
-<div class="UIContactPortlet" id="$compId" oncontextmenu="return false" style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white; _margin: auto;">
+<div><div style="width:940px;" ><span style="display:none;"></span></div></div>
+<div class="UIContactPortlet" id="$compId" oncontextmenu="return false" style="_width:expression(this.previousSibling.offsetWidth - 22 + 'px'); !border:1px solid white; _margin:auto;">
 
 <div class="ContactContainer">	
 	<!-- Start Action Bar -->

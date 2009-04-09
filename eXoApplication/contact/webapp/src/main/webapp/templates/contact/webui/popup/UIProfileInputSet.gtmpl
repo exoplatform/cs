@@ -153,6 +153,6 @@
 			<a href="<%=uicomponent.getParent().event("DeleteImage")%>"><%=_ctx.appRes(uicomponent.getParent().id + ".label.delete")%></a>			
 		</div>
 	</div>
-	<div style="clear: left;"><span></span></div>
+	<div style="clear:left;"><span></span></div>
 </div> 
 </div>       

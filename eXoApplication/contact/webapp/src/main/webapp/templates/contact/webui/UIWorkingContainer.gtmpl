@@ -13,5 +13,5 @@
 	<% uicomponent.renderChild(UIContactContainer.class) ;%>		
 <!-- End UIContactContainer -->
 
-		<div style="clear: left"><span></span></div>
+		<div style="clear:left"><span></span></div>
 	</div>
