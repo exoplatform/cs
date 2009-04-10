@@ -610,16 +610,26 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     return taskDetailTab.getUIStringInput(UIEventReminderTab.POPUP_REMIND_BEFORE).getValue() ;
   }
-  protected String isPopupRepeat() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
-    return String.valueOf("repeat".equals(eventDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).getValue())) ;
+  
+  protected Boolean isPopupRepeat() {
+    UIEventReminderTab eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
+    return Boolean.parseBoolean(eventReminderTab.getUIFormCheckBoxInput(UIEventReminderTab.POPUP_IS_REPEAT).getValue().toString()) ;
   }
-  protected void setPopupRepeat(String value) {
-    UIFormInputWithActions eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
-    if(Boolean.parseBoolean(value)) value = "repeat" ;
-    else value = "no-repeat" ;
-    eventReminderTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).setValue(value) ;
+  protected void setPopupRepeat(Boolean value) {
+    UIEventReminderTab eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
+    eventReminderTab.getUIFormCheckBoxInput(UIEventReminderTab.POPUP_IS_REPEAT).setChecked(value) ;
   }
+  
+//  protected String isPopupRepeat() {
+//    UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
+//    return String.valueOf("repeat".equals(eventDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).getValue())) ;
+//  }
+//  protected void setPopupRepeat(String value) {
+//    UIFormInputWithActions eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
+//    if(Boolean.parseBoolean(value)) value = "repeat" ;
+//    else value = "no-repeat" ;
+//    eventReminderTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).setValue(value) ;
+//  }
 
   protected String getPopupRepeatInterVal() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
@@ -664,7 +674,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_REPEAT_INTERVAL).setValue(String.valueOf(r.getRepeatInterval())) ;
       }else if(Reminder.TYPE_POPUP.equals(r.getReminderType())) {
         setPopupReminder(true) ;
-        setPopupRepeat(String.valueOf(r.isRepeat())) ;
+        setPopupRepeat(r.isRepeat()) ;
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REMIND_BEFORE).setValue(String.valueOf(r.getAlarmBefore())) ;
         //taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).setValue(String.valueOf(r.isRepeat())) ;
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REPEAT_INTERVAL).setValue(String.valueOf(r.getRepeatInterval())) ;
@@ -688,7 +698,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       Reminder popup = new Reminder() ;
       popup.setReminderType(Reminder.TYPE_POPUP) ;
       popup.setAlarmBefore(Long.parseLong(getPopupReminderTime())) ;
-      popup.setRepeate(Boolean.parseBoolean(isPopupRepeat())) ;
+      popup.setRepeate(isPopupRepeat()) ;
       popup.setRepeatInterval(Long.parseLong(getPopupRepeatInterVal())) ;
       popup.setFromDateTime(fromDateTime) ;
       StringBuffer sb = new StringBuffer() ;
