@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.internet.InternetAddress;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -47,11 +49,14 @@ public class Utils {
   }
   
 
-  public static List<String> parseEmails(String emails) {
+  public static List<String> parseEmails(String emails) throws Exception {
     List<String> emailList = new ArrayList<String>() ;
     if (isEmpty(emails)) return emailList ;
     for (String email : emails.replaceAll(SEMI_COLON, COMMA).split(COMMA))
+    {
+      email =  InternetAddress.parse(email)[0].getAddress() ;
       if (isValidEmailAddresses(email)) emailList.add(email) ;
+    }
     return emailList ;
   }
   

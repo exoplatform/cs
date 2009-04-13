@@ -66,6 +66,7 @@ public class DataPageList extends JCRPageList {
     public int compare(Object o1, Object o2) throws ClassCastException {
       String name1 = ((Contact) o1).getFullName() ;
       String name2 = ((Contact) o2).getFullName() ;
+      if (Utils.isEmpty(name1) || (Utils.isEmpty(name2))) return 0;
       return name1.compareTo(name2) ;
     }
   }

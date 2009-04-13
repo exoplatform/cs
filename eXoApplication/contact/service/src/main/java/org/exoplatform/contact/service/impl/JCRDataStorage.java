@@ -2562,6 +2562,9 @@ public class JCRDataStorage {
       filter.setEmailAddress(email) ;
       if (searchContact(username, filter).getAll().size() == 0) {
         Contact contact = new Contact() ;
+        String name = email.split("@")[0] ;
+        contact.setLastName(name) ;
+        contact.setFullName(name) ;
         contact.setEmailAddress(email) ;
         contact.setAddressBookIds(new String[] {NewUserListener.ADDRESSESGROUP + username}) ;
         saveContact(username, contact, true) ;

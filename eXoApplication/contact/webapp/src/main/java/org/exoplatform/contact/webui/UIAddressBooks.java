@@ -119,6 +119,17 @@ public class UIAddressBooks extends UIComponent {
         } catch (MissingResourceException e) {      
           e.printStackTrace() ;
         }
+      } else if (group.getId().equals(NewUserListener.ADDRESSESGROUP + ContactUtils.getCurrentUser()) &&  groupName.equals(NewUserListener.ADDRESSESGROUPNAME)) {
+        WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+        ResourceBundle res = context.getApplicationResourceBundle() ;
+        try {
+          groupName = res.getString("UIAddressBooks.label.collectedAddresses");
+          group.setName(groupName) ;         
+          ContactUtils.getContactService().saveAddressBook(
+              ContactUtils.getCurrentUser(), group, false) ;
+        } catch (MissingResourceException e) {      
+          e.printStackTrace() ;
+        }
       }
       privateAddressBookMap_.put(group.getId(), groupName) ; 
     }
