@@ -230,3 +230,7 @@
 .UIContactPortlet .UIImageForm .UIFormGrid td.FieldComponent {
 	white-space: normal;
 }
+
+.UIRightClickPopupMenu .MenuItem .ItemIcon{
+	padding:5px 5px 5px 32px;
+}
