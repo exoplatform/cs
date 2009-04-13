@@ -2,17 +2,6 @@ function UIContactPortlet() {
 	
 }
 
-//UIContactPortlet.prototype.toggleSelectAll = function(handler) {
-//  rootElement = eXo.core.DOMUtil.findAncestorByClass(handler, 'UIGrid') ;
-//  if (rootElement) {
-//    var eLst = eXo.core.DOMUtil.findDescendantsByClass(rootElement, 'input', 'checkbox') ;
-//    var curState = handler.checked ;
-//    for (var i=0; i<eLst.length; i++) {
-//       eLst[i].checked = curState ;
-//    }
-//  }
-//} ;
-
 UIContactPortlet.prototype.showContextMenu = function(compid) {
 	var UIContextMenuCon = eXo.webui.UIContextMenuCon ;//eXo.contact.ContextMenu ;
 	UIContextMenuCon.portletName = compid ;
@@ -611,7 +600,6 @@ UIContactPortlet.prototype.addCheckedIcon = function(layout, visible) {
   } else {
     eXo.core.DOMUtil.replaceClass(itemIcon,'CheckedMenu','');
   }
-  eXo
 } ;
 
 UIContactPortlet.prototype.imFormOnload = function(root){
@@ -713,6 +701,22 @@ UIContactPortlet.prototype.showMap = function(/*String*/ address, /*String*/ mes
 	eXo.core.Topic.publish("UIContactPortlet", "/eXo/portlet/map/displayAddress", {address:address, text:message});
 };
 
+
+UIContactPortlet.prototype.show = function(obj, evt){
+	if(!evt) evt = window.event ;
+	evt.cancelBubble = true ;
+	var DOMUtil = eXo.core.DOMUtil ;
+	var uiPopupCategory = DOMUtil.findFirstDescendantByClass(obj, 'div', 'UIRightClickPopupMenu') ;	
+	if (!uiPopupCategory) return ;	
+	if(uiPopupCategory.style.display == "none") {
+		DOMUtil.cleanUpHiddenElements() ;
+		uiPopupCategory.style.display = "block" ;
+		DOMUtil.listHideElements(uiPopupCategory) ;
+		if(eXo.core.I18n.isRT()) uiPopupCategory.style.left = (obj.offsetWidth - uiPopupCategory.offsetWidth) + "px" ;
+	}	
+	else uiPopupCategory.style.display = "none" ;
+};
+
 UIContactPortlet.prototype.showPopupCustomLayoutView = function(obj, evt) {
   var root = document.getElementById("UIContactPortlet");
   var objWelcome = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "UIWelcomeContact");
@@ -723,7 +727,7 @@ UIContactPortlet.prototype.showPopupCustomLayoutView = function(obj, evt) {
   } else {
     objDetails.style.display = "block";
   }
-  eXo.webui.UIPopupSelectCategory.show(obj, evt);
+  this.show(obj, evt);
 };
 
 UIContactPortlet.prototype.refreshData = function() {

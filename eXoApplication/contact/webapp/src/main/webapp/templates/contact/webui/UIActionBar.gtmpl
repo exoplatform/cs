@@ -38,14 +38,14 @@
 						</div>
           </a>
 						<div class="SeparatorLine"><span></span></div>
-						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+						<div class="SelectButton" onclick="eXo.contact.UIContactPortlet.show(this, event);">
 							<div class="IconHolder ViewIcon">
 								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.contactsView")%></div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
 								<div style="position: relative;">
-			      			<div class="UIPopupCategory" style="display: none;">
-			      				<div class="UIRightClickPopupMenu" style="display: block;">
+
+			      				<div class="UIRightClickPopupMenu" style="display: none;">
 			      					<div class="UIContextMenuContainer">
 											  <div class="TopLeftRightClickPopupMenu">
 					          			<div class="TopRightRightClickPopupMenu">
@@ -77,7 +77,7 @@
 								      </div>
 					      			</div>
 								    </div>
-			      			</div>
+
 			      		</div>
 			      		<% /*End Popup Menu*/ %>
 							<!--div class="IconHolder ViewIcon">
@@ -91,8 +91,8 @@
 							</div>
 							<% /*Begin Popup Menu*/ %>
 									<div style="position: relative;">
-			      			<div class="UIPopupCategory" style="display: none;">
-			      				<div class="UIRightClickPopupMenu" style="display: block;">
+
+			      				<div class="UIRightClickPopupMenu" style="display: none;">
 				      					<div class="UIContextMenuContainer">
 												  <div class="TopLeftRightClickPopupMenu">
 						          			<div class="TopRightRightClickPopupMenu">
@@ -137,7 +137,7 @@
 									      </div>
 						      			</div>
 									    </div>
-				      			</div>
+
 				      		</div>
 				      		<% /*End Popup Menu*/ %>
 							<!--div class="IconHolder CustomLayoutIcon">

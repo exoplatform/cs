@@ -8,11 +8,10 @@
 <div class="UIAddressBooks" id="<%=uicomponent.getId()%>">
 	<div class="TitleBar">
 		<div class="TitleIcon "><%=_ctx.appRes(uicomponent.getName() + ".label.addressBooks")%></div>
-		<div class="ActionIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+		<div class="ActionIcon" onclick="eXo.contact.UIContactPortlet.show(this, event);">
 			<% /*Begin Popup Menu*/ %>
-				<div style="position: relative;">
-  			<div class="UIPopupCategory" style="display: none;">
-  				<div class="UIRightClickPopupMenu" style="display: block;">
+				<div style="position: relative;height:1px;">
+  				<div class="UIRightClickPopupMenu" style="display: none;">
   					<div class="UIContextMenuContainer">
 							  <div class="TopLeftRightClickPopupMenu">
 	          			<div class="TopRightRightClickPopupMenu">
@@ -47,7 +46,6 @@
 				      </div>
 	      			</div>
 				    </div>
-  			</div>
   		</div>
   		<% /*End Popup Menu*/ %>
 		</div>

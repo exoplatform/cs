@@ -150,23 +150,14 @@
 }
 
 /* Popup Menu Positioning*/
-.UIActionBar .SelectButton .UIPopupCategory {
-	left: 7px ;
-}
 
-.UIContactPortlet .ActionIcon .UIPopupCategory {
-	top:17px;
-	_top:18px;
-	left:2px;
-}
-
-.UIContactPortlet .ActionIcon .UIPopupCategory .UIRightClickPopupMenu{
-	top:0px;
+.UIContactPortlet .ActionIcon .UIRightClickPopupMenu{
+	top:18px;
 	left:0px;
 }
 
 .UIContactPortlet .TagIcon .UIPopupCategory {
-	top:20px;
+	top:18px;
 	left:0px;
 }
 
