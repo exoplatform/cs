@@ -179,10 +179,16 @@ UIContextMenu.prototype.swapMenu = function(oldmenu, mousePos,evt) {
 	}
 	var uiApplication = document.getElementById("UIPortalApplication") ;
 	if(this.menuElement){
-	document.body.insertBefore(this.menuElement,uiApplication) ;	
+	document.body.insertBefore(this.menuElement,uiApplication) ;
+	var left = mousePos.x - 2;
+	var top = mousePos.y - 2;
+	if(eXo.core.I18n.isRT()){
+		left -= (eXo.cs.Utils.getElementWidth(this.menuElement)  - 3);
+		if(eXo.core.Browser.browserType == "ie") left -= eXo.cs.Utils.getScrollbarWidth() + 3 ;
+	}
 	this.menuElement.style.zIndex = 2000 ;
-	this.menuElement.style.top = mousePos.y - 2  + "px" ;
-	this.menuElement.style.left = mousePos.x - 2 + "px" ;
+	this.menuElement.style.top = top  + "px" ;
+	this.menuElement.style.left = left + "px" ;
 	this.menuElement.style.display = "block" ;
 	this.menuElement.style.visibility = "hidden" ;
 	if((this.menuElement.offsetHeight + mousePos.y) > browserHeight) this.menuElement.style.top = mousePos.y - this.menuElement.offsetHeight + 2  + "px" ;	
