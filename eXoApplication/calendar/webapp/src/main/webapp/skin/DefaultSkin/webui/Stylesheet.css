@@ -280,20 +280,20 @@
 }
 
 .UICalendarPortlet .UIForm .UIGrid .ViewDescription {
-	height:auto;
-	overflow:hidden;
-	width:80%;
+	height: auto;
+	overflow: hidden;
+	width: 80%;
 	margin: 0px;
 	font-family: Tahoma,Verdana,Arial;
 }
 
 .UICalendarPortlet .BlueCircleMinus { 
-	height:16px;
-	width:16px;
+	height: 16px;
+	width: 16px;
 }
 
 .UICalendarPortlet .busyIcon {
-	padding-left:20px;
+	padding-left: 20px;
 	height: 16px;
 }
 
@@ -303,8 +303,13 @@
 }
 
 .UICalendarPortlet .ItemIcon{
-	padding:0px 0px 0px 23px;
+	padding: 0px 0px 0px 23px;
 	line-height: 22px;
-	margin:0px 3px;
-	height:22px;
+	margin: 0px 3px;
+	height: 22px;
+}
+
+.UICalendarPortlet .MenuItem .ItemIcon {
+	line-height: 16px;
+	height: 16px;
 }

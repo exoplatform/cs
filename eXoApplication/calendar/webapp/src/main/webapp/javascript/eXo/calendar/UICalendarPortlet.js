@@ -2121,11 +2121,11 @@ UICalendarPortlet.prototype.showImagePreview = function(obj){
 	if(img.style.display == "none"){
 		img.style.display = "block";
 		obj.innerHTML = closeLabel ;
-		if(DOMUtil.hasClass(obj,"ViewAttachmentIcon")) DOMUtil.replaceClass(obj,"ViewAttachmentIcon","CloseAttachmentIcon") ;
+		if(DOMUtil.hasClass(obj,"ViewAttachmentIcon")) DOMUtil.replaceClass(obj,"ViewAttachmentIcon"," CloseAttachmentIcon") ;
 	}else {
 		img.style.display = "none";
 		obj.innerHTML = viewLabel ;
-		if(DOMUtil.hasClass(obj,"CloseAttachmentIcon")) DOMUtil.replaceClass(obj,"CloseAttachmentIcon","ViewAttachmentIcon") ;
+		if(DOMUtil.hasClass(obj,"CloseAttachmentIcon")) DOMUtil.replaceClass(obj,"CloseAttachmentIcon"," ViewAttachmentIcon") ;
 	}
 };
 
