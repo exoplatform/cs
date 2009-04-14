@@ -228,6 +228,10 @@
 	padding: 0px 0px 0px 26px;
 }
 
+.UIChat .UIRightClickPopupMenu .ItemIcon:hover {
+	color: orange;
+}
+
 .UIChat .UIRightClickPopupMenu .TypeViewContactPortlet {
 	text-align: left;
 }
@@ -237,24 +241,24 @@
 }
 
 /* ====================== User status shared Icons =================== */
-.ChatSharedIcons .IconChat {
+.UIChat .UIRightClickPopupMenu .IconChat {
   padding-left: 24px;
   display: block;
 }
 
-.ChatSharedIcons .OnlineIcon {
+.UIChat .UIRightClickPopupMenu .OnlineIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left 0px;
 }
 
-.ChatSharedIcons .OfflineIcon {
+.UIChat .UIRightClickPopupMenu .OfflineIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -75px;
 }
 
-.ChatSharedIcons .AwayIcon {
+.UIChat .UIRightClickPopupMenu .AwayIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -25px;
 }
 
-.ChatSharedIcons .FreeToChat {
+.UIChat .UIRightClickPopupMenu .FreeToChat {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -50px;
 }
 

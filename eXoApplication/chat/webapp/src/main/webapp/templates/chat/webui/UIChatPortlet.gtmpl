@@ -60,22 +60,18 @@
       		<div class="RightContainer">
       			<div class="CenterContainer">
       				<div class="TextContent">
-      					<a class="Icon NewRoomIcon" title="Create a new room"
-                   onclick="eXo.communication.chat.webui.UICreateNewRoomPopupWindow.setVisible(true)">New Room</a>
+      					<a class="Icon NewRoomIcon" title="Create a new room" onclick="eXo.communication.chat.webui.UICreateNewRoomPopupWindow.setVisible(true)">New Room</a>
       					<div class="SeperatorLine"><span></span></div>
-								<a class="Icon JoinRoomIcon" title="Join a room"
-                   onclick="eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(true)">Join Room</a>
+								<a class="Icon JoinRoomIcon" title="Join a room" onclick="eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(true)">Join Room</a>
 								<div class="SeperatorLine"><span></span></div>
-				        <a class="Icon AddContactIcon" title="Add new contact"
-				           onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true)">Add Contact
-								</a>
+				        <a class="Icon AddContactIcon" title="Add new contact" onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true)">Add Contact</a>
 								<div class="SeperatorLine" style="display: none"><span></span></div>
-				        <div style="clear: left;"><span></span></div>
+				        <div class="ClearLeft"><span></span></div>
               </div>
               <div style="padding: 5px 5px 0px 0px; display: none;">
                 <div class="FilterField"><span></span></div>
               </div>
-    				<div style="clear: left;"><span></span></div>
+    				<div class="ClearLeft"><span></span></div>
 			     </div>
 		     </div>
 	     </div>
@@ -104,21 +100,21 @@
                               <div class="MiddleRightRightClickPopupMenu">
                                 <div class="UIRightPopupMenuContainer">
                                   <div class="TypeViewContactPortlet">
-                                    <a class="MenuItem" href="#" onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)">
+                                    <div class="MenuItem" onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)">
                                       <div class="ItemIcon OnlineIcon">Online</div>
-                                    </a>
-                                    <a class="MenuItem" href="#" onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.AWAY_STATUS, null, event)">
+                                    </div>
+                                    <div class="MenuItem" onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.AWAY_STATUS, null, event)">
                                       <div class="ItemIcon AwayIcon">Away</div>
-                                    </a>
-                                    <a class="MenuItem" href="#" onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.EXTEND_AWAY_STATUS, null, event)">
+                                    </div>
+                                    <div class="MenuItem" onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.EXTEND_AWAY_STATUS, null, event)">
                                       <div class="ItemIcon AwayIcon">Extend Away</div>
-                                    </a>
-                                    <a class="MenuItem" href="#" onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.FREE_TO_CHAT_STATUS, null, event)">
+                                    </div>
+                                    <div class="MenuItem" onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.FREE_TO_CHAT_STATUS, null, event)">
                                       <div class="ItemIcon FreeToChat">Free To Chat</div>
-                                    </a>
-                                    <a class="MenuItem" href="#" onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)">
+                                    </div>
+                                    <div class="MenuItem" onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)">
                                       <div class="ItemIcon OfflineIcon">Offline</div>
-                                    </a>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -139,7 +135,7 @@
 										</div>
 									</div>
 								</div>
-								<div style="clear: left;"><span></span></div>
+								<div class="ClearLeft"><span></span></div>
 							</div>
 						</div>
 					</div>
@@ -147,7 +143,7 @@
     	</div>
     	<div class="HorizontalLayout">
     		<div class="UITabContentContainer BuddyList"></div>
-  			<div style="clear: left;"><span></span></div>
+  			<div class="ClearLeft"><span></span></div>
     	</div>
   	</div>
   </div>
@@ -167,12 +163,10 @@
                 <span>Conversation window</span>
 	            </div>  
 						
-							<div class="ControlIconChat CloseIcon" title="Close all conversations."
-	                 onclick="eXo.communication.chat.webui.UIChatWindow.closeAllWindow()"><span></span></div>
-							<div class="ControlIconChat RestoreIcon" title="Restore conversation window."
-	                 onclick="eXo.communication.chat.webui.UIChatWindow.setVisible(true, event, true)"><span></span></div>
+							<div class="ControlIconChat CloseIcon" title="Close all conversations." onclick="eXo.communication.chat.webui.UIChatWindow.closeAllWindow()"><span></span></div>
+							<div class="ControlIconChat RestoreIcon" title="Restore conversation window." onclick="eXo.communication.chat.webui.UIChatWindow.setVisible(true, event, true)"><span></span></div>
 						
-						<div style="clear: both"><span></span></div>
+						<div class="ClearBoth"><span></span></div>
 					</div>
 				</div>
 			</div>
@@ -195,12 +189,12 @@
       <div class="MiddleRightRightClickPopupMenu">
         <div class="UIRightPopupMenuContainer">
           <div class="TypeViewContactPortlet">
-            <a class="MenuItem" href="javascript:eXo.communication.chat.webui.UIMainChatWindow.postProcessBuddyItemAction(this, eXo.communication.chat.webui.UIMainChatWindow.CREATE_CONVERSATION_ACTION);">
+            <div class="MenuItem" onclick="javascript:eXo.communication.chat.webui.UIMainChatWindow.postProcessBuddyItemAction(this, eXo.communication.chat.webui.UIMainChatWindow.CREATE_CONVERSATION_ACTION);">
               <div class="ItemIcon MessageIcon">Send message</div>
-            </a>
-            <a class="MenuItem" href="javascript:eXo.communication.chat.webui.UIMainChatWindow.postProcessBuddyItemAction(this, eXo.communication.chat.webui.UIMainChatWindow.REMOVE_USER_ACTION);">
+            </div>
+            <div class="MenuItem" onclick="javascript:eXo.communication.chat.webui.UIMainChatWindow.postProcessBuddyItemAction(this, eXo.communication.chat.webui.UIMainChatWindow.REMOVE_USER_ACTION);">
               <div class="ItemIcon RemoveIcon">Remove</div>
-            </a>
+            </div>
           </div>
         </div>
       </div>
@@ -234,9 +228,9 @@
               <span class="UnreadMessage" style="color: red"></span>
               <span>Conversation</span>
             </div>
-	          <div style="clear: left;"><span></span></div>
+	          <div class="ClearLeft"><span></span></div>
 	        </div>
-	        <div style="clear: right;"><span></span></div>
+	        <div class="ClearRight"><span></span></div>
 	      </div>
       </div>
     </div>
@@ -281,7 +275,7 @@
       	<div class="FixHeight">
           <div title="Resize WindowResize Window" class="ResizeArea"><span></span></div>
           <div class="Information">Done</div>
-          <div style="clear: right;"><span></span></div>
+          <div class="ClearRight"><span></span></div>
 				</div>
       </div>
     </div>
@@ -377,15 +371,15 @@
                             </div>
                             <a class="Icon NextPageIcon" title="Next Page"><span></span></a>
                             <a class="Icon NextTopPageIcon" title="Next 10 pages"><span></span></a>
-                            <div style="clear: left;"><span></span></div>
+                            <div class="ClearLeft"><span></span></div>
                           </div>
                           <div class="LeftPageIteratorBlock">
                             <div class="TotalPages">Total pages:</div>
                             <div class="PagesTotalNumber">2</div>
-                            <div style="clear: left;"><span></span></div>
+                            <div class="ClearLeft"><span></span></div>
                           </div>
                         </div>
-                        <div style="clear: right;"><span></span></div>
+                        <div class="ClearRight"><span></span></div>
                       </div>
                     </div>
                   </div>
@@ -473,7 +467,7 @@
                                   <a class="SearchIcon" href="" title="Quick Search"><span></span></a>
                                 </div>
                               </div>
-                              <div style="clear: left"><span></span></div>
+                              <div class="ClearLeft"><span></span></div>
                             </div>
                           </div>
                         </div>
@@ -509,44 +503,44 @@
                             </div>
                             <a class="Icon NextPageIcon" title="Next Page"><span></span></a>
                             <a class="Icon NextTopPageIcon" title="Next 10 pages"><span></span></a>
-                            <div style="clear: left;"><span></span></div>
+                            <div class="ClearLeft"><span></span></div>
                           </div>
                           <div class="LeftPageIteratorBlock">
                             <div class="TotalPages">Total pages:</div>
                             <div class="PagesTotalNumber">2</div>
-                            <div style="clear: left;"><span></span></div>
+                            <div class="ClearLeft"><span></span></div>
                           </div>
                         </div>
-                        <div style="clear: right;"><span></span></div>
+                        <div class="ClearRight"><span></span></div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="UIAction">
-                  <table class="ActionContainer" align="center">
+                  <table class="ActionContainer" style="text-align:center;">
                     <tr>
                       <td align="center">
-                      	<a href="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.reloadRoomList()" class="ActionButton LightBlueStyle">
+                      	<div onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.reloadRoomList()" class="ActionButton LightBlueStyle">
                           <div class="ButtonLeft">
                             <div class="ButtonRight">
                               <div class="ButtonMiddle"> Refresh </div>
                             </div>
                           </div>
-                        </a>
-                       <a href="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.joinRoomAction()" class="ActionButton LightBlueStyle JoinRoomButton">
+                        </div>
+                       <div onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.joinRoomAction()" class="ActionButton LightBlueStyle JoinRoomButton">
                           <div class="ButtonLeft">
                             <div class="ButtonRight">
                               <div class="ButtonMiddle"> Join Room </div>
                             </div>
                           </div>
-                        </a>
-                        <a href="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
+                        </siv>
+                        <div onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
                           <div class="ButtonLeft">
                             <div class="ButtonRight">
                               <div class="ButtonMiddle"> Cancel </div>
                             </div>
                           </div>
-                        </a>
+                        </div>
                       </td>
                     </tr>
                   </table>
@@ -577,8 +571,7 @@
         <div class="TopCenterDecorator">
           <div class="OverflowContainer">
   	        <div class="PopupTitleIcon"><span></span></div>
-  	        <div class="CloseButton" title="Close Window"
-              onclick="eXo.communication.chat.webui.UICreateNewRoomPopupWindow.setVisible(false)"><span></span></div>
+  	        <div class="CloseButton" title="Close Window" onclick="eXo.communication.chat.webui.UICreateNewRoomPopupWindow.setVisible(false)"><span></span></div>
   	        <div class="PopupTitle">New Room</div>
   	      </div>
         </div>
@@ -612,23 +605,23 @@
                     </div>
                   </div>
                   <div class="UIAction">
-                    <table class="ActionContainer" align="center">
+                    <table class="ActionContainer" style="text-align:center;">
                       <tr>
                         <td align="center">
-                         <a href="javascript:eXo.communication.chat.webui.UICreateNewRoomPopupWindow.createNewRoomAction()" class="ActionButton LightBlueStyle">
+                         <div onclick="javascript:eXo.communication.chat.webui.UICreateNewRoomPopupWindow.createNewRoomAction()" class="ActionButton LightBlueStyle">
                             <div class="ButtonLeft">
                               <div class="ButtonRight">
                                 <div class="ButtonMiddle"> Ok </div>
                               </div>
                             </div>
-                          </a>
-                          <a href="javascript:eXo.communication.chat.webui.UICreateNewRoomPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
+                          </div>
+                          <div onclick="javascript:eXo.communication.chat.webui.UICreateNewRoomPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
                             <div class="ButtonLeft">
                               <div class="ButtonRight">
                                 <div class="ButtonMiddle"> Cancel </div>
                               </div>
                             </div>
-                          </a>
+                          </div>
                         </td>
                       </tr>
                     </table>
@@ -660,8 +653,7 @@
         <div class="TopCenterDecorator">
           <div class="OverflowContainer">
   	        <div class="PopupTitleIcon"><span></span></div>
-  	        <div class="CloseButton" title="Close Window"
-              onclick="eXo.communication.chat.webui.UIRoomConfigPopupWindow.setVisible(false)"><span></span></div>
+  	        <div class="CloseButton" title="Close Window" onclick="eXo.communication.chat.webui.UIRoomConfigPopupWindow.setVisible(false)"><span></span></div>
   	        <div class="PopupTitle">Room Configuration</div>
   	      </div>
         </div>
@@ -847,23 +839,23 @@
 						<div class="BoxForm">
 							<div class="BorderForm">
 						  	<div class="UIAction">
-		              <table class="ActionContainer" align="center">
+		              <table class="ActionContainer" style="text-align:center;">
 		                <tr>
 		                  <td align="center">
-		                   <a href="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.okAction()" class="ActionButton LightBlueStyle">
+		                   <div onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.okAction()" class="ActionButton LightBlueStyle">
 		                      <div class="ButtonLeft">
 		                        <div class="ButtonRight">
 		                          <div class="ButtonMiddle"> Ok </div>
 		                        </div>
 		                      </div>
-		                    </a>
-		                    <a href="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
+		                    </div>
+		                    <div onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
 		                      <div class="ButtonLeft">
 		                        <div class="ButtonRight">
 		                          <div class="ButtonMiddle"> Cancel </div>
 		                        </div>
 		                      </div>
-		                    </a>
+		                    </div>
 		                  </td>
 		                </tr>
 		              </table>
@@ -903,7 +895,7 @@
         <div class="BackgroundNick">
           <div class="NickName">
             <div class="StatusIcon NameId"><span></span></div>
-            <div style="clear: left"><span></span></div>
+            <div class="ClearLeft"><span></span></div>
           </div>
         </div>
       </div>
@@ -929,7 +921,7 @@
           </div>
         </div>
       </div>
-      <div style="clear: both"><span></span></div>
+      <div class="ClearBoth"><span></span></div>
     </div>
     <div class="MessageBody">
       <div class="BoxMessageChat">
@@ -971,7 +963,7 @@
           </div>
         </div>
       </div>
-      <div style="clear: both;"><span></span></div>
+      <div class="ClearBoth"><span></span></div>
     </div>
     <div class="MessageBody">
       <div class="BoxMessageChat">
@@ -1010,9 +1002,9 @@
   			<div class="ActionFile" onclick="eXo.communication.chat.webui.UIChatWindow.acceptFileExchange(this)">Accept</div>
   			<div class="ActionFile" onclick="eXo.communication.chat.webui.UIChatWindow.denieFileExchange(this)">Deny</div>
   			<div class="LoadingIcon" style="display: none; background: url('DefaultSkin/skinIcons/LoadingProgress24x24.gif') no-repeat center center; width: 24px; height: 24px;"><span></span></div>
-  			<div style="clear: left"><span></span></div>
+  			<div  class="ClearLeft"><span></span></div>
   		</div>
-  		<div style="clear: left"><span></span></div>
+  		<div  class="ClearLeft"><span></span></div>
   	</div>
   </div>
   <!--/-->
@@ -1046,8 +1038,7 @@
                 <div class="RightContainer">
                   <div class="CenterContainer">
                     <div class="TextContent">
-                      <a class="Icon ExportMessageIcon" title="Export messages history"
-                        onclick="eXo.communication.chat.webui.UIChatWindow.exportHistory(event)">
+                      <a class="Icon ExportMessageIcon" title="Export messages history" onclick="eXo.communication.chat.webui.UIChatWindow.exportHistory(event)">
                           Export History
                       </a>
                       <div class="SeperatorLine"><span></span></div>
@@ -1057,12 +1048,12 @@
                             onchange="eXo.communication.chat.webui.UIChatWindow.sendFile(this, event);">
                         </form>
                       </div>
-                      <div style="clear: left;"><span></span></div>
+                      <div  class="ClearLeft"><span></span></div>
                   </div>
                   <div style="padding: 5px 5px 0px 0px">
                     <div class="FilterField"><span></span></div>
                   </div>
-                  <div style="clear: left;"><span></span></div>
+                  <div  class="ClearLeft"><span></span></div>
                  </div>
                </div>
              </div>
@@ -1090,7 +1081,7 @@
                           <span class="Line">|</span>
                           <a onclick="eXo.communication.chat.webui.UIChatWindow.getMessageHistory(event,-1)"
                              class="LinkHistory" href="#">Beginning</a>
-                          <div style="clear: left"><span></span></div>
+                          <div class="ClearLeft"><span></span></div>
                         </div>
                       </div>
                     </div>
@@ -1100,7 +1091,7 @@
               <div class="MessagesBox"><span></span></div>
             </div>
           </div>
-          <div style="clear: both"><span></span></div>
+          <div class="ClearBoth"><span></span></div>
         </div>
         <div class="UIAction">
           <div class="SendButton">
@@ -1111,7 +1102,7 @@
             </div>
           </div>
           <textarea rows="3" name="msg" cols="6" class="MsgBox"></textarea>
-          <div style="clear: both"><span></span></div>
+          <div class="ClearBoth"><span></span></div>
         </div>
       </div>
     </div>
@@ -1128,21 +1119,18 @@
                 <div class="RightContainer">
                   <div class="CenterContainer">
                     <div class="TextContent">
-                      <a class="Icon AddChatIcon" title="Invite new friends"
-                        onclick="eXo.communication.chat.webui.UIChatWindow.inviteToJoinRoom(event)">
+                      <a class="Icon AddChatIcon" title="Invite new friends" onclick="eXo.communication.chat.webui.UIChatWindow.inviteToJoinRoom(event)">
                           Add
                       </a>
                       <div class="SeperatorLine"><span></span></div>
-                      <a class="Icon LeaveIcon" title="Leave room chat"
-                        onclick="eXo.communication.chat.webui.UIChatWindow.leaveRoomChat(event);">
+                      <a class="Icon LeaveIcon" title="Leave room chat" onclick="eXo.communication.chat.webui.UIChatWindow.leaveRoomChat(event);">
                           Leave
                       </a>
                       <div class="SeperatorLine"><span></span></div>
-                      <a class="Icon OptionsIcon" title="Room Configuration"
-                        onclick="eXo.communication.chat.webui.UIChatWindow.configRoom(event);">
+                      <a class="Icon OptionsIcon" title="Room Configuration" onclick="eXo.communication.chat.webui.UIChatWindow.configRoom(event);">
                           Options
                       </a>
-                      <div style="clear: left;"><span></span></div>
+                      <div class="ClearLeft"><span></span></div>
                     </div>
                   </div>
                  </div>
@@ -1165,18 +1153,14 @@
                         <div class="FixHeight">
                           <div class="ContainerHistoryList">
                             <span class="LableHistory">Show messages from:</span>
-                            <a onclick="eXo.communication.chat.webui.UIChatWindow.getMessageHistory(event,0)"
-                               class="LinkHistory" href="#">Today</a>
+                            <a onclick="eXo.communication.chat.webui.UIChatWindow.getMessageHistory(event,0)" class="LinkHistory" href="#">Today</a>
                             <span class="Line">|</span>
-                            <a onclick="eXo.communication.chat.webui.UIChatWindow.getMessageHistory(event,7)"
-                               class="LinkHistory" href="#">This week</a>
+                            <a onclick="eXo.communication.chat.webui.UIChatWindow.getMessageHistory(event,7)" class="LinkHistory" href="#">This week</a>
                             <span class="Line">|</span>
-                            <a onclick="eXo.communication.chat.webui.UIChatWindow.getMessageHistory(event,30)"
-                               class="LinkHistory" href="#">Last 30 days</a>
+                            <a onclick="eXo.communication.chat.webui.UIChatWindow.getMessageHistory(event,30)" class="LinkHistory" href="#">Last 30 days</a>
                             <span class="Line">|</span>
-                            <a onclick="eXo.communication.chat.webui.UIChatWindow.getMessageHistory(event,-1)"
-                               class="LinkHistory" href="#">Beginning</a>
-                            <div style="clear: left"><span></span></div>
+                            <a onclick="eXo.communication.chat.webui.UIChatWindow.getMessageHistory(event,-1)" class="LinkHistory" href="#">Beginning</a>
+                            <div class="ClearLeft"><span></span></div>
                           </div>
                         </div>
                       </div>
@@ -1185,7 +1169,7 @@
                 </div>
                 <div class="MessagesBox"><span></span></div>
               </div>
-            <div style="clear: right"><span></span></div>
+            <div class="ClearRight"><span></span></div>
           </div>
           <div class="UIAction">
             <div class="SendButton">
@@ -1194,7 +1178,7 @@
               </div>
             </div>
             <textarea rows="3" name="msg" cols="6" class="MsgBox"></textarea>
-            <div style="clear: both"><span></span></div>
+            <div class="ClearBoth"><span></span></div>
           </div>
         </div>
       </div>
