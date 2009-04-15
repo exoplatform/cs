@@ -269,21 +269,18 @@
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -504px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SiennaTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SeaShellTag {
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -483px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SeaShellTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SeaGreenTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -462px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SeaGreenTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SandyBrownTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -441px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .SandyBrownTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -420px;
-}
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .SalmonTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -399px;
@@ -309,59 +306,58 @@
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -294px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PowderBlueTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PlumTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -273px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PlumTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PinkTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -252px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PinkTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PeruTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -231px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PeruTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PeachPuffTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -210px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PeachPuffTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PapayaWhipTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -189px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PapayaWhipTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleVioletRedTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -168px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleVioletRedTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleTurquoiseTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -147px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleTurquoiseTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OrangeRedTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -126px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleGreenTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OliveDrabTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -105px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleGoldenRodTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OliveTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -84px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OrchidTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleGreenTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -63px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OrangeRedTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleGoldenRodTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -42px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OrangeTag	{
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OrchidTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -21px;
 }
 
-.UIContactPortlet .UIRightClickPopupMenu .MenuItem .OliveDrabTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px 0px;
+.UIContactPortlet .UIRightClickPopupMenu .MenuItem .PowderBlueTag	{
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px top;
 }
-
