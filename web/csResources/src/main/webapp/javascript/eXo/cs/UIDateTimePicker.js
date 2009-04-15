@@ -28,6 +28,25 @@ UIDateTimePicker.prototype.getLang = function() {
 	catch (e) {}
 } ;
 
+UIDateTimePicker.prototype.init = function(field, isDisplayTime) {
+	this.isDisplayTime = isDisplayTime ;
+	if (this.dateField) {
+		this.dateField.parentNode.style.position = '' ;
+	}
+	this.dateField = field ;
+	if (!document.getElementById(this.calendarId)) this.create();
+  this.show() ;
+
+	// fix bug for IE 6
+  var cld = document.getElementById(this.calendarId);
+  if(eXo.core.Browser.isIE6())  {
+    var blockClnd = document.getElementById('BlockCaledar') ;
+    var iframe = document.getElementById(this.calendarId + 'IFrame') ;
+    iframe.style.height = blockClnd.offsetHeight + "px";
+  }
+  field.parentNode.insertBefore(cld, field) ;
+};
+
 UIDateTimePicker.prototype.show = function() {
 	eXo.cs.UIDateTimePicker.getLang() ;
 	document.onmousedown = new Function('eXo.cs.UIDateTimePicker.hide()') ;
