@@ -185,6 +185,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
           sb.append(s) ;
         }
         uiEventForm.setSelectedTab(uiForm.tabId_) ;
+//      TODO cs-839
         uiEventForm.setParticipant(sb.toString()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getParent()) ;
       } 
@@ -219,7 +220,8 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
           return ;
         }
         uiEventForm.setSelectedTab(uiForm.tabId_) ;
-        uiEventForm.setParticipant(sb.toString()) ;
+//      TODO cs-839
+        //uiEventForm.setParticipant(sb.toString()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getParent()) ;
       } 
       UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;

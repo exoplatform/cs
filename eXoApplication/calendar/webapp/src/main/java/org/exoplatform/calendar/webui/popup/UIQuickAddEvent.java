@@ -392,6 +392,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiEventForm.setSelectedCategory(uiForm.getEventCategory()) ;
         String username = CalendarUtils.getCurrentUser() ;
         uiEventForm.setSelectedEventState(UIEventForm.ITEM_BUSY) ;
+//      TODO cs-839
         uiEventForm.setParticipant(username) ;
         uiEventForm.setEmailAddress(CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username).getEmail()) ;
         uiEventForm.setEmailRemindBefore(String.valueOf(5));
