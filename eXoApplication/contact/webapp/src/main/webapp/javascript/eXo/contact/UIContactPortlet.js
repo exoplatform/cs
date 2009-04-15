@@ -556,7 +556,7 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
 UIContactPortlet.prototype.checkView = function() {
 	var uiContactPortlet = document.getElementById("UIContactPortlet");
 	var viewIcon = eXo.core.DOMUtil.findFirstDescendantByClass(uiContactPortlet,"div","ViewIcon");
-	var menuItems = eXo.core.DOMUtil.findDescendantsByClass(viewIcon.parentNode,"a","MenuItem");
+	var menuItems = eXo.core.DOMUtil.findDescendantsByClass(viewIcon.parentNode,"div","MenuItem");
 	var isVcard = document.getElementById("UIVCards");
 	if (isVcard && eXo.core.DOMUtil.findAncestorByClass(isVcard,"UIContactContainer")) {
 		if(menuItems[0].getAttribute("style")) menuItems[0].removeAttribute("style");
