@@ -567,7 +567,7 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
 UIContactPortlet.prototype.checkView = function() {
 	var uiContactPortlet = document.getElementById("UIContactPortlet");
 	var viewIcon = eXo.core.DOMUtil.findFirstDescendantByClass(uiContactPortlet,"div","ViewIcon");
-	var menuItems = eXo.core.DOMUtil.findDescendantsByClass(viewIcon.parentNode,"a","MenuItem");
+	var menuItems = eXo.core.DOMUtil.findDescendantsByClass(viewIcon.parentNode,"div","MenuItem");
 	var isVcard = document.getElementById("UIVCards");
 	if (isVcard && eXo.core.DOMUtil.findAncestorByClass(isVcard,"UIContactContainer")) {
 		if(menuItems[0].getAttribute("style")) menuItems[0].removeAttribute("style");
@@ -576,6 +576,21 @@ UIContactPortlet.prototype.checkView = function() {
 		if(menuItems[1].getAttribute("style")) menuItems[1].removeAttribute("style");
 		menuItems[0].style.background = "#E6E8F5" ;
 	}	
+};
+
+UIContactPortlet.prototype.show = function(obj, evt){
+	if(!evt) evt = window.event ;
+	evt.cancelBubble = true ;
+	var DOMUtil = eXo.core.DOMUtil ;
+	var uiPopupCategory = DOMUtil.findFirstDescendantByClass(obj, 'div', 'UIRightClickPopupMenu') ;	
+	if (!uiPopupCategory) return ;	
+	if(uiPopupCategory.style.display == "none") {
+		DOMUtil.cleanUpHiddenElements() ;
+		uiPopupCategory.style.display = "block" ;
+		DOMUtil.listHideElements(uiPopupCategory) ;
+		if(eXo.core.I18n.isRT()) uiPopupCategory.style.left = (obj.offsetWidth - uiPopupCategory.offsetWidth) + "px" ;
+	}	
+	else uiPopupCategory.style.display = "none" ;
 };
 
 UIContactPortlet.prototype.showImMenu = function(obj, event) {
@@ -723,7 +738,7 @@ UIContactPortlet.prototype.showPopupCustomLayoutView = function(obj, evt) {
   } else {
     objDetails.style.display = "block";
   }
-  eXo.webui.UIPopupSelectCategory.show(obj, evt);
+  eXo.contact.UIContactPortlet.show(obj, evt);
 };
 
 UIContactPortlet.prototype.refreshData = function() {
