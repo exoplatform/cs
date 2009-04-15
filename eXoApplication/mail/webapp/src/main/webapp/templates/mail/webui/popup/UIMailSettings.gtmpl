@@ -16,8 +16,7 @@
                       <div class="LeftTab">
                         <div class="RightTab">                
                           <div class="MiddleTab">
-                            <div class="TabIcon SettingsIcon"><span></span></div>
-                            <a href="#" class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.general-settings") %></a>
+                            <div class="TabIcon SettingsIcon"><a href="#" class="Title" style="padding-left:5px;"><%=_ctx.appRes(uicomponent.id+ ".label.general-settings") %></a></div>
                             <div style="clear:left;"><span></span></div>
                           </div>
                         </div>

@@ -93,7 +93,8 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
 	          @EventConfig(listeners = UITaskForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE),
 	          @EventConfig(listeners = UITaskForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
 	          @EventConfig(listeners = UITaskForm.SelectUserActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.CancelActionListener.class, phase = Phase.DECODE)
+	          @EventConfig(listeners = UITaskForm.CancelActionListener.class, phase = Phase.DECODE),
+	          @EventConfig(listeners = UITaskForm.SelectTabActionListener.class, phase = Phase.DECODE)
 	        }
 	),
 	@ComponentConfig(
@@ -1119,6 +1120,12 @@ public Attachment getAttachment(String attId) {
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }
+  }
+  
+  static public class SelectTabActionListener extends EventListener<UITaskForm> {
+    public void execute(Event<UITaskForm> event) throws Exception {
+      event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
     }
   }
 }

@@ -58,7 +58,8 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     template = "system:/groovy/webui/form/UIFormTabPane.gtmpl",
     events = {
       @EventConfig(listeners = UICalDavForm.GenerateActionListener.class),      
-      @EventConfig(listeners = UICalDavForm.CancelActionListener.class, phase=Phase.DECODE)
+      @EventConfig(listeners = UICalDavForm.CancelActionListener.class, phase=Phase.DECODE),
+      @EventConfig(listeners = UICalDavForm.SelectTabActionListener.class, phase=Phase.DECODE)
     }
 )
 public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
@@ -102,6 +103,8 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
     UIFormInputWithActions rssTab = getChildById("rssCalendars") ;
     rssTab.getUIFormInputInfo(INFOR).setValue(getLabel(MESSAGE)) ;
   }
+  public String[] getActions() { return new String[]{"Generate", "Cancel"} ; }
+  
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   
@@ -192,4 +195,10 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
       calendarPortlet.cancelAction() ;
     }
   }  
+  
+  static public class SelectTabActionListener extends EventListener<UICalDavForm> {
+    public void execute(Event<UICalDavForm> event) throws Exception {
+      event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
+    }
+  }
 }

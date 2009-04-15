@@ -71,6 +71,7 @@
   margin: 0px 7px;
   padding-left: 22px;
   white-space: nowrap;
+  display: block;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .LayoutSwitcherIcon {

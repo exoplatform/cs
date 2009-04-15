@@ -8,8 +8,8 @@
 }
 
 .UICalendarPortlet .CloseAttachmentIcon {
-	background: url('icons/CloseMore.gif') no-repeat;
-	cursor:pointer; 
+	background: url('icons/CloseMore.gif') no-repeat left center;
+	cursor: pointer; 
 	padding-left:16px;
 }
 
@@ -284,7 +284,7 @@
 }
 
 .UICalendarPortlet .ViewAttachmentIcon {
-	background: url('icons/CalendarIcons.gif') no-repeat left -1405px;
+	background: url('icons/CalendarIcons.gif') no-repeat left -1400px;
 	cursor:pointer;
 	padding-left:16px;
 }
@@ -330,3 +330,340 @@
 	float:left;
 	background: url('icons/CalendarIcons.gif') no-repeat left -1891px;
 }
+
+/***************************UIRightClickPopupMenu*********************/
+/*********************************************************************/
+
+.UICalendarPortlet .MenuItem .UpArrow1Icon {
+	background: url('icons/BlueUpArrow.gif') no-repeat right;
+}
+
+.UICalendarPortlet .MenuItem .BlueCircleMinus {
+	background: url('icons/BlueCircleMinus.gif') repeat scroll 0 0;
+}
+
+.UICalendarPortlet .MenuItem .CloseAttachmentIcon {
+	background: url('icons/CloseMore.gif') no-repeat;
+	cursor:pointer; 
+	padding-left:16px;
+}
+
+.UICalendarPortlet .MenuItem .AddCalendarIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left top;
+}
+
+.UICalendarPortlet .MenuItem .AddCategoryIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -21px;
+}
+
+.UICalendarPortlet .MenuItem .AddCategory {
+	background: url('icons/CalendarIcons.gif') no-repeat left -23px;
+}
+
+.UICalendarPortlet .MenuItem .AddGroupIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -48px;
+}
+
+.UICalendarPortlet .MenuItem .AddNewEvent {
+	background: url('icons/CalendarIcons.gif') no-repeat left -73px;
+}
+
+.UICalendarPortlet .MenuItem .QuickAddEvent {
+	background: url('icons/CalendarIcons.gif') no-repeat left -75px;
+}
+
+.UICalendarPortlet .MenuItem .AddpuplicCalendarIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -100px;
+}
+
+.UICalendarPortlet .MenuItem .AddNewTask {
+	background: url('icons/CalendarIcons.gif') no-repeat left -125px;
+}
+
+.UICalendarPortlet .MenuItem .QuickAddTask {
+	background: url('icons/CalendarIcons.gif') no-repeat left -130px;
+}
+
+.UICalendarPortlet .MenuItem .AttachmentIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -156px;
+}
+
+.UICalendarPortlet .MenuItem .BackIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -182px;
+	width: 16px;height: 16px;
+}
+
+.UICalendarPortlet .MenuItem .NextIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -208px;
+	width: 16px;height: 16px;
+}
+
+.UICalendarPortlet .MenuItem .CalDavIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -230px;
+}
+
+.UICalendarPortlet .MenuItem .BothIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -256px;
+}
+
+.UICalendarPortlet .MenuItem .CalendarGroupIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -287px;
+}
+
+.UICalendarPortlet .MenuItem .CalendarIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -312px;
+}
+
+.UICalendarPortlet .MenuItem .CopyCalendarIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -360px;
+}
+
+.UICalendarPortlet .MenuItem .CutCalendarIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -386px;
+}
+
+.UICalendarPortlet .MenuItem .RemoveCalendarIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -412px;
+}
+
+.UICalendarPortlet .MenuItem .DeleteEventIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -438px;
+}
+
+.UICalendarPortlet .MenuItem .DeleteGroupIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -464px;
+}
+
+.UICalendarPortlet .MenuItem .FindIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -484px;
+}
+
+.UICalendarPortlet .MenuItem .DeleteTaskIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -490px;
+}
+
+.UICalendarPortlet .MenuItem .DownLoadAttachmentIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -523px;
+	height: 16px; padding-left:14px;
+}
+
+.UICalendarPortlet .MenuItem .EditCalendarIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -542px;
+}
+
+.UICalendarPortlet .MenuItem .EditEventIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -568px;
+}
+
+.UICalendarPortlet .MenuItem .EditGroupIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -594px;
+}
+
+.UICalendarPortlet .MenuItem .EditTaskIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -620px;
+}
+
+.UICalendarPortlet .MenuItem .EditTask {
+	background: url('icons/CalendarIcons.gif') no-repeat left -620px;
+	width: 16px;height: 16px;
+}
+
+.UICalendarPortlet .MenuItem .ExportCalendarIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -646px;
+}
+
+.UICalendarPortlet .MenuItem .EventIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -662px;
+}
+
+.UICalendarPortlet .MenuItem .EventIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -672px;
+}
+
+.UICalendarPortlet .MenuItem .IconFeed {
+	background: url('icons/CalendarIcons.gif') no-repeat left -702px;
+}
+
+.UICalendarPortlet .MenuItem .AdvancedSearch {
+  background: url('icons/CalendarIcons.gif') no-repeat left -729px;	
+}
+
+.UICalendarPortlet .MenuItem .GenerateRssIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -750px;
+}
+
+.UICalendarPortlet .MenuItem .GotoDate {
+	background: url('icons/CalendarIcons.gif') no-repeat left -776px;
+}
+
+.UICalendarPortlet .MenuItem .highPriorityIcon {
+	_position:absolute;
+	float:left;
+	background: url('icons/CalendarIcons.gif') no-repeat left -808px;
+	padding-left: 20px;
+	width: auto;
+}
+
+.UICalendarPortlet .MenuItem .HidenAllCalendar {
+	background: url('icons/CalendarIcons.gif') no-repeat left -828px;
+}
+
+.UICalendarPortlet .MenuItem .LayoutSwitcherIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -853px;
+}
+
+.UICalendarPortlet .MenuItem .HidenMinicalendar {
+	background: url('icons/CalendarIcons.gif') no-repeat left -880px;
+}
+
+.UICalendarPortlet .MenuItem .ImportCalendarIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -904px;
+}
+
+.UICalendarPortlet .MenuItem .lowPriorityIcon{
+	_position:absolute;
+	float:left;
+	background: url('icons/CalendarIcons.gif') no-repeat left -938px;
+	padding-left: 20px;
+	width: auto;
+}
+
+.UICalendarPortlet .MenuItem .MaximizeButton {
+	background: url('icons/CalendarIcons.gif') no-repeat left -962px;
+	width: 17px; height: 16px;
+}
+
+.UICalendarPortlet .MenuItem .MinimizeButton {
+	background: url('icons/CalendarIcons.gif') no-repeat left -988px;
+	width: 17px; height: 16px;
+}
+
+.UICalendarPortlet .MenuItem .PrintCalendarIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1060px;
+}
+
+.UICalendarPortlet .MenuItem .normalPriorityIcon {
+	_position:absolute;
+	float:left;
+	background: url('icons/CalendarIcons.gif') no-repeat left -1016px;
+	padding-left:20px;
+	width:auto;
+}
+
+.UICalendarPortlet .MenuItem .PasteGroupIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1041px;
+}
+
+.UICalendarPortlet .MenuItem .CalendarRssIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1087px;
+}
+
+.UICalendarPortlet .MenuItem .SearchIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1117px;
+}
+
+.UICalendarPortlet .MenuItem .SelectIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1144px;
+}
+
+.UICalendarPortlet .MenuItem .SendMailCalendarIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1167px;
+}
+
+.UICalendarPortlet .MenuItem .DayIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1172px;
+}
+
+.UICalendarPortlet .MenuItem .SettingCalendarIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1190px;
+}
+
+.UICalendarPortlet .MenuItem .SharedCalendarIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1217px;
+}
+
+.UICalendarPortlet .MenuItem .ShowMinicalendar {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1244px;
+}
+
+.UICalendarPortlet .MenuItem .AddAnyIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1272px;
+}
+
+.UICalendarPortlet .MenuItem .SelectGroupIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1272px;
+}
+
+.UICalendarPortlet .MenuItem .SelectMemberIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1297px;
+}
+
+.UICalendarPortlet .MenuItem .TaskIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1348px;
+}
+
+.UICalendarPortlet .MenuItem .TodayIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1659px;
+}
+
+.UICalendarPortlet .MenuItem .ViewOnCalendar {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1451px;
+}
+
+.UICalendarPortlet .MenuItem .ViewEventIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1374px;
+}
+
+.UICalendarPortlet .MenuItem .SelectUserIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1326px;
+}
+
+.UICalendarPortlet .MenuItem .ViewAttachmentIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1405px;
+	cursor:pointer;
+	padding-left:16px;
+}
+
+.UICalendarPortlet .MenuItem .ViewMoreIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat right -1430px;
+}
+
+.UICalendarPortlet .MenuItem .UIScheduleViewIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1477px;
+}
+
+.UICalendarPortlet .MenuItem .UIWeekViewIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1503px;
+}
+
+.UICalendarPortlet .MenuItem .UIWorkingViewIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1503px;
+}
+
+.UICalendarPortlet .MenuItem .UIMonthViewIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1581px;
+}
+
+.UICalendarPortlet .MenuItem .UIYearViewIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1607px;
+}
+
+.UICalendarPortlet .MenuItem .UIListContainerIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1633px;
+}
+
+.UICalendarPortlet .MenuItem .UIDayViewIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1659px;
+}
+
+.UICalendarPortlet .MenuItem .busyIcon {
+	float:left;
+	background: url('icons/CalendarIcons.gif') no-repeat left -1867px;
+}
+
+.UICalendarPortlet .MenuItem .outsideIcon {
+	float:left;
+	background: url('icons/CalendarIcons.gif') no-repeat left -1891px;
+}
+/***************************END UIRightClickPopupMenu*********************/
+/*********************************************************************/

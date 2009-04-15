@@ -72,7 +72,8 @@ import org.exoplatform.webui.form.UIFormTabPane;
       @EventConfig(listeners = UIEventForm.SaveActionListener.class),
       @EventConfig(listeners = UIEventForm.AddCategoryActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIEventForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE)
+      @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIEventForm.SelectTabActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Selector{
@@ -707,6 +708,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }
+  }
+  
+  static public class SelectTabActionListener extends EventListener<UIEventForm> {
+    public void execute(Event<UIEventForm> event) throws Exception {
+      event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
     }
   }
 }
