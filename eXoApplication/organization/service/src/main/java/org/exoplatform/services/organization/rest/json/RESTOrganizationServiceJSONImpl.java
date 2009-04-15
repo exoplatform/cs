@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2003-2007 eXo Platform SAS.
  *
  * This program is free software; you can redistribute it and/or
@@ -20,7 +20,6 @@ package org.exoplatform.services.organization.rest.json;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -29,9 +28,7 @@ import java.util.TreeSet;
 
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.common.http.HTTPStatus;
-import org.exoplatform.services.organization.Group;
-import org.exoplatform.services.organization.Membership;
-import org.exoplatform.services.organization.MembershipType;
+import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
@@ -47,7 +44,6 @@ import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.ws.frameworks.json.transformer.Bean2JsonOutputTransformer;
 
-import com.sun.mail.util.QEncoderStream;
 
 /**
  * Created by The eXo Platform SAS .
@@ -55,6 +51,9 @@ import com.sun.mail.util.QEncoderStream;
  * @author Gennady Azarenkov
  * @version $Id:$
  */
+
+//For chat application 
+
 @URITemplate("/organization/json/")
 public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbstractImpl implements
     ResourceContainer {
@@ -75,172 +74,13 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
     super(organizationService);
   }
 
-  // ok
-  @HTTPMethod(HTTPMethods.POST)
-  @URITemplate("/group/create/")
-  public Response createGroup(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                              @QueryParam("groupName") String groupName,
-                              @QueryParam("label") String label,
-                              @QueryParam("description") String description,
-                              @QueryParam("parentId") String parentId) {
-
-    Response response = super.createGroup(baseURI, groupName, label, description, parentId);
-    if (response != null)
-      return response;
-
-    String id = ((Group) response.getEntity()).getId();
-    return Response.Builder.created(baseURI + "/organization/json/group/info" + id).build();
-  }
-
-  // fix
-  @HTTPMethod(HTTPMethods.POST)
-  @URITemplate("/membership/create")
-  public Response createMembership(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                                   @QueryParam("username") String username,
-                                   @QueryParam("groupId") String groupId,
-                                   @QueryParam("type") String type) {
-    Response response = super.createMembership(baseURI, username, groupId, type);
-    if (response != null)
-      return response;
-
-    String id = ((Membership) response.getEntity()).getId();
-    return Response.Builder.created(baseURI + "/organization/json/membership/info/" + id).build();
-  }
-
-  // ok
-  @HTTPMethod(HTTPMethods.POST)
-  @URITemplate("/user/create/")
-  public Response createUser(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                             @QueryParam("username") String username,
-                             @QueryParam("password") String password,
-                             @QueryParam("firstname") String firstname,
-                             @QueryParam("lastname") String lastname,
-                             @QueryParam("email") String email) {
-    Response response = super.createUser(baseURI, username, password, firstname, lastname, email);
-    if (response != null)
-      return response;
-
-    return Response.Builder.created(baseURI + "/organization/json/user/" + username).build();
-  }
-
-  // ok
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/group/delete/")
-  public Response deleteGroup(@QueryParam("groupId") String groupId) {
-    Response response = super.deleteGroup(groupId);
-    if (response != null)
-      return response;
-    return Response.Builder.noContent().build();
-  }
-
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/membership/delete/{membershipId}/")
-  public Response deleteMembership(@URIParam("membershipId") String membershipId) {
-    Response response = super.deleteMembership(membershipId);
-    if (response != null)
-      return response;
-    return Response.Builder.noContent().build();
-  }
-
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/user/delete/{username}/")
-  public Response deleteUser(@URIParam("username") String username) {
-    Response response = super.deleteUser(username);
-    if (response != null)
-      return response;
-    return Response.Builder.noContent().build();
-  }
-
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/group/delete-user/")
-  public Response deleteUserFromGroup(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                                      @QueryParam("groupId") String groupId,
-                                      @QueryParam("username") String username) {
-    Response response = super.deleteUserFromGroup(baseURI, groupId, username);
-    if (response != null)
-      return response;
-    return Response.Builder.noContent().build();
-  }
-
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/membership/info/{membershipId}/")
-  @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response findMembership(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                                 @URIParam("membershipId") String membershipId) {
-    Membership membership = null;
-    try {
-      membership = membershipHandler.findMembership(membershipId);
-      if (membership != null) {
-        return Response.Builder.ok(membership, JSON_CONTENT_TYPE).build();
-      }
-      return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("Membership with id: '"
-          + membershipId + "' not found!").build();
-    } catch (Exception e) {
-      LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
-                             .build();
-    }
-  }
-
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/membership/view-all/")
-  @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response findMemberships(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                                  @QueryParam("groupId") String groupId,
-                                  @QueryParam("username") String username,
-                                  @QueryParam("type") String type) {
-    try {
-      Collection<Membership> memberships = null;
-      if (groupId != null && username != null && type != null) {
-        groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
-        Membership membership = membershipHandler.findMembershipByUserGroupAndType(username,
-                                                                                   groupId,
-                                                                                   type);
-        if (membership != null) {
-          return Response.Builder.ok(membership, JSON_CONTENT_TYPE).build();
-        } else {
-          return Response.Builder.withStatus(HTTPStatus.NOT_FOUND)
-                                 .errorMessage("Membership for groupId: '" + groupId
-                                     + "', username: '" + username + "', membership type: '" + type
-                                     + "' not found!")
-                                 .build();
-        }
-      } else if (groupId != null && username != null) {
-        groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
-        memberships = membershipHandler.findMembershipsByUserAndGroup(username, groupId);
-
-      } else if (groupId != null) {
-        groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
-        Group group = groupHandler.findGroupById(groupId);
-
-        if (group == null) {
-          return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("Group '" + groupId
-              + "' not found!").build();
-        }
-        memberships = membershipHandler.findMembershipsByGroup(group);
-      } else if (username != null) {
-        memberships = membershipHandler.findMembershipsByUser(username);
-      } else {
-        return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                               .errorMessage("Username, groupId or membership type should be specified!")
-                               .build();
-      }
-      if (username != null && userHandler.findUserByName(username) != null) {
-        MembershipListBean membership_list = new MembershipListBean(username, memberships);
-        return Response.Builder.ok(membership_list, JSON_CONTENT_TYPE).build();
-      }
-      MembershipListBean membership_list = new MembershipListBean(null, memberships);
-      return Response.Builder.ok(membership_list, JSON_CONTENT_TYPE).build();
-
-    } catch (Exception e) {
-      LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
-                             .build();
-    }
-  }
-
+  
+  
+  
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/user/find-all/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
@@ -252,6 +92,7 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
                             @QueryParam("fromLoginDate") String fromLoginDate,
                             @QueryParam("toLogindate") String toLoginDate) {
     try {
+    //TODO : now returned all founded user need be carefully then using wildcard (*)        
       Query query = new Query();
       query.setUserName(username);
       query.setFirstName(firstname);
@@ -271,7 +112,12 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
           LOGGER.warn("Thrown exception : " + e);
         }
       }
-      List<User> list = userHandler.findUsers(query).getAll();
+      PageList pageList = userHandler.findUsers(query);
+      List<User> list = new ArrayList<User>();
+      int pages = pageList.getAvailablePage();
+      for (int i = 1; i <= pages; i++) {
+        list.addAll(pageList.getPage(i));
+      }
       List<UserBean> listBean = new ArrayList<UserBean>();
       for (User user : list) {
         if (user != null)
@@ -287,67 +133,27 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
     }
   }
 
-  @HTTPMethod(HTTPMethods.POST)
-  @URITemplate("/user/view-from-to/{from}/{to}/")
-  @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response findUsersRange(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                                 @QueryParam("username") String username,
-                                 @QueryParam("firstname") String firstname,
-                                 @QueryParam("lastname") String lastname,
-                                 @QueryParam("email") String email,
-                                 @QueryParam("fromLoginDate") String fromLoginDate,
-                                 @QueryParam("toLogindate") String toLoginDate,
-                                 @URIParam("from") Integer offset,
-                                 @URIParam("to") Integer amount) {
-    try {
-      Query query = new Query();
-      query.setUserName(username);
-      query.setFirstName(firstname);
-      query.setLastName(lastname);
-      query.setEmail(email);
-      if (fromLoginDate != null) {
-        try {
-          query.setFromLoginDate(DateFormat.getDateTimeInstance().parse(fromLoginDate));
-        } catch (ParseException e) {
-          LOGGER.warn("Thrown exception : " + e);
-        }
-      }
-      if (toLoginDate != null) {
-        try {
-          query.setToLoginDate(DateFormat.getDateTimeInstance().parse(toLoginDate));
-        } catch (ParseException e) {
-          LOGGER.warn("Thrown exception : " + e);
-        }
-      }
-      List<User> list = userHandler.findUsers(query).getAll();
-      Integer amount_ = amount;
-      if (amount > list.size())
-        amount_ = list.size();
-      List<User> listSub = list.subList(offset, amount_);
-      List<UserBean> listBean = new ArrayList<UserBean>();
-      for (User user : listSub) {
-        if (user != null)
-          listBean.add(new UserBean(user));
-      }
-      UserListBean user_list = new UserListBean(listBean);
-      return Response.Builder.ok(user_list, JSON_CONTENT_TYPE).build();
-    } catch (Exception e) {
-      LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
-                             .build();
-    }
-  }
+  
 
+  /**
+   * @param baseURI
+   * @param question
+   * @param from
+   * @param to
+   * @param sortOrder
+   * @param sortField
+   * @return
+   */
+  @SuppressWarnings("unchecked")
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/user/find-user-in-range/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response findUsersRange2(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                                  @QueryParam("question") String question,
-                                  @QueryParam("from") Integer from,
-                                  @QueryParam("to") Integer to,
-                                  @QueryParam("sort-order") String sortOrder,
-                                  @QueryParam("sort-field") String sortField) {
+  public Response findUsersRange(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
+                                 @QueryParam("question") String question,
+                                 @QueryParam("from") Integer from,
+                                 @QueryParam("to") Integer to,
+                                 @QueryParam("sort-order") String sortOrder,
+                                 @QueryParam("sort-field") String sortField) {
     try {
       List<User> temp = new ArrayList<User>();
       Comparator<User> comparator = getComparator(sortField, sortOrder);
@@ -364,46 +170,26 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
                                .build();
       }
       SortedSet<User> users = new TreeSet<User>(comparator);
-
+      int numResult = to - from;
+      if (numResult <= 0) 
+        return Response.Builder.noContent().build(); 
       Query query = new Query();
       query.setUserName(question);
-      temp = userHandler.findUsers(query).getAll();
+      PageList pageList = userHandler.findUsers(query);
+      pageList.setPageSize(numResult);
+      int page = from / numResult + 1;
+      temp = pageList.getPage(page);
       for (User user : temp) {
         if (!users.contains(user))
           users.add(user);
       }
-      query = new Query();
-      query.setFirstName(question);
-      temp = userHandler.findUsers(query).getAll();
-      for (User user : temp) {
-        if (!users.contains(user))
-          users.add(user);
-      }
-      query = new Query();
-      query.setLastName(question);
-      temp = userHandler.findUsers(query).getAll();
-      for (User user : temp) {
-        if (!users.contains(user))
-          users.add(user);
-      }
-
-      if (to > users.size())
-        to = users.size();
-      // UserListBean user_list = new UserListBean(users.subList(from, to));
-
-      List<User> uList = new ArrayList<User>();
+      List<UserBean> uList = new ArrayList<UserBean>();
       Iterator<User> i = users.iterator();
       while (i.hasNext()) {
         User user = (User) i.next();
-        uList.add(user);
+        uList.add(new UserBean(user));
       }
-      List<User> listSub = uList.subList(from, to);
-      List<UserBean> listBean = new ArrayList<UserBean>();
-      for (User user : listSub) {
-        if (user != null)
-          listBean.add(new UserBean(user));
-      }
-      UserListBean user_list = new UserListBean(listBean);
+      UserListBean user_list = new UserListBean(uList);
       user_list.setTotalUser(users.size());
       return Response.Builder.ok(user_list, JSON_CONTENT_TYPE).build();
     } catch (Exception e) {
@@ -415,181 +201,10 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
     }
   }
 
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/group/filter/")
-  @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response getAllGroup(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                              @QueryParam("filter") String filter) {
-    try {
-      Collection<Group> groups = groupHandler.getAllGroups();
-      if (filter != null && filter.length() > 0) {
-        Collection<Group> temp = new ArrayList<Group>(groups);
-        for (Group g : temp) {
-          if (!g.getId().contains(filter))
-            groups.remove(g);
-        }
-      }
-      GroupListBean group_list = new GroupListBean(groups);
-      return Response.Builder.ok(group_list, JSON_CONTENT_TYPE).build();
-
-    } catch (Exception e) {
-      LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
-                             .build();
-    }
-  }
-
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/group/info/{groupId}/")
-  @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response getGroup(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                           @URIParam("groupId") String groupId) {
-    try {
-      groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
-      Group group = groupHandler.findGroupById(groupId);
-      if (group == null) {
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("Group '" + groupId
-            + "' not found.").build();
-      }
-      Collection<User> members = userHandler.findUsersByGroup(groupId).getAll();
-      return Response.Builder.ok(new GroupMembersBean(group, members), JSON_CONTENT_TYPE).build();
-
-    } catch (Exception e) {
-      LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
-                             .build();
-    }
-  }
-
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/group/view-all/")
-  @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response getGroups(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                            @QueryParam("parentId") String parentId) {
-    try {
-      Collection<Group> groups = null;
-      if (parentId != null && parentId.length() > 0) {
-        parentId = (parentId.startsWith("/")) ? parentId : "/" + parentId;
-        Group parent = groupHandler.findGroupById(parentId);
-        if (parent == null) {
-          return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("Parent '"
-              + parentId + "' not found.").build();
-        }
-        groups = groupHandler.findGroups(parent);
-      } else {
-        groups = groupHandler.findGroups(null);
-      }
-      GroupListBean group_list = new GroupListBean(groups);
-
-      return Response.Builder.ok(group_list, JSON_CONTENT_TYPE).build();
-
-    } catch (Exception e) {
-      LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
-                             .build();
-    }
-  }
-
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/group/count/")
-  @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response getGroupsCount() {
-    try {
-      int number = groupHandler.getAllGroups().size();
-
-      return Response.Builder.ok(new CountBean(number), JSON_CONTENT_TYPE).build();
-
-    } catch (Exception e) {
-      LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
-                             .build();
-    }
-  }
-
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/group/groups-for-user/")
-  @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response getGroupsOfUser(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                                  @QueryParam("username") String username) {
-    try {
-      if (userHandler.findUserByName(username) == null) {
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("User '" + username
-            + "' not found.").build();
-      }
-      Collection<Group> groups = groupHandler.findGroupsOfUser(username);
-
-      GroupListBean group_list = new GroupListBean(groups);
-
-      return Response.Builder.ok(group_list, JSON_CONTENT_TYPE).build();
-
-    } catch (Exception e) {
-      LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
-                             .build();
-    }
-  }
-
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/group/view-from-to/{from}/{to}/")
-  @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response getGroupsRange(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                                 @URIParam("from") Integer offset,
-                                 @URIParam("to") Integer amount,
-                                 @QueryParam("parentId") String parentId) {
-    try {
-      Collection<Group> groups = null;
-      if (parentId != null && parentId.length() > 0) {
-        parentId = (parentId.startsWith("/")) ? parentId : "/" + parentId;
-        Group parent = groupHandler.findGroupById(parentId);
-        if (parent == null) {
-          return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("Parent '"
-              + parentId + "' not found.").build();
-        }
-        groups = groupHandler.findGroups(parent);
-      } else {
-        groups = groupHandler.findGroups(null);
-      }
-      Integer amount_ = amount;
-      if (amount > groups.size())
-        amount_ = groups.size();
-
-      GroupListBean group_list = new GroupListBean(new ArrayList<Group>(groups).subList(offset,
-                                                                                        amount_));
-
-      return Response.Builder.ok(group_list, JSON_CONTENT_TYPE).build();
-
-    } catch (Exception e) {
-      LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
-                             .build();
-    }
-  }
-
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/membership/get-types/")
-  @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response getMembershipTypes() {
-    try {
-      Collection<MembershipType> membershipTypes = membershipTypeHandler.findMembershipTypes();
-
-      MembershipTypesListBean membership_types_list = new MembershipTypesListBean(membershipTypes);
-
-      return Response.Builder.ok(membership_types_list, JSON_CONTENT_TYPE).build();
-
-    } catch (Exception e) {
-      LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
-                             .build();
-    }
-  }
-
+  
+  /**
+   * {@inheritDoc}
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/user/info/{username}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
@@ -610,38 +225,26 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/users/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getUsers(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI) {
-    try {
-      List<User> list = userHandler.findUsers(new Query()).getAll();
-      // UserListBean user_list = new UserListBean(list);
-      List<UserBean> listBean = new ArrayList<UserBean>();
-      for (User user : list) {
-        if (user != null)
-          listBean.add(new UserBean(user));
-      }
-      UserListBean user_list = new UserListBean(listBean);
-      return Response.Builder.ok(user_list, JSON_CONTENT_TYPE).build();
-
-    } catch (Exception e) {
-      LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
-                             .build();
-    }
+    return Response.Builder.noContent().build();
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/user/count/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getUsersCount() {
     try {
-      int number = userHandler.findUsers(new Query()).getAll().size();
-
+      int number = userHandler.getUserPageList(20).getAvailable();
       return Response.Builder.ok(new CountBean(number), JSON_CONTENT_TYPE).build();
-
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
@@ -650,65 +253,9 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
     }
   }
 
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/user/view-range/{from}/{number}/")
-  @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response getUsersRange(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                                @URIParam("from") Integer offset,
-                                @URIParam("number") Integer amount) {
-    try {
-      List<User> list = userHandler.findUsers(new Query()).getAll();
-      int prevFrom = -1;
-      if (offset > 0)
-        prevFrom = ((offset - amount) > 0) ? offset - amount : 0;
-      int nextFrom = ((offset + amount) < list.size()) ? offset + amount : -1;
-      int to = (offset + amount < list.size()) ? offset + amount : list.size();
+//  
 
-      // UserListBean user_list = new UserListBean(list.subList(offset, to));
-      List<User> listSub = list.subList(offset, to);
-      List<UserBean> listBean = new ArrayList<UserBean>();
-      for (User user : listSub) {
-        if (user != null)
-          listBean.add(new UserBean(user));
-      }
-      UserListBean user_list = new UserListBean(listBean);
 
-      return Response.Builder.ok(user_list, JSON_CONTENT_TYPE).build();
-
-    } catch (Exception e) {
-      LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
-                             .build();
-    }
-  }
-
-  @HTTPMethod(HTTPMethods.POST)
-  @URITemplate("/group/update/")
-  public Response updateGroup(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                              @QueryParam("groupId") String groupId,
-                              @QueryParam("name") String name,
-                              @QueryParam("label") String label,
-                              @QueryParam("description") String description) {
-    Response response = super.updateGroup(baseURI, groupId, name, label, description);
-    if (response != null)
-      return response;
-    return Response.Builder.noContent().build();
-  }
-
-  @HTTPMethod(HTTPMethods.POST)
-  @URITemplate("/user/update/")
-  public Response updateUser(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
-                             @QueryParam("username") String username,
-                             @QueryParam("password") String password,
-                             @QueryParam("firstname") String firstname,
-                             @QueryParam("lastname") String lastname,
-                             @QueryParam("email") String email) {
-    Response response = super.updateUser(baseURI, username, password, firstname, lastname, email);
-    if (response != null)
-      return response;
-    return Response.Builder.noContent().build();
-  }
 
   /**
    * @author vetal

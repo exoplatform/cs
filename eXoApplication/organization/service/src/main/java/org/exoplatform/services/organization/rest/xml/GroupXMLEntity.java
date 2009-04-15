@@ -20,6 +20,7 @@ package org.exoplatform.services.organization.rest.xml;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.List;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
@@ -38,13 +39,13 @@ import org.exoplatform.services.rest.transformer.SerializableEntity;
 
 public class GroupXMLEntity implements SerializableEntity {
 
-  private final Collection<User> userList_;
+  private final List<User>    userList_;
 
   private final Group            group_;
 
   private final String           baseURI_;
 
-  public GroupXMLEntity(Group group, Collection<User> userList, String baseURI) {
+  public GroupXMLEntity(Group group, List<User> userList, String baseURI) {
     userList_ = userList;
     group_ = group;
     baseURI_ = baseURI;
@@ -80,7 +81,7 @@ public class GroupXMLEntity implements SerializableEntity {
       xsw.writeEndElement();
       xsw.writeStartElement("members");
       xsw.writeNamespace(XMLContants.XLINK_PREFIX, XMLContants.XLINK_NAMESPACE_URL);
-      for (User u : userList_) {
+      for (User user : userList_) {
         xsw.writeStartElement("user");
         xsw.writeAttribute(XMLContants.XLINK_NAMESPACE_URL, XMLContants.XLINK_HREF, baseURI_
             + "/organization/user/" /*
@@ -88,7 +89,7 @@ public class GroupXMLEntity implements SerializableEntity {
                                                                  * u.getUserName()
                                                                  */
             + "?output=xml&command=info");
-        xsw.writeCharacters(u.getUserName());
+        xsw.writeCharacters(user.getUserName());
         xsw.writeEndElement();
       }
       xsw.writeEndElement();

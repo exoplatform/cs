@@ -10,11 +10,9 @@
   <component>
     <type>org.exoplatform.services.organization.rest.json.RESTOrganizationServiceJSONImpl</type>
   </component>
-  <component>
-    <type>org.exoplatform.services.organization.rest.html.RESTOrganizationServiceHTMLImpl</type>
-  </component>
   
-  <external-component-plugins>
+  
+  <!-- external-component-plugins>
     <target-component>org.exoplatform.services.xml.transform.impl.trax.TRAXTemplatesServiceImpl</target-component>
     <component-plugin>
       <name>add.xslschema</name>
@@ -34,5 +32,5 @@
       </properties-param>
     </init-params>
     </component-plugin>
-  </external-component-plugins>  
+  </external-component-plugins-->  
 </configuration>

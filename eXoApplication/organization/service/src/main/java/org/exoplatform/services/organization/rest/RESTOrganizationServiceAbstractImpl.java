@@ -34,7 +34,8 @@ import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.rest.Response;
 
 /**
- * Created by The eXo Platform SAS        .
+ * Created by The eXo Platform SAS .
+ * 
  * @author Gennady Azarenkov
  * @version $Id:$
  */
@@ -58,8 +59,11 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
     membershipTypeHandler = organizationService.getMembershipTypeHandler();
   }
 
-  public Response createGroup(String baseURI, String groupName, String label, String description,
-      String parentId) {
+  public Response createGroup(String baseURI,
+                              String groupName,
+                              String label,
+                              String description,
+                              String parentId) {
     Group parent = null;
     Group group = null;
     try {
@@ -67,8 +71,8 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
         parentId = (parentId.startsWith("/")) ? parentId : "/" + parentId;
         parent = groupHandler.findGroupById(parentId);
         if (parent == null) {
-          return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage(
-              "Parent group '" + parentId + "' not found!").build();
+          return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("Parent group '"
+              + parentId + "' not found!").build();
         }
       }
       group = groupHandler.createGroupInstance();
@@ -78,53 +82,59 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
       groupHandler.addChild(parent, group, true);
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR).errorMessage(
-          "Thrown exception : " + e).build();
+      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
+                             .errorMessage("Thrown exception : " + e)
+                             .build();
     }
-    //Group Id holder
+    // Group Id holder
     return Response.Builder.ok(group).build();
   }
 
   public Response createMembership(String baseURI, String username, String groupId, String type) {
-    
+
     Membership m = null;
     try {
-  
+
       User user = userHandler.findUserByName(username);
       if (user == null)
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage(
-            "User : '" + username + "' not found!").build();
+        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("User : '" + username
+            + "' not found!").build();
       groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
       Group group = groupHandler.findGroupById(groupId);
       if (group == null)
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage(
-            "Group : '" + groupId + "' not found!").build();
-      
+        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("Group : '" + groupId
+            + "' not found!").build();
+
       MembershipType membershipType = membershipTypeHandler.findMembershipType(type);
-      
+
       m = membershipHandler.findMembershipByUserGroupAndType(username, groupId, type);
-      
+
       if (membershipType == null)
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage(
-            "MembershipType : '" + type + "' not found!").build();
+        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("MembershipType : '"
+            + type + "' not found!").build();
       membershipHandler.linkMembership(user, group, membershipType, true);
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR).errorMessage(
-          "Thrown exception : " + e).build();
+      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
+                             .errorMessage("Thrown exception : " + e)
+                             .build();
     }
-    
+
     return Response.Builder.ok(m).build();
 
   }
 
-  public Response createUser(String baseURI, String username, String password, String firstname,
-      String lastname, String email) {
+  public Response createUser(String baseURI,
+                             String username,
+                             String password,
+                             String firstname,
+                             String lastname,
+                             String email) {
     try {
       User user = userHandler.createUserInstance(username);
       if (user == null) {
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage(
-            "User '" + username + "' not found.").build();
+        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("User '" + username
+            + "' not found.").build();
       }
       user.setPassword(password);
       user.setFirstName(firstname);
@@ -134,30 +144,28 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
 
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR).errorMessage(
-          "Thrown exception : " + e).build();
+      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
+                             .errorMessage("Thrown exception : " + e)
+                             .build();
     }
-    
+
     return null;
   }
 
   public Response deleteGroup(String groupId) {
     try {
-      
       groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
-      
       Group group = groupHandler.findGroupById(groupId);
-      
       if (group != null) {
         groupHandler.removeGroup(group, true);
       } else
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage(
-            "Group '" + groupId + "' not found!").build();
-      
+        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("Group '" + groupId
+            + "' not found!").build();
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR).errorMessage(
-          "Thrown exception : " + e).build();
+      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
+                             .errorMessage("Thrown exception : " + e)
+                             .build();
     }
     return null;
   }
@@ -167,8 +175,9 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
       membershipHandler.removeMembership(membershipId, true);
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR).errorMessage(
-          "Thrown exception : " + e).build();
+      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
+                             .errorMessage("Thrown exception : " + e)
+                             .build();
     }
     return null;
   }
@@ -177,15 +186,15 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
     try {
       User user = userHandler.findUserByName(username);
       if (user == null) {
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage(
-            "User '" + username + "' not found.").build();
+        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("User '" + username
+            + "' not found.").build();
       }
       userHandler.removeUser(username, true);
-      
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR).errorMessage(
-          "Thrown exception : " + e).build();
+      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
+                             .errorMessage("Thrown exception : " + e)
+                             .build();
     }
     return null;
   }
@@ -195,46 +204,56 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
       groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
       if (userHandler.findUserByName(username) == null
           || groupHandler.findGroupById(groupId) == null) {
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage(
-            "Group or user not found!").build();
+        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND)
+                               .errorMessage("Group or user not found!")
+                               .build();
       }
-      Collection<Membership> memberships = membershipHandler.findMembershipsByUserAndGroup(
-          username, groupId);
+      Collection<Membership> memberships = membershipHandler.findMembershipsByUserAndGroup(username,
+                                                                                           groupId);
       for (Membership m : memberships)
         membershipHandler.removeMembership(m.getId(), true);
-      
+
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR).errorMessage(
-          "Thrown exception : " + e).build();
+      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
+                             .errorMessage("Thrown exception : " + e)
+                             .build();
     }
     return null;
   }
 
-  public Response updateGroup(String baseURI, String groupId, String name, String label,
-      String description) {
+  public Response updateGroup(String baseURI,
+                              String groupId,
+                              String name,
+                              String label,
+                              String description) {
     try {
       groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
       Group group = groupHandler.findGroupById(groupId);
       if (group == null) {
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage(
-            "Group '" + groupId + "' not found!").build();
+        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("Group '" + groupId
+            + "' not found!").build();
       }
       group.setGroupName(name);
       group.setLabel(label);
       group.setDescription(description);
       groupHandler.saveGroup(group, true);
-      
+
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR).errorMessage(
-          "Thrown exception : " + e).build();
+      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
+                             .errorMessage("Thrown exception : " + e)
+                             .build();
     }
     return null;
   }
 
-  public Response updateUser(String baseURI, String username, String password, String firstname,
-      String lastname, String email) {
+  public Response updateUser(String baseURI,
+                             String username,
+                             String password,
+                             String firstname,
+                             String lastname,
+                             String email) {
     try {
       User user = userHandler.findUserByName(username);
       user.setPassword(password);
@@ -246,9 +265,129 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
 
     } catch (Exception e) {
       LOGGER.error("Cannot manage user : ", e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR).errorMessage(
-          "Thrown exception : " + e).build();
+      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
+                             .errorMessage("Thrown exception : " + e)
+                             .build();
     }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response findMembership(String baseURI, String membershipId) {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response findMemberships(String baseURI, String groupId, String username, String type) {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response findUsers(String baseURI,
+                            String username,
+                            String firstname,
+                            String lastname,
+                            String email,
+                            String fromLoginDate,
+                            String toLoginDate) {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response findUsersRange(String baseURI,
+                                 String username,
+                                 String firstname,
+                                 String lastname,
+                                 String email,
+                                 String fromLoginDate,
+                                 String toLoginDate,
+                                 Integer offset,
+                                 Integer amount) {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response getAllGroup(String baseURI, String filter) {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response getGroup(String baseURI, String groupId) {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response getGroups(String baseURI, String parentId) {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response getGroupsCount() {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response getGroupsOfUser(String baseURI, String username) {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response getGroupsRange(String baseURI, Integer offset, Integer amount, String parentId) {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response getMembershipTypes() {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response getUser(String username) {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response getUsers(String baseURI) {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response getUsersCount() {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Response getUsersRange(String baseURI, Integer offset, Integer amount) {
     return null;
   }
 
