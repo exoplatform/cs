@@ -19,7 +19,7 @@ UIJoinRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   } else {
     this.roomListContainerNode = tmpNode;
   }
-  this.joinRoomButtonNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.rootNode, 'a', 'JoinRoomButton');
+  this.joinRoomButtonNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'JoinRoomButton');
   this.joinRoomButtonNode.hrefBk = this.joinRoomButtonNode.href;
   this.LocalTemplateEngine = this.UIMainChatWindow.LocalTemplateEngine;
   this.pageIteratorNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.uiPageIterator);
