@@ -57,7 +57,9 @@
 					              		<div class="UIRightPopupMenuContainer">
 					                    <div class="TypeViewContactPortlet">
   					                    <a class="MenuItem" href="<%=uicomponent.event("ChangeView", "true")%>">   
-  						                    <div class="ItemIcon ContactListIcon"><%=_ctx.appRes(uicomponent.getName() + ".label.contactsList")%></div>
+  						                    <div class="ItemIcon ContactListIcon">
+  						                    	<%=_ctx.appRes(uicomponent.getName() + ".label.contactsList")%>
+  						                    </div>
   					                    </a>
   					                    <a class="MenuItem" href="<%=uicomponent.event("ChangeView", "false")%>">   
   						                    <div class="ItemIcon ContactIcon">
