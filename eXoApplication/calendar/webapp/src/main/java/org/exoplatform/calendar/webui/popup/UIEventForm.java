@@ -749,8 +749,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       for(String s : getEmailAddress().replaceAll(CalendarUtils.SEMICOLON, CalendarUtils.COMMA).split(CalendarUtils.COMMA)) {
         s = s.trim() ;
         if(CalendarUtils.isEmailValid(s)) {
-          if(sbAddress.length() > 0) sbAddress.append(CalendarUtils.COMMA) ;
-          sbAddress.append(s) ;
+          if(sbAddress.indexOf(s) < 0) {
+            if(sbAddress.length() > 0) sbAddress.append(CalendarUtils.COMMA) ;
+            sbAddress.append(s) ;
+          }  
         }  
       }
       email.setEmailAddress(sbAddress.toString()) ;
@@ -1187,12 +1189,11 @@ public Attachment getAttachment(String attId) {
       UIEventForm uiForm = event.getSource() ;
       UIEventAttenderTab tabAttender = uiForm.getChildById(TAB_EVENTATTENDER) ;
 //    TODO cs-839
-      /*String values = uiForm.getParticipantValues() ;
-      tabAttender.updateParticipants(values) ;*/
+      String values = uiForm.getParticipantValues() ;
+      tabAttender.updateParticipants(values) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(tabAttender) ;       
       
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      System.out.println(uiContainer);
       UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;
       if(uiPopupWindow == null)uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelectEventForm", "UIPopupWindowUserSelectEventForm") ;
       UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
@@ -1415,11 +1416,12 @@ public Attachment getAttachment(String attId) {
             else 
               if(CalendarUtils.isValidEmailAddresses(uiForm.getInvitationEmail())) {
                 String addressList = uiForm.getInvitationEmail().replaceAll(CalendarUtils.SEMICOLON,CalendarUtils.COMMA) ;
-                List<String> emails = new ArrayList<String>() ;
+                Map<String, String> emails = new LinkedHashMap<String, String>() ;
                 for(String email : addressList.split(CalendarUtils.COMMA)) {
-                  emails.add(email) ;
+                  String address = email.trim() ;
+                  if (!emails.containsKey(address)) emails.put(address, address) ;
                 }
-                if(!emails.isEmpty()) calendarEvent.setInvitation(emails.toArray(new String[emails.size()])) ;
+                if(!emails.isEmpty()) calendarEvent.setInvitation(emails.keySet().toArray(new String[emails.size()])) ;
               } else {
                 uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.event-email-invalid"
                   , new String[] { CalendarUtils.invalidEmailAddresses(uiForm.getInvitationEmail())}));
