@@ -439,10 +439,8 @@ public class JCRDataStorage {
         Query query = qm.createQuery(filter.getStatement(), Query.XPATH);
         QueryResult result = query.execute();
         return new ContactPageList(username,
-                                   result.getNodes(),
                                    10,
                                    filter.getStatement(),
-                                   true,
                                    type);
       }
       return null;
@@ -481,10 +479,8 @@ public class JCRDataStorage {
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
       ContactPageList pageList = new ContactPageList(owner,
-                                                     result.getNodes(),
                                                      10,
                                                      queryString,
-                                                     true,
                                                      PERSONAL);
       return pageList;
     } finally {
@@ -1255,7 +1251,7 @@ public class JCRDataStorage {
                                                   .append(" order by @exo:fullName,@exo:id ascending");
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
-      return new ContactPageList(username, result.getNodes(), 10, queryString.toString(), true, SHARED) ;
+      return new ContactPageList(username, 10, queryString.toString(), SHARED) ;
     } finally {
       sysProvider.close();
     }
@@ -1275,7 +1271,7 @@ public class JCRDataStorage {
                                                 .append("order by @exo:fullName,@exo:id ascending");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
-    return new ContactPageList(null, result.getNodes(), 10, queryString.toString(), true, PUBLIC) ;
+    return new ContactPageList(null, 10, queryString.toString(), PUBLIC) ;
     } finally {
       sysProvider.close();
     }

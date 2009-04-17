@@ -35,6 +35,8 @@ import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
+import org.exoplatform.services.jcr.impl.core.query.lucene.QueryResultImpl;
 
 /**
  * @author Hung Nguyen (hung.nguyen@exoplatform.com)
@@ -45,9 +47,6 @@ public class ContactPageList extends JCRPageList {
   private String       username_;
 
   private NodeIterator iter_        = null;
-
-  private boolean      isQuery_     = false;
-
   private String       value_;
 
   private String       contactType_ = "0";
@@ -56,22 +55,43 @@ public class ContactPageList extends JCRPageList {
   private long         pageReturn   = 0;
 
   public ContactPageList(String username,
-                         NodeIterator iter,
                          long pageSize,
                          String value,
-                         boolean isQuery,
                          String type) throws Exception {
+    
     super(pageSize);
     username_ = username;
-    iter_ = iter;
     value_ = value;
-    isQuery_ = isQuery;
     contactType_ = type;
-    setAvailablePage(iter.getSize());
   }
 
-  protected void populateCurrentPage(long page, String username) throws Exception {
-    if (iter_ == null) {
+  protected void populateCurrentPage(long page, String username) throws Exception {    
+    long pageSize = getPageSize() ;
+    long totalPage = 0;
+    Node currentNode;
+    Session session = getJCRSession(username) ;
+    
+    try {
+      QueryImpl queryImpl = createXPathQuery(session, username, value_);
+      if( page > 1) {
+        long position = (page - 1) * pageSize;
+        if (pageReturn == page) {
+          queryImpl.setOffset(position - 1);
+        } else {
+          queryImpl.setOffset(position);
+        }
+      }
+      queryImpl.setLimit(pageSize);
+      QueryResult result = queryImpl.execute();
+      iter_ = result.getNodes();
+      totalPage = ((QueryResultImpl) result).getTotalSize() ;
+    } finally {
+      session.logout() ;
+    }
+    setAvailablePage(totalPage) ;
+    
+    // cs- 1017
+    /*if (iter_ == null) {
       Session session = getJCRSession(username);
       try {
         if (isQuery_) {
@@ -105,7 +125,10 @@ public class ContactPageList extends JCRPageList {
       } else {
         iter_.skip(position);
       }
-    }
+    }*/
+    
+    
+    
     boolean containDefault = false;
     currentListPage_ = new ArrayList<Contact>();
     for (int i = 0; i < pageSize; i++) {
@@ -280,7 +303,7 @@ public class ContactPageList extends JCRPageList {
 
   @Override
   public List<Contact> getAll() throws Exception {
-    if (iter_ == null) {
+    /*if (iter_ == null) {
       Session session = getJCRSession(username_);
       if (isQuery_) {
         QueryManager qm = session.getWorkspace().getQueryManager();
@@ -292,6 +315,17 @@ public class ContactPageList extends JCRPageList {
         iter_ = node.getNodes();
       }
       session.logout();
+    }*/
+    
+    long pageSize = getPageSize() ;
+    Session session = getJCRSession(username_) ;    
+    try {
+      QueryImpl queryImpl = createXPathQuery(session, username_, value_);
+      queryImpl.setLimit(pageSize);
+      QueryResult result = queryImpl.execute();
+      iter_ = result.getNodes();
+    } finally {
+      session.logout() ;
     }
     List<Contact> contacts = new ArrayList<Contact>();
     while (iter_.hasNext()) {
@@ -302,7 +336,7 @@ public class ContactPageList extends JCRPageList {
   }
 
   public Map<String, String> getEmails() throws Exception {
-    if (iter_ == null) {
+/*    if (iter_ == null) {
       Session session = getJCRSession(username_);
       if (isQuery_) {
         QueryManager qm = session.getWorkspace().getQueryManager();
@@ -314,6 +348,17 @@ public class ContactPageList extends JCRPageList {
         iter_ = node.getNodes();
       }
       session.logout();
+    }*/    
+
+    long pageSize = getPageSize() ;
+    Session session = getJCRSession(username_) ;    
+    try {
+      QueryImpl queryImpl = createXPathQuery(session, username_, value_);
+      queryImpl.setLimit(pageSize);
+      QueryResult result = queryImpl.execute();
+      iter_ = result.getNodes();
+    } finally {
+      session.logout() ;
     }
     NodeIterator inter = iter_;
     Map<String, String> emails = new LinkedHashMap<String, String>();
@@ -347,5 +392,9 @@ public class ContactPageList extends JCRPageList {
                                         .getDefaultWorkspaceName();
     return sessionProvider.getSession(defaultWS, repositoryService.getCurrentRepository());
   }
-
+  
+  private QueryImpl createXPathQuery(Session session, String username, String xpath) throws Exception {
+    QueryManager queryManager = session.getWorkspace().getQueryManager();
+    return (QueryImpl) queryManager.createQuery(xpath, Query.XPATH);
+  }
 }
