@@ -569,9 +569,7 @@
 	background-position: center;
 }
 
-.UIMailPortlet .MailWorkingWorkspace a:hover {
-	color: #058ee6;
-}
+
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .MoreActionsIcon {
 	margin: 1px 0px 0px 10px; /* orientation=lt */

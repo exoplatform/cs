@@ -187,15 +187,20 @@
 	margin: 0px 0px 0px 5px;
 	color: #126ca5;
 }
-
+.UIMessageCompose .MessageAddress .UIFormGrid .FieldLabel{
+	vertical-align:top;
+}
 .UIMessageCompose .MessageAddress .UIFormGrid .FieldLabel a {
-	text-decoration: underline;
+	line-height: 20px;
+	margin: 4px 1px 4px 1px;
+	float:right;
 }
 
 .UIMessageCompose .MessageAddress .UIFormGrid .FieldLabel a:hover {
-	background: none;
-	border: none;
-	text-decoration: none;
+	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
+	color: #058ee6; border: 1px solid #cbcbcb;
+	height: 20px;
+	margin: 3px 0px 3px 0px;
 }
 
 .UIMessageCompose .MessageAddress img {
