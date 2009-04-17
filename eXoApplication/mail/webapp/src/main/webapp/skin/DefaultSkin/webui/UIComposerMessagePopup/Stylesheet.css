@@ -3,7 +3,8 @@
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .ControlButton {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	line-height: 26px;
 	cursor: pointer;
 }
@@ -35,46 +36,56 @@
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .SeparatorLine {
-  float: left;
+  float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
   margin: 3px 5px 2px 5px;
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .ControlButton .IconHolder {
 	line-height: 26px;
 	margin: 1px 7px 0px 7px;
-	padding-left: 26px;
+	padding-left: 26px; /* orientation=lt */
+	padding-right: 26px; /* orientation=rt */
 	width: auto;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .SendMailIcon {
-	background: url('icons/24x24/SendMail.gif') no-repeat;
+	background: url('icons/24x24/SendMail.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/24x24/SendMail.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .SaveAsADraftIcon {
-	background: url('icons/24x24/SaveAsADraft.gif') no-repeat;
+	background: url('icons/24x24/SaveAsADraft.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/24x24/SaveAsADraft.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .DiscardIcon {
-	background: url('icons/24x24/Discard.gif') no-repeat;
+	background: url('icons/24x24/Discard.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/24x24/Discard.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .AttachFileIcon {
-	background: url('icons/24x24/AttachFiles.gif') no-repeat;
+	background: url('icons/24x24/AttachFiles.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/24x24/AttachFiles.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .PriorityIcon {
-	background: url('icons/24x24/MessagePriority.gif') no-repeat left top;
+	background: url('icons/24x24/MessagePriority.gif') no-repeat left top; /* orientation=lt */
+		background: url('icons/24x24/MessagePriority.gif') no-repeat right top; /* orientation=rt */
 	height: auto;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .EditorOptionsIcon {
-	background: url('icons/24x24/EditorOptions.gif') no-repeat left top;
+	background: url('icons/24x24/EditorOptions.gif') no-repeat left top; /* orientation=lt */
+	background: url('icons/24x24/EditorOptions.gif') no-repeat right top; /* orientation=rt */
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .DownArrow1Icon {
 	line-height: 24px;
-	padding-right: 16px;
-	background-position: right;
+	padding-right: 16px; /* orientation=lt */
+	padding-left: 16px; /* orientation=rt */
+	background-position: right; /* orientation=lt */
+	background-position: left; /* orientation=rt */
 	margin-top: 4px;
 }
 

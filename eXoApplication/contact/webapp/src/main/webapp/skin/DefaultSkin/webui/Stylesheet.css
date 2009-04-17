@@ -232,7 +232,8 @@
 }
 
 .UIRightClickPopupMenu .MenuItem .ItemIcon{
-	padding:5px 5px 5px 30px;
+	padding:5px 5px 5px 30px; /* orientation=lt */
+	padding:5px 30px 5px 5px; /* orientation=rt */
 }
 
 /* Create color tag */
@@ -361,3 +362,16 @@
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .PowderBlueTag	{
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px top;
 }
+
+/*----------------------- Create Clean  -------------------*/
+
+.UIContactPortlet .ClearContact{
+	clear: left; /* orientation=lt */
+	clear: right; /* orientation=rt */
+}
+
+.UIContactPortlet .ContactContainer .UISearchForm .ClearSearchForm{
+	clear: right; /* orientation=lt */
+	clear: left; /* orientation=rt */
+}
+

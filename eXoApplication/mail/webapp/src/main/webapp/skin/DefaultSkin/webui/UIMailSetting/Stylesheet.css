@@ -6,15 +6,19 @@
 /*****************************FlatTabStyle****************************************/
 
 .UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .SelectedTab {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 }
 
 .UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .NormalTab {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 }
 
 .UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .TabIcon {
 	margin: 1px 4px 0px 4px;
+	padding-left: 25px; /* orientation=rt */
+	padding-right: 25px; /* orientation=lt */
 }
 
 .UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .ShortcutKeyIcon {

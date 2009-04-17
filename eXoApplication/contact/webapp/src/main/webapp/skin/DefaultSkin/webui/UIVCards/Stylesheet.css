@@ -13,10 +13,12 @@
 
 .UIContactPortlet .UIVCards .VCardsBar .Subject {
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/VcardIcon.gif') no-repeat left center;
-	padding-left: 25px;
+	padding-left: 25px; /* orientation=lt */
+	padding-right: 25px; /* orientation=rt */
 	font-size: 14px;
 	font-weight: bold;
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 }
 
 .UIContactPortlet .UIVCards .UIVCardsContent {

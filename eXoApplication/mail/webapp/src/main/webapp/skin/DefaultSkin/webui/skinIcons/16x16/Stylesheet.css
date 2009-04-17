@@ -43,7 +43,8 @@
 }
 
 .UIMailPortlet .BlueTag {
-	background: url('icons/BlueTag.gif') no-repeat left center;
+	background: url('icons/BlueTag.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/BlueTag.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .RedTag {
@@ -83,11 +84,13 @@
 }
 
 .UIMailPortlet .MoreActionsIcon {
-	background: url('icons/MoreActions.gif') no-repeat left;
+	background: url('icons/MoreActions.gif') no-repeat left; /* orientation=lt */
+	background: url('icons/MoreActions.gif') no-repeat right; /* orientation=rt */
 }
 
 .UIMailPortlet .View {
-	background: url('icons/View.gif') no-repeat left;
+	background: url('icons/View.gif') no-repeat left; /* orientation=lt */
+	background: url('icons/View.gif') no-repeat right; /* orientation=rt */
 }
 
 .UIMailPortlet .ReplyMailIcon {
@@ -297,7 +300,8 @@
 }
 
 .UIMailPortlet .FolderIcon {
-	background: url('icons/FolderIcon.gif') no-repeat left center;
+	background: url('icons/FolderIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/FolderIcon.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .AccountIcon {
@@ -356,7 +360,8 @@
 }
 
 .UIMailPortlet .Folder {
-	background: url('icons/DefaultIcon.gif') no-repeat left center;
+	background: url('icons/DefaultIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/DefaultIcon-rt.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .DeleteAccount {
