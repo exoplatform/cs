@@ -39,6 +39,7 @@
     <module>eXoApplication/organization/webapp</module>
     
     <module>server/tomcat/patch</module>
+    <module>server/jboss/patch</module>
   </modules>
 
   <build>
