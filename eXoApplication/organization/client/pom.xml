@@ -1,0 +1,27 @@
+<project>
+  <parent>
+    <groupId>org.exoplatform.cs</groupId>
+    <artifactId>config</artifactId>
+    <version>1.2.1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>exo.cs.eXoApplication.organization.client.openfire</artifactId>
+	<name>eXo WS REST Openfire authentication plugin</name>
+  <version>${org.exoplatform.cs.version}</version>
+  <description></description>
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/conf</directory>
+        <includes><include>**/*.xml</include></includes>
+      </resource>
+    </resources>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>openfire</groupId>
+      <artifactId>openfire</artifactId>
+      <version>3.3.3</version>
+    </dependency>
+  </dependencies>
+</project>

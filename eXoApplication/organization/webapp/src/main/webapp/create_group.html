@@ -1,0 +1,41 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/organization/css/style.css"/>
+  <script type="text/javascript" src="js/script.js"></script>
+  <title>Add Group</title>
+</head>
+<body onload="document.forms[0].reset();">
+  <div class="main">
+    <form method="post" action="/rest/organization/group/create/" id = "createGroup">
+    <table  class="add-group">
+      <tr>
+        <td class="table-title" colspan="2">Add Group</td>
+      </tr>
+      <tr>
+        <td>Parent Name:</td>
+        <td><input class="input" type="text" name="parentId" /></td>
+      </tr>
+      <tr>
+        <td>Group Name:</td>
+        <td><input class="input" type="text" name="groupName" /></td>
+      </tr>
+      <tr>
+        <td>Label:</td>
+        <td><input class="input" type="text" name="label" /></td>
+      </tr>
+      <tr>
+        <td>Description:</td>
+        <td><input class="input" type="text" name="description" /></td>
+      </tr>
+      <tr>
+        <td class="action" colspan="2">
+          <input class="input" type="button" style="margin-right: 10px" value="Save" onclick="createGroup();"/>
+          <input class="input" type="button" style="margin-right: 10px" value="Back" onclick="history.go(-1);" />
+          <input class="input" type="reset" value="Clear" /></td>
+      </tr>
+    </table>
+    </form>
+  </div>
+</body>
+</html>
+
