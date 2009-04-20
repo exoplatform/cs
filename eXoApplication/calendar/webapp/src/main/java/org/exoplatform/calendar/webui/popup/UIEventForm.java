@@ -307,6 +307,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       setEventToDate(cal.getTime(),calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
       StringBuffer pars = new StringBuffer(CalendarUtils.getCurrentUser()) ;
 //    TODO cs-839
+      setMeetingInvitation(new String[] { CalendarUtils.getOrganizationService().getUserHandler().findUserByName(pars.toString()).getEmail() }) ;
       setParticipant(pars.toString()) ;
       attenderTab.updateParticipants(pars.toString());
     }
