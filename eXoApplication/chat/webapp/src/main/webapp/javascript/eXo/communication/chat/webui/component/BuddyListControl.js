@@ -2,6 +2,15 @@
  * @author Uoc Nguyen
  *  email: uoc.nguyen@exoplatform.com
  */
+
+/**
+ * BuddyItem UI component
+ * 
+ * @param {BuddyInfo} buddyInfo
+ * @param {Function} actionCallback
+ * @param {Integer} maxUserNameLen
+ * @param {Boolean} isGroupChat
+ */
 function BuddyItem(buddyInfo, actionCallback, maxUserNameLen, isGroupChat) {
   this.buddyInfo = buddyInfo;
   this.actionCallback = actionCallback;
@@ -29,6 +38,9 @@ function BuddyItem(buddyInfo, actionCallback, maxUserNameLen, isGroupChat) {
   this.updateStatus(buddyInfo.presence.type, true);
 }
 
+/**
+ * Init data and UI template
+ */
 BuddyItem.prototype.init = function() {
   var DOMUtil = eXo.core.DOMUtil;
   this.rootNode = eXo.communication.chat.core.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.template);
@@ -49,6 +61,12 @@ BuddyItem.prototype.init = function() {
   eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'click', this.actionCallback, false);
 };
 
+/**
+ * Update contact status
+ *
+ * @param {String} newStatus
+ * @param {Boolean} skipCheck use to skip check current user status
+ */
 BuddyItem.prototype.updateStatus = function(newStatus, skipCheck) {
   newStatus = newStatus.toLowerCase();
   window.jsconsole.warn('update status for: ' + this.buddyInfo.user + ' from ' + this.buddyInfo.presence.type + ' to ' + newStatus);
@@ -65,6 +83,12 @@ BuddyItem.prototype.updateStatus = function(newStatus, skipCheck) {
   }
 };
 
+/**
+ * Return real user name after cut out all another information from user name string
+ *
+ * @param {String} userNameFullStr
+ * @param {Integer} trimLen
+ */
 BuddyItem.prototype.getUserName = function(userNameFullStr, trimLen) {
   if (userNameFullStr.indexOf('/') != -1) {
     userNameFullStr = userNameFullStr.substring(0, userNameFullStr.indexOf('/'));
@@ -77,6 +101,9 @@ BuddyItem.prototype.getUserName = function(userNameFullStr, trimLen) {
   return userNameFullStr;
 };
 
+/**
+ * Use to remove a contact from contact list
+ */
 BuddyItem.prototype.remove = function() {
   var buddyItemNode = false;
   if (this.buddyInfo) {
@@ -96,6 +123,8 @@ eXo.communication.chat.webui.component.BuddyItem = BuddyItem;
  * BuddyListControl component
  * 
  * @param {Node} rootNode
+ * @param {Function} buddyItemActionCallback
+ * @param {UIMainChatWindow} UIMainChatWindow
  */
 function BuddyListControl(rootNode, buddyItemActionCallback, UIMainChatWindow) {
   this.rootNode = rootNode;
@@ -112,13 +141,22 @@ function BuddyListControl(rootNode, buddyItemActionCallback, UIMainChatWindow) {
 }
 
 /**
- * @return {eXo.communication.chat.webui.component.BuddyItem}
+ * Use to create a new defaul instance of BuddyItem object which common parameter
+ *
+ * @param {BuddyInfo} buddyInfo
+ *
+ * @return {BuddyItem}
  */
 BuddyListControl.prototype.getNewInstanceOfBuddyItem = function(buddyInfo) {
   var buddyItemObj = new this.BuddyItem(buddyInfo, this.buddyItemActionCallback, this.MAX_USERNAME_LEN, this.isGroupChat);
   return buddyItemObj;
 };
 
+/**
+ * Get BuddyItem object from contact list by buddyId
+ *
+ * @param {BuddyItem} buddyId
+ */
 BuddyListControl.prototype.getBuddyItem = function(buddyId) {
   this.buddyList = this.buddyList || {};
   var buddyObj = this.buddyList[this.getUserName(buddyId)];
@@ -129,6 +167,11 @@ BuddyListControl.prototype.getBuddyItem = function(buddyId) {
   return false;
 };
 
+/**
+ * Use to remove a contact from contact list
+ *
+ * @param {String} buddyId
+ */
 BuddyListControl.prototype.removeBuddy = function(buddyId){
   window.jsconsole.warn('Removing buddy: ' + buddyId);
   var buddyItemObj = this.getBuddyItem(buddyId);
@@ -138,6 +181,11 @@ BuddyListControl.prototype.removeBuddy = function(buddyId){
   }
 };
 
+/**
+ * Use to add a new contact to contact list using BuddyInfo object
+ *
+ * @param {BuddyInfo} buddyInfo
+ */
 BuddyListControl.prototype.addBuddy = function(buddyInfo){
   window.jsconsole.warn('Adding new buddy: ' + buddyInfo.user);
   var buddyItemObj = this.buddyList[buddyInfo.user];
@@ -150,7 +198,12 @@ BuddyListControl.prototype.addBuddy = function(buddyInfo){
   }
 };
 
-// Build new buddy list
+/**
+ * Use to build a new buddy/contact list from server data
+ *
+ * @param {Array[BuddyInfo]} roster
+ * @param {Boolean} isNotCleanUp
+ */
 BuddyListControl.prototype.build = function(roster, isNotCleanUp) {
   if (!isNotCleanUp) {
     this.cleanup();
@@ -164,6 +217,11 @@ BuddyListControl.prototype.build = function(roster, isNotCleanUp) {
   }
 };
 
+/**
+ * Use to convert a room contact list to standard contact list array
+ *
+ * @param {Array[Object]} roomContactList
+ */
 BuddyListControl.prototype.room2StandardContactList = function(roomContactList) {
   if (!roomContactList) {
     return [];
@@ -192,6 +250,9 @@ BuddyListControl.prototype.room2StandardContactList = function(roomContactList) 
   return contactList;
 };
 
+/**
+ * Use to clean contact list to when chat application is destroying or logout from server.
+ */
 BuddyListControl.prototype.cleanup = function() {
   if (this.buddyList) {
     for (var item in this.buddyList) {
@@ -209,6 +270,12 @@ BuddyListControl.prototype.cleanup = function() {
   this.rootNode.innerHTML = '<span/>';
 };
 
+/**
+ * Use to get real user name after cut out all another unneeded information from original user name return from
+ * server.
+ *
+ * @param {String} userNameFullStr
+ */
 BuddyListControl.prototype.getUserName = function(userNameFullStr) {
   if (userNameFullStr.indexOf('/') != -1) {
     return (userNameFullStr.substring(0, userNameFullStr.indexOf('/')));
@@ -217,6 +284,11 @@ BuddyListControl.prototype.getUserName = function(userNameFullStr) {
   }
 };
 
+/**
+ * Use to update presences(contact's status) for each contact in contact list
+ *
+ * @param {Array[Presence]} presences
+ */
 BuddyListControl.prototype.update = function(presences) {
   for (var i=0; i<presences.length; i++) {
     var presence = presences[i];
@@ -232,6 +304,11 @@ BuddyListControl.prototype.update = function(presences) {
   }
 };
 
+/**
+ * Update presences for contact in contact list using xor method.
+ *
+ * @param {Array[BuddyInfo]} roomContactList
+ */
 BuddyListControl.prototype.xUpdate = function(roomContactList) {
   if (!roomContactList) {
     return;

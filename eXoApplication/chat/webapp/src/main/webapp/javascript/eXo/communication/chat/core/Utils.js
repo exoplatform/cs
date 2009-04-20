@@ -1,5 +1,6 @@
 /**
  * @author uoc
+ * TODO: remove this utilities library
  */
 function Utils() {};
 

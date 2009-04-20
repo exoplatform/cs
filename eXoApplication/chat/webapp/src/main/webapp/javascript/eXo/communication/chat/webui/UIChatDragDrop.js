@@ -1,5 +1,7 @@
 /**
  * @author Uoc Nguyen
+ *
+ * Using for drag & drop support for chat application which work in both mode: classic & web os
  */
 function UIChatDragDrop() {
   this.DOMUtil      = eXo.core.DOMUtil ;
@@ -10,10 +12,19 @@ function UIChatDragDrop() {
   this.scValue      = 'solid 1px #000' ;
 } ;
 
+/**
+ * Initialize method
+ */
 UIChatDragDrop.prototype.init = function(rootNode, dragableNodeInfos) {
   this.regDnDItem(rootNode, dragableNodeInfos) ;
 } ;
 
+/**
+ * Register drag & drop item
+ *
+ * @param {HTMLElement} rootNode
+ * @param {Array[Object]} dragableNodeInfos
+ */
 UIChatDragDrop.prototype.regDnDItem = function(rootNode, dragableNodeInfos) {
   for (var i=0; i<dragableNodeInfos.length; i++) {
     var nodeList = eXo.core.DOMUtil.findDescendantsByClass(rootNode, dragableNodeInfos[i].tagName, dragableNodeInfos[i].className);
@@ -34,7 +45,8 @@ UIChatDragDrop.prototype.regDnDItem = function(rootNode, dragableNodeInfos) {
 } ;
 
 /**
- * 
+ * Check then process when mouse is down if it is dragable component
+ *
  * @param {Event} event
  */
 UIChatDragDrop.prototype.mouseDownTrigger = function(event) {
@@ -50,6 +62,14 @@ UIChatDragDrop.prototype.mouseDownTrigger = function(event) {
   return true ;
 } ;
 
+/**
+ * Initializing DnD process
+ *
+ * @param {Array[HTMLElement]} dropableObjs
+ * @param {HTMLElement} clickObj
+ * @param {HTMLElement} dragObj
+ * @param {Event} event
+ */
 UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, event) {
   var clickBlock = ((clickObj && clickObj.tagName) || (typeof(clickObj) != 'string')) ? clickObj : document.getElementById(clickObj) ;
   var dragBlock = ((dragObj && dragObj.tagName) || (typeof(dragObj) != 'string')) ? dragObj : document.getElementById(dragObj) ;
@@ -132,9 +152,17 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
   return false ;
 } ;
 
+/**
+ * Call back function will be called after DnD is initialized.
+ */
 UIChatDragDrop.prototype.initCallback = function(dndEvent) {
 } ;
 
+/**
+ * Call back function will be called while user draging object
+ *
+ * @param {DnDEvent} dndEvent
+ */
 UIChatDragDrop.prototype.dragCallback = function(dndEvent) {
   var dragObject = dndEvent.dragObject ;
   if (!dragObject.style.display ||
@@ -168,6 +196,11 @@ UIChatDragDrop.prototype.dragCallback = function(dndEvent) {
   }
 } ;
 
+/**
+ * Callback function will be called after user released mouse/drop object
+ *
+ * @param {DnDEvent} dndEvent
+ */
 UIChatDragDrop.prototype.dropCallback = function(dndEvent) {
   var dragObject = dndEvent.dragObject;
   var realNode = dragObject.realNode;

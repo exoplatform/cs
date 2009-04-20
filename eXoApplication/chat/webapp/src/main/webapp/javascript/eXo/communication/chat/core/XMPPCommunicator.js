@@ -1,5 +1,7 @@
 /**
-e* @author Uoc Nguyen Ba
+ * @author Uoc Nguyen Ba
+ * 
+ * A core javascript library using for communicate with services.
  */
 function XMPPCommunicator() {
   this.SERVICE_URL       = '/chat/messengerservlet';
@@ -11,11 +13,21 @@ function XMPPCommunicator() {
   this.TRANSPORT_MSN     = 'msn';
 }
 
+/**
+ * Encode ajax parameter before send to service
+ * 
+ * @param {String} param
+ */
 XMPPCommunicator.prototype.encodeParam = function(param) {
   //return window.escape(param);
   return window.encodeURIComponent(param);
 };
 
+/**
+ * Encode room name before send it to REST service
+ * 
+ * @param {String} roomName
+ */
 XMPPCommunicator.prototype.encodeRoomName = function(roomName) {
   if (roomName.indexOf('@') == -1) {
     return roomName;
@@ -25,6 +37,12 @@ XMPPCommunicator.prototype.encodeRoomName = function(roomName) {
   return roomNameParts.join('@');
 };
 
+/**
+ * Overwritten some ajax parameters and method defined in portal.
+ * 
+ * @param {Boolean} manualMode
+ * @param {AjaxRequest} ajaxRequest
+ */
 XMPPCommunicator.prototype.ajaxProcessOverwrite = function(manualMode, ajaxRequest) {
   if (ajaxRequest.request == null) return ;
   ajaxRequest.request.open(ajaxRequest.method, ajaxRequest.url, true) ;   
@@ -44,9 +62,10 @@ XMPPCommunicator.prototype.ajaxProcessOverwrite = function(manualMode, ajaxReque
 };
 
 /**
+ * A common method use for setup an AjaxRequest object
  * 
  * @param {AjaxRequest} ajaxRequest
- * @param {Object} handler
+ * @param {Function} handler
  */
 XMPPCommunicator.prototype.initRequest = function(ajaxRequest, handler) {
   ajaxRequest.onSuccess = handler.onSuccess ;
@@ -61,6 +80,9 @@ XMPPCommunicator.prototype.initRequest = function(ajaxRequest, handler) {
 // --- Organization service
 
 /**
+ * Use to contact to service which search user by keyword using fuzzy search method and return result in range.
+ * Range will be limited in {from} and {to} parameters use for javascript page iterator.
+ * 
  * @HTTPMethod(HTTPMethods.GET)
  * @URITemplate("/user/find-user-in-range/?question=question-content&from=x&to=y")
  * @param {String} question
@@ -76,6 +98,9 @@ XMPPCommunicator.prototype.orgFuzzySearchUser = function(question, from, to, han
 };
 
 /**
+ * Use to contact to service which search user by keyword using fuzzy search method and return all result
+ * at once time.
+ * 
  * @HTTPMethod(HTTPMethods.GET)
  * @URITemplate("/user/find-all/")
  * @param {String} username
@@ -94,10 +119,26 @@ XMPPCommunicator.prototype.orgSearchUser = function(userName, handler) {
 // -/-
 
 // --- File Exchange
+/**
+ * Return the service download url for file exchange.
+ * 
+ * @param {String} userName
+ * @param {String} uuid
+ * @param {String} transportName
+ * @param {Function} handler
+ */
 XMPPCommunicator.prototype.acceptSendFile = function(userName, uuid, transportName, handler) {
   return (this.SERVICE_URL + '/' + transportName + '/fileexchange/accept/' + userName + '/' + uuid + '/');
 };
 
+/**
+ * Send deny file exchange confirmation to file exchange service.
+ * 
+ * @param {String} userName
+ * @param {String} uuid
+ * @param {String} transportName
+ * @param {Function} handler
+ */
 XMPPCommunicator.prototype.denieSendFile = function(userName, uuid, transportName, handler) {
   var url = this.SERVICE_URL + '/' + transportName + '/fileexchange/reject/' + userName + '/' + uuid + '/';
   var request = new eXo.portal.AjaxRequest('GET', url, null);
@@ -107,6 +148,7 @@ XMPPCommunicator.prototype.denieSendFile = function(userName, uuid, transportNam
 // -/-
 
 /**
+ * Using to login to a transport. Data will be automatically take from a HTML Form node. 
  * 
  * @param {Element} formNode
  * @param {String} transportName
@@ -121,6 +163,7 @@ XMPPCommunicator.prototype.addTransportForm = function(formNode, transportName, 
 };
 
 /**
+ * Using to login to a transport. This is direct method using method get to pass username and password.
  * 
  * @param {Element} formNode
  * @param {String} transportName
@@ -135,6 +178,8 @@ XMPPCommunicator.prototype.addTransportDirect = function(userName, password, tra
 };
 
 /**
+ * Using to login to a transport but re-used portal authenticated authorize to login.
+ * This method not require username and password. 
  * 
  * @param {Element} formNode
  * @param {String} transportName
@@ -149,6 +194,7 @@ XMPPCommunicator.prototype.addTransport = function(transportName, handler) {
 };
 
 /**
+ * Use for logout.
  * 
  * @param {String} userName
  * @param {String} transportName
@@ -162,6 +208,7 @@ XMPPCommunicator.prototype.removeTransport = function(userName, transportName, h
 };
 
 /**
+ * Send a request confirmation for subscribe a contact
  * 
  * @param {String} userName
  * @param {String} askUser
@@ -176,6 +223,8 @@ XMPPCommunicator.prototype.askForSubscription = function(userName, askUser, tran
 };
 
 /**
+ * Use to confirm add an user to contact list
+ * 
  * url: /xmpp/roster/add/{username}/{adduser}
  * @param {String} userName
  * @param {String} addUser
@@ -190,6 +239,7 @@ XMPPCommunicator.prototype.addUser = function(userName, addUser, transportName, 
 };
 
 /**
+ * Using to confirm authorize and add user to contact list.
  * 
  * @param {String} userName
  * @param {String} subUser
@@ -204,6 +254,7 @@ XMPPCommunicator.prototype.subscribeUser = function(userName, subUser, transport
 };
 
 /**
+ * Remove user from contact list
  * 
  * @param {String} userName
  * @param {String} subUser
@@ -218,6 +269,7 @@ XMPPCommunicator.prototype.removeUser = function(userName, subUser, transportNam
 };
 
 /**
+ * Remove subscribe authorize for an user.
  * 
  * @param {String} userName
  * @param {String} subUser
@@ -232,6 +284,7 @@ XMPPCommunicator.prototype.unSubscribeUser = function(userName, subUser, transpo
 };
 
 /**
+ * Using to get subscription request list. 
  * 
  * @param {String} userName
  * @param {String} transportName
@@ -245,6 +298,7 @@ XMPPCommunicator.prototype.getSubscriptionRequests = function(userName, transpor
 };
 
 /**
+ * Use to remove all user in contact list.
  * 
  * @param {String} userName
  * @param {String} transportName
@@ -258,6 +312,7 @@ XMPPCommunicator.prototype.cleanBuddyList = function(userName, transportName, ha
 };
 
 /**
+ * Use to get contact list.
  * 
  * @param {String} userName
  * @param {String} transportName
@@ -271,6 +326,7 @@ XMPPCommunicator.prototype.getBuddyList = function(userName, transportName, hand
 };
 
 /**
+ * Use to change user status to available, away, extends away, free for chat ...
  * 
  * @param {String} userName
  * @param {String} transportName
@@ -285,6 +341,8 @@ XMPPCommunicator.prototype.sendStatus = function(userName, transportName, handle
 };
 
 /**
+ * Use to create a new room chat.
+ * 
  * url: /xmpp/muc/createroom/{username}/?room={room}&nickname={nickname}
  * 
  * @param {String} userName
@@ -302,6 +360,8 @@ XMPPCommunicator.prototype.createRoomchat = function(userName, nickName, roomNam
 };
 
 /**
+ * Use to send room's configuration to config room. 
+ * 
  * url: /xmpp/muc/configroom/{username}/?room={room}
  * 
  * @param {String} userName
@@ -319,6 +379,8 @@ XMPPCommunicator.prototype.sendConfigRoom = function(userName, roomName, roomCon
 };
 
 /**
+ * Service will be return room's information.
+ * 
  * url: /xmpp/muc/getroominfo/{username}/?room={room}
  * 
  * @param {String} userName
@@ -335,6 +397,8 @@ XMPPCommunicator.prototype.getRoomInfo = function(userName, roomName, transportN
 };
 
 /**
+ * Use to get current room's configuration data. We are using this data to refresh room configuration form.
+ * 
  * url: /xmpp/muc/getroomconfig/{username}/?room={room}
  * 
  * @param {String} userName
@@ -351,6 +415,8 @@ XMPPCommunicator.prototype.getRoomConfig = function(userName, roomName, transpor
 };
 
 /**
+ * Get current room list created in the server.
+ * 
  * url: /xmpp/muc/rooms/{username}
  * 
  * @param {String} userName
@@ -374,6 +440,8 @@ XMPPCommunicator.prototype.getRoomList = function(userName, from, to, sort, tran
 };
 
 /**
+ * Get current joined room list for current user.
+ * 
  * url: /xmpp/muc/rooms/{username}
  * 
  * @param {String} userName
@@ -389,6 +457,7 @@ XMPPCommunicator.prototype.getJoinedRoomList = function(userName, transportName,
 
 /**
  * For manage role of participant
+ * 
  * url: /xmpp/muc/managerole/{username}/{room}/{nickname}/
  * @param {String} username
  * @param {String} nickName: nickname that role need change
@@ -445,6 +514,7 @@ XMPPCommunicator.prototype.banUserFromRoom = function(userName, name, roomName, 
 };
 
 /**
+ * Invite an user to join to room.
  * 
  * @param {String} userName
  * @param {String} inviter
@@ -461,6 +531,7 @@ XMPPCommunicator.prototype.inviteJoinRoom = function(userName, inviter, roomName
 };
 
 /**
+ * Decline from join room invitation. 
  * 
  * @param {String} userName
  * @param {String} nickName
@@ -476,6 +547,8 @@ XMPPCommunicator.prototype.declineInviteJoinRoom = function(userName, inviter, r
 };
 
 /**
+ * Join to room.
+ * 
  * url: /xmpp/muc/join/{username}/{room}/
  * @param {String} userName
  * @param {String} roomName
@@ -492,6 +565,8 @@ XMPPCommunicator.prototype.joinToRoom = function(userName, roomName, password, t
 };
 
 /**
+ * Leave from current joined room.
+ * 
  * url: /xmpp/muc/leaveroom/{username}/{room}/
  * @param {String} userName
  * @param {String} transportName
@@ -506,6 +581,7 @@ XMPPCommunicator.prototype.leaveFromRoom = function(userName, roomName, transpor
 };
 
 /**
+ * Send message to user.
  * 
  * @param {String} userName
  * @param {String} transportName
@@ -521,6 +597,7 @@ XMPPCommunicator.prototype.sendMessage = function(userName, transportName, handl
 };
 
 /**
+ * Get message history by time.
  * 
  * @param {String} userName
  * @param {String} transportName
@@ -552,6 +629,7 @@ XMPPCommunicator.prototype.getMessageHistory = function(userName, transportName,
 };
 
 /**
+ * Send a room's message.
  * 
  * @param {String} userName
  * @param {String} transportName
@@ -567,6 +645,7 @@ XMPPCommunicator.prototype.sendRoomMessage = function(userName, transportName, h
 };
 
 /**
+ * Get a list of subscription requesting.
  * 
  * @param {String} userName
  * @param {String} transportName
@@ -580,6 +659,7 @@ XMPPCommunicator.prototype.getSubscriptionrequests = function(userName, transpor
 };
 
 /**
+ * Use for logout from a transport.
  * 
  * @param {String} userName
  * @param {String} transportName

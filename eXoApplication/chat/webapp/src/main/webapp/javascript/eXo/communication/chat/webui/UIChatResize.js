@@ -1,7 +1,18 @@
+/**
+ * @auther Uoc Nguyen
+ * Using to support resize UI component in chat application
+ */
 function UIChatResize() {
   this.callbackStack = {};
 }
 
+/**
+ * Register UI component resizeable
+ *
+ * @param {HTMLElement} resizeHandleObject
+ * @param {Function} callback
+ * @param {Boolean} forceReplaceEvent
+ */
 UIChatResize.prototype.register = function(resizeHandleObject, callback, forceReplaceEvent) {
   this.callbackStack[resizeHandleObject] = callback;
   var AdvancedDOMEvent = eXo.communication.chat.core.AdvancedDOMEvent;
@@ -12,6 +23,11 @@ UIChatResize.prototype.register = function(resizeHandleObject, callback, forceRe
   }
 };
 
+/**
+ * Initialize method
+ *
+ * @param {Event} event
+ */
 UIChatResize.prototype.init = function(event) {
   if(!event) event = window.event ;
   var srcObj = event.srcElement || event.target;

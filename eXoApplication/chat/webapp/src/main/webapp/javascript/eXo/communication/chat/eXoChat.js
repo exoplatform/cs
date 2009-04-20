@@ -1,5 +1,8 @@
 /**
  * @author uocnguyen
+ *
+ * @desc this file used to import all javascript library which needed to chat application
+ * working well,
  */
 eXo.require("eXo.core.JSON");
 eXo.require("eXo.core.Cometd");
@@ -46,6 +49,9 @@ eXo.require("eXo.communication.chat.webui.UIRoomConfigPopupWindow", "/chat/javas
 eXo.require("eXo.communication.chat.webui.UIJoinRoomPopupWindow", "/chat/javascript/");
 
 eXo.communication.chat.eXoChat = {
+  /**
+   * This method use to initialize all data before call UIMainChatWindow to init all chat application component 
+   */
   init : function() {
     try {
       var thys = eXo.communication.chat.eXoChat;

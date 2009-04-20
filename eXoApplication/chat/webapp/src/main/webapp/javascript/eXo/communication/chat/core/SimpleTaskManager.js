@@ -1,5 +1,6 @@
 /**
  * @author Uoc Nguyen
+ *
  */
 
 function SimpleTaskManager() {

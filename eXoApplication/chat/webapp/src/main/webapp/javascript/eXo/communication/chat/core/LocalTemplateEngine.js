@@ -9,6 +9,7 @@ LocalTemplateEngine.prototype.init = function(rootNode) {
 };
 
 /**
+ * Return a html template block by class name.
  * 
  * @param {String} klazz
  * 

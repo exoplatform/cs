@@ -1,6 +1,7 @@
 /**
  * @author Uoc Nguyen
  *  email: uoc.nguyen@exoplatform.com
+ * This object is using to manage add contact popup window.
  */
 function UIAddContactPopupWindow() {
   this.CSS_CLASS = {
@@ -12,6 +13,12 @@ function UIAddContactPopupWindow() {
   };
 }
 
+/**
+ * Initialize method
+ *
+ * @param {HTMLElement} rootNode
+ * @param {UIMainChatWindow} UIMainChatWindow
+ */
 UIAddContactPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.handler = false;
   var DOMUtil = eXo.core.DOMUtil;
@@ -30,11 +37,23 @@ UIAddContactPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.uiPageIterator.setGotoPageCallback(this.doSearchContact);
 };
 
+/**
+ * Wrapper method will be call doSearchContact method.
+ *
+ * @param {Event} event
+ */
 UIAddContactPopupWindow.prototype.doSearchContactWrapper = function(event) {
   event = event || window.event;
   eXo.communication.chat.webui.UIAddContactPopupWindow.doSearchContact();
 };
 
+/**
+ * Call servicce to filter contact list
+ *
+ * @param {Integer} from
+ * @param {Integer} to
+ * @param {String} keyword
+ */
 UIAddContactPopupWindow.prototype.doSearchContact = function(from, to, keyword) {
   var thys = eXo.communication.chat.webui.UIAddContactPopupWindow;
   keyword = keyword || thys.filterFieldNode.value;
@@ -51,6 +70,11 @@ UIAddContactPopupWindow.prototype.doSearchContact = function(from, to, keyword) 
   eXo.communication.chat.webui.UIMainChatWindow.orgFuzzySearchUser(keyword , from, to);
 };
 
+/**
+ * Update contact list will be called by UIMainChatWindow after a search contact request responsed.
+ *
+ * @param {Array[ContactInfo]} serverData
+ */
 UIAddContactPopupWindow.prototype.updateContactList = function(serverData) {
   if (!this.contactListContainerNode) {
     return;
@@ -86,12 +110,16 @@ UIAddContactPopupWindow.prototype.updateContactList = function(serverData) {
   this.UIPopupManager.focusEventFire(this);
 };
 
+/**
+ * Use to reload contact result pane and page iterator pane
+ */
 UIAddContactPopupWindow.prototype.reload = function() {
   this.uiPageIterator.reload();
 };
 
 /**
  * This filter will used default for main buddy list.
+ *
  * @param {Object} contact
  */
 UIAddContactPopupWindow.prototype.filter4MainBuddyList = function(contact) {
@@ -114,8 +142,10 @@ UIAddContactPopupWindow.prototype.filter4MainBuddyList = function(contact) {
 };
 
 /**
+ * Common method to create a contact DOM node to add to result pane
  * 
  * @param {Object} contactInfo
+ * @param {Boolean} isAlternate
  */
 UIAddContactPopupWindow.prototype.createContactNode = function(contactInfo, isAlternate) {
   var DOMUtil = eXo.core.DOMUtil;
@@ -154,6 +184,9 @@ UIAddContactPopupWindow.prototype.createContactNode = function(contactInfo, isAl
   return uiContactRowNode;
 };
 
+/**
+ * Call when add contact button is clicked to add all selected contact to user contact list
+ */
 UIAddContactPopupWindow.prototype.addContactAction = function() {
   var DOMUtil = eXo.core.DOMUtil;
   var uiGridNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'table', 'UIGrid');
@@ -178,6 +211,9 @@ UIAddContactPopupWindow.prototype.addContactAction = function() {
   this.setVisible(false);
 };
 
+/**
+ * Toggle select all/none contacts in contact result pane
+ */
 UIAddContactPopupWindow.prototype.toggleSelectAllContact = function() {
   var DOMUtil = eXo.core.DOMUtil;
   var uiGridNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'table', 'UIGrid');
@@ -196,6 +232,9 @@ UIAddContactPopupWindow.prototype.toggleSelectAllContact = function() {
   }
 };
 
+/**
+ * Select all/none contacts in contact result pane depends on selectMode is.
+ */
 UIAddContactPopupWindow.prototype.selectAllContacts = function(selectMode) {
   var DOMUtil = eXo.core.DOMUtil;
   var checkboxList = DOMUtil.findDescendantsByClass(this.contactListContainerNode, 'input', 'CheckBox');
@@ -210,7 +249,12 @@ UIAddContactPopupWindow.prototype.selectAllContacts = function(selectMode) {
   checkboxNode.checked = selectMode;
 };
 
-
+/**
+ * Use to make this component visible or not.
+ *
+ * @param {Boolean} visible
+ * @param {Function} handler will be call to filter contact result before display it in result pane.
+ */
 UIAddContactPopupWindow.prototype.setVisible = function(visible, handler){
   if (!this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {

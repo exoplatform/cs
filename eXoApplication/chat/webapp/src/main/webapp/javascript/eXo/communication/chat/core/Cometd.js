@@ -44,6 +44,11 @@ function Cometd() {
   this._multiClientsDetectCnt = 0;
 }
 
+/**
+ * Initialize for cometd connection
+ * 
+ * @param {Boolean} forceDisconnect use to force disconnect when cometd is already connected to server.
+ */
 Cometd.prototype.init = function(forceDisconnect) {
   this._tryToOpenTunnelCnt = 0;
   if ((!forceDisconnect &&
@@ -62,12 +67,22 @@ Cometd.prototype.init = function(forceDisconnect) {
 		this.currentTransport.initHandshake();
 };
 
+/**
+ * Add call back handler which will be called after connection is ready.
+ * 
+ * @param {Function} handle
+ */
 Cometd.prototype.addOnConnectionReadyCallback = function(handle) {
   if (handle) {
     this._connectionReadyCallbacks.push(handle);
   }
 };
 
+/**
+ * Remove call back handler.
+ * 
+ * @param {Function} handle
+ */
 Cometd.prototype.removeOnConnectionReadtCallback = function(handle) {
   for (var i=0; i<this._connectionReadyCallbacks.length; i++) {
     if (this._connectionReadyCallbacks[i] == handle) {
@@ -78,16 +93,31 @@ Cometd.prototype.removeOnConnectionReadtCallback = function(handle) {
   }
 };
 
-// public API functions called by cometd or by the transport classes
+/**
+ * Public API functions called by cometd or by the transport classes
+ * 
+ * @param {Object} messages
+ * @return {Object} messages
+ */
 Cometd.prototype.deliver = function(messages){
 	messages.each(this._deliver, this);
 	return messages;
 }
 
+/**
+ * Return true if cometd is connected to server
+ * 
+ * @return {Boolean}
+ */
 Cometd.prototype.isConnected = function(){
 	return this._connected;
 }
 
+/**
+ * Internal messages checker
+ * 
+ * @param {Object} message
+ */
 Cometd.prototype._deliver = function(message){
   //console.warn('Polling: ' + this._polling + ' - connected: ' + this._connected);
 	// dipatch events along the specified path
@@ -152,7 +182,12 @@ Cometd.prototype._deliver = function(message){
 	}
 }
 
-Cometd.prototype._sendMessage = function(/* object */ message){
+/**
+ * Send a cometd message to server
+ * 
+ * @param {Object} message
+ */
+Cometd.prototype._sendMessage = function(message){
 	if(this.currentTransport && this._connected && this.batch==0){
 		return this.currentTransport.sendMessages([message]);
 	}
@@ -161,8 +196,13 @@ Cometd.prototype._sendMessage = function(/* object */ message){
 	}
 }
 
-Cometd.prototype.subscribe = function(	/*String */	channel,
-				/*function */	callback){ 
+/**
+ * Subcribe a cometd topic
+ * 
+ * @param {String} channel
+ * @param {Function} callback handle
+ */
+Cometd.prototype.subscribe = function(channel, callback){ 
 					
 	if(callback){
 		var tname = channel;
@@ -183,7 +223,12 @@ Cometd.prototype.subscribe = function(	/*String */	channel,
 	}
 }
 
-Cometd.prototype.unsubscribe = function(/*string*/ channel){
+/**
+ * Unsubscribe a cometd topic
+ * 
+ * @param {String} channel
+ */
+Cometd.prototype.unsubscribe = function(channel){
 
 	var tname = channel;
 	if(this._subscriptions[tname]){
@@ -198,10 +243,16 @@ Cometd.prototype.unsubscribe = function(/*string*/ channel){
 	});
 }
 
+/**
+ * Increase batch connection/process
+ */
 Cometd.prototype.startBatch = function(){
 	this.batch++;
 }
 
+/**
+ * Auto increase retry counter by interval or reset if it is reached the max counter.
+ */
 Cometd.prototype.increaseRetryInterval = function() {
   this.advice = this.advice || {};
 	if(!this.advice.interval ||
@@ -215,6 +266,9 @@ Cometd.prototype.increaseRetryInterval = function() {
   //console.warn('Increased retry interval to: ' + this._retryInterval);
 }
 
+/**
+ * Reset if it is reached the max counter.
+ */
 Cometd.prototype.resetRetryInterval = function() {
   //console.warn('Reset retry interval');
 	if(this.advice) 
@@ -222,6 +276,9 @@ Cometd.prototype.resetRetryInterval = function() {
   this._retryInterval = 0;
 }
 
+/**
+ * Finish task for end batch process
+ */
 Cometd.prototype.endBatch = function(){
   this._tryToOpenTunnelCnt = 0;
   this._connecting = false;
@@ -243,6 +300,9 @@ Cometd.prototype.endBatch = function(){
 	}
 }
 
+/**
+ * Disconnect from server
+ */
 Cometd.prototype.disconnect = function(){
   this._tryToOpenTunnelCnt = 0;
 	this._subscriptions.each(this.unsubscribe, this);
@@ -254,6 +314,9 @@ Cometd.prototype.disconnect = function(){
 		this._connected=false;
 }
 
+/**
+ * Try to get new connection.
+ */
 Cometd.prototype._backoff = function(){
 	if(!this.advice || !this.advice.interval){
 		this.advice={reconnect:'retry',interval:0};
@@ -264,21 +327,34 @@ Cometd.prototype._backoff = function(){
 	}*/
 }
 
+/**
+ * Object LongPollTransport is use for handle long poll transport 
+ * between client and server
+ */
 function LongPollTransport() {
 	var instance = new Object() ;
 
-
+  /**
+   * Initialize long polling connection
+   * @param {Cometd} cometd
+   */
 	instance.init = function(cometd) {
 		this._connectionType='long-polling';
 		this._cometd=cometd;
 	}
 
+  /**
+   * Start connect to server
+   */
 	instance.startup = function() {
 		var request = new eXo.portal.AjaxRequest('POST', this._cometd.url);
 		request.onSuccess = this._cometd.deliver;
 		request.process();
 	}
 
+  /**
+   * Initialize handshake, send queries for new cometd connection
+   */
 	instance.initHandshake = function() {
 		var message = {
 			channel:	'/meta/handshake',
@@ -301,6 +377,11 @@ function LongPollTransport() {
 	
 	}
 
+  /**
+   * Finish initialize handshake
+   * 
+   * @param {Object} data
+   */
 	instance.finishInitHandshake = function(data){
 		data = data[0];
 		this._cometd.handshakeReturn = data;
@@ -335,7 +416,10 @@ function LongPollTransport() {
 		this.initTunnel();
 	
 	}
-
+  
+  /**
+   * Let's Cometd server initialize a tunel will be use for cometd long polling connection.
+   */
 	instance.initTunnel = function() {
 		var message = {
 			channel:	'/meta/connect',
@@ -346,6 +430,12 @@ function LongPollTransport() {
 		this.openTunnelWith({message: eXo.core.JSON.stringify(message)});
 	}
 
+  /**
+   * Open a tunel with custom url and queries
+   * 
+   * @param {Object} content
+   * @param {String} url
+   */
 	instance.openTunnelWith = function(content, url){
 		this._cometd._polling = true;
 		// just a hack, need to be changed, we should serialize the full object
@@ -377,6 +467,9 @@ function LongPollTransport() {
 		request.process();
 	}
 
+  /**
+   * Close tunel if it is reached to max try or start a new once in next few seconds
+   */
 	instance.tunnelCollapse = function(){
     if (this._cometd._tryToOpenTunnelCnt > this._cometd._maxTry) {
       return;
@@ -409,6 +502,9 @@ function LongPollTransport() {
 		}
 	}
 
+  /**
+   * Trying to connect to server
+   */
 	instance._connect = function(){
 		if(	(this._cometd['advice'])&&
 			(this._cometd.advice['reconnect']=='handshake')
@@ -430,6 +526,11 @@ function LongPollTransport() {
 		}
 	}
 
+  /**
+   * Send custom message to server
+   * 
+   * @param {Object} messages
+   */
 	instance.sendMessages = function(messages){
 			for(var i=0; i<messages.length; i++){
 				messages[i].clientId = this._cometd.clientId;
@@ -449,6 +550,9 @@ function LongPollTransport() {
 			request.process();
 	}
 
+  /**
+   * Try to let's server disconnect by stop long-polling connection.
+   */
 	instance.disconnect = function(){
 		var query = 'message=' + eXo.core.JSON.stringify([
 			{
