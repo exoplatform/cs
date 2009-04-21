@@ -54,8 +54,8 @@
 	  </tr>
 	  <tr>
 	    <td class="FieldLabel">
-	    	<a href="<%=uiForm.event("To")%>"><%=_ctx.appRes(uiForm.id+ ".label.to") %> :</a>&nbsp;&nbsp;
-	    	</td>
+	    	<a href="<%=uiForm.event("To")%>"><%=_ctx.appRes(uiForm.id+ ".label.to") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+	    </td>
 	    <td class="FieldComponent"  colspan="2">
 	      <%uiForm.renderField("to")%> 
 	    </td>
@@ -65,7 +65,7 @@
 	  if (uicomponent.showCc_) { displayCc = "" ; }
 	  %>
 	  	              <tr id="FIELD_CC" style="$displayCc">
-	  	                <td class="FieldLabel"><a href="<%=uiForm.event("ToCC")%>"><%=_ctx.appRes(uiForm.id+ ".label.cc") %> :</a>&nbsp;&nbsp;</td>
+	  	                <td class="FieldLabel"><a href="<%=uiForm.event("ToCC")%>"><%=_ctx.appRes(uiForm.id+ ".label.cc") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
 	  	                <td class="FieldComponent" colspan="2">
 	  	                  <%uiForm.renderField("cc")%> 
 	  	                </td>
@@ -75,7 +75,7 @@
 	  if (uicomponent.showBcc_) { displayBcc = "" ; }
 	  %>
 	  <tr id="FIELD_BCC" style="$displayBcc">
-	  	<td class="FieldLabel"><a href="<%=uiForm.event("ToBCC")%>"><%=_ctx.appRes(uiForm.id+ ".label.bcc") %> :</a>&nbsp;&nbsp;</td>
+	  	<td class="FieldLabel"><a href="<%=uiForm.event("ToBCC")%>"><%=_ctx.appRes(uiForm.id+ ".label.bcc") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
 	  	<td class="FieldComponent" colspan="2">
 	  	 <%uiForm.renderField("bcc")%> 
 	  	</td>
