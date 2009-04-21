@@ -9,6 +9,7 @@
 %>
 
 <!-- Begin Notification -->
+
 <div class="UINotification" style="display: none;position: relative;">
 	<div style="position: absolute;top: 0px;right: 5px;width: 250px;">
 		<div class="BoxNote">
@@ -523,21 +524,21 @@
                       	<div onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.reloadRoomList()" class="ActionButton LightBlueStyle">
                           <div class="ButtonLeft">
                             <div class="ButtonRight">
-                              <div class="ButtonMiddle"> Refresh </div>
+                              <div class="ButtonMiddle"><a href="#">Refresh</a></div>
                             </div>
                           </div>
                         </div>
                        <div onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.joinRoomAction()" class="ActionButton LightBlueStyle JoinRoomButton">
                           <div class="ButtonLeft">
                             <div class="ButtonRight">
-                              <div class="ButtonMiddle"> Join Room </div>
+                              <div class="ButtonMiddle"><a href="#">Join Room</a></div>
                             </div>
                           </div>
-                        </siv>
+                        </div>
                         <div onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
                           <div class="ButtonLeft">
                             <div class="ButtonRight">
-                              <div class="ButtonMiddle"> Cancel </div>
+                              <div class="ButtonMiddle"><a href="#">Cancel</a></div>
                             </div>
                           </div>
                         </div>
@@ -611,14 +612,14 @@
                          <div onclick="javascript:eXo.communication.chat.webui.UICreateNewRoomPopupWindow.createNewRoomAction()" class="ActionButton LightBlueStyle">
                             <div class="ButtonLeft">
                               <div class="ButtonRight">
-                                <div class="ButtonMiddle"> Ok </div>
+                                <div class="ButtonMiddle"><a href="#">Ok</a></div>
                               </div>
                             </div>
                           </div>
                           <div onclick="javascript:eXo.communication.chat.webui.UICreateNewRoomPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
                             <div class="ButtonLeft">
                               <div class="ButtonRight">
-                                <div class="ButtonMiddle"> Cancel </div>
+                                <div class="ButtonMiddle"><a href="#">Cancel</a></div>
                               </div>
                             </div>
                           </div>
@@ -845,14 +846,14 @@
 		                   <div onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.okAction()" class="ActionButton LightBlueStyle">
 		                      <div class="ButtonLeft">
 		                        <div class="ButtonRight">
-		                          <div class="ButtonMiddle"> Ok </div>
+		                          <div class="ButtonMiddle"><a href="#">Ok</a></div>
 		                        </div>
 		                      </div>
 		                    </div>
 		                    <div onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
 		                      <div class="ButtonLeft">
 		                        <div class="ButtonRight">
-		                          <div class="ButtonMiddle"> Cancel </div>
+		                          <div class="ButtonMiddle"><a href="#">Cancel</a></div>
 		                        </div>
 		                      </div>
 		                    </div>

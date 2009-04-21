@@ -431,11 +431,11 @@
 }
 
 .BuddyItemActionMenu .RemoveIcon {
-	background: url('DefaultSkin/skinIcons/ActionMenuIcon.png') no-repeat left top;
+	background: url('DefaultSkin/skinIcons/ActionMenuIconRemove.gif') no-repeat left top;
 }
 
 .BuddyItemActionMenu .MessageIcon {
-	background: url('DefaultSkin/skinIcons/ActionMenuIcon.png') no-repeat left -26px;
+	background: url('DefaultSkin/skinIcons/ActionMenuIconSend.gif') no-repeat left top;
 }
  /* Form Join Room */
 .UIJoinRoom .FieldName {
@@ -470,7 +470,7 @@
 }
 
 .UIJoinRoom .UIGrid td {
-	padding: 5px 0 2px 7px;
+	padding: 5px 0 2px 2px;
 }
 
 .UIJoinRoom .UIGrid input.CheckBox {
@@ -1300,3 +1300,4 @@ form {
 	color: #5286d6;
 	font-size: 11px;
 }
+
