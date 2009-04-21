@@ -62,6 +62,45 @@
       <show-info-bar>false</show-info-bar>       
     </application>
    </page>
+   
+   <page>
+  	<page-id>group::platform/users::collaboration</page-id>
+  	<owner-type>group</owner-type>
+    <owner-id>platform/users</owner-id>
+    <name>collaboration</name>
+    <factory-id>Desktop</factory-id>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <show-max-window>true</show-max-window>
+    
+    <application>
+      <instance-id>group#platform/users:/mail/MailPortlet/mail</instance-id>    
+      <title>Mail Portlet</title>
+      <show-info-bar>true</show-info-bar>
+      <show-application-state>true</show-application-state>
+    </application>
+    
+    <application>
+      <instance-id>group#platform/users:/calendar/CalendarPortlet/calendar</instance-id>    
+      <title>Calendar Portlet</title>
+      <show-info-bar>true</show-info-bar>
+      <show-application-state>true</show-application-state>
+    </application>
+    
+    <application>
+      <instance-id>group#platform/users:/contact/ContactPortlet/contact</instance-id>    
+      <title>Contact Portlet</title>
+      <show-info-bar>true</show-info-bar>
+      <show-application-state>true</show-application-state>
+    </application>
+    
+     <application>
+      <instance-id>group#platform/users:/chat/ChatPortlet/chat</instance-id>    
+      <title>Chat Portlet</title>
+      <show-info-bar>false</show-info-bar>       
+    </application>
+          
+  </page> 
     	  
 </page-set>
 

@@ -44,6 +44,7 @@ public class Attachment  {
   private  byte[] imageBytes ;
   private Calendar lastModified ;
   private String workspace ;
+  private String resourceId ;
   /**
    * This class use for keep data and infomation about attachments
    * the id will automatic generate when create new object
@@ -112,5 +113,19 @@ public class Attachment  {
 
   public String getWorkspace() {
     return workspace;
+  }
+
+  /**
+   * keep id to make sure temp file will be removed after use uploaded file
+  */
+  public void setResourceId(String resourceId) {
+    this.resourceId = resourceId;
+  }
+
+  /**
+   * get id to call download service remove temp file
+  */
+  public String getResourceId() {
+    return resourceId;
   }
 }
