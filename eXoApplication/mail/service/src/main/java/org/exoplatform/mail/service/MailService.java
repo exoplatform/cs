@@ -446,6 +446,17 @@ public interface MailService {
    */
   public List<Message>  checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception ;
   
+  /**
+   * This method should check  for the new message in the mail server, download and save them in the 
+   * Inbox folder
+   * @param username
+   * @param account
+   * @param folderId
+   * @return List<Message>
+   * @throws Exception
+   */
+  public List<Message>  checkNewMessage(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception ;
+  
   public void removeCheckingInfo(String username, String accountId)throws Exception ;
   
   public CheckingInfo getCheckingInfo(String username, String accountId) throws Exception ;
@@ -457,6 +468,16 @@ public interface MailService {
    * @throws Exception
    */
   public void checkMail(String username, String accountId) throws Exception ;
+
+  /**
+   * Getting new mail from server and store to JCR
+   * @param username
+   * @param accountId
+   * @param folderId
+   * @throws Exception
+   */
+  public void checkMail(String username, String accountId, String folderId) throws Exception ;
+  
   
   /**
    * Requests to stop mail checking

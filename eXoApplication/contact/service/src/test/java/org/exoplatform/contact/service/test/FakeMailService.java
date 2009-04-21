@@ -66,11 +66,21 @@ public class FakeMailService implements MailService {
 
   }
 
+  public void checkMail(String username, String accountId, String folderId) throws Exception {
+    // TODO Auto-generated method stub
+
+  }
+  
   public List<Message> checkNewMessage(SessionProvider provider, String username, String accountId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
 
+  public List<Message> checkNewMessage(SessionProvider provider, String username, String accountId, String folderId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+  
   public void createAccount(SessionProvider provider, String username, Account account) throws Exception {
     // TODO Auto-generated method stub
 

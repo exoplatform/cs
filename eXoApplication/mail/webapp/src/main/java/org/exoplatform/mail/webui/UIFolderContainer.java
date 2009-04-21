@@ -30,7 +30,6 @@ import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -185,15 +184,6 @@ public class UIFolderContainer extends UIContainer {
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
-      
-      String username = uiPortlet.getCurrentUser();
-      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      Folder folder = mailSrv.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId);
-      if (folder != null && !folder.getName().equals(Utils.FD_DRAFTS) &&
-          !folder.getName().equals(Utils.FD_SENT) && !folder.getName().equals(Utils.FD_SPAM) && !folder.getName().equals(Utils.FD_TRASH) ) {
-        WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true, '" + folderId + "') ;");
-      }
     }
   }
   

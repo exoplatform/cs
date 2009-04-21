@@ -126,19 +126,19 @@ public class MailUtils {
     return (s == null || s.trim().length() == 0);    
   }
   
-  public static boolean isChecking(String username, String accountId) throws Exception {
-    try {
-      ExoContainer container = ExoContainerContext.getCurrentContainer();
-      JobSchedulerService schedulerService = 
-        (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
-      List allJobs = schedulerService.getAllJobs() ;
-      for(Object obj : allJobs) {
-        if(((JobDetail)obj).getName().equals(username + ":" + accountId)) return true ; 
-      }
-    } catch(Exception e) { }
-    
-    return false ;
-  }
+//  public static boolean isChecking(String username, String accountId) throws Exception {
+//    try {
+//      ExoContainer container = ExoContainerContext.getCurrentContainer();
+//      JobSchedulerService schedulerService = 
+//        (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
+//      List allJobs = schedulerService.getAllJobs() ;
+//      for(Object obj : allJobs) {
+//        if(((JobDetail)obj).getName().equals(username + ":" + accountId)) return true ; 
+//      }
+//    } catch(Exception e) { }
+//    
+//    return false ;
+//  }
   
   public static String formatDate(String format, Date date, Locale locale) {
     Format formatter = new SimpleDateFormat(format, locale);

@@ -1290,9 +1290,10 @@ public class JCRDataStorage {
     if (node != null) {
       folder = new Folder();
       folder.setId(node.getProperty(Utils.EXO_ID).getString());
-      folder.setLabel(node.getProperty(Utils.EXO_LABEL).getString());
       folder.setPath(node.getPath());
+      folder.setURLName(node.getProperty(Utils.EXO_LABEL).getString());
       folder.setName(node.getProperty(Utils.EXO_NAME).getString());
+      folder.setType(node.getProperty(Utils.EXO_FOLDERTYPE).getLong());
       folder.setPersonalFolder(node.getProperty(Utils.EXO_PERSONAL).getBoolean());
       folder.setNumberOfUnreadMessage(node.getProperty(Utils.EXO_UNREADMESSAGES).getLong());
       folder.setTotalMessage(node.getProperty(Utils.EXO_TOTALMESSAGE).getLong());
@@ -1352,10 +1353,11 @@ public class JCRDataStorage {
     Folder folder = new Folder();
     // if this folder exists, creates the object and returns it
     folder.setId(node.getProperty(Utils.EXO_ID).getString());
-    folder.setLabel(node.getProperty(Utils.EXO_LABEL).getString());
+    folder.setURLName(node.getProperty(Utils.EXO_LABEL).getString());
     folder.setPath(node.getPath());
     folder.setName(node.getProperty(Utils.EXO_NAME).getString());
     folder.setPersonalFolder(node.getProperty(Utils.EXO_PERSONAL).getBoolean());
+    folder.setType(node.getProperty(Utils.EXO_FOLDERTYPE).getLong());
     folder.setNumberOfUnreadMessage(node.getProperty(Utils.EXO_UNREADMESSAGES).getLong());
     folder.setTotalMessage(node.getProperty(Utils.EXO_TOTALMESSAGE).getLong());
     try {
@@ -1408,8 +1410,9 @@ public class JCRDataStorage {
     // sets some properties
     myFolder.setProperty(Utils.EXO_ID, folder.getId());
     myFolder.setProperty(Utils.EXO_NAME, folder.getName());
-    myFolder.setProperty(Utils.EXO_LABEL, folder.getLabel());
     myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
+    myFolder.setProperty(Utils.EXO_FOLDERTYPE, folder.getType());
+    myFolder.setProperty(Utils.EXO_LABEL, folder.getURLName());
     myFolder.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
     myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder());
     if (folder.getLastCheckedDate() != null)
@@ -1440,12 +1443,28 @@ public class JCRDataStorage {
     NodeIterator nit = parentNode.getNodes();
     while (nit.hasNext()) {
       Node node = nit.nextNode();
-      String fn = node.getProperty(Utils.EXO_LABEL).getString();
+      String fn = node.getProperty(Utils.EXO_NAME).getString();
       if (fn.trim().equals(folderId))
         isExist = true;
     }
 
     return isExist;
+  }
+  
+  public List<String> getFolderIds(SessionProvider sProvider, String username, String accountId, String path) throws Exception {
+    List<String> folderIds = new ArrayList<String>();
+    Node folderHome = getFolderHome(sProvider, username, accountId);
+    Node parentNode;
+    if (path != null) {
+      parentNode = (Node) folderHome.getSession().getItem(path);      
+    } else {
+      parentNode = folderHome;
+    }
+    NodeIterator nit = parentNode.getNodes();
+    while (nit.hasNext()) {
+      folderIds.add(nit.nextNode().getName());
+    }
+    return folderIds;
   }
 
   public void saveFolder(SessionProvider sProvider, String username, String accountId,
@@ -1462,9 +1481,10 @@ public class JCRDataStorage {
     // sets some properties
     myFolder.setProperty(Utils.EXO_ID, folder.getId());
     myFolder.setProperty(Utils.EXO_NAME, folder.getName());
-    myFolder.setProperty(Utils.EXO_LABEL, folder.getLabel());
+    myFolder.setProperty(Utils.EXO_LABEL, folder.getURLName());
     myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
     myFolder.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
+    myFolder.setProperty(Utils.EXO_FOLDERTYPE, folder.getType());
     myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder());
     if (folder.getLastCheckedDate() != null)
       myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, folder.getLastCheckedDate().getTime());

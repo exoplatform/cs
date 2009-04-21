@@ -31,13 +31,14 @@ public class Folder {
   private String id ;
   private String path;
   private String name ;
-  private String label ;
+  private String urlName = "";
   private long unreadMessage = 0 ;
   private long allMessages = 0;
   private boolean isPersonalFolder = true ;
   private Date lastCheckedDate_ ;
   private Date lastStartCheckingTime_ ;
   private Date checkFromDate_;
+  private long type_ = 3;
   
   /**
    * The id folder should have the form AccountId/DefaultFolder/folderName or AccountId/UserFolder/folderName
@@ -56,12 +57,11 @@ public class Folder {
   public String getName() { return name ; }
   public void   setName(String s) { name = s ; }
   
-  /**
-   * The display label of the folder like Inbox, Sent, MyFolder
-   * @return The label of the folder
-   */
-  public String getLabel() { return label ; }
-  public void   setLabel(String s) { label = s ; }
+  public long getType() { return type_; }
+  public void setType(long type) { type_ = type; }
+  
+  public String getURLName() { return urlName ; }
+  public void   setURLName(String s) { urlName = s ; }
   
   public Date getLastCheckedDate() { return lastCheckedDate_; }
   public void setLastCheckedDate(Date date) { lastCheckedDate_ = date ; }

@@ -64,8 +64,9 @@ public class UIActionBar extends UIContainer {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class) ;
+      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      String folderId = uiFolderContainer.getSelectedFolder();
       UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      String username =  MailUtils.getCurrentUser() ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
@@ -73,12 +74,12 @@ public class UIActionBar extends UIContainer {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      } if (MailUtils.isChecking(username, accId)) {
-        System.out.println("####  You are already checking mail... ");
-        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox(\"You are already checking mail\") ;");
-        return ;
       } else {
-        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
+        if (MailUtils.isFieldEmpty(folderId)) {
+          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
+        } else {
+          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true, '" + folderId + "') ;");
+        }
         context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox() ;");        
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList) ;

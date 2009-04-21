@@ -91,7 +91,7 @@ public class UISelectFolder extends UIFormInputSet {
     level += "----" ;
     for (Folder cf : getSubFolders(folderPath)) {
       if (cf != null) {
-        optionList.addOption(new SelectOption(level + " " + cf.getLabel(), cf.getId()));
+        optionList.addOption(new SelectOption(level + " " + cf.getName(), cf.getId()));
         if (getSubFolders(cf.getPath()).size() > 0) { 
           optionList = addChildOption(cf.getPath(), optionList);
         }
@@ -109,12 +109,12 @@ public class UISelectFolder extends UIFormInputSet {
     List<SelectItem> options = new ArrayList<SelectItem>() ;
     SelectOptionGroup defaultFolders = new SelectOptionGroup("default-folder");
     for(Folder df : getDefaultFolders()) {
-      defaultFolders.addOption(new SelectOption(getUIForm().getLabel(df.getLabel()), df.getId())) ;
+      defaultFolders.addOption(new SelectOption(getUIForm().getLabel(df.getName()), df.getId())) ;
     }
     options.add(defaultFolders);
     SelectOptionGroup customizeFolders = new SelectOptionGroup("my-folder");
     for(Folder cf : getCustomizeFolders()) {
-      customizeFolders.addOption(new SelectOption(cf.getLabel(), cf.getId())) ;
+      customizeFolders.addOption(new SelectOption(cf.getName(), cf.getId())) ;
         if (getSubFolders(cf.getPath()).size() > 0) { 
           customizeFolders = addChildOption(cf.getPath(), customizeFolders);
         }

@@ -201,24 +201,24 @@ public class TestMailService extends BaseMailTestCase{
     Folder folder = new Folder() ;
     folder.setId("folderId1") ;
     folder.setName("folder test") ;
-    folder.setLabel("folder 1") ;
+    folder.setURLName("folder 1") ;
     mailService_.saveFolder(sProvider, username, accPop.getId(), folder) ;
     folder = new Folder() ;
     folder.setId("folderId1.1") ;
     folder.setName("folder test 1.1") ;
-    folder.setLabel("folder 1.1");
+    folder.setURLName("folder 1.1");
     mailService_.saveFolder(sProvider, username, accPop.getId(), folder) ;
     
     Folder folderChild = new Folder() ;
     folderChild.setId("folderId2") ;
-    folder.setLabel("folder 2") ;
+    folder.setURLName("folder 2") ;
     folderChild.setName("child folder ") ;
     mailService_.saveFolder(sProvider, username, accPop.getId(), folder.getId(), folderChild) ;
     List<Folder> fs = new ArrayList<Folder>() ;
     assertNotNull(mailService_.getFolders(sProvider, username, accPop.getId())) ;
     fs.addAll(mailService_.getFolders(sProvider, username, accPop.getId())) ;
     for(Folder f : fs) {
-      System.out.println("\n\n " + f.getLabel());
+      System.out.println("\n\n " + f.getName());
     }
     System.out.println("\n\n total folder size " + mailService_.getFolders(sProvider, username, accPop.getId()).size());
     //assertEquals(mailService_.getFolders(sProvider, username, accPop.getId()).size(), 2) ;
@@ -243,14 +243,14 @@ public class TestMailService extends BaseMailTestCase{
     Folder folder = new Folder() ;
     folder.setId("folderId1") ;
     folder.setName("folder test") ;
-    folder.setLabel("folder 1") ;
+    folder.setURLName("folder 1") ;
     mailService_.saveFolder(sProvider, username, accPop.getId(), folder) ;
     
     
     Folder desfolder = new Folder() ;
     desfolder.setId("folderId2") ;
     desfolder.setName("folder test 2 ") ;
-    desfolder.setLabel("folder 2") ;
+    desfolder.setURLName("folder 2") ;
     mailService_.saveFolder(sProvider, username, accPop.getId(), desfolder) ;
     
     message.setFolders(new String[]{folder.getId()}) ;

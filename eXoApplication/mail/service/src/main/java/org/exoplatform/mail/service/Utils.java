@@ -138,6 +138,7 @@ public class Utils {
   public static final String EXO_TOTALMESSAGE = "exo:totalMessages".intern();
   public static final String EXO_FOLDER = "exo:folder".intern() ;
   public static final String EXO_UNREADMESSAGES = "exo:unreadMessages".intern() ;
+  public static final String EXO_FOLDERTYPE = "exo:folderType".intern();
   public static final String EXO_NAME = "exo:name".intern() ;
   public static final String EXO_MAILTAG = "exo:mailtag".intern();
   public static final String EXO_COLOR = "exo:color".intern();

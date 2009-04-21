@@ -45,7 +45,7 @@ public class MailWebservice implements ResourceContainer {
     
     // try to start if no checking info available
     if (checkingInfo == null) {
-      mailService.checkMail(userName, accountId);
+      mailService.checkMail(userName, accountId, folderId);
     } else if (folderId != null && folderId.trim().length() > 0 && !folderId.equalsIgnoreCase("checkall")){
       checkingInfo.setRequestingForFolder_(folderId);
     }

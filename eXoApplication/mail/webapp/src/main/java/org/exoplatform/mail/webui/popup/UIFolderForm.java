@@ -96,7 +96,6 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       folder = new Folder() ;
       folder.setId(folderId);
       folder.setName(folderName) ;
-      folder.setLabel(folderName) ;
       if (uiForm.getParentPath() != null && !"".equals(uiForm.getParentPath().trim())) {
         mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), username, accountId, uiForm.getParentPath(), folder) ;
       } else {

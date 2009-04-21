@@ -36,10 +36,12 @@ public class CheckMailJob implements Job, InterruptableJob {
 	public static final String CHECKMAIL_GROUP = "CollaborationSuite-webmail";
   public static final String USERNAME = "userName";
   public static final String ACCOUNTID = "acountId";
+  public static final String FOLDERID = "folderId";
   private static Log log = ExoLogger.getLogger("job.CheckMailJob");
   
   private String username;
   private String accountId;
+  private String folderId;
   
   public CheckMailJob() throws Exception {
 		
@@ -54,10 +56,11 @@ public class CheckMailJob implements Job, InterruptableJob {
 		  
 		  username = dataMap.getString(USERNAME);
 		  accountId = dataMap.getString(ACCOUNTID);
+      folderId = dataMap.getString(FOLDERID);
 		  SessionProvider systemSession = SessionProvider.createSystemProvider() ;
 	    try {
 		  if (username!= null && accountId !=null) {
-		    mailService.checkNewMessage(systemSession, username, accountId) ;
+		    mailService.checkNewMessage(systemSession, username, accountId, folderId) ;
 		  }
     } catch (InterruptedException ie) {
       getMailService().stopCheckMail(username, accountId);

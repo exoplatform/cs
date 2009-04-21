@@ -110,7 +110,6 @@ public class NewUserListener extends UserEventListener {
           folder = new Folder() ;
           folder.setId(folderId);
           folder.setName(folderName) ;
-          folder.setLabel(folderName) ;
           folder.setPersonalFolder(false) ;
           mservice_.saveFolder(sProvider, username, accId, folder) ;
         }
