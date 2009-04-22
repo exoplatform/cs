@@ -114,7 +114,7 @@ public class ReminderJob implements Job {
       }
     } catch (Exception e) {
       System.out.println("\n\n Error when run email reminder job !");
-      e.printStackTrace();			
+      //e.printStackTrace();			
     } finally {
       provider.close() ;
     }

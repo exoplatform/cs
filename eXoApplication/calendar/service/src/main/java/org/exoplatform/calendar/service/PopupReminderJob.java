@@ -116,7 +116,7 @@ public class PopupReminderJob implements Job {
       }
     } catch (Exception e) {
       System.out.println("\n\n Error when run popup reminder job !");
-      e.printStackTrace();			
+      //e.printStackTrace();			
     }  finally {
       provider.close(); // release sessions
     }
