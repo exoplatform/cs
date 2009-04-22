@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.upload.UploadResource;
+import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -39,12 +40,12 @@ import org.exoplatform.webui.form.UIFormUploadInput;
  * Aug 24, 2007  
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template =  "system:/groovy/webui/form/UIForm.gtmpl",
-    events = {
-      @EventConfig(listeners = UIAttachFileForm.SaveActionListener.class), 
-      @EventConfig(listeners = UIAttachFileForm.CancelActionListener.class, phase = Phase.DECODE)
-    }
+                 lifecycle = UIFormLifecycle.class,
+                 template =  "system:/groovy/webui/form/UIForm.gtmpl",
+                 events = {
+                   @EventConfig(listeners = UIAttachFileForm.SaveActionListener.class), 
+                   @EventConfig(listeners = UIAttachFileForm.CancelActionListener.class, phase = Phase.DECODE)
+                 }
 )
 
 public class UIAttachFileForm extends UIForm implements UIPopupComponent {
@@ -52,9 +53,9 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
   final static public String FIELD_UPLOAD = "upload" ;  
   private int maxField = 5 ;
   public static final long MAX_SIZE = 10*1024*1024 ;
-  
+
   private long attSize = 0;
-  
+
   public UIAttachFileForm() throws Exception {
     setMultiPart(true) ;
     int i = 0 ;
@@ -69,6 +70,14 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
   public void setAttSize(long value) { attSize = value ;}
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
+
+  public static void removeUploadTemp(UploadService uservice, String uploadId) {
+    try {
+      uservice.removeUpload(uploadId) ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    }
+  }
 
   static  public class SaveActionListener extends EventListener<UIAttachFileForm> {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
@@ -93,12 +102,13 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
           attachfile.setInputStream(input.getUploadDataAsStream()) ;
           attachfile.setMimeType(uploadResource.getMimeType()) ;
           attachfile.setSize(fileSize);
+          attachfile.setResourceId(uploadResource.getUploadId());
           files.add(attachfile) ;
         }
       }
       if(files.isEmpty()){
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
-            ApplicationMessage.WARNING)) ;
+                                                ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } else {
@@ -132,6 +142,13 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
   static  public class CancelActionListener extends EventListener<UIAttachFileForm> {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
       UIAttachFileForm uiFileForm = event.getSource() ;
+      int i = 0 ;
+      while(i++ < uiFileForm.maxField) {
+        UIFormUploadInput input = (UIFormUploadInput)uiFileForm.getUIInput(FIELD_UPLOAD + String.valueOf(i));
+        UploadResource uploadResource = input.getUploadResource() ;
+        if(uploadResource != null)
+        UIAttachFileForm.removeUploadTemp(uiFileForm.getApplicationComponent(UploadService.class), uploadResource.getUploadId()) ;
+      }
       UIPopupAction uiPopupAction = uiFileForm.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;

@@ -18,6 +18,7 @@ package org.exoplatform.mail.webui.popup;
 
 import java.io.InputStream;
 
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
@@ -28,6 +29,7 @@ import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.upload.UploadResource;
+import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -75,7 +77,6 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
 
   static public class ImportActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
-      System.out.println(" === >>> Import Listener");
       UIImportForm uiImport = event.getSource();
       MailService mailSrv = MailUtils.getMailService();
       UIMailPortlet uiPortlet = uiImport.getAncestorOfType(UIMailPortlet.class);
@@ -114,6 +115,8 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } 
+      UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
+      uploadService.removeUpload(uiUploadInput.getUploadId()) ;
       uiPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
@@ -124,6 +127,10 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
 
   static public class CancelActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
+      UIImportForm uiForm = event.getSource() ;
+      UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
+      UIFormUploadInput input = uiForm.getUIInput(CHOOSE_MIME_MESSAGE) ;
+      uploadService.removeUpload(input.getUploadId()) ;
       event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
     }
   }

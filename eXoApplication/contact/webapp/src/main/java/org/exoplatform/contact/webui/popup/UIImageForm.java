@@ -27,11 +27,13 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Utils;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.upload.UploadResource;
+import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -120,6 +122,10 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       uiProfileInputSet.setImage(inputStream) ;
       uiProfileInputSet.setMimeType(mimeType) ;
       uiProfileInputSet.setFileName(fileName) ;
+      
+      UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
+      uploadService.removeUpload(input.getUploadId()) ;
+      
       UIPopupAction popupAction = uiPopupActionContainer.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
@@ -131,6 +137,9 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIImageForm> event) throws Exception {
       UIImageForm uiForm = event.getSource() ;
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
+      UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;  
+      UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
+      uploadService.removeUpload(uiformInput.getUploadId()) ;
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
      }
