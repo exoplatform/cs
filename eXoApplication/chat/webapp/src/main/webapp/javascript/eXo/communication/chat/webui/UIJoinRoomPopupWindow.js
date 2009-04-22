@@ -72,10 +72,10 @@ UIJoinRoomPopupWindow.prototype.createRoomNode = function(roomInfo, isAlternate)
     checkBoxHTML += ' checked="true" disabled="true"';
   }
   checkBoxHTML += 'name="roomName" value="' + roomInfo['name'] +
-    '" onclick="eXo.communication.chat.webui.UIJoinRoomPopupWindow.selectRoom(event);" style="width: 10px;">';
+    '" onclick="eXo.communication.chat.webui.UIJoinRoomPopupWindow.selectRoom(event);">';
   
-  tdTmpNode.style.width = '10px';
-  tdTmpNode.style.textAlign = 'center';
+  //tdTmpNode.style.width = '10px';
+  //tdTmpNode.style.textAlign = 'center';
   tdTmpNode.innerHTML = checkBoxHTML;
   uiRoomRowNode.appendChild(tdTmpNode.cloneNode(true));
   

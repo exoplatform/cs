@@ -795,7 +795,12 @@ form {
 
 .AddContactPopup .StyleInput {
 	width: 20px;
-	padding: 5px 0 2px 7px;
+	padding: 5px 0 2px 2px;
+}
+
+.AddressContainer .StyleInput {
+	width: 20px;
+	padding: 5px 0 2px 2px;
 }
 
 .AddContactPopup .UIGrid input.CheckBox {
@@ -814,7 +819,8 @@ form {
 }
 
 .AddContactPopup .UIGrid td {
-	padding: 5px 0px 2px 7px;
+	padding: 5px 0px 2px 2px;
+	margin:0 auto;
 }
 
 .AddContactPopup .UIGrid .Label {

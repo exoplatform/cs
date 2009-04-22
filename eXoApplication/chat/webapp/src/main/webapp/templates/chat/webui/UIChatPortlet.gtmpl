@@ -480,7 +480,7 @@
                       <table cellspacing="0" borderspacing="0" class="UIGrid">
                         <thead>
                           <tr>
-                            <th class="FieldName" style="width: 10px;">
+                            <th class="StyleInput">
                               <div><span></span></div>
                             </th>
                             <th class="FieldName">
@@ -493,7 +493,7 @@
                         </thead>
                         <tbody><span></span></tbody>
                       </table>
-                      <div class="UIPageIterator" style="display: none">
+                      <div class="UIPageIterator" style="display:none">
                         <div class="PageIteratorContainer">
                           <div class="RightPageIteratorBlock">
                             <a class="Icon LastTopPageIcon" title="Back 10 pages"><span></span></a>
