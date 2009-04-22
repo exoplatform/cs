@@ -38,7 +38,7 @@
             </a>
 						<div class="SeparatorLine"><span></span></div>
 						
-						<div class="ControlButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer;" >
+						<div class="ControlButton" onclick="eXo.cs.Utils.show(this, event);" style="cursor: pointer;" >
 							<a style="display: block;" >
   							<div class="IconHolder CustomViewIcon" title="Custome panels view">
   								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.custom-layout-view") %></div>
@@ -46,8 +46,7 @@
   						</a>
   							<% /*Begin Popup Menu*/ %>
   							<div style="position: relative;">
-  		      			<div class="UIPopupCategory" style="display: none;">
-  		      				<div class="UIRightClickPopupMenu" style="display: block;">
+  		      				<div class="UIRightClickPopupMenu" style="display: none;">
   		      					<div class="UIContextMenuContainer">
   										  <div class="TopLeftRightClickPopupMenu">
   				          			<div class="TopRightRightClickPopupMenu">
@@ -88,7 +87,6 @@
   					      		</div>	
   							    </div>
   		      			</div>
-  		      		</div>
   		      		<% /*End Popup Menu*/ %>
 						</div>
 						

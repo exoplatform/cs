@@ -9,12 +9,10 @@
   
   %>
 		<%uicomponent.renderChildren()%>
-		<div class="AddAccountIcon" title="<%=_ctx.appRes(uicomponent.id+ ".label.manage-accounts")%>" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+		<div class="AddAccountIcon" title="<%=_ctx.appRes(uicomponent.id+ ".label.manage-accounts")%>" onclick="eXo.cs.Utils.show(this, event);">
 		<% /*Begin Popup Menu*/ %>
 	      <div style="position: relative;">
-		      <div class="UIPopupCategory" style="display: none;">
-		      	<div class="PopupCategoryDecorator">
-			        <div class="UIRightClickPopupMenu" style="display: block;">
+			        <div class="UIRightClickPopupMenu" style="display: none;">
 			        	<div class="UIContextMenuContainer">
 								  <div class="TopLeftRightClickPopupMenu">
 			              <div class="TopRightRightClickPopupMenu">
@@ -51,8 +49,6 @@
 	          		</div>
 	          	</div>
 	        	</div>
-	      	</div>
-	    	</div>
     <% /*End Popup Menu*/ %>
     </div>
     <div style="clear:left;"><span></span></div>

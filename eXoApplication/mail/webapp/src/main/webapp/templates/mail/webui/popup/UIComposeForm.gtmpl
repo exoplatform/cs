@@ -65,8 +65,7 @@
 										</div>
 										<% /*Begin Popup Menu*/ %>
 										<div style="position: relative;">
-					      			<div class="UIPopupCategory" style="display: none; left: 10px;">
-					      				<div class="UIRightClickPopupMenu" style="display: block;">
+					      				<div class="UIRightClickPopupMenu" style="display: none;">
 					      					<div class="UIContextMenuContainer">
 													  <div class="TopLeftRightClickPopupMenu">
 							          			<div class="TopRightRightClickPopupMenu">
@@ -106,7 +105,6 @@
 							      			
 										    </div>
 					      			</div>
-					      		</div>
 					      		<% /*End Popup Menu*/ %>
 									</div>
 									
@@ -117,9 +115,8 @@
 											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.editor-options") %></div>
 										</div>
 										<% /*Begin Popup Menu*/ %>
-										<div style="position: relative;left: 80px;">
-					      			<div class="UIPopupCategory" style="display: none;">
-					      				<div class="UIRightClickPopupMenu" style="display: block; ">
+										<div style="position: relative;">
+					      				<div class="UIRightClickPopupMenu" style="display: none; ">
 					      					<div class="UIContextMenuContainer">
 													  <div class="TopLeftRightClickPopupMenu">
 							          			<div class="TopRightRightClickPopupMenu">
@@ -160,7 +157,6 @@
 							      			</div>
 										    </div>
 					      			</div>
-					      		</div>
 					      		<% /*End Popup Menu*/ %>
 									</div>
 									

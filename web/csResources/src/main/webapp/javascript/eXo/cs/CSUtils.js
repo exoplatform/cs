@@ -113,6 +113,21 @@ eXo.cs.Spliter = new LayoutSpliter() ;
 
 function Utils() {}
 
+Utils.prototype.show = function(obj, evt){
+	if(!evt) evt = window.event ;
+	evt.cancelBubble = true ;
+	var DOMUtil = eXo.core.DOMUtil ;
+	var uiPopupCategory = DOMUtil.findFirstDescendantByClass(obj, 'div', 'UIRightClickPopupMenu') ;	
+	if (!uiPopupCategory) return ;	
+	if(uiPopupCategory.style.display == "none") {
+		DOMUtil.cleanUpHiddenElements() ;
+		uiPopupCategory.style.display = "block" ;
+		DOMUtil.listHideElements(uiPopupCategory) ;
+		if(eXo.core.I18n.isRT()) uiPopupCategory.style.left = (obj.offsetWidth - uiPopupCategory.offsetWidth) + "px" ;
+	}	
+	else uiPopupCategory.style.display = "none" ;
+};
+
 Utils.prototype.showHidePane = function(clickobj, beforeobj, afterobj) {
   var container = eXo.core.DOMUtil.findAncestorByClass(clickobj, "SpliterContainer") ;
   var areas = eXo.core.DOMUtil.findDescendantsByClass(container, "div", "SpliterResizableListArea") ;

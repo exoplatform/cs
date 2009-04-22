@@ -152,20 +152,10 @@
 	font-size: 11px;
 
 }
-/*
 .UIMailPortlet .UISelectAccount .UIRightClickPopupMenu {
-	 top :5px;
-	 left:100px ;
-}*/
-
-.UIMailPortlet .UISelectAccount .UIPopupCategory {
 	top:21px;
 	left:0px ;
 	width: auto;
-}
-
-.UIMailPortlet .UISelectAccount .UIRightClickPopupMenu {
-	position:static ;
 }
 
 .UIMailPortlet .UISelectAccount .UIPopup {
@@ -473,21 +463,16 @@
 	background-position: left center; /* orientation=rt */
 }
 
-.UIMailPortlet .UIActionBar .UIPopupCategory {
-	left: 0px;
-	top: 0px;
-}
-
-.UIMailPortlet .UIActionBar .UIPopupCategory .UIRightClickPopupMenu {
+.UIMailPortlet .UIActionBar .UIRightClickPopupMenu {
 	width: 150px;
 }
 
-.UIMailPortlet .UIActionBar  .UIPopupCategory a {
+.UIMailPortlet .UIActionBar  .UIRightClickPopupMenu a {
 	color: #000000;
 	margin:4px 0px 0px 0px;
 }
 
-.UIMailPortlet .UIActionBar  .UIPopupCategory a:hover {
+.UIMailPortlet .UIActionBar  .UIRightClickPopupMenu a:hover {
 	background: #dee4f2;
 	color: #058ee6; border: none;
   line-height:26px;
@@ -1904,10 +1889,8 @@
 	width: 16px;
 }
 
-.UIMailPortlet .Actions .UIPopupCategory {
+.UIMailPortlet .ActionIcon .UIRightClickPopupMenu, .UIMailPortlet .Actions .UIRightClickPopupMenu {
 	top: 18px;
-	left: -104px;	
-
 }
 .UIMailPortlet .UIPopupActionEventContainer .SelectFileFrame {
 	width: 300px;

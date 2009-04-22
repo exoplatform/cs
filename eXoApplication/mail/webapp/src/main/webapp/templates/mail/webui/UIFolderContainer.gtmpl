@@ -13,13 +13,10 @@
 <div class="TitleBar">
   <div class="DownArrow3Icon" title="Collapse this Panel"><span></span></div>
   <div class="Title FolderIcon"><%=_ctx.appRes(uicomponent.id+ ".label.folders") %></div>
-  <div class="ActionIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+  <div class="ActionIcon" onclick="eXo.cs.Utils.show(this, event);">
       <% /*Begin Popup Menu*/ %>
-      <div style="position: relative;">
-        <div class="UIPopupCategory" style="display: none;">
-          <div class="PopupCategoryDecorator">
-        
-            <div class="UIRightClickPopupMenu" style="display: block;">
+      <div style="position: relative;height:1px;">
+            <div class="UIRightClickPopupMenu" style="display: none;">
             	<div class="UIContextMenuContainer">
 	              <div class="TopLeftRightClickPopupMenu">
 			            <div class="TopRightRightClickPopupMenu">
@@ -54,9 +51,6 @@
           		</div>
           	</div>
 	        </div>
-	      
-	      </div>
-	    </div>
   <% /*End Popup Menu*/ %>
   </div>
   <div style="clear: both"><span></span></div>
