@@ -18,60 +18,26 @@
 							</div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
-						<div class="Title ControlButton">
-							<%=_ctx.appRes(uicomponent.id + ".label.CalendarView")%>
-						</div>
-						<div class="SelectButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
-								<div class="IconHolder <%=uicomponent.getCurrentView()%>Icon">
-									<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id + ".label." + uicomponent.getCurrentView())%></div>
-								</div>
-							<% /*Begin Popup Menu*/ %>
-		      				<div class="UIRightClickPopupMenu" style="display: none;">
-		      					<div class="UIContextMenuContainer">
-										  <div class="TopLeftRightClickPopupMenu">
-				          			<div class="TopRightRightClickPopupMenu">
-				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-				          			</div>
-				        			</div>
-							        <div class="MiddleLeftRightClickPopupMenu">
-							          <div class="MiddleRightRightClickPopupMenu">
-				              		<div class="UIRightPopupMenuContainer">
-				              			<%for(viewType in uicomponent.getViewTypes()){
-				              				if(!viewType.equals(uicomponent.getCurrentView())) {
-				              				icon = viewType + "Icon" ;
-				              				actionLink = uicomponent.event("ChangeView",viewType + "&categoryId=calId") ;
-				              				String label = _ctx.appRes(uicomponent.id + ".label." + viewType) ;
-				              				if(!viewType.equals("UIScheduleView")) {
-				              			%>
-															<a class="MenuItem" href="$actionLink">   
-						                    <div class="ItemIcon $icon ">
-						                      $label
-						                    </div>
-					                    </a>
-				                    <%}
-				                    else {
-				                    %>
-				                    <!-- 
-				                    <span class="MenuItem" style="color:gray;">   
-						                    <div class="ItemIcon $icon ">
-						                      $label
-						                    </div>
-					                    </span>
-					                   -->
-				                    <%}
-				                    }}%>
-													</div>
-					          		</div>
-					        		</div>
-								      <div class="BottomLeftRightClickPopupMenu">
-							        <div class="BottomRightRightClickPopupMenu">
-							          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-							        </div>
-							      </div>
-				      			</div>
-							    </div>
-		      		<% /*End Popup Menu*/ %>
-						</div>
+						
+						
+						<%for(viewType in uicomponent.getViewTypes()){
+	      				if(!viewType.equals(uicomponent.getCurrentView())) {
+		      				icon = viewType + "Icon" ;
+		      				actionLink = uicomponent.event("ChangeView",viewType + "&categoryId=calId") ;
+		      				String label = _ctx.appRes(uicomponent.id + ".label." + viewType) ;
+		      				if(!viewType.equals("UIScheduleView")) {
+		      			%>
+		                <a href="$actionLink" class="ControlButton">
+											<div class="IconHolder $icon">
+												$label
+											</div>
+										</a>
+	                
+	            <%}
+	            else {
+	            %>
+	            <%}
+	            }}%>
 						<div class="SeparatorLine"><span></span></div>
 						<a href="<%=uicomponent.event("Setting")%>" class="ControlButton">
 							<div class="IconHolder SettingCalendarIcon">
