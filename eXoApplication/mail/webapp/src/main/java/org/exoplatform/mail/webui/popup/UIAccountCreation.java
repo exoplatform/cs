@@ -346,6 +346,10 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       acc.setOutgoingHost(smtpHost);
       acc.setOutgoingPort(smtpPort);
       acc.setIsSavePassword(isSavePass) ;
+      acc.setIsOutgoingAuthentication(false);
+      acc.setUseIncomingForAuthentication(true);
+      acc.setOutgoingUserName(incomingUserName);
+      acc.setOutgoingPassword(incomingPassword);
       
       UIFormDateTimePicker fromDateField = ((UIFormDateTimePicker) uiAccWs4.getChildById(UIAccountWizardStep4.FROM_DATE));
       acc.setCheckAll(!uiAccWs4.checkFromDate());

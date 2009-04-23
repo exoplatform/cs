@@ -149,3 +149,11 @@
 }
 
 /************************************UIAction*************************************/
+
+.UIMailPortlet .UIForm .UIFormGrid #outgoingUsername {
+	width:170px;
+}
+
+.UIMailPortlet .UIForm .UIFormGrid #outgoingPassword {
+	width:170px;
+}

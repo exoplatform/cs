@@ -73,6 +73,8 @@ public class Utils {
   public static final String SVR_MAIL_DEBUG = "mail.debug".intern() ;
   public static final String SVR_SMTP_STARTTLS_ENABLE = "mail.smtp.starttls.enable".intern() ;
   public static final String SVR_PROTOCOL = "protocol".intern() ;
+  public static final String SMTP_ISAUTHENTICATION = "smtp.isauthentication".intern() ;
+  public static final String SMTP_USEINCOMINGSETTING = "smtp.useincomingsetting".intern();
   public static final String SVR_INCOMING_HOST = "incoming.host".intern() ;
   public static final String SVR_INCOMING_PORT = "incoming.port".intern() ;
   public static final String SVR_INCOMING_FOLDER = "folder".intern() ;
@@ -81,6 +83,8 @@ public class Utils {
   
   public static final String SVR_OUTGOING_HOST = "outgoing.host".intern() ;
   public static final String SVR_OUTGOING_PORT = "outgoing.port".intern() ;
+  public static final String SVR_OUTGOING_USERNAME = "outgoing.username".intern() ;
+  public static final String SVR_OUTGOING_PASSWORD = "outgoing.password".intern() ;
    
   public static final String SVR_INCOMING_SSL = "ssl".intern() ;
   public static final String SVR_OUTGOING_SSL = "outgoing.ssl".intern() ;
@@ -133,6 +137,7 @@ public class Utils {
   public static final String EXO_SERVERPROPERTIES = "exo:serverProperties".intern() ;
   public static final String EXO_POPSERVERPROPERTIES = "exo:popServerProperties".intern() ;
   public static final String EXO_IMAPSERVERPROPERTIES = "exo:imapServerProperties".intern() ;
+  public static final String EXO_SMTPSERVERPROPERTIES = "exo:smtpServerProperties".intern() ;
   public static final String EXO_MESSAGE = "exo:message".intern() ;
   public static final String EXO_ISUNREAD = "exo:isUnread".intern() ;
   public static final String EXO_TOTALMESSAGE = "exo:totalMessages".intern();

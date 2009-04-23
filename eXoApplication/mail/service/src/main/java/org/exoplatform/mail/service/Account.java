@@ -49,6 +49,7 @@ public class Account {
   private Map<String, String> serverProperties ;  
   private Map<String, String> popServerProperties ;
   private Map<String, String> imapServerProperties ;
+  private Map<String, String> smtpServerProperties ;
   
   public Account() {
     id = Utils.KEY_ACCOUNT + IdGenerator.generate() ;
@@ -143,6 +144,26 @@ public class Account {
   
   public Folder  getFolderByName(String name) { return null ; }
   
+  public boolean isOutgoingAuthentication() { return Boolean.valueOf(smtpServerProperties.get(Utils.SMTP_ISAUTHENTICATION)); }
+  public void setIsOutgoingAuthentication(boolean b) {
+    setSmtpServerProperty(Utils.SMTP_ISAUTHENTICATION, String.valueOf(b));
+  }
+  
+  public boolean useIncomingSettingForOutgoingAuthent() { return Boolean.valueOf(smtpServerProperties.get(Utils.SMTP_USEINCOMINGSETTING)); }
+  public void setUseIncomingForAuthentication(boolean b) {
+    setSmtpServerProperty(Utils.SMTP_USEINCOMINGSETTING, String.valueOf(b));
+  }
+  
+  public String getOutgoingUserName() { return smtpServerProperties.get(Utils.SVR_OUTGOING_USERNAME); }
+  public void setOutgoingUserName(String username) { 
+    setSmtpServerProperty(Utils.SVR_OUTGOING_USERNAME, username); 
+  }
+  
+  public String getOutgoingPassword() { return smtpServerProperties.get(Utils.SVR_OUTGOING_PASSWORD); }
+  public void setOutgoingPassword(String password) { 
+    setSmtpServerProperty(Utils.SVR_OUTGOING_PASSWORD, password); 
+  }
+  
   /**
    * Manages the server properties, based on the serverProperties attribute
    */
@@ -215,5 +236,12 @@ public class Account {
     imapServerProperties.put(key, value) ;
   }
   
-  public Map<String, String> getImapServerProperties() { return imapServerProperties ; }
+  public Map<String, String> getImapServerProperties() { return smtpServerProperties ; }
+  
+  public void setSmtpServerProperty(String key, String value) {
+    if (smtpServerProperties == null) smtpServerProperties = new HashMap<String, String>();
+    smtpServerProperties.put(key, value) ;
+  }
+  
+  public Map<String, String> getSmtpServerProperties() { return smtpServerProperties ; }
 }

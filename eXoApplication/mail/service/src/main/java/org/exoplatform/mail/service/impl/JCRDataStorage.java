@@ -226,6 +226,18 @@ public class JCRDataStorage {
       }
     } catch (Exception e) {
     }
+    
+    try {
+      Value[] properties = accountNode.getProperty(Utils.EXO_SMTPSERVERPROPERTIES).getValues();
+      for (int i = 0; i < properties.length; i++) {
+        String property = properties[i].getString();
+        int index = property.indexOf('=');
+        if (index != -1)
+          account
+          .setSmtpServerProperty(property.substring(0, index), property.substring(index + 1));
+      }
+    } catch (Exception e) {
+    }
 
     return account;
   }
@@ -736,6 +748,17 @@ public class JCRDataStorage {
         }
         newAccount.setProperty(Utils.EXO_IMAPSERVERPROPERTIES, values.toArray(new String[account
                                                                                          .getImapServerProperties().size()]));
+      }
+      
+      if (account.getSmtpServerProperties() != null) {
+        it = account.getSmtpServerProperties().keySet().iterator();
+        values = new ArrayList<String>(account.getSmtpServerProperties().size());
+        while (it.hasNext()) {
+          String key = it.next().toString();
+          values.add(key + "=" + account.getSmtpServerProperties().get(key));
+        }
+        newAccount.setProperty(Utils.EXO_SMTPSERVERPROPERTIES, values.toArray(new String[account
+                                                                                         .getSmtpServerProperties().size()]));
       }
       // saves changes
       if (isNew) mailHome.getSession().save();

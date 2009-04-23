@@ -27,6 +27,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFormDateTimePicker;
+import org.exoplatform.mail.webui.UIFormInputWithActions;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
@@ -45,7 +46,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
@@ -67,7 +67,6 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
         @EventConfig(listeners = UIAccountSetting.DeleteAccountActionListener.class, phase = Phase.DECODE, confirm="UIAccountSetting.msg.confirm-remove-account"),
         @EventConfig(listeners = UIAccountSetting.SaveActionListener.class),
         @EventConfig(listeners = UIAccountSetting.CancelActionListener.class, phase = Phase.DECODE),
-        @EventConfig(listeners = UIAccountSetting.ChangeServerTypeActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIAccountSetting.ChangeSSLActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIAccountSetting.ChangeOutgoingSSLActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIAccountSetting.CheckFromDateActionListener.class, phase = Phase.DECODE)
@@ -80,7 +79,7 @@ public class UIAccountSetting extends UIFormTabPane {
   public static final String TAB_OUTGOING = "outgoing";
   public static final String TAB_FETCH_OPTIONS = "fetchOptions";
   
-  //public static final String FIELD_ACCOUNT_NAME = "accountName";
+  public static final String FIELD_ACCOUNT_NAME = "accountName";
   public static final String FIELD_DISPLAY_NAME = "display-name".intern();
   public static final String FIELD_INCOMING_USERNAME = "incomingUsername";
   //public static final String FIELD_ACCOUNT_DESCRIPTION = "description";
@@ -98,6 +97,10 @@ public class UIAccountSetting extends UIFormTabPane {
   public static final String FIELD_INCOMING_FOLDER = "messageComeInFolder";
   public static final String FIELD_IS_INCOMING_SSL = "isSSL";
   public static final String FIELD_IS_OUTGOING_SSL = "isOutgoingSsl";
+  public static final String IS_OUTGOING_AUTHENTICATION = "isOutgoingAuthentication";
+  public static final String USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN = "useIncomingSettingForOutgoingAuthent";
+  public static final String OUTGOING_USERNAME = "outgoingUsername";
+  public static final String OUTGOING_PASSWORD = "outgoingPassword";
   public static final String FIELD_CHECKMAIL_AUTO = "checkMailAutomatically";
   public static final String FIELD_LEAVE_ON_SERVER = "leaveMailOnServer";
 //  public static final String FIELD_SKIP_OVER_SIZE = "skipMessageOverMaxSize";
@@ -115,7 +118,7 @@ public class UIAccountSetting extends UIFormTabPane {
   public UIAccountSetting() throws Exception {
     super("UIAccountSetting");
     UIFormInputWithActions  identityInputSet = new UIFormInputWithActions(TAB_IDENTITY_SETTINGS);
-    
+    identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_ACCOUNT_NAME, null, null).addValidator(MandatoryValidator.class)) ;
     identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_DISPLAY_NAME, null, null).addValidator(MandatoryValidator.class)) ;
     identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_EMAIL_ADDRESS, null, null).addValidator(MandatoryValidator.class));
     identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_REPLYTO_ADDRESS, null, null));
@@ -135,12 +138,13 @@ public class UIAccountSetting extends UIFormTabPane {
     passwordField.setType(UIFormStringInput.PASSWORD_TYPE) ;
     passwordField.addValidator(MandatoryValidator.class) ;
     incomingInputSet.addUIFormInput(passwordField);
+    incomingInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_IS_SAVE_PASSWORD, null, null));
+    
     UIFormCheckBoxInput<Boolean> ssl = new UIFormCheckBoxInput<Boolean>(FIELD_IS_INCOMING_SSL, null, null);//getFieldIsSSL()
     ssl.setOnChange("ChangeSSL"); 
     incomingInputSet.addUIFormInput(ssl);
-    incomingInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_IS_SAVE_PASSWORD, null, null));
     
-    UIFormInputWithActions outGoingInputSet = new UIFormInputWithActions(TAB_OUTGOING);
+    UIOutgoingInputSet outGoingInputSet = new UIOutgoingInputSet(TAB_OUTGOING);
     outGoingInputSet.addUIFormInput(new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null).addValidator(MandatoryValidator.class));
     outGoingInputSet.addUIFormInput(new UIFormStringInput(FIELD_OUTGOING_PORT, null, null).addValidator(MandatoryValidator.class));
     
@@ -148,13 +152,16 @@ public class UIAccountSetting extends UIFormTabPane {
     outgoingssl.setOnChange("ChangeOutgoingSSL"); 
     outGoingInputSet.addUIFormInput(outgoingssl);
     
-    UIFormInputWithActions fetchOptionsInputSet = new UIFormInputWithActions(TAB_FETCH_OPTIONS);
-    UIFormCheckBoxInput<Boolean> checkFromDate = new UIFormCheckBoxInput<Boolean>(CHECK_FROM_DATE, CHECK_FROM_DATE, null);
-    checkFromDate.setOnChange("CheckFromDate");
-    fetchOptionsInputSet.addUIFormInput(checkFromDate);
-    fetchOptionsInputSet.addUIFormInput(new UIFormDateTimePicker(FROM_DATE, FROM_DATE, null, true));
-    fetchOptionsInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_FOLDER, null, null).addValidator(MandatoryValidator.class));
+    UIFormCheckBoxInput<Boolean> isOutgoingAuthen = new UIFormCheckBoxInput<Boolean>(IS_OUTGOING_AUTHENTICATION, null, null);
+    outGoingInputSet.addUIFormInput(isOutgoingAuthen);
     
+    UIFormCheckBoxInput<Boolean> useIncomingSetting = new UIFormCheckBoxInput<Boolean>(USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN, null, null);
+    outGoingInputSet.addUIFormInput(useIncomingSetting);
+    
+    outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_USERNAME, null, null).addValidator(MandatoryValidator.class));
+    outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE).addValidator(MandatoryValidator.class));
+    
+    UIFormInputWithActions fetchOptionsInputSet = new UIFormInputWithActions(TAB_FETCH_OPTIONS);
     
     fetchOptionsInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKMAIL_AUTO, null, null));
     
@@ -162,10 +169,20 @@ public class UIAccountSetting extends UIFormTabPane {
 //    skipOverSize_ = new UIFormStringInput(FIELD_SKIP_OVER_SIZE, null, null);
     markAsDelete_ = new UIFormCheckBoxInput<Boolean>(FIELD_MARK_AS_DELETED, null, null);
     
+    fetchOptionsInputSet.addUIFormInput(leaveOnServer_);
+    fetchOptionsInputSet.addUIFormInput(markAsDelete_);
+    
+    fetchOptionsInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_FOLDER, null, null).addValidator(MandatoryValidator.class));
+    
+    UIFormCheckBoxInput<Boolean> checkFromDate = new UIFormCheckBoxInput<Boolean>(CHECK_FROM_DATE, CHECK_FROM_DATE, null);
+    checkFromDate.setOnChange("CheckFromDate");
+    fetchOptionsInputSet.addUIFormInput(checkFromDate);
+    fetchOptionsInputSet.addUIFormInput(new UIFormDateTimePicker(FROM_DATE, FROM_DATE, null, true));
+    
     addUIFormInput(incomingInputSet);
     addUIFormInput(outGoingInputSet);
     addUIFormInput(fetchOptionsInputSet);
-    setSelectedTab(incomingInputSet.getId()) ;
+    setSelectedTab(identityInputSet.getId()) ;
   }
   
   private List<SelectItemOption<String>> getServerTypeValues(){
@@ -178,6 +195,11 @@ public class UIAccountSetting extends UIFormTabPane {
   public String getSelectedAccountId() throws Exception { return accountId_; }
   public void setSelectedAccountId(String accountId) throws Exception { this.accountId_ = accountId; }  
 
+  public String getFieldAccountNameValue() {
+    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    return uiInput.getUIStringInput(FIELD_ACCOUNT_NAME).getValue();
+  }
+  
   public String getDisplayName() { 
     UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
     return uiInput.getUIStringInput(FIELD_DISPLAY_NAME).getValue();
@@ -226,6 +248,27 @@ public class UIAccountSetting extends UIFormTabPane {
   public String getFieldMailSignature() {
     UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
     return uiInput.getUIStringInput(FIELD_MAIL_SIGNATURE).getValue();
+  }
+  
+  
+  public String getOutgoingUser() {
+    UIFormInputWithActions uiInput = getChildById(TAB_OUTGOING);
+    return uiInput.getUIStringInput(OUTGOING_USERNAME).getValue();
+  }
+  
+  public String getOutgoingPassword() {
+    UIFormInputWithActions uiInput = getChildById(TAB_OUTGOING);
+    return uiInput.getUIStringInput(OUTGOING_PASSWORD).getValue();
+  }
+  
+  public boolean isOutgoingAuthen() {
+    UIFormInputWithActions uiInput = getChildById(TAB_OUTGOING);
+    return uiInput.getUIFormCheckBoxInput(IS_OUTGOING_AUTHENTICATION).isChecked();
+  }
+  
+  public boolean useIncomingSettingForOutgoingAuthen() {
+    UIFormInputWithActions uiInput = getChildById(TAB_OUTGOING);
+    return uiInput.getUIFormCheckBoxInput(USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN).isChecked();
   }
   
   public boolean isSavePassword() {
@@ -318,6 +361,7 @@ public class UIAccountSetting extends UIFormTabPane {
     }
     */
     UIFormInputWithActions uiIdentityInput = getChildById(TAB_IDENTITY_SETTINGS) ;
+    uiIdentityInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel()) ;
     uiIdentityInput.getUIStringInput(FIELD_DISPLAY_NAME).setValue(account.getUserDisplayName()) ;
     uiIdentityInput.getUIStringInput(FIELD_EMAIL_ADDRESS).setValue(account.getEmailAddress()) ;
     uiIdentityInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).setValue(account.getEmailReplyAddress()) ;
@@ -335,31 +379,25 @@ public class UIAccountSetting extends UIFormTabPane {
     uiOutgoingInput.getUIStringInput(FIELD_OUTGOING_SERVER).setValue(account.getOutgoingHost()) ;
     uiOutgoingInput.getUIStringInput(FIELD_OUTGOING_PORT).setValue(account.getOutgoingPort()) ;
     uiOutgoingInput.getUIFormCheckBoxInput(FIELD_IS_OUTGOING_SSL).setChecked(account.isOutgoingSsl()) ;
-        
+    uiOutgoingInput.getUIFormCheckBoxInput(IS_OUTGOING_AUTHENTICATION).setChecked(account.isOutgoingAuthentication());
+    uiOutgoingInput.getUIFormCheckBoxInput(USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN).setChecked(account.useIncomingSettingForOutgoingAuthent());
+    if (account.useIncomingSettingForOutgoingAuthent()) {
+      uiOutgoingInput.getUIStringInput(OUTGOING_USERNAME).setEnable(false).setValue(account.getIncomingUser());
+      uiOutgoingInput.getUIStringInput(OUTGOING_PASSWORD).setEnable(false).setValue(account.getIncomingPassword());
+    } else {
+      uiOutgoingInput.getUIStringInput(OUTGOING_USERNAME).setValue(account.getOutgoingUserName());
+      uiOutgoingInput.getUIStringInput(OUTGOING_PASSWORD).setValue(account.getOutgoingPassword());
+    }
+
     UIFormInputWithActions uifetchOptionsInput = getChildById(TAB_FETCH_OPTIONS) ;
     uifetchOptionsInput.getUIStringInput(FIELD_INCOMING_FOLDER).setValue(account.getIncomingFolder()) ;
     uiIncomingInput.getUIFormSelectBox(FIELD_SERVER_TYPE).setValue(account.getProtocol()) ;
     uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto()) ;
     if(getFieldProtocol().equals(Utils.POP3)) {
-      if(uifetchOptionsInput.getChildById(FIELD_LEAVE_ON_SERVER) == null)
-        uifetchOptionsInput.addUIFormInput(leaveOnServer_) ;
-      if(uifetchOptionsInput.getChildById(FIELD_MARK_AS_DELETED) != null)
-        uifetchOptionsInput.removeChildById(FIELD_MARK_AS_DELETED) ;
-//      uiServerInput.addUIFormInput(skipOverSize_) ;
+      uifetchOptionsInput.removeChildById(FIELD_MARK_AS_DELETED) ;
+      uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).setChecked(Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
     } else {
-      if(uifetchOptionsInput.getChildById(FIELD_MARK_AS_DELETED) == null)
-        uifetchOptionsInput.addUIFormInput(markAsDelete_) ;
-      if(uifetchOptionsInput.getChildById(FIELD_LEAVE_ON_SERVER) != null)
-        uifetchOptionsInput.removeChildById(FIELD_LEAVE_ON_SERVER) ;
-    }
-    
-    if(account.getPopServerProperties() != null) {
-      if (uifetchOptionsInput.getChildById(FIELD_LEAVE_ON_SERVER) != null)
-        uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).setChecked(Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
-//      if (uiServerInput.getChildById(FIELD_SKIP_OVER_SIZE) != null)
-//        uiServerInput.getUIStringInput(FIELD_SKIP_OVER_SIZE).setValue(account.getPopServerProperties().get(Utils.SVR_POP_SKIP_OVER_SIZE)) ;
-    }
-    if(account.getImapServerProperties() != null && uifetchOptionsInput.getChildById(FIELD_MARK_AS_DELETED) != null) {
+      uifetchOptionsInput.removeChildById(FIELD_LEAVE_ON_SERVER) ;
       uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_MARK_AS_DELETED).setChecked(Boolean.valueOf(account.getImapServerProperties().get(Utils.SVR_IMAP_MARK_AS_DELETE))) ;
     }
   } 
@@ -368,10 +406,8 @@ public class UIAccountSetting extends UIFormTabPane {
     if(serverType.equals(Utils.POP3)) {
       if(isSSL) {
         getUIStringInput(FIELD_INCOMING_PORT).setValue(UIAccountCreation.DEFAULT_POPSSL_PORT) ;
-        //getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       } else {
         getUIStringInput(FIELD_INCOMING_PORT).setValue(UIAccountCreation.DEFAULT_POP_PORT) ;
-        //getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       }
     } else {
       if(isSSL) {
@@ -504,7 +540,7 @@ public class UIAccountSetting extends UIFormTabPane {
       }
       
       acc.setProtocol(uiSetting.getFieldProtocol()) ;
-      //acc.setLabel(uiSetting.getFieldAccountNameValue()) ;
+      acc.setLabel(uiSetting.getFieldAccountNameValue()) ;
       acc.setUserDisplayName(uiSetting.getDisplayName()) ;
       //acc.setDescription(uiSetting.getFieldAccountDescription()) ;
       acc.setEmailAddress(email) ;
@@ -521,6 +557,12 @@ public class UIAccountSetting extends UIFormTabPane {
       acc.setIncomingFolder(uiSetting.getFieldIncomingFolder()) ;
       acc.setOutgoingHost(uiSetting.getFieldOutgoingServer()) ;
       acc.setOutgoingPort(outgoingPort) ;
+      acc.setIsOutgoingAuthentication(uiSetting.isOutgoingAuthen());
+      acc.setUseIncomingForAuthentication(uiSetting.useIncomingSettingForOutgoingAuthen());
+      if (uiSetting.useIncomingSettingForOutgoingAuthen()) {
+        acc.setOutgoingUserName(uiSetting.getOutgoingUser());
+        acc.setOutgoingPassword(uiSetting.getOutgoingPassword());
+      }
       acc.setIsSavePassword(uiSetting.isSavePassword()) ;
       acc.setServerProperty(Utils.SVR_SMTP_USER, userName) ;
       
@@ -566,41 +608,6 @@ public class UIAccountSetting extends UIFormTabPane {
         return ;
       }
     }
-  }
-  //TODO this actionlistener not use anymore
-  static	public class ChangeServerTypeActionListener extends EventListener<UIAccountSetting> {
-  	public void execute(Event<UIAccountSetting> event) throws Exception {
-  		UIAccountSetting uiSetting = event.getSource() ; 
-  		uiSetting.setDefaultValue(uiSetting.getFieldProtocol(),uiSetting.getFieldIsSSL());
-  		UIFormInputWithActions uiInput = uiSetting.getChildById(TAB_FETCH_OPTIONS);
-  		String serverTypeValue = uiSetting.getFieldProtocol() ;
-  		if(serverTypeValue.equals(Utils.IMAP)) {
-  		  if (uiInput.getChildById(FIELD_LEAVE_ON_SERVER) != null ) {
-          uiSetting.leaveOnServer_ = uiInput.getChildById(FIELD_LEAVE_ON_SERVER) ; 
-          uiInput.removeChildById(FIELD_LEAVE_ON_SERVER) ;
-  		  }
-  		  
-//  		  if (uiInput.getChildById(FIELD_SKIP_OVER_SIZE) != null ) {
-//          uiSetting.skipOverSize_ = uiInput.getChildById(FIELD_SKIP_OVER_SIZE) ; 
-//          uiInput.removeChildById(FIELD_SKIP_OVER_SIZE) ;
-//        }
-  		  
-  		  if (uiInput.getChildById(FIELD_MARK_AS_DELETED) == null )
-  		    uiInput.addUIFormInput(uiSetting.markAsDelete_) ;
-  		} else {
-  		  if (uiInput.getChildById(FIELD_MARK_AS_DELETED) != null ) {
-          uiSetting.markAsDelete_ = uiInput.getChildById(FIELD_MARK_AS_DELETED) ; 
-          uiInput.removeChildById(FIELD_MARK_AS_DELETED) ;
-        } 
-  		  
-  		  if (uiInput.getChildById(FIELD_LEAVE_ON_SERVER) == null ) 
-          uiInput.addUIFormInput(uiSetting.leaveOnServer_) ;
-        
-//        if (uiInput.getChildById(FIELD_SKIP_OVER_SIZE) == null ) 
-//          uiInput.addUIFormInput(uiSetting.skipOverSize_) ;
-  		}
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiSetting.getParent()) ;
-  	}
   }
   
   static public class ChangeSSLActionListener extends EventListener<UIAccountSetting> {

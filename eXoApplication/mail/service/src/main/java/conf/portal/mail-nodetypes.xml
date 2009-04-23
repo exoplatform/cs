@@ -95,6 +95,9 @@
   		<propertyDefinition name="exo:imapServerProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition> 
+  		<propertyDefinition name="exo:smtpServerProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  			<valueConstraints/>
+  		</propertyDefinition> 
   		<propertyDefinition name="exo:lastStartCheckingTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
   		</propertyDefinition>
