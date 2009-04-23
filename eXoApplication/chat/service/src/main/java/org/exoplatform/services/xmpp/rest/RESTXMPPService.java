@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -86,6 +87,7 @@ import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.muc.HostedRoom;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.RoomInfo;
+import org.picocontainer.Startable;
 
 /**
  * Created by The eXo Platform SAS.
@@ -93,7 +95,7 @@ import org.jivesoftware.smackx.muc.RoomInfo;
  * @author <a href="mailto:vitaly.parfonov@gmail.com">Vitaly Parfonov</a>
  * @version $Id: $
  */
-public class RESTXMPPService implements ResourceContainer {
+public class RESTXMPPService implements ResourceContainer, Startable {
 
   /**
    * 
@@ -121,7 +123,9 @@ public class RESTXMPPService implements ResourceContainer {
   
   private final ResourceBundleService rbs;
   
-  private final ResourceBundle rb;
+  private ResourceBundle rb;
+  
+  private final static String BUNDLE_NAME = "locale.message.chat.serverMessage"; 
   
   private final HistoryImpl history;
   
@@ -142,8 +146,19 @@ public class RESTXMPPService implements ResourceContainer {
     this.organization = organization;
     this.delegate = delegate;
     this.history = history;
-    this.rbs = rbs;                  
-    this.rb = rbs.getResourceBundle("locale.message.chat.serverMessage", Locale.getDefault());
+    this.rbs = rbs;
+  }
+  
+  
+  public void start() {
+    loadResourceBundle();
+  }
+
+  public void stop() {
+  }
+  
+  private void loadResourceBundle(){
+    this.rb = this.rbs.getResourceBundle(BUNDLE_NAME, Locale.getDefault());
   }
 
   // //////////// Group chat //////////////////
@@ -158,6 +173,7 @@ public class RESTXMPPService implements ResourceContainer {
   public Response createRoom(@URIParam("username") String username,
                              @QueryParam("room") String room,
                              @QueryParam("nickname") String nickname) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -202,6 +218,7 @@ public class RESTXMPPService implements ResourceContainer {
   public Response configRoom(@URIParam("username") String username,
                              @QueryParam("room") String room,
                              ConfigRoomBean configRoom) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -236,6 +253,7 @@ public class RESTXMPPService implements ResourceContainer {
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getRoomConfigForm(@URIParam("username") String username,
                                     @QueryParam("room") String room) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -277,6 +295,7 @@ public class RESTXMPPService implements ResourceContainer {
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getRoomInfo(@URIParam("username") String username,
                               @QueryParam("room") String room) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -314,6 +333,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/muc/joinedrooms/{username}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getJoinedRooms(@URIParam("username") String username) {
+    if (this.rb == null) loadResourceBundle();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
@@ -345,6 +365,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/muc/rooms-old/{username}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getRooms(@URIParam("username") String username) {
+    if (this.rb == null) loadResourceBundle();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
@@ -389,6 +410,7 @@ public class RESTXMPPService implements ResourceContainer {
                            @QueryParam("from") Integer from,
                            @QueryParam("to") Integer to,
                            @QueryParam("sort") String sort) {
+    if (this.rb == null) loadResourceBundle();
     XMPPSessionImpl session = (XMPPSessionImpl) messenger.getSession(username);
     if (session != null) {
       try {
@@ -419,6 +441,7 @@ public class RESTXMPPService implements ResourceContainer {
                                 @URIParam("inviter") String inviter,
                                 @QueryParam("room") String room,
                                 @QueryParam("reason") String reason) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -442,6 +465,7 @@ public class RESTXMPPService implements ResourceContainer {
                               @QueryParam("room") String room,
                               @QueryParam("reason") String reason,
                               @QueryParam("altroom") String altRoom) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -485,6 +509,7 @@ public class RESTXMPPService implements ResourceContainer {
                                @URIParam("invitee") String invitee,
                                @QueryParam("room") String room,
                                @QueryParam("reason") String reason) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -524,6 +549,7 @@ public class RESTXMPPService implements ResourceContainer {
                            @QueryParam("room") String room,
                            @QueryParam("nickname") String nickname,
                            @QueryParam("password") String password) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -577,6 +603,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/muc/leaveroom/{username}/")
   public Response leftRoom(@URIParam("username") String username,
                            @QueryParam("room") String room) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -615,6 +642,7 @@ public class RESTXMPPService implements ResourceContainer {
   public Response changeNickname(@URIParam("username") String username,
                                  @QueryParam("nickname") String nickname,
                                  @QueryParam("room") String room) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null || nickname == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -661,6 +689,7 @@ public class RESTXMPPService implements ResourceContainer {
                                                  @URIParam("mode") String mode,
                                                  @QueryParam("room") String room,
                                                  @QueryParam("status") String status) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -693,6 +722,7 @@ public class RESTXMPPService implements ResourceContainer {
   public Response changeSubject(@URIParam("username") String username,
                                 @QueryParam("room") String room,
                                 @QueryParam("subject") String subject) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null || subject == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -738,6 +768,7 @@ public class RESTXMPPService implements ResourceContainer {
                                  @QueryParam("nickname") String nickname,
                                  @QueryParam("role") String role,
                                  @QueryParam("command") String command) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null || nickname == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -792,6 +823,7 @@ public class RESTXMPPService implements ResourceContainer {
                                        @QueryParam("nickname") String nickname,
                                        @QueryParam("affiliation") String affiliation,
                                        @QueryParam("command") String command) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null || nickname == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -844,6 +876,7 @@ public class RESTXMPPService implements ResourceContainer {
                                    @QueryParam("room") String room,
                                    @QueryParam("nickname") String nickname,
                                    @QueryParam("reason") String reason) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null || nickname == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -898,6 +931,7 @@ public class RESTXMPPService implements ResourceContainer {
                                   @QueryParam("room") String room,
                                   @QueryParam("name") String name,
                                   @QueryParam("reason") String reason) {
+    if (this.rb == null) loadResourceBundle();
     if (room == null || name ==null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -953,6 +987,7 @@ public class RESTXMPPService implements ResourceContainer {
                                @QueryParam("remoteusername") String remoteUser,
                                @QueryParam("remotepassword") String remotePassword,
                                @QueryParam("transport") String transport) {
+    if (this.rb == null) loadResourceBundle();
     try {
       XMPPSession session = messenger.getSession(username);
       if (session != null) {
@@ -999,6 +1034,7 @@ public class RESTXMPPService implements ResourceContainer {
                                    @URIParam("adduser") String adduser,
                                    @QueryParam("nickname") String nickname,
                                    @QueryParam("group") String group) {
+    if (this.rb == null) loadResourceBundle();
     XMPPSession session = messenger.getSession(username);
     try {
       if (session != null) {
@@ -1034,6 +1070,7 @@ public class RESTXMPPService implements ResourceContainer {
                               @URIParam("upduser") String upduser,
                               @QueryParam("nickname") String nickname,
                               @QueryParam("group") String group) {
+    if (this.rb == null) loadResourceBundle();
     XMPPSession session = messenger.getSession(username);
     try {
       if (session != null) {
@@ -1063,6 +1100,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/roster/group/{username}/{group}/")
   public Response createGroup(@URIParam("username") String username,
                               @URIParam("group") String group) { 
+    if (this.rb == null) loadResourceBundle();
     XMPPSessionImpl session = (XMPPSessionImpl) messenger.getSession(username);
     if (session != null) {
       session.createGroup(group);
@@ -1082,6 +1120,7 @@ public class RESTXMPPService implements ResourceContainer {
   public Response askForSubscription(@URIParam("username") String username,
                                      @URIParam("askuser") String askuser,
                                      @QueryParam("nickname") String nickname) {
+    if (this.rb == null) loadResourceBundle();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       if (session.getBuddy(askuser) == null)
@@ -1106,6 +1145,7 @@ public class RESTXMPPService implements ResourceContainer {
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/xmpp/rosterclean/{username}/")
   public Response cleanBuddylist(@URIParam("username") String username) {
+    if (this.rb == null) loadResourceBundle();
     try {
       XMPPSession session = messenger.getSession(username);
       if (session != null) {
@@ -1139,6 +1179,7 @@ public class RESTXMPPService implements ResourceContainer {
   public Response getAllHistory(@URIParam("usernameto") String usernameto,
                                 @URIParam("isGroupChat") Boolean isGroupChat,
                                 @QueryParam("usernamefrom") String usernamefrom) {
+    if (this.rb == null) loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                               .errorMessage(rb.getString("chat.message.history.participant.name.not.set"))
@@ -1183,6 +1224,7 @@ public class RESTXMPPService implements ResourceContainer {
                                         @URIParam("from") String from,
                                         @URIParam("to") String to,
                                         @QueryParam("usernamefrom") String usernamefrom) {
+    if (this.rb == null) loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                               .errorMessage(rb.getString("chat.message.history.participant.name.not.set"))
@@ -1236,6 +1278,7 @@ public class RESTXMPPService implements ResourceContainer {
                                           @URIParam("dateformat") String dateformat,
                                           @URIParam("from") String from,
                                           @QueryParam("usernamefrom") String usernamefrom) {
+    if (this.rb == null) loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                               .errorMessage(rb.getString("chat.message.history.participant.name.not.set"))
@@ -1277,6 +1320,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/history/getinterlocutors/{username}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getInterlocutors(@URIParam("username") String username) {
+    if (this.rb == null) loadResourceBundle();
     try {
       XMPPSession session = messenger.getSession(username);
       if (session != null) {
@@ -1302,6 +1346,7 @@ public class RESTXMPPService implements ResourceContainer {
   public Response getAllHistoryFile(@URIParam("usernameto") String usernameto,
                                     @URIParam("isGroupChat") Boolean isGroupChat,
                                     @QueryParam("usernamefrom") String usernamefrom) {
+    if (this.rb == null) loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                               .errorMessage(rb.getString("chat.message.history.participant.name.not.set"))
@@ -1342,6 +1387,7 @@ public class RESTXMPPService implements ResourceContainer {
                                               @URIParam("dateformat") String dateformat,
                                               @URIParam("from") String from,
                                               @QueryParam("usernamefrom") String usernamefrom) {
+    if (this.rb == null) loadResourceBundle();
     try {
       XMPPSession session = messenger.getSession(usernameto);
       if (session != null) {
@@ -1386,6 +1432,7 @@ public class RESTXMPPService implements ResourceContainer {
                                             @URIParam("from") String from,
                                             @URIParam("to") String to,
                                             @QueryParam("usernamefrom") String usernamefrom) {
+    if (this.rb == null) loadResourceBundle();
     try {
       XMPPSession session = messenger.getSession(usernameto);
       if (session != null) {
@@ -1451,6 +1498,7 @@ public class RESTXMPPService implements ResourceContainer {
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getSearchUsersForm(@URIParam("username") String username,
                                      @QueryParam(SearchFormFields.SEARCH_SERVICE) String searchService) {
+    if (this.rb == null) loadResourceBundle();
     try {
       XMPPSession session = messenger.getSession(username);
       if (session != null) {
@@ -1483,6 +1531,7 @@ public class RESTXMPPService implements ResourceContainer {
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getUserInfo(@URIParam("username") String username,
                               @URIParam("needinfo") String needinfo) {
+    if (this.rb == null) loadResourceBundle();
     try {
       XMPPSession session = messenger.getSession(username);
       if (session != null) {
@@ -1508,6 +1557,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/login2/{forcache}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response login2(@URIParam("forcache") String forcache) {
+    if (this.rb == null) loadResourceBundle();
     try {
       // log.info("Random number for cache problem: " + forcache);
       ConversationState curentState = ConversationState.getCurrent();
@@ -1581,6 +1631,7 @@ public class RESTXMPPService implements ResourceContainer {
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/xmpp/logout/{username}/")
   public Response logout(@URIParam("username") String _username) {
+    if (this.rb == null) loadResourceBundle();
     try {
       XMPPSession session =    messenger.getSession(_username);
       if (session != null) session.removeAllTransport();
@@ -1605,6 +1656,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/history/messagereceive/{username}/{messageid}/")
   public Response messageReceive(@URIParam("username") String username,
                                  @URIParam("messageid") String messageId) {
+    if (this.rb == null) loadResourceBundle();
     try {
       XMPPSession session = messenger.getSession(username);
       if (session != null) {
@@ -1628,6 +1680,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/roster/del/{username}/{removeboddy}/")
   public Response removeBuddy(@URIParam("username") String username,
                               @URIParam("removeboddy") String removeboddy) {
+    if (this.rb == null) loadResourceBundle();
     try {
       XMPPSession session = messenger.getSession(username);
       if (session != null) {
@@ -1662,6 +1715,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/removetransport/{username}/{transport}/")
   public Response removeTransport(@URIParam("username") String username,
                                   @URIParam("transport") String _transport) {
+    if (this.rb == null) loadResourceBundle();
     try {
       XMPPSession session = messenger.getSession(username);
       if (session != null) {
@@ -1716,6 +1770,7 @@ public class RESTXMPPService implements ResourceContainer {
                               @QueryParam(SearchFormFields.NAME) Boolean byName,
                               @QueryParam(SearchFormFields.EMAIL) Boolean byEmail,
                               @QueryParam(SearchFormFields.SEARCH_SERVICE) String searchService) {
+    if (this.rb == null) loadResourceBundle();
     try {
       if (byUsername == null)
         byUsername = new Boolean(false);
@@ -1753,6 +1808,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/sendmessage/{username}/")
   @InputTransformer(Json2BeanInputTransformer.class)
   public Response sendMessage(@URIParam("username") String username, MessageBean messageBean) {
+    if (this.rb == null) loadResourceBundle();
       XMPPSession session = messenger.getSession(username);
       if (session != null) {
         String from = session.getUsername().split("/")[0];
@@ -1778,6 +1834,7 @@ public class RESTXMPPService implements ResourceContainer {
   @InputTransformer(Json2BeanInputTransformer.class)
   public Response sendMUCMessage(@URIParam("username") String username, 
                                  MessageBean messageBean) {
+    if (this.rb == null) loadResourceBundle();
     try {
       String room = messageBean.getTo();
       String body = messageBean.getBody();
@@ -1808,14 +1865,15 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/sendstatus/{username}/{status}/")
   public Response setUserStatus(@URIParam("username") String username,
                                 @URIParam("status") String status) {
-      XMPPSession session = messenger.getSession(username);
-      Presence presence = PresenceUtil.getPresence(status);
-      if (presence == null)
-        return Response.Builder.withStatus(HTTPStatus.FORBIDDEN)
-                               .errorMessage("Get unknow status.")
-                               .build();
-      session.sendPresence(presence);
-      return Response.Builder.ok().cacheControl(cc).build();
+    if (this.rb == null) loadResourceBundle();
+    XMPPSession session = messenger.getSession(username);
+    Presence presence = PresenceUtil.getPresence(status);
+    if (presence == null)
+      return Response.Builder.withStatus(HTTPStatus.FORBIDDEN)
+                             .errorMessage("Get unknow status.")
+                             .build();
+    session.sendPresence(presence);
+    return Response.Builder.ok().cacheControl(cc).build();
   }
 
   /**
@@ -1827,6 +1885,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/subscribeuser/{username}/{subsuser}/")
   public Response subscribeUser(@URIParam("username") String _username,
                                 @URIParam("subsuser") String _subsuser) {
+    if (this.rb == null) loadResourceBundle();
     XMPPSession session = messenger.getSession(_username);
     if (session != null) {
       session.subscribeUser(_subsuser);
@@ -1847,6 +1906,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/unsubscribeuser/{username}/{unsubsuser}/")
   public Response unsubscribeUser(@URIParam("username") String username,
                                   @URIParam("unsubsuser") String unsubsuser) {
+    if (this.rb == null) loadResourceBundle();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       session.unsubscribeUser(unsubsuser);
@@ -1867,6 +1927,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/fileexchange/accept/{username}/{uuid}/")
   @OutputTransformer(PassthroughOutputTransformer.class)
   public Response acceptFile(@URIParam("username") String username, @URIParam("uuid") String uuid) {
+    if (this.rb == null) loadResourceBundle();
     try {
       XMPPSessionImpl session = (XMPPSessionImpl) messenger.getSession(username);
       String sender;
@@ -1914,6 +1975,7 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/fileexchange/reject/{username}/{uuid}/")
   public Response rejectFile(@URIParam("username") String username,
                              @URIParam("uuid") String uuid) {
+    if (this.rb == null) loadResourceBundle();
     XMPPSessionImpl session = (XMPPSessionImpl) messenger.getSession(username);
     String sender;
     if (session != null) {
@@ -1936,5 +1998,6 @@ public class RESTXMPPService implements ResourceContainer {
                              .build();
     }
   }
+
 
 }
