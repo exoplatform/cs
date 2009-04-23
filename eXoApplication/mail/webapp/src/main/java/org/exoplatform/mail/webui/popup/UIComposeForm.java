@@ -679,13 +679,19 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch (AuthenticationFailedException e) {
-        UIPopupActionContainer uiActionContainer = composeForm.getAncestorOfType(UIPopupActionContainer.class) ;
-        UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-        UIEnterPasswordDialog enterPasswordDialog =  uiChildPopup.createUIComponent(UIEnterPasswordDialog.class, null, null);
-        enterPasswordDialog.setAccountId(accountId);
-        enterPasswordDialog.setSendMessage(message);
-        uiChildPopup.activate(enterPasswordDialog, 600, 0) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+        Account acc = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), usename, accountId) ;
+        if (acc.isOutgoingAuthentication() && acc.useIncomingSettingForOutgoingAuthent()) { 
+          UIPopupActionContainer uiActionContainer = composeForm.getAncestorOfType(UIPopupActionContainer.class) ;
+          UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+          UIEnterPasswordDialog enterPasswordDialog =  uiChildPopup.createUIComponent(UIEnterPasswordDialog.class, null, null);
+          enterPasswordDialog.setAccountId(accountId);
+          enterPasswordDialog.setSendMessage(message);
+          uiChildPopup.activate(enterPasswordDialog, 600, 0) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+        } else {
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-configuration-for-smtp-server", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        }
         //uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.the-username-or-password-may-be-wrong-sending-failed", null)) ;
         //event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;

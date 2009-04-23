@@ -69,7 +69,8 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
         @EventConfig(listeners = UIAccountSetting.CancelActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIAccountSetting.ChangeSSLActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIAccountSetting.ChangeOutgoingSSLActionListener.class, phase = Phase.DECODE),
-        @EventConfig(listeners = UIAccountSetting.CheckFromDateActionListener.class, phase = Phase.DECODE)
+        @EventConfig(listeners = UIAccountSetting.CheckFromDateActionListener.class, phase = Phase.DECODE), 
+        @EventConfig(listeners = UIAccountSetting.IsCustomInboxActionListener.class, phase = Phase.DECODE)
     }
 )
 
@@ -113,6 +114,7 @@ public class UIAccountSetting extends UIFormTabPane {
   UIFormCheckBoxInput<Boolean> markAsDelete_;
   public static final String CHECK_FROM_DATE = "checkFromDate";
   public static final String FROM_DATE = "fromDate";
+  public static final String IS_CUSTOM_INBOX = "isCustomInbox";
   
   
   public UIAccountSetting() throws Exception {
@@ -161,7 +163,7 @@ public class UIAccountSetting extends UIFormTabPane {
     outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_USERNAME, null, null).addValidator(MandatoryValidator.class));
     outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE).addValidator(MandatoryValidator.class));
     
-    UIFormInputWithActions fetchOptionsInputSet = new UIFormInputWithActions(TAB_FETCH_OPTIONS);
+    UIFetchOptionsInputSet fetchOptionsInputSet = new UIFetchOptionsInputSet(TAB_FETCH_OPTIONS);
     
     fetchOptionsInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKMAIL_AUTO, null, null));
     
@@ -172,12 +174,15 @@ public class UIAccountSetting extends UIFormTabPane {
     fetchOptionsInputSet.addUIFormInput(leaveOnServer_);
     fetchOptionsInputSet.addUIFormInput(markAsDelete_);
     
-    fetchOptionsInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_FOLDER, null, null).addValidator(MandatoryValidator.class));
-    
     UIFormCheckBoxInput<Boolean> checkFromDate = new UIFormCheckBoxInput<Boolean>(CHECK_FROM_DATE, CHECK_FROM_DATE, null);
     checkFromDate.setOnChange("CheckFromDate");
     fetchOptionsInputSet.addUIFormInput(checkFromDate);
     fetchOptionsInputSet.addUIFormInput(new UIFormDateTimePicker(FROM_DATE, FROM_DATE, null, true));
+    
+    UIFormCheckBoxInput<Boolean> isCustomInbox = new UIFormCheckBoxInput<Boolean>(IS_CUSTOM_INBOX, IS_CUSTOM_INBOX, null);
+    isCustomInbox.setOnChange("IsCustomInbox");
+    fetchOptionsInputSet.addUIFormInput(isCustomInbox);
+    fetchOptionsInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_FOLDER, null, null));
     
     addUIFormInput(incomingInputSet);
     addUIFormInput(outGoingInputSet);
@@ -306,6 +311,11 @@ public class UIAccountSetting extends UIFormTabPane {
     return uiInput.getUIFormCheckBoxInput(CHECK_FROM_DATE).isChecked();
   }
   
+  public boolean isCustomInbox() {
+    UIFormInputWithActions uiInput = getChildById(TAB_FETCH_OPTIONS);
+    return uiInput.getUIFormCheckBoxInput(IS_CUSTOM_INBOX).isChecked();
+  }
+  
   public Calendar getFieldCheckFrom() {
     UIFormInputWithActions uiInput = getChildById(TAB_FETCH_OPTIONS);
     if (((UIFormDateTimePicker) uiInput.getChildById(FROM_DATE)) != null)
@@ -390,7 +400,21 @@ public class UIAccountSetting extends UIFormTabPane {
     }
 
     UIFormInputWithActions uifetchOptionsInput = getChildById(TAB_FETCH_OPTIONS) ;
-    uifetchOptionsInput.getUIStringInput(FIELD_INCOMING_FOLDER).setValue(account.getIncomingFolder()) ;
+    uifetchOptionsInput.getUIFormCheckBoxInput(CHECK_FROM_DATE).setChecked(!account.isCheckAll());
+    if (!getFieldCheckFromDate()) {
+      uifetchOptionsInput.removeChildById(FROM_DATE);
+    } else {
+      GregorianCalendar cal = new GregorianCalendar();
+      cal.setTime(account.getCheckFromDate());
+      ((UIFormDateTimePicker) uifetchOptionsInput.getChildById(FROM_DATE)).setCalendar(cal);
+    }
+    
+    uifetchOptionsInput.getUIFormCheckBoxInput(IS_CUSTOM_INBOX).setChecked(account.isCustomInbox());
+    if (isCustomInbox()) {
+      uifetchOptionsInput.getUIStringInput(FIELD_INCOMING_FOLDER).setEnable(true).setValue(account.getIncomingFolder()) ;
+    } else {
+      uifetchOptionsInput.getUIStringInput(FIELD_INCOMING_FOLDER).setEnable(false).setValue(account.getIncomingFolder()) ;
+    }
     uiIncomingInput.getUIFormSelectBox(FIELD_SERVER_TYPE).setValue(account.getProtocol()) ;
     uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto()) ;
     if(getFieldProtocol().equals(Utils.POP3)) {
@@ -559,12 +583,13 @@ public class UIAccountSetting extends UIFormTabPane {
       acc.setOutgoingPort(outgoingPort) ;
       acc.setIsOutgoingAuthentication(uiSetting.isOutgoingAuthen());
       acc.setUseIncomingForAuthentication(uiSetting.useIncomingSettingForOutgoingAuthen());
-      if (uiSetting.useIncomingSettingForOutgoingAuthen()) {
+      if (!uiSetting.useIncomingSettingForOutgoingAuthen()) {
         acc.setOutgoingUserName(uiSetting.getOutgoingUser());
         acc.setOutgoingPassword(uiSetting.getOutgoingPassword());
       }
       acc.setIsSavePassword(uiSetting.isSavePassword()) ;
       acc.setServerProperty(Utils.SVR_SMTP_USER, userName) ;
+      acc.setIsCustomInbox(uiSetting.isCustomInbox());
       
       if (acc.getProtocol().equals(Utils.IMAP)) {
         acc.setCheckAll(!uiSetting.getFieldCheckFromDate());
@@ -634,7 +659,7 @@ public class UIAccountSetting extends UIFormTabPane {
   static  public class CheckFromDateActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiSetting = event.getSource() ;
-      UIFormInputWithActions uiInput = uiSetting.getChildById(TAB_FETCH_OPTIONS);
+      UIFetchOptionsInputSet uiInput = uiSetting.getChildById(TAB_FETCH_OPTIONS);
       boolean checkAllMail = !uiInput.getUIFormCheckBoxInput(CHECK_FROM_DATE).isChecked();
       
       if (checkAllMail) {
@@ -647,6 +672,19 @@ public class UIAccountSetting extends UIFormTabPane {
         if (fromDateField.getCalendar() == null) fromDateField.setCalendar(cal);
       }
       
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiSetting) ;
+    }
+  }
+  
+  static  public class IsCustomInboxActionListener extends EventListener<UIAccountSetting> {
+    public void execute(Event<UIAccountSetting> event) throws Exception {
+      UIAccountSetting uiSetting = event.getSource() ;
+      UIFetchOptionsInputSet uiInput = uiSetting.getChildById(TAB_FETCH_OPTIONS);
+      if (uiSetting.isCustomInbox()) {
+        ((UIFormStringInput) uiInput.getChildById(FIELD_INCOMING_FOLDER)).setEnable(true);
+      } else {
+        ((UIFormStringInput) uiInput.getChildById(FIELD_INCOMING_FOLDER)).setEnable(false);
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiSetting) ;
     }
   }

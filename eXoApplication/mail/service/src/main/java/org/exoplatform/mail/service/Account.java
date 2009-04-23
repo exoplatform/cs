@@ -199,6 +199,11 @@ public class Account {
     setServerProperty(Utils.SVR_OUTGOING_PORT, port) ;
   }
   
+  public boolean isCustomInbox() { return Boolean.valueOf(serverProperties.get(Utils.SVR_IS_CUSTOM_INBOX)) ; }
+  public void setIsCustomInbox(boolean b) {
+    setServerProperty(Utils.SVR_IS_CUSTOM_INBOX, String.valueOf(b)); 
+  }
+  
   public String getIncomingFolder() { return serverProperties.get(Utils.SVR_INCOMING_FOLDER) ; }
   public void setIncomingFolder(String folder)  { 
     setServerProperty(Utils.SVR_INCOMING_FOLDER, folder) ; 

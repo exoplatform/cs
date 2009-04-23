@@ -327,17 +327,17 @@ public class MailServiceImpl implements MailService, Startable {
     Session session = Session.getInstance(props, null);
     logger.debug(" #### Sending email ... ");
     SMTPTransport transport = (SMTPTransport)session.getTransport(Utils.SVR_SMTP);
-    // khdung
     try {
-      transport.connect(outgoingHost, Integer.parseInt(outgoingPort), smtpUser, acc.getIncomingPassword());
-    } catch (Exception e) {
-      // do nothing ... if there is an exception, keep continuing
-      try {
+      if (!acc.isOutgoingAuthentication()) {
         transport.connect() ;
-      } catch(Exception ex) {
-        logger.warn("#### Can not connect to smtp server ...") ;
-        throw ex;
+      } else if (acc.useIncomingSettingForOutgoingAuthent()) {
+        transport.connect(outgoingHost, Integer.parseInt(outgoingPort), smtpUser, acc.getIncomingPassword());
+      } else {
+        transport.connect(outgoingHost, Integer.parseInt(outgoingPort), acc.getOutgoingUserName(), acc.getOutgoingPassword());
       }
+    } catch(Exception ex) {
+      logger.warn("#### Can not connect to smtp server ...") ;
+      throw ex;
     }
     Message msg = send(session, transport, message);
     transport.close();

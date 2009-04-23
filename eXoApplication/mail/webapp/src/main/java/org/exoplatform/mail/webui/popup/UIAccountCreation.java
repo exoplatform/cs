@@ -350,6 +350,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       acc.setUseIncomingForAuthentication(true);
       acc.setOutgoingUserName(incomingUserName);
       acc.setOutgoingPassword(incomingPassword);
+      acc.setIsCustomInbox(false);
       
       UIFormDateTimePicker fromDateField = ((UIFormDateTimePicker) uiAccWs4.getChildById(UIAccountWizardStep4.FROM_DATE));
       acc.setCheckAll(!uiAccWs4.checkFromDate());

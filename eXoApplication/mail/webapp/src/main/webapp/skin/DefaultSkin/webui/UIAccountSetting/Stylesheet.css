@@ -157,3 +157,16 @@
 .UIMailPortlet .UIForm .UIFormGrid #outgoingPassword {
 	width:170px;
 }
+
+.UIMailPortlet .UIForm .UIFormGrid  #messageComeInFolder {
+	width:150px;
+}
+
+.UIMailPortlet .UIForm .fetchOptions .UIFormGrid .fromDateTimePicker input {
+	width:150px;
+}
+
+
+.UIMailPortlet .UIForm .fetchOptions .UIFormGrid {
+   margin-left: 40px;
+}

@@ -78,6 +78,8 @@ public class Utils {
   public static final String SVR_INCOMING_HOST = "incoming.host".intern() ;
   public static final String SVR_INCOMING_PORT = "incoming.port".intern() ;
   public static final String SVR_INCOMING_FOLDER = "folder".intern() ;
+  public static final String SVR_IS_CUSTOM_INBOX = "isCustomInbox".intern();
+  
   public static final String SVR_INCOMING_USERNAME = "incoming.username".intern() ;
   public static final String SVR_INCOMING_PASSWORD = "incoming.password".intern() ;
   
