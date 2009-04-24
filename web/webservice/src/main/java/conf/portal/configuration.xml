@@ -4,11 +4,11 @@
     <type>org.exoplatform.webservice.cs.mail.MailWebservice</type>
   </component>
    
-  <!-- component>
+  <component>
     <type>org.exoplatform.webservice.cs.chat.UIStateService</type>
-  </component -->
+  </component>
   
-  <!-- external-component-plugins>
+  <external-component-plugins>
     <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
     <component-plugin>
       <name>add.nodeType.liveroom.webservice</name>
@@ -22,6 +22,6 @@
         </values-param>
       </init-params>
     </component-plugin>
-  </external-component-plugins -->
+  </external-component-plugins>
   
 </configuration>

@@ -48,7 +48,7 @@
     </application>  
   </page>
  
- <!--  page>
+ <page>
   	<page-id>group::platform/users::chat</page-id>
   	<owner-type>group</owner-type>
     <owner-id>platform/users</owner-id>
@@ -61,7 +61,7 @@
       <title>Chat Portlet</title>
       <show-info-bar>false</show-info-bar>       
     </application>
-   </page -->
+   </page>
    
    <page>
   	<page-id>group::platform/users::collaboration</page-id>
@@ -94,11 +94,11 @@
       <show-application-state>true</show-application-state>
     </application>
     
-     <!-- application>
+     <application>
       <instance-id>group#platform/users:/chat/ChatPortlet/chat</instance-id>    
       <title>Chat Portlet</title>
       <show-info-bar>false</show-info-bar>       
-    </application -->
+    </application>
           
   </page> 
     	  

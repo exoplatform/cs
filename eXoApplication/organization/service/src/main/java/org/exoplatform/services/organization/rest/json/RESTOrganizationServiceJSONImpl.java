@@ -190,7 +190,7 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
         uList.add(new UserBean(user));
       }
       UserListBean user_list = new UserListBean(uList);
-      user_list.setTotalUser(users.size());
+      user_list.setTotalUser(userHandler.getUserPageList(20).getAvailable());
       return Response.Builder.ok(user_list, JSON_CONTENT_TYPE).build();
     } catch (Exception e) {
       e.printStackTrace();

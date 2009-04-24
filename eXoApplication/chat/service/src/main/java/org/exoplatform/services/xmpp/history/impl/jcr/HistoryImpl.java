@@ -178,7 +178,6 @@ public class HistoryImpl implements Startable{
       Node tmpNode;
       String[] path = historyPath.split("/");
       for (int i = 0; i < path.length - 1; i++) {
-        System.out.println("HistoryImpl.initNodes()" + path[i]);
         if (node.hasNode(path[i]))
           tmpNode = node.getNode(path[i]);
         else
@@ -186,7 +185,6 @@ public class HistoryImpl implements Startable{
         node = tmpNode;
       }
       Node fNode = node.addNode(path[path.length - 1], HISTORY_NT);
-      System.out.println("HistoryImpl.initNodes() " + fNode.getPath());
       NodeImpl cNode = (NodeImpl) fNode.addNode(CONVERSATIONS, CONVERSATIONS_NT);
       if (cNode.canAddMixin("exo:privilegeable")) {
         cNode.addMixin("exo:privilegeable");
