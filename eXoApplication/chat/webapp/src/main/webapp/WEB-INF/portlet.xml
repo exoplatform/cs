@@ -21,7 +21,9 @@
     <supports>
       <mime-type>text/html</mime-type>
       <portlet-mode>help</portlet-mode>
-    </supports>   
+    </supports>
+    <supported-locale>en</supported-locale>
+    <resource-bundle>locale.portlet.chat.ChatPortlet</resource-bundle>   
     <portlet-info>
       <title>Chat Portlet</title>
       <short-title>ChatPortlet</short-title>

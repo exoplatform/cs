@@ -150,7 +150,11 @@
 }
 
 .UIChat .IconChat {
-	height: 24px; line-height: 24px;
+	display:block;
+	height:22px;
+	line-height:27px;
+	margin-left:10px;
+	padding-left:20px;
 }
 
 .UIChat .UITabContainer {
@@ -259,6 +263,42 @@
 }
 
 .UIChat .UIRightClickPopupMenu .FreeToChat {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -50px;
+}
+
+/* ====================== User status shared Icons =================== */
+
+.UIChat .OnlineIcon {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left 0px;
+}
+
+.UIChat .OfflineIcon {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -75px;
+}
+
+.UIChat .AwayIcon {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -25px;
+}
+
+.UIChat .FreeToChat {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -50px;
+}
+
+/* ====================== User status shared Icons =================== */
+
+.ChatContainer .RightPage .NickName .OnlineIcon {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left 0px;
+}
+
+.ChatContainer .RightPage .NickName .OfflineIcon {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -75px;
+}
+
+.ChatContainer .RightPage .NickName .AwayIcon {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -25px;
+}
+
+.ChatContainer .RightPage .NickName .FreeToChat {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -50px;
 }
 
@@ -431,11 +471,11 @@
 }
 
 .BuddyItemActionMenu .RemoveIcon {
-	background: url('DefaultSkin/skinIcons/ActionMenuIcon.png') no-repeat left top;
+	background: url('DefaultSkin/skinIcons/ActionMenuIconRemove.gif') no-repeat left top;
 }
 
 .BuddyItemActionMenu .MessageIcon {
-	background: url('DefaultSkin/skinIcons/ActionMenuIcon.png') no-repeat left -26px;
+	background: url('DefaultSkin/skinIcons/ActionMenuIconSend.gif') no-repeat left top;
 }
  /* Form Join Room */
 .UIJoinRoom .FieldName {
@@ -470,7 +510,7 @@
 }
 
 .UIJoinRoom .UIGrid td {
-	padding: 5px 0 2px 7px;
+	padding: 5px 0 2px 2px;
 }
 
 .UIJoinRoom .UIGrid input.CheckBox {
@@ -755,7 +795,12 @@ form {
 
 .AddContactPopup .StyleInput {
 	width: 20px;
-	padding: 5px 0 2px 7px;
+	padding: 5px 0 2px 2px;
+}
+
+.AddressContainer .StyleInput {
+	width: 20px;
+	padding: 5px 0 2px 2px;
 }
 
 .AddContactPopup .UIGrid input.CheckBox {
@@ -774,7 +819,8 @@ form {
 }
 
 .AddContactPopup .UIGrid td {
-	padding: 5px 0px 2px 7px;
+	padding: 5px 0px 2px 2px;
+	margin:0 auto;
 }
 
 .AddContactPopup .UIGrid .Label {
@@ -1300,3 +1346,4 @@ form {
 	color: #5286d6;
 	font-size: 11px;
 }
+

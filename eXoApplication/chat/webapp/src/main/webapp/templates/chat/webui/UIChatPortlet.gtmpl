@@ -363,7 +363,7 @@
                       <div class="UIPageIterator" style="display: none">
                         <div class="PageIteratorContainer">
                           <div class="RightPageIteratorBlock">
-                            <a class="Icon LastTopPageIcon" title="Back 10 pages"><span></span></a>
+                            <a class="Icon NextTopPageIcon" title="Back 10 pages"><span></span></a>
                             <a class="Icon LastPageIcon" title="Previous Page"><span></span></a>
                             <div class="Number">
                               <a href="" class="PageSelected">1</a>
@@ -381,6 +381,7 @@
                         </div>
                         <div class="ClearRight"><span></span></div>
                       </div>
+                      
                     </div>
                   </div>
                 </div>
