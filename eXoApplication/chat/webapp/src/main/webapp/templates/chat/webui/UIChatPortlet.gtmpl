@@ -9,6 +9,7 @@
 %>
 
 <!-- Begin Notification -->
+
 <div class="UINotification" style="display: none;position: relative;">
 	<div style="position: absolute;top: 0px;right: 5px;width: 250px;">
 		<div class="BoxNote">
@@ -223,11 +224,13 @@
 	          <div style="clear: left;"><span></span></div>
 	        </div>
 	        <div class="WindowPortletInfo">
-	          <div class="Icon PortletIcon WindowPortletIcon NovaPortletIcon"><span></span></div>
-	          <div class="PortletName">
+	          <div class="Icon PortletIcon WindowPortletIcon NovaPortletIcon">
+<div class="PortletName">
               <span class="UnreadMessage" style="color: red"></span>
               <span>Conversation</span>
-            </div>
+            	</div>
+</div>
+	          
 	          <div class="ClearLeft"><span></span></div>
 	        </div>
 	        <div class="ClearRight"><span></span></div>
@@ -360,28 +363,27 @@
                           </tr>
                         </tbody>
                       </table>
-                      <div class="UIPageIterator" style="display: none">
+                      <div class="UIPageIterator" style="display:none;">
                         <div class="PageIteratorContainer">
                           <div class="RightPageIteratorBlock">
-                            <a class="Icon NextTopPageIcon" title="Back 10 pages"><span></span></a>
-                            <a class="Icon LastPageIcon" title="Previous Page"><span></span></a>
+                            <a class="Icon LastTopPageIcon" title="<%=_ctx.appRes(uicomponent.id + ".label.backTenPages")%>"><span></span></a>
+                            <a class="Icon LastPageIcon" title="<%=_ctx.appRes(uicomponent.id + ".label.previousPage")%>"><span></span></a>
                             <div class="Number">
                               <a href="" class="PageSelected">1</a>
                               <a href="">2</a>
                             </div>
-                            <a class="Icon NextPageIcon" title="Next Page"><span></span></a>
-                            <a class="Icon NextTopPageIcon" title="Next 10 pages"><span></span></a>
+                            <a class="Icon NextPageIcon" title="<%=_ctx.appRes(uicomponent.id + ".label.nextPage")%>"><span></span></a>
+                            <a class="Icon NextTopPageIcon" title="<%=_ctx.appRes(uicomponent.id + ".label.nextTenPages")%>"><span></span></a>
                             <div class="ClearLeft"><span></span></div>
                           </div>
                           <div class="LeftPageIteratorBlock">
-                            <div class="TotalPages">Total pages:</div>
+                            <div class="TotalPages"><%=_ctx.appRes(uicomponent.id + ".label.totalPages")%></div>
                             <div class="PagesTotalNumber">2</div>
                             <div class="ClearLeft"><span></span></div>
                           </div>
                         </div>
                         <div class="ClearRight"><span></span></div>
                       </div>
-                      
                     </div>
                   </div>
                 </div>
@@ -480,7 +482,7 @@
                       <table cellspacing="0" borderspacing="0" class="UIGrid">
                         <thead>
                           <tr>
-                            <th class="FieldName" style="width: 10px;">
+                            <th class="StyleInput">
                               <div><span></span></div>
                             </th>
                             <th class="FieldName">
@@ -493,7 +495,7 @@
                         </thead>
                         <tbody><span></span></tbody>
                       </table>
-                      <div class="UIPageIterator" style="display: none">
+                      <div class="UIPageIterator" style="display:none">
                         <div class="PageIteratorContainer">
                           <div class="RightPageIteratorBlock">
                             <a class="Icon LastTopPageIcon" title="Back 10 pages"><span></span></a>
@@ -524,21 +526,21 @@
                       	<div onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.reloadRoomList()" class="ActionButton LightBlueStyle">
                           <div class="ButtonLeft">
                             <div class="ButtonRight">
-                              <div class="ButtonMiddle"> Refresh </div>
+                              <div class="ButtonMiddle"><a href="#">Refresh</a></div>
                             </div>
                           </div>
                         </div>
                        <div onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.joinRoomAction()" class="ActionButton LightBlueStyle JoinRoomButton">
                           <div class="ButtonLeft">
                             <div class="ButtonRight">
-                              <div class="ButtonMiddle"> Join Room </div>
+                              <div class="ButtonMiddle"><a href="#">Join Room</a></div>
                             </div>
                           </div>
-                        </siv>
+                        </div>
                         <div onclick="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
                           <div class="ButtonLeft">
                             <div class="ButtonRight">
-                              <div class="ButtonMiddle"> Cancel </div>
+                              <div class="ButtonMiddle"><a href="#">Cancel</a></div>
                             </div>
                           </div>
                         </div>
@@ -612,14 +614,14 @@
                          <div onclick="javascript:eXo.communication.chat.webui.UICreateNewRoomPopupWindow.createNewRoomAction()" class="ActionButton LightBlueStyle">
                             <div class="ButtonLeft">
                               <div class="ButtonRight">
-                                <div class="ButtonMiddle"> Ok </div>
+                                <div class="ButtonMiddle"><a href="#">Ok</a></div>
                               </div>
                             </div>
                           </div>
                           <div onclick="javascript:eXo.communication.chat.webui.UICreateNewRoomPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
                             <div class="ButtonLeft">
                               <div class="ButtonRight">
-                                <div class="ButtonMiddle"> Cancel </div>
+                                <div class="ButtonMiddle"><a href="#">Cancel</a></div>
                               </div>
                             </div>
                           </div>
@@ -846,14 +848,14 @@
 		                   <div onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.okAction()" class="ActionButton LightBlueStyle">
 		                      <div class="ButtonLeft">
 		                        <div class="ButtonRight">
-		                          <div class="ButtonMiddle"> Ok </div>
+		                          <div class="ButtonMiddle"><a href="#">Ok</a></div>
 		                        </div>
 		                      </div>
 		                    </div>
 		                    <div onclick="javascript:eXo.communication.chat.webui.UIRoomConfigPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
 		                      <div class="ButtonLeft">
 		                        <div class="ButtonRight">
-		                          <div class="ButtonMiddle"> Cancel </div>
+		                          <div class="ButtonMiddle"><a href="#">Cancel</a></div>
 		                        </div>
 		                      </div>
 		                    </div>
