@@ -147,7 +147,7 @@ function UIMainChatWindow() {
   this.errorCount = 0;
   // Using debugLevel <= 0 to disable js logger. Change it from 1->6 to enable debug level.
   this.debugLevel = 0;
-  this.debugLevel = 9;
+  //this.debugLevel = 9;
   this.serverInfo = false;
   this.buddyItemActionStack = false;
   this.joinedRooms = [];

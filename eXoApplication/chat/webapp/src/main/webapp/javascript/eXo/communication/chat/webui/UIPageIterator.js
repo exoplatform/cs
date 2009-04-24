@@ -11,8 +11,8 @@ function UIPageIterator(rootNode) {
     nextPage         : 'NextPageIcon',
     nextTopPage      : 'NextTopPageIcon',
     disabledPrefix   : 'Disable',
-    pageList         : 'Number',
-    selectedPage     : 'PageSelected'
+    pageNo           : 'Number',
+    selectedPage     : 'Number PageSelected'
   };
   this.currentPageNo = 0;
   this.totalPage = 0;
@@ -29,8 +29,7 @@ UIPageIterator.prototype.setGotoPageCallback = function(callBack) {
 
 UIPageIterator.prototype.init = function() {
   var DOMUtil = eXo.core.DOMUtil;
-  this.pageListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.pageList);
-  this.totalPageNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.pagesTotal);
+  this.totalPageNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'a', this.CSS_CLASS.pagesTotal);
   
   this.previousPageNode = 
         DOMUtil.findFirstDescendantByClass(this.rootNode, 'a', this.CSS_CLASS.previousPage) ||
@@ -73,7 +72,14 @@ UIPageIterator.prototype.renderPageIterator = function() {
     this.totalPageNode.innerHTML = this.totalPage + '';
     this.toggleNavButtons();
     
-    this.pageListNode.innerHTML = '';
+    var DOMUtil = eXo.core.DOMUtil;
+
+    // Remove old pages node
+    var pageNodeList = DOMUtil.findDescendantsByClass(this.rootNode, 'a', this.CSS_CLASS.pageNo);
+    for (var i=0; i<pageNodeList.length; i++) {
+      DOMUtil.removeElement(pageNodeList[i]);
+    }
+
     // Calculate pageStart and pageEnd
     var pageStart = this.currentPageNo - Math.floor(this.MAX_PAGE_NUM/2);
     while (pageStart < 0) {
@@ -86,10 +92,12 @@ UIPageIterator.prototype.renderPageIterator = function() {
       pageStart = pageStart - delta;
       pageStart = (pageStart < 0) ? 0 : pageStart;
     }
-    for (var i=pageStart; i<pageEnd; i++) {
+    for (var i=(pageEnd - 1); i>=pageStart; i--) {
       var pageNode = document.createElement('a');
       if (i == this.currentPageNo) {
         pageNode.className = this.CSS_CLASS.selectedPage;
+      } else {
+        pageNode.className = this.CSS_CLASS.pageNo;
       }
       pageNode.innerHTML = (i + 1);
       pageNode.pageNo = i;
@@ -98,7 +106,7 @@ UIPageIterator.prototype.renderPageIterator = function() {
       pageNode.style.cursor = 'pointer';
       pageNode.onclick = this.gotoPageWrapper;
 
-      this.pageListNode.appendChild(pageNode);
+      this.rootNode.insertBefore(pageNode, this.previousPageNode);
     }
 
     if (this.rootNode.style.display != 'block') {

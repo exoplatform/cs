@@ -363,26 +363,16 @@
                           </tr>
                         </tbody>
                       </table>
-                      <div class="UIPageIterator" style="display:none;">
-                        <div class="PageIteratorContainer">
-                          <div class="RightPageIteratorBlock">
-                            <a class="Icon LastTopPageIcon" title="<%=_ctx.appRes(uicomponent.id + ".label.backTenPages")%>"><span></span></a>
-                            <a class="Icon LastPageIcon" title="<%=_ctx.appRes(uicomponent.id + ".label.previousPage")%>"><span></span></a>
-                            <div class="Number">
-                              <a href="" class="PageSelected">1</a>
-                              <a href="">2</a>
-                            </div>
-                            <a class="Icon NextPageIcon" title="<%=_ctx.appRes(uicomponent.id + ".label.nextPage")%>"><span></span></a>
-                            <a class="Icon NextTopPageIcon" title="<%=_ctx.appRes(uicomponent.id + ".label.nextTenPages")%>"><span></span></a>
-                            <div class="ClearLeft"><span></span></div>
-                          </div>
-                          <div class="LeftPageIteratorBlock">
-                            <div class="TotalPages"><%=_ctx.appRes(uicomponent.id + ".label.totalPages")%></div>
-                            <div class="PagesTotalNumber">2</div>
-                            <div class="ClearLeft"><span></span></div>
-                          </div>
-                        </div>
-                        <div class="ClearRight"><span></span></div>
+                      <div class="UIPageIterator">
+                        <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span/></a>
+                        <a title="Next Page" class="Icon NextPageIcon"/>
+                        <a class="Number">2</a>
+                        <a class="Number PageSelected">1</a>
+                        <a title="Previous Page" class="Icon DisableLastPageIcon"><span/></a>
+                        <a title="Back 10 pages" class="Icon DisableLastTopPageIcon"/>        
+                        <a class="PagesTotalNumber">2</a>
+                        <a class="TotalPages">Total pages:</a>
+                        <div class="ClearRight"><span/></div>
                       </div>
                     </div>
                   </div>
@@ -495,26 +485,16 @@
                         </thead>
                         <tbody><span></span></tbody>
                       </table>
-                      <div class="UIPageIterator" style="display:none">
-                        <div class="PageIteratorContainer">
-                          <div class="RightPageIteratorBlock">
-                            <a class="Icon LastTopPageIcon" title="Back 10 pages"><span></span></a>
-                            <a class="Icon LastPageIcon" title="Previous Page"><span></span></a>
-                            <div class="Number">
-                              <a href="" class="PageSelected">1</a>
-                              <a href="">2</a>
-                            </div>
-                            <a class="Icon NextPageIcon" title="Next Page"><span></span></a>
-                            <a class="Icon NextTopPageIcon" title="Next 10 pages"><span></span></a>
-                            <div class="ClearLeft"><span></span></div>
-                          </div>
-                          <div class="LeftPageIteratorBlock">
-                            <div class="TotalPages">Total pages:</div>
-                            <div class="PagesTotalNumber">2</div>
-                            <div class="ClearLeft"><span></span></div>
-                          </div>
-                        </div>
-                        <div class="ClearRight"><span></span></div>
+                      <div class="UIPageIterator">
+                        <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span/></a>
+                        <a title="Next Page" class="Icon NextPageIcon"/>
+                        <a class="Number">2</a>
+                        <a class="Number PageSelected">1</a>
+                        <a title="Previous Page" class="Icon DisableLastPageIcon"><span/></a>
+                        <a title="Back 10 pages" class="Icon DisableLastTopPageIcon"/>        
+                        <a class="PagesTotalNumber">2</a>
+                        <a class="TotalPages">Total pages:</a>
+                        <div class="ClearRight"><span/></div>
                       </div>
                     </div>
                   </div>
