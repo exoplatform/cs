@@ -332,6 +332,7 @@ UIMailPortlet.prototype.showHideMessageDetails = function(obj){
 UIMailPortlet.prototype.showMessageAction = function(obj, evt){
     var DOMUtil = eXo.core.DOMUtil;
     eXo.cs.Utils.show(obj, evt);
+		if(eXo.core.I18n.lt) menu.style.left = (parseInt(menu.style.left) + obj.offsetWidth - menu.offsetWidth) + "px";
     var menu = DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu");
     var uiResizableBlock = DOMUtil.findAncestorByClass(obj, "UIResizableBlock");
     if (eXo.core.Browser.isIE6() && uiResizableBlock) {
@@ -738,6 +739,30 @@ UIMailPortlet.prototype.expandCollapse = function(clickObj, clickBar){
         eXo.core.DOMUtil.replaceClass(clickObj, "FolderCollapseIcon", "");
     }
 };
+
+UIMailPortlet.prototype.isSMTPAuthentication = function(id){
+	var chk = document.getElementById(id);
+	var checkboxs = eXo.core.DOMUtil.findDescendantsByClass(chk,"input","checkbox");
+	chk = checkboxs[1];
+	var table = eXo.core.DOMUtil.findAncestorByTagName(chk,"table");
+	var div = eXo.core.DOMUtil.findDescendantsByTagName(table,"div")[0];
+	var input = eXo.core.DOMUtil.findDescendantsByTagName(div,"input");
+	chk.onclick = function(){
+		if(!this.checked){
+			div.style.display = "none";
+		}else div.style.display = "";
+	}
+	chk = checkboxs[2];
+	chk.onclick = function(){
+		if (!this.checked) {
+			input[1].disabled = false;
+			input[2].disabled = false;
+		}else{
+			input[1].disabled = true;
+			input[2].disabled = true;
+		}
+	}
+}
 
 eXo.mail.UIMailPortlet = new UIMailPortlet();
 // Override submit method of UIForm to add a comfirm message
