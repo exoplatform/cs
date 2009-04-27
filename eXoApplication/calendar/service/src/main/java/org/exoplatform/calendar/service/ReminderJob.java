@@ -113,7 +113,7 @@ public class ReminderJob implements Job {
         System.out.println("\n\n message has been sent !");
       }
     } catch (Exception e) {
-      System.out.println("\n\n Error when run email reminder job !");
+      //System.out.println("\n\n Error when run email reminder job !");
       //e.printStackTrace();			
     } finally {
       provider.close() ;
