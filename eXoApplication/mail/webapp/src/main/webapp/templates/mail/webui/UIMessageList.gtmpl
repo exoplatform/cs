@@ -101,6 +101,65 @@
   </div>
   
   <div class="SelectButton" onclick="eXo.mail.UIMailPortlet.showView(this, event);">
+    <div class="ViewAsIcon" >
+      <div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.view-as") %></div>
+    </div>
+    <% /*Begin Popup Menu*/ %>
+      <div style="position: relative;">
+          <div class="UIRightClickPopupMenu" style="display: none;">
+          	<div class="UIContextMenuContainer">
+	            <div class="TopLeftRightClickPopupMenu">
+	              <div class="TopRightRightClickPopupMenu">
+	                <div class="TopCenterRightClickPopupMenu"><span></span></div>
+	              </div>
+	            </div>
+	            <div class="MiddleLeftRightClickPopupMenu">
+	              <div class="MiddleRightRightClickPopupMenu">
+	                <div class="UIRightPopupMenuContainer">
+		                	<% 
+	                    String listSelected = "";
+	                    if (uicomponent.viewMode == uicomponent.MODE_LIST) listSelected = "SelectItem" ;  
+	                  %>
+	                  <a class="MenuItem $listSelected" href="<%=uicomponent.event("ViewAsList")%>">   
+	                    <div class="ItemIcon ListIcon"><%=_ctx.appRes(uicomponent.id+ ".label.list") %></div>
+	                  </a>
+	                  <% 
+	                    String threadSelected = "";
+	                    if (uicomponent.viewMode == uicomponent.MODE_THREAD) threadSelected = "SelectItem" ;  
+	                  %>
+	                  <a class="MenuItem $threadSelected" href="<%=uicomponent.event("ViewAsThread")%>">   
+	                    <div class="ItemIcon ThreadIcon"><%=_ctx.appRes(uicomponent.id+ ".label.thread") %></div>
+	                  </a>
+	                  <% 
+	                    String conversationSelected = "";
+	                    if (uicomponent.viewMode == uicomponent.MODE_CONVERSATION) conversationSelected = "SelectItem" ;  
+	                  %>
+	                  
+	                  <a class="MenuItem $conversationSelected" href="<%=uicomponent.event("ViewAsConversation")%>">   
+	                    <div class="ItemIcon ConversationIcon"><%=_ctx.appRes(uicomponent.id+ ".label.conversation") %></div>
+	                  </a>
+	                  <div class ="HorizontalLine"><span></span></div>
+	                  <a class="MenuItem $conversationSelected" href="<%=uicomponent.event("ViewAsConversation")%>">   
+	                    <div class="IconHolder UIDayViewIcon"><%=_ctx.appRes(uicomponent.id+ ".label.groupByDate") %></div>
+	                  </a>
+	                </div>
+	              </div>
+	            </div>
+	            <div class="BottomLeftRightClickPopupMenu">
+              <div class="BottomRightRightClickPopupMenu">
+                <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+    <% /*End Popup Menu*/ %>
+  </div>
+  
+  
+  
+  
+  <div class="SelectButton" onclick="eXo.mail.UIMailPortlet.showView(this, event);">
     <div class="View" >
       <div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.view") %></div>
     </div>
@@ -116,96 +175,37 @@
 	            <div class="MiddleLeftRightClickPopupMenu">
 	              <div class="MiddleRightRightClickPopupMenu">
 	                <div class="UIRightPopupMenuContainer">
-	                  <a class="MenuItem">   
-	                    <div class="ItemIcon ViewAsIcon">
-                        <div class="NextArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.view-as") %></div>
-                      </div>
-	                  </a>
-                    <!--Submenu-->
-                       <div class="UIRightClickPopupMenu" style="display: none;">
-                        <div class="UIContextMenuContainer">
-                          <div class="TopLeftRightClickPopupMenu">
-                            <div class="TopRightRightClickPopupMenu">
-                              <div class="TopCenterRightClickPopupMenu"><span></span></div>
-                            </div>
-                          </div>
-                          <div class="MiddleLeftRightClickPopupMenu">
-                            <div class="MiddleRightRightClickPopupMenu">
-                              <div class="UIRightPopupMenuContainer">
-                              <% 
-                                String listSelected = "";
-                                if (uicomponent.viewMode == uicomponent.MODE_LIST) listSelected = "SelectItem" ;  
-                              %>
-                              <a class="MenuItem $listSelected" href="<%=uicomponent.event("ViewAsList")%>">   
-                                <div class="ItemIcon ListIcon"><%=_ctx.appRes(uicomponent.id+ ".label.list") %></div>
-                              </a>
-                              <% 
-                                String threadSelected = "";
-                                if (uicomponent.viewMode == uicomponent.MODE_THREAD) threadSelected = "SelectItem" ;  
-                              %>
-                              <a class="MenuItem $threadSelected" href="<%=uicomponent.event("ViewAsThread")%>">   
-                                <div class="ItemIcon ThreadIcon"><%=_ctx.appRes(uicomponent.id+ ".label.thread") %></div>
-                              </a>
-                              <% 
-                                String conversationSelected = "";
-                                if (uicomponent.viewMode == uicomponent.MODE_CONVERSATION) conversationSelected = "SelectItem" ;  
-                              %>
-                              <a class="MenuItem $conversationSelected" href="<%=uicomponent.event("ViewAsConversation")%>">   
-                                <div class="ItemIcon ConversationIcon"><%=_ctx.appRes(uicomponent.id+ ".label.conversation") %></div>
-                              </a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="BottomLeftRightClickPopupMenu">
-                           <div class="BottomRightRightClickPopupMenu">
-                             <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-                           </div>
-                         </div>
-                         </div>
-                       </div>
-                    <!--end-->
-                    <% 
-                      String viewSelected = "";
-                      if (uicomponent.viewing_ == uicomponent.VIEW_ALL) viewSelected = "SelectItem" ;  
-                    %>
-                    <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewAll")%>">   
-                      <div class="ItemIcon AllMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-all-messages") %></div>
-                    </a>
-                    <% 
-                      viewSelected = "";
-                      if (uicomponent.viewing_ == uicomponent.VIEW_STARRED) viewSelected = "SelectItem" ;  
-                    %>
-	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewStarred")%>">   
-	                    <div class="ItemIcon StarredIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-starred-messages") %></div>
-	                  </a>
-                    <% 
-                      viewSelected = "";
-                      if (uicomponent.viewing_ == uicomponent.VIEW_UNSTARRED) viewSelected = "SelectItem" ;  
-                    %>
-	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewUnstarred")%>">   
-	                    <div class="ItemIcon UnStarredIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-unstarred-messages") %></div>
-	                  </a>
-                    <% 
+	                  
+	                  
+	                  <% 
                       viewSelected = "";
                       if (uicomponent.viewing_ == uicomponent.VIEW_UNREAD) viewSelected = "SelectItem" ;  
                     %>
 	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewUnread")%>">   
 	                    <div class="ItemIcon UnreadMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-unread-messages") %></div>
 	                  </a>
-                    <% 
+	                  <% 
                       viewSelected = "";
-                      if (uicomponent.viewing_ == uicomponent.VIEW_READ) viewSelected = "SelectItem" ;  
+                      if (uicomponent.viewing_ == uicomponent.VIEW_STARRED) viewSelected = "SelectItem" ;  
                     %>
-	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewRead")%>">   
-	                    <div class="ItemIcon ReadMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-read-messages") %></div>
+	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewStarred")%>">   
+	                    <div class="ItemIcon StarredIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-starred-messages") %></div>
 	                  </a>
-                    <% 
+	                  <% 
                       viewSelected = "";
                       if (uicomponent.viewing_ == uicomponent.VIEW_ATTACHMENT) viewSelected = "SelectItem" ;  
                     %>
 	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewAttachment")%>">   
 	                    <div class="ItemIcon MessagesAttachmentIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-with-attachment") %></div>
 	                  </a>
+	                  <div class ="HorizontalLine"><span></span></div>
+                    <% 
+                      viewSelected = "";
+                      if (uicomponent.viewing_ == uicomponent.VIEW_ALL) viewSelected = "SelectItem" ;  
+                    %>
+                    <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewAll")%>">   
+                      <div class="ItemIcon AllMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-all-messages") %></div>
+                    </a>
 	                </div>
 	              </div>
 	            </div>

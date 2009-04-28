@@ -5,6 +5,10 @@
 	float: left;
 }
 
+.UIMailPortlet .CheckedMenu {
+	background: url('icons/BlueCheckerIcon.gif') no-repeat left center;
+}
+
 .UIMailPortlet .MaximizeReadingPane {
 	background: url('icons/MaximizeReadingPane.gif') no-repeat;
 	width: 17px; height: 16px;
@@ -222,6 +226,16 @@
 .UIMailPortlet .ConversationIcon {
 	background: url('icons/ConversationIcon.gif') no-repeat;
 }
+
+.UIMailPortlet .UIDayViewIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat;
+	margin: 1px 0px 0px 10px; /* orientation=lt */
+	margin: 1px 10px 0px 0px; /* orientation=rt */
+	line-height: 27px;
+	padding-left: 24px; /* orientation=lt */
+	padding-right: 24px; /* orientation=rt */
+}
+
 
 .UIMailPortlet .StaredMessagesIcon {
 	background: url('icons/AllMessagesIcon.gif') no-repeat;

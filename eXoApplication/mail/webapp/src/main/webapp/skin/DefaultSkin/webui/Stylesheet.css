@@ -572,6 +572,19 @@
 	padding-right: 24px; /* orientation=rt */
 }
 
+.UIMailPortlet .HorizontalLine {
+	background: url('background/HorizontalLine.gif') no-repeat scroll bottom left ;	
+	height: 1px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .ViewAsIcon {
+	margin: 1px 0px 0px 10px; /* orientation=lt */
+	margin: 1px 10px 0px 0px; /* orientation=rt */
+	line-height: 27px;
+	padding-left: 24px; /* orientation=lt */
+	padding-right: 24px; /* orientation=rt */
+}
+
 .UIMailPortlet .MailWorkingWorkspace .UIActionBar .AddEventIcon {
 	margin: 1px 7px 0px 7px;
 	line-height: 23px;
