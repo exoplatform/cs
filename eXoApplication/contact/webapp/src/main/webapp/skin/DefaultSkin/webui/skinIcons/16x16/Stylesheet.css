@@ -135,6 +135,10 @@
 	background: url('icons/DeleteIcon.gif') no-repeat left center;
 }
 
+.UIContactPortlet .DeleteIcon1 {
+	background: url('icons/DeleteIcon1.gif') no-repeat left center;
+}
+
 .UIContactPortlet .CopyAddressIcon {
 	background: url('icons/CopyIcon.gif') no-repeat left center;
 }

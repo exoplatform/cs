@@ -75,6 +75,8 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UIAddressBooks.ShareGroupActionListener.class),
     @EventConfig(listeners = UIAddressBooks.DeleteGroupActionListener.class
         , confirm = "UIAddressBooks.msg.confirm-delete"),
+    @EventConfig(listeners = UIAddressBooks.DeleteSharedGroupActionListener.class
+        , confirm = "UIAddressBooks.msg.confirm-discard"),
     @EventConfig(listeners = UIAddressBooks.SelectGroupActionListener.class),
     @EventConfig(listeners = UIAddressBooks.SelectPublicGroupActionListener.class),
     @EventConfig(listeners = UIAddressBooks.SelectSharedContactActionListener.class),
@@ -500,10 +502,51 @@ public class UIAddressBooks extends UIComponent {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser();
-      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       List <Contact> removedContacts = new ArrayList<Contact>() ;
+
+//      cs-1644
+      //if (uiContacts.isDisplaySearchResult())
+      removedContacts = contactService.getPersonalContactsByAddressBook(
+            username, groupId).getAll() ;
+      contactService.removeAddressBook(username, groupId);
+   
+      if (groupId.equals(uiAddressBook.copyAddress)) uiAddressBook.copyAddress = null ;      
+      if (groupId.equals(uiAddressBook.selectedGroup)) {
+        uiAddressBook.selectedGroup = null;
+        uiContacts.setContacts(null);
+      }
+      String selectedTag = uiContacts.getSelectedTag() ;
+      if (!ContactUtils.isEmpty(selectedTag)) {
+        uiContacts.setContacts(
+            contactService.getContactPageListByTag(username, selectedTag)) ;
+      }
       
+      if (uiContacts.isDisplaySearchResult()) {
+        //cs-1809 
+        uiContacts.setContacts(contactService.searchContact(username
+          , workingContainer.findFirstComponentOfType(UISearchForm.class).filter)) ;
+      }
+      if (uiContacts.getSelectedGroup() != null && groupId.equals(uiContacts.getSelectedGroup()))
+        uiContacts.setSelectedGroup(null) ;
       
+      // cs-1644
+      for (Contact contact : removedContacts)
+        uiAddressBook.copyContacts.remove(contact.getId()) ; 
+      event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer);     
+    }
+  }
+  
+  static public class DeleteSharedGroupActionListener extends EventListener<UIAddressBooks> {
+    @SuppressWarnings("static-access")
+    public void execute(Event<UIAddressBooks> event) throws Exception {
+      UIAddressBooks uiAddressBook = event.getSource();
+      UIWorkingContainer workingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class);
+      workingContainer.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
+      UIContacts uiContacts = workingContainer.findFirstComponentOfType(UIContacts.class) ;
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
+      ContactService contactService = ContactUtils.getContactService();
+      String username = ContactUtils.getCurrentUser();
+      List <Contact> removedContacts = new ArrayList<Contact>() ;
       if (uiAddressBook.sharedAddressBookMap_.containsKey(groupId)) {
         //contactService.removeSharedAddressBook(SessionProviderFactory.createSystemProvider(), username, groupId) ;
 //      cs-1644
@@ -513,12 +556,6 @@ public class UIAddressBooks extends UIComponent {
           contactService.unshareAddressBook(uiAddressBook.sharedAddressBookMap_.get(groupId).getSharedUserId()
               , groupId, username) ;          
         } catch (PathNotFoundException e) { }
-      } else {
-//      cs-1644
-        //if (uiContacts.isDisplaySearchResult())
-        removedContacts = contactService.getPersonalContactsByAddressBook(
-              username, groupId).getAll() ;
-        contactService.removeAddressBook(username, groupId);
       }
       if (groupId.equals(uiAddressBook.copyAddress)) uiAddressBook.copyAddress = null ;      
       if (groupId.equals(uiAddressBook.selectedGroup)) {
