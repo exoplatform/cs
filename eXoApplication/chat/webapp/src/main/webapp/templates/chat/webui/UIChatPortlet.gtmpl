@@ -10,8 +10,8 @@
 
 <!-- Begin Notification -->
 
-<div class="UINotification" style="display: none;position: relative;">
-	<div style="position: absolute;top: 0px;right: 5px;width: 250px;">
+<div class="UINotification" style="display:none; position:relative; top:13px; float:right">
+	<div style="position:absolute;top:0px;right:8px;width:250px;">
 		<div class="BoxNote">
 			<div class="LeftBoxNote">
 				<div class="RightBoxNote">
@@ -66,10 +66,10 @@
 								<a class="Icon JoinRoomIcon" title="Join a room" onclick="eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(true)">Join Room</a>
 								<div class="SeperatorLine"><span></span></div>
 				        <a class="Icon AddContactIcon" title="Add new contact" onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true)">Add Contact</a>
-								<div class="SeperatorLine" style="display: none"><span></span></div>
+								<div class="SeperatorLine" style="display:none"><span></span></div>
 				        <div class="ClearLeft"><span></span></div>
               </div>
-              <div style="padding: 5px 5px 0px 0px; display: none;">
+              <div style="padding:5px 5px 0px 0px; display:none;">
                 <div class="FilterField"><span></span></div>
               </div>
     				<div class="ClearLeft"><span></span></div>
@@ -88,7 +88,7 @@
 									<div class="LeftTabUser">
 										<div class="RightTabUser">
 											<div class="CenterTabUser">
-                        <div class="UIRightClickPopupMenu" style="display: none;">
+                        <div class="UIRightClickPopupMenu" style="display:none;">
                           <div class="UIContextMenuContainer">
                             <div class="TopLeftRightClickPopupMenu">
                               <div class="TopRightRightClickPopupMenu">
@@ -152,7 +152,7 @@
 <!-- End UIChat -->
 
 <!-- Start MiniBoxChat -->
-<div class="MiniBoxChat" style="display: none">
+<div class="MiniBoxChat" style="display:none">
 	<div class="NormalMiniBoxChat">
 		<div class="LeftMiniBoxChat">
 			<div class="RightMiniBoxChat">
@@ -160,7 +160,7 @@
 					<div class="FixHeight">
 											
 							<div class="InfoIcon">
-                <span class="UnreadMessage" style="color: red;"></span>
+                <span class="UnreadMessage" style="color:red;"></span>
                 <span>Conversation window</span>
 	            </div>  
 						
@@ -210,8 +210,8 @@
 <!-- End of BuddyItem action popup menu -->
 
 <!-- Chat window with tab -->
-<div style="position: absolute; top: 115px; left: 255px;width: 655px; height: 230px; display: none;"
-   class="UIWindow DefaultTheme UIDragObject UIResizeObject ChatPopup ChatSharedIcons" minwidth="545" minheight="245">
+<div style="position:absolute; top:115px; left:255px; width:655px; height:230px; display:none;"
+   class="UIWindow DefaultTheme UIDragObject UIResizeObject ChatPopup ChatSharedIcons" minwidth="545px" minheight="245px">
   <div class="WindowBarLeft">
     <div class="WindowBarRight">
       <div class="WindowBarCenter">
@@ -221,12 +221,12 @@
                  onmouseover="eXo.desktop.UIWindow.onControlOver(this, true);"
                  onclick="eXo.communication.chat.webui.UIChatWindow.setVisible(false, event, true)"
                  title="Minimize Window" class="ControlIcon MinimizedIcon"><span></span></div>
-	          <div style="clear: left;"><span></span></div>
+	          <div style="clear:left;"><span></span></div>
 	        </div>
 	        <div class="WindowPortletInfo">
 	          <div class="Icon PortletIcon WindowPortletIcon NovaPortletIcon">
 <div class="PortletName">
-              <span class="UnreadMessage" style="color: red"></span>
+              <span class="UnreadMessage" style="color:red"></span>
               <span>Conversation</span>
             	</div>
 </div>
@@ -251,7 +251,7 @@
                       <div class="RightHorizontalTabs">
                         <div class="CenterHorizontalTabs">
                           <div class="TabsContainer">
-                            <div class="ScrollButtons" style="display: block;">
+                            <div class="ScrollButtons" style="display:block;">
                               <div class="ScrollLeftButton" title="Previous">
                                 <div class="ScrollRightButton" title="Next"><span></span></div>
                               </div>
@@ -286,7 +286,7 @@
 </div>
 
 <!-- Start Add Contact popup -->
-<div class="UIPopupWindow UIDragObject AddContactPopup" style="position: absolute; top: 150px; left: 250px;width: 550px; height: 150px; display: none; visibility: visible">
+<div class="UIPopupWindow UIDragObject AddContactPopup" style="position:absolute; top:150px; left:250px;width:550px; height:150px; display:none; visibility:visible">
   <div class="ExoMesseageDecorator">
     <div class="TopLeftCornerDecorator">
       <div class="TopRightCornerDecorator">
@@ -316,11 +316,11 @@
                               <div class="UISearchForm">
                                 <div class="QuickSet">
                                   <div class="SearchTitle">Search:</div>
-                                  <input type="text" class="SearchField">
-                                  <a class="SearchIcon" href="" title="Quick Search"><span></span></a>
+                                  <input type="text" class="SearchField" />
+                                  <a class="SearchIcon" href="" title="Quick Search"></a>
                                 </div>
                               </div>
-                              <div style="clear: left"><span></span></div>
+                              <div style="clear:left"><span></span></div>
                             </div>
                           </div>
                         </div>
@@ -329,11 +329,11 @@
                   </div>
                   <div class="AddressContainer">
                     <div class="ListAddress">
-                      <table cellspacing="0" borderspacing="0" class="UIGrid">
+                      <table cellspacing="0" cellpadding="0" border="0" class="UIGrid">
                         <thead>
                           <tr>
                             <th class="StyleInput">
-                              <input type="checkbox" class="CheckBox ToggleSelect" onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.toggleSelectAllContact()" title="Select all/none">
+                              <input type="checkbox" class="CheckBox ToggleSelect" onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.toggleSelectAllContact()" title="Select all/none" />
                             </th>
                             <th>
                               <div class="Label">First Name</div>
@@ -348,8 +348,8 @@
                         </thead>
                         <tbody>
                           <tr>
-                            <td style="width: 20px; text-align: center;">
-                              <input type="checkbox" class="CheckBox ToggleSelect">
+                            <td style="width:20px; text-align:center;">
+                              <input type="checkbox" class="CheckBox ToggleSelect" />
                             </td>
                             <td>
                               <div class="Label">First Name</div>
@@ -378,30 +378,36 @@
                   </div>
                 </div>
                 <div class="UIAction">
-                  <table class="ActionContainer" align="center">
+                  <table class="ActionContainer">
                     <tr>
                       <td align="center">
-                       <a href="javascript:eXo.communication.chat.webui.UIAddContactPopupWindow.reload()" class="ActionButton LightBlueStyle">
+                       <div onclick="javascript:eXo.communication.chat.webui.UIAddContactPopupWindow.reload()" class="ActionButton LightBlueStyle">
                           <div class="ButtonLeft">
                             <div class="ButtonRight">
-                              <div class="ButtonMiddle"> Refresh </div>
+                              <div class="ButtonMiddle">
+                              	<a href="#">Refresh</a>
+                              </div>
                             </div>
                           </div>
-                        </a>
-                        <a href="javascript:eXo.communication.chat.webui.UIAddContactPopupWindow.addContactAction()" class="ActionButton LightBlueStyle AddContactButton">
+                        </div>
+                        <div onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.addContactAction()" class="ActionButton LightBlueStyle AddContactButton">
                           <div class="ButtonLeft">
                             <div class="ButtonRight">
-                              <div class="ButtonMiddle"> Add contact </div>
+                              <div class="ButtonMiddle">
+                              	<a href="#">Add contact</a>
+                          		</div>
                             </div>
                           </div>
-                        </a>
-                        <a href="javascript:eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
+                        </div>
+                        <div onclick="javascript:eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(false)" class="ActionButton LightBlueStyle">
                           <div class="ButtonLeft">
                             <div class="ButtonRight">
-                              <div class="ButtonMiddle"> Cancel </div>
+                              <div class="ButtonMiddle">
+                              	<a href="#">Cancel</a>
+                          		</div>
                             </div>
                           </div>
-                        </a>
+                        </div>
                       </td>
                     </tr>
                   </table>
@@ -425,7 +431,7 @@
 
 <!-- Popup Join Room -->
 <div class="UIPopupWindow UIDragObject JoinRoomPopup UIJoinRoom"
-  style="position: absolute; top: 150px; left: 250px;width: 550px; height: 150px; display: none; visibility: visible">
+  style="position:absolute; top:150px; left:250px;width:550px; height:150px; display:none; visibility:visible">
   <div class="ExoMesseageDecorator">
     <div class="TopLeftCornerDecorator">
       <div class="TopRightCornerDecorator">
@@ -447,7 +453,7 @@
 	            <!-- start contact -->
 	            <div class="UIInsertAddress">
                 <div class="InsertAddressContainer">
-                  <div class="UISearch" style="display: none">
+                  <div class="UISearch" style="display:none">
                     <div class="UIBarStyle">
                       <div class="NormalBarStyle">
                         <div class="LeftBar">
@@ -456,8 +462,8 @@
                               <div class="UISearchForm">
                                 <div class="QuickSet">
                                   <div class="SearchTitle">Search:</div>
-                                  <input type="text" disabled="true">
-                                  <a class="SearchIcon" href="" title="Quick Search"><span></span></a>
+                                  <input type="text" disabled="true" />
+                                  <a class="SearchIcon" href="" title="Quick Search"></a>
                                 </div>
                               </div>
                               <div class="ClearLeft"><span></span></div>
@@ -469,7 +475,7 @@
                   </div>
                   <div class="AddressContainer">
                     <div class="ListAddress">
-                      <table cellspacing="0" borderspacing="0" class="UIGrid">
+                      <table cellspacing="0px" cellpadding="0px" border="0px" class="UIGrid">
                         <thead>
                           <tr>
                             <th class="StyleInput">
@@ -483,18 +489,18 @@
                             </th>
                           </tr>
                         </thead>
-                        <tbody><span></span></tbody>
+                        <tbody><tr><td><span></span></td></tr></tbody>
                       </table>
                       <div class="UIPageIterator">
-                        <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span/></a>
-                        <a title="Next Page" class="Icon NextPageIcon"/>
+                        <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"></a>
+                        <a title="Next Page" class="Icon NextPageIcon"></a>
                         <a class="Number">2</a>
                         <a class="Number PageSelected">1</a>
-                        <a title="Previous Page" class="Icon DisableLastPageIcon"><span/></a>
-                        <a title="Back 10 pages" class="Icon DisableLastTopPageIcon"/>        
+                        <a title="Previous Page" class="Icon DisableLastPageIcon"></a>
+                        <a title="Back 10 pages" class="Icon DisableLastTopPageIcon"></a>        
                         <a class="PagesTotalNumber">2</a>
                         <a class="TotalPages">Total pages:</a>
-                        <div class="ClearRight"><span/></div>
+                        <div class="ClearRight"><span></span></div>
                       </div>
                     </div>
                   </div>
@@ -547,7 +553,7 @@
 
 <!-- Popup New Room -->
 <div class="UIPopupWindow UIDragObject CreateNewRoomPopup UINewRoom"
-  style="position: absolute; top: 150px; left: 250px;width: 550px; height: 150px; display: none; visibility: visible">
+  style="position:absolute; top:150px; left:250px;width:550px; height:150px; display:none; visibility:visible">
   <div class="ExoMesseageDecorator">
     <div class="TopLeftCornerDecorator">
       <div class="TopRightCornerDecorator">
@@ -571,15 +577,15 @@
                   <div class="InsertAddressContainer">
                     <div class="AddressContainer">
                       <div class="ListAddress">
-                        <table cellspacing="0" borderspacing="0" class="UIGrid">
+                        <table cellspacing="0px" cellpadding="0px" border="0px" class="UIGrid">
                           <tbody>
                             <tr>
                               <td class="FieldName">
                                 <div>Room name:</div>
                               </td>
                               <td>
-                                <input type="text" name="roomName" maxlength="50">
-                                <span style="color: #f00">*</span>
+                                <input type="text" name="roomName" maxlength="50px"/>
+                                <span style="color:#f00">*</span>
                               </td>
                             </tr>
                           </tbody>
@@ -629,7 +635,7 @@
 
 <!--Start room config form-->
 <div class="UIPopupWindow UIDragObject RoomConfigPopup"
-  style="position: absolute; top: 150px; left: 250px;width: 550px; height: 150px; display: none; visibility: visible">
+  style="position:absolute; top:150px; left:250px;width:550px; height:150px; display:none; visibility:visible">
   <div class="ExoMesseageDecorator UINewForm">
     <div class="TopLeftCornerDecorator">
       <div class="TopRightCornerDecorator">
@@ -645,34 +651,35 @@
 	  <div class="MiddleLeftSideDecorator">
 		  <div class="MiddleRightSideDecorator">
 		    <div class="MiddleCenterDecorator">
-        	<form method="post" class="ContainerForm">
+        	<form method="post" class="ContainerForm" action="#">
         		<div class="BoxForm">
         			<div class="BorderForm">
-							  <fieldset style="color: #333; margin-bottom: 10px; overflow: hidden: height: 100%;" maxHeight="350">
+							  <fieldset style="color:#333; margin-bottom:10px; overflow:hidden:height:100%;" maxHeight="350px">
 							    <legend class="StyleLegend">General</legend>
-							    <table class="UIFormGrid" style="visibility: visible;">
+							    <table class="UIFormGrid" style="visibility:visible;">
 							      <tr>
 							        <td class="FieldLabel">
-							          <label>Room name: </label>
+							          <label>Room name:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <input type="text" name="roomname" disabled>
+							          <input type="text" name="roomname" disabled />
 							        </td>
 							      </tr>
 							      <!--tr>
 							        <td class="FieldLabel">
-							          <label>Change Subject: </label>
+							          <label>Change Subject:</label>
 							        </td>
 							        <td class="FieldComponent">
 							          <input type="checkbox" name="changesubject">
 							        </td>
 							      </tr>
 							      <tr-->
+							      <tr>
 							        <td class="FieldLabel">
 							          <label>Persistent Room:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <input type="checkbox" name="persistentroom">
+							          <input type="checkbox" name="persistentroom"/>
 							        </td>
 							      </tr>
 							      <!--tr>
@@ -688,7 +695,7 @@
 							          <label>Presence Broadcast:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <select name="presencebroadcast" size="3" multiple="true">
+							          <select name="presencebroadcast" size="3">
 													<option value="moderator">moderator</option>
 													<option value="participant">participant</option>
 													<option value="visitor">visitor</option>
@@ -700,7 +707,7 @@
 							          <label>Who is:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <select name="whois" size="3" multiple="true">
+							          <select name="whois" size="3">
                           <option value="anyone">anyone</option>
                         </select>
 							        </td>
@@ -724,15 +731,15 @@
 							    </table>
 							  </fieldset>
 					
-							  <fieldset style="overflow: hidden; height: 20px;" maxHeight="350" state="closed">
+							  <fieldset style="overflow:hidden; height:20px;" maxHeight="350" state="closed">
 							    <legend class="StyleLegend">Show Security</legend>
-							     <table class="UIFormGrid" style="visibility: visible; opacity: 0;">
+							     <table class="UIFormGrid" style="visibility:visible; opacity:0;">
 							      <tr>
 							        <td class="FieldLabel">
 							          <label>Public Room:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <input type="checkbox" name="publicroom">
+							          <input type="checkbox" name="publicroom"/>
 							        </td>
 							      </tr>
 							      <tr>
@@ -740,7 +747,7 @@
 							          <label>Members Only:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <input type="checkbox" name="membersonly">
+							          <input type="checkbox" name="membersonly"/>
 							        </td>
 							      </tr>
 							      <tr>
@@ -748,7 +755,7 @@
 							          <label>Allow Invites:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <input type="checkbox" name="allowinvites">
+							          <input type="checkbox" name="allowinvites"/>
 							        </td>
 							      </tr>
 							      <tr>
@@ -756,7 +763,7 @@
 							          <label>Reserved nick:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <input type="checkbox" name="reservednick">
+							          <input type="checkbox" name="reservednick"/>
 							        </td>
 							      </tr>
 							      <!--tr>
@@ -780,7 +787,7 @@
 							          <label>Password Protected Room:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <input type="checkbox" name="passwordprotectedroom">
+							          <input type="checkbox" name="passwordprotectedroom" />
 							        </td>
 							      </tr>
 								  	<tr>
@@ -788,7 +795,7 @@
 							          <label>Password:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <input type="password" name="roomsecret">
+							          <input type="password" name="roomsecret" />
 							        </td>
 							      </tr>
 								  	<tr>
@@ -796,7 +803,7 @@
 							          <label>Moderated Room:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <input type="checkbox" name="moderatedroom">
+							          <input type="checkbox" name="moderatedroom" />
 							        </td>
 							      </tr>
 								  	<tr>
@@ -804,7 +811,9 @@
 							          <label>Room Admins:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <select name="roomadmins" size="3" multiple="true"></select>
+							          <select name="roomadmins" size="3">
+							          	<option></option>
+							          </select>
 							        </td>
 							      </tr>
 								  	<tr>
@@ -812,7 +821,9 @@
 							          <label>Room Owners:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <select name="roomowners" size="3" multiple="true"></select>
+							          <select name="roomowners" size="3">
+							          	<option></option>
+							          </select>
 							        </td>
 							      </tr>
 							    </table>
@@ -859,7 +870,7 @@
 <!--end room config form -->
 
 <!-- Start template area -->
-<div id="templateArea" style="display: none">
+<div id="templateArea" style="display:none">
 
   <!-- BuddyItem -->
   <div class="TitleIconChat">
@@ -900,7 +911,7 @@
       <div class="ChatTime">
         <div class="LeftTime">
           <div class="RightTime">
-            <div class="CenterTime"></div>
+            <div class="CenterTime"><span></span></div>
           </div>
         </div>
       </div>
@@ -919,7 +930,7 @@
           <div class="MiddleLeftBoxMessageChat">
             <div class="MiddleRightBoxMessageChat">
               <div class="UIRightPopupMenuContainer">
-                <div class="ContextChat"></div>
+                <div class="ContextChat"><span></span></div>
               </div>
             </div>
           </div>
@@ -937,12 +948,12 @@
   <div class="Message GuestMessage">
     <div class="MessageTitle">
       <div class="ChatName">
-        <div class="IconStatus ChatIcon"></div>
+        <div class="IconStatus ChatIcon"><span></span></div>
       </div>
       <div class="ChatTime">
         <div class="LeftTime">
           <div class="RightTime">
-            <div class="CenterTime"></div>
+            <div class="CenterTime"><span></span></div>
           </div>
         </div>
       </div>
@@ -961,7 +972,7 @@
           <div class="MiddleLeftBoxMessageChat">
             <div class="MiddleRightBoxMessageChat">
               <div class="UIRightPopupMenuContainer">
-                <div class="ContextChat"></div>
+                <div class="ContextChat"><span></span></div>
               </div>
             </div>
           </div>
@@ -980,11 +991,11 @@
   	<div class="BackgroundSendFile">
   		<div class="ImageFile"><span></span></div>
   		<div class="ContentSendFile">
-  			<div class="LableSendFile">Waiting for you to accept 1 file: </div>
+  			<div class="LableSendFile">Waiting for you to accept 1 file:</div>
   			<div class="NameFile"><span></span></div>
   			<div class="ActionFile" onclick="eXo.communication.chat.webui.UIChatWindow.acceptFileExchange(this)">Accept</div>
   			<div class="ActionFile" onclick="eXo.communication.chat.webui.UIChatWindow.denieFileExchange(this)">Deny</div>
-  			<div class="LoadingIcon" style="display: none; background: url('DefaultSkin/skinIcons/LoadingProgress24x24.gif') no-repeat center center; width: 24px; height: 24px;"><span></span></div>
+  			<div class="LoadingIcon" style="display:none; background:url('DefaultSkin/skinIcons/LoadingProgress24x24.gif') no-repeat center center; width:24px; height:24px;"><span></span></div>
   			<div  class="ClearLeft"><span></span></div>
   		</div>
   		<div  class="ClearLeft"><span></span></div>
@@ -998,11 +1009,11 @@
       <div class="LeftTab">
         <div class="RightTab">
           <div class="MiddleTab">
-            <div class="TabName" style="display: inline;">
-              <span class="UnreadMessage" style="color: red;"></span>
+            <div class="TabName" style="display:inline;">
+              <span class="UnreadMessage" style="color:red;"></span>
               <span class="ContactName"></span>
             </div>
-            <div class="CloseTabButton" style="display: inline; color: red;margin-left: 10px;" title="Click to remove this tab!">x</div>
+            <div class="CloseTabButton" style="display:inline; color:red;margin-left:10px;" title="Click to remove this tab!">x</div>
           </div>
         </div>
       </div>
@@ -1026,14 +1037,14 @@
                       </a>
                       <div class="SeperatorLine"><span></span></div>
                       <div class="SendFileIcon">
-                        <form method="POST" enctype="multipart/form-data" class="ChatSendFileForm" target="chatFileExchangeIframe">
-                          <input type="file" size="1" class="InputSendFile" width="5px" name="uploadfile"
-                            onchange="eXo.communication.chat.webui.UIChatWindow.sendFile(this, event);">
+                        <form method="POST" enctype="multipart/form-data" class="ChatSendFileForm" target="chatFileExchangeIframe" action="#">
+                          <input type="file" size="1" class="InputSendFile" style="width:5px" name="uploadfile"
+                            onchange="eXo.communication.chat.webui.UIChatWindow.sendFile(this, event);" />
                         </form>
                       </div>
                       <div  class="ClearLeft"><span></span></div>
                   </div>
-                  <div style="padding: 5px 5px 0px 0px">
+                  <div style="padding:5px 5px 0px 0px">
                     <div class="FilterField"><span></span></div>
                   </div>
                   <div  class="ClearLeft"><span></span></div>

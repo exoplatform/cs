@@ -30,7 +30,7 @@ UIAddContactPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.LocalTemplateEngine = this.UIMainChatWindow.LocalTemplateEngine;
   this.filterFieldNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'input', this.CSS_CLASS.searchField);
   this.pageIteratorNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.uiPageIterator);
-  this.addContactButtonNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'a', this.CSS_CLASS.addContactButton);
+  this.addContactButtonNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.addContactButton);
   this.addContactButtonNode.hrefBk = this.addContactButtonNode.href;
   eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.filterFieldNode, 'keyup', this.doSearchContactWrapper, false);
   this.uiPageIterator = new eXo.communication.chat.webui.UIPageIterator(this.pageIteratorNode);
