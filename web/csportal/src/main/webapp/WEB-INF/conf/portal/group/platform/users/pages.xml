@@ -46,22 +46,7 @@
       <title>Contact Portlet</title>
       <show-info-bar>false</show-info-bar>      
     </application>  
-  </page>
- 
- <page>
-  	<page-id>group::platform/users::chat</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/users</owner-id>
-    <name>chat</name>     
-    <access-permissions>*:/platform/users</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>   
-    
-    <application>
-      <instance-id>group#platform/users:/chat/ChatPortlet/chat</instance-id>    
-      <title>Chat Portlet</title>
-      <show-info-bar>false</show-info-bar>       
-    </application>
-   </page>
+  </page>  
    
    <page>
   	<page-id>group::platform/users::collaboration</page-id>
@@ -92,13 +77,7 @@
       <title>Contact Portlet</title>
       <show-info-bar>true</show-info-bar>
       <show-application-state>true</show-application-state>
-    </application>
-    
-     <application>
-      <instance-id>group#platform/users:/chat/ChatPortlet/chat</instance-id>    
-      <title>Chat Portlet</title>
-      <show-info-bar>false</show-info-bar>       
-    </application>
+    </application>    
           
   </page> 
     	  

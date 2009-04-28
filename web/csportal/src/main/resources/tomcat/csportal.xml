@@ -1,2 +1,2 @@
-<Context path="/csportal" docBase="../../../eXoProjects/cs/trunk/web/csportal/src/main/webapp" 
+<Context path="/csportal" docBase="../../../eXoProjects/cs/tags/1.2.1/web/csportal/src/main/webapp" 
          debug="0" reloadable="true" />

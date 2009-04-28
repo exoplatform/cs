@@ -10,7 +10,7 @@
   <groupId>org.exoplatform.cs</groupId>
   <artifactId>config</artifactId>
   <name>eXo Collaboration Suite Config</name>
-  <version>1.2.1-SNAPSHOT</version>
+  <version>1.2.1</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -30,13 +30,6 @@
     
     <module>eXoApplication/content/webapp</module>
     <module>eXoApplication/content/service</module>
-    
-    <module>eXoApplication/chat/service</module>
-    <module>eXoApplication/chat/webapp</module>
-    
-    <module>eXoApplication/organization/client</module>
-    <module>eXoApplication/organization/service</module>
-    <module>eXoApplication/organization/webapp</module>
     
     <module>server/tomcat/patch</module>
     <module>server/jboss/patch</module>
@@ -136,7 +129,7 @@
         <org.exoplatform.jcr.version>1.10.3</org.exoplatform.jcr.version>
         <org.exoplatform.pc.version>2.0.6</org.exoplatform.pc.version>
         <org.exoplatform.portal.version>2.5.3</org.exoplatform.portal.version>
-        <org.exoplatform.cs.version>1.2.1-SNAPSHOT</org.exoplatform.cs.version>
+        <org.exoplatform.cs.version>1.2.1</org.exoplatform.cs.version>
         <test.classes>Test</test.classes>
         <test.skip>true</test.skip>
       </properties>
