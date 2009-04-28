@@ -1,4 +1,13 @@
+/**
+ * @author Uoc Nguyen
+ *  email uoc.nguyen@exoplatform.com
+ *
+ *  This object is using to manage state of UI component by store it in JCR using REST service UIStateService
+ */
 
+/**
+ * AjaxHandler object to handle ajax request and call back to UIStateManager object
+ */
 function AjaxHandler(callbackObject, action) {
   this.LOADING_STATE = 'LOADING';
   this.SUCCESS_STATE = 'SUCCESS';
@@ -37,6 +46,9 @@ AjaxHandler.prototype.onTimeout = function(requestObj) {
   this.handler.callbackObject._ajaxUpdate(this.handler, this.handler.TIMEOUT_STATE, requestObj, this.handler.action);
 };
 
+/**
+ * UIStateManager
+ */
 function UIStateManager() {
   this.STORE_DATA_AJAX_ACTION = 'STORE DATA AJAX ACTION';
   this.RELOAD_DATA_AJAX_ACTION = 'RELOAD DATA AJAX ACTION';
@@ -47,14 +59,25 @@ function UIStateManager() {
   this.data = {};
 }
 
+/**
+ * Extends from JSUIBeanListener
+ */
 UIStateManager.prototype = eXo.communication.chat.webui.component.JSUIBeanListener;
 
+/**
+ * Initializing method
+ *
+ * @param {String} userName
+ */
 UIStateManager.prototype.init = function(userName) {
   this.userName = userName;
   this.reload();
   //this.autoCheckId = window.setInterval(this.autoStoreCheck, this.DEFAULT_TIMEOUT_CHECK);
 };
 
+/**
+ * Stop auto store data by interval
+ */
 UIStateManager.prototype.stopAutoStore = function() {
   if (this.autoCheckId) {
     window.clearInterval(this.autoCheckId);
@@ -62,6 +85,14 @@ UIStateManager.prototype.stopAutoStore = function() {
   }
 };
 
+/**
+ * Overwritten method use to store UI state each time when UI component is changed
+ *
+ * @param {Object} firedObject
+ * @param {String} propertyName
+ * @param {Object} oldValue
+ * @param {Object} newValue
+ */
 UIStateManager.prototype._optionChangedEventFire = function(firedObject, propertyName, oldValue, newValue) {
   this.isPropertiesChanged = true;
   window.jsconsole.warn('Window option change event fired: ' + firedObject + ', property name: ' + propertyName + ' old value: ' + oldValue + '  new value: ' + newValue);
@@ -78,21 +109,37 @@ UIStateManager.prototype._optionChangedEventFire = function(firedObject, propert
   }
 };
 
+/**
+ * Used by an UI component who want to register to use UIStateService to store UI state
+ *
+ * @param {WindowManager} windowObject
+ */
 UIStateManager.prototype.register = function(windowObj) {
   this.windowList.push(windowObj);
   windowObj._addOptionChangeEventListener(this);
 };
 
+/**
+ * Wrapper method
+ */
 UIStateManager.prototype.autoStoreCheck = function() {
   eXo.communication.chat.webui.UIStateManager.checkStore();
 };
 
+/**
+ * Check before do an automatic store job
+ */
 UIStateManager.prototype.checkStore = function() {
   if (this.isPropertiesChanged) {
     this.store();
   }
 };
 
+/**
+ * Call service to store UI state data
+ *
+ * @param {JSonData} data
+ */
 UIStateManager.prototype.store = function(data) {
   if (!this.userName) {
     return;
@@ -110,6 +157,9 @@ UIStateManager.prototype.store = function(data) {
   this.isPropertiesChanged = false;
 };
 
+/**
+ * Reload UI state. Get new UI state data from service.
+ */
 UIStateManager.prototype.reload = function() {
   // Do get state data to server using url: /portal/rest/chat/uistateservice/get/{user}/
   var url = '/portal/rest/chat/uistateservice/get/' + this.userName;
@@ -118,6 +168,14 @@ UIStateManager.prototype.reload = function() {
   this.isPropertiesChanged = false;
 };
 
+/**
+ * Call back handler when ajax request is done
+ *
+ * @param {AjaxHandler} ajaxHandler
+ * @param {String} state
+ * @param {HTTPXmlRequest} requestObject
+ * @param {String} action
+ */
 UIStateManager.prototype._ajaxUpdate = function(ajaxHandler, state, requestObject, action) {
   switch (state) {
     case ajaxHandler.LOADING_STATE:
@@ -157,6 +215,9 @@ UIStateManager.prototype._ajaxUpdate = function(ajaxHandler, state, requestObjec
   }
 };
 
+/**
+ * Reload all UI component after got UI state data from service
+ */
 UIStateManager.prototype.reloadAllWindows = function() {
   for ( var i = 0; i < this.windowList.length; i++) {
     var windowData = this.data[this.windowList[i].id];
@@ -167,6 +228,12 @@ UIStateManager.prototype.reloadAllWindows = function() {
   }
 };
 
+/**
+ * Ajax process overwritten to set some private parameters
+ *
+ * @param {Boolean} manualMode
+ * @param {AjaxRequest} ajaxRequest
+ */
 UIStateManager.prototype.ajaxProcessOverwrite = function(manualMode, ajaxRequest) {
   if (ajaxRequest.request == null) return ;
   ajaxRequest.request.open(ajaxRequest.method, ajaxRequest.url, true) ;   
@@ -186,7 +253,8 @@ UIStateManager.prototype.ajaxProcessOverwrite = function(manualMode, ajaxRequest
 };
 
 /**
- * 
+ * Common initialize process for an ajax request
+ *
  * @param {AjaxRequest} ajaxRequest
  * @param {Object} handler
  */
@@ -200,7 +268,15 @@ UIStateManager.prototype.initAjaxRequest = function(ajaxRequest, handler) {
   this.currentRequest = ajaxRequest ;
 };
 
-UIStateManager.prototype.ajaxWrapper =function(handler, url, method, data) {
+/**
+ * Wrapper do a ajax request
+ *
+ * @param {AjaxHandler} handler
+ * @param {String} url
+ * @param {Function} method
+ * @param {String} data
+ */
+UIStateManager.prototype.ajaxWrapper = function(handler, url, method, data) {
   var request = new eXo.portal.AjaxRequest(method, url, data);
   this.initAjaxRequest(request, handler);
   this.ajaxProcessOverwrite(true, request);

@@ -55,12 +55,19 @@ function UITabControl(tabId, isGroupChat, UIMainChatWindow) {
   this.isFixedSize = false;
 };
 
+/**
+ * Call when buddy item in chat room's buddy list call back for mouse action
+ *
+ * @param {Event} event
+ */
 UITabControl.prototype.buddyItemActionCallback = function(event) {
   event = event || window.event;
   window.jsconsole.warn('menu action and click action processing');
 };
 
-// ===== Functions below available only for when isGroupChat is true
+/**
+ * Return real room name
+ */
 UITabControl.prototype.getRoomName = function() {
   if (this.isGroupChat) {
     return this.tabId.targetPerson;
@@ -68,6 +75,11 @@ UITabControl.prototype.getRoomName = function() {
   return null;
 };
 
+/**
+ * Update roster for chat room
+ *
+ * @param {Array[BuddyInfo]} roster
+ */
 UITabControl.prototype.updateRoster = function(roster) {
   if (this.isGroupChat &&
       roster &&
@@ -77,6 +89,11 @@ UITabControl.prototype.updateRoster = function(roster) {
   }
 };
 
+/**
+ * Called by cometd event when user left room
+ *
+ * @param {String} user
+ */
 UITabControl.prototype.userLeftRoomEventFired = function(user) {
   user = user.substr(user.indexOf('/') + 1, user.length-1);
   this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, user + ' just left the room');
@@ -84,6 +101,11 @@ UITabControl.prototype.userLeftRoomEventFired = function(user) {
   this.buddyListControlObj.removeBuddy(user);
 };
 
+/**
+ * Called by cometd event when user join room
+ *
+ * @param {String} user
+ */
 UITabControl.prototype.userJoinRoomEventFired = function(user) {
   var userName = user.substr(user.indexOf('/') + 1, user.length-1);
   this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
@@ -99,6 +121,11 @@ UITabControl.prototype.userJoinRoomEventFired = function(user) {
   this.buddyListControlObj.addBuddy(buddyInfo);
 };
 
+/**
+ * Update user status for chat room
+ *
+ * @param {Array[presence]} presences
+ */
 UITabControl.prototype.updatePresence = function(presences) {
   if (!this.isGroupChat ||
       !presences ||
@@ -121,12 +148,22 @@ UITabControl.prototype.updatePresence = function(presences) {
   }
 };
 
+/**
+ * Call to invite another user to join room
+ */
 UITabControl.prototype.inviteToJoinRoom = function() {
   if (this.roomConfigured) {
     eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true, this);
   }
 };
 
+/**
+ * Update contact filter listener when UIAddContactPopupWindow is show.
+ * This function used for filter result to remove/disable contact which already existed
+ * in the room.
+ *
+ * @param {ContactElement} contact
+ */
 UITabControl.prototype.contactUpdateFilter = function(contact) {
   var UIChatWindow = eXo.communication.chat.webui.UIChatWindow;
   var uiTabControlObj = UIChatWindow.getUITabControl(this.tabId);
@@ -148,6 +185,12 @@ UITabControl.prototype.contactUpdateFilter = function(contact) {
   return contact;
 };
 
+/**
+ * Call back when user finish select contact from UIAddContactPopupWindow then this function
+ * will be use to request to invite user to join this room
+ *
+ * @param {Array[ContactInfo]} contactList
+ */
 UITabControl.prototype.addContactActionCallback = function(contactList) {
   var UIMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
   var roomName = this.tabId.targetPerson;
@@ -157,6 +200,12 @@ UITabControl.prototype.addContactActionCallback = function(contactList) {
   }
 };
 
+/**
+ * Called when room information come as Cometd notification
+ * It may called when user go to configure room or after new room is created.
+ *
+ * @param {JsonObject} roomInfoData
+ */
 UITabControl.prototype.roomInfoEventFired = function(roomInfoData) {
   if (roomInfoData &&
       roomInfoData.occupants) {
@@ -166,6 +215,11 @@ UITabControl.prototype.roomInfoEventFired = function(roomInfoData) {
 // =/= 
 
 // ===== FileExchange 
+/**
+ * Called when a file exchange event is comming.
+ *
+ * @param {FileTranferRequestEvent} FTReqEvent
+ */
 UITabControl.prototype.fileTransportRequestEventFire = function(FTReqEvent) {
   var DOMUtil = eXo.core.DOMUtil;
   var fileSize = this.getFuzzyFileSize(FTReqEvent.fileSize);
@@ -190,6 +244,12 @@ UITabControl.prototype.fileTransportRequestEventFire = function(FTReqEvent) {
   }
 };
 
+/**
+ * Called when a file exchange event is comming.
+ * For notify file transfer is completed or denied by user.
+ *
+ * @param {FileTranferResponseEvent} FTResEvent
+ */
 UITabControl.prototype.fileTransportResponseEventFire = function(FTResEvent) {
   var msgContent = '';
   if (FTResEvent.status == 'complete') {
@@ -200,6 +260,11 @@ UITabControl.prototype.fileTransportResponseEventFire = function(FTResEvent) {
   eXo.communication.chat.webui.UIChatWindow.insertCustomMsg(msgContent, this.tabId);
 };
 
+/**
+ * Use to get generic file size unit name by megabytes, gigabytes ... from bytes
+ *
+ * @param {Integer} size
+ */
 UITabControl.prototype.getFuzzyFileSize = function(size) {
   var units = ['bytes', 'kb', 'mb', 'gb', 'tb', 'pb'];
   var cnt = 0;
@@ -211,6 +276,13 @@ UITabControl.prototype.getFuzzyFileSize = function(size) {
   return {size: size, unit: unit};
 };
 
+/**
+ * Called after user click to download link to get file.
+ * Use to hide loading icon.
+ *
+ * @param {String} uuid
+ * @param {String} responseText
+ */
 UITabControl.prototype.downloadCompleteCallBack = function(uuid, responseText) {
   var DOMUtil = eXo.core.DOMUtil;
   var fileExchangeList = DOMUtil.findDescendantsByClass(this.messageContainerNode, 'div', this.CSS_CLASS.sendFile);
@@ -225,6 +297,11 @@ UITabControl.prototype.downloadCompleteCallBack = function(uuid, responseText) {
   }
 };
 
+/**
+ * Lets user download file, called after user click to download link
+ *
+ * @param {HTMLElement} acceptNode
+ */
 UITabControl.prototype.acceptFileExchange = function(acceptNode) {
   var DOMUtil = eXo.core.DOMUtil;
   var fileTransportNode = DOMUtil.findAncestorByClass(acceptNode, this.CSS_CLASS.sendFile);
@@ -243,11 +320,25 @@ UITabControl.prototype.acceptFileExchange = function(acceptNode) {
   uploadIframe.src = downloadUrl;
 };
 
+/**
+ * Called after file exchange is timeout then server will be remove file automatically
+ *
+ * @param {HTMLElement} fileTransportNode
+ * @param {UITabControl} uiTabControlObj
+ */
 UITabControl.prototype.fileEventTimeout = function(fileTransportNode, uiTabControlObj) {
   uiTabControlObj.removeActionFileButtons(fileTransportNode, uiTabControlObj);
   uiTabControlObj.writeMsg(eXo.communication.chat.webui.UIChatWindow.SYSTEM_INFO, 'The file exchange has been time out and removed by server.')
 };
 
+/**
+ * Called after user click denie button to denie file exchange.
+ * This function will be do 2 jobs:
+ *   - Remove buttons
+ *   - Call back to service to remove file exchange and notify to user about this
+ *
+ * @param {HTMLElement} denieNode
+ */
 UITabControl.prototype.denieFileExchange = function(denieNode) {
   var DOMUtil = eXo.core.DOMUtil;
   var fileTransportNode = DOMUtil.findAncestorByClass(denieNode, this.CSS_CLASS.sendFile);
@@ -255,6 +346,12 @@ UITabControl.prototype.denieFileExchange = function(denieNode) {
   this.removeActionFileButtons(fileTransportNode, this);
 };
 
+/**
+ * Use to remove all file exchange action buttons such as download, denie.
+ *
+ * @param {HTMLElement} fileTransportNode
+ * @param {UITabControl} thys
+ */
 UITabControl.prototype.removeActionFileButtons = function(fileTransportNode, thys) {
   var DOMUtil = eXo.core.DOMUtil;
   var actionFileList = DOMUtil.findDescendantsByClass(fileTransportNode, 'div', this.CSS_CLASS.actionFile);
@@ -270,6 +367,11 @@ UITabControl.prototype.removeActionFileButtons = function(fileTransportNode, thy
 };
 // =/=
 
+/**
+ * UI initializing
+ *
+ * @param {String} buddyId
+ */
 UITabControl.prototype.initUI = function(buddyId) {
   var DOMUtil = eXo.core.DOMUtil;
   this.tabNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.uiTab);
@@ -314,6 +416,11 @@ UITabControl.prototype.initUI = function(buddyId) {
   // TODO: Remove room option if current user is not owner or moderatored of the room.
 };
 
+/**
+ * Use to update history message to message container
+ *
+ * @param {Array[Message]} messageList
+ */
 UITabControl.prototype.updateHistoryMessage = function(messageList) {
   this.messagesBoxNode.innerHTML = '';
   // Ignore detect dupplicated message
@@ -327,6 +434,9 @@ UITabControl.prototype.updateHistoryMessage = function(messageList) {
   this.updatingHistoryMessage = false;
 };
 
+/**
+ * Update unread message counter and conversation window's title bar
+ */
 UITabControl.prototype.updateUnreadMessage = function() {
   var DOMUtil = eXo.core.DOMUtil;
   var myParent = this.UIMainChatWindow.UIChatWindow;
@@ -342,6 +452,11 @@ UITabControl.prototype.updateUnreadMessage = function() {
   myParent.updateUnreadMessage();
 };
 
+/**
+ * Common method to show notification.
+ *
+ * @param {String} msgContent
+ */
 UITabControl.prototype.showAlert = function(msgContent) {
   if (!this.visible ||
       !this.UIMainChatWindow.UIChatWindow.visible) {
@@ -350,6 +465,12 @@ UITabControl.prototype.showAlert = function(msgContent) {
   }
 };
 
+/**
+ * Use to display message in message container
+ *
+ * @param {String} buddyId
+ * @param {Message} msgObj
+ */
 UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   var myParent = this.UIMainChatWindow.UIChatWindow;
   if (this.visible &&
@@ -425,6 +546,12 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   }
 };
 
+/**
+ * Filter message content before display it in message container
+ * Remove html entities, replace \n by html line break <br> ...
+ *
+ * @param {String} msg
+ */
 UITabControl.prototype.messageFilter = function(msg) {
   // Encode all html entities.
   msg = eXo.core.HTMLUtil.entitiesEncode(msg);
@@ -451,6 +578,11 @@ UITabControl.prototype.messageFilter = function(msg) {
   return msg;
 };
 
+/**
+ * Make a text node breakable by insert <wbr> inside node content
+ *
+ * @param {HTMLElement} node
+ */
 UITabControl.prototype.textNodeBreakable = function(node) {
   var nodeList = node.childNodes;
   for (var i=0; i<nodeList.length; i++) {
@@ -466,6 +598,11 @@ UITabControl.prototype.textNodeBreakable = function(node) {
   }
 };
 
+/**
+ * Make html link from text
+ *
+ * @param {String} txt
+ */
 UITabControl.prototype.linkFactory = function(txt) {
   // Insert wbr tag to get line break supported by browser.
   var htmlTxt = txt.replace(/(.)/g, '$1<wbr>');
@@ -473,10 +610,19 @@ UITabControl.prototype.linkFactory = function(txt) {
   return txt;
 };
 
+/**
+ * Use to scroll message box to see new message update on the bottom of it
+ */
 UITabControl.prototype.scrollMessageBox = function() {
   this.messageContainerNode.scrollTop = this.messageContainerNode.scrollHeight - this.messageContainerNode.offsetHeight;
 };
 
+/**
+ * Use to create new message node from template and insert buddy information, time to it.
+ *
+ * @param {String} buddyId
+ * @param {Message} msgObj
+ */
 UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
   var DOMUtil = eXo.core.DOMUtil;
   var messageNode = false;
@@ -524,6 +670,7 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
 
 /**
  * This method will do: become keyboard handler for input text box
+ *
  * @param {Event} event
  */
 UITabControl.prototype.msgBoxKBHandler = function(event) {
@@ -541,11 +688,17 @@ UITabControl.prototype.msgBoxKBHandler = function(event) {
   return true;
 };
 
+/**
+ * Use to handle message typing box
+ *
+ * @param {String} txt
+ */
 UITabControl.prototype.insertToMessageBox = function(txt) {
   this.msgTypingBox.value = this.msgTypingBox.value + txt;
 };
 
 /**
+ * Wrapper method to send message from active tab
  *
  * @param {Object} event
  */
@@ -553,16 +706,27 @@ UITabControl.prototype.sendMessageWrapper = function(event) {
   eXo.communication.chat.webui.UIChatWindow.sendMsgFromActiveTab();
 };
 
+/**
+ * Use when user press Enter key to send message
+ * - Clear message typing box
+ * - Write message to message container box
+ */
 UITabControl.prototype.sendMessage = function() {
   var msgStr = this.msgTypingBox.value;
   this.msgTypingBox.value = '';
   this.writeMsg(this.tabId.owner, msgStr);
 };
 
+/**
+ * Use to get focus to this tab
+ */
 UITabControl.prototype.focusTabWrapper = function() {
   return eXo.communication.chat.webui.UIChatWindow.focusTab(this.tabId, true);
 };
 
+/**
+ * Use to close this tab
+ */
 UITabControl.prototype.closeTabWrapper = function() {
   var tabNameNode = eXo.core.DOMUtil.findPreviousElementByTagName(this, 'div');
   if (tabNameNode) {
@@ -570,6 +734,11 @@ UITabControl.prototype.closeTabWrapper = function() {
   }
 };
 
+/**
+ * Use to set this tab visible or not
+ *
+ * @param {Boolean} visible
+ */
 UITabControl.prototype.setVisible = function(visible) {
   if (!this.tabPaneNode ||
       !this.tabNode) {
@@ -629,7 +798,7 @@ UITabControl.prototype.setVisible = function(visible) {
 };
 
 /**
- * 
+ * This object is an UI component. It is used to manage conversation window and tab inside it.
  */
 function UIChatWindow() {
 //  this.id = 'eXo.communication.chat.webui.UIChatWindow';
@@ -658,8 +827,17 @@ function UIChatWindow() {
   eXo.core.Browser.setCookie(this.LR_COOKIE_SESSION_START, (new Date()).getTime());
 }
 
+/**
+ * Extends from JSUIBean
+ */
 UIChatWindow.prototype = new eXo.communication.chat.webui.component.JSUIBean();
 
+/**
+ * Initializing method.
+ *
+ * @param {HTMLElement} rootNode
+ * @param {UIMainChatWindow} UIMainChatWindow
+ */
 UIChatWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.rootNode = rootNode;
   this.UIMainChatWindow = UIMainChatWindow;
@@ -684,21 +862,35 @@ UIChatWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'mousemove', this.firstCheck, false);
 };
 
+/**
+ * Check somethings in the first time loaded
+ */
 UIChatWindow.prototype.firstCheck = function() {
   var thys = eXo.communication.chat.webui.UIChatWindow;
   thys.reloadScrollMgr(true);
   eXo.communication.chat.core.AdvancedDOMEvent.removeEventListener(thys.rootNode, 'mousemove', thys.firstCheck);
 };
 
-UIChatWindow.prototype.resizeCallback = function(delta) {
+/**
+ * Call back after resize action is finished to update somethings and store values on the server.
+ */
+UIChatWindow.prototype.resizeCallback = function() {
   var thys = eXo.communication.chat.webui.UIChatWindow;
   thys.reloadScrollMgr(true);
 };
 
+/**
+ * Register call back handle for this component.
+ */
 UIChatWindow.prototype.registerEventCallback = function() {
   this._registerEventCallback(this._RELOAD_EVENT, this.onReload);
 };
 
+/**
+ * Called when component do reload settings data such as position or size
+ *
+ * @param {Object} eventData
+ */
 UIChatWindow.prototype.onReload = function(eventData) {
   var thys = eXo.communication.chat.webui.UIChatWindow;
   thys._isOnLoading = true;
@@ -736,6 +928,9 @@ UIChatWindow.prototype.onReload = function(eventData) {
   thys._isOnLoading = false;
 };
 
+/**
+ * Call when main container request initialize for a new session.
+ */
 UIChatWindow.prototype.initSession = function() {
   this.destroySession();
   this.tabControlList = this.tabControlList || {};
@@ -744,6 +939,9 @@ UIChatWindow.prototype.initSession = function() {
   this.loadScroll();
 };
 
+/**
+ * Close all window or tab in destroy process
+ */
 UIChatWindow.prototype.closeAllWindow = function() {
   for (var item in this.tabControlList) {
     if (this.tabControlList[item] instanceof UITabControl) {
@@ -755,6 +953,9 @@ UIChatWindow.prototype.closeAllWindow = function() {
   this.setVisible(false);
 };
 
+/**
+ * Use to destroy a session
+ */
 UIChatWindow.prototype.destroySession = function() {
   for (var item in this.tabControlList) {
     if (this.tabControlList[item] instanceof UITabControl) {
@@ -769,6 +970,12 @@ UIChatWindow.prototype.destroySession = function() {
 
 UIChatWindow.prototype.destroy = function() {};
 
+/**
+ * Create a new UI tab
+ *
+ * @param {String} targetPerson
+ * @param {Boolean} isGroupChat
+ */
 UIChatWindow.prototype.createNewTab = function(targetPerson, isGroupChat) {
   var tabId = this.getTabId(targetPerson);
   var uiTabControlObj = this.getUITabControl(tabId, isGroupChat, true);
@@ -781,7 +988,9 @@ UIChatWindow.prototype.createNewTab = function(targetPerson, isGroupChat) {
   return uiTabControlObj;
 };
 
-// Using for UIStateService
+/**
+ * Update tab list information using for UIStateService
+ */
 UIChatWindow.prototype.updateTabList = function() {
   if (this._isOnLoading) {
     return;
@@ -802,6 +1011,12 @@ UIChatWindow.prototype.updateTabList = function() {
 };
 
 // Chat room
+/**
+ * Use to update chat room buddy list when an user is left from room
+ *
+ * @param {String} userName
+ * @param {String} roomName
+ */
 UIChatWindow.prototype.userLeaveRoom = function(userName, roomName) {
   var uiTabControl = this.tabControlList[this.getTabId(roomName).id];
   if (uiTabControl &&
@@ -812,6 +1027,11 @@ UIChatWindow.prototype.userLeaveRoom = function(userName, roomName) {
   }
 };
 
+/**
+ * Update roster for chat room
+ *
+ * @param {Array[ContactInfo]} roster
+ */
 UIChatWindow.prototype.updateRoster = function(roster) {
   window.jsconsole.warn('update roster for room chat');
   for (var item in this.tabControlList) {
@@ -823,6 +1043,12 @@ UIChatWindow.prototype.updateRoster = function(roster) {
   }
 };
 
+/**
+ * User left room event listener called when an user is left from room.
+ *
+ * @param {String} user
+ * @param {String} room
+ */
 UIChatWindow.prototype.userLeftRoomEventFired = function(user, room) {
   var uiTabControlObj = this.getUITabControl(this.getTabId(room), true, false);
   if (uiTabControlObj) {
@@ -830,6 +1056,12 @@ UIChatWindow.prototype.userLeftRoomEventFired = function(user, room) {
   }
 };
 
+/**
+ * User join room event listener called when an user is join room.
+ *
+ * @param {String} user
+ * @param {String} room
+ */
 UIChatWindow.prototype.userJoinRoomEventFired = function(user, room) {
   var uiTabControlObj = this.getUITabControl(this.getTabId(room), true, false);
   if (uiTabControlObj) {
@@ -837,6 +1069,11 @@ UIChatWindow.prototype.userJoinRoomEventFired = function(user, room) {
   }
 };
 
+/**
+ * Use to update user's presence/status
+ *
+ * @param {Array[Presence]} presences
+ */
 UIChatWindow.prototype.updatePresence = function(presences) {
   window.jsconsole.warn('update presences for room chat');
   for (var item in this.tabControlList) {
@@ -849,9 +1086,11 @@ UIChatWindow.prototype.updatePresence = function(presences) {
 };
 
 /**
+ * Use to find and call tab to display new message comming.
  *
  * @param {String} targetPerson
  * @param {String} msg
+ * @param {Boolean} isGroupChat
  */
 UIChatWindow.prototype.displayMessage = function(targetPerson, msg, isGroupChat) {
   var tabId = this.getTabId(targetPerson);
@@ -867,6 +1106,9 @@ UIChatWindow.prototype.displayMessage = function(targetPerson, msg, isGroupChat)
   this.updateUnreadMessage();
 };
 
+/**
+ * Update unread message counter to some place
+ */
 UIChatWindow.prototype.updateUnreadMessage = function() {
   var DOMUtil = eXo.core.DOMUtil;
   var unreadMessageNode = null;
@@ -901,6 +1143,11 @@ UIChatWindow.prototype.updateUnreadMessage = function() {
   this.reloadScrollMgr();
 };
 
+/**
+ * Use to blink minimized box chat
+ *
+ * @param {String} styleClass
+ */
 UIChatWindow.prototype.blinkMiniBoxChat = function(styleClass) {
   var thys = eXo.communication.chat.webui.UIChatWindow;
   var DOMUtil = eXo.core.DOMUtil;
@@ -915,6 +1162,13 @@ UIChatWindow.prototype.blinkMiniBoxChat = function(styleClass) {
   styleNode.className = styleClass;
 };
 
+/**
+ * Insert customized message to message container like system message
+ *
+ * @param {String} msg
+ * @param {TabId} tabId
+ * @param {String} from
+ */
 UIChatWindow.prototype.insertCustomMsg = function(msg, tabId, from) {
   var uiTabControlObj = false;
   if (tabId) {
@@ -932,6 +1186,7 @@ UIChatWindow.prototype.insertCustomMsg = function(msg, tabId, from) {
 };
 
 /**
+ * Return a TabId object
  *
  * @param {String} targetPerson
  */
@@ -945,8 +1200,11 @@ UIChatWindow.prototype.getTabId = function(targetPerson) {
 };
 
 /**
+ * Return an UITabControl object from tab control list
  *
- * @param {Object} tabId
+ * @param {TabId} tabId
+ * @param {Boolean} isGroupChat
+ * @param {Boolean} forceCreate
  *
  * @return {UITabControl}
  */
@@ -963,6 +1221,12 @@ UIChatWindow.prototype.getUITabControl = function(tabId, isGroupChat, forceCreat
   return uiTabControlObj;
 };
 
+/**
+ * Create a new UITabControl object
+ *
+ * @param {TabId} tabId
+ * @param {Boolean} isGroupChat
+ */
 UIChatWindow.prototype.createUITabControl = function(tabId, isGroupChat) {
   window.jsconsole.warn('=========== Create new tab with tabId=' + tabId.id);
   if (isGroupChat) {
@@ -978,8 +1242,10 @@ UIChatWindow.prototype.createUITabControl = function(tabId, isGroupChat) {
 };
 
 /**
+ * Use to get tab focus
  *
  * @param {String} id
+ * @param {Boolean} isFocusTextbox
  */
 UIChatWindow.prototype.focusTab = function(id, isFocusTextbox) {
   if (!id) {
@@ -1017,11 +1283,17 @@ UIChatWindow.prototype.focusTab = function(id, isFocusTextbox) {
   return targetTabIndex;
 };
 
+/**
+ * Use to get current active tab control 
+ *
+ * @return {UITabControl}
+ */
 UIChatWindow.prototype.getActiveTabControl = function() {
   return (this.tabControlList[this.activeTabId]);
 };
 
 /**
+ * Use to close a tab
  *
  * @param {String} id
  */
@@ -1064,6 +1336,13 @@ UIChatWindow.prototype.closeTab = function(id) {
   this.updateTabList();
 };
 
+/**
+ * Use to make conversation window visible or not
+ *
+ * @param {Boolean} visible
+ * @param {Event} event
+ * @param {Boolean} requestCancelEvent
+ */
 UIChatWindow.prototype.setVisible = function(visible, event, requestCancelEvent) {
   if (!this.rootNode ||
       (this.totalTab <= 0 && visible)) {
@@ -1100,13 +1379,24 @@ UIChatWindow.prototype.setVisible = function(visible, event, requestCancelEvent)
   }
 };
 
+/**
+ * Reference _setVisible method from UIJSBean to implemented method.
+ */
 UIChatWindow.prototype._setVisible = UIChatWindow.prototype.setVisible;
 
+/**
+ * Use to insert some text to message typing box
+ *
+ * @param {String} txt
+ */
 UIChatWindow.prototype.insertToMessageInputBox = function(txt) {
   var activeTabControl = this.getActiveTabControl();
   activeTabControl.insertToMessageBox(txt);
 };
 
+/**
+ * Use to send message from active tab
+ */
 UIChatWindow.prototype.sendMsgFromActiveTab = function() {
   var activeTabControl = this.getActiveTabControl();
   var msg = activeTabControl.msgTypingBox.value;
@@ -1123,6 +1413,11 @@ UIChatWindow.prototype.sendMsgFromActiveTab = function() {
   activeTabControl.sendMessage();
 };
 
+/**
+ * Use to show UIAddContactPopupWindow to invite some user to join room
+ *
+ * @param {Event} event
+ */
 UIChatWindow.prototype.inviteToJoinRoom = function(event) {
   event = event || window.event;
   eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
@@ -1130,6 +1425,11 @@ UIChatWindow.prototype.inviteToJoinRoom = function(event) {
   activeTabControl.inviteToJoinRoom();
 };
 
+/**
+ * Use to leave a chat room
+ *
+ * @param {Event} event
+ */
 UIChatWindow.prototype.leaveRoomChat = function(event) {
   event = event || window.event;
   eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
@@ -1141,6 +1441,11 @@ UIChatWindow.prototype.leaveRoomChat = function(event) {
   this.closeTab(activeTabControl.tabId.id);
 };
 
+/**
+ * Use to show room configuration form
+ *
+ * @param {Event} event
+ */
 UIChatWindow.prototype.configRoom = function(event) {
   event = event || window.event;
   eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
@@ -1148,6 +1453,11 @@ UIChatWindow.prototype.configRoom = function(event) {
   this.UIMainChatWindow.UIRoomConfigPopupWindow.setVisible(true, activeTabControl.tabId);
 };
 
+/**
+ * Called when room's information data is commming
+ *
+ * @param {JSonData} roomInfoData
+ */
 UIChatWindow.prototype.roomInfoEventFired = function(roomInfoData) {
   for (var item in this.tabControlList) {
     var uiTabControlObj = this.tabControlList[item];
@@ -1160,6 +1470,11 @@ UIChatWindow.prototype.roomInfoEventFired = function(roomInfoData) {
   }
 };
 
+/**
+ * Use to hide a HTMLElement
+ *
+ * @param {HTMLElement} element
+ */
 UIChatWindow.prototype.hideElement = function(element) {
 	element.style.display = 'none';
   element.style.position = 'absolute';
@@ -1167,6 +1482,9 @@ UIChatWindow.prototype.hideElement = function(element) {
 };
 
 // -- File exchange --
+/**
+ * Create iframe to upload file to server to preparing file exchange
+ */
 UIChatWindow.prototype.initFileExchange = function() {
   var tmpDiv = document.createElement('div');
   tmpDiv.innerHTML = '<iframe name="' + this.targetUploadIframe + '" class="ChatUploadIframe" src="#"></iframe>';
@@ -1176,6 +1494,11 @@ UIChatWindow.prototype.initFileExchange = function() {
   document.body.appendChild(tmpDiv);
 };
 
+/**
+ * Processing file exchange event when them come
+ *
+ * @param {Array[FileEvent]} fileEvents
+ */
 UIChatWindow.prototype.fileExchangeEventFire = function(fileEvents) {
   for (var i=0; i<fileEvents.length; i++) {
     var fileEvent = fileEvents[i];
@@ -1208,14 +1531,26 @@ UIChatWindow.prototype.fileExchangeEventFire = function(fileEvents) {
   }
 };
 
+/**
+ * Accept file exchange wrapper
+ */
 UIChatWindow.prototype.acceptFileExchange = function(acceptNode) {
   this.getActiveTabControl().acceptFileExchange(acceptNode);
 };
 
+/**
+ * Denie file exchange wrapper
+ */
 UIChatWindow.prototype.denieFileExchange = function(denieNode) {
   this.getActiveTabControl().denieFileExchange(denieNode);
 };
 
+/**
+ * Use to send file though file exchange service
+ *
+ * @param {HTMLElement} fileChooserNode
+ * @param {Event} event
+ */
 UIChatWindow.prototype.sendFile = function(fileChooserNode, event) {
   event = event || window.event;
   eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
@@ -1243,6 +1578,11 @@ UIChatWindow.prototype.sendFile = function(fileChooserNode, event) {
 
 // -- Message history --
 
+/**
+ * Use to update message history when they are comming
+ *
+ * @param {Array[Message]} messageList
+ */
 UIChatWindow.prototype.updateMessageHistory = function(messageList) {
   var uiTabControlObj = this.getActiveTabControl();
   if (uiTabControlObj) {
@@ -1250,6 +1590,12 @@ UIChatWindow.prototype.updateMessageHistory = function(messageList) {
   }
 };
 
+/**
+ * Use to request service about message history
+ *
+ * @param {Event} event
+ * @param {Integer} timeNo
+ */
 UIChatWindow.prototype.getMessageHistory = function(event, timeNo) {
   var activeTabControl = this.getActiveTabControl();
   if (!activeTabControl) return;
@@ -1312,6 +1658,9 @@ UIChatWindow.prototype.getMessageHistory = function(event, timeNo) {
   */
 };
 
+/**
+ * Use to export message history as plain text file which let's user download it
+ */
 UIChatWindow.prototype.exportHistory = function() {
   var historyStatus = false;
   var activeTabControl = this.getActiveTabControl();
@@ -1435,6 +1784,9 @@ UIChatWindow.prototype.scrollCallback = function() {
   this.lastVisibleIndex = lastIndex;*/
 };
 
+/**
+ * Use to reload scroll manager
+ */
 UIChatWindow.prototype.reloadScrollMgr = function(isReset) {
   if (this.rootNode.offsetHeight <= 0) {
     return;

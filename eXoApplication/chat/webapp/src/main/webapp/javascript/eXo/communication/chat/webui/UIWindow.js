@@ -1,3 +1,7 @@
+/**
+ * This version is get from Web OS
+ */
+
 function UIWindow() {
 	this.maxIndex = 0;
 } ;

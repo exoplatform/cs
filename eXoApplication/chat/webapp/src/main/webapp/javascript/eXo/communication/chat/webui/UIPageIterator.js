@@ -1,3 +1,9 @@
+/**
+ * @author Uoc Nguyen
+ *  email uoc.nguyen@exoplatform.com
+ *
+ *  This is an UI component use to split page or page iteration.
+ */
 function UIPageIterator(rootNode) {
   this.rootNode = rootNode;
   if (!this.rootNode) {
@@ -23,10 +29,18 @@ function UIPageIterator(rootNode) {
   this.init();
 }
 
+/**
+ * Use to set go to page call back handle
+ *
+ * @param {Function} callBack
+ */
 UIPageIterator.prototype.setGotoPageCallback = function(callBack) {
   this.gotoPageCallBack = callBack;
 };
 
+/**
+ * Initializing method
+ */
 UIPageIterator.prototype.init = function() {
   var DOMUtil = eXo.core.DOMUtil;
   this.totalPageNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'a', this.CSS_CLASS.pagesTotal);
@@ -60,11 +74,17 @@ UIPageIterator.prototype.init = function() {
   this.previousTopPageNode.getPageNo = this.getPageNoFromNode;
 };
 
+/**
+ * Call when component is in destroy process
+ */
 UIPageIterator.prototype.destroy = function() {
   this.totalPage = 0;
   this.currentPageNo = 0;
 };
 
+/**
+ * Use to render page iterator HTML structor
+ */
 UIPageIterator.prototype.renderPageIterator = function() {
   this.totalPage = Math.ceil(this.totalItem/this.NUM_PER_PAGE);
   //debugger;
@@ -119,10 +139,21 @@ UIPageIterator.prototype.renderPageIterator = function() {
   }
 };
 
+/**
+ * Use to get page no from a node
+ */
 UIPageIterator.prototype.getPageNoFromNode = function() {
   return this.pageNo;
 };
 
+/**
+ * Enable/disable navigation buttons
+ *
+ * @param {HTMLElement} buttonNode
+ * @param {Boolean} enable
+ * @param {String} disabledClass
+ * @param {String} enabledClass
+ */
 UIPageIterator.prototype.enableNavButton = function(buttonNode, enable, disabledClass, enabledClass) {
   if (!buttonNode) {
     window.jsconsole.debug('buttonNode = ' + buttonNode + ' - args=', arguments);
@@ -139,10 +170,16 @@ UIPageIterator.prototype.enableNavButton = function(buttonNode, enable, disabled
   }
 };
 
+/**
+ * Use to refresh
+ */
 UIPageIterator.prototype.reload = function() {
   this.gotoPage(this.currentPageNo, true, true);
 };
 
+/**
+ * Wrapper method
+ */
 UIPageIterator.prototype.gotoPageWrapper = function() {
   var uiPageIterator = eXo.core.DOMUtil.findAncestorsByClass(this, 'UIPageIterator');
   if (uiPageIterator &&
@@ -154,6 +191,13 @@ UIPageIterator.prototype.gotoPageWrapper = function() {
   }
 };
 
+/**
+ * Jump to a page
+ *
+ * @param {Integer} pageNum
+ * @param {Boolean} isAbsolutePage
+ * @param {Boolean} forceReload
+ */
 UIPageIterator.prototype.gotoPage = function(pageNum, isAbsolutePage, forceReload) {
   var targetPageNo = parseInt(this.currentPageNo) + parseInt(pageNum);
   if (isAbsolutePage) {
@@ -179,6 +223,9 @@ UIPageIterator.prototype.gotoPage = function(pageNum, isAbsolutePage, forceReloa
   this.currentPageNo = targetPageNo;
 };
 
+/**
+ * Use to toggle navigation buttons
+ */
 UIPageIterator.prototype.toggleNavButtons = function() {
   // Navigator button toggle
   var DOMUtil = eXo.core.DOMUtil;
@@ -204,6 +251,11 @@ UIPageIterator.prototype.toggleNavButtons = function() {
   this.enableNavButton(this.nextTopPageNode, isLastEnable, this.CSS_CLASS.disabledPrefix + this.CSS_CLASS.nextTopPage, this.CSS_CLASS.nextTopPage);
 };
 
+/**
+ * Check page no is valid or not
+ *
+ * @param {Integer} pageNo
+ */
 UIPageIterator.prototype.isPageValid = function(pageNo) {
   var valid = false;
   if (pageNo >= 0 && pageNo <= (this.totalPage - 1)) {

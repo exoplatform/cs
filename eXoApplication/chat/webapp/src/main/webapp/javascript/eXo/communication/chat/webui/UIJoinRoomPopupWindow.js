@@ -1,5 +1,7 @@
 /**
- * @author Uoc Nguyen Ba
+ * @author Uoc Nguyen
+ *
+ * This is an UI component use to manage join room popup window
  */
 function UIJoinRoomPopupWindow() {
   this.MAX_ROOM_NAME_DISPLAY = 12;
@@ -9,6 +11,12 @@ function UIJoinRoomPopupWindow() {
   };
 }
 
+/**
+ * Initializing method
+ *
+ * @param {HTMLElement} rootNode
+ * @param {UIMainChatWindow} UIMainChatWindow
+ */
 UIJoinRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.rootNode = rootNode;
   this.UIMainChatWindow = UIMainChatWindow;
@@ -27,14 +35,28 @@ UIJoinRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.uiPageIterator.setGotoPageCallback(this.gotoPage);
 };
 
+/**
+ * Call when room list is refreshed.
+ */
 UIJoinRoomPopupWindow.prototype.reloadRoomList = function() {
   this.uiPageIterator.reload();
 };
 
+/**
+ * Request server to get room list in a range
+ *
+ * @param {Integer} from
+ * @param {Integer} to
+ */
 UIJoinRoomPopupWindow.prototype.gotoPage = function(from, to) {
   eXo.communication.chat.webui.UIMainChatWindow.jabberGetRoomList(from, to);
 };
 
+/**
+ * Use to update room list which get from service
+ *
+ * @param {JSonData} serverData
+ */
 UIJoinRoomPopupWindow.prototype.updateRoomList = function(serverData) {
   roomList = serverData.hostedRooms;
 
@@ -52,6 +74,12 @@ UIJoinRoomPopupWindow.prototype.updateRoomList = function(serverData) {
   this.uiPageIterator.renderPageIterator(serverData);
 };
 
+/**
+ * Create a room node to add to room list result
+ *
+ * @param {RoomInfo} roomInfo
+ * @param {Boolean} isAlternate
+ */
 UIJoinRoomPopupWindow.prototype.createRoomNode = function(roomInfo, isAlternate) {
   var DOMUtil = eXo.core.DOMUtil;
   var uiRoomRowNode = document.createElement('tr');
@@ -101,6 +129,11 @@ UIJoinRoomPopupWindow.prototype.createRoomNode = function(roomInfo, isAlternate)
   return uiRoomRowNode;
 };
 
+/**
+ * Keep only one room selected by user
+ *
+ * @param {Event} event
+ */
 UIJoinRoomPopupWindow.prototype.selectRoom = function(event) {
   var DOMUtil = eXo.core.DOMUtil;
   event = event || window.event;
@@ -108,6 +141,9 @@ UIJoinRoomPopupWindow.prototype.selectRoom = function(event) {
   srcElement.checked = true;
 };
 
+/**
+ * Call when user press join room button
+ */
 UIJoinRoomPopupWindow.prototype.joinRoomAction = function() {
   var DOMUtil = eXo.core.DOMUtil;
   var checkBoxList = DOMUtil.findDescendantsByClass(this.roomListContainerNode, 'input', 'CheckBox');
@@ -137,6 +173,11 @@ UIJoinRoomPopupWindow.prototype.joinRoomAction = function() {
   }
 };
 
+/**
+ * Make component visible or not
+ *
+ * @param {Boolean} visible
+ */
 UIJoinRoomPopupWindow.prototype.setVisible = function(visible) {
   if (!this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {

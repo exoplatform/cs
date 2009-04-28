@@ -1,5 +1,6 @@
 /**
- * @author Uoc Nguyen Ba
+ * @author Uoc Nguyen
+ *  email uoc.nguyen@exoplatform.com
  */
 
 // --- Ajax handle --

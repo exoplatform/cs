@@ -1,5 +1,5 @@
 /**
- * @auther Uoc Nguyen
+ * @author Uoc Nguyen
  * Using to support resize UI component in chat application
  */
 function UIChatResize() {
@@ -120,6 +120,11 @@ UIChatResize.prototype.init = function(event) {
   return false;
 };
 
+/**
+ * Called when mouse is moving or window is resizing
+ *
+ * @param {Event} event
+ */
 UIChatResize.prototype.resizeWindowEvt = function(event) {
   if(!event) event = window.event ;
   var thys = eXo.communication.chat.webui.UIChatResize;
@@ -133,6 +138,11 @@ UIChatResize.prototype.resizeWindowEvt = function(event) {
   thys.resizeWindowTmp.style.height = newHeight + "px" ;
 } ;
 
+/**
+ * Call when finish resize window
+ *
+ * @param {Event} event
+ */
 UIChatResize.prototype.endResizeWindowEvt = function(event) {
   if(!event) event = window.event ;
   var thys = eXo.communication.chat.webui.UIChatResize;

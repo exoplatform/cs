@@ -1,3 +1,11 @@
+/**
+ * @author Uoc Nguyen
+ *  email uoc.nguyen@exoplatform.com
+ *
+ * This is an SlideAlert manager UI component use to manage notification
+ *
+ * @param {UIMainChatWindow} UIMainChatWindow
+ */
 function UISlideAlert(UIMainChatWindow) {
   this.UIMainChatWindow = UIMainChatWindow;
   
@@ -38,6 +46,12 @@ function UISlideAlert(UIMainChatWindow) {
   this.messageInfoMap = new eXo.core.HashMap();
 }
 
+/**
+ * Initializing method
+ *
+ * @param {UIMainChatWindow} UIMainChatWindow
+ * @param {HTMLElement} rootNode
+ */
 UISlideAlert.prototype.init = function(UIMainChatWindow, rootNode) {
   this.UIMainChatWindow = UIMainChatWindow;
   this.rootNode = rootNode;
@@ -56,6 +70,11 @@ UISlideAlert.prototype.init = function(UIMainChatWindow, rootNode) {
   //this.rootNode.onmouseout = this.resumeAnim;
 };
 
+/**
+ * Use to pause current animation
+ *
+ * @param {Event} event
+ */
 UISlideAlert.prototype.pauseAnim = function(event) {
   var thys = eXo.communication.chat.webui.UISlideAlert;
   if (thys.hideId) {
@@ -64,6 +83,11 @@ UISlideAlert.prototype.pauseAnim = function(event) {
   }
 };
 
+/**
+ * Use to resum paused animation
+ *
+ * @param {Event} event
+ */
 UISlideAlert.prototype.resumeAnim = function(event) {
   var thys = eXo.communication.chat.webui.UISlideAlert;
   if (!thys.hideId) {
@@ -71,6 +95,9 @@ UISlideAlert.prototype.resumeAnim = function(event) {
   }
 };
 
+/**
+ * Use to keep position of notification popup when user is scroll page up or down
+ */
 UISlideAlert.prototype.positionKeeper = function() {
   var thys = eXo.communication.chat.webui.UISlideAlert;
   if (!thys.animateId) {
@@ -78,6 +105,9 @@ UISlideAlert.prototype.positionKeeper = function() {
   }
 };
 
+/**
+ * Process message queueing
+ */
 UISlideAlert.prototype.queueProcess = function() {
   var thys = eXo.communication.chat.webui.UISlideAlert;
   if (thys.messageQueue.length > 0) {
@@ -86,12 +116,23 @@ UISlideAlert.prototype.queueProcess = function() {
   }
 };
 
+/**
+ * Use to add new message to message queue
+ *
+ * @param {Message} msgObj
+ * @param {TabId} tabId
+ */
 UISlideAlert.prototype.addMessage = function(msgObj, tabId) {
   this.messageQueue.push(msgObj);
   this.messageInfoMap.put(msgObj, tabId);
   this.setMsgCounter();
 };
 
+/**
+ * Use to set message to notification message container
+ *
+ * @param {Message} msgObj
+ */
 UISlideAlert.prototype.setMessage = function(msgObj) {
   if (!msgObj) {
     return;
@@ -115,6 +156,11 @@ UISlideAlert.prototype.setMessage = function(msgObj) {
   this.msgContentNode.appendChild(msgNode);
 };
 
+/**
+ * Use to request focus tab when user click to a notification message which related to tab
+ *
+ * @param {Event} event
+ */
 UISlideAlert.prototype.focusTab = function(event) {
   event = event || window.event;
   var srcElement = event.target || event.srcElement;
@@ -126,6 +172,11 @@ UISlideAlert.prototype.focusTab = function(event) {
   return true;
 };
 
+/**
+ * Find and remove message in queue by tab id
+ *
+ * @param {TabId} tabId
+ */
 UISlideAlert.prototype.removeMessageByTabId = function(tabId) {
   var DOMUtil = eXo.core.DOMUtil;
   var items = DOMUtil.findDescendantsByClass(this.msgContentNode, 'div', 'Item');
@@ -146,10 +197,18 @@ UISlideAlert.prototype.removeMessageByTabId = function(tabId) {
   this.hideNotification();
 };
 
+/**
+ * Set message counter to notification popup
+ */
 UISlideAlert.prototype.setMsgCounter = function() {
   this.msgCounterNote.innerHTML = '(<span>' + (this.messageQueue.length + 1) + '</span>)';
 };
 
+/**
+ * Make component visible or not
+ *
+ * @param {Boolean} visible
+ */
 UISlideAlert.prototype.setVisible = function(visible) {
   var thys = eXo.communication.chat.webui.UISlideAlert;
   thys.rootNode.style.display = (visible) ? 'block' : 'none';
@@ -180,6 +239,11 @@ UISlideAlert.prototype.setVisible = function(visible) {
   //thys.animateId = window.setInterval(thys.animateSlide, thys.TIME_STEP);
 };
 
+/**
+ * Hide notification popup
+ *
+ * @param {Event} event
+ */
 UISlideAlert.prototype.hideNotification = function(event) {
   var thys = eXo.communication.chat.webui.UISlideAlert;
   event = event || window.event;
@@ -189,6 +253,9 @@ UISlideAlert.prototype.hideNotification = function(event) {
   thys.setVisible(false);
 };
 
+/**
+ * Play slide animation for notification popup
+ */
 UISlideAlert.prototype.animateSlide = function() {
   var thys = eXo.communication.chat.webui.UISlideAlert;
   var stopCondition = false;

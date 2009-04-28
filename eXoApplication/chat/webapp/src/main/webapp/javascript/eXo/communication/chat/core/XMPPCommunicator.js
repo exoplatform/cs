@@ -1,5 +1,5 @@
 /**
- * @author Uoc Nguyen Ba
+ * @author Uoc Nguyen
  * 
  * A core javascript library using for communicate with services.
  */

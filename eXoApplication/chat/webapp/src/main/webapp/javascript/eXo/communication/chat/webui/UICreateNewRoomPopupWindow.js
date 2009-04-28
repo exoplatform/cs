@@ -1,9 +1,18 @@
 /**
- * @author Uoc Nguyen Ba
+ * @author Uoc Nguyen
+ *  email uoc.nguyen@exoplatform.com
+ *
+ *  This is an UI component use to manage UICreateNewRoomPopupWindow popup window
  */
 function UICreateNewRoomPopupWindow() {
 }
 
+/**
+ * Initializing method
+ *
+ * @param {HTMLElement} rootNode
+ * @param {UIMainChatWindow} UIMainChatWindow
+ */
 UICreateNewRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.rootNode = rootNode;
   this.UIMainChatWindow = UIMainChatWindow;
@@ -16,6 +25,11 @@ UICreateNewRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow)
   }
 };
 
+/**
+ * Use to make component visible or not
+ *
+ * @param {Boolean} visible
+ */
 UICreateNewRoomPopupWindow.prototype.setVisible = function(visible) {
   if (!this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {
@@ -35,6 +49,9 @@ UICreateNewRoomPopupWindow.prototype.setVisible = function(visible) {
   }
 };
 
+/**
+ * Use to call service to create a new room
+ */
 UICreateNewRoomPopupWindow.prototype.createNewRoomAction = function() {
   var roomName = this.roomNameField.value;
   if (roomName.indexOf(' ') != -1 ||

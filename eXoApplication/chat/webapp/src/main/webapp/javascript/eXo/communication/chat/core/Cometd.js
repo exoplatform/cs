@@ -10,7 +10,8 @@ at the handshake, so the transport should not do it, and be set after.
 */
 
 /**
- *  @author Uoc Nguyen (uoc.nguyen@exoplatform.com)
+ *  @author Uoc Nguyen
+ *   email uoc.nguyen@exoplatform.com
  *  @description Re-written.
  *
  */

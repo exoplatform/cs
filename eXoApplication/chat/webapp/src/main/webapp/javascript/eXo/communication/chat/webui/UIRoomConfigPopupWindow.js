@@ -1,3 +1,9 @@
+/**
+ * @author Uoc Nguyen
+ *  email uoc.nguyen@exoplatform.com
+ *
+ *  This is an UI component use to manage room configuration popup window
+ */
 function UIRoomConfigPopupWindow() {
   this.tabId = false;
   this.roomName = false;
@@ -5,6 +11,12 @@ function UIRoomConfigPopupWindow() {
   this.ANIMATION_TIME_STEP = 0.02*1000;
 }
 
+/**
+ * Initializing method
+ *
+ * @param {HTMLElement} rootNode
+ * @param {UIMainChatWindow} UIMainChatWindow
+ */
 UIRoomConfigPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   var DOMUtil = eXo.core.DOMUtil;
   this.rootNode = rootNode;
@@ -24,6 +36,11 @@ UIRoomConfigPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   }
 };
 
+/**
+ * Use to switch group options
+ *
+ * @param {Event} event
+ */
 UIRoomConfigPopupWindow.prototype.focusGroupOptions = function(event) {
   event = event || window.event;
   var srcElement = event.srcElement || event.target;
@@ -66,6 +83,9 @@ UIRoomConfigPopupWindow.prototype.focusGroupOptions = function(event) {
   eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
 };
 
+/**
+ * Play animation when switch group options
+ */
 UIRoomConfigPopupWindow.prototype.playAnimation = function() {
   if (this.animationId) {
     window.clearInterval(this.animationId);
@@ -76,6 +96,9 @@ UIRoomConfigPopupWindow.prototype.playAnimation = function() {
   }
 };
 
+/**
+ * Do real animation process when switch group options
+ */
 UIRoomConfigPopupWindow.prototype.switchGroupOptionsAnimate = function() {
   thys = eXo.communication.chat.webui.UIRoomConfigPopupWindow;
   var DOMUtil = eXo.core.DOMUtil;
@@ -129,6 +152,11 @@ UIRoomConfigPopupWindow.prototype.switchGroupOptionsAnimate = function() {
   }
 };
 
+/**
+ * Update group configuration by data got from service
+ *
+ * @param {JSonData} serverData
+ */
 UIRoomConfigPopupWindow.prototype.updateRoomConfig = function(serverData) {
   window.jsconsole.info('Update room config data from service');
   if (this.rootNode.style.display != 'block') {
@@ -241,6 +269,12 @@ UIRoomConfigPopupWindow.prototype.updateRoomConfig = function(serverData) {
   this.UIPopupManager.focusEventFire(this);
 };
 
+/**
+ * Use to synchronize privileges between 2 group admin and owner permision. To avoid user
+ * in 2 group at same time.
+ *
+ * @param {Event} event
+ */
 UIRoomConfigPopupWindow.prototype.syncPrivileges = function(event) {
   event = event || window.event;
   var DOMUtil = eXo.core.DOMUtil;
@@ -293,6 +327,11 @@ UIRoomConfigPopupWindow.prototype.syncPrivileges = function(event) {
   }
 };
 
+/**
+ * Toggle password field visible or not when protected room check box is checked
+ *
+ * @param {HTMLElement} checkboxNode
+ */
 UIRoomConfigPopupWindow.prototype.togglePasswdField = function(checkboxNode) {
   checkboxNode = (checkboxNode && checkboxNode.nodeName) ? checkboxNode : this;
   var DOMUtil = eXo.core.DOMUtil;
@@ -303,6 +342,14 @@ UIRoomConfigPopupWindow.prototype.togglePasswdField = function(checkboxNode) {
   }
 };
 
+/**
+ * Use to get value from a field by field name then return default value if value 
+ * in the field is null
+ *
+ * @param {Object} data
+ * @param {String} fieldName
+ * @param {Object} defaultValue
+ */
 UIRoomConfigPopupWindow.prototype.getValueOf = function(data, fieldName, defaultValue) {
   for (var i=0; i<data.length; i++) {
     var fieldData = data[i];
@@ -314,6 +361,11 @@ UIRoomConfigPopupWindow.prototype.getValueOf = function(data, fieldName, default
   return defaultValue;
 };
 
+/**
+ * Submit configuration data to service when ok button is pressed
+ *
+ * @param {Boolean} keepWindowState
+ */
 UIRoomConfigPopupWindow.prototype.okAction = function(keepWindowState) {
   // Collect data and convert them to JSON format
   var roomConfig = {};
@@ -354,11 +406,22 @@ UIRoomConfigPopupWindow.prototype.okAction = function(keepWindowState) {
   }
 };
 
+/**
+ * Use to fake configuration submit
+ *
+ * @param {Boolean} keepWindowState
+ */
 UIRoomConfigPopupWindow.prototype.fakeConfigCommit = function(keepWindowState) {
   this.okAction(keepWindowState);
   eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('You just cancel the room configuration. The default config still sent.', this.tabId);
 };
 
+/**
+ * Call when tab is closed while this component is visible to fake commit configuration to service
+ * to get permission to close room
+ *
+ * @param {TabId} tabId
+ */
 UIRoomConfigPopupWindow.prototype.relateClose = function(tabId) {
   if (this.tabId.id == tabId.id) {
     this.mustSubmit = false;
@@ -366,6 +429,13 @@ UIRoomConfigPopupWindow.prototype.relateClose = function(tabId) {
   }
 }
 
+/**
+ * Make component visible or not
+ *
+ * @param {Boolean} visible
+ * @param {TabId} tabId
+ * @param {Boolean} mustSubmit
+ */
 UIRoomConfigPopupWindow.prototype.setVisible = function(visible, tabId, mustSubmit) {
   if (!this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {

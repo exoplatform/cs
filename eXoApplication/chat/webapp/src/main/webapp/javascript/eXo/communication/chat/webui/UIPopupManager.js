@@ -1,3 +1,9 @@
+/**
+ * @author Uoc Nguyen
+ *  email uoc.nguyen@exoplatform.com
+ *
+ *  This is an UI component object use to manage all popup window.
+ */
 function UIPopupManager() {
   this.popupList = false;
   this.TOP_INDEX = 3;
@@ -6,6 +12,9 @@ function UIPopupManager() {
   this.popupCnt = 0;
 }
 
+/**
+ * Initializing method
+ */
 UIPopupManager.prototype.init = function() {
   if (this.initialized) {
     this.destroy();
@@ -14,11 +23,19 @@ UIPopupManager.prototype.init = function() {
   this.initialized = true;
 };
 
+/**
+ * Use when destroy component
+ */
 UIPopupManager.prototype.destroy = function() {
   this.popupList = null;
   this.initialized = false;
 };
 
+/**
+ * Use to add component to list
+ *
+ * @param {UIPopupWindow} popupWindowObj
+ */
 UIPopupManager.prototype.addItem = function(popupWindowObj) {
   if (!this.initialized) {
     return;
@@ -35,6 +52,11 @@ UIPopupManager.prototype.addItem = function(popupWindowObj) {
   this.popupCnt ++;
 };
 
+/**
+ * Call weh a popup window want to get focus
+ *
+ * @param {Event} event
+ */
 UIPopupManager.prototype.requestFocus = function(event) {
   event = event || window.event;
   var UIWindowManager = this.UIWindowManager;
@@ -47,6 +69,11 @@ UIPopupManager.prototype.requestFocus = function(event) {
   return true;
 };
 
+/**
+ * Call when focus event is fired
+ *
+ * @param {UIPopupWindow} popupWindowObj
+ */
 UIPopupManager.prototype.focusEventFire = function(popupWindowObj) {
   thys = eXo.communication.chat.webui.UIPopupManager;
   if (!thys.initialized) {

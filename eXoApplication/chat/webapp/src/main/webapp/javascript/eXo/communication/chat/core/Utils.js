@@ -1,5 +1,6 @@
 /**
- * @author uoc
+ * @author Uoc Nguyen
+ *  email uoc.nguyen@exoplatform.com
  * TODO: remove this utilities library
  */
 function Utils() {};
