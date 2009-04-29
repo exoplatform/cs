@@ -39,6 +39,7 @@ public class UIMessageArea extends UIContainer  {
     UIMessageList uiMessageList = createUIComponent(UIMessageList.class, null, null);
     uiMessageList.init(accId);
     addChild(uiMessageList);
-    addChild(UIMessagePreview.class, null, null);
+    UIMessagePreview messagePreview = addChild(UIMessagePreview.class, null, null);
+    messagePreview.setRendered(false) ;
   }
 }

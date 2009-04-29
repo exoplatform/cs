@@ -167,6 +167,14 @@ public class UIMessageList extends UIForm {
     setMessageFilter(filter);
   }
 
+  public boolean isMessagePreviewRendered() {
+    try {
+      return getAncestorOfType(UIMessageArea.class).getChild(UIMessagePreview.class).isRendered() ;
+    } catch (Exception e) {
+      return false ;
+    }
+  }
+  
   public String getAccountId() { return accountId_ ; }
 
   public String getSelectedMessageId() throws Exception {
@@ -311,6 +319,7 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
+      uiMessagePreview.setRendered(true) ;
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();

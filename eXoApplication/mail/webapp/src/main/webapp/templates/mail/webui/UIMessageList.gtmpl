@@ -339,7 +339,12 @@
 			<%
 		//}
 	%>
-  <div id="uiMessageGrid" class="UIMessageList SpliterResizableListArea" >
+	
+	<% 
+			height = "200px";
+			if (!uicomponent.isMessagePreviewRendered()) height = "500px";
+	 %>
+  <div id="uiMessageGrid" class="UIMessageList SpliterResizableListArea" style="height: $height;">
     <% /* <div class="AdvancedTooltipTmpl" id="mailAdvancedTooltipTmpl">
       <div class="Item">
         <div class="Key">Email: </div>
