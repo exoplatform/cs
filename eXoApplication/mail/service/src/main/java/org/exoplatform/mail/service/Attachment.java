@@ -31,6 +31,7 @@ abstract public class Attachment {
   private long size ;
   private String path ;
   private boolean isLoadedProperly = true;
+  protected String resoureId ;
   
   public String getId() { return id ; }
   public void setId(String id) { this.id = id ; }
@@ -53,5 +54,11 @@ abstract public class Attachment {
   }
   
   public boolean isLoadedProperly() { return isLoadedProperly; }
-  public void setIsLoadedProperly(boolean b) { isLoadedProperly = b; } 
+  public void setIsLoadedProperly(boolean b) { isLoadedProperly = b; }
+  public void setResoureId(String resoureId) {
+    this.resoureId = resoureId;
+  }
+  public String getResoureId() {
+    return resoureId;
+  } 
 }

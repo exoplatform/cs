@@ -309,6 +309,9 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
+      UIFormUploadInput input = uiForm.getUIInput(FIELD_UPLOAD) ;
+      uploadService.removeUpload(input.getUploadId()) ;
       calendarPortlet.cancelAction() ;
     }
   }

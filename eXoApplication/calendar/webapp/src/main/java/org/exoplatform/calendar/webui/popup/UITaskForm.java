@@ -56,6 +56,7 @@ import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -1129,12 +1130,21 @@ public Attachment getAttachment(String attId) {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         uiForm.setSelectedTab(TAB_TASKDETAIL) ;
       }
+      
+      UITaskDetailTab uiDetailTab = uiForm.getChildById(TAB_TASKDETAIL) ;
+      for (Attachment att : uiDetailTab.getAttachments()) {
+        UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), att.getResourceId()) ;
+      }
     }
   }
   static  public class CancelActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
       UITaskForm uiForm = event.getSource() ;
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
+      UITaskDetailTab uiDetailTab = uiForm.getChildById(TAB_TASKDETAIL) ;
+      for (Attachment att : uiDetailTab.getAttachments()) {
+        UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), att.getResourceId()) ;
+      }
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }

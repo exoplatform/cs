@@ -49,6 +49,7 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -796,12 +797,18 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
           return ;
         }
       } 
+      for(Attachment a : uiForm.getAttachments()) {
+        UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), a.getResourceId()) ;
+      }
     }
   }
   static  public class CancelActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
+      for(Attachment a : uiForm.getAttachments()) {
+        UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), a.getResourceId()) ;
+      }
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
@@ -828,6 +835,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       for (org.exoplatform.calendar.service.Attachment att : uiEventDetailTab.attachments_) {
         if (att.getId().equals(attFileId)) {
           attachfile = (org.exoplatform.calendar.service.Attachment) att;
+          UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), attachfile.getResourceId()) ;
         }
       }
       uiEventDetailTab.removeFromUploadFileList(attachfile);

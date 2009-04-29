@@ -208,6 +208,9 @@ public class UIImportForm extends UIForm {
   static  public class CancelActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
+      UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;  
+      UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
+      uploadService.removeUpload(uiformInput.getUploadId()) ;
       UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       contactPortlet.cancelAction() ;
      }

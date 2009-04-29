@@ -24,6 +24,7 @@ import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.upload.UploadResource;
+import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -78,6 +79,15 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
   public long getAttSize() {return attSize ;}
   public void setAttSize(long value) { attSize = value ;}
 
+
+  public static void removeUploadTemp(UploadService uservice, String uploadId) {
+    try {
+      uservice.removeUpload(uploadId) ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    }
+  }
+
   static  public class SaveActionListener extends EventListener<UIAttachFileForm> {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
       UIAttachFileForm uiForm = event.getSource();
@@ -102,6 +112,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
             attachFile.setInputStream(input.getUploadDataAsStream()) ;
             attachFile.setMimeType(uploadResource.getMimeType()) ;
             attachFile.setSize((long)uploadResource.getUploadedSize());
+            attachFile.setResoureId(input.getUploadId()) ;
             attachList.add(attachFile);
           }
         }
@@ -137,6 +148,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
             a.setMimeType(att.getMimeType()) ;
             a.setName(att.getName());
             a.setSize(att.getSize());
+            a.setResourceId(att.getResoureId()) ;
             uiEventDetailTab.addToUploadFileList(a) ;
           }
           uiEventDetailTab.refreshUploadFileList() ;
@@ -164,8 +176,14 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 
   static  public class CancelActionListener extends EventListener<UIAttachFileForm> {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
-      UIAttachFileForm uiAttach = event.getSource();
-      UIPopupAction uiPopupAction = uiAttach.getAncestorOfType(UIPopupAction.class) ; 
+      UIAttachFileForm uiForm = event.getSource();
+      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ; 
+      for (int i = 1; i <= uiForm.getNumberFile(); i++) {  
+        UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD + String.valueOf(i));
+        UploadResource uploadResource = input.getUploadResource() ;
+        if(uploadResource != null) 
+          UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), uploadResource.getUploadId()) ;
+      }
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
