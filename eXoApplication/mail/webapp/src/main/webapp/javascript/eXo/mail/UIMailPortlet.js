@@ -557,27 +557,7 @@ UIMailPortlet.prototype.showView = function(obj, evt){
             this.menuElement.style.display = "none";
     }
     this.swapMenu(uiPopupCategory, obj);
-    var uiRightPopupMenuContainer = DOMUtil.findFirstDescendantByClass(this.menuElement, 'div', 'UIRightPopupMenuContainer');
-    var actions = DOMUtil.findChildrenByClass(uiRightPopupMenuContainer, "a", "MenuItem");
-    //actions[0].onmouseover = this.showSubmenu;
-    //actions[0].onmouseout = this.hideSubmenu;
-    this.subMenu = DOMUtil.findNextElementByTagName(actions[0], "div");
-    this.subMenu.style.left = actions[0].offsetWidth + "px";
-    if (eXo.core.I18n.isRT()) 
-        this.subMenu.style.left = (3 - eXo.cs.Utils.getElementWidth(this.subMenu)) + "px";
-    eXo.core.DOMUtil.listHideElements(this.subMenu);
 };
-
-//UIMailPortlet.prototype.showSubmenu = function(){
-//    window.clearTimeout(eXo.mail.UIMailPortlet.timeOutSubmenu);
-//    eXo.mail.UIMailPortlet.subMenu.style.display = "block";
-//};
-//
-//UIMailPortlet.prototype.hideSubmenu = function(){
-//    eXo.mail.UIMailPortlet.timeOutSubmenu = window.setTimeout('eXo.mail.UIMailPortlet.subMenu.style.display = "none"', 100);
-//    eXo.mail.UIMailPortlet.subMenu.onmouseover = eXo.mail.UIMailPortlet.showSubmenu;
-//    eXo.mail.UIMailPortlet.subMenu.onmouseout = eXo.mail.UIMailPortlet.hideSubmenu;
-//};
 
 UIMailPortlet.prototype.swapMenu = function(oldmenu, clickobj){
     var DOMUtil = eXo.core.DOMUtil;

@@ -20,6 +20,20 @@ UICalendarPortlet.prototype.setStyle = function(object, styles){
     }
 } ;
 
+UICalendarPortlet.prototype.attachSwapClass = function(compId,className,hoverClass){
+    var component = document.getElementById(compId);
+    var items = eXo.core.DOMUtil.findDescendantsByClass(component,"div",className);
+    var i = items.length;
+    while(i--){
+    	items[i].onmouseover = function(){
+    		eXo.cs.Utils.swapClass(this,hoverClass);
+    	}
+    	items[i].onmouseout = function(){
+    		eXo.cs.Utils.swapClass(this,hoverClass);
+    	}
+    };
+} ;
+
 /**
  * Convert time from milliseconds to minutes
  * @param {Int} Milliseconds Milliseconds
@@ -317,8 +331,8 @@ UICalendarPortlet.prototype.showMainMenu = function(obj, evt){
     var currentTime = d.getTime();
     var timezoneOffset = d.getTimezoneOffset();
     var oldmenu = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu");
-    var actions = eXo.core.DOMUtil.findDescendantsByTagName(oldmenu, "a");
-    actions[1].href = String(actions[1].href).replace(/&.*/, "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
+    var actions = eXo.core.DOMUtil.findDescendantsByTagName(oldmenu, "div");
+    actions[1].onclick = String(actions[1].onclick).replace(/&.*/, "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
     eXo.calendar.UICalendarPortlet.swapMenu(oldmenu, obj);
 };
 
@@ -1614,7 +1628,7 @@ UICalendarPortlet.prototype.showView = function(obj, evt){
     var _e = window.event || evt;
     _e.cancelBubble = true;
     var oldmenu = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu");
-    var actions = eXo.core.DOMUtil.findDescendantsByClass(oldmenu, "a", "MenuItem");
+    var actions = eXo.core.DOMUtil.findDescendantsByClass(oldmenu, "a", "ItemLabel");
     if (!this.selectedCategory) 
         this.selectedCategory = null;
     for (var i = 0; i < actions.length; i++) {

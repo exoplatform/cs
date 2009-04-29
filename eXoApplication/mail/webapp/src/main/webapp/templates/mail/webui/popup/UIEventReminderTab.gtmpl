@@ -4,10 +4,10 @@
 <div id="$uicomponent.id" class="UIAddNewEvent">
 	<div class="ReminderByEmail">
 		<%uiForm.renderField(uicomponent.REMIND_BY_EMAIL); %>
-		<div class="FieldLabel" style="float: left;">
+		<div class="FieldLabel" style="float:left;">
 			<%=uiForm.getLabel(uicomponent.REMIND_BY_EMAIL)%>
 		</div>
-		<div style="clear: left;"><span></span></div>
+		<div style="clear:left;"><span></span></div>
 	  <table class="UIFormGrid">
 	    <tbody>
 	      <tr>
@@ -26,7 +26,7 @@
       			<table>
 					    <tbody>
 					      <tr>
-					        <td class="FieldComponent" style="width: 80px;">
+					        <td class="FieldComponent" style="width:80px;">
 					        	<% uiForm.renderField(uicomponent.EMAIL_IS_REPEAT);%>
 					        </td>
 					        <td class="FieldLabel" style="width:70px;">
@@ -50,7 +50,7 @@
 		          String actionLabel =  uiForm.getLabel("SelectEmail")  ;
 				    	String actionLink = uiForm.event("AddEmailAddress") ;
 				      println "<a title=\"" + actionLabel + "\" href=\"" + actionLink +"\">";
-				      println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" class=\"AddNewNodeIcon\"/>" ;
+				      println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt='' class=\"AddNewNodeIcon\"/>" ;
 				      println  "</a>";
 	          %>
 	          

@@ -21,9 +21,9 @@
     rcontext.getJavascriptManager().importJavascript('eXo.mail.UpdateList','/mail/javascript/') ;
     rcontext.getJavascriptManager().addJavascript('eXo.mail.UpdateList.init("' + uicomponent.getAccountId() + '","'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+'");') ;
 	%>
-  <div style="overflow-x: auto; width: 99%;">
-  <div><div style="width: 990px;" ><span style="display: none;"></span></div></div>
-  <div  style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white; _margin: auto;">
+  <div style="overflow-x:auto; width:99%;">
+  <div><div style="width:990px;"><span style="display:none;"></span></div></div>
+  <div style="_width:expression(this.previousSibling.offsetWidth - 22 + 'px'); !border:1px solid white; _margin:auto;">
 	  <div class="ApplicationMinWidth">
 	  	<div class="UIMailPortlet" id="UIMailPortlet">
 	    <%

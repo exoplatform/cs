@@ -170,7 +170,8 @@
 	border-bottom: 1px solid #b7b7b7;
 }
 
-.UIWeekView .UIGrid th {
+.UIWeekView .UIGrid td.UICellBlock,
+.UIWeekView .UIGrid td.UIEmtyBlock {
 	background: url('../background/CalendarBackground.gif') repeat-x center -106px;	
   height: 22px;
 	border-right: 1px solid #c7c7c7;
@@ -180,9 +181,13 @@
 	*width: 14%;
 	-moz-user-select: none ;
 	padding: 0px ;
+	text-align: center;
+	font-weight: bold;
+	line-height: 22px;
 }
 
-.UIWeekView .EventWeekBar .UIGrid th {
+.UIWeekView .EventWeekBar .UIGrid td.UICellBlock,
+.UIWeekView .EventWeekBar .UIGrid td.UIEmtyBlock {
 	border: 1px solid #c7c7c7;
 }
 
@@ -886,10 +891,12 @@
 
 .UICalendarPortlet .TitleBar .BackIcon {
 	margin:4px 4px 0px 0px;
+	cursor: pointer;
 }
 
 .UICalendarPortlet .TitleBar .NextIcon {
 	margin:4px 0px 0px 4px;
+	cursor: pointer;
 }
 
 .UICalendarPortlet .TitleBar table {

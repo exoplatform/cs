@@ -2,6 +2,14 @@
 	float: left;
 	line-height: 26px;
 	cursor: pointer;
+	margin: 4px 1px 0px 1px;
+}
+
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .ControlButton:hover{
+	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
+	color: #058ee6; border: 1px solid #cbcbcb;
+	height: 24px;
+	margin: 3px 0px 0px 0px;
 }
 
 .UIContactPortlet .UIMessageCompose {
@@ -15,9 +23,7 @@
 }
 
 .UIContactPortlet .UIMessageCompose .MailListActionsbar a:hover {
-	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
-	color: #058ee6; border: 1px solid #cbcbcb;
-	height: 24px;
+	color: #058ee6;
 }
 
 .UIContactPortlet .UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a {

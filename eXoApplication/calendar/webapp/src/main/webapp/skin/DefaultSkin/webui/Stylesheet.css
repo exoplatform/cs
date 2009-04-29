@@ -49,14 +49,6 @@
 	color:none;
 }
 
-.UICalendarPortlet .UIRightPopupMenuContainer a {
-  white-space: nowrap; 
-  display: block;
-}
-
-.UICalendarPortlet .UIRightPopupMenuContainer a:hover {
-  background: #dee4f2;
-}
 
 .UIPageDesktop .FixWidth {
 	_width: 940px;
@@ -312,4 +304,9 @@
 .UICalendarPortlet .MenuItem .ItemIcon {
 	line-height: 16px;
 	height: 16px;
+}
+
+.UICalendarPortlet .MenuItem .ItemIcon:hover {
+	background-color: #dee4f2;
+	color: orange;
 }

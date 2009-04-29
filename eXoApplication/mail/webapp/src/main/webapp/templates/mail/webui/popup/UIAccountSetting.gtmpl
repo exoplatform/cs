@@ -1,9 +1,9 @@
 <%
   import org.exoplatform.mail.service.Account; 
 %>
-<div style=" width: 97%; margin:auto;">
-<div><div style="width: 720px;" ><span style="display: none;"></span></div></div>
-<div  style="_width: expression(this.previousSibling.offsetWidth - 2 + 'px'); !border: 1px solid white; _margin: auto;">
+<div style=" width:97%; margin:auto;">
+<div><div style="width:720px;" ><span style="display:none;"></span></div></div>
+<div  style="_width:expression(this.previousSibling.offsetWidth - 2 + 'px'); !border:1px solid white; _margin:auto;">
 <div class="UIAccountSetting">
 	<div class="AccountSetting">
 	
@@ -11,7 +11,7 @@
 			<div class="CategoryControlBar">
 				<div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.accounts") %></div>
         <a href="<%=uicomponent.event("DeleteAccount", uicomponent.id, "id")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.delete-acc") %>"><div class="DeleteIcon"><span></span></div></a>
-				<div style="clear: both;"><span></span></div> 
+				<div style="clear:both;"><span></span></div> 
 			</div>
 			<div class="AccountSettingList">
 			  <%
@@ -74,7 +74,7 @@
     		          </div>
     		        </div>
     		        <%uiform.begin()%>
-    		        <input type="hidden" id="<%=uicomponent.RENDER_TAB%>" name="<%=uicomponent.RENDER_TAB%>" value="$uicomponent.selectedTabId">
+    		        <input type="hidden" id="<%=uicomponent.RENDER_TAB%>" name="<%=uicomponent.RENDER_TAB%>" value="$uicomponent.selectedTabId" />
     		        <div class="HorizontalLayout">
     		          <div class="UITabContentContainer">
     		            <%
@@ -82,7 +82,7 @@
     		                String display = "none" ;
                         if(formInput.getId().equals(selTabId)) display="block" ;
     		            %>
-    		                <div class="UITabContent" id="UITabContent"  style="display: $display;">
+    		                <div class="UITabContent" id="UITabContent"  style="display:$display;">
     		                  <%
     		                    uicomponent.renderUIComponent(formInput) ;
     		                  %>
@@ -98,7 +98,7 @@
     		</div>  			
 	  	</div>
 	  </div>
-		<div style="clear: left;"><span></span></div>
+		<div style="clear:left;"><span></span></div>
 	</div>	
 	
 	<div class="UIAction">

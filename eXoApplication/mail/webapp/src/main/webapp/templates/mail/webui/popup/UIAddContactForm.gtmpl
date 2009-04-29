@@ -3,9 +3,9 @@
   import org.exoplatform.contact.service.ContactAttachment;
 	uiform.begin() 
 %>
-<div style="overflow-x: auto; width: 99%;">
-<div><div style="width: 620px;" ><span style="display: none;"></span></div></div>
-<div  style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white; _margin: auto;">
+<div style="overflow-x:auto; width:99%;">
+<div><div style="width:620px;" ><span style="display:none;"></span></div></div>
+<div  style="_width:expression(this.previousSibling.offsetWidth - 22 + 'px'); !border:1px solid white; _margin:auto;">
 <div class="UIAddNewContact"> 
 
 <div class="UIForm AddGroupContact">
@@ -16,8 +16,8 @@
           <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.address-book") %></td>
           <td class="FieldComponent">
             <% uicomponent.renderField(uicomponent.SELECT_GROUP)%>
-            <% if (!uicomponent.isEdited_) {%><a href="<%=uicomponent.event("AddGroup")%>" title="Add Address Book"><img class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/></a><%}%> 
-          </td>           
+            <% if (!uicomponent.isEdited_) {%><a href="<%=uicomponent.event("AddGroup")%>" title="Add Address Book"><img class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt=""/></a><%}%> 
+         	</td>           
         </tr>
       </tbody>
     </table>
@@ -63,11 +63,11 @@
                     	 %>
                     
                       <input class="radio" type="radio" value="Male" $maleChecked name="gender"/>
-          	 					<span style="padding: 0px 20px 0px 5px" class="Lable">
+          	 					<span style="padding:0px 20px 0px 5px" class="Lable">
 												<%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %>
 											</span>
 											<input class="radio" type="radio" value="Female" $femaleChecked name="gender"/>
-											<span style="padding-left: 3px;" class="Lable">
+											<span style="padding-left:3px;" class="Lable">
 											 	 <%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %>
 											 </span>
                     </td>
@@ -127,29 +127,29 @@
       </div>
     </div>
     
-    <div style="clear: left;"><span></span></div>
+    <div style="clear:left;"><span></span></div>
   </div>
 </div>
 
 </div>
 
 <div class="UIAction">
-<table class="ActionContainer" align="center">
+<table class="ActionContainer">
   <tr>
     <td align="center">
       <% for(action in uicomponent.getActions()) { 
              String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
              String link = uicomponent.event(action) ;
       %>
-      <a href="$link" class="ActionButton LightBlueStyle">
+      <div onclick="$link" class="ActionButton LightBlueStyle">
       <div class="ButtonLeft">
         <div class="ButtonRight">
           <div class="ButtonMiddle">
-            $actionLabel
-              </div>
-            </div>
+            <a href="#">$actionLabel</a>
+          </div>
         </div>
-      </a>
+        </div>
+      </div>
       <%}%>
     </td>
   </tr>

@@ -25,7 +25,7 @@
 	      if(action.actionType == action.TYPE_ICON) {
           uiForm.renderField(action.getActionParameter());
           println "<a title=\"" + action.actionName + "\" href=\"" + actionLink +"\">";
-	        println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" class=\"" + action.cssIconClass +"\"/>" ;
+	        println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt='' class=\"" + action.cssIconClass +"\"/>" ;
 	        if(action.isShowLabel) { println  actionLabel  ;}
           println  "</a>";
 	      } else if(action.actionType == action.TYPE_LINK){
@@ -45,7 +45,7 @@
 	<table class="UIFormGrid">
 	  <tr>
 	    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.from") %> :&nbsp;&nbsp;</td>
-	    <td class="FieldComponent" style="width: 62%;"><%uiForm.renderField("from")%></td>
+	    <td class="FieldComponent" style="width:62%;"><%uiForm.renderField("from")%></td>
 	    <td class="FieldCCAndBCC">
 	      <a  href="<%=uiForm.event("ShowCc")%>">|<%=_ctx.appRes(uiForm.id+ ".label.add-cc") %>|</a> 
 	      <a  href="<%=uiForm.event("ShowBcc")%>"><%=_ctx.appRes(uiForm.id+ ".label.add-bcc") %>|</a>

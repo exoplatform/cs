@@ -111,7 +111,7 @@
 	              uicomponent.renderField(uicomponent.SEARCH_HAS_STAR);
 	            %>
 	          </td>
-	          <td class="FieldLabel" style="text-align: left;"><%=_ctx.appRes(uicomponent.id+ ".label.has-star") %></td>
+	          <td class="FieldLabel" style="text-align:left;"><%=_ctx.appRes(uicomponent.id+ ".label.has-star") %></td>
 	          <td class="FieldLabel" ><%=_ctx.appRes(uicomponent.id+ ".label.priority") %>: </td>
 	          <td class="FieldComponent FieldShort">
 	            <%
@@ -126,7 +126,7 @@
 	            uicomponent.renderField(uicomponent.SEARCH_HAS_ATTACH);
 	          %>
 	          </td>
-	          <td class="FieldLabel" style="text-align: left;"><%=_ctx.appRes(uicomponent.id+ ".label.has-attachment") %></td>
+	          <td class="FieldLabel" style="text-align:left;"><%=_ctx.appRes(uicomponent.id+ ".label.has-attachment") %></td>
 	          <td colspan="2">&nbsp;</td>
 				  </tr>
 				</table>

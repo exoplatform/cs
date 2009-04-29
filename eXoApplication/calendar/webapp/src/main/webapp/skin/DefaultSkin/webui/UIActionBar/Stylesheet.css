@@ -5,10 +5,10 @@
 	font-weight: bold;
 }
 
-
 .UICalendarPortlet .CalendarWorkingWorkspace .ControlButton {
 	float: left;
 	line-height: 18px;
+	cursor: pointer;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .SwitchButton {
@@ -23,18 +23,25 @@
 .UICalendarPortlet .CalendarWorkingWorkspace .RightControlButton {
 	float: right;
 	line-height: 18px;
+	cursor: pointer;
 }
 
-.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar a {
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .ControlButton {
 	color: #000000;
 	margin: 4px 1px 0px 1px;
+	cursor: pointer;
 }
 
-.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar a:hover {
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .ControlButton:hover {
+	color: #058ee6;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .ControlButtonHover {
 	background: url('../background/CalendarBackground.gif') repeat-x center -79px;
-	color: #058ee6; border: 1px solid #cbcbcb;
+	border: 1px solid #cbcbcb;
 	line-height: 26px;
 	margin: 3px 0px 0px 0px;
+	color: #058ee6;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace  .UIPopupCategory a {
@@ -44,7 +51,8 @@
 
 .UICalendarPortlet .CalendarWorkingWorkspace  .UIPopupCategory a:hover {
 	background: none ;
-	color: #058ee6; border: none;
+	color: #058ee6; 
+	border: none;
 	height: auto;
 }
 
@@ -71,7 +79,11 @@
   margin: 0px 7px;
   padding-left: 22px;
   white-space: nowrap;
-  display: block;
+	display: block;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .IconHolder:hover {
+  color: #058ee6;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .LayoutSwitcherIcon {
@@ -82,6 +94,7 @@
 .UICalendarPortlet .CalendarWorkingWorkspace .SelectButton .IconHolder {
 	margin: 4px 7px 0px 7px;
 	line-height: 25px;
+	display: block;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .DownArrow1Icon {

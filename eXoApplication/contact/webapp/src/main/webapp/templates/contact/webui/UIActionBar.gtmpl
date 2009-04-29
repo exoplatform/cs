@@ -6,17 +6,17 @@
 				
 					<div class="CenterBar">
 					
-					<a href="<%=uicomponent.event("AddContact")%>" class="SelectButton">
-						<div class="IconHolder AddContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>">
+					<div onclick="<%=uicomponent.event("AddContact")%>" class="SelectButton">
+						<a class="IconHolder AddContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>">
 							<%=_ctx.appRes(uicomponent.getName() + ".label.contact")%>
-						</div>
-          			</a>
+						</a>
+          </div>
           
-					<a href="<%=uicomponent.event("AddAddressBook")%>" class="SelectButton">
-						<div class="IconHolder AddAddressBookIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addAddressBook")%>">
+					<div onclick="<%=uicomponent.event("AddAddressBook")%>" class="SelectButton">
+						<a class="IconHolder AddAddressBookIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addAddressBook")%>">
 							<%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%>
-						</div>
-         			 </a>
+						</a>
+         	</div>
           		<!--	 
           			 <a href="<%=uicomponent.event("AddEvent")%>" class="SelectButton">
 						<div class="IconHolder AddEventIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addEvent")%>">
@@ -26,17 +26,17 @@
           -->
           
           <div class="SeparatorLine"><span></span></div>	
-          <a href="<%=uicomponent.event("ImportContact")%>" class="SelectButton">
-						<div class="IconHolder ImportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>">
+          <div onclick="<%=uicomponent.event("ImportContact")%>" class="SelectButton">
+						<a class="IconHolder ImportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>">
 							<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>
-						</div>
-          </a>
+						</a>
+          </div>
           
-          <a href="<%=uicomponent.event("ExportContact")%>" class="SelectButton">
-						<div class="IconHolder ExportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.exportAddress")%>">
+          <div onclick="<%=uicomponent.event("ExportContact")%>" class="SelectButton">
+						<a class="IconHolder ExportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.exportAddress")%>">
 							<%=_ctx.appRes(uicomponent.getName() + ".label.exportAddress")%>
-						</div>
-          </a>
+						</a>
+          </div>
 						<div class="SeparatorLine"><span></span></div>
 						<div class="SelectButton" onclick="eXo.contact.UIContactPortlet.show(this, event);">
 							<div class="IconHolder ViewIcon">
@@ -57,14 +57,14 @@
 					              		<div class="UIRightPopupMenuContainer">
 					                    <div class="TypeViewContactPortlet">
   					                    <div class="MenuItem" onclick="<%=uicomponent.event("ChangeView", "true")%>">   
-  						                    <div class="ItemIcon ContactListIcon">
+  						                    <a class="ItemIcon ContactListIcon">
   						                    	<%=_ctx.appRes(uicomponent.getName() + ".label.contactsList")%>
-  						                    </div>
+  						                    </a>
   					                    </div>
   					                    <div class="MenuItem" onclick="<%=uicomponent.event("ChangeView", "false")%>">   
-  						                    <div class="ItemIcon ContactIcon">
+  						                    <a class="ItemIcon ContactIcon">
   						                     	<%=_ctx.appRes(uicomponent.getName() + ".label.vcard")%>
-  						                    </div>
+  						                    </a>
   					                    </div>
 					                    </div>
 														</div>
@@ -103,29 +103,29 @@
 									          <div class="MiddleRightRightClickPopupMenu">
 						              		<div class="UIRightPopupMenuContainer" id="customLayoutViewMenu">
 																<div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(0)" >
-							                    <div class="ItemIcon CheckedMenu">
+							                    <a class="ItemIcon CheckedMenu">
 							                      <%=_ctx.appRes(uicomponent.getName() + ".label.default")%>
-							                    </div>
+							                    </a>
 						                    </div>
                                 <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(1)" >   
-							                    <div class="ItemIcon CheckedMenu">
+							                    <a class="ItemIcon CheckedMenu">
 							                      <%=_ctx.appRes(uicomponent.getName() + ".label.navigation")%>
-							                    </div>
+							                    </a>
 						                    </div>
 						                    <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(2)" >   
-							                    <div class="ItemIcon CheckedMenu">
+							                    <a class="ItemIcon CheckedMenu">
 							                       <%=_ctx.appRes(uicomponent.getName() + ".label.addressbooks")%>
-							                    </div>
+							                    </a>
 						                    </div>
 						                    <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(3)" >
-							                    <div class="ItemIcon CheckedMenu">
+							                    <a class="ItemIcon CheckedMenu">
 							                      <%=_ctx.appRes(uicomponent.getName() + ".label.tags")%>
-							                    </div>
+							                    </a>
 						                    </div>
                                 <div class="MenuItem ContactDetailsMenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(4)" >
-							                    <div class="ItemIcon CheckedMenu">
+							                    <a class="ItemIcon CheckedMenu">
 							                      <%=_ctx.appRes(uicomponent.getName() + ".label.details")%>
-							                    </div>
+							                    </a>
 						                    </div>
 															</div>
 							          		</div>

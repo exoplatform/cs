@@ -200,6 +200,11 @@ Utils.prototype.confirmAction = function(obj,msg,parentId){
 	else alert(msg);
 };
 
+Utils.prototype.swapClass = function(obj,hoverClass){
+	var domUtil = eXo.core.DOMUtil;
+	if(domUtil.hasClass(obj,hoverClass)) domUtil.replaceClass(obj,hoverClass,"");
+	else domUtil.addClass(obj,hoverClass);
+};
 /**
  * Gets scrollTop property of DOM element
  * @param {Object} obj DOM element

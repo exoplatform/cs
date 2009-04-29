@@ -26,41 +26,41 @@
 					        <div class="MiddleLeftRightClickPopupMenu">
 					          <div class="MiddleRightRightClickPopupMenu">
 		              		<div class="UIRightPopupMenuContainer">
-			                   <a class="MenuItem" href="<%=uicomponent.event("AddCalendarCategory")%>">   
-			                    <div class="ItemIcon AddGroupIcon">
+			                   <div class="MenuItem" onclick="<%=uicomponent.event("AddCalendarCategory")%>">   
+			                    <a class="ItemIcon AddGroupIcon">
 			                      <%=uiform.getLabel("AddGroup")%>
-			                    </div>
-			                   </a>
-			                   <a class="MenuItem" href="<%=uicomponent.event('AddCalendar','id')%>">   
-			                    <div class="ItemIcon AddCalendarIcon">
+			                    </a>
+			                   </div>
+			                   <div class="MenuItem MenuItemHover" onclick="<%=uicomponent.event('AddCalendar','id')%>">   
+			                    <a class="ItemIcon AddCalendarIcon">
 			                      <%=uiform.getLabel("AddCalendar")%>
-			                    </div>
-			                   </a>
-			                    <a class="MenuItem" href="<%=uicomponent.event("AddEventCategory")%>">   
-			                    <div class="ItemIcon AddCategoryIcon">
+			                    </a>
+			                   </div>
+			                    <div class="MenuItem" onclick="<%=uicomponent.event("AddEventCategory")%>">   
+			                    <a class="ItemIcon AddCategoryIcon">
 			                      <%=uiform.getLabel("AddEventCategory")%>
-			                    </div>
-			                   </a>
-			                   <a class="MenuItem" href="<%=uicomponent.event("ImportCalendar")%>">   
-			                    <div class="ItemIcon ImportCalendarIcon">
+			                    </a>
+			                   </div>
+			                   <div class="MenuItem" onclick="<%=uicomponent.event("ImportCalendar")%>">   
+			                    <a class="ItemIcon ImportCalendarIcon">
 			                      <%=uiform.getLabel("ImportCalendar")%>
-			                    </div>
-			                   </a>
-			                   <a class="MenuItem" href="<%=uicomponent.event("GenerateRss")%>">   
-			                    <div class="ItemIcon GenerateRssIcon">
+			                    </a>
+			                   </div>
+			                   <div class="MenuItem" onclick="<%=uicomponent.event("GenerateRss")%>">   
+			                    <a class="ItemIcon GenerateRssIcon">
 			                      <%=uiform.getLabel("GenerateRss")%>
-			                    </div>
-			                   </a>
-			                   <a class="MenuItem" href="<%=uicomponent.event("GenerateCalDav")%>">   
-			                    <div class="ItemIcon CalDavIcon">
+			                    </a>
+			                   </div>
+			                   <div class="MenuItem" onclick="<%=uicomponent.event("GenerateCalDav")%>">   
+			                    <a class="ItemIcon CalDavIcon">
 			                      <%=uiform.getLabel("GenerateCalDav")%>
-			                    </div>
-			                   </a>
-			                   <a class="MenuItem" href="<%=uicomponent.event("CalendarSetting")%>">   
-			                    <div class="ItemIcon SettingCalendarIcon">
+			                    </a>
+			                   </div>
+			                   <div class="MenuItem" onclick="<%=uicomponent.event("CalendarSetting")%>">   
+			                    <a class="ItemIcon SettingCalendarIcon">
 			                      <%=uiform.getLabel("CalendarSetting")%>
-			                    </div>
-			                   </a>
+			                    </a>
+			                   </div>
 		              		</div>
 		          			</div>
 		        			</div>
@@ -191,7 +191,7 @@
   				<div class="CalendarSelectedFlatStyle">
   					<div class="GroupItem">
   						<div class="GroupColor1">
-  							<div title="Collapser calendar group" class="CollapserFlatStyle" title="<%=uiform.getLabel("groupActions")%>"><span></span></div>
+  							<div class="CollapserFlatStyle" title="<%=uiform.getLabel("groupActions")%>"><span></span></div>
   							<div class="CheckBox"><input class="CalendarGroup" type="checkbox"/></div>
   							<div class="CalendarGroupIcon"><span title="$title">$label</span></div>
   							<div style="clear: both"><span></span></div>
@@ -236,31 +236,31 @@
 				        <div class="MiddleLeftRightClickPopupMenu">
 				          <div class="MiddleRightRightClickPopupMenu">
 		          		<div class="UIRightPopupMenuContainer">
-		          				 <a class="MenuItem" href="<%=uicomponent.event("AddCalendar","id")%>">   
-		                    <div class="ItemIcon AddCalendarIcon">
+		          				 <div class="MenuItem MenuItemHover" onclick="<%=uicomponent.event("AddCalendar","id")%>">   
+		                    <a class="ItemIcon AddCalendarIcon">
 		                       <%=uiform.getLabel("AddCalendar")%>
-		                    </div>
-		                   </a>
-		          				<a class="MenuItem" href="<%=uicomponent.event("EditGroup","id")%>">   
-		                    <div class="ItemIcon EditGroupIcon">
+		                    </a>
+		                   </div>
+		          				<div class="MenuItem" onclick="<%=uicomponent.event("EditGroup","id")%>">   
+		                    <a class="ItemIcon EditGroupIcon">
 		                     	<%=uiform.getLabel("EditGroup")%>
-		                    </div>
-		                   </a>
-		                   <a class="MenuItem" href="<%=uicomponent.event("DeleteGroup",uicomponent.id,"id")%>">   
-		                    <div class="ItemIcon DeleteGroupIcon">
+		                    </a>
+		                   </div>
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("DeleteGroup",uicomponent.id,"id")%>">   
+		                    <a class="ItemIcon DeleteGroupIcon">
 		                      <%=uiform.getLabel("DeleteGroup")%>
-		                    </div>
-		                   </a>	
-		                   <a class="MenuItem" href="<%=uicomponent.event("ImportCalendar")%>">   
-		                    <div class="ItemIcon ImportCalendarIcon">
+		                    </a>
+		                   </div>	
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("ImportCalendar")%>">   
+		                    <a class="ItemIcon ImportCalendarIcon">
 		                      <%=uiform.getLabel("ImportCalendar")%>
-		                    </div>
-		                   </a>
-		                   <a class="MenuItem" href="<%=uicomponent.event("ExportCalendars","id")%>">   
-		                    <div class="ItemIcon ExportCalendarIcon">
+		                    </a>
+		                   </div>
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("ExportCalendars","id")%>">   
+		                    <a class="ItemIcon ExportCalendarIcon">
 		                      <%=uiform.getLabel("ExportCalendars")%>
-		                    </div>
-		                   </a>
+		                    </a>
+		                   </div>
 		          		</div>
 		      			</div>
 		    			</div>
@@ -287,36 +287,36 @@
 				        <div class="MiddleLeftRightClickPopupMenu">
 				          <div class="MiddleRightRightClickPopupMenu">
 		          		<div class="UIRightPopupMenuContainer" >
-		                   <a class="MenuItem" href="<%=uicomponent.event("AddEvent","id")%>">   
-		                    <div class="ItemIcon AddNewEvent">
+		                   <div class="MenuItem MenuItemHover" onclick="<%=uicomponent.event("AddEvent","id")%>">   
+		                    <a class="ItemIcon AddNewEvent">
 		                    	<%=uiform.getLabel("AddEvent")%>
-		                    </div>
-		                   </a>
-		                   <a class="MenuItem" href="<%=uicomponent.event("AddTask","id")%>">   
-		                    <div class="ItemIcon AddNewTask">
+		                    </a>
+		                   </div>
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("AddTask","id")%>">   
+		                    <a class="ItemIcon AddNewTask">
 		                    	<%=uiform.getLabel("AddTask")%>
-		                    </div>
-		                   </a>
-		                   <a class="MenuItem" href="<%=uicomponent.event("EditCalendar","id")%>">   
-		                    <div class="ItemIcon  EditCalendarIcon">
+		                    </a>
+		                   </div>
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("EditCalendar","id")%>">   
+		                    <a class="ItemIcon  EditCalendarIcon">
 		                    	<%=uiform.getLabel("EditCalendar")%>
-		                    </div>
-		                   </a>
-		                   <a class="MenuItem" href="<%=uicomponent.event("RemoveCalendar",uicomponent.id,"id")%>">   
-		                    <div class="ItemIcon RemoveCalendarIcon">
+		                    </a>
+		                   </div>
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("RemoveCalendar",uicomponent.id,"id")%>">   
+		                    <a class="ItemIcon RemoveCalendarIcon">
 		                    	<%=uiform.getLabel("RemoveCalendar")%>
-		                    </div>
-		                   </a>
-		                    <a class="MenuItem" href="<%=uicomponent.event('ImportCalendar','id')%>">   
-		                    <div class="ItemIcon ImportCalendarIcon">
+		                    </a>
+		                   </div>
+		                    <div class="MenuItem" onclick="<%=uicomponent.event('ImportCalendar','id')%>">   
+		                    <a class="ItemIcon ImportCalendarIcon">
 		                      <%=uiform.getLabel("ImportCalendar")%>
-		                    </div>
-		                   </a>
-		                   <a class="MenuItem" href="<%=uicomponent.event("ExportCalendar","id")%>">   
-		                    <div class="ItemIcon ExportCalendarIcon">
+		                    </a>
+		                   </div>
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("ExportCalendar","id")%>">   
+		                    <a class="ItemIcon ExportCalendarIcon">
 		                    	<%=uiform.getLabel("ExportCalendar")%>
-		                    </div>
-		                   </a>
+		                    </a>
+		                   </div>
 		                   <!-- 
 		                   <div class="MenuItem" style="color: gray;">   
 		                    <div class="ItemIcon  SendMailCalendarIcon">
@@ -324,11 +324,11 @@
 		                    </div>
 		                   </div>
 		                    -->
-		                   <a class="MenuItem" href="<%=uicomponent.event("ShareCalendar","id")%>">   
-		                    <div class="ItemIcon  SharedCalendarIcon">
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("ShareCalendar","id")%>">   
+		                    <a class="ItemIcon  SharedCalendarIcon">
 		                    	<%=uiform.getLabel("ShareCalendar")%>
-		                    </div>
-		                   </a>		
+		                    </a>
+		                   </div>		
 		          		</div>
 		          			<div class="CalendarTableColor" >
 									  <%
@@ -344,7 +344,7 @@
 												while(j <= items && count < size){
 												 color = uicomponent.getColors()[count] ;
 												 actionLink = uicomponent.event('ChangeColor','id&calColor='+color);	
-												 print "<a href=\"$actionLink\" class=\"$color ColorCell\"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>" ;
+												 print "<a href=\"$actionLink\" class=\"$color ColorCell\"><img alt='' src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>" ;
 												 count++
 												 j++;
 												}
@@ -377,36 +377,36 @@
 				        <div class="MiddleLeftRightClickPopupMenu">
 				          <div class="MiddleRightRightClickPopupMenu">
 		          		<div class="UIRightPopupMenuContainer" >
-		                   <a class="MenuItem" href="<%=uicomponent.event("AddEvent","id")%>">   
-		                    <div class="ItemIcon AddNewEvent">
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("AddEvent","id")%>">   
+		                    <a class="ItemIcon AddNewEvent">
 		                    	<%=uiform.getLabel("AddEvent")%>
-		                    </div>
-		                   </a>
-		                   <a class="MenuItem" href="<%=uicomponent.event("AddTask","id")%>">   
-		                    <div class="ItemIcon AddNewTask">
+		                    </a>
+		                   </div>
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("AddTask","id")%>">   
+		                    <a class="ItemIcon AddNewTask">
 		                    	<%=uiform.getLabel("AddTask")%>
-		                    </div>
-		                   </a>
-		                   <a class="MenuItem" href="<%=uicomponent.event("EditCalendar","id")%>">   
-		                    <div class="ItemIcon  EditCalendarIcon">
+		                    </a>
+		                   </div>
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("EditCalendar","id")%>">   
+		                    <a class="ItemIcon  EditCalendarIcon">
 		                    	<%=uiform.getLabel("EditCalendar")%>
-		                    </div>
-		                   </a>
-		                   <a class="MenuItem" href="<%=uicomponent.event("RemoveSharedCalendar",uicomponent.id,"id")%>">   
-		                    <div class="ItemIcon RemoveCalendarIcon">
+		                    </a>
+		                   </div>
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("RemoveSharedCalendar",uicomponent.id,"id")%>">   
+		                    <a class="ItemIcon RemoveCalendarIcon">
 		                    	<%=uiform.getLabel("RemoveCalendar")%>
-		                    </div>
-		                   </a>
-		                    <a class="MenuItem" href="<%=uicomponent.event('ImportCalendar','id')%>">   
-		                    <div class="ItemIcon ImportCalendarIcon">
+		                    </a>
+		                   </div>
+		                    <div class="MenuItem" onclick="<%=uicomponent.event('ImportCalendar','id')%>">   
+		                    <a class="ItemIcon ImportCalendarIcon">
 		                      <%=uiform.getLabel("ImportCalendar")%>
-		                    </div>
-		                   </a>
-		                   <a class="MenuItem" href="<%=uicomponent.event("ExportCalendar","id")%>">   
-		                    <div class="ItemIcon ExportCalendarIcon">
+		                    </a>
+		                   </div>
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("ExportCalendar","id")%>">   
+		                    <a class="ItemIcon ExportCalendarIcon">
 		                    	<%=uiform.getLabel("ExportCalendar")%>
-		                    </div>
-		                   </a>
+		                    </a>
+		                   </div>
 		                   <!-- 
 		                   <div class="MenuItem" style="color: gray;">   
 		                    <div class="ItemIcon  SendMailCalendarIcon">
@@ -414,11 +414,11 @@
 		                    </div>
 		                   </div>
 		                    -->
-		                   <a class="MenuItem" href="<%=uicomponent.event("ShareCalendar","id")%>">   
-		                    <div class="ItemIcon  SharedCalendarIcon">
+		                   <div class="MenuItem" onclick="<%=uicomponent.event("ShareCalendar","id")%>">   
+		                    <a class="ItemIcon  SharedCalendarIcon">
 		                    	<%=uiform.getLabel("ShareCalendar")%>
-		                    </div>
-		                   </a>		
+		                    </a>
+		                   </div>		
 		          		</div>
 		          			<div class="CalendarTableColor" >
 									  <%
@@ -434,7 +434,7 @@
 												while(j <= items && count < size){
 												 color = uicomponent.getColors()[count] ;
 												 actionLink = uicomponent.event('ChangeColor','id&calColor='+color);	
-												 print "<a href=\"$actionLink\" class=\"$color ColorCell\"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>" ;
+												 print "<a href=\"$actionLink\" class=\"$color ColorCell\"><img alt='' src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>" ;
 												 count++
 												 j++;
 												}
@@ -477,11 +477,11 @@
 						  <%for(CalendarEvent task in uicomponent.getAllTask(uicomponent.getCurrentMiniBeginDate(),uicomponent.getCurrentMiniEndDate(), status)){
 						  	color = uicomponent.getColorMap().get(task.calType +CalendarUtils.COLON+ task.getCalendarId()) ;
 						  %>
-							  <a style="white-space:nowrap;">
+							  <div style="white-space:nowrap;">
 							    <div class="TasksColor" style="background: $color"><span></span></div>
 							    <div class="TasksName" title="$task.summary">$task.summary</div>
 							    <div style="clear: left;"><span></span></div>
-							  </a>
+							  </div>
 						  <%}%>
 						</div>
 					<%}%>

@@ -10,7 +10,7 @@
     <div class="WelcomeMail">
       <div class="LabelWelcomeMail">Welcome to</div>
       <div class="LabelComment">please do not reply to this message !</div>
-      <div style="clear: both;"><span></span></div>
+      <div style="clear:both;"><span></span></div>
     </div>
     <div class="LogoMail">
       <span></span>
@@ -18,7 +18,7 @@
     <div class="OverviewMail">
       Overview
     </div>
-    <div class="ContentMail" style="margin-left: 25px;">
+    <div class="ContentMail" style="margin-left:25px;">
       <b>eXo Mail</b> is an open-source mail that is built on foudation of eXo WebOS with variety of new features designed to make your e-mail experience more productive and convenience, as a new way to view your mails inbox and conversation and help to reduce risks and annoyances such as phishing and junk e-mail. Easy to approach the basics as writing, reading, finding and  much more...
     </div>
     <div class="FeaturesMail">
