@@ -46,18 +46,25 @@
 	  <tr>
 	    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.from") %> :&nbsp;&nbsp;</td>
 	    <td class="FieldComponent" style="width:62%;"><%uiForm.renderField("from")%></td>
-	    <td class="FieldCCAndBCC">
+	  </tr>
+	  <tr>
+	    <td class="FieldLabel">
+	    		<a href="<%=uiForm.event("To")%>"><%=_ctx.appRes(uiForm.id+ ".label.to") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+	    </td>
+	    <td class="FieldComponent"  colspan="2">
+	      <%uiForm.renderField("to")%> 
+	    </td>
+	  </tr>
+	  <%/* vietnt */%>
+	  <tr>
+	    <td class="FieldLabel">
+	    	
+	    </td>
+	    <td class="FieldComponent FieldCCAndBCC">
 	      <a  href="<%=uiForm.event("ShowCc")%>">|<%=_ctx.appRes(uiForm.id+ ".label.add-cc") %>|</a> 
 	      <a  href="<%=uiForm.event("ShowBcc")%>"><%=_ctx.appRes(uiForm.id+ ".label.add-bcc") %>|</a>
 	    <%/* javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_BCC')*/ %>
 	    </td>
-	  </tr>
-	  <tr>
-	    <td class="FieldLabel">
-	    	<a href="<%=uiForm.event("To")%>"><%=_ctx.appRes(uiForm.id+ ".label.to") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-	    </td>
-	    <td class="FieldComponent"  colspan="2">
-	      <%uiForm.renderField("to")%> 
 	    </td>
 	  </tr>
 	  <%
@@ -82,7 +89,7 @@
 	  </tr>
 	  <tr>
 	    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.subject") %> :&nbsp;&nbsp;</td>
-	    <td class="FieldComponent" colspan="2" style="padding:4px;">
+	    <td class="FieldComponent" colspan="2">
 	      <%uiForm.renderField("subject")%>
 	    </td>
 	  </tr>
@@ -91,7 +98,7 @@
 	    %> 
 	   <tr>
 	    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.attachments") %> :&nbsp;&nbsp;</td>
-	    <td class="FieldComponent" colspan="2" style="padding:4px;">
+	    <td class="FieldComponent" colspan="2">
 	      <%uiForm.renderField("attachments")%>
 	      <%renderActions("attachments")%>
 	    </td>

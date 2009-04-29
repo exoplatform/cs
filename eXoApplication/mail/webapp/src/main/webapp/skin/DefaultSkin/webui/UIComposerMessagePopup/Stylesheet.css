@@ -120,7 +120,7 @@
 
 .UIMessageCompose .UIForm .HorizontalLayout td.FieldLabel {
 	font-weight: bold;
-	width: 120px;
+	width: 50px;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout td {
@@ -129,8 +129,7 @@
 }	
 
 .UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC {
-	padding: 6px 0px 2px 0px;
-	width: 165px;
+	width: 100%;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC .LabelLink {
@@ -153,25 +152,22 @@
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout input {
-	width: 90%;
+	width: 99%;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout select {
-	width: 98%;
+	width: 99.7%;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout .FieldLabel .HoverButton {
 	line-height: 21px; width: 71px; height: 21px; float: right;
 }
 
-.UIMessageCompose .UIForm .HorizontalLayout .FieldLabel a:hover {
-	background: url('background/ButtonMail.gif') no-repeat;
-	width: 71px; height: 21px;
-}
 
 .UIMessageCompose .UIForm .HorizontalLayout textarea {
-	width: 90%; height: 40px; 
+	width: 99.2%; height: 40px; 
 	font-family: tahoma;
+	overflow:auto;
 }
 
 .UIMessageCompose .MessageAddress .ZipFileIcon {
@@ -191,16 +187,17 @@
 	vertical-align:top;
 }
 .UIMessageCompose .MessageAddress .UIFormGrid .FieldLabel a {
-	line-height: 20px;
-	margin: 4px 1px 4px 1px;
-	float:right;
+	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
+	color: black; border: 1px solid #cbcbcb;
+	line-height: 17px;
+	white-space:nowrap;
+	min-width:50px;
+	height:21px;
+	float:left;
 }
 
 .UIMessageCompose .MessageAddress .UIFormGrid .FieldLabel a:hover {
-	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
-	color: #058ee6; border: 1px solid #cbcbcb;
-	height: 20px;
-	margin: 3px 0px 3px 0px;
+	color: #058ee6; 
 }
 
 .UIMessageCompose .MessageAddress img {
@@ -208,6 +205,12 @@
 	margin-left:5px;
 	padding:0px;
 	vertical-align:bottom;
+}
+
+.UIMessageCompose .UIForm .HorizontalLayout .UIFormGrid td.FieldLabel {
+padding:4px;
+text-align:left;
+vertical-align:top;
 }
 
 
