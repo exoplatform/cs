@@ -120,6 +120,11 @@ UIMailDragDrop.prototype.synDragObjectPos = function(dndEvent) {
   var mouseY = eXo.core.Browser.findMouseYInPage(dndEvent.backupMouseEvent)
   dragObject.style.top = mouseY + 'px' ;
   dragObject.style.left = mouseX + 'px' ;
+	if (eXo.core.I18n.isRT()) {
+		if(eXo.core.Browser.browserType == "ie") mouseX -= eXo.cs.Utils.getScrollbarWidth();
+		dragObject.style.right = (eXo.core.Browser.getBrowserWidth() - mouseX) + "px" ;
+		dragObject.style.left = '' ;
+  }
 } ;
 
 UIMailDragDrop.prototype.initCallback = function(dndEvent) {
