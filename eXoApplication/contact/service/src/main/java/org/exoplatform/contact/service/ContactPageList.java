@@ -321,7 +321,7 @@ public class ContactPageList extends JCRPageList {
     Session session = getJCRSession(username_) ;    
     try {
       QueryImpl queryImpl = createXPathQuery(session, username_, value_);
-      queryImpl.setLimit(pageSize);
+      //queryImpl.setLimit(pageSize);
       QueryResult result = queryImpl.execute();
       iter_ = result.getNodes();
     } finally {
@@ -354,7 +354,7 @@ public class ContactPageList extends JCRPageList {
     Session session = getJCRSession(username_) ;    
     try {
       QueryImpl queryImpl = createXPathQuery(session, username_, value_);
-      queryImpl.setLimit(pageSize);
+      //queryImpl.setLimit(pageSize);
       QueryResult result = queryImpl.execute();
       iter_ = result.getNodes();
     } finally {
