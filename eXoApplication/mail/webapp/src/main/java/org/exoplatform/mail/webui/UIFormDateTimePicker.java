@@ -171,10 +171,11 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
   public void processRender(WebuiRequestContext context) throws Exception {
     Locale locale = context.getParentAppRequestContext().getLocale() ;
     locale_ = locale ;
+    String disabled = (isEditable())?"":"disabled" ;
     context.getJavascriptManager().importJavascript("eXo.webui.UICalendar") ;
     context.getJavascriptManager().importJavascript("eXo.cs.UIDateTimePicker","/csResources/javascript/") ;
     Writer w = context.getWriter();
-    w.write("<input monthsName='"+ getMonthsName()+"' daysName='"+getDaysName()+"' format='" + getFormatStyle() + "' type='text' onfocus='eXo.cs.UIDateTimePicker.init(this,") ;
+    w.write("<input "+ disabled +" monthsName='"+ getMonthsName()+"' daysName='"+getDaysName()+"' format='" + getFormatStyle() + "' type='text' onfocus='eXo.cs.UIDateTimePicker.init(this,") ;
     w.write(String.valueOf(isDisplayTime_));
     w.write(");' onkeyup='eXo.cs.UIDateTimePicker.show();' name='") ;
     w.write(getName()) ; w.write('\'') ;
