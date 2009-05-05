@@ -265,3 +265,7 @@
 	background: url('icons/MailIcons.gif') no-repeat left -651px; /* orientation=lt */
 	background: url('icons/MailIcons.gif') no-repeat right -651px; /* orientation=rt */
 }
+
+.UIMailPortlet .LayoutIcon {
+	background: url('icons/SettingsIcon.gif') no-repeat left center;
+}

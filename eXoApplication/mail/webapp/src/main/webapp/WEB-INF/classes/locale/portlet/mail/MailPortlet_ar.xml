@@ -275,6 +275,21 @@
       <Cancel>#{word.cancel}</Cancel>
     </action>
   </UIMailSettings>
+  <UIMailSettings-VerticalLayout>
+  	<label>
+  		<vertical-layout>Vertical Split</vertical-layout>
+  	</label>
+  </UIMailSettings-VerticalLayout>
+  <UIMailSettings-HorizontalLayout>
+  	<label>
+  		<horizontal-layout>Horizontal Split</horizontal-layout>
+  	</label>
+  </UIMailSettings-HorizontalLayout>
+  <UIMailSettings-NosplitLayout>
+  	<label>
+  		<nosplit-layout>No Split</nosplit-layout>
+  	</label>
+  </UIMailSettings-NosplitLayout>
   <UIAddressForm>
     <action>
       <Save>#{word.save}</Save>
