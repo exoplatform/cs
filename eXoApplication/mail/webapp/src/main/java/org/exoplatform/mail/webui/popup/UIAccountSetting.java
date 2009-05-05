@@ -318,9 +318,7 @@ public class UIAccountSetting extends UIFormTabPane {
   
   public Calendar getFieldCheckFrom() {
     UIFormInputWithActions uiInput = getChildById(TAB_FETCH_OPTIONS);
-    if (((UIFormDateTimePicker) uiInput.getChildById(FROM_DATE)) != null)
-      return ((UIFormDateTimePicker) uiInput.getChildById(FROM_DATE)).getCalendar();
-    else return null;
+    return ((UIFormDateTimePicker) uiInput.getChildById(FROM_DATE)).getCalendar();    
   }
   
   public boolean getFieldLeaveOnServer() {
@@ -342,34 +340,6 @@ public class UIAccountSetting extends UIFormTabPane {
     MailService mailSrv = getApplicationComponent(MailService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     Account account = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, getSelectedAccountId());
-    /*uiAccountInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel()) ;
-    uiAccountInput.getUIStringInput(FIELD_ACCOUNT_DESCRIPTION).setValue(account.getDescription()) ;
-    UIFormCheckBoxInput checkFromDate = uiAccountInput.getUIFormCheckBoxInput(CHECK_FROM_DATE);
-    if(account.getProtocol().equals(Utils.IMAP)) {
-      if (checkFromDate == null) {
-        checkFromDate = new UIFormCheckBoxInput<Boolean>(CHECK_FROM_DATE, CHECK_FROM_DATE, null);
-        checkFromDate.setOnChange("CheckFromDate");
-        uiAccountInput.addUIFormInput(checkFromDate);
-      }
-      checkFromDate.setChecked(!account.isCheckAll()) ;
-      GregorianCalendar cal = new GregorianCalendar();
-      if (account.getCheckFromDate() != null) {
-        cal.setTimeInMillis(account.getCheckFromDate().getTime());
-        UIFormDateTimePicker uiDate = ((UIFormDateTimePicker) uiAccountInput.getChildById(FROM_DATE));
-        if (uiDate != null) {
-          uiDate.setCalendar(cal) ;
-        } else {
-          uiDate = new UIFormDateTimePicker(FROM_DATE, FROM_DATE, null, true); 
-          uiDate.setCalendar(cal) ;
-          uiAccountInput.addUIFormInput(uiDate);
-        }
-      }
-      if (account.isCheckAll()) uiAccountInput.removeChildById(FROM_DATE);
-    } else {
-      uiAccountInput.removeChildById(CHECK_FROM_DATE);
-      uiAccountInput.removeChildById(FROM_DATE);
-    }
-    */
     UIFormInputWithActions uiIdentityInput = getChildById(TAB_IDENTITY_SETTINGS) ;
     uiIdentityInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel()) ;
     uiIdentityInput.getUIStringInput(FIELD_DISPLAY_NAME).setValue(account.getUserDisplayName()) ;
@@ -401,8 +371,8 @@ public class UIAccountSetting extends UIFormTabPane {
 
     UIFormInputWithActions uifetchOptionsInput = getChildById(TAB_FETCH_OPTIONS) ;
     uifetchOptionsInput.getUIFormCheckBoxInput(CHECK_FROM_DATE).setChecked(!account.isCheckAll());
-    if (!getFieldCheckFromDate()) {
-      uifetchOptionsInput.removeChildById(FROM_DATE);
+    if (account.isCheckAll()) {
+      ((UIFormDateTimePicker) uifetchOptionsInput.getChildById(FROM_DATE)).setEditable(false);
     } else {
       GregorianCalendar cal = new GregorianCalendar();
       cal.setTime(account.getCheckFromDate());
@@ -661,14 +631,13 @@ public class UIAccountSetting extends UIFormTabPane {
       UIAccountSetting uiSetting = event.getSource() ;
       UIFetchOptionsInputSet uiInput = uiSetting.getChildById(TAB_FETCH_OPTIONS);
       boolean checkAllMail = !uiInput.getUIFormCheckBoxInput(CHECK_FROM_DATE).isChecked();
+      UIFormDateTimePicker fromDateField = ((UIFormDateTimePicker) uiInput.getChildById(FROM_DATE));
       
       if (checkAllMail) {
-        uiInput.removeChildById(FROM_DATE);
+        fromDateField.setEditable(false);
       } else {
         GregorianCalendar cal = new GregorianCalendar();
-        if (uiInput.getChildById(FROM_DATE) == null)
-          uiInput.addUIFormInput(new UIFormDateTimePicker(FROM_DATE, FROM_DATE, null, true));
-        UIFormDateTimePicker fromDateField = ((UIFormDateTimePicker) uiInput.getChildById(FROM_DATE));
+        fromDateField.setEditable(true);
         if (fromDateField.getCalendar() == null) fromDateField.setCalendar(cal);
       }
       
