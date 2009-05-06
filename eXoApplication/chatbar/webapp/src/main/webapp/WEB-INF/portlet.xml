@@ -6,7 +6,7 @@
   
   <portlet>
     <description xml:lang="EN">ChatBar Portlet</description>
-    <portlet-name>ChatPortlet</portlet-name>
+    <portlet-name>ChatBarPortlet</portlet-name>
     <display-name xml:lang="EN">ChatBar Portlet</display-name>
     <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
 

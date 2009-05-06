@@ -1347,3 +1347,6 @@ form {
 	font-size: 11px;
 }
 
+.UIChatBarPortlet{
+	border:solid 1px red;	
+}

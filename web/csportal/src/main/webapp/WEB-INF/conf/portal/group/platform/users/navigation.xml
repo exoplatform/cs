@@ -39,6 +39,13 @@
 		    <label>#{platform.users.collaboration.chat}</label>
 		    <page-reference>group::platform/users::chat</page-reference>
 	  	</node>	
+	  	
+	  	<node>
+		    <uri>chatbar</uri>
+		    <name>chatbar</name>
+		    <label>#{platform.users.collaboration.chatbar}</label>
+		    <page-reference>group::platform/users::chatbar</page-reference>
+	  	</node>	
 	  	  
 	  <node>
 		    <uri>sitemap</uri>

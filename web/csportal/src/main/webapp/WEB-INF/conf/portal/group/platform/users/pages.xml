@@ -62,6 +62,21 @@
       <show-info-bar>false</show-info-bar>       
     </application>
    </page>
+   
+   <page>
+  	<page-id>group::platform/users::chatbar</page-id>
+  	<owner-type>group</owner-type>
+    <owner-id>platform/users</owner-id>
+    <name>chatbar</name>     
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>   
+    
+    <application>
+      <instance-id>group#platform/users:/chatbar/ChatBarPortlet/chatbar</instance-id>    
+      <title>Chat Bar Portlet</title>
+      <show-info-bar>false</show-info-bar>       
+    </application>
+   </page>
   
   <page>
   	<page-id>group::platform/users::collaboration</page-id>
@@ -98,6 +113,12 @@
     <application>
       <instance-id>group#platform/users:/chat/ChatPortlet/chat</instance-id>    
       <title>Chat Portlet</title>
+      <show-info-bar>false</show-info-bar>       
+    </application>
+    
+    <application>
+      <instance-id>group#platform/users:/chatbar/ChatBarPortlet/chatbar</instance-id>    
+      <title>Chat Bar Portlet</title>
       <show-info-bar>false</show-info-bar>       
     </application>      
   </page>   	 
