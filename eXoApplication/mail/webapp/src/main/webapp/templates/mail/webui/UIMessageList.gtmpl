@@ -171,22 +171,42 @@
 	                  
 	                  <div class ="HorizontalLine"><span></span></div>
 	                  
-	                  <% 
-                      String groupByDateSelected = "";
-                      if (uicomponent.viewMode == uicomponent.MODE_GROUP_BY_DATE) groupByDateSelected = "SelectItem" ;  
-                    %>
-	                  <div class="MenuItem $groupByDateSelected">   
-    	                <%
-                        if (!groupByDateSelected.equals("")) { 
-                      %> 
-                        <div class="CheckedIcon" style="float:right; width:16px; height:16px;  margin-top:5px"></div>
-                      <% 
-                        } 
-                      %>
-                      <div>
-	                      <a class="ItemIcon GroupByDateIcon"  href="<%=uicomponent.event("GroupByDate")%>"><%=_ctx.appRes(uicomponent.id+ ".label.groupByDate") %></a>
+	                  <div class="MenuItem">   
+                      <div class="NextArrow1Icon">
+	                      <a class="ItemIcon GroupByDateIcon"><%=_ctx.appRes(uicomponent.id+ ".label.groupBy") %></a>
 	                    </div>
-	                    <div style="clear:both;"><span></span></div>
+	                    
+	                    <!--Submenu-->
+  	                    <div style="position:relative;">
+  	                      <div class="UIRightClickPopupMenu" style="display: block;left:135px;top:-23px;width:140px;">
+  	                        <div class="UIContextMenuContainer">
+  	                          <div class="TopLeftRightClickPopupMenu">
+  	                            <div class="TopRightRightClickPopupMenu">
+  	                              <div class="TopCenterRightClickPopupMenu"><span></span></div>
+  	                            </div>
+  	                          </div>
+  	                          <div class="MiddleLeftRightClickPopupMenu">
+  	                            <div class="MiddleRightRightClickPopupMenu">
+  	                              <div class="UIRightPopupMenuContainer">
+  	                                <div class="MenuItem">  
+  	                                  <div>
+  	                                    <a class="ItemIcon ListIcon" style="background-position:6px center; margin-left:0px;color: rgb(204, 204, 204);" >
+  	                                      <%=_ctx.appRes(uicomponent.id+ ".label.groupByReceivedDate") %>
+  	                                    </a>
+  	                                  </div>  
+  	                                </div>
+  	                              </div>
+  	                            </div>
+  	                          </div>
+  	                          <div class="BottomLeftRightClickPopupMenu">
+  	                            <div class="BottomRightRightClickPopupMenu">
+  	                              <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+  	                            </div>
+  	                          </div>
+  	                        </div>
+  	                      </div>
+  	                    </div>
+	                    <!--end-->
 	                  </div>
 	                </div>
 	              </div>
