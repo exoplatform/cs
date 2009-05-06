@@ -227,13 +227,12 @@
 	background: url('icons/ConversationIcon.gif') no-repeat;
 }
 
-.UIMailPortlet .UIDayViewIcon {
-	background: url('icons/CalendarIcons.gif') no-repeat;
-	margin: 1px 0px 0px 10px; /* orientation=lt */
-	margin: 1px 10px 0px 0px; /* orientation=rt */
-	line-height: 27px;
-	padding-left: 24px; /* orientation=lt */
-	padding-right: 24px; /* orientation=rt */
+.UIMailPortlet .GroupByDateIcon {
+	background:transparent url('icons/GroupByDate.gif') no-repeat;
+}
+
+.UIMailPortlet .CheckedIcon{
+	background:transparent url('icons/BlueCheckerIcon.gif') no-repeat scroll left center
 }
 
 
