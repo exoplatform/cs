@@ -364,15 +364,15 @@
                         </tbody>
                       </table>
                       <div class="UIPageIterator">
-                        <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span/></a>
+                        <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span></span></a>
                         <a title="Next Page" class="Icon NextPageIcon"/>
                         <a class="Number">2</a>
                         <a class="Number PageSelected">1</a>
-                        <a title="Previous Page" class="Icon DisableLastPageIcon"><span/></a>
+                        <a title="Previous Page" class="Icon DisableLastPageIcon"><span></span></a>
                         <a title="Back 10 pages" class="Icon DisableLastTopPageIcon"/>        
                         <a class="PagesTotalNumber">2</a>
                         <a class="TotalPages">Total pages:</a>
-                        <div class="ClearRight"><span/></div>
+                        <div class="ClearRight"><span></span></div>
                       </div>
                     </div>
                   </div>
@@ -486,15 +486,15 @@
                         <tbody><span></span></tbody>
                       </table>
                       <div class="UIPageIterator" style="display: none">
-                        <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span/></a>
+                        <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span></span></a>
                         <a title="Next Page" class="Icon NextPageIcon"/>
                         <a class="Number">2</a>
                         <a class="Number PageSelected">1</a>
-                        <a title="Previous Page" class="Icon DisableLastPageIcon"><span/></a>
+                        <a title="Previous Page" class="Icon DisableLastPageIcon"><span></span></a>
                         <a title="Back 10 pages" class="Icon DisableLastTopPageIcon"/>        
                         <a class="PagesTotalNumber">2</a>
                         <a class="TotalPages">Total pages:</a>
-                        <div class="ClearRight"><span/></div>
+                        <div class="ClearRight"><span></span></div>
                       </div>
                     </div>
                   </div>

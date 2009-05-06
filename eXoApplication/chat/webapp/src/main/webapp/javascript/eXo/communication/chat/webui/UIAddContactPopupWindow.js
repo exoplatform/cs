@@ -142,7 +142,7 @@ UIAddContactPopupWindow.prototype.createContactNode = function(contactInfo, isAl
   }
   uiContactRowNode.appendChild(tdTmpNode.cloneNode(true));
   
-  tdTmpNode.innerHTML = '<span/>';
+  tdTmpNode.innerHTML = '<span></span>';
   
   tdTmpNode.innerHTML = contactInfo['firstName'];
   uiContactRowNode.appendChild(tdTmpNode.cloneNode(true));
