@@ -477,7 +477,6 @@ public class JCRDataStorage {
                                                          .append("order by @exo:fullName,@exo:id ascending")
                                                          .toString();
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-      QueryResult result = query.execute();
       ContactPageList pageList = new ContactPageList(owner,
                                                      10,
                                                      queryString,

@@ -316,8 +316,6 @@ public class ContactPageList extends JCRPageList {
       }
       session.logout();
     }*/
-    
-    long pageSize = getPageSize() ;
     Session session = getJCRSession(username_) ;    
     try {
       QueryImpl queryImpl = createXPathQuery(session, username_, value_);
@@ -349,8 +347,6 @@ public class ContactPageList extends JCRPageList {
       }
       session.logout();
     }*/    
-
-    long pageSize = getPageSize() ;
     Session session = getJCRSession(username_) ;    
     try {
       QueryImpl queryImpl = createXPathQuery(session, username_, value_);
