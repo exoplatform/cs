@@ -595,7 +595,6 @@
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .ContactPreviewDetails {
-	height: 420px;
 	overflow: auto;
 }
 
