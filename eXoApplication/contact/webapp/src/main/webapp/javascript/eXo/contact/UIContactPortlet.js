@@ -594,7 +594,7 @@ UIContactPortlet.prototype.showImMenu = function(obj, event) {
 
 UIContactPortlet.prototype.addCheckedIcon = function(layout, visible) {
   layout = parseInt(layout);
-  var itemIcon = eXo.core.DOMUtil.findDescendantsByClass(document.getElementById("customLayoutViewMenu"), "div", "ItemIcon")[layout];
+  var itemIcon = eXo.core.DOMUtil.findDescendantsByClass(document.getElementById("customLayoutViewMenu"), "a", "ItemIcon")[layout];
   if(visible) {
     eXo.core.DOMUtil.addClass(itemIcon,'CheckedMenu');
   } else {
