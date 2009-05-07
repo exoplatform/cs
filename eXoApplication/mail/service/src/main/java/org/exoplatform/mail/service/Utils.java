@@ -176,6 +176,7 @@ public class Utils {
   public static final String EXO_SAVE_SENT_MESSAGE = "exo:saveMsgInSent".intern();
   public static final String EXO_FILTER = "exo:filter".intern() ;
   public static final String EXO_PATH = "exo:path".intern();
+  public static final String EXO_LAYOUT = "exo:layout".intern();
   
   public static final String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
   public static final String NT_FILE = "nt:file".intern() ;

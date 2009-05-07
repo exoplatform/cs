@@ -19,6 +19,7 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
@@ -42,36 +43,34 @@ public class UIMailLayoutTab extends UIFormInputSet {
   public static final String VERTICAL_LAYOUT = "UIMailSettings-VerticalLayout";
   public static final String HORIZONTAL_LAYOUT= "UIMailSettings-HorizontalLayout";
   public static final String NOSPLIT_LAYOUT = "UIMailSettings-NosplitLayout";
-  public static final String VERTICAL_LAYOUT_OPTION = "vertical-layout";
-  public static final String HORIZONTAL_LAYOUT_OPTION = "horizontal-layout";
-  public static final String NOSPLIT_LAYOUT_OPTION = "nosplit-layout";
+  public static final String VERTICAL_LAYOUT_VALUE = "vertical-layout";
+  public static final String HORIZONTAL_LAYOUT_VALUE = "horizontal-layout";
+  public static final String NO_SPLIT_LAYOUT_VALUE = "nosplit-layout";
   public static final String RADIO_ID = "group-id";
   
   
   public UIMailLayoutTab(String id) throws Exception {
     super(id);
     setComponentConfig(getClass(), null) ;
-
     List<SelectItemOption<String>> layoutOption = new ArrayList<SelectItemOption<String>>();
-    layoutOption.add(new SelectItemOption<String>(VERTICAL_LAYOUT_OPTION,VERTICAL_LAYOUT_OPTION));
-    UIFormRadioBoxInput uiFormRadioBoxInput=new UIFormRadioBoxInput(RADIO_ID,VERTICAL_LAYOUT_OPTION,layoutOption);
+    layoutOption.add(new SelectItemOption<String>(VERTICAL_LAYOUT_VALUE, VERTICAL_LAYOUT_VALUE));
+    UIFormRadioBoxInput uiFormRadioBoxInput=new UIFormRadioBoxInput(RADIO_ID, "", layoutOption);
     uiFormRadioBoxInput.setId(VERTICAL_LAYOUT);
     addUIFormInput(uiFormRadioBoxInput);
+    
     layoutOption = new ArrayList<SelectItemOption<String>>();
-    layoutOption.add(new SelectItemOption<String>(HORIZONTAL_LAYOUT_OPTION,HORIZONTAL_LAYOUT_OPTION));
-    uiFormRadioBoxInput=new UIFormRadioBoxInput(RADIO_ID,HORIZONTAL_LAYOUT_OPTION,layoutOption);
-    uiFormRadioBoxInput.setId(HORIZONTAL_LAYOUT);
-    addUIFormInput(uiFormRadioBoxInput);
-    layoutOption = new ArrayList<SelectItemOption<String>>();
-    layoutOption.add(new SelectItemOption<String>(NOSPLIT_LAYOUT_OPTION,NOSPLIT_LAYOUT_OPTION));
-    uiFormRadioBoxInput=new UIFormRadioBoxInput(RADIO_ID,NOSPLIT_LAYOUT_OPTION,layoutOption);
+    layoutOption.add(new SelectItemOption<String>(NO_SPLIT_LAYOUT_VALUE, NO_SPLIT_LAYOUT_VALUE));
+    uiFormRadioBoxInput=new UIFormRadioBoxInput(RADIO_ID, "", layoutOption);
     uiFormRadioBoxInput.setId(NOSPLIT_LAYOUT);
     addUIFormInput(uiFormRadioBoxInput);
-    //TODO: read from database
+    
+    layoutOption = new ArrayList<SelectItemOption<String>>();
+    layoutOption.add(new SelectItemOption<String>(HORIZONTAL_LAYOUT_VALUE, HORIZONTAL_LAYOUT_VALUE));
+    uiFormRadioBoxInput=new UIFormRadioBoxInput(RADIO_ID, "", layoutOption);
+    uiFormRadioBoxInput.setId(HORIZONTAL_LAYOUT);
+    addUIFormInput(uiFormRadioBoxInput);
   }
   
  
-  protected UIForm getParentFrom() {
-    return (UIForm)getParent() ;
-  }
+  protected UIForm getParentFrom() { return (UIForm)getParent(); }
 }

@@ -63,7 +63,6 @@ import org.exoplatform.webui.form.UIFormTabPane;
     }
 )
 public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
-//public class UIMailSettings extends UIForm implements UIPopupComponent {
   public static final String DEFAULT_ACCOUNT = "default-account".intern();
   public static final String NUMBER_MSG_PER_PAGE = "number-of-conversation".intern() ;
   public static final String PERIOD_CHECK_AUTO = "period-check-mail".intern() ;
@@ -71,55 +70,15 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
   public static final String REPLY_WITH_ATTACH = "reply-message-with".intern();
   public static final String FORWARD_WITH_ATTACH = "forward-message-with".intern();
   public static final String SAVE_SENT_MESSAGE = "save-sent-message".intern();
-  //modify
   public static final String TAB_GENERAL = "general";
   public static final String TAB_LAYOUT = "layout";
   
   
   public UIMailSettings() throws Exception {    
     super("UIMailSettings");
-    
   }
   
   public void init() throws Exception {
-    /*addUIFormInput(new UIFormSelectBox(DEFAULT_ACCOUNT, DEFAULT_ACCOUNT, getAccounts()));
-        
-    List<SelectItemOption<String>> numberPerPage = new ArrayList<SelectItemOption<String>>();
-    for (int i = 1; i <= 7; i++) {
-      numberPerPage.add(new SelectItemOption<String>(String.valueOf(10*i)));
-    }
-    addUIFormInput(new UIFormSelectBox(NUMBER_MSG_PER_PAGE, NUMBER_MSG_PER_PAGE, numberPerPage));  
-    //TODO should replace text by resource boundle
-    List<SelectItemOption<String>> periodCheckAuto = new ArrayList<SelectItemOption<String>>();
-    periodCheckAuto.add(new SelectItemOption<String>("Never", "period." + String.valueOf(MailSetting.NEVER_CHECK_AUTO)));
-    //TODO change to id
-    periodCheckAuto.add(new SelectItemOption<String>("5 minutes", "period." + String.valueOf(MailSetting.FIVE_MINS)));
-    periodCheckAuto.add(new SelectItemOption<String>("10 minutes", "period." + String.valueOf(MailSetting.TEN_MINS)));
-    periodCheckAuto.add(new SelectItemOption<String>("20 minutes", "period." + String.valueOf(MailSetting.TWENTY_MINS)));
-    periodCheckAuto.add(new SelectItemOption<String>("30 minutes", "period." + String.valueOf(MailSetting.THIRTY_MINS)));
-    periodCheckAuto.add(new SelectItemOption<String>("1 hour", "period." + String.valueOf(MailSetting.ONE_HOUR)));
-    addUIFormInput(new UIFormSelectBox(PERIOD_CHECK_AUTO, PERIOD_CHECK_AUTO, periodCheckAuto));
-    
-    List<SelectItemOption<String>> useWysiwyg = new ArrayList<SelectItemOption<String>>();
-    useWysiwyg.add(new SelectItemOption<String>("Rich text editor (HTML format)", "editor.true"));
-    useWysiwyg.add(new SelectItemOption<String>("Plain text", "editor.false"));
-    addUIFormInput(new UIFormSelectBox(COMPOSE_MESSAGE_IN, COMPOSE_MESSAGE_IN, useWysiwyg));
-    
-    List<SelectItemOption<String>> replyWithAtt = new ArrayList<SelectItemOption<String>>();
-    replyWithAtt.add(new SelectItemOption<String>("Original message included attachment", "replywith.true"));
-    replyWithAtt.add(new SelectItemOption<String>("Original message", "replywith.false"));
-    addUIFormInput(new UIFormSelectBox(REPLY_WITH_ATTACH, REPLY_WITH_ATTACH, replyWithAtt));
-    
-    List<SelectItemOption<String>> forwardWithAtt = new ArrayList<SelectItemOption<String>>();
-    forwardWithAtt.add(new SelectItemOption<String>("Original message included attachment", "forwardwith.true"));
-    forwardWithAtt.add(new SelectItemOption<String>("Original message", "forwardwith.false"));
-    addUIFormInput(new UIFormSelectBox(FORWARD_WITH_ATTACH, FORWARD_WITH_ATTACH, forwardWithAtt));
-    
-    addUIFormInput(new UIFormCheckBoxInput<Boolean>(SAVE_SENT_MESSAGE, SAVE_SENT_MESSAGE, false));
-    fillData() ;
-    */
-    
-    //creat InputSet for General Tab
     UIFormInputSet  generalInputSet = new UIFormInputSet(TAB_GENERAL);
     generalInputSet.addUIFormInput(new UIFormSelectBox(DEFAULT_ACCOUNT, DEFAULT_ACCOUNT, getAccounts()));
     List<SelectItemOption<String>> numberPerPage = new ArrayList<SelectItemOption<String>>();
@@ -178,13 +137,28 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
     String username = Util.getPortalRequestContext().getRemoteUser();
     MailSetting setting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
     if (setting != null) {
-      ((UIFormInputSet) getChildById(TAB_GENERAL)).getUIFormSelectBox(DEFAULT_ACCOUNT).setValue(setting.getDefaultAccount()) ;
-      ((UIFormInputSet) getChildById(TAB_GENERAL)).getUIFormSelectBox(NUMBER_MSG_PER_PAGE).setValue(String.valueOf(setting.getNumberMsgPerPage()));
-      ((UIFormInputSet) getChildById(TAB_GENERAL)).getUIFormSelectBox(PERIOD_CHECK_AUTO).setValue("period." + String.valueOf(setting.getPeriodCheckAuto()));
-      ((UIFormInputSet) getChildById(TAB_GENERAL)).getUIFormSelectBox(COMPOSE_MESSAGE_IN).setValue("editor." + String.valueOf(setting.useWysiwyg()));
-      ((UIFormInputSet) getChildById(TAB_GENERAL)).getUIFormSelectBox(REPLY_WITH_ATTACH).setValue("replywith." + String.valueOf(setting.replyWithAttach()));
-      ((UIFormInputSet) getChildById(TAB_GENERAL)).getUIFormSelectBox(FORWARD_WITH_ATTACH).setValue("forwardwith." + String.valueOf(setting.forwardWithAtt()));
-      ((UIFormInputSet) getChildById(TAB_GENERAL)).getUIFormCheckBoxInput(SAVE_SENT_MESSAGE).setChecked(setting.saveMessageInSent());
+      long layout = setting.getLayout();
+      UIFormInputSet tabGeneral, tabLayout;
+      
+      tabGeneral = (UIFormInputSet) getChildById(TAB_GENERAL);
+      tabGeneral.getUIFormSelectBox(DEFAULT_ACCOUNT).setValue(setting.getDefaultAccount()) ;
+      tabGeneral.getUIFormSelectBox(NUMBER_MSG_PER_PAGE).setValue(String.valueOf(setting.getNumberMsgPerPage()));
+      tabGeneral.getUIFormSelectBox(PERIOD_CHECK_AUTO).setValue("period." + String.valueOf(setting.getPeriodCheckAuto()));
+      tabGeneral.getUIFormSelectBox(COMPOSE_MESSAGE_IN).setValue("editor." + String.valueOf(setting.useWysiwyg()));
+      tabGeneral.getUIFormSelectBox(REPLY_WITH_ATTACH).setValue("replywith." + String.valueOf(setting.replyWithAttach()));
+      tabGeneral.getUIFormSelectBox(FORWARD_WITH_ATTACH).setValue("forwardwith." + String.valueOf(setting.forwardWithAtt()));
+      tabGeneral.getUIFormCheckBoxInput(SAVE_SENT_MESSAGE).setChecked(setting.saveMessageInSent());
+      
+      tabLayout = (UIFormInputSet) getChildById(TAB_LAYOUT);
+      if (layout == MailSetting.VERTICAL_LAYOUT) {
+        ((UIFormRadioBoxInput) tabLayout.getChildById(UIMailLayoutTab.VERTICAL_LAYOUT)).setValue(UIMailLayoutTab.VERTICAL_LAYOUT_VALUE);
+      }
+      else if (layout == MailSetting.HORIZONTAL_LAYOUT) {
+        ((UIFormRadioBoxInput) tabLayout.getChildById(UIMailLayoutTab.HORIZONTAL_LAYOUT)).setValue(UIMailLayoutTab.HORIZONTAL_LAYOUT_VALUE);
+      }
+      else if (layout == MailSetting.NO_SPLIT_LAYOUT) {
+        ((UIFormRadioBoxInput) tabLayout.getChildById(UIMailLayoutTab.NOSPLIT_LAYOUT)).setValue(UIMailLayoutTab.NO_SPLIT_LAYOUT_VALUE);
+      }
     }
   }
   
@@ -227,6 +201,19 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       String forwardWith = uiSetting.getUIFormSelectBox(FORWARD_WITH_ATTACH).getValue() ;
       setting.setForwardWithAtt(Boolean.valueOf(forwardWith.substring(forwardWith.indexOf(".") + 1, forwardWith.length())));
       setting.setSaveMessageInSent(uiSetting.getUIFormCheckBoxInput(SAVE_SENT_MESSAGE).isChecked());
+      
+      UIFormInputSet tabLayout = (UIFormInputSet) uiSetting.getChildById(TAB_LAYOUT);
+      String value = ((UIFormRadioBoxInput) tabLayout.getChildById(UIMailLayoutTab.VERTICAL_LAYOUT)).getValue();
+      if (value != null && value.equals(UIMailLayoutTab.VERTICAL_LAYOUT_VALUE)) setting.setLayout(MailSetting.VERTICAL_LAYOUT);
+      else {
+        value = ((UIFormRadioBoxInput) tabLayout.getChildById(UIMailLayoutTab.HORIZONTAL_LAYOUT)).getValue();
+        if (value != null && value.equals(UIMailLayoutTab.HORIZONTAL_LAYOUT_VALUE)) setting.setLayout(MailSetting.HORIZONTAL_LAYOUT);
+        else {
+          value = ((UIFormRadioBoxInput) tabLayout.getChildById(UIMailLayoutTab.NOSPLIT_LAYOUT)).getValue();
+          if (value != null && value.equals(UIMailLayoutTab.NO_SPLIT_LAYOUT_VALUE)) setting.setLayout(MailSetting.NO_SPLIT_LAYOUT);
+        }
+      }
+      
       mailSrv.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, setting);
 		  UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       MessageFilter filter = uiMessageList.getMessageFilter() ;

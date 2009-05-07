@@ -315,6 +315,11 @@ public class JCRDataStorage {
             .getBoolean()));
       } catch (Exception e) {
       }
+      try {
+        setting.setLayout((settingNode.getProperty(Utils.EXO_LAYOUT)
+            .getLong()));
+      } catch (Exception e) {
+      }
     }
     return setting;
   }
@@ -787,6 +792,7 @@ public class JCRDataStorage {
       settingNode.setProperty(Utils.EXO_FORWARD_WITH_ATTACH, newSetting.forwardWithAtt());
       settingNode.setProperty(Utils.EXO_PREFIX_MESSAGE_WITH, newSetting.getPrefixMessageWith());
       settingNode.setProperty(Utils.EXO_SAVE_SENT_MESSAGE, newSetting.saveMessageInSent());
+      settingNode.setProperty(Utils.EXO_LAYOUT, newSetting.getLayout());
       // saves change
       settingNode.save();
     }

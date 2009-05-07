@@ -36,57 +36,7 @@
               </div>
             </div>
 						<div class="SeparatorLine"><span></span></div>
-						<div class="ControlButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor:pointer;" >
-  							<div class="IconHolder CustomViewIcon" title="Custome panels view">
-  								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.custom-layout-view") %></div>
-  							</div>
-  							<% /*Begin Popup Menu*/ %>
-  							<div style="position:relative;">
-  		      			<div class="UIPopupCategory" style="display:none;">
-  		      				<div class="UIRightClickPopupMenu" style="display:block;">
-  		      					<div class="UIContextMenuContainer">
-  										  <div class="TopLeftRightClickPopupMenu">
-  				          			<div class="TopRightRightClickPopupMenu">
-  				            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-  				          			</div>
-  				        			</div>
-  							        <div class="MiddleLeftRightClickPopupMenu">
-  							          <div class="MiddleRightRightClickPopupMenu">
-  				              		<div class="UIRightPopupMenuContainer" id='_CSMailLayoutSwitchMenu'>
-  														<div class="MenuItem" onclick="eXo.mail.UIMailPortlet.switchLayout(0)">   
-  					                    <div class="ItemIcon DefaultLayoutIcon">
-                                  <a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.layout-default") %></a>
-  					                    </div>
-  				                    </div>
-  				                    <div class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(1)">   
-  					                    <div class="ItemIcon HideFolderListIcon">
-                                  <a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.hide-navigator-pane") %></a>
-  					                    </div>
-  				                    </div>
-  				                    <div class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(2)">   
-  					                    <div class="ItemIcon HideMessagesPaneIcon">
-  					                      <a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.hide-messages-pane") %></a>
-  					                    </div>
-  				                    </div>
-  				                    <div class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(3)">   
-  					                    <div class="ItemIcon HideReadingPaneIcon">
-                                  <a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.hide-preview-pane") %></a>
-  					                    </div>
-  				                    </div>
-  													</div>
-  					          		</div>
-  					        		</div>
-  								      <div class="BottomLeftRightClickPopupMenu">
-  								        <div class="BottomRightRightClickPopupMenu">
-  								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-  								        </div>
-  								      </div>
-  					      		</div>	
-  							    </div>
-  		      			</div>
-  		      		</div>
-  		      		<% /*End Popup Menu*/ %>
-						</div>
+						
             <div onclick="<%=uicomponent.event("AccountSettings")%>" class="ControlButton">
               <div class="IconHolder AccountSettingIcon">
                 <%=_ctx.appRes(uicomponent.id+ ".label.accounts") %>

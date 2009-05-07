@@ -18,76 +18,80 @@ package org.exoplatform.mail.service;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Nam Phung
+ * Author : Phung Hai Nam
  *          phunghainam@gmail.com
  * Sep 22, 2007  
  */
 public class MailSetting {
+  public static final long NEVER_CHECK_AUTO = 0;
+  public static final long FIVE_MINS = 5 ;
+  public static final long TEN_MINS = 10;
+  public static final long TWENTY_MINS = 20;
+  public static final long THIRTY_MINS = 30;
+  public static final long ONE_HOUR = 60;
   
-  public static long NEVER_CHECK_AUTO = 0;
-  public static long FIVE_MINS = 5 ;
-  public static long TEN_MINS = 10;
-  public static long TWENTY_MINS = 20;
-  public static long THIRTY_MINS = 30;
-  public static long ONE_HOUR = 60;
+  public static final boolean USE_WYSIWYG = true;
+  public static final boolean FORMAT_AS_ORIGINAL = true ;
+  public static final boolean REPLY_WITH_ATTACH = true ;
+  public static final boolean FORWARD_WITH_ATTACH = true ;
   
-  public static boolean USE_WYSIWYG = true;
+  public static final String PREFIX_WITH_MINUS = "minus";
+  public static final String PREFIX_WITH_STAR = "star";
+  public static final String PREFIX_WITH_EQUAL = "equal";
+  public static final String PREFIX_WITH_QUOTE = "quote";
   
-  public static boolean FORMAT_AS_ORIGINAL = true ;
+  public static final long VERTICAL_LAYOUT = 0;
+  public static final long HORIZONTAL_LAYOUT = 1;
+  public static final long NO_SPLIT_LAYOUT = 2;
   
-  public static boolean REPLY_WITH_ATTACH = true ;
-  
-  public static boolean FORWARD_WITH_ATTACH = true ;
-  
-  public static String PREFIX_WITH_MINUS = "minus";
-  public static String PREFIX_WITH_STAR = "star";
-  public static String PREFIX_WITH_EQUAL = "equal";
-  public static String PREFIX_WITH_QUOTE = "quote";
-  
-  private long numberMsgPerPage;  
-  private boolean formatAsOriginal;
-  private boolean replyWithAtt;
-  private boolean forwardWithAtt;
-  private String prefixMsgWith;
-  private long periodCheckAuto;
-  private String defaultAccount;
-  private boolean useWysiwyg ; 
-  private boolean saveMsgInSent = true;
+  private long numberMsgPerPage_;  
+  private boolean formatAsOriginal_;
+  private boolean replyWithAtt_;
+  private boolean forwardWithAtt_;
+  private String prefixMsgWith_;
+  private long periodCheckAuto_;
+  private String defaultAccount_;
+  private boolean useWysiwyg_ ; 
+  private boolean saveMsgInSent_ = true;
+  private long layout_ = HORIZONTAL_LAYOUT; 
   
   public MailSetting() {
-    numberMsgPerPage = 20;
-    periodCheckAuto = FIVE_MINS;
-    useWysiwyg = true; 
-    formatAsOriginal = true;
-    replyWithAtt = false; 
-    forwardWithAtt = false;
-    prefixMsgWith = PREFIX_WITH_MINUS;
+    numberMsgPerPage_ = 20;
+    periodCheckAuto_ = FIVE_MINS;
+    useWysiwyg_ = true; 
+    formatAsOriginal_ = true;
+    replyWithAtt_ = false; 
+    forwardWithAtt_ = false;
+    prefixMsgWith_ = PREFIX_WITH_MINUS;
   }
   
-  public long getNumberMsgPerPage() { return numberMsgPerPage; }
-  public void setNumberMsgPerPage(long number) { numberMsgPerPage = number; }
+  public long getNumberMsgPerPage() { return numberMsgPerPage_; }
+  public void setNumberMsgPerPage(long number) { numberMsgPerPage_ = number; }
   
-  public long getPeriodCheckAuto() { return periodCheckAuto; }
-  public void setPeriodCheckAuto(long period) { periodCheckAuto = period; }
+  public long getPeriodCheckAuto() { return periodCheckAuto_; }
+  public void setPeriodCheckAuto(long period) { periodCheckAuto_ = period; }
   
-  public boolean useWysiwyg() { return useWysiwyg; }
-  public void setUseWysiwyg(boolean b) { useWysiwyg = b; }
+  public boolean useWysiwyg() { return useWysiwyg_; }
+  public void setUseWysiwyg(boolean b) { useWysiwyg_ = b; }
   
-  public String getDefaultAccount(){ return defaultAccount; }
-  public void setDefaultAccount(String account) { defaultAccount = account; }
+  public String getDefaultAccount(){ return defaultAccount_; }
+  public void setDefaultAccount(String account) { defaultAccount_ = account; }
   
-  public boolean saveMessageInSent() { return saveMsgInSent; }
-  public void setSaveMessageInSent(boolean save) { saveMsgInSent = save; }
+  public boolean saveMessageInSent() { return saveMsgInSent_; }
+  public void setSaveMessageInSent(boolean save) { saveMsgInSent_ = save; }
   
-  public boolean formatAsOriginal(){ return formatAsOriginal ; }
-  public void setFormatAsOriginal(boolean b) { formatAsOriginal = b; }
+  public boolean formatAsOriginal(){ return formatAsOriginal_ ; }
+  public void setFormatAsOriginal(boolean b) { formatAsOriginal_ = b; }
   
-  public boolean replyWithAttach() { return replyWithAtt; }
-  public void setReplyWithAttach(boolean b) { replyWithAtt = b; }
+  public boolean replyWithAttach() { return replyWithAtt_; }
+  public void setReplyWithAttach(boolean b) { replyWithAtt_ = b; }
   
-  public boolean forwardWithAtt() { return forwardWithAtt ; }
-  public void setForwardWithAtt(boolean b) { forwardWithAtt = b; }
+  public boolean forwardWithAtt() { return forwardWithAtt_ ; }
+  public void setForwardWithAtt(boolean b) { forwardWithAtt_ = b; }
   
-  public String getPrefixMessageWith() { return prefixMsgWith; }
-  public void setPrefixMessageWith(String prefix) { prefixMsgWith = prefix; }
+  public String getPrefixMessageWith() { return prefixMsgWith_; }
+  public void setPrefixMessageWith(String prefix) { prefixMsgWith_ = prefix; }
+  
+  public long getLayout() { return layout_; }
+  public void setLayout(long layout) { layout_ = layout; }
 }

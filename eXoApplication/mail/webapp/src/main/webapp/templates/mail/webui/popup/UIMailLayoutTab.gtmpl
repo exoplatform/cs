@@ -1,4 +1,5 @@
 <%uiForm = uicomponent.getParentFrom() ;%>
+
 <div id="$uicomponent.id">
 	<div class="VerticalSplitContainer">
    	<div class="LayoutSettingHeader">
@@ -9,6 +10,7 @@
    	<div class="RightSection"><span></span></div>
    	<div style="clear:left"><span></span></div>
   </div>
+  
   <div class="HorizontalSplitContainer">
    	<div class="LayoutSettingHeader">
    		<%uiForm.renderField(uicomponent.HORIZONTAL_LAYOUT)%>
@@ -18,7 +20,9 @@
    	<div class="BottomSection"><span></span></div>
    	<div style="clear:left"><span></span></div>
   </div>
+  
   <div style="clear:left"><span></span></div>
+  
   <div class="NoSplitContainer">
    	<div class="LayoutSettingHeader">
    		<%uiForm.renderField(uicomponent.NOSPLIT_LAYOUT)%>
@@ -30,6 +34,8 @@
    		<div class="RightSectionBottom"><span></span></div>
    	</div>
    	<div style="clear:left"><span></span></div>
+  
   </div>
+  
   <div style="clear:left"><span></span></div>
 </div>

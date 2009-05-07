@@ -387,6 +387,9 @@
   		<propertyDefinition name="exo:saveMsgInSent" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
   		</propertyDefinition>
+  		<propertyDefinition name="exo:layout" requiredType="Long" defaultValue="" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
   	</propertyDefinitions>
   </nodeType> 	
   
