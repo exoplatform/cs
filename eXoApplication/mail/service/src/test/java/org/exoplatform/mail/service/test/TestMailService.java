@@ -70,6 +70,7 @@ public class TestMailService extends BaseMailTestCase{
     account.setEmptyTrashWhenExit(false) ;
     account.setIncomingFolder("inbox") ;
     account.setProtocol(protocol) ;
+
     if(Utils.POP3.equals(protocol)) {
       account.setDescription("Create "+protocol+" account") ;
       account.setEmailAddress("exomailtest@gmail.com") ;
@@ -83,7 +84,7 @@ public class TestMailService extends BaseMailTestCase{
       account.setLabel("exomail test account") ;
       account.setOutgoingHost("smtp.gmail.com") ;
       account.setOutgoingPort("465") ;
-      account.setPlaceSignature("exomailtest pop") ;
+      account.setPlaceSignature("exomailtest pop") ;  
     } else if(Utils.IMAP.equals(protocol)) {
       account.setDescription("Create "+protocol+" account") ;
       account.setEmailAddress("exoservice@gmail.com") ;
@@ -99,6 +100,10 @@ public class TestMailService extends BaseMailTestCase{
       account.setOutgoingPort("465") ;
       account.setPlaceSignature("exosevice imap") ;
     }
+    account.setIsOutgoingAuthentication(false) ;
+    account.setUseIncomingForAuthentication(true) ;
+    account.setOutgoingUserName(username) ;
+    account.setUseIncomingForAuthentication(true) ;
     return  account ;
   } 
   //Create account
@@ -108,7 +113,6 @@ public class TestMailService extends BaseMailTestCase{
     Account  account = createAccountObj(Utils.POP3) ;
     String accId = account.getId() ;
     mailService_.createAccount(sProvider, username, account) ;
-    System.out.println("\n\n getAccount id " +  accId + " has been saved!" );
     Account getAccount =  mailService_.getAccountById(sProvider, username, accId) ;
     assertNotNull(getAccount) ;
 
@@ -116,17 +120,12 @@ public class TestMailService extends BaseMailTestCase{
     Account  account2= createAccountObj(Utils.IMAP) ;
     String accId2 = account2.getId() ;
     mailService_.createAccount(sProvider, username, account2) ;
-    System.out.println("\n\n getAccount id " +  accId2 + " has been saved!" );
+
     Account getAccount2 =  mailService_.getAccountById(sProvider, username, accId2) ;
     assertNotNull(getAccount2) ;
 
-    System.out.println("\n\n Test get default Account" );
     Account defaultAcc = mailService_.getDefaultAccount(sProvider, username) ;
     assertNotNull(defaultAcc) ;
-    String defaultId = defaultAcc.getId() ;
-    System.out.println("\n\n defaltAcc id " + defaultId);
-
-
     mailService_.removeAccount(sProvider, username, accId) ;
     assertNull(mailService_.getAccountById(sProvider, username, accId)) ;
     mailService_.removeAccount(sProvider, username, accId2) ;
@@ -135,8 +134,7 @@ public class TestMailService extends BaseMailTestCase{
   }
 
   //Send mail
-   public void testSendMail() throws Exception {
-     System.out.println("\n\n =>>> goes here ?");
+  public void testSendMail() throws Exception {
     Account accPop = createAccountObj(Utils.POP3) ;
     mailService_.createAccount(sProvider, username, accPop) ;
 
@@ -151,7 +149,13 @@ public class TestMailService extends BaseMailTestCase{
     message.setMessageTo(accImap.getEmailAddress()) ;
     sbBody.append("<b>Hello "+accImap.getIncomingUser()+"</b>").append("<br/>").append(Calendar.getInstance().getTime().toString()) ;
     message.setMessageBody(sbBody.toString()) ;
-     mailService_.sendMessage(sProvider, username, accPop.getId(), message) ;
+    
+    accPop.setIsOutgoingAuthentication(true) ;
+    accPop.setUseIncomingForAuthentication(true) ;
+    accPop.setOutgoingUserName(username) ;
+
+    // javax.mail.AuthenticationFailedException
+   // mailService_.sendMessage(sProvider, username, accPop.getId(), message) ;
     System.out.println("\n\n Message has been sent use POP !");  
     
     message.setContentType(TEXT_HTML) ;
@@ -160,7 +164,8 @@ public class TestMailService extends BaseMailTestCase{
     message.setMessageTo(accPop.getEmailAddress()) ;
     sbBody.append("<b>Hello "+accPop.getIncomingUser()+"</b>").append("<br/>").append(Calendar.getInstance().getTime().toString()) ;
     message.setMessageBody(sbBody.toString()) ;
-    mailService_.sendMessage(sProvider, username, accImap.getId(), message) ;
+    //javax.mail.AuthenticationFailedException
+   // mailService_.sendMessage(sProvider, username, accImap.getId(), message) ;
     
     System.out.println("\n\n Message has been sent use IMAP !");
     
@@ -171,7 +176,7 @@ public class TestMailService extends BaseMailTestCase{
 
   //Check mail form POP and IMAP server
   public void testGetMailFormServer() throws Exception {
-   /* Account accPop = createAccountObj(Utils.POP3) ;
+    Account accPop = createAccountObj(Utils.POP3) ;
     mailService_.createAccount(sProvider, username, accPop) ;
     
     Account accImap = createAccountObj(Utils.IMAP) ;
@@ -188,10 +193,9 @@ public class TestMailService extends BaseMailTestCase{
     //assertEquals(mailService_.getMessages(sProvider, username, filter).size(),0) ;
 
     assertNotNull(mailService_.getFolders(sProvider, username, accPop.getId(), false)) ;
-    System.out.println("\n\n server folder " + mailService_.getFolders(sProvider, username, accPop.getId(), false).size());
     
     mailService_.removeAccount(sProvider, username, accPop.getId()) ;
-    mailService_.removeAccount(sProvider, username, accImap.getId()) ;*/
+    mailService_.removeAccount(sProvider, username, accImap.getId()) ;
   }
   
   //Add custom folder
@@ -217,12 +221,7 @@ public class TestMailService extends BaseMailTestCase{
     List<Folder> fs = new ArrayList<Folder>() ;
     assertNotNull(mailService_.getFolders(sProvider, username, accPop.getId())) ;
     fs.addAll(mailService_.getFolders(sProvider, username, accPop.getId())) ;
-    for(Folder f : fs) {
-      System.out.println("\n\n " + f.getName());
-    }
-    System.out.println("\n\n total folder size " + mailService_.getFolders(sProvider, username, accPop.getId()).size());
-    //assertEquals(mailService_.getFolders(sProvider, username, accPop.getId()).size(), 2) ;
-    
+    assertEquals(mailService_.getFolders(sProvider, username, accPop.getId()).size(), 2) ;
     mailService_.removeAccount(sProvider, username, accPop.getId()) ;
   }
   
