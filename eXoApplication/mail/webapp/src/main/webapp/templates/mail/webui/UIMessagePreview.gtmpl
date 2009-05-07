@@ -31,7 +31,7 @@
 	<div class="ReadingPaneBar">
 	  <% if (uicomponent.getParent().isNoSplitLayout()) { %>
 	    <div>
-	      <a href="<%=uicomponent.event("BackToList")%>"><span class="BackToList"></span></a>
+	      <a href="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %>"><span class="BackToList"></span></a>
 	    </div>
 	    
 		<% } %>
