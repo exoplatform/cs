@@ -48,21 +48,30 @@
 	    <td class="FieldComponent" style="width:62%;"><%uiForm.renderField("from")%></td>
 	  </tr>
 	  <tr>
-	    <td class="FieldLabel">
+	    <td class="ToFieldLabel">
 	    		<a href="<%=uiForm.event("To")%>"><%=_ctx.appRes(uiForm.id+ ".label.to") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
 	    </td>
-	    <td class="FieldComponent"  colspan="2">
+	    <td class="ToFieldComponent"  colspan="2">
 	      <%uiForm.renderField("to")%> 
 	    </td>
 	  </tr>
 	  <%/* vietnt */%>
 	  <tr>
-	    <td class="FieldLabel">
+	    <td class="CCAndBCCFieldLabel">
 	    	
 	    </td>
-	    <td class="FieldComponent FieldCCAndBCC">
-	      <a  href="<%=uiForm.event("ShowCc")%>">|<%=_ctx.appRes(uiForm.id+ ".label.add-cc") %>|</a> 
-	      <a  href="<%=uiForm.event("ShowBcc")%>"><%=_ctx.appRes(uiForm.id+ ".label.add-bcc") %>|</a>
+	    <td class="CCAndBCCFieldComponent FieldCCAndBCC">
+			  <%
+			  String ToggledCc = "" ;
+			  if (uicomponent.showCc_) { ToggledCc = "font-weight: bold;" ; }
+			  %>
+	      <a  href="<%=uiForm.event("ShowCc")%>"><span style="$ToggledCc"><%=_ctx.appRes(uiForm.id+ ".label.add-cc") %></span> |</a>
+	      
+	      <%
+			  String ToggledBcc = "" ;
+			  if (uicomponent.showBcc_) { ToggledBcc = "font-weight: bold;" ; }
+			  %> 
+	      <a  href="<%=uiForm.event("ShowBcc")%>"><span style="$ToggledBcc"> <%=_ctx.appRes(uiForm.id+ ".label.add-bcc")%></span></a>
 	    <%/* javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_BCC')*/ %>
 	    </td>
 	    </td>
@@ -88,8 +97,8 @@
 	  	</td>
 	  </tr>
 	  <tr>
-	    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.subject") %> :&nbsp;&nbsp;</td>
-	    <td class="FieldComponent" colspan="2">
+	    <td class="SubjectFieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.subject") %> :&nbsp;&nbsp;</td>
+	    <td class="SubjectFieldComponent" colspan="2">
 	      <%uiForm.renderField("subject")%>
 	    </td>
 	  </tr>

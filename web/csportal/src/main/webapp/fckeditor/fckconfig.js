@@ -135,7 +135,7 @@ FCKConfig.ToolbarSets["Default"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Basic"] = [
-	['-','Bold','Italic','Underline','StrikeThrough','-','OrderedList','UnorderedList','Outdent','Indent'],
+	['Bold','Italic','Underline','TextColor','StrikeThrough','-','OrderedList','UnorderedList','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Blockquote','-','FitWindow','ShowBlocks'],	
 	['FontFormat','FontName','FontSize']
