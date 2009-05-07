@@ -222,15 +222,15 @@
 	  <div class="MiddleLeftRightClickPopupMenu">
 	    <div class="MiddleRightRightClickPopupMenu">
 	      <div class="UIRightPopupMenuContainer">
-	          <div onclick="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
-	           <div class="ItemIcon QuickAddEvent">
+	          <div class="MenuItem">
+	           <a class="ItemIcon QuickAddEvent" href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
 	           	<%=_ctx.appRes("ContextMenu.label.addEvent")%>
-	           </div>
+	           </a>
 	          </div>
-	          <div onclick="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
-	            <div class="ItemIcon QuickAddTask">
+	          <div class="MenuItem">
+	            <a class="ItemIcon QuickAddTask" href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
 	            	<%=_ctx.appRes("ContextMenu.label.addTask")%>
-	            </div>
+	            </a>
 	          </div>
 	      </div>
 	    </div>
@@ -263,16 +263,16 @@
 	  				link = uicomponent.event(act,uicomponent.id,"id&$uicomponent.CALENDARID=calId&calType=caltype") ;
 	  				icon = act + "EventIcon" ;
 	        %>
-	        <div onclick="$link">
-	          <div class="ItemIcon $icon">
+	        <div class="MenuItem">
+	          <a class="ItemIcon $icon" href="$link" >
 	            <%=_ctx.appRes("ContextMenu.label."+act)%>
-	          </div>
+	          </a>
 	        </div>
 	        <%}%>
-					<div onclick="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
-            <div class="ItemIcon ExportCalendarIcon">
+					<div class="MenuItem">
+            <a class="ItemIcon ExportCalendarIcon" href="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
             	<%=_ctx.appRes("ContextMenu.label.ExportEvent")%>
-            </div>
+            </a>
           </div>
 	      </div>
 	    </div>

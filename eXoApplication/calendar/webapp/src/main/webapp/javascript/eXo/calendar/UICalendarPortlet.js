@@ -1190,8 +1190,8 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
 					obj =parseInt(DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime")) + mouseY;
 				} else obj = null;
         for (var i = 0; i < items.length; i++) {
-            if (items[i].className == "EventActionMenu") {
-                items[i].style.display = "block";
+            if (DOMUtil.hasClass(items[i].parentNode,"EventActionMenu")) {
+                items[i].parentNode.style.display = "block";
                 items[i].href = UIContextMenu.replaceall(String(items[i].href), map);
             }
             else {
