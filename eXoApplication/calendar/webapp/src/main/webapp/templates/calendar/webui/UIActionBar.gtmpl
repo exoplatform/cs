@@ -29,25 +29,29 @@
 								</div>
             </div>
 						
-						
-						<%for(viewType in uicomponent.getViewTypes()){
-	      				if(!viewType.equals(uicomponent.getCurrentView())) {
+			<div class="SeparatorLine"><span></span></div>			
+			<%for(viewType in uicomponent.getViewTypes()){
+	      		
 		      				icon = viewType + "Icon" ;
 		      				actionLink = uicomponent.event("ChangeView",viewType + "&categoryId=calId") ;
 		      				String label = _ctx.appRes(uicomponent.id + ".label." + viewType) ;
-		      				if(!viewType.equals("UIScheduleView")) {
+		      				String style = "ControlButton" ;
+		      	  if(viewType.equals(uicomponent.getCurrentView())) {
+		      	   style = "ControlButton ControlButtonHover" ;
+		      	  }
+		      				
+		      	  if(!viewType.equals("UIScheduleView")) {
 		      			%>
-		                <div href="$actionLink" class="ControlButton">
-											<a class="IconHolder $icon">
+		                <div class="$style">
+											<a href="$actionLink" class="IconHolder $icon">
 												$label
 											</a>
 										</div>
 	                
-	            <%}
-	            else {
-	            %>
-	            <%}
-	            }}%>
+	        <%   } 
+	            
+	          }
+	        %>
 
 						<div class="SeparatorLine"><span></span></div>
 						<div onclick="<%=uicomponent.event("Setting")%>" class="ControlButton">
