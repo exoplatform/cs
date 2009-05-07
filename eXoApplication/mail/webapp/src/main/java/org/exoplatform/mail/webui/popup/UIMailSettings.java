@@ -27,6 +27,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -203,6 +204,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       setting.setSaveMessageInSent(uiSetting.getUIFormCheckBoxInput(SAVE_SENT_MESSAGE).isChecked());
       
       UIFormInputSet tabLayout = (UIFormInputSet) uiSetting.getChildById(TAB_LAYOUT);
+      long oldLayout = setting.getLayout();
       String value = ((UIFormRadioBoxInput) tabLayout.getChildById(UIMailLayoutTab.VERTICAL_LAYOUT)).getValue();
       if (value != null && value.equals(UIMailLayoutTab.VERTICAL_LAYOUT_VALUE)) setting.setLayout(MailSetting.VERTICAL_LAYOUT);
       else {
@@ -217,7 +219,10 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       mailSrv.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, setting);
 		  UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       MessageFilter filter = uiMessageList.getMessageFilter() ;
-      if (defaultAcc != null && (!accountId.equals(setting.getDefaultAccount()) || accountId.equals(defaultAcc))){
+      if (oldLayout != setting.getLayout()) {
+        uiMessageList.getAncestorOfType(UIMessageArea.class).reloadMailSetting();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+      } else if (defaultAcc != null && (!accountId.equals(setting.getDefaultAccount()) || accountId.equals(defaultAcc))){
         uiSelectAccount.updateAccount() ;
         uiSelectAccount.setSelectedValue(accountId);
         uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));

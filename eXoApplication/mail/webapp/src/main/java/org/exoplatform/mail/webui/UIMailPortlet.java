@@ -30,8 +30,8 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
 /**
- * Author : Nhu Dinh Thuan
- *          nhudinhthuan@yahoo.com
+ * Author : Phung Hai Nam
+ *          phunghainam@gmail.com
  * May 30, 2006
  */
 @ComponentConfig(
@@ -40,15 +40,14 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 )
 public class UIMailPortlet extends UIPortletApplication {
   public UIMailPortlet() throws Exception {
-//    addChild(UIBannerContainer.class, null, null) ;
     addChild(UIActionBar.class, null, null) ;
     addChild(UINavigationContainer.class, null, null) ;
     String accId = getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue();
     UIMessageArea uiMessageArea = createUIComponent(UIMessageArea.class, null, null);
     uiMessageArea.init(accId);
+    uiMessageArea.setMailSetting(getMailSetting());
     addChild(uiMessageArea);
     addChild(UIPopupAction.class, null, null) ;
-    //addChild(UIMailContainer.class, null, null) ;
   }
   
   public String getAccountId() {
@@ -60,10 +59,13 @@ public class UIMailPortlet extends UIPortletApplication {
   }
   
   public long getPeriodCheckAuto() throws Exception {
-    MailService mailSrv = getApplicationComponent(MailService.class) ;
-    MailSetting mailSetting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), getCurrentUser()) ;
-    Long period = mailSetting.getPeriodCheckAuto() * 60 * 1000 ;
+    Long period = getMailSetting().getPeriodCheckAuto() * 60 * 1000 ;
     return period ;
+  }
+  
+  public MailSetting getMailSetting() throws Exception {
+    MailService mailSrv = getApplicationComponent(MailService.class) ;
+    return mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), getCurrentUser()) ;    
   }
   
   public void renderPopupMessages() throws Exception {

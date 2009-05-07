@@ -29,16 +29,26 @@
   if (msgRoot != null) {
 %> 
 	<div class="ReadingPaneBar">
-		<div class="Subject"><span><%=_ctx.appRes(uicomponent.id+ ".label.subject") %>:</span><span>
-		<%
-		  String subject = "(" + _ctx.appRes(uicomponent.id+ ".label.no-subject") + ")"
-		  if (msgRoot.getSubject() != null && msgRoot.getSubject() != "") {
-		    subject = msgRoot.getSubject();
-		  }
-		%>
-		<%=subject%>
-		</span></div>
-		<div><a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.showHidePreviewPane(this);"><span id="ActionReadingPane" class="MaximizeReadingPane" title="<%=_ctx.appRes(uicomponent.id+ '.label.maximize-reading-pane') %>"></span></a></div>
+	  <% if (uicomponent.getParent().isNoSplitLayout()) { %>
+	    <div>
+	      <a href="<%=uicomponent.event("BackToList")%>"><span class="BackToList"></span></a>
+	    </div>
+	    
+		<% } %>
+		<div class="Subject">
+		  <span><%=_ctx.appRes(uicomponent.id+ ".label.subject") %>:</span><span>
+  		<%
+  		  String subject = "(" + _ctx.appRes(uicomponent.id+ ".label.no-subject") + ")"
+  		  if (msgRoot.getSubject() != null && msgRoot.getSubject() != "") {
+  		    subject = msgRoot.getSubject();
+  		  }
+  		%>
+  		<%=subject%>
+  		</span>
+    </div>
+    <% if (!uicomponent.getParent().isNoSplitLayout()) { %>
+		  <div><a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.showHidePreviewPane(this);"><span id="ActionReadingPane" class="MaximizeReadingPane" title="<%=_ctx.appRes(uicomponent.id+ '.label.maximize-reading-pane') %>"></span></a></div>
+		<%}%>
 		<div style="clear:both;"><span></span></div>
 	</div>
   

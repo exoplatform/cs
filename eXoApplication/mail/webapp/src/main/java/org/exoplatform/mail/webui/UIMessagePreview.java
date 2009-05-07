@@ -83,7 +83,8 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIMessagePreview.AddContactActionListener.class),
         @EventConfig(listeners = UIMessagePreview.MoveMessagesActionListener.class),
         @EventConfig(listeners = UIMessagePreview.AnswerInvitationActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.ViewAllHeadersActionListener.class)
+        @EventConfig(listeners = UIMessagePreview.ViewAllHeadersActionListener.class),
+        @EventConfig(listeners = UIMessagePreview.BackToListActionListener.class)
     }
 )
 
@@ -531,6 +532,14 @@ public class UIMessagePreview extends UIComponent {
       uiAllHeader.init(msg);
       uiPopup.activate(uiAllHeader, 700, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+    }
+  }
+  
+  static public class BackToListActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMsgPreview = event.getSource() ;    
+      uiMsgPreview.setMessage(null);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview.getParent()) ;
     }
   }
 }
