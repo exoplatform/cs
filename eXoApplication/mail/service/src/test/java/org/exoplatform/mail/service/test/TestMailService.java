@@ -98,11 +98,10 @@ public class TestMailService extends BaseMailTestCase{
       account.setLabel("exoservice test account") ;
       account.setOutgoingHost("smtp.gmail.com") ;
       account.setOutgoingPort("465") ;
+      account.setOutgoingSsl(true);
       account.setPlaceSignature("exosevice imap") ;
     }
-    account.setIsOutgoingAuthentication(false) ;
-    account.setUseIncomingForAuthentication(true) ;
-    account.setOutgoingUserName(username) ;
+    account.setIsOutgoingAuthentication(true) ;
     account.setUseIncomingForAuthentication(true) ;
     return  account ;
   } 
@@ -154,10 +153,6 @@ public class TestMailService extends BaseMailTestCase{
     accPop.setUseIncomingForAuthentication(true) ;
     accPop.setOutgoingUserName(username) ;
 
-    // javax.mail.AuthenticationFailedException
-   // mailService_.sendMessage(sProvider, username, accPop.getId(), message) ;
-    System.out.println("\n\n Message has been sent use POP !");  
-    
     message.setContentType(TEXT_HTML) ;
     message.setSubject("This message has been sent form "+accImap.getEmailAddress()) ;
     message.setFrom(accImap.getEmailAddress()) ;
@@ -165,7 +160,7 @@ public class TestMailService extends BaseMailTestCase{
     sbBody.append("<b>Hello "+accPop.getIncomingUser()+"</b>").append("<br/>").append(Calendar.getInstance().getTime().toString()) ;
     message.setMessageBody(sbBody.toString()) ;
     //javax.mail.AuthenticationFailedException
-   // mailService_.sendMessage(sProvider, username, accImap.getId(), message) ;
+    mailService_.sendMessage(sProvider, username, accImap.getId(), message) ;
     
     System.out.println("\n\n Message has been sent use IMAP !");
     
