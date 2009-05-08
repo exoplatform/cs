@@ -257,7 +257,7 @@
 	          <div class="MiddleRightRightClickPopupMenu">
   						<div class="UIRightPopupMenuContainer">
 				  			<div class="MenuItem">
-			            <a class="ItemIcon ContactIcon" onclick="<%=uicomponent.event("AddContact", "id")%>">
+			            <a class="ItemIcon ContactIcon" href="<%=uicomponent.event("AddContact", "id")%>">
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>
 			            </a>
 				        </div>
