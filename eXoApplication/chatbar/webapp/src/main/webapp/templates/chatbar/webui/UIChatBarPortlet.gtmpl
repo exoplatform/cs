@@ -2,10 +2,10 @@
   import org.exoplatform.portal.webui.util.Util;
 
   def rcontext = _ctx.getRequestContext() ;
-  def jsManager = rcontext.getJavascriptManager();
-  jsManager.importJavascript("eXo.communication.chat.eXoChat", "/chat/javascript/");
-  jsManager.addJavascript("eXo.communication.chat.eXoChat.applicationId = '" + uicomponent.getId() + "';");
-  jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChat.init");
+  //def jsManager = rcontext.getJavascriptManager();
+  //jsManager.importJavascript("eXo.communication.chat.eXoChat", "/chat/javascript/");
+  //jsManager.addJavascript("eXo.communication.chat.eXoChat.applicationId = '" + uicomponent.getId() + "';");
+  //jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChat.init");
 %>
 
 <!-- Begin Notification -->
@@ -53,34 +53,76 @@
 
 <!-- Begin UIChat -->
 <div class="UIChat ChatSharedIcons UIChatBarPortlet" id="<%=uicomponent.id%>" oncontextmenu="return false;">
-  
+  <div class="Actionbar">
+      <div class="RowContainer">
+      	<div class="LeftContainer">
+      		<div class="RightContainer">
+      			<div class="CenterContainer">
+      				<div class="TextContent">
+      					 <!-- Start MiniBoxChat -->
+								<div class="MiniBoxChat" style="">
+									<div class="NormalMiniBoxChat">
+										<div class="LeftMiniBoxChat">
+											<div class="RightMiniBoxChat">
+												<div class="CenterMiniBoxChat">
+													<div class="FixHeight">																
+															 
+															<div class="OnlineNoticeIcon">5</div>
+															<div class="ControlIconChat CloseIcon" title="Close all conversations." onclick="eXo.communication.chat.webui.UIChatWindow.closeAllWindow()"><span></span></div>
+															 
+														
+														<div class="ClearBoth"><span></span></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- End MiniBoxChat -->
+      					<div class="SeperatorLine"><span></span></div>
+      					<div class="IconButton">
+	      					<div class="LeftIconButton">
+	      						<div class="RightIconButton">
+	      							<div class="CenterIconButton">
+	      								<a class="Icon ContactManageIcon" title="Add new contact" onclick="eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(true)">Contacts</a>
+	      							</div>
+	      						</div>
+	      					</div>
+      					</div>
+      					<div class="IconButton">
+	      					<div class="LeftIconButton">
+	      						<div class="RightIconButton">
+	      							<div class="CenterIconOnlyButton">
+	      								<a class="Icon IconOnly RoomManageIcon" title="Join a room" onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true)"></a>
+	      							</div>
+	      						</div>
+	      					</div>
+      					</div>
+      					<div class="IconButton">
+	      					<div class="LeftIconButton">
+	      						<div class="RightIconButton">
+	      							<div class="CenterIconOnlyButton">
+	      								<a class="Icon IconOnly OnlineStatusIcon" title="Online status" onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true)"></a>
+	      							</div>
+	      						</div>
+	      					</div>
+      					</div>
+								<div class="SeperatorLine" style="display:none"><span></span></div>
+				        <div class="ClearLeft"><span></span></div>
+              </div>
+              <div style="padding:5px 5px 0px 0px; display:none;">
+                <div class="FilterField"><span></span></div>
+              </div>
+    				<div class="ClearRight"><span></span></div>
+			     </div>
+		     </div>
+	     </div>
+      </div>
+    </div>
 </div>
 <!-- End UIChat -->
 
-<!-- Start MiniBoxChat -->
-<div class="MiniBoxChat" style="display:none">
-	<div class="NormalMiniBoxChat">
-		<div class="LeftMiniBoxChat">
-			<div class="RightMiniBoxChat">
-				<div class="CenterMiniBoxChat">
-					<div class="FixHeight">
-											
-							<div class="InfoIcon">
-                <span class="UnreadMessage" style="color:red;"></span>
-                <span>Conversation window</span>
-	            </div>  
-						
-							<div class="ControlIconChat CloseIcon" title="Close all conversations." onclick="eXo.communication.chat.webui.UIChatWindow.closeAllWindow()"><span></span></div>
-							<div class="ControlIconChat RestoreIcon" title="Restore conversation window." onclick="eXo.communication.chat.webui.UIChatWindow.setVisible(true, event, true)"><span></span></div>
-						
-						<div class="ClearBoth"><span></span></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- End MiniBoxChat -->
+
 
 <!-- Start BuddyItem action popup menu -->
 <div class="UIRightClickPopupMenu BuddyItemActionMenu" style="display:none;">
@@ -270,15 +312,15 @@
                         </tbody>
                       </table>
                       <div class="UIPageIterator">
-                        <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span/></a>
+                        <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span></span></a>
                         <a title="Next Page" class="Icon NextPageIcon"/>
                         <a class="Number">2</a>
                         <a class="Number PageSelected">1</a>
-                        <a title="Previous Page" class="Icon DisableLastPageIcon"><span/></a>
+                        <a title="Previous Page" class="Icon DisableLastPageIcon"><span></span></a>
                         <a title="Back 10 pages" class="Icon DisableLastTopPageIcon"/>        
                         <a class="PagesTotalNumber">2</a>
                         <a class="TotalPages">Total pages:</a>
-                        <div class="ClearRight"><span/></div>
+                        <div class="ClearRight"><span></span></div>
                       </div>
                     </div>
                   </div>

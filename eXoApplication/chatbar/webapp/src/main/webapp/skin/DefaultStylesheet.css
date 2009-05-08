@@ -1347,6 +1347,116 @@ form {
 	font-size: 11px;
 }
 
+.ClearRight {
+	clear:right;
+}
+
 .UIChatBarPortlet{
-	border:solid 1px red;	
+	padding:0px 8px;
+}
+
+.UIChatBarPortlet .CenterContainer {
+	background:transparent url(/chatbar/skin/DefaultSkin/background/chatbarbackground.gif) repeat-x center top;
+}
+
+.UIChatBarPortlet .TextContent {
+	float:right;
+	height:30px;
+	line-height:30px;
+}
+
+.UIChatBarPortlet .MiniBoxChat{
+	float:left;
+	margin-top:4px;
+	width:56px;
+}
+
+.UIChatBarPortlet .OnlineNoticeIcon {
+	background:url(DefaultSkin/skinIcons/OnlineNotice25x23.gif) no-repeat left top;
+	float:left;
+	margin-left:3px;
+	width:25px;
+	height:23px;
+	text-align:center;
+	color:white;
+	line-height:18px;
+}
+
+
+.UIChatBarPortlet .Actionbar .Icon {
+	margin-left:0px;
+	margin-right:12px;
+}
+
+
+.UIChatBarPortlet .Actionbar .IconOnly {
+	margin-left:5px;
+	margin-right:0px;
+}
+
+.UIChatBarPortlet .Actionbar .IconButton {
+	float:left;
+	display:block;
+	height:26px;
+	line-height:26px;
+}
+
+.UIChatBarPortlet .Actionbar .LeftIconButton {
+	margin-top:2px;
+	padding-left:4px;
+	background:url(DefaultSkin/background/LeftIconButtonBG4x26.gif) no-repeat left top;
+} 
+
+.UIChatBarPortlet .Actionbar .LeftIconButton:hover {
+	background:url(DefaultSkin/background/LeftIconButtonHightLightBG4x26.gif) no-repeat left top;
+}
+
+.UIChatBarPortlet .Actionbar .RightIconButton {
+	padding-right:4px;
+	background:url(DefaultSkin/background/RightIconButtonBG4x26.gif) no-repeat right top;
+} 
+
+.UIChatBarPortlet .Actionbar .RightIconButton:hover {
+	background:url(DefaultSkin/background/RightIconButtonHightLightBG4x26.gif) no-repeat right top;
+}
+
+.UIChatBarPortlet .Actionbar  .CenterIconButton {
+	background:url(DefaultSkin/background/CenterIconButtonBG1x26.gif) repeat-x;
+	height:26px;
+	line-height:26px;
+} 
+
+.UIChatBarPortlet .Actionbar  .CenterIconButton:hover {
+	background:url(DefaultSkin/background/CenterIconButtonHightLightBG1x26.gif) repeat-x;
+}
+
+.UIChatBarPortlet .Actionbar  .CenterIconOnlyButton {
+	background:url(DefaultSkin/background/CenterIconButtonBG1x26.gif) repeat-x;
+	height:26px;
+	line-height:26px;
+} 
+
+.UIChatBarPortlet .Actionbar  .CenterIconOnlyButton:hover {
+	background:url(DefaultSkin/background/CenterIconButtonHightLightBG1x26.gif) repeat-x;
+} 
+
+.UIChatBarPortlet .SeperatorLine {
+	background:transparent url(/chatbar/skin/DefaultSkin/background/SeperatorLine1x30.gif) no-repeat;
+	float:left;
+	height:30px;
+	line-height:30px;
+	margin:0px 2px 0px 4px ;
+	width:2px;
+}
+
+.UIChatBarPortlet .Actionbar .ContactManageIcon {
+	background:transparent url(/chatbar/skin/DefaultSkin/skinIcons/ContactManageIcon29x22.gif) no-repeat left;
+}
+
+.UIChatBarPortlet .Actionbar .RoomManageIcon {
+	background:transparent url(/chatbar/skin/DefaultSkin/skinIcons/RoomManageIcon28x22.gif) no-repeat left;
+}
+
+.UIChatBarPortlet .Actionbar .OnlineStatusIcon {
+	background:transparent url(/chatbar/skin/DefaultSkin/skinIcons/OnlineStatusIcon25x22.gif) no-repeat left;
 }
