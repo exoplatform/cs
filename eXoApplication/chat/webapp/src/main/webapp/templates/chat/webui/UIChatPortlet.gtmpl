@@ -787,7 +787,7 @@
 							          <label>Password Protected Room:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <input type="checkbox" name="passwordprotectedroom" />
+							          <input type="checkbox" name="passwordprotectedroom"/>
 							        </td>
 							      </tr>
 								  	<tr>
@@ -795,7 +795,7 @@
 							          <label>Password:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <input type="password" name="roomsecret" />
+							          <input type="password" name="roomsecret"/>
 							        </td>
 							      </tr>
 								  	<tr>
@@ -803,7 +803,7 @@
 							          <label>Moderated Room:</label>
 							        </td>
 							        <td class="FieldComponent">
-							          <input type="checkbox" name="moderatedroom" />
+							          <input type="checkbox" name="moderatedroom"/>
 							        </td>
 							      </tr>
 								  	<tr>
@@ -1038,8 +1038,7 @@
                       <div class="SeperatorLine"><span></span></div>
                       <div class="SendFileIcon">
                         <form method="POST" enctype="multipart/form-data" class="ChatSendFileForm" target="chatFileExchangeIframe" action="#">
-                          <input type="file" size="1" class="InputSendFile" style="width:5px" name="uploadfile"
-                            onchange="eXo.communication.chat.webui.UIChatWindow.sendFile(this, event);" />
+                          <input type="file" size="1px" class="InputSendFile" style="width:5px" name="uploadfile" onchange="eXo.communication.chat.webui.UIChatWindow.sendFile(this, event);"/>
                         </form>
                       </div>
                       <div  class="ClearLeft"><span></span></div>
