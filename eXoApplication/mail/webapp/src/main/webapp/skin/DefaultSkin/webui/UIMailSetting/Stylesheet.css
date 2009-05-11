@@ -41,29 +41,50 @@
 }
 
 /******************************Layout Setting Style********************************/
+
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .VerticalSplitContainer {
-width:150px;
-height:150px;
-display:block;
-float:left;
-margin-left:25%;
+	display:block;
+	float:left;
 }
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .HorizontalSplitContainer {
-width:150px;
-height:150px;
-display:block;
-float:left;
-margin-left:50px;
+	display:block;
+	float:left;
+	margin-left:50px;
+}
+
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .VerticalSplitContainer .ImgVeticalSplit{
+	background: url('background/ItemSelector.gif') no-repeat left top;
+	width:270px;
+	height:168px;
+}
+
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .HorizontalSplitContainer .ImgHorizontalSplit{
+	background: url('background/ItemSelector.gif') no-repeat left -168px;
+	width:270px;
+	height:168px;
+}
+
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .NoSplitContainer .ImgNoSplit{
+	background: url('background/ItemSelector.gif') no-repeat left top;
+	width:270px;
+	height:168px;
+}
+
+.UIMailPortlet .UIMailSetting .UIForm .NoSplitContainer .MiddleSection {
+	width: 10px;
+	height: 15px;
+	display:block;
+	float:left;	
+	background: url('background/IconChange.gif') no-repeat center;
+	margin-left:131px;
+	margin-top:72px;
 }
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .NoSplitContainer {
-	width:350px;
-	height:150px;
 	display:block;
 	margin-top:10px;
 	float:left;
-	margin-left:25%;
 }
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .LayoutSettingRadio {
@@ -74,95 +95,4 @@ margin-left:50px;
 	font-weight:bold;
 }
 
-.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .VerticalSplitContainer .LeftSection {
-	margin:5px 0px 5px 5px;
-	width:64px;
-	height:120px;
-	border:1px solid red;
-	display:block;
-	float:left;
-}
 
-.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .VerticalSplitContainer .MiddleSection {
-	margin:5px 0px;
-	width:5px;
-	height:120px;
-	border:1px solid red;
-	display:block;
-	float:left;
-}
-
-.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .VerticalSplitContainer .RightSection {
-	margin:5px 5px 5px 0px ;
-	width:64px;
-	height:120px;
-	border:1px solid red;
-	display:block;
-	float:left;
-}
-
-.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .HorizontalSplitContainer .TopSection {
-	margin:5px 5px 0px 5px;
-	width:139px;
-	height:55px;
-	border:1px solid red;
-	display:block;
-}
-
-.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .HorizontalSplitContainer .MiddleSection {
-	margin:0px 5px;
-	width:139px;
-	height:5px;
-	border:1px solid red;
-	display:block;
-}
-
-.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .HorizontalSplitContainer .BottomSection {
-	margin:0px 5px 5px 5px;
-	width:139px;
-	height:55px;
-	border:1px solid red;
-	display:block;
-}
-
-.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .NoSplitContainer .LeftSection {
-	margin:5px 0px 5px 5px;
-	width:141px;
-	height:120px;
-	border:1px solid red;
-	display:block;
-	float:left;
-}
-
-.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .NoSplitContainer .MiddleSection {
-	margin:5px 0px;
-	width:50px;
-	height:120px;
-	border:1px solid red;
-	display:block;
-	float:left;	
-}
-
-.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .NoSplitContainer .RightSection {
-	margin:5px 5px 5px 0px ;
-	width:141px;
-	height:120px;
-	display:block;
-	float:left;
-}
-
-.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .NoSplitContainer .RightSectionTop {
-	margin:0px 5px;
-	width:131px;
-	height:20px;
-	border:1px solid red;
-	display:block;
-}
-
-.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .NoSplitContainer .RightSectionBottom {
-	margin:5px;
-	width:131px;
-	height:90px;
-	border:1px solid red;
-	display:block;
-}
