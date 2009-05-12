@@ -1103,6 +1103,13 @@
 	width: 38px;
 }
 
+.UIMailPortlet .VerticalResizeReadingPane {
+	background: url('background/VerticalResizeReadingPane3x38.gif') no-repeat center;
+	height: 38px;
+	cursor: ew-resize;
+	width: 5px;
+}
+
 .UIMailPortlet .TitleBar {
 	background: url('background/BgTitle1x23.gif') repeat-x ;
 	height: 23px; line-height: 23px;

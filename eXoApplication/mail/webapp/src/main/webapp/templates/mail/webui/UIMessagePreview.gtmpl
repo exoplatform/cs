@@ -34,7 +34,12 @@
 	      <a href="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %>"><span class="BackToList"></span></a>
 	    </div>
 	    
-		<% } %>
+		<% } else if (uicomponent.getParent().isVerticalLayout()) { %>
+    <div>
+      <a href="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.hide-preview') %>"><span class="HidePreview"></span></a>
+    </div>
+    
+    <% } %>
 		<div class="Subject">
 		  <span><%=_ctx.appRes(uicomponent.id+ ".label.subject") %>:</span><span>
   		<%
@@ -46,7 +51,7 @@
   		<%=subject%>
   		</span>
     </div>
-    <% if (!uicomponent.getParent().isNoSplitLayout()) { %>
+    <% if (uicomponent.getParent().isHorizontalLayout()) { %>
 		  <div><a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.showHidePreviewPane(this);"><span id="ActionReadingPane" class="MaximizeReadingPane" title="<%=_ctx.appRes(uicomponent.id+ '.label.maximize-reading-pane') %>"></span></a></div>
 		<%}%>
 		<div style="clear:both;"><span></span></div>

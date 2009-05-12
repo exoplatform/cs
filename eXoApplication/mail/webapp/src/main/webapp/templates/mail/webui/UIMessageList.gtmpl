@@ -11,7 +11,9 @@
  String compId = uicomponent.getId() ; 
  def rcontext = _ctx.getRequestContext() ;	
  rcontext.getJavascriptManager().addJavascript('eXo.mail.CheckBox.init("UIListUsers") ;') ;
- rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.checkLayout() ;') ;
+ if (uicomponent.getParent().isHorizontalLayout()) {
+   rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.checkLayout() ;') ;
+ }
  WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
  Locale locale = context.getParentAppRequestContext().getLocale() ;
  def confirmMsg = _ctx.appRes("UIMessageList.msg.checkMessage-select-no-messages");
@@ -447,10 +449,14 @@
 	
 	<% 
 			height = "200px";
-			if (!uicomponent.isMessagePreviewRendered()) height = "500px";
+	    style = "";
 			if (uicomponent.getParent().isNoSplitLayout()) height = "auto;"
+			else  if (uicomponent.getParent().isVerticalLayout()) { 
+			  height = "100%;"
+			  style = "overflow:none;";
+			}
 	 %>
-  <div id="uiMessageGrid" class="UIMessageList SpliterResizableListArea" style="height: $height;">
+  <div id="uiMessageGrid" class="UIMessageList SpliterResizableListArea" style="height: $height; $style;">
     <% /* <div class="AdvancedTooltipTmpl" id="mailAdvancedTooltipTmpl">
       <div class="Item">
         <div class="Key">Email: </div>
