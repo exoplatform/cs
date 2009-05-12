@@ -37,11 +37,13 @@ VerticalSpliter.prototype.adjustWidth = function(evt) {
   evt = (window.event) ? window.event : evt ;
   var VerticalSpliter = eXo.mail.VerticalSpliter ;
   var delta = evt.clientX - VerticalSpliter.posX ;
-  var rightWidth = (VerticalSpliter.rightX - delta) ;
-  var leftWidth = (VerticalSpliter.leftX + delta) ;
-  if (leftWidth <= 0  || rightWidth <= 0) return ;
-  VerticalSpliter.leftArea.style.width =  leftWidth + "px" ;
-  VerticalSpliter.rightArea.style.width =  rightWidth + "px" ;  
+  if (delta > 4 || delta < -4) {
+	  var rightWidth = (VerticalSpliter.rightX - delta) ;
+	  var leftWidth = (VerticalSpliter.leftX + delta) ;
+	  if (leftWidth <= 0  || rightWidth <= 0) return ;
+	  VerticalSpliter.leftArea.style.width =  leftWidth + "px" ;
+	  VerticalSpliter.rightArea.style.width =  rightWidth + "px" ;
+  }
 } ;
 
 VerticalSpliter.prototype.clear = function() {
