@@ -88,7 +88,7 @@ FCKConfig.TabSpaces		= 0 ;
 FCKConfig.ShowBorders	= true ;
 FCKConfig.SourcePopup	= false ;
 FCKConfig.ToolbarStartExpanded	= true ;
-FCKConfig.ToolbarCanCollapse	= true ;
+FCKConfig.ToolbarCanCollapse	= false ;
 FCKConfig.IgnoreEmptyParagraphValue = true ;
 FCKConfig.FloatingPanelsZIndex = 10000 ;
 FCKConfig.HtmlEncodeOutput = false ;
@@ -135,10 +135,7 @@ FCKConfig.ToolbarSets["Default"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Basic"] = [
-	['Bold','Italic','Underline','TextColor','StrikeThrough','-','OrderedList','UnorderedList','Outdent','Indent'],
-	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['Blockquote','-','FitWindow','ShowBlocks'],	
-	['FontFormat','FontName','FontSize']
+	['Bold','Italic','Underline','TextColor','StrikeThrough','OrderedList','UnorderedList','Outdent','Indent','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','Blockquote','FitWindow','ShowBlocks','FontFormat','FontName','FontSize']
 ] ;
 
 

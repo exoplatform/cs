@@ -62,6 +62,7 @@ public class MailUtils {
   final public static String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
   final public static String SUPPORTED_VIEW_TYPE_ATTACH[] = {"gif", "png", "jpg", "jpec", "bmp"} ;
   final public static String SIMPLECHARACTER[] = {GREATER_THAN, SMALLER_THAN, "'", "\""};
+  final public static int MAX_POPUP_WIDTH = 880;
   
   static public MailService getMailService() throws Exception {
     return (MailService)PortalContainer.getComponent(MailService.class) ;

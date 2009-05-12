@@ -101,7 +101,7 @@ public class UIActionBar extends UIContainer {
       }
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
-      uiPopupAction.activate(uiPopupContainer, 850, 0, true);
+      uiPopupAction.activate(uiPopupContainer, MailUtils.MAX_POPUP_WIDTH, 0, true);
       
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
       uiComposeForm.init(accId, null, 0);
