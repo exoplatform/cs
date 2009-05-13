@@ -47,9 +47,12 @@ import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -600,6 +603,16 @@ public class UIAddressBooks extends UIComponent {
       uiContacts.setDefaultNameSorted(true) ;
       uiContacts.setSelectSharedContacts(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer);
+      
+     /* System.out.println("\n\n 1111 \n\n");
+
+      for (int i = 0 ; i < 600 ; i ++) {
+        OrganizationService service = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+        User user = service.getUserHandler().createUserInstance("" + i + "" + i + "" + i + "" + i + "" + i) ;
+        user.setFullName("hung dep trai") ;
+        service.getUserHandler().createUser(user, true) ;
+      }
+      System.out.println("\n\n 2222 \n\n");*/
     }
   }
 

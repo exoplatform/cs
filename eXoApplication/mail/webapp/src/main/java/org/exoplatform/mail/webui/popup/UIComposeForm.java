@@ -784,7 +784,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        uiChildPopup.deActivate() ;
+        //uiChildPopup.deActivate() ;
       }
       // update ui
       String selectedFolder = uiFolderContainer.getSelectedFolder() ;
@@ -813,19 +813,25 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       for(Attachment a : composeForm.getAttachFileList()) {
         UIAttachFileForm.removeUploadTemp(composeForm.getApplicationComponent(UploadService.class), a.getResoureId()) ;
       }
-      uiPortlet.cancelAction();
+      //uiPortlet.cancelAction();
+
+      uiChildPopup.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
 
   static public class DiscardChangeActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
-      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
+      //UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
       uiForm.resetFields() ;
       for(Attachment a : uiForm.getAttachFileList()) {
         UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), a.getResoureId()) ;
       }
-      uiPortlet.cancelAction();
+      //uiPortlet.cancelAction();
+      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ; 
+      uiPopupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
   static public class AttachmentActionListener extends EventListener<UIComposeForm> {

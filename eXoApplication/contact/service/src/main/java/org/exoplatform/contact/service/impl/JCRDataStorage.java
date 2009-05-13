@@ -1243,33 +1243,24 @@ public class JCRDataStorage {
     SessionProvider sysProvider = SessionProvider.createSystemProvider();
     try {
       Node contactHome = getPersonalContactsHome(sysProvider, addressBook.getSharedUserId()) ;
-      QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                   + "//element(*,exo:contact)[(@exo:categories='").
                                                   append(addressBook.getId()).append("')]")
                                                   .append(" order by @exo:fullName,@exo:id ascending");
-      Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-      QueryResult result = query.execute();
       return new ContactPageList(username, 10, queryString.toString(), SHARED) ;
     } finally {
       sysProvider.close();
     }
   }
-  
-
 
   public ContactPageList getPublicContactsByAddressBook(String groupId) throws Exception {   
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
     SessionProvider sysProvider = SessionProvider.createSystemProvider();
     try {
-    Node contactHome = getPublicContactsHome(sysProvider);
-    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
                                                 + "//element(*,exo:contact)[@exo:categories='")
                                                 .append(groupId).append("' and @exo:isOwner='true'] ")
                                                 .append("order by @exo:fullName,@exo:id ascending");
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
     return new ContactPageList(null, 10, queryString.toString(), PUBLIC) ;
     } finally {
       sysProvider.close();

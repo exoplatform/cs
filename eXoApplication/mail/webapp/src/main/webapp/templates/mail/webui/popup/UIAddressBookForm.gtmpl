@@ -247,11 +247,9 @@
                                   <tr>
                                     <td>
                                       <div class="InfoTitle3 Email" title="$emailAdd">                
-                                          <%                         
-                                              print("<a href='mailto:" + emailAdd + "'>") ;
-                                              print(subEmail) ;
-                                              print("</a>")
-                                          %>                                
+                                          <a href="<%=uicomponent.event("SendEmail", emailAdd)%>">
+				                                	<%= subEmail %>
+				                              </a>                                
                                        </div>
                                     </td>
                                   </tr>

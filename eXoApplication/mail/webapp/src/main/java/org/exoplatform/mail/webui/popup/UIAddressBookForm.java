@@ -27,12 +27,16 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectOption;
@@ -57,6 +61,7 @@ import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
       @EventConfig(listeners = UIAddressBookForm.EditContactActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.ChangeGroupActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.SelectContactActionListener.class),
+      @EventConfig(listeners = UIAddressBookForm.SendEmailActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.DeleteContactActionListener.class, confirm="UIAddressBookForm.msg.confirm-remove-contact"),
       @EventConfig(listeners = UIAddressBookForm.CloseActionListener.class)
     }
@@ -272,6 +277,54 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiAddressBookForm = event.getSource();
       uiAddressBookForm.getAncestorOfType(UIMailPortlet.class).cancelAction();
+    }
+  }
+  
+  static public class SendEmailActionListener extends EventListener<UIAddressBookForm> {
+    public void execute(Event<UIAddressBookForm> event) throws Exception {
+      UIAddressBookForm uiForm = event.getSource() ;
+      String email = event.getRequestContext().getRequestParameter(OBJECTID);
+      if (!MailUtils.isFieldEmpty(email)) {
+        UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
+        String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;      
+        if(Utils.isEmptyField(accId)) {
+          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+        /*
+        UIPopupActionContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
+        UIPopupAction popupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
+        //uiPopupContainer.setId("UIPopupActionComposeContainer") ;
+       
+        
+        UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, MailUtils.MAX_POPUP_WIDTH);
+        uiComposeForm.init(accId, null, 0) ;
+        uiComposeForm.setFieldToValue(email) ;
+        
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;*/
+/*        
+        UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+        UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
+        uiPopupAction.activate(uiPopupContainer, MailUtils.MAX_POPUP_WIDTH, 0, true);
+        
+        UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+        uiComposeForm.init(accId, null, 0);
+        uiPopupContainer.addChild(uiComposeForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;*/
+        
+        UIPopupActionContainer uiActionContainer = uiForm.getParent() ;
+        UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+        UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, 730) ;
+        uiPopupContainer.setId("UIPopupActionComposeContainer") ;
+        UIComposeForm uiComposeForm = uiPopupContainer.addChild(UIComposeForm.class, null, null) ;
+        uiComposeForm.init(accId, null, 0);
+        uiComposeForm.setFieldToValue(email) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+        
+      }
+      
     }
   }
 }
