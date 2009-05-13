@@ -26,23 +26,39 @@
 	
   <%
     if (uicomponent.isVerticalLayout()) {
+      if (uicomponent.getUIMessagePreview().getMessage() == null) {
   %>
-    <div id="VeticalLeftLayout" style="width:100%; float:left;">
+      <div id="VeticalLeftLayout" style="width:100%; float:left;">
       <div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px; overflow:none; min-width:600px; width:100%">    
         <%uicomponent.renderChild(UIMessageList.class);%>
+        </div>
       </div>
-    </div>
-   <% if (uicomponent.getUIMessagePreview().getMessage() != null) { %> 
-    <div class="VerticalResizeReadingPane" id="ResizeReadingPane" style="border-left:1px solid #C0C0C0; float:left" onmousedown="eXo.mail.VerticalSpliter.doResize(event, this);">
-      <span></span>
-    </div>
-    <div id="VerticalRightLayout" style="width:50%; float:left; scroll:auto;">
-      <div id="SpliterResizableArea">    
-        <%uicomponent.renderChild(UIMessagePreview.class);%>
-      </div>  
-    </div>
+ <%   } else { 
+        if (!uicomponent.getUIMessagePreview().isHideMessageList()) {
+ %> 
+         <div id="VeticalLeftLayout" style="width:100%; float:left;">
+         <div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px; overflow:none; min-width:600px; width:100%">    
+           <%uicomponent.renderChild(UIMessageList.class);%>
+           </div>
+         </div>
+         <div class="VerticalResizeReadingPane" id="ResizeReadingPane" style="border-left:1px solid #C0C0C0; float:left" onmousedown="eXo.mail.VerticalSpliter.doResize(event, this);">
+           <span></span>
+         </div>
+         <div id="VerticalRightLayout" style="width:50%; float:left;">
+ <%
+        } else {
+ %>
+           <div id="VerticalRightLayout" style="width:100%; float:left; scroll:auto;">
+ <%
+        }
+ %>
+        <div id="SpliterResizableArea">    
+          <%uicomponent.renderChild(UIMessagePreview.class);%>
+        </div>  
+      </div>
 	<%
-    }} else if (uicomponent.isHorizontalLayout()) {
+      }
+    } else if (uicomponent.isHorizontalLayout()) {
 	%>
   	<div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px">		
   		<%uicomponent.renderChild(UIMessageList.class);%>

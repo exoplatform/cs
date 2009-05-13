@@ -31,6 +31,14 @@
 	margin:4px 4px 0px 10px;
 }
 
+.UIMailPortlet .ReadingPaneBar .SplitLayout {
+	background: url('icons/SplitLayoutIcon.gif') no-repeat;
+	width: 26px; height: 16px;
+	cursor: pointer;
+	float:left;
+	margin:4px 4px 0px 10px;
+}
+
 .UIMailPortlet .MinimumReadingPane {
 	background: url('icons/MinimumReadingPane.gif') no-repeat;
 	width: 17px; height: 16px;

@@ -84,14 +84,16 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIMessagePreview.MoveMessagesActionListener.class),
         @EventConfig(listeners = UIMessagePreview.AnswerInvitationActionListener.class),
         @EventConfig(listeners = UIMessagePreview.ViewAllHeadersActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.BackToListActionListener.class)
+        @EventConfig(listeners = UIMessagePreview.BackToListActionListener.class),
+        @EventConfig(listeners = UIMessagePreview.HideMessageListActionListener.class)
     }
 )
 
 public class UIMessagePreview extends UIComponent {
   private Message selectedMessage_ ;
   private List<Message> showedMsgs = new ArrayList<Message>() ;
-
+  private boolean isHideMessageList_ = false;
+  
   public UIMessagePreview() throws Exception {}
 
   public Message getMessage() throws Exception { 
@@ -109,6 +111,9 @@ public class UIMessagePreview extends UIComponent {
   public void setShowedMessages(List<Message> msgList) throws Exception {
     showedMsgs = msgList ;
   }
+  
+  public void setIsHideMessageList(boolean b) { isHideMessageList_ = b; }
+  public boolean isHideMessageList() { return isHideMessageList_; }
   
   public boolean isShowBcc(Message msg) throws Exception {
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
@@ -539,6 +544,14 @@ public class UIMessagePreview extends UIComponent {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource() ;    
       uiMsgPreview.setMessage(null);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview.getParent()) ;
+    }
+  }
+  
+  static public class HideMessageListActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMsgPreview = event.getSource() ;    
+      uiMsgPreview.setIsHideMessageList(!uiMsgPreview.isHideMessageList());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview.getParent()) ;
     }
   }
