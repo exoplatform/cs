@@ -593,7 +593,7 @@
                 if (uicomponent.getMessageFilter().getName().equals("Search")) {
                   print(" <div style=\"border-right:0px; float: left\">") ;
                   for (Folder folder : uicomponent.getFolders(msg))
-                    if (folder != null) print(" [" + folder.getLabel() + "]&nbsp; ")
+                    if (folder != null) print(" [" + folder.getName() + "]&nbsp; ")
                   print("</div> ") ;
                 }
                 if (msg.getTags() != null && msg.getTags().length > 0) {
