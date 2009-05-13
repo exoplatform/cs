@@ -33,19 +33,19 @@
 	    <div>
 	      <a href="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %>"><span class="BackToList"></span></a>
 	    </div>
-	    
+	    <div class="Subject">
 		<% } else if (uicomponent.getParent().isVerticalLayout()) { %>
-    <div>
-      <%
-        if (!uicomponent.isHideMessageList()) {
-      %>
-        <a href="<%=uicomponent.event("HideMessageList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.hide-message-list') %>"><span class="BackToList"></span></a>
-      <%} else { %>
-        <a href="<%=uicomponent.event("HideMessageList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.vertical-split-layout') %>"><span class="SplitLayout"></span></a>
-      <%} %>
-      <a href="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.hide-preview') %>"></span><span class="HidePreview" style="margin:4px 4px 0 2px;"></span></a>
-    </div>
-    <div class="Subject" style="width:50%">
+      <div>
+        <%
+          if (!uicomponent.isHideMessageList()) {
+        %>
+          <a href="<%=uicomponent.event("HideMessageList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.hide-message-list') %>"><span class="BackToList"></span></a>
+        <%} else { %>
+          <a href="<%=uicomponent.event("HideMessageList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.vertical-split-layout') %>"><span class="SplitLayout"></span></a>
+        <%} %>
+        <a href="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.hide-preview') %>"></span><span class="HidePreview" style="margin:4px 4px 0 2px;"></span></a>
+      </div>
+      <div class="Subject" style="width:50%">
     <% } else { %>
 		  <div class="Subject">
 		<% } %>
