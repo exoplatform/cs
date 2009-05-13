@@ -106,16 +106,16 @@
   cursor: pointer;
 }
 
-.UIChat .Actionbar .AddContactIcon {
+.UIChat .AddContactIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -225px;
   
 }
 
-.UIChat .Actionbar .NewRoomIcon {
+.UIChat .NewRoomIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -175px;
 }
 
-.UIChat .Actionbar .JoinRoomIcon {
+.UIChat .JoinRoomIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -200px;
 }
 
@@ -219,9 +219,7 @@
 
 /* Down menu status */
 .UIChat .UIRightClickPopupMenu {
-	position: absolute;
-	top: 230px;
-	left: 30px;
+	float:right;
 }
 
 .UIChat .UIRightClickPopupMenu .ItemIcon {
@@ -260,6 +258,10 @@
 
 .UIChat .UIRightClickPopupMenu .AwayIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -25px;
+}
+
+.UIChat .UIRightClickPopupMenu .ExtendAwayIcon {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -300px;
 }
 
 .UIChat .UIRightClickPopupMenu .FreeToChat {
@@ -1383,26 +1385,23 @@ form {
 }
 
 
-.UIChatBarPortlet .Actionbar .Icon {
+.UIChatBarPortlet .Actionbar .IconHolder {
 	margin-left:0px;
-	margin-right:12px;
-}
-
-
-.UIChatBarPortlet .Actionbar .IconOnly {
-	margin-left:5px;
-	margin-right:0px;
+	display:block;
+	white-space:nowrap;
+	padding-left:15px;
+	height:26px;
+	margin:0px 7px;
 }
 
 .UIChatBarPortlet .Actionbar .IconButton {
 	float:left;
-	display:block;
-	height:26px;
 	line-height:26px;
+	margin-top:2px;
+	display:block;
 }
 
 .UIChatBarPortlet .Actionbar .LeftIconButton {
-	margin-top:2px;
 	padding-left:4px;
 	background:url(DefaultSkin/background/LeftIconButtonBG4x26.gif) no-repeat left top;
 } 
@@ -1420,21 +1419,15 @@ form {
 	background:url(DefaultSkin/background/RightIconButtonHightLightBG4x26.gif) no-repeat right top;
 }
 
-.UIChatBarPortlet .Actionbar  .CenterIconButton {
-	background:url(DefaultSkin/background/CenterIconButtonBG1x26.gif) repeat-x;
-	height:26px;
-	line-height:26px;
+.UIChatBarPortlet .Actionbar .CenterIconButton {
+	background:url(DefaultSkin/background/CenterIconButtonBG1x26.gif) repeat-x left;
+  height:26px;
 } 
 
 .UIChatBarPortlet .Actionbar  .CenterIconButton:hover {
 	background:url(DefaultSkin/background/CenterIconButtonHightLightBG1x26.gif) repeat-x;
 }
 
-.UIChatBarPortlet .Actionbar  .CenterIconOnlyButton {
-	background:url(DefaultSkin/background/CenterIconButtonBG1x26.gif) repeat-x;
-	height:26px;
-	line-height:26px;
-} 
 
 .UIChatBarPortlet .Actionbar  .CenterIconOnlyButton:hover {
 	background:url(DefaultSkin/background/CenterIconButtonHightLightBG1x26.gif) repeat-x;
@@ -1450,13 +1443,107 @@ form {
 }
 
 .UIChatBarPortlet .Actionbar .ContactManageIcon {
-	background:transparent url(/chatbar/skin/DefaultSkin/skinIcons/ContactManageIcon29x22.gif) no-repeat left;
+	background:url(/chatbar/skin/DefaultSkin/skinIcons/SmallChatIcons.gif) no-repeat left -323px;
 }
 
 .UIChatBarPortlet .Actionbar .RoomManageIcon {
-	background:transparent url(/chatbar/skin/DefaultSkin/skinIcons/RoomManageIcon28x22.gif) no-repeat left;
+	background:url(/chatbar/skin/DefaultSkin/skinIcons/RoomManageIcon28x22.gif) no-repeat center;
 }
 
 .UIChatBarPortlet .Actionbar .OnlineStatusIcon {
-	background:transparent url(/chatbar/skin/DefaultSkin/skinIcons/OnlineStatusIcon25x22.gif) no-repeat left;
+	background:url(/chatbar/skin/DefaultSkin/skinIcons/SmallChatIcons.gif) no-repeat center 5px;
+}
+
+.UIChatBarPortlet .Actionbar .Arrow {
+	background:url(/chatbar/skin/DefaultSkin/skinIcons/SmallChatIcons.gif) no-repeat center -344px;
+	padding-right:20px;
+	cursor:pointer;
+}
+
+/**************************** Pop up Online *****************************/
+
+.UIChatBarPortlet .UIRightClickPopupMenu{
+	display:block;
+}
+
+.UIChatBarPortlet .UIContextMenuContainer{
+	border:none;	
+}
+
+.UIRightClickPopupMenu .UIRightPopupMenuContainer {
+	background:#f5f5f5 none repeat scroll 0 0;
+	margin:0px;
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .TypeViewContactPortlet{
+	font-weight: bold;
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .TopLeftRightClickPopupMenu{
+	padding-left:3px;
+	background:url('DefaultSkin/background/CornerQuickChat.gif') no-repeat left top;
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .TopRightRightClickPopupMenu{
+	padding-right:3px;
+	background:url('DefaultSkin/background/CornerQuickChat.gif') no-repeat right -3px;
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .TopCenterRightClickPopupMenu{
+	height:3px;
+	background:url('DefaultSkin/background/CornerQuickChat.gif') repeat-x left -6px;
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .BottomLeftRightClickPopupMenu{
+	padding-left:3px;
+	background:url('DefaultSkin/background/CornerQuickChat.gif') no-repeat left -9px;
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .BottomRightRightClickPopupMenu{
+	padding-right:3px;
+	background:url('DefaultSkin/background/CornerQuickChat.gif') no-repeat right -12px;
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .BottomCenterRightClickPopupMenu{
+	height:3px;
+	background:url('DefaultSkin/background/CornerQuickChat.gif') repeat-x left -15px;
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .MiddleLeftRightClickPopupMenu{
+	padding-left:4px;
+	background:url('DefaultSkin/background/MiddePopup.gif') repeat-y left 0px;	
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .MiddleRightRightClickPopupMenu{
+	padding-right:3px;
+	background:url('DefaultSkin/background/MiddePopup.gif') repeat-y right 0px;	
+}
+
+/**************************** Pop up Group *****************************/
+
+.UIChatBarPortlet .Icon {
+  cursor: pointer;
+  padding-left: 30px;
+  line-height: 25px;
+  height: 25px;
+  margin: 2px;
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .Split{
+	background:url('DefaultSkin/background/CornerQuickChat.gif') repeat-x left -18px;
+	height: 9px;
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .TypeViewContactPortlet .TextMemberRoom{
+	line-height: 25px;
+}
+.UIChatBarPortlet .UIRightClickPopupMenu .TypeViewContactPortlet .TextMemberRoom a:hover{
+	display:block;
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .ScrollGroup{
+	overflow: auto;
+	height: 150px;
+	width:100%;
+	min-width:120px;
 }

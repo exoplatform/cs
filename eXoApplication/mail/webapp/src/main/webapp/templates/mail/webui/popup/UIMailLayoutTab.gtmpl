@@ -7,14 +7,12 @@
    	</div>
    	<div class="ImgVeticalSplit"><span></span></div>
   </div>
-  
   <div class="HorizontalSplitContainer">
    	<div class="LayoutSettingHeader">
    		<%uiForm.renderField(uicomponent.HORIZONTAL_LAYOUT)%>
    	</div>
    	<div class="ImgHorizontalSplit"><span></span></div>
   </div>
-  
   <div style="clear:left"><span></span></div>
   <div class="NoSplitContainer">
    	<div class="LayoutSettingHeader">
@@ -22,6 +20,5 @@
    	</div>
    	<div class="ImgNoSplit"><div class="MiddleSection"><span></span></div></div>
   </div>
-  
   <div style="clear:left"><span></span></div>
 </div>
