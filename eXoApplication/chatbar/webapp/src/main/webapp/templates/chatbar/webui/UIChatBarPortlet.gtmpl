@@ -54,7 +54,7 @@
 <!-- Begin UIChat -->
 <div class="UIChat ChatSharedIcons UIChatBarPortlet" id="<%=uicomponent.id%>" oncontextmenu="return false;">
 	<!-- Right Click Popup Online -->
-	<div class="UIRightClickPopupMenu" style="float:left; position:relative; width: 150px;">
+	<div class="UIRightClickPopupMenu" style="width: 150px;">
 	  <div class="UIContextMenuContainer">
 	    <div class="TopLeftRightClickPopupMenu">
 	      <div class="TopRightRightClickPopupMenu">
@@ -96,7 +96,7 @@
 	<!-- Right Click Popup Online-->
 	
 	<!-- Right Click Popup Group -->
-	<div class="UIRightClickPopupMenu" style="float:left; position:relative;  width: 200px;">
+	<div class="UIRightClickPopupMenu" style="width: 200px;display:block; margin-left:200px;">
 	  <div class="UIContextMenuContainer">
 	    <div class="TopLeftRightClickPopupMenu">
 	      <div class="TopRightRightClickPopupMenu">
@@ -142,7 +142,7 @@
 	<!-- End Right Click Popup Group-->
 	
 	<!-- Right Click Popup Contact -->
-	<div class="UIRightClickPopupMenu" style="float:left; position:relative;  width: 200px;">
+	<div class="UIRightClickPopupMenu" style="width: 200px; margin-left:500px">
 	  <div class="UIContextMenuContainer">
 	    <div class="TopLeftRightClickPopupMenu">
 	      <div class="TopRightRightClickPopupMenu">
