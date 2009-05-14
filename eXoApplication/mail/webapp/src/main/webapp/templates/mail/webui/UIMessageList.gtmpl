@@ -170,7 +170,7 @@
                       </div>
                       <div style="clear:both;"><span></span></div>
 	                  </div>
-	                  
+	                 <!-- 
 	                  <div class ="HorizontalLine"><span></span></div>
 	                  
 	                  <div class="MenuItem">   
@@ -178,7 +178,7 @@
 	                      <a class="ItemIcon GroupByDateIcon"><%=_ctx.appRes(uicomponent.id+ ".label.groupBy") %></a>
 	                    </div>
 	                    
-	                    <!--Submenu-->
+	                   
   	                    <div style="position:relative;">
   	                      <div class="UIRightClickPopupMenu" style="display: block;left:135px;top:-23px;width:140px;">
   	                        <div class="UIContextMenuContainer">
@@ -208,8 +208,10 @@
   	                        </div>
   	                      </div>
   	                    </div>
-	                    <!--end-->
+	                    
 	                  </div>
+	                  -->
+	                  
 	                </div>
 	              </div>
 	            </div>
