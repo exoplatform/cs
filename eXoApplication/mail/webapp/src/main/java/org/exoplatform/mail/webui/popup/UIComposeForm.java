@@ -693,8 +693,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-configuration-for-smtp-server", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }
-        //uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.the-username-or-password-may-be-wrong-sending-failed", null)) ;
-        //event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch (SMTPSendFailedException e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null)) ;
@@ -711,8 +709,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         composeForm.saveToSentFolder(usename, accountId, message);
         // update ui
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+        UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         uiMessageList.updateList();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
+        if (uiMsgPreview.getMessage() != null && uiMsgPreview.getMessage().getId().equals(message.getId())) {
+          uiMsgPreview.setMessage(null);
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
+        } else {
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
+        }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
         UIPopupAction uiChildPopup = composeForm.getAncestorOfType(UIPopupAction.class);
         uiChildPopup.deActivate() ;
