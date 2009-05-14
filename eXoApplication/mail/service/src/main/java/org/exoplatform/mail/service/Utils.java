@@ -238,6 +238,7 @@ public class Utils {
   public static final String TAG_YELLOW = "Yellow".intern() ;
   public static final String[] TAG_COLOR = {TAG_RED, TAG_BLUE, TAG_GREEN, TAG_BROWN, TAG_ORANGE, TAG_PING, TAG_YELLOW, TAG_VIOLET};
   public static final String[] MIME_MAIL_TYPES = {"eml"};
+  public static final String[] NOT_SUPPORTED_CHARSETS = {"koi8-r"};
   
   // TODO
   public static final byte NO_MAIL_DUPLICATE = 0;

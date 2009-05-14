@@ -742,30 +742,6 @@ public class MailServiceImpl implements MailService, Startable {
     List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
     Folder folder;
     String folderId;
-//    List<String> storedFolderIds;
-//    boolean removed = true;
-//    if (parentFolder == null) {
-//      storedFolderIds = storage_.getFolderIds(sProvider, username, accountId, null);
-//    } else {
-//      storedFolderIds = storage_.getFolderIds(sProvider, username, accountId, parentFolder.getPath());
-//    }
-//    
-    //TODO: remove stored folder 
-    //removeStoredFolders(sProvider, username, accountId, storedFolders, folders);
-    
-    /*for (String fdId : storedFolderIds) {
-      removed = true;
-      System.out.println("storedFolderIds ===================>>> " + fdId);
-      for (javax.mail.Folder fd : folders) {
-        if (fd.getType() == 2 || fdId.equals(Utils.createFolderId(accountId, String.valueOf(((IMAPFolder) fd).getUIDValidity()), true))) {
-          if (fd.getType() != 2) System.out.println("serverIds ===================>>> " + Utils.createFolderId(accountId, String.valueOf(((IMAPFolder) fd).getUIDValidity()), true));
-          removed = false;
-          continue;
-        }
-      }
-      if (removed) removeUserFolder(sProvider, username, accountId, fdId);
-    }
-    */
     for (javax.mail.Folder fd : folders) {
       if (!fd.getName().equalsIgnoreCase(Utils.FD_INBOX)) {        
         if (fd.getType() != 2) {

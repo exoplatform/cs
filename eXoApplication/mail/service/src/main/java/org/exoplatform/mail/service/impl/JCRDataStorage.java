@@ -1028,7 +1028,7 @@ public class JCRDataStorage {
         }
       } 
       String contentType = "text/plain";
-      if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/alternative"))
+      if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/alternative") || cmsg.isMimeType("multipart/related"))
         contentType = "text/html";
       String body = "";
       if (obj instanceof Multipart) {
@@ -1253,7 +1253,13 @@ public class JCRDataStorage {
     String charset = "UTF-8";
     if (ct != null) {
       String cs = new ContentType(ct).getParameter("charset");
-      if (cs != null) {
+      boolean convertCharset = true;
+      for (int i = 0; i < Utils.NOT_SUPPORTED_CHARSETS.length; i++) {
+        if (cs.equalsIgnoreCase(Utils.NOT_SUPPORTED_CHARSETS[i])) {
+          convertCharset = false;
+        }
+      }
+      if (cs != null && convertCharset) {
         charset = cs;
       }
     }
