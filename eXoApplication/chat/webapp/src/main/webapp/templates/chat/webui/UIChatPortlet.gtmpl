@@ -108,7 +108,7 @@
                                       <div class="ItemIcon AwayIcon">Away</div>
                                     </div>
                                     <div class="MenuItem" onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.EXTEND_AWAY_STATUS, null, event)">
-                                      <div class="ItemIcon AwayIcon">Extend Away</div>
+                                      <div class="ItemIcon ExtendAwayIcon">Extend Away</div>
                                     </div>
                                     <div class="MenuItem" onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.FREE_TO_CHAT_STATUS, null, event)">
                                       <div class="ItemIcon FreeToChat">Free To Chat</div>

@@ -262,6 +262,10 @@
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -25px;
 }
 
+.UIChat .UIRightClickPopupMenu .ExtendAwayIcon {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -300px;
+}
+
 .UIChat .UIRightClickPopupMenu .FreeToChat {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -50px;
 }
