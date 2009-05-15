@@ -1104,6 +1104,7 @@ public class JCRDataStorage{
     if(eventNode.hasProperty(Utils.EXO_PRIORITY)) event.setPriority(eventNode.getProperty(Utils.EXO_PRIORITY).getString()) ;
     if(eventNode.hasProperty(Utils.EXO_IS_PRIVATE)) event.setPrivate(eventNode.getProperty(Utils.EXO_IS_PRIVATE).getBoolean()) ;
     if(eventNode.hasProperty(Utils.EXO_EVENT_STATE)) event.setEventState(eventNode.getProperty(Utils.EXO_EVENT_STATE).getString()) ;
+    if(eventNode.hasProperty(Utils.EXO_SEND_OPTION)) event.setSendOption(eventNode.getProperty(Utils.EXO_SEND_OPTION).getString()) ;
     SessionProvider systemSession =  SessionProvider.createSystemProvider() ;
     try {
       event.setReminders(getReminders(eventNode)) ;
@@ -1205,6 +1206,8 @@ public class JCRDataStorage{
         addAttachment(eventNode, att, isNew) ;
       }
     }
+    eventNode.setProperty(Utils.EXO_SEND_OPTION, event.getSendOption()) ;
+    
 
     calendarNode.getSession().save() ;
 
@@ -1553,6 +1556,7 @@ public class JCRDataStorage{
     settingNode.setProperty(Utils.EXO_PUBLIC_CALENDARS, setting.getFilterPublicCalendars()) ;
     settingNode.setProperty(Utils.EXO_SHARED_CALENDARS, setting.getFilterSharedCalendars()) ;
     settingNode.setProperty(Utils.EXO_SHARED_CALENDAR_COLORS, setting.getSharedCalendarsColors()) ;
+    settingNode.setProperty(Utils.EXO_SEND_OPTION, setting.getSendOption()) ;
   }
   public CalendarSetting getCalendarSetting(String username) throws Exception{
     Node calendarHome = getUserCalendarServiceHome(username) ;
@@ -1564,6 +1568,7 @@ public class JCRDataStorage{
       calendarSetting.setWeekStartOn(settingNode.getProperty(Utils.EXO_WEEK_START_ON).getString()) ;
       calendarSetting.setDateFormat(settingNode.getProperty(Utils.EXO_DATE_FORMAT).getString()) ;
       calendarSetting.setTimeFormat(settingNode.getProperty(Utils.EXO_TIME_FORMAT).getString()) ;
+      if(settingNode.hasProperty(Utils.EXO_SEND_OPTION)) calendarSetting.setSendOption(settingNode.getProperty(Utils.EXO_SEND_OPTION).getString()) ;
       if(settingNode.hasProperty(Utils.EXO_BASE_URL)) calendarSetting.setBaseURL(settingNode.getProperty(Utils.EXO_BASE_URL).getString()) ;
       if(settingNode.hasProperty(Utils.EXO_LOCATION))
         calendarSetting.setLocation(settingNode.getProperty(Utils.EXO_LOCATION).getString()) ;

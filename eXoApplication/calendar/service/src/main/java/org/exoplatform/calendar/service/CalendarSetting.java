@@ -44,6 +44,10 @@ public class CalendarSetting {
   public static String THURSDAY = "5" ;
   public static String FRIDAY = "6" ;
   public static String SATURDAY = "7" ;
+  public static String ACTION_ALWAYS = "always" ;
+  public static String ACTION_NEVER = "never" ;
+  public static String ACTION_ASK = "ask" ;
+  public static String ACTION_BYSETTING = "setting" ;
 
   private String viewType ;
   private long timeInterval ;
@@ -61,7 +65,11 @@ public class CalendarSetting {
   private String[] filterPrivateCalendars ;
   private String[] filterPublicCalendars ;
   private String[] filterSharedCalendars ;
-
+  
+  private String sendOption;
+  
+  
+  
   public CalendarSetting() {
     viewType = DAY_VIEW ;
     timeInterval = 15 ;
@@ -75,6 +83,7 @@ public class CalendarSetting {
     filterPublicCalendars = new String[]{} ;
     filterSharedCalendars = new String[]{} ;
     sharedCalendarsColors = new String[]{} ;
+    sendOption = ACTION_ASK ;
   }
 
   public void setViewType(String viewType) { this.viewType = viewType ; }
@@ -148,6 +157,14 @@ public class CalendarSetting {
   }
   public String[] getFilterSharedCalendars() {
     return filterSharedCalendars ;
+  }
+  
+  public void setSendOption(String option){
+    sendOption=option;
+  }
+  
+  public String getSendOption(){
+    return sendOption;
   }
 }
 

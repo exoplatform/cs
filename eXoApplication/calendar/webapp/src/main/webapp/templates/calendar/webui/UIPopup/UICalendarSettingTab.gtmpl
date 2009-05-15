@@ -107,6 +107,14 @@
           <div style="clear:left;"><span></span></div>
         </td>
       </tr>
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_SEND)%>
+        </td>
+        <td class="FieldComponent">
+          <%uiForm.renderField(uicomponent.FIELD_SEND)%>
+        </td>
+      </tr>
     </tbody>
   </table>
 </div>

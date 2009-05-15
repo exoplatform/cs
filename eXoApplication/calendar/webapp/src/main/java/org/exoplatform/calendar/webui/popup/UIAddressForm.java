@@ -49,16 +49,16 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/calendar/webui/UIPopup/UIAddressForm.gtmpl",
-    events = {
-      @EventConfig(listeners = UIAddressForm.AddActionListener.class), 
-      @EventConfig(listeners = UIAddressForm.ReplaceActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIAddressForm.SearchActionListener.class), 
-      @EventConfig(listeners = UIAddressForm.ShowPageActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIAddressForm.ChangeGroupActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIAddressForm.CancelActionListener.class, phase = Phase.DECODE)
-    }
+                 lifecycle = UIFormLifecycle.class,
+                 template =  "app:/templates/calendar/webui/UIPopup/UIAddressForm.gtmpl",
+                 events = {
+                   @EventConfig(listeners = UIAddressForm.AddActionListener.class), 
+                   @EventConfig(listeners = UIAddressForm.ReplaceActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIAddressForm.SearchActionListener.class), 
+                   @EventConfig(listeners = UIAddressForm.ShowPageActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIAddressForm.ChangeGroupActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIAddressForm.CancelActionListener.class, phase = Phase.DECODE)
+                 }
 )
 
 public class UIAddressForm extends UIForm implements UIPopupComponent { 
@@ -67,6 +67,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   private String recipientsType = "";
   protected String selectedAddressId_ = "" ;
   private UIPageIterator uiPageIterator_ ;
+  protected String[] actions_ = new String[]{"Add", "Replace", "Cancel"}; 
   public LinkedHashMap<String, Contact> checkedList_ = new LinkedHashMap<String, Contact>() ;
   public void setRecipientsType(String type)  {
     recipientsType=type;
@@ -109,10 +110,12 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     return options;
   }
 
-  public String[] getActions() { return new String[]{"Add", "Replace", "Cancel"}; }
+  public String[] getActions() { return actions_ ; }
 
   public void activate() throws Exception {}
-  public void deActivate() throws Exception {} 
+  public void deActivate() throws Exception {
+    actions_ = new String[]{"Add", "Replace", "Cancel"}; 
+  } 
   @SuppressWarnings("unchecked")
   public List<ContactData> getContacts() throws Exception { 
     for(Contact c : checkedList_.values()) {
@@ -202,6 +205,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UITaskForm uiTaskForm = uiContainer.findFirstComponentOfType(UITaskForm.class) ;
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
+      UIInvitationForm uiInvitationForm =uiContainer.findFirstComponentOfType(UIInvitationForm.class) ;
       StringBuffer sb = new StringBuffer() ;
       if(uiTaskForm != null) {
         if(uiTaskForm.getEmailAddress() != null && uiTaskForm.getEmailAddress().trim().length() > 0) {
@@ -236,7 +240,11 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTREMINDER) ;
         uiEventForm.setEmailAddress(sb.toString()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
-      }
+      } else if(uiInvitationForm != null) {
+        String value =  uiInvitationForm.appendValue(uiInvitationForm.getParticipantValue(),  sb.toString()) ;
+        uiInvitationForm.getUIFormTextAreaInput(UIInvitationForm.FIELD_PARTICIPANT).setValue(value) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiInvitationForm) ;
+     }
     }
   }
 
@@ -252,6 +260,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UITaskForm uiTaskForm = uiContainer.findFirstComponentOfType(UITaskForm.class) ;
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
+      UIInvitationForm uiInvitationForm = uiContainer.findFirstComponentOfType(UIInvitationForm.class) ;
       StringBuilder sb = new StringBuilder() ;
       for(ContactData c : uiForm.getCheckedContact()) {
         if(!CalendarUtils.isEmpty(c.getEmail())) {
@@ -269,6 +278,11 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         uiEventForm.setEmailAddress(sb.toString()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
       } 
+      if(uiInvitationForm != null) {
+         String value =  uiInvitationForm.appendValue(uiInvitationForm.getParticipantValue(),  sb.toString()) ;
+         uiInvitationForm.getUIFormTextAreaInput(UIInvitationForm.FIELD_PARTICIPANT).setValue(value) ;
+      }
+
       UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
       chilPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;

@@ -80,8 +80,11 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
+import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
@@ -115,7 +118,8 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
                      @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.SelectTabActionListener.class, phase = Phase.DECODE)
                    }
-  ),
+  )
+  /*,
     @ComponentConfig(
                    id = "UIPopupWindowUserSelectEventForm",
                    type = UIPopupWindow.class,
@@ -125,7 +129,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
                      @EventConfig(listeners = UIEventForm.AddActionListener.class, name = "Add", phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.CloseActionListener.class, name = "Close", phase = Phase.DECODE)
                    }
-  )
+  )*/
 }
 )
 public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISelector{
@@ -133,9 +137,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String TAB_EVENTREMINDER = "eventReminder".intern() ;
   final public static String TAB_EVENTSHARE = "eventShare".intern() ;
   final public static String TAB_EVENTATTENDER = "eventAttender".intern() ;
-
-  final public static String FIELD_SHARE = "shareEvent".intern() ;
-  final public static String FIELD_STATUS = "status".intern() ;
+ 
+ 
   final public static String FIELD_MEETING = "participant".intern() ;
   
 //TODO cs-839
@@ -152,6 +155,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String ITEM_REPEAT = "true".intern() ;
   final public static String ITEM_UNREPEAT = "false".intern() ;
 
+  final public static String ITEM_ALWAYS = "always".intern();
+  final public static String ITEM_NERVER = "never".intern();
+  final public static String ITEM_ASK = "ask".intern();
+  
   final public static String ACT_REMOVE = "RemoveAttachment".intern() ;
   final public static String ACT_DOWNLOAD = "DownloadAttachment".intern() ;
   final public static String ACT_ADDEMAIL = "AddEmailAddress".intern() ;
@@ -159,9 +166,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private boolean isAddNew_ = true ;
   private CalendarEvent calendarEvent_ = null ;
   protected String calType_ = "0" ;
+  protected String invitationMsg_ = "" ;
+  protected String participantList_ = "" ;
   private String errorMsg_ = null ;
   private String errorValues = null ;
-  private Map<String, String> participants_ = new LinkedHashMap<String, String>() ;
+  protected Map<String, String> participants_ = new LinkedHashMap<String, String>() ;
   private String oldCalendarId_ = null ;
   private String newCalendarId_ = null ;
   //private String newCategoryId_ = null ;
@@ -171,11 +180,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     addChild(eventDetailTab) ;
     UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_EVENTREMINDER) ;
     addChild(eventReminderTab) ;
-    UIFormInputWithActions eventShareTab =  new UIFormInputWithActions(TAB_EVENTSHARE) ;
+    UIFormInputWithActions eventShareTab =  new UIEventShareTab(TAB_EVENTSHARE) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
-    eventShareTab.addUIFormInput(new UIFormSelectBox(FIELD_SHARE, FIELD_SHARE, getShareValue()) ) ;
-    eventShareTab.addUIFormInput(new UIFormSelectBox(FIELD_STATUS, FIELD_STATUS, getStatusValue()) ) ;
-    eventShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISSENDMAIL, FIELD_ISSENDMAIL, false)) ;
+    
+    eventShareTab.addUIFormInput(new UIFormRadioBoxInput(UIEventShareTab.FIELD_SHARE, UIEventShareTab.FIELD_SHARE, getShareValue()) ) ;
+    eventShareTab.addUIFormInput(new UIFormRadioBoxInput(UIEventShareTab.FIELD_STATUS, UIEventShareTab.FIELD_STATUS, getStatusValue()) ) ;
+    eventShareTab.addUIFormInput(new UIFormRadioBoxInput(UIEventShareTab.FIELD_SEND, UIEventShareTab.FIELD_SEND, CalendarUtils.getSendValue(CalendarSetting.ACTION_BYSETTING)) ) ;
+    eventShareTab.addUIFormInput(new UIFormInputInfo(UIEventShareTab.FIELD_INFO, UIEventShareTab.FIELD_INFO, null) ) ;
+    //eventShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISSENDMAIL, FIELD_ISSENDMAIL, false)) ;
     // TODO cs-839
     //eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_PARTICIPANT, FIELD_PARTICIPANT, null)) ;
     eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_MEETING, FIELD_MEETING, null)) ;
@@ -187,9 +199,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     addUser.setActionName("AddUser") ;
     addUser.setActionParameter(TAB_EVENTSHARE);
     addUser.setActionType(ActionData.TYPE_ICON) ;
-    addUser.setCssIconClass("SelectUserIcon") ;
+    addUser.setCssIconClass("AddNewNodeIcon") ;
     actions.add(addUser) ;
-    eventShareTab.setActionField(FIELD_MEETING, actions) ;
+    eventShareTab.setActionField(UIEventShareTab.FIELD_INFO, actions) ;
     addChild(eventShareTab) ;
     UIEventAttenderTab eventAttenderTab = new UIEventAttenderTab(TAB_EVENTATTENDER) ;
     addChild(eventAttenderTab) ;
@@ -258,6 +270,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       } else {
         setSelectedShareType(UIEventForm.ITEM_PUBLIC) ;
       }
+      setSendOption(eventCalendar.getSendOption());
       setSelectedEventState(eventCalendar.getEventState()) ;
       setMeetingInvitation(eventCalendar.getInvitation()) ;
       StringBuffer pars = new StringBuffer() ;
@@ -310,6 +323,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 //    TODO cs-839
       setMeetingInvitation(new String[] { CalendarUtils.getOrganizationService().getUserHandler().findUserByName(pars.toString()).getEmail() }) ;
       setParticipant(pars.toString()) ;
+      setSendOption(CalendarSetting.ACTION_BYSETTING);
       attenderTab.updateParticipants(pars.toString());
     }
   }
@@ -361,6 +375,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     return options ;
   }
 
+  /*private List<SelectItemOption<String>> getSendValue() {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    options.add(new SelectItemOption<String>(ITEM_ALWAYS, ITEM_ALWAYS)) ;
+    options.add(new SelectItemOption<String>(ITEM_NERVER, ITEM_NERVER)) ;
+    options.add(new SelectItemOption<String>(ITEM_ASK, ITEM_ASK)) ;
+    return options ;
+  }*/
+  
   public String[] getActions() {
     return new String[]{"Save", "Cancel"} ;
   }
@@ -812,21 +834,32 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
 
   protected String getEventState() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
-    return eventDetailTab.getUIFormSelectBox(FIELD_STATUS).getValue() ;
+    UIEventShareTab eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
+    return eventDetailTab.getUIFormRadioBoxInput(UIEventShareTab.FIELD_STATUS).getValue() ;
   }
   public void setSelectedEventState(String value) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
-    eventDetailTab.getUIFormSelectBox(FIELD_STATUS).setValue(value) ;
+    UIEventShareTab eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
+    eventDetailTab.getUIFormRadioBoxInput(UIEventShareTab.FIELD_STATUS).setValue(value) ;
   }
 
   protected String getShareType() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
-    return  eventDetailTab.getUIFormSelectBox(FIELD_SHARE).getValue()  ;
+    UIEventShareTab eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
+    return  eventDetailTab.getUIFormRadioBoxInput(UIEventShareTab.FIELD_SHARE).getValue()  ;
   }
+  
+  protected String getSendOption(){
+    UIEventShareTab eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
+    return  eventDetailTab.getUIFormRadioBoxInput(UIEventShareTab.FIELD_SEND).getValue()  ;
+  }
+  
+  protected void setSendOption(String value){
+    UIEventShareTab eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
+    eventDetailTab.getUIFormRadioBoxInput(UIEventShareTab.FIELD_SEND).setValue(value)  ;
+  }
+  
   protected void setSelectedShareType(String value) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
-    eventDetailTab.getUIFormSelectBox(FIELD_SHARE).setValue(value) ;
+    UIEventShareTab eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
+    eventDetailTab.getUIFormRadioBoxInput(UIEventShareTab.FIELD_SHARE).setValue(value) ;
   }
 
   protected String[] getMeetingInvitation() {
@@ -906,7 +939,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
   protected boolean isSendMail() {
     UIFormInputWithActions uiShareTab = getChildById(TAB_EVENTSHARE) ;
-    return uiShareTab.getUIFormCheckBoxInput(FIELD_ISSENDMAIL).isChecked() ;
+    return false ; //uiShareTab.getUIFormCheckBoxInput(FIELD_ISSENDMAIL).isChecked() ;
   }
   /*protected String getInvitationNote() {
     UIFormInputWithActions uiShareTab = getChildById(TAB_EVENTSHARE) ;
@@ -1196,16 +1229,33 @@ public Attachment getAttachment(String attId) {
       event.getRequestContext().addUIComponentToUpdateByAjax(tabAttender) ;       
       
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;
+      //uiContainer.addChild(UIInvitationForm.class) ;
+      UIPopupAction uiPopupAction = uiContainer.getChild(UIPopupAction.class);
+      UIPopupContainer uiInvitationContainer= uiPopupAction.createUIComponent(UIPopupContainer.class, null, "UIInvitationContainer");
+      uiInvitationContainer.getChild(UIPopupAction.class).setId("UIPopupAction3") ;
+      uiInvitationContainer.getChild(UIPopupAction.class).getChild(UIPopupWindow.class).setId("UIPopupWindow");
+      UIInvitationForm uiInvitationForm = uiInvitationContainer.addChild(UIInvitationForm.class, null, null);
+      uiInvitationForm.setInvitationMsg(uiForm.invitationMsg_) ;
+      uiInvitationForm.setParticipantValue(uiForm.participantList_) ;
+      uiPopupAction.activate(uiInvitationContainer, 600, 0, true);
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiInvitationContainer);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      
+      
+     /* UIPopupContainer uiContainer2 = uiContainer.getChild(UIPopupAction.class).addChild(UIPopupContainer.class, null, null)  ;
+      uiContainer2.getChild(UIPopupAction.class).setId("newId") ;
+      uiContainer2.getChild(UIPopupAction.class).getChild(UIPopupWindow.class).setId("newIdWindow") ;*/
+      
+      /*UIPopupWindow uiPopupWindow = uiContainer2.getChild(UIPopupWindow.class) ;
       if(uiPopupWindow == null)uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelectEventForm", "UIPopupWindowUserSelectEventForm") ;
-      UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
+      UIUserSelector uiUserSelector = uiContainer2.createUIComponent(UIUserSelector.class, null, null) ;
       uiUserSelector.setShowSearch(true);
       uiUserSelector.setShowSearchUser(true) ;
       uiUserSelector.setShowSearchGroup(true);
       uiPopupWindow.setUIComponent(uiUserSelector);
       uiPopupWindow.setShow(true);
       uiPopupWindow.setWindowSize(740, 400) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer2) ;      */
     }
   }
   static  public class AddActionListener extends EventListener<UIUserSelector> {
@@ -1411,6 +1461,8 @@ public Attachment getAttachment(String attId) {
             }
             calendarEvent.setFromDateTime(from) ;
             calendarEvent.setToDateTime(to);
+            
+            calendarEvent.setSendOption(uiForm.getSendOption());
             
 //          TODO cs-839
             calendarEvent.setParticipant(pars) ;

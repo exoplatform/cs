@@ -82,6 +82,7 @@ public class CalendarEvent {
   private Date toDateTime ;
   private Date completedDateTime ;
   private String taskDelegator  ;
+  private String sendOption = CalendarSetting.ACTION_BYSETTING ;
 
   /**
    * Types: TYPE_EVENT, TYPE_TASK, TYPE_JOURNAL
@@ -201,5 +202,13 @@ public class CalendarEvent {
 
   public String getEventCategoryName() {
     return eventCategoryName;
+  }
+
+  public void setSendOption(String sendOption) {
+    this.sendOption = sendOption;
+  }
+
+  public String getSendOption() {
+    return sendOption;
   }
 }

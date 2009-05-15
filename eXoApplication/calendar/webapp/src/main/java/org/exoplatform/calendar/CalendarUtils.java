@@ -125,6 +125,8 @@ public class CalendarUtils {
   public static final String TWELVE_HOURS  = "12-Hours".intern() ;
   public static final String TWENTY_FOUR_HOURS  = "24-Hours".intern() ;
   
+  public static final String BREAK_LINE = "\n".intern() ;
+  
   public static final String DATETIMEFORMAT = DATEFORMAT +" " +TIMEFORMAT;   
   public static final int DEFAULT_TIMEITERVAL = 15;
   public static final long MILISECONS_OF_DAY = 24*60*59*1000;
@@ -140,6 +142,11 @@ public class CalendarUtils {
     AT, SHARP, MONEY_MARK, PERCENT,EXPONENT,AND,STAR,PLUS,OPEN_SQUARE_BRACKET,CLOSE_SQUARE_BRACKET,
     OPEN_SHARP_BRACKET,CLOSE_SHARP_BRACKET,OPEN_PARENTHESIS,CLOSE_PARENTHESIS};
   public static final String SIMPLECHARACTER[] = {GREATER_THAN,SMALLER_THAN};
+  
+  final public static String FIELD_SEND = "send".intern();
+  final public static String ITEM_ALWAYS = "always".intern();
+  final public static String ITEM_NERVER = "never".intern();
+  final public static String ITEM_ASK = "ask".intern();
 
   public static final String[] getUserGroups(String username) throws Exception {
     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
@@ -661,5 +668,15 @@ public class CalendarUtils {
     Long time = cal.getTimeInMillis() - tz ;
     time += confTimeZone.getRawOffset();
     return String.valueOf(time);
+  }
+  
+  public static List<SelectItemOption<String>> getSendValue(String more) {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    if(more != null) 
+      options.add(new SelectItemOption<String>(CalendarSetting.ACTION_BYSETTING, CalendarSetting.ACTION_BYSETTING)) ;
+    options.add(new SelectItemOption<String>(CalendarSetting.ACTION_NEVER, CalendarSetting.ACTION_NEVER)) ;
+    options.add(new SelectItemOption<String>(CalendarSetting.ACTION_ALWAYS, CalendarSetting.ACTION_ALWAYS)) ;
+    options.add(new SelectItemOption<String>(CalendarSetting.ACTION_ASK, CalendarSetting.ACTION_ASK)) ;
+    return options ;
   }
 }

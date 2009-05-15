@@ -115,6 +115,9 @@
 	  		<propertyDefinition name="exo:repeat" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:sendOption" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
   		</propertyDefinitions>
   		<childNodeDefinitions>
 	      <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
@@ -328,6 +331,9 @@
 	  		</propertyDefinition>	 
 	  		<propertyDefinition name="exo:sharedCalendarsColors" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:sendOption" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
 	  		</propertyDefinition>	  	
   		</propertyDefinitions>
  	 	</nodeType>

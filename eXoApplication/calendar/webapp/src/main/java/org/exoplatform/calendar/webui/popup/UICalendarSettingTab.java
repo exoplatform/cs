@@ -35,6 +35,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
+import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 
 /**
@@ -59,6 +60,8 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
   final public static String WORKINGTIME_BEGIN = "beginTime".intern() ;
   final public static String WORKINGTIME_END = "endTime".intern() ;
   final public static String BASE_URL = "baseURL".intern() ;
+  final public static String FIELD_SEND = "send".intern() ;
+
   private Map<String, List<ActionData>> actionField_  = new HashMap<String, List<ActionData>>() ;
 
   public UICalendarSettingTab(String compId) throws Exception {
@@ -109,6 +112,7 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     List<SelectItemOption<String>> endTimes = CalendarUtils.getTimesSelectBoxOptions(CalendarUtils.TIMEFORMAT, 30) ;
     addUIFormInput(new UIFormSelectBox(WORKINGTIME_BEGIN, WORKINGTIME_BEGIN, startTimes)) ;
     addUIFormInput(new UIFormSelectBox(WORKINGTIME_END, WORKINGTIME_END, endTimes)) ;
+    addUIFormInput(new UIFormRadioBoxInput(CalendarUtils.FIELD_SEND,CalendarUtils.FIELD_SEND,CalendarUtils.getSendValue(null)));
   }
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;
@@ -242,5 +246,11 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
   }
   private List<SelectItemOption<String>> getLocales() {
     return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;
+  }
+  public String getSendOption() {
+    return ((UIFormRadioBoxInput)getChild(UIFormRadioBoxInput.class)).getValue() ;
+  }
+  public void setSendOption(String value) {
+    ((UIFormRadioBoxInput)getChild(UIFormRadioBoxInput.class)).setValue(value) ;
   }
 }
