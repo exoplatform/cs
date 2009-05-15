@@ -683,8 +683,10 @@
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .IconTag {
 	width: 16px;
 	height: 20px;
-	margin-left: 4px;
-	padding-left: 20px;
+	margin-left: 4px; /* orientation=lt */
+	margin-right: 4px; /* orientation=rt */
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 20px; /* orientation=rt */
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .ReadItem {
@@ -695,13 +697,17 @@
 	display: block; 
 	overflow: hidden; 
 	white-space: nowrap; 
-	margin-right: 3px;
-	padding-left: 20px;
-	_float: left;
+	margin-right: 3px; /* orientation=lt */
+	margin-left: 3px; /* orientation=rt */
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 27px; /* orientation=rt */
+	_float: left; /* orientation=lt */
+	_float: right; /* orientation=rt */
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .ReadItem .IconTag {
-	padding-left: 20px;
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 20px; /* orientation=rt */
 	width: auto;
 }
 
