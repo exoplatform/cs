@@ -159,6 +159,44 @@
 					      			</div>
 					      		<% /*End Popup Menu*/ %>
 									</div>
+
+									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
+										<div class="IconHolder PriorityIcon">
+											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.options") %></div>
+										</div>
+										<% /*Begin Popup Menu*/ %>
+										<div style="position: relative;">
+					      				<div class="UIRightClickPopupMenu" style="display: none;">
+					      					<div class="UIContextMenuContainer">
+													  <div class="TopLeftRightClickPopupMenu">
+							          			<div class="TopRightRightClickPopupMenu">
+							            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+							          			</div>
+							        			</div>
+										        <div class="MiddleLeftRightClickPopupMenu">
+										          <div class="MiddleRightRightClickPopupMenu">
+							              		<div class="UIRightPopupMenuContainer">
+																	<%
+																	  String returnReceiptLink = uicomponent.event("ReturnReceipt");
+																	  String returnReceipt = "";
+	                                  if (uicomponent.isReturnReceipt) returnReceipt = "CheckItem";
+																	%>
+							                    <a class="MenuItem" href="$returnReceiptLink"> <div class="ItemIcon $returnReceipt"> <%=_ctx.appRes(uicomponent.id+ ".label.returnReceipt") %> </div> </a>
+							                    
+																</div>
+								          		</div>
+								        		</div>
+											      <div class="BottomLeftRightClickPopupMenu">
+										        <div class="BottomRightRightClickPopupMenu">
+										          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+										        </div>
+										      </div>
+							      			</div>
+							      			
+										    </div>
+					      			</div>
+					      		<% /*End Popup Menu*/ %>
+									</div>
 									
 									<div style="clear:left;"><span></span></div>
 									

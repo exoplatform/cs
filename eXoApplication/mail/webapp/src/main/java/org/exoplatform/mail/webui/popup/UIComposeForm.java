@@ -97,6 +97,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
                    @EventConfig(listeners = UIComposeForm.ChangePriorityActionListener.class),
                    @EventConfig(listeners = UIComposeForm.UseVisualEdiorActionListener.class),
                    @EventConfig(listeners = UIComposeForm.ShowCcActionListener.class),
+                   @EventConfig(listeners = UIComposeForm.ReturnReceiptActionListener.class),
                    @EventConfig(listeners = UIComposeForm.ShowBccActionListener.class)
                  }
 )
@@ -122,6 +123,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   private Message message_ = null;
   private long priority_ = Utils.PRIORITY_NORMAL;
   private Boolean isVisualEditor = true;
+  private Boolean isReturnReceipt = false ;
   private int composeType_ = MESSAGE_NEW;
   private String accountId_ ;
   public String parentPath_ ;
@@ -1024,6 +1026,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     }
   }
 
+  static public class ReturnReceiptActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm uiForm = event.getSource() ;
+      uiForm.isReturnReceipt = ! uiForm.isReturnReceipt ;      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
+    }
+  }
+  
   private boolean validateMessage(Event<UIComposeForm> event, Message msg) throws Exception {
     String msgWarning = null;
     if (!MailUtils.isValidEmailAddresses(msg.getMessageTo())) {
