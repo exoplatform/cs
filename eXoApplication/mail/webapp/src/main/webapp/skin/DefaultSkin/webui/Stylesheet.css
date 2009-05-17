@@ -670,8 +670,10 @@
 	height: 20px; 
 	line-height: 20px;
 	border-left: none;
-	border-right: 1px solid #e8e8e8;
-	padding: 0px 0px 0px 6px;
+	border-right: 1px solid #e8e8e8; /* orientation=lt */
+	border-left: 1px solid #e8e8e8; /* orientation=rt */
+	padding: 0px 0px 0px 6px; /* orientation=lt */
+	padding: 0px 6px 0px 0px; /* orientation=rt */
 }
 
 .UIMailPortlet .UIMessageList .UIGrid td a {
@@ -700,7 +702,7 @@
 	margin-right: 3px; /* orientation=lt */
 	margin-left: 3px; /* orientation=rt */
 	padding-left: 20px; /* orientation=lt */
-	padding-right: 27px; /* orientation=rt */
+	padding-right: 20px; /* orientation=rt */
 	_float: left; /* orientation=lt */
 	_float: right; /* orientation=rt */
 }

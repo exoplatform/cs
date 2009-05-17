@@ -108,7 +108,8 @@
 }
 
 .UIMailPortlet .MultipTag {
-	background: url('icons/MultipTag.gif') no-repeat left center;
+	background: url('icons/MultipTag.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/MultipTag-rt.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .MoreActionsIcon {
