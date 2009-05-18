@@ -1,6 +1,7 @@
 /*====================View Calendar =====================*/
 .UICalendarViewContainer {
-	margin-left: 243px;
+	margin-left: 243px; /* orientation=lt */
+	margin-right: 243px; /* orientation=rt */
 	padding-bottom: 8px;
 }
 
@@ -444,7 +445,8 @@
 .UIScheduleView .UIGrid th {
 	background: url('../background/CalendarBackground.gif') repeat-x center -106px;	
   height: 23px;
-	border-right: 1px solid #c7c7c7;
+	border-right: 1px solid #c7c7c7; /* orientation=lt */
+	border-left: 1px solid #c7c7c7; /* orientation=rt */
 	width: 22%;
 	border-top:none;
 	border-bottom:none;
@@ -671,7 +673,8 @@
 .ListBar {
 	background: url('../background/CalendarBackground.gif') repeat-x center -79px;		
 	height: 26px;
-	border-left: 1px solid #c7c7c7;
+	border-left: 1px solid #c7c7c7; /* orientation=lt */
+	border-right: 1px solid #c7c7c7; /* orientation=rt */
 }
 
 .ListBar .Refresh16x16Icon {
@@ -699,8 +702,9 @@
 
 .ListBar .AddCategoryIcon {
 	float: right;
-	width: 16px; height: 16px;
-	margin: 5px 6px 0px 3px;
+	width: 22px; 
+	height: 22px;
+	margin: 4px 6px 0px 0px;
 }
 
 .ListBar .EventCategory {
@@ -722,8 +726,10 @@
 .UIListView .UIGrid th {
 	background: url('../background/CalendarBackground.gif') repeat-x center -162px;		
   height: 20px;
-	border-right: 1px solid #c7c7c7;
-	padding: 0px 0px 0px 7px;
+	border-right: 1px solid #c7c7c7; /* orientation=lt */
+	border-left: 1px solid #c7c7c7; /* orientation=rt */
+	padding: 0px 0px 0px 7px; /* orientation=lt */
+	padding: 0px 7px 0px 0px; /* orientation=rt */
 }
 
 .UIListView .EventIcon {
@@ -861,15 +867,18 @@
 }
 
 .UIPreview .ViewContainer .SeparatorDotLine {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	background: url('../background/CalendarBackground.gif') no-repeat -4px top;
-	width: 1px; height: 25px;
+	width: 1px;
+	height: 25px;
 	margin: 3px 5px;
 }
 
 .UIPreview .ViewContainer .ActionsContainer {
 	border-top: 1px dotted #b7b7b7;
-	margin: 0px 10px 0px 33px;
+	margin: 0px 10px 0px 33px; /* orientation=lt */
+	margin: 0px 33px 0px 10px; /* orientation=rt */
 	padding-top: 2px;
 }
 
@@ -890,12 +899,14 @@
 /*====================View Event Month =====================*/
 
 .UICalendarPortlet .TitleBar .BackIcon {
-	margin:4px 4px 0px 0px;
+	margin:4px 4px 0px 0px; /* orientation=lt */
+	margin:4px 0px 0px 4px; /* orientation=rt */
 	cursor: pointer;
 }
 
 .UICalendarPortlet .TitleBar .NextIcon {
-	margin:4px 0px 0px 4px;
+	margin:4px 0px 0px 4px; /* orientation=lt */
+	margin:4px 4px 0px 0px; /* orientation=rt */
 	cursor: pointer;
 }
 
@@ -908,18 +919,21 @@
 	height: 440px;
 	overflow-y: auto;
 	overflow-x: hidden;
-	border-left: 1px solid #c7c7c7;
+	border-left: 1px solid #c7c7c7; /* orientation=lt */
+	border-right: 1px solid #c7c7c7; /* orientation=rt */
 	border-bottom: 1px solid #c7c7c7;
 }
 
 .UIMonthView .EventMonthContent .UIGrid{
-	padding-left: 0px;
+	padding-left: 0px; /* orientation=lt */
+	padding-right: 0px; /* orientation=rt */
 	border: none;
 	*width: auto;
 }
 
 .UIMonthView .EventMonthContent .DayBox {
-	text-align: right;
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
 	border-top: 1px solid #c7c7c7;
 	padding: 2px 6px;
 }
@@ -959,13 +973,15 @@
 
 
 .UIMonthView .EventMonthContent  .DisableDay {
-	text-align: right;
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
 	border-top: 1px solid #c7c7c7;
 	color: #909090;
 }
 
 .UIMonthView .EventMonthContent .Today {
-	text-align: right;
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
 	border-top: 1px solid #c7c7c7;
 	padding: 0px 6px;
 	line-height: 16px;
@@ -980,27 +996,33 @@
 
 .UIMonthView .EventMonthContent .ViewMoreIcon {
 	line-height: 16px;
-	padding-right: 18px;
-	text-align: right;
+	padding-right: 18px; /* orientation=lt */
+	padding-left: 18px; /* orientation=rt */
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
 	cursor: pointer;
 	color: #0e31ff;
 	
 }
 
 .UIMonthView .EventMonthContent  .UIGrid td {
-	border-right: 1px solid #c7c7c7;
+	border-right: 1px solid #c7c7c7; /* orientation=lt */
+	border-left: 1px solid #c7c7c7; /* orientation=rt */
 	border-top: none;
-	border-left: none;
+	border-left: none; /* orientation=lt */
+	border-right: none; /* orientation=rt */
 }
 
 .UIMonthView .EventMonthContent  .WeekList {
 	background: url('../background/CalendarBackground.gif') repeat-x center -51px;	
   height: 22px;
-	border-left: 1px solid #c7c7c7;
+	border-left: 1px solid #c7c7c7; /* orientation=lt */
+	border-right: 1px solid #c7c7c7; /* orientation=rt */
 }
 
 .UIMonthView .EventMonthContent  .WeekTitle {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	text-align: center;
 	line-height: 22px;
 	width: 14%;
@@ -1008,7 +1030,8 @@
 
 .UIMonthView .EventMonthContent .DayContent {
 	height: 100px;
-	text-align: right;
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
 }
 
 .UIMonthView .EventMonthContent  .RowContainerDay .CalendarContentNomal {
@@ -1027,7 +1050,8 @@
 
 
 .UIMonthView .EventMonthContent  .RowContainerDay .NormalDayLabel {
-	text-align: right;
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
 }
 
 .UIMonthView .EventMonthContent  .RowContainerDay .CurrentMonthLabel {
@@ -1040,7 +1064,8 @@
 }
 
 .UIMonthView .EventMonthContent .EventOnDayContent {
-	width: auto; height: 20px;
+	width: auto; 
+	height: 20px;
 	border: 1px solid #ffffff;
 }
 
@@ -1049,13 +1074,16 @@
 }
 
 .UIMonthView .EventMonthContent .EventCheckbox .checkbox{
-	 margin: 3px 4px 0px 2px;
+	 margin: 3px 4px 0px 2px; /* orientation=lt */
+ 	 margin: 3px 2px 0px 4px; /* orientation=rt */
 	 *margin: 0px 0px 0px 0px;
 }
 
 .UIMonthView .EventMonthContent .EventSummary{
-	margin: 0px 0px  0px 8px;
-	padding-left:2px;
+	margin: 0px 0px  0px 8px; /* orientation=lt */
+	margin: 0px 8px  0px 0px; /* orientation=rt */
+	padding-left:2px; /* orientation=lt */
+	padding-right:2px; /* orientation=rt */
 	overflow: hidden;
 }
 

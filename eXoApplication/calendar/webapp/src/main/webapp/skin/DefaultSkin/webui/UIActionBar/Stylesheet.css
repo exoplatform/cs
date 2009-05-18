@@ -6,7 +6,8 @@
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .ControlButton {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	line-height: 18px;
 	cursor: pointer;
 }
@@ -16,12 +17,14 @@
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .SelectButton {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	line-height: 20px;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .RightControlButton {
-	float: right;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 	line-height: 18px;
 	cursor: pointer;
 }
@@ -57,7 +60,8 @@
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .SeparatorLine {
-  float: left;
+  float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
   margin: 3px 3px 0px 3px;
 }
 
@@ -70,14 +74,16 @@
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .RightLine {
-  float: right;
+  float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
   margin: 3px 5px 2px 5px;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .IconHolder {
   line-height: 25px;
   margin: 0px 7px;
-  padding-left: 22px;
+  padding-left: 22px; /* orientation=lt */
+	padding-right: 22px; /* orientation=rt */
   white-space: nowrap;
 	display: block;
 }
@@ -87,8 +93,10 @@
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .LayoutSwitcherIcon {
-	padding-left: 0px;
-	width: 22px; height: 24px;
+	padding-left: 0px; /* orientation=lt */
+	padding-right: 0px; /* orientation=rt */
+	width: 22px; 
+	height: 24px;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .SelectButton .IconHolder {
@@ -98,7 +106,8 @@
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .DownArrow1Icon {
-	padding-right: 14px; 
+	padding-right: 14px; /* orientation=lt */
+	padding-left: 14px; /* orientation=rt */
 	cursor: pointer;
 	white-space: nowrap;
 }

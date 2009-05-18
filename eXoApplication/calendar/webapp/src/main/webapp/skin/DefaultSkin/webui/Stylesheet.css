@@ -79,13 +79,17 @@
 }
 
 .UICalendarPortlet .UICalendarWorkingContainer .SeparatorLine {
-  float: left;
+  float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
   margin: 4px 3px 0px 3px;
-  background: url('background/CalendarBackground.gif') no-repeat left top;	
-  height: 18px; width: 2px;
+  background: url('background/CalendarBackground.gif') no-repeat left top; /* orientation=lt */
+	background: url('background/CalendarBackground.gif') no-repeat right top; /* orientation=rt */	
+  height: 18px; 
+  width: 2px;
 }
 .UICalendarPortlet .UICalendarContainer {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	width: 225px;
 	padding: 8px;
 }
