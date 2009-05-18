@@ -1105,6 +1105,8 @@ public class JCRDataStorage{
     if(eventNode.hasProperty(Utils.EXO_IS_PRIVATE)) event.setPrivate(eventNode.getProperty(Utils.EXO_IS_PRIVATE).getBoolean()) ;
     if(eventNode.hasProperty(Utils.EXO_EVENT_STATE)) event.setEventState(eventNode.getProperty(Utils.EXO_EVENT_STATE).getString()) ;
     if(eventNode.hasProperty(Utils.EXO_SEND_OPTION)) event.setSendOption(eventNode.getProperty(Utils.EXO_SEND_OPTION).getString()) ;
+    if(eventNode.hasProperty(Utils.EXO_MESSAGE)) event.setMessage(eventNode.getProperty(Utils.EXO_MESSAGE).getString()) ;
+    
     SessionProvider systemSession =  SessionProvider.createSystemProvider() ;
     try {
       event.setReminders(getReminders(eventNode)) ;
@@ -1136,6 +1138,18 @@ public class JCRDataStorage{
           participant[i] = values[i].getString() ;
         }
         event.setParticipant(participant) ;
+      }
+    }
+    if(eventNode.hasProperty(Utils.EXO_PARTICIPANT_STATUS)){
+      Value[] values = eventNode.getProperty(Utils.EXO_PARTICIPANT_STATUS).getValues() ;
+      if(values.length == 1 ){      
+        event.setParticipantStatus(new String[]{values[0].getString()}) ;
+      }else {
+        String[] participantStatus = new String[values.length] ;
+        for(int i = 0; i < values.length; i ++) {
+          participantStatus[i] = values[i].getString() ;
+        }
+        event.setParticipantStatus(participantStatus) ;
       }
     }
     return event ;
@@ -1206,7 +1220,11 @@ public class JCRDataStorage{
         addAttachment(eventNode, att, isNew) ;
       }
     }
+    //TODO cs-764
+    eventNode.setProperty(Utils.EXO_MESSAGE, event.getMessage());
     eventNode.setProperty(Utils.EXO_SEND_OPTION, event.getSendOption()) ;
+    if(event.getParticipantStatus() == null) event.setParticipantStatus(new String[]{}) ; 
+    eventNode.setProperty(Utils.EXO_PARTICIPANT_STATUS, event.getParticipantStatus()) ;
     
 
     calendarNode.getSession().save() ;

@@ -107,6 +107,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
         settingTab.setWorkingBegin(calendarSetting.getWorkingTimeBegin(), CalendarUtils.DATEFORMAT + " " + calendarSetting.getTimeFormat()) ;
         settingTab.setWorkingEnd(calendarSetting.getWorkingTimeEnd(), CalendarUtils.DATEFORMAT + " " + calendarSetting.getTimeFormat()) ;
       }
+      //TODO cs-764
       settingTab.setSendOption(calendarSetting.getSendOption()) ;
       if(calendarSetting.getBaseURL() == null) calendarSetting.setBaseURL(CalendarUtils.getServerBaseUrl() + "calendar/iCalRss") ;
       //settingTab.setBaseUrl(calendarSetting.getBaseURL()) ;
@@ -236,6 +237,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       calendarSetting.setLocation(settingTab.getLocale()) ;
       calendarSetting.setTimeZone(settingTab.getTimeZone()) ;
       calendarSetting.setBaseURL(CalendarUtils.getServerBaseUrl() + "calendar/iCalRss") ;
+      //TODO cs-764
       calendarSetting.setSendOption(settingTab.getSendOption()) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(settingTab.getShowWorkingTimes()) {

@@ -1,4 +1,7 @@
 <%
+import java.util.Map;
+import java.util.Map.Entry;
+
 	uiForm = uicomponent.getParentFrom() ;	 
 	private void renderActions(String fieldKey) {
 		def actions = uicomponent.getActionField(fieldKey) ;
@@ -88,12 +91,12 @@
 		            </thead>
 		            <tbody>
 		              <%
-		                for (String p : uicomponent.getParticipants()) {
+		                for (Entry<String,String> p : uicomponent.getParticipantStatus().entrySet()) {
 		              %>
 		                <tr>
 		                  
-		                  <td class="text BorderAddress"><%=p%></td>
-		                  <td class="text">pending</td>
+		                  <td class="text BorderAddress"><%=p.getKey()%></td>
+		                  <td class="text"><%=p.getValue() %></td>
 		                </tr>
 		              <%}%>
 		        </tbody>

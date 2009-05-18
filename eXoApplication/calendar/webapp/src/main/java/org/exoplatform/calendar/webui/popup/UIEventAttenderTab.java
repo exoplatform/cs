@@ -82,7 +82,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     Map<String, String> tmpMap = new HashMap<String, String>() ;
     List<String> newPars = new ArrayList<String>() ;
     if(!CalendarUtils.isEmpty(values)) {
-      for(String par : values.split(CalendarUtils.COMMA)) {
+      for(String par : values.split(CalendarUtils.BREAK_LINE)) {
         if(orgService.getUserHandler().findUserByName(par) != null)  {
           String vl = tmpMap.get(par) ;
           parMap_.put(par.trim(), vl) ;

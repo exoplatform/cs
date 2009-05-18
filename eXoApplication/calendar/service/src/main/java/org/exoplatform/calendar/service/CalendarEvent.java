@@ -28,6 +28,7 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Jul 11, 2007  
  */
 public class CalendarEvent {
+
   final public static String TYPE_EVENT = "Event".intern() ;
   final public static String TYPE_TASK = "Task".intern() ;
   final public static String TYPE_JOURNAL = "Journal".intern() ;
@@ -83,6 +84,8 @@ public class CalendarEvent {
   private Date completedDateTime ;
   private String taskDelegator  ;
   private String sendOption = CalendarSetting.ACTION_BYSETTING ;
+  private String message;
+  private String[] participantStatus ;
 
   /**
    * Types: TYPE_EVENT, TYPE_TASK, TYPE_JOURNAL
@@ -179,6 +182,14 @@ public class CalendarEvent {
   public String[] getParticipant() {
     return participant;
   }
+  
+  public String[] getParticipantStatus() {
+    return participantStatus;
+  }
+
+  public void setParticipantStatus(String[] participantStatus) {
+    this.participantStatus = participantStatus;
+  }
 
   public void setTaskDelegator(String taskDelegator) {
     this.taskDelegator = taskDelegator;
@@ -210,5 +221,12 @@ public class CalendarEvent {
 
   public String getSendOption() {
     return sendOption;
+  }
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
   }
 }

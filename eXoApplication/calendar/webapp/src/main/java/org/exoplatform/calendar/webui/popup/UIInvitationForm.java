@@ -167,9 +167,12 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
       UIEventForm uiEventForm = uiGrandParentPopup.getChild(UIEventForm.class) ;
       uiEventForm.invitationMsg_ = uiInvitationForm.getUIFormTextAreaInput(FIELD_INVITATION_MSG).getValue() ;
       uiEventForm.participantList_ = uiInvitationForm.getParticipantValue() ;
+      uiEventForm.setParticipant(uiEventForm.participantList_);
+      uiEventForm.setParticipantStatus(uiEventForm.participantList_);
       UIPopupAction uiPopup = uiParentPopup.getAncestorOfType(UIPopupAction.class) ;
       uiPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
     }
   }
 

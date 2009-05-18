@@ -103,7 +103,7 @@
                       <div class="DeleteUserIcon" title="<%=uiForm.getLabel('DeleteUsername')%>">
                         <span></span>
                       </div>
-                    </a><a href="<%=uiForm.event("AddParticipant",uicomponent.id)%>">
+                    </a><a href="<%=uiForm.event("AddUser",uicomponent.id)%>">
                       <div class="AddUserIcon" title="<%=uiForm.getLabel('AddUsername')%>">
                         <span></span>
                       </div>

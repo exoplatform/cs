@@ -109,6 +109,12 @@
 	  		<propertyDefinition name="exo:participant" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   				<valueConstraints/>
 	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:participantStatus" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:message" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:properties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>

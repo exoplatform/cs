@@ -70,8 +70,8 @@ public class UIEventShareTab extends UIFormInputWithActions {
   public UIFormRadioBoxInput getUIFormRadioBoxInput (String id) {
     return findComponentById(id);
   }
-  public Map<String, String> getParticipants() {
-    return ((UIEventForm) getParent()).participants_ ;
+  public Map<String, String> getParticipantStatus() {
+    return ((UIEventForm) getParent()).participantStatus_ ;
   }
   public void setActionField(String fieldName, List<ActionData> actions) throws Exception {
     actionField_.put(fieldName, actions) ;
