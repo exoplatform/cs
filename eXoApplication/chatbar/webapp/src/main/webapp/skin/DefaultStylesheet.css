@@ -94,7 +94,6 @@
 }
 
 .UIChat .Actionbar .Icon {
-  float: left;
   cursor: pointer;
   padding-left: 30px;
   line-height: 25px; height: 25px;
@@ -102,8 +101,7 @@
 }
 
 .UIChat .Actionbar .Icon:Hover {
-  float: left;
-  cursor: pointer;
+  color: orange;
 }
 
 .UIChat .AddContactIcon {
@@ -222,7 +220,7 @@
 	float:right;
 }
 
-.UIChat .UIRightClickPopupMenu .ItemIcon {
+.UIChatBarPortlet .UIRightClickPopupMenu .ItemIcon {
 	text-align: left;
 	height: 25px; line-height: 25px;
 	cursor: pointer;
@@ -230,11 +228,11 @@
 	padding: 0px 0px 0px 26px;
 }
 
-.UIChat .UIRightClickPopupMenu .ItemIcon:hover {
+.UIChatBarPortlet .UIRightClickPopupMenu .ItemIcon:hover {
 	color: orange;
 }
 
-.UIChat .UIRightClickPopupMenu .TypeViewContactPortlet {
+.UIChatBarPortlet .UIRightClickPopupMenu .TypeViewContactPortlet {
 	text-align: left;
 }
 
@@ -243,28 +241,28 @@
 }
 
 /* ====================== User status shared Icons =================== */
-.UIChat .UIRightClickPopupMenu .IconChat {
+.UIChatBarPortlet .UIRightClickPopupMenu .IconChat {
   padding-left: 24px;
   display: block;
 }
 
-.UIChat .UIRightClickPopupMenu .OnlineIcon {
+.UIChatBarPortlet .UIRightClickPopupMenu .OnlineIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left 0px;
 }
 
-.UIChat .UIRightClickPopupMenu .OfflineIcon {
+.UIChatBarPortlet .UIRightClickPopupMenu .OfflineIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -75px;
 }
 
-.UIChat .UIRightClickPopupMenu .AwayIcon {
+.UIChatBarPortlet .UIRightClickPopupMenu .AwayIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -25px;
 }
 
-.UIChat .UIRightClickPopupMenu .ExtendAwayIcon {
+.UIChatBarPortlet .UIRightClickPopupMenu .ExtendAwayIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -300px;
 }
 
-.UIChat .UIRightClickPopupMenu .FreeToChat {
+.UIChatBarPortlet .UIRightClickPopupMenu .FreeToChat {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -50px;
 }
 

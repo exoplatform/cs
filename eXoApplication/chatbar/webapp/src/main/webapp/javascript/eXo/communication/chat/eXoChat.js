@@ -47,7 +47,7 @@ eXo.require("eXo.communication.chat.webui.UIChatResize", "/chat/javascript/");
 eXo.require("eXo.communication.chat.webui.UICreateNewRoomPopupWindow", "/chat/javascript/");
 eXo.require("eXo.communication.chat.webui.UIRoomConfigPopupWindow", "/chat/javascript/");
 eXo.require("eXo.communication.chat.webui.UIJoinRoomPopupWindow", "/chat/javascript/");
-
+eXo.require("eXo.communication.chat.webui.UIChatBar", "/chatbar/javascript/");
 eXo.communication.chat.eXoChat = {
   /**
    * This method use to initialize all data before call UIMainChatWindow to init all chat application component 

@@ -2,10 +2,10 @@
   import org.exoplatform.portal.webui.util.Util;
 
   def rcontext = _ctx.getRequestContext() ;
-  //def jsManager = rcontext.getJavascriptManager();
-  //jsManager.importJavascript("eXo.communication.chat.eXoChat", "/chat/javascript/");
-  //jsManager.addJavascript("eXo.communication.chat.eXoChat.applicationId = '" + uicomponent.getId() + "';");
-  //jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChat.init");
+  def jsManager = rcontext.getJavascriptManager();
+  jsManager.importJavascript("eXo.communication.chat.eXoChat", "/chatbar/javascript/");
+  jsManager.addJavascript("eXo.communication.chat.eXoChat.applicationId = '" + uicomponent.getId() + "';");
+  jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChat.init");
 %>
 
 <!-- Begin Notification -->
@@ -52,153 +52,7 @@
 <!-- End Notification -->
 
 <!-- Begin UIChat -->
-<div class="UIChat ChatSharedIcons UIChatBarPortlet" id="<%=uicomponent.id%>" oncontextmenu="return false;">
-	<!-- Right Click Popup Online -->
-	<div class="UIRightClickPopupMenu" style="width: 150px;">
-	  <div class="UIContextMenuContainer">
-	    <div class="TopLeftRightClickPopupMenu">
-	      <div class="TopRightRightClickPopupMenu">
-	        <div class="TopCenterRightClickPopupMenu">
-	          <div class="TipRight"><span><span/></div>
-	        </div>
-	      </div>
-	    </div>
-	    <div class="MiddleLeftRightClickPopupMenu">
-	      <div class="MiddleRightRightClickPopupMenu">
-	        <div class="UIRightPopupMenuContainer">
-	          <div class="TypeViewContactPortlet">
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
-	              <div class="ItemIcon OnlineIcon">Online</div>
-	            </div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.AWAY_STATUS, null, event)" class="MenuItem">
-	              <div class="ItemIcon AwayIcon">Away</div>
-	            </div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.EXTEND_AWAY_STATUS, null, event)" class="MenuItem">
-	              <div class="ItemIcon ExtendAwayIcon">Extend Away</div>
-	            </div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.FREE_TO_CHAT_STATUS, null, event)" class="MenuItem">
-	              <div class="ItemIcon FreeToChat">Free To Chat</div>
-	            </div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
-	              <div class="ItemIcon OfflineIcon">Offline</div>
-	            </div>
-	          </div>
-	        </div>
-	      </div>
-	    </div>
-	    <div class="BottomLeftRightClickPopupMenu">
-	      <div class="BottomRightRightClickPopupMenu">
-	        <div class="BottomCenterRightClickPopupMenu"><span><span/></div>
-	      </div>
-	    </div>
-	  </div>
-    </div>
-	<!-- Right Click Popup Online-->
-	
-	<!-- Right Click Popup Group -->
-	<div class="UIRightClickPopupMenu" style="width: 200px;display:block; margin-left:200px;">
-	  <div class="UIContextMenuContainer">
-	    <div class="TopLeftRightClickPopupMenu">
-	      <div class="TopRightRightClickPopupMenu">
-	        <div class="TopCenterRightClickPopupMenu">
-	          <div class="TipRight"><span><span/></div>
-	        </div>
-	      </div>
-	    </div>
-	    <div class="MiddleLeftRightClickPopupMenu">
-	      <div class="MiddleRightRightClickPopupMenu">
-	        <div class="UIRightPopupMenuContainer">
-	          <div class="TypeViewContactPortlet">
-	          	<div class="ScrollGroup">
-			          <div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-			          <div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-		          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-		          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-		          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-		          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-		          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-		          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-		          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-		          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-	          	</div>
-	          	<div class="Split"><span></span></div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
-	              <div class="Icon JoinRoomIcon">Join Room</div>
-	            </div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
-	              <div class="Icon NewRoomIcon">Add Room</div>
-	            </div>
-	          </div>
-	        </div>
-	      </div>
-	    </div>
-	    <div class="BottomLeftRightClickPopupMenu">
-	      <div class="BottomRightRightClickPopupMenu">
-	        <div class="BottomCenterRightClickPopupMenu"><span><span/></div>
-	      </div>
-	    </div>
-	  </div>
-    </div>
-	<!-- End Right Click Popup Group-->
-	
-	<!-- Right Click Popup Contact -->
-	<div class="UIRightClickPopupMenu" style="width: 200px; margin-left:500px">
-	  <div class="UIContextMenuContainer">
-	    <div class="TopLeftRightClickPopupMenu">
-	      <div class="TopRightRightClickPopupMenu">
-	        <div class="TopCenterRightClickPopupMenu">
-	          <div class="TipRight"><span><span/></div>
-	        </div>
-	      </div>
-	    </div>
-	    <div class="MiddleLeftRightClickPopupMenu">
-	      <div class="MiddleRightRightClickPopupMenu">
-	        <div class="UIRightPopupMenuContainer">
-	          <div class="TypeViewContactPortlet">
-	          	<div class="ScrollGroup">
-			          <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
-	              <div class="ItemIcon OnlineIcon">Online</div>
-	            </div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.AWAY_STATUS, null, event)" class="MenuItem">
-	              <div class="ItemIcon AwayIcon">Away</div>
-	            </div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.EXTEND_AWAY_STATUS, null, event)" class="MenuItem">
-	              <div class="ItemIcon ExtendAwayIcon">Extend Away</div>
-	            </div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.FREE_TO_CHAT_STATUS, null, event)" class="MenuItem">
-	              <div class="ItemIcon FreeToChat">Free To Chat</div>
-	            </div>
-	            <div class="Split"><span></span></div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
-	              <div class="ItemIcon OfflineIcon">Offline</div>
-	            </div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
-	              <div class="ItemIcon OfflineIcon">Offline</div>
-	            </div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
-	              <div class="ItemIcon OfflineIcon">Offline</div>
-	            </div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
-	              <div class="ItemIcon OfflineIcon">Offline</div>
-	            </div>
-	          	</div>
-	          	<div class="Split"><span></span></div>
-	            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
-	              <div class="Icon AddContactIcon">Add Contact</div>
-	            </div>
-	          </div>
-	        </div>
-	      </div>
-	    </div>
-	    <div class="BottomLeftRightClickPopupMenu">
-	      <div class="BottomRightRightClickPopupMenu">
-	        <div class="BottomCenterRightClickPopupMenu"><span><span/></div>
-	      </div>
-	    </div>
-	  </div>
-  </div>
-	<!--  End Right Click Popup Contact-->
-	
+<div class="UIChat ChatSharedIcons UIChatBarPortlet" id="<%=uicomponent.id%>" oncontextmenu="return false;">		
 	<div class="ClearRight"><span></span></div>
   <div class="Actionbar">
       <div class="RowContainer">
@@ -224,30 +78,179 @@
 								</div>
 								<!-- End MiniBoxChat -->
       					<div class="SeperatorLine"><span></span></div>
-      					<div class="IconButton" style="width:100px">
+      					<div class="IconButton" style="width:100px" onclick="eXo.communication.chat.webui.UIChatBar.showMenu(this,event);">
+      						<!-- Right Click Popup Contact -->
+									<div style="position:relative;">
+										<div class="UIRightClickPopupMenu" style="width: 200px;bottom:0px;right:0px;display:none;">
+										  <div class="UIContextMenuContainer">
+										    <div class="TopLeftRightClickPopupMenu">
+										      <div class="TopRightRightClickPopupMenu">
+										        <div class="TopCenterRightClickPopupMenu">
+										          <div class="TipRight"><span><span/></div>
+										        </div>
+										      </div>
+										    </div>
+										    <div class="MiddleLeftRightClickPopupMenu">
+										      <div class="MiddleRightRightClickPopupMenu">
+										        <div class="UIRightPopupMenuContainer">
+										          <div class="TypeViewContactPortlet">
+										          	<div class="ScrollGroup">
+												          <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
+										              <div class="ItemIcon OnlineIcon">Online</div>
+										            </div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.AWAY_STATUS, null, event)" class="MenuItem">
+										              <div class="ItemIcon AwayIcon">Away</div>
+										            </div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.EXTEND_AWAY_STATUS, null, event)" class="MenuItem">
+										              <div class="ItemIcon ExtendAwayIcon">Extend Away</div>
+										            </div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.FREE_TO_CHAT_STATUS, null, event)" class="MenuItem">
+										              <div class="ItemIcon FreeToChat">Free To Chat</div>
+										            </div>
+										            <div class="Split"><span></span></div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
+										              <div class="ItemIcon OfflineIcon">Offline</div>
+										            </div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
+										              <div class="ItemIcon OfflineIcon">Offline</div>
+										            </div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
+										              <div class="ItemIcon OfflineIcon">Offline</div>
+										            </div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
+										              <div class="ItemIcon OfflineIcon">Offline</div>
+										            </div>
+										          	</div>
+										          	<div class="Split"><span></span></div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
+										              <div class="Icon AddContactIcon">Add Contact</div>
+										            </div>
+										          </div>
+										        </div>
+										      </div>
+										    </div>
+										    <div class="BottomLeftRightClickPopupMenu">
+										      <div class="BottomRightRightClickPopupMenu">
+										        <div class="BottomCenterRightClickPopupMenu"><span><span/></div>
+										      </div>
+										    </div>
+										  </div>
+									  </div>
+									</div>
+									<!--  End Right Click Popup Contact-->
 	      					<div class="LeftIconButton">
 	      						<div class="RightIconButton">
 	      							<div class="CenterIconButton">
-	      								<a class="IconHolder ContactManageIcon" title="Add new contact" onclick="eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(true)">Contacts</a>
+	      								<a class="IconHolder ContactManageIcon" title="Add new contact">Contacts</a>
 	      							</div>
 	      						</div>
 	      					</div>
       					</div>
-      					<div class="IconButton" style="width:60px">
+      					<div class="IconButton" onclick="eXo.communication.chat.webui.UIChatBar.showMenu(this,event);" style="width:60px;">
+      						<!-- Right Click Popup Group -->
+									<div style="width:60px;position:relative;">
+										<div class="UIRightClickPopupMenu" style="width: 200px;display:block;bottom:0px;right:0px;display:none;">
+										  <div class="UIContextMenuContainer">
+										    <div class="TopLeftRightClickPopupMenu">
+										      <div class="TopRightRightClickPopupMenu">
+										        <div class="TopCenterRightClickPopupMenu">
+										          <div class="TipRight"><span><span/></div>
+										        </div>
+										      </div>
+										    </div>
+										    <div class="MiddleLeftRightClickPopupMenu">
+										      <div class="MiddleRightRightClickPopupMenu">
+										        <div class="UIRightPopupMenuContainer">
+										          <div class="TypeViewContactPortlet">
+										          	<div class="ScrollGroup">
+												          <div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
+												          <div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
+											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
+											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
+											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
+											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
+											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
+											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
+											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
+											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
+										          	</div>
+										          	<div class="Split"><span></span></div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
+										              <div class="Icon JoinRoomIcon">Join Room</div>
+										            </div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
+										              <div class="Icon NewRoomIcon">Add Room</div>
+										            </div>
+										          </div>
+										        </div>
+										      </div>
+										    </div>
+										    <div class="BottomLeftRightClickPopupMenu">
+										      <div class="BottomRightRightClickPopupMenu">
+										        <div class="BottomCenterRightClickPopupMenu"><span><span/></div>
+										      </div>
+										    </div>
+										  </div>
+									   </div>
+									</div>
+									<!-- End Right Click Popup Group-->
 	      					<div class="LeftIconButton">
 	      						<div class="RightIconButton">
 	      							<div class="CenterIconButton">
-	      								<a class="IconHolder RoomManageIcon" title="Join a room" onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true)"></a>
+	      								<a class="IconHolder RoomManageIcon" title="Join a room"><span></span></a>
 	      							</div>
 	      						</div>
 	      					</div>
       					</div>
-      					<div class="IconButton" style="width:60px">
+      					<div class="IconButton" onclick="eXo.communication.chat.webui.UIChatBar.showMenu(this,event);" style="width:60px;">
+      						<!-- Right Click Popup Online -->
+									<div style="width:60px;position:relative;">
+										<div class="UIRightClickPopupMenu" style="width: 150px;bottom:0px;right:0px;display:none;">
+										  <div class="UIContextMenuContainer">
+										    <div class="TopLeftRightClickPopupMenu">
+										      <div class="TopRightRightClickPopupMenu">
+										        <div class="TopCenterRightClickPopupMenu">
+										          <div class="TipRight"><span><span/></div>
+										        </div>
+										      </div>
+										    </div>
+										    <div class="MiddleLeftRightClickPopupMenu">
+										      <div class="MiddleRightRightClickPopupMenu">
+										        <div class="UIRightPopupMenuContainer">
+										          <div class="TypeViewContactPortlet">
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
+										              <div class="ItemIcon OnlineIcon">Online</div>
+										            </div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.AWAY_STATUS, null, event)" class="MenuItem">
+										              <div class="ItemIcon AwayIcon">Away</div>
+										            </div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.EXTEND_AWAY_STATUS, null, event)" class="MenuItem">
+										              <div class="ItemIcon ExtendAwayIcon">Extend Away</div>
+										            </div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.FREE_TO_CHAT_STATUS, null, event)" class="MenuItem">
+										              <div class="ItemIcon FreeToChat">Free To Chat</div>
+										            </div>
+										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
+										              <div class="ItemIcon OfflineIcon">Offline</div>
+										            </div>
+										          </div>
+										        </div>
+										      </div>
+										    </div>
+										    <div class="BottomLeftRightClickPopupMenu">
+										      <div class="BottomRightRightClickPopupMenu">
+										        <div class="BottomCenterRightClickPopupMenu"><span><span/></div>
+										      </div>
+										    </div>
+										  </div>
+									   </div>
+										</div>
+									<!-- Right Click Popup Online-->
 	      					<div class="LeftIconButton">
 	      						<div class="RightIconButton">
 	      							<div class="CenterIconButton">
 	      								<div class="Arrow">
-	      								<a class="IconHolder OnlineIcon" title="Online status" onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true)"></a>
+	      								<a class="IconHolder OnlineIcon" title="Online status"><span></span></a>
 	      								</div>			
 	      							</div>
 	      						</div>
