@@ -24,12 +24,11 @@ import java.util.Map;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Tuan Nguyen
- *          tuan.nguyen@exoplatform.com
+ * Author : Phung Nam
+ *          phunghainam@gmail.com
  * Jun 23, 2007  
  */
 public class Message extends MessageHeader {
-  private String path ;
   private String from ;
   private String to ;
   private String cc ;
@@ -37,14 +36,15 @@ public class Message extends MessageHeader {
   private String body ;
   private String subject ;
   private String replyTo ;
+  private String path ;
   private Date sendDate ;
+  private boolean isReturnReceipt;
   private Date receivedDate ;
   private String contentType;
   private boolean isUnread = true ;
   private long size ;
   private boolean hasAttach = false ;
   private boolean hasStar = false;
-  private ServerConfiguration serverConfiguration;
   
   private String[] folders ;
   private String[] tags ;
@@ -55,6 +55,8 @@ public class Message extends MessageHeader {
   private List<String> groupedMessageIds = new ArrayList<String>() ;
   private boolean isRootConversation = true ;
   private boolean attIsLoadedProperly = true;
+  
+  private ServerConfiguration serverConfiguration;
   
   public Message() {super() ;}
   
@@ -134,4 +136,7 @@ public class Message extends MessageHeader {
   
   public boolean attIsLoadedProperly() { return attIsLoadedProperly; }
   public void setAttIsLoadedProperly(boolean b) { attIsLoadedProperly = b;}
+  
+  public boolean isReturnReceipt() { return isReturnReceipt; }
+  public void setIsReturnReceipt(boolean b) { isReturnReceipt = b;}
 }

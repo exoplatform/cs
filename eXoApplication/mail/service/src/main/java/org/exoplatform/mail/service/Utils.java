@@ -130,9 +130,10 @@ public class Utils {
   public static final String EXO_PRIORITY = "exo:priority".intern() ;
   public static final String EXO_HASATTACH = "exo:hasAttach".intern();
   public static final String ATT_IS_LOADED_PROPERLY = "exo:isLoadedProperly".intern();
+  public static final String IS_RETURN_RECEIPT = "exo:isReturnReceipt".intern();
   public static final String EXO_TAGS = "exo:tags".intern() ;
-  public static final String EXO_FOLDERS = "exo:folders".intern() ;
-  public static final String EXO_HEADERS = "exo:headers".intern() ;
+  public static final String MSG_FOLDERS = "exo:folders".intern() ;
+  public static final String MSG_HEADERS = "exo:headers".intern() ;
   public static final String EXO_PERSONAL = "exo:personal".intern() ;
   public static final String EXO_RECEIVEDDATE = "exo:receivedDate".intern() ; 
   public static final String EXO_SENDDATE = "exo:sendDate".intern() ;

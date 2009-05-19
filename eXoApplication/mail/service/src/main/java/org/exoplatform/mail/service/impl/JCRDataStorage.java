@@ -416,7 +416,7 @@ public class JCRDataStorage {
     }
 
     try {
-      Value[] propFolders = messageNode.getProperty(Utils.EXO_FOLDERS).getValues();
+      Value[] propFolders = messageNode.getProperty(Utils.MSG_FOLDERS).getValues();
       String[] folders = new String[propFolders.length];
       for (int i = 0; i < propFolders.length; i++) {
         folders[i] = propFolders[i].getString();
@@ -437,7 +437,7 @@ public class JCRDataStorage {
     
 
     try {
-      Value[] properties = messageNode.getProperty(Utils.EXO_HEADERS).getValues();
+      Value[] properties = messageNode.getProperty(Utils.MSG_HEADERS).getValues();
       for (int i = 0; i < properties.length; i++) {
         String property = properties[i].getString();
         int index = property.indexOf('=');
@@ -463,6 +463,11 @@ public class JCRDataStorage {
     try { 
       msg.setAttIsLoadedProperly(messageNode.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
     } catch(Exception e) { }
+    
+    try {   
+      msg.setIsReturnReceipt(messageNode.getProperty(Utils.IS_RETURN_RECEIPT).getBoolean());
+    } catch(Exception e) { }
+    
     
     return msg;
   }
@@ -530,7 +535,7 @@ public class JCRDataStorage {
         Node msgNode = (Node) messageHome.getSession().getItem(msg.getPath());
         boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
         String sentFolderId = Utils.createFolderId(accountId, Utils.FD_SENT, false);
-        Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
+        Value[] propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
         boolean moveReference = true;
         String[] folderIds = new String[propFolders.length];
         if (propFolders.length == 1) {
@@ -582,7 +587,7 @@ public class JCRDataStorage {
           inTotalMessage++;
         }
 
-        msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
+        msgNode.setProperty(Utils.MSG_FOLDERS, folderIds);
         if (moveReference)
           msgNode = moveReference(accountId, msgNode);
         msgNode.save();
@@ -637,14 +642,14 @@ public class JCRDataStorage {
       if (updateReference) msgNode = moveReference(accountId, msgNode);
       try {
         Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-        propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
+        propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
         folderIds = new String[propFolders.length];
         for (int i = 0; i < propFolders.length; i++) {
           folderId = propFolders[i].getString();
           if (currentFolderId.equals(folderId)) folderIds[i] = destFolderId;
           else folderIds[i] = folderId;
         }
-        msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
+        msgNode.setProperty(Utils.MSG_FOLDERS, folderIds);
         if (isUnread) inUnreadNumber++;
         inTotalMessage++;
         
@@ -846,14 +851,14 @@ public class JCRDataStorage {
       String[] tags = message.getTags();
       nodeMsg.setProperty(Utils.EXO_TAGS, tags);
       String[] folders = message.getFolders();
-      nodeMsg.setProperty(Utils.EXO_FOLDERS, folders);
+      nodeMsg.setProperty(Utils.MSG_FOLDERS, folders);
       Iterator<String> ith = message.getHeaders().keySet().iterator();
       ArrayList<String> values = new ArrayList<String>(message.getHeaders().size());
       while (ith.hasNext()) {
         String key = ith.next().toString();
         values.add(key + "=" + message.getHeaders().get(key));
       }
-      nodeMsg.setProperty(Utils.EXO_HEADERS, values
+      nodeMsg.setProperty(Utils.MSG_HEADERS, values
           .toArray(new String[message.getHeaders().size()]));
 
       List<Attachment> attachments = message.getAttachments();
@@ -992,11 +997,14 @@ public class JCRDataStorage {
 
       long priority = MimeMessageParser.getPriority(msg);
       node.setProperty(Utils.EXO_PRIORITY, priority);
-
+      
+      if (msg.getHeader("Disposition-Notification-To") != null) node.setProperty(Utils.IS_RETURN_RECEIPT, true);
+      else node.setProperty(Utils.IS_RETURN_RECEIPT, false);
+      
       if (spamFilter != null && spamFilter.checkSpam(msg)) {
         folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) };
       }
-      node.setProperty(Utils.EXO_FOLDERS, folderIds);
+      node.setProperty(Utils.MSG_FOLDERS, folderIds);
       
       if (tagList != null && tagList.size() > 0)
         node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
@@ -1007,7 +1015,7 @@ public class JCRDataStorage {
         Header header = (Header) enu.nextElement();
         values.add(header.getName() + "=" + header.getValue());
       }
-      node.setProperty(Utils.EXO_HEADERS, values.toArray(new String[] {}));
+      node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
 
       logger.warn("Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B");
       t2 = System.currentTimeMillis();
@@ -1541,7 +1549,7 @@ public class JCRDataStorage {
       List<Node> msgNodes, String folderId) throws Exception {
     for (Node msgNode : msgNodes) {
       try {
-        Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
+        Value[] propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
         String[] oldFolderIds = new String[propFolders.length];
         //TODO use for each, and we can remove the folder id in this loop
         /*List<String> folderList = new ArrayList<String>(Arrays.asList(oldFolderIds));
@@ -1553,7 +1561,7 @@ public class JCRDataStorage {
         }
         List<String> folderList = new ArrayList<String>(Arrays.asList(oldFolderIds));
         folderList.remove(folderId);
-        msgNode.setProperty(Utils.EXO_FOLDERS, folderList.toArray(new String[folderList.size()]));
+        msgNode.setProperty(Utils.MSG_FOLDERS, folderList.toArray(new String[folderList.size()]));
         msgNode.save();
       } catch (Exception e) {
       }
@@ -2088,7 +2096,7 @@ public class JCRDataStorage {
         msgNode.save();
 
         Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, msgNode
-            .getProperty(Utils.EXO_FOLDERS).getValues()[0].getString());
+            .getProperty(Utils.MSG_FOLDERS).getValues()[0].getString());
         if (currentFolderNode != null) {
           if (isUnread) {
             currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
@@ -2271,13 +2279,13 @@ public class JCRDataStorage {
   private Node setIsRoot(String accountId, Node msgNode, Node converNode) throws Exception {
     boolean isRoot = true;
     try {
-      Value[] propFoldersMsgNode = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
+      Value[] propFoldersMsgNode = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
       String[] foldersMsgNode = new String[propFoldersMsgNode.length];
       for (int i = 0; i < propFoldersMsgNode.length; i++) {
         foldersMsgNode[i] = propFoldersMsgNode[i].getString();
       }
       
-      Value[] propFoldersConverNode = converNode.getProperty(Utils.EXO_FOLDERS).getValues();
+      Value[] propFoldersConverNode = converNode.getProperty(Utils.MSG_FOLDERS).getValues();
       String[] foldersConverNode = new String[propFoldersConverNode.length];
       for (int i = 0; i < propFoldersConverNode.length; i++) {
         foldersConverNode[i] = propFoldersConverNode[i].getString();
@@ -2467,7 +2475,7 @@ public class JCRDataStorage {
       String accId, Node msgNode, String folderId) {
     byte ret = Utils.NO_MAIL_DUPLICATE;
     try {
-      Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
+      Value[] propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
       for (int i = 0; i < propFolders.length; i++) {
         if (propFolders[i].getString().indexOf(folderId) > -1) {
           logger.warn("DUPLICATE MAIL ... removed");
@@ -2481,7 +2489,7 @@ public class JCRDataStorage {
       }
       msgNode.setProperty(Utils.EXO_ISUNREAD, true);
       msgNode.setProperty(Utils.EXO_STAR, false);
-      msgNode.setProperty(Utils.EXO_FOLDERS, folders);
+      msgNode.setProperty(Utils.MSG_FOLDERS, folders);
       msgHomeNode.save();
       increaseFolderItem(sProvider, username, accId, folderId);
 

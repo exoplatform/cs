@@ -97,8 +97,8 @@ import com.sun.mail.smtp.SMTPSendFailedException;
                    @EventConfig(listeners = UIComposeForm.ChangePriorityActionListener.class),
                    @EventConfig(listeners = UIComposeForm.UseVisualEdiorActionListener.class),
                    @EventConfig(listeners = UIComposeForm.ShowCcActionListener.class),
-                   @EventConfig(listeners = UIComposeForm.ReturnReceiptActionListener.class),
-                   @EventConfig(listeners = UIComposeForm.ShowBccActionListener.class)
+                   @EventConfig(listeners = UIComposeForm.ShowBccActionListener.class), 
+                   @EventConfig(listeners = UIComposeForm.ReturnReceiptActionListener.class)
                  }
 )
 public class UIComposeForm extends UIForm implements UIPopupComponent {
@@ -593,6 +593,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     message.setMessageBcc(bcc) ;
     message.setHasStar(false);
     message.setPriority(priority);
+    message.setIsReturnReceipt(isReturnReceipt);
 
     List<Attachment> attachments = new ArrayList<Attachment>();
     for (Attachment att : this.getAttachFileList()) {

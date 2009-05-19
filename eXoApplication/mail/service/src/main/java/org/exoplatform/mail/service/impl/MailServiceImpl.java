@@ -470,6 +470,9 @@ public class MailServiceImpl implements MailService, Startable {
       else
         mimeMessage.setContent(message.getMessageBody(), "text/html; charset=utf-8");
     }
+    
+    if (message.isReturnReceipt()) mimeMessage.setHeader("Disposition-Notification-To", message.getReplyTo());
+    
     mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));
     String priority = "Normal";
     if (message.getPriority() == Utils.PRIORITY_HIGH) {

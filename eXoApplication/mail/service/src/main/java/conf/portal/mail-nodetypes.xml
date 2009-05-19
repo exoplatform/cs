@@ -225,6 +225,10 @@
       	protected="false" multiple="false">
   	    <valueConstraints/>
   	  </propertyDefinition>  
+  	   <propertyDefinition name="exo:isReturnReceipt" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
+      	protected="false" multiple="false">
+  	    <valueConstraints/>
+  	  </propertyDefinition>
     </propertyDefinitions>    
     <childNodeDefinitions>
 	  <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
