@@ -483,7 +483,7 @@ public class MailServiceImpl implements MailService, Startable {
     if (message.getPriority() != 0)
       mimeMessage.setHeader("Importance", priority);
 
-    Iterator iter = message.getHeaders().keySet().iterator();
+    Iterator<String> iter = message.getHeaders().keySet().iterator();
     while (iter.hasNext()) {
       String key = iter.next().toString();
       mimeMessage.setHeader(key, message.getHeaders().get(key));
@@ -925,8 +925,7 @@ public class MailServiceImpl implements MailService, Startable {
       List<MessageFilter> filters = getFilters(sProvider, username, accountId);
       LinkedHashMap<javax.mail.Message, List<String>> msgMap = new LinkedHashMap<javax.mail.Message, List<String>>();
       boolean isImap = account.getProtocol().equals(Utils.IMAP); 
-      boolean markAsDelete = (isImap && Boolean.valueOf(account.getImapServerProperties().get(Utils.SVR_IMAP_MARK_AS_DELETE)));
-      boolean deleteOnServer = (isImap && markAsDelete);
+      boolean leaveOnserver = (isImap && Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER)));
       
       if (checkFromDate == null) {
         if (lastCheckedDate != null && lastCheckedFromDate != null) {
@@ -1013,7 +1012,7 @@ public class MailServiceImpl implements MailService, Startable {
             
             if (saved) {
               msg.setFlag(Flags.Flag.SEEN, true);
-              if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
+              if (!leaveOnserver) msg.setFlag(Flags.Flag.DELETED, true);
               
               folderStr = "";
               for (int k = 0; k < folderIds.length; k++) {
@@ -1200,12 +1199,8 @@ public class MailServiceImpl implements MailService, Startable {
           boolean saved = false ;
 
           if (totalNew > 0) {
-            boolean leaveOnServer = (isPop3 && Boolean.valueOf(account.getPopServerProperties().get(
-                Utils.SVR_POP_LEAVE_ON_SERVER)));
-            boolean markAsDelete = (isImap && Boolean.valueOf(account.getImapServerProperties().get(
-                Utils.SVR_IMAP_MARK_AS_DELETE)));
-
-            boolean deleteOnServer = (isPop3 && !leaveOnServer) || (isImap && markAsDelete);
+            boolean leaveOnServer = (Boolean.valueOf(account.getServerProperties().get(
+                Utils.SVR_LEAVE_ON_SERVER)));
 
             info.setTotalMsg(totalNew);
             
@@ -1263,7 +1258,7 @@ public class MailServiceImpl implements MailService, Startable {
                 
                 if (saved) {
                   msg.setFlag(Flags.Flag.SEEN, true);
-                  if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
+                  if (!leaveOnServer) msg.setFlag(Flags.Flag.DELETED, true);
                   
                   folderStr = "";
                   for (int k = 0; k < folderIds.length; k++) {

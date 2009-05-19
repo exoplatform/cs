@@ -105,13 +105,11 @@ public class UIAccountSetting extends UIFormTabPane {
   public static final String FIELD_CHECKMAIL_AUTO = "checkMailAutomatically";
   public static final String FIELD_LEAVE_ON_SERVER = "leaveMailOnServer";
 //  public static final String FIELD_SKIP_OVER_SIZE = "skipMessageOverMaxSize";
-  public static final String FIELD_MARK_AS_DELETED = "markItAsDeleted";
   public static final String FIELD_IS_SAVE_PASSWORD = "isSavePassword" ;
   private String accountId_ = null;
   //TODO don't keep these components
   UIFormCheckBoxInput<Boolean> leaveOnServer_ ;
 //  UIFormStringInput skipOverSize_;
-  UIFormCheckBoxInput<Boolean> markAsDelete_;
   public static final String CHECK_FROM_DATE = "checkFromDate";
   public static final String FROM_DATE = "fromDate";
   public static final String IS_CUSTOM_INBOX = "isCustomInbox";
@@ -168,11 +166,9 @@ public class UIAccountSetting extends UIFormTabPane {
     fetchOptionsInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKMAIL_AUTO, null, null));
     
     leaveOnServer_ = new UIFormCheckBoxInput<Boolean>(FIELD_LEAVE_ON_SERVER, null, null) ;
-//    skipOverSize_ = new UIFormStringInput(FIELD_SKIP_OVER_SIZE, null, null);
-    markAsDelete_ = new UIFormCheckBoxInput<Boolean>(FIELD_MARK_AS_DELETED, null, null);
+
     
     fetchOptionsInputSet.addUIFormInput(leaveOnServer_);
-    fetchOptionsInputSet.addUIFormInput(markAsDelete_);
     
     UIFormCheckBoxInput<Boolean> checkFromDate = new UIFormCheckBoxInput<Boolean>(CHECK_FROM_DATE, CHECK_FROM_DATE, null);
     checkFromDate.setOnChange("CheckFromDate");
@@ -331,11 +327,6 @@ public class UIAccountSetting extends UIFormTabPane {
 //    return uiInput.getUIStringInput(FIELD_SKIP_OVER_SIZE).getValue();
 //  }
   
-  public boolean getFieldMaxAsDeleted() {
-    UIFormInputWithActions uiInput = getChildById(TAB_FETCH_OPTIONS);
-    return uiInput.getUIFormCheckBoxInput(FIELD_MARK_AS_DELETED).isChecked();
-  }
-  
   public void fillField() throws Exception {
     MailService mailSrv = getApplicationComponent(MailService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -387,13 +378,7 @@ public class UIAccountSetting extends UIFormTabPane {
     }
     uiIncomingInput.getUIFormSelectBox(FIELD_SERVER_TYPE).setValue(account.getProtocol()) ;
     uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto()) ;
-    if(getFieldProtocol().equals(Utils.POP3)) {
-      uifetchOptionsInput.removeChildById(FIELD_MARK_AS_DELETED) ;
-      uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).setChecked(Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
-    } else {
-      uifetchOptionsInput.removeChildById(FIELD_LEAVE_ON_SERVER) ;
-      uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_MARK_AS_DELETED).setChecked(Boolean.valueOf(account.getImapServerProperties().get(Utils.SVR_IMAP_MARK_AS_DELETE))) ;
-    }
+    uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).setChecked(Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER))) ;
   } 
   
   public void setDefaultValue(String serverType, boolean isSSL) {
@@ -575,15 +560,9 @@ public class UIAccountSetting extends UIFormTabPane {
         }
       }
       
-      if(uiSetting.getFieldProtocol().equals(Utils.POP3)){
-        boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
-        //String skipOverSize = uiSetting.getFieldSkipOverSize() ;
-        acc.setPopServerProperty(Utils.SVR_POP_LEAVE_ON_SERVER, String.valueOf(leaveOnServer)) ;
-        //acc.setPopServerProperty(Utils.SVR_POP_SKIP_OVER_SIZE, skipOverSize) ;
-      } else {
-        boolean markAsDelete = uiSetting.getFieldMaxAsDeleted() ;
-        acc.setImapServerProperty(Utils.SVR_IMAP_MARK_AS_DELETE, String.valueOf(markAsDelete)) ;
-      }
+      boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
+      acc.setServerProperty(Utils.SVR_LEAVE_ON_SERVER, String.valueOf(leaveOnServer)) ;
+      
       
       try {
         mailSrv.updateAccount(SessionProviderFactory.createSystemProvider(), username, acc) ;

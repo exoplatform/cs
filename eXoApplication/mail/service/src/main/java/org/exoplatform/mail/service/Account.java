@@ -47,14 +47,11 @@ public class Account {
   private Date checkFromDate_;
   
   private Map<String, String> serverProperties ;  
-  private Map<String, String> popServerProperties ;
-  private Map<String, String> imapServerProperties ;
   private Map<String, String> smtpServerProperties ;
   
   public Account() {
     id = Utils.KEY_ACCOUNT + IdGenerator.generate() ;
-    setPopServerProperty(Utils.SVR_POP_LEAVE_ON_SERVER, "true") ;
-    setImapServerProperty(Utils.SVR_IMAP_MARK_AS_DELETE, "false") ;
+    setServerProperty(Utils.SVR_LEAVE_ON_SERVER, "true") ;
   }
   
   /**
@@ -228,20 +225,6 @@ public class Account {
   public void setOutgoingSsl(boolean b) { 
     setServerProperty(Utils.SVR_OUTGOING_SSL, String.valueOf(b)); 
   }
-  
-  public void setPopServerProperty(String key, String value) {
-    if (popServerProperties == null) popServerProperties = new HashMap<String, String>();
-    popServerProperties.put(key, value) ;
-  }
-  
-  public Map<String, String> getPopServerProperties() { return popServerProperties ; }
-  
-  public void setImapServerProperty(String key, String value) {
-    if (imapServerProperties == null) imapServerProperties = new HashMap<String, String>();
-    imapServerProperties.put(key, value) ;
-  }
-  
-  public Map<String, String> getImapServerProperties() { return smtpServerProperties ; }
   
   public void setSmtpServerProperty(String key, String value) {
     if (smtpServerProperties == null) smtpServerProperties = new HashMap<String, String>();

@@ -33,18 +33,6 @@
       %>
       
       <%              
-        field = uicomponent.getChildById(UIAccountSetting.FIELD_MARK_AS_DELETED)
-        if (field != null) {
-          label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
-      %>
-        <tr>
-          <td class="FieldComponent" style="text-align: left" colspan="3"><%uicomponent.renderUIComponent(field)%>&nbsp;&nbsp;&nbsp;&nbsp;$label</td>
-        </tr>
-      <%
-        }
-      %>
-      
-      <%              
         field = uicomponent.getChildById(UIAccountSetting.CHECK_FROM_DATE)
         label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
       %>
