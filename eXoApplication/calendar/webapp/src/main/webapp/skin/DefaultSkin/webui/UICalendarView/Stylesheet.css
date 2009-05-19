@@ -166,7 +166,8 @@
 	overflow-y:auto;
 	overflow-x: hidden;
 	height: 420px;
-	padding: 0px 0px 0px 1px;
+	padding: 0px 0px 0px 1px; /* orientation=lt */
+	padding: 0px 1px 0px 0px; /* orientation=rt */
 	*padding: 0px;
 	border-bottom: 1px solid #b7b7b7;
 }
@@ -175,10 +176,12 @@
 .UIWeekView .UIGrid td.UIEmtyBlock {
 	background: url('../background/CalendarBackground.gif') repeat-x center -106px;	
   height: 22px;
-	border-right: 1px solid #c7c7c7;
+	border-right: 1px solid #c7c7c7; /* orientation=lt */
+	border-left: 1px solid #c7c7c7; /* orientation=rt */
 	width: 13.2%;
 	border-top:none;
-	border-left: none;
+	border-left: none; /* orientation=lt */
+	border-right: none; /* orientation=rt */
 	*width: 14%;
 	-moz-user-select: none ;
 	padding: 0px ;
@@ -199,12 +202,14 @@
 }
 
 .UIWeekView .EventWeekBar {
-	padding: 0px 16px 0px 0px;
+	padding: 0px 16px 0px 0px; /* orientation=lt */
+	padding: 0px 0px 0px 16px; /* orientation=rt */
 	
 }
 
 .UIWeekView .EventWeekBar table {
-	margin-left: 1px;
+	margin-left: 1px; /* orientation=lt */
+	margin-right: 1px; /* orientation=rt */
 	*margin-left: 0px;
 }
 
@@ -683,7 +688,8 @@
 	width: 18px; height: 18px;
 }
 .ListBar select {
-	width: 150px; height: 18px;
+	width: 150px;
+	height: 18px;
 	font-size: 11px;
 }
 
@@ -695,21 +701,26 @@
 	color: #058ee6;
 }
 .ListBar .Label {
-	float: right;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 	margin: 7px 4px 0px 3px;
 }
 
 
 .ListBar .AddCategoryIcon {
-	float: right;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 	width: 22px; 
 	height: 22px;
-	margin: 4px 6px 0px 0px;
+	margin: 4px 6px 0px 0px; /* orientation=lt */
+	margin: 4px 0px 0px 6px; /* orientation=rt */
 }
 
 .ListBar .EventCategory {
-	float: right;
-	margin: 3px 6px 0px 3px;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	margin: 3px 6px 0px 3px; /* orientation=lt */
+	margin: 3px 3px 0px 6px; /* orientation=rt */
 }
 
 .UIListView table {

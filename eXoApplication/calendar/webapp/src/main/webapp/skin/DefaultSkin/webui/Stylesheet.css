@@ -106,7 +106,8 @@
   line-height: 22px ;
   font-weight: bold ;
 	border: 1px solid #c7c7c7;
-	border-right: none;
+	border-right: none; /* orientation=lt */
+	border-left: none; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIWeekView .TitleBar {
@@ -150,7 +151,8 @@
 }
 
 .UIContextMenuContainer .CalendarTableColor .ColorCell {
- width: 12px; height: 12px;
+ width: 12px; 
+ height: 12px;
  margin: 2px;
  border: 1px solid #ffffff;
 }
@@ -161,7 +163,8 @@
 
 .UIContextMenuContainer .CalendarTableColor .SelectedColorCell {
 	background: url('skinIcons/icons/CalendarIcons.gif') no-repeat left -342px;
-	width: 12px; height: 12px;
+	width: 12px; 
+	height: 12px;
 	border: 1px solid red;
 }
 
@@ -289,17 +292,20 @@
 }
 
 .UICalendarPortlet .busyIcon {
-	padding-left: 20px;
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 15px; /* orientation=rt */
 	height: 16px;
 }
 
 .UICalendarPortlet .outsideIcon {
-	 padding-left:20px;
+	 padding-left:20px; /* orientation=lt */
+ 	 padding-right:20px; /* orientation=rt */
 	 height: 16px;
 }
 
 .UICalendarPortlet .ItemIcon{
-	padding: 0px 0px 0px 23px;
+	padding: 0px 0px 0px 23px; /* orientation=lt */
+	padding: 0px 23px 0px 0px; /* orientation=rt */
 	line-height: 22px;
 	margin: 0px 3px;
 	height: 22px;

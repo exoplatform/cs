@@ -10,8 +10,10 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .ReminderByEmail input.checkbox{
-	float: left;
-	margin-right: 3px;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	margin-right: 3px; /* orientation=lt */
+	margin-left: 3px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddNewEvent .ReminderByEmail .FieldLabel {
@@ -23,8 +25,10 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .ReminderByPopup input.checkbox{
-	float: left;
-	margin-right: 3px;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	margin-right: 3px; /* orientation=lt */
+	margin-left: 3px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddNewEvent .ReminderByEmail .selectbox{
@@ -59,46 +63,66 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .AddEmailAddress {
-	float: left;
-	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1841px;
-	width: 18px; height: 16px;
-	margin: 1px 0px 0px 6px;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1841px; /* orientation=lt */
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat right -1841px; /* orientation=rt */
+	width: 18px;
+	height: 16px;
+	margin: 1px 0px 0px 6px; /* orientation=lt */
+	margin: 1px 6px 0px 0px; /* orientation=rt */
 	cursor: pointer;
 }
 
 .UICalendarPortlet .UIAddNewEvent .AddUserIcon {
-	float: right;
-	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1793px;
-	width: 16px; height: 16px;
-	margin: 4px 0px 0px 6px;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1793px; /* orientation=lt */
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat right -1793px; /* orientation=rt */
+	width: 18px; 
+	height: 16px;
+	margin: 4px 0px 0px 6px; /* orientation=lt */
+	margin: 4px 6px 0px 0px; /* orientation=rt */
 	cursor: pointer;
 	
 }
 
 .UICalendarPortlet .UIAddNewEvent .DeleteUserIcon {
-	float: right;
-	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1769px;
-	width: 16px; height: 16px;
-	margin: 4px 4px 0px 6px;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1769px; /* orientation=lt */
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat right -1769px; /* orientation=rt */
+	width: 18px; 
+	height: 16px;
+	margin: 4px 4px 0px 6px; /* orientation=lt */
+	margin: 4px 6px 0px 4px; /* orientation=rt */
 	cursor: pointer;
 }
 
 .UICalendarPortlet .UIAddNewEvent .SaveUserIcon {
-	float: right;
-	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1817px;
-	width: 16px; height: 16px;
-	margin: 4px 0px 0px 6px;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1817px; /* orientation=lt */
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat right -1817px; /* orientation=rt */
+	width: 18px; 
+	height: 16px;
+	margin: 4px 0px 0px 6px; /* orientation=lt */
+	margin: 4px 6px 0px 0px; /* orientation=rt */
 	cursor: pointer;
 }
 
 .UICalendarPortlet .UIAddNewEvent .HorizontalLayout .DateTime {
-	float: left;
-	margin-right: 3px;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	margin-right: 3px; /* orientation=lt */
+	margin-left: 3px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Date {
-	float: left;
-	margin-right: 7px;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	margin-right: 7px; /* orientation=lt */
+	margin-left: 7px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Date input{
@@ -115,7 +139,8 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .ReminderLabel{
-	float:left;
+	float:left; /* orientation=lt */
+	float:right; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .ReminderTime .selectbox{
@@ -123,9 +148,11 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .HorizontalLayout .FieldComponent .UIAction {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	padding: 0px;
-	margin-left: 4px; 
+	margin-left: 4px; /* orientation=lt */
+	margin-right: 4px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventSharing input {
@@ -141,12 +168,14 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .Label {
-	float: right;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 	margin: 0px 3px;
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .Field {
-	float: right;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .UIGrid td {
@@ -178,14 +207,17 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .UIGrid .Title {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	color: black;
 	margin: 4px;
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .UIGrid .Input {
-	float: left;
-	margin: 5px 0px 0px 4px;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	margin: 5px 0px 0px 4px; /* orientation=lt */
+	margin: 5px 4px 0px 0px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .UIGrid input {
@@ -201,21 +233,26 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .BackIcon {
-	width: 16px; height: 16px;
-	margin: 2px 4px 0px 3px;
+	width: 20px; 
+	height: 16px;
+	margin: 2px 4px 0px 3px; /* orientation=lt */
+	margin: 2px 3px 0px 4px; /* orientation=rt */
 	cursor: pointer;
 	float: none;
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .NextIcon {
-	width: 16px; height: 16px;
-	margin: 2px 4px 0px 3px;
+	width: 20px; 
+	height: 16px;
+	margin: 2px 4px 0px 3px; /* orientation=lt */
+	margin: 2px 3px 0px 4px; /* orientation=rt */
 	cursor: pointer;
 	float: none;
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .TitleBar .Title {
-	margin: 4px 4px 0px 0px;
+	margin: 4px 4px 0px 0px; /* orientation=lt */
+	margin: 4px 0px 0px 4px; /* orientation=rt */
 	float: none;
 	color: black;
 	font-weight: bold;
@@ -237,18 +274,18 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .TimeNumberDisable {
- display: none ;
+	display: none ;
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .LeftSide {
-	 width: 160px;
-	 height: 20px;
-	 text-align: center;
+	width: 160px;
+	height: 20px;
+	text-align: center;
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .LeftSide .Input .checkbox{
-	 width: 13px;
-	 height: 13px;
+	width: 13px;
+	height: 13px;
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .ThiefBox {
@@ -258,21 +295,26 @@
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .ThiefBox .FreeTime {
 	border: 1px solid #c7c7c7;
-	width: 15px; height: 15px;
+	width: 15px; 
+	height: 15px;
 	margin: 4px;
-	float: right;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .ThiefBox .BusyTime{
 	border: 1px solid #c7c7c7;
-	width: 15px; height: 15px;
+	width: 15px; 
+	height: 15px;
 	margin: 4px;
-	float: right;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .ThiefBox .Label{
 	margin: 4px;
-	float: right;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddTask {
@@ -290,13 +332,17 @@
 }
 
 .UICalendarPortlet .UIAddTask .AddCategory {
-	width: 16px; height: 16px;
-	margin: 1px 0px 0px 6px;
+	width: 16px; 
+	height: 16px;
+	margin: 1px 0px 0px 6px; /* orientation=lt */
+	margin: 1px 6px 0px 0px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddTask .HorizontalLayout .DateTime {
-	float: left;
-	margin-right: 3px;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	margin-right: 3px; /* orientation=lt */
+	margin-left: 3px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddTask .HorizontalLayout .DateTime input {
@@ -311,29 +357,37 @@
 }
 
 .UICalendarPortlet .UIAddTask .HorizontalLayout .SelectUserIcon {
-	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1324px;
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1324px; /* orientation=lt */
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat right -1324px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddTask .HorizontalLayout .SelectMemberIcon {
-	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1272px;
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1272px; /* orientation=lt */
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat right -1272px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddTask .HorizontalLayout .AddAnyIcon {
-	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1297px;
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1297px; /* orientation=lt */
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat right -1297px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddTask .HorizontalLayout .UIAction {
 	width: 65px;
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	padding: 0px;
-	margin-left: 4px; 
+	margin-left: 4px; /* orientation=lt */
+	margin-right: 4px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Date {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	background: none;
-	margin-right: 7px;
-	_margin-right: 1px;
+	margin-right: 7px; /* orientation=lt */
+	margin-left: 7px; /* orientation=rt */
+	_margin-right: 1px; /* orientation=lt */
+	_margin-left: 1px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Date input{
@@ -357,12 +411,14 @@
 
 
 .eventShare .UIFormGrid td.FieldLabel {
-	text-align:left;
+	text-align:left; /* orientation=lt */
+	text-align:right; /* orientation=rt */
 	width:18%;
 	line-height:16px;
 }
 .eventShare .UIFormGrid .AddNewNodeIcon {
-margin-left:10px;
+	margin-left:10px; /* orientation=lt */
+	margin-right:10px; /* orientation=rt */
 }
 /********************* UIInvitationForm ***************************/
 
@@ -378,7 +434,8 @@ margin-left:10px;
 }
 
 .UICalendarPortlet .UIInvitationForm .ParticipantLabel {
-	margin-left:10px;
+	margin-left:10px; /* orientation=lt */
+	margin-right:10px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIInvitationForm .Field {

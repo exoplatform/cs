@@ -27,7 +27,7 @@
       			<table>
 				    <tbody>
 				      <tr>
-				        <td class="FieldComponent" style="text-align: left;" >
+				        <td class="FieldComponent">
 				        	<% uiForm.renderField(uicomponent.EMAIL_IS_REPEAT);%>
 				           <%=uiForm.getLabel(uicomponent.EMAIL_REPEAT_INTERVAL)%>
 				          <% uiForm.renderField(uicomponent.EMAIL_REPEAT_INTERVAL)  ; %>

@@ -21,25 +21,35 @@
 }
 
 .UICalendarPortlet .UIMiniCalendar .YearSelector .NextYearSelector {
-	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -1724px;
-	height: 21px; width: 23px;
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -1724px; /* orientation=lt */
+	background: url('../skinIcons/icons/CalendarIcons-rt.gif') no-repeat right -1724px; /* orientation=rt */
+	height: 21px; 
+	width: 23px;
 }
 
 .UICalendarPortlet .UIMiniCalendar .YearSelector .PreviousYearSelector {
-	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -1702px;
-	height: 21px; width: 23px;
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -1702px; /* orientation=lt */
+	background: url('../skinIcons/icons/CalendarIcons-rt.gif') no-repeat right -1702px; /* orientation=rt */
+	height: 21px; 
+	width: 23px;
 }
 
 .UICalendarPortlet .UIMiniCalendar .MonthSelector .NextMonthSelector {
-	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat right -1748px;
-	height: 16px; width: 10px;
-	margin: 1px 0px 0px 4px;
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat right -1748px; /* orientation=lt */
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -1748px; /* orientation=rt */
+	height: 16px; 
+	width: 10px;
+	margin: 1px 0px 0px 4px; /* orientation=lt */
+	margin: 1px 4px 0px 0px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIMiniCalendar .MonthSelector .PreviousMonthSelector {
-	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -1748px;
-	height: 16px; width: 10px;
-	margin: 1px 4px 0px 0px;
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -1748px; /* orientation=lt */
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat right -1748px; /* orientation=rt */
+	height: 16px; 
+	width: 10px;
+	margin: 1px 4px 0px 0px; /* orientation=lt */
+	margin: 1px 0px 0px 4px; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIMiniCalendar .MonthSelector .Title {

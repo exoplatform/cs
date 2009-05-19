@@ -68,14 +68,14 @@
 
 .UICalendarPortlet .BackIcon {
 	background: url('icons/CalendarIcons.gif') no-repeat left -182px; /* orientation=lt */
-	background: url('icons/CalendarIcons.gif') no-repeat right -182px; /* orientation=rt */
-	width: 16px;
+	background: url('icons/CalendarIcons-rt.gif') no-repeat right -182px; /* orientation=rt */
+	width: 17px;
 	height: 16px;
 }
 
 .UICalendarPortlet .NextIcon {
 	background: url('icons/CalendarIcons.gif') no-repeat left -208px; /* orientation=lt */
-	background: url('icons/CalendarIcons.gif') no-repeat right -208px; /* orientation=rt */
+	background: url('icons/CalendarIcons-rt.gif') no-repeat right -208px; /* orientation=rt */
 	width: 20px;
 	height: 16px;
 }
