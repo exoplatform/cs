@@ -43,6 +43,7 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.popup.UIEventCategoryManager;
 import org.exoplatform.calendar.webui.popup.UIEventForm;
+import org.exoplatform.calendar.webui.popup.UIEventShareTab;
 import org.exoplatform.calendar.webui.popup.UIExportForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
@@ -592,6 +593,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiEventForm.update(CalendarUtils.PRIVATE_TYPE, CalendarUtils.getCalendarOption()) ;
           uiEventForm.setSelectedEventState(UIEventForm.ITEM_BUSY) ;
           uiEventForm.setParticipant(username) ;
+          uiEventForm.setParticipantStatus(username);
+          uiEventForm.getChild(UIEventShareTab.class).setParticipantStatusList(uiEventForm.getParticipantStatusList());
           uiEventForm.setEmailAddress(CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username).getEmail()) ;
           uiEventForm.setEmailRemindBefore(String.valueOf(5));
           uiEventForm.setEmailReminder(true) ;

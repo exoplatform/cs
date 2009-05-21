@@ -245,6 +245,7 @@ public class Utils {
   
   public static final boolean SHOWCONVERSATION = true ;
   
+  
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
   }

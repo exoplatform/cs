@@ -26,6 +26,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
@@ -2489,7 +2490,79 @@ public class JCRDataStorage{
     }
   }
 
-
+  public void confirmInvitation(String fromUserId, String confirmingEmail, String confirmingUser,int calType, String calendarId, String eventId, int answer) throws Exception{
+    SessionProvider session = SessionProvider.createSystemProvider() ;
+    try {
+      Map<String, String> pars = new HashMap<String, String>() ;
+      CalendarEvent event = null ;
+      if( Calendar.TYPE_PRIVATE == calType) {
+        event = getUserEvent(fromUserId, calendarId, eventId) ;
+      } else  if(Calendar.TYPE_SHARED == calType)  {
+        List<String> calendarIds = new ArrayList<String>() ;
+        calendarIds.add(calendarId) ;
+        for(CalendarEvent calEvent : getSharedEventByCalendars(fromUserId, calendarIds)) {
+          if(calEvent.getId().equals(eventId)) {
+            event = calEvent ;
+            break ;
+          }
+        }
+      } else  if(Calendar.TYPE_PUBLIC == calType)  {
+        event = getGroupEvent(calendarId, eventId) ;
+      }
+      if(event != null) {
+        if(event.getParticipantStatus() != null) {
+          for(String parStatus : event.getParticipantStatus()) {
+            String[] entry = parStatus.split(":");
+            if(entry.length>1)
+              pars.put(entry[0], entry[1]);
+            else pars.put(entry[0], Utils.STATUS_EMPTY);
+          }
+        }
+        String status = Utils.STATUS_EMPTY;
+        switch (answer){
+        case Utils.DENY:
+          status = Utils.STATUS_NO;
+          break;
+        case Utils.ACCEPT:
+          status = Utils.STATUS_YES;
+          break;
+        case Utils.NOTSURE:
+          status = Utils.STATUS_PENDING;
+          break;
+        default :
+          break;
+        }
+        
+        if(pars.containsKey(confirmingUser)){
+          pars.remove(confirmingUser);
+          pars.put(confirmingUser, status);
+        }
+        if(pars.containsKey(confirmingEmail)){
+          pars.remove(confirmingEmail);
+          pars.put(confirmingEmail, status);
+        }
+        //TODO this make duplicate
+        Map<String, String> participant = new HashMap<String, String>() ;
+        for (Entry<String, String> par : pars.entrySet()) {
+          participant.put(par.getKey()+":"+par.getValue(),"") ;
+        }
+        event.setParticipantStatus(participant.keySet().toArray(new String[participant.keySet().size()]));
+        if( Calendar.TYPE_PRIVATE == calType) {
+          saveUserEvent(fromUserId, calendarId, event, false) ;
+        } else  if(Calendar.TYPE_SHARED == calType)  {
+          saveEventToSharedCalendar(fromUserId, calendarId, event, false) ;
+        } else  if(Calendar.TYPE_PUBLIC == calType)  {
+          savePublicEvent(calendarId, event, false) ;
+        }
+      }
+    } catch (Exception e) {
+      System.out.println("\n\n confirmInvitation " + e.getClass().toString()) ;
+      //e.printStackTrace() ;
+    } finally {
+      session.close() ;
+    }
+  }
+  
   /**
    * Create a session provider for current context. The method first try to get a normal session provider, 
    * then attempts to create a system provider if the first one was not available.

@@ -52,6 +52,8 @@ import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.mail.webui.popup.UIViewAllHeaders;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -470,7 +472,18 @@ public class UIMessagePreview extends UIComponent {
       CalendarService calService = uiMsgPreview.getApplicationComponent(CalendarService.class) ;
       Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
       String fromUserId = MailUtils.getEventFrom(msg) ;
-      String toUserId = MailUtils.getEventTo(msg) ;
+      //String toUserId = MailUtils.getEventTo(msg) ;
+      //TODO cs-764
+      UIMailPortlet uiMailPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      UISelectAccount uiSelectAcc = uiMailPortlet.findFirstComponentOfType(UISelectAccount.class);
+      String accId = uiSelectAcc.getSelectedValue();
+      MailService mailSvr = uiSelectAcc.getApplicationComponent(MailService.class) ;
+      String confirmingUser = uiMailPortlet.getCurrentUser();
+      Account account = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), confirmingUser, accId);
+      String confirmingEmail ="";
+      if ( account != null) {
+        confirmingEmail = account.getEmailAddress();
+      }
       int calType = Integer.parseInt(MailUtils.getEventType(msg)) ;
       String calendarId = MailUtils.getCalendarId(msg) ;
       String eventId = MailUtils.getCalendarEventId(msg) ;
@@ -510,11 +523,11 @@ public class UIMessagePreview extends UIComponent {
             uiEventForm.initForm(calService.getCalendarSetting(MailUtils.getCurrentUser()), calEvent) ;
             uiEventForm.isAddNew_ = true ;
             uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
-            calService.confirmInvitation(fromUserId, toUserId, calType, calendarId, eventId, 1) ;
+            calService.confirmInvitation(fromUserId ,confirmingEmail,confirmingUser, calType, calendarId, eventId, 1) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
           }
         }  else {
-          calService.confirmInvitation(fromUserId, toUserId, calType, calendarId, eventId, Integer.parseInt(answer)) ;
+          calService.confirmInvitation(fromUserId ,confirmingEmail,confirmingUser, calType, calendarId, eventId, Integer.parseInt(answer)) ;
         }
       } catch (Exception e) {
         e.printStackTrace() ;

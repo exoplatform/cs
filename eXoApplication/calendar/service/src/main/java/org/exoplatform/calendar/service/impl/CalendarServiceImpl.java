@@ -421,12 +421,26 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                                 int answer) throws Exception {
     storage_.confirmInvitation(fromUserId, toUserId, calType, calendarId, eventId, answer);
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public void confirmInvitation(String fromUserId,
+                                String confirmingEmail,
+                                String confirmingUser,
+                                int calType,
+                                String calendarId,
+                                String eventId,
+                                int answer) throws Exception {
+    storage_.confirmInvitation(fromUserId, confirmingEmail, confirmingUser, calType, calendarId, eventId, answer);
+  }
 
   public void start() {
     for (CalendarUpdateEventListener updateListener : listeners_) {
       updateListener.preUpdate();
     }
   }
+
 
   public void stop() {
     // TODO Auto-generated method stub

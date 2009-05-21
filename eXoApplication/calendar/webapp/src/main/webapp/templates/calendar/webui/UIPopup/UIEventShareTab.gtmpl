@@ -1,6 +1,7 @@
 <%
 import java.util.Map;
 import java.util.Map.Entry;
+import org.exoplatform.calendar.webui.popup.UIEventForm.ParticipantStatus;
 
 	uiForm = uicomponent.getParentFrom() ;	 
 	private void renderActions(String fieldKey) {
@@ -90,18 +91,22 @@ import java.util.Map.Entry;
 		              </tr>
 		            </thead>
 		            <tbody>
-		              <%
-		                for (Entry<String,String> p : uicomponent.getParticipantStatus().entrySet()) {
-		              %>
-		                <tr>
-		                  
-		                  <td class="text BorderAddress"><%=p.getKey()%></td>
-		                  <td class="text"><%=p.getValue() %></td>
+		            	<%
+	              	def rowClass = null;
+	              	boolean even = true;
+	                for (ParticipantStatus data : uicomponent.getData()) {
+	                	if(even) rowClass = "EvenRow";
+	                	else rowClass = "OddRow";
+	                	even = !even;
+	              	%>
+		                <tr class="$rowClass">
+		                  <td class="text BorderAddress"><%=data.getParticipant()%></td>
+		                  <td class="text"><%=data.getStatus()%></td>
 		                </tr>
 		              <%}%>
 		        </tbody>
 		        </table>      
-		       <%/*_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");*/%>  
+		       <%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>  
       </div>
 	      </td>
       </tr>

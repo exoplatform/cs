@@ -197,6 +197,14 @@ public class MailUtils {
     return to ;
   }
   
+  public static String getAddressTo(Message msg) throws Exception {
+    String to = null;
+    if (isInvitation(msg)) {
+      to = msg.getHeader("To").trim() ;
+    }
+    return to ;
+  }
+  
   public static String getEventType(Message msg) throws Exception {
     String eventType = null;
     if (isInvitation(msg)) {

@@ -490,5 +490,7 @@ public interface CalendarService extends CalendarServiceLegacy {
    */
   public void confirmInvitation(String fromUserId, String toUserId,int calType,String calendarId, String eventId, int answer) throws Exception ;
   
+  public void confirmInvitation(String fromUserId, String confirmingEmail, String confirmingUser, int calType,String calendarId, String eventId, int answer) throws Exception ;
+  
   public void addListenerPlugin(CalendarUpdateEventListener listener) throws Exception ;
 }

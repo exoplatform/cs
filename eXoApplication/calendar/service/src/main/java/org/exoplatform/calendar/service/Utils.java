@@ -131,6 +131,10 @@ public class Utils {
   public static final int DENY = 0 ;
   public static final int ACCEPT = 1 ;
   public static final int NOTSURE = 2 ;
+  final public static String STATUS_EMPTY = "".intern();
+  final public static String STATUS_PENDING = "pending".intern();
+  final public static String STATUS_YES = "yes".intern();
+  final public static String STATUS_NO = "no".intern();
 
   /**
    * The method creates instance calendar object with time zone is GMT 0
