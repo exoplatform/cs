@@ -227,6 +227,8 @@ public class CalendarEvent {
   }
 
   public void setMessage(String message) {
-    this.message = message;
+    if(message != null)
+      this.message = message;
+    else this.message = new String();
   }
 }

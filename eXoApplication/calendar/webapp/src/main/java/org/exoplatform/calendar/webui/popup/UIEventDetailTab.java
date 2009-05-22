@@ -52,6 +52,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 ) 
 public class UIEventDetailTab extends UIFormInputWithActions {
 
+  final public static String FIELD_MESSAGE = "messageName".intern() ;
   final public static String FIELD_EVENT = "eventName".intern() ;
   final public static String FIELD_CALENDAR = "calendar".intern() ;
   final public static String FIELD_CATEGORY = "category".intern() ;

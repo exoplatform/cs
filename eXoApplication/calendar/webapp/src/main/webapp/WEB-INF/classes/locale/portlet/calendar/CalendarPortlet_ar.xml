@@ -1106,6 +1106,7 @@
   		<ask>Ask</ask>
   		<send>Send invitations :</send>
   		<confirm-msg>"Do you want to save and send invitation ?"</confirm-msg>
+  		<messageName>Invitation Message</messageName>
   	</label>
   </UIEventForm>
   <shareEvent>
