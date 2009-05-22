@@ -1082,5 +1082,93 @@
       <user-required>قم باختيار مستخدم على الأقل</user-required>
     </msg>
   </UISelectUserForm>
+  <!-- #org.exoplatform.calendar.webui.popup.UIInvitationForm -->
+  <UIInvitationForm>
+  	<label>
+  	<default-invitation-msg>I am pleased to invite you to our event</default-invitation-msg>
+  	<participant>Participants</participant>
+  	<invitation-msg>Invitation Messages</invitation-msg>
+  	<contact-picker>Contact Picker</contact-picker>
+  	<user-picker>User Picker</user-picker>
+  	<group-picker>Group Picker</group-picker>
+  	</label>
+  	<action>
+  		<Save>Save</Save>
+  		<Cancel>Cancel</Cancel>
+  	</action>
+  </UIInvitationForm>
+  <UIEventForm>
+  	<label>
+  		<info>Participants :</info>
+  		<answer>Attending ?</answer>
+  		<always>Always</always>
+  		<never>Never</never>
+  		<ask>Ask</ask>
+  		<send>Send invitations :</send>
+  		<confirm-msg>"Do you want to save and send invitation ?"</confirm-msg>
+  	</label>
+  </UIEventForm>
+  <shareEvent>
+  	<label>
+  		<private>Private</private>
+  		<public>Public</public>
+  	</label>
+  </shareEvent>
+  <status>
+  	<label>
+  		<busy>Busy</busy>
+  		<available>Available</available>
+  		<outside>Outside</outside>
+  	</label>
+  </status>
+  <send>
+  	<label>
+  		<setting>Use Calendar Setting</setting>
+  		<never>Never</never>
+  		<always>Always</always>
+  		<ask>Ask</ask>
+  	</label>
+  </send>
+  <UICalendarChildPopupWindow>
+  	<title>
+  		<UIInvitationContainer>Invitations</UIInvitationContainer>
+  	</title>
+  </UICalendarChildPopupWindow>
+  <PUIPopupGroupSelector>
+  	<title>
+  		<PGroupSelector>Select group</PGroupSelector>
+  	</title>
+  </PUIPopupGroupSelector>
+  <UIPopupWindow3>
+  	<title>
+  		<UIAddressForm>Add Contact</UIAddressForm>
+  	</title>
+  </UIPopupWindow3>
+  <UICalendarSettingForm>
+  	<label>
+  		<send>Send event invitations</send>
+  	</label>
+  </UICalendarSettingForm>
+  <UIPopupWindow>
+  	<title>
+  		<UIAddressForm>Select Address</UIAddressForm>
+  	</title>
+  </UIPopupWindow>
+  
+  <!-- #org.exoplatform.calendar.webui.popup.UIConfirmForm -->
+  <UICalendarChildPopupWindow>
+  	<title>
+  		<UIConfirmForm>Confirm</UIConfirmForm>
+  	</title>
+  </UICalendarChildPopupWindow>
+  <UIConfirmForm>
+  	<label>
+  		<confirm>Message</confirm>
+  	</label>
+  	<action>
+  		<ConfirmOK>Save&Send</ConfirmOK>
+  		<ConfirmCancel>Save</ConfirmCancel>
+  	</action>
+  </UIConfirmForm>
 </bundle>
 

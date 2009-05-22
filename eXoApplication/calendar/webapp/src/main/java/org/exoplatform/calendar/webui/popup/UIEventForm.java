@@ -1507,6 +1507,7 @@ public Attachment getAttachment(String attId) {
               Account acc = CalendarUtils.getMailService().getDefaultAccount(uiForm.getSession(), username);
               try {
                 
+                if(oldCalendarEvent!=null){
                 if(oldCalendarEvent.getSummary()!=null && !oldCalendarEvent.getSummary().equalsIgnoreCase(calendarEvent.getSummary()))
                   uiForm.isChangedSignificantly = true;
                 if(oldCalendarEvent.getDescription()!=null && !oldCalendarEvent.getDescription().equalsIgnoreCase(calendarEvent.getDescription()))
@@ -1517,7 +1518,7 @@ public Attachment getAttachment(String attId) {
                     uiForm.isChangedSignificantly = true;
                 if(!oldCalendarEvent.getToDateTime().equals(calendarEvent.getToDateTime()))
                   uiForm.isChangedSignificantly = true;
-                
+                }                
                 if(uiForm.isAddNew_||uiForm.isChangedSignificantly){                   
                   uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, uiForm.getParticipantValues(), calendarEvent) ;
                   Map<String, String> parsUpdated = new HashMap<String, String>() ;
