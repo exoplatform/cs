@@ -289,7 +289,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                                 rssData,
                                 calendarImportExport_.get(ICALENDAR));
   }
-
+  
   /**
    * {@inheritDoc}
    */
@@ -851,5 +851,22 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                             String calendarId,
                             List<String> receiverUsers) throws Exception {
     shareCalendar(username, calendarId, receiverUsers);
+  }
+
+  public void updateCalDav(String usename, String calendarId, CalendarImportExport imp) throws Exception {
+    storage_.updateCalDav(usename, calendarId, imp) ;
+  }
+  
+  public void updateCalDav(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception {
+    storage_.updateCalDav(usename, calendarId, imp, number) ;
+  }
+
+  public void updateRss(String usename, String calendarId, CalendarImportExport imp) throws Exception {
+    storage_.updateRss(usename, calendarId, imp) ;
+    
+  }
+  
+  public void updateRss(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception {
+    storage_.updateRss(usename, calendarId, imp, number) ;
   }
 }

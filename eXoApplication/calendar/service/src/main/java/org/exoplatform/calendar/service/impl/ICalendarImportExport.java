@@ -76,6 +76,7 @@ import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -436,6 +437,45 @@ public class ICalendarImportExport implements CalendarImportExport{
     return bout;
   }
 
+  public OutputStream exportCalendar(String username, List<String> calendarIds, String type, int limited) throws Exception {
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>();
+    SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+    if(type.equals(PRIVATE_TYPE)) {
+      EventQuery eventQuery = new EventQuery() ;
+      eventQuery.setCalendarId(calendarIds.toArray(new String[]{})) ;
+      eventQuery.setOrderBy(new String[]{"jcr:lastModified"}) ;
+      eventQuery.setLimitedItems(limited) ;
+      events = storage_.getEvents(username, eventQuery, null) ;
+    }else if(type.equals(SHARED_TYPE)) {
+      events = storage_.getSharedEventByCalendars(username, calendarIds) ;
+    }else if(type.equals(PUBLIC_TYPE)){
+      events = storage_.getGroupEventByCalendar(calendarIds) ;
+    }
+    if(events.isEmpty()) return null ;
+    net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
+    calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
+    calendar.getProperties().add(Version.VERSION_2_0);
+    calendar.getProperties().add(CalScale.GREGORIAN);
+    for(CalendarEvent exoEvent : events) {
+      if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
+         calendar = getVEvent(calendar, exoEvent) ;        
+      } else { // task
+        calendar = getVTask(calendar, exoEvent) ;
+      }
+    }    
+    ByteArrayOutputStream bout = new ByteArrayOutputStream();
+    CalendarOutputter output = new CalendarOutputter();
+    try {
+      output.output(calendar, bout) ;
+    }catch(ValidationException e) {
+      e.printStackTrace() ;
+      return null ;
+    }  finally {
+      systemSession.close() ;
+    }  
+    return bout;
+  }
+  
   public OutputStream exportEventCalendar(SessionProvider sProvider, String username, String calendarId, String type, String eventId) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
     List<String> calendarIds = Arrays.asList(new String[]{calendarId}) ;

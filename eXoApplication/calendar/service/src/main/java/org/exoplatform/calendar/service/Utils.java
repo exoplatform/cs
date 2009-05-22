@@ -56,6 +56,12 @@ public class Utils {
   public static final String EXO_CALENDAR_PUBLIC_EVENT = "exo:calendarPublicEvent".intern() ;
   public static final String EXO_EVENT_CATEGORY = "exo:eventCategory".intern() ;
   
+  public static final String EXO_DATA = "exo:data".intern() ;
+  public static final String EXO_ICAL_DATA = "exo:iCalData".intern() ;
+  public static final String EXO_TITLE = "exo:title".intern() ;
+  public static final String EXO_CONTENT = "exo:content".intern() ;
+  
+  
   public static final String EXO_CALENDAR_SETTING = "exo:calendarSetting".intern() ;
   public static final String EXO_IS_SHOW_WORKING_TIME = "exo:showWorkingTime".intern() ;
   public static final String EXO_WORKING_BEGIN = "exo:workingTimeBegin".intern() ;
@@ -131,6 +137,12 @@ public class Utils {
   public static final int DENY = 0 ;
   public static final int ACCEPT = 1 ;
   public static final int NOTSURE = 2 ;
+  
+  public static final String RSS_NODE  = "iCalendars".intern() ;
+  public static final String CALDAV_NODE  = "WebDavCalendars".intern() ;
+  
+  public static final String ICS_EXT  = ".ics".intern() ;
+  
   final public static String STATUS_EMPTY = "".intern();
   final public static String STATUS_PENDING = "pending".intern();
   final public static String STATUS_YES = "yes".intern();

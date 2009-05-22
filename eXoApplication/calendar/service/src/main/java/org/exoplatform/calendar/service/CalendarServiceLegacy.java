@@ -243,6 +243,12 @@ public interface CalendarServiceLegacy {
      */
     public int generateCalDav(SessionProvider systemSession, String username, List<String> calendarIds, RssData rssData) throws Exception ;
 
+    
+    /**
+     * @deprecated use {@link CalendarService#generateRss(List, RssData)}
+     */
+    public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception ;
+    
     /**
      * @deprecated use {@link CalendarService#removeSharedEvent(String, String, String)}
      */

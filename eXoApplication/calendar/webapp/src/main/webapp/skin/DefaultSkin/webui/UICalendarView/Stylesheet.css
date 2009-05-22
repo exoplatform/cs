@@ -333,7 +333,8 @@
 .UIWeekView .EventDayContent .EventContainer {
 	border:1px solid #ffffff;
 	border-top: none;
-	border: solid 1px red ;
+	 
+	
 }
 
 .UIWeekView .EventContainerBorder .ResizeEventContainer {

@@ -342,4 +342,11 @@ public class CsvImportExport implements CalendarImportExport {
       return false ;
     }
   }
+  public OutputStream exportCalendar(String username,
+                                     List<String> calendarIds,
+                                     String type,
+                                     int number) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

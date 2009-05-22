@@ -345,6 +345,7 @@ public interface CalendarService extends CalendarServiceLegacy {
    */
   public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception ;
 
+  
   /**
    * It gets data form server and show the url to view contents of RSS
    * @param systemSession Sessesion to access the public data
@@ -493,4 +494,23 @@ public interface CalendarService extends CalendarServiceLegacy {
   public void confirmInvitation(String fromUserId, String confirmingEmail, String confirmingUser, int calType,String calendarId, String eventId, int answer) throws Exception ;
   
   public void addListenerPlugin(CalendarUpdateEventListener listener) throws Exception ;
+  /**
+   * The method update exited rss data when calendar has been changed
+   * @param usename 
+   * @param calendarId calendar id
+   * Added from 1.3
+   */  
+  public void updateRss(String usename, String calendarId, CalendarImportExport imp) throws Exception ;
+  
+  public void updateRss(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception ;
+  
+  /**
+   * The method update exited rss data when calendar has been changed
+   * @param usename 
+   * @param calendarId calendar id
+   * Added from 1.3
+   */  
+  public void updateCalDav(String usename, String calendarId, CalendarImportExport imp) throws Exception ;
+  
+  public void updateCalDav(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception ;
 }

@@ -42,6 +42,8 @@ public class EventQuery {
   private String[] participants ;  
   private String orderType = "ascending" ;//ascending or descending
   private String queryType = Query.XPATH ;
+  
+  private long limitedItems = 0 ;
 
   public String getNodeType() { return nodeType ; }
   public void setNodeType(String nt) { this.nodeType = nt ; }
@@ -276,5 +278,14 @@ public class EventQuery {
   }
   public String getQueryType() {
     return queryType;
+  }
+  public void setLimitedItems(int limitedItems) {
+    this.limitedItems = limitedItems;
+  }
+  public void setLimitedItems(long limitedItems) {
+    this.limitedItems = limitedItems;
+  }
+  public long getLimitedItems() {
+    return limitedItems;
   }
 }

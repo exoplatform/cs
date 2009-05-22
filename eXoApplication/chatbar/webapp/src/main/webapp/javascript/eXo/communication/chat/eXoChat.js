@@ -23,35 +23,36 @@ eXo.communication = {
 // Overwrite html entities to ignore white space from html encode
 eXo.core.HTMLUtil.entities.nbsp = null;
 
-eXo.require("eXo.communication.chat.core.DateFormat", "/chat/javascript/");
-eXo.require("eXo.communication.chat.core.Cometd", "/chat/javascript/");
-eXo.require("eXo.communication.chat.core.AdvancedDOMEvent", "/chat/javascript/");
-eXo.require("eXo.communication.chat.core.JSLogger", "/chat/javascript/");
-eXo.require("eXo.communication.chat.core.XMPPCommunicator", "/chat/javascript/");
-eXo.require("eXo.communication.chat.core.Utils", "/chat/javascript/");
-eXo.require("eXo.communication.chat.core.LocalTemplateEngine", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UIWindow", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UIPageIterator", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.TabScrollManager", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UISlideAlert", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.component.BuddyListControl", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.component.JSUIBean", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.component.JSUIBeanListener", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UIStateManager", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UIMainChatWindow", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UIPopupManager", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UIChatWindow", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UIAddContactPopupWindow", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UIChatDragDrop", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UIChatResize", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UICreateNewRoomPopupWindow", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UIRoomConfigPopupWindow", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UIJoinRoomPopupWindow", "/chat/javascript/");
+eXo.require("eXo.communication.chat.core.DateFormat", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.core.Cometd", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.core.AdvancedDOMEvent", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.core.JSLogger", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.core.XMPPCommunicator", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.core.Utils", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.core.LocalTemplateEngine", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.UIWindow", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.UIPageIterator", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.TabScrollManager", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.UISlideAlert", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.component.BuddyListControl", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.component.JSUIBean", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.component.JSUIBeanListener", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.UIStateManager", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.UIMainChatWindow", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.UIPopupManager", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.UIChatWindow", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.UIAddContactPopupWindow", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.UIChatDragDrop", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.UIChatResize", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.UICreateNewRoomPopupWindow", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.UIRoomConfigPopupWindow", "/chatbar/javascript/");
+eXo.require("eXo.communication.chat.webui.UIJoinRoomPopupWindow", "/chatbar/javascript/");
 eXo.require("eXo.communication.chat.webui.UIChatBar", "/chatbar/javascript/");
 eXo.communication.chat.eXoChat = {
   /**
    * This method use to initialize all data before call UIMainChatWindow to init all chat application component 
    */
+	alert("hello come here") ;
   init : function() {
     try {
       var thys = eXo.communication.chat.eXoChat;

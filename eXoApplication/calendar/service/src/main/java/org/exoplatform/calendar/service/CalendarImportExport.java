@@ -61,6 +61,8 @@ public interface CalendarImportExport {
    */
   public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception ;
   
+  public OutputStream exportCalendar(String username, List<String> calendarIds, String type, int number) throws Exception ;
+  
   /**
    * The method export calendar event to output stream by given event id
    * @param userSession session of current user
