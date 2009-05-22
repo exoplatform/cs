@@ -1340,7 +1340,7 @@ public Attachment getAttachment(String attId) {
             }
           }
           CalendarEvent calendarEvent  = null ; 
-          CalendarEvent oldCalendarEvent  = null ; 
+          CalendarEvent oldCalendarEvent = null;
 //        TODO cs-839
           String[] pars = uiForm.getParticipantValues().split(CalendarUtils.BREAK_LINE) ;
           String eventId = null ;
@@ -1348,7 +1348,12 @@ public Attachment getAttachment(String attId) {
             calendarEvent = new CalendarEvent() ;
           } else {
             calendarEvent = uiForm.calendarEvent_ ;
-            oldCalendarEvent = uiForm.calendarEvent_;
+            oldCalendarEvent = new CalendarEvent();
+            oldCalendarEvent.setSummary(calendarEvent.getSummary());
+            oldCalendarEvent.setDescription(calendarEvent.getDescription());
+            oldCalendarEvent.setLocation(calendarEvent.getLocation());
+            oldCalendarEvent.setFromDateTime(calendarEvent.getFromDateTime());
+            oldCalendarEvent.setToDateTime(calendarEvent.getToDateTime());
           }
           calendarEvent.setFromDateTime(from) ;
           calendarEvent.setToDateTime(to);
@@ -1508,11 +1513,11 @@ public Attachment getAttachment(String attId) {
               try {
                 
                 if(oldCalendarEvent!=null){
-                if(oldCalendarEvent.getSummary()!=null && !oldCalendarEvent.getSummary().equalsIgnoreCase(calendarEvent.getSummary()))
+                if(oldCalendarEvent.getSummary()!=null && !oldCalendarEvent.getSummary().equalsIgnoreCase(calendarEvent.getSummary())||calendarEvent.getSummary()!=null && !calendarEvent.getSummary().equalsIgnoreCase(oldCalendarEvent.getSummary()))
                   uiForm.isChangedSignificantly = true;
-                if(oldCalendarEvent.getDescription()!=null && !oldCalendarEvent.getDescription().equalsIgnoreCase(calendarEvent.getDescription()))
+                if(oldCalendarEvent.getDescription()!=null && !oldCalendarEvent.getDescription().equalsIgnoreCase(calendarEvent.getDescription())||calendarEvent.getDescription()!=null && !calendarEvent.getDescription().equalsIgnoreCase(oldCalendarEvent.getDescription()))
                   uiForm.isChangedSignificantly = true;
-                if(oldCalendarEvent.getLocation()!=null && !oldCalendarEvent.getLocation().equalsIgnoreCase(calendarEvent.getLocation()))
+                if(oldCalendarEvent.getLocation()!=null && !oldCalendarEvent.getLocation().equalsIgnoreCase(calendarEvent.getLocation())||calendarEvent.getLocation()!=null && !calendarEvent.getLocation().equalsIgnoreCase(oldCalendarEvent.getLocation()))
                   uiForm.isChangedSignificantly = true;
                 if(!oldCalendarEvent.getFromDateTime().equals(calendarEvent.getFromDateTime()))
                     uiForm.isChangedSignificantly = true;
@@ -1884,6 +1889,14 @@ public Attachment getAttachment(String attId) {
       CalendarSetting calSetting = calendarPortlet.getCalendarSetting() ;
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       //TODO cs-764
+      if(!uiForm.isReminderValid()) {
+        uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues} ));
+        uiForm.setSelectedTab(TAB_EVENTREMINDER) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      else {
       String sendOption = uiForm.getSendOption();
       if(sendOption.equalsIgnoreCase(CalendarSetting.ACTION_BYSETTING))
         sendOption = calSetting.getSendOption(); 
@@ -1901,6 +1914,7 @@ public Attachment getAttachment(String attId) {
         else
           uiForm.SaveAndNoAsk(event, false);
       }
+     }
     }
   }
   static  public class OnChangeActionListener extends EventListener<UIEventForm> {
