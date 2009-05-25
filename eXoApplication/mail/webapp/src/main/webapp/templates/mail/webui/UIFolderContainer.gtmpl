@@ -72,8 +72,8 @@
     }
   %>
   
-  <div class="Icon Folder $icon $cssClass ">
-    <a href="$actionLink" folder="$id"><%=_ctx.appRes(uicomponent.getName() + ".label." + name)%>
+  <div class="Icon Folder $icon $cssClass" folder="$id">
+    <a class="FolderLink" href="$actionLink"><%=_ctx.appRes(uicomponent.getName() + ".label." + name)%>
       <% 
          print "<span id=\"" + id + "\" class=\"MailQuantity\">" ;
          if(msgQuantity > 0) print "($msgQuantity)";
