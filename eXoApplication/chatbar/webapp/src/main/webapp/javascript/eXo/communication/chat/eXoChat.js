@@ -52,7 +52,6 @@ eXo.communication.chat.eXoChat = {
   /**
    * This method use to initialize all data before call UIMainChatWindow to init all chat application component 
    */
-	alert("hello come here") ;
   init : function() {
     try {
       var thys = eXo.communication.chat.eXoChat;
