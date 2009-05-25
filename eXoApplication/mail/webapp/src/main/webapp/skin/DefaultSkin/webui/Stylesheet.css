@@ -1940,3 +1940,13 @@
 .UIMailPortlet .UIPopupActionEventContainer .SelectFileFrame {
 	width: 300px;
 }
+
+.UIMessagePreview .ReadingPaneBar .TextBackToList{
+	float:left; 
+	line-height:22px; 
+	color:#2276ab;
+}
+
+.UIMessagePreview .ReadingPaneBar .TextBackToList a{
+	color:#2276ab;
+}

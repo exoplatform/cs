@@ -33,6 +33,7 @@
 	    <div>
 	      <a href="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %>"><span class="BackToList"></span></a>
 	    </div>
+	    <div class="TextBackToList"><a href="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %>">Back to list</a></div>
 	    <div class="Subject">
 		<% } else if (uicomponent.getParent().isVerticalLayout()) { %>
       <div>
