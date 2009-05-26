@@ -2636,8 +2636,10 @@ public class JCRDataStorage{
           savePublicEvent(calendarId, event, false) ;
         }
       }
+
     } catch (Exception e) {
-      System.out.println("\n\n confirmInvitation " + e.getClass().toString()) ;
+      System.out.println("\n\n confirmInvitation " + e.getClass().toString());
+      throw new  Exception(e.getClass().toString(),e.fillInStackTrace());
       //e.printStackTrace() ;
     } finally {
       session.close() ;

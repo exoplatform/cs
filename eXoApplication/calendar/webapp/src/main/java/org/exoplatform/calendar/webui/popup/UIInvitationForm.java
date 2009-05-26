@@ -165,12 +165,15 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
       UIPopupContainer uiParentPopup = (UIPopupContainer)uiInvitationForm.getParent() ;
       UIPopupContainer uiGrandParentPopup = uiParentPopup.getAncestorOfType(UIPopupContainer.class) ;
       UIEventForm uiEventForm = uiGrandParentPopup.getChild(UIEventForm.class) ;
+      UIEventShareTab uiEventShareTab =  uiEventForm.getChild(UIEventShareTab.class);
+      Long currentPage = uiEventShareTab.getCurrentPage();
       uiEventForm.invitationMsg_ = uiInvitationForm.getUIFormTextAreaInput(FIELD_INVITATION_MSG).getValue() ;
       uiEventForm.participantList_ = uiInvitationForm.getParticipantValue() ;
       if(uiEventForm.participantList_!= null){
       uiEventForm.setParticipant(uiEventForm.participantList_);
       uiEventForm.setParticipantStatus(uiEventForm.participantList_);
-      uiEventForm.getChild(UIEventShareTab.class).setParticipantStatusList(uiEventForm.getParticipantStatusList());
+      uiEventShareTab.setParticipantStatusList(uiEventForm.getParticipantStatusList());
+      uiEventShareTab.updateCurrentPage(currentPage.intValue());
       }
       UIPopupAction uiPopup = uiParentPopup.getAncestorOfType(UIPopupAction.class) ;
       uiPopup.deActivate() ;

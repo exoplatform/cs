@@ -27,6 +27,7 @@ import org.exoplatform.calendar.webui.popup.UIEventForm.ParticipantStatus;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
@@ -46,25 +47,28 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
 @ComponentConfig(
                  template = "app:/templates/calendar/webui/UIPopup/UIEventShareTab.gtmpl",
                  events = {
-                     @EventConfig(listeners = UIEventShareTab.ShowPageActionListener.class, phase = Phase.PROCESS)
+                     @EventConfig(listeners = UIEventShareTab.ShowPageActionListener.class, phase = Phase.PROCESS),
+                     @EventConfig(listeners = UIEventForm.DeleteActionListener.class, confirm = "UIEventForm.msg.confirm-delete")
                  }
 ) 
 public class UIEventShareTab extends UIFormInputWithActions {
 
+  public static String[] BEAN_FIELD = {"participant","status"};
+  private static String[] ACTION = {"Delete"} ;
   final public static String FIELD_SHARE = "shareEvent".intern() ;
   final public static String FIELD_STATUS = "status".intern() ;
   final public static String FIELD_SEND = "send".intern();
   final public static String FIELD_INFO =  "info".intern() ;
   final public static String FIELD_ANSWER = "answer".intern() ;
-  //final public static String FIELD_
   private Map<String, List<ActionData>> actionField_ = new HashMap<String, List<ActionData>>() ;
-  private UIPageIterator uiPageIterator_ ;
   
   public UIEventShareTab(String id) throws Exception {
     super(id);
     setComponentConfig(getClass(), null) ;
-    uiPageIterator_ = new UIPageIterator() ;
-    uiPageIterator_.setId("UIParticipantList") ;
+    UIGrid categoryList = addChild(UIGrid.class, null , "UIParticipantList") ;
+    categoryList.configure("participant", BEAN_FIELD, ACTION) ;
+    categoryList.getUIPageIterator().setId("ParticipantListIterator");
+    setParticipantStatusList(new LinkedList<ParticipantStatus>()) ;
   }
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;
@@ -81,23 +85,22 @@ public class UIEventShareTab extends UIFormInputWithActions {
   }
   public List<ActionData> getActionField(String fieldName) {return actionField_.get(fieldName) ;}
   
-
   public List<ParticipantStatus> getData() throws Exception {
-    return new LinkedList<ParticipantStatus>(uiPageIterator_.getCurrentPageData());
+    return new LinkedList<ParticipantStatus>(getChild(UIGrid.class).getUIPageIterator().getCurrentPageData());
   }
   
-  public UIPageIterator  getUIPageIterator() {  return uiPageIterator_ ; }
+  public UIPageIterator  getUIPageIterator() {  return getChild(UIGrid.class).getUIPageIterator() ; }
   
-  public long getAvailablePage(){ return uiPageIterator_.getAvailablePage() ;}
+  public long getAvailablePage(){ return getChild(UIGrid.class).getUIPageIterator().getAvailablePage() ;}
   
-  public long getCurrentPage() { return uiPageIterator_.getCurrentPage();}
+  public long getCurrentPage() { return getChild(UIGrid.class).getUIPageIterator().getCurrentPage();}
   
   public void setParticipantStatusList(List<ParticipantStatus> participantStatusList) throws Exception {
     ObjectPageList objPageList = new ObjectPageList(participantStatusList, 10) ;
-    uiPageIterator_.setPageList(objPageList) ;
+    getChild(UIGrid.class).getUIPageIterator().setPageList(objPageList) ;
   }
   protected void updateCurrentPage(int page) throws Exception{
-    uiPageIterator_.setCurrentPage(page) ;
+    getChild(UIGrid.class).getUIPageIterator().setCurrentPage(page) ;
   }
   static  public class ShowPageActionListener extends EventListener<UIEventShareTab> {
     public void execute(Event<UIEventShareTab> event) throws Exception {
@@ -107,5 +110,6 @@ public class UIEventShareTab extends UIFormInputWithActions {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiEventShareTab);           
     }
   }
+  
  
 }

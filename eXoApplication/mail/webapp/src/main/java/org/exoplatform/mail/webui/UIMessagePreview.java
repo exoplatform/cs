@@ -92,6 +92,11 @@ import org.exoplatform.webui.event.EventListener;
 )
 
 public class UIMessagePreview extends UIComponent {
+  public static String QUESTION = "question".intern();
+  public static String ANSWER_IMPORT = "yes-import".intern();
+  public static String ANSWER_YES = "yes".intern();
+  public static String ANSWER_NO = "no".intern();
+  public static String ANSWER_MAYBE = "maybe".intern();
   private Message selectedMessage_ ;
   private List<Message> showedMsgs = new ArrayList<Message>() ;
   private boolean isHideMessageList_ = false;
@@ -141,9 +146,11 @@ public class UIMessagePreview extends UIComponent {
         calendarSrv.getUserEventByCalendar(MailUtils.getEventFrom(msg), calIds).iterator() ;
       while (iter.hasNext()) {
         calEvent = iter.next() ;
-        if(MailUtils.getCalendarEventId(msg).equals(calEvent.getId())) ;
-        break ;
+        if(MailUtils.getCalendarEventId(msg).equals(calEvent.getId()))
+          break ;
       }
+      if(!MailUtils.getCalendarEventId(msg).equals(calEvent.getId()))
+        calEvent = null;
     } else if(Calendar.TYPE_SHARED == Integer.parseInt(MailUtils.getEventType(msg))) {
       //calendarSrv.get
     }
@@ -171,6 +178,35 @@ public class UIMessagePreview extends UIComponent {
     RepositoryService rService = getApplicationComponent(RepositoryService.class) ;    
     return rService.getCurrentRepository().getConfiguration().getName() ;
   }
+  
+  public String getAnswerStatus() throws Exception{     
+    CalendarEvent calEvent = getEvent(getMessage());
+    if(calEvent == null) return null;
+    String[] parStatus = calEvent.getParticipantStatus();
+    //
+    UIMailPortlet uiMailPortlet = this.getAncestorOfType(UIMailPortlet.class);
+    String currentUser = uiMailPortlet.getCurrentUser();
+    UISelectAccount uiSelectAcc = uiMailPortlet.findFirstComponentOfType(UISelectAccount.class);
+    String accId = uiSelectAcc.getSelectedValue();
+    MailService mailSvr = uiSelectAcc.getApplicationComponent(MailService.class) ;
+    Account account = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), currentUser, accId);
+    String currentEmail ="";
+    if ( account != null) {
+      currentEmail = account.getEmailAddress();
+    }
+    //
+    for (String par : parStatus) {
+      String[] entry = par.split(":");
+      if(entry[0].equalsIgnoreCase(currentUser)||entry[0].equalsIgnoreCase(currentEmail)){
+        if(entry.length > 1)
+          return entry[1];
+        else
+          return new String("");
+      } 
+    }
+    return null;
+  }
+  
   public static class DownloadAttachmentActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
@@ -523,8 +559,8 @@ public class UIMessagePreview extends UIComponent {
             uiEventForm.initForm(calService.getCalendarSetting(MailUtils.getCurrentUser()), calEvent) ;
             uiEventForm.isAddNew_ = true ;
             uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
-            calService.confirmInvitation(fromUserId ,confirmingEmail,confirmingUser, calType, calendarId, eventId, 1) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+            calService.confirmInvitation(fromUserId ,confirmingEmail,confirmingUser, calType, calendarId, eventId, 1) ;
           }
         }  else {
           calService.confirmInvitation(fromUserId ,confirmingEmail,confirmingUser, calType, calendarId, eventId, Integer.parseInt(answer)) ;

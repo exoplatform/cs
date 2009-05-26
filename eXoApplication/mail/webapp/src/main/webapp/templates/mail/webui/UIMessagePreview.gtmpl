@@ -412,11 +412,27 @@
                   <div class="InvitationBG">
                   <%=msg.getMessageBody()%>
                   <div class="ActionBox">
-                    <span style="font-weight: bold ;">Will you attend ?</span> 
-	                    <a href="<%=uicomponent.event('AnswerInvitation', '3&messageId=' + msg.getId())%>">Yes and Import</a> -
-	                    <a href="<%=uicomponent.event('AnswerInvitation', '1&messageId=' + msg.getId())%>">Yes</a> - 
-	                    <a href="<%=uicomponent.event('AnswerInvitation', '0&messageId=' + msg.getId())%>">No</a> - 
-	                    <a href="<%=uicomponent.event('AnswerInvitation', '2&messageId=' + msg.getId())%>">Maybe</a> 
+                  	<%  
+                  		String status = uicomponent.getAnswerStatus();
+                  		display0 = new String("");
+                  		display1 = new String("");
+                  		display2 = new String("");
+                  		display3 = new String("");
+                  		if(status != null && status.trim().length()> 0){
+                  			if(status.equals("yes"))
+                  				display1="display:none;";
+                  			else if(status.equals("no"))
+                  						display2="display:none;";
+                 						 else 
+                 						 	display3="display:none;";
+                 			}
+                  		
+                  	%>
+                    <span style="font-weight: bold ;"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.QUESTION)%> 
+	                    <a href="<%=uicomponent.event('AnswerInvitation', '3&messageId=' + msg.getId())%>" style="$display0"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_IMPORT)%></a>
+	                    <span style="$display1"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '1&messageId=' + msg.getId())%>" style="$display1"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_YES)%></a>
+	                    <span style="$display2"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '0&messageId=' + msg.getId())%>" style="$display2"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_NO)%></a>
+	                    <span style="$display3"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '2&messageId=' + msg.getId())%>" style="$display3"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_MAYBE)%></a> 
                     </span>
                   </div>
                   </div> 
