@@ -47,12 +47,9 @@ import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -272,7 +269,6 @@ public class UIAddressBooks extends UIComponent {
         UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null, null) ;
         uiExportForm.setId("ExportForm");
         ContactService contactService = ContactUtils.getContactService() ;
-        SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
         String username = ContactUtils.getCurrentUser() ;
         Map<String, String> privateGroup = uiAddressBook.privateAddressBookMap_ ;
         if (privateGroup.containsKey(addressBookId)) {
@@ -443,8 +439,7 @@ public class UIAddressBooks extends UIComponent {
       uiPopupContainer.setId("UIPermissionGroupForm") ;
       UIAddEditPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIAddEditPermission.class, null, null);
       ContactService contactService = ContactUtils.getContactService();
-      String username = ContactUtils.getCurrentUser();
-      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;  
+      String username = ContactUtils.getCurrentUser(); 
       uiAddNewEditPermission.initGroup(contactService.getPersonalAddressBook(username, groupId)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       //event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
@@ -691,7 +686,6 @@ public class UIAddressBooks extends UIComponent {
 
       ContactService service = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      SessionProvider provide = SessionProviderFactory.createSessionProvider() ;
       ContactPageList pageList = null ;
       if (uiAddressBook.privateAddressBookMap_.containsKey(groupId)) {
         pageList = service.getPersonalContactsByAddressBook(username, groupId) ;

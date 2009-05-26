@@ -63,11 +63,16 @@ public class ContactPageList extends JCRPageList {
     username_ = username;
     value_ = value;
     contactType_ = type;
+    Session session = getJCRSession(username) ;
+    try {    
+      setAvailablePage(((QueryResultImpl) createXPathQuery(session, username, value_).execute()).getTotalSize()) ;
+    } finally {
+      session.logout() ;
+    }
   }
 
   protected void populateCurrentPage(long page, String username) throws Exception {    
     long pageSize = getPageSize() ;
-    long totalPage = 0;
     Node currentNode;
     Session session = getJCRSession(username) ;
     
@@ -84,11 +89,11 @@ public class ContactPageList extends JCRPageList {
       queryImpl.setLimit(pageSize);
       QueryResult result = queryImpl.execute();
       iter_ = result.getNodes();
-      totalPage = ((QueryResultImpl) result).getTotalSize() ;
+      
     } finally {
       session.logout() ;
     }
-    setAvailablePage(totalPage) ;
+    
     
     // cs- 1017
     /*if (iter_ == null) {
@@ -129,14 +134,14 @@ public class ContactPageList extends JCRPageList {
     
     
     
-    boolean containDefault = false;
+   // boolean containDefault = false;
     currentListPage_ = new ArrayList<Contact>();
     for (int i = 0; i < pageSize; i++) {
       if (iter_ != null && iter_.hasNext()) {
         currentNode = iter_.nextNode();
         if (currentNode.isNodeType("exo:contact")) {
           Contact contact = getContact(currentNode, contactType_);
-          if (contact.getId().equalsIgnoreCase(username_)
+          /*if (contact.getId().equalsIgnoreCase(username_)
               && (contactType_.equals(JCRDataStorage.PERSONAL))) {
             if (page > 1) {
               i--;
@@ -144,7 +149,7 @@ public class ContactPageList extends JCRPageList {
             }
             currentListPage_.add(0, contact);
             containDefault = true;
-          } else
+          } else*/
             currentListPage_.add(contact);
         }
       } else {
@@ -152,7 +157,7 @@ public class ContactPageList extends JCRPageList {
       }
     }
     // add to take default contact to first of list
-    if (page == 1 && !containDefault && contactType_.equals(JCRDataStorage.PERSONAL)
+/*    if (page == 1 && !containDefault && contactType_.equals(JCRDataStorage.PERSONAL)
         && value_.contains(NewUserListener.DEFAULTGROUP + username_) && iter_ != null) {
       iter_.skip(0);
       while (iter_.hasNext()) {
@@ -168,7 +173,7 @@ public class ContactPageList extends JCRPageList {
           break;
         }
       }
-    }
+    }*/
     iter_ = null;
   }
 

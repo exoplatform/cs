@@ -470,13 +470,11 @@ public class JCRDataStorage {
     try {
       sProvider = createSessionProvider();
       Node userContactsHome = getPersonalContactsHome(sProvider, owner);
-      QueryManager qm = userContactsHome.getSession().getWorkspace().getQueryManager();
       String queryString = new StringBuffer("/jcr:root" + userContactsHome.getPath()
           + "//element(*,exo:contact)[@exo:categories='").append(addressBookId)
                                                          .append("']")
                                                          .append("order by @exo:fullName,@exo:id ascending")
                                                          .toString();
-      Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       ContactPageList pageList = new ContactPageList(owner,
                                                      10,
                                                      queryString,
