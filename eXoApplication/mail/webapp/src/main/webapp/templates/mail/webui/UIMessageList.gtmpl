@@ -470,7 +470,21 @@
     		<tr>
     			<th style="width: 20px; padding-left: 7px; " class="Border"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.id+ '.label.check-all') %>" value="4"/></th>
     			<th style="width: 24px;"><div class="StarredIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div></th>
-    		  <th style="padding-left: 8px; width: 20%;">
+    			<% if (uicomponent.viewMode != uicomponent.MODE_LIST && uicomponent.viewMode != uicomponent.MODE_GROUP_BY_DATE) {%>
+           <th style="width: 24px;"><div class="TotalMessageIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.total-messages-in-conversation') %>"><span></span></div></th>
+          <%}%>
+          <th style="padding-left: 24px;width:40%;">
+          <%
+            String sortedBySubject = uicomponent.event("Sort",Utils.EXO_SUBJECT);
+              String classArrowSubject = "";
+              if (uicomponent.getSortedBy().equals(Utils.EXO_SUBJECT)) {
+                if (uicomponent.isAscending()) classArrowSubject = "UpArrow1Icon";
+                else classArrowSubject = "DownArrow1Icon"
+              }
+          %>
+           <a href = "$sortedBySubject"><div class="$classArrowSubject" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-subject') %>" style="width: 95%; cursor: pointer; margin-top: 3px;"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %></div></a>
+          </th>
+    			<th style="padding-left: 8px; width: 20%;">
     		    <%
     		      String sortedBySender = uicomponent.event("Sort",Utils.EXO_FROM);
               String classArrowFrom = "";
@@ -489,34 +503,20 @@
     		    %>
     		  	<a href = "$sortedBySender" ><div class="$classArrowFrom" style="width: 90%; cursor: pointer; margin-top: 3px;" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-sender') %>">$head</div></a>
     		  </th>
+    		  <th style="width: 80px; padding-left: 8px; border-right: none;" >
+          <%
+             String sortedByReceivedDate = uicomponent.event("Sort",Utils.EXO_RECEIVEDDATE);
+              String classArrowDate = "";
+              if (uicomponent.getSortedBy().equals(Utils.EXO_RECEIVEDDATE)) {
+                if (uicomponent.isAscending()) classArrowDate = "UpArrow1Icon";
+                else classArrowDate = "DownArrow1Icon"
+              }
+          %>
+            <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-date-time') %>" ><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %></div></a>
+          </th>
     		  <th style="width: 24px;">
     		    <a hreft = ""><div class="AttachmentIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.attachment') %>"><span></span></div></a>
     		  </th>
-   	      <th style="padding-left: 24px;width:40%;">
-       	   <%
-             String sortedBySubject = uicomponent.event("Sort",Utils.EXO_SUBJECT);
-           	   String classArrowSubject = "";
-               if (uicomponent.getSortedBy().equals(Utils.EXO_SUBJECT)) {
-                 if (uicomponent.isAscending()) classArrowSubject = "UpArrow1Icon";
-                 else classArrowSubject = "DownArrow1Icon"
-               }
-           %>
-    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-subject') %>" style="width: 95%; cursor: pointer; margin-top: 3px;"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %></div></a>
-    		  </th>
-          <% if (uicomponent.viewMode != uicomponent.MODE_LIST && uicomponent.viewMode != uicomponent.MODE_GROUP_BY_DATE) {%>
-   	        <th style="width: 24px;"><div class="TotalMessageIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.total-messages-in-conversation') %>"><span></span></div></th>
-          <%}%>
-   	      <th style="width: 80px; padding-left: 8px; border-right: none;" >
-         	  <%
-         	     String sortedByReceivedDate = uicomponent.event("Sort",Utils.EXO_RECEIVEDDATE);
-             	  String classArrowDate = "";
-                if (uicomponent.getSortedBy().equals(Utils.EXO_RECEIVEDDATE)) {
-                  if (uicomponent.isAscending()) classArrowDate = "UpArrow1Icon";
-                  else classArrowDate = "DownArrow1Icon"
-                }
-            %>
-    		      <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-date-time') %>" ><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %></div></a>
-   	      </th>
    	      <th style="width: 50px; padding-left: 8px; border-left: 1px solid #d2d4dc;">
        	    <%
                String sortedBySize = uicomponent.event("Sort",Utils.EXO_SIZE);
@@ -560,36 +560,22 @@
                 %>
               </td>
               <td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
-              <td class="$readStatus">
-                <%
-                  String sender = "";
-                  if (uicomponent.selectedSentFolder() || uicomponent.selectedDraftFolder()) {
-                    try {
-                      InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
-                      for (j in 0..(toAddress.length-1)) {
-                        InternetAddress address = toAddress[j];
-                        if (j > 0) sender += ",";
-                        sender += Utils.getPersonal(address);
-                      }
-                    } catch(Exception) {}
-                  } else {
-                    sender = Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0]) ;
-                  }
-                %>
-                <a href="$actionLink"> $sender </a>
-              </td>
-              <td style="padding: 0px auto;">
+              <% if (uicomponent.viewMode != uicomponent.MODE_LIST && uicomponent.viewMode != uicomponent.MODE_GROUP_BY_DATE) {%>
+              <td class="text">
                 <% 
-                  if (msg.hasAttachment() && msg.attIsLoadedProperly()) {
+                  if (msg.isRootConversation()){
                 %>
-                	<a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
-                <%} else if (!msg.attIsLoadedProperly()) { %>
-                	<a href="$actionLink"><div class="WarningAttachmentIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.there-are-attachments-could-not-be-loaded-properly') %>"><span></span></div></a>
-                <%	
+                   &nbsp; <% 
+                      int nom = 1 ;
+                      for (String id : msg.getGroupedMessageIds()) if (uicomponent.messageList_.containsKey(id)) nom++ ;
+                      print(nom);
+                    %>
+                    &nbsp;
+                <%
                   }
                 %>
               </td>
-
+              <%}%>
               <td class="$readStatus"><div style="_width: 600%;">
               <% 
                 if (uicomponent.getMessageFilter().getName().equals("Search")) {
@@ -633,34 +619,45 @@
                 <div style="clear: left;"><span></span></div>
                 </div>
               </td>          
-              <% if (uicomponent.viewMode != uicomponent.MODE_LIST && uicomponent.viewMode != uicomponent.MODE_GROUP_BY_DATE) {%>
-                <td class="text">
-                  <% 
-                    if (uicomponent.viewMode == uicomponent.MODE_LIST) {
-                  %>
-                    ( 1 )
-                  <% 
-                    } else if (msg.isRootConversation()){
-                  %>
-                    ( <% 
-                        int nom = 1 ;
-                        for (String id : msg.getGroupedMessageIds()) if (uicomponent.messageList_.containsKey(id)) nom++ ;
-                        print(nom);
-                      %> )
-                  <%
-                    }
-                  %>
-                </td>
-              <%}%>
               <td class="$readStatus">
-                <a href="$actionLink">
-                  <%if (msg.getReceivedDate() != null) { %>
-                    <%=MailUtils.formatDate(msg.getReceivedDate(), locale)%>
-                  <%} else if (msg.getSendDate() != null){%>
-                    <%=MailUtils.formatDate(msg.getSendDate(), locale)%>
-                  <%}%>
-                </a>
+                <%
+                  String sender = "";
+                  if (uicomponent.selectedSentFolder() || uicomponent.selectedDraftFolder()) {
+                    try {
+                      InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
+                      for (j in 0..(toAddress.length-1)) {
+                        InternetAddress address = toAddress[j];
+                        if (j > 0) sender += ",";
+                        sender += Utils.getPersonal(address);
+                      }
+                    } catch(Exception) {}
+                  } else {
+                    sender = Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0]) ;
+                  }
+                %>
+                <a href="$actionLink"> $sender </a>
               </td>
+              <td class="$readStatus">
+              <a href="$actionLink">
+                <%if (msg.getReceivedDate() != null) { %>
+                  <%=MailUtils.formatDate(msg.getReceivedDate(), locale)%>
+                <%} else if (msg.getSendDate() != null){%>
+                  <%=MailUtils.formatDate(msg.getSendDate(), locale)%>
+                <%}%>
+              </a>
+              </td>
+              <td style="padding: 0px auto;">
+                <% 
+                  if (msg.hasAttachment() && msg.attIsLoadedProperly()) {
+                %>
+                	<a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
+                <%} else if (!msg.attIsLoadedProperly()) { %>
+                	<a href="$actionLink"><div class="WarningAttachmentIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.there-are-attachments-could-not-be-loaded-properly') %>"><span></span></div></a>
+                <%	
+                  }
+                %>
+              </td>
+
               <td class="$readStatus">
                 <a href="$actionLink">
                   <%=MailUtils.convertSize(msg.getSize())%>
