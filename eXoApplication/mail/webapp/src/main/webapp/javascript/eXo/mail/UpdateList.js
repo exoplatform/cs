@@ -61,15 +61,9 @@ UpdateList.prototype.update = function(obj){
 		  td.style.padding = "0px auto";
 		  td.innerHTML = "<a " + href + "><div class='UnStarredIcon'><span></span></div></a>";
 		  tr.appendChild(td);
-		  		
-		  td = document.createElement("td");
-		  td.className = "UnreadItem";
-		  td.innerHTML = "<a " + href + "> " + data.from + "</a>";
-		  tr.appendChild(td);
 		  
 		  td = document.createElement("td");
-		  td.className = "UnreadItem";
-		  td.innerHTML = "<a " + href + "> </a>";
+		  td.innerHTML = "<a " + href + "> &nbsp 1 &nbsp </a>";
 		  tr.appendChild(td);
 		  
 		  td = document.createElement("td");
@@ -77,13 +71,20 @@ UpdateList.prototype.update = function(obj){
 		  td.innerHTML = "<a " + href + "> " + data.subject + "</a>";
 		  tr.appendChild(td);
 		  
+		  
 		  td = document.createElement("td");
-		  td.innerHTML = "<a " + href + "> ( 1 ) </a>";
+		  td.className = "UnreadItem";
+		  td.innerHTML = "<a " + href + "> " + data.from + "</a>";
 		  tr.appendChild(td);
 		  
 		  td = document.createElement("td");
 		  td.className = "UnreadItem";
 		  td.innerHTML = "<a " + href + ">" + data.date + " </a>";
+		  tr.appendChild(td);
+		  
+		  td = document.createElement("td");
+		  td.className = "UnreadItem";
+		  td.innerHTML = "<a " + href + "> </a>";
 		  tr.appendChild(td);
 		  
 		  td = document.createElement("td");
