@@ -72,7 +72,13 @@
 
 .UIMessageCompose .MailListActionsbar .ControlButton .PriorityIcon {
 	background: url('icons/24x24/MessagePriority.gif') no-repeat left top; /* orientation=lt */
-		background: url('icons/24x24/MessagePriority.gif') no-repeat right top; /* orientation=rt */
+	background: url('icons/24x24/MessagePriority.gif') no-repeat right top; /* orientation=rt */
+	height: auto;
+}
+
+.UIMessageCompose .MailListActionsbar .ControlButton .OptionsIcon {
+	background: url('icons/24x24/MessageOptions.gif') no-repeat left top; /* orientation=lt */
+	background: url('icons/24x24/MessageOptions.gif') no-repeat right top; /* orientation=rt */
 	height: auto;
 }
 
