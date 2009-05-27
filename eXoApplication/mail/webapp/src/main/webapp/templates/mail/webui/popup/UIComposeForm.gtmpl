@@ -159,7 +159,7 @@
 					      			</div>
 					      		<% /*End Popup Menu*/ %>
 									</div>
-
+									<div class="SeparatorLine"><span></span></div>
 									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
 										<div class="IconHolder OptionsIcon">
 											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.options") %></div>
