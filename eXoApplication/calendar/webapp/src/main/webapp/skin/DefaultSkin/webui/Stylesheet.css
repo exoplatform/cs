@@ -250,15 +250,18 @@
 }
 
 .UICalendarPortlet .SelectMemberIcon {
-	width: 16px ; height: 16px;
+	width: 20px ; 
+	height: 16px;
 }
 
 .UICalendarPortlet .SelectUserIcon {
-	width: 16px ; height: 16px;
+	width: 20px ; 
+	height: 16px;
 }
 
 .UICalendarPortlet .SelectGroupIcon {
-	width: 16px ; height: 16px;
+	width: 20px ; 
+	height: 16px;
 }
 
 .UICalendarPortlet .UISharedForm .UIFormGrid {

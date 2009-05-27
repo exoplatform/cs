@@ -12,6 +12,6 @@
 		<div class="SearchIcon" title="<%=uiform.getLabel('Search')%>"><span></span></div>
 	</div>
 	<%uiform.renderChild("value")%>
-	<div style="clear:right;"><span></span></div>
+	<div class="Clear"><span></span></div>
 </div>
 <%uiform.end();%>

@@ -42,3 +42,9 @@
 	margin: 8px 2px 0px 0px; /* orientation=rt */
 	cursor: pointer;
 }
+
+.UICalendarPortlet .UISearchForm .Clear{
+	clear: right; /* orientation=lt */
+	clear: left; /* orientation=rt */
+}
+

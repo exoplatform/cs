@@ -33,8 +33,10 @@
 
 .UIChat .TextContent {
   font-weight: bold;
-  float: left;
-  padding-left: 8px;
+  float: left; /* orientation=lt */
+  float: right; /* orientation=rt */
+  padding-left: 8px; /* orientation=lt */
+  padding-right: 8px; /* orientation=rt */
 }
 
 .UIChat .SeperatorLine {
@@ -1447,21 +1449,27 @@ form {
 }
 
 .UIChatBarPortlet .Actionbar .LeftIconButton {
-	padding-left:4px;
-	background:url(DefaultSkin/background/LeftIconButtonBG4x26.gif) no-repeat left top;
+	padding-left:4px; /* orientation=lt */
+	padding-right:4px; /* orientation=rt */
+	background:url(DefaultSkin/background/LeftIconButtonBG4x26.gif) no-repeat left top; /* orientation=lt */
+	background:url(DefaultSkin/background/LeftIconButtonBG4x26-rt.gif) no-repeat right top; /* orientation=rt */
 } 
 
 .UIChatBarPortlet .Actionbar .LeftIconButton:hover {
-	background:url(DefaultSkin/background/LeftIconButtonHightLightBG4x26.gif) no-repeat left top;
+	background:url(DefaultSkin/background/LeftIconButtonHightLightBG4x26.gif) no-repeat left top; /* orientation=lt */
+	background:url(DefaultSkin/background/LeftIconButtonHightLightBG4x26-rt.gif) no-repeat right top; /* orientation=rt */
 }
 
 .UIChatBarPortlet .Actionbar .RightIconButton {
-	padding-right:4px;
-	background:url(DefaultSkin/background/RightIconButtonBG4x26.gif) no-repeat right top;
+	padding-right:4px; /* orientation=lt */
+	padding-left:4px; /* orientation=rt */
+	background:url(DefaultSkin/background/RightIconButtonBG4x26.gif) no-repeat right top; /* orientation=lt */
+	background:url(DefaultSkin/background/RightIconButtonBG4x26-rt.gif) no-repeat left top; /* orientation=rt */
 } 
 
 .UIChatBarPortlet .Actionbar .RightIconButton:hover {
-	background:url(DefaultSkin/background/RightIconButtonHightLightBG4x26.gif) no-repeat right top;
+	background:url(DefaultSkin/background/RightIconButtonHightLightBG4x26.gif) no-repeat right top; /* orientation=lt */
+	background:url(DefaultSkin/background/RightIconButtonHightLightBG4x26-rt.gif) no-repeat left top; /* orientation=rt */
 }
 
 .UIChatBarPortlet .Actionbar .CenterIconButton {
@@ -1474,11 +1482,13 @@ form {
 }
 
 .UIChatBarPortlet .SeperatorLine {
-	background:transparent url(/chatbar/skin/DefaultSkin/background/SeperatorLine1x30.gif) no-repeat;
-	float:left;
+	background: url(/chatbar/skin/DefaultSkin/background/SeperatorLine1x30.gif) no-repeat;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	height:30px;
 	line-height:30px;
-	margin:0px 2px 0px 4px ;
+	margin:0px 2px 0px 4px; /* orientation=lt */
+	margin:0px 4px 0px 2px; /* orientation=rt */
 	width:2px;
 }
 
