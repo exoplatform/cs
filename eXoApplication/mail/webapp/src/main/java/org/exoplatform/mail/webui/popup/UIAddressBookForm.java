@@ -17,8 +17,10 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
@@ -60,10 +62,12 @@ import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
       @EventConfig(listeners = UIAddressBookForm.AddContactActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.EditContactActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.ChangeGroupActionListener.class),
+      @EventConfig(listeners = UIAddressBookForm.CheckContactActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.SelectContactActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.SendEmailActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.DeleteContactActionListener.class, confirm="UIAddressBookForm.msg.confirm-remove-contact"),
-      @EventConfig(listeners = UIAddressBookForm.CloseActionListener.class)
+      @EventConfig(listeners = UIAddressBookForm.CloseActionListener.class),
+      @EventConfig(listeners = UIAddressBookForm.SendMultiEmailActionListener.class)
     }
 )
 public class UIAddressBookForm extends UIForm implements UIPopupComponent{
@@ -72,6 +76,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   private Contact selectedContact ;
   LinkedHashMap<String, Contact> contactMap_ = new LinkedHashMap<String, Contact>() ;
   List<Contact> contactList_ = new ArrayList<Contact>();
+  HashMap<String, String> checkedContactMap = new LinkedHashMap<String, String>();
   
   public UIAddressBookForm() throws Exception {
     UIFormSelectBoxWithGroups uiSelectGroup = new UIFormSelectBoxWithGroups(SELECT_GROUP, SELECT_GROUP, getOptions());
@@ -118,6 +123,34 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   public Contact getSelectedContact() { return this.selectedContact; }
   public void setSelectedContact(Contact contact) { this.selectedContact = contact; }
   
+  public HashMap<String, String> getCheckedContactMap() {
+    return checkedContactMap;
+  }
+
+  public void flipFlopCheckedContactMap(String contactId) {
+    for(Entry<String, String> entry: checkedContactMap.entrySet()){
+      if(entry.getKey().equals(contactId)){
+        if(entry.getValue().equals("0"))
+          checkedContactMap.put(entry.getKey(), "1");
+        else
+          checkedContactMap.put(entry.getKey(), "0");
+        break;
+      }
+    }
+  }
+
+  public boolean isCheckedContact(String contactId){
+    for(Entry<String, String> entry: checkedContactMap.entrySet()){
+      if(entry.getKey().equals(contactId)){
+        if(entry.getValue().equals("0"))
+          return false;
+        else
+          return true;
+      }
+    }
+    return false;
+  }
+  
   public DownloadService getDownloadService() { 
     return getApplicationComponent(DownloadService.class) ; 
   }
@@ -140,9 +173,16 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       contactList = contactSrv.searchContact(username, ctFilter).getAll();
     }
     contactMap_.clear();
-    for (Contact ct : contactList) contactMap_.put(ct.getId(), ct);
+    checkedContactMap.clear();
+    for (Contact ct : contactList) {
+      contactMap_.put(ct.getId(), ct);
+      checkedContactMap.put(ct.getId(),"0");
+    }
     contactList_ = new ArrayList<Contact>(contactMap_.values());
-    if (contactList_.size() > 0) selectedContact = contactList_.get(0);
+    if (contactList_.size() > 0) {
+      selectedContact = contactList_.get(0);
+      checkedContactMap.put(selectedContact.getId(),"1");
+    }
     else selectedContact = null;
   }
   
@@ -215,7 +255,16 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiAddressBook = event.getSource() ;
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
-      uiAddressBook.setSelectedContact(uiAddressBook.contactMap_.get(contactId));
+      uiAddressBook.setSelectedContact(uiAddressBook.contactMap_.get(contactId));      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
+    }
+  }
+  
+  static public class CheckContactActionListener extends EventListener<UIAddressBookForm> {
+    public void execute(Event<UIAddressBookForm> event) throws Exception {
+      UIAddressBookForm uiAddressBook = event.getSource() ;
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      uiAddressBook.flipFlopCheckedContactMap(contactId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
     }
   }
@@ -316,7 +365,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
         
         UIPopupActionContainer uiActionContainer = uiForm.getParent() ;
         UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-        UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, 730) ;
+        UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, MailUtils.MAX_POPUP_WIDTH) ;
         uiPopupContainer.setId("UIPopupActionComposeContainer") ;
         UIComposeForm uiComposeForm = uiPopupContainer.addChild(UIComposeForm.class, null, null) ;
         uiComposeForm.init(accId, null, 0);
@@ -325,6 +374,40 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
         
       }
       
+    }
+  }
+  static public class SendMultiEmailActionListener extends EventListener<UIAddressBookForm> {
+    public void execute(Event<UIAddressBookForm> event) throws Exception {
+      UIAddressBookForm uiForm = event.getSource() ;
+      String emails =  new String("");
+      for (Contact contact : uiForm.getContacts()) {
+        if(uiForm.isCheckedContact(contact.getId())){        
+          String emailAddresses = contact.getEmailAddress();
+          if(emailAddresses!= null && emailAddresses.length()>0){
+            String[] str = emailAddresses.split(";");
+            if(emails.length() > 0) emails += ", ";
+            emails += str[0];
+          } 
+        }  
+      }
+      if (!MailUtils.isFieldEmpty(emails)) {
+        UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
+        String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;      
+        if(Utils.isEmptyField(accId)) {
+          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      UIPopupActionContainer uiActionContainer = uiForm.getParent() ;
+      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, MailUtils.MAX_POPUP_WIDTH) ;
+      uiPopupContainer.setId("UIPopupActionComposeContainer") ;
+      UIComposeForm uiComposeForm = uiPopupContainer.addChild(UIComposeForm.class, null, null) ;
+      uiComposeForm.init(accId, null, 0);
+      uiComposeForm.setFieldToValue(emails) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+      }
     }
   }
 }

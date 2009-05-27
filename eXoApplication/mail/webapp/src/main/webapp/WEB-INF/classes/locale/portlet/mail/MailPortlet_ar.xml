@@ -787,6 +787,11 @@
       <action-on-this-messge>إجراءات</action-on-this-messge>
       <maximize-reading-pane>تكبير نافذة القراءة</maximize-reading-pane>
       <this-attachment-could-not-be-loaded-properly>لا يُمكن تحميل هذه المُرفقات بشكل سليم !</this-attachment-could-not-be-loaded-properly>
+      <question>Will you attend ?</question>
+      <yes-import>Yes and Import</yes-import>
+      <yes>Yes</yes>
+      <no>No</no>
+      <maybe>Maybe</maybe>
     </label>
     <msg>
       <trouble-loading-event>هذا "الحدث" قد تمّ حذفهُ ، أو أنّك قد لا تستطيع الوصول إليه !</trouble-loading-event>
@@ -1103,6 +1108,7 @@
       <job-title>المهنة</job-title>
       <birthday>تاريخ الولادة</birthday>
       <email>البريد الاكتروني</email>
+      <send-multi-email>Send Email</send-multi-email>
     </label>
     <action>
       <Close>إغلاق</Close>

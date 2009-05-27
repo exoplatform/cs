@@ -1534,10 +1534,23 @@
 .UIMailPortlet .UIContactsPopup .ContactContainer .NormalItem {
 	line-height: 20px;
 	height: 20px;
-	padding-left: 24px;
+	/*padding-left: 24px;*/
 	overflow: hidden;
 	white-space: nowrap;
 	width:150px;
+}
+
+.UIMailPortlet .UIContactsPopup .ContactContainer .NormalBox {
+	height: 20px;
+	width: 24px;
+}
+
+.UIMailPortlet .UIContactsPopup .ContactContainer .NormalBox:hover {
+	background-color:#E8E8E8;
+}
+
+.UIMailPortlet .UIContactsPopup .ContactContainer .SelectedContact {
+	font-weight:bold;
 }
 
 .UIMailPortlet .UIContactsPopup .RightContacts .ContactContainer {
