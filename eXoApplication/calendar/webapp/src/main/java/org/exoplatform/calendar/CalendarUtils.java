@@ -541,6 +541,41 @@ public class CalendarUtils {
     }
     return options ;
   }
+  
+  public static List<SelectItem> getCalendarCategoryOption() throws Exception {
+    List<SelectItem> options = new ArrayList<SelectItem>() ;
+    CalendarService calendarService = getCalendarService() ;
+    String username = getCurrentUser();
+    //private calendars 
+    List<GroupCalendarData> groupPrivateCalendars = calendarService.getCalendarCategories(username, true) ;
+    if(groupPrivateCalendars != null) {
+      SelectOptionGroup privGrp = new SelectOptionGroup(CalendarUtils.PRIVATE_CALENDARS);
+      for(GroupCalendarData group: groupPrivateCalendars){
+        privGrp.addOption(new SelectOption(group.getName(),CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + group.getId()));
+      }
+      if(privGrp.getOptions().size() > 0) options.add(privGrp);
+    }
+    //share calendars
+    GroupCalendarData groupShareCalendar = calendarService.getSharedCalendars(username, true) ;
+    if(groupShareCalendar != null) {
+      SelectOptionGroup sharedGrp = new SelectOptionGroup(CalendarUtils.SHARED_CALENDARS);
+      sharedGrp.addOption(new SelectOption(groupShareCalendar.getName(),CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + groupShareCalendar.getId()));
+      options.add(sharedGrp);
+    }
+    //public calendars
+    String[] groups = CalendarUtils.getUserGroups(username) ;
+    List<GroupCalendarData> groupPublicCalendars = calendarService.getGroupCalendars(groups, true, username) ;
+    if(groupPublicCalendars!=null){
+      SelectOptionGroup pubGrp = new SelectOptionGroup(CalendarUtils.PUBLIC_CALENDARS);
+      for(GroupCalendarData group : groupPublicCalendars){
+        pubGrp.addOption(new SelectOption(group.getName(),CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + group.getId()));
+      }
+      if(pubGrp.getOptions().size()>0) options.add(pubGrp);
+    }
+    
+    return options ;
+    
+  }
 
   public static List<org.exoplatform.calendar.service.Calendar> getCalendars() throws Exception {
     List<org.exoplatform.calendar.service.Calendar> list = new ArrayList<org.exoplatform.calendar.service.Calendar>() ;
@@ -602,10 +637,16 @@ public class CalendarUtils {
     List<String> emails = new ArrayList<String>() ;
     emails.addAll(Arrays.asList(addressList.split(COMMA))) ;
     String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
-    for (String email : emails) {
-      email = email.trim() ;
-      if(!email.matches(emailRegex)) return false ;
+    try{
+      for (String email : emails) {
+        email = email.trim() ;
+        if(!email.matches(emailRegex)) return false ;
+      }
+    }catch (Exception e){
+      e.printStackTrace();
+      return false;
     }
+    
     return true ;
   }
   
@@ -617,10 +658,16 @@ public class CalendarUtils {
     String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
     for (String email : emails) {
       email = email.trim() ;
-      if(!email.matches(emailRegex)) {
+      try{
+        if(!email.matches(emailRegex)) {
+          if (invalidEmails.length() > 0) invalidEmails.append(", ") ;
+          invalidEmails.append(email) ;
+        }
+      } catch (Exception e){
+        e.printStackTrace();
         if (invalidEmails.length() > 0) invalidEmails.append(", ") ;
         invalidEmails.append(email) ;
-      }
+      }    
     }
     if (invalidEmails.length() ==0) return addressList ;
     return invalidEmails.toString() ;
