@@ -2304,11 +2304,11 @@ public class JCRDataStorage{
       if(publicCalendarIds != null && publicCalendarIds.length > 0) { 
         
         // add to fix bug CS-2728
-        String[] calendarBefore = eventQuery.getCalendarId() ;
+        //String[] calendarBefore = eventQuery.getCalendarId() ;
         
         eventQuery.setCalendarId(publicCalendarIds) ;
         events.addAll(getPublicEvents(eventQuery)) ;
-        eventQuery.setCalendarId(calendarBefore) ;
+        //eventQuery.setCalendarId(calendarBefore) ;
       }
     } catch (Exception e) {
       e.printStackTrace() ;
