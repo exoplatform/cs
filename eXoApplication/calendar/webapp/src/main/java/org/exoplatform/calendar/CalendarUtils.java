@@ -626,6 +626,21 @@ public class CalendarUtils {
     return invalidEmails.toString() ;
   }
 
+  public static String invalidUsers(String userList) throws Exception {
+    StringBuilder invalidNames = new StringBuilder("") ;
+    userList = userList.replaceAll(SEMICOLON,COMMA) ;
+    List<String> users = new ArrayList<String>() ;
+    users.addAll(Arrays.asList(userList.split(COMMA))) ;
+    for(String user: users){
+      user = user.trim();
+      if(!isUserExisted(getOrganizationService(), user)){
+        if(invalidNames.length()>0) invalidNames.append(", ");
+        invalidNames.append(user);
+      }
+    }
+    return invalidNames.toString() ;
+  }
+  
   public static String parseEmailAddress(String address) {
     try {
       InternetAddress[] iAdds = InternetAddress.parse(address, true);
