@@ -1118,6 +1118,7 @@
       <cannot-delete-this-contact>لا يمكن حذف 'جهة الاتصال 'هذه</cannot-delete-this-contact>
       <no-selected-contact-to-edit>قُم باختيار 'جهة الاتصال 'التي ترغب في تغييرها</no-selected-contact-to-edit>
       <no-selected-contact-to-delete>قُم باختيار 'جهة الاتصال 'التي ترغب في حذفها</no-selected-contact-to-delete>
+      <UIAddressBookForm.msg.no-selected-contact-to-send-mail>Please selects some contact to send email</UIAddressBookForm.msg.no-selected-contact-to-send-mail>
       <cannot-delete-ownerContact>لا يمكنُك حذف جهة الاتّصال هذه، نظرًا لكونها صاحبة الدفتر (دفتر العناوين).</cannot-delete-ownerContact>
       <cannot-delete>إجراء غير مُمكن. حاول استعمال "دفتر العناوين" الخاصّ بإكزو حتّى  تتمكّن من القيام بالوظائف المُـتطوّرة.</cannot-delete>
       <cannot-edit>إجراء غير مُمكن. حاول استعمال "دفتر العناوين" الخاصّ بإكزو حتّى  تتمكّن من القيام بالوظائف المُـتطوّرة.</cannot-edit>

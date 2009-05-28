@@ -22,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.AddressBook;
@@ -407,6 +408,12 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       uiComposeForm.init(accId, null, 0);
       uiComposeForm.setFieldToValue(emails) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+      }
+      else {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.no-selected-contact-to-send-mail",null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
     }
   }
