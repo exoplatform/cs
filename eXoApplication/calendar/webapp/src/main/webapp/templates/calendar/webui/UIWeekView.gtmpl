@@ -300,13 +300,13 @@
               <%=_ctx.appRes("ContextMenu.label.ExportEvent")%>
             </a>
           </div>
-          <div class="MenuItem">
-            <a class="ItemIcon QuickAddEvent" href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
+          <div class="MenuItem"  >
+            <a class="ItemIcon QuickAddEvent" href="#">
               <%=_ctx.appRes("ContextMenu.label.addEvent")%>
             </a>
           </div>
-					<div class="MenuItem">
-            <a class="ItemIcon QuickAddTask" href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
+		  <div class="MenuItem">
+            <a class="ItemIcon QuickAddTask" href="#">
               <%=_ctx.appRes("ContextMenu.label.addTask")%>
             </a>
           </div>

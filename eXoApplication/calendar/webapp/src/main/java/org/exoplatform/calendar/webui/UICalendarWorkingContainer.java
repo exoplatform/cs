@@ -16,8 +16,16 @@
  **/
 package org.exoplatform.calendar.webui;
 
+import java.util.Date;
+
+import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.webui.popup.UIEventForm;
+import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 
 /**
  * Created by The eXo Platform SARL
@@ -27,13 +35,45 @@ import org.exoplatform.webui.core.UIContainer;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/calendar/webui/UICalendarWorkingContainer.gtmpl"
+                 template =  "app:/templates/calendar/webui/UICalendarWorkingContainer.gtmpl"
 )
 public class UICalendarWorkingContainer extends UIContainer  {
-  
-  
+
+
   public UICalendarWorkingContainer() throws Exception {
     addChild(UICalendarContainer.class, null, null).setRendered(true) ;
     addChild(UICalendarViewContainer.class, null, null).setRendered(true) ;
   }  
+
+  @Override
+  public void processRender(WebuiRequestContext context) throws Exception {
+    active() ;
+    super.processRender(context);
+  }
+
+  public void active() throws Exception {
+    UIPopupWindowQuick uiWindowE = getChildById("UIQuckAddEventPopupWindow") ;
+    if(uiWindowE == null) uiWindowE = addChild(UIPopupWindowQuick.class, null, "UIQuckAddEventPopupWindow") ;
+    UIQuickAddEvent quickAddForm = (UIQuickAddEvent)uiWindowE.getUIComponent();
+    if(quickAddForm == null) quickAddForm = createUIComponent(UIQuickAddEvent.class, null, null) ; 
+    ((UIFormSelectBoxWithGroups)quickAddForm.getChildById(UIQuickAddEvent.FIELD_CALENDAR)).setOptions(CalendarUtils.getCalendarOption()) ;
+    quickAddForm.getUIFormSelectBox(UIQuickAddEvent.FIELD_CATEGORY).setOptions(UIEventForm.getCategory()) ;
+    quickAddForm.setEvent(true) ;
+    quickAddForm.setId("UIQuickAddEvent") ;
+    quickAddForm.init(CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()), String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime())) ;
+    uiWindowE.setUIComponent(quickAddForm) ;
+    uiWindowE.setWindowSize(540, 0);
+
+  UIPopupWindowQuick uiWindowT =  getChildById("UIQuckAddTaskPopupWindow") ;
+    if(uiWindowT == null) uiWindowT = addChild(UIPopupWindowQuick.class, null, "UIQuckAddTaskPopupWindow") ;
+    UIQuickAddEvent quickAddTask = (UIQuickAddEvent)uiWindowT.getUIComponent();
+    if(quickAddTask == null) quickAddTask = createUIComponent(UIQuickAddEvent.class, null, null) ; 
+    quickAddTask.setEvent(false) ;
+    quickAddTask.setId("UIQuickAddTask") ;
+    quickAddTask.init(CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()),String.valueOf(new Date().getTime()), String.valueOf(new Date().getTime())) ;
+    ((UIFormSelectBoxWithGroups)quickAddTask.getChildById(UIQuickAddEvent.FIELD_CALENDAR)).setOptions(CalendarUtils.getCalendarOption()) ;
+    quickAddTask.getUIFormSelectBox(UIQuickAddEvent.FIELD_CATEGORY).setOptions(UIEventForm.getCategory()) ;
+    uiWindowT.setUIComponent(quickAddTask) ;
+    uiWindowT.setWindowSize(540, 0);
+  }
 }

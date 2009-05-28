@@ -33,7 +33,65 @@ UICalendarPortlet.prototype.attachSwapClass = function(compId,className,hoverCla
     	}
     };
 } ;
+/**
+ * Show Quick add event and task form 
+ * @param {obj, type} has action object, type of form : event 1 | task 2
+ */
+UICalendarPortlet.prototype.addQuickShowHidden = function(obj, type){
+    this.addQuickShowHiddenWithTime(obj, type, new Date().getTime(), new Date().getTime()) ;
+} ;
 
+/**
+ * Show Quick add event and task form with selected time
+ * @param {obj, type, from, to} has action object, type of form : event 1 | task 2, from in milliseconds, to in milliseconds
+ */
+UICalendarPortlet.prototype.addQuickShowHiddenWithTime = function(obj, type, fromMilli, toMilli){
+    var CalendarWorkingWorkspace =  document.getElementById("UICalendarWorkingContainer");
+    var UIQuckAddEventPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddEventPopupWindow");
+    var UIQuckAddTaskPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddTaskPopupWindow");
+    var formater = eXo.cs.DateTimeFormater ;
+    var data = {
+    		from:parseInt(fromMilli),
+    		fromTime:parseInt(fromMilli),
+    		to:parseInt(toMilli),
+    		toTime:parseInt(toMilli)
+    };
+    if(type == 1) {
+    	var uiform = eXo.core.DOMUtil.findDescendantById(UIQuckAddEventPopupWindow, "UIQuickAddEvent") ;
+    	uiform.reset() ;
+    	
+    	this.fillData(uiform, data) ;
+    	
+    	eXo.webui.UIPopupWindow.show(UIQuckAddEventPopupWindow);
+    	eXo.webui.UIPopup.hide(UIQuckAddTaskPopupWindow) ;
+    } else if(type == 2) {
+    	var uiform = eXo.core.DOMUtil.findDescendantById(UIQuckAddTaskPopupWindow, "UIQuickAddTask") ;
+    	uiform.reset() ;
+    	this.fillData(uiform, data) ;
+    	eXo.webui.UIPopupWindow.show(UIQuckAddTaskPopupWindow);
+    	eXo.webui.UIPopup.hide(UIQuckAddEventPopupWindow);
+    }
+} ;
+/**
+ * fill data to quick event/task form
+ * @param {uiform, data} uifrom obj or id, data is array of value for each element of form
+ */
+UICalendarPortlet.prototype.fillData = function(uiform, data) {
+	uiform = (typeof uiform == "string") ? document.getElementById(uiform):uiform;
+	var fromField = uiform.elements["from"] ;
+	var fromFieldTime = uiform.elements["fromTime"] ;
+	var toField = uiform.elements["to"] ;
+	var toFieldTime = uiform.elements["toTime"] ;
+	var formater = eXo.cs.DateTimeFormater ;
+	var timeType = "HH:MM" ;
+	var dateType = fromField.getAttribute("format").replace("MM","mm") ;
+	if(fromFieldTime.value.trim().length > 5)  timeType = formater.masks.shortTime ;
+	fromField.value = formater.format(data.from, dateType);
+	fromFieldTime.value = formater.format(data.fromTime, timeType);
+	
+	toField.value = formater.format(data.to, dateType);
+	toFieldTime.value = formater.format(data.toTime, timeType); 
+}
 /**
  * Convert time from milliseconds to minutes
  * @param {Int} Milliseconds Milliseconds
@@ -1196,6 +1254,20 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
             }
             else {
                 items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/, "startTime=" + obj);
+                var fTime = Math.round(parseInt(obj));
+                var tTime = fTime + 15*60 ;
+        		if(DOMUtil.hasClass(items[i],"QuickAddEvent")){
+        			items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(this, 1,"+fTime+","+tTime+");"
+        			 if(isNaN(fTime)) {
+        				 items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHidden(this, 1);" ;
+        		     } 
+            		 
+            	} else if (DOMUtil.hasClass(items[i],"QuickAddTask")) {
+            		items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(this, 2, "+fTime+","+tTime+");"
+            		 if(isNaN(fTime)) {
+        				 items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHidden(this, 2);" ;
+        		     } 
+            	}
             }
         }
     }
@@ -1209,7 +1281,21 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
                 items[i].style.display = "none";
             }
             else {
-                items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/, "startTime=" + map);
+            	items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/, "startTime=" + map);
+                var fTime = Math.round(parseInt(map));
+                var tTime = fTime + 15*60 ;
+                
+            	if(DOMUtil.hasClass(items[i],"QuickAddEvent")){
+            		items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(this, 1,"+fTime+","+tTime+");"
+            		 if(isNaN(fTime)) {
+        				 items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHidden(this, 1);" ;
+        		     } 
+            	} else if (DOMUtil.hasClass(items[i],"QuickAddTask")) {
+            		items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(this, 2, "+fTime+","+tTime+");"
+            		 if(isNaN(fTime)) {
+        				 items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHidden(this, 2);" ;
+        		     } 
+            	}
             }
             
         }
@@ -1877,7 +1963,10 @@ UISelection.prototype.clear = function(){
         endTime = parseInt(UISelection.startTime) + UISelection.step * 60 * 1000;
     }
 		if(bottom >= UISelection.container.offsetHeight) endTime -= 1;
-    eXo.webui.UIForm.submitEvent(UISelection.viewType, 'QuickAdd', '&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime);
+	var container = document.getElementById("UICalendarViewContainer");	
+	var porlet = eXo.calendar.UICalendarPortlet;
+	porlet.addQuickShowHiddenWithTime(container, 1, startTime, endTime) ;
+    //eXo.webui.UIForm.submitEvent(UISelection.viewType, 'QuickAdd', '&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime);
     eXo.core.DOMUtil.listHideElements(UISelection.block);
 		UISelection.startTime = null;
 		UISelection.startY = null;

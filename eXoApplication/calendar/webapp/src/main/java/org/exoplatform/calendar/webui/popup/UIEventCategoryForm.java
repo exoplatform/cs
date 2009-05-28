@@ -137,7 +137,7 @@ public class UIEventCategoryForm extends UIForm {
           ((CalendarView)uiViewContainer.getRenderedChild()).setSelectedCategory(uiManager.categoryId_) ; 
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer.getParent()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         if(uiPopupContainer != null) {
           UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;

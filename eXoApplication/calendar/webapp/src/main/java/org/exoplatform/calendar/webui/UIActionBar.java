@@ -34,6 +34,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -91,7 +92,10 @@ public class UIActionBar extends UIContainer  {
       //System.out.println(TimeZone.getTimeZone(calset.getTimeZone()) + "-" + calset.getTimeZone());
       String categoryId = event.getRequestContext().getRequestParameter(CATEGORYID) ;
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UICalendarWorkingContainer workContainer = uiPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class) ;
+      workContainer.getChild(UIPopupWindow.class).setShow(true) ;
+      
+      /*UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
       if(CalendarEvent.TYPE_EVENT.equals(type)) {
         uiQuickAddEvent.setEvent(true) ;        
@@ -103,7 +107,7 @@ public class UIActionBar extends UIContainer  {
       uiQuickAddEvent.update("0", null) ;
       if(CalendarUtils.isEmpty(categoryId) || categoryId.toLowerCase().trim().equals("null")) uiQuickAddEvent.setSelectedCategory("meeting") ;
       else uiQuickAddEvent.setSelectedCategory(categoryId) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;*/
     }
   }
 

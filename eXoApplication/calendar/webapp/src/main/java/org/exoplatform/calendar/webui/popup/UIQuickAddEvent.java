@@ -30,6 +30,7 @@ import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
+import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListContainer;
@@ -94,7 +95,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormComboBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
     addUIFormInput(new UIFormComboBox(FIELD_TO_TIME, FIELD_TO_TIME, options));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ALLDAY, FIELD_ALLDAY, false));
-    addUIFormInput(new UIFormSelectBoxWithGroups(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
+    addUIFormInput(new UIFormSelectBoxWithGroups(FIELD_CALENDAR, FIELD_CALENDAR, CalendarUtils.getCalendarOption())) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
   }
 
@@ -113,9 +114,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     toField.setDateFormatStyle(calendarSetting.getDateFormat()) ;
     getUIFormCombobox(FIELD_FROM_TIME).setOptions(fromOptions) ;
     getUIFormCombobox(FIELD_TO_TIME).setOptions(toOptions) ;
-    UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
     java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
-    cal.setTime(miniCalendar.getCurrentCalendar().getTime());
+    /*UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
+    cal.setTime(miniCalendar.getCurrentCalendar().getTime());*/
     if(startTime != null) {
       cal.setTimeInMillis(Long.parseLong(startTime)) ;
     } 
@@ -338,9 +339,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
           CalendarUtils.getCalendarService().savePublicEvent(calEvent.getCalendarId(), calEvent, true) ;          
         }
-        UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
+        /*UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
         uiPopupAction.deActivate() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;*/
         UICalendarViewContainer uiContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class);
         UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
@@ -354,7 +355,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         */
         calendarView.setLastUpdatedEventId(calEvent.getId()) ; 
         uiContainer.refresh() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+        uiForm.reset() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer.getParent()) ;
       } catch (Exception e) {
         e.printStackTrace() ;
         uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.add-unsuccessfully", null)) ;
@@ -365,11 +367,11 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   static  public class MoreDetailActionListener extends EventListener<UIQuickAddEvent> {
     public void execute(Event<UIQuickAddEvent> event) throws Exception {
       UIQuickAddEvent uiForm = event.getSource() ;
-      CalendarSetting calendarSetting = 
-        uiForm.getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+      UICalendarPortlet porlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      CalendarSetting calendarSetting = porlet.getCalendarSetting() ;
       String dateFormat = calendarSetting.getDateFormat() ;
       String timeFormat = calendarSetting.getTimeFormat() ;
-      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
+      UIPopupAction uiPopupAction = porlet.getChild(UIPopupAction.class) ;
       if(uiForm.isEvent()) {
         uiPopupAction.deActivate() ;
         UIPopupContainer uiPouContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
@@ -400,7 +402,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiEventForm.setEmailRemindBefore(String.valueOf(5));
         uiEventForm.setEmailReminder(true) ;
         uiEventForm.setEmailRepeat(false) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        //event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       } else {
         uiPopupAction.deActivate() ;
         UIPopupContainer uiPouContainer  = uiPopupAction.activate(UIPopupContainer.class, 700) ;
@@ -421,13 +423,15 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiTaskForm.setEventToDate(to, dateFormat, timeFormat) ;
         uiTaskForm.setEventAllDate(uiForm.getIsAllDay()) ;
         uiTaskForm.setSelectedCategory(uiForm.getEventCategory()) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
+      event.getRequestContext().addUIComponentToUpdateByAjax(porlet.findFirstComponentOfType(UICalendarWorkingContainer.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
   static  public class CancelActionListener extends EventListener<UIQuickAddEvent> {
     public void execute(Event<UIQuickAddEvent> event) throws Exception {    	
-      event.getSource().getAncestorOfType(UICalendarPortlet.class).cancelAction() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax( 
+      event.getSource().getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendarWorkingContainer.class)) ;
     }
   }
 
