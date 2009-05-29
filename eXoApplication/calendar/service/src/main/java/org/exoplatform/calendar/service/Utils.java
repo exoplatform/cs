@@ -147,6 +147,11 @@ public class Utils {
   final public static String STATUS_PENDING = "pending".intern();
   final public static String STATUS_YES = "yes".intern();
   final public static String STATUS_NO = "no".intern();
+  
+  public static final int INVALID_TYPE = -1;
+  public static final int PRIVATE_TYPE = 0;
+  public static final int SHARED_TYPE = 1;
+  public static final int PUBLIC_TYPE = 2;
 
   /**
    * The method creates instance calendar object with time zone is GMT 0

@@ -2651,6 +2651,34 @@ public class JCRDataStorage{
     }
   }
   
+  public int getTypeOfCalendar(String userName, String calendarId){
+    try {
+      Node calendarNode = getUserCalendarHome(userName).getNode(calendarId);
+      return Utils.PRIVATE_TYPE;
+    }catch(Exception e){
+    }
+    try {
+      Node calendarNode = getPublicCalendarHome().getNode(calendarId) ;
+      return Utils.PUBLIC_TYPE;
+    }catch (Exception e){
+    }
+    try {
+      Node sharedCalendarHome = getSharedCalendarHome() ;
+      if(sharedCalendarHome.hasNode(userName)) {
+        Node userNode = sharedCalendarHome.getNode(userName) ;
+        PropertyIterator iter = userNode.getReferences() ;
+        Node calendar ;
+        while(iter.hasNext()) {
+          calendar = iter.nextProperty().getParent() ;
+          if(calendar.getProperty(Utils.EXO_ID).getString().equals(calendarId))
+            return Utils.SHARED_TYPE;
+        }
+      }
+    }catch(Exception e){
+    }
+    return Utils.INVALID_TYPE;
+  }
+  
   /**
    * Create a session provider for current context. The method first try to get a normal session provider, 
    * then attempts to create a system provider if the first one was not available.

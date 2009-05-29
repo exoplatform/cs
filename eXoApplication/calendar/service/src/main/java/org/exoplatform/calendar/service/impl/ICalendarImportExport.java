@@ -29,6 +29,7 @@ import java.util.Random;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PropertyIterator;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.CalendarOutputter;
@@ -935,7 +936,17 @@ public class ICalendarImportExport implements CalendarImportExport{
         } catch (Exception e) {
           e.printStackTrace() ;
         }
-        storage_.saveUserEvent(username, calendarId, exoEvent, true) ;
+        switch (storage_.getTypeOfCalendar(username, calendarId)){
+          case Utils.PRIVATE_TYPE:
+            storage_.saveUserEvent(username, calendarId, exoEvent, true) ;
+            break;
+          case Utils.SHARED_TYPE:
+            storage_.saveEventToSharedCalendar(username, calendarId, exoEvent, true);
+            break;
+          case Utils.PUBLIC_TYPE:
+            storage_.savePublicEvent(calendarId, exoEvent, true);
+            break;
+        }
       }else if(obj instanceof VToDo){ 
         VToDo event = (VToDo)obj ;
         exoEvent = new CalendarEvent() ;
@@ -1036,7 +1047,18 @@ public class ICalendarImportExport implements CalendarImportExport{
         } catch (Exception e) {
           e.printStackTrace() ;
         }
-        storage_.saveUserEvent(username, calendarId, exoEvent, true) ;
+        
+        switch (storage_.getTypeOfCalendar(username, calendarId)){
+        case Utils.PRIVATE_TYPE:
+          storage_.saveUserEvent(username, calendarId, exoEvent, true) ;
+          break;
+        case Utils.SHARED_TYPE:
+          storage_.saveEventToSharedCalendar(username, calendarId, exoEvent, true);
+          break;
+        case Utils.PUBLIC_TYPE:
+          storage_.savePublicEvent(calendarId, exoEvent, true);
+          break;
+        }
        }      
     }
   }

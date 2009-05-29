@@ -415,6 +415,7 @@
       <timeZone>النطاق الزمني</timeZone>
       <selectColor>اللون</selectColor>
       <AddCalendar>إضافة رزنامة</AddCalendar>
+      <permission>Edit permission</permission>
     </label>
     <msg>
       <file-name-error>يجب عليك  القيام بتحميل اللف أولا</file-name-error>

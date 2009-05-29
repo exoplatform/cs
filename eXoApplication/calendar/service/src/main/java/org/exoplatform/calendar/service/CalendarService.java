@@ -513,4 +513,6 @@ public interface CalendarService extends CalendarServiceLegacy {
   public void updateCalDav(String usename, String calendarId, CalendarImportExport imp) throws Exception ;
   
   public void updateCalDav(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception ;
+  
+  public int getTypeOfCalendar(String userName, String calendarId) throws Exception;
 }

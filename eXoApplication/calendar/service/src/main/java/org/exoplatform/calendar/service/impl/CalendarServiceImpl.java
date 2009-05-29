@@ -869,4 +869,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public void updateRss(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception {
     storage_.updateRss(usename, calendarId, imp, number) ;
   }
+  
+  public int getTypeOfCalendar(String userName, String calendarId) throws Exception {
+    return storage_.getTypeOfCalendar(userName, calendarId);
+  }
 }

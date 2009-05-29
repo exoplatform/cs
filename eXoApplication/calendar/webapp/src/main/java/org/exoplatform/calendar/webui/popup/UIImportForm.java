@@ -17,7 +17,10 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -34,12 +37,17 @@ import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.Membership;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -47,6 +55,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormUploadInput;
@@ -65,17 +74,22 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
                    @EventConfig(listeners = UIImportForm.SaveActionListener.class),  
                    @EventConfig(listeners = UIImportForm.ImportActionListener.class, phase = Phase.DECODE),
                    @EventConfig(listeners = UIImportForm.AddActionListener.class, phase = Phase.DECODE),
-                   @EventConfig(listeners = UIImportForm.CancelActionListener.class, phase = Phase.DECODE)
+                   @EventConfig(listeners = UIImportForm.CancelActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIImportForm.SelectPermissionActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIImportForm.OnChangeActionListener.class, phase = Phase.DECODE)
                  }
 )
-public class UIImportForm extends UIForm implements UIPopupComponent{
+public class UIImportForm extends UIForm implements UIPopupComponent, UISelector{
 
   final public static String DISPLAY_NAME = "displayName" ;
   final public static String DESCRIPTION = "description" ;
   final public static String CATEGORY = "category" ;
+  final public static String PERMISSION = "permission" ;
   final public static String SELECT_COLOR = "selectColor" ;
   final public static String TIMEZONE = "timeZone" ;
   final public static String LOCALE = "locale" ;
+  final public static String PERMISSION_SUB = "_permission".intern() ;
+  public Map<String, Map<String, String>> perms_ = new HashMap<String, Map<String, String>>() ;
 
   final static public String TYPE = "type".intern() ;
   final static public String FIELD_UPLOAD = "upload".intern() ;
@@ -94,14 +108,19 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     }
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
     addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD));
-    UIFormSelectBox privateCal = new UIFormSelectBox(FIELD_TO_CALENDAR, FIELD_TO_CALENDAR, getPrivateCalendars()) ; 
+    //UIFormSelectBox privateCal = new UIFormSelectBox(FIELD_TO_CALENDAR, FIELD_TO_CALENDAR, getPrivateCalendars()) ;
+    UIFormSelectBoxWithGroups privateCal = new UIFormSelectBoxWithGroups(FIELD_TO_CALENDAR, FIELD_TO_CALENDAR, CalendarUtils.getCalendarOption()) ;
     addUIFormInput(privateCal);
     addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null));
-    addUIFormInput(new UIFormSelectBox(CATEGORY, CATEGORY, getCategory()));
+    //addUIFormInput(new UIFormSelectBox(CATEGORY, CATEGORY, getCategory()));
+    UIFormSelectBoxWithGroups calCategory = new UIFormSelectBoxWithGroups(CATEGORY, CATEGORY, CalendarUtils.getCalendarCategoryOption());
+    calCategory.setOnChange("OnChange");
+    addUIFormInput(calCategory);
     //cs-2163
     CalendarSetting calendarSetting = CalendarUtils.getCalendarService()
       .getCalendarSetting(CalendarUtils.getCurrentUser()) ;
+    addUIFormInput(new UIFormStringInput(PERMISSION, PERMISSION, null));
     UIFormSelectBox locale = new UIFormSelectBox(LOCALE, LOCALE, getLocales()) ;
     locale.setValue(calendarSetting.getLocation()) ;
     addUIFormInput(locale);    
@@ -113,7 +132,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
 
   public void init(String calId, String calType) {
     if(!CalendarUtils.isEmpty(calId) && String.valueOf(Calendar.TYPE_PRIVATE).equals(calType)) {
-      UIFormSelectBox selectBox = getUIFormSelectBox(FIELD_TO_CALENDAR) ;
+      UIFormSelectBoxWithGroups selectBox = getUIFormSelectBoxGroup(FIELD_TO_CALENDAR) ;
       if(selectBox.getOptions()!= null && !selectBox.getOptions().isEmpty()) {
         switchMode(UPDATE_EXIST);
         selectBox.setValue(calId) ;
@@ -154,6 +173,14 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
   private List<SelectItemOption<String>> getLocales() {
     return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;
   }
+  
+  private List getSelectedGroups(String groupId) throws Exception {
+    List groups = new ArrayList() ;
+    Group g = (Group)getApplicationComponent(OrganizationService.class).getGroupHandler().findGroupById(groupId) ;
+    groups.add(g);
+    return groups;
+  }
+  
   public String[] getActions(){
     return new String[]{"Save", "Cancel"} ;
   }
@@ -174,7 +201,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     return flag_ == ADD_NEW ;
   }
   protected String getSelectedGroup() {
-    return getUIFormSelectBox(CATEGORY).getValue() ;
+    return getUIFormSelectBoxGroup(CATEGORY).getValue() ;
   }
   protected String getDescription() {
     return getUIFormTextAreaInput(DESCRIPTION).getValue() ;
@@ -194,18 +221,27 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
   public void switchMode(int flag) {
     flag_ = flag ;
     if(flag == UPDATE_EXIST) {
-      getUIFormSelectBox(FIELD_TO_CALENDAR).setRendered(true);
+      getUIFormSelectBoxGroup(FIELD_TO_CALENDAR).setRendered(true);
       getUIStringInput(DISPLAY_NAME).setRendered(false);
       getUIFormTextAreaInput(DESCRIPTION).setRendered(false);
-      getUIFormSelectBox(CATEGORY).setRendered(false);
+      getUIFormSelectBoxGroup(CATEGORY).setRendered(false);
+      getUIStringInput(PERMISSION).setRendered(false);
       getUIFormSelectBox(TIMEZONE).setRendered(false);
       getUIFormSelectBox(LOCALE).setRendered(false);
       getChild(UIFormColorPicker.class).setRendered(false);
     } else if(flag == ADD_NEW) {
-      getUIFormSelectBox(FIELD_TO_CALENDAR).setRendered(false);
+      getUIFormSelectBoxGroup(FIELD_TO_CALENDAR).setRendered(false);
       getUIStringInput(DISPLAY_NAME).setRendered(true);
       getUIFormTextAreaInput(DESCRIPTION).setRendered(true);
-      getUIFormSelectBox(CATEGORY).setRendered(true);
+      getUIFormSelectBoxGroup(CATEGORY).setRendered(true);
+      String groupId = getSelectedGroup();
+      if(groupId !=null) {
+      groupId = groupId.split(CalendarUtils.COLON)[1];
+      if(groupId.contains(CalendarUtils.SLASH))
+        getUIStringInput(PERMISSION).setRendered(true);
+      else
+        getUIStringInput(PERMISSION).setRendered(false);
+      }
       getUIFormSelectBox(TIMEZONE).setRendered(true);
       getUIFormSelectBox(LOCALE).setRendered(true);
       getChild(UIFormColorPicker.class).setRendered(true);
@@ -214,6 +250,46 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     }
   }
 
+  public UIFormSelectBoxWithGroups getUIFormSelectBoxGroup(String id) {
+    return findComponentById(id) ;
+  }
+  
+  protected String getCalendarId() {
+    UIFormSelectBoxWithGroups calendars =  getUIFormSelectBoxGroup(FIELD_TO_CALENDAR) ;
+    String value = calendars.getValue() ;
+    if (!CalendarUtils.isEmpty(value) && value.split(CalendarUtils.COLON).length>0) {
+      return value.split(CalendarUtils.COLON)[1] ;      
+    } 
+    return value ;
+  }
+  
+  public void updateSelect(String selectField, String value) throws Exception {
+    UIFormStringInput fieldInput = getUIStringInput(selectField);
+    StringBuilder sb = new StringBuilder() ;
+    Map<String, String> temp = new HashMap<String, String>() ;
+    String key = value.substring(0, value.lastIndexOf(CalendarUtils.COLON_SLASH)-1);
+    String tempS = value.substring(value.lastIndexOf(CalendarUtils.COLON_SLASH) + 2) ;
+    if(perms_.get(selectField) == null) {
+      temp.put(key, tempS) ;
+    } else {
+      temp = perms_.get(selectField) ;
+      if(temp.get(key) != null && !tempS.equals(temp.get(key))) tempS = temp.get(key) + CalendarUtils.COMMA +  tempS ;
+      temp.put(key, tempS) ;
+    }
+    perms_.put(selectField, temp) ;
+    Map<String, String> tempMap = new HashMap<String, String>() ;
+    for(String s : temp.values()) {
+      for(String t : s.split(CalendarUtils.COMMA)) {
+        tempMap.put(t, t) ;
+      }
+    }
+    for(String s : tempMap.values()) {
+      if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
+      sb.append(s) ;
+    }
+    fieldInput.setValue(sb.toString());
+  }
+  
   static  public class SaveActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       String username = CalendarUtils.getCurrentUser() ;
@@ -259,10 +335,62 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
             calendar.setCalendarOwner(username) ;
             calendar.setPublic(false) ;
             calendar.setCategoryId(uiForm.getSelectedGroup()) ;
+            /*
+             * List<String> selected = new ArrayList<String>() ;
+             * selected.add(groupId)
+             * calendar.setGroups
+             * List<String> listPermission = new ArrayList<String>() ;
+             * OrganizationService orgService = CalendarUtils.getOrganizationService() ;
+             * String groupKey = groupIdSelected + CalendarUtils.SLASH_COLON ;
+             * String typedPerms = sharedTab.getUIStringInput(groupIdSelected + PERMISSION_SUB).getValue();
+             * if(!CalendarUtils.isEmpty(typedPerms)) {
+              for(String s : typedPerms.split(CalendarUtils.COMMA)){
+                s = s.trim() ;
+                if(!CalendarUtils.isEmpty(s)) {
+                  List<User> users = orgService.getUserHandler().findUsersByGroup(groupIdSelected).getAll() ;  
+                  boolean isExisted = false ;
+                  for(User u : users) {
+                    if(u.getUserName().equals(s)) {
+                      isExisted = true ;
+                      break ;
+                    }
+                  }
+                  if(isExisted) {             
+                    listPermission.add(groupKey + s) ;
+                  } else {
+                    if(s.equals(CalendarUtils.ANY)) listPermission.add(groupKey + s) ; 
+                    else if(s.indexOf(CalendarUtils.ANY_OF) > -1) {
+                      String typeName = s.substring(s.lastIndexOf(CalendarUtils.DOT)+ 1, s.length()) ;
+                      if(orgService.getMembershipTypeHandler().findMembershipType(typeName) != null) {
+                        listPermission.add(groupKey + s) ;
+                      } else {
+                        uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-not-on-group", new Object[]{s,groupKey}, ApplicationMessage.WARNING)) ;
+                        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                        return ;
+                      } 
+                    } else {
+                      uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-not-on-group", new Object[]{s,groupKey}, ApplicationMessage.WARNING)) ;
+                      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                      return ;
+                    }
+                  }
+                }
+              }
+            }
+            Collection<Membership> mbsh = CalendarUtils.getOrganizationService().getMembershipHandler().findMembershipsByUser(username) ;
+            if(!listPermission.contains(groupKey + CalendarUtils.getCurrentUser()) 
+                && !CalendarUtils.isMemberShipType(mbsh, typedPerms))
+            { 
+              listPermission.add(groupKey + CalendarUtils.getCurrentUser()) ;
+            }
+             * calendar.setEditPermission(listPermission.toArray(new String[listPermission.size()])) ;
+          calendarService.savePublicCalendar(calendar, uiForm.isAddNew_, username) ;
+             * */
             calendarService.saveUserCalendar(username, calendar, true) ;
             calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendar.getId()) ;
           } else {
-            String calendarId = uiForm.getUIFormSelectBox(FIELD_TO_CALENDAR).getValue() ;
+            //String calendarId = uiForm.getUIFormSelectBoxGroup(FIELD_TO_CALENDAR).getValue() ;
+            String calendarId = uiForm.getCalendarId();
             calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendarId) ;
           }
           UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
@@ -280,6 +408,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         } 
       } catch(Exception e) {
+        e.printStackTrace();
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-type-error", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;  
       }
@@ -313,6 +442,40 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       UIFormUploadInput input = uiForm.getUIInput(FIELD_UPLOAD) ;
       uploadService.removeUpload(input.getUploadId()) ;
       calendarPortlet.cancelAction() ;
+    }
+  }
+  
+  static  public class SelectPermissionActionListener extends EventListener<UIImportForm> {
+    public void execute(Event<UIImportForm> event) throws Exception {
+      UIImportForm uiForm = event.getSource() ;
+      String value = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIGroupSelector uiGroupSelector = uiForm.createUIComponent(UIGroupSelector.class, null, null);
+      uiGroupSelector.setType(value) ;
+      String groupId = uiForm.getSelectedGroup();
+      groupId = groupId.split(CalendarUtils.COLON)[1];
+      uiGroupSelector.setSelectedGroups(uiForm.getSelectedGroups(groupId));
+      uiGroupSelector.changeGroup(groupId) ;
+      uiGroupSelector.setComponent(uiForm, new String[] {PERMISSION});
+      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
+      uiChildPopup.activate(uiGroupSelector, 500, 0, true) ;
+      uiGroupSelector.setFilter(false) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+    }
+  }
+  
+  static  public class OnChangeActionListener extends EventListener<UIImportForm> {
+    public void execute(Event<UIImportForm> event) throws Exception {
+      UIImportForm uiImportForm = event.getSource();
+      System.out.println("Goes here on change");
+      String groupId = uiImportForm.getSelectedGroup();
+      groupId = groupId.split(CalendarUtils.COLON)[1];
+      if(groupId.contains(CalendarUtils.SLASH))
+        uiImportForm.getUIFormSelectBoxGroup(PERMISSION).setRendered(true);
+      else
+        uiImportForm.getUIFormSelectBoxGroup(PERMISSION).setRendered(false);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiImportForm);
     }
   }
 }

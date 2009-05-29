@@ -555,13 +555,13 @@ public class CalendarUtils {
       }
       if(privGrp.getOptions().size() > 0) options.add(privGrp);
     }
-    //share calendars
+    /*//share calendars
     GroupCalendarData groupShareCalendar = calendarService.getSharedCalendars(username, true) ;
     if(groupShareCalendar != null) {
       SelectOptionGroup sharedGrp = new SelectOptionGroup(CalendarUtils.SHARED_CALENDARS);
       sharedGrp.addOption(new SelectOption(groupShareCalendar.getName(),CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + groupShareCalendar.getId()));
       options.add(sharedGrp);
-    }
+    }*/
     //public calendars
     String[] groups = CalendarUtils.getUserGroups(username) ;
     List<GroupCalendarData> groupPublicCalendars = calendarService.getGroupCalendars(groups, true, username) ;
