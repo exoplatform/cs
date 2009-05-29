@@ -108,6 +108,10 @@
 	font-weight:bold;
 }
 
+.UICalendarPortlet .UIMiniCalendar .DayList .UIGrid .Highlight {
+	font-weight:bold;
+}
+
 .UICalendarPortlet .UIMiniCalendar .DayList .UIGrid .Today {
 	background: #ABC7FE;
 }

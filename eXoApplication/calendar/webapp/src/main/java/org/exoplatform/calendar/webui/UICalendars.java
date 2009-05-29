@@ -374,7 +374,7 @@ public class UICalendars extends UIForm  {
           uiQuickAddEvent.update(calType, null) ;
           uiQuickAddEvent.setSelectedCalendar(calendarId) ;
           uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), clientTime, null) ;
-          if(categoryId != null && categoryId.trim().length() >0 && !categoryId.toLowerCase().equals("null")) {
+          if(categoryId != null && categoryId.trim().length() >0 && !categoryId.toLowerCase().equals("null")&& !categoryId.equals("calId")) {
             uiQuickAddEvent.setSelectedCategory(categoryId) ;
           } else {
             uiQuickAddEvent.setSelectedCategory("meeting") ;
