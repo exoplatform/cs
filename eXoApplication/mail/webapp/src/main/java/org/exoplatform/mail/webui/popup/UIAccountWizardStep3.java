@@ -82,6 +82,9 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
   } 
   
   protected void setDefaultValue(String serverType, boolean isSSL) {
+    getUIStringInput(FIELD_INCOMINGPORT).setRendered(false);
+    getUIStringInput(FIELD_OUTGOINGPORT).setRendered(false);
+    getUIStringInput(FIELD_STOREFOLDER).setRendered(false);
     if(serverType.equals(Utils.POP3)) {
       getUIStringInput(FIELD_INCOMING_SERVER).setValue(UIAccountCreation.DEFAULT_POP_SERVER) ;
       if(isSSL) {
