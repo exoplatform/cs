@@ -200,8 +200,21 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
   public boolean isNew() {
     return flag_ == ADD_NEW ;
   }
-  protected String getSelectedGroup() {
-    return getUIFormSelectBoxGroup(CATEGORY).getValue() ;
+  protected String getSelectedTypeGroup() {
+    UIFormSelectBoxWithGroups calCategory =  getUIFormSelectBoxGroup(CATEGORY) ;
+    String value = calCategory.getValue() ;
+    if (!CalendarUtils.isEmpty(value) && value.split(CalendarUtils.COLON).length>0) {
+      return value.split(CalendarUtils.COLON)[0] ;      
+    } 
+    return value ;
+  }
+  protected String getSelectedIdGroup() {
+    UIFormSelectBoxWithGroups calCategory =  getUIFormSelectBoxGroup(CATEGORY) ;
+    String value = calCategory.getValue() ;
+    if (!CalendarUtils.isEmpty(value) && value.split(CalendarUtils.COLON).length>0) {
+      return value.split(CalendarUtils.COLON)[1] ;      
+    } 
+    return value ;
   }
   protected String getDescription() {
     return getUIFormTextAreaInput(DESCRIPTION).getValue() ;
@@ -234,14 +247,11 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
       getUIStringInput(DISPLAY_NAME).setRendered(true);
       getUIFormTextAreaInput(DESCRIPTION).setRendered(true);
       getUIFormSelectBoxGroup(CATEGORY).setRendered(true);
-      String groupId = getSelectedGroup();
-      if(groupId !=null) {
-      groupId = groupId.split(CalendarUtils.COLON)[1];
-      if(groupId.contains(CalendarUtils.SLASH))
+      String groupType = getSelectedTypeGroup();
+      if(!CalendarUtils.isEmpty(groupType)&& groupType.equals(CalendarUtils.PUBLIC_TYPE))
         getUIStringInput(PERMISSION).setRendered(true);
       else
         getUIStringInput(PERMISSION).setRendered(false);
-      }
       getUIFormSelectBox(TIMEZONE).setRendered(true);
       getUIFormSelectBox(LOCALE).setRendered(true);
       getChild(UIFormColorPicker.class).setRendered(true);
@@ -333,61 +343,69 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
             calendar.setTimeZone(uiForm.getTimeZone()) ;
             calendar.setCalendarColor(uiForm.getSelectedColor()) ;
             calendar.setCalendarOwner(username) ;
-            calendar.setPublic(false) ;
-            calendar.setCategoryId(uiForm.getSelectedGroup()) ;
-            /*
-             * List<String> selected = new ArrayList<String>() ;
-             * selected.add(groupId)
-             * calendar.setGroups
-             * List<String> listPermission = new ArrayList<String>() ;
-             * OrganizationService orgService = CalendarUtils.getOrganizationService() ;
-             * String groupKey = groupIdSelected + CalendarUtils.SLASH_COLON ;
-             * String typedPerms = sharedTab.getUIStringInput(groupIdSelected + PERMISSION_SUB).getValue();
-             * if(!CalendarUtils.isEmpty(typedPerms)) {
-              for(String s : typedPerms.split(CalendarUtils.COMMA)){
-                s = s.trim() ;
-                if(!CalendarUtils.isEmpty(s)) {
-                  List<User> users = orgService.getUserHandler().findUsersByGroup(groupIdSelected).getAll() ;  
-                  boolean isExisted = false ;
-                  for(User u : users) {
-                    if(u.getUserName().equals(s)) {
-                      isExisted = true ;
-                      break ;
+            if(uiForm.getSelectedTypeGroup().equals(CalendarUtils.PRIVATE_TYPE)){
+              calendar.setPublic(false) ;
+              calendar.setCategoryId(uiForm.getSelectedIdGroup()) ;
+              calendarService.saveUserCalendar(username, calendar, true) ;
+              calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendar.getId()) ;
+            }
+            else {
+              calendar.setPublic(true) ;
+              
+              List<String> selected = new ArrayList<String>() ;
+              selected.add(uiForm.getSelectedIdGroup());
+              
+              calendar.setGroups(selected.toArray((new String[]{})));
+              
+              List<String> listPermission = new ArrayList<String>() ;
+              OrganizationService orgService = CalendarUtils.getOrganizationService() ;
+              String groupKey = uiForm.getSelectedIdGroup() + CalendarUtils.SLASH_COLON ;
+              String typedPerms = uiForm.getUIStringInput(PERMISSION).getValue();
+              if(!CalendarUtils.isEmpty(typedPerms)) {
+                for(String s : typedPerms.split(CalendarUtils.COMMA)){
+                  s = s.trim() ;
+                  if(!CalendarUtils.isEmpty(s)) {
+                    List<User> users = orgService.getUserHandler().findUsersByGroup(uiForm.getSelectedIdGroup()).getAll() ;  
+                    boolean isExisted = false ;
+                    for(User u : users) {
+                      if(u.getUserName().equals(s)) {
+                        isExisted = true ;
+                        break ;
+                      }
                     }
-                  }
-                  if(isExisted) {             
-                    listPermission.add(groupKey + s) ;
-                  } else {
-                    if(s.equals(CalendarUtils.ANY)) listPermission.add(groupKey + s) ; 
-                    else if(s.indexOf(CalendarUtils.ANY_OF) > -1) {
-                      String typeName = s.substring(s.lastIndexOf(CalendarUtils.DOT)+ 1, s.length()) ;
-                      if(orgService.getMembershipTypeHandler().findMembershipType(typeName) != null) {
-                        listPermission.add(groupKey + s) ;
+                    if(isExisted) {             
+                      listPermission.add(groupKey + s) ;
+                    } else {
+                      if(s.equals(CalendarUtils.ANY)) listPermission.add(groupKey + s) ; 
+                      else if(s.indexOf(CalendarUtils.ANY_OF) > -1) {
+                        String typeName = s.substring(s.lastIndexOf(CalendarUtils.DOT)+ 1, s.length()) ;
+                        if(orgService.getMembershipTypeHandler().findMembershipType(typeName) != null) {
+                          listPermission.add(groupKey + s) ;
+                        } else {
+                          uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-not-on-group", new Object[]{s,groupKey}, ApplicationMessage.WARNING)) ;
+                          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                          return ;
+                        } 
                       } else {
                         uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-not-on-group", new Object[]{s,groupKey}, ApplicationMessage.WARNING)) ;
                         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
                         return ;
-                      } 
-                    } else {
-                      uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-not-on-group", new Object[]{s,groupKey}, ApplicationMessage.WARNING)) ;
-                      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-                      return ;
+                      }
                     }
                   }
                 }
               }
+              Collection<Membership> mbsh = CalendarUtils.getOrganizationService().getMembershipHandler().findMembershipsByUser(username) ;
+              if(!listPermission.contains(groupKey + CalendarUtils.getCurrentUser()) 
+                  && !CalendarUtils.isMemberShipType(mbsh, typedPerms))
+              { 
+                listPermission.add(groupKey + CalendarUtils.getCurrentUser()) ;
+              }
+              calendar.setEditPermission(listPermission.toArray(new String[listPermission.size()])) ;
+              
+              calendarService.savePublicCalendar(calendar, true, username) ;
+              calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendar.getId()) ;
             }
-            Collection<Membership> mbsh = CalendarUtils.getOrganizationService().getMembershipHandler().findMembershipsByUser(username) ;
-            if(!listPermission.contains(groupKey + CalendarUtils.getCurrentUser()) 
-                && !CalendarUtils.isMemberShipType(mbsh, typedPerms))
-            { 
-              listPermission.add(groupKey + CalendarUtils.getCurrentUser()) ;
-            }
-             * calendar.setEditPermission(listPermission.toArray(new String[listPermission.size()])) ;
-          calendarService.savePublicCalendar(calendar, uiForm.isAddNew_, username) ;
-             * */
-            calendarService.saveUserCalendar(username, calendar, true) ;
-            calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendar.getId()) ;
           } else {
             //String calendarId = uiForm.getUIFormSelectBoxGroup(FIELD_TO_CALENDAR).getValue() ;
             String calendarId = uiForm.getCalendarId();
@@ -451,8 +469,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
       String value = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIGroupSelector uiGroupSelector = uiForm.createUIComponent(UIGroupSelector.class, null, null);
       uiGroupSelector.setType(value) ;
-      String groupId = uiForm.getSelectedGroup();
-      groupId = groupId.split(CalendarUtils.COLON)[1];
+      String groupId = uiForm.getSelectedIdGroup();
       uiGroupSelector.setSelectedGroups(uiForm.getSelectedGroups(groupId));
       uiGroupSelector.changeGroup(groupId) ;
       uiGroupSelector.setComponent(uiForm, new String[] {PERMISSION});
@@ -469,12 +486,11 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiImportForm = event.getSource();
       System.out.println("Goes here on change");
-      String groupId = uiImportForm.getSelectedGroup();
-      groupId = groupId.split(CalendarUtils.COLON)[1];
-      if(groupId.contains(CalendarUtils.SLASH))
-        uiImportForm.getUIFormSelectBoxGroup(PERMISSION).setRendered(true);
+      String groupType = uiImportForm.getSelectedTypeGroup();
+      if(!CalendarUtils.isEmpty(groupType)&& groupType.equals(CalendarUtils.PUBLIC_TYPE))
+        uiImportForm.getUIStringInput(PERMISSION).setRendered(true);
       else
-        uiImportForm.getUIFormSelectBoxGroup(PERMISSION).setRendered(false);
+        uiImportForm.getUIStringInput(PERMISSION).setRendered(false);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiImportForm);
     }
   }
