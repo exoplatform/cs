@@ -417,6 +417,13 @@
       <AddCalendar>إضافة رزنامة</AddCalendar>
       <permission>Edit permission</permission>
     </label>
+		<optionGroup>
+			<label>
+				<privateCalendar>Private Calendar</privateCalendar>
+				<sharedCalendar>Shared Calendar</sharedCalendar>
+				<publicCalendar>Public Calendar</publicCalendar>
+			</label>
+		</optionGroup>
     <msg>
       <file-name-error>يجب عليك  القيام بتحميل اللف أولا</file-name-error>
       <file-type-error>نوع الملف غير صحيح</file-type-error>

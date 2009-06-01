@@ -131,11 +131,11 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
   }
 
   public void init(String calId, String calType) {
-    if(!CalendarUtils.isEmpty(calId) && String.valueOf(Calendar.TYPE_PRIVATE).equals(calType)) {
+    if(!CalendarUtils.isEmpty(calId)) {
       UIFormSelectBoxWithGroups selectBox = getUIFormSelectBoxGroup(FIELD_TO_CALENDAR) ;
       if(selectBox.getOptions()!= null && !selectBox.getOptions().isEmpty()) {
         switchMode(UPDATE_EXIST);
-        selectBox.setValue(calId) ;
+        selectBox.setValue(calType +CalendarUtils.COLON + calId) ;
       } else {
         switchMode(ADD_NEW);
       }
