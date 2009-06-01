@@ -20,7 +20,7 @@
 	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactDragDrop","/contact/javascript") ;
 	rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.contact.UIContactDragDrop.init() ;") ;
 	rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.contact.UIContactPortlet.checkView();') ;
-  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.contact.UIContactPortlet.checkLayout()') ;
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.contact.UIContactPortlet.checkLayout();') ;
   rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactPortlet.refreshData();') ;
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
 	JCRPageList pageList = uicomponent.getContactPageList();
