@@ -183,6 +183,28 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
         if (!users.contains(user))
           users.add(user);
       }
+      //For CS-2662
+      query = new Query();
+      query.setFirstName(question);
+      pageList = userHandler.findUsers(query);
+      pageList.setPageSize(numResult);
+      page = from / numResult + 1;
+      temp = pageList.getPage(page);
+      for (User user : temp) {
+        if (!users.contains(user))
+          users.add(user);
+      }
+      query = new Query();
+      query.setLastName(question);
+      pageList = userHandler.findUsers(query);
+      pageList.setPageSize(numResult);
+      page = from / numResult + 1;
+      temp = pageList.getPage(page);
+      for (User user : temp) {
+        if (!users.contains(user))
+          users.add(user);
+      }
+      
       List<UserBean> uList = new ArrayList<UserBean>();
       Iterator<User> i = users.iterator();
       while (i.hasNext()) {
