@@ -454,4 +454,10 @@
 	background: url('icons/OffLineIcon.png') no-repeat;
 	height: 16px; width: 17px;
 }
- 
+ .UIMailPortlet .CheckingIcon {
+	background: url('icons/loading.gif') no-repeat center;
+}
+
+.UIMailPortlet .SyncIcon {
+	background: url('icons/Sync.gif') no-repeat center;
+}

@@ -743,6 +743,19 @@ UIMailPortlet.prototype.isSMTPAuthentication = function(id){
 		}
 	}
 }
+UIMailPortlet.prototype.lazySync = function(obj, fId){
+	var actionLink = obj.getAttribute("actionlink") ;
+	eval(actionLink);
+	if(this.isChecked) {
+		window.clearTimeout(this.isChecked);
+		//eXo.mail.MailServiceHandler.stopCheckMail();
+	}
+	this.isChecked = window.setTimeout(function(){		 
+		eXo.mail.MailServiceHandler.checkMail(true, fId);
+		window.clearTimeout(this.isChecked);
+		delete this.isChecked;
+	}, 5*1000);
+}
 
 eXo.mail.UIMailPortlet = new UIMailPortlet();
 // Override submit method of UIForm to add a comfirm message

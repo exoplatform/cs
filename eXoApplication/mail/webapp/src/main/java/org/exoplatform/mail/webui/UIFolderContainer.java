@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -44,39 +45,39 @@ import org.exoplatform.webui.event.EventListener;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    template = "app:/templates/mail/webui/UIFolderContainer.gtmpl",
-    events = {
-        @EventConfig(listeners = UIFolderContainer.ChangeFolderActionListener.class),
-        @EventConfig(listeners = UIFolderContainer.AddFolderActionListener.class),
-        @EventConfig(listeners = UIFolderContainer.AddSubFolderActionListener.class),
-        @EventConfig(listeners = UIFolderContainer.RenameFolderActionListener.class),
-        @EventConfig(listeners = UIFolderContainer.RemoveFolderActionListener.class, confirm="UIFolderContainer.msg.confirm-remove-folder"),
-        @EventConfig(listeners = UIFolderContainer.MarkReadActionListener.class),
-        @EventConfig(listeners = UIFolderContainer.EmptyFolderActionListener.class),
-        @EventConfig(listeners = UIFolderContainer.MoveToTrashActionListener.class)
-    }
+                 template = "app:/templates/mail/webui/UIFolderContainer.gtmpl",
+                 events = {
+                     @EventConfig(listeners = UIFolderContainer.ChangeFolderActionListener.class),
+                     @EventConfig(listeners = UIFolderContainer.AddFolderActionListener.class),
+                     @EventConfig(listeners = UIFolderContainer.AddSubFolderActionListener.class),
+                     @EventConfig(listeners = UIFolderContainer.RenameFolderActionListener.class),
+                     @EventConfig(listeners = UIFolderContainer.RemoveFolderActionListener.class, confirm="UIFolderContainer.msg.confirm-remove-folder"),
+                     @EventConfig(listeners = UIFolderContainer.MarkReadActionListener.class),
+                     @EventConfig(listeners = UIFolderContainer.EmptyFolderActionListener.class),
+                     @EventConfig(listeners = UIFolderContainer.MoveToTrashActionListener.class)
+                 }
 )
 public class UIFolderContainer extends UIContainer {
   private String currentFolder_ = null ;
   public int i = 1;
-  
+
   public UIFolderContainer() throws Exception { }
 
   public void init(String accountId) throws Exception {
     currentFolder_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
   }
-  
+
   public String getSelectedFolder(){ return currentFolder_ ; }
   public void setSelectedFolder(String folderId) { currentFolder_ = folderId ;}
-  
+
   public List<Folder> getDefaultFolders() throws Exception{
     return getFolders(false);
   } 
-  
+
   public List<Folder> getCustomizeFolders() throws Exception{
     return getFolders(true);
   }
-  
+
   public List<Folder> getSubFolders(String parentPath) throws Exception {
     MailService mailSvr = MailUtils.getMailService();
     String username = MailUtils.getCurrentUser() ;
@@ -87,7 +88,7 @@ public class UIFolderContainer extends UIContainer {
     }
     return subFolders ;
   }
-  
+
   public Folder getCurrentFolder() throws Exception{
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
@@ -95,7 +96,7 @@ public class UIFolderContainer extends UIContainer {
     getChild(UISelectAccount.class).getSelectedValue() ;
     return mailSvr.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, getSelectedFolder()) ;
   }
-  
+
   public List<Folder> getFolders(boolean isPersonal) throws Exception{
     List<Folder> folders = new ArrayList<Folder>() ;
     MailService mailSvr = getApplicationComponent(MailService.class) ;
@@ -109,11 +110,20 @@ public class UIFolderContainer extends UIContainer {
     }
     return folders ;
   }
-  
+
   public String[] getActions() {
     return new String[] {"AddFolder"} ;
   }
-  
+
+  public boolean isImap() throws Exception {
+    MailService mailSvr = MailUtils.getMailService();
+    String username = MailUtils.getCurrentUser() ;
+    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    Account acc = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId) ;
+    return Utils.IMAP.equalsIgnoreCase(acc.getProtocol());
+  }
+
+
   static public class AddFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       UIFolderContainer uiFolder = event.getSource() ;
@@ -130,7 +140,7 @@ public class UIFolderContainer extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
-  
+
   static public class AddSubFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
@@ -142,7 +152,7 @@ public class UIFolderContainer extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
-  
+
   static public class ChangeFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;  
@@ -171,10 +181,10 @@ public class UIFolderContainer extends UIContainer {
         uiMessageList.viewing_ =  uiMessageList.VIEW_ALL;
         uiMsgPreview.setMessage(null);
       }
-      
+
       UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class); 
       uiTagContainer.setSelectedTagId(null);
-      
+
       UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class);
       if (!MailUtils.isFieldEmpty(uiSearchForm.getTextSearch())) {
         uiSearchForm.setTextSearch("");       
@@ -186,7 +196,7 @@ public class UIFolderContainer extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
     }
   }
-  
+
   static public class RenameFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;      
@@ -207,7 +217,7 @@ public class UIFolderContainer extends UIContainer {
       String username = uiPortlet.getCurrentUser();
       UINavigationContainer uiNavigationContainer = uiFolderContainer.getAncestorOfType(UINavigationContainer.class);
       String accountId = uiNavigationContainer.getChild(UISelectAccount.class).getSelectedValue();
-      
+
       mailService.removeUserFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId);     
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
@@ -224,7 +234,7 @@ public class UIFolderContainer extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
     }
   }
-  
+
   static public class EmptyFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       UIFolderContainer uiFolderContainer = event.getSource() ;
@@ -234,25 +244,25 @@ public class UIFolderContainer extends UIContainer {
       UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class) ;
       UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class);
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
-      
+
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      
+
       List<Message> msgList = mailSrv.getMessagesByFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
       mailSrv.removeMessages(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, false);
-      
+
       uiMsgList.updateList();
       Message msgPreview = uiMsgPreview.getMessage() ;
       if (msgPreview != null) {
-      	if (!msgList.contains(msgPreview.getId()))
-      		uiMsgPreview.setMessage(null);
+        if (!msgList.contains(msgPreview.getId()))
+          uiMsgPreview.setMessage(null);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
     }
   }
-  
+
   static public class MarkReadActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -279,33 +289,33 @@ public class UIFolderContainer extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
     }
   }
-  
+
   static public class MoveToTrashActionListener extends EventListener<UIFolderContainer> {
-	public void execute(Event<UIFolderContainer> event) throws Exception {
-	  UIFolderContainer uiFolderContainer = event.getSource() ;
-	  String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;		  
+    public void execute(Event<UIFolderContainer> event) throws Exception {
+      UIFolderContainer uiFolderContainer = event.getSource() ;
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;		  
       UIMailPortlet uiPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class) ;
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
-	  UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class) ;	
+      UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class) ;	
       UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class) ;
-	  UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class) ;
-	  String username = uiPortlet.getCurrentUser() ;
-	  String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-	  MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class) ;
-	  List<Message> msgList = mailSrv.getMessagesByFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
-	  boolean containPreview = false ;
-	  Message msgPre = uiMsgPreview.getMessage() ;
-	  String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;     		 
-    
-    mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, folderId, trashFolderId, false) ;
-    
-    for (Message msg : msgList) {
-      if (msgPre != null && msg.getId().equals(msgPre.getId())) containPreview = true ;
-    }  
-	  uiMsgList.updateList() ;
-	  if (containPreview) uiMsgPreview.setMessage(null);
-	  event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
-	  event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
-	  }
+      UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class) ;
+      String username = uiPortlet.getCurrentUser() ;
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class) ;
+      List<Message> msgList = mailSrv.getMessagesByFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
+      boolean containPreview = false ;
+      Message msgPre = uiMsgPreview.getMessage() ;
+      String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;     		 
+
+      mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, folderId, trashFolderId, false) ;
+
+      for (Message msg : msgList) {
+        if (msgPre != null && msg.getId().equals(msgPre.getId())) containPreview = true ;
+      }  
+      uiMsgList.updateList() ;
+      if (containPreview) uiMsgPreview.setMessage(null);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
+    }
   }
 }
