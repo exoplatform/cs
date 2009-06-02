@@ -221,7 +221,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     Map<String, SharedAddressBook> sharedGroupMap = getAncestorOfType(
         UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class).getSharedGroups() ;
     String currentUser = ContactUtils.getCurrentUser() ;
-    for (String address : contact.getAddressBook()) { 
+    for (String address : contact.getAddressBookIds()) { 
       SharedAddressBook add = sharedGroupMap.get(address) ;
       if (add != null) {
         if (add.getEditPermissionUsers() != null &&
@@ -255,7 +255,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         }    
     Map<String, SharedAddressBook> sharedGroupMap = getAncestorOfType(UIWorkingContainer.class)
         .findFirstComponentOfType(UIAddressBooks.class).getSharedGroups() ;
-    for (String address : contact.getAddressBook()) {
+    for (String address : contact.getAddressBookIds()) {
       try {
         SharedAddressBook add = sharedGroupMap.get(address) ;
         if (add.getEditPermissionUsers() != null &&
@@ -278,7 +278,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     String username = ContactUtils.getCurrentUser() ;
     */
     if (isSelectSharedContacts) return false ;
-    for (String add : contact.getAddressBook()) {
+    for (String add : contact.getAddressBookIds()) {
       if (getSharedGroupMap().containsKey(add)) {
         return true ;
         
@@ -531,7 +531,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       Map<String, String> privateGroups = uiAddressBooks.getPrivateGroupMap() ;
       Map<String, SharedAddressBook> sharedAddress = uiAddressBooks.getSharedGroups() ;
       List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ;
-      for (String add : contact.getAddressBook()) {
+      for (String add : contact.getAddressBookIds()) {
         if (privateGroups.containsKey(add)) {
           categories.add(new SelectItemOption<String>(ContactUtils.encodeHTML(privateGroups.get(add)), add)) ;  
           continue ;
@@ -686,7 +686,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
               return ;
             } else {
               String groupId = null ;
-              for (String add : contact.getAddressBook())
+              for (String add : contact.getAddressBookIds())
                 if (addressBooks.getSharedGroups().containsKey(add)) groupId = add ;                    
               if (groupId != null && !addressBooks.havePermission(groupId)) {
                 uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
@@ -726,8 +726,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
-
       if (uiAddressBooks.getSharedGroups().containsKey(addressBookId)) {
         AddressBook group = contactService.getSharedAddressBook(username, addressBookId) ;
         if (group.getEditPermissionUsers() == null || 
@@ -774,7 +772,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             return ;
           } else {
             String groupId = null ;
-            for (String add : contact.getAddressBook())
+            for (String add : contact.getAddressBookIds())
               if (uiAddressBooks.getSharedGroups().containsKey(add)) groupId = add ;                    
             if (groupId != null && !uiAddressBooks.havePermission(groupId)) {
               uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
@@ -791,7 +789,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       Map<String, String> copyedContacts = uiAddressBooks.getCopyContacts() ;      
       for(String contactId : contactIds) {
         Contact contact = uiContacts.contactMap.get(contactId) ;
-        if (!contact.getAddressBook()[0].equals(addressBookId)) copyedContacts.remove(contactId) ;  
+        if (!contact.getAddressBookIds()[0].equals(addressBookId)) copyedContacts.remove(contactId) ;  
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
 //        check for existing contact
           Contact tempContact = null ;
@@ -812,7 +810,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           copySharedContacts.put(contactId, JCRDataStorage.SHARED) ;
         }
         else {
-          contact.setAddressBook(new String[] { addressBookId }) ;
+          contact.setAddressBookIds(new String[] { addressBookId }) ;
           contacts.add(contact) ;   
         }  
       }
@@ -823,7 +821,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         for (Contact contact : sharedContacts) {        
         if (uiContacts.isSharedAddress(contact)) {
           String addressId = null ;
-          for (String add : contact.getAddressBook())
+          for (String add : contact.getAddressBookIds())
             if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
           /*
           // add to fix bug cs-1509
@@ -842,7 +840,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             return ; 
           }*/
         }
-        contact.setAddressBook(new String[] { addressBookId }) ;
+        contact.setAddressBookIds(new String[] { addressBookId }) ;
        }      
       }
       if (contacts.size() > 0) {
@@ -974,7 +972,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             return ;
           } else {
             String groupId = null ;
-            for (String add : contact.getAddressBook())
+            for (String add : contact.getAddressBookIds())
               if (addressBooks.getSharedGroups().containsKey(add)) groupId = add ;                    
             if (groupId != null && !addressBooks.havePermission(groupId)) {
               uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-delete", null
@@ -1000,7 +998,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
           if (uiContacts.isSharedAddress(contact)) {
             String addressBookId = null ;
-            for (String add : contact.getAddressBook())
+            for (String add : contact.getAddressBookIds())
               if (uiContacts.getSharedGroupMap().containsKey(add)) addressBookId = add ;
             try { 
               contactService.removeSharedContact(

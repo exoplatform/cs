@@ -35,9 +35,7 @@ import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -292,14 +290,13 @@ public class UIContactForm extends UIFormTabPane {
 
       ContactService contactService = ContactUtils.getContactService();  
       String username = ContactUtils.getCurrentUser() ;
-      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       if (uiContactForm.isNew_) {
         UIPopupContainer popupContainer = uiContactForm.getParent() ;
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
         String category = uiCategorySelect.getSelectedCategory();        
-        contact.setAddressBook(new String[] { category });
+        contact.setAddressBookIds(new String[] { category });
 
         UIAddressBooks uiAddressBooks = uiContactForm
         .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
@@ -334,9 +331,9 @@ public class UIContactForm extends UIFormTabPane {
           } else if (contactType.equals(JCRDataStorage.SHARED)) {
             UIAddressBooks uiAddressBooks = uiContactForm
               .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
-            if ( uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBook()[0])) {
-              if (uiAddressBooks.havePermission(contact.getAddressBook()[0]) || uiContacts.havePermission(contact)) {
-                contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ; 
+            if ( uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBookIds()[0])) {
+              if (uiAddressBooks.havePermission(contact.getAddressBookIds()[0]) || uiContacts.havePermission(contact)) {
+                contactService.saveContactToSharedAddressBook(username, contact.getAddressBookIds()[0], contact, false) ; 
                 contactService.getSharedContactAddressBook(username, contact.getId()) ;
                 contact.setContactType(JCRDataStorage.SHARED) ;
               } else {

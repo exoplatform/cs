@@ -17,20 +17,24 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
+
+import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.SharedAddressBook;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UISelectAccount;
@@ -39,7 +43,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectOption;
@@ -78,12 +81,49 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   LinkedHashMap<String, Contact> contactMap_ = new LinkedHashMap<String, Contact>() ;
   List<Contact> contactList_ = new ArrayList<Contact>();
   HashMap<String, String> checkedContactMap = new LinkedHashMap<String, String>();
+  private String sharedContacts_ = "sharedContacts";
   
   public UIAddressBookForm() throws Exception {
     UIFormSelectBoxWithGroups uiSelectGroup = new UIFormSelectBoxWithGroups(SELECT_GROUP, SELECT_GROUP, getOptions());
     uiSelectGroup.setOnChange("ChangeGroup");
     addUIFormInput(uiSelectGroup);
     refrestContactList(uiSelectGroup.getValue());
+  }
+  
+  public boolean havePermission(String groupId) throws Exception { 
+    String currentUser = MailUtils.getCurrentUser() ;
+    AddressBook sharedGroup = getApplicationComponent(ContactService.class).getSharedAddressBook(currentUser, groupId) ;
+    if (sharedGroup == null) return false ;
+    if (sharedGroup.getEditPermissionUsers() != null &&
+        Arrays.asList(sharedGroup.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
+      return true ;
+    }
+    String[] editPerGroups = sharedGroup.getEditPermissionGroups() ;
+    if (editPerGroups != null)
+      for (String editPer : editPerGroups)
+        if (MailUtils.getUserGroups().contains(editPer)) return true ;
+    return false ;
+  }
+  
+  public boolean havePermission(Contact contact) throws Exception {
+    if (!contact.getContactType().equals(JCRDataStorage.SHARED)) return true ;
+    // contact shared
+    String currentUser = MailUtils.getCurrentUser() ;
+    if (contact.getEditPermissionUsers() != null &&
+        Arrays.asList(contact.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
+      return true ;
+    }
+    String[] editPerGroups = contact.getEditPermissionGroups() ;
+    if (editPerGroups != null)
+      for (String editPer : editPerGroups)
+        if (MailUtils.getUserGroups().contains(editPer)) {
+          return true ;
+        }
+    
+    if (!getChild(UIFormSelectBoxWithGroups.class).getValue().equals(sharedContacts_)) {
+      if (havePermission(getChild(UIFormSelectBoxWithGroups.class).getValue())) return true ;      
+    }
+    return false ;    
   }
   
   public String getPortalName() {
@@ -105,13 +145,14 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       personalContacts.addOption(new SelectOption(pcg.getName(), pcg.getId())) ;
     }
     options.add(personalContacts);
-    /*  
-    SelectItemOptionGroup sharedContacts = new SelectItemOptionGroup("shared-contacts");
-    for(SharedAddressBook scg : contactSrv.getSharedAddressBooks(SessionProviderFactory.createSystemProvider(), username)) {
-      sharedContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(scg.getId(), scg.getName())) ;
+      
+    SelectOptionGroup sharedContacts = new SelectOptionGroup("shared-contacts");
+    for(SharedAddressBook scg : contactSrv.getSharedAddressBooks(username)) {
+      sharedContacts.addOption(new SelectOption(MailUtils.getDisplayAdddressShared(scg.getSharedUserId(), scg.getName()), scg.getId())) ;
     }
+    sharedContacts.addOption(new SelectOption(sharedContacts_, sharedContacts_));
     options.add(sharedContacts);
-    
+    /*
     SelectItemOptionGroup publicContacts = new SelectItemOptionGroup("public-contacts");
     for(String publicCg : MailUtils.getUserGroups()) {
       publicContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(publicCg, publicCg)) ;
@@ -165,12 +206,24 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     ContactFilter ctFilter = new ContactFilter() ;
     ctFilter.setOrderBy("fullName");
     ctFilter.setAscending(true);
-    ctFilter.setType("0") ;
+ 
     if (groupId != null && groupId.trim().length() > 0 ) {
-      ctFilter.setCategories(new String[] {groupId});
+      SelectOptionGroup privateGroups = (SelectOptionGroup)getChild(UIFormSelectBoxWithGroups.class).getOptions().get(0) ;
+      for (SelectOption option : privateGroups.getOptions())
+        if (option.getValue().equals(groupId)) {
+          ctFilter.setType("0") ;
+          break ;
+        }
+      if (ctFilter.getType() == null) ctFilter.setType("1") ;
+      
+      
+      if (!groupId.equals(sharedContacts_)) ctFilter.setCategories(new String[] {groupId});
+      else ctFilter.setSearchSharedContacts(true) ;
       contactList = contactSrv.searchContact(username, ctFilter).getAll();
     } else {
-      ctFilter.setCategories(new String[] {contactSrv.getGroups(username).get(0).getId()});
+      //ctFilter.setCategories(new String[] {contactSrv.getGroups(username).get(0).getId()});
+      ctFilter.setType("0") ;
+      ctFilter.setCategories(new String[] { ((SelectOptionGroup)getChild(UIFormSelectBoxWithGroups.class).getOptions().get(0)).getOptions().get(0).getValue() });
       contactList = contactSrv.searchContact(username, ctFilter).getAll();
     }
     contactMap_.clear();
@@ -231,18 +284,34 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       UIApplication uiApp = uiAddBook.getAncestorOfType(UIApplication.class) ;
       String groupId = ((UIFormSelectBoxWithGroups)uiAddBook.getChildById(SELECT_GROUP)).getValue();
       if (selectedContact != null) {
-        if (selectedContact.getContactType().equals("2") ||(selectedContact.getContactType().equals("1"))) {
+        if (selectedContact.getContactType().equals("1") && !uiAddBook.havePermission(selectedContact)) {
           uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-edit", null)) ;;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
+        /*
+        if (selectedContact.getContactType().equals("2") ||(selectedContact.getContactType().equals("1"))) {
+          uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-edit", null)) ;;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }*/
         UIPopupActionContainer uiActionContainer = uiAddBook.getParent() ;
         UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
         UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, 730) ;
         uiPopupContainer.setId("UIPopupAddContactForm") ;
         UIAddContactForm uiAddContact = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null) ;
         uiPopupContainer.addChild(uiAddContact) ;
-        uiAddContact.fillDatas(selectedContact, groupId) ;
+        if (selectedContact.getContactType().equals("1") && uiAddBook.getChild(UIFormSelectBoxWithGroups.class).getValue().equals(uiAddBook.sharedContacts_)){
+          uiAddContact.fillDatas(selectedContact, groupId) ;
+          ((UIFormSelectBoxWithGroups)uiAddContact.getChildById(SELECT_GROUP)).getOptions().clear() ;
+          List<SelectItem> options = new ArrayList<SelectItem>() ;
+          SelectOptionGroup personalContacts = new SelectOptionGroup("personal-contacts");
+          personalContacts.addOption(new SelectOption(uiAddBook.sharedContacts_, uiAddBook.sharedContacts_)) ;
+          options.add(personalContacts);   
+          ((UIFormSelectBoxWithGroups)uiAddContact.getChildById(SELECT_GROUP)).setOptions(options) ;
+        } else {
+          uiAddContact.fillDatas(selectedContact, groupId) ;
+        }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
       } else {
         uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.no-selected-contact-to-edit", null)) ;
@@ -283,24 +352,46 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
             uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete-ownerContact", null)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
-          } else if (contact.getContactType().equals("2") ||(contact.getContactType().equals("1"))) {
+          } /*else if (contact.getContactType().equals("2") ||(contact.getContactType().equals("1"))) {
             uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete", null)) ;;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
-          }
+          }*/
           
-          List<String> contactIds = new ArrayList<String>();
-          // hung edit
-          if (!contact.getId().equals(MailUtils.getCurrentUser())) {
-            contactIds.add(contact.getId()) ;
-            contactServ.removeContacts(username, contactIds); // do we require a system provider here ?
-            uiAddressBook.refrestContactList(((UIFormSelectBoxWithGroups)uiAddressBook.getChildById(SELECT_GROUP)).getValue());
-          } else {
-            uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete-this-contact", null)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
+          SelectOptionGroup privateGroups = (SelectOptionGroup)uiAddressBook.getChild(UIFormSelectBoxWithGroups.class).getOptions().get(0) ;
+          boolean isPrivate = false ;
+          for (SelectOption option : privateGroups.getOptions())
+            if (option.getValue().equals(contact.getAddressBookIds()[0])) {
+              isPrivate = true ;
+              List<String> contactIds = new ArrayList<String>();
+              if (!contact.getId().equals(MailUtils.getCurrentUser())) {
+                contactIds.add(contact.getId()) ;
+                contactServ.removeContacts(username, contactIds); // do we require a system provider here ?
+                
+              } else {
+                uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete-this-contact", null)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;
+              }
+              break ;
+            }
+          if (!isPrivate) {
+            if (((UIFormSelectBoxWithGroups)uiAddressBook.getChildById(SELECT_GROUP)).getValue().equals(uiAddressBook.sharedContacts_)) {
+              /*if (!uiAddressBook.havePermission(contact)) {
+                uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-edit", null)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;
+              }*/
+              try {
+                contactServ.removeUserShareContact(contact.getPath(), contact.getId(), username) ;
+              } catch (PathNotFoundException e) {}
+            } else {
+              uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete", null)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;              
+            }            
           }
-
+          uiAddressBook.refrestContactList(((UIFormSelectBoxWithGroups)uiAddressBook.getChildById(SELECT_GROUP)).getValue());
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
         } catch(Exception e) {
           e.printStackTrace();

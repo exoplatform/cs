@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -42,6 +43,7 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.quartz.JobDetail;
 
@@ -298,4 +300,20 @@ public class MailUtils {
     s = s.replaceAll("<(A|a)(.*?)>(.*?)</(A|a)>", "<a $2 target=\"_blank\"> $3 </a>") ;
     return s ;
   }
+  
+  public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
+    return sharedUserId + " - " + addressName ;
+  }
+  
+  public static List<String> getUserGroups() throws Exception {
+    OrganizationService organizationService = 
+      (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(getCurrentUser()).toArray() ;
+    List<String> groupIds = new ArrayList<String>() ;
+    for (Object object : objGroupIds) {
+      groupIds.add(((GroupImpl)object).getId()) ;
+    }
+    return groupIds ;
+  }
+  
 }
