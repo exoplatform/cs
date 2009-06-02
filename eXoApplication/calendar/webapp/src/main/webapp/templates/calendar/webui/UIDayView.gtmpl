@@ -49,6 +49,10 @@
 	rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
  	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UICalendarPortlet.browserResizeCallback') ;
   cssClass = "Day" ;
+  
+  DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
+  tempFormat.setCalendar(uicomponent.getInstanceTempCalendar()) ;
+  
 %>
 <div class="UIDayView">
   <div class="TitleBar">
@@ -188,8 +192,8 @@
 			            			if(flag) {cssClass = "TdLine" ;} ;
 									 			 
                       %>
-                      <tr startTime="<%=cl.getTimeInMillis()%>"  class="$style">
-                        <td class="$cssClass"  startTime="<%=cl.getTimeInMillis()%>"  unselectable="on" >
+                      <tr startFull="<%=tempFormat.format(cl.getTime())%>" startTime="<%=cl.getTimeInMillis()%>"  class="$style">
+                        <td class="$cssClass"  startFull="<%=tempFormat.format(cl.getTime())%>" startTime="<%=cl.getTimeInMillis()%>"  unselectable="on" >
                           &nbsp;
                         </td>
                       </tr>

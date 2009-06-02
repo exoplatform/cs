@@ -1051,7 +1051,8 @@ GUIMan.prototype.callbackHighlighter = function() {
   var d = new Date() ;
   var timezoneOffset = d.getTimezoneOffset() ;
   var currentTime = Highlighter.firstCell.getAttribute('startTime') ;
-  eXo.webui.UIForm.submitEvent('UIMonthView' ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime +'&ct='+currentTime+ '&tz=' + timezoneOffset); 
+  eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(Highlighter.firstCell,1,startTime,endTime) ;
+  //eXo.webui.UIForm.submitEvent('UIMonthView' ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime +'&ct='+currentTime+ '&tz=' + timezoneOffset); 
 } ;
 
 eXo.calendar.UICalendarMan = {

@@ -777,8 +777,8 @@ UIWeekView.prototype.cancelBubble = function(evt) {
 
 UIWeekView.prototype.callbackSelectionX = function() {
 	var UIHSelection = eXo.calendar.UIHSelection ;
-	var startTime = parseInt(UIHSelection.firstCell.getAttribute("startTime")) ;
-	var endTime = parseInt(UIHSelection.lastCell.getAttribute("startTime")) + 24*60*60*1000 - 1 ;
+	var startTime = parseInt(Date.parse(UIHSelection.firstCell.getAttribute("startTimeFull"))) ;
+	var endTime = parseInt(Date.parse(UIHSelection.lastCell.getAttribute("startTimeFull"))) + 24*60*60*1000 - 1 ;
 	var porlet = eXo.calendar.UICalendarPortlet;
 	var container = document.getElementById("UICalendarViewContainer");	
 	porlet.addQuickShowHiddenWithTime(container, 1, startTime, endTime) ;

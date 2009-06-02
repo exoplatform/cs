@@ -214,8 +214,8 @@
 			        <div class="MiddleLeftRightClickPopupMenu">
 			          <div class="MiddleRightRightClickPopupMenu">
               		<div class="UIRightPopupMenuContainer">
-          			  	<div class="MenuItem">
-					           <a class="ItemIcon QuickAddEvent" href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
+          			  	<div class="MenuItem" >
+					           <a class="ItemIcon QuickAddEvent" href="javascript:void(0);">
 					            	<%=_ctx.appRes("ContextMenu.label.addEvent")%>
 					            </a>
 					          </div>

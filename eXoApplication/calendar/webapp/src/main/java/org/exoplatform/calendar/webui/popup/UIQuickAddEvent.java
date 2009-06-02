@@ -430,6 +430,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
   static  public class CancelActionListener extends EventListener<UIQuickAddEvent> {
     public void execute(Event<UIQuickAddEvent> event) throws Exception {    	
+      UIQuickAddEvent uiQuickAddEvent = event.getSource() ;
+      uiQuickAddEvent.reset() ;
       event.getRequestContext().addUIComponentToUpdateByAjax( 
       event.getSource().getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendarWorkingContainer.class)) ;
     }

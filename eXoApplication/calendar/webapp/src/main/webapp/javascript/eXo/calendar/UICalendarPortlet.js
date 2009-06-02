@@ -38,7 +38,8 @@ UICalendarPortlet.prototype.attachSwapClass = function(compId,className,hoverCla
  * @param {obj, type} has action object, type of form : event 1 | task 2
  */
 UICalendarPortlet.prototype.addQuickShowHidden = function(obj, type){
-    this.addQuickShowHiddenWithTime(obj, type, new Date().getTime(), new Date().getTime()) ;
+	var startTime = new Date().getTime() ;
+    this.addQuickShowHiddenWithTime(obj, type, startTime, startTime + 15*60*1000) ;
 } ;
 
 /**
@@ -59,9 +60,7 @@ UICalendarPortlet.prototype.addQuickShowHiddenWithTime = function(obj, type, fro
     if(type == 1) {
     	var uiform = eXo.core.DOMUtil.findDescendantById(UIQuckAddEventPopupWindow, "UIQuickAddEvent") ;
     	uiform.reset() ;
-    	
     	this.fillData(uiform, data) ;
-    	
     	eXo.webui.UIPopupWindow.show(UIQuckAddEventPopupWindow);
     	eXo.webui.UIPopup.hide(UIQuckAddTaskPopupWindow) ;
     } else if(type == 2) {
@@ -1193,14 +1192,28 @@ UICalendarPortlet.prototype.listViewCallack = function(evt){
 UICalendarPortlet.prototype.dayViewCallback = function(evt){
     var _e = window.event || evt;
     var src = _e.srcElement || _e.target;
-    var startTime = "";
+   
+     
     var map = null;
     if (src.nodeName == "TD") {
         src = eXo.core.DOMUtil.findAncestorByTagName(src, "tr");
-        startTime = src.getAttribute("startTime");
-        map = {
+        var startTime = parseInt(Date.parse(src.getAttribute('startFull')));
+    	/*var endTime = parseInt(Date.parse(DOMUtil.findAncestorByTagName(src, "td").getAttribute('startFull')))  + 24*60*60*1000 - 1;
+    	
+        var startTime = parseInt(src.getAttribute("startTime"));*/
+        var endTime = startTime + 15*60*1000 ;
+        var items = eXo.core.DOMUtil.findDescendantsByTagName(eXo.webui.UIContextMenu.menuElement, "a");
+        for(var i = 0; i < items.length; i++){
+        	var aTag = items[i];
+        	if(eXo.core.DOMUtil.hasClass(aTag, "QuickAddEvent")) {
+        		aTag.href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(this,1,"+startTime+","+endTime+");" 
+        	} else if(eXo.core.DOMUtil.hasClass(aTag, "QuickAddTask")) {
+        		aTag.href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(this,2,"+startTime+","+endTime+");"
+        	}
+        }
+        /*map = {
             "startTime\s*=\s*.*(?=&|'|\")": "startTime=" + startTime
-        };
+        };*/
     }
     else {
         src = (eXo.core.DOMUtil.hasClass(src, "EventBoxes")) ? src : eXo.core.DOMUtil.findAncestorByClass(src, "EventBoxes");
@@ -1242,38 +1255,40 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
                 "calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calType=" + calType
             };
         }
-				if(!DOMUtil.hasClass(obj,"EventAlldayContainer")){
-					var container = DOMUtil.findAncestorByClass(src,"EventWeekContent");
-					var mouseY = (eXo.core.Browser.findMouseRelativeY(container,evt) + container.scrollTop)*60000;
-					obj =parseInt(DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime")) + mouseY;
-				} else obj = null;
+		if(!DOMUtil.hasClass(obj,"EventAlldayContainer")){
+			var container = DOMUtil.findAncestorByClass(src,"EventWeekContent");
+			var mouseY = (eXo.core.Browser.findMouseRelativeY(container,evt) + container.scrollTop)*60000;
+			obj =parseInt(DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime")) + mouseY;
+		} else obj = null;
         for (var i = 0; i < items.length; i++) {
             if (DOMUtil.hasClass(items[i].parentNode,"EventActionMenu")) {
                 items[i].parentNode.style.display = "block";
                 items[i].href = UIContextMenu.replaceall(String(items[i].href), map);
             }
             else {
-                items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/, "startTime=" + obj);
-                var fTime = Math.round(parseInt(obj));
-                var tTime = fTime + 15*60 ;
+                //TODO Menu on allday events
+            	//items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/, "startTime=" + obj);
+                /*var fTime = parseInt(obj);
+                var tTime = fTime + 15*60*1000 ;*/
         		if(DOMUtil.hasClass(items[i],"QuickAddEvent")){
-        			items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(this, 1,"+fTime+","+tTime+");"
+        			items[i].style.display="none" ;
+        			/*items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(this, 1,"+fTime+","+tTime+");"
         			 if(isNaN(fTime)) {
         				 items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHidden(this, 1);" ;
-        		     } 
+        		     } */
             		 
             	} else if (DOMUtil.hasClass(items[i],"QuickAddTask")) {
-            		items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(this, 2, "+fTime+","+tTime+");"
+            		items[i].style.display="none" ;
+            		/*items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(this, 2, "+fTime+","+tTime+");"
             		 if(isNaN(fTime)) {
         				 items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHidden(this, 2);" ;
-        		     } 
+        		     } */
             	}
             }
         }
-    }
-    else {
-				var container = DOMUtil.findAncestorByClass(src,"EventWeekContent");
-				var mouseY = (eXo.core.Browser.findMouseRelativeY(container,evt) + container.scrollTop)*60000;
+    } else {
+		var container = DOMUtil.findAncestorByClass(src,"EventWeekContent");
+		var mouseY = (eXo.core.Browser.findMouseRelativeY(container,evt) + container.scrollTop)*60000;
         obj = eXo.core.EventManager.getEventTargetByTagName(evt,"td"); //(DOMUtil.findAncestorByTagName(src, "td")) ? DOMUtil.findAncestorByTagName(src, "td") : src;
         map = eXo.calendar.UICalendarPortlet.getBeginDay(obj.getAttribute("startTime")) + mouseY;
         for (var i = 0; i < items.length; i++) {
@@ -1282,8 +1297,8 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
             }
             else {
             	items[i].href = String(items[i].href).replace(/startTime\s*=\s*.*(?=&|'|\")/, "startTime=" + map);
-                var fTime = Math.round(parseInt(map));
-                var tTime = fTime + 15*60 ;
+                var fTime = parseInt(map);
+                var tTime = fTime + 15*60*1000 ;
                 
             	if(DOMUtil.hasClass(items[i],"QuickAddEvent")){
             		items[i].href = "javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(this, 1,"+fTime+","+tTime+");"
@@ -1315,10 +1330,20 @@ UICalendarPortlet.prototype.monthViewCallback = function(evt){
     var links = eXo.core.DOMUtil.findDescendantsByTagName(UIContextMenu.menuElement, "a");
     if (!DOMUtil.findAncestorByClass(src, "EventBoxes")) {
         if (objectValue = DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime")) {
-            var map = {
+        	//TODO CS-2800
+        	var startTime = parseInt(Date.parse(DOMUtil.findAncestorByTagName(src, "td").getAttribute('startTimeFull')));
+        	var endTime = parseInt(Date.parse(DOMUtil.findAncestorByTagName(src, "td").getAttribute('startTimeFull')))  + 24*60*60*1000 - 1;
+        	for(var i = 0; i < links.length; i++){
+            	if(DOMUtil.hasClass(links[i], "QuickAddEvent")) {
+            		links[i].href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(this,1,"+startTime+","+endTime+");" 
+            	} else if(DOMUtil.hasClass(links[i], "QuickAddTask")) {
+            		links[i].href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(this,2,"+startTime+","+endTime+");"
+            	}
+            }
+        	/*var map = {
                 "startTime\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "startTime=" + objectValue
             };
-            UIContextMenu.changeAction(UIContextMenu.menuElement, map);
+            UIContextMenu.changeAction(UIContextMenu.menuElement, map);*/
         }
     }
     else 
@@ -1892,7 +1917,7 @@ UISelection.prototype.start = function(evt){
 						return;
         }
         
-        UISelection.startTime = src.getAttribute("startTime");
+        UISelection.startTime = parseInt(Date.parse(src.getAttribute("startFull")));//src.getAttribute("startTime");
         UISelection.startX = eXo.core.Browser.findPosXInContainer(src, UISelection.container) - document.getElementById(eXo.calendar.UICalendarPortlet.portletName).parentNode.scrollTop;
         UISelection.block.style.display = "block";
         UISelection.startY = eXo.core.Browser.findPosYInContainer(src, UISelection.container);
@@ -1964,8 +1989,7 @@ UISelection.prototype.clear = function(){
     }
 		if(bottom >= UISelection.container.offsetHeight) endTime -= 1;
 	var container = document.getElementById("UICalendarViewContainer");	
-	var porlet = eXo.calendar.UICalendarPortlet;
-	porlet.addQuickShowHiddenWithTime(container, 1, startTime, endTime) ;
+	eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(container, 1, startTime, endTime) ;
     //eXo.webui.UIForm.submitEvent(UISelection.viewType, 'QuickAdd', '&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime);
     eXo.core.DOMUtil.listHideElements(UISelection.block);
 		UISelection.startTime = null;

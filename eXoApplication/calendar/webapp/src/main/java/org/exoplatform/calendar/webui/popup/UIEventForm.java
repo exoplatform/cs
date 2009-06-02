@@ -980,7 +980,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         participantStatus_.put(entry[0], entry[1]);
         participantStatusList_.add(new ParticipantStatus(entry[0],entry[1]));
       }
-      else {
+      else if(entry.length == 1){
         participantStatus_.put(entry[0], STATUS_EMPTY);
         participantStatusList_.add(new ParticipantStatus(entry[0],STATUS_EMPTY));
       }

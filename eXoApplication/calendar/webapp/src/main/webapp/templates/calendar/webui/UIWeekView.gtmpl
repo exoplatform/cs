@@ -253,7 +253,7 @@
 					 		  	cssClass = "Weekday" ;
 					 		  }
             %>
-            <td startTime="<%=cl.getTimeInMillis()%>" eventindex="$dayOfWeek" class="$styleClass $cssClass $style" style="$styleWidth">
+            <td startFull="<%=tempFormat.format(cl.getTime())%>" startTime="<%=cl.getTimeInMillis()%>" eventindex="$dayOfWeek" class="$styleClass $cssClass $style" style="$styleWidth">
               <span></span>
             </td>
             <%		
