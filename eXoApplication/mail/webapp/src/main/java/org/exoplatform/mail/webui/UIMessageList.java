@@ -27,6 +27,7 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessagePageList;
@@ -35,6 +36,7 @@ import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAddContactForm;
 import org.exoplatform.mail.webui.popup.UIAddMessageFilter;
+import org.exoplatform.mail.webui.popup.UIAskmeReturnReceipt;
 import org.exoplatform.mail.webui.popup.UIComfirmPassword;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIExportForm;
@@ -332,6 +334,7 @@ public class UIMessageList extends UIForm {
         if (msg.hasAttachment()) {
           msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accountId, msg) ;
         }
+        
         if (msg.isUnread()) {
           List<Message> msgIds  = new ArrayList<Message>();
           msgIds.add(msg);
@@ -348,10 +351,10 @@ public class UIMessageList extends UIForm {
             return ;
           }
           msg.setUnread(false);
-          uiMessageList.setSelectedMessageId(msgId);
           uiMessageList.messageList_.put(msg.getId(), msg);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer); 
         }
+        uiMessageList.setSelectedMessageId(msgId);
         for (Message uncheckedMsg : uiMessageList.messageList_.values()) {
           UIFormCheckBoxInput<Boolean> uiCheckbox = uiMessageList.getChildById(uncheckedMsg.getId());
           if (uiCheckbox != null ) {
@@ -374,10 +377,28 @@ public class UIMessageList extends UIForm {
           }
         }
         uiMessagePreview.setShowedMessages(showedMessages) ;
+        
+        if (msg.isReturnReceipt()) {
+          long requestReturnReceipt = ((UIMessageArea)uiMessageList.getParent()).getMailSetting().getSendReturnReceipt();
+          if (requestReturnReceipt == MailSetting.SEND_RECEIPT_ASKSME) {
+            UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
+            uiPopupAction.activate(UIAskmeReturnReceipt.class, 600).setSelectedMsg(msg);
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+          } else if (requestReturnReceipt == MailSetting.SEND_RECEIPT_ALWAYS) {
+            MailService mailService = uiMessageList.getApplicationComponent(MailService.class);
+            mailService.sendReturnReceipt(SessionProviderFactory.createSystemProvider(), username, accountId, msgId);
+            List<Message> msgs = new ArrayList<Message>();
+            msgs.add(msg);
+            mailSrv.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, msgs, Utils.IS_RETURN_RECEIPT);
+          }
+        } 
+        
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
       }          
     }
   }
+  
+  
 
   static public class ReadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {

@@ -297,6 +297,11 @@ public class JCRDataStorage {
             .getLong()));
       } catch (Exception e) {
       }
+      try {
+        setting.setSendReturnReceipt((settingNode.getProperty(Utils.EXO_RETURN_RECEIPT)
+            .getLong()));
+      } catch (Exception e) {
+      }
     }
     return setting;
   }
@@ -753,6 +758,7 @@ public class JCRDataStorage {
       settingNode.setProperty(Utils.EXO_PREFIX_MESSAGE_WITH, newSetting.getPrefixMessageWith());
       settingNode.setProperty(Utils.EXO_SAVE_SENT_MESSAGE, newSetting.saveMessageInSent());
       settingNode.setProperty(Utils.EXO_LAYOUT, newSetting.getLayout());
+      settingNode.setProperty(Utils.EXO_RETURN_RECEIPT, newSetting.getSendReturnReceipt());
       // saves change
       settingNode.save();
     }
@@ -799,6 +805,7 @@ public class JCRDataStorage {
       nodeMsg.setProperty(Utils.EXO_IS_ROOT, message.isRootConversation());
       nodeMsg.setProperty(Utils.EXO_CONTENT_TYPE, message.getContentType());
       nodeMsg.setProperty(Utils.ATT_IS_LOADED_PROPERLY, message.attIsLoadedProperly());
+      nodeMsg.setProperty(Utils.IS_RETURN_RECEIPT, message.isReturnReceipt());
       if (message.getSendDate() != null)
         nodeMsg.setProperty(Utils.EXO_SENDDATE, message.getSendDate().getTime());
       if (message.getReceivedDate() != null)
@@ -947,13 +954,14 @@ public class JCRDataStorage {
       node.setProperty(Utils.EXO_SENDDATE, sc);
       
       node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize()));
-      node.setProperty(Utils.EXO_ISUNREAD, true);
+      boolean isReadMessage = MimeMessageParser.isSeenMessage(msg);
+      node.setProperty(Utils.EXO_ISUNREAD, !isReadMessage);
       node.setProperty(Utils.EXO_STAR, false);
 
       long priority = MimeMessageParser.getPriority(msg);
       node.setProperty(Utils.EXO_PRIORITY, priority);
       
-      if (msg.getHeader("Disposition-Notification-To") != null) node.setProperty(Utils.IS_RETURN_RECEIPT, true);
+      if (MimeMessageParser.requestReturnReceipt(msg)) node.setProperty(Utils.IS_RETURN_RECEIPT, true);
       else node.setProperty(Utils.IS_RETURN_RECEIPT, false);
       
       if (spamFilter != null && spamFilter.checkSpam(msg)) {
@@ -1009,6 +1017,7 @@ public class JCRDataStorage {
       if (infoObj != null && continuation != null) {
         infoObj.setFrom(from);
         infoObj.setMsgId(msgId);
+        infoObj.setIsRead(isReadMessage);
         infoObj.setSubject(subject);
         infoObj.setSize(Utils.convertSize(Math.abs(msg.getSize())));
         infoObj.setAccountId(accId);
@@ -1033,8 +1042,9 @@ public class JCRDataStorage {
       t1 = System.currentTimeMillis();
 
       for (int i = 0; i < folderIds.length; i++) {
-        increaseFolderItem(sProvider, username, accId, folderIds[i]);
+        increaseFolderItem(sProvider, username, accId, folderIds[i], isReadMessage);
       }
+
       t2 = System.currentTimeMillis();
       logger.warn("Updated number message to folder finished : " + (t2 - t1) + " ms");
       return true;
@@ -1066,12 +1076,14 @@ public class JCRDataStorage {
   }
 
   private void increaseFolderItem(SessionProvider sProvider, String username, String accId,
-      String folderId) throws Exception {
+      String folderId, boolean isReadMessage) throws Exception {
     try {
       Node node = getFolderNodeById(sProvider, username, accId, folderId);
       if (node != null) {
-        node.setProperty(Utils.EXO_UNREADMESSAGES, node.getProperty(Utils.EXO_UNREADMESSAGES)
-            .getLong() + 1);
+        if (!isReadMessage) {
+          node.setProperty(Utils.EXO_UNREADMESSAGES, node.getProperty(Utils.EXO_UNREADMESSAGES)
+                           .getLong() + 1);
+        }
         node.setProperty(Utils.EXO_TOTALMESSAGE,
             node.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1);
         node.save();
@@ -2062,6 +2074,9 @@ public class JCRDataStorage {
           }
           currentFolderNode.save();
         }
+      } else {
+        msgNode.setProperty(property, !msgNode.getProperty(property).getBoolean());
+        msgNode.save();
       }
     }
   }
@@ -2446,7 +2461,7 @@ public class JCRDataStorage {
       msgNode.setProperty(Utils.EXO_STAR, false);
       msgNode.setProperty(Utils.MSG_FOLDERS, folders);
       msgHomeNode.save();
-      increaseFolderItem(sProvider, username, accId, folderId);
+      increaseFolderItem(sProvider, username, accId, folderId, true);
 
       logger.warn("DUPLICATE MAIL IN ANOTHER FOLDER ... ");
 

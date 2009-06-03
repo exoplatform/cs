@@ -42,6 +42,7 @@ import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
 import javax.mail.internet.AddressException;
+import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -84,6 +85,7 @@ import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.scheduler.JobInfo;
@@ -299,6 +301,8 @@ public class MailServiceImpl implements MailService, Startable {
     props.put(Utils.SVR_SMTP_USER, smtpUser);
     props.put(Utils.SVR_SMTP_HOST, outgoingHost);
     props.put(Utils.SVR_SMTP_PORT, outgoingPort);
+    props.put("mail.smtp.dsn.notify", "SUCCESS,FAILURE ORCPT=rfc822;" + acc.getEmailAddress());
+    props.put("mail.smtp.dsn.ret", "FULL");
     props.put("mail.smtp.socketFactory.port", outgoingPort);
     props.put(Utils.SVR_SMTP_AUTH, "true");
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "true");
@@ -908,7 +912,7 @@ public class MailServiceImpl implements MailService, Startable {
     
     try {
       folder.open(javax.mail.Folder.READ_WRITE);
-      
+      System.out.println(folder.getName() + "======================================>>> " + folder.getNewMessageCount());
       logger.warn(" #### Getting mails from folder " + folder.getName() + " !");
       checkingLog_.get(key).setStatusMsg("Getting mails from folder " + folder.getName() + " !");
       
@@ -1011,7 +1015,7 @@ public class MailServiceImpl implements MailService, Startable {
             saved = storage_.saveMessage(sProvider, username, accountId, msg, folderIds, null, spamFilter, infoObj, continuation);
             
             if (saved) {
-              msg.setFlag(Flags.Flag.SEEN, true);
+              //msg.setFlag(Flags.Flag.SEEN, true);
               if (!leaveOnserver) msg.setFlag(Flags.Flag.DELETED, true);
               
               folderStr = "";
@@ -1084,7 +1088,6 @@ public class MailServiceImpl implements MailService, Startable {
       info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !");
       int totalNew = 0;
       String protocol = account.getProtocol();
-      boolean isPop3 = account.getProtocol().equals(Utils.POP3);
       boolean isImap = account.getProtocol().equals(Utils.IMAP); 
      
       /*ExoContainer container = RootContainer.getInstance();
@@ -1581,5 +1584,11 @@ public class MailServiceImpl implements MailService, Startable {
     if(listener instanceof MailUpdateStorageEventListener ) {
       listeners_.add((MailUpdateStorageEventListener)listener) ;
     }
+  }
+
+  public boolean sendReturnReceipt(SessionProvider provider, String username, String accId, String msgId) throws Exception {
+    //TODO need to implement
+    Message msg = getMessageById(provider, username, accId, msgId);
+    return true;
   }
 }

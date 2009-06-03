@@ -494,5 +494,10 @@ public class FakeMailService implements MailService {
     // TODO Auto-generated method stub
 
   }
+  
+  public boolean sendReturnReceipt(SessionProvider provider, String username, String accId, String msgId) throws Exception {
+    // TODO Auto-generated method stub
+    return true;  
+  }
 
 }

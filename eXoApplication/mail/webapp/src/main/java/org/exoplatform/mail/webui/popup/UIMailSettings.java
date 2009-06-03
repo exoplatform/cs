@@ -71,9 +71,13 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
   public static final String REPLY_WITH_ATTACH = "reply-message-with".intern();
   public static final String FORWARD_WITH_ATTACH = "forward-message-with".intern();
   public static final String SAVE_SENT_MESSAGE = "save-sent-message".intern();
-  public static final String TAB_GENERAL = "general";
-  public static final String TAB_LAYOUT = "layout";
-  
+  public static final String SENT_RECEIPT_ASKME = "askme".intern();
+  public static final String SENT_RECEIPT_NEVER = "never".intern();
+  public static final String SENT_RECEIPT_ALWAYS = "always".intern();
+  public static final String RETURN_RECEIPTS="returnReceipts".intern();
+  public static final String TAB_GENERAL = "general".intern();
+  public static final String TAB_RETURN_RECEIPT = "return-receipt".intern();
+  public static final String TAB_LAYOUT = "layout".intern();
   
   public UIMailSettings() throws Exception {    
     super("UIMailSettings");
@@ -87,10 +91,8 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       numberPerPage.add(new SelectItemOption<String>(String.valueOf(10*i)));
     }
     generalInputSet.addUIFormInput(new UIFormSelectBox(NUMBER_MSG_PER_PAGE, NUMBER_MSG_PER_PAGE, numberPerPage));  
-    //TODO should replace text by resource boundle
     List<SelectItemOption<String>> periodCheckAuto = new ArrayList<SelectItemOption<String>>();
     periodCheckAuto.add(new SelectItemOption<String>("Never", "period." + String.valueOf(MailSetting.NEVER_CHECK_AUTO)));
-    //TODO change to id
     periodCheckAuto.add(new SelectItemOption<String>("5 minutes", "period." + String.valueOf(MailSetting.FIVE_MINS)));
     periodCheckAuto.add(new SelectItemOption<String>("10 minutes", "period." + String.valueOf(MailSetting.TEN_MINS)));
     periodCheckAuto.add(new SelectItemOption<String>("20 minutes", "period." + String.valueOf(MailSetting.TWENTY_MINS)));
@@ -115,8 +117,17 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
     
     generalInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(SAVE_SENT_MESSAGE, SAVE_SENT_MESSAGE, false));
     
-    UIMailLayoutTab  layoutInputSet = new UIMailLayoutTab(TAB_LAYOUT);
+    UIMailLayoutTab layoutInputSet = new UIMailLayoutTab(TAB_LAYOUT);
+    
+    UIFormInputSet returnReceiptInputSet = new UIFormInputSet(TAB_RETURN_RECEIPT);
+    List<SelectItemOption<String>> returnReceiptOptions = new ArrayList<SelectItemOption<String>>();
+    returnReceiptOptions.add(new SelectItemOption<String>(SENT_RECEIPT_ASKME, SENT_RECEIPT_ASKME));
+    returnReceiptOptions.add(new SelectItemOption<String>(SENT_RECEIPT_NEVER, SENT_RECEIPT_NEVER));
+    returnReceiptOptions.add(new SelectItemOption<String>(SENT_RECEIPT_ALWAYS, SENT_RECEIPT_ALWAYS));
+    returnReceiptInputSet.addUIFormInput((new UIFormRadioBoxInput(RETURN_RECEIPTS,RETURN_RECEIPTS, returnReceiptOptions)).setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN));
+    
     addUIFormInput(generalInputSet);
+    addUIFormInput(returnReceiptInputSet);
     addUIFormInput(layoutInputSet);
     setSelectedTab(generalInputSet.getId()) ;
     fillData() ;
@@ -139,7 +150,8 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
     MailSetting setting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
     if (setting != null) {
       long layout = setting.getLayout();
-      UIFormInputSet tabGeneral, tabLayout;
+      long sendReturnReceipt = setting.getSendReturnReceipt();
+      UIFormInputSet tabGeneral, returnReceipts, tabLayout;
       
       tabGeneral = (UIFormInputSet) getChildById(TAB_GENERAL);
       tabGeneral.getUIFormSelectBox(DEFAULT_ACCOUNT).setValue(setting.getDefaultAccount()) ;
@@ -149,6 +161,14 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       tabGeneral.getUIFormSelectBox(REPLY_WITH_ATTACH).setValue("replywith." + String.valueOf(setting.replyWithAttach()));
       tabGeneral.getUIFormSelectBox(FORWARD_WITH_ATTACH).setValue("forwardwith." + String.valueOf(setting.forwardWithAtt()));
       tabGeneral.getUIFormCheckBoxInput(SAVE_SENT_MESSAGE).setChecked(setting.saveMessageInSent());
+      
+      returnReceipts = (UIFormInputSet) getChildById(TAB_RETURN_RECEIPT);
+      if (sendReturnReceipt == MailSetting.SEND_RECEIPT_ASKSME) 
+        ((UIFormRadioBoxInput) returnReceipts.getChildById(RETURN_RECEIPTS)).setValue(SENT_RECEIPT_ASKME);
+      else if (sendReturnReceipt == MailSetting.SEND_RECEIPT_NEVER) 
+        ((UIFormRadioBoxInput) returnReceipts.getChildById(RETURN_RECEIPTS)).setValue(SENT_RECEIPT_NEVER);
+      else if (sendReturnReceipt == MailSetting.SEND_RECEIPT_ALWAYS) 
+        ((UIFormRadioBoxInput) returnReceipts.getChildById(RETURN_RECEIPTS)).setValue(SENT_RECEIPT_ALWAYS);
       
       tabLayout = (UIFormInputSet) getChildById(TAB_LAYOUT);
       if (layout == MailSetting.VERTICAL_LAYOUT) {
@@ -203,9 +223,17 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       setting.setForwardWithAtt(Boolean.valueOf(forwardWith.substring(forwardWith.indexOf(".") + 1, forwardWith.length())));
       setting.setSaveMessageInSent(uiSetting.getUIFormCheckBoxInput(SAVE_SENT_MESSAGE).isChecked());
       
+      UIFormInputSet returnReceiptLayout = (UIFormInputSet) uiSetting.getChildById(TAB_RETURN_RECEIPT);
+      String value = ((UIFormRadioBoxInput) returnReceiptLayout.getChildById(UIMailSettings.RETURN_RECEIPTS)).getValue();
+      if (value != null) {
+        if (value.equals(UIMailSettings.SENT_RECEIPT_ASKME)) setting.setSendReturnReceipt(MailSetting.SEND_RECEIPT_ASKSME);
+        else if (value.equals(UIMailSettings.SENT_RECEIPT_NEVER)) setting.setSendReturnReceipt(MailSetting.SEND_RECEIPT_NEVER);
+        else if (value.equals(UIMailSettings.SENT_RECEIPT_ALWAYS)) setting.setSendReturnReceipt(MailSetting.SEND_RECEIPT_ALWAYS);
+      }
+      
       UIFormInputSet tabLayout = (UIFormInputSet) uiSetting.getChildById(TAB_LAYOUT);
       long oldLayout = setting.getLayout();
-      String value = ((UIFormRadioBoxInput) tabLayout.getChildById(UIMailLayoutTab.VERTICAL_LAYOUT)).getValue();
+      value = ((UIFormRadioBoxInput) tabLayout.getChildById(UIMailLayoutTab.VERTICAL_LAYOUT)).getValue();
       if (value != null && value.equals(UIMailLayoutTab.VERTICAL_LAYOUT_VALUE)) setting.setLayout(MailSetting.VERTICAL_LAYOUT);
       else {
         value = ((UIFormRadioBoxInput) tabLayout.getChildById(UIMailLayoutTab.HORIZONTAL_LAYOUT)).getValue();

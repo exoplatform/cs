@@ -608,4 +608,6 @@ public interface MailService {
   public Message loadAttachments(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception ;
   
   public void addListenerPlugin(ComponentPlugin listener) throws Exception ;
+  
+  public boolean sendReturnReceipt(SessionProvider sProvider, String username, String accId, String msgId) throws Exception;
 }

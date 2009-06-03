@@ -388,6 +388,9 @@
   		<propertyDefinition name="exo:layout" requiredType="Long" defaultValue="" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
   		</propertyDefinition>
+  		<propertyDefinition name="exo:returnReceipt" requiredType="Long" defaultValue="0" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
   	</propertyDefinitions>
   </nodeType> 	
   

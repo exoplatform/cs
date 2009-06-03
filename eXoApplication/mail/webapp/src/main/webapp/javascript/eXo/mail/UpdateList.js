@@ -25,17 +25,19 @@ UpdateList.prototype.update = function(obj){
   	var folderNumberCountNode ;
   	var numberStr;
   	var updateImapFolder;
-  	for (var i = 0; i < folders.length; i++) {
-  	  folderNumberCountNode = document.getElementById(folders[i]);
-  	  if (folderNumberCountNode != null) {
-  	  	if (eXo.core.DOMUtil.findAncestorByClass(folderNumberCountNode, "Folder").className.indexOf("SelectedLabel") > -1) isUpdate = true;
-  	  	numberStr = folderNumberCountNode.innerHTML;
-  	  	numberStr = numberStr.substring(numberStr.indexOf("(") + 1, numberStr.indexOf(")"));
-      	if (numberStr.length == 0) numberStr = "0";
-  	  	folderNumberCountNode.innerHTML = "(" + (parseInt(numberStr) + 1) + ")";
-  	  } else {
-  	    updateImapFolder = document.getElementById("UpdateImapFolder");
-  	    if (updateImapFolder != null) {
+      for (var i = 0; i < folders.length; i++) {
+  	    folderNumberCountNode = document.getElementById(folders[i]);
+  	    if (folderNumberCountNode != null) {
+  	  	  if (eXo.core.DOMUtil.findAncestorByClass(folderNumberCountNode, "Folder").className.indexOf("SelectedLabel") > -1) isUpdate = true;
+  	  	  if (data.isRead != 'true') {
+  	  	    numberStr = folderNumberCountNode.innerHTML;
+  	  	    numberStr = numberStr.substring(numberStr.indexOf("(") + 1, numberStr.indexOf(")"));
+      	    if (numberStr.length == 0) numberStr = "0";
+  	  	    folderNumberCountNode.innerHTML = "(" + (parseInt(numberStr) + 1) + ")";
+  	      }
+  	    } else {
+  	      updateImapFolder = document.getElementById("UpdateImapFolder");
+  	      if (updateImapFolder != null) {
   	    	eval(eXo.core.DOMUtil.findDescendantsByTagName(updateImapFolder, 'a')[0].href.replace("%20", ""));
   	    }
   	  }
@@ -47,7 +49,8 @@ UpdateList.prototype.update = function(obj){
 		  var preTr = eXo.core.DOMUtil.findPreviousElementByTagName(tr, "tr");
 		  if (preTr && !preTr.className) tbodyMsgList.removeChild(preTr);
 		  var href = "href=\"javascript:eXo.webui.UIForm.submitEvent('mail#UIMessageList','SelectMessage','&objectId=" + data.msgId + "')\"";
-		  
+		  var clazz = "UnreadItem";
+		  if (data.isRead == 'true') clazz = "ReadItem";
 		  eXo.core.EventManager.addEvent(tr, "mousedown", eXo.mail.UIMailDragDrop.mailMDTrigger);
 		  tr.className = "MessageItem";
 		  tr.msgid = data.msgId;
@@ -67,28 +70,28 @@ UpdateList.prototype.update = function(obj){
 		  tr.appendChild(td);
 		  
 		  td = document.createElement("td");
-		  td.className = "UnreadItem";
+		  td.className = clazz;
 		  td.innerHTML = "<a " + href + "> " + data.subject + "</a>";
 		  tr.appendChild(td);
 		  
 		  
 		  td = document.createElement("td");
-		  td.className = "UnreadItem";
+		  td.className = clazz;
 		  td.innerHTML = "<a " + href + "> " + data.from + "</a>";
 		  tr.appendChild(td);
 		  
 		  td = document.createElement("td");
-		  td.className = "UnreadItem";
+		  td.className = clazz;
 		  td.innerHTML = "<a " + href + ">" + data.date + " </a>";
 		  tr.appendChild(td);
 		  
 		  td = document.createElement("td");
-		  td.className = "UnreadItem";
+		  td.className = clazz;
 		  td.innerHTML = "<a " + href + "> </a>";
 		  tr.appendChild(td);
 		  
 		  td = document.createElement("td");
-		  td.className = "UnreadItem";
+		  td.className = clazz;
 		  td.innerHTML = "<a " + href + "> " + data.size + " </a>";
 		  tr.appendChild(td);
 		  

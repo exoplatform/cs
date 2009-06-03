@@ -31,6 +31,7 @@ public class Info {
   private String date_;
   private String size_;
   private String folders_;
+  private String isRead_;
   
   public String getMsgId() { return id_; }
   public void setMsgId(String id) { id_ = id; }
@@ -52,6 +53,9 @@ public class Info {
   
   public String getSize() { return size_; }
   public void setSize(String size) { size_ = size; }
+  
+  public String getIsRead() { return isRead_; }
+  public void setIsRead(boolean isRead) { isRead_ = String.valueOf(isRead); }
   
   public String getFolders() { return folders_; }
   public void setFolders(String folders) { folders_ = folders; }

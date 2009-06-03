@@ -44,6 +44,10 @@ public class MailSetting {
   public static final long HORIZONTAL_LAYOUT = 1;
   public static final long NO_SPLIT_LAYOUT = 2;
   
+  public static final long SEND_RECEIPT_ASKSME = 0;
+  public static final long SEND_RECEIPT_NEVER = 1;
+  public static final long SEND_RECEIPT_ALWAYS = 2;
+  
   private long numberMsgPerPage_;  
   private boolean formatAsOriginal_;
   private boolean replyWithAtt_;
@@ -54,6 +58,7 @@ public class MailSetting {
   private boolean useWysiwyg_ ; 
   private boolean saveMsgInSent_ = true;
   private long layout_ = HORIZONTAL_LAYOUT; 
+  private long sendReceipt_ = SEND_RECEIPT_ASKSME;
   
   public MailSetting() {
     numberMsgPerPage_ = 20;
@@ -94,4 +99,7 @@ public class MailSetting {
   
   public long getLayout() { return layout_; }
   public void setLayout(long layout) { layout_ = layout; }
+  
+  public long getSendReturnReceipt() { return sendReceipt_; }
+  public void setSendReturnReceipt(long sendReceipt) { sendReceipt_ = sendReceipt; }
 }

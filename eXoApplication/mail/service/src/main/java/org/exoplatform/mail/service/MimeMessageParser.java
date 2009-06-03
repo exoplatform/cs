@@ -27,6 +27,7 @@ import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import javax.mail.Flags;
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -218,5 +219,39 @@ public class MimeMessageParser {
     String[] exoInvitationHeaders = message.getHeader("X-Exo-Invitation");
     if (exoInvitationHeaders != null) return exoInvitationHeaders ;
     return null ;
+  }
+  
+  public static boolean isSeenMessage(javax.mail.Message message) throws Exception {
+    boolean isReadMessage = false ;
+    Flags flags = message.getFlags();
+    Flags.Flag[] sf = flags.getSystemFlags();
+    for (int i = 0; i < sf.length; i++) {
+      if (sf[i] == Flags.Flag.SEEN)
+        isReadMessage = true;
+    }
+    return isReadMessage;
+  }
+  
+  public static boolean isAnsweredMessage(javax.mail.Message message) throws Exception {
+    boolean isAnswerMessage = false ;
+    Flags flags = message.getFlags();
+    Flags.Flag[] sf = flags.getSystemFlags();
+    for (int i = 0; i < sf.length; i++) {
+      if (sf[i] == Flags.Flag.ANSWERED)
+        isAnswerMessage = true;
+    }
+    return isAnswerMessage;
+  }
+  
+  public static boolean isExistHeader(javax.mail.Message message, String header) throws Exception {
+    String[] headers = message.getHeader(header) ;
+    return (headers != null);
+  }
+  
+  public static boolean requestReturnReceipt(javax.mail.Message message) throws Exception {
+    boolean requestReturnReceipt = false;
+    // need to emprove
+    if (!isSeenMessage(message) && isExistHeader(message, "Disposition-Notification-To")) requestReturnReceipt = true;
+    return requestReturnReceipt;
   }
 }
