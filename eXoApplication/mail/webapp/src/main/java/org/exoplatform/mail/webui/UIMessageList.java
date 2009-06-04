@@ -331,9 +331,7 @@ public class UIMessageList extends UIForm {
 
       if (msg != null) {
         MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-        if (msg.hasAttachment()) {
-          msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accountId, msg) ;
-        }
+        msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accountId, msg) ;
         
         if (msg.isUnread()) {
           List<Message> msgIds  = new ArrayList<Message>();

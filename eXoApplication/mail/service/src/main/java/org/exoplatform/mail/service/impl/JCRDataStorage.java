@@ -1207,9 +1207,9 @@ public class JCRDataStorage {
           node.setProperty(Utils.ATT_IS_LOADED_PROPERLY, false);
         }
         nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
-        //if ((disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT))) {
+        if ((disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT))) {
           node.setProperty(Utils.EXO_HASATTACH, true);
-        //}
+        }
       }
     } catch (Exception e) {
       e.printStackTrace();

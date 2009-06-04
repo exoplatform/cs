@@ -129,7 +129,6 @@ public class UIMessagePreview extends UIComponent {
         if (attLink != null ) {
           attLink = "/" + getPortalName()+"/rest/jcr/" + getRepository() + att.getPath() ;
           attId = att.getId();
-          System.out.println(attId.substring(attId.lastIndexOf("/") + 1, attId.length()));
           imageLocation.put(attId.substring(attId.lastIndexOf("/") + 1, attId.length()), attLink.substring(0, attLink.lastIndexOf("/") + 1));
         }
       }

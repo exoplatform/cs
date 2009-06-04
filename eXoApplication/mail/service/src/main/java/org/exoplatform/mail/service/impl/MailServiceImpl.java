@@ -912,7 +912,6 @@ public class MailServiceImpl implements MailService, Startable {
     
     try {
       folder.open(javax.mail.Folder.READ_WRITE);
-      System.out.println(folder.getName() + "======================================>>> " + folder.getNewMessageCount());
       logger.warn(" #### Getting mails from folder " + folder.getName() + " !");
       checkingLog_.get(key).setStatusMsg("Getting mails from folder " + folder.getName() + " !");
       
