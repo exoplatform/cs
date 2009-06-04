@@ -17,8 +17,10 @@
 package org.exoplatform.mail.webui ;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.mail.internet.InternetAddress;
 
@@ -52,8 +54,6 @@ import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.mail.webui.popup.UIViewAllHeaders;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -117,6 +117,24 @@ public class UIMessagePreview extends UIComponent {
 
   public void setShowedMessages(List<Message> msgList) throws Exception {
     showedMsgs = msgList ;
+  }
+  
+  public Map<String, String> getImageLocationMap(Message message) throws Exception {
+    Map<String, String > imageLocation = new HashMap<String, String>();
+    DownloadService dservice = getDownloadService() ;
+    String attLink = "", attId = "";    
+    for (Attachment att : message.getAttachments()) {
+      if (att.isShownInBody()) {
+        attLink = MailUtils.getImageSource(att, dservice) ;
+        if (attLink != null ) {
+          attLink = "/" + getPortalName()+"/rest/jcr/" + getRepository() + att.getPath() ;
+          attId = att.getId();
+          System.out.println(attId.substring(attId.lastIndexOf("/") + 1, attId.length()));
+          imageLocation.put(attId.substring(attId.lastIndexOf("/") + 1, attId.length()), attLink.substring(0, attLink.lastIndexOf("/") + 1));
+        }
+      }
+    }
+    return imageLocation;
   }
   
   public void setIsHideMessageList(boolean b) { isHideMessageList_ = b; }

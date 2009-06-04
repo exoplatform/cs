@@ -1155,7 +1155,8 @@ public class JCRDataStorage {
         } else if (part.isMimeType("message/rfc822")) {
           body = getNestedMessageBody(part, node, body);
         }
-      } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
+      } 
+      if ((disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) || part.isMimeType("image/*")) {
         /*
          * this part must be presented as an attachment, hence we add it to the
          * attached files
@@ -1166,7 +1167,19 @@ public class JCRDataStorage {
         } catch (PathNotFoundException e) {
           attHome = node.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
         }
-        Node nodeFile = attHome.addNode("attachment" + IdGenerator.generate(), Utils.EXO_MAIL_ATTACHMENT);
+        String attId = "";
+        if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
+          attId = "attachment" + IdGenerator.generate();
+        } else {
+          if (part.getHeader("X-Attachment-Id") != null) {
+            attId = part.getHeader("X-Attachment-Id")[0].toString();
+          } else if (part.getHeader("Content-Id") != null) {
+            attId = part.getHeader("Content-Id")[0].toString();
+            attId = attId.substring(1, attId.length());
+            attId = attId.substring(0, attId.length() - 1);
+          }
+        }
+        Node nodeFile = attHome.addNode(attId, Utils.EXO_MAIL_ATTACHMENT);
         Node nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
         if (ct.indexOf(";") > 0) {
           String[] type = ct.split(";");
@@ -1184,13 +1197,19 @@ public class JCRDataStorage {
         try {
            nodeContent.setProperty(Utils.JCR_DATA, part.getInputStream());
            nodeFile.setProperty(Utils.ATT_IS_LOADED_PROPERLY, true);
+           nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, false);
+           if ((disposition == null || !disposition.equalsIgnoreCase(Part.ATTACHMENT)) && part.isMimeType("image/*")) {
+             nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, true);
+           }
         } catch (Exception e) {
           nodeContent.setProperty(Utils.JCR_DATA, new ByteArrayInputStream("".getBytes()));
           nodeFile.setProperty(Utils.ATT_IS_LOADED_PROPERLY, false);
           node.setProperty(Utils.ATT_IS_LOADED_PROPERLY, false);
         }
         nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
-        node.setProperty(Utils.EXO_HASATTACH, true);
+        //if ((disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT))) {
+          node.setProperty(Utils.EXO_HASATTACH, true);
+        //}
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -2416,6 +2435,7 @@ public class JCRDataStorage {
           //TODO fix last minute bug CS-2530
           if(node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
           file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
+          file.setIsShowInBody(node.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
           file.setWorkspace(node.getSession().getWorkspace().getName());
           file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
           file.setPath("/" + file.getWorkspace() + node.getPath()) ;

@@ -32,6 +32,7 @@ abstract public class Attachment {
   private String path ;
   private boolean isLoadedProperly = true;
   protected String resoureId ;
+  private boolean isShownInBody = false;
   
   public String getId() { return id ; }
   public void setId(String id) { this.id = id ; }
@@ -60,5 +61,8 @@ abstract public class Attachment {
   }
   public String getResoureId() {
     return resoureId;
-  } 
+  }
+  
+  public boolean isShownInBody() { return isShownInBody; }
+  public void setIsShowInBody(boolean b) { isShownInBody = b; } 
 }

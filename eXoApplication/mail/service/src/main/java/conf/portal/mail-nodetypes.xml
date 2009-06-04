@@ -241,7 +241,11 @@
  	<propertyDefinitions>
   	  <propertyDefinition name="exo:fileName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   		<valueConstraints/>
-  	  </propertyDefinition>	  		
+  	  </propertyDefinition>	  	
+  	  <propertyDefinition name="exo:isShownInBody" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
+      	protected="false" multiple="false">
+  	    <valueConstraints/>
+  	  </propertyDefinition>
       <propertyDefinition name="exo:isLoadedProperly" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
       	protected="false" multiple="false">
   	    <valueConstraints/>

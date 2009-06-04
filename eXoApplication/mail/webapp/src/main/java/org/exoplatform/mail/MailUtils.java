@@ -26,14 +26,13 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -44,8 +43,6 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
-import org.exoplatform.services.scheduler.JobSchedulerService;
-import org.quartz.JobDetail;
 
 
 /**
@@ -123,6 +120,17 @@ public class MailUtils {
       }
     }
     return null ;
+  }
+  
+  public static String fillImage(String body, Map<String, String> imageLocationMap) throws Exception {
+    String attId = "", src = "";
+    while (body.indexOf("cid:") > -1) {
+     attId = body.substring(body.indexOf("src=\"cid:") + 9, body.length());
+     attId = attId.substring(0, attId.indexOf("\""));
+     src = "src=\"" + imageLocationMap.get(attId);
+     body = body.replaceFirst("src=\"cid:(.*?)", src);
+    }
+    return body;
   }
   
   public static boolean isFieldEmpty(String s) {
