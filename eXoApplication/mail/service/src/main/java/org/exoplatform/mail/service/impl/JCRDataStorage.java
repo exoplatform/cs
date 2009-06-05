@@ -1103,7 +1103,7 @@ public class JCRDataStorage {
         Part bodyPart;
         for (int i = 0; i < multipart.getCount(); i++) {
           bodyPart = multipart.getBodyPart(i);
-          if (bodyPart.isMimeType("text/html") || bodyPart.isMimeType("multipart/related")) {
+          if (bodyPart.isMimeType("text/html") || bodyPart.isMimeType("multipart/*")) {
             body = setPart(bodyPart, node, body);
             readText = false;
           }
@@ -1133,7 +1133,7 @@ public class JCRDataStorage {
           MimeMultipart mimeMultiPart = (MimeMultipart) part.getContent();
           for (int i = 0; i < mimeMultiPart.getCount(); i++) {
             bodyPart = mimeMultiPart.getBodyPart(i);
-            if (bodyPart.isMimeType("text/html")) {
+            if (bodyPart.isMimeType("text/html") || bodyPart.isMimeType("multipart/*")) {
               body = setPart(bodyPart, node, body);
               readText = false;
             }
