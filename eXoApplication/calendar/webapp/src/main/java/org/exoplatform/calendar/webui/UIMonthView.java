@@ -65,6 +65,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class),
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
       @EventConfig(listeners = UICalendarView.ExportEventActionListener.class),
+      @EventConfig(listeners = UICalendarView.MoveEventActionListener.class),
       @EventConfig(listeners = UIMonthView.UpdateEventActionListener.class)
     }
 )
@@ -163,6 +164,7 @@ public class UIMonthView extends UICalendarView {
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       String username = CalendarUtils.getCurrentUser() ;
       String value = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      System.out.print(value);
       //String eventId = event.getRequestContext().getRequestParameter(EVENTID) ;
       //String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
