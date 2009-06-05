@@ -66,6 +66,10 @@ UICalendarDragDrop.prototype.getAllDropableSets = function() {
       this.dropableSets.push(row[j]);
     }
   }
+	// For moving events between calendars.
+	var uiCalendars = document.getElementById("UICalendars");
+	var calendarItems = eXo.core.DOMUtil.findDescendantsByClass(uiCalendars,"div","CalendarItem");
+	this.dropableSets.pushAll(calendarItems);
 } ;
 
 UICalendarDragDrop.prototype.regDnDItem = function() {
@@ -203,6 +207,12 @@ UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
     this.foundTargetObjectCatch.style.backgroundColor = this.foundTargetObjectCatchStyle ;
   }
   this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
+	if (this.foundTargetObjectCatch && eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,"CalendarItem")) {
+		var moveAction = eXo.core.DOMUtil.findFirstDescendantByClass(dndEvent.dragObject,"div","EventBoxes").getAttribute("moveAction");
+		ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(moveAction,null), false) ;
+  	alert("Waiting for 'Moving events between calendars action'");
+		return ;
+	}
   if (this.foundTargetObjectCatch) {
     if ((this.foundTargetObjectCatch.getAttribute('starttime') == dndEvent.clickObject.getAttribute('starttime')) && (eventObj.length == 1)) {
       return;
