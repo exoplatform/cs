@@ -2280,7 +2280,7 @@ public class JCRDataStorage {
           msgNode.save();
         }
       //For CS-2254
-        Node rootNode = findRoot(sProvider, username, accountId, msgNode);   
+        Node rootNode = findRoot(sProvider, username, accountId, inReplyToHeader, msgNode);   
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTimeInMillis(msgNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
         updateThreadDate(sProvider, username, accountId, rootNode, cal.getTime());
@@ -2290,14 +2290,14 @@ public class JCRDataStorage {
     }  
   }
   
-  private Node findRoot(SessionProvider sProvider, String username, String accountId, Node msgNode) throws Exception {
+  private Node findRoot(SessionProvider sProvider, String username, String accountId, String inReplyToHeader, Node msgNode) throws Exception {
     if(msgNode == null) return null;
     Node parentNode = null;
     try {
-      parentNode = getMatchingThreadBefore(sProvider, username, accountId, msgNode.getProperty(Utils.EXO_IN_REPLY_TO_HEADER).getString(), msgNode);
+      parentNode = getMatchingThreadBefore(sProvider, username, accountId, inReplyToHeader, msgNode);
       Node grandParentNode = parentNode;
       while(grandParentNode != null){
-        grandParentNode = getMatchingThreadBefore(sProvider, username, accountId, parentNode.getProperty(Utils.EXO_IN_REPLY_TO_HEADER).getString(), parentNode);
+        grandParentNode = getMatchingThreadBefore(sProvider, username, accountId, inReplyToHeader, parentNode);
         if(grandParentNode != null) parentNode = grandParentNode;
       }
     } catch (Exception e){
@@ -2484,27 +2484,29 @@ public class JCRDataStorage {
     try {
       Node messageNode = getDateStoreNode(sProvider, username, accountId, msg.getReceivedDate())
       .getNode(msg.getId());
-      NodeIterator msgAttachmentIt = messageNode.getNode(Utils.KEY_ATTACHMENT).getNodes();
-      List<Attachment> attachments = new ArrayList<Attachment>();
-      while (msgAttachmentIt.hasNext()) {
-        Node node = msgAttachmentIt.nextNode();
-        if (node.isNodeType(Utils.EXO_MAIL_ATTACHMENT)) {
-          JCRMessageAttachment file = new JCRMessageAttachment();
-          file.setId(node.getPath());
-          file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE)
-              .getString());
-          file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
-          //TODO fix last minute bug CS-2530
-          if(node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
-          file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
-          file.setIsShowInBody(node.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
-          file.setWorkspace(node.getSession().getWorkspace().getName());
-          file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
-          file.setPath("/" + file.getWorkspace() + node.getPath()) ;
-          attachments.add(file);
+      if (messageNode.hasNode(Utils.KEY_ATTACHMENT)){
+        NodeIterator msgAttachmentIt = messageNode.getNode(Utils.KEY_ATTACHMENT).getNodes();
+        List<Attachment> attachments = new ArrayList<Attachment>();
+        while (msgAttachmentIt.hasNext()) {
+          Node node = msgAttachmentIt.nextNode();
+          if (node.isNodeType(Utils.EXO_MAIL_ATTACHMENT)) {
+            JCRMessageAttachment file = new JCRMessageAttachment();
+            file.setId(node.getPath());
+            file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE)
+                             .getString());
+            file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
+            //TODO fix last minute bug CS-2530
+            if(node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
+              file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
+            file.setIsShowInBody(node.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
+            file.setWorkspace(node.getSession().getWorkspace().getName());
+            file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
+            file.setPath("/" + file.getWorkspace() + node.getPath()) ;
+            attachments.add(file);
+          }
         }
+        msg.setAttachements(attachments);
       }
-      msg.setAttachements(attachments);
     } catch (PathNotFoundException e) {
       e.printStackTrace();
       System.out.println("[EXO WARNING] PathNotFoundException when load attachment");
