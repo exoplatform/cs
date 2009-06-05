@@ -173,10 +173,11 @@
 						startIndex = cal.get(Calendar.WEEK_OF_MONTH) ;
 					}
 					color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.calendarId) ;
+					moveAction = uicomponent.url("MoveEvent",event.getId());
 					%>
 					<div class="DayContentContainer EventBoxes" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" 
 					startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
-					startTime="$startTime" endTime="$endTime" >
+					startTime="$startTime" endTime="$endTime" moveAction="$moveAction">
 						<div class="EventOnDayBorder $color">
 							<div class="EventOnDayContent">
 								<div>
