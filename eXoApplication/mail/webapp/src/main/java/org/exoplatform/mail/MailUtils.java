@@ -124,11 +124,13 @@ public class MailUtils {
   
   public static String fillImage(String body, Map<String, String> imageLocationMap) throws Exception {
     String attId = "", src = "";
-    while (body.indexOf("cid:") > -1) {
-     attId = body.substring(body.indexOf("src=\"cid:") + 9, body.length());
-     attId = attId.substring(0, attId.indexOf("\""));
-     src = "src=\"" + imageLocationMap.get(attId);
-     body = body.replaceFirst("src=\"cid:(.*?)", src);
+    if (imageLocationMap.size() > 0) {
+      while (body.indexOf("\"cid:") > -1) {        
+        attId = body.substring(body.indexOf("\"cid:") + 5, body.length());
+        attId = attId.substring(0, attId.indexOf("\""));
+        src = "\"" + imageLocationMap.get(attId);
+        body = body.replaceFirst("\"cid:(.*?)", src);
+      }
     }
     return body;
   }

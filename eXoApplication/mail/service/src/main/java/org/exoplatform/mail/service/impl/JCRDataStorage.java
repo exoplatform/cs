@@ -1002,7 +1002,7 @@ public class JCRDataStorage {
         }
       } 
       String contentType = "text/plain";
-      if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/alternative") || cmsg.isMimeType("multipart/related"))
+      if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/*"))
         contentType = "text/html";
       String body = "";
       if (obj instanceof Multipart) {
@@ -1192,7 +1192,11 @@ public class JCRDataStorage {
         }
         
         try {
-          nodeFile.setProperty(Utils.EXO_ATT_NAME, Utils.decodeText(part.getFileName()));
+          if (!Utils.isEmptyField(part.getFileName())) { 
+            nodeFile.setProperty(Utils.EXO_ATT_NAME, Utils.decodeText(part.getFileName()));
+          } else {
+            nodeFile.setProperty(Utils.EXO_ATT_NAME, "No name");
+          }
         } catch(Exception e) {
           nodeFile.setProperty(Utils.EXO_ATT_NAME, "Corrupted attachment");
         }

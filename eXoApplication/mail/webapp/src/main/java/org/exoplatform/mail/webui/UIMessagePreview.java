@@ -123,13 +123,15 @@ public class UIMessagePreview extends UIComponent {
     Map<String, String > imageLocation = new HashMap<String, String>();
     DownloadService dservice = getDownloadService() ;
     String attLink = "", attId = "";    
-    for (Attachment att : message.getAttachments()) {
-      if (att.isShownInBody()) {
-        attLink = MailUtils.getImageSource(att, dservice) ;
-        if (attLink != null ) {
-          attLink = "/" + getPortalName()+"/rest/jcr/" + getRepository() + att.getPath() ;
-          attId = att.getId();
-          imageLocation.put(attId.substring(attId.lastIndexOf("/") + 1, attId.length()), attLink.substring(0, attLink.lastIndexOf("/") + 1));
+    if (message.getAttachments() != null) {
+      for (Attachment att : message.getAttachments()) {
+        if (att.isShownInBody()) {
+          attLink = MailUtils.getImageSource(att, dservice) ;
+          if (attLink != null ) {
+            attLink = "/" + getPortalName()+"/rest/jcr/" + getRepository() + att.getPath() ;
+            attId = att.getId();
+            imageLocation.put(attId.substring(attId.lastIndexOf("/") + 1, attId.length()), attLink.substring(0, attLink.lastIndexOf("/") + 1));
+          }
         }
       }
     }
