@@ -556,6 +556,16 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       if(this instanceof UIListView) {} else refresh() ;
       super.processRender(arg0);
     }
+    public List<CalendarEvent>  getSelectedEvents(String eventIds) throws Exception {
+    	String[] list = eventIds.split(",");
+    	CalendarService calService = CalendarUtils.getCalendarService() ;
+        List<CalendarEvent> dataList = new ArrayList<CalendarEvent>() ;
+    	for(int i = 0; i < list.length; i++){
+    		CalendarEvent evt = getDataMap().get(list[i]) ;
+    		dataList.add(evt);
+    	}
+		return dataList;
+	}
     static  public class AddEventActionListener extends EventListener<UICalendarView> {
       public void execute(Event<UICalendarView> event) throws Exception {
         UICalendarView uiForm = event.getSource() ;
@@ -1207,6 +1217,21 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 		        event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
 		      }
 		   
+	   }
+   }
+   
+   static public class MoveEventActionListener extends EventListener<UICalendarView>{
+	   public void execute(Event<UICalendarView> event) throws Exception{
+		   UICalendarView uiComponent = event.getSource() ;
+		   String eventIds = event.getRequestContext().getRequestParameter("objectId") ;
+		   String selectedCalendarId = event.getRequestContext().getRequestParameter("calendarId") ;
+		   String toType = event.getRequestContext().getRequestParameter("caltype") ;
+		   String currentUser = CalendarUtils.getCurrentUser() ;
+		   CalendarService calService = CalendarUtils.getCalendarService() ;
+		   List<CalendarEvent> eventList = uiComponent.getSelectedEvents(eventIds);
+		   for(CalendarEvent ce : eventList){
+			   calService.moveEvent(ce.getCalendarId(), selectedCalendarId, ce.getCalType(), toType, eventList, currentUser) ;	   
+		   }		   
 	   }
    }
 }
