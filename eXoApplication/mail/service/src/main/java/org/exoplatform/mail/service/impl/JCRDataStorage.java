@@ -808,8 +808,10 @@ public class JCRDataStorage {
       nodeMsg.setProperty(Utils.IS_RETURN_RECEIPT, message.isReturnReceipt());
       if (message.getSendDate() != null)
         nodeMsg.setProperty(Utils.EXO_SENDDATE, message.getSendDate().getTime());
-      if (message.getReceivedDate() != null)
+      if (message.getReceivedDate() != null){
         nodeMsg.setProperty(Utils.EXO_RECEIVEDDATE, message.getReceivedDate().getTime());
+        nodeMsg.setProperty(Utils.EXO_LAST_UPDATE_TIME, message.getReceivedDate().getTime());
+      }
       String[] tags = message.getTags();
       nodeMsg.setProperty(Utils.EXO_TAGS, tags);
       String[] folders = message.getFolders();
@@ -947,6 +949,7 @@ public class JCRDataStorage {
       else subject = "";
       node.setProperty(Utils.EXO_SUBJECT, subject);
       node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
+      node.setProperty(Utils.EXO_LAST_UPDATE_TIME, gc);
       
       Calendar sc = GregorianCalendar.getInstance();
       if (msg.getSentDate() != null) sc.setTime(msg.getSentDate());
@@ -2245,8 +2248,21 @@ public class JCRDataStorage {
           createReference(converChild, msgNode);        
           converChild = setIsRoot(accountId, converChild, msgNode);
           msgNode.setProperty(Utils.EXO_IS_ROOT, true);
+          //For CS-2254
+          GregorianCalendar cal = new GregorianCalendar();
+          cal.setTimeInMillis(msgNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
+          Date lastMsgNodeModified = cal.getTime();
+          cal.setTimeInMillis(converChild.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
+          Date lastConverChildModified = cal.getTime();
+          if(lastMsgNodeModified.before(lastConverChildModified))
+            msgNode.setProperty(Utils.EXO_LAST_UPDATE_TIME, converChild.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
+          //
           converChild.save();
           msgNode.save();
+        }
+        for (Node converChild : converNodeChilds) {
+          converChild.setProperty(Utils.EXO_LAST_UPDATE_TIME, msgNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
+          converChild.save();
         }
       } else {
         Node converNodeParent = getMatchingThreadBefore(sProvider, username, accountId, inReplyToHeader, msgNode);
@@ -2256,15 +2272,57 @@ public class JCRDataStorage {
           msgNode.save();
           converNodeParent.save();
         } else {
-          msgNode.setProperty(Utils.EXO_IS_ROOT, true);
+          msgNode.setProperty(Utils.EXO_IS_ROOT, true);         
           msgNode.save();
         }
+      //For CS-2254
+        Node rootNode = findRoot(sProvider, username, accountId, msgNode);   
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(msgNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
+        updateThreadDate(sProvider, username, accountId, rootNode, cal.getTime());
       } 
     } catch (Exception e) {
       e.printStackTrace();
-    }   
+    }  
   }
   
+  private Node findRoot(SessionProvider sProvider, String username, String accountId, Node msgNode) throws Exception {
+    if(msgNode == null) return null;
+    Node parentNode = null;
+    try {
+      parentNode = getMatchingThreadBefore(sProvider, username, accountId, msgNode.getProperty(Utils.EXO_IN_REPLY_TO_HEADER).getString(), msgNode);
+      Node grandParentNode = parentNode;
+      while(grandParentNode != null){
+        grandParentNode = getMatchingThreadBefore(sProvider, username, accountId, parentNode.getProperty(Utils.EXO_IN_REPLY_TO_HEADER).getString(), parentNode);
+        if(grandParentNode != null) parentNode = grandParentNode;
+      }
+    } catch (Exception e){
+        e.printStackTrace();
+      }
+    if(parentNode == null)
+      return msgNode;
+    else return parentNode;
+  }
+  
+  private void updateThreadDate(SessionProvider sProvider, String username, String accountId, Node rootNode, Date date) throws Exception {
+    if(rootNode == null) return;
+    try {
+    GregorianCalendar cal = new GregorianCalendar();
+    cal.setTimeInMillis(rootNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
+    Date lastRootModified = cal.getTime();
+    if(lastRootModified.before(date)){
+      rootNode.setProperty(Utils.EXO_LAST_UPDATE_TIME, date.getTime());
+      rootNode.save();
+    }
+    List<Node> childNodes = getMatchingThreadAfter(sProvider, username, accountId, rootNode);
+    for(Node child: childNodes){
+      updateThreadDate(sProvider, username, accountId, child, date);
+    }
+   }catch (Exception e){
+     e.printStackTrace();
+   }
+  }
+ 
   private Node setIsRoot(String accountId, Node msgNode, Node converNode) throws Exception {
     boolean isRoot = true;
     try {

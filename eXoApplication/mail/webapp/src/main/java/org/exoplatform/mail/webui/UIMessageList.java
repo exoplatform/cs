@@ -145,7 +145,10 @@ public class UIMessageList extends UIForm {
     MailService mailSrv = MailUtils.getMailService();
     MessageFilter filter = getMessageFilter();
     if (filter == null) filter = new MessageFilter("Folder");
-    if (viewMode == MODE_THREAD || viewMode == MODE_CONVERSATION) filter.setHasStructure(true) ;
+    if (viewMode == MODE_THREAD || viewMode == MODE_CONVERSATION){
+      filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
+      filter.setHasStructure(true) ;
+    }
     if (accountId != null && accountId != "") {
       filter.setAccountId(accountId) ;
       if (filter.getFolder() == null) {
@@ -623,6 +626,7 @@ public class UIMessageList extends UIForm {
         String username = uiPortlet.getCurrentUser();
         MessageFilter filter = uiMessageList.getMessageFilter() ;
         filter.setHasStructure(true) ;
+        filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
         try {
           uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter)) ;
         } catch (PathNotFoundException e) {
@@ -668,6 +672,7 @@ public class UIMessageList extends UIForm {
         String username = uiPortlet.getCurrentUser();
         MessageFilter filter = uiMessageList.getMessageFilter() ;
         filter.setHasStructure(true) ;
+        filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
         try {
           uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter)) ;
         } catch (PathNotFoundException e) {
