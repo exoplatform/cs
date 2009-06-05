@@ -3,141 +3,79 @@
 
   def rcontext = _ctx.getRequestContext() ;
   def jsManager = rcontext.getJavascriptManager();
-  jsManager.importJavascript("eXo.communication.chat.eXoChat", "/chatbar/javascript/");
-  jsManager.addJavascript("eXo.communication.chat.eXoChat.applicationId = '" + uicomponent.getId() + "';");
-  jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChat.init");
+  jsManager.importJavascript("eXo.communication.chat.eXoChatBar", "/chatbar/javascript/");
+  jsManager.addJavascript("eXo.communication.chat.eXoChatBar.applicationId = '" + uicomponent.getId() + "';");
+  jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChatBar.init");
 %>
 
-<!-- Begin Notification -->
-
-<div class="UINotification" style="display:none; position:relative; top:13px; float:right">
-	<div style="position:absolute;top:0px;right:8px;width:250px;">
-		<div class="BoxNote">
-			<div class="LeftBoxNote">
-				<div class="RightBoxNote">
-					<div class="CenterBoxNote">
-						<div class="IconBoxNote">(<span>1</span>)</div>
-					</div>
-				</div>
-			</div>
-			<div style="clear:both"><span></span></div>
-		</div>
-		<div class="UIPopupNotification">
-		<div class="TLPopupNotification">
-			<div class="TRPopupNotification">
-				<div class="TCPopupNotification"><span></span></div>
-			</div>
-		</div>
-		<div class="MLPopupNotification">
-			<div class="MRPopupNotification">
-				<div class="MCPopupNotification">
-					<div class="TitleNotification">
-						<a class="ItemTitle" href="#">Notification</a>
-						<a class="Close" href="#"><span></span></a>
-					</div>
-					<div class="UINotificationContent">
-						<div class="Item">You have 3 new messages</div>
-					</div>			
-				</div>
-			</div>
-		</div>
-		<div class="BLPopupNotification">
-			<div class="BRPopupNotification">
-				<div class="BCPopupNotification"><span></span></div>
-			</div>
-		</div>
-	</div>
-	</div>
-</div>
-<!-- End Notification -->
 
 <!-- Begin UIChat -->
-<div class="UIChat ChatSharedIcons UIChatBarPortlet" id="<%=uicomponent.id%>" oncontextmenu="return false;">		
-	<div class="ClearRight"><span></span></div>
+<div class="UIChat ChatSharedIcons UIChatBarPortlet" id="UIChatBarPortlet" oncontextmenu="return false;" eXoToken="<%=uicomponent.getUserToken();%>" userName="<%=Util.getPortalRequestContext().getRemoteUser();%>">		
+  <div class="ClearRight"><span></span></div>
   <div class="Actionbar">
       <div class="RowContainer">
       	<div class="LeftContainer">
       		<div class="RightContainer">
       			<div class="CenterContainer">
       				<div class="TextContent">
-      					 <!-- Start MiniBoxChat -->
-								<div class="MiniBoxChat">
-									<div class="NormalMiniBoxChat">
-										<div class="LeftMiniBoxChat">
-											<div class="RightMiniBoxChat">
-												<div class="CenterMiniBoxChat">
-													<div class="FixHeight">																
-															<div class="OnlineNoticeIcon">50</div>
-															<div class="ControlIconChat CloseIcon" title="Close all conversations." onclick="eXo.communication.chat.webui.UIChatWindow.closeAllWindow()"><span></span></div>
-														<div class="ClearBoth"><span></span></div>
-													</div>
-												</div>
+      					<!-- Start MiniBoxChat -->
+				 		<div class="MiniBoxChat" style="display:none;" onclick="eXo.communication.chat.webui.UIChatWindow.setVisible(true, event, true);">
+							<div class="NormalMiniBoxChat">
+								<div class="LeftMiniBoxChat">
+									<div class="RightMiniBoxChat">
+										<div class="CenterMiniBoxChat">
+											<div class="FixHeight">
+													 <div class="OnlineNoticeIcon">
+						                				<span class="UnreadMessage" style="color:white;"></span>
+							           				 </div>  
+													<div class="ControlIconChat CloseIcon" title="Close all conversations." onclick="eXo.communication.chat.webui.UIChatWindow.closeAllWindow();"><span></span></div>
+												<div class="ClearBoth"><span></span></div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<!-- End MiniBoxChat -->
+							</div>
+						</div>
+						<!-- End MiniBoxChat -->	 
       					<div class="SeperatorLine"><span></span></div>
-      					<div class="IconButton" style="width:100px" onclick="eXo.communication.chat.webui.UIChatBar.showMenu(this,event);">
+      					<div class="ContactArea IconButton" style="width:100px" onclick="eXo.communication.chat.webui.UIChatBar.showMenu(this,event);">
       						<!-- Right Click Popup Contact -->
-									<div style="position:relative;">
-										<div class="UIRightClickPopupMenu" style="width: 200px;bottom:0px;right:0px;display:none;">
-										  <div class="UIContextMenuContainer">
-										    <div class="TopLeftRightClickPopupMenu">
-										      <div class="TopRightRightClickPopupMenu">
-										        <div class="TopCenterRightClickPopupMenu">
-										          <div class="TipRight"><span><span/></div>
-										        </div>
-										      </div>
-										    </div>
-										    <div class="MiddleLeftRightClickPopupMenu">
-										      <div class="MiddleRightRightClickPopupMenu">
-										        <div class="UIRightPopupMenuContainer">
-										          <div class="TypeViewContactPortlet">
-										          	<div class="ScrollGroup">
-												          <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
-										              <div class="ItemIcon OnlineIcon">Online</div>
-										            </div>
-										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.AWAY_STATUS, null, event)" class="MenuItem">
-										              <div class="ItemIcon AwayIcon">Away</div>
-										            </div>
-										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.EXTEND_AWAY_STATUS, null, event)" class="MenuItem">
-										              <div class="ItemIcon ExtendAwayIcon">Extend Away</div>
-										            </div>
-										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.FREE_TO_CHAT_STATUS, null, event)" class="MenuItem">
-										              <div class="ItemIcon FreeToChat">Free To Chat</div>
-										            </div>
-										            <div class="Split"><span></span></div>
-										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
-										              <div class="ItemIcon OfflineIcon">Offline</div>
-										            </div>
-										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
-										              <div class="ItemIcon OfflineIcon">Offline</div>
-										            </div>
-										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
-										              <div class="ItemIcon OfflineIcon">Offline</div>
-										            </div>
-										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.OFFLINE_STATUS, null, event)" class="MenuItem">
-										              <div class="ItemIcon OfflineIcon">Offline</div>
-										            </div>
-										          	</div>
-										          	<div class="Split"><span></span></div>
-										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
-										              <div class="Icon AddContactIcon">Add Contact</div>
-										            </div>
-										          </div>
-										        </div>
-										      </div>
-										    </div>
-										    <div class="BottomLeftRightClickPopupMenu">
-										      <div class="BottomRightRightClickPopupMenu">
-										        <div class="BottomCenterRightClickPopupMenu"><span><span/></div>
-										      </div>
-										    </div>
-										  </div>
-									  </div>
-									</div>
-									<!--  End Right Click Popup Contact-->
+							<div style="position:relative;">
+								<div class="UIRightClickPopupMenu" style="width: 200px;bottom:0px;right:0px;display:none;">
+								  <div class="UIContextMenuContainer">
+								    <div class="TopLeftRightClickPopupMenu">
+								      <div class="TopRightRightClickPopupMenu">
+								        <div class="TopCenterRightClickPopupMenu">
+								          <div class="TipRight"><span></span></div>
+								        </div>
+								      </div>
+								    </div>
+								    <div class="MiddleLeftRightClickPopupMenu">
+								      <div class="MiddleRightRightClickPopupMenu">
+								        <div class="UIRightPopupMenuContainer">
+								          <div class="TypeViewContactPortlet">
+								          	<div class="ScrollGroup">
+											    <div class="BuddyList">
+												     <span></span>
+									            </div>
+								          	</div>
+								          	<div class="Split"><span></span></div>
+								            <div class="MenuItem">
+								              <div class="Icon AddContactIcon">Add Contact</div>
+								            </div>
+								          </div>
+								        </div>
+								      </div>
+								    </div>
+								    <div class="BottomLeftRightClickPopupMenu">
+								      <div class="BottomRightRightClickPopupMenu">
+								        <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+								      </div>
+								    </div>
+								  </div>
+							  </div>
+							</div>
+							<!--  End Right Click Popup Contact-->
 	      					<div class="LeftIconButton">
 	      						<div class="RightIconButton">
 	      							<div class="CenterIconButton">
@@ -146,7 +84,7 @@
 	      						</div>
 	      					</div>
       					</div>
-      					<div class="IconButton" onclick="eXo.communication.chat.webui.UIChatBar.showMenu(this,event);" style="width:60px;">
+      					<div class="RoomArea IconButton" onclick="eXo.communication.chat.webui.UIChatBar.showMenu(this,event);" style="width:60px;">
       						<!-- Right Click Popup Group -->
 									<div style="width:60px;position:relative;">
 										<div class="UIRightClickPopupMenu" style="width: 200px;display:block;bottom:0px;right:0px;display:none;">
@@ -154,7 +92,7 @@
 										    <div class="TopLeftRightClickPopupMenu">
 										      <div class="TopRightRightClickPopupMenu">
 										        <div class="TopCenterRightClickPopupMenu">
-										          <div class="TipRight"><span><span/></div>
+										          <div class="TipRight"><span></span></div>
 										        </div>
 										      </div>
 										    </div>
@@ -162,24 +100,14 @@
 										      <div class="MiddleRightRightClickPopupMenu">
 										        <div class="UIRightPopupMenuContainer">
 										          <div class="TypeViewContactPortlet">
-										          	<div class="ScrollGroup">
-												          <div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-												          <div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
-											          	<div class="TextMemberRoom"><a href="#">eXoPlatform</a></div>
+										          	<div class="RoomData ScrollGroup"><span></span>
 										          	</div>
 										          	<div class="Split"><span></span></div>
-										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
-										              <div class="Icon JoinRoomIcon">Join Room</div>
+										            <div class="MenuItem">
+										              <div class="Icon JoinRoomIcon" onclick="eXo.communication.chat.webui.UIJoinRoomPopupWindow.setVisible(true)">Join Room</div>
 										            </div>
-										            <div onclick="eXo.communication.chat.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chat.webui.UIMainChatWindow.ONLINE_STATUS, null, event)" class="MenuItem">
-										              <div class="Icon NewRoomIcon">Add Room</div>
+										            <div class="MenuItem">
+										              <div class="Icon NewRoomIcon" onclick="eXo.communication.chat.webui.UICreateNewRoomPopupWindow.setVisible(true);">Add Room</div>
 										            </div>
 										          </div>
 										        </div>
@@ -187,7 +115,7 @@
 										    </div>
 										    <div class="BottomLeftRightClickPopupMenu">
 										      <div class="BottomRightRightClickPopupMenu">
-										        <div class="BottomCenterRightClickPopupMenu"><span><span/></div>
+										        <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 										      </div>
 										    </div>
 										  </div>
@@ -202,7 +130,7 @@
 	      						</div>
 	      					</div>
       					</div>
-      					<div class="IconButton" onclick="eXo.communication.chat.webui.UIChatBar.showMenu(this,event);" style="width:60px;">
+      					<div class="StatusArea IconButton" onclick="eXo.communication.chat.webui.UIChatBar.showMenu(this,event);" style="width:60px;">
       						<!-- Right Click Popup Online -->
 									<div style="width:60px;position:relative;">
 										<div class="UIRightClickPopupMenu" style="width: 150px;bottom:0px;right:0px;display:none;">
@@ -210,7 +138,7 @@
 										    <div class="TopLeftRightClickPopupMenu">
 										      <div class="TopRightRightClickPopupMenu">
 										        <div class="TopCenterRightClickPopupMenu">
-										          <div class="TipRight"><span><span/></div>
+										          <div class="TipRight"></span><span></div>
 										        </div>
 										      </div>
 										    </div>
@@ -239,7 +167,7 @@
 										    </div>
 										    <div class="BottomLeftRightClickPopupMenu">
 										      <div class="BottomRightRightClickPopupMenu">
-										        <div class="BottomCenterRightClickPopupMenu"><span><span/></div>
+										        <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 										      </div>
 										    </div>
 										  </div>
@@ -250,13 +178,17 @@
 	      						<div class="RightIconButton">
 	      							<div class="CenterIconButton">
 	      								<div class="Arrow">
-	      								<a class="IconHolder OnlineIcon" title="Online status"><span></span></a>
+	      								<div class="IconHolder OfflineIcon" title="<%=uicomponent.getRemoteUser()%>">
+										<div class="StatusIcon">
+										  <div class="Text" user="<%=Util.getPortalRequestContext().getRemoteUser();%>"><span></span></div>
+										 </div>
+										</div>
 	      								</div>			
 	      							</div>
 	      						</div>
 	      					</div>
       					</div>
-								<div class="SeperatorLine" style="display:none"><span></span></div>
+						<div class="SeperatorLine" style="display:none"><span></span></div>
 				        <div class="ClearLeft"><span></span></div>
               </div>
               <div style="padding:5px 5px 0px 0px; display:none;">
@@ -969,11 +901,13 @@
 <!-- Start template area -->
 <div id="templateArea" style="display:none">
 
-  <!-- BuddyItem -->
-  <div class="TitleIconChat">
-		<a class="IconChat OfflineIcon"></a>
+  <!-- BuddyItem  -->
+    <div class="TitleIconChat">
+		<div class="MenuItem">
+          <div class="IconChat"><span></span></div>
+       </div>
 	</div>
-
+<!-- End BuddyItem -->
   <!-- BuddyItem for group chat -->
   <div class="GroupNick ChatSharedIcons">
     <div class="LeftTopNick">

@@ -16,6 +16,7 @@ function BuddyItem(buddyInfo, actionCallback, maxUserNameLen, isGroupChat) {
   this.actionCallback = actionCallback;
   this.CSS_CLASS = {
     template        : 'TitleIconChat',
+    item            : 'MenuItem',
     nick            : 'IconChat',
     unavailable     : 'OfflineIcon',
     available       : 'OnlineIcon',
@@ -48,16 +49,15 @@ BuddyItem.prototype.init = function() {
   if (this.isGroupChat) {
     this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
   } else {
-    this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'a', this.CSS_CLASS.nick);
+    this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
   }
   this.updateStatus(this.buddyInfo.presence.type);
 
   this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.user, true);
   this.iconChatNode.setAttribute('title' ,this.getUserName(this.buddyInfo.user, false));
-
   this.rootNode.setAttribute('userName', this.buddyInfo.user);
   this.rootNode.setAttribute('nickname', this.buddyInfo.nickname);
-  eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'contextmenu', this.actionCallback, false);
+  //eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'contextmenu', this.actionCallback, false);
   eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'click', this.actionCallback, false);
 };
 
@@ -267,7 +267,7 @@ BuddyListControl.prototype.cleanup = function() {
     }
   }
   this.buddyList = null;
-  this.rootNode.innerHTML = '<span/>';
+  this.rootNode.innerHTML = '<span></span>';
 };
 
 /**

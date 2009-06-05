@@ -267,7 +267,7 @@ BuddyListControl.prototype.cleanup = function() {
     }
   }
   this.buddyList = null;
-  this.rootNode.innerHTML = '<span/>';
+  this.rootNode.innerHTML = '<span></span>';
 };
 
 /**

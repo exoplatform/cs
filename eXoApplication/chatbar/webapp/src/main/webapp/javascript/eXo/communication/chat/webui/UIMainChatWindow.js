@@ -174,7 +174,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   }
   this.rootNode = (typeof(rootNode) == 'string') ? document.getElementById(rootNode) : rootNode;
   var DOMUtil = eXo.core.DOMUtil;
-  this.rootNode                   = DOMUtil.findDescendantById(this.rootNode, 'UIChat');
+  this.rootNode                   = DOMUtil.findDescendantById(this.rootNode, 'UIChatBarPortlet');
 
   this.AdvancedDOMEvent           = eXo.communication.chat.core.AdvancedDOMEvent;
   this.XMPPCommunicator           = eXo.communication.chat.core.XMPPCommunicator;
@@ -219,18 +219,18 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   // ----- End ---------------------
 
   this.LocalTemplateEngine = eXo.communication.chat.core.LocalTemplateEngine;
-  this.addContactIconNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'a', 'AddContactIcon');
+  this.addContactIconNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'AddContactIcon');
   this.statusIconNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'StatusIcon');
-  this.statusNode = DOMUtil.findAncestorByClass(this.statusIconNode, 'UITab');
+  this.statusNode = DOMUtil.findAncestorByClass(this.statusIconNode, 'StatusArea');
+  this.roomAreaNode = DOMUtil.findFirstDescendantByClass( this.rootNode, 'div', 'RoomArea');
   //this.statusbarNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'Information');
   this.loginFormNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'fieldset', 'LoginForm');
   this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'BuddyList');
-  this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'BuddyItemActionMenu');
+  //this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'BuddyItemActionMenu');
   //this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'BuddyItemActionMenu');
   
   // Notification template
-  this.notificationNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'UINotification');
-
+  //this.notificationNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'NotificationArea');
   // Windows and popups.
   this.chatPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'ChatPopup');
   this.addContactPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'AddContactPopup');
@@ -244,7 +244,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.UIRoomConfigPopupWindow.init(this.roomConfigPopupNode, this);
   this.UIJoinRoomPopupWindow.init(this.joinRoomPopupNode, this);
   
-  this.UISlideAlert.init(this, this.notificationNode);
+  //this.UISlideAlert.init(this, this.notificationNode);
 
   this.UIPopupManager = eXo.communication.chat.webui.UIPopupManager;
   this.UIPopupManager.init();
@@ -282,7 +282,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
  * which overwritten the chat application.
  */
 UIMainChatWindow.prototype.isChatAlive = function() {
-  if (!document.getElementById('UIChat')) {
+  if (!document.getElementById('UIChatBarPortlet')) {
     eXo.communication.chat.webui.UIMainChatWindow.jabberLogout();
   }
 };
@@ -509,8 +509,32 @@ UIMainChatWindow.prototype.update = function(state, requestObj, action) {
 /**
  * Process all successfully ajax request action.
  */
+
+UIMainChatWindow.prototype.updateRoomList = function() {
+	if (this.joinedRooms ) {
+		  var roomList = this.joinedRooms ;
+		  var roomDataNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.roomAreaNode,'div', 'RoomData');
+		  roomDataNode.innerHTML = '' ;
+		  for (var i=0; i<roomList.length; i++) {
+			    var roomInfo = roomList[i];
+			    var roomNode = document.createElement('div');		    
+			    roomNode.className = "TextMemberRoom" ;
+			    var roomLink = document.createElement('div');
+			    roomLink.innerHTML = roomInfo.room ;
+			    roomLink.setAttribute("roomId", roomInfo.room) ;
+			    roomLink.onclick = function (){
+			    	eXo.communication.chat.webui.UIJoinRoomPopupWindow.joinSelectedRoomAction(roomLink);
+			    }
+			    //roomLink.href = "javascript:void(0);" ;
+			    roomNode.appendChild(roomLink);
+			    roomDataNode.appendChild(roomNode);
+		  }  
+	  }
+}
+
 UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
   var serverData = this.serverDataStack[eventId];
+  //this.updateRoomList() ;
   switch (action) {
     case this.LOGIN_ACTION:
       this.postChangeStatus(this.ONLINE_STATUS, eventId);
@@ -916,7 +940,7 @@ UIMainChatWindow.prototype.xLogin = function(userName) {
  * @param {Boolean} skipCheck
  * @param {Event} event
  */
-UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) {
+UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) {	
   if (!this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] ||
       !status ||
       ((this.userStatus != this.ONLINE_STATUS) && (this.userStatus == status))) {
@@ -927,11 +951,11 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
     eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
   }
   this.lastStatusSent = status;
-  this.setChangeStatusMenuVisible(this.statusNode, false);
+  //this.setChangeStatusMenuVisible(this.statusNode, false);
   var DOMUtil = eXo.core.DOMUtil;
-  var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode, 'div', 'Text');
+  //var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode, 'div', 'Text');
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  userNameNode.innerHTML = userName;
+  //userNameNode.innerHTML = userName;
   switch (status) {
     case this.ONLINE_STATUS:
       if (!this.userStatus ||
@@ -985,8 +1009,8 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
   var serverData = this.serverDataStack[eventId];
   this.lastStatusSent = false;
   var DOMUtil = eXo.core.DOMUtil;
-  var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode, 'div', 'Text');
-  userNameNode.innerHTML = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
+  //var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode, 'div', 'Text');
+  //userNameNode.innerHTML = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
   var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode, 'div');
   window.jsconsole.warn('User changed status: ' + this.userStatus + ' -> ' + status);
   this.userStatus = status;
@@ -997,7 +1021,7 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
   this.UIChatWindow.updatePresence(presenceData);
   switch (this.userStatus) {
     case this.ONLINE_STATUS:
-      userStatusIconNode.className = 'OnlineIcon';
+      userStatusIconNode.className = 'IconHolder'+' '+'OnlineIcon';
       if (!serverData) {
         break;
       }
@@ -1007,7 +1031,7 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
       this.timeoutCount = 0;
       this.errorCount = 0;
       this.addContactIconNode.onclick = function() {
-        eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true);
+    	 eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true);
       };
       // Create buddy list
       if (this.serverInfo.roster) {
@@ -1025,20 +1049,21 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
       //this.unsubscribeCometdTopics();
       this.buddyListControlObj.cleanup();
       this.addContactIconNode.onclick = null;
-      userStatusIconNode.className = 'OfflineIcon';
+      userStatusIconNode.className = 'IconHolder'+' '+'OfflineIcon';
       break;
     case this.AWAY_STATUS:
-      userStatusIconNode.className = 'AwayIcon';
+      userStatusIconNode.className = 'IconHolder'+' '+'AwayIcon';
       break;
     case this.EXTEND_AWAY_STATUS:
-      userStatusIconNode.className = 'AwayIcon';
+      userStatusIconNode.className = 'IconHolder'+' '+'AwayIcon';
       break;
     case this.FREE_TO_CHAT_STATUS:
-      userStatusIconNode.className = 'FreeToChat';
+      userStatusIconNode.className = 'IconHolder'+' '+'FreeToChat';
       break;
     default:
       break;
   }
+  eXo.core.DOMUtil.cleanUpHiddenElements();
 };
 
 /**

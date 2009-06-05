@@ -164,8 +164,8 @@
                 <span>Conversation window</span>
 	            </div>  
 						
-							<div class="ControlIconChat CloseIcon" title="Close all conversations." onclick="eXo.communication.chat.webui.UIChatWindow.closeAllWindow()"><span></span></div>
-							<div class="ControlIconChat RestoreIcon" title="Restore conversation window." onclick="eXo.communication.chat.webui.UIChatWindow.setVisible(true, event, true)"><span></span></div>
+							<div class="ControlIconChat CloseIcon" title="Close all conversations." onclick="eXo.communication.chat.webui.UIChatWindow.closeAllWindow();"><span></span></div>
+							<div class="ControlIconChat RestoreIcon" title="Restore conversation window." onclick="eXo.communication.chat.webui.UIChatWindow.setVisible(true, event, true);"><span></span></div>
 						
 						<div class="ClearBoth"><span></span></div>
 					</div>

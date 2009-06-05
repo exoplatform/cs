@@ -60,12 +60,15 @@ UISlideAlert.prototype.init = function(UIMainChatWindow, rootNode) {
 
   // 
   var DOMUtil = eXo.core.DOMUtil;
+  try {
   this.msgCounterNote = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'IconBoxNote');
-  this.msgContentNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'UINotificationContent');
-  this.closeButton = DOMUtil.findFirstDescendantByClass(this.rootNode, 'a', 'Close');
-  
-  this.closeButton.onclick = this.hideNotification;
-    
+  //this.msgNotificationNode = DOMUtil.findFirstDescendantByClass(this.rootNode.parentNode, 'div', 'UINotification');
+  //this.msgContentNode = DOMUtil.findFirstDescendantByClass(this.msgNotificationNode, 'div', 'UINotificationContent');
+  //this.closeButton = DOMUtil.findFirstDescendantByClass(this.msgNotificationNode, 'a', 'Close');
+  //this.closeButton.onclick = this.hideNotification;
+  } catch (e) {
+	  alert(e) ;
+  }
   //this.rootNode.onmousemove = this.pauseAnim;
   //this.rootNode.onmouseout = this.resumeAnim;
 };
@@ -99,10 +102,10 @@ UISlideAlert.prototype.resumeAnim = function(event) {
  * Use to keep position of notification popup when user is scroll page up or down
  */
 UISlideAlert.prototype.positionKeeper = function() {
-  var thys = eXo.communication.chat.webui.UISlideAlert;
+ /* var thys = eXo.communication.chat.webui.UISlideAlert;
   if (!thys.animateId) {
-    thys.rootNode.style.top = document.documentElement.scrollTop + 'px';
-  }
+    thys.msgNotificationNode.style.top = document.documentElement.scrollTop + 'px';
+  }*/
 };
 
 /**
@@ -137,23 +140,23 @@ UISlideAlert.prototype.setMessage = function(msgObj) {
   if (!msgObj) {
     return;
   }
-  this.msgContentNode.innerHTML = '';
-  var msgNode = document.createElement('div');
-  msgNode.tabId = this.messageInfoMap.get(msgObj);
+  //this.msgContentNode.innerHTML = '';
   this.messageInfoMap.remove(msgObj);
+ /* var msgNode = document.createElement('div');
+  msgNode.tabId = this.messageInfoMap.get(msgObj);
   msgNode.className = 'Item';
   if (msgObj.substring) {
     msgObj = msgObj.replace(/(\w{4})/g, '$1<wbr>');
     msgNode.innerHTML = msgObj;
   } else {    
     msgNode.appendChild(msgObj);
-  }
+  }*/
   
-  msgNode.onclick = this.focusTab;
-  msgNode.style.cursor = 'pointer';
+  /*msgNode.onclick = this.focusTab;
+  msgNode.style.cursor = 'pointer';*/
   
   this.setMsgCounter();
-  this.msgContentNode.appendChild(msgNode);
+  //this.msgContentNode.appendChild(msgNode);
 };
 
 /**
@@ -179,13 +182,13 @@ UISlideAlert.prototype.focusTab = function(event) {
  */
 UISlideAlert.prototype.removeMessageByTabId = function(tabId) {
   var DOMUtil = eXo.core.DOMUtil;
-  var items = DOMUtil.findDescendantsByClass(this.msgContentNode, 'div', 'Item');
+  /*var items = DOMUtil.findDescendantsByClass(this.msgContentNode, 'div', 'Item');
   for (var i=0; i<items.length; i++) {
     if (items[i].tabId &&
         items[i].tabId == tabId) {
       DOMUtil.removeElement(items[i]);
     }
-  }
+  }*/
   for (var i=0; i<this.messageQueue.length; i++) {
     var tabIdTmp = this.messageInfoMap.get(this.messageQueue[i]);
     if (tabIdTmp == tabId) {
@@ -201,7 +204,7 @@ UISlideAlert.prototype.removeMessageByTabId = function(tabId) {
  * Set message counter to notification popup
  */
 UISlideAlert.prototype.setMsgCounter = function() {
-  this.msgCounterNote.innerHTML = '(<span>' + (this.messageQueue.length + 1) + '</span>)';
+  //this.msgCounterNote.innerHTML = this.messageQueue.length + 1;
 };
 
 /**
@@ -211,7 +214,7 @@ UISlideAlert.prototype.setMsgCounter = function() {
  */
 UISlideAlert.prototype.setVisible = function(visible) {
   var thys = eXo.communication.chat.webui.UISlideAlert;
-  thys.rootNode.style.display = (visible) ? 'block' : 'none';
+  //thys.msgNotificationNode.style.display = (visible) ? 'block' : 'none';
   if (visible) {
     if (thys.messageQueue.length <= 0 ||
         thys.visible ||
@@ -287,14 +290,14 @@ UISlideAlert.prototype.animateSlide = function() {
       if (thys.positionKeeperId) {
         window.clearInterval(thys.positionKeeperId);
       }
-      thys.rootNode.style.top = '-1000px';
+      //thys.msgNotificationNode.style.top = '-1000px';
       thys.visible = false;
       thys.hideId = null;
       thys.queueProcess();
     }
     return;
   }
-  thys.rootNode.style.top = (thys.currentDistance + document.documentElement.scrollTop - thys.MAX_DISTANCE) + 'px';
+  //thys.msgNotificationNode.style.top = (thys.currentDistance + document.documentElement.scrollTop - thys.MAX_DISTANCE) + 'px';
 };
 
 eXo.communication.chat.webui.UISlideAlert = new UISlideAlert();

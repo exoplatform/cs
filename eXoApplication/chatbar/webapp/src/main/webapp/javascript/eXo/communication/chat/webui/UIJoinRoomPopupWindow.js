@@ -157,6 +157,7 @@ UIJoinRoomPopupWindow.prototype.joinRoomAction = function() {
         return;
       }
       var roomInfo = roomInfoNode.roomInfo;
+      alert(roomInfoNode.innerHTML) ;
       var joinedRooms = this.UIMainChatWindow.joinedRooms;
       for (var i=0; i<joinedRooms.length; i++) {
         var joinedRoomInfo = joinedRooms[i];
@@ -172,6 +173,48 @@ UIJoinRoomPopupWindow.prototype.joinRoomAction = function() {
     }
   }
 };
+
+UIJoinRoomPopupWindow.prototype.joinSelectedRoomAction = function(obj) {
+	  var DOMUtil = eXo.core.DOMUtil;
+	  var roomInfoNode= obj ;
+	  var joinedRooms = this.UIMainChatWindow.joinedRooms;
+      for (var i=0; i<joinedRooms.length; i++) {
+        var joinedRoomInfo = joinedRooms[i];
+        alert(joinedRoomInfo.roomInfo.room) ;
+        if (joinedRoomInfo.roomInfo.room == roomInfoNode.getAttribute("roomId")) {
+          this.UIMainChatWindow.UIChatWindow.createNewTab(joinedRoomInfo.roomInfo.room, true);           
+          return;
+        }
+      }
+      //this.UIMainChatWindow.jabberJoinToRoom(joinedRoomInfo.roomInfo.room, joinedRoomInfo.roomInfo.isPasswordProtected);
+      return; 
+	  
+	  /*var checkBoxList = DOMUtil.findDescendantsByClass(this.roomListContainerNode, 'input', 'CheckBox');
+	  for (var i=0; i<checkBoxList.length; i++) {
+	    var currentNode = checkBoxList[i];
+	    if (currentNode.checked) {
+	      // Check if target room is protected
+	      var roomInfoNode = DOMUtil.findAncestorByTagName(currentNode, 'tr');
+	      if (!roomInfoNode) {
+	        // window.jsconsole.error('Can not detect room information');
+	        return;
+	      }
+	      var roomInfo = roomInfoNode.roomInfo;
+	      var joinedRooms = this.UIMainChatWindow.joinedRooms;
+	      for (var i=0; i<joinedRooms.length; i++) {
+	        var joinedRoomInfo = joinedRooms[i];
+	        if (joinedRoomInfo.roomInfo.room == roomInfo.room) {
+	          this.UIMainChatWindow.UIChatWindow.createNewTab(roomInfo.room, true);
+	          this.setVisible(false);
+	          return;
+	        }
+	      }
+	      this.UIMainChatWindow.jabberJoinToRoom(currentNode.value, roomInfo.isPasswordProtected);
+	      this.setVisible(false);
+	      return;
+	    }
+	  }*/
+	};
 
 /**
  * Make component visible or not

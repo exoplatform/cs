@@ -48,14 +48,14 @@ eXo.require("eXo.communication.chat.webui.UICreateNewRoomPopupWindow", "/chatbar
 eXo.require("eXo.communication.chat.webui.UIRoomConfigPopupWindow", "/chatbar/javascript/");
 eXo.require("eXo.communication.chat.webui.UIJoinRoomPopupWindow", "/chatbar/javascript/");
 eXo.require("eXo.communication.chat.webui.UIChatBar", "/chatbar/javascript/");
-eXo.communication.chat.eXoChat = {
+eXo.communication.chat.eXoChatBar = {
   /**
    * This method use to initialize all data before call UIMainChatWindow to init all chat application component 
    */
   init : function() {
     try {
-      var thys = eXo.communication.chat.eXoChat;
-      var UIChatNode = document.getElementById('UIChat');
+      var thys = eXo.communication.chat.eXoChatBar;
+      var UIChatNode = document.getElementById('UIChatBarPortlet');
       var eXoToken = UIChatNode.getAttribute('eXoToken');
       var userName = UIChatNode.getAttribute('userName');
       eXo.communication.chat.core.LocalTemplateEngine.init('templateArea');
@@ -65,7 +65,8 @@ eXo.communication.chat.eXoChat = {
         [{className:'WindowBarLeft', tagName: 'div'}, {className: 'PopupTitle', tagName: 'div'}]);
       eXo.communication.chat.webui.UIMainChatWindow.xLogin(userName);
     } catch (e) {
-      throw (new Error('Error while loading chat application.'));
+      print(e) ;
+      //throw (new Error('Error while loading chat application.'));
     }
   }
 }

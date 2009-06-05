@@ -461,7 +461,7 @@ UITabControl.prototype.showAlert = function(msgContent) {
   if (!this.visible ||
       !this.UIMainChatWindow.UIChatWindow.visible) {
     this.UIMainChatWindow.UISlideAlert.addMessage(msgContent, this.tabId.id);
-    this.UIMainChatWindow.UISlideAlert.setVisible(true);
+    //this.UIMainChatWindow.UISlideAlert.setVisible(true);
   }
 };
 
@@ -1126,20 +1126,28 @@ UIChatWindow.prototype.updateUnreadMessage = function() {
       this.miniBoxChatAnimationId = null;
       this.blinkMiniBoxChat('NormalMiniBoxChat');
     }
+    if (unreadMessageNode) {
+        if (unreadMessageCnt == 0) {
+          unreadMessageNode.innerHTML = ''
+        } else {
+          unreadMessageNode.innerHTML = '*[' + unreadMessageCnt + ']&nbsp;';
+        }
+      }
   } else {
     unreadMessageNode = DOMUtil.findFirstDescendantByClass(this.miniBoxChatNode, 'span', 'UnreadMessage');
     if (unreadMessageCnt > 0 &&
         !this.miniBoxChatAnimationId) {
       this.miniBoxChatAnimationId = window.setInterval(this.blinkMiniBoxChat, this.MINI_BOX_CHAT_ANIMATION_STEP);
     }
+    if (unreadMessageNode) {
+        if (unreadMessageCnt == 0) {
+          unreadMessageNode.innerHTML = ''
+        } else {
+          unreadMessageNode.innerHTML = '' + unreadMessageCnt + '';
+        }
+      }
   }
-  if (unreadMessageNode) {
-    if (unreadMessageCnt == 0) {
-      unreadMessageNode.innerHTML = ''
-    } else {
-      unreadMessageNode.innerHTML = '*[' + unreadMessageCnt + ']&nbsp;';
-    }
-  }
+ 
   this.reloadScrollMgr();
 };
 
