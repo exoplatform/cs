@@ -1377,7 +1377,9 @@ public class JCRDataStorage {
     QueryManager qm = sess.getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
         + "//element(*,exo:folder)[@exo:id='").append(folderId).append("']");
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryImpl query = (QueryImpl)qm.createQuery(queryString.toString(), Query.XPATH);
+    query.setOffset(0);
+    query.setLimit(1);
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
     Node node = null;
