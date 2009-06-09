@@ -923,8 +923,10 @@ public class MailServiceImpl implements MailService, Startable {
       Date lastCheckedDate = eXoFolder.getLastCheckedDate();
       Date lastCheckedFromDate = eXoFolder.getLastStartCheckingTime();
       Date checkFromDate = eXoFolder.getCheckFromDate();
-      if (checkFromDate == null) checkFromDate = account.getCheckFromDate();
-      
+
+      if (checkFromDate == null || (checkFromDate.after(account.getCheckFromDate()))) {
+        checkFromDate = account.getCheckFromDate();
+      }
       List<MessageFilter> filters = getFilters(sProvider, username, accountId);
       LinkedHashMap<javax.mail.Message, List<String>> msgMap = new LinkedHashMap<javax.mail.Message, List<String>>();
       boolean isImap = account.getProtocol().equals(Utils.IMAP); 
