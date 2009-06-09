@@ -1352,7 +1352,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                               .errorMessage(rb.getString("chat.message.history.participant.name.not.set"))
                               .build();
     try {
-      XMPPSession session = messenger.getSession(usernameto);
+      //XMPPSession session = messenger.getSession(usernameto);
+      //For CS-2668
+      XMPPSession session = messenger.getSession(usernamefrom);
       if (session != null) {
         List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
         list = session.getAllHistory(usernameto, usernamefrom, isGroupChat);
@@ -1389,7 +1391,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                               @QueryParam("usernamefrom") String usernamefrom) {
     if (this.rb == null) loadResourceBundle();
     try {
-      XMPPSession session = messenger.getSession(usernameto);
+      //XMPPSession session = messenger.getSession(usernameto);
+    //For CS-2668
+      XMPPSession session = messenger.getSession(usernamefrom);
       if (session != null) {
         List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
         DateFormat dateFormat = new SimpleDateFormat(dateformat);
@@ -1434,7 +1438,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                             @QueryParam("usernamefrom") String usernamefrom) {
     if (this.rb == null) loadResourceBundle();
     try {
-      XMPPSession session = messenger.getSession(usernameto);
+      //XMPPSession session = messenger.getSession(usernameto);
+    //For CS-2668
+      XMPPSession session = messenger.getSession(usernamefrom);
       if (session != null) {
         List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
         DateFormat dateFormat = new SimpleDateFormat(dateformat);
