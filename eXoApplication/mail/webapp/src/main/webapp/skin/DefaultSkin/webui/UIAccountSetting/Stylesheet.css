@@ -166,6 +166,9 @@
 	width:150px;
 }
 
+.UIMailPortlet .UIForm .fetchOptions .UIFormGrid .fromDateTimePicker .CalendarTimeBox .CalendarTimeBoxM input.InputTime {
+	width:15px;
+}
 
 .UIMailPortlet .UIForm .fetchOptions .UIFormGrid {
    margin-left: 40px;
