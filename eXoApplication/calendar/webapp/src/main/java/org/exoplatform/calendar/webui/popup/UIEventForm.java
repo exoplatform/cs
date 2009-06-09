@@ -208,7 +208,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     
     eventShareTab.addUIFormInput(new UIFormRadioBoxInput(UIEventShareTab.FIELD_SHARE, UIEventShareTab.FIELD_SHARE, getShareValue()) ) ;
     eventShareTab.addUIFormInput(new UIFormRadioBoxInput(UIEventShareTab.FIELD_STATUS, UIEventShareTab.FIELD_STATUS, getStatusValue()) ) ;
-    eventShareTab.addUIFormInput(new UIFormRadioBoxInput(UIEventShareTab.FIELD_SEND, UIEventShareTab.FIELD_SEND, CalendarUtils.getSendValue(CalendarSetting.ACTION_BYSETTING)) ) ;
+    eventShareTab.addUIFormInput(new UIFormRadioBoxInput(UIEventShareTab.FIELD_SEND, UIEventShareTab.FIELD_SEND, CalendarUtils.getSendValue(null)) ) ;
     eventShareTab.addUIFormInput(new UIFormInputInfo(UIEventShareTab.FIELD_INFO, UIEventShareTab.FIELD_INFO, null) ) ;
     //eventShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISSENDMAIL, FIELD_ISSENDMAIL, false)) ;
     // TODO cs-839
@@ -352,7 +352,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       setMeetingInvitation(new String[] { CalendarUtils.getOrganizationService().getUserHandler().findUserByName(pars.toString()).getEmail() }) ;
       setParticipant(pars.toString()) ;
       //TODO cs-764
-      setSendOption(CalendarSetting.ACTION_BYSETTING);
+      setSendOption(calSetting.getSendOption());
       getChild(UIEventShareTab.class).setParticipantStatusList(participantStatusList_);
       attenderTab.updateParticipants(pars.toString());
     }
@@ -1914,8 +1914,8 @@ public Attachment getAttachment(String attId) {
       }
       else {
       String sendOption = uiForm.getSendOption();
-      if(sendOption.equalsIgnoreCase(CalendarSetting.ACTION_BYSETTING))
-        sendOption = calSetting.getSendOption(); 
+      /*if(sendOption.equalsIgnoreCase(CalendarSetting.ACTION_BYSETTING))
+        sendOption = calSetting.getSendOption(); */
       if(CalendarSetting.ACTION_ASK.equalsIgnoreCase(sendOption)){
           // Show Confirm
         UIPopupAction pAction = uiPopupContainer.getChild(UIPopupAction.class) ;
