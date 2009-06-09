@@ -100,8 +100,7 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1){
         doc.body.style.visibility = "visible";
         frame.style.height = doc.documentElement.offsetHeight + 20 + "px";
         frame.style.width = doc.body.offsetWidth + "px";
-    }
-    else {
+    } else {
         var docHt = 0, sh, oh;
         if (doc.height) {
             docHt = doc.height;

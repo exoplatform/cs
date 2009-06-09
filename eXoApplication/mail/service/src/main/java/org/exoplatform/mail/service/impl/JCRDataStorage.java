@@ -955,6 +955,7 @@ public class JCRDataStorage {
       if (msg.getSentDate() != null) sc.setTime(msg.getSentDate());
       else sc = gc;
       node.setProperty(Utils.EXO_SENDDATE, sc);
+      if (gc == null) node.setProperty(Utils.EXO_LAST_UPDATE_TIME, sc);
       
       node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize()));
       boolean isReadMessage = MimeMessageParser.isSeenMessage(msg);
@@ -2254,21 +2255,8 @@ public class JCRDataStorage {
           createReference(converChild, msgNode);        
           converChild = setIsRoot(accountId, converChild, msgNode);
           msgNode.setProperty(Utils.EXO_IS_ROOT, true);
-          //For CS-2254
-          GregorianCalendar cal = new GregorianCalendar();
-          cal.setTimeInMillis(msgNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
-          Date lastMsgNodeModified = cal.getTime();
-          cal.setTimeInMillis(converChild.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
-          Date lastConverChildModified = cal.getTime();
-          if(lastMsgNodeModified.before(lastConverChildModified))
-            msgNode.setProperty(Utils.EXO_LAST_UPDATE_TIME, converChild.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
-          //
           converChild.save();
           msgNode.save();
-        }
-        for (Node converChild : converNodeChilds) {
-          converChild.setProperty(Utils.EXO_LAST_UPDATE_TIME, msgNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
-          converChild.save();
         }
       } else {
         Node converNodeParent = getMatchingThreadBefore(sProvider, username, accountId, inReplyToHeader, msgNode);
@@ -2277,56 +2265,43 @@ public class JCRDataStorage {
           msgNode = setIsRoot(accountId, msgNode, converNodeParent);
           msgNode.save();
           converNodeParent.save();
+          GregorianCalendar cal = new GregorianCalendar();
+          cal.setTimeInMillis(msgNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
+          updateLastTimeToParent(sProvider, username, accountId, msgNode, converNodeParent, cal);
         } else {
           msgNode.setProperty(Utils.EXO_IS_ROOT, true);         
           msgNode.save();
         }
-      //For CS-2254
-        Node rootNode = findRoot(sProvider, username, accountId, inReplyToHeader, msgNode);   
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTimeInMillis(msgNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
-        updateThreadDate(sProvider, username, accountId, rootNode, cal.getTime());
       } 
     } catch (Exception e) {
       e.printStackTrace();
     }  
   }
   
-  private Node findRoot(SessionProvider sProvider, String username, String accountId, String inReplyToHeader, Node msgNode) throws Exception {
-    if(msgNode == null) return null;
-    Node parentNode = null;
-    try {
-      parentNode = getMatchingThreadBefore(sProvider, username, accountId, inReplyToHeader, msgNode);
-      Node grandParentNode = parentNode;
-      while(grandParentNode != null){
-        grandParentNode = getMatchingThreadBefore(sProvider, username, accountId, inReplyToHeader, parentNode);
-        if(grandParentNode != null) parentNode = grandParentNode;
+  private void updateLastTimeToParent(SessionProvider sProvider, String username, String accountId, Node node, Node parentNode, Calendar cal) throws Exception {
+    Node grandParent = null; 
+    if (parentNode != null) {
+      parentNode.setProperty(Utils.EXO_LAST_UPDATE_TIME, cal);
+      grandParent = getReferentParent(sProvider, username, accountId, parentNode);
+      if (grandParent != null) {
+        updateLastTimeToParent(sProvider, username, accountId, parentNode, grandParent, cal);
       }
-    } catch (Exception e){
-        e.printStackTrace();
-      }
-    if(parentNode == null)
-      return msgNode;
-    else return parentNode;
+      parentNode.save();
+    }
   }
   
-  private void updateThreadDate(SessionProvider sProvider, String username, String accountId, Node rootNode, Date date) throws Exception {
-    if(rootNode == null) return;
+  private Node getReferentParent(SessionProvider sProvider, String username, String accountId, Node node) throws Exception {
+    Node parentNode = null;
     try {
-    GregorianCalendar cal = new GregorianCalendar();
-    cal.setTimeInMillis(rootNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
-    Date lastRootModified = cal.getTime();
-    if(lastRootModified.before(date)){
-      rootNode.setProperty(Utils.EXO_LAST_UPDATE_TIME, date.getTime());
-      rootNode.save();
+      if (node.hasProperty("exo:conversationId")) {
+        Value[] currentValues = node.getProperty("exo:conversationId").getValues();
+        if (currentValues.length > 0) parentNode = node.getSession().getNodeByUUID(currentValues[0].getString());
+      }
+    } catch(Exception e) {
+      e.printStackTrace();
+      System.out.println("Exception exception");
     }
-    List<Node> childNodes = getMatchingThreadAfter(sProvider, username, accountId, rootNode);
-    for(Node child: childNodes){
-      updateThreadDate(sProvider, username, accountId, child, date);
-    }
-   }catch (Exception e){
-     e.printStackTrace();
-   }
+    return parentNode;
   }
  
   private Node setIsRoot(String accountId, Node msgNode, Node converNode) throws Exception {
@@ -2459,6 +2434,8 @@ public class JCRDataStorage {
 
           if (firstNode == null)
             firstNode = msgNode;
+         
+          msgNode.setProperty("exo:conversationId", valueList.toArray(new Value[valueList.size()]));
           msgNode.save();
         }
       }

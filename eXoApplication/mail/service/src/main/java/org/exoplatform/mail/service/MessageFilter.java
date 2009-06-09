@@ -73,7 +73,7 @@ public class MessageFilter {
     this.hasStar_ = false;
     this.priority_ = 0;
     isAscending_ = false;
-    orderBy_ = Utils.EXO_RECEIVEDDATE;
+    orderBy_ = Utils.EXO_LAST_CHECKED_TIME;
     hasStructure_ = false ;
   }
   
