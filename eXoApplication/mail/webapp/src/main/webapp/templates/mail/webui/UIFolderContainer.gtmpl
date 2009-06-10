@@ -220,17 +220,18 @@ def enableSync = ((customFolders.size() > 0) && uicomponent.isImap())
           long pUnreadMess = cf.getNumberOfUnreadMessage();
           String pCssClass = "CloseFolder" ;
           String selectedClass = "NormalLabel";
+          boolean isChecking = false;
           String checking = "NotCheckingIcon";
           String collapse = _ctx.appRes(uicomponent.id+ ".label.click-to-collapse") ;
           String title = _ctx.appRes(uicomponent.id+ ".label.click-to-expand") + "," + _ctx.appRes(uicomponent.id+ ".label.click-to-collapse") ;
           String pActionLink = uicomponent.event('ChangeFolder', pid);
           if(pid.equals(uicomponent.getSelectedFolder())) {
-	       //checking = "CheckingIcon";
+            if (uicomponent.isChecking()) isChecking = true;
 	       selectedClass = "SelectedLabel" ;
 	      }
           StringBuilder builder = new StringBuilder() ;
           builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder Folder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
-          builder.append("<div class=\"$checking\">"); 
+          if (isChecking) builder.append("<div class='CheckingIcon'></div>");
           if (cf.getType() != 2) {
           	 if(enableSync){
               builder.append("<a class=\"FolderLink\" title=\"$name\" actionlink=\"$pActionLink\" onclick=\"javascript:eXo.mail.UIMailPortlet.lazySync(this,\'$pid\');\" href=\"javascript:void(0);\"  folder=\"").append(pid).append("\">");
@@ -245,11 +246,10 @@ def enableSync = ((customFolders.size() > 0) && uicomponent.isImap())
           if(pUnreadMess > 0) builder.append("($pUnreadMess)");
           builder.append("</span>");
           builder.append("</a>");
-          builder.append("</div>");
-          builder.append("</div>");
+          builder.append("</div>")
           println(builder.toString());
           if (uicomponent.getSubFolders(cf.getPath()).size() > 0) { 
-            printNodes(cf.getPath());
+            printNodes(cf.getPath(), true);
           }
         }
       }
@@ -265,16 +265,16 @@ def enableSync = ((customFolders.size() > 0) && uicomponent.isImap())
       String pCssClass = "CloseFolder" ;
       String pActionLink = uicomponent.event('ChangeFolder', pid);
       String selectedClass = "NormalLabel";
-      String checking = "NotCheckingIcon" ;
+      boolean isChecking = false;
       String collapse = _ctx.appRes(uicomponent.id+ ".label.click-to-collapse") ;
       String title = _ctx.appRes(uicomponent.id+ ".label.click-to-expand") + "," + _ctx.appRes(uicomponent.id+ ".label.click-to-collapse") ;
       if(pid.equals(uicomponent.getSelectedFolder())) {
-       //checking = "CheckingIcon";
+       if (uicomponent.isChecking()) isChecking = true;
        selectedClass = "SelectedLabel" ;
       }
       StringBuilder builder = new StringBuilder() ;
       builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder Folder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
-      builder.append("<div class=\"$checking\">"); 
+      if (isChecking) builder.append("<div class='CheckingIcon'></div>");
       if (cf.getType() != 2) {
          if(enableSync){
               builder.append("<a class=\"FolderLink\" title=\"$name\" actionlink=\"$pActionLink\" onclick=\"javascript:eXo.mail.UIMailPortlet.lazySync(this,\'$pid\');\" href=\"javascript:void(0);\"  folder=\"").append(pid).append("\">");
@@ -289,7 +289,6 @@ def enableSync = ((customFolders.size() > 0) && uicomponent.isImap())
       if(pUnreadMess > 0) builder.append("($pUnreadMess)");
       builder.append("</span>")
       builder.append("</a>");
-      builder.append("</div>");
       builder.append("</div>");
       println(builder.toString());
       if (uicomponent.getSubFolders(cf.getPath()).size() > 0) { 

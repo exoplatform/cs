@@ -85,12 +85,14 @@ public class UIFetchingBar extends UIForm {
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getParent());
+      UIFolderContainer folderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      folderContainer.setIsChecking(false);
+      event.getRequestContext().addUIComponentToUpdateByAjax(folderContainer);
     }
   }	
 	
   static public class UpdateListActionListener extends EventListener<UIFetchingBar> {
     public void execute(Event<UIFetchingBar> event) throws Exception {
-      System.out.println("hksdfsdfsdkf");
       UIFetchingBar uiFetchingBar = event.getSource();
       UIMailPortlet uiPortlet = uiFetchingBar.getAncestorOfType(UIMailPortlet.class);
       UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;    

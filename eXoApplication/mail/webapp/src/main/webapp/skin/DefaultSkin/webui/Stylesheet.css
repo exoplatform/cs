@@ -297,10 +297,11 @@
 	white-space: nowrap;
 	overflow: hidden;
 	width: 80%;
+	margin-left:20px;
 }
 
 .UIMailPortlet .MyFolder .MyFolderContent {
-	padding: 5px 0px 0px 20px;
+	padding: 5px 0px 0px 0px;
 }
 
 .UIMailPortlet .UIFolderContainer .NormalLabel {
@@ -1964,33 +1965,10 @@
 	color:#2276ab;
 }
 
-.UIMailPortlet .MyFolder .MyFolderContent .IconFolder{
-	padding-left: 1px;
 }
-.UIFolderContainer .MyFolderContent .CheckingIcon {     
-	height:16px;
-    padding-left:4px;
-    padding-top:0;
-    width:16px;
-}
-
-.UIFolderContainer .MyFolderContent .NotCheckingIcon {     
-	height:16px;
-    width:16px;
-    padding-left:4px;
-    padding-top:0;
-}
-
-.UIFolderContainer .MyFolderContent .CheckingIcon a{     
-	 padding-left:20px;
-}
-
-.UIFolderContainer .MyFolderContent .NotCheckingIcon a{     
-	 padding-left:20px;
-}
-.UIFolderContainer .SyncIcon {
-	height:16px;
-    width:16px;
-    margin-left:5px;
-    float:left;
+.UIMailPortlet .UIFolderContainer .SyncIcon {
+	height:12px;
+ 	width:11px;
+ 	margin-left:5px;
+ 	float:right;
 }

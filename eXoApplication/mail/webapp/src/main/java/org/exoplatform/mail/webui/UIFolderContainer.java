@@ -60,6 +60,7 @@ import org.exoplatform.webui.event.EventListener;
 public class UIFolderContainer extends UIContainer {
   private String currentFolder_ = null ;
   public int i = 1;
+  private boolean isChecking_ = false;
 
   public UIFolderContainer() throws Exception { }
 
@@ -77,7 +78,10 @@ public class UIFolderContainer extends UIContainer {
   public List<Folder> getCustomizeFolders() throws Exception{
     return getFolders(true);
   }
-
+  
+  public boolean isChecking() { return isChecking_; }
+  public void setIsChecking(boolean b) { isChecking_ = b; } 
+  
   public List<Folder> getSubFolders(String parentPath) throws Exception {
     MailService mailSvr = MailUtils.getMailService();
     String username = MailUtils.getCurrentUser() ;
@@ -163,6 +167,7 @@ public class UIFolderContainer extends UIContainer {
       UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class) ;
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       boolean isRefesh = true ;
+      uiFolder.setIsChecking(true);
       if (uiFolder.getSelectedFolder() != null  && uiFolder.getSelectedFolder().equals(folderId)) {
         try {
           uiMessageList.updateList();
