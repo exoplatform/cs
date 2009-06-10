@@ -46,8 +46,6 @@ import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UIRssForm;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -148,12 +146,6 @@ public class UICalendars extends UIForm  {
     eq.setToDate(toDate) ;
     list = CalendarUtils.getCalendarService().getEvents(CalendarUtils.getCurrentUser(), eq, null) ;
     return list ;
-  }
-  private SessionProvider getSession() {
-    return SessionProviderFactory.createSessionProvider() ;
-  }
-  private SessionProvider getSystemSession() {
-    return SessionProviderFactory.createSystemProvider() ;
   }
 
   public void checkAll() {
@@ -744,25 +736,33 @@ public class UICalendars extends UIForm  {
       UICalendars uiComponent = event.getSource() ;
       boolean showAll = true;
       String user = CalendarUtils.getCurrentUser();
-      List<GroupCalendarData> calendarCategories = CalendarUtils.getCalendarService().getCalendarCategories(user, showAll);
+      CalendarService calendarService = CalendarUtils.getCalendarService() ;
+      List<GroupCalendarData> calendarCategories = calendarService.getCalendarCategories(user, showAll);
       if(calendarCategories== null || calendarCategories.isEmpty()) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }   
-      List<Calendar> list = CalendarUtils.getCalendarService().getUserCalendars(user,  showAll) ;
-      if(list == null || list.isEmpty()) {
+      List<Calendar> userCals = calendarService.getUserCalendars(user,  showAll) ;      
+      List<Calendar> sharedCals = calendarService.getSharedCalendars(user, showAll).getCalendars() ;
+      List<Calendar> publicCals = new ArrayList<Calendar>() ;
+      String[] groups = CalendarUtils.getUserGroups(user) ;
+      List<GroupCalendarData> publicCalendars =  calendarService.getGroupCalendars(groups, showAll, user);
+      for (GroupCalendarData group : publicCalendars) {
+        publicCals.addAll(group.getCalendars()) ;
+      }      
+      if(userCals.isEmpty() && (sharedCals == null || sharedCals.isEmpty()) && publicCals.isEmpty()) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      } 
+      }
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
       UIRssForm uiRssForm = popupAction.activate(UIRssForm.class, 600) ;
-      uiRssForm.init() ;
+      uiRssForm.init(userCals, sharedCals, publicCals) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
@@ -770,26 +770,35 @@ public class UICalendars extends UIForm  {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
       String user = CalendarUtils.getCurrentUser();
+      CalendarService calendarService = CalendarUtils.getCalendarService() ;
       boolean showAll = true;
-      List<GroupCalendarData> calendarCategories = CalendarUtils.getCalendarService().getCalendarCategories(user, showAll) ;
+      List<GroupCalendarData> calendarCategories = calendarService.getCalendarCategories(user, showAll) ;
       if(calendarCategories== null || calendarCategories.isEmpty()) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }   
-      List<Calendar> list = CalendarUtils.getCalendarService().getUserCalendars(user,  showAll) ;
-      if(list == null || list.isEmpty()) {
+      
+      List<Calendar> userCals = calendarService.getUserCalendars(user,  showAll) ;      
+      List<Calendar> sharedCals = calendarService.getSharedCalendars(user, showAll).getCalendars() ;
+      List<Calendar> publicCals = new ArrayList<Calendar>() ;
+      String[] groups = CalendarUtils.getUserGroups(user) ;
+      List<GroupCalendarData> publicCalendars =  calendarService.getGroupCalendars(groups, showAll, user);
+      for (GroupCalendarData group : publicCalendars) {
+        publicCals.addAll(group.getCalendars()) ;
+      }      
+      if(userCals.isEmpty() && (sharedCals == null || sharedCals.isEmpty()) && publicCals.isEmpty()) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      } 
+      }
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
       UICalDavForm uiCalDavForm = popupAction.activate(UICalDavForm.class, 600) ;
-      uiCalDavForm.init() ;
+      uiCalDavForm.init(userCals, sharedCals, publicCals) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
@@ -819,8 +828,6 @@ public class UICalendars extends UIForm  {
       String color = event.getRequestContext().getRequestParameter(CALCOLOR) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
-      SessionProvider session = uiComponent.getSession() ;
-      SessionProvider systemSession = uiComponent.getSystemSession() ;
       String username = CalendarUtils.getCurrentUser() ;
       try{
         Calendar calendar = null ;

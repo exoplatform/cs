@@ -152,7 +152,9 @@ public class Utils {
   public static final int PRIVATE_TYPE = 0;
   public static final int SHARED_TYPE = 1;
   public static final int PUBLIC_TYPE = 2;
-
+  
+  public static final String SPLITTER = "splitter::";
+  
   /**
    * The method creates instance calendar object with time zone is GMT 0
    * @return GregorianCalendar

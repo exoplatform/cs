@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -1665,7 +1666,7 @@ public class JCRDataStorage{
     return feeds ;
   }
 
-  public int generateRss(String username, List<String> calendarIds, RssData rssData, 
+  public int generateRss(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData, 
                          CalendarImportExport importExport) throws Exception {
 
    // Node sharedNode = getSharedCalendarHome() ;
@@ -1691,9 +1692,11 @@ public class JCRDataStorage{
       PortalContainerInfo containerInfo = 
         (PortalContainerInfo)container.getComponentInstanceOfType(PortalContainerInfo.class) ;      
       String portalName = containerInfo.getContainerName() ; 
-      List<String> ids = new ArrayList<String>();
-      for(String calendarId : calendarIds) {        
-        OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), "0") ;
+      //List<String> ids = new ArrayList<String>();
+      for(String calendarMap : calendars.keySet()) {
+        String calendarId = calendarMap.split(Utils.SPLITTER)[0] ;
+        String type = calendarMap.split(Utils.SPLITTER)[1] ;
+        OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), type) ;
         if(out != null) {
           ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
           try {
@@ -1706,7 +1709,8 @@ public class JCRDataStorage{
           path.append(iCalHome.getName()).append(Utils.SLASH).append(iCalHome.getNode(calendarId + Utils.ICS_EXT).getName());        
           String url = getEntryUrl(portalName, rssHomeNode.getSession().getWorkspace().getName(), 
                                    username, path.toString(), rssData.getUrl()) ;
-          Calendar exoCal = getUserCalendar(username, calendarId) ;
+          Calendar exoCal = calendars.get(calendarMap) ;
+          
           entry = new SyndEntryImpl();
           entry.setTitle(exoCal.getName());                
           entry.setLink(url);        
@@ -1806,7 +1810,7 @@ public class JCRDataStorage{
     }
   }
   
-  public int generateCalDav(String username, List<String> calendarIds, RssData rssData, 
+  public int generateCalDav(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData, 
                             CalendarImportExport importExport) throws Exception {
     Node rssHomeNode = getRssHome(username) ;
     Node iCalHome = null ;
@@ -1824,8 +1828,10 @@ public class JCRDataStorage{
       List<SyndEntry> entries = new ArrayList<SyndEntry>();
       SyndEntry entry;
       SyndContent description;
-      for(String calendarId : calendarIds) {        
-        OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), "0") ;
+      for(String calendarMap : calendars.keySet()) {
+        String calendarId = calendarMap.split(Utils.SPLITTER)[0] ;
+        String type = calendarMap.split(Utils.SPLITTER)[1] ;
+        OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), type) ;
         if(out != null) {
           ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
           Node ical = null ;
@@ -1843,7 +1849,7 @@ public class JCRDataStorage{
           if(!iCalHome.isNew()) iCalHome.save() ;
           else iCalHome.getSession().save() ;
           String link = rssData.getLink() + ical.getPath() ;
-          Calendar exoCal = getUserCalendar(username, calendarId) ;
+          Calendar exoCal = calendars.get(calendarMap) ;
           entry = new SyndEntryImpl();
           entry.setTitle(exoCal.getName());                
           entry.setLink(link);     

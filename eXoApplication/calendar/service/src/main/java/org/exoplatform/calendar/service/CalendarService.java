@@ -16,6 +16,7 @@
  **/
 package org.exoplatform.calendar.service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -337,13 +338,13 @@ public interface CalendarService extends CalendarServiceLegacy {
   /**
    * The menthod uses to make url to contants links to subcribe calendar folows RSS stand
    * @param username current user name(or user id)
-   * @param calendarIds
+   * @param calendars
    * @param rssData object contants infomations about the rss feed
    * @return
    * @throws Exception
    * @see RssData
    */
-  public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception ;
+  public int generateRss(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData) throws Exception ;
 
   
   /**
@@ -450,12 +451,12 @@ public interface CalendarService extends CalendarServiceLegacy {
   /**
    * The method genarete links to access calendar throw WEBDAV, it will require user name and password when access
    * @param username current user name(or user id)
-   * @param calendarIds List calendar ids will look up and publicing
+   * @param calendars List calendar ids will look up and publicing
    * @param rssData Object contants infomations about rss feed
    * @return
    * @throws Exception
    */
-  public int generateCalDav(String username, List<String> calendarIds, RssData rssData) throws Exception ;
+  public int generateCalDav(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData) throws Exception ;
 
   /**
    * The method removes the events or tasks form shared calendar, orloginal item will be removed

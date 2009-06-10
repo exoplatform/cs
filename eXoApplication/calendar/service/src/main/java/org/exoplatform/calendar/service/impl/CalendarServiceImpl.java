@@ -283,9 +283,9 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   /**
    * {@inheritDoc}
    */
-  public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception {
+  public int generateRss(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData) throws Exception {
     return storage_.generateRss(username,
-                                calendarIds,
+                                calendars,
                                 rssData,
                                 calendarImportExport_.get(ICALENDAR));
   }
@@ -293,9 +293,9 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   /**
    * {@inheritDoc}
    */
-  public int generateCalDav(String username, List<String> calendarIds, RssData rssData) throws Exception {
+  public int generateCalDav(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData) throws Exception {
     return storage_.generateCalDav(username,
-                                   calendarIds,
+                                   calendars,
                                    rssData,
                                    calendarImportExport_.get(ICALENDAR));
   }
@@ -468,9 +468,9 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    */
   public int generateCalDav(SessionProvider systemSession,
                             String username,
-                            List<String> calendarIds,
+                            LinkedHashMap<String, Calendar> calendars,
                             RssData rssData) throws Exception {
-    return generateCalDav(username, calendarIds, rssData);
+    return generateCalDav(username, calendars, rssData);
   }
 
   /**
@@ -478,9 +478,9 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    */
   public int generateRss(SessionProvider systemSession,
                          String username,
-                         List<String> calendarIds,
+                         LinkedHashMap<String, Calendar> calendars,
                          RssData rssData) throws Exception {
-    return generateRss(username, calendarIds, rssData);
+    return generateRss(username, calendars, rssData);
   }
 
   /**

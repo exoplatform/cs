@@ -18,12 +18,14 @@ package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.RssData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.container.PortalContainer;
@@ -73,6 +75,10 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
   final static private String COPYRIGHTS = "copyrights".intern() ;
   final static private String INFO_TAB = "rssInfo".intern() ;
   final static private String CALENDAR_TAB = "rssCalendars".intern() ;
+  private LinkedHashMap<String, Calendar> userCals_ = new LinkedHashMap<String, Calendar>() ; 
+  private LinkedHashMap<String, Calendar> sharedCals_ = new LinkedHashMap<String, Calendar>() ; 
+  private LinkedHashMap<String, Calendar> publicCals_ = new LinkedHashMap<String, Calendar>() ;
+  
   public UICalDavForm() throws Exception{
     super("UICalDavForm");
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -86,21 +92,30 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
     rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, null).addValidator(MandatoryValidator.class)) ;
     rssInfo.addUIFormInput(new UIFormDateTimePicker(PUBLIC_DATE, PUBLIC_DATE, new Date(), false)) ;
     setSelectedTab(rssInfo.getId()) ;
-    addUIFormInput(rssInfo) ;
+    addUIFormInput(rssInfo) ;    
+  }
+  public void init(List<Calendar> userCals, List<Calendar> sharedCals, List<Calendar> publicCals) throws Exception{
     UIFormInputWithActions rssCalendars = new UIFormInputWithActions(CALENDAR_TAB) ;
-    rssCalendars.addUIFormInput(new UIFormInputInfo(INFOR,INFOR, null)) ; 
-    List<Calendar> calendars = calendarService.getUserCalendars(username, true) ;
-    for(Calendar calendar : calendars) {
+    UIFormInputInfo formInputInfo = new UIFormInputInfo(INFOR,INFOR, null) ;
+    formInputInfo.setValue(getLabel(MESSAGE)) ;
+    rssCalendars.addUIFormInput(formInputInfo) ;
+    for(Calendar calendar : userCals) {
+      userCals_.put(calendar.getId(), calendar) ;
+      rssCalendars.addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getName(), calendar.getId(), true)) ;
+    }
+    for(Calendar calendar : sharedCals) {
+      sharedCals_.put(calendar.getId(), calendar) ;
+      rssCalendars.addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getCalendarOwner() + "- " +  calendar.getName(), calendar.getId(), true)) ;
+    }
+    for(Calendar calendar : publicCals) {
+      publicCals_.put(calendar.getId(), calendar) ;
       rssCalendars.addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getName(), calendar.getId(), true)) ;
     }
     addUIFormInput(rssCalendars) ;
-  }
-  public void init() throws Exception{
-    UIFormInputWithActions rssInfo = getChildById("rssInfo") ;
+    
+    UIFormInputWithActions rssInfo = getChildById(INFO_TAB) ;
     rssInfo.getUIFormTextAreaInput(DESCRIPTION).setValue(getLabel(DESCRIPTIONS)) ;
     rssInfo.getUIStringInput(COPYRIGHT).setValue(getLabel(COPYRIGHTS)) ;
-    UIFormInputWithActions rssTab = getChildById("rssCalendars") ;
-    rssTab.getUIFormInputInfo(INFOR).setValue(getLabel(MESSAGE)) ;
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
@@ -175,7 +190,18 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
       rssData.setVersion("rss_2.0") ;
       if(uiForm.getUIDateTimePicker(UICalDavForm.PUBLIC_DATE).getCalendar() != null)
       rssData.setPubDate(uiForm.getUIDateTimePicker(UICalDavForm.PUBLIC_DATE).getCalendar().getTime()) ;
-      int result = calendarService.generateCalDav(CalendarUtils.getCurrentUser(), calendarIds, rssData) ;
+      LinkedHashMap<String, Calendar> calendars = new LinkedHashMap<String, Calendar>() ;
+      for (String calId : calendarIds) {
+        if (uiForm.userCals_.containsKey(calId)) {
+          calendars.put(calId + Utils.SPLITTER + Utils.PRIVATE_TYPE, uiForm.userCals_.get(calId)) ;
+        } else if (uiForm.sharedCals_.containsKey(calId)) {
+          calendars.put(calId + Utils.SPLITTER + Utils.SHARED_TYPE, uiForm.sharedCals_.get(calId)) ;
+        } else if (uiForm.publicCals_.containsKey(calId)) {
+          calendars.put(calId + Utils.SPLITTER + Utils.PUBLIC_TYPE, uiForm.publicCals_.get(calId)) ;
+        }
+      }
+      int result = calendarService.generateCalDav(CalendarUtils.getCurrentUser(), calendars, rssData) ;
+      
       if(result < 0) {
         uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.no-data-generated", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
