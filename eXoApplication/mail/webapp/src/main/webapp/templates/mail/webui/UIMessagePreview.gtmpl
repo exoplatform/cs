@@ -230,12 +230,16 @@
                     <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:</div>
                     <div class="LinkAddress"> 
                       <%
+                        boolean isShowReplyAll = false;
                         try { 
                           if (!MailUtils.isFieldEmpty(msg.getMessageTo())) {  
                           InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
                           for (i in 0..(toAddress.length-1)) {
                             InternetAddress address = toAddress[i];
-                              if (i > 0 && i < (toAddress.length)) print ", <br>";
+                              if (i > 0 && i < (toAddress.length)) { 
+                                print ", <br>";
+                                isShowReplyAll = true;
+                              }
                       %>
                               <span><%=Utils.getPersonal(address)%> </span> <% print((address != null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
                       <%
@@ -251,6 +255,7 @@
                   </div>
                   <%
                     if (!MailUtils.isFieldEmpty(msg.getMessageCc())) {  
+                      isShowReplyAll = true;
                   %>
                       <div class="FieldContainer">
                         <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.cc") %>:</div>
@@ -517,7 +522,10 @@
                   } 
                 %>
                 			<div style="border-top: 1px dotted #b7b7b7; padding-top: 3px">
-                				<a href="<%=uicomponent.event("Reply", msg.getId())%>" class="MessageActionIcon ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a>
+                				<a href="<%=uicomponent.event("Reply", msg.getId())%>" class="MessageActionIcon ReplyMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a>
+                				<% if (isShowReplyAll) {%>
+                				<a href="<%=uicomponent.event("ReplyAll", msg.getId())%>" class="MessageActionIcon ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a>
+                				<% } %>
 			                	<a href="<%=uicomponent.event("Forward", msg.getId())%>" class="MessageActionIcon ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></a>
 			                	<div style="clear: left"><span></span></div>
 			                </div>
