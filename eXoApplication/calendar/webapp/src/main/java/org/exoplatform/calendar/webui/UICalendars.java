@@ -745,7 +745,9 @@ public class UICalendars extends UIForm  {
         return ;
       }   
       List<Calendar> userCals = calendarService.getUserCalendars(user,  showAll) ;      
-      List<Calendar> sharedCals = calendarService.getSharedCalendars(user, showAll).getCalendars() ;
+      List<Calendar> sharedCals = new ArrayList<Calendar>() ;
+      GroupCalendarData sharedGroups = calendarService.getSharedCalendars(user, showAll) ;
+      if (sharedGroups != null) sharedCals = sharedGroups.getCalendars() ;
       List<Calendar> publicCals = new ArrayList<Calendar>() ;
       String[] groups = CalendarUtils.getUserGroups(user) ;
       List<GroupCalendarData> publicCalendars =  calendarService.getGroupCalendars(groups, showAll, user);
@@ -781,7 +783,9 @@ public class UICalendars extends UIForm  {
       }   
       
       List<Calendar> userCals = calendarService.getUserCalendars(user,  showAll) ;      
-      List<Calendar> sharedCals = calendarService.getSharedCalendars(user, showAll).getCalendars() ;
+      List<Calendar> sharedCals = new ArrayList<Calendar>() ;
+      GroupCalendarData sharedGroups = calendarService.getSharedCalendars(user, showAll) ;
+      if (sharedGroups != null) sharedCals = sharedGroups.getCalendars() ;
       List<Calendar> publicCals = new ArrayList<Calendar>() ;
       String[] groups = CalendarUtils.getUserGroups(user) ;
       List<GroupCalendarData> publicCalendars =  calendarService.getGroupCalendars(groups, showAll, user);

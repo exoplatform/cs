@@ -54,6 +54,7 @@ public class AutoGeneratePeriodJobImp  implements Job {
         URL feedUrl = new URL(d.getUrl());
         SyndFeedInput input = new SyndFeedInput();
         SyndFeed feed = input.build(new XmlReader(feedUrl)); 
+        if (feed.getEntries() == null || feed.getEntries().size() == 0) continue ;
         SyndEntry entry = (SyndEntry)feed.getEntries().get(0);
         String calId = entry.getLink().substring(entry.getLink().lastIndexOf("/")+1) ;
         calSvr.updateRss(entry.getAuthor(), calId, calSvr.getCalendarImportExports(CalendarServiceImpl.ICALENDAR),Integer.parseInt(numberLimited)) ;

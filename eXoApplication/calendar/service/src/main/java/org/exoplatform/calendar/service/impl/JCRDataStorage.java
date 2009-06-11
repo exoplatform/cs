@@ -19,6 +19,7 @@ package org.exoplatform.calendar.service.impl;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -74,7 +75,9 @@ import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.feed.synd.SyndFeedImpl;
+import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.SyndFeedOutput;
+import com.sun.syndication.io.XmlReader;
 
 
 /**
@@ -379,6 +382,11 @@ public class JCRDataStorage{
       } finally {
         provider.close() ;
       }
+      try {
+        removeFeed(username, calendarId) ;        
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
       return calendar ;
     }
     return null ;
@@ -463,6 +471,11 @@ public class JCRDataStorage{
         calNode.remove();
         // calendarHome.save() ;
         calendarHome.getSession().save();
+        try {
+          removeFeed(null, calendarId) ;        
+        } catch (Exception e) {
+          e.printStackTrace() ;
+        }        
         return calendar;
       }
       return null;
@@ -1643,12 +1656,67 @@ public class JCRDataStorage{
     }
     return null ;
   }
+  
+  private void storeXML(String feedXML, Node rssHome, String rssNodeName, RssData rssData) throws Exception{
+    Node rss ;
+    if(rssHome.hasNode(rssNodeName)) rss = rssHome.getNode(rssNodeName);
+    else rss = rssHome.addNode(rssNodeName, Utils.EXO_RSS_DATA);
+    rss.setProperty(Utils.EXO_BASE_URL, rssData.getUrl()) ;
+    rss.setProperty(Utils.EXO_TITLE, rssData.getTitle()) ;
+    rss.setProperty(Utils.EXO_CONTENT, new ByteArrayInputStream(feedXML.getBytes()));
+  }
+  
+  private void removeFeed(String username, String calendarId) throws Exception {
+    Node rssHome = getRssHome(username) ;
+    NodeIterator iter = rssHome.getNodes() ; 
+    while(iter.hasNext()) {
+      Node feedNode = iter.nextNode() ;
+      if(feedNode.isNodeType(Utils.EXO_RSS_DATA)) {
+        FeedData feedData = new FeedData() ;
+        feedData.setTitle(feedNode.getProperty("exo:title").getString()) ;
+        StringBuffer url = new StringBuffer(feedNode.getProperty(Utils.EXO_BASE_URL).getString()) ;  
+        url.append("/").append(PortalContainer.getInstance().getPortalContainerInfo().getContainerName()) ;
+        url.append("/").append(feedNode.getSession().getWorkspace().getName()) ;
+        url.append("/").append(username)  ;
+        url.append("/").append(feedNode.getName())  ;
+        feedData.setUrl(url.toString()) ;
+       
+        URL feedUrl = new URL(feedData.getUrl());
+        SyndFeedInput input = new SyndFeedInput();
+        SyndFeed feed = input.build(new XmlReader(feedUrl)); 
+        
+        List entries = feed.getEntries();
+        List<SyndEntry> listBefore = new ArrayList<SyndEntry>() ;
+        listBefore.addAll(entries) ;
+        
+        boolean has = false ;
+        for (int i = 0; i < listBefore.size(); i ++) {
+          SyndEntry entry = (SyndEntry)feed.getEntries().get(i);
+          String id = entry.getLink().substring(entry.getLink().lastIndexOf("/")+1) ;
+          if (id.contains(calendarId)) {
+            listBefore.remove(i) ; 
+            has = true ;
+            break ;
+          }        
+        }
+        if (has) {
+          feed.setEntries(listBefore) ;
+          SyndFeedOutput output = new SyndFeedOutput(); 
+          String feedXML = output.outputString(feed);      
+          feedXML = StringUtils.replace(feedXML,"&amp;","&");
+          
+          feedNode.setProperty(Utils.EXO_CONTENT, new ByteArrayInputStream(feedXML.getBytes()));
+          feedNode.save() ;
+          break ;
+        }        
+      }
+    }  
+  }
 
   public List<FeedData> getFeeds(String username) throws Exception {
     List<FeedData> feeds = new ArrayList<FeedData>() ;
-    Node shareNode = getSharedCalendarHome() ;
     Node rssHome = getRssHome(username) ;
-    NodeIterator iter = rssHome.getNodes() ;
+    NodeIterator iter = rssHome.getNodes() ; 
     while(iter.hasNext()) {
       Node feedNode = iter.nextNode() ;
       if(feedNode.isNodeType(Utils.EXO_RSS_DATA)) {
@@ -1883,14 +1951,7 @@ public class JCRDataStorage{
     return 1 ;
   }
 
-  private void storeXML(String feedXML, Node rssHome, String rssNodeName, RssData rssData) throws Exception{
-    Node rss ;
-    if(rssHome.hasNode(rssNodeName)) rss = rssHome.getNode(rssNodeName);
-    else rss = rssHome.addNode(rssNodeName, Utils.EXO_RSS_DATA);
-    rss.setProperty(Utils.EXO_BASE_URL, rssData.getUrl()) ;
-    rss.setProperty(Utils.EXO_TITLE, rssData.getTitle()) ;
-    rss.setProperty(Utils.EXO_CONTENT, new ByteArrayInputStream(feedXML.getBytes()));
-  }
+ 
 
   private String getEntryUrl(String portalName, String wsName, String username, String path, String baseUrl) throws Exception{
     StringBuilder url = new StringBuilder(baseUrl) ;
@@ -2272,6 +2333,11 @@ public class JCRDataStorage{
           calendar.refresh(true) ;
           break ;
         }
+      }
+      try {
+        removeFeed(username, calendarId) ;        
+      } catch (Exception e) {
+        e.printStackTrace() ;
       }
     }
   }
