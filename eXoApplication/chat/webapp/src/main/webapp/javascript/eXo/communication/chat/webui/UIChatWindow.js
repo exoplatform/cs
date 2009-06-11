@@ -1557,22 +1557,23 @@ UIChatWindow.prototype.sendFile = function(fileChooserNode, event) {
   if (!fileChooserNode.value) {
     return;
   }
-  var uploadForm = eXo.core.DOMUtil.findAncestorByTagName(fileChooserNode, 'form');
-  
-	var activeTabControl = this.getActiveTabControl();
-	var description = '';
-	var userName = activeTabControl.tabId.owner;
-	var targetUser = activeTabControl.tabId.targetPerson;
-	targetUser = targetUser.substr(0, targetUser.indexOf('@'));
-	uploadForm.action = '/chat/fileexchange?username=' + userName + '&requestor=' + targetUser + '&description=' + description;
+  var uploadForm = eXo.core.DOMUtil.findAncestorByTagName(fileChooserNode, 'form');  
+  var activeTabControl = this.getActiveTabControl();
+  var description = '';
+  var userName = activeTabControl.tabId.owner;
+  var targetUser = activeTabControl.tabId.targetPerson;
+  targetUser = targetUser.substr(0, targetUser.indexOf('@'));
+  uploadForm.action = '/chat/fileexchange?username=' + userName + '&requestor=' + targetUser + '&description=' + description;
 	this.uploadIframe.onload = function() {
-  	window.jsconsole.warn('upload completed');
-    eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('File exchange: Waiting for authorize...', activeTabControl.tabId);
-  	this.onload = null;
+	window.jsconsole.warn('upload completed');
+	eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('File exchange: Waiting for authorize...', activeTabControl.tabId);
+	this.onload = null;
   };
-	uploadForm.submit();
+  uploadForm.submit();
   eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('File exchange: Uploading file to server...', activeTabControl.tabId);
-	fileChooserNode.value = '';
+  fileChooserNode.value = '';
+  //TODO fix ie not re-send the same file
+  uploadForm.reset();
 };
 // --/--
 

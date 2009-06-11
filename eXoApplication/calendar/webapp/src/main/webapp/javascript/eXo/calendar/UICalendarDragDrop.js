@@ -210,7 +210,7 @@ UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
 	if (this.foundTargetObjectCatch && eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,"CalendarItem")) {
 		var moveAction = eXo.core.DOMUtil.findFirstDescendantByClass(dndEvent.dragObject,"div","EventBoxes").getAttribute("moveAction");
 		ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(moveAction,null), false) ;
-  	alert("Waiting for 'Moving events between calendars action'");
+  	//alert("Waiting for 'Moving events between calendars action'");
 		return ;
 	}
   if (this.foundTargetObjectCatch) {

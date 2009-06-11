@@ -1581,6 +1581,8 @@ UIChatWindow.prototype.sendFile = function(fileChooserNode, event) {
 	uploadForm.submit();
   eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('File exchange: Uploading file to server...', activeTabControl.tabId);
 	fileChooserNode.value = '';
+	//TODO fix ie not re-send the same file
+	uploadForm.reset();
 };
 // --/--
 

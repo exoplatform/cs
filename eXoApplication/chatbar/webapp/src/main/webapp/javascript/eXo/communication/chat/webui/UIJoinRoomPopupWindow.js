@@ -157,7 +157,6 @@ UIJoinRoomPopupWindow.prototype.joinRoomAction = function() {
         return;
       }
       var roomInfo = roomInfoNode.roomInfo;
-      alert(roomInfoNode.innerHTML) ;
       var joinedRooms = this.UIMainChatWindow.joinedRooms;
       for (var i=0; i<joinedRooms.length; i++) {
         var joinedRoomInfo = joinedRooms[i];
@@ -180,7 +179,6 @@ UIJoinRoomPopupWindow.prototype.joinSelectedRoomAction = function(obj) {
 	  var joinedRooms = this.UIMainChatWindow.joinedRooms;
       for (var i=0; i<joinedRooms.length; i++) {
         var joinedRoomInfo = joinedRooms[i];
-        alert(joinedRoomInfo.roomInfo.room) ;
         if (joinedRoomInfo.roomInfo.room == roomInfoNode.getAttribute("roomId")) {
           this.UIMainChatWindow.UIChatWindow.createNewTab(joinedRoomInfo.roomInfo.room, true);           
           return;

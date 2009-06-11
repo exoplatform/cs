@@ -147,7 +147,9 @@ Highlighter.prototype.start = function(evt) {
 	document.onmouseup = Highlighter.end ;
 	Highlighter.firstCell = Highlighter.startCell ;
 	Highlighter.lastCell = Highlighter.startCell ;
-	} catch(e) {alert(e.message) ;}
+	} catch(e) {
+		//alert(e.message) ;
+	}
 } ;
 
 /**
