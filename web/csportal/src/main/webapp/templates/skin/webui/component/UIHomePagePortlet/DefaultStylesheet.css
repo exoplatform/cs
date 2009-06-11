@@ -8,7 +8,7 @@
 }
 
 .UIHomePagePortlet .PortletDecoration{	
-	padding: 7px 7px 10px 7px;
+	padding: 8px;
 	border: 1px solid #dedede;
 	background: #fff;
 }
@@ -19,58 +19,42 @@
 
 .UIHomePagePortlet .LeftAdImage{	
 	background: transparent url('DefaultSkin/background/LeftHomePage.jpg') no-repeat left center;
+	height: 274px;
+	text-align: right;
+	padding-right: 130px;
 }
 
 .UIHomePagePortlet .RightAdImage {
- background: transparent url('DefaultSkin/background/RightHomePage.jpg') no-repeat right top; 
- height: 229px;
- text-align: right;
- padding-right: 20px;
+	 background: transparent url('DefaultSkin/background/RightHomePage.jpg') no-repeat right top;
 }
 
 .UIHomePagePortlet .HomePortletAdBackround .EmptyBlock{
-	height: 125px;
+	height: 148px;
 }
 
 .UIHomePagePortlet .HomePortletAdBackround .ProductSlogan {
-	font-size: 22px;
+	font-size: 29px;
 	font-weight: bold;
-	height: 58px;
+	height: 45px;
 	letter-spacing: 1px;
-	color: #656669;
+	color: #fff;
 }
 
 .UIHomePagePortlet .HomePortletAdBackround .ProductIntro {
-	font-size: 13px;
+	font-size: 15px;
 	letter-spacing: 1px;
 	color: #fff;
 	line-height: 14px;
+	border-top: dashed 1px #ffffff;
+	width: 300px;
+	float: right;
+	padding-top: 10px;
 }
 
 .UIHomePagePortlet .HomePortletContainer {
-}
-
-.UIHomePagePortlet .HomePortletContainer .Mail {
-	background: transparent url('DefaultSkin/background/ProductsCS.jpg') no-repeat left top;
-	padding-left: 95px;
-	height: 89px; line-height: 89px;
-}
-
-.UIHomePagePortlet .HomePortletContainer .Calendar {
-	background: transparent url('DefaultSkin/background/ProductsCS.jpg') no-repeat left -178px;
-	padding-left: 95px;
-	height: 89px; line-height: 89px;
-}
-
-.UIHomePagePortlet .HomePortletContainer .Addressbook {
-	background: transparent url('DefaultSkin/background/ProductsCS.jpg') no-repeat left -267px;
-	padding-left: 95px;
-	height: 89px; line-height: 89px;
-}
-
-.UIHomePagePortlet .HomePortletContainer .BgReat {
-	background: url('DefaultSkin/background/ProductsCS.jpg') repeat-x left -89px;
-	
+	background: #fbfbfc url('DefaultSkin/background/Bg.jpg') repeat-x left top;
+	height: 125px;
+	border-bottom: solid 1px #d7d7d7;
 }
 
 .UIHomePagePortlet .HomePortletContainer .LableProduct {
@@ -80,14 +64,16 @@
 }
 
 .UIHomePagePortlet .HomePortletContainer .ContentProductsCS {
-	background-color: #cacaca;
-	padding-left: 30px;
+	padding-left: 25px;
 	height: auto;
+	margin-left: 193px;
+	background: transparent url('DefaultSkin/background/BgRightContainter.jpg') no-repeat right top;
+	height: 125px;
 }
 
 .UIHomePagePortlet .HomePortletContainer .ContentProductsCS .Bullet {
 	background: url('DefaultSkin/background/Bullet.gif') no-repeat;
-	padding-left: 25px;
+	padding-left: 12px;
 }
 
 .UIHomePagePortlet .HomePortletContainer .ContentProductsCS .Text {
@@ -95,22 +81,66 @@
 	line-height: 16px;
 }
 
-.UIHomePagePortlet .HomePortletContainer .LeftBottom {
-	background: transparent url('DefaultSkin/background/BgBottom.gif') no-repeat left top;
-	padding-left: 3px;
+.UIHomePagePortlet .HomePortletContainer .ContainerBox{
+	width: 192px;
+	color: #000000;
+	text-align: center;
+	float: left;
 }
 
-.UIHomePagePortlet .HomePortletContainer .RightBottom {
-	background: transparent url('DefaultSkin/background/BgBottom.gif') no-repeat right -7px;
-	padding-right: 3px;
-	height: 7px;
+
+/*****************************************************Add new HomePagePortlet**********************************************/
+
+.UIHomePagePortlet .HomePortletContainer .LeftTitleHomePage{
+	background: url('DefaultSkin/background/BgConerTitle.gif') no-repeat left top;
+	padding-left: 4px;
 }
 
-.UIHomePagePortlet .HomePortletContainer .CenterBottom {
-	background: url('DefaultSkin/background/BgBottom.gif') repeat-x center -14px;
-	
+.UIHomePagePortlet .HomePortletContainer .RightTitleHomePage{
+	background: url('DefaultSkin/background/BgConerTitle.gif') no-repeat right top;
+	padding-right: 4px;
 }
 
+.UIHomePagePortlet .HomePortletContainer .CenterTitleHomePage{
+	background: url('DefaultSkin/background/BgConerTitle.gif') repeat-x left -37px;
+	height: 37px;
+	line-height: 32px;
+	font-size: 14px;
+}
+
+.UIHomePagePortlet .HomePortletContainer .ContainerIcon{
+	border-right: solid 1px #d7d7d7;
+	border-left: solid 1px #d7d7d7;
+	padding: 10px 0px;
+}
+
+.UIHomePagePortlet .HomePortletContainer .IconCalenda{
+	background: url('DefaultSkin/background/ProductsCS.gif') no-repeat center 0px;
+	height: 68px;
+	width: 74px;
+	margin: auto;
+}
+
+.UIHomePagePortlet .HomePortletContainer .IconAddressBook{
+	background: url('DefaultSkin/background/ProductsCS.gif') no-repeat center -68px;
+	height: 68px;
+	width: 74px;
+	margin: auto;
+}
+
+.UIHomePagePortlet .HomePortletContainer .IconMail{
+	background: url('DefaultSkin/background/ProductsCS.gif') no-repeat center -136px;
+	height: 68px;
+	width: 74px;
+	margin: auto;
+}
+
+.UIHomePagePortlet .HomePortletContainer .IconChat{
+	background: url('DefaultSkin/background/ProductsCS.gif') no-repeat center -204px;
+	height: 68px;
+	width: 74px;
+	margin: auto;
+}
 /*****************************************************sidebar**********************************************/
 
 .sidebarTDContaineCS {
@@ -126,40 +156,56 @@ padding:14px 8px 22px;
   text-align: center;
 }
 .SideBar .DownloadButton{
-	background: #f1f1f1 url('DefaultSkin/background/DownloadButton.gif') no-repeat ;
-	width: 192px; height: 89px;
-	margin:18px 0px 0px 0px;
+	background:url('DefaultSkin/background/DownloadButton.jpg') no-repeat center top;
+	height: 110px;
+	margin: 18px 0px 0px 0px;
 	display: block;
+	width: 100%;
+	color: #fff;
+	cursor: pointer;
+}
+
+.SideBar .DownloadButton .TextDownload{
+	font-size: 15px;
+	font-weight: bold;
 }
 
 .SideBar .NormalText { 
     color:#3D3D3D;
     line-height:16px;
+	margin-top: 17px;
 }
 
 .SideBar .DotLine {
    background:transparent url(DefaultSkin/background/DotLine.gif) repeat-x scroll 0 0;
    height:1px;
-   margin:12px 10px;
+   margin:0px 10px;
 }
 .SideBar .LeftButton {
-	background: url('DefaultSkin/background/Button.gif') no-repeat left -33px;
-	padding-left: 17px;
-	margin: 10px;
+	background: url('DefaultSkin/background/Button.gif') no-repeat left 0px;
+	padding-left: 24px;
+	margin: 17px 20px 0px 20px;
 }
 
 .SideBar .RightButton {
-	background: url('DefaultSkin/background/Button.gif') no-repeat right -66px;
-	padding-right: 16px;
+	background: url('DefaultSkin/background/Button.gif') no-repeat right -79px;
+	padding-right: 23px;
 }
 
 .SideBar .CenterButton {
-	background: url('DefaultSkin/background/Button.gif') repeat-x top;
-	line-height: 33px;
-	font-size: 18px;
+	background: url('DefaultSkin/background/Button.gif') repeat-x left -158px;
+	height: 74px;
+	font-size: 15px;
 	font-family: tahoma;
 	font-weight: bold;
+	padding-top: 5px;
 	color: white;
+}
+
+.SideBar .CenterButton  .TextBntColla{
+	font-size: 11px;
+	white-space: nowrap;
+	font-weight:normal;
 }
 
 .SideBar .SignUp {
@@ -179,7 +225,7 @@ padding:14px 8px 22px;
 }
 
 .SideBar .ProVersion { 
-   color:#5D8C18;
+   color:#e27e26;
    font-family:tahoma;
    font-size:12px;
    font-weight:bold;

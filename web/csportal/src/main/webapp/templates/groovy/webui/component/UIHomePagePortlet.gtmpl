@@ -8,10 +8,10 @@
 			<div class="UIHomePagePortlet" id="$uicomponent.id">
 				<div class="PortletDecoration">
 						<div class="HomePortletAdBackround">
-							<div class="LeftAdImage">
-								<div class="RightAdImage">
+							<div class="RightAdImage">
+								<div class="LeftAdImage">
 									<div class="EmptyBlock"><span></span></div>
-									<div class="ProductSlogan">eXo Collaboration Suite 1.3<br />Live Demo</div>
+									<div class="ProductSlogan">eXo Collaboration Suite 1.3</div>
 									<div class="ProductIntro">beta version with chat application</div>
 								</div>
 							</div>
@@ -19,75 +19,54 @@
 						<table style="table-layout: fixed; width: 100%;-width: auto;">
 							<tr>
 								<td>
-									<div class="HomePortletContainer" style="margin: 10px 5px 0px 0px">
-										<div class="BgReat">
-											<div class="Mail LableProduct">Mail</div>
+									<div class="HomePortletContainer" style="margin: 10px 8px 0px 0px">
+										<div class="ContainerBox">
+											<div class="LeftTitleHomePage">
+												<div class="RightTitleHomePage">
+													<div class="CenterTitleHomePage">Calendar</div>
+												</div>
+											</div>
+											<div class="ContainerIcon">
+												<div class="IconCalenda"><span></span></div>
+											</div>
 										</div>
 										<div class="ContentProductsCS">
+											<div style="height: 20px"><span></span></div>
 											<div class="Bullet">
-												<div class="Text">Mutiple accounts</div>
-											</div>
-											<div class="Bullet">
-												<div class="Text">Conversation, thread and list views</div>
+												<div class="Text">Multiple calendars</div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Tags</div>
+												<div class="Text">Events and tasks</div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Filters</div>
-											</div>
-											<div class="Bullet">
-												<div class="Text">Support for imap, pop and smtp</div>
-											</div>
-											<div class="Bullet">
-												<div class="Text">Advanced search</div>
-											</div>
-										</div>
-										<div class="CenterBottom">
-											<div class="LeftBottom">
-												<div class="RightBottom"><span></span></div>
-											</div>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="HomePortletContainer" style="margin: 10px 5px 0px 0px">
-										<div class="BgReat">
-											<div class="Calendar LableProduct">Calendar</div>
-										</div>
-										<div class="ContentProductsCS">
-										<div class="Bullet">
 												<div class="Text">Calendar sharing</div>
-											</div>
-											<div class="Bullet">
-												<div class="Text">Tags</div>
 											</div>
 											<div class="Bullet">
 												<div class="Text">Invitations and reminders</div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Free/busy auto check</div>
+												<div class="Text">Free/ busy auto check</div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Support for calDAV, iCal and RSS</div>
-											</div>
-											<div class="Bullet">
-												<div class="Text">Advanced search</div>
+												<div class="Text">iCal support</div>
 											</div>
 										</div>
-										<div class="CenterBottom">
-											<div class="LeftBottom">
-												<div class="RightBottom"><span></span></div>
-											</div>
-										</div>
-									</div>	
+									</div>
 								</td>
 								<td>
 									<div class="HomePortletContainer" style="margin: 10px 0px 0px 0px">
-										<div class="BgReat">
-											<div class="Addressbook LableProduct">Addressbook</div>
+										<div class="ContainerBox">
+											<div class="LeftTitleHomePage">
+												<div class="RightTitleHomePage">
+													<div class="CenterTitleHomePage">Address Book</div>
+												</div>
+											</div>
+											<div class="ContainerIcon">
+												<div class="IconAddressBook"><span></span></div>
+											</div>
 										</div>
 										<div class="ContentProductsCS">
+											<div style="height: 20px"><span></span></div>
 											<div class="Bullet">
 												<div class="Text">Public, group and private addressbooks</div>
 											</div>
@@ -95,21 +74,79 @@
 												<div class="Text">Addressbook and contacts sharing</div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Tags</div>
-											</div>
-											<div class="Bullet">
 												<div class="Text">Group actions</div>
-											</div>
-											<div class="Bullet">
-												<div class="Text">VCard support</div>
 											</div>
 											<div class="Bullet">
 												<div class="Text">Advanced search</div>
 											</div>
+											<div class="Bullet">
+												<div class="Text">VCard suppor</div>
+											</div>
 										</div>
-										<div class="CenterBottom">
-											<div class="LeftBottom">
-												<div class="RightBottom"><span></span></div>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="HomePortletContainer" style="margin: 8px 8px 0px 0px">
+										<div class="ContainerBox">
+											<div class="LeftTitleHomePage">
+												<div class="RightTitleHomePage">
+													<div class="CenterTitleHomePage">Chat</div>
+												</div>
+											</div>
+											<div class="ContainerIcon">
+												<div class="IconChat"><span></span></div>
+											</div>
+										</div>
+										<div class="ContentProductsCS">
+											<div style="height: 20px"><span></span></div>
+											<div class="Bullet">
+												<div class="Text">Instant Messaging for portal  users</div>
+											</div>
+											<div class="Bullet">
+												<div class="Text">Chat rooms for live meetings</div>
+											</div>
+											<div class="Bullet">
+												<div class="Text">File exchange</div>
+											</div>
+											<div class="Bullet">
+												<div class="Text">Coversation history</div>
+											</div>
+											<div class="Bullet">
+												<div class="Text">XMPP  based  protacol</div>
+											</div>
+										</div>
+									</div>
+								</td>
+								<td>
+									<div class="HomePortletContainer" style="margin: 8px 0px 0px 0px">
+										<div class="ContainerBox">
+											<div class="LeftTitleHomePage">
+												<div class="RightTitleHomePage">
+													<div class="CenterTitleHomePage">Mail</div>
+												</div>
+											</div>
+											<div class="ContainerIcon">
+												<div class="IconMail"><span></span></div>
+											</div>
+										</div>
+										<div class="ContentProductsCS">
+											<div style="height: 20px"><span></span></div>
+											<div class="Bullet">
+												<div class="Text">Mutiple accounts</div>
+											</div>
+											<div class="Bullet">
+												<div class="Text">Conversations, threads or list views</div>
+											</div>
+											<div class="Bullet">
+												<div class="Text">Tagging, starring and filtering</div>
+											</div>
+											<div class="Bullet">
+												<div class="Text">Advanced search</div>
+											</div>
+											<div class="Bullet">
+												<div class="Text">IMAP, POP, SMTP support</div>
 											</div>
 										</div>
 									</div>
@@ -122,24 +159,37 @@
 		<td class="sidebarTDContaineCS">
 			<div class="SideBar">	
 				<div class="SideBarContainer">
-
-					<div class="DotLine"><span></span></div>		
-					<div class="NormalText">Want to play with it? That's easy you just need to <a href="/portal/public/classic/register">a demo account</a>.</div>
-					<a href="/portal/public/classic/register" class="SignUp">Sign Up Now</a>
-								
-
-					<a class="DownloadButton" href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3-tomcat.zip"></a>
-					
+					<div style="height: 11px;"><span></span></div>
 					<div class="DotLine"><span></span></div>
-					<!--div class="VersionIcon"><span></span></div-->		
-					<div class="NormalText">For production support, we strongly suggest eXo Platform's</div>
-					<a href="http://www.exoplatform.com/portal/public/en/download/dl_compare" class="ProVersion">professional version</a>
-					
-					<div class="DotLine"><span></span></div>
-					<div class="NormalText">CS also works within eXo WebOS, try it!</div>
 					<div class="LeftButton">
 						<div class="RightButton">
-							<div class="CenterButton"><a href="/portal/private/classic/collaboration" style="color: white;">CS on WebOS</a></div>
+							<div class="CenterButton">
+							<a href="/portal/private/classic/collaboration" style="color: white; margin-top: 5px;">Try now</a>
+							<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla">Create a demo account</a></div>
+						</div>
+					</div>
+					<div class="DotLine"><span></span></div>
+				<!--- 	<div class="NormalText">Want to play with it? That's easy you just need to <a href="/portal/public/classic/register">a demo account</a>.</div>
+					<a href="/portal/public/classic/register" class="SignUp">Sign Up Now</a>
+						-->		
+					<div class="DownloadButton">
+						<div style="height: 45px"><span></span></div>
+						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3-tomcat.zip" style="color: white;" class="TextDownload">DOWN LOAD</a><br/>
+						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3-tomcat.zip" style="color: white;">Community Version</a>
+					</div>
+					<div class="DotLine"><span></span></div>
+					<div style="margin: 17px 0px;">
+					<div class="NormalText">Did you like? Did you hate?</div>
+					<a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">Send Feedback</a>
+					</div>
+					<div class="DotLine"><span></span></div>
+					<!--div class="VersionIcon"><span></span></div-->		
+					
+					<div class="LeftButton">
+						<div class="RightButton">
+							<div class="CenterButton">
+							<a href="/portal/private/classic/collaboration" style="color: white; margin-top: 5px;">CS on WebOS</a>
+							<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla">The collaborative desktop</a></div>
 						</div>
 					</div>		
 					<!--
@@ -151,10 +201,9 @@
 					</div>		
 					-->
 					<div class="DotLine"><span></span></div>
-					<div class="NormalText">Tell us how we are doing</div>
-					
-					<a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">Send Feedback</a>
-					
+					<div class="NormalText">For more information, visit<br/>
+the <a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">wiki</a> and <a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">forums</a></div>
+									
 					<!--
 					<div class="LeftButton">
 						<div class="RightButton">
@@ -162,6 +211,7 @@
 						</div>
 					</div>	
 					-->
+					<div style="height:69px;"><span></span></div>
 				</div>
 			</div>
 		</td>
