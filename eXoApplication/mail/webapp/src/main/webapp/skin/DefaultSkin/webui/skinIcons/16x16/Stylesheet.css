@@ -122,6 +122,10 @@
 	background: url('icons/View.gif') no-repeat right; /* orientation=rt */
 }
 
+.UIMailPortlet .ReplyMailAllIcon {
+	background: url('icons/ReplyAllcon16x14.gif') no-repeat left 6px;
+}
+
 .UIMailPortlet .ReplyMailIcon {
 	background: url('icons/Replyicon16x14.gif') no-repeat left 6px;
 }

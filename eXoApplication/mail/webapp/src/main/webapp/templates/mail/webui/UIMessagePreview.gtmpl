@@ -332,9 +332,11 @@
                                       <a class="MenuItem" href="<%=uicomponent.event("Reply", msg.getId())%>">   
                                         <div class="ItemIcon ReplyMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %></div>
                                       </a>  
+                                      <% if (isShowReplyAll) { %>
                                       <a class="MenuItem" href="<%=uicomponent.event("ReplyAll", msg.getId())%>">   
-                                        <div class="ItemIcon ReplyMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></div>
+                                        <div class="ItemIcon ReplyMailAllIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></div>
                                       </a>  
+                                      <% } %>
                                       <a class="MenuItem" href="<%=uicomponent.event("Forward", msg.getId())%>">   
                                         <div class="ItemIcon ForwardMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.forward") %> </div>
                                       </a>
