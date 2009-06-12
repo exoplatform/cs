@@ -281,15 +281,13 @@ UIRoomConfigPopupWindow.prototype.syncPrivileges = function(event) {
   var targetNode = DOMUtil.findAncestorByTagName(this, 'form');
   var targetName = (this.name == 'roomadmins') ? 'roomowners' : 'roomadmins';
   var roomAdminsListNode = targetNode['roomadmins'];
-  var roomOwnersListNode = targetNode['roomadmins'];
-  var lastOwner = null;
+  var roomOwnersListNode = targetNode['roomowners'];
 
-  if (roomOwnersListNode.options.selectedIndex)
   targetNode = targetNode[targetName];
   if (!targetNode ||
       (targetNode == roomAdminsListNode &&
        roomOwnersListNode.options.length == 1)) {
-    roomAdminsListNode.options[0].selected = false;
+    roomAdminsListNode.options.selectedIndex = -1;
     return false;
   }
   for (var i=0; i<this.options.length; i++) {
@@ -299,31 +297,13 @@ UIRoomConfigPopupWindow.prototype.syncPrivileges = function(event) {
     }
     for (var j=0; j<targetNode.options.length; j++) {
       var targetOption = targetNode.options[j];
-      if (targetOption.value == option.value) {
-        targetOption.selected = false;
-        if (targetNode == roomOwnersListNode) {
-          lastOwner = targetOption;
+      if (targetOption.selected && targetOption.value == option.value ) {
+        if (targetNode == roomAdminsListNode) {
+          targetNode.options.selectedIndex = -1;
         }
+        else this.options.selectedIndex = -1;
       }
     }
-  }
-  //var totalOwner = 0;
-  //for (var i=0; i<roomOwnersListNode.options.length; i++) {
-    //if (roomOwnersListNode.options[i].selected) {
-      //totalOwner ++;
-    //}
-  //}
-  if (lastOwner &&
-      (roomOwnersListNode.selectedIndex == -1 ||
-      roomAdminsListNode.options.length == 1)) {
-    for (var i=0; i<roomAdminsListNode.options.length; i++) {
-      var option = roomAdminsListNode.options[i];
-      if (option.selected &&
-          lastOwner.value == option.value) {
-        option.selected = false;
-      }
-    }
-    lastOwner.selected = true;
   }
 };
 

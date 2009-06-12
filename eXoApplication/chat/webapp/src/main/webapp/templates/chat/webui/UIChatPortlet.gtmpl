@@ -779,7 +779,7 @@
                     <div class="BoxForm">
                         <div class="BorderForm">
                             <fieldset style="color: #333; margin-bottom: 10px; overflow: hidden:height:100%;"
-                                maxheight="350px">
+                                maxheight="350">
                                 <legend class="StyleLegend">General</legend>
                                 <table class="UIFormGrid" style="visibility: visible;">
                                     <tr>
