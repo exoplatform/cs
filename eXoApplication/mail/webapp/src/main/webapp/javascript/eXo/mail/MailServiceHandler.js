@@ -1,5 +1,5 @@
 /**
- * @author Uoc Nguyen
+ * @author Uoc Nguyen, Nam Phung
  */
 function MailServiceHandler() {
   this.START_CHECKMAIL_STATUS = 101;
@@ -9,6 +9,9 @@ function MailServiceHandler() {
   this.NO_UPDATE_STATUS = 201;
   this.FINISHED_CHECKMAIL_STATUS = 200;
   this.REQUEST_STOP_STATUS = 202;
+  
+  this.START_SYNC_FOLDER = 301;
+  this.FINISH_SYNC_FOLDER = 302;
   
   this.SERVICE_BASED_URL = '/portal/rest/cs/mail';
   this.CHECK_MAIL_ACTION = 'check mail action';
@@ -76,6 +79,17 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
     if (status != this.NO_UPDATE_STATUS) {
       this.updateUI(status);
     }
+    
+    var statusSync = parseInt(this.serverData.info.checkingmail.syncFolderStatus);
+    
+    if (statusSync) {
+	    if (statusSync == this.START_SYNC_FOLDER) {
+	    	document.getElementById('SynchronizeIconRefreshFolder').className = "SyncingIcon"; 
+	    } else if (statusSync == this.FINISH_SYNC_FOLDER) {
+	    	document.getElementById('SynchronizeIconRefreshFolder').className = "SyncIcon"; 
+	    }
+    }
+    	
     if (status == this.FINISHED_CHECKMAIL_STATUS || status == this.CONNECTION_FAILURE || status == this.RETRY_PASSWORD ||
         status == this.REQUEST_STOP_STATUS) {
       this.destroy();    

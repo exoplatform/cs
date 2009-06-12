@@ -858,8 +858,10 @@ public class MailServiceImpl implements MailService, Startable {
     IMAPStore store = openIMAPConnection(sProvider, username, account, info);  
     
     if (store != null) {
+      info.setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
       info.setStatusMsg("Synchronizing imap folder ...");
       List<javax.mail.Folder> folderList = synchImapFolders(sProvider, username, accountId, null, store.getDefaultFolder().list());
+      info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
       info.setStatusMsg("Finished synchronizing imap folder ...");
       if (!Utils.isEmptyField(folderId)) {
         javax.mail.Folder fd;

@@ -477,3 +477,11 @@
  	margin-left:5px;
  	float:right;
 }
+
+.UIMailPortlet .SyncingIcon {
+	background: url('icons/loading.gif') no-repeat center;
+	height:12px;
+ 	width:11px;
+ 	margin-left:5px;
+ 	float:right;
+}

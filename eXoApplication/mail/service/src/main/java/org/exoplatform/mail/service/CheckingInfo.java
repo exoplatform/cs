@@ -32,6 +32,9 @@ public class CheckingInfo {
   public static final int CONNECTION_FAILURE = 102 ;
   public static final int RETRY_PASSWORD = 103 ;
   
+  public static final int START_SYNC_FOLDER = 301;
+  public static final int FINISH_SYNC_FOLDER = 302;
+  
   private int totalMsg_ = 0 ;
   private int fetching_ = 0  ;
   private int statusCode_ ;
@@ -41,6 +44,7 @@ public class CheckingInfo {
   private boolean isRequestStop_ = false;
   private String requestingForFolder_;
   private String msgId_ ;
+  private int syncFolderStatus_ =300;
   
   public int getTotalMsg() {  return totalMsg_ ; } ;
   public void setTotalMsg(int totalMsg) { 
@@ -52,6 +56,11 @@ public class CheckingInfo {
   public void setFetching(int in) { 
     fetching_ = in ; 
     hasChanged_ = true ;
+  }
+
+  public int getSyncFolderStatus() {  return syncFolderStatus_ ; } ;
+  public void setSyncFolderStatus(int syncFolderStatus) { 
+    syncFolderStatus_ = syncFolderStatus ; 
   }
   
   public String getFetchingToFolders() { return fetchingToFolders_; } 
