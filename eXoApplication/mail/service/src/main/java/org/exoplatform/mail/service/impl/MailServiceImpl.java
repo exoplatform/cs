@@ -923,8 +923,9 @@ public class MailServiceImpl implements MailService, Startable {
       Date lastCheckedDate = eXoFolder.getLastCheckedDate();
       Date lastCheckedFromDate = eXoFolder.getLastStartCheckingTime();
       Date checkFromDate = eXoFolder.getCheckFromDate();
-
-      if (checkFromDate == null || (checkFromDate.after(account.getCheckFromDate()))) {
+      
+      if (account.getCheckFromDate() == null) checkFromDate = null ;
+      else if (checkFromDate == null || (checkFromDate.after(account.getCheckFromDate()))) {
         checkFromDate = account.getCheckFromDate();
       }
       List<MessageFilter> filters = getFilters(sProvider, username, accountId);
