@@ -1796,6 +1796,7 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
     tmpMenuElement.setAttribute("id", "tmpMenuElement");
     tmpMenuElement.style.zIndex = 1 ;
     this.menuElement = tmpMenuElement;
+ 		if(Browser.isIE6()) this.menuElement.style.width = "140px";
     if (uiDesktop) {
         document.body.appendChild(this.menuElement);
         this.swapIeMenu(this.menuElement, clickobj);
@@ -1810,7 +1811,6 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
     if (arguments.length > 2) {
         menuY -= arguments[2].scrollTop;
     }
-    
     this.menuElement.style.top = menuY + "px";
     this.menuElement.style.left = menuX + "px";
     this.showHide(this.menuElement);
