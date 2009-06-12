@@ -331,8 +331,11 @@ UIMailPortlet.prototype.showHideMessageDetails = function(obj){
 UIMailPortlet.prototype.showMessageAction = function(obj, evt){
     var DOMUtil = eXo.core.DOMUtil;
     eXo.cs.Utils.show(obj, evt);
-		if(eXo.core.I18n.lt) menu.style.left = (parseInt(menu.style.left) + obj.offsetWidth - menu.offsetWidth) + "px";
     var menu = DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu");
+	if(eXo.core.I18n.lt) {
+		menu.style.left = (parseInt(menu.style.left) + obj.offsetWidth - menu.offsetWidth) + "px";
+		menu.style.left = (obj.offsetWidth - menu.offsetWidth) + "px";
+	}
     var uiResizableBlock = DOMUtil.findAncestorByClass(obj, "UIResizableBlock");
     if (eXo.core.Browser.isIE6() && uiResizableBlock) {
         this.actionMenuTop = menu.offsetTop + uiResizableBlock.scrollTop;

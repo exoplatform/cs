@@ -31,10 +31,10 @@
 	<div class="ReadingPaneBar">
 	  <% if (uicomponent.getParent().isNoSplitLayout()) { %>
 	    <div>
-	      <a href="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %>"><span class="BackToList"></span></a>
+	      <div onclick="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %>"><span class="BackToList"></span></div>
 	    </div>
-	    <div class="TextBackToList"><a href="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %>">Back to list</a></div>
-	    <div class="Subject">
+	    <div class="TextBackToList"><div onclick="<%=uicomponent.event("BackToList")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %>"><%=_ctx.appRes(uicomponent.id+ '.label.back-to-list') %></div></div>
+	    <div class="Subject" style="width:80%">
 		<% } else if (uicomponent.getParent().isVerticalLayout()) { %>
       <div>
         <%
@@ -315,7 +315,19 @@
   								<div class="MessageActions" >
   									<div class="DownArrow1Icon"><span></span></div>
   									<div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)" showhideheader="<%=_ctx.appRes(uicomponent.id+ '.label.show-details') %> ,<%=_ctx.appRes(uicomponent.id+ '.label.hide-details') %>"><%=_ctx.appRes(uicomponent.id+ ".label.show-details") %></div>
-  									<div class="MonthDate"></div>
+  									<div class="MonthDate">
+  									<%if (msg.getReceivedDate() != null) { %>
+                      <%=MailUtils.formatDate(msg.getReceivedDate(), locale)%>
+                    <%} else if (msg.getSendDate() != null){%>
+                      <%=MailUtils.formatDate(msg.getSendDate(), locale)%>
+                    <%}%>
+  									</div>
+  									
+  									<% if (!isShowReplyAll) { %>
+  									 <div style="float:left"><a onclick="<%=uicomponent.event("Reply", msg.getId())%>" class="MessageActionIcon ReplyMailIcon MessagePreviewMenu"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a></div>
+  									<% } else {%>
+  									 <div style="float:left"><a onclick="<%=uicomponent.event("ReplyAll", msg.getId())%>" class="MessageActionIcon ReplyAllMailIcon MessagePreviewMenu"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a></div>
+  									<% } %>
   									<div class="Actions" title="<%=_ctx.appRes(uicomponent.id+ '.label.action-on-this-messge') %>" onclick="eXo.mail.UIMailPortlet.showMessageAction(this, event);">
                     <% /*Begin Popup Menu*/ %>
                       <div style="position: relative;height:1px;">
@@ -329,14 +341,11 @@
                                 <div class="MiddleLeftRightClickPopupMenu">
                                   <div class="MiddleRightRightClickPopupMenu">
                                     <div class="UIRightPopupMenuContainer">
+                                      <% if (isShowReplyAll) { %>
                                       <a class="MenuItem" href="<%=uicomponent.event("Reply", msg.getId())%>">   
                                         <div class="ItemIcon ReplyMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %></div>
                                       </a>  
-                                      <% if (isShowReplyAll) { %>
-                                      <a class="MenuItem" href="<%=uicomponent.event("ReplyAll", msg.getId())%>">   
-                                        <div class="ItemIcon ReplyMailAllIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></div>
-                                      </a>  
-                                      <% } %>
+                                      <%}%>
                                       <a class="MenuItem" href="<%=uicomponent.event("Forward", msg.getId())%>">   
                                         <div class="ItemIcon ForwardMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.forward") %> </div>
                                       </a>

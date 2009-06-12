@@ -989,7 +989,7 @@
 .UIMailPortlet .MailWorkingWorkspace .CollapseMessageAddress {
 	float: left; 
 	line-height: 18px;
-	width: 70%;
+	width: 65%;
 	overflow: hidden;
 	white-space: nowrap;
 }
@@ -1014,8 +1014,7 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageActions {
-	float: right; 
-	width: 113px;
+	float: right;
 	line-height: 20px;
 }
 
@@ -1042,8 +1041,16 @@
 
 .UIMailPortlet .MailWorkingWorkspace .MessageActions .MonthDate {
 	float: left;
-	font-size: 11px; font-weight: bold;
-	margin: 0px 4px;
+	font-size: 11px; font-weight: normal;
+	color:black;
+	margin: 0px 15px 0px 4px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MessageActions .MessagePreviewMenu {
+	text-decoration:none; 
+	color:black; cursor:pointer; 
+	font-size:11px;
+	padding-right:5px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageActions .AttackIcon {
