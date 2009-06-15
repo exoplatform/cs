@@ -240,15 +240,15 @@ public interface CalendarServiceLegacy {
     public Map<String, String> checkFreeBusy(SessionProvider systemSession, EventQuery eventQuery) throws Exception  ;
 
     /**
-     * @deprecated use {@link CalendarService#generateCalDav(String, LinkedHashMap, RssData)}
+     * @deprecated use {@link CalendarService#generateCalDav(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData)}
      */
-    public int generateCalDav(SessionProvider systemSession, String username, LinkedHashMap<String, Calendar> calendarIds, RssData rssData) throws Exception ;
+    public int generateCalDav(String username, List<String> calendarIds, RssData rssData) throws Exception ;
 
     
     /**
-     * @deprecated use {@link CalendarService#generateRss(List, RssData)}
+     * @deprecated use {@link CalendarService#generateRss(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData)}
      */
-    public int generateRss(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData) throws Exception ;
+    public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception ;
     
     /**
      * @deprecated use {@link CalendarService#removeSharedEvent(String, String, String)}

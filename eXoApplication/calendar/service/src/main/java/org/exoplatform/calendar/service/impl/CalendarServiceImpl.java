@@ -873,4 +873,12 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public int getTypeOfCalendar(String userName, String calendarId) throws Exception {
     return storage_.getTypeOfCalendar(userName, calendarId);
   }
+
+  public int generateCalDav(String username, List<String> calendarIds, RssData rssData) throws Exception {
+    return storage_.generateCalDav(username,calendarIds, rssData, calendarImportExport_.get(ICALENDAR));
+  }
+
+  public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception {
+    return storage_.generateRss(username,calendarIds, rssData, calendarImportExport_.get(ICALENDAR));
+  }
 }
