@@ -1741,7 +1741,8 @@ public class JCRDataStorage{
   
   private void removeFeed(String username, String calendarId) throws Exception {
     Node rssHome = getRssHome(username) ;
-    NodeIterator iter = rssHome.getNodes() ; 
+    NodeIterator iter = rssHome.getNodes() ;
+    List<String> removedFeedNodes = new ArrayList<String>() ;
     while(iter.hasNext()) {
       Node feedNode = iter.nextNode() ;
       if(feedNode.isNodeType(Utils.EXO_RSS_DATA)) {
@@ -1761,29 +1762,56 @@ public class JCRDataStorage{
         List entries = feed.getEntries();
         List<SyndEntry> listBefore = new ArrayList<SyndEntry>() ;
         listBefore.addAll(entries) ;
-
         for (int i = 0; i < listBefore.size(); i ++) {
-          SyndEntry entry = (SyndEntry)feed.getEntries().get(i);
+          SyndEntry entry = listBefore.get(i);
           String id = entry.getLink().substring(entry.getLink().lastIndexOf("/")+1) ;
           if (id.contains(calendarId)) {
-            listBefore.remove(i) ; 
-            //if (listBefore.size() == 0) {
-            //  feedNode.remove() ;
-            //  rssHome.getSession().save() ;
-            //  break ;
-            //} else {
-              feed.setEntries(listBefore) ;
-              SyndFeedOutput output = new SyndFeedOutput(); 
-              String feedXML = output.outputString(feed);      
-              feedXML = StringUtils.replace(feedXML,"&amp;","&");
-              
-              feedNode.setProperty(Utils.EXO_CONTENT, new ByteArrayInputStream(feedXML.getBytes()));
-              feedNode.save() ;
-            //}            
+            listBefore.remove(i) ;          
+            i -- ;
           }        
-        }       
+        }
+        if (listBefore.size() == 0) {
+          removedFeedNodes.add(feedNode.getName()) ;
+        } else {
+          feed.setEntries(listBefore) ;
+          SyndFeedOutput output = new SyndFeedOutput(); 
+          String feedXML = output.outputString(feed);      
+          feedXML = StringUtils.replace(feedXML,"&amp;","&");          
+          feedNode.setProperty(Utils.EXO_CONTENT, new ByteArrayInputStream(feedXML.getBytes()));
+          feedNode.save() ;
+        }        
       }
-    }  
+    }
+    if (removedFeedNodes.size() > 0) {
+      for (String s : removedFeedNodes) {      
+        if(rssHome.getNode(s) != null) {
+          rssHome.getNode(s).remove() ;
+        } 
+      }
+      rssHome.getSession().save() ;
+    }    
+
+    // remove calDav
+    if(rssHome.hasNode(Utils.CALDAV_NODE)) {
+      iter = rssHome.getNode(Utils.CALDAV_NODE).getNodes() ;
+      while (iter.hasNext()) {
+        Node rssCal = iter.nextNode() ;
+        if (rssCal.getPath().contains(calendarId)) {
+          rssCal.remove() ;          
+        }
+      }
+    }
+    // remove RSS
+    if(rssHome.hasNode(Utils.RSS_NODE)) {
+      iter = rssHome.getNode(Utils.RSS_NODE).getNodes() ;
+      while (iter.hasNext()) {
+        Node rssCal = iter.nextNode() ;
+        if (rssCal.getPath().contains(calendarId)) {
+          rssCal.remove() ;
+        }  
+      }
+    }
+    rssHome.getSession().save() ; 
   }
 
   public List<FeedData> getFeeds(String username) throws Exception {
@@ -2428,8 +2456,6 @@ public class JCRDataStorage{
       while(iter.hasNext()) {
         try{
           Node calendar = iter.nextProperty().getParent() ;
-          
-          System.out.println("\n\n id :" + calendarIds.get(0) + "\n\n");
           if(calendarIds.contains(calendar.getProperty(Utils.EXO_ID).getString())) {
             NodeIterator it = calendar.getNodes();
             while(it.hasNext()){

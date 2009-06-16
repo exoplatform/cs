@@ -598,16 +598,6 @@ public class UIAddressBooks extends UIComponent {
       uiContacts.setDefaultNameSorted(true) ;
       uiContacts.setSelectSharedContacts(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer);
-      
-     /* System.out.println("\n\n 1111 \n\n");
-
-      for (int i = 0 ; i < 600 ; i ++) {
-        OrganizationService service = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-        User user = service.getUserHandler().createUserInstance("" + i + "" + i + "" + i + "" + i + "" + i) ;
-        user.setFullName("hung dep trai") ;
-        service.getUserHandler().createUser(user, true) ;
-      }
-      System.out.println("\n\n 2222 \n\n");*/
     }
   }
 
