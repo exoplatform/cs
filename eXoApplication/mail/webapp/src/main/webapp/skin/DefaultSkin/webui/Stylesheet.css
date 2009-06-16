@@ -980,6 +980,7 @@
 	float: left;
 	color: #2276ab;
 	cursor: pointer;
+	direction:ltr;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageAddress .LinkAddress span {

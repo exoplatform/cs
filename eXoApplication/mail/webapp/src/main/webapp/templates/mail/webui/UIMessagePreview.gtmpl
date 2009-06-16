@@ -173,7 +173,7 @@
   										      InternetAddress[] fromAddress1 = Utils.getInternetAddress(msg.getFrom());
   										      InternetAddress from1 = fromAddress1[0];
   										  %>
-  										      <span><%=Utils.getPersonal(from1)%> <% print((from1 != null) ? ("&lt; " + from1.getAddress() + " &gt;") : "") %> </span>
+  										      <span dir="ltr">&nbsp;<%=Utils.getPersonal(from1)%> <% print((from1 != null) ? ("&lt; " + from1.getAddress() + " &gt;") : "") %> </span>
                         <%} %>    
   										</span>
                       <span class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:</span>
@@ -209,7 +209,7 @@
                         InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
                         InternetAddress from = fromAddress[0];
                       %>
-                      <span><%=Utils.getPersonal(from)%> </span> <% print((from != null) ? ("&lt; " + from.getAddress() + " &gt;") : "")%> 
+                      <span>&nbsp;<%=Utils.getPersonal(from)%> </span> <% print((from != null) ? ("&lt; " + from.getAddress() + " &gt;") : "")%> 
                     </div>  
                     <div style="clear: left;"><span></span></div>
                   </div>
@@ -221,7 +221,7 @@
                         InternetAddress[] replyAddress = Utils.getInternetAddress(msg.getReplyTo());
                         InternetAddress reply = replyAddress[0];
                       %>
-                      <span><%=Utils.getPersonal(reply)%> </span> <%print((reply != null) ? ("&lt; " + reply.getAddress() + " &gt;") : "") %> 
+                      <span>&nbsp;<%=Utils.getPersonal(reply)%> </span> <%print((reply != null) ? ("&lt; " + reply.getAddress() + " &gt;") : "") %> 
                       <%} %>
                     </div>
                     <div style="clear: left;"><span></span></div>
@@ -241,7 +241,7 @@
                                 isShowReplyAll = true;
                               }
                       %>
-                              <span><%=Utils.getPersonal(address)%> </span> <% print((address != null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
+                              <span>&nbsp;<%=Utils.getPersonal(address)%> </span> <% print((address != null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
                       <%
                           } 
                           }
@@ -267,7 +267,7 @@
                               InternetAddress address = toAddress[i];
                               if (i > 0 && i < (toAddress.length)) print ", <br>";
                         %>
-                              <span><%=Utils.getPersonal(address)%> </span> <% print((address !=null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
+                              <span>&nbsp;<%=Utils.getPersonal(address)%> </span> <% print((address !=null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
                         <%
                             } 
                           } catch (Exception e) { 
@@ -292,7 +292,7 @@
                             InternetAddress address = toAddress[i];
                             if (i > 0 && i < (toAddress.length)) print ", <br>";
                       %>
-                            <span><%=Utils.getPersonal(address)%> </span> <% print((address !=null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
+                            <span>&nbsp;<%=Utils.getPersonal(address)%> </span> <% print((address !=null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
                       <%
                           } 
                         } catch (Exception e) { 
