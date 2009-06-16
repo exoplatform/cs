@@ -335,6 +335,7 @@ public class UIMessageList extends UIForm {
       if (msg != null) {
         MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
         msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accountId, msg) ;
+        Account account = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId);
         
         if (msg.isUnread()) {
           List<Message> msgIds  = new ArrayList<Message>();
@@ -379,7 +380,7 @@ public class UIMessageList extends UIForm {
         }
         uiMessagePreview.setShowedMessages(showedMessages) ;
         
-        if (msg.isReturnReceipt()) {
+        if (msg.isReturnReceipt()&& !msg.getFrom().contains(account.getEmailAddress())) {
           long requestReturnReceipt = ((UIMessageArea)uiMessageList.getParent()).getMailSetting().getSendReturnReceipt();
           if (requestReturnReceipt == MailSetting.SEND_RECEIPT_ASKSME) {
             UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
