@@ -474,10 +474,7 @@ public class MailServiceImpl implements MailService, Startable {
     }
     
     if (message.isReturnReceipt()) {
-      if(message.getReplyTo()!= null)
-        mimeMessage.setHeader("Disposition-Notification-To", message.getReplyTo());
-      else
-        mimeMessage.setHeader("Disposition-Notification-To", message.getMessageTo());
+      mimeMessage.setHeader("Disposition-Notification-To", message.getReplyTo());
     }
     
     mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));

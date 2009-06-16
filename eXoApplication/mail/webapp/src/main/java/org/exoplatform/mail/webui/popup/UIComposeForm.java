@@ -610,7 +610,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     message.setMessageBody(body) ;
     message.setUnread(false);
     message.setSize(body.getBytes().length + attSize) ;
-    message.setReplyTo(account.getEmailReplyAddress());
+    if (!Utils.isEmptyField(account.getEmailReplyAddress())) {
+      message.setReplyTo(account.getEmailReplyAddress());
+    } else {
+      message.setReplyTo(from);
+    }
     if (getComposeType() == MESSAGE_REPLY || getComposeType() == MESSAGE_REPLY_ALL || getComposeType() == MESSAGE_FOWARD) {
       message.setHeader(Utils.HEADER_IN_REPLY_TO, getMessage().getId()) ;
     }
@@ -744,6 +748,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     boolean fromDrafts = fromDrafts();
     if (!fromDrafts && isSaved) {
       message.setReplyTo(message.getMessageTo()) ;
+      message.setIsReturnReceipt(false);
       message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
       mailSvr.saveMessage(session, usename, accountId, parentPath_, message, true) ;
     } else if (fromDrafts) {
