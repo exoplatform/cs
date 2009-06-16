@@ -18,14 +18,18 @@
 }
 
 .UIHomePagePortlet .LeftAdImage{	
-	background: transparent url('DefaultSkin/background/LeftHomePage.jpg') no-repeat left center;
+	background: transparent url('DefaultSkin/background/LeftHomePage.jpg') no-repeat left center; /* orientation=lt */
+	background: transparent url('DefaultSkin/background/LeftHomePage-rt.jpg') no-repeat right center; /* orientation=rt */
 	height: 274px;
-	text-align: right;
-	padding-right: 130px;
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
+	padding-right: 130px; /* orientation=lt */
+	padding-left: 130px; /* orientation=rt */
 }
 
 .UIHomePagePortlet .RightAdImage {
-	 background: transparent url('DefaultSkin/background/RightHomePage.jpg') no-repeat right top;
+	background: transparent url('DefaultSkin/background/RightHomePage.jpg') no-repeat right top; /* orientation=lt */
+	background: transparent url('DefaultSkin/background/RightHomePage-rt.jpg') no-repeat left top; /* orientation=rt */
 }
 
 .UIHomePagePortlet .HomePortletAdBackround .EmptyBlock{
@@ -47,14 +51,21 @@
 	line-height: 14px;
 	border-top: dashed 1px #ffffff;
 	width: 300px;
-	float: right;
+	float: right;  /* orientation=lt */
+	float: left;  /* orientation=rt */
 	padding-top: 10px;
+}
+
+.UIHomePagePortlet td .BlockAddressBook{
+	margin: 10px 0px 0px 0px;
 }
 
 .UIHomePagePortlet .HomePortletContainer {
 	background: #fbfbfc url('DefaultSkin/background/Bg.jpg') repeat-x left top;
 	height: 125px;
 	border-bottom: solid 1px #d7d7d7;
+	margin: 10px 8px 0px 0px; /* orientation=lt */
+	margin: 10px 0px 0px 8px; /* orientation=rt */
 }
 
 .UIHomePagePortlet .HomePortletContainer .LableProduct {
@@ -64,16 +75,21 @@
 }
 
 .UIHomePagePortlet .HomePortletContainer .ContentProductsCS {
-	padding-left: 25px;
+	padding-left: 25px; /* orientation=lt */
+	padding-right: 25px; /* orientation=rt */
 	height: auto;
-	margin-left: 193px;
-	background: transparent url('DefaultSkin/background/BgRightContainter.jpg') no-repeat right top;
+	margin-left: 190px; /* orientation=lt */
+	margin-right: 190px; /* orientation=rt */
+	background: transparent url('DefaultSkin/background/BgRightContainter.jpg') no-repeat right top; /* orientation=lt */
+	background: transparent url('DefaultSkin/background/BgRightContainter-rt.jpg') no-repeat left top; /* orientation=rt */
 	height: 125px;
 }
 
 .UIHomePagePortlet .HomePortletContainer .ContentProductsCS .Bullet {
-	background: url('DefaultSkin/background/Bullet.gif') no-repeat;
-	padding-left: 12px;
+	background: url('DefaultSkin/background/Bullet.gif') no-repeat left center; /* orientation=lt */
+	background: url('DefaultSkin/background/Bullet-rt.gif') no-repeat right center; /* orientation=rt */
+	padding-left: 12px; /* orientation=lt */
+	padding-right: 12px; /* orientation=rt */
 }
 
 .UIHomePagePortlet .HomePortletContainer .ContentProductsCS .Text {
@@ -85,20 +101,25 @@
 	width: 192px;
 	color: #000000;
 	text-align: center;
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 }
 
 
 /*****************************************************Add new HomePagePortlet**********************************************/
 
 .UIHomePagePortlet .HomePortletContainer .LeftTitleHomePage{
-	background: url('DefaultSkin/background/BgConerTitle.gif') no-repeat left top;
-	padding-left: 4px;
+	background: url('DefaultSkin/background/BgConerTitle.gif') no-repeat left top; /* orientation=lt */
+	background: url('DefaultSkin/background/BgConerTitle-rt.gif') no-repeat right top; /* orientation=rt */
+	padding-left: 3px; /* orientation=lt */
+	padding-right: 3px; /* orientation=rt */
 }
 
 .UIHomePagePortlet .HomePortletContainer .RightTitleHomePage{
-	background: url('DefaultSkin/background/BgConerTitle.gif') no-repeat right top;
-	padding-right: 4px;
+	background: url('DefaultSkin/background/BgConerTitle.gif') no-repeat right top; /* orientation=lt */
+	background: url('DefaultSkin/background/BgConerTitle-rt.gif') no-repeat left top; /* orientation=rt */
+	padding-right: 3px; /* orientation=lt */
+	padding-left: 3px; /* orientation=rt */
 }
 
 .UIHomePagePortlet .HomePortletContainer .CenterTitleHomePage{
@@ -148,9 +169,9 @@
 }
 
 .SideBar { 
-background:white none repeat scroll 0 0;
-border:1px solid #DEDEDE;
-padding:14px 8px 22px;
+	background:white none repeat scroll 0 0;
+	border:1px solid #DEDEDE;
+	padding:14px 8px 22px;
 }
 .SideBarContainer {
   text-align: center;
@@ -158,7 +179,7 @@ padding:14px 8px 22px;
 .SideBar .DownloadButton{
 	background:url('DefaultSkin/background/DownloadButton.jpg') no-repeat center top;
 	height: 110px;
-	margin: 18px 0px 0px 0px;
+	margin: 20px 0px 0px 0px;
 	display: block;
 	width: 100%;
 	color: #fff;
@@ -173,7 +194,7 @@ padding:14px 8px 22px;
 .SideBar .NormalText { 
     color:#3D3D3D;
     line-height:16px;
-	margin-top: 17px;
+	margin-top: 19px;
 }
 
 .SideBar .DotLine {
@@ -181,20 +202,27 @@ padding:14px 8px 22px;
    height:1px;
    margin:0px 10px;
 }
+
+.SideBar .AlignBnt{
+	margin: 0px 25px;
+}
+
 .SideBar .LeftButton {
-	background: url('DefaultSkin/background/Button.gif') no-repeat left 0px;
-	padding-left: 24px;
-	margin: 17px 20px 0px 20px;
+	background: url('DefaultSkin/background/Button.gif') no-repeat left top;	
+	padding-left: 23px;
+	margin: 20px 15px 0px 15px;
+	height: 74px;
 }
 
 .SideBar .RightButton {
-	background: url('DefaultSkin/background/Button.gif') no-repeat right -79px;
+	background: url('DefaultSkin/background/Button.gif') no-repeat right -79px;  
 	padding-right: 23px;
+	height: 74px;
 }
 
 .SideBar .CenterButton {
 	background: url('DefaultSkin/background/Button.gif') repeat-x left -158px;
-	height: 74px;
+	height: 69px;
 	font-size: 15px;
 	font-family: tahoma;
 	font-weight: bold;

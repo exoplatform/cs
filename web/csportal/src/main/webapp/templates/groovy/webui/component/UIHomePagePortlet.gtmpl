@@ -19,7 +19,7 @@
 						<table style="table-layout: fixed; width: 100%;-width: auto;">
 							<tr>
 								<td>
-									<div class="HomePortletContainer" style="margin: 10px 8px 0px 0px">
+									<div class="HomePortletContainer">
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
@@ -31,7 +31,7 @@
 											</div>
 										</div>
 										<div class="ContentProductsCS">
-											<div style="height: 20px"><span></span></div>
+											<div style="height: 13px"><span></span></div>
 											<div class="Bullet">
 												<div class="Text">Multiple calendars</div>
 											</div>
@@ -54,7 +54,7 @@
 									</div>
 								</td>
 								<td>
-									<div class="HomePortletContainer" style="margin: 10px 0px 0px 0px">
+									<div class="BlockAddressBook HomePortletContainer">
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
@@ -66,7 +66,7 @@
 											</div>
 										</div>
 										<div class="ContentProductsCS">
-											<div style="height: 20px"><span></span></div>
+											<div style="height: 13px"><span></span></div>
 											<div class="Bullet">
 												<div class="Text">Public, group and private addressbooks</div>
 											</div>
@@ -88,7 +88,7 @@
 							</tr>
 							<tr>
 								<td>
-									<div class="HomePortletContainer" style="margin: 8px 8px 0px 0px">
+									<div class="HomePortletContainer">
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
@@ -100,7 +100,7 @@
 											</div>
 										</div>
 										<div class="ContentProductsCS">
-											<div style="height: 20px"><span></span></div>
+											<div style="height: 13px"><span></span></div>
 											<div class="Bullet">
 												<div class="Text">Instant Messaging for portal  users</div>
 											</div>
@@ -120,7 +120,7 @@
 									</div>
 								</td>
 								<td>
-									<div class="HomePortletContainer" style="margin: 8px 0px 0px 0px">
+									<div class="BlockAddressBook HomePortletContainer">
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
@@ -132,7 +132,7 @@
 											</div>
 										</div>
 										<div class="ContentProductsCS">
-											<div style="height: 20px"><span></span></div>
+											<div style="height: 13px"><span></span></div>
 											<div class="Bullet">
 												<div class="Text">Mutiple accounts</div>
 											</div>
@@ -161,13 +161,14 @@
 				<div class="SideBarContainer">
 					<div style="height: 11px;"><span></span></div>
 					<div class="DotLine"><span></span></div>
-					<div class="LeftButton">
-						<div class="RightButton">
-							<div class="CenterButton">
-							<a href="/portal/private/classic/collaboration" style="color: white; margin-top: 5px;">Try now</a>
-							<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla">Create a demo account</a></div>
+						<div class="LeftButton">
+							<div class="RightButton">
+								<div class="CenterButton">
+								<a href="/portal/private/classic/collaboration" style="color: white; margin-top: 5px;">Try now</a>
+								<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla">Create a demo account</a></div>
+							</div>
 						</div>
-					</div>
+					
 					<div class="DotLine"><span></span></div>
 				<!--- 	<div class="NormalText">Want to play with it? That's easy you just need to <a href="/portal/public/classic/register">a demo account</a>.</div>
 					<a href="/portal/public/classic/register" class="SignUp">Sign Up Now</a>
@@ -179,19 +180,18 @@
 					</div>
 					<div class="DotLine"><span></span></div>
 					<div style="margin: 17px 0px;">
-					<div class="NormalText">Did you like? Did you hate?</div>
-					<a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">Send Feedback</a>
+						<div class="NormalText">Did you like ? Did you hate ?</div>
+						<a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">Send Feedback</a>
 					</div>
 					<div class="DotLine"><span></span></div>
-					<!--div class="VersionIcon"><span></span></div-->		
-					
-					<div class="LeftButton">
-						<div class="RightButton">
-							<div class="CenterButton">
-							<a href="/portal/private/classic/collaboration" style="color: white; margin-top: 5px;">CS on WebOS</a>
-							<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla">The collaborative desktop</a></div>
-						</div>
-					</div>		
+					<!--div class="VersionIcon"><span></span></div-->
+						<div class="LeftButton">
+							<div class="RightButton">
+								<div class="CenterButton">
+								<a href="/portal/private/classic/collaboration" style="color: white; margin-top: 5px;">CS on WebOS</a>
+								<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla">The collaborative desktop</a></div>
+							</div>
+						</div>					
 					<!--
 					<div class="DotLine"><span></span></div>
 					<div class="LeftButton">
