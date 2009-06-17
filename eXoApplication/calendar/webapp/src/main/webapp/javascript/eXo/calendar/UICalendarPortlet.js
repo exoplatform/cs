@@ -471,7 +471,11 @@ UICalendarPortlet.prototype.switchLayoutCallback = function(layout,status){
 		if(layout == 1){			
 			layoutMan.layouts[layout].style.display = "none" ;
 			layoutMan.layouts[layout+1].style.display = "none" ;
-			panelWorking.style.marginLeft = "0px" ;			
+			if (eXo.core.I18n.isRT()) {
+				panelWorking.style.marginRight = "0px" ;
+			}else{
+				panelWorking.style.marginLeft = "0px" ;
+			}
 			if(layoutcookie.indexOf('2') < 0) layoutcookie = layoutcookie.concat(2) ;
 			if(layoutcookie.indexOf('3') < 0) layoutcookie = layoutcookie.concat(3) ;
 			eXo.core.Browser.setCookie(layoutMan.layoutId,layoutcookie,1);
@@ -482,7 +486,11 @@ UICalendarPortlet.prototype.switchLayoutCallback = function(layout,status){
 		if(layout == 1){			
 			layoutMan.layouts[layout].style.display = "block" ;
 			layoutMan.layouts[layout+1].style.display = "block" ;
-			panelWorking.style.marginLeft = "243px" ;
+			if (eXo.core.I18n.isRT()) {
+				panelWorking.style.marginRight = "243px" ;
+			}else{
+				panelWorking.style.marginLeft = "243px" ;
+			}
 			if(layoutcookie.indexOf('2') >= 0) layoutcookie = layoutcookie.replace('2','') ;
 			if(layoutcookie.indexOf('3') >= 0) layoutcookie = layoutcookie.replace('3','') ;
 			eXo.core.Browser.setCookie(layoutMan.layoutId,layoutcookie,1);
@@ -495,13 +503,21 @@ UICalendarPortlet.prototype.switchLayoutCallback = function(layout,status){
 UICalendarPortlet.prototype.checkLayoutCallback = function(layoutcookie){
 	if (layoutcookie.indexOf("1") >=0) {
 		var workingarea = eXo.core.DOMUtil.findNextElementByTagName(eXo.calendar.LayoutManager.layouts[0], "div");
-		workingarea.style.marginLeft = "0px";
+		if (eXo.core.I18n.isRT()) {
+			workingarea.style.marginRight = "0px";
+		}else{
+			workingarea.style.marginLeft = "0px";
+		}
 	}
 };
 
 UICalendarPortlet.prototype.resetLayoutCallback = function(){
 	var workingarea = eXo.core.DOMUtil.findNextElementByTagName(eXo.calendar.LayoutManager.layouts[0], "div");
-	workingarea.style.marginLeft = "243px";
+	if (eXo.core.I18n.isRT()) {
+			workingarea.style.marginRight = "243px";
+		}else{
+			workingarea.style.marginLeft = "243px";
+		}
 	if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
 	if(eXo.core.Browser.isFF() && document.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth();
 };
@@ -1736,8 +1752,9 @@ UICalendarPortlet.prototype.switchListView = function(obj, evt){
  * @param {Object} evt Mouse event
  */
 UICalendarPortlet.prototype.showView = function(obj, evt){
-    var _e = window.event || evt;
-    _e.cancelBubble = true;
+//    var _e = window.event || evt;
+//    _e.cancelBubble = true;
+		eXo.core.EventManager.cancelBubble(evt);
     var oldmenu = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu");
     var actions = eXo.core.DOMUtil.findDescendantsByClass(oldmenu, "a", "ItemLabel");
     if (!this.selectedCategory) 
@@ -1789,7 +1806,7 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
     var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
     var uiDesktop = document.getElementById("UIPageDesktop");
     var uiWorkSpaceWidth = (document.getElementById("UIControlWorkspace")) ? document.getElementById("UIControlWorkspace").offsetWidth : 0;
-    uiWorkSpaceWidth = (document.all) ? 2 * uiWorkSpaceWidth : uiWorkSpaceWidth;
+    uiWorkSpaceWidth = (Browser.isIE6() || Browser.isIE7()) ? 2 * uiWorkSpaceWidth : uiWorkSpaceWidth;
     if (document.getElementById("tmpMenuElement")) 
         DOMUtil.removeElement(document.getElementById("tmpMenuElement"));
     var tmpMenuElement = oldmenu.cloneNode(true);
@@ -1805,14 +1822,23 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
     else {
         document.getElementById(this.portletName).appendChild(tmpMenuElement);
     }
-    
+		
     var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth;
     var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight;
     if (arguments.length > 2) {
         menuY -= arguments[2].scrollTop;
     }
+		if (eXo.core.I18n.isRT()) {
+      menuX -= (eXo.cs.Utils.getElementWidth(this.menuElement) - clickobj.offsetWidth) - uiWorkSpaceWidth;      
+    }
     this.menuElement.style.top = menuY + "px";
-    this.menuElement.style.left = menuX + "px";
+    this.menuElement.style.left =  menuX + "px";
+ 		if (eXo.core.I18n.isRT() && Browser.isIE6()) {
+      menuX = Browser.findPosXInContainer(clickobj,this.menuElement.offsetParent,true);
+      menuX += uiWorkSpaceWidth/2 ;
+      this.menuElement.style.right = menuX + "px";
+      this.menuElement.style.left =  "";
+    }
     this.showHide(this.menuElement);
     var uiRightClick = (DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu")) ? DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu") : UICalendarPortlet.menuElement;
     var mnuBottom = UICalendarPortlet.menuElement.offsetTop + uiRightClick.offsetHeight - window.document.documentElement.scrollTop;
@@ -1820,6 +1846,7 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
         menuY += (window.document.documentElement.clientHeight - mnuBottom);
         UICalendarPortlet.menuElement.style.top = menuY + "px";
     }
+    
 };
 
 UICalendarPortlet.prototype.isAllday = function(form){

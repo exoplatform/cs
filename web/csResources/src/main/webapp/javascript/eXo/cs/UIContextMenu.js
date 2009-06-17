@@ -182,9 +182,10 @@ UIContextMenu.prototype.swapMenu = function(oldmenu, mousePos,evt) {
 	document.body.insertBefore(this.menuElement,uiApplication) ;
 	var left = mousePos.x - 2;
 	var top = mousePos.y - 2;
+	if(Browser.isIE6()) this.menuElement.style.width = "140px";
 	if(eXo.core.I18n.isRT()){
 		left -= (eXo.cs.Utils.getElementWidth(this.menuElement)  - 3);
-		if(eXo.core.Browser.browserType == "ie") left -= eXo.cs.Utils.getScrollbarWidth() + 3 ;
+		if(Browser.isIE6() || Browser.isIE7()) left -= eXo.cs.Utils.getScrollbarWidth() + 3 ;
 	}
 	this.menuElement.style.zIndex = 2000 ;
 	this.menuElement.style.top = top  + "px" ;
