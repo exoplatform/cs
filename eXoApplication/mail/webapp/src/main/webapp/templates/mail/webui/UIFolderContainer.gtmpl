@@ -234,7 +234,7 @@ def enableSync = ((customFolders.size() > 0) && uicomponent.isImap())
           if (isChecking) builder.append("<div class='CheckingIcon'></div>");
           if (cf.getType() != 2) {
           	 if(enableSync){
-              builder.append("<a class=\"FolderLink\" title=\"$name\" actionlink=\"$pActionLink\" onclick=\"javascript:eXo.mail.UIMailPortlet.lazySync(this,\'$pid\');\" href=\"javascript:void(0);\"  folder=\"").append(pid).append("\">");
+              builder.append("<a class=\"FolderLink CustomizeFolder\" title=\"$name\" actionlink=\"$pActionLink\" onclick=\"javascript:eXo.mail.UIMailPortlet.lazySync(this,\'$pid\');\" href=\"javascript:void(0);\"  folder=\"").append(pid).append("\">");
              } else {
               builder.append("<a class=\"FolderLink\" title=\"$name\"  href=\"$pActionLink\" onclick=\"event.cancelBubble = true;\" folder=\"").append(pid).append("\">");
              }
@@ -256,7 +256,7 @@ def enableSync = ((customFolders.size() > 0) && uicomponent.isImap())
       println("</div>");
     }
   }
-  
+
   for (Folder cf : customFolders) {
     if (cf != null) {
       String pid = cf.getId() ;
@@ -277,7 +277,7 @@ def enableSync = ((customFolders.size() > 0) && uicomponent.isImap())
       if (isChecking) builder.append("<div class='CheckingIcon'></div>");
       if (cf.getType() != 2) {
          if(enableSync){
-              builder.append("<a class=\"FolderLink\" title=\"$name\" actionlink=\"$pActionLink\" onclick=\"javascript:eXo.mail.UIMailPortlet.lazySync(this,\'$pid\');\" href=\"javascript:void(0);\"  folder=\"").append(pid).append("\">");
+              builder.append("<a class=\"FolderLink CustomizeFolder\" title=\"$name\" actionlink=\"$pActionLink\" onclick=\"javascript:eXo.mail.UIMailPortlet.lazySync(this,\'$pid\');\" href=\"javascript:void(0);\"  folder=\"").append(pid).append("\">");
          } else {
               builder.append("<a class=\"FolderLink\" title=\"$name\"  href=\"$pActionLink\" onclick=\"event.cancelBubble = true;\" folder=\"").append(pid).append("\">");
          }
@@ -291,6 +291,7 @@ def enableSync = ((customFolders.size() > 0) && uicomponent.isImap())
       builder.append("</a>");
       builder.append("</div>");
       println(builder.toString());
+
       if (uicomponent.getSubFolders(cf.getPath()).size() > 0) { 
         printNodes(cf.getPath(), enableSync);
       }
