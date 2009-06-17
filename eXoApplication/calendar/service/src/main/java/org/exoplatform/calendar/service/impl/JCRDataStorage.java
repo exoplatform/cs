@@ -2018,8 +2018,8 @@ public class JCRDataStorage{
           OutputStream out = imp.exportCalendar(username, Arrays.asList(new String[]{id}), type, number) ;
           if(out != null) {
             ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
-              rssCal.setProperty(Utils.EXO_DATA, is) ;
-              rssCal.save() ;
+            rssCal.setProperty(Utils.EXO_DATA, is) ;
+            rssCal.save() ;
           } else {
             rssCal.remove() ;
             rssHome.getSession().save() ;
