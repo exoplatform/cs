@@ -474,14 +474,18 @@
 	background: url('icons/Sync.gif') no-repeat center;
 	height:12px;
  	width:11px;
- 	margin-left:5px;
- 	float:right;
+ 	margin-right:5px;/* orientation=lt */
+ 	margin-left:5px;/* orientation=rt */
+ 	float: right; /* orientation=lt */
+ 	float: left; /* orientation=rt */
 }
 
 .UIMailPortlet .SyncingIcon {
 	background: url('icons/loading.gif') no-repeat center;
 	height:12px;
  	width:11px;
- 	margin-left:5px;
- 	float:right;
+ 	margin-right:5px;/* orientation=lt */
+ 	margin-left:5px;/* orientation=rt */
+ 	float: right; /* orientation=lt */
+ 	float: left; /* orientation=rt */
 }

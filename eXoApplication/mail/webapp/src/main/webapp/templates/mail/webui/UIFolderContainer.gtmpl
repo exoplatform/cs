@@ -206,7 +206,7 @@ def enableSync = ((customFolders.size() > 0) && uicomponent.isImap())
   <% if(enableSync){ %>
     <div id="SynchronizeIconRefreshFolder" class="SyncIcon" title="" onclick="javascript:eXo.mail.MailServiceHandler.checkMail(true,'<%=uicomponent.getSelectedFolder()%>'); this.className = 'SyncingIcon';"><span></span></div>
   <% } %>
-  <div style="clear: left"><span></span></div>
+  <div style="clear: both"><span></span></div>
 </div>
 <div class="MyFolderContent">
 <% 

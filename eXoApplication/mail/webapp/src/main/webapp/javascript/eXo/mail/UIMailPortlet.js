@@ -332,10 +332,11 @@ UIMailPortlet.prototype.showMessageAction = function(obj, evt){
     var DOMUtil = eXo.core.DOMUtil;
     eXo.cs.Utils.show(obj, evt);
     var menu = DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu");
-	if(eXo.core.I18n.lt) {
-		menu.style.left = (parseInt(menu.style.left) + obj.offsetWidth - menu.offsetWidth) + "px";
-		menu.style.left = (obj.offsetWidth - menu.offsetWidth) + "px";
-	}
+		if(eXo.core.I18n.lt) {
+			if(!menu.style.left) menu.style.left = "0px";
+			menu.style.left = (parseInt(menu.style.left) + obj.offsetWidth - menu.offsetWidth) + "px";
+			menu.style.left = (obj.offsetWidth - menu.offsetWidth) + "px";
+		}
     var uiResizableBlock = DOMUtil.findAncestorByClass(obj, "UIResizableBlock");
     if (eXo.core.Browser.isIE6() && uiResizableBlock) {
         this.actionMenuTop = menu.offsetTop + uiResizableBlock.scrollTop;

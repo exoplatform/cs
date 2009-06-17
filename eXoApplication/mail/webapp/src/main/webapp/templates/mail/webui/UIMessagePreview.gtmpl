@@ -387,7 +387,7 @@
                           </div>
                   <% /*End Popup Menu*/ %>
                     </div>
-  									<div style="clear: both;"><span></span></div>
+  									<div style="clear: left;"><span></span></div>
   								</div>
   								<div style="clear: both;"><span></span></div>
   							</div>
