@@ -1082,7 +1082,8 @@
 }
 
 .UIMonthView .EventMonthContent .EventCheckbox{
-	 float: left;
+	 float: left; /* orientation=lt */
+	 float: right;/* orientation=rt */
 }
 
 .UIMonthView .EventMonthContent .EventCheckbox .checkbox{
@@ -1165,7 +1166,8 @@
 
 .UIMonthView .DummyDNDClass .EventCheckbox {
 	position:static;
-	float:left;
+	float:left;/* orientation=lt */
+	float: right;/* orientation=rt */
 }
 
 .UIMonthView .RowContainerDay .EventBoxes {

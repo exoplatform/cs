@@ -24,7 +24,7 @@
       <div class="UIFormInputSetWithAction">
         <div class="FormContainer">
           <div class="DateTimeContainer">
-            <div style="float: left; width: 150px; line-height: 20px;">
+            <div class="ApplySelectedDate">
               <div class="Field">
                 <%uiForm.renderField(uicomponent.FIELD_CHECK_TIME)%>
               </div>
@@ -32,7 +32,7 @@
                 <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_CHECK_TIME)%>
                 :
               </div>
-              <div style="clear: right;">
+              <div style="clear: both;">
                 <span></span>
               </div>
             </div>
@@ -167,7 +167,7 @@
             <div class="FreeTime">
               <span></span>
             </div>
-            <div style="clear: right;">
+            <div style="clear: both;">
               <span></span>
             </div>
           </div>

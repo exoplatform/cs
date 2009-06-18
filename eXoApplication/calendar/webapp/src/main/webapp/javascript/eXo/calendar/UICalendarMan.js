@@ -982,6 +982,9 @@ GUIMan.prototype.drawEventByDay = function(eventObj, startTime, endTime, dayInfo
 	eventNode.style.top = topPos + 'px';
   eventNode.style.left = leftPos + 'px';
   eventNode.style.width = eventLen + 'px';
+  if(eXo.core.I18n.isRT()){
+  	eventNode.style.left = (leftPos - eventLen + (dayInfo.width)) + 'px';
+  }
   eventNode.setAttribute('used', 'true');
 	this.setOverMonth(eventObj,dayInfo.beginMonth,dayInfo.endMonth);
 };

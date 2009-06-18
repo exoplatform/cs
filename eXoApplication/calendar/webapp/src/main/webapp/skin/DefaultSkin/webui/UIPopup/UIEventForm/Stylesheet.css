@@ -273,6 +273,13 @@
 	 width: 16px;
 }
 
+.UICalendarPortlet .UIAddNewEvent .NewEventAttendee .DateTimeContainer .ApplySelectedDate {
+	float: left; /* orientation=lt */
+	float: right;/* orientation=rt */
+	width: 150px; 
+	line-height: 20px;
+}
+
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .TimeNumberDisable {
 	display: none ;
 }
@@ -315,6 +322,11 @@
 	margin: 4px;
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
+}
+
+.UICalendarPortlet .UIAddNewEvent .AddAttachmentIcon {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddTask {
