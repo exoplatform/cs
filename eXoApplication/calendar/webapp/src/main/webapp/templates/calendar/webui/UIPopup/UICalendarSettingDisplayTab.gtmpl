@@ -26,10 +26,10 @@
 	      </tr>
 	      <%for(UIComponent comp : uicomponent.getUIFormPrivateCheckboxs()) {%>
 	      	<tr>
-		        <td class="FieldComponent" style="text-align:right;">
+		        <td class="FieldComponent ">
 		          <%uiForm.renderField(comp.getId())%>
 		        </td>
-		        <td class="FieldLabel" style="text-align:left;">
+		        <td class="FieldLabel">
 		        <%
 		        	fullLabel = uiForm.getLabel(comp.getId()) ;
 		        	label = fullLabel ;
@@ -53,10 +53,10 @@
 	      </tr>
 	      <%for(Calendar cal : uicomponent.getShareCalendars()) {%>
 	      	<tr>
-		        <td class="FieldComponent" style="text-align:right;">
+		        <td class="FieldComponent">
 		          <%uiForm.renderField(cal.getId())%>
 		        </td>
-		        <td class="FieldLabel" style="text-align:left;">
+		        <td class="FieldLabel">
 		        <%
 		        	String owner = "" ;
           		if(cal.getCalendarOwner() != null) { owner = cal.getCalendarOwner() + "- "} ;
@@ -82,10 +82,10 @@
 	      </tr>
 	      <%for(UIComponent comp : uicomponent.getUIFormPublicCheckboxs()) {%>
 	      	<tr>
-		        <td class="FieldComponent" style="text-align:right;">
+		        <td class="FieldComponent">
 		          <%uiForm.renderField(comp.getId())%>
 		        </td>
-		        <td class="FieldLabel" style="text-align:left;">
+		        <td class="FieldLabel">
 		          <%
 		        	fullLabel = uiForm.getLabel(comp.getId()) ;
 		        	label = fullLabel ;

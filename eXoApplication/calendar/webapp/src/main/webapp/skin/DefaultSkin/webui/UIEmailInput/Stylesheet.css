@@ -8,13 +8,15 @@
 }
 
 .UIEmailInput .UIEmailAddressItem .UIEmailAddressLabel{
-	float:left;
+	float:left;/* orientation=lt */
+	float: right;/* orientation=rt */
 }
 
 .UIEmailInput .UIEmailAddressItem .UIRemoveEmailIcon{
 	background:transparent url(/eXoResources/skin/DefaultSkin/webui/component/UIUpload/background/Delete18x18.gif) no-repeat scroll 0 0;
 	cursor:pointer;
-	float:right;
+	float:right;/* orientation=lt */
+	float:left;/* orientation=rt */
 	width:18px;
 	height:18px;
 }

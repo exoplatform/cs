@@ -123,6 +123,8 @@
 	float: right; /* orientation=rt */
 	margin-right: 7px; /* orientation=lt */
 	margin-left: 7px; /* orientation=rt */
+	width: 108px;
+	background-position-x: right;/* orientation=rt */
 }
 
 .UICalendarPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Date input{
@@ -131,6 +133,8 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Time{
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	font-size: 11px;
 }
 

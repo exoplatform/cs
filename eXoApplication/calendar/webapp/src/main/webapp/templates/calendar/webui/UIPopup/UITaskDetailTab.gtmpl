@@ -148,7 +148,7 @@
           <%uiForm.renderField(uicomponent.FIELD_ATTACHMENTS) ;%>
           <%renderActions(uicomponent.FIELD_ATTACHMENTS) ;%>
           </div>
-          <div style="float:left;">
+          <div class="AddAttachmentIcon">
 	          <a href="<%= uicomponent.getParent().event("AddAttachment") %>" title="<%=_ctx.appRes(uicomponent.getParent().getName() + ".action.AddAttachment")%>">
   	          <img class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/>
   	        </a>          

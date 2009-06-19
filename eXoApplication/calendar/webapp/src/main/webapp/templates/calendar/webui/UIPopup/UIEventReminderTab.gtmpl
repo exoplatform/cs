@@ -6,13 +6,12 @@
 <div id="$uicomponent.id" class="UIAddNewEvent">
 	<div class="ReminderByEmail">
 		<div>
-			<div style="float:left;" onclick="eXo.calendar.UICalendarPortlet.showHideSetting(this);">
+			<div onclick="eXo.calendar.UICalendarPortlet.showHideSetting(this);">
 				<%uiForm.renderField(uicomponent.REMIND_BY_EMAIL); %>
 				<span class="FieldLabel">
 					<%=uiForm.getLabel(uicomponent.REMIND_BY_EMAIL)%>
 				</span>
-			</div>
-			<div style="clear: left;"><span></span></div>
+			</div>			
 		</div>
 	  <table class="UIFormGrid" $isEmailReminder>
 	    <tbody>
@@ -56,30 +55,29 @@
 	</div>
 	<div class="ReminderByPopup">
 		<div>
-			<div style="float:left;" onclick="eXo.calendar.UICalendarPortlet.showHideSetting(this);">			
+			<div onclick="eXo.calendar.UICalendarPortlet.showHideSetting(this);">			
 		 	   <% uiForm.renderField(uicomponent.REMIND_BY_POPUP) %>
-		 	   <span class="FieldLabel" style="float: left;"><%=uiForm.getLabel(uicomponent.REMIND_BY_POPUP)%></span>
+		 	   <span class="FieldLabel" ><%=uiForm.getLabel(uicomponent.REMIND_BY_POPUP)%></span>
 			</div>
-	 	   <div style="clear: left;"><span></span></div>
 		</div>
- 	 	          <table class="UIFormGrid" $isPopupReminder>
- 	 	            <tbody>
- 	 	              <tr>
- 		                <td class="FieldComponent">
- 	 	                        <% uiForm.renderField(uicomponent.POPUP_REMIND_BEFORE)  ;%>
- 	 	                </td>
- 	 	                <td class="FieldComponent">
- 	 	                 <%=uiForm.getLabel(uicomponent.POPUP_REMIND_BEFORE)%> 
- 	 	                </td>
- 	 	              </tr>
- 	 	              <tr>
- 	 	                <td class="FieldComponent" valign="top" colspan="2">
-	 	                 <% uiForm.renderField(uicomponent.POPUP_IS_REPEAT)  ;%>
- 	 	                  <%=uiForm.getLabel(uicomponent.POPUP_REPEAT_INTERVAL)%> 
- 	 	                  <% uiForm.renderField(uicomponent.POPUP_REPEAT_INTERVAL)  ;%>
- 	 	                </td>
- 	 	              </tr>
- 	 	            </tbody>
- 	 	          </table>
+ 	 	<table class="UIFormGrid" $isPopupReminder>
+ 	 	  <tbody>
+ 	 	    <tr>
+ 		      <td class="FieldComponent">
+ 	 	        <% uiForm.renderField(uicomponent.POPUP_REMIND_BEFORE)  ;%>
+ 	 	      </td>
+ 	 	      <td class="FieldComponent">
+ 	 	        <%=uiForm.getLabel(uicomponent.POPUP_REMIND_BEFORE)%> 
+ 	 	      </td>
+ 	 	    </tr>
+ 	 	    <tr>
+ 	 	      <td class="FieldComponent" valign="top" colspan="2">
+ 	           <% uiForm.renderField(uicomponent.POPUP_IS_REPEAT)  ;%>
+ 	 	         <%=uiForm.getLabel(uicomponent.POPUP_REPEAT_INTERVAL)%> 
+ 	 	         <% uiForm.renderField(uicomponent.POPUP_REPEAT_INTERVAL)  ;%>
+ 	 	     	</td>
+ 	 	   </tr>
+ 	 	  </tbody>
+ 	 	</table>
  	</div>
 </div>

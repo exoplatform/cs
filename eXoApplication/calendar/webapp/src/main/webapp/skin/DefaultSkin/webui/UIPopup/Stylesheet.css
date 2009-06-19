@@ -59,13 +59,24 @@
 .UICalendarPortlet .setting{
 }
 .UICalendarPortlet .setting .WorkingTime{
- float: left;
+ float: left;/* orientation=lt */
+ float: right;/* orientation=rt */
 }
 .UICalendarPortlet .setting .WorkingTime .selectbox{
  width: 70px;
 }
 .UICalendarPortlet .setting .WorkingTimeCheck {
- float:left;
+ float:left;/* orientation=lt */
+ float: right;/* orientation=rt */
+}
+
+.UICalendarPortlet .defaultCalendarTab td.FieldLabel {
+	text-align:left;/* orientation=lt */
+	text-align:right;/* orientation=rt */
+}
+.UICalendarPortlet .defaultCalendarTab td.FieldComponent {
+	text-align:left;/* orientation=rt */
+	text-align:right;/* orientation=lt */
 }
 /********************************** UISelectUserForm ***************************************/
 .UISelectUserForm {
