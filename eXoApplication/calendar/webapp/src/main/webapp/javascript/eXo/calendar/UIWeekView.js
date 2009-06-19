@@ -79,18 +79,6 @@ UIWeekView.prototype.setSize = function() {
 	}	
 } ;
 
-//UIWeekView.prototype.showHideEvent = function(el,isVisible){
-//	var i = el.length ;
-//	if(isVisible){
-//		while(i--){
-//			el[i].style.visibility = "visible";
-//		}
-//	}else{
-//		while(i--){
-//			el[i].style.visibility = "hidden";
-//		}
-//	}
-//};
 UIWeekView.prototype.adjustWidth = function(el) {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	var inter = UICalendarPortlet.getInterval(el) ;
@@ -127,11 +115,27 @@ UIWeekView.prototype.adjustWidth = function(el) {
 				width = parseFloat(totalWidth/len) ;
 			}
 			el[j].style.width = width + "px" ;
-			if (el[j-1]&&(len > 1)) el[j].style.left = offsetLeft + parseFloat(el[j-1].style.width)*n +  "px" ;
-			else {
-				el[j].style.left = offsetLeft +  "px" ;
+			if (el[j-1]&&(len > 1)) {
+//				el[j].style.right = offsetLeft + parseFloat(el[j-1].style.width)*n +  "px" ;
+//				el[j].style.left = offsetLeft + parseFloat(el[j-1].style.width)*n +  "px" ;
+				setLeft(el[j],offsetLeft + parseFloat(el[j-1].style.width)*n);
 			}
+			else {
+//				el[j].style.left = offsetLeft +  "px" ;
+//				el[j].style.right = offsetLeft +  "px" ;		
+				setLeft(el[j],offsetLeft);
+			}
+//      var test = el[j].parentNode.offsetWidth - el[j-1].offsetWidth - eXo.core.Browser.findPosXInContainer(el[j],el[j].parentNode);
+//      console.log(parseFloat(el[j].style.left) + "  ---  " +el[j].parentNode.offsetWidth + "  ---  " + el[j].offsetWidth + "  ---  "  +eXo.core.Browser.findPosXInContainer(el[j],el[j].parentNode));
+//      el[j].style.left = (parseFloat(el[j].style.left) + test) +  "px" ;
 			n++ ;
+		}
+	}
+	function setLeft(obj,left){
+		obj.style.left = left + "px";
+		if(eXo.core.I18n.isRT()){
+		if(eXo.core.Browser.isIE6()) left -= eXo.cs.Utils.getScrollbarWidth();
+			obj.style.right = left + "px";	
 		}
 	}
 } ;
@@ -145,8 +149,7 @@ UIWeekView.prototype.showInCol = function(obj) {
 	var left = parseFloat((eXo.core.Browser.findPosXInContainer(obj, container) - 1)/container.offsetWidth)*100 ;
 	var width = parseFloat((obj.offsetWidth - 2)/container.offsetWidth)*100 ;
 	items = eXo.calendar.UICalendarPortlet.sortByAttribute(items, "starttime") ;
-	UIWeekView.adjustWidth(items, obj.offsetWidth, eXo.core.Browser.findPosXInContainer(obj, container)) ;
-	//this.showHideEvent(items,true);
+	UIWeekView.adjustWidth(items, obj.offsetWidth, eXo.core.Browser.findPosXInContainer(obj, container,eXo.core.I18n.isRT())) ;
 } ;
 
 UIWeekView.prototype.dragStart = function(evt) {
