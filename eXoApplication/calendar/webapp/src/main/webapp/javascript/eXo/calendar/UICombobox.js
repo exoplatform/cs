@@ -1,8 +1,9 @@
 function UICombobox() {
 }
 
-UICombobox.prototype.init = function(textbox) {
-	if(typeof(textbox) == "string") textbox = document.getElementById(textbox) ;
+UICombobox.prototype.init = function(contId,id) {
+	var cont = document.getElementById(contId);
+	var textbox = eXo.core.DOMUtil.findDescendantById(cont,id) ;
 	var UICombobox = eXo.calendar.UICombobox ;
 	var onfocus = textbox.getAttribute("onfocus") ;
 	var onclick = textbox.getAttribute("onclick") ;

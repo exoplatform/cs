@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputBase;
@@ -142,7 +143,8 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
   }
   
   public void processRender(WebuiRequestContext context) throws Exception {
-    context.getJavascriptManager().addJavascript("eXo.calendar.UICombobox.init('" + getId()+ "');") ;  
+	String parentId = ((UIComponent) this.getParent()).getId();
+    context.getJavascriptManager().addJavascript("eXo.calendar.UICombobox.init('" + parentId+ "','" + getId() + "');") ;  
     Writer w =  context.getWriter() ;
     String options = "[";
     String text = "<div class='UIComboboxComponent'><div class='UIComboboxList'><div class='UIComboboxContainer'><div class='UIComboboxItemContainer'>" ;
