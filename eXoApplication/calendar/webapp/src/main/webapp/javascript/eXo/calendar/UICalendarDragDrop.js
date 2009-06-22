@@ -7,6 +7,8 @@ DragDrop.prototype.findDropableTarget4Cal = function(dndEvent, dropableTargets, 
   var additionY = UICalendarDragDropObj.RowContainerDay.scrollTop;
   var mousexInPage = eXo.core.Browser.findMouseXInPage(mouseEvent) + additionX ;
   var mouseyInPage = eXo.core.Browser.findMouseYInPage(mouseEvent) + additionY ;
+  if(eXo.core.Browser.getBrowserType() == "ie" && eXo.core.I18n.isRT())
+  	mousexInPage = mousexInPage / 2;
   
   var clickObject = dndEvent.clickObject ;
   var dragObject = dndEvent.dragObject ;
