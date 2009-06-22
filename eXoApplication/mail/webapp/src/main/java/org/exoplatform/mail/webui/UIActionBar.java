@@ -28,6 +28,7 @@ import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIMessageFilter;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -88,6 +89,8 @@ public class UIActionBar extends UIContainer {
 
   static public class ComposeActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
+      
+      System.out.println("\n\n hi :" + Util.getUIPortalApplication().getOrientation().isRT() + "\n\n");
       UIActionBar uiActionBar = event.getSource() ; 
       UIMailPortlet uiPortlet = uiActionBar.getParent() ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;

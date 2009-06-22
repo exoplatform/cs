@@ -56,12 +56,11 @@
 			  			  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
 			  			  	%>
 		  			  </td>
-							<td class="text">
+							<td>
 								<div class="State OfflineIcon" title="Available"> 
 									<% 
 										String name = "" ;
 										if (contact.getFullName() != null) {
-										//println "aa : " + contact.getFullName().length() ;
 											if (contact.getFullName().length() > 40) name = contact.getFullName().substring(0, 40) + "..." ;
 											else name = contact.getFullName();
 										}
@@ -69,7 +68,7 @@
 									<%= ContactUtils.encodeHTML(name) %>
 								</div>
 							</td>
-							<td class="text"><%=(contact.getEmail()==null ? "" : contact.getEmail().replaceAll(";", "; "))%></td>
+							<td><%=(contact.getEmail()==null ? "" : contact.getEmail().replaceAll(";", "; "))%></td>
 		
 		   			</tr>
 		     	<% } %>  

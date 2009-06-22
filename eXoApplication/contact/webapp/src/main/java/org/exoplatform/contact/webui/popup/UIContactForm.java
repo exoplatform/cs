@@ -237,7 +237,7 @@ public class UIContactForm extends UIFormTabPane {
         "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+";
       String emails = profileTab.getFieldEmail() ;
       for (String email : emails.split(Utils.SEMI_COLON)) {
-        if (!ContactUtils.isEmpty(email) && !email.trim().matches(EMAIL_REGEX)) {
+        if (!ContactUtils.isEmpty(email) && (!email.trim().matches(EMAIL_REGEX) || (email.length() > 40))) {
           uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.invalid-email", null, 
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
