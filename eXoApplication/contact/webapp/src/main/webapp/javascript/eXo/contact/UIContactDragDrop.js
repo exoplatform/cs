@@ -17,6 +17,30 @@ UIContactDragDrop.prototype.init = function() {
   this.regDnDItem() ;
 } ;
 
+DragDrop.prototype.isIn = function(x, y, component) {
+  var componentLeft = eXo.core.Browser.findPosX(component);
+  var componentRight = componentLeft + component.offsetWidth ;
+  var componentTop = eXo.core.Browser.findPosY(component) ;
+  var componentBottom = componentTop + component.offsetHeight ;
+  var isOver = false ;
+
+	var uiWorkspaceContainer = document.getElementById("UIWorkspaceContainer") ;
+	if ((uiWorkspaceContainer && uiWorkspaceContainer.style.display != "none") && eXo.core.Browser.isIE7()) {
+		if(eXo.core.I18n.isLT()) componentRight = componentRight - uiWorkspaceContainer.clientWidth ;
+	}
+	
+  if((eXo.core.Browser.getBrowserType() == "ie") && eXo.core.I18n.isLT()) {
+  	componentLeft = componentLeft / 2 ;
+  }
+  
+  if((componentLeft < x) && (x < componentRight)) {
+    if((componentTop < y) && (y < componentBottom)) {
+      isOver = true ;
+    }
+  }
+  return isOver ;
+} ;
+
 DragDrop.prototype.findDropableTarget = function(dndEvent, dropableTargets, mouseEvent) {
   if(dropableTargets == null) return null ;
   var isDesktop = document.getElementById("UIPageDesktop");
@@ -178,8 +202,13 @@ UIContactDragDrop.prototype.synDragObjectPos = function(dndEvent) {
   var dragObject = dndEvent.dragObject ;
   var mouseX = eXo.core.Browser.findMouseXInPage(dndEvent.backupMouseEvent) ;
   var mouseY = eXo.core.Browser.findMouseYInPage(dndEvent.backupMouseEvent) ;
+  
   dragObject.style.top = mouseY + 'px' ;
   dragObject.style.left = mouseX + 'px' ;
+  if(eXo.core.I18n.isRT()){
+  	if(eXo.core.Browser.isIE6() || eXo.core.Browser.isIE7()) mouseX -= eXo.cs.Utils.getScrollbarWidth();
+	  dragObject.style.right = (eXo.core.Browser.getBrowserWidth() -  mouseX) + 'px' ;
+  }
 } ;
 
 UIContactDragDrop.prototype.initCallback = function(dndEvent) {
