@@ -1955,13 +1955,13 @@ public Attachment getAttachment(String attId) {
       } else {
         StringBuilder sb1 = new StringBuilder() ;
         StringBuilder sb2 = new StringBuilder() ;
-        for(String uName : values.split(CalendarUtils.COMMA)) {
+        for(String uName : values.split(CalendarUtils.BREAK_LINE)) {
           User user = CalendarUtils.getOrganizationService().getUserHandler().findUserByName(uName.trim()) ;
           if(user != null) {
-            if(sb1 != null && sb1.length() > 0) sb1.append(CalendarUtils.COMMA) ;
+            if(sb1 != null && sb1.length() > 0) sb1.append(CalendarUtils.BREAK_LINE) ;
             sb1.append(uName.trim()) ;
           } else {
-            if(sb2 != null && sb2.length() > 0) sb2.append(CalendarUtils.COMMA) ;
+            if(sb2 != null && sb2.length() > 0) sb2.append(CalendarUtils.BREAK_LINE) ;
             sb2.append(uName.trim()) ;
           }
         }
