@@ -20,7 +20,7 @@ function BuddyItem(buddyInfo, actionCallback, maxUserNameLen, isGroupChat) {
     unavailable     : 'OfflineIcon',
     available       : 'OnlineIcon',
     away            : 'AwayIcon',
-    xa              : 'AwayIcon',
+    xa              : 'ExtendAwayIcon',
     chat            : 'FreeToChat',
     'free to chat'  : 'FreeToChat',
     busy            : 'ExtendsAwayIcon',
@@ -74,9 +74,9 @@ BuddyItem.prototype.updateStatus = function(newStatus, skipCheck) {
   if (skipCheck ||
       this.buddyInfo.presence.type != newStatus &&
       cssClass) {
-    this.buddyInfo.presence.type = newStatus;
     this.iconChatNode.className = 
-                  this.iconChatNode.className.replace(this.CSS_CLASS[this.buddyInfo.presence.type], cssClass);
+                  this.iconChatNode.className.replace(this.CSS_CLASS[this.buddyInfo.presence.type], cssClass);   
+    this.buddyInfo.presence.type = newStatus;              
     if (this.iconChatNode.className.indexOf(this.CSS_CLASS[this.buddyInfo.presence.type]) == -1) {
       this.iconChatNode.className = this.CSS_CLASS.nick + ' ' + this.CSS_CLASS[this.buddyInfo.presence.type];
     }
