@@ -135,7 +135,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     inputset.setActionField(FIELD_USER, actionUser) ;
     
     UIFormStringInput groupField = new UIFormStringInput(FIELD_GROUP, FIELD_GROUP, null) ;
-    groupField.setEditable(false) ;
+    //groupField.setEditable(false) ;
     inputset.addUIFormInput(groupField) ;
     List<ActionData> actionGroup = new ArrayList<ActionData>() ;
     ActionData selectGroupAction = new ActionData() ;
@@ -210,6 +210,24 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           return ;          
         }      
       }
+      
+      if(!ContactUtils.isEmpty(groups)) {
+        StringBuilder invalidGroups = new StringBuilder() ;
+        String[] array = groups.split(",") ;
+        for(String name : array) {
+          if (organizationService.getGroupHandler().findGroupById(name.trim()) == null) {
+            if (invalidGroups.length() == 0) invalidGroups.append(name) ;
+            else invalidGroups.append(", " + name) ;
+          }
+        }
+        if (invalidGroups.length() > 0) {
+          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-exist-group"
+              , new Object[]{invalidGroups.toString()}, 1 )) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;          
+        }      
+      }
+      
       ContactService contactService = ContactUtils.getContactService() ;
       //SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;      
       Map<String, String>  receiveUsersByGroups = new LinkedHashMap<String, String>() ;

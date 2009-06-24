@@ -131,7 +131,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
     inputset.setActionField(FIELD_USER, actionUser) ;
     
     UIFormStringInput group = new UIFormStringInput(FIELD_GROUP, FIELD_GROUP, null) ;
-    group.setEditable(false) ;
+    //group.setEditable(false) ;
     inputset.addUIFormInput(group) ;
     List<ActionData> actionGroup = new ArrayList<ActionData>() ;
     ActionData selectGroupAction = new ActionData() ;
@@ -185,6 +185,31 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } 
+      String username = ContactUtils.getCurrentUser() ;
+      if(!ContactUtils.isEmpty(names)) {
+        OrganizationService organizationService = 
+          (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+        StringBuilder invalidUsers = new StringBuilder() ;
+        String[] array = names.split(",") ;
+        for(String name : array) {
+          if (organizationService.getUserHandler().findUserByName(name.trim()) != null) {
+            if (!name.trim().equals(username)) {
+              receiverUser.put(name.trim() + JCRDataStorage.HYPHEN, name.trim() + JCRDataStorage.HYPHEN) ;
+            }
+          } else {
+            if (invalidUsers.length() == 0) invalidUsers.append(name) ;
+            else invalidUsers.append(", " + name) ;
+          }
+        }
+        if (invalidUsers.length() > 0) {
+          uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.not-exist-username"
+              , new Object[]{invalidUsers.toString()}, 1 )) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;          
+        }      
+      }
+      
+      /*
       if(!ContactUtils.isEmpty(names)) {
         OrganizationService organizationService = 
           (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
@@ -201,8 +226,44 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           return ;
         }
       }
-      ContactService contactService = ContactUtils.getContactService() ;
-      String username = ContactUtils.getCurrentUser() ;  
+      */
+      // CS-2604
+    /*  if(!ContactUtils.isEmpty(groups)) {
+        OrganizationService organizationService = 
+          (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+        try {
+          String[] array = groups.split(",") ;
+          for(String name : array) {
+            organizationService.getGroupHandler().findGroupById(name).getGroupName() ;
+          }         
+        } catch (NullPointerException e) {
+          uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.not-exist-group", null,
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      }
+      */
+      if(!ContactUtils.isEmpty(groups)) {
+        OrganizationService organizationService = 
+          (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+        StringBuilder invalidGroups = new StringBuilder() ;
+        String[] array = groups.split(",") ;
+        for(String name : array) {
+          if (organizationService.getGroupHandler().findGroupById(name.trim()) == null) {
+            if (invalidGroups.length() == 0) invalidGroups.append(name) ;
+            else invalidGroups.append(", " + name) ;
+          }
+        }
+        if (invalidGroups.length() > 0) {
+          uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.not-exist-group"
+              , new Object[]{invalidGroups.toString()}, 1 )) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;          
+        }      
+      }
+      
+      ContactService contactService = ContactUtils.getContactService() ;  
       Map<String, String> viewMapGroups = new LinkedHashMap<String, String>() ;
       if (!ContactUtils.isEmpty(groups)) {
         String[] arrayGroups = groups.split(",") ; 
