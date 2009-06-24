@@ -96,7 +96,7 @@
     </application>
     
     <application>
-      <instance-id>group#platform/users:/calendar/CalendarPortlet/calendar</instance-id>    
+      <instance-id>group#platform/users:/calendar/CalendarPortlet/calendars</instance-id>    
       <title>Calendar Portlet</title>
       <show-info-bar>true</show-info-bar>
       <show-application-state>true</show-application-state>
