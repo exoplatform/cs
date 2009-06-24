@@ -324,6 +324,11 @@
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -25px; /* orientation=rt */
 }
 
+.UIChat .ExtendAwayIcon {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -300px; /* orientation=lt */
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -300px; /* orientation=rt */  
+}
+
 .UIChat .UIRightClickPopupMenu .ExtendAwayIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -300px; /* orientation=lt */
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -300px; /* orientation=rt */  
