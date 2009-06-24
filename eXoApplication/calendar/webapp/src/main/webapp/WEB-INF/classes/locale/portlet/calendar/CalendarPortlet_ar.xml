@@ -122,6 +122,26 @@
       <false>لا</false>
     </label>
   </UIAddEditPermission>
+  <UIPopupWindowUserSelect>
+  	<title>
+  		<UIUserSelector>Select users</UIUserSelector>
+  	</title>
+  </UIPopupWindowUserSelect>
+  <UIPopupWindowUserSelectEventForm>
+  	<title>
+  		<UIUserSelector>Select users</UIUserSelector>
+  	</title>
+  </UIPopupWindowUserSelectEventForm>
+  <UIPopupWindowUserSelectTaskForm>
+  	<title>
+  		<UIUserSelector>Select users</UIUserSelector>
+  	</title>
+  </UIPopupWindowUserSelectTaskForm>
+  <UIPopupWindowAddUserEventForm>
+  	<title>
+  		<UIUserSelector>Select users</UIUserSelector>
+  	</title>
+  </UIPopupWindowAddUserEventForm>
   <!--
   #org.exoplatform.calendar.webui.popup.UICalendarCategoryForm
   -->
@@ -366,6 +386,7 @@
       <check-free-busy-required>التحقق من التوافر أمر ضروري.</check-free-busy-required>
       <cant-send-email>يجب أن يكون لديك حساب في 'رسائل اكزو-eXo Mail' لتتمكن من إرسال رسائل البريد الإلكتروني.</cant-send-email>
       <error-send-email>لا يمكن إرسال الدعوة إلى المشاركين.حاول بعد قليل</error-send-email>
+      <event-participant-invalid>invalid participant : {0}</event-participant-invalid>
     </msg>
     <optionGroup>
       <label>
@@ -1175,7 +1196,7 @@
   		<confirm>Message</confirm>
   	</label>
   	<action>
-  		<ConfirmOK>Save&Send</ConfirmOK>
+  		<ConfirmOK>Save and Send</ConfirmOK>
   		<ConfirmCancel>Save</ConfirmCancel>
   	</action>
   </UIConfirmForm>

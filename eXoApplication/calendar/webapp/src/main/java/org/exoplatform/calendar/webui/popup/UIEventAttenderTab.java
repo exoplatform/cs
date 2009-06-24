@@ -128,7 +128,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     calendar_.add(Calendar.DATE, 1) ;
     StringBuilder values = new StringBuilder(); 
     for(String par : parMap_.keySet()) {
-      if(values != null && values.length() > 0) values.append(",") ;
+      if(values != null && values.length() > 0) values.append(CalendarUtils.BREAK_LINE) ;
       values.append(par) ;    	
     }
     parMap_.clear() ;
@@ -138,7 +138,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     calendar_.add(Calendar.DATE, -1) ;
     StringBuilder values = new StringBuilder(); 
     for(String par : parMap_.keySet()) {
-      if(values != null && values.length() > 0) values.append(",") ;
+      if(values != null && values.length() > 0) values.append(CalendarUtils.BREAK_LINE) ;
       values.append(par) ;    	
     }
     parMap_.clear() ;

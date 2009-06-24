@@ -2191,9 +2191,9 @@ UICalendarPortlet.prototype.initSelectionX = function(tr){
  * @return Object contains two properties that are AM and PM
  */
 UICalendarPortlet.prototype.getTimeFormat = function(input){
-    var list = eXo.core.DOMUtil.findPreviousElementByTagName(input, "div");
-    var a = eXo.core.DOMUtil.findDescendantsByTagName(list, "a");
-    var am = a[0].getAttribute("value").match(/[A-Z]+/);
+    //var list = eXo.core.DOMUtil.findPreviousElementByTagName(input, "div");
+    //var a = eXo.core.DOMUtil.findDescendantsByTagName(list, "a");
+    var am = input.getAttribute("value").match(/[A-Z]+/);
     if (!am) 
         return null;
     var pm = a[a.length - 1].getAttribute("value").match(/[A-Z]+/);

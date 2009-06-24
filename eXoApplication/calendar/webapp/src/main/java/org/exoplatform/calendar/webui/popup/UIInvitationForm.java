@@ -193,6 +193,11 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
     return builder.toString(); 
   }
   
+  public String escapeGroupReferences(String s){
+    if(CalendarUtils.isEmpty(s)) return new String("");
+    return s.replace("$", "\\$");
+  }
+  
   static public class SaveActionListener extends EventListener<UIInvitationForm>{
     public void execute(Event<UIInvitationForm> event) throws Exception{
       UIInvitationForm uiInvitationForm = event.getSource();
@@ -229,10 +234,8 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
           builder.append(CalendarUtils.invalidEmailAddresses(emailList.trim()));
         
         uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.event-participant-invalid"
-                                                , new String[] { builder.toString() }));
+                                                , new String[] { uiInvitationForm.escapeGroupReferences(builder.toString()) }, ApplicationMessage.ERROR));
         
-        
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiParentPopup.getAncestorOfType(UIPopupAction.class)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
 
@@ -273,10 +276,6 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
       UIPopupContainer uiPopupContainer = uiInvitationForm.getParent();  
       uiPopupContainer.deActivate();
       UIPopupWindow uiPopupWindow = uiPopupContainer.getChild(UIPopupWindow.class) ;
-      /*if(uiPopupWindow != null) {
-        uiPopupWindow.setShow(false) ;
-        uiPopupWindow.setUIComponent(null) ;
-      }*/
       if(uiPopupWindow == null)uiPopupWindow = uiPopupContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelectEventForm", "UIPopupWindowUserSelectEventForm") ;
       UIUserSelector uiUserSelector = uiPopupContainer.createUIComponent(UIUserSelector.class, null, null) ;
       uiUserSelector.setShowSearch(true);
@@ -284,6 +283,7 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
       uiUserSelector.setShowSearchGroup(true);
       uiPopupWindow.setUIComponent(uiUserSelector);
       uiPopupWindow.setShow(true);
+      uiPopupWindow.setRendered(true);
       uiPopupWindow.setWindowSize(740, 400) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;
     }
@@ -294,8 +294,9 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
       UIInvitationForm uiInvitationForm = event.getSource();  
       UIPopupWindow uiPopupWindow = uiInvitationForm.getChild(UIPopupWindow.class) ;
       if(uiPopupWindow != null) {
-        uiPopupWindow.setShow(false) ;
         uiPopupWindow.setUIComponent(null) ;
+        uiPopupWindow.setRendered(false);
+        uiPopupWindow.setShow(false) ;
       }
       uiPopupWindow.setShow(true);    
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupWindow) ;      
@@ -306,12 +307,11 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIInvitationForm> event) throws Exception{
       UIInvitationForm uiInvitationForm = event.getSource();
       UIPopupContainer uiPopupContainer = uiInvitationForm.getParent();
-      //uiPopupContainer.deActivate();
      UIPopupWindow window = uiPopupContainer.getChildById("UIPopupWindowUserSelectEventForm");
       if(window != null) {
-        System.out.println("Goes here");
-        window.setShow(false) ;
         window.setUIComponent(null) ;
+        window.setRendered(false);
+        window.setShow(false) ;
       }
       UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
       UIPopupContainer uiGrandParentPopup = uiPopupContainer.getAncestorOfType(UIPopupContainer.class) ;
@@ -338,7 +338,7 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
           }
         }
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;  
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;  
    }
   }
 
