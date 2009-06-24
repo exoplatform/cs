@@ -1055,7 +1055,7 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
       userStatusIconNode.className = 'IconHolder'+' '+'AwayIcon';
       break;
     case this.EXTEND_AWAY_STATUS:
-      userStatusIconNode.className = 'IconHolder'+' '+'AwayIcon';
+      userStatusIconNode.className = 'IconHolder'+' '+'ExtendAwayIcon';
       break;
     case this.FREE_TO_CHAT_STATUS:
       userStatusIconNode.className = 'IconHolder'+' '+'FreeToChat';
