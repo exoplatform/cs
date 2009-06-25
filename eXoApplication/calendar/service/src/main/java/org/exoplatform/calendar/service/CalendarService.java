@@ -22,8 +22,6 @@ import java.util.Map;
 
 import javax.jcr.Node;
 
-
-
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -237,6 +235,15 @@ public interface CalendarService extends CalendarServiceLegacy {
    */
   public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception ;
 
+  /**
+   * Get a personal event for a given owner
+   * @param owner user id of the event owner
+   * @param eventId id of event to get
+   * @return CalendarEvent in the personal events of owner 
+   * @throws Exception 
+   */
+  public CalendarEvent getEvent(String username, String eventId) throws Exception ;  
+  
   /**
    * The method save infomation to an event or a task by given private calendar id to data
    * @param username current user name(or user id)

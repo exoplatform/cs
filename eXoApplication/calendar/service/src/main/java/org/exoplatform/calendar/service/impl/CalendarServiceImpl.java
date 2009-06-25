@@ -203,6 +203,10 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     return storage_.getUserEvents(username, eventQuery);
   }
 
+  public CalendarEvent getEvent(String username, String eventId) throws Exception {
+    return storage_.getEvent(username, eventId) ;
+  }
+  
   /**
    * {@inheritDoc}
    */
