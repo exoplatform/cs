@@ -942,6 +942,20 @@ public class JCRDataStorage{
     return events;
   }
 
+  public CalendarEvent getEvent(String username, String eventId) throws Exception {
+    Node calendarHome = getUserCalendarHome(username) ;
+    String queryString = new StringBuffer("/jcr:root" + calendarHome.getPath()
+                                          + "//element(*,exo:calendarEvent)[@exo:id='").append(eventId)
+                                                                                       .append("']")
+                                                                                       .toString();
+    QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
+    Query query = qm.createQuery(queryString, Query.XPATH) ;
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    if (it.hasNext()) return getEvent(it.nextNode()) ;
+    else return null ;
+  }
+  
   public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception {
     Node calendarHome = getUserCalendarHome(username) ;
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
