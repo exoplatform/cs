@@ -164,8 +164,8 @@
 						<div class="LeftButton">
 							<div class="RightButton">
 								<div class="CenterButton">
-								<a href="/portal/private/classic/collaboration" style="color: white; margin-top: 5px;">Try now</a>
-								<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla">Create a demo account</a></div>
+								<a href="/portal/public/classic/register" style="color: white; margin-top: 5px;">Try now</a>
+								<a href="/portal/public/classic/register" style="color: white;" class="TextBntColla">Create a demo account</a></div>
 							</div>
 						</div>
 					
@@ -202,7 +202,7 @@
 					-->
 					<div class="DotLine"><span></span></div>
 					<div class="NormalText">For more information, visit<br/>
-the <a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">wiki</a> and <a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">forums</a></div>
+the <a href="http://wiki.exoplatform.org/xwiki/bin/view/CS" class="ProVersion">wiki</a> and <a href="http://www.exoplatform.com/portal/public/website/community/forum" class="ProVersion">forums</a></div>
 									
 					<!--
 					<div class="LeftButton">
