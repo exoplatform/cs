@@ -55,7 +55,8 @@
         <value>locale.portal.expression</value>
         <value>locale.portal.services</value>
         <value>locale.portal.webui</value>
-        <value>locale.portal.custom</value>  
+        <value>locale.portal.custom</value>
+        <value>locale.homepage.custom</value>    
       </values-param>      
     </init-params>
   </component>
