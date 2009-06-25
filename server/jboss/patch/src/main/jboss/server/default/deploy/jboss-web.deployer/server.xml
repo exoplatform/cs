@@ -113,11 +113,11 @@
                               that presented it.  Set cookieDomain to a
                               wider domain (e.g. "xyz.com") to allow an SSO
                               to span more than one hostname.
-             -->
+            
              
             <Valve className="org.apache.catalina.authenticator.SingleSignOn" />
             
-
+                  -->
             <!-- Uncomment to enable single sign-on across web apps
                deployed to this host AND to all other hosts in the cluster.
             

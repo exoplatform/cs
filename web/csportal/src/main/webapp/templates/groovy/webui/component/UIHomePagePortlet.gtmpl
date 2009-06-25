@@ -11,8 +11,8 @@
 							<div class="RightAdImage">
 								<div class="LeftAdImage">
 									<div class="EmptyBlock"><span></span></div>
-									<div class="ProductSlogan">eXo Collaboration Suite 1.3</div>
-									<div class="ProductIntro">beta version with chat application</div>
+									<div class="ProductSlogan"><%=_ctx.appRes("UIHomePagePortlet.cs-slogan")%></div>
+									<div class="ProductIntro"><%=_ctx.appRes("UIHomePagePortlet.cs-product-intro")%></div>
 								</div>
 							</div>
 						</div>
@@ -23,7 +23,7 @@
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
-													<div class="CenterTitleHomePage">Calendar</div>
+													<div class="CenterTitleHomePage"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar")%></div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
@@ -58,7 +58,7 @@
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
-													<div class="CenterTitleHomePage">Address Book</div>
+													<div class="CenterTitleHomePage"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book")%></div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
@@ -92,7 +92,7 @@
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
-													<div class="CenterTitleHomePage">Chat</div>
+													<div class="CenterTitleHomePage"><%=_ctx.appRes("UIHomePagePortlet.cs-chat")%></div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
@@ -124,7 +124,7 @@
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
-													<div class="CenterTitleHomePage">Mail</div>
+													<div class="CenterTitleHomePage"><%=_ctx.appRes("UIHomePagePortlet.cs-mail")%></div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
@@ -165,52 +165,35 @@
 							<div class="RightButton">
 								<div class="CenterButton">
 								<a href="/portal/private/classic/collaboration" style="color: white; margin-top: 5px;">Try now</a>
-								<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla">Create a demo account</a></div>
+								<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla"><%=_ctx.appRes("UIHomePagePortlet.cs-register")%></a></div>
 							</div>
 						</div>
 					
 					<div class="DotLine"><span></span></div>
-				<!--- 	<div class="NormalText">Want to play with it? That's easy you just need to <a href="/portal/public/classic/register">a demo account</a>.</div>
-					<a href="/portal/public/classic/register" class="SignUp">Sign Up Now</a>
-						-->		
+				 
 					<div class="DownloadButton">
 						<div style="height: 45px"><span></span></div>
-						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3-tomcat.zip" style="color: white;" class="TextDownload">DOWN LOAD</a><br/>
-						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3-tomcat.zip" style="color: white;">Community Version</a>
+						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3Beta1-tomcat.zip" style="color: white;" class="TextDownload"><%=_ctx.appRes("UIHomePagePortlet.cs-download")%></a><br/>
+						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3Beta1-tomcat.zip" style="color: white;"><%=_ctx.appRes("UIHomePagePortlet.cs-community")%></a>
 					</div>
 					<div class="DotLine"><span></span></div>
 					<div style="margin: 17px 0px;">
 						<div class="NormalText">Did you like ? Did you hate ?</div>
-						<a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">Send Feedback</a>
+						<a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-send-feedback")%></a>
 					</div>
 					<div class="DotLine"><span></span></div>
-					<!--div class="VersionIcon"><span></span></div-->
+					 
 						<div class="LeftButton">
 							<div class="RightButton">
 								<div class="CenterButton">
-								<a href="/portal/private/classic/collaboration" style="color: white; margin-top: 5px;">CS on WebOS</a>
-								<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla">The collaborative desktop</a></div>
+								<a href="/portal/private/classic/collaboration" style="color: white; margin-top: 5px;"><%=_ctx.appRes("UIHomePagePortlet.cs-webos")%></a>
+								<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla"><%=_ctx.appRes("UIHomePagePortlet.cs-desktop")%></a></div>
 							</div>
 						</div>					
-					<!--
-					<div class="DotLine"><span></span></div>
-					<div class="LeftButton">
-						<div class="RightButton">
-							<div class="CenterButton"><a href="$toururi" style="color: white;">Take a tour</a></div>
-						</div>
-					</div>		
-					-->
-					<div class="DotLine"><span></span></div>
+ 					<div class="DotLine"><span></span></div>
 					<div class="NormalText">For more information, visit<br/>
 the <a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">wiki</a> and <a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">forums</a></div>
 									
-					<!--
-					<div class="LeftButton">
-						<div class="RightButton">
-							<div class="CenterButton"><a href="mailto:cs@exoplatform.com?subject=CS demo feedback" style="color: white;">Feedback</a></div>
-						</div>
-					</div>	
-					-->
 					<div style="height:69px;"><span></span></div>
 				</div>
 			</div>
