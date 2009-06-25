@@ -49,7 +49,7 @@ UIMailPortlet.prototype.changeAction = function(menu, id){
 
 UIMailPortlet.prototype.defaultFolderPopupMenuCallback = function(evt){
     var UIContextMenuMail = eXo.webui.UIContextMenuMail;
-    var src = eXo.core.EventManager.getEventTargetByTagName(evt, "a");
+    var src = eXo.core.EventManager.getEventTargetByTagName(evt, "div");
     var folder = src.getAttribute("folder");
     eXo.webui.UIContextMenuMail.changeAction(UIContextMenuMail.menuElement, folder);
 };
