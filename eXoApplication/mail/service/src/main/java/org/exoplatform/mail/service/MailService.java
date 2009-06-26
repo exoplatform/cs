@@ -19,6 +19,7 @@ package org.exoplatform.mail.service;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -609,5 +610,5 @@ public interface MailService {
   
   public void addListenerPlugin(ComponentPlugin listener) throws Exception ;
   
-  public boolean sendReturnReceipt(SessionProvider sProvider, String username, String accId, String msgId) throws Exception;
+  public boolean sendReturnReceipt(SessionProvider sProvider, String username, String accId, String msgId, ResourceBundle res) throws Exception;
 }

@@ -19,6 +19,7 @@ package org.exoplatform.contact.service.test;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.mail.service.Account;
@@ -495,7 +496,7 @@ public class FakeMailService implements MailService {
 
   }
   
-  public boolean sendReturnReceipt(SessionProvider provider, String username, String accId, String msgId) throws Exception {
+  public boolean sendReturnReceipt(SessionProvider provider, String username, String accId, String msgId, ResourceBundle res) throws Exception {
     // TODO Auto-generated method stub
     return true;  
   }

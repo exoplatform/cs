@@ -29,9 +29,13 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
+import javax.activation.CommandMap;
 import javax.activation.DataHandler;
+import javax.activation.MailcapCommandMap;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
 import javax.mail.Header;
@@ -1590,9 +1594,148 @@ public class MailServiceImpl implements MailService, Startable {
     }
   }
 
-  public boolean sendReturnReceipt(SessionProvider provider, String username, String accId, String msgId) throws Exception {
+  private Properties getAccountProperties(Account acc){
+    Properties props = new Properties();
+    String smtpUser = acc.getIncomingUser();
+    String outgoingHost = acc.getOutgoingHost();
+    String outgoingPort = acc.getOutgoingPort();
+    String isSSl = acc.getServerProperties().get(Utils.SVR_OUTGOING_SSL);
+    props.put(Utils.SVR_SMTP_USER, smtpUser);
+    props.put(Utils.SVR_SMTP_HOST, outgoingHost);
+    props.put(Utils.SVR_SMTP_PORT, outgoingPort);
+    props.put("mail.smtp.dsn.notify", "SUCCESS,FAILURE ORCPT=rfc822;" + acc.getEmailAddress());
+    props.put("mail.smtp.dsn.ret", "FULL");
+    props.put("mail.smtp.socketFactory.port", outgoingPort);
+    props.put(Utils.SVR_SMTP_AUTH, "true");
+    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "true");
+    props.put("mail.smtp.connectiontimeout", "0" );
+    props.put("mail.smtp.timeout", "0" );
+    //props.put("mail.debug", "true");
+    String socketFactoryClass = "javax.net.SocketFactory";
+    if (Boolean.valueOf(isSSl)) {
+      socketFactoryClass = Utils.SSL_FACTORY;
+      props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
+      props.put("mail.smtp.ssl.protocols","SSLv3 TLSv1");
+    }
+    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS, socketFactoryClass);
+    
+    return props;
+  }
+  
+  
+  public boolean sendReturnReceipt(SessionProvider provider, String username, String accId, String msgId, ResourceBundle res) throws Exception {
     //TODO need to implement
+    Account acc = getAccountById(provider, username, accId);
     Message msg = getMessageById(provider, username, accId, msgId);
+    
+    String subject = new String("Disposition notification");
+    String text = new String("The message sent on {0} to {1} with subject \"{2}\" has been displayed. This is no guarantee that the message has been read or understood.");
+    if(res != null){
+      try {
+        subject = res.getString("UIMessagePreview.msg.return-receipt-subject");      
+      } catch (MissingResourceException e) {
+        subject = new String("Disposition notification");
+        e.printStackTrace();
+      }
+      try {
+        text = res.getString("UIMessagePreview.msg.return-receipt-text");
+      } catch (MissingResourceException e) {
+        text = new String("The message sent on {0} to {1} with subject \"{2}\" has been displayed. This is no guarantee that the message has been read or understood.");
+        e.printStackTrace();
+      }
+    }
+    text = text.replace("{0}", msg.getSendDate().toString());
+    text = text.replace("{1}", msg.getMessageTo());
+    text = text.replace("{2}", msg.getSubject());
+    
+    Message receiptMsg = new Message();
+    receiptMsg.setMessageTo(msg.getFrom());
+    receiptMsg.setSubject(subject);
+    receiptMsg.setSendDate(new Date());
+    
+    DispositionNotification disNotification = new DispositionNotification();
+    disNotification.getNotifications().setHeader("Reporting-UA", "cs.exoplatform.com;" + " CS-Mail");
+    disNotification.getNotifications().setHeader("MDN-Gateway", "smtp;" + " " + acc.getOutgoingHost());
+    disNotification.getNotifications().setHeader("Original-Recipient", "rfc822;" + " " + msg.getFrom());
+    disNotification.getNotifications().setHeader("Final-Recipient", "rfc822;" + " " + acc.getUserDisplayName()+ "<" + acc.getEmailAddress() + ">");
+    disNotification.getNotifications().setHeader("Original-Message-ID", msg.getId());
+    disNotification.getNotifications().setHeader("Disposition", "manual-action/MDN-sent-automatically;" + " displayed");
+    
+    MultipartReport report = new MultipartReport(text , disNotification);
+    
+    Properties props = getAccountProperties(acc);
+    Session session = Session.getInstance(props, null);
+    logger.debug(" #### Sending email ... ");
+    SMTPTransport transport = (SMTPTransport)session.getTransport(Utils.SVR_SMTP);
+    try {
+      if (!acc.isOutgoingAuthentication()) {
+        transport.connect() ;
+      } else if (acc.useIncomingSettingForOutgoingAuthent()) {
+        transport.connect(acc.getOutgoingHost(), Integer.parseInt(acc.getOutgoingPort()), acc.getIncomingUser(), acc.getIncomingPassword());
+      } else {
+        transport.connect(acc.getOutgoingHost(), Integer.parseInt(acc.getOutgoingPort()), acc.getOutgoingUserName(), acc.getOutgoingPassword());
+      }
+    } catch(Exception ex) {
+      logger.warn("#### Can not connect to smtp server ...") ;
+      throw ex;
+    }
+    
+    MailcapCommandMap mailcap = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
+    mailcap.addMailcap("message/disposition-notification;; x-java-content-handler=org.exoplatform.mail.service.impl.Message_DispositionNotification");
+    CommandMap.setDefaultCommandMap(mailcap);
+
+    sendReturnReceipt(session, transport, receiptMsg, report);
+    transport.close();
+    
     return true;
+  }
+  
+  
+  private void sendReturnReceipt(Session session, Transport transport, Message message, MultipartReport report) throws Exception {
+    MimeMessage mimeMessage = new MimeMessage(session);
+    String status = "";
+    InternetAddress addressFrom;
+    mimeMessage.setHeader("Message-ID", message.getId());
+    mimeMessage.setHeader("Content-Transfer-Encoding", "utf-8");
+    
+    if (message.getFrom() != null)
+      addressFrom = new InternetAddress(message.getFrom());
+    else
+      addressFrom = new InternetAddress(session.getProperties().getProperty(Utils.SVR_SMTP_USER));
+
+    mimeMessage.setFrom(addressFrom);
+    if (message.getMessageTo() != null)
+      mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message
+          .getMessageTo()));
+
+    mimeMessage.setSubject(message.getSubject(), "UTF-8");
+    mimeMessage.setSentDate(message.getSendDate());
+    
+    mimeMessage.setContent(report);
+    
+    mimeMessage.saveChanges();
+    try {
+      transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
+      status = "Mail Delivered !";
+    } catch (AddressException e) {
+      status = "There was an error parsing the addresses. Sending Failed !" + e.getMessage();
+      throw e;
+    } catch (AuthenticationFailedException e) {
+      status = "The Username or Password may be wrong. Sending Failed !" + e.getMessage();
+      throw e;
+    } catch (SMTPSendFailedException e) {
+      status = "Sorry, There was an error sending the message. Sending Failed !" + e.getMessage();
+      throw e;
+    } catch (MessagingException e) {
+      status = "There was an unexpected error. Sending Failed ! " + e.getMessage();
+      e.printStackTrace();
+      throw e;
+    } catch (Exception e) {
+      status = "There was an unexpected error. Sending Falied !" + e.getMessage();
+      throw e;
+    } finally {
+      // logger.debug(" #### Info : " + status);
+    }
+    logger.debug(" #### Info : " + status);
   }
 }
