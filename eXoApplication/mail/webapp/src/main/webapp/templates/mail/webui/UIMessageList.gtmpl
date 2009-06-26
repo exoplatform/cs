@@ -20,7 +20,7 @@
 %>
 <% /*Start Message Action Bar*/ %>
 <%uiform.begin()%>  
-  <div class="UIMessageActionsBar">
+  <div class="UIMessageActionsBar" >
   <a href="<%=uicomponent.event("Reply")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %>">
     <div class="IconHolder ReplyIcon"><span></span></div>
   </a>
@@ -690,7 +690,7 @@
       <%/* End of function show*/%>
       
       <% if (uicomponent.getMessageList().size() > 0) { %>
-        <tbody id="TbodyMessageList" class="MessageContainer">
+        <tbody id="TbodyMessageList" class="MessageContainer" viewing="<%=uicomponent.viewing_%>">
         <%
           int i = 0 ;
           int l = 0 ;
@@ -703,7 +703,7 @@
       <% 
         } else {
       %>
-          <tbody id="TbodyMessageList"><tr><td colspan="9">
+          <tbody id="TbodyMessageList" viewing="<%=uicomponent.viewing_%>"><tr><td colspan="9">
             <div class="MessageNotice">
             <%=_ctx.appRes(uicomponent.id+ ".label.there-are-no-messages") %>
           </div>
