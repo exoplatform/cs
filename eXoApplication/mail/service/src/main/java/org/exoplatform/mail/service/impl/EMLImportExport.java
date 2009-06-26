@@ -45,7 +45,7 @@ public class EMLImportExport implements MailImportExport{
 	}
 	public OutputStream exportMessage(SessionProvider sProvider, String username, String accountId, Message message) throws Exception {
 		Properties props = System.getProperties();
-    Session session = Session.getDefaultInstance(props, null);
+    Session session = Session.getInstance(props, null);
     MimeMessage mimeMessage = new MimeMessage(session);
     mimeMessage = Utils.mergeToMimeMessage(message, mimeMessage);
     OutputStream outputStream = new ByteArrayOutputStream();
@@ -55,7 +55,7 @@ public class EMLImportExport implements MailImportExport{
 
 	public boolean importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
 		Properties props = System.getProperties();
-    Session session = Session.getDefaultInstance(props, null);
+    Session session = Session.getInstance(props, null);
     MimeMessage mimeMessage = new MimeMessage(session, inputStream);
     mimeMessage.setHeader("Message-ID", "Message" + IdGenerator.generate());
     try {
