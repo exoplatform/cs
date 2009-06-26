@@ -66,6 +66,25 @@ public class MultipartReport extends MimeMultipart {
     setBodyPart(mbp, 1);
     constructed = true;
   }
+  
+  /**
+   * Construct a multipart/report object with the specified plain
+   * text and disposition notification to be returned to the user.
+   */
+  public MultipartReport(String text, DispositionNotification notification)
+  throws MessagingException {
+    super("report");
+    ContentType ct = new ContentType(contentType);
+    ct.setParameter("report-type", "disposition-notification");
+    contentType = ct.toString();
+    MimeBodyPart mbp = new MimeBodyPart();
+    mbp.setText(text);
+    setBodyPart(mbp, 0);
+    mbp = new MimeBodyPart();
+    mbp.setContent(notification, "message/disposition-notification");
+    setBodyPart(mbp, 1);
+    constructed = true;
+  }
 
   /**
    * Construct a multipart/report object with the specified plain
@@ -83,12 +102,42 @@ public class MultipartReport extends MimeMultipart {
 
   /**
    * Construct a multipart/report object with the specified plain
+   * text, disposition notification, and original message to be returned to the user.
+   */
+  public MultipartReport(String text, DispositionNotification notification,
+                         MimeMessage msg) throws MessagingException {
+    this(text, notification);
+    if (msg != null) {
+      MimeBodyPart mbp = new MimeBodyPart();
+      mbp.setContent(msg, "message/rfc822");
+      setBodyPart(mbp, 2);
+    }
+  }
+
+  
+  /**
+   * Construct a multipart/report object with the specified plain
    * text, delivery status, and headers from the original message
    * to be returned to the user.
    */
   public MultipartReport(String text, DeliveryStatus status,
                          InternetHeaders hdr) throws MessagingException {
     this(text, status);
+    if (hdr != null) {
+      MimeBodyPart mbp = new MimeBodyPart();
+      mbp.setContent(new MessageHeaders(hdr), "text/rfc822-headers");
+      setBodyPart(mbp, 2);
+    }
+  }
+  
+  /**
+   * Construct a multipart/report object with the specified plain
+   * text, disposition notification, and headers from the original message
+   * to be returned to the user.
+   */
+  public MultipartReport(String text, DispositionNotification notification,
+                         InternetHeaders hdr) throws MessagingException {
+    this(text, notification);
     if (hdr != null) {
       MimeBodyPart mbp = new MimeBodyPart();
       mbp.setContent(new MessageHeaders(hdr), "text/rfc822-headers");
@@ -192,6 +241,24 @@ public class MultipartReport extends MimeMultipart {
                                    ex);
     }
   }
+  
+  /**
+   * Get the disposition notification associated with this multipart/report.
+   */
+  public synchronized DispositionNotification getDispositionNotification()
+  throws MessagingException {
+    if (getCount() < 2)
+      return null;
+    BodyPart bp = getBodyPart(1);
+    if (!bp.isMimeType("message/disposition-notification"))
+      return null;
+    try {
+      return (DispositionNotification)bp.getContent();
+    } catch (IOException ex) {
+      throw new MessagingException("IOException getting DispositionNotification",
+                                   ex);
+    }
+  }
 
   /**
    * Set the delivery status associated with this multipart/report.
@@ -206,6 +273,19 @@ public class MultipartReport extends MimeMultipart {
     contentType = ct.toString();
   }
 
+  /**
+   * Set the disposition notification associated with this multipart/report.
+   */
+  public synchronized void setDispositionNotification(DispositionNotification notification)
+  throws MessagingException {
+    MimeBodyPart mbp = new MimeBodyPart();
+    mbp.setContent(notification, "message/disposition-notification");
+    setBodyPart(mbp, 2);
+    ContentType ct = new ContentType(contentType);
+    ct.setParameter("report-type", "disposition-notification");
+    contentType = ct.toString();
+  }
+  
   /**
    * Get the original message that is being returned along with this
    * multipart/report.  If no original message is included, null is

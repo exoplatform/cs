@@ -19,8 +19,12 @@ package org.exoplatform.mail.webui ;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.jcr.PathNotFoundException;
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.mail.MailUtils;
@@ -56,6 +60,8 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+
+import com.sun.mail.smtp.SMTPSendFailedException;
 
 /**
  * Created by The eXo Platform SARL
@@ -388,7 +394,28 @@ public class UIMessageList extends UIForm {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
           } else if (requestReturnReceipt == MailSetting.SEND_RECEIPT_ALWAYS) {
             MailService mailService = uiMessageList.getApplicationComponent(MailService.class);
-            mailService.sendReturnReceipt(SessionProviderFactory.createSystemProvider(), username, accountId, msgId);
+            UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+            ResourceBundle res = event.getRequestContext().getApplicationResourceBundle() ;
+            try {             
+              mailService.sendReturnReceipt(SessionProviderFactory.createSystemProvider(), username, accountId, msgId, res);
+            } catch (AddressException e) {
+              uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-error-parsing-the-addresses-sending-failed", null)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return;
+            } catch (AuthenticationFailedException e) {
+              uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-configuration-for-smtp-server", null)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return;
+            } catch (SMTPSendFailedException e) {
+              uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return;
+            } catch (MessagingException e) {
+              uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-unexpected-error-sending-falied", null)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;
+            }
+            
             List<Message> msgs = new ArrayList<Message>();
             msgs.add(msg);
             mailSrv.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, msgs, Utils.IS_RETURN_RECEIPT);

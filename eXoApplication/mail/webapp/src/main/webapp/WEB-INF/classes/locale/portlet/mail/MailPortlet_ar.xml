@@ -796,6 +796,8 @@
     <msg>
       <trouble-loading-event>هذا "الحدث" قد تمّ حذفهُ ، أو أنّك قد لا تستطيع الوصول إليه !</trouble-loading-event>
       <confirm-remove-message>هل ترغب حقّـا في حذف هذه الرّسالة؟</confirm-remove-message>
+      <return-receipt-subject>Disposition notification</return-receipt-subject>
+			<return-receipt-text>The message sent on {0} to {1} with subject "{2}" has been displayed. This is no guarantee that the message has been read or understood.</return-receipt-text>
     </msg>
     <UIIntroduction>
       <label>

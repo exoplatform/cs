@@ -234,7 +234,7 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
           builder.append(CalendarUtils.invalidEmailAddresses(emailList.trim()));
         
         uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.event-participant-invalid"
-                                                , new String[] { uiInvitationForm.escapeGroupReferences(builder.toString()) }, ApplicationMessage.ERROR));
+                                                , new String[] { uiInvitationForm.escapeGroupReferences(builder.toString()) }, ApplicationMessage.WARNING));
         
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
