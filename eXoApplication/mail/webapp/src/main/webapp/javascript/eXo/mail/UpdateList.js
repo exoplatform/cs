@@ -16,8 +16,9 @@ UpdateList.prototype.update = function(obj){
 	var data = eXo.core.JSON.parse(obj.data);	
 	var tbodyMsgList = document.getElementById("TbodyMessageList");
 	var updateListLabel = document.getElementById("UpdateList");
+  var viewing = tbodyMsgList.getAttribute("viewing");
 	var isUpdate = false ;
-	
+
 	if (this.accountId_ == data.accountId) {
 		// Update folder unread count
 	  var folderIds = data.folders;
@@ -46,6 +47,19 @@ UpdateList.prototype.update = function(obj){
   	}
   	
 	  if (tbodyMsgList && updateListLabel && isUpdate) {
+	  	if (viewing == "2") {
+	  		if (data.hasStar != "true") return ;	
+	  	} else if (viewing == "3") {
+	  		if (data.hasStar == "true") return ;
+	  	} else if (viewing == "4") {
+	  		if (data.isUnread != "true") return ;
+	  	} else if (viewing == "5") {
+	  		if (data.isUnread == "true") return ;
+	  	} else if (viewing == "6") {
+	  		if (data.hasAttach != "true") {
+	  			return ;	  			
+	  		}
+	  	}
 		  var tr = document.createElement("tr");
 		  tbodyMsgList.appendChild(tr);
 		  var preTr = eXo.core.DOMUtil.findPreviousElementByTagName(tr, "tr");
