@@ -51,6 +51,7 @@ import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -140,11 +141,13 @@ public class UIMessageList extends UIForm {
   private String accountId_ ;
   public int viewMode = MODE_THREAD ;
   public int viewing_ = VIEW_ALL ;
+  public SessionProvider sProvider_; 
   public LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
 
   public UIMessageList() throws Exception {}
 
   public void init(String accountId) throws Exception {
+    sProvider_ = SessionProviderFactory.createSystemProvider();
     accountId_ = accountId ;
     sortedBy_ = Utils.EXO_RECEIVEDDATE ;
     String username = MailUtils.getCurrentUser();
@@ -168,7 +171,7 @@ public class UIMessageList extends UIForm {
       // CS-2253
       long currentPage = 1 ;
       if (pageList_ != null) currentPage = pageList_.getCurrentPage() ;
-      MessagePageList currentPageList = mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter) ;
+      MessagePageList currentPageList = mailSrv.getMessagePageList(sProvider_, username, filter) ;
       // CS-2493
       setMessagePageList(currentPageList);
       updateList(currentPage) ;
@@ -340,7 +343,7 @@ public class UIMessageList extends UIForm {
 
       if (msg != null) {
         MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-        msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accountId, msg) ;
+        msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg) ;
         Account account = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId);
         
         if (msg.isUnread()) {
@@ -378,7 +381,7 @@ public class UIMessageList extends UIForm {
             for (String id : msg.getGroupedMessageIds()) {
               Message msgMem = uiMessageList.messageList_.get(id);
               if (msgMem.hasAttachment()) {
-                msgMem = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accountId, msgMem) ;
+                msgMem = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msgMem) ;
               }
               showedMessages.add(msgMem) ;
             }
@@ -891,8 +894,9 @@ public class UIMessageList extends UIForm {
 
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
 
-      Message message ;
+      Message message = null;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
+      if (message != null && !message.isLoaded()) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiMessageList.sProvider_, uiPortlet.getCurrentUser(), accId, message); 
       else  message = checkedMsgs.get(0);
       try {
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY);
@@ -940,8 +944,9 @@ public class UIMessageList extends UIForm {
 
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
 
-      Message message ;
-      if (msgId != null) message = uiMessageList.messageList_.get(msgId) ; 
+      Message message = null;
+      if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
+      if (message != null && !message.isLoaded()) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiMessageList.sProvider_, uiPortlet.getCurrentUser(), accId, message);
       else  message = checkedMsgs.get(0);
       try {
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY_ALL);
@@ -989,8 +994,9 @@ public class UIMessageList extends UIForm {
 
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
 
-      Message message ;
+      Message message = null;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
+      if (message != null && !message.isLoaded()) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiMessageList.sProvider_, uiPortlet.getCurrentUser(), accId, message);
       else  message = checkedMsgs.get(0);
       try {
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_FOWARD);
@@ -1029,9 +1035,10 @@ public class UIMessageList extends UIForm {
         return;
       }
       
-      Message message ;
+      Message message = null;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
       else  message = uiMessageList.getCheckedMessage().get(0);
+      if (message != null && !message.isLoaded()) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiMessageList.sProvider_, uiPortlet.getCurrentUser(), accountId, message);
       
       String from = Utils.getAddresses(message.getFrom())[0];
       MessageFilter filter = new MessageFilter(from);
@@ -1236,10 +1243,10 @@ public class UIMessageList extends UIForm {
       Message message = null ;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
       else  message = checkedMsgs.get(0);
-      if (message != null && message.hasAttachment()) {
+      if (message != null && !message.isLoaded()) {
         String username = MailUtils.getCurrentUser();
         MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-        message = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accountId, message) ;
+        message = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message) ;
       }
       String username = MailUtils.getCurrentUser();
       MailService mailSrv = MailUtils.getMailService();
@@ -1543,7 +1550,7 @@ public class UIMessageList extends UIForm {
           if(msg.hasAttachment()) {
             String username = uiPortlet.getCurrentUser() ;
             MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-            msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accId, msg) ;
+            msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, accId, msg) ;
           }
           uiExportForm.setExportMessage(msg);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);

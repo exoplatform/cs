@@ -96,7 +96,7 @@ public class JCRDataStorage {
   private Node getMailHomeNode(SessionProvider sProvider, String username) throws Exception {
     Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username);
     Node mailNode = null;
-    try {
+    try { 
       mailNode = userApp.getNode(MAIL_SERVICE);
     } catch (PathNotFoundException e) {
       mailNode = userApp.addNode(MAIL_SERVICE, Utils.NT_UNSTRUCTURED);
@@ -441,6 +441,11 @@ public class JCRDataStorage {
       msg.setSendDate(cal.getTime());
     } catch (Exception e) {
     }
+    
+
+    try { 
+      msg.setIsLoaded(messageNode.getProperty(Utils.IS_LOADED).getBoolean());
+    } catch(Exception e) { }
     
     try { 
       msg.setAttIsLoadedProperly(messageNode.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
@@ -887,15 +892,25 @@ public class JCRDataStorage {
       javax.mail.Message msg, String folderIds[], List<String> tagList, SpamFilter spamFilter) throws Exception {
     return saveMessage(sProvider, username, accId, msg, folderIds, tagList, spamFilter, null, null);
   }
+  
 
   public boolean saveMessage(SessionProvider sProvider, String username, String accId,
       javax.mail.Message msg, String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation)
   throws Exception {
-    long t1, t2, t3, t4;
+    return saveMessage(sProvider, username, accId, 0, msg, folderIds, tagList, spamFilter, infoObj, continuation);
+  }
+
+  public boolean saveMessage(SessionProvider sProvider, String username, String accId, long msgUID,
+      javax.mail.Message msg, String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation)
+  throws Exception {
+    long t1, t2, t4;
     String from ;
-    String msgId = MimeMessageParser.getMessageId(msg);
+    String msgId = "";
+    if (msgUID != 0 && !Utils.isEmptyField(String.valueOf(msgUID))) msgId = String.valueOf(msgUID);
+    else MimeMessageParser.getMD5MsgId(msg);
     logger.warn("MessageId = " + msgId);
     Calendar gc = MimeMessageParser.getReceivedDate(msg);
+    t1 = System.currentTimeMillis();
     Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());
     if (msgHomeNode == null) return false;
     try {
@@ -904,7 +919,9 @@ public class JCRDataStorage {
       // check duplicate
       for (int i = 0; i < folderIds.length; i ++) {
         String folderId = folderIds[i];
-        byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msgNode, folderId); 
+        t1 = System.currentTimeMillis();
+        byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msgNode, folderId);
+        
         if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER) {
           // there is a duplicate but in another folder
           return true;
@@ -934,20 +951,19 @@ public class JCRDataStorage {
     try {
       msgHomeNode.save();
       node.setProperty(Utils.EXO_ID, msgId);
-      node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, MimeMessageParser.getInReplyToHeader(msg));
       node.setProperty(Utils.EXO_ACCOUNT, accId);
       from = Utils.decodeText(InternetAddress.toString(msg.getFrom()));
       node.setProperty(Utils.EXO_FROM, from);
-
       node.setProperty(Utils.EXO_TO, getAddresses(msg, javax.mail.Message.RecipientType.TO));      
       node.setProperty(Utils.EXO_CC, getAddresses(msg, javax.mail.Message.RecipientType.CC));
       node.setProperty(Utils.EXO_BCC, getAddresses(msg, javax.mail.Message.RecipientType.BCC));
-      
       node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg.getReplyTo())));
+      
       String subject = msg.getSubject();
       if (subject != null ) subject = Utils.decodeText(msg.getSubject());
       else subject = "";
       node.setProperty(Utils.EXO_SUBJECT, subject);
+      
       node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
       node.setProperty(Utils.EXO_LAST_UPDATE_TIME, gc);
       
@@ -957,13 +973,12 @@ public class JCRDataStorage {
       node.setProperty(Utils.EXO_SENDDATE, sc);
       if (gc == null) node.setProperty(Utils.EXO_LAST_UPDATE_TIME, sc);
       
-      node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize()));
+      int msgSize = Math.abs(msg.getSize());
+      node.setProperty(Utils.EXO_SIZE, msgSize);
+     
       boolean isReadMessage = MimeMessageParser.isSeenMessage(msg);
       node.setProperty(Utils.EXO_ISUNREAD, !isReadMessage);
       node.setProperty(Utils.EXO_STAR, false);
-
-      long priority = MimeMessageParser.getPriority(msg);
-      node.setProperty(Utils.EXO_PRIORITY, priority);
       
       if (MimeMessageParser.requestReturnReceipt(msg)) node.setProperty(Utils.IS_RETURN_RECEIPT, true);
       else node.setProperty(Utils.IS_RETURN_RECEIPT, false);
@@ -976,46 +991,6 @@ public class JCRDataStorage {
       if (tagList != null && tagList.size() > 0)
         node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
 
-      ArrayList<String> values = new ArrayList<String>();
-      Enumeration enu = msg.getAllHeaders();
-      while (enu.hasMoreElements()) {
-        Header header = (Header) enu.nextElement();
-        values.add(header.getName() + "=" + header.getValue());
-      }
-      node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
-
-      logger.warn("Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B");
-      t2 = System.currentTimeMillis();
-      
-      MimeMessage cmsg = (MimeMessage) msg;
-      Object obj = new Object();
-      try {
-        obj = msg.getContent();
-      } catch(MessagingException mex) {
-        // Use the MimeMessage copy constructor to make a copy
-        // of the entire message, which will fetch the entire
-        // message from the server and parse it on the client:
-        cmsg = new MimeMessage((MimeMessage) msg);
-        try {
-          obj = cmsg.getContent();
-        } catch(MessagingException mex1) {
-          System.out.println("##### Error when fetch message body");
-        }
-      } 
-      String contentType = "text/plain";
-      if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/*"))
-        contentType = "text/html";
-      String body = "";
-      if (obj instanceof Multipart) {
-        body = setMultiPart((Multipart) obj, node, body);
-      } else {
-        body = setPart(cmsg, node, body);
-      }
-      node.setProperty(Utils.EXO_CONTENT_TYPE, contentType);
-      node.setProperty(Utils.EXO_BODY, Utils.decodeText(body));
-      t3 = System.currentTimeMillis();
-      logger.warn("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
-
       node.save();
       
       if (infoObj != null && continuation != null) {
@@ -1023,7 +998,7 @@ public class JCRDataStorage {
         infoObj.setMsgId(msgId);
         infoObj.setIsRead(isReadMessage);
         infoObj.setSubject(subject);
-        infoObj.setSize(Utils.convertSize(Math.abs(msg.getSize())));
+        infoObj.setSize(Utils.convertSize(msgSize));
         infoObj.setAccountId(accId);
         if (gc != null) infoObj.setDate(gc.getTime().toString());
         else if (sc != null) infoObj.setDate(sc.getTime().toString());
@@ -1064,6 +1039,55 @@ public class JCRDataStorage {
       return false;
     }
   }
+  
+  public boolean saveTotalMessage(SessionProvider sProvider, String username, String accId, String msgId, javax.mail.Message msg) throws Exception {
+    Calendar gc = MimeMessageParser.getReceivedDate(msg);
+    Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());
+    Node node = msgHomeNode.getNode(msgId);
+    node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, MimeMessageParser.getInReplyToHeader(msg));
+    
+    ArrayList<String> values = new ArrayList<String>();
+    Enumeration enu = msg.getAllHeaders();
+    while (enu.hasMoreElements()) {
+      Header header = (Header) enu.nextElement();
+      values.add(header.getName() + "=" + header.getValue());
+    }
+    node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
+    
+    long priority = MimeMessageParser.getPriority(msg);
+    node.setProperty(Utils.EXO_PRIORITY, priority);
+    
+    if (node != null) {
+      MimeMessage cmsg = (MimeMessage) msg;
+      Object obj = new Object();
+      try {
+        obj = msg.getContent();
+      } catch(MessagingException mex) {
+        cmsg = new MimeMessage((MimeMessage) msg);
+        try {
+          obj = cmsg.getContent();
+        } catch(MessagingException mex1) {
+          System.out.println("##### Error when fetch message body");
+        }
+      } 
+      String contentType = "text/plain";
+      if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/*"))
+        contentType = "text/html";
+      String body = "";
+      if (obj instanceof Multipart) {
+        body = setMultiPart((Multipart) obj, node, body);
+      } else {
+        body = setPart(cmsg, node, body);
+      }
+      node.setProperty(Utils.EXO_CONTENT_TYPE, contentType);
+      node.setProperty(Utils.EXO_BODY, Utils.decodeText(body));
+      node.setProperty(Utils.IS_LOADED, true);
+      node.save();
+    } else {
+      return false;
+    }
+    return true;
+  } 
   
   private String getAddresses(javax.mail.Message msg, javax.mail.Message.RecipientType type) throws Exception {
     String recipients = ""; 
@@ -2459,7 +2483,7 @@ public class JCRDataStorage {
     return msgList;
   }
 
-  public Message loadAttachments(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception {
+  public Message loadTotalMessage(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception {
     try {
       Node messageNode = getDateStoreNode(sProvider, username, accountId, msg.getReceivedDate())
       .getNode(msg.getId());
@@ -2486,6 +2510,7 @@ public class JCRDataStorage {
         }
         msg.setAttachements(attachments);
       }
+      msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
     } catch (PathNotFoundException e) {
       e.printStackTrace();
       System.out.println("[EXO WARNING] PathNotFoundException when load attachment");
@@ -2534,5 +2559,181 @@ public class JCRDataStorage {
     }
     return ret;
   }  
-
+  
+  public boolean savePOP3Message(SessionProvider sProvider, String username, String accId,
+       javax.mail.Message msg, String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation)
+    throws Exception {
+   long t1, t2, t3, t4;
+   String from ;
+   String msgId = MimeMessageParser.getMessageId(msg);
+   logger.warn("MessageId = " + msgId);
+   Calendar gc = MimeMessageParser.getReceivedDate(msg);
+   Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());
+   if (msgHomeNode == null) return false;
+   try {
+     Node msgNode = msgHomeNode.getNode(msgId);
+     logger.warn("Check duplicate ......................................");
+     // check duplicate
+     for (int i = 0; i < folderIds.length; i ++) {
+       String folderId = folderIds[i];
+       byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msgNode, folderId); 
+       if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER) {
+         // there is a duplicate but in another folder
+         return true;
+       }
+  
+       if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_SAME_FOLDER) {
+         // will "never" come here
+         // but we need to make sure ...
+         return false ;
+       }
+     }
+   } catch(Exception e) {
+  
+   }
+  
+   logger.warn("Saving message to JCR ...");
+   t1 = System.currentTimeMillis();
+   Node node = null;
+   try {
+     node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
+   } catch (Exception e) {
+     // generating another msgId
+     msgId = "Message" + IdGenerator.generate();
+     logger.warn("The MessageId is NOT GOOD, generated another one = " + msgId);
+     node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
+   }
+   try {
+     msgHomeNode.save();
+     node.setProperty(Utils.EXO_ID, msgId);
+     node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, MimeMessageParser.getInReplyToHeader(msg));
+     node.setProperty(Utils.EXO_ACCOUNT, accId);
+     from = Utils.decodeText(InternetAddress.toString(msg.getFrom()));
+     node.setProperty(Utils.EXO_FROM, from);
+  
+     node.setProperty(Utils.EXO_TO, getAddresses(msg, javax.mail.Message.RecipientType.TO));      
+     node.setProperty(Utils.EXO_CC, getAddresses(msg, javax.mail.Message.RecipientType.CC));
+     node.setProperty(Utils.EXO_BCC, getAddresses(msg, javax.mail.Message.RecipientType.BCC));
+     
+     node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg.getReplyTo())));
+     String subject = msg.getSubject();
+     if (subject != null ) subject = Utils.decodeText(msg.getSubject());
+     else subject = "";
+     node.setProperty(Utils.EXO_SUBJECT, subject);
+     node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
+     node.setProperty(Utils.EXO_LAST_UPDATE_TIME, gc);
+     
+     Calendar sc = GregorianCalendar.getInstance();
+     if (msg.getSentDate() != null) sc.setTime(msg.getSentDate());
+     else sc = gc;
+     node.setProperty(Utils.EXO_SENDDATE, sc);
+     if (gc == null) node.setProperty(Utils.EXO_LAST_UPDATE_TIME, sc);
+     
+     node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize()));
+     boolean isReadMessage = MimeMessageParser.isSeenMessage(msg);
+     node.setProperty(Utils.EXO_ISUNREAD, !isReadMessage);
+     node.setProperty(Utils.EXO_STAR, false);
+  
+     long priority = MimeMessageParser.getPriority(msg);
+     node.setProperty(Utils.EXO_PRIORITY, priority);
+     
+     if (MimeMessageParser.requestReturnReceipt(msg)) node.setProperty(Utils.IS_RETURN_RECEIPT, true);
+     else node.setProperty(Utils.IS_RETURN_RECEIPT, false);
+     
+     if (spamFilter != null && spamFilter.checkSpam(msg)) {
+       folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) };
+     }
+     node.setProperty(Utils.MSG_FOLDERS, folderIds);
+     
+     if (tagList != null && tagList.size() > 0)
+       node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
+  
+     ArrayList<String> values = new ArrayList<String>();
+     Enumeration enu = msg.getAllHeaders();
+     while (enu.hasMoreElements()) {
+       Header header = (Header) enu.nextElement();
+       values.add(header.getName() + "=" + header.getValue());
+     }
+     node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
+  
+     logger.warn("Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B");
+     t2 = System.currentTimeMillis();
+     
+     MimeMessage cmsg = (MimeMessage) msg;
+     Object obj = new Object();
+     try {
+       obj = msg.getContent();
+     } catch(MessagingException mex) {
+       // Use the MimeMessage copy constructor to make a copy
+       // of the entire message, which will fetch the entire
+       // message from the server and parse it on the client:
+       cmsg = new MimeMessage((MimeMessage) msg);
+       try {
+         obj = cmsg.getContent();
+       } catch(MessagingException mex1) {
+         System.out.println("##### Error when fetch message body");
+       }
+     } 
+     String contentType = "text/plain";
+     if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/*"))
+       contentType = "text/html";
+     String body = "";
+     if (obj instanceof Multipart) {
+       body = setMultiPart((Multipart) obj, node, body);
+     } else {
+       body = setPart(cmsg, node, body);
+     }
+     node.setProperty(Utils.EXO_CONTENT_TYPE, contentType);
+     node.setProperty(Utils.EXO_BODY, Utils.decodeText(body));
+     t3 = System.currentTimeMillis();
+     logger.warn("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
+  
+     node.save();
+     
+     if (infoObj != null && continuation != null) {
+       infoObj.setFrom(from);
+       infoObj.setMsgId(msgId);
+       infoObj.setIsRead(isReadMessage);
+       infoObj.setSubject(subject);
+       infoObj.setSize(Utils.convertSize(Math.abs(msg.getSize())));
+       infoObj.setAccountId(accId);
+       if (gc != null) infoObj.setDate(gc.getTime().toString());
+       else if (sc != null) infoObj.setDate(sc.getTime().toString());
+       else  infoObj.setDate(new Date().toString()); 
+       
+       JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();                  
+       JsonValue json = generatorImpl.createJsonObject(infoObj);
+       continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
+     }
+  
+     t4 = System.currentTimeMillis();
+     logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
+     logger.warn("Adding message to thread ...");
+     t1 = System.currentTimeMillis();
+     addMessageToThread(sProvider, username, accId,MimeMessageParser.getInReplyToHeader(msg), node);
+     t2 = System.currentTimeMillis();
+     logger.warn("Added message to thread finished : " + (t2 - t1) + " ms");
+  
+     logger.warn("Updating number message to folder ...");
+     t1 = System.currentTimeMillis();
+  
+     for (int i = 0; i < folderIds.length; i++) {
+       increaseFolderItem(sProvider, username, accId, folderIds[i], isReadMessage);
+     }
+  
+     t2 = System.currentTimeMillis();
+     logger.warn("Updated number message to folder finished : " + (t2 - t1) + " ms");
+     return true;
+  
+   } catch (Exception e) {
+     try {
+       msgHomeNode.refresh(true);
+     } catch(Exception ex) {
+       e.printStackTrace();
+       logger.warn(" [WARNING] Can't refresh.");
+     }
+     logger.warn(" [WARNING] Cancel saving message to JCR.");
+       return false;
+     }
+   }
 }

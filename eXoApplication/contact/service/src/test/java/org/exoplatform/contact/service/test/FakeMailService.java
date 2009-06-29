@@ -282,7 +282,7 @@ public class FakeMailService implements MailService {
     return false;
   }
 
-  public Message loadAttachments(SessionProvider provider,
+  public Message loadTotalMessage(SessionProvider provider,
                                  String username,
                                  String accountId,
                                  Message msg) throws Exception {

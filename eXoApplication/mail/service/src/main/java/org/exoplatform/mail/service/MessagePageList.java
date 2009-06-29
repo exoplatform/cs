@@ -253,6 +253,10 @@ public class MessagePageList extends JCRPageList {
     } catch(Exception e) { }
     
     try { 
+      msg.setIsLoaded(messageNode.getProperty(Utils.IS_LOADED).getBoolean());
+    } catch(Exception e) { }
+    
+    try { 
       msg.setAttIsLoadedProperly(messageNode.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
     } catch(Exception e) { }
     

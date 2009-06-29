@@ -606,7 +606,7 @@ public interface MailService {
    * @return Message
    * @throws Exception
    */
-  public Message loadAttachments(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception ;
+  public Message loadTotalMessage(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception ;
   
   public void addListenerPlugin(ComponentPlugin listener) throws Exception ;
   

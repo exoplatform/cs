@@ -145,6 +145,7 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("    <status>" + CheckingInfo.DOWNLOADING_MAIL_STATUS + "</status>");
         buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
         buffer.append("    <total>" + checkingInfo.getTotalMsg() + "</total>");
+        buffer.append("    <syncFolderStatus>" + checkingInfo.getSyncFolderStatus() + "</syncFolderStatus>");
         buffer.append("    <completed>" + checkingInfo.getFetching() + "</completed>");
         buffer.append("    <fetchingtofolders>" + checkingInfo.getFetchingToFolders() + "</fetchingtofolders>");
         if (checkingInfo.getMsgId() != null && !checkingInfo.getMsgId().equals("")) {
