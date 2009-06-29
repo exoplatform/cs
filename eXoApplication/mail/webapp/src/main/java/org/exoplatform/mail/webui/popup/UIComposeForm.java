@@ -749,6 +749,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     if (!fromDrafts && isSaved) {
       message.setReplyTo(message.getMessageTo()) ;
       message.setIsReturnReceipt(false);
+      message.setIsLoaded(true);
       message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
       mailSvr.saveMessage(session, usename, accountId, parentPath_, message, true) ;
     } else if (fromDrafts) {
@@ -783,7 +784,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       try {
         String draftFolderId = Utils.createFolderId(accountId, Utils.FD_DRAFTS, false) ;
         message.setFolders(new String[]{ draftFolderId }) ;
-
+        message.setIsLoaded(true);
         if (!composeForm.fromDrafts()) {
           mailSvr.saveMessage(session, usename, accountId, composeForm.parentPath_, message, true) ;
           Folder drafts = mailSvr.getFolder(session, usename, accountId, draftFolderId);

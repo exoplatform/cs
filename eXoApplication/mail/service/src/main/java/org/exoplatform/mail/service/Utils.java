@@ -108,6 +108,7 @@ public class Utils {
   
   public static final String EXO_ACCOUNT = "exo:account".intern() ;
   public static final String EXO_ID = "exo:id".intern() ;
+  public static final String EXO_UID = "exo:uid".intern() ;
   public static final String EXO_IN_REPLY_TO_HEADER = "exo:inReplyToHeader".intern();
   public static final String EXO_LABEL = "exo:label".intern() ;
   public static final String EXO_USERDISPLAYNAME = "exo:userDisplayName".intern() ;
