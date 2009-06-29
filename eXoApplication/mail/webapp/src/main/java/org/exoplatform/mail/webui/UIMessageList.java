@@ -390,6 +390,7 @@ public class UIMessageList extends UIForm {
         uiMessagePreview.setShowedMessages(showedMessages) ;
         
         if (msg.isReturnReceipt()&& !msg.getFrom().contains(account.getEmailAddress())) {
+          ((UIMessageArea)uiMessageList.getParent()).reloadMailSetting();
           long requestReturnReceipt = ((UIMessageArea)uiMessageList.getParent()).getMailSetting().getSendReturnReceipt();
           if (requestReturnReceipt == MailSetting.SEND_RECEIPT_ASKSME) {
             UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
