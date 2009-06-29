@@ -335,6 +335,10 @@ public class JCRDataStorage {
       msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
     } catch (Exception e) {
     }
+    try {
+      msg.setUID(messageNode.getProperty(Utils.EXO_UID).getString());
+    } catch (Exception e) {
+    }
     msg.setPath(messageNode.getPath());
     try {
       msg.setInReplyToHeader(messageNode.getProperty(Utils.EXO_IN_REPLY_TO_HEADER).getString());
@@ -793,6 +797,7 @@ public class JCRDataStorage {
     if (nodeMsg != null) {
       // add some properties
       nodeMsg.setProperty(Utils.EXO_ID, message.getId());
+      nodeMsg.setProperty(Utils.EXO_UID, message.getUID());
       nodeMsg.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, message.getInReplyToHeader());
       nodeMsg.setProperty(Utils.EXO_ACCOUNT, accountId);
       nodeMsg.setProperty(Utils.EXO_PATH, message.getPath());
@@ -905,13 +910,12 @@ public class JCRDataStorage {
   throws Exception {
     long t1, t2, t4;
     String from ;
-    String msgId = "";
-    if (msgUID != 0 && !Utils.isEmptyField(String.valueOf(msgUID))) msgId = String.valueOf(msgUID);
-    else MimeMessageParser.getMD5MsgId(msg);
+    String msgId = MimeMessageParser.getMessageId(msg);
     logger.warn("MessageId = " + msgId);
     Calendar gc = MimeMessageParser.getReceivedDate(msg);
-    t1 = System.currentTimeMillis();
     Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());
+    
+    t1 = System.currentTimeMillis();
     if (msgHomeNode == null) return false;
     try {
       Node msgNode = msgHomeNode.getNode(msgId);
@@ -951,6 +955,11 @@ public class JCRDataStorage {
     try {
       msgHomeNode.save();
       node.setProperty(Utils.EXO_ID, msgId);
+      try {
+        String uid = String.valueOf(msgUID);
+        if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMD5MsgId(msg);
+        node.setProperty(Utils.EXO_UID, uid);
+      } catch(Exception e) {}
       node.setProperty(Utils.EXO_ACCOUNT, accId);
       from = Utils.decodeText(InternetAddress.toString(msg.getFrom()));
       node.setProperty(Utils.EXO_FROM, from);
@@ -991,6 +1000,17 @@ public class JCRDataStorage {
       if (tagList != null && tagList.size() > 0)
         node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
 
+      node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, MimeMessageParser.getInReplyToHeader(msg));
+      
+      ArrayList<String> values = new ArrayList<String>();
+      Enumeration enu = msg.getAllHeaders();
+      while (enu.hasMoreElements()) {
+        Header header = (Header) enu.nextElement();
+        values.add(header.getName() + "=" + header.getValue());
+      }
+      node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
+
+      
       node.save();
       
       if (infoObj != null && continuation != null) {
@@ -1013,7 +1033,7 @@ public class JCRDataStorage {
       logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
       logger.warn("Adding message to thread ...");
       t1 = System.currentTimeMillis();
-      addMessageToThread(sProvider, username, accId,MimeMessageParser.getInReplyToHeader(msg), node);
+      addMessageToThread(sProvider, username, accId, MimeMessageParser.getInReplyToHeader(msg), node);
       t2 = System.currentTimeMillis();
       logger.warn("Added message to thread finished : " + (t2 - t1) + " ms");
 
@@ -1043,17 +1063,7 @@ public class JCRDataStorage {
   public boolean saveTotalMessage(SessionProvider sProvider, String username, String accId, String msgId, javax.mail.Message msg) throws Exception {
     Calendar gc = MimeMessageParser.getReceivedDate(msg);
     Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());
-    Node node = msgHomeNode.getNode(msgId);
-    node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, MimeMessageParser.getInReplyToHeader(msg));
-    
-    ArrayList<String> values = new ArrayList<String>();
-    Enumeration enu = msg.getAllHeaders();
-    while (enu.hasMoreElements()) {
-      Header header = (Header) enu.nextElement();
-      values.add(header.getName() + "=" + header.getValue());
-    }
-    node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
-    
+    Node node = msgHomeNode.getNode(msgId);    
     long priority = MimeMessageParser.getPriority(msg);
     node.setProperty(Utils.EXO_PRIORITY, priority);
     
@@ -2510,7 +2520,11 @@ public class JCRDataStorage {
         }
         msg.setAttachements(attachments);
       }
-      msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
+      try {
+        msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
+      } catch(Exception e) {
+        logger.warn("Can't load message body");
+      }
     } catch (PathNotFoundException e) {
       e.printStackTrace();
       System.out.println("[EXO WARNING] PathNotFoundException when load attachment");

@@ -174,6 +174,9 @@ public class MessagePageList extends JCRPageList {
     } catch (Exception e) {
     }
     try { 
+      msg.setUID(messageNode.getProperty(Utils.EXO_UID).getString()) ;
+    } catch(Exception e) { } 
+    try { 
       msg.setAccountId(messageNode.getProperty(Utils.EXO_ACCOUNT).getString()) ;
     } catch(Exception e) { } 
     try { 

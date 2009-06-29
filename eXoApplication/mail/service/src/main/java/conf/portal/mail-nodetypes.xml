@@ -127,6 +127,10 @@
         protected="false" multiple="false">
         <valueConstraints/>      
       </propertyDefinition>
+      <propertyDefinition name="exo:uid" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>      
+      </propertyDefinition>
       <propertyDefinition name="exo:inReplyToHeader" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="false">
         <valueConstraints/>      

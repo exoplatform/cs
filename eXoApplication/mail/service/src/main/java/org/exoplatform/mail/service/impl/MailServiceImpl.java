@@ -1590,22 +1590,26 @@ public class MailServiceImpl implements MailService, Startable {
 
   public Message loadTotalMessage(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception {
     Account account = getAccountById(sProvider, username, accountId);
-    if (!msg.isLoaded() && (imapStore_ != null || openIMAPConnection(sProvider, username, account) != null)) {
-      javax.mail.Message message = null;
-      javax.mail.Folder fd = null;
-      URLName url = new URLName(getFolder(sProvider, username, accountId, msg.getFolders()[0]).getURLName());
-      fd = imapStore_.getFolder(url);
-      if (fd != null) {
-        if (fd.isOpen()) {
-          message = ((IMAPFolder)fd).getMessageByUID(Long.valueOf(msg.getId()));
-          storage_.saveTotalMessage(sProvider, username, accountId, msg.getId(), message);
-        } else {
-          fd.open(javax.mail.Folder.READ_WRITE);
-          message = ((IMAPFolder)fd).getMessageByUID(Long.valueOf(msg.getId()));
-          storage_.saveTotalMessage(sProvider, username, accountId, msg.getId(), message);
-          fd.close(true);
+    try {
+      if (!msg.isLoaded() && (imapStore_ != null || openIMAPConnection(sProvider, username, account) != null)) {
+        javax.mail.Message message = null;
+        javax.mail.Folder fd = null;
+        URLName url = new URLName(getFolder(sProvider, username, accountId, msg.getFolders()[0]).getURLName());
+        fd = imapStore_.getFolder(url);
+        if (fd != null) {
+          if (fd.isOpen()) {
+            message = ((IMAPFolder)fd).getMessageByUID(Long.valueOf(msg.getUID()));
+            storage_.saveTotalMessage(sProvider, username, accountId, msg.getId(), message);
+          } else {
+            fd.open(javax.mail.Folder.READ_WRITE);
+            message = ((IMAPFolder)fd).getMessageByUID(Long.valueOf(msg.getUID()));
+            storage_.saveTotalMessage(sProvider, username, accountId, msg.getId(), message);
+            fd.close(true);
+          }
         }
       }
+    } catch(Exception e) {
+      logger.info("Download content failure");
     }
     return storage_.loadTotalMessage(sProvider, username, accountId, msg);
   }

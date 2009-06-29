@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.mail.Message;
 
+import org.exoplatform.mail.service.MimeMessageParser;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 import com.sun.mail.imap.IMAPFolder;
@@ -59,7 +60,7 @@ public class FetchMailContentThread implements Runnable {
     List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap_.keySet()) ;
     while (j < totalNew) {
       msg = msgList.get(j);
-      storage_.saveTotalMessage(sProvider_, username_, accountId_, String.valueOf(((IMAPFolder)folder_).getUID(msg)), msg);
+      storage_.saveTotalMessage(sProvider_, username_, accountId_, MimeMessageParser.getMessageId(msg), msg);
       j++;
     } 
   }
