@@ -4,15 +4,20 @@
  **************************************************************************/
 package org.exoplatform.content.service;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.content.model.ContentItem;
 import org.exoplatform.content.model.ContentNode;
+import org.exoplatform.services.common.DataBuffer;
+import org.exoplatform.services.common.HttpClientImpl;
 import org.exoplatform.services.rss.parser.DefaultRSSChannel;
 import org.exoplatform.services.rss.parser.DefaultRSSItem;
 import org.exoplatform.services.rss.parser.RSSDocument;
@@ -37,12 +42,21 @@ public class RSSContentPlugin extends ContentPlugin {
 
   @SuppressWarnings("unchecked")
   public PageList loadContentMeta(ContentNode node) throws Exception {
+    URL uri = new URL(node.getUrl());     
     //TODO: tuan.pham CS-2531 get encode from rss file
+    GetMethod get = null;
+    HttpClientImpl httpClientService = new HttpClientImpl(uri);
+    get = httpClientService.getMethod(uri.getFile());
+    get.setFollowRedirects(true);
+    int statusCode = httpClientService.getHttpClient().executeMethod(get);
+    if (statusCode != HttpStatus.SC_OK){
+      throw new Exception("Server response code "+statusCode);
+    }
+    InputStream input = get.getResponseBodyAsStream();
     DocumentBuilder  docbuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder() ;
-    Document doc = docbuilder.parse(node.getUrl()) ;
+    Document doc = docbuilder.parse(input) ;
     String encode = doc.getXmlEncoding() ;
     if (encode == null || encode.trim().length() == 0) encode = "utf-8" ;
-    URL uri = new URL(node.getUrl()); 
     RSSDocument<DefaultRSSChannel, RSSItem> document = 
       service_.createDocument(uri, encode, DefaultRSSChannel.class, RSSItem.class);
     List<RSSItem> list = document.getItems();     
