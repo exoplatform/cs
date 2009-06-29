@@ -215,6 +215,10 @@
       	protected="false" multiple="false">
   	    <valueConstraints/>
   	  </propertyDefinition>
+  	  <propertyDefinition name="exo:isLoaded" defaultValue="false" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
+      	protected="false" multiple="false">
+  	    <valueConstraints/>
+  	  </propertyDefinition>
   	  <propertyDefinition name="exo:isLoadedProperly" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
       	protected="false" multiple="false">
   	    <valueConstraints/>

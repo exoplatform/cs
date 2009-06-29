@@ -281,7 +281,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       setFieldBccValue(msg.getMessageBcc()) ;
       setFieldContentValue(formatContent(msg));
       if (msg != null && msg.hasAttachment()) {
-        msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
+        msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
         for (Attachment att : msg.getAttachments()) {
           if (att.isLoadedProperly()) attachments_.add(att);
         }
@@ -300,7 +300,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       setFieldSubjectValue(subject);
       if (msg != null && msg.hasAttachment()) {
         if (msg.getAttachments() == null) {
-          msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
+          msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
         }
         for (Attachment att : msg.getAttachments()) {
           if (att.isLoadedProperly()) attachments_.add(att);
@@ -358,7 +358,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 
       if (msg != null && msg.hasAttachment()) {
         if (msg.getAttachments() == null) {
-          msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
+          msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
         }
         for (Attachment att : msg.getAttachments()) {
           if (att.isLoadedProperly())  attachments_.add(att);
@@ -386,7 +386,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       setFieldToValue("");
       if (msg != null && msg.hasAttachment()) {
         if (msg.getAttachments() == null) {
-          msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
+          msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
         }
         for (Attachment att : msg.getAttachments()) {
           if (att.isLoadedProperly()) attachments_.add(att);
@@ -812,7 +812,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
               if (message.getId().equals(msg.getId())) {
                 int index = showedMsg.indexOf(msg) ;
                 showedMsg.remove(index) ;
-                message = mailSvr.loadAttachments(session, usename, accountId, 
+                message = mailSvr.loadTotalMessage(session, usename, accountId, 
                                                   mailSvr.getMessageById(session, usename, accountId, message.getId())) ;
                 showedMsg.add(index, message) ;
               }

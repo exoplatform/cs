@@ -46,8 +46,9 @@ public class MimeMessageParser {
   
   public static Calendar getReceivedDate(javax.mail.Message msg) throws Exception {
     Calendar gc = GregorianCalendar.getInstance() ;
-    if (msg.getReceivedDate() != null) {
-      gc.setTime(msg.getReceivedDate()) ;
+    Date date = msg.getReceivedDate();
+    if (date != null) {
+      gc.setTime(date) ;
     } else {
       gc.setTime(getDateHeader(msg)) ;
     }
@@ -58,26 +59,30 @@ public class MimeMessageParser {
   private static Date getDateHeader(javax.mail.Message msg) throws MessagingException {
     Date today = new Date();
     String[] received = msg.getHeader("received");
-    if(received != null) 
+    if(received != null) { 
       for (int i = 0; i < received.length; i++) {
         String dateStr = null;
         try {
           dateStr = getDateString(received[i]);
           if(dateStr != null) {
             Date msgDate = parseDate(dateStr);
-            if(!msgDate.after(today))
-              return msgDate;
+            if(!msgDate.after(today)) return msgDate;
           }
-        } catch(ParseException ex) { } 
+        } catch(ParseException ex) { 
+          // exception
+        } 
       }
-
+    }
+    
     String[] dateHeader = msg.getHeader("date");
     if(dateHeader != null) {
       String dateStr = dateHeader[0];
       try {
         Date msgDate = parseDate(dateStr);
         if(!msgDate.after(today)) return msgDate;
-      } catch(ParseException ex) { }
+      } catch(ParseException ex) {
+        // exception
+      }
     }
 
     return today;
@@ -222,25 +227,20 @@ public class MimeMessageParser {
   }
   
   public static boolean isSeenMessage(javax.mail.Message message) throws Exception {
-    boolean isReadMessage = false ;
-    Flags flags = message.getFlags();
-    Flags.Flag[] sf = flags.getSystemFlags();
+    Flags.Flag[] sf = message.getFlags().getSystemFlags();
     for (int i = 0; i < sf.length; i++) {
-      if (sf[i] == Flags.Flag.SEEN)
-        isReadMessage = true;
+      if (sf[i] == Flags.Flag.SEEN) return true;
     }
-    return isReadMessage;
+    return false;
   }
   
   public static boolean isAnsweredMessage(javax.mail.Message message) throws Exception {
-    boolean isAnswerMessage = false ;
     Flags flags = message.getFlags();
     Flags.Flag[] sf = flags.getSystemFlags();
     for (int i = 0; i < sf.length; i++) {
-      if (sf[i] == Flags.Flag.ANSWERED)
-        isAnswerMessage = true;
+      if (sf[i] == Flags.Flag.ANSWERED) return true;
     }
-    return isAnswerMessage;
+    return false;
   }
   
   public static boolean isExistHeader(javax.mail.Message message, String header) throws Exception {

@@ -112,6 +112,8 @@ public class MailServiceImpl implements MailService, Startable {
   private static final Log          logger = LogFactory.getLog(MailServiceImpl.class);
 
   private JCRDataStorage            storage_;
+  
+  private IMAPStore imapStore_ = null;
 
   // will be use map for multi import/export email type
   private EMLImportExport           emlImportExport_;
@@ -801,10 +803,14 @@ public class MailServiceImpl implements MailService, Startable {
     return folderList ;
   }
   
+  public IMAPStore openIMAPConnection(SessionProvider sProvider, String username, Account account) {
+    return openIMAPConnection(sProvider, username, account, null);
+  }
+  
   public IMAPStore openIMAPConnection(SessionProvider sProvider, String username, Account account, CheckingInfo info) {
     try {
       logger.warn(" #### Getting mail from " + account.getIncomingHost() + " ... !");
-      info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !");
+      if (info != null) info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !");
       
       Properties props = System.getProperties();
       props.setProperty("mail.mime.base64.ignoreerrors", "true"); // this line fix for base64 encode problem with corrupted attachments
@@ -820,20 +826,24 @@ public class MailServiceImpl implements MailService, Startable {
       try {
         imapStore.connect(account.getIncomingHost(), Integer.valueOf(account.getIncomingPort()), 
                         account.getIncomingUser(), account.getIncomingPassword());
-      
+        imapStore_ = imapStore;      
       } catch (AuthenticationFailedException e) {
         if (!account.isSavePassword()) {   // about remember password, in the first time get email.
           account.setIncomingPassword("");
           updateAccount(sProvider, username, account);
           logger.warn("Exception while connecting to server : " + e.getMessage());
         }
-        info.setStatusMsg("The username or password may be wrong.");
-        info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
+        if (info != null) {
+          info.setStatusMsg("The username or password may be wrong.");
+          info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
+        }
         return null;
       } catch (MessagingException e) {
         logger.warn("Exception while connecting to server : " + e.getMessage());
-        info.setStatusMsg("Connecting failed. Please check server configuration.");
-        info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
+        if (info != null) {
+          info.setStatusMsg("Connecting failed. Please check server configuration.");
+          info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
+        }
         return null;
       } catch (Exception e) {
         logger.warn("Exception while connecting to server : " + e.getMessage());
@@ -842,8 +852,10 @@ public class MailServiceImpl implements MailService, Startable {
         e.printStackTrace(pw);
         StringBuffer sb = sw.getBuffer();
         logger.error(sb.toString());
-        info.setStatusMsg("There was an unexpected error. Connecting failed.");
-        info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
+        if (info != null) {
+          info.setStatusMsg("There was an unexpected error. Connecting failed.");
+          info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
+        }
         return null;
       }
       
@@ -864,6 +876,7 @@ public class MailServiceImpl implements MailService, Startable {
     IMAPStore store = openIMAPConnection(sProvider, username, account, info);  
     
     if (store != null) {
+      imapStore_ = store;
       info.setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
       info.setStatusMsg("Synchronizing imap folder ...");
       List<javax.mail.Folder> folderList = synchImapFolders(sProvider, username, accountId, null, store.getDefaultFolder().list());
@@ -901,7 +914,7 @@ public class MailServiceImpl implements MailService, Startable {
       }
       logger.warn("/////////////////////////////////////////////////////////////");
       logger.warn("/////////////////////////////////////////////////////////////");
-      store.close();
+      //store.close();
       info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
       removeCheckingInfo(username, accountId);
     }
@@ -975,6 +988,7 @@ public class MailServiceImpl implements MailService, Startable {
         String[] folderIds = { folderId };
         List<String> filterList;
         MessageFilter filter;
+        long msgUID;
         String folderStr;
         Date lastFromDate = null;
         Date receivedDate = null;
@@ -1019,8 +1033,8 @@ public class MailServiceImpl implements MailService, Startable {
               folderStr += folderIds[k] + ",";
             }
             infoObj.setFolders(folderStr);
-            
-            saved = storage_.saveMessage(sProvider, username, accountId, msg, folderIds, null, spamFilter, infoObj, continuation);
+            msgUID = ((IMAPFolder)folder).getUID(msg);
+            saved = storage_.saveMessage(sProvider, username, accountId, msgUID, msg, folderIds, null, spamFilter, infoObj, continuation);
             
             if (saved) {
               //msg.setFlag(Flags.Flag.SEEN, true);
@@ -1046,6 +1060,9 @@ public class MailServiceImpl implements MailService, Startable {
           }
           i++;
         }
+        
+        FetchMailContentThread downloadContentMail = new FetchMailContentThread(sProvider, storage_, msgMap, folder, username, accountId);
+        new Thread(downloadContentMail).start();        
       }      
       logger.warn("#### Synchronization finished for " + folder.getName() + " folder.");
 
@@ -1055,7 +1072,7 @@ public class MailServiceImpl implements MailService, Startable {
       saveFolder(sProvider, username, accountId, eXoFolder);
       
       
-      folder.close(true);
+      //folder.close(true);
     } catch (Exception e) {
       logger.error("Error while checking emails from folder" + folder.getName() + " of username " + username + " on account " + accountId, e);
     }
@@ -1265,7 +1282,7 @@ public class MailServiceImpl implements MailService, Startable {
                   folderIds = folderList.toArray(new String[] {});
                 }
                 
-                saved = storage_.saveMessage(sProvider, username, accountId, msg, folderIds, tagList, spamFilter);
+                saved = storage_.savePOP3Message(sProvider, username, accountId, msg, folderIds, tagList, spamFilter, null, null);
                 
                 if (saved) {
                   msg.setFlag(Flags.Flag.SEEN, true);
@@ -1316,7 +1333,7 @@ public class MailServiceImpl implements MailService, Startable {
         info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
         
         removeCheckingInfo(username, accountId);
-        
+       
         logger.warn("/////////////////////////////////////////////////////////////");
         logger.warn("/////////////////////////////////////////////////////////////");
       } catch (Exception e) {
@@ -1571,9 +1588,26 @@ public class MailServiceImpl implements MailService, Startable {
     return account;
   }
 
-  public Message loadAttachments(SessionProvider sProvider, String username, String accountId,
-      Message msg) throws Exception {
-    return storage_.loadAttachments(sProvider, username, accountId, msg);
+  public Message loadTotalMessage(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception {
+    Account account = getAccountById(sProvider, username, accountId);
+    if (!msg.isLoaded() && (imapStore_ != null || openIMAPConnection(sProvider, username, account) != null)) {
+      javax.mail.Message message = null;
+      javax.mail.Folder fd = null;
+      URLName url = new URLName(getFolder(sProvider, username, accountId, msg.getFolders()[0]).getURLName());
+      fd = imapStore_.getFolder(url);
+      if (fd != null) {
+        if (fd.isOpen()) {
+          message = ((IMAPFolder)fd).getMessageByUID(Long.valueOf(msg.getId()));
+          storage_.saveTotalMessage(sProvider, username, accountId, msg.getId(), message);
+        } else {
+          fd.open(javax.mail.Folder.READ_WRITE);
+          message = ((IMAPFolder)fd).getMessageByUID(Long.valueOf(msg.getId()));
+          storage_.saveTotalMessage(sProvider, username, accountId, msg.getId(), message);
+          fd.close(true);
+        }
+      }
+    }
+    return storage_.loadTotalMessage(sProvider, username, accountId, msg);
   }
 
   public List<MailUpdateStorageEventListener> listeners_ = new ArrayList<MailUpdateStorageEventListener>();
@@ -1585,7 +1619,9 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void stop() {
-    
+    try {
+      if (imapStore_ != null) imapStore_.close();
+    } catch(Exception e) { }
   }
 
   public synchronized void addListenerPlugin(ComponentPlugin listener) throws Exception {
