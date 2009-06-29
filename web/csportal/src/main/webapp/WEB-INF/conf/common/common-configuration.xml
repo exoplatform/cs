@@ -46,7 +46,7 @@
         <value>locale.navigation.group.platform.users</value>
         <value>locale.navigation.group.platform.guests</value>
         <value>locale.navigation.group.organization.management.executive-board</value>
-        <value>locale.message.chat.serverMessage</value>    
+        <value>locale.message.chat.serverMessage</value>          
       </values-param>      
       <values-param>
         <name>portal.resource.names</name>
@@ -55,8 +55,7 @@
         <value>locale.portal.expression</value>
         <value>locale.portal.services</value>
         <value>locale.portal.webui</value>
-        <value>locale.portal.custom</value>
-        <value>locale.homepage.custom</value>    
+        <value>locale.portal.custom</value>                      
       </values-param>      
     </init-params>
   </component>

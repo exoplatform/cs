@@ -33,22 +33,22 @@
 										<div class="ContentProductsCS">
 											<div style="height: 13px"><span></span></div>
 											<div class="Bullet">
-												<div class="Text">Multiple calendars</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar-1")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Events and tasks</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar-2")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Calendar sharing</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar-3")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Invitations and reminders</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar-4")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Free/ busy auto check</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar-5")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">iCal support</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar-6")%></div>
 											</div>
 										</div>
 									</div>
@@ -68,19 +68,19 @@
 										<div class="ContentProductsCS">
 											<div style="height: 13px"><span></span></div>
 											<div class="Bullet">
-												<div class="Text">Public, group and private addressbooks</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book-1")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Addressbook and contacts sharing</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book-2")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Group actions</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book-3")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Advanced search</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book-4")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">VCard suppor</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book-5")%></div>
 											</div>
 										</div>
 									</div>
@@ -102,19 +102,19 @@
 										<div class="ContentProductsCS">
 											<div style="height: 13px"><span></span></div>
 											<div class="Bullet">
-												<div class="Text">Instant Messaging for portal  users</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-chat-1")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Chat rooms for live meetings</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-chat-2")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">File exchange</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-chat-3")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Coversation history</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-chat-4")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">XMPP  based  protacol</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-chat-5")%></div>
 											</div>
 										</div>
 									</div>
@@ -134,19 +134,19 @@
 										<div class="ContentProductsCS">
 											<div style="height: 13px"><span></span></div>
 											<div class="Bullet">
-												<div class="Text">Mutiple accounts</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-mail-1")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Conversations, threads or list views</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-mail-2")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Tagging, starring and filtering</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-mail-3")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">Advanced search</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-mail-4")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text">IMAP, POP, SMTP support</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-mail-5")%>t</div>
 											</div>
 										</div>
 									</div>
@@ -164,8 +164,8 @@
 						<div class="LeftButton">
 							<div class="RightButton">
 								<div class="CenterButton">
-								<a href="/portal/private/classic/collaboration" style="color: white; margin-top: 5px;">Try now</a>
-								<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla"><%=_ctx.appRes("UIHomePagePortlet.cs-register")%></a></div>
+								<a href="/portal/public/classic/register" style="color: white; margin-top: 5px;">Try now</a>
+								<a href="/portal/public/classic/register" style="color: white;" class="TextBntColla"><%=_ctx.appRes("UIHomePagePortlet.cs-register")%></a></div>
 							</div>
 						</div>
 					
@@ -173,8 +173,8 @@
 				 
 					<div class="DownloadButton">
 						<div style="height: 45px"><span></span></div>
-						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3Beta1-tomcat.zip" style="color: white;" class="TextDownload"><%=_ctx.appRes("UIHomePagePortlet.cs-download")%></a><br/>
-						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3Beta1-tomcat.zip" style="color: white;"><%=_ctx.appRes("UIHomePagePortlet.cs-community")%></a>
+						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3RC1-tomcat.zip" style="color: white;" class="TextDownload"><%=_ctx.appRes("UIHomePagePortlet.cs-download")%></a><br/>
+						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3RC1-tomcat.zip" style="color: white;"><%=_ctx.appRes("UIHomePagePortlet.cs-community")%></a>
 					</div>
 					<div class="DotLine"><span></span></div>
 					<div style="margin: 17px 0px;">
@@ -191,8 +191,8 @@
 							</div>
 						</div>					
  					<div class="DotLine"><span></span></div>
-					<div class="NormalText">For more information, visit<br/>
-the <a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">wiki</a> and <a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">forums</a></div>
+					<div class="NormalText"><%=_ctx.appRes("UIHomePagePortlet.cs-more")%><br/>
+the <a href="http://wiki.exoplatform.org/xwiki/bin/view/CS" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-wiki")%></a> <%=_ctx.appRes("UIHomePagePortlet.cs-and")%> <a href="http://forum.exoplatform.com" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-forum")%></a></div>
 									
 					<div style="height:69px;"><span></span></div>
 				</div>

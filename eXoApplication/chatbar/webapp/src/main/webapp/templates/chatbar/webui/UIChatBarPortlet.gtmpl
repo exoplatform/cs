@@ -1,14 +1,15 @@
 <%
-  import org.exoplatform.portal.webui.util.Util;
-  def rcontext = _ctx.getRequestContext() ;
-  def jsManager = rcontext.getJavascriptManager();
-  jsManager.importJavascript("eXo.communication.chat.eXoChatBar", "/chatbar/javascript/");
-  jsManager.addJavascript("eXo.communication.chat.eXoChatBar.applicationId = '" + uicomponent.getId() + "';");
-  jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChatBar.init");
+  String user = uicomponent.getRemoteUser() ;
+  if(user != null && user.trim().length() > 0) { 
+	  def rcontext = _ctx.getRequestContext() ;
+	  def jsManager = rcontext.getJavascriptManager();
+	  jsManager.importJavascript("eXo.communication.chat.eXoChatBar", "/chatbar/javascript/");
+	  jsManager.addJavascript("eXo.communication.chat.eXoChatBar.applicationId = '" + uicomponent.getId() + "';");
+	  jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChatBar.init");
 %>
 <!-- Begin UIChat -->
 <div class="UIChat ChatSharedIcons UIChatBarPortlet" id="UIChatBarPortlet" oncontextmenu="return false;"
-    exotoken="<%=uicomponent.getUserToken();%>" username="<%=Util.getPortalRequestContext().getRemoteUser();%>">
+    exotoken="<%=uicomponent.getUserToken();%>" username="<%=uicomponent.getRemoteUser();%>">
     <div class="ClearRight">
         <span></span>
     </div>
@@ -220,7 +221,7 @@
                                             <div class="Arrow">
                                                 <div class="IconHolder OfflineIcon" title="<%=uicomponent.getRemoteUser()%>">
                                                     <div class="StatusIcon">
-                                                        <div class="Text" user="<%=Util.getPortalRequestContext().getRemoteUser()%>">
+                                                        <div class="Text" user="<%=uicomponent.getRemoteUser()%>">
                                                             <span></span>
                                                         </div>
                                                     </div>
@@ -1430,3 +1431,4 @@
     <!--/-->
 </div>
 <!-- End template area -->
+<%}%>
