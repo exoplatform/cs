@@ -186,8 +186,9 @@ UIWeekView.prototype.drag = function(evt) {
 		UIWeekView.dragElement.style.top = UIWeekView.mousePos(_e).y - UIWeekView.offset.y - UIWeekView.containerOffset.y + "px" ;
 	}
 	if (UIWeekView.isCol(_e)) {
-		var posX = eXo.core.Browser.findPosXInContainer(UIWeekView.currentCol, UIWeekView.dragElement.offsetParent) ;
+		var posX = eXo.core.Browser.findPosXInContainer(UIWeekView.currentCol, UIWeekView.dragElement.offsetParent, eXo.core.I18n.isRT()) ;
 		UIWeekView.dragElement.style.left = posX + "px" ;
+		if(eXo.core.I18n.isRT()) UIWeekView.dragElement.style.right = (posX - eXo.cs.Utils.getScrollbarWidth()) + "px" ;
 	}
 	eXo.calendar.UICalendarPortlet.updateTitle(UIWeekView.dragElement, posY) ;
 	UIWeekView.dragElement.style.width = (UIWeekView.dragElement.parentNode.offsetWidth - 10) + "px";
@@ -260,13 +261,14 @@ UIWeekView.prototype.isCol = function(evt) {
 	var Browser = eXo.core.Browser ;
 	var isIE = (Browser.browserType == "ie")?true:false ;
 	var isDesktop = (document.getElementById("UIPageDesktop"))?true:false ;
-	var mouseX = Browser.findMouseXInPage(evt) ;
+	var mouseX = Browser.findMouseXInPage(evt);
+	if(eXo.core.I18n.isRT() && (Browser.isIE7() || Browser.isIE6())) mouseX = mouseX - 32; // 32 =  double of scrollbar width
 	var len = UIWeekView.cols.length ;
 	var colX = 0 ;
 	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	for(var i = 1 ; i < len ; i ++) {
 		colX = Browser.findPosX(UIWeekView.cols[i]) ;
-		if(uiControlWorkspace && isIE && (!isDesktop || Browser.isIE7())) colX -= uiControlWorkspace.offsetWidth ;
+		//if(uiControlWorkspace && isIE && (!isDesktop || Browser.isIE7())) colX -= uiControlWorkspace.offsetWidth ;
 		if ((mouseX > colX) && (mouseX < colX + UIWeekView.cols[i].offsetWidth)){
 			return UIWeekView.currentCol = UIWeekView.cols[i] ;
 		}
