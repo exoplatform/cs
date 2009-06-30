@@ -354,4 +354,45 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calendarService_.removeUserCalendar(username, cal.getId()) ;
     calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   } 
+  public void testLastUpdatedTime() throws Exception {
+    CalendarCategory calCategory = new CalendarCategory();
+    calCategory.setName("CalendarCategoryName");
+    calCategory.setDescription("CaldendarCategoryDescription");
+    calendarService_.saveCalendarCategory(username, calCategory, true);
+    
+    Calendar cal = new Calendar();
+    cal.setName("CalendarName") ;
+    cal.setDescription("CalendarDesscription") ;
+    cal.setCategoryId(calCategory.getId()) ;
+    cal.setPublic(true) ;
+    calendarService_.savePublicCalendar(cal, true, username) ;
+    
+    EventCategory eventCategory = new EventCategory();
+    eventCategory.setName("LastUpdatedTimeEventCategoryName");
+    eventCategory.setDescription("EventCategoryDescription");
+    calendarService_.saveEventCategory(username, eventCategory, null, true) ;
+    
+    CalendarEvent calEvent = new CalendarEvent();
+    calEvent.setEventCategoryId(eventCategory.getName());
+    calEvent.setSummary("Have a meeting");
+    java.util.Calendar fromCal = java.util.Calendar.getInstance();
+    java.util.Calendar toCal = java.util.Calendar.getInstance(); 
+    toCal.add(java.util.Calendar.HOUR, 1) ;
+    calEvent.setFromDateTime(fromCal.getTime());
+    calEvent.setToDateTime(toCal.getTime());
+    calendarService_.savePublicEvent(cal.getId(), calEvent , true);
+
+    CalendarEvent event = calendarService_.getGroupEvent(cal.getId(), calEvent.getId());
+    Date createdDate = event.getLastUpdatedTime();
+    assertNotNull(createdDate);
+    event.setSummary("Have a new meeting");
+    calendarService_.savePublicEvent(cal.getId(), event , false);
+    Date modifiedDate = calendarService_.getGroupEvent(cal.getId(), event.getId()).getLastUpdatedTime();
+    assertNotNull(modifiedDate);
+    assertTrue(modifiedDate.after(createdDate));
+    
+    calendarService_.removeEventCategory(username, eventCategory.getName()) ;
+    calendarService_.removeUserCalendar(username, cal.getId()) ;
+    calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
+  }
 }
