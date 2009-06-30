@@ -86,6 +86,7 @@ public class CalendarEvent {
   private String sendOption = CalendarSetting.ACTION_BYSETTING ;
   private String message;
   private String[] participantStatus ;
+  private Date lastUpdatedTime;
 
   /**
    * Types: TYPE_EVENT, TYPE_TASK, TYPE_JOURNAL
@@ -231,4 +232,13 @@ public class CalendarEvent {
       this.message = message;
     else this.message = new String();
   }
+
+  public Date getLastUpdatedTime() {
+    return lastUpdatedTime;
+  }
+
+  public void setLastUpdatedTime(Date lastUpdatedTime) {
+    this.lastUpdatedTime = lastUpdatedTime;
+  }
+    
 }

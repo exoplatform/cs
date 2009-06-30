@@ -101,6 +101,7 @@ public class Utils {
   public static final String EXO_SEND_OPTION = "exo:sendOption".intern() ;
   public static final String EXO_MESSAGE = "exo:message".intern() ;
   public static final String EXO_PARTICIPANT_STATUS = "exo:participantStatus".intern() ;
+  public static final String EXO_DATE_MODIFIED = "exo:dateModified".intern();
   
   public static final String X_STATUS = "X-STATUS".intern() ;
   
