@@ -154,7 +154,7 @@
 								 	//actionLink =  uicomponent.event("SaveEvent",ce.id+"&calendarId="+ce.calendarId+"&startTime=beginTime&finishTime=endTime") ;
 									actionLink = uicomponent.url("SaveEvent",ce.id);
                   %>
-                  <div class="EventContainerBorder EventBoxes $color" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="$ce.id" calid="$ce.calendarId" actionlink="$actionLink"  starttime="$beginTime" endtime="$endTime">
+                  <div class="EventContainerBorder EventBoxes $color" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="$ce.id" calid="$ce.calendarId" actionlink="$actionLink"  startTime="$beginTime" endTime="$endTime">
                     <div class="<%=ce.eventState%>Icon">
                     	<div class="<%=ce.getPriority()%>PriorityIcon" style="float:left;"><span></span></div>
                     </div>

@@ -104,7 +104,7 @@
 								}
 							 	wf.setCalendar(cl) ;
             %>
-            <td class="$cssClass UICellBlock" style="$styleWidth" starttime="<%=cl.getTimeInMillis()%>"  startTimeFull="<%=tempFormat.format(cl.getTime())%>">
+            <td class="$cssClass UICellBlock" style="$styleWidth" startTime="<%=cl.getTimeInMillis()%>"  startTimeFull="<%=tempFormat.format(cl.getTime())%>">
               <a href="$actionLink" style="$styleCss">
                 <%=wf.format(cl.getTime())%>
               </a>
@@ -137,7 +137,7 @@
 										title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
 										actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 	                %>
-	                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" calid="$event.calendarId" starttime="$begindate"  endtime="$enddate" 
+	                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" calid="$event.calendarId" startTime="$begindate"  endTime="$enddate" 
 	                startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
 	                 title="$title" actionlink="$actionLink">
 	                  <div class="$leftClass">
@@ -189,7 +189,7 @@
         <div class="EventContainerBorder WeekViewEventBoxes $color" eventindex="$dayOfWeek"
           style="position: absolute;" eventcat="$event.eventCategoryId" caltype="$event.calType"
           eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on"
-          starttime="$beginTime" endtime="$endTime">
+          startTime="$beginTime" endTime="$endTime">
            <div class="<%=event.eventState%>Icon">
 	           <div class="<%=event.getPriority()%>PriorityIcon" style="float: left;">
 		            <span></span>

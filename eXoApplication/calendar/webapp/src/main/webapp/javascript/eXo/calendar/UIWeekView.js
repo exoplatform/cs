@@ -30,7 +30,7 @@ UIWeekView.prototype.init = function() {
 	}	
 	var marker = null ;
 	for(var i = 0 ; i < len ; i ++){		
-		var height = parseInt(this.items[i].getAttribute("endtime")) - parseInt(this.items[i].getAttribute("starttime")) ;
+		var height = parseInt(this.items[i].getAttribute("endTime")) - parseInt(this.items[i].getAttribute("startTime")) ;
 		this.items[i].onmousedown = UIWeekView.dragStart ;
     	this.items[i].ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback ;
 		marker = DOMUtil.findFirstDescendantByClass(this.items[i], "div", "ResizeEventContainer") ;
@@ -148,7 +148,7 @@ UIWeekView.prototype.showInCol = function(obj) {
 	var container = (eXo.core.Browser.isFF()) ? UIWeekView.container : items[0].offsetParent ;
 	var left = parseFloat((eXo.core.Browser.findPosXInContainer(obj, container) - 1)/container.offsetWidth)*100 ;
 	var width = parseFloat((obj.offsetWidth - 2)/container.offsetWidth)*100 ;
-	items = eXo.calendar.UICalendarPortlet.sortByAttribute(items, "starttime") ;
+	items = eXo.calendar.UICalendarPortlet.sortByAttribute(items, "startTime") ;
 	UIWeekView.adjustWidth(items, obj.offsetWidth, eXo.core.Browser.findPosXInContainer(obj, container,eXo.core.I18n.isRT())) ;
 } ;
 
@@ -204,7 +204,7 @@ UIWeekView.prototype.dropCallback = function() {
 	var currentStart = dragElement.offsetTop + workingStart ;
 	var currentEnd = currentStart + delta ;
 	//var actionLink =	eXo.calendar.UICalendarPortlet.adjustTime(currentStart, currentEnd, dragElement) ;
-	var currentDate = this.currentCol.getAttribute("starttime").toString() ;
+	var currentDate = this.currentCol.getAttribute("startTime").toString() ;
 	//actionLink = actionLink.toString().replace(/'\s*\)/,"&currentDate=" + currentDate + "&calType=" + calType + "')") ;
 	var actionLink = dragElement.getAttribute("actionLink");
 	var params = [
@@ -330,7 +330,7 @@ UIWeekView.prototype.resizeCallback = function(evt) {
 	var calType = parseInt(eventBox.getAttribute("calType")) ;
 	if (eventBox.offsetHeight != UIResizeEvent.beforeHeight) {
 		var actionLink = eventBox.getAttribute("actionLink");//eXo.calendar.UICalendarPortlet.adjustTime(start, end, eventBox) ;
-		var currentDate = eventBox.parentNode.getAttribute("starttime").toString() ;
+		var currentDate = eventBox.parentNode.getAttribute("startTime").toString() ;
 		//actionLink = actionLink.toString().replace(/'\s*\)/,"&currentDate=" + currentDate + "&calType=" + calType + "')") ;
 		//eval(actionLink) ;
 		var params = [

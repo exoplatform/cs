@@ -221,7 +221,7 @@ UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
 		return ;
 	}
   if (this.foundTargetObjectCatch) {
-    if ((this.foundTargetObjectCatch.getAttribute('starttime') == dndEvent.clickObject.getAttribute('starttime')) && (eventObj.length == 1)) {
+    if ((this.foundTargetObjectCatch.getAttribute('startTime') == dndEvent.clickObject.getAttribute('startTime')) && (eventObj.length == 1)) {
       return;
     }
     if (actionlink = this.foundTargetObjectCatch.getAttribute("actionLink")) {
