@@ -69,7 +69,7 @@
 									<%= ContactUtils.encodeHTML(name) %>
 								</div>
 							</td>
-							<td class="text"><%=(contact.getEmail()==null ? "" : contact.getEmail().replaceAll(";", "; "))%></td>
+							<td><%=(contact.getEmail()==null ? "" : contact.getEmail().replaceAll(";", "; "))%></td>
 		
 		   			</tr>
 		     	<% } %>  

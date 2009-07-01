@@ -143,7 +143,7 @@ public class UITags extends UIComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;  
       }
-      UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 500) ;
+      UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 600) ;
       uiExportForm.setId("ExportForm");
       uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ; 
       List<ContactData> data = new ArrayList<ContactData>() ;

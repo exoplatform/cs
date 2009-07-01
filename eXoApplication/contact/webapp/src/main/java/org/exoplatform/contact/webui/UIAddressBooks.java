@@ -296,7 +296,7 @@ public class UIAddressBooks extends UIComponent {
           }
         }
         uiExportForm.setContactList(data);
-        uiPopupAction.activate(uiExportForm, 500, 0) ;
+        uiPopupAction.activate(uiExportForm, 600, 0) ;
       } else {
         
         // There is no specific address book so display the address books list        
