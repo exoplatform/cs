@@ -1116,7 +1116,7 @@ UICalendarPortlet.prototype.dragEnd = function(){
 		var params = [
 			{name:"calendarId",value:dragObject.getAttribute("calid")},
 			{name:"startTime",value:currentStart},
-			{name:"finishTime",value:currentEnd},
+			{name:"finishTime",value:currentEnd}
 		];
 		eXo.calendar.UICalendarPortlet.setTimeValue(dragObject,currentStart,currentEnd);
 		eXo.calendar.UICalendarPortlet.showEvent();
