@@ -333,8 +333,8 @@ UICalendarPortlet.prototype.hasEventThrough = function(min,events){
 	var end = 0 ;
 	var i = events.length
 	while(i--){
-		start = parseInt(events[i].getAttribute("starttime")) ;
-		end = parseInt(events[i].getAttribute("endtime")) ;
+		start = parseInt(events[i].getAttribute("startTime")) ;
+		end = parseInt(events[i].getAttribute("endTime")) ;
 		if((start <= min) && (end >= min)){
 			return true ;
 		}
@@ -660,8 +660,8 @@ UICalendarPortlet.prototype.setWidth = function(element, width){
  * @return A array includes two elements that are start and end time
  */
 UICalendarPortlet.prototype.getSize = function(el){
-    var start = parseInt(el.getAttribute("starttime"));
-    var end = parseInt(el.getAttribute("endtime"));
+    var start = parseInt(el.getAttribute("startTime"));
+    var end = parseInt(el.getAttribute("endTime"));
 		var delta = end - start ;
 		if(delta < 30) end = start + 30 ;
     return [start, end];
@@ -765,7 +765,7 @@ UICalendarPortlet.prototype.showEvent = function(){
         return;
     this.viewType = "UIDayView";
     var el = this.getElements(this.viewer);
-    el = this.sortByAttribute(el, "starttime");
+    el = this.sortByAttribute(el, "startTime");
     if (el.length <= 0) 
         return;
     var marker = null;
@@ -840,8 +840,8 @@ UICalendarPortlet.prototype.sortByAttribute = function(obj, attribute){
                 obj[j] = tmp;
             }
             if (attribute2 == attribute1) {
-                var end1 = parseInt(obj[i].getAttribute("endtime"));
-                var end2 = parseInt(obj[j].getAttribute("endtime"));
+                var end1 = parseInt(obj[i].getAttribute("endTime"));
+                var end2 = parseInt(obj[j].getAttribute("endTime"));
                 if (end2 > end1) {
                     tmp = obj[i];
                     obj[i] = obj[j];
@@ -983,7 +983,7 @@ UIResizeEvent.prototype.resizeCallback = function(evt){
 		var params = [
 			{name:"calendarId",value:eventBox.getAttribute("calid")},
 			{name:"startTime",value:start},
-			{name:"finishTime",value:end},
+			{name:"finishTime",value:end}
 		];
 		eXo.calendar.UICalendarPortlet.setTimeValue(eventBox,start,end);
 		eXo.calendar.UICalendarPortlet.showEvent();
@@ -1069,7 +1069,7 @@ UICalendarPortlet.prototype.dragStart = function(evt){
 UICalendarPortlet.prototype.updateTitle = function(events, min, type){
     var timeFormat = events.getAttribute("timeFormat");
     var title = eXo.core.DOMUtil.findDescendantsByTagName(events, "p")[0];
-		var delta = parseInt(events.getAttribute("endtime")) - parseInt(events.getAttribute("starttime")) ;
+		var delta = parseInt(events.getAttribute("endTime")) - parseInt(events.getAttribute("startTime")) ;
     timeFormat = (timeFormat) ? eval(timeFormat) : {
         am: "AM",
         pm: "PM"
