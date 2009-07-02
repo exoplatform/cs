@@ -255,6 +255,11 @@ public class MessagePageList extends JCRPageList {
       msg.setSendDate(cal.getTime());
     } catch(Exception e) { }
     
+    try {
+      cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
+      msg.setLastUpdateDate(cal.getTime());
+    } catch(Exception e) { }
+    
     try { 
       msg.setIsLoaded(messageNode.getProperty(Utils.IS_LOADED).getBoolean());
     } catch(Exception e) { }

@@ -41,6 +41,7 @@ public class Message extends MessageHeader {
   private Date sendDate ;
   private boolean isReturnReceipt;
   private Date receivedDate ;
+  private Date lastUpdateDate;
   private String contentType;
   private boolean isUnread = true ;
   private long size ;
@@ -88,6 +89,9 @@ public class Message extends MessageHeader {
   
   public Date getSendDate() { return sendDate ; }
   public void setSendDate(Date d) { sendDate = d ; }
+  
+  public Date getLastUpdateDate() { return lastUpdateDate ; }
+  public void setLastUpdateDate(Date d) { lastUpdateDate = d ; }
   
   public Date getReceivedDate() { return receivedDate ; }
   public void setReceivedDate(Date d) { receivedDate = d ; }

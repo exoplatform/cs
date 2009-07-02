@@ -639,11 +639,15 @@
               </td>
               <td class="$readStatus">
               <a href="$actionLink">
-                <%if (msg.getReceivedDate() != null) { %>
+                <%if (uicomponent.viewMode != uicomponent.MODE_CONVERSATION) {                
+                  if (msg.getReceivedDate() != null) { %>
                   <%=MailUtils.formatDate(msg.getReceivedDate(), locale)%>
                 <%} else if (msg.getSendDate() != null){%>
                   <%=MailUtils.formatDate(msg.getSendDate(), locale)%>
-                <%}%>
+                <%} 
+                } else {
+                  println(MailUtils.formatDate(msg.getLastUpdateDate(), locale));
+                }%>
               </a>
               </td>
               <td style="padding: 0px auto;">
