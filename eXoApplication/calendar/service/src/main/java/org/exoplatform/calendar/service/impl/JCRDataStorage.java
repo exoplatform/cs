@@ -2309,6 +2309,10 @@ public class JCRDataStorage{
     Session systemSession = sharedCalendarHome.getSession() ;
     Node userNode ;
     List<Value> valueList = new ArrayList<Value>() ;
+    for (int i = 0; i < values.length; i++) {
+      Value value = values[i];
+      valueList.add(value) ;
+    }
     for(String user : receiverUsers) {
       CalendarSetting calSetting = getCalendarSetting(user) ;
       if(calSetting == null) calSetting = new CalendarSetting() ;
@@ -2340,6 +2344,7 @@ public class JCRDataStorage{
         } 
       }
       boolean isExist = false ; 
+      isExist = false;
       for (int i = 0; i < values.length; i++) {
         Value value = values[i];
         String uuid = value.getString();
@@ -2348,7 +2353,6 @@ public class JCRDataStorage{
           isExist = true ; 
           break ;
         }
-        valueList.add(value) ;
       }
       if(!isExist) {
         Value value2add = calendarNode.getSession().getValueFactory().createValue(userNode);
