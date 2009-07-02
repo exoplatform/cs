@@ -476,6 +476,10 @@ public class FakeMailService implements MailService {
     // TODO Auto-generated method stub
 
   }
+  
+  public void stopAllJobs(String username, String accountId) throws Exception {
+    // TODO Auto-generated method stub
+  }
 
   public void toggleMessageProperty(SessionProvider provider,
                                     String username,
