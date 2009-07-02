@@ -351,7 +351,7 @@ public class UIMessageList extends UIForm {
           msgIds.add(msg);
           try {
             MailUtils.getMailService().toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);
-          }catch (PathNotFoundException e) {
+          } catch (PathNotFoundException e) {
             uiMessageList.setMessagePageList(null) ;
             uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
