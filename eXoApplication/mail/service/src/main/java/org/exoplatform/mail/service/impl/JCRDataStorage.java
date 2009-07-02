@@ -446,7 +446,12 @@ public class JCRDataStorage {
     } catch (Exception e) {
     }
     
-
+    try {
+      cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
+      msg.setLastUpdateDate(cal.getTime());
+    } catch(Exception e) { }
+    
+    
     try { 
       msg.setIsLoaded(messageNode.getProperty(Utils.IS_LOADED).getBoolean());
     } catch(Exception e) { }
@@ -1291,7 +1296,7 @@ public class JCRDataStorage {
       String cs = new ContentType(ct).getParameter("charset");
       boolean convertCharset = true;
       for (int i = 0; i < Utils.NOT_SUPPORTED_CHARSETS.length; i++) {
-        if (cs.equalsIgnoreCase(Utils.NOT_SUPPORTED_CHARSETS[i])) {
+        if (cs != null && cs.equalsIgnoreCase(Utils.NOT_SUPPORTED_CHARSETS[i])) {
           convertCharset = false;
         }
       }
