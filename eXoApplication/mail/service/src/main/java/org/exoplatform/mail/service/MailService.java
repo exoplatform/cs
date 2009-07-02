@@ -488,6 +488,8 @@ public interface MailService {
    */
   public void stopCheckMail(String username, String accountId) ;
   
+  public void stopAllJobs(String username, String accountId) throws Exception;
+  
   /**
    * This method get mail settings
    * @param username
