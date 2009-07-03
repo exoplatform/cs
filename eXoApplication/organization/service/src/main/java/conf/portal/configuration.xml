@@ -10,7 +10,9 @@
   <component>
     <type>org.exoplatform.services.organization.rest.json.RESTOrganizationServiceJSONImpl</type>
   </component>
-  
+  <component>
+    <type>org.exoplatform.services.xmpp.groupchat.MultiUserChatManager</type>
+  </component>
   
   <!-- external-component-plugins>
     <target-component>org.exoplatform.services.xml.transform.impl.trax.TRAXTemplatesServiceImpl</target-component>

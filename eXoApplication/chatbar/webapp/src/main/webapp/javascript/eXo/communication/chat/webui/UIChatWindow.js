@@ -1430,7 +1430,12 @@ UIChatWindow.prototype.inviteToJoinRoom = function(event) {
   event = event || window.event;
   eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
   var activeTabControl = this.getActiveTabControl();
-  activeTabControl.inviteToJoinRoom();
+  //activeTabControl.inviteToJoinRoom();
+  //if (this.roomConfigured) {
+  	 
+    eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true, activeTabControl.tabId);
+  //}
+  
 };
 
 /**
