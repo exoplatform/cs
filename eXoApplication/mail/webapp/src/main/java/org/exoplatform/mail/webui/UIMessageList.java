@@ -141,13 +141,11 @@ public class UIMessageList extends UIForm {
   private String accountId_ ;
   public int viewMode = MODE_THREAD ;
   public int viewing_ = VIEW_ALL ;
-  public SessionProvider sProvider_; 
   public LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
 
   public UIMessageList() throws Exception {}
 
   public void init(String accountId) throws Exception {
-    sProvider_ = SessionProviderFactory.createSystemProvider();
     accountId_ = accountId ;
     sortedBy_ = Utils.EXO_RECEIVEDDATE ;
     String username = MailUtils.getCurrentUser();
@@ -171,7 +169,7 @@ public class UIMessageList extends UIForm {
       // CS-2253
       long currentPage = 1 ;
       if (pageList_ != null) currentPage = pageList_.getCurrentPage() ;
-      MessagePageList currentPageList = mailSrv.getMessagePageList(sProvider_, username, filter) ;
+      MessagePageList currentPageList = mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter) ;
       // CS-2493
       setMessagePageList(currentPageList);
       updateList(currentPage) ;
@@ -896,9 +894,9 @@ public class UIMessageList extends UIForm {
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
 
       Message message = null;
-      if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
-      if (message != null && !message.isLoaded()) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiMessageList.sProvider_, uiPortlet.getCurrentUser(), accId, message); 
+      if (msgId != null) message = uiMessageList.messageList_.get(msgId) ; 
       else  message = checkedMsgs.get(0);
+      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), accId, message);
       try {
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY);
       } catch (Exception e) {
@@ -947,8 +945,8 @@ public class UIMessageList extends UIForm {
 
       Message message = null;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
-      if (message != null && !message.isLoaded()) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiMessageList.sProvider_, uiPortlet.getCurrentUser(), accId, message);
       else  message = checkedMsgs.get(0);
+      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), accId, message);
       try {
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY_ALL);
       } catch (Exception e) {
@@ -997,8 +995,8 @@ public class UIMessageList extends UIForm {
 
       Message message = null;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
-      if (message != null && !message.isLoaded()) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiMessageList.sProvider_, uiPortlet.getCurrentUser(), accId, message);
       else  message = checkedMsgs.get(0);
+      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), accId, message);
       try {
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_FOWARD);
       } catch (Exception e) {
@@ -1039,7 +1037,6 @@ public class UIMessageList extends UIForm {
       Message message = null;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
       else  message = uiMessageList.getCheckedMessage().get(0);
-      if (message != null && !message.isLoaded()) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiMessageList.sProvider_, uiPortlet.getCurrentUser(), accountId, message);
       
       String from = Utils.getAddresses(message.getFrom())[0];
       MessageFilter filter = new MessageFilter(from);
@@ -1244,6 +1241,7 @@ public class UIMessageList extends UIForm {
       Message message = null ;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
       else  message = checkedMsgs.get(0);
+      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), accountId, message);  
       if (message != null && !message.isLoaded()) {
         String username = MailUtils.getCurrentUser();
         MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);

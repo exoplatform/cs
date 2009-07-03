@@ -281,7 +281,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       setFieldBccValue(msg.getMessageBcc()) ;
       setFieldContentValue(formatContent(msg));
       if (msg != null && msg.hasAttachment()) {
-        msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
         for (Attachment att : msg.getAttachments()) {
           if (att.isLoadedProperly()) attachments_.add(att);
         }
@@ -299,9 +298,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       if (!subject.toLowerCase().startsWith("re:")) subject = "Re: " + subject ;
       setFieldSubjectValue(subject);
       if (msg != null && msg.hasAttachment()) {
-        if (msg.getAttachments() == null) {
-          msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
-        }
         for (Attachment att : msg.getAttachments()) {
           if (att.isLoadedProperly()) attachments_.add(att);
         }
@@ -357,9 +353,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       }
 
       if (msg != null && msg.hasAttachment()) {
-        if (msg.getAttachments() == null) {
-          msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
-        }
         for (Attachment att : msg.getAttachments()) {
           if (att.isLoadedProperly())  attachments_.add(att);
         }
@@ -385,9 +378,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 
       setFieldToValue("");
       if (msg != null && msg.hasAttachment()) {
-        if (msg.getAttachments() == null) {
-          msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
-        }
         for (Attachment att : msg.getAttachments()) {
           if (att.isLoadedProperly()) attachments_.add(att);
         }
@@ -449,7 +439,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 
   private String formatContent(Message msg) throws Exception {
     String msgContent = msg.getMessageBody();
-    if (isVisualEditor && msg.getContentType().indexOf("text/plain") > -1) {
+    if (isVisualEditor && (msg.getContentType() != null && msg.getContentType().indexOf("text/plain") > -1)) {
       msgContent = MailUtils.encodeHTML(msg.getMessageBody()).replaceAll("\n", "<br />") ;
     } 
     return msgContent ;
