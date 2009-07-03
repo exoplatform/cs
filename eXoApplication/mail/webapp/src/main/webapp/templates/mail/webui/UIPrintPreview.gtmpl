@@ -59,7 +59,7 @@
     </div>
     <div class="PrintContent"><textarea rows="#" cols="#">
         <%
-          if (msg.getContentType().toLowerCase().indexOf("text/plain") > -1) {    
+          if (msg.getContentType() !=null && msg.getContentType().toLowerCase().indexOf("text/plain") > -1) {    
             println(msg.getMessageBody().replaceAll("\n", "<br/>")) ;
         } else {    
           println(MailUtils.encodeHTML(msg.getMessageBody())) ; 
