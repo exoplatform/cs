@@ -329,68 +329,75 @@ UICalendarPortlet.prototype.showMainMenu = function(obj, evt){
 };
 
 UICalendarPortlet.prototype.calendarMenuCallback = function(evt){
-  var DOMUtil = eXo.core.DOMUtil ;
-  var obj = eXo.core.EventManager.getEventTargetByClass(evt,"CalendarItem") || eXo.core.EventManager.getEventTargetByClass(evt,"GroupItem");
-  var calType = obj.getAttribute("calType");
-  var calName = obj.getAttribute("calName");
-  var calColor = obj.getAttribute("calColor");
-  var canEdit = String(obj.getAttribute("canedit")).toLowerCase();
-  var menu = eXo.webui.UIContextMenu.menuElement ;
-  var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;
-	if(selectedCategory) selectedCategory = selectedCategory.options[selectedCategory.selectedIndex].value;
-	if(!menu || !obj.id) {
-    eXo.webui.UIContextMenu.menuElement = null ;
-    return ;
-  } 
-  var value = "" ;
-  value = "objectId=" + obj.id;
-  if (calType) {
-      value += "&calType=" + calType;
-  }
-  if (calName) {
-      value += "&calName=" + calName;
-  }
-  if (calColor) {
-      value += "&calColor=" + calColor;
-  }
-  var items = DOMUtil.findDescendantsByTagName(menu, "a");  
-  for (var i = 0; i < items.length; i++) {
-      if (DOMUtil.hasClass(items[i].firstChild, "SelectedColorCell")) {
-          items[i].firstChild.className = items[i].firstChild.className.toString().replace(/SelectedColorCell/, "");
-      }
-      if (DOMUtil.hasClass(items[i], calColor)) {
-          var selectedCell = items[i].firstChild;
-          DOMUtil.addClass(selectedCell, "SelectedColorCell");
-      }
-      if (items[i].href.indexOf("ChangeColor") != -1) {
-          value = value.replace(/calColor\s*=\s*\w*/, "calColor=" + items[i].className.split(" ")[0]);
-      }
-      items[i].href = String(items[i].href).replace(/objectId\s*=.*(?='|")/, value);
-  }
+	var DOMUtil = eXo.core.DOMUtil ;
+	var obj = eXo.core.EventManager.getEventTargetByClass(evt,"CalendarItem") || eXo.core.EventManager.getEventTargetByClass(evt,"GroupItem");
+	var calType = obj.getAttribute("calType");
+	var calName = obj.getAttribute("calName");
+	var calColor = obj.getAttribute("calColor");
+	var canEdit = String(obj.getAttribute("canedit")).toLowerCase();
+	var menu = eXo.webui.UIContextMenu.menuElement ;
+
+	try {
+		var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;
+		if(selectedCategory) selectedCategory = selectedCategory.options[selectedCategory.selectedIndex].value;
+	} catch (e) { //Fix for IE
+		var selectedCategory = null;
+	}
 	
-  if (DOMUtil.hasClass(obj, "CalendarItem")) {
-      items[0].href = String(items[0].href).replace("')", "&categoryId=" + selectedCategory + "')");
-      items[1].href = String(items[1].href).replace("')", "&categoryId=" + selectedCategory + "')");      
-  }
-  if (calType && (calType != "0")) {
-  
-      var actions = DOMUtil.findDescendantsByTagName(menu, "a");
-      for (var j = 0; j < actions.length; j++) {
-          if ((actions[j].href.indexOf("EditCalendar") >= 0) ||
-          (actions[j].href.indexOf("RemoveCalendar") >= 0) ||
-          (actions[j].href.indexOf("ShareCalendar") >= 0) ||
-          (actions[j].href.indexOf("ChangeColorCalendar") >= 0)) {
-              actions[j].style.display = "none";
-          }
-      }
-  }
-  if (canEdit && (canEdit == "true")) {
-      for (var j = 0; j < actions.length; j++) {
-          if (actions[j].href.indexOf("EditCalendar") >= 0 || actions[j].href.indexOf("RemoveCalendar") >= 0) {
-              actions[j].style.display = "block";
-          }
-      }
-  }  
+
+	if(!menu || !obj.id) {
+	    eXo.webui.UIContextMenu.menuElement = null ;
+	    return ;
+	} 
+	var value = "" ;
+	value = "objectId=" + obj.id;
+	if (calType) {
+	  value += "&calType=" + calType;
+	}
+	if (calName) {
+	  value += "&calName=" + calName;
+	}
+	if (calColor) {
+	  value += "&calColor=" + calColor;
+	}
+	var items = DOMUtil.findDescendantsByTagName(menu, "a");  
+	for (var i = 0; i < items.length; i++) {
+	  if (DOMUtil.hasClass(items[i].firstChild, "SelectedColorCell")) {
+	      items[i].firstChild.className = items[i].firstChild.className.toString().replace(/SelectedColorCell/, "");
+	  }
+	  if (DOMUtil.hasClass(items[i], calColor)) {
+	      var selectedCell = items[i].firstChild;
+	      DOMUtil.addClass(selectedCell, "SelectedColorCell");
+	  }
+	  if (items[i].href.indexOf("ChangeColor") != -1) {
+	      value = value.replace(/calColor\s*=\s*\w*/, "calColor=" + items[i].className.split(" ")[0]);
+	  }
+	  items[i].href = String(items[i].href).replace(/objectId\s*=.*(?='|")/, value);
+	}
+	
+	if (DOMUtil.hasClass(obj, "CalendarItem")) {
+	  items[0].href = String(items[0].href).replace("')", "&categoryId=" + selectedCategory + "')");
+	  items[1].href = String(items[1].href).replace("')", "&categoryId=" + selectedCategory + "')");      
+	}
+	if (calType && (calType != "0")) {
+	
+	  var actions = DOMUtil.findDescendantsByTagName(menu, "a");
+	  for (var j = 0; j < actions.length; j++) {
+	      if ((actions[j].href.indexOf("EditCalendar") >= 0) ||
+	      (actions[j].href.indexOf("RemoveCalendar") >= 0) ||
+	      (actions[j].href.indexOf("ShareCalendar") >= 0) ||
+	      (actions[j].href.indexOf("ChangeColorCalendar") >= 0)) {
+	          actions[j].style.display = "none";
+	      }
+	  }
+	}
+	if (canEdit && (canEdit == "true")) {
+	  for (var j = 0; j < actions.length; j++) {
+	      if (actions[j].href.indexOf("EditCalendar") >= 0 || actions[j].href.indexOf("RemoveCalendar") >= 0) {
+	          actions[j].style.display = "block";
+	      }
+	  }
+	}  
 } ;
 
 UICalendarPortlet.prototype.switchLayoutCallback = function(layout,status){
@@ -1411,7 +1418,14 @@ UICalendarPortlet.prototype.runFilterByCategory = function(){
 
 UICalendarPortlet.prototype.runAction = function(obj){
 	var actionLink = obj.getAttribute("actionLink");
-	var categoryId = this.filterSelect.options[this.filterSelect.selectedIndex].value;
+	
+	try {
+		var categoryId = this.filterSelect.options[this.filterSelect.selectedIndex].value;
+	} catch (e) { //Fix for IE
+		var categoryId = null;
+	}
+
+
 	actionLink = actionLink.replace("')","&categoryId="+categoryId+"')");
 	eval(actionLink);
 };
