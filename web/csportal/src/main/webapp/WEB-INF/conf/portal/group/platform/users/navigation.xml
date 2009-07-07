@@ -6,13 +6,13 @@
   <description>collaboration demo users navigation</description>
   
   <page-nodes> 
-  		<!--<node>
+  	   <node>
 	    <uri>collaboration</uri>
 	    <name>collaboration</name>
 	    <label>#{platform.users.collaboration}</label>
 	    <page-reference>group::platform/users::collaboration</page-reference>
-	 </node>     	 	
-	    --><node>
+	   </node>     	 	
+	    <node>
 		    <uri>contact</uri>
 		    <name>contact</name>
 		    <label>#{platform.users.collaboration.contact}</label>
