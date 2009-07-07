@@ -1546,11 +1546,9 @@ public class UIMessageList extends UIForm {
         Message msg = checkedMsgs.get(0) ;
         if (msg != null) {
           UIExportForm uiExportForm = uiPopup.activate(UIExportForm.class, 600);
-          if(msg.hasAttachment()) {
-            String username = uiPortlet.getCurrentUser() ;
-            MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-            msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, accId, msg) ;
-          }
+          String username = uiPortlet.getCurrentUser() ;
+          MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+          msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, accId, msg) ;  
           uiExportForm.setExportMessage(msg);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
         }
