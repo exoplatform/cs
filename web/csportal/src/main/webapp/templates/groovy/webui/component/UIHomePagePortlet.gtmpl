@@ -1,6 +1,7 @@
 <%
   import org.exoplatform.portal.webui.util.Util ;
   String toururi = Util.getPortalRequestContext().getPortalURI() + "tour";
+  
 %>
 <table style="table-layout: fixed;width: 100%;-width: auto;">
 	<tr>
@@ -23,11 +24,15 @@
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
-													<div class="CenterTitleHomePage"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar")%></div>
+													<div class="CenterTitleHomePage">
+                                                                                                          <a href="/portal/private/classic/calendar">
+                                                                                                           <%=_ctx.appRes("UIHomePagePortlet.cs-calendar")%>
+													   </a>	
+													  </div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
-												<div class="IconCalenda"><span></span></div>
+												<div class="IconCalenda"><a style="height:68px;width:74px; display:block;" href="/portal/private/classic/calendar"><span></span></a></div>
 											</div>
 										</div>
 										<div class="ContentProductsCS">
@@ -58,11 +63,15 @@
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
-													<div class="CenterTitleHomePage"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book")%></div>
+													<div class="CenterTitleHomePage">
+												         <a href="/portal/private/classic/contact">
+												           <%=_ctx.appRes("UIHomePagePortlet.cs-address-book")%>
+												          </a>
+												         </div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
-												<div class="IconAddressBook"><span></span></div>
+												<div class="IconAddressBook"><a style="height:68px;width:74px; display:block;" href="/portal/private/classic/contact"><span></span></a></div>
 											</div>
 										</div>
 										<div class="ContentProductsCS">
@@ -92,11 +101,11 @@
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
-													<div class="CenterTitleHomePage"><%=_ctx.appRes("UIHomePagePortlet.cs-chat")%></div>
+													<div class="CenterTitleHomePage"><a href="/portal/private/classic/collaboration"><%=_ctx.appRes("UIHomePagePortlet.cs-chat")%></a></div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
-												<div class="IconChat"><span></span></div>
+												<div class="IconChat"><a style="height:68px;width:74px; display:block;" href="/portal/private/classic/collaboration"><span></span></a></div>
 											</div>
 										</div>
 										<div class="ContentProductsCS">
@@ -124,11 +133,11 @@
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
-													<div class="CenterTitleHomePage"><%=_ctx.appRes("UIHomePagePortlet.cs-mail")%></div>
+													<div class="CenterTitleHomePage"><a href="/portal/private/classic/mail"><%=_ctx.appRes("UIHomePagePortlet.cs-mail")%></a></div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
-												<div class="IconMail"><span></span></div>
+												<div class="IconMail"><a style="height:68px;width:74px; display:block;" href="/portal/private/classic/mail"><span></span></a></div>
 											</div>
 										</div>
 										<div class="ContentProductsCS">
@@ -180,8 +189,8 @@
 					<div style="margin: 17px 0px;">
 						<div class="NormalText">Did you like ? Did you hate ?</div>
 						<a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-send-feedback")%></a>
-					</div>
-					<div class="DotLine"><span></span></div>
+					</div>					 
+                                         <div class="DotLine"><span></span></div>
 					 
 						<div class="LeftButton">
 							<div class="RightButton">

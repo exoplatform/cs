@@ -78,7 +78,7 @@
     </application>
    </page>  
   -->
-   <!--<page>
+   <page>
   	<page-id>group::platform/users::collaboration</page-id>
   	<owner-type>group</owner-type>
     <owner-id>platform/users</owner-id>
@@ -116,14 +116,15 @@
       <show-info-bar>false</show-info-bar>       
     </application>
     
-    <application>
+    <!-- 
+     <application>
       <instance-id>group#platform/users:/chatbar/ChatBarPortlet/chatbar</instance-id>    
       <title>Chat Bar Portlet</title>
       <show-info-bar>false</show-info-bar>       
-    </application>      
+    </application>
+     -->      
   
-  </page>   	 
-    	 
+  </page>    	 
     	  
---></page-set>
+</page-set>
 
