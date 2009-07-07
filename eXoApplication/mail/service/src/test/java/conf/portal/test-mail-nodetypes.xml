@@ -89,12 +89,6 @@
   		<propertyDefinition name="exo:serverProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition> 		
-  		<propertyDefinition name="exo:popServerProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-  			<valueConstraints/>
-  		</propertyDefinition> 
-  		<propertyDefinition name="exo:imapServerProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-  			<valueConstraints/>
-  		</propertyDefinition> 
   		<propertyDefinition name="exo:smtpServerProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition> 
@@ -130,6 +124,10 @@
     </supertypes>
     <propertyDefinitions>
       <propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>      
+      </propertyDefinition>
+      <propertyDefinition name="exo:uid" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="false">
         <valueConstraints/>      
       </propertyDefinition>
@@ -221,10 +219,22 @@
       	protected="false" multiple="false">
   	    <valueConstraints/>
   	  </propertyDefinition>
+  	  <propertyDefinition name="exo:isLoaded" defaultValue="false" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
+      	protected="false" multiple="false">
+  	    <valueConstraints/>
+  	  </propertyDefinition>
   	  <propertyDefinition name="exo:isLoadedProperly" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
       	protected="false" multiple="false">
   	    <valueConstraints/>
   	  </propertyDefinition>  
+  	   <propertyDefinition name="exo:isReturnReceipt" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
+      	protected="false" multiple="false">
+  	    <valueConstraints/>
+  	  </propertyDefinition>
+  	  <propertyDefinition name="exo:lastUpdateTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition> 
     </propertyDefinitions>    
     <childNodeDefinitions>
 	  <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
@@ -243,7 +253,11 @@
  	<propertyDefinitions>
   	  <propertyDefinition name="exo:fileName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   		<valueConstraints/>
-  	  </propertyDefinition>	  		
+  	  </propertyDefinition>	  	
+  	  <propertyDefinition name="exo:isShownInBody" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
+      	protected="false" multiple="false">
+  	    <valueConstraints/>
+  	  </propertyDefinition>
       <propertyDefinition name="exo:isLoadedProperly" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
       	protected="false" multiple="false">
   	    <valueConstraints/>
@@ -385,6 +399,12 @@
   			<valueConstraints/>
   		</propertyDefinition>
   		<propertyDefinition name="exo:saveMsgInSent" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		<propertyDefinition name="exo:layout" requiredType="Long" defaultValue="" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		<propertyDefinition name="exo:returnReceipt" requiredType="Long" defaultValue="0" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
   		</propertyDefinition>
   	</propertyDefinitions>
