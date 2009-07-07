@@ -52,8 +52,12 @@
 	              for(formInput in uicomponent.getChildren()) { 
 	                String display = "none;" ;
                   if(formInput.getId().equals(selTabId)) display="block;" ;
+                  String className = "UITabContent";
+                  if(uicomponent.getCurrentStep() == uicomponent.wizardMaxStep_) {
+                  className = "UITabContent InfoTab" ;
+                  }
 	            %>
-	                <div class="UITabContent" id="UITabContent" style="display:$display;">
+	                <div class="$className" id="UITabContent" style="display:$display;">
 	                  <%uicomponent.renderUIComponent(formInput) ;%>
 	                </div>
 	            <%}%>
@@ -79,7 +83,8 @@
 			  						       }
 			  						       print "<a href=\"$actionLink\" class=\"$cssClass\" >"  ;
 			  						       print i ;
-			  						       println "</a>";
+			  						       println "</a>"; 						       
+			  						        
 			  						       i++ ;
 		  						      }  		 			     	
 												 

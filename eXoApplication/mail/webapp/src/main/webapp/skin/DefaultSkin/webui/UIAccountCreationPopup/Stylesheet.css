@@ -8,6 +8,11 @@
 	padding: 0px;
 }
 
+.UIMailPortlet .UIAccountCreationWizard .InfoTab .UIFormInputSet {
+	width: auto;
+	overflow: hidden;
+}
+
 .UIMailPortlet .UIAccountCreationWizard .AccountCreationStep .InfoContainer{
 	padding: 0px 20px 10px 20px;
 	background: white;
