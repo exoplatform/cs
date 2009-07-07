@@ -255,7 +255,7 @@ UIAddContactPopupWindow.prototype.selectAllContacts = function(selectMode) {
  * @param {Boolean} visible
  * @param {Function} handler will be call to filter contact result before display it in result pane.
  */
-UIAddContactPopupWindow.prototype.setVisible = function(visible, handler){
+UIAddContactPopupWindow.prototype.setVisible = function(visible, tabId, mustSubmit){
   if (!this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {
     return;
@@ -264,17 +264,29 @@ UIAddContactPopupWindow.prototype.setVisible = function(visible, handler){
     //window.alert('handler callback: ', handler);
     //window.alert('handler callback: ', handler.addContactActionCallback);
     //eXo.communication.chat.webui.UIMainChatWindow.orgSearchUser();
-    eXo.communication.chat.webui.UIMainChatWindow.orgFuzzySearchUser('*', 0, 10);
-    this.filterFieldNode.value = '';
-    this.toggleSelectAllNode.checked = false;
-    //this.filterFieldNode.focus();
-    this.handler = handler;
-    this.uiPageIterator.destroy();
+    if ((tabId && tabId.targetPerson)) {
+	    var chatRoomServiceName = this.UIMainChatWindow.serverInfo.mucServicesNames[0];
+	    this.tabId = tabId;
+	    var roomName = this.tabId.targetPerson;
+	    if (roomName.indexOf('@' + chatRoomServiceName) != -1) {
+	      roomName = roomName.substr(0, roomName.indexOf('@' + chatRoomServiceName));
+	    }
+	    eXo.communication.chat.webui.UIMainChatWindow.orgFuzzySearchUser('*', 0, 10, roomName);
+	    this.filterFieldNode.value = '';
+	    this.toggleSelectAllNode.checked = false;
+	    this.uiPageIterator.destroy();
+		} else {
+			eXo.communication.chat.webui.UIMainChatWindow.orgFuzzySearchUser('*', 0, 10);
+	    this.filterFieldNode.value = '';
+	    this.toggleSelectAllNode.checked = false;
+	    //this.handler = handler;
+	    this.uiPageIterator.destroy();		
+		}
   } else {
     if (this.rootNode.style.display != 'none') {
       this.rootNode.style.display = 'none';
     }
-    this.handler = null;
+    this.mustSubmit = false;
   }
 };
 
