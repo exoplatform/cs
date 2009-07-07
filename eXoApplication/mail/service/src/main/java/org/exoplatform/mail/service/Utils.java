@@ -412,7 +412,7 @@ public class Utils {
     MimeMultipart  alternativePart = new MimeMultipart("alternative");
     
     String contentType = "text/plain" ;
-    if (message.getContentType().toLowerCase().indexOf("text/html") > -1) contentType = "text/html" ;
+    if (message.getContentType() != null && message.getContentType().toLowerCase().indexOf("text/html") > -1) contentType = "text/html" ;
     List<Attachment> attachList = message.getAttachments();
     if (attachList != null && attachList.size() > 0) {
       MimeBodyPart contentPartRoot = new MimeBodyPart();
