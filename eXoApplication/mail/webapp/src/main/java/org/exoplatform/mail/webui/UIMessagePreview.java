@@ -158,23 +158,27 @@ public class UIMessagePreview extends UIComponent {
   public CalendarEvent getEvent(Message msg) throws Exception {
     CalendarService calendarSrv = getApplicationComponent(CalendarService.class) ;
     CalendarEvent calEvent = null ;
-    if(Calendar.TYPE_PRIVATE == Integer.parseInt(MailUtils.getEventType(msg)) ) {
-      List<String> calIds = new ArrayList<String>() ;
-      calIds.add(MailUtils.getCalendarId(msg)) ;
-      Iterator<CalendarEvent> iter =
-        calendarSrv.getUserEventByCalendar(MailUtils.getEventFrom(msg), calIds).iterator() ;
-      while (iter.hasNext()) {
-        calEvent = iter.next() ;
-        if(MailUtils.getCalendarEventId(msg).equals(calEvent.getId()))
-          break ;
+    try {
+      if(Calendar.TYPE_PRIVATE == Integer.parseInt(MailUtils.getEventType(msg)) ) {
+        List<String> calIds = new ArrayList<String>() ;
+        calIds.add(MailUtils.getCalendarId(msg)) ;
+        Iterator<CalendarEvent> iter =
+          calendarSrv.getUserEventByCalendar(MailUtils.getEventFrom(msg), calIds).iterator() ;
+        while (iter.hasNext()) {
+          calEvent = iter.next() ;
+          if(MailUtils.getCalendarEventId(msg).equals(calEvent.getId()))
+            break ;
+        }
+        if(!MailUtils.getCalendarEventId(msg).equals(calEvent.getId()))
+          calEvent = null;
+      } else if(Calendar.TYPE_SHARED == Integer.parseInt(MailUtils.getEventType(msg))) {
+        //calendarSrv.get
       }
-      if(!MailUtils.getCalendarEventId(msg).equals(calEvent.getId()))
-        calEvent = null;
-    } else if(Calendar.TYPE_SHARED == Integer.parseInt(MailUtils.getEventType(msg))) {
-      //calendarSrv.get
-    }
-    else if(Calendar.TYPE_PUBLIC == Integer.parseInt(MailUtils.getEventType(msg))) {
-      calEvent = calendarSrv.getGroupEvent(MailUtils.getCalendarId(msg), MailUtils.getCalendarEventId(msg)) ; 
+      else if(Calendar.TYPE_PUBLIC == Integer.parseInt(MailUtils.getEventType(msg))) {
+        calEvent = calendarSrv.getGroupEvent(MailUtils.getCalendarId(msg), MailUtils.getCalendarEventId(msg)) ; 
+      }
+    } catch(Exception e){
+      calEvent = null;
     }
     return calEvent ;
   }
