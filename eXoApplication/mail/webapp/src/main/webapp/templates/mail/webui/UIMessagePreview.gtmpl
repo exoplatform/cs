@@ -435,6 +435,11 @@
                   		display1 = new String("");
                   		display2 = new String("");
                   		display3 = new String("");
+                  		if(status == null){
+                  			display1="display:none;";
+                  			display2="display:none;";
+                  			display3="display:none;";
+                  		}
                   		if(status != null && status.trim().length()> 0){
                   			if(status.equals("yes"))
                   				display1="display:none;";
