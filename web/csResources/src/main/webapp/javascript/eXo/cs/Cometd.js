@@ -108,7 +108,8 @@ Cometd.prototype._deliver = function(message){
       this._multiClientsDetectCnt ++;
       //console.warn('Multiple clients detected and notify from server');
       if (this._multiClientsDetectCnt == 1) {
-        throw (new Error('You has multiple tab/window using Cometd!\nPlease keep only once.'));
+        //throw (new Error('You has multiple tab/window using Cometd!\nPlease keep only once.'));
+        console.warn('You has multiple tab/window using Cometd!\nPlease keep only once.');  
       }
     } else {
       this._multiClientsDetectCnt = 0;
@@ -130,13 +131,15 @@ Cometd.prototype._deliver = function(message){
 				break;
 			case '/meta/subscribe':
 				if(!message.successful){
-					throw (new Error('todo manage error subscription'));
+					//throw (new Error('todo manage error subscription'));
+					console.warn('todo manage error subscription');
 					return;
 				}
 				break;
 			case '/meta/unsubscribe':
 				if(!message.successful){
-					throw (new('todo manage error unsubscription'));
+					//throw (new('todo manage error unsubscription'));
+					console.warn('todo manage error unsubscription') ;
 					return;
 				}
 				break;
