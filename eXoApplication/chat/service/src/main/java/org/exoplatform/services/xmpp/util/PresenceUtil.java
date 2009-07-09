@@ -85,7 +85,7 @@ public final class PresenceUtil {
    */
   public static Presence getPresence(String status) {
     for (Presence presence : PRESENCES) {
-      if (status.equals(presence.getStatus())) {
+      if (presence.getStatus().equalsIgnoreCase(status)) {
         return presence;
       }
     }
@@ -100,7 +100,7 @@ public final class PresenceUtil {
    */
   public static Presence getPresence(String status, String address) {
     for (Presence presence : PRESENCES) {
-      if (status.equals(presence.getStatus())) {
+      if (presence.getStatus().equalsIgnoreCase(status)) {
         presence.setTo(address);
         return presence;
       }
