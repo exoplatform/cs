@@ -50,7 +50,6 @@ import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -169,7 +168,7 @@ public class UIMessageList extends UIForm {
       // CS-2253
       long currentPage = 1 ;
       if (pageList_ != null) currentPage = pageList_.getCurrentPage() ;
-      MessagePageList currentPageList = mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter) ;
+      MessagePageList currentPageList = mailSrv.getMessagePageList(username, filter) ;
       // CS-2493
       setMessagePageList(currentPageList);
       updateList(currentPage) ;
@@ -256,7 +255,7 @@ public class UIMessageList extends UIForm {
       } catch(Exception e) {
         String username = MailUtils.getCurrentUser();
         MailService mailSrv = MailUtils.getMailService();
-        setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, getMessageFilter()));
+        setMessagePageList(mailSrv.getMessagePageList(username, getMessageFilter()));
         return ;
       }
       for (Message message : msgList) {
@@ -301,7 +300,7 @@ public class UIMessageList extends UIForm {
       if (msg.getTags() != null && msg.getTags().length > 0) {
         //TODO should use for each
         for (int i = 0; i < msg.getTags().length; i++) {
-          Tag tag = mailSrv.getTag(SessionProviderFactory.createSystemProvider(), username, accountId_, msg.getTags()[i]);
+          Tag tag = mailSrv.getTag(username, accountId_, msg.getTags()[i]);
           tagList.add(tag);
         }
       }
@@ -319,7 +318,7 @@ public class UIMessageList extends UIForm {
     String[] folders = msg.getFolders() ;
     if (folders != null && folders.length > 0) {
       for (int i = 0; i < folders.length; i++) {
-        Folder folder = mailSrv.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId_, folders[i]) ;
+        Folder folder = mailSrv.getFolder(username, accountId_, folders[i]) ;
         folderList.add(folder) ;
       }
     }
@@ -341,14 +340,14 @@ public class UIMessageList extends UIForm {
 
       if (msg != null) {
         MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-        msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg) ;
-        Account account = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId);
+        msg = mailSrv.loadTotalMessage(username, accountId, msg) ;
+        Account account = mailSrv.getAccountById(username, accountId);
         
         if (msg.isUnread()) {
           List<Message> msgIds  = new ArrayList<Message>();
           msgIds.add(msg);
           try {
-            MailUtils.getMailService().toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);
+            MailUtils.getMailService().toggleMessageProperty(username, accountId, msgIds, Utils.EXO_ISUNREAD);
           } catch (PathNotFoundException e) {
             uiMessageList.setMessagePageList(null) ;
             uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -379,7 +378,7 @@ public class UIMessageList extends UIForm {
             for (String id : msg.getGroupedMessageIds()) {
               Message msgMem = uiMessageList.messageList_.get(id);
               if (msgMem.hasAttachment()) {
-                msgMem = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msgMem) ;
+                msgMem = mailSrv.loadTotalMessage(username, accountId, msgMem) ;
               }
               showedMessages.add(msgMem) ;
             }
@@ -399,7 +398,7 @@ public class UIMessageList extends UIForm {
             UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
             ResourceBundle res = event.getRequestContext().getApplicationResourceBundle() ;
             try {             
-              mailService.sendReturnReceipt(SessionProviderFactory.createSystemProvider(), username, accountId, msgId, res);
+              mailService.sendReturnReceipt(username, accountId, msgId, res);
             } catch (AddressException e) {
               uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-error-parsing-the-addresses-sending-failed", null)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -420,7 +419,7 @@ public class UIMessageList extends UIForm {
             
             List<Message> msgs = new ArrayList<Message>();
             msgs.add(msg);
-            mailSrv.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, msgs, Utils.IS_RETURN_RECEIPT);
+            mailSrv.toggleMessageProperty(username, accountId, msgs, Utils.IS_RETURN_RECEIPT);
           }
         } 
         
@@ -492,7 +491,7 @@ public class UIMessageList extends UIForm {
         msg.setHasStar(!msg.hasStar());
         uiMessageList.messageList_.put(msg.getId(), msg);
         try {
-          mailSrv.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, Utils.EXO_STAR);
+          mailSrv.toggleMessageProperty(username, accountId, msgList, Utils.EXO_STAR);
         } catch (PathNotFoundException e) {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -513,7 +512,7 @@ public class UIMessageList extends UIForm {
           }
         }
         try {
-          mailSrv.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, Utils.EXO_STAR);
+          mailSrv.toggleMessageProperty(username, accountId, msgList, Utils.EXO_STAR);
         } catch (PathNotFoundException e) {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -555,7 +554,7 @@ public class UIMessageList extends UIForm {
         }
       }
       try {
-        mailSrv.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, Utils.EXO_STAR);       
+        mailSrv.toggleMessageProperty(username, accountId, msgList, Utils.EXO_STAR);       
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -619,7 +618,7 @@ public class UIMessageList extends UIForm {
       MessageFilter filter = uiMessageList.getMessageFilter() ;
       filter.setHasStructure(false) ;
       try {
-        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter)) ;
+        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter)) ;
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -658,7 +657,7 @@ public class UIMessageList extends UIForm {
         filter.setHasStructure(true) ;
         filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
         try {
-          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter)) ;
+          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter)) ;
         } catch (PathNotFoundException e) {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -704,7 +703,7 @@ public class UIMessageList extends UIForm {
         filter.setHasStructure(true) ;
         filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
         try {
-          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter)) ;
+          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter)) ;
         } catch (PathNotFoundException e) {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -744,7 +743,7 @@ public class UIMessageList extends UIForm {
       MessageFilter filter = uiMessageList.getMessageFilter() ;
       filter.setHasStructure(false) ;
       try {
-        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter)) ;
+        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter)) ;
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -861,7 +860,7 @@ public class UIMessageList extends UIForm {
       msgFilter.setTag((getSelectedTagId() == null) ? null : new String[] {getSelectedTagId()});
     }
     msgFilter.setHasStructure(false) ;
-    setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, msgFilter));
+    setMessagePageList(mailSrv.getMessagePageList(username, msgFilter));
   }
 
   static public class ReplyActionListener extends EventListener<UIMessageList> {
@@ -896,7 +895,7 @@ public class UIMessageList extends UIForm {
       Message message = null;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ; 
       else  message = checkedMsgs.get(0);
-      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), accId, message);
+      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accId, message);
       try {
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY);
       } catch (Exception e) {
@@ -946,7 +945,7 @@ public class UIMessageList extends UIForm {
       Message message = null;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
       else  message = checkedMsgs.get(0);
-      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), accId, message);
+      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accId, message);
       try {
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY_ALL);
       } catch (Exception e) {
@@ -996,7 +995,7 @@ public class UIMessageList extends UIForm {
       Message message = null;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
       else  message = checkedMsgs.get(0);
-      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), accId, message);
+      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accId, message);
       try {
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_FOWARD);
       } catch (Exception e) {
@@ -1095,10 +1094,10 @@ public class UIMessageList extends UIForm {
       String selectedFolderId = uiMessageList.getSelectedFolderId() ;
       try {
         if (selectedFolderId != null && selectedFolderId.equals(trashFolderId)) { 
-          mailSrv.removeMessages(SessionProviderFactory.createSystemProvider(), username, accountId, appliedMsgList, true);
+          mailSrv.removeMessages(username, accountId, appliedMsgList, true);
         } else {
           for (Message message : appliedMsgList)
-            mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], trashFolderId);
+            mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], trashFolderId);
         }
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
@@ -1146,7 +1145,7 @@ public class UIMessageList extends UIForm {
       }    
       SpamFilter spamFilter = null ;
       try {
-        spamFilter = mailSrv.getSpamFilter(SessionProviderFactory.createSystemProvider(), username, accountId);
+        spamFilter = mailSrv.getSpamFilter(username, accountId);
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -1156,10 +1155,10 @@ public class UIMessageList extends UIForm {
         return; 
       }
       for(Message message: checkedMessageList) {
-        mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_SPAM, false));
+        mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_SPAM, false));
         spamFilter.reportSpam(message);
       }       
-      mailSrv.saveSpamFilter(SessionProviderFactory.createSystemProvider(), username, accountId, spamFilter);
+      mailSrv.saveSpamFilter(username, accountId, spamFilter);
 
       uiMessageList.updateList(); 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
@@ -1196,7 +1195,7 @@ public class UIMessageList extends UIForm {
 
       SpamFilter spamFilter = null ;
       try {
-        spamFilter = mailSrv.getSpamFilter(SessionProviderFactory.createSystemProvider(), username, accountId);
+        spamFilter = mailSrv.getSpamFilter(username, accountId);
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -1207,10 +1206,10 @@ public class UIMessageList extends UIForm {
       }
 
       for(Message message: checkedMessageList) {
-        mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+        mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_INBOX, false));
         spamFilter.notSpam(message);
       }       
-      mailSrv.saveSpamFilter(SessionProviderFactory.createSystemProvider(), username, accountId, spamFilter);
+      mailSrv.saveSpamFilter(username, accountId, spamFilter);
 
       uiMessageList.updateList(); 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
@@ -1241,18 +1240,18 @@ public class UIMessageList extends UIForm {
       Message message = null ;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
       else  message = checkedMsgs.get(0);
-      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), accountId, message);  
+      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accountId, message);  
       if (message != null && !message.isLoaded()) {
         String username = MailUtils.getCurrentUser();
         MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-        message = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message) ;
+        message = mailSrv.loadTotalMessage(username, accountId, message) ;
       }
       String username = MailUtils.getCurrentUser();
       MailService mailSrv = MailUtils.getMailService();
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIPrintPreview uiPrintPreview ;
 //    cs-2127
-       Account acc = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId);
+       Account acc = mailSrv.getAccountById(username, accountId);
        if (acc != null ){
          uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
          uiPrintPreview.setAcc(acc) ; 
@@ -1297,7 +1296,7 @@ public class UIMessageList extends UIForm {
         }
       }
       try {
-        mailSrv.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, Utils.EXO_ISUNREAD);
+        mailSrv.toggleMessageProperty(username, accountId, msgList, Utils.EXO_ISUNREAD);
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -1340,7 +1339,7 @@ public class UIMessageList extends UIForm {
         }
       }
       try {
-        mailSrv.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, Utils.EXO_ISUNREAD);
+        mailSrv.toggleMessageProperty(username, accountId, msgList, Utils.EXO_ISUNREAD);
       } catch (PathNotFoundException e) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -1368,7 +1367,7 @@ public class UIMessageList extends UIForm {
       MailService mailService = uiMessageList.getApplicationComponent(MailService.class);
       List<Tag> listTags = null ; 
       try {
-        listTags = mailService.getTags(SessionProviderFactory.createSystemProvider(), username, accId);
+        listTags = mailService.getTags(username, accId);
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -1396,8 +1395,8 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       List<Tag> tagList = new ArrayList<Tag>();      
-      tagList.add(mailSrv.getTag(SessionProviderFactory.createSystemProvider(), username, accountId, tagId));
-      mailSrv.addTag(SessionProviderFactory.createSystemProvider(), username, accountId, uiMessageList.getCheckedMessage(), tagList);
+      tagList.add(mailSrv.getTag(username, accountId, tagId));
+      mailSrv.addTag(username, accountId, uiMessageList.getCheckedMessage(), tagList);
       List<String> tagIdList = new ArrayList<String>() ;
       for (Tag tag : tagList) tagIdList.add(tag.getId()) ;
       for (Message msg : uiMessageList.getCheckedMessage()) {
@@ -1452,10 +1451,10 @@ public class UIMessageList extends UIForm {
       List<Message> appliedMsgList = uiMessageList.getCheckedMessage();
       String fromFolderId = uiFolderContainer.getSelectedFolder() ;
       if (fromFolderId != null) {
-        mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, appliedMsgList, fromFolderId, folderId) ;
+        mailSrv.moveMessages(username, accountId, appliedMsgList, fromFolderId, folderId) ;
       } else {
         for (Message message : appliedMsgList) {
-          mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], folderId);
+          mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], folderId);
         }
       }       
       uiMessageList.updateList();     
@@ -1548,7 +1547,7 @@ public class UIMessageList extends UIForm {
           UIExportForm uiExportForm = uiPopup.activate(UIExportForm.class, 600);
           String username = uiPortlet.getCurrentUser() ;
           MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-          msg = mailSrv.loadTotalMessage(SessionProviderFactory.createSystemProvider(), username, accId, msg) ;  
+          msg = mailSrv.loadTotalMessage(username, accId, msg) ;  
           uiExportForm.setExportMessage(msg);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
         }
@@ -1630,7 +1629,7 @@ public class UIMessageList extends UIForm {
         msgFilter.setHasStructure(false) ;
       }
       try {
-        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, msgFilter));
+        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, msgFilter));
         uiMessageList.setMessageFilter(msgFilter);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
       } catch (Exception e) {
@@ -1660,7 +1659,7 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       try {
-        Message msg = mailSrv.getMessageById(SessionProviderFactory.createSystemProvider(), username, accountId, msgId);
+        Message msg = mailSrv.getMessageById(username, accountId, msgId);
         UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(msg.getId(), msg.getId(), false);
         uiMsgList.addUIFormInput(uiCheckBox);
         uiMsgList.messageList_.put(msg.getId(), msg);

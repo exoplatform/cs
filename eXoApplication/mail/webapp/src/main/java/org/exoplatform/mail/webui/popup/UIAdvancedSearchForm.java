@@ -33,7 +33,6 @@ import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.mail.webui.UITagContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -274,7 +273,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       uiMessageList.setMessageFilter(filter);
       uiMessageList.viewMode = uiMessageList.MODE_LIST ;
       try {
-        uiMessageList.setMessagePageList(mailService.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
+        uiMessageList.setMessagePageList(mailService.getMessagePageList(username, filter));
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
         uiFolderContainer.setSelectedFolder(null);

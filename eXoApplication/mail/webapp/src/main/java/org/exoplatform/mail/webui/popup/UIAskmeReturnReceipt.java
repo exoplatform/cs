@@ -29,7 +29,6 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -81,7 +80,7 @@ public class UIAskmeReturnReceipt extends UIForm implements UIPopupComponent {
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       ResourceBundle res = event.getRequestContext().getApplicationResourceBundle() ;
       try {
-        mailService.sendReturnReceipt(SessionProviderFactory.createSystemProvider(), username, accId, selectedMsgId, res);
+        mailService.sendReturnReceipt(username, accId, selectedMsgId, res);
       } catch (AddressException e) {
         uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-error-parsing-the-addresses-sending-failed", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -102,7 +101,7 @@ public class UIAskmeReturnReceipt extends UIForm implements UIPopupComponent {
       
       List<Message> msgs = new ArrayList<Message>();
       msgs.add(uiForm.getSelectedMsg());
-      mailService.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accId, msgs, Utils.IS_RETURN_RECEIPT);
+      mailService.toggleMessageProperty(username, accId, msgs, Utils.IS_RETURN_RECEIPT);
       uiMsgList.updateList();
       uiPopupAction.deActivate();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
@@ -120,7 +119,7 @@ public class UIAskmeReturnReceipt extends UIForm implements UIPopupComponent {
       String accId = uiMsgList.getAccountId();
       List<Message> msgs = new ArrayList<Message>();
       msgs.add(uiForm.getSelectedMsg());
-      mailService.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accId, msgs, Utils.IS_RETURN_RECEIPT);
+      mailService.toggleMessageProperty(username, accId, msgs, Utils.IS_RETURN_RECEIPT);
       uiMsgList.updateList();
       uiPortlet.cancelAction();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getParent()) ;

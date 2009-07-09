@@ -27,7 +27,6 @@ import javax.mail.internet.MimeMessage;
 import org.exoplatform.mail.service.MailImportExport;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 
@@ -43,7 +42,7 @@ public class EMLImportExport implements MailImportExport{
 	public EMLImportExport(JCRDataStorage jcrDataStorage) throws Exception {
 		jcrDataStorage_ = jcrDataStorage ;
 	}
-	public OutputStream exportMessage(SessionProvider sProvider, String username, String accountId, Message message) throws Exception {
+	public OutputStream exportMessage(String username, String accountId, Message message) throws Exception {
 		Properties props = System.getProperties();
     Session session = Session.getInstance(props, null);
     MimeMessage mimeMessage = new MimeMessage(session);
@@ -53,13 +52,13 @@ public class EMLImportExport implements MailImportExport{
 		return outputStream;
 	}
 
-	public boolean importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
+	public boolean importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
 		Properties props = System.getProperties();
     Session session = Session.getInstance(props, null);
     MimeMessage mimeMessage = new MimeMessage(session, inputStream);
     mimeMessage.setHeader("Message-ID", "Message" + IdGenerator.generate());
     try {
-       return jcrDataStorage_.saveMessage(sProvider, username, accountId, mimeMessage, new String[] { folderId }, null, null);
+       return jcrDataStorage_.saveMessage(username, accountId, mimeMessage, new String[] { folderId }, null, null);
     } catch(Exception e) { return false ; }
 	}  
 	

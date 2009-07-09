@@ -1189,7 +1189,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         e.printStackTrace() ;
       }
       message.setAttachements(attachments) ;      
-      svr.sendMessage(getSession(), user.getUserName(), acc.getId(), message) ;
+      svr.sendMessage(user.getUserName(), acc.getId(), message) ;
       
       // TODO cs-1141
       ContactService contactService = (ContactService)PortalContainer.getComponent(ContactService.class) ;
@@ -1492,7 +1492,7 @@ public Attachment getAttachment(String attId) {
             e.printStackTrace() ;
           }
           if(calendarEvent != null && uiForm.isSendMail()) {
-            Account acc = CalendarUtils.getMailService().getDefaultAccount(uiForm.getSession(), username);
+            Account acc = CalendarUtils.getMailService().getDefaultAccount(username);
             //if(acc != null) {
             try {
           /*    StringBuffer recive = new StringBuffer() ; 
@@ -1517,7 +1517,7 @@ public Attachment getAttachment(String attId) {
           //TODO cs-764
           else {
             if(calendarEvent != null && isSend){
-              Account acc = CalendarUtils.getMailService().getDefaultAccount(uiForm.getSession(), username);
+              Account acc = CalendarUtils.getMailService().getDefaultAccount(username);
                 if(oldCalendarEvent!=null){
                 if(oldCalendarEvent.getSummary()!=null && !oldCalendarEvent.getSummary().equalsIgnoreCase(calendarEvent.getSummary())||calendarEvent.getSummary()!=null && !calendarEvent.getSummary().equalsIgnoreCase(oldCalendarEvent.getSummary()))
                   uiForm.isChangedSignificantly = true;

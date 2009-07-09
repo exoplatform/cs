@@ -19,7 +19,6 @@ package org.exoplatform.mail.service;
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.quartz.InterruptableJob;
@@ -57,17 +56,15 @@ public class CheckMailJob implements Job, InterruptableJob {
 		  username = dataMap.getString(USERNAME);
 		  accountId = dataMap.getString(ACCOUNTID);
       folderId = dataMap.getString(FOLDERID);
-		  SessionProvider systemSession = SessionProvider.createSystemProvider() ;
 	    try {
 		  if (username!= null && accountId !=null) {
-		    mailService.checkNewMessage(systemSession, username, accountId, folderId) ;
+		    mailService.checkNewMessage(username, accountId, folderId) ;
 		  }
     } catch (InterruptedException ie) {
       getMailService().stopCheckMail(username, accountId);
 	  } catch (Exception e) {
 		  log.error("Mail check failed for " + context.getJobDetail().getName(), e);
 	  } finally {
-      systemSession.close() ;
   	  if (log.isDebugEnabled()) {
         log.debug("\n\n####  Checking mail of " + context.getJobDetail().getName() + " finished ");
   	  }

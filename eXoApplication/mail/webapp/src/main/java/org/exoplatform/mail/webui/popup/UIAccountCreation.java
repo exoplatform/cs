@@ -36,7 +36,6 @@ import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.WizardStep;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -171,18 +170,18 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   
   protected void saveForm(String currentUser, Account account) throws Exception {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
-    mailSvr.createAccount(SessionProviderFactory.createSystemProvider(), currentUser, account) ;
+    mailSvr.createAccount(currentUser, account) ;
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
     String username = uiPortlet.getCurrentUser() ;
     for(String folderName : defaultFolders_) {
       String folderId = Utils.createFolderId(account.getId(), folderName, false);
-      Folder folder = mailSvr.getFolder(SessionProviderFactory.createSystemProvider(), username, account.getId(), folderId) ;
+      Folder folder = mailSvr.getFolder(username, account.getId(), folderId) ;
       if(folder == null) {
         folder = new Folder() ;
         folder.setId(folderId);
         folder.setName(folderName) ;
         folder.setPersonalFolder(false) ;
-        mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), username, account.getId(), folder) ;
+        mailSvr.saveFolder(username, account.getId(), folder) ;
       }
     }
   }
@@ -392,7 +391,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.initService('checkMailInfobar', '" + MailUtils.getCurrentUser() + "', '" + acc.getId() + "') ;") ;
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.setCheckmailTimeout(" + 
-              uiAccCreation.getApplicationComponent(MailService.class).getMailSetting(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser()).getPeriodCheckAuto() + ") ;") ;
+              uiAccCreation.getApplicationComponent(MailService.class).getMailSetting(MailUtils.getCurrentUser()).getPeriodCheckAuto() + ") ;") ;
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox() ;");        
         } catch (AuthenticationFailedException afe) {

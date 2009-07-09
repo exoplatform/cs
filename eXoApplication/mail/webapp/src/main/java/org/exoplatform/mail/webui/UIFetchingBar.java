@@ -20,7 +20,6 @@ import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -102,7 +101,7 @@ public class UIFetchingBar extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       Message msg = null ;
       try {
-        msg = mailSrv.getMessageById(SessionProviderFactory.createSystemProvider(), username, accountId, msgId);
+        msg = mailSrv.getMessageById(username, accountId, msgId);
       }  catch (PathNotFoundException e) {
 
         uiMsgList.setMessagePageList(null) ;

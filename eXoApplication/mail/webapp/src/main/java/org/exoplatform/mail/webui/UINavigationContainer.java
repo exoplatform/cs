@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -42,9 +41,9 @@ public class UINavigationContainer extends UIContainer  {
     addChild(uiSelectAccount) ;
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    String defaultAcc = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), username).getDefaultAccount();
+    String defaultAcc = mailSvr.getMailSetting(username).getDefaultAccount();
     //TODO check session to get account (no need the systemSession for this)
-    List<Account> accounts = mailSvr.getAccounts(SessionProviderFactory.createSystemProvider(), username);
+    List<Account> accounts = mailSvr.getAccounts(username);
     if (defaultAcc == null && accounts.size() > 0) defaultAcc = accounts.get(0).getId();
     uiSelectAccount.setSelectedValue(defaultAcc);
     UIFolderContainer uiFolderContainer = createUIComponent(UIFolderContainer.class, null, null);

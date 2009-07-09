@@ -28,7 +28,6 @@ import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -93,7 +92,7 @@ public class UIEnterPasswordDialog extends UIForm implements UIPopupComponent{
   public Account getAccount() throws Exception {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = MailUtils.getCurrentUser();
-    return mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, getAccountId());
+    return mailSrv.getAccountById(username, getAccountId());
   }
   
   public boolean showWarning() { return showWarning_; }
@@ -110,14 +109,14 @@ public class UIEnterPasswordDialog extends UIForm implements UIPopupComponent{
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      Account acc = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId) ;
+      Account acc = mailSrv.getAccountById(username, accountId) ;
       acc.setIsSavePassword(isSavePw) ;
       acc.setIncomingPassword(newPw) ;
       
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       
       try {
-        mailSrv.sendMessage(SessionProviderFactory.createSystemProvider(), username, acc, uiForm.getSendMessage());
+        mailSrv.sendMessage(username, acc, uiForm.getSendMessage());
       } catch (AddressException e) {
         uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-error-parsing-the-addresses-sending-failed", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -150,7 +149,7 @@ public class UIEnterPasswordDialog extends UIForm implements UIPopupComponent{
       }
       
       if (isSavePw) {
-        mailSrv.updateAccount(SessionProviderFactory.createSystemProvider(), username, acc) ;
+        mailSrv.updateAccount(username, acc) ;
       }
       
       uiPopup.deActivate();

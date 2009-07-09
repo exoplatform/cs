@@ -28,7 +28,6 @@ import org.exoplatform.mail.webui.popup.UIAccountList;
 import org.exoplatform.mail.webui.popup.UIAccountSetting;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -79,8 +78,8 @@ public class UISelectAccount extends UIForm {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<Account> accountList = new ArrayList<Account>(); 
-    accountList =  mailSvr.getAccounts(SessionProviderFactory.createSystemProvider(), username) ;
-    String defaultAcc = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), username).getDefaultAccount();
+    accountList =  mailSvr.getAccounts(username) ;
+    String defaultAcc = mailSvr.getMailSetting(username).getDefaultAccount();
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
     for(Account acc : accountList) {
       SelectItemOption<String> option = new SelectItemOption<String>(acc.getLabel(), acc.getId());
@@ -179,8 +178,8 @@ public class UISelectAccount extends UIForm {
         UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
         MailService mailSvr = uiSelectAcc.getApplicationComponent(MailService.class) ;
         String username = uiPortlet.getCurrentUser();
-        if (mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), username, accId) == null) {
-          List<Account> accs = mailSvr.getAccounts(SessionProviderFactory.createSystemProvider(), username);
+        if (mailSvr.getAccountById(username, accId) == null) {
+          List<Account> accs = mailSvr.getAccounts(username);
           if (accs != null && accs.size() > 0) {
             accId = accs.get(0).getId();
             uiSelectAcc.refreshItems();

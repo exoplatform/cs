@@ -52,7 +52,6 @@ import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.mail.webui.popup.UIViewAllHeaders;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -147,7 +146,7 @@ public class UIMessagePreview extends UIComponent {
     String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     String username = MailUtils.getCurrentUser();
     MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
-    Account account = mailServ.getAccountById(SessionProviderFactory.createSystemProvider(), username, accId);
+    Account account = mailServ.getAccountById(username, accId);
     InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
     InternetAddress from = fromAddress[0];
     return (!MailUtils.isFieldEmpty(selectedFolder) &&  selectedFolder.equals(Utils.createFolderId(accId, Utils.FD_SENT, false))
@@ -212,7 +211,7 @@ public class UIMessagePreview extends UIComponent {
     UISelectAccount uiSelectAcc = uiMailPortlet.findFirstComponentOfType(UISelectAccount.class);
     String accId = uiSelectAcc.getSelectedValue();
     MailService mailSvr = uiSelectAcc.getApplicationComponent(MailService.class) ;
-    Account account = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), currentUser, accId);
+    Account account = mailSvr.getAccountById(currentUser, accId);
     String currentEmail ="";
     if ( account != null) {
       currentEmail = account.getEmailAddress();
@@ -270,7 +269,7 @@ public class UIMessagePreview extends UIComponent {
         List<Message> msgList = new ArrayList<Message>() ;
         msg.setHasStar(!msg.hasStar());
         msgList.add(msg) ;
-        mailServ.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, Utils.EXO_STAR);
+        mailServ.toggleMessageProperty(username, accountId, msgList, Utils.EXO_STAR);
         uiMessageList.messageList_.put(msgId, msg);
         uiMsgPreview.setMessage(msg);
       }
@@ -390,9 +389,9 @@ public class UIMessagePreview extends UIComponent {
       if (msg != null) {
         String selectedFolderId = uiFolderCon.getSelectedFolder() ;
         if (selectedFolderId != null && selectedFolderId.equals(Utils.createFolderId(accountId, Utils.FD_TRASH, false))) { 
-          mailSrv.removeMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg);
+          mailSrv.removeMessage(username, accountId, msg);
         } else {
-          mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
+          mailSrv.moveMessage(username, accountId, msg, msg.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_TRASH, false));
         }        
         uiMsgList.updateList();
         List<Message> showedMsgList = uiMsgPreview.getShowedMessages() ;
@@ -421,7 +420,7 @@ public class UIMessagePreview extends UIComponent {
       String username = MailUtils.getCurrentUser();
       MailService mailSrv = MailUtils.getMailService();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      Account acc = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId);
+      Account acc = mailSrv.getAccountById(username, accountId);
       if (acc != null) {
         uiPrintPreview.setAcc(acc) ; 
         uiPrintPreview.setPrintMessage(msg) ;
@@ -491,7 +490,7 @@ public class UIMessagePreview extends UIComponent {
         String username = uiPortlet.getCurrentUser();
         String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
         MailService mailSrv = MailUtils.getMailService();
-        List<Tag> listTags = mailSrv.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
+        List<Tag> listTags = mailSrv.getTags(username, accountId);
         uiPopupAction.activate(uiTagForm, 600, 0, true);
         List<Message> msgList = new ArrayList<Message>();
         msgList.add(msg);
@@ -538,7 +537,7 @@ public class UIMessagePreview extends UIComponent {
       String accId = uiSelectAcc.getSelectedValue();
       MailService mailSvr = uiSelectAcc.getApplicationComponent(MailService.class) ;
       String confirmingUser = uiMailPortlet.getCurrentUser();
-      Account account = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), confirmingUser, accId);
+      Account account = mailSvr.getAccountById(confirmingUser, accId);
       String confirmingEmail ="";
       if ( account != null) {
         confirmingEmail = account.getEmailAddress();

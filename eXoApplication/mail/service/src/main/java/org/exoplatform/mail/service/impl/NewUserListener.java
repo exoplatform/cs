@@ -102,16 +102,16 @@ public class NewUserListener extends UserEventListener {
     String folderId = null;
     Folder folder   = null;
     try {
-      mservice_.createAccount(sProvider, username, acc);
+      mservice_.createAccount(username, acc);
       for(String folderName : defaultFolders_) {
         folderId = Utils.createFolderId(accId, folderName, false);
-        folder = mservice_.getFolder(sProvider, username, accId, folderId) ;
+        folder = mservice_.getFolder(username, accId, folderId) ;
         if(folder == null) {
           folder = new Folder() ;
           folder.setId(folderId);
           folder.setName(folderName) ;
           folder.setPersonalFolder(false) ;
-          mservice_.saveFolder(sProvider, username, accId, folder) ;
+          mservice_.saveFolder(username, accId, folder) ;
         }
       }
     } catch (Exception e) {

@@ -19,7 +19,6 @@ package org.exoplatform.mail.service;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 
 /**
@@ -29,6 +28,6 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  * Jul 2, 2007  
  */
 public interface MailImportExport {  
-	public boolean importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
-  public OutputStream exportMessage(SessionProvider sProvider, String username,String accountId, Message message) throws Exception;
+	public boolean importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
+  public OutputStream exportMessage(String username, String accountId,Message message) throws Exception;
 }

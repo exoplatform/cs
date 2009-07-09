@@ -30,7 +30,6 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -137,7 +136,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
-    for(Account acc : mailSrv.getAccounts(SessionProviderFactory.createSystemProvider(), username)) {
+    for(Account acc : mailSrv.getAccounts(username)) {
       SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getLabel() + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
       options.add(itemOption) ;
     }
@@ -147,7 +146,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
   public void fillData() throws Exception {    
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
-    MailSetting setting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
+    MailSetting setting = mailSrv.getMailSetting(username);
     if (setting != null) {
       long layout = setting.getLayout();
       long sendReturnReceipt = setting.getSendReturnReceipt();
@@ -205,7 +204,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       String accountId = uiSelectAccount.getSelectedValue();
 		  
       MailService mailSrv = MailUtils.getMailService();
-		  MailSetting setting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
+		  MailSetting setting = mailSrv.getMailSetting(username);
       String defaultAcc = uiSetting.getUIFormSelectBox(DEFAULT_ACCOUNT).getValue() ;
 		  setting.setDefaultAccount(defaultAcc) ;
       setting.setNumberMsgPerPage(Long.valueOf(uiSetting.getUIFormSelectBox(NUMBER_MSG_PER_PAGE).getValue())) ;
@@ -244,7 +243,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         }
       }
       
-      mailSrv.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, setting);
+      mailSrv.saveMailSetting(username, setting);
 		  UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       MessageFilter filter = uiMessageList.getMessageFilter() ;
       if (oldLayout != setting.getLayout()) {
@@ -253,10 +252,10 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       } else if (defaultAcc != null && (!accountId.equals(setting.getDefaultAccount()) || accountId.equals(defaultAcc))){
         uiSelectAccount.updateAccount() ;
         uiSelectAccount.setSelectedValue(accountId);
-        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
+        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter));
       } else {
         try {
-        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
+        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter));
         } catch (PathNotFoundException e) {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
