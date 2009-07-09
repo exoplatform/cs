@@ -32,7 +32,6 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -253,7 +252,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ; 
         String username = ContactUtils.getCurrentUser() ;
         try {
-          mailSvr.sendMessage(SessionProviderFactory.createSessionProvider(), username, accId, message) ;
+          mailSvr.sendMessage(username, accId, message) ;
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
           uiChildPopup.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
@@ -268,12 +267,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         try {
-          MailSetting setting = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
+          MailSetting setting = mailSvr.getMailSetting(username);
           if (setting.saveMessageInSent()) {
             message.setFolders(new String[]{ Utils.createFolderId(accId, Utils.FD_SENT, false) }) ;
           }
           message.setReplyTo(message.getMessageTo()) ;
-          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), username, accId, message.getPath(), message, true) ;
+          mailSvr.saveMessage(username, accId, message.getPath(), message, true) ;
           uiChildPopup.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
         } catch (Exception e) {

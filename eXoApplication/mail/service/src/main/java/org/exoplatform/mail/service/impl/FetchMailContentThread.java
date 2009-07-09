@@ -23,26 +23,23 @@ import java.util.List;
 import javax.mail.Message;
 
 import org.exoplatform.mail.service.MimeMessageParser;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-
-import com.sun.mail.imap.IMAPFolder;
 
 public class FetchMailContentThread implements Runnable {
 
   private JCRDataStorage storage_;
-  private SessionProvider sProvider_;
   private String username_;
   private String accountId_;
   private LinkedHashMap<javax.mail.Message, List<String>> msgMap_;
   private javax.mail.Folder folder_;
+  private int numberMessage_ = 0;
   
-  public FetchMailContentThread(SessionProvider sProvider, JCRDataStorage storage, LinkedHashMap<javax.mail.Message, List<String>> msgMap, javax.mail.Folder folder, String username, String accountId) throws Exception {
-    sProvider_ = sProvider; 
+  public FetchMailContentThread(JCRDataStorage storage, LinkedHashMap<javax.mail.Message, List<String>> msgMap, int numberMessage, javax.mail.Folder folder, String username, String accountId) throws Exception {
     storage_ = storage;
     username_ = username;
     accountId_ = accountId;
     msgMap_ = msgMap;
     folder_ = folder;
+    numberMessage_ = numberMessage;
   }
 
   public void run() {
@@ -56,11 +53,10 @@ public class FetchMailContentThread implements Runnable {
   public void downloadMailContent() throws Exception {
     int j = 0;
     Message msg;
-    int totalNew = msgMap_.size();
     List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap_.keySet()) ;
-    while (j < totalNew) {
+    while (j < numberMessage_) {
       msg = msgList.get(j);
-      storage_.saveTotalMessage(sProvider_, username_, accountId_, MimeMessageParser.getMessageId(msg), msg);
+      storage_.saveTotalMessage(username_, accountId_, MimeMessageParser.getMessageId(msg), msg);
       j++;
     } 
   }

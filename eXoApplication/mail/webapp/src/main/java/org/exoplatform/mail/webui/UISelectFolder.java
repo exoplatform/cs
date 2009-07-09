@@ -22,7 +22,6 @@ import java.util.List;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
@@ -69,7 +68,7 @@ public class UISelectFolder extends UIFormInputSet {
     MailService mailSvr = MailUtils.getMailService();
     String username = MailUtils.getCurrentUser() ;
     List<Folder> subFolders = new ArrayList<Folder>();
-    for (Folder f : mailSvr.getSubFolders(SessionProviderFactory.createSystemProvider(), username, accountId_, parentPath)) {
+    for (Folder f : mailSvr.getSubFolders(username, accountId_, parentPath)) {
       subFolders.add(f);
     }
     return subFolders ;
@@ -80,7 +79,7 @@ public class UISelectFolder extends UIFormInputSet {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String username = MailUtils.getCurrentUser() ;
     try {
-      folders.addAll(mailSvr.getFolders(SessionProviderFactory.createSystemProvider(), username, accountId_, isPersonal)) ;
+      folders.addAll(mailSvr.getFolders(username, accountId_, isPersonal)) ;
     } catch (Exception e){
       //e.printStackTrace() ;
     }

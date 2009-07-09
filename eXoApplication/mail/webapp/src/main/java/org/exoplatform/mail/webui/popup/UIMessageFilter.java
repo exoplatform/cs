@@ -27,7 +27,6 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -84,7 +83,7 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
     String accountId = getAncestorOfType(UIMailPortlet.class).getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
     MailService mailSrv = MailUtils.getMailService();
     if (getSelectedFilterId() != null) {
-      return mailSrv.getFilterById(SessionProviderFactory.createSystemProvider(), username, accountId, getSelectedFilterId());
+      return mailSrv.getFilterById(username, accountId, getSelectedFilterId());
     } else {
       return null;
     }
@@ -93,21 +92,21 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
   public List<MessageFilter> getFilters() throws Exception {
     String username = MailUtils.getCurrentUser();
     MailService mailSrv = MailUtils.getMailService();
-    return mailSrv.getFilters(SessionProviderFactory.createSystemProvider(), username, accountId_);
+    return mailSrv.getFilters(username, accountId_);
   }
   
   public Folder getFolder() throws Exception {
     String username = MailUtils.getCurrentUser();
     String accountId = getAncestorOfType(UIMailPortlet.class).getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
     MailService mailSrv = MailUtils.getMailService();
-    return mailSrv.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, getSelectedFilter().getApplyFolder());
+    return mailSrv.getFolder(username, accountId, getSelectedFilter().getApplyFolder());
   }
   
   public Tag getTag() throws Exception {
     String username = MailUtils.getCurrentUser();
     String accountId = getAncestorOfType(UIMailPortlet.class).getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
     MailService mailSrv = MailUtils.getMailService();
-    return mailSrv.getTag(SessionProviderFactory.createSystemProvider(), username, accountId, getSelectedFilter().getApplyTag());
+    return mailSrv.getTag(username, accountId, getSelectedFilter().getApplyTag());
   }
   
   //TODO should replace text with resource boundle
@@ -191,8 +190,8 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       String accountId = mailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = MailUtils.getMailService();
       try {
-        mailServ.removeFilter(SessionProviderFactory.createSystemProvider(), username, accountId, filterId);
-        List<MessageFilter> msgFilters = mailServ.getFilters(SessionProviderFactory.createSystemProvider(), username, accountId);
+        mailServ.removeFilter(username, accountId, filterId);
+        List<MessageFilter> msgFilters = mailServ.getFilters(username, accountId);
         if (msgFilters != null && msgFilters.size() > 0) {
           uiMessageFilter.setSelectedFilterId(msgFilters.get(0).getId());  
         } else { 

@@ -21,7 +21,6 @@ import java.util.List;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.RootContainer;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.security.ConversationRegistry;
@@ -45,7 +44,7 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
      }
     MailService mService = (MailService)container.getComponentInstanceOfType(MailService.class) ;
     String username = event.getData().getIdentity().getUserId();
-    List<Account> accList = mService.getAccounts(SessionProvider.createSystemProvider(), username);
+    List<Account> accList = mService.getAccounts(username);
     for (Account acc : accList) {
       mService.stopAllJobs(username, acc.getId());
     }    

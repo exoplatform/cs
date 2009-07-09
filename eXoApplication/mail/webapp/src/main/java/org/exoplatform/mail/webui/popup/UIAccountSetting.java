@@ -34,7 +34,6 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -330,7 +329,7 @@ public class UIAccountSetting extends UIFormTabPane {
   public void fillField() throws Exception {
     MailService mailSrv = getApplicationComponent(MailService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    Account account = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, getSelectedAccountId());
+    Account account = mailSrv.getAccountById(username, getSelectedAccountId());
     UIFormInputWithActions uiIdentityInput = getChildById(TAB_IDENTITY_SETTINGS) ;
     uiIdentityInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel()) ;
     uiIdentityInput.getUIStringInput(FIELD_DISPLAY_NAME).setValue(account.getUserDisplayName()) ;
@@ -404,7 +403,7 @@ public class UIAccountSetting extends UIFormTabPane {
   public List<Account> getAccounts() throws Exception {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
-    return mailSrv.getAccounts(SessionProviderFactory.createSystemProvider(), username);
+    return mailSrv.getAccounts(username);
   }
   
   static  public class SelectAccountActionListener extends EventListener<UIAccountSetting> {
@@ -439,8 +438,8 @@ public class UIAccountSetting extends UIFormTabPane {
       MailService mailSvr = uiPortlet.getApplicationComponent(MailService.class) ;
       try {
         String removedAccId = uiAccSetting.getSelectedAccountId() ; 
-        mailSvr.removeAccount(SessionProviderFactory.createSystemProvider(), username, removedAccId) ;
-        MailSetting mailSetting = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), username) ;
+        mailSvr.removeAccount(username, removedAccId) ;
+        MailSetting mailSetting = mailSvr.getMailSetting(username) ;
         if (uiAccSetting.getAccounts().size() > 0) {
           String newSelectedAcc = uiAccSetting.getAccounts().get(0).getId() ;
           uiAccSetting.setSelectedAccountId(newSelectedAcc) ;
@@ -450,7 +449,7 @@ public class UIAccountSetting extends UIFormTabPane {
           String defaultAcc = mailSetting.getDefaultAccount();
           if (removedAccId.equals(defaultAcc)) {
             mailSetting.setDefaultAccount(newSelectedAcc) ;
-            mailSvr.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, mailSetting) ;
+            mailSvr.saveMailSetting(username, mailSetting) ;
           }
           uiAccSetting.fillField() ;
           uiMsgList.setMessageFilter(null);
@@ -461,7 +460,7 @@ public class UIAccountSetting extends UIFormTabPane {
           uiSelectAccount.updateAccount() ;
           uiSelectAccount.setSelectedValue(null) ;
           mailSetting.setDefaultAccount(null) ;
-          mailSvr.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, mailSetting) ;
+          mailSvr.saveMailSetting(username, mailSetting) ;
           event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction() ;
           uiMsgList.init(null);
           uiMsgPreview.setMessage(null);
@@ -483,7 +482,7 @@ public class UIAccountSetting extends UIFormTabPane {
       MailService mailSrv = uiSetting.getApplicationComponent(MailService.class) ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       String editedAccountId = uiSetting.getSelectedAccountId() ;
-      Account acc = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, editedAccountId) ;
+      Account acc = mailSrv.getAccountById(username, editedAccountId) ;
       String userName = uiSetting.getFieldIncomingAccount() ;
       String email = uiSetting.getFieldMailAddress() ;
       String reply = uiSetting.getFieldReplyAddress() ;
@@ -565,7 +564,7 @@ public class UIAccountSetting extends UIFormTabPane {
       
       
       try {
-        mailSrv.updateAccount(SessionProviderFactory.createSystemProvider(), username, acc) ;
+        mailSrv.updateAccount(username, acc) ;
         UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
         String accountId = uiSelectAccount.getSelectedValue();
         uiSelectAccount.updateAccount() ;

@@ -22,7 +22,6 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.webui.UIFetchingBar ;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 
 /**
  * Created by The eXo Platform SARL
@@ -51,7 +50,7 @@ public class UIMessageArea extends UIContainer  {
   
   public void reloadMailSetting() throws Exception {
     MailService mailSrv = getApplicationComponent(MailService.class) ;
-    mailSetting_ = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser()) ;    
+    mailSetting_ = mailSrv.getMailSetting(MailUtils.getCurrentUser()) ;    
   }
   
   public UIMessageList getUIMessageList() { return findFirstComponentOfType(UIMessageList.class); }

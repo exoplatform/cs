@@ -28,7 +28,6 @@ import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIEditTagForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -113,7 +112,7 @@ public class UITagContainer extends UIForm {
       UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser() ;
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-      if (accountId != null && accountId != "") tagList = mailService.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
+      if (accountId != null && accountId != "") tagList = mailService.getTags(username, accountId);
     } catch (Exception e) { }
     return tagList;
   }
@@ -136,7 +135,7 @@ public class UITagContainer extends UIForm {
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(SessionProviderFactory.createSystemProvider(), username, accountId, tagId));
+      uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, tagId));
       MessageFilter filter = new MessageFilter("Tag"); 
       filter.setTag(new String[] { tagId });
       filter.setAccountId(accountId);
@@ -201,7 +200,7 @@ public class UITagContainer extends UIForm {
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      mailSrv.removeTag(SessionProviderFactory.createSystemProvider(), username, accountId, tagId);
+      mailSrv.removeTag(username, accountId, tagId);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
@@ -220,10 +219,10 @@ public class UITagContainer extends UIForm {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       
-      List<Message> listMessage = mailSrv.getMessageByTag(SessionProviderFactory.createSystemProvider(), username, accountId, tagId);
+      List<Message> listMessage = mailSrv.getMessageByTag(username, accountId, tagId);
       List<String> listTag = new ArrayList<String>();
       listTag.add(tagId);
-      mailSrv.removeTagsInMessages(SessionProviderFactory.createSystemProvider(), username, accountId, listMessage, listTag);
+      mailSrv.removeTagsInMessages(username, accountId, listMessage, listTag);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
@@ -240,9 +239,9 @@ public class UITagContainer extends UIForm {
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      Tag tag = mailSrv.getTag(SessionProviderFactory.createSystemProvider(), username, accountId, tagId) ;
+      Tag tag = mailSrv.getTag(username, accountId, tagId) ;
       tag.setColor(color) ;
-      mailSrv.updateTag(SessionProviderFactory.createSystemProvider(), username, accountId, tag);
+      mailSrv.updateTag(username, accountId, tag);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());

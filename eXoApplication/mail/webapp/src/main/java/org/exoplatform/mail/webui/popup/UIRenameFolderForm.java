@@ -25,7 +25,6 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -69,7 +68,7 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = MailUtils.getCurrentUser();
     String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    Folder folder = mailSrv.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId);
+    Folder folder = mailSrv.getFolder(username, accountId, folderId);
     getUIFormInputInfo(CUR_FOLDER_NAME).setValue(folder.getName());    
   }
 
@@ -93,11 +92,11 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
       }
       
       try {
-        String folderParentId =  mailService.getFolderParentId(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
-        if (!mailService.isExistFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderParentId, newFolderName)) {
-          Folder folder =  mailService.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId);
+        String folderParentId =  mailService.getFolderParentId(username, accountId, folderId) ;
+        if (!mailService.isExistFolder(username, accountId, folderParentId, newFolderName)) {
+          Folder folder =  mailService.getFolder(username, accountId, folderId);
           folder.setName(newFolderName) ;
-          mailService.saveFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folder) ;
+          mailService.saveFolder(username, accountId, folder) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{newFolderName})) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

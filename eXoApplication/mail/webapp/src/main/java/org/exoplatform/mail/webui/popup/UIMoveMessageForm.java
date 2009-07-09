@@ -31,7 +31,6 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -92,7 +91,7 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       String destFolderId = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
       Folder destFolder =  null ;
       try {
-        destFolder =  mailSrv.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, destFolderId);
+        destFolder =  mailSrv.getFolder(username, accountId, destFolderId);
       } catch (PathNotFoundException e) { }
       if (destFolder == null) {
         UIApplication uiApp = uiMoveMessageForm.getAncestorOfType(UIApplication.class) ;
@@ -105,10 +104,10 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
       String fromFolderId = uiFolderContainer.getSelectedFolder() ;
       if (fromFolderId != null) {
-        mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, uiMoveMessageForm.getMessageList(), fromFolderId, destFolderId) ;
+        mailSrv.moveMessages(username, accountId, uiMoveMessageForm.getMessageList(), fromFolderId, destFolderId) ;
       } else {
         for (Message message : uiMoveMessageForm.getMessageList()) {
-          mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], destFolderId);
+          mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], destFolderId);
         }
       }
       uiMessageList.updateList(); 

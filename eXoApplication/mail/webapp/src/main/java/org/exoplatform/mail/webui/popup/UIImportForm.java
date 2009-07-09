@@ -27,7 +27,6 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -109,7 +108,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       String username = uiPortlet.getCurrentUser() ;
       String folderId = uiImport.getChild(UISelectFolder.class).getSelectedValue();
-      if (!mailSrv.importMessage(SessionProviderFactory.createSystemProvider(), username, accountId, folderId, inputStream, type)) {
+      if (!mailSrv.importMessage(username, accountId, folderId, inputStream, type)) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.import-messages-error", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

@@ -27,7 +27,6 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -87,7 +86,7 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       String folderId = Utils.KEY_FOLDERS + IdGenerator.generate() ;
       Folder folder = null ;
       try {
-        if (mailSvr.isExistFolder(SessionProviderFactory.createSystemProvider(), username, accountId, uiForm.getParentPath(), folderName)) {
+        if (mailSvr.isExistFolder(username, accountId, uiForm.getParentPath(), folderName)) {
           uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
@@ -97,10 +96,10 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       folder.setId(folderId);
       folder.setName(folderName) ;
       if (uiForm.getParentPath() != null && !"".equals(uiForm.getParentPath().trim())) {
-        mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), username, accountId, uiForm.getParentPath(), folder) ;
+        mailSvr.saveFolder(username, accountId, uiForm.getParentPath(), folder) ;
       } else {
         try {
-          mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folder) ;
+          mailSvr.saveFolder(username, accountId, folder) ;
         } catch (PathNotFoundException e) {
           uiPortlet.findFirstComponentOfType(UIMessageList.class).setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();

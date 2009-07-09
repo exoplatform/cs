@@ -111,34 +111,34 @@ public class TestMailService extends BaseMailTestCase{
     System.out.println("\n\n Test POP Account" );
     Account  account = createAccountObj(Utils.POP3) ;
     String accId = account.getId() ;
-    mailService_.createAccount(sProvider, username, account) ;
-    Account getAccount =  mailService_.getAccountById(sProvider, username, accId) ;
+    mailService_.createAccount(username, account) ;
+    Account getAccount =  mailService_.getAccountById(username, accId) ;
     assertNotNull(getAccount) ;
 
     System.out.println("\n\n Test IMAP Account" );
     Account  account2= createAccountObj(Utils.IMAP) ;
     String accId2 = account2.getId() ;
-    mailService_.createAccount(sProvider, username, account2) ;
+    mailService_.createAccount(username, account2) ;
 
-    Account getAccount2 =  mailService_.getAccountById(sProvider, username, accId2) ;
+    Account getAccount2 =  mailService_.getAccountById(username, accId2) ;
     assertNotNull(getAccount2) ;
 
-    Account defaultAcc = mailService_.getDefaultAccount(sProvider, username) ;
+    Account defaultAcc = mailService_.getDefaultAccount(username) ;
     assertNotNull(defaultAcc) ;
-    mailService_.removeAccount(sProvider, username, accId) ;
-    assertNull(mailService_.getAccountById(sProvider, username, accId)) ;
-    mailService_.removeAccount(sProvider, username, accId2) ;
-    assertNull(mailService_.getAccountById(sProvider, username, accId2)) ;
+    mailService_.removeAccount(username, accId) ;
+    assertNull(mailService_.getAccountById(username, accId)) ;
+    mailService_.removeAccount(username, accId2) ;
+    assertNull(mailService_.getAccountById(username, accId2)) ;
 
   }
 
   //Send mail
   public void testSendMail() throws Exception {
     Account accPop = createAccountObj(Utils.POP3) ;
-    mailService_.createAccount(sProvider, username, accPop) ;
+    mailService_.createAccount(username, accPop) ;
 
     Account accImap = createAccountObj(Utils.IMAP) ;
-    mailService_.createAccount(sProvider, username, accImap) ;
+    mailService_.createAccount(username, accImap) ;
     StringBuffer sbBody = new StringBuffer("") ;
     
     Message message = new Message() ;
@@ -160,70 +160,70 @@ public class TestMailService extends BaseMailTestCase{
     sbBody.append("<b>Hello "+accPop.getIncomingUser()+"</b>").append("<br/>").append(Calendar.getInstance().getTime().toString()) ;
     message.setMessageBody(sbBody.toString()) ;
     //javax.mail.AuthenticationFailedException
-    mailService_.sendMessage(sProvider, username, accImap.getId(), message) ;
+    mailService_.sendMessage(username, accImap.getId(), message) ;
     
     System.out.println("\n\n Message has been sent use IMAP !");
     
-    mailService_.removeAccount(sProvider, username, accPop.getId()) ;
-    mailService_.removeAccount(sProvider, username, accImap.getId()) ;
+    mailService_.removeAccount(username, accPop.getId()) ;
+    mailService_.removeAccount(username, accImap.getId()) ;
 
   }
 
   //Check mail form POP and IMAP server
   public void testGetMailFormServer() throws Exception {
     Account accPop = createAccountObj(Utils.POP3) ;
-    mailService_.createAccount(sProvider, username, accPop) ;
+    mailService_.createAccount(username, accPop) ;
     
     Account accImap = createAccountObj(Utils.IMAP) ;
-    mailService_.createAccount(sProvider, username, accImap) ;
+    mailService_.createAccount(username, accImap) ;
 
-    mailService_.checkNewMessage(sProvider, username, accPop.getId()) ;
+    mailService_.checkNewMessage(username, accPop.getId()) ;
     
     MessageFilter filter = new MessageFilter("testFilter") ;
     filter.setAccountId(accPop.getId()) ;
-    assertNotNull(mailService_.getMessages(sProvider, username, filter)) ;
+    assertNotNull(mailService_.getMessages(username, filter)) ;
     //assertEquals(mailService_.getMessages(sProvider, username, filter).size(),1) ;
     filter.setAccountId(accImap.getId()) ;
-    assertNotNull(mailService_.getMessages(sProvider, username, filter)) ;
+    assertNotNull(mailService_.getMessages(username, filter)) ;
     //assertEquals(mailService_.getMessages(sProvider, username, filter).size(),0) ;
 
-    assertNotNull(mailService_.getFolders(sProvider, username, accPop.getId(), false)) ;
+    assertNotNull(mailService_.getFolders(username, accPop.getId(), false)) ;
     
-    mailService_.removeAccount(sProvider, username, accPop.getId()) ;
-    mailService_.removeAccount(sProvider, username, accImap.getId()) ;
+    mailService_.removeAccount(username, accPop.getId()) ;
+    mailService_.removeAccount(username, accImap.getId()) ;
   }
   
   //Add custom folder
   public void testAddFolder() throws Exception {
     Account accPop = createAccountObj(Utils.POP3) ;
-    mailService_.createAccount(sProvider, username, accPop) ;
+    mailService_.createAccount(username, accPop) ;
     Folder folder = new Folder() ;
     folder.setId("folderId1") ;
     folder.setName("folder test") ;
     folder.setURLName("folder 1") ;
-    mailService_.saveFolder(sProvider, username, accPop.getId(), folder) ;
+    mailService_.saveFolder(username, accPop.getId(), folder) ;
     folder = new Folder() ;
     folder.setId("folderId1.1") ;
     folder.setName("folder test 1.1") ;
     folder.setURLName("folder 1.1");
-    mailService_.saveFolder(sProvider, username, accPop.getId(), folder) ;
+    mailService_.saveFolder(username, accPop.getId(), folder) ;
     
     Folder folderChild = new Folder() ;
     folderChild.setId("folderId2") ;
     folder.setURLName("folder 2") ;
     folderChild.setName("child folder ") ;
-    mailService_.saveFolder(sProvider, username, accPop.getId(), folder.getId(), folderChild) ;
+    mailService_.saveFolder(username, accPop.getId(), folder.getId(), folderChild) ;
     List<Folder> fs = new ArrayList<Folder>() ;
-    assertNotNull(mailService_.getFolders(sProvider, username, accPop.getId())) ;
-    fs.addAll(mailService_.getFolders(sProvider, username, accPop.getId())) ;
-    assertEquals(mailService_.getFolders(sProvider, username, accPop.getId()).size(), 2) ;
-    mailService_.removeAccount(sProvider, username, accPop.getId()) ;
+    assertNotNull(mailService_.getFolders(username, accPop.getId())) ;
+    fs.addAll(mailService_.getFolders(username, accPop.getId())) ;
+    assertEquals(mailService_.getFolders(username, accPop.getId()).size(), 2) ;
+    mailService_.removeAccount(username, accPop.getId()) ;
   }
   
   //Save and move message 
   public void testSaveMessage() throws Exception {
     Account accPop = createAccountObj(Utils.POP3) ;
-    mailService_.createAccount(sProvider, username, accPop) ;
+    mailService_.createAccount(username, accPop) ;
     System.out.println("account " + username + " has been saved!");
     StringBuffer sbBody = new StringBuffer("") ;
     Message message = new Message() ;
@@ -238,31 +238,31 @@ public class TestMailService extends BaseMailTestCase{
     folder.setId("folderId1") ;
     folder.setName("folder test") ;
     folder.setURLName("folder 1") ;
-    mailService_.saveFolder(sProvider, username, accPop.getId(), folder) ;
+    mailService_.saveFolder(username, accPop.getId(), folder) ;
     
     
     Folder desfolder = new Folder() ;
     desfolder.setId("folderId2") ;
     desfolder.setName("folder test 2 ") ;
     desfolder.setURLName("folder 2") ;
-    mailService_.saveFolder(sProvider, username, accPop.getId(), desfolder) ;
+    mailService_.saveFolder(username, accPop.getId(), desfolder) ;
     
     message.setFolders(new String[]{folder.getId()}) ;
     message.setReceivedDate(new Date()) ;
-    mailService_.saveMessage(sProvider, username, accPop.getId(), message, true) ;
-    assertNotNull(mailService_.getMessagesByFolder(sProvider, username, accPop.getId(), folder.getId())) ;
-    assertEquals(mailService_.getMessagesByFolder(sProvider, username, accPop.getId(), folder.getId()).size(), 1) ;
+    mailService_.saveMessage(username, accPop.getId(), message, true) ;
+    assertNotNull(mailService_.getMessagesByFolder(username, accPop.getId(), folder.getId())) ;
+    assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), folder.getId()).size(), 1) ;
     
-    message = mailService_.getMessageById(sProvider, username, accPop.getId(), message.getId()) ;
-    mailService_.moveMessage(sProvider, username, accPop.getId(), message, folder.getId(), desfolder.getId()) ;
-    assertEquals(mailService_.getMessagesByFolder(sProvider, username, accPop.getId(), folder.getId()).size(), 0) ;
+    message = mailService_.getMessageById(username, accPop.getId(), message.getId()) ;
+    mailService_.moveMessage(username, accPop.getId(), message, folder.getId(), desfolder.getId()) ;
+    assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), folder.getId()).size(), 0) ;
     
-    assertNotNull(mailService_.getMessagesByFolder(sProvider, username, accPop.getId(), desfolder.getId())) ;
-    assertEquals(mailService_.getMessagesByFolder(sProvider, username, accPop.getId(), desfolder.getId()).size(), 1) ;
-    mailService_.removeMessage(sProvider, username, accPop.getId(), message) ;
-    assertEquals(mailService_.getMessagesByFolder(sProvider, username, accPop.getId(), desfolder.getId()).size(), 0) ;
+    assertNotNull(mailService_.getMessagesByFolder(username, accPop.getId(), desfolder.getId())) ;
+    assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), desfolder.getId()).size(), 1) ;
+    mailService_.removeMessage(username, accPop.getId(), message) ;
+    assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), desfolder.getId()).size(), 0) ;
     
     
-    mailService_.removeAccount(sProvider, username, accPop.getId()) ;
+    mailService_.removeAccount(username, accPop.getId()) ;
   }
 }

@@ -30,7 +30,6 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -108,7 +107,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     
     List<SelectItemOption<String>> tagList = new ArrayList<SelectItemOption<String>>();   
     tagList.add(new SelectItemOption<String>("Choose a tag", "choose-tag"));       
-    for (Tag tag : mailSrv.getTags(SessionProviderFactory.createSystemProvider(), username, accountId)) {   
+    for (Tag tag : mailSrv.getTags(username, accountId)) {   
       tagList.add(new SelectItemOption<String>(tag.getName(), tag.getId()));       
     }    
     addUIFormInput(new UIFormSelectBox(FILTER_APPLY_TAG, FILTER_APPLY_TAG, tagList));
@@ -290,7 +289,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       filter.setApplyTag(applyTag);
       filter.setApplyForAll(applyForAll) ;
       try {
-        mailSrv.saveFilter(SessionProviderFactory.createSystemProvider(), username, accountId, filter, uiAddFilter.getApplyAll());
+        mailSrv.saveFilter(username, accountId, filter, uiAddFilter.getApplyAll());
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAddMessageFilter.msg.contain-special-characters", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

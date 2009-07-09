@@ -20,7 +20,6 @@ import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.organization.OrganizationService;
@@ -143,7 +142,7 @@ public class ContactUtils {
   public static List<Account> getAccounts() throws Exception {
     MailService mailSvr = (MailService)PortalContainer.getComponent(MailService.class) ;
     try {
-      return mailSvr.getAccounts(SessionProviderFactory.createSessionProvider(), getCurrentUser()) ;
+      return mailSvr.getAccounts(getCurrentUser()) ;
     } catch (RepositoryException e) {
       return null ;
     } catch (IndexOutOfBoundsException ex) {

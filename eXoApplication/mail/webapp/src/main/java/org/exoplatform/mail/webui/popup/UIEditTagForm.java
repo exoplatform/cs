@@ -29,7 +29,6 @@ import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UITagContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -85,7 +84,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = MailUtils.getCurrentUser();
     String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    List<Tag> tagList= mailSrv.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
+    List<Tag> tagList= mailSrv.getTags(username, accountId);
     
     if (tagList.isEmpty()) return;   
     
@@ -124,7 +123,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       UIApplication uiApp = editTagForm.getAncestorOfType(UIApplication.class) ;
       List<Tag> tagList = null ;
       try {
-        tagList = mailService.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
+        tagList = mailService.getTags(username, accountId);
       } catch (PathNotFoundException e) {
         uiPortlet.findFirstComponentOfType(UIMessageList.class).setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -145,12 +144,12 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       if (tagId != null) {
         try {      
           editTagForm.setTag(tagId);        
-          Tag tag =  mailService.getTag(SessionProviderFactory.createSystemProvider(), username, accountId, tagId);
+          Tag tag =  mailService.getTag(username, accountId, tagId);
           if (tag != null) {
             tag.setName(newTagName);
             tag.setColor(color);
             tag.setDescription(description);
-            mailService.updateTag(SessionProviderFactory.createSystemProvider(), username, accountId, tag);
+            mailService.updateTag(username, accountId, tag);
           }
         } catch (Exception e){
           uiApp.addMessage(new ApplicationMessage("UIRenameTagForm.msg.error-rename-tag", null)) ;
@@ -164,7 +163,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         newTag.setName(newTagName);
         newTag.setColor(color);
         newTag.setDescription(description);
-        mailService.addTag(SessionProviderFactory.createSystemProvider(), username, accountId, newTag);
+        mailService.addTag(username, accountId, newTag);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UITagContainer.class)) ;

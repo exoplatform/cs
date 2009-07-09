@@ -29,7 +29,6 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -87,7 +86,7 @@ public class UIFolderContainer extends UIContainer {
     String username = MailUtils.getCurrentUser() ;
     String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     List<Folder> subFolders = new ArrayList<Folder>();
-    for (Folder f : mailSvr.getSubFolders(SessionProviderFactory.createSystemProvider(), username, accountId, parentPath)) {
+    for (Folder f : mailSvr.getSubFolders(username, accountId, parentPath)) {
       subFolders.add(f);
     }
     return subFolders ;
@@ -98,7 +97,7 @@ public class UIFolderContainer extends UIContainer {
     String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
     String accountId = getAncestorOfType(UINavigationContainer.class).
     getChild(UISelectAccount.class).getSelectedValue() ;
-    return mailSvr.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, getSelectedFolder()) ;
+    return mailSvr.getFolder(username, accountId, getSelectedFolder()) ;
   }
 
   public List<Folder> getFolders(boolean isPersonal) throws Exception{
@@ -108,7 +107,7 @@ public class UIFolderContainer extends UIContainer {
     String accountId = getAncestorOfType(UINavigationContainer.class).
     getChild(UISelectAccount.class).getSelectedValue() ;
     try {
-      folders.addAll(mailSvr.getFolders(SessionProviderFactory.createSystemProvider(), username, accountId, isPersonal)) ;
+      folders.addAll(mailSvr.getFolders(username, accountId, isPersonal)) ;
     } catch (Exception e){
       //e.printStackTrace() ;
     }
@@ -123,7 +122,7 @@ public class UIFolderContainer extends UIContainer {
     MailService mailSvr = MailUtils.getMailService();
     String username = MailUtils.getCurrentUser() ;
     String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    Account acc = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId) ;
+    Account acc = mailSvr.getAccountById(username, accountId) ;
     return Utils.IMAP.equalsIgnoreCase(acc.getProtocol());
   }
 
@@ -223,7 +222,7 @@ public class UIFolderContainer extends UIContainer {
       UINavigationContainer uiNavigationContainer = uiFolderContainer.getAncestorOfType(UINavigationContainer.class);
       String accountId = uiNavigationContainer.getChild(UISelectAccount.class).getSelectedValue();
 
-      mailService.removeUserFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId);     
+      mailService.removeUserFolder(username, accountId, folderId);     
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       if (folderId.equals(uiFolderContainer.getSelectedFolder())) {
@@ -254,8 +253,8 @@ public class UIFolderContainer extends UIContainer {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
 
-      List<Message> msgList = mailSrv.getMessagesByFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
-      mailSrv.removeMessages(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, false);
+      List<Message> msgList = mailSrv.getMessagesByFolder(username, accountId, folderId) ;
+      mailSrv.removeMessages(username, accountId, msgList, false);
 
       uiMsgList.updateList();
       Message msgPreview = uiMsgPreview.getMessage() ;
@@ -280,8 +279,8 @@ public class UIFolderContainer extends UIContainer {
       filter.setFolder(new String[] {folderId});
       filter.setAccountId(accountId);
       filter.setViewQuery("@" + Utils.EXO_ISUNREAD + "='true'");
-      List<Message> messages = mailSrv.getMessages(SessionProviderFactory.createSystemProvider(), username, filter);
-      mailSrv.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, messages, Utils.EXO_ISUNREAD);
+      List<Message> messages = mailSrv.getMessages(username, filter);
+      mailSrv.toggleMessageProperty(username, accountId, messages, Utils.EXO_ISUNREAD);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       if (folderId.equals(uiMessageList.getSelectedFolderId())) {
         List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
@@ -307,12 +306,12 @@ public class UIFolderContainer extends UIContainer {
       String username = uiPortlet.getCurrentUser() ;
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class) ;
-      List<Message> msgList = mailSrv.getMessagesByFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
+      List<Message> msgList = mailSrv.getMessagesByFolder(username, accountId, folderId) ;
       boolean containPreview = false ;
       Message msgPre = uiMsgPreview.getMessage() ;
       String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;     		 
 
-      mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, folderId, trashFolderId, false) ;
+      mailSrv.moveMessages(username, accountId, msgList, folderId, trashFolderId, false) ;
 
       for (Message msg : msgList) {
         if (msgPre != null && msg.getId().equals(msgPre.getId())) containPreview = true ;

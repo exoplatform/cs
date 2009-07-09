@@ -53,6 +53,10 @@ import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.RootContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.Folder;
@@ -66,6 +70,7 @@ import org.exoplatform.mail.service.MimeMessageParser;
 import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
@@ -89,7 +94,7 @@ public class JCRDataStorage {
     nodeHierarchyCreator_ = nodeHierarchyCreator;
   }
   
-  public String getMailHierarchyNode(SessionProvider sProvider) throws Exception {
+  public String getMailHierarchyNode() throws Exception {
     return nodeHierarchyCreator_.getJcrPath("usersPath") ;
   }
 
@@ -106,133 +111,155 @@ public class JCRDataStorage {
     return mailNode;
   }
 
-  public Account getAccountById(SessionProvider sProvider, String username, String id)
-  throws Exception {
-    Node mailHome = getMailHomeNode(sProvider, username);
-    if (mailHome.hasNode(id)) {
-      return getAccount(mailHome.getNode(id));
+  public Account getAccountById(String username, String id) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node mailHome = getMailHomeNode(sProvider, username);
+      if (mailHome.hasNode(id)) {
+        return getAccount(mailHome.getNode(id));
+      }
+    } finally {
+      closeSessionProvider(sProvider);
     }
     return null;
   }
 
-  public List<Account> getAccounts(SessionProvider sProvider, String username) throws Exception {
+  public List<Account> getAccounts(String username) throws Exception {
+    SessionProvider sProvider = null;
     List<Account> accounts = new ArrayList<Account>();
-    Node homeNode = getMailHomeNode(sProvider, username);
-    if (homeNode == null) return accounts;
-    NodeIterator it = homeNode.getNodes();
-    while (it.hasNext()) {
-      Node node = it.nextNode();
-      if (node.isNodeType("exo:account"))
-        accounts.add(getAccount(node));
+    try {
+      sProvider = createSessionProvider();
+      Node homeNode = getMailHomeNode(sProvider, username);
+      if (homeNode == null) return accounts;
+      NodeIterator it = homeNode.getNodes();
+      while (it.hasNext()) {
+        Node node = it.nextNode();
+        if (node.isNodeType("exo:account"))
+          accounts.add(getAccount(node));
+      }
+      return accounts;
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    return accounts;
   }
 
   private Account getAccount(Node accountNode) throws Exception {
     Account account = new Account();
-    account.setId(accountNode.getProperty(Utils.EXO_ID).getString());
+    SessionProvider sProvider = null;
     try {
-      account.setLabel(accountNode.getProperty(Utils.EXO_LABEL).getString());
-    } catch (Exception e) {
-    }
-    try {
-      account.setUserDisplayName(accountNode.getProperty(Utils.EXO_USERDISPLAYNAME).getString());
-    } catch (Exception e) {
-    }
-    try {
-      account.setEmailAddress(accountNode.getProperty(Utils.EXO_EMAILADDRESS).getString());
-    } catch (Exception e) {
-    }
-    try {
-      account.setEmailReplyAddress(accountNode.getProperty(Utils.EXO_REPLYEMAIL).getString());
-    } catch (Exception e) {
-    }
-    try {
-      account.setSignature(accountNode.getProperty(Utils.EXO_SIGNATURE).getString());
-    } catch (Exception e) {
-    }
-    try {
-      account.setDescription(accountNode.getProperty(Utils.EXO_DESCRIPTION).getString());
-    } catch (Exception e) {
-    }
-    try {
-      account.setCheckedAuto(accountNode.getProperty(Utils.EXO_CHECKMAILAUTO).getBoolean());
-    } catch (Exception e) {
-    }
-    try {
-      account.setIsSavePassword(accountNode.getProperty(Utils.EXO_IS_SAVE_PASSWORD).getBoolean());
-    } catch (Exception e) {
-    }
-    try {
-      account.setEmptyTrashWhenExit(accountNode.getProperty(Utils.EXO_EMPTYTRASH).getBoolean());
-    } catch (Exception e) {
-    }
-    try {
-      account.setPlaceSignature(accountNode.getProperty(Utils.EXO_PLACESIGNATURE).getString());
-    } catch (Exception e) {
-    }
-    try {
-      GregorianCalendar cal = new GregorianCalendar();
-      cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_LAST_CHECKED_TIME).getLong());
-      account.setLastCheckedDate(cal.getTime());
-    } catch (Exception e) {
-      account.setLastCheckedDate(null);
-    }
-    try {
-      GregorianCalendar cal = new GregorianCalendar();
-      cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_LAST_START_CHECKING_TIME).getLong());
-      account.setLastStartCheckingTime(cal.getTime());
-    } catch (Exception e) {
-      account.setLastStartCheckingTime(null);
-    }
-    try {
-      account.setCheckAll(accountNode.getProperty(Utils.EXO_CHECK_ALL).getBoolean());
-    } catch (Exception e) { }
-    try {
-      GregorianCalendar cal = new GregorianCalendar();
-      cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_CHECK_FROM_DATE).getLong());
-      account.setCheckFromDate(cal.getTime());
-    } catch (Exception e) { }
-    
-    try {
-      Value[] properties = accountNode.getProperty(Utils.EXO_SERVERPROPERTIES).getValues();
-      for (int i = 0; i < properties.length; i++) {
-        String property = properties[i].getString();
-        int index = property.indexOf('=');
-        if (index != -1)
-          account.setServerProperty(property.substring(0, index), property.substring(index + 1));
+      sProvider = createSessionProvider() ;
+      account.setId(accountNode.getProperty(Utils.EXO_ID).getString());
+      try {
+        account.setLabel(accountNode.getProperty(Utils.EXO_LABEL).getString());
+      } catch (Exception e) {
       }
-    } catch (Exception e) { }
-    
-    try {
-      Value[] properties = accountNode.getProperty(Utils.EXO_SMTPSERVERPROPERTIES).getValues();
-      for (int i = 0; i < properties.length; i++) {
-        String property = properties[i].getString();
-        int index = property.indexOf('=');
-        if (index != -1)
-          account
-          .setSmtpServerProperty(property.substring(0, index), property.substring(index + 1));
+      try {
+        account.setUserDisplayName(accountNode.getProperty(Utils.EXO_USERDISPLAYNAME).getString());
+      } catch (Exception e) {
       }
-    } catch (Exception e) {
-    }
+      try {
+        account.setEmailAddress(accountNode.getProperty(Utils.EXO_EMAILADDRESS).getString());
+      } catch (Exception e) {
+      }
+      try {
+        account.setEmailReplyAddress(accountNode.getProperty(Utils.EXO_REPLYEMAIL).getString());
+      } catch (Exception e) {
+      }
+      try {
+        account.setSignature(accountNode.getProperty(Utils.EXO_SIGNATURE).getString());
+      } catch (Exception e) {
+      }
+      try {
+        account.setDescription(accountNode.getProperty(Utils.EXO_DESCRIPTION).getString());
+      } catch (Exception e) {
+      }
+      try {
+        account.setCheckedAuto(accountNode.getProperty(Utils.EXO_CHECKMAILAUTO).getBoolean());
+      } catch (Exception e) {
+      }
+      try {
+        account.setIsSavePassword(accountNode.getProperty(Utils.EXO_IS_SAVE_PASSWORD).getBoolean());
+      } catch (Exception e) {
+      }
+      try {
+        account.setEmptyTrashWhenExit(accountNode.getProperty(Utils.EXO_EMPTYTRASH).getBoolean());
+      } catch (Exception e) {
+      }
+      try {
+        account.setPlaceSignature(accountNode.getProperty(Utils.EXO_PLACESIGNATURE).getString());
+      } catch (Exception e) {
+      }
+      try {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_LAST_CHECKED_TIME).getLong());
+        account.setLastCheckedDate(cal.getTime());
+      } catch (Exception e) {
+        account.setLastCheckedDate(null);
+      }
+      try {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_LAST_START_CHECKING_TIME).getLong());
+        account.setLastStartCheckingTime(cal.getTime());
+      } catch (Exception e) {
+        account.setLastStartCheckingTime(null);
+      }
+      try {
+        account.setCheckAll(accountNode.getProperty(Utils.EXO_CHECK_ALL).getBoolean());
+      } catch (Exception e) { }
+      try {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_CHECK_FROM_DATE).getLong());
+        account.setCheckFromDate(cal.getTime());
+      } catch (Exception e) { }
 
-    return account;
+      try {
+        Value[] properties = accountNode.getProperty(Utils.EXO_SERVERPROPERTIES).getValues();
+        for (int i = 0; i < properties.length; i++) {
+          String property = properties[i].getString();
+          int index = property.indexOf('=');
+          if (index != -1)
+            account.setServerProperty(property.substring(0, index), property.substring(index + 1));
+        }
+      } catch (Exception e) { }
+
+      try {
+        Value[] properties = accountNode.getProperty(Utils.EXO_SMTPSERVERPROPERTIES).getValues();
+        for (int i = 0; i < properties.length; i++) {
+          String property = properties[i].getString();
+          int index = property.indexOf('=');
+          if (index != -1)
+            account
+            .setSmtpServerProperty(property.substring(0, index), property.substring(index + 1));
+        }
+      } catch (Exception e) {
+      }
+
+      return account;
+    } finally {
+      closeSessionProvider(sProvider) ;
+    }
   }
 
-  public Message getMessageById(SessionProvider sProvider, String username, String accountId,
-      String msgId) throws Exception {
-    Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
-    StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
-        + "//element(*,exo:message)[@exo:id='").append(msgId).append("']");
-    QueryImpl queryImpl = createXPathQuery(sProvider, username, accountId, queryString.toString());
-    queryImpl.setOffset(0);
-    queryImpl.setLimit(1);
-    QueryResult result = queryImpl.execute();
-    NodeIterator it = result.getNodes();
-    Node node = null;
-    if (it.hasNext()) node = it.nextNode();
-    Message msg = getMessage(node);
-    return msg;
+  public Message getMessageById(String username, String accountId, String msgId) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider(); 
+      Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
+      StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
+                                                  + "//element(*,exo:message)[@exo:id='").append(msgId).append("']");
+      QueryImpl queryImpl = createXPathQuery(sProvider, username, accountId, queryString.toString());
+      queryImpl.setOffset(0);
+      queryImpl.setLimit(1);
+      QueryResult result = queryImpl.execute();
+      NodeIterator it = result.getNodes();
+      Node node = null;
+      if (it.hasNext()) node = it.nextNode();
+      Message msg = getMessage(node);
+      return msg;
+    } finally {
+      closeSessionProvider(sProvider);
+    }
   }
   
   private QueryImpl createXPathQuery(SessionProvider sProvider, String username, String accountId, String xpath) throws Exception {
@@ -242,94 +269,112 @@ public class JCRDataStorage {
     return (QueryImpl) queryManager.createQuery(xpath, Query.XPATH);
   }
 
-  public MailSetting getMailSetting(SessionProvider sProvider, String username) throws Exception {
-    Node homeNode = getMailHomeNode(sProvider, username);
-    Node settingNode = null;
-    if (homeNode.hasNode(Utils.KEY_MAIL_SETTING))
-      settingNode = homeNode.getNode(Utils.KEY_MAIL_SETTING);
-    MailSetting setting = new MailSetting();
-    if (settingNode != null) {
-      try {
-        setting.setNumberMsgPerPage((settingNode.getProperty(Utils.EXO_NUMBER_MSG_PER_PAGE)
-            .getLong()));
-      } catch (Exception e) {
+  public MailSetting getMailSetting(String username) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node homeNode = getMailHomeNode(sProvider, username);
+      Node settingNode = null;
+      if (homeNode.hasNode(Utils.KEY_MAIL_SETTING))
+        settingNode = homeNode.getNode(Utils.KEY_MAIL_SETTING);
+      MailSetting setting = new MailSetting();
+      if (settingNode != null) {
+        try {
+          setting.setNumberMsgPerPage((settingNode.getProperty(Utils.EXO_NUMBER_MSG_PER_PAGE)
+              .getLong()));
+        } catch (Exception e) {
+        }
+        try {
+          setting.setPeriodCheckAuto((settingNode.getProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO)
+              .getLong()));
+        } catch (Exception e) {
+        }
+        try {
+          setting.setDefaultAccount((settingNode.getProperty(Utils.EXO_DEFAULT_ACCOUNT).getString()));
+        } catch (Exception e) {
+        }
+        try {
+          setting.setUseWysiwyg(settingNode.getProperty(Utils.EXO_USE_WYSIWYG).getBoolean());
+        } catch (Exception e) {
+        }
+        try {
+          setting.setFormatAsOriginal((settingNode.getProperty(Utils.EXO_FORMAT_AS_ORIGINAL)
+              .getBoolean()));
+        } catch (Exception e) {
+        }
+        try {
+          setting.setReplyWithAttach(settingNode.getProperty(Utils.EXO_REPLY_WITH_ATTACH)
+                                     .getBoolean());
+        } catch (Exception e) {
+        }
+        try {
+          setting.setForwardWithAtt(settingNode.getProperty(Utils.EXO_FORWARD_WITH_ATTACH)
+                                    .getBoolean());
+        } catch (Exception e) {
+        }
+        try {
+          setting.setPrefixMessageWith((settingNode.getProperty(Utils.EXO_PREFIX_MESSAGE_WITH)
+              .getString()));
+        } catch (Exception e) {
+        }
+        try {
+          setting.setSaveMessageInSent((settingNode.getProperty(Utils.EXO_SAVE_SENT_MESSAGE)
+              .getBoolean()));
+        } catch (Exception e) {
+        }
+        try {
+          setting.setLayout((settingNode.getProperty(Utils.EXO_LAYOUT)
+              .getLong()));
+        } catch (Exception e) {
+        }
+        try {
+          setting.setSendReturnReceipt((settingNode.getProperty(Utils.EXO_RETURN_RECEIPT)
+              .getLong()));
+        } catch (Exception e) {
+        }
       }
-      try {
-        setting.setPeriodCheckAuto((settingNode.getProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO)
-            .getLong()));
-      } catch (Exception e) {
-      }
-      try {
-        setting.setDefaultAccount((settingNode.getProperty(Utils.EXO_DEFAULT_ACCOUNT).getString()));
-      } catch (Exception e) {
-      }
-      try {
-        setting.setUseWysiwyg(settingNode.getProperty(Utils.EXO_USE_WYSIWYG).getBoolean());
-      } catch (Exception e) {
-      }
-      try {
-        setting.setFormatAsOriginal((settingNode.getProperty(Utils.EXO_FORMAT_AS_ORIGINAL)
-            .getBoolean()));
-      } catch (Exception e) {
-      }
-      try {
-        setting.setReplyWithAttach(settingNode.getProperty(Utils.EXO_REPLY_WITH_ATTACH)
-            .getBoolean());
-      } catch (Exception e) {
-      }
-      try {
-        setting.setForwardWithAtt(settingNode.getProperty(Utils.EXO_FORWARD_WITH_ATTACH)
-            .getBoolean());
-      } catch (Exception e) {
-      }
-      try {
-        setting.setPrefixMessageWith((settingNode.getProperty(Utils.EXO_PREFIX_MESSAGE_WITH)
-            .getString()));
-      } catch (Exception e) {
-      }
-      try {
-        setting.setSaveMessageInSent((settingNode.getProperty(Utils.EXO_SAVE_SENT_MESSAGE)
-            .getBoolean()));
-      } catch (Exception e) {
-      }
-      try {
-        setting.setLayout((settingNode.getProperty(Utils.EXO_LAYOUT)
-            .getLong()));
-      } catch (Exception e) {
-      }
-      try {
-        setting.setSendReturnReceipt((settingNode.getProperty(Utils.EXO_RETURN_RECEIPT)
-            .getLong()));
-      } catch (Exception e) {
-      }
+      return setting;
+    } finally {
+      closeSessionProvider(sProvider) ;
     }
-    return setting;
   }
 
-  public MessagePageList getMessagePageList(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
-    Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
-    filter.setAccountPath(homeMsg.getPath());
-    long pageSize = getMailSetting(sProvider, username).getNumberMsgPerPage();
-    return new MessagePageList(pageSize, filter.getStatement(), filter.hasStructure());
-  }
-
-  public List<Message> getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
-    Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
-    filter.setAccountPath(homeMsg.getPath());
-    QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
-    String queryString = filter.getStatement();
-    Query query = qm.createQuery(queryString, Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator iter = result.getNodes();
-    List<Message> strList = new ArrayList<Message>();
-    while (iter.hasNext()) {
-      Node node = iter.nextNode();
-      strList.add(getMessage(node));
+  public MessagePageList getMessagePageList(String username, MessageFilter filter) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
+      filter.setAccountPath(homeMsg.getPath());
+      long pageSize = getMailSetting(username).getNumberMsgPerPage();
+      return new MessagePageList(pageSize, filter.getStatement(), filter.hasStructure());
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    return strList;
   }
 
-  public Message getMessage(Node messageNode) throws Exception {
+  public List<Message> getMessages(String username, MessageFilter filter) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider(); 
+      Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
+      filter.setAccountPath(homeMsg.getPath());
+      QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
+      String queryString = filter.getStatement();
+      Query query = qm.createQuery(queryString, Query.XPATH);
+      QueryResult result = query.execute();
+      NodeIterator iter = result.getNodes();
+      List<Message> strList = new ArrayList<Message>();
+      while (iter.hasNext()) {
+        Node node = iter.nextNode();
+        strList.add(getMessage(node));
+      }
+      return strList;
+    } finally {
+      closeSessionProvider(sProvider);
+    }
+  }
+
+  private Message getMessage(Node messageNode) throws Exception {
     Message msg = new Message();
     try {
       msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
@@ -468,640 +513,695 @@ public class JCRDataStorage {
     return msg;
   }
 
-  public void removeAccount(SessionProvider sProvider, String username, String accountId)
-  throws Exception {
-    Node homeNode = getMailHomeNode(sProvider, username);
-    // gets the specified account, and removes it
-    if (homeNode.hasNode(accountId)) {
-      homeNode.getNode(accountId).remove();
-      homeNode.getSession().save();
-    }
-  }
-
-  public void removeMessage(SessionProvider sProvider, String username, String accountId,
-      Message message) throws Exception {
-    Node msgStoreNode = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
+  public void removeAccount(String username, String accountId) throws Exception {
+    SessionProvider sProvider = null;
     try {
-      Node node = msgStoreNode.getNode(message.getId());
-      if (node != null) {
-        node = moveReference(accountId, node);
-        NodeType[] nts = node.getMixinNodeTypes();
-        for (int i = 0; i < nts.length; i++) {
-          node.removeMixin(nts[i].getName());
-        }
-        node.remove();
-        msgStoreNode.getSession().save();
+      sProvider = createSessionProvider();
+      Node homeNode = getMailHomeNode(sProvider, username);
+      // gets the specified account, and removes it
+      if (homeNode.hasNode(accountId)) {
+        homeNode.getNode(accountId).remove();
+        homeNode.getSession().save();
       }
-    } catch (PathNotFoundException e) {
+    } finally {
+      closeSessionProvider(sProvider);
     }
   }
 
-  public void removeMessages(SessionProvider sProvider, String username, String accountId,
-      List<Message> messages, boolean moveReference) throws Exception {
-    Node msgHome = getMessageHome(sProvider, username, accountId);
-    for (Message message : messages) {
-      Node msgStoreNode = getDateStoreNode(sProvider, username, accountId, message
-          .getReceivedDate());
+  public void removeMessage(String username, String accountId, Message message) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node msgStoreNode = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
       try {
         Node node = msgStoreNode.getNode(message.getId());
         if (node != null) {
-          if (moveReference)
-            node = moveReference(accountId, node);
+          node = moveReference(accountId, node);
           NodeType[] nts = node.getMixinNodeTypes();
-          //TODO should use for each
           for (int i = 0; i < nts.length; i++) {
             node.removeMixin(nts[i].getName());
           }
           node.remove();
+          msgStoreNode.getSession().save();
         }
       } catch (PathNotFoundException e) {
       }
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    msgHome.getSession().save();
   }
 
-  public void moveMessages(SessionProvider sProvider, String username, String accountId,
-      List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
-    Node messageHome = getMessageHome(sProvider, username, accountId);
-    Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
-    Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
-    int inUnreadNumber = 0, deUnreadNumber = 0, inTotalMessage = 0, deTotalMessage = 0;
-    for (Message msg : msgList) {
-      try {
-        Node msgNode = (Node) messageHome.getSession().getItem(msg.getPath());
-        boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-        String sentFolderId = Utils.createFolderId(accountId, Utils.FD_SENT, false);
-        Value[] propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
-        boolean moveReference = true;
-        String[] folderIds = new String[propFolders.length];
-        if (propFolders.length == 1) {
-          if (destFolderId.equals(sentFolderId)) {
-            folderIds[0] = sentFolderId;
-            if (!propFolders[0].getString().equals(sentFolderId)) {
-              if (isUnread) {
-                inUnreadNumber++;
-                deUnreadNumber++;
-              }
-              deTotalMessage++;
-              inTotalMessage++;
-            } else {
-              if (isUnread) {
-                inUnreadNumber++;
-              }
-              inTotalMessage++;
+  public void removeMessages(String username, String accountId, List<Message> messages, boolean moveReference) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node msgHome = getMessageHome(sProvider, username, accountId);
+      for (Message message : messages) {
+        Node msgStoreNode = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
+        try {
+          Node node = msgStoreNode.getNode(message.getId());
+          if (node != null) {
+            if (moveReference)
+              node = moveReference(accountId, node);
+            NodeType[] nts = node.getMixinNodeTypes();
+            //TODO should use for each
+            for (int i = 0; i < nts.length; i++) {
+              node.removeMixin(nts[i].getName());
             }
-            moveReference = false;
-          } else {
-            folderIds[0] = destFolderId;
-            if (propFolders[0].getString().equals(sentFolderId)) {
-              if (isUnread) {
-                inUnreadNumber++;
-              }
-              inTotalMessage++;
-            } else if (!currentFolderId.equals(destFolderId)) {
-              if (isUnread) {
-                inUnreadNumber++;
-                deUnreadNumber++;
-              }
-              deTotalMessage++;
-              inTotalMessage++;
-            }
+            node.remove();
           }
-        } else {
-          for (int i = 0; i < propFolders.length; i++) {
-            String folderId = propFolders[i].getString();
-            if (currentFolderId.equals(folderId))
-              folderIds[i] = destFolderId;
-            else
-              folderIds[i] = folderId;
-          }
-          if (isUnread) {
-            inUnreadNumber++;
-            deUnreadNumber++;
-          }
-          deTotalMessage++;
-          inTotalMessage++;
+        } catch (PathNotFoundException e) {
         }
+      }
+      msgHome.getSession().save();
+    } finally {
+      closeSessionProvider(sProvider);
+    }
+  }
 
-        msgNode.setProperty(Utils.MSG_FOLDERS, folderIds);
-        if (moveReference)
-          msgNode = moveReference(accountId, msgNode);
-        msgNode.save();
+  public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider(); 
+      Node messageHome = getMessageHome(sProvider, username, accountId);
+      Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
+      Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
+      int inUnreadNumber = 0, deUnreadNumber = 0, inTotalMessage = 0, deTotalMessage = 0;
+      for (Message msg : msgList) {
+        try {
+          Node msgNode = (Node) messageHome.getSession().getItem(msg.getPath());
+          boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
+          String sentFolderId = Utils.createFolderId(accountId, Utils.FD_SENT, false);
+          Value[] propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
+          boolean moveReference = true;
+          String[] folderIds = new String[propFolders.length];
+          if (propFolders.length == 1) {
+            if (destFolderId.equals(sentFolderId)) {
+              folderIds[0] = sentFolderId;
+              if (!propFolders[0].getString().equals(sentFolderId)) {
+                if (isUnread) {
+                  inUnreadNumber++;
+                  deUnreadNumber++;
+                }
+                deTotalMessage++;
+                inTotalMessage++;
+              } else {
+                if (isUnread) {
+                  inUnreadNumber++;
+                }
+                inTotalMessage++;
+              }
+              moveReference = false;
+            } else {
+              folderIds[0] = destFolderId;
+              if (propFolders[0].getString().equals(sentFolderId)) {
+                if (isUnread) {
+                  inUnreadNumber++;
+                }
+                inTotalMessage++;
+              } else if (!currentFolderId.equals(destFolderId)) {
+                if (isUnread) {
+                  inUnreadNumber++;
+                  deUnreadNumber++;
+                }
+                deTotalMessage++;
+                inTotalMessage++;
+              }
+            }
+          } else {
+            for (int i = 0; i < propFolders.length; i++) {
+              String folderId = propFolders[i].getString();
+              if (currentFolderId.equals(folderId))
+                folderIds[i] = destFolderId;
+              else
+                folderIds[i] = folderId;
+            }
+            if (isUnread) {
+              inUnreadNumber++;
+              deUnreadNumber++;
+            }
+            deTotalMessage++;
+            inTotalMessage++;
+          }
+  
+          msgNode.setProperty(Utils.MSG_FOLDERS, folderIds);
+          if (moveReference)
+            msgNode = moveReference(accountId, msgNode);
+          msgNode.save();
+        } catch (Exception e) {
+          e.printStackTrace() ;
+        }
+      }
+      try {
+        if (currentFolderNode != null)
+          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
+              Utils.EXO_UNREADMESSAGES).getLong() - deUnreadNumber));
+        if (destFolderNode != null)
+          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(
+              Utils.EXO_UNREADMESSAGES).getLong() + inUnreadNumber));
       } catch (Exception e) {
         e.printStackTrace() ;
       }
+  
+      try {
+        if (currentFolderNode != null)
+          currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(
+              Utils.EXO_TOTALMESSAGE).getLong() - deTotalMessage));
+        if (destFolderNode != null)
+          destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(
+              Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
+      if (currentFolderNode != null) currentFolderNode.save();
+      if (destFolderNode != null) destFolderNode.save();
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    try {
-      if (currentFolderNode != null)
-        currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
-            Utils.EXO_UNREADMESSAGES).getLong() - deUnreadNumber));
-      if (destFolderNode != null)
-        destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(
-            Utils.EXO_UNREADMESSAGES).getLong() + inUnreadNumber));
-    } catch (Exception e) {
-      e.printStackTrace() ;
-    }
-
-    try {
-      if (currentFolderNode != null)
-        currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(
-            Utils.EXO_TOTALMESSAGE).getLong() - deTotalMessage));
-      if (destFolderNode != null)
-        destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(
-            Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
-    } catch (Exception e) {
-      e.printStackTrace() ;
-    }
-    if (currentFolderNode != null) currentFolderNode.save();
-    if (destFolderNode != null) destFolderNode.save();
   }
   
-  public void moveMessage(SessionProvider sProvider, String username, String accountId,
-                           Message msg, String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
+  public void moveMessage(String username, String accountId, Message msg,
+                           String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
     List<Message> msgList = new ArrayList<Message>();
     msgList.add(msg);
-    moveMessages(sProvider, username, accountId, msgList, currentFolderId, destFolderId, updateReference);
+    moveMessages(username, accountId, msgList, currentFolderId, destFolderId, updateReference);
   }
 
-  public void moveMessages(SessionProvider sProvider, String username, String accountId,
-      List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
-    Node messageHome = getMessageHome(sProvider, username, accountId);
-    Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
-    Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
-    int inUnreadNumber = 0, inTotalMessage = 0;
-    Value[] propFolders ;
-    String[] folderIds;
-    String folderId ;
-    Node msgNode;
-    for (Message msg : msgList) {
-      msgNode = (Node) messageHome.getSession().getItem(msg.getPath());
-      if (updateReference) msgNode = moveReference(accountId, msgNode);
-      try {
-        Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-        propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
-        folderIds = new String[propFolders.length];
-        for (int i = 0; i < propFolders.length; i++) {
-          folderId = propFolders[i].getString();
-          if (currentFolderId.equals(folderId)) folderIds[i] = destFolderId;
-          else folderIds[i] = folderId;
-        }
-        msgNode.setProperty(Utils.MSG_FOLDERS, folderIds);
-        if (isUnread) inUnreadNumber++;
-        inTotalMessage++;
-        
-        msgNode.save();
-      } catch(Exception e) {
-        System.out.println("Unknow error when move message that with subject " + msg.getSubject()); 
-        e.printStackTrace();
-      }
-    } 
-      
+  public void moveMessages(String username, String accountId, List<Message> msgList,
+      String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
+    SessionProvider sProvider = null;
     try {
-      if (currentFolderNode != null)
-        currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
-            Utils.EXO_UNREADMESSAGES).getLong() - inUnreadNumber));
-      if (destFolderNode != null)
-        destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(
-            Utils.EXO_UNREADMESSAGES).getLong() + inUnreadNumber));
-    } catch (Exception e) {
-      e.printStackTrace() ;
-    }
-
-    try {
-      if (currentFolderNode != null)
-        currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(
-            Utils.EXO_TOTALMESSAGE).getLong() - inTotalMessage));
-      if (destFolderNode != null)
-        destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(
-            Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
-    } catch (Exception e) {
-      e.printStackTrace() ;
-    }
-    if (currentFolderNode != null) currentFolderNode.save();
-    if (destFolderNode != null) destFolderNode.save();
-  }
-
-  public void saveAccount(SessionProvider sProvider, String username, Account account, boolean isNew)
-  throws Exception {
-    // creates or updates an account, depending on the isNew flag
-    Node mailHome = getMailHomeNode(sProvider, username);
-    Node newAccount = null;
-    String accId = account.getId();
-    if (isNew) { // creates the node
-      newAccount = mailHome.addNode(accId, Utils.EXO_ACCOUNT);
-      mailHome.save();
-      newAccount.setProperty(Utils.EXO_ID, accId);
-    } else { // gets the specified account
-      try {
-        newAccount = mailHome.getNode(accId);
-      } catch (Exception e) {
-        return;
-      }
-    }
-    if (newAccount != null) {
-      // add some properties
-      newAccount.setProperty(Utils.EXO_LABEL, account.getLabel());
-      newAccount.setProperty(Utils.EXO_USERDISPLAYNAME, account.getUserDisplayName());
-      newAccount.setProperty(Utils.EXO_EMAILADDRESS, account.getEmailAddress());
-      newAccount.setProperty(Utils.EXO_REPLYEMAIL, account.getEmailReplyAddress());
-      newAccount.setProperty(Utils.EXO_SIGNATURE, account.getSignature());
-      newAccount.setProperty(Utils.EXO_DESCRIPTION, account.getDescription());
-      newAccount.setProperty(Utils.EXO_CHECKMAILAUTO, account.checkedAuto());
-      newAccount.setProperty(Utils.EXO_IS_SAVE_PASSWORD, account.isSavePassword());
-      newAccount.setProperty(Utils.EXO_EMPTYTRASH, account.isEmptyTrashWhenExit());
-      newAccount.setProperty(Utils.EXO_PLACESIGNATURE, account.getPlaceSignature());
-      if (account.getLastCheckedDate() != null)
-        newAccount.setProperty(Utils.EXO_LAST_CHECKED_TIME, account.getLastCheckedDate().getTime());
-      else 
-        newAccount.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
-      
-      if (account.getLastStartCheckingTime() != null)
-        newAccount.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, account.getLastStartCheckingTime().getTime());
-      else 
-        newAccount.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
-      
-      newAccount.setProperty(Utils.EXO_CHECK_ALL, account.isCheckAll());
-      if (account.getCheckFromDate() != null)
-        newAccount.setProperty(Utils.EXO_CHECK_FROM_DATE, account.getCheckFromDate().getTime());
-      else 
-        newAccount.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
-      Iterator<String> it = account.getServerProperties().keySet().iterator();
-      ArrayList<String> values = new ArrayList<String>(account.getServerProperties().size());
-      while (it.hasNext()) {
-        String key = it.next().toString();
-        values.add(key + "=" + account.getServerProperties().get(key));
-      }
-      newAccount.setProperty(Utils.EXO_SERVERPROPERTIES, values.toArray(new String[account
-                                                                                   .getServerProperties().size()]));
-      
-      if (account.getSmtpServerProperties() != null) {
-        it = account.getSmtpServerProperties().keySet().iterator();
-        values = new ArrayList<String>(account.getSmtpServerProperties().size());
-        while (it.hasNext()) {
-          String key = it.next().toString();
-          values.add(key + "=" + account.getSmtpServerProperties().get(key));
-        }
-        newAccount.setProperty(Utils.EXO_SMTPSERVERPROPERTIES, values.toArray(new String[account
-                                                                                         .getSmtpServerProperties().size()]));
-      }
-      // saves changes
-      if (isNew) mailHome.getSession().save();
-      else mailHome.save();
-    }
-  }
-
-  public void saveMailSetting(SessionProvider sProvider, String username, MailSetting newSetting)
-  throws Exception {
-    Node mailHome = getMailHomeNode(sProvider, username);
-    Node settingNode = null;
-    try {
-      settingNode = mailHome.getNode(Utils.KEY_MAIL_SETTING);
-    } catch (PathNotFoundException e) {
-      settingNode = mailHome.addNode(Utils.KEY_MAIL_SETTING, Utils.EXO_MAIL_SETTING);
-      mailHome.save();
-    }
-
-    if (settingNode != null) {
-      settingNode.setProperty(Utils.EXO_NUMBER_MSG_PER_PAGE, newSetting.getNumberMsgPerPage());
-      settingNode.setProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO, newSetting.getPeriodCheckAuto());
-      settingNode.setProperty(Utils.EXO_DEFAULT_ACCOUNT, newSetting.getDefaultAccount());
-      settingNode.setProperty(Utils.EXO_FORMAT_AS_ORIGINAL, newSetting.formatAsOriginal());
-      settingNode.setProperty(Utils.EXO_USE_WYSIWYG, newSetting.useWysiwyg());
-      settingNode.setProperty(Utils.EXO_REPLY_WITH_ATTACH, newSetting.replyWithAttach());
-      settingNode.setProperty(Utils.EXO_FORWARD_WITH_ATTACH, newSetting.forwardWithAtt());
-      settingNode.setProperty(Utils.EXO_PREFIX_MESSAGE_WITH, newSetting.getPrefixMessageWith());
-      settingNode.setProperty(Utils.EXO_SAVE_SENT_MESSAGE, newSetting.saveMessageInSent());
-      settingNode.setProperty(Utils.EXO_LAYOUT, newSetting.getLayout());
-      settingNode.setProperty(Utils.EXO_RETURN_RECEIPT, newSetting.getSendReturnReceipt());
-      // saves change
-      settingNode.save();
-    }
-  }
-
-  public void saveMessage(SessionProvider sProvider, String username, String accountId,
-      String targetMsgPath, Message message, boolean isNew) throws Exception {
-    Node msgNode = saveMessage(sProvider, username, accountId, message, isNew);
-    if (targetMsgPath != null && !targetMsgPath.equals("")) {
-      Node mailHome = getMailHomeNode(sProvider, username);
-      Node targetNode = (Node) mailHome.getSession().getItem(targetMsgPath);
-      createReference(msgNode, targetNode);
-    }
-  }
-
-  public Node saveMessage(SessionProvider sProvider, String username, String accountId,
-      Message message, boolean isNew) throws Exception {
-    Node mailHome = getMailHomeNode(sProvider, username);
-    Node homeMsg = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
-    Node nodeMsg = null;
-    if (isNew) { // creates the node
-      nodeMsg = homeMsg.addNode(message.getId(), Utils.EXO_MESSAGE);
-      homeMsg.save();
-    } else { // gets the specified message
-      nodeMsg = (Node) mailHome.getSession().getItem(message.getPath());
-    }
-    if (nodeMsg != null) {
-      // add some properties
-      nodeMsg.setProperty(Utils.EXO_ID, message.getId());
-      nodeMsg.setProperty(Utils.EXO_UID, message.getUID());
-      nodeMsg.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, message.getInReplyToHeader());
-      nodeMsg.setProperty(Utils.EXO_ACCOUNT, accountId);
-      nodeMsg.setProperty(Utils.EXO_PATH, message.getPath());
-      nodeMsg.setProperty(Utils.EXO_FROM, message.getFrom());
-      nodeMsg.setProperty(Utils.EXO_TO, message.getMessageTo());
-      nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
-      nodeMsg.setProperty(Utils.EXO_CC, message.getMessageCc());
-      nodeMsg.setProperty(Utils.EXO_BCC, message.getMessageBcc());
-      nodeMsg.setProperty(Utils.EXO_BODY, message.getMessageBody());
-      nodeMsg.setProperty(Utils.EXO_REPLYTO, message.getReplyTo());
-      nodeMsg.setProperty(Utils.EXO_SIZE, message.getSize());
-      nodeMsg.setProperty(Utils.EXO_STAR, message.hasStar());
-      nodeMsg.setProperty(Utils.EXO_PRIORITY, message.getPriority());
-      nodeMsg.setProperty(Utils.EXO_ISUNREAD, message.isUnread());
-      nodeMsg.setProperty(Utils.EXO_IS_ROOT, message.isRootConversation());
-      nodeMsg.setProperty(Utils.EXO_CONTENT_TYPE, message.getContentType());
-      nodeMsg.setProperty(Utils.ATT_IS_LOADED_PROPERLY, message.attIsLoadedProperly());
-      nodeMsg.setProperty(Utils.IS_RETURN_RECEIPT, message.isReturnReceipt());
-      if (message.getSendDate() != null)
-        nodeMsg.setProperty(Utils.EXO_SENDDATE, message.getSendDate().getTime());
-      if (message.getReceivedDate() != null){
-        nodeMsg.setProperty(Utils.EXO_RECEIVEDDATE, message.getReceivedDate().getTime());
-        nodeMsg.setProperty(Utils.EXO_LAST_UPDATE_TIME, message.getReceivedDate().getTime());
-      }
-      String[] tags = message.getTags();
-      nodeMsg.setProperty(Utils.EXO_TAGS, tags);
-      String[] folders = message.getFolders();
-      nodeMsg.setProperty(Utils.MSG_FOLDERS, folders);
-      Iterator<String> ith = message.getHeaders().keySet().iterator();
-      ArrayList<String> values = new ArrayList<String>(message.getHeaders().size());
-      while (ith.hasNext()) {
-        String key = ith.next().toString();
-        values.add(key + "=" + message.getHeaders().get(key));
-      }
-      nodeMsg.setProperty(Utils.MSG_HEADERS, values
-          .toArray(new String[message.getHeaders().size()]));
-
-      List<Attachment> attachments = message.getAttachments();
-      if (!isNew) {
-        NodeIterator nit = nodeMsg.getNodes();
-        while (nit.hasNext()) {
-          Node attNode = nit.nextNode();
-          try {
-            attNode.remove();
-          } catch (PathNotFoundException e) {
-          }
-        }
-        nodeMsg.setProperty(Utils.EXO_HASATTACH, false);
-      }
-      //TODO should use: attachments.isEmpty()
-      if (attachments != null && attachments.size() > 0) {
-        Iterator<Attachment> it = attachments.iterator();
-        boolean makeNewAtt = isNew ;
-        while (it.hasNext()) {
-          Attachment file = it.next();
-          Node nodeFile = null;
-          Session session = mailHome.getSession();
-          try {
-            if (!isNew) nodeFile = (Node) session.getItem(file.getId());
-          } catch (Exception e) {
-            makeNewAtt = true ;
-          }
-
-          if (makeNewAtt) {
-            Node attHome = null;
-            try {
-              attHome = nodeMsg.getNode(Utils.KEY_ATTACHMENT);
-            } catch(Exception pne) {
-              attHome = nodeMsg.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
-            }
-            nodeFile = attHome.addNode("attachment" + IdGenerator.generate(),
-                Utils.EXO_MAIL_ATTACHMENT);
-            nodeFile.setProperty(Utils.EXO_ATT_NAME, file.getName());
-          }
-
-          Node nodeContent = null;
-          if (!nodeFile.hasNode(Utils.JCR_CONTENT))
-            nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
-          else
-            nodeContent = nodeFile.getNode(Utils.JCR_CONTENT);
-          nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
-          nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
-          nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
-          nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
-        }
-      }
-
-      if (nodeMsg.canAddMixin("mix:referenceable"))
-        nodeMsg.addMixin("mix:referenceable");
-      nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
-      nodeMsg.save();
-    }
-    return nodeMsg;
-  }
-  
-  public boolean saveMessage(SessionProvider sProvider, String username, String accId,
-      javax.mail.Message msg, String folderIds[], List<String> tagList, SpamFilter spamFilter) throws Exception {
-    return saveMessage(sProvider, username, accId, msg, folderIds, tagList, spamFilter, null, null);
-  }
-  
-
-  public boolean saveMessage(SessionProvider sProvider, String username, String accId,
-      javax.mail.Message msg, String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation)
-  throws Exception {
-    return saveMessage(sProvider, username, accId, 0, msg, folderIds, tagList, spamFilter, infoObj, continuation);
-  }
-
-  public boolean saveMessage(SessionProvider sProvider, String username, String accId, long msgUID,
-      javax.mail.Message msg, String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation)
-  throws Exception {
-    long t1, t2, t4;
-    String from ;
-    
-    String msgId = MimeMessageParser.getMessageId(msg);
-    logger.warn("MessageId = " + msgId);
-    Calendar gc = MimeMessageParser.getReceivedDate(msg);
-    boolean isReadMessage = MimeMessageParser.isSeenMessage(msg);
-    boolean isReturnReceipt = MimeMessageParser.requestReturnReceipt(msg);
-    String inReplyToHeader = MimeMessageParser.getInReplyToHeader(msg);
-    
-    Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());
-    
-    t1 = System.currentTimeMillis();
-    if (msgHomeNode == null) return false;
-    try {
-      Node msgNode = msgHomeNode.getNode(msgId);
-      logger.warn("Check duplicate ......................................");
-      // check duplicate
-      for (int i = 0; i < folderIds.length; i ++) {
-        String folderId = folderIds[i];
-        t1 = System.currentTimeMillis();
-        byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msgNode, folderId);
-        
-        if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER) {
-          // there is a duplicate but in another folder
-          return true;
-        }
-
-        if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_SAME_FOLDER) {
-          // will "never" come here
-          // but we need to make sure ...
-          return false ;
-        }
-      }
-    } catch(Exception e) {
-
-    }
-
-    logger.warn("Saving message to JCR ...");
-    t1 = System.currentTimeMillis();
-    Node node = null;
-    try {
-      node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
-    } catch (Exception e) {
-      msgId = "Message" + IdGenerator.generate(); // generating another msgId
-      logger.warn("The MessageId is NOT GOOD, generated another one = " + msgId);
-      node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
-    }
-    try {
-      msgHomeNode.save();
-      node.setProperty(Utils.EXO_ID, msgId);
-      try {
-        String uid = String.valueOf(msgUID);
-        if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMD5MsgId(msg);
-        node.setProperty(Utils.EXO_UID, uid);
-      } catch(Exception e) {}
-      node.setProperty(Utils.EXO_ACCOUNT, accId);
-      from = Utils.decodeText(InternetAddress.toString(msg.getFrom()));
-      node.setProperty(Utils.EXO_FROM, from);
-      node.setProperty(Utils.EXO_TO, getAddresses(msg, javax.mail.Message.RecipientType.TO));      
-      node.setProperty(Utils.EXO_CC, getAddresses(msg, javax.mail.Message.RecipientType.CC));
-      node.setProperty(Utils.EXO_BCC, getAddresses(msg, javax.mail.Message.RecipientType.BCC));
-      node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg.getReplyTo())));
-      
-      String subject = msg.getSubject();
-      if (!Utils.isEmptyField(subject)) subject = Utils.decodeText(subject);
-      else subject = "";
-      node.setProperty(Utils.EXO_SUBJECT, subject);
-      
-      node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
-      node.setProperty(Utils.EXO_LAST_UPDATE_TIME, gc);
-      
-      Calendar sc = GregorianCalendar.getInstance();
-      if (msg.getSentDate() != null) sc.setTime(msg.getSentDate());
-      else sc = gc;
-      node.setProperty(Utils.EXO_SENDDATE, sc);
-      if (gc == null) node.setProperty(Utils.EXO_LAST_UPDATE_TIME, sc);
-      
-      int msgSize = Math.abs(msg.getSize());
-      node.setProperty(Utils.EXO_SIZE, msgSize);
-     
-      node.setProperty(Utils.EXO_ISUNREAD, !isReadMessage);
-      node.setProperty(Utils.EXO_STAR, false);
-      
-      if (isReturnReceipt) node.setProperty(Utils.IS_RETURN_RECEIPT, true);
-      else node.setProperty(Utils.IS_RETURN_RECEIPT, false);
-      
-      if (spamFilter != null && spamFilter.checkSpam(msg)) {
-        folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) };
-      }
-      
-      node.setProperty(Utils.MSG_FOLDERS, folderIds);
-      
-      if (tagList != null && tagList.size() > 0)
-        node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
-
-      node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, inReplyToHeader);
-      
-      ArrayList<String> values = new ArrayList<String>();
-      Enumeration enu = msg.getAllHeaders();
-      while (enu.hasMoreElements()) {
-        Header header = (Header) enu.nextElement();
-        values.add(header.getName() + "=" + header.getValue());
-      }
-      node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
-      
-      node.save();
-      
-      if (infoObj != null && continuation != null) {
-        infoObj.setFrom(from);
-        infoObj.setMsgId(msgId);
-        infoObj.setIsRead(isReadMessage);
-        infoObj.setSubject(subject);
-        infoObj.setSize(Utils.convertSize(msgSize));
-        infoObj.setAccountId(accId);
-        if (gc != null) infoObj.setDate(gc.getTime().toString());
-        else if (sc != null) infoObj.setDate(sc.getTime().toString());
-        else  infoObj.setDate(new Date().toString()); 
-        
-        JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();                  
-        JsonValue json = generatorImpl.createJsonObject(infoObj);
-        continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
-      }
-
-      t4 = System.currentTimeMillis();
-      logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
-      logger.warn("Adding message to thread ...");
-      t1 = System.currentTimeMillis();
-      addMessageToThread(sProvider, username, accId, inReplyToHeader, node);
-      t2 = System.currentTimeMillis();
-      logger.warn("Added message to thread finished : " + (t2 - t1) + " ms");
-
-      for (int i = 0; i < folderIds.length; i++) {
-        increaseFolderItem(sProvider, username, accId, folderIds[i], isReadMessage);
-      }
-
-      return true;
-    } catch (Exception e) {
-      try {
-        msgHomeNode.refresh(true);
-      } catch(Exception ex) {
-        e.printStackTrace();
-        logger.warn(" [WARNING] Can't refresh.");
-      }
-      logger.warn(" [WARNING] Cancel saving message to JCR.");
-      return false;
-    }
-  }
-  
-  public boolean saveTotalMessage(SessionProvider sProvider, String username, String accId, String msgId, javax.mail.Message msg) throws Exception {
-    Calendar gc = MimeMessageParser.getReceivedDate(msg);
-    Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());    
-    Node node = null;
-    try {
-      node = msgHomeNode.getNode(msgId);    
-    } catch (Exception e) {}
-    
-    if (node != null) {
-      long priority = MimeMessageParser.getPriority(msg);
-      node.setProperty(Utils.EXO_PRIORITY, priority);
-      MimeMessage cmsg = (MimeMessage) msg;
-      Object obj = new Object();
-      try {
-        obj = msg.getContent();
-      } catch(MessagingException mex) {
-        cmsg = new MimeMessage((MimeMessage) msg);
+      sProvider = createSessionProvider(); 
+      Node messageHome = getMessageHome(sProvider, username, accountId);
+      Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
+      Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
+      int inUnreadNumber = 0, inTotalMessage = 0;
+      Value[] propFolders ;
+      String[] folderIds;
+      String folderId ;
+      Node msgNode;
+      for (Message msg : msgList) {
+        msgNode = (Node) messageHome.getSession().getItem(msg.getPath());
+        if (updateReference) msgNode = moveReference(accountId, msgNode);
         try {
-          obj = cmsg.getContent();
-        } catch(MessagingException mex1) {
-          System.out.println("##### Error when fetch message body");
+          Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
+          propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
+          folderIds = new String[propFolders.length];
+          for (int i = 0; i < propFolders.length; i++) {
+            folderId = propFolders[i].getString();
+            if (currentFolderId.equals(folderId)) folderIds[i] = destFolderId;
+            else folderIds[i] = folderId;
+          }
+          msgNode.setProperty(Utils.MSG_FOLDERS, folderIds);
+          if (isUnread) inUnreadNumber++;
+          inTotalMessage++;
+          
+          msgNode.save();
+        } catch(Exception e) {
+          System.out.println("Unknow error when move message that with subject " + msg.getSubject()); 
+          e.printStackTrace();
         }
       } 
-      String contentType = "text/plain";
-      if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/*"))
-        contentType = "text/html";
-      String body = "";
-      if (obj instanceof Multipart) {
-        body = setMultiPart((Multipart) obj, node, body);
-      } else {
-        body = setPart(cmsg, node, body);
+        
+      try {
+        if (currentFolderNode != null)
+          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
+              Utils.EXO_UNREADMESSAGES).getLong() - inUnreadNumber));
+        if (destFolderNode != null)
+          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(
+              Utils.EXO_UNREADMESSAGES).getLong() + inUnreadNumber));
+      } catch (Exception e) {
+        e.printStackTrace() ;
       }
-      node.setProperty(Utils.EXO_CONTENT_TYPE, contentType);
-      node.setProperty(Utils.EXO_BODY, Utils.decodeText(body));
-      node.setProperty(Utils.IS_LOADED, true);
-      node.save();
-    } else {
-      return false;
+  
+      try {
+        if (currentFolderNode != null)
+          currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(
+              Utils.EXO_TOTALMESSAGE).getLong() - inTotalMessage));
+        if (destFolderNode != null)
+          destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(
+              Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
+      if (currentFolderNode != null) currentFolderNode.save();
+      if (destFolderNode != null) destFolderNode.save();
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    return true;
+  }
+
+  public void saveAccount(String username, Account account, boolean isNew) throws Exception {
+    SessionProvider sysProvider = null;
+    try {
+      sysProvider = createSessionProvider();
+      // creates or updates an account, depending on the isNew flag
+      Node mailHome = getMailHomeNode(sysProvider, username);
+      Node newAccount = null;
+      String accId = account.getId();
+      if (isNew) { // creates the node
+        newAccount = mailHome.addNode(accId, Utils.EXO_ACCOUNT);
+        mailHome.save();
+        newAccount.setProperty(Utils.EXO_ID, accId);
+      } else { // gets the specified account
+        try {
+          newAccount = mailHome.getNode(accId);
+        } catch (Exception e) {
+          return;
+        }
+      }
+      if (newAccount != null) {
+        // add some properties
+        newAccount.setProperty(Utils.EXO_LABEL, account.getLabel());
+        newAccount.setProperty(Utils.EXO_USERDISPLAYNAME, account.getUserDisplayName());
+        newAccount.setProperty(Utils.EXO_EMAILADDRESS, account.getEmailAddress());
+        newAccount.setProperty(Utils.EXO_REPLYEMAIL, account.getEmailReplyAddress());
+        newAccount.setProperty(Utils.EXO_SIGNATURE, account.getSignature());
+        newAccount.setProperty(Utils.EXO_DESCRIPTION, account.getDescription());
+        newAccount.setProperty(Utils.EXO_CHECKMAILAUTO, account.checkedAuto());
+        newAccount.setProperty(Utils.EXO_IS_SAVE_PASSWORD, account.isSavePassword());
+        newAccount.setProperty(Utils.EXO_EMPTYTRASH, account.isEmptyTrashWhenExit());
+        newAccount.setProperty(Utils.EXO_PLACESIGNATURE, account.getPlaceSignature());
+        if (account.getLastCheckedDate() != null)
+          newAccount.setProperty(Utils.EXO_LAST_CHECKED_TIME, account.getLastCheckedDate().getTime());
+        else 
+          newAccount.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
+
+        if (account.getLastStartCheckingTime() != null)
+          newAccount.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, account.getLastStartCheckingTime().getTime());
+        else 
+          newAccount.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
+
+        newAccount.setProperty(Utils.EXO_CHECK_ALL, account.isCheckAll());
+        if (account.getCheckFromDate() != null)
+          newAccount.setProperty(Utils.EXO_CHECK_FROM_DATE, account.getCheckFromDate().getTime());
+        else 
+          newAccount.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
+        Iterator<String> it = account.getServerProperties().keySet().iterator();
+        ArrayList<String> values = new ArrayList<String>(account.getServerProperties().size());
+        while (it.hasNext()) {
+          String key = it.next().toString();
+          values.add(key + "=" + account.getServerProperties().get(key));
+        }
+        newAccount.setProperty(Utils.EXO_SERVERPROPERTIES, values.toArray(new String[account
+                                                                                     .getServerProperties().size()]));
+
+        if (account.getSmtpServerProperties() != null) {
+          it = account.getSmtpServerProperties().keySet().iterator();
+          values = new ArrayList<String>(account.getSmtpServerProperties().size());
+          while (it.hasNext()) {
+            String key = it.next().toString();
+            values.add(key + "=" + account.getSmtpServerProperties().get(key));
+          }
+          newAccount.setProperty(Utils.EXO_SMTPSERVERPROPERTIES, values.toArray(new String[account
+                                                                                           .getSmtpServerProperties().size()]));
+        }
+        // saves changes
+        if (isNew) mailHome.getSession().save();
+        else mailHome.save();
+      }
+    } finally {
+      closeSessionProvider(sysProvider);
+    }
+  }
+
+  public void saveMailSetting(String username, MailSetting newSetting) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node mailHome = getMailHomeNode(sProvider, username);
+      Node settingNode = null;
+      try {
+        settingNode = mailHome.getNode(Utils.KEY_MAIL_SETTING);
+      } catch (PathNotFoundException e) {
+        settingNode = mailHome.addNode(Utils.KEY_MAIL_SETTING, Utils.EXO_MAIL_SETTING);
+        mailHome.save();
+      }
+
+      if (settingNode != null) {
+        settingNode.setProperty(Utils.EXO_NUMBER_MSG_PER_PAGE, newSetting.getNumberMsgPerPage());
+        settingNode.setProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO, newSetting.getPeriodCheckAuto());
+        settingNode.setProperty(Utils.EXO_DEFAULT_ACCOUNT, newSetting.getDefaultAccount());
+        settingNode.setProperty(Utils.EXO_FORMAT_AS_ORIGINAL, newSetting.formatAsOriginal());
+        settingNode.setProperty(Utils.EXO_USE_WYSIWYG, newSetting.useWysiwyg());
+        settingNode.setProperty(Utils.EXO_REPLY_WITH_ATTACH, newSetting.replyWithAttach());
+        settingNode.setProperty(Utils.EXO_FORWARD_WITH_ATTACH, newSetting.forwardWithAtt());
+        settingNode.setProperty(Utils.EXO_PREFIX_MESSAGE_WITH, newSetting.getPrefixMessageWith());
+        settingNode.setProperty(Utils.EXO_SAVE_SENT_MESSAGE, newSetting.saveMessageInSent());
+        settingNode.setProperty(Utils.EXO_LAYOUT, newSetting.getLayout());
+        settingNode.setProperty(Utils.EXO_RETURN_RECEIPT, newSetting.getSendReturnReceipt());
+        // saves change
+        settingNode.save();
+      }
+    } finally {
+      closeSessionProvider(sProvider) ;
+    }
+  }
+
+  public void saveMessage(String username, String accountId, String targetMsgPath, Message message, boolean isNew) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node msgNode = saveMessage(username, accountId, message, isNew);
+      if (targetMsgPath != null && !targetMsgPath.equals("")) {
+        Node mailHome = getMailHomeNode(sProvider, username);
+        Node targetNode = (Node) mailHome.getSession().getItem(targetMsgPath);
+        createReference(msgNode, targetNode);
+      }
+    } finally {
+      closeSessionProvider(sProvider);
+    }
+  }
+
+  public Node saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node mailHome = getMailHomeNode(sProvider, username);
+      Node homeMsg = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
+      Node nodeMsg = null;
+      if (isNew) { // creates the node
+        nodeMsg = homeMsg.addNode(message.getId(), Utils.EXO_MESSAGE);
+        homeMsg.save();
+      } else { // gets the specified message
+        nodeMsg = (Node) mailHome.getSession().getItem(message.getPath());
+      }
+      if (nodeMsg != null) {
+        // add some properties
+        nodeMsg.setProperty(Utils.EXO_ID, message.getId());
+        nodeMsg.setProperty(Utils.EXO_UID, message.getUID());
+        nodeMsg.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, message.getInReplyToHeader());
+        nodeMsg.setProperty(Utils.EXO_ACCOUNT, accountId);
+        nodeMsg.setProperty(Utils.EXO_PATH, message.getPath());
+        nodeMsg.setProperty(Utils.EXO_FROM, message.getFrom());
+        nodeMsg.setProperty(Utils.EXO_TO, message.getMessageTo());
+        nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
+        nodeMsg.setProperty(Utils.EXO_CC, message.getMessageCc());
+        nodeMsg.setProperty(Utils.EXO_BCC, message.getMessageBcc());
+        nodeMsg.setProperty(Utils.EXO_BODY, message.getMessageBody());
+        nodeMsg.setProperty(Utils.EXO_REPLYTO, message.getReplyTo());
+        nodeMsg.setProperty(Utils.EXO_SIZE, message.getSize());
+        nodeMsg.setProperty(Utils.EXO_STAR, message.hasStar());
+        nodeMsg.setProperty(Utils.EXO_PRIORITY, message.getPriority());
+        nodeMsg.setProperty(Utils.EXO_ISUNREAD, message.isUnread());
+        nodeMsg.setProperty(Utils.EXO_IS_ROOT, message.isRootConversation());
+        nodeMsg.setProperty(Utils.EXO_CONTENT_TYPE, message.getContentType());
+        nodeMsg.setProperty(Utils.ATT_IS_LOADED_PROPERLY, message.attIsLoadedProperly());
+        nodeMsg.setProperty(Utils.IS_RETURN_RECEIPT, message.isReturnReceipt());
+        if (message.getSendDate() != null)
+          nodeMsg.setProperty(Utils.EXO_SENDDATE, message.getSendDate().getTime());
+        if (message.getReceivedDate() != null){
+          nodeMsg.setProperty(Utils.EXO_RECEIVEDDATE, message.getReceivedDate().getTime());
+          nodeMsg.setProperty(Utils.EXO_LAST_UPDATE_TIME, message.getReceivedDate().getTime());
+        }
+        String[] tags = message.getTags();
+        nodeMsg.setProperty(Utils.EXO_TAGS, tags);
+        String[] folders = message.getFolders();
+        nodeMsg.setProperty(Utils.MSG_FOLDERS, folders);
+        Iterator<String> ith = message.getHeaders().keySet().iterator();
+        ArrayList<String> values = new ArrayList<String>(message.getHeaders().size());
+        while (ith.hasNext()) {
+          String key = ith.next().toString();
+          values.add(key + "=" + message.getHeaders().get(key));
+        }
+        nodeMsg.setProperty(Utils.MSG_HEADERS, values
+                            .toArray(new String[message.getHeaders().size()]));
+
+        List<Attachment> attachments = message.getAttachments();
+        if (!isNew) {
+          NodeIterator nit = nodeMsg.getNodes();
+          while (nit.hasNext()) {
+            Node attNode = nit.nextNode();
+            try {
+              attNode.remove();
+            } catch (PathNotFoundException e) {
+            }
+          }
+          nodeMsg.setProperty(Utils.EXO_HASATTACH, false);
+        }
+        //TODO should use: attachments.isEmpty()
+        if (attachments != null && attachments.size() > 0) {
+          Iterator<Attachment> it = attachments.iterator();
+          boolean makeNewAtt = isNew ;
+          while (it.hasNext()) {
+            Attachment file = it.next();
+            Node nodeFile = null;
+            Session session = mailHome.getSession();
+            try {
+              if (!isNew) nodeFile = (Node) session.getItem(file.getId());
+            } catch (Exception e) {
+              makeNewAtt = true ;
+            }
+
+            if (makeNewAtt) {
+              Node attHome = null;
+              try {
+                attHome = nodeMsg.getNode(Utils.KEY_ATTACHMENT);
+              } catch(Exception pne) {
+                attHome = nodeMsg.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
+              }
+              nodeFile = attHome.addNode("attachment" + IdGenerator.generate(),
+                                         Utils.EXO_MAIL_ATTACHMENT);
+              nodeFile.setProperty(Utils.EXO_ATT_NAME, file.getName());
+            }
+
+            Node nodeContent = null;
+            if (!nodeFile.hasNode(Utils.JCR_CONTENT))
+              nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
+            else
+              nodeContent = nodeFile.getNode(Utils.JCR_CONTENT);
+            nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
+            nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
+            nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
+            nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
+          }
+        }
+
+        if (nodeMsg.canAddMixin("mix:referenceable"))
+          nodeMsg.addMixin("mix:referenceable");
+        nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
+        nodeMsg.save();
+      }
+      return nodeMsg;
+    } finally {
+      closeSessionProvider(sProvider);
+    }
+  }
+  
+  public boolean saveMessage(String username, String accId, javax.mail.Message msg,
+      String folderIds[], List<String> tagList, SpamFilter spamFilter) throws Exception {
+    return saveMessage(username, accId, msg, folderIds, tagList, spamFilter, null, null);
+  }
+  
+
+  public boolean saveMessage(String username, String accId, javax.mail.Message msg,
+      String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation) throws Exception {
+    return saveMessage(username, accId, 0, msg, folderIds, tagList, spamFilter, infoObj, continuation);
+  }
+
+  public boolean saveMessage(String username, String accId, long msgUID, javax.mail.Message msg,
+      String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      long t1, t2, t4;
+      String from ;
+      
+      String msgId = MimeMessageParser.getMessageId(msg);
+      logger.warn("MessageId = " + msgId);
+      Calendar gc = MimeMessageParser.getReceivedDate(msg);
+      boolean isReadMessage = MimeMessageParser.isSeenMessage(msg);
+      boolean isReturnReceipt = MimeMessageParser.requestReturnReceipt(msg);
+      String inReplyToHeader = MimeMessageParser.getInReplyToHeader(msg);
+      
+      Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());
+      
+      t1 = System.currentTimeMillis();
+      if (msgHomeNode == null) return false;
+      try {
+        Node msgNode = msgHomeNode.getNode(msgId);
+        logger.warn("Check duplicate ......................................");
+        // check duplicate
+        for (int i = 0; i < folderIds.length; i ++) {
+          String folderId = folderIds[i];
+          t1 = System.currentTimeMillis();
+          byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msgNode, folderId);
+          
+          if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER) {
+            // there is a duplicate but in another folder
+            return true;
+          }
+  
+          if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_SAME_FOLDER) {
+            // will "never" come here
+            // but we need to make sure ...
+            return false ;
+          }
+        }
+      } catch(Exception e) {
+  
+      }
+  
+      logger.warn("Saving message to JCR ...");
+      t1 = System.currentTimeMillis();
+      Node node = null;
+      try {
+        node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
+      } catch (Exception e) {
+        msgId = "Message" + IdGenerator.generate(); // generating another msgId
+        logger.warn("The MessageId is NOT GOOD, generated another one = " + msgId);
+        node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
+      }
+      try {
+        msgHomeNode.save();
+        node.setProperty(Utils.EXO_ID, msgId);
+        try {
+          String uid = String.valueOf(msgUID);
+          if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMD5MsgId(msg);
+          node.setProperty(Utils.EXO_UID, uid);
+        } catch(Exception e) {}
+        node.setProperty(Utils.EXO_ACCOUNT, accId);
+        from = Utils.decodeText(InternetAddress.toString(msg.getFrom()));
+        node.setProperty(Utils.EXO_FROM, from);
+        node.setProperty(Utils.EXO_TO, getAddresses(msg, javax.mail.Message.RecipientType.TO));      
+        node.setProperty(Utils.EXO_CC, getAddresses(msg, javax.mail.Message.RecipientType.CC));
+        node.setProperty(Utils.EXO_BCC, getAddresses(msg, javax.mail.Message.RecipientType.BCC));
+        node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg.getReplyTo())));
+        
+        String subject = msg.getSubject();
+        if (!Utils.isEmptyField(subject)) subject = Utils.decodeText(subject);
+        else subject = "";
+        node.setProperty(Utils.EXO_SUBJECT, subject);
+        
+        node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
+        node.setProperty(Utils.EXO_LAST_UPDATE_TIME, gc);
+        
+        Calendar sc = GregorianCalendar.getInstance();
+        if (msg.getSentDate() != null) sc.setTime(msg.getSentDate());
+        else sc = gc;
+        node.setProperty(Utils.EXO_SENDDATE, sc);
+        if (gc == null) node.setProperty(Utils.EXO_LAST_UPDATE_TIME, sc);
+        
+        int msgSize = Math.abs(msg.getSize());
+        node.setProperty(Utils.EXO_SIZE, msgSize);
+       
+        node.setProperty(Utils.EXO_ISUNREAD, !isReadMessage);
+        node.setProperty(Utils.EXO_STAR, false);
+        
+        if (isReturnReceipt) node.setProperty(Utils.IS_RETURN_RECEIPT, true);
+        else node.setProperty(Utils.IS_RETURN_RECEIPT, false);
+        
+        if (spamFilter != null && spamFilter.checkSpam(msg)) {
+          folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) };
+        }
+        
+        node.setProperty(Utils.MSG_FOLDERS, folderIds);
+        
+        if (tagList != null && tagList.size() > 0)
+          node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
+  
+        node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, inReplyToHeader);
+        
+        ArrayList<String> values = new ArrayList<String>();
+        Enumeration enu = msg.getAllHeaders();
+        while (enu.hasMoreElements()) {
+          Header header = (Header) enu.nextElement();
+          values.add(header.getName() + "=" + header.getValue());
+        }
+        node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
+        
+        node.save();
+        
+        if (infoObj != null && continuation != null) {
+          infoObj.setFrom(from);
+          infoObj.setMsgId(msgId);
+          infoObj.setIsRead(isReadMessage);
+          infoObj.setSubject(subject);
+          infoObj.setSize(Utils.convertSize(msgSize));
+          infoObj.setAccountId(accId);
+          if (gc != null) infoObj.setDate(gc.getTime().toString());
+          else if (sc != null) infoObj.setDate(sc.getTime().toString());
+          else  infoObj.setDate(new Date().toString()); 
+          
+          JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();                  
+          JsonValue json = generatorImpl.createJsonObject(infoObj);
+          continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
+        }
+  
+        t4 = System.currentTimeMillis();
+        logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
+        logger.warn("Adding message to thread ...");
+        t1 = System.currentTimeMillis();
+        addMessageToThread(sProvider, username, accId, inReplyToHeader, node);
+        t2 = System.currentTimeMillis();
+        logger.warn("Added message to thread finished : " + (t2 - t1) + " ms");
+  
+        for (int i = 0; i < folderIds.length; i++) {
+          increaseFolderItem(sProvider, username, accId, folderIds[i], isReadMessage);
+        }
+  
+        return true;
+      } catch (Exception e) {
+        try {
+          msgHomeNode.refresh(true);
+        } catch(Exception ex) {
+          e.printStackTrace();
+          logger.warn(" [WARNING] Can't refresh.");
+        }
+        logger.warn(" [WARNING] Cancel saving message to JCR.");
+        return false;
+      }
+    } finally {
+      closeSessionProvider(sProvider);
+    }
+  }
+  
+  public boolean saveTotalMessage(String username, String accId, String msgId, javax.mail.Message msg) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider(); 
+      Calendar gc = MimeMessageParser.getReceivedDate(msg);
+      Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());    
+      Node node = null;
+      try {
+        node = msgHomeNode.getNode(msgId);    
+      } catch (Exception e) {}
+
+      if (node != null) {
+        long priority = MimeMessageParser.getPriority(msg);
+        node.setProperty(Utils.EXO_PRIORITY, priority);
+        MimeMessage cmsg = (MimeMessage) msg;
+        Object obj = new Object();
+        try {
+          obj = msg.getContent();
+        } catch(MessagingException mex) {
+          cmsg = new MimeMessage((MimeMessage) msg);
+          try {
+            obj = cmsg.getContent();
+          } catch(MessagingException mex1) {
+            System.out.println("##### Error when fetch message body");
+          }
+        } 
+        String contentType = "text/plain";
+        if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/*"))
+          contentType = "text/html";
+        String body = "";
+        if (obj instanceof Multipart) {
+          body = setMultiPart((Multipart) obj, node, body);
+        } else {
+          body = setPart(cmsg, node, body);
+        }
+        node.setProperty(Utils.EXO_CONTENT_TYPE, contentType);
+        node.setProperty(Utils.EXO_BODY, Utils.decodeText(body));
+        node.setProperty(Utils.IS_LOADED, true);
+        node.save();
+      } else {
+        return false;
+      }
+      return true;
+    } finally {
+      closeSessionProvider(sProvider);
+    }
   } 
   
   private String getAddresses(javax.mail.Message msg, javax.mail.Message.RecipientType type) throws Exception {
@@ -1118,8 +1218,7 @@ public class JCRDataStorage {
     return Utils.decodeText(recipients);
   }
 
-  private void increaseFolderItem(SessionProvider sProvider, String username, String accId,
-      String folderId, boolean isReadMessage) throws Exception {
+  private void increaseFolderItem(SessionProvider sProvider, String username, String accId, String folderId, boolean isReadMessage) throws Exception {
     try {
       Node node = getFolderNodeById(sProvider, username, accId, folderId);
       if (node != null) {
@@ -1331,92 +1430,73 @@ public class JCRDataStorage {
     return body;
   }
 
-  public String setAddress(String strAddress) throws Exception {
-    String str = "";
-    try {
-      if (strAddress != null && strAddress.trim() != "") {
-        InternetAddress[] internetAddress = InternetAddress.parse(strAddress);
-        int i = 0;
-        if (internetAddress != null && internetAddress.length > 0) {
-          while (i < internetAddress.length) {
-            String personal = internetAddress[i].getPersonal();
-            String address = internetAddress[i].getAddress();
-            String sender = address + ";" + address;
-            if (personal != null && personal != "")
-              sender = personal + " ;" + address;
-            if (str.length() < 1) {
-              str = sender;
-            } else {
-              str += "," + sender;
-            }
-            i++;
-          }
-        }
-      }
-    } catch (Exception e) {
-      str = strAddress;
-    }
-    return str;
-  }
-
-  public Folder getFolder(SessionProvider sProvider, String username, String accountId,
-      String folderId) throws Exception {
+  public Folder getFolder(String username, String accountId, String folderId) throws Exception {
+    SessionProvider sProvider = null;
     Folder folder = null;
-    Node node = getFolderNodeById(sProvider, username, accountId, folderId);
-    if (node != null) {
-      folder = new Folder();
-      folder.setId(node.getProperty(Utils.EXO_ID).getString());
-      folder.setPath(node.getPath());
-      folder.setURLName(node.getProperty(Utils.EXO_LABEL).getString());
-      folder.setName(node.getProperty(Utils.EXO_NAME).getString());
-      folder.setType(node.getProperty(Utils.EXO_FOLDERTYPE).getLong());
-      folder.setPersonalFolder(node.getProperty(Utils.EXO_PERSONAL).getBoolean());
-      folder.setNumberOfUnreadMessage(node.getProperty(Utils.EXO_UNREADMESSAGES).getLong());
-      folder.setTotalMessage(node.getProperty(Utils.EXO_TOTALMESSAGE).getLong());
-      try {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTimeInMillis(node.getProperty(Utils.EXO_LAST_CHECKED_TIME).getLong());
-        folder.setLastCheckedDate(cal.getTime());
-      } catch (Exception e) {
-        folder.setLastCheckedDate(null);
-      }
-      try {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTimeInMillis(node.getProperty(Utils.EXO_LAST_START_CHECKING_TIME).getLong());
-        folder.setLastStartCheckingTime(cal.getTime());
-      } catch (Exception e) {
-        folder.setLastStartCheckingTime(null);
-      }
-      try {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTimeInMillis(node.getProperty(Utils.EXO_CHECK_FROM_DATE).getLong());
-        folder.setCheckFromDate(cal.getTime());
-      } catch (Exception e) { }
+    try {
+      sProvider = createSessionProvider();
+      Node node = getFolderNodeById(sProvider, username, accountId, folderId);
+      if (node != null) {
+        folder = new Folder();
+        folder.setId(node.getProperty(Utils.EXO_ID).getString());
+        folder.setPath(node.getPath());
+        folder.setURLName(node.getProperty(Utils.EXO_LABEL).getString());
+        folder.setName(node.getProperty(Utils.EXO_NAME).getString());
+        folder.setType(node.getProperty(Utils.EXO_FOLDERTYPE).getLong());
+        folder.setPersonalFolder(node.getProperty(Utils.EXO_PERSONAL).getBoolean());
+        folder.setNumberOfUnreadMessage(node.getProperty(Utils.EXO_UNREADMESSAGES).getLong());
+        folder.setTotalMessage(node.getProperty(Utils.EXO_TOTALMESSAGE).getLong());
+        try {
+          GregorianCalendar cal = new GregorianCalendar();
+          cal.setTimeInMillis(node.getProperty(Utils.EXO_LAST_CHECKED_TIME).getLong());
+          folder.setLastCheckedDate(cal.getTime());
+        } catch (Exception e) {
+          folder.setLastCheckedDate(null);
+        }
+        try {
+          GregorianCalendar cal = new GregorianCalendar();
+          cal.setTimeInMillis(node.getProperty(Utils.EXO_LAST_START_CHECKING_TIME).getLong());
+          folder.setLastStartCheckingTime(cal.getTime());
+        } catch (Exception e) {
+          folder.setLastStartCheckingTime(null);
+        }
+        try {
+          GregorianCalendar cal = new GregorianCalendar();
+          cal.setTimeInMillis(node.getProperty(Utils.EXO_CHECK_FROM_DATE).getLong());
+          folder.setCheckFromDate(cal.getTime());
+        } catch (Exception e) { }
 
+      }
+    } finally {
+      closeSessionProvider(sProvider);
     }
     return folder;
   }
 
-  public String getFolderParentId(SessionProvider sProvider, String username, String accountId,
-      String folderId) throws Exception {
-    Node parentNode = getFolderNodeById(sProvider, username, accountId, folderId).getParent();
+  public String getFolderParentId(String username, String accountId, String folderId) throws Exception {
+    SessionProvider sProvider = null;
     try {
-      if (parentNode != null)
-        return parentNode.getProperty(Utils.EXO_ID).getString();
-      else
+      sProvider = createSessionProvider();
+      Node parentNode = getFolderNodeById(sProvider, username, accountId, folderId).getParent();
+      try {
+        if (parentNode != null)
+          return parentNode.getProperty(Utils.EXO_ID).getString();
+        else
+          return null;
+      } catch (PathNotFoundException e) {
         return null;
-    } catch (PathNotFoundException e) {
-      return null;
+      }
+    } finally {
+      closeSessionProvider(sProvider);
     }
   }
 
-  private Node getFolderNodeById(SessionProvider sProvider, String username, String accountId,
-      String folderId) throws Exception {
+  private Node getFolderNodeById(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
     Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
     Session sess = accountNode.getSession();
     QueryManager qm = sess.getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
-        + "//element(*,exo:folder)[@exo:id='").append(folderId).append("']");
+                                                + "//element(*,exo:folder)[@exo:id='").append(folderId).append("']");
     QueryImpl query = (QueryImpl)qm.createQuery(queryString.toString(), Query.XPATH);
     query.setOffset(0);
     query.setLimit(1);
@@ -1462,122 +1542,125 @@ public class JCRDataStorage {
     return folder;
   }
 
-  public List<Folder> getFolders(SessionProvider sProvider, String username, String accountId)
-  throws Exception {
+  public List<Folder> getFolders(String username, String accountId) throws Exception {
+    SessionProvider sProvider = null;
     List<Folder> folders = new ArrayList<Folder>();
-    Node folderHomeNode = getFolderHome(sProvider, username, accountId);
-    NodeIterator iter = folderHomeNode.getNodes();
-    while (iter.hasNext()) {
-      Node folder = (Node) iter.next();
-      folders.add(getFolder(sProvider, username, accountId, folder.getName()));
+    try {
+      sProvider = createSessionProvider();
+      Node folderHomeNode = getFolderHome(sProvider, username, accountId);
+      NodeIterator iter = folderHomeNode.getNodes();
+      while (iter.hasNext()) {
+        Node folder = (Node) iter.next();
+        folders.add(getFolder(username, accountId, folder.getName()));
+      }
+    } finally {
+      closeSessionProvider(sProvider);
     }
     return folders;
   }
 
-  public void saveFolder(SessionProvider sProvider, String username, String accountId, Folder folder)
-  throws Exception {
-    // gets folder home node of the specified account
-    Node home = getFolderHome(sProvider, username, accountId);
-    Node myFolder = null;
-    Node node = getFolderNodeById(sProvider, username, accountId, folder.getId());
-    if (node != null) { // if the folder exists, gets it
-      myFolder = node;
-    } else { // if it doesn't exist, creates it
-      myFolder = home.addNode(folder.getId(), Utils.EXO_FOLDER);
+  public void saveFolder(String username, String accountId, Folder folder) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      // gets folder home node of the specified account
+      Node home = getFolderHome(sProvider, username, accountId);
+      Node myFolder = null;
+      Node node = getFolderNodeById(sProvider, username, accountId, folder.getId());
+      if (node != null) { // if the folder exists, gets it
+        myFolder = node;
+      } else { // if it doesn't exist, creates it
+        myFolder = home.addNode(folder.getId(), Utils.EXO_FOLDER);
+      }
+      // sets some properties
+      myFolder.setProperty(Utils.EXO_ID, folder.getId());
+      myFolder.setProperty(Utils.EXO_NAME, folder.getName());
+      myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
+      myFolder.setProperty(Utils.EXO_FOLDERTYPE, folder.getType());
+      myFolder.setProperty(Utils.EXO_LABEL, folder.getURLName());
+      myFolder.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
+      myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder());
+      if (folder.getLastCheckedDate() != null)
+        myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, folder.getLastCheckedDate().getTime());
+      else 
+        myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
+
+      if (folder.getLastStartCheckingTime() != null)
+        myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, folder.getLastStartCheckingTime().getTime());
+      else 
+        myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
+      if (folder.getCheckFromDate() != null)
+        myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, folder.getCheckFromDate().getTime());
+      else 
+        myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
+      home.getSession().save();
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    // sets some properties
-    myFolder.setProperty(Utils.EXO_ID, folder.getId());
-    myFolder.setProperty(Utils.EXO_NAME, folder.getName());
-    myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
-    myFolder.setProperty(Utils.EXO_FOLDERTYPE, folder.getType());
-    myFolder.setProperty(Utils.EXO_LABEL, folder.getURLName());
-    myFolder.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
-    myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder());
-    if (folder.getLastCheckedDate() != null)
-      myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, folder.getLastCheckedDate().getTime());
-    else 
-      myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
-    
-    if (folder.getLastStartCheckingTime() != null)
-      myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, folder.getLastStartCheckingTime().getTime());
-    else 
-      myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
-    if (folder.getCheckFromDate() != null)
-      myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, folder.getCheckFromDate().getTime());
-    else 
-      myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
-    home.getSession().save();
   }
 
-  public boolean isExistFolder(SessionProvider sProvider, String username, String accountId,
-      String parentId, String folderId) throws Exception {
+  public boolean isExistFolder(String username, String accountId, String parentId, String folderId) throws Exception {
+    SessionProvider sProvider = null;
     boolean isExist = false;
-    Node parentNode ;
-    if (parentId != null && parentId.trim().length() > 0) {  
-      parentNode = getFolderNodeById(sProvider, username, accountId, parentId);
-    } else  {
-      parentNode = getFolderHome(sProvider, username, accountId) ;
+    try {
+      sProvider = createSessionProvider();
+      Node parentNode ;
+      if (parentId != null && parentId.trim().length() > 0) {  
+        parentNode = getFolderNodeById(sProvider, username, accountId, parentId);
+      } else  {
+        parentNode = getFolderHome(sProvider, username, accountId) ;
+      }
+      NodeIterator nit = parentNode.getNodes();
+      while (nit.hasNext()) {
+        Node node = nit.nextNode();
+        String fn = node.getProperty(Utils.EXO_NAME).getString();
+        if (fn.trim().equals(folderId))
+          isExist = true;
+      }
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    NodeIterator nit = parentNode.getNodes();
-    while (nit.hasNext()) {
-      Node node = nit.nextNode();
-      String fn = node.getProperty(Utils.EXO_NAME).getString();
-      if (fn.trim().equals(folderId))
-        isExist = true;
-    }
-
     return isExist;
   }
-  
-  public List<String> getFolderIds(SessionProvider sProvider, String username, String accountId, String path) throws Exception {
-    List<String> folderIds = new ArrayList<String>();
-    Node folderHome = getFolderHome(sProvider, username, accountId);
-    Node parentNode;
-    if (path != null) {
-      parentNode = (Node) folderHome.getSession().getItem(path);      
-    } else {
-      parentNode = folderHome;
-    }
-    NodeIterator nit = parentNode.getNodes();
-    while (nit.hasNext()) {
-      folderIds.add(nit.nextNode().getName());
-    }
-    return folderIds;
-  }
 
-  public void saveFolder(SessionProvider sProvider, String username, String accountId,
-      String parentId, Folder folder) throws Exception {
-    // gets folder home node of the specified account
-    Node home = getFolderHome(sProvider, username, accountId);
-    Node parentNode = getFolderNodeById(sProvider, username, accountId, parentId);
-    Node myFolder = null;
-    if (parentNode.hasNode(folder.getId())) { // if the folder exists, gets it
-      myFolder = parentNode.getNode(folder.getId());
-    } else { // if it doesn't exist, creates it
-      myFolder = parentNode.addNode(folder.getId(), Utils.EXO_FOLDER);
+  public void saveFolder(String username, String accountId, String parentId, Folder folder) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      // gets folder home node of the specified account
+      Node home = getFolderHome(sProvider, username, accountId);
+      Node parentNode = getFolderNodeById(sProvider, username, accountId, parentId);
+      Node myFolder = null;
+      if (parentNode.hasNode(folder.getId())) { // if the folder exists, gets it
+        myFolder = parentNode.getNode(folder.getId());
+      } else { // if it doesn't exist, creates it
+        myFolder = parentNode.addNode(folder.getId(), Utils.EXO_FOLDER);
+      }
+      // sets some properties
+      myFolder.setProperty(Utils.EXO_ID, folder.getId());
+      myFolder.setProperty(Utils.EXO_NAME, folder.getName());
+      myFolder.setProperty(Utils.EXO_LABEL, folder.getURLName());
+      myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
+      myFolder.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
+      myFolder.setProperty(Utils.EXO_FOLDERTYPE, folder.getType());
+      myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder());
+      if (folder.getLastCheckedDate() != null)
+        myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, folder.getLastCheckedDate().getTime());
+      else 
+        myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
+      
+      if (folder.getLastStartCheckingTime() != null)
+        myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, folder.getLastStartCheckingTime().getTime());
+      else 
+        myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
+      if (folder.getCheckFromDate() != null)
+        myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, folder.getCheckFromDate().getTime());
+      else 
+        myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
+      home.getSession().save();
+    } finally {
+      closeSessionProvider(sProvider) ;
     }
-    // sets some properties
-    myFolder.setProperty(Utils.EXO_ID, folder.getId());
-    myFolder.setProperty(Utils.EXO_NAME, folder.getName());
-    myFolder.setProperty(Utils.EXO_LABEL, folder.getURLName());
-    myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
-    myFolder.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
-    myFolder.setProperty(Utils.EXO_FOLDERTYPE, folder.getType());
-    myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder());
-    if (folder.getLastCheckedDate() != null)
-      myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, folder.getLastCheckedDate().getTime());
-    else 
-      myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
-    
-    if (folder.getLastStartCheckingTime() != null)
-      myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, folder.getLastStartCheckingTime().getTime());
-    else 
-      myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
-    if (folder.getCheckFromDate() != null)
-      myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, folder.getCheckFromDate().getTime());
-    else 
-      myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
-    home.getSession().save();
   }
 
   private void removeFolderInMessages(SessionProvider sProvider, String username, String accountId,
@@ -1603,19 +1686,24 @@ public class JCRDataStorage {
     }
   }
 
-  public void removeUserFolder(SessionProvider sProvider, String username, String accountId,
-      String folderId) throws Exception {
-    List<Node> msgNodes = getMessageNodeByFolder(sProvider, username, accountId, folderId);
-    removeFolderInMessages(sProvider, username, accountId, msgNodes, folderId);
+  public void removeUserFolder(String username, String accountId, String folderId) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      List<Node> msgNodes = getMessageNodeByFolder(sProvider, username, accountId, folderId);
+      removeFolderInMessages(sProvider, username, accountId, msgNodes, folderId);
 
-    Node node = getFolderNodeById(sProvider, username, accountId, folderId);
-    if (node != null) {
-      node.remove();
+      Node node = getFolderNodeById(sProvider, username, accountId, folderId);
+      if (node != null) {
+        node.remove();
+      }
+      node.getSession().save();
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    node.getSession().save();
   }
 
-  public Node getFilterHome(SessionProvider sProvider, String username, String accountId) throws Exception {
+  private Node getFilterHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     if (accountHome.hasNode(Utils.KEY_FILTER))
       return accountHome.getNode(Utils.KEY_FILTER);
@@ -1626,219 +1714,211 @@ public class JCRDataStorage {
     return accountHome.getNode(Utils.KEY_FILTER);
   }
 
-  public List<MessageFilter> getFilters(SessionProvider sProvider, String username, String accountId)
-  throws Exception {
+  public List<MessageFilter> getFilters(String username, String accountId) throws Exception {
+    SessionProvider sProvider = null;
     List<MessageFilter> filterList = new ArrayList<MessageFilter>();
-    Node filterHomeNode = getFilterHome(sProvider, username, accountId);
-    NodeIterator iter = filterHomeNode.getNodes();
-    while (iter.hasNext()) {
-      Node filterNode = (Node) iter.next();
-      MessageFilter filter = new MessageFilter("");
-      try {
-        filter.setId((filterNode.getProperty(Utils.EXO_ID).getString()));
-      } catch (Exception e) {
+    try {
+      sProvider = createSessionProvider();
+      Node filterHomeNode = getFilterHome(sProvider, username, accountId);
+      NodeIterator iter = filterHomeNode.getNodes();
+      while (iter.hasNext()) {
+        Node filterNode = (Node) iter.next();
+        MessageFilter filter = new MessageFilter("");
+        try {
+          filter.setId((filterNode.getProperty(Utils.EXO_ID).getString()));
+        } catch (Exception e) { }
+        try {
+          filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString());
+        } catch (Exception e) { }
+        try {
+          filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
+        } catch (Exception e) { }
+        try {
+          filter.setFromCondition((int) (filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
+        } catch (Exception e) { }
+        try {
+          filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
+        } catch (Exception e) { }
+        try {
+          filter.setToCondition((int) (filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
+        } catch (Exception e) { }
+        try {
+          filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
+        } catch (Exception e) { }
+        try {
+          filter.setSubjectCondition((int) (filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION)
+              .getLong()));
+        } catch (Exception e) { }
+        try {
+          filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
+        } catch (Exception e) { }
+        try {
+          filter.setBodyCondition((int) (filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
+        } catch (Exception e) { }
+        try {
+          String folder = filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString();
+          if (!Utils.isEmptyField(folder) && getFolder(username, accountId, folder) != null) filter.setApplyFolder(folder);
+          else filter.setApplyFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+        } catch (Exception e) { }
+        try {
+          filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
+        } catch (Exception e) { }
+        try {
+          filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
+        } catch (Exception e) { }
+        try {
+          filter.setApplyForAll(filterNode.getProperty(Utils.EXO_APPLY_FOR_ALL).getBoolean());
+        } catch (Exception e) { }
+        filterList.add(filter);
       }
-      try {
-        filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setFromCondition((int) (filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
-      } catch (Exception e) {
-      }
-      try {
-        filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setToCondition((int) (filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
-      } catch (Exception e) {
-      }
-      try {
-        filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setSubjectCondition((int) (filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION)
-            .getLong()));
-      } catch (Exception e) {
-      }
-      try {
-        filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setBodyCondition((int) (filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
-      } catch (Exception e) {
-      }
-      try {
-        String folder = filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString();
-        if (!Utils.isEmptyField(folder) && getFolder(sProvider, username, accountId, folder) != null) filter.setApplyFolder(folder);
-        else filter.setApplyFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
-      } catch (Exception e) {
-      }
-      try {
-        filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setApplyForAll(filterNode.getProperty(Utils.EXO_APPLY_FOR_ALL).getBoolean());
-      } catch (Exception e) {
-      }
-      filterList.add(filter);
+    } finally {
+      closeSessionProvider(sProvider);
     }
     return filterList;
   }
 
-  public MessageFilter getFilterById(SessionProvider sProvider, String username, String accountId,
-      String filterId) throws Exception {
-    Node filterHomeNode = getFilterHome(sProvider, username, accountId);
+  public MessageFilter getFilterById(String username, String accountId, String filterId) throws Exception {
+    SessionProvider sProvider = null;
     MessageFilter filter = new MessageFilter("");
-    if (filterHomeNode.hasNode(filterId)) {
-      Node filterNode = filterHomeNode.getNode(filterId);
-      try {
-        filter.setId((filterNode.getProperty(Utils.EXO_ID).getString()));
-      } catch (Exception e) {
+    try {
+      sProvider = createSessionProvider();
+      Node filterHomeNode = getFilterHome(sProvider, username, accountId);
+      if (filterHomeNode.hasNode(filterId)) {
+        Node filterNode = filterHomeNode.getNode(filterId);
+        try {
+          filter.setId((filterNode.getProperty(Utils.EXO_ID).getString()));
+        } catch (Exception e) { }
+        try {
+          filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString());
+        } catch (Exception e) { }
+        try {
+          filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
+        } catch (Exception e) { }
+        try {
+          filter.setFromCondition((int) (filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
+        } catch (Exception e) { }
+        try {
+          filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
+        } catch (Exception e) { }
+        try {
+          filter.setToCondition((int) (filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
+        } catch (Exception e) { }
+        try {
+          filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
+        } catch (Exception e) { }
+        try {
+          filter.setSubjectCondition((int) (filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION)
+              .getLong()));
+        } catch (Exception e) { }
+        try {
+          filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
+        } catch (Exception e) { }
+        try {
+          filter.setBodyCondition((int) (filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
+        } catch (Exception e) { }
+        try {
+          String folder = filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString();
+          if (!Utils.isEmptyField(folder) && getFolder(username, accountId, folder) != null) filter.setApplyFolder(folder);
+          else filter.setApplyFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+        } catch (Exception e) { }
+        try {
+          filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
+        } catch (Exception e) { }
+        try {
+          filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
+        } catch (Exception e) { }
+        try {
+          filter.setApplyForAll(filterNode.getProperty(Utils.EXO_APPLY_FOR_ALL).getBoolean());
+        } catch (Exception e) { }
       }
-      try {
-        filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setFromCondition((int) (filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
-      } catch (Exception e) {
-      }
-      try {
-        filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setToCondition((int) (filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
-      } catch (Exception e) {
-      }
-      try {
-        filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setSubjectCondition((int) (filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION)
-            .getLong()));
-      } catch (Exception e) {
-      }
-      try {
-        filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setBodyCondition((int) (filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
-      } catch (Exception e) {
-      }
-      try {
-        String folder = filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString();
-        if (!Utils.isEmptyField(folder) && getFolder(sProvider, username, accountId, folder) != null) filter.setApplyFolder(folder);
-        else filter.setApplyFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
-      } catch (Exception e) {
-      }
-      try {
-        filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
-      } catch (Exception e) {
-      }
-      try {
-        filter.setApplyForAll(filterNode.getProperty(Utils.EXO_APPLY_FOR_ALL).getBoolean());
-      } catch (Exception e) {
-      }
+    } finally {
+      closeSessionProvider(sProvider);
     }
     return filter;
   }
 
-  public void saveFilter(SessionProvider sProvider, String username, String accountId,
-      MessageFilter filter, boolean applyAll) throws Exception {
-    Node home = getFilterHome(sProvider, username, accountId);
-    Node filterNode = null;
-    if (home.hasNode(filter.getId())) { // if the filter exists, gets it
-      filterNode = home.getNode(filter.getId());
-    } else { // if it doesn't exist, creates it
-      filterNode = home.addNode(filter.getId(), Utils.EXO_FILTER);
-    }
-    // sets some properties
-    filterNode.setProperty(Utils.EXO_ID, filter.getId());
-    filterNode.setProperty(Utils.EXO_NAME, filter.getName());
-    filterNode.setProperty(Utils.EXO_FROM, filter.getFrom());
-    filterNode.setProperty(Utils.EXO_FROM_CONDITION, (long) filter.getFromCondition());
-    filterNode.setProperty(Utils.EXO_TO, filter.getTo());
-    filterNode.setProperty(Utils.EXO_TO_CONDITION, (long) filter.getToCondition());
-    filterNode.setProperty(Utils.EXO_SUBJECT, filter.getSubject());
-    filterNode.setProperty(Utils.EXO_SUBJECT_CONDITION, (long) filter.getSubjectCondition());
-    filterNode.setProperty(Utils.EXO_BODY, filter.getBody());
-    filterNode.setProperty(Utils.EXO_BODY_CONDITION, (long) filter.getBodyCondition());
-    if (!Utils.isEmptyField(filter.getApplyFolder())) 
-      filterNode.setProperty(Utils.EXO_APPLY_FOLDER, filter.getApplyFolder());
-    else filterNode.setProperty(Utils.EXO_APPLY_FOLDER, Utils.createFolderId(accountId, Utils.FD_INBOX, false));
-    filterNode.setProperty(Utils.EXO_APPLY_TAG, filter.getApplyTag());
-    filterNode.setProperty(Utils.EXO_KEEP_IN_INBOX, filter.keepInInbox());
-    filterNode.setProperty(Utils.EXO_APPLY_FOR_ALL, filter.applyForAll());
-
+  public void saveFilter(String username, String accountId, MessageFilter filter, boolean applyAll) throws Exception {
+    SessionProvider sProvider = null;
     try {
-      if (applyAll) {
-        runFilter(sProvider, username, accountId, filter);
+      sProvider = createSessionProvider();
+      Node home = getFilterHome(sProvider, username, accountId);
+      Node filterNode = null;
+      if (home.hasNode(filter.getId())) { // if the filter exists, gets it
+        filterNode = home.getNode(filter.getId());
+      } else { // if it doesn't exist, creates it
+        filterNode = home.addNode(filter.getId(), Utils.EXO_FILTER);
       }
-    } catch(Exception e) {
-      return ;
-    }
+      // sets some properties
+      filterNode.setProperty(Utils.EXO_ID, filter.getId());
+      filterNode.setProperty(Utils.EXO_NAME, filter.getName());
+      filterNode.setProperty(Utils.EXO_FROM, filter.getFrom());
+      filterNode.setProperty(Utils.EXO_FROM_CONDITION, (long) filter.getFromCondition());
+      filterNode.setProperty(Utils.EXO_TO, filter.getTo());
+      filterNode.setProperty(Utils.EXO_TO_CONDITION, (long) filter.getToCondition());
+      filterNode.setProperty(Utils.EXO_SUBJECT, filter.getSubject());
+      filterNode.setProperty(Utils.EXO_SUBJECT_CONDITION, (long) filter.getSubjectCondition());
+      filterNode.setProperty(Utils.EXO_BODY, filter.getBody());
+      filterNode.setProperty(Utils.EXO_BODY_CONDITION, (long) filter.getBodyCondition());
+      if (!Utils.isEmptyField(filter.getApplyFolder())) 
+        filterNode.setProperty(Utils.EXO_APPLY_FOLDER, filter.getApplyFolder());
+      else filterNode.setProperty(Utils.EXO_APPLY_FOLDER, Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+      filterNode.setProperty(Utils.EXO_APPLY_TAG, filter.getApplyTag());
+      filterNode.setProperty(Utils.EXO_KEEP_IN_INBOX, filter.keepInInbox());
+      filterNode.setProperty(Utils.EXO_APPLY_FOR_ALL, filter.applyForAll());
 
-    home.getSession().save();
+      try {
+        if (applyAll) {
+          runFilter(sProvider, username, accountId, filter);
+        }
+      } catch(Exception e) {
+        return ;
+      }
+
+      home.getSession().save();
+    } finally {
+      closeSessionProvider(sProvider);
+    }
   }
 
   private void runFilter(SessionProvider sProvider, String username, String accountId,
       MessageFilter filter) throws Exception {
-    List<Message> msgList = getMessagePageList(sProvider, username, filter).getAll(username);
+    List<Message> msgList = getMessagePageList(username, filter).getAll(username);
     String applyFolder = filter.getApplyFolder();
     String applyTag = filter.getApplyTag();
     List<Tag> tagList = new ArrayList<Tag>();
     for (Message msg : msgList) {
-      Folder folder = getFolder(sProvider, username, accountId, applyFolder);
+      Folder folder = getFolder(username, accountId, applyFolder);
       if (folder != null && (msg.getFolders()[0] != applyFolder)) {
-        Folder appFolder = getFolder(sProvider, username, accountId, applyFolder);
+        Folder appFolder = getFolder(username, accountId, applyFolder);
         if (appFolder != null)
-          moveMessage(sProvider, username, accountId, msg, msg.getFolders()[0], applyFolder, true);
+          moveMessage(username, accountId, msg, msg.getFolders()[0], applyFolder, true);
       }
     }
     if (!Utils.isEmptyField(applyTag)) {
-      Tag tag = getTag(sProvider, username, accountId, applyTag);
+      Tag tag = getTag(username, accountId, applyTag);
       if (tag != null) {
         tagList.add(tag);
-        addTag(sProvider, username, accountId, msgList, tagList);
+        addTag(username, accountId, msgList, tagList);
       }
     }
   }
 
-  public void removeFilter(SessionProvider sProvider, String username, String accountId,
-      String filterId) throws Exception {
-    Node filterHome = getFilterHome(sProvider, username, accountId);
-    if (filterHome.hasNode(filterId)) {
-      filterHome.getNode(filterId).remove();
+  public void removeFilter(String username, String accountId, String filterId) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node filterHome = getFilterHome(sProvider, username, accountId);
+      if (filterHome.hasNode(filterId)) {
+        filterHome.getNode(filterId).remove();
+      }
+      filterHome.getSession().save();
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    filterHome.getSession().save();
   }
 
-  public Node getMessageHome(SessionProvider sProvider, String username, String accountId)
-  throws Exception {
+  private Node getMessageHome(SessionProvider sProvider, String username, String accountId) throws Exception {
+    sProvider = createSessionProvider();
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     Node msgHome = null;
     try {
@@ -1850,8 +1930,7 @@ public class JCRDataStorage {
     return msgHome;
   }
 
-  public Node getFolderHome(SessionProvider sProvider, String username, String accountId)
-  throws Exception {
+  private Node getFolderHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     Node folderHome = null;
     try {
@@ -1860,11 +1939,10 @@ public class JCRDataStorage {
       folderHome = accountHome.addNode(Utils.KEY_FOLDERS, Utils.NT_UNSTRUCTURED);
       accountHome.save();
     }
-    return folderHome;
+    return folderHome; 
   }
 
-  public Node getTagHome(SessionProvider sProvider, String username, String accountId)
-  throws Exception {
+  private Node getTagHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     Node tagHome = null;
     try {
@@ -1876,177 +1954,209 @@ public class JCRDataStorage {
     return tagHome;
   }
 
-  public void addTag(SessionProvider sProvider, String username, String accountId, Tag tag)
-  throws Exception {
-    Node tagHome = getTagHome(sProvider, username, accountId);
-    if (!tagHome.hasNode(tag.getId())) {
-      Node tagNode = tagHome.addNode(tag.getId(), Utils.EXO_MAILTAG);
-      tagNode.setProperty(Utils.EXO_ID, tag.getId());
-      tagNode.setProperty(Utils.EXO_NAME, tag.getName());
-      tagNode.setProperty(Utils.EXO_DESCRIPTION, tag.getDescription());
-      tagNode.setProperty(Utils.EXO_COLOR, tag.getColor());
-      tagHome.save();
-    }
-  }
-
-  public void addTag(SessionProvider sProvider, String username, String accountId,
-      List<Message> messages, List<Tag> tagList) throws Exception {
-    Map<String, String> tagMap = new HashMap<String, String>();
-    Node tagHome = getTagHome(sProvider, username, accountId);
-    for (Tag tag : tagList) {
+  public void addTag(String username, String accountId, Tag tag) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node tagHome = getTagHome(sProvider, username, accountId);
       if (!tagHome.hasNode(tag.getId())) {
         Node tagNode = tagHome.addNode(tag.getId(), Utils.EXO_MAILTAG);
         tagNode.setProperty(Utils.EXO_ID, tag.getId());
         tagNode.setProperty(Utils.EXO_NAME, tag.getName());
         tagNode.setProperty(Utils.EXO_DESCRIPTION, tag.getDescription());
         tagNode.setProperty(Utils.EXO_COLOR, tag.getColor());
+        tagHome.save();
       }
-      tagMap.put(tag.getId(), tag.getId());
-    }
-    tagHome.getSession().save();
-
-    Node mailHome = getMailHomeNode(sProvider, username);
-    for (Message message : messages) {
-      Map<String, String> messageTagMap = new HashMap<String, String>();
-      Node messageNode = (Node) mailHome.getSession().getItem(message.getPath());
-      try {
-        Value[] values = messageNode.getProperty(Utils.EXO_TAGS).getValues();
-        for (Value value : values) {
-          messageTagMap.put(value.getString(), value.getString());
-        }
-      } catch (Exception e) {
-      }
-      messageTagMap.putAll(tagMap);
-      messageNode.setProperty(Utils.EXO_TAGS, messageTagMap.values().toArray(new String[] {}));
-
-      messageNode.save();
+    } finally {
+      closeSessionProvider(sProvider);
     }
   }
 
-  public List<Tag> getTags(SessionProvider sProvider, String username, String accountId)
-  throws Exception {
+  public void addTag(String username, String accountId, List<Message> messages, List<Tag> tagList) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Map<String, String> tagMap = new HashMap<String, String>();
+      Node tagHome = getTagHome(sProvider, username, accountId);
+      for (Tag tag : tagList) {
+        if (!tagHome.hasNode(tag.getId())) {
+          Node tagNode = tagHome.addNode(tag.getId(), Utils.EXO_MAILTAG);
+          tagNode.setProperty(Utils.EXO_ID, tag.getId());
+          tagNode.setProperty(Utils.EXO_NAME, tag.getName());
+          tagNode.setProperty(Utils.EXO_DESCRIPTION, tag.getDescription());
+          tagNode.setProperty(Utils.EXO_COLOR, tag.getColor());
+        }
+        tagMap.put(tag.getId(), tag.getId());
+      }
+      tagHome.getSession().save();
+
+      Node mailHome = getMailHomeNode(sProvider, username);
+      for (Message message : messages) {
+        Map<String, String> messageTagMap = new HashMap<String, String>();
+        Node messageNode = (Node) mailHome.getSession().getItem(message.getPath());
+        try {
+          Value[] values = messageNode.getProperty(Utils.EXO_TAGS).getValues();
+          for (Value value : values) {
+            messageTagMap.put(value.getString(), value.getString());
+          }
+        } catch (Exception e) {
+        }
+        messageTagMap.putAll(tagMap);
+        messageNode.setProperty(Utils.EXO_TAGS, messageTagMap.values().toArray(new String[] {}));
+
+        messageNode.save();
+      }
+    } finally {
+      closeSessionProvider(sProvider);
+    }
+  }
+
+  public List<Tag> getTags(String username, String accountId) throws Exception {
+    SessionProvider sProvider = null;
     List<Tag> tags = new ArrayList<Tag>();
-    Node tagHomeNode = getTagHome(sProvider, username, accountId);
-    NodeIterator iter = tagHomeNode.getNodes();
-    while (iter.hasNext()) {
-      Node tagNode = (Node) iter.next();
-      Tag tag = new Tag();
-      try {
-        tag.setId((tagNode.getProperty(Utils.EXO_ID).getString()));
-      } catch (PathNotFoundException e) {
+    try {
+      sProvider = createSessionProvider();
+      Node tagHomeNode = getTagHome(sProvider, username, accountId);
+      NodeIterator iter = tagHomeNode.getNodes();
+      while (iter.hasNext()) {
+        Node tagNode = (Node) iter.next();
+        Tag tag = new Tag();
+        try {
+          tag.setId((tagNode.getProperty(Utils.EXO_ID).getString()));
+        } catch (PathNotFoundException e) { }
+        try {
+          tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString());
+        } catch (PathNotFoundException e) { }
+        try {
+          tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString());
+        } catch (PathNotFoundException e) { }
+        try {
+          tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString());
+        } catch (PathNotFoundException e) { }
+        tags.add(tag);
       }
-      try {
-        tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString());
-      } catch (PathNotFoundException e) {
-      }
-      try {
-        tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString());
-      } catch (PathNotFoundException e) {
-      }
-      try {
-        tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString());
-      } catch (PathNotFoundException e) {
-      }
-      tags.add(tag);
+    } finally {
+      closeSessionProvider(sProvider);
     }
     return tags;
   }
 
-  public Tag getTag(SessionProvider sProvider, String username, String accountId, String tagId)
-  throws Exception {
-    Node tagHomeNode = getTagHome(sProvider, username, accountId);
+  public Tag getTag(String username, String accountId, String tagId) throws Exception {
+    SessionProvider sProvider = null;
     Tag tag = new Tag();
-    NodeIterator iter = tagHomeNode.getNodes();
-    while (iter.hasNext()) {
-      Node tagNode = (Node) iter.next();
-      //TODO should break loop when matching the tag node
-      if (tagNode.getProperty(Utils.EXO_ID).getString().equals(tagId)) {
-        try {
-          tag.setId((tagNode.getProperty(Utils.EXO_ID).getString()));
-        } catch (PathNotFoundException e) {
-        }
-        try {
-          tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString());
-        } catch (PathNotFoundException e) {
-        }
-        try {
-          tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString());
-        } catch (PathNotFoundException e) {
-        }
-        try {
-          tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString());
-        } catch (PathNotFoundException e) {
+    try {
+      sProvider = createSessionProvider();
+      Node tagHomeNode = getTagHome(sProvider, username, accountId);
+      NodeIterator iter = tagHomeNode.getNodes();
+      while (iter.hasNext()) {
+        Node tagNode = (Node) iter.next();
+        //TODO should break loop when matching the tag node
+        if (tagNode.getProperty(Utils.EXO_ID).getString().equals(tagId)) {
+          try {
+            tag.setId((tagNode.getProperty(Utils.EXO_ID).getString()));
+          } catch (PathNotFoundException e) { }
+          try {
+            tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString());
+          } catch (PathNotFoundException e) { }
+          try {
+            tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString());
+          } catch (PathNotFoundException e) { }
+          try {
+            tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString());
+          } catch (PathNotFoundException e) { }
         }
       }
+    } finally {
+      closeSessionProvider(sProvider);
     }
     return tag;
   }
 
-  public void removeTagsInMessages(SessionProvider sProvider, String username, String accountId,
-      List<Message> msgList, List<String> tagIds) throws Exception {
-    Node mailHome = getMailHomeNode(sProvider, username);
-    for (Message msg : msgList) {
-      try {
-        Node msgNode = (Node) mailHome.getSession().getItem(msg.getPath());
+  public void removeTagsInMessages(String username, String accountId, List<Message> msgList, List<String> tagIds) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node mailHome = getMailHomeNode(sProvider, username);
+      for (Message msg : msgList) {
         try {
-          Value[] propTags = msgNode.getProperty(Utils.EXO_TAGS).getValues();
-          String[] oldTagIds = new String[propTags.length];
-          for (int i = 0; i < propTags.length; i++) {
-            oldTagIds[i] = propTags[i].getString();
+          Node msgNode = (Node) mailHome.getSession().getItem(msg.getPath());
+          try {
+            Value[] propTags = msgNode.getProperty(Utils.EXO_TAGS).getValues();
+            String[] oldTagIds = new String[propTags.length];
+            for (int i = 0; i < propTags.length; i++) {
+              oldTagIds[i] = propTags[i].getString();
+            }
+            List<String> tagList = new ArrayList<String>(Arrays.asList(oldTagIds));
+            tagList.removeAll(tagIds);
+            String[] newTagIds = tagList.toArray(new String[tagList.size()]);
+            msgNode.setProperty(Utils.EXO_TAGS, newTagIds);
+            msgNode.save();
+          } catch (Exception e) {
           }
-          List<String> tagList = new ArrayList<String>(Arrays.asList(oldTagIds));
-          tagList.removeAll(tagIds);
-          String[] newTagIds = tagList.toArray(new String[tagList.size()]);
-          msgNode.setProperty(Utils.EXO_TAGS, newTagIds);
-          msgNode.save();
-        } catch (Exception e) {
+        } catch (PathNotFoundException e) {
         }
-      } catch (PathNotFoundException e) {
       }
+    } finally {
+      closeSessionProvider(sProvider);
     }
   }
 
-  public void removeTag(SessionProvider sProvider, String username, String accountId, String tagId)
-  throws Exception {
-    // remove this tag in all messages
-    List<Message> listMessage = getMessageByTag(sProvider, username, accountId, tagId);
-    List<String> listTag = new ArrayList<String>();
-    listTag.add(tagId);
-    removeTagsInMessages(sProvider, username, accountId, listMessage, listTag);
+  public void removeTag(String username, String accountId, String tagId) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      // remove this tag in all messages
+      List<Message> listMessage = getMessageByTag(username, accountId, tagId);
+      List<String> listTag = new ArrayList<String>();
+      listTag.add(tagId);
+      removeTagsInMessages(username, accountId, listMessage, listTag);
 
-    // remove tag node
-    Node tagHomeNode = getTagHome(sProvider, username, accountId);
-    if (tagHomeNode.hasNode(tagId)) {
-      tagHomeNode.getNode(tagId).remove();
+      // remove tag node
+      Node tagHomeNode = getTagHome(sProvider, username, accountId);
+      if (tagHomeNode.hasNode(tagId)) {
+        tagHomeNode.getNode(tagId).remove();
+      }
+      tagHomeNode.getSession().save();
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    tagHomeNode.getSession().save();
   }
 
-  public void updateTag(SessionProvider sProvider, String username, String accountId, Tag tag)
-  throws Exception {
-    Node tagHome = getTagHome(sProvider, username, accountId);
-    if (tagHome.hasNode(tag.getId())) {
-      Node tagNode = tagHome.getNode(tag.getId());
-      tagNode.setProperty(Utils.EXO_NAME, tag.getName());
-      tagNode.setProperty(Utils.EXO_DESCRIPTION, tag.getDescription());
-      tagNode.setProperty(Utils.EXO_COLOR, tag.getColor());
+  public void updateTag(String username, String accountId, Tag tag) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node tagHome = getTagHome(sProvider, username, accountId);
+      if (tagHome.hasNode(tag.getId())) {
+        Node tagNode = tagHome.getNode(tag.getId());
+        tagNode.setProperty(Utils.EXO_NAME, tag.getName());
+        tagNode.setProperty(Utils.EXO_DESCRIPTION, tag.getDescription());
+        tagNode.setProperty(Utils.EXO_COLOR, tag.getColor());
+      }
+      tagHome.save();
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    tagHome.save();
   }
 
-  public List<Message> getMessageByTag(SessionProvider sProvider, String username,
-      String accountId, String tagId) throws Exception {
+  public List<Message> getMessageByTag(String username, String accountId, String tagId) throws Exception {
+    SessionProvider sProvider = null;
     List<Message> messages = new ArrayList<Message>();
-    Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
-    QueryManager qm = accountNode.getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
-        + "//element(*,exo:message)[@exo:tags='").append(tagId).append("']");
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
-    while (it.hasNext()) {
-      Message message = getMessage(it.nextNode());
-      messages.add(message);
+    try {
+      sProvider = createSessionProvider();
+      Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
+      QueryManager qm = accountNode.getSession().getWorkspace().getQueryManager();
+      StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
+                                                  + "//element(*,exo:message)[@exo:tags='").append(tagId).append("']");
+      Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+      QueryResult result = query.execute();
+      NodeIterator it = result.getNodes();
+      while (it.hasNext()) {
+        Message message = getMessage(it.nextNode());
+        messages.add(message);
+      }
+    } finally {
+      closeSessionProvider(sProvider);
     }
     return messages;
   }
@@ -2067,18 +2177,23 @@ public class JCRDataStorage {
     return msgNodes;
   }
 
-  public Node getSpamFilterHome(SessionProvider sProvider, String username, String accountId)
-  throws Exception {
-    Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
-    if (accountHome.hasNode(Utils.KEY_SPAM_FILTER))
-      return accountHome.getNode(Utils.KEY_SPAM_FILTER);
-    else
-      return accountHome.addNode(Utils.KEY_SPAM_FILTER, Utils.NT_UNSTRUCTURED);
+  public Node getSpamFilterHome(String username, String accountId) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
+      if (accountHome.hasNode(Utils.KEY_SPAM_FILTER))
+        return accountHome.getNode(Utils.KEY_SPAM_FILTER);
+      else
+        return accountHome.addNode(Utils.KEY_SPAM_FILTER, Utils.NT_UNSTRUCTURED);
+    } finally {
+      closeSessionProvider(sProvider) ;
+    }
   }
 
-  public SpamFilter getSpamFilter(SessionProvider sProvider, String username, String accountId)
+  public SpamFilter getSpamFilter(String username, String accountId)
   throws Exception {
-    Node accountNode = getSpamFilterHome(sProvider, username, accountId);
+    Node accountNode = getSpamFilterHome(username, accountId);
     NodeIterator it = accountNode.getNodes();
     Node spamFilterNode = null;
     while (it.hasNext()) {
@@ -2103,9 +2218,8 @@ public class JCRDataStorage {
     return spamFilter;
   }
 
-  public void saveSpamFilter(SessionProvider sProvider, String username, String accountId,
-      SpamFilter spamFilter) throws Exception {
-    Node accountNode = getSpamFilterHome(sProvider, username, accountId);
+  public void saveSpamFilter(String username, String accountId, SpamFilter spamFilter) throws Exception {
+    Node accountNode = getSpamFilterHome(username, accountId);
     Node spamFilterNode = null;
     if (accountNode.hasNode(Utils.EXO_SPAM_FILTER)) {
       spamFilterNode = accountNode.getNode(Utils.EXO_SPAM_FILTER);
@@ -2117,101 +2231,120 @@ public class JCRDataStorage {
     accountNode.getSession().save();
   }
 
-  public void toggleMessageProperty(SessionProvider sProvider, String username, String accountId,
-      List<Message> msgList, String property) throws Exception {
-    Node mailHome = getMailHomeNode(sProvider, username);
-    for (Message msg : msgList) {
-      Node msgNode = (Node) mailHome.getSession().getItem(msg.getPath());
-      if (property.equals(Utils.EXO_STAR)) {
-        msgNode.setProperty(Utils.EXO_STAR, !msgNode.getProperty(Utils.EXO_STAR).getBoolean());
-        msgNode.save();
-      } else if (property.equals(Utils.EXO_ISUNREAD)) {
-        Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-        msgNode.setProperty(Utils.EXO_ISUNREAD, !isUnread);
-        msgNode.save();
+  public void toggleMessageProperty(String username, String accountId, List<Message> msgList, String property) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node mailHome = getMailHomeNode(sProvider, username);
+      for (Message msg : msgList) {
+        Node msgNode = (Node) mailHome.getSession().getItem(msg.getPath());
+        if (property.equals(Utils.EXO_STAR)) {
+          msgNode.setProperty(Utils.EXO_STAR, !msgNode.getProperty(Utils.EXO_STAR).getBoolean());
+          msgNode.save();
+        } else if (property.equals(Utils.EXO_ISUNREAD)) {
+          Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
+          msgNode.setProperty(Utils.EXO_ISUNREAD, !isUnread);
+          msgNode.save();
 
-        Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, msgNode
-            .getProperty(Utils.MSG_FOLDERS).getValues()[0].getString());
-        if (currentFolderNode != null) {
-          if (isUnread) {
-            currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
-                Utils.EXO_UNREADMESSAGES).getLong() - 1));
-          } else {
-            currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
-                Utils.EXO_UNREADMESSAGES).getLong() + 1));
+          Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, msgNode
+                                                     .getProperty(Utils.MSG_FOLDERS).getValues()[0].getString());
+          if (currentFolderNode != null) {
+            if (isUnread) {
+              currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
+                                                                                                     Utils.EXO_UNREADMESSAGES).getLong() - 1));
+            } else {
+              currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
+                                                                                                     Utils.EXO_UNREADMESSAGES).getLong() + 1));
+            }
+            currentFolderNode.save();
           }
-          currentFolderNode.save();
+        } else {
+          msgNode.setProperty(property, !msgNode.getProperty(property).getBoolean());
+          msgNode.save();
         }
-      } else {
-        msgNode.setProperty(property, !msgNode.getProperty(property).getBoolean());
-        msgNode.save();
       }
+    } finally {
+      closeSessionProvider(sProvider) ;
     }
   }
 
-  public String getFolderHomePath(SessionProvider sProvider, String username, String accountId)
-  throws Exception {
-    return getFolderHome(sProvider, username, accountId).getPath();
-  }
-
-  public List<Folder> getSubFolders(SessionProvider sProvider, String username, String accountId,
-      String parentPath) throws Exception {
-    Node home = getFolderHome(sProvider, username, accountId);
-    Node parentNode = (Node) home.getSession().getItem(parentPath);
-    List<Folder> childFolders = new ArrayList<Folder>();
-    NodeIterator it = parentNode.getNodes();
-    while (it.hasNext()) {
-      // browse the accounts and add them to the return list
-      Node node = it.nextNode();
-      if (node.isNodeType(Utils.EXO_FOLDER)) {
-        if (node.hasProperty(Utils.EXO_PERSONAL)
-            && node.getProperty(Utils.EXO_PERSONAL).getBoolean())
-          childFolders.add(getFolder(node));
-      }
+  public String getFolderHomePath(String username, String accountId)throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      return getFolderHome(sProvider, username, accountId).getPath();
+    } finally {
+      sProvider.close();
     }
-    return childFolders;
   }
 
-  public void execActionFilter(SessionProvider sProvider, String username, String accountId,
-      Calendar checkTime) throws Exception {
-    List<MessageFilter> msgFilters = getFilters(sProvider, username, accountId);
-    Node homeMsg = getMessageHome(sProvider, username, accountId);
-    Session sess = getMailHomeNode(sProvider, username).getSession();
-    QueryManager qm = sess.getWorkspace().getQueryManager();
-    for (MessageFilter filter : msgFilters) {
-      String applyFolder = filter.getApplyFolder();
-      String applyTag = filter.getApplyTag();
-      filter.setAccountPath(homeMsg.getPath());
-      filter.setAccountId(accountId);
-      filter.setFromDate(checkTime);
-      String queryString = filter.getStatement();
-      Query query = qm.createQuery(queryString, Query.XPATH);
-      QueryResult result = query.execute();
-      NodeIterator it = result.getNodes();
+  public List<Folder> getSubFolders(String username, String accountId, String parentPath) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node home = getFolderHome(sProvider, username, accountId);
+      Node parentNode = (Node) home.getSession().getItem(parentPath);
+      List<Folder> childFolders = new ArrayList<Folder>();
+      NodeIterator it = parentNode.getNodes();
       while (it.hasNext()) {
-        Message msg = getMessage(it.nextNode());
-        if (!Utils.isEmptyField(applyFolder)
-            && (getFolder(sProvider, username, accountId, applyFolder) != null)) {
-          Folder folder = getFolder(sProvider, username, accountId, applyFolder);
-          if (folder != null)
-            moveMessage(sProvider, username, accountId, msg, msg.getFolders()[0], applyFolder, true);
-        }
-        if (!Utils.isEmptyField(applyTag)) {
-          Tag tag = getTag(sProvider, username, accountId, applyTag);
-          if (tag != null) {
-            List<Message> msgList = new ArrayList<Message>();
-            msgList.add(msg);
-            List<Tag> tagList = new ArrayList<Tag>();
-            tagList.add(tag);
-            addTag(sProvider, username, accountId, msgList, tagList);
-          }
+        // browse the accounts and add them to the return list
+        Node node = it.nextNode();
+        if (node.isNodeType(Utils.EXO_FOLDER)) {
+          if (node.hasProperty(Utils.EXO_PERSONAL)
+              && node.getProperty(Utils.EXO_PERSONAL).getBoolean())
+            childFolders.add(getFolder(node));
         }
       }
+      return childFolders;
+    } finally {
+      sProvider.close();
     }
   }
 
-  public Node getDateStoreNode(SessionProvider sProvider, String username, String accountId,
-      Date date) throws Exception {
+  public void execActionFilter(String username, String accountId, Calendar checkTime) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      List<MessageFilter> msgFilters = getFilters(username, accountId);
+      Node homeMsg = getMessageHome(sProvider, username, accountId);
+      Session sess = getMailHomeNode(sProvider, username).getSession();
+      QueryManager qm = sess.getWorkspace().getQueryManager();
+      for (MessageFilter filter : msgFilters) {
+        String applyFolder = filter.getApplyFolder();
+        String applyTag = filter.getApplyTag();
+        filter.setAccountPath(homeMsg.getPath());
+        filter.setAccountId(accountId);
+        filter.setFromDate(checkTime);
+        String queryString = filter.getStatement();
+        Query query = qm.createQuery(queryString, Query.XPATH);
+        QueryResult result = query.execute();
+        NodeIterator it = result.getNodes();
+        while (it.hasNext()) {
+          Message msg = getMessage(it.nextNode());
+          if (!Utils.isEmptyField(applyFolder)
+              && (getFolder(username, accountId, applyFolder) != null)) {
+            Folder folder = getFolder(username, accountId, applyFolder);
+            if (folder != null)
+              moveMessage(username, accountId, msg, msg.getFolders()[0], applyFolder, true);
+          }
+          if (!Utils.isEmptyField(applyTag)) {
+            Tag tag = getTag(username, accountId, applyTag);
+            if (tag != null) {
+              List<Message> msgList = new ArrayList<Message>();
+              msgList.add(msg);
+              List<Tag> tagList = new ArrayList<Tag>();
+              tagList.add(tag);
+              addTag(username, accountId, msgList, tagList);
+            }
+          }
+        }
+      }
+    } finally {
+      closeSessionProvider(sProvider) ;
+    }
+  }
+
+  private Node getDateStoreNode(SessionProvider sProvider, String username, String accountId, Date date) throws Exception {
     Node msgHome = getMessageHome(sProvider, username, accountId);
     java.util.Calendar calendar = new GregorianCalendar();
     calendar.setTime(date);
@@ -2263,8 +2396,8 @@ public class JCRDataStorage {
     return converNodes;
   }
   
-  private Node getMatchingThreadBefore(SessionProvider sProvider, String username, String accountId,
-      String inReplyToHeader, Node msg) throws Exception {
+  private Node getMatchingThreadBefore(SessionProvider sProvider, String username, String accountId, String inReplyToHeader,
+      Node msg) throws Exception {
     Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
     Node converNode = null;
     try {
@@ -2285,7 +2418,7 @@ public class JCRDataStorage {
     return converNode;
   }
 
-  public void addMessageToThread(SessionProvider sProvider, String username, String accountId,String inReplyToHeader, Node msgNode) throws Exception {
+  private void addMessageToThread(SessionProvider sProvider, String username, String accountId, String inReplyToHeader,Node msgNode) throws Exception {
     List<Node> converNodeChilds = getMatchingThreadAfter(sProvider, username, accountId, msgNode);
     try {
       msgNode.addMixin("mix:referenceable");
@@ -2306,7 +2439,7 @@ public class JCRDataStorage {
           converNodeParent.save();
           GregorianCalendar cal = new GregorianCalendar();
           cal.setTimeInMillis(msgNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
-          updateLastTimeToParent(sProvider, username, accountId, msgNode, converNodeParent, cal);
+          updateLastTimeToParent(username, accountId, msgNode, converNodeParent, cal);
         } else {
           msgNode.setProperty(Utils.EXO_IS_ROOT, true);         
           msgNode.save();
@@ -2317,19 +2450,19 @@ public class JCRDataStorage {
     }  
   }
   
-  private void updateLastTimeToParent(SessionProvider sProvider, String username, String accountId, Node node, Node parentNode, Calendar cal) throws Exception {
+  private void updateLastTimeToParent(String username, String accountId, Node node, Node parentNode, Calendar cal) throws Exception {
     Node grandParent = null; 
     if (parentNode != null) {
       parentNode.setProperty(Utils.EXO_LAST_UPDATE_TIME, cal);
-      grandParent = getReferentParent(sProvider, username, accountId, parentNode);
+      grandParent = getReferentParent(username, accountId, parentNode);
       if (grandParent != null) {
-        updateLastTimeToParent(sProvider, username, accountId, parentNode, grandParent, cal);
+        updateLastTimeToParent(username, accountId, parentNode, grandParent, cal);
       }
       parentNode.save();
     }
   }
   
-  private Node getReferentParent(SessionProvider sProvider, String username, String accountId, Node node) throws Exception {
+  private Node getReferentParent(String username, String accountId, Node node) throws Exception {
     Node parentNode = null;
     try {
       if (node.hasProperty("exo:conversationId")) {
@@ -2484,73 +2617,83 @@ public class JCRDataStorage {
     return node;
   }
 
-  public List<Message> getReferencedMessages(SessionProvider sProvider, String username,
-      String accountId, String msgPath) throws Exception {
-    Node mailHome = getMailHomeNode(sProvider, username);
-    List<Message> msgList = new ArrayList<Message>();
-    Node converNode = (Node) mailHome.getSession().getItem(msgPath);
-    PropertyIterator iter = converNode.getReferences();
-    Node msgNode;
-    while (iter.hasNext()) {
-      msgNode = iter.nextProperty().getParent();
-      msgList.add(getMessage(msgNode));
+  public List<Message> getReferencedMessages(String username, String accountId, String msgPath) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node mailHome = getMailHomeNode(sProvider, username);
+      List<Message> msgList = new ArrayList<Message>();
+      Node converNode = (Node) mailHome.getSession().getItem(msgPath);
+      PropertyIterator iter = converNode.getReferences();
+      Node msgNode;
+      while (iter.hasNext()) {
+        msgNode = iter.nextProperty().getParent();
+        msgList.add(getMessage(msgNode));
+      }
+      return msgList;
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    return msgList;
   }
 
-  public Message loadTotalMessage(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception {
+  public Message loadTotalMessage(String username, String accountId, Message msg) throws Exception {
+    SessionProvider sProvider = null;
     try {
-      Node messageNode = getDateStoreNode(sProvider, username, accountId, msg.getReceivedDate())
-      .getNode(msg.getId());
-      if (messageNode.hasNode(Utils.KEY_ATTACHMENT)){
-        NodeIterator msgAttachmentIt = messageNode.getNode(Utils.KEY_ATTACHMENT).getNodes();
-        List<Attachment> attachments = new ArrayList<Attachment>();
-        while (msgAttachmentIt.hasNext()) {
-          Node node = msgAttachmentIt.nextNode();
-          if (node.isNodeType(Utils.EXO_MAIL_ATTACHMENT)) {
-            JCRMessageAttachment file = new JCRMessageAttachment();
-            file.setId(node.getPath());
-            file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE)
-                             .getString());
-            file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
-            //TODO fix last minute bug CS-2530
-            if(node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
-              file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
-            file.setIsShowInBody(node.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
-            file.setWorkspace(node.getSession().getWorkspace().getName());
-            file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
-            file.setPath("/" + file.getWorkspace() + node.getPath()) ;
-            attachments.add(file);
-          }
-        }
-        msg.setAttachements(attachments);
-      }
+      sProvider = createSessionProvider(); 
       try {
-        msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
-      } catch(Exception e) {
-        e.printStackTrace();
-        logger.warn("Can't load message body");
+        Node messageNode = getDateStoreNode(sProvider, username, accountId, msg.getReceivedDate())
+        .getNode(msg.getId());
+        if (messageNode.hasNode(Utils.KEY_ATTACHMENT)){
+          NodeIterator msgAttachmentIt = messageNode.getNode(Utils.KEY_ATTACHMENT).getNodes();
+          List<Attachment> attachments = new ArrayList<Attachment>();
+          while (msgAttachmentIt.hasNext()) {
+            Node node = msgAttachmentIt.nextNode();
+            if (node.isNodeType(Utils.EXO_MAIL_ATTACHMENT)) {
+              JCRMessageAttachment file = new JCRMessageAttachment();
+              file.setId(node.getPath());
+              file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE)
+                               .getString());
+              file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
+              //TODO fix last minute bug CS-2530
+              if(node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
+                file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
+              file.setIsShowInBody(node.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
+              file.setWorkspace(node.getSession().getWorkspace().getName());
+              file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
+              file.setPath("/" + file.getWorkspace() + node.getPath()) ;
+              attachments.add(file);
+            }
+          }
+          msg.setAttachements(attachments);
+        }
+        try {
+          msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
+        } catch(Exception e) {
+          e.printStackTrace();
+          logger.warn("Can't load message body");
+        }
+      } catch (PathNotFoundException e) {
+        //e.printStackTrace();
+        System.out.println("[EXO WARNING] PathNotFoundException when load attachment");
       }
-    } catch (PathNotFoundException e) {
-      //e.printStackTrace();
-      System.out.println("[EXO WARNING] PathNotFoundException when load attachment");
+      return msg;
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    return msg;
   }
 
   /**
    * 
-   * @param sProvider
    * @param username
    * @param msgHomeNode
    * @param accId
+   * @param folderId
    * @param msg
    * @param msgId
-   * @param folderId
    * @return
    */
-  private byte checkDuplicateStatus(SessionProvider sProvider, String username, Node msgHomeNode,
-      String accId, Node msgNode, String folderId) {
+  private byte checkDuplicateStatus(SessionProvider sProvider, String username, Node msgHomeNode, String accId,
+      Node msgNode, String folderId) {
     byte ret = Utils.NO_MAIL_DUPLICATE;
     try {
       Value[] propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
@@ -2580,180 +2723,215 @@ public class JCRDataStorage {
     return ret;
   }  
   
-  public boolean savePOP3Message(SessionProvider sProvider, String username, String accId,
-       javax.mail.Message msg, String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation)
-    throws Exception {
-   long t1, t2, t3, t4;
-   String from ;
-   String msgId = MimeMessageParser.getMessageId(msg);
-   logger.warn("MessageId = " + msgId);
-   Calendar gc = MimeMessageParser.getReceivedDate(msg);
-   Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());
-   if (msgHomeNode == null) return false;
-   try {
-     Node msgNode = msgHomeNode.getNode(msgId);
-     logger.warn("Check duplicate ......................................");
-     // check duplicate
-     for (int i = 0; i < folderIds.length; i ++) {
-       String folderId = folderIds[i];
-       byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msgNode, folderId); 
-       if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER) {
-         // there is a duplicate but in another folder
-         return true;
-       }
-  
-       if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_SAME_FOLDER) {
-         // will "never" come here
-         // but we need to make sure ...
-         return false ;
-       }
-     }
-   } catch(Exception e) {
-  
-   }
-  
-   logger.warn("Saving message to JCR ...");
-   t1 = System.currentTimeMillis();
-   Node node = null;
-   try {
-     node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
-   } catch (Exception e) {
-     // generating another msgId
-     msgId = "Message" + IdGenerator.generate();
-     logger.warn("The MessageId is NOT GOOD, generated another one = " + msgId);
-     node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
-   }
-   try {
-     msgHomeNode.save();
-     node.setProperty(Utils.EXO_ID, msgId);
-     node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, MimeMessageParser.getInReplyToHeader(msg));
-     node.setProperty(Utils.EXO_ACCOUNT, accId);
-     from = Utils.decodeText(InternetAddress.toString(msg.getFrom()));
-     node.setProperty(Utils.EXO_FROM, from);
-  
-     node.setProperty(Utils.EXO_TO, getAddresses(msg, javax.mail.Message.RecipientType.TO));      
-     node.setProperty(Utils.EXO_CC, getAddresses(msg, javax.mail.Message.RecipientType.CC));
-     node.setProperty(Utils.EXO_BCC, getAddresses(msg, javax.mail.Message.RecipientType.BCC));
-     
-     node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg.getReplyTo())));
-     String subject = msg.getSubject();
-     if (subject != null ) subject = Utils.decodeText(msg.getSubject());
-     else subject = "";
-     node.setProperty(Utils.EXO_SUBJECT, subject);
-     node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
-     node.setProperty(Utils.EXO_LAST_UPDATE_TIME, gc);
-     
-     Calendar sc = GregorianCalendar.getInstance();
-     if (msg.getSentDate() != null) sc.setTime(msg.getSentDate());
-     else sc = gc;
-     node.setProperty(Utils.EXO_SENDDATE, sc);
-     if (gc == null) node.setProperty(Utils.EXO_LAST_UPDATE_TIME, sc);
-     
-     node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize()));
-     boolean isReadMessage = MimeMessageParser.isSeenMessage(msg);
-     node.setProperty(Utils.EXO_ISUNREAD, !isReadMessage);
-     node.setProperty(Utils.EXO_STAR, false);
-  
-     long priority = MimeMessageParser.getPriority(msg);
-     node.setProperty(Utils.EXO_PRIORITY, priority);
-     
-     if (MimeMessageParser.requestReturnReceipt(msg)) node.setProperty(Utils.IS_RETURN_RECEIPT, true);
-     else node.setProperty(Utils.IS_RETURN_RECEIPT, false);
-     
-     if (spamFilter != null && spamFilter.checkSpam(msg)) {
-       folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) };
-     }
-     node.setProperty(Utils.MSG_FOLDERS, folderIds);
-     
-     if (tagList != null && tagList.size() > 0)
-       node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
-  
-     ArrayList<String> values = new ArrayList<String>();
-     Enumeration enu = msg.getAllHeaders();
-     while (enu.hasMoreElements()) {
-       Header header = (Header) enu.nextElement();
-       values.add(header.getName() + "=" + header.getValue());
-     }
-     node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
-  
-     logger.warn("Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B");
-     t2 = System.currentTimeMillis();
-     
-     MimeMessage cmsg = (MimeMessage) msg;
-     Object obj = new Object();
+  public boolean savePOP3Message(String username, String accId, javax.mail.Message msg, String folderIds[], List<String> tagList, 
+                                 SpamFilter spamFilter, Info infoObj, ContinuationService continuation) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+     long t1, t2, t3, t4;
+     String from ;
+     String msgId = MimeMessageParser.getMessageId(msg);
+     logger.warn("MessageId = " + msgId);
+     Calendar gc = MimeMessageParser.getReceivedDate(msg);
+     Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());
+     if (msgHomeNode == null) return false;
      try {
-       obj = msg.getContent();
-     } catch(MessagingException mex) {
-       // Use the MimeMessage copy constructor to make a copy
-       // of the entire message, which will fetch the entire
-       // message from the server and parse it on the client:
-       cmsg = new MimeMessage((MimeMessage) msg);
-       try {
-         obj = cmsg.getContent();
-       } catch(MessagingException mex1) {
-         System.out.println("##### Error when fetch message body");
+       Node msgNode = msgHomeNode.getNode(msgId);
+       logger.warn("Check duplicate ......................................");
+       // check duplicate
+       for (int i = 0; i < folderIds.length; i ++) {
+         String folderId = folderIds[i];
+         byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msgNode, folderId); 
+         if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER) {
+           // there is a duplicate but in another folder
+           return true;
+         }
+    
+         if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_SAME_FOLDER) {
+           // will "never" come here
+           // but we need to make sure ...
+           return false ;
+         }
        }
-     } 
-     String contentType = "text/plain";
-     if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/*"))
-       contentType = "text/html";
-     String body = "";
-     if (obj instanceof Multipart) {
-       body = setMultiPart((Multipart) obj, node, body);
-     } else {
-       body = setPart(cmsg, node, body);
+     } catch(Exception e) {
+    
      }
-     node.setProperty(Utils.EXO_CONTENT_TYPE, contentType);
-     node.setProperty(Utils.EXO_BODY, Utils.decodeText(body));
-     t3 = System.currentTimeMillis();
-     logger.warn("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
-  
-     node.save();
-     
-     if (infoObj != null && continuation != null) {
-       infoObj.setFrom(from);
-       infoObj.setMsgId(msgId);
-       infoObj.setIsRead(isReadMessage);
-       infoObj.setSubject(subject);
-       infoObj.setSize(Utils.convertSize(Math.abs(msg.getSize())));
-       infoObj.setAccountId(accId);
-       if (gc != null) infoObj.setDate(gc.getTime().toString());
-       else if (sc != null) infoObj.setDate(sc.getTime().toString());
-       else  infoObj.setDate(new Date().toString()); 
+    
+     logger.warn("Saving message to JCR ...");
+     t1 = System.currentTimeMillis();
+     Node node = null;
+     try {
+       node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
+     } catch (Exception e) {
+       // generating another msgId
+       msgId = "Message" + IdGenerator.generate();
+       logger.warn("The MessageId is NOT GOOD, generated another one = " + msgId);
+       node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
+     }
+     try {
+       msgHomeNode.save();
+       node.setProperty(Utils.EXO_ID, msgId);
+       node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, MimeMessageParser.getInReplyToHeader(msg));
+       node.setProperty(Utils.EXO_ACCOUNT, accId);
+       from = Utils.decodeText(InternetAddress.toString(msg.getFrom()));
+       node.setProperty(Utils.EXO_FROM, from);
+    
+       node.setProperty(Utils.EXO_TO, getAddresses(msg, javax.mail.Message.RecipientType.TO));      
+       node.setProperty(Utils.EXO_CC, getAddresses(msg, javax.mail.Message.RecipientType.CC));
+       node.setProperty(Utils.EXO_BCC, getAddresses(msg, javax.mail.Message.RecipientType.BCC));
        
-       JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();                  
-       JsonValue json = generatorImpl.createJsonObject(infoObj);
-       continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
-     }
-  
-     t4 = System.currentTimeMillis();
-     logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
-     logger.warn("Adding message to thread ...");
-     t1 = System.currentTimeMillis();
-     addMessageToThread(sProvider, username, accId,MimeMessageParser.getInReplyToHeader(msg), node);
-     t2 = System.currentTimeMillis();
-     logger.warn("Added message to thread finished : " + (t2 - t1) + " ms");
-  
-     logger.warn("Updating number message to folder ...");
-     t1 = System.currentTimeMillis();
-  
-     for (int i = 0; i < folderIds.length; i++) {
-       increaseFolderItem(sProvider, username, accId, folderIds[i], isReadMessage);
-     }
-  
-     t2 = System.currentTimeMillis();
-     logger.warn("Updated number message to folder finished : " + (t2 - t1) + " ms");
-     return true;
-  
-   } catch (Exception e) {
-     try {
-       msgHomeNode.refresh(true);
-     } catch(Exception ex) {
-       e.printStackTrace();
-       logger.warn(" [WARNING] Can't refresh.");
-     }
-     logger.warn(" [WARNING] Cancel saving message to JCR.");
-       return false;
+       node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg.getReplyTo())));
+       String subject = msg.getSubject();
+       if (subject != null ) subject = Utils.decodeText(msg.getSubject());
+       else subject = "";
+       node.setProperty(Utils.EXO_SUBJECT, subject);
+       node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
+       node.setProperty(Utils.EXO_LAST_UPDATE_TIME, gc);
+       
+       Calendar sc = GregorianCalendar.getInstance();
+       if (msg.getSentDate() != null) sc.setTime(msg.getSentDate());
+       else sc = gc;
+       node.setProperty(Utils.EXO_SENDDATE, sc);
+       if (gc == null) node.setProperty(Utils.EXO_LAST_UPDATE_TIME, sc);
+       
+       node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize()));
+       boolean isReadMessage = MimeMessageParser.isSeenMessage(msg);
+       node.setProperty(Utils.EXO_ISUNREAD, !isReadMessage);
+       node.setProperty(Utils.EXO_STAR, false);
+    
+       long priority = MimeMessageParser.getPriority(msg);
+       node.setProperty(Utils.EXO_PRIORITY, priority);
+       
+       if (MimeMessageParser.requestReturnReceipt(msg)) node.setProperty(Utils.IS_RETURN_RECEIPT, true);
+       else node.setProperty(Utils.IS_RETURN_RECEIPT, false);
+       
+       if (spamFilter != null && spamFilter.checkSpam(msg)) {
+         folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) };
+       }
+       node.setProperty(Utils.MSG_FOLDERS, folderIds);
+       
+       if (tagList != null && tagList.size() > 0)
+         node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
+    
+       ArrayList<String> values = new ArrayList<String>();
+       Enumeration enu = msg.getAllHeaders();
+       while (enu.hasMoreElements()) {
+         Header header = (Header) enu.nextElement();
+         values.add(header.getName() + "=" + header.getValue());
+       }
+       node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
+    
+       logger.warn("Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B");
+       t2 = System.currentTimeMillis();
+       
+       MimeMessage cmsg = (MimeMessage) msg;
+       Object obj = new Object();
+       try {
+         obj = msg.getContent();
+       } catch(MessagingException mex) {
+         // Use the MimeMessage copy constructor to make a copy
+         // of the entire message, which will fetch the entire
+         // message from the server and parse it on the client:
+         cmsg = new MimeMessage((MimeMessage) msg);
+         try {
+           obj = cmsg.getContent();
+         } catch(MessagingException mex1) {
+           System.out.println("##### Error when fetch message body");
+         }
+       } 
+       String contentType = "text/plain";
+       if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/*"))
+         contentType = "text/html";
+       String body = "";
+       if (obj instanceof Multipart) {
+         body = setMultiPart((Multipart) obj, node, body);
+       } else {
+         body = setPart(cmsg, node, body);
+       }
+       node.setProperty(Utils.EXO_CONTENT_TYPE, contentType);
+       node.setProperty(Utils.EXO_BODY, Utils.decodeText(body));
+       t3 = System.currentTimeMillis();
+       logger.warn("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
+    
+       node.save();
+       
+       if (infoObj != null && continuation != null) {
+         infoObj.setFrom(from);
+         infoObj.setMsgId(msgId);
+         infoObj.setIsRead(isReadMessage);
+         infoObj.setSubject(subject);
+         infoObj.setSize(Utils.convertSize(Math.abs(msg.getSize())));
+         infoObj.setAccountId(accId);
+         if (gc != null) infoObj.setDate(gc.getTime().toString());
+         else if (sc != null) infoObj.setDate(sc.getTime().toString());
+         else  infoObj.setDate(new Date().toString()); 
+         
+         JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();                  
+         JsonValue json = generatorImpl.createJsonObject(infoObj);
+         continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
+       }
+    
+       t4 = System.currentTimeMillis();
+       logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
+       logger.warn("Adding message to thread ...");
+       t1 = System.currentTimeMillis();
+       addMessageToThread(sProvider, username, accId, MimeMessageParser.getInReplyToHeader(msg),node);
+       t2 = System.currentTimeMillis();
+       logger.warn("Added message to thread finished : " + (t2 - t1) + " ms");
+    
+       logger.warn("Updating number message to folder ...");
+       t1 = System.currentTimeMillis();
+    
+       for (int i = 0; i < folderIds.length; i++) {
+         increaseFolderItem(sProvider, username, accId, folderIds[i], isReadMessage);
+       }
+    
+       t2 = System.currentTimeMillis();
+       logger.warn("Updated number message to folder finished : " + (t2 - t1) + " ms");
+       return true;
+    
+     } catch (Exception e) {
+       try {
+         msgHomeNode.refresh(true);
+       } catch(Exception ex) {
+         e.printStackTrace();
+         logger.warn(" [WARNING] Can't refresh.");
+       }
+       logger.warn(" [WARNING] Cancel saving message to JCR.");
+         return false;
+       }
+     } finally {
+       closeSessionProvider(sProvider);
      }
    }
+  
+  /**
+   * Create a session provider for current context. The method first try to get a normal session provider, 
+   * then attempts to create a system provider if the first one was not available.
+   * @return a SessionProvider initialized by current SessionProviderService
+   * @see SessionProviderService#getSessionProvider(null)
+   */
+  private SessionProvider createSessionProvider() {
+    PortalContainer portalContainer = PortalContainer.getInstance();
+    PortalContainer.setInstance(portalContainer);
+    
+    SessionProviderService service = (SessionProviderService) portalContainer.getComponentInstanceOfType(SessionProviderService.class);
+    SessionProvider provider = service.getSessionProvider(null);
+    if (provider == null) {
+      //logger.info("eXo Mail Service: No user session provider was available, using a system session provider");
+      provider = service.getSystemSessionProvider(null);
+    }
+    return provider;
+  }
+
+  /**
+   * Safely closes JCR session provider. Call this method in finally to clean any provider initialized by createSessionProvider()
+   * @param sessionProvider the sessionProvider to close
+   * @see SessionProvider#close();
+   */
+  private void closeSessionProvider(SessionProvider sessionProvider) {
+    if (sessionProvider != null) {
+      sessionProvider.close();
+    }
+  }
 }
