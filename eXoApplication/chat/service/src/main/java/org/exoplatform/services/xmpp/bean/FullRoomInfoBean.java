@@ -42,6 +42,10 @@ public class FullRoomInfoBean {
   /**
    * 
    */
+  private Boolean isPasswordProtected;
+  /**
+   * 
+   */
   public FullRoomInfoBean() {
   }
 
@@ -54,6 +58,7 @@ public class FullRoomInfoBean {
     super();
     this.occupants = occupants;
     this.roomInfo = roomInfo;
+    this.isPasswordProtected = roomInfo.isPasswordProtected();
   }
 
 
@@ -85,5 +90,14 @@ public class FullRoomInfoBean {
     this.occupants = occupants;
   }
 
+
+  public Boolean getIsPasswordProtected() {
+    return isPasswordProtected;
+  }
+
+
+  public void setIsPasswordProtected(Boolean isPasswordProtected) {
+    this.isPasswordProtected = isPasswordProtected;
+  }
 
 }

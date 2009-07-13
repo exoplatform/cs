@@ -227,6 +227,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   //this.statusbarNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'Information');
   this.loginFormNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'fieldset', 'LoginForm');
   this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'BuddyList');
+  this.joinedRoomListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'RoomData');
   //this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'BuddyItemActionMenu');
   //this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'BuddyItemActionMenu');
   
@@ -511,31 +512,46 @@ UIMainChatWindow.prototype.update = function(state, requestObj, action) {
  * Process all successfully ajax request action.
  */
 
-UIMainChatWindow.prototype.updateRoomList = function() {
-	if (this.joinedRooms ) {
+UIMainChatWindow.prototype.updateJoinedRoomList = function() {
+		var MAX_ROOM_TITLE_LEN = 25;
+		var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
+		userName = userName+'@';
+		this.joinedRoomListNode.innerHTML = '' ;
+	  if (this.joinedRooms ) {
 		  var roomList = this.joinedRooms ;
-		  var roomDataNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.roomAreaNode,'div', 'RoomData');
-		  roomDataNode.innerHTML = '' ;
 		  for (var i=0; i<roomList.length; i++) {
-			    var roomInfo = roomList[i];
-			    var roomNode = document.createElement('div');		    
-			    roomNode.className = "TextMemberRoom" ;
+		  		var roomOccupantsList = roomList[i].occupants;
+		  		var isThisUserJoined = false;
+		  		for(var j=0; j<roomOccupantsList.length; j++){
+		  			var occupant = roomOccupantsList[j];
+		  			if(occupant.jid.indexOf(userName)==0){
+		  				isThisUserJoined = true;
+		  				break;
+		  			}
+		  		}
+			    var roomInfo = roomList[i].roomInfo;
+			    var roomNode = document.createElement('div');		
+			    if(isThisUserJoined)    
+			    	roomNode.className = 'TextMemberRoom HightLightTextMemberRoom' ;
+			    else
+			    	roomNode.className = 'TextMemberRoom' ;
 			    var roomLink = document.createElement('div');
-			    roomLink.innerHTML = roomInfo.room ;
-			    roomLink.setAttribute("roomId", roomInfo.room) ;
-			    roomLink.onclick = function (){
-			    	eXo.communication.chat.webui.UIJoinRoomPopupWindow.joinSelectedRoomAction(roomLink);
-			    }
-			    //roomLink.href = "javascript:void(0);" ;
+			    if(roomInfo.room.length > MAX_ROOM_TITLE_LEN)
+			    	roomLink.innerHTML = roomInfo.room.substr(0, MAX_ROOM_TITLE_LEN-3)+ '...';
+			    else			    	
+			    	roomLink.innerHTML = roomInfo.room ;
+			    roomLink.setAttribute('roomId', roomInfo.room) ;
+			    roomLink.onclick = function(event){
+			    	eXo.communication.chat.webui.UIJoinRoomPopupWindow.joinSelectedRoomByIdAction(event);
+			    };
 			    roomNode.appendChild(roomLink);
-			    roomDataNode.appendChild(roomNode);
+			    this.joinedRoomListNode.appendChild(roomNode);			    
 		  }  
 	  }
 }
 
 UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
   var serverData = this.serverDataStack[eventId];
-  //this.updateRoomList() ;
   switch (action) {
     case this.LOGIN_ACTION:
       this.postChangeStatus(this.ONLINE_STATUS, eventId);
@@ -580,7 +596,12 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
 
     case this.GET_JOINED_ROOM_LIST_ACTION:
       this.joinedRooms = serverData.joinedRooms ? serverData.joinedRooms : [];
+      this.updateJoinedRoomList();
       break;
+
+		case this.LEAVE_FROM_ROOM_ACTION:
+			eXo.communication.chat.webui.UIMainChatWindow.jabberGetJoinedRoomList();
+			break;
 
     case this.GET_SUBSCRIPTION_REQUESTS_ACTION:
       break;
@@ -652,7 +673,10 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
     case this.GET_ROOM_CONFIG_ACTION:
     //case this.GET_ROOM_INFO_ACTION:
     case this.GET_ROOM_LIST_ACTION:
-    //case this.GET_JOINED_ROOM_LIST_ACTION:
+    case this.GET_JOINED_ROOM_LIST_ACTION:
+    	this.joinedRooms = [];
+    	this.updateJoinedRoomList();
+    	break;
     case this.INVITE_JOIN_ROOM_ACTION:
     case this.DECLINE_JOIN_ROOM_ACTION:
     case this.LEAVE_FROM_ROOM_ACTION:

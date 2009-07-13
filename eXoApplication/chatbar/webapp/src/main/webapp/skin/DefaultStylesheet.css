@@ -1511,6 +1511,10 @@ form {
 	cursor:pointer;
 }
 
+.UIChatBarPortlet .Actionbar .StatusArea .StatusIcon {
+	background:none;
+}
+
 /**************************** Pop up Online *****************************/
 
 .UIChatBarPortlet .UIRightClickPopupMenu{
@@ -1586,7 +1590,17 @@ form {
 }
 
 .UIChatBarPortlet .UIRightClickPopupMenu .TypeViewContactPortlet .TextMemberRoom{
+	cursor:pointer;
 	line-height: 25px;
+	margin:2px;
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .TypeViewContactPortlet .TextMemberRoom:hover{
+	color:orange;
+}
+
+.UIChatBarPortlet .UIRightClickPopupMenu .TypeViewContactPortlet .HightLightTextMemberRoom{
+	color:#058EE6;
 }
 
 .UIChatBarPortlet .UIRightClickPopupMenu .TypeViewContactPortlet .TextMemberRoom a:hover{
