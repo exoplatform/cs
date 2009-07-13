@@ -2141,87 +2141,13 @@ UICalendarPortlet.prototype.fixFirstLoad = function(){
     
 };
 
+eXo.portal.UIControlWorkspace._showWorkspace = eXo.portal.UIControlWorkspace.showWorkspace ;
+
 eXo.portal.UIControlWorkspace.showWorkspace = function(){
-    var cws = eXo.portal.UIControlWorkspace;
-    var uiWorkspace = document.getElementById(this.id);
-    var uiWorkspaceContainer = document.getElementById("UIWorkspaceContainer");
-    var uiWorkspacePanel = document.getElementById("UIWorkspacePanel");
-    var slidebar = document.getElementById("ControlWorkspaceSlidebar");
-    var uiControlWorkspace = document.getElementById("UIControlWorkspace");
-    if (cws.showControlWorkspace) {
-        // hides the workspace
-        cws.showControlWorkspace = false;
-        uiWorkspaceContainer.style.display = "none";
-        slidebar.style.display = "block";
-        eXo.portal.UIControlWorkspace.width = eXo.portal.UIControlWorkspace.slidebar.offsetWidth;
-        uiWorkspace.style.width = slidebar.offsetWidth + "px";
-        eXo.portal.UIWorkingWorkspace.onResize(null, null);
-    }
-    else {
     
-        cws.showControlWorkspace = true;
-        slidebar.style.display = "none";
-        eXo.portal.UIControlWorkspace.width = cws.defaultWidth;
-        uiWorkspace.style.width = cws.defaultWidth + "px";
-        eXo.portal.UIWorkingWorkspace.onResize(null, null);
-        uiWorkspaceContainer.style.display = "block";
-        uiWorkspaceContainer.style.width = cws.defaultWidth + "px";
-        uiWorkspacePanel.style.height = (eXo.portal.UIControlWorkspace.height -
-        eXo.portal.UIControlWorkspace.uiWorkspaceControl.offsetHeight -
-        23) +
-        "px";
-        /*23 is height of User Workspace Title*/
-        
-        eXo.webui.UIVerticalScroller.init();
-        eXo.portal.UIPortalControl.fixHeight();
-    }
-    
-    /* Reorganize opened windows */
-    /* Resize Dockbar */
-    var uiPageDesktop = document.getElementById("UIPageDesktop");
-    if (uiPageDesktop) 
-        eXo.desktop.UIDockbar.resizeDockBar();
-    /* Resizes the scrollable containers */
-    eXo.portal.UIPortalControl.initAllManagers();
-    
-    /* BEGIN - Check positon of widgets in order to avoid hide widgets when we expand/collapse workspace*/
-    if (uiPageDesktop) {
-        var DOMUtil = eXo.core.DOMUtil;
-        var uiWidget = DOMUtil.findChildrenByClass(uiPageDesktop, "div", "UIWidget");
-        var uiControlWorkspace = document.getElementById("UIControlWorkspace");
-        var size = uiWidget.length;
-        var limitX = 50;
-        
-        for (var i = 0; i < size; i++) {
-            var dragObject = uiWidget[i];
-            if (cws.showControlWorkspace) {
-                dragObject.style.left = (dragObject.offsetLeft - uiControlWorkspace.offsetWidth) + "px";
-            }
-            else {
-                dragObject.style.left = (dragObject.offsetLeft + uiControlWorkspace.offsetWidth + dragObject.offsetWidth) + "px";
-            }
-            var offsetHeight = uiPageDesktop.offsetHeight - dragObject.offsetHeight - limitX;
-            var offsetTop = dragObject.offsetTop;
-            var offsetWidth = uiPageDesktop.offsetWidth - dragObject.offsetWidth - limitX;
-            var offsetLeft = dragObject.offsetLeft;
-            
-            if (dragObject.offsetLeft < 0) 
-                dragObject.style.left = "0px";
-            if (dragObject.offsetTop < 0) 
-                dragObject.style.top = "0px";
-            if (offsetTop > offsetHeight) 
-                dragObject.style.top = (offsetHeight + limitX) + "px";
-            if (offsetLeft > offsetWidth) 
-                dragObject.style.left = (offsetWidth + limitX) + "px";
-        }
-    }
-    /* -- END -- */
-    var params = [{
-        name: "objectId",
-        value: cws.showControlWorkspace
-    }];
-    ajaxAsyncGetRequest(eXo.env.server.createPortalURL(this.id, "SetVisible", true, params), false);
-    if ((eXo.core.Browser.browserType != "ie") && !document.getElementById("UIPageDesktop")) {
+		eXo.portal.UIControlWorkspace._showWorkspace();
+		
+    if ((eXo.core.Browser.browserType != "ie") && !eXo.core.Browser.isDesktop()) {
         if (document.getElementById("UIWeekView")) {
             eXo.calendar.UICalendarMan.initWeek();
             eXo.calendar.UIWeekView.setSize();
@@ -2247,86 +2173,29 @@ UICalendarPortlet.prototype.fixForMaximize = function(){
   }
 };
 
-if(typeof(UIDesktop) != "undefined"){
+if(eXo.desktop.UIDesktop){
+UIDesktop.prototype._ShowHideWindow = eXo.desktop.UIDesktop.showHideWindow;
+UIWindow.prototype._endResizeWindowEvt = eXo.desktop.UIWindow.endResizeWindowEvt;
+UIWindow.prototype._maximizeWindowEvt = eXo.desktop.UIWindow.maximizeWindowEvt;
 
-UIDesktop.prototype.showHideWindow = function(uiWindow, clickedElement){
-    if (typeof(uiWindow) == "string") 
-        this.object = document.getElementById(uiWindow);
-    else 
-        this.object = uiWindow;
-    this.object.maxIndex = eXo.desktop.UIDesktop.resetZIndex(this.object);
-    var numberOfFrame = 10;
-    if (this.object.style.display == "block") {
-        eXo.animation.ImplodeExplode.implode(this.object, clickedElement, "UIPageDesktop", numberOfFrame, false);
-        eXo.desktop.UIWindow.saveWindowProperties(this.object, "HIDE");
-        this.object.isShowed = false;
-    }
-    else {
-        this.object.isShowed = true;
-        var uiDockBar = document.getElementById("UIDockBar");
-        var uiPageDesktop = document.getElementById("UIPageDesktop");
-        eXo.desktop.UIDockbar.resetDesktopShowedStatus(uiPageDesktop, uiDockBar);
-        eXo.animation.ImplodeExplode.explode(this.object, clickedElement, "UIPageDesktop", numberOfFrame, false);
-        eXo.desktop.UIWindow.saveWindowProperties(this.object, "SHOW");
-        
-        if (eXo.core.Browser.isIE6()) {
-            this.object.style.filter = "";
-        }
-        //fix display scroll in first time.
-        var blockResizes = eXo.core.DOMUtil.findDescendantsByClass(this.object, "div", "UIResizableBlock");
-        if (blockResizes.length > 1) 
-            blockResizes[0].style.overflow = "hidden";
+UIDesktop.prototype.showHideWindow = function(uiWindow, clickedElement, mode){
+		eXo.desktop.UIDesktop._ShowHideWindow(uiWindow, clickedElement, mode);
+    if (eXo.desktop.UIDesktop.object.style.display != "block") {
         if(uiWindow.indexOf("calendar") >=0) eXo.calendar.UICalendarPortlet.delay = window.setTimeout("eXo.calendar.UICalendarPortlet.fixFirstLoad() ;", 2000);
     }
 };
 
+
+
+
 UIWindow.prototype.endResizeWindowEvt = function(evt){
     // Re initializes the scroll tabs managers on the page
-    eXo.portal.UIPortalControl.initAllManagers();
-    eXo.desktop.UIWindow.portletWindow = null;
-    eXo.desktop.UIWindow.resizableObject = null;
-    this.onmousemove = null;
-    this.onmouseup = null;
+		eXo.desktop.UIWindow._endResizeWindowEvt(evt);
     eXo.calendar.UICalendarPortlet.fixForMaximize();
 };
 
 UIWindow.prototype.maximizeWindowEvt = function(evt){
-    var domUtil = eXo.core.DOMUtil;
-    var portletWindow = domUtil.findAncestorByClass(this, "UIResizeObject");
-    
-    var uiWindow = eXo.desktop.UIWindow;
-    var uiPageDesktop = document.getElementById("UIPageDesktop");
-    var desktopWidth = uiPageDesktop.offsetWidth;
-    var desktopHeight = uiPageDesktop.offsetHeight;
-    var uiResizableBlock = domUtil.findDescendantsByClass(portletWindow, "div", "UIResizableBlock");
-    
-    if (portletWindow.maximized) {
-        portletWindow.style.top = uiWindow.posY + "px";
-        portletWindow.style.left = uiWindow.posX + "px";
-        portletWindow.style.width = uiWindow.originalWidth + "px";
-        portletWindow.maximized = false;
-        for (var i = 0; i < uiResizableBlock.length; i++) {
-            uiResizableBlock[i].style.height = uiResizableBlock[i].originalHeight + "px";
-        }
-        this.className = "ControlIcon MaximizedIcon";
-    }
-    else {
-        uiWindow.backupObjectProperties(portletWindow, uiResizableBlock);
-        portletWindow.style.top = "0px";
-        portletWindow.style.left = "0px";
-        portletWindow.style.width = "100%";
-        portletWindow.style.height = "auto";
-        var delta = eXo.core.Browser.getBrowserHeight() - portletWindow.clientHeight;
-        for (var i = 0; i < uiResizableBlock.length; i++) {
-            uiResizableBlock[i].style.height = (parseInt(uiResizableBlock[i].clientHeight) + delta) + "px";
-        }
-        portletWindow.style.height = portletWindow.clientHeight + "px";
-        portletWindow.maximized = true;
-        this.className = "ControlIcon RestoreIcon";
-        eXo.desktop.UIWindow.saveWindowProperties(portletWindow);
-    }
-    // Re initializes the scroll tabs managers on the page
-    eXo.portal.UIPortalControl.initAllManagers();
+    eXo.desktop.UIWindow._maximizeWindowEvt(evt);
     eXo.calendar.UICalendarPortlet.fixForMaximize();
 };
 }
