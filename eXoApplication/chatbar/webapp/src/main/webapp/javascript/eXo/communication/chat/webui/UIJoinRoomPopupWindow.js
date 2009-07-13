@@ -213,6 +213,38 @@ UIJoinRoomPopupWindow.prototype.joinSelectedRoomAction = function(obj) {
 	    }
 	  }*/
 	};
+	
+	UIJoinRoomPopupWindow.prototype.joinSelectedRoomByIdAction = function(event) {
+		event = event || window.event;
+	  var srcElement = event.srcElement || event.target;
+	  var roomId = srcElement.getAttribute('roomId');
+	  var roomName = roomId.split('@')[0];
+	  var userName = this.UIMainChatWindow.userNames[this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP];
+		userName = userName+'@';
+	  var joinedRooms = this.UIMainChatWindow.joinedRooms;
+      for (var i=0; i<joinedRooms.length; i++) {
+        var joinedRoomInfo = joinedRooms[i];
+        if (joinedRoomInfo.roomInfo.room == roomId) {
+        	//
+        	var isThisUserJoined = false;
+        	var roomOccupantsList = joinedRoomInfo.occupants;
+		  		for(var j=0; j<roomOccupantsList.length; j++){
+		  			var occupant = roomOccupantsList[j];
+		  			if(occupant.jid.indexOf(userName)==0){
+		  				isThisUserJoined = true;
+		  				break;
+		  			}
+		  		}
+		  		//
+        	if(isThisUserJoined)
+        		this.UIMainChatWindow.UIChatWindow.createNewTab(joinedRoomInfo.roomInfo.room, true);       
+        	else
+          	this.UIMainChatWindow.jabberJoinToRoom(roomName, joinedRoomInfo.isPasswordProtected);
+          return;
+        }
+      }
+      return; 
+   };
 
 /**
  * Make component visible or not
