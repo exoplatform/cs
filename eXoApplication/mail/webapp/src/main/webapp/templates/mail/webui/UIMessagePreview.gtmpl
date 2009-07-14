@@ -17,9 +17,6 @@
   rcontext.getJavascriptManager().importJavascript('eXo.cs.MaskLayerControl','/csResources/javascript/');
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.MaskLayerControl.init(\'' + uicomponent.getId() + '\')');
   rcontext.getJavascriptManager().importJavascript("eXo.mail.UIMailPortlet","/mail/javascript/");
-  // Fix for show image in IE6
-  //rcontext.getJavascriptManager().addJavascript("if(eXo.core.Browser.isIE6()) {top.location.reload() };") ;
-  
   WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
   Locale locale = context.getParentAppRequestContext().getLocale() ;
 %>
@@ -70,13 +67,21 @@
 <!--  Start DecoratorBox ViewBoxStyle -->
     <% 
     int msgIndex = 0;
-    if (msgRoot != null) { for(Message msg : uicomponent.getShowedMessages()) {  if (msg != null) {%>
+    boolean hasUnreadMsg = false;
+    boolean showDetail;
+    if (msgRoot != null) { for(Message msg : uicomponent.getShowedMessages()) {  if (msg != null) {
+      if (msg.isUnread()) {
+        showDetail = true;
+        hasUnreadMsg = true;
+      }
+      if (!hasUnreadMsg && !showDetail && (msgIndex == uicomponent.getShowedMessages().size() -1)) showDetail = true;
+    %>
 		<div class="DecoratorBox SpliterResizableListArea" previewId="<%=msg.getId()%>">
     <%
         String starClass = "UnStarredIcon" ;
         if (msg.hasStar()) starClass = "StarredIcon";
         String styleCollapse = "block";
-        if (msgIndex == uicomponent.getShowedMessages().size() -1) styleCollapse = "none";
+        if (showDetail) styleCollapse = "none";
     %>
       <div id="CollapseMessage" class="CollapseMessage" style="display: $styleCollapse ;" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this)">
         <div class="ViewBoxStyle">
@@ -148,8 +153,8 @@
       </div>
 
       <%
-        String styleExpand = "none";
-        if (msgIndex == uicomponent.getShowedMessages().size() -1) styleExpand = "block";
+        String styleExpand = "block";
+        if (!showDetail) styleExpand = "none";
       %>
       <div class="ExpandMessage">
   			<div class="ViewBoxStyle">

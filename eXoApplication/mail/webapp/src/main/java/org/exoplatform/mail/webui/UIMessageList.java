@@ -342,26 +342,7 @@ public class UIMessageList extends UIForm {
         MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
         msg = mailSrv.loadTotalMessage(username, accountId, msg) ;
         Account account = mailSrv.getAccountById(username, accountId);
-        
-        if (msg.isUnread()) {
-          List<Message> msgIds  = new ArrayList<Message>();
-          msgIds.add(msg);
-          try {
-            MailUtils.getMailService().toggleMessageProperty(username, accountId, msgIds, Utils.EXO_ISUNREAD);
-          } catch (PathNotFoundException e) {
-            uiMessageList.setMessagePageList(null) ;
-            uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
-            
-            UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-            uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
-          }
-          msg.setUnread(false);
-          uiMessageList.messageList_.put(msg.getId(), msg);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer); 
-        }
+              
         uiMessageList.setSelectedMessageId(msgId);
         for (Message uncheckedMsg : uiMessageList.messageList_.values()) {
           UIFormCheckBoxInput<Boolean> uiCheckbox = uiMessageList.getChildById(uncheckedMsg.getId());
@@ -385,8 +366,37 @@ public class UIMessageList extends UIForm {
           }
         }
         uiMessagePreview.setShowedMessages(showedMessages) ;
+       
+        List<Message> msgs  = new ArrayList<Message>();
+        if (msg.isUnread()) msgs.add(msg);
+        if ((uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) && (msg.getGroupedMessageIds().size() > 0)) {
+          for (String id : msg.getGroupedMessageIds()) {
+            Message m = uiMessageList.messageList_.get(id);
+            if (m.isUnread()) msgs.add(m);
+          }
+        }
         
-        if (msg.isReturnReceipt()&& !msg.getFrom().contains(account.getEmailAddress())) {
+        if (msgs.size() > 0) {
+          try {
+            uiMessageList.toggleMsgStatus(username, accountId, msgs);
+          } catch (PathNotFoundException e) {
+            uiMessageList.setMessagePageList(null) ;
+            uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
+            
+            UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+            uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
+          for (Message m : msgs) {
+            m.setUnread(false);
+            uiMessageList.messageList_.put(m.getId(), m);
+          }
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer); 
+        }
+        
+        if (msg.isReturnReceipt() && !msg.getFrom().contains(account.getEmailAddress())) {
           ((UIMessageArea)uiMessageList.getParent()).reloadMailSetting();
           long requestReturnReceipt = ((UIMessageArea)uiMessageList.getParent()).getMailSetting().getSendReturnReceipt();
           if (requestReturnReceipt == MailSetting.SEND_RECEIPT_ASKSME) {
@@ -417,9 +427,9 @@ public class UIMessageList extends UIForm {
               return ;
             }
             
-            List<Message> msgs = new ArrayList<Message>();
-            msgs.add(msg);
-            mailSrv.toggleMessageProperty(username, accountId, msgs, Utils.IS_RETURN_RECEIPT);
+            List<Message> msgL = new ArrayList<Message>();
+            msgL.add(msg);
+            mailSrv.toggleMessageProperty(username, accountId, msgL, Utils.IS_RETURN_RECEIPT);
           }
         } 
         
@@ -428,7 +438,23 @@ public class UIMessageList extends UIForm {
     }
   }
   
+  private void toggleMsgStatus(String username, String accountId, List<Message> msgs) throws Exception {
+    MailUtils.getMailService().toggleMessageProperty(username, accountId, msgs, Utils.EXO_ISUNREAD); 
+  }
   
+  public boolean isShowUnread(Message msg) throws Exception {
+    boolean showUnread = false;
+    try {
+      if ((viewMode == MODE_CONVERSATION) && (msg.getGroupedMessageIds().size() > 0)) {
+        for (String id : msg.getGroupedMessageIds()) {
+          Message m = messageList_.get(id);
+          if (m.isUnread()) showUnread = true; 
+        }
+      }
+    } catch(Exception e) { }
+    
+    return showUnread;
+  }
 
   static public class ReadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
