@@ -47,7 +47,7 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
     String username = event.getData().getIdentity().getUserId();
     List<Account> accList = mService.getAccounts(SessionProvider.createSystemProvider(), username);
     for (Account acc : accList) {
-      mService.stopCheckMail(username, acc.getId());
+      mService.stopAllJobs(username, acc.getId());
     }    
   } 
  }

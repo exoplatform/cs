@@ -466,6 +466,9 @@ public class FakeMailService implements MailService {
 
   }
 
+  public void stopAllJobs(String usernam, String accountId) throws Exception {
+  }
+
   public void toggleMessageProperty(SessionProvider provider,
                                     String username,
                                     String accountId,

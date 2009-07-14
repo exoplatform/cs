@@ -99,14 +99,17 @@ UpdateList.prototype.update = function(obj){
 		  	}
 		  }
 		  var form = eXo.core.DOMUtil.findAncestorByTagName(tbodyMsgList,"form");
-			eXo.mail.UpdateList.sendRequest(form.action,data.msgId);
+			eXo.mail.UpdateList.sendRequest(form.action,data.msgId, form);
 		}
   }
 } ;
 
 UpdateList.prototype.sendRequest = function(url, msgId){
-	url += "&formOp=UpdateList&objectId=" + msgId + "&ajaxRequest=true";
-	ajaxAsyncGetRequest(url,false);
-} ;
+  url += "&formOp=UpdateList&objectId=" + msgId + "&ajaxRequest=true";
+  if(form) {
+    url = (url).split("?")[0];
+  }
+  ajaxAsyncGetRequest(url,false);
+};
 
 eXo.mail.UpdateList = new UpdateList();

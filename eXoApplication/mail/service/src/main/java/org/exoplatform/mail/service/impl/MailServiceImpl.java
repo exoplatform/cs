@@ -161,7 +161,7 @@ public class MailServiceImpl implements MailService, Startable {
 
   public void removeAccount(SessionProvider sProvider, String username, String accountId)
   throws Exception {
-    stopAllJobs(sProvider, username, accountId);
+    stopAllJobs(username, accountId);
     storage_.removeAccount(sProvider, username, accountId);
   }
 
@@ -534,7 +534,7 @@ public class MailServiceImpl implements MailService, Startable {
     } 
   }
   
-  private void stopAllJobs(SessionProvider sProvider, String username, String accountId) throws Exception {
+  public void stopAllJobs(String username, String accountId) throws Exception {
     JobInfo info = CheckMailJob.getJobInfo(username, accountId);
     stopCheckMail(username, accountId);
     schedulerService_.removeJob(info);
