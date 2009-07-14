@@ -761,11 +761,12 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageCompose table {
 	background: none;
+	width: 97%;
+	table-layout: fixed;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIMessageCompose table {
-	background: none;
-	width: 97%;
+.UIMailPortlet .MailWorkingWorkspace .UIMessageCompose .UIFormGrid td.FieldLabel {
+	width: 64px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace input.checkbox {
