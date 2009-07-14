@@ -549,6 +549,7 @@
             if ((i%2) == 1) selectedClass = "EvenItem";
             String readStatus = "ReadItem" ;
             if (msg.isUnread()) readStatus = "UnreadItem" ;
+            if ((uicomponent.viewMode == uicomponent.MODE_CONVERSATION) && !readStatus.equals("UnreadItem") && uicomponent.isShowUnread(msg)) readStatus = "UnreadItem"; 
             if (checkboxField.checked) selectedClass += " SelectedItem" ;
             String starClass = "UnStarredIcon" ;
             if (msg.hasStar()) starClass = "StarredIcon";
@@ -699,8 +700,7 @@
           int i = 0 ;
           int l = 0 ;
     			for(Message msg : uicomponent.getMessageList()) {
-            if (msg.isRootConversation()) 
-            i = show(msg, i, l, locale);
+            if (msg.isRootConversation()) i = show(msg, i, l, locale);
           } // end of for loop
         %>
       	</tbody>

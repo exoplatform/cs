@@ -205,25 +205,19 @@ public class UIMessagePreview extends UIComponent {
     CalendarEvent calEvent = getEvent(getMessage());
     if(calEvent == null) return null;
     String[] parStatus = calEvent.getParticipantStatus();
-    //
-    UIMailPortlet uiMailPortlet = this.getAncestorOfType(UIMailPortlet.class);
-    String currentUser = uiMailPortlet.getCurrentUser();
-    UISelectAccount uiSelectAcc = uiMailPortlet.findFirstComponentOfType(UISelectAccount.class);
-    String accId = uiSelectAcc.getSelectedValue();
-    MailService mailSvr = uiSelectAcc.getApplicationComponent(MailService.class) ;
-    Account account = mailSvr.getAccountById(currentUser, accId);
+    UIMailPortlet uiPortlet = this.getAncestorOfType(UIMailPortlet.class);
+    String username = uiPortlet.getCurrentUser();
+    String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    MailService mailSvr = uiPortlet.getApplicationComponent(MailService.class) ;
+    Account account = mailSvr.getAccountById(username, accId);
     String currentEmail ="";
-    if ( account != null) {
-      currentEmail = account.getEmailAddress();
-    }
-    //
+    if ( account != null) currentEmail = account.getEmailAddress();
+    
     for (String par : parStatus) {
       String[] entry = par.split(":");
-      if(entry[0].equalsIgnoreCase(currentUser)||entry[0].equalsIgnoreCase(currentEmail)){
-        if(entry.length > 1)
-          return entry[1];
-        else
-          return new String("");
+      if(entry[0].equalsIgnoreCase(username)||entry[0].equalsIgnoreCase(currentEmail)){
+        if(entry.length > 1) return entry[1];
+        else return new String("");
       } 
     }
     return null;
