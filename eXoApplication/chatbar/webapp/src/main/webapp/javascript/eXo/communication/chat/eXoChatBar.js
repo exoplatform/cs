@@ -24,7 +24,7 @@ eXo.communication = {
 eXo.core.HTMLUtil.entities.nbsp = null;
 
 eXo.require("eXo.communication.chat.core.DateFormat", "/chatbar/javascript/");
-eXo.require("eXo.communication.chat.core.Cometd", "/chatbar/javascript/");
+//eXo.require("eXo.communication.chat.core.Cometd", "/chatbar/javascript/");
 eXo.require("eXo.communication.chat.core.AdvancedDOMEvent", "/chatbar/javascript/");
 eXo.require("eXo.communication.chat.core.JSLogger", "/chatbar/javascript/");
 eXo.require("eXo.communication.chat.core.XMPPCommunicator", "/chatbar/javascript/");
