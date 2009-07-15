@@ -45,6 +45,7 @@ function UICalendarDragDrop() {
   this.DragDrop = eXo.core.DragDrop ;
   this.dropableSets = [] ;
   this.listView = false ;
+  this.onMouseMoveCount = 0; //Trick to slow onMouseMove event on Safari
 } ;
 
 /**
@@ -166,6 +167,12 @@ UICalendarDragDrop.prototype.initCallback = function(dndEvent) {
 } ;
 
 UICalendarDragDrop.prototype.dragCallback = function(dndEvent) {
+	if(eXo.core.Browser.getBrowserType() == "safari"){
+		if(!this.onMouseMoveCount) this.onMouseMoveCount = 0;
+		this.onMouseMoveCount++;
+		if(this.onMouseMoveCount < 7) return;
+		else this.onMouseMoveCount = 0;
+	}
   var dragObject = dndEvent.dragObject ;
   if (!dragObject.style.display ||
       dragObject.style.display == 'none') {
@@ -173,7 +180,6 @@ UICalendarDragDrop.prototype.dragCallback = function(dndEvent) {
   }
 	dragObject.style.zIndex = 2000 ; // fix for IE 
   eXo.calendar.UICalendarDragDrop.synDragObjectPos(dndEvent) ;
-  
   // Re-find target
   var foundTarget = 
       eXo.core.DragDrop.findDropableTarget4Cal(dndEvent, eXo.core.DragDrop.dropableTargets, dndEvent.backupMouseEvent) ;
