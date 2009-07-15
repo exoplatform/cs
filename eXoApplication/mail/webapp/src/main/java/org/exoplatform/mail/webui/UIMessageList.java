@@ -50,7 +50,6 @@ import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -62,6 +61,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
  * Created by The eXo Platform SARL
@@ -368,12 +368,17 @@ public class UIMessageList extends UIForm {
         uiMessagePreview.setShowedMessages(showedMessages) ;
        
         List<Message> msgs  = new ArrayList<Message>();
+        List<String> unreadMsgIds = new ArrayList<String>();
         if (msg.isUnread()) msgs.add(msg);
         if ((uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) && (msg.getGroupedMessageIds().size() > 0)) {
           for (String id : msg.getGroupedMessageIds()) {
             Message m = uiMessageList.messageList_.get(id);
-            if (m.isUnread()) msgs.add(m);
+            if (m.isUnread()) {
+              msgs.add(m);
+              unreadMsgIds.add(m.getId());
+            }
           }
+          uiMessagePreview.setUnreadMessages(unreadMsgIds);
         }
         
         if (msgs.size() > 0) {

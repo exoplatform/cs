@@ -67,14 +67,14 @@
 <!--  Start DecoratorBox ViewBoxStyle -->
     <% 
     int msgIndex = 0;
-    boolean hasUnreadMsg = false;
-    boolean showDetail;
+    boolean hasUnreadMsg = false, showDetail;
     if (msgRoot != null) { for(Message msg : uicomponent.getShowedMessages()) {  if (msg != null) {
-      if (msg.isUnread()) {
+      showDetail = false;
+      if (uicomponent.getUnreadMessages().contains(msg.getId())) {
         showDetail = true;
         hasUnreadMsg = true;
       }
-      if (!hasUnreadMsg && !showDetail && (msgIndex == uicomponent.getShowedMessages().size() -1)) showDetail = true;
+      if (!hasUnreadMsg && (msgIndex == uicomponent.getShowedMessages().size() -1)) showDetail = true;
     %>
 		<div class="DecoratorBox SpliterResizableListArea" previewId="<%=msg.getId()%>">
     <%

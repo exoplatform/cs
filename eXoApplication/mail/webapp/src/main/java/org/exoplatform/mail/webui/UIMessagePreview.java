@@ -99,6 +99,7 @@ public class UIMessagePreview extends UIComponent {
   private Message selectedMessage_ ;
   private List<Message> showedMsgs = new ArrayList<Message>() ;
   private boolean isHideMessageList_ = false;
+  private List<String> unreadMsgIds = new ArrayList<String>();
   
   public UIMessagePreview() throws Exception {}
 
@@ -116,6 +117,14 @@ public class UIMessagePreview extends UIComponent {
 
   public void setShowedMessages(List<Message> msgList) throws Exception {
     showedMsgs = msgList ;
+  }
+  
+  public List<String> getUnreadMessages() throws Exception {
+    return unreadMsgIds ;
+  } 
+
+  public void setUnreadMessages(List<String> unreadMsgIds) throws Exception {
+    this.unreadMsgIds = unreadMsgIds ;
   }
   
   public Map<String, String> getImageLocationMap(Message message) throws Exception {
