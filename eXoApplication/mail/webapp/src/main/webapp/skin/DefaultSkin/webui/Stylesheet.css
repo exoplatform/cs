@@ -859,18 +859,15 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .MessageActionIcon {
 	float: left;
-	height: 20px; line-height: 20px;
-	height: 20px; line-height: 20px;
+	height: 20px; line-height: 17px;
 	padding: 0px 10px 0px 20px;
 	display: block;
-	font-size: 12px;
 	background-position: left center;
 }	
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview a:hover.MessageActionIcon {
-	color: #fda946;
-    font-size: 12px;
-	text-decoration: none;
+	color: #058ee6;
+	text-decoration: underline;
 }
 
 .UIMessagePreview .AttachmentContainer {
