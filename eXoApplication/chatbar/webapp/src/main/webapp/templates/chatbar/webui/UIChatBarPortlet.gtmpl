@@ -8,7 +8,7 @@
 	  jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChatBar.init");
 %>
 <!-- Begin UIChat -->
-<div class="UIChat ChatSharedIcons UIChatBarPortlet" id="UIChatBarPortlet" oncontextmenu="return false;"
+<div class="UIChat ChatSharedIcons UIChatBarPortlet" id="UIChatBarPortlet" oncontextmenu="return false;" style="position:absolute;"
     exotoken="<%=uicomponent.getUserToken();%>" username="<%=uicomponent.getRemoteUser();%>">
     <div class="ClearRight">
         <span></span>

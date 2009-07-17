@@ -64,11 +64,41 @@ eXo.communication.chat.eXoChatBar = {
         eXo.communication.chat.webui.UIMainChatWindow.chatWindowsContainerNode,
         [{className:'WindowBarLeft', tagName: 'div'}, {className: 'PopupTitle', tagName: 'div'}]);
       eXo.communication.chat.webui.UIMainChatWindow.xLogin(userName);
+	  eXo.communication.chat.eXoChatBar.floatingBox("UIChatBarPortlet");
+	  var div = document.createElement("div");
+	  div.style.height = document.getElementById("UIChatBarPortlet").offsetHeight + "px";
+	  document.body.appendChild(div);
     } catch (e) {
       print(e) ;
       //throw (new Error('Error while loading chat application.'));
     }
-  }
+  },
+  calculateY : function() {
+		var posY = 0;
+		if(document.documentElement && document.documentElement.scrollTop){
+			posY = document.documentElement.scrollTop;
+		} else if(document.body && document.body.scrollTop) {
+			posY = document.body.scrollTop;
+		} else if(window.pageYOffset) {
+			posY = window.pageYOffset;
+		} else if(window.scrollY) {
+			posY = window.scrollY;
+		}
+		return posY ;
+	},
+
+	floatingBox : function(objID){
+		var obj = document.getElementById(objID);
+		var browserHeight = eXo.core.Browser.getBrowserHeight() ;
+		var scrollTop = eXo.communication.chat.eXoChatBar.calculateY();
+		var posTop =  browserHeight + scrollTop;
+		obj.style.width = (obj.offsetParent.offsetWidth - 10) + "px";
+		if(posTop <= document.body.scrollHeight){
+			posTop -= obj.offsetHeight ;
+			obj.style.top = posTop + "px";
+		}
+		window.setTimeout('eXo.communication.chat.eXoChatBar.floatingBox("'+objID+'")', 100);
+	}
 }
 
 
