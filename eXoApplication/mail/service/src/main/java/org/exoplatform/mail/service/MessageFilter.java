@@ -373,6 +373,12 @@ public class MessageFilter {
       stringBuffer.append(" order by @" + orderBy_ + " ") ;
       if (isAscending_ && !hasStructure_) stringBuffer.append("ascending") ;
       else stringBuffer.append("descending");
+
+      if (orderBy_.equalsIgnoreCase(Utils.EXO_LAST_UPDATE_TIME)) {
+        stringBuffer.append(" , @" + Utils.EXO_RECEIVEDDATE + " ") ;
+        if (isAscending_ && !hasStructure_) stringBuffer.append("ascending") ;
+        else stringBuffer.append("descending");
+      }
     }
     
     // System.out.println(" ## Query Statement : " + stringBuffer.toString());
