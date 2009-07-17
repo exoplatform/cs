@@ -61,7 +61,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
  * Created by The eXo Platform SARL
