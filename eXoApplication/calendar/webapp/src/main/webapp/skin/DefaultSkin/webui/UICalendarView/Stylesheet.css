@@ -203,13 +203,12 @@
 
 .UIWeekView .EventWeekBar {
 	padding: 0px 16px 0px 0px; /* orientation=lt */
-	padding: 0px 0px 0px 16px; /* orientation=rt */
+	!padding: 0px 0px 0px 16px; /* orientation=rt */
 	
 }
 
 .UIWeekView .EventWeekBar table {
 	margin-left: 1px; /* orientation=lt */
-	margin-right: 1px; /* orientation=rt */
 	*margin-left: 0px;
 }
 

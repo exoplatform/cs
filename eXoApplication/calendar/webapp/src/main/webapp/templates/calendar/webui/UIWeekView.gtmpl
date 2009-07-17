@@ -87,7 +87,7 @@
     <div class="EventWeekBar">
       <table class="UIGrid"  cellspacing="0" cellpadding="0" exocallback="eXo.calendar.UIWeekView.callbackSelectionX();">
           <tr>
-            <td style="width: 55px;" class="UIEmtyBlock"><div style="width: 55px;"><span></span></div></td>
+            <td style="width: <%= isLT ? "55px" : "72px" %>; !width: 55px;" class="UIEmtyBlock"><div style="width: 55px;"><span></span></div></td>
             <%			
 							cl = uicomponent.getBeginDateOfWeek() ;				
 						  t = 0 ; 
@@ -117,8 +117,8 @@
       </table>
 	  
 		<div id="UIWeekViewGridAllDay" class="EventAllday" style="" numberOfDays="$numberOfDays">
-			<div style="width: 55px; float: left; height: 100%; background: white; border-right: 1px solid #ccc"><span></span></div>
-			<div style="margin-left: 55px;">
+			<div style="width: <%= isLT ? "55px" : "72px" %>; !width: 55px; float: <%= isLT ? "left" : "right" %>; height: 100%; background: white; border-<%= isLT ? "right" : "left" %>: 1px solid #ccc"><span></span></div>
+			<div style="margin-<%= isLT ? "left: 55px" : "right:72px" %>; !margin-<%= isLT ? "left" : "right" %>: 55px;">
 				<div class="EventAlldayBoard">
 	                <% for (event in uicomponent.getEventList().values()) {
 										begindate =  event.getFromDateTime().getTime() ;  
