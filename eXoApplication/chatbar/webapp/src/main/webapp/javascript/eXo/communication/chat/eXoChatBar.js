@@ -69,8 +69,7 @@ eXo.communication.chat.eXoChatBar = {
 	  div.style.height = document.getElementById("UIChatBarPortlet").offsetHeight + "px";
 	  document.body.appendChild(div);
     } catch (e) {
-      print(e) ;
-      //throw (new Error('Error while loading chat application.'));
+      throw (new Error('Error while loading chat application.'));
     }
   },
   calculateY : function() {
