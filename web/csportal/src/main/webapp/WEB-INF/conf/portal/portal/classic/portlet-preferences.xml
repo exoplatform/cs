@@ -6,7 +6,7 @@
     <window-id>portal#classic:/web/BannerPortlet/banner</window-id>
     <preference>
       <name>template</name>
-      <value>par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl</value>
+      <value>system:/templates/groovy/webui/component/UIBannerPortlet.gtmpl</value>
       <read-only>false</read-only>
     </preference>
   </portlet-preferences>
