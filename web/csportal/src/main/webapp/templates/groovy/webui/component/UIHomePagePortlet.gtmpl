@@ -1,6 +1,8 @@
 <%
   import org.exoplatform.portal.webui.util.Util ;
   String toururi = Util.getPortalRequestContext().getPortalURI() + "tour";
+  def prContext = _ctx.getRequestContext().getParentAppRequestContext();
+  String user = prContext.getRemoteUser() ;
   
 %>
 <table style="table-layout: fixed;width: 100%;-width: auto;">
@@ -190,7 +192,8 @@
 						<div class="NormalText">Did you like ? Did you hate ?</div>
 						<a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-send-feedback")%></a>
 					</div>					 
-                                         <div class="DotLine"><span></span></div>
+                        <%if(user != null && user.trim().length() > 0) { %>
+                        <div class="DotLine"><span></span></div>
 					 
 						<div class="LeftButton">
 							<div class="RightButton">
@@ -198,7 +201,8 @@
 								<a href="/portal/private/classic/collaboration" style="color: white; margin-top: 5px;"><%=_ctx.appRes("UIHomePagePortlet.cs-webos")%></a>
 								<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla"><%=_ctx.appRes("UIHomePagePortlet.cs-desktop")%></a></div>
 							</div>
-						</div>					
+						</div>
+						<%}%>					
  					<div class="DotLine"><span></span></div>
 					<div class="NormalText"><%=_ctx.appRes("UIHomePagePortlet.cs-more")%><br/>
 the <a href="http://wiki.exoplatform.org/xwiki/bin/view/CS" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-wiki")%></a> <%=_ctx.appRes("UIHomePagePortlet.cs-and")%> <a href="http://forum.exoplatform.com" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-forum")%></a></div>
