@@ -401,8 +401,12 @@ UICalendarPortlet.prototype.calendarMenuCallback = function(evt){
   var calColor = obj.getAttribute("calColor");
   var canEdit = String(obj.getAttribute("canedit")).toLowerCase();
   var menu = eXo.webui.UIContextMenu.menuElement ;
-  var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;
-	if(selectedCategory) selectedCategory = selectedCategory.options[selectedCategory.selectedIndex].value;
+  	try {
+		var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;
+		if(selectedCategory) selectedCategory = selectedCategory.options[selectedCategory.selectedIndex].value;
+	} catch (e) { //Fix for IE
+		var selectedCategory = null;
+	}
 	if(!menu || !obj.id) {
     eXo.webui.UIContextMenu.menuElement = null ;
     return ;

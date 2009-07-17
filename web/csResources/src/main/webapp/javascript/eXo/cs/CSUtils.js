@@ -170,10 +170,11 @@ Utils.prototype.onEnter = function(evt) {
   _e.cancelBubble = true ;
   var keynum = eXo.cs.Utils.getKeynum(_e) ;
   if (keynum == 13) {
-    var action = eXo.core.DOMUtil.findPreviousElementByTagName(this, "a") ;
-		if(!action) action = eXo.core.DOMUtil.findNextElementByTagName(this, "a") ;
-    action = String(action.href).replace("javascript:","").replace("%20","") ;
-    eval(action) ;
+    var action = eXo.core.DOMUtil.findPreviousElementByTagName(this, "div") ;
+		if(!action) action = eXo.core.DOMUtil.findNextElementByTagName(this, "div") ;
+    //action = String(action.href).replace("javascript:","").replace("%20","") ;
+    //eval(action) ;
+	action.onclick();
   }
 } ;
 
