@@ -859,16 +859,20 @@ public class MailServiceImpl implements MailService, Startable {
       info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
       info.setStatusMsg("Finished synchronizing imap folder ...");
       if (!Utils.isEmptyField(folderId)) {
-        javax.mail.Folder fd;
-        try {
-          URLName url = new URLName(getFolder(username, accountId, folderId).getURLName());
-          fd = store.getFolder(url);
-          if (fd != null) {
-            synchImapMessage(username, accountId, fd, key);
-          }
-        } catch(Exception e) {
+        javax.mail.Folder fd = null;
+        Folder f = getFolder(username, accountId, folderId);
+        if (f == null || Utils.isEmptyField(f.getURLName())) {
+          f = getFolder(username, accountId, Utils.createFolderId(accountId, Utils.FD_INBOX, false));
         }
-       
+        try {
+          if (f != null && !Utils.isEmptyField(f.getURLName())) {
+            URLName url = new URLName(f.getURLName());
+            fd = store.getFolder(url);
+            if (fd != null) {
+              synchImapMessage(username, accountId, fd, key);
+            }
+          }  
+        } catch (Exception e) { }
       } else {
         for (javax.mail.Folder folder : folderList) {
           if (!Utils.isEmptyField(info.getRequestingForFolder_()) && !info.getRequestingForFolder_().equals("checkall")) {          
