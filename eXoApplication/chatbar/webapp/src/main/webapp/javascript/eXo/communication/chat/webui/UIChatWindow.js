@@ -378,10 +378,17 @@ UITabControl.prototype.initUI = function(buddyId) {
   // Customize new UITab node
   this.tabNameNode = DOMUtil.findFirstDescendantByClass(this.tabNode, 'div', this.CSS_CLASS.tabName);
   var tabContactNameNode = DOMUtil.findFirstDescendantByClass(this.tabNameNode, 'span', this.CSS_CLASS.tabContactName);
-  if (this.tabId.targetPerson.length > this.MAX_TAB_TITLE_LEN) {
-    tabContactNameNode.innerHTML = this.tabId.targetPerson.substr(0, this.MAX_TAB_TITLE_LEN - 3) + '...';
+  
+  var fullNameMap = eXo.communication.chat.webui.UIChatWindow.fullNameMap ;
+  var fullName = this.tabId.targetPerson ;
+	var uid = this.tabId.targetPerson ;
+	if (fullNameMap[uid] != null) {
+  	fullName = fullNameMap[uid] ;
+	}
+  if (fullName > this.MAX_TAB_TITLE_LEN) {  	
+		tabContactNameNode.innerHTML = fullName.substr(0, this.MAX_TAB_TITLE_LEN - 3) + '...';  		
   } else {
-    tabContactNameNode.innerHTML = this.tabId.targetPerson;
+  	tabContactNameNode.innerHTML = fullName ;
   }
   this.tabNameNode.setAttribute('title', this.tabId.targetPerson);
   this.tabNameNode.tabId = this.tabId.id;
@@ -802,6 +809,7 @@ UITabControl.prototype.setVisible = function(visible) {
  */
 function UIChatWindow() {
 //  this.id = 'eXo.communication.chat.webui.UIChatWindow';
+	this.fullNameMap = {};
   this.id = 'UIChatWindow';
   this.CSS_CLASS = {
     tabsContainer       : 'TabsContainer',

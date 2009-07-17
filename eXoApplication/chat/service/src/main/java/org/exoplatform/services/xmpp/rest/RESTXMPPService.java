@@ -49,6 +49,7 @@ import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.PassthroughOutputTransformer;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.xmpp.bean.ConfigRoomBean;
+import org.exoplatform.services.xmpp.bean.ContactBean;
 import org.exoplatform.services.xmpp.bean.FormBean;
 import org.exoplatform.services.xmpp.bean.HostedRoomBean;
 import org.exoplatform.services.xmpp.bean.InitInfoBean;
@@ -66,6 +67,7 @@ import org.exoplatform.services.xmpp.ext.transport.MSNTransport;
 import org.exoplatform.services.xmpp.ext.transport.YahooTransport;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
+import org.exoplatform.services.xmpp.userinfo.UserInfo;
 import org.exoplatform.services.xmpp.userinfo.UserInfoService;
 import org.exoplatform.services.xmpp.util.PresenceUtil;
 import org.exoplatform.services.xmpp.util.SearchFormFields;
@@ -189,7 +191,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
           //nothing to do         
         }
        try { 
-          FormBean formBean = session.createRoom(roomEscape, nickname);
+          FormBean formBean = session.createRoom(roomEscape, nickname);          
           List<String> values = new ArrayList<String>();
           values.add(room);
           // Tricks, add change field to configuration form for sending to UI client name of room that entered user. 
@@ -1604,6 +1606,18 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       initInfoBean.setMainServiceName(mainServiceName);
       initInfoBean.setMucServicesNames(collectionMUCService);
       initInfoBean.setRoster(TransformUtils.rosterToRosterBean(buddyList));
+      
+      
+      try {
+        List<ContactBean> list = new ArrayList<ContactBean>() ;
+        for (ContactBean b : initInfoBean.getRoster()) {
+          UserInfo info = session.getUserInfo(b.getUser().split("@")[0]) ;
+          b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
+          list.add(b) ;
+        }
+        initInfoBean.setRoster(list) ;
+      } catch (Exception e) { }
+  
       initInfoBean.setSearchServicesNames(services);
       initInfoBean.setHostedRooms(rooms);
       initInfoBean.setTotalRooms(rooms.size());

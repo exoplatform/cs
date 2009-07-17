@@ -39,12 +39,14 @@ import javax.jcr.RepositoryException;
 
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
+import org.apache.poi.hdf.event.EventBridge;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.xmpp.bean.ChangeNickBean;
 import org.exoplatform.services.xmpp.bean.ConfigRoomBean;
+import org.exoplatform.services.xmpp.bean.ContactBean;
 import org.exoplatform.services.xmpp.bean.DeclineBean;
 import org.exoplatform.services.xmpp.bean.EventsBean;
 import org.exoplatform.services.xmpp.bean.FieldBean;
@@ -246,6 +248,16 @@ public class XMPPSessionImpl implements XMPPSession {
             EventsBean eventsBean = new EventsBean();
             eventsBean.addFileEvent(bean);
             eventsBean.setEventId(Packet.nextID());
+            try {
+              List<ContactBean> list2 = new ArrayList<ContactBean>() ;
+              for (ContactBean b : eventsBean.getRoster()) {
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
+                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
+                list2.add(b) ;
+              }
+              eventsBean.setRoster(list2) ;
+            } catch (Exception e) { }
+            
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate.sendMessage(username_, CometdChannels.FILE_EXCHANGE, json.toString(), null);
             if (log.isDebugEnabled())
@@ -269,6 +281,16 @@ public class XMPPSessionImpl implements XMPPSession {
             EventsBean eventsBean = new EventsBean();
             eventsBean.addMessage(message);
             eventsBean.setEventId(Packet.nextID());
+            try {
+              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              for (ContactBean b : eventsBean.getRoster()) {
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
+                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
+                list.add(b) ;
+              }
+              eventsBean.setRoster(list) ;
+            } catch (Exception e) { }
+            
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
             if (log.isDebugEnabled())
@@ -292,6 +314,16 @@ public class XMPPSessionImpl implements XMPPSession {
               eventsBean.addPresence(TransformUtils.presenceToBean(presence));
             }
             eventsBean.setEventId(Packet.nextID());
+            try {
+              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              for (ContactBean b : eventsBean.getRoster()) {
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
+                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
+                list.add(b) ;
+              }
+              eventsBean.setRoster(list) ;
+            } catch (Exception e) { }
+            
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate.sendMessage(username_, CometdChannels.SUBSCRIPTION, json.toString(), null);
            } catch (Exception e) {
@@ -355,6 +387,16 @@ public class XMPPSessionImpl implements XMPPSession {
             EventsBean eventsBean = new EventsBean();
             eventsBean.addMessage(messageBean);
             eventsBean.setEventId(Packet.nextID());
+            try {
+              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              for (ContactBean b : eventsBean.getRoster()) {
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
+                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
+                list.add(b) ;
+              }
+              eventsBean.setRoster(list) ;
+            } catch (Exception e) { }
+            
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
             if (log.isDebugEnabled())
@@ -373,6 +415,17 @@ public class XMPPSessionImpl implements XMPPSession {
             EventsBean eventsBean = new EventsBean();
             eventsBean.setRoster(TransformUtils.rosterToRosterBean(connection_.getRoster()));
             eventsBean.setEventId(Packet.nextID());
+            
+            try {
+              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              for (ContactBean b : eventsBean.getRoster()) {
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
+                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
+                list.add(b) ;
+              }
+              eventsBean.setRoster(list) ;
+            } catch (Exception e) { }
+            
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate.sendMessage(username_, CometdChannels.ROSTER, json.toString(), null);
             if (log.isDebugEnabled())
@@ -389,6 +442,17 @@ public class XMPPSessionImpl implements XMPPSession {
             EventsBean eventsBean = new EventsBean();
             eventsBean.setRoster(TransformUtils.rosterToRosterBean(connection_.getRoster()));
             eventsBean.setEventId(Packet.nextID());
+            
+            try {
+              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              for (ContactBean b : eventsBean.getRoster()) {
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
+                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
+                list.add(b) ;
+              }
+              eventsBean.setRoster(list) ;
+            } catch (Exception e) { }
+            
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate.sendMessage(username_, CometdChannels.ROSTER, json.toString(), null);
             if (log.isDebugEnabled())
@@ -401,10 +465,24 @@ public class XMPPSessionImpl implements XMPPSession {
 
         public void entriesUpdated(java.util.Collection<String> arg0) {
           try {
+            
+            
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
             EventsBean eventsBean = new EventsBean();
             eventsBean.setRoster(TransformUtils.rosterToRosterBean(connection_.getRoster()));
             eventsBean.setEventId(Packet.nextID());
+            
+            try {
+              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              for (ContactBean b : eventsBean.getRoster()) {
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
+                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
+                list.add(b) ;
+              }
+              eventsBean.setRoster(list) ;
+            } catch (Exception e) { }
+            
+            
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate.sendMessage(username_, CometdChannels.ROSTER, json.toString(), null);
             if (log.isDebugEnabled())
@@ -421,6 +499,15 @@ public class XMPPSessionImpl implements XMPPSession {
             EventsBean eventsBean = new EventsBean();
             eventsBean.addPresence(TransformUtils.presenceToBean(presence));
             eventsBean.setEventId(Packet.nextID());
+            try {
+              List<ContactBean> list = new ArrayList<ContactBean>() ;
+              for (ContactBean b : eventsBean.getRoster()) {
+                UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
+                b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
+                list.add(b) ;
+              }
+              eventsBean.setRoster(list) ;
+            } catch (Exception e) { }
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate.sendMessage(username_, CometdChannels.PRESENCE, json.toString(), null);
             if (log.isDebugEnabled())
@@ -919,16 +1006,22 @@ public class XMPPSessionImpl implements XMPPSession {
     if (chat != null) {
       Form form = chat.getConfigurationForm();
       if (form != null) {
+        
         // Tricks, add one more field to configuration form for sending real JID to UI client
         form = addRoomIDField(form, chat.getRoom());
         FormBean formBean = TransformUtils.formToFormBean(form);
         List<String> users = new ArrayList<String>();
+        List<String> fullNames = new ArrayList<String>();
         Iterator<String> occupants = chat.getOccupants();
         while (occupants.hasNext()) {
           String occ = (String) occupants.next();
-          users.add(chat.getOccupant(occ).getJid());
+          String jid = chat.getOccupant(occ).getJid() ;
+          users.add(jid);
+          UserInfo info = getUserInfo(jid.split("@")[0]) ;
+          fullNames.add(info.getFirstName() + " " + info.getLastName()) ;
         }
         formBean.setMembers(users);
+        formBean.setFullNames(fullNames) ;
         return formBean;
       }
     }
@@ -1517,6 +1610,18 @@ public class XMPPSessionImpl implements XMPPSession {
         EventsBean eventsBean = new EventsBean();
         eventsBean.addFileEvent(bean);
         eventsBean.setEventId(Packet.nextID());
+        
+
+        try {
+          List<ContactBean> list2 = new ArrayList<ContactBean>() ;
+          for (ContactBean b : eventsBean.getRoster()) {
+            UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
+            b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
+            list2.add(b) ;
+          }
+          eventsBean.setRoster(list2) ;
+        } catch (Exception e) { }
+        
         JsonValue json = generatorImpl.createJsonObject(eventsBean);
         delegate.sendMessage(username_, "/eXo/Application/Chat/FileExchange", json.toString(), null);
         contFileTransfers--;
@@ -1538,6 +1643,8 @@ public class XMPPSessionImpl implements XMPPSession {
   private void addListeners(final MultiUserChat chat) {
     chat.addInvitationRejectionListener(new InvitationRejectionListener() {
       public void invitationDeclined(String invitee, String reason) {
+        
+        
         MUCPacketBean bean = new MUCPacketBean();
         bean.setAction(MUCConstants.Action.DECLINE);
         bean.setDecline(new DeclineBean(invitee, reason));
@@ -1545,7 +1652,6 @@ public class XMPPSessionImpl implements XMPPSession {
         sendGroupChatEvent(bean);
       }
     });
-
     chat.addParticipantListener(new PacketListener() {
       public void processPacket(Packet packet) {
         Presence prs = (Presence) packet;
@@ -1883,6 +1989,16 @@ public class XMPPSessionImpl implements XMPPSession {
       EventsBean eventsBean = new EventsBean();
       eventsBean.addMessage(messageBean);
       eventsBean.setEventId(Packet.nextID());
+      
+      try {
+        List<ContactBean> list = new ArrayList<ContactBean>() ;
+        for (ContactBean b : eventsBean.getRoster()) {
+          UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
+          b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
+          list.add(b) ;
+        }
+        eventsBean.setRoster(list) ;
+      } catch (Exception e) { }
       JsonValue json = generatorImpl.createJsonObject(eventsBean);
       delegate.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
     }catch (Exception e) {
@@ -1899,13 +2015,48 @@ public class XMPPSessionImpl implements XMPPSession {
     try {
       JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
       EventsBean eventsBean = new EventsBean();
-      eventsBean.addMUCEvent(bean);
+      eventsBean.addMUCEvent(bean); 
+      try {
+        List<ContactBean> list = new ArrayList<ContactBean>() ;
+        for (ContactBean b : eventsBean.getRoster()) {
+          UserInfo info = getUserInfo(b.getUser().split("@")[0]) ;
+          b.setFullName(info.getFirstName() + " " + info.getLastName()) ;
+          list.add(b) ;
+        }  
+        eventsBean.setRoster(list) ;
+      } catch (Exception e) {}
+      
       JsonValue json = generatorImpl.createJsonObject(eventsBean);
+/*
+      String strReturn = json.toString() ;
+      try {
+        StringBuilder builder = new StringBuilder(strReturn) ;
+        int indexOfOccu = builder.indexOf("occupants\":") ;
+        if (indexOfOccu == -1) throw new Exception() ;
+        int addPo = 0;
+        
+        while (true) {
+          int jid = builder.toString().indexOf("jid", indexOfOccu) ;
+          if (jid == -1) break ;
+          addPo = builder.toString().indexOf("}", jid) ;
+          if (addPo == -1) break ;
+          String strJid = builder.substring(builder.toString().indexOf(":\"", jid) + 2, builder.toString().indexOf("\",", jid)) ;
+          UserInfo info = getUserInfo(strJid.split("@")[0]) ;
+          String insertStr = ",\"fullName\":\"" +  info.getFirstName() + " " + info.getLastName() + "\"" ;
+          if (builder.toString().indexOf("]", indexOfOccu) < (addPo + insertStr.length() + 1)) break ;
+          else indexOfOccu = addPo;
+
+        }
+        delegate.sendMessage(username_, CometdChannels.GROUP_CHAT, builder.toString(), null);
+      } catch (Exception e) {
+        e.printStackTrace() ; 
+        delegate.sendMessage(username_, CometdChannels.GROUP_CHAT, strReturn, null);
+      }  
+      */
       delegate.sendMessage(username_, CometdChannels.GROUP_CHAT, json.toString(), null);
     } catch (Exception e) {
       e.printStackTrace();
     }
-
   }
   
   public String validateRoomJID(String room){
