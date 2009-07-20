@@ -13,6 +13,14 @@
 	overflow: hidden;
 }
 
+.UIMailPortlet .UIAccountCreationWizard .InfoTab .UIFormInputSet .accountName{
+	white-space: normal;
+}
+
+.UIMailPortlet .UIAccountCreationWizard .InfoTab .UIFormInputSet .outgoingName{
+	white-space: normal;
+}
+
 .UIMailPortlet .UIAccountCreationWizard .AccountCreationStep .InfoContainer{
 	padding: 0px 20px 10px 20px;
 	background: white;
