@@ -4,6 +4,19 @@
 	min-width: 450px;
 }
 
+.UIMailPortlet .UIAccountCreationWizard .InfoTab .UIFormInputSet {
+	width: auto;
+	overflow: hidden;
+}
+
+.UIMailPortlet .UIAccountCreationWizard .InfoTab .UIFormInputSet .accountName{
+	white-space: normal;
+}
+
+.UIMailPortlet .UIAccountCreationWizard .InfoTab .UIFormInputSet .outgoingName{
+	white-space: normal;
+}
+
 .UIMailPortlet .UIAccountCreationWizard .UIFormTabPane {
 	padding: 0px;
 }
