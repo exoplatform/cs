@@ -89,19 +89,15 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
       getUIStringInput(FIELD_INCOMING_SERVER).setValue(UIAccountCreation.DEFAULT_POP_SERVER) ;
       if(isSSL) {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_POPSSL_PORT) ;
-        //getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
       } else {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_POP_PORT) ;
-        //getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       }
     } else {
       getUIStringInput(FIELD_INCOMING_SERVER).setValue(UIAccountCreation.DEFAULT_IMAP_SERVER) ;
       if(isSSL) {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_IMAPSSL_PORT) ;
-        //getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
       } else {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_IMAP_PORT) ;
-        //getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       }
     }
   }
@@ -147,8 +143,8 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
   
   protected void resetFields(){
     reset() ;
-    setIncomingServer(UIAccountCreation.DEFAULT_POP_SERVER) ;
-    setIncomingPort(UIAccountCreation.DEFAULT_POP_PORT) ;
+    setIncomingServer(UIAccountCreation.DEFAULT_IMAP_SERVER) ;
+    setIncomingPort(UIAccountCreation.DEFAULT_IMAP_PORT) ;
     setOutgoingServer(UIAccountCreation.DEFAULT_SMTP_SERVER) ;
     setOutgoingPort(UIAccountCreation.DEFAULT_SMTP_PORT) ;
     setStoreFolder(UIAccountCreation.DEFAULT_SERVER_FOLDER) ;
@@ -217,8 +213,8 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
   
   private List<SelectItemOption<String>> getServerTypeValues(){
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>(Utils.POP3, Utils.POP3));
     options.add(new SelectItemOption<String>(Utils.IMAP, Utils.IMAP)) ;
+    options.add(new SelectItemOption<String>(Utils.POP3, Utils.POP3));
     return options ;
   }
   public void fillFields(Account acc) {
