@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -34,7 +33,6 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.rest.RESTOrganizationServiceAbstractImpl;
-import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.services.rest.ContextParam;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.OutputTransformer;
@@ -45,10 +43,6 @@ import org.exoplatform.services.rest.URIParam;
 import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.ws.frameworks.json.transformer.Bean2JsonOutputTransformer;
-import org.exoplatform.services.xmpp.connection.impl.XMPPSessionImpl;
-import org.exoplatform.services.xmpp.groupchat.MultiUserChatManager ;
-import org.exoplatform.services.xmpp.rest.RESTXMPPService;
-import org.jivesoftware.smackx.muc.MultiUserChat;
 
 /**
  * Created by The eXo Platform SAS .
@@ -158,11 +152,9 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
                                  @QueryParam("from") Integer from,
                                  @QueryParam("to") Integer to,
                                  @QueryParam("sort-order") String sortOrder,
-                                 @QueryParam("sort-field") String sortField,
-                                 @QueryParam("roomName") String roomName,
-                                 @QueryParam("username") String username) {
+                                 @QueryParam("sort-field") String sortField) {
     try {      
-      MultiUserChatManager m = XMPPSessionImpl.multiUserChatManager ;
+      /*MultiUserChatManager m = XMPPSessionImpl.multiUserChatManager ;
       for (MultiUserChat multiUserChat : m.getAll()) {
         if (multiUserChat.getRoom().contains(roomName)) {
           try {
@@ -184,7 +176,7 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
               .build();  
           }          
         }
-      }
+      }*/
       List<User> temp = new ArrayList<User>();
       Comparator<User> comparator = getComparator(sortField, sortOrder);
       if (comparator == null) {

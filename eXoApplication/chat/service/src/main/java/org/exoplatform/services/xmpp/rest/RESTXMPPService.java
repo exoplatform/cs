@@ -125,7 +125,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   
   private final ResourceBundleService rbs;
   
-  public static ResourceBundle rb;
+  private ResourceBundle rb;
   
   private final static String BUNDLE_NAME = "locale.message.chat.serverMessage"; 
   

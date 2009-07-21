@@ -90,8 +90,8 @@ XMPPCommunicator.prototype.initRequest = function(ajaxRequest, handler) {
  * @param {Integer} to End of range
  * @param {AjaxHandler} handler
  */
-XMPPCommunicator.prototype.orgFuzzySearchUser = function(question, from, to,roomName,username, handler) {
-  var url = '/rest/organization/json/user/find-user-in-range/?question=' + question + '&from=' + from + '&to=' + to + '&roomName=' + roomName + '&username=' + username;
+XMPPCommunicator.prototype.orgFuzzySearchUser = function(question, from, to, handler) {
+	var url = '/rest/organization/json/user/find-user-in-range/?question=' + question + '&from=' + from + '&to=' + to;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process() ;
