@@ -259,3 +259,10 @@
    font-weight:bold;
    line-height:18px;
 }
+
+/***********************************banner**********************************/
+
+.UIBannerPortlet .RightBanner {
+  background: url('DefaultSkin/background/Logo.gif') no-repeat left top; /* orientation=lt */
+  background: url('DefaultSkin/background/Logo.gif') no-repeat right -74px; /* orientation=rt */
+}
