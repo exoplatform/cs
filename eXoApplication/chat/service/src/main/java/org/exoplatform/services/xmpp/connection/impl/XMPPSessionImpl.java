@@ -156,7 +156,7 @@ public class XMPPSessionImpl implements XMPPSession {
   /**
    * 
    */
-  public static MultiUserChatManager              multiUserChatManager;
+  private MultiUserChatManager              multiUserChatManager;
 
   /**
    * 
@@ -2059,7 +2059,7 @@ public class XMPPSessionImpl implements XMPPSession {
     }
   }
   
-  public String validateRoomJID(String room){
+  private String validateRoomJID(String room){
     String roomJID = new String();
     try {
       if (room.contains("@"))

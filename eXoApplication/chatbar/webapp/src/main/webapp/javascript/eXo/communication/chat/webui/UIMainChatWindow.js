@@ -40,7 +40,7 @@ ChatAjaxHandler.prototype.onSuccess = function(requestObj) {
 ChatAjaxHandler.prototype.onError = function(requestObj) {
   var UIMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
   if (!UIMainChatWindow) return;
-  if(requestObj.status == 401) alert(requestObj.responseText);
+  //if(requestObj.status == 401) alert(requestObj.responseText);
   window.jsconsole.info('[' + this.handler.action + '] ' + UIMainChatWindow.ERROR_STATE);
   UIMainChatWindow.update(UIMainChatWindow.ERROR_STATE, requestObj, this.handler.action);
 };
@@ -1366,11 +1366,10 @@ UIMainChatWindow.prototype.displayMessages = function(messages, cancelIfNotExist
  * @param {Integer} from
  * @param {Integer} to
  */
-UIMainChatWindow.prototype.orgFuzzySearchUser = function(question, from, to, roomName) {
+UIMainChatWindow.prototype.orgFuzzySearchUser = function(question, from, to) {
   this.activeAction = this.ORG_FUZZY_SEARCH_USER_ACTION;
   question = question || '';
-  var username = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.orgFuzzySearchUser(question, from, to, roomName,username, this.getAjaxHandler());
+  this.XMPPCommunicator.orgFuzzySearchUser(question, from, to, this.getAjaxHandler());
 };
 
 /**
