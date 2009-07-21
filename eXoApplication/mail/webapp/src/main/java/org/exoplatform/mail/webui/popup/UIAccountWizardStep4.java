@@ -61,6 +61,7 @@ public class UIAccountWizardStep4 extends UIFormInputSet implements WizardStep {
     addChild(checkFromDate) ;
     UIFormDateTimePicker uiFromDate = new UIFormDateTimePicker(FROM_DATE, FROM_DATE, null, true) ;
     Calendar sc = GregorianCalendar.getInstance();
+    sc.add(Calendar.DATE, -10);
     uiFromDate.setCalendar(sc);
     addUIFormInput(uiFromDate) ;   
     infoMessage_.clear() ;
