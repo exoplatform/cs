@@ -315,8 +315,8 @@
 }
 
 .UICalendarPortlet .MenuItem .ItemIcon {
-	line-height: 16px;
-	height: 16px;
+	line-height: 25px;
+	height: 25px;
 }
 
 .UICalendarPortlet .MenuItem .ItemIcon:hover {
