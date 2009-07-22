@@ -536,10 +536,11 @@ UIMainChatWindow.prototype.updateJoinedRoomList = function() {
 			    else
 			    	roomNode.className = 'TextMemberRoom' ;
 			    var roomLink = document.createElement('div');
-			    if(roomInfo.room.length > MAX_ROOM_TITLE_LEN)
-			    	roomLink.innerHTML = roomInfo.room.substr(0, MAX_ROOM_TITLE_LEN-3)+ '...';
+			    var roomName = roomInfo.room.substr(0, roomInfo.room.indexOf('@'));
+			    if(roomName.length > MAX_ROOM_TITLE_LEN)
+			    	roomLink.innerHTML = roomName.substr(0, MAX_ROOM_TITLE_LEN-3)+ '...';
 			    else			    	
-			    	roomLink.innerHTML = roomInfo.room ;
+			    	roomLink.innerHTML = roomName ;
 			    roomLink.setAttribute('roomId', roomInfo.room) ;
 			    roomLink.onclick = function(event){
 			    	eXo.communication.chat.webui.UIJoinRoomPopupWindow.joinSelectedRoomByIdAction(event);
@@ -598,6 +599,10 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
       this.joinedRooms = serverData.joinedRooms ? serverData.joinedRooms : [];
       this.updateJoinedRoomList();
       break;
+
+		case this.JOIN_TO_ROOM_ACTION:
+			this.jabberGetJoinedRoomList();
+			break;
 
 		case this.LEAVE_FROM_ROOM_ACTION:
 			eXo.communication.chat.webui.UIMainChatWindow.jabberGetJoinedRoomList();

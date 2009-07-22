@@ -195,8 +195,6 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       UIMailLayoutTab uiSettingTab = uiSetting.getChildById(TAB_LAYOUT) ;
       UIFormRadioBoxInput uiRadio = (UIFormRadioBoxInput)uiSettingTab.getChildById(UIMailLayoutTab.HORIZONTAL_LAYOUT) ;
       //TODO save to data base
-      System.out.println("\n\n " + uiRadio.getValue());
-      
        
 		  UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();

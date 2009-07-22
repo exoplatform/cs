@@ -381,11 +381,12 @@ UITabControl.prototype.initUI = function(buddyId) {
   
   var fullNameMap = eXo.communication.chat.webui.UIChatWindow.fullNameMap ;
   var fullName = this.tabId.targetPerson ;
+  fullName = fullName.substr(0, fullName.indexOf('@'));
 	var uid = this.tabId.targetPerson ;
 	if (fullNameMap[uid] != null) {
   	fullName = fullNameMap[uid] ;
 	}
-  if (fullName > this.MAX_TAB_TITLE_LEN) {  	
+  if (fullName.length > this.MAX_TAB_TITLE_LEN) {  	
 		tabContactNameNode.innerHTML = fullName.substr(0, this.MAX_TAB_TITLE_LEN - 3) + '...';  		
   } else {
   	tabContactNameNode.innerHTML = fullName ;
