@@ -110,11 +110,6 @@
 	background: none;
 }
 
-.UIContactPortlet .ContactIcon {
-	width : 16px ;
-	height : 16px ;
-}
-
 .UIContactPortlet .UIAddEditPermission .UISharedForm .UIFormInputSet{
   width: auto;
 }
@@ -232,8 +227,14 @@
 }
 
 .UIRightClickPopupMenu .MenuItem .ItemIcon{
-	padding:5px 5px 5px 30px; /* orientation=lt */
-	padding:5px 30px 5px 5px; /* orientation=rt */
+	padding: 5px 5px 5px 23px; /* orientation=lt */
+	padding: 5px 23px 5px 5px; /* orientation=rt */
+	margin: 0px 2px;
+}
+
+.UIRightClickPopupMenu .MenuItem .ItemIcon:hover {
+	background-color: #dee4f2;
+	color: orange;
 }
 
 /* Create color tag */

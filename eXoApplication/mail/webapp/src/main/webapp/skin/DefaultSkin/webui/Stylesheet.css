@@ -617,6 +617,17 @@
 	font-size:11px;
 }
 
+.UIRightClickPopupMenu .MenuItem .ItemIcon{
+	padding: 5px 5px 5px 23px; /* orientation=lt */
+	padding: 5px 23px 5px 5px; /* orientation=rt */
+	margin: 0px 2px;
+}
+
+.UIRightClickPopupMenu .MenuItem .ItemIcon:hover {
+	background-color: #dee4f2;
+	color: orange;
+}
+
 .UIRightClickPopupMenu .SelectItem {
 	background: #dee4f2 ;
 }
