@@ -46,7 +46,10 @@
 							</div>
 							<div style="clear:both"><span></span></div>
 						</div>
-						<a href="/portal" style="display: block; margin-<%= isLT? "right":"left" %>: 233px; height: 74px;"></a>
+						<%
+						String pageURI = Util.getPortalRequestContext().getPortalURI() + "home";
+						%>	
+						<a href="$pageURI" style="display: block; margin-<%= isLT? "right":"left" %>: 233px; height: 74px;"></a>
 						<div class="ClearBoth"><span></span></div>
 	        </div>
 	      </div>   
