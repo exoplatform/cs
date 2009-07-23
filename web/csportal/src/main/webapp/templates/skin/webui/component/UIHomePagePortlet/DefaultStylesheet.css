@@ -172,11 +172,13 @@
 	background:white none repeat scroll 0 0;
 	border:1px solid #DEDEDE;
 	padding:14px 8px 22px;
-	width:525px;
+	height:525px;
 }
+
 .SideBarContainer {
   text-align: center;
 }
+
 .SideBar .DownloadButton{
 	background:url('DefaultSkin/background/DownloadButton.jpg') no-repeat center top;
 	height: 110px;
