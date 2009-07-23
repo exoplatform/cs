@@ -21,14 +21,14 @@
 .UIWindow .UIMailPortlet {
 	margin: 0px;
 	border: none;
-	min-width: 102px;	
+	min-width: 950px;	
 }
 
 .UIMailPortlet {
 	background: white;
 	border: 1px solid #b7b7b7;
 	margin: 5px;
-	min-width: 1020px;	
+	min-width: 950px;	
 }
 
 .UIWindow .UIEmpty {
@@ -617,6 +617,17 @@
 	font-size:11px;
 }
 
+.UIRightClickPopupMenu .MenuItem .ItemIcon{
+	padding: 5px 5px 5px 23px; /* orientation=lt */
+	padding: 5px 23px 5px 5px; /* orientation=rt */
+	margin: 0px 2px;
+}
+
+.UIRightClickPopupMenu .MenuItem .ItemIcon:hover {
+	background-color: #dee4f2;
+	color: orange;
+}
+
 .UIRightClickPopupMenu .SelectItem {
 	background: #dee4f2 ;
 }
@@ -761,12 +772,11 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageCompose table {
 	background: none;
-	width: 97%;
-	table-layout: fixed;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIMessageCompose .UIFormGrid td.FieldLabel {
-	width: 64px;
+.UIMailPortlet .MailWorkingWorkspace .UIMessageCompose table {
+	background: none;
+	width: 97%;
 }
 
 .UIMailPortlet .MailWorkingWorkspace input.checkbox {
@@ -859,15 +869,20 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .MessageActionIcon {
 	float: left;
-	height: 20px; line-height: 17px;
+	height: 20px; line-height: 20px;
+	height: 20px; line-height: 20px;
 	padding: 0px 10px 0px 20px;
+	color: #2276AB;
 	display: block;
+	font-size: 12px;
 	background-position: left center;
+	text-decoration: underline;
 }	
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview a:hover.MessageActionIcon {
-	color: #058ee6;
-	text-decoration: underline;
+	color: #fda946;
+    font-size: 12px;
+	text-decoration: none;
 }
 
 .UIMessagePreview .AttachmentContainer {
@@ -1962,6 +1977,7 @@
 .UIMessagePreview .ReadingPaneBar .TextBackToList{
 	float:left; 
 	line-height:22px; 
+	color:#2276ab;
 }
 
 .UIMessagePreview .ReadingPaneBar .TextBackToList a{
