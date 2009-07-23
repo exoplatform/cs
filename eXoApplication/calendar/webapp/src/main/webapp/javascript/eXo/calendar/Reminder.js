@@ -24,7 +24,7 @@ Reminder.prototype.alarm = function(eventObj){
 	var a = eXo.core.JSON.parse(eventObj.data);	
 	var message = '<a class="Item" href="#">('+ a.fromDateTime.hours + ':' + a.fromDateTime.minutes + ') ' +a.summary+'</a>' ;
 	var html = this.generateHTML(message) ;
-	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(this.createMessage(html), "div","UIPopupNotification") ;
+	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(this.createMessage(html, message), "div","UIPopupNotification") ;
 	eXo.webui.Box.config(popup,popup.offsetHeight, 5, this.openCallback, this.closeBox) ;
 	window.focus() ;
 	return ;
@@ -39,11 +39,35 @@ Reminder.prototype.closeBox = function(obj){
 	obj.style.visibility = "hidden" ;
 }
 
-Reminder.prototype.createMessage = function(html){
+Reminder.prototype.createMessage = function(html, message){
 	var msgBox = null ;
 	if(document.getElementById("msgBox")) {
 		msgBox = document.getElementById("msgBox") ;
-		msgBox.innerHTML = html ;
+		var directChildNode = eXo.core.DOMUtil.findFirstDescendantByClass(msgBox,'div','UIPopupNotification');
+		if(directChildNode.style.visibility == 'hidden')
+			msgBox.innerHTML = html ;
+		else {
+		//For CS-1397
+		var contentBox = eXo.core.DOMUtil.findFirstDescendantByClass(msgBox,'div','MCPopupNotification');
+		var childrens = eXo.core.DOMUtil.findDescendantsByClass(contentBox,'a','Item');
+  		var ln = childrens.length ;	
+  		var child = null ;
+  		var hasExist = false;
+  		for (var k = 0; k < ln; k++){
+  			child = childrens[k] ;
+  			var msgChild = child.innerHTML;
+  			msgChild = '<a class="Item" href="#">'+ msgChild + '</a>';
+  			if(msgChild == message){
+  				hasExist = true;
+  				break;
+  			}
+  		}
+  		if(!hasExist){
+				var tmp = document.createElement("div") ;
+				tmp.innerHTML = message;
+				contentBox.appendChild(tmp);
+			}
+		}
 	} else {
 		msgBox = document.createElement("div") ;
 		msgBox.id = "msgBox" ;
