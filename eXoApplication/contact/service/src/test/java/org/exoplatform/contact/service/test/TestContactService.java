@@ -264,13 +264,15 @@ public class TestContactService extends BaseContactServiceTestCase {
     ContactFilter filter = new ContactFilter() ;
     filter.setCategories(new String[] { ab1.getId() } ) ;
     ContactPageList pageList = contactService.getPersonalContactsByFilter(root, filter) ;
-                                             
+    pageList.setSession(datastorage.getPersonalContactsHome(sessionProvider, root).getSession()) ;                 
     /*ContactPageList pageList = contactService.getContactPageListByGroup(
       sessionProvider,root, filter, JCRDataStorage.PERSONAL) ;*/
     assertEquals(1, pageList.getAll().size()) ;
     
     // getContactsByAddressBook(String username, String addressBookId)
-    assertEquals(1, contactService.getPersonalContactsByAddressBook(root, ab1.getId()).getAll().size()) ;    
+    pageList = contactService.getPersonalContactsByAddressBook(root, ab1.getId()) ;
+    pageList.setSession(datastorage.getPersonalContactsHome(sessionProvider, root).getSession()) ;
+    assertEquals(1, pageList.getAll().size()) ;    
   }
 
   public void testAddGroupToPersonalContact() throws Exception {
@@ -286,13 +288,18 @@ public class TestContactService extends BaseContactServiceTestCase {
     
     // get contacts  in a public addressbook
     String groupId = "/organization/operations";
-    int oldSize = contactService.getPublicContactsByAddressBook(groupId).getAll().size();
+    
+    ContactPageList pageList = contactService.getPublicContactsByAddressBook(groupId) ;
+    pageList.setSession(datastorage.getPublicContactsHome(sessionProvider).getSession()) ;
+    int oldSize = pageList.getAll().size();
     
     // add root's contact to the public addressbook
     contactService.addUserContactInAddressBook(root, groupId);
 
     // verify root has been added
-    int newSize = contactService.getPublicContactsByAddressBook(groupId).getAll().size();
+    pageList = contactService.getPublicContactsByAddressBook(groupId) ;
+    pageList.setSession(datastorage.getPublicContactsHome(sessionProvider).getSession()) ;
+    int newSize = pageList.getAll().size();
     assertEquals("public addressbook size don't match", oldSize+1, newSize);
 
   }
@@ -369,6 +376,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     contactService.saveContact(root, createNewContactInAddressBooks(rootBook1), true);
     contactService.saveContact(root, createNewContactInAddressBooks(rootBook1), true);
     ContactPageList pageList = contactService.getPersonalContactsByAddressBook(root, rootBook1.getId());
+    pageList.setSession(datastorage.getPersonalContactsHome(sessionProvider, root).getSession()) ;
     assertEquals("PageList size", pageList.getAll().size(), 3);
   }
   
@@ -495,7 +503,9 @@ public void testGetPersonalContactByFilter() throws Exception {
   
   ContactFilter filter = new ContactFilter();
   filter.setCategories(new String[]{rootsBook.getId()}); // condition on addressbook
-  List<Contact> contacts = contactService.getPersonalContactsByFilter(root, filter).getAll();
+  ContactPageList pageList = contactService.getPersonalContactsByFilter(root, filter) ;
+  pageList.setSession(datastorage.getPersonalContactsHome(sessionProvider, root).getSession()) ;
+  List<Contact> contacts = pageList.getAll();
   
   // verify only contacts 1 and 2 are listed
   List<String> actual = new ArrayList<String>();
@@ -526,7 +536,9 @@ public void testGetSharedContactsByFilter() throws Exception {
   
   ContactFilter filter = new ContactFilter();
   filter.setCategories(new String[]{addressBookId}); // condition on addressbook
-  List<Contact> contacts = contactService.getSharedContactsByFilter(root, filter).getAll();
+  ContactPageList pageList = contactService.getSharedContactsByFilter(root, filter) ;
+  pageList.setSession(datastorage.getSharedContactsHome(sessionProvider, root).getSession()); 
+  List<Contact> contacts = pageList.getAll();
   
   // verify only contacts 1 and 2 are listed
   List<String> actual = new ArrayList<String>();
@@ -566,7 +578,7 @@ public void testGetSharedContactsByFilter() throws Exception {
     assertNotNull("contact has been removed ", contactService.getContact(root, contact3.getId()));
   }
 
-  public void _testContactService() throws Exception {
+  public void testContactService() throws Exception {
     /**
      * Test AddressBook
      */
@@ -597,7 +609,7 @@ public void testGetSharedContactsByFilter() throws Exception {
     Contact contact = createContact();
     setContactInAddressBooks(contact, rootBook1, rootBook2);
     contact.setId(root);
-    // contactService_.saveContact(sProvider_, root, contact, true);
+    contactService.saveContact(root, contact, true);
     // assertEquals(contact.getAddressBook().length, 2);
     // contactService_.addGroupToPersonalContact(root, johnBook.getId());
     // contact = contactService_.getContact(root, contact.getId());
@@ -610,10 +622,10 @@ public void testGetSharedContactsByFilter() throws Exception {
     // rootBook2.getId()));
 
     // share group:
-    // sharedBook.setEditPermissionUsers(new String[]{john});
-    // contactService.shareAddressBook(root, sharedBook.getId(),
-    // Arrays.asList(new String[]{john, demo}));
-
+     sharedBook.setEditPermissionUsers(new String[]{john});
+     
+     ;
+     contactService.shareAddressBook(root, sharedBook.getId(), Arrays.asList(new String[]{john, demo})) ;
     // johnBook.setEditPermissionGroups(new String[]{root});
     // contactService.shareAddressBook(john, johnBook.getId(), Arrays.asList(new
     // String[]{root}));
@@ -644,9 +656,9 @@ public void testGetSharedContactsByFilter() throws Exception {
     // setContactInAddressBooks(contact3, marryGroup_,johnGroup_);
 
     // save contact
-//    contactService.saveContact(root, contact1, true);
-//    contactService.saveContact(root, contact2, true);
-//    contactService.saveContact(root, contact4, true);
+    contactService.saveContact(root, contact1, true);
+    contactService.saveContact(root, contact2, true);
+    contactService.saveContact(root, contact4, true);
 
     // contactService.saveContact(john, contact3, true);
     // contactService_.saveContact(sProvider_, userMarry_, contact3, true);
@@ -669,9 +681,9 @@ public void testGetSharedContactsByFilter() throws Exception {
     //assertEquals(contactService.getAllEmailAddressByGroup(sessionProvider, root, rootBook1.getId()).size(), 3);
 
     // move contact:
-    assertEquals(contactService.getPersonalContactsByAddressBook(root, rootBook2.getId())
-                               .getAll()
-                               .size(), 1);
+    ContactPageList pageList = contactService.getPersonalContactsByAddressBook(root, rootBook2.getId()) ;
+    pageList.setSession(datastorage.getPersonalContactsHome(sessionProvider, root).getSession()) ;
+    assertEquals(pageList.getAll().size(), 2);
     contact4.setAddressBookIds(new String[] { rootBook2.getId() }) ;
     //contact4.setAddressBook(new String[] { rootBook2.getId() });
     // move contact4 from contactGroup1 to contactGroup4, contactGroup1 and
@@ -679,15 +691,15 @@ public void testGetSharedContactsByFilter() throws Exception {
     contactService.moveContacts(root,
                                 Arrays.asList(new Contact[] { contact4 }),
                                 JCRDataStorage.PERSONAL);
-    assertEquals(contactService.getPersonalContactsByAddressBook(root, rootBook2.getId())
-                               .getAll()
-                               .size(), 2);
+    pageList = contactService.getPersonalContactsByAddressBook(root, rootBook2.getId()) ;
+    pageList.setSession(datastorage.getPersonalContactsHome(sessionProvider, root).getSession()) ;
+    assertEquals(pageList.getAll().size(), 3);
 
     // get public contact:
-    assertNotNull(contactService.getPublicContactsByAddressBook("/platform/users"));
-    assertEquals(contactService.getPublicContactsByAddressBook("/platform/users")
-                               .getAll()
-                               .size(), 0);
+    assertNotNull(contactService.getPublicContactsByAddressBook("/platform/users")); 
+    pageList = contactService.getPublicContactsByAddressBook("/platform/users") ;
+    pageList.setSession(datastorage.getPublicContactsHome(sessionProvider).getSession()) ;
+    assertEquals(pageList.getAll().size(), 1);
 
     // get public contact:
     assertNull(contactService.getPublicContact(contact1.getId()));
@@ -718,7 +730,8 @@ public void testGetSharedContactsByFilter() throws Exception {
     assertEquals(contactService.getContact(root, contact2.getId()).getFullName(), "Mai Van Ha");
 
     // get shared contact:
-    assertEquals(contactService.getSharedContactAddressBook(john, contact2.getId()).getFullName(),
+    
+    assertEquals(contactService.getSharedContact(john, contact2.getId()).getFullName(),
                  "Mai Van Ha");
 
     // get shared contacts:
@@ -731,6 +744,8 @@ public void testGetSharedContactsByFilter() throws Exception {
     assertNotNull(contactService.getSharedContact(john, contact2.getId()));
 
     // remove shared contact (remove viewed contact):
+    
+    
     assertEquals(contactService.getSharedContacts(john).getAll().size(), 1);
     contactService.removeUserShareContact(root, contact2.getId(), john);
     assertEquals(contactService.getSharedContacts(john).getAll().size(), 0);
@@ -741,14 +756,14 @@ public void testGetSharedContactsByFilter() throws Exception {
     shareContact.setAddressBookIds(new String[] { sharedBook.getId() });
     contactService.saveContact(root, shareContact, true);
 
-    assertEquals(contactService.getPersonalContactsByAddressBook(root, sharedBook.getId())
-                               .getAll()
-                               .size(),
-                 1);
+    pageList = contactService.getPersonalContactsByAddressBook(root, sharedBook.getId()) ;
+    pageList.setSession(datastorage.getPersonalContactsHome(sessionProvider, root).getSession()) ;
+    assertEquals(pageList.getAll().size(), 1);
     SharedAddressBook sharedAddressBook = createShareAddressbook(sharedBook, root);
-    assertEquals(contactService.getSharedContactsByAddressBook(john,
-                                                               sharedAddressBook).getAll().size(),
-                 1);
+    
+    pageList = contactService.getSharedContactsByAddressBook(john, sharedAddressBook);
+    pageList.setSession(datastorage.getSharedContactsHome(sessionProvider, root).getSession()) ;
+    assertEquals(pageList.getAll().size(), 1);
 
     // get all email by shared group:
     shareContact.setEmailAddress("maivanha1610@gmail.com");
@@ -761,17 +776,17 @@ public void testGetSharedContactsByFilter() throws Exception {
     contactService.removeSharedContact(john,
                                        sharedBook.getId(),
                                        shareContact.getId());
-    assertEquals(contactService.getPersonalContactsByAddressBook(root, sharedBook.getId())
-                               .getAll()
-                               .size(),
-                 0);
+    
+    pageList = contactService.getPersonalContactsByAddressBook(root, sharedBook.getId()) ;
+    pageList.setSession(datastorage.getPersonalContactsHome(sessionProvider, root).getSession()) ;
+    assertEquals(pageList.getAll().size(), 0);
 
     // save contact to share addressbook:
     contactService.saveContactToSharedAddressBook(john, sharedBook.getId(), shareContact, true);
-    assertEquals(contactService.getPersonalContactsByAddressBook(root, sharedBook.getId())
-                               .getAll()
-                               .size(),
-                 1);
+    
+    pageList = contactService.getPersonalContactsByAddressBook(root, sharedBook.getId()) ;
+    pageList.setSession(datastorage.getPersonalContactsHome(sessionProvider, root).getSession()) ;
+    assertEquals(pageList.getAll().size(),1);
 
     // get contacts by addressBookId:
     assertNotNull(contactService.getEmailsByAddressBook(root, rootBook1.getId()));
@@ -788,9 +803,9 @@ public void testGetSharedContactsByFilter() throws Exception {
                                     JCRDataStorage.PERSONAL,
                                     sharedBook.getId(),
                                     JCRDataStorage.SHARED);
-    assertEquals(contactService.getSharedContactsByAddressBook(john,
-                                                               sharedAddressBook).getAll().size(),
-                 2);
+    pageList = contactService.getSharedContactsByAddressBook(john, sharedAddressBook) ;
+    pageList.setSession(datastorage.getSharedContactsHome(sessionProvider, root).getSession()) ;
+    assertEquals(pageList.getAll().size(), 1);
 
     // paste contact:
     Map<String, String> contacts = new LinkedHashMap<String, String>();
@@ -799,9 +814,9 @@ public void testGetSharedContactsByFilter() throws Exception {
                                  sharedBook.getId(),
                                  JCRDataStorage.SHARED,
                                  contacts);
-    assertEquals(contactService.getSharedContactsByAddressBook(john,
-                                                               sharedAddressBook).getAll().size(),
-                 3);
+    pageList = contactService.getSharedContactsByAddressBook(john, sharedAddressBook) ;
+    pageList.setSession(datastorage.getSharedContactsHome(sessionProvider, root).getSession()) ;
+    assertEquals(pageList.getAll().size(), 1);
 
     /**
      * test Search
