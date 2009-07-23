@@ -16,19 +16,25 @@
  **/
 package org.exoplatform.calendar.webui;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.jcr.PathNotFoundException;
 
+import org.apache.poi.util.TempFile;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.webui.popup.UIPopupAction;
+import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -48,25 +54,25 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/calendar/webui/UIMonthView.gtmpl", 
-    events = {
-      @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
-      @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class, confirm="UICalendarView.msg.confirm-delete"),
-      @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
-      @EventConfig(listeners = UICalendarView.EventSelectActionListener.class), 
-      @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
-      @EventConfig(listeners = UICalendarView.ViewActionListener.class),
-      @EventConfig(listeners = UICalendarView.EditActionListener.class), 
-      @EventConfig(listeners = UICalendarView.DeleteActionListener.class, confirm="UICalendarView.msg.confirm-delete"),
-      @EventConfig(listeners = UICalendarView.GotoDateActionListener.class), 
-      @EventConfig(listeners = UICalendarView.QuickAddActionListener.class), 
-      @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
-      @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class),
-      @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
-      @EventConfig(listeners = UICalendarView.ExportEventActionListener.class),
-      @EventConfig(listeners = UIMonthView.UpdateEventActionListener.class)
-    }
+                 lifecycle = UIFormLifecycle.class,
+                 template = "app:/templates/calendar/webui/UIMonthView.gtmpl", 
+                 events = {
+                   @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
+                   @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class, confirm="UICalendarView.msg.confirm-delete"),
+                   @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
+                   @EventConfig(listeners = UICalendarView.EventSelectActionListener.class), 
+                   @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
+                   @EventConfig(listeners = UICalendarView.ViewActionListener.class),
+                   @EventConfig(listeners = UICalendarView.EditActionListener.class), 
+                   @EventConfig(listeners = UICalendarView.DeleteActionListener.class, confirm="UICalendarView.msg.confirm-delete"),
+                   @EventConfig(listeners = UICalendarView.GotoDateActionListener.class), 
+                   @EventConfig(listeners = UIMonthView.QuickAddActionListener.class), 
+                   @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
+                   @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class),
+                   @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
+                   @EventConfig(listeners = UICalendarView.ExportEventActionListener.class),
+                   @EventConfig(listeners = UIMonthView.UpdateEventActionListener.class)
+                 }
 )
 public class UIMonthView extends UICalendarView {
   private LinkedHashMap<String, CalendarEvent> dataMap_ = new LinkedHashMap<String, CalendarEvent>() ;
@@ -212,7 +218,7 @@ public class UIMonthView extends UICalendarView {
           calendarview.refresh() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         }
-         
+
 
       } catch (PathNotFoundException e) {
         e.printStackTrace() ;
@@ -227,6 +233,61 @@ public class UIMonthView extends UICalendarView {
       uiViewContainer.refresh() ;
       uiPortlet.setCalendarSetting(setting) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+    }
+  }
+
+  static  public class QuickAddActionListener extends EventListener<UICalendarView> {
+    public void execute(Event<UICalendarView> event) throws Exception {
+      UICalendarView uiForm = event.getSource() ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      if(CalendarUtils.getCalendarOption().isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      List<EventCategory> eventCategories = CalendarUtils.getCalendarService().getEventCategories(CalendarUtils.getCurrentUser()) ;
+      if(eventCategories.isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }  
+      String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
+      String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
+
+      String selectedCategory = uiForm.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
+      UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
+      if(!CalendarUtils.isEmpty(selectedCategory)) 
+        uiQuickAddEvent.setSelectedCategory(selectedCategory) ;
+      else uiQuickAddEvent.setSelectedCategory("Meeting") ; 
+      if(CalendarEvent.TYPE_TASK.equals(type)) {
+        uiQuickAddEvent.setEvent(false) ;
+        uiQuickAddEvent.setId("UIQuickAddTask") ;
+      } else {
+        uiQuickAddEvent.setEvent(true) ;
+        uiQuickAddEvent.setId("UIQuickAddEvent") ;
+      }
+      try {
+        Calendar tmp = GregorianCalendar.getInstance() ;
+        tmp.setTimeInMillis(Long.parseLong(startTime)) ;
+        startTime = String.valueOf(CalendarUtils.getBeginDay(tmp).getTimeInMillis()) ;
+      }catch (Exception e) {
+        startTime = null ;
+      }
+      try {
+        Calendar tmp = GregorianCalendar.getInstance() ;
+        tmp.setTimeInMillis(Long.parseLong(finishTime)) ;
+        finishTime = String.valueOf(CalendarUtils.getEndDay(tmp).getTimeInMillis()-1) ;
+
+      }catch (Exception e) {
+        finishTime = null ;
+      }
+      uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), startTime, finishTime) ;
+      uiQuickAddEvent.update(CalendarUtils.PRIVATE_TYPE, null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
   }
 }
