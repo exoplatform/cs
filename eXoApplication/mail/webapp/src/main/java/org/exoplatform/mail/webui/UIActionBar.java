@@ -90,7 +90,7 @@ public class UIActionBar extends UIContainer {
   static public class ComposeActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       
-      System.out.println("\n\n hi :" + Util.getUIPortalApplication().getOrientation().isRT() + "\n\n");
+      //System.out.println("\n\n hi :" + Util.getUIPortalApplication().getOrientation().isRT() + "\n\n");
       UIActionBar uiActionBar = event.getSource() ; 
       UIMailPortlet uiPortlet = uiActionBar.getParent() ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
