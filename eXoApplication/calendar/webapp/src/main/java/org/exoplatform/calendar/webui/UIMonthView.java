@@ -33,8 +33,11 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
+import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
+import org.exoplatform.calendar.webui.popup.UITaskForm;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -46,6 +49,8 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+
+import com.ibm.icu.text.SimpleDateFormat;
 
 /**
  * Created by The eXo Platform SARL
@@ -269,18 +274,15 @@ public class UIMonthView extends UICalendarView {
         uiQuickAddEvent.setEvent(true) ;
         uiQuickAddEvent.setId("UIQuickAddEvent") ;
       }
+      //ISO_8601
+      SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'") ;
       try {
-        Calendar tmp = GregorianCalendar.getInstance() ;
-        tmp.setTimeInMillis(Long.parseLong(startTime)) ;
-        startTime = String.valueOf(CalendarUtils.getBeginDay(tmp).getTimeInMillis()) ;
+        startTime = String.valueOf(sf.parse(startTime).getTime()) ;
       }catch (Exception e) {
         startTime = null ;
       }
       try {
-        Calendar tmp = GregorianCalendar.getInstance() ;
-        tmp.setTimeInMillis(Long.parseLong(finishTime)) ;
-        finishTime = String.valueOf(CalendarUtils.getEndDay(tmp).getTimeInMillis()-1) ;
-
+        finishTime = String.valueOf(sf.parse(finishTime).getTime()) ;
       }catch (Exception e) {
         finishTime = null ;
       }

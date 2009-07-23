@@ -376,8 +376,9 @@ UICalendarPortlet.prototype.calendarMenuCallback = function(evt){
 	}
 	
 	if (DOMUtil.hasClass(obj, "CalendarItem")) {
-	  items[0].href = String(items[0].href).replace("')", "&categoryId=" + selectedCategory + "')");
-	  items[1].href = String(items[1].href).replace("')", "&categoryId=" + selectedCategory + "')");      
+	  var startTime = eXo.cs.DateTimeFormater.format(new Date(), "yyyymmdd'T'HHMMss'Z'", 0) ;
+	  items[0].href = String(items[0].href).replace("')", "&categoryId=" + selectedCategory + "&current="+startTime+"')");
+	  items[1].href = String(items[1].href).replace("')", "&categoryId=" + selectedCategory + "&current="+startTime+"')");      
 	}
 	if (calType && (calType != "0")) {
 	
@@ -1197,8 +1198,9 @@ UICalendarPortlet.prototype.monthViewCallback = function(evt){
     var links = eXo.core.DOMUtil.findDescendantsByTagName(UIContextMenu.menuElement, "a");
     if (!DOMUtil.findAncestorByClass(src, "EventBoxes")) {
         if (objectValue = DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime")) {
+        	var startTime = eXo.cs.DateTimeFormater.format(new Date(parseInt(objectValue)), "yyyymmdd'T'HHMMss'Z'", 0) ;        	
             var map = {
-                "startTime\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "startTime=" + objectValue
+                "startTime\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "startTime=" + startTime
             };
             UIContextMenu.changeAction(UIContextMenu.menuElement, map);
         }
@@ -1418,15 +1420,13 @@ UICalendarPortlet.prototype.runFilterByCategory = function(){
 
 UICalendarPortlet.prototype.runAction = function(obj){
 	var actionLink = obj.getAttribute("actionLink");
-	
 	try {
 		var categoryId = this.filterSelect.options[this.filterSelect.selectedIndex].value;
 	} catch (e) { //Fix for IE
 		var categoryId = null;
 	}
-
-
-	actionLink = actionLink.replace("')","&categoryId="+categoryId+"')");
+	var startTime = eXo.cs.DateTimeFormater.format(new Date(), "yyyymmdd'T'HHMMss'Z'", 0) ;
+	actionLink = actionLink.replace("')","&categoryId="+categoryId+"&current="+startTime+"')");		 
 	eval(actionLink);
 };
 

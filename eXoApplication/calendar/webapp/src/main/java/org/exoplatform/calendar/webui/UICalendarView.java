@@ -572,7 +572,15 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           return ;
         }  
         String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
+        
         String formTime = CalendarUtils.getCurrentTime(uiForm) ;
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'") ;
+        String startTime = event.getRequestContext().getRequestParameter("current") ;
+        try {
+          formTime = String.valueOf(sf.parse(startTime).getTime()) ;
+        }catch (Exception e) {
+          
+        }
         //String formTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
         String value = uiForm.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
         UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;

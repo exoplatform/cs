@@ -9,13 +9,13 @@ uicomponent.update() ;
 uicomponent.setSelectedCategory(uicomponent.getSelectedCategory()) ;
 %>
 <div class="UIHeaderBar ListBar">
-		<a href="<%=uicomponent.event("AddEvent",uicomponent.TYPE_EVENT)%>" class="ControlButton">
+		<a actionLink="<%=uicomponent.event('AddEvent','Event')%>" class="ControlButton" onclick="eXo.calendar.UICalendarPortlet.runAction(this);">
 			<div class="IconHolder AddNewEvent">
 				<%=_ctx.appRes("UIHeaderBar.label.AddEvent")%>
 			</div>
 		</a>
 		<div class="SeparatorLine"><span></span></div>
-		<a href="<%=uicomponent.event("AddEvent", uicomponent.TYPE_TASK)%>" class="ControlButton">
+		<a actionLink="<%=uicomponent.event("AddEvent", uicomponent.TYPE_TASK)%>" class="ControlButton" onclick="eXo.calendar.UICalendarPortlet.runAction(this);">
 			<div class="IconHolder AddNewTask">
 				<%=_ctx.appRes("UIHeaderBar.label.AddTask")%>
 			</div>

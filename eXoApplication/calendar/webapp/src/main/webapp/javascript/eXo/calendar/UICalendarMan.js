@@ -1050,7 +1050,9 @@ GUIMan.prototype.callbackHighlighter = function() {
   var endTime = parseInt(Date.parse(Highlighter.lastCell.getAttribute('startTimeFull')))  + 24*60*60*1000 - 1;
   var d = new Date() ;
   var timezoneOffset = d.getTimezoneOffset() ;
-  var currentTime = Highlighter.firstCell.getAttribute('startTime') ;
+  var currentTime = Highlighter.firstCell.getAttribute('startTime') ;  
+  startTime = eXo.cs.DateTimeFormater.format(new Date(startTime), "yyyymmdd'T'HHMMss'Z'", 0) ;
+  endTime = eXo.cs.DateTimeFormater.format(new Date(endTime), "yyyymmdd'T'HHMMss'Z'", 0) ;
   eXo.webui.UIForm.submitEvent('UIMonthView' ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime +'&ct='+currentTime+ '&tz=' + timezoneOffset); 
 } ;
 

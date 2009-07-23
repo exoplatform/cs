@@ -37,6 +37,8 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+import com.ibm.icu.text.SimpleDateFormat;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -87,7 +89,15 @@ public class UIActionBar extends UIContainer  {
         return ;
       }
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String formTime = CalendarUtils.getCurrentTime(uiActionBar) ;//event.getRequestContext().getRequestParameter(CURRENTTIME) ;
+      String startTime = event.getRequestContext().getRequestParameter("current") ;
+      String formTime = null ;
+      SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'") ;
+      try {
+        formTime = String.valueOf(sf.parse(startTime).getTime()) ;
+      }catch (Exception e) {
+         //e.printStackTrace() ;
+      }
+      //String formTime = CalendarUtils.getCurrentTime(uiActionBar) ;//event.getRequestContext().getRequestParameter(CURRENTTIME) ;
       //System.out.println(TimeZone.getTimeZone(calset.getTimeZone()) + "-" + calset.getTimeZone());
       String categoryId = event.getRequestContext().getRequestParameter(CATEGORYID) ;
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;

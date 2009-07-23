@@ -61,6 +61,8 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
+import com.ibm.icu.text.SimpleDateFormat;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -362,8 +364,14 @@ public class UICalendars extends UIForm  {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }  
-         
-          String clientTime = CalendarUtils.getCurrentTime(uiComponent) ;
+          String startTime = event.getRequestContext().getRequestParameter("current") ;
+          String clientTime = null ;
+          SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'") ;
+          try {
+            clientTime = String.valueOf(sf.parse(startTime).getTime()) ;
+          }catch (Exception e) {
+             //e.printStackTrace() ;
+          }
           //String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
           String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
           UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
@@ -397,7 +405,17 @@ public class UICalendars extends UIForm  {
       try {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;        
-        String clientTime = CalendarUtils.getCurrentTime(uiComponent) ;
+        //String clientTime = CalendarUtils.getCurrentTime(uiComponent) ;
+        
+        String startTime = event.getRequestContext().getRequestParameter("current") ;
+        String clientTime = null ;
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'") ;
+        try {
+          clientTime = String.valueOf(sf.parse(startTime).getTime()) ;
+        }catch (Exception e) {
+           //e.printStackTrace() ;
+        }
+        
         //String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
         String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
         String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
