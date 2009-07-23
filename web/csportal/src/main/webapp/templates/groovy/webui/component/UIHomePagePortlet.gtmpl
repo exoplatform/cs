@@ -3,6 +3,19 @@
   String toururi = Util.getPortalRequestContext().getPortalURI() + "tour";
   def prContext = _ctx.getRequestContext().getParentAppRequestContext();
   String user = prContext.getRemoteUser() ;
+  String calendarUrl = Util.getPortalRequestContext().getPortalURI() + "calendar" ;
+  String mailUrl = Util.getPortalRequestContext().getPortalURI() + "mail" ;
+  String contactUrl = Util.getPortalRequestContext().getPortalURI() + "contact" ;
+  String chatUrl = "/portal/private/classic/collaboration" ;
+  String webosUrl = Util.getPortalRequestContext().getPortalURI() + "collaboration" ;
+  String registerUrl = Util.getPortalRequestContext().getPortalURI() + "register" ;
+  if(user == null) {
+   calendarUrl = "#" ;
+   mailUrl = "#" ;
+   contactUrl = "#" ;
+   chatUrl = "#" ;  
+  } ;
+  
   
 %>
 <table style="table-layout: fixed;width: 100%;-width: auto;">
@@ -27,14 +40,14 @@
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
 													<div class="CenterTitleHomePage">
-                                                                                                          <a href="/portal/private/classic/calendar">
-                                                                                                           <%=_ctx.appRes("UIHomePagePortlet.cs-calendar")%>
+                                                       <a href="$calendarUrl">
+                                                         <%=_ctx.appRes("UIHomePagePortlet.cs-calendar")%>
 													   </a>	
 													  </div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
-												<div class="IconCalenda"><a style="height:68px;width:74px; display:block;" href="/portal/private/classic/calendar"><span></span></a></div>
+												<div class="IconCalenda"><a style="height:68px;width:74px; display:block;" href="$calendarUrl"><span></span></a></div>
 											</div>
 										</div>
 										<div class="ContentProductsCS">
@@ -66,14 +79,14 @@
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
 													<div class="CenterTitleHomePage">
-												         <a href="/portal/private/classic/contact">
+												         <a href="$contactUrl">
 												           <%=_ctx.appRes("UIHomePagePortlet.cs-address-book")%>
 												          </a>
 												         </div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
-												<div class="IconAddressBook"><a style="height:68px;width:74px; display:block;" href="/portal/private/classic/contact"><span></span></a></div>
+												<div class="IconAddressBook"><a style="height:68px;width:74px; display:block;" href="$contactUrl"><span></span></a></div>
 											</div>
 										</div>
 										<div class="ContentProductsCS">
@@ -103,11 +116,11 @@
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
-													<div class="CenterTitleHomePage"><a href="/portal/private/classic/collaboration"><%=_ctx.appRes("UIHomePagePortlet.cs-chat")%></a></div>
+													<div class="CenterTitleHomePage"><a href="$chatUrl"><%=_ctx.appRes("UIHomePagePortlet.cs-chat")%></a></div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
-												<div class="IconChat"><a style="height:68px;width:74px; display:block;" href="/portal/private/classic/collaboration"><span></span></a></div>
+												<div class="IconChat"><a style="height:68px;width:74px; display:block;" href="$chatUrl"><span></span></a></div>
 											</div>
 										</div>
 										<div class="ContentProductsCS">
@@ -135,11 +148,11 @@
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
-													<div class="CenterTitleHomePage"><a href="/portal/private/classic/mail"><%=_ctx.appRes("UIHomePagePortlet.cs-mail")%></a></div>
+													<div class="CenterTitleHomePage"><a href="$mailUrl"><%=_ctx.appRes("UIHomePagePortlet.cs-mail")%></a></div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
-												<div class="IconMail"><a style="height:68px;width:74px; display:block;" href="/portal/private/classic/mail"><span></span></a></div>
+												<div class="IconMail"><a style="height:68px;width:74px; display:block;" href="$mailUrl"><span></span></a></div>
 											</div>
 										</div>
 										<div class="ContentProductsCS">
@@ -171,17 +184,18 @@
 			<div class="SideBar">	
 				<div class="SideBarContainer">
 					<div style="height: 11px;"><span></span></div>
+					 <%if(user == null) { %>
 					<div class="DotLine"><span></span></div>
 						<div class="LeftButton">
 							<div class="RightButton">
 								<div class="CenterButton">
-								<a href="/portal/public/classic/register" style="color: white; margin-top: 5px;">Try now</a>
-								<a href="/portal/public/classic/register" style="color: white;" class="TextBntColla"><%=_ctx.appRes("UIHomePagePortlet.cs-register")%></a></div>
+								<a href="$registerUrl" style="color: white; margin-top: 5px;">Try now</a>
+								<a href="$registerUrl" style="color: white;" class="TextBntColla"><%=_ctx.appRes("UIHomePagePortlet.cs-register")%></a></div>
 							</div>
 						</div>
-					
+					 
 					<div class="DotLine"><span></span></div>
-				 
+				    <%}%>
 					<div class="DownloadButton">
 						<div style="height: 45px"><span></span></div>
 						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3RC1-tomcat.zip" style="color: white;" class="TextDownload"><%=_ctx.appRes("UIHomePagePortlet.cs-download")%></a><br/>
@@ -198,8 +212,8 @@
 						<div class="LeftButton">
 							<div class="RightButton">
 								<div class="CenterButton">
-								<a href="/portal/private/classic/collaboration" style="color: white; margin-top: 5px;"><%=_ctx.appRes("UIHomePagePortlet.cs-webos")%></a>
-								<a href="/portal/private/classic/collaboration" style="color: white;" class="TextBntColla"><%=_ctx.appRes("UIHomePagePortlet.cs-desktop")%></a></div>
+								<a href="$webosUrl" style="color: white; margin-top: 5px;"><%=_ctx.appRes("UIHomePagePortlet.cs-webos")%></a>
+								<a href="$webosUrl" style="color: white;" class="TextBntColla"><%=_ctx.appRes("UIHomePagePortlet.cs-desktop")%></a></div>
 							</div>
 						</div>
 						<%}%>					
