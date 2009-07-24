@@ -20,8 +20,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +37,7 @@ import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Dur;
+import net.fortuna.ical4j.model.Iso8601;
 import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.ParameterList;
 import net.fortuna.ical4j.model.Property;
@@ -78,6 +81,7 @@ import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 
@@ -101,6 +105,11 @@ public class ICalendarImportExport implements CalendarImportExport{
     Uid id = new Uid(exoEvent.getId()) ; 
     long start = exoEvent.getFromDateTime().getTime() ;
     long end = exoEvent.getToDateTime().getTime() ;
+    /*if(exoEvent.isAllday()) {
+      SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd") ;
+      start = sf.parse(sf.format(exoEvent.getFromDateTime())).getTime() ;
+      end = sf.parse(sf.format(exoEvent.getToDateTime())).getTime() ;
+    }*/
     String summary = exoEvent.getSummary() ;
     VEvent event ;
     if(end > 0) {
@@ -137,7 +146,7 @@ public class ICalendarImportExport implements CalendarImportExport{
       }
     }
 
- /*   if(exoEvent.getEventType().equals(CalendarEvent.TYPE_TASK)) {
+    /*   if(exoEvent.getEventType().equals(CalendarEvent.TYPE_TASK)) {
       long completed = exoEvent.getCompletedDateTime().getTime() ;
       event.getProperties().add(new Completed(new DateTime(completed)));
       event.getProperties().getProperty(Property.COMPLETED).getParameters()
@@ -247,7 +256,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     calendar.getComponents().add(event);
     return calendar ;
   }
-  
+
   private net.fortuna.ical4j.model.Calendar getVTask(net.fortuna.ical4j.model.Calendar calendar, CalendarEvent exoEvent) throws Exception {
     Uid id = new Uid(exoEvent.getId()) ; 
     long start = exoEvent.getFromDateTime().getTime() ;
@@ -399,8 +408,8 @@ public class ICalendarImportExport implements CalendarImportExport{
     calendar.getComponents().add(event);
     return calendar ;
   }
-  
-  
+
+
   public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
     SessionProvider systemSession = SessionProvider.createSystemProvider() ;
@@ -418,7 +427,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     calendar.getProperties().add(CalScale.GREGORIAN);
     for(CalendarEvent exoEvent : events) {
       if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
-         calendar = getVEvent(calendar, exoEvent) ;        
+        calendar = getVEvent(calendar, exoEvent) ;        
       } else { // task
         calendar = getVTask(calendar, exoEvent) ;
       }
@@ -554,8 +563,26 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
         if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
         exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
-        if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
-        if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
+        String sValue = "" ;
+        String eValue = "" ;
+        if(event.getStartDate() != null) {
+          sValue = event.getStartDate().getValue() ;
+          exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
+        }
+        if(event.getEndDate() != null) {
+          eValue = event.getEndDate().getValue() ;
+          exoEvent.setToDateTime(event.getEndDate().getDate()) ;
+        }
+        if (sValue.length() == 8 && eValue.length() == 8 ) {
+          //exoEvent.setAllday(true) ;
+          exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
+        }
+        if (sValue.length() > 8 && eValue.length() > 8 ) {         
+          if("0000".equals(sValue.substring(9,13)) && "0000".equals(eValue.substring(9,13)) ) {
+            //exoEvent.setAllday(true);
+            exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
+          }
+        }
         if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
         if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
         /*if(vFreeBusyData.get(event.getUid().getValue()) != null) {
@@ -819,8 +846,26 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
         if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
         exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
-        if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
-        if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
+        String sValue = "" ;
+        String eValue = "" ;
+        if(event.getStartDate() != null) {
+          sValue = event.getStartDate().getValue() ;
+          exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
+        }
+        if(event.getEndDate() != null) {
+          eValue = event.getEndDate().getValue() ;
+          exoEvent.setToDateTime(event.getEndDate().getDate()) ;
+        }
+        if (sValue.length() == 8 && eValue.length() == 8 ) {
+          //exoEvent.setAllday(true) ;
+          exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
+        }
+        if (sValue.length() > 8 && eValue.length() > 8 ) {         
+          if("0000".equals(sValue.substring(9,13)) && "0000".equals(eValue.substring(9,13)) ) {
+            //exoEvent.setAllday(true);
+            exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
+          }
+        }
         if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
         if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
         if(vFreeBusyData.get(event.getUid().getValue()) != null) {
@@ -997,7 +1042,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           e.printStackTrace() ;
         }
         storage_.saveUserEvent(username, calendarId, exoEvent, true) ;
-       }      
+      }      
     }
   }
 
