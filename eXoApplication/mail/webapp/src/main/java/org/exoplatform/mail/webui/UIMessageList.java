@@ -185,6 +185,29 @@ public class UIMessageList extends UIForm {
     }
   }
   
+  public void refreshBrowser(String accId) throws Exception {
+    String username = MailUtils.getCurrentUser();
+    MailService mailSrv = MailUtils.getMailService();
+    try {
+      Account acc = mailSrv.getAccountById(username, accId);
+      if (acc == null) {
+        UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+        try {
+          String selectedAccId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+          if (!MailUtils.isFieldEmpty(selectedAccId)) {
+            init(selectedAccId);
+          } else {
+            init(null);
+            uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
+          }
+        } catch(Exception e) {
+          init(null);
+          uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
+        }
+      }
+    } catch (Exception ex) { }
+  }
+  
   public String getAccountId() { return accountId_ ; }
 
   public String getSelectedMessageId() throws Exception {
@@ -340,6 +363,7 @@ public class UIMessageList extends UIForm {
       if (msg != null) {
         MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
         msg = mailSrv.loadTotalMessage(username, accountId, msg) ;
+        if (msg.getMessageBody() == null) msg.setMessageBody("Please wait while message is being loaded...");
         Account account = mailSrv.getAccountById(username, accountId);
               
         uiMessageList.setSelectedMessageId(msgId);
@@ -925,8 +949,8 @@ public class UIMessageList extends UIForm {
       Message message = null;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ; 
       else  message = checkedMsgs.get(0);
-      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accId, message);
       try {
+        if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accId, message);
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY);
       } catch (Exception e) {
         uiMessageList.setMessagePageList(null) ;
@@ -975,8 +999,8 @@ public class UIMessageList extends UIForm {
       Message message = null;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
       else  message = checkedMsgs.get(0);
-      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accId, message);
       try {
+        if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accId, message);
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY_ALL);
       } catch (Exception e) {
         uiMessageList.setMessagePageList(null) ;
@@ -1025,8 +1049,8 @@ public class UIMessageList extends UIForm {
       Message message = null;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
       else  message = checkedMsgs.get(0);
-      if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accId, message);
       try {
+        if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accId, message);
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_FOWARD);
       } catch (Exception e) {
         uiMessageList.setMessagePageList(null) ;
@@ -1267,32 +1291,29 @@ public class UIMessageList extends UIForm {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
         return;
       }
+      String username = MailUtils.getCurrentUser();
+      MailService mailSrv = MailUtils.getMailService();
+      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+      UIPrintPreview uiPrintPreview ;
+      Account acc = mailSrv.getAccountById(username, accountId);
+      if (acc != null ){
+        uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
+        uiPrintPreview.setAcc(acc) ; 
+      } else {
+        uiMessageList.setMessagePageList(null) ;
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return; 
+      }
       Message message = null ;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
       else  message = checkedMsgs.get(0);
       if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accountId, message);  
       if (message != null && !message.isLoaded()) {
-        String username = MailUtils.getCurrentUser();
-        MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
         message = mailSrv.loadTotalMessage(username, accountId, message) ;
       }
-      String username = MailUtils.getCurrentUser();
-      MailService mailSrv = MailUtils.getMailService();
-      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
-      UIPrintPreview uiPrintPreview ;
-//    cs-2127
-       Account acc = mailSrv.getAccountById(username, accountId);
-       if (acc != null ){
-         uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
-         uiPrintPreview.setAcc(acc) ; 
-       } else {
-         uiMessageList.setMessagePageList(null) ;
-         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-         return; 
-       }
       uiPrintPreview.setPrintMessage(message) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
