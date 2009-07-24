@@ -2912,10 +2912,12 @@ public class JCRDataStorage {
    * @see SessionProviderService#getSessionProvider(null)
    */
   private SessionProvider createSessionProvider() {
-    PortalContainer portalContainer = PortalContainer.getInstance();
-    PortalContainer.setInstance(portalContainer);
+    /*PortalContainer portalContainer = PortalContainer.getInstance();
+    PortalContainer.setInstance(portalContainer);    
+    SessionProviderService service = (SessionProviderService) portalContainer.getComponentInstanceOfType(SessionProviderService.class);*/
     
-    SessionProviderService service = (SessionProviderService) portalContainer.getComponentInstanceOfType(SessionProviderService.class);
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
     SessionProvider provider = service.getSessionProvider(null);
     if (provider == null) {
       //logger.info("eXo Mail Service: No user session provider was available, using a system session provider");
