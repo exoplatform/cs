@@ -320,24 +320,28 @@
 .UIMailPortlet .NextPageArrow {
 	background: url('icons/NextPage.gif') no-repeat left center;
 	height: 16px;
+	width: 16px;
 	cursor: pointer;
 }
 
 .UIMailPortlet .LastPageArrow {
 	background: url('icons/LastPage.gif') no-repeat left center;
 	height: 16px;
+	width: 16px;
 	cursor: pointer;
 }
 
 .UIMailPortlet .FirstPageArrow{
 	background: url('icons/PreviousPage.gif') no-repeat left center;
 	height: 16px;
+	width: 16px;
 	cursor: pointer;
 }
 
 .UIMailPortlet .PreviousPageArrow {
 	background: url('icons/BackPage.gif') no-repeat;
 	height: 16px;
+	width: 16px;
 	cursor: pointer;
 }
 
