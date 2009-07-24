@@ -52,7 +52,7 @@ public class ContactPageList extends JCRPageList {
   // add to fix bug 1484
   private long         pageReturn   = 0;
   
-  // add to fix bug 
+  // add to fix bug 2925
   private Session session_ = null;
   
   public ContactPageList(String username,
