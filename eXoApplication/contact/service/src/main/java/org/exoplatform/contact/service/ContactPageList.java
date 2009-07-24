@@ -30,8 +30,6 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
-import org.exoplatform.contact.service.impl.JCRDataStorage;
-import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -53,7 +51,10 @@ public class ContactPageList extends JCRPageList {
 
   // add to fix bug 1484
   private long         pageReturn   = 0;
-
+  
+  // add to fix bug 
+  private Session session_ = null;
+  
   public ContactPageList(String username,
                          long pageSize,
                          String value,
@@ -64,10 +65,12 @@ public class ContactPageList extends JCRPageList {
     value_ = value;
     contactType_ = type;
     Session session = getJCRSession(username) ;
-    try {    
-      setAvailablePage(((QueryResultImpl) createXPathQuery(session, username, value_).execute()).getTotalSize()) ;
-    } finally {
-      session.logout() ;
+    if (session != null) {
+      try {    
+        setAvailablePage(((QueryResultImpl) createXPathQuery(session, username, value_).execute()).getTotalSize()) ;
+      } finally {
+        session.logout() ;
+      }      
     }
   }
 
@@ -384,14 +387,19 @@ public class ContactPageList extends JCRPageList {
 
   public void setList(List<Contact> contacts) {
   }
-
+  
+  public void setSession(Session s) { session_ = s ; }
   private Session getJCRSession(String username) throws Exception {
-    RepositoryService repositoryService = (RepositoryService) PortalContainer.getComponent(RepositoryService.class);
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-    String defaultWS = repositoryService.getDefaultRepository()
-                                        .getConfiguration()
-                                        .getDefaultWorkspaceName();
-    return sessionProvider.getSession(defaultWS, repositoryService.getCurrentRepository());
+    try {
+      RepositoryService repositoryService = (RepositoryService) PortalContainer.getComponent(RepositoryService.class);
+      SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+      String defaultWS = repositoryService.getDefaultRepository()
+      .getConfiguration()
+      .getDefaultWorkspaceName();
+      return sessionProvider.getSession(defaultWS, repositoryService.getCurrentRepository());      
+    } catch (NullPointerException e) {
+      return session_ ;
+    }
   }
   
   private QueryImpl createXPathQuery(Session session, String username, String xpath) throws Exception {
