@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,6 @@ import java.util.Random;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.PropertyIterator;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.CalendarOutputter;
@@ -595,8 +595,27 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
         if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
         exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
-        if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
-        if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
+        
+		String sValue = "" ;
+        String eValue = "" ;
+        if(event.getStartDate() != null) {
+          sValue = event.getStartDate().getValue() ;
+          exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
+        }
+        if(event.getEndDate() != null) {
+          eValue = event.getEndDate().getValue() ;
+          exoEvent.setToDateTime(event.getEndDate().getDate()) ;
+        }
+        if (sValue.length() == 8 && eValue.length() == 8 ) {
+          //exoEvent.setAllday(true) ;
+          exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
+        }
+        if (sValue.length() > 8 && eValue.length() > 8 ) {         
+          if("0000".equals(sValue.substring(9,13)) && "0000".equals(eValue.substring(9,13)) ) {
+            //exoEvent.setAllday(true);
+            exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
+          }
+        }
         if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
         if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
         /*if(vFreeBusyData.get(event.getUid().getValue()) != null) {
@@ -860,8 +879,27 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
         if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
         exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
-        if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
-        if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
+        
+        String sValue = "" ;
+        String eValue = "" ;
+        if(event.getStartDate() != null) {
+          sValue = event.getStartDate().getValue() ;
+          exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
+        }
+        if(event.getEndDate() != null) {
+          eValue = event.getEndDate().getValue() ;
+          exoEvent.setToDateTime(event.getEndDate().getDate()) ;
+        }
+        if (sValue.length() == 8 && eValue.length() == 8 ) {
+          //exoEvent.setAllday(true) ;
+          exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
+        }
+        if (sValue.length() > 8 && eValue.length() > 8 ) {         
+          if("0000".equals(sValue.substring(9,13)) && "0000".equals(eValue.substring(9,13)) ) {
+            //exoEvent.setAllday(true);
+            exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
+          }
+        }
         if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
         if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
         if(vFreeBusyData.get(event.getUid().getValue()) != null) {
