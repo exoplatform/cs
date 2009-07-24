@@ -53,10 +53,7 @@ import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.RootContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.Folder;
@@ -117,7 +114,7 @@ public class JCRDataStorage {
       sProvider = createSessionProvider();
       Node mailHome = getMailHomeNode(sProvider, username);
       if (mailHome.hasNode(id)) {
-        return getAccount(mailHome.getNode(id));
+        return getAccount(sProvider, mailHome.getNode(id));
       }
     } finally {
       closeSessionProvider(sProvider);
@@ -136,7 +133,7 @@ public class JCRDataStorage {
       while (it.hasNext()) {
         Node node = it.nextNode();
         if (node.isNodeType("exo:account"))
-          accounts.add(getAccount(node));
+          accounts.add(getAccount(sProvider, node));
       }
       return accounts;
     } finally {
@@ -144,101 +141,95 @@ public class JCRDataStorage {
     }
   }
 
-  private Account getAccount(Node accountNode) throws Exception {
+  private Account getAccount(SessionProvider sProvider, Node accountNode) throws Exception {
     Account account = new Account();
-    SessionProvider sProvider = null;
+    account.setId(accountNode.getProperty(Utils.EXO_ID).getString());
     try {
-      sProvider = createSessionProvider() ;
-      account.setId(accountNode.getProperty(Utils.EXO_ID).getString());
-      try {
-        account.setLabel(accountNode.getProperty(Utils.EXO_LABEL).getString());
-      } catch (Exception e) {
-      }
-      try {
-        account.setUserDisplayName(accountNode.getProperty(Utils.EXO_USERDISPLAYNAME).getString());
-      } catch (Exception e) {
-      }
-      try {
-        account.setEmailAddress(accountNode.getProperty(Utils.EXO_EMAILADDRESS).getString());
-      } catch (Exception e) {
-      }
-      try {
-        account.setEmailReplyAddress(accountNode.getProperty(Utils.EXO_REPLYEMAIL).getString());
-      } catch (Exception e) {
-      }
-      try {
-        account.setSignature(accountNode.getProperty(Utils.EXO_SIGNATURE).getString());
-      } catch (Exception e) {
-      }
-      try {
-        account.setDescription(accountNode.getProperty(Utils.EXO_DESCRIPTION).getString());
-      } catch (Exception e) {
-      }
-      try {
-        account.setCheckedAuto(accountNode.getProperty(Utils.EXO_CHECKMAILAUTO).getBoolean());
-      } catch (Exception e) {
-      }
-      try {
-        account.setIsSavePassword(accountNode.getProperty(Utils.EXO_IS_SAVE_PASSWORD).getBoolean());
-      } catch (Exception e) {
-      }
-      try {
-        account.setEmptyTrashWhenExit(accountNode.getProperty(Utils.EXO_EMPTYTRASH).getBoolean());
-      } catch (Exception e) {
-      }
-      try {
-        account.setPlaceSignature(accountNode.getProperty(Utils.EXO_PLACESIGNATURE).getString());
-      } catch (Exception e) {
-      }
-      try {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_LAST_CHECKED_TIME).getLong());
-        account.setLastCheckedDate(cal.getTime());
-      } catch (Exception e) {
-        account.setLastCheckedDate(null);
-      }
-      try {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_LAST_START_CHECKING_TIME).getLong());
-        account.setLastStartCheckingTime(cal.getTime());
-      } catch (Exception e) {
-        account.setLastStartCheckingTime(null);
-      }
-      try {
-        account.setCheckAll(accountNode.getProperty(Utils.EXO_CHECK_ALL).getBoolean());
-      } catch (Exception e) { }
-      try {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_CHECK_FROM_DATE).getLong());
-        account.setCheckFromDate(cal.getTime());
-      } catch (Exception e) { }
-
-      try {
-        Value[] properties = accountNode.getProperty(Utils.EXO_SERVERPROPERTIES).getValues();
-        for (int i = 0; i < properties.length; i++) {
-          String property = properties[i].getString();
-          int index = property.indexOf('=');
-          if (index != -1)
-            account.setServerProperty(property.substring(0, index), property.substring(index + 1));
-        }
-      } catch (Exception e) { }
-
-      try {
-        Value[] properties = accountNode.getProperty(Utils.EXO_SMTPSERVERPROPERTIES).getValues();
-        for (int i = 0; i < properties.length; i++) {
-          String property = properties[i].getString();
-          int index = property.indexOf('=');
-          if (index != -1)
-            account
-            .setSmtpServerProperty(property.substring(0, index), property.substring(index + 1));
-        }
-      } catch (Exception e) {
-      }
-
-      return account;
-    } finally {
-      closeSessionProvider(sProvider) ;
+      account.setLabel(accountNode.getProperty(Utils.EXO_LABEL).getString());
+    } catch (Exception e) {
     }
+    try {
+      account.setUserDisplayName(accountNode.getProperty(Utils.EXO_USERDISPLAYNAME).getString());
+    } catch (Exception e) {
+    }
+    try {
+      account.setEmailAddress(accountNode.getProperty(Utils.EXO_EMAILADDRESS).getString());
+    } catch (Exception e) {
+    }
+    try {
+      account.setEmailReplyAddress(accountNode.getProperty(Utils.EXO_REPLYEMAIL).getString());
+    } catch (Exception e) {
+    }
+    try {
+      account.setSignature(accountNode.getProperty(Utils.EXO_SIGNATURE).getString());
+    } catch (Exception e) {
+    }
+    try {
+      account.setDescription(accountNode.getProperty(Utils.EXO_DESCRIPTION).getString());
+    } catch (Exception e) {
+    }
+    try {
+      account.setCheckedAuto(accountNode.getProperty(Utils.EXO_CHECKMAILAUTO).getBoolean());
+    } catch (Exception e) {
+    }
+    try {
+      account.setIsSavePassword(accountNode.getProperty(Utils.EXO_IS_SAVE_PASSWORD).getBoolean());
+    } catch (Exception e) {
+    }
+    try {
+      account.setEmptyTrashWhenExit(accountNode.getProperty(Utils.EXO_EMPTYTRASH).getBoolean());
+    } catch (Exception e) {
+    }
+    try {
+      account.setPlaceSignature(accountNode.getProperty(Utils.EXO_PLACESIGNATURE).getString());
+    } catch (Exception e) {
+    }
+    try {
+      GregorianCalendar cal = new GregorianCalendar();
+      cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_LAST_CHECKED_TIME).getLong());
+      account.setLastCheckedDate(cal.getTime());
+    } catch (Exception e) {
+      account.setLastCheckedDate(null);
+    }
+    try {
+      GregorianCalendar cal = new GregorianCalendar();
+      cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_LAST_START_CHECKING_TIME).getLong());
+      account.setLastStartCheckingTime(cal.getTime());
+    } catch (Exception e) {
+      account.setLastStartCheckingTime(null);
+    }
+    try {
+      account.setCheckAll(accountNode.getProperty(Utils.EXO_CHECK_ALL).getBoolean());
+    } catch (Exception e) { }
+    try {
+      GregorianCalendar cal = new GregorianCalendar();
+      cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_CHECK_FROM_DATE).getLong());
+      account.setCheckFromDate(cal.getTime());
+    } catch (Exception e) { }
+
+    try {
+      Value[] properties = accountNode.getProperty(Utils.EXO_SERVERPROPERTIES).getValues();
+      for (int i = 0; i < properties.length; i++) {
+        String property = properties[i].getString();
+        int index = property.indexOf('=');
+        if (index != -1)
+          account.setServerProperty(property.substring(0, index), property.substring(index + 1));
+      }
+    } catch (Exception e) { }
+
+    try {
+      Value[] properties = accountNode.getProperty(Utils.EXO_SMTPSERVERPROPERTIES).getValues();
+      for (int i = 0; i < properties.length; i++) {
+        String property = properties[i].getString();
+        int index = property.indexOf('=');
+        if (index != -1)
+          account
+          .setSmtpServerProperty(property.substring(0, index), property.substring(index + 1));
+      }
+    } catch (Exception e) {
+    }
+
+    return account;
   }
 
   public Message getMessageById(String username, String accountId, String msgId) throws Exception {
