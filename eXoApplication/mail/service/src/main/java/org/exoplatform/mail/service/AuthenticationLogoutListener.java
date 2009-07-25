@@ -38,15 +38,19 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
 
   @Override
   public void onEvent(Event<ConversationRegistry, ConversationState> event) throws Exception {
-   ExoContainer container = ExoContainerContext.getCurrentContainer();
-     if (container instanceof RootContainer) {
-       container = RootContainer.getInstance().getPortalContainer("portal");
-     }
-    MailService mService = (MailService)container.getComponentInstanceOfType(MailService.class) ;
-    String username = event.getData().getIdentity().getUserId();
-    List<Account> accList = mService.getAccounts(username);
-    for (Account acc : accList) {
-      mService.stopAllJobs(username, acc.getId());
-    }    
+    try {
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      if (container instanceof RootContainer) {
+        container = RootContainer.getInstance().getPortalContainer("portal");
+      }
+      MailService mService = (MailService)container.getComponentInstanceOfType(MailService.class) ;
+      String username = event.getData().getIdentity().getUserId();
+      List<Account> accList = mService.getAccounts(username);
+      for (Account acc : accList) {
+        mService.stopAllJobs(username, acc.getId());
+      }    
+    } catch (Exception e) {
+      // e.printStackTrace();
+    }
   } 
- }
+}
