@@ -42,22 +42,27 @@ function BuddyItem(buddyInfo, actionCallback, maxUserNameLen, isGroupChat) {
  * Init data and UI template
  */
 BuddyItem.prototype.init = function() {
+	
+	alert("aa") ;
   var DOMUtil = eXo.core.DOMUtil;
-  this.rootNode = eXo.communication.chat.core.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.template);
-
+  this.rootNode = eXo.communication.chat.core.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.template);	
+	var nickDis = this.buddyInfo.nickname ;
+	if (nickDis.indexOf("/") != -1) nickDis = nickDis.split("/")[1] ;
   if (this.isGroupChat) {
     this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
-    this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.nickname, true) ;
+    this.iconChatNode.innerHTML = this.getUserName(nickDis, true) ;
   } else {
-    this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'a', this.CSS_CLASS.nick);
-    this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.fullName, true) ;
+    this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
+		this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.fullName, true) ;
   }
   this.updateStatus(this.buddyInfo.presence.type);
+
 	var uid = this.buddyInfo.user ;
 	eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;	
+  //this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.user, true);
   this.iconChatNode.setAttribute('title' ,this.getUserName(this.buddyInfo.user, false));
-  this.rootNode.setAttribute('userName', this.buddyInfo.user);
-  this.rootNode.setAttribute('nickname', this.buddyInfo.nickname);
+  this.rootNode.setAttribute('userName', this.buddyInfo.user);  
+  this.rootNode.setAttribute('nickname', nickDis);
   eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'contextmenu', this.actionCallback, false);
   eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'click', this.actionCallback, false);
 };
