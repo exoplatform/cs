@@ -198,8 +198,8 @@
 				    <%}%>
 					<div class="DownloadButton">
 						<div style="height: 45px"><span></span></div>
-						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3RC1-tomcat.zip" style="color: white;" class="TextDownload"><%=_ctx.appRes("UIHomePagePortlet.cs-download")%></a><br/>
-						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3RC1-tomcat.zip" style="color: white;"><%=_ctx.appRes("UIHomePagePortlet.cs-community")%></a>
+						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3Beta2-tomcat.zip" style="color: white;" class="TextDownload"><%=_ctx.appRes("UIHomePagePortlet.cs-download")%></a><br/>
+						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3Beta2-tomcat.zip" style="color: white;"><%=_ctx.appRes("UIHomePagePortlet.cs-community")%></a>
 					</div>
 					<div class="DotLine"><span></span></div>
 					<div style="margin: 17px 0px;">
