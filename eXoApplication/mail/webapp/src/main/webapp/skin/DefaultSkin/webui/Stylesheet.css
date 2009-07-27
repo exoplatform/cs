@@ -683,13 +683,10 @@
 	margin: 1px 0px 0px 4px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIMessageCompose table {
-	background: none;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .UIMessageCompose table {
+.UIMailPortlet .MailWorkingWorkspace .UIMessageCompose .MessageAddress .UIFormGrid {
 	background: none;
 	width: 97%;
+	table-layout: fixed;
 }
 
 .UIMailPortlet .MailWorkingWorkspace input.checkbox {
@@ -842,6 +839,12 @@
 	line-height: 24px;
 	margin-right: 5px;
 	background-position: left center;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessageCompose table {
+	background: none;
+	width: 97%;
+	table-layout: fixed;
 }
 /*=======================Message Header====================*/
 
