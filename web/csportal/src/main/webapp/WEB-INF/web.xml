@@ -20,7 +20,18 @@
     <filter-name>ThreadLocalSessionProviderInitializedFilter</filter-name>
     <filter-class>org.exoplatform.frameworks.jcr.web.ThreadLocalSessionProviderInitializedFilter</filter-class>
   </filter>  	
-
+ 
+ <!-- ============================Rest configuration============================== -->
+ <filter>
+    <filter-name>AnonymousUserContextRedirectionFilter</filter-name>
+    <filter-class>org.exoplatform.ws.frameworks.servlet.AnonymousUserContextRedirectionFilter</filter-class>
+		<init-param>
+      <param-name>context-name</param-name>
+      <param-value>/rest/private</param-value>
+    </init-param>
+  </filter>
+  <!-- ===========================End Rest configuration ================================= -->
+  
   <filter>
     <filter-name>SetCurrentIdentityFilter</filter-name>
     <filter-class>org.exoplatform.services.security.web.SetCurrentIdentityFilter</filter-class>
@@ -75,6 +86,19 @@
     <url-pattern>/rest/*</url-pattern>
   </filter-mapping>
   
+   <!-- ===========================Rest configuration ================================= -->
+   <filter-mapping>
+  <!-- This must be before ThreadLocalSessionProviderInitializedFilter for URI /rest/private/*-->
+    <filter-name>AnonymousUserContextRedirectionFilter</filter-name>
+    <url-pattern>/rest/private/*</url-pattern>
+  </filter-mapping>
+  
+  <filter-mapping>
+    <filter-name>ThreadLocalSessionProviderInitializedFilter</filter-name>
+    <url-pattern>/rest/private/*</url-pattern>
+  </filter-mapping>    
+   <!-- ===========================End Rest configuration ================================= -->
+   
   <filter-mapping>
     <filter-name>ThreadLocalSessionProviderInitializedFilter</filter-name>
     <url-pattern>/*</url-pattern>
@@ -145,6 +169,14 @@
 	  <servlet-name>portal</servlet-name> 
 	  <url-pattern>/command/*</url-pattern> 
 	</servlet-mapping>
+  
+  <!-- ===========================Rest configuration ================================= -->
+  <servlet-mapping>
+    <servlet-name>RestServer</servlet-name>
+    <url-pattern>/rest/private/*</url-pattern>
+  </servlet-mapping>
+  <!-- ===========================End Rest configuration ================================= -->
+  
   <servlet-mapping>
     <servlet-name>RestServer</servlet-name>
     <url-pattern>/rest/*</url-pattern>
