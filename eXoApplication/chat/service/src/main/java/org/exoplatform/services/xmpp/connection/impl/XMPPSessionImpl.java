@@ -86,6 +86,7 @@ import org.exoplatform.services.xmpp.util.XMPPConnectionUtils;
 import org.exoplatform.ws.frameworks.cometd.transport.ContinuationServiceDelegate;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
+import org.jivesoftware.smack.PacketInterceptor;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
@@ -93,6 +94,9 @@ import org.jivesoftware.smack.RosterGroup;
 import org.jivesoftware.smack.RosterListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.filter.PacketFilter;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.PacketExtension;
@@ -122,6 +126,7 @@ import org.jivesoftware.smackx.packet.DiscoverInfo;
 import org.jivesoftware.smackx.packet.DiscoverItems;
 import org.jivesoftware.smackx.packet.MUCUser;
 import org.jivesoftware.smackx.packet.Time;
+import org.jivesoftware.smackx.packet.DiscoverInfo.Identity;
 import org.jivesoftware.smackx.packet.DiscoverItems.Item;
 import org.jivesoftware.smackx.packet.MUCUser.Invite;
 import org.jivesoftware.smackx.search.UserSearchManager;
@@ -408,6 +413,30 @@ public class XMPPSessionImpl implements XMPPSession {
          }
       },errorMessageFilter);
 
+      //For CS-2908
+      PacketFilter discoverInfoFilter = new PacketTypeFilter(DiscoverInfo.class);
+      connection_.addPacketWriterInterceptor(new PacketInterceptor() {
+        public void interceptPacket(Packet packet) {
+          DiscoverInfo discoverInfo = (DiscoverInfo)packet;
+          if(discoverInfo != null && discoverInfo.getType() == IQ.Type.RESULT){
+            Iterator<Identity> it = discoverInfo.getIdentities();
+            if(it.hasNext()){
+              Identity id = it.next();
+              if(id.getCategory().equalsIgnoreCase("client")){
+                if(!discoverInfo.containsFeature("http://jabber.org/protocol/si/profile/file-transfer")){
+                  discoverInfo.addFeature("http://jabber.org/protocol/xhtml-im");
+                  discoverInfo.addFeature("http://jabber.org/protocol/muc");
+                  discoverInfo.addFeature("http://jabber.org/protocol/si/profile/file-transfer");
+                  discoverInfo.addFeature("http://jabber.org/protocol/si");
+                  discoverInfo.addFeature("http://jabber.org/protocol/bytestreams");
+                  discoverInfo.addFeature("http://jabber.org/protocol/ibb");
+                }
+              }
+            }           
+          }         
+        }
+      }, discoverInfoFilter);
+      
       connection_.getRoster().addRosterListener(new RosterListener() {
         public void entriesAdded(java.util.Collection<String> arg0) {
           try {
