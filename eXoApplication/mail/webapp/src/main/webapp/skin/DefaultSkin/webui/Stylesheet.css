@@ -772,11 +772,8 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageCompose table {
 	background: none;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .UIMessageCompose table {
-	background: none;
 	width: 97%;
+	table-layout: fixed;
 }
 
 .UIMailPortlet .MailWorkingWorkspace input.checkbox {

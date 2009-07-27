@@ -45,7 +45,7 @@
 	<table class="UIFormGrid">
 	  <tr>
 	    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.from") %> :&nbsp;&nbsp;</td>
-	    <td class="FieldComponent" style="width:92%;"><%uiForm.renderField("from")%></td>
+	    <td class="FieldComponent" style="width:82%;"><%uiForm.renderField("from")%></td>
 	  </tr>
 	  <tr>
 	    <td class="ToFieldLabel">
