@@ -278,6 +278,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       setFieldCcValue(msg.getMessageCc()) ;
       setFieldBccValue(msg.getMessageBcc()) ;
       setFieldContentValue(formatContent(msg));
+      setPriority(msg.getPriority());
       if (msg != null && msg.hasAttachment()) {
         msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
         for (Attachment att : msg.getAttachments()) {
@@ -296,6 +297,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       subject = msg.getSubject();
       if (!subject.toLowerCase().startsWith("re:")) subject = "Re: " + subject ;
       setFieldSubjectValue(subject);
+      setPriority(msg.getPriority());
       if (msg != null && msg.hasAttachment()) {
         if (msg.getAttachments() == null) {
           msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
@@ -323,6 +325,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       setFieldSubjectValue(subject);
       String replyTo = msg.getReplyTo();
       setFieldToValue(replyTo);
+      setPriority(msg.getPriority());
 
       String replyCc = "";
 
@@ -380,7 +383,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       subject = msg.getSubject();
       if (!subject.toLowerCase().startsWith("fwd:")) subject = "Fwd: " + subject ;
       setFieldSubjectValue(subject);
-
+      setPriority(msg.getPriority());
       setFieldToValue("");
       if (msg != null && msg.hasAttachment()) {
         if (msg.getAttachments() == null) {
