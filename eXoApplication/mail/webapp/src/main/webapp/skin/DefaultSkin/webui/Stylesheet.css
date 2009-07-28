@@ -618,9 +618,10 @@
 }
 
 .UIRightClickPopupMenu .MenuItem .ItemIcon{
-	padding: 5px 5px 5px 23px; /* orientation=lt */
-	padding: 5px 23px 5px 5px; /* orientation=rt */
 	margin: 0px 2px;
+	padding: 0px 0px 0px 23px; /* orientation=lt */
+	padding: 0px 23px 0px 0px; /* orientation=rt */
+	line-height: 25px;
 }
 
 .UIRightClickPopupMenu .MenuItem .ItemIcon:hover {
