@@ -452,7 +452,11 @@
                   String sender = "";
                   if (uicomponent.selectedSentFolder() || uicomponent.selectedDraftFolder()) {
                     try {
-                      InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
+                      InternetAddress[] toAddress = null ;
+                      if(msg.getMessageTo() != null){ toAddress = InternetAddress.parse(msg.getMessageTo());}
+                      else if(msg.getMessageCc() != null) { toAddress = InternetAddress.parse(msg.getMessageCc());}
+                      else if(getMessageBcc() != null) {toAddress = InternetAddress.parse(getMessageBcc());}
+                      
                       for (j in 0..(toAddress.length-1)) {
                         InternetAddress address = toAddress[j];
                         if (j > 0) sender += ",";
