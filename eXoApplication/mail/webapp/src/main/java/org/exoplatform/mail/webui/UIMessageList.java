@@ -169,8 +169,7 @@ public class UIMessageList extends UIForm {
       if (pageList_ != null) currentPage = pageList_.getCurrentPage() ;
       MessagePageList currentPageList = mailSrv.getMessagePageList(username, filter) ;
       // CS-2493
-      setMessagePageList(currentPageList);
-      updateList(currentPage) ;
+      setMessagePageList(currentPageList, currentPage);
     } else {
       messageList_.clear();
     }
@@ -253,8 +252,13 @@ public class UIMessageList extends UIForm {
   }
 
   public void setMessagePageList(MessagePageList pageList) throws Exception {
+    setMessagePageList(pageList, 0);
+  }
+  
+  public void setMessagePageList(MessagePageList pageList, long currentPage) throws Exception {
     pageList_ = pageList ;
-    updateList();
+    if (currentPage > 0 ) updateList(currentPage);
+    else updateList();
   }
 
   //TODO check pageList_ null before getCurrentPage()
@@ -277,7 +281,11 @@ public class UIMessageList extends UIForm {
       } catch(Exception e) {
         String username = MailUtils.getCurrentUser();
         MailService mailSrv = MailUtils.getMailService();
-        setMessagePageList(mailSrv.getMessagePageList(username, getMessageFilter()));
+        try {
+          setMessagePageList(mailSrv.getMessagePageList(username, getMessageFilter()));
+        } catch(Exception ex) {
+          setMessagePageList(null);
+        }
         return ;
       }
       for (Message message : msgList) {
