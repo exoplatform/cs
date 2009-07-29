@@ -60,12 +60,19 @@ abstract public class JCRPageList {
   abstract protected void populateCurrentPage(long page, String username) throws Exception   ;
   
   public List<Message> getPage(long page, String username) throws Exception   {
-    checkAndSetPage(page) ;
-    populateCurrentPage(page, username) ;
-    return new ArrayList<Message>(currentListPage_.values()) ;
+    List<Message> clp = new ArrayList<Message>();
+    try {
+      checkAndSetPage(page) ;
+      populateCurrentPage(page, username) ;
+      clp = new ArrayList<Message>(currentListPage_.values()) ;
+      if (clp == null) return new ArrayList<Message>(); 
+    } catch(Exception e) {
+      return new ArrayList<Message>();
+    } 
+    return clp;
   }
   
-  abstract public List getAll() throws Exception  ;
+  abstract public List<Message> getAll() throws Exception  ;
   
   public void checkAndSetPage(long page) throws Exception  {
     if(page < 1 || page > availablePage_) {
