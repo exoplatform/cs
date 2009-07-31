@@ -196,7 +196,7 @@ Highlighter.prototype.execute = function(evt) {
 				Highlighter.lastCell  = Highlighter.currentCell ;
 			} else {
 				//startBlock.style.right = eXo.core.Browser.findPosXInContainer(Highlighter.startCell, Highlighter.container) + diff*Highlighter.dimension.x - fixleftIE + "px" ;
-			 	Highlighter.reserveDirection(Highlighter.startCell, Highlighter.container,startBlock,diff*Highlighter.dimension.x)
+			 	Highlighter.reserveDirection(Highlighter.currentCell, Highlighter.container,startBlock);
 				startBlock.style.width = (1 - diff)*Highlighter.dimension.x + "px" ;
 			 	Highlighter.lastCell = Highlighter.startCell ;
 				Highlighter.firstCell  = Highlighter.currentCell ;
