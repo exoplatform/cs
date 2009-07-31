@@ -772,19 +772,14 @@
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .MessageActionIcon {
 	float: left;
 	height: 20px; line-height: 20px;
-	height: 20px; line-height: 20px;
 	padding: 0px 10px 0px 20px;
-	color: #2276AB;
 	display: block;
-	font-size: 12px;
 	background-position: left center;
-	text-decoration: underline;
 }	
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview a:hover.MessageActionIcon {
-	color: #fda946;
-    font-size: 12px;
-	text-decoration: none;
+	color: #058ee6;
+	text-decoration: underline;
 }
 
 .UIMessagePreview .AttachmentContainer {
@@ -936,6 +931,18 @@
 	float: right; 
 	width: 113px;
 	line-height: 20px;
+}
+
+.UIMessagePreview .ReadingPaneBar .TextBackToList{
+	float:left; 
+	line-height:22px; 
+}
+
+.UIMailPortlet .MailWorkingWorkspace .MessageActions .MessagePreviewMenu {
+	text-decoration:none; 
+	color:black; cursor:pointer; 
+	font-size:11px;
+	padding-right:5px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageActions .DownArrow1Icon {
