@@ -665,6 +665,11 @@ GUIMan.prototype.drawEventByMiliseconds = function(eventObj, startTime, endTime,
 	if(!eXo.core.Browser.isIE6() || (document.getElementById("UIPageDesktop")))	leftPos += 55 ;
   eventNode.style.top = topPos + 'px';
   eventNode.style.left = leftPos + 'px';
+  if(eXo.core.I18n.isRT()){
+  	leftPos += 17 ;
+	if(eXo.core.Browser.isIE6() || eXo.core.Browser.isIE7()) leftPos -= 16
+  	eventNode.style.right = leftPos + 'px';
+  }
   eventNode.style.width = eventLen - 2 + 'px';
 	eventNode.style.visibility = 'visible';
 	this.setOverWeek(eventNode,startTime,endTime);
