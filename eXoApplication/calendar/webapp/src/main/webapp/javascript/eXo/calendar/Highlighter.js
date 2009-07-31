@@ -113,6 +113,17 @@ Highlighter.prototype.createBlock = function(cell) {
 	eXo.calendar.Highlighter.block = block ;
 } ;
 
+
+Highlighter.prototype.reserveDirection = function(obj, container,targetObj,extra){
+		var fixleftIE = (document.all && document.getElementById("UIWeekView"))? 6 : 0 ;
+		var x = eXo.core.Browser.findPosXInContainer(obj,container)  - fixleftIE;
+		if (extra) x += extra ;
+		if(eXo.core.I18n.isRT()){
+			x = (container.offsetWidth - obj.offsetWidth - x)  - 16;
+			targetObj.style.right = x + "px";
+		}
+		targetObj.style.left = x + "px";
+};
 /**
  * Sets up dragging selection when mouse down on the month view
  * @param {Object} evt Mouse event
@@ -139,7 +150,8 @@ Highlighter.prototype.start = function(evt) {
 	var fixleftIE = (document.all && document.getElementById("UIWeekView"))? 6 : 0 ; //TODO : No hard code 
 	var x = eXo.core.Browser.findPosXInContainer(Highlighter.startCell, Highlighter.container) -  fixleftIE ;
 	var y = eXo.core.Browser.findPosYInContainer(Highlighter.startCell, Highlighter.container) - document.getElementById(eXo.calendar.UICalendarPortlet.portletName).parentNode.scrollTop ;
-	Highlighter.startBlock.style.left = x + "px" ;
+	//Highlighter.startBlock.style.left = x + "px" ;
+	Highlighter.reserveDirection(Highlighter.startCell, Highlighter.container,Highlighter.startBlock) ;
 	Highlighter.startBlock.style.top = y + "px" ;
 	Highlighter.startBlock.style.width = Highlighter.dimension.x + "px" ;
 	Highlighter.startBlock.style.height = Highlighter.dimension.y + "px" ;
@@ -162,7 +174,7 @@ Highlighter.prototype.execute = function(evt) {
 	var sPos = Highlighter.getPos(Highlighter.startCell) ;
 	var fixleftIE = (document.all && document.getElementById("UIWeekView"))? 6 : 0 ; //TODO : No hard code 
 	try{
-		var cPos = Highlighter.getMousePos(_e) ;		
+		var cPos = Highlighter.getMousePos(_e) ;
 		var len = cPos.y - sPos.y ;	
 		var startBlock = null ;
 		var endBlock = null ;
@@ -177,13 +189,15 @@ Highlighter.prototype.execute = function(evt) {
 			startBlock = Highlighter.startBlock ;
 			Highlighter.hideAll(startBlock) ;
 			if (diff > 0) {
-				startBlock.style.left = eXo.core.Browser.findPosXInContainer(Highlighter.startCell, Highlighter.container) - fixleftIE + "px" ;
+				//startBlock.style.right = Highlighter.container.offsetWidth - Highlighter.startCell.offsetWidth - eXo.core.Browser.findPosXInContainer(Highlighter.startCell, Highlighter.container) - fixleftIE + "px" ;
+				Highlighter.reserveDirection(Highlighter.startCell, Highlighter.container,startBlock) ;
 				startBlock.style.width = (diff + 1)*Highlighter.dimension.x + "px" ;
 				Highlighter.firstCell = Highlighter.startCell ;
 				Highlighter.lastCell  = Highlighter.currentCell ;
 			} else {
-				startBlock.style.left = eXo.core.Browser.findPosXInContainer(Highlighter.startCell, Highlighter.container) + diff*Highlighter.dimension.x - fixleftIE + "px" ;
-			 	startBlock.style.width = (1 - diff)*Highlighter.dimension.x + "px" ;
+				//startBlock.style.right = eXo.core.Browser.findPosXInContainer(Highlighter.startCell, Highlighter.container) + diff*Highlighter.dimension.x - fixleftIE + "px" ;
+			 	Highlighter.reserveDirection(Highlighter.startCell, Highlighter.container,startBlock,diff*Highlighter.dimension.x)
+				startBlock.style.width = (1 - diff)*Highlighter.dimension.x + "px" ;
 			 	Highlighter.lastCell = Highlighter.startCell ;
 				Highlighter.firstCell  = Highlighter.currentCell ;
 			}
@@ -200,6 +214,7 @@ Highlighter.prototype.execute = function(evt) {
 				startWidth = (Highlighter.cellLength - sPos.x)*Highlighter.dimension.x ;
 				Highlighter.firstCell = Highlighter.startCell ;
 				Highlighter.lastCell  = Highlighter.currentCell ;
+				Highlighter.reserveDirection(Highlighter.startCell, Highlighter.container,startBlock) ;
 			} else {
 				startIndex = sPos.y  + len ;
 				lastIndex = sPos.y ;
@@ -211,24 +226,27 @@ Highlighter.prototype.execute = function(evt) {
 				startWidth = (Highlighter.cellLength - cPos.x)*Highlighter.dimension.x ;
 				Highlighter.lastCell = Highlighter.startCell ;
 				Highlighter.firstCell  = Highlighter.currentCell ;
+				Highlighter.reserveDirection(Highlighter.currentCell, Highlighter.container,startBlock) ;
 			}
 			startBlock.style.display = "block" ;
 			startBlock.style.top = startY + "px" ;
-			startBlock.style.left = startX - fixleftIE + "px" ;
+			//startBlock.style.right = startX - fixleftIE + "px" ;
 			startBlock.style.width = startWidth + "px" ;
 			startBlock.style.height = Highlighter.dimension.y + "px" ;
 			if(Math.abs(len) >= 1) {
 				for(var i = startIndex + 1 ; i < (startIndex + Math.abs(len)); i ++) {
 					Highlighter.block[i].style.display  = "block" ;
 					Highlighter.block[i].style.top  = parseInt(Highlighter.block[i - 1].style.top) + Highlighter.dimension.y + "px" ;
-					Highlighter.block[i].style.left  = eXo.core.Browser.findPosXInContainer(Highlighter.cell[0], Highlighter.container) + "px" ;
+					//Highlighter.block[i].style.left  = eXo.core.Browser.findPosXInContainer(Highlighter.cell[0], Highlighter.container) + "px" ;
+					Highlighter.reserveDirection(Highlighter.cell[0], Highlighter.container,Highlighter.block[i]) ;
 					Highlighter.block[i].style.width = Highlighter.cellLength*Highlighter.dimension.x + "px" ;
 					Highlighter.block[i].style.height = Highlighter.dimension.y + "px" ;
 				}
 			}
 			endBlock.style.display  = "block" ;
 			endBlock.style.top  = parseInt(Highlighter.block[lastIndex - 1].style.top) + Highlighter.dimension.y + "px" ;
-			endBlock.style.left  = eXo.core.Browser.findPosXInContainer(Highlighter.cell[0], Highlighter.container) - fixleftIE + "px" ;
+			//endBlock.style.right  = eXo.core.Browser.findPosXInContainer(Highlighter.cell[0], Highlighter.container) - fixleftIE + "px" ;
+			Highlighter.reserveDirection(Highlighter.cell[0], Highlighter.container,endBlock) ;
 			endBlock.style.width = endX + "px" ;
 			endBlock.style.height = Highlighter.dimension.y + "px" ;
 			Highlighter.hideBlock(startIndex, lastIndex) ;
