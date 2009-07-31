@@ -15,8 +15,7 @@
    contactUrl = "#" ;
    chatUrl = "#" ;  
   } ;
-  
-  
+    
 %>
 <table style="table-layout: fixed;width: 100%;-width: auto;">
 	<tr>
@@ -184,6 +183,7 @@
 			<div class="SideBar">	
 				<div class="SideBarContainer">
 					<div style="height: 11px;"><span></span></div>
+					 <%if(user == null) { %>
 					<div class="DotLine"><span></span></div>
 						<div class="LeftButton">
 							<div class="RightButton">
@@ -192,9 +192,9 @@
 								<a href="$registerUrl" style="color: white;" class="TextBntColla"><%=_ctx.appRes("UIHomePagePortlet.cs-register")%></a></div>
 							</div>
 						</div>
-					
+					 
 					<div class="DotLine"><span></span></div>
-				 
+				    <%}%>
 					<div class="DownloadButton">
 						<div style="height: 45px"><span></span></div>
 						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3RC1-tomcat.zip" style="color: white;" class="TextDownload"><%=_ctx.appRes("UIHomePagePortlet.cs-download")%></a><br/>
