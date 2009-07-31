@@ -16,7 +16,7 @@
           <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.address-book") %></td>
           <td class="FieldComponent">
             <% uicomponent.renderField(uicomponent.SELECT_GROUP)%>
-            <% if (!uicomponent.isEdited_) {%><a href="<%=uicomponent.event("AddGroup")%>" title="Add Address Book"><img class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/></a><%}%> 
+            <% if (!uicomponent.isEdited_) {%><a href="<%=uicomponent.event("AddGroup")%>" title="Add Address Book"><img class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/></a><%}%>
           </td>           
         </tr>
       </tbody>
