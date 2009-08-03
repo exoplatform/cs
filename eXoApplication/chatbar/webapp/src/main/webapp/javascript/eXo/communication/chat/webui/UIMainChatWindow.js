@@ -655,7 +655,7 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
   }
   switch (action) {
     case this.JOIN_TO_ROOM_ACTION:
-      //window.alert('Your secret key to join room is not valid/You are trying to join private room!\nPlease try again later');
+      window.alert('Your secret key to join room is not valid/You are trying to join private room!\nPlease try again later');
     //case this.LOGIN_ACTION:
     //case this.LOGOUT_ACTION:
     //case this.SEND_STATUS_ACTION:
