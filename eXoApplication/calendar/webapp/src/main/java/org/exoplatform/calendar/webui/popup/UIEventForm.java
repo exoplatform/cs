@@ -112,7 +112,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
                      @EventConfig(listeners = UIEventForm.MoveNextActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.MovePreviousActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.DeleteUserActionListener.class, phase = Phase.DECODE),
-                     @EventConfig(listeners = UIEventForm.DeleteActionListener.class, confirm = "UIEventForm.msg.confirm-delete"),
+                     @EventConfig(listeners = UIEventForm.DeleteActionListener.class, confirm = "UIEventForm.msg.confirm-delete", phase = Phase.DECODE ),
 
                      @EventConfig(listeners = UIEventForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
