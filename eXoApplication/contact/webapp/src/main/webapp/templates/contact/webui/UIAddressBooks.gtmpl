@@ -283,8 +283,8 @@
 			            </a>
 				        </div>						        
 				        
-				        <div class="MenuItem" style="color:#cccccc">   
-			            <a class="ItemIcon ShareIcon" href="javascript:void(0) ;">
+				        <div class="MenuItem">   
+			            <a class="ItemIcon ShareIcon" style="color:#cccccc" href="javascript:void(0) ;">
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.share")%>
 			            </a>
 				        </div>				     
@@ -349,8 +349,8 @@
 	      	<div class="MiddleLeftRightClickPopupMenu">
 	          <div class="MiddleRightRightClickPopupMenu">
   						<div class="UIRightPopupMenuContainer">
-				  			<div class="MenuItem" style="color:#cccccc">   
-			            <a class="ItemIcon ContactIcon" href="javascript:void(0) ;">
+				  			<div class="MenuItem">   
+			            <a class="ItemIcon ContactIcon" style='color : #cccccc ;' href="javascript:void(0) ;">
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>
 			            </a>
 				        </div>
@@ -360,14 +360,14 @@
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>
 			            </a>
 				        </div>
-				        <div class="MenuItem" style="color:#cccccc">   
-			            <a class="ItemIcon PasteIcon" href="javascript:void(0) ;">
+				        <div class="MenuItem">   
+			            <a class="ItemIcon PasteIcon" style="color:#cccccc" href="javascript:void(0) ;">
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.pasteContacts")%>
 			            </a> 
 				        </div>					        
 				        
-				        <div class="MenuItem" style="color:#cccccc">   
-			            <a class="ItemIcon ShareIcon" href="javascript:void(0) ;">
+				        <div class="MenuItem">   
+			            <a class="ItemIcon ShareIcon"  style="color:#cccccc" href="javascript:void(0) ;">
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.share")%>
 			            </a>
 				        </div>				     
@@ -376,13 +376,13 @@
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.exportContacts")%>
 			            </a>
 				        </div>
-				        <div class="MenuItem" style="color:#cccccc">   
-			            <a class="ItemIcon ImportContactIcon" href="javascript:void(0) ;">
+				        <div class="MenuItem">   
+			            <a class="ItemIcon ImportContactIcon" style="color:#cccccc" href="javascript:void(0) ;">
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.importContacts")%>
 			            </a>
 				        </div>
-				        <div class="MenuItem" style="color:#cccccc">   
-			            <a class="ItemIcon EditActionIcon" href="javascript:void(0) ;">
+				        <div class="MenuItem">   
+			            <a class="ItemIcon EditActionIcon" style="color:#cccccc" href="javascript:void(0) ;">
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.edit")%>
 			            </a>
 				        </div>
@@ -393,8 +393,8 @@
 			            </a>
 				        </div>
 				        
-				        <div class="MenuItem" style="color:#cccccc">   
-			            <a class="ItemIcon DeleteIcon" href="javascript:void(0) ;">
+				        <div class="MenuItem">   
+			            <a class="ItemIcon DeleteIcon" style="color:#cccccc" href="javascript:void(0) ;">
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>
 			            </a> 
 				        </div>					        
