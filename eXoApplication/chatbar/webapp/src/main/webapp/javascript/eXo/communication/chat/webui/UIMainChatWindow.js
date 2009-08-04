@@ -857,6 +857,10 @@ UIMainChatWindow.prototype.processSubscriptions = function(eventId) {
         case 'subscribed':
           break;
         case 'unsubscribed':
+        	denyUser = subscription.from;
+        	denyUser = denyUser.substring(0, denyUser.indexOf('@'));
+        	//window.alert(denyUser + ' has denied your request to add them to your contact list.');
+        	this.jabberRemoveUser(denyUser);
           break;
         case 'subscribe':
           var requestUser = subscription.from;
@@ -868,6 +872,12 @@ UIMainChatWindow.prototype.processSubscriptions = function(eventId) {
             this.jabberUnsubscriptUser(requestUser);
           }
           break;
+        case 'unsubscribe':
+        	denyUser = subscription.from;
+        	denyUser = denyUser.substring(0, denyUser.indexOf('@'));
+        	//window.alert(denyUser + ' has denied your request to add them to your contact list.');
+        	this.jabberRemoveUser(denyUser);
+        	break;
       }
     }
   } else if (serverData.presences) {
