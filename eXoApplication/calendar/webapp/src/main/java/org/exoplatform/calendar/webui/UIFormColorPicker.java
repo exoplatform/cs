@@ -123,7 +123,7 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
   @SuppressWarnings("unused")
   public void decode(Object input, WebuiRequestContext context) throws Exception {
     value_ = (String) input;
-    if(value_ != null && value_.trim().length() == 0) value_ = null ;
+    if(value_ != null && value_.trim().length() == 0) value_ = "" ;
   }
   public void setOnChange(String onchange){ onchange_ = onchange; } 
 
@@ -135,12 +135,12 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
   }
 
   private String renderJsActions() {
-    StringBuffer sb = new StringBuffer("") ;
+    StringBuffer sb = new StringBuffer() ;
     for(String k : jsActions_.keySet()){
-      if(sb != null && sb.length() > 0 ) sb.append(" ") ;
-      if(jsActions_.get(k) != null) {
+      if(jsActions_.get(k) != null && jsActions_.get(k).trim().length() > 0) {
         sb.append(k).append("=\"").append(jsActions_.get(k)).append("\"") ;
       }  
+      if(sb != null && sb.length() > 0 ) sb.append(" ") ;
     }
     return sb.toString() ;
   }
@@ -154,13 +154,15 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
   }
   private int items() {return items_ ;}
   private int size() {return colors_.length ;}
+ 
   public void processRender(WebuiRequestContext context) throws Exception {
+    if(value_ == null) value_ = "" ;
     Writer w =  context.getWriter() ; 
     w.write("<div class='UIFormColorPicker'>") ;
       w.write("<div class=\"UIColorPickerInput\" onclick=\"eXo.calendar.UIColorPicker.show(this)\">") ;
       w.write("<span class=\" DisplayValue "+encodeValue(value_).toString()+"\"></span>") ;
       w.write("</div>") ;
-      w.write("<div class=\"CalendarTableColor\" selectedColor=\""+encodeValue(value_).toString()+" \">") ;
+      w.write("<div class=\"CalendarTableColor\" selectedColor=\""+encodeValue(value_).toString()+"\">") ;
       int i = 0 ;
       int count = 0 ;
       while(i <= size()/items())  {
@@ -193,7 +195,7 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
 
   private StringBuilder encodeValue(String value){
     char [] chars = {'\'', '"'};
-    String [] refs = {"&#39;", "&#34;"};
+    String [] refs = {"&#39;", "&#34;"};    
     StringBuilder builder = new StringBuilder(value);
     int idx ;
     for(int i = 0; i < chars.length; i++){
