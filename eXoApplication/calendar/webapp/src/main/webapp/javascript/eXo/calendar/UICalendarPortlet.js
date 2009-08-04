@@ -43,19 +43,39 @@ UICalendarPortlet.prototype.addQuickShowHidden = function(obj, type){
 } ;
 
 /**
+ * Show Quick add event and task form 
+ * @param {obj, type} has action object, type of form : event 1 | task 2 | calendarId selected calendar
+ */
+UICalendarPortlet.prototype.addQuickShowHiddenWithId = function(obj, type, id){
+	var startTime = new Date().getTime() ;
+    var id = (id.match(/calendar[a-zA-Z0-9]+\&/ig)).toString().replace("&","");
+    this.addQuickShowHiddenWithTime(obj, type, startTime, startTime + 15*60*1000, id) ;
+} ;
+
+
+/**
  * Show Quick add event and task form with selected time
  * @param {obj, type, from, to} has action object, type of form : event 1 | task 2, from in milliseconds, to in milliseconds
  */
-UICalendarPortlet.prototype.addQuickShowHiddenWithTime = function(obj, type, fromMilli, toMilli){
+UICalendarPortlet.prototype.addQuickShowHiddenWithTime = function(obj, type, fromMilli, toMilli, id){
     var CalendarWorkingWorkspace =  document.getElementById("UICalendarWorkingContainer");
     var UIQuckAddEventPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddEventPopupWindow");
     var UIQuckAddTaskPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddTaskPopupWindow");
+    var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;     
+    if(eXo.calendar.UICalendarPortlet.filterSelect.options.length <= 1) {
+    	var divEventCategory = eXo.core.DOMUtil.findAncestorByClass(eXo.calendar.UICalendarPortlet.filterSelect, "EventCategory") ;
+    	alert(divEventCategory.getAttribute("msg")) ;
+    	return;
+    }
     var formater = eXo.cs.DateTimeFormater ;
     var data = {
     		from:parseInt(fromMilli),
     		fromTime:parseInt(fromMilli),
     		to:parseInt(toMilli),
-    		toTime:parseInt(toMilli)
+    		toTime:parseInt(toMilli),
+    		isAllday:false,
+    		calendar:id,
+    		category:selectedCategory.value
     };
     if(type == 1) {
     	var uiform = eXo.core.DOMUtil.findDescendantById(UIQuckAddEventPopupWindow, "UIQuickAddEvent") ;
@@ -81,15 +101,29 @@ UICalendarPortlet.prototype.fillData = function(uiform, data) {
 	var fromFieldTime = uiform.elements["fromTime"] ;
 	var toField = uiform.elements["to"] ;
 	var toFieldTime = uiform.elements["toTime"] ;
+	var isAllday = uiform.elements["allDay"] ;
+	var calendar = uiform.elements["calendar"]; 
+	var category = uiform.elements["category"] ;
+	
 	var formater = eXo.cs.DateTimeFormater ;
 	var timeType = "HH:MM" ;
 	var dateType = fromField.getAttribute("format").replace("MM","mm") ;
 	if(fromFieldTime.value.trim().length > 5)  timeType = formater.masks.shortTime ;
 	fromField.value = formater.format(data.from, dateType);
-	fromFieldTime.value = formater.format(data.fromTime, timeType);
-	
+	fromFieldTime.style.visibility= "visible";
+	fromFieldTime.value = formater.format(data.fromTime, timeType);	
 	toField.value = formater.format(data.to, dateType);
+	toFieldTime.style.visibility = "visible";
 	toFieldTime.value = formater.format(data.toTime, timeType); 
+	isAllday.checked = data.isAllday ;
+	for(i=0; i < calendar.options.length;  i++) {
+		var value = calendar.options[i].value ;
+		calendar.options[i].selected = (value.match(data.calendar) != null);		   
+	}
+	for(i=0; i < category.options.length;  i++) {
+		var value = category.options[i].value ;
+		category.options[i].selected = (value.match(data.category) != null);		 
+	}
 }
 /**
  * Convert time from milliseconds to minutes

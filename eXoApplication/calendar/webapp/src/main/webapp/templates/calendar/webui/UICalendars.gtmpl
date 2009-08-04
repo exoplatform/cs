@@ -288,14 +288,14 @@
 				          <div class="MiddleRightRightClickPopupMenu">
 		          		<div class="UIRightPopupMenuContainer" >
 		                   <div class="MenuItem MenuItemHover">   
-		                    <div class="ItemIcon AddNewEvent" onclick ="eXo.calendar.UICalendarPortlet.addQuickShowHidden(this, 1);">
+		                    <a class="ItemIcon AddNewEvent" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 1, 'objectId=id');">
 		                    	<%=uiform.getLabel("AddEvent")%>
-		                    </div>
+		                    </a>
 		                   </div>
 		                   <div class="MenuItem">   
-		                    <div class="ItemIcon AddNewTask" onclick ="eXo.calendar.UICalendarPortlet.addQuickShowHidden(this, 2);">
+		                    <a class="ItemIcon AddNewTask" href="javascript:eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithId(this, 2, 'objectId=id');">
 		                    	<%=uiform.getLabel("AddTask")%>
-		                    </div>
+		                    </a>
 		                   </div>
 		                   <div class="MenuItem">   
 		                    <a class="ItemIcon  EditCalendarIcon" href="<%=uicomponent.event("EditCalendar","id")%>">

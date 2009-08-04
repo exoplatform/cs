@@ -78,7 +78,7 @@ uicomponent.setSelectedCategory(uicomponent.getSelectedCategory()) ;
 		<div class="AddCategoryIcon" onclick="<%=uicomponent.event("AddCategory")%>" title="<%=_ctx.appRes('UIHeaderBar.label.addNewCategory')%>">
 			<span></span>
 		</div>
-		<div class="EventCategory">
+		<div class="EventCategory" msg="<%=_ctx.appRes('UICalendarView.msg.event-category-list-empty')%>">
 			<% 
 				uiform.renderField("eventCategories") ;
 			%>			
