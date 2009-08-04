@@ -617,13 +617,16 @@
 	font-size:11px;
 }
 
+.UIMailPortlet .UIContextMenuContainer .MenuItem .ItemIcon{
+	background-position: 4px center; /* orientation=lt */
+	background-position: 98% center; /* orientation=rt */
+}
+
 .UIRightClickPopupMenu .MenuItem .ItemIcon{
 	margin: 0px 2px;
 	padding: 0px 5px 0px 26px; /* orientation=lt */
 	padding: 0px 26px 0px 5px; /* orientation=rt */
 	line-height: 25px;
-	background-position: 4px center; /* orientation=lt */
-	background-position: 98% center; /* orientation=rt */
 }
 
 .UIRightClickPopupMenu .MenuItem .ItemIcon:hover {
