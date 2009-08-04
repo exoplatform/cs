@@ -16,9 +16,12 @@ UIMailDragDrop.prototype.onLoad = function() {
 
 UIMailDragDrop.prototype.init = function() {
   this.dropableSets = [] ;
-  this.uiMailPortletNode = document.getElementById('UIMailPortlet') ;
+  var uiMailPortletNode = eXo.core.DOMUtil.findDescendantsByClass(document.body,"div","UIMailPortlet") ;
   this.getAllDropableSets() ;
-  this.regDnDItem() ;
+  var i = uiMailPortletNode.length ;
+  while(i--){  	
+	this.regDnDItem(uiMailPortletNode[i]) ;
+  }
 } ;
 
 UIMailDragDrop.prototype.getAllDropableSets = function() {
@@ -44,8 +47,9 @@ UIMailDragDrop.prototype.getAllDropableSets = function() {
   }
 } ;
 
-UIMailDragDrop.prototype.regDnDItem = function() {
-  var uiListUsersNode = document.getElementById('UIListUsers') ;
+UIMailDragDrop.prototype.regDnDItem = function(rootNode) {
+  var uiListUsersNode = eXo.core.DOMUtil.findDescendantById(rootNode,'UIListUsers') ;
+  if(!uiListUsersNode) return ;
   var mailList = this.DOMUtil.findDescendantsByClass(uiListUsersNode, 'tr', this.msgItemClass) ;
   for (var i=0; i<mailList.length; i++) {
     mailList[i].onmousedown = this.mailMDTrigger ;
