@@ -226,10 +226,16 @@
 	white-space: normal;
 }
 
+.UIContactPortlet .UIContextMenuContainer .MenuItem .ItemIcon{
+	background-position: 4px center; /* orientation=lt */
+	background-position: 98% center; /* orientation=rt */
+}
+
 .UIRightClickPopupMenu .MenuItem .ItemIcon{
-	padding: 5px 5px 5px 23px; /* orientation=lt */
-	padding: 5px 23px 5px 5px; /* orientation=rt */
+	padding: 0px 5px 0px 28px; /* orientation=lt */
+	padding: 0px 28px 0px 5px; /* orientation=rt */
 	margin: 0px 2px;
+	line-height: 25px;
 }
 
 .UIRightClickPopupMenu .MenuItem .ItemIcon:hover {
