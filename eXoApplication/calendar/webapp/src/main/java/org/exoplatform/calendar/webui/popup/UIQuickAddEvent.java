@@ -24,8 +24,11 @@ import java.util.List;
 import java.util.Locale;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -244,6 +247,11 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     } 
     calType_ = calType ;
   }
+  
+  public boolean canEdit(String[] savePerms) throws Exception{
+    return CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), savePerms, CalendarUtils.getCurrentUser()) ;
+  }
+  
   static  public class SaveActionListener extends EventListener<UIQuickAddEvent> {
     public void execute(Event<UIQuickAddEvent> event) throws Exception {
       UIQuickAddEvent uiForm = event.getSource() ;
@@ -332,12 +340,45 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         calEvent.setFromDateTime(from);
         calEvent.setToDateTime(to) ;
         calEvent.setCalType(uiForm.calType_) ;
+        
+        CalendarService calService =  CalendarUtils.getCalendarService() ;
+        Calendar calendar = null ;
+        if(CalendarUtils.PRIVATE_TYPE.equals(uiForm.calType_)) { 
+          calendar = calService.getUserCalendar(username, calEvent.getCalendarId()) ;
+        } else if (CalendarUtils.PUBLIC_TYPE.equals(uiForm.calType_)) {
+          GroupCalendarData gCalendarData = calService.getSharedCalendars(username, true) ;
+          if( gCalendarData!= null && gCalendarData.getCalendarById(calEvent.getCalendarId()) != null) calendar = gCalendarData.getCalendarById(calEvent.getCalendarId()) ;
+        } else if (CalendarUtils.SHARED_TYPE.equals(uiForm.calType_)){
+          calendar = calService.getSharedCalendars(username, true).getCalendarById(calEvent.getCalendarId()) ;
+        }
+        if (calendar == null) {
+          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          uiForm.reset() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UICalendarPortlet.class)) ;
+          return ;
+        } else {
+          if(CalendarUtils.SHARED_TYPE.equals(uiForm.calType_) && !CalendarUtils.canEdit(null, calendar.getEditPermission(), username)) {
+            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null,1));
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            uiForm.reset() ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UICalendarPortlet.class)) ;
+            return ;
+          }
+          if(CalendarUtils.PUBLIC_TYPE.equals(uiForm.calType_) && !uiForm.canEdit(calendar.getEditPermission())) {
+            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            uiForm.reset() ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UICalendarPortlet.class)) ;
+            return ;
+          }
+        }
         if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-          CalendarUtils.getCalendarService().saveUserEvent(username, calEvent.getCalendarId(), calEvent, true) ;
+          calService.saveUserEvent(username, calEvent.getCalendarId(), calEvent, true) ;
         }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
-          CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calEvent.getCalendarId(), calEvent, true) ;
+          calService.saveEventToSharedCalendar(username, calEvent.getCalendarId(), calEvent, true) ;
         }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-          CalendarUtils.getCalendarService().savePublicEvent(calEvent.getCalendarId(), calEvent, true) ;          
+          calService.savePublicEvent(calEvent.getCalendarId(), calEvent, true) ;          
         }
         /*UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
         uiPopupAction.deActivate() ;
