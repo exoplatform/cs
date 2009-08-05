@@ -245,6 +245,7 @@
 
 .UIChatBarPortlet .UIRightClickPopupMenu .ItemIcon:hover {
 	color: orange;
+	background-color: #DEE4F2;
 }
 
 .UIChatBarPortlet .UIRightClickPopupMenu .TypeViewContactPortlet {
