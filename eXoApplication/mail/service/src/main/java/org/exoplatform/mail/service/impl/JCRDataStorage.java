@@ -55,6 +55,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.Folder;
@@ -2900,13 +2901,16 @@ public class JCRDataStorage {
    * @see SessionProviderService#getSessionProvider(null)
    */
   private SessionProvider createSessionProvider() {
-    /*PortalContainer portalContainer = PortalContainer.getInstance();
+    PortalContainer portalContainer = PortalContainer.getInstance();
     PortalContainer.setInstance(portalContainer);    
-    SessionProviderService service = (SessionProviderService) portalContainer.getComponentInstanceOfType(SessionProviderService.class);*/
+    SessionProviderService service = (SessionProviderService) portalContainer.getComponentInstanceOfType(SessionProviderService.class);
     
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
     SessionProvider provider = service.getSessionProvider(null);
+    if (provider == null) {
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+      provider = service.getSessionProvider(null);
+    }
     if (provider == null) {
       //logger.info("eXo Mail Service: No user session provider was available, using a system session provider");
       provider = service.getSystemSessionProvider(null);
