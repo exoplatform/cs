@@ -158,6 +158,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 
       Map<String, String> tagIds = new LinkedHashMap<String, String>() ;
       String inputTag = uiTagForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue();
+//    CS-3009
+      inputTag = ContactUtils.reduceSpace(inputTag) ;
       UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
       UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;
       if (!ContactUtils.isEmpty(inputTag)) {

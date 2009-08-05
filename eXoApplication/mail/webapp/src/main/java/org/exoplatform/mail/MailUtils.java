@@ -326,4 +326,15 @@ public class MailUtils {
     return groupIds ;
   }
   
+  public static String reduceSpace(String s) {
+    if (isFieldEmpty(s)) return "" ;
+    String[] words = s.split(" ") ;
+    StringBuilder builder = new StringBuilder() ;
+    for (String word : words) {
+      if (builder.length() > 0 && word.trim().length() > 0) builder.append(" ") ;
+      builder.append(word.trim()) ;
+    }
+    return builder.toString() ;
+  }
+  
 }

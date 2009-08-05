@@ -110,7 +110,8 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       String tagId = editTagForm.getTagId();
       String newTagName = editTagForm.getUIStringInput(NEW_TAG_NAME).getValue().trim() ;
-      
+//    CS-3009
+      newTagName = MailUtils.reduceSpace(newTagName) ;
       if (!MailUtils.isNameValid(newTagName, MailUtils.SIMPLECHARACTER)) {
         UIApplication uiApp = editTagForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagname-invalid", MailUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;

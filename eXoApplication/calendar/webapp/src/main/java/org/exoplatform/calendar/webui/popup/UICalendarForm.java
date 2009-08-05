@@ -478,6 +478,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         UICalendarForm uiForm = event.getSource() ;
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         String displayName = uiForm.getUIStringInput(DISPLAY_NAME).getValue() ;
+//      CS-3009
+        displayName = CalendarUtils.reduceSpace(displayName) ;
         if(!CalendarUtils.isNameValid(displayName, CalendarUtils.SPECIALCHARACTER)){
           uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-invalid", null, ApplicationMessage.WARNING) ) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

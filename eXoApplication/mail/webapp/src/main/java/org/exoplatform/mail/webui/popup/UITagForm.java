@@ -149,6 +149,8 @@ public class UITagForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UITagForm> event) throws Exception {
       UITagForm uiTagForm = event.getSource(); 
       String newTagName = uiTagForm.getUIStringInput(SELECT_AVAIABLE_TAG).getValue();
+//    CS-3009
+      newTagName = MailUtils.reduceSpace(newTagName) ;
       String tagColor = uiTagForm.getSelectedColor();
       UIMailPortlet uiPortlet = uiTagForm.getAncestorOfType(UIMailPortlet.class);
       UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class);
