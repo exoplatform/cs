@@ -55,7 +55,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.Folder;
@@ -511,7 +510,6 @@ public class JCRDataStorage {
     try {
       sProvider = createSessionProvider();
       Node homeNode = getMailHomeNode(sProvider, username);
-      // gets the specified account, and removes it
       if (homeNode.hasNode(accountId)) {
         homeNode.getNode(accountId).remove();
         homeNode.getSession().save();
@@ -852,10 +850,10 @@ public class JCRDataStorage {
   }
 
   public void saveMessage(String username, String accountId, String targetMsgPath, Message message, boolean isNew) throws Exception {
+    Node msgNode = saveMessage(username, accountId, message, isNew);
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
-      Node msgNode = saveMessage(username, accountId, message, isNew);
       if (targetMsgPath != null && !targetMsgPath.equals("")) {
         Node mailHome = getMailHomeNode(sProvider, username);
         Node targetNode = (Node) mailHome.getSession().getItem(targetMsgPath);
@@ -880,7 +878,6 @@ public class JCRDataStorage {
         nodeMsg = (Node) mailHome.getSession().getItem(message.getPath());
       }
       if (nodeMsg != null) {
-        // add some properties
         nodeMsg.setProperty(Utils.EXO_ID, message.getId());
         nodeMsg.setProperty(Utils.EXO_UID, message.getUID());
         nodeMsg.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, message.getInReplyToHeader());
@@ -932,7 +929,6 @@ public class JCRDataStorage {
           }
           nodeMsg.setProperty(Utils.EXO_HASATTACH, false);
         }
-        //TODO should use: attachments.isEmpty()
         if (attachments != null && attachments.size() > 0) {
           Iterator<Attachment> it = attachments.iterator();
           boolean makeNewAtt = isNew ;
@@ -959,20 +955,22 @@ public class JCRDataStorage {
             }
 
             Node nodeContent = null;
-            if (!nodeFile.hasNode(Utils.JCR_CONTENT))
+            if (!nodeFile.hasNode(Utils.JCR_CONTENT)) {
               nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
-            else
+            } else {
               nodeContent = nodeFile.getNode(Utils.JCR_CONTENT);
+            }
             nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
             nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
             nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
+            nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, false);
             nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
           }
         }
 
-        if (nodeMsg.canAddMixin("mix:referenceable"))
-          nodeMsg.addMixin("mix:referenceable");
+        if (nodeMsg.canAddMixin("mix:referenceable")) nodeMsg.addMixin("mix:referenceable");
         nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
+        nodeMsg.setProperty(Utils.IS_LOADED, message.isLoaded());   
         nodeMsg.save();
       }
       return nodeMsg;
@@ -1634,7 +1632,6 @@ public class JCRDataStorage {
       } else { // if it doesn't exist, creates it
         myFolder = parentNode.addNode(folder.getId(), Utils.EXO_FOLDER);
       }
-      // sets some properties
       myFolder.setProperty(Utils.EXO_ID, folder.getId());
       myFolder.setProperty(Utils.EXO_NAME, folder.getName());
       myFolder.setProperty(Utils.EXO_LABEL, folder.getURLName());
@@ -1667,11 +1664,6 @@ public class JCRDataStorage {
       try {
         Value[] propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
         String[] oldFolderIds = new String[propFolders.length];
-        //TODO use for each, and we can remove the folder id in this loop
-        /*List<String> folderList = new ArrayList<String>(Arrays.asList(oldFolderIds));
-        for (Value v : propFolders) {
-           if(!v.getString().equals(folderId)) folderList.add(v.getString()) ;
-        }*/
         for (int i = 0; i < propFolders.length; i++) {
           oldFolderIds[i] = propFolders[i].getString();
         }
@@ -2639,8 +2631,7 @@ public class JCRDataStorage {
     try {
       sProvider = createSessionProvider(); 
       try {
-        Node messageNode = getDateStoreNode(sProvider, username, accountId, msg.getReceivedDate())
-        .getNode(msg.getId());
+        Node messageNode = getDateStoreNode(sProvider, username, accountId, msg.getReceivedDate()).getNode(msg.getId());
         if (messageNode.hasNode(Utils.KEY_ATTACHMENT)){
           NodeIterator msgAttachmentIt = messageNode.getNode(Utils.KEY_ATTACHMENT).getNodes();
           List<Attachment> attachments = new ArrayList<Attachment>();
@@ -2649,8 +2640,7 @@ public class JCRDataStorage {
             if (node.isNodeType(Utils.EXO_MAIL_ATTACHMENT)) {
               JCRMessageAttachment file = new JCRMessageAttachment();
               file.setId(node.getPath());
-              file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE)
-                               .getString());
+              file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE).getString());
               file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
               //TODO fix last minute bug CS-2530
               if(node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))

@@ -654,10 +654,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       MailService mailSvr = composeForm.getApplicationComponent(MailService.class) ;
       String accountId = composeForm.getFieldFromValue() ;
       String usename = uiPortlet.getCurrentUser() ;
-      SessionProvider session = SessionProviderFactory.createSystemProvider();
 
       Message message = composeForm.getNewMessage() ; 
-      // validate message
       if (!composeForm.validateMessage(event, message)) return;
       if (MailUtils.isFieldEmpty(message.getMessageTo()) &&
           MailUtils.isFieldEmpty(message.getMessageCc()) &&
@@ -671,7 +669,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class) ;
       try {
         mailSvr.sendMessage(usename, message) ;
-//      TODO cs-1141
         ContactService contactService = (ContactService)PortalContainer.getComponent(ContactService.class) ;
         contactService.saveAddress(usename, message.getMessageTo()) ;
         contactService.saveAddress(usename, message.getMessageCc()) ;
@@ -708,7 +705,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       // save to Sent folder and update the number of total messages in Sent folder
       try {
         composeForm.saveToSentFolder(usename, accountId, message);
-        // update ui
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         uiMessageList.updateList();
@@ -735,7 +731,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   }
 
   public void saveToSentFolder(String usename, String accountId, Message message) throws Exception {
-    SessionProvider session = SessionProviderFactory.createSystemProvider();
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     MailSetting setting = mailSvr.getMailSetting(usename);
     boolean isSaved = setting.saveMessageInSent();
