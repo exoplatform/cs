@@ -462,10 +462,7 @@ public class UICalendars extends UIForm  {
         Calendar calendar = null ;
         if(CalendarUtils.PRIVATE_TYPE.equals(calType)) { 
           calendar = calService.getUserCalendar(username, calendarId) ;
-        }/* else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
-           if(calService.getSharedCalendars(uiComponent.getSystemSession(), username, true) != null)
-            calendar = calService.getSharedCalendars(uiComponent.getSystemSession(), username, true).getCalendarById(calendarId) ;
-        }*/ else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
+        } else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
           calendar = calService.getGroupCalendar(calendarId) ;
         }
         if(calendar == null){
