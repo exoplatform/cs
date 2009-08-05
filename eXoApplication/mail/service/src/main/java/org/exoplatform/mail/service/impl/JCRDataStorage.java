@@ -982,18 +982,18 @@ public class JCRDataStorage {
   }
   
   public boolean saveMessage(String username, String accId, javax.mail.Message msg,
-      String folderIds[], List<String> tagList, SpamFilter spamFilter) throws Exception {
-    return saveMessage(username, accId, msg, folderIds, tagList, spamFilter, null, null);
+      String folderIds[], List<String> tagList, SpamFilter spamFilter, boolean saveTotal) throws Exception {
+    return saveMessage(username, accId, msg, folderIds, tagList, spamFilter, null, null, saveTotal);
   }
   
 
   public boolean saveMessage(String username, String accId, javax.mail.Message msg,
-      String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation) throws Exception {
-    return saveMessage(username, accId, 0, msg, folderIds, tagList, spamFilter, infoObj, continuation);
+      String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation, boolean saveTotal) throws Exception {
+    return saveMessage(username, accId, 0, msg, folderIds, tagList, spamFilter, infoObj, continuation, saveTotal);
   }
 
   public boolean saveMessage(String username, String accId, long msgUID, javax.mail.Message msg,
-      String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation) throws Exception {
+      String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation, boolean saveTotal) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
@@ -1120,7 +1120,9 @@ public class JCRDataStorage {
           JsonValue json = generatorImpl.createJsonObject(infoObj);
           continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
         }
-  
+        
+        if (saveTotal) saveTotalMessage(username, accId, msgId, msg, sProvider) ;
+        
         t4 = System.currentTimeMillis();
         logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
         logger.warn("Adding message to thread ...");
@@ -1149,10 +1151,13 @@ public class JCRDataStorage {
     }
   }
   
-  public boolean saveTotalMessage(String username, String accId, String msgId, javax.mail.Message msg) throws Exception {
-    SessionProvider sProvider = null;
+  public boolean saveTotalMessage(String username, String accId, String msgId, javax.mail.Message msg, SessionProvider sProvider) throws Exception {
+    boolean closeProvider = false;
     try {
-      sProvider = createSessionProvider(); 
+      if (sProvider == null) {
+        sProvider = createSessionProvider();
+        closeProvider = true;
+      }
       Calendar gc = MimeMessageParser.getReceivedDate(msg);
       Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());    
       Node node = null;
@@ -1193,7 +1198,7 @@ public class JCRDataStorage {
       }
       return true;
     } finally {
-      closeSessionProvider(sProvider);
+      if (closeProvider) closeSessionProvider(sProvider);
     }
   } 
   

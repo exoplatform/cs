@@ -1014,7 +1014,7 @@ public class MailServiceImpl implements MailService, Startable {
             }
             infoObj.setFolders(folderStr);
             msgUID = ((IMAPFolder)folder).getUID(msg);
-            saved = storage_.saveMessage(username, accountId, msgUID, msg, folderIds, null, spamFilter, infoObj, continuation);
+            saved = storage_.saveMessage(username, accountId, msgUID, msg, folderIds, null, spamFilter, infoObj, continuation, false);
             
             if (saved) {
               //msg.setFlag(Flags.Flag.SEEN, true);
@@ -1564,11 +1564,11 @@ public class MailServiceImpl implements MailService, Startable {
         if (fd != null) {
           if (fd.isOpen()) {
             message = ((IMAPFolder)fd).getMessageByUID(Long.valueOf(msg.getUID()));
-            storage_.saveTotalMessage(username, accountId, msg.getId(), message);
+            storage_.saveTotalMessage(username, accountId, msg.getId(), message, null);
           } else {
             fd.open(javax.mail.Folder.READ_WRITE);
             message = ((IMAPFolder)fd).getMessageByUID(Long.valueOf(msg.getUID()));
-            storage_.saveTotalMessage(username, accountId, msg.getId(), message);
+            storage_.saveTotalMessage(username, accountId, msg.getId(), message, null);
             fd.close(true);
           }
         }
