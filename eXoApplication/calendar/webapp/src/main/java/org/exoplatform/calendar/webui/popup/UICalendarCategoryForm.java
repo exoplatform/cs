@@ -104,6 +104,8 @@ public class UICalendarCategoryForm extends UIForm {
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UICalendarCategoryManager uiManager = uiForm.getAncestorOfType(UICalendarCategoryManager.class) ;
       String categoryName = uiForm.getCategoryName() ;
+      // CS-3009
+      categoryName = CalendarUtils.reduceSpace(categoryName) ;
       if(!CalendarUtils.isNameValid(categoryName, CalendarUtils.SPECIALCHARACTER)){
         uiApp.addMessage(new ApplicationMessage("UICalendarCategoryForm.msg.name-invalid", null, ApplicationMessage.WARNING) ) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

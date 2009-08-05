@@ -81,7 +81,8 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
       String accountId =  uiMailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       String folderId = uiForm.getFolderId();
       String newFolderName = uiForm.getUIStringInput(NEW_FOLDER_NAME).getValue() ;
-      
+//    CS-3009
+      newFolderName = MailUtils.reduceSpace(newFolderName) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UIFolderContainer uiFolderContainer = uiMailPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
 

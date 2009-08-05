@@ -90,6 +90,9 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIEditTagForm> event) throws Exception {
       UIEditTagForm uiEditTagForm = event.getSource() ;
       String tagName = uiEditTagForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue(); 
+//    CS-3009
+      tagName = ContactUtils.reduceSpace(tagName) ;
+      
       String des = uiEditTagForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue() ;
       UIApplication uiApp = uiEditTagForm.getAncestorOfType(UIApplication.class) ;
       if (ContactUtils.isEmpty(tagName)) {

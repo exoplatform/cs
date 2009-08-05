@@ -99,7 +99,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
       UICategoryForm uiCategoryForm = event.getSource() ;
-      String  groupName = uiCategoryForm.getUIStringInput(FIELD_CATEGORYNAME_INPUT).getValue().trim(); 
+      String  groupName = uiCategoryForm.getUIStringInput(FIELD_CATEGORYNAME_INPUT).getValue().trim();
+      // CS-3009
+      groupName = ContactUtils.reduceSpace(groupName) ;
       UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class) ;
       if (ContactUtils.isNameLong(groupName)) {
         uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.nameTooLong", null, 

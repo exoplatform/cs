@@ -102,6 +102,9 @@ public class UIEventCategoryForm extends UIForm {
         return ;
       }
       if(!CalendarUtils.isEmpty(name)) name = name.trim() ;
+      
+      // CS-3009
+      name = CalendarUtils.reduceSpace(name) ;
       if(!CalendarUtils.isEmpty(description)) description = description.trim() ;
       UIEventCategoryManager uiManager = uiForm.getAncestorOfType(UIEventCategoryManager.class) ;
       CalendarService calendarService = CalendarUtils.getCalendarService();

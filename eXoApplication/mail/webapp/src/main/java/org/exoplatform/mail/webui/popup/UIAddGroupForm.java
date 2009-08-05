@@ -69,6 +69,8 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
       ContactService contactSrv = uiAddGroupForm.getApplicationComponent(ContactService.class) ;
       UIApplication uiApp = uiAddGroupForm.getAncestorOfType(UIApplication.class) ;
       String groupName = uiAddGroupForm.getUIStringInput(GROUP_NAME).getValue() ;
+//    CS-3009
+      groupName = MailUtils.reduceSpace(groupName) ;
       String groupDescription = uiAddGroupForm.getUIFormTextAreaInput(GROUP_DESCRIPTION).getValue() ;
       String username = MailUtils.getCurrentUser() ;
       if (groupName == null || groupName.trim().equals("")) {

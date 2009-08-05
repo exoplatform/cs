@@ -741,4 +741,15 @@ public class CalendarUtils {
     options.add(new SelectItemOption<String>(CalendarSetting.ACTION_ASK, CalendarSetting.ACTION_ASK)) ;
     return options ;
   }
+  
+  public static String reduceSpace(String s) {
+    if (isEmpty(s)) return "" ;
+    String[] words = s.split(" ") ;
+    StringBuilder builder = new StringBuilder() ;
+    for (String word : words) {
+      if (builder.length() > 0 && word.trim().length() > 0) builder.append(" ") ;
+      builder.append(word.trim()) ;
+    }
+    return builder.toString() ;
+  }
 }
