@@ -371,7 +371,6 @@ public class UIMessageList extends UIForm {
       if (msg != null) {
         MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
         msg = mailSrv.loadTotalMessage(username, accountId, msg) ;
-        if (msg.getMessageBody() == null) msg.setMessageBody("Please wait while message is being loaded...");
         Account account = mailSrv.getAccountById(username, accountId);
               
         uiMessageList.setSelectedMessageId(msgId);
