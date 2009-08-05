@@ -453,11 +453,11 @@ public class CalendarUtils {
   public static boolean canEdit(OrganizationService oService, String[] savePerms, String username) throws Exception {
     StringBuffer sb = new StringBuffer(username) ;
     if(oService != null) {
-      Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUser(username) ;
       Collection<Group> groups = oService.getGroupHandler().findGroupsOfUser(username) ;
       for(Group g : groups) {
         sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(ANY) ;
         sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(username) ;
+        Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUserAndGroup(username, g.getId()) ;
         for(Membership mp : memberShipsType) {
           sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(ANY_OF + mp.getMembershipType()) ;
         }
