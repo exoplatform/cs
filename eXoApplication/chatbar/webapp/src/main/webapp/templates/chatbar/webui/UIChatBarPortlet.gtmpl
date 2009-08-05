@@ -859,7 +859,7 @@
                                                 Presence Broadcast:</label>
                                         </td>
                                         <td class="FieldComponent">
-                                            <select name="presencebroadcast" size="3">
+                                            <select name="presencebroadcast" size="3" MULTIPLE>
                                                 <option value="moderator">moderator</option>
                                                 <option value="participant">participant</option>
                                                 <option value="visitor">visitor</option>
