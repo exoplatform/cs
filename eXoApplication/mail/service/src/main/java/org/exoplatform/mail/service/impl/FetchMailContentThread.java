@@ -56,7 +56,7 @@ public class FetchMailContentThread implements Runnable {
     List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap_.keySet()) ;
     while (j < numberMessage_) {
       msg = msgList.get(j);
-      storage_.saveTotalMessage(username_, accountId_, MimeMessageParser.getMessageId(msg), msg);
+      storage_.saveTotalMessage(username_, accountId_, MimeMessageParser.getMessageId(msg), msg, null);
       j++;
     } 
   }

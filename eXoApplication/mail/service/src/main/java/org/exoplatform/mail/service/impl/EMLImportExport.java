@@ -58,7 +58,7 @@ public class EMLImportExport implements MailImportExport{
     MimeMessage mimeMessage = new MimeMessage(session, inputStream);
     mimeMessage.setHeader("Message-ID", "Message" + IdGenerator.generate());
     try {
-       return jcrDataStorage_.saveMessage(username, accountId, mimeMessage, new String[] { folderId }, null, null);
+       return jcrDataStorage_.saveMessage(username, accountId, mimeMessage, new String[] { folderId }, null, null, true);
     } catch(Exception e) { return false ; }
 	}  
 	
