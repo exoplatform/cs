@@ -61,7 +61,7 @@ UICreateNewRoomPopupWindow.prototype.createNewRoomAction = function() {
     return;
   }
   this.setVisible(false);
-  
+  this.UIMainChatWindow.newestRoomName = roomName;
   this.UIMainChatWindow.createRoomChat({id: (new Date()).getTime(), name:roomName});
 };
 

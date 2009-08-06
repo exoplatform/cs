@@ -153,6 +153,7 @@ function UIMainChatWindow() {
   this.serverInfo = false;
   this.buddyItemActionStack = false;
   this.joinedRooms = [];
+  this.newestRoomName = '';// use only for CS-2999
   this.serverDataStack = false;
   this.actionHandler = {};
   this.initialized = false;
@@ -605,7 +606,20 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
   }
   switch (action) {
     case this.JOIN_TO_ROOM_ACTION:
-      window.alert('Your secret key to join room is not valid/You are trying to join private room!\nPlease try again later');
+      switch(requestObj.status) {
+    		case 401:
+    			window.alert('Your secret key to join room is not valid.\nPlease try again later.');
+    			break;
+    		case 403:
+    		case 404:
+    		case 407:
+    		  window.alert('You are trying to join a private room in which you are not a member!\nPlease try again later.');
+    			break;
+    		case 409:
+    		default:
+    			break;
+    	}
+      break;
     //case this.LOGIN_ACTION:
     //case this.LOGOUT_ACTION:
     //case this.SEND_STATUS_ACTION:
@@ -623,6 +637,20 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
     //case this.ORG_FUZZY_SEARCH_USER_ACTION:
     //case this.ORG_COUNT_USER_ACTION:
     case this.CREATE_ROOM_ACTION:
+    	switch(requestObj.status) {
+    		case 401:
+    			this.jabberJoinToRoom(this.newestRoomName,true);
+    			break;
+    		case 403:
+    		case 404:
+    		case 407:
+    			window.alert('You are trying to join a private room in which you are not a member!\nPlease try again later.');
+    			break;
+    		case 409:
+    		default:
+    			break;
+    	}
+    	break;
     case this.CREATE_CONVERSATION_ACTION:
     case this.CONFIG_ROOM_ACTION:
     case this.GET_ROOM_CONFIG_ACTION:

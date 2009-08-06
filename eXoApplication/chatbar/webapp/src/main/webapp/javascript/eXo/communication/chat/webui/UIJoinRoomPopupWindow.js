@@ -70,7 +70,7 @@ UIJoinRoomPopupWindow.prototype.updateRoomList = function(serverData) {
     roomInfo.enabled4Add = true;
     this.roomListContainerNode.appendChild(this.createRoomNode(roomInfo, (i%2)));
   }
-  this.uiPageIterator.totalItem = serverData.totalRooms
+  this.uiPageIterator.totalItem = serverData.totalRooms;
   this.uiPageIterator.renderPageIterator(serverData);
 };
 
