@@ -17,7 +17,7 @@
 	  rcontext.getJavascriptManager().addJavascript('eXo.mail.MailServiceHandler.init(eXo.cs.webservice.core.WebserviceManager) ;') ;
 	  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.showContextMenu('" + uicomponent.id + "') ;") ;
     rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;
-    rcontext.getJavascriptManager().importJavascript('eXo.core.Cometd') ;
+    rcontext.getJavascriptManager().importJavascript('eXo.cs.CSCometd','/csResources/javascript/') ;
     rcontext.getJavascriptManager().importJavascript('eXo.mail.UpdateList','/mail/javascript/') ;
     rcontext.getJavascriptManager().addJavascript('eXo.mail.UpdateList.init("' + uicomponent.getAccountId() + '","'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+'");') ;
 	%>

@@ -3,19 +3,19 @@ function Reminder() {
 } ;
 
 Reminder.prototype.init = function(eXoUser, eXoToken){
-  eXo.core.Cometd.exoId = eXoUser;
-  eXo.core.Cometd.exoToken = eXoToken;
-  eXo.core.Cometd.subscribe('/eXo/Application/Calendar/messages', function(eventObj) {		
+	eXo.cs.CSCometd.exoId = eXoUser;
+	eXo.cs.CSCometd.exoToken = eXoToken;
+	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/messages', function(eventObj) {		
 		eXo.calendar.Reminder.alarm(eventObj) ;
   });
-  //eXo.core.Cometd.addOnConnectionReadyCallback(this.initCometd);
-	if (!eXo.core.Cometd.isConnected()) {
-     eXo.core.Cometd.init();
+  //eXo.cs.CSCometd.addOnConnectionReadyCallback(this.initCometd);
+	if (!eXo.cs.CSCometd.isConnected()) {
+		eXo.cs.CSCometd.init();
   }
 } ;
 
 Reminder.prototype.initCometd = function() {
-	eXo.core.Cometd.subscribe('/eXo/Application/Calendar/messages', function(eventObj) {		
+	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/messages', function(eventObj) {		
 		eXo.calendar.Reminder.alarm(eventObj) ;
   });
 }
