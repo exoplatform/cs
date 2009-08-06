@@ -20,6 +20,7 @@ package org.exoplatform.services.organization.rest.json;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -198,43 +199,66 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
       Query query = new Query();
       query.setUserName(question);
       PageList pageList = userHandler.findUsers(query);
-      pageList.setPageSize(numResult);
-      int page = from / numResult + 1;
-      temp = pageList.getPage(page);
-      for (User user : temp) {
-        if (!users.contains(user))
-          users.add(user);
+      int totalUsers = 0;
+      Iterator<User> i = null;
+      if("*".equals(question.trim())){
+        pageList.setPageSize(numResult);
+        int page = from / numResult + 1;
+        temp = pageList.getPage(page);
+        for (User user : temp) {
+          if (!users.contains(user))
+            users.add(user);
+        }
+        totalUsers = pageList.getAvailable();
+        i = users.iterator();
       }
-      //For CS-2662
-      query = new Query();
-      query.setFirstName(question);
-      pageList = userHandler.findUsers(query);
-      pageList.setPageSize(numResult);
-      page = from / numResult + 1;
-      temp = pageList.getPage(page);
-      for (User user : temp) {
-        if (!users.contains(user))
-          users.add(user);
+      else {
+      //For CS-2662 and CS-3032
+        temp = pageList.getAll();
+        for (User user : temp) {
+          if (!users.contains(user))
+            users.add(user);
+        }
+        
+        query = new Query();
+        query.setFirstName(question);
+        pageList = userHandler.findUsers(query);
+        temp = pageList.getAll();
+        for (User user : temp) {
+          if (!users.contains(user))
+            users.add(user);
+        }
+
+        query = new Query();
+        query.setLastName(question);
+        pageList = userHandler.findUsers(query);
+        temp = pageList.getAll();
+        for (User user : temp) {
+          if (!users.contains(user))
+            users.add(user);
+        }
+        
+        totalUsers = users.size();
+        
+        List<User> list = new ArrayList<User>();
+        list.addAll(users);
+        int page = from / numResult + 1;
+        int f = (page - 1) * numResult;
+        int t = page * numResult;
+        if(t > totalUsers) t = totalUsers;
+        list =  list.subList(f, t);
+        
+        i = list.iterator();
       }
-      query = new Query();
-      query.setLastName(question);
-      pageList = userHandler.findUsers(query);
-      pageList.setPageSize(numResult);
-      page = from / numResult + 1;
-      temp = pageList.getPage(page);
-      for (User user : temp) {
-        if (!users.contains(user))
-          users.add(user);
-      }
-      
+            
       List<UserBean> uList = new ArrayList<UserBean>();
-      Iterator<User> i = users.iterator();
       while (i.hasNext()) {
         User user = (User) i.next();
         uList.add(new UserBean(user));
       }
       UserListBean user_list = new UserListBean(uList);
-      user_list.setTotalUser(userHandler.getUserPageList(20).getAvailable());
+      //user_list.setTotalUser(userHandler.getUserPageList(20).getAvailable());
+      user_list.setTotalUser(totalUsers);
       return Response.Builder.ok(user_list, JSON_CONTENT_TYPE).build();
     } catch (Exception e) {
       e.printStackTrace();
