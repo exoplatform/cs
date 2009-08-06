@@ -122,7 +122,7 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
   
   public String getWebDAVServerPrefix() throws Exception {    
    String prefixWebDAV = CalendarUtils.getServerBaseUrl() + 
-           getPortalName() + "/rest/jcr/"+getRepository().getConfiguration().getName() +"/" + getWorkspaceName()  ;
+           getPortalName() + "/rest/private/jcr/"+getRepository().getConfiguration().getName() +"/" + getWorkspaceName()  ;
     return prefixWebDAV ;
   }
   public String getPortalName() {
