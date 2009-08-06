@@ -3,13 +3,13 @@ function CheckMailNotify() {
 } ;
 
 CheckMailNotify.prototype.init = function(eXoUser, eXoToken){
-  eXo.core.Cometd.exoId = eXoUser;
-  eXo.core.Cometd.exoToken = eXoToken;
-  eXo.core.Cometd.subscribe('/eXo/Application/mail/messages', function(eventObj) {		
+  eXo.cs.CSCometd.exoId = eXoUser;
+  eXo.cs.CSCometd.exoToken = eXoToken;
+  eXo.cs.CSCometd.subscribe('/eXo/Application/mail/messages', function(eventObj) {		
 		eXo.mail.CheckMailNotify.alarm(eventObj) ;
   });
-	if (!eXo.core.Cometd.isConnected()) {
-     eXo.core.Cometd.init();
+	if (!eXo.cs.CSCometd.isConnected()) {
+     eXo.cs.CSCometd.init();
   }
 } ;
 

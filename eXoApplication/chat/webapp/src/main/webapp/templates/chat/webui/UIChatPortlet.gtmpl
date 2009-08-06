@@ -1019,7 +1019,7 @@
 <div id="templateArea" style="display: none;">
     <!-- BuddyItem -->
     <div class="TitleIconChat">
-        <a class="IconChat OfflineIcon"></a>
+        <div class="IconChat OfflineIcon"><span></span></div>
     </div>
     <!-- BuddyItem for group chat -->
     <div class="GroupNick ChatSharedIcons">

@@ -15,7 +15,7 @@
  	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu('"+ compId +"') ;") ;
  	
  	rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;
-	rcontext.getJavascriptManager().importJavascript('eXo.core.Cometd') ;
+	rcontext.getJavascriptManager().importJavascript('eXo.cs.CSCometd','/csResources/javascript/') ;
 	rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactAlert','/contact/javascript/') ;
 	rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactAlert.init("'+ContactUtils.getCurrentUser()+'","'+uicomponent.getUserToken()+'");') ;
  	

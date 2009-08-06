@@ -5,7 +5,7 @@
  * working well,
  */
 eXo.require("eXo.core.JSON");
-eXo.require("eXo.core.Cometd");
+//eXo.require("eXo.cs.CSCometd");
 eXo.require("eXo.core.HTMLUtil");
 eXo.require("eXo.core.Resize");
 eXo.require("eXo.webui.UIHorizontalTabs");
@@ -24,7 +24,7 @@ eXo.communication = {
 eXo.core.HTMLUtil.entities.nbsp = null;
 
 eXo.require("eXo.communication.chat.core.DateFormat", "/chatbar/javascript/");
-//eXo.require("eXo.communication.chat.core.Cometd", "/chatbar/javascript/");
+eXo.require("eXo.cs.CSCometd", "/csResources/javascript/");
 eXo.require("eXo.communication.chat.core.AdvancedDOMEvent", "/chatbar/javascript/");
 eXo.require("eXo.communication.chat.core.JSLogger", "/chatbar/javascript/");
 eXo.require("eXo.communication.chat.core.XMPPCommunicator", "/chatbar/javascript/");

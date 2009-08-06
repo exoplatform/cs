@@ -67,8 +67,8 @@
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICombobox','/calendar/javascript/') ;
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIColorPicker','/calendar/javascript/') ;
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.Highlighter','/calendar/javascript/') ;
-		  rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;
-		  rcontext.getJavascriptManager().importJavascript('eXo.core.Cometd') ;
+		  rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;		   
+		  rcontext.getJavascriptManager().importJavascript('eXo.cs.CSCometd','/csResources/javascript/') ;
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.Reminder','/calendar/javascript/') ;
 		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.Reminder.init("'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+'");') ;
 		%>

@@ -47,7 +47,7 @@ BuddyItem.prototype.init = function() {
   var DOMUtil = eXo.core.DOMUtil;
   this.rootNode = eXo.communication.chat.core.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.template);	
 	var nickDis = this.buddyInfo.nickname ;
-	if (nickDis.indexOf("/") != -1) nickDis = nickDis.split("/")[1] ;
+	if (nickDis != null && nickDis.indexOf("/") != -1) nickDis = nickDis.split("/")[1] ;
   if (this.isGroupChat) {
     this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
     this.iconChatNode.innerHTML = this.getUserName(nickDis, true) ;

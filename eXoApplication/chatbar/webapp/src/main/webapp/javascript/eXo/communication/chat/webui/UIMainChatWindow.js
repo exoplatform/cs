@@ -302,7 +302,7 @@ UIMainChatWindow.prototype.sessionKeeper = function() {
  * Cometd connection initialize method.
  */
 UIMainChatWindow.prototype.initCometd = function() {
-  var Cometd = eXo.core.Cometd;
+  var Cometd = eXo.cs.CSCometd;
   if (!Cometd.isConnected()) {
     Cometd.exoId = this.userName;
     Cometd.exoToken = this.userToken;
@@ -314,7 +314,7 @@ UIMainChatWindow.prototype.initCometd = function() {
  * Use for login from another object like call from event handle method or in window context.
  */
 UIMainChatWindow.prototype.loginWrapper = function() {
-  if (!eXo.core.Cometd.isConnected()) {
+  if (!eXo.cs.CSCometd.isConnected()) {
     window.jsconsole.warn('wait for cometd connection ready.');
     return;
   }
@@ -327,7 +327,7 @@ UIMainChatWindow.prototype.loginWrapper = function() {
  * Use to un subscribe cometd topics for chat application
  */
 UIMainChatWindow.prototype.unsubscribeCometdTopics = function() {
-  var Cometd = eXo.core.Cometd;
+  var Cometd = eXo.cs.CSCometd;
   if (Cometd.isConnected()) {
     window.jsconsole.warn('Cometd is not connected');
   }
@@ -348,7 +348,7 @@ UIMainChatWindow.prototype.unsubscribeCometdTopics = function() {
  * Use to subscribe cometd topics for chat application
  */
 UIMainChatWindow.prototype.subscribeCometdTopics = function() {
-  var Cometd = eXo.core.Cometd;
+  var Cometd = eXo.cs.CSCometd;
   if (!Cometd.isConnected()) {
     window.jsconsole.warn('Cometd is not connected');
     return;
@@ -392,8 +392,8 @@ UIMainChatWindow.prototype.destroy = function() {
  * in no-normal way.
  */
 UIMainChatWindow.prototype.destroyAll = function() {
-  if (eXo.core.Cometd.isConnected()) {
-    eXo.core.Cometd.disconnect();
+  if (eXo.cs.CSCometd.isConnected()) {
+	  eXo.cs.CSCometd.disconnect();
   }
   var thys = eXo.communication.chat.webui.UIMainChatWindow;
   var logoutUrl = thys.XMPPCommunicator.SERVICE_URL +
@@ -403,8 +403,8 @@ UIMainChatWindow.prototype.destroyAll = function() {
   window.document.body.appendChild(iframeNode);
   iframeNode.src = logoutUrl;
   try {
-    if (eXo.core.Cometd.isConnected()) {
-      eXo.core.Cometd.disconnect();
+    if (eXo.cs.CSCometd.isConnected()) {
+    	eXo.cs.CSCometd.disconnect();
     }
     thys.jabberLogout();
   } catch (e) {}
@@ -1469,8 +1469,8 @@ UIMainChatWindow.prototype.jabberLogin = function(userName) {
   }
   // Register with on connection ready to wait for cometd connection become ready before try login.
   this.userNames['xmpp'] = userName;
-  if (!eXo.core.Cometd.isConnected()) {
-    eXo.core.Cometd.addOnConnectionReadyCallback(this.loginWrapper);
+  if (!eXo.cs.CSCometd.isConnected()) {
+	  eXo.cs.CSCometd.addOnConnectionReadyCallback(this.loginWrapper);
     return;
   }
   this.activeAction = this.LOGIN_ACTION;
