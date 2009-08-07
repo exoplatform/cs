@@ -2012,8 +2012,9 @@ public class JCRDataStorage{
               rssCal.setProperty(Utils.EXO_DATA, is) ;
               rssCal.save() ;
           } else {
-            rssCal.remove() ;
-            rssHome.getSession().save() ;
+            removeFeed(username, id) ;
+            /*rssCal.remove() ;
+            rssHome.getSession().save() ;*/
           }
           break ;
         }  
@@ -2036,8 +2037,10 @@ public class JCRDataStorage{
             rssCal.setProperty(Utils.EXO_DATA, is) ;
             rssCal.save() ;
           } else {
-            rssCal.remove() ;
-            rssHome.getSession().save() ;
+            removeFeed(username, id) ;           
+            
+            /*rssCal.remove() ;
+            rssHome.getSession().save() ;*/
           }
           break ;
         }  
@@ -2059,6 +2062,8 @@ public class JCRDataStorage{
         if(out != null) {
           ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
           nodeContent.setProperty(Utils.JCR_DATA, is) ;  
+        } else {
+          removeFeed(username, id) ;
         }
       }
       rssHome.getSession().save() ;
@@ -2079,6 +2084,11 @@ public class JCRDataStorage{
         if(out != null) {
           ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
           nodeContent.setProperty(Utils.JCR_DATA, is) ;  
+        } else {
+         /* ByteArrayInputStream is = new ByteArrayInputStream(new byte[] {}) ;
+          nodeContent.setProperty(Utils.JCR_DATA, is) ;*/
+          
+          removeFeed(username, id) ;
         }
       }
       rssHome.getSession().save() ;
