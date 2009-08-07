@@ -665,6 +665,7 @@ eXo.mail.CheckBox = {
 	},
 	register: function(rootNode){
 		var tablelist = eXo.core.DOMUtil.findDescendantById(rootNode,this.tablelistId) ;
+		if(!tablelist) return ;
 		var checkboxes = eXo.core.DOMUtil.findDescendantsByClass(tablelist, "input", "checkbox") ;
 		if(checkboxes.length <=0) return ;
 		checkboxes[0].onclick = this.checkAll ;
