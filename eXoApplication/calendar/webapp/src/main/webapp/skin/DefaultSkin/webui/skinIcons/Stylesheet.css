@@ -488,8 +488,8 @@
 }
 
 .UICalendarPortlet .MenuItem .QuickAddTask {
-	background: url('icons/CalendarIcons.gif') no-repeat left -130px; /* orientation=lt */
-	background: url('icons/CalendarIcons.gif') no-repeat right -130px; /* orientation=rt */
+	background: url('icons/CalendarIcons.gif') no-repeat left -125px; /* orientation=lt */
+	background: url('icons/CalendarIcons.gif') no-repeat right -125px; /* orientation=rt */
 }
 
 .UICalendarPortlet .MenuItem .AttachmentIcon {
