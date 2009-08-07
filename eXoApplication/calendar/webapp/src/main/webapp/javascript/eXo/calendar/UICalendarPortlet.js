@@ -1481,6 +1481,8 @@ UICalendarPortlet.prototype.filterByGroup = function(){
             continue;
         checkboxes[i].checked = checked;
     }
+	eXo.calendar.UICalendarPortlet.runFilterByCategory();
+	eXo.calendar.UICalendarPortlet.resortEvents();
 };
 
 /**
@@ -1513,6 +1515,25 @@ UICalendarPortlet.prototype.runFilterByCalendar = function(calid, checked){
 };
 
 /**
+ * Resort event after doing something
+ */
+UICalendarPortlet.prototype.resortEvents = function(){
+	
+    try { //TODO: review order javascript file 
+        if (document.getElementById("UIMonthView")) 
+            eXo.calendar.UICalendarMan.initMonth();
+        if (document.getElementById("UIDayViewGrid")) 
+            eXo.calendar.UICalendarPortlet.showEvent();
+        if (document.getElementById("UIWeekViewGrid")) {
+            eXo.calendar.UICalendarMan.initWeek();
+            eXo.calendar.UIWeekView.init();
+        }
+    } 
+    catch (e) {
+    };
+	
+};
+/**
  * Filters calendar event by calendar
  */
 UICalendarPortlet.prototype.filterByCalendar = function(){
@@ -1540,18 +1561,7 @@ UICalendarPortlet.prototype.filterByCalendar = function(){
         }
     }
     UICalendarPortlet.runFilterByCategory();
-    try { //TODO: review order javascript file 
-        if (document.getElementById("UIMonthView")) 
-            eXo.calendar.UICalendarMan.initMonth();
-        if (document.getElementById("UIDayViewGrid")) 
-            eXo.calendar.UICalendarPortlet.showEvent();
-        if (document.getElementById("UIWeekViewGrid")) {
-            eXo.calendar.UICalendarMan.initWeek();
-            eXo.calendar.UIWeekView.init();
-        }
-    } 
-    catch (e) {
-    };
+    eXo.calendar.UICalendarPortlet.resortEvents();
     
 };
 
@@ -1583,14 +1593,7 @@ UICalendarPortlet.prototype.filterByCategory = function(){
             else 
                 events[i].style.display = "none";
     }
-    if (document.getElementById("UIMonthView")) 
-        eXo.calendar.UICalendarMan.initMonth();
-    if (document.getElementById("UIDayViewGrid")) 
-        eXo.calendar.UICalendarPortlet.showEvent();
-    if (document.getElementById("UIWeekViewGrid")) {
-        eXo.calendar.UICalendarMan.initWeek();
-        eXo.calendar.UIWeekView.init();
-    }
+    eXo.calendar.UICalendarPortlet.resortEvents();
 };
 
 /**
@@ -1736,16 +1739,9 @@ UICalendarPortlet.prototype.checkFilter = function(){
         }
     }
     UICalendarPortlet.checkCalendarFilter();
-		if (document.getElementById("UIMonthView")) 
-        eXo.calendar.UICalendarMan.initMonth();
-    if (document.getElementById("UIDayViewGrid")) 
-        eXo.calendar.UICalendarPortlet.showEvent();
-    if (document.getElementById("UIWeekViewGrid")) {
-        eXo.calendar.UICalendarMan.initWeek();
-        eXo.calendar.UIWeekView.init();
-    }
-		UICalendarPortlet.setFocus();
-		if(eXo.calendar.UICalendarPortlet.firstLoadTimeout) delete eXo.calendar.UICalendarPortlet.firstLoadTimeout;
+	eXo.calendar.UICalendarPortlet.resortEvents();
+	UICalendarPortlet.setFocus();
+	if(eXo.calendar.UICalendarPortlet.firstLoadTimeout) delete eXo.calendar.UICalendarPortlet.firstLoadTimeout;
 };
 
 /**
