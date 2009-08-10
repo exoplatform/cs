@@ -344,12 +344,11 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         CalendarService calService =  CalendarUtils.getCalendarService() ;
         Calendar calendar = null ;
         if(CalendarUtils.PRIVATE_TYPE.equals(uiForm.calType_)) { 
-          calendar = calService.getUserCalendar(username, calEvent.getCalendarId()) ;
+          calendar = calService.getUserCalendar(username, uiForm.getEventCalendar()) ;
         } else if (CalendarUtils.PUBLIC_TYPE.equals(uiForm.calType_)) {
-          GroupCalendarData gCalendarData = calService.getSharedCalendars(username, true) ;
-          if( gCalendarData!= null && gCalendarData.getCalendarById(calEvent.getCalendarId()) != null) calendar = gCalendarData.getCalendarById(calEvent.getCalendarId()) ;
+          calendar = calService.getGroupCalendar(uiForm.getEventCalendar()) ;
         } else if (CalendarUtils.SHARED_TYPE.equals(uiForm.calType_)){
-          calendar = calService.getSharedCalendars(username, true).getCalendarById(calEvent.getCalendarId()) ;
+          calendar = calService.getSharedCalendars(username, true).getCalendarById(uiForm.getEventCalendar()) ;
         }
         if (calendar == null) {
           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
