@@ -16,9 +16,8 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.UIPageIterator;
-import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
@@ -48,13 +46,13 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
                  template = "app:/templates/calendar/webui/UIPopup/UIEventShareTab.gtmpl",
                  events = {
                      @EventConfig(listeners = UIEventShareTab.ShowPageActionListener.class, phase = Phase.PROCESS),
-                     @EventConfig(listeners = UIEventForm.DeleteActionListener.class, confirm = "UIEventForm.msg.confirm-delete")
+                     @EventConfig(listeners = UIEventShareTab.DeleteActionListener.class, confirm = "UIEventForm.msg.confirm-delete", phase = Phase.DECODE)
                  }
 ) 
 public class UIEventShareTab extends UIFormInputWithActions {
 
   public static String[] BEAN_FIELD = {"participant","status"};
-  private static String[] ACTION = {"Delete"} ;
+  private static String[] ACTION = { "Delete"} ;
   final public static String FIELD_SHARE = "shareEvent".intern() ;
   final public static String FIELD_STATUS = "status".intern() ;
   final public static String FIELD_SEND = "send".intern();
@@ -111,5 +109,34 @@ public class UIEventShareTab extends UIFormInputWithActions {
     }
   }
   
- 
+  static  public class DeleteActionListener extends EventListener<UIEventShareTab> {
+    public void execute(Event<UIEventShareTab> event) throws Exception {
+      UIEventShareTab uiform = event.getSource() ;
+      UIEventForm uiEventForm = uiform.getParent() ;
+      String parStatus = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIEventAttenderTab tabAttender = uiEventForm.getChildById(UIEventForm.TAB_EVENTATTENDER) ;
+      UIEventShareTab uiEventShareTab = uiEventForm.getChildById(UIEventForm.TAB_EVENTSHARE) ;
+      Long currentPage  = uiEventShareTab.getCurrentPage() ;
+      if(uiEventForm.participants_.containsKey(parStatus)){
+        uiEventForm.participants_.remove(parStatus);
+        tabAttender.parMap_.remove(parStatus) ;
+        uiEventForm.removeChildById(parStatus) ; 
+      }
+      uiEventForm.participantStatus_.remove(parStatus);
+      for(Iterator<ParticipantStatus> i = uiEventForm.participantStatusList_.iterator(); i.hasNext();){
+        ParticipantStatus participantStatus = i.next();
+        if(parStatus.equalsIgnoreCase(participantStatus.getParticipant()))
+          i.remove();
+      }
+      uiEventShareTab.setParticipantStatusList(uiEventForm.getParticipantStatusList());
+      if(currentPage <= uiEventShareTab.getAvailablePage()) 
+        uiEventShareTab.updateCurrentPage(currentPage.intValue());
+      else 
+        uiEventShareTab.updateCurrentPage((int)uiEventShareTab.getAvailablePage());
+      uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTSHARE) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(UIEventForm.TAB_EVENTATTENDER)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(UIEventForm.TAB_EVENTSHARE)) ;
+     }
+    }
+  
 }

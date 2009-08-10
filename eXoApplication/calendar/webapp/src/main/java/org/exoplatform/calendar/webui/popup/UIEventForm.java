@@ -112,8 +112,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
                      @EventConfig(listeners = UIEventForm.MoveNextActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.MovePreviousActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.DeleteUserActionListener.class, phase = Phase.DECODE),
-                     @EventConfig(listeners = UIEventForm.DeleteActionListener.class, confirm = "UIEventForm.msg.confirm-delete", phase = Phase.DECODE ),
-
+                     //@EventConfig(listeners = UIEventForm.DeleteActionListener.class, confirm = "UIEventForm.msg.confirm-delete", phase = Phase.DECODE ),
                      @EventConfig(listeners = UIEventForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
@@ -2018,34 +2017,6 @@ public Attachment getAttachment(String attId) {
     }
   }
   
-  static  public class DeleteActionListener extends EventListener<UIEventForm> {
-    public void execute(Event<UIEventForm> event) throws Exception {
-      UIEventForm uiEventForm = event.getSource();
-      String parStatus = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIEventAttenderTab tabAttender = uiEventForm.getChildById(TAB_EVENTATTENDER) ;
-      UIEventShareTab uiEventShareTab = uiEventForm.getChildById(TAB_EVENTSHARE) ;
-      Long currentPage  = uiEventShareTab.getCurrentPage() ;
-      if(uiEventForm.participants_.containsKey(parStatus)){
-        uiEventForm.participants_.remove(parStatus);
-        tabAttender.parMap_.remove(parStatus) ;
-        uiEventForm.removeChildById(parStatus) ; 
-      }
-      uiEventForm.participantStatus_.remove(parStatus);
-      for(Iterator<ParticipantStatus> i = uiEventForm.participantStatusList_.iterator(); i.hasNext();){
-        ParticipantStatus participantStatus = i.next();
-        if(parStatus.equalsIgnoreCase(participantStatus.getParticipant()))
-          i.remove();
-      }
-      uiEventShareTab.setParticipantStatusList(uiEventForm.getParticipantStatusList());
-      if(currentPage <= uiEventShareTab.getAvailablePage()) 
-        uiEventShareTab.updateCurrentPage(currentPage.intValue());
-      else 
-        uiEventShareTab.updateCurrentPage((int)uiEventShareTab.getAvailablePage());
-      uiEventForm.setSelectedTab(TAB_EVENTSHARE) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(TAB_EVENTATTENDER)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(TAB_EVENTSHARE)) ;
-     }
-    }
   
   public class ParticipantStatus {
     private String participant ;
