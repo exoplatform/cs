@@ -111,11 +111,11 @@ public class UIEventShareTab extends UIFormInputWithActions {
   
   static  public class DeleteActionListener extends EventListener<UIEventShareTab> {
     public void execute(Event<UIEventShareTab> event) throws Exception {
-      UIEventShareTab uiform = event.getSource() ;
-      UIEventForm uiEventForm = uiform.getParent() ;
+      UIEventShareTab uiEventShareTab = event.getSource() ;
+      UIEventForm uiEventForm = uiEventShareTab.getParent() ;
       String parStatus = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIEventAttenderTab tabAttender = uiEventForm.getChildById(UIEventForm.TAB_EVENTATTENDER) ;
-      UIEventShareTab uiEventShareTab = uiEventForm.getChildById(UIEventForm.TAB_EVENTSHARE) ;
+      //UIEventShareTab uiEventShareTab = uiEventForm.getChildById(UIEventForm.TAB_EVENTSHARE) ;
       Long currentPage  = uiEventShareTab.getCurrentPage() ;
       if(uiEventForm.participants_.containsKey(parStatus)){
         uiEventForm.participants_.remove(parStatus);
@@ -134,8 +134,8 @@ public class UIEventShareTab extends UIFormInputWithActions {
       else 
         uiEventShareTab.updateCurrentPage((int)uiEventShareTab.getAvailablePage());
       uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTSHARE) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(UIEventForm.TAB_EVENTATTENDER)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(UIEventForm.TAB_EVENTSHARE)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(tabAttender) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventShareTab) ;
      }
     }
   
