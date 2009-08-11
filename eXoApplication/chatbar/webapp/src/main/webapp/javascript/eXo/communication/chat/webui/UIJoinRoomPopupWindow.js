@@ -163,7 +163,8 @@ UIJoinRoomPopupWindow.prototype.joinRoomAction = function() {
       for (var i=0; i<joinedRooms.length; i++) {
         var joinedRoomInfo = joinedRooms[i];
         if (joinedRoomInfo.roomInfo.room == roomInfo.room) {
-          this.UIMainChatWindow.UIChatWindow.createNewTab(roomInfo.room, true);
+          var uiTabControlObj = this.UIMainChatWindow.UIChatWindow.createNewTab(roomInfo.room, true);
+          uiTabControlObj.roomConfigured = true;
           this.setVisible(false);
           return;
         }
@@ -238,8 +239,10 @@ UIJoinRoomPopupWindow.prototype.joinSelectedRoomAction = function(obj) {
 		  			}
 		  		}
 		  		//
-        	if(isThisUserJoined)
-        		this.UIMainChatWindow.UIChatWindow.createNewTab(joinedRoomInfo.roomInfo.room, true);       
+        	if(isThisUserJoined){
+        		var uiTabControlObj = this.UIMainChatWindow.UIChatWindow.createNewTab(joinedRoomInfo.roomInfo.room, true); 
+        				uiTabControlObj.roomConfigured = true;
+        	}  
         	else
           	this.UIMainChatWindow.jabberJoinToRoom(roomName, joinedRoomInfo.isPasswordProtected);
           return;
