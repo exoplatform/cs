@@ -590,14 +590,12 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
       break;
 
     case this.GET_ROOM_LIST_ACTION:
-      if (serverData &&
-          serverData.hostedRooms) {
+      if (serverData)
         this.UIJoinRoomPopupWindow.updateRoomList(serverData);
-      }
       break;
 
     case this.GET_JOINED_ROOM_LIST_ACTION:
-      this.joinedRooms = serverData.joinedRooms ? serverData.joinedRooms : [];
+      this.joinedRooms = serverData && serverData.joinedRooms ? serverData.joinedRooms : [];
       this.updateJoinedRoomList();
       break;
 
@@ -1653,7 +1651,7 @@ UIMainChatWindow.prototype.jabberGetRoomConfig = function(roomName) {
  * @param {String} sort have 2 values are: ASC, DASC
  */
 UIMainChatWindow.prototype.jabberGetRoomList = function(from, to, sort) {
-  this.jabberGetJoinedRoomList();
+  //this.jabberGetJoinedRoomList();
   this.activeAction = this.GET_ROOM_LIST_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
   this.XMPPCommunicator.getRoomList(userName, from, to, sort, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());

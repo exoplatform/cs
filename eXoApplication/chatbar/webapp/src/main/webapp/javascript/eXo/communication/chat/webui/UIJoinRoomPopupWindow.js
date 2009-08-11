@@ -58,7 +58,7 @@ UIJoinRoomPopupWindow.prototype.gotoPage = function(from, to) {
  * @param {JSonData} serverData
  */
 UIJoinRoomPopupWindow.prototype.updateRoomList = function(serverData) {
-  roomList = serverData.hostedRooms;
+  roomList = serverData.hostedRooms ? serverData.hostedRooms : [];
 
   // Fix bug table innerHTML for ie
   var tmpNode = this.roomListContainerNode.parentNode;
@@ -72,6 +72,8 @@ UIJoinRoomPopupWindow.prototype.updateRoomList = function(serverData) {
   }
   this.uiPageIterator.totalItem = serverData.totalRooms;
   this.uiPageIterator.renderPageIterator(serverData);
+  if(eXo.core.Browser.isIE7() && !serverData.hostedRooms)
+  	this.reloadRoomList();
 };
 
 /**
