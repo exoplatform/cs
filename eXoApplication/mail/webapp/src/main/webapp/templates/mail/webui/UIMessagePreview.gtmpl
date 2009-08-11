@@ -329,9 +329,9 @@
   									</div>
   									
   									<% if (!isShowReplyAll) { %>
-  									 <div style="float:left"><a onclick="<%=uicomponent.event("Reply", msg.getId())%>" class="MessageActionIcon ReplyMailIcon MessagePreviewMenu"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a></div>
+  									 <div class="MessageActionIcon MessagePreviewMenu"><a onclick="<%=uicomponent.event("Reply", msg.getId())%>" class="ReplyMailIcon "><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a></div>
   									<% } else {%>
-  									 <div style="float:left"><a onclick="<%=uicomponent.event("ReplyAll", msg.getId())%>" class="MessageActionIcon ReplyAllMailIcon MessagePreviewMenu"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a></div>
+  									 <div class="MessageActionIcon MessagePreviewMenu"><a onclick="<%=uicomponent.event("ReplyAll", msg.getId())%>" class="ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a></div>
   									<% } %>
   									<div class="Actions" title="<%=_ctx.appRes(uicomponent.id+ '.label.action-on-this-messge') %>" onclick="eXo.mail.UIMailPortlet.showMessageAction(this, event);">
                     <% /*Begin Popup Menu*/ %>
@@ -543,11 +543,11 @@
                   } 
                 %>
                 			<div style="border-top: 1px dotted #b7b7b7; padding-top: 3px">
-                				<a href="<%=uicomponent.event("Reply", msg.getId())%>" class="MessageActionIcon ReplyMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a>
+                				<div class="MessageActionIcon "><a href="<%=uicomponent.event("Reply", msg.getId())%>" style="display: block;" class="ReplyMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a></div>
                 				<% if (isShowReplyAll) {%>
-                				<a href="<%=uicomponent.event("ReplyAll", msg.getId())%>" class="MessageActionIcon ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a>
+                				<div class="MessageActionIcon "><a href="<%=uicomponent.event("ReplyAll", msg.getId())%>" style="display: block;" class="ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a></div>
                 				<% } %>
-			                	<a href="<%=uicomponent.event("Forward", msg.getId())%>" class="MessageActionIcon ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></a>
+			                	<div class="MessageActionIcon "><a href="<%=uicomponent.event("Forward", msg.getId())%>" style="display: block;" class="ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></a></div>
 			                	<div style="clear: left"><span></span></div>
 			                </div>
   						</div>										
