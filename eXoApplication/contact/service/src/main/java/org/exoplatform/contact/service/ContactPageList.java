@@ -78,7 +78,7 @@ public class ContactPageList extends JCRPageList {
     long pageSize = getPageSize() ;
     Node currentNode;
     Session session = getJCRSession(username) ;
-    
+    long totalPage = 0 ;
     try {
       QueryImpl queryImpl = createXPathQuery(session, username, value_);
       if( page > 1) {
@@ -91,12 +91,12 @@ public class ContactPageList extends JCRPageList {
       }
       queryImpl.setLimit(pageSize);
       QueryResult result = queryImpl.execute();
-      iter_ = result.getNodes();
-      
+      iter_ = result.getNodes();      
+      totalPage = ((QueryResultImpl) result).getTotalSize() ; 
     } finally {
       session.logout() ;
     }
-    
+    setAvailablePage(totalPage) ;
     
     // cs- 1017
     /*if (iter_ == null) {
