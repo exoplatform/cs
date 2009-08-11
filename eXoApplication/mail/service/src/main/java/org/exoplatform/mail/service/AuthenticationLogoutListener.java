@@ -45,9 +45,18 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
      }
     MailService mService = (MailService)container.getComponentInstanceOfType(MailService.class) ;
     String username = event.getData().getIdentity().getUserId();
-    List<Account> accList = mService.getAccounts(SessionProvider.createSystemProvider(), username);
-    for (Account acc : accList) {
-      mService.stopAllJobs(username, acc.getId());
-    }    
+    
+    SessionProvider sp = null;
+    try {
+      sp = SessionProvider.createSystemProvider();
+      List<Account> accList = mService.getAccounts(sp, username);
+      for (Account acc : accList) {
+        mService.stopAllJobs(username, acc.getId());
+      }   
+    } finally {
+      if (sp != null) {
+        sp.close();
+      }
+    }  
   } 
  }
