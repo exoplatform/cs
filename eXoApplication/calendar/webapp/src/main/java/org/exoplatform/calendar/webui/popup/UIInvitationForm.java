@@ -27,8 +27,6 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
-import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
