@@ -116,14 +116,26 @@ UICalendarPortlet.prototype.fillData = function(uiform, data) {
 	toFieldTime.style.visibility = "visible";
 	toFieldTime.value = formater.format(data.toTime, timeType); 
 	isAllday.checked = data.isAllday ;
-	for(i=0; i < calendar.options.length;  i++) {
-		var value = calendar.options[i].value ;
-		calendar.options[i].selected = (value.match(data.calendar) != null);		   
-	}
-	for(i=0; i < category.options.length;  i++) {
-		var value = category.options[i].value ;
-		category.options[i].selected = (value.match(data.category) != null);		 
-	}
+	if(data.calendar)
+		for(i=0; i < calendar.options.length;  i++) {
+			var value = calendar.options[i].value ;
+			calendar.options[i].selected = (value.match(data.calendar) != null);		   
+		}
+	else
+		for(i=0; i < calendar.options.length;  i++) {			
+			calendar.options[i].selected = true;		 
+			break;  
+		}
+	if(data.category != 'all')
+		for(i=0; i < category.options.length;  i++) {
+			var value = category.options[i].value ;
+			category.options[i].selected = (value.match(data.category) != null);		 
+		}
+	else
+		for(i=0; i < category.options.length;  i++) {
+			category.options[i].selected = true;
+			break;		 
+		}
 }
 /**
  * Convert time from milliseconds to minutes
