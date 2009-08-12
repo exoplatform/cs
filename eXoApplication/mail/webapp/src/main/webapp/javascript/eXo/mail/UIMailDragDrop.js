@@ -17,15 +17,15 @@ UIMailDragDrop.prototype.onLoad = function() {
 UIMailDragDrop.prototype.init = function() {
   this.dropableSets = [] ;
   var uiMailPortletNode = eXo.core.DOMUtil.findDescendantsByClass(document.body,"div","UIMailPortlet") ;
-  this.getAllDropableSets() ;
   var i = uiMailPortletNode.length ;
   while(i--){  	
+	//this.getAllDropableSets(uiMailPortletNode[i]) ;
 	this.regDnDItem(uiMailPortletNode[i]) ;
   }
 } ;
 
-UIMailDragDrop.prototype.getAllDropableSets = function() {
-  var uiFolderContainerNode = document.getElementById('UIFolderContainer') ;
+UIMailDragDrop.prototype.getAllDropableSets = function(uiMailPortletNode) {
+  var uiFolderContainerNode = this.DOMUtil.findDescendantById(uiMailPortletNode,'UIFolderContainer') ;
   var folderList = this.DOMUtil.findDescendantsByClass(uiFolderContainerNode, 'a', 'Folder') ;
   for (var i=0; i<folderList.length; i++) {
     this.dropableSets[this.dropableSets.length] = folderList[i] ;
@@ -34,12 +34,13 @@ UIMailDragDrop.prototype.getAllDropableSets = function() {
   for (var i=0; i<folderList.length; i++) {
     this.dropableSets[this.dropableSets.length] = folderList[i] ;
   }
-  var uiTagContainerNode = document.getElementById('UITagContainer') ;
+  var uiTagContainerNode = this.DOMUtil.findDescendantById(uiMailPortletNode,'UITagContainer') ;
   var tagLists = this.DOMUtil.findDescendantsByClass(uiTagContainerNode, 'a', 'IconTagHolder') ;
   for (var i=0; i<tagLists.length; i++) {
     this.dropableSets[this.dropableSets.length] = tagLists[i] ;
   }
-  var tagContainer = document.getElementById('UITagContainer') ;
+  //var tagContainer = document.getElementById('UITagContainer') ;
+  var tagContainer = this.DOMUtil.findDescendantById(uiMailPortletNode,'UITagContainer') ;
 //  if (tagContainer &&  tagLists.length <= 0) {
   if (tagContainer) {
   	var uiTagContainer = this.DOMUtil.findFirstDescendantByClass(tagContainer, "div","UITagContainer") ;
@@ -63,6 +64,9 @@ UIMailDragDrop.prototype.regDnDItem = function(rootNode) {
 UIMailDragDrop.prototype.mailMDTrigger = function(e) {
   e = e ? e : window.event ;
   if (e.button == 1 || e.which == 1) {
+  	var elem = eXo.core.EventManager.getEventTarget(e);
+  	var uiMailPortletNode = eXo.core.DOMUtil.findAncestorByClass(elem,"UIMailPortlet");
+  	eXo.mail.UIMailDragDrop.getAllDropableSets(uiMailPortletNode);
     return eXo.mail.UIMailDragDrop.initDnD(eXo.mail.UIMailDragDrop.dropableSets, this, this, e) ;
   }
   return true ;
@@ -88,8 +92,7 @@ UIMailDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, e) 
     display = 'none' ;
   }
   eXo.core.Browser.setOpacity(tmpNode, 80) ;
-  var selectedItems = eXo.cs.FormHelper.getSelectedElementByClass(
-                        document.getElementById('UIListUsers'), this.msgItemClass, dragBlock) ;
+  var selectedItems = eXo.cs.FormHelper.getSelectedElementByClass(eXo.core.DOMUtil.findAncestorById(clickObj,"UIListUsers"), this.msgItemClass, dragBlock) ;
   var cnt = 0;
   if (selectedItems.length > 0) {
     for (var i=0; i<selectedItems.length; i++) {
@@ -185,12 +188,15 @@ UIMailDragDrop.prototype.dropCallback = function(dndEvent) {
       place2MoveId = this.foundTargetObjectCatch.getAttribute('folder') ;
       formOp = 'MoveDirectMessages' ;
     }
-    var uiMsgList = document.getElementById('UIMessageList') ;
-		if ((uiMsgList.action).indexOf("objectId")>=0) {
-			var pattern = /objectId=.*/ ;
-			uiMsgList.action = (uiMsgList.action).replace(pattern,'objectId=' + place2MoveId) ;
-		} else
-	    uiMsgList.action = uiMsgList.action + '&objectId=' + place2MoveId ;
+    var uiMailPortletNode = eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch,"UIMailPortlet");
+    var uiMsgList = eXo.core.DOMUtil.findDescendantById(uiMailPortletNode,'UIMessageList') ;
+	if ((uiMsgList.action).indexOf("objectId")>=0) {
+		var pattern = /objectId=.*/ ;
+		uiMsgList.action = (uiMsgList.action).replace(pattern,'objectId=' + place2MoveId) ;
+	} else
+    uiMsgList.action = uiMsgList.action + '&objectId=' + place2MoveId ;
+	uiMailPortletNode = eXo.core.DOMUtil.findAncestorByClass(uiMailPortletNode,"PORTLET-FRAGMENT");
+    eXo.webui.UIForm.submitForm(uiMailPortletNode.parentNode.id + '#UIMessageList', formOp, true) ;
     eXo.webui.UIForm.submitForm('UIMessageList', formOp, true) ;
   }
 } ;
