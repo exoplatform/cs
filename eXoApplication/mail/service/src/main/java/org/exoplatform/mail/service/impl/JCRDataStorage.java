@@ -1021,7 +1021,7 @@ public class JCRDataStorage {
           
           if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER) {
             // there is a duplicate but in another folder
-            return true;
+            return false;
           }
   
           if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_SAME_FOLDER) {
@@ -1163,8 +1163,12 @@ public class JCRDataStorage {
       try {
         node = msgHomeNode.getNode(msgId);    
       } catch (Exception e) {}
-
       if (node != null) {
+        try {
+          if (node.getProperty(Utils.IS_LOADED).getBoolean()) return true;
+        } catch(PathNotFoundException e) {}
+        node.setProperty(Utils.IS_LOADED, true);
+        node.save();
         long priority = MimeMessageParser.getPriority(msg);
         node.setProperty(Utils.EXO_PRIORITY, priority);
         MimeMessage cmsg = (MimeMessage) msg;
@@ -1190,7 +1194,6 @@ public class JCRDataStorage {
         }
         node.setProperty(Utils.EXO_CONTENT_TYPE, contentType);
         node.setProperty(Utils.EXO_BODY, Utils.decodeText(body));
-        node.setProperty(Utils.IS_LOADED, true);
         node.save();
       } else {
         return false;
@@ -1307,17 +1310,19 @@ public class JCRDataStorage {
           attHome = node.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
         }
         String attId = "";
-        if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
+        
+        if (part.getHeader("X-Attachment-Id") != null) {
+          attId = part.getHeader("X-Attachment-Id")[0].toString();
+        } else if (part.getHeader("Content-Id") != null) {
+          attId = part.getHeader("Content-Id")[0].toString();
+          attId = attId.substring(1, attId.length());
+          attId = attId.substring(0, attId.length() - 1);
+        } else if (disposition != null && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || part.isMimeType("image/*"))) {
           attId = "attachment" + IdGenerator.generate();
-        } else {
-          if (part.getHeader("X-Attachment-Id") != null) {
-            attId = part.getHeader("X-Attachment-Id")[0].toString();
-          } else if (part.getHeader("Content-Id") != null) {
-            attId = part.getHeader("Content-Id")[0].toString();
-            attId = attId.substring(1, attId.length());
-            attId = attId.substring(0, attId.length() - 1);
-          }
-        }
+        } 
+          
+        if (attHome.hasNode(attId)) return body;
+        
         Node nodeFile = attHome.addNode(attId, Utils.EXO_MAIL_ATTACHMENT);
         Node nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
         if (ct.indexOf(";") > 0) {
@@ -2643,7 +2648,6 @@ public class JCRDataStorage {
               file.setId(node.getPath());
               file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE).getString());
               file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
-              //TODO fix last minute bug CS-2530
               if(node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
                 file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
               file.setIsShowInBody(node.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
@@ -2653,12 +2657,13 @@ public class JCRDataStorage {
               attachments.add(file);
             }
           }
+          msg.setHasAttachment(true);
           msg.setAttachements(attachments);
         }
         try {
           msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
         } catch(Exception e) {
-          e.printStackTrace();
+          //e.printStackTrace();
           logger.warn("Can't load message body");
         }
       } catch (PathNotFoundException e) {
