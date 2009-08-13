@@ -98,7 +98,13 @@ public class UIWeekView extends UICalendarView {
     String username = CalendarUtils.getCurrentUser() ;
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(getBeginDateOfWeek()) ;
-    eventQuery.setToDate(getEndDateOfWeek()) ;
+	//eventQuery.setToDate(getEndDateOfWeek()) ; 
+    //Fix for CS-2986
+    Calendar endDateOfWeek = getEndDateOfWeek();
+    Date toDate = endDateOfWeek.getTime();
+    toDate.setTime(toDate.getTime()-1);
+    endDateOfWeek.setTime(toDate);
+    eventQuery.setToDate(endDateOfWeek) ; 
     List<CalendarEvent> allEvents = calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;
     Iterator iter = allEvents.iterator() ;
     while(iter.hasNext()) {
