@@ -884,6 +884,14 @@
 	padding: 0px 10px 0px 20px;
 }	
 
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .MessageActionIcon .ReplyAllMailIcon{
+	height: 20px; line-height: 20px;
+	display: block;
+	background-position: left center;
+	padding: 0px 10px 0px 20px;
+}	
+
+
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .MessageActionIcon .ReplyMailIcon{
 	height: 20px; line-height: 20px;
 	display: block;
