@@ -16,12 +16,14 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.webui.popup.UIEventForm.ParticipantStatus;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -94,7 +96,10 @@ public class UIEventShareTab extends UIFormInputWithActions {
   public long getCurrentPage() { return getChild(UIGrid.class).getUIPageIterator().getCurrentPage();}
   
   public void setParticipantStatusList(List<ParticipantStatus> participantStatusList) throws Exception {
-    ObjectPageList objPageList = new ObjectPageList(participantStatusList, 10) ;
+    List<ParticipantStatus> newParStatus = new ArrayList<ParticipantStatus>() ;
+    for (ParticipantStatus participantStatus : participantStatusList)
+      if (!CalendarUtils.isEmpty(participantStatus.getParticipant())) newParStatus.add(participantStatus) ;
+    ObjectPageList objPageList = new ObjectPageList(newParStatus, 10) ;
     getChild(UIGrid.class).getUIPageIterator().setPageList(objPageList) ;
   }
   protected void updateCurrentPage(int page) throws Exception{
@@ -120,10 +125,9 @@ public class UIEventShareTab extends UIFormInputWithActions {
       if(uiEventForm.participants_.containsKey(parStatus)){
         uiEventForm.participants_.remove(parStatus);
         tabAttender.parMap_.remove(parStatus) ;
-        uiEventForm.removeChildById(parStatus) ; 
       }
-      uiEventForm.participantStatus_.remove(parStatus);
-      for(Iterator<ParticipantStatus> i = uiEventForm.participantStatusList_.iterator(); i.hasNext();){
+       uiEventForm.participantStatus_.remove(parStatus);
+       for(Iterator<ParticipantStatus> i = uiEventForm.participantStatusList_.iterator(); i.hasNext();){
         ParticipantStatus participantStatus = i.next();
         if(parStatus.equalsIgnoreCase(participantStatus.getParticipant()))
           i.remove();
@@ -134,8 +138,9 @@ public class UIEventShareTab extends UIFormInputWithActions {
       else 
         uiEventShareTab.updateCurrentPage((int)uiEventShareTab.getAvailablePage());
       uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTSHARE) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(tabAttender) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventShareTab) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(tabAttender) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiEventShareTab) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getAncestorOfType(UIPopupAction.class)) ;
      }
     }
   

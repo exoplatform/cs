@@ -971,7 +971,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   protected void  setParticipantStatusValues(String[] values) {
     participantStatus_.clear();
     participantStatusList_.clear();
-    StringBuilder buider = new StringBuilder("") ;
+   // StringBuilder buider = new StringBuilder("") ;
     for (String par : values) {
       String[] entry = par.split(":");
       if(entry.length>1){
@@ -1038,7 +1038,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
 
   protected boolean isSendMail() {
-    UIFormInputWithActions uiShareTab = getChildById(TAB_EVENTSHARE) ;
+    // UIFormInputWithActions uiShareTab = getChildById(TAB_EVENTSHARE) ;
     return false ; //uiShareTab.getUIFormCheckBoxInput(FIELD_ISSENDMAIL).isChecked() ;
   }
   /*protected String getInvitationNote() {
@@ -1250,9 +1250,8 @@ public Attachment getAttachment(String attId) {
     return null;
   }
 
-  public List<ParticipantStatus> getParticipantStatusList() {
-    
-  return participantStatusList_;
+  public List<ParticipantStatus> getParticipantStatusList() {    
+    return participantStatusList_;
 }
 
   
@@ -1368,6 +1367,8 @@ public Attachment getAttachment(String attId) {
           calendarEvent.setSendOption(uiForm.getSendOption());
           calendarEvent.setMessage(uiForm.getMessage());
           String[] parStatus = uiForm.getParticipantStatusValues().split(CalendarUtils.BREAK_LINE) ;
+          
+          
           calendarEvent.setParticipantStatus(parStatus);
           
 //        TODO cs-839
@@ -1897,10 +1898,10 @@ public Attachment getAttachment(String attId) {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      CalendarSetting calSetting = calendarPortlet.getCalendarSetting() ;
+      //UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      //UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
+      //UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      //CalendarSetting calSetting = calendarPortlet.getCalendarSetting() ;
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       //TODO cs-764
       if(!uiForm.isReminderValid()) {
@@ -1917,7 +1918,7 @@ public Attachment getAttachment(String attId) {
       if(CalendarSetting.ACTION_ASK.equalsIgnoreCase(sendOption)){
           // Show Confirm
         UIPopupAction pAction = uiPopupContainer.getChild(UIPopupAction.class) ;
-        UIConfirmForm confirmForm =  pAction.activate(UIConfirmForm.class, 300);
+        UIConfirmForm confirmForm =  pAction.activate(UIConfirmForm.class, 500);
         confirmForm.setConfirmMessage(uiForm.confirm_msg);
         confirmForm.setConfig_id(uiForm.getId()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(pAction) ;

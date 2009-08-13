@@ -29,8 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
-
 import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -558,7 +556,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     public List<CalendarEvent>  getSelectedEvents(String eventIds) throws Exception {
     	String[] list = eventIds.split(",");
-    	CalendarService calService = CalendarUtils.getCalendarService() ;
+    	//CalendarService calService = CalendarUtils.getCalendarService() ;
         List<CalendarEvent> dataList = new ArrayList<CalendarEvent>() ;
     	for(int i = 0; i < list.length; i++){
     		CalendarEvent evt = getDataMap().get(list[i]) ;
