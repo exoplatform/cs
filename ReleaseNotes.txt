@@ -25,7 +25,7 @@ eXo Chat-Bar : the simply way to do everything like you are on chat application,
 
 - System Requirements
         Web Browser: IE6, IE7, FF2, FF3 (recommended), Safari.
-        JVM: version 1.5.0_09 or higher 
+        JVM: version 1.5.0_09 or higher
         Application Server : Tomcat, jboss
         Building Tools: Maven 2.0.6 and up
         openfire server version 3.4.5 for more information visit here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Chat+Configuration
@@ -34,19 +34,38 @@ eXo Chat-Bar : the simply way to do everything like you are on chat application,
 - What is new in eXo-CS Version 1.3 RC1
   + Base on public Portal 2.5.5
   + Sync message with IMAP server
-  + Support Right to Left (Arabic language) for all application
-  + Fix bugs listed below
+  + Support Right to Left (Arabic language)
+  + Fix bugs listed below 
+
  
+    * [CS-2867] - impossible to change time by mouse
+    * [CS-3000] - can not subscribe to caldav by sunbird and window calendar
+    * [CS-3002] - Server log print out NPE
+    * [CS-3006] - Calendar: Don't show "Add new event" item when right click on existing event/task
+    * [CS-3008] - still can add quick event in first time after delete all categories
+    * [CS-3009] - Duplicate event category value in special case
+    * [CS-3010] -  Need alert message when user input wrong password to join room
+    * [CS-3011] - Don't show attachment of message in sent folder
+    * [CS-3013] -  Normally there's no system message alerts some one has just joined room
+    * [CS-3014] -  Show message require input "event summary" when delete participant
+    * [CS-3015] - Error when close Add Calendar form without input
+    * [CS-3018] - Still can add Event in shared calendar which user don't edit right in special case
+    * [CS-3019] - events belong category is still displayed although that category isn't selected to view
+    * [CS-3020] - don't show content of message when import
+    * [CS-3021] - User can not add another into his personal contacts list after refuse the invitation
+    * [CS-3022] - Quick add event: still allow set time although selected "All day" in special case
+    * [CS-3028] -  should message to user known user can't do action with Address book of group
+    * [CS-3029] - Unknow error when search mail with special character : ^
+    * [CS-3031] - Little error in showing chat bar
+    * [CS-3032] -  Page iterator is still shown when filter user
+    * [CS-3035] - Public Calendar:User who don't have selected membership still have edit right
+    * [CS-3076] - Chat portlet can not work on webos mode
+    * [CS-3078] - Show error message when edit draft
+    * [CS-3079] - Can not add event/task for group calendar
+    * [CS-3080] - IE7: Join room form always show there's 2 pages in iterator when there's no room to join
+    * [CS-3081] - Page iterator was not shown after added more than 10 contacts (need to refresh)
 
-List issue CS Version 1.3 RC1
  
-
-
-- Other resources and links
-     Company site        http://www.exoplatform.com
-     Community JIRA      http://jira.exoplatform.org
-     Community site      http://www.exoplatform.org
-     Developers wiki     http://wiki.exoplatform.org
 
 
 

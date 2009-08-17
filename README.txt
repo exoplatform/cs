@@ -1,32 +1,60 @@
-Actually, no branch exists for Collaboration Suite.
-So if you want to use CS trunk for a 2.0 version of portal, ecm ..., you have to modify some thinks for update CS dependancies.
+- Collaboration suite quick start guide
+  Collaboration suite have 2 servers need to run at same time to use:
+    +) exo-tomcat: this is main tomcat server include Collaboration web applications and all dependencies.     
+    +) exo-openfire: a XMPP server using for Chat application
 
-1) In cs/trunk/pom.xml :
-Change component version in "profiles" part, for example :
-<profiles>
-    <profile>
-      <id>default</id>  
-      <activation>
-        <property><name>default</name></property>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <org.exoplatform.kernel.version>2.0</org.exoplatform.kernel.version>
-        <org.exoplatform.core.version>2.0</org.exoplatform.core.version>
-        <org.exoplatform.jcr.version>1.8</org.exoplatform.jcr.version>
-        <org.exoplatform.pc.version>trunk</org.exoplatform.pc.version>
-        <org.exoplatform.portal.version>2.0</org.exoplatform.portal.version>
-        <org.exoplatform.cs.version>trunk</org.exoplatform.cs.version>
+Need to set the JAVA_HOME variable for run Collaboration suite's servers.
++) How to start Collaboration sute:
+   * First thing first you need to give all script files the executable permission if you are in unix family environment.
+   Use command: "chmod +x *.sh" (without quote) to have execute permission on these files.
+   
+   * NOTE for cygwin's user: the JAVA_HOME must be in MS Windows format like: "C:\Program Files\JDK 1.5"
+    Example use: export JAVA_HOME=`cygpath -w "$JAVA_HOME"`; to convert unix like format to MS Windows format.
+   
+   * Start all servers by one command for Unix/Linux/cygwin environment:
+      Go to exo-tomcat/bin and run command:
+      ./eXo.sh
+   
+   * Start exo-tomcat server:
+   
+     +) On the Windows platform
+       Open a DOS prompt command, go to exo-tomcat/bin and type the command:
+         eXo.bat run
 
-        <test.classes>Test</test.classes>
-        <test.skip>true</test.skip>
+     +) On Unix/Linux/cygwin
+       Open a terminal, go to exo-tomcat/bin and type the command:
+         ./eXo.sh run
+    
+   * Start exo-openfire server:
+     +) On the Windows platform
+       Open a DOS prompt command, go to exo-openfire/bin and type the command:
+         openfired.exe
 
-      </properties>
-    </profile>
-  </profiles>
+     +) On Unix/Linux
+       Open a terminal, go to exo-openfire/bin and type the command:
+         ./openfire start
+
+-) How to access the eXo Collaboration Suite
+
+* Enter one of the following addresses into your browser address bar:
+   
+    http://localhost:8080/portal
+    http://localhost:8080/portal/public/classic
+    http://localhost:8080/portal/private/classic/collaboration
+
+You can log into the portal with the following accounts: root, john, marry, demo.
+All those accounts have the default password "exo".
+
+* Direct link to access applications in Collaboration suite:
+    +) Chat application: http://localhost:8080/portal/private/classic/chat
+    +) Chat application: http://localhost:8080/portal/private/classic/calendar     
+    +) Chat application: http://localhost:8080/portal/private/classic/mail     
+    +) Chat application: http://localhost:8080/portal/private/classic/contact         
+  You will get login form if you are not yet logged in to Collaboration Suite.
 
 
-2) in cs/trunk/web/csportal/pom.xml,
-Change each time ".../portal/trunk/..." by ".../portal/branches/2.0/..." if you use portal 2.0 version.
-
-
+- Other resources and links
+     Company site        http://www.exoplatform.com
+     Community JIRA      http://jira.exoplatform.org
+     Community site      http://www.exoplatform.org
+     Developers wiki     http://wiki.exoplatform.org
