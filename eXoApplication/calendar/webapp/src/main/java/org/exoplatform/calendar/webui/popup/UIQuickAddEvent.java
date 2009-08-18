@@ -308,6 +308,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
           calEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
           calEvent.setEventState(UIEventForm.ITEM_BUSY) ;
           calEvent.setParticipant(new String[]{username}) ;
+          calEvent.setParticipantStatus(new String[] {username + ":"});
+          calEvent.setSendOption(uiPortlet.getCalendarSetting().getSendOption());
           String emailAddress = CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username).getEmail() ;
           if(CalendarUtils.isEmailValid(emailAddress)) {
             List<Reminder> reminders = new ArrayList<Reminder>() ;
