@@ -54,21 +54,22 @@ public class LogoutFilter implements Filter {
    */
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
                                                                                            ServletException {
-    chain.doFilter(request, response);
+    //chain.doFilter(request, response);
     //System.out.println("LogoutFilter.doFilter()--------------------------------------------");
     HttpServletRequest httpRequest = (HttpServletRequest) request;
     javax.servlet.http.HttpSession session = httpRequest.getSession(false);
     if (session != null) {
       String sessionId = session.getId();
-      log.info("Remove session : " + sessionId);
-      session.invalidate();
       ConversationRegistry conversationRegistry = (ConversationRegistry) ExoContainerContext.getCurrentContainer()
                                                                                             .getComponentInstanceOfType(ConversationRegistry.class);
-      if (conversationRegistry.getState(sessionId) != null) {
+      if (conversationRegistry!= null && conversationRegistry.getState(sessionId) != null) {
+        log.info("Remove session : " + sessionId);
+        session.invalidate();
         log.info("Remove conversation state : " + sessionId);
         conversationRegistry.unregister(sessionId);
       }
     }
+    chain.doFilter(request, response);
   }
 
   /**
