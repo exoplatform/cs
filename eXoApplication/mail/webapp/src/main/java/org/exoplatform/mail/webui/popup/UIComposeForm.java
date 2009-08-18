@@ -46,11 +46,10 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -69,8 +68,8 @@ import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
+import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
 
@@ -137,6 +136,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 
   public UIComposeForm() throws Exception { }
 
+  @SuppressWarnings("deprecation")
   public void init(String accountId, Message msg, int composeType) throws Exception {
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
     String username = MailUtils.getCurrentUser();
@@ -214,6 +214,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     return uploadedFiles ;
   }
 
+  @SuppressWarnings("unchecked")
   public List<String> getCheckedAttach() throws Exception {
     List<String> checkedAttach = new ArrayList<String>();
     for (Attachment att : attachments_) {
@@ -708,11 +709,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         uiMessageList.updateList();
-        if (uiMsgPreview.getMessage() != null && uiMsgPreview.getMessage().getId().equals(message.getId())) {
+        if (uiMsgPreview != null && uiMsgPreview.getMessage() != null && uiMsgPreview.getMessage().getId().equals(message.getId())) {
           uiMsgPreview.setMessage(null);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview.getParent()) ;
         } else {
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
         UIPopupAction uiChildPopup = composeForm.getAncestorOfType(UIPopupAction.class);
@@ -762,7 +763,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       MailService mailSvr = composeForm.getApplicationComponent(MailService.class) ;
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       String usename = uiPortlet.getCurrentUser() ;
-      SessionProvider session = SessionProviderFactory.createSystemProvider();
 
       UIPopupAction uiChildPopup = composeForm.getAncestorOfType(UIPopupAction.class) ;
       Message message = composeForm.getNewMessage() ; 
@@ -786,7 +786,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        //uiChildPopup.deActivate() ;
       }
       // update ui
       String selectedFolder = uiFolderContainer.getSelectedFolder() ;
@@ -795,7 +794,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         uiMsgList.setMessagePageList(mailSvr.getMessagePageList(usename, uiMsgList.getMessageFilter())) ;
         List<Message> showedMsg = uiMsgPreview.getShowedMessages() ;
-        // update preview message in case editing while priviewing this message 
         try {
           if (showedMsg != null && showedMsg.size() > 0) {
             for (Message msg : showedMsg) {
@@ -814,7 +812,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       for(Attachment a : composeForm.getAttachFileList()) {
         UIAttachFileForm.removeUploadTemp(composeForm.getApplicationComponent(UploadService.class), a.getResoureId()) ;
       }
-      //uiPortlet.cancelAction();
 
       uiChildPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
@@ -978,6 +975,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   }
 
   static public class UseVisualEdiorActionListener extends EventListener<UIComposeForm> {
+    @SuppressWarnings("deprecation")
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
       boolean isVisualEditor = Boolean.valueOf(event.getRequestContext().getRequestParameter(OBJECTID)) ;  
