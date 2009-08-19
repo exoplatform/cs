@@ -737,7 +737,7 @@
 			  		  
 			  		  </div>
 			  		</div>
-			  		<div style="clear: left;"><span></span></div>
+			  		<div class="ClearContact"><span></span></div>
 			  	</div>
 			  </div>
 		  </td>
@@ -904,7 +904,7 @@
 			  		  	</div>
 			  		  </div>
 			  		</div>
-			  		<div style="clear: left;"><span></span></div>
+			  		<div class="ClearContact"><span></span></div>
 			  	</div>
 			  </div>			
 			  <% } %>

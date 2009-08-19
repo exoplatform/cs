@@ -115,6 +115,11 @@
 }
 /*=====================Table Color===========================*/
 
+.UIPopupCategory{
+	right:0px; /* orientation=rt */
+	position:absolute;
+}
+
 .UIPopupCategory .UIContextMenuContainer {
 	white-space: nowrap;
 }
@@ -235,7 +240,7 @@
 	padding: 0px 5px 0px 28px; /* orientation=lt */
 	padding: 0px 28px 0px 5px; /* orientation=rt */
 	margin: 0px 2px;
-	line-height: 25px;
+	line-height: 24px;
 }
 
 .UIRightClickPopupMenu .MenuItem .ItemIcon:hover {
@@ -246,128 +251,159 @@
 /* Create color tag */
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .YellowTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -651px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -651px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -651px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .WheatTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -630px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -630px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -630px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .VioletTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -609px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -609px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -609px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .TurquoiseTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -588px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -588px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -588px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .TomatoTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -567px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -567px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -567px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .ThistleTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -546px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -546px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -546px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .SkyBlueTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -525px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -525px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -525px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .SilverTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -504px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -504px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -504px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .SeaShellTag {
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -483px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -483px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -483px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .SeaGreenTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -462px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -462px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -462px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .SandyBrownTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -441px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -441px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -441px; /* orientation=rt */
 }
 
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .SalmonTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -399px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -399px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -399px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .SaddleBrownTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -378px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -378px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -378px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .RoyalBlueTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -357px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -357px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -357px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .RosyBrownTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -336px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -336px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -336px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .RedTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -315px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -315px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -315px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .PurpleTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -294px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -294px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -294px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .PlumTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -273px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -273px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -273px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .PinkTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -252px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -252px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -252px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .PeruTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -231px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -231px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -231px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .PeachPuffTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -210px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -210px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -210px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .PapayaWhipTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -189px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -189px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -189px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleVioletRedTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -168px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -168px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -168px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleTurquoiseTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -147px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -147px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -147px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .OrangeRedTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -126px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -126px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -126px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .OliveDrabTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -105px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -105px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -105px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .OliveTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -84px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -84px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -84px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleGreenTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -63px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -63px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -63px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .PaleGoldenRodTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -42px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -42px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -42px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .OrchidTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -21px;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px -21px; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% -21px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIRightClickPopupMenu .MenuItem .PowderBlueTag	{
-	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px top;
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 6px top; /* orientation=lt */
+	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% top; /* orientation=rt */
 }
 
 /*----------------------- Create Clean  -------------------*/

@@ -105,7 +105,8 @@
 }
 
 .UIContactPortlet .ControlButton {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	margin: 0px 3px;
 	cursor: pointer;
 }
@@ -174,8 +175,10 @@
 }
 
 .UIContactPortlet .UIActionBar .DownArrow1Icon {
-	background-position: right center;
-	padding-right: 16px;
+	background-position: right center; /* orientation=lt */
+	background-position: left center; /* orientation=rt */
+	padding-right: 16px; /* orientation=lt */
+	padding-left: 16px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIActionBar .UIPopupCategory {
@@ -544,7 +547,8 @@
 
 .UIContactPortlet .UIContactContainer td {
 	border-top: none;
-	padding-left: 10px;
+	padding-left: 10px; /* orientation=lt */
+	padding-right: 10px; /* orientation=rt */
 }
 
 .UIContactPortlet .UIContactContainer .text {
@@ -654,13 +658,15 @@
 }
 
 .UIContactPortlet .ContactPreviewContainer .Avatar {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	margin: 0px 0px 5px 0px;
 	border: 1px solid #545454;
 }
 
 .UIContactPortlet .ContactPreviewContainer .Member {
-	margin-left: 80px;
+	margin-left: 80px; /* orientation=lt */
+	margin-right: 80px; /* orientation=rt */
 	width: 60%;
 }
 
@@ -700,15 +706,19 @@
 }
 
 .UIContactPortlet .InfoContainer .LeftContent {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	width: 46%;
-	padding-right: 10px;
+	padding-right: 10px; /* orientation=lt */
+	padding-left: 10px; /* orientation=rt */
 }
 
 .UIContactPortlet .InfoContainer .RightContent {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	width: 46%;
-	padding-left: 10px;
+	padding-left: 10px; /* orientation=lt */
+	padding-right: 10px; /* orientation=rt */
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoLabel {
@@ -739,8 +749,10 @@
 }
 
 .UIContactPortlet .InfoContainer .Content .Email {
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat left center;
-	padding-left: 20px;
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat right center; /* orientation=rt */
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 20px; /* orientation=rt */
 }
 
 .UIEmpty .OwnerIcon {
