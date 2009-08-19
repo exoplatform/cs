@@ -64,7 +64,7 @@ exo Collaboration Suite 1.3 features several noteworthy changes:
 
 - Collaboration suite quick start guide
   Collaboration suite have 2 servers need to run at same time to use:
-    +) exo-tomcat: this is main tomcat server include Collaboration web applications and all dependencies.     
+    +) exo-jboss: this is main jboss server include Collaboration web applications and all dependencies.     
     +) exo-openfire: a Jabber server used for Chat applications
 
 Need to set the JAVA_HOME variable for run Collaboration suite's servers.
@@ -76,18 +76,18 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
     Example use: export JAVA_HOME=`cygpath -w "$JAVA_HOME"`; to convert unix like format to MS Windows format.
    
    * Start all servers by one command for Unix/Linux/cygwin environment:
-      Go to exo-tomcat/bin and run command:
-      ./eXo.sh
+      Go to exo-jboss/bin and run command:
+      ./run.sh
    
-   * Start exo-tomcat server:
+   * Start exo-jboss server:
    
      +) On the Windows platform
        Open a DOS prompt command, go to exo-tomcat/bin and type the command:
-         eXo.bat run
+         run.bat start
 
      +) On Unix/Linux/cygwin
        Open a terminal, go to exo-tomcat/bin and type the command:
-         ./eXo.sh run
+         ./run.sh
     
    * Start exo-openfire server:
      +) On the Windows platform
