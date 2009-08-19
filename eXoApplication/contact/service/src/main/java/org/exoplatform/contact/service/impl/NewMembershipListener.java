@@ -115,9 +115,9 @@ public class NewMembershipListener extends MembershipEventListener {
     //  remove group of public contact
     Contact contact = cservice_.getPublicContact(m.getUserName()) ;
     Map<String, String> groupIds = new LinkedHashMap<String, String>() ;
-    for (String group  : contact.getAddressBook()) groupIds.put(group, group) ;
+    for (String group  : contact.getAddressBookIds()) groupIds.put(group, group) ;
     groupIds.remove(m.getGroupId()) ;
-    contact.setAddressBook(groupIds.keySet().toArray(new String[] {})) ;
+    contact.setAddressBookIds(groupIds.keySet().toArray(new String[] {})) ;
     SessionProvider systemSession = SessionProvider.createSystemProvider();
     try {
       cservice_.saveContact(m.getUserName(), contact, false) ;

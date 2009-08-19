@@ -98,7 +98,9 @@ public class JCRDataStorage {
   }
 
   private Node getMailHomeNode(SessionProvider sProvider, String username) throws Exception {
-    Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username);
+//  CS-3016    
+    SessionProvider sessionProvider = createSystemProvider() ;
+    Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sessionProvider, username);
     Node mailNode = null;
     try { 
       mailNode = userApp.getNode(MAIL_SERVICE);
@@ -2932,5 +2934,11 @@ public class JCRDataStorage {
     if (sessionProvider != null) {
       sessionProvider.close();
     }
+  }
+  
+  private SessionProvider createSystemProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSystemSessionProvider(null) ;    
   }
 }
