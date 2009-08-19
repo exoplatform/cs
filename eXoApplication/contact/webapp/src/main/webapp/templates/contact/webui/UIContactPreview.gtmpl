@@ -53,7 +53,7 @@
 											 <div class="Job"> <%= ContactUtils.encodeHTML(contact.getJobTitle()) %></div>
 									<% } %>
 								</div>
-								<div style="clear: left;"><span></span></div>
+								<div class="CleanRTL"><span></span></div>
 								
 								<div class="InfoContainer">
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.profile")%></div>

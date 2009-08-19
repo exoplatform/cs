@@ -660,7 +660,8 @@
 }
 
 .UIContactPortlet .ContactPreviewContainer .Avatar {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	margin: 0px 0px 5px 0px;
 	border: 1px solid #545454;
 }
@@ -706,15 +707,19 @@
 }
 
 .UIContactPortlet .InfoContainer .LeftContent {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	width: 46%;
-	padding-right: 10px;
+	padding-right: 10px; /* orientation=lt */
+	padding-left: 10px; /* orientation=rt */
 }
 
 .UIContactPortlet .InfoContainer .RightContent {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	width: 46%;
-	padding-left: 10px;
+	padding-left: 10px; /* orientation=lt */
+	padding-right: 10px; /* orientation=rt */
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoLabel {
@@ -724,14 +729,14 @@
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle1 {
 	white-space: nowrap;
-  padding: 0px 10px 0px 4px;
-  width: 100%;
+	padding: 0px 10px 0px 4px;
+	width: 100%;
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle2 {
 	white-space: nowrap;
-  width: 100%; 
-  table-layout: fixed;
+	width: 100%; 
+	table-layout: fixed;
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle3 {
@@ -741,12 +746,14 @@
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle {
 	white-space: nowrap;
-  padding: 0px 10px 0px 2px;
+  	padding: 0px 10px 0px 2px;
 }
 
 .UIContactPortlet .InfoContainer .Content .Email {
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat left center;
-	padding-left: 20px;
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat right center; /* orientation=rt */
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 20px; /* orientation=rt */
 }
 
 .UIEmpty .OwnerIcon {
@@ -757,4 +764,9 @@
 .UIEmpty .OfflineIcon {
 	width: auto;
 	padding-left: 20px;
+}
+
+.UIContactPortlet .ContactPreviewContainer .CleanRTL{
+	clear: left; /* orientation=lt */
+	clear: right; /* orientation=rt */
 }
