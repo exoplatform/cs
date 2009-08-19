@@ -106,7 +106,9 @@ public class JCRDataStorage {
    * @throws Exception
    */
   public Node getContactUserDataHome(SessionProvider sProvider, String username) throws Exception {
-    Node userDataHome = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)  ;
+//  CS-3016    
+    SessionProvider sessionProvider = createSystemProvider() ;
+    Node userDataHome = nodeHierarchyCreator_.getUserApplicationNode(sessionProvider, username)  ;
     try {
       return  userDataHome.getNode(CONTACT_APP) ;
     } catch (PathNotFoundException ex) {
@@ -436,8 +438,6 @@ public class JCRDataStorage {
         }
       }
       if (qm != null) {
-        Query query = qm.createQuery(filter.getStatement(), Query.XPATH);
-        QueryResult result = query.execute();
         return new ContactPageList(username,
                                    10,
                                    filter.getStatement(),
@@ -2515,13 +2515,13 @@ public class JCRDataStorage {
     }
     return provider;
   }
-  
+  /*
   private SessionProvider createUserProvider() {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
     return service.getSessionProvider(null) ;    
   }  
-  
+  */
   private SessionProvider createSystemProvider() {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
