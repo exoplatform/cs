@@ -45,12 +45,13 @@
 	<table class="UIFormGrid">
 	  <tr>
 	    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.from") %> :&nbsp;&nbsp;</td>
-	    <td class="FieldComponent" style="width:82%;"><%uiForm.renderField("from")%></td>
+	    <td class="FieldComponent" style="width:75%;"><%uiForm.renderField("from")%></td>
 	  </tr>
 	  <tr>
 	    <td class="ToFieldLabel">
 	    		<a href="<%=uiForm.event("To")%>"><%=_ctx.appRes(uiForm.id+ ".label.to") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
 	    </td>
+<!--	    add style to fix bug 3077-->
 	    <td class="ToFieldComponent"  colspan="2">
 	      <%uiForm.renderField("to")%> 
 	    </td>
