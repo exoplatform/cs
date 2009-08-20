@@ -411,6 +411,10 @@
 	width:24px;
 }
 
+.UIUserSelector .UIAddressSearchForm .GroupInput{
+	width: 308px;
+}
+
 /*----------------------- Create Clean  -------------------*/
 
 .UIContactPortlet .ClearContact{
