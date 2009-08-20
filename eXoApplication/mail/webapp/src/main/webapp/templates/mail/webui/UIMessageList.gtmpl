@@ -330,7 +330,7 @@
   </div>
   <%
     MessagePageList pageList = uicomponent.getMessagePageList();
-    if (pageList != null && pageList.getAvailablePage() > 1) {
+    if (pageList != null && pageList.getAvailablePage() > 1 && (uicomponent.getMessageList().size() != 0)) {
   %>
     <div class="UIMessagePageList">
       <div class="MailIteratorContainer">
@@ -340,7 +340,6 @@
             String cssNextPage = "FloatBlockHidden";
             long currentPage = 1;
             String mailRange = "";
-            if (pageList != null && (uicomponent.getMessageList().size() != 0)) {
               currentPage = pageList.getCurrentPage();
               if (currentPage > 1) cssPreviousPage = "FloatBlock";
               if (currentPage < pageList.getAvailablePage()) cssNextPage = "FloatBlock";
@@ -348,15 +347,14 @@
               long endIndex = fromIndex + pageList.getPageSize() - 1;
               if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
               if (fromIndex < endIndex) mailRange = fromIndex + " " + _ctx.appRes(uicomponent.id+ ".label.to-index") + " " + endIndex ;
-              else if (fromIndex == endIndex) mailRange = fromIndex ;
-            }         
+              else if (fromIndex == endIndex) mailRange = fromIndex ;         
           %>
-          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.first-page') %>" class="$cssPreviousPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        
-          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.previous-page') %>" class="$cssPreviousPage PreviousPageArrow" href="<%=uicomponent.event("PreviousPage")%>"></a>
-          <div class="Number">$currentPage / <%=pageList.getAvailablePage()%></div>
-          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.next-page') %>" class="$cssNextPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
-          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.last-page') %>" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span></span></a>
-          <div style="clear: left;"><span></span></div>
+            <a title="<%=_ctx.appRes(uicomponent.id+ '.label.first-page') %>" class="$cssPreviousPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        
+            <a title="<%=_ctx.appRes(uicomponent.id+ '.label.previous-page') %>" class="$cssPreviousPage PreviousPageArrow" href="<%=uicomponent.event("PreviousPage")%>"></a>
+            <div class="Number">$currentPage / <%=pageList.getAvailablePage()%></div>
+            <a title="<%=_ctx.appRes(uicomponent.id+ '.label.next-page') %>" class="$cssNextPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
+            <a title="<%=_ctx.appRes(uicomponent.id+ '.label.last-page') %>" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span></span></a>
+            <div style="clear: left;"><span></span></div>
         </div>
         <div class="LeftPageIteratorBlock">
           <%
