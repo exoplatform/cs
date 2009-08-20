@@ -2406,17 +2406,13 @@ public class JCRDataStorage {
     SessionProvider sysProvider = createSystemProvider() ;
     try {
       if(isNew) {
-        // TODO cs-1141
-        Node addressesGroup = getPersonalAddressBooksHome(
-          sysProvider, user.getUserName()).addNode(NewUserListener.ADDRESSESGROUP + user.getUserName(), "exo:contactGroup");
-        addressesGroup.setProperty("exo:id", NewUserListener.ADDRESSESGROUP + user.getUserName()); 
-        addressesGroup.setProperty("exo:name", NewUserListener.ADDRESSESGROUPNAME);
-        addressesGroup.getSession().save() ;
+        Node addressHome = getPersonalAddressBooksHome(sysProvider, user.getUserName()) ;
+        
         AddressBook addressbook = new AddressBook() ;
         addressbook.setId(NewUserListener.DEFAULTGROUP+user.getUserName()) ;
         addressbook.setName(NewUserListener.DEFAULTGROUPNAME) ;
         addressbook.setDescription(NewUserListener.DEFAULTGROUPDES) ;
-        Node groupNode = getPersonalAddressBooksHome(sysProvider, user.getUserName()).addNode(addressbook.getId(), "exo:contactGroup");
+        Node groupNode = addressHome.addNode(addressbook.getId(), "exo:contactGroup");
         groupNode.setProperty("exo:id", addressbook.getId()); 
         groupNode.setProperty("exo:name", addressbook.getName());
         groupNode.setProperty("exo:description", addressbook.getDescription());
@@ -2424,7 +2420,14 @@ public class JCRDataStorage {
         groupNode.setProperty("exo:viewPermissionUsers", addressbook.getViewPermissionUsers()) ;
         groupNode.setProperty("exo:editPermissionGroups", addressbook.getEditPermissionGroups()) ;
         groupNode.setProperty("exo:viewPermissionGroups", addressbook.getViewPermissionGroups()) ;
-        groupNode.getSession().save() ;
+        //groupNode.getSession().save() ;
+        
+//      TODO cs-1141
+        Node addressesGroup = addressHome.addNode(NewUserListener.ADDRESSESGROUP + user.getUserName(), "exo:contactGroup");
+        addressesGroup.setProperty("exo:id", NewUserListener.ADDRESSESGROUP + user.getUserName()); 
+        addressesGroup.setProperty("exo:name", NewUserListener.ADDRESSESGROUPNAME);
+        //addressesGroup.getSession().save() ;
+        addressHome.getSession().save();
         
         // save contact
         contact.setId(user.getUserName()) ;
