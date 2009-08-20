@@ -100,7 +100,7 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
         uiPortlet.cancelAction();
         return ;
       }
-      List<Message> appliedMsgList = uiMessageList.getCheckedMessage() ;
+      List<Message> appliedMsgList = uiMoveMessageForm.getMessageList() ;
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
       String fromFolderId = uiFolderContainer.getSelectedFolder() ;
       if (fromFolderId != null) {

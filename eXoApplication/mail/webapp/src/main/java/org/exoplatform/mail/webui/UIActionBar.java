@@ -67,7 +67,6 @@ public class UIActionBar extends UIContainer {
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class) ;
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       String folderId = uiFolderContainer.getSelectedFolder();
-      UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
@@ -83,14 +82,12 @@ public class UIActionBar extends UIContainer {
         }
         context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox() ;");        
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
     }
   }
 
   static public class ComposeActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-      
-      //System.out.println("\n\n hi :" + Util.getUIPortalApplication().getOrientation().isRT() + "\n\n");
       UIActionBar uiActionBar = event.getSource() ; 
       UIMailPortlet uiPortlet = uiActionBar.getParent() ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;

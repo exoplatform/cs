@@ -300,6 +300,7 @@ public class UIMessageList extends UIForm {
     return getCheckedMessage(true);
   }
   
+  @SuppressWarnings("unchecked")
   public List<Message> getCheckedMessage(boolean includeGroupedMsgs) throws Exception {
     List<Message> checkedList = new ArrayList<Message>();
     UIFormCheckBoxInput uiCheckbox;

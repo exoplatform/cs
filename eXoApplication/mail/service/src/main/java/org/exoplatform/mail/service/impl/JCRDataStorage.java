@@ -1513,7 +1513,6 @@ public class JCRDataStorage {
 
   public Folder getFolder(Node node) throws Exception {
     Folder folder = new Folder();
-    // if this folder exists, creates the object and returns it
     folder.setId(node.getProperty(Utils.EXO_ID).getString());
     folder.setURLName(node.getProperty(Utils.EXO_LABEL).getString());
     folder.setPath(node.getPath());
