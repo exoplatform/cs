@@ -511,6 +511,7 @@ public class UIMessageList extends UIForm {
 
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
       try {
+        if (msg != null) msg = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accountId, msg);
         uiComposeForm.init(accountId, msg, uiComposeForm.MESSAGE_IN_DRAFT);
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;

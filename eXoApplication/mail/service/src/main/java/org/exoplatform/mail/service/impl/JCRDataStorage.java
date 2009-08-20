@@ -881,16 +881,21 @@ public class JCRDataStorage {
         nodeMsg = (Node) mailHome.getSession().getItem(message.getPath());
       }
       if (nodeMsg != null) {
+        String from = "", to = "", cc = "", bcc = "";
         nodeMsg.setProperty(Utils.EXO_ID, message.getId());
         nodeMsg.setProperty(Utils.EXO_UID, message.getUID());
         nodeMsg.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, message.getInReplyToHeader());
         nodeMsg.setProperty(Utils.EXO_ACCOUNT, accountId);
         nodeMsg.setProperty(Utils.EXO_PATH, message.getPath());
-        nodeMsg.setProperty(Utils.EXO_FROM, message.getFrom().replaceAll("\"", ""));
-        nodeMsg.setProperty(Utils.EXO_TO, message.getMessageTo().replaceAll("\"", ""));
+        if (!Utils.isEmptyField(message.getFrom())) from = message.getFrom().replaceAll("\"", "");
+        nodeMsg.setProperty(Utils.EXO_FROM, from);
+        if (!Utils.isEmptyField(message.getMessageTo())) to = message.getMessageTo().replaceAll("\"", "");
+        nodeMsg.setProperty(Utils.EXO_TO, to);
         nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
-        nodeMsg.setProperty(Utils.EXO_CC, message.getMessageCc().replaceAll("\"", ""));
-        nodeMsg.setProperty(Utils.EXO_BCC, message.getMessageBcc().replaceAll("\"", ""));
+        if (!Utils.isEmptyField(message.getMessageCc())) cc = message.getMessageCc().replaceAll("\"", "");
+        nodeMsg.setProperty(Utils.EXO_CC, cc);
+        if (!Utils.isEmptyField(message.getMessageBcc())) bcc = message.getMessageBcc().replaceAll("\"", "");
+        nodeMsg.setProperty(Utils.EXO_BCC, bcc);
         nodeMsg.setProperty(Utils.EXO_BODY, message.getMessageBody());
         nodeMsg.setProperty(Utils.EXO_REPLYTO, message.getReplyTo());
         nodeMsg.setProperty(Utils.EXO_SIZE, message.getSize());
@@ -1215,7 +1220,8 @@ public class JCRDataStorage {
       recipients = InternetAddress.toString(msg.getRecipients(type));
     } catch (Exception e) { 
       String[] ccs = msg.getHeader(t) ;
-      for (int i = 0 ; i < ccs.length; i++) recipients += ccs[i].replaceAll("\"", "") + "," ; 
+      for (int i = 0 ; i < ccs.length; i++) 
+        if (!Utils.isEmptyField(ccs[i]))recipients += ccs[i].replaceAll("\"", "") + "," ; 
     }
     return Utils.decodeText(recipients);
   }

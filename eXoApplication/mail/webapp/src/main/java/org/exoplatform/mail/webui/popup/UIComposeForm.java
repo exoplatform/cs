@@ -783,6 +783,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           mailSvr.saveMessage(usename, accountId, composeForm.parentPath_, message, false) ;
         }
       } catch (Exception e) {
+        e.printStackTrace();
         UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -821,12 +822,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   static public class DiscardChangeActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
-      //UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
       uiForm.resetFields() ;
       for(Attachment a : uiForm.getAttachFileList()) {
         UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), a.getResoureId()) ;
       }
-      //uiPortlet.cancelAction();
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ; 
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
