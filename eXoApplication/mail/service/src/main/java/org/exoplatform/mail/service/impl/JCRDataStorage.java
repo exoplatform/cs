@@ -886,11 +886,11 @@ public class JCRDataStorage {
         nodeMsg.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, message.getInReplyToHeader());
         nodeMsg.setProperty(Utils.EXO_ACCOUNT, accountId);
         nodeMsg.setProperty(Utils.EXO_PATH, message.getPath());
-        nodeMsg.setProperty(Utils.EXO_FROM, message.getFrom());
-        nodeMsg.setProperty(Utils.EXO_TO, message.getMessageTo());
+        nodeMsg.setProperty(Utils.EXO_FROM, message.getFrom().replaceAll("\"", ""));
+        nodeMsg.setProperty(Utils.EXO_TO, message.getMessageTo().replaceAll("\"", ""));
         nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject());
-        nodeMsg.setProperty(Utils.EXO_CC, message.getMessageCc());
-        nodeMsg.setProperty(Utils.EXO_BCC, message.getMessageBcc());
+        nodeMsg.setProperty(Utils.EXO_CC, message.getMessageCc().replaceAll("\"", ""));
+        nodeMsg.setProperty(Utils.EXO_BCC, message.getMessageBcc().replaceAll("\"", ""));
         nodeMsg.setProperty(Utils.EXO_BODY, message.getMessageBody());
         nodeMsg.setProperty(Utils.EXO_REPLYTO, message.getReplyTo());
         nodeMsg.setProperty(Utils.EXO_SIZE, message.getSize());
@@ -1055,7 +1055,7 @@ public class JCRDataStorage {
           node.setProperty(Utils.EXO_UID, uid);
         } catch(Exception e) {}
         node.setProperty(Utils.EXO_ACCOUNT, accId);
-        from = Utils.decodeText(InternetAddress.toString(msg.getFrom()));
+        from = Utils.decodeText(InternetAddress.toString(msg.getFrom())).replaceAll("\"", "");
         node.setProperty(Utils.EXO_FROM, from);
         node.setProperty(Utils.EXO_TO, getAddresses(msg, javax.mail.Message.RecipientType.TO));      
         node.setProperty(Utils.EXO_CC, getAddresses(msg, javax.mail.Message.RecipientType.CC));
@@ -1215,7 +1215,7 @@ public class JCRDataStorage {
       recipients = InternetAddress.toString(msg.getRecipients(type));
     } catch (Exception e) { 
       String[] ccs = msg.getHeader(t) ;
-      for (int i = 0 ; i < ccs.length; i++) recipients += ccs[i] + "," ; 
+      for (int i = 0 ; i < ccs.length; i++) recipients += ccs[i].replaceAll("\"", "") + "," ; 
     }
     return Utils.decodeText(recipients);
   }
