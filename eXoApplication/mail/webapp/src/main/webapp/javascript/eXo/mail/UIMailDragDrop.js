@@ -197,7 +197,6 @@ UIMailDragDrop.prototype.dropCallback = function(dndEvent) {
     uiMsgList.action = uiMsgList.action + '&objectId=' + place2MoveId ;
 	uiMailPortletNode = eXo.core.DOMUtil.findAncestorByClass(uiMailPortletNode,"PORTLET-FRAGMENT");
     eXo.webui.UIForm.submitForm(uiMailPortletNode.parentNode.id + '#UIMessageList', formOp, true) ;
-    eXo.webui.UIForm.submitForm('UIMessageList', formOp, true) ;
   }
 } ;
 
