@@ -408,6 +408,10 @@
 	background: url('skinIcons/24x24/icons/TagIcons.gif') no-repeat 95% top; /* orientation=rt */
 }
 
+.UIUserSelector .UIAddressSearchForm .SearchIcon {
+	margin:3px 4px;
+}
+
 /*----------------------- Create Clean  -------------------*/
 
 .UIContactPortlet .ClearContact{
