@@ -52,10 +52,8 @@ import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.calendar.webui.UIPreview;
-import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactFilter;
+import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
@@ -1644,6 +1642,7 @@ public Attachment getAttachment(String attId) {
         UIAddressForm uiAddressForm = uiPopupAction.activate(UIAddressForm.class, 640) ;
         uiAddressForm.setContactList("") ;
         String oldAddress = uiForm.getEmailAddress() ;
+        /*
         List<Contact> allContact = new ArrayList<Contact>() ;
         ContactService contactService = uiAddressForm.getApplicationComponent(ContactService.class) ;
         String username = CalendarUtils.getCurrentUser() ;
@@ -1657,6 +1656,19 @@ public Attachment getAttachment(String attId) {
                   if(Arrays.asList(c.getEmailAddress().split(";")).contains(address.trim())) {
                     uiAddressForm.checkedList_.put(c.getId(), c) ;
                   }
+                }
+              }
+            }
+          }
+        }
+        */
+        List<ContactData> contacts = uiAddressForm.getContactList() ;
+        if(!CalendarUtils.isEmpty(oldAddress)) {
+          for(String address : oldAddress.split(",")) {
+            for(ContactData c : contacts){
+              if(!CalendarUtils.isEmpty(c.getEmail())) {              
+                if(Arrays.asList(c.getEmail().split(";")).contains(address.trim())) {
+                  if (!uiAddressForm.checkedList_.contains(c.getId())) uiAddressForm.checkedList_.add(c.getId()) ;
                 }
               }
             }

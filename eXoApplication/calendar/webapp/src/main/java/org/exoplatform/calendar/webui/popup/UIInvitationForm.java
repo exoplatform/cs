@@ -23,10 +23,7 @@ import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
-import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -318,6 +315,7 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
       uiAddressForm.actions_ = new String[]{"Add", "Cancel"};
       uiAddressForm.setContactList("") ;
       String oldAddress = uiEventForm.getEmailAddress() ;
+      /*
       List<Contact> allContact = new ArrayList<Contact>() ;
       ContactService contactService = uiAddressForm.getApplicationComponent(ContactService.class) ;
       String username = CalendarUtils.getCurrentUser() ;
@@ -331,6 +329,19 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
                 if(Arrays.asList(c.getEmailAddress().split(";")).contains(address.trim())) {
                   uiAddressForm.checkedList_.put(c.getId(), c) ;
                 }
+              }
+            }
+          }
+        }
+      }
+      */
+      List<ContactData> contacts = uiAddressForm.getContactList() ;
+      if(!CalendarUtils.isEmpty(oldAddress)) {
+        for(String address : oldAddress.split(",")) {
+          for(ContactData c : contacts){
+            if(!CalendarUtils.isEmpty(c.getEmail())) {
+              if(Arrays.asList(c.getEmail().split(";")).contains(address.trim())) {
+                if (!uiAddressForm.checkedList_.contains(c.getId())) uiAddressForm.checkedList_.add(c.getId()) ;
               }
             }
           }
