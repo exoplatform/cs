@@ -45,16 +45,11 @@ import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.calendar.webui.UIPreview;
-import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -131,7 +126,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   
   private String oldCalendarId_ = null ;
   private String newCalendarId_ = null ;
-  private String newCategoryId_ = null ;
+  //private String newCategoryId_ = null ;
   private Map<String, String> delegators_ = new LinkedHashMap<String, String>() ;
 
   public UITaskForm() throws Exception {
@@ -155,12 +150,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     super.reset() ;
     calendarEvent_ = null;
   }
-  private SessionProvider getSession() {
-    return SessionProviderFactory.createSessionProvider() ;
-  }
-  private SessionProvider getSystemSession() {
-    return SessionProviderFactory.createSystemProvider() ;
-  }
+
   public void setSelectedEventState(String value) {
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_STATUS).setValue(value) ;
@@ -820,6 +810,7 @@ public Attachment getAttachment(String attId) {
         UIAddressForm uiAddressForm = uiPopupAction.activate(UIAddressForm.class, 640) ;
         uiAddressForm.setContactList("") ;
         String oldAddress = uiForm.getEmailAddress() ;
+        /*
         List<Contact> allContact = new ArrayList<Contact>() ;
         ContactService contactService = uiAddressForm.getApplicationComponent(ContactService.class) ;
         String username = CalendarUtils.getCurrentUser() ;
@@ -833,6 +824,19 @@ public Attachment getAttachment(String attId) {
                   if(Arrays.asList(c.getEmailAddress().split(";")).contains(address.trim())) {
                     uiAddressForm.checkedList_.put(c.getId(), c) ;
                   }
+                }
+              }
+            }
+          }
+        }
+        */
+        List<ContactData> contacts = uiAddressForm.getContactList() ;
+        if(!CalendarUtils.isEmpty(oldAddress)) {
+          for(String address : oldAddress.split(",")) {
+            for(ContactData c : contacts){
+              if(!CalendarUtils.isEmpty(c.getEmail())) {
+                if(Arrays.asList(c.getEmail().split(";")).contains(address.trim())) {
+                  if (!uiAddressForm.checkedList_.contains(c.getId())) uiAddressForm.checkedList_.add(c.getId()) ;
                 }
               }
             }
