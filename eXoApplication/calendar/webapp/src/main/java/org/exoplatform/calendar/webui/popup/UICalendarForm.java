@@ -31,8 +31,6 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.calendar.webui.UIFormColorPicker;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
@@ -146,13 +144,13 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   public String[] getActions(){
     return new String[]{"Save", "Reset", "Cancel"} ;
   }
-  private SessionProvider getSession()  {
+ /* private SessionProvider getSession()  {
     return SessionProviderFactory.createSessionProvider() ;
   }
 
   private SessionProvider getSystemSession()  {
     return SessionProviderFactory.createSystemProvider() ;
-  }
+  }*/
   private  List<SelectItemOption<String>> getCategory() throws Exception {
     String username = CalendarUtils.getCurrentUser() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -223,6 +221,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     }
 
   }
+  public boolean isAddNew() { return isAddNew_ ; }
   public void init(Calendar calendar) throws Exception {
     isAddNew_ = false ;
     calendar_ = calendar ;

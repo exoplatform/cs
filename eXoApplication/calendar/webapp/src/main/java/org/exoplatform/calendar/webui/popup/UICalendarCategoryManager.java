@@ -32,10 +32,11 @@ import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.calendar.webui.UISearchForm;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -100,6 +101,14 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
       UICalendarCategoryManager uiManager = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiManager.getAncestorOfType(UICalendarPortlet.class) ;
       String calendarCategoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UICalendarForm uiCalendarForm = calendarPortlet.findFirstComponentOfType(UICalendarForm.class) ;
+      if(uiCalendarForm != null && !uiCalendarForm.isAddNew() && uiCalendarForm.calendar_ != null 
+          && uiCalendarForm.calendar_.getCategoryId().contains(calendarCategoryId)) {
+        UIApplication app = uiManager.getAncestorOfType(UIApplication.class) ;
+        app.addMessage(new ApplicationMessage("UICalendarCategoryManager.msg.can-not-delete-calendar-in-use", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(app.getUIPopupMessages()) ;
+        return ;        
+      }
       CalendarService calService = uiManager.getApplicationComponent(CalendarService.class) ;
       String username = CalendarUtils.getCurrentUser() ;
       calService.removeCalendarCategory(username, calendarCategoryId) ;
@@ -128,7 +137,7 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
       uiManager.updateGrid() ;
       uiManager.resetForm() ;
-      UICalendarForm uiCalendarForm = calendarPortlet.findFirstComponentOfType(UICalendarForm.class) ;
+      
       if(uiCalendarForm != null) {
         uiCalendarForm.reloadCategory() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarForm.getChildById(UICalendarForm.INPUT_CALENDAR)) ;
