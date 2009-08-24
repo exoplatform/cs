@@ -273,6 +273,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
     String subject = "";
     String replyContent = "";
+    String originalAttId = "";
     switch (getComposeType()) {
     case MESSAGE_IN_DRAFT :
       setFieldSubjectValue(msg.getSubject());
@@ -305,7 +306,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           if (att.isLoadedProperly()) attachments_.add(att);
         }
       }
-      if (mailSetting.replyWithAttach()) addOriginalMessageAsAttach(msg);
+      if (mailSetting.replyWithAttach()) originalAttId = addOriginalMessageAsAttach(msg);
       else {
         replyContent = getReplyContent(msg);
       }
@@ -313,7 +314,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 
       if (attachments_.size() > 0) {
         for (ActionData actionData : getUploadFileList()) {
-          inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null));
+          if (actionData.getActionParameter().equals(originalAttId))
+            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null).setChecked(true));
+          else 
+            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null));
         }
         refreshUploadFileList();
       }
@@ -361,7 +365,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           if (att.isLoadedProperly())  attachments_.add(att);
         }
       }
-      if (mailSetting.replyWithAttach()) addOriginalMessageAsAttach(msg);
+      if (mailSetting.replyWithAttach()) originalAttId = addOriginalMessageAsAttach(msg);
       else {
         replyContent = getReplyContent(msg);
       }
@@ -369,7 +373,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 
       if (attachments_.size() > 0) {
         for (ActionData actionData : getUploadFileList()) {
-          inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null));
+          if (actionData.getActionParameter().equals(originalAttId))
+            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null).setChecked(true));
+          else 
+            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null));
         }
         refreshUploadFileList();
       }
@@ -450,7 +457,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     return msgContent ;
   }
 
-  private void addOriginalMessageAsAttach(Message msg) throws Exception {
+  private String addOriginalMessageAsAttach(Message msg) throws Exception {
     MailService mailSrv = MailUtils.getMailService();
     String username = MailUtils.getCurrentUser();
     BufferAttachment att = new BufferAttachment();
@@ -462,6 +469,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     att.setInputStream(inputStream);
     att.setMimeType("message/rfc822");
     attachments_.add(att);
+    return att.getId();
   }
 
   public long getPriority() { return priority_; }  
