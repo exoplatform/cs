@@ -240,7 +240,8 @@ UIMailPortlet.prototype.resetLayoutCallback = function(){
 };
 
 UIMailPortlet.prototype.checkLayout = function(){
-    eXo.mail.LayoutManager = new LayoutManager("maillayout");
+	try {
+	eXo.mail.LayoutManager = new LayoutManager("maillayout");
     var layout1 = document.getElementById("UINavigationContainer");
     var layout2 = document.getElementById("uiMessageListResizableArea");
     var layout3 = document.getElementById("SpliterResizableArea");
@@ -253,6 +254,7 @@ UIMailPortlet.prototype.checkLayout = function(){
     eXo.mail.LayoutManager.resetCallback = eXo.mail.UIMailPortlet.resetLayoutCallback;
     eXo.mail.LayoutManager.check();
     this.setScroll();
+	} catch(e) {}
 };
 
 UIMailPortlet.prototype.showHideAddMoreAddress = function(add){
@@ -263,6 +265,7 @@ UIMailPortlet.prototype.showHideAddMoreAddress = function(add){
 };
 
 UIMailPortlet.prototype.showHidePreviewPane = function(obj){
+	try {
     var DOMUtil = eXo.core.DOMUtil;
     this.switchLayout(2);
     var actionButton = DOMUtil.findDescendantsByTagName(obj, "span")[0];
@@ -272,6 +275,7 @@ UIMailPortlet.prototype.showHidePreviewPane = function(obj){
         actionButton.className = "MinimumReadingPane";
     else 
         actionButton.className = "MaximizeReadingPane";
+	} catch (e) {}
 };
 
 UIMailPortlet.prototype.showHideMessageHeader = function(obj){
