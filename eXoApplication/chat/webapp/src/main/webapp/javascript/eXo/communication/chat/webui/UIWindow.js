@@ -29,9 +29,9 @@ UIWindow.prototype.init = function(popup, isShow, posX, posY) {
 	}
 	
 	var windowPortletControl = DOMUtil.findFirstDescendantByClass(popup, "div", "WindowPortletControl") ;
-	var minimizedIcon = DOMUtil.findFirstDescendantByClass(windowPortletControl, "div", "MinimizedIcon") ;
+	var minimizedIcon = DOMUtil.findFirstDescendantByClass(popup, "div", "MinimizedIcon") ;
 	minimizedIcon.onmouseup = this.minimizeWindowEvt ; 
-	var maximizedIcon = DOMUtil.findFirstDescendantByClass(windowPortletControl, "div", "MaximizedIcon") ;
+	var maximizedIcon = DOMUtil.findFirstDescendantByClass(popup, "div", "MaximizedIcon") ;
 	maximizedIcon.onmouseup = this.maximizeWindowEvt ;
 	var resizeArea = DOMUtil.findFirstDescendantByClass(popup, "div", "ResizeArea") ;
 	resizeArea.onmousedown = this.startResizeWindowEvt ;
