@@ -79,10 +79,10 @@
    </page>  
   -->
    <page>
-  	<page-id>group::platform/users::collaboration</page-id>
+  	<page-id>group::platform/users::webos</page-id>
   	<owner-type>group</owner-type>
     <owner-id>platform/users</owner-id>
-    <name>collaboration</name>
+    <name>webos</name>
     <factory-id>Desktop</factory-id>
     <access-permissions>*:/platform/users</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>

@@ -7,11 +7,11 @@
   
   <page-nodes> 
   	   <node>
-	    <uri>collaboration</uri>
-	    <name>collaboration</name>
+	    <uri>webos</uri>
+	    <name>webos</name>
 	    <label>#{platform.users.collaboration}</label>
 	    <visible>false</visible>	 
-	    <page-reference>group::platform/users::collaboration</page-reference>
+	    <page-reference>group::platform/users::webos</page-reference>
 	   </node>     	 	
 	    <node>
 		    <uri>contact</uri>

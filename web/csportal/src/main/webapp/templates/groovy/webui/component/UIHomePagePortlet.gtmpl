@@ -6,8 +6,8 @@
   String calendarUrl = Util.getPortalRequestContext().getPortalURI() + "calendar" ;
   String mailUrl = Util.getPortalRequestContext().getPortalURI() + "mail" ;
   String contactUrl = Util.getPortalRequestContext().getPortalURI() + "contact" ;
-  String chatUrl = "/portal/private/classic/collaboration" ;
-  String webosUrl = Util.getPortalRequestContext().getPortalURI() + "collaboration" ;
+  String webosUrl = Util.getPortalRequestContext().getPortalURI() + "webos" ;
+  String chatUrl = "/portal/private/classic/webos" ;
   String registerUrl = Util.getPortalRequestContext().getPortalURI() + "register" ;
   if(user == null) {
    calendarUrl = "#" ;
