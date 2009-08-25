@@ -73,6 +73,10 @@ UIChatResize.prototype.init = function(event) {
     workspaceControlWidth = eXo.portal.UIControlWorkspace.width;
   } catch (error) {}
 
+	if (isNaN(workspaceControlWidth)) {
+      workspaceControlWidth = 0;
+    }
+
   var UIPageDesktopNode = document.getElementById('UIPageDesktop');
   if (UIPageDesktopNode) {
     oTop += eXo.core.Browser.findPosYInContainer(eXo.communication.chat.webui.UIMainChatWindow.rootNode, document.body);
