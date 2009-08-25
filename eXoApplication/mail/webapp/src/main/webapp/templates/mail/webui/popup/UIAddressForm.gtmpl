@@ -1,10 +1,10 @@
 <%
- import org.exoplatform.contact.service.Contact;
- uiform.begin() 
- def rcontext = _ctx.getRequestContext() ;
- String actionLink = uicomponent.event('SearchContact') ;
- rcontext.getJavascriptManager().addJavascript('eXo.cs.Utils.captureInput("'+uiform.CONTACT_SEARCH+'","'+actionLink+'") ;') ;
- rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("' + uiform.id + '"); ') ;
+	import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
+  uiform.begin() 
+  def rcontext = _ctx.getRequestContext() ;
+  String actionLink = uicomponent.event('SearchContact') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.cs.Utils.captureInput("'+uiform.CONTACT_SEARCH+'","'+actionLink+'") ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("' + uiform.id + '"); ') ;
  %>
 <div class="UIInsertAddress">
   <div class="InsertAddressContainer">
@@ -55,7 +55,7 @@
             </thead>
             <tbody>
               <%
-                for (Contact contact : uicomponent.getContacts()) {
+                for (ContactData contact : uicomponent.getContacts()) {
                   checkboxField = uicomponent.getChildById(contact.getId());
               %>
                 <tr>
@@ -65,7 +65,7 @@
                     %>
                   </td>
                   <td class="text BorderAddress"><%=contact.getFullName()%></td>
-                  <td class="text"><%=(contact.getEmailAddress() != null ? contact.getEmailAddress() :"")%></td>
+                  <td class="text"><%=(contact.getEmail() != null ? contact.getEmail() :"")%></td>
                 </tr>
               <%}%>
         </tbody>

@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
@@ -32,10 +33,9 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
-import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.contact.service.Utils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
@@ -45,6 +45,7 @@ import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.Selector;
 import org.exoplatform.mail.webui.UIFormComboBox;
 import org.exoplatform.mail.webui.UIFormDateTimePicker;
+import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -656,9 +657,37 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
         UIAddressForm AddressForm = uiPopupAction.activate(UIAddressForm.class, 650) ;
         String oldAddress = uiForm.getEmailAddress() ;
-        List<Contact> allContact = new ArrayList<Contact>() ;
+        
         ContactService contactService = AddressForm.getApplicationComponent(ContactService.class) ;
         String username = MailUtils.getCurrentUser() ;
+        
+        Map<String, String> resultMap = contactService.searchEmails(username, new ContactFilter()) ;
+        List<ContactData> data = new ArrayList<ContactData>() ;
+        for(String ct : resultMap.keySet()) {
+          String id  = ct ;
+          String value = resultMap.get(id) ; 
+          if(resultMap.get(id) != null && resultMap.get(id).trim().length() > 0) {
+            if(value.lastIndexOf(Utils.SPLIT) > 0) {
+              String fullName = value.substring(0,value.lastIndexOf(Utils.SPLIT)) ;
+              String email = value.substring(value.lastIndexOf(Utils.SPLIT) + Utils.SPLIT.length()) ;
+              if(!MailUtils.isFieldEmpty(email)) data.add(AddressForm.new ContactData(id, fullName, email)) ;
+            }
+          }
+        }
+        if(!CalendarUtils.isEmpty(oldAddress)) {
+          for(String address : oldAddress.split(",")) {
+            for(ContactData c :data){
+              if(!CalendarUtils.isEmpty(c.getEmail())) {
+                if(Arrays.asList(c.getEmail().split(";")).contains(address.trim())) {
+                  AddressForm.checkedList_.put(c.getId(), c) ;
+                }
+              }
+            }
+          }
+        }
+
+        /*
+        List<Contact> allContact = new ArrayList<Contact>() ;
         DataPageList dataList = contactService.searchContact(username, new ContactFilter()) ;
         allContact = dataList.getAll() ;
         if(!allContact.isEmpty()) {
@@ -674,6 +703,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
             }
           }
         }
+        */
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
     }

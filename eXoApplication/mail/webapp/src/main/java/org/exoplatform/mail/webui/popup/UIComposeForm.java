@@ -50,6 +50,7 @@ import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -127,9 +128,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   private String accountId_ ;
   public String parentPath_ ;
 
-  public List<Contact> toContacts = new ArrayList<Contact>();
-  public List<Contact> ccContacts = new ArrayList<Contact>();
-  public List<Contact> bccContacts = new ArrayList<Contact>();
+  public List<ContactData> toContacts = new ArrayList<ContactData>();
+  public List<ContactData> ccContacts = new ArrayList<ContactData>();
+  public List<ContactData> bccContacts = new ArrayList<ContactData>();
 
   public boolean isVisualEditor() { return isVisualEditor; }
   public void setVisualEditor(boolean b) { isVisualEditor = b; }
@@ -179,14 +180,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     setMessage(msg, composeType);
   }
 
-  public List<Contact> getToContacts() { return toContacts; }
-  public void setToContacts(List<Contact> contactList) { toContacts = contactList; }
+  public List<ContactData> getToContacts() { return toContacts; }
+  public void setToContacts(List<ContactData> contactList) { toContacts = contactList; }
 
-  public List<Contact> getCcContacts() { return ccContacts; }
-  public void setCcContacts(List<Contact> contactList) { ccContacts = contactList; }
+  public List<ContactData> getCcContacts() { return ccContacts; }
+  public void setCcContacts(List<ContactData> contactList) { ccContacts = contactList; }
 
-  public List<Contact> getBccContacts() { return bccContacts; }
-  public void setBccContacts(List<Contact> contactList) { bccContacts = contactList; }
+  public List<ContactData> getBccContacts() { return bccContacts; }
+  public void setBccContacts(List<ContactData> contactList) { bccContacts = contactList; }
 
   public int getComposeType() { return composeType_ ; }
   public void setComposeType(int t) { composeType_ = t; }
@@ -900,11 +901,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         if (toAddresses[i] != null) emailList.add(toAddresses[i].getAddress());
       }
 
-      List<Contact> toContact = uiComposeForm.getToContacts() ;
+      List<ContactData> toContact = uiComposeForm.getToContacts() ;
       if (toContact != null && toContact.size() > 0) {
-        List<Contact> contactList = new ArrayList<Contact>();
-        for (Contact ct : toContact) {
-          if (emailList.contains(ct.getEmailAddress())) contactList.add(ct) ;
+        List<ContactData> contactList = new ArrayList<ContactData>();
+        for (ContactData ct : toContact) {
+          if (emailList.contains(ct.getEmail())) contactList.add(ct) ;
         }
         uiAddress.setAlreadyCheckedContact(contactList);
       }
@@ -928,11 +929,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       for (int i = 0 ; i < ccAddresses.length; i++) {
         if (ccAddresses[i] != null) emailList.add(ccAddresses[i].getAddress());
       }
-      List<Contact> ccContact = uiComposeForm.getCcContacts() ;
+      List<ContactData> ccContact = uiComposeForm.getCcContacts() ;
       if (ccContact != null && ccContact.size() > 0) {
-        List<Contact> contactList = new ArrayList<Contact>();
-        for (Contact ct : ccContact) {
-          if (emailList.contains(ct.getEmailAddress())) contactList.add(ct) ;
+        List<ContactData> contactList = new ArrayList<ContactData>();
+        for (ContactData ct : ccContact) {
+          if (emailList.contains(ct.getEmail())) contactList.add(ct) ;
         }
         uiAddress.setAlreadyCheckedContact(contactList);
       }
@@ -957,11 +958,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       for (int i = 0 ; i < bccAddresses.length; i++) {
         if (bccAddresses[i] != null) emailList.add(bccAddresses[i].getAddress());
       }
-      List<Contact> bccContact = uiComposeForm.getBccContacts() ;
+      List<ContactData> bccContact = uiComposeForm.getBccContacts() ;
       if (bccContact != null && bccContact.size() > 0) {
-        List<Contact> contactList = new ArrayList<Contact>();
-        for (Contact ct : bccContact) {
-          if (emailList.contains(ct.getEmailAddress())) contactList.add(ct) ;
+        List<ContactData> contactList = new ArrayList<ContactData>();
+        for (ContactData ct : bccContact) {
+          if (emailList.contains(ct.getEmail())) contactList.add(ct) ;
         }
         uiAddress.setAlreadyCheckedContact(contactList);
       }

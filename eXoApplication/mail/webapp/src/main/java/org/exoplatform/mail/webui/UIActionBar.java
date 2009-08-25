@@ -28,7 +28,6 @@ import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIMessageFilter;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
