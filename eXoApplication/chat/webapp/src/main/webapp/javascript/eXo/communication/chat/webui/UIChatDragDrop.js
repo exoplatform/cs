@@ -108,7 +108,11 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
   try {
     workspaceControlWidth = eXo.portal.UIControlWorkspace.width;
   } catch (error) {}
-
+	
+	if (isNaN(workspaceControlWidth)) {
+      workspaceControlWidth = 0;
+    }
+    
   var UIPageDesktopNode = document.getElementById('UIPageDesktop');
   if (UIPageDesktopNode) {
     oTop += eXo.core.Browser.findPosYInContainer(eXo.communication.chat.webui.UIMainChatWindow.rootNode, document.body);
