@@ -1167,6 +1167,7 @@ form {
 .ChatContainer .UserMessage .BoxMessageChat .ContextChat {
 	padding: 10px 15px;
 	line-height: 20px;
+	white-space: normal;
 }
 
 .ChatContainer .GuestMessage .BoxMessageChat {
