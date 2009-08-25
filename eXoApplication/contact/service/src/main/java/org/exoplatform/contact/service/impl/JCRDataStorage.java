@@ -2031,85 +2031,93 @@ public class JCRDataStorage {
     filter.setHasEmails(true); // contact must have emails
     SessionProvider sysProvider = SessionProvider.createSystemProvider();
     try {
-    //public contacts
-    Node publicContactHome = getPublicContactsHome(sysProvider) ; 
-    String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
-    filter.setAccountPath(usersPath) ;
-    // minus shared contacts
-    filter.setOwner("true") ; 
-    QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager() ;
-    Query query = qm.createQuery(filter.getStatement(), Query.XPATH) ; // TODO add criteria on emailAddress not null to lower number of results
-    NodeIterator itpublic = query.execute().getNodes();
-    while(itpublic.hasNext()) {
-      Node contactNode = itpublic.nextNode() ;
-      //if (contactNode.hasProperty("exo:emailAddress"))
-        feedEmailResult(emails, contactNode);
-    }
-    filter.setOwner(null) ;
-
-    // private contacts
-    if(username != null && username.length() > 0) {
-      Node contactHome = getPersonalContactsHome(sysProvider, username) ;
-      filter.setAccountPath(contactHome.getPath()) ;      
-      qm = contactHome.getSession().getWorkspace().getQueryManager() ;
-      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;// TODO add criteria on emailAddress not null to lower number of results
-      NodeIterator it = query.execute().getNodes() ;
-      while(it.hasNext()) {
-        Node contactNode = it.nextNode() ;
-        //if (contactNode.hasProperty("exo:emailAddress"))
-          feedEmailResult(emails, contactNode);        
-      }
-    }
-
-    //share contacts
-    try {
-      Node sharedContact = getSharedContact(username) ;      
-      PropertyIterator iter = sharedContact.getReferences() ;
-      while(iter.hasNext()) {
-        try{
-          Node sharedContactHomeNode = iter.nextProperty().getParent().getParent() ;
-          filter.setAccountPath(sharedContactHomeNode.getPath()) ;
-
-          String split = "/" ;
-          String temp = sharedContactHomeNode.getPath().split(usersPath)[1] ;
-          String userId = temp.split(split)[1] ;
-          filter.setUsername(userId) ;
-          
-          qm = sharedContactHomeNode.getSession().getWorkspace().getQueryManager() ;      
+      QueryManager qm ;
+      Query query ;
+      String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
+      //public contacts
+      if (!filter.isSearchSharedContacts()) {
+        Node publicContactHome = getPublicContactsHome(sysProvider) ; 
+        filter.setAccountPath(usersPath) ;
+        // minus shared contacts
+        filter.setOwner("true") ; 
+        qm = publicContactHome.getSession().getWorkspace().getQueryManager() ;
+        query = qm.createQuery(filter.getStatement(), Query.XPATH) ; // TODO add criteria on emailAddress not null to lower number of results
+        NodeIterator itpublic = query.execute().getNodes();
+        while(itpublic.hasNext()) {
+          Node contactNode = itpublic.nextNode() ;
+          //if (contactNode.hasProperty("exo:emailAddress"))
+            feedEmailResult(emails, contactNode);
+        }
+        filter.setOwner(null) ;
+    
+        // private contacts
+        if(username != null && username.length() > 0) {
+          Node contactHome = getPersonalContactsHome(sysProvider, username) ;
+          filter.setAccountPath(contactHome.getPath()) ;      
+          qm = contactHome.getSession().getWorkspace().getQueryManager() ;
           query = qm.createQuery(filter.getStatement(), Query.XPATH) ;// TODO add criteria on emailAddress not null to lower number of results
           NodeIterator it = query.execute().getNodes() ;
           while(it.hasNext()) {
             Node contactNode = it.nextNode() ;
             //if (contactNode.hasProperty("exo:emailAddress"))
-              feedEmailResult(emails, contactNode);  
+              feedEmailResult(emails, contactNode);        
           }
-        }catch(Exception e){
-          e.printStackTrace() ;
         }
       }
-    } catch (PathNotFoundException e) { }
-    Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
-    PropertyIterator iter = sharedAddressBookMock.getReferences() ;
-    Node addressBook ;
-    
-//  add if to fix bug 1407
-    boolean hasGroup = (filter.getCategories() != null && filter.getCategories().length > 0) ; 
-    while(iter.hasNext()) {
-      addressBook = iter.nextProperty().getParent() ;
-      Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
-      filter.setAccountPath(contactHomeNode.getPath()) ;
-      if (!hasGroup) filter.setCategories(new String[] {addressBook.getName()}) ;
-      filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString()) ;
-      qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;      
-      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;  // TODO add criteria on emailAddress not null to lower number of results
-      NodeIterator it = query.execute().getNodes() ;
-      while(it.hasNext()) {
-        Node contactNode = it.nextNode() ;
-        //if (contactNode.hasProperty("exo:emailAddress"))
-          feedEmailResult(emails, contactNode); 
-      }
-    }
-    return emails ;
+      
+  
+      //share contacts
+      try {
+        Node sharedContact = getSharedContact(username) ;      
+        PropertyIterator iter = sharedContact.getReferences() ;
+        while(iter.hasNext()) {
+          try{
+            Node sharedContactHomeNode = iter.nextProperty().getParent().getParent() ;
+            filter.setAccountPath(sharedContactHomeNode.getPath()) ;
+  
+            String split = "/" ;
+            String temp = sharedContactHomeNode.getPath().split(usersPath)[1] ;
+            String userId = temp.split(split)[1] ;
+            filter.setUsername(userId) ;
+            
+            qm = sharedContactHomeNode.getSession().getWorkspace().getQueryManager() ;      
+            query = qm.createQuery(filter.getStatement(), Query.XPATH) ;// TODO add criteria on emailAddress not null to lower number of results
+            NodeIterator it = query.execute().getNodes() ;
+            while(it.hasNext()) {
+              Node contactNode = it.nextNode() ;
+              //if (contactNode.hasProperty("exo:emailAddress"))
+                feedEmailResult(emails, contactNode);  
+            }
+          }catch(Exception e){
+            e.printStackTrace() ;
+          }
+        }
+      } catch (PathNotFoundException e) { }
+      
+      if (!filter.isSearchSharedContacts()) { 
+        Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
+        PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+        Node addressBook ;
+        
+    //  add if to fix bug 1407
+        boolean hasGroup = (filter.getCategories() != null && filter.getCategories().length > 0) ; 
+        while(iter.hasNext()) {
+          addressBook = iter.nextProperty().getParent() ;
+          Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+          filter.setAccountPath(contactHomeNode.getPath()) ;
+          if (!hasGroup) filter.setCategories(new String[] {addressBook.getName()}) ;
+          filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString()) ;
+          qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;      
+          query = qm.createQuery(filter.getStatement(), Query.XPATH) ;  // TODO add criteria on emailAddress not null to lower number of results
+          NodeIterator it = query.execute().getNodes() ;
+          while(it.hasNext()) {
+            Node contactNode = it.nextNode() ;
+            //if (contactNode.hasProperty("exo:emailAddress"))
+              feedEmailResult(emails, contactNode); 
+          }
+        }
+      }      
+      return emails ;
     } finally {
       if (sysProvider != null) sysProvider.close();
     }
