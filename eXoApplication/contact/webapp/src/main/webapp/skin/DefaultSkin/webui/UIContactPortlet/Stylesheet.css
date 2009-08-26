@@ -105,7 +105,8 @@
 }
 
 .UIContactPortlet .ControlButton {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	margin: 0px 3px;
 	cursor: pointer;
 }
@@ -513,7 +514,8 @@
 
 .UIContactPortlet .UIContactContainer .UIGrid th {
 	background: url(background/ThGridRepeatBg1x19.gif) repeat-x;
-	text-align: left;
+	text-align: left; /* orientation=lt */
+	text-align: right; /* orientation=rt */
 	border-bottom: 1px solid #d8d8d8;
 	border-top: none;
 	padding-top: 0px;

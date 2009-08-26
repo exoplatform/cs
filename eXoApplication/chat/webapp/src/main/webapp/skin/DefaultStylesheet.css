@@ -1240,6 +1240,7 @@ form {
 
 .ChatContainer .GuestMessage .BoxMessageChat .ContextChat {
 	padding: 10px 15px;
+	white-space: normal;
 }
 
 .UIConversation .UIAction {
