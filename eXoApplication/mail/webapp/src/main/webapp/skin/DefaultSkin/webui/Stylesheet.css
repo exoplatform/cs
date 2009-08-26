@@ -437,7 +437,7 @@
 	margin: 3px 0px 0px 0px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace  .UIActionBar .ControlButton:hover {
+.UIMailPortlet .MailWorkingWorkspace .UIActionBar .ControlButton:hover {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	color: #058ee6; 
 	border: 1px solid #cbcbcb;

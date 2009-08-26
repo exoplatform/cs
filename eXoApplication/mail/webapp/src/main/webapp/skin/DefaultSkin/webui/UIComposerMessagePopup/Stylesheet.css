@@ -196,18 +196,22 @@
 }
 
 .UIMessageCompose .MessageAddress .UIFormGrid .FieldLabel a {
-	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
-	color: black; border: 1px solid #cbcbcb;
-	line-height: 17px;
+	color: black;
 	text-indent:2px;
 	white-space:nowrap;
 	min-width:50px;
-	height:18px;
+	line-height: 26px;
+	height: 26px;
+	display: block;
 	float:left;
+	border: 1px solid #cbcbcb;
 }
 
 .UIMessageCompose .MessageAddress .UIFormGrid .FieldLabel a:hover {
 	color: #058ee6; 
+	background: url('background/ControlButtonBG1x26.gif') repeat-x;
+	border: 1px solid #cbcbcb;
+	line-height: 26px;
 }
 
 .UIMessageCompose .MessageAddress img {
@@ -232,18 +236,22 @@
 }
 
 .UIMessageCompose .MessageAddress .UIFormGrid .ToFieldLabel a {
-	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
-	color: black; border: 1px solid #cbcbcb;
-	line-height: 17px;
+	color: black;
 	text-indent:2px;
 	white-space:nowrap;
 	min-width:50px;
-	height:18px;
+	line-height: 26px;
+	height: 26px;
+	display: block;
 	float:left;
+	border: 1px solid #cbcbcb;
 }
 
 .UIMessageCompose .MessageAddress .UIFormGrid .ToFieldLabel a:hover {
 	color: #058ee6; 
+	background: url('background/ControlButtonBG1x26.gif') repeat-x;
+	border: 1px solid #cbcbcb;
+	line-height: 26px;
 }
 
 .UIMessageCompose .UIForm .UIFormGrid td.ToFieldComponent {
