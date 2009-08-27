@@ -3,19 +3,25 @@ function UIContactPortlet() {
 }
 
 UIContactPortlet.prototype.showContextMenu = function(compid) {
-	var UIContextMenuCon = eXo.webui.UIContextMenuCon ;//eXo.contact.ContextMenu ;
-	UIContextMenuCon.portletName = compid ;
-	var config = {
-		'preventDefault':false, 
-		'preventForms':false
-	} ;	
-	UIContextMenuCon.init(config) ;
-	UIContextMenuCon.attach(['UIContactList','VCardContent'], 'UIContactListPopuMenu') ;
-	UIContextMenuCon.attach('PrivateAddressBook', 'UIAddressBookPopupMenu0') ;	
-  UIContextMenuCon.attach('ShareAddressBook', 'UIAddressBookPopupMenu1') ;
-  UIContextMenuCon.attach('PublicAddressBook', 'UIAddressBookPopupMenu2') ;
-	UIContextMenuCon.attach('TagList', 'UITagPopupMenu') ;
-	this.fixForIE(compid);
+	try {
+		var UIContextMenuCon = eXo.webui.UIContextMenuCon ;//eXo.contact.ContextMenu ;
+		UIContextMenuCon.portletName = compid ;
+		var config = {
+			'preventDefault':false, 
+			'preventForms':false
+		} ;	
+		UIContextMenuCon.init(config) ;
+		UIContextMenuCon.attach(['UIContactList','VCardContent'], 'UIContactListPopuMenu') ;
+		UIContextMenuCon.attach('PrivateAddressBook', 'UIAddressBookPopupMenu0') ;	
+		UIContextMenuCon.attach('ShareAddressBook', 'UIAddressBookPopupMenu1') ;
+		UIContextMenuCon.attach('PublicAddressBook', 'UIAddressBookPopupMenu2') ;
+		UIContextMenuCon.attach('TagList', 'UITagPopupMenu') ;
+		this.fixForIE(compid);
+	} catch (e) {
+		return ;
+	}
+
+
 } ;
 
 UIContactPortlet.prototype.fixForIE = function(cpid) {
