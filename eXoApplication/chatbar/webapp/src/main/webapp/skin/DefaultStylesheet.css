@@ -104,10 +104,12 @@
   line-height: 25px; 
   height: 25px;
   margin-top: 2px;
+  float:none;
 }
 
 .UIChat .Actionbar .Icon:Hover {
   color: orange;
+  float:none;
 }
 
 .UIChat .AddContactIcon {
@@ -1520,6 +1522,9 @@ form {
 
 .UIChatBarPortlet .UIRightClickPopupMenu{
 	display:block;
+	left:auto;
+	top:auto;
+	position:absolute;
 }
 
 .UIChatBarPortlet .UIContextMenuContainer{

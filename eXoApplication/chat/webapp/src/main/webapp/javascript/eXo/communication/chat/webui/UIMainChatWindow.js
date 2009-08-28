@@ -284,9 +284,11 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
  * which overwritten the chat application.
  */
 UIMainChatWindow.prototype.isChatAlive = function() {
+	/*
   if (!document.getElementById('UIChat')) {
     eXo.communication.chat.webui.UIMainChatWindow.jabberLogout();
   }
+  */
 };
 
 /**
