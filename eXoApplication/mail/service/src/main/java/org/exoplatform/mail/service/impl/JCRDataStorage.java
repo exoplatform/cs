@@ -1971,7 +1971,9 @@ public class JCRDataStorage {
         tagHome.save();
       }
     } finally {
-      closeSessionProvider(sProvider);
+      try {
+        closeSessionProvider(sProvider);
+      } catch(Exception e) {}
     }
   }
 
@@ -2010,7 +2012,9 @@ public class JCRDataStorage {
         messageNode.save();
       }
     } finally {
-      closeSessionProvider(sProvider);
+      try {
+        closeSessionProvider(sProvider);
+      } catch (Exception e) {}  
     }
   }
 
