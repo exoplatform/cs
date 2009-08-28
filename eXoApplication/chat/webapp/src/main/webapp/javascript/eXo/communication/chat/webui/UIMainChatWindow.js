@@ -549,14 +549,13 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
       break;
 
     case this.GET_ROOM_LIST_ACTION:
-      if (serverData &&
-          serverData.hostedRooms) {
+      if (serverData) {
         this.UIJoinRoomPopupWindow.updateRoomList(serverData);
       }
       break;
 
     case this.GET_JOINED_ROOM_LIST_ACTION:
-      this.joinedRooms = serverData.joinedRooms ? serverData.joinedRooms : [];
+      this.joinedRooms = serverData && serverData.joinedRooms ? serverData.joinedRooms : [];
       break;
 
     case this.GET_SUBSCRIPTION_REQUESTS_ACTION:
@@ -968,9 +967,9 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
   this.lastStatusSent = status;
   this.setChangeStatusMenuVisible(this.statusNode, false);
   var DOMUtil = eXo.core.DOMUtil;
-  var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode, 'div', 'Text');
+  //var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode, 'div', 'Text');
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  userNameNode.innerHTML = userName;
+  //userNameNode.innerHTML = userName;
   switch (status) {
     case this.ONLINE_STATUS:
       if (!this.userStatus ||
@@ -1024,8 +1023,8 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
   var serverData = this.serverDataStack[eventId];
   this.lastStatusSent = false;
   var DOMUtil = eXo.core.DOMUtil;
-  var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode, 'div', 'Text');
-  userNameNode.innerHTML = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
+  //var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode, 'div', 'Text');
+  //userNameNode.innerHTML = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
   var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode, 'div');
   window.jsconsole.warn('User changed status: ' + this.userStatus + ' -> ' + status);
   this.userStatus = status;
@@ -1064,7 +1063,8 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
       //this.unsubscribeCometdTopics();
       this.buddyListControlObj.cleanup();
       this.addContactIconNode.onclick = null;
-      userStatusIconNode.className = 'OfflineIcon';
+      if(userStatusIconNode)
+      	userStatusIconNode.className = 'OfflineIcon';
       break;
     case this.AWAY_STATUS:
       userStatusIconNode.className = 'AwayIcon';
