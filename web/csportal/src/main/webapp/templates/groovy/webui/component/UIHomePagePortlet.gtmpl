@@ -189,7 +189,7 @@
 						<div class="LeftButton">
 							<div class="RightButton">
 								<div class="CenterButton">
-								<a href="$registerUrl" style="color: white; margin-top: 5px;">Try now</a>
+								<a href="$registerUrl" style="color: white; margin-top: 5px;"><%=_ctx.appRes("UIHomePagePortlet.cs-sign-up")%></a>
 								<a href="$registerUrl" style="color: white;" class="TextBntColla"><%=_ctx.appRes("UIHomePagePortlet.cs-register")%></a></div>
 							</div>
 						</div>
@@ -197,14 +197,16 @@
 					<div class="DotLine"><span></span></div>
 				    <%}%>
 					<div class="DownloadButton">
+					<% String downloadurl = _ctx.appRes("UIHomePagePortlet.cs-url") %>
 						<div style="height: 45px"><span></span></div>
-						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3RC1-tomcat.zip" style="color: white;" class="TextDownload"><%=_ctx.appRes("UIHomePagePortlet.cs-download")%></a><br/>
-						<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.3RC1-tomcat.zip" style="color: white;"><%=_ctx.appRes("UIHomePagePortlet.cs-community")%></a>
+						<a href="<%=downloadurl%>" style="color: white;" class="TextDownload"><%=_ctx.appRes("UIHomePagePortlet.cs-download")%></a><br/>
+						<a href="<%=downloadurl%>" style="color: white;">&nbsp;</a>
 					</div>
 					<div class="DotLine"><span></span></div>
 					<div style="margin: 17px 0px;">
-						<div class="NormalText">Did you like ? Did you hate ?</div>
-						<a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-send-feedback")%></a>
+						<div class="NormalText"><%=_ctx.appRes("UIHomePagePortlet.cs-feedback")%></div>
+						<% String feedbackurl=_ctx.appRes("UIHomePagePortlet.cs-feedback-url")%>
+						<a href="<%=feedbackurl%>" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-send-feedback")%></a>
 					</div>					 
                         <%if(user != null && user.trim().length() > 0) { %>
                         <div class="DotLine"><span></span></div>
