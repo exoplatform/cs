@@ -199,7 +199,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
           formBean = TransformUtils.changeFieldForm(formBean, "muc#roomconfig_roomdesc", values);
           return Response.Builder.ok(formBean, JSON_CONTENT_TYPE).cacheControl(cc).build();
       } catch (Exception e) {
-        e.printStackTrace();
+        /*e.printStackTrace();*/
         return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
                                .errorMessage(rb.getString("chat.message.room.creation.error") + "\n" + e.getMessage())
                                .build();
@@ -240,8 +240,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                .build();
       }
     } catch (XMPPException e) {
-      if (log.isDebugEnabled()) 
-        e.printStackTrace();
+      /*if (log.isDebugEnabled()) 
+        e.printStackTrace();*/
       XMPPError error = e.getXMPPError();
       return Response.Builder.withStatus(error.getCode())
                              .errorMessage(rb.getString("chat.message.conference.configuration.error")
@@ -273,8 +273,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                .cacheControl(cc)
                                .build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled()) 
-          e.printStackTrace();
+        /*if (log.isDebugEnabled()) 
+          e.printStackTrace();*/
         XMPPError error = e.getXMPPError();
         return Response.Builder.withStatus(error.getCode())
                        .errorMessage(rb.getString("chat.message.conference.configuration.error")
@@ -1629,15 +1629,15 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                              .header("Set-Cookie", "userTicket=" + UUID.randomUUID().toString())
                              .build();
     } catch (XMPPException e) {
-      if (log.isDebugEnabled()) 
-        e.printStackTrace();
+      /*if (log.isDebugEnabled()) 
+        e.printStackTrace();*/
       XMPPError error = e.getXMPPError();
       return Response.Builder.withStatus(error.getCode())
                              .errorMessage(error.getMessage())
                              .build();
     } catch (Exception e) {
-      if (log.isDebugEnabled())
-        e.printStackTrace();
+      /*if (log.isDebugEnabled())
+        e.printStackTrace();*/
       return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
                              .errorMessage("Thrown exception : " + e)
                              .build();

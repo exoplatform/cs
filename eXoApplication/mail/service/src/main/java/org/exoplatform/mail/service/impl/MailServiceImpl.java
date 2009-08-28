@@ -320,7 +320,7 @@ public class MailServiceImpl implements MailService, Startable {
         transport.connect(outgoingHost, Integer.parseInt(outgoingPort), acc.getOutgoingUserName(), acc.getOutgoingPassword());
       }
     } catch(Exception ex) {
-      logger.warn("#### Can not connect to smtp server ...") ;
+      logger.debug("#### Can not connect to smtp server ...") ;
       throw ex;
     }
     Message msg = send(session, transport, message);
@@ -365,7 +365,7 @@ public class MailServiceImpl implements MailService, Startable {
       try {
         transport.connect() ;
       } catch(Exception ex) {
-        logger.warn("#### Can not connect to smtp server ...") ;
+        logger.debug("#### Can not connect to smtp server ...") ;
         return ;
       }
     }
@@ -785,7 +785,7 @@ public class MailServiceImpl implements MailService, Startable {
   
   public IMAPStore openIMAPConnection(String username, Account account, CheckingInfo info) {
     try {
-      logger.warn(" #### Getting mail from " + account.getIncomingHost() + " ... !");
+      logger.debug(" #### Getting mail from " + account.getIncomingHost() + " ... !");
       if (info != null) info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !");
       
       Properties props = System.getProperties();
@@ -807,7 +807,7 @@ public class MailServiceImpl implements MailService, Startable {
         if (!account.isSavePassword()) {   // about remember password, in the first time get email.
           account.setIncomingPassword("");
           updateAccount(username, account);
-          logger.warn("Exception while connecting to server : " + e.getMessage());
+          logger.debug("Exception while connecting to server : " + e.getMessage());
         }
         if (info != null) {
           info.setStatusMsg("The username or password may be wrong.");
@@ -815,14 +815,14 @@ public class MailServiceImpl implements MailService, Startable {
         }
         return null;
       } catch (MessagingException e) {
-        logger.warn("Exception while connecting to server : " + e.getMessage());
+        logger.debug("Exception while connecting to server : " + e.getMessage());
         if (info != null) {
           info.setStatusMsg("Connecting failed. Please check server configuration.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
         }
         return null;
       } catch (Exception e) {
-        logger.warn("Exception while connecting to server : " + e.getMessage());
+        logger.debug("Exception while connecting to server : " + e.getMessage());
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
@@ -892,8 +892,8 @@ public class MailServiceImpl implements MailService, Startable {
           }
         }
       }
-      logger.warn("/////////////////////////////////////////////////////////////");
-      logger.warn("/////////////////////////////////////////////////////////////");
+      logger.debug("/////////////////////////////////////////////////////////////");
+      logger.debug("/////////////////////////////////////////////////////////////");
       //store.close();
       info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
       removeCheckingInfo(username, accountId);
@@ -911,7 +911,7 @@ public class MailServiceImpl implements MailService, Startable {
     
     try {
       folder.open(javax.mail.Folder.READ_WRITE);
-      logger.warn(" #### Getting mails from folder " + folder.getName() + " !");
+      logger.debug(" #### Getting mails from folder " + folder.getName() + " !");
       checkingLog_.get(key).setStatusMsg("Getting mails from folder " + folder.getName() + " !");
       
       String folderId = Utils.createFolderId(accountId, String.valueOf(((IMAPFolder) folder).getUIDValidity()), true);
@@ -958,8 +958,8 @@ public class MailServiceImpl implements MailService, Startable {
       
       totalNew = msgMap.size();
 
-      logger.warn("=============================================================");
-      logger.warn(" #### Folder " + folder.getName() + " contains " + totalNew + " messages !");
+      logger.debug("=============================================================");
+      logger.debug(" #### Folder " + folder.getName() + " contains " + totalNew + " messages !");
 
       if (totalNew > 0) {        
         int i = 0;
@@ -1044,7 +1044,7 @@ public class MailServiceImpl implements MailService, Startable {
         FetchMailContentThread downloadContentMail = new FetchMailContentThread(storage_, msgMap, i, folder, username, accountId);
         new Thread(downloadContentMail).start();        
       }      
-      logger.warn("#### Synchronization finished for " + folder.getName() + " folder.");
+      logger.debug("#### Synchronization finished for " + folder.getName() + " folder.");
 
       if (!account.isSavePassword()) account.setIncomingPassword("");
       updateAccount(username, account);
@@ -1089,7 +1089,7 @@ public class MailServiceImpl implements MailService, Startable {
       if (Utils.isEmptyField(account.getIncomingPassword()))
         info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
 
-      logger.warn(" #### Getting mail from " + account.getIncomingHost() + " ... !");
+      logger.debug(" #### Getting mail from " + account.getIncomingHost() + " ... !");
       info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !");
       int totalNew = 0;
       String protocol = account.getProtocol();
@@ -1132,18 +1132,18 @@ public class MailServiceImpl implements MailService, Startable {
             if (!account.isSavePassword()) {   // about remember password, in the first time get email.
               account.setIncomingPassword("");
               updateAccount(username, account);
-              logger.warn("Exception while connecting to server : " + e.getMessage());
+              logger.debug("Exception while connecting to server : " + e.getMessage());
             }
             info.setStatusMsg("The username or password may be wrong.");
             info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
             return messageList;
           } catch (MessagingException e) {
-            logger.warn("Exception while connecting to server : " + e.getMessage());
+            logger.debug("Exception while connecting to server : " + e.getMessage());
             info.setStatusMsg("Connecting failed. Please check server configuration.");
             info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
             return messageList;
           } catch (Exception e) {
-            logger.warn("Exception while connecting to server : " + e.getMessage());
+            logger.debug("Exception while connecting to server : " + e.getMessage());
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
@@ -1156,12 +1156,12 @@ public class MailServiceImpl implements MailService, Startable {
 
           javax.mail.Folder folder = store.getFolder(storeURL.getFile());
           if (!folder.exists()) {
-            logger.warn(" #### Folder " + incomingFolder + " is not exists !");
+            logger.debug(" #### Folder " + incomingFolder + " is not exists !");
             info.setStatusMsg("Folder " + incomingFolder + " is not exists");
             store.close();
             continue;
           } else {
-            logger.warn(" #### Getting mails from folder " + incomingFolder + " !");
+            logger.debug(" #### Getting mails from folder " + incomingFolder + " !");
             info.setStatusMsg("Getting mails from folder " + incomingFolder + " !");
           }
           folder.open(javax.mail.Folder.READ_WRITE);
@@ -1199,9 +1199,9 @@ public class MailServiceImpl implements MailService, Startable {
           
           totalNew = msgMap.size();
 
-          logger.warn("=============================================================");
-          logger.warn("=============================================================");
-          logger.warn(" #### Folder contains " + totalNew + " messages !");
+          logger.debug("=============================================================");
+          logger.debug("=============================================================");
+          logger.debug(" #### Folder contains " + totalNew + " messages !");
 
           tt1 = System.currentTimeMillis();
           boolean saved = false ;
@@ -1234,7 +1234,7 @@ public class MailServiceImpl implements MailService, Startable {
               
               msg = msgList.get(i);
               
-              logger.warn("Fetching message " + (i + 1) + " ...");
+              logger.debug("Fetching message " + (i + 1) + " ...");
               /* JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
                 Reminder rmdObj = new Reminder() ;   
                 rmdObj.setFromDateTime(new Date()) ;
@@ -1292,11 +1292,11 @@ public class MailServiceImpl implements MailService, Startable {
               }
               i++;
               t2 = System.currentTimeMillis();
-              logger.warn("Message " + i + " saved : " + (t2 - t1) + " ms");
+              logger.debug("Message " + i + " saved : " + (t2 - t1) + " ms");
             }
 
             tt2 = System.currentTimeMillis();
-            logger.warn(" ### Check mail finished total took: " + (tt2 - tt1) + " ms");
+            logger.debug(" ### Check mail finished total took: " + (tt2 - tt1) + " ms");
           }
 
           if (!account.isSavePassword()) account.setIncomingPassword("");
@@ -1314,8 +1314,8 @@ public class MailServiceImpl implements MailService, Startable {
         
         removeCheckingInfo(username, accountId);
        
-        logger.warn("/////////////////////////////////////////////////////////////");
-        logger.warn("/////////////////////////////////////////////////////////////");
+        logger.debug("/////////////////////////////////////////////////////////////");
+        logger.debug("/////////////////////////////////////////////////////////////");
       } catch (Exception e) {
         e.printStackTrace();
         logger.error("Error while checking emails for " + username + " on account " + accountId, e);
@@ -1681,7 +1681,7 @@ public class MailServiceImpl implements MailService, Startable {
         transport.connect(acc.getOutgoingHost(), Integer.parseInt(acc.getOutgoingPort()), acc.getOutgoingUserName(), acc.getOutgoingPassword());
       }
     } catch(Exception ex) {
-      logger.warn("#### Can not connect to smtp server ...") ;
+      logger.debug("#### Can not connect to smtp server ...") ;
       throw ex;
     }
     
