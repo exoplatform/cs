@@ -1458,15 +1458,22 @@ public class UIMessageList extends UIForm {
       tagList.add(mailSrv.getTag(username, accountId, tagId));
       mailSrv.addTag(username, accountId, uiMessageList.getCheckedMessage(), tagList);
       List<String> tagIdList = new ArrayList<String>() ;
-      for (Tag tag : tagList) tagIdList.add(tag.getId()) ;
+      try {
       for (Message msg : uiMessageList.getCheckedMessage()) {
         if (msg.getTags() != null && msg.getTags().length > 0) {
+          boolean add = true;
           for (int i=0 ; i < msg.getTags().length; i++) {
-            if (!tagIdList.contains(msg.getTags()[i])) tagIdList.add(msg.getTags()[i]) ;
+            if (tagId.equals(msg.getTags()[i])) add = false;   
+            tagIdList.add(msg.getTags()[i]);
           }
+          if (add) tagIdList.add(tagId) ;
         }
+        if (tagIdList.size() == 0) tagIdList.add(tagId); 
         msg.setTags(tagIdList.toArray(new String[]{})) ;
         uiMessageList.messageList_.put(msg.getId(), msg) ;
+      }
+      } catch(Exception e) {
+        uiMessageList.updateList();
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer) ;
