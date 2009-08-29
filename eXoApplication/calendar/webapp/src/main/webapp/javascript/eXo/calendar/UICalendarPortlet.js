@@ -33,6 +33,26 @@ UICalendarPortlet.prototype.attachSwapClass = function(compId,className,hoverCla
     	}
     };
 } ;
+
+UICalendarPortlet.prototype.notify = function(message){
+	var Reminder = eXo.calendar.Reminder ;
+	var html = Reminder.generateHTML(message) ;
+	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(Reminder.createMessage(html, message), "div","UIPopupNotification") ;
+	eXo.webui.Box.config(popup,popup.offsetHeight, 5, Reminder.openCallback, Reminder.closeBox) ;
+	window.focus() ;
+	return ;
+};
+
+UICalendarPortlet.prototype.checkPermission = function(eventObj){
+	var calId = eventObj.getAttribute("calid");
+	var uiCalendarWorkingContainer = eXo.core.DOMUtil.findAncestorById(eventObj,"UICalendarWorkingContainer");
+	var msg = "<div style='padding:3px;color:red;'>" + uiCalendarWorkingContainer.getAttribute("msg") + "</div>";
+	var calendarNode = eXo.core.DOMUtil.findDescendantById(uiCalendarWorkingContainer,calId);
+	var isEdit = eval(calendarNode.getAttribute("canedit")) ;
+	delete calId, calendarNode, uiCalendarWorkingContainer ;
+	if(!isEdit) this.notify(msg);
+	return isEdit;
+};
 /**
  * Show Quick add event and task form 
  * @param {obj, type} has action object, type of form : event 1 | task 2
@@ -500,6 +520,7 @@ UICalendarPortlet.prototype.calendarMenuCallback = function(evt){
       }
   }
   if (canEdit && (canEdit == "true")) {
+  	  var actions = DOMUtil.findDescendantsByTagName(menu, "a");
       for (var j = 0; j < actions.length; j++) {
           if (actions[j].href.indexOf("EditCalendar") >= 0 || actions[j].href.indexOf("RemoveCalendar") >= 0) {
               actions[j].style.display = "block";
@@ -1071,8 +1092,9 @@ UICalendarPortlet.prototype.resetZIndex = function(obj){
 UICalendarPortlet.prototype.initDND = function(evt){
     var _e = window.event || evt;
     _e.cancelBubble = true;
-		if(eXo.core.EventManager.getMouseButton(evt) == 2) return ;
+	if(eXo.core.EventManager.getMouseButton(evt) == 2) return ;
     var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
+	if(!UICalendarPortlet.checkPermission(this))  return ;
     UICalendarPortlet.dragObject = this;
     UICalendarPortlet.resetZIndex(UICalendarPortlet.dragObject);
     UICalendarPortlet.dragContainer = eXo.core.DOMUtil.findAncestorByClass(UICalendarPortlet.dragObject, "EventDayContainer");

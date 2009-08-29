@@ -157,6 +157,7 @@ UIWeekView.prototype.dragStart = function(evt) {
 	_e.cancelBubble = true ;
 	if (_e.button == 2) return ;
 	var UIWeekView = eXo.calendar.UIWeekView ;
+	if(!eXo.calendar.UICalendarPortlet.checkPermission(this)) return ;
 	UIWeekView.dragElement = this ;
 	eXo.calendar.UICalendarPortlet.resetZIndex(UIWeekView.dragElement) ;
 	UIWeekView.objectOffsetLeft = eXo.core.Browser.findPosX(UIWeekView.dragElement) ;

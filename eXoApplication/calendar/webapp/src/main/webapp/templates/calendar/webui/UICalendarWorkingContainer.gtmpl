@@ -1,4 +1,4 @@
-<div class="UICalendarWorkingContainer" id="$uicomponent.id">
+<div class="UICalendarWorkingContainer" id="$uicomponent.id" msg="<%=_ctx.appRes("UICalendars.msg.have-no-permission-to-edit-event")%>">
  <%uicomponent.renderChildren()%>
  <div style="clear: left;"><span></span></div>
 </div>
