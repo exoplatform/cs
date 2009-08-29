@@ -111,7 +111,7 @@
             if(calendar.getViewPermission()!= null && calendar.getViewPermission().length > 0) { icon = "SharedCalendarIcon"}
 						if(uicomponent.getChildById(calId) != null) {
 				%>
-  					<div class="CalendarItem $calendar.calendarColor CalendarItemPrivate" calColor="$calendar.calendarColor" id="$calId" calType="0" >
+  					<div class="CalendarItem $calendar.calendarColor CalendarItemPrivate" calColor="$calendar.calendarColor" canEdit="true" id="$calId" calType="0" >
   							<div class="CheckBox"><%uiform.renderField(calId)%></div>
   							<div class="$icon" title="$calendar.name"><span>$calendar.name</span></div>
   							<!--<div class="DownArrow1Icon"><span></span></div>-->
@@ -154,7 +154,7 @@
 							owner = calendar.getCalendarOwner() + "- " ;
 						}
 				%>
-  					<div class="CalendarItem $color CalendarItemShared"  calColor="$color" id="$calId" calType="1"  canEdit="true">
+  					<div class="CalendarItem $color CalendarItemShared"  calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(calendar.getEditPermission())%>">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon" title="<%=owner + calendar.getName()%>"><span><%=owner + calendar.getName()%></span></div>
   							<!--<div class="DownArrow1Icon"><span></span></div>-->
@@ -199,7 +199,7 @@
   					</div>
   				</div>
   				<div class="UIVTabContent" >
-				<%	
+				<%	true
 						List calendarList = groupData.getCalendars() ;
 						for(calendar in calendarList) {
 							calId = calendar.getId() ;
