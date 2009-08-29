@@ -1,11 +1,5 @@
 <project>
-	<description>eXo Collaboration Suite is made of four applications:
-
-    * eXo Address Book: is an integrated address book and contacts manager. It not only handles private and public contacts in your organization but also keep precious information such as address, telephone, fax, etc. Furthermore, we also support VCard format, import/export in order to consolidate your existing contacts into a single place.
-    * eXo Calendar: is a personal and shared agenda. It not only helps you schedule your time more quickly and conveniently but also manages your shared and public agendas in the organization efficiently. Moreover, eXo Calendar also facilitates iCal support that helps you easily exchange event/task information with other applications.
-    * eXo Mail: is a full featured email client. It is built with a variety of features designed to make your e-mail experience more productive.
-    * eXo Chat: is an effective and convenient way to communicate online in real time.
-</description>
+	<description>eXo Collaboration Suite, made of Address Book, Calendar, Mail and Chat</description>
 	<url>http://wiki.exoplatform.org/xwiki/bin/view/CS/</url>
 
   <parent>

@@ -1,5 +1,5 @@
 ==============================================
-    Release Notes - exo-cs - Version 1.3 RC1
+    Release Notes - exo-cs - Version 1.4
 ==============================================
 
 ===============
@@ -51,9 +51,14 @@ exo Collaboration Suite 1.3 features several noteworthy changes:
           o Jabber chat server
           o Chat Bar application
           o WebOS friendly chat application
+          
+Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
+          
 =========
  INSTALL
 =========
+
+Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Install+Guide
 
 - System Requirements
         Web Browser: IE6, IE7, FF2, FF3 (recommended), Safari.
@@ -131,6 +136,55 @@ All those accounts have the default password "exo".
 ===========
  CHANGELOG
 ===========
+
+
+- 1.3 Final
+
+** Bug
+    * [CS-2930] - Can't drag and drop mail 
+    * [CS-2969] - Don't maximize portlet when go to webOS
+    * [CS-2974] - FF: UI error when open status menu of user
+    * [CS-2978] - don't add other user into new room when closed the room and join again
+    * [CS-2986] - Show wrong event when add event from 13/07/2009 00:00 to 14/07/2009 23:59
+    * [CS-2999] - don't show warning message when join room but don't have right
+    * [CS-3007] - Calendar:IE7:Unusual warning when show Event Categories form
+    * [CS-3016] - Portlet mail don't work , UI Error when over timeout 
+    * [CS-3077] - Little error in Compose a new message form
+    * [CS-3085] - Only list contact from Users and My contact AD when choose participant using Contact Picker
+    * [CS-3086] - Have to click Cancel twice after remove the only participant to close the edit event form
+    * [CS-3091] - IE7: wrong default calendar when add event/task
+    * [CS-3100] - The participants list is blank when edit a event from shared calendar by shared user
+    * [CS-3101] - Can not add star for message
+    * [CS-3103] - memory problem with jboss run
+    * [CS-3104] - can not send mail when stand at Split view
+    * [CS-3105] - JBOSS session problem cause by chatbar
+    * [CS-3106] - IE7: Fail when access into  a portlet in the first time
+    * [CS-3107] - index of folder is fail when drag and drop a unread  message which is in a conversation
+    * [CS-3108] - little error in Advance search form
+    * [CS-3109] - While checking mail, if click on a message to view ,message is empty in short  time
+    * [CS-3131] - Chat: Show empty page if refresh in case stand at Chat portlet
+    * [CS-3132] - Chat, FF3, WebOS: Error in showing long text message
+    * [CS-3134] - MAIL: sort message is wrong when sort by Sender
+    * [CS-3135] - message dont add tag when filter with add tag rule
+    * [CS-3138] - Error when edit a draft mail with attachments
+    * [CS-3140] - Mail: Little UI error when delete a mail account
+    * [CS-3142] - IE7 - contact: Occur wrongn message when go to address portlet in special case
+    * [CS-3143] - Unknown error when drag&drop message to a Tag while getting mail
+    * [CS-3147] - Error when try to show mail list in Inbox while maximizing the mail details pane
+    * [CS-3148] - Need much time for loading the about 100 users list but then no more user is displayed in list when show form to select mail to send from contact list
+    * [CS-3154] - Change "Invitations seding" to "Invitations Sending"  in resource file 
+    * [CS-3161] - Chat, IE7, WebOS: Should allow to drag & drop sub popup
+    * [CS-3163] - Chat, IE7: Error in showing personal contacts list of 2 users in 1 browser
+    * [CS-3164] - Chat, WebOS: "Service message: XMPPSession is null" appears sometimes when show Join room
+
+** Improvement
+    * [CS-2571] - Apply button style to recipients buttons
+    * [CS-2895] - use buttons in message view
+    * [CS-3129] - Contact: Should set "My Contact" is default value when create new contact
+    * [CS-3130] - Improve time to load the Select email form with about 100 users when add email to send reminder
+    * [CS-3136] - Calendar: Still show Edit calendat form although saved in special case
+    * [CS-3145] - Eml file isn't checked by default when reply a message with "Reply Original message as an attachment" setting
+
 
 
 - 1.3 RC1
@@ -245,7 +299,7 @@ All those accounts have the default password "exo".
     * [CS-839] - Add event participants by email
     * [CS-1008] - dynamic RSS/calDAV feeds
     * [CS-2568] - Custom Layout as a User Settings
-   * [CS-764] - Revamp Participants tab
+    * [CS-764] - Revamp Participants tab
     * [CS-2509] - List Personal IMAP folders
     * [CS-2676] - Synchronize folder on click
     * [CS-2678] - Chat Bar : Status
