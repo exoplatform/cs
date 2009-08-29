@@ -10,7 +10,7 @@
 	    <uri>webos</uri>
 	    <name>webos</name>
 	    <label>#{platform.users.collaboration}</label>
-	    <visible>false</visible>	    
+	    <visible>false</visible>	 
 	    <page-reference>group::platform/users::webos</page-reference>
 	   </node>     	 	
 	    <node>
