@@ -174,9 +174,11 @@
 	padding:14px 8px 22px;
 	height:525px;
 }
+
 .SideBarContainer {
   text-align: center;
 }
+
 .SideBar .DownloadButton{
 	background:url('DefaultSkin/background/DownloadButton.jpg') no-repeat center top;
 	height: 110px;

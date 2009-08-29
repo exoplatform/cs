@@ -18,10 +18,10 @@
 	    <show-info-bar>false</show-info-bar>
 	  </application>
 		
-	  <application>
+	  <!-- application>
 	    <instance-id>portal#classic:/web/BreadcumbsPortlet/breadcumbs</instance-id>
 	    <show-info-bar>false</show-info-bar>
-	  </application>
+	  </application-->
 	  
 	  <page-body> </page-body>
 	  <application>
