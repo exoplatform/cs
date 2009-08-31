@@ -202,8 +202,7 @@
 }
 
 .UIWeekView .EventWeekBar {
-	padding: 0px 16px 0px 0px; /* orientation=lt */
-	padding: 0px 0px 0px 16px; /* orientation=rt */
+	padding: 0px 16px 0px 0px;
 	
 }
 
@@ -255,7 +254,8 @@
 }
 
 .UIWeekView .TdTime {
-	text-align: right;
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
 	width: 55px;
 	-moz-user-select : none ;
 }
@@ -281,10 +281,24 @@
 .UIWeekView .EventAllday {
 	position:relative;
 	background: #DFE6F8;
-	border: 1px solid #c7c7c7;
+	border-bottom: 1px solid #c7c7c7;
+	border-left: 1px solid #c7c7c7; /* orientation=lt */
+	border-right: 1px solid #c7c7c7; /* orientation=rt */
+	border-right: 1px solid #c7c7c7; /* orientation=lt */
 	border-top: none;
 	height:28px;
 	_position:static;
+}
+
+.UIWeekView .EventAllday .Space{
+	width: 55px; /* orientation=lt */
+	width: 57px; /* orientation=rt */
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	height: 100%; 
+	background: white; 
+	border-right: 1px solid #ccc; /* orientation=lt */
+	border-left: 1px solid #ccc; /* orientation=rt */
 }
 
 .UIPageDesktop .UIWeekView .EventAllday {
