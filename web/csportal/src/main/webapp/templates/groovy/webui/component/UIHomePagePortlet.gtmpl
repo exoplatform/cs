@@ -170,7 +170,7 @@
 												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-mail-4")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-mail-5")%>t</div>
+												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-mail-5")%></div>
 											</div>
 										</div>
 									</div>
