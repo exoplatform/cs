@@ -1204,7 +1204,7 @@ UIMainChatWindow.prototype.buddyItemActionCallback = function(event) {
         if (Browser.isIE7()) {
           if (eXo.portal &&
               eXo.portal.UIControlWorkspace) {
-            intLeft += eXo.portal.UIControlWorkspace.width;
+            intLeft += workspaceControlWidth;
           }
         }
       }

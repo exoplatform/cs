@@ -250,6 +250,18 @@
 	background-color: #DEE4F2;
 }
 
+.UIRightClickPopupMenu .MenuItem .ItemIcon{
+	padding: 0px 5px 0px 28px; /* orientation=lt */
+	padding: 0px 28px 0px 5px; /* orientation=rt */
+	margin: 0px 2px;
+	line-height: 24px;
+}
+
+.UIRightClickPopupMenu .MenuItem .ItemIcon:hover {
+	background-color: #dee4f2;
+	color: orange;
+}
+
 .UIChatBarPortlet .UIRightClickPopupMenu .TypeViewContactPortlet {
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
