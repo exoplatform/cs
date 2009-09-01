@@ -649,9 +649,17 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList .LevelThreadIcon2 {
-	float: left;
-	background: url(background/Tree2.gif) no-repeat;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	background: url(background/Tree2.gif) no-repeat left center; /* orientation=lt */
+	background: url(background/Tree2-rt.gif) no-repeat right center; /* orientation=rt */
 	width: 22px; height: 22px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessageList .LevelThreadPadding{
+	padding-left: 25px; /* orientation=lt */
+	padding-right: 25px; /* orientation=rt */
+	width: auto;
 }
 
 .UIMailPortlet .UIMessageList .UIGrid {
