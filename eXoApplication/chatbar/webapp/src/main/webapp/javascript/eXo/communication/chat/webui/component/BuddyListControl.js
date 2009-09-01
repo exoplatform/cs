@@ -273,7 +273,7 @@ BuddyListControl.prototype.cleanup = function() {
       }
     }
   }
-  this.buddyList = null;
+  this.buddyList = {};
   this.rootNode.innerHTML = '<span></span>';
 };
 
