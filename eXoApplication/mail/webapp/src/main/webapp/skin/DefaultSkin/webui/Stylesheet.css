@@ -641,7 +641,8 @@
 /*================================== UIGrid==============================*/
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList {
-	padding-left: 1px;
+	padding-left: 1px; /* orientation=lt */
+	padding-right: 1px; /* orientation=rt */
 	overflow-y: auto;
 	overflow-x: hidden;
 	height: 200px ;
@@ -649,9 +650,16 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList .LevelThreadIcon2 {
-	float: left;
-	background: url(background/Tree2.gif) no-repeat;
-	width: 22px; height: 22px;
+	background: url(background/Tree2.gif) no-repeat left center; /* orientation=lt */
+	background: url(background/Tree2-rt.gif) no-repeat right center; /* orientation=rt */
+	width: 22px; 
+	height: 22px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessageList .LevelThreadPadding{
+	padding-left: 25px; /* orientation=lt */
+	padding-right: 25px; /* orientation=rt */
+	width: auto;
 }
 
 .UIMailPortlet .UIMessageList .UIGrid {
@@ -681,7 +689,8 @@
 }
 
 .UIMailPortlet .UIMessageList .UIGrid td.Border {
-	border-right: 1px solid #e8e8e8;
+	border-right: 1px solid #e8e8e8; /* orientation=lt */
+	border-left: 1px solid #e8e8e8; /* orientation=rt */
 }
 
 .UIMailPortlet .UIMessageList .UIGrid td {
