@@ -378,31 +378,38 @@
 }
 
 .UIMailPortlet .ViewDownloadIcon {
-	background: url('icons/ViewIcon.gif') no-repeat left center;
+	background: url('icons/ViewIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/ViewIcon.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .DownloadIcon {
-	background: url('icons/DownloadIcon.gif') no-repeat left center;
+	background: url('icons/DownloadIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/DownloadIcon.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .AddAccount {
-	background: url('icons/AddAccount.gif') no-repeat left center;
+	background: url('icons/AddAccount.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/AddAccount.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .AddFolderIcon {
-	background: url('icons/AddNewFolderIcon.gif') no-repeat left center;
+	background: url('icons/AddNewFolderIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/AddNewFolderIcon.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .AddTagIcon {
-	background: url('icons/AddNewTagIcon.gif') no-repeat left center;
+	background: url('icons/AddNewTagIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/AddNewTagIcon.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .CheckItem {
-	background: url('icons/CheckItem.gif') no-repeat left center;
+	background: url('icons/CheckItem.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/CheckItem.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .CloseFolder {
-	background: url('icons/DefaultIcon.gif') no-repeat left center;
+	background: url('icons/DefaultIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/DefaultIcon.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .Folder {
@@ -411,11 +418,13 @@
 }
 
 .UIMailPortlet .DeleteAccount {
-	background: url('icons/DeleteAccount.gif') no-repeat left center;
+	background: url('icons/DeleteAccount.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/DeleteAccount.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .EditAccount {
-	background: url('icons/EditAccount.gif') no-repeat left center;
+	background: url('icons/EditAccount.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/EditAccount.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .EmptyIcon {

@@ -72,7 +72,7 @@
       <div class="LeftContacts">
         <div class="UISelectAccount">
           <%uicomponent.renderField(uicomponent.SELECT_GROUP)%>
-          <div style="clear:left;"><span></span></div>
+          <div class="CleanRTL"><span></span></div>
         </div>
         <div class="ContactContainer">
           <div class="Title ContactIcon">

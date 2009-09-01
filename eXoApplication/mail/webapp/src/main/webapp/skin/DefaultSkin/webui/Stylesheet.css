@@ -1579,12 +1579,15 @@
 
 .UIMailPortlet .UIContactsPopup .ContactContainer .Title {
 	background: #e7e7e7;
-	line-height: 27px;
-	height: 27px;
 	padding: 0px 0px 0px 5px ; /* orientation=lt */
 	padding: 0px 5px 0px 0px ; /* orientation=rt */
 	height: 20px;
 	line-height: 20px;
+}
+
+.UIMailPortlet .UIContactsPopup .WorkContainer .CleanRTL{
+	clear: left; /* orientation=lt */
+	clear: right; /* orientation=rt */
 }
 
 .UIMailPortlet .UIContactsPopup .ContactContainer .ListContact {
