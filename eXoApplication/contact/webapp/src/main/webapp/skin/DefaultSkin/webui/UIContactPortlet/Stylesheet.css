@@ -613,12 +613,16 @@
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .Subject {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	font-weight: bold;
 	font-size: 11px;
-	margin: 5px 0px 0px 10px; 
-	padding-left: 20px;
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ContactIcon.gif') no-repeat left center;
+	margin: 5px 0px 0px 10px; /* orientation=lt */
+	margin: 5px 10px 0px 0px; /* orientation=rt */
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 20px; /* orientation=rt */
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ContactIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ContactIcon.gif') no-repeat right center; /* orientation=rt */
 }
 /*
 .UIContactPortlet .UIContactContainer .UIContactPreview .MaximizeContactPane {
@@ -636,21 +640,24 @@
 }*/
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .MaximizeButton {
-  float: right;
+  	float: right; /* orientation=lt */
+  	float: left; /* orientation=rt */
 	width: 30px;
 	height: 25px;
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat center;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .MinimizeButton {
- float: right;
+ 	float: right; /* orientation=lt */
+ 	float: left; /* orientation=rt */
 	width: 30px;
 	height: 25px;
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MinimumReadingPane.gif') no-repeat center;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .LastUpdated {
-	float: right;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 	line-height: 25px;
 }
 
@@ -669,13 +676,16 @@
 }
 
 .UIContactPortlet .ContactPreviewContainer .Member {
-	margin-left: 80px;
+	margin-left: 80px; /* orientation=lt */
+	margin-right: 80px; /* orientation=rt */
 	width: 60%;
 }
 
 .UIContactPortlet .ContactPreviewContainer .State {
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/OnlineIcon.gif') no-repeat left center;
-	padding-left: 20px;
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/OnlineIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/OnlineIcon.gif') no-repeat right center; /* orientation=rt */
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 20px; /* orientation=rt */
 	line-height: 25px;
 	font-size: 14px;
 	font-weight: bold;
@@ -683,7 +693,8 @@
 
 .UIContactPortlet .ContactPreviewContainer .Job {
 	font-size: 13px;
-	padding-left: 20px;
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 20px; /* orientation=rt */
 }
 
 .UIContactPortlet .ContactPreviewContainer .InfoContainer {
