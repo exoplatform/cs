@@ -63,7 +63,7 @@ BuddyItem.prototype.init = function() {
   this.iconChatNode.setAttribute('title' ,this.getUserName(this.buddyInfo.user, false));
   this.rootNode.setAttribute('userName', this.buddyInfo.user);  
   this.rootNode.setAttribute('nickname', nickDis);
-  //eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'contextmenu', this.actionCallback, false);
+  eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'contextmenu', this.actionCallback, false);
   eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'click', this.actionCallback, false);
 };
 

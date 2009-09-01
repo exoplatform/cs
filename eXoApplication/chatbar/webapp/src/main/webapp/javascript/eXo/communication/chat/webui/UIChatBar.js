@@ -12,6 +12,11 @@ UIChatBar.prototype.showMenu = function(obj,event){
 		eXo.communication.chat.webui.UIMainChatWindow.jabberGetJoinedRoomList();
 	this.switchState(menu);
 	eXo.core.DOMUtil.listHideElements(menu);
+	if(!this.buddyItemActionMenuNode){
+		var UIMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
+  	this.buddyItemActionMenuNode = UIMainChatWindow.buddyItemActionMenuNode;
+	}
+	this.buddyItemActionMenuNode.style.display = 'none';
 };
 
 UIChatBar.prototype.switchState = function(obj){

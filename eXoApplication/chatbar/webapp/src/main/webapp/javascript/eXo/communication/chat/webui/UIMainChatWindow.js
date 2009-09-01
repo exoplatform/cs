@@ -229,8 +229,11 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.loginFormNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'fieldset', 'LoginForm');
   this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'BuddyList');
   this.joinedRoomListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'RoomData');
-  //this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'BuddyItemActionMenu');
+  this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'BuddyItemActionMenu');
   //this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'BuddyItemActionMenu');
+  this.ContactAreaNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'ContactArea');
+  if(this.ContactAreaNode)
+  	this.ContactAreaNode = DOMUtil.findFirstDescendantByClass(this.ContactAreaNode,"div","UIRightClickPopupMenu");
   
   // Notification template
   //this.notificationNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'NotificationArea');
@@ -1255,7 +1258,7 @@ UIMainChatWindow.prototype.buddyItemActionCallback = function(event) {
         if (Browser.isIE7()) {
           if (eXo.portal &&
               eXo.portal.UIControlWorkspace) {
-            intLeft += eXo.portal.UIControlWorkspace.width;
+            intLeft += workspaceControlWidth;
           }
         }
       }
@@ -1264,6 +1267,10 @@ UIMainChatWindow.prototype.buddyItemActionCallback = function(event) {
         left = intLeft + 'px';
         display = 'block';
       }
+  		if(this.ContactAreaNode){
+  			this.ContactAreaNode.style.display = 'block';
+  			eXo.core.DOMUtil.listHideElements(this.ContactAreaNode);
+  		}
       this.AdvancedDOMEvent.addEventListener(document, 'click', this.postProcessBuddyItemAction, false);
       break;
   }
