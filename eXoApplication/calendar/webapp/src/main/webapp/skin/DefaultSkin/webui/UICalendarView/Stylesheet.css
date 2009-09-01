@@ -254,7 +254,8 @@
 }
 
 .UIWeekView .TdTime {
-	text-align: right;
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
 	width: 55px;
 	-moz-user-select : none ;
 }
