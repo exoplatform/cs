@@ -2023,3 +2023,8 @@
  	margin-left:5px;
  	float:right;
 }
+
+.UIMailPortlet .UIContactsPopup .WorkContainer .UISelectAccount .CleanRTL{
+	clear: left; /* orientation=lt */
+	clear: right; /* orientation=rt */
+}

@@ -398,11 +398,13 @@
 }
 
 .UIMailPortlet .CheckItem {
-	background: url('icons/CheckItem.gif') no-repeat left center;
+	background: url('icons/CheckItem.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/CheckItem.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .CloseFolder {
-	background: url('icons/DefaultIcon.gif') no-repeat left center;
+	background: url('icons/DefaultIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/DefaultIcon.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .Folder {
