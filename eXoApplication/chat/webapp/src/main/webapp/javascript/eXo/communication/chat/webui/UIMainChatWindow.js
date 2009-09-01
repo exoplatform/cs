@@ -40,7 +40,7 @@ ChatAjaxHandler.prototype.onSuccess = function(requestObj) {
 ChatAjaxHandler.prototype.onError = function(requestObj) {
   var UIMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
   if (!UIMainChatWindow) return;
-  if(requestObj.status == 401) alert(requestObj.responseText);
+  //if(requestObj.status == 401) alert(requestObj.responseText);
   window.jsconsole.info('[' + this.handler.action + '] ' + UIMainChatWindow.ERROR_STATE);
   UIMainChatWindow.update(UIMainChatWindow.ERROR_STATE, requestObj, this.handler.action);
 };
