@@ -243,6 +243,15 @@ UIRoomConfigPopupWindow.prototype.updateRoomConfig = function(serverData) {
             if (element.name == 'passwordprotectedroom') {
               element.onclick = this.togglePasswdField;
               this.togglePasswdField(element);
+            } else if (element.name == 'allowinvites') {  // CS-2980
+            		if (formNode.elements['membersonly'].checked == true) {
+            			element.removeAttribute("disabled"); 
+            		} else {
+            			element.disabled = "true";       			
+            		}            	
+            } else if (element.name == 'membersonly') {
+            	element.onclick = this.toggleMembersOnlyField;
+              this.toggleMembersOnlyField(element);
             }
             continue fillData;
           case 'password':
@@ -319,6 +328,18 @@ UIRoomConfigPopupWindow.prototype.togglePasswdField = function(checkboxNode) {
   var passwdFieldContainer = DOMUtil.findAncestorByTagName(DOMUtil.findAncestorByTagName(checkboxNode, 'form')['roomsecret'], 'tr');
   if (passwdFieldContainer) {
     passwdFieldContainer.style.display = passwdFieldVisible;
+  }
+};
+
+UIRoomConfigPopupWindow.prototype.toggleMembersOnlyField = function(checkboxNode) {
+  checkboxNode = (checkboxNode && checkboxNode.nodeName) ? checkboxNode : this;
+  var DOMUtil = eXo.core.DOMUtil;
+  var allowInviteField = DOMUtil.findAncestorByTagName(checkboxNode, 'form')['allowinvites'] ;
+  if (checkboxNode.checked == true) {
+    allowInviteField.removeAttribute("disabled");
+  } else {
+  	allowInviteField.disabled = "true";
+  	allowInviteField.checked = false;
   }
 };
 
