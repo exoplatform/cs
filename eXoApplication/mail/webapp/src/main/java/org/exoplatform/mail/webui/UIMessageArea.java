@@ -45,7 +45,7 @@ public class UIMessageArea extends UIContainer  {
     uiMessageList.init(accId);
     addChild(uiMessageList);
     UIMessagePreview messagePreview = addChild(UIMessagePreview.class, null, null);
-    messagePreview.setRendered(false) ;
+    messagePreview.setRendered(true) ;
   }
   
   public void reloadMailSetting() throws Exception {
