@@ -965,7 +965,7 @@ public class MailServiceImpl implements MailService, Startable {
         int i = 0;
         javax.mail.Message msg;
         
-        String[] folderIds = { folderId };
+        String[] folderIds ;
         List<String> filterList;
         MessageFilter filter;
         long msgUID;
@@ -987,7 +987,8 @@ public class MailServiceImpl implements MailService, Startable {
               !String.valueOf(((IMAPFolder) folder).getUIDValidity()).equals(Utils.getFolderNameFromFolderId(checkingLog_.get(key).getRequestingForFolder_()))) {
             break;
           }
-          
+           
+          folderIds =  new String[]{ folderId };
           msg = msgList.get(i);
           
           checkingLog_.get(key).setFetching(i + 1);
@@ -1017,13 +1018,7 @@ public class MailServiceImpl implements MailService, Startable {
             saved = storage_.saveMessage(username, accountId, msgUID, msg, folderIds, tagList, spamFilter, infoObj, continuation, false);
             
             if (saved) {
-              //msg.setFlag(Flags.Flag.SEEN, true);
-              if (!leaveOnserver) msg.setFlag(Flags.Flag.DELETED, true);
-              
-              folderStr = "";
-              for (int k = 0; k < folderIds.length; k++) {
-                folderStr += folderIds[k] + ",";
-              }                
+              if (!leaveOnserver) msg.setFlag(Flags.Flag.DELETED, true);       
             }
             receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
             eXoFolder = getFolder(username, accountId, folderId);
