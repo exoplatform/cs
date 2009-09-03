@@ -522,6 +522,10 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
       break;
 
     case this.CREATE_ROOM_ACTION:
+    	if(!serverData){
+    		var uiTabControlObj = this.UIChatWindow.createNewTab(this.newestRoomName+'@'+this.serverInfo.mucServicesNames, true);
+    		uiTabControlObj.roomConfigured = true;
+    	}
       break;
 
     case this.GET_MESSAGE_HISTORY_ACTION:
