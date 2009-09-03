@@ -606,7 +606,7 @@
                   if (!msg.isRootConversation() && uicomponent.viewMode == uicomponent.MODE_THREAD) {
                     String marginLevel = (l-2)*10 + "px" ;
                 %>
-                  <div class="LevelThreadIcon2 LevelThreadPadding" style="margin-left: $marginLevel;">
+                  <div class="LevelThreadIcon2 LevelThreadPadding" style="<%= isLT ? 'margin-left:' : 'margin-right:'  %> $marginLevel;">
                 <% 
                   } else {
                 %>
