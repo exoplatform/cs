@@ -67,6 +67,7 @@ public class UISearchForm extends UIForm {
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);  
       String text = uiSearchForm.getUIStringInput(FIELD_SEARCHVALUE).getValue();
       MessageFilter filter = new MessageFilter("Search"); 
+      filter.setHasStructure(uiMessageList.getMessageFilter().hasStructure());
       UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       if(Utils.isEmptyField(accId)) {
@@ -74,7 +75,6 @@ public class UISearchForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      //TODO should use mandatory validater
       if(text == null || text.length() == 0) {
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -101,7 +101,6 @@ public class UISearchForm extends UIForm {
         uiMessageList.setMessagePageList(mailService.getMessagePageList(username, filter));
         uiMessageList.setSelectedFolderId(null);
         uiMessageList.setSelectedTagId(null);
-        uiMessageList.viewMode = uiMessageList.MODE_LIST ;
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
         uiFolderContainer.setSelectedFolder(null);
