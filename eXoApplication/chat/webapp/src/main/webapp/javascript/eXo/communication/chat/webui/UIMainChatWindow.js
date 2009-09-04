@@ -659,6 +659,8 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
     case this.CREATE_CONVERSATION_ACTION:
     case this.CONFIG_ROOM_ACTION:
     case this.GET_ROOM_CONFIG_ACTION:
+	    window.alert(requestObj.responseText);
+	    break;
     //case this.GET_ROOM_INFO_ACTION:
     case this.GET_ROOM_LIST_ACTION:
     //case this.GET_JOINED_ROOM_LIST_ACTION:
