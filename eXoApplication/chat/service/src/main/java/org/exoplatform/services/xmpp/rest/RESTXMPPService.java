@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -277,8 +276,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
           e.printStackTrace();*/
         XMPPError error = e.getXMPPError();
         return Response.Builder.withStatus(error.getCode())
-                       .errorMessage(rb.getString("chat.message.conference.configuration.error")
-                                   + "\n" + error.getMessage())
+                       .errorMessage(rb.getString("chat.message.conference.configuration.error"))
                        .build();
       }
     }
@@ -738,7 +736,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         if (log.isDebugEnabled()) 
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
-        String em= new String();
+       /* String em= new String();
         switch (error.getCode()) {
         case 403:
           em = rb.getString("chat.message.subject.change.error");
@@ -746,7 +744,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         default:
           em = rb.getString("chat.message.default.error");
           break;
-        }
+        }*/
         return Response.Builder.withStatus(error.getCode())
                                .errorMessage(error.getMessage())
                                .build();

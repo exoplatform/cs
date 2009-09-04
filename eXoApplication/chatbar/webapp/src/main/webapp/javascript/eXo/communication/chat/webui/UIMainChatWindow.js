@@ -710,6 +710,8 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
     case this.CREATE_CONVERSATION_ACTION:
     case this.CONFIG_ROOM_ACTION:
     case this.GET_ROOM_CONFIG_ACTION:
+    	window.alert(requestObj.responseText);
+    	break;
     //case this.GET_ROOM_INFO_ACTION:
     case this.GET_ROOM_LIST_ACTION:
     case this.GET_JOINED_ROOM_LIST_ACTION:
@@ -721,7 +723,7 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
     case this.LEAVE_FROM_ROOM_ACTION:
     case this.ACEPT_SEND_FILE_ACTION:
       if (requestObj.responseText) {
-        window.alert('Service message: ' + requestObj.responseText);
+        window.alert('Service message: ' + requestObj.responseText);        
       }
       break;
 
