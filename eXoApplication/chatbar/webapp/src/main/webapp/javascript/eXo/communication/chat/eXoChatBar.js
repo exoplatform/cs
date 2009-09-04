@@ -62,7 +62,7 @@ eXo.communication.chatbar.eXoChatBar = {
         eXo.communication.chatbar.webui.UIMainChatWindow.chatWindowsContainerNode,
         [{className:'WindowBarLeft', tagName: 'div'}, {className: 'PopupTitle', tagName: 'div'}]);
       eXo.communication.chatbar.webui.UIMainChatWindow.xLogin(userName);
-	  eXo.communication.chatbar.eXoChatBar.floatingBox("UIChatBarPortlet");
+	  eXo.communication.chatbar.eXoChatBar.setWidth("UIChatBarPortlet");
 	  var div = document.createElement("div");
 	  div.style.height = document.getElementById("UIChatBarPortlet").offsetHeight + "px";
 	  document.body.appendChild(div);
@@ -70,32 +70,15 @@ eXo.communication.chatbar.eXoChatBar = {
       throw (new Error('Error while loading chat application.'));
     }
   },
-  calculateY : function() {
-		var posY = 0;
-		if(document.documentElement && document.documentElement.scrollTop){
-			posY = document.documentElement.scrollTop;
-		} else if(document.body && document.body.scrollTop) {
-			posY = document.body.scrollTop;
-		} else if(window.pageYOffset) {
-			posY = window.pageYOffset;
-		} else if(window.scrollY) {
-			posY = window.scrollY;
-		}
-		return posY ;
-	},
-
-	floatingBox : function(objID){
+  setWidth : function(objID){
 		var obj = document.getElementById(objID);
-		var browserHeight = eXo.core.Browser.getBrowserHeight() ;
-		var scrollTop = eXo.communication.chatbar.eXoChatBar.calculateY();
-		var posTop =  browserHeight + scrollTop;
 		if(obj){
-			obj.style.width = (obj.offsetParent.offsetWidth - 10) + "px";
-			if(posTop <= document.body.scrollHeight){
-				posTop -= obj.offsetHeight ;
-				obj.style.top = posTop + "px";
+		var browserWidth = eXo.core.Browser.getBrowserWidth() ;
+		var objWidth = obj.offsetWidth + 16;
+			if(objWidth != browserWidth){
+				obj.style.width = (browserWidth - 16) + "px";
 			}			
 		}
-		window.setTimeout('eXo.communication.chatbar.eXoChatBar.floatingBox("'+objID+'")', 100);
+		window.setTimeout('eXo.communication.chatbar.eXoChatBar.setWidth("'+objID+'")', 100);
 	}
 }
