@@ -31,7 +31,7 @@ UIJoinRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.joinRoomButtonNode.hrefBk = this.joinRoomButtonNode.href;
   this.LocalTemplateEngine = this.UIMainChatWindow.LocalTemplateEngine;
   this.pageIteratorNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.uiPageIterator);
-  this.uiPageIterator = new eXo.communication.chat.webui.UIPageIterator(this.pageIteratorNode);
+  this.uiPageIterator = new eXo.communication.chatbar.webui.UIPageIterator(this.pageIteratorNode);
   this.uiPageIterator.setGotoPageCallback(this.gotoPage);
 };
 
@@ -49,7 +49,7 @@ UIJoinRoomPopupWindow.prototype.reloadRoomList = function() {
  * @param {Integer} to
  */
 UIJoinRoomPopupWindow.prototype.gotoPage = function(from, to) {
-  eXo.communication.chat.webui.UIMainChatWindow.jabberGetRoomList(from, to);
+  eXo.communication.chatbar.webui.UIMainChatWindow.jabberGetRoomList(from, to);
 };
 
 /**
@@ -102,7 +102,7 @@ UIJoinRoomPopupWindow.prototype.createRoomNode = function(roomInfo, isAlternate)
     checkBoxHTML += ' checked="true" disabled="true"';
   }
   checkBoxHTML += 'name="roomName" value="' + roomInfo['name'] +
-    '" onclick="eXo.communication.chat.webui.UIJoinRoomPopupWindow.selectRoom(event);" style="width: 10px;">';
+    '" onclick="eXo.communication.chatbar.webui.UIJoinRoomPopupWindow.selectRoom(event);" style="width: 10px;">';
   
   tdTmpNode.style.width = '10px';
   tdTmpNode.style.textAlign = 'center';
@@ -274,4 +274,4 @@ UIJoinRoomPopupWindow.prototype.setVisible = function(visible) {
   }
 };
 
-eXo.communication.chat.webui.UIJoinRoomPopupWindow = new UIJoinRoomPopupWindow();
+eXo.communication.chatbar.webui.UIJoinRoomPopupWindow = new UIJoinRoomPopupWindow();

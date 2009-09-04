@@ -82,4 +82,4 @@ AdvancedDOMEvent.prototype.cancelEvent = function(event) {
   }
 };
 
-eXo.communication.chat.core.AdvancedDOMEvent = new AdvancedDOMEvent();
+eXo.communication.chatbar.core.AdvancedDOMEvent = new AdvancedDOMEvent();

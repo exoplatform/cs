@@ -9,4 +9,4 @@
 function PortalSessionKeeper() {
 }
 
-eXo.communication.chat.core.PortalSessionKeeper = new PortalSessionKeeper();
+eXo.communication.chatbar.core.PortalSessionKeeper = new PortalSessionKeeper();

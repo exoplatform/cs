@@ -428,4 +428,4 @@ TabScrollManager.prototype.renderArrows = function() {
 	else this.enableArrow(this.rightArrow, true);
 };
 
-eXo.communication.chat.webui.TabScrollManager = TabScrollManager;
+eXo.communication.chatbar.webui.TabScrollManager = TabScrollManager;

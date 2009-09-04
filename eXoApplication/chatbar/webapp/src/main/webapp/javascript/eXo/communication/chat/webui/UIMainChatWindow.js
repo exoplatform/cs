@@ -14,7 +14,7 @@ function ChatAjaxHandler(action) {
  * @param {XMLHttpRequest} requestObj
  */
 ChatAjaxHandler.prototype.onLoading = function(requestObj) {
-  var UIMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
+  var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
   if (!UIMainChatWindow) return;
   window.jsconsole.info('[' + this.handler.action + '] ' + UIMainChatWindow.LOADING_STATE);
   UIMainChatWindow.update(UIMainChatWindow.LOADING_STATE, requestObj, this.handler.action);
@@ -26,7 +26,7 @@ ChatAjaxHandler.prototype.onLoading = function(requestObj) {
  * @param {XMLHttpRequest} requestObj
  */
 ChatAjaxHandler.prototype.onSuccess = function(requestObj) {
-  var UIMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
+  var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
   if (!UIMainChatWindow) return;
   window.jsconsole.info('[' + this.handler.action + '] ' + UIMainChatWindow.SUCCESS_STATE);
   UIMainChatWindow.update(UIMainChatWindow.SUCCESS_STATE, requestObj, this.handler.action);
@@ -38,7 +38,7 @@ ChatAjaxHandler.prototype.onSuccess = function(requestObj) {
  * @param {XMLHttpRequest} requestObj
  */
 ChatAjaxHandler.prototype.onError = function(requestObj) {
-  var UIMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
+  var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
   if (!UIMainChatWindow) return;
   //if(requestObj.status == 401) alert(requestObj.responseText);
   window.jsconsole.info('[' + this.handler.action + '] ' + UIMainChatWindow.ERROR_STATE);
@@ -51,7 +51,7 @@ ChatAjaxHandler.prototype.onError = function(requestObj) {
  * @param {XMLHttpRequest} requestObj
  */
 ChatAjaxHandler.prototype.onTimeout = function(requestObj) {
-  var UIMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
+  var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
   if (!UIMainChatWindow) return;
   window.jsconsole.info('[' + this.handler.action + '] ' + UIMainChatWindow.TIMEOUT_STATE);
   UIMainChatWindow.update(UIMainChatWindow.TIMEOUT_STATE, requestObj, this.handler.action);
@@ -135,8 +135,8 @@ function UIMainChatWindow() {
   this.MIN_WIDTH = 426;
   this.MIN_HEIGHT = 448;
 
-  this.ChatSessionHandler = eXo.communication.chat.webui.ChatSessionHandler;
-  this.XMPPCommunicator = eXo.communication.chat.core.XMPPCommunicator;
+  this.ChatSessionHandler = eXo.communication.chatbar.webui.ChatSessionHandler;
+  this.XMPPCommunicator = eXo.communication.chatbar.core.XMPPCommunicator;
 
   this.checkAliveId = false;
   this.userToken = false;
@@ -178,16 +178,16 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   var DOMUtil = eXo.core.DOMUtil;
   this.rootNode                   = DOMUtil.findDescendantById(this.rootNode, 'UIChatBarPortlet');
 
-  this.AdvancedDOMEvent           = eXo.communication.chat.core.AdvancedDOMEvent;
-  this.XMPPCommunicator           = eXo.communication.chat.core.XMPPCommunicator;
-  this.ChatSessionHandler         = eXo.communication.chat.webui.ChatSessionHandler;
-  this.UIAddContactPopupWindow    = eXo.communication.chat.webui.UIAddContactPopupWindow;
-  this.UIChatWindow               = eXo.communication.chat.webui.UIChatWindow;
-  this.UICreateNewRoomPopupWindow = eXo.communication.chat.webui.UICreateNewRoomPopupWindow;
-  this.UIRoomConfigPopupWindow    = eXo.communication.chat.webui.UIRoomConfigPopupWindow;
-  this.UIJoinRoomPopupWindow      = eXo.communication.chat.webui.UIJoinRoomPopupWindow;
-  this.UIChatResize               = eXo.communication.chat.webui.UIChatResize;
-  this.UISlideAlert               = eXo.communication.chat.webui.UISlideAlert;
+  this.AdvancedDOMEvent           = eXo.communication.chatbar.core.AdvancedDOMEvent;
+  this.XMPPCommunicator           = eXo.communication.chatbar.core.XMPPCommunicator;
+  this.ChatSessionHandler         = eXo.communication.chatbar.webui.ChatSessionHandler;
+  this.UIAddContactPopupWindow    = eXo.communication.chatbar.webui.UIAddContactPopupWindow;
+  this.UIChatWindow               = eXo.communication.chatbar.webui.UIChatWindow;
+  this.UICreateNewRoomPopupWindow = eXo.communication.chatbar.webui.UICreateNewRoomPopupWindow;
+  this.UIRoomConfigPopupWindow    = eXo.communication.chatbar.webui.UIRoomConfigPopupWindow;
+  this.UIJoinRoomPopupWindow      = eXo.communication.chatbar.webui.UIJoinRoomPopupWindow;
+  this.UIChatResize               = eXo.communication.chatbar.webui.UIChatResize;
+  this.UISlideAlert               = eXo.communication.chatbar.webui.UISlideAlert;
 
   // ----- Specified to used with desktop page----
   this.chatWindowsContainerNode = document.getElementById('UIPageDesktop');
@@ -220,7 +220,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   }
   // ----- End ---------------------
 
-  this.LocalTemplateEngine = eXo.communication.chat.core.LocalTemplateEngine;
+  this.LocalTemplateEngine = eXo.communication.chatbar.core.LocalTemplateEngine;
   this.addContactIconNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'AddContactIcon');
   this.statusIconNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'StatusIcon');
   this.statusNode = DOMUtil.findAncestorByClass(this.statusIconNode, 'StatusArea');
@@ -252,7 +252,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   
   //this.UISlideAlert.init(this, this.notificationNode);
 
-  this.UIPopupManager = eXo.communication.chat.webui.UIPopupManager;
+  this.UIPopupManager = eXo.communication.chatbar.webui.UIPopupManager;
   this.UIPopupManager.init();
   this.UIPopupManager.addItem(this.UIChatWindow);
   this.UIPopupManager.addItem(this.UIAddContactPopupWindow);
@@ -274,7 +274,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.userName = userName;
   this.buddyItemActionStack = {};
   this.serverDataStack = {};
-  var component = eXo.communication.chat.webui.component;
+  var component = eXo.communication.chatbar.webui.component;
   this.buddyListControlObj =
     new component.BuddyListControl(this.buddyListNode, this.buddyItemActionCallbackWrapper, this);
 
@@ -290,7 +290,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
 UIMainChatWindow.prototype.isChatAlive = function() {
   //TODO CS-3105 logout problem
   /*if (!document.getElementById('UIChatBarPortlet')) {
-    eXo.communication.chat.webui.UIMainChatWindow.jabberLogout();
+    eXo.communication.chatbar.webui.UIMainChatWindow.jabberLogout();
   }*/
 };
 
@@ -298,8 +298,8 @@ UIMainChatWindow.prototype.isChatAlive = function() {
  * Using ajax request to keep active status with portal session to avoid portal session timeout.
  * TODO: remove/maintain this method because it is not really affect to portal session.
 UIMainChatWindow.prototype.sessionKeeper = function() {
-  eXo.require("eXo.communication.chat.core.PortalSessionKeeper", "/chat/javascript/");
-  eXo.communication.chat.core.PortalSessionKeeper = null;
+  eXo.require("eXo.communication.chatbar.core.PortalSessionKeeper", "/chat/javascript/");
+  eXo.communication.chatbar.core.PortalSessionKeeper = null;
 };
 
 /**
@@ -323,7 +323,7 @@ UIMainChatWindow.prototype.loginWrapper = function() {
     return;
   }
   window.jsconsole.warn('Connection is ready, try to login now.');
-  var thys = eXo.communication.chat.webui.UIMainChatWindow;
+  var thys = eXo.communication.chatbar.webui.UIMainChatWindow;
   thys.jabberLogin(thys.userNames[thys.XMPPCommunicator.TRANSPORT_XMPP]);
 };
 
@@ -358,27 +358,27 @@ UIMainChatWindow.prototype.subscribeCometdTopics = function() {
     return;
   }
   Cometd.subscribe('/eXo/Application/Chat/message', function(eventObj) {
-    eXo.communication.chat.webui.UIMainChatWindow.messageListener(eventObj);
+    eXo.communication.chatbar.webui.UIMainChatWindow.messageListener(eventObj);
   });
 
   Cometd.subscribe('/eXo/Application/Chat/groupchat', function(eventObj) {
-    eXo.communication.chat.webui.UIMainChatWindow.groupChatListener(eventObj);
+    eXo.communication.chatbar.webui.UIMainChatWindow.groupChatListener(eventObj);
   });
 
   Cometd.subscribe('/eXo/Application/Chat/presence', function(eventObj) {
-    eXo.communication.chat.webui.UIMainChatWindow.presenceListener(eventObj);
+    eXo.communication.chatbar.webui.UIMainChatWindow.presenceListener(eventObj);
   });
 
   Cometd.subscribe('/eXo/Application/Chat/roster', function(eventObj) {
-    eXo.communication.chat.webui.UIMainChatWindow.rosterListener(eventObj);
+    eXo.communication.chatbar.webui.UIMainChatWindow.rosterListener(eventObj);
   });
 
   Cometd.subscribe('/eXo/Application/Chat/subscription', function(eventObj) {
-    eXo.communication.chat.webui.UIMainChatWindow.subscriptionListener(eventObj);
+    eXo.communication.chatbar.webui.UIMainChatWindow.subscriptionListener(eventObj);
   });
 
   Cometd.subscribe('/eXo/Application/Chat/FileExchange', function(eventObj) {
-    eXo.communication.chat.webui.UIMainChatWindow.fileExchangeListener(eventObj);
+    eXo.communication.chatbar.webui.UIMainChatWindow.fileExchangeListener(eventObj);
   });
 };
 
@@ -399,7 +399,7 @@ UIMainChatWindow.prototype.destroyAll = function() {
   if (eXo.cs.CSCometd.isConnected()) {
 	  eXo.cs.CSCometd.disconnect();
   }
-  var thys = eXo.communication.chat.webui.UIMainChatWindow;
+  var thys = eXo.communication.chatbar.webui.UIMainChatWindow;
   var logoutUrl = thys.XMPPCommunicator.SERVICE_URL +
                     '/' + thys.XMPPCommunicator.TRANSPORT_XMPP +
                     '/logout/' + thys.userNames[thys.XMPPCommunicator.TRANSPORT_XMPP];
@@ -483,7 +483,7 @@ UIMainChatWindow.prototype.update = function(state, requestObj, action) {
       }
       var successAction = action;
       window.setTimeout(function() {
-        eXo.communication.chat.webui.UIMainChatWindow.processSuccessAction(successAction, eventId);
+        eXo.communication.chatbar.webui.UIMainChatWindow.processSuccessAction(successAction, eventId);
       }, 1);
       this.activeAction = false;
       break;
@@ -548,7 +548,7 @@ UIMainChatWindow.prototype.updateJoinedRoomList = function() {
 			    	roomLink.innerHTML = roomName ;
 			    roomLink.setAttribute('roomId', roomInfo.room) ;
 			    roomLink.onclick = function(event){
-			    	eXo.communication.chat.webui.UIJoinRoomPopupWindow.joinSelectedRoomByIdAction(event);
+			    	eXo.communication.chatbar.webui.UIJoinRoomPopupWindow.joinSelectedRoomByIdAction(event);
 			    };
 			    roomNode.appendChild(roomLink);
 			    this.joinedRoomListNode.appendChild(roomNode);			    
@@ -612,7 +612,7 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
 			break;
 
 		case this.LEAVE_FROM_ROOM_ACTION:
-			eXo.communication.chat.webui.UIMainChatWindow.jabberGetJoinedRoomList();
+			eXo.communication.chatbar.webui.UIMainChatWindow.jabberGetJoinedRoomList();
 			break;
 
     case this.GET_SUBSCRIPTION_REQUESTS_ACTION:
@@ -740,7 +740,7 @@ UIMainChatWindow.prototype.groupChatListener = function(eventObj) {
   var eventId = 'groupChatCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
   window.setTimeout(function() {
-      eXo.communication.chat.webui.UIMainChatWindow.processGroupChat(eventId);
+      eXo.communication.chatbar.webui.UIMainChatWindow.processGroupChat(eventId);
   }, 1);
 };
 
@@ -752,7 +752,7 @@ UIMainChatWindow.prototype.rosterListener = function(eventObj) {
   var eventId = 'rosterCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
   window.setTimeout(function() {
-      eXo.communication.chat.webui.UIMainChatWindow.processRoster(eventId);
+      eXo.communication.chatbar.webui.UIMainChatWindow.processRoster(eventId);
   }, 1);
 };
 
@@ -764,7 +764,7 @@ UIMainChatWindow.prototype.presenceListener = function(eventObj) {
   var eventId = 'presenceCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
   window.setTimeout(function() {
-      eXo.communication.chat.webui.UIMainChatWindow.processPresences(eventId);
+      eXo.communication.chatbar.webui.UIMainChatWindow.processPresences(eventId);
   }, 1);
 };
 
@@ -776,7 +776,7 @@ UIMainChatWindow.prototype.subscriptionListener = function(eventObj) {
   var eventId = 'subscriptionCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
   window.setTimeout(function() {
-      eXo.communication.chat.webui.UIMainChatWindow.processSubscriptions(eventId);
+      eXo.communication.chatbar.webui.UIMainChatWindow.processSubscriptions(eventId);
   }, 1);
 };
 
@@ -788,7 +788,7 @@ UIMainChatWindow.prototype.fileExchangeListener = function(eventObj) {
 	var eventId = 'fileExchangeCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
   window.setTimeout(function() {
-      eXo.communication.chat.webui.UIMainChatWindow.processFileExchange(eventId);
+      eXo.communication.chatbar.webui.UIMainChatWindow.processFileExchange(eventId);
   }, 1);
 };
 
@@ -800,7 +800,7 @@ UIMainChatWindow.prototype.messageListener = function(eventObj) {
   var eventId = 'messageCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
   window.setTimeout(function() {
-      eXo.communication.chat.webui.UIMainChatWindow.processMessages(eventId);
+      eXo.communication.chatbar.webui.UIMainChatWindow.processMessages(eventId);
   }, 1);
 };
 
@@ -1022,7 +1022,7 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
   }
   event = event || window.event;
   if (event) {
-    eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
+    eXo.communication.chatbar.core.AdvancedDOMEvent.cancelEvent(event);
   }
   this.lastStatusSent = status;
   //this.setChangeStatusMenuVisible(this.statusNode, false);
@@ -1105,7 +1105,7 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
       this.timeoutCount = 0;
       this.errorCount = 0;
       this.addContactIconNode.onclick = function() {
-    	 eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true);
+    	 eXo.communication.chatbar.webui.UIAddContactPopupWindow.setVisible(true);
       };
       // Create buddy list
       if (this.serverInfo.roster) {
@@ -1117,7 +1117,7 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
       // Register onunload event to window for clean logout when user leave this page.
       this.AdvancedDOMEvent.addEventListener(window, 'unload', this.destroyAll, false);
       this.preChangeStatus(this.ONLINE_STATUS, true);
-      eXo.communication.chat.webui.UIStateManager.init(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]);
+      eXo.communication.chatbar.webui.UIStateManager.init(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]);
       break;
     case this.OFFLINE_STATUS:
       //this.unsubscribeCometdTopics();
@@ -1149,7 +1149,7 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
  */
 UIMainChatWindow.prototype.setChangeStatusMenuVisible = function(nodeObj, visible, event) {
   event = event || window.event;
-  var AdvancedDOMEvent = eXo.communication.chat.core.AdvancedDOMEvent;
+  var AdvancedDOMEvent = eXo.communication.chatbar.core.AdvancedDOMEvent;
   if (event) {
     AdvancedDOMEvent.cancelEvent(event);
   }
@@ -1198,7 +1198,7 @@ UIMainChatWindow.prototype.setChangeStatusMenuVisibleWrapper = function(event) {
       return true;
     }
   }
-  return eXo.communication.chat.webui.UIMainChatWindow.setChangeStatusMenuVisible(null, false);
+  return eXo.communication.chatbar.webui.UIMainChatWindow.setChangeStatusMenuVisible(null, false);
 };
 
 /**
@@ -1215,7 +1215,7 @@ UIMainChatWindow.prototype.createRoomChat = function(roomInfo) {
  */
 UIMainChatWindow.prototype.buddyItemActionCallbackWrapper = function(event) {
   event = event || window.event;
-  eXo.communication.chat.webui.UIMainChatWindow.buddyItemActionCallback(event);
+  eXo.communication.chatbar.webui.UIMainChatWindow.buddyItemActionCallback(event);
   return false;
 };
 
@@ -1291,7 +1291,7 @@ UIMainChatWindow.prototype.removeUserCallback = function(event) {
   var buddyNode = event.srcElement || event.target;
   buddyNode = eXo.core.DOMUtil.findAncestorByClass(buddyNode, 'TitleIconChat');
   var buddyId = buddyNode.getAttribute('userName');
-  eXo.communication.chat.webui.UIMainChatWindow.removeContact(buddyId);
+  eXo.communication.chatbar.webui.UIMainChatWindow.removeContact(buddyId);
 };
 
 /**
@@ -1300,7 +1300,7 @@ UIMainChatWindow.prototype.removeUserCallback = function(event) {
 UIMainChatWindow.prototype.removeContact = function(buddyId) {
   if (window.confirm('Are you sure to remove \'' + buddyId + '\'')) {
     buddyId = buddyId.substring(0, buddyId.indexOf('@'));
-    eXo.communication.chat.webui.UIMainChatWindow.jabberRemoveUser(buddyId);
+    eXo.communication.chatbar.webui.UIMainChatWindow.jabberRemoveUser(buddyId);
   }
 };
 
@@ -1327,9 +1327,9 @@ UIMainChatWindow.prototype.postProcessBuddyItemAction = function(event, action) 
         return true;
       }
     }
-    var UIMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
+    var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
     UIMainChatWindow.buddyItemActionMenuNode.style.display = 'none';
-    eXo.communication.chat.core.AdvancedDOMEvent.removeEventListener(document, 'click', UIMainChatWindow.postProcessBuddyItemAction, false);
+    eXo.communication.chatbar.core.AdvancedDOMEvent.removeEventListener(document, 'click', UIMainChatWindow.postProcessBuddyItemAction, false);
     return;
   }
   this.buddyItemActionMenuNode.style.display = 'none';
@@ -1785,8 +1785,8 @@ UIMainChatWindow.prototype.jabberLogout = function() {
     this.checkAliveId = false;
   }
   if (window.parent &&
-      window.parent.eXo.communication.chat.webui.eXoChatLoader) {
-    window.parent.eXo.communication.chat.webui.eXoChatLoader.setChatWindowVisible(false);
+      window.parent.eXo.communication.chatbar.webui.eXoChatLoader) {
+    window.parent.eXo.communication.chatbar.webui.eXoChatLoader.setChatWindowVisible(false);
   }
   if (!this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]) {
   	return;
@@ -1823,4 +1823,4 @@ UIMainChatWindow.prototype.aimLogin = function(nodeObj) {};
  */
 UIMainChatWindow.prototype.icqLogin = function(nodeObj) {};
 
-eXo.communication.chat.webui.UIMainChatWindow = new UIMainChatWindow();
+eXo.communication.chatbar.webui.UIMainChatWindow = new UIMainChatWindow();

@@ -18,4 +18,4 @@ function TaskObject(name) {
   this.taskName = name;
 }
 
-eXo.communication.chat.core.SimpleTaskManager = new SimpleTaskManager();
+eXo.communication.chatbar.core.SimpleTaskManager = new SimpleTaskManager();

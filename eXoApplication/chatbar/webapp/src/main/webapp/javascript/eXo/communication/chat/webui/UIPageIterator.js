@@ -265,4 +265,4 @@ UIPageIterator.prototype.isPageValid = function(pageNo) {
   return valid;
 };
 
-eXo.communication.chat.webui.UIPageIterator = UIPageIterator;
+eXo.communication.chatbar.webui.UIPageIterator = UIPageIterator;

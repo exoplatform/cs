@@ -69,5 +69,5 @@ jsconsole.prototype = {
 jsconsole.prototype.init = function() {
 };
 
-eXo.communication.chat.core.jsconsole = new jsconsole();
-window.jsconsole = eXo.communication.chat.core.jsconsole;
+eXo.communication.chatbar.core.jsconsole = new jsconsole();
+window.jsconsole = eXo.communication.chatbar.core.jsconsole;

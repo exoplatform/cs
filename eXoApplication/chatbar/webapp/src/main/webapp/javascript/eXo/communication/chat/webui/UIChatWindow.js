@@ -38,7 +38,7 @@ function UITabControl(tabId, isGroupChat, UIMainChatWindow) {
     nicksGroupChat        : 'OverflowGroupNick'
   };
   this.UIMainChatWindow = UIMainChatWindow;
-  this.LocalTemplateEngine = eXo.communication.chat.core.LocalTemplateEngine;
+  this.LocalTemplateEngine = eXo.communication.chatbar.core.LocalTemplateEngine;
   this.tabId = tabId;
   this.unreadMessageCnt = 0;
   this.isGroupChat = isGroupChat || false;
@@ -47,7 +47,7 @@ function UITabControl(tabId, isGroupChat, UIMainChatWindow) {
   this.activeMe = this.isGroupChat;
   this.initUI();
   if (this.isGroupChat) {
-    this.buddyListControlObj = new eXo.communication.chat.webui.component.BuddyListControl(
+    this.buddyListControlObj = new eXo.communication.chatbar.webui.component.BuddyListControl(
                                 this.buddyListNode, this.buddyItemActionCallback, this.UIMainChatWindow);
     this.buddyListControlObj.isGroupChat = this.isGroupChat;
     this.buddyListControlObj.MAX_USERNAME_LEN = this.MAX_USERNAME_LEN;
@@ -153,7 +153,7 @@ UITabControl.prototype.updatePresence = function(presences) {
  */
 UITabControl.prototype.inviteToJoinRoom = function() {
   if (this.roomConfigured) {
-    eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true, this);
+    eXo.communication.chatbar.webui.UIAddContactPopupWindow.setVisible(true, this);
   }
 };
 
@@ -165,7 +165,7 @@ UITabControl.prototype.inviteToJoinRoom = function() {
  * @param {ContactElement} contact
  */
 UITabControl.prototype.contactUpdateFilter = function(contact) {
-  var UIChatWindow = eXo.communication.chat.webui.UIChatWindow;
+  var UIChatWindow = eXo.communication.chatbar.webui.UIChatWindow;
   var uiTabControlObj = UIChatWindow.getUITabControl(this.tabId);
   var currentContactList = uiTabControlObj.buddyListControlObj.buddyList || [];
   for (var contactId in currentContactList) {
@@ -192,7 +192,7 @@ UITabControl.prototype.contactUpdateFilter = function(contact) {
  * @param {Array[ContactInfo]} contactList
  */
 UITabControl.prototype.addContactActionCallback = function(contactList) {
-  var UIMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
+  var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
   var roomName = this.tabId.targetPerson;
   roomName = roomName.substr(0, roomName.indexOf('@'));
   for (var i=0; i<contactList.length; i++) {
@@ -257,7 +257,7 @@ UITabControl.prototype.fileTransportResponseEventFire = function(FTResEvent) {
   } else {
     msgContent = 'File exchange: [' + FTResEvent.fileName + '] denied.';
   }
-  eXo.communication.chat.webui.UIChatWindow.insertCustomMsg(msgContent, this.tabId);
+  eXo.communication.chatbar.webui.UIChatWindow.insertCustomMsg(msgContent, this.tabId);
 };
 
 /**
@@ -328,7 +328,7 @@ UITabControl.prototype.acceptFileExchange = function(acceptNode) {
  */
 UITabControl.prototype.fileEventTimeout = function(fileTransportNode, uiTabControlObj) {
   uiTabControlObj.removeActionFileButtons(fileTransportNode, uiTabControlObj);
-  uiTabControlObj.writeMsg(eXo.communication.chat.webui.UIChatWindow.SYSTEM_INFO, 'The file exchange has been time out and removed by server.')
+  uiTabControlObj.writeMsg(eXo.communication.chatbar.webui.UIChatWindow.SYSTEM_INFO, 'The file exchange has been time out and removed by server.')
 };
 
 /**
@@ -379,7 +379,7 @@ UITabControl.prototype.initUI = function(buddyId) {
   this.tabNameNode = DOMUtil.findFirstDescendantByClass(this.tabNode, 'div', this.CSS_CLASS.tabName);
   var tabContactNameNode = DOMUtil.findFirstDescendantByClass(this.tabNameNode, 'span', this.CSS_CLASS.tabContactName);
   
-  var fullNameMap = eXo.communication.chat.webui.UIChatWindow.fullNameMap ;
+  var fullNameMap = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap ;
   var fullName = this.tabId.targetPerson ;
   fullName = fullName.substr(0, fullName.indexOf('@'));
 	var uid = this.tabId.targetPerson ;
@@ -686,9 +686,9 @@ UITabControl.prototype.msgBoxKBHandler = function(event) {
   switch (event.keyCode) {
     case 13:
       if (event.shiftKey || event.ctrlKey) {
-        eXo.communication.chat.webui.UIChatWindow.insertToMessageInputBox('\n');
+        eXo.communication.chatbar.webui.UIChatWindow.insertToMessageInputBox('\n');
       } else {
-        eXo.communication.chat.webui.UIChatWindow.sendMsgFromActiveTab();
+        eXo.communication.chatbar.webui.UIChatWindow.sendMsgFromActiveTab();
       }
       return false;
       break;
@@ -711,7 +711,7 @@ UITabControl.prototype.insertToMessageBox = function(txt) {
  * @param {Object} event
  */
 UITabControl.prototype.sendMessageWrapper = function(event) {
-  eXo.communication.chat.webui.UIChatWindow.sendMsgFromActiveTab();
+  eXo.communication.chatbar.webui.UIChatWindow.sendMsgFromActiveTab();
 };
 
 /**
@@ -729,7 +729,7 @@ UITabControl.prototype.sendMessage = function() {
  * Use to get focus to this tab
  */
 UITabControl.prototype.focusTabWrapper = function() {
-  return eXo.communication.chat.webui.UIChatWindow.focusTab(this.tabId, true);
+  return eXo.communication.chatbar.webui.UIChatWindow.focusTab(this.tabId, true);
 };
 
 /**
@@ -738,7 +738,7 @@ UITabControl.prototype.focusTabWrapper = function() {
 UITabControl.prototype.closeTabWrapper = function() {
   var tabNameNode = eXo.core.DOMUtil.findPreviousElementByTagName(this, 'div');
   if (tabNameNode) {
-    return eXo.communication.chat.webui.UIChatWindow.closeTab(tabNameNode.tabId);
+    return eXo.communication.chatbar.webui.UIChatWindow.closeTab(tabNameNode.tabId);
   }
 };
 
@@ -809,7 +809,7 @@ UITabControl.prototype.setVisible = function(visible) {
  * This object is an UI component. It is used to manage conversation window and tab inside it.
  */
 function UIChatWindow() {
-//  this.id = 'eXo.communication.chat.webui.UIChatWindow';
+//  this.id = 'eXo.communication.chatbar.webui.UIChatWindow';
 	this.fullNameMap = {};
   this.id = 'UIChatWindow';
   this.CSS_CLASS = {
@@ -824,8 +824,8 @@ function UIChatWindow() {
   this.BEGINNING_MESSAGE = -1;
   this.CURRENT_CONVERSATION_MESSAGE = 0;
   this.SYSTEM_INFO = 'System: ';
-  this.UIMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
-  this.LocalTemplateEngine = eXo.communication.chat.core.LocalTemplateEngine;
+  this.UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
+  this.LocalTemplateEngine = eXo.communication.chatbar.core.LocalTemplateEngine;
   this.scrollMgr = false;
   this.isFixedTabContainerHeight = false;
   this.totalTab = 0;
@@ -839,7 +839,7 @@ function UIChatWindow() {
 /**
  * Extends from JSUIBean
  */
-UIChatWindow.prototype = new eXo.communication.chat.webui.component.JSUIBean();
+UIChatWindow.prototype = new eXo.communication.chatbar.webui.component.JSUIBean();
 
 /**
  * Initializing method.
@@ -868,23 +868,23 @@ UIChatWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.initSession();
   this._callback();
   this.registerEventCallback();
-  eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'mousemove', this.firstCheck, false);
+  eXo.communication.chatbar.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'mousemove', this.firstCheck, false);
 };
 
 /**
  * Check somethings in the first time loaded
  */
 UIChatWindow.prototype.firstCheck = function() {
-  var thys = eXo.communication.chat.webui.UIChatWindow;
+  var thys = eXo.communication.chatbar.webui.UIChatWindow;
   thys.reloadScrollMgr(true);
-  eXo.communication.chat.core.AdvancedDOMEvent.removeEventListener(thys.rootNode, 'mousemove', thys.firstCheck);
+  eXo.communication.chatbar.core.AdvancedDOMEvent.removeEventListener(thys.rootNode, 'mousemove', thys.firstCheck);
 };
 
 /**
  * Call back after resize action is finished to update somethings and store values on the server.
  */
 UIChatWindow.prototype.resizeCallback = function() {
-  var thys = eXo.communication.chat.webui.UIChatWindow;
+  var thys = eXo.communication.chatbar.webui.UIChatWindow;
   thys.reloadScrollMgr(true);
 };
 
@@ -901,7 +901,7 @@ UIChatWindow.prototype.registerEventCallback = function() {
  * @param {Object} eventData
  */
 UIChatWindow.prototype.onReload = function(eventData) {
-  var thys = eXo.communication.chat.webui.UIChatWindow;
+  var thys = eXo.communication.chatbar.webui.UIChatWindow;
   thys._isOnLoading = true;
   var visible = thys._isVisible();
   thys.initSession();
@@ -927,7 +927,7 @@ UIChatWindow.prototype.onReload = function(eventData) {
       var focusTabIndex = thys.focusTab(activeTabId, true);
       window.setTimeout(function() {
         thys.autoScroll(focusTabIndex);
-        eXo.communication.chat.core.AdvancedDOMEvent.removeEventListener(thys.rootNode, 'mousemove', thys.firstCheck);
+        eXo.communication.chatbar.core.AdvancedDOMEvent.removeEventListener(thys.rootNode, 'mousemove', thys.firstCheck);
       }, 100);
       thys.updateTabList();
     } else {
@@ -943,7 +943,7 @@ UIChatWindow.prototype.onReload = function(eventData) {
 UIChatWindow.prototype.initSession = function() {
   this.destroySession();
   this.tabControlList = this.tabControlList || {};
-  this.owner = this.UIMainChatWindow.userNames[eXo.communication.chat.core.XMPPCommunicator.TRANSPORT_XMPP]; 
+  this.owner = this.UIMainChatWindow.userNames[eXo.communication.chatbar.core.XMPPCommunicator.TRANSPORT_XMPP]; 
   this.totalTab = 0;
   this.loadScroll();
 };
@@ -1166,7 +1166,7 @@ UIChatWindow.prototype.updateUnreadMessage = function() {
  * @param {String} styleClass
  */
 UIChatWindow.prototype.blinkMiniBoxChat = function(styleClass) {
-  var thys = eXo.communication.chat.webui.UIChatWindow;
+  var thys = eXo.communication.chatbar.webui.UIChatWindow;
   var DOMUtil = eXo.core.DOMUtil;
   styleClass = ((styleClass + '').indexOf('MiniBoxChat') == -1) ? '' : styleClass;
   var styleNode = DOMUtil.findFirstDescendantByClass(thys.miniBoxChatNode, 'div', 'NormalMiniBoxChat');
@@ -1366,7 +1366,7 @@ UIChatWindow.prototype.setVisible = function(visible, event, requestCancelEvent)
     return;
   }
   if (requestCancelEvent) {
-    eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
+    eXo.communication.chatbar.core.AdvancedDOMEvent.cancelEvent(event);
   }
   this._setOption('visible', visible);
   this.visible = visible;
@@ -1437,7 +1437,7 @@ UIChatWindow.prototype.sendMsgFromActiveTab = function() {
  */
 UIChatWindow.prototype.inviteToJoinRoom = function(event) {
   event = event || window.event;
-  eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
+  eXo.communication.chatbar.core.AdvancedDOMEvent.cancelEvent(event);
   var activeTabControl = this.getActiveTabControl();
   activeTabControl.inviteToJoinRoom();
 };
@@ -1449,7 +1449,7 @@ UIChatWindow.prototype.inviteToJoinRoom = function(event) {
  */
 UIChatWindow.prototype.leaveRoomChat = function(event) {
   event = event || window.event;
-  eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
+  eXo.communication.chatbar.core.AdvancedDOMEvent.cancelEvent(event);
   var activeTabControl = this.getActiveTabControl();
   var roomName = activeTabControl.tabId.targetPerson;
   roomName = roomName.substr(0, roomName.indexOf('@'));
@@ -1465,7 +1465,7 @@ UIChatWindow.prototype.leaveRoomChat = function(event) {
  */
 UIChatWindow.prototype.configRoom = function(event) {
   event = event || window.event;
-  eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
+  eXo.communication.chatbar.core.AdvancedDOMEvent.cancelEvent(event);
   var activeTabControl = this.getActiveTabControl();
   this.UIMainChatWindow.UIRoomConfigPopupWindow.setVisible(true, activeTabControl.tabId);
 };
@@ -1570,7 +1570,7 @@ UIChatWindow.prototype.denieFileExchange = function(denieNode) {
  */
 UIChatWindow.prototype.sendFile = function(fileChooserNode, event) {
   event = event || window.event;
-  eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
+  eXo.communication.chatbar.core.AdvancedDOMEvent.cancelEvent(event);
   if (!fileChooserNode.value) {
     return;
   }
@@ -1584,11 +1584,11 @@ UIChatWindow.prototype.sendFile = function(fileChooserNode, event) {
 	uploadForm.action = '/chat/fileexchange?username=' + userName + '&requestor=' + targetUser + '&description=' + description;
 	this.uploadIframe.onload = function() {
   	window.jsconsole.warn('upload completed');
-    eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('File exchange: Waiting for authorize...', activeTabControl.tabId);
+    eXo.communication.chatbar.webui.UIChatWindow.insertCustomMsg('File exchange: Waiting for authorize...', activeTabControl.tabId);
   	this.onload = null;
   };
 	uploadForm.submit();
-  eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('File exchange: Uploading file to server...', activeTabControl.tabId);
+  eXo.communication.chatbar.webui.UIChatWindow.insertCustomMsg('File exchange: Uploading file to server...', activeTabControl.tabId);
 	fileChooserNode.value = '';
 	//TODO fix ie not re-send the same file
 	uploadForm.reset();
@@ -1763,7 +1763,7 @@ UIChatWindow.prototype.loadScroll = function() {
   
   // Creates new ScrollManager and initializes it
   if (!this.scrollMgr) {
-    this.scrollMgr = new eXo.communication.chat.webui.TabScrollManager("UIChatWindow");
+    this.scrollMgr = new eXo.communication.chatbar.webui.TabScrollManager("UIChatWindow");
     // Adds the tab elements to the manager
     this.scrollMgr.mainContainer = this.tabContainerNode;
     this.scrollMgr.arrowsContainer = eXo.core.DOMUtil.findFirstDescendantByClass(this.tabContainerNode, "div", "ScrollButtons");
@@ -1828,7 +1828,7 @@ UIChatWindow.prototype.reloadScrollMgr = function(isReset) {
 
 // Function using to auto scroll to visible tab when tab elements is changed
 UIChatWindow.prototype.autoScroll = function(focusTabIndex) {
-  var scrollMgr = eXo.communication.chat.webui.UIChatWindow.scrollMgr;
+  var scrollMgr = eXo.communication.chatbar.webui.UIChatWindow.scrollMgr;
   if (!scrollMgr) {
     return;
   }
@@ -1836,4 +1836,4 @@ UIChatWindow.prototype.autoScroll = function(focusTabIndex) {
 };
 // -- / --
 
-eXo.communication.chat.webui.UIChatWindow = new UIChatWindow();
+eXo.communication.chatbar.webui.UIChatWindow = new UIChatWindow();

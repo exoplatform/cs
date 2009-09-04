@@ -300,7 +300,7 @@ JSUIBean.prototype = {
    * when each option is changed.
    */
   _register2StateMan : function() {
-    eXo.communication.chat.webui.UIStateManager.register(this);
+    eXo.communication.chatbar.webui.UIStateManager.register(this);
   },
   
   /**
@@ -316,4 +316,4 @@ JSUIBean.prototype = {
   }
 };
 
-eXo.communication.chat.webui.component.JSUIBean = JSUIBean;
+eXo.communication.chatbar.webui.component.JSUIBean = JSUIBean;

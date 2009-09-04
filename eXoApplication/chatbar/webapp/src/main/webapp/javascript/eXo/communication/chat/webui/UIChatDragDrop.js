@@ -57,7 +57,7 @@ UIChatDragDrop.prototype.mouseDownTrigger = function(event) {
     return;
   }
   if (event.button == 1 || event.which == 1) {
-    return eXo.communication.chat.webui.UIChatDragDrop.initDnD(eXo.communication.chat.webui.UIChatDragDrop.dropableSets, srcElement, srcElement, event) ;
+    return eXo.communication.chatbar.webui.UIChatDragDrop.initDnD(eXo.communication.chatbar.webui.UIChatDragDrop.dropableSets, srcElement, srcElement, event) ;
   }
   return true ;
 } ;
@@ -111,8 +111,8 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
 
   var UIPageDesktopNode = document.getElementById('UIPageDesktop');
   if (UIPageDesktopNode) {
-    oTop += eXo.core.Browser.findPosYInContainer(eXo.communication.chat.webui.UIMainChatWindow.rootNode, document.body);
-    oLeft += eXo.core.Browser.findPosXInContainer(eXo.communication.chat.webui.UIMainChatWindow.rootNode, document.body);
+    oTop += eXo.core.Browser.findPosYInContainer(eXo.communication.chatbar.webui.UIMainChatWindow.rootNode, document.body);
+    oLeft += eXo.core.Browser.findPosXInContainer(eXo.communication.chatbar.webui.UIMainChatWindow.rootNode, document.body);
     if (eXo.core.Browser.isIE7()) {
       oLeft -= workspaceControlWidth;
     }
@@ -148,7 +148,7 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
     //this.DragDrop.init(dropableObjs, clickBlock, uiDragObjectNode, event) ;
     this.DragDrop.init(dropableObjs, clickBlock, dragTmpNode, event) ;
   }
-  eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
+  eXo.communication.chatbar.core.AdvancedDOMEvent.cancelEvent(event);
   return false ;
 } ;
 
@@ -170,7 +170,7 @@ UIChatDragDrop.prototype.dragCallback = function(dndEvent) {
     dragObject.style.display = 'block' ;
   }
 
-//  dragObject.style[eXo.communication.chat.webui.UIChatDragDrop.scKey] = eXo.communication.chat.webui.UIChatDragDrop.scValue;
+//  dragObject.style[eXo.communication.chatbar.webui.UIChatDragDrop.scKey] = eXo.communication.chatbar.webui.UIChatDragDrop.scValue;
 
   if (!dndEvent.backupMouseEvent) {
     dndEvent.backupMouseEvent = window.event ;
@@ -226,9 +226,9 @@ UIChatDragDrop.prototype.dropCallback = function(dndEvent) {
     realNode.UIWindow._setPosition(oTop, oLeft);
   }
   if (realNode.UIWindowManager) {
-    eXo.communication.chat.webui.UIPopupManager.focusEventFire(realNode.UIWindowManager);
+    eXo.communication.chatbar.webui.UIPopupManager.focusEventFire(realNode.UIWindowManager);
   }
   eXo.core.DOMUtil.removeElement(dragObject);
 } ;
 
-eXo.communication.chat.webui.UIChatDragDrop = new UIChatDragDrop();
+eXo.communication.chatbar.webui.UIChatDragDrop = new UIChatDragDrop();

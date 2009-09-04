@@ -4,7 +4,7 @@
  *
  *  This is an UI component object use to manage all popup window.
  */
-function UIPopupManager() {
+function UIPopupManager() {	
   this.popupList = false;
   this.TOP_INDEX = 3;
   this.NORMAL_INDEX = 2;
@@ -62,10 +62,10 @@ UIPopupManager.prototype.requestFocus = function(event) {
   var UIWindowManager = this.UIWindowManager;
   if (UIWindowManager) {
     window.setTimeout(function() {
-        eXo.communication.chat.webui.UIPopupManager.focusEventFire(UIWindowManager);
+        eXo.communication.chatbar.webui.UIPopupManager.focusEventFire(UIWindowManager);
       }, 50);
   }
-  //eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
+  //eXo.communication.chatbar.core.AdvancedDOMEvent.cancelEvent(event);
   return true;
 };
 
@@ -75,7 +75,7 @@ UIPopupManager.prototype.requestFocus = function(event) {
  * @param {UIPopupWindow} popupWindowObj
  */
 UIPopupManager.prototype.focusEventFire = function(popupWindowObj) {
-  thys = eXo.communication.chat.webui.UIPopupManager;
+  thys = eXo.communication.chatbar.webui.UIPopupManager;
   if (!thys.initialized) {
     return;
   }
@@ -105,4 +105,4 @@ UIPopupManager.prototype.focusEventFire = function(popupWindowObj) {
   }
 };
 
-eXo.communication.chat.webui.UIPopupManager = new UIPopupManager();
+eXo.communication.chatbar.webui.UIPopupManager = new UIPopupManager();

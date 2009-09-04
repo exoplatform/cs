@@ -6,7 +6,7 @@ JavascriptService.addJavascript("eXo.communication.chat.core.JSLogger", "/javasc
 JavascriptService.addJavascript("eXo.communication.chat.core.XMPPCommunicator", "/javascript/eXo/communication/chat/core/XMPPCommunicator.js", ServletContext);
 JavascriptService.addJavascript("eXo.communication.chat.core.Utils", "/javascript/eXo/communication/chat/core/Utils.js", ServletContext);
 JavascriptService.addJavascript("eXo.communication.chat.core.LocalTemplateEngine", "/javascript/eXo/communication/chat/core/LocalTemplateEngine.js", ServletContext);
-JavascriptService.addJavascript("eXo.communication.chat.webui.UIWindow", "/javascript/eXo/communication/chat/webui/UIWindow.js", ServletContext);
+//JavascriptService.addJavascript("eXo.communication.chat.webui.UIWindow", "/javascript/eXo/communication/chat/webui/UIWindow.js", ServletContext);
 JavascriptService.addJavascript("eXo.communication.chat.webui.UIPageIterator", "/javascript/eXo/communication/chat/webui/UIPageIterator.js", ServletContext);
 JavascriptService.addJavascript("eXo.communication.chat.webui.TabScrollManager", "/javascript/eXo/communication/chat/webui/TabScrollManager.js", ServletContext);
 JavascriptService.addJavascript("eXo.communication.chat.webui.UISlideAlert", "/javascript/eXo/communication/chat/webui/UISlideAlert.js", ServletContext);
