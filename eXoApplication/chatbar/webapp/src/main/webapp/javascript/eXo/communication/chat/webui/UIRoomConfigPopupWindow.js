@@ -44,7 +44,7 @@ UIRoomConfigPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
 UIRoomConfigPopupWindow.prototype.focusGroupOptions = function(event) {
   event = event || window.event;
   var srcElement = event.srcElement || event.target;
-  var thys  = eXo.communication.chat.webui.UIRoomConfigPopupWindow;
+  var thys  = eXo.communication.chatbar.webui.UIRoomConfigPopupWindow;
   var DOMUtil = eXo.core.DOMUtil;
   var fieldsetNode = DOMUtil.findAncestorByTagName(srcElement, 'fieldset');
   if (fieldsetNode &&
@@ -80,7 +80,7 @@ UIRoomConfigPopupWindow.prototype.focusGroupOptions = function(event) {
     }
   }
   thys.playAnimation();
-  eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
+  eXo.communication.chatbar.core.AdvancedDOMEvent.cancelEvent(event);
 };
 
 /**
@@ -100,7 +100,7 @@ UIRoomConfigPopupWindow.prototype.playAnimation = function() {
  * Do real animation process when switch group options
  */
 UIRoomConfigPopupWindow.prototype.switchGroupOptionsAnimate = function() {
-  thys = eXo.communication.chat.webui.UIRoomConfigPopupWindow;
+  thys = eXo.communication.chatbar.webui.UIRoomConfigPopupWindow;
   var DOMUtil = eXo.core.DOMUtil;
   var closingContentNode = DOMUtil.findFirstDescendantByClass(thys.closingNode, 'table', 'UIFormGrid');
   var openingContentNode = DOMUtil.findFirstDescendantByClass(thys.openingNode, 'table', 'UIFormGrid');
@@ -414,7 +414,7 @@ UIRoomConfigPopupWindow.prototype.okAction = function(keepWindowState) {
  */
 UIRoomConfigPopupWindow.prototype.fakeConfigCommit = function(keepWindowState) {
   this.okAction(keepWindowState);
-  eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('You just cancel the room configuration. The default config still sent.', this.tabId);
+  eXo.communication.chatbar.webui.UIChatWindow.insertCustomMsg('You just cancel the room configuration. The default config still sent.', this.tabId);
 };
 
 /**
@@ -482,4 +482,4 @@ UIRoomConfigPopupWindow.prototype.setVisible = function(visible, tabId, mustSubm
   }
 };
 
-eXo.communication.chat.webui.UIRoomConfigPopupWindow = new UIRoomConfigPopupWindow();
+eXo.communication.chatbar.webui.UIRoomConfigPopupWindow = new UIRoomConfigPopupWindow();

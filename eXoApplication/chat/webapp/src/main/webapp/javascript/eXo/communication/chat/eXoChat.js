@@ -9,16 +9,21 @@ eXo.require("eXo.core.JSON");
 eXo.require("eXo.core.HTMLUtil");
 eXo.require("eXo.core.Resize");
 eXo.require("eXo.webui.UIHorizontalTabs");
-
-eXo.communication = {
-  chat : {
+if(!eXo.communication) eXo.communication = {};
+eXo.communication.chat = {
     eXoChat : {},
     core : {},
     webui : {
       component : {}
     }
-  }
 }
+
+eXo.chatRequire = function(module, jsLocation) {  
+  window.status = "Loading Javascript Module " + module ;
+  if(jsLocation == null) jsLocation = '/eXoResources/javascript/' ;
+  var path = jsLocation  + module.replace(/\./g, '/')  + '.js' ;
+  eXo.loadJS(path);
+} ;
 
 // Overwrite html entities to ignore white space from html encode
 eXo.core.HTMLUtil.entities.nbsp = null;
@@ -30,7 +35,7 @@ eXo.require("eXo.communication.chat.core.JSLogger", "/chat/javascript/");
 eXo.require("eXo.communication.chat.core.XMPPCommunicator", "/chat/javascript/");
 eXo.require("eXo.communication.chat.core.Utils", "/chat/javascript/");
 eXo.require("eXo.communication.chat.core.LocalTemplateEngine", "/chat/javascript/");
-eXo.require("eXo.communication.chat.webui.UIWindow", "/chat/javascript/");
+eXo.chatRequire("eXo.communication.chat.webui.UIWindow", "/chat/javascript/");
 eXo.require("eXo.communication.chat.webui.UIPageIterator", "/chat/javascript/");
 eXo.require("eXo.communication.chat.webui.TabScrollManager", "/chat/javascript/");
 eXo.require("eXo.communication.chat.webui.UISlideAlert", "/chat/javascript/");

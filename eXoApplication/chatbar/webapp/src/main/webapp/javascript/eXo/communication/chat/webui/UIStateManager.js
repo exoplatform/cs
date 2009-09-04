@@ -62,7 +62,7 @@ function UIStateManager() {
 /**
  * Extends from JSUIBeanListener
  */
-UIStateManager.prototype = eXo.communication.chat.webui.component.JSUIBeanListener;
+UIStateManager.prototype = eXo.communication.chatbar.webui.component.JSUIBeanListener;
 
 /**
  * Initializing method
@@ -123,7 +123,7 @@ UIStateManager.prototype.register = function(windowObj) {
  * Wrapper method
  */
 UIStateManager.prototype.autoStoreCheck = function() {
-  eXo.communication.chat.webui.UIStateManager.checkStore();
+  eXo.communication.chatbar.webui.UIStateManager.checkStore();
 };
 
 /**
@@ -283,4 +283,4 @@ UIStateManager.prototype.ajaxWrapper = function(handler, url, method, data) {
 //  request.process() ;
 };
 
-eXo.communication.chat.webui.UIStateManager = new UIStateManager();
+eXo.communication.chatbar.webui.UIStateManager = new UIStateManager();

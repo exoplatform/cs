@@ -672,4 +672,4 @@ XMPPCommunicator.prototype.removeTransport = function(userName, transportName, h
   request.process() ;
 };
 
-eXo.communication.chat.core.XMPPCommunicator = new XMPPCommunicator();
+eXo.communication.chatbar.core.XMPPCommunicator = new XMPPCommunicator();

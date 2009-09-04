@@ -45,7 +45,7 @@ function BuddyItem(buddyInfo, actionCallback, maxUserNameLen, isGroupChat) {
  */
 BuddyItem.prototype.init = function() {
   var DOMUtil = eXo.core.DOMUtil;
-  this.rootNode = eXo.communication.chat.core.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.template);	
+  this.rootNode = eXo.communication.chatbar.core.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.template);	
 	var nickDis = this.buddyInfo.nickname ;
 	if (nickDis != null && nickDis.indexOf("/") != -1) nickDis = nickDis.split("/")[1] ;
   if (this.isGroupChat) {
@@ -58,13 +58,13 @@ BuddyItem.prototype.init = function() {
   this.updateStatus(this.buddyInfo.presence.type);
 
 	var uid = this.buddyInfo.user ;
-	eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;	
+	eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;	
   //this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.user, true);
   this.iconChatNode.setAttribute('title' ,this.getUserName(this.buddyInfo.user, false));
   this.rootNode.setAttribute('userName', this.buddyInfo.user);  
   this.rootNode.setAttribute('nickname', nickDis);
-  eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'contextmenu', this.actionCallback, false);
-  eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'click', this.actionCallback, false);
+  eXo.communication.chatbar.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'contextmenu', this.actionCallback, false);
+  eXo.communication.chatbar.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'click', this.actionCallback, false);
 };
 
 /**
@@ -123,7 +123,7 @@ BuddyItem.prototype.remove = function() {
   return false;
 }
 
-eXo.communication.chat.webui.component.BuddyItem = BuddyItem;
+eXo.communication.chatbar.webui.component.BuddyItem = BuddyItem;
 
 /**
  * BuddyListControl component
@@ -142,7 +142,7 @@ function BuddyListControl(rootNode, buddyItemActionCallback, UIMainChatWindow) {
   this.UIMainChatWindow = UIMainChatWindow;
   this.MAX_USERNAME_LEN = -1;
   this.buddyItemActionCallback = buddyItemActionCallback;
-  this.BuddyItem = eXo.communication.chat.webui.component.BuddyItem;
+  this.BuddyItem = eXo.communication.chatbar.webui.component.BuddyItem;
   this.buddyList = {};
   this.cleanup();  
 }
@@ -341,4 +341,4 @@ BuddyListControl.prototype.xUpdate = function(roomContactList) {
   }
 };
 
-eXo.communication.chat.webui.component.BuddyListControl = BuddyListControl;
+eXo.communication.chatbar.webui.component.BuddyListControl = BuddyListControl;

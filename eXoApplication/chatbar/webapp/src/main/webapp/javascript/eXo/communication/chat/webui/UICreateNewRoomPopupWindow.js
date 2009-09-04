@@ -65,4 +65,4 @@ UICreateNewRoomPopupWindow.prototype.createNewRoomAction = function() {
   this.UIMainChatWindow.createRoomChat({id: (new Date()).getTime(), name:roomName});
 };
 
-eXo.communication.chat.webui.UICreateNewRoomPopupWindow = new UICreateNewRoomPopupWindow();
+eXo.communication.chatbar.webui.UICreateNewRoomPopupWindow = new UICreateNewRoomPopupWindow();

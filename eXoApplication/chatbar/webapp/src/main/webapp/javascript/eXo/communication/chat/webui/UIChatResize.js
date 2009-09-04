@@ -15,7 +15,7 @@ function UIChatResize() {
  */
 UIChatResize.prototype.register = function(resizeHandleObject, callback, forceReplaceEvent) {
   this.callbackStack[resizeHandleObject] = callback;
-  var AdvancedDOMEvent = eXo.communication.chat.core.AdvancedDOMEvent;
+  var AdvancedDOMEvent = eXo.communication.chatbar.core.AdvancedDOMEvent;
   if (forceReplaceEvent) {
     resizeHandleObject.onmousedown = this.init;
   } else {
@@ -31,7 +31,7 @@ UIChatResize.prototype.register = function(resizeHandleObject, callback, forceRe
 UIChatResize.prototype.init = function(event) {
   if(!event) event = window.event ;
   var srcObj = event.srcElement || event.target;
-  var thys = eXo.communication.chat.webui.UIChatResize;
+  var thys = eXo.communication.chatbar.webui.UIChatResize;
   thys.resizeHandleObject = srcObj;
   thys.portletWindow = eXo.core.DOMUtil.findAncestorByClass(srcObj, 'UIResizeObject');
   if (!thys.portletWindow) return;
@@ -75,8 +75,8 @@ UIChatResize.prototype.init = function(event) {
 
   var UIPageDesktopNode = document.getElementById('UIPageDesktop');
   if (UIPageDesktopNode) {
-    oTop += eXo.core.Browser.findPosYInContainer(eXo.communication.chat.webui.UIMainChatWindow.rootNode, document.body);
-    oLeft += eXo.core.Browser.findPosXInContainer(eXo.communication.chat.webui.UIMainChatWindow.rootNode, document.body);
+    oTop += eXo.core.Browser.findPosYInContainer(eXo.communication.chatbar.webui.UIMainChatWindow.rootNode, document.body);
+    oLeft += eXo.core.Browser.findPosXInContainer(eXo.communication.chatbar.webui.UIMainChatWindow.rootNode, document.body);
     if (eXo.core.Browser.isIE7()) {
       oLeft -= workspaceControlWidth;
     }
@@ -112,7 +112,7 @@ UIChatResize.prototype.init = function(event) {
   thys.initMouseX   = event.clientX ;
   thys.initMouseY   = event.clientY ;
 
-  var AdvancedDOMEvent = eXo.communication.chat.core.AdvancedDOMEvent;
+  var AdvancedDOMEvent = eXo.communication.chatbar.core.AdvancedDOMEvent;
   AdvancedDOMEvent.addEventListener(document.body, 'mousemove', thys.resizeWindowEvt, false);
   AdvancedDOMEvent.addEventListener(document.body, 'mouseup', thys.endResizeWindowEvt, false);
 
@@ -127,7 +127,7 @@ UIChatResize.prototype.init = function(event) {
  */
 UIChatResize.prototype.resizeWindowEvt = function(event) {
   if(!event) event = window.event ;
-  var thys = eXo.communication.chat.webui.UIChatResize;
+  var thys = eXo.communication.chatbar.webui.UIChatResize;
   var deltaX       = event.clientX - thys.initMouseX ;
   var deltaY       = event.clientY - thys.initMouseY ;
   
@@ -145,7 +145,7 @@ UIChatResize.prototype.resizeWindowEvt = function(event) {
  */
 UIChatResize.prototype.endResizeWindowEvt = function(event) {
   if(!event) event = window.event ;
-  var thys = eXo.communication.chat.webui.UIChatResize;
+  var thys = eXo.communication.chatbar.webui.UIChatResize;
 
   var deltaX = event.clientX - thys.initMouseX ;
   var deltaY = event.clientY - thys.initMouseY ;
@@ -180,7 +180,7 @@ UIChatResize.prototype.endResizeWindowEvt = function(event) {
   thys.originalWidth   = null;
   thys.originalHeight  = null;
 
-  var AdvancedDOMEvent = eXo.communication.chat.core.AdvancedDOMEvent;
+  var AdvancedDOMEvent = eXo.communication.chatbar.core.AdvancedDOMEvent;
   AdvancedDOMEvent.removeEventListener(document.body, 'mousemove', thys.resizeWindowEvt);
   AdvancedDOMEvent.removeEventListener(document.body, 'mouseup', thys.endResizeWindowEvt);
 
@@ -189,4 +189,4 @@ UIChatResize.prototype.endResizeWindowEvt = function(event) {
   }
 } ;  
 
-eXo.communication.chat.webui.UIChatResize = new UIChatResize();
+eXo.communication.chatbar.webui.UIChatResize = new UIChatResize();

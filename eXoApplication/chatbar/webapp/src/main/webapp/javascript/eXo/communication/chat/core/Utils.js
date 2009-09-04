@@ -210,4 +210,4 @@ Utils.prototype.xml2json = function(xml, tab) {
    return "{\n" + tab + (tab ? json.replace(/\t/g, tab) : json.replace(/\t|\n/g, "")) + "\n}";
 }
 
-eXo.communication.chat.core.Utils = new Utils();
+eXo.communication.chatbar.core.Utils = new Utils();

@@ -79,7 +79,7 @@ UISlideAlert.prototype.init = function(UIMainChatWindow, rootNode) {
  * @param {Event} event
  */
 UISlideAlert.prototype.pauseAnim = function(event) {
-  var thys = eXo.communication.chat.webui.UISlideAlert;
+  var thys = eXo.communication.chatbar.webui.UISlideAlert;
   if (thys.hideId) {
     window.clearTimeout(thys.hideId);
     thys.hideId = null;
@@ -92,7 +92,7 @@ UISlideAlert.prototype.pauseAnim = function(event) {
  * @param {Event} event
  */
 UISlideAlert.prototype.resumeAnim = function(event) {
-  var thys = eXo.communication.chat.webui.UISlideAlert;
+  var thys = eXo.communication.chatbar.webui.UISlideAlert;
   if (!thys.hideId) {
     thys.hideId = window.setTimeout(thys.hide, thys.LIVE_TIME);
   }
@@ -102,7 +102,7 @@ UISlideAlert.prototype.resumeAnim = function(event) {
  * Use to keep position of notification popup when user is scroll page up or down
  */
 UISlideAlert.prototype.positionKeeper = function() {
- /* var thys = eXo.communication.chat.webui.UISlideAlert;
+ /* var thys = eXo.communication.chatbar.webui.UISlideAlert;
   if (!thys.animateId) {
     thys.msgNotificationNode.style.top = document.documentElement.scrollTop + 'px';
   }*/
@@ -112,7 +112,7 @@ UISlideAlert.prototype.positionKeeper = function() {
  * Process message queueing
  */
 UISlideAlert.prototype.queueProcess = function() {
-  var thys = eXo.communication.chat.webui.UISlideAlert;
+  var thys = eXo.communication.chatbar.webui.UISlideAlert;
   if (thys.messageQueue.length > 0) {
     thys.setVisible(true);
     return;
@@ -168,9 +168,9 @@ UISlideAlert.prototype.focusTab = function(event) {
   event = event || window.event;
   var srcElement = event.target || event.srcElement;
   if (this.tabId) {
-    var thys = eXo.communication.chat.webui.UISlideAlert;
+    var thys = eXo.communication.chatbar.webui.UISlideAlert;
     thys.removeMessageByTabId(this.tabId);
-    return eXo.communication.chat.webui.UIChatWindow.focusTab(this.tabId, true);
+    return eXo.communication.chatbar.webui.UIChatWindow.focusTab(this.tabId, true);
   }
   return true;
 };
@@ -213,7 +213,7 @@ UISlideAlert.prototype.setMsgCounter = function() {
  * @param {Boolean} visible
  */
 UISlideAlert.prototype.setVisible = function(visible) {
-  var thys = eXo.communication.chat.webui.UISlideAlert;
+  var thys = eXo.communication.chatbar.webui.UISlideAlert;
   //thys.msgNotificationNode.style.display = (visible) ? 'block' : 'none';
   if (visible) {
     if (thys.messageQueue.length <= 0 ||
@@ -248,10 +248,10 @@ UISlideAlert.prototype.setVisible = function(visible) {
  * @param {Event} event
  */
 UISlideAlert.prototype.hideNotification = function(event) {
-  var thys = eXo.communication.chat.webui.UISlideAlert;
+  var thys = eXo.communication.chatbar.webui.UISlideAlert;
   event = event || window.event;
   if (event) {
-    eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
+    eXo.communication.chatbar.core.AdvancedDOMEvent.cancelEvent(event);
   }
   thys.setVisible(false);
 };
@@ -260,7 +260,7 @@ UISlideAlert.prototype.hideNotification = function(event) {
  * Play slide animation for notification popup
  */
 UISlideAlert.prototype.animateSlide = function() {
-  var thys = eXo.communication.chat.webui.UISlideAlert;
+  var thys = eXo.communication.chatbar.webui.UISlideAlert;
   var stopCondition = false;
   switch(thys.direction) {
     case thys.DOWN:
@@ -300,4 +300,4 @@ UISlideAlert.prototype.animateSlide = function() {
   //thys.msgNotificationNode.style.top = (thys.currentDistance + document.documentElement.scrollTop - thys.MAX_DISTANCE) + 'px';
 };
 
-eXo.communication.chat.webui.UISlideAlert = new UISlideAlert();
+eXo.communication.chatbar.webui.UISlideAlert = new UISlideAlert();

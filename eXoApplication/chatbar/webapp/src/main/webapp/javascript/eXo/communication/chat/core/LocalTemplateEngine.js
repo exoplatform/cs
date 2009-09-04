@@ -25,4 +25,4 @@ LocalTemplateEngine.prototype.getTemplateByClassName = function(klazz) {
   return false;
 };
 
-eXo.communication.chat.core.LocalTemplateEngine = new LocalTemplateEngine();
+eXo.communication.chatbar.core.LocalTemplateEngine = new LocalTemplateEngine();

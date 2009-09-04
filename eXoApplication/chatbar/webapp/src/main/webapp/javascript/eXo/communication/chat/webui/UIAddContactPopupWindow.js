@@ -32,8 +32,8 @@ UIAddContactPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.pageIteratorNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.uiPageIterator);
   this.addContactButtonNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.addContactButton);
   this.addContactButtonNode.hrefBk = this.addContactButtonNode.href;
-  eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.filterFieldNode, 'keyup', this.doSearchContactWrapper, false);
-  this.uiPageIterator = new eXo.communication.chat.webui.UIPageIterator(this.pageIteratorNode);
+  eXo.communication.chatbar.core.AdvancedDOMEvent.addEventListener(this.filterFieldNode, 'keyup', this.doSearchContactWrapper, false);
+  this.uiPageIterator = new eXo.communication.chatbar.webui.UIPageIterator(this.pageIteratorNode);
   this.uiPageIterator.setGotoPageCallback(this.doSearchContact);
 };
 
@@ -44,7 +44,7 @@ UIAddContactPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
  */
 UIAddContactPopupWindow.prototype.doSearchContactWrapper = function(event) {
   event = event || window.event;
-  eXo.communication.chat.webui.UIAddContactPopupWindow.doSearchContact();
+  eXo.communication.chatbar.webui.UIAddContactPopupWindow.doSearchContact();
 };
 
 /**
@@ -55,7 +55,7 @@ UIAddContactPopupWindow.prototype.doSearchContactWrapper = function(event) {
  * @param {String} keyword
  */
 UIAddContactPopupWindow.prototype.doSearchContact = function(from, to, keyword) {
-  var thys = eXo.communication.chat.webui.UIAddContactPopupWindow;
+  var thys = eXo.communication.chatbar.webui.UIAddContactPopupWindow;
   keyword = keyword || thys.filterFieldNode.value;
   keyword = keyword || '*';
   if (keyword.indexOf('*') != (keyword.length - 1)) {
@@ -67,7 +67,7 @@ UIAddContactPopupWindow.prototype.doSearchContact = function(from, to, keyword) 
   thys.keywordbk = keyword;
   from = from || 0;
   to = to || 10;
-  eXo.communication.chat.webui.UIMainChatWindow.orgFuzzySearchUser(keyword , from, to);
+  eXo.communication.chatbar.webui.UIMainChatWindow.orgFuzzySearchUser(keyword , from, to);
 };
 
 /**
@@ -86,7 +86,7 @@ UIAddContactPopupWindow.prototype.updateContactList = function(serverData) {
   tmpNode.appendChild(this.contactListContainerNode);
   // Add new contact list
   var contactList = serverData.users;
-  var currentActiveUser = eXo.communication.chat.webui.UIMainChatWindow.userNames['xmpp'];
+  var currentActiveUser = eXo.communication.chatbar.webui.UIMainChatWindow.userNames['xmpp'];
   for (var i=0; i<contactList.length; i++) {
     var contact = contactList[i];
     contact.enabled4Add = true;
@@ -123,7 +123,7 @@ UIAddContactPopupWindow.prototype.reload = function() {
  * @param {Object} contact
  */
 UIAddContactPopupWindow.prototype.filter4MainBuddyList = function(contact) {
-  var currentContactList = eXo.communication.chat.webui.UIMainChatWindow.buddyListControlObj.buddyList || [];
+  var currentContactList = eXo.communication.chatbar.webui.UIMainChatWindow.buddyListControlObj.buddyList || [];
   for (var contactId in currentContactList) {
     var contactInfo = currentContactList[contactId];
     if (!(contactInfo instanceof Object) ||
@@ -206,7 +206,7 @@ UIAddContactPopupWindow.prototype.addContactAction = function() {
       this.handler.addContactActionCallback) {
     this.handler.addContactActionCallback(contactList);
   } else {
-    eXo.communication.chat.webui.UIMainChatWindow.addContacts(contactList);
+    eXo.communication.chatbar.webui.UIMainChatWindow.addContacts(contactList);
   }
   this.setVisible(false);
 };
@@ -261,21 +261,21 @@ UIAddContactPopupWindow.prototype.selectAllContacts = function(selectMode) {
 //    return;
 //  }
 //  if (visible) {
-//	  	eXo.communication.chat.webui.UIMainChatWindow.orgFuzzySearchUser('*', 0, 10);
+//	  	eXo.communication.chatbar.webui.UIMainChatWindow.orgFuzzySearchUser('*', 0, 10);
 //	    this.filterFieldNode.value = '';
 //	    this.toggleSelectAllNode.checked = false;
 //	    //this.handler = handler;
 //	    this.uiPageIterator.destroy();
 ////    //window.alert('handler callback: ', handler);
 ////    //window.alert('handler callback: ', handler.addContactActionCallback);
-////    //eXo.communication.chat.webui.UIMainChatWindow.orgSearchUser();
+////    //eXo.communication.chatbar.webui.UIMainChatWindow.orgSearchUser();
 ////    var chatRoomServiceName = this.UIMainChatWindow.serverInfo.mucServicesNames[0];
 ////    this.tabId = tabId;
 ////    var roomName = this.tabId.getRoomName() ;
 ////    if (roomName.indexOf('@' + chatRoomServiceName) != -1) {
 ////      roomName = roomName.substr(0, roomName.indexOf('@' + chatRoomServiceName));
 ////    }  
-////    eXo.communication.chat.webui.UIMainChatWindow.orgFuzzySearchUser('*', 0, 10, roomName);
+////    eXo.communication.chatbar.webui.UIMainChatWindow.orgFuzzySearchUser('*', 0, 10, roomName);
 //////
 //////    this.filterFieldNode.value = '';
 //////    this.toggleSelectAllNode.checked = false;
@@ -298,8 +298,8 @@ UIAddContactPopupWindow.prototype.setVisible = function(visible, handler){
   if (visible) {
     //window.alert('handler callback: ', handler);
     //window.alert('handler callback: ', handler.addContactActionCallback);
-    //eXo.communication.chat.webui.UIMainChatWindow.orgSearchUser();
-    eXo.communication.chat.webui.UIMainChatWindow.orgFuzzySearchUser('*', 0, 10);
+    //eXo.communication.chatbar.webui.UIMainChatWindow.orgSearchUser();
+    eXo.communication.chatbar.webui.UIMainChatWindow.orgFuzzySearchUser('*', 0, 10);
     this.filterFieldNode.value = '';
     this.toggleSelectAllNode.checked = false;
     //this.filterFieldNode.focus();
@@ -313,4 +313,4 @@ UIAddContactPopupWindow.prototype.setVisible = function(visible, handler){
   }
 };
 
-eXo.communication.chat.webui.UIAddContactPopupWindow = new UIAddContactPopupWindow();
+eXo.communication.chatbar.webui.UIAddContactPopupWindow = new UIAddContactPopupWindow();

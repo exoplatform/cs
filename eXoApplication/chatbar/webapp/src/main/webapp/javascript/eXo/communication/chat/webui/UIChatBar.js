@@ -9,11 +9,11 @@ UIChatBar.prototype.showMenu = function(obj,event){
 	var menu = eXo.core.DOMUtil.findFirstDescendantByClass(obj,"div","UIRightClickPopupMenu");
 	var isRoomMenu = eXo.core.DOMUtil.findFirstDescendantByClass(menu, 'div', 'RoomData');
 	if(isRoomMenu)
-		eXo.communication.chat.webui.UIMainChatWindow.jabberGetJoinedRoomList();
+		eXo.communication.chatbar.webui.UIMainChatWindow.jabberGetJoinedRoomList();
 	this.switchState(menu);
 	eXo.core.DOMUtil.listHideElements(menu);
 	if(!this.buddyItemActionMenuNode){
-		var UIMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
+		var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
   	this.buddyItemActionMenuNode = UIMainChatWindow.buddyItemActionMenuNode;
 	}
 	this.buddyItemActionMenuNode.style.display = 'none';
@@ -25,4 +25,4 @@ UIChatBar.prototype.switchState = function(obj){
 
 };
 
-eXo.communication.chat.webui.UIChatBar = new UIChatBar();
+eXo.communication.chatbar.webui.UIChatBar = new UIChatBar();

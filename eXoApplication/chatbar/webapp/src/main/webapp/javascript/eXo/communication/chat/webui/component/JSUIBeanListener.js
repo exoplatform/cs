@@ -20,4 +20,4 @@ JSUIBeanListener.prototype = {
   _optionChangedEventFire : function(firedObject, propertyName, oldValue, newValue) {}
 };
 
-eXo.communication.chat.webui.component.JSUIBeanListener = JSUIBeanListener.prototype;
+eXo.communication.chatbar.webui.component.JSUIBeanListener = JSUIBeanListener.prototype;
