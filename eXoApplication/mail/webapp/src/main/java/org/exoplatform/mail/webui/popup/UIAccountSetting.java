@@ -103,12 +103,9 @@ public class UIAccountSetting extends UIFormTabPane {
   public static final String OUTGOING_PASSWORD = "outgoingPassword";
   public static final String FIELD_CHECKMAIL_AUTO = "checkMailAutomatically";
   public static final String FIELD_LEAVE_ON_SERVER = "leaveMailOnServer";
-//  public static final String FIELD_SKIP_OVER_SIZE = "skipMessageOverMaxSize";
   public static final String FIELD_IS_SAVE_PASSWORD = "isSavePassword" ;
   private String accountId_ = null;
-  //TODO don't keep these components
   UIFormCheckBoxInput<Boolean> leaveOnServer_ ;
-//  UIFormStringInput skipOverSize_;
   public static final String CHECK_FROM_DATE = "checkFromDate";
   public static final String FROM_DATE = "fromDate";
   public static final String IS_CUSTOM_INBOX = "isCustomInbox";
@@ -320,11 +317,6 @@ public class UIAccountSetting extends UIFormTabPane {
     UIFormInputWithActions uiInput = getChildById(TAB_FETCH_OPTIONS);
     return uiInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).isChecked();
   }
-  
-//  public String getFieldSkipOverSize() {
-//    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
-//    return uiInput.getUIStringInput(FIELD_SKIP_OVER_SIZE).getValue();
-//  }
   
   public void fillField() throws Exception {
     MailService mailSrv = getApplicationComponent(MailService.class) ;
