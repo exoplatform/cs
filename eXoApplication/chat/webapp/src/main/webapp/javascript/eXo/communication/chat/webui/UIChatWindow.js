@@ -1808,12 +1808,12 @@ UIChatWindow.prototype.reloadScrollMgr = function(isReset) {
   }
   // Reset somethings.
   if (isReset) {
-    /*
+    this.scrollMgr.firstVisibleIndex = 0;
+    this.scrollMgr.lastVisibleIndex = -1;
     if (this.scrollMgr.arrowsContainer.style.display != 'none') {
       this.scrollMgr.arrowsContainer.style.display = 'none';
     }
     this.scrollMgr.mainContainer.space = null;
-    */
   }
 
   this.scrollMgr.loadElements("UITab", true);
