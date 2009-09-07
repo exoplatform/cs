@@ -79,7 +79,8 @@ public class UIActionBar extends UIContainer {
         } else {
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true, '" + folderId + "') ;");
         }
-        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox() ;");        
+        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox() ;");
+        uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(false);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
     }
