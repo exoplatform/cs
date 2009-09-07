@@ -118,18 +118,19 @@ TabScrollManager.prototype.checkAvailableSpace = function(maxSpace) { // in pixe
 	var elementsSpace = 0;
 	var margin = 0;
 	var length =  this.elements.length;
-	for (var i = 0; i < length; i++) {
-		elementsSpace += this.getElementSpace(this.elements[i]);
-		//dynamic margin;
-		if (i+1 < length) margin = this.getElementSpace(this.elements[i+1]) / 3;
-		else margin = this.margin;
-		if (elementsSpace + margin < maxSpace) { // If the tab fits in the available space
-			this.elements[i].isVisible = true;
-			this.lastVisibleIndex = i;
-		} else { // If the available space is full
-			this.elements[i].isVisible = false;
+	if(this.firstVisibleIndex == 0)
+		for (var i = 0; i < length; i++) {
+			elementsSpace += this.getElementSpace(this.elements[i]);
+			//dynamic margin;
+			if (i+1 < length) margin = this.getElementSpace(this.elements[i+1]) / 3;
+			else margin = this.margin;
+			if (elementsSpace + margin < maxSpace) { // If the tab fits in the available space
+				this.elements[i].isVisible = true;
+				this.lastVisibleIndex = i;
+			} else { // If the available space is full
+				this.elements[i].isVisible = false;
+			}
 		}
-	}
 };
 /**
  * Calculates the space of the elements between indexStart and indexEnd
@@ -292,7 +293,7 @@ TabScrollManager.prototype.scrollTo = function(index) {
 };
 
 TabScrollManager.prototype.isElementVisible = function(index) {
-  var firstIndex = -1;
+  /*var firstIndex = -1;
   var lastIndex = -1;
   for (var i=0; i<this.elements.length; i++) {
     if (this.elements[i].isVisible &&
@@ -314,10 +315,10 @@ TabScrollManager.prototype.isElementVisible = function(index) {
       firstIndex == lastIndex ||
       firstIndex > lastIndex) {
     return true;
-  }
+  }*/
 
-  if (index >= firstIndex &&
-      index <= lastIndex) {
+  if (index >= this.firstVisibleIndex &&
+      index <= this.lastVisibleIndex) {
     return true;
   }
   return false;
