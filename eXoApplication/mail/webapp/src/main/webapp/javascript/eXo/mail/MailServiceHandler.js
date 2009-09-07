@@ -87,6 +87,10 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
 	    	document.getElementById('SynchronizeIconRefreshFolder').className = "SyncingIcon"; 
 	    } else if (statusSync == this.FINISH_SYNC_FOLDER) {
 	    	document.getElementById('SynchronizeIconRefreshFolder').className = "SyncIcon"; 
+	    	var updateImapFolder = document.getElementById("UpdateImapFolder");
+	  	      if (updateImapFolder != null) {
+	  	    	eval(eXo.core.DOMUtil.findDescendantsByTagName(updateImapFolder, 'a')[0].href.replace("%20", ""));
+	  	      }
 	    }
     }
     	

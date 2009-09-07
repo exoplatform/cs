@@ -119,11 +119,15 @@ public class UIFolderContainer extends UIContainer {
   }
 
   public boolean isImap() throws Exception {
-    MailService mailSvr = MailUtils.getMailService();
-    String username = MailUtils.getCurrentUser() ;
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    Account acc = mailSvr.getAccountById(username, accountId) ;
-    return Utils.IMAP.equalsIgnoreCase(acc.getProtocol());
+    try {
+      MailService mailSvr = MailUtils.getMailService();
+      String username = MailUtils.getCurrentUser() ;
+      String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      Account acc = mailSvr.getAccountById(username, accountId) ;
+      return Utils.IMAP.equalsIgnoreCase(acc.getProtocol());
+    } catch (Exception e){
+      return false;
+    }
   }
 
 
