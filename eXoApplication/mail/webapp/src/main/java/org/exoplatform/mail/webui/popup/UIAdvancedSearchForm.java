@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
@@ -248,6 +249,12 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
+      } else if(!MailUtils.isSearchValid(from, MailUtils.SPECIALCHARACTER) || !MailUtils.isSearchValid(to, MailUtils.SPECIALCHARACTER)
+          || !MailUtils.isSearchValid(subject, MailUtils.SPECIALCHARACTER) || !MailUtils.isSearchValid(body, MailUtils.SPECIALCHARACTER)) {
+        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null
+                                                , ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
       }
       MessageFilter filter = new MessageFilter("Search");
       filter.setAccountId(accountId);

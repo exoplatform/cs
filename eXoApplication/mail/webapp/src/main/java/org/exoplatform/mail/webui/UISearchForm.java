@@ -16,6 +16,7 @@
  */
 package org.exoplatform.mail.webui;
 
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
@@ -75,8 +76,13 @@ public class UISearchForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      if(text == null || text.length() == 0) {
+      if(MailUtils.isFieldEmpty(text)) {
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } else if(!MailUtils.isSearchValid(text, MailUtils.SPECIALCHARACTER)) {
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.contain-special-characters", null
+                                                , ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } else {
