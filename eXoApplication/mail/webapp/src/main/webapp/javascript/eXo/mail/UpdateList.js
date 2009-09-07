@@ -20,12 +20,11 @@ UpdateList.prototype.update = function(obj){
 	var isUpdate = false ;
 
 	if (this.accountId_ == data.accountId) {
-		// Update folder unread count
 	  var folderIds = data.folders;
-  	var folders = folderIds.split(","); 
-  	var folderNumberCountNode ;
-  	var numberStr;
-  	var updateImapFolder;
+  	  var folders = folderIds.split(","); 
+  	  var folderNumberCountNode ;
+  	  var numberStr;
+  	  var updateImapFolder;
       for (var i = 0; i < folders.length; i++) {
     	if (folders[i] != "") {  
 	  	    folderNumberCountNode = document.getElementById(folders[i]);
@@ -111,15 +110,19 @@ UpdateList.prototype.update = function(obj){
 		  td.innerHTML = "<a " + href + "> " + data.size + " </a>";
 		  tr.appendChild(td);
 		  
+		  var priority = "NormalPriority";
+		  if (data.priority == "5") priority = "LowPriority";
+		  else if (data.priority == "1")  priority = "HighPriority";
 		  td = document.createElement("td");
-		  td.innerHTML = "<a " + href + ">  </a>";
+		  td.style.padding = "0px";
+		  td.innerHTML = "<div class=\"text " + priority + "\"> <span> </span> </div>";
 		  tr.appendChild(td);
-		 
+		  
 		  if (preTr) {
 		  	if (tr.className) {
 				if (preTr.className.indexOf("OddItem") != -1) tr.className = tr.className.replace("OddItem", "") + " EvenItem";
-				 else if (preTr.className.indexOf("EvenItem") != -1) tr.className = tr.className.replace("EvenItem", "") + " OddItem";
-				  else tr.className += " OddItem";
+				else if (preTr.className.indexOf("EvenItem") != -1) tr.className = tr.className.replace("EvenItem", "") + " OddItem";
+				else tr.className += " OddItem";
 		  	} else {
 		  		tr.className = "OddItem";
 		  	}

@@ -197,7 +197,7 @@
 
 <%
 def customFolders = uicomponent.getCustomizeFolders();
-def enableSync = ((customFolders.size() > 0) && uicomponent.isImap())
+def enableSync = uicomponent.isImap();
 %>
 
 <div class="TitleBar">

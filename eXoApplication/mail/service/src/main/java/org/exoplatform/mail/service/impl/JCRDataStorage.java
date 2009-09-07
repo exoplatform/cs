@@ -119,11 +119,12 @@ public class JCRDataStorage {
       Node mailHome = getMailHomeNode(sProvider, username);
       if (mailHome.hasNode(id)) {
         return getAccount(sProvider, mailHome.getNode(id));
+      } else {
+        return null;
       }
     } finally {
       closeSessionProvider(sProvider);
     }
-    return null;
   }
 
   public List<Account> getAccounts(String username) throws Exception {
@@ -1108,7 +1109,8 @@ public class JCRDataStorage {
           values.add(header.getName() + "=" + header.getValue());
         }
         node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
-        
+        long priority = MimeMessageParser.getPriority(msg);
+        node.setProperty(Utils.EXO_PRIORITY, priority);
         node.save();
         
         if (infoObj != null && continuation != null) {
@@ -1117,6 +1119,7 @@ public class JCRDataStorage {
           infoObj.setIsRead(isReadMessage);
           infoObj.setSubject(subject);
           infoObj.setSize(Utils.convertSize(msgSize));
+          infoObj.setPriority(String.valueOf(priority));
           infoObj.setAccountId(accId);
           if (gc != null) infoObj.setDate(gc.getTime().toString());
           else if (sc != null) infoObj.setDate(sc.getTime().toString());
@@ -1176,8 +1179,6 @@ public class JCRDataStorage {
         } catch(PathNotFoundException e) {}
         node.setProperty(Utils.IS_LOADED, true);
         node.save();
-        long priority = MimeMessageParser.getPriority(msg);
-        node.setProperty(Utils.EXO_PRIORITY, priority);
         MimeMessage cmsg = (MimeMessage) msg;
         Object obj = new Object();
         try {

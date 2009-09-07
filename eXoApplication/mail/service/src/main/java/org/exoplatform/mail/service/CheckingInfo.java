@@ -34,6 +34,7 @@ public class CheckingInfo {
   
   public static final int START_SYNC_FOLDER = 301;
   public static final int FINISH_SYNC_FOLDER = 302;
+  public static final int FINISHED_SYNC_FOLDER = 303;
   
   private int totalMsg_ = 0 ;
   private int fetching_ = 0  ;

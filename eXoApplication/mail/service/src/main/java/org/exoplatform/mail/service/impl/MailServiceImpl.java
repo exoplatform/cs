@@ -912,6 +912,7 @@ public class MailServiceImpl implements MailService, Startable {
     try {
       folder.open(javax.mail.Folder.READ_WRITE);
       logger.debug(" #### Getting mails from folder " + folder.getName() + " !");
+      checkingLog_.get(key).setSyncFolderStatus(CheckingInfo.FINISHED_SYNC_FOLDER);
       checkingLog_.get(key).setStatusMsg("Getting mails from folder " + folder.getName() + " !");
       
       String folderId = Utils.createFolderId(accountId, String.valueOf(((IMAPFolder) folder).getUIDValidity()), true);
