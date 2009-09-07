@@ -48,8 +48,13 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 )
 public class UIFetchingBar extends UIForm {
 	
+  private boolean isShown_ = false; 
+  
   public UIFetchingBar() throws Exception {}
 	
+  public boolean isShown() { return isShown_; }
+  public void setIsShown(boolean b) { isShown_ = b; }
+  
   public boolean isUpdate() throws Exception {
   	UIMessageList uiMsgList = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UIMessageList.class);
   	if(uiMsgList.getMessagePageList() != null) {

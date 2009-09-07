@@ -16,7 +16,7 @@ UpdateList.prototype.update = function(obj){
 	var data = eXo.core.JSON.parse(obj.data);	
 	var tbodyMsgList = document.getElementById("TbodyMessageList");
 	var updateListLabel = document.getElementById("UpdateList");
-  var viewing = tbodyMsgList.getAttribute("viewing");
+	var viewing = tbodyMsgList.getAttribute("viewing");
 	var isUpdate = false ;
 
 	if (this.accountId_ == data.accountId) {
@@ -27,25 +27,25 @@ UpdateList.prototype.update = function(obj){
   	  var updateImapFolder;
       for (var i = 0; i < folders.length; i++) {
     	if (folders[i] != "") {  
-	  	    folderNumberCountNode = document.getElementById(folders[i]);
-	  	    if (folderNumberCountNode != null) {
-	  	  	  if (eXo.core.DOMUtil.findAncestorByClass(folderNumberCountNode, "Folder").className.indexOf("SelectedLabel") > -1) isUpdate = true;
-	  	  	  if (data.isRead != 'true') {
-	  	  	    numberStr = folderNumberCountNode.innerHTML;
-	  	  	    numberStr = numberStr.substring(numberStr.indexOf("(") + 1, numberStr.indexOf(")"));
-	      	    if (numberStr.length == 0) numberStr = "0";
-	  	  	    folderNumberCountNode.innerHTML = "(" + (parseInt(numberStr) + 1) + ")";
-	  	      }
-	  	    } else {
-	  	      updateImapFolder = document.getElementById("UpdateImapFolder");
-	  	      if (updateImapFolder != null) {
-	  	    	eval(eXo.core.DOMUtil.findDescendantsByTagName(updateImapFolder, 'a')[0].href.replace("%20", ""));
-	  	    }
-  	    }
-  	  }
+		    folderNumberCountNode = document.getElementById(folders[i]);
+		    if (folderNumberCountNode != null) {
+		  	  if (eXo.core.DOMUtil.findAncestorByClass(folderNumberCountNode, "Folder").className.indexOf("SelectedLabel") > -1) isUpdate = true;
+		  	  if (data.isRead != 'true') {
+		  	    numberStr = folderNumberCountNode.innerHTML;
+		  	    numberStr = numberStr.substring(numberStr.indexOf("(") + 1, numberStr.indexOf(")"));
+		  	    if (numberStr.length == 0) numberStr = "0";
+		  	    folderNumberCountNode.innerHTML = "(" + (parseInt(numberStr) + 1) + ")";
+		      }
+		    } else {
+		      updateImapFolder = document.getElementById("UpdateImapFolder");
+		      if (updateImapFolder != null) {
+		    	eval(eXo.core.DOMUtil.findDescendantsByTagName(updateImapFolder, 'a')[0].href.replace("%20", ""));
+		      }
+		    }
+  	  	}
   	}
   	
-	  if (tbodyMsgList && updateListLabel && isUpdate) {
+	  if (tbodyMsgList && updateListLabel && isUpdate) {		  
 	  	if (viewing == "2") {
 	  		if (data.hasStar != "true") return ;	
 	  	} else if (viewing == "3") {
@@ -127,18 +127,18 @@ UpdateList.prototype.update = function(obj){
 		  		tr.className = "OddItem";
 		  	}
 		  }
-		  var form = eXo.core.DOMUtil.findAncestorByTagName(tbodyMsgList,"form");
+		  var form = eXo.core.DOMUtil.findAncestorByTagName(tbodyMsgList, "form");
 		  eXo.mail.UpdateList.sendRequest(form.action,data.msgId, form);
 		}
   }
 } ;
 
-UpdateList.prototype.sendRequest = function(url, msgId, form){	 
+UpdateList.prototype.sendRequest = function(url, msgId, form){
 	url += "&formOp=UpdateList&objectId=" + msgId + "&ajaxRequest=true";
-	if(form) {
+	if(form == null) {
 		url = (url).split("?")[0];
 	}
-	ajaxAsyncGetRequest(url,false);
+	ajaxAsyncGetRequest(url, false);
 } ;
 
 eXo.mail.UpdateList = new UpdateList();

@@ -368,7 +368,7 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
 
       Message msg = uiMessageList.messageList_.get(msgId);
-
+      
       if (msg != null) {
         MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
         msg = mailSrv.loadTotalMessage(username, accountId, msg) ;
@@ -416,6 +416,7 @@ public class UIMessageList extends UIForm {
           try {
             uiMessageList.toggleMsgStatus(username, accountId, msgs);
           } catch (PathNotFoundException e) {
+            e.printStackTrace();
             uiMessageList.setMessagePageList(null) ;
             uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
@@ -469,7 +470,8 @@ public class UIMessageList extends UIForm {
           }
         } 
         
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessagePreview);
       }          
     }
   }
@@ -1668,6 +1670,7 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiMessageList.init(accountId);
+      uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(false);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
