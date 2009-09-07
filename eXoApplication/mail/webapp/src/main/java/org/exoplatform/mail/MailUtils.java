@@ -58,7 +58,8 @@ public class MailUtils {
   final public static String BACKSLASH = "\\".intern() ;
   public static final String GREATER_THAN = ">".intern() ;
   public static final String SMALLER_THAN = "<".intern() ;
-  final public static String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
+  final public static String SPECIALCHARACTER[] = {"?", "[", "(", "|", ")", "*", "\\", "+", "}", "{", "^", "$", "\""
+    ,"!", "#", "%", "&", ":", ">", "<", "~", "`", "]", "'", "/", "-"} ; ;
   final public static String SUPPORTED_VIEW_TYPE_ATTACH[] = {"gif", "png", "jpg", "jpec", "bmp"} ;
   final public static String SIMPLECHARACTER[] = {GREATER_THAN, SMALLER_THAN, "'", "\""};
   final public static int MAX_POPUP_WIDTH = 900;
@@ -335,6 +336,12 @@ public class MailUtils {
       builder.append(word.trim()) ;
     }
     return builder.toString() ;
+  }
+  
+  public static boolean isSearchValid(String name, String[] regex) {
+    if (isFieldEmpty(name)) return true ;
+    for(String c : regex){ if(name.contains(c)) return false ;}
+    return true ;
   }
   
 }
