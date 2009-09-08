@@ -492,7 +492,7 @@ UIContactPortlet.prototype.swithLayoutCallback = function(layout, status){
 	var layoutcookie = eXo.core.Browser.getCookie(layoutMan.layoutId);
 	
 	if((layout == 2) || (layout == 3)){
-		if(layoutcookie.indexOf('1') >= 0) return ;
+		if(layoutcookie.indexOf('1') >= 0) { return ; }
 	}
 	if(!status) {
 		layoutMan.layouts[layout-1].style.display = "none" ;
@@ -509,10 +509,9 @@ UIContactPortlet.prototype.swithLayoutCallback = function(layout, status){
 		}
 		
 	} else {
-		
 		layoutMan.layouts[layout-1].style.display = "block" ;
 		uiContactPortlet.addCheckedIcon(layout,true) ;
-		if(layout == 1){			
+		if(layout == 1){
 			layoutMan.layouts[layout].style.display = "block" ;
 			layoutMan.layouts[layout+1].style.display = "block" ;
 			panelWorking.style.marginLeft = "225px" ;
@@ -522,6 +521,7 @@ UIContactPortlet.prototype.swithLayoutCallback = function(layout, status){
 			if(layoutcookie.indexOf('3') >= 0) layoutcookie = layoutcookie.replace('3','') ;
 			eXo.core.Browser.setCookie(layoutMan.layoutId,layoutcookie,1);
 		}
+		
 	}
 	uiContactPortlet.isDefaultLayout() ;
 };
@@ -542,7 +542,7 @@ UIContactPortlet.prototype.checkLayoutCallback = function(layoutcookie){
 };
 
 UIContactPortlet.prototype.resetLayoutCallback = function(){
-	var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(document.getElementById("customLayoutViewMenu"), "div", "ItemIcon");
+	var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(document.getElementById("customLayoutViewMenu"), "a", "ItemIcon");
 	var panelWorking = document.getElementById('UIContactContainer');
 	var i = itemIcons.length ;
 	while(i--){
@@ -650,8 +650,8 @@ UIContactPortlet.prototype.synchonizeMenu = function(menuRoot, menu4Remove){
   }
 } ;
 
-UIContactPortlet.prototype.isDefaultLayout = function() {
-	var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(document.getElementById("customLayoutViewMenu"), "div", "ItemIcon");
+UIContactPortlet.prototype.isDefaultLayout = function() {	
+	var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(document.getElementById("customLayoutViewMenu"), "a", "ItemIcon");
 	var len = itemIcons.length ;
 	var j = 0 ;
 	for(var i = 1 ; i < len ; i++) {
