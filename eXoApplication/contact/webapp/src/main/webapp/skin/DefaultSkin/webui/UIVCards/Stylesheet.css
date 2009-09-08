@@ -79,8 +79,10 @@
 }
 
 .UIContactPortlet .UIVCards .TitleVCards .TagIcon {
-	float: right;
-	padding-left: 20px;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 20px; /* orientation=rt */
 	line-height: 25px;
 	height: 22px;
 	cursor: pointer;
@@ -132,6 +134,7 @@
 	background: url('icons/16x16/MailMemberIcon.gif') no-repeat left center; /* orientation=lt */
 	background: url('icons/16x16/MailMemberIcon.gif') no-repeat right center; /* orientation=rt */
 	padding-left: 20px; /* orientation=lt */
+	padding-left: 25px; /* orientation=rt */
 	padding-right: 20px; /* orientation=rt */
 	line-height: 20px;
 	margin-left: 5px; /* orientation=lt */
