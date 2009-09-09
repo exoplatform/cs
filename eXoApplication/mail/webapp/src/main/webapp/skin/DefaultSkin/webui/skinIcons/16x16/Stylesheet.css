@@ -417,6 +417,11 @@
 	background: url('icons/DefaultIcon-rt.gif') no-repeat right center; /* orientation=rt */
 }
 
+.UIMailPortlet .ParentFolder {
+	background: url('icons/ParentIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/ParentIcon-rt.gif') no-repeat right center; /* orientation=rt */
+}
+
 .UIMailPortlet .DeleteAccount {
 	background: url('icons/DeleteAccount.gif') no-repeat left center; /* orientation=lt */
 	background: url('icons/DeleteAccount.gif') no-repeat right center; /* orientation=rt */

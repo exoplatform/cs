@@ -214,6 +214,7 @@ def enableSync = uicomponent.isImap();
     if (!path.equals("") && uicomponent.getSubFolders(path).size() > 0) {
       println("<div class=\"Collapse\" >");
       for (Folder cf : uicomponent.getSubFolders(path)) {
+        boolean hasSubfolder = (uicomponent.getSubFolders(cf.getPath()).size() > 0)
         if (cf != null) {
           String pid = cf.getId() ;
           String name = MailUtils.encodeHTML(cf.getName());
@@ -229,8 +230,10 @@ def enableSync = uicomponent.isImap();
             if (uicomponent.isChecking()) isChecking = true;
 	       selectedClass = "SelectedLabel" ;
 	      }
+          String iconFolder = "Folder";
+          if (hasSubfolder) iconFolder = "ParentFolder";
           StringBuilder builder = new StringBuilder() ;
-          builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder Folder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
+          builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder $iconFolder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
           if (isChecking) builder.append("<div class='CheckingIcon'></div>");
           if (cf.getType() != 2) {
           	 if(enableSync){
@@ -248,7 +251,7 @@ def enableSync = uicomponent.isImap();
           builder.append("</a>");
           builder.append("</div>")
           println(builder.toString());
-          if (uicomponent.getSubFolders(cf.getPath()).size() > 0) { 
+          if (hasSubfolder) { 
             printNodes(cf.getPath(), true);
           }
         }
@@ -261,6 +264,7 @@ def enableSync = uicomponent.isImap();
     if (cf != null) {
       String pid = cf.getId() ;
       String name = MailUtils.encodeHTML(cf.getName());
+      boolean hasSubfolder = (uicomponent.getSubFolders(cf.getPath()).size() > 0);
       long pUnreadMess = cf.getNumberOfUnreadMessage();
       String pCssClass = "CloseFolder" ;
       String pActionLink = uicomponent.event('ChangeFolder', pid);
@@ -273,7 +277,9 @@ def enableSync = uicomponent.isImap();
        selectedClass = "SelectedLabel" ;
       }
       StringBuilder builder = new StringBuilder() ;
-      builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder Folder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
+      String iconFolder = "Folder";
+      if (hasSubfolder) iconFolder = "ParentFolder";
+      builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder $iconFolder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
       if (isChecking) builder.append("<div class='CheckingIcon'></div>");
       if (cf.getType() != 2) {
          if(enableSync){
@@ -292,7 +298,7 @@ def enableSync = uicomponent.isImap();
       builder.append("</div>");
       println(builder.toString());
 
-      if (uicomponent.getSubFolders(cf.getPath()).size() > 0) { 
+      if (hasSubfolder) { 
         printNodes(cf.getPath(), enableSync);
       }
     }
