@@ -1226,6 +1226,7 @@ public class XMPPSessionImpl implements XMPPSession {
     if (chat == null) {
       String roomJID = validateRoomJID(room);
       chat = new MultiUserChat(connection_, roomJID);
+      addListeners(chat);
       multiUserChatManager.addMultiUserChat(chat);
     }
     if (!chat.isJoined()) {
@@ -1234,7 +1235,6 @@ public class XMPPSessionImpl implements XMPPSession {
       } else
         chat.join(nickname);
     }
-    addListeners(chat);
   }
   
   
@@ -1392,6 +1392,7 @@ public class XMPPSessionImpl implements XMPPSession {
     if (chat != null) {
       if (chat.isJoined())
         chat.leave();
+      multiUserChatManager.removeMultiUserChat(chat);
       return true;
     }
     return false;
