@@ -44,6 +44,17 @@ public class MultiUserChatManager {
   public void addMultiUserChat(MultiUserChat chat) {
     chatMap.put(chat.getRoom(), chat);
   }
+  
+  /**
+   * Remove chat from map.
+   * 
+   * @param chat the chat
+   */
+  public void removeMultiUserChat(MultiUserChat chat) {
+    if (chatMap.containsKey(chat.getRoom())) {
+      chatMap.remove(chat.getRoom());
+    }
+  }
 
   /**
    * @param room the room name
