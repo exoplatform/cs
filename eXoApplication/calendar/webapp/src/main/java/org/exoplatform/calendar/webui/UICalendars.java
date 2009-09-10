@@ -87,6 +87,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
                    @EventConfig(listeners = UICalendars.AddCalendarCategoryActionListener.class),
                    @EventConfig(listeners = UICalendars.ShareCalendarActionListener.class),
                    @EventConfig(listeners = UICalendars.ChangeColorActionListener.class),
+                   @EventConfig(listeners = UICalendars.TickActionListener.class),
                    @EventConfig(listeners = UICalendars.CalendarSettingActionListener.class)
                  }
 )
@@ -153,6 +154,16 @@ public class UICalendars extends UIForm  {
       getUIFormCheckBoxInput(cpm.getId()).setChecked(true) ; 
   }
 
+  public List<String> getCheckedCalendars() {
+    List<String> list = new ArrayList<String>();
+    for(UIComponent cpm : getChildren())
+      if (cpm instanceof UIFormCheckBoxInput) {
+        UIFormCheckBoxInput checkbox = (UIFormCheckBoxInput) cpm;
+        if (checkbox.isChecked()) list.add(cpm.getId());
+      }    
+    return list ;
+  }
+  
   protected List<GroupCalendarData> getPrivateCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = CalendarUtils.getCurrentUser() ;
@@ -894,4 +905,19 @@ public class UICalendars extends UIForm  {
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
+  
+  // CS- 3152 only when list view
+  static public class TickActionListener extends EventListener<UICalendars> {
+    public void execute(Event<UICalendars> event) throws Exception {
+      UICalendars uiCalendars = event.getSource() ;
+      UICalendarPortlet uiPortlet = uiCalendars.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      uiViewContainer.refresh();
+      UICalendarContainer uiVContainer = uiPortlet.findFirstComponentOfType(UICalendarContainer.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiVContainer.findFirstComponentOfType(UIMiniCalendar.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
+      
+    }
+  }  
+  
 }
