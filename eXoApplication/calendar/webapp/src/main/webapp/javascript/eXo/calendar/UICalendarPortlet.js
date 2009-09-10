@@ -1581,8 +1581,12 @@ UICalendarPortlet.prototype.filterByCalendar = function(){
     if (document.getElementById("UIWeekViewGrid")) 
         className = "WeekViewEventBoxes"; // TODO : review event box gettting
     var events = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className);
-    if (!events) 
-        return;
+
+     //CS-3152
+    if ((!events || events.length == 0)&& document.getElementById("UIListView")) {
+        eXo.webui.UIForm.submitForm('UICalendars','Tick', true)		
+    }
+    if (!events) return;
     var len = events.length;
     for (var i = 0; i < len; i++) {
         if (events[i].getAttribute("calId") == calid) {
@@ -1644,6 +1648,12 @@ UICalendarPortlet.prototype.runFilterByCategory = function(){
         className = "WeekViewEventBoxes"; // TODO : review event box gettting
     var allEvents = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className);
     var events = eXo.calendar.UICalendarPortlet.getEventsForFilter(allEvents);
+    
+     //CS-3152
+    if ((!events || events.length == 0)&& document.getElementById("UIListView")) {
+        eXo.webui.UIForm.submitForm('UICalendars','Tick', true)		
+    }
+    
     if (!events) 
         return;
     var len = events.length;

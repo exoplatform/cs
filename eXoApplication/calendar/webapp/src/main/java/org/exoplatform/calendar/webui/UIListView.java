@@ -29,6 +29,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -76,8 +77,8 @@ public class UIListView extends UICalendarView {
   private String keyWords_ = null ;
   private int currentPage_ = 0 ;
   public CalendarEventComparator ceCompare_ = new CalendarEventComparator();
-  private int sortedField_ = ceCompare_.getCompareField();
-  private boolean isAscending_ = ceCompare_.getRevertOrder();
+  //private int sortedField_ = ceCompare_.getCompareField();
+  //private boolean isAscending_ = ceCompare_.getRevertOrder();
   
   public UIListView() throws Exception{
     if(getEvents().length > 0 ) {
@@ -127,9 +128,28 @@ public class UIListView extends UICalendarView {
     if(!getViewType().equals(TYPE_BOTH)) {
       eventQuery.setEventType(getViewType()) ;
     }
+   
+    //CS-3152
+    UICalendars uiCalendars = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class);
+    List<String> checkedCals = uiCalendars.getCheckedCalendars() ;
+    List<String> calendarIds = new ArrayList<String>() ; 
+    for (GroupCalendarData groupCalendarData : uiCalendars.getPrivateCalendars())
+      for (org.exoplatform.calendar.service.Calendar cal : groupCalendarData.getCalendars())
+        if (checkedCals.contains(cal.getId())) calendarIds.add(cal.getId());
+    if (uiCalendars.getSharedCalendars() != null)
+      for (org.exoplatform.calendar.service.Calendar cal : uiCalendars.getSharedCalendars().getCalendars())
+        if (checkedCals.contains(cal.getId())) calendarIds.add(cal.getId());    
+    if (calendarIds.size() > 0)
+      eventQuery.setCalendarId(calendarIds.toArray(new String[] {}));
+    else {
+      eventQuery.setCalendarId(new String[] {"null"});
+    }
+    List<String> publicCals = new ArrayList<String>();
+    for (String cal : getPublicCalendars())
+      if (checkedCals.contains(cal)) publicCals.add(cal);
     
     if(uiListContainer.isDisplaySearchResult())  { update(pageList_) ;
-    } else update(new EventPageList(calendarService.getEvents(username, eventQuery, getPublicCalendars()), 10)) ;
+    } else update(new EventPageList(calendarService.getEvents(username, eventQuery, publicCals.toArray(new String[publicCals.size()])), 10)) ;
     if(currentPage_ > 0 && currentPage_ <= pageList_.getAvailablePage()) {
       updateCurrentPage(currentPage_) ;
     }
@@ -172,6 +192,7 @@ public class UIListView extends UICalendarView {
     pageList_ = pageList ;
     updateCurrentPage(pageList_.getCurrentPage()) ;
   }
+  @SuppressWarnings("unchecked")
   protected void updateCurrentPage(long page) throws Exception{
     getChildren().clear() ;
     initCategories() ;
