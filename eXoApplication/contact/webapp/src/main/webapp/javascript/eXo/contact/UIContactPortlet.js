@@ -500,7 +500,8 @@ UIContactPortlet.prototype.swithLayoutCallback = function(layout, status){
 		if(layout == 1){			
 			layoutMan.layouts[layout].style.display = "none" ;
 			layoutMan.layouts[layout+1].style.display = "none" ;
-			panelWorking.style.marginLeft = "0px" ;			
+			if(eXo.core.I18n.isLT()) panelWorking.style.marginLeft = "0px" ;
+			else  panelWorking.style.marginRight = "0px" ;			
 			uiContactPortlet.addCheckedIcon(2,false) ;
 			uiContactPortlet.addCheckedIcon(3,false) ;
 			if(layoutcookie.indexOf('2') < 0) layoutcookie = layoutcookie.concat(2) ;
@@ -514,7 +515,8 @@ UIContactPortlet.prototype.swithLayoutCallback = function(layout, status){
 		if(layout == 1){
 			layoutMan.layouts[layout].style.display = "block" ;
 			layoutMan.layouts[layout+1].style.display = "block" ;
-			panelWorking.style.marginLeft = "225px" ;
+			if(eXo.core.I18n.isLT()) panelWorking.style.marginLeft = "225px" ;
+			else  panelWorking.style.marginRight = "225px" ;
 			uiContactPortlet.addCheckedIcon(2,true) ;
 			uiContactPortlet.addCheckedIcon(3,true) ;
 			if(layoutcookie.indexOf('2') >= 0) layoutcookie = layoutcookie.replace('2','') ;
@@ -533,7 +535,8 @@ UIContactPortlet.prototype.checkLayoutCallback = function(layoutcookie){
 		eXo.contact.UIContactPortlet.addCheckedIcon(parseInt(layoutcookie.charAt(i)),false) ;
 		if(parseInt(layoutcookie.charAt(i)) == 1) {
 			var panelWorking = document.getElementById('UIContactContainer');
-			panelWorking.style.marginLeft = "0px" ;
+			if(eXo.core.I18n.isLT()) panelWorking.style.marginLeft = "0px" ;
+			else  panelWorking.style.marginRight = "0px" ;
 			uiContactPortlet.addCheckedIcon(2,false) ;
 			uiContactPortlet.addCheckedIcon(3,false) ;
 		}
@@ -548,7 +551,8 @@ UIContactPortlet.prototype.resetLayoutCallback = function(){
 	while(i--){
 		eXo.core.DOMUtil.addClass(itemIcons[i],'CheckedMenu');
 	}
-	panelWorking.style.marginLeft = "225px" ;
+	if(eXo.core.I18n.isLT()) panelWorking.style.marginLeft = "225px" ;
+	else  panelWorking.style.marginRight = "225px" ;
 };
 
 UIContactPortlet.prototype.switchLayout = function(layout) {
