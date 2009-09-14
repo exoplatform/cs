@@ -1836,21 +1836,25 @@ public class JCRDataStorage{
 
   public List<FeedData> getFeeds(String username) throws Exception {
     List<FeedData> feeds = new ArrayList<FeedData>() ;
-    Node rssHome = getRssHome(username) ;
-    NodeIterator iter = rssHome.getNodes() ;
-    while(iter.hasNext()) {
-      Node feedNode = iter.nextNode() ;
-      if(feedNode.isNodeType(Utils.EXO_RSS_DATA)) {
-        FeedData feed = new FeedData() ;
-        feed.setTitle(feedNode.getProperty("exo:title").getString()) ;
-        StringBuffer url = new StringBuffer(feedNode.getProperty(Utils.EXO_BASE_URL).getString()) ;  
-        url.append("/").append(PortalContainer.getInstance().getPortalContainerInfo().getContainerName()) ;
-        url.append("/").append(feedNode.getSession().getWorkspace().getName()) ;
-        url.append("/").append(username)  ;
-        url.append("/").append(feedNode.getName())  ;
-        feed.setUrl(url.toString()) ;
-        feeds.add(feed) ;
+    try {
+      Node rssHome = getRssHome(username) ;
+      NodeIterator iter = rssHome.getNodes() ;
+      while(iter.hasNext()) {
+        Node feedNode = iter.nextNode() ;
+        if(feedNode.isNodeType(Utils.EXO_RSS_DATA)) {
+          FeedData feed = new FeedData() ;
+          feed.setTitle(feedNode.getProperty("exo:title").getString()) ;
+          StringBuffer url = new StringBuffer(feedNode.getProperty(Utils.EXO_BASE_URL).getString()) ;  
+          url.append("/").append(PortalContainer.getInstance().getPortalContainerInfo().getContainerName()) ;
+          url.append("/").append(feedNode.getSession().getWorkspace().getName()) ;
+          url.append("/").append(username)  ;
+          url.append("/").append(feedNode.getName())  ;
+          feed.setUrl(url.toString()) ;
+          feeds.add(feed) ;
+        }
       }
+    } catch (Exception e) {
+      log.debug(e);
     }
     return feeds ;
   }
