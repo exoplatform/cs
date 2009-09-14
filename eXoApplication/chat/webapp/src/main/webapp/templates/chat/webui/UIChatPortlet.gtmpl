@@ -275,7 +275,8 @@
                     <div class="WindowPortletInfo">
                         <div class="Icon PortletIcon WindowPortletIcon NovaPortletIcon">
                             <div class="PortletName">
-                                <span class="UnreadMessage" style="color: red">Conversation</span>
+                                <span class="UnreadMessage" style="color: red"></span>
+                                <span>Conversation</span>
                             </div>
                         </div>
                         <div class="ClearLeft">
