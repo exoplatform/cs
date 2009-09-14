@@ -121,7 +121,7 @@ public class MessengerServlet extends HttpServlet implements Connector {
       // }
     } catch (Exception e) {
       LOGGER.error("dispatch method error!");
-      e.printStackTrace();
+      LOGGER.debug(e);
       httpResponse.sendError(500, "This request can't be serve by service.\n"
           + "Check request parameters and try again.");
     }
