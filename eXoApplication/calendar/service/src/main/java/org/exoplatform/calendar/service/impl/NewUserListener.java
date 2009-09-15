@@ -24,6 +24,7 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
@@ -55,12 +56,14 @@ public class NewUserListener extends UserEventListener {
   final public static String ST_WORKINGTIME = "isShowWorkingTime".intern() ; 
   final public static String ST_TIME_BEGIN = "workingTimeBegin".intern() ;
   final public static String ST_TIME_END = "workingTimeEnd".intern() ;
+  final public static String ST_USER_IGNORE = "ignoredUser".intern() ;
 
 
   private CalendarService cservice_;
   private String[] defaultEventCategories_;
   private String defaultCalendarCategory_;
   private String[] defaultCalendar_;
+  private String[] ignore_users_ ;
 
   private CalendarSetting defaultCalendarSetting_ ;
 
@@ -113,11 +116,17 @@ public class NewUserListener extends UserEventListener {
         }
       }
     }
-
+    String ignoredUsers = params.getValueParam(ST_USER_IGNORE).getValue() ;
+    if(ignoredUsers != null) {
+      ignore_users_ = ignoredUsers.split(Utils.COMMA) ;
+    }
   }
 
   public void postSave(User user, boolean isNew) throws Exception {
     if(!isNew) return ;
+    for(String u : ignore_users_) {
+      if (user.getUserName().equalsIgnoreCase(u)) return ;
+    }
     SessionProvider sysProvider = SessionProvider.createSystemProvider();
     ThreadLocalSessionProviderService sessionProviderService = (ThreadLocalSessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
     sessionProviderService.setSessionProvider(null, sysProvider);

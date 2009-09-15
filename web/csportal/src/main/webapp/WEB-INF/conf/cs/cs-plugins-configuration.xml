@@ -112,13 +112,13 @@
 	    <name>contact.new.user.event.listener</name>
 	    <set-method>addListenerPlugin</set-method>
 	    <type>org.exoplatform.contact.service.impl.NewUserListener</type>
-	    <description>description</description>	    
+	    <description>description</description>
 	  </component-plugin>
 	  <component-plugin>
 	    <name>contact.new.membership.event.listener</name>
 	    <set-method>addListenerPlugin</set-method>
 	    <type>org.exoplatform.contact.service.impl.NewMembershipListener</type>
-	    <description>description</description>	    
+	    <description>description</description>	     
 	  </component-plugin>
 	  
 	  <component-plugin>
@@ -191,9 +191,15 @@
         </value-param>
         
          <value-param>
-         <name>workingTimeEnd</name>
-         <value>18:00</value><!--  -->
+	         <name>workingTimeEnd</name>
+	         <value>18:00</value><!--  -->
         </value-param>
+        
+        <value-param>
+	        <name>ignoredUser</name>
+	        <value></value><!-- demo,marry user id, use coma (,) to split values  -->
+        </value-param>
+        
         
 	    </init-params>    
 	  </component-plugin>
@@ -223,6 +229,11 @@
 	      	<value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
       	</value-param>	
       
+        <value-param>
+	        <name>ignoredGroup</name>
+	        <value></value><!-- /platform/guests group id, use coma (,) to split values  -->
+        </value-param>
+        
         
 	    </init-params>    
 	  </component-plugin>
