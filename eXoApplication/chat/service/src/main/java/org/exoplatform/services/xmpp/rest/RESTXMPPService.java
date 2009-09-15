@@ -39,6 +39,7 @@ import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.InputTransformer;
+import org.exoplatform.services.rest.MultivaluedMetadata;
 import org.exoplatform.services.rest.OutputTransformer;
 import org.exoplatform.services.rest.QueryParam;
 import org.exoplatform.services.rest.Response;
@@ -1401,11 +1402,14 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         if (dateFrom.before(Calendar.getInstance().getTime())) {
           list = session.getHistoryFromDateToNow(usernameto, usernamefrom, isGroupChat, dateFrom);
           InputStream inputStream = historyBeanToStream(list);
+          CacheControl ccIEfixed = new CacheControl();//Fix for http://jira.exoplatform.org/browse/CS-3179
+          MultivaluedMetadata headers= new MultivaluedMetadata();
+          headers.putSingle("Content-disposition", "attachment; filename=" + usernameto + "-" + usernamefrom
+                                             + "(" + from + ").txt");
+          headers.putSingle("Expires", "Sun, 17 Dec 1989 07:30:00 GMT");
           return Response.Builder.ok(inputStream, DEFAULT_CONTENT_TYPE)
-                                 .header("Content-disposition",
-                                         "attachment; filename=" + usernameto + "-" + usernamefrom
-                                             + "(" + from + ").txt")
-                                 .cacheControl(cc)
+                                 .headers(headers)
+                                 .cacheControl(ccIEfixed)
                                  .build();
         } else {
           return Response.Builder.withStatus(HTTPStatus.CONFLICT).build();
