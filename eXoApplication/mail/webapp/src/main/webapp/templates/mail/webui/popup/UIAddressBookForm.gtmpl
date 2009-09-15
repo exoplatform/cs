@@ -51,6 +51,19 @@
 	                    <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.delete-contact") %></div>
 	                  </div>
                 	</a>
+                	 <% 
+              			if (uicomponent.getContacts().size() > 0) {
+       						 %>
+                	<div class="ControlButton" onclick="<%=uicomponent.event("SendMultiEmail")%>">
+	                  <div class="IconHolder SendMailIcon">
+	                   <%
+			                 String sendLabel = _ctx.appRes(uicomponent.getName() + ".label.send-multi-email") ;
+			                 String sendLink = uicomponent.event("SendMultiEmail") ;
+			          			%>
+	                    <div class="Label">$sendLabel</div>
+	                  </div>
+	                </div>
+	                <% } %>
                
                 <!--  
                 <div class="SearchForm">
@@ -112,31 +125,7 @@
             </table>
           </div>
         </div>
-        <% 
-              if (uicomponent.getContacts().size() > 0) {
-        %>
-        <div class="UIAction">
-			    <table class="ActionContainer" align="center">
-			      <tr>
-			        <td align="center">
-			          <%
-			                 String sendLabel = _ctx.appRes(uicomponent.getName() + ".label.send-multi-email") ;
-			                 String sendLink = uicomponent.event("SendMultiEmail") ;
-			          %>
-			          <a href="$sendLink" class="ActionButton LightBlueStyle">
-			          <div class="ButtonLeft">
-			            <div class="ButtonRight">
-			              <div class="ButtonMiddle">
-			                $sendLabel
-			                  </div>
-			                </div>
-			            </div>
-			          </a>
-			        </td>
-			      </tr>
-			    </table>
-			  </div>
-			  <% } %>
+        
       </div>
       <div class="RightContacts">
         <div class="ContactContainer">

@@ -507,3 +507,7 @@
  	float: right; /* orientation=lt */
  	float: left; /* orientation=rt */
 }
+
+.UIMailPortlet .SendMailIcon {
+	background: url('icons/SendMailIcon.gif') no-repeat;
+}
