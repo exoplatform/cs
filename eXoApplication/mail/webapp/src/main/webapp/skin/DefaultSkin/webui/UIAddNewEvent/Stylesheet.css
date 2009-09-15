@@ -64,34 +64,36 @@
 .UIMailPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Date {
 	float: left;
 	margin-right: 7px;
+	width: 108px;
 }
 
-.UIAddNewEvent .UIFormGrid .FieldComponent .Date input{
+.UIMailPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Date input{
 	font-size: 11px;
 	width: 104px;
 }
 
-.UIAddNewEvent .UIFormGrid .FieldComponent .Time{
+.UIMailPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Time{
 	font-size: 11px;
+	float: left;
 }
 
-.UIAddNewEvent .UIFormGrid .FieldComponent .Time .selectbox{
+.UIMailPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Time .selectbox{
 	width: 104px;
 }
 
-.UIAddNewEvent .UIFormGrid .FieldComponent .ReminderLabel{
+.UIMailPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .ReminderLabel{
 	float:left;
 }
 
-.UIAddNewEvent .UIFormGrid .FieldComponent .ReminderTime .selectbox{
+.UIMailPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .ReminderTime .selectbox{
 	width: 60px;
 }
 
-.UIAddNewEvent .HorizontalLayout .FieldComponent .UIAction {
+.UIMailPortlet .UIAddNewEvent .HorizontalLayout .FieldComponent .UIAction {
 	float: left;
 	padding: 0px;
 	margin-left: 4px; 
 }
-.UIAddNewEvent .UIFormGrid .FieldComponent .Time .UIComboboxInput{
+.UIMailPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Time .UIComboboxInput{
 	width: 120px;
 }
