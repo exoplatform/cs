@@ -17,7 +17,12 @@
 package org.exoplatform.calendar.service;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
+
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.Membership;
+import org.exoplatform.services.organization.OrganizationService;
 
 /**
  * Created by The eXo Platform SARL
@@ -132,6 +137,11 @@ public class Utils {
   public static final String COLON = ":".intern() ;
   public static final String SLASH = "/".intern() ;
   
+  public static final String SLASH_COLON = "/:".intern() ;
+  public static final String COLON_SLASH = ":/".intern() ;
+  public static final String ANY = "*.*".intern();
+  public static final String ANY_OF = "*.".intern();
+  
   final public static String CALENDAR_REMINDER = "reminders".intern();
   final public static String CALENDAR_APP = "CalendarApplication".intern() ;
 
@@ -174,4 +184,48 @@ public class Utils {
   public static boolean isEmpty(String string) {
     return string == null || string.trim().length() == 0 ;
   }
+  
+  
+  @SuppressWarnings("unchecked")
+  public static boolean canEdit(OrganizationService oService, String[] savePerms, String username) throws Exception {
+    StringBuffer sb = new StringBuffer(username) ;
+    if(oService != null) {
+      Collection<Group> groups = oService.getGroupHandler().findGroupsOfUser(username) ;
+      for(Group g : groups) {
+        sb.append(COMMA).append(g.getId()).append(SLASH_COLON).append(ANY) ;
+        sb.append(COMMA).append(g.getId()).append(SLASH_COLON).append(username) ;
+        Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUserAndGroup(username, g.getId()) ;
+        for(Membership mp : memberShipsType) {
+          sb.append(COMMA).append(g.getId()).append(SLASH_COLON).append(ANY_OF + mp.getMembershipType()) ;
+        }
+      }
+    }
+    return hasEditPermission(savePerms, sb.toString().split(Utils.COMMA)) ;
+  }
+  public static boolean isMemberShipType(Collection<Membership> mbsh, String value) {
+    if(!isEmpty(value))
+      for (String check : value.split(COMMA)) { 
+        check = check.trim() ;
+        if(check.lastIndexOf(ANY_OF) > -1) {
+          if(ANY.equals(check)) return true ;
+          value = check.substring(check.lastIndexOf(ANY_OF) + ANY_OF.length()) ;
+          if(mbsh!= null && !mbsh.isEmpty()) {
+            for(Membership mb : mbsh) {
+              if(mb.getMembershipType().equals(value)) return true ; 
+            }
+          }
+        }
+      }
+    return false ;
+  }
+  
+  public static boolean hasEditPermission(String[] savePerms, String[] checkPerms) {
+    if(savePerms != null)
+      for(String sp : savePerms) {
+        for (String cp : checkPerms) {
+          if(sp.equals(cp)) {return true ;}      
+        }
+      }
+    return false ;
+  } 
 }
