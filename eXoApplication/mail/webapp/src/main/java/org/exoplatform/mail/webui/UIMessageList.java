@@ -362,7 +362,6 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
-      uiMessagePreview.setRendered(true) ;
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
@@ -469,15 +468,18 @@ public class UIMessageList extends UIForm {
             mailSrv.toggleMessageProperty(username, accountId, msgL, Utils.IS_RETURN_RECEIPT);
           }
         } 
-        
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessagePreview);
+        if (!((UIMessageArea) uiMessageList.getParent()).isNoSplitLayout()) {
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiMessagePreview);
+        } else {
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
+        }
       }          
     }
   }
   
   private void toggleMsgStatus(String username, String accountId, List<Message> msgs) throws Exception {
-    MailUtils.getMailService().toggleMessageProperty(username, accountId, msgs, Utils.EXO_ISUNREAD); 
+    MailUtils.getMailService().toggleMessageProperty(username, accountId, msgs, Utils.EXO_ISUNREAD);
   }
   
   public boolean isShowUnread(Message msg) throws Exception {
