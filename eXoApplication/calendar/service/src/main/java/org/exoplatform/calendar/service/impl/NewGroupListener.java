@@ -7,9 +7,11 @@ package org.exoplatform.calendar.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tools.ant.filters.TokenFilter.IgnoreBlank;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.Group;
@@ -32,6 +34,10 @@ public class NewGroupListener extends GroupEventListener {
 	private String defaultTimeZone ;
 	private String[] editPermission ; ;
 	private String[] viewPermission ;
+	private String[] groupIgnore_ ;
+	final public String ST_GROUP_IGNORE = "ignoredGroup".intern() ;
+	
+	
 	/**
 	 * 
 	 * @param calendarService Calendar service geeting from the Portlet Container
@@ -49,12 +55,15 @@ public class NewGroupListener extends GroupEventListener {
 			defaultCalendarDescription = params.getValueParam("defaultCalendarDescription").getValue() ;
 		if(params.getValueParam("defaultLocale") != null) defaultLocale = params.getValueParam("defaultLocale").getValue() ;
 		if(params.getValueParam("defaultTimeZone") != null) defaultTimeZone = params.getValueParam("defaultTimeZone").getValue() ;
+		if(params.getValueParam(ST_GROUP_IGNORE) != null) groupIgnore_ = params.getValueParam(ST_GROUP_IGNORE).getValue().split(Utils.COMMA);
 	}
 
 	public void postSave(Group group, boolean isNew) throws Exception { 
 		if (!isNew) return;
 		String groupId = group.getId();
-
+		for(String g : groupIgnore_) {
+		  if(groupId.equalsIgnoreCase(g)) return ;
+		}
 		boolean isPublic = true;
 		Calendar calendar = new Calendar() ;
 		calendar.setName(group.getGroupName()+" calendar") ;
