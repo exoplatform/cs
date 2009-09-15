@@ -64,6 +64,7 @@
 .UIMailPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Date {
 	float: left;
 	margin-right: 7px;
+	width: 108px;
 }
 
 .UIAddNewEvent .UIFormGrid .FieldComponent .Date input{
@@ -73,6 +74,7 @@
 
 .UIAddNewEvent .UIFormGrid .FieldComponent .Time{
 	font-size: 11px;
+	float: left;
 }
 
 .UIAddNewEvent .UIFormGrid .FieldComponent .Time .selectbox{
