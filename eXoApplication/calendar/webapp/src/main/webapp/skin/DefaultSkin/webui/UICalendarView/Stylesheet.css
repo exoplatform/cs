@@ -648,6 +648,11 @@
 	_padding-left: 0px;
 }
 
+.UIListView .AttachmentIcon{
+	background-position: -6px -156px;
+	width: 14px;
+}
+
 .UIListView .highPriorityIcon {
 	_position:static;
  margin: auto;
