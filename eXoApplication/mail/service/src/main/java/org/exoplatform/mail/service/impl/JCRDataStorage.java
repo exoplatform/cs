@@ -1008,7 +1008,7 @@ public class JCRDataStorage {
       String from ;
 
       String msgId = MimeMessageParser.getMessageId(msg);
-      logger.warn("MessageId = " + msgId);
+      logger.debug("MessageId = " + msgId);
       Calendar gc = MimeMessageParser.getReceivedDate(msg);
       boolean isReadMessage = MimeMessageParser.isSeenMessage(msg);
       boolean isReturnReceipt = MimeMessageParser.requestReturnReceipt(msg);
@@ -1020,7 +1020,7 @@ public class JCRDataStorage {
       if (msgHomeNode == null) return false;
       try {
         Node msgNode = msgHomeNode.getNode(msgId);
-        logger.warn("Check duplicate ......................................");
+        logger.debug("Check duplicate ......................................");
         // check duplicate
         for (int i = 0; i < folderIds.length; i ++) {
           String folderId = folderIds[i];
@@ -1042,14 +1042,14 @@ public class JCRDataStorage {
 
       }
 
-      logger.warn("Saving message to JCR ...");
+      logger.debug("Saving message to JCR ...");
       t1 = System.currentTimeMillis();
       Node node = null;
       try {
         node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
       } catch (Exception e) {
         msgId = "Message" + IdGenerator.generate(); // generating another msgId
-        logger.warn("The MessageId is NOT GOOD, generated another one = " + msgId);
+        logger.debug("The MessageId is NOT GOOD, generated another one = " + msgId);
         node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
       }
       try {
@@ -1133,12 +1133,12 @@ public class JCRDataStorage {
         if (saveTotal) saveTotalMessage(username, accId, msgId, msg, sProvider) ;
 
         t4 = System.currentTimeMillis();
-        logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
-        logger.warn("Adding message to thread ...");
+        logger.debug("Saved total message to JCR finished : " + (t4 - t1) + " ms");
+        logger.debug("Adding message to thread ...");
         t1 = System.currentTimeMillis();
         addMessageToThread(sProvider, username, accId, inReplyToHeader, node);
         t2 = System.currentTimeMillis();
-        logger.warn("Added message to thread finished : " + (t2 - t1) + " ms");
+        logger.debug("Added message to thread finished : " + (t2 - t1) + " ms");
 
         for (int i = 0; i < folderIds.length; i++) {
           increaseFolderItem(sProvider, username, accId, folderIds[i], isReadMessage);
@@ -1150,9 +1150,9 @@ public class JCRDataStorage {
           msgHomeNode.refresh(true);
         } catch(Exception ex) {
           e.printStackTrace();
-          logger.warn(" [WARNING] Can't refresh.");
+          logger.debug(" [WARNING] Can't refresh.");
         }
-        logger.warn(" [WARNING] Cancel saving message to JCR.");
+        logger.debug(" [WARNING] Cancel saving message to JCR.");
         return false;
       }
     } finally {
@@ -1391,7 +1391,7 @@ public class JCRDataStorage {
       } else if (obj instanceof Multipart) {
         body = setMultiPart((Multipart) obj, node, body);
       } else {
-        logger.warn("This is a unknown type.");
+        logger.debug("This is a unknown type.");
       }
     }
     return body;
@@ -2676,7 +2676,7 @@ public class JCRDataStorage {
           msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
         } catch(Exception e) {
           //e.printStackTrace();
-          logger.warn("Can't load message body");
+          logger.debug("Can't load message body");
         }
       } catch (PathNotFoundException e) {
         //e.printStackTrace();
@@ -2705,7 +2705,7 @@ public class JCRDataStorage {
       Value[] propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
       for (int i = 0; i < propFolders.length; i++) {
         if (propFolders[i].getString().indexOf(folderId) > -1) {
-          logger.warn("DUPLICATE MAIL ... removed");
+          logger.debug("DUPLICATE MAIL ... removed");
           return Utils.MAIL_DUPLICATE_IN_SAME_FOLDER;
         }
       }
@@ -2737,13 +2737,13 @@ public class JCRDataStorage {
       long t1, t2, t3, t4;
       String from ;
       String msgId = MimeMessageParser.getMessageId(msg);
-      logger.warn("MessageId = " + msgId);
+      logger.debug("MessageId = " + msgId);
       Calendar gc = MimeMessageParser.getReceivedDate(msg);
       Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());
       if (msgHomeNode == null) return false;
       try {
         Node msgNode = msgHomeNode.getNode(msgId);
-        logger.warn("Check duplicate ......................................");
+        logger.debug("Check duplicate ......................................");
         // check duplicate
         for (int i = 0; i < folderIds.length; i ++) {
           String folderId = folderIds[i];
@@ -2763,7 +2763,7 @@ public class JCRDataStorage {
 
       }
 
-      logger.warn("Saving message to JCR ...");
+      logger.debug("Saving message to JCR ...");
       t1 = System.currentTimeMillis();
       Node node = null;
       try {
@@ -2771,7 +2771,7 @@ public class JCRDataStorage {
       } catch (Exception e) {
         // generating another msgId
         msgId = "Message" + IdGenerator.generate();
-        logger.warn("The MessageId is NOT GOOD, generated another one = " + msgId);
+        logger.debug("The MessageId is NOT GOOD, generated another one = " + msgId);
         node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE);
       }
       try {
@@ -2827,7 +2827,7 @@ public class JCRDataStorage {
         }
         node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
 
-        logger.warn("Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B");
+        logger.debug("Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B");
         t2 = System.currentTimeMillis();
 
         MimeMessage cmsg = (MimeMessage) msg;
@@ -2857,7 +2857,7 @@ public class JCRDataStorage {
         node.setProperty(Utils.EXO_CONTENT_TYPE, contentType);
         node.setProperty(Utils.EXO_BODY, Utils.decodeText(body));
         t3 = System.currentTimeMillis();
-        logger.warn("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
+        logger.debug("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
 
         node.save();
 
@@ -2879,13 +2879,13 @@ public class JCRDataStorage {
 
         t4 = System.currentTimeMillis();
         logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
-        logger.warn("Adding message to thread ...");
+        logger.debug("Adding message to thread ...");
         t1 = System.currentTimeMillis();
         addMessageToThread(sProvider, username, accId, MimeMessageParser.getInReplyToHeader(msg),node);
         t2 = System.currentTimeMillis();
-        logger.warn("Added message to thread finished : " + (t2 - t1) + " ms");
+        logger.debug("Added message to thread finished : " + (t2 - t1) + " ms");
 
-        logger.warn("Updating number message to folder ...");
+        logger.debug("Updating number message to folder ...");
         t1 = System.currentTimeMillis();
 
         for (int i = 0; i < folderIds.length; i++) {
@@ -2893,7 +2893,7 @@ public class JCRDataStorage {
         }
 
         t2 = System.currentTimeMillis();
-        logger.warn("Updated number message to folder finished : " + (t2 - t1) + " ms");
+        logger.debug("Updated number message to folder finished : " + (t2 - t1) + " ms");
         return true;
 
       } catch (Exception e) {
@@ -2901,9 +2901,9 @@ public class JCRDataStorage {
           msgHomeNode.refresh(true);
         } catch(Exception ex) {
           e.printStackTrace();
-          logger.warn(" [WARNING] Can't refresh.");
+          logger.debug(" [WARNING] Can't refresh.");
         }
-        logger.warn(" [WARNING] Cancel saving message to JCR.");
+        logger.debug(" [WARNING] Cancel saving message to JCR.");
         return false;
       }
     } finally {
