@@ -64,6 +64,38 @@ public class MailWebservice implements ResourceContainer {
   }
 
   @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/cs/mail/synchfolders/{username}/{accountId}/")
+  @OutputTransformer(StringOutputTransformer.class)
+  public Response synchFolders(@URIParam("username")
+  String userName, @URIParam("accountId")
+  String accountId) throws Exception {
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    MailService mailService = (MailService) ExoContainerContext
+        .getCurrentContainer().getComponentInstanceOfType(MailService.class);
+    
+    CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
+    
+    // try to start if no checking info available
+    if (checkingInfo == null) {
+      mailService.synchImapFolders(userName, accountId);
+    } 
+    
+    StringBuffer buffer = new StringBuffer();
+    buffer.append("<info>");
+    buffer.append("  <checkingmail>");
+    buffer.append("    <status>" + CheckingInfo.START_CHECKMAIL_STATUS + "</status>");
+    if (checkingInfo != null) {
+      buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
+    }
+    buffer.append("  </checkingmail>");
+    buffer.append("</info>");
+
+    return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
+  }
+  
+  @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/cs/mail/stopcheckmail/{username}/{accountId}/")
   @OutputTransformer(StringOutputTransformer.class)
   public Response stopCheckMail(@URIParam("username")
@@ -99,6 +131,8 @@ public class MailWebservice implements ResourceContainer {
     return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 
+
+  
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/cs/mail/checkmailjobinfo/{username}/{accountId}/")
   @OutputTransformer(StringOutputTransformer.class)

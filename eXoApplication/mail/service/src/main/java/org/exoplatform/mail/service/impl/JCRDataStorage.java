@@ -99,7 +99,7 @@ public class JCRDataStorage {
 
   private Node getMailHomeNode(SessionProvider sProvider, String username) throws Exception {
     //  CS-3016    
-    SessionProvider sessionProvider = createSystemProvider() ;
+    SessionProvider sessionProvider = createSessionProvider() ;
     Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sessionProvider, username);
     Node mailNode = null;
     try { 
@@ -2918,20 +2918,17 @@ public class JCRDataStorage {
    * @see SessionProviderService#getSessionProvider(null)
    */
   private SessionProvider createSessionProvider() {
-      ExoContainer container = ExoContainerContext.getCurrentContainer();
-     // PortalContainer.setInstance(portalContainer);
-      SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-      SessionProvider provider = service.getSessionProvider(null);
-      if (service == null) {
-        PortalContainer portalContainer = PortalContainer.getInstance();
-        service = (SessionProviderService) portalContainer.getComponentInstanceOfType(SessionProviderService.class);
-        provider = service.getSessionProvider(null);
-      }
-      if (provider == null) {
-        //logger.info("eXo Mail Service: No user session provider was available, using a system session provider");
-        provider = service.getSystemSessionProvider(null);
-      }
-      return provider;
+    ExoContainer container = null;    
+    try {
+      container = PortalContainer.getInstance();   
+    } catch(IllegalStateException ie) {
+      container = ExoContainerContext.getCurrentContainer();
+    } 
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    SessionProvider provider = service.getSessionProvider(null);    
+    if (provider == null) provider = service.getSystemSessionProvider(null);
+    
+    return provider;  
   }
 
   /**
@@ -2943,11 +2940,5 @@ public class JCRDataStorage {
     if (sessionProvider != null) {
       sessionProvider.close();
     }
-  }
-
-  private SessionProvider createSystemProvider() {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    return service.getSystemSessionProvider(null) ;    
   }
 }

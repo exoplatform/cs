@@ -727,6 +727,23 @@ public class MailServiceImpl implements MailService, Startable {
     return msgMap ;
   }
   
+  public void synchImapFolders(String username, String accountId) throws Exception {
+    CheckingInfo info = new CheckingInfo();
+    String key = username + ":" + accountId;
+    checkingLog_.put(key, info);
+    Account account = getAccountById(username, accountId);
+    IMAPStore store = openIMAPConnection(username, account, info);  
+    if (store != null) {
+      info.setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
+      info.setStatusMsg("Synchronizing imap folder ...");
+      synchImapFolders(username, accountId, null, store.getDefaultFolder().list());
+      info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
+      info.setStatusMsg("Finished synchronizing imap folder ...");
+      info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
+      removeCheckingInfo(username, accountId);
+    }
+  }
+  
   private List<javax.mail.Folder> synchImapFolders(String username, String accountId, Folder parentFolder, javax.mail.Folder[] folders) throws Exception {
     List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
     Folder folder;
@@ -843,7 +860,7 @@ public class MailServiceImpl implements MailService, Startable {
     }
   }
   
-  public void getSynchnizeImapServer(String username, String accountId, String folderId) throws Exception {
+  private void getSynchnizeImapServer(String username, String accountId, String folderId, boolean synchFolders) throws Exception {
     CheckingInfo info = new CheckingInfo();
     String key = username + ":" + accountId;
     checkingLog_.put(key, info);
@@ -855,7 +872,8 @@ public class MailServiceImpl implements MailService, Startable {
       imapStore_ = store;
       info.setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
       info.setStatusMsg("Synchronizing imap folder ...");
-      List<javax.mail.Folder> folderList = synchImapFolders(username, accountId, null, store.getDefaultFolder().list());
+      List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
+      if (synchFolders) folderList = synchImapFolders(username, accountId, null, store.getDefaultFolder().list());
       info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
       info.setStatusMsg("Finished synchronizing imap folder ...");
       if (!Utils.isEmptyField(folderId)) {
@@ -1067,7 +1085,8 @@ public class MailServiceImpl implements MailService, Startable {
       if (isPop3) {
         return checkPop3Server(username, accountId);
       } else if (isImap) {
-        getSynchnizeImapServer(username, accountId, folderId);
+        boolean synchFolder = !(getFolders(username, accountId, true).size() > 0);
+        getSynchnizeImapServer(username, accountId, folderId, synchFolder);
       }
     }
     return messageList ;

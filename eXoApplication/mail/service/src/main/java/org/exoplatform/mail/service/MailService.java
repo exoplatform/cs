@@ -436,6 +436,8 @@ public interface MailService {
    */
   public Message sendMessage(String username, Message message) throws Exception ;
  
+  public void synchImapFolders(String username, String accountId) throws Exception ;
+  
   /**
    * This method should check  for the new message in the mail server, download and save them in the 
    * Inbox folder
