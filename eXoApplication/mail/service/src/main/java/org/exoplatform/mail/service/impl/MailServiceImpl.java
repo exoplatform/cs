@@ -892,7 +892,11 @@ public class MailServiceImpl implements MailService, Startable {
               synchImapMessage(username, accountId, fd, key);
             }
           }  
-        } catch (Exception e) { }
+        } catch (Exception e) { 
+        } finally {
+          checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
+          removeCheckingInfo(username, accountId);
+        }
       } else {
         for (javax.mail.Folder folder : folderList) {
           if (!Utils.isEmptyField(info.getRequestingForFolder_()) && !info.getRequestingForFolder_().equals("checkall")) {          
@@ -908,15 +912,17 @@ public class MailServiceImpl implements MailService, Startable {
             synchImapMessage(username, accountId, folder, key);
           } catch (MessagingException e){
             System.err.println("Failed to open '" + folder.getName() + "' folder as read-only");
+            checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
+            removeCheckingInfo(username, accountId);
             e.printStackTrace();
           }
         }
+        checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
+        removeCheckingInfo(username, accountId);
       }
       logger.debug("/////////////////////////////////////////////////////////////");
       logger.debug("/////////////////////////////////////////////////////////////");
       //store.close();
-      checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
-      removeCheckingInfo(username, accountId);
     }
   }
   
@@ -1060,7 +1066,7 @@ public class MailServiceImpl implements MailService, Startable {
         FetchMailContentThread downloadContentMail = new FetchMailContentThread(storage_, msgMap, i, folder, username, accountId);
         new Thread(downloadContentMail).start();        
       }      
-      checkingLog_.get(key).setStatusMsg("Synchronization finished for " + folder.getName() + " folder.");
+      checkingLog_.get(key).setStatusMsg("Finished downloading for " + folder.getName() + " folder.");
       logger.debug("#### Synchronization finished for " + folder.getName() + " folder.");
 
       if (!account.isSavePassword()) account.setIncomingPassword("");
