@@ -870,12 +870,14 @@ public class MailServiceImpl implements MailService, Startable {
     
     if (store != null) {
       imapStore_ = store;
-      info.setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
-      info.setStatusMsg("Synchronizing imap folder ...");
       List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
-      if (synchFolders) folderList = synchImapFolders(username, accountId, null, store.getDefaultFolder().list());
-      info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
-      info.setStatusMsg("Finished synchronizing imap folder ...");
+      if (synchFolders) {
+        info.setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
+        info.setStatusMsg("Synchronizing imap folder ...");
+        folderList = synchImapFolders(username, accountId, null, store.getDefaultFolder().list());
+        info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
+        info.setStatusMsg("Finished synchronizing imap folder ...");
+      }
       if (!Utils.isEmptyField(folderId)) {
         javax.mail.Folder fd = null;
         Folder f = getFolder(username, accountId, folderId);
@@ -913,7 +915,7 @@ public class MailServiceImpl implements MailService, Startable {
       logger.debug("/////////////////////////////////////////////////////////////");
       logger.debug("/////////////////////////////////////////////////////////////");
       //store.close();
-      info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
+      checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
       removeCheckingInfo(username, accountId);
     }
   }
@@ -1058,6 +1060,7 @@ public class MailServiceImpl implements MailService, Startable {
         FetchMailContentThread downloadContentMail = new FetchMailContentThread(storage_, msgMap, i, folder, username, accountId);
         new Thread(downloadContentMail).start();        
       }      
+      checkingLog_.get(key).setStatusMsg("Synchronization finished for " + folder.getName() + " folder.");
       logger.debug("#### Synchronization finished for " + folder.getName() + " folder.");
 
       if (!account.isSavePassword()) account.setIncomingPassword("");

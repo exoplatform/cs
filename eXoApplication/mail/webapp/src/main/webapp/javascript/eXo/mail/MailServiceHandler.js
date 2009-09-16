@@ -201,12 +201,14 @@ MailServiceHandler.prototype.destroy = function() {
   if (st == this.FINISHED_CHECKMAIL_STATUS || st == this.CONNECTION_FAILURE || st == this.RETRY_PASSWORD) {
     eXo.core.Browser.setCookie('cs.mail.checkingmail' + this.accountId, 'false');
     var stopLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopCheckMail') ;
+    
     stopLabel.style.display = 'none' ;
     if (st == this.RETRY_PASSWORD && this.checkMailInfobarNode.style.display == 'block') {
       eXo.webui.UIForm.submitForm('UIMessageList','ComfirmPassword', true) ;
     } else if (st == this.FINISHED_CHECKMAIL_STATUS){
       var refeshLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Here');
-      eval(eXo.core.DOMUtil.findDescendantsByTagName(refeshLabel, 'a')[0].href.replace("%20", ""))
+      this.checkMailInfobarNode.style.display = 'none';
+      eval(eXo.core.DOMUtil.findDescendantsByTagName(refeshLabel, 'a')[0].href.replace("%20", ""));
     } else {
       var hideLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Hide') ;
       hideLabel.style.display = 'block' ;
