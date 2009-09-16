@@ -21,15 +21,15 @@
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.UIMailDragDrop.onLoad');
 %>
 
-<div class="MailWorkingDetails SpliterContainer" id="<%=uicomponent.getId()%>">
+<div class="MailWorkingDetails SpliterContainer">
 	<%uicomponent.renderChild(UIFetchingBar.class);%>
-	
+	<div id="<%=uicomponent.getId()%>">
   <%
     if (uicomponent.isVerticalLayout()) {
       if (uicomponent.getUIMessagePreview().getMessage() == null) {
   %>
       <div id="VeticalLeftLayout" style="width:100%; float:left;">
-      <div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px; overflow:none; min-width:600px; width:100%">    
+        <div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px; overflow:none; min-width:600px; width:100%">    
         <%uicomponent.renderChild(UIMessageList.class);%>
         </div>
       </div>
@@ -85,4 +85,4 @@
 	  }
   %>
 </div>
-
+</div>

@@ -468,12 +468,7 @@ public class UIMessageList extends UIForm {
             mailSrv.toggleMessageProperty(username, accountId, msgL, Utils.IS_RETURN_RECEIPT);
           }
         } 
-        if (!((UIMessageArea) uiMessageList.getParent()).isNoSplitLayout()) {
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiMessagePreview);
-        } else {
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
-        }
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
       }          
     }
   }
