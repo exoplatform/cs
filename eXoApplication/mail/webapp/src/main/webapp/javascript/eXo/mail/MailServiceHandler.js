@@ -115,6 +115,19 @@ MailServiceHandler.prototype.checkMailWrapper = function() {
   eXo.mail.MailServiceHandler.checkMail();
 };
 
+MailServiceHandler.prototype.synchImapFolders = function(isUpdateUI) {
+	if (!this.accountId || !this.userName) {
+	    return;
+	}
+		  
+	this.isUpdateUI_ = isUpdateUI;
+		  
+	this.activeAction = this.CHECK_MAIL_ACTION;
+	this.tryCount = 0;
+	var url = this.SERVICE_BASED_URL + '/synchfolders/' + this.userName + '/' + this.accountId + '/';
+	this.makeRequest(url, this.HTTP_GET, '', this.CHECK_MAIL_ACTION);
+}
+
 MailServiceHandler.prototype.checkMail = function(isUpdateUI, folderId) {
   if (!this.accountId ||
       !this.userName) {

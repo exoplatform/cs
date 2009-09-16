@@ -204,7 +204,7 @@ def enableSync = uicomponent.isImap();
   <div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
   <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.my-folders") %></div>
   <% if(enableSync){ %>
-    <div id="SynchronizeIconRefreshFolder" class="SyncIcon" title="" onclick="javascript:eXo.mail.MailServiceHandler.checkMail(true,'<%=uicomponent.getSelectedFolder()%>'); this.className = 'SyncingIcon';"><span></span></div>
+    <div id="SynchronizeIconRefreshFolder" class="SyncIcon" title="" onclick="javascript:eXo.mail.MailServiceHandler.synchImapFolders(true); this.className = 'SyncingIcon';"><span></span></div>
   <% } %>
   <div style="clear: both"><span></span></div>
 </div>
