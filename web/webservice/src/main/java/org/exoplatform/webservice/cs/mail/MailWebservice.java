@@ -80,15 +80,15 @@ public class MailWebservice implements ResourceContainer {
     // try to start if no checking info available
     if (checkingInfo == null) {
       mailService.synchImapFolders(userName, accountId);
+      checkingInfo = mailService.getCheckingInfo(userName, accountId);
     } 
     
     StringBuffer buffer = new StringBuffer();
     buffer.append("<info>");
     buffer.append("  <checkingmail>");
-    buffer.append("    <status>" + CheckingInfo.START_CHECKMAIL_STATUS + "</status>");
-    if (checkingInfo != null) {
-      buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
-    }
+    buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
+    buffer.append("    <status>" + checkingInfo.getStatusCode() + "</status>");
+    buffer.append("    <syncFolderStatus>" + checkingInfo.getSyncFolderStatus() + "</syncFolderStatus>");
     buffer.append("  </checkingmail>");
     buffer.append("</info>");
 
