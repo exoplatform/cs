@@ -327,7 +327,7 @@
 	-moz-user-select : none ;
 	cursor: move ;
 	overflow:hidden;
-	_padding-left: 17px;
+	_width: 90px;
 }
 
 .UIWeekView .EventDayContent .EventContainer {
@@ -1092,8 +1092,8 @@
 }
 
 .UIMonthView .EventMonthContent .EventCheckbox .checkbox{
-	 margin: 3px 4px 0px 2px; /* orientation=lt */
- 	 margin: 3px 2px 0px 4px; /* orientation=rt */
+	 margin: 3px 0px 0px 2px; /* orientation=lt */
+ 	 margin: 3px 2px 0px 0px; /* orientation=rt */
 	 *margin: 0px 0px 0px 0px;
 }
 
@@ -1119,9 +1119,10 @@
 .UIMonthView .EventMonthContent .EventLabel {
 	line-height: 17px;
 	height:17px;
-	_width: 85%;
+	_width: 90%;
 	white-space: nowrap;
-	-moz-user-select : none ;	
+	-moz-user-select : none;
+	overflow-x: hidden;	
 }
 
 .UICalendarPortlet .MoreEvent {

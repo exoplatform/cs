@@ -412,8 +412,8 @@
 .UICalendarPortlet .busyIcon {
 	float:left; /* orientation=lt */
 	float:right; /* orientation=rt */
-	background: url('icons/CalendarIcons.gif') no-repeat left -1867px; /* orientation=lt */
-	background: url('icons/CalendarIcons.gif') no-repeat right -1867px; /* orientation=rt */
+	background: url('icons/CalendarIcons.gif') no-repeat left -1865px; /* orientation=lt */
+	background: url('icons/CalendarIcons.gif') no-repeat right -1865px; /* orientation=rt */
 }
 
 .UICalendarPortlet .outsideIcon {
