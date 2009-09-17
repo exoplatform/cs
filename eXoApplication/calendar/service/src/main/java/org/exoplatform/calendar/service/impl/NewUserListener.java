@@ -24,9 +24,9 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
-import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValuesParam;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.User;
@@ -56,17 +56,24 @@ public class NewUserListener extends UserEventListener {
   final public static String ST_WORKINGTIME = "isShowWorkingTime".intern() ; 
   final public static String ST_TIME_BEGIN = "workingTimeBegin".intern() ;
   final public static String ST_TIME_END = "workingTimeEnd".intern() ;
-  final public static String ST_USER_IGNORE = "ignoredUser".intern() ;
+  final public static String ST_USER_IGNORE = "ignoredUsers".intern() ;
 
 
   private CalendarService cservice_;
   private String[] defaultEventCategories_;
   private String defaultCalendarCategory_;
   private String[] defaultCalendar_;
-  private String[] ignore_users_ ;
+  private List<String> ignore_users_ ;
 
   private CalendarSetting defaultCalendarSetting_ ;
 
+
+  /**
+   * 
+   * @param  Calendar service geeting from the Portlet Container
+   * @param params  parameters defined in the cs-plugins-configuration.xml
+   */
+  @SuppressWarnings("unchecked")
   public NewUserListener(CalendarService cservice, InitParams params)
   throws Exception {
     cservice_ = cservice;
@@ -116,17 +123,18 @@ public class NewUserListener extends UserEventListener {
         }
       }
     }
-    String ignoredUsers = params.getValueParam(ST_USER_IGNORE).getValue() ;
-    if(ignoredUsers != null) {
-      ignore_users_ = ignoredUsers.split(Utils.COMMA) ;
+    ValuesParam ignoredUsers = params.getValuesParam(ST_USER_IGNORE) ;
+    if(ignoredUsers != null && !ignoredUsers.getValues().isEmpty()) {
+      ignore_users_ = ignoredUsers.getValues() ;
     }
   }
 
   public void postSave(User user, boolean isNew) throws Exception {
     if(!isNew) return ;
-    for(String u : ignore_users_) {
-      if (user.getUserName().equalsIgnoreCase(u)) return ;
-    }
+    if(ignore_users_ != null && !ignore_users_.isEmpty())
+      for(String u : ignore_users_) {
+        if (user.getUserName().equalsIgnoreCase(u)) return ;
+      }
     SessionProvider sysProvider = SessionProvider.createSystemProvider();
     ThreadLocalSessionProviderService sessionProviderService = (ThreadLocalSessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
     sessionProviderService.setSessionProvider(null, sysProvider);
@@ -138,7 +146,7 @@ public class NewUserListener extends UserEventListener {
           eventCategory.setName(evCategory);
           eventCategory.setDataInit(true) ;
           cservice_.saveEventCategory(user.getUserName(), eventCategory,
-              null, true);
+                                      null, true);
         }
       }
       if (defaultCalendarCategory_ != null && defaultCalendarCategory_.length() > 0) {

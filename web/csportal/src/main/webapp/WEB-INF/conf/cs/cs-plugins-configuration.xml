@@ -195,10 +195,14 @@
 	         <value>18:00</value><!--  -->
         </value-param>
         
-        <value-param>
-	        <name>ignoredUser</name>
-	        <value></value><!-- demo,marry user id, use coma (,) to split values  -->
-        </value-param>
+        <values-param>
+	        <name>ignoredUsers</name>
+	        <description>Definition users to ignore create default calendar</description>
+	        <!-- 
+	        <value>demo</value> 
+	        <value>marry</value>
+	         -->
+        </values-param>
         
         
 	    </init-params>    
@@ -229,10 +233,13 @@
 	      	<value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
       	</value-param>	
       
-        <value-param>
-	        <name>ignoredGroup</name>
-	        <value></value><!-- /platform/guests group id, use coma (,) to split values  -->
-        </value-param>
+        <values-param>
+	        <name>ignoredGroups</name>
+	        <description>Definition group to ignore create default calendar</description>
+	        <!-- 
+	        <value>/platform/guests</value>
+	         -->
+        </values-param>
         
         
 	    </init-params>    
