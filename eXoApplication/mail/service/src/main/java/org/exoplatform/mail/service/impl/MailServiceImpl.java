@@ -1066,7 +1066,7 @@ public class MailServiceImpl implements MailService, Startable {
         FetchMailContentThread downloadContentMail = new FetchMailContentThread(storage_, msgMap, i, folder, username, accountId);
         new Thread(downloadContentMail).start();        
       }      
-      checkingLog_.get(key).setStatusMsg("Finished downloading for " + folder.getName() + " folder.");
+      checkingLog_.get(key).setStatusMsg("Finished download for " + folder.getName() + " folder.");
       logger.debug("#### Synchronization finished for " + folder.getName() + " folder.");
 
       if (!account.isSavePassword()) account.setIncomingPassword("");

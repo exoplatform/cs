@@ -207,7 +207,6 @@ MailServiceHandler.prototype.destroy = function() {
       eXo.webui.UIForm.submitForm('UIMessageList','ComfirmPassword', true) ;
     } else if (st == this.FINISHED_CHECKMAIL_STATUS){
       var refeshLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Here');
-      this.checkMailInfobarNode.style.display = 'none';
       eval(eXo.core.DOMUtil.findDescendantsByTagName(refeshLabel, 'a')[0].href.replace("%20", ""));
     } else {
       var hideLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Hide') ;
@@ -215,6 +214,7 @@ MailServiceHandler.prototype.destroy = function() {
       return ;
     }
   }
+  this.checkMailInfobarNode.style.display = 'none';
 };
 
 eXo.mail.MailServiceHandler = eXo.mail.MailServiceHandler || new MailServiceHandler() ;
