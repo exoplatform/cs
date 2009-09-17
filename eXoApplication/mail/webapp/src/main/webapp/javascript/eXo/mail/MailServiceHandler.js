@@ -82,10 +82,13 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
     
     var statusSync = parseInt(this.serverData.info.checkingmail.syncFolderStatus);
     
+    
     if (statusSync) {
 	    if (statusSync == this.START_SYNC_FOLDER) {
+	    	
 	    	document.getElementById('SynchronizeIconRefreshFolder').className = "SyncingIcon"; 
 	    } else if (statusSync == this.FINISH_SYNC_FOLDER) {
+	
 	    	document.getElementById('SynchronizeIconRefreshFolder').className = "SyncIcon"; 
 	    	var updateImapFolder = document.getElementById("UpdateImapFolder");
 	  	      if (updateImapFolder != null) {
