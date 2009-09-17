@@ -1217,8 +1217,7 @@
                     Accept</div>
                 <div class="ActionFile" onclick="eXo.communication.chatbar.webui.UIChatWindow.denieFileExchange(this);">
                     Deny</div>
-                <div class="LoadingIcon" style="display: none; background: url('DefaultSkin/skinIcons/LoadingProgress24x24.gif') no-repeat center center;
-                    width: 24px; height: 24px;">
+                <div class="LoadingIcon">
                     <span></span>
                 </div>
                 <div class="ClearLeft">
