@@ -1959,12 +1959,16 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         Presence presence = session.getConnection().getRoster().getPresence(sender);
         if (presence.getType().equals(Presence.Type.available)) {
           IncomingFileTransfer fileTransfer = request.accept();
+          CacheControl ccIEfixed = new CacheControl();//Fix for http://jira.exoplatform.org/browse/CS-3319
+          MultivaluedMetadata headers= new MultivaluedMetadata();
+          headers.putSingle("Content-disposition",
+                            "attachment; filename=\"" + fileTransfer.getFileName()
+                            + "\"");
+          headers.putSingle("Expires", "Sun, 17 Dec 1989 07:30:00 GMT");
           return Response.Builder.ok(fileTransfer.recieveFile(), DEFAULT_CONTENT_TYPE)
-                                   .header("Content-disposition",
-                                           "attachment; filename=\"" + fileTransfer.getFileName()
-                                               + "\"")
+                                   .headers(headers)
                                    .contentLenght(fileTransfer.getFileSize())
-                                   .cacheControl(cc)
+                                   .cacheControl(ccIEfixed)
                                    .build();
         } else {
           String errorMessage = rb.getString("chat.message.filetransfer.sender.accept.offline");
