@@ -147,10 +147,16 @@ public class MailWebservice implements ResourceContainer {
         .getCurrentContainer().getComponentInstanceOfType(MailService.class);
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
     
+    StringBuffer buffer = new StringBuffer();
     if (checkingInfo == null) {
       Thread.sleep(MailWebservice.MIN_SLEEP_TIMEOUT);
       checkingInfo = mailService.getCheckingInfo(userName, accountId);
-      return Response.Builder.serverError().build();
+      buffer.append("<info>");
+      buffer.append("  <checkingmail>");
+      buffer.append("    <status>1000</status>");
+      buffer.append("  </checkingmail>");
+      buffer.append("</info>");
+      return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
     }
     
     if (!checkingInfo.hasChanged()) {
@@ -160,7 +166,6 @@ public class MailWebservice implements ResourceContainer {
         Thread.sleep(MailWebservice.MIN_SLEEP_TIMEOUT);
       }
     }
-    StringBuffer buffer = new StringBuffer();
     if (checkingInfo != null) {
       if (checkingInfo.getStatusCode() == CheckingInfo.FINISHED_CHECKMAIL_STATUS ||
           checkingInfo.getStatusCode() == CheckingInfo.CONNECTION_FAILURE || 
@@ -196,7 +201,7 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("  </checkingmail>");
         buffer.append("</info>");
       }
-    }
+    } 
     
     return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
