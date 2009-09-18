@@ -114,10 +114,9 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
       this.destroy();    
     }
   } else if(state == this.ERROR_STATE) {
-    if (this.activeAction == this.GET_CHECK_MAIL_INFO_ACTION &&
-    	  this.tryCount < this.MAX_TRY) {
-			this.activeAction = this.GET_CHECK_MAIL_INFO_ACTION;
-			this.tryCount ++;
+    if (this.activeAction == this.GET_CHECK_MAIL_INFO_ACTION && this.tryCount < this.MAX_TRY) {
+		this.activeAction = this.GET_CHECK_MAIL_INFO_ACTION;
+		this.tryCount ++;
     	url = this.SERVICE_BASED_URL + '/checkmailjobinfo/' + this.userName + '/' + this.accountId + '/';
     	this.makeRequest(url, this.HTTP_GET, '', this.GET_CHECK_MAIL_INFO_ACTION);
     }
