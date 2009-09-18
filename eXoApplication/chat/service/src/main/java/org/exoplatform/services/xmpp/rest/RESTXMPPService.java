@@ -1889,13 +1889,21 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                 @URIParam("status") String status) {
     if (this.rb == null) loadResourceBundle();
     XMPPSession session = messenger.getSession(username);
-    Presence presence = PresenceUtil.getPresence(status);
-    if (presence == null)
-      return Response.Builder.withStatus(HTTPStatus.FORBIDDEN)
-                             .errorMessage("Get unknow status.")
-                             .build();
-    session.sendPresence(presence);
-    return Response.Builder.ok().cacheControl(cc).build();
+    if(session != null){
+      Presence presence = PresenceUtil.getPresence(status);
+      if (presence == null)
+        return Response.Builder.withStatus(HTTPStatus.FORBIDDEN)
+                               .errorMessage("Get unknow status.")
+                               .build();
+      session.sendPresence(presence);
+      return Response.Builder.ok().cacheControl(cc).build();
+    }
+    else {
+      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
+      .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
+      .build();
+    }
+    
   }
 
   /**
