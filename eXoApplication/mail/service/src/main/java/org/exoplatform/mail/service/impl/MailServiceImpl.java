@@ -734,20 +734,17 @@ public class MailServiceImpl implements MailService, Startable {
     Account account = getAccountById(username, accountId);
     IMAPStore store = openIMAPConnection(username, account, info);  
     if (store != null) {
-      info.setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
-      info.setStatusMsg("Synchronizing imap folder ...");
+      checkingLog_.get(key).setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
       synchImapFolders(username, accountId, null, store.getDefaultFolder().list());
-      info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
-      info.setStatusMsg("Finished synchronizing imap folder ...");
-      info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
-      removeCheckingInfo(username, accountId);
+      checkingLog_.get(key).setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
     }
   }
   
   private List<javax.mail.Folder> synchImapFolders(String username, String accountId, Folder parentFolder, javax.mail.Folder[] folders) throws Exception {
     List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
-    Folder folder;
+    List<String> serverFolderId = new ArrayList<String>();
     String folderId;
+    Folder folder;
     for (javax.mail.Folder fd : folders) {
       if (!fd.getName().equalsIgnoreCase(Utils.FD_INBOX)) {        
         if (fd.getType() != javax.mail.Folder.HOLDS_FOLDERS) {
@@ -755,6 +752,7 @@ public class MailServiceImpl implements MailService, Startable {
         } else {
           folderId = "thisistestofphungnam";
         } 
+        serverFolderId.add(folderId);
         folder = storage_.getFolder(username, accountId, folderId);
         if (folder == null) {
           folder = new Folder();
@@ -765,7 +763,6 @@ public class MailServiceImpl implements MailService, Startable {
           folder.setTotalMessage(0);
           folder.setPersonalFolder(true);
           folder.setType(fd.getType());
-          // try to make new one
           try {
             if (parentFolder == null) {
               storage_.saveFolder(username, accountId, folder);
@@ -779,7 +776,19 @@ public class MailServiceImpl implements MailService, Startable {
         } else if (folder.getName().equalsIgnoreCase(fd.getName())) {  // update available one
           folder.setName(fd.getName());
           folder.setURLName(fd.getURLName().toString());
+          
           saveFolder(username, accountId, folder);
+        }
+        
+        List<Folder> localFolders = new ArrayList<Folder>();
+        if (parentFolder == null) {
+          localFolders = getFolders(username, accountId, true);
+        } else {
+          localFolders = getSubFolders(username, accountId, parentFolder.getPath());
+        }
+        
+        for (Folder f : localFolders) {
+          if (!serverFolderId.contains(f.getId())) removeUserFolder(username, accountId, f.getId());
         }
 
         folderList.add(fd);

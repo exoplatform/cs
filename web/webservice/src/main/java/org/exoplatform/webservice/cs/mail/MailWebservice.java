@@ -77,7 +77,6 @@ public class MailWebservice implements ResourceContainer {
     
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
     
-    // try to start if no checking info available
     if (checkingInfo == null) {
       mailService.synchImapFolders(userName, accountId);
       checkingInfo = mailService.getCheckingInfo(userName, accountId);
@@ -86,12 +85,14 @@ public class MailWebservice implements ResourceContainer {
     StringBuffer buffer = new StringBuffer();
     buffer.append("<info>");
     buffer.append("  <checkingmail>");
-    buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
-    buffer.append("    <status>" + checkingInfo.getStatusCode() + "</status>");
-    buffer.append("    <syncFolderStatus>" + checkingInfo.getSyncFolderStatus() + "</syncFolderStatus>");
+    if (checkingInfo != null) {
+      buffer.append("    <status>" + checkingInfo.getSyncFolderStatus() + "</status>");
+    }
     buffer.append("  </checkingmail>");
     buffer.append("</info>");
-
+    
+    mailService.removeCheckingInfo(userName, accountId);
+    
     return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
   
@@ -172,8 +173,7 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("</info>");
         mailService.removeCheckingInfo(userName, accountId);
         return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
-      }
-      if (checkingInfo.hasChanged()) {
+      } else if (checkingInfo.hasChanged()) {
         buffer.append("<info>");
         buffer.append("  <checkingmail>");
         buffer.append("    <status>" + CheckingInfo.DOWNLOADING_MAIL_STATUS + "</status>");

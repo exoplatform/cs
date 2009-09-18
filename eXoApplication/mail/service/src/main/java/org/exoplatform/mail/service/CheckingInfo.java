@@ -62,6 +62,7 @@ public class CheckingInfo {
   public int getSyncFolderStatus() {  return syncFolderStatus_ ; } ;
   public void setSyncFolderStatus(int syncFolderStatus) { 
     syncFolderStatus_ = syncFolderStatus ; 
+    hasChanged_ = true ;
   }
   
   public String getFetchingToFolders() { return fetchingToFolders_; } 

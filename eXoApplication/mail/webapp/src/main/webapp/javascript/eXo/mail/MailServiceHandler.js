@@ -15,6 +15,7 @@ function MailServiceHandler() {
   
   this.SERVICE_BASED_URL = '/portal/rest/cs/mail';
   this.CHECK_MAIL_ACTION = 'check mail action';
+  this.SYNCH_FOLDER_ACTION = 'synchronize folder action';
   this.GET_CHECK_MAIL_INFO_ACTION = 'get check mail info action';
   this.STOP_CHECK_MAIL_ACTION = 'stop check mail action';
   this.MAX_TRY = 3;
@@ -66,6 +67,20 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
       return;
     }
     var status = parseInt(this.serverData.info.checkingmail.status);
+    if (status == this.START_SYNC_FOLDER || status == this.FINISH_SYNC_FOLDER) {
+	    if (status == this.START_SYNC_FOLDER) {	    	
+	    	document.getElementById('SynchronizeIconRefreshFolder').className = "SyncingIcon"; 
+	    } else if (status == this.FINISH_SYNC_FOLDER) {
+	    	document.getElementById('SynchronizeIconRefreshFolder').className = "SyncIcon"; 
+	    	var updateImapFolder = document.getElementById("UpdateImapFolder");
+	  	      if (updateImapFolder != null) {
+	  	    	eval(eXo.core.DOMUtil.findDescendantsByTagName(updateImapFolder, 'a')[0].href.replace("%20", ""));
+	  	      }
+	  	    this.destroy();
+	  	    return;
+	    }
+    }
+    
     var url = false;
     if (status == this.START_CHECKMAIL_STATUS ||
         status == this.DOWNLOADING_MAIL_STATUS ||
@@ -82,13 +97,10 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
     
     var statusSync = parseInt(this.serverData.info.checkingmail.syncFolderStatus);
     
-    
     if (statusSync) {
-	    if (statusSync == this.START_SYNC_FOLDER) {
-	    	
+	    if (statusSync == this.START_SYNC_FOLDER) {	    	
 	    	document.getElementById('SynchronizeIconRefreshFolder').className = "SyncingIcon"; 
 	    } else if (statusSync == this.FINISH_SYNC_FOLDER) {
-	
 	    	document.getElementById('SynchronizeIconRefreshFolder').className = "SyncIcon"; 
 	    	var updateImapFolder = document.getElementById("UpdateImapFolder");
 	  	      if (updateImapFolder != null) {
@@ -125,10 +137,10 @@ MailServiceHandler.prototype.synchImapFolders = function(isUpdateUI) {
 		  
 	this.isUpdateUI_ = isUpdateUI;
 		  
-	this.activeAction = this.CHECK_MAIL_ACTION;
+	this.activeAction = this.SYNCH_FOLDER_ACTION;
 	this.tryCount = 0;
 	var url = this.SERVICE_BASED_URL + '/synchfolders/' + this.userName + '/' + this.accountId + '/';
-	this.makeRequest(url, this.HTTP_GET, '', this.CHECK_MAIL_ACTION);
+	this.makeRequest(url, this.HTTP_GET, '', this.SYNCH_FOLDER_ACTION);
 }
 
 MailServiceHandler.prototype.checkMail = function(isUpdateUI, folderId) {
@@ -217,7 +229,7 @@ MailServiceHandler.prototype.destroy = function() {
       return ;
     }
   }
-  this.checkMailInfobarNode.style.display = 'none';
+  if (this.checkMailInfobarNode) this.checkMailInfobarNode.style.display = 'none';
 };
 
 eXo.mail.MailServiceHandler = eXo.mail.MailServiceHandler || new MailServiceHandler() ;
