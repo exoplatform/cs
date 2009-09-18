@@ -51,7 +51,9 @@ BuddyItem.prototype.init = function() {
     this.iconChatNode.innerHTML = this.getUserName(nickDis, true) ;
   } else {
     this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
-		this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.fullName, true) ;
+	    var fullName = this.buddyInfo.fullName ? this.buddyInfo.fullName : nickDis;
+		fullName = fullName ? fullName : this.buddyInfo.user.split('@')[0];
+		this.iconChatNode.innerHTML = this.getUserName(fullName, true) ;
   }
   this.updateStatus(this.buddyInfo.presence.type);
 
