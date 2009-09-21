@@ -255,9 +255,6 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.UIPopupManager.addItem(this.UICreateNewRoomPopupWindow);
   this.UIPopupManager.addItem(this.UIRoomConfigPopupWindow);
   this.UIPopupManager.addItem(this.UIJoinRoomPopupWindow);
-  if (this.isWebOS) {
-    this.UIPopupManager.addItem(this);
-  }
 
   this.userStatus = false;
   this.lastStatusSent = false;
