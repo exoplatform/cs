@@ -42,7 +42,7 @@ import org.exoplatform.services.rest.transformer.StringOutputTransformer;
 public class CalendarWebservice implements ResourceContainer{
 
   public final static String JSON_CONTENT_TYPE    = "application/json";
-  public final static String XML_CONTENT_TYPE    = "text/xml";
+  public final static String XML_CONTENT_TYPE    = "plain/text";
   public final static String SERVICE_BASED_URL = "/portal/rest/" ;
 
   public CalendarWebservice() {}
@@ -64,19 +64,19 @@ public class CalendarWebservice implements ResourceContainer{
       Calendar cal = null ;
       buffer.append("{canEdit:0}");
       if(Utils.PRIVATE_TYPE == Integer.parseInt(type)) {
-        buffer.append("{canEdit:1}");
+        buffer = new StringBuffer("{canEdit:1}");
       } else if(Utils.PUBLIC_TYPE == Integer.parseInt(type)) {
         OrganizationService oService = (OrganizationService)ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
         cal = calService.getGroupCalendar(calendarId) ;
         if(Utils.canEdit(oService, cal.getEditPermission(), username)) {
-          buffer.append("{canEdit:1}");
+        	buffer = new StringBuffer("{canEdit:1}");
         } 
       } else if(Utils.SHARED_TYPE == Integer.parseInt(type)) {
         if(calService.getSharedCalendars(username, true) != null) {
           cal = calService.getSharedCalendars(username, true).getCalendarById(calendarId) ;
           if(Utils.canEdit(null, cal.getEditPermission(), username)) {
-            buffer.append("{canEdit:1}");
+            buffer = new StringBuffer("{canEdit:1}");
           }  
         } 
       }  
