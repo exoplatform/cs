@@ -174,7 +174,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
     String username = uiPortlet.getCurrentUser() ;
     for(String folderName : defaultFolders_) {
-      String folderId = Utils.createFolderId(account.getId(), folderName, false);
+      String folderId = Utils.generateFID(account.getId(), folderName, false);
       Folder folder = mailSvr.getFolder(username, account.getId(), folderId) ;
       if(folder == null) {
         folder = new Folder() ;

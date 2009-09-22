@@ -158,7 +158,7 @@ public class UIMessageList extends UIForm {
       filter.setAccountId(accountId) ;
       if (filter.getFolder() == null) {
         if (!filter.getName().equals("Search")) {
-          selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
+          selectedFolderId_ = Utils.generateFID(accountId, Utils.FD_INBOX, false);
           filter.setFolder(new String[] { selectedFolderId_ });
         }
       } else {
@@ -222,15 +222,15 @@ public class UIMessageList extends UIForm {
   public void setSelectedTagId(String tagId) {selectedTagId_ = tagId ;}
 
   public boolean selectedSpamFolder() throws Exception {
-    return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.createFolderId(accountId_, Utils.FD_SPAM, false)) : false ;
+    return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.generateFID(accountId_, Utils.FD_SPAM, false)) : false ;
   }
 
   public boolean selectedDraftFolder() throws Exception {
-    return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.createFolderId(accountId_, Utils.FD_DRAFTS, false)) : false ;
+    return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.generateFID(accountId_, Utils.FD_DRAFTS, false)) : false ;
   }
 
   public boolean selectedSentFolder() throws Exception {
-    return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.createFolderId(accountId_, Utils.FD_SENT, false)) : false ;
+    return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.generateFID(accountId_, Utils.FD_SENT, false)) : false ;
   }
 
   public String getViewQuery() {return viewQuery_ ;}
@@ -313,7 +313,7 @@ public class UIMessageList extends UIForm {
           for (String childMsgId : msg.getGroupedMessageIds()) {
             childMsg = messageList_.get(childMsgId);
             if (childMsg != null && 
-                !childMsg.getFolders()[0].equals(Utils.createFolderId(accountId_, Utils.FD_SENT, false))) 
+                !childMsg.getFolders()[0].equals(Utils.generateFID(accountId_, Utils.FD_SENT, false))) 
               checkedList.add(childMsg) ;
           }
         }
@@ -1152,7 +1152,7 @@ public class UIMessageList extends UIForm {
       } else {
         appliedMsgList = uiMessageList.getCheckedMessage();
       }
-      String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;
+      String trashFolderId = Utils.generateFID(accountId, Utils.FD_TRASH, false) ;
       String selectedFolderId = uiMessageList.getSelectedFolderId() ;
       try {
         if (selectedFolderId != null && selectedFolderId.equals(trashFolderId)) { 
@@ -1217,7 +1217,7 @@ public class UIMessageList extends UIForm {
         return; 
       }
       for(Message message: checkedMessageList) {
-        mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_SPAM, false));
+        mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.generateFID(accountId, Utils.FD_SPAM, false));
         spamFilter.reportSpam(message);
       }       
       mailSrv.saveSpamFilter(username, accountId, spamFilter);
@@ -1268,7 +1268,7 @@ public class UIMessageList extends UIForm {
       }
 
       for(Message message: checkedMessageList) {
-        mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+        mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.generateFID(accountId, Utils.FD_INBOX, false));
         spamFilter.notSpam(message);
       }       
       mailSrv.saveSpamFilter(username, accountId, spamFilter);
@@ -1577,7 +1577,7 @@ public class UIMessageList extends UIForm {
       if (uiMessageList.getSelectedFolderId() != null) {
         uiImportForm.setSelectedFolder(uiMessageList.getSelectedFolderId());
       } else {
-        uiImportForm.setSelectedFolder(Utils.createFolderId(accId, Utils.FD_INBOX, false));
+        uiImportForm.setSelectedFolder(Utils.generateFID(accId, Utils.FD_INBOX, false));
       }
       uiPopup.activate(uiImportForm, 600, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);    

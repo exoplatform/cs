@@ -158,7 +158,7 @@ public class UIMessagePreview extends UIComponent {
     Account account = mailServ.getAccountById(username, accId);
     InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
     InternetAddress from = fromAddress[0];
-    return (!MailUtils.isFieldEmpty(selectedFolder) &&  selectedFolder.equals(Utils.createFolderId(accId, Utils.FD_SENT, false))
+    return (!MailUtils.isFieldEmpty(selectedFolder) &&  selectedFolder.equals(Utils.generateFID(accId, Utils.FD_SENT, false))
         && !MailUtils.isFieldEmpty(msg.getMessageBcc()) 
         && (account != null) && from.getAddress().equalsIgnoreCase(account.getEmailAddress()));
   }
@@ -391,10 +391,10 @@ public class UIMessagePreview extends UIComponent {
 
       if (msg != null) {
         String selectedFolderId = uiFolderCon.getSelectedFolder() ;
-        if (selectedFolderId != null && selectedFolderId.equals(Utils.createFolderId(accountId, Utils.FD_TRASH, false))) { 
+        if (selectedFolderId != null && selectedFolderId.equals(Utils.generateFID(accountId, Utils.FD_TRASH, false))) { 
           mailSrv.removeMessage(username, accountId, msg);
         } else {
-          mailSrv.moveMessage(username, accountId, msg, msg.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_TRASH, false));
+          mailSrv.moveMessage(username, accountId, msg, msg.getFolders()[0], Utils.generateFID(accountId, Utils.FD_TRASH, false));
         }        
         uiMsgList.updateList();
         List<Message> showedMsgList = uiMsgPreview.getShowedMessages() ;

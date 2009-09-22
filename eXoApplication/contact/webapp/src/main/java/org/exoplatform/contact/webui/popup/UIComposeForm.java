@@ -269,7 +269,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         try {
           MailSetting setting = mailSvr.getMailSetting(username);
           if (setting.saveMessageInSent()) {
-            message.setFolders(new String[]{ Utils.createFolderId(accId, Utils.FD_SENT, false) }) ;
+            message.setFolders(new String[]{ Utils.generateFID(accId, Utils.FD_SENT, false) }) ;
           }
           message.setReplyTo(message.getMessageTo()) ;
           mailSvr.saveMessage(username, accId, message.getPath(), message, true) ;
