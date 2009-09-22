@@ -67,11 +67,7 @@ import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.RootContainer;
 import org.exoplatform.container.component.ComponentPlugin;
-import org.exoplatform.mail.connection.impl.BaseConnector;
-import org.exoplatform.mail.connection.impl.ImapConnector;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
