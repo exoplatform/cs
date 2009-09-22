@@ -34,24 +34,82 @@ UICalendarPortlet.prototype.attachSwapClass = function(compId,className,hoverCla
     };
 } ;
 
-UICalendarPortlet.prototype.notify = function(message){
+
+UICalendarPortlet.prototype.makeRequest = function(url,callback){
+	var request =  eXo.core.Browser.createHttpRequest() ;
+	request.open('GET', url, false) ;
+	request.setRequestHeader("Cache-Control", "max-age=86400") ;
+	request.send(null) ;
+	if(callback) callback(request.responseText) ;
+};
+
+UICalendarPortlet.prototype.notify = function(eventObj){
 	var Reminder = eXo.calendar.Reminder ;
-	var html = Reminder.generateHTML(message) ;
-	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(Reminder.createMessage(html, message), "div","UIPopupNotification") ;
+	var uiCalendarWorkingContainer = eXo.core.DOMUtil.findAncestorById(eventObj,"UICalendarWorkingContainer");
+	var msg = "<div style='padding:3px;color:red;'>" + uiCalendarWorkingContainer.getAttribute("msg") + "</div>";
+	var html = Reminder.generateHTML(msg) ;
+	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(Reminder.createMessage(html, msg), "div","UIPopupNotification") ;
 	eXo.webui.Box.config(popup,popup.offsetHeight, 5, Reminder.openCallback, Reminder.closeBox) ;
 	window.focus() ;
 	return ;
 };
 
+UICalendarPortlet.prototype.getOrginalPosition = function(eventObj){
+	if(eventObj.getAttribute("orginalSize")){
+		return eventObj.getAttribute("orginalSize");
+	}
+};
+
+UICalendarPortlet.prototype.setPosition = function(eventObj){
+	var DOMUtil = eXo.core.DOMUtil ;
+	var me = eXo.calendar.UICalendarPortlet ;
+	me.activeEventObject = eventObj ;
+	var cTop = DOMUtil.getStyle(eventObj,"top");
+	var cLeft = DOMUtil.getStyle(eventObj,"left");
+	var cWdith = DOMUtil.getStyle(eventObj,"width");
+	var cHeight = DOMUtil.getStyle(eventObj,"height");
+	var cTitle = DOMUtil.findFirstDescendantByClass(eventObj,"div","EventTitle").innerHTML ; 
+	var cInnerHeight = DOMUtil.getStyle(DOMUtil.findFirstDescendantByClass(eventObj,"div","EventContainer"),"height") ;
+	me.restoreTitle = cTitle ;
+	me.restoreContainerHeight = cInnerHeight ;
+	me.restoreSize = {
+		"top": cTop,
+		"left": cLeft,
+		"width": cWdith,
+		"height": cHeight
+	};
+};
+
+UICalendarPortlet.prototype.restorePosition = function(eventObj){
+	this.setStyle(eventObj,this.restoreSize);
+	var eventTitle = eXo.core.DOMUtil.findFirstDescendantByClass(eventObj,"div","EventTitle");
+	var eventContainer = eXo.core.DOMUtil.findFirstDescendantByClass(eventObj,"div","EventContainer");
+	if(this.restoreTitle && eventTitle) eventTitle.innerHTML = this.restoreTitle ;
+	if(this.restoreContainerHeight && eventContainer) eventContainer.style.height = this.restoreContainerHeight ;
+	this.restoreSize = null ;
+	this.activeEventObject = null ;
+	this.dropCallback = null ;
+	this.restoreTitle = null ;
+};
+
+UICalendarPortlet.prototype.postCheck = function(response){
+	var me = eXo.calendar.UICalendarPortlet ;
+	eval("var data = " + response);
+	if(parseInt(data.canEdit) == 0){
+		me.notify(me.activeEventObject);		
+		me.restorePosition(me.activeEventObject);
+	}else{
+		if(me.dropCallback) me.dropCallback();
+		delete me.activeEventObject ;
+		delete me.restoreSize;
+	}
+};
+
 UICalendarPortlet.prototype.checkPermission = function(eventObj){
 	var calId = eventObj.getAttribute("calid");
-	var uiCalendarWorkingContainer = eXo.core.DOMUtil.findAncestorById(eventObj,"UICalendarWorkingContainer");
-	var msg = "<div style='padding:3px;color:red;'>" + uiCalendarWorkingContainer.getAttribute("msg") + "</div>";
-	var calendarNode = eXo.core.DOMUtil.findDescendantById(uiCalendarWorkingContainer,calId);
-	var isEdit = eval(calendarNode.getAttribute("canedit")) ;
-	delete calId, calendarNode, uiCalendarWorkingContainer ;
-	if(!isEdit) this.notify(msg);
-	return isEdit;
+	var calType = eventObj.getAttribute("calType");
+	var url = "/portal/rest/cs/calendar/checkPermission/"+ eXo.cs.CSCometd.exoId +"/"+ calId +"/"+ calType +"/"
+	this.makeRequest(url,this.postCheck);
 };
 /**
  * Show Quick add event and task form 
@@ -946,7 +1004,9 @@ UIResizeEvent.prototype.init = function(evt){
     var minHeight = 15;
     var interval = eXo.calendar.UICalendarPortlet.interval;
     UIResizeEvent.start(_e, innerElement, outerElement, container, minHeight, interval);
-    UIResizeEvent.callback = UIResizeEvent.resizeCallback;
+    //UIResizeEvent.callback = UIResizeEvent.resizeCallback;
+	eXo.calendar.UICalendarPortlet.dropCallback = UIResizeEvent.resizeCallback;
+	eXo.calendar.UICalendarPortlet.setPosition(outerElement);
 };
 
 UIResizeEvent.prototype.getOriginalHeight = function(obj){
@@ -1015,24 +1075,12 @@ UIResizeEvent.prototype.execute = function(evt){
  * @param {Object} evt Mouse event
  */
 UIResizeEvent.prototype.end = function(evt){
+	document.onmousemove = null;
+    document.onmouseup = null;
     var _e = window.event || evt;
     var UIResizeEvent = eXo.calendar.UIResizeEvent;
-    if (typeof(UIResizeEvent.callback) == "function") 
-        UIResizeEvent.callback();
-    UIResizeEvent.innerElement = null;
-    UIResizeEvent.outerElement = null;
-    UIResizeEvent.posY = null;
-    UIResizeEvent.minHeight = null;
-    UIResizeEvent.interval = null;
-    UIResizeEvent.innerElementHeight = null;
-    UIResizeEvent.outerElementHeight = null;
-    document.onmousemove = null;
-    document.onmouseup = null;
-    UIResizeEvent.container = null;
-    UIResizeEvent.innerElementHeight = null;
-    UIResizeEvent.beforeHeight = null;
-    UIResizeEvent.posY = null;
-    UIResizeEvent.uppermost = null;
+//    if (typeof(UIResizeEvent.callback) == "function") UIResizeEvent.callback();
+	eXo.calendar.UICalendarPortlet.checkPermission(UIResizeEvent.outerElement) ;
 };
 
 /**
@@ -1046,10 +1094,6 @@ UIResizeEvent.prototype.resizeCallback = function(evt){
     var calType = eventBox.getAttribute("calType");
     var end = start + eventBox.offsetHeight;
     if (eventBox.offsetHeight != UIResizeEvent.beforeHeight) {
-//        var actionLink = eXo.calendar.UICalendarPortlet.adjustTime(start, end, eventBox);
-//        if (calType) 
-//            actionLink = actionLink.replace(/'\s*\)/, "&calType=" + calType + "')");
-//        eval(actionLink);
 		var actionLink = eventBox.getAttribute("actionLink");
 		var params = [
 			{name:"calendarId",value:eventBox.getAttribute("calid")},
@@ -1060,6 +1104,18 @@ UIResizeEvent.prototype.resizeCallback = function(evt){
 		eXo.calendar.UICalendarPortlet.showEvent();
 		ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(actionLink,params), false) ;
     }
+	UIResizeEvent.innerElement = null;
+    UIResizeEvent.outerElement = null;
+    UIResizeEvent.posY = null;
+    UIResizeEvent.minHeight = null;
+    UIResizeEvent.interval = null;
+    UIResizeEvent.innerElementHeight = null;
+    UIResizeEvent.outerElementHeight = null;
+    UIResizeEvent.container = null;
+    UIResizeEvent.innerElementHeight = null;
+    UIResizeEvent.beforeHeight = null;
+    UIResizeEvent.posY = null;
+    UIResizeEvent.uppermost = null;
 };
 
 /* for drag and drop */
@@ -1094,7 +1150,6 @@ UICalendarPortlet.prototype.initDND = function(evt){
     _e.cancelBubble = true;
 	if(eXo.core.EventManager.getMouseButton(evt) == 2) return ;
     var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
-	if(!UICalendarPortlet.checkPermission(this))  return ;
     UICalendarPortlet.dragObject = this;
     UICalendarPortlet.resetZIndex(UICalendarPortlet.dragObject);
     UICalendarPortlet.dragContainer = eXo.core.DOMUtil.findAncestorByClass(UICalendarPortlet.dragObject, "EventDayContainer");
@@ -1104,6 +1159,8 @@ UICalendarPortlet.prototype.initDND = function(evt){
     UICalendarPortlet.dragContainer.onmousemove = UICalendarPortlet.dragStart;
     UICalendarPortlet.dragContainer.onmouseup = UICalendarPortlet.dragEnd;
     UICalendarPortlet.title = eXo.core.DOMUtil.findDescendantsByTagName(UICalendarPortlet.dragObject, "p")[0].innerHTML;
+	UICalendarPortlet.dropCallback = UICalendarPortlet.dayviewDropCallback;
+	UICalendarPortlet.setPosition(UICalendarPortlet.dragObject);
 };
 /**
  * Processes when dragging object
@@ -1156,8 +1213,19 @@ UICalendarPortlet.prototype.updateTitle = function(events, min, type){
 /**
  * End calendar event dragging, this method clean up some unused properties and execute callback function
  */
+
 UICalendarPortlet.prototype.dragEnd = function(){
-    this.onmousemove = null;
+	this.onmousemove = null;
+	var me = eXo.calendar.UICalendarPortlet;
+	var dragObject = me.dragObject;
+	var eventTop = me.eventTop ;
+	if (dragObject.offsetTop != eventTop) {
+		me.checkPermission(dragObject);
+	}
+};
+
+UICalendarPortlet.prototype.dayviewDropCallback = function(){
+    //this.onmousemove = null;
     var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
     var dragObject = UICalendarPortlet.dragObject;
     var calType = dragObject.getAttribute("calType");
@@ -1171,7 +1239,7 @@ UICalendarPortlet.prototype.dragEnd = function(){
     var currentStart = dragObject.offsetTop;
     var currentEnd = currentStart + delta;
     var eventDayContainer = eXo.core.DOMUtil.findAncestorByClass(dragObject, "EventDayContainer");
-    var eventTop = UICalendarPortlet.eventTop;
+    //var eventTop = UICalendarPortlet.eventTop;
     eventDayContainer.onmousemove = null;
     eventDayContainer.onmouseup = null;
     UICalendarPortlet.dragObject = null;
@@ -1179,11 +1247,7 @@ UICalendarPortlet.prototype.dragEnd = function(){
     UICalendarPortlet.eventY = null;
     UICalendarPortlet.dragContainer = null;
     UICalendarPortlet.title = null;
-    if (dragObject.offsetTop != eventTop) {
-//        var actionLink = UICalendarPortlet.adjustTime(currentStart, currentEnd, dragObject);
-//        if (calType) 
-//            actionLink = actionLink.replace(/'\s*\)/, "&calType=" + calType + "')");
-//        eval(actionLink);
+    //if (dragObject.offsetTop != eventTop) {
 		var actionLink = dragObject.getAttribute("actionLink");
 		var params = [
 			{name:"calendarId",value:dragObject.getAttribute("calid")},
@@ -1193,7 +1257,7 @@ UICalendarPortlet.prototype.dragEnd = function(){
 		eXo.calendar.UICalendarPortlet.setTimeValue(dragObject,currentStart,currentEnd);
 		eXo.calendar.UICalendarPortlet.showEvent();
 		ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(actionLink,params), false) ;
-    }
+    //}
     //title.innerHTML = titleName;
 };
 

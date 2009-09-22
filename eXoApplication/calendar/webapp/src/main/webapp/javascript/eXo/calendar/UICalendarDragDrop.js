@@ -86,7 +86,6 @@ UICalendarDragDrop.prototype.regDnDItem = function() {
 
 UICalendarDragDrop.prototype.dndTrigger = function(e){
   e = e ? e : window.event;
-  if(!eXo.calendar.UICalendarPortlet.checkPermission(this)) return ;
   if (e.button == 1 || e.which == 1) {
     return eXo.calendar.UICalendarDragDrop.initDnD(eXo.calendar.UICalendarDragDrop.dropableSets, this, this, e);
   }
@@ -128,8 +127,6 @@ UICalendarDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj,
     EventMonthContentNode.appendChild(tmpNode[len]);    
   }
   UIMonthViewNode.appendChild(EventMonthContentNode);
-//  if (document.getElementById("UIPageDesktop")) document.body.appendChild(UIMonthViewNode);
-//	else document.getElementById("UIMonthView").appendChild(UIMonthViewNode);
 	document.body.insertBefore(UIMonthViewNode,document.body.firstChild);
   this.DragDrop.initCallback = this.initCallback ;
   this.DragDrop.dragCallback = this.dragCallback ;
@@ -224,7 +221,6 @@ UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
 	if (this.foundTargetObjectCatch && eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,"CalendarItem")) {
 		var moveAction = eXo.core.DOMUtil.findFirstDescendantByClass(dndEvent.dragObject,"div","EventBoxes").getAttribute("moveAction");
 		ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(moveAction,null), false) ;
-  	//alert("Waiting for 'Moving events between calendars action'");
 		return ;
 	}
   if (this.foundTargetObjectCatch) {
@@ -256,19 +252,13 @@ UICalendarDragDrop.prototype.getCheckedObject = function(clickObj){
   var i = evenObj.length ;
   var tmpNode = null ;
   var top = 0 ;
-  //if(!this.isCheckedObject(clickObj)) {
-    tmpNode = eXo.core.DOMUtil.findFirstDescendantByClass(clickObj, "input", "checkbox");
-    tmpNode.checked = true ;
-  //}
+	tmpNode = eXo.core.DOMUtil.findFirstDescendantByClass(clickObj, "input", "checkbox");
+	tmpNode.checked = true ;
   while(i--){
     if(!this.isCheckedObject(evenObj[i])) continue ;
     tmpNode = evenObj[i].cloneNode(true) ;
     eXo.core.Browser.setOpacity(tmpNode,50) ;
-		//console.log(tmpNode.className);
-    //tmpNode.style.position = "absolute";
-    tmpNode.style.top = top + "px";
-    //tmpNode.style.left = "0px";
-    //tmpNode.style.width = clickObj.offsetWidth + "px	";		
+    tmpNode.style.top = top + "px";		
     top += 20 ;
     checkedObj.push(tmpNode);
   }

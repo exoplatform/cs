@@ -116,24 +116,17 @@ UIWeekView.prototype.adjustWidth = function(el) {
 			}
 			el[j].style.width = width + "px" ;
 			if (el[j-1]&&(len > 1)) {
-//				el[j].style.right = offsetLeft + parseFloat(el[j-1].style.width)*n +  "px" ;
-//				el[j].style.left = offsetLeft + parseFloat(el[j-1].style.width)*n +  "px" ;
 				setLeft(el[j],offsetLeft + parseFloat(el[j-1].style.width)*n);
 			}
-			else {
-//				el[j].style.left = offsetLeft +  "px" ;
-//				el[j].style.right = offsetLeft +  "px" ;		
+			else {		
 				setLeft(el[j],offsetLeft);
 			}
-//      var test = el[j].parentNode.offsetWidth - el[j-1].offsetWidth - eXo.core.Browser.findPosXInContainer(el[j],el[j].parentNode);
-//      console.log(parseFloat(el[j].style.left) + "  ---  " +el[j].parentNode.offsetWidth + "  ---  " + el[j].offsetWidth + "  ---  "  +eXo.core.Browser.findPosXInContainer(el[j],el[j].parentNode));
-//      el[j].style.left = (parseFloat(el[j].style.left) + test) +  "px" ;
 			n++ ;
 		}
 	}
 	function setLeft(obj,left){
 		obj.style.left = left + "px";
-		if(eXo.core.I18n.isRT()){
+		if(eXo.core.I18n.isRT()){ alert("r");
 		if(eXo.core.Browser.isIE6()) left -= eXo.cs.Utils.getScrollbarWidth();
 			obj.style.right = left + "px";	
 		}
@@ -157,7 +150,6 @@ UIWeekView.prototype.dragStart = function(evt) {
 	_e.cancelBubble = true ;
 	if (_e.button == 2) return ;
 	var UIWeekView = eXo.calendar.UIWeekView ;
-	if(!eXo.calendar.UICalendarPortlet.checkPermission(this)) return ;
 	UIWeekView.dragElement = this ;
 	eXo.calendar.UICalendarPortlet.resetZIndex(UIWeekView.dragElement) ;
 	UIWeekView.objectOffsetLeft = eXo.core.Browser.findPosX(UIWeekView.dragElement) ;
@@ -172,6 +164,8 @@ UIWeekView.prototype.dragStart = function(evt) {
 	UIWeekView.title = eXo.core.DOMUtil.findDescendantsByTagName(UIWeekView.dragElement,"p")[0].innerHTML ;
 	document.onmousemove = UIWeekView.drag ;
 	document.onmouseup = UIWeekView.drop ;
+	eXo.calendar.UICalendarPortlet.dropCallback = UIWeekView.dropCallback ;
+	eXo.calendar.UICalendarPortlet.setPosition(UIWeekView.dragElement);
 } ;
 
 UIWeekView.prototype.drag = function(evt) {
@@ -195,7 +189,8 @@ UIWeekView.prototype.drag = function(evt) {
 } ;
 
 UIWeekView.prototype.dropCallback = function() {
-	var dragElement = this.dragElement ;
+	var me = eXo.calendar.UIWeekView ;
+	var dragElement = me.dragElement ;
 	var start = parseInt(dragElement.getAttribute("startTime")) ;
 	var end = parseInt(dragElement.getAttribute("endTime")) ;
 	var calType = parseInt(dragElement.getAttribute("calType")) ;
@@ -204,9 +199,7 @@ UIWeekView.prototype.dropCallback = function() {
 	var delta = end - start  ;
 	var currentStart = dragElement.offsetTop + workingStart ;
 	var currentEnd = currentStart + delta ;
-	//var actionLink =	eXo.calendar.UICalendarPortlet.adjustTime(currentStart, currentEnd, dragElement) ;
-	var currentDate = this.currentCol.getAttribute("startTime").toString() ;
-	//actionLink = actionLink.toString().replace(/'\s*\)/,"&currentDate=" + currentDate + "&calType=" + calType + "')") ;
+	var currentDate = me.currentCol.getAttribute("startTime").toString() ;
 	var actionLink = dragElement.getAttribute("actionLink");
 	var params = [
 		{name:"calendarId",value:dragElement.getAttribute("calid")},
@@ -216,14 +209,11 @@ UIWeekView.prototype.dropCallback = function() {
 		{name:"currentDate",value:currentDate},
 		{name:"eventCategories",value:dragElement.getAttribute("eventcat")}
 	];
-	//console.log(eXo.env.server.createPortalURL("UIWeekView", "UpdateEvent", true, params));
-//	eXo.calendar.UIWeekView.checkFilter();
-	eXo.calendar.UICalendarPortlet.setTimeValue(dragElement,currentStart,currentEnd,this.currentCol);	
-	this.setSize();	
+	me.currentCol.appendChild(dragElement) ;
+	eXo.calendar.UICalendarPortlet.setTimeValue(dragElement,currentStart,currentEnd,me.currentCol);
+	me.setSize();
 	ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(actionLink,params), false) ;
-	
-	//alert(actionLink);return ;	
-	//eval(actionLink) ;	
+	me.cleanUp();
 } ;
 
 UIWeekView.prototype.drop = function(evt) {
@@ -234,8 +224,12 @@ UIWeekView.prototype.drop = function(evt) {
 	var currentCol = UIWeekView.currentCol ;
 	var sourceCol = UIWeekView.dragElement.parentNode ;
 	var eventY = UIWeekView.eventY ;
-	currentCol.appendChild(UIWeekView.dragElement) ;
-	if((UIWeekView.mouseY != _e.clientY) || (UIWeekView.mouseX != _e.clientX)) UIWeekView.dropCallback() ;
+	if((UIWeekView.mouseY != _e.clientY) || (UIWeekView.mouseX != _e.clientX)) eXo.calendar.UICalendarPortlet.checkPermission(UIWeekView.dragElement);
+	return null ;
+} ;
+
+UIWeekView.prototype.cleanUp = function(){
+	var UIWeekView = eXo.calendar.UIWeekView ;
 	UIWeekView.title = null ;
 	UIWeekView.offset = null ;
 	UIWeekView.mouseY = null ;
@@ -244,9 +238,8 @@ UIWeekView.prototype.drop = function(evt) {
 	UIWeekView.objectOffsetLeft = null ;
 	UIWeekView.containerOffset = null ;
 	UIWeekView.title = null ;
-	UIWeekView.dragElement = null ;
-	return null ;
-} ;
+	UIWeekView.dragElement = null ;	
+};
 
 UIWeekView.prototype.getOffset = function(object, evt) {	
 	return {
@@ -261,13 +254,13 @@ UIWeekView.prototype.isCol = function(evt) {
 	var Browser = eXo.core.Browser ;
 	var isIE = (Browser.browserType == "ie")?true:false ;
 	var isDesktop = (document.getElementById("UIPageDesktop"))?true:false ;
-	var mouseX = Browser.findMouseXInPage(evt) ;
+	var mouseX = Browser.findMouseXInPage(evt);
+	if(eXo.core.I18n.isRT() && (Browser.isIE7() || Browser.isIE6())) mouseX = mouseX - 32; // 32 =  double of scrollbar width
 	var len = UIWeekView.cols.length ;
 	var colX = 0 ;
 	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	for(var i = 1 ; i < len ; i ++) {
 		colX = Browser.findPosX(UIWeekView.cols[i]) ;
-		if(uiControlWorkspace && isIE && (!isDesktop || Browser.isIE7())) colX -= uiControlWorkspace.offsetWidth ;
 		if ((mouseX > colX) && (mouseX < colX + UIWeekView.cols[i].offsetWidth)){
 			return UIWeekView.currentCol = UIWeekView.cols[i] ;
 		}
@@ -320,7 +313,8 @@ UIWeekView.prototype.initResize = function(evt) {
 	var minHeight = 15 ;
 	var interval = eXo.calendar.UICalendarPortlet.interval ;
 	UIResizeEvent.start(_e, innerElement, outerElement, container, minHeight, interval) ;
-	UIResizeEvent.callback = eXo.calendar.UIWeekView.resizeCallback ;
+	eXo.calendar.UICalendarPortlet.dropCallback = UIResizeEvent.resizeCallback;
+	eXo.calendar.UICalendarPortlet.setPosition(outerElement);
 } ;
 
 UIWeekView.prototype.resizeCallback = function(evt) {
@@ -330,10 +324,8 @@ UIWeekView.prototype.resizeCallback = function(evt) {
 	var end =  start + eventBox.offsetHeight ;
 	var calType = parseInt(eventBox.getAttribute("calType")) ;
 	if (eventBox.offsetHeight != UIResizeEvent.beforeHeight) {
-		var actionLink = eventBox.getAttribute("actionLink");//eXo.calendar.UICalendarPortlet.adjustTime(start, end, eventBox) ;
+		var actionLink = eventBox.getAttribute("actionLink");
 		var currentDate = eventBox.parentNode.getAttribute("startTime").toString() ;
-		//actionLink = actionLink.toString().replace(/'\s*\)/,"&currentDate=" + currentDate + "&calType=" + calType + "')") ;
-		//eval(actionLink) ;
 		var params = [
 			{name:"calendarId",value:eventBox.getAttribute("calid")},
 			{name:"startTime",value:start},
