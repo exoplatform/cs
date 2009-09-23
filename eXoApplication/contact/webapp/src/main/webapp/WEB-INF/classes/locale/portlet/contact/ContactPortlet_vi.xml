@@ -571,8 +571,8 @@
       <tags>Các thẻ</tags>
       <details>Chi tiết</details>
       <customLayoutView>Chọn khung</customLayoutView>
-      <contactsView>Các Liên Lạc</contactsView>
-      <layoutView>Xem khung</layoutView>
+      <contactsView>Kiểu xem</contactsView>
+      <layoutView>Bố cục</layoutView>
       <addEvent>Thêm sự kiện</addEvent>
       <event>Sự kiện</event>
     </label>
