@@ -585,7 +585,7 @@ public class JCRDataStorage {
         try {
           Node msgNode = (Node) messageHome.getSession().getItem(msg.getPath());
           boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-          String sentFolderId = Utils.createFolderId(accountId, Utils.FD_SENT, false);
+          String sentFolderId = Utils.generateFID(accountId, Utils.FD_SENT, false);
           Value[] propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
           boolean moveReference = true;
           String[] folderIds = new String[propFolders.length];
@@ -1020,9 +1020,9 @@ public class JCRDataStorage {
       try {
         Node msgNode = msgHomeNode.getNode(msgId);
         logger.debug("Check duplicate ......................................");
-        // check duplicate
+        String folderId;
         for (int i = 0; i < folderIds.length; i ++) {
-          String folderId = folderIds[i];
+          folderId = folderIds[i];
           t1 = System.currentTimeMillis();
           byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msgNode, folderId);
 
@@ -1091,7 +1091,7 @@ public class JCRDataStorage {
         else node.setProperty(Utils.IS_RETURN_RECEIPT, false);
 
         if (spamFilter != null && spamFilter.checkSpam(msg)) {
-          folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) };
+          folderIds = new String[] { Utils.generateFID(accId, Utils.FD_SPAM, false) };
         }
 
         node.setProperty(Utils.MSG_FOLDERS, folderIds);
@@ -1761,7 +1761,7 @@ public class JCRDataStorage {
         try {
           String folder = filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString();
           if (!Utils.isEmptyField(folder) && getFolder(username, accountId, folder) != null) filter.setApplyFolder(folder);
-          else filter.setApplyFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+          else filter.setApplyFolder(Utils.generateFID(accountId, Utils.FD_INBOX, false));
         } catch (Exception e) { }
         try {
           filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
@@ -1822,7 +1822,7 @@ public class JCRDataStorage {
         try {
           String folder = filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString();
           if (!Utils.isEmptyField(folder) && getFolder(username, accountId, folder) != null) filter.setApplyFolder(folder);
-          else filter.setApplyFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+          else filter.setApplyFolder(Utils.generateFID(accountId, Utils.FD_INBOX, false));
         } catch (Exception e) { }
         try {
           filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
@@ -1864,7 +1864,7 @@ public class JCRDataStorage {
       filterNode.setProperty(Utils.EXO_BODY_CONDITION, (long) filter.getBodyCondition());
       if (!Utils.isEmptyField(filter.getApplyFolder())) 
         filterNode.setProperty(Utils.EXO_APPLY_FOLDER, filter.getApplyFolder());
-      else filterNode.setProperty(Utils.EXO_APPLY_FOLDER, Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+      else filterNode.setProperty(Utils.EXO_APPLY_FOLDER, Utils.generateFID(accountId, Utils.FD_INBOX, false));
       filterNode.setProperty(Utils.EXO_APPLY_TAG, filter.getApplyTag());
       filterNode.setProperty(Utils.EXO_KEEP_IN_INBOX, filter.keepInInbox());
       filterNode.setProperty(Utils.EXO_APPLY_FOR_ALL, filter.applyForAll());
@@ -2702,29 +2702,27 @@ public class JCRDataStorage {
     byte ret = Utils.NO_MAIL_DUPLICATE;
     try {
       Value[] propFolders = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
+      String[] folders = new String[propFolders.length + 1];
+      folders[0] = folderId;
+ 
       for (int i = 0; i < propFolders.length; i++) {
         if (propFolders[i].getString().indexOf(folderId) > -1) {
           logger.debug("DUPLICATE MAIL ... removed");
           return Utils.MAIL_DUPLICATE_IN_SAME_FOLDER;
+        } else {
+          folders[i + 1] = propFolders[i].getString();
         }
-      }
-      String[] folders = new String[propFolders.length + 1];
-      folders[0] = folderId;
-      for (int i = 0; i < propFolders.length; i++) {
-        folders[i + 1] = propFolders[i].getString();
       }
       msgNode.setProperty(Utils.EXO_ISUNREAD, true);
       msgNode.setProperty(Utils.EXO_STAR, false);
       msgNode.setProperty(Utils.MSG_FOLDERS, folders);
-      msgHomeNode.save();
+      msgNode.save();
       increaseFolderItem(sProvider, username, accId, folderId, true);
 
       logger.warn("DUPLICATE MAIL IN ANOTHER FOLDER ... ");
 
       ret = Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER;
-    } catch (Exception e) {
-      // do nothing here
-    }
+    } catch (Exception e) { }
     return ret;
   }  
 
@@ -2811,7 +2809,7 @@ public class JCRDataStorage {
         else node.setProperty(Utils.IS_RETURN_RECEIPT, false);
 
         if (spamFilter != null && spamFilter.checkSpam(msg)) {
-          folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) };
+          folderIds = new String[] { Utils.generateFID(accId, Utils.FD_SPAM, false) };
         }
         node.setProperty(Utils.MSG_FOLDERS, folderIds);
 

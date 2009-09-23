@@ -42,7 +42,10 @@ import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
 /**
  * Created by The eXo Platform SARL
@@ -343,24 +346,17 @@ public class Utils {
     }
   }
   
-  public static String createFolderId(String accountId, String folderName, boolean isPersonal) {
-    String folderId = accountId + "UserFolder" + folderName;
-    if (!isPersonal) {
-      if (folderName.equalsIgnoreCase(Utils.FD_INBOX)) {
-        folderId = accountId + "DefaultFolder" + FD_INBOX;
-      } else if (folderName.equalsIgnoreCase(Utils.FD_DRAFTS)) {
-        folderId = accountId + "DefaultFolder" + FD_DRAFTS;
-      } else if (folderName.equalsIgnoreCase(Utils.FD_SENT)) {
-        folderId = accountId + "DefaultFolder" + FD_SENT;
-      } else if (folderName.equalsIgnoreCase(Utils.FD_TRASH)) {
-        folderId = accountId + "DefaultFolder" + FD_TRASH;
-      } else if (folderName.equalsIgnoreCase(Utils.FD_SPAM)) {
-        folderId = accountId + "DefaultFolder" + FD_SPAM;
-      } else {
-        folderId = accountId + "DefaultFolder" + folderName;
+  public static String generateFID(String accountId, String folderName, boolean isPersonal) {
+    if (isPersonal) {
+      return (accountId + "UserFolder" + folderName);
+    } else {
+      for (int i = 0; i < DEFAULT_FOLDERS.length; i++) {
+        if (folderName.equalsIgnoreCase(DEFAULT_FOLDERS[i])) {
+          return (accountId + "DefaultFolder" + DEFAULT_FOLDERS[i]);
+        }
       }
+      return (accountId + "DefaultFolder" + folderName);
     }
-    return folderId;
   }
   
   public static String getFolderNameFromFolderId(String folderId) {
@@ -522,4 +518,11 @@ public class Utils {
     else str += size + " B" ;
     return str ;
   } 
+  
+  public static ContinuationService getContinuationService() throws Exception {
+    ExoContainer container = RootContainer.getInstance();
+    container = ((RootContainer)container).getPortalContainer("portal");
+    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
+    return continuation;
+  }
 }

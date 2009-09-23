@@ -64,7 +64,7 @@ public class UIFolderContainer extends UIContainer {
   public UIFolderContainer() throws Exception { }
 
   public void init(String accountId) throws Exception {
-    currentFolder_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
+    currentFolder_ = Utils.generateFID(accountId, Utils.FD_INBOX, false);
   }
 
   public String getSelectedFolder(){ return currentFolder_ ; }
@@ -232,7 +232,7 @@ public class UIFolderContainer extends UIContainer {
       if (folderId.equals(uiFolderContainer.getSelectedFolder())) {
         uiMessageList.setMessageFilter(null);
         uiMessageList.init(accountId);
-        uiFolder.setSelectedFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+        uiFolder.setSelectedFolder(Utils.generateFID(accountId, Utils.FD_INBOX, false));
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null) ;
       } else if (uiFolderContainer.getSelectedFolder() == null && uiMessageList.getMessageFilter().getName().equals("Search")) {
         uiMessageList.updateList() ;
@@ -313,7 +313,7 @@ public class UIFolderContainer extends UIContainer {
       List<Message> msgList = mailSrv.getMessagesByFolder(username, accountId, folderId) ;
       boolean containPreview = false ;
       Message msgPre = uiMsgPreview.getMessage() ;
-      String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;     		 
+      String trashFolderId = Utils.generateFID(accountId, Utils.FD_TRASH, false) ;     		 
 
       mailSrv.moveMessages(username, accountId, msgList, folderId, trashFolderId, false) ;
 

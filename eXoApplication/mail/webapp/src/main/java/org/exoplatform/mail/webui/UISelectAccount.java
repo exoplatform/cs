@@ -193,10 +193,10 @@ public class UISelectAccount extends UIForm {
           }
         }
         uiSelectAcc.setSelectedValue(accId);
-        uiFolder.setSelectedFolder(Utils.createFolderId(accId, Utils.FD_INBOX, false));
+        uiFolder.setSelectedFolder(Utils.generateFID(accId, Utils.FD_INBOX, false));
         MessageFilter filter = new MessageFilter("Folder");
         filter.setAccountId(accId);
-        filter.setFolder(new String[] {Utils.createFolderId(accId, Utils.FD_INBOX, false)}) ;
+        filter.setFolder(new String[] {Utils.generateFID(accId, Utils.FD_INBOX, false)}) ;
         uiMessageList.setMessageFilter(filter);
         uiMessageList.init(accId);
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);

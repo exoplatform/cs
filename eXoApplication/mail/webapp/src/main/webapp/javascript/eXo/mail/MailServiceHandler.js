@@ -223,9 +223,7 @@ MailServiceHandler.prototype.destroy = function() {
       var refeshLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Here');
       eval(eXo.core.DOMUtil.findDescendantsByTagName(refeshLabel, 'a')[0].href.replace("%20", ""));
     } else {
-      var hideLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Hide') ;
-      hideLabel.style.display = 'block' ;
-      return ;
+    	if (this.checkMailInfobarNode) this.checkMailInfobarNode.style.display = 'none';
     }
   }
   if (this.checkMailInfobarNode) this.checkMailInfobarNode.style.display = 'none';

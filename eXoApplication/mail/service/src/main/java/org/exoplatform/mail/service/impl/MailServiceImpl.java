@@ -67,8 +67,6 @@ import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.RootContainer;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
@@ -557,18 +555,14 @@ public class MailServiceImpl implements MailService, Startable {
     JobInfo info = CheckMailJob.getJobInfo(username, accountId);
     JobDetail job = findCheckmailJob(username, accountId);
 
-    // add job is it does not exist
     if (job == null) {
       JobDataMap jobData = new JobDataMap();
       jobData.put(CheckMailJob.USERNAME, username);
       jobData.put(CheckMailJob.ACCOUNTID, accountId);     
       jobData.put(CheckMailJob.FOLDERID, folderId);
-      // start now, execute once 
-      // TODO :schedule as specified by account settings
       PeriodInfo periodInfo = new PeriodInfo(new GregorianCalendar().getTime(), null, 1, 24*60*60*1000);
       schedulerService_.addPeriodJob(info, periodInfo, jobData);
       
-      //job = findCheckmailJob(username, accountId);
     }
     return job;
   }
@@ -591,6 +585,9 @@ public class MailServiceImpl implements MailService, Startable {
       javax.mail.Folder folder, boolean isImap, Date fromDate, Date toDate, List<MessageFilter> filters) throws Exception {
     javax.mail.Message[] messages ;
     SearchTerm searchTerm = null;
+    
+    if (fromDate.equals(toDate)) return msgMap;
+    
     if (fromDate == null && toDate == null) { 
       messages = folder.getMessages();
     } else {
@@ -748,7 +745,7 @@ public class MailServiceImpl implements MailService, Startable {
     for (javax.mail.Folder fd : folders) {
       if (!fd.getName().equalsIgnoreCase(Utils.FD_INBOX)) {        
         if (fd.getType() != javax.mail.Folder.HOLDS_FOLDERS) {
-          folderId = Utils.createFolderId(accountId, String.valueOf(((IMAPFolder) fd).getUIDValidity()), true);
+          folderId = Utils.generateFID(accountId, String.valueOf(((IMAPFolder) fd).getUIDValidity()), true);
         } else {
           folderId = "thisistestofphungnam";
         } 
@@ -796,7 +793,7 @@ public class MailServiceImpl implements MailService, Startable {
           folderList.addAll(synchImapFolders(username, accountId, getFolder(username, accountId, folderId), fd.list()));
         }
       } else {
-        Folder inbox = getFolder(username, accountId, Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+        Folder inbox = getFolder(username, accountId, Utils.generateFID(accountId, Utils.FD_INBOX, false));
         inbox.setURLName(fd.getURLName().toString());
         saveFolder(username, accountId, inbox);
       }
@@ -891,7 +888,7 @@ public class MailServiceImpl implements MailService, Startable {
         javax.mail.Folder fd = null;
         Folder f = getFolder(username, accountId, folderId);
         if (f == null || Utils.isEmptyField(f.getURLName())) {
-          f = getFolder(username, accountId, Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+          f = getFolder(username, accountId, Utils.generateFID(accountId, Utils.FD_INBOX, false));
         }
         try {
           if (f != null && !Utils.isEmptyField(f.getURLName())) {
@@ -929,6 +926,8 @@ public class MailServiceImpl implements MailService, Startable {
         checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
         removeCheckingInfo(username, accountId);
       }
+      if (!account.isSavePassword()) account.setIncomingPassword("");
+      updateAccount(username, account);
       logger.debug("/////////////////////////////////////////////////////////////");
       logger.debug("/////////////////////////////////////////////////////////////");
       //store.close();
@@ -937,21 +936,19 @@ public class MailServiceImpl implements MailService, Startable {
   
   private void synchImapMessage(String username, String accountId, javax.mail.Folder folder, String key) throws Exception {
     Account account = getAccountById(username, accountId) ;
-    int totalNew = -1;
-    ExoContainer container = RootContainer.getInstance();
-    container = ((RootContainer)container).getPortalContainer("portal");
-    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
-    Info infoObj = new Info();
     boolean saved = false ;
-    
+    int totalNew = -1;
+    Info infoObj = new Info();
+    ContinuationService continuation = Utils.getContinuationService();
+    if (folder == null) return;
     try {
       folder.open(javax.mail.Folder.READ_WRITE);
       logger.debug(" #### Getting mails from folder " + folder.getName() + " !");
       checkingLog_.get(key).setSyncFolderStatus(CheckingInfo.FINISHED_SYNC_FOLDER);
       checkingLog_.get(key).setStatusMsg("Getting mails from folder " + folder.getName() + " !");
       
-      String folderId = Utils.createFolderId(accountId, String.valueOf(((IMAPFolder) folder).getUIDValidity()), true);
-      if (folder.getName().equalsIgnoreCase(Utils.FD_INBOX)) folderId = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
+      String folderId = Utils.generateFID(accountId, String.valueOf(((IMAPFolder) folder).getUIDValidity()), true);
+      if (folder.getName().equalsIgnoreCase(Utils.FD_INBOX)) folderId = Utils.generateFID(accountId, Utils.FD_INBOX, false);
       
       Folder eXoFolder = getFolder(username, accountId, folderId);
       
@@ -959,56 +956,31 @@ public class MailServiceImpl implements MailService, Startable {
       Date lastCheckedFromDate = eXoFolder.getLastStartCheckingTime();
       Date checkFromDate = eXoFolder.getCheckFromDate();
       
-      if (account.getCheckFromDate() == null) checkFromDate = null ;
-      else if (checkFromDate == null || (checkFromDate.after(account.getCheckFromDate()))) {
+      if (account.getCheckFromDate() == null) {
+        checkFromDate = null ;
+      } else if (checkFromDate == null || checkFromDate.before(account.getCheckFromDate())) {
         checkFromDate = account.getCheckFromDate();
       }
-      List<MessageFilter> filters = getFilters(username, accountId);
+      
       LinkedHashMap<javax.mail.Message, List<String>> msgMap = new LinkedHashMap<javax.mail.Message, List<String>>();
       boolean isImap = account.getProtocol().equals(Utils.IMAP); 
       boolean leaveOnserver = (isImap && Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER)));
-      
-      if (checkFromDate == null) {
-        if (lastCheckedDate != null && lastCheckedFromDate != null) {
-          msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
-          msgMap = getMessages(msgMap, folder, true, null, lastCheckedDate, filters);
-        } else if (lastCheckedFromDate != null) {
-          msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
-        } else if (lastCheckedDate != null) {
-          msgMap = getMessages(msgMap, folder, true, null, lastCheckedDate, filters);
-        }  else {
-          msgMap = getMessages(msgMap, folder, true, null, null, filters);
-        }
-      } else {
-        if (lastCheckedDate != null && lastCheckedFromDate != null) {
-          msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
-          msgMap = getMessages(msgMap, folder, true, checkFromDate, lastCheckedDate, filters);
-        } else if (lastCheckedFromDate != null) {
-          msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
-        } else if (lastCheckedDate != null && lastCheckedDate.after(checkFromDate)) {
-          msgMap = getMessages(msgMap, folder, true, checkFromDate, lastCheckedDate, filters);
-        }  else {
-          msgMap = getMessages(msgMap, folder, true, checkFromDate, null, filters);
-        }
-      }
-      
+     
+      msgMap = getMessageMap(username, accountId, folder, lastCheckedDate, checkFromDate, lastCheckedFromDate);
+        
       totalNew = msgMap.size();
 
-      logger.debug("=============================================================");
       logger.debug(" #### Folder " + folder.getName() + " contains " + totalNew + " messages !");
 
       if (totalNew > 0) {        
-        int i = 0;
-        javax.mail.Message msg;
-        
-        String[] folderIds ;
-        List<String> filterList;
-        MessageFilter filter;
-        long msgUID;
+        int i = 0; long msgUID;
         String folderStr;
-        Date lastFromDate = null;
-        Date receivedDate = null;
-        List<String> folderList, tagList;
+        javax.mail.Message msg;
+        String[] folderIds ;
+        List<String> filterList, folderList, tagList;;
+        MessageFilter filter;
+        
+        Date lastFromDate = null, receivedDate = null;
         List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap.keySet()) ;
         SpamFilter spamFilter = getSpamFilter(username, account.getId());
         
@@ -1050,14 +1022,14 @@ public class MailServiceImpl implements MailService, Startable {
               folderStr += folderIds[k] + ",";
             }
             infoObj.setFolders(folderStr);
+            
             msgUID = ((IMAPFolder)folder).getUID(msg);
             saved = storage_.saveMessage(username, accountId, msgUID, msg, folderIds, tagList, spamFilter, infoObj, continuation, false);
             
-            if (saved) {
-              if (!leaveOnserver) msg.setFlag(Flags.Flag.DELETED, true);       
-            }
+            if (saved && !leaveOnserver) msg.setFlag(Flags.Flag.DELETED, true);       
+              
             receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
-            eXoFolder = getFolder(username, accountId, folderId);
+
             if (i == 0) lastFromDate = receivedDate;                  
             eXoFolder.setLastCheckedDate(receivedDate);
             if ((i == (totalNew - 1))) eXoFolder.setCheckFromDate(lastFromDate);
@@ -1071,6 +1043,8 @@ public class MailServiceImpl implements MailService, Startable {
           }
           i++;
         }
+
+        saveFolder(username, accountId, eXoFolder);
         
         FetchMailContentThread downloadContentMail = new FetchMailContentThread(storage_, msgMap, i, folder, username, accountId);
         new Thread(downloadContentMail).start();        
@@ -1078,16 +1052,39 @@ public class MailServiceImpl implements MailService, Startable {
       checkingLog_.get(key).setStatusMsg("Finished download for " + folder.getName() + " folder.");
       logger.debug("#### Synchronization finished for " + folder.getName() + " folder.");
 
-      if (!account.isSavePassword()) account.setIncomingPassword("");
-      updateAccount(username, account);
-      
-      saveFolder(username, accountId, eXoFolder);
-      
-      
-      //folder.close(true);
     } catch (Exception e) {
       logger.error("Error while checking emails from folder" + folder.getName() + " of username " + username + " on account " + accountId, e);
     }
+  }
+  
+  private LinkedHashMap<javax.mail.Message, List<String>> getMessageMap(String username, String accountId, javax.mail.Folder folder, Date lastCheckedDate, 
+                                                                        Date checkFromDate, Date lastCheckedFromDate) throws Exception{
+    LinkedHashMap<javax.mail.Message, List<String>> msgMap = new LinkedHashMap<javax.mail.Message, List<String>>();
+    List<MessageFilter> filters = getFilters(username, accountId);
+    if (checkFromDate == null) {
+      if (lastCheckedDate != null && lastCheckedFromDate != null) {
+        msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
+        msgMap = getMessages(msgMap, folder, true, null, lastCheckedDate, filters);
+      } else if (lastCheckedFromDate != null) {
+        msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
+      } else if (lastCheckedDate != null) {
+        msgMap = getMessages(msgMap, folder, true, null, lastCheckedDate, filters);
+      }  else {
+        msgMap = getMessages(msgMap, folder, true, null, null, filters);
+      }
+    } else {
+      if (lastCheckedDate != null && lastCheckedFromDate != null) {
+        msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
+        msgMap = getMessages(msgMap, folder, true, checkFromDate, lastCheckedDate, filters);
+      } else if (lastCheckedFromDate != null) {
+        msgMap = getMessages(msgMap, folder, true, lastCheckedFromDate, null, filters);
+      } else if (lastCheckedDate != null && lastCheckedDate.after(checkFromDate)) {
+        msgMap = getMessages(msgMap, folder, true, checkFromDate, lastCheckedDate, filters);
+      }  else {
+        msgMap = getMessages(msgMap, folder, true, checkFromDate, null, filters);
+      }
+    }
+    return msgMap;
   }
   
   public List<Message> checkNewMessage(String username, String accountId) throws Exception {
@@ -1358,10 +1355,10 @@ public class MailServiceImpl implements MailService, Startable {
   } 
   
   private String makeStoreFolder(String username, String accountId, String incomingFolder) throws Exception {
-    String folderId = Utils.createFolderId(accountId, incomingFolder, false);
+    String folderId = Utils.generateFID(accountId, incomingFolder, false);
     Folder storeFolder = storage_.getFolder(username, accountId, folderId);
     if (storeFolder == null) {
-      folderId = Utils.createFolderId(accountId, incomingFolder, true);
+      folderId = Utils.generateFID(accountId, incomingFolder, true);
       Folder storeUserFolder = storage_.getFolder(username, accountId, folderId);
       if (storeUserFolder != null) {
         storeFolder = storeUserFolder;

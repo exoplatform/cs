@@ -83,7 +83,7 @@ public class MessagePageList extends JCRPageList {
         existRefNode = false ; 
         folders = currentNode.getProperty(Utils.MSG_FOLDERS).getValues();
         accId = currentNode.getProperty(Utils.EXO_ACCOUNT).getString() ;
-        sentFolderId = Utils.createFolderId(accId, Utils.FD_SENT, false) ;
+        sentFolderId = Utils.generateFID(accId, Utils.FD_SENT, false) ;
         refFolders = new String[] { sentFolderId } ;
         curMsgFolder = "";
         
@@ -137,7 +137,7 @@ public class MessagePageList extends JCRPageList {
   private LinkedHashMap<String, Message> getMessageList(LinkedHashMap<String, Message> listPage, Node currentNode, String folderId, String[] refFolders) throws Exception {
     PropertyIterator prosIter = currentNode.getReferences() ;
     String accId = currentNode.getProperty(Utils.EXO_ACCOUNT).getString() ;
-    String sentFolderId = Utils.createFolderId(accId, Utils.FD_SENT, false) ;
+    String sentFolderId = Utils.generateFID(accId, Utils.FD_SENT, false) ;
     Node msgNode ;
     while (prosIter.hasNext()) {
       msgNode = prosIter.nextProperty().getParent() ;

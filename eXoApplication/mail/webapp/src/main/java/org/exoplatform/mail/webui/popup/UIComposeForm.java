@@ -626,7 +626,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   }
 
   public boolean fromDrafts() {    
-    return (getMessage() != null && getMessage().getFolders()[0].equals(Utils.createFolderId(accountId_, Utils.FD_DRAFTS, false)) || getComposeType() == MESSAGE_IN_DRAFT) ;
+    return (getMessage() != null && getMessage().getFolders()[0].equals(Utils.generateFID(accountId_, Utils.FD_DRAFTS, false)) || getComposeType() == MESSAGE_IN_DRAFT) ;
   }
 
   public String getLabel(String id) {
@@ -749,12 +749,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       message.setReplyTo(message.getMessageTo()) ;
       message.setIsReturnReceipt(false);
       message.setIsLoaded(true);
-      message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
+      message.setFolders(new String[]{ Utils.generateFID(accountId, Utils.FD_SENT, false) }) ;
       mailSvr.saveMessage(usename, accountId, parentPath_, message, true) ;
     } else if (fromDrafts) {
-      Folder drafts = mailSvr.getFolder(usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
+      Folder drafts = mailSvr.getFolder(usename, accountId, Utils.generateFID(accountId, Utils.FD_DRAFTS, false));
       if (isSaved) {
-        message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
+        message.setFolders(new String[]{ Utils.generateFID(accountId, Utils.FD_SENT, false) }) ;
         mailSvr.saveMessage(usename, accountId, parentPath_, message, false) ;
       } else {
         mailSvr.removeMessage(usename, accountId, message);
@@ -780,7 +780,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 
       message.setReplyTo(message.getMessageTo()) ;
       try {
-        String draftFolderId = Utils.createFolderId(accountId, Utils.FD_DRAFTS, false) ;
+        String draftFolderId = Utils.generateFID(accountId, Utils.FD_DRAFTS, false) ;
         message.setFolders(new String[]{ draftFolderId }) ;
         message.setIsLoaded(true);
         if (!composeForm.fromDrafts()) {
@@ -799,7 +799,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       }
       // update ui
       String selectedFolder = uiFolderContainer.getSelectedFolder() ;
-      if (selectedFolder != null && selectedFolder.equals(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false))) {
+      if (selectedFolder != null && selectedFolder.equals(Utils.generateFID(accountId, Utils.FD_DRAFTS, false))) {
         UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         uiMsgList.setMessagePageList(mailSvr.getMessagePageList(usename, uiMsgList.getMessageFilter())) ;

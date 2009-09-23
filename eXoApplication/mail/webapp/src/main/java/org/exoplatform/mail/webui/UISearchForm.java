@@ -89,8 +89,8 @@ public class UISearchForm extends UIForm {
         filter.setText(text);
       }
       filter.setAccountId(accId);      
-      String spamFolderId = Utils.createFolderId(accId, Utils.FD_SPAM, false) ;
-      String trashFolderId = Utils.createFolderId(accId, Utils.FD_TRASH, false) ;
+      String spamFolderId = Utils.generateFID(accId, Utils.FD_SPAM, false) ;
+      String trashFolderId = Utils.generateFID(accId, Utils.FD_TRASH, false) ;
       String currentFolder = uiMessageList.getSelectedFolderId() ;
       if (currentFolder != null) {
         if (currentFolder.equals(spamFolderId)) filter.setFolder(new String[] {spamFolderId}) ;
