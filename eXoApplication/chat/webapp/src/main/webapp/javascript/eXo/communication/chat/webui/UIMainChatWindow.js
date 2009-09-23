@@ -231,7 +231,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   //this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'BuddyItemActionMenu');
   
   // Notification template
-  this.notificationNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'UINotification');
+  this.notificationNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'UIChatNotification');
 
   // Windows and popups.
   this.chatPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'ChatPopup');

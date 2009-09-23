@@ -8,7 +8,7 @@
   jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChat.init");
 %>
 <!-- Begin Notification -->
-<div class="UINotification" style="display: none; position: relative; top: 13px;
+<div class="UIChatNotification" style="display: none; position: relative; top: 13px;
     float: right">
     <div style="position: absolute; top: 0px; right: 8px; width: 250px;">
         <div class="BoxNote">
