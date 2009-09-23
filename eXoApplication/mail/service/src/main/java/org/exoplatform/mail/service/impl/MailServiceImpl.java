@@ -586,7 +586,7 @@ public class MailServiceImpl implements MailService, Startable {
     javax.mail.Message[] messages ;
     SearchTerm searchTerm = null;
     
-    if (fromDate.equals(toDate)) return msgMap;
+    if (fromDate != null && toDate != null && fromDate.equals(toDate)) return msgMap;
     
     if (fromDate == null && toDate == null) { 
       messages = folder.getMessages();
