@@ -940,7 +940,7 @@ public class MailServiceImpl implements MailService, Startable {
     int totalNew = -1;
     Info infoObj = new Info();
     ContinuationService continuation = Utils.getContinuationService();
-    
+    if (folder == null) return;
     try {
       folder.open(javax.mail.Folder.READ_WRITE);
       logger.debug(" #### Getting mails from folder " + folder.getName() + " !");
