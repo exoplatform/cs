@@ -51,23 +51,28 @@ VerticalSpliter.prototype.clear = function() {
 } ;
 
 VerticalSpliter.prototype.initVerticalLayout = function() {
-	var container = document.getElementById("VeticalLeftLayout");
-	var parentWidth = document.getElementById("VeticalLeftLayout").parentNode.offsetWidth;
-	var oldLeftContentWidth = document.getElementById("uiMessageListResizableArea").offsetWidth + "px";
-	container.style.width = (parentWidth / 2 - 3) + "px";
-	document.getElementById("uiMessageListResizableArea").style.width = oldLeftContentWidth;
-	document.getElementById("VerticalRightLayout").style.width = (parentWidth / 2 - 5) + "px" ;
-	container.style.overflow = "auto";
-	var height = container.offsetHeight;
-	if (!height || height < 600) {
-		height = 600;
-		container.style.height = height + "px" ;;
-	}
-	document.getElementById("ResizeReadingPane").style.height = height + "px" ;
-	document.getElementById("VerticalRightLayout").style.height = height + "px" ;
-	document.getElementById("SpliterResizableArea").style.height = height + "px" ;
-	document.getElementById("UIMessagePreview").style.height = height + "px" ;
-	document.getElementById("UIMessagePreview").style.overflow = "auto";
+	try {
+		var container = document.getElementById("VeticalLeftLayout");
+		var parentWidth = document.getElementById("VeticalLeftLayout").parentNode.offsetWidth;
+		var oldLeftContentWidth = document.getElementById("uiMessageListResizableArea").offsetWidth + "px";
+		container.style.width = (parentWidth / 2 - 3) + "px";
+		document.getElementById("uiMessageListResizableArea").style.width = oldLeftContentWidth;
+		document.getElementById("VerticalRightLayout").style.width = (parentWidth / 2 - 5) + "px" ;
+		container.style.overflow = "auto";
+		var height = container.offsetHeight;
+		if (!height || height < 600) {
+			height = 600;
+			container.style.height = height + "px" ;;
+		}
+		document.getElementById("ResizeReadingPane").style.height = height + "px" ;
+		document.getElementById("VerticalRightLayout").style.height = height + "px" ;
+		document.getElementById("SpliterResizableArea").style.height = height + "px" ;
+		document.getElementById("UIMessagePreview").style.height = height + "px" ;
+		document.getElementById("UIMessagePreview").style.overflow = "auto";
+	} catch(e){
+		//CS-3358:  Chat bar is moved to left bottom of browser and offline when refresh browser in special case 
+		//document.getElementById("VeticalLeftLayout") == null -> bug; 
+	};
 }
 
 eXo.mail.VerticalSpliter = new VerticalSpliter();
