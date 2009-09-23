@@ -378,33 +378,33 @@
   overflow: hidden;
 }
 
-/*************** UINotification **************/
-.UINotification  {
+/*************** UIChatNotification **************/
+.UIChatNotification  {
 	
 }
 
-.UINotification .BoxNote {
+.UIChatNotification .BoxNote {
 	right: 0px;
 }
 
-.UINotification .BoxNote .LeftBoxNote {
+.UIChatNotification .BoxNote .LeftBoxNote {
   background: url('DefaultSkin/background/BoxNote.gif') no-repeat left top;
   padding-left: 5px;
   float: right;
 }
 
-.UINotification .BoxNote .RightBoxNote {
+.UIChatNotification .BoxNote .RightBoxNote {
   background: url('DefaultSkin/background/BoxNote.gif') no-repeat right top;
   padding-right: 5px;
 }
 
-.UINotification .BoxNote .CenterBoxNote {
+.UIChatNotification .BoxNote .CenterBoxNote {
   background: url('DefaultSkin/background/BoxNote.gif') repeat-x left -26px;
   line-height: 26px;
   padding: 0px 5px;
 }
 
-.UINotification .BoxNote .IconBoxNote {
+.UIChatNotification .BoxNote .IconBoxNote {
   background: url('DefaultSkin/background/Icon.gif') no-repeat left 2px;
   line-height: 26px;
   padding: 0px 5px 0px 25px;
@@ -412,64 +412,64 @@
   font-size: 12px;
 }
 
-.UINotification .BoxNote .IconBoxNote  span{
+.UIChatNotification .BoxNote .IconBoxNote  span{
   color: red;
 }
 
-.UINotification .UIPopupNotification {
+.UIChatNotification .UIPopupNotification {
 }
 
-.UINotification .UIPopupNotification  .TLPopupNotification {
+.UIChatNotification .UIPopupNotification  .TLPopupNotification {
   background: url('DefaultSkin/background/Popup.gif') no-repeat left top;
   padding-left:4px;
 }
 
-.UINotification .UIPopupNotification  .TCPopupNotification {
+.UIChatNotification .UIPopupNotification  .TCPopupNotification {
   height:13px;
   background: url('DefaultSkin/background/Popup.gif') repeat-x left -13px;
 }
 
-.UINotification .UIPopupNotification  .TRPopupNotification {
+.UIChatNotification .UIPopupNotification  .TRPopupNotification {
   background: url('DefaultSkin/background/PopupTR.png') no-repeat right top;
   padding-right: 45px;
 }
 
-.UINotification .UIPopupNotification  .TitleNotification {
+.UIChatNotification .UIPopupNotification  .TitleNotification {
   background: url('DefaultSkin/background/Popup.gif') repeat-x left -50px ;
   height: 16px;
   padding-left:10px;
 }
 
-.UINotification .UIPopupNotification  .MLPopupNotification {
+.UIChatNotification .UIPopupNotification  .MLPopupNotification {
   background: url('DefaultSkin/background/PopupML.gif') repeat-y left;
   padding-left: 2px;
 }
 
-.UINotification .UIPopupNotification  .MCPopupNotification {
+.UIChatNotification .UIPopupNotification  .MCPopupNotification {
   background: #feffcf;
 }
 
-.UINotification .UIPopupNotification  .MRPopupNotification {
+.UIChatNotification .UIPopupNotification  .MRPopupNotification {
   background: url('DefaultSkin/background/PopupMR.gif') repeat-y right;
   padding-right: 2px;
 }
 
-.UINotification .UIPopupNotification  .BLPopupNotification {
+.UIChatNotification .UIPopupNotification  .BLPopupNotification {
   background: url('DefaultSkin/background/Popup.gif') no-repeat left -26px;
   padding-left: 4px;
 }
 
-.UINotification .UIPopupNotification  .BCPopupNotification {
+.UIChatNotification .UIPopupNotification  .BCPopupNotification {
   height: 4px;
   background: url('DefaultSkin/background/Popup.gif') repeat-x left -30px;
 }
 
-.UINotification .UIPopupNotification  .BRPopupNotification {
+.UIChatNotification .UIPopupNotification  .BRPopupNotification {
   background: url('DefaultSkin/background/Popup.gif') no-repeat right -26px;
   padding-right: 4px;
 }
 
-.UINotification .UIPopupNotification  .ItemTitle {
+.UIChatNotification .UIPopupNotification  .ItemTitle {
   color: black;
   display: block;
   font-size: 12px;
@@ -477,7 +477,7 @@
   float: left;
 }
 
-.UINotification .UIPopupNotification  .Close {
+.UIChatNotification .UIPopupNotification  .Close {
   background: url('DefaultSkin/background/Popup.gif') left -66px no-repeat;
   display: block;
   height: 7px; width: 7px;
@@ -486,7 +486,7 @@
   cursor: pointer;
 }
 
-.UINotification .UIPopupNotification  .Item {
+.UIChatNotification .UIPopupNotification  .Item {
 	overflow:hidden;
   border-bottom: 1px dotted #b7b7b7;
   margin: 0px 5px;
@@ -497,7 +497,7 @@
   background: url('DefaultSkin/background/Popup.gif') no-repeat 3px -74px;
 }
 
-.UINotification .UIPopupNotification  .Item:hover {
+.UIChatNotification .UIPopupNotification  .Item:hover {
   color: #353535;
 	font-weight: bold;
 }
