@@ -139,8 +139,9 @@ UICalendarPortlet.prototype.addQuickShowHiddenWithTime = function(obj, type, fro
     var CalendarWorkingWorkspace =  document.getElementById("UICalendarWorkingContainer");
     var UIQuckAddEventPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddEventPopupWindow");
     var UIQuckAddTaskPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddTaskPopupWindow");
-    var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;     
-    if(eXo.calendar.UICalendarPortlet.filterSelect.options.length <= 1) {
+    var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;
+	// There is at least 1 event category to show event form
+	if((selectedCategory != null) && (selectedCategory.options.length <= 1)) {
     	var divEventCategory = eXo.core.DOMUtil.findAncestorByClass(eXo.calendar.UICalendarPortlet.filterSelect, "EventCategory") ;
     	alert(divEventCategory.getAttribute("msg")) ;
     	return;
@@ -153,7 +154,7 @@ UICalendarPortlet.prototype.addQuickShowHiddenWithTime = function(obj, type, fro
     		toTime:parseInt(toMilli),
     		isAllday:false,
     		calendar:id,
-    		category:selectedCategory.value
+    		category:(selectedCategory)? selectedCategory.value : null 
     };
     if(type == 1) {
     	var uiform = eXo.core.DOMUtil.findDescendantById(UIQuckAddEventPopupWindow, "UIQuickAddEvent") ;
