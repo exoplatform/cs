@@ -110,13 +110,12 @@ public class PopupReminderJob implements Job {
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
             JsonValue json = generatorImpl.createJsonObject(rmdObj);
             continuation.sendMessage(user, "/eXo/Application/Calendar/messages", json, rmdObj.toString());
-            System.out.println("\n\n " + user + " has a notify !");
+            if (log_.isDebugEnabled()) log_.debug("\n\n " + user + " has a notify !");
           }
         }
       }
     } catch (Exception e) {
-      //System.out.println("\n\n Error when run popup reminder job !");
-      //e.printStackTrace();			
+      if (log_.isDebugEnabled()) log_.debug("\n\n Error when run popup reminder job !");
     }  finally {
       provider.close(); // release sessions
     }
