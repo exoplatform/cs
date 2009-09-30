@@ -1280,6 +1280,7 @@ form {
 	float: right; /* orientation=rt */
 	height: 68px;
 	margin: 0px;
+	border: 1px solid #c7c7c7;
 }
 
 /**************************** MiniBoxChat*****************************/
