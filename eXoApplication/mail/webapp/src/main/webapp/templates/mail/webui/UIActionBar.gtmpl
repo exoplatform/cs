@@ -66,15 +66,24 @@
   					                    <div class="ItemIcon HideFolderListIcon">
                                   <%=_ctx.appRes(uicomponent.id+ ".label.hide-navigator-pane") %>
   					                    </div>
+																<div class="ItemIcon HideFolderListIcon" style="display:none;">
+                                  <%=_ctx.appRes(uicomponent.id+ ".label.show-navigator-pane") %>
+  					                    </div>
   				                    </a>
   				                    <a class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(2)" href="#">   
   					                    <div class="ItemIcon HideMessagesPaneIcon">
   					                      <%=_ctx.appRes(uicomponent.id+ ".label.hide-messages-pane") %>
   					                    </div>
+																<div class="ItemIcon HideMessagesPaneIcon" style="display:none;">
+  					                      <%=_ctx.appRes(uicomponent.id+ ".label.show-messages-pane") %>
+  					                    </div>
   				                    </a>
   				                    <a class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(3)" href="#">   
   					                    <div class="ItemIcon HideReadingPaneIcon">
                                   <%=_ctx.appRes(uicomponent.id+ ".label.hide-preview-pane") %>
+  					                    </div>
+																<div class="ItemIcon HideReadingPaneIcon" style="display:none;">
+                                  <%=_ctx.appRes(uicomponent.id+ ".label.show-preview-pane") %>
   					                    </div>
   				                    </a>
   													</div>

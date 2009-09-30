@@ -148,26 +148,31 @@ UIMailPortlet.prototype.switchLayout = function(layout) {
 UIMailPortlet.prototype.changeMenuLabel = function(layout, layoutState){
 	var csMailLayoutSwitchMenuNode = document.getElementById('_CSMailLayoutSwitchMenu');
   var menuItems = eXo.core.DOMUtil.findDescendantsByClass(csMailLayoutSwitchMenuNode, 'a', 'MenuItem');
-  var menuItemTexts = eXo.core.DOMUtil.findDescendantsByClass(csMailLayoutSwitchMenuNode, 'div', 'ItemIcon');
-  var fontWeight = false;
-  for (var i=0; i<menuItems.length; i++) {
-    if (menuItemTexts[i]) {
-			if(layout == "all") {
-				if (layoutState) {
-	        menuItemTexts[i].innerHTML = menuItemTexts[i].innerHTML.replace('Show', 'Hide');        
-	      } else if (!layoutState){        
-	        menuItemTexts[i].innerHTML = menuItemTexts[i].innerHTML.replace('Hide', 'Show');
-	      }
-				continue ;
-			}
-      if (layout == 0 ||
+	if(layout == "all") {
+  	for (var i=1; i<menuItems.length; i++) {			
+			var menuLabelNode = eXo.core.DOMUtil.findDescendantsByClass(menuItems[i], 'div', 'ItemIcon');
+			if (layoutState) {
+        menuLabelNode[0].style.display = "block";
+				menuLabelNode[1].style.display = "none";        
+      } else if (!layoutState){
+				menuLabelNode[0].style.display = "none";
+				menuLabelNode[1].style.display = "block";
+      }
+		}
+  }
+	else{
+		for (var i=1; i<menuItems.length; i++) {
+			var menuLabelNode = eXo.core.DOMUtil.findDescendantsByClass(menuItems[i], 'div', 'ItemIcon');
+	    if (layout == 0 ||
           (layoutState && i == layout)) {
-        menuItemTexts[i].innerHTML = menuItemTexts[i].innerHTML.replace('Show', 'Hide');        
-      } else if (!layoutState && i == layout){        
-        menuItemTexts[i].innerHTML = menuItemTexts[i].innerHTML.replace('Hide', 'Show');
+				menuLabelNode[0].style.display = "block";
+				menuLabelNode[1].style.display = "none";        
+      } else if (!layoutState && i == layout){
+				menuLabelNode[0].style.display = "none";
+				menuLabelNode[1].style.display = "block";
       }
     }
-  }
+	}
 };
 
 UIMailPortlet.prototype.switchLayoutCallback = function(layout,status){

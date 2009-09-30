@@ -348,6 +348,9 @@
       <hide-navigator-pane>تــصفّـح</hide-navigator-pane>
       <hide-messages-pane>القائمة</hide-messages-pane>
       <hide-preview-pane>الرسالة</hide-preview-pane>
+			<show-navigator-pane>تــصفّـح</s-navigator-pane>
+      <show-messages-pane>القائمة</s-messages-pane>
+      <show-preview-pane>الرسالة</s-preview-pane>
       <accounts>حسابات</accounts>
       <settings>التفضيلات</settings>
     </label>
