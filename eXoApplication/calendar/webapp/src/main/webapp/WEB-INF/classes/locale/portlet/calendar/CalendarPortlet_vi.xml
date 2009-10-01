@@ -78,6 +78,16 @@
       <UIEventPreview>Xem chi tiết</UIEventPreview>
     </title>
   </UICalendarPopupWindow>
+  <UIQuckAddEventPopupWindow>
+  	<title>
+  		<UIQuickAddEvent>Thêm sự kiện</UIQuickAddEvent>
+  	</title>
+  </UIQuckAddEventPopupWindow>
+  <UIQuckAddTaskPopupWindow>
+  	<title>
+  		<UIQuickAddTask>Thêm nhiệm vụ</UIQuickAddTask>
+  	</title>
+  </UIQuckAddTaskPopupWindow>
   <UICalendarChildPopupWindow>
     <title>
       <UIGroupSelector>Chọn nhóm</UIGroupSelector>
@@ -252,9 +262,16 @@
       <sharedCalendar>Lịch chia sẻ</sharedCalendar>
       <publicCalendar>Lịch cho nhóm</publicCalendar>
       <option>
-	    <dd-MM-yyyy>dd-mm-yyyy (nn-tt-nnnn)</dd-MM-yyyy>
+	    	<dd-MM-yyyy>dd-mm-yyyy (nn-tt-nnnn)</dd-MM-yyyy>
         <MM-dd-yyyy>mm-dd-yyyy (tt-nn-nnnn)</MM-dd-yyyy>
       </option>
+	    <option.1-wst>Chủ nhật</option.1-wst>
+	    <option.2-wst>Thứ hai</option.2-wst>
+	    <option.3-wst>Thứ ba</option.3-wst>
+	    <option.4-wst>Thứ tư</option.4-wst>
+	    <option.5-wst>Thứ năm</option.5-wst>
+	    <option.6-wst>Thứ sáu</option.6-wst>
+	    <option.7-wst>Thứ bẩy</option.7-wst>
     </label>
     <action>
       <Cancel>Hủy bỏ</Cancel>
@@ -745,10 +762,10 @@
       <delegation>Giao việc</delegation>
       <calendar>Lịch</calendar>
       <category>Phân loại</category>
-      <mailReminder>Nhắc việc qua thư</mailReminder>
+      <mailReminder>Gửi thư nhắc nhở</mailReminder>
       <mailReminderTime>Thời gian</mailReminderTime>
       <mailReminderAddress>Địa chỉ thư</mailReminderAddress>
-      <popupReminder>Nhắc việc</popupReminder>
+      <popupReminder>Thông báo nhắc nhở</popupReminder>
       <popupReminderTime>Thời gian</popupReminderTime>
       <action>
         <AddCategory>Thêm chỉ mụch</AddCategory>
@@ -775,6 +792,10 @@
       <popupRepeatInterval>Khoảng</popupRepeatInterval>
       <SelectEmail>Chọn thư</SelectEmail>
       <option>
+        <none>Không có</none>
+        <normal>Bình thường</normal>
+        <high>Cao</high>
+        <low>Thấp</low>
         <needs-action>Cần thực hiện</needs-action>
         <completed>Đã thực hiện</completed>
         <in-process>Đang thực hiện</in-process>
@@ -1129,7 +1150,7 @@
   <UIEventForm>
   	<label>
   		<info>Người tham gia :</info>
-  		<answer>Tham giự?</answer>
+  		<answer>Tham dự?</answer>
   		<always>Luôn luôn</always>
   		<never>Không bao giờ</never>
   		<ask>Hỏi</ask>
