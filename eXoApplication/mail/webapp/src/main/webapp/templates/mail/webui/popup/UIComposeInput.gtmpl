@@ -49,7 +49,7 @@
 	  </tr>
 	  <tr>
 	    <td class="ToFieldLabel">
-	    		<a href="<%=uiForm.event("To")%>"><%=_ctx.appRes(uiForm.id+ ".label.to") %> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+	    		<a style="width: 20px;" href="<%=uiForm.event("To")%>"><%=_ctx.appRes(uiForm.id+ ".label.to") %> :&nbsp;&nbsp;</a>
 	    </td>
 	    <td class="ToFieldComponent"  colspan="2">
 	      <%uiForm.renderField("to")%> 

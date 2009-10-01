@@ -109,8 +109,30 @@
 
 .UIMessageCompose .UIForm .HorizontalLayout td.FieldLabel {
 	font-weight: bold;
-	width: 120px;
 }
+
+.UIMessageCompose .UIForm .HorizontalLayout td.ToFieldLabel {
+	font-weight: bold;
+	padding:4px;
+	text-align:right;
+	vertical-align:top;
+}
+
+.UIMessageCompose .UIForm .HorizontalLayout td.SubjectFieldLabel {
+	font-weight: bold;
+	padding:4px;
+	text-align:right;
+	vertical-align:top;
+}
+
+.UIMessageCompose .UIForm .HorizontalLayout td.SubjectFieldComponent {
+	padding:4px;
+}
+
+.UIMessageCompose .UIForm .HorizontalLayout td.ToFieldComponent {
+	padding:4px;
+}
+
 
 .UIMessageCompose .UIForm .HorizontalLayout td {
 	border: none;
