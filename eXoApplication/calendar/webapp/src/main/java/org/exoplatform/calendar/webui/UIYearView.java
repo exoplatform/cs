@@ -16,17 +16,19 @@
  **/
 package org.exoplatform.calendar.webui;
 
+import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
-import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -104,6 +106,25 @@ public class UIYearView extends UICalendarView {
     setSelectedCategory(categoryId) ;
   }
 
+  // CS-3357
+  protected String[] getDaysNameTitle() { 
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormatSymbols dfs = new DateFormatSymbols(locale) ;
+    Map<Integer, String> days = new LinkedHashMap<Integer, String>();
+    if (!locale.getDisplayLanguage().contains("Vietnam")) {
+      for(int i = 1; i < dfs.getWeekdays().length ; i ++) {
+        days.put(i, dfs.getWeekdays()[i]) ;
+      }
+    } else {
+      days.put(1, dfs.getWeekdays()[1]);
+      for(int i = 2; i < dfs.getWeekdays().length ; i ++) {
+        days.put(i, dfs.getWeekdays()[i].split(" ")[1].toUpperCase()) ;
+      }
+    }    
+    return days.values().toArray(new String[]{})  ;
+  }
+  
   static  public class OnchangeActionListener extends EventListener<UIYearView> {
     public void execute(Event<UIYearView> event) throws Exception {
       UIYearView uiYearView = event.getSource() ;
