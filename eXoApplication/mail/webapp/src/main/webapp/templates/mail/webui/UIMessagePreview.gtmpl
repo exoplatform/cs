@@ -310,7 +310,7 @@
   									<% } %>
   									<div class="Actions" title="<%=_ctx.appRes(uicomponent.id+ '.label.action-on-this-messge') %>" onclick="eXo.mail.UIMailPortlet.showMessageAction(this, event);">
                     <% /*Begin Popup Menu*/ %>
-                      <div style="position: relative;height:1px;">
+                      
                             <div class="UIRightClickPopupMenu" style="display: none;">
                               <div class="UIContextMenuContainer">
                                 <div class="TopLeftRightClickPopupMenu">
@@ -366,7 +366,7 @@
                             </div>
                           </div>
                   <% /*End Popup Menu*/ %>
-                    </div>
+                    
   									<div style="clear: left;"><span></span></div>
   								</div>
   								<div style="clear: both;"><span></span></div>
