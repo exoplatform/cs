@@ -16,8 +16,14 @@
  */
 package org.exoplatform.services.xmpp.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoricalMessageImpl;
 import org.jivesoftware.smack.packet.Message;
 
@@ -29,7 +35,9 @@ import org.jivesoftware.smack.packet.Message;
  */
 public class HistoryUtils {
 
-  public static HistoricalMessageImpl messageToHistoricalMessage(Message message) {
+  private static final String XMPP_DELAY_DATETIME_FORMAT = "yyyyMMdd'T'HH:mm:ss";
+  
+  public static HistoricalMessageImpl messageToHistoricalMessage(Message message){
     HistoricalMessageImpl historicalMessage = new HistoricalMessageImpl();
     historicalMessage.setId(message.getPacketID());
     historicalMessage.setFrom(message.getFrom());
@@ -37,8 +45,26 @@ public class HistoryUtils {
     historicalMessage.setType(message.getType().name());
     historicalMessage.setBody(message.getBody());
     historicalMessage.setReceive(false);
-    historicalMessage.setDateSend(Calendar.getInstance().getTime());
+    Date delayedDate = getDelayedDate(message);
+    if(delayedDate != null)
+      historicalMessage.setDateSend(delayedDate);
+    else
+      historicalMessage.setDateSend(Calendar.getInstance().getTime());
     return historicalMessage;
   }
-
+  
+  private static Date getDelayedDate(Message message){
+    Document document;
+    Date delayedDate = null;
+    DateFormat delayedFormatter = new SimpleDateFormat(XMPP_DELAY_DATETIME_FORMAT);
+    try {
+      String xmlns = message.getExtension("jabber:x:delay").toXML();
+      document = DocumentHelper.parseText(xmlns);
+      Element delayInformation = document.getRootElement();
+      delayedDate = delayedFormatter.parse(delayInformation.attributeValue("stamp"));
+    } catch (Exception e) {
+      return null;
+    }
+    return delayedDate;
+  }
 }
