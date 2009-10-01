@@ -297,7 +297,7 @@
     <label>
       <checkContact>Đánh dấu</checkContact>
       <edit>Sửa</edit>
-      <copy>Sao</copy>
+      <copy>Sao Chép</copy>
       <shared>Chia sẻ</shared>
       <sendEmail>Gửi thư</sendEmail>
       <instantMessage>Nhắn tin</instantMessage>
@@ -314,9 +314,9 @@
       <name>Tên</name>
       <searchResult>Kết quả tìm kiếm</searchResult>
       <of>Của</of>
-      <contacts>Các liên lạc</contacts>
+      <contacts>Liên lạc</contacts>
       <sharedContacts>Liên lạc chia sẻ</sharedContacts>
-      <copyContacts>Sao liên lạc </copyContacts>
+      <copyContacts>Sao Chép</copyContacts>
       <webSite>Trang web</webSite>
       <viewDetails>Xem chi tiết</viewDetails>
       <firstPage>Về đầu trang</firstPage>
@@ -343,7 +343,7 @@
       <non-permission>Bạn không có quyền thực hiện thao tác này</non-permission>
       <contact-deleted>Liên lạc đã bị xóa</contact-deleted>
       <checkContact-toDelete>Chọn liên lạc để xóa</checkContact-toDelete>
-      <checkContact-toCopy>Chọn liên lạc để sao</checkContact-toCopy>
+      <checkContact-toCopy>Chọn liên lạc để sao chép</checkContact-toCopy>
       <checkContact-toSendMail>Chọn liên lạc để gửi thư</checkContact-toSendMail>
       <checkContact-toPrint>Chọn liên lạc để in</checkContact-toPrint>
       <checkContact-toMove>Chọn liên lạc để di chuyển</checkContact-toMove>
@@ -351,6 +351,7 @@
       <chatApp-notAvaiable>ứng dụng Tán gẫu chưa sẵn sàng</chatApp-notAvaiable>
       <checkContact-toChat>Chọn liên lạc để tán gẫu</checkContact-toChat>
       <contact-not-existed>Liên lạc không còn tồn tại</contact-not-existed>
+      <have-no-item>Bạn chưa chọn liên lạc nào</have-no-item>
     </msg>
     <action>
       <print>In</print>
@@ -399,7 +400,7 @@
       <personalAddress>Nhóm cá nhân</personalAddress>
       <publicAddress>Nhóm chung</publicAddress>
       <addContact>Thêm liên lạc</addContact>
-      <copyContacts>Sao</copyContacts>
+      <copyContacts>Sao chép</copyContacts>
       <pasteContacts>Dán</pasteContacts>
       <share>Chia sẻ</share>
       <exportContacts>Xuất liên lạc</exportContacts>
@@ -570,9 +571,9 @@
       <addressbooks>Các nhóm</addressbooks>
       <tags>Các thẻ</tags>
       <details>Chi tiết</details>
-      <customLayoutView>Chọn khung</customLayoutView>
-      <contactsView>Kiểu xem</contactsView>
-      <layoutView>Bố cục</layoutView>
+      <customLayoutView>Tùy biến giao diện</customLayoutView>
+      <contactsView>Hiển thị</contactsView>
+      <layoutView>Tùy biến giao diện</layoutView>
       <addEvent>Thêm sự kiện</addEvent>
       <event>Sự kiện</event>
     </label>
