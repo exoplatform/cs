@@ -89,7 +89,18 @@ public class Conversation {
    * @param message the message 
    */
   public void addMessage(HistoricalMessageImpl message) {
-    messageList.add(message);
+    if(message == null) return;
+    boolean hasExist = false;
+    if(message.getDateSend() != null)
+      for(HistoricalMessageImpl hisMessage: messageList)
+      {
+        if(message.getDateSend().equals(hisMessage.getDateSend()) && message.getFrom().equals(hisMessage.getFrom())){
+          hasExist = true;
+          break;
+        }
+      }
+    if(!hasExist)
+      messageList.add(message);
   }
 
   /**

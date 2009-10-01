@@ -281,8 +281,11 @@ public class XMPPSessionImpl implements XMPPSession {
             packet.setPacketID(CodingUtils.encodeToHex(UUID.randomUUID().toString()));
             MessageBean message = TransformUtils.messageToBean((Message) packet);
             message.setDateSend(dateFormat.format(new Date()));
-            history.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage((Message) packet),
-                                         sessionProvider);
+            /*history.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage((Message) packet),
+                                         sessionProvider);*/
+            //Fix for CS-3246: contact list in public room is empty in special case
+            //Because persistence operations are massive -> much delay time -> bug ->to solve by using cache
+            history.logMessage((Message) packet);
             EventsBean eventsBean = new EventsBean();
             eventsBean.addMessage(message);
             eventsBean.setEventId(Packet.nextID());

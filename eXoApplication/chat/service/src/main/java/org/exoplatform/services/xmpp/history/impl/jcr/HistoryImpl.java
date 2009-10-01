@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Queue;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -43,6 +45,7 @@ import org.exoplatform.services.jcr.impl.core.NodeImpl;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.Interlocutor;
 import org.exoplatform.services.xmpp.util.CodingUtils;
+import org.exoplatform.services.xmpp.util.HistoryUtils;
 import org.jcrom.Jcrom;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.util.StringUtils;
@@ -136,6 +139,11 @@ public class HistoryImpl implements Startable{
    */
   private Jcrom               jcrom;
   
+  /**
+   * Queue that holds the messages to log.
+   */
+  private Queue<Message> logQueue = new ConcurrentLinkedQueue<Message>();
+  
   public void start() {
     try{
       Session sysSession = this.repositoryService.getRepository(repositopryName).getSystemSession(wsName);
@@ -153,6 +161,7 @@ public class HistoryImpl implements Startable{
   
   
   public void stop() {
+    logAllMessages();
   }
 
   /**
@@ -202,7 +211,34 @@ public class HistoryImpl implements Startable{
     
     sysSession.logout();
   }
+  
+  public Queue<Message> getLogQueue() {
+    return logQueue;
+  }
 
+  public void logMessage(Message message) {
+    // Only log messages that have a subject or body. Otherwise ignore it.
+    if (message.getSubject() != null || message.getBody() != null) {
+        logQueue.add(message);
+    }
+  }
+  
+  /**
+   * Logs all the remaining message log entries to the database. Use this method to force
+   * saving all the message log entries before the service becomes unavailable.
+   */
+  private void logAllMessages() {
+      Message message;
+      SessionProvider provider = SessionProvider.createSystemProvider();
+      while (!logQueue.isEmpty()) {
+        message = logQueue.poll();
+          if (message != null) {
+              this.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage(message), provider);
+          }
+      }
+      provider.close();
+  }
+  
   /**
    * @return
    * @throws RepositoryException
@@ -224,7 +260,7 @@ public class HistoryImpl implements Startable{
    * @param message the message add to history 
    * @param sessionProvider the session provider
    */
-  public void addHistoricalMessage(HistoricalMessage message, SessionProvider sessionProvider) {
+  public boolean addHistoricalMessage(HistoricalMessage message, SessionProvider sessionProvider) {
     if (message.getTo() != null && message.getFrom() != null) {
       try {
         HistoricalMessageImpl historicalMessage = (HistoricalMessageImpl) message;
@@ -256,8 +292,10 @@ public class HistoryImpl implements Startable{
         conversationNode.getSession().save();
       } catch (Exception e) {
         e.printStackTrace();
+        return false;
       }
     }
+    return true;
   }
 
   
