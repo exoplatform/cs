@@ -1,0 +1,157 @@
+<div class="UIActionBar">
+	<div class="UIToolbar">
+		<div class="HeaderToolbar">
+			<div class="LeftBar">
+				<div class="RightBar">
+				
+					<div class="CenterBar">
+					
+					<a href="<%=uicomponent.event("AddContact")%>" class="SelectButton">
+						<div class="IconHolder AddContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>">
+							<%=_ctx.appRes(uicomponent.getName() + ".label.contact")%>
+						</div>
+          			</a>
+          
+					<a href="<%=uicomponent.event("AddAddressBook")%>" class="SelectButton">
+						<div class="IconHolder AddAddressBookIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addAddressBook")%>">
+							<%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%>
+						</div>
+         			 </a>
+          		<!--	 
+          			 <a href="<%=uicomponent.event("AddEvent")%>" class="SelectButton">
+						<div class="IconHolder AddEventIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addEvent")%>">
+							<%=_ctx.appRes(uicomponent.getName() + ".label.event")%>
+						</div>
+         			 </a>         
+          -->
+          
+          <div class="SeparatorLine"><span></span></div>	
+          <a href="<%=uicomponent.event("ImportContact")%>" class="SelectButton">
+						<div class="IconHolder ImportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>">
+							<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>
+						</div>
+          </a>
+          
+          <a href="<%=uicomponent.event("ExportContact")%>" class="SelectButton">
+						<div class="IconHolder ExportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.exportAddress")%>">
+							<%=_ctx.appRes(uicomponent.getName() + ".label.exportAddress")%>
+						</div>
+          </a>
+						<div class="SeparatorLine"><span></span></div>
+						<div class="SelectButton" onclick="eXo.contact.UIContactPortlet.show(this, event);">
+							<div class="IconHolder ViewIcon">
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.contactsView")%></div>
+							</div>
+							<% /*Begin Popup Menu*/ %>
+								<div style="position: relative;">
+
+			      				<div class="UIRightClickPopupMenu" style="display: none;">
+			      					<div class="UIContextMenuContainer">
+											  <div class="TopLeftRightClickPopupMenu">
+					          			<div class="TopRightRightClickPopupMenu">
+					            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+					          			</div>
+					        			</div>
+								        <div class="MiddleLeftRightClickPopupMenu">
+								          <div class="MiddleRightRightClickPopupMenu">
+					              		<div class="UIRightPopupMenuContainer">
+					                    <div class="TypeViewContactPortlet">
+  					                    <div class="MenuItem" onclick="<%=uicomponent.event("ChangeView", "true")%>">   
+  						                    <div class="ItemIcon ContactListIcon">
+  						                    	<%=_ctx.appRes(uicomponent.getName() + ".label.contactsList")%>
+  						                    </div>
+  					                    </div>
+  					                    <div class="MenuItem" onclick="<%=uicomponent.event("ChangeView", "false")%>">   
+  						                    <div class="ItemIcon ContactIcon">
+  						                     	<%=_ctx.appRes(uicomponent.getName() + ".label.vcard")%>
+  						                    </div>
+  					                    </div>
+					                    </div>
+														</div>
+						          		</div>
+						        		</div>
+									      <div class="BottomLeftRightClickPopupMenu">
+								        <div class="BottomRightRightClickPopupMenu">
+								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+								        </div>
+								      </div>
+					      			</div>
+								    </div>
+
+			      		</div>
+			      		<% /*End Popup Menu*/ %>
+							<!--div class="IconHolder ViewIcon">
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.contactsView")%></div>
+							</div-->
+						</div>
+						
+						<div class="SelectButton" onclick="eXo.contact.UIContactPortlet.showPopupCustomLayoutView(this, event);">
+							<div class="IconHolder CustomLayoutIcon">
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.layoutView")%></div>
+							</div>
+							<% /*Begin Popup Menu*/ %>
+									<div style="position: relative;">
+
+			      				<div class="UIRightClickPopupMenu" style="display: none;">
+				      					<div class="UIContextMenuContainer">
+												  <div class="TopLeftRightClickPopupMenu">
+						          			<div class="TopRightRightClickPopupMenu">
+						            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+						          			</div>
+						        			</div>
+									        <div class="MiddleLeftRightClickPopupMenu">
+									          <div class="MiddleRightRightClickPopupMenu">
+						              		<div class="UIRightPopupMenuContainer" id="customLayoutViewMenu">
+																<div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(0)" >
+							                    <div class="ItemIcon CheckedMenu">
+							                      <%=_ctx.appRes(uicomponent.getName() + ".label.default")%>
+							                    </div>
+						                    </div>
+                                <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(1)" >   
+							                    <div class="ItemIcon CheckedMenu">
+							                      <%=_ctx.appRes(uicomponent.getName() + ".label.navigation")%>
+							                    </div>
+						                    </div>
+						                    <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(2)" >   
+							                    <div class="ItemIcon CheckedMenu">
+							                       <%=_ctx.appRes(uicomponent.getName() + ".label.addressbooks")%>
+							                    </div>
+						                    </div>
+						                    <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(3)" >
+							                    <div class="ItemIcon CheckedMenu">
+							                      <%=_ctx.appRes(uicomponent.getName() + ".label.tags")%>
+							                    </div>
+						                    </div>
+                                <div class="MenuItem ContactDetailsMenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(4)" >
+							                    <div class="ItemIcon CheckedMenu">
+							                      <%=_ctx.appRes(uicomponent.getName() + ".label.details")%>
+							                    </div>
+						                    </div>
+															</div>
+							          		</div>
+							        		</div>
+										      <div class="BottomLeftRightClickPopupMenu">
+									        <div class="BottomRightRightClickPopupMenu">
+									          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+									        </div>
+									      </div>
+						      			</div>
+									    </div>
+
+				      		</div>
+				      		<% /*End Popup Menu*/ %>
+							<!--div class="IconHolder CustomLayoutIcon">
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.customLayoutView")%></div>
+							</div-->
+						</div>
+						
+						<!--a href="#">
+							<div class="IconHolder AddressOptionIcon">Address Book Options</div>
+						</a-->
+						<div style="clear:left;"><span></span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

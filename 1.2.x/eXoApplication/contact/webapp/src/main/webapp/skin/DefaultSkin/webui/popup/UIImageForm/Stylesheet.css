@@ -1,0 +1,8 @@
+.UIContactPortlet .UIImageForm {
+	background: #f3f3f3;
+	padding: 20px;
+}
+
+.UIContactPortlet .UIImageForm .UIForm .HorizontalLayout {
+	border: none;
+}

@@ -1,0 +1,69 @@
+<project>
+  <parent>
+    <groupId>org.exoplatform.cs</groupId>
+    <artifactId>config</artifactId>
+    <version>1.2.2-SNAPSHOT</version>
+  </parent> 
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>exo.cs.web.webservice</artifactId>
+  <version>${org.exoplatform.cs.version}</version>
+  <packaging>jar</packaging>
+  <name>eXo webservice</name>
+  <url>http://www.exoplatform.org</url>
+  <description>eXo webservice</description>
+  
+  <dependencies> 
+    <dependency>
+      <groupId>org.exoplatform.ws</groupId>
+      <artifactId>exo.ws.rest.core</artifactId>
+      <version>${org.exoplatform.ws.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.security.core</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.resources</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.webui.portal</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.jcr</groupId>
+      <artifactId>exo.jcr.component.ext</artifactId>
+      <version>${org.exoplatform.jcr.version}</version>      
+    </dependency> 
+    
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
+      <version>${org.exoplatform.cs.version}</version>
+      <scope>provided</scope>
+    </dependency>  
+    
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.contact.service</artifactId>
+      <version>${org.exoplatform.cs.version}</version>
+      <scope>provided</scope>
+    </dependency>   
+    
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
+      <version>${org.exoplatform.cs.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    
+  </dependencies>
+</project>

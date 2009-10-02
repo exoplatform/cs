@@ -1,0 +1,128 @@
+.UICalendarPortlet .UIInsertAddress {
+	width: 650px;
+	background: #f3f3f3;
+}
+
+.UICalendarPortlet .UIInsertAddress .UISearch {
+	padding: 0px;
+	height: 37px;
+}
+
+.UICalendarPortlet .UIInsertAddress .UISearch .UIBarStyle .NormalBarStyle {
+	height: 37px;
+}
+
+.UICalendarPortlet .UIInsertAddress .InsertAddressContainer {
+	padding: 10px;
+	border: 1px solid #c0c0c0;
+}
+
+.UICalendarPortlet .UIInsertAddress .AddressContainer {
+	padding-top: 10px;
+}
+
+.UICalendarPortlet .UIInsertAddress .UIGrid th {
+	background: url('../background/CalendarBackground.gif') repeat-x center -162px;
+	line-height: 17px; height: 18px;
+	text-align: left;
+	padding: 0px 5px;
+}
+
+.UICalendarPortlet .UIInsertAddress .UIGrid th input {
+	text-align: center;
+	margin: 2px 0px 0px 0px;
+}
+
+.UICalendarPortlet .UIInsertAddress .UIGrid tbody {
+	background: white;	
+	padding-bottom: 10px;
+}
+
+.UICalendarPortlet .UIInsertAddress .UIGrid td {
+	height: 23px;
+	padding: 4px 0px 0px 5px;
+}
+
+.UICalendarPortlet .UIInsertAddress .UIGrid .BorderAddress {
+	border-right: 1px solid #e8e8e8;
+}
+
+/*********************************************UISearch*****************************************/
+
+.UICalendarPortlet .UIInsertAddress .UIAddressSearchForm {
+	float: left;
+	width: 300px;
+}
+
+.UICalendarPortlet .UIInsertAddress .UIAddressSearchForm input{
+	float: left;
+	margin: 10px 0px 0px 3px;
+	width: 160px;
+}
+
+.UICalendarPortlet .UIInsertAddress .UIAddressSearchForm .SearchIcon {
+  float: left;
+  height: 20px; width: 24px;
+  margin: 10px 0px 0px 10px;
+}
+
+.UICalendarPortlet .UIInsertAddress .UIAddressSearchForm .SearchTitle {
+	float: left;
+	line-height: 20px;
+	margin: 5px 0px;
+	color: #555; 
+}
+.UICalendarPortlet .UIInsertAddress .AddressesGroup {
+	width: 300px;
+	height: 32px;
+	margin: 0px 8px 0px 305px;
+	text-align: right;
+}
+
+.UICalendarPortlet .UIInsertAddress .AddressesGroup .AddressLabel {
+	float: left;
+	width: 120px;
+	padding: 0px 4px;
+}
+
+.UICalendarPortlet .UIInsertAddress .AddressesGroup select {
+	width: 160px;
+	margin: 10px 0px 0px 0px;
+	font-size: 11px;
+}
+
+/*********************************************ListAddress*****************************************/
+
+.UICalendarPortlet .UIInsertAddress .ListAddress {
+	background: white;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border: 1px solid #b7b7b7;
+}
+
+
+.UICalendarPortlet .UIInsertAddress .ListAddress .UIGrid {
+	border-top: none;
+	border-left: none;
+	border-right: none;
+}
+
+.UICalendarPortlet .UIInsertAddress .ListAddress .UIGrid .BlueDownArrowIcon{
+  padding: 0px 10px 0px 4px; 
+  width: 34px;
+  float: left;
+  cursor: pointer;
+}
+
+.UICalendarPortlet .UIInsertAddress .ListAddress .UIGrid thead {
+	border: none;
+}
+
+.UICalendarPortlet .UIInsertAddress .ListAddress .UIGrid th {
+	border-left: none;
+	border-top: none;
+}
+
+.UICalendarPortlet .UIInsertAddress .ListAddress .UIGrid td {
+	border-left: none;
+}

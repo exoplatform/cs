@@ -1,0 +1,547 @@
+<%
+  import org.exoplatform.mail.service.Message;
+  import org.exoplatform.mail.service.Utils; 
+  import org.exoplatform.mail.service.Attachment;
+  import javax.mail.internet.InternetAddress;
+  import org.exoplatform.mail.MailUtils;  
+  import org.exoplatform.download.DownloadService;
+  import org.exoplatform.calendar.service.CalendarEvent;
+  import javax.mail.internet.MimeUtility;
+  import org.exoplatform.webui.application.WebuiRequestContext;
+  import java.util.Locale;
+  
+  import org.exoplatform.mail.webui.UIMessageList ;
+  import org.exoplatform.mail.webui.UIMessagePreview ;
+  
+  def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().importJavascript('eXo.cs.MaskLayerControl','/csResources/javascript/');
+  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.MaskLayerControl.init(\'' + uicomponent.getId() + '\')');
+  rcontext.getJavascriptManager().importJavascript("eXo.mail.UIMailPortlet","/mail/javascript/");
+  WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+  Locale locale = context.getParentAppRequestContext().getLocale() ;
+%>
+<div class="UIMessagePreview" id="<%=uicomponent.getId()%>">
+<%
+  Message msgRoot = uicomponent.getMessage();
+  if (msgRoot != null) {
+%> 
+	<div class="ReadingPaneBar">
+		  <div class="Subject ">
+		  <span><%=_ctx.appRes(uicomponent.id+ ".label.subject") %>:</span><span>
+  		<%
+  		  String subject = "(" + _ctx.appRes(uicomponent.id+ ".label.no-subject") + ")"
+  		  if (msgRoot.getSubject() != null && msgRoot.getSubject() != "") {
+  		    subject = msgRoot.getSubject();
+  		  }
+  		%>
+  		<%=subject%>
+  		</span>
+    </div>
+    <div><a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.showHidePreviewPane(this);"><span id="ActionReadingPane" class="MaximizeReadingPane" title="<%=_ctx.appRes(uicomponent.id+ '.label.maximize-reading-pane') %>"></span></a></div>
+		<div style="clear:both;"><span></span></div>
+	</div>
+  
+	<div id="ReadingPaneDetails" class="ReadingPaneDetails"> 
+  
+<!--  Start DecoratorBox ViewBoxStyle -->
+    <% 
+    int msgIndex = 0;
+    boolean hasUnreadMsg = false, showDetail;
+    if (msgRoot != null) { for(Message msg : uicomponent.getShowedMessages()) {  if (msg != null) {
+      showDetail = false;
+      if (!hasUnreadMsg && (msgIndex == uicomponent.getShowedMessages().size() -1)) showDetail = true;
+    %>
+		<div class="DecoratorBox SpliterResizableListArea" previewId="<%=msg.getId()%>">
+    <%
+        String starClass = "UnStarredIcon" ;
+        if (msg.hasStar()) starClass = "StarredIcon";
+        String styleCollapse = "block";
+        if (showDetail) styleCollapse = "none";
+    %>
+      <div id="CollapseMessage" class="CollapseMessage" style="display: $styleCollapse ;" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this)">
+        <div class="ViewBoxStyle">
+          <div class="TopLeftViewBoxStyle">
+            <div class="TopRightViewBoxStyle">
+              <div class="TopCenterViewBoxStyle"><span></span></div>
+            </div>
+          </div>
+          <div class="MiddleLeftViewBoxStyle">
+            <div class="MiddleRightViewBoxStyle">
+              <div class="MiddleCenterViewBoxStyle">
+              
+                <table style="width: 100%;">
+                  <body>
+                    <tr>
+                      <td>
+                        <div  class="$starClass" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div>
+                      </td>
+                      <td style="width: auto; white-space: nowrap;">
+                        <div class="SenderAddress">
+                        <%
+                          if (!MailUtils.isFieldEmpty(msg.getFrom())) {
+                            InternetAddress[] fromAddress2 = Utils.getInternetAddress(msg.getFrom());
+                            InternetAddress from2 = fromAddress2[0];
+                        %>
+                            <%=Utils.getPersonal(from2)%> <% println((from2 != null) ? ("&lt; " + from2.getAddress() + " &gt;") : "")%> 
+                        <%} %>    
+                        </div>
+                      </td>
+                      <td style="width: 100%; white-space: nowrap; oveflow: hidden;">
+                        <table style="white-space: nowrap; width: 100%; table-layout: fixed;">
+                          <tr>
+                            <td>
+                              <div class="HeadlineText" title="<%=_ctx.appRes(uicomponent.id+ '.label.click-here-to-expand') %>">
+                              <%
+                                String body = MailUtils.html2string(msg.getMessageBody()) ;
+                                if (body.length() > 90) body = body.substring(0, 90) ;
+                                print(body) ;
+                              %> ...</div>
+                            </td>
+                          </tr>
+                        </table>
+                       </td>
+                      <td >
+                        <% if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0) { %>
+                        <div class="AttachmentIcon"><span></span></div>
+                        <% } %>
+                      </td>
+                      <td style="width: auto; white-space: nowrap;">
+                        <div class="MonthDate">
+                        <%=MailUtils.formatDate(msg.getReceivedDate(), locale)%>
+                        </div>
+                      </td>
+                    </tr>
+                  </body>
+                </table>
+                
+                
+                
+              </div>
+            </div>
+          </div>
+          <div class="BottomLeftViewBoxStyle">
+            <div class="BottomRightViewBoxStyle">
+              <div class="BottomCenterViewBoxStyle"><span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%
+        String styleExpand = "block";
+        if (!showDetail) styleExpand = "none";
+      %>
+      <div class="ExpandMessage">
+  			<div class="ViewBoxStyle">
+  				<div class="TopLeftViewBoxStyle">
+  					<div class="TopRightViewBoxStyle">
+  						<div class="TopCenterViewBoxStyle"><span></span></div>										
+  					</div>
+  				</div>
+  				<div class="MiddleLeftViewBoxStyle">
+  					<div class="MiddleRightViewBoxStyle">
+  						<div class="MiddleCenterViewBoxStyle">
+  							<div class="MessageHeader">
+  								<div class="MessageCheck">
+  									<div><a href="<%=uicomponent.event("AddStar", msg.getId())%>"><div  class="$starClass" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div></a></div>
+  									<div style="clear: left;"><span></span></div>
+  								</div>
+  								<div id="CollapseMessageAddressPreview" class="CollapseMessageAddress" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this);">
+  										<span class="LinkAddress">
+  										  <%
+  										    if (!MailUtils.isFieldEmpty(msg.getFrom())) {
+  										      InternetAddress[] fromAddress1 = Utils.getInternetAddress(msg.getFrom());
+  										      InternetAddress from1 = fromAddress1[0];
+  										  %>
+  										      <span dir="ltr">&nbsp;<%=Utils.getPersonal(from1)%> <% print((from1 != null) ? ("&lt; " + from1.getAddress() + " &gt;") : "") %> </span>
+                        <%} %>    
+  										</span>
+                      <span class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:</span>
+                      <span class="LinkAddress"> 
+                        <%
+                          try {
+                            if (!MailUtils.isFieldEmpty(msg.getMessageTo())) {
+                              InternetAddress[] toAddress1 = InternetAddress.parse(msg.getMessageTo());
+                              int lenToAddress = (toAddress1.length < 3) ? toAddress1.length : 3;
+                              for (i in 0..(lenToAddress - 1)) {
+                                InternetAddress address1 = toAddress1[i];
+                                if (i > 0) print ",";
+                        %>
+                                <span><%=Utils.getPersonal(address1)%> </span>
+                        <%
+                                if ((toAddress1.length > 3) && (i == lenToAddress-1)) print " ..." ;
+                              }
+                            } 
+                          } catch (Exception e) {
+                            if (msg.getMessageTo() != null) {
+                        %>   
+                          <%=msg.getMessageTo()%>
+                        <% } }%>
+                      </span>
+  								</div>
+                  
+                  <!-- Begin Expand Message Header -->
+                  <div id="MessageAddressPreview" class="MessageAddress" style="display : none;">
+                  <div class="FieldContainer">
+                    <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.from") %>:</div>
+                    <div class="LinkAddress">
+                      <%
+                        InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
+                        InternetAddress from = fromAddress[0];
+                      %>
+                      <span>&nbsp;<%=Utils.getPersonal(from)%> </span> <% print((from != null) ? ("&lt; " + from.getAddress() + " &gt;") : "")%> 
+                    </div>  
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+                  <div class="FieldContainer">
+                    <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to") %>:</div>
+                    <div class="LinkAddress"> 
+                      <%
+                        if (!MailUtils.isFieldEmpty(msg.getReplyTo())) {
+                        InternetAddress[] replyAddress = Utils.getInternetAddress(msg.getReplyTo());
+                        InternetAddress reply = replyAddress[0];
+                      %>
+                      <span>&nbsp;<%=Utils.getPersonal(reply)%> </span> <%print((reply != null) ? ("&lt; " + reply.getAddress() + " &gt;") : "") %> 
+                      <%} %>
+                    </div>
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+                  <div class="FieldContainer">
+                    <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:</div>
+                    <div class="LinkAddress"> 
+                      <%
+                        boolean isShowReplyAll = false;
+                        try { 
+                          if (!MailUtils.isFieldEmpty(msg.getMessageTo())) {  
+                          InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
+                          for (i in 0..(toAddress.length-1)) {
+                            InternetAddress address = toAddress[i];
+                              if (i > 0 && i < (toAddress.length)) { 
+                                print ", <br>";
+                                isShowReplyAll = true;
+                              }
+                      %>
+                              <span>&nbsp;<%=Utils.getPersonal(address)%> </span> <% print((address != null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
+                      <%
+                          } 
+                          }
+                        } catch (Exception e) { 
+                          if (msg.getMessageTo() != null) {
+                      %>   
+                        <%=msg.getMessageTo()%>
+                      <% } } %>
+                    </div>
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+                  <%
+                    if (!MailUtils.isFieldEmpty(msg.getMessageCc())) {  
+                      isShowReplyAll = true;
+                  %>
+                      <div class="FieldContainer">
+                        <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.cc") %>:</div>
+                        <div class="LinkAddress"> 
+                        <%
+                          try { 
+                          InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageCc());
+                            for (i in 0..(toAddress.length-1)) {
+                              InternetAddress address = toAddress[i];
+                              if (i > 0 && i < (toAddress.length)) print ", <br>";
+                        %>
+                              <span>&nbsp;<%=Utils.getPersonal(address)%> </span> <% print((address !=null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
+                        <%
+                            } 
+                          } catch (Exception e) { 
+                            if (msg.getMessageCc() != null) {
+                        %>   
+                          <%=msg.getMessageCc()%>
+                        <% } }%>
+                        </div>  
+                        <div style="clear: left;"><span></span></div>
+                      </div>
+                  <%} %>
+                  <%
+                  if (uicomponent.isShowBcc(msg)) {  
+                %>
+                    <div class="FieldContainer">
+                      <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.bcc") %>:</div>
+                      <div class="LinkAddress"> 
+                      <%
+                        try { 
+                        InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageBcc());
+                          for (i in 0..(toAddress.length-1)) {
+                            InternetAddress address = toAddress[i];
+                            if (i > 0 && i < (toAddress.length)) print ", <br>";
+                      %>
+                            <span>&nbsp;<%=Utils.getPersonal(address)%> </span> <% print((address !=null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
+                      <%
+                          } 
+                        } catch (Exception e) { 
+                          if (msg.getMessageBcc() != null) {
+                      %>   
+                        <%=msg.getMessageBcc()%>
+                      <% } }%>
+                      </div>  
+                      <div style="clear: left;"><span></span></div>
+                    </div>
+                <%} %>
+                  <div class="FieldContainer">
+                    <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %>:</div>
+                    <div class="Address"><%=MailUtils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate(), locale)%></div>
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+                  </div>
+                  <!-- End Expand Message Header-->
+                  
+  								<div class="MessageActions" style="width:auto" >
+  									<div class="DownArrow1Icon"><span></span></div>
+  									<div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)" showhideheader="<%=_ctx.appRes(uicomponent.id+ '.label.show-details') %> ,<%=_ctx.appRes(uicomponent.id+ '.label.hide-details') %>"><%=_ctx.appRes(uicomponent.id+ ".label.show-details") %></div>
+  									<div class="MonthDate">
+  									<%if (msg.getReceivedDate() != null) { %>
+                      <%=MailUtils.formatDate(msg.getReceivedDate(), locale)%>
+                    <%} else if (msg.getSendDate() != null){%>
+                      <%=MailUtils.formatDate(msg.getSendDate(), locale)%>
+                    <%}%>
+  									</div>
+  									
+  									<% if (!isShowReplyAll) { %>
+  									 <div class="MessageActionIcon MessagePreviewMenu"><a onclick="<%=uicomponent.event("Reply", msg.getId())%>" class="ReplyMailIcon" style="line-height:15px;"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a></div>
+  									<% } else {%>
+  									 <div class="MessageActionIcon MessagePreviewMenu"><a onclick="<%=uicomponent.event("ReplyAll", msg.getId())%>" class="ReplyAllMailIcon" style="line-height:15px;"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a></div>
+  									<% } %>
+  									<div class="Actions" title="<%=_ctx.appRes(uicomponent.id+ '.label.action-on-this-messge') %>" onclick="eXo.mail.UIMailPortlet.showMessageAction(this, event);">
+                    <% /*Begin Popup Menu*/ %>
+                      
+                            <div class="UIRightClickPopupMenu" style="display: none;">
+                              <div class="UIContextMenuContainer">
+                                <div class="TopLeftRightClickPopupMenu">
+                                  <div class="TopRightRightClickPopupMenu">
+                                    <div class="TopCenterRightClickPopupMenu"><span></span></div>
+                                  </div>
+                                </div>
+                                <div class="MiddleLeftRightClickPopupMenu">
+                                  <div class="MiddleRightRightClickPopupMenu">
+                                    <div class="UIRightPopupMenuContainer">
+                                      <% if (isShowReplyAll) { %>
+                                      <a class="MenuItem" href="<%=uicomponent.event("Reply", msg.getId())%>">   
+                                        <div class="ItemIcon ReplyMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %></div>
+                                      </a>  
+                                      <%}%>
+                                      <a class="MenuItem" href="<%=uicomponent.event("Forward", msg.getId())%>">   
+                                        <div class="ItemIcon ForwardMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.forward") %> </div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("CreateFilter", msg.getId())%>">   
+                                        <div class="ItemIcon CreateFilterIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.create-filter-from-this") %> </div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("Print", msg.getId())%>">   
+                                        <div class="ItemIcon PrintMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.print") %> </div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("Delete", msg.getId())%>">   
+                                        <div class="ItemIcon DeleteMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.delete") %> </div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("AddTag", msg.getId())%>">   
+                                        <div class="ItemIcon TagMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.tag") %> </div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", msg.getId())%>">   
+                                        <div class="ItemIcon MoveMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.move-to-folder") %> </div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("AddContact", msg.getId())%>">   
+                                        <div class="ItemIcon AddContactIcon"><%=_ctx.appRes(uicomponent.id+ ".label.add-sender-to-contacts") %></div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("Export", msg.getId())%>">   
+                                        <div class="ItemIcon ExportIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %> </div>
+                                      </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("ViewAllHeaders", msg.getId())%>">   
+                                        <div class="ItemIcon ViewFullHeadersIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.view-all-headers") %> </div>
+                                      </a>  
+                                      <div class="RightClickCustomItem"></div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="BottomLeftRightClickPopupMenu">
+                              <div class="BottomRightRightClickPopupMenu">
+                                <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+                              </div>
+                            </div>
+                              </div>
+                            </div>
+                          </div>
+                  <% /*End Popup Menu*/ %>
+                    
+  									<div style="clear: left;"><span></span></div>
+  								</div>
+  								<div style="clear: both;"><span></span></div>
+  							</div>
+                
+                <% 
+                  if (!MailUtils.isInvitation(msg)) {
+                  String frameId = "IframeMessagePreview" + msgIndex ;
+                  String textAreaId = "MessageDetails" + msgIndex ;
+                  String contentType = msg.getContentType() ;
+                  if (contentType != null) {
+                    if (contentType.indexOf(";") > -1) {
+                      contentType = contentType.substring(0, contentType.indexOf(";")) ;
+                    }
+                    contentType = contentType.toLowerCase()
+                  } else {
+                    contentType = "text/plain" ;
+                  }
+                %>
+                <iframe src="" style="border: 0px" frameborder="0" class="MessageDetails" id="$frameId"></iframe>
+                <%
+                  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe('" + textAreaId + "', '" + frameId + "', '" + styleExpand + "', '" + contentType + "');") ;
+                %>
+  							<textarea id="$textAreaId" class="MessageDetails" style="display:none">
+                  <%
+                  String msgBody = msg.getMessageBody();
+                    println("<div style='font-family:Tahoma,Verdana,Arial,Helvetica,sans-serif; font-size:12px;'>")
+                    if (contentType.indexOf("text/plain") >= 0) {
+                      msgBody = MailUtils.convertTextToHtmlLink(msgBody);
+                      println(MailUtils.encodeHTML(msgBody));
+                    } else {
+                      msgBody = MailUtils.insertTargetToHtmlLink(msgBody);
+                      println(MailUtils.encodeHTML(msgBody));
+                    }
+                    println("</div>");
+                  %>
+  							</textarea>
+                <%} else {%>
+                  <div class="InvitationBG">
+                  <%=msg.getMessageBody()%>
+                  <div class="ActionBox">
+                  	<%  
+                  		String status = uicomponent.getAnswerStatus();
+                  		display0 = new String("");
+                  		display1 = new String("");
+                  		display2 = new String("");
+                  		display3 = new String("");
+                  		if(status == null){
+                  			display1="display:none;";
+                  			display2="display:none;";
+                  			display3="display:none;";
+                  		}
+                  		if(status != null && status.trim().length()> 0){
+                  			if(status.equals("yes"))
+                  				display1="display:none;";
+                  			else if(status.equals("no"))
+                  						display2="display:none;";
+                 						 else 
+                 						 	display3="display:none;";
+                 			}
+                  		
+                  	%>
+                    <span style="font-weight: bold ;"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.QUESTION)%> 
+	                    <a href="<%=uicomponent.event('AnswerInvitation', '3&messageId=' + msg.getId())%>" style="$display0"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_IMPORT)%></a>
+	                    <span style="$display1"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '1&messageId=' + msg.getId())%>" style="$display1"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_YES)%></a>
+	                    <span style="$display2"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '0&messageId=' + msg.getId())%>" style="$display2"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_NO)%></a>
+	                    <span style="$display3"> - </span><a href="<%=uicomponent.event('AnswerInvitation', '2&messageId=' + msg.getId())%>" style="$display3"><%=_ctx.appRes(uicomponent.id+ ".label." + uicomponent.ANSWER_MAYBE)%></a> 
+                    </span>
+                  </div>
+                  </div> 
+                <%}%>
+                <%
+                  if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0) {
+                %>
+                  <div class="AttachmentContainer">
+    						  	<div class="AttachmentTitle"><%=_ctx.appRes(uicomponent.id+ ".label.attachments") %>:</div>            
+                    <%
+                      DownloadService dservice = uicomponent.getDownloadService() ;
+                      String attLink ;
+                      for (Attachment attach : msg.getAttachments()) {
+                        if (attach.isLoadedProperly()) {
+                        String downloadAction = uicomponent.event("DownloadAttachment", msg.getId() + "&attachId=" + attach.getId());
+                    %>
+      						  	<div class="AttachmentContent">
+                        <%
+                          attLink = MailUtils.getImageSource(attach, dservice) ;
+                          boolean isImage = false ;
+                          boolean isSupportedIcon = false ;
+                          if (attLink != null ) {
+                            if (attach.getMimeType().toLowerCase().indexOf("image") > -1) {
+                              isImage = true ; 
+                              attLink = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository() + attach.getPath() ;
+                            } else if (attach.getMimeType().indexOf("msword") > -1) {
+                              isSupportedIcon = true ;
+                              attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";
+                            } else if (attach.getMimeType().indexOf("pdf") > -1) {
+                              isSupportedIcon = true ;
+                              attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/PDFIcon.gif";
+                            }
+                            if (isImage) {
+                        %> 
+      						  		      <img class="AttachmentFile" style="height:auto ;width: 200px;padding-right: 5px" src="$attLink">
+      						  		<%
+                            } else if (isSupportedIcon){
+                        %>
+                              <img class="AttachmentFile" src="$attLink">
+                        <%     
+                            }
+                          }
+                        %> 
+                        <div class="AttachmentBox">
+      										<div class="AttachmentIcon"><%=attach.getName()%></div>
+													<div class="Size"><%=_ctx.appRes(uicomponent.id+ ".label.size") %>: <%=MailUtils.convertSize(attach.getSize())%> &nbsp;&nbsp;&nbsp;
+													<% 
+                            boolean validType = false ;
+      											String name = attach.getName().trim() ;
+     												for (int i = 0; i < MailUtils.SUPPORTED_VIEW_TYPE_ATTACH.length; i++) {
+     												  String type = MailUtils.SUPPORTED_VIEW_TYPE_ATTACH[i].trim() ;
+     												  if(name.substring(name.lastIndexOf(".") + 1, name.length()).equalsIgnoreCase(type))
+        												validType = true ;
+        										}
+        										if (validType) {
+      										%>
+														<span class="Icon ViewDownloadIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view") %></a></span>
+													<% 
+      											}	
+      										%>
+														<span class="Icon DownloadIcon"> <a href="$downloadAction"><%=_ctx.appRes(uicomponent.id+ ".label.download") %></a></span></div>
+      						  		</div>
+      						  		<div style="clear: left;"><span></span></div>
+      						  	</div>
+                    <% 
+                      } else {
+                    %>
+                      <div class="AttachmentContent">
+                        <div class="AttachmentBox">
+                          <div class="WarningAttachmentIcon" style="float:left;"></div><span style="padding-left:10px;"><%=_ctx.appRes(uicomponent.id+ ".label.this-attachment-could-not-be-loaded-properly") %></span>
+                        </div>
+                      </div>
+                    <%
+                        }
+                      }
+                    %>
+    						  </div>
+                <% 
+                  } 
+                %>
+                			<div style="border-top: 1px dotted #b7b7b7; padding-top: 3px">
+                				<div class="MessageActionIcon "><a href="<%=uicomponent.event("Reply", msg.getId())%>" style="display: block; line-height:15px;" class="ReplyMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a></div>
+                				<% if (isShowReplyAll) {%>
+                				<div class="MessageActionIcon "><a href="<%=uicomponent.event("ReplyAll", msg.getId())%>" style="display: block; line-height:15px;" class="ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a></div>
+                				<% } %>
+			                	<div class="MessageActionIcon "><a href="<%=uicomponent.event("Forward", msg.getId())%>" style="display: block; line-height:15px;" class="ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></a></div>
+			                	<div style="clear: left"><span></span></div>
+			                </div>
+  						</div>										
+  					</div>
+  				</div>	
+  				<div class="BottomLeftViewBoxStyle">
+  					<div class="BottomRightViewBoxStyle">
+  						<div class="BottomCenterViewBoxStyle"><span></span></div>										
+  					</div>
+  				</div>
+  			</div>
+      </div>
+		</div>
+    <%
+     msgIndex++;
+    }
+    } 
+    }%>
+<!--  End DecoratorBox ViewBoxStyle -->
+	</div>
+<%} else {
+    _ctx.include("app:/templates/mail/webui/UIIntroduction.gtmpl");
+  } 
+%>
+</div>

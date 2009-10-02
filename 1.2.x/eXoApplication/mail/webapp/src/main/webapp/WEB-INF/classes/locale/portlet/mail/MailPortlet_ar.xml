@@ -1,0 +1,1413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <javax>
+    <portlet>
+      <title>مدخل الرسائل</title>
+    </portlet>
+  </javax>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UISelectAccount>
+    <action>
+      <AddAccount>إضافة حساب</AddAccount>
+      <EditAccount>تغيير حساب</EditAccount>
+      <DeleteAccount>حذف حساب</DeleteAccount>
+    </action>
+    <msg>
+      <account-list-empty>يجب عليك إضافة حساب قبل كل شيء</account-list-empty>
+    </msg>
+    <label>
+      <default>إفتراضي</default>
+      <manage-accounts>التصرف في الحسابات</manage-accounts>
+    </label>
+  </UISelectAccount>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIPopupWindow>
+    <title>
+      <UIAccountCreationContainer>المساعد في معالجة الحسابات</UIAccountCreationContainer>
+      <UIAccountCreation>إضافة حساب جديد</UIAccountCreation>
+      <UIAccountPopupCreation>إضافة حساب جديد</UIAccountPopupCreation>
+      <UIAccountPopupSetting>تغيير حساب</UIAccountPopupSetting>
+      <UIMailSettings>ضبط البريد الالكتروني</UIMailSettings>
+      <UIAddressForm>البحث على عنوان بريد الكتروني</UIAddressForm>
+      <UIFolderForm>مُـجلّــد جديد</UIFolderForm>
+      <UIRenameFolderForm>إعادة تسمية المُـجلّــد</UIRenameFolderForm>
+      <UIPopupActionComposeContainer>كتابة رسالة جديدة</UIPopupActionComposeContainer>
+      <UITagForm>أضف علامة لهذه الرسالة</UITagForm>
+      <UIEditTagForm>إضافة / تغيير علامة</UIEditTagForm>
+      <UIPopupDeleteAccountContainer>حذف حساب</UIPopupDeleteAccountContainer>
+      <UIMoveMessageForm>تحويل رسالة</UIMoveMessageForm>
+      <UIAdvancedSearchForm>عملية بحث متطورة</UIAdvancedSearchForm>
+      <UIPrintPreview>طباعة الرسالة</UIPrintPreview>
+      <UIQuickAddEvent>عملية إضافة 'حدث' سريعة</UIQuickAddEvent>
+      <UIImportForm>استيراد رسالة</UIImportForm>
+      <UIExportForm>تصدير رسالة</UIExportForm>
+      <UIViewAllHeaders>ترويسة  الرسالة</UIViewAllHeaders>
+      <UIMessageFilter>فلتر الرسائل</UIMessageFilter>
+      <UIPopupActionFilterContainer>فلتر الرسائل</UIPopupActionFilterContainer>
+      <UIAddMessageFilter>فلتر الرسائل</UIAddMessageFilter>
+      <UIAddressBookForm>دفتر العناوين</UIAddressBookForm>
+      <UIPopupActionAddressContainer>دفتر العناوين</UIPopupActionAddressContainer>
+      <UIPopupActionEventContainer>حدث جديد</UIPopupActionEventContainer>
+      <UIPopupActionAddContactContainer>إضافة / تغيير  جهة اتصال</UIPopupActionAddContactContainer>
+      <UIPopupAddContactForm>إضافة / تغيير  جهة اتصال</UIPopupAddContactForm>
+      <UIPopupAddEventContainer>إضافة / تغيير حدث</UIPopupAddEventContainer>
+      <UIComfirmPassword>أدخل كلمة السر</UIComfirmPassword>
+      <UIEnterPasswordDialog>أدخل كلمة السر</UIEnterPasswordDialog>
+    </title>
+  </UIPopupWindow>
+  <UIAccountCreation>
+    <tab>
+      <info>
+        <step0>الخطوة التمهيدية</step0>
+        <step1>الخطوة 1 : اسم و وصف الحساب</step1>
+        <step2>الخطوة 2 : هُوِيَّة البريد الالكتروني</step2>
+        <step3>الخطوة 3 : مزود البريدات الاكترونية</step3>
+        <step4>الخطوة 4 : اسم المستخدم و كلمة السر</step4>
+        <step5>الخطوة 5 : تثبت من معلوماتك</step5>
+      </info>
+    </tab>
+    <label>
+      <selectActions>جديد</selectActions>
+      <accounts>حسابات</accounts>
+      <accountName>اسم الحساب</accountName>
+      <description>الوصف</description>
+      <checkFromDate>فحص الرسائل بعد التاريخ المحدد (IMAP فقط)</checkFromDate>
+      <fromDate>الحصول على رسائل البريد الالكترونية التي  يعود تاريخها فقط إلى</fromDate>
+      <outgoingName>غير معروض</outgoingName>
+      <emailAddress>عنوان البريد الالكتروني</emailAddress>
+      <emailReply>عنوان البريد الالكتروني الخاص بالجواب</emailReply>
+      <signature>الإمضاء</signature>
+      <serverType>نوع الـمُزوّد </serverType>
+      <incomingServer>الـمُزوّد الداخل</incomingServer>
+      <incomingPort>المَـنفذ الداخل</incomingPort>
+      <outgoingServer>الـمُزوّد الخارج</outgoingServer>
+      <outgoingPort>المَـنفذ الخارج</outgoingPort>
+      <isSsl>رابطة مؤمنة  (SSL)</isSsl>
+      <outgoingSsl>استعمال خارج SSL</outgoingSsl>
+      <storeFolder>المُـجلّــد الخاص بتجميع الرّسائل</storeFolder>
+      <getMail>إبدأ الآن في عملية تجميع الرسائل</getMail>
+      <wizardSteps>الخطوات</wizardSteps>
+      <userName>المعرف الوحيد</userName>
+      <password>كلمة السر</password>
+      <savePassword>حفظ كلمة السر</savePassword>
+    </label>
+    <msg>
+      <confirm-cancel>لم تتم بعد عمليّة إنشاء الحساب الخاصّ بك، هل مازلت تريد مُغادرة المُساعد في معالجة الحسابات ؟  </confirm-cancel>
+      <fields-requirement>القيمة منقوصة</fields-requirement>
+      <create-acc-successfully> عملية إنشاء الحساب  قد تمت بنجاح</create-acc-successfully>
+      <getMail-unsuccessfully>طرأ خطأ  أثناء استرجاع الرسائل على الـمُزوّد</getMail-unsuccessfully>
+      <userName-password-incorrect>اسم المستخدم أو كلمة السر غير صحيحة</userName-password-incorrect>
+      <account-name-requirement>يجب عليك أن تُـعطي اسمـًـا لهذا الحساب</account-name-requirement>
+      <display-name-requirement>حدد الاسم الذي تريد إظهاره بالنسبة لهذا الحساب</display-name-requirement>
+      <email-address-requirement>يجب عليك أن تحدد عنوان البريد الالكتروني الخاص بهذا الحساب</email-address-requirement>
+      <email-address-is-invalid>يبدو أن صيغة عنوان البريد الإلكتروني الذي أدخلته غير صالحة. يجب أن تـُـشبه  شيئـًا من هذا القبيل:  votrenom@votresociete.com</email-address-is-invalid>
+      <reply-address-is-invalid>يبدو أن صيغة عنوان البريد الإلكتروني الذي أدخلته غير صالحة. يجب أن تـُـشبه  شيئـًا من هذا القبيل:  votrenom@votresociete.com</reply-address-is-invalid>
+      <incoming-server-requirement>أعط اسم الـمُزوّد الداخل</incoming-server-requirement>
+      <outgoing-server-requirement>أعط اسم الـمُزوّد الخارج</outgoing-server-requirement>
+      <store-folder-requirement>يُرجى الإشارة إلى مكان وصول الرسائل الجديدة. في حالة شكّ، استعمل 'inbox'.</store-folder-requirement>
+      <incoming-port-is-not-number>الرقم الخاص بالمنفذ الداخل يجب أن يكون عددًا، الرجاء طلب الاستفسار من مُدريك (المختص المسؤول عن إدارة عمل أنظمة الحاسوب أو أنظمة الاتصالات أو كليهما معًا).</incoming-port-is-not-number>
+      <outgoing-port-is-not-number>الرقم الخاص بالمنفذ الداخل يجب أن يكون عددًا، الرجاء طلب الاستفسار من مُدريك (المختص المسؤول عن إدارة عمل أنظمة الحاسوب أو أنظمة الاتصالات أو كليهما معًا).</outgoing-port-is-not-number>
+      <username-requirement>أدخل اسم المستخدم الخاص بالبريدات الالكترونية</username-requirement>
+      <password-requirement>أدخل كلمة السر الخاصة بالبريدات الالكترونية</password-requirement>
+    </msg>
+    <action>
+      <Next>#{word.next}</Next>
+      <Back>#{word.back}</Back>
+      <Finish>#{word.finish}</Finish>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+  </UIAccountCreation>
+  <UIAccountWizardStepIntro>
+    <info>
+      <label1>اختر (بوضع علامة) لإضافة حساب جديد</label1>
+      <label2>اختر (بوضع علامة) لتعديل الحساب</label2>
+    </info>
+  </UIAccountWizardStepIntro>
+  <UIAccountWizardStep1>
+    <info>
+      <label1>أدخل اسمًا أو عبارةً  لتعريف هذا الحساب ، على سبيل المثال "مريم في العمل"</label1>
+      <label2>اكتُب وصفـًا لحسابك ، على سبيل المثال  "الحساب الذي أستعمله للرسائل الخاصة بالعمل"</label2>
+    </info>
+  </UIAccountWizardStep1>
+  <UIAccountWizardStep2>
+    <info>
+      <label1>هُوِيَّة البريد الالكتروني هي الاسم و عنوان البريد الالكتروني المستعملان في مراسلاتك. لكل حساب هوية  مُستقلّة خاصّة به، وهي معلومة تـُعرّف بك لدى الأشخاص(المُرسَل إليهم) عند تلــقّيهم لرسالاتك.</label1>
+    </info>
+  </UIAccountWizardStep2>
+  <UIAccountWizardStep3>
+    <info>
+      <label1>قم باختيار الـمُزوّد الداخلي الذي تستعمله</label1>
+      <label2>أدخل أسماء مزوّدي البريد الإلكتروني ، على سبيل المثال mail.mycompany.com</label2>
+      <label3> في حالة شكّ، اتصل بـمُـدريك (المختص المسؤول عن إدارة عمل أنظمة الحاسوب أو أنظمة الاتصالات أو كليهما معًا).</label3>
+    </info>
+  </UIAccountWizardStep3>
+  <UIAccountWizardStep4>
+    <info>
+      <label1>أدخل اسم المستخدم و كلمة السر الخاصة بالبريدات الالكترونية</label1>
+    </info>
+  </UIAccountWizardStep4>
+  <UIAccountWizardStep5>
+    <info>
+      <label1>تثبّت من صحة المعلومات التالية  قبل خروجك من المساعد في معالجة الحسابات. </label1>
+    </info>
+  </UIAccountWizardStep5>
+  <UIFormInputSetWithAction>
+    <msg>
+      <confirm-delete>هل أنت متأكد من عملية الحذف ؟</confirm-delete>
+    </msg>
+  </UIFormInputSetWithAction>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIAccountSetting>
+    <tab>
+      <label>
+        <account>حساب</account>
+        <identitySettings>الهويّة</identitySettings>
+        <serverSettings>الـمُزوّد</serverSettings>
+      </label>
+    </tab>
+    <label>
+      <accounts>حسابات</accounts>
+      <accountName>اسم الحساب</accountName>
+      <display-name>اسم معروض</display-name>
+      <incomingUsername>المعرف الوحيد للبريدات الالكترونية</incomingUsername>
+      <description>الوصف</description>
+      <checkFromDate>فحص الرسائل بعد التاريخ المحدد</checkFromDate>
+      <fromDate>الحصول على رسائل البريد الالكترونية التي  يعود تاريخها فقط إلى</fromDate>
+      <yourOutgoingName> المعرف الوحيد للمزود الخارج</yourOutgoingName>
+      <yourEmailAddress>عنوان البريد الالكتروني</yourEmailAddress>
+      <replyToAddress>عنوان البريد الالكتروني الخاص بالإجابة</replyToAddress>
+      <incomingAccount>المعرف الوحيد للبريدات الالكترونية</incomingAccount>
+      <incomingPassword>كلمة السر</incomingPassword>
+      <isSavePassword>حفظ كلمة السر</isSavePassword>
+      <mailSignature>الإمضاء</mailSignature>
+      <placeSignature>إضافة الإمضاء</placeSignature>
+      <applySignatureBy>تطبيق الإمضاء بـ</applySignatureBy>
+      <serverType>نوع الـمُزوّد </serverType>
+      <incomingServer>الـمُزوّد الداخل</incomingServer>
+      <outgoingServer>الـمُزوّد الخارج</outgoingServer>
+      <messageComeInFolder>المُـجلّــد الخاص بتجميع الرّسائل</messageComeInFolder>
+      <leaveMailOnServer>ترك رسائل على الـمُزوّد</leaveMailOnServer>
+      <skipMessageOverMaxSize>تجاهل الرسائل ذات الحجم الكبير (5 ميجابايت على أقصى تقدير)5M)</skipMessageOverMaxSize>
+      <markItAsDeleted>مَــيِّزْ الرسائل التي تم تحميلها كرسائل محذوفة من الـمُزوّد</markItAsDeleted>
+      <incomingPort>المَـنفذ الداخل</incomingPort>
+      <outgoingPort>المَـنفذ الخارج</outgoingPort>
+      <isSSL>تأمين (SSL)</isSSL>
+      <isOutgoingSsl>استعمال خارج SSL</isOutgoingSsl>
+      <checkMailAutomatically>استلام تلقائي للرسائل</checkMailAutomatically>
+      <emptyTrashWhenExit>أفرغ محتوى سلة المهملات عند المغادرة</emptyTrashWhenExit>
+      <option>
+        <signOnHead>ترويسة  الرسالة</signOnHead>
+        <signOnFoot>أسفل الرسالة </signOnFoot>
+      </option>
+      <delete-acc>حذف حساب</delete-acc>
+    </label>
+    <msg>
+      <edit-acc-successfully>تم تحديث الحساب</edit-acc-successfully>
+      <edit-acc-unsuccessfully>لا يمكن تحديث الحساب</edit-acc-unsuccessfully>
+      <please-choose-specified-date>الرجاء اختيار التاريخ المحدد</please-choose-specified-date>
+      <email-address-is-invalid></email-address-is-invalid>
+      <reply-address-is-invalid>يبدو أن صيغة عنوان البريد الإلكتروني الذي أدخلته غير صالحة. يجب أن تـُـشبه  شيئـًا من هذا القبيل:  votrenom@votresociete.com</reply-address-is-invalid>
+      <incoming-port-is-not-number>الرقم الخاص بالمنفذ الداخل يجب أن يكون عددًا، الرجاء طلب الاستفسار من مُدريك (المختص المسؤول عن إدارة عمل أنظمة الحاسوب أو أنظمة الاتصالات أو كليهما معًا).</incoming-port-is-not-number>
+      <outgoing-port-is-not-number>الرقم الخاص بالمنفذ الداخل يجب أن يكون عددًا، الرجاء طلب الاستفسار من مُدريك (المختص المسؤول عن إدارة عمل أنظمة الحاسوب أو أنظمة الاتصالات أو كليهما معًا).</outgoing-port-is-not-number>
+      <field-password-is-required>أدخل كلمة السر</field-password-is-required>
+      <confirm-remove-account>عملية حذفك لهذا الحساب ستـُؤدي إلى حذف جميع ما يتضمنـُه من رسائل. هل تؤكد ذلك؟</confirm-remove-account>
+    </msg>
+    <action>
+      <Save>#{word.save}</Save>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+  </UIAccountSetting>
+  <UIMailSettings>
+    <label>
+      <default-account>الحساب الإفتراضي الخاص بالبريدات الاكترونية</default-account>
+      <number-of-conversation>العدد الجملي للمحادثات في كل صفحة</number-of-conversation>
+      <period-check-mail>تثبت من الرسائل كُــــل</period-check-mail>
+      <compose-message-in>تأليف  الرسائل بـواسطة</compose-message-in>
+      <reply-forward-as>شكل الرسائل</reply-forward-as>
+      <reply-message-with>أجب على الرسائل بواسطة</reply-message-with>
+      <forward-message-with> إعادة توجيه الرسائل بواسطة</forward-message-with>
+      <prefix-message-with>إضافة بادئة للرسائل  بواسطة</prefix-message-with>
+      <save-sent-message>حفظ الرسالات التي تم ارسالها في ''البريد المُرسَل''</save-sent-message>
+      <general-settings>عامّ</general-settings>
+      <number-shows>العدد الجملي للمحادثات في كل صفحة</number-shows>
+      <auto-check>تثبت من الرسائل كُــــل</auto-check>
+      <compose-in>تأليف حسب هيئة</compose-in>
+      <reply-with>أجب بواسطة</reply-with>
+      <forward-with>إعادة التوجيه بواسطة</forward-with>
+      <save-sent>الاحتفاظ بنسخة في''البريد المرسل''</save-sent>
+      <option>
+        <period />
+        <editor>
+          <true>نصّ مُنـسّق</true>
+          <false>نصّ عادي</false>
+        </editor>
+        <format>
+          <true>مطابق للرسالة الأصلية</true>
+          <false>نصّ عادي</false>
+        </format>
+        <replywith>
+          <true>الرسالة الأصلية كملف مُــرفق</true>
+          <false>نص الرسالة الأصلية في ''اصُلْب الرسالة'' </false>
+        </replywith>
+        <forwardwith>
+          <true>الرسالة الأصلية كملف مُــرفق</true>
+          <false>نص الرسالة الأصلية في ''اصُلْب الرسالة'' </false>
+        </forwardwith>
+      </option>
+    </label>
+    <action>
+      <Save>#{word.save}</Save>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+  </UIMailSettings>
+  <UIAddressForm>
+    <action>
+      <Save>#{word.save}</Save>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <label>
+      <contact-group>المجموعة </contact-group>
+      <contact-search>ابحث</contact-search>
+      <change-group>تغيير المجموعة </change-group>
+      <quick-search>عملية بحث سريعة</quick-search>
+      <addresses-from-group>دفتر العناوين</addresses-from-group>
+      <name>الاسم</name>
+      <email>البريد الاكتروني</email>
+      <add-address>إضافة عنوان بريد الكتروني</add-address>
+      <replace>استبدل</replace>
+      <cancel>#{word.cancel}</cancel>
+    </label>
+    <msg>
+      <search-error-keyword>قم بإدخال نصّ عادي في المجال المخصص للبحث</search-error-keyword>
+      <contact-email-required>عليك اختيار 'جهة اتصال' على الأقلّ.</contact-email-required>
+      <you-should-only-choose-contact-with-email-address>رجاءً اختر ''جهة اتصال'' مع عنوان بريد الكتروني فحسب.</you-should-only-choose-contact-with-email-address>
+    </msg>
+    <optionGroup>
+      <label>
+        <personal-contacts>دفاتر شخصيّة</personal-contacts>
+        <public-contacts>دفاتر عموميّة</public-contacts>
+        <shared-contacts>دفاتر مُشترَكة</shared-contacts>
+      </label>
+    </optionGroup>
+  </UIAddressForm>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UISearchForm>
+    <label>
+      <inputValue>بحث على:</inputValue>
+      <advance-search>عملية بحث متطورة</advance-search>
+      <search>ابـحث</search>
+    </label>
+    <msg>
+      <account-list-empty>يجب عليك إضافة حساب قبل كل شيء</account-list-empty>
+      <no-text-to-search>أدخل العبارة التي تريد البحث عنها</no-text-to-search>
+      <contain-special-characters>لم يتم التعرف على عبارة البحث التي أدخلتها. يرجى التأكد من أنّها مكتوبة بالشكل الصحيح أو حاول أن تختار عبارة أخرى مُبَسَّطـة .</contain-special-characters>
+    </msg>
+  </UISearchForm>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIActionBar>
+    <msg>
+      <account-list-empty>يجب عليك إضافة حساب قبل كل شيء</account-list-empty>
+      <userName-password-incorrect>لا يمكن الرّبط مع المزوّد. يوجد خطأ في اسم المستخدم أو في كلمة السرّ.</userName-password-incorrect>
+      <check-mail-error>حدث خطأ أثناء استرجاع الرسائل على المزوّد. الرجاء التثبت من خيارات الضبط الخاصة بالبريدات الالكترونية.</check-mail-error>
+      <conection-false>حدث خطأ أثناء عملية الرّبط. لا يُمكن الرّبط مع المزوّد.</conection-false>
+    </msg>
+    <label>
+      <check-mail>تثبيت الرسائل</check-mail>
+      <stop-check-mail>توقّف</stop-check-mail>
+      <compose>إنشاء رسالة جديدة</compose>
+      <address-book>دفتر العناوين</address-book>
+      <add-event>حدث جديد</add-event>
+      <filter>الفلاتر</filter>
+      <custom-layout-view>عرض</custom-layout-view>
+      <layout-default>إعادة ضبط</layout-default>
+      <hide-navigator-pane>تــصفّـح</hide-navigator-pane>
+      <hide-messages-pane>القائمة</hide-messages-pane>
+      <hide-preview-pane>الرسالة</hide-preview-pane>
+			<show-navigator-pane>تــصفّـح</s-navigator-pane>
+      <show-messages-pane>القائمة</s-messages-pane>
+      <show-preview-pane>الرسالة</s-preview-pane>
+      <accounts>حسابات</accounts>
+      <settings>التفضيلات</settings>
+    </label>
+  </UIActionBar>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIFolderContainer>
+    <action>
+      <AddFolder>مُـجلّــد جديد</AddFolder>
+    </action>
+    <label>
+      <folders>مُجلّدات</folders>
+      <my-folders>المُـجلّــدات الشخصيّة</my-folders>
+      <new-folder>مُـجلّــد جديد</new-folder>
+      <mark-all-read>تعليمها '' تمّـت قراءتها ''</mark-all-read>
+      <move-all-to-trash>قُــم بوضعها في سلة  المُــهملات</move-all-to-trash>
+      <empty-trash>إفراغ سلة المهملات</empty-trash>
+      <new-subfoder>إنشاء مجلّد فرعي جديد</new-subfoder>
+      <rename>إعادة تسمية</rename>
+      <remove>حذف</remove>
+      <Inbox>البريد الوارد</Inbox>
+      <Drafts>مُــسودّات</Drafts>
+      <Sent>البريد المـُــرسَل</Sent>
+      <Spam>بريد مزعج</Spam>
+      <Trash>سلّة المُــهملات</Trash>
+      <click-to-collapse>إخفاء(تصغير)</click-to-collapse>
+      <click-to-expand>إظهار(تكبير)</click-to-expand>
+    </label>
+    <msg>
+      <account-list-empty>يجب عليك انشاء حساب</account-list-empty>
+      <confirm-remove-folder>هل أنت متأكد من أنك تريد حذف هذا المُـجلّــد؟</confirm-remove-folder>
+    </msg>
+  </UIFolderContainer>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIFolderForm>
+    <label>
+      <folderName>اسم المُـجلّــد</folderName>
+    </label>
+    <action>
+      <Save>#{word.save}</Save>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <msg>
+      <name-invalid>اسم المُجلـد لا يحتوي على {0} ، {1} ، {2} ،{3}</name-invalid>
+      <error-create-folder>لا يُمكن إنشاء هذا المجلد</error-create-folder>
+      <folder-exist>المجلّد '{0}' موجود من السّابق</folder-exist>
+      <add-folder-successfuly> تمّت عمليّة  إنشاء المجلّد '{0}' بنجاح</add-folder-successfuly>
+    </msg>
+  </UIFolderForm>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIRenameFolderForm>
+    <label>
+      <curFolderName>الاسم الحالي</curFolderName>
+      <newFolderName>الاسم الجديد</newFolderName>
+    </label>
+    <action>
+      <Save>#{word.save}</Save>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <msg>
+      <error-rename-folder>طرأ خطأ عند إعادة تسمية المُـجلّــد.</error-rename-folder>
+    </msg>
+  </UIRenameFolderForm>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIComposeForm>
+    <label>
+      <fromInput>UIComposeForm</fromInput>
+      <from>من:</from>
+      <to>إلى:</to>
+      <cc>إضافة نسخة إلى:</cc>
+      <bcc>إضافة نُسخة مخفيّة الوجهة إلى:</bcc>
+      <subject>الموضوع:</subject>
+      <attachments>المُرفقات</attachments>
+      <messageContent>الرسالة</messageContent>
+      <action>
+        <To>[إلى]</To>
+        <ToCC>[نسخة إلى]</ToCC>
+        <ToBCC>[نُسخة مخفيّة الوجهة ]</ToBCC>
+        <remove>[حذف]</remove>
+      </action>
+      <send-mail>أرسل</send-mail>
+      <save-as-a-draft>مُـسودّة</save-as-a-draft>
+      <discard>إلغاء</discard>
+      <attach-file> المُرفق (ــات).</attach-file>
+      <message-priority>الأولويّـة</message-priority>
+      <low-priority>ضئيلة</low-priority>
+      <normal-priority>مُتوسّطة</normal-priority>
+      <hight-priority>قُصوى</hight-priority>
+      <editor-options>الـمُـحرّر</editor-options>
+      <rich-text-editor>مُنـسّق</rich-text-editor>
+      <plain-text>عادي</plain-text>
+      <add-cc>نسخة إلى</add-cc>
+      <add-bcc>نُسخة مخفيّة الوجهة</add-bcc>
+    </label>
+    <msg>
+      <to-field-required>أدخل على الأقلّ الــ'' مُرسَل إليه'' في المجال ''إلى:'' </to-field-required>
+      <send-mail-error>حدث خطأ أثناء عمليّة إرسال البريد الإلكتروني.</send-mail-error>
+      <save-sent-error>حدث خطأ أثناء عمليّة النّسخ في البريد المُــرسَل.</save-sent-error>
+      <send-mail-succsessfuly>لقد تمّ إرسال بريدك.</send-mail-succsessfuly>
+      <save-draft-error>عمليّة حفظ البريد في مُـجلّــد المسودّات غير مُمكنة!</save-draft-error>
+      <save-mail-draff>تمّ حفظ الرّسالة في مجلّد ''المسوّدات''.</save-mail-draff>
+      <to-field-empty>قُم بإدخال عنوان البريد الالكتروني الخاصّ بالمُرسَل إليه في المجال ''إلى:''.</to-field-empty>
+      <subject-field-empty>يجبُ أن تحتوي رسالتُك على موضوع</subject-field-empty>
+      <content-field-empty>مُحتوى الرّسالة فارغ (بدون نصّ).</content-field-empty>
+      <invalid-to-field>يبدو أنّ صيغة عنوان البريد الإلكتروني الذي أدخلته في المجال " إلى" غيرُ صالحة.</invalid-to-field>
+      <invalid-cc-field>يبدو أنّ صيغة عنوان البريد الإلكتروني الذي أدخلته في المجال "نسخة إلى" غيرُ صالحة.</invalid-cc-field>
+      <invalid-bcc-field>يبدو أنّ صيغة عنوان البريد الإلكتروني الذي أدخلته في المجال "نُسخة مخفيّة الوجهة" غيرُ صالحة.</invalid-bcc-field>
+      <select-at-least-recipient>يُـرْجى على الأقلّ تحديد '' مُرسَل إليه''.</select-at-least-recipient>
+      <there-was-an-error-parsing-the-addresses-sending-failed>حدث خطأ أثناء القيام بتحليل العناوين. فشل في عملية الإرسال!</there-was-an-error-parsing-the-addresses-sending-failed>
+      <the-username-or-password-may-be-wrong-sending-failed>اسم المستخدم أو كلمة السر قد تكون خاطئة. فشل في عمليّة الإرسال.</the-username-or-password-may-be-wrong-sending-failed>
+      <sorry-there-was-an-error-sending-the-message-sending-failed>عُذرًا ، طرأ خطأ أثناء مُحاولة إرسال الرّسالة. فشل في عمليّة الإرسال!</sorry-there-was-an-error-sending-the-message-sending-failed>
+      <there-was-an-unexpected-error-sending-falied>عُذرًا ، طرأ خطأ غير متوقَّع. فشل في عمليّة الإرسال!</there-was-an-unexpected-error-sending-falied>
+    </msg>
+  </UIComposeForm>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIChildPopupWindowUIPopupActionComposeContainer>
+    <title>
+      <UIAttachFileForm>إرفاق ملفّات</UIAttachFileForm>
+      <UIAddressForm>العنوان</UIAddressForm>
+      <UIEnterPasswordDialog>أدخل كلمة السر</UIEnterPasswordDialog>
+    </title>
+  </UIChildPopupWindowUIPopupActionComposeContainer>
+  <UIAttachFileForm>
+    <label>
+      <upload>إرفاق ملفّات</upload>
+      <upload1>الملف 1</upload1>
+      <upload2>الملف 2</upload2>
+      <upload3>الملف 3</upload3>
+      <upload4>الملف 4</upload4>
+      <upload5>الملف 5</upload5>
+      <upload6>الملف 6</upload6>
+      <upload7>الملف 7</upload7>
+      <upload8>الملف 8</upload8>
+      <upload9>الملف 9</upload9>
+      <upload10>الملف 10</upload10>
+      <add-more>إضافة المزيد</add-more>
+    </label>
+    <action>
+      <Save>#{word.save}</Save>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <msg>
+      <file-empty-error>يجب عليك تحميل الملف على الـمُزوّد قبل عملية الحفظ.</file-empty-error>
+      <upload-error>حجم هذا الملف ضخم جدّا</upload-error>
+      <fileName-error>اسم الملف غير صالح</fileName-error>
+      <size-attachs-must-be-smaller-than-10M>الحد الأقصى لحجم المرفقات لا يُمكن أن يتجاوز 10 ميغابايت.</size-attachs-must-be-smaller-than-10M>
+    </msg>
+  </UIAttachFileForm>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UITagContainer>
+    <label>
+      <tags>علامات</tags>
+      <edit>تغيير</edit>
+      <remove>حذف</remove>
+      <empty>أفرغ الـمُـحتوى</empty>
+    </label>
+    <action>
+      <AddTag>إضافة علامة جديدة</AddTag>
+    </action>
+    <msg>
+      <confirm-remove-tag>هل تريد حقّا حذف هذه العلامة ؟</confirm-remove-tag>
+    </msg>
+  </UITagContainer>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UITagForm>
+    <label>
+      <select-avaiable-tag>اختر علامة</select-avaiable-tag>
+      <tagName>علامة</tagName>
+      <tag-name>اسم العلامة</tag-name>
+      <choose-color>اللّون</choose-color>
+      <subject>الموضُوع</subject>
+      <no-tag>لا توجد علامات</no-tag>
+      <tag-description>الوصف</tag-description>
+    </label>
+    <action>
+      <Add>أضف</Add>
+      <Remove>حذف</Remove>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <msg>
+      <tag-already-exists>هذه العلامة موجودة من السّـابق</tag-already-exists>
+      <tagname-invalid>اسم العلامة لا يحتوي على {0} ، {1} ، {2} ،{3}</tagname-invalid>
+      <have-to-choose-at-least-a-tag>عليك أن تختار '' علامة '' على الأقلّ</have-to-choose-at-least-a-tag>
+      <name-tag-no-value>أعط اسمـًـا لعلامتك</name-tag-no-value>
+    </msg>
+  </UITagForm>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIEditTagForm>
+    <label>
+      <curTagName>الاسم الحالي</curTagName>
+      <newTagName>الاسم</newTagName>
+      <description>الوصف</description>
+      <color>اللّون</color>
+    </label>
+    <action>
+      <Save>#{word.save}</Save>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <msg>
+      <error-rename-tag>إعادة تسمية هذه العلامة غير مُـمكنة</error-rename-tag>
+      <name-required>أعط اسمـًـا لهذه العلامة</name-required>
+      <tagname-invalid>اسم العلامة لا يحتوي على {0} ، {1} ، {2} ،{3}</tagname-invalid>
+      <tag-already-exists>هذه العلامة موجودة من السّـابق</tag-already-exists>
+    </msg>
+  </UIEditTagForm>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIAccountList>
+    <header>
+      <name>الاسم</name>
+      <email>البريد الاكتروني</email>
+      <server>الـمُزوّد</server>
+      <protocol>بروتوكول</protocol>
+      <action>إجراءات</action>
+    </header>
+    <action>
+      <Close>#{word.close}</Close>
+    </action>
+    <msg>
+      <confirm-delete>هل ترغب حقّـا في حذف هذا الحساب ؟</confirm-delete>
+      <remove-accout-error>لا يمكنك حذف هذا الحساب </remove-accout-error>
+    </msg>
+  </UIAccountList>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIMoveMessageForm>
+    <label>
+      <folder>الإنتقال إلى المُـجلّــد</folder>
+      <Inbox>البريد الوارد</Inbox>
+      <Drafts>مُــسودّات</Drafts>
+      <Sent>البريد المـُــرسَل</Sent>
+      <Spam>بريد مزعج</Spam>
+      <Trash>سلّة المُــهملات</Trash>
+    </label>
+    <optionGroup>
+      <label>
+        <default-folder>المُـجلّــدات الإفتراضيّة</default-folder>
+        <my-folder>المُـجلّــدات الشخصيّة</my-folder>
+      </label>
+    </optionGroup>
+    <action>
+      <Save>#{word.save}</Save>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <msg>
+      <selected-folder-is-not-exits-any-more>لم يعُد هنالك مُـجلّــدات يُمكنك اختيارها</selected-folder-is-not-exits-any-more>
+    </msg>
+  </UIMoveMessageForm>
+  <ApplicationMessage>
+    <WARNING>لم تقُم باختيار رسالة</WARNING>
+  </ApplicationMessage>
+  <!--
+  ##################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIMessageList>
+    <msg>
+      <account-list-empty>يجب عليك انشاء حساب</account-list-empty>
+      <checkMessage-select-no-messages>الرجاء اختيار رسائل.</checkMessage-select-no-messages>
+      <checkMessage-select-many-messages>لا يمكن  تطبيق هذا الإجراء إلاّ على رسالة واحدة.</checkMessage-select-many-messages>
+      <deleted_account>تمّ حذف الحساب من الخارج.</deleted_account>
+      <confirm-remove-message>هل ترغب حقّـا في حذف هذه الرّسائل ؟</confirm-remove-message>
+    </msg>
+    <label>
+      <receiving-messages>استلام الرسائل...</receiving-messages>
+      <there-are-no-messages>لا تُوجد رسائل</there-are-no-messages>
+      <mark-as-read>تمّت قراءتها</mark-as-read>
+      <more-actions>أكثر إجراءات </more-actions>
+      <mark-as-unread>لم تتمّ قراءتها</mark-as-unread>
+      <add-star>إضافة نجمة</add-star>
+      <remove-star>حذف النّجمة</remove-star>
+      <tag-message>إضافة علامة</tag-message>
+      <move-message>تحويل</move-message>
+      <import-message>استيراد</import-message>
+      <export-message>تصدير</export-message>
+      <view>رؤيـة</view>
+      <view-as>قـُـم بترتيبها حسب</view-as>
+      <list>القائمة</list>
+      <thread>الموضوع</thread>
+      <conversation>مـُــحادثة</conversation>
+      <view-all-messages>كُلّ البريدات</view-all-messages>
+      <view-starred-messages>بريد له نجمة</view-starred-messages>
+      <view-unstarred-messages>بدون نجمة</view-unstarred-messages>
+      <view-unread-messages>لم تتمّ قراءتها</view-unread-messages>
+      <view-read-messages>تمّت قراءتها</view-read-messages>
+      <view-with-attachment>مع المُرفق (ــات).</view-with-attachment>
+      <edit-draft>استرجاع المسودّة</edit-draft>
+      <print>طباعة</print>
+      <reply-to-sender>الردّ</reply-to-sender>
+      <reply-to-all>الردّ على الجميع</reply-to-all>
+      <forward> إعادة توجيه</forward>
+      <create-filter-from-this>إنشاء فلتر</create-filter-from-this>
+      <move-to-folder>تحويل إلى المُـجلّــد</move-to-folder>
+      <tag>إضافة علامة</tag>
+      <delete>حذف</delete>
+      <not-spam>ليس بريدًا مُزعجًـا</not-spam>
+      <report-spam>بريد مُزعج</report-spam>
+      <add-sender-to-contacts>أضف إلى '' جهات الاتصال''</add-sender-to-contacts>
+      <export-eml>تصدير إلى  (*.eml)</export-eml>
+      <sender>المُرسِـل</sender>
+      <to>إلى</to>
+      <messages>البريدات</messages>
+      <threads>المواضيع</threads>
+      <conversations>الـمـُـحادثات</conversations>
+      <to-index>إلى</to-index>
+      <of>من</of>
+      <subject>الموضوع</subject>
+      <date-time><![CDATA[التاريخ و التوقيت]]></date-time>
+      <size>الحجم</size>
+      <first-page>الصّفحة الأولى</first-page>
+      <previous-page>الصّفحة السّابقة</previous-page>
+      <next-page>الصّفحة المُوالية</next-page>
+      <last-page>الصّفحة الأخيرة</last-page>
+      <starting>جار الانطلاق</starting>
+      <stop>توقّف</stop>
+      <stoping>جار الايقاف</stoping>
+      <hide>إخفاء</hide>
+      <refresh>تحديث</refresh>
+      <check-all>اختر الجميع</check-all>
+      <attachment> المُرفق (ــات).</attachment>
+      <sort-by-sender>ترتيب حسب المُرْسِل.</sort-by-sender>
+      <add-star-for-this-message>إضافة نجمة لهذه الرّسالة</add-star-for-this-message>
+      <sort-by-subject>ترتيب حسب الموضوع.</sort-by-subject>
+      <sort-by-date-time>ترتيب حسب التاريخ</sort-by-date-time>
+      <sort-by-size>ترتيب حسب الحجم.</sort-by-size>
+      <sort-by-priority>ترتيب حسب الأولويّة</sort-by-priority>
+      <total-messages-in-conversation>العدد الجملي للرسالات في هذه المحادثة</total-messages-in-conversation>
+      <no-subject>(بدون موضوع)</no-subject>
+      <there-are-attachments-could-not-be-loaded-properly>لا يُمكن تحميل هذه المُرفقات بشكل سليم !</there-are-attachments-could-not-be-loaded-properly>
+    </label>
+  </UIMessageList>
+  <!--
+  ##################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIMessagePreview>
+    <label>
+      <subject>الموضوع</subject>
+      <from>من</from>
+      <reply-to>الردّ على</reply-to>
+      <to>إلى</to>
+      <cc>نسخة إلى</cc>
+      <print>طباعة</print>
+      <reply-to-sender>الردّ</reply-to-sender>
+      <reply-to-all>الردّ على الجميع</reply-to-all>
+      <forward> إعادة توجيه</forward>
+      <create-filter-from-this>إنشاء فلتر</create-filter-from-this>
+      <move-to-folder>تحويل إلى المُـجلّــد</move-to-folder>
+      <tag>إضافة علامة</tag>
+      <delete>حذف</delete>
+      <attachments>المُرفقات</attachments>
+      <reply>الردّ</reply>
+      <size>الحجم</size>
+      <add-sender-to-contacts>أضف إلى '' جهات الاتصال''</add-sender-to-contacts>
+      <export-eml>تصدير إلى  (*.eml)</export-eml>
+      <view-all-headers>رؤية الترويسات</view-all-headers>
+      <no-subject>بدون موضوع</no-subject>
+      <add-star-for-this-message>إضافة نجمة لهذه الرّسالة</add-star-for-this-message>
+      <click-here-to-expand>فتح الرّسالة</click-here-to-expand>
+      <date-time>التاريخ و التوقيت</date-time>
+      <view>رؤيـة</view>
+      <download>تحميل</download>
+      <show-details>إظهار التّفاصيل</show-details>
+      <hide-details>إخفاء التّفاصيل</hide-details>
+      <action-on-this-messge>إجراءات</action-on-this-messge>
+      <maximize-reading-pane>تكبير نافذة القراءة</maximize-reading-pane>
+      <this-attachment-could-not-be-loaded-properly>لا يُمكن تحميل هذه المُرفقات بشكل سليم !</this-attachment-could-not-be-loaded-properly>
+    </label>
+    <msg>
+      <trouble-loading-event>هذا "الحدث" قد تمّ حذفهُ ، أو أنّك قد لا تستطيع الوصول إليه !</trouble-loading-event>
+      <confirm-remove-message>هل ترغب حقّـا في حذف هذه الرّسالة؟</confirm-remove-message>
+    </msg>
+    <UIIntroduction>
+      <label>
+        <welcome>مرحبًــا بكم في</welcome>
+        <overview>نظرة عامّة</overview>
+        <label0>يُعتبَرُ بريد إكزو عميلاً للبريد ذو المصدر المفتوح. هذا العميل الذي يقوم على أساس eXo WebOS يتضمّن العديد من الوظائف الجديدة و المُصمَّمَة  من أجل أن تجعل تجربَتك مع بريدك الإلكتروني أكثر إنتاجية وأكثر مُلائَمَة، مع توفير طريقة جديدة لعرض رسائل البريد الوارد ، والمحادثة ، إلى جانب مُساعدتك على الحدّ من المخاطر أو المُضايقات التي يُمكن التعرُّض لها مثل التصيّـد الالكتروني أو رسائل البريد الالكترونية الغير مرغوب فيها...بريد إكزو هو طريقة سهلة لفهم أُسُس كتابة الرّسائل، قرائتها، العثور على معلومات تضمَّنَتها هذه الأخيرة و أكثر من ذلك من الميزات...</label0>
+        <comment>عميل بريدك الالكتروني الأكثر فعاليّة</comment>
+        <features>الوظائف</features>
+        <label1>طريقة مُتطوّرة لعرض المُجلـّدات : يُـوفـّر بريد إكزو مجموعة مُـتـنـوّعة من الطّرق التي تُمكّـنُك من تنظيم وعرض مُجلـّداتك وفقا لتفضيلاتك !</label1>
+        <label2>العلامات : يُمكنـُـك، عن طريق بريد إكزو، إضافة علامة لبريداتك و ذلك بواسطة الصّيغ التي تـُلائم احتياجاتك!</label2>
+        <label3>الفلاتر:  بواسطة بريد إكزو، أنت قادر على إنشاء فلتر أو أكثر لبريداتك وفقـًا لقيود أو شروط خاصّة قصد تطبيق علامات لرسائلك أو تصنيفها تلقائيّا في مجلـّدات.</label3>
+        <label4>عمليّة بحث مُـتطوّرة : يُـتيح لك بريد إكزو فـُرصة القيام بعمليّة البحث عن رسائلك من خلال العديد من الخيارات.</label4>
+        <label5>إلـخ...</label5>
+      </label>
+      <action>
+        <title>
+          <togglePreview>تثبيت نافذة القراءة</togglePreview>
+        </title>
+      </action>
+    </UIIntroduction>
+  </UIMessagePreview>
+  <!--
+  ##################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIAdvancedSearchForm>
+    <label>
+      <search-input>بـحث</search-input>
+      <folder>بـحث في المُـجلّــد</folder>
+      <from-field>من</from-field>
+      <to-field>إلى</to-field>
+      <subject-field>الموضوع</subject-field>
+      <message-content>الرسالة</message-content>
+      <from-date>وَرَدت بَعْد</from-date>
+      <to-date>وَرَدت قبل</to-date>
+      <filter-from-condition>قُـيود على المُرسِـل</filter-from-condition>
+      <filter-to-condition>قُـيود على المُرسَل إليه</filter-to-condition>
+      <filter-subject-condition>قُـيود على الموضوع</filter-subject-condition>
+      <filter-body-condition>قُيود على''اصُلْب الرسالة'' </filter-body-condition>
+      <has-star>بريد له نـجمة</has-star>
+      <priority>الأولويّـة</priority>
+      <has-attachment>مع المُرفق (ــات).</has-attachment>
+      <option>
+        <priority />
+      </option>
+      <Inbox>البريد الوارد</Inbox>
+      <Drafts>مُــسودّات</Drafts>
+      <Sent>البريد المـُــرسَل</Sent>
+      <Spam>بريد مزعج</Spam>
+      <Trash>سلّة المُــهملات</Trash>
+    </label>
+    <action>
+      <Cancel>#{word.cancel}</Cancel>
+      <Search>ابحث</Search>
+    </action>
+    <msg>
+      <date-time-invalid>التاريخ المُخصصّ لــ'إلى' يجب أن يكون أكبر من التاريخ المُخصصّ لــ'من'.</date-time-invalid>
+      <search-query-invalid>لم يتم التعرف على عبارة البحث التي أدخلتها. يرجى التأكد من أنّها مكتوبة بالشكل الصحيح أو حاول أن تختار عبارة أخرى مُبَسَّطـة .</search-query-invalid>
+    </msg>
+    <optionGroup>
+      <label>
+        <default-folder>المُـجلّــدات الإفتراضيّة</default-folder>
+        <my-folder>المُـجلّــدات الشخصيّة</my-folder>
+      </label>
+    </optionGroup>
+  </UIAdvancedSearchForm>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIPrintPreview>
+    <label>
+      <from>من</from>
+      <to>إلى</to>
+      <attachments>المُرفقات</attachments>
+      <size>الحجم</size>
+    </label>
+    <action>
+      <Print>طباعة</Print>
+      <Cancel>#{word.close}</Cancel>
+    </action>
+  </UIPrintPreview>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIQuickAddEvent>
+    <label>
+      <eventName>الموضوع</eventName>
+      <description>الوصف</description>
+      <from>من</from>
+      <to>إلى</to>
+      <allDay>كامل اليوم</allDay>
+      <calendar>الرزنامة</calendar>
+      <category>الفئة</category>
+      <mailReminder>بواسطة بريد الكتروني</mailReminder>
+      <popupReminder>بواسطة إشعار</popupReminder>
+    </label>
+    <action>
+      <MoreDetail>أكثر تفاصيل</MoreDetail>
+      <Save>#{word.save}</Save>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <msg>
+      <calendar-field-required>قم بإختيار رزنامة قبل كل شيء</calendar-field-required>
+      <category-field-required>قم بإختيار فئة قبل كل شيء</category-field-required>
+      <logic-required>تاريخ النهاية يجب أن يكون أكبر من تاريخ البداية</logic-required>
+      <add-unsuccessfully>لا يمكن إضافة هذا الحدث</add-unsuccessfully>
+      <add-successfully>تم إضافة الحدث بنجاح</add-successfully>
+      <fromDate-format>شكل تاريخ البداية غير صحيح</fromDate-format>
+      <toDate-format>شكل تاريخ النهاية غير صحيح</toDate-format>
+    </msg>
+  </UIQuickAddEvent>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIImportForm>
+    <label>
+      <UISelectFolder>تصدير البريد إلى المُـجلّــد</UISelectFolder>
+      <choose-mime-message>اختر الملف (.eml)</choose-mime-message>
+      <import-to-folder>تصدير البريد إلى المُـجلّــد</import-to-folder>
+      <Inbox>البريد الوارد</Inbox>
+      <Drafts>مُــسودّات</Drafts>
+      <Sent>البريد المـُــرسَل</Sent>
+      <Spam>بريد مزعج</Spam>
+      <Trash>سلّة المُــهملات</Trash>
+    </label>
+    <optionGroup>
+      <label>
+        <default-folder>المُـجلّــدات الإفتراضيّة</default-folder>
+        <my-folder>المُـجلّــدات الشخصيّة</my-folder>
+      </label>
+    </optionGroup>
+    <action>
+      <Import>استيراد</Import>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <msg>
+      <file-upload-error>عمليّة تحميل الملف على المُزوّد غير مُمكنة.</file-upload-error>
+      <upload-error>قُـم بتحميل الملف على المُزوّد قبل كلّ شيء.</upload-error>
+      <import-messages-error>لا يمكن استيراد الملفّ التّابع لهذه الرّسالة. تأكد من شكل هذا الأخير.</import-messages-error>
+    </msg>
+  </UIImportForm>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIExportForm>
+    <label>
+      <export-file-type>شكل التّصدير</export-file-type>
+      <export-file-name>اسم الملف</export-file-name>
+    </label>
+    <action>
+      <Export>تصدير</Export>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <msg>
+      <export-name-blank>أعط اسمًـا للملف الذي ترغب في تصديره</export-name-blank>
+    </msg>
+  </UIExportForm>
+  <!--
+  ###################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIViewAllHeaders>
+    <header>
+      <key>ترويسة</key>
+      <value>القيمة</value>
+    </header>
+    <action>
+      <Close>#{word.close}</Close>
+    </action>
+  </UIViewAllHeaders>
+  <!--
+  ##################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIMessageFilter>
+    <label>
+      <search-input>بـحث</search-input>
+      <folder>بـحث في المُـجلّــد</folder>
+      <from-field>من</from-field>
+      <to-field>إلى</to-field>
+      <subject-field>الموضوع</subject-field>
+      <message-content>الرسالة</message-content>
+      <from-date>وَرَدت قبل</from-date>
+      <to-date>وَرَدت بَعْد</to-date>
+      <condition-contain>تحتوي على</condition-contain>
+      <condition-not-contain>لا تحتوي على</condition-not-contain>
+      <condition-is>هي/هو</condition-is>
+      <condition-not-is>ليست/ليس</condition-not-is>
+      <condition-end-with>تنتهي بـ</condition-end-with>
+      <condition-start-with>تبدأ بـ</condition-start-with>
+      <add-filter>إضافة فلتر جديد</add-filter>
+      <edit-filter>تغيير فلتر</edit-filter>
+      <delete-filter>حذف فلتر</delete-filter>
+      <filter-name>اسم الفلتر</filter-name>
+      <filter>فلتر</filter>
+      <click-here-to-add-a-new-filter>إضافة فلتر</click-here-to-add-a-new-filter>
+      <to>من</to>
+      <from>إلى</from>
+      <subject>الموضوع</subject>
+      <body>الـمُـحتوى</body>
+      <tag>علامة</tag>
+      <this-filter-contains-some-conditions-follow>هذا الفلتر يحتوي على الشّرُوط التّالية</this-filter-contains-some-conditions-follow>
+      <then-apply-for>طبّق كذلك على</then-apply-for>
+      <introduction-title1>حماية بريدك الوارد من أيّ مصدر إزعاج.</introduction-title1>
+      <introduction-content1>تمّ تصميم الفلتر ليُمَكـّنـَـك من إزالة الرّسائل الغير مرغوب فيها بصفة آليّة و التي تتلقـّاها عن طريق البريد الإلكتروني.</introduction-content1>
+      <introduction-title2>تنظيم رسائلك تلقائيّا.</introduction-title2>
+      <introduction-content2>إنشاء فلاتر قَصد تحويل البريدات الواردة بصفة آليّة إلى مُجلّدات من اختيارك، كما يمكنك أيضًا تطبيق علامات عليها.</introduction-content2>
+    </label>
+    <action>
+      <Close>إغلاق</Close>
+    </action>
+    <msg>
+      <select-no-filter>قـُـم باختيار الفلتر الذي ترغب في تغييره</select-no-filter>
+      <confirm-remove-filter>هل ترغب حقّـا في حذف هذا الفلتر؟</confirm-remove-filter>
+    </msg>
+  </UIMessageFilter>
+  <!--
+  ##################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIChildPopupWindowUIPopupActionFilterContainer>
+    <title>
+      <UIAddMessageFilter>فلتر الرسائل</UIAddMessageFilter>
+    </title>
+  </UIChildPopupWindowUIPopupActionFilterContainer>
+  <UIAddMessageFilter>
+    <label>
+      <filter-name>اسم الفلتر</filter-name>
+      <filter-from>ترويسة ''من''</filter-from>
+      <filter-from-condition>قُـيود على المُرسِـل</filter-from-condition>
+      <filter-to>ترويسة ''إلى''</filter-to>
+      <filter-to-condition>قُـيود على المُرسَل إليه</filter-to-condition>
+      <filter-subject>الموضوع</filter-subject>
+      <filter-subject-condition>قُـيود على الموضوع</filter-subject-condition>
+      <filter-body>مُـحتوى الرّسالة</filter-body>
+      <filter-body-condition>قُيود على صُلب الرّسالة</filter-body-condition>
+      <filter-aplly-folder>تحويل الرّسالة إلى</filter-aplly-folder>
+      <filter-aplly-tag>طبِّق العلامة</filter-aplly-tag>
+      <filter-keep-in-inbox>احتفظ به (ــها) في البريد الوارد</filter-keep-in-inbox>
+      <apply-all-messages>قُم بالتّنفيذ الآن</apply-all-messages>
+      <if-all-of-the-flowing-true>إذا كانت هذه القُيودُ صحيحة....</if-all-of-the-flowing-true>
+      <from>المُرسِل</from>
+      <to>المُرسَل إليه</to>
+      <subject>الموضُوع</subject>
+      <body>الرّسالة</body>
+      <then>إذَنْ</then>
+      <Inbox>البريد الوارد</Inbox>
+      <Drafts>مُــسودّات</Drafts>
+      <Sent>البريد المـُــرسَل</Sent>
+      <Spam>بريد مزعج</Spam>
+      <Trash>سلّة المُــهملات</Trash>
+      <option>
+        <choose-tag>-- اخـتــر --</choose-tag>
+      </option>
+    </label>
+    <optionGroup>
+      <label>
+        <default-folder>المُـجلّــدات الإفتراضيّة</default-folder>
+        <my-folder>المُـجلّــدات الشخصيّة</my-folder>
+      </label>
+    </optionGroup>
+    <action>
+      <Save>#{word.save}</Save>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <msg>
+      <filter-name-blank>أعط اسمًـا لهذا الفلتر.</filter-name-blank>
+      <fill-at-lease-field>يجب عليك على الأقل إنشاء قاعدة لهذا الفلتر.</fill-at-lease-field>
+      <contain-special-characters>الاسم التي اخترته لهذا الفلتر غير مناسب، حاول أن تختار اسمًـا آخر مُبَسَّطـًا.</contain-special-characters>
+    </msg>
+  </UIAddMessageFilter>
+  <!--
+  ##################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIAddressBookForm>
+    <label>
+      <select-group>المجموعة </select-group>
+      <add-new-group>مجموعة جديدة</add-new-group>
+      <add-new-contact>إنشاء جهة اتصال جديدة</add-new-contact>
+      <edit-contact>تغيير جهة اتصال</edit-contact>
+      <delete-contact>حذف</delete-contact>
+      <search>ابحث</search>
+      <contact>جهة اتصال</contact>
+      <profile>التّعريفة</profile>
+      <nick-name>الكنية</nick-name>
+      <gender>الجنس</gender>
+      <job-title>المهنة</job-title>
+      <birthday>تاريخ الولادة</birthday>
+      <email>البريد الاكتروني</email>
+    </label>
+    <action>
+      <Close>إغلاق</Close>
+    </action>
+    <msg>
+      <confirm-remove-contact>هل ترغب حقّـا في حذف هذا الحساب؟</confirm-remove-contact>
+      <cannot-delete-this-contact>لا يمكن حذف 'جهة الاتصال 'هذه</cannot-delete-this-contact>
+      <no-selected-contact-to-edit>قُم باختيار 'جهة الاتصال 'التي ترغب في تغييرها</no-selected-contact-to-edit>
+      <no-selected-contact-to-delete>قُم باختيار 'جهة الاتصال 'التي ترغب في حذفها</no-selected-contact-to-delete>
+      <cannot-delete-ownerContact>لا يمكنُك حذف جهة الاتّصال هذه، نظرًا لكونها صاحبة الدفتر (دفتر العناوين).</cannot-delete-ownerContact>
+      <cannot-delete>إجراء غير مُمكن. حاول استعمال "دفتر العناوين" الخاصّ بإكزو حتّى  تتمكّن من القيام بالوظائف المُـتطوّرة.</cannot-delete>
+      <cannot-edit>إجراء غير مُمكن. حاول استعمال "دفتر العناوين" الخاصّ بإكزو حتّى  تتمكّن من القيام بالوظائف المُـتطوّرة.</cannot-edit>
+    </msg>
+    <optionGroup>
+      <label>
+        <personal-contacts>دفاتر شخصيّة</personal-contacts>
+        <public-contacts>دفاتر عموميّة</public-contacts>
+        <shared-contacts>دفاتر مُشترَكة</shared-contacts>
+      </label>
+    </optionGroup>
+  </UIAddressBookForm>
+  <!--
+  ##################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIChildPopupWindowUIPopupActionAddressContainer>
+    <title>
+      <UIAddGroupForm>مجموعة جديدة</UIAddGroupForm>
+      <UIPopupAddContactForm>إضافة / تغيير  جهة اتصال</UIPopupAddContactForm>
+    </title>
+  </UIChildPopupWindowUIPopupActionAddressContainer>
+  <UIChildPopupWindowUIPopupAddContactForm>
+    <title>
+      <UIAddGroupForm>مجموعة جديدة</UIAddGroupForm>
+      <UIImageForm>تغيير الصّورة</UIImageForm>
+    </title>
+  </UIChildPopupWindowUIPopupAddContactForm>
+  <UIChildPopupWindowUIPopupActionAddContactContainer>
+    <title>
+      <UIAddGroupForm>مجموعة جديدة</UIAddGroupForm>
+      <UIImageForm>تغيير الصّورة</UIImageForm>
+    </title>
+  </UIChildPopupWindowUIPopupActionAddContactContainer>
+  <UIAddGroupForm>
+    <label>
+      <group-name>اسم المجموعة</group-name>
+      <group-description>الوصف</group-description>
+    </label>
+    <action>
+      <Add>أضف</Add>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <msg>
+      <group-name-required>أعط اسمًـا للمجموعة</group-name-required>
+      <group-name-exist>الاسم الذي اخترته لدفتر العناوين يوجد من السّابق، حاول أن تختار اسمًــا آخر.</group-name-exist>
+    </msg>
+  </UIAddGroupForm>
+  <!--
+  ##################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIAddContactForm>
+    <label>
+      <select-group>المجموعة</select-group>
+      <name>المعرف الوحيد</name>
+      <first-name>اللّقب</first-name>
+      <last-name>اسم العائلة</last-name>
+      <nickName>الكنية</nickName>
+      <email>البريد الاكتروني</email>
+      <gender>الجنس</gender>
+      <day>يوم</day>
+      <month>شهر</month>
+      <year>سنة</year>
+      <birthday>تاريخ الولادة</birthday>
+      <jobTitle>المهنة</jobTitle>
+      <male>ذكر</male>
+      <female>أنثى</female>
+      <address-book>دفتر العناوين</address-book>
+      <nick-name>الكنية</nick-name>
+      <job-title>المهنة</job-title>
+      <picture>صورة</picture>
+      <change>تغيير</change>
+      <delete>حذف</delete>
+      <option>
+        <day>يوم</day>
+        <month>شهر</month>
+        <year>سنة</year>
+      </option>
+    </label>
+    <msg>
+      <name-required>أدخل الاسم و اللّقب</name-required>
+      <birthday-incorrect>صيغة تاريخ الولادة غير صحيحة</birthday-incorrect>
+      <date-time-invalid>هذا الشخص لم يُولد بعد...الرّجاء،  تثبّت من صحّة تاريخ الولادة.</date-time-invalid>
+      <email-required>أدخل عنوان البريد الالكتروني </email-required>
+      <add-contact-successfully>تمّ إضافة جهة الاتّصال في دفتر العناوين بنجاح.</add-contact-successfully>
+      <email-invalid> يبدو أن صيغة عنوان البريد الإلكتروني الذي أدخلته غير صالحة. يجب أن تـُـشبه  شيئـًا من هذا القبيل:  votrenom@votresociete.com</email-invalid>
+      <too-manyField>قمت بإضافة الكثير في هذا المجال</too-manyField>
+    </msg>
+    <action>
+      <Save>#{word.save}</Save>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <optionGroup>
+      <label>
+        <personal-contacts>مجموعة شخصيّة</personal-contacts>
+        <public-contacts>مجموعة  العموم</public-contacts>
+        <shared-contacts>مجموعة  مُشتركة</shared-contacts>
+      </label>
+    </optionGroup>
+  </UIAddContactForm>
+  <!--
+  ##################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIImageForm>
+    <action>
+      <Save>حفظ</Save>
+      <Cancel>إلغاء</Cancel>
+    </action>
+    <label>
+      <upload>الملف</upload>
+    </label>
+    <msg>
+      <selectFile-required>يجب عليك أوّلاً القيام بتحميل الصورة على المُزوّد.</selectFile-required>
+    </msg>
+  </UIImageForm>
+  <!--
+  ##################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIEventForm>
+    <tab>
+      <label>
+        <eventDetail>التفاصيل</eventDetail>
+        <eventReminder>التذكيرات</eventReminder>
+        <eventShare>المُشاركون</eventShare>
+        <eventAttender>تخطيط</eventAttender>
+      </label>
+    </tab>
+    <action>
+      <AddAttachment>إرفاق ملف(ــات)</AddAttachment>
+      <Save>#{word.save}</Save>
+      <Cancel>#{word.cancel}</Cancel>
+    </action>
+    <label>
+      <eventName>موضوع الحدث</eventName>
+      <description>الوصف</description>
+      <calendar>الرزنامة</calendar>
+      <category>الفئة</category>
+      <mailReminder>تذكير بواسطة رسالة  بريد الكتروني</mailReminder>
+      <mailReminderTime>بعث رسالة الكترونية قبل بداية الحدث بــ:</mailReminderTime>
+      <mailReminderAddress>أرسل أيضـًا إلى :</mailReminderAddress>
+      <popupReminder>عرض إشعار مرئي</popupReminder>
+      <popupReminderTime>قبل بداية الحدث المـُـقبل بـــ</popupReminderTime>
+      <action>
+        <AddCategory>إضافة فئة جديدية</AddCategory>
+        <AddParticipant>البحث على مشارك (اضافة العنوان الخاص به)</AddParticipant>
+        <RemoveAttachment>حذف</RemoveAttachment>
+        <AddEmailAddress>إضافة عنوان بريد الكتروني</AddEmailAddress>
+        <AddAttachment>تحميل ملف</AddAttachment>
+      </action>
+      <from>من</from>
+      <to>إلى</to>
+      <allDay>كامل اليوم</allDay>
+      <repeat>إعادة</repeat>
+      <attachments>الملفّات المـُرفقة</attachments>
+      <place>المكان</place>
+      <reminder>تذكير</reminder>
+      <timeReminder>إرسال التذكير إلى:</timeReminder>
+      <shareEvent>خُـصوصية الحدث</shareEvent>
+      <status>المـُـشاركون المُتواجدون</status>
+      <meeting>استدعي أيضـًا عن طريق البريد الالكتروني:</meeting>
+      <participant>المشاركون الذين ستتم دعوتهم</participant>
+      <priority>الأولويّـة</priority>
+      <dateAll>كامل اليوم</dateAll>
+      <snooze>مـُـدّة التّذكير</snooze>
+      <emailIsRepeat>إعادة</emailIsRepeat>
+      <emailRepeatInterval>كُلّ</emailRepeatInterval>
+      <option>
+        <false>لا</false>
+        <true>نعم</true>
+        <norepeat>بدون إعادة</norepeat>
+        <daily>كل يوم</daily>
+        <weekly>كل أسبوع</weekly>
+        <monthly>كل شهر</monthly>
+        <yearly>كل سنة</yearly>
+        <weekend>كل آخر أسبوع</weekend>
+        <workingdays>أيـّام العمل</workingdays>
+        <none>لا شيء</none>
+        <normal>مُتوسّطة</normal>
+        <high>قُصوى</high>
+        <low>ضئيلة</low>
+      </option>
+      <minutes>دقائق</minutes>
+    </label>
+    <msg>
+      <summary-invalid>خُـلاصة الحدث لا تحتوي على {0}،{1}!</summary-invalid>
+      <event-email-invalid>البريدات الالكترونية التي أدخلتها غير صحيحة!</event-email-invalid>
+      <email-reminder-required>قم بإختيار التذكير بواسطة بريد الكتروني قبل كل شيء.</email-reminder-required>
+      <add-event-successfully>تم إضافة الحدث بنجاح.</add-event-successfully>
+      <update-event-successfully>عملية التحديث الخاصة بهذه  المهمة قد تمت بنجاح</update-event-successfully>
+      <add-event-error>لا يمكن حفظ هذه المهمة</add-event-error>
+      <event-summary-required>اسم المهمة ضروري.</event-summary-required>
+      <event-calendar-required>قم بإضافة رزنامة قبل كل شيء.</event-calendar-required>
+      <event-category-required>قم بإضافة فئة للحدث قبل كل شيء.</event-category-required>
+      <event-fromdate-required>تاريخ البداية ضروري</event-fromdate-required>
+      <event-fromdate-notvalid>شكل تاريخ البداية غير صحيح.</event-fromdate-notvalid>
+      <event-todate-required>تاريخ النهاية ضروري.</event-todate-required>
+      <event-todate-notvalid>شكل تاريخ النهاية غير صحيح.</event-todate-notvalid>
+      <event-date-time-logic>يجب أن يكون توقيت نهاية العمل أكبر من توقيت البداية !</event-date-time-logic>
+      <event-date-time-getvalue>صيغة هذا التوقيت غير صحيحة</event-date-time-getvalue>
+      <event-email-required>قائمة البريدات الالكترونية لا يمكن أن تكون خالية من المعلومات</event-email-required>
+      <have-no-calendar>تم حذف الرزنامة أو لم يتم صُنعها !</have-no-calendar>
+      <have-no-permission-to-edit>غير مسموح لك بتعديل هذا الحدث!</have-no-permission-to-edit>
+    </msg>
+    <optionGroup>
+      <label>
+        <privateCalendar>رزنامات شخصية</privateCalendar>
+        <sharedCalendar>رزنامات مُـشترَكـَة</sharedCalendar>
+        <publicCalendar>رزنامات المجموعة</publicCalendar>
+      </label>
+    </optionGroup>
+  </UIEventForm>
+  <!--
+  ##################################################################
+  #org.exoplatform.calendar.webui.popup.UIEventCategoryForm
+  ##################################################################
+  -->
+  <UIEventCategoryForm>
+    <label>
+      <eventCategoryName>الفئة</eventCategoryName>
+      <description>الوصف</description>
+    </label>
+    <action>
+      <Reset>إعادة ضبط</Reset>
+      <Cancel>غلق</Cancel>
+      <Save>حفظ</Save>
+    </action>
+    <msg>
+      <name-invalid>هذه الفئة غير صالحة أو أنّـها وُجــدت سابقًــا</name-invalid>
+      <name-required>أعط اسمـًا للفئة</name-required>
+    </msg>
+  </UIEventCategoryForm>
+  <!--
+  ##################################################################
+  #org.exoplatform.calendar.webui.popup.UIEventCategoryManager
+  ##################################################################
+  -->
+  <UIChildPopupWindowUIPopupActionEventContainer>
+    <title>
+      <UIEventCategoryManager>فئات الأحداث</UIEventCategoryManager>
+      <UIPopupActionContainer>فئات الأحداث</UIPopupActionContainer>
+      <UIAddressForm>العنوان</UIAddressForm>
+    </title>
+  </UIChildPopupWindowUIPopupActionEventContainer>
+  <!--
+  ##################################################################
+  #org.exoplatform.calendar.webui.popup.UIComfirmPassword
+  ##################################################################
+  -->
+  <UIComfirmPassword>
+    <label>
+      <input-password>أدخل كلمة السر</input-password>
+      <saved-message>تذكّر كلمة السر</saved-message>
+    </label>
+    <action>
+      <Save>تثبيت الرسائل</Save>
+      <Cancel>إلغاء</Cancel>
+    </action>
+  </UIComfirmPassword>
+  <!--
+  ##################################################################
+  #org.exoplatform.calendar.webui.popup.UIEnterPasswordDialog
+  ##################################################################
+  -->
+  <UIEnterPasswordDialog>
+    <label>
+      <input-password>أدخل كلمة السر</input-password>
+      <saved-message>تذكّر كلمة السر</saved-message>
+      <you-have-to-enter-the-valid-password-for-account>كلمة السر التي قُمت بإدخالها لهذا الحساب غير صحيحة</you-have-to-enter-the-valid-password-for-account>
+      <on>على</on>
+    </label>
+    <action>
+      <Save>مُوَافق</Save>
+      <Cancel>إلغاء</Cancel>
+    </action>
+    <msg>
+      <there-was-an-error-parsing-the-addresses-sending-failed>حدث خطأ أثناء القيام بتحليل العناوين. فشل في عملية الإرسال!</there-was-an-error-parsing-the-addresses-sending-failed>
+      <sorry-there-was-an-error-sending-the-message-sending-failed>عُذرًا ، طرأ خطأ أثناء مُحاولة إرسال الرّسالة. فشل في عمليّة الإرسال!</sorry-there-was-an-error-sending-the-message-sending-failed>
+      <there-was-an-unexpected-error-sending-falied>عُذرًا ، طرأ خطأ غير متوقَّع. فشل في عمليّة الإرسال!</there-was-an-unexpected-error-sending-falied>
+    </msg>
+  </UIEnterPasswordDialog>
+  <!--
+  ##################################################################
+  -->
+  <!--
+  ###################################################################
+  -->
+  <UIFetchingBar>
+    <label>
+      <starting>بداية</starting>
+      <stop>توقّف</stop>
+      <stoping>إيقاف</stoping>
+      <hide>إخفاء</hide>
+      <refresh>تحديث</refresh>
+    </label>
+    <msg>
+      <deleted_account>تمّ حذف الحساب من الخارج.</deleted_account>
+    </msg>
+  </UIFetchingBar>
+</bundle>
+

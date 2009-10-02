@@ -1,0 +1,158 @@
+.UIMailPortlet .UIReadMessage {
+  padding: 8px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .ControlButton {
+	float: left;
+	line-height: 26px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar  a {
+	color: #000000;
+	margin: 3px 0px 0px 0px;
+	line-height: 26px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar a:hover {
+	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
+	color: #126ca5; border: 1px solid #cbcbcb;
+	height: 24px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .Label {
+	line-height: 24px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .SeparatorLine {
+  float: left;
+  margin: 3px 5px 2px 5px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .IconHolder {
+	line-height: 26px;
+	margin: 0px 7px;
+	padding-left: 26px;
+}
+
+/*=================================Reading Pane=================*/
+
+.UIMailPortlet .UIReadMessage .MailControlBar .ReadingPane {
+	border: 1px solid #c0c0c0;
+	background: #ffffff;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .ReadingPane .ReadingPaneBar {
+	background: #e7e7e7;
+	height: 25px;
+	border: 1px solid #ffffff;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .ReadingPane .Subject {
+	float: left;
+	font-weight: bold;
+	font-size: 11px;
+	margin: 5px 0px 0px 10px; 
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .ReadingPane .NomalReadingPane {
+  float: right;
+	margin: 4px 4px 0px 0px;
+}
+
+/*=======================Message Header====================*/
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageHeader {
+	padding: 5px;
+	height: 25px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageCheck {
+	float: left;
+	width: 40px; 
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageCheck .CheckBox {
+	float: left;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageCheck .UnStarredIcon {
+	float: left; 
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageAddress {
+	float: left; 
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageAddress .FieldContainer{
+	line-height: 18px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageAddress .Title {
+	float: left;
+	color: #6a6a6a;
+	width: 80px;
+	font-weight: bold;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageAddress .Address {
+	float: left;
+	font-weight: bold;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageAddress .SenderAddress {
+	float: left;
+	color: #126ca5;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .TagIcon {
+	float: left;
+	margin: 0px 4px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageActions {
+	float: right; 
+	width: 160px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageAttachment {
+	float: right; 
+	width: 100px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageActions .DownArrow1Icon {
+	float: left;
+	width: 12px; height: 16px;
+	cursor: pointer;
+	margin: 3px 0px 0px 0px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageActions .ShowHideTitle {
+	float: left;
+	line-height: 20px;
+	color: #126ca5; cursor: pointer;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageActions .HeadlineText {
+	float: left;
+	color: #969696;
+	font-weight: nomal;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MonthDate {
+	float: left;
+	line-height: 20px;
+	font-weight: bold;
+	margin: 0px 4px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .AttachmentIcon {
+	float: left;
+	margin: 2px 2px 0px 0px;
+}
+
+.UIMailPortlet .UIReadMessage .MailControlBar .MessageDetail {
+	padding: 10px;
+}
+

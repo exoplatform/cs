@@ -1,0 +1,315 @@
+<div class="$uicomponent.id UIApplication" id="$uicomponent.id">
+  <div class="ApplicationMinWidth">
+	  <div class="UIReadMessage">
+	  	<div class="MailControlBar">
+				<div class="UIToolbar">
+					<div class="HeaderToolbar">
+						<div class="LeftBar">
+							<div class="RightBar">
+								<div class="CenterBar">
+									<a href="#" class="ControlButton">
+										<div class="IconHolder ReplyIcon">
+											<div class="Label"> Reply </div>
+										</div>
+									</a>
+									<a href="#" class="ControlButton">
+										<div class="IconHolder ReplyAllIcon">
+											<div class="Label"> Reply All </div>
+										</div>
+									</a>
+									<a href="#" class="ControlButton">
+										<div class="IconHolder ForwardIcon">
+											<div class="Label"> Forward </div>
+										</div>
+									</a>
+									<div class="SeparatorLine"><span></span></div>
+									<a href="#" class="ControlButton">
+										<div class="IconHolder DeleteIcon" title="Delete selected item(s)"><span></span></div>
+									</a>
+									<a href="#" class="ControlButton">
+										<div class="IconHolder PrintIcon" title="Print selected mail(s)"><span></span></div>
+									</a>
+									<div class="SeparatorLine"><span></span></div>
+									<div style="clear:left;"><span></span></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+<!--  Start Mail Reading Pane -->
+				<div class="ReadingPane">
+					<div class="ReadingPaneBar">
+						<div class="Subject">Subject: Melissa Theuriau Background for M6</div>
+						<div class="MaximizePaneButton" title="Maximize Reading Pane"><span></span></div>
+						<div class="ExpandMessageBoxes" title="Expand all messages"><span></span></div>
+						<div style="clear:both;"><span></span></div>
+					</div>
+					<div class="ReadingPaneDeltail">
+<!--  Start DecoratorBox ViewBoxStyle -->
+						<div class="DecoratorBox">
+							<div class="ViewBoxStyle">
+								<div class="TopLeftViewBoxStyle">
+									<div class="TopRightViewBoxStyle">
+										<div class="TopCenterViewBoxStyle"><span></span></div>										
+									</div>
+								</div>
+								<div class="MiddleLeftViewBoxStyle">
+									<div class="MiddleRightViewBoxStyle">
+										<div class="MiddleCenterViewBoxStyle">
+											<div class="MessageHeader">
+												<div class="MessageCheck">
+													<div><input type="checkbox" class="CheckBox" value="4"/></div>
+													<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
+													<div style="clear: left;"><span></span></div>
+												</div>
+												<div class="MessageAddress">
+													<div class="FieldContainer">
+														<div class="SenderAddress">Brice Revenant (brice.revenant@gmail.com)</div>
+														<div class="HeadlineText">To: Me</div>
+														<div style="clear: left;"><span></span></div>
+													</div>
+												</div>
+												<div class="MessageActions" >
+													<div class="DownArrow1Icon"><span></span></div>
+													<div class="ShowHideTitle">Hide deails</div>
+													<div class="MonthDate">June 26</div>
+													<div class="AttachmentIcon"><span></span></div>
+													<div class="MessageActions" title="Actions on this message"><span></span></div>
+													<div style="clear: both;"><span></span></div>
+												</div>
+												<div style="clear: both;"><span></span></div>
+											</div>
+											<div class="MessageDetail">
+												Hi Phuong,<p>
+		 
+		So I learnt that you are currently sick. I wish you will recover ASAP. I'm not sure if you was able to be at the university for your lessons. Probably next week when you feel better.
+		Tomorrow morning, we'll show the prototype to M6 with Benjamin. We'll think about you, you really did a great job for the UI. I'm sure it will help to succeed.</p>
+											</div>											
+										</div>										
+									</div>
+								</div>
+								<div class="BottomLeftViewBoxStyle">
+									<div class="BottomRightViewBoxStyle">
+										<div class="BottomCenterViewBoxStyle"><span></span></div>										
+									</div>
+								</div>
+							</div>
+						</div>
+<!--  End DecoratorBox ViewBoxStyle -->
+<!--  Start DecoratorBox ViewBoxStyle -->
+						<div class="DecoratorBox">
+							<div class="ViewBoxStyle">
+								<div class="TopLeftViewBoxStyle">
+									<div class="TopRightViewBoxStyle">
+										<div class="TopCenterViewBoxStyle"><span></span></div>										
+									</div>
+								</div>
+								<div class="MiddleLeftViewBoxStyle">
+									<div class="MiddleRightViewBoxStyle">
+										<div class="MiddleCenterViewBoxStyle">
+											<div class="MessageHeader">
+												<div class="MessageCheck">
+													<div><input type="checkbox" class="CheckBox" value="4"/></div>
+													<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
+													<div style="clear: left;"><span></span></div>
+												</div>
+												<div class="MessageAddress">
+													<div class="FieldContainer">
+														<div class="SenderAddress">Brice Revenant (brice.revenant@gmail.com)</div>
+														<div class="HeadlineText">Hi Phuong, yes, absolutely, in the destop WebOS</div>
+														<div style="clear: left;"><span></span></div>
+													</div>
+												</div>
+												<div class="MessageAttachment" >
+													<div class="MonthDate">June 26</div>
+													<div class="AttachmentIcon"><span></span></div>
+													<div style="clear: both;"><span></span></div>
+												</div>
+												<div style="clear: both;"><span></span></div>
+											</div>
+										</div>										
+									</div>
+								</div>
+								<div class="BottomLeftViewBoxStyle">
+									<div class="BottomRightViewBoxStyle">
+										<div class="BottomCenterViewBoxStyle"><span></span></div>										
+									</div>
+								</div>
+							</div>
+						</div>
+<!--  End DecoratorBox ViewBoxStyle -->
+<!--  Start DecoratorBox ViewBoxStyle -->
+						<div class="DecoratorBox">
+							<div class="ViewBoxStyle">
+								<div class="TopLeftViewBoxStyle">
+									<div class="TopRightViewBoxStyle">
+										<div class="TopCenterViewBoxStyle"><span></span></div>										
+									</div>
+								</div>
+								<div class="MiddleLeftViewBoxStyle">
+									<div class="MiddleRightViewBoxStyle">
+										<div class="MiddleCenterViewBoxStyle">
+											<div class="MessageHeader">
+												<div class="MessageCheck">
+													<div><input type="checkbox" class="CheckBox" value="4"/></div>
+													<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
+													<div style="clear: left;"><span></span></div>
+												</div>
+												<div class="MessageAddress">
+													<div class="FieldContainer">
+														<div class="SenderAddress">Brice Revenant (brice.revenant@gmail.com)</div>
+														<div class="HeadlineText">Hi Phuong, yes, absolutely, in the destop WebOS</div>
+														<div style="clear: left;"><span></span></div>
+													</div>
+												</div>
+												<div class="MessageAttachment" >
+													<div class="MonthDate">June 26</div>
+													<div class="AttachmentIcon"><span></span></div>
+													<div style="clear: both;"><span></span></div>
+												</div>
+												<div style="clear: both;"><span></span></div>
+											</div>
+										</div>										
+									</div>
+								</div>
+								<div class="BottomLeftViewBoxStyle">
+									<div class="BottomRightViewBoxStyle">
+										<div class="BottomCenterViewBoxStyle"><span></span></div>										
+									</div>
+								</div>
+							</div>
+						</div>
+<!--  End DecoratorBox ViewBoxStyle -->
+<!--  Start DecoratorBox ViewBoxStyle -->
+						<div class="DecoratorBox">
+							<div class="ViewBoxStyle">
+								<div class="TopLeftViewBoxStyle">
+									<div class="TopRightViewBoxStyle">
+										<div class="TopCenterViewBoxStyle"><span></span></div>										
+									</div>
+								</div>
+								<div class="MiddleLeftViewBoxStyle">
+									<div class="MiddleRightViewBoxStyle">
+										<div class="MiddleCenterViewBoxStyle">
+											<div class="MessageHeader">
+												<div class="MessageCheck">
+													<div><input type="checkbox" class="CheckBox" value="4"/></div>
+													<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
+													<div style="clear: left;"><span></span></div>
+												</div>
+												<div class="MessageAddress">
+													<div class="FieldContainer">
+														<div class="SenderAddress">Brice Revenant (brice.revenant@gmail.com)</div>
+														<div class="HeadlineText">Hi Phuong, yes, absolutely, in the destop WebOS</div>
+														<div style="clear: left;"><span></span></div>
+													</div>
+												</div>
+												<div class="MessageAttachment" >
+													<div class="MonthDate">June 26</div>
+													<div class="AttachmentIcon"><span></span></div>
+													<div style="clear: both;"><span></span></div>
+												</div>
+												<div style="clear: both;"><span></span></div>
+											</div>
+										</div>										
+									</div>
+								</div>
+								<div class="BottomLeftViewBoxStyle">
+									<div class="BottomRightViewBoxStyle">
+										<div class="BottomCenterViewBoxStyle"><span></span></div>										
+									</div>
+								</div>
+							</div>
+						</div>
+<!--  End DecoratorBox ViewBoxStyle -->
+<!--  Start DecoratorBox ViewBoxStyle -->
+						<div class="DecoratorBox">
+							<div class="ViewBoxStyle">
+								<div class="TopLeftViewBoxStyle">
+									<div class="TopRightViewBoxStyle">
+										<div class="TopCenterViewBoxStyle"><span></span></div>										
+									</div>
+								</div>
+								<div class="MiddleLeftViewBoxStyle">
+									<div class="MiddleRightViewBoxStyle">
+										<div class="MiddleCenterViewBoxStyle">
+											<div class="MessageHeader">
+												<div class="MessageCheck">
+													<div><input type="checkbox" class="CheckBox" value="4"/></div>
+													<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
+													<div style="clear: left;"><span></span></div>
+												</div>
+												<div class="MessageAddress">
+													<div class="FieldContainer">
+														<div class="SenderAddress">Brice Revenant (brice.revenant@gmail.com)</div>
+														<div class="HeadlineText">Hi Phuong, yes, absolutely, in the destop WebOS</div>
+														<div style="clear: left;"><span></span></div>
+													</div>
+												</div>
+												<div class="MessageAttachment" >
+													<div class="MonthDate">June 26</div>
+													<div class="AttachmentIcon"><span></span></div>
+													<div style="clear: both;"><span></span></div>
+												</div>
+												<div style="clear: both;"><span></span></div>
+											</div>
+										</div>										
+									</div>
+								</div>
+								<div class="BottomLeftViewBoxStyle">
+									<div class="BottomRightViewBoxStyle">
+										<div class="BottomCenterViewBoxStyle"><span></span></div>										
+									</div>
+								</div>
+							</div>
+						</div>
+<!--  End DecoratorBox ViewBoxStyle -->
+<!--  Start DecoratorBox ViewBoxStyle -->
+						<div class="DecoratorBox">
+							<div class="ViewBoxStyle">
+								<div class="TopLeftViewBoxStyle">
+									<div class="TopRightViewBoxStyle">
+										<div class="TopCenterViewBoxStyle"><span></span></div>										
+									</div>
+								</div>
+								<div class="MiddleLeftViewBoxStyle">
+									<div class="MiddleRightViewBoxStyle">
+										<div class="MiddleCenterViewBoxStyle">
+											<div class="MessageHeader">
+												<div class="MessageCheck">
+													<div><input type="checkbox" class="CheckBox" value="4"/></div>
+													<div class="UnStarredIcon" title="Add star for this message"><span></span></div>
+													<div style="clear: left;"><span></span></div>
+												</div>
+												<div class="MessageAddress">
+													<div class="FieldContainer">
+														<div class="SenderAddress">Brice Revenant (brice.revenant@gmail.com)</div>
+														<div class="HeadlineText">Hi Phuong, yes, absolutely, in the destop WebOS</div>
+														<div style="clear: left;"><span></span></div>
+													</div>
+												</div>
+												<div class="MessageAttachment" >
+													<div class="MonthDate">June 26</div>
+													<div class="AttachmentIcon"><span></span></div>
+													<div style="clear: both;"><span></span></div>
+												</div>
+												<div style="clear: both;"><span></span></div>
+											</div>
+										</div>										
+									</div>
+								</div>
+								<div class="BottomLeftViewBoxStyle">
+									<div class="BottomRightViewBoxStyle">
+										<div class="BottomCenterViewBoxStyle"><span></span></div>										
+									</div>
+								</div>
+							</div>
+						</div>
+<!--  End DecoratorBox ViewBoxStyle -->
+					</div>
+				</div>
+<!--  End Mail Reading Pane -->
+			</div>
+	  </div>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+<project>
+  <parent>
+    <groupId>org.exoplatform.cs</groupId>
+    <artifactId>config</artifactId>
+    <version>1.2.2-SNAPSHOT</version>
+  </parent> 
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>exo.cs.eXoApplication.contact.service</artifactId>
+  <version>${org.exoplatform.cs.version}</version>
+  <packaging>jar</packaging>
+  <name>eXo contact service</name>
+  <url>http://www.exoplatform.org</url>
+  <description>eXo contact service</description>
+  
+  <dependencies>   
+    <dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.security.core</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.organization.jdbc</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+      <scope>test</scope>
+    </dependency>    
+    
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.resources</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.jcr</groupId>
+      <artifactId>exo.jcr.component.ext</artifactId>
+      <version>${org.exoplatform.jcr.version}</version>            
+    </dependency>
+    
+    <dependency>
+		  <groupId>net.wimpi.pim</groupId>
+		  <artifactId>jpim-0.1</artifactId>
+		  <version>1.0</version>
+		  <scope>compile</scope>
+	  </dependency>
+		
+		<dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
+      <version>${org.exoplatform.cs.version}</version>            
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.ws</groupId>
+      <artifactId>exo.ws.frameworks.cometd.service</artifactId>
+      <version>${org.exoplatform.ws.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.ws</groupId>
+      <artifactId>exo.ws.frameworks.json</artifactId>
+      <version>${org.exoplatform.ws.version}</version>
+    </dependency> 
+		
+  </dependencies>
+</project>

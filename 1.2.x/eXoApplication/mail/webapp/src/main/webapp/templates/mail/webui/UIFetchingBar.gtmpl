@@ -1,0 +1,16 @@
+<%uiform.begin()%>  
+	<div style="background: #ffe98f; padding: 2px 0px 5px 10px; height: 18px; display: none" id="checkMailInfobar">
+		<div class="LoadingIcon"><span></span></div>
+		<div style=" float: left; margin-top: 2px" class="StatusText"> 
+			<%=_ctx.appRes(uicomponent.id+ ".label.starting") %> ...
+		</div>
+		<div style=" float: left; margin: 2px 0px 0px 5px; color: #00f; cursor: pointer" class="StopCheckMail" onclick="eXo.mail.MailServiceHandler.stopCheckMail()"><%=_ctx.appRes(uicomponent.id+ ".label.stop") %></div>
+		<div style=" float: left; margin: 2px 0px 0px 5px; color: #00f; cursor: pointer; display:none" class="StopingCheckMail" ><%=_ctx.appRes(uicomponent.id+ ".label.stoping") %>...</div>
+		<div style=" float: right; padding-right: 10px; margin-top: 2px; color: #00f; cursor: pointer; display:none" class="Hide" onclick="document.getElementById('checkMailInfobar').style.display = 'none'">| <%=_ctx.appRes(uicomponent.id+ ".label.hide") %></div>
+		<div style="float: right; padding-right: 5px; margin-top: 2px;" class="Here"><a style=" color: #00f;" href="<%=uicomponent.event("Refresh")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.refresh")%></a></div>
+		<%if (uicomponent.isUpdate()) {%>
+			<div id="UpdateList" style="float: right; padding-right: 5px; margin-top: 2px;" class="UpdateList"><a style=" color: #00f;" href="<%=uicomponent.event("UpdateList", "msgId")%>"></a></div>
+		<%}%>
+		<div style="clear: both;"><span></span></div>
+	</div>
+<%uiform.end()%>  

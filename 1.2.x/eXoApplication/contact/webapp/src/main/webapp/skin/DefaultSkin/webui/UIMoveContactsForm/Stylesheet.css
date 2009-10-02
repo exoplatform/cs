@@ -1,0 +1,62 @@
+.UIContactPortlet .UIMoveContactsForm {
+	color: #272727;
+	padding: 10px;
+}
+
+.UIContactPortlet .UIMoveContactsForm .MoveContainer {
+	background: #f3f3f3;
+	border: 1px solid #b7b7b7;	
+}
+
+.UIContactPortlet .UIMoveContactsForm .MoveContactsName {
+	background: #f3f3f3;
+	border: 1px solid #b7b7b7;	
+	line-height: 25px;
+	padding-left: 10px;
+	font-weight: bold;
+	color: #3f3f3f;
+	margin-bottom: 5px;
+}
+
+.UIContactPortlet .UIMoveContactsForm .TitleMoveContactsForm {
+	line-height: 25px;
+	margin-bottom: 10px;
+	padding-left: 25px;
+	font-weight: bold;
+	color: #3f3f3f;
+	background: #d6d6d6;
+}
+
+.UIContactPortlet .UIMoveContactsForm .MoveContactsFormContainer {
+	border: 1px solid #a5a5a5;
+	padding: 7px 1px;
+	background: white;
+	width: 240px;
+	margin : 0px auto 10px auto;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.UIContactPortlet .UIMoveContactsForm .MoveContactsFormContainer .ItemList {
+	line-height: 24px;
+	padding-left: 15px;
+}
+
+.UIContactPortlet .UIMoveContactsForm .MoveContactsFormContainer .SelectedItem {
+	background: #d8d9ee;
+}
+
+.UIContactPortlet .UIMoveContactsForm .MoveContactsFormContainer .ItemList .Icon {
+	padding-left: 24px;
+}
+
+.UIContactPortlet .UIMoveContactsForm .UIForm {
+	background: #f3f3f3;
+	padding: 10px 0px;
+}
+
+.UIContactPortlet .UIMoveContactsForm .UIForm .HorizontalLayout {
+	border: none;
+	width: 250px;
+	margin: auto;
+}

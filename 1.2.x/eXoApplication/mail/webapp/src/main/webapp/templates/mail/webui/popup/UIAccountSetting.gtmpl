@@ -1,0 +1,128 @@
+<%
+  import org.exoplatform.mail.service.Account; 
+%>
+<div style=" width: 97%; margin:auto;">
+<div><div style="width: 720px;" ><span style="display: none;"></span></div></div>
+<div  style="_width: expression(this.previousSibling.offsetWidth - 2 + 'px'); !border: 1px solid white; _margin: auto;">
+<div class="UIAccountSetting">
+	<div class="AccountSetting">
+	
+		<div class="AccountSettingCategory">
+			<div class="CategoryControlBar">
+				<div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.accounts") %></div>
+        <a href="<%=uicomponent.event("DeleteAccount", uicomponent.id, "id")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.delete-acc") %>"><div class="DeleteIcon"><span></span></div></a>
+				<div style="clear: both;"><span></span></div> 
+			</div>
+			<div class="AccountSettingList">
+			  <%
+			    for (account in uicomponent.getAccounts()) {
+			      String linkAction = uicomponent.event("SelectAccount", account.getId());
+			      String cssClass = "NormalItem";
+			      if (account.getId() == uicomponent.getSelectedAccountId()) { cssClass = "SelectedItem"; }
+			  %>
+				<div class="$cssClass"><a href="$linkAction"><%=account.getLabel()%></a></div>
+				<%}%>
+			</div>
+		</div>
+		
+		<div class="AccountSettingContainer">
+			<div class="AccountSettingContainerForm">					
+  			<%
+  		    def rcontext = _ctx.getRequestContext() ;
+  		    rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs') ;
+  		  %>
+
+    		<div class="UIFormTabPane">
+    		  <div class="UITabPane">
+    		    <div class="TabPaneContent">
+    		      <%String workingAreaCssClass="WorkingArea" ;%>
+    		      <div class="$workingAreaCssClass">
+    		        <div class="UIHorizontalTabs" >
+    		          <div class="LeftHorizontalTabs">
+    		            <div class="RightHorizontalTabs">
+    		              <div class="CenterHorizontalTabs">
+    		                <div class="TabsContainer">
+    		                  <%
+                            String selTabId = uicomponent.getSelectedTabId() ;
+    		                    for(inputSet in uicomponent.getChildren()) {
+    		                      String className="NormalTab" ;
+                              if(inputSet.getId().equals(selTabId)) className="SelectedTab" ;
+    		                      boolean renderResource = uicomponent.hasRenderResourceTabName(); 
+    		                      String tabName = inputSet.getName() ; 
+    		                      if(renderResource) {
+    		                        tabName = _ctx.appRes(uicomponent.getName() + ".tab.label." + inputSet.name) ;
+    		                      }
+    		                      
+    		                      //boolean renderTab = uicomponent.hasWithRenderTab();
+    		                      //if(renderTab){
+    		                  %>
+    		                      <div class="UITab NormalTabStyle">
+    		                        <div class="$className">
+    		                          <div class="LeftTab">
+    		                            <div class="RightTab">
+    		                              <div class="MiddleTab" onClick="eXo.webui.UIHorizontalTabs.changeTabForUIFormTabpane(this, '$uiform.id', '$inputSet.id')">$tabName</div>
+    		                            </div>
+    		                          </div>
+    		                        </div>
+    		                      </div>
+    		                  <%  //}
+    		                    }
+    		                  %>
+    		                </div>
+    		              </div>
+    		            </div>
+    		          </div>
+    		        </div>
+    		        <%uiform.begin()%>
+    		        <input type="hidden" id="<%=uicomponent.RENDER_TAB%>" name="<%=uicomponent.RENDER_TAB%>" value="$uicomponent.selectedTabId">
+    		        <div class="HorizontalLayout">
+    		          <div class="UITabContentContainer">
+    		            <%
+    		              for(formInput in uicomponent.getChildren()) { 
+    		                String display = "none" ;
+                        if(formInput.getId().equals(selTabId)) display="block" ;
+    		            %>
+    		                <div class="UITabContent" id="UITabContent"  style="display: $display;">
+    		                  <%
+    		                    uicomponent.renderUIComponent(formInput) ;
+    		                  %>
+    		                </div>
+    		            <%}%>
+    		          </div>
+    		        </div>
+    		        <%uiform.end()%>
+    		      </div>
+    		    </div>  
+    		  </div>  
+    		  
+    		</div>  			
+	  	</div>
+	  </div>
+		<div style="clear: left;"><span></span></div>
+	</div>	
+	
+	<div class="UIAction">
+    <table class="ActionContainer" align="center">
+      <tr>
+        <td align="center">
+          <%for(action in uicomponent.getActions()) { 
+            String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+            String link = uicomponent.event(action) ;
+          %>
+          <a href="$link" class="ActionButton LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle">
+                 $actionLabel
+                </div>
+              </div>
+            </div>
+          </a>
+          <%}%>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div>
+</div>

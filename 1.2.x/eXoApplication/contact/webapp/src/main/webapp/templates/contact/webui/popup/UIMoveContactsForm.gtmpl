@@ -1,0 +1,75 @@
+<%
+	import org.exoplatform.contact.service.AddressBook;
+	import org.exoplatform.contact.service.GroupContactData;
+	import org.exoplatform.contact.service.impl.NewUserListener;
+	import org.exoplatform.contact.ContactUtils;
+	uiform.begin()
+%>
+
+<div class="UIMoveContactsForm">
+	<div class="MoveContactsName"><span style="font-weight: normal"><%=_ctx.appRes(uicomponent.getName() + ".label.contacts")%></span>
+		<%=uicomponent.getContactsName()%>
+	</div>
+	<div class="MoveContainer">
+		<div class="PrivateAdress">
+			<div class="TitleMoveContactsForm"><%=_ctx.appRes(uicomponent.getName() + ".label.toPrivate")%></div>
+			<div class="MoveContactsFormContainer">
+				<%  Map map = uicomponent.getPrivateGroupMap() ;
+						for(groupId in map.keySet()) {
+							String param = groupId + "&addressType=0" ;
+							String actionLink  = uicomponent.event("SelectGroup", param) ;
+				%>
+				<div class="ItemList">
+					<div class="Icon AddressIcon"><a href="$actionLink"><%= ContactUtils.encodeHTML(map.get(groupId)) %></a></div>
+				</div>
+			<% } %>
+			</div>
+		</div>	
+
+		<% 
+			Map sharedGroups = uicomponent.getSharedGroupMap() ;
+			if (sharedGroups.size() > 0) {
+		 %>
+		<div class="PrivateAdress">
+			<div class="TitleMoveContactsForm"><%=_ctx.appRes(uicomponent.getName() + ".label.toShared")%></div>
+			<div class="MoveContactsFormContainer">
+				<% 
+	        for(groupId in sharedGroups.keySet()) { 
+	        	String param = groupId + "&addressType=1" ;
+						String actionLink  = uicomponent.event("SelectGroup", param) ;						
+						groupName = ContactUtils.getDisplayAdddressShared(sharedGroups.get(groupId).getSharedUserId(), sharedGroups.get(groupId).getName()) ;
+      	%>
+				<div class="ItemList">
+					<div class="Icon AddressIcon"><a href="$actionLink"><%= ContactUtils.encodeHTML(groupName) %></a></div>
+				</div>
+			<% } %>
+			</div>
+		</div>
+
+		<% } %>
+
+	</div>
+	<div class="UIAction"> 
+    <table class="ActionContainer" align="center">
+    	<tr>
+    		<td align="center">
+	          <% for(action in uicomponent.getActions()) { 
+            	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+            	 String link = uicomponent.event(action, "null&addressType=2") ;
+      		%>
+      		<a href="$link" class="ActionButton LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle">
+                  $actionLabel
+                </div>
+              </div>
+            </div>
+       		</a>
+      		<%}%>        
+      	</td>
+      </tr>  
+    </table>
+  </div>
+</div>
+<%uiform.end()%>

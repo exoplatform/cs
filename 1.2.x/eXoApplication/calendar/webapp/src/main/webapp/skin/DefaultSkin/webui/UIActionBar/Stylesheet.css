@@ -1,0 +1,91 @@
+
+/*=========================Calendar ControlBar======================================*/
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .Title {
+	margin: 7px 4px 0px 4px;
+	font-weight: bold;
+}
+
+
+.UICalendarPortlet .CalendarWorkingWorkspace .ControlButton {
+	float: left;
+	line-height: 18px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .SwitchButton {
+	display: block;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .SelectButton {
+	float: left;
+	line-height: 20px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .RightControlButton {
+	float: right;
+	line-height: 18px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar a {
+	color: #000000;
+	margin: 4px 1px 0px 1px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar a:hover {
+	background: url('../background/CalendarBackground.gif') repeat-x center -79px;
+	color: #058ee6; border: 1px solid #cbcbcb;
+	line-height: 26px;
+	margin: 3px 0px 0px 0px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace  .UIPopupCategory a {
+	color: #000000;
+	margin: 0px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace  .UIPopupCategory a:hover {
+	background: none ;
+	color: #058ee6; border: none;
+	height: auto;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .SeparatorLine {
+  float: left;
+  margin: 3px 3px 0px 3px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .NextIcon {
+  margin-top: 6px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .BackIcon {
+  margin-top: 6px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .RightLine {
+  float: right;
+  margin: 3px 5px 2px 5px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .IconHolder {
+  line-height: 25px;
+  margin: 0px 7px;
+  padding-left: 22px;
+  white-space: nowrap;
+  display: block;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .LayoutSwitcherIcon {
+	padding-left: 0px;
+	width: 22px; height: 24px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .SelectButton .IconHolder {
+	margin: 4px 7px 0px 7px;
+	line-height: 25px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .DownArrow1Icon {
+	padding-right: 14px; 
+	cursor: pointer;
+	white-space: nowrap;
+}

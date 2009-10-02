@@ -1,0 +1,58 @@
+	<%
+	//import org.exoplatform.mail.webui.UIBannerContainer ;
+		import org.exoplatform.mail.webui.UIActionBar ;
+		import org.exoplatform.mail.webui.UINavigationContainer ;
+		import org.exoplatform.mail.webui.UIMessageArea ;
+		import org.exoplatform.mail.webui.popup.UIPopupAction;
+		import org.exoplatform.mail.MailUtils;
+	// move this to the method processRender
+		def rcontext = _ctx.getRequestContext() ;
+	  rcontext.getJavascriptManager().importJavascript('eXo.core.Spliter');
+	 	rcontext.getJavascriptManager().importJavascript('eXo.cs.CSUtils','/csResources/javascript/') ;
+		rcontext.getJavascriptManager().importJavascript('eXo.cs.UIContextMenuMail','/csResources/javascript/') ;
+	  rcontext.getJavascriptManager().importJavascript('eXo.mail.UIMailPortlet','/mail/javascript/');
+	  rcontext.getJavascriptManager().importJavascript('eXo.mail.UIColorPicker','/mail/javascript/') ;
+	  rcontext.getJavascriptManager().importJavascript('eXo.mail.UICombobox','/mail/javascript/') ;
+	  rcontext.getJavascriptManager().importJavascript('eXo.mail.MailServiceHandler','/mail/javascript/') ;
+	  rcontext.getJavascriptManager().addJavascript('eXo.mail.MailServiceHandler.init(eXo.cs.webservice.core.WebserviceManager) ;') ;
+	  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.showContextMenu('" + uicomponent.id + "') ;") ;
+    rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;
+    rcontext.getJavascriptManager().importJavascript('eXo.core.Cometd') ;
+    rcontext.getJavascriptManager().importJavascript('eXo.mail.UpdateList','/mail/javascript/') ;
+    rcontext.getJavascriptManager().addJavascript('eXo.mail.UpdateList.init("' + uicomponent.getAccountId() + '","'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+'");') ;
+	%>
+  <div style="overflow-x: auto; width: 99%;">
+  <div><div style="width: 1040px;" ><span style="display: none;"></span></div></div>
+  <div  style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white; _margin: auto;">
+	  <div class="ApplicationMinWidth">
+	  	<div class="UIMailPortlet" id="UIMailPortlet">
+	    <%
+	      String accountId = uicomponent.getAccountId();
+	      if (accountId != null && accountId.trim().length() > 0) { 
+	        rcontext.getJavascriptManager().addJavascript('eXo.mail.MailServiceHandler.initService("checkMailInfobar", "' + MailUtils.getCurrentUser() + '", "' + uicomponent.getAccountId() + '") ;') ;
+	        rcontext.getJavascriptManager().addJavascript('eXo.mail.MailServiceHandler.setCheckmailTimeout(' + uicomponent.getPeriodCheckAuto() + ') ;') ;
+	      }
+	    %>
+	<!-- Start Mail Banner -->
+	<!-- End Mail Banner -->
+	<!-- Start Mail Working Workspace -->
+		    <div class="MailWorkingWorkspace" id="MailWorkingWorkspace">
+	<!-- Start Mail ControlBar -->
+				<%uicomponent.renderChild(UIActionBar.class);%>
+	<!-- End Mail ControlBar -->
+	<!-- Start Mail Container -->
+					<div class="MailContainer" id="MailContainer">
+						<%uicomponent.renderChild(UINavigationContainer.class);%>
+	<!-- End Mail AccountManagement -->
+	<!-- Start Mail Working Details -->
+						<%uicomponent.renderChild(UIMessageArea.class);%>
+						<%uicomponent.renderPopupMessages();%>
+						<%uicomponent.renderChild(UIPopupAction.class);%>
+						<div style="clear:left;"><span></span></div>
+					</div>
+				</div>
+	    </div>
+	  </div>
+  </div>
+</div>  
+

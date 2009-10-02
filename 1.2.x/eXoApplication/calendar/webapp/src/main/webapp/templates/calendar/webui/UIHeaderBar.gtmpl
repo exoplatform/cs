@@ -1,0 +1,90 @@
+<%
+import org.exoplatform.calendar.webui.UIListView;
+import org.exoplatform.calendar.webui.UIMonthView;
+def rcontext = _ctx.getRequestContext() ;
+def msg = _ctx.appRes("UICalendarView.msg.check-box-required");
+def parent = uicomponent.getParent().getId() ;
+rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterSelect("'+uiform.id+'") ;') ;
+uicomponent.update() ;
+uicomponent.setSelectedCategory(uicomponent.getSelectedCategory()) ;
+%>
+<div class="UIHeaderBar ListBar">
+		<a actionLink="<%=uicomponent.event('AddEvent','Event')%>" class="ControlButton" onclick="eXo.calendar.UICalendarPortlet.runAction(this);">
+			<div class="IconHolder AddNewEvent">
+				<%=_ctx.appRes("UIHeaderBar.label.AddEvent")%>
+			</div>
+		</a>
+		<div class="SeparatorLine"><span></span></div>
+		<a actionLink="<%=uicomponent.event("AddEvent", uicomponent.TYPE_TASK)%>" class="ControlButton" onclick="eXo.calendar.UICalendarPortlet.runAction(this);">
+			<div class="IconHolder AddNewTask">
+				<%=_ctx.appRes("UIHeaderBar.label.AddTask")%>
+			</div>
+		</a>
+		<%if((uicomponent instanceof UIListView) || (uicomponent instanceof UIMonthView)){%>
+			<div class="SeparatorLine"><span></span></div>
+			<a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","$parent") ;' actionLink="<%=uicomponent.event("DeleteEvent",uicomponent.id,"id")%>" class="ControlButton">
+				<div class="IconHolder DeleteEventIcon">
+					<%=_ctx.appRes("UIHeaderBar.label.Delete")%>
+				</div>
+			</a>
+		<%}%>
+		<%if(uicomponent instanceof UIListView){%>
+		<div class="SeparatorLine"><span></span></div>
+		<div class="ViewTypeSelect" style="cursor:pointer; position:relative ;" onclick="eXo.calendar.UICalendarPortlet.switchListView(this, event);">
+			<% /*Begin  ViewTypeSelect Popup Menu*/ %>
+	  			<div class="UIPopupCategory" style="display: none;">
+	  				<div class="UIRightClickPopupMenu" style="display: block;">
+	  					<div class="UIContextMenuContainer">
+							  <div class="TopLeftRightClickPopupMenu">
+	          			<div class="TopRightRightClickPopupMenu">
+	            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+	          			</div>
+	        			</div>
+				        <div class="MiddleLeftRightClickPopupMenu">
+				          <div class="MiddleRightRightClickPopupMenu">
+	              		<div class="UIRightPopupMenuContainer">
+	              			 <%for(type in uicomponent.getViews()){
+			                   	if(!type.equals(uicomponent.getViewType())){
+			                   	icon = type + "Icon" ;	
+			                  %>
+		                    <a href="<%=uicomponent.event("SwitchView",type)%>" class="MenuItem">   
+			                    <div class="ItemIcon $icon">
+			                    	<%=_ctx.appRes("UIHeaderBar.label."+type)%>
+			                    </div>
+		                    </a>
+			                 <%}
+			                   	 }
+			                 %> 
+										</div>
+		          		</div>
+		        		</div>
+					      <div class="BottomLeftRightClickPopupMenu">
+					        <div class="BottomRightRightClickPopupMenu">
+					          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+					        </div>
+					      </div>
+		      		</div>		
+					  </div>
+	  			</div>
+  	<% /*End Popup Menu*/ %>
+			<div class="ControlButton">
+				<div class="IconHolder <%=uicomponent.getViewType()%>Icon">
+					<%=_ctx.appRes("UIHeaderBar.label."+uicomponent.getViewType())%>
+				</div>
+			</div>
+	
+		</div>
+		<%}%>
+		<a href="<%=uicomponent.event("AddCategory")%>" title="<%=_ctx.appRes('UIHeaderBar.label.addNewCategory')%>">
+			<div class="AddCategoryIcon"><span></span></div>
+		</a>
+		<div class="EventCategory">
+			<% 
+				uiform.renderField("eventCategories") ;
+			%>			
+		</div>
+		<div class="Label">
+			<%=_ctx.appRes("UIHeaderBar.label.eventCategory")%>
+		</div> 
+		<div style="clear: both;"><span></span></div>
+</div>

@@ -1,0 +1,18 @@
+<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
+  xmlns:jcr="http://www.jcp.org/jcr/1.0">
+  
+  <!-- For DTD rules look at nodetypes.dtd (
+    Original version live in exo-jcr.services.jcr.impl-1.0.jar at 
+    org\exoplatform\services\jcr\impl\core\nodetype\ path
+    ) -->
+  
+  <nodeType name="exo:categorized" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+    <propertyDefinitions>
+      <propertyDefinition name="exo:category" requiredType="Reference" autoCreated="false" mandatory="true"
+        onParentVersion="COPY" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>        
+    </propertyDefinitions>
+  </nodeType>	
+</nodeTypes>
+

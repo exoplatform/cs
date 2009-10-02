@@ -1,0 +1,107 @@
+.UIMailPortlet .UIInsertAddress {
+	width: 640px;
+	background: #f3f3f3;
+}
+
+.UIMailPortlet .UIInsertAddress .InsertAddressContainer {
+	padding: 10px;
+	border: 1px solid #c0c0c0;
+}
+
+.UIMailPortlet .UIInsertAddress .AddressContainer {
+	padding-top: 10px;
+}
+
+.UIMailPortlet .UIInsertAddress .UIGrid th {
+	background: url('background/ThGridTitle1x20.gif') repeat-x;
+	line-height: 17px; height: 18px;
+	text-align: left;
+	padding: 0px 5px;
+}
+
+.UIMailPortlet .UIInsertAddress .UIGrid th input {
+	text-align: center;
+	margin: 2px 0px 0px 0px;
+}
+
+.UIMailPortlet .UIInsertAddress .UIGrid tbody {
+	background: white;	
+	padding-bottom: 10px;
+}
+
+.UIMailPortlet .UIInsertAddress .UIGrid td {
+	height: 23px;
+	padding: 4px 0px 0px 5px;
+}
+
+.UIMailPortlet .UIInsertAddress .UIGrid .BorderAddress {
+	border-right: 1px solid #e8e8e8;
+}
+
+/*********************************************UISearch*****************************************/
+
+.UIMailPortlet .UIInsertAddress .UISearchForm {
+	float: left;
+	width: 300px;
+}
+
+.UIMailPortlet .UIInsertAddress .UISearchForm .SearchIcon {
+  background: url('icons/SearchIcon.gif') no-repeat center;
+  float: left;
+  height: 20px; width: 24px;
+}
+
+.UIMailPortlet .UIInsertAddress .AddressesGroup {
+	margin: 0px 8px 0px 305px;
+	text-align: right;
+}
+
+.UIMailPortlet .UIInsertAddress .AddressesGroup .AddressLabel {
+	float: left;
+	width: 120px;
+	padding: 0px 4px;
+}
+
+.UIMailPortlet .UIInsertAddress .AddressesGroup select {
+	width: 160px;
+	margin: 10px 0px 0px 0px;
+	font-size: 11px;
+}
+
+/*********************************************ListAddress*****************************************/
+
+.UIMailPortlet .UIInsertAddress .ListAddress {
+	background: white;
+	width: 616px;	height: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border: 1px solid #b7b7b7;
+}
+
+
+.UIMailPortlet .UIInsertAddress .ListAddress .UIGrid {
+	border-top: none;
+	border-left: none;
+	border-right: none;
+}
+
+.UIMailPortlet .UIInsertAddress .ListAddress .UIGrid .BlueDownArrowIcon{
+  padding: 0px 10px 0px 4px; 
+  width: 34px;
+  float: left;
+  cursor: pointer;
+}
+
+.UIMailPortlet .UIInsertAddress .ListAddress .UIGrid thead {
+	border: none;
+}
+
+.UIMailPortlet .UIInsertAddress .ListAddress .UIGrid th {
+	border-left: none;
+	border-top: none;
+}
+
+.UIMailPortlet .UIInsertAddress .ListAddress .UIGrid td {
+	border-left: none;
+}
+

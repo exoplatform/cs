@@ -1,0 +1,279 @@
+  <%
+	import java.text.DateFormat;
+	import java.text.SimpleDateFormat;
+	import java.util.Calendar;
+	import java.util.Date;
+	import java.util.GregorianCalendar;
+	import java.util.Locale;
+	import org.exoplatform.calendar.CalendarUtils;
+	import org.exoplatform.webui.application.WebuiRequestContext;
+	uiform.begin() ;
+ 	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
+	def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarDragDrop','/calendar/javascript/') ;
+  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.onLoad() ;') ;
+  //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
+  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
+	//rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
+	rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
+ 	int currentDay = uicomponent.getCurrentDay() ;
+	int currentMonth = uicomponent.getCurrentMonth() ;
+	String currentMonthName = uicomponent.getMonthName(currentMonth) ;
+	int currentYear = uicomponent.getCurrentYear() ;
+ 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.MONTH)) ;
+ 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.MONTH)) ;
+	Calendar calendar = uicomponent.getCurrentCalendar() ;
+ 	yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
+	dateFormat = uicomponent.getDateFormat() ;
+	timeFormat = uicomponent.getTimeFormat() ;
+	dateTimeFormat = uicomponent.getDateTimeFormat() ;
+	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+ 	Locale locale = context.getParentAppRequestContext().getLocale() ;
+	
+	DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
+	df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+	DateFormat sdf = new  SimpleDateFormat("d", locale) ;
+	sdf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+	DateFormat sdtf = new  SimpleDateFormat("MMM/dd", locale) ;
+	sdtf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+	DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
+	tf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+	DateFormat dtf = new SimpleDateFormat(dateTimeFormat, locale) ;
+	dtf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM", locale) ;
+	wf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+	DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
+	tempFormat.setCalendar(uicomponent.getInstanceTempCalendar()) ;
+	%>
+	<div class="UIMonthView">
+		<div class="TitleBar">
+			<table>
+				<body>
+					<tr>
+						<td>
+							<a href="$linkDayPrevious">
+								<div class="BackIcon" title="<%=uiform.getLabel('previousMonth')%>"><span></span></div>
+							</a>
+						</td>
+						<td>
+							<div class="Title">$currentMonthName, 
+								<a href="<%=uicomponent.event("GotoDate",yearViewAction)%>">
+									$currentYear
+								</a>
+							</div>
+						</td>
+						<td>
+							<a href="$linkDayNext">
+								<div class="NextIcon" title="<%=uiform.getLabel('nextMonth')%>"><span></span></div>
+							</a
+						</td>
+					</tr>
+				</body>
+			</table>
+		</div>
+		<div class="EventMonthContainer">
+			<div class="EventMonthContent">
+				<div class="WeekList">
+					<%
+						String cssStyle = "" ;
+						String dayLabel = "" ;
+						i= 0;
+						while(i++ <7) {
+							cssStyle = "" ;
+							if(i==0) cssStyle = "color: red;" ;
+							dayLabel = uicomponent.dfs_.getWeekdays()[i] ;
+					%>
+  						<div class="WeekTitle" style="$cssStyle">$dayLabel</div>
+	  			<%
+	  				}
+	  			%>			
+  				<div style="clear: left;"><span></span></div>
+  			</div>
+				<div class="RowContainerDay" style="position:relative ;"  onresize="eXo.calendar.UICalendarMan.initMonth() ;" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>">
+					
+			<table class="UIGrid"  style="table-layout: fixed;" id="UIMonthViewGrid" cellspacing="0" borderspacing="0" eXoCallback="eXo.calendar.UICalendarMan.GUIMan.callbackHighlighter() ;">
+				<col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%">
+				<tbody>
+				
+					<%
+					  temcalendar = uicomponent.getInstanceTempCalendar() ;//uicomponent.getBeginDateOfMonthView() ;
+					  temcalendar.setTime(uicomponent.getBeginDateOfMonthView().getTime()) ;
+						week = 0 ; 
+						table = "" ;
+						clazz ="" ;
+						dayOfMonth = 1 ;
+						validDay = 0 ;
+						cssClass = "CalendarContentNomal" ;
+						daysInMonth = uicomponent.getDaysInMonth() ;
+						while (week++ < uicomponent.getWeeksOfTheMonth(currentYear, currentMonth, 1)) {
+					    println "<tr>";
+					    dayOfWeek = 0 ;
+					    while (dayOfWeek++ < 7) {
+					    	startDayOfWeek = uicomponent.getDayOfWeek(currentYear, currentMonth, dayOfMonth) ;
+					      if (week == 1 && startDayOfWeek == dayOfWeek) {
+					        validDay = 1;
+					      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
+					        validDay = 0;
+					      }
+					      display = "" ;
+					     	dateTime = temcalendar.getTimeInMillis() ;  
+						    actionUpdate = uicomponent.event('UpdateEvent', dateTime + '&' + uicomponent.EVENTID + '=event&' + uicomponent.CALENDARID + '=cal&' + uicomponent.CALTYPE + '=caltype') ;
+					      dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+  dateTime ;
+					      if (validDay) { 
+					        if (uicomponent.isCurrentDay(dayOfMonth, currentMonth, currentYear )) {
+					          clazz = 'Today';
+					        } else if (dayOfWeek == 1 || dayOfWeek == 7) {
+					          clazz = 'DayBox';
+					        } else {
+					          clazz = 'DayBox';
+					        }
+						      month = currentMonth + 1 ;
+					        %>
+					        <td startTimeFull="<%=tempFormat.format(temcalendar.getTime())%>"  actionLink="$actionUpdate" class='CalendarContentNomal UICellBlock' startTime='<%=temcalendar.getTimeInMillis()%>' > 
+					        	<div class='DayBox $clazz' >
+						        <a href="<%=uicomponent.event("GotoDate",dayActionLink)%>" onmousedown="event.cancelBubble = true ;">
+						         <%=sdf.format(temcalendar.getTime())%> 
+										</a>
+									 </div><div class='DayContent'><span></span></div>
+									</td> 
+								<%	 
+					        dayOfMonth++ ;
+					      } else {
+					      	%>
+					        <td  startTimeFull="<%=tempFormat.format(temcalendar.getTime())%>" actionLink="$actionUpdate" startTime='$dateTime' class='CalendarContentDisable  UICellBlock'> <div class='DisableDay'><span></span></div>
+					        	<div class='DayContent'> 
+					        	 <a href="<%=uicomponent.event("GotoDate",dayActionLink)%>" onmousedown="event.cancelBubble = true ;">
+						        	<%=sdtf.format(temcalendar.getTime())%>
+										</a>
+								 		</div>
+								 	</td>
+					     <%
+					      }
+					    temcalendar.add(Calendar.DATE, 1) ;
+					    }
+					    println "</tr>" ;
+		  			}	
+		  			
+					%>
+				</tbody>
+			</table>
+			<%
+					startMonh =  uicomponent.getBeginDateOfMonth() ;
+					endMonth =  uicomponent.getEndDateOfMonth() ;					
+					eventList = uicomponent.getDataMap().values() ;
+					for(event in eventList){
+					startTime = event.fromDateTime.getTime() ;
+					endTime = event.toDateTime.getTime() ;
+					startIndex = 0;
+					endIndex = uicomponent.getCurrentCalendar().getMaximum(Calendar.WEEK_OF_MONTH) ;
+					if(event.fromDateTime.after(startMonh.getTime()) || event.fromDateTime.equals(startMonh.getTime())) {
+						Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+						cal.setTime(event.fromDateTime) ;
+						startIndex = cal.get(Calendar.WEEK_OF_MONTH) ;
+					}
+					color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.calendarId) ;
+					%>
+					<div class="DayContentContainer EventBoxes" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" 
+					startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
+					startTime="$startTime" endTime="$endTime" >
+						<div class="EventOnDayBorder $color">
+							<div class="EventOnDayContent">
+								<div>
+									<div class="EventCheckbox">
+										<%uicomponent.renderField(uicomponent.getChildById(event.id))%>
+									</div>
+									<div class="EventSummary">
+										<div class="<%=event.eventState%>Icon">
+											<div class="<%=event.getPriority()%>PriorityIcon  <%= (event.getPriority() != null)? " PriorityIcon":"" %>">
+												<div class="EventLabel EventPriority" title="<%=event.summary%>" >$event.summary</div>
+											</div>
+										</div>
+									</div>
+									<div style="clear:left;"><span></span></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<%
+					}%>	
+		</div>
+			</div>
+		</div>
+	</div>
+<%uiform.end();%>
+<% /*Begin Popup Menu*/ %>
+  			
+  				<div class="UIRightClickPopupMenu" id="UIMonthViewRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
+  					<div class="UIContextMenuContainer">
+						  <div class="TopLeftRightClickPopupMenu">
+          			<div class="TopRightRightClickPopupMenu">
+            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+          			</div>
+        			</div>
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+              		<div class="UIRightPopupMenuContainer">
+          			  	<a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
+					           <div class="ItemIcon QuickAddEvent">
+					            	<%=_ctx.appRes("ContextMenu.label.addEvent")%>
+					            </div>
+					          </a>
+					          <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
+					            <div class="ItemIcon QuickAddTask">
+					            	<%=_ctx.appRes("ContextMenu.label.addTask")%>
+					            </div>
+					          </a>
+									</div>
+	          		</div>
+	        		</div>
+				      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+	      		</div>
+	      	</div>
+
+  		<% /*End Popup Menu*/ %>
+  		<% /*Begin Popup Menu*/ %>
+  			
+  				<div class="UIRightClickPopupMenu" id="UIMonthViewEventRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.monthViewCallback">
+  					<div class="UIContextMenuContainer">
+						  <div class="TopLeftRightClickPopupMenu">
+          			<div class="TopRightRightClickPopupMenu">
+            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+          			</div>
+        			</div>
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+              		<div class="UIRightPopupMenuContainer">
+              			<%
+              				for(String act : uicomponent.getQuickEditMenu()) {
+              				link = uicomponent.event(act,uicomponent.id,"id&$uicomponent.CALENDARID=calId&calType=caltype") ;
+              				icon = act + "EventIcon" ;
+              			%>
+              				<a href="$link">
+	              				<div class="ItemIcon $icon">
+													<%=_ctx.appRes("ContextMenu.label."+act)%>
+												</div>
+              			  </a>
+              			<%}%>
+											<a href="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
+	              				<div class="ItemIcon ExportCalendarIcon">
+													<%=_ctx.appRes("ContextMenu.label.ExportEvent")%>
+												</div>
+              			  </a>
+									</div>
+	          		</div>
+	        		</div>
+				      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+	      		</div>
+	      	</div>
+
+  		<% /*End Popup Menu*/ %>
+  		

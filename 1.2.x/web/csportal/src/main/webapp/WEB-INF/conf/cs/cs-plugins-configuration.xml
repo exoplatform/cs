@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<configuration>  
+	<component>
+		<key>org.exoplatform.services.mail.MailService</key>
+		<type>org.exoplatform.services.mail.impl.MailServiceImpl</type>
+			<init-params>
+				<properties-param>
+					<name>config</name>
+					<property name="mail.smtp.auth.username" value="exoservice@gmail.com" />
+					<property name="mail.smtp.auth.password" value="exoadmin" />
+					<property name="mail.smtp.host" value="smtp.gmail.com" />
+					<property name="mail.smtp.port" value="465" />
+		 			<property name="mail.smtp.starttls.enable" value="true" />
+					<property name="mail.smtp.auth" value="true" />
+					<property name="mail.smtp.debug" value="false" />
+					<property name="mail.smtp.socketFactory.port" value="465" />
+					<property name="mail.smtp.socketFactory.class" value="javax.net.ssl.SSLSocketFactory" />
+					<property name="mail.smtp.socketFactory.fallback" value="false" />
+				</properties-param>
+			</init-params>
+	</component>
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
+    <component-plugin>
+      <name>RecordsJob</name>
+      <set-method>addPeriodJob</set-method>
+      <type>org.exoplatform.calendar.service.ReminderPeriodJob</type>
+      <description>add e-mail reminder job to the JobSchedulerService</description>
+      <init-params>
+        <properties-param>
+          <name>job.info</name>
+          <description>save the monitor data  periodically</description>
+          <property name="jobName" value="ReminderJob"/>
+          <property name="groupName" value="CollaborationSuite"/>
+          <property name="job" value="org.exoplatform.calendar.service.ReminderJob"/>
+          <property name="repeatCount" value="0"/>
+          <property name="period" value="180000"/>     
+          <property name="startTime" value="+0"/>
+          <property name="endTime" value=""/>               
+        </properties-param>
+        <properties-param>
+          <name>reminder.info</name>
+          <description>save the monitor data  periodically</description>
+          <property name="timeZone" value="This is TimeZone"/>          
+          <property name="account" value="exoservice@gmail.com"/>          
+          <property name="password" value="exoadmin"/>          
+		  		<property name="ssl" value="true"/> 
+          <property name="outgoing" value="smtp.gmail.com"/>          
+          <property name="port" value="465"/>          
+        </properties-param>
+      </init-params>
+    </component-plugin>
+		<component-plugin>
+      <name>PopupRecordsJob</name>
+      <set-method>addPeriodJob</set-method>
+      <type>org.exoplatform.calendar.service.PopupReminderPeriodJob</type>
+      <description>add popup reminder job to the JobSchedulerService</description>
+      <init-params>
+        <properties-param>
+          <name>job.info</name>
+          <description>save the monitor data  periodically</description>
+          <property name="jobName" value="PopupReminderJob"/>
+          <property name="groupName" value="CollaborationSuite"/>
+          <property name="job" value="org.exoplatform.calendar.service.PopupReminderJob"/>
+          <property name="repeatCount" value="0"/>
+          <property name="period" value="6000"/>     
+          <property name="startTime" value="+0"/>
+          <property name="endTime" value=""/>               
+        </properties-param>
+				<properties-param>
+          <name>popupreminder.info</name>
+          <description>save the monitor data  periodically</description>
+          <property name="portalName" value="portal"/> 
+        </properties-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>   
+  
+  <external-component-plugins>
+  	<target-component>org.exoplatform.services.organization.OrganizationService</target-component>
+	  <component-plugin>
+	    <name>contact.new.user.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.contact.service.impl.NewUserListener</type>
+	    <description>description</description>	    
+	  </component-plugin>
+	  <component-plugin>
+	    <name>contact.new.membership.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.contact.service.impl.NewMembershipListener</type>
+	    <description>description</description>	    
+	  </component-plugin>
+	  
+	  <component-plugin>
+	    <name>calendar.new.user.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.calendar.service.impl.NewUserListener</type>
+	    <description>description</description>
+	    <init-params>
+        <value-param>
+        	<name>defaultEventCategories</name>
+        	<value>Meeting,Calls,Clients,Holiday,Anniversary</value><!-- Multi value, use coma (,) to split values-->
+        </value-param>
+        <value-param>
+        	<name>defaultCalendarCategory</name>
+        	<value>My group</value><!-- Single value-->
+        </value-param>
+        <value-param>
+        	<name>defaultCalendar</name>
+        	<value>Default</value><!-- Multi value, use coma (,) to split values-->
+        </value-param>
+        <!--Params for default calendar setting-->
+        <value-param>
+         <name>viewType</name>
+         <value>1</value><!-- DAY_VIEW = "0" ; WEEK_VIEW = "1" ; MONTH_VIEW = "2" ; YEAR_VIEW = "3" ; LIST_VIEW = "4" ; SCHEDULE_VIEW = "5" ; WORKING_VIEW = "6" ;-->
+        </value-param>
+        
+        <value-param>
+         <name>timeInterval</name>
+         <value>15</value><!-- in minutes -->
+        </value-param>
+        
+        <value-param>
+         <name>weekStartOn</name>
+         <value>2</value><!--SUNDAY = "1" ; MONDAY = "2" ; TUESDAY = "3" ; WEDNESDAY = "4" ; THURSDAY = "5" ; FRIDAY = "6" ;SATURDAY = "7" ;-->
+        </value-param>
+        
+        <value-param>
+         <name>dateFormat</name>
+         <value>MM/dd/yyyy</value>
+        </value-param>
+        
+        <value-param>
+         <name>timeFormat</name>
+         <value>HH:mm</value> <!-- HH:mm/hh:mm a -->
+        </value-param>
+        
+        <value-param>
+         <name>localeId</name>
+         <value>BEL</value><!-- see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
+        </value-param>
+        
+         <value-param>
+         <name>timezoneId</name>
+         <value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
+        </value-param>
+        
+         <value-param>
+         <name>baseUrlForRss</name>
+         <value></value>
+        </value-param>
+        
+         <value-param>
+         <name>isShowWorkingTime</name>
+         <value>false</value><!-- boolean true/false -->
+        </value-param>
+        
+         <value-param>
+         <name>workingTimeBegin</name>
+         <value>08:00</value><!--  -->
+        </value-param>
+        
+         <value-param>
+         <name>workingTimeEnd</name>
+         <value>18:00</value><!--  -->
+        </value-param>
+        
+	    </init-params>    
+	  </component-plugin>
+	  
+	  <component-plugin>
+	    <name>calendar.new.group.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.calendar.service.impl.NewGroupListener</type>
+	    <description>description</description>
+	    <init-params>
+        <value-param>
+        	<name>defaultEditPermission</name>
+        	<value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
+        </value-param>
+        <value-param>
+        	<name>defaultViewPermission</name>
+        	<value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
+        </value-param>
+        
+        <value-param>
+	      	<name>defaultLocale</name>
+	        <value>BEL</value><!-- see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
+      	</value-param>
+      
+      	<value-param>
+	      	<name>defaultTimeZone</name>
+	      	<value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
+      	</value-param>	
+      
+        
+	    </init-params>    
+	  </component-plugin>
+	  
+	  <!--component-plugin>
+	    <name>mail.new.user.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.mail.service.impl.NewUserListener</type>
+	    <description>description</description>
+	    <init-params>
+			<value-param>
+				<name>protocol</name>
+				<value>imap</value>
+			</value-param>
+			<value-param>
+				<name>ssl</name>
+				<value>false</value>
+			</value-param>
+			<value-param>
+				<name>incomingServer</name>
+				<value>in</value>
+			</value-param>
+			<value-param>
+				<name>incomingPort</name>
+				<value>143</value>
+			</value-param>
+			<value-param>
+				<name>incomingFolder</name>
+				<value>Inbox</value>
+			</value-param>
+			<value-param>
+				<name>outgoingServer</name>
+				<value>out</value>
+			</value-param>
+			<value-param>
+				<name>outgoingPort</name>
+				<value>25</value>
+			</value-param>
+	    </init-params>    
+	  </component-plugin-->
+  </external-component-plugins>   
+  <!-- 
+	<external-component-plugins>
+	  <target-component>org.exoplatform.calendar.service.CalendarService</target-component>
+	  <component-plugin>
+	    <name>calendar.update.version</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.calendar.service.impl.UpdateCalendarVersion</type>
+	    <description>Update calendar data</description>	    
+	    <init-params>
+				<object-param>
+					<name>cs.calendar.update.object</name>
+					<description>cs update obj param</description>
+					<object type="org.exoplatform.calendar.service.CsObjectParam">
+						<field name="nodeTypes">
+							<collection type="java.util.ArrayList">
+								<value>
+									<object type="org.exoplatform.calendar.service.CsNodeTypeMapping">
+										<field name="nodeTypeName">
+											<string>exo:reminder</string>
+										</field>
+										<field name="updatedProperties">
+											<collection type="java.util.ArrayList">
+												<value>
+													<object type="org.exoplatform.calendar.service.CsPropertyMapping">
+														<field name="propertyName"><string>exo:owner</string></field>
+														<field name="replaceName"><string>exo:creator</string></field>
+														<field name="defaultValue"><string></string></field>
+													</object>
+												</value>
+											</collection>
+										</field>
+									</object>
+								</value>
+								<value>
+									<object type="org.exoplatform.calendar.service.CsNodeTypeMapping">
+										<field name="nodeTypeName">
+											<string>exo:calendarEvent</string>
+										</field>
+										<field name="addedProperties">
+											<collection type="java.util.ArrayList">
+												<value>
+													<object type="org.exoplatform.calendar.service.CsPropertyMapping">
+														<field name="propertyName"><string>exo:eventcategoryName</string></field>
+														<field name="replaceName"><string></string></field>
+														<field name="defaultValue"><string></string></field>
+													</object>
+												</value>
+											</collection>
+										</field>
+										<field name="removedProperties">
+											<collection type="java.util.ArrayList">
+											</collection>
+										</field>
+										<field name="updatedProperties">
+											<collection type="java.util.ArrayList">
+											</collection>
+										</field>
+									</object>
+								</value>	
+							</collection>
+						</field>
+					</object>
+				</object-param>
+			</init-params>
+	  </component-plugin>
+  </external-component-plugins>   
+ -->
+  <!-- update mail data 
+  <external-component-plugins>
+	  <target-component>org.exoplatform.mail.service.MailService</target-component>
+	  <component-plugin>
+	    <name>calendar.update.version</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.mail.service.MailUpdateStorage</type>
+	    <description>Update mail data</description>	    
+	    <init-params>
+				<object-param>
+					<name>cs.mail.update.object</name>
+					<description>cs update obj param</description>
+					<object type="org.exoplatform.mail.service.CsObjectParam">
+						<field name="nodeTypes">
+							<collection type="java.util.ArrayList">
+								<value>
+									<object type="org.exoplatform.mail.service.CsNodeTypeMapping">
+										<field name="nodeTypeName">
+											<string>exo:account</string>
+										</field>
+										<field name="addedProperties">
+											<collection type="java.util.ArrayList">
+												<value>
+													<object type="org.exoplatform.mail.service.CsPropertyMapping">
+														<field name="propertyName"><string>exo:checkAll</string></field>
+														<field name="replaceName"><string></string></field>
+														<field name="defaultValue"><string>true</string></field>
+													</object>
+												</value>
+												<value>
+													<object type="org.exoplatform.mail.service.CsPropertyMapping">
+														<field name="propertyName"><string>exo:checkFromDate</string></field>
+														<field name="replaceName"><string></string></field>
+														<field name="defaultValue"><string></string></field>
+													</object>
+												</value>
+											</collection>
+										</field>
+									</object>
+								</value>
+								<value>				
+									<object type="org.exoplatform.mail.service.CsNodeTypeMapping">
+										<field name="nodeTypeName">
+											<string>exo:message</string>
+										</field>
+										<field name="addedProperties">
+											<collection type="java.util.ArrayList">
+												<value>
+													<object type="org.exoplatform.mail.service.CsPropertyMapping">
+														<field name="propertyName"><string>exo:isRoot</string></field>
+														<field name="replaceName"><string></string></field>
+														<field name="defaultValue"><string>true</string></field>
+													</object>
+												</value>
+											</collection>
+										</field>
+									</object>
+								</value>
+ 
+							</collection>
+						</field>
+					</object>
+				</object-param>
+			</init-params>
+	  </component-plugin>
+  </external-component-plugins>   
+  -->
+  
+    <external-component-plugins>
+    	<target-component>org.exoplatform.services.listener.ListenerService</target-component>
+   		<component-plugin>   
+            <name>exo.core.security.ConversationRegistry.unregister</name>
+     		<set-method>addListener</set-method>
+            <type>org.exoplatform.mail.service.AuthenticationLogoutListener</type>
+      		<description>description</description>     
+    	</component-plugin>      
+  	</external-component-plugins>
+  
+</configuration>

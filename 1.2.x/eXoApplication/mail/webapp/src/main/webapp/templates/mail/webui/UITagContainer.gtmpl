@@ -1,0 +1,137 @@
+<%
+  import org.exoplatform.mail.service.Tag;
+  import org.exoplatform.mail.MailUtils;
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.initNavigationAction("'+uiform.id+'");'); 
+	uiform.begin()
+%>
+<div class="UITagContainer">
+	<div class="TitleBar">
+		<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+		<div class="TagTitle BlueTag"><%=_ctx.appRes(uicomponent.id+ ".label.tags") %></div>
+		<div class="ActionIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+      <% /*Begin Popup Menu*/ %>
+      <div style="position: relative;">
+        <div class="UIPopupCategory" style="display: none;">
+          <div class="PopupCategoryDecorator">
+        
+            <div class="UIRightClickPopupMenu" style="display: block;">
+              <div class="UIContextMenuContainer">
+                <div class="TopLeftRightClickPopupMenu">
+                  <div class="TopRightRightClickPopupMenu">
+                    <div class="TopCenterRightClickPopupMenu"><span></span></div>
+                  </div>
+                </div>
+                <div class="MiddleLeftRightClickPopupMenu">
+                  <div class="MiddleRightRightClickPopupMenu">
+              
+                    <div class="UIRightPopupMenuContainer">
+                      <%
+                         for(action in uicomponent.getActions()) {
+                         String nameItem = _ctx.appRes(uicomponent.getName() + ".action." + action);
+                         String classIconItem = action + "Icon";
+                      %>
+                         <a class="MenuItem" href="<%=uicomponent.event(action)%>" >   
+                          <div class="ItemIcon $classIconItem" >
+                            $nameItem
+                          </div>
+                         </a>
+                      <%}%>
+                      <div class="RightClickCustomItem"></div>
+                    </div>
+              
+                  </div>
+                </div>
+                <div class="BottomLeftRightClickPopupMenu">
+              <div class="BottomRightRightClickPopupMenu">
+                <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+              </div>
+            </div>
+              </div>
+            </div>
+          </div>
+        
+        </div>
+      </div>
+      <% /*End Popup Menu*/ %>
+    </div>
+  <div style="clear: both"><span></span></div>
+	</div>	
+	<div>
+	<% /*Popup menu*/ %>
+	<div class="UIRightClickPopupMenu" id="UITagListPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.tagListPopupMenuCallback">
+		<div class="UIContextMenuContainer">
+	  	<div class="TopLeftRightClickPopupMenu" id="test">
+	  	  <div class="TopRightRightClickPopupMenu">
+	  	    <div class="TopCenterRightClickPopupMenu"><span></span></div>
+	  	  </div>
+	  	</div>
+	  
+	  	<div class="MiddleLeftRightClickPopupMenu">
+	  	  <div class="MiddleRightRightClickPopupMenu">
+	  	    <div class="UIRightPopupMenuContainer">
+	  	      <a class="MenuItem" href="<%=uicomponent.event("EditTag", "id")%>">   
+	  	        <div class="ItemIcon RenameFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.edit") %> </div>
+	  	      </a>
+	  	      <a class="MenuItem" href="<%=uicomponent.event("RemoveTag", uicomponent.id,"id")%>">   
+	  	        <div class="ItemIcon RemoveFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.remove") %> </div>
+	  	      </a>
+	  	      <a class="MenuItem" href="<%=uicomponent.event("EmptyTag", "id")%>">   
+	  	        <div class="ItemIcon EmptyIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.empty") %> </div>
+	  	      </a>
+            <div class="MailTableColor" >
+            <%
+              int i = 0 ;
+              int index = 0 ;
+              int items = 5 ;
+              int size = uicomponent.getColors().size() ;
+              int rows = size/items ;
+              int count = 0 ;
+              while(i <= rows)  {
+                print "<div>" ; 
+                j = 0 ;
+                while(j <= items && count < size){
+                 color = uicomponent.getColors()[count] ;
+                 actionLink = uicomponent.event('ChangeColor','id&color=' + color);  
+                 print("<a href=\"" + actionLink + "\" class=\"$color ColorCell\"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>") ;
+                 count++
+                 j++;
+                }
+                print "</div>" ;  
+                i++ ;
+              }
+            %>
+            </div>
+	  	    </div>
+	  	  </div>
+	  	</div>
+	  
+	  	<div class="BottomLeftRightClickPopupMenu">
+  	  <div class="BottomRightRightClickPopupMenu">
+  	    <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+  	  </div>
+  	</div>
+		</div>
+	</div>
+	<% /*end popup menu*/ %>
+	
+	<div class="TagsList">
+	  <%
+	    if (uicomponent.getTags().size() > 0) {
+        for(Tag tag : uicomponent.getTags()) {
+          String tagId = tag.getId();
+          String tagName = MailUtils.encodeHTML(tag.getName());
+          String actionLink = uicomponent.event("ChangeTag", tagId);
+          String colorClass = tag.getColor() + "Tag";
+          String boldStyle = "";
+          if (tagId.equals(uicomponent.getSelectedTagId())) boldStyle = "font-weight:bold;";
+    %>
+		  <a href="$actionLink" style="$boldStyle" class="IconTagHolder $colorClass" tagId="$tagId" title="<%=tag.getName()%>"><%=tagName%></a>		
+		<%  
+		    }
+	    }  
+	  %>
+	</div>
+	</div>
+</div>
+<% uiform.end() %>

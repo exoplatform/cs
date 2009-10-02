@@ -1,0 +1,156 @@
+<% uiform.begin() %>
+<div style="overflow-x: auto; width: 99%;">
+<div><div style="width: 600px;" ><span style="display: none;"></span></div></div>
+<div  style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white; _margin: auto;">
+<div class="UIMailSetting">
+  <div class="UITabSelector">
+    <div class="UITabPane">
+      <div class="TabPaneContent">
+        <div class="UIHorizontalTabs">
+          <div class="LeftHorizontalTabs">
+            <div class="RightHorizontalTabs">
+              <div class="CenterHorizontalTabs">
+                <div class="TabsContainer">
+                  <div class="UITab FlatTabStyle">
+                    <div class="SelectedTab">
+                      <div class="LeftTab">
+                        <div class="RightTab">                
+                          <div class="MiddleTab">
+                            <div class="TabIcon SettingsIcon"><a href="#" class="Title" style="padding-left:5px;"><%=_ctx.appRes(uicomponent.id+ ".label.general-settings") %></a></div>
+                            <div style="clear:left;"><span></span></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="LineSeparator"><span></span></div>
+                    <%/*<div class="NormalTab">
+                      <div class="LeftTab">
+                        <div class="RightTab">                
+                          <div class="MiddleTab">
+                            <div class="TabIcon ShortcutKeyIcon"><span></span></div>
+                            <a href="#" class="Title">Shortcut Keys</a>
+                            <div style="clear:left;"><span></span></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="LineSeparator"><span></span></div>
+                    <div class="NormalTab">
+                      <div class="LeftTab">
+                        <div class="RightTab">                
+                          <div class="MiddleTab">
+                            <div class="TabIcon AccountIcon"><span></span></div>
+                            <a href="#" class="Title">Account Settings</a>
+                            <div style="clear:left;"><span></span></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="LineSeparator"><span></span></div>
+                    */%>
+                  </div>              
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="UITabContentContainer">
+          <div class="UITabContent" >
+            <div class="UIForm GeneralSettings">
+              <div class="HorizontalLayout">
+                <div class="FormContainer">
+                  <table class="UIFormGrid">
+                  <tr>
+                  <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.default-account") %> :</td>
+                  <td class="FieldComponent">
+                    <%uicomponent.renderField(uicomponent.DEFAULT_ACCOUNT)%>
+                  </td>
+                </tr>
+                    <tr>
+                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.number-shows") %> :</td>
+                      <td class="FieldComponent">
+                        <%uicomponent.renderField(uicomponent.NUMBER_MSG_PER_PAGE)%>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.auto-check") %> :</td>
+                      <td class="FieldComponent">
+                        <%uicomponent.renderField(uicomponent.PERIOD_CHECK_AUTO)%>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.compose-in") %> :</td>
+                      <td class="FieldComponent">
+                        <%uicomponent.renderField(uicomponent.COMPOSE_MESSAGE_IN)%>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.reply-with") %> :</td>
+                      <td class="FieldComponent">
+                        <%uicomponent.renderField(uicomponent.REPLY_WITH_ATTACH)%>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.forward-with") %> :</td>
+                      <td class="FieldComponent">
+                        <%uicomponent.renderField(uicomponent.FORWARD_WITH_ATTACH)%>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.save-sent") %> :</td>
+                      <td class="FieldComponent">
+                        <%uicomponent.renderField(uicomponent.SAVE_SENT_MESSAGE)%>
+                      </td>
+                    </tr>
+                  </table>
+                      
+                  <%/*<div class="UIAction"> 
+                    <table class="ActionContainer" align="center">
+                      <tr>
+                        <td align="center">
+                          <a href="#" class="ActionButton LightBlueStyle">
+                            <div class="ButtonLeft">
+                              <div class="ButtonRight">
+                                <div class="ButtonMiddle"> Restore Default </div>
+                              </div>
+                            </div>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>*/%>  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>  
+      </div>  
+    </div>  
+  </div>
+    
+  <div class="UIAction">
+    <table class="ActionContainer" align="center">
+      <tr>
+        <td align="center">
+          <%for(action in uicomponent.getActions()) { 
+            String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+            String link = uicomponent.event(action) ;
+          %>
+          <a href="$link" class="ActionButton LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle">
+                 $actionLabel
+                </div>
+              </div>
+            </div>
+          </a>
+          <%}%>
+        </td>
+      </tr>
+    </table>
+  </div>  
+</div>
+</div>
+</div>
+<% uiform.end() %>

@@ -1,0 +1,33 @@
+.UIContactPortlet .UIExportAddressBookForm {
+	padding: 10px ;
+	min-width: 300px;
+}
+
+.UIContactPortlet .UIExportAddressBookForm .ExportContact {
+	border: 1px solid #aeaeae;
+	background: #f7f7f7;
+}
+
+.UIContactPortlet .UIExportAddressBookForm .WorkingContainer {
+	border: 1px solid white;
+	padding: 5px 15px 10px 15px;
+}
+
+.UIContactPortlet .UIExportAddressBookForm .Title {
+	line-height: 30px;
+	font-weight: bold;
+}
+
+.UIContactPortlet .UIExportAddressBookForm .State {
+	width: auto;
+	padding-left: 18px;
+	line-height: 12px;
+}
+
+.UIContactPortlet .UIExportAddressBookForm .ExportForm {
+	padding: 10px;
+}
+
+.UIContactPortlet .UIExportAddressBookForm .UIGrid .text {
+	white-space: nowrap;
+}

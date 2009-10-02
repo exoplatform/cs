@@ -1,0 +1,104 @@
+<% 
+	import org.exoplatform.contact.ContactUtils;
+%>
+<div class="UITags" id="<%=uicomponent.getId()%>">
+	<div class="TitleBar">
+		<div class="TitleIcon BlueTag"><%=_ctx.appRes(uicomponent.getName() + ".label.tags")%></div>
+		<div class="ActionIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+		
+			<% /*Begin Popup Menu*/ %>
+				<div style="position: relative;">
+  			<div class="UIPopupCategory" style="display: none;">
+  				<div class="UIRightClickPopupMenu" style="display: block;">
+  					<div class="UIContextMenuContainer">
+					  <div class="TopLeftRightClickPopupMenu">
+	          			<div class="TopRightRightClickPopupMenu">
+	            		  <div class="TopCenterRightClickPopupMenu"><span></span></div>
+	          			</div>
+	        		  </div>
+				      <div class="MiddleLeftRightClickPopupMenu">
+				        <div class="MiddleRightRightClickPopupMenu">
+	              		  <div class="UIRightPopupMenuContainer">
+		                    <a class="MenuItem" href="<%=uicomponent.event("AddTag")%>">   
+			                    <div class="ItemIcon AddTagIcon">
+			                      <%=_ctx.appRes(uicomponent.getName() + ".label.addTag")%>
+			                    </div>
+		                    </a>
+						  </div>
+		          		</div>
+		        	  </div>
+					  <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+	      			</div>
+				</div>
+  			</div>
+  				</div>
+  		<% /*End Popup Menu*/ %>
+		
+		
+		</div>
+	</div>
+	<div class="ListContent">
+		<%  
+			List tags = uicomponent.getTags();
+			String actionLink ;
+			for(tag in tags) {
+				actionLink  = uicomponent.event("SelectTag", tag.getId()) ;			
+				cssClass = "Normal" ;
+				if(tag.getId().equals(uicomponent.getSelectedTag())) cssClass = "Selected" ;
+				color = tag.getColor() + "Tag" ;
+		%>
+			<div  class="TagList ItemList $cssClass" tagId="<%=tag.getId()%>" >
+				<a href="$actionLink" class="IconHolder2 $color" title="<%=ContactUtils.encodeHTML(tag.getName())%>" ><%= ContactUtils.encodeHTML(tag.getName())%></a>
+			</div>
+		<% } %>
+	</div>
+	<% /*Begin Popup Menu*/ %>
+				
+	  	<div class="UIRightClickPopupMenu" id="UITagPopupMenu" eXoCallback="eXo.contact.UIContactPortlet.tagCallback">
+	  		<div class="UIContextMenuContainer">
+				  <div class="TopLeftRightClickPopupMenu">
+		  			<div class="TopRightRightClickPopupMenu">
+							<div class="TopCenterRightClickPopupMenu"><span></span></div>
+		  			</div>
+					</div>
+		     	<div class="MiddleLeftRightClickPopupMenu">
+	          <div class="MiddleRightRightClickPopupMenu">
+	  					<div class="UIRightPopupMenuContainer">
+	        			<a class="MenuItem" href="<%=uicomponent.event("EditTag", "id")%>">   
+	            		<div class="ItemIcon EditActionIcon">
+	              		<%=_ctx.appRes(uicomponent.getName() + ".label.edit")%>
+	            		</div>
+	        			</a>
+	        			<a class="MenuItem" href="<%=uicomponent.event("DeleteTag", "id")%>">   
+	            		<div class="ItemIcon DeleteIcon">
+	              		<%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>
+	            		</div> 
+	        			</a>
+                <a class="MenuItem" href="<%=uicomponent.event("ExportAddress", "id")%>">   
+                  <div class="ItemIcon ExportContactIcon">
+                    <%=_ctx.appRes(uicomponent.getName() + ".label.exportContacts")%>
+                  </div>
+                </a>
+        			
+	        			<a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
+                  <div class="ItemIcon PrintIcon">
+                    <%=_ctx.appRes(uicomponent.getName() + ".label.printContacts")%>
+                  </div>
+                </a>	        			
+							</div>
+	  				</div>
+					</div>
+		      <div class="BottomLeftRightClickPopupMenu">
+	        <div class="BottomRightRightClickPopupMenu">
+	          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+	        </div>
+	      </div>
+				</div>
+			</div>
+	  			
+	  		<% /*End Popup Menu*/ %>
+</div>

@@ -1,0 +1,89 @@
+<%
+	import org.exoplatform.calendar.webui.UIActionBar ;
+	import org.exoplatform.calendar.webui.UICalendarWorkingContainer ;
+	import org.exoplatform.calendar.webui.popup.UIPopupAction ;
+	import org.exoplatform.calendar.service.CalendarSetting;
+%>
+<div class="FixIE">
+<div><div class="FixWidth"><span style="display: none;"></span></div></div>
+<div style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); _margin: auto;">
+	<div class="ApplicationMinWidth">
+		<div class="UICalendarPortlet" id="$uicomponent.id">
+			<div class="UINotification" style="display:none;">
+				<div class="UIControlInfo">
+					<div class="LeftControlInfo">
+						<div class="RightControlInfo">
+							<div class="CenterControlInfo">
+								<a class="ControlInfoLabel" href="#">(0)</a>
+							</div>
+						</div>
+					</div>  
+					<div style="clear: right"><span></span></div>
+				</div>
+				<div class="UIPopupNotification" style="visibility: hidden;">
+					<div class="TLPopupNotification">
+						<div class="TRPopupNotification">
+							<div class="TCPopupNotification"><span></span></div>
+						</div>
+					</div>
+					<div class="LPopupTitleNotification">
+						<div class="RPopupTitleNotification">
+							<div class="CPopupTitleNotification">
+								<a class="ItemTitle" href="#">Notification</a>
+								<a class="Close" href="#"><span></span></a>
+							</div>
+						</div>
+					</div>
+					<div class="MLPopupNotification">
+						<div class="MRPopupNotification">
+							<div class="MCPopupNotification">
+								<!-- Message here
+								<a class="Item" href="#"><div class="ItemLabel">You have 3 new messages inbox</div></a>
+								<a class="Item" href="#"><div class="ItemLabel">New event on your calendar </div></a>
+								-->
+							</div>
+						</div>
+					</div>
+					<div class="BLPopupNotification">
+						<div class="BRPopupNotification">
+							<div class="BCPopupNotification"><span></span></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<%
+			timeStep = uicomponent.getCalendarSetting().getTimeInterval() ; 
+		  workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
+		  CalendarSetting calendarSetting = uicomponent.getCalendarSetting() ;
+		  String timeFormat = calendarSetting.getTimeFormat() ;
+		  String settingTimeZone = uicomponent.getSettingTimeZone() ;
+			def rcontext = _ctx.getRequestContext() ;
+			rcontext.getJavascriptManager().importJavascript('eXo.webui.UICalendar') ;
+			rcontext.getJavascriptManager().importJavascript('eXo.cs.CSUtils','/csResources/javascript/') ;
+		  rcontext.getJavascriptManager().importJavascript('eXo.cs.UIContextMenu','/csResources/javascript/') ;
+		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarPortlet','/calendar/javascript/') ;
+		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + timeStep + ', "' + workingStart + '", "' + timeFormat +'", "'+uicomponent.id+'") ;') ;
+		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu("'+ uicomponent.id +'") ;') ;
+		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICombobox','/calendar/javascript/') ;
+		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIColorPicker','/calendar/javascript/') ;
+		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.Highlighter','/calendar/javascript/') ;
+		  rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;
+		  rcontext.getJavascriptManager().importJavascript('eXo.core.Cometd') ;
+		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.Reminder','/calendar/javascript/') ;
+		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.Reminder.init("'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+'");') ;
+		%>
+	    <div class="CalendarWorkingWorkspace">
+		    <%uicomponent.renderChild(UIActionBar.class)%>
+				<%uicomponent.renderChild(UICalendarWorkingContainer.class)%>
+			</div>
+		
+	  </div>
+	</div>
+</div>
+</div>
+<div class="UICalendarPortlet UIEmpty">
+<%
+	uicomponent.renderPopupMessages() ;
+	uicomponent.renderChild(UIPopupAction.class) ;
+%>
+</div>

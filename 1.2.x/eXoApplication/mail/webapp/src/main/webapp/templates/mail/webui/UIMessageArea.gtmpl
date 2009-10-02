@@ -1,0 +1,29 @@
+<%
+  import org.exoplatform.mail.webui.UIMessageList ;
+  import org.exoplatform.mail.webui.UIMessagePreview ;
+  import org.exoplatform.mail.webui.UIFetchingBar ;
+  
+  def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().importJavascript('eXo.mail.UIMailDragDrop','/mail/javascript/');
+  rcontext.getJavascriptManager().importJavascript('eXo.cs.FormHelper','/csResources/javascript/');
+  rcontext.getJavascriptManager().importJavascript('eXo.cs.AdvancedTooltip','/csResources/javascript/');
+  rcontext.getJavascriptManager().importJavascript('eXo.cs.TableMan','/csResources/javascript/');
+  rcontext.getJavascriptManager().importJavascript('eXo.cs.TableDnD','/csResources/javascript/');
+  rcontext.getJavascriptManager().importJavascript('eXo.mail.Spliter','/mail/javascript/');
+  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.UIMailDragDrop.onLoad');
+  //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.AdvancedTooltip.onLoad(\'UIListUsers\', \'mailAdvancedTooltipTmpl\')');
+  //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.TableDnD.init(\'UIListUsers\')');
+%>
+
+<div class="MailWorkingDetails SpliterContainer" id="<%=uicomponent.getId()%>">
+	<%uicomponent.renderChild(UIFetchingBar.class);%>
+
+	<div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px">		
+		<%uicomponent.renderChild(UIMessageList.class);%>
+	</div>
+	<div class="ResizeReadingPane" id="ResizeReadingPane" onmousedown="eXo.cs.Spliter.doResize(event, this);"><span></span></div>
+	<div id="SpliterResizableArea">
+		<%uicomponent.renderChild(UIMessagePreview.class);%>
+	</div>
+</div>
+

@@ -1,0 +1,175 @@
+.UIContactPortlet .CheckedMenu {
+	background: url('icons/BlueCheckerIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .AddressIcon {
+	background: url('icons/AddressBookIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .SharedAddressIcon {
+	background: url('icons/SharedAddressIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .EmailListIcon {
+	background: url('icons/EmailListIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .MoveIcon {
+	background: url('icons/MoveActionIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .EditIcon {
+	background: url('icons/EditIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .SelectTagIcon {
+	background: url('icons/TagIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .AddEmailIcon {
+	background: url('icons/AddEmailIcon.gif') no-repeat center;
+}
+
+.UIContactPortlet .DeleteEmailIcon {
+	background: url('icons/DeleteEmailIcon.gif') no-repeat center;
+}
+
+.UIContactPortlet .NextPageArrow {
+	background: url('icons/NextPage.gif') no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.UIContactPortlet .LastPageArrow {
+	background: url('icons/LastPage.gif') no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.UIContactPortlet .FirstPageArrow{
+	background: url('icons/PreviousPage.gif') no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.UIContactPortlet .PreviousPageArrow {
+	background: url('icons/BackPage.gif') no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.UIContactPortlet .OnlineIcon {
+	background: url('icons/OnlineIcon.png') no-repeat;
+  padding-left: 20px;
+  height: 16px;
+}
+
+.UIContactPortlet .OwnerIcon {
+	background: url('icons/OwnerIcon.gif') no-repeat;
+	height: 16px; width: 17px;
+}
+
+.UIContactPortlet .OfflineIcon {
+	background: url('icons/OffLineIcon.png') no-repeat;
+	height: 16px; width: 17px;
+}
+
+.UIContactPortlet .BusyIcon {
+	background: url('icons/BusyIcon.png') no-repeat;
+	height: 16px; width: 17px;
+}
+
+.UIContactPortlet .TypeViewContactPortlet .ContactListIcon {
+	background: url('icons/ContactListIcon.gif') no-repeat center;
+}
+
+.UIContactPortlet .TypeViewContactPortlet .MenuItem {
+
+}
+
+.UIContactPortlet .TypeViewContactPortlet .MenuItemSelected {
+	background: #dee4f2;
+}
+
+.UIContactPortlet .EmailIcon {
+	background: url('icons/EmailIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .InstantMessage {
+	background: url('icons/InstantMessage.gif') no-repeat left center;
+}
+
+.UIContactPortlet .MoveContactIcon {
+	background: url('icons/MoveIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .DeleteContactIcon {
+	background: url('icons/DeleteContactIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .ShareIcon {
+	background: url('icons/ShareIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .ExportAddressIcon {
+	background: url('icons/ExportAddressIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .ImportAddressIcon {
+	background: url('icons/ImportAddressIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .EditActionIcon {
+	background: url('icons/EditActionIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .ContactIcon {
+	background: url('icons/ContactIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .DeleteIcon {
+	background: url('icons/DeleteIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .CopyAddressIcon {
+	background: url('icons/CopyIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .PasteIcon {
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/PasteIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .MoveNavigationIcon {
+	background: url('icons/MoveNavigationIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .SelectUserIcon {
+	background:transparent url(icons/SmallUserIcon.gif) no-repeat;
+}
+
+.UIContactPortlet .SelectMemberIcon {
+	background:transparent url(icons/SmallMemberIcon.gif) no-repeat;
+}
+
+.UIContactPortlet .SelectGroupIcon {
+	background:transparent url(icons/SmallGroupIcon.gif) no-repeat;
+}
+
+.UIContactPortlet .AddContactIcon {
+	background:transparent url(icons/AddContactIcon.gif) no-repeat left center;
+}
+
+.UIContactPortlet .AddAddressBookIcon {
+	background:transparent url(icons/AddAddressBookIcon.gif) no-repeat;
+}
+.UIContactPortlet .BlueTagIcon {
+	background:transparent url(icons/BlueTag.gif) no-repeat left center;
+}
+
+.UIContactPortlet .SelectTagIcon {
+	background: url('icons/TagIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .AddTagIcon {
+	background:transparent url(icons/AddNewTagIcon.gif) no-repeat left center;
+}
