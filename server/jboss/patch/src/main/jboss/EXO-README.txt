@@ -30,7 +30,8 @@ experience more productive. It offers several ways to to view and organize your 
 =============
 exo Collaboration Suite 1.2.2 features several noteworthy changes:
 
-    * General
+	
+     * General
           o Upgraded to portal 2.5.3
           o Compatible with webos 1.5          
     * Calendar
@@ -42,7 +43,7 @@ exo Collaboration Suite 1.2.2 features several noteworthy changes:
     * Chat
           o Bugs fix
           
-Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
+Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes          
           
 =========
  INSTALL
@@ -59,7 +60,7 @@ Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/
 
 - Collaboration suite quick start guide
   Collaboration suite have 2 servers need to run at same time to use:
-    +) exo-tomcat: this is main tomcat server include Collaboration web applications and all dependencies.     
+    +) exo-jboss: this is main jboss server include Collaboration web applications and all dependencies.     
     +) exo-openfire: a Jabber server used for Chat applications
 
 Need to set the JAVA_HOME variable for run Collaboration suite's servers.
@@ -71,18 +72,18 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
     Example use: export JAVA_HOME=`cygpath -w "$JAVA_HOME"`; to convert unix like format to MS Windows format.
    
    * Start all servers by one command for Unix/Linux/cygwin environment:
-      Go to exo-tomcat/bin and run command:
-      ./eXo.sh
+      Go to exo-jboss/bin and run command:
+      ./run.sh
    
-   * Start exo-tomcat server:
+   * Start exo-jboss server:
    
      +) On the Windows platform
        Open a DOS prompt command, go to exo-tomcat/bin and type the command:
-         eXo.bat run
+         run.bat start
 
      +) On Unix/Linux/cygwin
        Open a terminal, go to exo-tomcat/bin and type the command:
-         ./eXo.sh run
+         ./run.sh
     
    * Start exo-openfire server:
      +) On the Windows platform
@@ -125,7 +126,7 @@ All those accounts have the default password "exo".
 
 ===========
  CHANGELOG
-===========
+===========
 - 1.2.2
 ** Bug
     * [CS-1397] - multiple reminders at the same time
@@ -231,5 +232,4 @@ All those accounts have the default password "exo".
     * [CS-2405] - Remove duplicate class SelectOptionGroup, SelectItem,SelectOption (on Contact porlet) and use it form portal
     * [CS-2418] - Backport menu from 1.1
     * [CS-2442] - Change bundle keys to be compliant with xml format
-
 
