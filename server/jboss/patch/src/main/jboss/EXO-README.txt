@@ -1,5 +1,5 @@
 ==============================================
-    Release Notes - exo-cs - Version 1.3.1
+    Release Notes - exo-cs - Version 1.3.2
 ==============================================
 
 ===============
@@ -136,8 +136,70 @@ All those accounts have the default password "exo".
 ===========
  CHANGELOG
 ===========
+- 1.3.2
 
+- 1.3.1
+** Bug
+    * [CS-2773] - Don't Subscribe to remote calendar by CalDav
+    * [CS-2800] - Event category or calendar not selected when add new event
+    * [CS-2976] - be Shown  name of room in user list at room 
+    * [CS-2985] - UI error when many email address at To file
+    * [CS-3024] - Show popup msg when try to open Inbox folder while the message detail pane is maximized
+    * [CS-3026] - UI error when run calendar in weekview with arabic
+    * [CS-3083] - Broken UI & exception in console when do action in Contact app after timeout
+    * [CS-3084] - Little error when show tag in Vcard view in Arabic
+    * [CS-3087] - Occur wrong message when comeback classic and open a folder
+    * [CS-3088] - IE7 :UI error at User selector form in Arabic
+    * [CS-3089] - UI error when change custom layout in Arabic
+    * [CS-3090] - UI error when view detail contact in Arabic
+    * [CS-3092] - Participant information sometimes can not be shown when edit event
+    * [CS-3093] - Error when show mails list in Arabic
+    * [CS-3095] - Little UI error when show contacts list in Mail app in Arabic
+    * [CS-3102] - in the first time, message is shown in 2 places when drag&drop
+    * [CS-3128] - Drag and drop of an event is possible without edit permission on shared calendars
+    * [CS-3144] - Mail: Priority of an e-mail isn't shown at the first seen time
+    * [CS-3146] - IE7: don't open edit event/task form when double click on event/task in list view
+    * [CS-3162] - Chat, WebOS: Error when show message requires to input password
+    * [CS-3167] - UI error when show/hide layout
+    * [CS-3168] - Jboss:Reset button don't work
+    * [CS-3169] - Jboss: Can not Cancel Editing a calendar
+    * [CS-3174] - chat: IE 7 show duplicate message from system on FF when user leave or join in room
+    * [CS-3177] - eXo Chat bar should be position at the bottom of the browser (not the bottom of the "html page"
+    * [CS-3178] - IE7: don't remove user from Contact List
+    * [CS-3179] - IE7/webos: Don't export Chat History
+    * [CS-3189] - Chat bar is slowing down the browser (FF3.5, Safari and IE6) when switching tabs
+    * [CS-3273] - Lost Title of  chat  room
+    * [CS-3283] - show wrong message when view message at Vertical &Flip Layout
+    * [CS-3320] - Webos: suddenly show other portlet while working on Chat portlet in special case
+    * [CS-3321] - IE 8: don't show room list when perform to refresh before
+    * [CS-3322] - User can not chat,add user,join room in special case
+    * [CS-3325] - Fetching bar is always shown after finishing checking mail
+    * [CS-3349] - Webos: Can't open Chat room when create new room OR join room
 
+** Feedback
+    * [CS-3122] - View as selected value is reset when quick search
+    * [CS-3123] - Folders that contain subfolders are not easy to recognize
+
+** Improvement
+    * [CS-1033] - Add possibility to define exception when user or group is created to create a new calendar
+    * [CS-1345] - Open add event form by javaScript only for faster
+    * [CS-2772] - should allow remove Contacts  when was input  them in participant form
+    * [CS-2809] - after creating an account mail, [ Enable SMTP authentication] checck box  at Outgoing tab of Edit account form should be ticked 
+    * [CS-2979] - should be disable user in contact list of room when this user added into the room
+    * [CS-2980] - At Room configuration : should be disable [Allow invites ] field when [ Member only ] field is not chosen yet
+    * [CS-3137] - Mail: Check mail info bar disappears when select a message to view while checking mail
+    * [CS-3139] - Chat: Should change content of message when user does not have right to config room
+    * [CS-3150] - Should allow resize the mails list pane when no mail is selected yet
+    * [CS-3151] - Searching user to send mail from Contacts list by email
+    * [CS-3152] - List View should filter task/event by calendar on uncheck the check box
+    * [CS-3153] - Should show alert message when search mail with special characters
+    * [CS-3157] - chat: Should has warming message when members, who have no invite right, want to invite other joining room
+    * [CS-3160] - Chat, WebOS: Should focus on existing room when create same name rooms by 1 user
+    * [CS-3190] - ChatBar  loads around 20 .js files !
+    * [CS-3275] - Avoid stacktrace in RSS generator at startup
+
+** Task
+    * [CS-3308] - check compatible version of portal rest on cs
 - 1.3 Final
 
 ** Bug
