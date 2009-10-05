@@ -1,0 +1,169 @@
+<project>
+	<parent>
+		<groupId>org.exoplatform.cs</groupId>
+		<artifactId>cs</artifactId>
+		<version>1.4-SNAPSHOT</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>exo.cs.packaging</artifactId>
+	<packaging>pom</packaging>
+	<name>eXo CS Packaging</name>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.portlet.exoadmin</artifactId>
+			<version>${org.exoplatform.portal.version}</version>
+			<type>war</type>
+		</dependency><!-- 2.5.5-->
+
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.portlet.dashboard</artifactId>
+			<version>${org.exoplatform.portal.version}</version>
+			<type>war</type>
+		</dependency><!-- 2.5.5-->
+
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.web.eXoSkinMac</artifactId>
+			<version>${org.exoplatform.portal.version}</version>
+			<type>war</type>
+		</dependency><!-- 2.5.5-->
+
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.web.eXoSkinVista</artifactId>
+			<version>${org.exoplatform.portal.version}</version>
+			<type>war</type>
+		</dependency><!-- 2.5.5-->
+
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.gadgets-server</artifactId>
+			<version>${org.exoplatform.portal.version}</version>
+			<type>war</type>
+		</dependency><!-- 2.5.5-->
+
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.server.tomcat.plugin</artifactId>
+			<version>${org.exoplatform.portal.version}</version>
+			<type>jar</type>
+		</dependency><!-- 2.5.5-->
+
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.web.eXoResources</artifactId>
+			<version>${org.exoplatform.portal.version}</version>
+			<type>war</type>
+		</dependency><!-- 2.5.5-->
+
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.portlet.web</artifactId>
+			<version>${org.exoplatform.portal.version}</version>
+			<type>war</type>
+		</dependency><!-- 2.5.5-->
+
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.component.dashboard</artifactId>
+			<version>${org.exoplatform.portal.version}</version>
+			<type>jar</type>
+		</dependency><!-- 2.5.5-->
+
+		<dependency>
+			<groupId>org.exoplatform.webos</groupId>
+			<artifactId>exo.webos.web.webosResources</artifactId>
+			<version>${org.exoplatform.webos.version}</version>
+			<type>war</type>
+		</dependency><!-- 1.5-->
+
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.web.rest</artifactId>
+			<version>${org.exoplatform.portal.version}</version>
+			<type>war</type>
+		</dependency><!-- 2.5.5-->
+
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.eXoGadgets</artifactId>
+			<version>${org.exoplatform.portal.version}</version>
+			<type>war</type>
+		</dependency><!-- 2.5.5-->
+
+		<dependency>
+			<groupId>org.exoplatform.jcr</groupId>
+			<artifactId>exo.jcr.framework.command</artifactId>
+			<version>${org.exoplatform.jcr.version}</version>
+			<type>jar</type>
+		</dependency><!-- 1.10.4-->
+
+		<dependency>
+			<groupId>org.exoplatform.jcr</groupId>
+			<artifactId>exo.jcr.component.webdav</artifactId>
+			<version>${org.exoplatform.jcr.version}</version>
+			<type>jar</type>
+		</dependency><!-- 1.10.4-->
+
+		<dependency>
+			<groupId>org.exoplatform.jcr</groupId>
+			<artifactId>exo.jcr.component.ftp</artifactId>
+			<version>${org.exoplatform.jcr.version}</version>
+			<type>jar</type>
+		</dependency><!-- 1.10.4-->
+
+		<dependency>
+			<groupId>org.exoplatform.jcr</groupId>
+			<artifactId>exo.jcr.framework.web</artifactId>
+			<version>${org.exoplatform.jcr.version}</version>
+			<type>jar</type>
+		</dependency><!-- 1.10.4-->
+
+		<dependency>
+			<groupId>org.exoplatform.portletcontainer</groupId>
+			<artifactId>exo.pc.component.plugins.wsrp2</artifactId>
+			<version>${org.exoplatform.pc.version}</version>
+			<type>jar</type>
+		</dependency><!-- 2.0.7-->
+
+		<dependency>
+			<groupId>org.exoplatform.portletcontainer</groupId>
+			<artifactId>exo.pc.component.plugins.wsrp1</artifactId>
+			<version>${org.exoplatform.pc.version}</version>
+			<type>jar</type>
+		</dependency><!-- 2.0.7-->
+
+		<dependency>
+			<groupId>org.exoplatform.portletcontainer</groupId>
+			<artifactId>exo.pc.applications.wsrp</artifactId>
+			<version>${org.exoplatform.pc.version}</version>
+			<type>exopc-war</type>
+		</dependency><!-- 2.0.7-->
+
+
+		<!-- ADDITIONAL NEEDED DEPS -->
+
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis-jaxrpc</artifactId>
+			<version>1.4</version>
+			<type>jar</type>
+		</dependency><!-- 1.4-->
+
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis-saaj</artifactId>
+			<version>1.4</version>
+			<type>jar</type>
+		</dependency><!-- 1.4-->
+
+
+	</dependencies>
+</project>
+
+
