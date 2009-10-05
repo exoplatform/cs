@@ -44,6 +44,8 @@
     
     <module>server/tomcat/patch</module>
     <module>server/jboss/patch</module>
+
+    <module>packaging</module>
   </modules>
   <issueManagement>
   	<system>JIRA</system>
@@ -168,6 +170,8 @@
         <org.exoplatform.jcr.version>1.10.4</org.exoplatform.jcr.version>
         <org.exoplatform.pc.version>2.0.7</org.exoplatform.pc.version>
         <org.exoplatform.portal.version>2.5.5</org.exoplatform.portal.version>
+        <org.exoplatform.webos.version>1.5</org.exoplatform.webos.version>
+        <org.exoplatform.tool.version>trunk</org.exoplatform.tool.version>
         <org.exoplatform.cs.version>1.4-SNAPSHOT</org.exoplatform.cs.version>
         <test.classes>Test</test.classes>
         <test.skip>true</test.skip>
