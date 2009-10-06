@@ -200,19 +200,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_EVENTREMINDER) ;
     addChild(eventReminderTab) ;
     UIEventShareTab eventShareTab =  new UIEventShareTab(TAB_EVENTSHARE) ;
-    List<ActionData> actions = new ArrayList<ActionData>() ;
-    
     eventShareTab.addUIFormInput(new UIFormRadioBoxInput(UIEventShareTab.FIELD_SHARE, UIEventShareTab.FIELD_SHARE, getShareValue()) ) ;
     eventShareTab.addUIFormInput(new UIFormRadioBoxInput(UIEventShareTab.FIELD_STATUS, UIEventShareTab.FIELD_STATUS, getStatusValue()) ) ;
     eventShareTab.addUIFormInput(new UIFormRadioBoxInput(UIEventShareTab.FIELD_SEND, UIEventShareTab.FIELD_SEND, CalendarUtils.getSendValue(null)) ) ;
     eventShareTab.addUIFormInput(new UIFormInputInfo(UIEventShareTab.FIELD_INFO, UIEventShareTab.FIELD_INFO, null) ) ;
-    //eventShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISSENDMAIL, FIELD_ISSENDMAIL, false)) ;
-    // TODO cs-839
-    //eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_PARTICIPANT, FIELD_PARTICIPANT, null)) ;
     eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_MEETING, FIELD_MEETING, null)) ;
-    //eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_INVITATION_NOTE, FIELD_INVITATION_NOTE, null)) ;
-    actions = new ArrayList<ActionData>() ;
-
+    
+    List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData addUser = new ActionData() ;
     addUser.setActionListener("AddParticipant") ;
     addUser.setActionName("AddUser") ;
@@ -221,6 +215,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     addUser.setCssIconClass("AddNewNodeIcon") ;
     actions.add(addUser) ;
     eventShareTab.setActionField(UIEventShareTab.FIELD_INFO, actions) ;
+    
     addChild(eventShareTab) ;
     UIEventAttenderTab eventAttenderTab = new UIEventAttenderTab(TAB_EVENTATTENDER) ;
     addChild(eventAttenderTab) ;

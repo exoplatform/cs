@@ -304,7 +304,7 @@
       </label>
     </tab>
     <action>
-      <AddAttachment>Đính kèm tệp:</AddAttachment>
+      <AddAttachment>Đính kèm tệp</AddAttachment>      
       <Save>#{word.save}</Save>
       <Cancel>#{word.cancel}</Cancel>
     </action>
@@ -315,16 +315,18 @@
       <category>Thuộc loại</category>
       <mailReminder>Gủi thư nhắc nhở</mailReminder>
       <mailReminderTime>Thời gian:</mailReminderTime>
-      <mailReminderAddress>Địa chỉ thư :</mailReminderAddress>
+      <mailReminderAddress>Địa chỉ thư</mailReminderAddress>
       <popupReminder>Thông báo nhắc nhở</popupReminder>
       <popupReminderTime>Thời gian:</popupReminderTime>
       <action>
-        <AddCategory>Thêm chỉ mục</AddCategory>
-        <AddParticipant>Thêm người tham dự</AddParticipant>
-        <RemoveAttachment>Xóa tệp đính kèm</RemoveAttachment>
-        <AddEmailAddress>Lựa chọn thư</AddEmailAddress>
-        <AddAttachment>Đính kèm tệp</AddAttachment>
-        <AddUser>Thêm người dùng</AddUser>
+      	<title>	        
+	        <AddParticipant>Thêm người tham dự</AddParticipant>	        
+	        <AddEmailAddress>Lựa chọn thư</AddEmailAddress>
+	        <AddAttachment>Đính kèm tệp</AddAttachment>	        
+	       </title>
+	       <AddUser>Thêm người dùng</AddUser>
+	       <AddCategory>Thêm chỉ mục</AddCategory>
+	       <RemoveAttachment>Xóa tệp đính kèm</RemoveAttachment>
       </action>
       <from>Từ</from>
       <to>Tới</to>
@@ -413,6 +415,26 @@
       </label>
     </optionGroup>
   </UIEventForm>
+
+  <eventShare>
+  	<header>
+  		<status>Trạng thái</status>
+  		<participant>Người tham dự</participant>
+  	</header>
+  	<action>
+  		<title>
+  			<Delete>Xóa</Delete>
+  			<AddUser>Thêm người dùng</AddUser>
+  			<AddCategory>Thêm chỉ mục</AddCategory>
+  		</title>
+  		
+	    
+  		
+  		
+  	</action>  
+  </eventShare>
+  
+  
   <!--
   #org.exoplatform.calendar.webui.popup.UIAddEmailAddress
   -->
@@ -768,7 +790,7 @@
       <popupReminder>Thông báo nhắc nhở</popupReminder>
       <popupReminderTime>Thời gian</popupReminderTime>
       <action>
-        <AddCategory>Thêm chỉ mụch</AddCategory>
+        <AddCategory>Thêm chỉ mục</AddCategory>
         <RemoveAttachment>Xóa bỏ tệp đính kèm</RemoveAttachment>
         <AddEmailAddress>Thêm địa chỉ thư</AddEmailAddress>
         <AddAttachment>Đính kèm</AddAttachment>

@@ -302,7 +302,7 @@
       <addresses-from-group>Nhóm</addresses-from-group>
       <name>Tên</name>
       <email>Địa chỉ thư</email>
-      <add-address>Địa chỉ nhà</add-address>
+      <add-address>Thêm địa chỉ</add-address>
       <replace>Thay thế</replace>
       <cancel>#{word.cancel}</cancel>
     </label>
@@ -448,11 +448,11 @@
   <UIComposeForm>
     <label>
       <fromInput>UIComposeForm</fromInput>
-      <from>Từ :</from>
-      <to>Đến :</to>
-      <cc>CC :</cc>
-      <bcc>BCC :</bcc>
-      <subject>Chủ đề:</subject>
+      <from>Từ</from>
+      <to>Đến</to>
+      <cc>CC</cc>
+      <bcc>BCC</bcc>
+      <subject>Chủ đề</subject>
       <attachments>Các đính kèm</attachments>
       <messageContent>Nội dung</messageContent>
       <action>
