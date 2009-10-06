@@ -11,7 +11,7 @@
         <td class="FieldLabel" style="font-weight:bold;">
           <%=uiForm.getLabel(uiForm.DEFAULT_CALENDARS)%>
         </td>
-        <td class="FieldComponent">
+        <td class="FieldLabel">
           <%uiForm.renderField(uiForm.DEFAULT_CALENDARS)%>
         </td>
       </tr>
