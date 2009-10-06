@@ -411,6 +411,7 @@
       <print>In</print>
       <collapse-expand>Cuộn/trải</collapse-expand>
       <defaultAddName>Các liên lạc của tôi</defaultAddName>
+      <collectedAddresses>Địa chỉ tự cập nhật</collectedAddresses>
       <defaultAddDes>Đây là nhóm mặc định</defaultAddDes>
     </label>
   </UIAddressBooks>

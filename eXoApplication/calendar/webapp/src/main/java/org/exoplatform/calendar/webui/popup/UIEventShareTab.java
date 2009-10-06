@@ -85,6 +85,7 @@ public class UIEventShareTab extends UIFormInputWithActions {
   }
   public List<ActionData> getActionField(String fieldName) {return actionField_.get(fieldName) ;}
   
+  @SuppressWarnings("unchecked")
   public List<ParticipantStatus> getData() throws Exception {
     return new LinkedList<ParticipantStatus>(getChild(UIGrid.class).getUIPageIterator().getCurrentPageData());
   }

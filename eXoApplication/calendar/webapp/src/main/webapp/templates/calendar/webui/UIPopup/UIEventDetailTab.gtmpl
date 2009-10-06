@@ -21,7 +21,9 @@
 	        if(temp.length() > 30) {
 	        actionLabel = temp.substring(0, 30) + "..." + sizeLabel ;}
 	      }
-		    println "<a title=\"" + action.actionName + "\" href=\"" + actionLink +"\">";
+	      
+	      // CS-3361 replace "title=action.actionName" by "title=actionLabel"   
+		    println "<a title=\"" + actionLabel + "\" href=\"" + actionLink +"\">";
 	      if(action.actionType == action.TYPE_ICON) {
 	        println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" class=\"" + action.cssIconClass +"\"/>" ;
 	        if(action.isShowLabel) { println  actionLabel  ;}
