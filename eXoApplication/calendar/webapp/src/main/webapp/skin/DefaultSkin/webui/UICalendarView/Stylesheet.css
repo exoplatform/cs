@@ -203,7 +203,7 @@
 
 .UIWeekView .EventWeekBar {
 	padding: 0px 16px 0px 0px;
-	
+	*padding: 0px 0px 0px 0px; /* orientation=rt */
 }
 
 .UIWeekView .EventWeekBar table {
@@ -755,7 +755,7 @@
 }
 
 .UIListView .UIGrid th {
-	background: url('../background/CalendarBackground.gif') repeat-x center -162px;		
+	background: url('../background/CalendarBackground.gif') repeat-x center -142px;		
   height: 20px;
 	border-right: 1px solid #c7c7c7; /* orientation=lt */
 	border-left: 1px solid #c7c7c7; /* orientation=rt */
