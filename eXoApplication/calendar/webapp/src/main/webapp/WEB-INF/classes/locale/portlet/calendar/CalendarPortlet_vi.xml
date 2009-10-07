@@ -256,8 +256,8 @@
       <beginTime>Bắt đầu</beginTime>
       <endTime>Kết thúc</endTime>
       <baseURL>Đường dẫn cơ bản(URL) dùng để tạo 'RSS'</baseURL>
-      <defaultCalendars>Lịch mặc định :</defaultCalendars>
-      <note>Ghi chú</note>
+      <defaultCalendars>Hướng dẫn:</defaultCalendars>
+      <note>Bỏ chọn những lịch mà bạn muốn ẩn</note>
       <privateCalendar>Lịch cá nhân</privateCalendar>
       <sharedCalendar>Lịch chia sẻ</sharedCalendar>
       <publicCalendar>Lịch cho nhóm</publicCalendar>
