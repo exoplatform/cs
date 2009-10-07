@@ -115,18 +115,17 @@ import com.sun.mail.smtp.SMTPSendFailedException;
 )
 
 public class UIMessageList extends UIForm {
-  //TODO should use by static way
-  public final int MODE_LIST = 1 ;
-  public final int MODE_THREAD = 2 ;
-  public final int MODE_CONVERSATION = 3 ;
-  public final int MODE_GROUP_BY_DATE = 4 ;
+  public static final int MODE_LIST = 1 ;
+  public static final int MODE_THREAD = 2 ;
+  public static final int MODE_CONVERSATION = 3 ;
+  public static final int MODE_GROUP_BY_DATE = 4 ;
 
-  public final int VIEW_ALL = 1 ;
-  public final int VIEW_STARRED = 2 ;
-  public final int VIEW_UNSTARRED = 3 ;
-  public final int VIEW_UNREAD = 4 ;
-  public final int VIEW_READ = 5 ;
-  public final int VIEW_ATTACHMENT = 6 ; 
+  public static final int VIEW_ALL = 1 ;
+  public static final int VIEW_STARRED = 2 ;
+  public static final int VIEW_UNSTARRED = 3 ;
+  public static final int VIEW_UNREAD = 4 ;
+  public static final int VIEW_READ = 5 ;
+  public static final int VIEW_ATTACHMENT = 6 ; 
 
   private String selectedMessageId_ = null ;
   private String selectedFolderId_ = null ;
@@ -164,11 +163,9 @@ public class UIMessageList extends UIForm {
       } else {
         selectedFolderId_ = filter.getFolder()[0];
       }
-      // CS-2253
       long currentPage = 1 ;
       if (pageList_ != null) currentPage = pageList_.getCurrentPage() ;
       MessagePageList currentPageList = mailSrv.getMessagePageList(username, filter) ;
-      // CS-2493
       setMessagePageList(currentPageList, currentPage);
     } else {
       messageList_.clear();
@@ -261,7 +258,6 @@ public class UIMessageList extends UIForm {
     else updateList();
   }
 
-  //TODO check pageList_ null before getCurrentPage()
   public void updateList() throws Exception {
     long page = 1;
     if (pageList_ != null) page = pageList_.getCurrentPage() ;
@@ -329,7 +325,6 @@ public class UIMessageList extends UIForm {
     List<Tag> tagList = new ArrayList<Tag>();
     try {
       if (msg.getTags() != null && msg.getTags().length > 0) {
-        //TODO should use for each
         for (int i = 0; i < msg.getTags().length; i++) {
           Tag tag = mailSrv.getTag(username, accountId_, msg.getTags()[i]);
           tagList.add(tag);
@@ -384,7 +379,7 @@ public class UIMessageList extends UIForm {
         uiMessagePreview.setMessage(msg);
         List<Message> showedMessages = new ArrayList<Message>() ;
         showedMessages.add(msg) ;
-        if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) {
+        if (uiMessageList.viewMode == MODE_CONVERSATION) {
           if (msg != null && msg.getGroupedMessageIds().size() > 0) {
             for (String id : msg.getGroupedMessageIds()) {
               Message msgMem = uiMessageList.messageList_.get(id);
@@ -400,7 +395,7 @@ public class UIMessageList extends UIForm {
         List<Message> msgs  = new ArrayList<Message>();
         List<String> unreadMsgIds = new ArrayList<String>();
         if (msg.isUnread()) msgs.add(msg);
-        if ((uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) && (msg.getGroupedMessageIds().size() > 0)) {
+        if ((uiMessageList.viewMode == MODE_CONVERSATION) && (msg.getGroupedMessageIds().size() > 0)) {
           for (String id : msg.getGroupedMessageIds()) {
             Message m = uiMessageList.messageList_.get(id);
             if (m.isUnread()) {
@@ -601,14 +596,15 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      List<Message> checkedMsgList = uiMessageList.getCheckedMessage();  
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      if(uiMessageList.getCheckedMessage().isEmpty()) {
+      if(checkedMsgList.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       }
       List<Message> msgList = new ArrayList<Message>() ;
-      for (Message msg : uiMessageList.getCheckedMessage()) {
+      for (Message msg : checkedMsgList) {
         if (msg.hasStar()) {
           msgList.add(msg);
           msg.setHasStar(false);
@@ -626,7 +622,7 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
 
@@ -652,7 +648,7 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      uiMessageList.viewing_ = uiMessageList.VIEW_ALL ;
+      uiMessageList.viewing_ = VIEW_ALL ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -668,8 +664,8 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      if (uiMessageList.viewMode == uiMessageList.MODE_LIST) return ;
-      if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) {
+      if (uiMessageList.viewMode == MODE_LIST) return ;
+      if (uiMessageList.viewMode == MODE_CONVERSATION) {
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         List<Message> showedMsgs = new ArrayList<Message>();
         showedMsgs.add(uiMsgPreview.getMessage()) ;
@@ -690,7 +686,7 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      uiMessageList.viewMode = uiMessageList.MODE_LIST ;
+      uiMessageList.viewMode = MODE_LIST ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -706,13 +702,13 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      if (uiMessageList.viewMode == uiMessageList.MODE_THREAD) return ;
-      if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) {
+      if (uiMessageList.viewMode == MODE_THREAD) return ;
+      if (uiMessageList.viewMode == MODE_CONVERSATION) {
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         List<Message> showedMsgs = new ArrayList<Message>();
         showedMsgs.add(uiMsgPreview.getMessage()) ;
         uiMsgPreview.setShowedMessages(showedMsgs);
-      } else if (uiMessageList.viewMode == uiMessageList.MODE_LIST){
+      } else if (uiMessageList.viewMode == MODE_LIST){
         MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
         String username = uiPortlet.getCurrentUser();
         MessageFilter filter = uiMessageList.getMessageFilter() ;
@@ -730,7 +726,7 @@ public class UIMessageList extends UIForm {
           return ;
         }
       }
-      uiMessageList.viewMode = uiMessageList.MODE_THREAD ;
+      uiMessageList.viewMode = MODE_THREAD ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -746,8 +742,8 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) return ;
-      if (uiMessageList.viewMode == uiMessageList.MODE_THREAD) {
+      if (uiMessageList.viewMode == MODE_CONVERSATION) return ;
+      if (uiMessageList.viewMode == MODE_THREAD) {
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         List<Message> showedMsgs = new ArrayList<Message>();
         Message msg = uiMsgPreview.getMessage();
@@ -758,7 +754,7 @@ public class UIMessageList extends UIForm {
           }
         }
         uiMsgPreview.setShowedMessages(showedMsgs);
-      } else if (uiMessageList.viewMode == uiMessageList.MODE_LIST) {
+      } else if (uiMessageList.viewMode == MODE_LIST) {
         MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
         String username = uiPortlet.getCurrentUser();
         MessageFilter filter = uiMessageList.getMessageFilter() ;
@@ -776,7 +772,7 @@ public class UIMessageList extends UIForm {
           return ;
         }
       }
-      uiMessageList.viewMode = uiMessageList.MODE_CONVERSATION ;
+      uiMessageList.viewMode = MODE_CONVERSATION ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -793,8 +789,8 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      if (uiMessageList.viewMode == uiMessageList.MODE_GROUP_BY_DATE) return ;
-      if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) {
+      if (uiMessageList.viewMode == MODE_GROUP_BY_DATE) return ;
+      if (uiMessageList.viewMode == MODE_CONVERSATION) {
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         List<Message> showedMsgs = new ArrayList<Message>();
         showedMsgs.add(uiMsgPreview.getMessage()) ;
@@ -815,7 +811,7 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      uiMessageList.viewMode = uiMessageList.MODE_GROUP_BY_DATE ;
+      uiMessageList.viewMode = MODE_GROUP_BY_DATE ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -842,8 +838,8 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      uiMessageList.viewing_ = uiMessageList.VIEW_STARRED ;
-      uiMessageList.viewMode = uiMessageList.MODE_LIST;
+      uiMessageList.viewing_ = VIEW_STARRED ;
+      uiMessageList.viewMode = MODE_LIST;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -870,8 +866,8 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      uiMessageList.viewing_ = uiMessageList.VIEW_UNREAD ;
-      uiMessageList.viewMode = uiMessageList.MODE_LIST;
+      uiMessageList.viewing_ = VIEW_UNREAD ;
+      uiMessageList.viewMode = MODE_LIST;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -898,8 +894,8 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      uiMessageList.viewing_ = uiMessageList.VIEW_ATTACHMENT ;
-      uiMessageList.viewMode = uiMessageList.MODE_LIST;
+      uiMessageList.viewing_ = VIEW_ATTACHMENT ;
+      uiMessageList.viewMode = MODE_LIST;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }

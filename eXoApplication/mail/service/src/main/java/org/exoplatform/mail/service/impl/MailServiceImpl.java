@@ -338,8 +338,7 @@ public class MailServiceImpl implements MailService, Startable {
     sendMessages(msgList, message.getServerConfiguration());
   }
 
-  public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig)
-  throws Exception {
+  public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig) throws Exception {
     Properties props = new Properties();
     props.put(Utils.SVR_INCOMING_USERNAME, serverConfig.getUserName());
     props.put(Utils.SVR_INCOMING_PASSWORD, serverConfig.getPassword());
@@ -387,6 +386,7 @@ public class MailServiceImpl implements MailService, Startable {
     transport.close();
   }
 
+  @SuppressWarnings("unchecked")
   private Message send(Session session, Transport transport, Message message) throws Exception {
     MimeMessage mimeMessage = new MimeMessage(session);
     String status = "";
@@ -930,7 +930,6 @@ public class MailServiceImpl implements MailService, Startable {
       updateAccount(username, account);
       logger.debug("/////////////////////////////////////////////////////////////");
       logger.debug("/////////////////////////////////////////////////////////////");
-      //store.close();
     }
   }
   
@@ -1125,10 +1124,6 @@ public class MailServiceImpl implements MailService, Startable {
       String protocol = account.getProtocol();
       boolean isImap = account.getProtocol().equals(Utils.IMAP); 
      
-      /*ExoContainer container = RootContainer.getInstance();
-        container = ((RootContainer)container).getPortalContainer("portal");
-        ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
-      */
       try {
         Properties props = System.getProperties();
         props.setProperty("mail.mime.base64.ignoreerrors", "true"); // this line fix for base64 encode problem with corrupted attachments
@@ -1265,13 +1260,6 @@ public class MailServiceImpl implements MailService, Startable {
               msg = msgList.get(i);
               
               logger.debug("Fetching message " + (i + 1) + " ...");
-              /* JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
-                Reminder rmdObj = new Reminder() ;   
-                rmdObj.setFromDateTime(new Date()) ;
-                rmdObj.setSummary("Fetching message " + (i + 1) + "/" + totalNew) ;
-                JsonValue json = generatorImpl.createJsonObject(rmdObj);
-                continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
-              */
               checkingLog_.get(key).setFetching(i + 1);
               checkingLog_.get(key).setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew);
               t1 = System.currentTimeMillis();
