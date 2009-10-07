@@ -51,6 +51,7 @@ VerticalSpliter.prototype.clear = function() {
 } ;
 
 VerticalSpliter.prototype.initVerticalLayout = function() {
+	eXo.mail.VerticalSpliter = new VerticalSpliter();
 	try {
 		var container = document.getElementById("VeticalLeftLayout");
 		var parentWidth = document.getElementById("VeticalLeftLayout").parentNode.offsetWidth;
@@ -69,10 +70,7 @@ VerticalSpliter.prototype.initVerticalLayout = function() {
 		document.getElementById("SpliterResizableArea").style.height = height + "px" ;
 		document.getElementById("UIMessagePreview").style.height = height + "px" ;
 		document.getElementById("UIMessagePreview").style.overflow = "auto";
-	} catch(e){
-		//CS-3358:  Chat bar is moved to left bottom of browser and offline when refresh browser in special case 
-		//document.getElementById("VeticalLeftLayout") == null -> bug; 
-	};
+	} catch(e){ };
 }
 
 eXo.mail.VerticalSpliter = new VerticalSpliter();
