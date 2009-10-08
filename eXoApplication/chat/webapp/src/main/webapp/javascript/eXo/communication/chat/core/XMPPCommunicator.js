@@ -62,6 +62,18 @@ XMPPCommunicator.prototype.ajaxProcessOverwrite = function(manualMode, ajaxReque
 };
 
 /**
+ * Overwritten some ajax parameters and method defined in portal, using synchronous XHR in window.unload.
+ * 
+ * @param {AjaxRequest} ajaxRequest
+ */
+XMPPCommunicator.prototype.synchronousXHR = function(ajaxRequest) {
+  if (ajaxRequest.request == null) return ;
+  ajaxRequest.request.open(ajaxRequest.method, ajaxRequest.url, false) ; 
+  ajaxRequest.request.onreadystatechange = function() {};
+  ajaxRequest.request.send(ajaxRequest.queryString) ;
+};
+
+/**
  * A common method use for setup an AjaxRequest object
  * 
  * @param {AjaxRequest} ajaxRequest
@@ -669,7 +681,7 @@ XMPPCommunicator.prototype.removeTransport = function(userName, transportName, h
   var url = this.SERVICE_URL + '/' + transportName + '/logout/' + userName;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
-  request.process() ;
+  this.synchronousXHR(request);
 };
 
 eXo.communication.chat.core.XMPPCommunicator = new XMPPCommunicator();
