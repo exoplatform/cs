@@ -84,7 +84,7 @@
               else classCss = "UpArrow1Icon";
             }
           %>
-  		    <th style="width: 46px;"><a href="$sortLink" ><div class="$classCss"><%=uiform.getLabel('Priority')%></div></a></th>
+  		    <th style="width: 50px;"><a href="$sortLink" ><div class="$classCss"><%=uiform.getLabel('Priority')%></div></a></th>
           
           <%
             sortLink = uicomponent.event("Sort", CalendarEventComparator.EVENT_SUMMARY.toString()) ;
