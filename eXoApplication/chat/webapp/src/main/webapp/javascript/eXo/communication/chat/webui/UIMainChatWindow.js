@@ -990,6 +990,11 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
       break;
     case this.OFFLINE_STATUS:
       if (this.userStatus != this.OFFLINE_STATUS) {
+    	this.userStatus = this.OFFLINE_STATUS;
+  		this.buddyListControlObj.cleanup();
+  		this.addContactIconNode.onclick = null;
+  		var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode, 'div');
+  		userStatusIconNode.className = 'IconHolder'+' '+'OfflineIcon';
         this.jabberLogout();
       }
       break;
