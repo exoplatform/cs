@@ -45,8 +45,7 @@
         <value>locale.navigation.group.platform.administrators</value>
         <value>locale.navigation.group.platform.users</value>
         <value>locale.navigation.group.platform.guests</value>
-        <value>locale.navigation.group.organization.management.executive-board</value>
-        <value>locale.message.chat.serverMessage</value>    
+        <value>locale.navigation.group.organization.management.executive-board</value>        
       </values-param>      
       <values-param>
         <name>portal.resource.names</name>

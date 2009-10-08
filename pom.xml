@@ -29,14 +29,7 @@
     <module>eXoApplication/contact/service</module>
     
     <module>eXoApplication/content/webapp</module>
-    <module>eXoApplication/content/service</module>
-    
-    <module>eXoApplication/chat/service</module>
-    <module>eXoApplication/chat/webapp</module>
-    
-    <module>eXoApplication/organization/client</module>
-    <module>eXoApplication/organization/service</module>
-    <module>eXoApplication/organization/webapp</module>
+    <module>eXoApplication/content/service</module>   
     
     <module>server/tomcat/patch</module>
     <module>server/jboss/patch</module>
