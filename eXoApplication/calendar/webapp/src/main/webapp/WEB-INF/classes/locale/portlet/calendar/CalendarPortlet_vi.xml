@@ -995,7 +995,7 @@
         <all>Tất cả</all>
       </option>
       <Task>Nhiệm vụ</Task>
-      <Priority>Mức ưu tiên</Priority>
+      <Priority>Ưu tiên</Priority>
       <Status>Trạng thái</Status>
       <DueDate>Trong khoảng</DueDate>
       <TaskDelegation>Giao việc</TaskDelegation>
