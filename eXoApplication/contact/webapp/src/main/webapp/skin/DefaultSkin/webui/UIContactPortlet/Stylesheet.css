@@ -509,7 +509,7 @@
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid th {
-	background: url(background/ThGridRepeatBg1x19.gif) repeat-x;
+	background: url(background/ThGridRepeatBg1x19.gif) repeat-x left 3px;
 	text-align: left;
 	border-bottom: 1px solid #d8d8d8;
 	border-top: none;
@@ -708,7 +708,6 @@
 .UIContactPortlet .InfoContainer .LeftContent {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	width: 46%;
 	padding-right: 10px; /* orientation=lt */
 	padding-left: 10px; /* orientation=rt */
 }
@@ -722,20 +721,20 @@
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoLabel {
-  white-space: nowrap;
+	white-space: nowrap;
 }
 
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle1 {
 	white-space: nowrap;
-  padding: 0px 10px 0px 4px;
-  width: 100%;
+	padding: 0px 10px 0px 4px;
+	width: 100%;
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle2 {
 	white-space: nowrap;
-  width: 100%; 
-  table-layout: fixed;
+	width: 100%; 
+	table-layout: fixed;
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle3 {
@@ -745,7 +744,7 @@
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle {
 	white-space: nowrap;
-  padding: 0px 10px 0px 2px;
+	padding: 0px 10px 0px 2px;
 }
 
 .UIContactPortlet .InfoContainer .Content .Email {
