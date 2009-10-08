@@ -513,7 +513,7 @@
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid th {
-	background: url(background/ThGridRepeatBg1x19.gif) repeat-x;
+	background: url(background/ThGridRepeatBg1x19.gif) repeat-x left 3px;
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
 	border-bottom: 1px solid #d8d8d8;
