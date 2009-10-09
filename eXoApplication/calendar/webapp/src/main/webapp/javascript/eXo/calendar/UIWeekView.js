@@ -126,7 +126,7 @@ UIWeekView.prototype.adjustWidth = function(el) {
 	}
 	function setLeft(obj,left){
 		obj.style.left = left + "px";
-		if(eXo.core.I18n.isRT()){ alert("r");
+		if(eXo.core.I18n.isRT()){
 		if(eXo.core.Browser.isIE6()) left -= eXo.cs.Utils.getScrollbarWidth();
 			obj.style.right = left + "px";	
 		}
@@ -262,6 +262,7 @@ UIWeekView.prototype.isCol = function(evt) {
 	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	for(var i = 1 ; i < len ; i ++) {
 		colX = Browser.findPosX(UIWeekView.cols[i]) ;
+		if(uiControlWorkspace && isIE && (!isDesktop || Browser.isIE7())) colX -= uiControlWorkspace.offsetWidth ;
 		if ((mouseX > colX) && (mouseX < colX + UIWeekView.cols[i].offsetWidth)){
 			return UIWeekView.currentCol = UIWeekView.cols[i] ;
 		}
