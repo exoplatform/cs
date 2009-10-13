@@ -665,6 +665,8 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
     			break;
     		case 403:
     		case 404:
+    			window.alert('You are trying to join a room which is not unlocked yet.\nPlease try again later !');
+    			break;
     		case 407:
     		  window.alert('You are trying to join a private room in which you are not a member!\nPlease try again later.');
     			break;
@@ -696,6 +698,8 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
     			break;
     		case 403:
     		case 404:
+    			window.alert('You are trying to join a room which is not unlocked yet.\nPlease try again later !');
+    			break;
     		case 407:
     			window.alert('You are trying to join a private room in which you are not a member!\nPlease try again later.');
     			break;
