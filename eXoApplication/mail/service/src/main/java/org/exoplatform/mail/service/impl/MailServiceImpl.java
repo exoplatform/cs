@@ -747,7 +747,7 @@ public class MailServiceImpl implements MailService, Startable {
         if (fd.getType() != javax.mail.Folder.HOLDS_FOLDERS) {
           folderId = Utils.generateFID(accountId, String.valueOf(((IMAPFolder) fd).getUIDValidity()), true);
         } else {
-          folderId = "thisistestofphungnam";
+          folderId = Utils.escapeIllegalJcrChars(fd.getName());
         } 
         serverFolderId.add(folderId);
         folder = storage_.getFolder(username, accountId, folderId);
