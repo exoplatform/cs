@@ -414,11 +414,13 @@
 		                    </div>
 		                   </div>
 		                    -->
-		                   <div class="MenuItem">   
+		                  <!-- <div class="MenuItem">   
 		                    <a class="ItemIcon  SharedCalendarIcon" href="<%=uicomponent.event("ShareCalendar","id")%>">
 		                    	<%=uiform.getLabel("ShareCalendar")%>
 		                    </a>
-		                   </div>		
+		                   </div>	
+		                   -->
+		                   	
 		          		</div>
 		          			<div class="CalendarTableColor" >
 									  <%

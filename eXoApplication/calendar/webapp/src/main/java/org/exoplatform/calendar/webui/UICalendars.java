@@ -672,6 +672,7 @@ public class UICalendars extends UIForm  {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
       } else {
+        /*
         boolean canEdit = false ;
         if(calType.equals(CalendarUtils.SHARED_TYPE)) {
           canEdit = CalendarUtils.canEdit(null, calendar.getEditPermission(), currentUser) ;
@@ -683,6 +684,7 @@ public class UICalendars extends UIForm  {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
+        */
         List<Calendar> list = new ArrayList<Calendar>() ;
         list.add(calendar) ;
         UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;

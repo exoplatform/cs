@@ -561,31 +561,46 @@ UICalendarPortlet.prototype.calendarMenuCallback = function(evt){
       }
       items[i].href = String(items[i].href).replace(/objectId\s*=.*(?='|")/, value);
   }
-	
   if (DOMUtil.hasClass(obj, "CalendarItem")) {
       items[0].href = String(items[0].href).replace("')", "&categoryId=" + selectedCategory + "')");
       items[1].href = String(items[1].href).replace("')", "&categoryId=" + selectedCategory + "')");      
   }
-  if (calType && (calType != "0")) {
-  
-      var actions = DOMUtil.findDescendantsByTagName(menu, "a");
+  if (calType && (calType == "1") && canEdit && (canEdit == "false")) {  	
+      var actions = DOMUtil.findDescendantsByTagName(menu, "a"); 
       for (var j = 0; j < actions.length; j++) {
           if ((actions[j].href.indexOf("EditCalendar") >= 0) ||
-          (actions[j].href.indexOf("RemoveCalendar") >= 0) ||
-          (actions[j].href.indexOf("ShareCalendar") >= 0) ||
-          (actions[j].href.indexOf("ChangeColorCalendar") >= 0)) {
-              actions[j].style.display = "none";
+          (actions[j].href.indexOf("addQuickShowHiddenWithId") >= 0) ||
+          (actions[j].href.indexOf("ImportCalendar") >= 0)) {
+            actions[j].style.display = "none";
+          } else if (actions[j].href.indexOf("ChangeColor") >= 0) {
+ 						var colorTable = DOMUtil.findDescendantsByClass(menu ,"div", "CalendarTableColor");
+ 						if (colorTable) colorTable[0].style.display = "none";
           }
       }
   }
-  if (canEdit && (canEdit == "true")) {
-  	  var actions = DOMUtil.findDescendantsByTagName(menu, "a");
+  
+  if (calType && (calType == "2")) {  	
+    var actions = DOMUtil.findDescendantsByTagName(menu, "a"); 
+    for (var j = 0; j < actions.length; j++) {
+        if (actions[j].href.indexOf("ShareCalendar") >= 0) {
+            actions[j].style.display = "none";
+        }
+    }
+    if (canEdit && (canEdit == "false")) {
+  	  //var actions = DOMUtil.findDescendantsByTagName(menu, "a");
       for (var j = 0; j < actions.length; j++) {
-          if (actions[j].href.indexOf("EditCalendar") >= 0 || actions[j].href.indexOf("RemoveCalendar") >= 0) {
-              actions[j].style.display = "block";
-          }
+        if (actions[j].href.indexOf("EditCalendar") >= 0 ||          
+        actions[j].href.indexOf("addQuickShowHiddenWithId") >= 0 ||
+        actions[j].href.indexOf("ImportCalendar") >= 0 ||
+        actions[j].href.indexOf("ChangeColor") >= 0 ||          
+        actions[j].href.indexOf("RemoveCalendar") >= 0) {
+          actions[j].style.display = "none";
+        }
       }
-  }  
+		}   
+  }
+  
+    
 } ;
 
 UICalendarPortlet.prototype.switchLayoutCallback = function(layout,status){
