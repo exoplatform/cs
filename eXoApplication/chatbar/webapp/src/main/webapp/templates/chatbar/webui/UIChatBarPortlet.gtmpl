@@ -1268,7 +1268,7 @@
                                             <div class="SendFileIcon">
                                                 <form method="POST" enctype="multipart/form-data" class="ChatSendFileForm" target="chatFileExchangeIframe"
                                                 action="#">
-                                                <input type="file" size="1" class="InputSendFile" style="width: 5px" name="uploadfile"
+                                                <input type="file" size="1" class="InputSendFile"  name="uploadfile"
                                                     onchange="eXo.communication.chatbar.webui.UIChatWindow.sendFile(this, event);" />
                                                 </form>
                                             </div>

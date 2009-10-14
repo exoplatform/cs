@@ -183,7 +183,6 @@
 }
 
 .SendFile .BackgroundSendFile .ContentSendFile .LoadingIcon {
-  background: url('DefaultSkin/skinIcons/LoadingProgress24x24.gif') no-repeat center center;
   width: 24px; 
   height: 24px;
   display:none;
