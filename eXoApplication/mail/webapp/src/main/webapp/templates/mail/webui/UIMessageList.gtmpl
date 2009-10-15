@@ -464,7 +464,7 @@
         <div class="Value">email</div>
       </div>
     </div>*/ %>
-  	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid" style="table-layout: fixed;">
+  	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid" style="table-layout: fixed;-moz-user-select:none;" onselectstart="return false">
     	<thead>
     		<tr>
     			<th style="width: 20px; padding-left: 7px; " class="Border"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.id+ '.label.check-all') %>" value="4"/></th>
