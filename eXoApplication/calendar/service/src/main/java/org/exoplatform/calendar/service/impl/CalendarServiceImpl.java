@@ -59,8 +59,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
 
   protected List<CalendarUpdateEventListener> listeners_            = new ArrayList<CalendarUpdateEventListener>(3);
 
-  public CalendarServiceImpl(NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
-    storage_ = new JCRDataStorage(nodeHierarchyCreator);
+  public CalendarServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice) throws Exception {
+    storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
     calendarImportExport_.put(ICALENDAR, new ICalendarImportExport(storage_));
     calendarImportExport_.put(EXPORTEDCSV, new CsvImportExport(storage_));
   }
