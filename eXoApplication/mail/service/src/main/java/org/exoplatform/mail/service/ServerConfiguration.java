@@ -35,6 +35,7 @@ public class ServerConfiguration extends HashMap<String, String> {
   private String password ;
   private boolean ssl_;
   private boolean outgoingSsl_;
+  private boolean isAuthen_ = true;
   
   /**
    * The protocol_ supported by mail server ex: pop3, imap
@@ -54,6 +55,9 @@ public class ServerConfiguration extends HashMap<String, String> {
   
   public String getOutgoingPort() { return outgoingPort; }
   public void   setOutgoingPort(String s) { outgoingPort = s ; }
+  
+  public boolean isOutgoingAuthentication() {return isAuthen_;}
+  public void setIsOutgoingAuthentication(boolean b) {isAuthen_ = b;}
   
   public String getFolder() { return folder ; }
   public void   setFolder(String s) { folder = s ; }

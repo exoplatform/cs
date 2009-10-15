@@ -275,6 +275,7 @@ public class MailServiceImpl implements MailService, Startable {
     String outgoingHost = acc.getOutgoingHost();
     String outgoingPort = acc.getOutgoingPort();
     String isSSl = acc.getServerProperties().get(Utils.SVR_OUTGOING_SSL);
+    boolean isSMTPAuth = acc.isOutgoingAuthentication();
     Properties props = new Properties();
     props.put(Utils.SVR_SMTP_USER, smtpUser);
     props.put(Utils.SVR_SMTP_HOST, outgoingHost);
@@ -282,7 +283,6 @@ public class MailServiceImpl implements MailService, Startable {
     props.put("mail.smtp.dsn.notify", "SUCCESS,FAILURE ORCPT=rfc822;" + acc.getEmailAddress());
     props.put("mail.smtp.dsn.ret", "FULL");
     props.put("mail.smtp.socketFactory.port", outgoingPort);
-    props.put(Utils.SVR_SMTP_AUTH, "true");
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "true");
     props.put("mail.smtp.connectiontimeout", "0" );
     props.put("mail.smtp.timeout", "0" );
@@ -296,7 +296,11 @@ public class MailServiceImpl implements MailService, Startable {
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS, socketFactoryClass);
     props.put(Utils.SVR_SMTP_USER, smtpUser);
 
- 
+    if (isSMTPAuth){
+      props.put(Utils.SVR_SMTP_AUTH, "true");
+    } else {
+      props.put(Utils.SVR_SMTP_AUTH, "false");
+    }
 
     // TODO : add authenticator
     /*
@@ -310,7 +314,7 @@ public class MailServiceImpl implements MailService, Startable {
     logger.debug(" #### Sending email ... ");
     SMTPTransport transport = (SMTPTransport)session.getTransport(Utils.SVR_SMTP);
     try {
-      if (!acc.isOutgoingAuthentication()) {
+      if (!isSMTPAuth) {
         transport.connect() ;
       } else if (acc.useIncomingSettingForOutgoingAuthent()) {
         transport.connect(outgoingHost, Integer.parseInt(outgoingPort), smtpUser, acc.getIncomingPassword());
@@ -345,7 +349,12 @@ public class MailServiceImpl implements MailService, Startable {
     props.put(Utils.SVR_SMTP_USER, serverConfig.getUserName());
     props.put(Utils.SVR_SMTP_HOST, serverConfig.getOutgoingHost());
     props.put(Utils.SVR_SMTP_PORT, serverConfig.getOutgoingPort());
-    props.put(Utils.SVR_SMTP_AUTH, "true");
+    boolean isSMTPAuth = serverConfig.isOutgoingAuthentication();
+    if (isSMTPAuth){
+      props.put(Utils.SVR_SMTP_AUTH, "true");
+    } else {
+      props.put(Utils.SVR_SMTP_AUTH, "false");
+    }
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_PORT, serverConfig.getOutgoingPort());
     if (serverConfig.isOutgoingSsl()) {
       props.put(Utils.SVR_INCOMING_SSL, String.valueOf(serverConfig.isSsl()));
@@ -355,9 +364,14 @@ public class MailServiceImpl implements MailService, Startable {
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
     Session session = Session.getInstance(props, null);
     Transport transport = session.getTransport(Utils.SVR_SMTP);
+    
     try {
-      transport.connect(serverConfig.getOutgoingHost(), serverConfig.getUserName(), serverConfig
+      if (!isSMTPAuth) {
+        transport.connect() ;
+      } else {
+        transport.connect(serverConfig.getOutgoingHost(), serverConfig.getUserName(), serverConfig
           .getPassword());
+      }
     } catch(Exception e) {
       try {
         transport.connect() ;

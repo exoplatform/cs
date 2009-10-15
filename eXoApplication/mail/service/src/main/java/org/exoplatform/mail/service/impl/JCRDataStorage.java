@@ -2294,7 +2294,6 @@ public class JCRDataStorage {
       List<Folder> childFolders = new ArrayList<Folder>();
       NodeIterator it = parentNode.getNodes();
       while (it.hasNext()) {
-        // browse the accounts and add them to the return list
         Node node = it.nextNode();
         if (node.isNodeType(Utils.EXO_FOLDER)) {
           if (node.hasProperty(Utils.EXO_PERSONAL)
