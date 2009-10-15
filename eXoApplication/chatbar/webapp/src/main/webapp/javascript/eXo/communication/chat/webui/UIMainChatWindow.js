@@ -4,8 +4,9 @@
  */
 
 // --- Ajax handle --
-function ChatAjaxHandler(action) {
+function ChatAjaxHandler(action, params) {
   this.action = action;
+  this.params = params;
 }
 
 /**
@@ -29,7 +30,7 @@ ChatAjaxHandler.prototype.onSuccess = function(requestObj) {
   var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
   if (!UIMainChatWindow) return;
   window.jsconsole.info('[' + this.handler.action + '] ' + UIMainChatWindow.SUCCESS_STATE);
-  UIMainChatWindow.update(UIMainChatWindow.SUCCESS_STATE, requestObj, this.handler.action);
+  UIMainChatWindow.update(UIMainChatWindow.SUCCESS_STATE, requestObj, this.handler.action, this.params);
 };
 
 /**
@@ -143,6 +144,7 @@ function UIMainChatWindow() {
   this.userStatus = false;
   this.lastStatusSent = false;
   this.activeAction = false;
+  this.activeParams = new Array();
   this.guiMode = false;
   this.userNames = new Array();
   this.timeoutCount = 0;
@@ -263,6 +265,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.userStatus = false;
   this.lastStatusSent = false;
   this.activeAction = false;
+  this.activeParams = new Array();
   this.guiMode = false;
   this.userNames = new Array();
   this.isGetMsgInProcess = false;
@@ -428,7 +431,7 @@ UIMainChatWindow.prototype.getUserName = function(userNameFullStr) {
  * Return a common ajax handler use for most ajax request in chat application
  */
 UIMainChatWindow.prototype.getAjaxHandler = function() {
-  return (new ChatAjaxHandler(this.activeAction));
+  return (new ChatAjaxHandler(this.activeAction, this.activeParams));
 };
 
 /**
@@ -455,7 +458,7 @@ UIMainChatWindow.prototype.resetAllTryCount = function() {
  * @param {Object} state
  * @param {Object} requestObj
  */
-UIMainChatWindow.prototype.update = function(state, requestObj, action) {
+UIMainChatWindow.prototype.update = function(state, requestObj, action, params) {
   // Update icon and statusbar message
   switch (state) {
     case this.LOADING_STATE :
@@ -477,12 +480,22 @@ UIMainChatWindow.prototype.update = function(state, requestObj, action) {
         } catch (e) {
           // TODO
         }
+        var successAction = action;
+        window.setTimeout(function() {
+          eXo.communication.chatbar.webui.UIMainChatWindow.processSuccessAction(successAction, eventId);
+        }, 1);
+        this.activeAction = false;
+      } 
+      else {
+    	switch (action) {
+    	  case this.GET_ROOM_INFO_ACTION:
+    		this.jabberGetRoomInfo(params[0]);
+    	    break;
+    	  default:
+    		this.activeAction = false;
+    	    break;
+    	}
       }
-      var successAction = action;
-      window.setTimeout(function() {
-        eXo.communication.chatbar.webui.UIMainChatWindow.processSuccessAction(successAction, eventId);
-      }, 1);
-      this.activeAction = false;
       break;
 
     case this.ERROR_STATE :
@@ -1648,6 +1661,7 @@ UIMainChatWindow.prototype.jabberSendConfigRoom = function(roomName, roomConfigJ
  */
 UIMainChatWindow.prototype.jabberGetRoomInfo = function(roomName) {
   this.activeAction = this.GET_ROOM_INFO_ACTION;
+  this.activeParams = new Array(roomName);
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
   this.XMPPCommunicator.getRoomInfo(userName, roomName, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
