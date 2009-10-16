@@ -480,22 +480,22 @@ UIMainChatWindow.prototype.update = function(state, requestObj, action, params) 
         } catch (e) {
           // TODO
         }
-        var successAction = action;
-        window.setTimeout(function() {
-          eXo.communication.chatbar.webui.UIMainChatWindow.processSuccessAction(successAction, eventId);
-        }, 1);
-        this.activeAction = false;
       } 
-      else {
-    	switch (action) {
-    	  case this.GET_ROOM_INFO_ACTION:
-    		this.jabberGetRoomInfo(params[0]);
-    	    break;
-    	  default:
-    		this.activeAction = false;
-    	    break;
-    	}
-      }
+      switch (action) {
+	    case this.GET_ROOM_INFO_ACTION:
+	      if(!requestObj.responseText || (requestObj.responseText && !this.serverDataStack[eventId]) || (requestObj.responseText && this.serverDataStack[eventId] && !this.serverDataStack[eventId].roomInfo)){
+	        this.jabberGetRoomInfo(params[0]);
+	      }
+	      else {
+	        eXo.communication.chatbar.webui.UIMainChatWindow.processSuccessAction(action, eventId);
+	        this.activeAction = false;
+	      }
+	      break;
+	    default:
+          eXo.communication.chatbar.webui.UIMainChatWindow.processSuccessAction(action, eventId);
+          this.activeAction = false;
+	      break;
+	  }
       break;
 
     case this.ERROR_STATE :
@@ -575,7 +575,7 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
       break;
 
     case this.CREATE_ROOM_ACTION:
-		if(!serverData){
+    	if(!serverData){
     		var uiTabControlObj = this.UIChatWindow.createNewTab(this.newestRoomName+'@'+this.serverInfo.mucServicesNames, true);
     		uiTabControlObj.roomConfigured = true;
     	}
