@@ -2525,7 +2525,13 @@ UIWindow.prototype._endResizeWindowEvt = eXo.desktop.UIWindow.endResizeWindowEvt
 UIWindow.prototype._maximizeWindowEvt = eXo.desktop.UIWindow.maximizeWindowEvt;
 
 UIDesktop.prototype.showHideWindow = function(uiWindow, clickedElement, mode){
-		eXo.desktop.UIDesktop._ShowHideWindow(uiWindow, clickedElement, mode);
+	//Fix for CS-3474: IE8: Webos : can not open portlet by one click
+	var DOMUtil = eXo.core.DOMUtil ;
+	if(typeof(uiWindow) == "string") this.cs3474 = document.getElementById(uiWindow) ;
+	else this.cs3474 = uiWindow ;
+	this.cs3474.maxIndex = 0;
+	eXo.desktop.UIDesktop._ShowHideWindow(this.cs3474, clickedElement, mode);
+	//End fix for CS-3474
     if (eXo.desktop.UIDesktop.object.style.display != "block") {
         if(uiWindow.indexOf("calendar") >=0) eXo.calendar.UICalendarPortlet.delay = window.setTimeout("eXo.calendar.UICalendarPortlet.fixFirstLoad() ;", 2000);
     }
