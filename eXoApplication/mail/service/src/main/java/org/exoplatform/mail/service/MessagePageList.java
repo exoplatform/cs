@@ -30,8 +30,11 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
 import org.exoplatform.services.jcr.impl.core.query.lucene.QueryResultImpl;
@@ -362,7 +365,7 @@ public class MessagePageList extends JCRPageList {
   @SuppressWarnings("deprecation")
   private Session getJCRSession(String username) throws Exception {
     RepositoryService  repositoryService = (RepositoryService)PortalContainer.getComponent(RepositoryService.class) ;
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
+    SessionProvider sessionProvider = createSystemProvider() ;
     String defaultWS = repositoryService.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
     return sessionProvider.getSession(defaultWS, repositoryService.getCurrentRepository()) ;
   }
@@ -370,5 +373,11 @@ public class MessagePageList extends JCRPageList {
   private QueryImpl createXPathQuery(Session session, String username, String xpath) throws Exception {
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     return (QueryImpl) queryManager.createQuery(xpath, Query.XPATH);
+  }
+  
+  private SessionProvider createSystemProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSystemSessionProvider(null) ;    
   }
 }

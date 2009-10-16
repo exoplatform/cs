@@ -10,7 +10,10 @@ import java.util.List;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupEventListener;
@@ -83,7 +86,7 @@ public class NewGroupListener extends GroupEventListener {
       if(!perms.contains(groupKey)) perms.add(groupKey) ;
     }
     calendar.setEditPermission(perms.toArray(new String[perms.size()])) ;
-    SessionProvider sProvider = SessionProvider.createSystemProvider();
+    SessionProvider sProvider = createSystemProvider();
     try {
       calendarService_.savePublicCalendar(calendar, isNew, null) ;
     } finally {
@@ -92,7 +95,7 @@ public class NewGroupListener extends GroupEventListener {
   }
   @Override
   public void postDelete(Group group) throws Exception {
-    SessionProvider sProvider = SessionProvider.createSystemProvider();
+    SessionProvider sProvider = createSystemProvider();
     try {
       List<GroupCalendarData> gCalData = calendarService_.getGroupCalendars(new String[]{group.getId()}, true, null) ;
       for (GroupCalendarData gc : gCalData) {
@@ -106,5 +109,11 @@ public class NewGroupListener extends GroupEventListener {
     } finally {
       sProvider.close();// release sessions
     }    
+  }
+  
+  private SessionProvider createSystemProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSystemSessionProvider(null) ;    
   }
 }

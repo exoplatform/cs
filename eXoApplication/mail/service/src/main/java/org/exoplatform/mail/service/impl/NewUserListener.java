@@ -16,11 +16,14 @@
  */
 package org.exoplatform.mail.service.impl;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
@@ -96,7 +99,7 @@ public class NewUserListener extends UserEventListener {
     acc.setOutgoingHost(outgoingHost);
     acc.setOutgoingPort(outgoingPort);
 
-    SessionProvider sProvider = SessionProvider.createSystemProvider();
+    SessionProvider sProvider = createSystemProvider();
     String username = user.getUserName();
     String accId    = acc.getId();
     String folderId = null;
@@ -119,6 +122,12 @@ public class NewUserListener extends UserEventListener {
     } finally {
       sProvider.close();
     }
+  }
+  
+  private SessionProvider createSystemProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSystemSessionProvider(null) ;    
   }
 
 }

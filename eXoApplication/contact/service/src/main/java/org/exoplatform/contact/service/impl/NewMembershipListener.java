@@ -25,6 +25,7 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.ReferentialIntegrityException;
+import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -32,6 +33,11 @@ import javax.jcr.query.QueryResult;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.Membership;
@@ -46,9 +52,11 @@ import org.exoplatform.services.organization.MembershipEventListener;
 public class NewMembershipListener extends MembershipEventListener {
   private ContactService cservice_ ;
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
-  public NewMembershipListener(ContactService cservice, NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
+  private RepositoryService reposervice_ ;
+  public NewMembershipListener(ContactService cservice, NodeHierarchyCreator nodeHierarchyCreator, RepositoryService rservice) throws Exception {
     cservice_ = cservice ;
     nodeHierarchyCreator_ = nodeHierarchyCreator ;
+    reposervice_ = rservice ;
   }
 
   public void postSave(Membership m, boolean isNew) throws Exception {
@@ -56,12 +64,12 @@ public class NewMembershipListener extends MembershipEventListener {
     String username = m.getUserName();
     String groupId = m.getGroupId();
     cservice_.addUserContactInAddressBook(username, groupId) ;
-    JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
-    SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+    JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_, reposervice_) ;
+    SessionProvider systemSession = createSystemProvider() ;
     try {
-      Node publicContactHome = storage_.getPublicContactsHome(systemSession) ;      
+      //Node publicContactHome = storage_.getPublicContactsHome(systemSession) ;      
       String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
-      QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
+      QueryManager qm = getSession(systemSession).getWorkspace().getQueryManager();
 
 
       // Add the user's contact to the public address book for the group
@@ -118,13 +126,13 @@ public class NewMembershipListener extends MembershipEventListener {
     for (String group  : contact.getAddressBookIds()) groupIds.put(group, group) ;
     groupIds.remove(m.getGroupId()) ;
     contact.setAddressBookIds(groupIds.keySet().toArray(new String[] {})) ;
-    SessionProvider systemSession = SessionProvider.createSystemProvider();
+    SessionProvider systemSession = createSystemProvider();
     try {
       cservice_.saveContact(m.getUserName(), contact, false) ;
-      JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
-      Node publicContactHome = storage_.getPublicContactsHome(systemSession) ;      
+      JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_, reposervice_) ;
+      //Node publicContactHome = storage_.getPublicContactsHome(systemSession) ;      
       String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
-      QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
+      QueryManager qm = getSession(systemSession).getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
           + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append( m.getGroupId() + "']") ;        
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
@@ -176,4 +184,19 @@ public class NewMembershipListener extends MembershipEventListener {
       systemSession.close() ;
     }
   }
+  
+
+  private SessionProvider createSystemProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSystemSessionProvider(null) ;    
+  }
+  
+  private Session getSession(SessionProvider sprovider) throws Exception{
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    RepositoryService repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
+    ManageableRepository currentRepo = repositoryService.getCurrentRepository() ;
+    return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo) ;
+  }
+  
 }

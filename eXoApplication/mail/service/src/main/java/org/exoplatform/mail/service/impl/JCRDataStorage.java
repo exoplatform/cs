@@ -69,6 +69,8 @@ import org.exoplatform.mail.service.MimeMessageParser;
 import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
@@ -86,11 +88,13 @@ public class JCRDataStorage {
   private static final Log     logger       = LogFactory.getLog(Utils.class);
 
   private NodeHierarchyCreator nodeHierarchyCreator_;
+  private RepositoryService  repoService_ ;
 
   private static final String  MAIL_SERVICE = "MailApplication";
 
-  public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator) {
+  public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService  repoService) {
     nodeHierarchyCreator_ = nodeHierarchyCreator;
+    repoService_ = repoService ;
   }
 
   public String getMailHierarchyNode() throws Exception {
@@ -99,7 +103,7 @@ public class JCRDataStorage {
 
   private Node getMailHomeNode(SessionProvider sProvider, String username) throws Exception {
     if (sProvider == null) sProvider = createSystemProvider() ;
-    Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username);
+    Node userApp = getNodeByPath(nodeHierarchyCreator_.getUserApplicationNode(sProvider, username).getPath(), sProvider);
     Node mailNode = null;
     try { 
       mailNode = userApp.getNode(MAIL_SERVICE);
@@ -258,8 +262,8 @@ public class JCRDataStorage {
   }
 
   private QueryImpl createXPathQuery(SessionProvider sProvider, String username, String accountId, String xpath) throws Exception {
-    Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
-    Session sess = accountNode.getSession();
+    //Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
+    Session sess = getSession(sProvider);
     QueryManager queryManager = sess.getWorkspace().getQueryManager();
     return (QueryImpl) queryManager.createQuery(xpath, Query.XPATH);
   }
@@ -353,7 +357,7 @@ public class JCRDataStorage {
       sProvider = createSessionProvider(); 
       Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
       filter.setAccountPath(homeMsg.getPath());
-      QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
+      QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
       String queryString = filter.getStatement();
       Query query = qm.createQuery(queryString, Query.XPATH);
       QueryResult result = query.execute();
@@ -1503,7 +1507,7 @@ public class JCRDataStorage {
 
   private Node getFolderNodeById(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
     Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
-    Session sess = accountNode.getSession();
+    Session sess = getSession(sProvider);
     QueryManager qm = sess.getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
                                                 + "//element(*,exo:folder)[@exo:id='").append(folderId).append("']");
@@ -2152,7 +2156,7 @@ public class JCRDataStorage {
     try {
       sProvider = createSessionProvider();
       Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
-      QueryManager qm = accountNode.getSession().getWorkspace().getQueryManager();
+      QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
                                                   + "//element(*,exo:message)[@exo:tags='").append(tagId).append("']");
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
@@ -2172,7 +2176,7 @@ public class JCRDataStorage {
                                             String accountId, String folderId) throws Exception {
     List<Node> msgNodes = new ArrayList<Node>();
     Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
-    QueryManager qm = accountNode.getSession().getWorkspace().getQueryManager();
+    QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
                                                 + "//element(*,exo:message)[@exo:folders='").append(folderId).append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
@@ -2313,7 +2317,7 @@ public class JCRDataStorage {
       sProvider = createSessionProvider();
       List<MessageFilter> msgFilters = getFilters(username, accountId);
       Node homeMsg = getMessageHome(sProvider, username, accountId);
-      Session sess = getMailHomeNode(sProvider, username).getSession();
+      Session sess = getSession(sProvider);
       QueryManager qm = sess.getWorkspace().getQueryManager();
       for (MessageFilter filter : msgFilters) {
         String applyFolder = filter.getApplyFolder();
@@ -2386,7 +2390,7 @@ public class JCRDataStorage {
     try {
       if (msg.getName().equals(msg.getProperty(Utils.EXO_IN_REPLY_TO_HEADER).getString()))
         return null;
-      Session sess = accountNode.getSession();
+      Session sess = getSession(sProvider);
       QueryManager qm = sess.getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
                                                   + "//element(*,exo:message)[@exo:inReplyToHeader='").append(msg.getName()).append("']");
@@ -2409,7 +2413,7 @@ public class JCRDataStorage {
     try {
       if (inReplyToHeader.equals(msg.getName()))
         return null;
-      Session sess = accountNode.getSession();
+      Session sess = getSession(sProvider);
       QueryManager qm = sess.getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
                                                   + "//element(*,exo:message)[@exo:id='").append(inReplyToHeader).append("']");
@@ -2942,5 +2946,14 @@ public class JCRDataStorage {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
     return service.getSystemSessionProvider(null) ;    
+  }
+  
+  private Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception {
+    return (Node) getSession(sessionProvider).getItem(nodePath);
+  }
+  
+  private Session getSession(SessionProvider sprovider) throws Exception{
+    ManageableRepository currentRepo = repoService_.getCurrentRepository() ;
+    return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo) ;
   }
 }

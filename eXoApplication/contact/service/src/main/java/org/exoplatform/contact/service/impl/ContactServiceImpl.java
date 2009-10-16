@@ -30,6 +30,7 @@ import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.User;
@@ -47,8 +48,8 @@ public class ContactServiceImpl implements ContactService {
   private JCRDataStorage storage_ ;
   private Map<String, ContactImportExport> contactImportExport_ = new HashMap<String, ContactImportExport>() ;
   
-  public ContactServiceImpl(NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
-      storage_ = new JCRDataStorage(nodeHierarchyCreator) ;
+  public ContactServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService rservice) throws Exception {
+      storage_ = new JCRDataStorage(nodeHierarchyCreator, rservice) ;
       contactImportExport_.put(VCARD, new VCardImportExport(storage_)) ;
   }
   

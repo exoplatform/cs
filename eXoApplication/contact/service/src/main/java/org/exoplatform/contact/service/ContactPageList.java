@@ -30,8 +30,12 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
 import org.exoplatform.services.jcr.impl.core.query.lucene.QueryResultImpl;
@@ -64,12 +68,12 @@ public class ContactPageList extends JCRPageList {
     username_ = username;
     value_ = value;
     contactType_ = type;
-    Session session = getJCRSession(username) ;
+    Session session = getSession(createSystemProvider()) ;
     if (session != null) {
       try {    
         setAvailablePage(((QueryResultImpl) createXPathQuery(session, username, value_).execute()).getTotalSize()) ;
       } finally {
-        session.logout() ;
+       // session.logout() ;
       }      
     }
   }
@@ -77,7 +81,7 @@ public class ContactPageList extends JCRPageList {
   protected void populateCurrentPage(long page, String username) throws Exception {    
     long pageSize = getPageSize() ;
     Node currentNode;
-    Session session = getJCRSession(username) ;
+    Session session = getSession(createSystemProvider()) ;
     long totalPage = 0 ;
     try {
       QueryImpl queryImpl = createXPathQuery(session, username, value_);
@@ -94,7 +98,7 @@ public class ContactPageList extends JCRPageList {
       iter_ = result.getNodes();      
       totalPage = ((QueryResultImpl) result).getTotalSize() ; 
     } finally {
-      session.logout() ;
+      //session.logout() ;
     }
     setAvailablePage(totalPage) ;
     
@@ -324,14 +328,14 @@ public class ContactPageList extends JCRPageList {
       }
       session.logout();
     }*/
-    Session session = getJCRSession(username_) ;    
+    Session session = getSession(createSystemProvider()) ;
     try {
       QueryImpl queryImpl = createXPathQuery(session, username_, value_);
       //queryImpl.setLimit(pageSize);
       QueryResult result = queryImpl.execute();
       iter_ = result.getNodes();
     } finally {
-      session.logout() ;
+      //session.logout() ;
     }
     List<Contact> contacts = new ArrayList<Contact>();
     while (iter_.hasNext()) {
@@ -355,14 +359,14 @@ public class ContactPageList extends JCRPageList {
       }
       session.logout();
     }*/    
-    Session session = getJCRSession(username_) ;    
+    Session session = getSession(createSystemProvider()) ;    
     try {
       QueryImpl queryImpl = createXPathQuery(session, username_, value_);
       //queryImpl.setLimit(pageSize);
       QueryResult result = queryImpl.execute();
       iter_ = result.getNodes();
     } finally {
-      session.logout() ;
+      //session.logout() ;
     }
     NodeIterator inter = iter_;
     Map<String, String> emails = new LinkedHashMap<String, String>();
@@ -389,10 +393,13 @@ public class ContactPageList extends JCRPageList {
   }
   
   public void setSession(Session s) { session_ = s ; }
+  
+  
+  
   private Session getJCRSession(String username) throws Exception {
     try {
       RepositoryService repositoryService = (RepositoryService) PortalContainer.getComponent(RepositoryService.class);
-      SessionProvider sessionProvider = SessionProvider.createSystemProvider();
+      SessionProvider sessionProvider = createSystemProvider();
       String defaultWS = repositoryService.getDefaultRepository()
       .getConfiguration()
       .getDefaultWorkspaceName();
@@ -405,5 +412,18 @@ public class ContactPageList extends JCRPageList {
   private QueryImpl createXPathQuery(Session session, String username, String xpath) throws Exception {
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     return (QueryImpl) queryManager.createQuery(xpath, Query.XPATH);
+  }
+  
+  private SessionProvider createSystemProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSystemSessionProvider(null) ;    
+  }
+  
+  private Session getSession(SessionProvider sprovider) throws Exception{
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    RepositoryService repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
+    ManageableRepository currentRepo = repositoryService.getCurrentRepository() ;
+    return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo) ;
   }
 }

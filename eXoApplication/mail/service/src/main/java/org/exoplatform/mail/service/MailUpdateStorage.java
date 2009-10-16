@@ -30,9 +30,12 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeType;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
@@ -54,7 +57,7 @@ public class MailUpdateStorage extends MailUpdateStorageEventListener {
   public void preUpdate() {
     if(csObj_ != null)
     try {
-      SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
+      SessionProvider sessionProvider = createSystemProvider() ;
       String wsName = repositorySerivce_.getCurrentRepository().getConfiguration().getDefaultWorkspaceName();
       Session session = sessionProvider.getSession(wsName, repositorySerivce_.getCurrentRepository());
       QueryManager qm = session.getWorkspace().getQueryManager() ;
@@ -276,5 +279,11 @@ public class MailUpdateStorage extends MailUpdateStorageEventListener {
   public void postUpdate() {
     super.postUpdate();
     //Run update data base
+  }
+  
+  private SessionProvider createSystemProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSystemSessionProvider(null) ;    
   }
 }

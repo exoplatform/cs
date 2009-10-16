@@ -86,6 +86,7 @@ import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.scheduler.JobInfo;
@@ -120,8 +121,8 @@ public class MailServiceImpl implements MailService, Startable {
   
   private JobSchedulerService schedulerService_;
 
-  public MailServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, JobSchedulerService schedulerService) throws Exception {
-    storage_ = new JCRDataStorage(nodeHierarchyCreator);
+  public MailServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, JobSchedulerService schedulerService,  RepositoryService reposervice) throws Exception {
+    storage_ = new JCRDataStorage(nodeHierarchyCreator,reposervice);
     emlImportExport_ = new EMLImportExport(storage_);
     checkingLog_ = new HashMap<String, CheckingInfo>();
     this.schedulerService_ = schedulerService;
