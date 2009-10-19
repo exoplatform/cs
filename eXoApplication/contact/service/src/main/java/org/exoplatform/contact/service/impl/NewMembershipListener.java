@@ -69,11 +69,11 @@ public class NewMembershipListener extends MembershipEventListener {
     try {
       //Node publicContactHome = storage_.getPublicContactsHome(systemSession) ;      
       String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
-      QueryManager qm = getSession(systemSession).getWorkspace().getQueryManager();
 
 
       // Add the user's contact to the public address book for the group
       Contact contact = cservice_.getPublicContact(username) ;
+      QueryManager qm = getSession(systemSession).getWorkspace().getQueryManager();
       Map<String, String> groups = new LinkedHashMap<String, String>() ;
       for (String group  : contact.getAddressBookIds()) groups.put(group, group) ;
       groups.put(groupId, groupId) ;

@@ -2205,19 +2205,21 @@ public class JCRDataStorage{
     Query query ;
     CalendarSetting calSetting = getCalendarSetting(username)  ;
     SessionProvider systemSession = createSystemProvider() ;
+    Node calendarHome = getUserCalendarHome(username) ;
+    Node calendarShareNode = getSharedCalendarHome() ;
+    Node publicCalHome = getPublicCalendarHome() ;
     QueryManager  qm = getSession(systemSession).getWorkspace().getQueryManager() ;
     try {
       // private events
       if(username != null && username.length() > 0) {
-        Node calendarHome = getUserCalendarHome(username) ;
         eventQuery.setCalendarPath(calendarHome.getPath()) ;
         query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
         NodeIterator it = query.execute().getNodes();   
         mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterPrivateCalendars()) ;
       }
       // shared events
-      if(getSharedCalendarHome().hasNode(username)) {
-        PropertyIterator iter = getSharedCalendarHome().getNode(username).getReferences() ;
+      if(calendarShareNode.hasNode(username)) {
+        PropertyIterator iter = calendarShareNode.getNode(username).getReferences() ;
         while(iter.hasNext()) {
           try{
             Node calendar = iter.nextProperty().getParent() ;
@@ -2231,18 +2233,15 @@ public class JCRDataStorage{
         }
       }  
       // public events
-      Node publicCalHome = getPublicCalendarHome(systemSession) ;
       eventQuery.setCalendarPath(publicCalHome.getPath()) ;
-      qm = publicCalHome.getSession().getWorkspace().getQueryManager() ;
+      //qm = publicCalHome.getSession().getWorkspace().getQueryManager() ;
       eventQuery.setCalendarId(publicCalendarIds) ;
       query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
       NodeIterator it = query.execute().getNodes();
       mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterPublicCalendars()) ;
     } catch (Exception e) {
       e.printStackTrace() ;
-    } finally {
-      systemSession.close() ;
-    }
+    }  
     return mapData ;    
   }
 
