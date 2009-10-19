@@ -22,6 +22,8 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -33,6 +35,8 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.ServerConfiguration;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
@@ -65,10 +69,10 @@ public class ReminderJob implements Job {
       StringBuffer path = new StringBuffer(getReminderPath(fromCalendar, provider));
       path.append("//element(*,exo:reminder)");
       path.append("[@exo:remindDateTime <= xs:dateTime('"	+ ISO8601.format(fromCalendar)
-          + "') and @exo:isOver = 'false' and @exo:reminderType = 'email' ]");
+                  + "') and @exo:isOver = 'false' and @exo:reminderType = 'email' ]");
       /*path.append("//element(*,exo:reminder)");
       path.append("[@exo:isOver = 'false']");*/
-      QueryManager queryManager = calendarHome.getSession().getWorkspace().getQueryManager();
+      QueryManager queryManager = getSession(provider).getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(path.toString(), Query.XPATH);
       QueryResult results = query.execute();
       NodeIterator iter = results.getNodes();
@@ -110,11 +114,11 @@ public class ReminderJob implements Job {
       }  
       if(!messageList.isEmpty()) {
         mailService.sendMessages(messageList, config);
-        //System.out.println("\n\n message has been sent !");
       }
-    } catch (Exception e) {
-      //System.out.println("\n\n Error when run email reminder job !");
-      //e.printStackTrace();			
+    } catch (RepositoryException e) {
+      if (log_.isDebugEnabled()) log_.debug("Data base not ready !");
+    } catch (Exception e){
+      if (log_.isDebugEnabled()) log_.debug(e.toString());
     } finally {
       provider.close() ;
     }
@@ -138,5 +142,12 @@ public class ReminderJob implements Job {
     Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(provider) ;
     if(publicApp != null && publicApp.hasNode(Utils.CALENDAR_APP)) return publicApp.getNode(Utils.CALENDAR_APP) ;
     return null ;		
+  }
+
+  private Session getSession(SessionProvider sprovider) throws Exception{
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    RepositoryService repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
+    ManageableRepository currentRepo = repositoryService.getCurrentRepository() ;
+    return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo) ;
   }
 }

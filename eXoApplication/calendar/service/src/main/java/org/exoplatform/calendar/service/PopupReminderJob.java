@@ -23,6 +23,8 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -32,6 +34,8 @@ import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.RootContainer;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
@@ -61,8 +65,8 @@ public class PopupReminderJob implements Job {
       StringBuffer path = new StringBuffer(getReminderPath(fromCalendar, provider));
       path.append("//element(*,exo:reminder)");
       path.append("[@exo:remindDateTime <= xs:dateTime('"	+ ISO8601.format(fromCalendar)
-          + "') and @exo:isOver = 'false' and @exo:reminderType = 'popup' ]"); 
-      QueryManager queryManager = calendarHome.getSession().getWorkspace().getQueryManager();
+                  + "') and @exo:isOver = 'false' and @exo:reminderType = 'popup' ]"); 
+      QueryManager queryManager = getSession(provider).getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(path.toString(), Query.XPATH);
       QueryResult results = query.execute();
       NodeIterator iter = results.getNodes();
@@ -74,35 +78,35 @@ public class PopupReminderJob implements Job {
         long fromTime = reminder.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTimeInMillis() ;
         long remindTime = reminder.getProperty(Utils.EXO_REMINDER_DATE).getDate().getTimeInMillis() ;
         long interval = reminder.getProperty(Utils.EXO_TIME_INTERVAL).getLong() * 60 * 1000 ;
-          Reminder rmdObj = new Reminder() ;
-          rmdObj.setRepeate(isRepeat) ;
-          if(reminder.hasProperty(Utils.EXO_OWNER)) rmdObj.setReminderOwner(reminder.getProperty(Utils.EXO_OWNER).getString()) ;
-          if(reminder.hasProperty(Utils.EXO_EVENT_ID)) rmdObj.setId(reminder.getProperty(Utils.EXO_EVENT_ID).getString()) ;
-          if(reminder.hasProperty(Utils.EXO_FROM_DATE_TIME)) {
-            Calendar tempCal = reminder.getProperty(Utils.EXO_FROM_DATE_TIME).getDate() ;
-            rmdObj.setFromDateTime(tempCal.getTime()) ;
-          }
-          if(reminder.hasProperty(Utils.EXO_SUMMARY)) rmdObj.setSummary(reminder.getProperty(Utils.EXO_SUMMARY).getString()) ;
-          rmdObj.setAlarmBefore(remindTime) ; 
-          if(reminder.hasProperty(Utils.EXO_REMINDER_TYPE)) rmdObj.setReminderType(reminder.getProperty(Utils.EXO_REMINDER_TYPE).getString()) ;
-          if(isRepeat) {
-            if (fromCalendar.getTimeInMillis() >= fromTime) {
+        Reminder rmdObj = new Reminder() ;
+        rmdObj.setRepeate(isRepeat) ;
+        if(reminder.hasProperty(Utils.EXO_OWNER)) rmdObj.setReminderOwner(reminder.getProperty(Utils.EXO_OWNER).getString()) ;
+        if(reminder.hasProperty(Utils.EXO_EVENT_ID)) rmdObj.setId(reminder.getProperty(Utils.EXO_EVENT_ID).getString()) ;
+        if(reminder.hasProperty(Utils.EXO_FROM_DATE_TIME)) {
+          Calendar tempCal = reminder.getProperty(Utils.EXO_FROM_DATE_TIME).getDate() ;
+          rmdObj.setFromDateTime(tempCal.getTime()) ;
+        }
+        if(reminder.hasProperty(Utils.EXO_SUMMARY)) rmdObj.setSummary(reminder.getProperty(Utils.EXO_SUMMARY).getString()) ;
+        rmdObj.setAlarmBefore(remindTime) ; 
+        if(reminder.hasProperty(Utils.EXO_REMINDER_TYPE)) rmdObj.setReminderType(reminder.getProperty(Utils.EXO_REMINDER_TYPE).getString()) ;
+        if(isRepeat) {
+          if (fromCalendar.getTimeInMillis() >= fromTime) {
+            reminder.setProperty(Utils.EXO_IS_OVER, true) ;
+          }else {
+            if((remindTime + interval) > fromTime) {
               reminder.setProperty(Utils.EXO_IS_OVER, true) ;
             }else {
-              if((remindTime + interval) > fromTime) {
-                reminder.setProperty(Utils.EXO_IS_OVER, true) ;
-              }else {
-                java.util.Calendar cal = new GregorianCalendar() ;
-                cal.setTimeInMillis(remindTime + interval) ;
-                reminder.setProperty(Utils.EXO_REMINDER_DATE, cal) ;
-                reminder.setProperty(Utils.EXO_IS_OVER, false) ;
-              }
+              java.util.Calendar cal = new GregorianCalendar() ;
+              cal.setTimeInMillis(remindTime + interval) ;
+              reminder.setProperty(Utils.EXO_REMINDER_DATE, cal) ;
+              reminder.setProperty(Utils.EXO_IS_OVER, false) ;
             }
-          }else {
-            reminder.setProperty(Utils.EXO_IS_OVER, true) ;
           }
-          popupReminders.add(rmdObj) ;
-          reminder.save() ;
+        }else {
+          reminder.setProperty(Utils.EXO_IS_OVER, true) ;
+        }
+        popupReminders.add(rmdObj) ;
+        reminder.save() ;
       }
       if(!popupReminders.isEmpty()) {
         for(Reminder rmdObj : popupReminders) {
@@ -110,14 +114,14 @@ public class PopupReminderJob implements Job {
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
             JsonValue json = generatorImpl.createJsonObject(rmdObj);
             continuation.sendMessage(user, "/eXo/Application/Calendar/messages", json, rmdObj.toString());
-            //System.out.println("\n\n " + user + " has a notify !");
           }
         }
       }
+    } catch (RepositoryException e) {
+      if (log_.isDebugEnabled()) log_.debug("Data base not ready!");
     } catch (Exception e) {
-      //System.out.println("\n\n Error when run popup reminder job !");
-      //e.printStackTrace();			
-    }  finally {
+      if (log_.isDebugEnabled()) log_.debug(e.toString());
+    } finally {
       provider.close(); // release sessions
     }
     if (log_.isDebugEnabled()) log_.debug("File plan job done");
@@ -140,5 +144,12 @@ public class PopupReminderJob implements Job {
     Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(provider) ;
     if(publicApp != null && publicApp.hasNode(Utils.CALENDAR_APP)) return publicApp.getNode(Utils.CALENDAR_APP) ;
     return null ;		
+  }
+
+  private Session getSession(SessionProvider sprovider) throws Exception{
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    RepositoryService repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
+    ManageableRepository currentRepo = repositoryService.getCurrentRepository() ;
+    return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo) ;
   }
 }
