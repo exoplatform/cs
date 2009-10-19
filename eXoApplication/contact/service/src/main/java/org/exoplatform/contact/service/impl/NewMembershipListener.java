@@ -65,7 +65,7 @@ public class NewMembershipListener extends MembershipEventListener {
     String groupId = m.getGroupId();
     cservice_.addUserContactInAddressBook(username, groupId) ;
     JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_, reposervice_) ;
-    SessionProvider systemSession = createSystemProvider() ;
+    SessionProvider systemSession = SessionProvider.createSystemProvider() ;
     try {
       //Node publicContactHome = storage_.getPublicContactsHome(systemSession) ;      
       String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
@@ -110,7 +110,7 @@ public class NewMembershipListener extends MembershipEventListener {
       }
     } catch (Exception e) {
       e.printStackTrace() ;
-    } finally {
+    }  finally {
       systemSession.close() ;
     }
   }
@@ -126,7 +126,7 @@ public class NewMembershipListener extends MembershipEventListener {
     for (String group  : contact.getAddressBookIds()) groupIds.put(group, group) ;
     groupIds.remove(m.getGroupId()) ;
     contact.setAddressBookIds(groupIds.keySet().toArray(new String[] {})) ;
-    SessionProvider systemSession = createSystemProvider();
+    SessionProvider systemSession = SessionProvider.createSystemProvider();
     try {
       cservice_.saveContact(m.getUserName(), contact, false) ;
       JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_, reposervice_) ;
@@ -183,13 +183,6 @@ public class NewMembershipListener extends MembershipEventListener {
     } finally {
       systemSession.close() ;
     }
-  }
-  
-
-  private SessionProvider createSystemProvider() {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    return service.getSystemSessionProvider(null) ;    
   }
   
   private Session getSession(SessionProvider sprovider) throws Exception{
