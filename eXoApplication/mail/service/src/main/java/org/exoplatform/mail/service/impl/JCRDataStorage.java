@@ -1584,6 +1584,7 @@ public class JCRDataStorage {
         myFolder = node;
       } else { // if it doesn't exist, creates it
         myFolder = home.addNode(folder.getId(), Utils.EXO_FOLDER);
+        home.save();
       }
       // sets some properties
       myFolder.setProperty(Utils.EXO_ID, folder.getId());
@@ -1606,7 +1607,7 @@ public class JCRDataStorage {
         myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, folder.getCheckFromDate().getTime());
       else 
         myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
-      home.getSession().save();
+      myFolder.save();
     } finally {
       closeSessionProvider(sProvider);
     }
@@ -1648,6 +1649,7 @@ public class JCRDataStorage {
         myFolder = parentNode.getNode(folder.getId());
       } else { // if it doesn't exist, creates it
         myFolder = parentNode.addNode(folder.getId(), Utils.EXO_FOLDER);
+        parentNode.save();
       }
       myFolder.setProperty(Utils.EXO_ID, folder.getId());
       myFolder.setProperty(Utils.EXO_NAME, folder.getName());
@@ -1669,7 +1671,7 @@ public class JCRDataStorage {
         myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, folder.getCheckFromDate().getTime());
       else 
         myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
-      home.getSession().save();
+      myFolder.save();
     } finally {
       closeSessionProvider(sProvider) ;
     }
