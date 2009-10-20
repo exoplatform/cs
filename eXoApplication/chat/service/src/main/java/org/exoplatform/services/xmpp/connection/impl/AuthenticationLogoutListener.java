@@ -16,10 +16,12 @@
  */
 package org.exoplatform.services.xmpp.connection.impl;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.security.ConversationRegistry;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.xmpp.connection.XMPPSession;
@@ -32,6 +34,8 @@ import org.exoplatform.services.xmpp.connection.XMPPSession;
  */
 public class AuthenticationLogoutListener extends Listener<ConversationRegistry, ConversationState> {
 
+  protected static final Log log = ExoLogger.getLogger("chat.AuthenticationLogoutListener");
+  
   @Override
   public void onEvent(Event<ConversationRegistry, ConversationState> event) throws Exception {
     try {
@@ -44,7 +48,8 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
         messenger.logout(userId);
       }
      } catch (Exception e){
-        e.printStackTrace();
+       if(log.isDebugEnabled())
+        log.debug(e.getMessage());
       }
   }
 
