@@ -77,31 +77,31 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
  *          tuan.pham@exoplatform.com
  */
 @ComponentConfigs({
-	@ComponentConfig(
-	        lifecycle = UIFormLifecycle.class,
-	        template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
-	        events = {
-	          @EventConfig(listeners = UITaskForm.SaveActionListener.class),
-	          @EventConfig(listeners = UITaskForm.AddCategoryActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.SelectUserActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.CancelActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.SelectTabActionListener.class, phase = Phase.DECODE)
-	        }
-	),
-	@ComponentConfig(
-			id = "UIPopupWindowUserSelectTaskForm",
-            type = UIPopupWindow.class,
-            template =  "system:/groovy/webui/core/UIPopupWindow.gtmpl",
-            events = {
-              @EventConfig(listeners = UIPopupWindow.CloseActionListener.class, name = "ClosePopup")  ,
-              @EventConfig(listeners = UITaskForm.AddActionListener.class, name = "Add", phase = Phase.DECODE),
-              @EventConfig(listeners = UITaskForm.CloseActionListener.class, name = "Close", phase = Phase.DECODE)
-            }
-	)
+  @ComponentConfig(
+                   lifecycle = UIFormLifecycle.class,
+                   template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
+                   events = {
+                     @EventConfig(listeners = UITaskForm.SaveActionListener.class),
+                     @EventConfig(listeners = UITaskForm.AddCategoryActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UITaskForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UITaskForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UITaskForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UITaskForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UITaskForm.SelectUserActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UITaskForm.CancelActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UITaskForm.SelectTabActionListener.class, phase = Phase.DECODE)
+                   }
+  ),
+  @ComponentConfig(
+                   id = "UIPopupWindowUserSelectTaskForm",
+                   type = UIPopupWindow.class,
+                   template =  "system:/groovy/webui/core/UIPopupWindow.gtmpl",
+                   events = {
+                     @EventConfig(listeners = UIPopupWindow.CloseActionListener.class, name = "ClosePopup")  ,
+                     @EventConfig(listeners = UITaskForm.AddActionListener.class, name = "Add", phase = Phase.DECODE),
+                     @EventConfig(listeners = UITaskForm.CloseActionListener.class, name = "Close", phase = Phase.DECODE)
+                   }
+  )
 })
 public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISelector{
   final public static String TAB_TASKDETAIL = "eventDetail".intern() ;
@@ -123,7 +123,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   private String errorMsg_ = null ;
   private String errorValues = null ;
   private String calType_ = "0" ;
-  
+
   private String oldCalendarId_ = null ;
   private String newCalendarId_ = null ;
   //private String newCategoryId_ = null ;
@@ -193,11 +193,13 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           }
         }
         if (!hasEventCategory){
-          selectBox.getOptions().add(new SelectItemOption<String>(eventCalendar.getEventCategoryName(), eventCalendar.getEventCategoryId())) ;
+          //CS-2488
+          selectBox.getOptions().add(0,new SelectItemOption<String>("all", "all")) ;
+          //selectBox.getOptions().add(new SelectItemOption<String>(eventCalendar.getEventCategoryName(), eventCalendar.getEventCategoryId())) ;
         }
         selectBox.setValue(eventCalendar.getEventCategoryId()) ;
       }
-      // cs-1911
+      //CS-1911
       StringBuilder delegator = new StringBuilder("") ;      
       if (eventCalendar.getTaskDelegator() != null)
         for (String user : eventCalendar.getTaskDelegator().split(CalendarUtils.COMMA))
@@ -556,20 +558,20 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UIEventReminderTab eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
     return Boolean.parseBoolean(eventReminderTab.getUIFormCheckBoxInput(UIEventReminderTab.EMAIL_IS_REPEAT).getValue().toString()) ;
   }
-//  protected String isEmailRepeat() {
-//    UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
-//    return String.valueOf("repeat".equals(eventDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).getValue())) ;
-//  }
+  //  protected String isEmailRepeat() {
+  //    UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
+  //    return String.valueOf("repeat".equals(eventDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).getValue())) ;
+  //  }
   public void setEmailRepeat(Boolean value) {
     UIEventReminderTab eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
     eventReminderTab.getUIFormCheckBoxInput(UIEventReminderTab.EMAIL_IS_REPEAT).setChecked(value) ;
   }
-//  public void setEmailRepeat(String value) {
-//    UIFormInputWithActions eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
-//    if(Boolean.parseBoolean(value)) value = "repeat" ;
-//    else value = "no-repeat" ;
-//    eventReminderTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).setValue(value) ;
-//  }
+  //  public void setEmailRepeat(String value) {
+  //    UIFormInputWithActions eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
+  //    if(Boolean.parseBoolean(value)) value = "repeat" ;
+  //    else value = "no-repeat" ;
+  //    eventReminderTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).setValue(value) ;
+  //  }
   protected String getEmailRepeatInterVal() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
     return eventDetailTab.getUIStringInput(UIEventReminderTab.EMAIL_REPEAT_INTERVAL).getValue() ;
@@ -601,7 +603,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     return taskDetailTab.getUIStringInput(UIEventReminderTab.POPUP_REMIND_BEFORE).getValue() ;
   }
-  
+
   protected Boolean isPopupRepeat() {
     UIEventReminderTab eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
     return Boolean.parseBoolean(eventReminderTab.getUIFormCheckBoxInput(UIEventReminderTab.POPUP_IS_REPEAT).getValue().toString()) ;
@@ -610,17 +612,17 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UIEventReminderTab eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
     eventReminderTab.getUIFormCheckBoxInput(UIEventReminderTab.POPUP_IS_REPEAT).setChecked(value) ;
   }
-  
-//  protected String isPopupRepeat() {
-//    UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
-//    return String.valueOf("repeat".equals(eventDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).getValue())) ;
-//  }
-//  protected void setPopupRepeat(String value) {
-//    UIFormInputWithActions eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
-//    if(Boolean.parseBoolean(value)) value = "repeat" ;
-//    else value = "no-repeat" ;
-//    eventReminderTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).setValue(value) ;
-//  }
+
+  //  protected String isPopupRepeat() {
+  //    UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
+  //    return String.valueOf("repeat".equals(eventDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).getValue())) ;
+  //  }
+  //  protected void setPopupRepeat(String value) {
+  //    UIFormInputWithActions eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
+  //    if(Boolean.parseBoolean(value)) value = "repeat" ;
+  //    else value = "no-repeat" ;
+  //    eventReminderTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).setValue(value) ;
+  //  }
 
   protected String getPopupRepeatInterVal() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
@@ -748,19 +750,19 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
 
   public String cleanValue(String values) throws Exception{
-	  String[] tmpArr = values.split(",");
-      List<String> list = Arrays.asList(tmpArr);
-      java.util.Set<String> set = new java.util.HashSet<String>(list);
-      String[] result = new String[set.size()];
-      set.toArray(result);
-      String data = "";
-      for (String s : result) {
-          data += "," + s;
-      }
-      data = data.substring(1);
-	  return data;
+    String[] tmpArr = values.split(",");
+    List<String> list = Arrays.asList(tmpArr);
+    java.util.Set<String> set = new java.util.HashSet<String>(list);
+    String[] result = new String[set.size()];
+    set.toArray(result);
+    String data = "";
+    for (String s : result) {
+      data += "," + s;
+    }
+    data = data.substring(1);
+    return data;
   }
-public Attachment getAttachment(String attId) {
+  public Attachment getAttachment(String attId) {
     UITaskDetailTab uiDetailTab = getChildById(TAB_TASKDETAIL) ;
     for (Attachment att : uiDetailTab.getAttachments()) {
       if(att.getId().equals(attId)) {
@@ -829,7 +831,7 @@ public Attachment getAttachment(String attId) {
             }
           }
         }
-        */
+         */
         List<ContactData> contacts = uiAddressForm.getContactList() ;
         if(!CalendarUtils.isEmpty(oldAddress)) {
           for(String address : oldAddress.split(",")) {
@@ -882,31 +884,31 @@ public Attachment getAttachment(String attId) {
 
   static  public class SelectUserActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
-    	UITaskForm uiForm = event.getSource() ;
-    	String value = uiForm.getEventDelegation() ;
-    	uiForm.setEventDelegation(value) ;
-    	UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-    	UIPopupWindow uiPopupWindow = uiPopupContainer.getChild(UIPopupWindow.class) ;
-        if(uiPopupWindow == null)uiPopupWindow = uiPopupContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelectTaskForm", "UIPopupWindowUserSelectTaskForm") ;
-        UIUserSelector uiUserSelector = uiPopupContainer.createUIComponent(UIUserSelector.class, null, null) ;
-        uiUserSelector.setShowSearch(true);
-        uiUserSelector.setShowSearchUser(true) ;
-        uiUserSelector.setShowSearchGroup(true);
-        uiPopupWindow.setUIComponent(uiUserSelector);
-        uiPopupWindow.setShow(true);
-        uiPopupWindow.setWindowSize(740, 400) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;  
-//      UITaskForm uiForm = event.getSource() ;
-//      String value = uiForm.getEventDelegation() ;
-//      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-//      UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
-//      UIGroupSelector uiGroupSelector = uiPopupAction.activate(UIGroupSelector.class,500) ;
-//      uiGroupSelector.setType(UISelectComponent.TYPE_USER) ;
-//      uiGroupSelector.setSelectedGroups(null) ;
-//      uiGroupSelector.setFilter(false) ;
-//      uiForm.setEventDelegation(value) ;
-//      uiGroupSelector.setComponent(uiForm,new String[]{UITaskDetailTab.FIELD_DELEGATION}) ;
-//      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      UITaskForm uiForm = event.getSource() ;
+      String value = uiForm.getEventDelegation() ;
+      uiForm.setEventDelegation(value) ;
+      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupWindow uiPopupWindow = uiPopupContainer.getChild(UIPopupWindow.class) ;
+      if(uiPopupWindow == null)uiPopupWindow = uiPopupContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelectTaskForm", "UIPopupWindowUserSelectTaskForm") ;
+      UIUserSelector uiUserSelector = uiPopupContainer.createUIComponent(UIUserSelector.class, null, null) ;
+      uiUserSelector.setShowSearch(true);
+      uiUserSelector.setShowSearchUser(true) ;
+      uiUserSelector.setShowSearchGroup(true);
+      uiPopupWindow.setUIComponent(uiUserSelector);
+      uiPopupWindow.setShow(true);
+      uiPopupWindow.setWindowSize(740, 400) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;  
+      //      UITaskForm uiForm = event.getSource() ;
+      //      String value = uiForm.getEventDelegation() ;
+      //      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      //      UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
+      //      UIGroupSelector uiGroupSelector = uiPopupAction.activate(UIGroupSelector.class,500) ;
+      //      uiGroupSelector.setType(UISelectComponent.TYPE_USER) ;
+      //      uiGroupSelector.setSelectedGroups(null) ;
+      //      uiGroupSelector.setFilter(false) ;
+      //      uiForm.setEventDelegation(value) ;
+      //      uiGroupSelector.setComponent(uiForm,new String[]{UITaskDetailTab.FIELD_DELEGATION}) ;
+      //      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
   static  public class AddActionListener extends EventListener<UIUserSelector> {
@@ -924,7 +926,7 @@ public Attachment getAttachment(String attId) {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
     }
   }
-  
+
   static  public class CloseActionListener extends EventListener<UIUserSelector> {
     public void execute(Event<UIUserSelector> event) throws Exception {
       UIUserSelector uiUseSelector = event.getSource() ;
@@ -1134,7 +1136,7 @@ public Attachment getAttachment(String attId) {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         uiForm.setSelectedTab(TAB_TASKDETAIL) ;
       }
-      
+
       UITaskDetailTab uiDetailTab = uiForm.getChildById(TAB_TASKDETAIL) ;
       for (Attachment att : uiDetailTab.getAttachments()) {
         UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), att.getResourceId()) ;
@@ -1153,7 +1155,7 @@ public Attachment getAttachment(String attId) {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
-  
+
   static public class SelectTabActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
       event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      

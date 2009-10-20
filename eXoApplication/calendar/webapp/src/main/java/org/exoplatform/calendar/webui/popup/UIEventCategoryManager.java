@@ -32,8 +32,6 @@ import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.calendar.webui.UISearchForm;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -96,9 +94,6 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
     UIGrid uiGrid = getChild(UIGrid.class) ; 
     ObjectPageList objPageList = new ObjectPageList(categories, 10) ;
     uiGrid.getUIPageIterator().setPageList(objPageList) ;   
-  }
-  private SessionProvider getSession() {
-    return SessionProviderFactory.createSessionProvider() ;
   }
   static  public class EditActionListener extends EventListener<UIEventCategoryManager> {
     public void execute(Event<UIEventCategoryManager> event) throws Exception {
