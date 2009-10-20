@@ -299,11 +299,11 @@ UIAddContactPopupWindow.prototype.setVisible = function(visible, handler){
     //window.alert('handler callback: ', handler);
     //window.alert('handler callback: ', handler.addContactActionCallback);
     //eXo.communication.chatbar.webui.UIMainChatWindow.orgSearchUser();
+	this.handler = handler;
     eXo.communication.chatbar.webui.UIMainChatWindow.orgFuzzySearchUser('*', 0, 10);
     this.filterFieldNode.value = '';
     this.toggleSelectAllNode.checked = false;
     //this.filterFieldNode.focus();
-    this.handler = handler;
     this.uiPageIterator.destroy();
   } else {
     if (this.rootNode.style.display != 'none') {
