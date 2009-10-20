@@ -2277,6 +2277,7 @@ public class JCRDataStorage{
   }
 
 
+  @SuppressWarnings("deprecation")
   private Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate, String[] filterCalIds) throws Exception {
     int fromDayOfYear = fromDate.get(java.util.Calendar.DAY_OF_YEAR) ;
     int daysOfyer = fromDate.getMaximum(java.util.Calendar.DAY_OF_YEAR) ;
@@ -2285,13 +2286,21 @@ public class JCRDataStorage{
       toDayOfYear = toDayOfYear + daysOfyer ;
     }
     boolean isVictory = false ;
-    while(it.hasNext() && !isVictory) {
+    while(it.hasNext() && !isVictory) { 
       Node eventNode = it.nextNode() ;
       if(filterCalIds == null || !Arrays.asList(filterCalIds).contains(eventNode.getProperty(Utils.EXO_CALENDAR_ID).getString())) {
         java.util.Calendar eventFormDate = eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate() ;
         java.util.Calendar eventToDate = eventNode.getProperty(Utils.EXO_TO_DATE_TIME).getDate() ;
+
         int eventFromDayOfYear = eventFormDate.get(java.util.Calendar.DAY_OF_YEAR) ;
         int eventToDayOfYear = eventToDate.get(java.util.Calendar.DAY_OF_YEAR) ;
+        
+        if (eventFormDate.getTime().getYear() < fromDate.getTime().getYear()) {
+          eventFromDayOfYear = 1 ;
+        }
+        if (eventToDate.getTime().getYear() > toDate.getTime().getYear()) {
+          eventToDayOfYear = 366 ;
+        }
         Integer begin = -1 ;
         Integer end = -1 ;
         if(fromDayOfYear >= eventFromDayOfYear) {
