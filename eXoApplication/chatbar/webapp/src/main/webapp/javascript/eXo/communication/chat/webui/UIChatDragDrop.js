@@ -109,6 +109,10 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
     workspaceControlWidth = eXo.portal.UIControlWorkspace.width;
   } catch (error) {}
 
+  if (isNaN(workspaceControlWidth)) {
+      workspaceControlWidth = 0;
+  }
+  
   var UIPageDesktopNode = document.getElementById('UIPageDesktop');
   if (UIPageDesktopNode) {
     oTop += eXo.core.Browser.findPosYInContainer(eXo.communication.chatbar.webui.UIMainChatWindow.rootNode, document.body);
@@ -117,8 +121,10 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
       oLeft -= workspaceControlWidth;
     }
   } else {
+	if(!eXo.core.Browser.isIE8) 
+	  eXo.core.Browser.isIE8 = function(){return (navigator.userAgent.indexOf('MSIE 8') >= 0);};
     if ((!eXo.core.Browser.isIE6() &&
-        !eXo.core.Browser.isIE7())) {
+        !eXo.core.Browser.isIE7() && !eXo.core.Browser.isIE8())) {
       oLeft += workspaceControlWidth;
     }
   }
