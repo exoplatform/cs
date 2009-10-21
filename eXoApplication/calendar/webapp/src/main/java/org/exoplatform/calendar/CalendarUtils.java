@@ -147,6 +147,7 @@ public class CalendarUtils {
   final public static String ITEM_ALWAYS = "always".intern();
   final public static String ITEM_NERVER = "never".intern();
   final public static String ITEM_ASK = "ask".intern();
+  final public static String DEFAULT_CATEGORY = "all".intern() ;
 
   public static final String[] getUserGroups(String username) throws Exception {
     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
@@ -481,6 +482,7 @@ public class CalendarUtils {
       }
     return false ;
   }
+  @SuppressWarnings("unchecked")
   static public class SelectComparator implements Comparator{
     public int compare(Object o1, Object o2) throws ClassCastException {
       String name1 = ((SelectItemOption) o1).getLabel() ;
@@ -488,6 +490,7 @@ public class CalendarUtils {
       return name1.compareToIgnoreCase(name2) ;
     }
   }
+  @SuppressWarnings("unchecked")
   static public class ContactComparator implements Comparator{
     public int compare(Object o1, Object o2) throws ClassCastException {
       String name1 = ((ContactData) o1).getFullName() ;

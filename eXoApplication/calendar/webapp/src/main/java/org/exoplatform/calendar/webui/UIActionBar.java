@@ -19,16 +19,12 @@ package org.exoplatform.calendar.webui;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
 import org.exoplatform.calendar.webui.popup.UIFeed;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
-import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -57,8 +53,6 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIActionBar extends UIContainer  {
 
-//  final static String CURRENTTIME = "ct".intern() ;
-//  final static String TIMEZONE = "tz".intern() ;
   final static String CATEGORYID = "categoryId".intern() ;
   private boolean isShowPane_ = true ;
   private String currentView_ = null ;
@@ -69,45 +63,24 @@ public class UIActionBar extends UIContainer  {
 
   protected boolean isShowPane() {return isShowPane_ ;}
   protected void setShowPane(boolean isShow) {isShowPane_ = isShow ;}
-  private SessionProvider getSession() {
-    return SessionProviderFactory.createSessionProvider() ;
-  }
   static public class QuickAddEventActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-      if(CalendarUtils.getCalendarOption().isEmpty()) {
+      /*if(CalendarUtils.getCalendarOption().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
+      }*/
       List<EventCategory> eventCategories = CalendarUtils.getCalendarService().getEventCategories(CalendarUtils.getCurrentUser()) ;
       if(eventCategories.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String formTime = CalendarUtils.getCurrentTime(uiActionBar) ;//event.getRequestContext().getRequestParameter(CURRENTTIME) ;
-      //System.out.println(TimeZone.getTimeZone(calset.getTimeZone()) + "-" + calset.getTimeZone());
-      String categoryId = event.getRequestContext().getRequestParameter(CATEGORYID) ;
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarWorkingContainer workContainer = uiPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class) ;
       workContainer.getChild(UIPopupWindow.class).setShow(true) ;
-      
-      /*UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
-      if(CalendarEvent.TYPE_EVENT.equals(type)) {
-        uiQuickAddEvent.setEvent(true) ;        
-      } else {
-        uiQuickAddEvent.setEvent(false) ;
-        uiQuickAddEvent.setId(UIQuickAddEvent.UIQUICKADDTASK) ;
-      }
-      uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), formTime , null) ;
-      uiQuickAddEvent.update("0", null) ;
-      if(CalendarUtils.isEmpty(categoryId) || categoryId.toLowerCase().trim().equals("null")) uiQuickAddEvent.setSelectedCategory("meeting") ;
-      else uiQuickAddEvent.setSelectedCategory(categoryId) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;*/
     }
   }
 

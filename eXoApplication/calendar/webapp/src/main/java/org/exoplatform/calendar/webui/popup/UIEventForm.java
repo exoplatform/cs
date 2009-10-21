@@ -146,10 +146,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String FIELD_MEETING = "participant".intern() ;
 
   //TODO cs-839
-  //final public static String FIELD_PARTICIPANT = "participant".intern() ;
   final public static String FIELD_ISSENDMAIL = "isSendMail".intern() ;
-  //final public static String FIELD_INVITATION_NOTE = "invitationNote".intern() ;
-
   final public static String ITEM_PUBLIC = "public".intern() ;
   final public static String ITEM_PRIVATE = "private".intern() ;
   final public static String ITEM_AVAILABLE = "available".intern() ;
@@ -185,7 +182,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private String oldCalendarId_ = null ;
   private String newCalendarId_ = null ;
   private String confirm_msg = "";
-  //private String newCategoryId_ = null ;
   public UIEventForm() throws Exception {
     super("UIEventForm");
     this.setId("UIEventForm");
@@ -260,20 +256,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
       // cs-1790
       String eventCategoryId = eventCalendar.getEventCategoryId() ;
-      UIFormSelectBox selectBox = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
       if(!CalendarUtils.isEmpty(eventCategoryId)) {
-        boolean hasEventCategory = false ;
-        for (SelectItemOption<String> o : selectBox.getOptions()) {
-          if (o.getValue().equals(eventCategoryId)) {
-            hasEventCategory = true ;
-            break ;
-          }
-        }
-        if (!hasEventCategory){
-          //CS-2488
-          selectBox.getOptions().add(0,new SelectItemOption<String>("all", "all")) ;
-          //selectBox.getOptions().add(new SelectItemOption<String>(eventCalendar.getEventCategoryName(), eventCategoryId)) ;
-        }
         setSelectedCategory(eventCategoryId) ;
       } 
       setEventPlace(eventCalendar.getLocation()) ;
@@ -303,18 +286,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       //    TODO cs-839
       setParticipant(pars.toString()) ;
-      //boolean isContains = false ;
-      //CalendarService calService = CalendarUtils.getCalendarService();
-      /*List<EventCategory> listCategory = 
-        calService.getEventCategories(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser());
-      for(EventCategory eventCat : listCategory) {
-        isContains = (eventCalendar.getEventCategoryId() == null || eventCat.getName().equalsIgnoreCase(eventCalendar.getEventCategoryId())) ;
-        if(isContains) break ;
-      }*/
       if(eventCategoryId != null) {
-        /*SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryId(), eventCalendar.getEventCategoryId()) ;
-        uiSelectBox.getOptions().add(item) ;
-        newCategoryId_ = eventCalendar.getEventCategoryId() ;*/
         UIFormSelectBox uiSelectBox = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
         if(!isAddNew_ && ! String.valueOf(Calendar.TYPE_PRIVATE).equalsIgnoreCase(calType_) ){
           SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryName(), eventCalendar.getEventCategoryId()) ;
@@ -373,7 +345,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(CalendarUtils.getCurrentUser()) ;
-    options.add(new SelectItemOption<String>("all", "all")) ;
+    options.add(new SelectItemOption<String>(CalendarUtils.DEFAULT_CATEGORY, CalendarUtils.DEFAULT_CATEGORY)) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
     }
@@ -399,14 +371,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     return options ;
   }
 
-  /*private List<SelectItemOption<String>> getSendValue() {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>(ITEM_ALWAYS, ITEM_ALWAYS)) ;
-    options.add(new SelectItemOption<String>(ITEM_NERVER, ITEM_NERVER)) ;
-    options.add(new SelectItemOption<String>(ITEM_ASK, ITEM_ASK)) ;
-    return options ;
-  }*/
-
   public String[] getActions() {
     return new String[]{"Save", "Cancel"} ;
   }
@@ -426,10 +390,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       errorMsg_ = getId() +  ".msg.event-calendar-required" ;
       return false ;
     } 
-    if(CalendarUtils.isEmpty(getEventCategory())) {
+    /*if(CalendarUtils.isEmpty(getEventCategory())) {
       errorMsg_ = getId() +  ".msg.event-category-required" ;
       return false ;
-    }
+    }*/
     if(CalendarUtils.isEmpty(getEventFormDateValue())) {
       errorMsg_ = getId() +  ".msg.event-fromdate-required" ;
       return false ;
@@ -452,29 +416,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }
-    //if(!getEventAllDate()) {
-    /*if(CalendarUtils.isEmpty(getEventToDateValue())){
-        errorMsg_ = "UIEventForm.msg.event-todate-required" ;
-        return false ;
-      } */
-    /*try {
-        getEventToDate(dateFormat, timeFormat) ;
-      } catch (Exception e) {
-        e.printStackTrace() ;
-        errorMsg_ =  "UIEventForm.msg.event-todate-notvalid" ;
-        return false ;
-      }*/
-    //try {
     if(from.after(to) || from.equals(to)){
       errorMsg_ = "UIEventForm.msg.event-date-time-logic" ;
       return false ;
     }
-    /*} catch (Exception e) {
-        e.printStackTrace() ;
-        errorMsg_ = "UIEventForm.msg.event-date-time-getvalue" ;
-        return false ;
-      }    */  
-    // }
     errorMsg_ = null ;
     return true ;
   }
@@ -498,22 +443,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     if(isSendMail() && getMeetingInvitation() == null) {
       errorMsg_ = "UIEventForm.msg.error-particimant-email-required" ;
       return false ;
-    }/*else if (isSendMail()) {
-      errorValues = null ;
-      //getParticipants() ;
-      StringBuilder buider = new StringBuilder("") ;
-      for (String par : getParticipantValues().split(CalendarUtils.COMMA)) {
-        if (CalendarUtils.getOrganizationService().getUserHandler().findUserByName(par) == null) {
-          if (buider.length() > 0) buider.append(", ") ; 
-          buider.append(par) ;
-        }
-      }
-      if (buider.length() > 0) {
-        errorMsg_ = "UIEventForm.msg.invalid-username" ;
-        errorValues = buider.toString() ;
-        return false ;
-      }
-    }*/
+    } 
     errorMsg_ = null ;
     return true ;
   }
@@ -552,7 +482,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
   protected String getEventCategory() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    return eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getValue() ;
+    String value = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getValue() ;
+    if(CalendarUtils.DEFAULT_CATEGORY.equalsIgnoreCase(value)) value = null ;
+    return value;
   }
   public void setSelectedCategory(String value) {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
@@ -822,17 +754,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       StringBuffer sb = new StringBuffer() ;
       boolean isExist = false ;
       //    TODO cs-839
-      /*     if(getParticipants() != null) {
-        for(String s : getParticipants()) {
-          if(s.equals(CalendarUtils.getCurrentUser())) isExist = true ;
-          break ;
-        }
-        for(String s : getParticipants()) {
-          if(sb.length() >0) sb.append(CalendarUtils.COMMA);
-          sb.append(s);
-        }
-      }
-       */
       if(!isExist) {
         if(sb.length() >0) sb.append(CalendarUtils.COMMA);
         sb.append(CalendarUtils.getCurrentUser());
@@ -902,10 +823,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   } 
 
   protected String getInvitationEmail() {
-    //UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
-    // String invitation = eventDetailTab.getUIFormTextAreaInput(FIELD_MEETING).getValue() ;
-    /* if(CalendarUtils.isEmpty(invitation)) return null ;
-    else return invitation.split(CalendarUtils.COMMA) ;*/
     //TODO cs-764
     StringBuilder buider = new StringBuilder("") ;
     for (Entry<String, String> par : participantStatus_.entrySet()) {
@@ -913,7 +830,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       if(par.getKey().contains("@")) buider.append(par.getKey()) ;
     }
     return buider.toString() ;
-    //return invitation ;
   } 
   protected void setMeetingInvitation(String[] values) {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
@@ -926,24 +842,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
     eventDetailTab.getUIFormTextAreaInput(FIELD_MEETING).setValue(sb.toString()) ;
   }
-  //TODO cs-839
-  /*
-  protected String[] getParticipants() throws Exception {
-    String participants = getParticipantValues() ;
-    if(CalendarUtils.isEmpty(participants)) return null ;
-    else {
-      OrganizationService orgService = CalendarUtils.getOrganizationService() ;
-      Map<String, String> parMap = new HashMap<String, String> () ;
-      for(String user : participants.split(CalendarUtils.COMMA))  {
-        if(orgService.getUserHandler().findUserByName(user.trim()) != null) {
-          parMap.put(user.trim(), user.trim()) ;
-        } else if(CalendarUtils.isValidEmailAddresses(user.trim())) {
-          //parMap.put(user.trim(), user.trim()) ;
-        }
-      }
-      return parMap.values().toArray(new String[parMap.values().size()]) ;
-    }
-  } */
   //TODO cs-839
   protected String  getParticipantValues() {
     StringBuilder buider = new StringBuilder("") ;
@@ -967,7 +865,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   protected void  setParticipantStatusValues(String[] values) {
     participantStatus_.clear();
     participantStatusList_.clear();
-    // StringBuilder buider = new StringBuilder("") ;
     for (String par : values) {
       String[] entry = par.split(":");
       if(entry.length>1){
@@ -983,7 +880,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
   //TODO cs-839
   public void setParticipant(String values) throws Exception{
-    //participants_.clear() ;
     OrganizationService orgService = CalendarUtils.getOrganizationService() ;
     StringBuffer sb = new StringBuffer() ;
     for(String s : values.split(CalendarUtils.BREAK_LINE)) {
@@ -1007,24 +903,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   } 
 
   public void setParticipantStatus(String values) throws Exception{
-    //participantStatus_.clear();
     for(String s : values.split(CalendarUtils.BREAK_LINE)) {
       if(s.trim().length()>0)
         if(participantStatus_.put(s.trim(), STATUS_EMPTY) == null)
           participantStatusList_.add(new ParticipantStatus(s.trim(),STATUS_EMPTY));
     }
   }
-  /*public void setParticipant(String[] values) throws Exception{
-    StringBuffer sb = new StringBuffer() ;
-    if(values != null) {
-      for(String s : values) {
-        if(sb.length() > 0) sb.append(CalendarUtils.BREAK_LINE) ;
-        sb.append(s) ;
-      }
-      participantList_=sb.toString();
-      setParticipant(participantList_);
-    }
-  }*/
 
   protected SessionProvider getSession() {
     return SessionProviderFactory.createSessionProvider() ;
@@ -1034,13 +918,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
 
   protected boolean isSendMail() {
-    // UIFormInputWithActions uiShareTab = getChildById(TAB_EVENTSHARE) ;
-    return false ; //uiShareTab.getUIFormCheckBoxInput(FIELD_ISSENDMAIL).isChecked() ;
+    return false ;  
   }
-  /*protected String getInvitationNote() {
-    UIFormInputWithActions uiShareTab = getChildById(TAB_EVENTSHARE) ;
-    return uiShareTab.getUIFormTextAreaInput(FIELD_INVITATION_NOTE).getValue() ;
-  }*/
 
   protected void sendMail(MailService svr, OrganizationService orSvr,CalendarSetting setting, Account acc, String fromId,  String toId, CalendarEvent event) throws Exception {
     List<Attachment> atts = getAttachments(null, false);
@@ -1113,13 +992,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
     StringBuffer sbAddress = new StringBuffer() ;
     //  TODO cs-839
-    /* for(String s : toId.split(CalendarUtils.COMMA)) {
-      s = s.trim() ;
-      User reciver = orSvr.getUserHandler().findUserByName(s.trim()) ;
-      if(reciver.getEmail() != null)
-        if(!CalendarUtils.isEmpty(sbAddress.toString())) sbAddress.append(CalendarUtils.COMMA) ;
-      sbAddress.append(reciver.getEmail()) ;
-    }*/
     if(event.getInvitation()!= null) {
       for(String s : event.getInvitation()) {
         s = s.trim() ; 
@@ -1321,7 +1193,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           if(currentCalendar == null) {
             uiPopupAction.deActivate() ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-            //event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
@@ -1393,19 +1264,17 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           calendarEvent.setDescription(description) ;
           calendarEvent.setCalType(uiForm.calType_) ;
           calendarEvent.setCalendarId(calendarId) ;
-          calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
-          //if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {c
-          //  String eventCategoryName = calService.getEventCategory(uiForm.getSession(), username, uiForm.getEventCategory()).getName() ;
-          //  calendarEvent.setEventCategoryName(eventCategoryName) ;              
-          UIFormSelectBox selectBox = ((UIFormInputWithActions)uiForm.getChildById(TAB_EVENTDETAIL))
-          .getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
-          for (SelectItemOption<String> o : selectBox.getOptions()) {
-            if (o.getValue().equals(selectBox.getValue())) {
-              calendarEvent.setEventCategoryName(o.getLabel()) ;
-              break ;
-            }
-          }              
-          //}
+          if(uiForm.getEventCategory() != null) {
+            calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
+            UIFormSelectBox selectBox = ((UIFormInputWithActions)uiForm.getChildById(TAB_EVENTDETAIL))
+            .getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
+            for (SelectItemOption<String> o : selectBox.getOptions()) {
+              if (o.getValue().equals(selectBox.getValue())) {
+                calendarEvent.setEventCategoryName(o.getLabel()) ;
+                break ;
+              }
+            }              
+          }
           calendarEvent.setLocation(location) ;
           calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
           calendarEvent.setPriority(uiForm.getEventPriority()) ; 
@@ -1429,12 +1298,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
               String toCal = uiForm.newCalendarId_.split(CalendarUtils.COLON)[1].trim() ;
               String fromType = uiForm.oldCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
               String toType = uiForm.newCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
-              /*if(uiForm.newCategoryId_ != null) {
-                EventCategory evc = new EventCategory() ;
-                evc.setName(uiForm.newCategoryId_ ) ;
-                calService.saveEventCategory(uiForm.getSession(), username, evc, null, true) ;
-                uiViewContainer.updateCategory() ;
-              }*/
               List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
               listEvent.add(calendarEvent) ;
               calService.moveEvent(fromCal, toCal, fromType, toType, listEvent, username) ;
@@ -1488,26 +1351,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           }
           if(calendarEvent != null && uiForm.isSendMail()) {
             Account acc = CalendarUtils.getMailService().getDefaultAccount(username);
-            //if(acc != null) {
             try {
-              /*    StringBuffer recive = new StringBuffer() ; 
-
-//            TODO cs-839
-              for(String rc : uiForm.getParticipantValues().split(CalendarUtils.COMMA)) {
-                rc = rc.trim() ;                                 
-                if(recive.length() > 0) recive.append(CalendarUtils.COMMA) ;
-                recive.append(rc) ;
-              }*/
               uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, uiForm.getParticipantValues(), calendarEvent) ;
             } catch (Exception e) {
               uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
               e.printStackTrace() ;
             }
-            /* } else {
-              uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.cant-send-email", null));
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            }*/
           }
           //TODO cs-764
           else {
@@ -1640,26 +1490,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         UIAddressForm uiAddressForm = uiPopupAction.activate(UIAddressForm.class, 640) ;
         uiAddressForm.setContactList("") ;
         String oldAddress = uiForm.getEmailAddress() ;
-        /*
-        List<Contact> allContact = new ArrayList<Contact>() ;
-        ContactService contactService = uiAddressForm.getApplicationComponent(ContactService.class) ;
-        String username = CalendarUtils.getCurrentUser() ;
-        DataPageList dataList = contactService.searchContact(username, new ContactFilter()) ;
-        allContact = dataList.getAll() ;
-        if(!allContact.isEmpty()) {
-          if(!CalendarUtils.isEmpty(oldAddress)) {
-            for(String address : oldAddress.split(",")) {
-              for(Contact c : allContact){
-                if(!CalendarUtils.isEmpty(c.getEmailAddress())) {
-                  if(Arrays.asList(c.getEmailAddress().split(";")).contains(address.trim())) {
-                    uiAddressForm.checkedList_.put(c.getId(), c) ;
-                  }
-                }
-              }
-            }
-          }
-        }
-         */
         List<ContactData> contacts = uiAddressForm.getContactList() ;
         if(!CalendarUtils.isEmpty(oldAddress)) {
           for(String address : oldAddress.split(",")) {
@@ -1732,7 +1562,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       event.getRequestContext().addUIComponentToUpdateByAjax(tabAttender) ;       
 
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      //uiContainer.addChild(UIInvitationForm.class) ;
       UIPopupAction uiPopupAction = uiContainer.getChild(UIPopupAction.class);
       UIPopupContainer uiInvitationContainer= uiPopupAction.createUIComponent(UIPopupContainer.class, null, "UIInvitationContainer");
       uiInvitationContainer.getChild(UIPopupAction.class).setId("UIPopupAction3") ;
@@ -1742,24 +1571,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       uiForm.participantList_ = new String("");
       uiInvitationForm.setParticipantValue(uiForm.participantList_) ;
       uiPopupAction.activate(uiInvitationContainer, 500, 0, true);
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiInvitationContainer);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-
-
-      /* UIPopupContainer uiContainer2 = uiContainer.getChild(UIPopupAction.class).addChild(UIPopupContainer.class, null, null)  ;
-      uiContainer2.getChild(UIPopupAction.class).setId("newId") ;
-      uiContainer2.getChild(UIPopupAction.class).getChild(UIPopupWindow.class).setId("newIdWindow") ;*/
-
-      /*UIPopupWindow uiPopupWindow = uiContainer2.getChild(UIPopupWindow.class) ;
-      if(uiPopupWindow == null)uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelectEventForm", "UIPopupWindowUserSelectEventForm") ;
-      UIUserSelector uiUserSelector = uiContainer2.createUIComponent(UIUserSelector.class, null, null) ;
-      uiUserSelector.setShowSearch(true);
-      uiUserSelector.setShowSearchUser(true) ;
-      uiUserSelector.setShowSearchGroup(true);
-      uiPopupWindow.setUIComponent(uiUserSelector);
-      uiPopupWindow.setShow(true);
-      uiPopupWindow.setWindowSize(740, 400) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer2) ;      */
     }
   }
   static  public class AddActionListener extends EventListener<UIUserSelector> {
@@ -1770,7 +1582,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIEventShareTab uiEventShareTab =  uiEventForm.getChild(UIEventShareTab.class);
       Long currentPage = uiEventShareTab.getCurrentPage();
       //    TODO cs-839
-      //String currentValues = uiEventForm.getParticipantValues();
       String values = uiUserSelector.getSelectedUsers();
       List<String> currentEmails = new ArrayList<String>() ;
       String [] invitors = uiEventForm.getMeetingInvitation() ;
@@ -1801,10 +1612,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIPopupContainer uiPopupContainer = uiForm.getParent();  
       uiPopupContainer.deActivate();
       UIPopupWindow uiPopupWindow = uiPopupContainer.getChildById("UIPopupWindowAddUserEventForm") ;
-      /*if(uiPopupWindow != null) {
-        uiPopupWindow.setShow(false) ;
-        uiPopupWindow.setUIComponent(null) ;
-      }*/
       if(uiPopupWindow == null)uiPopupWindow = uiPopupContainer.addChild(UIPopupWindow.class, "UIPopupWindowAddUserEventForm", "UIPopupWindowAddUserEventForm") ;
       UIUserSelector uiUserSelector = uiPopupContainer.createUIComponent(UIUserSelector.class, null, null) ;
       uiUserSelector.setShowSearch(true);
@@ -1852,8 +1659,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_FROM).setCalendar(uiEventAttenderTab.calendar_) ;
         uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_TO).setCalendar(uiEventAttenderTab.calendar_) ;
       }
-      /*uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_FROM).setCalendar(uiEventAttenderTab.calendar_) ;
-      uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_TO).setCalendar(uiEventAttenderTab.calendar_) ;*/
       uiForm.setSelectedTab(TAB_EVENTATTENDER) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }
@@ -1898,7 +1703,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       uiForm.getChild(UIEventShareTab.class).setParticipantStatusList(uiForm.getParticipantStatusList());
       //    TODO cs-839
-      //uiForm.setParticipant(newPars.toString()) ;
       uiForm.setSelectedTab(TAB_EVENTATTENDER) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_EVENTATTENDER)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_EVENTSHARE)) ;
@@ -1909,10 +1713,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      //UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      //UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      //UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      //CalendarSetting calSetting = calendarPortlet.getCalendarSetting() ;
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       //TODO cs-764
       if(!uiForm.isReminderValid()) {
@@ -1924,10 +1724,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       else {
         String sendOption = uiForm.getSendOption();
-        /*if(sendOption.equalsIgnoreCase(CalendarSetting.ACTION_BYSETTING))
-        sendOption = calSetting.getSendOption(); */
         if(CalendarSetting.ACTION_ASK.equalsIgnoreCase(sendOption)){
-          // Show Confirm
           UIPopupAction pAction = uiPopupContainer.getChild(UIPopupAction.class) ;
           UIConfirmForm confirmForm =  pAction.activate(UIConfirmForm.class, 500);
           confirmForm.setConfirmMessage(uiForm.confirm_msg);
@@ -1935,10 +1732,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           event.getRequestContext().addUIComponentToUpdateByAjax(pAction) ;
         }
         else {
-          if(CalendarSetting.ACTION_ALWAYS.equalsIgnoreCase(sendOption))
-            uiForm.SaveAndNoAsk(event, true);
-          else
-            uiForm.SaveAndNoAsk(event, false);
+          uiForm.SaveAndNoAsk(event, CalendarSetting.ACTION_ALWAYS.equalsIgnoreCase(sendOption));
         }
       }
     }
