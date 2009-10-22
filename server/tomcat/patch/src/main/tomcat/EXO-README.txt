@@ -29,30 +29,26 @@ experience more productive. It offers several ways to to view and organize your 
 =============
  What's new?
 =============
-exo Collaboration Suite 1.3 features several noteworthy changes:
+exo Collaboration Suite 1.3.2 features several noteworthy changes:
 
     * General
-          o Upgraded to portal 2.5.5
-          o Compatible with webos 1.5
-          o Right to left (RTL) orientation support
-          o Arabic translations
-    * Calendar
-          o Quick add event and task by javaScript for faster
-          o Revamped participants and invitations dialog
-          o Dynamic iCal generation for feeds (CalDAV and RSS)
-    * Mail
-          o IMAP folders listing and fetching
-          o Return receipts
-          o New layouts (vertical, horizontal, switch layout)
-    * Address Book
-          o Collected adresses adress book to collect contacts from Mail
-          o Enhanced integration in Mail
-    * Chat
-          o Jabber chat server
-          o Chat Bar application
-          o WebOS friendly chat application
           
-Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
+	  o Upgraded to core 2.1.6
+          o Upgraded to kernel 2.0.8 
+          o Upgraded to jcr 1.10.5          
+	  o Upgraded to ws 1.3.4
+	  o Upgraded to portlet-container 2.0.7          
+	  o Upgraded to portal 2.5.6.1
+          o Upgraded to webos 1.5.3
+          
+    * Calendar
+          o Remove event category but keep events
+    * Mail
+          o Faster calling contacts on mail     
+    * Chat
+          o Support for FF 3.5  
+          
+Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes          
           
 =========
  INSTALL
@@ -69,7 +65,7 @@ Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/
 
 - Collaboration suite quick start guide
   Collaboration suite have 2 servers need to run at same time to use:
-    +) exo-tomcat: this is main tomcat server include Collaboration web applications and all dependencies.     
+    +) exo-jboss: this is main jboss server include Collaboration web applications and all dependencies.     
     +) exo-openfire: a Jabber server used for Chat applications
 
 Need to set the JAVA_HOME variable for run Collaboration suite's servers.
@@ -81,18 +77,18 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
     Example use: export JAVA_HOME=`cygpath -w "$JAVA_HOME"`; to convert unix like format to MS Windows format.
    
    * Start all servers by one command for Unix/Linux/cygwin environment:
-      Go to exo-tomcat/bin and run command:
-      ./eXo.sh
+      Go to exo-jboss/bin and run command:
+      ./run.sh
    
-   * Start exo-tomcat server:
+   * Start exo-jboss server:
    
      +) On the Windows platform
        Open a DOS prompt command, go to exo-tomcat/bin and type the command:
-         eXo.bat run
+         run.bat start
 
      +) On Unix/Linux/cygwin
        Open a terminal, go to exo-tomcat/bin and type the command:
-         ./eXo.sh run
+         ./run.sh
     
    * Start exo-openfire server:
      +) On the Windows platform
@@ -137,6 +133,48 @@ All those accounts have the default password "exo".
  CHANGELOG
 ===========
 - 1.3.2
+
+Release Notes - exo-cs - Version cs-1.3.2
+
+** Bug
+    * [CS-911] - Events spanning 2 years are not highlighted
+    * [CS-2482] - List view: should be hide events/tasks of calendar which is uncheck in calendar list
+    * [CS-2498] - some users are not shown at task delegation field when have many users , who was added into Task delegation
+    * [CS-2506] - Dragging a link displays 'javascript:void(0)'
+    * [CS-2621] - Error when run email reminder job and  popup reminder job
+    * [CS-3004] - Chat: MacOS, FF3: Little error when show room config form
+    * [CS-3017] - Room owner can not see other in joining room users list 
+    * [CS-3033] - should disable the some funtions on right menu of a group address book
+    * [CS-3165] - unnecessary exception found while concurrently creating events
+    * [CS-3171] - Don't arrange mail in time order when filter with adding tag
+    * [CS-3246] - contact list in public room is empty in special case 
+    * [CS-3271] - Contact list in maill app error when show on RTL (arabic)
+    * [CS-3307] - IE6: UI error when show event in Week/week work view, day view, month view
+    * [CS-3309] - Safari : List View: UI error when view event/task which store attachment
+    * [CS-3315] - Messages are not displayed in chat window
+    * [CS-3318] - don't send file in IE8 while chatting
+    * [CS-3319] - IE8: user Can't save file when another user send file
+    * [CS-3326] - Safari : Still Keep session of user when that user logout 
+    * [CS-3327] - SMTP Error when sending mail : could not connect to SMTP server
+    * [CS-3343] - IE7: UI error when search contact in case Result is empty
+    * [CS-3351] - Content of alert message is wrong when join room in special case 
+    * [CS-3355] -  if add star for message can't resize Detail message pane when view in Vertical layout
+    * [CS-3371] - Can only see the messages I send in a private chat or in a room
+    * [CS-3372] - Functionality "Show messages from" doesn't work
+    * [CS-3402] - IMAP folders containing '/' not handled properly
+    * [CS-3416] - automatically hide event/task of calendar when create new event/task in special case     
+
+** Feedback
+    * [CS-3127] - Calling Address Book from Mail is too slow
+
+** Improvement
+    * [CS-569] - Fetch headers
+    * [CS-2488] - do not destroy events when deleting a category   
+    * [CS-2761] - Order of the columns in message list   
+
+** Task
+    * [CS-2483] - remove duplicate rome dependency
+    * [CS-3269] - Upgrade to portal 2.5.6.1 
 
 - 1.3.1
 ** Bug

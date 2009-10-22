@@ -221,7 +221,8 @@ UIWeekView.prototype.drop = function(evt) {
 	document.onmousemove = null ;
 	var _e = window.event || evt ;
 	var UIWeekView = eXo.calendar.UIWeekView ;
-	if (!UIWeekView.isCol(_e)) return ;
+	var isEventbox = eXo.core.EventManager.getEventTargetByClass(evt,"WeekViewEventBoxes");
+	if (!UIWeekView.isCol(_e) || !isEventbox) return ;
 	var currentCol = UIWeekView.currentCol ;
 	var sourceCol = UIWeekView.dragElement.parentNode ;
 	var eventY = UIWeekView.eventY ;
