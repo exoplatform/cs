@@ -91,7 +91,18 @@ uiform.begin() ;
 			        						<td class="Text">
 			        							<%=uiform.getLabel('TaskDelegation')%>
 			        						</td>
-			        						<td class="Text"><%=(CalendarUtils.isEmpty(task.getTaskDelegator()))? "" : task.getTaskDelegator()%></td>
+			        						
+			        						<% 
+														delegators = task.getTaskDelegator();
+							  		  			String subDelegators ;
+														if (CalendarUtils.isEmpty(delegators)) subDelegators = "" ;
+					  		  					else {
+					  		  						delegators = delegators.replaceAll(",", ", ") ;
+					  		  					  if (delegators.length() > 50) subDelegators = delegators.substring(0, 50) + "..." ;
+				  		  						  else subDelegators = delegators ;	
+					  		  					}
+												 %>
+			        						<td class="Text" title="$delegators"><%=subDelegators%></td>
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">
