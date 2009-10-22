@@ -118,8 +118,8 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
       CalendarService calService = uiManager.getApplicationComponent(CalendarService.class) ;
       String username = CalendarUtils.getCurrentUser() ;
       calService.removeEventCategory(username, eventCategoryName) ;
-      UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; 
+      //UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; 
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       if(uiViewContainer.getRenderedChild()  instanceof UIListContainer) {
         UIListContainer list = (UIListContainer)uiViewContainer.getRenderedChild() ;
@@ -131,16 +131,16 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
           uiListView.setLastViewId(null) ;
           UISearchForm uiSearchForm = calendarPortlet.findFirstComponentOfType(UISearchForm.class) ;
           uiSearchForm.reset() ;
-          UIActionBar uiActionBar = calendarPortlet.findFirstComponentOfType(UIActionBar.class) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchForm) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+          //UIActionBar uiActionBar = calendarPortlet.findFirstComponentOfType(UIActionBar.class) ;
+          //event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchForm) ;
+          //event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
         }
       }
       uiViewContainer.updateCategory() ;
       uiViewContainer.refresh() ;
-      UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
+      //UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
       Long currentPage  = uiManager.getCurrentPage() ;
       uiManager.updateGrid() ;
       if(currentPage <= uiManager.getAvailablePage()) uiManager.setCurrentPage(currentPage.intValue()) ;
@@ -151,13 +151,14 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
       if(uiEventDetailTab != null) { 
         uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setOptions(UIEventForm.getCategory());
         uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(uiManager.categoryId_) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiEventDetailTab) ;
+        //event.getRequestContext().addUIComponentToUpdateByAjax(uiEventDetailTab) ;
        }
       if(uiTaskDetailTab != null) {
         uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setOptions(UIEventForm.getCategory());
         uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setValue(uiManager.categoryId_) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskDetailTab) ;
+        //event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskDetailTab) ;
       }
+      event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ; 
     }
   }
 }

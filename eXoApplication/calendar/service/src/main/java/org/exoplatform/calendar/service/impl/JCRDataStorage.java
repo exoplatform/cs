@@ -726,6 +726,7 @@ public class JCRDataStorage{
             NodeIterator it = calendar.getNodes();
             while(it.hasNext()){
               Node eventNode = it.nextNode() ;
+              if(eventNode.hasProperty(Utils.EXO_EVENT_CATEGORYID))
               if (eventNode.getProperty(Utils.EXO_EVENT_CATEGORYID).getString().equals(eventCategory.getId()))
                 eventNode.setProperty(Utils.EXO_EVENT_CATEGORY_NAME, eventCategory.getName()) ;
             }
@@ -779,16 +780,25 @@ public class JCRDataStorage{
     if(eventCategoryHome.hasNode(eventCategoryName)) {
       Node eventCategoryNode = eventCategoryHome.getNode(eventCategoryName) ;
       //CS-3482
-      //SessionProvider systemSession = SessionProvider.createSystemProvider() ;
-      /*for(CalendarEvent ce : getUserEventByCategory(username, eventCategoryName)) {
-          removeUserEvent(username, ce.getCalendarId(), ce.getId()) ;
+      // SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+     for(CalendarEvent ce : getUserEventByCategory(username, eventCategoryName)) {
+          ce.setEventCategoryId(null);
+          ce.setEventCategoryName(null);
+          saveUserEvent(username, ce.getCalendarId(), ce, false) ;
+          //removeUserEvent(username, ce.getCalendarId(), ce.getId()) ;
         }
         for(CalendarEvent ce : getSharedEventByCategory(username, eventCategoryName)) {
-          removeSharedEvent(username, ce.getCalendarId(), ce.getId()) ;
+          ce.setEventCategoryId(null);
+          ce.setEventCategoryName(null);
+          saveEventToSharedCalendar(username, ce.getCalendarId(), ce, false);
+          //removeSharedEvent(username, ce.getCalendarId(), ce.getId()) ;
         }
         for(CalendarEvent ce : getPublicEventByCategory(username, eventCategoryName)) {
-          removePublicEvent(ce.getCalendarId(), ce.getId()) ;
-        }*/
+          ce.setEventCategoryId(null);
+          ce.setEventCategoryName(null);
+          savePublicEvent(ce.getCalendarId(), ce, false) ;
+          //removePublicEvent(ce.getCalendarId(), ce.getId()) ;
+        } 
       eventCategoryNode.remove() ;
       eventCategoryHome.save() ;
       eventCategoryHome.getSession().save() ;
@@ -867,6 +877,7 @@ public class JCRDataStorage{
             NodeIterator it = calendar.getNodes();
             while(it.hasNext()){
               Node eventNode = it.nextNode() ;
+              if(eventNode.hasProperty(Utils.EXO_EVENT_CATEGORYID))
               if (eventNode.getProperty(Utils.EXO_EVENT_CATEGORYID).getString().equals(eventCategoryId)) {
                 events.add(getEvent(eventNode)) ;
               }
@@ -877,20 +888,6 @@ public class JCRDataStorage{
           }
         }
       }
-      /*    
-    try {
-      while (calIter.hasNext()) {
-        StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
-                                                    + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
-                                                    append(eventCategoryId).
-                                                    append("']");
-        query = qm.createQuery(queryString.toString(), Query.XPATH);
-        result = query.execute();
-        NodeIterator it = result.getNodes();
-        while(it.hasNext()){
-          events.add(getEvent(systemSession, it.nextNode())) ;
-        }
-      }*/
     } catch (Exception e) {
       e.printStackTrace() ;
     } finally {
