@@ -1175,7 +1175,7 @@
 .UIMailPortlet .VerticalResizeReadingPane {
 	background: url('background/VerticalResizeReadingPane3x38.gif') no-repeat center;
 	height: 38px;
-	cursor: ew-resize;
+	cursor: e-resize;
 	width: 5px;
 }
 
