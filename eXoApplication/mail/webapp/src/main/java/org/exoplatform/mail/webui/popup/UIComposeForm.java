@@ -51,6 +51,7 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -143,6 +144,46 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     String username = MailUtils.getCurrentUser();
     accountId_ = accountId ;
     MailService mailSrv = getApplicationComponent(MailService.class);
+    
+    // img
+    if (msg.getAttachments() != null) {
+      List<String> imgLinks = new ArrayList<String>();
+      for (Attachment attach : msg.getAttachments()) {
+        String attLink = MailUtils.getImageSource(attach, getDownloadService()) ;        
+        if (attLink != null && attach.getMimeType().toLowerCase().indexOf("image") > -1) {
+          attLink = "/"+ getPortalName()+"/rest/jcr/" + getRepository() + attach.getPath() ;
+          imgLinks.add(attLink);
+        }
+      }
+      String body = msg.getMessageBody();
+      String[] imgs = body.split("img");
+      List<String> newBody = new ArrayList<String>();
+      for (String img : imgs) {
+        try {
+          int indexSrc = img.indexOf("src") ;
+          if (indexSrc == -1) {
+            newBody.add(img);
+            continue;
+          }
+          int endSrc = img.indexOf("\"", indexSrc + 5);
+          String oldSrc = img.substring(indexSrc + 5, endSrc);
+          String newSrc = imgLinks.get(0);
+          for (String src : imgLinks) {
+            if (src.contains(oldSrc.substring(4))) {
+              newSrc = src;
+              break;
+            }
+          }
+          img = img.replace(oldSrc, newSrc);
+          newBody.add("img" + img);
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }      
+      StringBuilder builder = new StringBuilder();
+      for (String img : newBody) builder.append(img);
+      msg.setMessageBody(builder.toString());
+    }
     for(Account acc : mailSrv.getAccounts(username)) {
       SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
       if (acc.getId().equals(accountId)) { itemOption.setSelected(true); }
@@ -180,6 +221,18 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     setMessage(msg, composeType);
   }
 
+  public DownloadService getDownloadService() { 
+    return getApplicationComponent(DownloadService.class) ; 
+  }
+  public String getPortalName() {
+    PortalContainer pcontainer =  PortalContainer.getInstance() ;
+    return pcontainer.getPortalContainerInfo().getContainerName() ;  
+  }
+  public String getRepository() throws Exception {
+    RepositoryService rService = getApplicationComponent(RepositoryService.class) ;    
+    return rService.getCurrentRepository().getConfiguration().getName() ;
+  }
+  
   public List<ContactData> getToContacts() { return toContacts; }
   public void setToContacts(List<ContactData> contactList) { toContacts = contactList; }
 
@@ -281,6 +334,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       setFieldToValue(msg.getMessageTo());
       setFieldCcValue(msg.getMessageCc()) ;
       setFieldBccValue(msg.getMessageBcc()) ;
+      
+     
+      
       setFieldContentValue(formatContent(msg));
       isReturnReceipt = msg.isReturnReceipt();
       setPriority(msg.getPriority());
