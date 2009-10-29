@@ -64,7 +64,7 @@ public class UICalendarWorkingContainer extends UIContainer  {
     uiWindowE.setUIComponent(quickAddForm) ;
     uiWindowE.setWindowSize(540, 0);
 
-  UIPopupWindowQuick uiWindowT =  getChildById("UIQuckAddTaskPopupWindow") ;
+    UIPopupWindowQuick uiWindowT =  getChildById("UIQuckAddTaskPopupWindow") ;
     if(uiWindowT == null) uiWindowT = addChild(UIPopupWindowQuick.class, null, "UIQuckAddTaskPopupWindow") ;
     UIQuickAddEvent quickAddTask = (UIQuickAddEvent)uiWindowT.getUIComponent();
     if(quickAddTask == null) quickAddTask = createUIComponent(UIQuickAddEvent.class, null, null) ; 
