@@ -132,6 +132,20 @@
 	width: 104px;
 }
 
+.UICalendarPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .CheckBoxRepeat {
+	float: left;
+}
+
+.UICalendarPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .RepeatLabel {
+	float: left;
+	margin-left: 7px;
+}
+
+.UICalendarPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .RepeatInterval {
+	float: left;
+	margin-left: 7px;
+}
+
 .UICalendarPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Time{
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */

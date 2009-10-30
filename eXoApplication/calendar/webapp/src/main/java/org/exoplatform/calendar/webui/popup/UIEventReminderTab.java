@@ -48,7 +48,8 @@ public class UIEventReminderTab extends UIFormInputWithActions {
   final public static String FIELD_EMAIL_ADDRESS = "mailReminderAddress".intern() ;
   final public static String EMAIL_REPEAT_INTERVAL = "emailRepeatInterval".intern() ;
   final public static String EMAIL_IS_REPEAT = "emailIsRepeat".intern() ;
-
+  final public static String REPEAT = "repeat".intern() ;
+  
   final public static String REMIND_BY_POPUP = "popupReminder".intern() ;
   final public static String POPUP_REMIND_BEFORE = "popupReminderTime".intern() ;
   final public static String POPUP_REPEAT_INTERVAL = "popupRepeatInterval".intern() ;
