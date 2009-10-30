@@ -2064,14 +2064,26 @@ UICalendarPortlet.prototype.showHideTime = function(chk){
  */
 UICalendarPortlet.prototype.showHideField = function(chk, fields){
     var display = "";
-    if (typeof(chk) == "string") 
-        chk = document.getElementById(chk);
+    if (typeof(chk) == "string")
+        chk = document.getElementById(chk);  
     display = (chk.checked) ? "hidden" : "visible";
     var len = fields.length;
     for (var i = 0; i < len; i++) {
         fields[i].style.visibility = display;
         i
     }
+};
+
+UICalendarPortlet.prototype.showHideRepeat = function(chk){
+    var DOMUtil = eXo.core.DOMUtil;
+    var checkbox = DOMUtil.findFirstDescendantByClass(chk, "input", "checkbox");
+    var fieldCom = DOMUtil.findAncestorByClass(chk, "FieldComponent");
+    var repeatField = DOMUtil.findFirstDescendantByClass(fieldCom, "div", "RepeatInterval");
+		if (checkbox.checked) {
+	    repeatField.style.visibility = "visible";
+		} else {
+	    repeatField.style.visibility = "hidden";
+		}
 };
 
 /**
