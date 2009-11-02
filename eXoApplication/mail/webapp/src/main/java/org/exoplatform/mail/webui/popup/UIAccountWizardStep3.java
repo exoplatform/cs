@@ -64,11 +64,13 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
     addChild(new UIFormCheckBoxInput<Boolean>(FIELD_USESSL, null,null)) ;
     UIFormCheckBoxInput uiCheckBox = getUIFormCheckBoxInput(FIELD_USESSL) ;
     uiCheckBox.setOnChange(UIAccountCreation.ACT_CHANGE_SSL) ;
+    uiCheckBox.setChecked(true);    
     addChild(new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null).addValidator(MandatoryValidator.class)) ;
     addChild(new UIFormStringInput(FIELD_OUTGOINGPORT, null, null).addValidator(MandatoryValidator.class)) ;
     addChild(new UIFormCheckBoxInput<Boolean>(FIELD_OUTGOING_SSL, null,null)) ;
     UIFormCheckBoxInput outgoingSsl = getUIFormCheckBoxInput(FIELD_OUTGOING_SSL) ;
     outgoingSsl.setOnChange(UIAccountCreation.ACT_CHANGE_OUTGOINGSSL) ;
+    outgoingSsl.setChecked(true);    
     addChild(new UIFormStringInput(FIELD_STOREFOLDER, null,null).addValidator(MandatoryValidator.class)) ;
     setDefaultValue(uiSelect.getValue(), uiCheckBox.isChecked()) ;
     resetFields() ;
@@ -144,9 +146,9 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
   protected void resetFields(){
     reset() ;
     setIncomingServer(UIAccountCreation.DEFAULT_IMAP_SERVER) ;
-    setIncomingPort(UIAccountCreation.DEFAULT_IMAP_PORT) ;
+    setIncomingPort(UIAccountCreation.DEFAULT_IMAPSSL_PORT) ;
     setOutgoingServer(UIAccountCreation.DEFAULT_SMTP_SERVER) ;
-    setOutgoingPort(UIAccountCreation.DEFAULT_SMTP_PORT) ;
+    setOutgoingPort(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
     setStoreFolder(UIAccountCreation.DEFAULT_SERVER_FOLDER) ;
   }
   protected void fillFields(String serverType, boolean isSsl, String incomingServer, String popPort,String outgoingServer, String smtpPort, boolean outgoingSsl, String storeFolder){
