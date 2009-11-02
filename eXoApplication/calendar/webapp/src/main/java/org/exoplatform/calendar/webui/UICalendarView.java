@@ -762,7 +762,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           UIListContainer listContainer = uiCalendarView.getAncestorOfType(UIListContainer.class) ;
           UIListView uiListView = listContainer.findFirstComponentOfType(UIListView.class) ;
           long pageNum = uiListView.getCurrentPage() ;
-          // hung.hoang
           if (!listContainer.isDisplaySearchResult()) {
             listContainer.refresh() ;
             uiListView.updateCurrentPage(pageNum) ; 
