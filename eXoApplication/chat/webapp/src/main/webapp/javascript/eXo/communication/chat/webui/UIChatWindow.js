@@ -1501,7 +1501,8 @@ UIChatWindow.prototype.hideElement = function(element) {
  */
 UIChatWindow.prototype.initFileExchange = function() {
   var tmpDiv = document.createElement('div');
-  tmpDiv.innerHTML = '<iframe name="' + this.targetUploadIframe + '" class="ChatUploadIframe" src="#"></iframe>';
+  //Fix for CS-3276, CS-3534: On Safari, when src="#" , Iframe will be filled with Portal code -> misunderstand when using DOMUtil to search nodes. -> must set src="".
+  tmpDiv.innerHTML = '<iframe name="' + this.targetUploadIframe + '" class="ChatUploadIframe" src=""></iframe>';
   this.uploadIframe = eXo.core.DOMUtil.findFirstDescendantByClass(tmpDiv, 'iframe', 'ChatUploadIframe');
   this.uploadIframe.UIChatWindow = this;
   this.hideElement(tmpDiv);

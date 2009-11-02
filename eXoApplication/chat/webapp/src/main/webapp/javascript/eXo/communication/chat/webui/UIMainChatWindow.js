@@ -701,9 +701,7 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
 UIMainChatWindow.prototype.groupChatListener = function(eventObj) {
   var eventId = 'groupChatCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
-  window.setTimeout(function() {
-      eXo.communication.chat.webui.UIMainChatWindow.processGroupChat(eventId);
-  }, 1);
+  eXo.communication.chat.webui.UIMainChatWindow.processGroupChat(eventId);
 };
 
 /**
@@ -713,9 +711,7 @@ UIMainChatWindow.prototype.groupChatListener = function(eventObj) {
 UIMainChatWindow.prototype.rosterListener = function(eventObj) {
   var eventId = 'rosterCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
-  window.setTimeout(function() {
-      eXo.communication.chat.webui.UIMainChatWindow.processRoster(eventId);
-  }, 1);
+  eXo.communication.chat.webui.UIMainChatWindow.processRoster(eventId);
 };
 
 /**
@@ -725,9 +721,7 @@ UIMainChatWindow.prototype.rosterListener = function(eventObj) {
 UIMainChatWindow.prototype.presenceListener = function(eventObj) {
   var eventId = 'presenceCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
-  window.setTimeout(function() {
-      eXo.communication.chat.webui.UIMainChatWindow.processPresences(eventId);
-  }, 1);
+  eXo.communication.chat.webui.UIMainChatWindow.processPresences(eventId);
 };
 
 /**
@@ -737,9 +731,7 @@ UIMainChatWindow.prototype.presenceListener = function(eventObj) {
 UIMainChatWindow.prototype.subscriptionListener = function(eventObj) {
   var eventId = 'subscriptionCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
-  window.setTimeout(function() {
-      eXo.communication.chat.webui.UIMainChatWindow.processSubscriptions(eventId);
-  }, 1);
+  eXo.communication.chat.webui.UIMainChatWindow.processSubscriptions(eventId);
 };
 
 /**
@@ -747,11 +739,9 @@ UIMainChatWindow.prototype.subscriptionListener = function(eventObj) {
  * All cometd notify about file exchange will be call this function.
  */
 UIMainChatWindow.prototype.fileExchangeListener = function(eventObj) {
-	var eventId = 'fileExchangeCometdEvent_' + (new Date()).getTime();
+  var eventId = 'fileExchangeCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
-  window.setTimeout(function() {
-      eXo.communication.chat.webui.UIMainChatWindow.processFileExchange(eventId);
-  }, 1);
+  eXo.communication.chat.webui.UIMainChatWindow.processFileExchange(eventId);
 };
 
 /**
@@ -761,9 +751,7 @@ UIMainChatWindow.prototype.fileExchangeListener = function(eventObj) {
 UIMainChatWindow.prototype.messageListener = function(eventObj) {
   var eventId = 'messageCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
-  window.setTimeout(function() {
-      eXo.communication.chat.webui.UIMainChatWindow.processMessages(eventId);
-  }, 1);
+  eXo.communication.chat.webui.UIMainChatWindow.processMessages(eventId);
 };
 
 // ---+--
