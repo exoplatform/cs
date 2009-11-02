@@ -30,8 +30,18 @@
 				        	<div class="CheckBoxRepeat" onclick="eXo.calendar.UICalendarPortlet.showHideRepeat(this) ;">
 					        	<% uiForm.renderField(uicomponent.EMAIL_IS_REPEAT);%>					        				        			        	
 				        	</div>
-				        	<div class="RepeatLabel"><%=uiForm.getLabel(uicomponent.REPEAT)%>	</div>				        	
-				        	<div class="RepeatInterval" style="visibility:hidden">				        	 	
+				        	<div class="RepeatLabel"><%=uiForm.getLabel(uicomponent.REPEAT)%>	</div>
+				        	<%
+				        		if (!uiForm.isAddNew_ && uiForm.isEditEmailRepeat()) {
+				        	 %>
+				        	 <div class="RepeatInterval" style="visibility:visible">
+				        	<% 
+				        		} else {
+				        	 %>
+				        	 <div class="RepeatInterval" style="visibility:hidden">
+				        	 <% 
+				        	 	}
+				        	  %>			        	 	
 				           <%=uiForm.getLabel(uicomponent.EMAIL_REPEAT_INTERVAL)%>
 				           <% uiForm.renderField(uicomponent.EMAIL_REPEAT_INTERVAL)  ; %>				        	
 				        	</div>
@@ -96,8 +106,19 @@
  	 	         		<div class="CheckBoxRepeat" onclick="eXo.calendar.UICalendarPortlet.showHideRepeat(this) ;">
 				        	<% uiForm.renderField(uicomponent.POPUP_IS_REPEAT)  ;%>				        				        			        	
 			        	</div>
-			        	<div class="RepeatLabel"><%=uiForm.getLabel(uicomponent.REPEAT)%>	</div>				        	
-			        	<div class="RepeatInterval" style="visibility:hidden">				        	 	
+			        	<div class="RepeatLabel"><%=uiForm.getLabel(uicomponent.REPEAT)%>	</div>
+			        	
+			        	<%
+			        		if (!uiForm.isAddNew_ && uiForm.isEditPopupRepeat()) {
+			        	 %>
+			        	 <div class="RepeatInterval" style="visibility:visible">
+			        	<% 
+			        		} else {
+			        	 %>
+			        	 <div class="RepeatInterval" style="visibility:hidden">
+			        	 <% 
+			        	 	}
+			        	  %>				        	 	
 			           <%=uiForm.getLabel(uicomponent.POPUP_REPEAT_INTERVAL)%> 
 			           <% uiForm.renderField(uicomponent.POPUP_REPEAT_INTERVAL)  ;%>			        	
 			       </div>   
