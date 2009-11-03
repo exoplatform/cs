@@ -2086,6 +2086,29 @@ UICalendarPortlet.prototype.showHideRepeat = function(chk){
 		}
 };
 
+UICalendarPortlet.prototype.autoShowRepeatEvent = function(){
+		var DOMUtil = eXo.core.DOMUtil;
+		var divEmailObject = document.getElementById("IsEmailRepeatEventReminderTab");
+    var checkboxEmail = DOMUtil.findFirstDescendantByClass(divEmailObject, "input", "checkbox");
+    var fieldComEmail = DOMUtil.findAncestorByClass(divEmailObject, "FieldComponent");
+    var repeatFieldEmail = DOMUtil.findFirstDescendantByClass(fieldComEmail, "div", "RepeatInterval");
+		if (checkboxEmail.checked) {
+	    repeatFieldEmail.style.visibility = "visible";
+		} else {
+	    repeatFieldEmail.style.visibility = "hidden";
+		}
+    
+    var divObjectPopup = document.getElementById("IsPopupRepeatEventReminderTab");
+    var checkboxPopup = DOMUtil.findFirstDescendantByClass(divObjectPopup, "input", "checkbox");
+    var fieldComPopup = DOMUtil.findAncestorByClass(divObjectPopup, "FieldComponent");
+    var repeatFieldPopup = DOMUtil.findFirstDescendantByClass(fieldComPopup, "div", "RepeatInterval");
+		if (checkboxPopup.checked) {
+	    repeatFieldPopup.style.visibility = "visible";
+		} else {
+	    repeatFieldPopup.style.visibility = "hidden";
+		}  
+};
+
 /**
  * Sets up dragging selection for calendar view
  */
