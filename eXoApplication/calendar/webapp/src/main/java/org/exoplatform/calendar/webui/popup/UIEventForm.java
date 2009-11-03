@@ -349,26 +349,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
   }
   
-  public boolean isEditEmailRepeat() {
-    if (calendarEvent_ == null) return false ;
-    for(Reminder rm : calendarEvent_.getReminders()) {
-      if(Reminder.TYPE_EMAIL.equals(rm.getReminderType())) {
-        return rm.isRepeat();
-      }
-    }
-    return false;
-  }
-  
-  public boolean isEditPopupRepeat() {
-    if (calendarEvent_ == null) return false ;
-    for(Reminder rm : calendarEvent_.getReminders()) {
-      if(Reminder.TYPE_POPUP.equals(rm.getReminderType())) {
-        return rm.isRepeat();
-      }
-    }
-    return false;
-  }
-
   private void setEventCheckTime(Date time) {
     UIEventAttenderTab uiAttenderTab = getChildById(TAB_EVENTATTENDER) ;
     uiAttenderTab.calendar_.setTime(time) ;
