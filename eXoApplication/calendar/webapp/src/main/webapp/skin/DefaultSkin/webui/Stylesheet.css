@@ -323,3 +323,6 @@
 	background-color: #dee4f2;
 	color: orange;
 }
+.UICalendarPortlet .UICalendarViewContainer {
+	-khtml-user-select:none;	
+}
