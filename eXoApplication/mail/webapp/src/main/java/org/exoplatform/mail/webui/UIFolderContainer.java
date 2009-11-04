@@ -284,7 +284,7 @@ public class UIFolderContainer extends UIContainer {
       filter.setAccountId(accountId);
       filter.setViewQuery("@" + Utils.EXO_ISUNREAD + "='true'");
       List<Message> messages = mailSrv.getMessages(username, filter);
-      mailSrv.toggleMessageProperty(username, accountId, messages, Utils.EXO_ISUNREAD);
+      mailSrv.toggleMessageProperty(username, accountId, messages, folderId, Utils.EXO_ISUNREAD, false);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       if (folderId.equals(uiMessageList.getSelectedFolderId())) {
         List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());

@@ -101,7 +101,7 @@ public class UIAskmeReturnReceipt extends UIForm implements UIPopupComponent {
       
       List<Message> msgs = new ArrayList<Message>();
       msgs.add(uiForm.getSelectedMsg());
-      mailService.toggleMessageProperty(username, accId, msgs, Utils.IS_RETURN_RECEIPT);
+      mailService.toggleMessageProperty(username, accId, msgs, "", Utils.IS_RETURN_RECEIPT, true);
       uiMsgList.updateList();
       uiPopupAction.deActivate();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
@@ -119,7 +119,7 @@ public class UIAskmeReturnReceipt extends UIForm implements UIPopupComponent {
       String accId = uiMsgList.getAccountId();
       List<Message> msgs = new ArrayList<Message>();
       msgs.add(uiForm.getSelectedMsg());
-      mailService.toggleMessageProperty(username, accId, msgs, Utils.IS_RETURN_RECEIPT);
+      mailService.toggleMessageProperty(username, accId, msgs,"", Utils.IS_RETURN_RECEIPT, false);
       uiMsgList.updateList();
       uiPortlet.cancelAction();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getParent()) ;

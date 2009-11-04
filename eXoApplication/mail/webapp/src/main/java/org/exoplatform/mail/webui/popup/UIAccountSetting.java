@@ -82,7 +82,6 @@ public class UIAccountSetting extends UIFormTabPane {
   public static final String FIELD_ACCOUNT_NAME = "accountName";
   public static final String FIELD_DISPLAY_NAME = "display-name".intern();
   public static final String FIELD_INCOMING_USERNAME = "incomingUsername";
-  //public static final String FIELD_ACCOUNT_DESCRIPTION = "description";
   public static final String FIELD_OUTGOING_NAME = "yourOutgoingName";
   public static final String FIELD_EMAIL_ADDRESS = "yourEmailAddress";
   public static final String FIELD_INCOMING_ACCOUNT = "incomingAccount";
@@ -512,7 +511,6 @@ public class UIAccountSetting extends UIFormTabPane {
       acc.setProtocol(uiSetting.getFieldProtocol()) ;
       acc.setLabel(uiSetting.getFieldAccountNameValue()) ;
       acc.setUserDisplayName(uiSetting.getDisplayName()) ;
-      //acc.setDescription(uiSetting.getFieldAccountDescription()) ;
       acc.setEmailAddress(email) ;
       acc.setEmailReplyAddress(reply) ;
       acc.setSignature(uiSetting.getFieldMailSignature()) ;
@@ -553,8 +551,7 @@ public class UIAccountSetting extends UIFormTabPane {
       
       boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
       acc.setServerProperty(Utils.SVR_LEAVE_ON_SERVER, String.valueOf(leaveOnServer)) ;
-      
-      
+       
       try {
         mailSrv.updateAccount(username, acc) ;
         UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;

@@ -68,6 +68,8 @@ import javax.mail.util.ByteArrayDataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.mail.connection.Connector;
+import org.exoplatform.mail.connection.impl.ImapConnector;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
@@ -181,11 +183,83 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void saveFolder(String username, String accountId, Folder folder) throws Exception {
-    storage_.saveFolder(username, accountId, folder);
+    saveFolder(username, accountId, folder, true);
+  }
+  
+  private void saveFolder(String username, String accountId, Folder folder, boolean b) throws Exception {
+    Account account = getAccountById(username, accountId);
+    if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder() && b) {
+      try {
+        Connector connector = new ImapConnector(account);
+        IMAPFolder imapFolder = (IMAPFolder) connector.createFolder(folder);
+        saveFolder(username, accountId, null, imapFolder);
+      } catch(Exception e) {
+        return;
+      }
+    } else {
+      storage_.saveFolder(username, accountId, folder);
+    }
+  }
+  
+  public void saveFolder(String username, String accountId, String parentId,
+                         Folder folder) throws Exception {
+    saveFolder(username, accountId, parentId, folder, true);
+  }
+  
+  private void saveFolder(String username, String accountId, String parentId,
+                         Folder folder, boolean b) throws Exception {
+    Account account = getAccountById(username, accountId);
+    if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder() && b) {
+      try {
+        Folder parentFolder = getFolder(username, accountId, parentId);
+        Connector connector = new ImapConnector(account);
+        IMAPFolder imapFolder = (IMAPFolder) connector.createFolder(parentFolder, folder);
+        if (imapFolder != null) {
+          saveFolder(username, accountId, parentFolder, imapFolder);
+        }
+      } catch(Exception e) {
+        e.printStackTrace();
+        return;
+      }
+    } else {
+      storage_.saveFolder(username, accountId, parentId, folder);
+    }
   }
 
-  public void removeUserFolder(String username, String accountId, String folderId) throws Exception {
+  public void renameFolder(String username, String accountId, String newName,  String folderId) throws Exception {
+    Account account = getAccountById(username, accountId);
+    Folder folder = this.getFolder(username, accountId, folderId);
+    boolean success = false;
+    if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder()) {
+      try {
+        Connector connector = new ImapConnector(account);
+        success = connector.renameFolder(newName, folder);
+      } catch(Exception e) {
+        e.printStackTrace();
+        return;
+      }
+    }
+    if (success) storage_.renameFolder(username, accountId, newName, folderId);
+  }
+  
+  private void deleteLocalFolder(String username, String accountId, String folderId) throws Exception {
     storage_.removeUserFolder(username, accountId, folderId);
+  }
+  
+  public void removeUserFolder(String username, String accountId, String folderId) throws Exception {
+    Account account = getAccountById(username, accountId);
+    Folder folder = this.getFolder(username, accountId, folderId);
+    boolean success = false;
+    if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder()) {
+      try {
+        Connector connector = new ImapConnector(account);
+        success = connector.deleteFolder(folder);
+      } catch(Exception e) {
+        e.printStackTrace();
+        return;
+      }
+    }
+    if (success) storage_.removeUserFolder(username, accountId, folderId);
   }
 
   public List<MessageFilter> getFilters(String username, String accountId) throws Exception {
@@ -217,22 +291,74 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
-    storage_.moveMessages(username, accountId, msgList, currentFolderId, destFolderId);
+    Account account = getAccountById(username, accountId);
+    Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
+    Folder destFolder = this.getFolder(username, accountId, destFolderId);
+    boolean success = false;
+    if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
+      try {
+        Connector connector = new ImapConnector(account);
+        success = connector.moveMessage(msgList, currentFolder, destFolder);
+      } catch(Exception e) {
+        return;
+      }
+    }
+    if (success) storage_.moveMessages(username, accountId, msgList, currentFolderId, destFolderId);
   }
   
   public void moveMessages(String username, String accountId, List<Message> msgList,
                           String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
-    storage_.moveMessages(username, accountId, msgList, currentFolderId, destFolderId, updateReference);
+    Account account = getAccountById(username, accountId);
+    Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
+    Folder destFolder = this.getFolder(username, accountId, destFolderId);
+    boolean success = false;
+    if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
+      try {
+        Connector connector = new ImapConnector(account);
+        success = connector.moveMessage(msgList, currentFolder, destFolder);
+      } catch(Exception e) {
+        return;
+      }
+    }
+    if (success) storage_.moveMessages(username, accountId, msgList, currentFolderId, destFolderId, updateReference);
   }
 
   public void moveMessage(String username, String accountId, Message msg,
       String currentFolderId, String destFolderId) throws Exception {
-    moveMessage(username, accountId, msg, currentFolderId, destFolderId, true);
+    Account account = getAccountById(username, accountId);
+    Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
+    Folder destFolder = this.getFolder(username, accountId, destFolderId);
+    boolean success = false;
+    if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
+      try {
+        Connector connector = new ImapConnector(account);
+        List<Message> l = new ArrayList<Message>();
+        l.add(msg);
+        success = connector.moveMessage(l, currentFolder, destFolder);
+      } catch(Exception e) {
+        return;
+      }
+    }
+    if (success) moveMessage(username, accountId, msg, currentFolderId, destFolderId, true);
   }
   
   public void moveMessage(String username, String accountId, Message msg,
-	String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
-	storage_.moveMessage(username, accountId, msg, currentFolderId, destFolderId, updateReference);
+	  String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
+    Account account = getAccountById(username, accountId);
+    Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
+    Folder destFolder = this.getFolder(username, accountId, destFolderId);
+    boolean success = false;
+    if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
+      try {
+        Connector connector = new ImapConnector(account);
+        List<Message> l = new ArrayList<Message>();
+        l.add(msg);
+        success = connector.moveMessage(l, currentFolder, destFolder);
+      } catch(Exception e) {
+        return;
+      }
+    }
+    if (success) storage_.moveMessage(username, accountId, msg, currentFolderId, destFolderId, updateReference);
   }
 
   public MessagePageList getMessagePageList(String username, MessageFilter filter) throws Exception {
@@ -789,7 +915,7 @@ public class MailServiceImpl implements MailService, Startable {
           folder.setName(fd.getName());
           folder.setURLName(fd.getURLName().toString());
           
-          saveFolder(username, accountId, folder);
+          saveFolder(username, accountId, folder, false);
         }
         
         List<Folder> localFolders = new ArrayList<Folder>();
@@ -800,7 +926,7 @@ public class MailServiceImpl implements MailService, Startable {
         }
         
         for (Folder f : localFolders) {
-          if (!serverFolderId.contains(f.getId())) removeUserFolder(username, accountId, f.getId());
+          if (!serverFolderId.contains(f.getId())) deleteLocalFolder(username, accountId, f.getId());
         }
 
         folderList.add(fd);
@@ -810,12 +936,42 @@ public class MailServiceImpl implements MailService, Startable {
       } else {
         Folder inbox = getFolder(username, accountId, Utils.generateFID(accountId, Utils.FD_INBOX, false));
         inbox.setURLName(fd.getURLName().toString());
-        saveFolder(username, accountId, inbox);
+        saveFolder(username, accountId, inbox, false);
       }
     }      
     
     return folderList ;
   }
+  
+  private void saveFolder(String username, String accountId, Folder parentFolder, javax.mail.Folder serverFolder) throws Exception {
+    String folderId;
+    Folder folder;     
+    if (serverFolder.getType() != javax.mail.Folder.HOLDS_FOLDERS) {
+      folderId = Utils.generateFID(accountId, String.valueOf(((IMAPFolder) serverFolder).getUIDValidity()), true);
+    } else {
+      folderId = Utils.escapeIllegalJcrChars(serverFolder.getName());
+    } 
+    folder = storage_.getFolder(username, accountId, folderId);
+    if (folder == null) {
+      folder = new Folder();
+      folder.setId(folderId);
+      folder.setName(serverFolder.getName());
+      folder.setURLName(serverFolder.getURLName().toString());
+      folder.setNumberOfUnreadMessage(0);
+      folder.setTotalMessage(0);
+      folder.setPersonalFolder(true);
+      folder.setType(serverFolder.getType());
+      try {
+        if (parentFolder == null) {
+          storage_.saveFolder(username, accountId, folder);
+        } else {
+          storage_.saveFolder(username, accountId, parentFolder.getId(), folder);
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      } 
+    }
+  }  
   
   public IMAPStore openIMAPConnection(String username, Account account) {
     return openIMAPConnection(username, account, null);
@@ -1058,7 +1214,7 @@ public class MailServiceImpl implements MailService, Startable {
           i++;
         }
 
-        saveFolder(username, accountId, eXoFolder);
+        saveFolder(username, accountId, eXoFolder, false);
         
         FetchMailContentThread downloadContentMail = new FetchMailContentThread(storage_, msgMap, i, folder, username, accountId);
         new Thread(downloadContentMail).start();        
@@ -1069,6 +1225,11 @@ public class MailServiceImpl implements MailService, Startable {
     } catch (Exception e) {
       logger.error("Error while checking emails from folder" + folder.getName() + " of username " + username + " on account " + accountId, e);
     }
+    try {
+      ((IMAPFolder) folder).idle();
+    } catch(MessagingException me) {
+      logger.debug("Server not support for idle() command");
+    }  
   }
   
   private LinkedHashMap<javax.mail.Message, List<String>> getMessageMap(String username, String accountId, javax.mail.Folder folder, Date lastCheckedDate, 
@@ -1544,9 +1705,57 @@ public class MailServiceImpl implements MailService, Startable {
     storage_.saveSpamFilter(username, accountId, spamFilter);
   }
 
-  public void toggleMessageProperty(String username, String accountId, List<Message> msgList,
-      String property) throws Exception {
-    storage_.toggleMessageProperty(username, accountId, msgList, property);
+  public void toggleMessageProperty(String username, String accountId, List<Message> msgList, String folderId,
+      String property, boolean value) throws Exception {
+    Account account = getAccountById(username, accountId);
+    Folder folder = getFolder(username, accountId, folderId);
+    boolean success = false;
+    if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
+      try {
+        Connector connector = new ImapConnector(account);
+        if (property.equals(Utils.EXO_STAR)) {
+          if (folder != null && !Utils.isEmptyField(folder.getName())) {
+            success = connector.setIsStared(msgList, value, folder.getName());
+          } else {
+            List<Message> l ;
+            for (Message m : msgList) {
+              folder = getFolder(username, accountId, m.getFolders()[0]);
+              if (folder != null) {
+                l = new ArrayList<Message>();
+                l.add(m);
+                success = connector.setIsStared(l, value, folder.getName());
+              }
+            }
+          }
+        } else if (property.equals(Utils.EXO_ISUNREAD)) {
+          if (folder != null && !Utils.isEmptyField(folder.getName())) {
+            if (value) {
+              success = connector.markAsUnread(msgList, folder.getName());
+            } else {
+              success = connector.markAsRead(msgList, folder.getName());
+            }
+          } else {
+            List<Message> l ;
+            for (Message m : msgList) {
+              folder = getFolder(username, accountId, m.getFolders()[0]);
+              if (folder != null) {
+                l = new ArrayList<Message>();
+                l.add(m);
+                if (value) {
+                  success = connector.markAsUnread(l, folder.getName());
+                } else {
+                  success = connector.markAsRead(l, folder.getName());
+                }
+              }
+            }
+          }
+        } 
+        
+      } catch(Exception e) {
+        return;
+      }
+    }
+    if (success) storage_.toggleMessageProperty(username, accountId, msgList, property, value);
   }
 
   public List<AccountData> getAccountDatas(SessionProvider sProvider) throws Exception {
@@ -1556,11 +1765,6 @@ public class MailServiceImpl implements MailService, Startable {
   public String getFolderHomePath(String username, String accountId)
   throws Exception {
     return storage_.getFolderHomePath(username, accountId);
-  }
-
-  public void saveFolder(String username, String accountId, String parentId,
-      Folder folder) throws Exception {
-    storage_.saveFolder(username, accountId, parentId, folder);
   }
 
   public List<Folder> getSubFolders(String username, String accountId, String parentPath) throws Exception {

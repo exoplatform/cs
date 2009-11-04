@@ -272,7 +272,7 @@ public class UIMessagePreview extends UIComponent {
         List<Message> msgList = new ArrayList<Message>() ;
         msg.setHasStar(!msg.hasStar());
         msgList.add(msg) ;
-        mailServ.toggleMessageProperty(username, accountId, msgList, Utils.EXO_STAR);
+        mailServ.toggleMessageProperty(username, accountId, msgList,msg.getFolders()[0], Utils.EXO_STAR, !msg.hasStar());
         uiMessageList.messageList_.put(msgId, msg);
         uiMsgPreview.setMessage(msg);
       }
