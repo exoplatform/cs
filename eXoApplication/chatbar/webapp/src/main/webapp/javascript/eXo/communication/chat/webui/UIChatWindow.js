@@ -453,7 +453,7 @@ UITabControl.prototype.updateUnreadMessage = function() {
       myParent._isVisible()) {
     tabUnreadMessageNode.innerHTML = '';
     this.unreadMessageCnt = 0;
-    this.UIMainChatWindow.UISlideAlert.removeMessageByTabId(this.tabId.id);
+    //this.UIMainChatWindow.UISlideAlert.removeMessageByTabId(this.tabId.id);
   } else if (this.unreadMessageCnt > 0) {
     tabUnreadMessageNode.innerHTML = '*[' + this.unreadMessageCnt + ']&nbsp;';
   }
@@ -516,11 +516,11 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   if (this.lastBuddyId != buddyIdTmp ||
       this.fileTransportRequestIncoming) {
     msgNode = this.createNewMsgNode(buddyIdTmp, msgObj);
+    this.messagesBoxNode.appendChild(msgNode);
     if (this.fileTransportRequestIncoming) {
       this.fileTransportRequestIncoming = false;
     }
   }
-  this.messagesBoxNode.appendChild(msgNode);
   var contextChatNode = DOMUtil.findFirstDescendantByClass(msgNode, 'div', this.CSS_CLASS.contextChat);
   var msgTmpNode = document.createElement('div');
   var msgContent = msgObj['body'] || msgObj;
@@ -532,7 +532,7 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   } else {
     msgContentTmp = msgContent;
   }
-  this.showAlert(msgContentTmp);
+  //this.showAlert(msgContentTmp);
 
   if (!this.roomConfigured &&
       (msgContent.toLowerCase().indexOf('this room is now unlocked.') != -1) ||

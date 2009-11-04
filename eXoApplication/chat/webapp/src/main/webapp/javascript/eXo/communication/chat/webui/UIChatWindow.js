@@ -521,11 +521,11 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   if (this.lastBuddyId != buddyIdTmp ||
       this.fileTransportRequestIncoming) {
     msgNode = this.createNewMsgNode(buddyIdTmp, msgObj);
+    this.messagesBoxNode.appendChild(msgNode);
     if (this.fileTransportRequestIncoming) {
       this.fileTransportRequestIncoming = false;
     }
   }
-  this.messagesBoxNode.appendChild(msgNode);
   var contextChatNode = DOMUtil.findFirstDescendantByClass(msgNode, 'div', this.CSS_CLASS.contextChat);
   var msgTmpNode = document.createElement('div');
   var msgContent = msgObj['body'] || msgObj;

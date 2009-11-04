@@ -159,8 +159,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   public void stop() {
   }
   
-  private void loadResourceBundle(){
+  public ResourceBundle loadResourceBundle(){
     this.rb = this.rbs.getResourceBundle(BUNDLE_NAME, Locale.getDefault());
+    return this.rb;
   }
 
   // //////////// Group chat //////////////////

@@ -171,7 +171,7 @@ public class XMPPSessionImpl implements XMPPSession {
   /**
    * 
    */
-  private final HistoryImpl                 history;
+  private final HistoryImpl                 history_;
 
   /**
    * 
@@ -191,17 +191,17 @@ public class XMPPSessionImpl implements XMPPSession {
   /**
    * 
    */
-  private final UserInfoService             organization;
+  private final UserInfoService             organization_;
 
   /**
    * 
    */
-  private final ContinuationServiceDelegate delegate;
+  private final ContinuationServiceDelegate delegate_;
   
   /**
    * 
    */
-  private final ResourceBundle rb;
+  private final ResourceBundle rb_;
   
   /**
    * 
@@ -225,10 +225,10 @@ public class XMPPSessionImpl implements XMPPSession {
                             final HistoryImpl history,
                             final ResourceBundle rb) throws XMPPException {
     XMPPConnection.DEBUG_ENABLED = true;
-    this.delegate = delegate;
-    this.history = history;
-    this.organization = organization;
-    this.rb = rb;
+    this.delegate_ = delegate;
+    this.history_ = history;
+    this.organization_ = organization;
+    this.rb_ = rb;
     this.connection_ = new XMPPConnection(XMPPMessenger.getConnectionConfiguration());
     this.username_ = username;
     try {
@@ -264,7 +264,7 @@ public class XMPPSessionImpl implements XMPPSession {
             } catch (Exception e) { }
             
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
-            delegate.sendMessage(username_, CometdChannels.FILE_EXCHANGE, json.toString(), null);
+            delegate_.sendMessage(username_, CometdChannels.FILE_EXCHANGE, json.toString(), null);
             if (log.isDebugEnabled())
               log.debug(json.toString());
           } catch (Exception e) {
@@ -285,7 +285,7 @@ public class XMPPSessionImpl implements XMPPSession {
                                          sessionProvider);*/
             //Fix for CS-3246: contact list in public room is empty in special case
             //Because persistence operations are massive -> much delay time -> bug ->to solve by using cache
-            history.logMessage((Message) packet);
+            history_.logMessage((Message) packet);
             EventsBean eventsBean = new EventsBean();
             eventsBean.addMessage(message);
             eventsBean.setEventId(Packet.nextID());
@@ -297,14 +297,18 @@ public class XMPPSessionImpl implements XMPPSession {
                 list.add(b) ;
               }
               eventsBean.setRoster(list) ;
-            } catch (Exception e) { }
+            } catch (Exception e) {
+              if (log.isDebugEnabled())
+                e.printStackTrace();
+            }
             
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
-            delegate.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
+            delegate_.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
             if (log.isDebugEnabled())
               log.debug(json.toString());
           } catch (Exception e) {
-
+            //if (log.isDebugEnabled())
+              e.printStackTrace();
           }
         }
       }, msgFilter);
@@ -333,7 +337,7 @@ public class XMPPSessionImpl implements XMPPSession {
             } catch (Exception e) { }
             
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
-            delegate.sendMessage(username_, CometdChannels.SUBSCRIPTION, json.toString(), null);
+            delegate_.sendMessage(username_, CometdChannels.SUBSCRIPTION, json.toString(), null);
            } catch (Exception e) {
             if (log.isDebugEnabled())
               e.printStackTrace();
@@ -374,15 +378,15 @@ public class XMPPSessionImpl implements XMPPSession {
             final Message message = (Message)packet;       
             String errorMessage = "";                                                                                       
             if (message.getError().getCode() == 403 && message.getSubject() != null) {                                          
-                errorMessage = rb.getString("chat.message.subject.change.error");                                                   
+                errorMessage = rb_.getString("chat.message.subject.change.error");                                                   
             }                                                                                                                   
             else if (message.getError().getCode() == 403) {                                                          
-               errorMessage = rb.getString("chat.message.forbidden.error");
+               errorMessage = rb_.getString("chat.message.forbidden.error");
                MUCUser packetExtension = (MUCUser) packet.getExtension("x",  "http://jabber.org/protocol/muc#user"); 
                if (packetExtension != null){
                  Invite invite = packetExtension.getInvite();
                  if (invite != null){
-                   errorMessage = rb.getString("chat.message.room.invite.forbidden.error");
+                   errorMessage = rb_.getString("chat.message.room.invite.forbidden.error");
                    Object values []  = { invite.getTo(), message.getFrom() }; 
                    errorMessage = MessageFormat.format(errorMessage, values);
                  }
@@ -403,14 +407,17 @@ public class XMPPSessionImpl implements XMPPSession {
                 list.add(b) ;
               }
               eventsBean.setRoster(list) ;
-            } catch (Exception e) { }
+            } catch (Exception e) { 
+              if (log.isDebugEnabled())
+                e.printStackTrace();
+            }
             
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
-            delegate.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
+            delegate_.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
             if (log.isDebugEnabled())
               log.debug(json.toString());
           } catch (Exception e) {
-            if (log.isDebugEnabled())
+            //if (log.isDebugEnabled())
               e.printStackTrace();
           }
          }
@@ -459,7 +466,7 @@ public class XMPPSessionImpl implements XMPPSession {
             } catch (Exception e) { }
             
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
-            delegate.sendMessage(username_, CometdChannels.ROSTER, json.toString(), null);
+            delegate_.sendMessage(username_, CometdChannels.ROSTER, json.toString(), null);
             if (log.isDebugEnabled())
               log.debug(json.toString());
           } catch (Exception e) {
@@ -486,7 +493,7 @@ public class XMPPSessionImpl implements XMPPSession {
             } catch (Exception e) { }
             
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
-            delegate.sendMessage(username_, CometdChannels.ROSTER, json.toString(), null);
+            delegate_.sendMessage(username_, CometdChannels.ROSTER, json.toString(), null);
             if (log.isDebugEnabled())
               log.debug(json.toString());
           } catch (Exception e) {
@@ -516,7 +523,7 @@ public class XMPPSessionImpl implements XMPPSession {
             
             
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
-            delegate.sendMessage(username_, CometdChannels.ROSTER, json.toString(), null);
+            delegate_.sendMessage(username_, CometdChannels.ROSTER, json.toString(), null);
             if (log.isDebugEnabled())
               log.debug(json.toString());
           } catch (Exception e) {
@@ -541,7 +548,7 @@ public class XMPPSessionImpl implements XMPPSession {
               eventsBean.setRoster(list) ;
             } catch (Exception e) { }
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
-            delegate.sendMessage(username_, CometdChannels.PRESENCE, json.toString(), null);
+            delegate_.sendMessage(username_, CometdChannels.PRESENCE, json.toString(), null);
             if (log.isDebugEnabled())
               log.debug(json.toString());
           } catch (Exception e) {
@@ -553,7 +560,7 @@ public class XMPPSessionImpl implements XMPPSession {
 
       sessionProvider = new SessionProvider(ConversationState.getCurrent());
       //for keeping session in cache 
-      sessionProvider.getSession(history.getWorkspace(), history.getRepository());
+      sessionProvider.getSession(history_.getWorkspace(), history_.getRepository());
 
     } catch (XMPPException e) {
       throw new XMPPException("Create XMPP connection for user '" + username + "' failed. ", e);
@@ -684,7 +691,7 @@ public class XMPPSessionImpl implements XMPPSession {
   public List<HistoricalMessage> getAllHistory(String usernameto,
                                                String usernamefrom,
                                                boolean isGroupChat) {
-    return history.getHistoricalMessages(usernameto, usernamefrom, isGroupChat, sessionProvider);
+    return history_.getHistoricalMessages(usernameto, usernamefrom, isGroupChat, sessionProvider);
   }
 
   /**
@@ -714,7 +721,7 @@ public class XMPPSessionImpl implements XMPPSession {
                                                        boolean isGroupChat,
                                                        Date dateFrom,
                                                        Date dateTo) {
-    return history.getHistoricalMessages(usernameto,
+    return history_.getHistoricalMessages(usernameto,
                                          usernamefrom,
                                          isGroupChat,
                                          dateFrom,
@@ -730,7 +737,7 @@ public class XMPPSessionImpl implements XMPPSession {
                                                          String usernamefrom,
                                                          boolean isGroupChat,
                                                          Date dateFrom) {
-    return history.getHistoricalMessages(usernameto,
+    return history_.getHistoricalMessages(usernameto,
                                          usernamefrom,
                                          isGroupChat,
                                          dateFrom,
@@ -742,14 +749,14 @@ public class XMPPSessionImpl implements XMPPSession {
    */
   public List<HistoricalMessage> getNotRecieveMessages() {
     String usernameTo = username_ + "@";
-    return history.getNotReciveMessage(usernameTo, sessionProvider);
+    return history_.getNotReciveMessage(usernameTo, sessionProvider);
   }
 
   /**
    * {@inheritDoc}
    */
   public List<Interlocutor> getInterlocutors(String username) {
-    return history.getInterlocutors(username, sessionProvider);
+    return history_.getInterlocutors(username, sessionProvider);
   }
 
   /**
@@ -805,7 +812,7 @@ public class XMPPSessionImpl implements XMPPSession {
    * {@inheritDoc}
    */
   public UserInfo getUserInfo(String userID) {
-    return organization.getUserInfo(userID);
+    return organization_.getUserInfo(userID);
   }
 
   /**
@@ -990,7 +997,7 @@ public class XMPPSessionImpl implements XMPPSession {
    * {@inheritDoc}
    */
   public void messageReceive(String messageId) {
-    history.messageReceive(messageId, sessionProvider);
+    history_.messageReceive(messageId, sessionProvider);
   }
 
   /**
@@ -1656,7 +1663,7 @@ public class XMPPSessionImpl implements XMPPSession {
         } catch (Exception e) { }
         
         JsonValue json = generatorImpl.createJsonObject(eventsBean);
-        delegate.sendMessage(username_, "/eXo/Application/Chat/FileExchange", json.toString(), null);
+        delegate_.sendMessage(username_, "/eXo/Application/Chat/FileExchange", json.toString(), null);
         contFileTransfers--;
         if (contFileTransfers == 0) {
           delFile(transfer.getFilePath());
@@ -2033,7 +2040,7 @@ public class XMPPSessionImpl implements XMPPSession {
         eventsBean.setRoster(list) ;
       } catch (Exception e) { }
       JsonValue json = generatorImpl.createJsonObject(eventsBean);
-      delegate.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
+      delegate_.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
     }catch (Exception e) {
       e.printStackTrace();
     }
@@ -2086,7 +2093,7 @@ public class XMPPSessionImpl implements XMPPSession {
         delegate.sendMessage(username_, CometdChannels.GROUP_CHAT, strReturn, null);
       }  
       */
-      delegate.sendMessage(username_, CometdChannels.GROUP_CHAT, json.toString(), null);
+      delegate_.sendMessage(username_, CometdChannels.GROUP_CHAT, json.toString(), null);
     } catch (Exception e) {
       e.printStackTrace();
     }
