@@ -536,7 +536,7 @@ public class JCRDataStorage {
             node.removeMixin(nts[i].getName());
           }
           node.remove();
-          msgStoreNode.getSession().save();
+          msgStoreNode.save();
         }
       } catch (PathNotFoundException e) {
       }
@@ -549,7 +549,6 @@ public class JCRDataStorage {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
-      Node msgHome = getMessageHome(sProvider, username, accountId);
       for (Message message : messages) {
         Node msgStoreNode = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
         try {
@@ -566,8 +565,8 @@ public class JCRDataStorage {
           }
         } catch (PathNotFoundException e) {
         }
+        msgStoreNode.save();
       }
-      msgHome.getSession().save();
     } finally {
       closeSessionProvider(sProvider);
     }
@@ -1638,7 +1637,6 @@ public class JCRDataStorage {
     try {
       sProvider = createSessionProvider();
       // gets folder home node of the specified account
-      Node home = getFolderHome(sProvider, username, accountId);
       Node parentNode = getFolderNodeById(sProvider, username, accountId, parentId);
       Node myFolder = null;
       if (parentNode.hasNode(folder.getId())) { // if the folder exists, gets it
@@ -1668,6 +1666,20 @@ public class JCRDataStorage {
       else 
         myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
       myFolder.save();
+    } finally {
+      closeSessionProvider(sProvider) ;
+    }
+  }
+  
+  public void renameFolder(String username, String accountId, String newName, String folderId) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node myFolder = getFolderNodeById(sProvider, username, accountId, folderId);
+      if (myFolder != null) {
+        myFolder.setProperty(Utils.EXO_NAME, newName);
+        myFolder.save();
+      }
     } finally {
       closeSessionProvider(sProvider) ;
     }
@@ -2240,7 +2252,7 @@ public class JCRDataStorage {
     accountNode.getSession().save();
   }
 
-  public void toggleMessageProperty(String username, String accountId, List<Message> msgList, String property) throws Exception {
+  public void toggleMessageProperty(String username, String accountId, List<Message> msgList, String property, boolean value) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
@@ -2248,17 +2260,16 @@ public class JCRDataStorage {
       for (Message msg : msgList) {
         Node msgNode = (Node) mailHome.getSession().getItem(msg.getPath());
         if (property.equals(Utils.EXO_STAR)) {
-          msgNode.setProperty(Utils.EXO_STAR, !msgNode.getProperty(Utils.EXO_STAR).getBoolean());
+          msgNode.setProperty(Utils.EXO_STAR, value);
           msgNode.save();
         } else if (property.equals(Utils.EXO_ISUNREAD)) {
-          Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-          msgNode.setProperty(Utils.EXO_ISUNREAD, !isUnread);
+          msgNode.setProperty(Utils.EXO_ISUNREAD, value);
           msgNode.save();
 
           Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, msgNode
                                                      .getProperty(Utils.MSG_FOLDERS).getValues()[0].getString());
           if (currentFolderNode != null) {
-            if (isUnread) {
+            if (!value) {
               currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
                                                                                                      Utils.EXO_UNREADMESSAGES).getLong() - 1));
             } else {
@@ -2714,7 +2725,6 @@ public class JCRDataStorage {
           folders[i + 1] = propFolders[i].getString();
         }
       }
-      msgNode.setProperty(Utils.EXO_ISUNREAD, true);
       msgNode.setProperty(Utils.EXO_STAR, false);
       msgNode.setProperty(Utils.MSG_FOLDERS, folders);
       msgNode.save();

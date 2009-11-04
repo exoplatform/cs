@@ -158,6 +158,8 @@ public interface MailService {
    * @param account
    * @throws Exception
    */
+  public void renameFolder(String username, String accountId, String newName,  String folderId) throws Exception;
+  
   public void removeUserFolder(String username, String accountId, String folderId) throws Exception ;
   
   /**
@@ -551,7 +553,7 @@ public interface MailService {
    * @param property
    * @throws Exception
    */
-  public void toggleMessageProperty(String username, String accountId, List<Message> msgList, String property) throws Exception ;
+  public void toggleMessageProperty(String username, String accountId, List<Message> msgList, String folderId, String property, boolean value) throws Exception ;
   
   /**
    * Get path of node, that contains all folders

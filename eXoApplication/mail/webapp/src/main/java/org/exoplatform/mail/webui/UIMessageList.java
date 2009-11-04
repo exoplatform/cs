@@ -360,7 +360,9 @@ public class UIMessageList extends UIForm {
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-
+      String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
+      if (Utils.isEmptyField(folderId)) folderId = "";
+      
       Message msg = uiMessageList.messageList_.get(msgId);
       
       if (msg != null) {
@@ -408,7 +410,7 @@ public class UIMessageList extends UIForm {
         
         if (msgs.size() > 0) {
           try {
-            uiMessageList.toggleMsgStatus(username, accountId, msgs);
+            uiMessageList.toggleMsgStatus(username, accountId, msgs, folderId, false);
           } catch (PathNotFoundException e) {
             e.printStackTrace();
             uiMessageList.setMessagePageList(null) ;
@@ -460,7 +462,7 @@ public class UIMessageList extends UIForm {
             
             List<Message> msgL = new ArrayList<Message>();
             msgL.add(msg);
-            mailSrv.toggleMessageProperty(username, accountId, msgL, Utils.IS_RETURN_RECEIPT);
+            mailSrv.toggleMessageProperty(username, accountId, msgL, folderId, Utils.IS_RETURN_RECEIPT, false);
           }
         } 
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
@@ -468,8 +470,8 @@ public class UIMessageList extends UIForm {
     }
   }
   
-  private void toggleMsgStatus(String username, String accountId, List<Message> msgs) throws Exception {
-    MailUtils.getMailService().toggleMessageProperty(username, accountId, msgs, Utils.EXO_ISUNREAD);
+  private void toggleMsgStatus(String username, String accountId, List<Message> msgs, String folderId, boolean value) throws Exception {
+    MailUtils.getMailService().toggleMessageProperty(username, accountId, msgs, folderId, Utils.EXO_ISUNREAD, value);
   }
   
   public boolean isShowUnread(Message msg) throws Exception {
@@ -529,6 +531,8 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
+      if (Utils.isEmptyField(folderId)) folderId = "";
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
       if(Utils.isEmptyField(accountId)) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
@@ -548,7 +552,7 @@ public class UIMessageList extends UIForm {
         msg.setHasStar(!msg.hasStar());
         uiMessageList.messageList_.put(msg.getId(), msg);
         try {
-          mailSrv.toggleMessageProperty(username, accountId, msgList, Utils.EXO_STAR);
+          mailSrv.toggleMessageProperty(username, accountId, msgList, folderId, Utils.EXO_STAR, msg.hasStar());
         } catch (PathNotFoundException e) {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -569,7 +573,7 @@ public class UIMessageList extends UIForm {
           }
         }
         try {
-          mailSrv.toggleMessageProperty(username, accountId, msgList, Utils.EXO_STAR);
+          mailSrv.toggleMessageProperty(username, accountId, msgList, folderId, Utils.EXO_STAR, true);
         } catch (PathNotFoundException e) {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -590,6 +594,8 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
+      if (Utils.isEmptyField(folderId)) folderId = "";
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
       if(Utils.isEmptyField(accountId)) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
@@ -612,7 +618,7 @@ public class UIMessageList extends UIForm {
         }
       }
       try {
-        mailSrv.toggleMessageProperty(username, accountId, msgList, Utils.EXO_STAR);       
+        mailSrv.toggleMessageProperty(username, accountId, msgList, folderId, Utils.EXO_STAR, false);       
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -1329,6 +1335,7 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
       if(Utils.isEmptyField(accountId)) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
@@ -1351,7 +1358,8 @@ public class UIMessageList extends UIForm {
         }
       }
       try {
-        mailSrv.toggleMessageProperty(username, accountId, msgList, Utils.EXO_ISUNREAD);
+        if (Utils.isEmptyField(folderId)) folderId = "";
+        mailSrv.toggleMessageProperty(username, accountId, msgList, folderId, Utils.EXO_ISUNREAD, false);
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -1372,6 +1380,8 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
+      if (Utils.isEmptyField(folderId)) folderId = "";
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
       if(Utils.isEmptyField(accountId)) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
@@ -1394,7 +1404,7 @@ public class UIMessageList extends UIForm {
         }
       }
       try {
-        mailSrv.toggleMessageProperty(username, accountId, msgList, Utils.EXO_ISUNREAD);
+        mailSrv.toggleMessageProperty(username, accountId, msgList, folderId, Utils.EXO_ISUNREAD, true);
       } catch (PathNotFoundException e) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
