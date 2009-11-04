@@ -23,8 +23,6 @@ Searching for events/tasks in calendars also very convenient with full text sear
 *eXo Mail is a mail client that is built with a variety of features designed to make your e-mail
 experience more productive. It offers several ways to to view and organize your mails in-box and conversation.
 
-*eXo Chat is a live web-based Instant Messaging system. It is a Jabber compliant chat implemented over the open xmpp protocol. With it, you can send instant message, exchange files real-time, store, export your conversation's history and sort by date, week, month. Group conversation very useful for co-working and group meeting online. eXo Chat comes in 2 flavours, the Chat application an webOS friendly windowed application.
-
 =============
  What's new?
 =============
@@ -40,9 +38,7 @@ exo Collaboration Suite 1.2.2 features several noteworthy changes:
           o Bugs fix
     * Address Book
           o Bugs fix
-    * Chat
-          o Bugs fix
-          
+     
 Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes          
           
 =========
@@ -56,12 +52,12 @@ Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/
         JVM: version 1.5.0_09 or higher
         Application Server : Tomcat, jboss
         Building Tools: Maven 2.0.6 and up
-        openfire server version 3.4.5 for more information visit here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Chat+Configuration
+       
 
 - Collaboration suite quick start guide
   Collaboration suite have 2 servers need to run at same time to use:
     +) exo-jboss: this is main jboss server include Collaboration web applications and all dependencies.     
-    +) exo-openfire: a Jabber server used for Chat applications
+    
 
 Need to set the JAVA_HOME variable for run Collaboration suite's servers.
 +) How to start Collaboration sute:
@@ -78,22 +74,13 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
    * Start exo-jboss server:
    
      +) On the Windows platform
-       Open a DOS prompt command, go to exo-tomcat/bin and type the command:
+       Open a DOS prompt command, go to exo-jboss/bin and type the command:
          run.bat start
 
      +) On Unix/Linux/cygwin
-       Open a terminal, go to exo-tomcat/bin and type the command:
-         ./run.sh
+       Open a terminal, go to exo-jboss/bin and type the command:
+         ./run.sh    
     
-   * Start exo-openfire server:
-     +) On the Windows platform
-       Open a DOS prompt command, go to exo-openfire/bin and type the command:
-         openfired.exe
-
-     +) On Unix/Linux
-       Open a terminal, go to exo-openfire/bin and type the command:
-         ./openfire start
-
 -) How to access the eXo Collaboration Suite
 
 * Enter one of the following addresses into your browser address bar:
@@ -133,16 +120,10 @@ All those accounts have the default password "exo".
     * [CS-2505] - Typo on home page
     * [CS-2510] - RSS Portlet : Portlet does not manage accent correctly when the feed contains accent
     * [CS-2610] - MAC OS: Little error when show add new contact pop up in mail application
-    * [CS-2621] -  Error when run email reminder job and  popup reminder job
-    * [CS-2650] - UI error at Join Room form
-    * [CS-2654] - jboss: Can not perform any action on Chat portlet after register new user
-    * [CS-2655] - Jboss: when have more than 10 registered user, at Add contact form is shown to be  10 only
-    * [CS-2659] - Jboss: show wrong font when send message by Vietnamese 
-    * [CS-2661] - Safari4: Little error in form: Add contact into room
+    * [CS-2621] -  Error when run email reminder job and  popup reminder job       
     * [CS-2669] - Overloaded methods in UICalendarPortlet.js
     * [CS-2716] - Don't change label on menu of custom layout when change custom layout
-    * [CS-2847] - WYSIWYG in compose dialog does not support i18n
-    * [CS-2850] - CS deploy with chat , cannot run on jboss server
+    * [CS-2847] - WYSIWYG in compose dialog does not support i18n   
     * [CS-2867] - impossible to change time by mouse
     * [CS-2868] - UNknown error while exporting an email
     * [CS-2883] - UI error when open User workspace
@@ -173,8 +154,7 @@ All those accounts have the default password "exo".
 
 ** Improvement
     * [CS-2566] - Make AddressBook application vertically elastic
-    * [CS-2895] - use buttons in message view
-    * [CS-3172] - Should keep showing tab of current viewing public room when there are many joining rooms
+    * [CS-2895] - use buttons in message view   
 
 ** Task
     * [CS-2615] - Resource Bundles and FR translation review
@@ -186,12 +166,7 @@ All those accounts have the default password "exo".
     * [CS-2477] - Safari: Wrong UI of Manage account Icon
     * [CS-2479] - Priority Icon and Outside Icon overlay together
     * [CS-2480] - Safari: UI error at Export contacts form
-    * [CS-2531] - In RSS content plug-in, char-set used to read xml rss is always utf-8
-    * [CS-2651] - Lost status Icon of User
-    * [CS-2652] - occur wrong message when join room in special case
-    * [CS-2653] - User do not have right :when join room , occur wrong message
-    * [CS-2658] - Jboss: Can not perform any action on chat portlet when change status of user from off-line to on-line
-    * [CS-2663] - Don't send file in conversation
+    * [CS-2531] - In RSS content plug-in, char-set used to read xml rss is always utf-8   
     * [CS-2667] - Error with page iterator in  some forms of CS
 
 ** Task
