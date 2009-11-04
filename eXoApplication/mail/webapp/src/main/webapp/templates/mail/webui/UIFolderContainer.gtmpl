@@ -239,7 +239,7 @@ def enableSync = uicomponent.isImap();
           	 if(enableSync){
               builder.append("<a class=\"FolderLink CustomizeFolder\" title=\"$name\" actionlink=\"$pActionLink\" onclick=\"javascript:eXo.mail.UIMailPortlet.lazySync(this,\'$pid\');\" href=\"javascript:void(0);\"  folder=\"").append(pid).append("\">");
              } else {
-              builder.append("<a class=\"FolderLink\" title=\"$name\"  href=\"$pActionLink\" onclick=\"event.cancelBubble = true;\" folder=\"").append(pid).append("\">");
+              builder.append("<a class=\"FolderLink CustomizeFolderPop3\" title=\"$name\"  href=\"$pActionLink\" onclick=\"event.cancelBubble = true;\" folder=\"").append(pid).append("\">");
              }
           } else {
             builder.append("<a>");
@@ -285,7 +285,7 @@ def enableSync = uicomponent.isImap();
          if(enableSync){
               builder.append("<a class=\"FolderLink CustomizeFolder\" title=\"$name\" actionlink=\"$pActionLink\" onclick=\"javascript:eXo.mail.UIMailPortlet.lazySync(this,\'$pid\');\" href=\"javascript:void(0);\"  folder=\"").append(pid).append("\">");
          } else {
-              builder.append("<a class=\"FolderLink\" title=\"$name\"  href=\"$pActionLink\" onclick=\"event.cancelBubble = true;\" folder=\"").append(pid).append("\">");
+              builder.append("<a class=\"FolderLink CustomizeFolderPop3\" title=\"$name\"  href=\"$pActionLink\" onclick=\"event.cancelBubble = true;\" folder=\"").append(pid).append("\">");
          }
       } else {
         builder.append("<a>");

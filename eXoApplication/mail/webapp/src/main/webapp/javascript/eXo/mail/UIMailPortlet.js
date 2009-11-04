@@ -11,6 +11,7 @@ UIMailPortlet.prototype.showContextMenu = function(compid){
     UIContextMenuMail.init(config);
     UIContextMenuMail.attach('MessageItem', 'UIMessagePopupMenu');
     UIContextMenuMail.attach('CustomizeFolder', 'UIFolderListPopupMenu');
+    UIContextMenuMail.attach('CustomizeFolderPop3', 'UIFolderListPopupMenu');
     UIContextMenuMail.attach('IconTagHolder', 'UITagListPopupMenu');
     UIContextMenuMail.attach('InboxIcon', 'UIDefaultFolderPopupMenu');
     UIContextMenuMail.attach('DraftsIcon', 'UIDefaultFolderPopupMenu');
