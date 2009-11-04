@@ -1225,11 +1225,6 @@ public class MailServiceImpl implements MailService, Startable {
     } catch (Exception e) {
       logger.error("Error while checking emails from folder" + folder.getName() + " of username " + username + " on account " + accountId, e);
     }
-    try {
-      ((IMAPFolder) folder).idle();
-    } catch(MessagingException me) {
-      logger.debug("Server not support for idle() command");
-    }  
   }
   
   private LinkedHashMap<javax.mail.Message, List<String>> getMessageMap(String username, String accountId, javax.mail.Folder folder, Date lastCheckedDate, 
