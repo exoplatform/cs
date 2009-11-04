@@ -25,6 +25,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.security.ConversationRegistry;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
+import org.exoplatform.services.xmpp.rest.RESTXMPPService;
 import org.exoplatform.services.xmpp.userinfo.UserInfoService;
 import org.exoplatform.ws.frameworks.cometd.transport.ContinuationServiceDelegate;
 
@@ -43,7 +44,8 @@ public class AuthenticationLoginListener extends Listener<ConversationRegistry, 
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
-      if(messenger != null){
+      RESTXMPPService restXmppService = (RESTXMPPService)container.getComponentInstanceOfType(RESTXMPPService.class);
+      if(messenger != null && restXmppService != null){
         String userId = event.getData().getIdentity().getUserId() ;
         UserInfoService organization = (UserInfoService) container.getComponentInstanceOfType(UserInfoService.class);
         String password = organization.getOrganizationService()
@@ -53,7 +55,7 @@ public class AuthenticationLoginListener extends Listener<ConversationRegistry, 
         ContinuationServiceDelegate delegate = (ContinuationServiceDelegate) container.getComponentInstanceOfType(ContinuationServiceDelegate.class);
         HistoryImpl history = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
         ConversationState.setCurrent(event.getData());
-        messenger.login(userId, password, organization, delegate, history,null);
+        messenger.login(userId, password, organization, delegate, history,restXmppService.loadResourceBundle());
       }
     } catch (Exception e){
       if(log.isDebugEnabled())

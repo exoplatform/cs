@@ -48,12 +48,15 @@ public class UIStateService implements ResourceContainer {
   @InputTransformer(Json2BeanInputTransformer.class)
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response saveState(@URIParam("username") String userName, UIStateDataBean stateData) throws Exception {
-    Node uiStateNode = this.getPrivateNode(userName); 
-    uiStateNode.setProperty(JCR_UI_STATE_NOTE_PROPERTY, stateData.getData());
-    if (!uiStateNode.isNew()) {
-      uiStateNode.save();
-    } else {
-      uiStateNode.getSession().save() ;
+    try {
+      Node uiStateNode = this.getPrivateNode(userName); 
+      uiStateNode.setProperty(JCR_UI_STATE_NOTE_PROPERTY, stateData.getData());
+      if (!uiStateNode.isNew()) {
+        uiStateNode.save();
+      } else {
+        uiStateNode.getSession().save() ;
+      }
+    } catch (Exception e){
     }
     UIStateDataBean stateDataBean = new UIStateDataBean("null");
     return Response.Builder.ok(stateDataBean, JSON_CONTENT_TYPE).build();
