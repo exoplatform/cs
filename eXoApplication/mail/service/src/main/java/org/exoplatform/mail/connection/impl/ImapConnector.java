@@ -89,7 +89,7 @@ public class ImapConnector extends BaseConnector {
         if (!imapFolder.exists()) {
           imapFolder.create((int) folder.getType());
         }
-        parentImapFolder.idle();
+        parentImapFolder.close(true);
       }
     }
     
@@ -157,7 +157,7 @@ public class ImapConnector extends BaseConnector {
         message = inFolder.getMessageByUID(Long.valueOf(msg.getUID()));
         if (message != null) message.setFlag(Flags.Flag.DELETED, true);
       }
-      inFolder.idle();
+      inFolder.close(true);
       return true;
     } catch(Exception e) {
       return false;
@@ -186,13 +186,8 @@ public class ImapConnector extends BaseConnector {
       for (int k=0; k<copiedMsgs.size(); k++) {
         copiedMsgs.get(k).setFlag(Flags.Flag.DELETED, true);
       }
-      try {
-        fromFolder.idle();
-        toFolder.idle();
-      } catch(MessagingException me) {
-        fromFolder.close(true);
-        toFolder.close(true);
-      }
+      fromFolder.close(true);
+      toFolder.close(true);
       return true;
     } catch (Exception e) {
       logger.error("Error in moveMessage()",e);
@@ -209,11 +204,7 @@ public class ImapConnector extends BaseConnector {
         message = folder.getMessageByUID(Long.valueOf(msg.getUID()));
         if (message != null) message.setFlag(Flags.Flag.SEEN, true); 
       }
-      try {
-        folder.idle();
-      } catch(MessagingException me) {;
-        folder.close(true);
-      }
+      folder.close(true);
       return true;
     } catch(Exception e) {
       return false;
@@ -229,11 +220,7 @@ public class ImapConnector extends BaseConnector {
         message = folder.getMessageByUID(Long.valueOf(msg.getUID()));
         if (message != null) message.setFlag(Flags.Flag.SEEN, false); 
       }
-      try {
-        folder.idle();
-      } catch(MessagingException me) {;
-        folder.close(true);
-      }
+      folder.close(true);
       return true;
     } catch(Exception e) {
       return false;
@@ -242,7 +229,6 @@ public class ImapConnector extends BaseConnector {
 
   public boolean setIsStared(List<Message> msgList, boolean isStared, String folderName) throws Exception {
     try {
-      System.out.println("---------------------------------" + msgList.size());
       IMAPFolder folder = (IMAPFolder) ((IMAPStore)store_).getFolder(folderName);
       if (!folder.isOpen()) folder.open(javax.mail.Folder.READ_WRITE);
       javax.mail.Message message;
@@ -250,11 +236,7 @@ public class ImapConnector extends BaseConnector {
         message = folder.getMessageByUID(Long.valueOf(msg.getUID()));
         if (message != null) message.setFlag(Flags.Flag.FLAGGED, isStared); 
       }
-      try {
-        folder.idle();
-      } catch(MessagingException me) {;
-        folder.close(true);
-      }
+      folder.close(true);
       return true;
     } catch(Exception e) {
       return false;
