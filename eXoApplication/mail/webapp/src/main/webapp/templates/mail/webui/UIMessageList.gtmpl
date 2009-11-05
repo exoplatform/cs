@@ -712,7 +712,19 @@
       %>
           <tbody id="TbodyMessageList" viewing="<%=uicomponent.viewing_%>"><tr><td colspan="9">
             <div class="MessageNotice">
+            <% 
+            	if (uicomponent.getAccountId()) {
+             %>
             <%=_ctx.appRes(uicomponent.id+ ".label.there-are-no-messages") %>
+            <% 
+            	} else {
+             %>
+             <a href="<%=uicomponent.event("AddAccount")%>">
+             	<div style="color:#D21717"><%=_ctx.appRes(uicomponent.id+ ".label.there-are-no-account") %></div>             	
+             </a>
+             <% 
+             	}
+              %>
           </div>
         </td></tr></tbody>
       <%

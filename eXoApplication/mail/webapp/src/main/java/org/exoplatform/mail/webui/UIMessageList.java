@@ -38,6 +38,7 @@ import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAddContactForm;
 import org.exoplatform.mail.webui.popup.UIAddMessageFilter;
 import org.exoplatform.mail.webui.popup.UIAskmeReturnReceipt;
@@ -75,6 +76,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     events = {
       @EventConfig(listeners = UIMessageList.SelectMessageActionListener.class),
       @EventConfig(listeners = UIMessageList.ReadActionListener.class),
+      @EventConfig(listeners = UIMessageList.AddAccountActionListener.class),
       @EventConfig(listeners = UIMessageList.EditDraftActionListener.class),
       @EventConfig(listeners = UIMessageList.AddStarActionListener.class),
       @EventConfig(listeners = UIMessageList.RemoveStarActionListener.class),
@@ -1738,6 +1740,19 @@ public class UIMessageList extends UIForm {
       } catch(Exception e) { 
         // do nothing
       }
+    }
+  }
+  
+  static  public class AddAccountActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiForm = event.getSource() ;
+      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
+      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiAccContainer = uiPortlet.createUIComponent(UIPopupActionContainer.class, null, null) ;
+      uiAccContainer.setId("UIAccountPopupCreation");
+      uiAccContainer.addChild(UIAccountCreation.class, null, null) ;
+      uiPopup.activate(uiAccContainer, 700, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
 }
