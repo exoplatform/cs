@@ -273,6 +273,10 @@
 	white-space: nowrap;
 }
 
+.UICalendarPortlet .UIForm .UIFormGrid .FieldLabel td.FieldComponent {
+	text-align: left;
+}
+
 .UICalendarPortlet .UIAttachFileForm .UIForm .UIFormGrid td.FieldComponent {
 	white-space: normal;
 }
