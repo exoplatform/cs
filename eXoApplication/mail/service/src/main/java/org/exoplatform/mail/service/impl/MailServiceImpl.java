@@ -229,7 +229,7 @@ public class MailServiceImpl implements MailService, Startable {
   public void renameFolder(String username, String accountId, String newName,  String folderId) throws Exception {
     Account account = getAccountById(username, accountId);
     Folder folder = this.getFolder(username, accountId, folderId);
-    boolean success = false;
+    boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder()) {
       try {
         Connector connector = new ImapConnector(account);
@@ -249,7 +249,7 @@ public class MailServiceImpl implements MailService, Startable {
   public void removeUserFolder(String username, String accountId, String folderId) throws Exception {
     Account account = getAccountById(username, accountId);
     Folder folder = this.getFolder(username, accountId, folderId);
-    boolean success = false;
+    boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder()) {
       try {
         Connector connector = new ImapConnector(account);
@@ -294,7 +294,7 @@ public class MailServiceImpl implements MailService, Startable {
     Account account = getAccountById(username, accountId);
     Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
     Folder destFolder = this.getFolder(username, accountId, destFolderId);
-    boolean success = false;
+    boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         Connector connector = new ImapConnector(account);
@@ -311,7 +311,7 @@ public class MailServiceImpl implements MailService, Startable {
     Account account = getAccountById(username, accountId);
     Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
     Folder destFolder = this.getFolder(username, accountId, destFolderId);
-    boolean success = false;
+    boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         Connector connector = new ImapConnector(account);
@@ -328,7 +328,7 @@ public class MailServiceImpl implements MailService, Startable {
     Account account = getAccountById(username, accountId);
     Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
     Folder destFolder = this.getFolder(username, accountId, destFolderId);
-    boolean success = false;
+    boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         Connector connector = new ImapConnector(account);
@@ -347,7 +347,7 @@ public class MailServiceImpl implements MailService, Startable {
     Account account = getAccountById(username, accountId);
     Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
     Folder destFolder = this.getFolder(username, accountId, destFolderId);
-    boolean success = false;
+    boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         Connector connector = new ImapConnector(account);
@@ -1704,7 +1704,7 @@ public class MailServiceImpl implements MailService, Startable {
       String property, boolean value) throws Exception {
     Account account = getAccountById(username, accountId);
     Folder folder = getFolder(username, accountId, folderId);
-    boolean success = false;
+    boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         Connector connector = new ImapConnector(account);
