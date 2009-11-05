@@ -1,5 +1,5 @@
 ==============================================
-    Release Notes - exo-cs - Version 1.3.2
+    Release Notes - exo-cs - Version 1.3.2.1
 ==============================================
 
 ===============
@@ -34,11 +34,11 @@ exo Collaboration Suite 1.3.2 features several noteworthy changes:
           
 	  o Upgraded to core 2.1.6
           o Upgraded to kernel 2.0.8 
-          o Upgraded to jcr 1.10.5          
+          o Upgraded to jcr 1.10.5.1          
 	  o Upgraded to ws 1.3.4
 	  o Upgraded to portlet-container 2.0.7          
-	  o Upgraded to portal 2.5.6.1
-          o Upgraded to webos 1.5.3
+	  o Upgraded to portal 2.5.6.2
+          o Upgraded to webos 1.5.3.1
           
     * Calendar
           o Remove event category but keep events
