@@ -116,7 +116,6 @@ public class MailServiceImpl implements MailService, Startable {
   
   private IMAPStore imapStore_ = null;
 
-  // will be use map for multi import/export email type
   private EMLImportExport           emlImportExport_;
 
   private Map<String, CheckingInfo> checkingLog_;

@@ -217,17 +217,9 @@ public class ContactServiceImpl implements ContactService {
   public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, SharedAddressBook addressBook) throws Exception {
     return getSharedContactsByAddressBook(username, addressBook);
   }
-  /*public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception {
-  	storage_.removeSharedAddressBook(sProvider, username, addressBookId) ;
-  }*/
-
   public ContactPageList getSharedContactsByAddressBook(String username, SharedAddressBook addressBook) throws Exception {
   	return storage_.getSharedContactsByAddressBook(username, addressBook) ;
   }
-  /*public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception {
-  	storage_.removeSharedAddressBook(sProvider, username, addressBookId) ;
-  }*/
-  
   public void removeSharedContact(SessionProvider sProvider, String username, String addressBookId, String contactId) throws Exception {
     removeSharedContact(username, addressBookId, contactId);
   }

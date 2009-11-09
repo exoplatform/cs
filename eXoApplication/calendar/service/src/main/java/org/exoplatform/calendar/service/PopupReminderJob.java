@@ -71,7 +71,7 @@ public class PopupReminderJob implements Job {
       QueryResult results = query.execute();
       NodeIterator iter = results.getNodes();
       Node reminder;
-      List<Reminder> popupReminders = new ArrayList<Reminder>() ;
+      List<Reminder> popupReminders = new ArrayList<Reminder>();
       while (iter.hasNext()) {
         reminder = iter.nextNode();
         boolean isRepeat = reminder.getProperty(Utils.EXO_IS_REPEAT).getBoolean() ;

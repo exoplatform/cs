@@ -60,6 +60,7 @@ public class DeliveryStatus {
    * Construct a delivery status notification by parsing the
    * supplied input stream.
    */
+  @SuppressWarnings("unchecked")
   public DeliveryStatus(InputStream is) throws MessagingException, IOException {
     messageDSN = new InternetHeaders(is);
     if (debug)

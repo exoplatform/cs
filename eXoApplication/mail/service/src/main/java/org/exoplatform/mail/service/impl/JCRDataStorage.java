@@ -262,7 +262,6 @@ public class JCRDataStorage {
   }
 
   private QueryImpl createXPathQuery(SessionProvider sProvider, String username, String accountId, String xpath) throws Exception {
-    //Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
     Session sess = getSession(sProvider);
     QueryManager queryManager = sess.getWorkspace().getQueryManager();
     return (QueryImpl) queryManager.createQuery(xpath, Query.XPATH);

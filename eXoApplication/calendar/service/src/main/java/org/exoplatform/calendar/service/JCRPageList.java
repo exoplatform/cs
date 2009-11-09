@@ -63,6 +63,7 @@ abstract public class JCRPageList {
     return currentListPage_ ;
   }
   
+  @SuppressWarnings("unchecked")
   abstract public List getAll() throws Exception  ;
   
   protected void checkAndSetPage(long page) throws Exception  {
@@ -82,18 +83,6 @@ abstract public class JCRPageList {
       long pages = available / pageSize_ ;
       if ( available % pageSize_ > 0) pages++ ;
       availablePage_ = pages ;
-      //currentPage_ =  1 ;
     }
   }
-  
- 
-  /*public long getFrom() { 
-    return (currentPage_ - 1) * pageSize_ ; 
-  }
-  
-  public long getTo() { 
-    long to = currentPage_  * pageSize_ ; 
-    if (to > available_ ) to = available_ ;
-    return to ;
-  }*/
 }

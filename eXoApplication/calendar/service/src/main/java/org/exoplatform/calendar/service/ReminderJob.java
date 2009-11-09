@@ -70,8 +70,6 @@ public class ReminderJob implements Job {
       path.append("//element(*,exo:reminder)");
       path.append("[@exo:remindDateTime <= xs:dateTime('"	+ ISO8601.format(fromCalendar)
                   + "') and @exo:isOver = 'false' and @exo:reminderType = 'email' ]");
-      /*path.append("//element(*,exo:reminder)");
-      path.append("[@exo:isOver = 'false']");*/
       QueryManager queryManager = getSession(provider).getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(path.toString(), Query.XPATH);
       QueryResult results = query.execute();

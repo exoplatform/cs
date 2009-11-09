@@ -38,7 +38,7 @@ public interface ContactService extends ContactServiceLegacy {
   public List<Contact> getPersonalContacts(String username) throws Exception ;
   
   /**
-   * get contact page list in a specific personal addressbook
+   * get contact page list in a specific personal address book
    * @param username current user
    * @param addressBookId id of address book to get
    * @return a contact page list 
@@ -138,7 +138,7 @@ public interface ContactService extends ContactServiceLegacy {
   /**
    * get id, name, email of contacts base on properties of ContactFilter
    * @param username current user 
-   * @param filter setted some properties to filter contacts.
+   * @param filter set some properties to filter contacts.
    * @param sProvider should use system provider
    * @return a map contains id, name, email of contacts.
    * @throws Exception 
@@ -159,7 +159,7 @@ public interface ContactService extends ContactServiceLegacy {
   /**
    * Get the public contact for a given user Id
    * @param userId User ID whose corresponding contact will be retrieved
-   * @return The self contact for the iven user
+   * @return The self contact for the given user
    * @throws Exception 
    */
   public Contact getPublicContact(String userId) throws Exception ;  
@@ -176,7 +176,7 @@ public interface ContactService extends ContactServiceLegacy {
 
   /**
    * get all personal address books of user
-   * @param username username of user get groups
+   * @param username user name of user get groups
    * @return list all groups of user 
    * @throws Exception 
    */
@@ -249,7 +249,7 @@ public interface ContactService extends ContactServiceLegacy {
   
 
   /**
-   * Unshare an address book with another user
+   * Un-share an address book with another user
    * @param owner user ID of the address book owner
    * @param addressBookId id of shared address book 
    * @param unsharedUser user ID of the user that looses sharing to this address book
@@ -281,7 +281,7 @@ public interface ContactService extends ContactServiceLegacy {
    * @param username userId of current user
    * @param addressBookId id of address book user wants to save contact to
    * @param contact saved contact to shared address book
-   * @param isNew true if save a new contact, false if save a editted contact  
+   * @param isNew true if save a new contact, false if save a edited contact  
    * @throws Exception 
    */
   public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception ;
@@ -435,7 +435,7 @@ public interface ContactService extends ContactServiceLegacy {
   public void registerNewUser(User user, boolean isNew) throws Exception ;
   
   /**
-   * save collected email adresses
+   * save collected email addresses
    * @param emailAddress collected email
    * @throws Exception 
    */
