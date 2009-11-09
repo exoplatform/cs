@@ -186,7 +186,7 @@ public interface MailService {
    * @param username
    * @param accountId
    * @param filter
-   * @param applyAll TODO
+   * @param applyAll
    * @return save filter to database
    * @throws Exception
    */

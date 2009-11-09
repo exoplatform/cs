@@ -24,9 +24,11 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValuesParam;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.User;
@@ -135,7 +137,7 @@ public class NewUserListener extends UserEventListener {
       for(String u : ignore_users_) {
         if (user.getUserName().equalsIgnoreCase(u)) return ;
       }
-    SessionProvider sysProvider = SessionProvider.createSystemProvider();
+    SessionProvider sysProvider = createSystemProvider();
     ThreadLocalSessionProviderService sessionProviderService = (ThreadLocalSessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
     sessionProviderService.setSessionProvider(null, sysProvider);
     try {
@@ -183,9 +185,9 @@ public class NewUserListener extends UserEventListener {
 
   @Override
   public void postDelete(User user) throws Exception {
-    SessionProvider session = SessionProvider.createSystemProvider(); ;
+    SessionProvider session = createSystemProvider(); ;
     String username = user.getUserName() ;
-    List<GroupCalendarData> gCalData = cservice_.getCalendarCategories(username, true) ; // should use a system session
+    List<GroupCalendarData> gCalData = cservice_.getCalendarCategories(username, true) ;  
     try {
       if(!gCalData.isEmpty())
         for (GroupCalendarData gCal : gCalData) {
@@ -207,5 +209,11 @@ public class NewUserListener extends UserEventListener {
       session.close() ;
     }
     super.postDelete(user);
+  }
+  
+  private SessionProvider createSystemProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSystemSessionProvider(null) ;    
   }
 }
