@@ -6,7 +6,7 @@
   String name = uicomponent.getId() ;
 %>
 <div class="$uicomponent.id" id="$uicomponent.id">
-	<table class="UIGrid" style="overflow:hidden">
+	<table class="UIGrid">
 	  <thead>
 	    <tr>
 	      <%if(name != null) { %>
