@@ -252,22 +252,24 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public List<ActionData> getUploadFileList() throws Exception { 
     List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
     for(Attachment attachdata : attachments_) {
-      ActionData fileUpload = new ActionData() ;
-      fileUpload.setActionListener("Download") ;
-      fileUpload.setActionParameter(attachdata.getId());
-      fileUpload.setActionType(ActionData.TYPE_ICON) ;
-      fileUpload.setCssIconClass("AttachmentIcon");
-      fileUpload.setActionName(attachdata.getName() + " (" + MailUtils.convertSize(attachdata.getSize()) + ")" ) ;
-      fileUpload.setShowLabel(true);
-      uploadedFiles.add(fileUpload);
-      ActionData removeAction = new ActionData() ;
-      removeAction.setActionListener("RemoveAttachment") ;
-      removeAction.setActionName(ACT_REMOVE);
-      removeAction.setActionParameter(attachdata.getId());
-      removeAction.setCssIconClass("LabelLink");
-      removeAction.setActionType(ActionData.TYPE_LINK) ;
-      removeAction.setBreakLine(true);
-      uploadedFiles.add(removeAction) ;
+      if (!attachdata.isShownInBody()) {
+        ActionData fileUpload = new ActionData() ;
+        fileUpload.setActionListener("Download") ;
+        fileUpload.setActionParameter(attachdata.getId());
+        fileUpload.setActionType(ActionData.TYPE_ICON) ;
+        fileUpload.setCssIconClass("AttachmentIcon");
+        fileUpload.setActionName(attachdata.getName() + " (" + MailUtils.convertSize(attachdata.getSize()) + ")" ) ;
+        fileUpload.setShowLabel(true);
+        uploadedFiles.add(fileUpload);
+        ActionData removeAction = new ActionData() ;
+        removeAction.setActionListener("RemoveAttachment") ;
+        removeAction.setActionName(ACT_REMOVE);
+        removeAction.setActionParameter(attachdata.getId());
+        removeAction.setCssIconClass("LabelLink");
+        removeAction.setActionType(ActionData.TYPE_LINK) ;
+        removeAction.setBreakLine(true);
+        uploadedFiles.add(removeAction) ;        
+      }
     }
     return uploadedFiles ;
   }
