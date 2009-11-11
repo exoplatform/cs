@@ -666,11 +666,14 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
     timeStamp = timeStamp.format('dd/mm/yyyy - HH:MM:ss');
   } else {
     window.jsconsole.warn('timeStamp before process: ' + timeStamp);
+    var isICTFormat = timeStamp.indexOf('ICT') >=0 ? true : false;
     timeStamp = timeStamp.replace('ICT', ''); // Remove ICT if exist
     window.jsconsole.warn('timeStamp after process: ' + timeStamp);
     var regexObj = /GMT(\+|\-)?\d{2}:\d{2}/g;
     timeStamp = timeStamp.replace(regexObj, function(m) {return m.replace(/:\d{2}/, '');});
     timeStamp = new Date(timeStamp);
+    if(isICTFormat)
+      timeStamp = this.convertToClientTime(timeStamp, this.UIMainChatWindow.serverTimezoneOffset);
     timeStamp = timeStamp.format('dd/mm/yyyy - HH:MM:ss');
     //timeStamp = timeStamp.getDate() + '/' + (timeStamp.getMonth() + 1) + '/' + timeStamp.getFullYear() +
                 //' - ' + 
@@ -680,6 +683,16 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
     
   return messageNode;
 };
+
+UITabControl.prototype.convertToClientTime = function(serverDate, serverTimezoneOffset){
+  if(!serverTimezoneOffset || serverTimezoneOffset == this.UIMainChatWindow.clientTimezoneOffset)
+    return serverDate;
+  var gmtTime = serverDate.getTime() + serverTimezoneOffset * (60 * 1000);
+  gmtTime -= this.UIMainChatWindow.clientTimezoneOffset * (60 * 1000);
+  var clientTime = new Date();
+  clientTime.setTime(gmtTime);
+  return clientTime;
+}
 
 /**
  * This method will do: become keyboard handler for input text box
@@ -1644,7 +1657,7 @@ UIChatWindow.prototype.getMessageHistory = function(event, timeNo) {
   
   var targetPerson = activeTabControl.tabId.targetPerson;
   targetPerson = targetPerson.substr(0, targetPerson.indexOf('@'));
-  this.UIMainChatWindow.jabberGetMessageHistory(targetPerson, javaTimeFormat, startDate, endDate, activeTabControl.isGroupChat);
+  this.UIMainChatWindow.jabberGetMessageHistory(targetPerson, javaTimeFormat, startDate, endDate, this.UIMainChatWindow.clientTimezoneOffset, activeTabControl.isGroupChat);
   historyStatus = timeNo;
   activeTabControl.tabPaneNode.historyStatus = historyStatus;
   /*
@@ -1725,6 +1738,9 @@ UIChatWindow.prototype.exportHistory = function() {
   if (startDate &&
       endDate) {
     url += endDate + '/';
+  }
+  if(this.UIMainChatWindow.clientTimezoneOffset){
+    url += this.UIMainChatWindow.clientTimezoneOffset + '/';
   }
   url += '?usernamefrom=' + currentUser; 
   this.uploadIframe.src = url;

@@ -621,7 +621,7 @@ XMPPCommunicator.prototype.sendMessage = function(userName, transportName, handl
  * @param {Boolean} isGroupChat
  *
  */
-XMPPCommunicator.prototype.getMessageHistory = function(userName, transportName, handler, targetPerson, dateFormat, dateFrom, dateTo, isGroupChat) {
+XMPPCommunicator.prototype.getMessageHistory = function(userName, transportName, handler, targetPerson, dateFormat, dateFrom, dateTo, clientTimezoneOffset, isGroupChat) {
   //targetPerson = this.encodeParam(targetPerson);
   var url = this.SERVICE_URL + '/' + transportName + '/history/getmessages/' + userName + '/' + isGroupChat + '/';
   if (dateFormat) {
@@ -633,6 +633,9 @@ XMPPCommunicator.prototype.getMessageHistory = function(userName, transportName,
   if (dateFrom &&
       dateTo) {
     url += dateTo + '/';
+  }
+  if(clientTimezoneOffset){
+    url += clientTimezoneOffset + '/';
   }
   url += '?usernamefrom=' + targetPerson;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
