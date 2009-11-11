@@ -29,7 +29,7 @@
                                                     <div class="OnlineNoticeIcon">
                                                         <span class="UnreadMessage" style="color: white;"></span>
                                                     </div>
-                                                    <div class="ControlIconChat CloseIcon" title="Close all conversations." onclick="eXo.communication.chatbar.webui.UIChatWindow.closeAllWindow();">
+                                                    <div class="ControlIconChat CloseIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.closeAllConversations");%>." onclick="eXo.communication.chatbar.webui.UIChatWindow.closeAllWindow();">
                                                         <span></span>
                                                     </div>
                                                     <div class="ClearBoth">
@@ -74,7 +74,7 @@
                                                             </div>
                                                             <div class="MenuItem">
                                                                 <div class="Icon AddContactIcon">
-                                                                    Add Contact</div>
+                                                                    <%=_ctx.appRes("UIChatBarPortlet.label.addContact");%></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -94,7 +94,7 @@
                                 <div class="LeftIconButton">
                                     <div class="RightIconButton">
                                         <div class="CenterIconButton">
-                                            <a class="IconHolder ContactManageIcon" title="Add new contact">Contacts</a>
+                                            <a class="IconHolder ContactManageIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.addContact");%>"><%=_ctx.appRes("UIChatBarPortlet.label.contacts");%></a>
                                         </div>
                                     </div>
                                 </div>
@@ -127,11 +127,11 @@
                                                             </div>
                                                             <div class="MenuItem">
                                                                 <div class="Icon JoinRoomIcon" onclick="eXo.communication.chatbar.webui.UIJoinRoomPopupWindow.setVisible(true);">
-                                                                    Join Room</div>
+                                                                    <%=_ctx.appRes("UIChatBarPortlet.label.joinRoom");%></div>
                                                             </div>
                                                             <div class="MenuItem">
                                                                 <div class="Icon NewRoomIcon" onclick="eXo.communication.chatbar.webui.UICreateNewRoomPopupWindow.setVisible(true);">
-                                                                    Add Room</div>
+                                                                    <%=_ctx.appRes("UIChatBarPortlet.label.addRoom");%></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -151,7 +151,7 @@
                                 <div class="LeftIconButton">
                                     <div class="RightIconButton">
                                         <div class="CenterIconButton">
-                                            <a class="IconHolder RoomManageIcon" title="Join a room"><span></span></a>
+                                            <a class="IconHolder RoomManageIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.joinRoom");%>"><span></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -178,27 +178,27 @@
                                                             <div onclick="eXo.communication.chatbar.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chatbar.webui.UIMainChatWindow.ONLINE_STATUS, null, event);"
                                                                 class="MenuItem">
                                                                 <div class="ItemIcon OnlineIcon">
-                                                                    Online</div>
+                                                                    <%=_ctx.appRes("UIChatBarPortlet.label.onLine");%></div>
                                                             </div>
                                                             <div onclick="eXo.communication.chatbar.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chatbar.webui.UIMainChatWindow.AWAY_STATUS, null, event);"
                                                                 class="MenuItem">
                                                                 <div class="ItemIcon AwayIcon">
-                                                                    Away</div>
+                                                                    <%=_ctx.appRes("UIChatBarPortlet.label.away");%></div>
                                                             </div>
                                                             <div onclick="eXo.communication.chatbar.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chatbar.webui.UIMainChatWindow.EXTEND_AWAY_STATUS, null, event);"
                                                                 class="MenuItem">
                                                                 <div class="ItemIcon ExtendAwayIcon">
-                                                                    Extend Away</div>
+                                                                    <%=_ctx.appRes("UIChatBarPortlet.label.extendAway");%></div>
                                                             </div>
                                                             <div onclick="eXo.communication.chatbar.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chatbar.webui.UIMainChatWindow.FREE_TO_CHAT_STATUS, null, event);"
                                                                 class="MenuItem">
                                                                 <div class="ItemIcon FreeToChat">
-                                                                    Free To Chat</div>
+                                                                    <%=_ctx.appRes("UIChatBarPortlet.label.freeToChat");%></div>
                                                             </div>
                                                             <div onclick="eXo.communication.chatbar.webui.UIMainChatWindow.preChangeStatus(eXo.communication.chatbar.webui.UIMainChatWindow.OFFLINE_STATUS, null, event);"
                                                                 class="MenuItem">
                                                                 <div class="ItemIcon OfflineIcon">
-                                                                    Offline</div>
+                                                                    <%=_ctx.appRes("UIChatBarPortlet.label.offLine");%></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -271,11 +271,11 @@
                     <div class="TypeViewContactPortlet">
                         <div class="MenuItem" onclick="javascript:eXo.communication.chatbar.webui.UIMainChatWindow.postProcessBuddyItemAction(this, eXo.communication.chatbar.webui.UIMainChatWindow.CREATE_CONVERSATION_ACTION);">
                             <div class="ItemIcon MessageIcon">
-                                Send message</div>
+                                <%=_ctx.appRes("UIChatBarPortlet.label.sendMessage");%></div>
                         </div>
                         <div class="MenuItem" onclick="javascript:eXo.communication.chatbar.webui.UIMainChatWindow.postProcessBuddyItemAction(this, eXo.communication.chatbar.webui.UIMainChatWindow.REMOVE_USER_ACTION);">
                             <div class="ItemIcon RemoveIcon">
-                                Remove</div>
+                                <%=_ctx.appRes("UIChatBarPortlet.label.remove");%></div>
                         </div>
                     </div>
                 </div>
@@ -302,7 +302,7 @@
                     <div class="WindowPortletControl CategoryDetectPosition">
                         <div onmouseout="eXo.desktop.UIWindow.onControlOver(this, false);" onmouseover="eXo.desktop.UIWindow.onControlOver(this, true);"
                             onclick="eXo.communication.chatbar.webui.UIChatWindow.setVisible(false, event, true)"
-                            title="Minimize Window" class="ControlIcon MinimizedIcon">
+                            title="<%=_ctx.appRes("UIChatBarPortlet.label.minimizeWindow");%>" class="ControlIcon MinimizedIcon">
                             <span></span>
                         </div>
                         <div style="clear: left;">
@@ -313,7 +313,7 @@
                         <div class="Icon PortletIcon WindowPortletIcon NovaPortletIcon">
                             <div class="PortletName">
                                 <span class="UnreadMessage" style="color: red"></span>
-                                <span>Conversation</span>
+                                <span><%=_ctx.appRes("UIChatBarPortlet.label.conversation");%></span>
                             </div>
                         </div>
                         <div class="ClearLeft">
@@ -341,8 +341,8 @@
                                                 <div class="CenterHorizontalTabs">
                                                     <div class="TabsContainer">
                                                         <div class="ScrollButtons" style="display: block;">
-                                                            <div class="ScrollLeftButton" title="Previous">
-                                                                <div class="ScrollRightButton" title="Next">
+                                                            <div class="ScrollLeftButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.previous");%>">
+                                                                <div class="ScrollRightButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.next");%>">
                                                                     <span></span>
                                                                 </div>
                                                             </div>
@@ -369,11 +369,11 @@
         <div class="BottomDecoratorRight">
             <div class="BottomDecoratorCenter">
                 <div class="FixHeight">
-                    <div title="Resize WindowResize Window" class="ResizeArea">
+                    <div title="<%=_ctx.appRes("UIChatBarPortlet.label.resizewindow");%>" class="ResizeArea">
                         <span></span>
                     </div>
                     <div class="Information">
-                        Done</div>
+                        <%=_ctx.appRes("UIChatBarPortlet.label.done");%></div>
                     <div class="ClearRight">
                         <span></span>
                     </div>
@@ -393,11 +393,11 @@
                         <div class="PopupTitleIcon">
                             <span></span>
                         </div>
-                        <div class="CloseButton" title="Close Window" onclick="eXo.communication.chatbar.webui.UIAddContactPopupWindow.setVisible(false);">
+                        <div class="CloseButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.closeWindow");%>" onclick="eXo.communication.chatbar.webui.UIAddContactPopupWindow.setVisible(false);">
                             <span></span>
                         </div>
                         <div class="PopupTitle">
-                            Add Contact</div>
+                            <%=_ctx.appRes("UIChatBarPortlet.label.addContact");%></div>
                     </div>
                 </div>
             </div>
@@ -419,9 +419,9 @@
                                                             <div class="UISearchForm">
                                                                 <div class="QuickSet">
                                                                     <div class="SearchTitle">
-                                                                        Search:</div>
+                                                                         <%=_ctx.appRes("UIChatBarPortlet.label.search");%>:</div>
                                                                     <input type="text" class="SearchField" />
-                                                                    <a class="SearchIcon" href="" title="Quick Search"><span></span></a>
+                                                                    <a class="SearchIcon" href="" title="<%=_ctx.appRes("UIChatBarPortlet.label.quickSearch");%>"><span></span></a>
                                                                 </div>
                                                             </div>
                                                             <div style="clear: left;">
@@ -440,19 +440,19 @@
                                                     <tr>
                                                         <th class="StyleInput">
                                                             <input type="checkbox" class="CheckBox ToggleSelect" onclick="eXo.communication.chatbar.webui.UIAddContactPopupWindow.toggleSelectAllContact()"
-                                                                title="Select all/none" />
+                                                                 title="<%=_ctx.appRes("UIChatBarPortlet.label.selectAllNone");%>" />
                                                         </th>
                                                         <th>
                                                             <div class="Label">
-                                                                First Name</div>
+                                                                <%=_ctx.appRes("UIChatBarPortlet.label.firstName");%></div>
                                                         </th>
                                                         <th>
                                                             <div class="Label">
-                                                                Last Name</div>
+                                                                <%=_ctx.appRes("UIChatBarPortlet.label.lastName");%></div>
                                                         </th>
                                                         <th>
                                                             <div class="Label">
-                                                                UserName</div>
+                                                                <%=_ctx.appRes("UIChatBarPortlet.label.userName");%></div>
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -463,25 +463,25 @@
                                                         </td>
                                                         <td>
                                                             <div class="Label">
-                                                                First Name</div>
+                                                                <%=_ctx.appRes("UIChatBarPortlet.label.firstName");%></div>
                                                         </td>
                                                         <td>
                                                             <div class="Label">
-                                                                Last Name</div>
+                                                                <%=_ctx.appRes("UIChatBarPortlet.label.lastName");%></div>
                                                         </td>
                                                         <td>
                                                             <div class="Label">
-                                                                User Name</div>
+                                                                <%=_ctx.appRes("UIChatBarPortlet.label.userName");%></div>
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                             <div class="UIPageIterator">
-                                                <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span></span></a><a
-                                                    title="Next Page" class="Icon NextPageIcon"><span></span></a><a class="Number">2</a>
-                                                <a class="Number PageSelected">1</a> <a title="Previous Page" class="Icon DisableLastPageIcon">
-                                                    <span></span></a><a title="Back 10 pages" class="Icon DisableLastTopPageIcon"><span>
-                                                    </span></a><a class="PagesTotalNumber">2</a> <a class="TotalPages">Total pages:</a>
+                                                <a title="<%=_ctx.appRes("UIChatBarPortlet.label.nextTenPages");%>" class="Icon DisableNextTopPageIcon"><span></span></a><a
+                                                    title="<%=_ctx.appRes("UIChatBarPortlet.label.nextPage");%>" class="Icon NextPageIcon"><span></span></a><a class="Number">2</a>
+                                                <a class="Number PageSelected">1</a> <a title="<%=_ctx.appRes("UIChatBarPortlet.label.previousPage");%>" class="Icon DisableLastPageIcon">
+                                                    <span></span></a><a title="<%=_ctx.appRes("UIChatBarPortlet.label.backTenPages");%>" class="Icon DisableLastTopPageIcon"><span>
+                                                    </span></a><a class="PagesTotalNumber">2</a> <a class="TotalPages"><%=_ctx.appRes("UIChatBarPortlet.label.totalPages");%>:</a>
                                                 <div class="ClearRight">
                                                     <span></span>
                                                 </div>
@@ -498,7 +498,7 @@
                                                     <div class="ButtonLeft">
                                                         <div class="ButtonRight">
                                                             <div class="ButtonMiddle">
-                                                                <a href="#">Refresh</a>
+                                                                <a href="#"><%=_ctx.appRes("UIChatBarPortlet.label.refresh");%></a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -508,7 +508,7 @@
                                                     <div class="ButtonLeft">
                                                         <div class="ButtonRight">
                                                             <div class="ButtonMiddle">
-                                                                <a href="#">Add contact</a>
+                                                                <a href="#"><%=_ctx.appRes("UIChatBarPortlet.label.addContact");%></a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -518,7 +518,7 @@
                                                     <div class="ButtonLeft">
                                                         <div class="ButtonRight">
                                                             <div class="ButtonMiddle">
-                                                                <a href="#">Cancel</a>
+                                                                <a href="#"><%=_ctx.appRes("UIChatBarPortlet.label.cancel");%></a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -558,11 +558,11 @@
                         <div class="PopupTitleIcon">
                             <span></span>
                         </div>
-                        <div class="CloseButton" title="Close Window" onclick="eXo.communication.chatbar.webui.UIJoinRoomPopupWindow.setVisible(false);">
+                        <div class="CloseButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.closeWindow");%>" onclick="eXo.communication.chatbar.webui.UIJoinRoomPopupWindow.setVisible(false);">
                             <span></span>
                         </div>
                         <div class="PopupTitle">
-                            Join Room</div>
+                            <%=_ctx.appRes("UIChatBarPortlet.label.joinRoom");%></div>
                     </div>
                 </div>
             </div>
@@ -584,9 +584,9 @@
                                                             <div class="UISearchForm">
                                                                 <div class="QuickSet">
                                                                     <div class="SearchTitle">
-                                                                        Search:</div>
+                                                                        <%=_ctx.appRes("UIChatBarPortlet.label.search");%>:</div>
                                                                     <input type="text" disabled/>
-                                                                    <a class="SearchIcon" href="" title="Quick Search"><span></span></a>
+                                                                    <a class="SearchIcon" href="" title="<%=_ctx.appRes("UIChatBarPortlet.label.quickSearch");%>"><span></span></a>
                                                                 </div>
                                                             </div>
                                                             <div class="ClearLeft">
@@ -610,11 +610,11 @@
                                                         </th>
                                                         <th class="FieldName">
                                                             <div>
-                                                                Name</div>
+                                                                <%=_ctx.appRes("UIChatBarPortlet.label.roomName");%></div>
                                                         </th>
                                                         <th>
                                                             <div class="Label">
-                                                                Des</div>
+                                                                <%=_ctx.appRes("UIChatBarPortlet.label.roomDescription");%></div>
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -627,11 +627,11 @@
                                                 </tbody>
                                             </table>
                                             <div class="UIPageIterator">
-                                                <a title="Next 10 pages" class="Icon DisableNextTopPageIcon"></a><a title="Next Page"
+                                                <a title="<%=_ctx.appRes("UIChatBarPortlet.label.nextTenPages");%>" class="Icon DisableNextTopPageIcon"></a><a title="<%=_ctx.appRes("UIChatBarPortlet.label.nextPage");%>"
                                                     class="Icon NextPageIcon"><span></span></a><a class="Number">2</a> <a class="Number PageSelected">
-                                                        1</a> <a title="Previous Page" class="Icon DisableLastPageIcon"><span></span>
-                                                </a><a title="Back 10 pages" class="Icon DisableLastTopPageIcon"><span></span></a>
-                                                <a class="PagesTotalNumber">2</a> <a class="TotalPages">Total pages:</a>
+                                                        1</a> <a title="<%=_ctx.appRes("UIChatBarPortlet.label.previousPage");%>" class="Icon DisableLastPageIcon"><span></span>
+                                                </a><a title="<%=_ctx.appRes("UIChatBarPortlet.label.backTenPages");%>" class="Icon DisableLastTopPageIcon"><span></span></a>
+                                                <a class="PagesTotalNumber">2</a> <a class="TotalPages"><%=_ctx.appRes("UIChatBarPortlet.label.totalPages");%>:</a>
                                                 <div class="ClearRight">
                                                     <span></span>
                                                 </div>
@@ -648,7 +648,7 @@
                                                     <div class="ButtonLeft">
                                                         <div class="ButtonRight">
                                                             <div class="ButtonMiddle">
-                                                                <a href="#">Refresh</a></div>
+                                                                <a href="#"><%=_ctx.appRes("UIChatBarPortlet.label.refresh");%></a></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -657,7 +657,7 @@
                                                     <div class="ButtonLeft">
                                                         <div class="ButtonRight">
                                                             <div class="ButtonMiddle">
-                                                                <a href="#">Join Room</a></div>
+                                                                <a href="#"><%=_ctx.appRes("UIChatBarPortlet.label.joinRoom");%></a></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -666,7 +666,7 @@
                                                     <div class="ButtonLeft">
                                                         <div class="ButtonRight">
                                                             <div class="ButtonMiddle">
-                                                                <a href="#">Cancel</a></div>
+                                                                <a href="#"><%=_ctx.appRes("UIChatBarPortlet.label.cancel");%></a></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -705,11 +705,11 @@
                         <div class="PopupTitleIcon">
                             <span></span>
                         </div>
-                        <div class="CloseButton" title="Close Window" onclick="eXo.communication.chatbar.webui.UICreateNewRoomPopupWindow.setVisible(false);">
+                        <div class="CloseButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.closeWindow");%>" onclick="eXo.communication.chatbar.webui.UICreateNewRoomPopupWindow.setVisible(false);">
                             <span></span>
                         </div>
                         <div class="PopupTitle">
-                            New Room</div>
+                            <%=_ctx.appRes("UIChatBarPortlet.label.newRoom");%></div>
                     </div>
                 </div>
             </div>
@@ -730,7 +730,7 @@
                                                     <tr>
                                                         <td class="FieldName">
                                                             <div>
-                                                                Room name:</div>
+                                                                <%=_ctx.appRes("UIChatBarPortlet.label.roomName");%>:</div>
                                                         </td>
                                                         <td>
                                                             <input type="text" name="roomName" maxlength="50px" />
@@ -751,7 +751,7 @@
                                                     <div class="ButtonLeft">
                                                         <div class="ButtonRight">
                                                             <div class="ButtonMiddle">
-                                                                <a href="#">Ok</a></div>
+                                                                <a href="#"><%=_ctx.appRes("UIChatBarPortlet.label.ok");%></a></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -760,7 +760,7 @@
                                                     <div class="ButtonLeft">
                                                         <div class="ButtonRight">
                                                             <div class="ButtonMiddle">
-                                                                <a href="#">Cancel</a></div>
+                                                                <a href="#"><%=_ctx.appRes("UIChatBarPortlet.label.cancel");%></a></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -800,11 +800,11 @@
                         <div class="PopupTitleIcon">
                             <span></span>
                         </div>
-                        <div class="CloseButton" title="Close Window" onclick="eXo.communication.chatbar.webui.UIRoomConfigPopupWindow.setVisible(false);">
+                        <div class="CloseButton" title="<%=_ctx.appRes("UIChatBarPortlet.label.closeWindow");%>" onclick="eXo.communication.chatbar.webui.UIRoomConfigPopupWindow.setVisible(false);">
                             <span></span>
                         </div>
                         <div class="PopupTitle">
-                            Room Configuration</div>
+                            <%=_ctx.appRes("UIChatBarPortlet.label.roomConfiguration");%></div>
                     </div>
                 </div>
             </div>
@@ -817,12 +817,12 @@
                         <div class="BorderForm">
                             <fieldset style="color: #333; margin-bottom: 10px; overflow: hidden:height:100%;"
                                 maxheight="350">
-                                <legend class="StyleLegend">General</legend>
+                                <legend class="StyleLegend"><%=_ctx.appRes("UIChatBarPortlet.label.general");%></legend>
                                 <table class="UIFormGrid" style="visibility: visible;">
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Room name:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.roomName");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <input type="text" name="roomname" disabled />
@@ -840,7 +840,7 @@
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Persistent Room:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.persistentRoom");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <input type="checkbox" name="persistentroom" />
@@ -857,31 +857,31 @@
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Presence Broadcast:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.presenceBroadcast");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <select name="presencebroadcast" size="3" MULTIPLE>
-                                                <option value="moderator">moderator</option>
-                                                <option value="participant">participant</option>
-                                                <option value="visitor">visitor</option>
+                                                <option value="moderator"><%=_ctx.appRes("UIChatBarPortlet.label.moderator");%></option>
+                                                <option value="participant"><%=_ctx.appRes("UIChatBarPortlet.label.participant");%></option>
+                                                <option value="visitor"><%=_ctx.appRes("UIChatBarPortlet.label.visitor");%></option>
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Who is:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.whoIs");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <select name="whois" size="3">
-                                                <option value="anyone">anyone</option>
+                                                <option value="anyone"><%=_ctx.appRes("UIChatBarPortlet.label.anyOne");%></option>
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Room Desc:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.roomDescription");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <textarea name="roomdesc" rows="3" cols="12"></textarea>
@@ -890,7 +890,7 @@
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Max Users:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.maxUsers");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <select name="maxusers">
@@ -901,12 +901,12 @@
                                 </table>
                             </fieldset>
                             <fieldset style="overflow: hidden; height: 20px;" maxheight="350" state="closed">
-                                <legend class="StyleLegend">Show Security</legend>
+                                <legend class="StyleLegend"><%=_ctx.appRes("UIChatBarPortlet.label.showSecurity");%></legend>
                                 <table class="UIFormGrid" style="visibility: visible; opacity: 0;">
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Public Room:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.publicRoom");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <input type="checkbox" name="publicroom" />
@@ -915,7 +915,7 @@
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Members Only:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.membersOnly");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <input type="checkbox" name="membersonly" />
@@ -924,7 +924,7 @@
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Allow Invites:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.allowInvites");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <input type="checkbox" name="allowinvites" />
@@ -933,7 +933,7 @@
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Reserved nick:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.reservedNick");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <input type="checkbox" name="reservednick" />
@@ -958,7 +958,7 @@
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Password Protected Room:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.passwordProtectedRoom");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <input type="checkbox" name="passwordprotectedroom" />
@@ -967,7 +967,7 @@
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Password:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.password");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <input type="password" name="roomsecret" />
@@ -976,7 +976,7 @@
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Moderated Room:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.moderatedRoom");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <input type="checkbox" name="moderatedroom" />
@@ -985,7 +985,7 @@
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Room Admins:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.roomAdmins");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <select name="roomadmins" size="3">
@@ -996,7 +996,7 @@
                                     <tr>
                                         <td class="FieldLabel">
                                             <label>
-                                                Room Owners:</label>
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.roomOwners");%>:</label>
                                         </td>
                                         <td class="FieldComponent">
                                             <select name="roomowners" size="3">
@@ -1019,7 +1019,7 @@
                                                 <div class="ButtonLeft">
                                                     <div class="ButtonRight">
                                                         <div class="ButtonMiddle">
-                                                            <a href="#">Ok</a></div>
+                                                            <a href="#"><%=_ctx.appRes("UIChatBarPortlet.label.ok");%></a></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1028,7 +1028,7 @@
                                                 <div class="ButtonLeft">
                                                     <div class="ButtonRight">
                                                         <div class="ButtonMiddle">
-                                                            <a href="#">Cancel</a></div>
+                                                            <a href="#"><%=_ctx.appRes("UIChatBarPortlet.label.cancel");%></a></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1209,14 +1209,14 @@
             </div>
             <div class="ContentSendFile">
                 <div class="LableSendFile">
-                    Waiting for you to accept 1 file:</div>
+                    <%=_ctx.appRes("UIChatBarPortlet.label.waitingForYouToAcceptOneFile");%>:</div>
                 <div class="NameFile">
                     <span></span>
                 </div>
                 <div class="ActionFile" onclick="eXo.communication.chatbar.webui.UIChatWindow.acceptFileExchange(this);">
-                    Accept</div>
+                    <%=_ctx.appRes("UIChatBarPortlet.label.accept");%></div>
                 <div class="ActionFile" onclick="eXo.communication.chatbar.webui.UIChatWindow.denieFileExchange(this);">
-                    Deny</div>
+                    <%=_ctx.appRes("UIChatBarPortlet.label.deny");%></div>
                 <div class="LoadingIcon">
                     <span></span>
                 </div>
@@ -1241,7 +1241,7 @@
                             </span>
                         </div>
                         <div class="CloseTabButton" style="display: inline; color: red; margin-left: 10px;"
-                            title="Click to remove this tab!">
+                            title="<%=_ctx.appRes("UIChatBarPortlet.label.clickToRemoveThisTab");%>!">
                             x</div>
                     </div>
                 </div>
@@ -1260,8 +1260,8 @@
                                 <div class="RightContainer">
                                     <div class="CenterContainer">
                                         <div class="TextContent">
-                                            <a class="Icon ExportMessageIcon" title="Export messages history" onclick="eXo.communication.chatbar.webui.UIChatWindow.exportHistory(event);">
-                                                Export History </a>
+                                            <a class="Icon ExportMessageIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.exportMessagesHistory");%>" onclick="eXo.communication.chatbar.webui.UIChatWindow.exportHistory(event);">
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.exportHistory");%></a>
                                             <div class="SeperatorLine">
                                                 <span></span>
                                             </div>
@@ -1299,12 +1299,12 @@
                                         <div class="CenterHistoryList">
                                             <div class="FixHeight">
                                                 <div class="ContainerHistoryList">
-                                                    <span class="LableHistory">Show messages from:</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,0);"
-                                                        class="LinkHistory" href="#">Today</a> <span class="Line">|</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,7);"
-                                                            class="LinkHistory" href="#">This week</a> <span class="Line">|</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,30);"
-                                                                class="LinkHistory" href="#">Last 30 days</a> <span class="Line">|</span>
+                                                    <span class="LableHistory"><%=_ctx.appRes("UIChatBarPortlet.label.showMessagesFrom");%>:</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,0);"
+                                                        class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.today");%></a> <span class="Line">|</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,7);"
+                                                            class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.thisWeek");%></a> <span class="Line">|</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,30);"
+                                                                class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.last30Days");%></a> <span class="Line">|</span>
                                                     <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,-1);"
-                                                        class="LinkHistory" href="#">Beginning</a>
+                                                        class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.beginning");%></a>
                                                     <div class="ClearLeft">
                                                         <span></span>
                                                     </div>
@@ -1350,18 +1350,18 @@
                                 <div class="RightContainer">
                                     <div class="CenterContainer">
                                         <div class="TextContent">
-                                            <a class="Icon AddChatIcon" title="Invite new friends" onclick="eXo.communication.chatbar.webui.UIChatWindow.inviteToJoinRoom(event);">
-                                                Add </a>
+                                            <a class="Icon AddChatIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.inviteNewFriends");%>" onclick="eXo.communication.chatbar.webui.UIChatWindow.inviteToJoinRoom(event);">
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.add");%> </a>
                                             <div class="SeperatorLine">
                                                 <span></span>
                                             </div>
-                                            <a class="Icon LeaveIcon" title="Leave room chat" onclick="eXo.communication.chatbar.webui.UIChatWindow.leaveRoomChat(event);">
-                                                Leave </a>
+                                            <a class="Icon LeaveIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.leaveChatRoom");%>" onclick="eXo.communication.chatbar.webui.UIChatWindow.leaveRoomChat(event);">
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.leave");%> </a>
                                             <div class="SeperatorLine">
                                                 <span></span>
                                             </div>
-                                            <a class="Icon OptionsIcon" title="Room Configuration" onclick="eXo.communication.chatbar.webui.UIChatWindow.configRoom(event);">
-                                                Options </a>
+                                            <a class="Icon OptionsIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.roomConfiguration");%>" onclick="eXo.communication.chatbar.webui.UIChatWindow.configRoom(event);">
+                                                <%=_ctx.appRes("UIChatBarPortlet.label.options");%> </a>
                                             <div class="ClearLeft">
                                                 <span></span>
                                             </div>
@@ -1388,12 +1388,12 @@
                                         <div class="CenterHistoryList">
                                             <div class="FixHeight">
                                                 <div class="ContainerHistoryList">
-                                                    <span class="LableHistory">Show messages from:</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,0);"
-                                                        class="LinkHistory" href="#">Today</a> <span class="Line">|</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,7);"
-                                                            class="LinkHistory" href="#">This week</a> <span class="Line">|</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,30);"
-                                                                class="LinkHistory" href="#">Last 30 days</a> <span class="Line">|</span>
+                                                    <span class="LableHistory"><%=_ctx.appRes("UIChatBarPortlet.label.showMessagesFrom");%>:</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,0);"
+                                                        class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.today");%></a> <span class="Line">|</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,7);"
+                                                            class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.thisWeek");%></a> <span class="Line">|</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,30);"
+                                                                class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.last30Days");%></a> <span class="Line">|</span>
                                                     <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,-1);"
-                                                        class="LinkHistory" href="#">Beginning</a>
+                                                        class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.beginning");%></a>
                                                     <div class="ClearLeft">
                                                         <span></span>
                                                     </div>
