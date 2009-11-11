@@ -17,7 +17,9 @@
 package org.exoplatform.services.xmpp.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -192,5 +194,26 @@ public class TransformUtils {
     return form;
   }
 
+  public static Integer getServerTimezoneOffset(){
+    Calendar cal = Calendar.getInstance();
+    Integer tz = -(cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET)) / (60 * 1000);
+    return tz;
+  }
+  
+  public static Date convertToServerTime(Date clientDate, Integer clientTimezoneOffset){
+    if(clientTimezoneOffset == null || clientTimezoneOffset == getServerTimezoneOffset())
+      return clientDate;
+    Long gmtTime = clientDate.getTime() + clientTimezoneOffset * (60 * 1000);
+    gmtTime -= getServerTimezoneOffset() * (60 * 1000);
+    return new Date(gmtTime);
+  }
+  
+  public static Date convertToClientTime(Date serverDate, Integer clientTimezoneOffset){
+    if(clientTimezoneOffset == null || clientTimezoneOffset == getServerTimezoneOffset())
+      return serverDate;
+    Long gmtTime = serverDate.getTime() + getServerTimezoneOffset() * (60 * 1000);
+    gmtTime -= clientTimezoneOffset * (60 * 1000);
+    return new Date(gmtTime);
+  }
 
 }

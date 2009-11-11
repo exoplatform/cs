@@ -153,6 +153,8 @@ function UIMainChatWindow() {
   this.debugLevel = 0;
   //this.debugLevel = 9;
   this.serverInfo = false;
+  this.serverTimezoneOffset = false;
+  this.clientTimezoneOffset = false;
   this.buddyItemActionStack = false;
   this.joinedRooms = [];
   this.newestRoomName = '';// use only for CS-2999
@@ -266,6 +268,9 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.userNames = new Array();
   this.isGetMsgInProcess = false;
   this.serverInfo = false;
+  var d = new Date() ;
+  this.serverTimezoneOffset = d.getTimezoneOffset() ;
+  this.clientTimezoneOffset = d.getTimezoneOffset() ;
   this.userToken = userToken;
   this.userName = userName;
   this.buddyItemActionStack = {};
@@ -1056,6 +1061,7 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
       }
       //this.sessionKeeperId = window.setInterval(this.sessionKeeper, this.PORTAL_SESSION_KEEPER_TIME_STEP);
       this.serverInfo = serverData;
+      this.serverTimezoneOffset = serverData.serverTimezoneOffset;
       this.UIChatWindow.initSession();
       this.timeoutCount = 0;
       this.errorCount = 0;
@@ -1491,9 +1497,9 @@ UIMainChatWindow.prototype.jabberSendStatus = function(status) {
  * @param {String} dateTo
  * @param {Boolean} isGroupChat
  */
-UIMainChatWindow.prototype.jabberGetMessageHistory = function(targetPerson, dateFormat, dateFrom, dateTo, isGroupChat) {
+UIMainChatWindow.prototype.jabberGetMessageHistory = function(targetPerson, dateFormat, dateFrom, dateTo, clientTimezoneOffset, isGroupChat) {
   this.activeAction = this.GET_MESSAGE_HISTORY_ACTION;
-  this.XMPPCommunicator.getMessageHistory(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(), targetPerson, dateFormat, dateFrom, dateTo, isGroupChat);
+  this.XMPPCommunicator.getMessageHistory(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(), targetPerson, dateFormat, dateFrom, dateTo, clientTimezoneOffset, isGroupChat);
 };
 
 /**
