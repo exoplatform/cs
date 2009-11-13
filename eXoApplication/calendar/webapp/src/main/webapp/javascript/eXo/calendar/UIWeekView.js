@@ -316,7 +316,7 @@ UIWeekView.prototype.initResize = function(evt) {
 	var minHeight = 15 ;
 	var interval = eXo.calendar.UICalendarPortlet.interval ;
 	UIResizeEvent.start(_e, innerElement, outerElement, container, minHeight, interval) ;
-	eXo.calendar.UICalendarPortlet.dropCallback = UIResizeEvent.resizeCallback;
+	eXo.calendar.UICalendarPortlet.dropCallback = eXo.calendar.UIWeekView.resizeCallback;
 	eXo.calendar.UICalendarPortlet.setPosition(outerElement);
 } ;
 
