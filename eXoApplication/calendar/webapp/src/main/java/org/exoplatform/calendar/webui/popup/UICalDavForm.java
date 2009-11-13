@@ -167,7 +167,7 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
         return ;
       }
       RssData rssData = new RssData() ;
-      String tempName = uiForm.getUIStringInput(UICalDavForm.TITLE).getValue() ;
+      String tempName = uiForm.getUIStringInput(UICalDavForm.TITLE).getValue().trim() ;
       if(tempName != null && tempName.length() > 0) {
         if(!CalendarUtils.isNameValid(tempName, CalendarUtils.SPECIALCHARACTER)) {
           uiForm.setSelectedTab(INFO_TAB) ;
