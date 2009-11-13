@@ -150,7 +150,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
         return ;
       }
       RssData rssData = new RssData() ;
-      String tempName = uiForm.getUIStringInput(TITLE).getValue() ;
+      String tempName = uiForm.getUIStringInput(TITLE).getValue().trim() ;
       if(tempName != null && tempName.trim().length() > 0) {
         if(!CalendarUtils.isNameValid(tempName, CalendarUtils.SPECIALCHARACTER)) {
           uiForm.setSelectedTab(INPUT_RSSINFO) ;
@@ -183,11 +183,8 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
         } else if (uiForm.publicCals_.containsKey(calId)) {
           calendars.put(calId + Utils.SPLITTER + Utils.PUBLIC_TYPE, uiForm.publicCals_.get(calId)) ;
         }
-      }
-      
+      }      
       int result = calendarService.generateRss(CalendarUtils.getCurrentUser(), calendars, rssData) ;
-      
-      
       if(result < 0) {
         uiForm.setSelectedTab(INPUT_RSSINFO) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
