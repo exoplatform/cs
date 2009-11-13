@@ -904,6 +904,7 @@ UICalendarPortlet.prototype.adjustWidth = function(el, totalWidth){
 UICalendarPortlet.prototype.showEvent = function(){
     this.init();
     var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(this.viewer, "EventDayContainer");
+	if (!EventDayContainer) return ;
 //    this.setFocus(this.viewer, EventDayContainer);
     this.editAlldayEvent(EventDayContainer);
     if (!this.init()) 
