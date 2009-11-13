@@ -72,15 +72,10 @@ eXo.communication.chatbar.eXoChatBar = {
   },
   setWidth : function(){
 		var obj = document.getElementById('UIChatBarPortlet');
-		var uiWorkingWorkspace = document.getElementById('UIWorkingWorkspace') ;
-		if(obj){
-		//var browserWidth = eXo.core.Browser.getBrowserWidth() ;
-		//var objWidth = obj.offsetWidth + 16;
-		//	if(objWidth != browserWidth){
-				//obj.style.width = (browserWidth - 16) + "px";
-			obj.style.width = (uiWorkingWorkspace.offsetWidth - 16) + "px";
+		var uiPage = document.getElementById('UIPage') ;
+		if(obj || (uiPage.offsetWidth < obj.offsetWidth)){
+			obj.style.width = (uiPage.offsetWidth - 16) + "px";
 		}		
-		//}
 		window.setTimeout('eXo.communication.chatbar.eXoChatBar.setWidth()', 100);
 	}
 }
