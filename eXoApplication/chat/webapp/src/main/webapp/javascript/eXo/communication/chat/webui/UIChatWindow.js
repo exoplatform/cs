@@ -96,7 +96,9 @@ UITabControl.prototype.updateRoster = function(roster) {
  */
 UITabControl.prototype.userLeftRoomEventFired = function(user) {
   user = user.substr(user.indexOf('/') + 1, user.length-1);
-  this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, user + ' just left the room');
+  //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, user + ' just left the room');
+  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_left.replace('{0}', user);
+  this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
   user += '@' + this.UIMainChatWindow.serverInfo.mainServiceName;
   this.buddyListControlObj.removeBuddy(user);
 };
@@ -108,7 +110,9 @@ UITabControl.prototype.userLeftRoomEventFired = function(user) {
  */
 UITabControl.prototype.userJoinRoomEventFired = function(user) {
   var userName = user.substr(user.indexOf('/') + 1, user.length-1);
-  this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
+  //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
+  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', userName);
+  this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
   userName += '@' + this.UIMainChatWindow.serverInfo.mainServiceName;
   var buddyInfo = {
     presence           : {from: user,mode: null, status: null, type: 'available'},
@@ -226,7 +230,9 @@ UITabControl.prototype.fileTransportRequestEventFire = function(FTReqEvent) {
   // Create file transport node
   var fileTransportNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.sendFile);
   var labelNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'div', this.CSS_CLASS.sendFileLabel);
-  var alertContent = this.tabId.targetPerson + ' want to send you [' + FTReqEvent.filename + ']';
+  //var alertContent = this.tabId.targetPerson + ' want to send you [' + FTReqEvent.filename + ']';
+  var alertContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_request.replace('{0}', this.tabId.targetPerson);
+  alertContent = alertContent.replace('{1}', FTReqEvent.filename);
   labelNode.innerHTML = alertContent;
   var fileNameNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'div', this.CSS_CLASS.sendFileName);
   fileNameNode.innerHTML = FTReqEvent.filename + ' (' + fileSize.size + ' ' + fileSize.unit + ')<br>'
@@ -253,9 +259,11 @@ UITabControl.prototype.fileTransportRequestEventFire = function(FTReqEvent) {
 UITabControl.prototype.fileTransportResponseEventFire = function(FTResEvent) {
   var msgContent = '';
   if (FTResEvent.status == 'complete') {
-    msgContent = 'File exchange: [' + FTResEvent.fileName + '] completed.';
+    //msgContent = 'File exchange: [' + FTResEvent.fileName + '] completed.';
+	msgContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_response_completed.replace('{0}', FTResEvent.fileName);
   } else {
-    msgContent = 'File exchange: [' + FTResEvent.fileName + '] denied.';
+    //msgContent = 'File exchange: [' + FTResEvent.fileName + '] denied.';
+	msgContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_response_denied.replace('{0}', FTResEvent.fileName);
   }
   eXo.communication.chat.webui.UIChatWindow.insertCustomMsg(msgContent, this.tabId);
 };
@@ -328,7 +336,8 @@ UITabControl.prototype.acceptFileExchange = function(acceptNode) {
  */
 UITabControl.prototype.fileEventTimeout = function(fileTransportNode, uiTabControlObj) {
   uiTabControlObj.removeActionFileButtons(fileTransportNode, uiTabControlObj);
-  uiTabControlObj.writeMsg(eXo.communication.chat.webui.UIChatWindow.SYSTEM_INFO, 'The file exchange has been time out and removed by server.')
+  //uiTabControlObj.writeMsg(eXo.communication.chat.webui.UIChatWindow.SYSTEM_INFO, 'The file exchange has been time out and removed by server.')
+  uiTabControlObj.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, this.UIMainChatWindow.ResourceBundle.chat_message_file_event_time_out);
 };
 
 /**
@@ -1594,11 +1603,13 @@ UIChatWindow.prototype.sendFile = function(fileChooserNode, event) {
   uploadForm.action = '/chat/fileexchange?username=' + userName + '&requestor=' + targetUser + '&description=' + description;
 	this.uploadIframe.onload = function() {
 	window.jsconsole.warn('upload completed');
-	eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('File exchange: Waiting for authorize...', activeTabControl.tabId);
+	//eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('File exchange: Waiting for authorize...', activeTabControl.tabId);
+	eXo.communication.chat.webui.UIChatWindow.insertCustomMsg(this.UIMainChatWindow.ResourceBundle.chat_message_file_exchange_waiting_for_authorize, activeTabControl.tabId);
 	this.onload = null;
   };
   uploadForm.submit();
-  eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('File exchange: Uploading file to server...', activeTabControl.tabId);
+  //eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('File exchange: Uploading file to server...', activeTabControl.tabId);
+  eXo.communication.chat.webui.UIChatWindow.insertCustomMsg(this.UIMainChatWindow.ResourceBundle.chat_message_file_exchange_uploading_file_to_server, activeTabControl.tabId);
   fileChooserNode.value = '';
   //TODO fix ie not re-send the same file
   uploadForm.reset();

@@ -162,6 +162,8 @@ function UIMainChatWindow() {
   this.actionHandler = {};
   this.initialized = false;
   this.sessionKeeperId = false;
+  this.lang = 'en';
+  this.ResourceBundle = false;
   // The timeout to request resource to avoid portal's session timeout.
   this.PORTAL_SESSION_KEEPER_TIME_STEP = 5*1000*60;
 };
@@ -190,6 +192,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.UICreateNewRoomPopupWindow = eXo.communication.chatbar.webui.UICreateNewRoomPopupWindow;
   this.UIRoomConfigPopupWindow    = eXo.communication.chatbar.webui.UIRoomConfigPopupWindow;
   this.UIJoinRoomPopupWindow      = eXo.communication.chatbar.webui.UIJoinRoomPopupWindow;
+  this.UIPopupMessages            = eXo.communication.chatbar.webui.UIPopupMessages;
   this.UIChatResize               = eXo.communication.chatbar.webui.UIChatResize;
   this.UISlideAlert               = eXo.communication.chatbar.webui.UISlideAlert;
 
@@ -247,12 +250,14 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.createNewRoomPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'CreateNewRoomPopup');
   this.roomConfigPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'RoomConfigPopup');
   this.joinRoomPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'JoinRoomPopup');
+  this.messagesPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'MessagesPopup');
 
   this.UIChatWindow.init(this.chatPopupNode, this);
   this.UIAddContactPopupWindow.init(this.addContactPopupNode, this);
   this.UICreateNewRoomPopupWindow.init(this.createNewRoomPopupNode, this);
   this.UIRoomConfigPopupWindow.init(this.roomConfigPopupNode, this);
   this.UIJoinRoomPopupWindow.init(this.joinRoomPopupNode, this);
+  this.UIPopupMessages.init(this.messagesPopupNode, this);
   
   //this.UISlideAlert.init(this, this.notificationNode);
 
@@ -263,6 +268,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.UIPopupManager.addItem(this.UICreateNewRoomPopupWindow);
   this.UIPopupManager.addItem(this.UIRoomConfigPopupWindow);
   this.UIPopupManager.addItem(this.UIJoinRoomPopupWindow);
+  this.UIPopupManager.addItem(this.UIPopupMessages);
 
   this.userStatus = false;
   this.lastStatusSent = false;
@@ -282,7 +288,10 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   var component = eXo.communication.chatbar.webui.component;
   this.buddyListControlObj =
     new component.BuddyListControl(this.buddyListNode, this.buddyItemActionCallbackWrapper, this);
-
+  this.lang = eXo.core.I18n.getLanguage();
+  eXo.require("eXo.communication.chat.locale." + this.lang, "/chatbar/javascript/");
+  this.ResourceBundle = eXo.communication.chatbar.locale.ResourceBundle;
+  
   // Init cometd service on startup
   this.initCometd();
   this.initialized = true;
@@ -672,21 +681,23 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
   if (requestObj.status == 400 &&
       requestObj.responseText == 'XMPPSesion is null!') {
     window.jsconsole.warn('You are not login to chat.');
-    window.alert('You are not login to Chat/Chat session has closed by another window/tab.\n Please logout and login again.');
+    window.alert(this.ResourceBundle.chat_message_xmpp_session_is_null);
     return;
   }
   switch (action) {
     case this.JOIN_TO_ROOM_ACTION:
     	switch(requestObj.status) {
     		case 401:
-    			window.alert('Your secret key to join room is not valid.\nPlease try again later.');
+    			//window.alert('Your secret key to join room is not valid.\nPlease try again later.');
+    			window.alert(this.ResourceBundle.chat_message_room_password_error);
+    			//this.UIPopupMessages.warning(this.ResourceBundle.chat_message_room_password_error);
     			break;
     		case 403:
     		case 404:
-    			window.alert('You are trying to join a room which is not unlocked yet.\nPlease try again later !');
+    			window.alert(this.ResourceBundle.chat_message_room_not_unlocked_error);
     			break;
     		case 407:
-    		  window.alert('You are trying to join a private room in which you are not a member!\nPlease try again later.');
+    		    window.alert(this.ResourceBundle.chat_message_room_user_not_member);
     			break;
     		case 409:
     		default:
@@ -716,10 +727,10 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
     			break;
     		case 403:
     		case 404:
-    			window.alert('You are trying to join a room which is not unlocked yet.\nPlease try again later !');
+    			window.alert(this.ResourceBundle.chat_message_room_not_unlocked_error);
     			break;
     		case 407:
-    			window.alert('You are trying to join a private room in which you are not a member!\nPlease try again later.');
+    			window.alert(this.ResourceBundle.chat_message_room_user_not_member);
     			break;
     		case 409:
     		default:
@@ -908,7 +919,8 @@ UIMainChatWindow.prototype.processSubscriptions = function(eventId) {
         case 'subscribe':
           var requestUser = subscription.from;
           requestUser = requestUser.substring(0, requestUser.indexOf('@'));
-          if (window.confirm('Do you want to allow [' + requestUser + '] to see your status\n and add him/her to your contact list?')) {
+          var str = this.ResourceBundle.chat_message_confirm_allow_to_see_status;
+          if (window.confirm(str.replace('{0}', requestUser))) {
             this.jabberSendSubscription(requestUser);
             this.jabberAddUser(requestUser);
           } else {
@@ -962,7 +974,9 @@ UIMainChatWindow.prototype.processGroupChat = function(eventId) {
         case this.MUC_ACTION_INVITE_ROOM: 
           var inviteInfo = mucEvent.invite;
           var roomName = inviteInfo.room;
-          var msgBuf = inviteInfo.inviter + ' invite you join to room: "' + roomName + '"';
+          //var msgBuf = inviteInfo.inviter + ' invite you join to room: "' + roomName + '"';
+          var msgBuf = this.ResourceBundle.chat_message_room_invite_to_join.replace('{0}', inviteInfo.inviter);
+          msgBuf = msgBuf.replace('{1}', roomName);
           if (window.confirm(msgBuf)) {
             roomName = roomName.substr(0, roomName.indexOf('@'));
             this.jabberJoinToRoom(roomName, inviteInfo.password);
@@ -1313,7 +1327,8 @@ UIMainChatWindow.prototype.removeUserCallback = function(event) {
  * Remove contact callback process
  */
 UIMainChatWindow.prototype.removeContact = function(buddyId) {
-  if (window.confirm('Are you sure to remove \'' + buddyId + '\'')) {
+  var str = this.ResourceBundle.chat_message_confirm_remove_buddy;
+  if (window.confirm(str.replace('{0}', buddyId))) {
     buddyId = buddyId.substring(0, buddyId.indexOf('@'));
     eXo.communication.chatbar.webui.UIMainChatWindow.jabberRemoveUser(buddyId);
   }
@@ -1767,7 +1782,7 @@ UIMainChatWindow.prototype.jabberDeclineJoinRoom = function(inviter, roomName) {
 UIMainChatWindow.prototype.jabberJoinToRoom = function(roomName, askPassword) {
   var password = '';
   if (askPassword) {
-    password = window.prompt('Please give secret key to access room:', '');
+    password = window.prompt(this.ResourceBundle.chat_message_room_secret_key_to_access, '');
     if (!password) {
       return;
     }

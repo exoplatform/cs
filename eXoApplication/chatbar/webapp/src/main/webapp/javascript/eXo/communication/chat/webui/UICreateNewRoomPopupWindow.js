@@ -56,7 +56,7 @@ UICreateNewRoomPopupWindow.prototype.createNewRoomAction = function() {
   var roomName = this.roomNameField.value;
   if (roomName.indexOf(' ') != -1 ||
       roomName == '') {
-    window.alert('Room name is invalid.');
+    window.alert(this.UIMainChatWindow.ResourceBundle.chat_message_room_name_is_invalid);
     this.roomNameField.focus();
     return;
   }

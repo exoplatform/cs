@@ -414,7 +414,7 @@ UIRoomConfigPopupWindow.prototype.okAction = function(keepWindowState) {
  */
 UIRoomConfigPopupWindow.prototype.fakeConfigCommit = function(keepWindowState) {
   this.okAction(keepWindowState);
-  eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('You just cancel the room configuration. The default config still sent.', this.tabId);
+  eXo.communication.chat.webui.UIChatWindow.insertCustomMsg(this.UIMainChatWindow.ResourceBundle.chat_message_room_default_config_commit, this.tabId);
 };
 
 /**

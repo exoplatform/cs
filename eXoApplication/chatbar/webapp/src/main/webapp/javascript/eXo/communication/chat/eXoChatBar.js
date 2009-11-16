@@ -13,6 +13,7 @@ if(!eXo.communication) eXo.communication = {};
 eXo.communication.chatbar = {
     eXoChat : {},
     core : {},
+    locale : {},
     webui : {
       component : {}
     }
