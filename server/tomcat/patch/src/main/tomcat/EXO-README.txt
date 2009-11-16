@@ -76,10 +76,15 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
    * NOTE for cygwin's user: the JAVA_HOME must be in MS Windows format like: "C:\Program Files\JDK 1.5"
     Example use: export JAVA_HOME=`cygpath -w "$JAVA_HOME"`; to convert unix like format to MS Windows format.
    
-   * Start exo-tomcat server by one command for Unix/Linux/cygwin(in windows) environment:
+   * Start tomcat server 
+      +) On the Unix/Linux/cygwin(in windows developer mode) environment:
       Go to exo-tomcat/bin and run command:
-      ./eXo.sh run  
-    
+      ./eXo.sh run 
+
+      +) On the Windows platform   
+       Go to exo-tomcat/bin by DOS Command (cmd) and run command:
+       eXo.bat run 
+
    * Start exo-openfire server:
      +) On the Windows platform
        Open a DOS prompt command, go to exo-openfire/bin and type the command:
@@ -88,6 +93,7 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
      +) On Unix/Linux
        Open a terminal, go to exo-openfire/bin and type the command:
          ./openfire start
+    
 
 -) How to access the eXo Collaboration Suite
 
