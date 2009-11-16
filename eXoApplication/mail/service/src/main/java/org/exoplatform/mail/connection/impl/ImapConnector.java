@@ -25,6 +25,7 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.UIDFolder;
+import javax.mail.URLName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -81,7 +82,8 @@ public class ImapConnector extends BaseConnector {
       imapFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(folder.getName());
       imapFolder.create((int) folder.getType());
     } else {
-      IMAPFolder parentImapFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(parentFolder.getName());
+      URLName url = new URLName(parentFolder.getURLName());
+      IMAPFolder parentImapFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(url);
       if (parentImapFolder != null && parentImapFolder.exists()) {
         boolean isOpen = parentImapFolder.isOpen();
         if (!isOpen) parentImapFolder.open(javax.mail.Folder.READ_WRITE);
@@ -99,7 +101,8 @@ public class ImapConnector extends BaseConnector {
   public boolean renameFolder(String newName, Folder folder) throws Exception {
     try {
       boolean result = false;
-      IMAPFolder folderToBeRenamed = (IMAPFolder) ((IMAPStore)store_).getFolder(folder.getName());
+      URLName url = new URLName(folder.getURLName());
+      IMAPFolder folderToBeRenamed = (IMAPFolder) ((IMAPStore)store_).getFolder(url);
       if (folderToBeRenamed.exists()) {
         if (folderToBeRenamed.isOpen()) folderToBeRenamed.close(false);
         IMAPFolder f1 = (IMAPFolder) ((IMAPStore)store_).getFolder(newName);
@@ -128,7 +131,8 @@ public class ImapConnector extends BaseConnector {
   public boolean deleteFolder(Folder folder) throws Exception {
     try {
       boolean result = false;
-      IMAPFolder folderToBeRemoved = (IMAPFolder) ((IMAPStore)store_).getFolder(folder.getName());
+      URLName url = new URLName(folder.getURLName());
+      IMAPFolder folderToBeRemoved = (IMAPFolder) ((IMAPStore)store_).getFolder(url);
       if (folderToBeRemoved.exists()) {
         if (folderToBeRemoved.isOpen()) folderToBeRemoved.close(true);
         result = folderToBeRemoved.delete(true);
@@ -149,7 +153,8 @@ public class ImapConnector extends BaseConnector {
 
   public boolean deleteMessage(List<Message> msgs, Folder folder) throws Exception {
     try {
-      IMAPFolder inFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(folder.getName());
+      URLName url = new URLName(folder.getURLName());
+      IMAPFolder inFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(url);
       boolean isOpen = inFolder.isOpen(); 
       if (!isOpen) inFolder.open(javax.mail.Folder.READ_WRITE);
       javax.mail.Message message;
@@ -170,8 +175,10 @@ public class ImapConnector extends BaseConnector {
       if (!currentFolder.isPersonalFolder() && !currentFolder.getName().equalsIgnoreCase(Utils.FD_INBOX)) return true;
       if (!desFolder.isPersonalFolder() && !desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX)) return true;
       
-      IMAPFolder fromFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(currentFolder.getName());
-      IMAPFolder toFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(desFolder.getName());
+      URLName fromURL = new URLName(currentFolder.getURLName());
+      IMAPFolder fromFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(fromURL);
+      URLName toURL = new URLName(desFolder.getURLName());
+      IMAPFolder toFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(toURL);
 
       fromFolder.open(javax.mail.Folder.READ_WRITE);
       toFolder.open(javax.mail.Folder.READ_WRITE);
@@ -195,9 +202,10 @@ public class ImapConnector extends BaseConnector {
     return false;
   }
 
-  public boolean markAsRead(List<Message> msgList, String folderName) throws Exception {
+  public boolean markAsRead(List<Message> msgList, Folder f) throws Exception {
     try {
-      IMAPFolder folder = (IMAPFolder) ((IMAPStore)store_).getFolder(folderName);
+      URLName url = new URLName(f.getURLName());
+      IMAPFolder folder = (IMAPFolder) ((IMAPStore)store_).getFolder(url);
       if (!folder.isOpen()) folder.open(javax.mail.Folder.READ_WRITE);
       javax.mail.Message message;
       for (Message msg : msgList) {
@@ -211,9 +219,10 @@ public class ImapConnector extends BaseConnector {
     }
   }
 
-  public boolean markAsUnread(List<Message> msgList, String folderName) throws Exception {
+  public boolean markAsUnread(List<Message> msgList, Folder f) throws Exception {
     try {
-      IMAPFolder folder = (IMAPFolder) ((IMAPStore)store_).getFolder(folderName);
+      URLName url = new URLName(f.getURLName());	
+      IMAPFolder folder = (IMAPFolder) ((IMAPStore)store_).getFolder(url);
       if (!folder.isOpen()) folder.open(javax.mail.Folder.READ_WRITE);
       javax.mail.Message message;
       for (Message msg : msgList) {
@@ -227,9 +236,10 @@ public class ImapConnector extends BaseConnector {
     }
   }
 
-  public boolean setIsStared(List<Message> msgList, boolean isStared, String folderName) throws Exception {
+  public boolean setIsStared(List<Message> msgList, boolean isStared, Folder f) throws Exception {
     try {
-      IMAPFolder folder = (IMAPFolder) ((IMAPStore)store_).getFolder(folderName);
+      URLName url = new URLName(f.getURLName());
+      IMAPFolder folder = (IMAPFolder) ((IMAPStore)store_).getFolder(url);
       if (!folder.isOpen()) folder.open(javax.mail.Folder.READ_WRITE);
       javax.mail.Message message;
       for (Message msg : msgList) {

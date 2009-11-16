@@ -1709,7 +1709,7 @@ public class MailServiceImpl implements MailService, Startable {
         Connector connector = new ImapConnector(account);
         if (property.equals(Utils.EXO_STAR)) {
           if (folder != null && !Utils.isEmptyField(folder.getName())) {
-            success = connector.setIsStared(msgList, value, folder.getName());
+            success = connector.setIsStared(msgList, value, folder);
           } else {
             List<Message> l ;
             for (Message m : msgList) {
@@ -1717,16 +1717,16 @@ public class MailServiceImpl implements MailService, Startable {
               if (folder != null) {
                 l = new ArrayList<Message>();
                 l.add(m);
-                success = connector.setIsStared(l, value, folder.getName());
+                success = connector.setIsStared(l, value, folder);
               }
             }
           }
         } else if (property.equals(Utils.EXO_ISUNREAD)) {
           if (folder != null && !Utils.isEmptyField(folder.getName())) {
             if (value) {
-              success = connector.markAsUnread(msgList, folder.getName());
+              success = connector.markAsUnread(msgList, folder);
             } else {
-              success = connector.markAsRead(msgList, folder.getName());
+              success = connector.markAsRead(msgList, folder);
             }
           } else {
             List<Message> l ;
@@ -1736,9 +1736,9 @@ public class MailServiceImpl implements MailService, Startable {
                 l = new ArrayList<Message>();
                 l.add(m);
                 if (value) {
-                  success = connector.markAsUnread(l, folder.getName());
+                  success = connector.markAsUnread(l, folder);
                 } else {
-                  success = connector.markAsRead(l, folder.getName());
+                  success = connector.markAsRead(l, folder);
                 }
               }
             }

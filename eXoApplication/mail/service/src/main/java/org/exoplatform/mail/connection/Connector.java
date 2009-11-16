@@ -48,9 +48,9 @@ public interface Connector {
   
   public boolean moveMessage(List<Message> msgs, Folder currentFolder, Folder desFolder) throws Exception;
   
-  public boolean markAsRead(List<Message> msgList, String folderName) throws Exception;
+  public boolean markAsRead(List<Message> msgList, Folder folder) throws Exception;
   
-  public boolean markAsUnread(List<Message> msgList, String folderName) throws Exception;
+  public boolean markAsUnread(List<Message> msgList, Folder folder) throws Exception;
   
-  public boolean setIsStared(List<Message> msgList, boolean isStared, String folderName) throws Exception;  
+  public boolean setIsStared(List<Message> msgList, boolean isStared, Folder folder) throws Exception;  
 }
