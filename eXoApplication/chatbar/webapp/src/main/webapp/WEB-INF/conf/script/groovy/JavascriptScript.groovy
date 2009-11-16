@@ -24,3 +24,4 @@ JavascriptService.addJavascript("eXo.communication.chat.webui.UICreateNewRoomPop
 JavascriptService.addJavascript("eXo.communication.chat.webui.UIRoomConfigPopupWindow", "/javascript/eXo/communication/chat/webui/UIRoomConfigPopupWindow.js", ServletContext);
 JavascriptService.addJavascript("eXo.communication.chat.webui.UIJoinRoomPopupWindow", "/javascript/eXo/communication/chat/webui/UIJoinRoomPopupWindow.js", ServletContext);
 JavascriptService.addJavascript("eXo.communication.chat.webui.UIChatBar", "/javascript/eXo/communication/chat/webui/UIChatBar.js", ServletContext);
+JavascriptService.addJavascript("eXo.communication.chat.webui.UIPopupMessages", "/javascript/eXo/communication/chat/webui/UIPopupMessages.js", ServletContext);
