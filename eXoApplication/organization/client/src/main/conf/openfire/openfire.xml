@@ -59,34 +59,34 @@
     X - number.     
   -->  
   <exoAuthProvider> 
-    <authenticationURL>http://127.0.0.1:8080/rest/organization/authenticate/</authenticationURL>  
+    <authenticationURL>http://localhost:8080/rest/organization/authenticate/</authenticationURL>  
     <authenticationMethod>POST</authenticationMethod> 
   </exoAuthProvider>  
   <exoUserProvider> 
-    <findUsersURL>http://127.0.0.1:8080/rest/organization/xml/user/find-all/</findUsersURL>  
+    <findUsersURL>http://localhost:8080/rest/organization/xml/user/find-all/</findUsersURL>  
     <findUsersMethod>GET</findUsersMethod>  
-    <getUsersURL>http://127.0.0.1:8080/rest/organization/xml/user/view-range/</getUsersURL>  
+    <getUsersURL>http://localhost:8080/rest/organization/xml/user/view-range/</getUsersURL>  
     <getUsersMethod>GET</getUsersMethod>  
-    <usersCountURL>http://127.0.0.1:8080/rest/organization/xml/user/count/</usersCountURL>  
+    <usersCountURL>http://localhost:8080/rest/organization/xml/user/count/</usersCountURL>  
     <usersCountMethod>GET</usersCountMethod>  
-    <userInfoURL>http://127.0.0.1:8080/rest/organization/xml/user/info/</userInfoURL>  
+    <userInfoURL>http://localhost:8080/rest/organization/xml/user/info/</userInfoURL>  
     <userInfoMethod>GET</userInfoMethod> 
   </exoUserProvider>  
   <exoGroupProvider> 
-    <groupInfoURL>http://127.0.0.1:8080/rest/organization/xml/group/info/</groupInfoURL>  
+    <groupInfoURL>http://localhost:8080/rest/organization/xml/group/info/</groupInfoURL>  
     <groupInfoMethod>GET</groupInfoMethod>  
-    <getGroupsAllURL>http://127.0.0.1:8080/rest/organization/xml/group/view-all/</getGroupsAllURL>  
+    <getGroupsAllURL>http://localhost:8080/rest/organization/xml/group/view-all/</getGroupsAllURL>  
     <getGroupsAllMethod>GET</getGroupsAllMethod>  
-    <getGroupsRangeURL>http://127.0.0.1:8080/rest/organization/xml/group/view-from-to/</getGroupsRangeURL>  
+    <getGroupsRangeURL>http://localhost:8080/rest/organization/xml/group/view-from-to/</getGroupsRangeURL>  
     <getGroupsRangeMethod>GET</getGroupsRangeMethod>  
-    <getGroupsForUserURL>http://127.0.0.1:8080/rest/organization/xml/group/groups-for-user/</getGroupsForUserURL>  
+    <getGroupsForUserURL>http://localhost:8080/rest/organization/xml/group/groups-for-user/</getGroupsForUserURL>  
     <getGroupsForUserMethod>GET</getGroupsForUserMethod>  
-    <groupsCountURL>http://127.0.0.1:8080/rest/organization/xml/group/count</groupsCountURL>  
+    <groupsCountURL>http://localhost:8080/rest/organization/xml/group/count</groupsCountURL>  
     <groupsCountMethod>GET</groupsCountMethod> 
   </exoGroupProvider>  
   <!-- Network settings. By default, Openfire will bind to all network interfaces.
       Alternatively, you can specify a specific network interfaces that the server
-      will listen on. For example, 127.0.0.1. This setting is generally only useful
+      will listen on. For example, localhost. This setting is generally only useful
        on multi-homed servers. -->  
   <!--
     <network>
@@ -102,7 +102,7 @@
   <database> 
     <defaultProvider> 
       <driver>com.mysql.jdbc.Driver</driver>  
-      <serverURL>jdbc:mysql://127.0.0.1:3306/openfire</serverURL>  
+      <serverURL>jdbc:mysql://localhost:3306/openfire</serverURL>  
       <username>openfire</username>  
       <password>openfire</password>  
       <minConnections>5</minConnections>  
