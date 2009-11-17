@@ -11,7 +11,7 @@
  	  		}else {
  	  			for(feed in feeds) {
  	  				%>
- 	  					<a href="<%=feed.getUrl()%>" class="Icon IconFeed"><%=feed.getTitle()%></a> 
+ 	  					<a href="<%=feed.getUrl()%>" class="Icon IconFeed" target="_blank"><%=feed.getTitle()%></a> 
  	  					<div class="FeedLink">(<%=feed.getUrl()%>)</div>
  	  				<%
  	  			}
