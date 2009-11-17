@@ -106,6 +106,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
                    events = {
                      @EventConfig(listeners = UIEventForm.SaveActionListener.class),
                      @EventConfig(listeners = UIEventForm.AddCategoryActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.RemoveEmailActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.MoveNextActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.MovePreviousActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.DeleteUserActionListener.class, phase = Phase.DECODE),
@@ -1624,6 +1625,14 @@ public Attachment getAttachment(String attId) {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
+  static  public class RemoveEmailActionListener extends EventListener<UIEventForm> {
+    public void execute(Event<UIEventForm> event) throws Exception {
+      UIEventForm uiForm = event.getSource() ;
+      uiForm.setEmailAddress(uiForm.getEmailAddress());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChild(UIEventReminderTab.class)) ;
+    }
+  }
+  
   static  public class AddEmailAddressActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
