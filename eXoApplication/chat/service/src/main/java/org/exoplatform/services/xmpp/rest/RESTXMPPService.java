@@ -1176,11 +1176,10 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/history/getmessages/{usernameto}/{isGroupChat}/{clientTimezoneOffset}/")
+  @URITemplate("/xmpp/history/getmessages/{usernameto}/{isGroupChat}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getAllHistory(@URIParam("usernameto") String usernameto,
                                 @URIParam("isGroupChat") Boolean isGroupChat,
-                                @URIParam("clientTimezoneOffset") String clientTimezoneOffset,
                                 @QueryParam("usernamefrom") String usernamefrom) {
     if (this.rb == null) loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
@@ -1219,14 +1218,12 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/history/getmessages/{usernameto}/{isGroupChat}/{dateformat}/{from}/{to}/{clientTimezoneOffset}/")
+  @URITemplate("/xmpp/history/getmessages/{usernameto}/{isGroupChat}/{from}/{to}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getHistoryBetweenDate(@URIParam("usernameto") String usernameto,
                                         @URIParam("isGroupChat") Boolean isGroupChat,
-                                        @URIParam("dateformat") String dateformat,
                                         @URIParam("from") String from,
                                         @URIParam("to") String to,
-                                        @URIParam("clientTimezoneOffset") String clientTimezoneOffset,
                                         @QueryParam("usernamefrom") String usernamefrom) {
     if (this.rb == null) loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
@@ -1237,12 +1234,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       XMPPSession session = messenger.getSession(usernameto);
       if (session != null) {
         List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
-        DateFormat dateFormat = new SimpleDateFormat(dateformat);
-        Integer clientTimeZoneOffset = Integer.valueOf(clientTimezoneOffset);
-        Date dateFrom = dateFormat.parse(from);
-        dateFrom = TransformUtils.convertToServerTime(dateFrom, clientTimeZoneOffset);
-        Date dateTo = dateFormat.parse(to);
-        dateTo = TransformUtils.convertToServerTime(dateTo, clientTimeZoneOffset);
+        Date dateFrom = new Date(Long.parseLong(from));
+        Date dateTo = new Date(Long.parseLong(to));
         List<MessageBean> listBean = new ArrayList<MessageBean>();
         if (dateFrom.before(dateTo)) {
           list = session.getHistoryBetweenDate(usernameto,
@@ -1278,13 +1271,11 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/history/getmessages/{usernameto}/{isGroupChat}/{dateformat}/{from}/{clientTimezoneOffset}/")
+  @URITemplate("/xmpp/history/getmessages/{usernameto}/{isGroupChat}/{from}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getHistoryFromDateToNow(@URIParam("usernameto") String usernameto,
                                           @URIParam("isGroupChat") Boolean isGroupChat,
-                                          @URIParam("dateformat") String dateformat,
                                           @URIParam("from") String from,
-                                          @URIParam("clientTimezoneOffset") String clientTimezoneOffset,
                                           @QueryParam("usernamefrom") String usernamefrom) {
     if (this.rb == null) loadResourceBundle();
     if (usernamefrom == null || usernamefrom.length() == 0)
@@ -1295,10 +1286,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       XMPPSession session = messenger.getSession(usernameto);
       if (session != null) {
         List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
-        DateFormat dateFormat = new SimpleDateFormat(dateformat);
-        Integer clientTimeZoneOffset = Integer.valueOf(clientTimezoneOffset);
-        Date dateFrom = dateFormat.parse(from);
-        dateFrom = TransformUtils.convertToServerTime(dateFrom, clientTimeZoneOffset);
+        Date dateFrom = new Date(Long.parseLong(from));
         List<MessageBean> listBean = new ArrayList<MessageBean>();
         if (dateFrom.before(Calendar.getInstance().getTime())) {
           list = session.getHistoryFromDateToNow(usernameto, usernamefrom, isGroupChat, dateFrom);
@@ -1399,11 +1387,10 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/history/file/getmessages/{usernameto}/{isGroupChat}/{dateformat}/{from}/{clientTimezoneOffset}/")
+  @URITemplate("/xmpp/history/file/getmessages/{usernameto}/{isGroupChat}/{from}/{clientTimezoneOffset}/")
   @OutputTransformer(PassthroughOutputTransformer.class)
   public Response getHistoryFromDateToNowFile(@URIParam("usernameto") String usernameto,
                                               @URIParam("isGroupChat") Boolean isGroupChat,
-                                              @URIParam("dateformat") String dateformat,
                                               @URIParam("from") String from,
                                               @URIParam("clientTimezoneOffset") String clientTimezoneOffset,
                                               @QueryParam("usernamefrom") String usernamefrom) {
@@ -1414,10 +1401,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       XMPPSession session = messenger.getSession(usernamefrom);
       if (session != null) {
         List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
-        DateFormat dateFormat = new SimpleDateFormat(dateformat);
         Integer clientTimeZoneOffset = Integer.valueOf(clientTimezoneOffset);
-        Date dateFrom = dateFormat.parse(from);
-        dateFrom = TransformUtils.convertToServerTime(dateFrom, clientTimeZoneOffset);
+        Date dateFrom = new Date(Long.valueOf(from));
         if (dateFrom.before(Calendar.getInstance().getTime())) {
           list = session.getHistoryFromDateToNow(usernameto, usernamefrom, isGroupChat, dateFrom);
           for (HistoricalMessage message : list){
@@ -1456,11 +1441,10 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/history/file/getmessages/{usernameto}/{isGroupChat}/{dateformat}/{from}/{to}/{clientTimezoneOffset}/")
+  @URITemplate("/xmpp/history/file/getmessages/{usernameto}/{isGroupChat}/{from}/{to}/{clientTimezoneOffset}/")
   @OutputTransformer(PassthroughOutputTransformer.class)
   public Response getHistoryBetweenDateFile(@URIParam("usernameto") String usernameto,
                                             @URIParam("isGroupChat") Boolean isGroupChat,
-                                            @URIParam("dateformat") String dateformat,
                                             @URIParam("from") String from,
                                             @URIParam("to") String to,
                                             @URIParam("clientTimezoneOffset") String clientTimezoneOffset,
@@ -1472,12 +1456,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       XMPPSession session = messenger.getSession(usernamefrom);
       if (session != null) {
         List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
-        DateFormat dateFormat = new SimpleDateFormat(dateformat);
         Integer clientTimeZoneOffset = Integer.valueOf(clientTimezoneOffset);
-        Date dateFrom = dateFormat.parse(from);
-        dateFrom = TransformUtils.convertToServerTime(dateFrom, clientTimeZoneOffset);
-        Date dateTo = dateFormat.parse(to);
-        dateTo = TransformUtils.convertToServerTime(dateTo, clientTimeZoneOffset);
+        Date dateFrom = new Date(Long.valueOf(from));
+        Date dateTo = new Date(Long.valueOf(to));
         if (dateFrom.before(dateTo)) {
           list = session.getHistoryBetweenDate(usernameto,
                                                usernamefrom,
@@ -1656,7 +1637,6 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       initInfoBean.setSearchServicesNames(services);
       initInfoBean.setHostedRooms(rooms);
       initInfoBean.setTotalRooms(rooms.size());
-      initInfoBean.setServerTimezoneOffset(TransformUtils.getServerTimezoneOffset());
       // TODO: temper temporarily comment until we not have confirmation about
       // receive messages
       // initInfoBean.setMessages(session.getNotRecieveMessages());

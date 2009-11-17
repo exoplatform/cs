@@ -280,7 +280,7 @@ public class XMPPSessionImpl implements XMPPSession {
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
             packet.setPacketID(CodingUtils.encodeToHex(UUID.randomUUID().toString()));
             MessageBean message = TransformUtils.messageToBean((Message) packet);
-            message.setDateSend(dateFormat.format(new Date()));
+            message.setDateSend(String.valueOf(new Date().getTime()));
             /*history.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage((Message) packet),
                                          sessionProvider);*/
             //Fix for CS-3246: contact list in public room is empty in special case

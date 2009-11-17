@@ -671,14 +671,13 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
     timeStamp = timeStamp.format('dd/mm/yyyy - HH:MM:ss');
   } else {
     window.jsconsole.warn('timeStamp before process: ' + timeStamp);
-    var isICTFormat = timeStamp.indexOf('ICT') >=0 ? true : false;
-    timeStamp = timeStamp.replace('ICT', ''); // Remove ICT if exist
+    /*timeStamp = timeStamp.replace('ICT', ''); // Remove ICT if exist
     window.jsconsole.warn('timeStamp after process: ' + timeStamp);
     var regexObj = /GMT(\+|\-)?\d{2}:\d{2}/g;
-    timeStamp = timeStamp.replace(regexObj, function(m) {return m.replace(/:\d{2}/, '');});
-    timeStamp = new Date(timeStamp);
-    if(isICTFormat)
-      timeStamp = this.convertToClientTime(timeStamp, this.UIMainChatWindow.serverTimezoneOffset);
+    timeStamp = timeStamp.replace(regexObj, function(m) {return m.replace(/:\d{2}/, '');});*/
+    var time = timeStamp;
+    timeStamp = new Date();
+    timeStamp.setTime(time);
     timeStamp = timeStamp.format('dd/mm/yyyy - HH:MM:ss');
     //timeStamp = timeStamp.getDate() + '/' + (timeStamp.getMonth() + 1) + '/' + timeStamp.getFullYear() +
                 //' - ' + 
@@ -688,16 +687,6 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
     
   return messageNode;
 };
-
-UITabControl.prototype.convertToClientTime = function(serverDate, serverTimezoneOffset){
-  if(!serverTimezoneOffset || serverTimezoneOffset == this.UIMainChatWindow.clientTimezoneOffset)
-    return serverDate;
-  var gmtTime = serverDate.getTime() + serverTimezoneOffset * (60 * 1000);
-  gmtTime -= this.UIMainChatWindow.clientTimezoneOffset * (60 * 1000);
-  var clientTime = new Date();
-  clientTime.setTime(gmtTime);
-  return clientTime;
-}
 
 /**
  * This method will do: become keyboard handler for input text box
@@ -1652,7 +1641,6 @@ UIChatWindow.prototype.getMessageHistory = function(event, timeNo) {
   }
   var endDate = new Date();
   var startDate = new Date(endDate);
-  var javaTimeFormat = 'HH:mm:ss:dd:MM:yyyy';
   switch (timeNo) {
     case this.THIS_WEEK_MESSAGE:
       startDate.setDate(endDate.getDate() - endDate.getDay());
@@ -1665,15 +1653,17 @@ UIChatWindow.prototype.getMessageHistory = function(event, timeNo) {
       break;
   }
   if (startDate) {
-    startDate = startDate.format('00:00:00:dd:mm:yyyy');
-    endDate = endDate.format('HH:MM:ss:dd:mm:yyyy');
-  } else {
-    javaTimeFormat = null;
+	startDate.setHours(0);
+	startDate.setMinutes(0);
+	startDate.setSeconds(0);
+	startDate.setMilliseconds(1);
+    startDate = startDate.getTime();
+    endDate = endDate.getTime();
   }
   
   var targetPerson = activeTabControl.tabId.targetPerson;
   targetPerson = targetPerson.substr(0, targetPerson.indexOf('@'));
-  this.UIMainChatWindow.jabberGetMessageHistory(targetPerson, javaTimeFormat, startDate, endDate, this.UIMainChatWindow.clientTimezoneOffset, activeTabControl.isGroupChat);
+  this.UIMainChatWindow.jabberGetMessageHistory(targetPerson, startDate, endDate, activeTabControl.isGroupChat);
   historyStatus = timeNo;
   activeTabControl.tabPaneNode.historyStatus = historyStatus;
   /*
@@ -1716,7 +1706,6 @@ UIChatWindow.prototype.exportHistory = function() {
   }
   var endDate = new Date();
   var startDate = new Date(endDate);
-  var javaTimeFormat = 'dd:MM:yyyy';
     
   switch (historyStatus) {
     case this.CURRENT_CONVERSATION_MESSAGE:
@@ -1733,10 +1722,13 @@ UIChatWindow.prototype.exportHistory = function() {
       break;
   }
   if (startDate) {
-    startDate = startDate.format('dd:mm:yyyy');
+	startDate.setHours(0);
+	startDate.setMinutes(0);
+	startDate.setSeconds(0);
+	startDate.setMilliseconds(1);
+    startDate = startDate.getTime();
     endDate = null;
   } else {
-    javaTimeFormat = null;
     startDate = null;
     endDate = null;
   }
@@ -1745,9 +1737,6 @@ UIChatWindow.prototype.exportHistory = function() {
   targetPerson = targetPerson.substr(0, targetPerson.indexOf('@'));
   var currentUser = this.UIMainChatWindow.userNames[this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP];
   var url = '/chat/messengerservlet/' + this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP + '/history/file/getmessages/' + targetPerson + '/' + activeTabControl.isGroupChat + '/';
-  if (javaTimeFormat) {
-    url += javaTimeFormat + '/';
-  }
   if (startDate) {
     url += startDate + '/';
   }
@@ -1756,7 +1745,7 @@ UIChatWindow.prototype.exportHistory = function() {
     url += endDate + '/';
   }
   if(this.UIMainChatWindow.clientTimezoneOffset){
-    url += this.UIMainChatWindow.clientTimezoneOffset + '/';
+	url += this.UIMainChatWindow.clientTimezoneOffset + '/';
   }
   url += '?usernamefrom=' + currentUser; 
   this.uploadIframe.src = url;

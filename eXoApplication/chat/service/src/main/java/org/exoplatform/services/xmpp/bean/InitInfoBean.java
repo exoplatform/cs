@@ -80,11 +80,6 @@ public class InitInfoBean {
   private List<FullRoomInfoBean>  joinedRooms;
   
   /**
-   * 
-   */
-  private Integer  serverTimezoneOffset;
-
-  /**
    * @return the mainServiceName
    */
   public String getMainServiceName() {
@@ -224,15 +219,5 @@ public class InitInfoBean {
   public void setTotalJoinedRooms(Integer totalJoinedRooms) {
     this.totalJoinedRooms = totalJoinedRooms;
   }
-
-  public Integer getServerTimezoneOffset() {
-    return serverTimezoneOffset;
-  }
-
-  public void setServerTimezoneOffset(Integer serverTimezoneOffset) {
-    this.serverTimezoneOffset = serverTimezoneOffset;
-  }
-  
-  
 
 }
