@@ -110,7 +110,7 @@ public class TransformUtils {
                                               message.getTo(),
                                               message.getType(),
                                               message.getBody());
-    messageBean.setDateSend(message.getDateSend().toString());
+    messageBean.setDateSend(String.valueOf(message.getDateSend().getTime()));
     return messageBean;
   }
 
