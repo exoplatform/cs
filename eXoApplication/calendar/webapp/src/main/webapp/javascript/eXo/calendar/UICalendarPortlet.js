@@ -2500,6 +2500,51 @@ UICalendarPortlet.prototype.showHideSetting = function(obj){
 	}	
 };
 
+UICalendarPortlet.prototype.autoShowHideSetting = function(){
+	var DOMUtil = eXo.core.DOMUtil;
+	var eventReminder = document.getElementById("eventReminder");
+	var checkboxEmail = DOMUtil.findFirstDescendantByClass(eventReminder, "input", "checkbox");
+	var uiFormGrid = DOMUtil.findFirstDescendantByClass(eventReminder,"table","UIFormGrid");
+	if(checkboxEmail.checked) {
+		uiFormGrid.style.display = "";
+	}
+	else{
+		uiFormGrid.style.display = "none";
+	}
+	var popupReminder = DOMUtil.findFirstDescendantByClass(eventReminder, "div", "ReminderByPopup");
+	var checkboxPopup = DOMUtil.findFirstDescendantByClass(popupReminder, "input", "checkbox");
+	var uiFormGridPopup = DOMUtil.findFirstDescendantByClass(popupReminder,"table","UIFormGrid");
+	if(checkboxPopup.checked) {
+		uiFormGridPopup.style.display = "";
+	}
+	else{
+		uiFormGridPopup.style.display = "none";
+	}
+};
+
+UICalendarPortlet.prototype.removeEmailReminder = function(obj){
+	var uiEmailAddressItem = obj.parentNode;
+	var uiEmailAddressLabel = eXo.core.DOMUtil.findPreviousElementByTagName(obj,"div");
+	var uiEmailInput = eXo.core.DOMUtil.findAncestorByClass(obj,"UIEmailInput");
+	uiEmailInput = eXo.core.DOMUtil.getChildrenByTagName(uiEmailInput,"input")[0];
+	uiEmailAddressLabel = uiEmailAddressLabel.innerHTML.toString().trim();
+	uiEmailInput.value = this.removeItem(uiEmailInput.value,uiEmailAddressLabel);
+	eXo.core.DOMUtil.removeElement(uiEmailAddressItem);
+	if(!document.getElementById("UIEventForm")) return ;
+		eXo.webui.UIForm.submitForm('UIEventForm','RemoveEmail', true);
+}
+
+UICalendarPortlet.prototype.removeItem = function(str,removeValue){
+	if(str.indexOf(",") <= 0) return "";
+	var list = str.split(",");
+	list.remove(removeValue);
+	var tmp = "";
+	for(var i = 0 ; i < list.length; i++){
+		tmp += ","+list[i];
+	}
+	return tmp.substr(1,tmp.length);
+};
+
 eXo.calendar.UICalendarPortlet = eXo.calendar.UICalendarPortlet || new UICalendarPortlet();
 eXo.calendar.UIResizeEvent = new UIResizeEvent();
 eXo.calendar.UISelection = new UISelection();

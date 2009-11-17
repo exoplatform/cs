@@ -28,7 +28,7 @@ public class UIEmailInput extends UIFormStringInput {
 		if(list != null){
 			for(int i=0; i < list.length ; i++ ){ 
 				w.write("	<div class='UIEmailAddressItem'>");
-				w.write("		<div class='UIEmailAddressLabel'>" + list[i] + "</div><div class='UIRemoveEmailIcon' onclick='eXo.cs.UIEmailInput.remove(this);'><span></span></div>");
+				w.write("		<div class='UIEmailAddressLabel'>" + list[i] + "</div><div class='UIRemoveEmailIcon' onclick='eXo.calendar.UICalendarPortlet.removeEmailReminder(this) ;'><span></span></div>");
 				w.write("		<div style='clear:both;'><span></span></div>");
 				w.write("	</div>");	
 			}
@@ -36,7 +36,7 @@ public class UIEmailInput extends UIFormStringInput {
 		}
 		if((!CalendarUtils.isEmpty(value) && (value.indexOf("@") != -1))){
 			w.write("	<div class='UIEmailAddressItem'>");
-			w.write("		<div class='UIEmailAddressLabel'>" + value + "</div><div class='UIRemoveEmailIcon' onclick='eXo.cs.UIEmailInput.remove(this);'><span></span></div>");
+			w.write("		<div class='UIEmailAddressLabel'>" + value + "</div><div class='UIRemoveEmailIcon' onclick='eXo.calendar.UICalendarPortlet.removeEmailReminder(this) ;'><span></span></div>");
 			w.write("		<div style='clear:both;'><span></span></div>");
 			w.write("	</div>");
 		}
