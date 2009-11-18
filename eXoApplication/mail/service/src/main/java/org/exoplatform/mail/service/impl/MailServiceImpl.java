@@ -883,6 +883,10 @@ public class MailServiceImpl implements MailService, Startable {
     String folderId;
     Folder folder;
     for (javax.mail.Folder fd : folders) {
+      if (parentFolder == null && (fd.getName().equalsIgnoreCase(Utils.FD_TRASH) || fd.getName().equalsIgnoreCase(Utils.FD_DRAFTS) ||
+           fd.getName().equalsIgnoreCase(Utils.FD_SENT) || fd.getName().equalsIgnoreCase(Utils.FD_SPAM))) {
+       continue;
+      }
       if (!fd.getName().equalsIgnoreCase(Utils.FD_INBOX)) {        
         if (fd.getType() != javax.mail.Folder.HOLDS_FOLDERS) {
           folderId = Utils.generateFID(accountId, String.valueOf(((IMAPFolder) fd).getUIDValidity()), true);
