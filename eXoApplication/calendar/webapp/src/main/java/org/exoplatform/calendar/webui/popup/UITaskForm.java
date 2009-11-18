@@ -81,15 +81,16 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
 	        lifecycle = UIFormLifecycle.class,
 	        template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
 	        events = {
-	          @EventConfig(listeners = UITaskForm.SaveActionListener.class),
-	          @EventConfig(listeners = UITaskForm.AddCategoryActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.SelectUserActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.CancelActionListener.class, phase = Phase.DECODE),
-	          @EventConfig(listeners = UITaskForm.SelectTabActionListener.class, phase = Phase.DECODE)
+            @EventConfig(listeners = UITaskForm.SaveActionListener.class),
+            @EventConfig(listeners = UITaskForm.AddCategoryActionListener.class, phase = Phase.DECODE),
+            @EventConfig(listeners = UITaskForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
+            @EventConfig(listeners = UITaskForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
+            @EventConfig(listeners = UITaskForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE),
+            @EventConfig(listeners = UITaskForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
+            @EventConfig(listeners = UITaskForm.SelectUserActionListener.class, phase = Phase.DECODE),
+            @EventConfig(listeners = UITaskForm.CancelActionListener.class, phase = Phase.DECODE),
+            @EventConfig(listeners = UITaskForm.RemoveEmailActionListener.class, phase = Phase.DECODE),
+            @EventConfig(listeners = UITaskForm.SelectTabActionListener.class, phase = Phase.DECODE)
 	        }
 	),
 	@ComponentConfig(
@@ -102,6 +103,8 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
               @EventConfig(listeners = UITaskForm.CloseActionListener.class, name = "Close", phase = Phase.DECODE)
             }
 	)
+
+
 })
 public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISelector{
   final public static String TAB_TASKDETAIL = "eventDetail".intern() ;
@@ -1151,6 +1154,14 @@ public Attachment getAttachment(String attId) {
       }
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }
+  }
+  
+  static  public class RemoveEmailActionListener extends EventListener<UITaskForm> {
+    public void execute(Event<UITaskForm> event) throws Exception {
+      UITaskForm uiForm = event.getSource() ;
+      uiForm.setEmailAddress(uiForm.getEmailAddress());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChild(UIEventReminderTab.class)) ;
     }
   }
   

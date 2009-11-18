@@ -2515,8 +2515,11 @@ UICalendarPortlet.prototype.removeEmailReminder = function(obj){
 	uiEmailAddressLabel = uiEmailAddressLabel.innerHTML.toString().trim();
 	uiEmailInput.value = this.removeItem(uiEmailInput.value,uiEmailAddressLabel);
 	eXo.core.DOMUtil.removeElement(uiEmailAddressItem);
-	if(!document.getElementById("UIEventForm")) return ;
-		eXo.webui.UIForm.submitForm('UIEventForm','RemoveEmail', true);
+	if(document.getElementById("UIEventForm")) {
+		eXo.webui.UIForm.submitForm('UIEventForm','RemoveEmail', true);		
+	} else if(document.getElementById("UITaskForm")) { 
+		eXo.webui.UIForm.submitForm('UITaskForm','RemoveEmail', true);	
+	}
 }
 
 UICalendarPortlet.prototype.removeItem = function(str,removeValue){
