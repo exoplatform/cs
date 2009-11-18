@@ -186,7 +186,7 @@ public class UIFolderContainer extends UIContainer {
         uiMessageList.setSelectedFolderId(folderId);
         uiMessageList.setSelectedTagId(null);
         uiMessageList.init(accountId);
-        uiMessageList.viewing_ =  uiMessageList.VIEW_ALL;
+        uiMessageList.viewing_ =  UIMessageList.VIEW_ALL;
         uiMsgPreview.setMessage(null);
       }
 

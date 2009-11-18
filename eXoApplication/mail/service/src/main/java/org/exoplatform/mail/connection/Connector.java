@@ -42,7 +42,7 @@ public interface Connector {
   
   public int emptyFolder(Folder folder) throws Exception;
   
-  public boolean createMessage(Message msg) throws Exception;
+  public boolean createMessage(List<Message> msgs, Folder folder) throws Exception;
   
   public boolean deleteMessage(List<Message> msgs, Folder folder) throws Exception;
   
