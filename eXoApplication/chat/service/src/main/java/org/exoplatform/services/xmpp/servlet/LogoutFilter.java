@@ -81,8 +81,8 @@ public class LogoutFilter implements Filter {
           conversationRegistry.unregister(sessionId);
         }
       }
-      chain.doFilter(request, response);
     }
+    chain.doFilter(request, response);
   }
 
   /**
