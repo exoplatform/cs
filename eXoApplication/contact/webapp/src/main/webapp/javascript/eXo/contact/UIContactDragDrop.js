@@ -176,6 +176,10 @@ UIContactDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, 
     contactListNode.appendChild(tmpNode);
 		uiContactPortletNode.style.border = 'solid 1px #A5A5A5' ;
   }
+  
+  eXo.core.DOMUtil.addClass(dragBlock,"UIVcardHightLight");
+  eXo.contact.UIContactDragDrop.orginalObject = dragBlock ;
+  
   with(uiContactPortletNode.style) {    
     position = 'absolute' ;
     width = blockWidth + 'px' ;
@@ -245,6 +249,8 @@ UIContactDragDrop.prototype.dragCallback = function(dndEvent) {
 
 UIContactDragDrop.prototype.dropCallback = function(dndEvent) { 
   eXo.core.DOMUtil.removeElement(dndEvent.dragObject) ;
+  eXo.core.DOMUtil.replaceClass(eXo.contact.UIContactDragDrop.orginalObject,"UIVcardHightLight","");
+  delete eXo.contact.UIContactDragDrop.orginalObject;  
   if (this.foundTargetObjectCatch) {
     this.foundTargetObjectCatch.style[eXo.contact.UIContactDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
 		if(eXo.core.Browser.browserType == "ie") this.foundTargetObjectCatch.removeAttribute("style") ;

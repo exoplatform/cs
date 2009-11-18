@@ -427,3 +427,10 @@
 	clear: left; /* orientation=rt */
 }
 
+.UIContactPortlet .UIGrid .UIHightLight {
+	background-color:#FFFFCC;	
+}
+
+.UIContactPortlet .UIVCardsContent .UIVcardHightLight {
+	border: solid 1px red;	
+}
