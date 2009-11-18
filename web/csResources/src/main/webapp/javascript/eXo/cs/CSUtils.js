@@ -36,6 +36,7 @@ CheckBoxManager.prototype.checkAllItem = function(obj){
 	var len = items.length ;
 	for(var i = 1 ; i < len ; i ++) {
 		items[i].checked = checked ;
+		this.highlight(items[i],checked);
 	}	
 } ;
 
@@ -52,7 +53,16 @@ CheckBoxManager.prototype.checkItem = function(obj){
 		}
 		checkboxes[0].checked = state;
 	}
+	this.highlight(obj,obj.checked);
 } ;
+
+CheckBoxManager.prototype.highlight = function(obj,isChecked){
+	obj = eXo.core.DOMUtil.findAncestorByTagName(obj,"tr");
+	if(!obj) return ;
+	if(isChecked) eXo.core.DOMUtil.addClass(obj,"UIHightLight");
+	else eXo.core.DOMUtil.replaceClass(obj,"UIHightLight","");
+} ;
+
 eXo.cs.CheckBox = new CheckBoxManager() ;
 
 /********************* Pane Spliter ******************/
