@@ -160,8 +160,8 @@ UIMailPortlet.prototype.switchLayout = function(layout){
 
 UIMailPortlet.prototype.changeMenuLabel = function(layout, layoutState){
     var csMailLayoutSwitchMenuNode = document.getElementById('_CSMailLayoutSwitchMenu');
-    var menuItems = eXo.core.DOMUtil.findDescendantsByClass(csMailLayoutSwitchMenuNode, 'a', 'MenuItem');
-    var menuItemTexts = eXo.core.DOMUtil.findDescendantsByClass(csMailLayoutSwitchMenuNode, 'div', 'ItemIcon');
+    var menuItems = eXo.core.DOMUtil.findDescendantsByClass(csMailLayoutSwitchMenuNode, 'div', 'MenuItem');
+    var menuItemTexts = eXo.core.DOMUtil.findDescendantsByClass(csMailLayoutSwitchMenuNode, 'a', 'ItemIcon');
     var fontWeight = false;
     for (var i = 0; i < menuItems.length; i++) {
         if (menuItemTexts[i]) {
@@ -596,7 +596,7 @@ UIMailPortlet.prototype.swapMenu = function(oldmenu, clickobj){
 
 UIMailPortlet.prototype.setMenuWidth = function(menu){
   menu.style.width= "1px";
-	var items = eXo.core.DOMUtil.findDescendantsByClass(menu,"a","MenuItem");
+	var items = eXo.core.DOMUtil.findDescendantsByClass(menu,"div","MenuItem");
 	var max = 0;
 	if(menu.style.display == "none") menu.style.display = "block";
 	var i = items.length;
