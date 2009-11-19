@@ -3,6 +3,7 @@ eXo.communication.chat.locale.ResourceBundle =
 {
   chat_message_xmpp_session_is_null : "You are not login to Chat/Chat session has closed by another window/tab.\n Please logout and login again.",
   chat_message_room_default_config_commit : "You just cancel the room configuration. The default config still sent.",
+  chat_message_room_configuration_error : "You don't have permission to configure this room.",
   chat_message_room_password_error : "Your secret key to join room is not valid.\nPlease try again later.",
   chat_message_room_not_unlocked_error : "You are trying to join a room which is not unlocked yet.\nPlease try again later !",
   chat_message_room_user_not_member : "You are trying to join a private room in which you are not a member!\nPlease try again later.",
