@@ -779,7 +779,7 @@ UIMailPortlet.prototype.lazySync = function(obj, fId){
 		//eXo.mail.MailServiceHandler.stopCheckMail();
 	}
 	this.isChecked = window.setTimeout(function(){		 
-		eXo.mail.MailServiceHandler.checkMail(true, fId);
+		eXo.mail.MailServiceHandler.checkMail(false, fId);
 		window.clearTimeout(this.isChecked);
 		delete this.isChecked;
 	}, 5*1000);

@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Flags;
-import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.UIDFolder;
