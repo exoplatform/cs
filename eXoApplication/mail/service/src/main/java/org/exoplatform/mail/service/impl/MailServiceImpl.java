@@ -880,25 +880,26 @@ public class MailServiceImpl implements MailService, Startable {
   private List<javax.mail.Folder> synchImapFolders(String username, String accountId, Folder parentFolder, javax.mail.Folder[] folders) throws Exception {
     List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
     List<String> serverFolderId = new ArrayList<String>();
-    String folderId;
+    String folderId, folderName;
     Folder folder;
     for (javax.mail.Folder fd : folders) {
-      if (parentFolder == null && (fd.getName().equalsIgnoreCase(Utils.FD_TRASH) || fd.getName().equalsIgnoreCase(Utils.FD_DRAFTS) ||
-           fd.getName().equalsIgnoreCase(Utils.FD_SENT) || fd.getName().equalsIgnoreCase(Utils.FD_SPAM))) {
+      folderName = fd.getName();
+      if (parentFolder == null && (folderName.equalsIgnoreCase(Utils.FD_TRASH) || folderName.equalsIgnoreCase(Utils.FD_DRAFTS) ||
+          folderName.equalsIgnoreCase(Utils.FD_SENT) || folderName.equalsIgnoreCase(Utils.FD_SPAM))) {
        continue;
       }
       if (!fd.getName().equalsIgnoreCase(Utils.FD_INBOX)) {        
         if (fd.getType() != javax.mail.Folder.HOLDS_FOLDERS) {
           folderId = Utils.generateFID(accountId, String.valueOf(((IMAPFolder) fd).getUIDValidity()), true);
         } else {
-          folderId = Utils.escapeIllegalJcrChars(fd.getName());
+          folderId = Utils.escapeIllegalJcrChars(folderName);
         } 
         serverFolderId.add(folderId);
         folder = storage_.getFolder(username, accountId, folderId);
         if (folder == null) {
           folder = new Folder();
           folder.setId(folderId);
-          folder.setName(fd.getName());
+          folder.setName(folderName);
           folder.setURLName(fd.getURLName().toString());
           folder.setNumberOfUnreadMessage(0);
           folder.setTotalMessage(0);
