@@ -65,30 +65,30 @@
 	            <div class="MiddleLeftRightClickPopupMenu">
 	              <div class="MiddleRightRightClickPopupMenu">
 	                <div class="UIRightPopupMenuContainer">
-	                  <a class="MenuItem" href="<%=uicomponent.event("MarkAsRead")%>">   
-	                    <div class="ItemIcon MarkReadIcon"><%=_ctx.appRes(uicomponent.id+ ".label.mark-as-read") %></div>
-	                  </a>
-	                  <a class="MenuItem ItemHidden" href="<%=uicomponent.event("MarkAsUnRead")%>">   
-	                    <div class="ItemIcon MarkUnreadIcon"><%=_ctx.appRes(uicomponent.id+ ".label.mark-as-unread") %></div>
-	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("AddStar")%>">   
-	                    <div class="ItemIcon StarredIcon"><%=_ctx.appRes(uicomponent.id+ ".label.add-star") %></div>
-	                  </a>
-	                  <a class="MenuItem ItemHidden" href="<%=uicomponent.event("RemoveStar")%>">   
-	                    <div class="ItemIcon RemoveStarIcon"><%=_ctx.appRes(uicomponent.id+ ".label.remove-star") %></div>
-	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("AddTag")%>">   
-	                    <div class="ItemIcon BlueTag"><%=_ctx.appRes(uicomponent.id+ ".label.tag-message") %></div>
-	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("MoveMessages")%>">   
-	                    <div class="ItemIcon MoveMessageIcon"><%=_ctx.appRes(uicomponent.id+ ".label.move-message") %></div>
-	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("Import")%>">   
-	                    <div class="ItemIcon ImportMessageIcon"><%=_ctx.appRes(uicomponent.id+ ".label.import-message") %></div>
-	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("Export")%>">   
-	                    <div class="ItemIcon EmportMessageIcon"><%=_ctx.appRes(uicomponent.id+ ".label.export-message") %></div>
-	                  </a>
+	                  <div class="MenuItem">   
+	                    <a class="ItemIcon MarkReadIcon" href="<%=uicomponent.event("MarkAsRead")%>"><%=_ctx.appRes(uicomponent.id+ ".label.mark-as-read") %></a>
+	                  </div>
+	                  <div class="MenuItem ItemHidden">   
+	                    <a class="ItemIcon MarkUnreadIcon" href="<%=uicomponent.event("MarkAsUnRead")%>"><%=_ctx.appRes(uicomponent.id+ ".label.mark-as-unread") %></a>
+	                  </div>
+	                  <div class="MenuItem">   
+	                    <a class="ItemIcon StarredIcon" href="<%=uicomponent.event("AddStar")%>"><%=_ctx.appRes(uicomponent.id+ ".label.add-star") %></a>
+	                  </div>
+	                  <div class="MenuItem ItemHidden">   
+	                    <a class="ItemIcon RemoveStarIcon" href="<%=uicomponent.event("RemoveStar")%>"><%=_ctx.appRes(uicomponent.id+ ".label.remove-star") %></a>
+	                  </div>
+	                  <div class="MenuItem">   
+	                    <a class="ItemIcon BlueTag" href="<%=uicomponent.event("AddTag")%>"><%=_ctx.appRes(uicomponent.id+ ".label.tag-message") %></a>
+	                  </div>
+	                  <div class="MenuItem">   
+	                    <a class="ItemIcon MoveMessageIcon" href="<%=uicomponent.event("MoveMessages")%>"><%=_ctx.appRes(uicomponent.id+ ".label.move-message") %></a>
+	                  </div>
+	                  <div class="MenuItem">   
+	                    <a class="ItemIcon ImportMessageIcon" href="<%=uicomponent.event("Import")%>"><%=_ctx.appRes(uicomponent.id+ ".label.import-message") %></a>
+	                  </div>
+	                  <div class="MenuItem">   
+	                    <a class="ItemIcon EmportMessageIcon" href="<%=uicomponent.event("Export")%>"><%=_ctx.appRes(uicomponent.id+ ".label.export-message") %></a>
+	                  </div>
 	                </div>
 	              </div>
 	            </div>
@@ -396,38 +396,38 @@
               <div class="ItemIcon EditDraftIcon"><%=_ctx.appRes(uicomponent.id+ ".label.edit-draft") %></div>
             </a>
             <% } %>
-            <a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
-              <div class="ItemIcon PrintMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.print") %></div>
-            </a>
+            <div class="MenuItem">   
+              <a class="ItemIcon PrintMailIcon" href="<%=uicomponent.event("Print", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.print") %></a>
+            </div>
             <% if (!uicomponent.selectedDraftFolder()) { %> 
-            <a class="MenuItem" href="<%=uicomponent.event("Reply", "id")%>">   
-              <div class="ItemIcon ReplyMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %></div>
-            </a>  
-            <a class="MenuItem" href="<%=uicomponent.event("ReplyAll", "id")%>">   
-              <div class="ItemIcon ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("Forward", "id")%>">   
-              <div class="ItemIcon ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></div>
-            </a>
+            <div class="MenuItem">   
+              <a class="ItemIcon ReplyMailIcon" href="<%=uicomponent.event("Reply", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %></a>
+            </div>  
+            <div class="MenuItem">   
+              <a class="ItemIcon ReplyAllMailIcon" href="<%=uicomponent.event("ReplyAll", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></a>
+            </div>
+            <div class="MenuItem">   
+              <a class="ItemIcon ForwardMailIcon" href="<%=uicomponent.event("Forward", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></a>
+            </div>
             <% } %>
-            <a class="MenuItem" href="<%=uicomponent.event("CreateFilter", "id")%>">   
-              <div class="ItemIcon CreateFilterIcon"><%=_ctx.appRes(uicomponent.id+ ".label.create-filter-from-this") %></div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", "id")%>">   
-              <div class="ItemIcon MoveMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.move-to-folder") %></div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("AddTag", "id")%>">   
-              <div class="ItemIcon TagMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.tag") %> </div>
-            </a>          
-            <a class="MenuItem" href="<%=uicomponent.event("Delete", uicomponent.id, "id")%>">   
-              <div class="ItemIcon DeleteMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.delete") %></div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("AddContact", "id")%>">   
-              <div class="ItemIcon AddContactIcon"><%=_ctx.appRes(uicomponent.id+ ".label.add-sender-to-contacts") %></div>
-            </a>
-            <a class="MenuItem" href="<%=uicomponent.event("Export", "id")%>">   
-              <div class="ItemIcon ExportIcon"><%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %></div>
-            </a>
+            <div class="MenuItem">   
+              <a class="ItemIcon CreateFilterIcon" href="<%=uicomponent.event("CreateFilter", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.create-filter-from-this") %></a>
+            </div>
+            <div class="MenuItem">   
+              <a class="ItemIcon MoveMailIcon" href="<%=uicomponent.event("MoveMessages", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.move-to-folder") %></a>
+            </div>
+            <div class="MenuItem">   
+              <a class="ItemIcon TagMailIcon" href="<%=uicomponent.event("AddTag", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.tag") %> </a>
+            </div>          
+            <div class="MenuItem">   
+              <a class="ItemIcon DeleteMailIcon" href="<%=uicomponent.event("Delete", uicomponent.id, "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.delete") %></a>
+            </div>
+            <div class="MenuItem">   
+              <a class="ItemIcon AddContactIcon" href="<%=uicomponent.event("AddContact", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.add-sender-to-contacts") %></a>
+            </div>
+            <div class="MenuItem">   
+              <a class="ItemIcon ExportIcon" href="<%=uicomponent.event("Export", "id")%>"><%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %></a>
+            </div>
           </div>
         </div>
       </div>
