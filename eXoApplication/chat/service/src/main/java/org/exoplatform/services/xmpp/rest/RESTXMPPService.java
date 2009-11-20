@@ -1588,10 +1588,11 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       String username = curentState.getIdentity().getUserId();
       if (log.isDebugEnabled())
         log.info("Userid for login : " + username);
-      String password = organization.getOrganizationService()
+      /*String password = organization.getOrganizationService()
                                     .getUserHandler()
                                     .findUserByName(username)
-                                    .getPassword();
+                                    .getPassword();*/
+      String password = (String)curentState.getIdentity().getSubject().getPrivateCredentials().iterator().next();
       messenger.login(username, password, organization, delegate, history,rb);
       XMPPSession session = messenger.getSession(username);
       XMPPConnection connection = session.getConnection();
