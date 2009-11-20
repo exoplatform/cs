@@ -48,10 +48,11 @@ public class AuthenticationLoginListener extends Listener<ConversationRegistry, 
       if(messenger != null && restXmppService != null){
         String userId = event.getData().getIdentity().getUserId() ;
         UserInfoService organization = (UserInfoService) container.getComponentInstanceOfType(UserInfoService.class);
-        String password = organization.getOrganizationService()
+        /*String password = organization.getOrganizationService()
                                       .getUserHandler()
                                       .findUserByName(userId)
-                                      .getPassword();
+                                      .getPassword();*/
+        String password = (String)event.getData().getIdentity().getSubject().getPrivateCredentials().iterator().next();
         ContinuationServiceDelegate delegate = (ContinuationServiceDelegate) container.getComponentInstanceOfType(ContinuationServiceDelegate.class);
         HistoryImpl history = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
         ConversationState.setCurrent(event.getData());
