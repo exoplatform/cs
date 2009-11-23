@@ -14,7 +14,7 @@ eXo.communication.chat.locale.ResourceBundle =
   chat_message_room_user_join : "{0} just joined the room",
   chat_message_confirm_allow_to_see_status : "Do you want to allow [{0}] to see your status\n and add him/her to your contact list?",
   chat_message_confirm_remove_buddy : "Are you sure to remove \'{0}\'?",
-  chat_message_system_info : "System: ",
+  chat_message_system_info : "System",
   chat_message_file_transport_request : "{0} want to send you [{1}]",
   chat_message_file_transport_response_completed : "File exchange: [{0}] completed.",
   chat_message_file_transport_response_denied : "File exchange: [{0}] denied.",

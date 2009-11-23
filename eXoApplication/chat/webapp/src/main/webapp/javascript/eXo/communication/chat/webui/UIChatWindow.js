@@ -503,7 +503,8 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   }
   if (msgObj &&
       msgObj.type == 'error') {
-    buddyId = this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO;
+    //buddyId = this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO;
+	  buddyId = this.UIMainChatWindow.ResourceBundle.chat_message_system_info + ':';
     msgObj = msgObj.body;
   }this.updateUnreadMessage();
   var buddyIdTmp = buddyId;
@@ -541,7 +542,8 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   msgContent = msgContent + '';
   
   var msgContentTmp = '';
-  if (buddyIdTmp != this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO) {
+  var sysInfo = this.UIMainChatWindow.ResourceBundle.chat_message_system_info + ':';
+  if (buddyIdTmp != sysInfo) {
     msgContentTmp = buddyIdTmp + ': ' + msgContent;
   } else {
     msgContentTmp = msgContent;
@@ -839,7 +841,7 @@ function UIChatWindow() {
   this.LAST_30_DAY_MESSAGE = 30;
   this.BEGINNING_MESSAGE = -1;
   this.CURRENT_CONVERSATION_MESSAGE = 0;
-  this.SYSTEM_INFO = 'System: ';
+  //this.SYSTEM_INFO = 'System: ';
   this.UIMainChatWindow = eXo.communication.chat.webui.UIMainChatWindow;
   this.LocalTemplateEngine = eXo.communication.chat.core.LocalTemplateEngine;
   this.scrollMgr = false;
@@ -1203,7 +1205,8 @@ UIChatWindow.prototype.insertCustomMsg = function(msg, tabId, from) {
   }
   if (uiTabControlObj) {
     if (!from) {
-      uiTabControlObj.writeMsg(this.SYSTEM_INFO,msg);
+      var sysInfo = this.UIMainChatWindow.ResourceBundle.chat_message_system_info + ':';
+      uiTabControlObj.writeMsg(sysInfo, msg);
     } else {
       uiTabControlObj.writeMsg(from,msg);
     }
