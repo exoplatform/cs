@@ -98,7 +98,7 @@ public class ImapConnector extends BaseConnector {
     return imapFolder;
   }
 
-  public boolean renameFolder(String newName, Folder folder) throws Exception {
+  public Folder renameFolder(String newName, Folder folder) throws Exception {
     try {
       boolean result = false;
       URLName url = new URLName(folder.getURLName());
@@ -107,13 +107,14 @@ public class ImapConnector extends BaseConnector {
         if (folderToBeRenamed.isOpen()) folderToBeRenamed.close(false);
         IMAPFolder f1 = (IMAPFolder) ((IMAPStore)store_).getFolder(newName);
         result = folderToBeRenamed.renameTo(f1);
+        folder.setURLName(f1.getURLName().toString());
         if (!result) logger.info("Error while renaming folder!");
       } else {
         logger.info("Folder does not exists!");
       }
-      return result;
+      return folder;
     } catch (Exception ex) {
-      return false;
+      return null;
     }
   }
   
