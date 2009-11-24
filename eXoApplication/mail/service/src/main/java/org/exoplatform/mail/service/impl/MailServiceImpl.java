@@ -228,17 +228,16 @@ public class MailServiceImpl implements MailService, Startable {
   public void renameFolder(String username, String accountId, String newName,  String folderId) throws Exception {
     Account account = getAccountById(username, accountId);
     Folder folder = this.getFolder(username, accountId, folderId);
-    boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder()) {
       try {
         Connector connector = new ImapConnector(account);
-        success = connector.renameFolder(newName, folder);
+        folder = connector.renameFolder(newName, folder);
       } catch(Exception e) {
         e.printStackTrace();
         return;
       }
     }
-    if (success) storage_.renameFolder(username, accountId, newName, folderId);
+    if (folder != null) storage_.renameFolder(username, accountId, newName, folder);
   }
   
   private void deleteLocalFolder(String username, String accountId, String folderId) throws Exception {

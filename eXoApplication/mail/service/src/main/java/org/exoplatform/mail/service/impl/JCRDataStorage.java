@@ -1674,13 +1674,14 @@ public class JCRDataStorage {
     }
   }
   
-  public void renameFolder(String username, String accountId, String newName, String folderId) throws Exception {
+  public void renameFolder(String username, String accountId, String newName, Folder folder) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
-      Node myFolder = getFolderNodeById(sProvider, username, accountId, folderId);
+      Node myFolder = getFolderNodeById(sProvider, username, accountId, folder.getId());
       if (myFolder != null) {
         myFolder.setProperty(Utils.EXO_NAME, newName);
+        myFolder.setProperty(Utils.EXO_LABEL, folder.getURLName());
         myFolder.save();
       }
     } finally {

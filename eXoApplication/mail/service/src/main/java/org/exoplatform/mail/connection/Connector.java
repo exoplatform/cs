@@ -36,7 +36,7 @@ public interface Connector {
   
   public javax.mail.Folder createFolder(Folder parentFolder, Folder folder) throws Exception;
   
-  public boolean renameFolder(String newName, Folder folder) throws Exception;
+  public Folder renameFolder(String newName, Folder folder) throws Exception;
   
   public boolean deleteFolder(Folder folder) throws Exception;
   
