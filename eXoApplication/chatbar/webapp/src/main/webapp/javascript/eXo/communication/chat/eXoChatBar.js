@@ -76,7 +76,11 @@ eXo.communication.chatbar.eXoChatBar = {
 		var uiPage = document.getElementById('UIPage') ;
 		if(obj || (uiPage.offsetWidth < obj.offsetWidth)){
 			obj.style.width = (uiPage.offsetWidth - 16) + "px";
-		}		
+		}
+		if(eXo.core.Browser.isIE6()){
+			obj.style.position = "absolute";
+			obj.style.top = (eXo.core.Browser.getBrowserHeight() - obj.offsetHeight + document.documentElement.scrollTop) + "px";
+		}
 		window.setTimeout('eXo.communication.chatbar.eXoChatBar.setWidth()', 100);
 	}
 }
