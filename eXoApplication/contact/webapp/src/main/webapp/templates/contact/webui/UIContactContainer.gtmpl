@@ -2,18 +2,89 @@
 	import org.exoplatform.contact.webui.UIContactPreview;
 	import org.exoplatform.contact.webui.UIContacts;
 	String compId = uicomponent.getId() ;
+	UIContacts uiContacts = uicomponent.uiContacts();
 %>
 
 <div class="UIContactContainer SpliterContainer" id="$compId">
-<!--  Start UIContacts-->
-	<div class="UIMessageArea" id="uiMessageListResizableArea">
-	<% uicomponent.renderChild(UIContacts.class) ;%>		
-	</div>	
-<!--  End UIContacts -->
-	<div class="ResizeReadingPane" onmousedown = "eXo.cs.Spliter.doResize(event, this) ;"><span></span></div>
+	<!--  Start UIContacts-->
+		<div class="UIMessageArea" id="uiMessageListResizableArea">
+		<% uicomponent.renderChild(UIContacts.class) ;%>		
+		</div>	
+	<!--  End UIContacts -->
+		<div class="ResizeReadingPane" onmousedown = "eXo.cs.Spliter.doResize(event, this) ;"><span></span></div>
+			
+	<!--  Start UIContactPreview-->
+		<% uicomponent.renderChild(UIContactPreview.class) ;%>	
+	<!--  End UIContactPreview -->		
 		
-<!--  Start UIContactPreview-->
-	<% uicomponent.renderChild(UIContactPreview.class) ;%>	
-<!--  End UIContactPreview -->		
-		
+	<% /*Begin Popup Menu*/ %>						
+
+  				<div class="UIRightClickPopupMenu" id="UIContactListPopuMenu" eXoCallback="eXo.contact.UIContactPortlet.contactCallback">
+  					<div class="UIContextMenuContainer">
+						  <div class="TopLeftRightClickPopupMenu">
+          			<div class="TopRightRightClickPopupMenu">
+            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+          			</div>
+        			</div>
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+              		<div class="UIRightPopupMenuContainer">
+										<div class="MenuItem">   
+	                    <a class="ItemIcon EditActionIcon" href="<%=uiContacts.event("EditContact", "id")%>">
+	                      <%=_ctx.appRes(uiContacts.getName() + ".label.edit")%>
+	                    </a>
+                    </div>                    
+                    <div class="MenuItem">   
+	                    <a class="ItemIcon CopyContactIcon" href="<%=uiContacts.event("CopyContact", "id")%>">
+	                      <%=_ctx.appRes(uiContacts.getName() + ".label.copy")%>
+	                    </a>
+                    </div>                    
+                    <div class="MenuItem">   
+	                    <a class="ItemIcon ShareIcon" href="<%=uiContacts.event("SharedContacts", "id")%>">
+	                      <%=_ctx.appRes(uiContacts.getName() + ".label.shared")%>
+	                    </a>
+                    </div>                    
+                    <div class="MenuItem">  
+	                    <a class="ItemIcon EmailIcon" href="<%=uiContacts.event("SendEmail", "id")%>">
+	                      <%=_ctx.appRes(uiContacts.getName() + ".label.sendEmail")%>
+	                    </a>
+                    </div>             
+                    <div class="MenuItem">   
+	                    <a class="ItemIcon VioletTag" href="<%=uiContacts.event("Tag", "id")%>">
+	                      <%=_ctx.appRes(uiContacts.getName() + ".label.tag")%>
+	                    </a>
+                    </div>
+                    <div class="MenuItem">   
+	                    <a class="ItemIcon MoveIcon" href="<%=uiContacts.event("MoveContacts", "id")%>">
+	                      <%=_ctx.appRes(uiContacts.getName() + ".label.move")%>
+	                    </a>
+                    </div>
+                    <div class="MenuItem">   
+	                    <a class="ItemIcon DeleteContactIcon" href="<%=uiContacts.event("DeleteContacts", uiContacts.id, "id")%>">
+	                      <%=_ctx.appRes(uiContacts.getName() + ".label.delete")%>
+	                    </a> 
+                    </div>
+                    <div class="MenuItem">   
+	                    <a class="ItemIcon PrintIcon" href="<%=uiContacts.event("PrintDetails", "id")%>">
+	                      <%=_ctx.appRes(uiContacts.getName() + ".label.print") %>
+	                    </a>
+                    </div>
+                    <div class="MenuItem">   
+	                    <a class="ItemIcon ExportContactIcon" href="<%=uiContacts.event("ExportContact", "id")%>">
+	                      <%=_ctx.appRes(uiContacts.getName() + ".label.export")%>
+	                    </a>
+                    </div>
+									</div>
+	          		</div>
+	        		</div>
+				      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+				    </div>		      		
+				  </div>
+
+  		<% /*End Popup Menu*/ %>
+	
 </div>

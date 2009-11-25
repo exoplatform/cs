@@ -2,6 +2,8 @@
 	import org.exoplatform.contact.service.Contact;
 	import org.exoplatform.download.DownloadService;
 	import org.exoplatform.contact.ContactUtils;
+	import org.exoplatform.contact.webui.UIContacts;
+	UIContacts uiContacts = uicomponent.uiContacts();
 	String compId = uicomponent.getId() ;
 	Contact contact = uicomponent.getContact();
 	import org.exoplatform.contact.service.ContactAttachment;
@@ -22,7 +24,7 @@
 		<% } %>		
 		<div style="clear:both;"><span></span></div>
 	</div>
-	<div class="ContactPreviewDetails SpliterResizableListArea">
+	<div class="ContactPreviewDetails SpliterResizableListArea" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uiContacts.havePermission(contact)%>" havePermissionAdd="<%=uiContacts.havePermissionAdd(contact)%>" isSharedAddress = "<%=uiContacts.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>">
 <!--  Start DecoratorBox ViewBoxStyle -->
 		<div class="DecoratorBox">
 			<div class="ViewBoxStyle">

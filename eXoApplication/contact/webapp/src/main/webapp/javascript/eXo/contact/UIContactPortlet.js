@@ -11,7 +11,7 @@ UIContactPortlet.prototype.showContextMenu = function(compid) {
 			'preventForms':false
 		} ;	
 		UIContextMenuCon.init(config) ;
-		UIContextMenuCon.attach(['UIContactList','VCardContent'], 'UIContactListPopuMenu') ;
+		UIContextMenuCon.attach(['UIContactList','VCardContent','ContactPreviewDetails'], 'UIContactListPopuMenu') ;
 		UIContextMenuCon.attach('PrivateAddressBook', 'UIAddressBookPopupMenu0') ;	
 		UIContextMenuCon.attach('ShareAddressBook', 'UIAddressBookPopupMenu1') ;
 		UIContextMenuCon.attach('PublicAddressBook', 'UIAddressBookPopupMenu2') ;
@@ -39,12 +39,17 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 	var id = null ;
 	var tr = DOMUtil.findAncestorByClass(src, "VCardContent") ;
 	if(tr != null) {
-		tr = DOMUtil.findAncestorByClass(src, "VCardContent") ;
+		//tr = DOMUtil.findAncestorByClass(src, "VCardContent") ;
 		id = tr.getAttribute("id") ;
 	} else {
 		tr = DOMUtil.findAncestorByTagName(src, "tr") ;
-		var checkbox = DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;		
-		id = checkbox.name ;
+		if (tr != null) {
+			var checkbox = DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;		
+			id = checkbox.name ;
+		} else {
+			tr = DOMUtil.findAncestorByClass(src, "ContactPreviewDetails");
+			id = tr.getAttribute("id");
+		}
 	}
   var type = tr.getAttribute("type").toLowerCase() ;
 	var isOwner = tr.getAttribute("isOwner").toLowerCase() ;  

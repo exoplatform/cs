@@ -43,4 +43,8 @@ public class UIContactContainer extends UIContainer  {
     getChild(UIContacts.class)
     .setContacts(contactService.getPersonalContactsByAddressBook(ContactUtils.getCurrentUser(), group)) ;
   }
+  
+  public UIContacts uiContacts() {
+    return getChild(UIContacts.class);
+  }
 }
