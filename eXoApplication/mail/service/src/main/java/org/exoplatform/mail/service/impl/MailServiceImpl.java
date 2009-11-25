@@ -296,7 +296,8 @@ public class MailServiceImpl implements MailService, Startable {
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         Connector connector = new ImapConnector(account);
-        success = connector.moveMessage(msgList, currentFolder, destFolder);
+        msgList = connector.moveMessage(msgList, currentFolder, destFolder);
+        if (msgList == null) success = false;
       } catch(Exception e) {
         return;
       }
@@ -313,7 +314,8 @@ public class MailServiceImpl implements MailService, Startable {
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         Connector connector = new ImapConnector(account);
-        success = connector.moveMessage(msgList, currentFolder, destFolder);
+        msgList = connector.moveMessage(msgList, currentFolder, destFolder);
+        if (msgList == null) success = false;
       } catch(Exception e) {
         return;
       }
@@ -329,10 +331,12 @@ public class MailServiceImpl implements MailService, Startable {
     boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
-        Connector connector = new ImapConnector(account);
         List<Message> l = new ArrayList<Message>();
+        Connector connector = new ImapConnector(account);
         l.add(msg);
-        success = connector.moveMessage(l, currentFolder, destFolder);
+        l = connector.moveMessage(l, currentFolder, destFolder);
+        if (l == null) success = false;
+        else msg = l.get(0);
       } catch(Exception e) {
         return;
       }
@@ -351,7 +355,9 @@ public class MailServiceImpl implements MailService, Startable {
         Connector connector = new ImapConnector(account);
         List<Message> l = new ArrayList<Message>();
         l.add(msg);
-        success = connector.moveMessage(l, currentFolder, destFolder);
+        l = connector.moveMessage(l, currentFolder, destFolder);
+        if (l == null) success = false;
+        else msg = l.get(0);
       } catch(Exception e) {
         return;
       }
