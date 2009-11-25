@@ -66,6 +66,10 @@ public class UIContactPreview extends UIComponent  {
     return rService.getCurrentRepository().getConfiguration().getName() ;
   }
   
+  public UIContacts uiContacts() {
+    return getAncestorOfType(UIContactContainer.class).getChild(UIContacts.class);
+  }
+  
   static public class SendEmailActionListener extends EventListener<UIContactPreview> {
     public void execute(Event<UIContactPreview> event) throws Exception {
       UIContactPreview uiContactPreview = event.getSource() ;
