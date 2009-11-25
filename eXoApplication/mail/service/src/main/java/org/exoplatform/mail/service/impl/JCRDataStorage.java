@@ -641,6 +641,7 @@ public class JCRDataStorage {
           }
 
           msgNode.setProperty(Utils.MSG_FOLDERS, folderIds);
+          msgNode.setProperty(Utils.EXO_UID, msg.getUID());
           if (moveReference)
             msgNode = moveReference(accountId, msgNode);
           msgNode.save();
@@ -709,6 +710,7 @@ public class JCRDataStorage {
             else folderIds[i] = folderId;
           }
           msgNode.setProperty(Utils.MSG_FOLDERS, folderIds);
+          msgNode.setProperty(Utils.EXO_UID, msg.getUID());
           if (isUnread) inUnreadNumber++;
           inTotalMessage++;
 

@@ -42,11 +42,11 @@ public interface Connector {
   
   public int emptyFolder(Folder folder) throws Exception;
   
-  public boolean createMessage(List<Message> msgs, Folder folder) throws Exception;
+  public List<Message> createMessage(List<Message> msgs, Folder folder) throws Exception;
   
   public boolean deleteMessage(List<Message> msgs, Folder folder) throws Exception;
   
-  public boolean moveMessage(List<Message> msgs, Folder currentFolder, Folder desFolder) throws Exception;
+  public List<Message> moveMessage(List<Message> msgs, Folder currentFolder, Folder desFolder) throws Exception;
   
   public boolean markAsRead(List<Message> msgList, Folder folder) throws Exception;
   
