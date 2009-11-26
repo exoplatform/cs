@@ -1,6 +1,7 @@
 <% 
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.attachSwapClass("'+ uicomponent.id +'","ControlButton","ControlButtonHover") ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.CalendarScrollManager.load() ;') ;
 %>
 <div id="$uicomponent.id" class="UIActionBar"> 
 	<div class="UIToolbar">
@@ -8,36 +9,36 @@
 			<div class="LeftBar">
 				<div class="RightBar">
 					<div class="CenterBar">
-						<div class="Title ControlButton">
+						<div class="Title ControlButton ActionBarButton">
 							<%=_ctx.appRes(uicomponent.id + ".label.QuickAdd")%>
 						</div>
-						<div onclick="eXo.calendar.UICalendarPortlet.addQuickShowHidden(this, 1);" class="ControlButton">
+						<div onclick="eXo.calendar.UICalendarPortlet.addQuickShowHidden(this, 1);" class="ControlButton ActionBarButton">
 							<a class="IconHolder QuickAddEvent">
 								<%=_ctx.appRes(uicomponent.id + ".label.Event")%>
 							</a>
 						</div>
-						<div onclick="eXo.calendar.UICalendarPortlet.addQuickShowHidden(this, 2);" class="ControlButton">
+						<div onclick="eXo.calendar.UICalendarPortlet.addQuickShowHidden(this, 2);" class="ControlButton ActionBarButton">
 							<a class="IconHolder AddNewTask">
 								<%=_ctx.appRes(uicomponent.id + ".label.Task")%>
 							</a>
 						</div>
 						
-						<div class="SeparatorLine"><span></span></div>
-            <div onclick="<%=uicomponent.event("Today")%>" class="ControlButton">
+						<div class="SeparatorLine ActionBarButton"><span></span></div>
+            <div onclick="<%=uicomponent.event("Today")%>" class="ControlButton ActionBarButton">
 								<a class="IconHolder TodayIcon">
 									<%=_ctx.appRes(uicomponent.id + '.label.Today')%>
 								</a>
             </div>
 						
-			<div class="SeparatorLine"><span></span></div>			
+			<div class="SeparatorLine ActionBarButton"><span></span></div>			
 			<%for(viewType in uicomponent.getViewTypes()){
 	      		
 		      				icon = viewType + "Icon" ;
 		      				actionLink = uicomponent.event("ChangeView",viewType + "&categoryId=calId") ;
 		      				String label = _ctx.appRes(uicomponent.id + ".label." + viewType) ;
-		      				String style = "ControlButton" ;
+		      				String style = "ControlButton  ActionBarButton" ;
 		      	  if(viewType.equals(uicomponent.getCurrentView())) {
-		      	   style = "ControlButton ControlButtonHover" ;
+		      	   style = "ControlButton ControlButtonHover ActionBarButton" ;
 		      	  }
 		      				
 		      	  if(!viewType.equals("UIScheduleView")) {
@@ -53,28 +54,28 @@
 	          }
 	        %>
 
-						<div class="SeparatorLine"><span></span></div>
-						<div onclick="<%=uicomponent.event("Setting")%>" class="ControlButton">
+						<div class="SeparatorLine ActionBarButton"><span></span></div>
+						<div onclick="<%=uicomponent.event("Setting")%>" class="ControlButton ActionBarButton">
 							<div class="IconHolder SettingCalendarIcon">
 								<%=_ctx.appRes(uicomponent.id + ".label.CalendarSettings")%>
 							</div>
 						</div>
-						<div class="SeparatorLine"><span></span></div>
-						<div onclick="<%=uicomponent.event("RSS")%>" class="ControlButton">
+						<div class="SeparatorLine ActionBarButton"><span></span></div>
+						<div onclick="<%=uicomponent.event("RSS")%>" class="ControlButton  ActionBarButton">
 							<div class="IconHolder CalendarRssIcon">
 								<%=_ctx.appRes(uicomponent.id + ".label.RSS")%>
 							</div>
 						</div>
 						<!--
 						<div class="SeparatorLine"><span></span></div>
-						<span class="ControlButton" style="color:gray;margin-top: 4px;">
+						<span class="ControlButton  ActionBarButton" style="color:gray;margin-top: 4px;">
 							<div class="IconHolder PrintCalendarIcon">
 								<%=_ctx.appRes(uicomponent.id + ".label.Print")%>
 							</div>
 						</span>
 						-->
-						<div class="SeparatorLine"><span></span></div>
-						<div class="ControlButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
+						<div class="SeparatorLine ActionBarButton"><span></span></div>
+						<div class="ControlButton  ActionBarButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
 								<div class="IconHolder LayoutSwitcherIcon" title="<%=_ctx.appRes(uicomponent.id + '.label.ShowHide')%>">
 									<span></span>
 								</div>
@@ -121,8 +122,12 @@
 							    </div>
 		      		<% /*End Popup Menu*/ %>
 		      		</div>
-		      		<div class="SeparatorLine"><span></span></div>
-		      		
+		      		<div class="SeparatorLine ActionBarButton"><span></span></div>
+		      		<div class="ScrollButtons" style="display: none;">
+				      		<div title="Previous" class="ScrollLeftButton">
+				      			<div title="Next" class="ScrollRightButton"><span></span></div>
+				      		</div>
+			      	</div>
 						<div style="clear: both;"><span></span></div>
 					</div>
 				</div>
