@@ -28,6 +28,7 @@ import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.calendar.webui.UIFormColorPicker;
@@ -538,6 +539,27 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }
+          
+          // CS-3607
+          List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(selected.toArray(new String[] {}), false, username) ;
+          for (GroupCalendarData groupCalendarData : groupCalendars) {
+            for (Calendar calendar2 : groupCalendarData.getCalendars()) {
+              if (uiForm.isAddNew_) {
+                if(calendar2.getName().equalsIgnoreCase(displayName.trim())) {
+                  uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{displayName}, ApplicationMessage.WARNING)) ;
+                  event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                  return ;
+                }                
+              } else {
+                if(calendar2.getName().trim().equalsIgnoreCase(displayName.trim()) && !calendar2.getId().equals(calendar.getId())) {
+                  uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{displayName}, ApplicationMessage.WARNING)) ;
+                  event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                  return ;
+                }
+              }
+            }
+          }
+          
           calendar.setPublic(isPublic) ;
           calendar.setGroups(selected.toArray((new String[]{})));
           List<String> listPermission = new ArrayList<String>() ;

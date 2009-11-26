@@ -26,9 +26,9 @@ import java.util.TimeZone;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.service.Calendar;
-import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
@@ -47,7 +47,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -143,7 +142,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
       switchMode(ADD_NEW);
     } 
   }
-  private  List<SelectItemOption<String>> getCategory() throws Exception {
+ /* private  List<SelectItemOption<String>> getCategory() throws Exception {
     String username = CalendarUtils.getCurrentUser() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<CalendarCategory> categories = calendarService.getCategories(username) ;
@@ -152,14 +151,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
       options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
     }
     return options ;
-  }
-  private SessionProvider getSession()  {
-    return SessionProviderFactory.createSessionProvider() ;
-  }
-
-  private SessionProvider getSystemSession()  {
-    return SessionProviderFactory.createSystemProvider() ;
-  }
+  }*/
   private List<SelectItemOption<String>> getTimeZones() {
     return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
   } 
@@ -174,6 +166,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
     return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;
   }
   
+  @SuppressWarnings("unchecked")
   private List getSelectedGroups(String groupId) throws Exception {
     List groups = new ArrayList() ;
     Group g = (Group)getApplicationComponent(OrganizationService.class).getGroupHandler().findGroupById(groupId) ;
@@ -301,6 +294,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
   }
   
   static  public class SaveActionListener extends EventListener<UIImportForm> {
+    @SuppressWarnings("unchecked")
     public void execute(Event<UIImportForm> event) throws Exception {
       String username = CalendarUtils.getCurrentUser() ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -350,13 +344,22 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
               calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendar.getId()) ;
             }
             else {
-              calendar.setPublic(true) ;
-              
+              calendar.setPublic(true) ;              
               List<String> selected = new ArrayList<String>() ;
               selected.add(uiForm.getSelectedIdGroup());
               
-              calendar.setGroups(selected.toArray((new String[]{})));
-              
+//            CS-3607
+              List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(selected.toArray(new String[] {}), false, username) ;
+              for (GroupCalendarData groupCalendarData : groupCalendars) {
+                for (Calendar calendar2 : groupCalendarData.getCalendars()) {
+                  if(calendar2.getName().equalsIgnoreCase(calendarName.trim())) {
+                    uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{calendarName}, ApplicationMessage.WARNING)) ;
+                    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                    return ;
+                  }
+                }
+              }
+              calendar.setGroups(selected.toArray((new String[]{})));              
               List<String> listPermission = new ArrayList<String>() ;
               OrganizationService orgService = CalendarUtils.getOrganizationService() ;
               String groupKey = uiForm.getSelectedIdGroup() + CalendarUtils.SLASH_COLON ;
