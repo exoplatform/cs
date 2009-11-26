@@ -1197,14 +1197,14 @@ public class JCRDataStorage {
         String contentType = "text/plain";
         if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/*"))
           contentType = "text/html";
-        String body = "";
+        StringBuffer body = new StringBuffer("");
         if (obj instanceof Multipart) {
           body = setMultiPart((Multipart) obj, node, body);
         } else {
           body = setPart(cmsg, node, body);
         }
         node.setProperty(Utils.EXO_CONTENT_TYPE, contentType);
-        node.setProperty(Utils.EXO_BODY, Utils.decodeText(body));
+        node.setProperty(Utils.EXO_BODY, Utils.decodeText(body.toString()));
         node.save();
       } else {
         return false;
@@ -1247,7 +1247,7 @@ public class JCRDataStorage {
     }
   }
 
-  private String setMultiPart(Multipart multipart, Node node, String body) {
+  private StringBuffer setMultiPart(Multipart multipart, Node node, StringBuffer body) {
     try {
       boolean readText = true;
       if (multipart.getContentType().toLowerCase().indexOf("multipart/alternative") > -1) {
@@ -1271,7 +1271,7 @@ public class JCRDataStorage {
     return body;
   }   
 
-  private String setPart(Part part, Node node, String body) {
+  private StringBuffer setPart(Part part, Node node, StringBuffer body) {
     try {
       String disposition = part.getDisposition();
       String ct = part.getContentType();
@@ -1377,20 +1377,20 @@ public class JCRDataStorage {
     return body;
   }
 
-  private String getNestedMessageBody(Part part, Node node, String body) throws Exception {
+  private StringBuffer getNestedMessageBody(Part part, Node node, StringBuffer body) throws Exception {
     try {
       body = setPart((Part) part.getContent(), node, body);
     } catch (ClassCastException e) {
       Object obj = part.getContent();
       if (obj instanceof String) {
-        body += (String) obj;
+        body.append(obj);
       } else if (obj instanceof InputStream) {
         StringBuffer sb = new StringBuffer();
         InputStream is = (InputStream) obj;
         int c;
         while ((c = is.read()) != -1)
           sb.append(c);
-        body += sb.toString();
+        body.append(sb);
       } else if (obj instanceof Multipart) {
         body = setMultiPart((Multipart) obj, node, body);
       } else {
@@ -1400,7 +1400,7 @@ public class JCRDataStorage {
     return body;
   }
 
-  private String appendMessageBody(Part part, Node node, String body) throws Exception {
+  private StringBuffer appendMessageBody(Part part, Node node, StringBuffer body) throws Exception {
     StringBuffer messageBody = new StringBuffer();
     InputStream is = part.getInputStream();
     String ct = part.getContentType();
@@ -1430,15 +1430,15 @@ public class JCRDataStorage {
 
     if (part.isMimeType("text/plain")) {
       if (body != null && !body.equals("")) {
-        body = body + "\n" + Utils.encodeHTML(messageBody.toString());
+        body.append("\n").append(Utils.encodeHTML(messageBody.toString()));
       } else {
-        body = Utils.encodeHTML(messageBody.toString());
+        body = new StringBuffer(Utils.encodeHTML(messageBody.toString()));
       }
     } else if (part.isMimeType("text/html")) {
       if (body != null && !body.equals("")) {
-        body = body + "<br>" + messageBody.toString();
+        body.append("<br>").append(messageBody);
       } else {
-        body = messageBody.toString();
+        body = messageBody;
       }
     }
     return body;
@@ -2862,14 +2862,14 @@ public class JCRDataStorage {
         String contentType = "text/plain";
         if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/*"))
           contentType = "text/html";
-        String body = "";
+        StringBuffer body = new StringBuffer("");
         if (obj instanceof Multipart) {
           body = setMultiPart((Multipart) obj, node, body);
         } else {
           body = setPart(cmsg, node, body);
         }
         node.setProperty(Utils.EXO_CONTENT_TYPE, contentType);
-        node.setProperty(Utils.EXO_BODY, Utils.decodeText(body));
+        node.setProperty(Utils.EXO_BODY, Utils.decodeText(body.toString()));
         t3 = System.currentTimeMillis();
         logger.debug("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
 
