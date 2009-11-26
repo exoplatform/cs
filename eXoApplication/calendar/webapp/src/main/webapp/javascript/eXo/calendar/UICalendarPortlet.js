@@ -2588,6 +2588,56 @@ UICalendarPortlet.prototype.fixForMaximize = function(){
   }
 };
 
+/**
+ * 
+ * Scroll Manager for Action bar
+ */
+function CalendarScrollManager(){
+};
+
+CalendarScrollManager.prototype.load = function(){ 
+	var uiNav = eXo.calendar.CalendarScrollManager ;
+  var container = document.getElementById("UIActionBar") ;
+  if(container) {
+    var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "CenterBar") ;
+	  var randomId = eXo.core.DOMUtil.generateId("CalendarScrollbar");
+  	mainContainer.setAttribute("id",randomId);
+    uiNav.scrollMgr = eXo.portal.UIPortalControl.newScrollManager(randomId) ;
+    uiNav.scrollMgr.initFunction = uiNav.initScroll ;
+    uiNav.scrollMgr.mainContainer = mainContainer ;
+    uiNav.scrollMgr.arrowsContainer = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "ScrollButtons") ;
+    uiNav.scrollMgr.loadElements("ActionBarButton", true) ;
+    var button = eXo.core.DOMUtil.findDescendantsByTagName(uiNav.scrollMgr.arrowsContainer, "div");
+    if(button.length >= 2) {    
+      uiNav.scrollMgr.initArrowButton(button[0],"left", "ScrollLeftButton", "HighlightScrollLeftButton", "DisableScrollLeftButton") ;
+      uiNav.scrollMgr.initArrowButton(button[1],"right", "ScrollRightButton", "HighlightScrollRightButton", "DisableScrollRightButton") ;
+    }
+		
+    uiNav.scrollManagerLoaded = true;
+    uiNav.initScroll() ;
+  }
+} ;
+
+CalendarScrollManager.prototype.initScroll = function() {
+  var uiNav = eXo.calendar.CalendarScrollManager ;
+  if(!uiNav.scrollManagerLoaded) uiNav.load() ;
+  var elements = uiNav.scrollMgr.elements ;
+  uiNav.scrollMgr.init() ;
+  uiNav.scrollMgr.checkAvailableSpace() ;
+  uiNav.scrollMgr.renderElements() ;
+} ;
+
+ScrollManager.prototype.loadItems = function(elementClass, clean) {
+	if (clean) this.cleanElements();
+	this.elements.clear();
+	var items = eXo.core.DOMUtil.findDescendantsByClass(this.mainContainer, "div", elementClass);
+	for(var i = 0; i < items.length; i++){
+		this.elements.push(items[i]);
+	}
+};
+
+eXo.calendar.CalendarScrollManager = new CalendarScrollManager();
+
 if(eXo.desktop.UIDesktop){
 UIDesktop.prototype._ShowHideWindow = eXo.desktop.UIDesktop.showHideWindow;
 UIWindow.prototype._endResizeWindowEvt = eXo.desktop.UIWindow.endResizeWindowEvt;
