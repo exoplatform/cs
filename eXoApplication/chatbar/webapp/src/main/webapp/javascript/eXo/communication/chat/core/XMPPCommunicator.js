@@ -681,4 +681,11 @@ XMPPCommunicator.prototype.removeTransport = function(userName, transportName, h
   this.synchronousXHR(request);
 };
 
+XMPPCommunicator.prototype.loadJsResourceBundle = function(locale, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/loadJsResourceBundle/' + locale + '/';
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
 eXo.communication.chatbar.core.XMPPCommunicator = new XMPPCommunicator();

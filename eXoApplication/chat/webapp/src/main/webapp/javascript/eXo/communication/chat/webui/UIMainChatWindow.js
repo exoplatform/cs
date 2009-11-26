@@ -93,6 +93,7 @@ function UIMainChatWindow() {
   this.DECLINE_JOIN_ROOM_ACTION           = 'Decline join room';
   this.JOIN_TO_ROOM_ACTION                = 'Join to room';
   this.LEAVE_FROM_ROOM_ACTION             = 'Leave from room';
+  this.LOAD_JS_RESOURCE_BUNDLE            = 'Load js resource bundle';
 
   // MUC event action defined here.
   this.MUC_ACTION_CREATED_ROOM            = 'created';
@@ -279,8 +280,9 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.buddyListControlObj =
     new component.BuddyListControl(this.buddyListNode, this.buddyItemActionCallbackWrapper, this);
   this.lang = eXo.core.I18n.getLanguage();
-  eXo.require("eXo.communication.chat.locale." + this.lang, "/chat/javascript/");
-  this.ResourceBundle = eXo.communication.chat.locale.ResourceBundle;
+  this.jabberLoadJsResourceBundle(this.lang);
+  /*eXo.require("eXo.communication.chat.locale." + this.lang, "/chat/javascript/");
+  this.ResourceBundle = eXo.communication.chat.locale.ResourceBundle;*/
 
   // Init cometd service on startup
   this.initCometd();
@@ -602,6 +604,15 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
       this.UIChatWindow.destroySession();
       break;
 
+    case this.LOAD_JS_RESOURCE_BUNDLE:
+      try {
+      	eval(serverData.script);
+      	this.ResourceBundle = eXo.communication.chatbar.locale.ResourceBundle;
+      } catch (error){
+      	  alert(serverData.script);
+      }
+      break;
+      
     default:
       break;
   }
@@ -1759,6 +1770,11 @@ UIMainChatWindow.prototype.jabberLogout = function() {
   this.activeAction = this.LOGOUT_ACTION;
   this.XMPPCommunicator.removeTransport(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
   return false;
+};
+
+UIMainChatWindow.prototype.jabberLoadJsResourceBundle = function(locale) {
+  this.activeAction = this.LOAD_JS_RESOURCE_BUNDLE;
+  this.XMPPCommunicator.loadJsResourceBundle(locale, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 // -/-
 
