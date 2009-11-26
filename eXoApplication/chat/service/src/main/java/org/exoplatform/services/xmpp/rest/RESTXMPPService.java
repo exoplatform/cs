@@ -23,11 +23,14 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -54,6 +57,7 @@ import org.exoplatform.services.xmpp.bean.FormBean;
 import org.exoplatform.services.xmpp.bean.HostedRoomBean;
 import org.exoplatform.services.xmpp.bean.InitInfoBean;
 import org.exoplatform.services.xmpp.bean.InterlocutorListBean;
+import org.exoplatform.services.xmpp.bean.JsResourceBundleBean;
 import org.exoplatform.services.xmpp.bean.MessageBean;
 import org.exoplatform.services.xmpp.bean.MessageListBean;
 import org.exoplatform.services.xmpp.bean.FullRoomInfoBean;
@@ -99,6 +103,31 @@ import org.picocontainer.Startable;
  */
 public class RESTXMPPService implements ResourceContainer, Startable {
 
+  private static final Map<String, String> jsResourceBundle = new HashMap<String, String>(){
+    {
+      put("chat.message.xmpp.session.is.null", "chat_message_xmpp_session_is_null");
+      put("chat.message.room.default.config.commit", "chat_message_room_default_config_commit");
+      put("chat.message.room.configuration.error", "chat_message_room_configuration_error");
+      put("chat.message.room.password.error", "chat_message_room_password_error");
+      put("chat.message.room.not.unlocked.error", "chat_message_room_not_unlocked_error");
+      put("chat.message.room.user.not.member", "chat_message_room_user_not_member");
+      put("chat.message.room.name.is.invalid", "chat_message_room_name_is_invalid");
+      put("chat.message.room.secret.key.to.access", "chat_message_room_secret_key_to_access");
+      put("chat.message.room.invite.to.join", "chat_message_room_invite_to_join");
+      put("chat.message.room.user.left", "chat_message_room_user_left");
+      put("chat.message.room.user.join", "chat_message_room_user_join");
+      put("chat.message.confirm.allow.to.see.status", "chat_message_confirm_allow_to_see_status");
+      put("chat.message.confirm.remove.buddy", "chat_message_confirm_remove_buddy");
+      put("chat.message.system.info", "chat_message_system_info");
+      put("chat.message.file.transport.request", "chat_message_file_transport_request");
+      put("chat.message.file.transport.response.completed", "chat_message_file_transport_response_completed");
+      put("chat.message.file.transport.response.denied", "chat_message_file_transport_response_denied");
+      put("chat.message.file.event.time.out", "chat_message_file_event_time_out");
+      put("chat.message.file.exchange.waiting.for.authorize", "chat_message_file_exchange_waiting_for_authorize");
+      put("chat.message.file.exchange.uploading.file.to.server", "chat_message_file_exchange_uploading_file_to_server");
+    }
+  };
+  
   /**
    * 
    */
@@ -164,6 +193,31 @@ public class RESTXMPPService implements ResourceContainer, Startable {
     return this.rb;
   }
 
+  @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/xmpp/loadJsResourceBundle/{locale}/")
+  @OutputTransformer(Bean2JsonOutputTransformer.class)
+  public Response loadJsResourceBundle(@URIParam("locale") String locale){
+    ResourceBundle jsRb = this.rbs.getResourceBundle(BUNDLE_NAME, new Locale(locale));
+    StringBuilder sb = new StringBuilder();
+    try {
+      sb.append("eXo.communication.chatbar.locale.ResourceBundle = {\n");
+      for(Map.Entry<String, String> entry : jsResourceBundle.entrySet()){
+        sb.append(entry.getValue() + " : \"").append(jsRb.getString(entry.getKey())).append("\",\n");
+      }
+      sb.append("chat_message_finish_load_resource_bundle : \"finish load resource bundle\"\n");
+      sb.append("};");
+      JsResourceBundleBean jsResourceBundleBean = new JsResourceBundleBean();
+      jsResourceBundleBean.setScript(sb.toString());
+      return Response.Builder.ok(jsResourceBundleBean, JSON_CONTENT_TYPE)
+                             .cacheControl(cc)
+                             .build();
+    } catch (Exception e){
+      if (log.isDebugEnabled())
+        e.printStackTrace();
+      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR).build();
+    }
+  }
+  
   // //////////// Group chat //////////////////
   /**
    * @param username
