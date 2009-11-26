@@ -419,8 +419,8 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
           uploadService.removeUpload(input.getUploadId()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarViewContainer) ;
           calendarPortlet.cancelAction() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-type-error", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
