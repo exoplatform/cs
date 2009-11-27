@@ -295,7 +295,11 @@
 	padding-left:14px;
 	padding-right:14px;
 }
+
 .UIMessageCompose .MessageContent .PlainTextMessage .textarea {
 	width:99.5%; height: 252px; text-align: left ;
 }
 
+#xEditingArea {
+	height: 270px;
+}
