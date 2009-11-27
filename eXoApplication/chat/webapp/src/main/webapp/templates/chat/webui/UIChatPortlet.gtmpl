@@ -332,7 +332,7 @@
         <div class="BottomDecoratorRight">
             <div class="BottomDecoratorCenter">
                 <div class="FixHeight">
-                    <div title="<%=_ctx.appRes("UIChatPortlet.label.resizewindow");%>" class="ResizeArea">
+                    <div title="<%=_ctx.appRes("UIChatPortlet.label.resizeWindow");%>" class="ResizeArea">
                         <span></span>
                     </div>
                     <div class="Information">
@@ -1223,13 +1223,15 @@
                                             <div class="SeperatorLine">
                                                 <span></span>
                                             </div>
-                                            <div class="SendFileIcon">
-                                                <form method="POST" enctype="multipart/form-data" class="ChatSendFileForm" target="chatFileExchangeIframe"
-                                                action="#">
-                                                <input type="file" size="1" class="InputSendFile"  name="uploadfile"
-                                                    onchange="eXo.communication.chat.webui.UIChatWindow.sendFile(this, event);" />
-                                                </form>
+                                            <div class="SendFileIcon" title="<%=_ctx.appRes("UIChatPortlet.label.sendFile");%>">
+                                            	<span></span>
                                             </div>
+                                            <div class="SendFileLabel" title="<%=_ctx.appRes("UIChatPortlet.label.sendFile");%>">
+                                            	<span><%=_ctx.appRes("UIChatPortlet.label.sendFile");%></span>
+                                            </div>
+ 																						<form method="POST" enctype="multipart/form-data" class="ChatSendFileForm" target="chatFileExchangeIframe" action="#">
+  																						<input type="file" size="1" class="InputSendFile" name="uploadfile" onchange="eXo.communication.chat.webui.UIChatWindow.sendFile(this, event);" />
+ 																						</form>
                                             <div class="ClearLeft">
                                                 <span></span>
                                             </div>

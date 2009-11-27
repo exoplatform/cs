@@ -15,6 +15,10 @@
         <directory>src/main/conf</directory>
         <includes><include>**/*.xml</include></includes>
       </resource>
+      <resource>
+        <directory>src/main/i18n</directory>
+        <includes><include>**/*.properties</include></includes>
+      </resource>
     </resources>
   </build>
   <dependencies>
