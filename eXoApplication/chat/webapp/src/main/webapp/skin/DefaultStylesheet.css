@@ -1,9 +1,9 @@
 .UIResizableBlock {
-	overflow: auto;	
+	overflow-x: hidden;	
 }
 
 .UIPageDesktop .UIChat {
-	!width: 100%;
+	min-width: 550px;
 }
 
 .UIChat {
@@ -23,13 +23,13 @@
 .UIChat .LeftContainer {
   background: url('DefaultSkin/background/Background.gif') no-repeat left -30px;
   padding-left: 2px;	
-  height: 30px; line-height: 30px;	
+  line-height: 30px;	
 }
 
 .UIChat .RightContainer {
   background: url('DefaultSkin/background/Background.gif') no-repeat right -60px;
   padding-right: 2px;		
-  height: 30px; line-height: 30px;
+  line-height: 30px;
 }
 
 .UIChat .CenterContainer {
