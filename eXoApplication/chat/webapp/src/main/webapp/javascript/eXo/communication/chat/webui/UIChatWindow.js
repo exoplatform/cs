@@ -156,9 +156,10 @@ UITabControl.prototype.updatePresence = function(presences) {
  * Call to invite another user to join room
  */
 UITabControl.prototype.inviteToJoinRoom = function() {
-  if (this.roomConfigured) {
+  /*if (this.roomConfigured) {
     eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true, this);
-  }
+  }*/
+  eXo.communication.chat.webui.UIAddContactPopupWindow.setVisible(true, this);
 };
 
 /**
@@ -548,11 +549,11 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   }
   this.showAlert(msgContentTmp);
 
-  if (!this.roomConfigured &&
+  /*if (!this.roomConfigured &&
       (msgContent.toLowerCase().indexOf('this room is now unlocked.') != -1) ||
       (msgContent.toLowerCase().indexOf('this room is not anonymous.') != -1)) {
     this.roomConfigured = true;
-  }
+  }*/
 
   msgTmpNode.innerHTML = this.messageFilter(msgContent);
 
@@ -1447,7 +1448,8 @@ UIChatWindow.prototype.inviteToJoinRoom = function(event) {
   event = event || window.event;
   eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
   var activeTabControl = this.getActiveTabControl();
-  activeTabControl.inviteToJoinRoom();
+  if(!this.UIMainChatWindow.UIRoomConfigPopupWindow.isVisible())
+    activeTabControl.inviteToJoinRoom();
 };
 
 /**

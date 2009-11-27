@@ -7,6 +7,7 @@
 function UIRoomConfigPopupWindow() {
   this.tabId = false;
   this.roomName = false;
+  this.visible = false;
   this.ANIMATION_SPEED = 30;
   this.ANIMATION_TIME_STEP = 0.02*1000;
 }
@@ -445,6 +446,7 @@ UIRoomConfigPopupWindow.prototype.setVisible = function(visible, tabId, mustSubm
   if (this.mustSubmit) {
     this.fakeConfigCommit(visible);
   }
+  this.visible = visible;
   if (visible) {
     if (tabId &&
         tabId.targetPerson) {
@@ -480,6 +482,10 @@ UIRoomConfigPopupWindow.prototype.setVisible = function(visible, tabId, mustSubm
     }
     this.mustSubmit = false;
   }
+};
+
+UIRoomConfigPopupWindow.prototype.isVisible = function() {
+  return this.visible;
 };
 
 eXo.communication.chatbar.webui.UIRoomConfigPopupWindow = new UIRoomConfigPopupWindow();
