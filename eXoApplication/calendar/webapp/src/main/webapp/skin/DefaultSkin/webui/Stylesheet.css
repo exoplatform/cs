@@ -326,3 +326,7 @@
 .UICalendarPortlet .UICalendarViewContainer {
 	-khtml-user-select:none;	
 }
+
+.UICalendarPortlet .UIHightlightEvent {
+	border:solid 1px red;
+}

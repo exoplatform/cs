@@ -203,6 +203,7 @@ UICalendarDragDrop.prototype.dragCallback = function(dndEvent) {
 
 UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
   var eventObj = eXo.core.DOMUtil.findDescendantsByClass(dndEvent.dragObject,"div","EventBoxes");
+  eXo.calendar.UICalendarDragDrop.highlight(false);
   if ((eXo.calendar.UICalendarDragDrop.pos.x == dndEvent.dragObject.offsetLeft) && (eXo.calendar.UICalendarDragDrop.pos.y == dndEvent.dragObject.offsetTop)) {
     eXo.calendar.UICalendarDragDrop.pos = null ;
     return ;
@@ -252,6 +253,7 @@ UICalendarDragDrop.prototype.getCheckedObject = function(clickObj){
   var i = evenObj.length ;
   var tmpNode = null ;
   var top = 0 ;
+  this.selectedEvent = new Array();
 	tmpNode = eXo.core.DOMUtil.findFirstDescendantByClass(clickObj, "input", "checkbox");
 	tmpNode.checked = true ;
   while(i--){
@@ -260,10 +262,28 @@ UICalendarDragDrop.prototype.getCheckedObject = function(clickObj){
     eXo.core.Browser.setOpacity(tmpNode,50) ;
     tmpNode.style.top = top + "px";		
     top += 20 ;
+    this.selectedEvent.push(evenObj[i]);
     checkedObj.push(tmpNode);
   }
+  this.highlight(true);
   return checkedObj ;
 } ;
+
+UICalendarDragDrop.prototype.highlight = function(isHighlight){
+	var me = eXo.calendar.UICalendarDragDrop;
+	if(!me.selectedEvent) return ;
+	var i = me.selectedEvent.length ; document.title = "Test";
+	if(isHighlight){
+		while(i--){
+	  	eXo.core.DOMUtil.addClass(me.selectedEvent[i],"UIHightlightEvent");
+	  }
+	} else{
+		while(i--){
+	  	eXo.core.DOMUtil.replaceClass(me.selectedEvent[i],"UIHightlightEvent","");
+	  }
+	  delete me.selectedEvent ;
+	}
+};
 
 UICalendarDragDrop.prototype.isCheckedObject = function(eventObj){
   var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(eventObj, "input", "checkbox");
@@ -271,4 +291,3 @@ UICalendarDragDrop.prototype.isCheckedObject = function(eventObj){
 } ;
 
 eXo.calendar.UICalendarDragDrop = new UICalendarDragDrop();
-
