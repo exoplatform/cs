@@ -272,7 +272,7 @@ UICalendarDragDrop.prototype.getCheckedObject = function(clickObj){
 UICalendarDragDrop.prototype.highlight = function(isHighlight){
 	var me = eXo.calendar.UICalendarDragDrop;
 	if(!me.selectedEvent) return ;
-	var i = me.selectedEvent.length ; document.title = "Test";
+	var i = me.selectedEvent.length ;
 	if(isHighlight){
 		while(i--){
 	  	eXo.core.DOMUtil.addClass(me.selectedEvent[i],"UIHightlightEvent");
