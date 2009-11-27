@@ -28,7 +28,7 @@
 
 .UIChat .CenterContainer {
   background: url('DefaultSkin/background/Background.gif') repeat-x center top;
-  height: 30px; line-height: 30px;	
+  line-height: 30px;	
 }
 
 .UIChat .TextContent {
@@ -1409,6 +1409,7 @@ form {
 
 .UIChatBarPortlet{
 	padding:0px 8px;
+	min-width: 960px;
 }
 
 .UIChatBarPortlet .CenterContainer {
