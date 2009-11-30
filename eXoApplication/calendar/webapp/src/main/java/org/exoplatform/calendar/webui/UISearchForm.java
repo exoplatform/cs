@@ -75,6 +75,7 @@ public class UISearchForm extends UIForm {
       return map.values().toArray(new String[map.values().size()] ) ;
   }
   static  public class SearchActionListener extends EventListener<UISearchForm> {
+    @SuppressWarnings("unchecked")
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
@@ -122,8 +123,9 @@ public class UISearchForm extends UIForm {
         Collections.sort(resultList, ceCompare);
         
         EventPageList pageList = new EventPageList(resultList ,10) ;
-        uiListView.update(pageList) ;
+//      CS-3610
         uiListView.setViewType(UIListView.TYPE_BOTH) ;
+        uiListView.update(pageList) ;
         uiListView.setDisplaySearchResult(true) ;
         uiListView.setSelectedEvent(null) ;
         uiListView.setLastUpdatedEventId(null) ;

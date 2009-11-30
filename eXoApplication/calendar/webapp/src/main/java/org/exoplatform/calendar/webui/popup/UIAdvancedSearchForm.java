@@ -41,8 +41,6 @@ import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIPreview;
 import org.exoplatform.calendar.webui.UIWeekView;
 import org.exoplatform.calendar.webui.UIListView.CalendarEventComparator;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -191,12 +189,12 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     }
     return map.values().toArray(new String[map.values().size()] ) ;
   }
-  private SessionProvider getSession() {
+/*  private SessionProvider getSession() {
     return SessionProviderFactory.createSessionProvider() ;
   }
   private SessionProvider getSystemSession() {
     return SessionProviderFactory.createSystemProvider() ;
-  }
+  }*/
   public boolean isSearchTask() {
     return getUIFormSelectBox(TYPE).getValue().equals(CalendarEvent.TYPE_TASK) ; 
   }
@@ -220,6 +218,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     return !CalendarUtils.isEmpty(formData);
   }
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
+    @SuppressWarnings("unchecked")
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
@@ -295,24 +294,23 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         }
         calendarViewContainer.initView(UICalendarViewContainer.LIST_VIEW) ;
         UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
-        calendarPortlet.cancelAction() ;
         
+        //CS-3610
+        uiListView.setViewType(UIListView.TYPE_BOTH) ;
+        calendarPortlet.cancelAction() ;        
         CalendarEventComparator ceCompare = uiListView.ceCompare_ ;
         ceCompare.setCompareField(CalendarEventComparator.EVENT_SUMMARY);
         
         uiListView.ceCompare_.setCompareField(CalendarEventComparator.EVENT_SUMMARY) ;
         boolean order = false ;
         uiListView.ceCompare_.setRevertOrder(order) ;
-        /*uiListView.setSortedField(CalendarEventComparator.EVENT_SUMMARY);
-        
+        /*uiListView.setSortedField(CalendarEventComparator.EVENT_SUMMARY);        
         ceCompare.setRevertOrder(order);
         uiListView.setIsAscending(order);*/
-        Collections.sort(resultList, uiListView.ceCompare_);
-        
+        Collections.sort(resultList, uiListView.ceCompare_);        
         EventPageList pageList = new EventPageList(resultList ,10) ;
         uiListView.update(pageList) ;
-        calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;
-        uiListView.setViewType(UIListView.TYPE_BOTH) ;
+        calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;        
         if(!uiListView.isDisplaySearchResult()) uiListView.setLastViewId(currentView) ;
         uiListView.setDisplaySearchResult(true) ;
         uiListView.setSelectedEvent(null) ;
