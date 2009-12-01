@@ -163,7 +163,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
           break ;
         }
       }
-      if (!hasEventCategory){
+      if (!hasEventCategory && !MailUtils.isFieldEmpty(eventCategoryName)){
         CalendarService calService = getApplicationComponent(CalendarService.class) ;
         EventCategory eventCategory = new EventCategory() ;
         eventCategory.setName(eventCategoryName);
@@ -249,6 +249,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
 
   public static List<SelectItemOption<String>> getCategory() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    options.add(new SelectItemOption<String>("all", "all")) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
     for(EventCategory category : eventCategories) {
@@ -766,8 +767,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         calendarEvent.setToDateTime(to);
         calendarEvent.setCalendarId(calendarId) ;
         calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
-        String eventCategoryName = CalendarUtils.getCalendarService().getEventCategory(username, uiForm.getEventCategory()).getName() ;
-        calendarEvent.setEventCategoryName(eventCategoryName) ;
+        try {
+          String eventCategoryName = CalendarUtils.getCalendarService().getEventCategory(username, uiForm.getEventCategory()).getName() ;
+          calendarEvent.setEventCategoryName(eventCategoryName) ;
+        } catch (Exception e) { }
         calendarEvent.setLocation(eventPlace) ;
         calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
         calendarEvent.setPriority(uiForm.getEventPriority()) ; 
