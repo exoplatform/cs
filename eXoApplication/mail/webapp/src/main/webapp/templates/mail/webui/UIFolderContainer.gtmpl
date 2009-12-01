@@ -316,7 +316,7 @@ def enableSync = uicomponent.isImap();
       StringBuilder builder = new StringBuilder() ;
       String iconFolder = "Folder";
       if (hasSubfolder) iconFolder = "ParentFolder";
-      builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder $iconFolder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
+      builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder Folder $iconFolder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
       if (isChecking) builder.append("<div class='CheckingIcon'></div>");
       if (cf.getType() != 2) {
          if(enableSync){
