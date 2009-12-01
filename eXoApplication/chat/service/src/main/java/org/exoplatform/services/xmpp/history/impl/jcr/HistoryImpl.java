@@ -291,7 +291,8 @@ public class HistoryImpl implements Startable{
         }
         conversationNode.getSession().save();
       } catch (Exception e) {
-        e.printStackTrace();
+        //TODO: find why exception happens
+        //e.printStackTrace();
         return false;
       }
     }
@@ -709,8 +710,9 @@ public class HistoryImpl implements Startable{
    * @param conversationsNode the node
    * @param conversation the conversation
    * @param username the username
+   * @throws Exception 
    */
-  private void updateConversation(Node conversationsNode, Conversation conversation, String username) {
+  private void updateConversation(Node conversationsNode, Conversation conversation, String username) throws Exception {
     try {
       if (conversationsNode.hasNode(conversation.getConversationId())) {
         Node node = conversationsNode.getNode(conversation.getConversationId());
@@ -718,7 +720,8 @@ public class HistoryImpl implements Startable{
         node.getSession().save();
       }
     } catch (Exception e) {
-      e.printStackTrace();
+        throw e;
+      //e.printStackTrace();
     }
   }
 

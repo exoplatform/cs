@@ -87,7 +87,7 @@
           <property name="groupName" value="CollaborationSuite"/>
           <property name="job" value="org.exoplatform.services.xmpp.connection.impl.HistoryJob"/>
           <property name="repeatCount" value="0"/>
-          <property name="period" value="10000"/>     
+          <property name="period" value="3000"/>     
           <property name="startTime" value="+0"/>
           <property name="endTime" value=""/>               
         </properties-param>
