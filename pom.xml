@@ -25,7 +25,7 @@
     <module>web/csportal</module>
     <module>web/csResources</module>
     <module>web/webservice</module>
-    <module>tool/migration</module>
+    <!-- module>tool/migration</module -->
     
     <module>eXoApplication/mail/webapp</module>
     <module>eXoApplication/mail/service</module>
@@ -107,8 +107,7 @@
         <configuration>
           <skip>${test.skip}</skip>
           <useFile>false</useFile>
-          <forkMode>pertest</forkMode><!--once , pertest -->
-          <testFailureIgnore>false</testFailureIgnore>
+          <forkMode>pertest</forkMode>
           <includes>
             <include implementation="java.lang.String">**/${test.classes}*.java</include>
           </includes>
