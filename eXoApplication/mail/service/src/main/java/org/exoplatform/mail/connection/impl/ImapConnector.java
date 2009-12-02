@@ -109,6 +109,7 @@ public class ImapConnector extends BaseConnector {
         IMAPFolder f1 = (IMAPFolder) ((IMAPStore)store_).getFolder(newName);
         result = folderToBeRenamed.renameTo(f1);
         folder.setURLName(f1.getURLName().toString());
+        folder.setName(newName) ;
         if (!result) logger.info("Error while renaming folder!");
       } else {
         logger.info("Folder does not exists!");
