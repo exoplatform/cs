@@ -37,7 +37,8 @@ function BuddyItem(buddyInfo, actionCallback, maxUserNameLen, isGroupChat) {
     }
   }
   this.init();
-  this.updateStatus(buddyInfo.presence.type, true);  
+  var status = buddyInfo.presence.mode ? buddyInfo.presence.mode : buddyInfo.presence.type;
+  this.updateStatus(status, true);  
 }
 
 /**
@@ -57,7 +58,8 @@ BuddyItem.prototype.init = function() {
     	fullName = fullName ? fullName : this.buddyInfo.user.split('@')[0];
 		this.iconChatNode.innerHTML = this.getUserName(fullName, true) ;
   }
-  this.updateStatus(this.buddyInfo.presence.type);
+  var status = this.buddyInfo.presence.mode ? this.buddyInfo.presence.mode : this.buddyInfo.presence.type;
+  this.updateStatus(status);
 
 	var uid = this.buddyInfo.user ;
 	eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;	
