@@ -48,8 +48,6 @@ import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
 import org.exoplatform.mail.service.Account;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -179,7 +177,12 @@ public class UIAddressBooks extends UIComponent {
     return false ;
   }
   public void setCopyAddress(String add) { copyAddress = add ; }
-  public boolean isDefault(String groupId) throws Exception { return groupId.contains(NewUserListener.DEFAULTGROUP) ; }
+  public boolean isDefault(String groupId) throws Exception {
+    if (groupId.contains(NewUserListener.DEFAULTGROUP) || groupId.contains(NewUserListener.ADDRESSESGROUP)) {
+      return true ;
+    }
+    return false;
+  }
   
   public void setCopyContacts(Map<String, String> contacts) { copyContacts = contacts ; }
   public Map<String, String> getCopyContacts() { return copyContacts ; }
