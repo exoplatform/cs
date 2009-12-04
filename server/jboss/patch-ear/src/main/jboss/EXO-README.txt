@@ -52,7 +52,7 @@ exo Collaboration Suite 1.3 features several noteworthy changes:
           o Chat Bar application
           o WebOS friendly chat application
           
-Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
+Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes          
           
 =========
  INSTALL
@@ -63,13 +63,13 @@ Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/
 - System Requirements
         Web Browser: IE6, IE7, FF2, FF3 (recommended), Safari.
         JVM: version 1.5.0_09 or higher
-        Application Server : Tomcat
+        Application Server : Tomcat, jboss
         Building Tools: Maven 2.0.6 and up
         openfire server version 3.4.5 for more information visit here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Chat+Configuration
 
 - Collaboration suite quick start guide
   Collaboration suite have 2 servers need to run at same time to use:
-    +) exo-tomcat: this is main tomcat server include Collaboration web applications and all dependencies.     
+    +) exo-jboss: this is main jboss server include Collaboration web applications and all dependencies.     
     +) exo-openfire: a Jabber server used for Chat applications
 
 Need to set the JAVA_HOME variable for run Collaboration suite's servers.
@@ -80,15 +80,19 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
    * NOTE for cygwin's user: the JAVA_HOME must be in MS Windows format like: "C:\Program Files\JDK 1.5"
     Example use: export JAVA_HOME=`cygpath -w "$JAVA_HOME"`; to convert unix like format to MS Windows format.
    
+   * Start all servers by one command for Unix/Linux/cygwin environment:
+      Go to exo-jboss/bin and run command:
+      ./run.sh
    
-   * Start tomcat server 
-      +) On the Unix/Linux/cygwin(in windows developer mode) environment:
-      Go to exo-tomcat/bin and run command:
-      ./eXo.sh run 
+   * Start exo-jboss server:
+   
+     +) On the Windows platform
+       Open a DOS prompt command, go to exo-tomcat/bin and type the command:
+         run.bat start
 
-      +) On the Windows platform   
-       Go to exo-tomcat/bin by DOS Command (cmd) and run command:
-       eXo.bat run 
+     +) On Unix/Linux/cygwin
+       Open a terminal, go to exo-tomcat/bin and type the command:
+         ./run.sh
     
    * Start exo-openfire server:
      +) On the Windows platform
@@ -196,7 +200,6 @@ All those accounts have the default password "exo".
 
 ** Task
     * [CS-3308] - check compatible version of portal rest on cs
-
 - 1.3 Final
 
 ** Bug
@@ -243,6 +246,7 @@ All those accounts have the default password "exo".
     * [CS-3130] - Improve time to load the Select email form with about 100 users when add email to send reminder
     * [CS-3136] - Calendar: Still show Edit calendat form although saved in special case
     * [CS-3145] - Eml file isn't checked by default when reply a message with "Reply Original message as an attachment" setting
+
 
 
 
@@ -358,7 +362,7 @@ All those accounts have the default password "exo".
     * [CS-839] - Add event participants by email
     * [CS-1008] - dynamic RSS/calDAV feeds
     * [CS-2568] - Custom Layout as a User Settings
-    * [CS-764] - Revamp Participants tab
+   * [CS-764] - Revamp Participants tab
     * [CS-2509] - List Personal IMAP folders
     * [CS-2676] - Synchronize folder on click
     * [CS-2678] - Chat Bar : Status

@@ -1,5 +1,5 @@
 ==============================================
-    Release Notes - exo-cs - Version 1.3.2
+    Release Notes - exo-cs - Version 1.3.3
 ==============================================
 
 ===============
@@ -29,11 +29,13 @@ experience more productive. It offers several ways to to view and organize your 
 =============
  What's new?
 =============
-exo Collaboration Suite 1.3 features several noteworthy changes:
+exo Collaboration Suite 1.3.3 features several noteworthy changes:
 
     * General
-          o Upgraded to portal 2.5.5
-          o Compatible with webos 1.5
+          o Upgraded to portal 2.5.6.2
+          o Compatible with jcr 1.10.5.1
+          o Compatible with webos 1.5.1
+          
           o Right to left (RTL) orientation support
           o Arabic translations
     * Calendar
@@ -63,7 +65,7 @@ Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/
 - System Requirements
         Web Browser: IE6, IE7, FF2, FF3 (recommended), Safari.
         JVM: version 1.5.0_09 or higher
-        Application Server : Tomcat, jboss
+        Application Server : jboss
         Building Tools: Maven 2.0.6 and up
         openfire server version 3.4.5 for more information visit here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Chat+Configuration
 
@@ -80,18 +82,15 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
    * NOTE for cygwin's user: the JAVA_HOME must be in MS Windows format like: "C:\Program Files\JDK 1.5"
     Example use: export JAVA_HOME=`cygpath -w "$JAVA_HOME"`; to convert unix like format to MS Windows format.
    
-   * Start all servers by one command for Unix/Linux/cygwin environment:
-      Go to exo-jboss/bin and run command:
-      ./run.sh
    
    * Start exo-jboss server:
    
      +) On the Windows platform
-       Open a DOS prompt command, go to exo-tomcat/bin and type the command:
+       Open a DOS prompt command, go to exo-jboss/bin and type the command:
          run.bat start
 
      +) On Unix/Linux/cygwin
-       Open a terminal, go to exo-tomcat/bin and type the command:
+       Open a terminal, go to exo-jboss/bin and type the command:
          ./run.sh
     
    * Start exo-openfire server:
