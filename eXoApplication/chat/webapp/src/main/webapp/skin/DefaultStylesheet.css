@@ -291,8 +291,8 @@
 }
 
 .UIChat .UIRightClickPopupMenu .OnlineIcon {
-  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left 0px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right 0px; /* orientation=rt */
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -365px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -365px; /* orientation=rt */
 }
 
 .UIChat .UIRightClickPopupMenu .OfflineIcon {
@@ -317,14 +317,24 @@
 
 /* ====================== User status shared Icons =================== */
 
+.UIChat .TitleIconChat .OnlineIcon {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -365px; /* orientation=lt */
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -365px; /* orientation=rt */
+}
+
 .UIChat .OnlineIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left 0px; /* orientation=lt */
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right 0px; /* orientation=rt */
 }
 
-.UIChat .OfflineIcon {
+.UIChat .TitleIconChat .OfflineIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -75px; /* orientation=lt */
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -75px; /* orientation=rt */
+}
+
+.UIChat .OfflineIcon {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -394px; /* orientation=lt */
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -394px; /* orientation=rt */
 }
 
 .UIChat .AwayIcon {

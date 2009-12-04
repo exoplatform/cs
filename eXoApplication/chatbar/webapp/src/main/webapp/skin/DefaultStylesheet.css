@@ -280,8 +280,8 @@
 }
 
 .UIChatBarPortlet .UIRightClickPopupMenu .OnlineIcon {
-  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left 0px; /* orientation=lt */
-  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right 0px; /* orientation=rt */
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -365px; /* orientation=lt */
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -365px; /* orientation=rt */
 }
 
 .UIChatBarPortlet .UIRightClickPopupMenu .OfflineIcon {
@@ -312,8 +312,8 @@
 }
 
 .UIChat .OfflineIcon {
-  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -75px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -75px; /* orientation=rt */
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -394px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -394px; /* orientation=rt */
 }
 
 .UIChat .AwayIcon {
@@ -1458,9 +1458,9 @@ form {
 	margin-left:0px;
 	display:block;
 	white-space:nowrap;
-	padding-left: 15px; /* orientation=lt */
+	padding-left: 25px; /* orientation=lt */
 	padding-right: 25px; /* orientation=rt */
-	height:26px;
+	height:21px;
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
 	margin:0px 4px;
