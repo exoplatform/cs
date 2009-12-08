@@ -110,24 +110,16 @@ public class UIEventCategoryForm extends UIForm {
       String username = CalendarUtils.getCurrentUser() ;
       EventCategory eventCat = new EventCategory() ;
       eventCat.setName(name) ;
-      /*if(CalendarUtils.DEFAULT_CATEGORY.equalsIgnoreCase(name)) {
+      if(CalendarUtils.DEFAULT_CATEGORY.equalsIgnoreCase(name)) {
         uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-is-default", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
         return ;
-      }*/
+      }
       eventCat.setDescription(description) ;
       try {
-        if(uiForm.isAddNew_) {
-          for (String defaultName : uiManager.defaultEventCategoriesMap.values())
-            if (defaultName.equalsIgnoreCase(eventCat.getName()))
-              throw new ItemExistsException();
-          calendarService.saveEventCategory(username, eventCat, null, true) ;
-        }
+        if(uiForm.isAddNew_) calendarService.saveEventCategory(username, eventCat, null, true) ;
         else { 
           eventCat = uiForm.getEventCategory() ;
-          for (String defaultName : uiManager.defaultEventCategoriesMap.values())
-            if (defaultName.equalsIgnoreCase(name) && !eventCat.getName().equalsIgnoreCase(name))
-              throw new ItemExistsException();
           eventCat.setName(name) ;
           eventCat.setDescription(description) ;
           calendarService.saveEventCategory(username, eventCat, new String[]{name, uiForm.getCategoryDescription()}, false) ; 

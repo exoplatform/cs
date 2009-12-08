@@ -41,8 +41,9 @@ import org.exoplatform.services.organization.UserEventListener;
 public class NewUserListener extends UserEventListener {
 
   //Calendar params
-  //final public static String CALENDAR_CATEGORIES = "defaultCalendarCategory".intern() ;
-  //final public static String CALENDAR_NAME  = "defaultCalendar".intern() ;
+  final public static String EVENT_CATEGORIES = "defaultEventCategories".intern() ;
+  final public static String CALENDAR_CATEGORIES = "defaultCalendarCategory".intern() ;
+  final public static String CALENDAR_NAME  = "defaultCalendar".intern() ;
   final public static String COMA = ",".intern() ;
 
   //Calendar Setting params
@@ -61,34 +62,14 @@ public class NewUserListener extends UserEventListener {
 
 
   private CalendarService cservice_;
-  //private String defaultCalendarCategory_;
-  //private String[] defaultCalendar_;
+  private String[] defaultEventCategories_;
+  private String defaultCalendarCategory_;
+  private String[] defaultCalendar_;
   private List<String> ignore_users_ ;
+
   private CalendarSetting defaultCalendarSetting_ ;
 
-  final public static String DEFAULT_CALENDAR_CATEGORYID = "defaultCalendarCategoryId";
-  final public static String DEFAULT_CALENDAR_ID = "defaultCalendarId";
-  
-  final public static String DEFAULT_CALENDAR_CATEGORYNAME = "defaultCalendarCategoryName";
-  final public static String DEFAULT_CALENDAR_NAME = "defaultCalendarName";
-  
-  final public static String DEFAULT_EVENTCATEGORY_ID_ALL = "defaultEventCategoryIdAll";
-  final public static String DEFAULT_EVENTCATEGORY_ID_MEETING = "defaultEventCategoryIdMeeting";
-  final public static String DEFAULT_EVENTCATEGORY_ID_CALLS = "defaultEventCategoryIdCalls";
-  final public static String DEFAULT_EVENTCATEGORY_ID_CLIENTS = "defaultEventCategoryIdClients";
-  final public static String DEFAULT_EVENTCATEGORY_ID_HOLIDAY = "defaultEventCategoryIdHoliday";
-  final public static String DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY = "defaultEventCategoryIdAnniversary";
-  public static String[] defaultEventCategoryId = {DEFAULT_EVENTCATEGORY_ID_ALL, DEFAULT_EVENTCATEGORY_ID_MEETING, DEFAULT_EVENTCATEGORY_ID_CALLS
-    , DEFAULT_EVENTCATEGORY_ID_CLIENTS, DEFAULT_EVENTCATEGORY_ID_HOLIDAY, DEFAULT_EVENTCATEGORY_ID_ANNIVERSARY} ;
- 
-  final public static String DEFAULT_EVENTCATEGORY_NAME_ALL = "defaultEventCategoryNameAll";
-  final public static String DEFAULT_EVENTCATEGORY_NAME_MEETING = "defaultEventCategoryNameMeeting";
-  final public static String DEFAULT_EVENTCATEGORY_NAME_CALLS = "defaultEventCategoryNameCalls";
-  final public static String DEFAULT_EVENTCATEGORY_NAME_CLIENTS = "defaultEventCategoryNameClients";
-  final public static String DEFAULT_EVENTCATEGORY_NAME_HOLIDAY = "defaultEventCategoryNameHoliday";
-  final public static String DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY = "defaultEventCategoryNameAnniversary";
-  public static String[] defaultEventCategoryName = {DEFAULT_EVENTCATEGORY_NAME_ALL, DEFAULT_EVENTCATEGORY_NAME_MEETING, DEFAULT_EVENTCATEGORY_NAME_CALLS
-    , DEFAULT_EVENTCATEGORY_NAME_CLIENTS, DEFAULT_EVENTCATEGORY_NAME_HOLIDAY, DEFAULT_EVENTCATEGORY_NAME_ANNIVERSARY} ;
+
   /**
    * 
    * @param  Calendar service geeting from the Portlet Container
@@ -98,6 +79,15 @@ public class NewUserListener extends UserEventListener {
   public NewUserListener(CalendarService cservice, InitParams params)
   throws Exception {
     cservice_ = cservice;
+    String defaultEventCategories = params.getValueParam(EVENT_CATEGORIES).getValue();
+    if (defaultEventCategories != null && defaultEventCategories.length() > 0) {
+      defaultEventCategories_ = defaultEventCategories.split(COMA);
+    }
+    defaultCalendarCategory_ = params.getValueParam(CALENDAR_CATEGORIES).getValue();
+    String defaultCalendar = params.getValueParam(CALENDAR_NAME).getValue();
+    if (defaultCalendar != null && defaultCalendar.length() > 0) {
+      defaultCalendar_ = defaultCalendar.split(COMA);
+    }
     defaultCalendarSetting_ = new CalendarSetting() ;
     if(params.getValueParam(ST_VIEW_TYPE) != null) {
       defaultCalendarSetting_.setViewType(params.getValueParam(ST_VIEW_TYPE).getValue()) ;
@@ -151,36 +141,38 @@ public class NewUserListener extends UserEventListener {
     ThreadLocalSessionProviderService sessionProviderService = (ThreadLocalSessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
     sessionProviderService.setSessionProvider(null, sysProvider);
     try {
-      EventCategory eventCategory = new EventCategory();
-      eventCategory.setDataInit(true);
-      for (int id = 0; id < defaultEventCategoryId.length; id ++) {
-        eventCategory.setId(defaultEventCategoryId[id]);
-        eventCategory.setName(defaultEventCategoryName[id]);
-        cservice_.saveEventCategory(user.getUserName(), eventCategory, null, true);
+      if (defaultEventCategories_ != null
+          && defaultEventCategories_.length > 0) {
+        for (String evCategory : defaultEventCategories_) {
+          EventCategory eventCategory = new EventCategory();
+          eventCategory.setName(evCategory);
+          eventCategory.setDataInit(true) ;
+          cservice_.saveEventCategory(user.getUserName(), eventCategory,
+                                      null, true);
+        }
       }
-
-      // save default calendar category
-      CalendarCategory calCategory = new CalendarCategory();
-      calCategory.setId(DEFAULT_CALENDAR_CATEGORYID);
-      calCategory.setName(DEFAULT_CALENDAR_CATEGORYNAME);
-      calCategory.setDataInit(true) ;
-      cservice_.saveCalendarCategory(user.getUserName(),	calCategory, true);
-
-      // save default calendar
-      Calendar cal = new Calendar();
-      cal.setId(DEFAULT_CALENDAR_ID);
-      cal.setName(DEFAULT_CALENDAR_NAME);
-      cal.setCategoryId(calCategory.getId());
-      cal.setDataInit(true) ;
-      cal.setCalendarOwner(user.getUserName()) ;
-      if(defaultCalendarSetting_ != null) {
-        if(defaultCalendarSetting_.getLocation() != null)
-          cal.setLocale(defaultCalendarSetting_.getLocation()) ;
-        if(defaultCalendarSetting_.getTimeZone() != null)
-          cal.setTimeZone(defaultCalendarSetting_.getTimeZone()) ;
-      }
-      cservice_.saveUserCalendar(user.getUserName(), cal,	true);
-
+      if (defaultCalendarCategory_ != null && defaultCalendarCategory_.length() > 0) {
+        CalendarCategory calCategory = new CalendarCategory();
+        calCategory.setName(defaultCalendarCategory_);
+        calCategory.setDataInit(true) ;
+        cservice_.saveCalendarCategory(user.getUserName(),	calCategory, true);
+        if (defaultCalendar_ != null && defaultCalendar_.length > 0) {
+          for (String calendar : defaultCalendar_) {
+            Calendar cal = new Calendar();
+            cal.setName(calendar);
+            cal.setCategoryId(calCategory.getId());
+            cal.setDataInit(true) ;
+            cal.setCalendarOwner(user.getUserName()) ;
+            if(defaultCalendarSetting_ != null) {
+              if(defaultCalendarSetting_.getLocation() != null)
+                cal.setLocale(defaultCalendarSetting_.getLocation()) ;
+              if(defaultCalendarSetting_.getTimeZone() != null)
+                cal.setTimeZone(defaultCalendarSetting_.getTimeZone()) ;
+            }
+            cservice_.saveUserCalendar(user.getUserName(), cal,	true);
+          }
+        }
+      }    
       if(defaultCalendarSetting_ != null && user != null) {
         cservice_.saveCalendarSetting(user.getUserName(), defaultCalendarSetting_) ;
       }

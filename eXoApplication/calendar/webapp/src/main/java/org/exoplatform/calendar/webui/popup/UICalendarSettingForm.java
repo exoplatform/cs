@@ -28,12 +28,13 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
-import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UIActionBar;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -167,24 +168,18 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       if(input != null) input.setChecked(false) ;
     }
   }
- /* private SessionProvider getSession() {
+  private SessionProvider getSession() {
     return SessionProviderFactory.createSessionProvider() ;
-  }*/
-/*  private SessionProvider getSystemSession() {
+  }
+  private SessionProvider getSystemSession() {
     return SessionProviderFactory.createSystemProvider() ;
-  }*/
+  }
   protected List<Calendar> getPrivateCalendars(CalendarService calendarService, String username) throws Exception{
     boolean showAll = true;
     List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(username, showAll) ;
     List<Calendar> calendars = new ArrayList<Calendar>() ;
-    for(GroupCalendarData group : groupCalendars) {      
-      for (Calendar calendar : group.getCalendars()) {
-        if (calendar.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
-          calendar.setName(newName);
-        }
-        calendars.add(calendar);
-      }
+    for(GroupCalendarData group : groupCalendars) {
+      calendars.addAll(group.getCalendars()) ;
     }
     return calendars;
   }
@@ -201,17 +196,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
 
   protected List<Calendar> getSharedCalendars(CalendarService calendarService, String username) throws Exception{
     GroupCalendarData groupCalendars = calendarService.getSharedCalendars(username, true) ;
-    List<Calendar> calendars = new ArrayList<Calendar>(); 
-    if(groupCalendars != null) {    
-      for (Calendar calendar : groupCalendars.getCalendars()) {
-        if (calendar.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
-          calendar.setName(newName);
-        }
-        calendars.add(calendar);
-      }
-    }    
-    return calendars ;
+    if(groupCalendars != null) return groupCalendars.getCalendars() ;
+    return new ArrayList<Calendar>()  ;
   }
   public String getLabel(ResourceBundle res, String id) {
     if(names_.get(id) != null) return names_.get(id) ;

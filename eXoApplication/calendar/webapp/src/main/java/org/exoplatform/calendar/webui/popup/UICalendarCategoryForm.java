@@ -21,7 +21,6 @@ import java.util.List;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -73,10 +72,6 @@ public class UICalendarCategoryForm extends UIForm {
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
     String username = CalendarUtils.getCurrentUser() ;
     CalendarCategory category = calService.getCalendarCategory(username, categoryId) ;
-    if (category.getId().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYID) && category.getName().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME)) {
-      String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_CATEGORYID);
-      category.setName(newName);
-    }
     setCategoryId(category.getId()) ;
     setCategoryName(category.getName()) ;
     setCategoryDescription(category.getDescription()) ;

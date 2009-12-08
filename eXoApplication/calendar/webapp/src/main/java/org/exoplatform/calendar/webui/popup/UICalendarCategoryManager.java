@@ -22,7 +22,6 @@ import java.util.List;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UIActionBar;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -81,11 +80,6 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
     String username = CalendarUtils.getCurrentUser() ;
     List<CalendarCategory> categories = calService.getCategories(username) ;
-    for (CalendarCategory calendarCategory : categories)
-      if (calendarCategory.getId().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYID) && calendarCategory.getName().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME)) {
-        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_CATEGORYID);
-        calendarCategory.setName(newName);
-      }
     UIGrid uiGrid = getChild(UIGrid.class) ; 
     ObjectPageList objPageList = new ObjectPageList(categories, 20) ;
     uiGrid.getUIPageIterator().setPageList(objPageList) ;   

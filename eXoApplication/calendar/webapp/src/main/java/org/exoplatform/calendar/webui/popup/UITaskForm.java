@@ -232,14 +232,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(CalendarUtils.getCurrentUser()) ;
-    //options.add(new SelectItemOption<String>(CalendarUtils.DEFAULT_CATEGORY, CalendarUtils.DEFAULT_CATEGORY)) ;
+    options.add(new SelectItemOption<String>(CalendarUtils.DEFAULT_CATEGORY, CalendarUtils.DEFAULT_CATEGORY)) ;
     for(EventCategory category : eventCategories) {
-      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
-        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
-        options.add(new SelectItemOption<String>(newName, category.getId())) ;
-      } else {
-        options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        
-      }
+      options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
     return options ;
   }
@@ -387,7 +382,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   protected String getEventCategory() {
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     String value = taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).getValue();
-    //if(CalendarUtils.DEFAULT_CATEGORY.equalsIgnoreCase(value)) value = null;
+    if(CalendarUtils.DEFAULT_CATEGORY.equalsIgnoreCase(value)) value = null;
     return value;
   }
   public void setSelectedCategory(String value) {
