@@ -27,6 +27,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.RootContainer;
@@ -44,7 +45,7 @@ public class LogoutFilter implements Filter {
   /**
    * Class logger.
    */
-  private final Log log = ExoLogger.getLogger("liveroom.chat.LogoutFilter");
+  private final Log log = LogFactory.getLog("liveroom.chat.LogoutFilter");
 
   private final static String   JBOSS        = "jboss";
   
@@ -74,11 +75,11 @@ public class LogoutFilter implements Filter {
           container = RootContainer.getInstance().getPortalContainer("portal");
         }
         ConversationRegistry conversationRegistry = (ConversationRegistry) container.getComponentInstanceOfType(ConversationRegistry.class);
-        if (conversationRegistry!= null && conversationRegistry.getState(sessionId) != null) {
+        if (conversationRegistry!= null && conversationRegistry.getStateKeys(sessionId) != null) {
           log.info("Remove session : " + sessionId);
           session.invalidate();
           log.info("Remove conversation state : " + sessionId);
-          conversationRegistry.unregister(sessionId);
+          conversationRegistry.unregisterByUserId(sessionId);
         }
       }
     }

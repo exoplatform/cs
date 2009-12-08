@@ -17,6 +17,7 @@
 package org.exoplatform.mail.service;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.log.ExoLogger;
@@ -36,7 +37,7 @@ public class CheckMailJob implements Job, InterruptableJob {
   public static final String USERNAME = "userName";
   public static final String ACCOUNTID = "acountId";
   public static final String FOLDERID = "folderId";
-  private static Log log = ExoLogger.getLogger("job.CheckMailJob");
+  private static Log  log = LogFactory.getLog("job.CheckMailJob");
   
   private String username;
   private String accountId;

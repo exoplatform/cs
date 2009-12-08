@@ -467,7 +467,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                             String username,
                             LinkedHashMap<String, Calendar> calendars,
                             RssData rssData) throws Exception {
-    return generateCalDav(username, calendars, rssData);
+    return 0 ;//generateCalDav(username, calendars, rssData);
   }
 
   /**

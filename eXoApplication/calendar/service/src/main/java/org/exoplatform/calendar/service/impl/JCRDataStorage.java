@@ -43,6 +43,7 @@ import javax.jcr.query.QueryResult;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
@@ -104,7 +105,7 @@ public class JCRDataStorage{
 
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
   private RepositoryService  repoService_ ;
-  private static final Log log = ExoLogger.getLogger(JCRDataStorage.class);
+  private static final Log log = LogFactory.getLog(JCRDataStorage.class);
 
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService  repoService)throws Exception {
     nodeHierarchyCreator_ = nodeHierarchyCreator ; 

@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.services.log.ExoLogger;
@@ -46,7 +47,7 @@ public class XMPPMessenger {
   /**
    * Logger.
    */
-  protected static final Log             LOGGER                     = ExoLogger.getLogger("XMPPMessenger");
+  protected static final Log             LOGGER                     = LogFactory.getLog("XMPPMessenger");
 
   /**
    * 

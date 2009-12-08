@@ -34,10 +34,10 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.RootContainer;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.rest.Connector;
 import org.exoplatform.services.xmpp.connection.impl.XMPPMessenger;
 import org.exoplatform.services.xmpp.connection.impl.XMPPSessionImpl;
@@ -52,7 +52,7 @@ public class FileExchangeServlet extends HttpServlet implements Connector {
   /**
    * Class logger.
    */
-  private final Log log = ExoLogger.getLogger("ws.FileExchangeServlet");
+  private final Log log = LogFactory.getLog("ws.FileExchangeServlet");
 
   /**
    * 

@@ -3,19 +3,17 @@
  */
 package org.exoplatform.webservice.cs.mail;
 
-import org.exoplatform.common.http.HTTPMethods;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Response;
+
+import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.services.rest.CacheControl;
-import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.OutputTransformer;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.URIParam;
-import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.StringOutputTransformer;
-
+import org.exoplatform.services.rest.resource.ResourceContainer;
 /**
  * @author Uoc Nguyen
  * Modified by : Phung Nam (phunghainam@gmail.com) 
@@ -28,12 +26,12 @@ public class MailWebservice implements ResourceContainer {
 
   public MailWebservice() {  }
 
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/cs/mail/checkmail/{username}/{accountId}/{folderId}/")
-  @OutputTransformer(StringOutputTransformer.class)
-  public Response checkMail(@URIParam("username")
-  String userName, @URIParam("accountId")
-  String accountId, @URIParam("folderId")
+  @GET
+  @Path("/cs/mail/checkmail/{username}/{accountId}/{folderId}/")
+  //@OutputTransformer(StringOutputTransformer.class)
+  public Response checkMail(@PathParam("username")
+  String userName, @PathParam("accountId")
+  String accountId, @PathParam("folderId")
   String folderId) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
@@ -60,14 +58,14 @@ public class MailWebservice implements ResourceContainer {
     buffer.append("  </checkingmail>");
     buffer.append("</info>");
 
-    return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
+    return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/cs/mail/synchfolders/{username}/{accountId}/")
-  @OutputTransformer(StringOutputTransformer.class)
-  public Response synchFolders(@URIParam("username")
-  String userName, @URIParam("accountId")
+  @GET
+  @Path("/cs/mail/synchfolders/{username}/{accountId}/")
+  //@OutputTransformer(StringOutputTransformer.class)
+  public Response synchFolders(@PathParam("username")
+  String userName, @PathParam("accountId")
   String accountId) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
@@ -93,14 +91,14 @@ public class MailWebservice implements ResourceContainer {
     
     mailService.removeCheckingInfo(userName, accountId);
     
-    return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
+    return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
   
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/cs/mail/stopcheckmail/{username}/{accountId}/")
-  @OutputTransformer(StringOutputTransformer.class)
-  public Response stopCheckMail(@URIParam("username")
-  String userName, @URIParam("accountId")
+  @GET
+  @Path("/cs/mail/stopcheckmail/{username}/{accountId}/")
+  //@OutputTransformer(StringOutputTransformer.class)
+  public Response stopCheckMail(@PathParam("username")
+  String userName, @PathParam("accountId")
   String accountId) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
@@ -127,18 +125,19 @@ public class MailWebservice implements ResourceContainer {
       
       checkingInfo.setRequestStop(true);
     } else {
-      return Response.Builder.serverError().build();
+      Response.status(HTTPStatus.INTERNAL_ERROR) ;
+      return Response.ok().build();
     }
-    return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
+    return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 
 
   
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/cs/mail/checkmailjobinfo/{username}/{accountId}/")
-  @OutputTransformer(StringOutputTransformer.class)
-  public Response getCheckMailJobInfo(@URIParam("username")
-  String userName, @URIParam("accountId")
+  @GET
+  @Path("/cs/mail/checkmailjobinfo/{username}/{accountId}/")
+  //@OutputTransformer(StringOutputTransformer.class)
+  public Response getCheckMailJobInfo(@PathParam("username")
+  String userName, @PathParam("accountId")
   String accountId) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
@@ -156,7 +155,7 @@ public class MailWebservice implements ResourceContainer {
       buffer.append("    <status>1000</status>");
       buffer.append("  </checkingmail>");
       buffer.append("</info>");
-      return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
+      return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
     }
     
     if (!checkingInfo.hasChanged()) {
@@ -177,7 +176,7 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("  </checkingmail>");
         buffer.append("</info>");
         mailService.removeCheckingInfo(userName, accountId);
-        return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
+        return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
       } else if (checkingInfo.hasChanged()) {
         buffer.append("<info>");
         buffer.append("  <checkingmail>");
@@ -203,6 +202,6 @@ public class MailWebservice implements ResourceContainer {
       }
     } 
     
-    return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
+    return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 }

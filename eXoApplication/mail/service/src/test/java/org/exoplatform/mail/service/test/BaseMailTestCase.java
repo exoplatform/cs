@@ -22,6 +22,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
@@ -39,7 +40,7 @@ import org.exoplatform.test.BasicTestCase;
  */
 public abstract class BaseMailTestCase extends BasicTestCase {
 
-  protected static Log          log = ExoLogger.getLogger("sample.services.test");  
+  protected static Log          log = LogFactory.getLog("sample.services.test");  
 
   protected static RepositoryService   repositoryService;
   protected static StandaloneContainer container;

@@ -38,7 +38,7 @@ import org.exoplatform.calendar.service.CsObjectParam;
 import org.exoplatform.calendar.service.CsPropertyMapping;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeType;
+//import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeType;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
@@ -61,7 +61,7 @@ public class UpdateCalendarVersion extends CalendarUpdateEventListener {
    
   @Override
   public void preUpdate() {
-    if(csObj_ != null)
+   /* if(csObj_ != null)
     try {
       SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
       String wsName = repositorySerivce_.getCurrentRepository().getConfiguration().getDefaultWorkspaceName();
@@ -287,6 +287,8 @@ public class UpdateCalendarVersion extends CalendarUpdateEventListener {
   public void postUpdate() {
     super.postUpdate();
     //Run update data base
+     * 
+     */
   }
 
 }

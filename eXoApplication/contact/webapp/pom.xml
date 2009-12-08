@@ -1,13 +1,13 @@
 <project>
   <parent>
     <groupId>org.exoplatform.cs</groupId>
-    <artifactId>cs</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <artifactId>exo.cs.eXoApplication.contact</artifactId>
+    <version>2.0.0-Alpha01-SNAPSHOT</version>
   </parent> 
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.cs.eXoApplication.contact.webapp</artifactId>
-  <version>${org.exoplatform.cs.version}</version>
+   
   <packaging>war</packaging>
   <name>eXo contact application</name>
   <url>http://www.exoplatform.org</url>
@@ -31,30 +31,29 @@
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.contact.service</artifactId>
-      <version>${org.exoplatform.cs.version}</version>
+      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>    
     
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
-      <version>${org.exoplatform.cs.version}</version>
+      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>  
     
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
-      <version>${org.exoplatform.cs.version}</version>
+      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     
     <dependency>
-    	<groupId>org.exoplatform.ws</groupId>
-  		<artifactId>exo.ws.frameworks.cometd.service</artifactId>
-			<version>${org.exoplatform.ws.version}</version>
-			<scope>provided</scope>
-  	 </dependency>
+      		<groupId>org.exoplatform.comet</groupId>
+      		<artifactId>exo-comet-service</artifactId>
+      		<scope>provided</scope>
+    </dependency>
   </dependencies>
   
 

@@ -29,6 +29,7 @@ import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
+
 /**
  * Author : Nguyen Quang Hung
  *          hung.nguyen@exoplatform.com

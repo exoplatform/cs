@@ -19,6 +19,7 @@ package org.exoplatform.services.xmpp.connection.impl;
 import java.util.Queue;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -39,7 +40,7 @@ import org.quartz.JobExecutionException;
  */
 public class HistoryJob implements Job {
 
-  private static Log log = ExoLogger.getLogger("job.ChatRecordsJob");
+  private static Log log = LogFactory.getLog("job.ChatRecordsJob");
   
   public void execute(JobExecutionContext context) throws JobExecutionException {
     SessionProvider provider = SessionProvider.createSystemProvider();

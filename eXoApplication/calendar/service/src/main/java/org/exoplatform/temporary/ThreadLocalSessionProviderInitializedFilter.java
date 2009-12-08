@@ -27,6 +27,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
@@ -53,7 +54,7 @@ public class ThreadLocalSessionProviderInitializedFilter implements Filter {
   private ThreadLocalSessionProviderService providerService;
   
   private static final Log LOGGER =
-    ExoLogger.getLogger("jcr.ThreadLocalSessionProviderInitializedFilter"); 
+	  LogFactory.getLog("jcr.ThreadLocalSessionProviderInitializedFilter"); 
 
   /* (non-Javadoc)
    * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)

@@ -17,6 +17,7 @@
 package org.exoplatform.services.xmpp.connection.impl;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.listener.Event;
@@ -37,7 +38,7 @@ import org.exoplatform.ws.frameworks.cometd.transport.ContinuationServiceDelegat
  */
 public class AuthenticationLoginListener extends Listener<ConversationRegistry, ConversationState> {
 
-  protected static final Log log = ExoLogger.getLogger("chat.AuthenticationLoginListener");
+  protected static final Log log = LogFactory.getLog("chat.AuthenticationLoginListener");
   
   @Override
   public void onEvent(Event<ConversationRegistry, ConversationState> event) throws Exception {

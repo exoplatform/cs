@@ -176,7 +176,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
           copySharedContacts.put(id, JCRDataStorage.SHARED) ;
         } else {
           contacts.add(contact) ;
-          contact.setAddressBook(new String[] { addressBookId }) ;
+          contact.setAddressBookIds(new String[] { addressBookId }) ;
         }
       }
       
@@ -187,7 +187,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
         for (Contact contact : sharedContacts) {
           if (uiContacts.isSharedAddress(contact)) {
             String addressId = null ;
-            for (String add : contact.getAddressBook())
+            for (String add : contact.getAddressBookIds())
               if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
             contactService.removeSharedContact(username, addressId, contact.getId()) ;
           } else {
@@ -202,7 +202,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
               return ; 
             }
           }
-          contact.setAddressBook(new String[] { addressBookId }) ; 
+          contact.setAddressBookIds(new String[] { addressBookId }) ; 
         } 
       } 
       if (contacts.size() > 0) {

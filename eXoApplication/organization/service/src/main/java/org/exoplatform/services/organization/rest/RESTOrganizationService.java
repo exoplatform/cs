@@ -17,8 +17,8 @@
 
 package org.exoplatform.services.organization.rest;
 
-import org.exoplatform.services.rest.Response;
-
+//import org.exoplatform.services.rest.Response;
+import javax.ws.rs.core.Response;
 /**
  * Created by The eXo Platform SAS .<br>
  * An interface for managing an Organization Service using REST framework

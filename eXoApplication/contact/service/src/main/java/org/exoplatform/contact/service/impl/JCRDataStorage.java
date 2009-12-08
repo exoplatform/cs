@@ -39,6 +39,7 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
@@ -92,7 +93,7 @@ public class JCRDataStorage {
   final public static String SPLIT = "::".intern();
   final public static String HYPHEN = "shared_".intern();
   
-  private static final Log log = ExoLogger.getLogger(JCRDataStorage.class);
+  private static final Log log = LogFactory.getLog(JCRDataStorage.class);
   
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
   private RepositoryService repoService_ ;

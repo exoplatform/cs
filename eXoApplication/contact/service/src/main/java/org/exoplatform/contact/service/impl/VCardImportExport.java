@@ -522,10 +522,10 @@ public class VCardImportExport implements ContactImportExport {
       
       if (groupId.contains(JCRDataStorage.HYPHEN)) {
         String newGroupId = groupId.replace(JCRDataStorage.HYPHEN, "") ;
-        contact.setAddressBook(new String[] { newGroupId }) ;
+        contact.setAddressBookIds(new String[] { newGroupId }) ;
         storage_.saveContactToSharedAddressBook(username, newGroupId, contact, true) ;
       } else {
-        contact.setAddressBook(new String[] { groupId }) ;
+        contact.setAddressBookIds(new String[] { groupId }) ;
         storage_.saveContact(username, contact, true);
       }
       re.setSummary(String.valueOf(index + 1) + " contacts imported ...") ;

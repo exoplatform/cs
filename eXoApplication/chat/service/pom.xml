@@ -1,12 +1,11 @@
 <project>
   <parent>
     <groupId>org.exoplatform.cs</groupId>
-    <artifactId>cs</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <artifactId>exo.cs.eXoApplication.chat</artifactId>
+    <version>2.0.0-Alpha01-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.cs.eXoApplication.chat.service</artifactId>
-  <version>${org.exoplatform.cs.version}</version>
   <name>eXo Chat Service</name>
   <description></description>
 
@@ -27,6 +26,12 @@
       <version>${org.exoplatform.kernel.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.resources</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+    </dependency>
+    
+    <dependency>
       <groupId>jabber.smack</groupId>
       <artifactId>smack</artifactId>
       <version>3.0.4</version>
@@ -35,6 +40,11 @@
       <groupId>jabber.smack</groupId>
       <artifactId>smackx</artifactId>
       <version>3.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
@@ -52,10 +62,10 @@
       <version>1.2</version>
     </dependency>
     <dependency>
-      <groupId>org.exoplatform.ws</groupId>
-      <artifactId>exo.ws.frameworks.cometd.service</artifactId>
-      <version>${org.exoplatform.ws.version}</version>
-    </dependency>
+      		<groupId>org.exoplatform.comet</groupId>
+      		<artifactId>exo-comet-service</artifactId>
+      		<scope>provided</scope>
+    		</dependency>
     <dependency>
       <groupId>org.exoplatform.ws</groupId>
       <artifactId>exo.ws.frameworks.json</artifactId>
@@ -65,7 +75,7 @@
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
       <version>1.0</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <reporting>

@@ -28,14 +28,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.rest.Connector;
-import org.exoplatform.services.rest.MultivaluedMetadata;
-import org.exoplatform.services.rest.ResourceDispatcher;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.servlet.RequestFactory;
+//import org.exoplatform.services.rest.MultivaluedMetadata;
+//import org.exoplatform.services.rest.ResourceDispatcher;
+//import org.exoplatform.services.rest.Response;
+import org.exoplatform.services.rest.impl.RequestDispatcher;
+//import org.exoplatform.services.rest.servlet.RequestFactory;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Created by The eXo Platform SAS.
@@ -53,7 +64,7 @@ public class MessengerServlet extends HttpServlet implements Connector {
   /**
    * 
    */
-  private static final Log  LOGGER           = ExoLogger.getLogger("MessangerServlet");
+  private static final Log  LOGGER           = LogFactory.getLog("MessangerServlet");
 
   /**
    * 
@@ -89,7 +100,7 @@ public class MessengerServlet extends HttpServlet implements Connector {
     httpRequest.setCharacterEncoding("UTF-8");
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     LOGGER.debug("Current Container: " + container);
-    ResourceDispatcher dispatcher = (ResourceDispatcher) container.getComponentInstanceOfType(ResourceDispatcher.class);
+    RequestDispatcher dispatcher = (RequestDispatcher) container.getComponentInstanceOfType(RequestDispatcher.class);
     LOGGER.debug("ResourceDispatcher: " + dispatcher);
     if (dispatcher == null) {
       throw new ServletException("ResourceDispatcher is null.");
@@ -112,9 +123,10 @@ public class MessengerServlet extends HttpServlet implements Connector {
        * break; } Thread.sleep(timeChekEvent); } } else { // simple connection
        */
       OutputStream out = httpResponse.getOutputStream();
+      //TODO need to check with new code
       Response response = dispatcher.dispatch(RequestFactory.createRequest(httpRequest));
       httpResponse.setStatus(response.getStatus());
-      tuneResponse(httpResponse, response.getResponseHeaders());
+      tuneResponse(httpResponse, response.);
       response.writeEntity(out);
       out.flush();
       out.close();

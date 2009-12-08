@@ -39,6 +39,7 @@ import javax.jcr.RepositoryException;
 
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hdf.event.EventBridge;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -181,7 +182,7 @@ public class XMPPSessionImpl implements XMPPSession {
   /**
    * Logger.
    */
-  private final Log                         log                    = ExoLogger.getLogger("lr.XMPPSessionImpl");
+  private final Log                         log                    = LogFactory.getLog("lr.XMPPSessionImpl");
 
   /**
    * 

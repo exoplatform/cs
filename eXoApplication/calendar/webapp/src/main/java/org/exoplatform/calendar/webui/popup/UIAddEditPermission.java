@@ -103,7 +103,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
     permissionList.getUIPageIterator().setPageList(objPageList) ;  
     permissionList.getUIPageIterator().setCurrentPage(currentPage);
-    
+   
   }
 
   static public class EditActionListener extends EventListener<UIAddEditPermission> {

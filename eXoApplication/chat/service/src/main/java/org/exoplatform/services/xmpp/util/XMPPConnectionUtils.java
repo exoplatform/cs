@@ -37,6 +37,7 @@ import org.jivesoftware.smackx.packet.DiscoverItems;
 import org.jivesoftware.smackx.packet.DiscoverItems.Item;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.xmpp.bean.FieldBean;
 import org.exoplatform.services.xmpp.bean.FormBean;
@@ -56,7 +57,7 @@ import org.exoplatform.services.xmpp.ext.transport.YahooTransport;
  */
 public class XMPPConnectionUtils {
 
-  private static final Log LOGGER = ExoLogger.getLogger("ConnectionUtils");
+  private static final Log LOGGER = LogFactory.getLog("ConnectionUtils");
 
   /**
    * Discovery Server items.

@@ -1,13 +1,12 @@
 <project>
   <parent>
     <groupId>org.exoplatform.cs</groupId>
-    <artifactId>cs</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <artifactId>exo.cs.eXoApplication.organization</artifactId>
+    <version>2.0.0-Alpha01-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.cs.eXoApplication.organization.client.openfire</artifactId>
 	<name>eXo WS REST Openfire authentication plugin</name>
-  <version>${org.exoplatform.cs.version}</version>
   <description></description>
   <build>
     <resources>

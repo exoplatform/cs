@@ -30,6 +30,7 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -48,7 +49,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 public class PopupReminderJob implements Job {
-  private static Log log_ = ExoLogger.getLogger("job.PopupRecordsJob");
+  private static Log log_ = LogFactory.getLog("job.PopupRecordsJob");
   public void execute(JobExecutionContext context) throws JobExecutionException {
     SessionProvider provider = SessionProvider.createSystemProvider();
     try {

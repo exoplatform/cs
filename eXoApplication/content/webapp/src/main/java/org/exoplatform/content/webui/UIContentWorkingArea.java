@@ -7,7 +7,7 @@ package org.exoplatform.content.webui;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.UIDescription;
+import org.exoplatform.content.webui.UIDescription;
 
 /**
  * Created by The eXo Platform SARL

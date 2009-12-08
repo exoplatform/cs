@@ -16,21 +16,18 @@
  */
 package org.exoplatform.webservice.cs.calendar;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Response;
+
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.Utils;
-import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.rest.CacheControl;
-import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.OutputTransformer;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.URIParam;
-import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.container.ResourceContainer;
-import org.exoplatform.services.rest.transformer.StringOutputTransformer;
-
+import org.exoplatform.services.rest.resource.ResourceContainer;
 
 
 /**
@@ -47,12 +44,12 @@ public class CalendarWebservice implements ResourceContainer{
 
   public CalendarWebservice() {}
 
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/cs/calendar/checkPermission/{username}/{calendarId}/{type}/")
-  @OutputTransformer(StringOutputTransformer.class)
-  public Response checkPermission(@URIParam("username")
-                                  String username, @URIParam("calendarId")
-                                  String calendarId, @URIParam("type")
+  @GET
+  @Path("/cs/calendar/checkPermission/{username}/{calendarId}/{type}/")
+  //@OutputTransformer(StringOutputTransformer.class)
+  public Response checkPermission(@PathParam("username")
+                                  String username, @PathParam("calendarId")
+                                  String calendarId, @PathParam("type")
                                   String type) throws Exception {
     StringBuffer buffer = new StringBuffer();
     CacheControl cacheControl = new CacheControl();
@@ -85,6 +82,6 @@ public class CalendarWebservice implements ResourceContainer{
       buffer = new StringBuffer("{ERROR:500 " + e + "}") ;
       
     } 
-    return Response.Builder.ok(buffer.toString(), JSON_CONTENT_TYPE).cacheControl(cacheControl).build();
+    return Response.ok(buffer.toString(), JSON_CONTENT_TYPE).cacheControl(cacheControl).build();
   }
 }

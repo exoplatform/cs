@@ -32,7 +32,7 @@ import javax.jcr.query.QueryResult;
 
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeType;
+//import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeType;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
@@ -52,7 +52,8 @@ public class MailUpdateStorage extends MailUpdateStorageEventListener {
   }
   
   public void preUpdate() {
-    if(csObj_ != null)
+    /*
+	  if(csObj_ != null)
     try {
       SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
       String wsName = repositorySerivce_.getCurrentRepository().getConfiguration().getDefaultWorkspaceName();
@@ -146,6 +147,7 @@ public class MailUpdateStorage extends MailUpdateStorageEventListener {
     } catch (Exception e) {
      e.printStackTrace() ;
     }
+    */
   }
 
   private void setValue(int propertyType, boolean isMultiple, NodeIterator it,String proName, String value) throws Exception {
