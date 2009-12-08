@@ -29,6 +29,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.calendar.webui.UIFormColorPicker;
@@ -158,6 +159,10 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     List<CalendarCategory> categories = calendarService.getCategories(username) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(CalendarCategory category : categories) {
+      if (category.getId().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYID) && category.getName().equals(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME)) {
+        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_CATEGORYID);
+        category.setName(newName);
+      }
       options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
     }
     return options ;
@@ -508,6 +513,10 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
           calendar.setCategoryId(calendarCategoryId) ;
           List<Calendar> pCals = calendarService.getUserCalendars(username, true) ;
           for(Calendar cal : pCals) {
+            if (cal.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+              cal.setName(newName);
+            }
             if(uiForm.isAddNew_) {
               if(cal.getName().trim().equalsIgnoreCase(displayName.trim())) {
                 uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{displayName}, ApplicationMessage.WARNING)) ;

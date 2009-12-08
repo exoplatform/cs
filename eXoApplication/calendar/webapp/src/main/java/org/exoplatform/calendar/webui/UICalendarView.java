@@ -39,6 +39,7 @@ import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.popup.UIEventCategoryManager;
 import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIEventShareTab;
@@ -195,6 +196,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<String> list = new ArrayList<String>() ;
     for(org.exoplatform.calendar.service.Calendar c : calendarService.getUserCalendars(CalendarUtils.getCurrentUser() , true)) {
+      if (c.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+        c.setName(newName);
+      }
       list.add(c.getId()) ;
     }
     return list ;
@@ -245,18 +250,24 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   public void initCategories() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<EventCategory> eventCategories = calendarService.getEventCategories(CalendarUtils.getCurrentUser()) ;
+    String username = CalendarUtils.getCurrentUser();
+    List<EventCategory> eventCategories = calendarService.getEventCategories(username) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>("all", "all")) ;
     for(EventCategory category : eventCategories) {
-      options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
+      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
+        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
+        options.add(new SelectItemOption<String>(newName, category.getId())) ;
+        category.setName(newName);
+      } else {
+        options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        
+      }      
     }
     UIFormSelectBox categoryInput =   new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options) ;
     addUIFormInput(categoryInput) ;
     //categoryInput.setValue("Meeting") ;
   }
   protected String getSelectedCategory() {
-    if("all".equals(getUIFormSelectBox(EVENT_CATEGORIES).getValue())) return null ;
+    //if("all".equals(getUIFormSelectBox(EVENT_CATEGORIES).getValue())) return null ;
     return getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
   }
   public void setSelectedCategory(String id) {
@@ -318,11 +329,16 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     public void update() throws Exception {
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
-      List<EventCategory> eventCategories = calendarService.getEventCategories(CalendarUtils.getCurrentUser()) ;
+      String username = CalendarUtils.getCurrentUser();
+      List<EventCategory> eventCategories = calendarService.getEventCategories(username) ;
       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-      options.add(new SelectItemOption<String>("all", "all")) ;
       for(EventCategory category : eventCategories) {
-        options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
+        if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
+          String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
+          options.add(new SelectItemOption<String>(newName, category.getId())) ;
+        } else {
+          options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        
+        }
       }
       getUIFormSelectBox(EVENT_CATEGORIES).setOptions(options) ;
       getUIFormSelectBox(EVENT_CATEGORIES).setValue(null) ;
@@ -1159,10 +1175,18 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           }
 		      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
 		        calendar = calService.getUserCalendar(currentUser, selectedCalendarId) ;
+            if (calendar.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+              String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+              calendar.setName(newName);
+            }
 		      } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
 		        GroupCalendarData gCalendarData = calService.getSharedCalendars(currentUser, true) ;
 		        if(gCalendarData != null) { 
 		          calendar = gCalendarData.getCalendarById(selectedCalendarId) ;
+              if (calendar.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+                String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+                calendar.setName(newName);
+              }
 		          if(calendar != null && !CalendarUtils.isEmpty(calendar.getCalendarOwner())) calendar.setName(calendar.getCalendarOwner() + "-" + calendar.getName()) ;
 		        }
 		      } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
@@ -1189,7 +1213,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 		          return ;
 		        }
 		        List<org.exoplatform.calendar.service.Calendar> list = new ArrayList<org.exoplatform.calendar.service.Calendar>() ;
-		        list.add(calendar) ;
+            list.add(calendar) ;
 		        UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
 		        popupAction.deActivate() ;
 		        

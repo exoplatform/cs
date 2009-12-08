@@ -29,6 +29,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
@@ -183,6 +184,10 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     try {
       for(Calendar c : CalendarUtils.getCalendarService().getUserCalendars(CalendarUtils.getCurrentUser(), true)){
+        if (c.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+          c.setName(newName);
+        }
         options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
       }
     } catch (Exception e) {
@@ -324,6 +329,10 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
             }
             List<Calendar> pCals = calendarService.getUserCalendars(username, true) ;
             for(Calendar cal : pCals) {
+              if (cal.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+                String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+                cal.setName(newName);
+              }
               if(cal.getName().trim().equalsIgnoreCase(calendarName)) {
                 uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{calendarName}, ApplicationMessage.WARNING)) ;
                 event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
