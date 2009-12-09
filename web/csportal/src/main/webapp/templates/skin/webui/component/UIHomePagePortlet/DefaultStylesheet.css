@@ -78,8 +78,8 @@
 	padding-left: 25px; /* orientation=lt */
 	padding-right: 25px; /* orientation=rt */
 	height: auto;
-	margin-left: 190px; /* orientation=lt */
-	margin-right: 190px; /* orientation=rt */
+	margin-left: 110px; /* orientation=lt */
+	margin-right: 110px; /* orientation=rt */
 	background: transparent url('DefaultSkin/background/BgRightContainter.jpg') no-repeat right top; /* orientation=lt */
 	background: transparent url('DefaultSkin/background/BgRightContainter-rt.jpg') no-repeat left top; /* orientation=rt */
 	height: 125px;
@@ -98,7 +98,7 @@
 }
 
 .UIHomePagePortlet .HomePortletContainer .ContainerBox{
-	width: 192px;
+	width: 120px;
 	color: #000000;
 	text-align: center;
 	float: left; /* orientation=lt */
