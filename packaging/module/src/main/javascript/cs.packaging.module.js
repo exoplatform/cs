@@ -21,9 +21,8 @@ function getModule(params)
 
     
   module.comet.cometd =
-	//new Project("org.exoplatform.comet", "exo-comet-webapp", "war", cometVersion).
-    //addDependency(new Project("org.mortbay.jetty", "cometd-bayeux", "jar", "6.1.11")).
-	new Project("org.mortbay.jetty", "cometd-bayeux", "jar", "6.1.11").
+	new Project("org.exoplatform.comet", "exo-comet-webapp", "war", cometVersion).
+    addDependency(new Project("org.mortbay.jetty", "cometd-bayeux", "jar", "6.1.11")).
 	addDependency(new Project("org.mortbay.jetty", "jetty-util", "jar", "6.1.11")).
 	addDependency(new Project("org.mortbay.jetty", "cometd-api", "jar", "0.9.20080221")).
 	addDependency(new Project("org.exoplatform.comet", "exo-comet-service", "jar", cometVersion));  	
@@ -65,9 +64,6 @@ function getModule(params)
   	  //addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.webapp", "war", module.version)).
       addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.client.openfire", "jar", module.version)).
   	  //addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.webapp", "war", module.version)).
-  	  addDependency(new Project("org.exoplatform.ws", "exo.ws.frameworks.json", "jar", "1.3.3")).
-  	  addDependency(ws.frameworks.cometd).
-  	  addDependency(new Project("org.exoplatform.portal", "exo.portal.web.rest", "war", "2.5.5")).
   	  addDependency(new Project("jabber.smack", "smack", "jar", "3.0.4")).
   	  addDependency(new Project("jabber.smack", "smackx", "jar", "3.0.4")).
   	  addDependency(new Project("org.jcrom", "jcrom", "jar", "1.2")).
