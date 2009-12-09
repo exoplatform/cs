@@ -96,11 +96,6 @@
     </dependency>
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
-      <artifactId>exo.cs.eXoApplication.chatbar.service</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.web.csResources</artifactId>
       <version>${project.version}</version>
       <type>war</type>
