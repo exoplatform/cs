@@ -19,6 +19,7 @@ package org.exoplatform.services.organization.rest.json;
 import java.util.Date;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.impl.UserImpl;
@@ -32,7 +33,7 @@ public class UserBean {
   /**
    * Class logger.
    */
-  private final Log log = ExoLogger.getLogger("ws.UserBean");
+  private final Log log = LogFactory.getLog("ws.UserBean");
   private Date createdDate;
   private String email;
   private String firstName;

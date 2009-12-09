@@ -24,17 +24,13 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
-import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.services.organization.Group;
@@ -42,17 +38,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.rest.RESTOrganizationServiceAbstractImpl;
-//import org.exoplatform.services.rest.ContextParam;
-//import org.exoplatform.services.rest.HTTPMethod;
-//import org.exoplatform.services.rest.OutputTransformer;
-//import org.exoplatform.services.rest.QueryParam;
-//import org.exoplatform.services.rest.ResourceDispatcher;
-//import org.exoplatform.services.rest.Response;
-//import org.exoplatform.services.rest.URIParam;
-//import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.impl.RequestDispatcher;
 import org.exoplatform.services.rest.resource.ResourceContainer;
-//import org.exoplatform.services.rest.transformer.SerializableTransformer;
 
 /**
  * Created by The eXo Platform SAS .
@@ -76,7 +62,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   @GET
   @Path("/user/find-all/")
   //@OutputTransformer(SerializableTransformer.class)
-  public Response findUsers(@PathParam("baseURI") String baseURI,
+  public Response findUsers(@Context UriInfo uriInfo,
                             @QueryParam("username") String username,
                             @QueryParam("firstname") String firstname,
                             @QueryParam("lastname") String lastname,
@@ -111,7 +97,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       for (int i = 1; i <= pages; i++) {
         list.addAll(pageList.getPage(i));
       }
-      return Response.ok(new UserListXMLEntity(list, baseURI), XML_CONTENT_TYPE).build();
+      return Response.ok(new UserListXMLEntity(list, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
@@ -124,7 +110,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   @GET
   @Path("/user/find-all/{from}/{num}/")
   //@OutputTransformer(SerializableTransformer.class)
-  public Response findUsersRange(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
+  public Response findUsersRange(@Context UriInfo uriInfo,
                                  @QueryParam("username") String username,
                                  @QueryParam("firstname") String firstname,
                                  @QueryParam("lastname") String lastname,
@@ -158,11 +144,11 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       pageList.setPageSize(numResult);
       int page = from / numResult + 1;
       list = pageList.getPage(page);
-      return Response.ok(new UserListXMLEntity(list, baseURI), XML_CONTENT_TYPE).build();
+      return Response.ok(new UserListXMLEntity(list, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
+      return Response.status(HTTPStatus.INTERNAL_ERROR)
+                             .entity("Thrown exception : " + e)
                              .build();
     }
   }
@@ -174,7 +160,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   @GET
   @Path("/user/view-range/{from}/{num}/")
   //@OutputTransformer(SerializableTransformer.class)
-  public Response getUsersRange(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
+  public Response getUsersRange(@Context UriInfo uriInfo,
                                 @PathParam("from") Integer from,
                                 @PathParam("num") Integer numResult) {
     try {
@@ -182,12 +168,12 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       PageList pageList = userHandler.getUserPageList(numResult);
       int page = from / numResult + 1;
       list = pageList.getPage(page);
-      return Response.ok(new UserListXMLEntity(list, baseURI), XML_CONTENT_TYPE).build();
+      return Response.ok(new UserListXMLEntity(list, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
       e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
+      return Response.status(HTTPStatus.INTERNAL_ERROR)
+                             .entity("Thrown exception : " + e)
                              .build();
     }
   }
@@ -204,8 +190,8 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       return Response.ok(new CountXMLEntity(number, "users"), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
+      return Response.status(HTTPStatus.INTERNAL_ERROR)
+                             .entity("Thrown exception : " + e)
                              .build();
     }
   }
@@ -220,14 +206,14 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
     try {
       User user = userHandler.findUserByName(username);
       if (user == null) {
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("User '" + username
+        return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username
             + "' not found.").build();
       }
       return Response.ok(new UserXMLEntity(user), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
+      return Response.status(HTTPStatus.INTERNAL_ERROR)
+                             .entity("Thrown exception : " + e)
                              .build();
     }
   }
@@ -236,13 +222,13 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   @GET
   @Path("/group/info/{groupId}/")
   //@OutputTransformer(SerializableTransformer.class)
-  public Response getGroup(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
+  public Response getGroup(@Context UriInfo uriInfo,
                            @PathParam("groupId") String groupId) {
     try {
       groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
       Group group = groupHandler.findGroupById(groupId);
       if (group == null) {
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("Group '" + groupId
+        return Response.status(HTTPStatus.NOT_FOUND).entity("Group '" + groupId
             + "' not found.").build();
       }
 
@@ -253,13 +239,13 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
         members.addAll(pageList.getPage(i));
       }
 
-      return Response.ok(new GroupXMLEntity(group, members, baseURI), XML_CONTENT_TYPE)
+      return Response.ok(new GroupXMLEntity(group, members, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE)
                              .build();
     } catch (Exception e) {
       e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
+      return Response.status(HTTPStatus.INTERNAL_ERROR)
+                             .entity("Thrown exception : " + e)
                              .build();
     }
   }
@@ -268,7 +254,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   @GET
   @Path("/group/view-all/")
   //@OutputTransformer(SerializableTransformer.class)
-  public Response getGroups(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
+  public Response getGroups(@Context UriInfo uriInfo,
                             @QueryParam("parentId") String parentId) {
     try {
       Collection<Group> groups = null;
@@ -276,18 +262,18 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
         parentId = (parentId.startsWith("/")) ? parentId : "/" + parentId;
         Group parent = groupHandler.findGroupById(parentId);
         if (parent == null) {
-          return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("Parent '"
+          return Response.status(HTTPStatus.NOT_FOUND).entity("Parent '"
               + parentId + "' not found.").build();
         }
         groups = groupHandler.findGroups(parent);
       } else {
         groups = groupHandler.findGroups(null);
       }
-      return Response.ok(new GroupListXMLEntity(groups, baseURI), XML_CONTENT_TYPE).build();
+      return Response.ok(new GroupListXMLEntity(groups, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
+      return Response.status(HTTPStatus.INTERNAL_ERROR)
+                             .entity("Thrown exception : " + e)
                              .build();
     }
   }
@@ -303,8 +289,8 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
 
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
+      return Response.status(HTTPStatus.INTERNAL_ERROR)
+                             .entity("Thrown exception : " + e)
                              .build();
     }
   }
@@ -315,21 +301,21 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   @GET
   @Path("/group/groups-for-user/")
   //@OutputTransformer(SerializableTransformer.class)
-  public Response getGroupsOfUser(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
+  public Response getGroupsOfUser(@Context UriInfo uriInfo,
                                   @QueryParam("username") String username) {
     try {
       if (userHandler.findUserByName(username) == null) {
-        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("User '" + username
+        return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username
             + "' not found.").build();
       }
       Collection<Group> groups = groupHandler.findGroupsOfUser(username);
 
-      return Response.ok(new GroupListXMLEntity(groups, baseURI), XML_CONTENT_TYPE).build();
+      return Response.ok(new GroupListXMLEntity(groups, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
 
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
+      return Response.status(HTTPStatus.INTERNAL_ERROR)
+                             .entity("Thrown exception : " + e)
                              .build();
     }
   }
@@ -338,7 +324,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   @GET
   @Path("/group/view-from-to/{from}/{to}/")
   //@OutputTransformer(SerializableTransformer.class)
-  public Response getGroupsRange(@ContextParam(ResourceDispatcher.CONTEXT_PARAM_BASE_URI) String baseURI,
+  public Response getGroupsRange(@Context UriInfo uriInfo,
                                  @PathParam("from") Integer offset,
                                  @PathParam("to") Integer amount,
                                  @QueryParam("parentId") String parentId) {
@@ -348,7 +334,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
         parentId = (parentId.startsWith("/")) ? parentId : "/" + parentId;
         Group parent = groupHandler.findGroupById(parentId);
         if (parent == null) {
-          return Response.Builder.withStatus(HTTPStatus.NOT_FOUND).errorMessage("Parent '"
+          return Response.status(HTTPStatus.NOT_FOUND).entity("Parent '"
               + parentId + "' not found.").build();
         }
         groups = groupHandler.findGroups(parent);
@@ -360,12 +346,12 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       if (amount > groups.size())
         amount_ = groups.size();
       return Response.ok(new GroupListXMLEntity(new ArrayList<Group>(groups).subList(offset,amount_),
-                                                        baseURI),XML_CONTENT_TYPE).build();
+                                                        uriInfo.getBaseUri().getPath()),XML_CONTENT_TYPE).build();
 
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
-      return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Thrown exception : " + e)
+      return Response.status(HTTPStatus.INTERNAL_ERROR)
+                             .entity("Thrown exception : " + e)
                              .build();
     }
   }

@@ -21,11 +21,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
 
+import javax.ws.rs.core.StreamingOutput;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.exoplatform.services.organization.Group;
-import org.exoplatform.services.rest.transformer.SerializableEntity;
 
 /**
  * Build XML document that content list of groups according to request information
@@ -34,7 +34,7 @@ import org.exoplatform.services.rest.transformer.SerializableEntity;
  * @version $Id: $
  */
 
-public class GroupListXMLEntity implements SerializableEntity {
+public class GroupListXMLEntity implements StreamingOutput {
 
   private final Collection<Group> groupList_;
   private final String baseURI_;
@@ -49,7 +49,7 @@ public class GroupListXMLEntity implements SerializableEntity {
    * 
    * @see org.exoplatform.services.rest.transformer.SerializableEntity#writeObject(java.io.OutputStream)
    */
-  public void writeObject(OutputStream _out) throws IOException {
+  public void write(OutputStream _out) throws IOException {
     try {
       XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
       outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, Boolean.TRUE);

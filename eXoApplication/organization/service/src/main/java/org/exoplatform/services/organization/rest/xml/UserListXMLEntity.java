@@ -21,19 +21,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
+import javax.ws.rs.core.StreamingOutput;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.rest.transformer.SerializableEntity;
 
 
 /**
  * @author <a href="mailto:vitalka_p@ukr.net">Vitaly Parfonov</a>
  * @version $Id: $
  */
-public final class UserListXMLEntity implements SerializableEntity {
+public final class UserListXMLEntity implements StreamingOutput {
 
   private final List<User> userList_;
   private final String baseURI_;
@@ -61,7 +61,7 @@ public final class UserListXMLEntity implements SerializableEntity {
    * 
    * @see org.exoplatform.services.rest.transformer.SerializableEntity#writeObject(java.io.OutputStream)
    */
-  public void writeObject(OutputStream out) throws IOException {
+  public void write(OutputStream out) throws IOException {
     try {
       XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
       outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, Boolean.TRUE);

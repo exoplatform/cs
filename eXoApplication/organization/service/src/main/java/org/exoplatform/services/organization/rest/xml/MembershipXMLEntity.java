@@ -20,17 +20,17 @@ package org.exoplatform.services.organization.rest.xml;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.ws.rs.core.StreamingOutput;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.exoplatform.services.organization.Membership;
-import org.exoplatform.services.rest.transformer.SerializableEntity;
 
 /**
  * @author <a href="mailto:andrew00x@gmail.com">Andrey Parfonov</a>
  * @version $Id: $
  */
-public class MembershipXMLEntity implements SerializableEntity {
+public class MembershipXMLEntity implements StreamingOutput {
   
   private final Membership membership_;
   private final String baseURI_;
@@ -40,7 +40,7 @@ public class MembershipXMLEntity implements SerializableEntity {
     baseURI_ = baseURI;
   }
 
-  public void writeObject(OutputStream out) throws IOException {
+  public void write(OutputStream out) throws IOException {
     try {
       XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
       outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, Boolean.TRUE);

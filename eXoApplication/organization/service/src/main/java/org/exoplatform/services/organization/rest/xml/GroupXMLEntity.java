@@ -19,15 +19,14 @@ package org.exoplatform.services.organization.rest.xml;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collection;
 import java.util.List;
 
+import javax.ws.rs.core.StreamingOutput;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.rest.transformer.SerializableEntity;
 
 /**
  * Build XML document that content information about group (name of group,
@@ -37,7 +36,7 @@ import org.exoplatform.services.rest.transformer.SerializableEntity;
  * @version $Id: $
  */
 
-public class GroupXMLEntity implements SerializableEntity {
+public class GroupXMLEntity implements StreamingOutput {
 
   private final List<User>    userList_;
 
@@ -56,7 +55,7 @@ public class GroupXMLEntity implements SerializableEntity {
    * 
    * @see org.exoplatform.services.rest.transformer.SerializableEntity#writeObject(java.io.OutputStream)
    */
-  public void writeObject(OutputStream out) throws IOException {
+  public void write(OutputStream out) throws IOException {
     try {
       XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
       outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, Boolean.TRUE);

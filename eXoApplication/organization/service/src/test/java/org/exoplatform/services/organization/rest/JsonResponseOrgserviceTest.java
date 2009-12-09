@@ -21,10 +21,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import junit.framework.TestCase;
+import javax.ws.rs.core.MultivaluedMap;
 
 import org.exoplatform.common.http.HTTPStatus;
-import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.Membership;
@@ -40,33 +39,31 @@ import org.exoplatform.services.organization.rest.json.MembershipListBean;
 import org.exoplatform.services.organization.rest.json.RESTOrganizationServiceJSONImpl;
 import org.exoplatform.services.organization.rest.json.UserBean;
 import org.exoplatform.services.organization.rest.json.UserListBean;
-import org.exoplatform.services.rest.MultivaluedMetadata;
-import org.exoplatform.services.rest.Request;
-import org.exoplatform.services.rest.ResourceDispatcher;
-import org.exoplatform.services.rest.ResourceIdentifier;
-import org.exoplatform.services.rest.Response;
+import org.exoplatform.services.rest.impl.ContainerResponse;
+import org.exoplatform.services.rest.impl.MultivaluedMapImpl;
+import org.exoplatform.services.rest.tools.ByteArrayContainerResponseWriter;
 
 /**
  * Created by The eXo Platform SARL Author : Volodymyr Krasnikov
  * volodymyr.krasnikov@exoplatform.com.ua
  */
 
-public class JsonResponseOrgserviceTest extends TestCase {
+public class JsonResponseOrgserviceTest extends AbstractResourceTest {
 
-  StandaloneContainer             container;
+  //StandaloneContainer             container;
 
   OrganizationService             orgService;
 
   RESTOrganizationServiceJSONImpl jsonOrgService;
 
-  ResourceDispatcher              dispatcher;
+  //ResourceDispatcher              dispatcher;
 
   static final String             baseURI = "http://localhost:8080/rest/";
 
-  protected void setUp() throws Exception {
+  public void setUp() throws Exception {
     super.setUp();
     
-    String containerConf = JsonResponseOrgserviceTest.class.getResource("/conf/standalone/test-configuration.xml").toString();
+    /*String containerConf = JsonResponseOrgserviceTest.class.getResource("/conf/standalone/test-configuration.xml").toString();
     
     StandaloneContainer.setConfigurationURL(containerConf);
     container = StandaloneContainer.getInstance();
@@ -76,11 +73,11 @@ public class JsonResponseOrgserviceTest extends TestCase {
         .getComponentInstanceOfType(RESTOrganizationServiceJSONImpl.class);
 
     dispatcher = (ResourceDispatcher) container
-        .getComponentInstanceOfType(ResourceDispatcher.class);
+        .getComponentInstanceOfType(ResourceDispatcher.class);*/
 
   }
 
-  protected void tearDown() throws Exception {
+  public void tearDown() throws Exception {
     super.tearDown();
   }
 
@@ -139,19 +136,21 @@ public class JsonResponseOrgserviceTest extends TestCase {
 
     MembershipHandler hMembership = orgService.getMembershipHandler();
 
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();
+    /*MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     // admin - user from DummyOrganizationService
     String username = "admin";
 
-    qp.putSingle("username", username);
-
+    h.putSingle("username", username);
     String extURI = "/organization/json/membership/view-all/";
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
 
@@ -169,19 +168,21 @@ public class JsonResponseOrgserviceTest extends TestCase {
 
     UserHandler hUser = orgService.getUserHandler();
 
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();
+    /*MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     // admin - user from DummyOrganizationService
     String username = "admin";
 
-    qp.putSingle("username", username);
-
+    h.putSingle("username", username);
     String extURI = "/organization/json/user/find-all/";
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
 
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
 
@@ -209,22 +210,26 @@ public class JsonResponseOrgserviceTest extends TestCase {
 
     UserHandler hUser = orgService.getUserHandler();
 
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();
+    /*MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     // admin - user from DummyOrganizationService
     String username = "admin";
 
-    qp.putSingle("username", username);
+    h.putSingle("username", username);
 
     Integer from = 0, to = 5;
 
     String extURI = String.format("/organization/json/user/view-from-to/%s/%s/", from.toString(),
         to.toString());
+    
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
 
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "POST", mv, qp);
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "POST", mv, qp);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
 
@@ -254,25 +259,29 @@ public class JsonResponseOrgserviceTest extends TestCase {
 
     UserHandler hUser = orgService.getUserHandler();
 
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();
+    /*MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     // admin - user from DummyOrganizationService
     String username = "admin";
 
-    qp.putSingle("username", username);
+    h.putSingle("username", username);
 
     Integer from = 0, to = 10;
 
     String extURI = "/organization/json/user/find-user-in-range/";
-    qp.putSingle("question", "*");
-    qp.putSingle("from", "0");
-    qp.putSingle("to", "10");
-    qp.putSingle("sort-field", "lastname");
-    qp.putSingle("sort-order", "descending");
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
+    h.putSingle("question", "*");
+    h.putSingle("from", "0");
+    h.putSingle("to", "10");
+    h.putSingle("sort-field", "lastname");
+    h.putSingle("sort-order", "descending");
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
 
@@ -304,18 +313,21 @@ public class JsonResponseOrgserviceTest extends TestCase {
 
   public void testGetAllGroup() throws Exception {
 
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();
-
+    /*MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String group_exclude = "";
-    qp.putSingle("filter", group_exclude);
+    h.putSingle("filter", group_exclude);
 
     String extURI = "/organization/json/group/filter/";
 
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
 
@@ -332,17 +344,20 @@ public class JsonResponseOrgserviceTest extends TestCase {
   }
 
   public void testGetGroup() throws Exception {
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();
-
+    /*MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String group_id = "/admin";
     
     String extURI = "/organization/json/group/info/" + "admin";
 
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    
+   /* Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
 
@@ -361,14 +376,16 @@ public class JsonResponseOrgserviceTest extends TestCase {
   }
 
   public void testGetGroupsCount() throws Exception {
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-
+    //MultivaluedMetadata mv = new MultivaluedMetadata();
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String extURI = "/organization/json/group/count/";
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
 
@@ -384,18 +401,21 @@ public class JsonResponseOrgserviceTest extends TestCase {
   }
 
   public void testGetGroupsOfUser() throws Exception {
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();
+    /*MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl(); 
 
     String username = "admin";
-    qp.putSingle("username", username);
+    h.putSingle("username", username);
 
     String extURI = "/organization/json/group/groups-for-user/";
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
 
@@ -494,16 +514,17 @@ public class JsonResponseOrgserviceTest extends TestCase {
 //  }
 
   public void testGetUser() throws Exception {
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-
+    //MultivaluedMetadata mv = new MultivaluedMetadata();
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String username = "admin";
 
     String extURI = String.format("/organization/json/user/info/%s/", username);
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
 
@@ -517,14 +538,15 @@ public class JsonResponseOrgserviceTest extends TestCase {
   }
 
   public void testGetUsers() throws Exception {
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-
+    //MultivaluedMetadata mv = new MultivaluedMetadata();
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String extURI = "/organization/json/users/";
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
 
@@ -546,14 +568,15 @@ public class JsonResponseOrgserviceTest extends TestCase {
   }
 
   public void testGetUsersCount() throws Exception {
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-
+    //MultivaluedMetadata mv = new MultivaluedMetadata();
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String extURI = "/organization/json/user/count/";
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
 

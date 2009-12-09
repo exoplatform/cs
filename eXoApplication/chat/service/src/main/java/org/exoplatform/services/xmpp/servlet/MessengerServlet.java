@@ -20,8 +20,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,10 +37,17 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.rest.Connector;
+import org.exoplatform.services.rest.ContainerResponseWriter;
+import org.exoplatform.services.rest.GenericContainerResponse;
+import org.exoplatform.services.rest.RequestHandler;
 //import org.exoplatform.services.rest.MultivaluedMetadata;
 //import org.exoplatform.services.rest.ResourceDispatcher;
 //import org.exoplatform.services.rest.Response;
+import org.exoplatform.services.rest.impl.ContainerResponse;
+import org.exoplatform.services.rest.impl.EnvironmentContext;
 import org.exoplatform.services.rest.impl.RequestDispatcher;
+import org.exoplatform.services.rest.impl.header.HeaderHelper;
+import org.exoplatform.services.rest.servlet.ServletContainerRequest;
 //import org.exoplatform.services.rest.servlet.RequestFactory;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -47,6 +58,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.MessageBodyWriter;
 
 /**
  * Created by The eXo Platform SAS.
@@ -75,9 +87,21 @@ public class MessengerServlet extends HttpServlet implements Connector {
    * 
    */
   private int               timeChekEvent;
+  
+  /**
+   * See {@link ServletConfig}.
+   */
+  private ServletConfig     config;
+
+  /**
+   * See {@link ServletContext}.
+   */
+  private ServletContext    context;
 
   @Override
   public void init() throws ServletException {
+	this.config = config;
+	this.context = config.getServletContext();
     final String timeOut = this.getInitParameter("connection-timeout");
     final String timeChekEventStr = this.getInitParameter("time-check-event");
     if (timeOut != null)
@@ -100,13 +124,32 @@ public class MessengerServlet extends HttpServlet implements Connector {
     httpRequest.setCharacterEncoding("UTF-8");
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     LOGGER.debug("Current Container: " + container);
-    RequestDispatcher dispatcher = (RequestDispatcher) container.getComponentInstanceOfType(RequestDispatcher.class);
+    /*RequestDispatcher dispatcher = (RequestDispatcher) container.getComponentInstanceOfType(RequestDispatcher.class);
     LOGGER.debug("ResourceDispatcher: " + dispatcher);
     if (dispatcher == null) {
       throw new ServletException("ResourceDispatcher is null.");
-    }
+    }*/
+    RequestHandler requestHandler = (RequestHandler) container.getComponentInstanceOfType(RequestHandler.class);
+
+    EnvironmentContext env = new EnvironmentContext();
+    env.put(HttpServletRequest.class, httpRequest);
+    env.put(HttpServletResponse.class, httpResponse);
+    env.put(ServletConfig.class, config);
+    env.put(ServletContext.class, context);
+    
     try {
-      /*
+        EnvironmentContext.setCurrent(env);
+        ServletContainerRequest request = new ServletContainerRequest(httpRequest);
+        ContainerResponse response = new ContainerResponse(new ServletContainerResponseWriter(httpResponse));
+        requestHandler.handleRequest(request, response);
+    } catch (Exception e) {
+      throw new ServletException(e);
+    } finally {
+      EnvironmentContext.setCurrent(null);
+    }
+    
+    /*try {
+      
        * boolean waitingResponse; try { waitingResponse = new
        * Boolean(httpRequest.getParameter("waiting-response")); } catch
        * (Exception e) { waitingResponse = false; } if (waitingResponse) { //
@@ -121,7 +164,7 @@ public class MessengerServlet extends HttpServlet implements Connector {
        * (System.currentTimeMillis() > timeOut) { httpResponse.setStatus(200);
        * // NO_CONETNT LOGGER.debug("Timeout " + System.currentTimeMillis());
        * break; } Thread.sleep(timeChekEvent); } } else { // simple connection
-       */
+       
       OutputStream out = httpResponse.getOutputStream();
       //TODO need to check with new code
       Response response = dispatcher.dispatch(RequestFactory.createRequest(httpRequest));
@@ -136,16 +179,75 @@ public class MessengerServlet extends HttpServlet implements Connector {
       LOGGER.debug(e);
       httpResponse.sendError(500, "This request can't be serve by service.\n"
           + "Check request parameters and try again.");
-    }
+    }*/
   }
 
+  /**
+   * See {@link ContainerResponseWriter}.
+   */
+  class ServletContainerResponseWriter implements ContainerResponseWriter {
+
+    /**
+     * See {@link HttpServletResponse}.
+     */
+    private HttpServletResponse servletResponse;
+
+    /**
+     * @param response HttpServletResponse
+     */
+    ServletContainerResponseWriter(HttpServletResponse response) {
+      this.servletResponse = response;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public void writeBody(GenericContainerResponse response, MessageBodyWriter entityWriter) throws IOException {
+      Object entity = response.getEntity();
+      if (entity != null) {
+        OutputStream out = servletResponse.getOutputStream();
+        entityWriter.writeTo(entity,
+                             entity.getClass(),
+                             response.getEntityType(),
+                             null,
+                             response.getContentType(),
+                             response.getHttpHeaders(),
+                             out);
+        out.flush();
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void writeHeaders(GenericContainerResponse response) throws IOException {
+      if (servletResponse.isCommitted())
+        return;
+
+      servletResponse.setStatus(response.getStatus());
+
+      if (response.getHttpHeaders() != null) {
+        // content-type and content-length should be preset in headers
+        for (Map.Entry<String, List<Object>> e : response.getHttpHeaders().entrySet()) {
+          String name = e.getKey();
+          for (Object o : e.getValue()) {
+            String value = null;
+            if (o != null && (value = HeaderHelper.getHeaderAsString(o)) != null)
+              servletResponse.addHeader(name, value);
+          }
+        }
+      }
+    }
+  }
+  
   /**
    * Tune HTTP response.
    * 
    * @param httpResponse HTTP response.
    * @param responseHeaders HTTP response headers.
    */
-  private void tuneResponse(HttpServletResponse httpResponse, MultivaluedMetadata responseHeaders) {
+  /*private void tuneResponse(HttpServletResponse httpResponse, MultivaluedMetadata responseHeaders) {
     if (responseHeaders != null) {
       HashMap<String, String> headers = responseHeaders.getAll();
       Set<String> keys = headers.keySet();
@@ -155,6 +257,6 @@ public class MessengerServlet extends HttpServlet implements Connector {
         httpResponse.setHeader(key, headers.get(key));
       }
     }
-  }
+  }*/
 
 }

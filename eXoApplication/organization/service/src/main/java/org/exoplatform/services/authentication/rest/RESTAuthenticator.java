@@ -18,18 +18,14 @@
 package org.exoplatform.services.authentication.rest;
 
 import javax.security.auth.login.LoginContext;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 
 import org.exoplatform.common.http.HTTPStatus;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.services.security.IdentityRegistry;
+import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.jaas.BasicCallbackHandler;
-
-import org.exoplatform.services.rest.HTTPMethod;
-import org.exoplatform.services.rest.QueryParam;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.URITemplate;
-import org.exoplatform.services.rest.container.ResourceContainer;
 
 /**
  * @author <a href="mailto:vitalka_p@ukr.net">Vitaly Parfonov</a>
@@ -45,8 +41,8 @@ public class RESTAuthenticator implements ResourceContainer {
    * @return return Response with status 200 (OK) if the login is successful,
    *         otherwise return Response with status 403 (Forbidden).
    */
-  @HTTPMethod("POST")
-  @URITemplate("/organization/authenticate/")
+  @POST
+  @Path("/organization/authenticate/")
   public Response authenticate(
       @QueryParam("username") String username,
       @QueryParam("password") String password) {
@@ -55,24 +51,24 @@ public class RESTAuthenticator implements ResourceContainer {
           new BasicCallbackHandler(username, password.toCharArray()));
       loginContext.login();
       loginContext.logout();
-      return Response.Builder.ok().build();
+      return Response.ok().build();
     } catch (Exception e) {
       e.printStackTrace();
-      return Response.Builder.withStatus(HTTPStatus.FORBIDDEN).errorMessage(e.getMessage())
+      return Response.status(HTTPStatus.FORBIDDEN).entity(e.getMessage())
           .build();
     }
   }
   
   
-//  @HTTPMethod("POST")
-//  @URITemplate("/organization/authenticate/")
+//  @POST
+//  @Path("/organization/authenticate/")
 //  public Response isUserLogedIn(@QueryParam("username") String userId ){
 //    IdentityRegistry identityRegistry = (IdentityRegistry) getContainer().getComponentInstanceOfType(
 //        IdentityRegistry.class);
 //    if (identityRegistry.getIdentity(userId) != null)
-//      return Response.Builder.ok().build();
+//      return Response.ok().build();
 //
-//    return Response.Builder.withStatus(HTTPStatus.FORBIDDEN).build();
+//    return Response.withStatus(HTTPStatus.FORBIDDEN).build();
 //
 //  }
 //

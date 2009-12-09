@@ -24,13 +24,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.StreamingOutput;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import junit.framework.TestCase;
-
 import org.exoplatform.common.http.HTTPStatus;
-import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.Membership;
@@ -39,14 +38,10 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
-import org.exoplatform.services.organization.rest.json.UserListBean;
 import org.exoplatform.services.organization.rest.xml.RESTOrganizationServiceXMLImpl;
-import org.exoplatform.services.rest.MultivaluedMetadata;
-import org.exoplatform.services.rest.Request;
-import org.exoplatform.services.rest.ResourceDispatcher;
-import org.exoplatform.services.rest.ResourceIdentifier;
-import org.exoplatform.services.rest.Response;
-import org.exoplatform.services.rest.transformer.SerializableEntity;
+import org.exoplatform.services.rest.impl.ContainerResponse;
+import org.exoplatform.services.rest.impl.MultivaluedMapImpl;
+import org.exoplatform.services.rest.tools.ByteArrayContainerResponseWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -58,22 +53,22 @@ import org.w3c.dom.NodeList;
  * volodymyr.krasnikov@exoplatform.com.ua
  */
 
-public class XMLResponseOrgserviceTest extends TestCase {
+public class XMLResponseOrgserviceTest extends AbstractResourceTest {
 
-  StandaloneContainer             container;
+  //StandaloneContainer             container;
 
   OrganizationService             orgService;
 
   RESTOrganizationServiceXMLImpl xmlOrgService;
 
-  ResourceDispatcher              dispatcher;
+  //ResourceDispatcher              dispatcher;
 
   static final String             baseURI = "http://localhost:8080/rest/";
 
-  protected void setUp() throws Exception {
+  public void setUp() throws Exception {
     super.setUp();
     
-    String containerConf = XMLResponseOrgserviceTest.class.getResource("/conf/standalone/test-configuration.xml").toString();
+    /*String containerConf = XMLResponseOrgserviceTest.class.getResource("/conf/standalone/test-configuration.xml").toString();
     
     StandaloneContainer.setConfigurationURL(containerConf);
     container = StandaloneContainer.getInstance();
@@ -83,11 +78,11 @@ public class XMLResponseOrgserviceTest extends TestCase {
         .getComponentInstanceOfType(RESTOrganizationServiceXMLImpl.class);
 
     dispatcher = (ResourceDispatcher) container
-        .getComponentInstanceOfType(ResourceDispatcher.class);
+        .getComponentInstanceOfType(ResourceDispatcher.class);*/
 
   }
 
-  protected void tearDown() throws Exception {
+  public void tearDown() throws Exception {
     super.tearDown();
   }
 
@@ -103,30 +98,32 @@ public class XMLResponseOrgserviceTest extends TestCase {
 
     MembershipHandler hMembership = orgService.getMembershipHandler();
 
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();
+    /*MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     // admin - user from DummyOrganizationService
     String username = "admin";
 
-    qp.putSingle("username", username);
+    h.putSingle("username", username);
 
     String extURI = "/organization/xml/membership/view-all/";
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
 
-    final SerializableEntity entry = (SerializableEntity)response.getEntity();
+    final StreamingOutput entry = (StreamingOutput)response.getEntity();
     final PipedOutputStream po = new PipedOutputStream();
     final PipedInputStream pi = new PipedInputStream(po);
     new Thread(){
       @Override
       public void run() {
         try {
-          entry.writeObject(po);
+          entry.write(po);
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -261,33 +258,36 @@ public class XMLResponseOrgserviceTest extends TestCase {
 
     UserHandler hUser = orgService.getUserHandler();
 
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();
+    /*MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     // admin - user from DummyOrganizationService
     String username = "admin";
 
-    qp.putSingle("username", username);
+    h.putSingle("username", username);
 
     Integer from = 0, to = 5;
 
     String extURI = String.format("/organization/xml/user/view-from-to/%s/%s/", from.toString(),
         to.toString());
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "POST", mv, qp);
+    
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "POST", mv, qp);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
     
-    final SerializableEntity entry = (SerializableEntity)response.getEntity();
+    final StreamingOutput entry = (StreamingOutput)response.getEntity();
     final PipedOutputStream po = new PipedOutputStream();
     final PipedInputStream pi = new PipedInputStream(po);
     new Thread(){
       @Override
       public void run() {
         try {
-          entry.writeObject(po);
+          entry.write(po);
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -320,29 +320,31 @@ public class XMLResponseOrgserviceTest extends TestCase {
 
   public void testGetAllGroup() throws Exception {
 
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();
+    /*MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
 
     String group_exclude = "";
-    qp.putSingle("filter", group_exclude);
+    h.putSingle("filter", group_exclude);
 
     String extURI = "/organization/xml/group/filter/";
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
     
-    final SerializableEntity entry = (SerializableEntity)response.getEntity();
+    final StreamingOutput entry = (StreamingOutput)response.getEntity();
     final PipedOutputStream po = new PipedOutputStream();
     final PipedInputStream pi = new PipedInputStream(po);
     new Thread(){
       @Override
       public void run() {
         try {
-          entry.writeObject(po);
+          entry.write(po);
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -378,27 +380,29 @@ public class XMLResponseOrgserviceTest extends TestCase {
   }
 
   public void testGetGroup() throws Exception {
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();
+    /*MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
 
     String group_id = "/admin";
     String extURI = "/organization/xml/group/info/" + "admin";
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
     
-    final SerializableEntity entry = (SerializableEntity)response.getEntity();
+    final StreamingOutput entry = (StreamingOutput)response.getEntity();
     final PipedOutputStream po = new PipedOutputStream();
     final PipedInputStream pi = new PipedInputStream(po);
     new Thread(){
       @Override
       public void run() {
         try {
-          entry.writeObject(po);
+          entry.write(po);
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -432,25 +436,26 @@ public class XMLResponseOrgserviceTest extends TestCase {
   }
 
   public void testGetGroupsCount() throws Exception {
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-
+    //MultivaluedMetadata mv = new MultivaluedMetadata();
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String extURI = "/organization/xml/group/count/";
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
 
-    final SerializableEntity entry = (SerializableEntity)response.getEntity();
+    final StreamingOutput entry = (StreamingOutput)response.getEntity();
     final PipedOutputStream po = new PipedOutputStream();
     final PipedInputStream pi = new PipedInputStream(po);
     new Thread(){
       @Override
       public void run() {
         try {
-          entry.writeObject(po);
+          entry.write(po);
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -476,29 +481,30 @@ public class XMLResponseOrgserviceTest extends TestCase {
   }
 
   public void testGetGroupsOfUser() throws Exception {
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();
-
+    /*MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String username = "admin";
-    qp.putSingle("username", username);
+    h.putSingle("username", username);
 
     String extURI = "/organization/xml/group/groups-for-user/";
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
     
-    final SerializableEntity entry = (SerializableEntity)response.getEntity();
+    final StreamingOutput entry = (StreamingOutput)response.getEntity();
     final PipedOutputStream po = new PipedOutputStream();
     final PipedInputStream pi = new PipedInputStream(po);
     new Thread(){
       @Override
       public void run() {
         try {
-          entry.writeObject(po);
+          entry.write(po);
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -526,27 +532,28 @@ public class XMLResponseOrgserviceTest extends TestCase {
   }
 
   public void testGetUser() throws Exception {
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-
+    //MultivaluedMetadata mv = new MultivaluedMetadata();
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String username = "admin";
 
     String extURI = String.format("/organization/xml/user/info/%s/", username);
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
     
-    final SerializableEntity entry = (SerializableEntity)response.getEntity();
+    final StreamingOutput entry = (StreamingOutput)response.getEntity();
     final PipedOutputStream po = new PipedOutputStream();
     final PipedInputStream pi = new PipedInputStream(po);
     new Thread(){
       @Override
       public void run() {
         try {
-          entry.writeObject(po);
+          entry.write(po);
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -576,25 +583,26 @@ public class XMLResponseOrgserviceTest extends TestCase {
   
 
   public void testGetUsers() throws Exception {
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-
+    //MultivaluedMetadata mv = new MultivaluedMetadata();
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String extURI = "/organization/xml/users/";
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
     
-    final SerializableEntity entry = (SerializableEntity)response.getEntity();
+    final StreamingOutput entry = (StreamingOutput)response.getEntity();
     final PipedOutputStream po = new PipedOutputStream();
     final PipedInputStream pi = new PipedInputStream(po);
     new Thread(){
       @Override
       public void run() {
         try {
-          entry.writeObject(po);
+          entry.write(po);
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -621,25 +629,26 @@ public class XMLResponseOrgserviceTest extends TestCase {
   }
 
   public void testGetUsersCount() throws Exception {
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-
+    //MultivaluedMetadata mv = new MultivaluedMetadata();
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String extURI = "/organization/xml/user/count/";
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
     
-    final SerializableEntity entry = (SerializableEntity)response.getEntity();
+    final StreamingOutput entry = (StreamingOutput)response.getEntity();
     final PipedOutputStream po = new PipedOutputStream();
     final PipedInputStream pi = new PipedInputStream(po);
     new Thread(){
       @Override
       public void run() {
         try {
-          entry.writeObject(po);
+          entry.write(po);
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -666,26 +675,27 @@ public class XMLResponseOrgserviceTest extends TestCase {
   }
 
   public void testUsersRange() throws Exception {
-    MultivaluedMetadata mv = new MultivaluedMetadata();
-
+    //MultivaluedMetadata mv = new MultivaluedMetadata();
+	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     Integer offset = 0, amount = 5;
     String extURI = String.format("/organization/xml/user/view-range/%s/%s/", offset, amount);
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
 
     Response response = null;
-    response = dispatcher.dispatch(request);
+    response = dispatcher.dispatch(request);*/
+    ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
     
-    final SerializableEntity entry = (SerializableEntity)response.getEntity();
+    final StreamingOutput entry = (StreamingOutput)response.getEntity();
     final PipedOutputStream po = new PipedOutputStream();
     final PipedInputStream pi = new PipedInputStream(po);
     new Thread(){
       @Override
       public void run() {
         try {
-          entry.writeObject(po);
+          entry.write(po);
         } catch (IOException e) {
           e.printStackTrace();
         }

@@ -19,10 +19,10 @@ package org.exoplatform.services.organization.rest.xml;
 
 import java.io.IOException;
 import java.io.OutputStream;
+
+import javax.ws.rs.core.StreamingOutput;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
-
-import org.exoplatform.services.rest.transformer.SerializableEntity;
 
 /**
  * Build XML document that content information about count of users or groups on system.
@@ -31,7 +31,7 @@ import org.exoplatform.services.rest.transformer.SerializableEntity;
  * @version $Id: $
  */
 
-public class CountXMLEntity implements SerializableEntity {
+public class CountXMLEntity implements StreamingOutput {
 
   private final int count_;
   private final String typeRes_;
@@ -46,7 +46,7 @@ public class CountXMLEntity implements SerializableEntity {
    * 
    * @see org.exoplatform.services.rest.transformer.SerializableEntity#writeObject(java.io.OutputStream)
    */
-  public void writeObject(OutputStream _out) throws IOException {
+  public void write(OutputStream _out) throws IOException {
     try {
       XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
       outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, Boolean.TRUE);

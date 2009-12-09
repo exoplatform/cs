@@ -21,17 +21,17 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
 
+import javax.ws.rs.core.StreamingOutput;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.exoplatform.services.organization.MembershipType;
-import org.exoplatform.services.rest.transformer.SerializableEntity;
 
 /**
  * @author <a href="mailto:andrew00x@gmail.com">Andrey Parfonov</a>
  * @version $Id: $
  */
-public class MembershipTypesListXMLEntity implements SerializableEntity {
+public class MembershipTypesListXMLEntity implements StreamingOutput {
   
   private final Collection<MembershipType> membershipTypes_;
   
@@ -39,7 +39,7 @@ public class MembershipTypesListXMLEntity implements SerializableEntity {
     membershipTypes_ = membershipTypes;
   }
 
-  public void writeObject(final OutputStream out) throws IOException {
+  public void write(final OutputStream out) throws IOException {
     try {
       XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
       outputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, Boolean.TRUE);
