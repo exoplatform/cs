@@ -1,28 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.exoplatform.tool</groupId>
-    <artifactId>eXoParentPom</artifactId>
-    <version>trunk</version>
+    <groupId>org.exoplatform.cs</groupId>
+    <artifactId>cs</artifactId>
+    <version>1.3.3-SNAPSHOT</version>
   </parent>
   <groupId>org.exoplatform.cs</groupId>
-  <version>1.3.3-SNAPSHOT</version>
-  <artifactId>test-calendar-selenium</artifactId>
-  <repositories>
-    <repository>
-      <id>openqa.org</id>
-      <name>Openqa Release Repository</name>
-      <url>http://archiva.openqa.org/repository/releases</url>
-      <layout>default</layout>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
-  </repositories>
+  <artifactId>exo.cs.test-calendar-selenium</artifactId>
+  <name>eXo CS Calendar Selenium Tests</name>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

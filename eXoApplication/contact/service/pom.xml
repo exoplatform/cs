@@ -1,4 +1,4 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>cs</artifactId>
@@ -7,11 +7,8 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.cs.eXoApplication.contact.service</artifactId>
-  <version>${org.exoplatform.cs.version}</version>
   <packaging>jar</packaging>
-  <name>eXo contact service</name>
-  <url>http://www.exoplatform.org</url>
-  <description>eXo contact service</description>
+  <name>eXo CS Contact Service</name>
   
   <dependencies>   
     <dependency>
@@ -48,7 +45,7 @@
 		<dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
-      <version>${org.exoplatform.cs.version}</version>            
+      <version>1.3.3-SNAPSHOT</version>            
     </dependency>
     
     <dependency>

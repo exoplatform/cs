@@ -1,4 +1,4 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>cs</artifactId>
@@ -6,9 +6,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.cs.eXoApplication.chat.service</artifactId>
-  <version>${org.exoplatform.cs.version}</version>
-  <name>eXo Chat Service</name>
-  <description></description>
+  <name>eXo CS Chat Service</name>
 
   <dependencies>
     <dependency>
@@ -68,16 +66,4 @@
       <scope>compile</scope>
     </dependency>
   </dependencies>
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <configuration>
-           <configLocation>${exo.projects.directory.config}/exo-checkstyle-checker.xml</configLocation>
-           <suppressionsLocation>${exo.projects.directory.config}/exo-checkstyle-suppressions.xml</suppressionsLocation>
-        </configuration>
-      </plugin>
-  </plugins>
-</reporting>
 </project>

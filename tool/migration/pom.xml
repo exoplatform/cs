@@ -1,4 +1,4 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
   <parent>
 	<groupId>org.exoplatform.cs</groupId>
 	<artifactId>cs</artifactId>
@@ -7,10 +7,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.cs.tool.migration</artifactId>
-  <packaging>jar</packaging>
-  <version>${org.exoplatform.cs.version}</version>
-  <name>exo cs migration tool</name>
-  <url>http://www.exoplatform.org</url>
+  <name>eXo CS migration tool</name>
   <description>CS migration tool to update cs versions</description>
 
   <dependencies>

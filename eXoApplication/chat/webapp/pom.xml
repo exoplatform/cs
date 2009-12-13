@@ -1,4 +1,4 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>cs</artifactId>
@@ -8,8 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.cs.eXoApplication.chat.webapp</artifactId>
   <packaging>war</packaging> 
-  <version>${org.exoplatform.cs.version}</version>
-  <name>eXo Chat Web Application</name>
+  <name>eXo CS Chat Web Application</name>
   
   <dependencies>
     <dependency>

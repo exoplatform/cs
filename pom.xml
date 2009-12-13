@@ -1,6 +1,5 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
 	<description>eXo Collaboration Suite is made of four applications:
-
     * eXo Address Book: is an integrated address book and contacts manager. It not only handles private and public contacts in your organization but also keep precious information such as address, telephone, fax, etc. Furthermore, we also support VCard format, import/export in order to consolidate your existing contacts into a single place.
     * eXo Calendar: is a personal and shared agenda. It not only helps you schedule your time more quickly and conveniently but also manages your shared and public agendas in the organization efficiently. Moreover, eXo Calendar also facilitates iCal support that helps you easily exchange event/task information with other applications.
     * eXo Mail: is a full featured email client. It is built with a variety of features designed to make your e-mail experience more productive.
@@ -10,8 +9,8 @@
 
   <parent>
     <groupId>org.exoplatform</groupId>
-    <artifactId>parent</artifactId>
-    <version>1.1.1</version>
+    <artifactId>exo.parent</artifactId>
+    <version>6</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -20,6 +19,20 @@
   <name>eXo Collaboration Suite</name>
   <version>1.3.3-SNAPSHOT</version>
   <packaging>pom</packaging>
+
+  <properties>
+    <org.exoplatform.kernel.version>2.0.8</org.exoplatform.kernel.version>
+    <org.exoplatform.core.version>2.1.6</org.exoplatform.core.version>
+    <org.exoplatform.ws.version>1.3.4</org.exoplatform.ws.version>
+    <org.exoplatform.jcr.version>1.10.5.1</org.exoplatform.jcr.version>
+    <org.exoplatform.pc.version>2.0.7</org.exoplatform.pc.version>
+    <org.exoplatform.portal.version>2.5.6.2</org.exoplatform.portal.version>
+    <org.exoplatform.webos.version>1.5.3.1</org.exoplatform.webos.version>
+
+    <!-- default test configuration -->
+    <maven.test.skip>true</maven.test.skip>
+    <maven.test.failure.ignore>true</maven.test.failure.ignore>
+  </properties>
 
   <modules>
     <module>web/csportal</module>
@@ -90,13 +103,7 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration> <source>1.5</source><target>1.5</target><optimize>true</optimize></configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>2.0.2</version>
         <configuration>
           <archiveClasses>false</archiveClasses>
           <warSourceExcludes>WEB-INF/lib/*.jar</warSourceExcludes>
@@ -106,9 +113,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <skip>${test.skip}</skip>
-          <useFile>false</useFile>
-          <forkMode>pertest</forkMode>
           <includes>
             <include implementation="java.lang.String">**/${test.classes}*.java</include>
           </includes>
@@ -145,27 +149,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>default</id>  
-      <activation>
-        <property><name>default</name></property>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <org.exoplatform.kernel.version>2.0.8</org.exoplatform.kernel.version>
-        <org.exoplatform.core.version>2.1.6</org.exoplatform.core.version>
-	<org.exoplatform.ws.version>1.3.4</org.exoplatform.ws.version>
-        <org.exoplatform.jcr.version>1.10.5.1</org.exoplatform.jcr.version>
-        <org.exoplatform.pc.version>2.0.7</org.exoplatform.pc.version>
-        <org.exoplatform.portal.version>2.5.6.2</org.exoplatform.portal.version>
-        <org.exoplatform.webos.version>1.5.3.1</org.exoplatform.webos.version>
-        <org.exoplatform.tool.version>trunk</org.exoplatform.tool.version>
-        <org.exoplatform.cs.version>1.3.3-SNAPSHOT</org.exoplatform.cs.version>
-        <test.classes>Test</test.classes>
-        <test.skip>true</test.skip>
-      </properties>
-    </profile>
-  </profiles>
 </project>
