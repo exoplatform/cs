@@ -1224,14 +1224,11 @@
                                                 <span></span>
                                             </div>
                                             <div class="SendFileIcon" title="<%=_ctx.appRes("UIChatPortlet.label.sendFile");%>">
-                                            	<span></span>
-                                            </div>
-                                            <div class="SendFileLabel" title="<%=_ctx.appRes("UIChatPortlet.label.sendFile");%>">
-                                            	<span><%=_ctx.appRes("UIChatPortlet.label.sendFile");%></span>
-                                            </div>
- 																						<form method="POST" enctype="multipart/form-data" class="ChatSendFileForm" target="chatFileExchangeIframe" action="#">
-  																						<input type="file" size="1" class="InputSendFile" name="uploadfile" onchange="eXo.communication.chat.webui.UIChatWindow.sendFile(this, event);" />
- 																						</form>
+											 <form method="POST" enctype="multipart/form-data" class="ChatSendFileForm" target="chatFileExchangeIframe" action="#">
+											  <input type="file" size="1" class="InputSendFile"  name="uploadfile" onchange="eXo.communication.chat.webui.UIChatWindow.sendFile(this, event);" />
+											  <span class="SendFileLabel"><%=_ctx.appRes("UIChatPortlet.label.sendFile");%></span>
+											 </form>
+											</div>
                                             <div class="ClearLeft">
                                                 <span></span>
                                             </div>

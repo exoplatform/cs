@@ -701,7 +701,6 @@ form {
 
 .UIConversation .Buttons .Actionbar .SendFileIcon {
   background: url('DefaultSkin/skinIcons/SendFile.gif') no-repeat;
-  width: 25px;
   height: 25px;
   float: left;
   cursor: pointer;
@@ -709,7 +708,9 @@ form {
 }
 
 .UIConversation .Buttons .Actionbar .SendFileLabel {
-  float: left;
+  position: relative;
+  left: -60px;
+  z-index: 0;
 }
 .UIConversation .Buttons .Actionbar .ChatSendFileForm {
 	float: left;
@@ -720,7 +721,9 @@ form {
 	filter: alpha(opacity=0);
 	cursor: pointer;
 	position: relative;
-	left: -65px;
+	width: 85px;
+	z-index: 1;
+	
 }
 
 .UIConversation .Buttons .Actionbar .Icon {
