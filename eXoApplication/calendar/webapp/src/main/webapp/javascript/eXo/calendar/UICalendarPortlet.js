@@ -2623,7 +2623,7 @@ CalendarScrollManager.prototype.initScroll = function() {
   if(!uiNav.scrollManagerLoaded) uiNav.load() ;
   var elements = uiNav.scrollMgr.elements ;
   uiNav.scrollMgr.init() ;
-  uiNav.scrollMgr.checkAvailableSpace() ;
+  uiNav.scrollMgr.csCheckAvailableSpace() ;
   uiNav.scrollMgr.renderElements() ;
 } ;
 
@@ -2635,6 +2635,26 @@ ScrollManager.prototype.loadItems = function(elementClass, clean) {
 		this.elements.push(items[i]);
 	}
 };
+
+ScrollManager.prototype.csCheckAvailableSpace = function(maxSpace) { // in pixels
+	if (!maxSpace) maxSpace = this.getElementSpace(this.mainContainer) - this.getElementSpace(this.arrowsContainer);
+	var elementsSpace = 0;
+	var margin = 0;
+	var length =  this.elements.length;
+	for (var i = 0; i < length; i++) {
+		elementsSpace += this.getElementSpace(this.elements[i]);
+		//dynamic margin;
+		if (i+1 < length) margin = this.getElementSpace(this.elements[i+1]) / 3;
+		else margin = this.margin;
+		if (elementsSpace + margin < maxSpace) { // If the tab fits in the available space
+			this.elements[i].isVisible = true;
+			this.lastVisibleIndex = i;
+		} else { // If the available space is full
+			this.elements[i].isVisible = false;
+		}
+	}
+};
+
 
 eXo.calendar.CalendarScrollManager = new CalendarScrollManager();
 
