@@ -852,5 +852,64 @@
 	background: url('icons/CalendarIcons.gif') no-repeat right -1891px; /* orientation=rt */
 }
 
+/* Scroll chat window */
+
+.UICalendarPortlet .ScrollButtons {
+  float: right;
+  padding: 4px;
+  display: block;
+}
+
+.UICalendarPortlet .ScrollLeftButton {
+  cursor: pointer;
+  background: url('icons/ScollArrow.gif') no-repeat left 0px;
+  width: 17px;
+  height: 17px;
+  padding-left: 17px;
+  margin: 0px 5px;
+}
+
+.UICalendarPortlet .ScrollRightButton {
+  cursor: pointer;
+  background: url('icons/ScollArrow.gif') no-repeat left -18px;
+  width: 17px;
+  height: 17px;
+  margin: 0px 5px;
+}
+
+.UICalendarPortlet .DisableScrollLeftButton {
+  cursor: pointer;
+  background: url('icons/ScollArrow.gif') no-repeat left -36px;
+  width: 17px;
+  height: 17px;
+  padding-left: 17px;
+  margin: 0px 5px;
+}
+
+.UICalendarPortlet .DisableScrollRightButton { 
+  cursor: pointer;
+  background: url('icons/ScollArrow.gif') no-repeat left -54px;
+  width: 17px;
+  height: 17px;
+  margin: 0px 4px;
+}
+
+.UICalendarPortlet .HighlightScrollLeftButton {
+  cursor: pointer;
+  background: url('icons/ScollArrow.gif') no-repeat left -72px;
+  width: 17px;
+  height: 17px;
+  padding-left: 17px;
+  margin: 0px 5px;
+}
+
+.UICalendarPortlet .HighlightScrollRightButton {
+  cursor: pointer;
+  background: url('icons/ScollArrow.gif') no-repeat left -90px;
+  width: 17px;
+  height: 17px;
+  margin: 0px 4px;
+}	
+
 /***************************END UIRightClickPopupMenu*********************/
 /*********************************************************************/
