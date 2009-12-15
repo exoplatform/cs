@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<configuration>  
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
+	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+	
 	<component>
 		<key>org.exoplatform.services.mail.MailService</key>
 		<type>org.exoplatform.services.mail.impl.MailServiceImpl</type>
@@ -105,318 +107,68 @@
     </component-plugin>
     
   </external-component-plugins>   
+  <!--<component>
+    <key>org.exoplatform.content.service.ContentDAO</key>
+    <type>org.exoplatform.content.service.impl.ContentDAOImpl</type>     
+  </component>
+    
+  <external-component-plugins>  
+    <target-component>org.exoplatform.content.service.ContentDAO</target-component>      
+    <component-plugin>
+      <name>content.new.user.listener</name>
+      <set-method>initListener</set-method>
+      <type>org.exoplatform.content.service.NewContentNavListener</type>
+      <description>this listener create the content navigation configuration for the new user</description>
+      <init-params>
+        <value-param>
+          <name>check.user</name>
+          <description>The check user for checking db is empty or not</description>
+          <value>root</value>          
+        </value-param>
+        <object-param>
+          <name>configuration</name>
+          <description>description</description>
+          <object type="org.exoplatform.portal.config.NewPortalConfig">
+            <field  name="predefinedOwner">
+              <collection type="java.util.HashSet">                
+                <value><string>root</string></value>
+                <value><string>marry</string></value>
+                <value><string>john</string></value>
+                <value><string>demo</string></value>
+              </collection>
+            </field>
+            <field  name="ownerType"><string>user</string></field>
+            <field  name="templateOwner"><string>template</string></field>
+            <field  name="templateLocation"><string>war:/conf/portal</string></field> 
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin> 
+    <component-plugin>
+      <name>rssreader.listener</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.content.service.RSSContentPlugin</type>
+      <description>rss reader plugin</description>     
+    </component-plugin>
+    
+    <component-plugin>
+      <name>description.listener</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.content.service.DescriptionPlugin</type>
+      <description>Description plugin</description>     
+    </component-plugin>
+  </external-component-plugins>
   
-  <!--<external-component-plugins>
-  	<target-component>org.exoplatform.services.organization.OrganizationService</target-component>
-	  <component-plugin>
-	    <name>contact.new.user.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.contact.service.impl.NewUserListener</type>
-	    <description>description</description>
-	  </component-plugin>
-	  <component-plugin>
-	    <name>contact.new.membership.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.contact.service.impl.NewMembershipListener</type>
-	    <description>description</description>	     
-	  </component-plugin>
-	  
-	  <component-plugin>
-	    <name>calendar.new.user.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.calendar.service.impl.NewUserListener</type>
-	    <description>description</description>
-	    <init-params>
-        <value-param>
-        	<name>defaultEventCategories</name>
-        	<value>Meeting,Calls,Clients,Holiday,Anniversary</value> Multi value, use coma (,) to split values
-        </value-param>
-        <value-param>
-        	<name>defaultCalendarCategory</name>
-        	<value>My group</value> Single value
-        </value-param>
-        <value-param>
-        	<name>defaultCalendar</name>
-        	<value>Default</value> Multi value, use coma (,) to split values
-        </value-param>
-        Params for default calendar setting
-        <value-param>
-         <name>viewType</name>
-         <value>1</value> DAY_VIEW = "0" ; WEEK_VIEW = "1" ; MONTH_VIEW = "2" ; YEAR_VIEW = "3" ; LIST_VIEW = "4" ; SCHEDULE_VIEW = "5" ; WORKING_VIEW = "6" ;
-        </value-param>
-        
-        <value-param>
-         <name>timeInterval</name>
-         <value>15</value> in minutes 
-        </value-param>
-        
-        <value-param>
-         <name>weekStartOn</name>
-         <value>2</value>SUNDAY = "1" ; MONDAY = "2" ; TUESDAY = "3" ; WEDNESDAY = "4" ; THURSDAY = "5" ; FRIDAY = "6" ;SATURDAY = "7" ;
-        </value-param>
-        
-        <value-param>
-         <name>dateFormat</name>
-         <value>MM/dd/yyyy</value>
-        </value-param>
-        
-        <value-param>
-         <name>timeFormat</name>
-         <value>HH:mm</value>  HH:mm/hh:mm a 
-        </value-param>
-        
-        <value-param>
-         <name>localeId</name>
-         <value>BEL</value> see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html 
-        </value-param>
-        
-         <value-param>
-         <name>timezoneId</name>
-         <value>Europe/Brussels</value> see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids 
-        </value-param>
-        
-         <value-param>
-         <name>baseUrlForRss</name>
-         <value></value>
-        </value-param>
-        
-         <value-param>
-         <name>isShowWorkingTime</name>
-         <value>false</value> boolean true/false 
-        </value-param>
-        
-         <value-param>
-         <name>workingTimeBegin</name>
-         <value>08:00</value>  
-        </value-param>
-        
-         <value-param>
-	         <name>workingTimeEnd</name>
-	         <value>18:00</value>  
-        </value-param>
-        
-        <values-param>
-	        <name>ignoredUsers</name>
-	        <description>Definition users to ignore create default calendar</description>
-	         
-	        <value>demo</value> 
-	        <value>marry</value>
-	         
-        </values-param>
-        
-        
-	    </init-params>    
-	  </component-plugin>
-	  
---><!--	  <component-plugin>-->
-<!--	    <name>calendar.new.group.event.listener</name>-->
-<!--	    <set-method>addListenerPlugin</set-method>-->
-<!--	    <type>org.exoplatform.calendar.service.impl.NewGroupListener</type>-->
-<!--	    <description>description</description>-->
-<!--	    <init-params>-->
-<!--        <value-param>-->
-<!--        	<name>defaultEditPermission</name>-->
-<!--        	<value>*.*</value> Multi value membership, use coma (,) to split values-->
-<!--        </value-param>-->
-<!--        <value-param>-->
-<!--        	<name>defaultViewPermission</name>-->
-<!--        	<value>*.*</value> Multi value membership, use coma (,) to split values-->
-<!--        </value-param>-->
-<!--        -->
-<!--        <value-param>-->
-<!--	      	<name>defaultLocale</name>-->
-<!--	        <value>BEL</value> see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
-<!--      	</value-param>-->
-<!--      -->
-<!--      	<value-param>-->
-<!--	      	<name>defaultTimeZone</name>-->
-<!--	      	<value>Europe/Brussels</value> see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
-<!--      	</value-param>	-->
-<!--      -->
-<!--        <values-param>-->
-<!--	        <name>ignoredGroups</name>-->
-<!--	        <description>Definition group to ignore create default calendar</description>-->
-<!--	         -->
-<!--	        <value>/platform/guests</value>-->
-<!--	         -->
-<!--        </values-param>-->
-<!--        -->
-<!--        -->
-<!--	    </init-params>    -->
-<!--	  </component-plugin>-->
-	  
-	  <!--component-plugin>
-	    <name>mail.new.user.event.listener</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.mail.service.impl.NewUserListener</type>
-	    <description>description</description>
-	    <init-params>
-			<value-param>
-				<name>protocol</name>
-				<value>imap</value>
-			</value-param>
-			<value-param>
-				<name>ssl</name>
-				<value>false</value>
-			</value-param>
-			<value-param>
-				<name>incomingServer</name>
-				<value>in</value>
-			</value-param>
-			<value-param>
-				<name>incomingPort</name>
-				<value>143</value>
-			</value-param>
-			<value-param>
-				<name>incomingFolder</name>
-				<value>Inbox</value>
-			</value-param>
-			<value-param>
-				<name>outgoingServer</name>
-				<value>out</value>
-			</value-param>
-			<value-param>
-				<name>outgoingPort</name>
-				<value>25</value>
-			</value-param>
-	    </init-params>    
-	  </component-plugin-->
-   
-  <!-- 
-	<external-component-plugins>
-	  <target-component>org.exoplatform.calendar.service.CalendarService</target-component>
-	  <component-plugin>
-	    <name>calendar.update.version</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.calendar.service.impl.UpdateCalendarVersion</type>
-	    <description>Update calendar data</description>	    
-	    <init-params>
-				<object-param>
-					<name>cs.calendar.update.object</name>
-					<description>cs update obj param</description>
-					<object type="org.exoplatform.calendar.service.CsObjectParam">
-						<field name="nodeTypes">
-							<collection type="java.util.ArrayList">
-								<value>
-									<object type="org.exoplatform.calendar.service.CsNodeTypeMapping">
-										<field name="nodeTypeName">
-											<string>exo:reminder</string>
-										</field>
-										<field name="updatedProperties">
-											<collection type="java.util.ArrayList">
-												<value>
-													<object type="org.exoplatform.calendar.service.CsPropertyMapping">
-														<field name="propertyName"><string>exo:owner</string></field>
-														<field name="replaceName"><string>exo:creator</string></field>
-														<field name="defaultValue"><string></string></field>
-													</object>
-												</value>
-											</collection>
-										</field>
-									</object>
-								</value>
-								<value>
-									<object type="org.exoplatform.calendar.service.CsNodeTypeMapping">
-										<field name="nodeTypeName">
-											<string>exo:calendarEvent</string>
-										</field>
-										<field name="addedProperties">
-											<collection type="java.util.ArrayList">
-												<value>
-													<object type="org.exoplatform.calendar.service.CsPropertyMapping">
-														<field name="propertyName"><string>exo:eventcategoryName</string></field>
-														<field name="replaceName"><string></string></field>
-														<field name="defaultValue"><string></string></field>
-													</object>
-												</value>
-											</collection>
-										</field>
-										<field name="removedProperties">
-											<collection type="java.util.ArrayList">
-											</collection>
-										</field>
-										<field name="updatedProperties">
-											<collection type="java.util.ArrayList">
-											</collection>
-										</field>
-									</object>
-								</value>	
-							</collection>
-						</field>
-					</object>
-				</object-param>
-			</init-params>
-	  </component-plugin>
-  </external-component-plugins>   
- -->
-  <!-- update mail data 
   <external-component-plugins>
-	  <target-component>org.exoplatform.mail.service.MailService</target-component>
-	  <component-plugin>
-	    <name>calendar.update.version</name>
-	    <set-method>addListenerPlugin</set-method>
-	    <type>org.exoplatform.mail.service.MailUpdateStorage</type>
-	    <description>Update mail data</description>	    
-	    <init-params>
-				<object-param>
-					<name>cs.mail.update.object</name>
-					<description>cs update obj param</description>
-					<object type="org.exoplatform.mail.service.CsObjectParam">
-						<field name="nodeTypes">
-							<collection type="java.util.ArrayList">
-								<value>
-									<object type="org.exoplatform.mail.service.CsNodeTypeMapping">
-										<field name="nodeTypeName">
-											<string>exo:account</string>
-										</field>
-										<field name="addedProperties">
-											<collection type="java.util.ArrayList">
-												<value>
-													<object type="org.exoplatform.mail.service.CsPropertyMapping">
-														<field name="propertyName"><string>exo:checkAll</string></field>
-														<field name="replaceName"><string></string></field>
-														<field name="defaultValue"><string>true</string></field>
-													</object>
-												</value>
-												<value>
-													<object type="org.exoplatform.mail.service.CsPropertyMapping">
-														<field name="propertyName"><string>exo:checkFromDate</string></field>
-														<field name="replaceName"><string></string></field>
-														<field name="defaultValue"><string></string></field>
-													</object>
-												</value>
-											</collection>
-										</field>
-									</object>
-								</value>
-								<value>				
-									<object type="org.exoplatform.mail.service.CsNodeTypeMapping">
-										<field name="nodeTypeName">
-											<string>exo:message</string>
-										</field>
-										<field name="addedProperties">
-											<collection type="java.util.ArrayList">
-												<value>
-													<object type="org.exoplatform.mail.service.CsPropertyMapping">
-														<field name="propertyName"><string>exo:isRoot</string></field>
-														<field name="replaceName"><string></string></field>
-														<field name="defaultValue"><string>true</string></field>
-													</object>
-												</value>
-											</collection>
-										</field>
-									</object>
-								</value>
+    <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
+    
+    <component-plugin> 
+      <name>user.content.nav.listener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.content.service.UserContentNavListener</type>
+    </component-plugin>   
+  </external-component-plugins>
  
-							</collection>
-						</field>
-					</object>
-				</object-param>
-			</init-params>
-	  </component-plugin>
-  </external-component-plugins>   
-  -->
-  
     <external-component-plugins>
     	<target-component>org.exoplatform.services.listener.ListenerService</target-component>
    		<component-plugin>   
@@ -427,4 +179,4 @@
     	</component-plugin>      
   	</external-component-plugins>
   
-</configuration>
+--></configuration>
