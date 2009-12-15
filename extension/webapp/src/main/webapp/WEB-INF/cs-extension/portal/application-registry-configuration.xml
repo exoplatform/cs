@@ -6,17 +6,17 @@
   <external-component-plugins>
     <target-component>org.exoplatform.application.registry.ApplicationRegistryService</target-component>     
 	    <component-plugin>
-	      <name>ks.portlets.registry</name>
+	      <name>cs.portlets.registry</name>
 	      <set-method>initListener</set-method>
 	      <type>org.exoplatform.application.registry.ApplicationCategoriesPlugins</type>
 	      <description>this listener init the portlets are registered in PortletRegister</description>
 	      <init-params>
 	        <object-param>
-	          <name>KnowledgeSuite</name>
+	          <name>CollaborationSuite</name>
 	          <description>description</description>
 	          <object type="org.exoplatform.application.registry.ApplicationCategory">
 	            <field  name="name"><string>CollaborationSuite</string></field>
-	            <field  name="displayName"><string>CollaborationSuite<</string></field> 
+	            <field  name="displayName"><string>CollaborationSuite</string></field> 
 	            <field  name="description"><string>CS Portlets</string></field> 
 	            <field  name="applications">
 		            <collection type="java.util.ArrayList">
@@ -24,7 +24,7 @@
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>CollaborationSuite</string></field>
 		                  <field name="applicationName"><string>CalendarPorlet</string></field>
-						          <field name="displayName"><string>Calendar porlet/string></field>
+						          <field name="displayName"><string>Calendar porlet</string></field>
 		                  <field name="applicationType"><string>portlet</string></field>
 		                  <field name="applicationGroup"><string>CollaborationSuite</string></field>                
 		                </object>

@@ -7,9 +7,9 @@
   <import>war:/cs-extension/jcr/jcr-configuration.xml</import> 
 
   <!-- CS data storage tree -->
-  <import>war:/cs-extension/jcr/repository-configuration.xml</import> 
+  <!--<import>war:/cs-extension/jcr/repository-configuration.xml</import> 
   
-  <!-- new apps in registry  -->
+  --><!-- new apps in registry  -->
   <import>war:/cs-extension/portal/application-registry-configuration.xml</import>  
   
   <!-- main CS configuration  -->
