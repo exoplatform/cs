@@ -16,7 +16,8 @@
  */
 package org.exoplatform.services.xmpp.util;
 
-import org.apache.commons.codec.binary.Hex;
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+
 
 /**
  * Created by The eXo Platform SAS.
@@ -27,16 +28,14 @@ import org.apache.commons.codec.binary.Hex;
 public class CodingUtils {
 
   public static String encodeToHex(String string) {
-    Hex hex = new Hex();
     if (string != null)
-     return new String(hex.encode(string.getBytes()));
+     return new String(HexBin.encode(string.getBytes()));
     else return string;
   }
 
   public static String decodeFromHex(String hexstring) {
     try {
-      Hex hex = new Hex();
-      return new String(hex.decode(hexstring.getBytes()));
+      return new String(HexBin.decode(hexstring));
     } catch (Exception e) {
       e.printStackTrace();
       return null;
