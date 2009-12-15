@@ -29,7 +29,10 @@ function getProduct(version) {
   product.addDependencies(portal.web.eXoResources);
 
   product.addDependencies(portal.web.portal);
-    
+  
+  portal.starter = new Project("org.exoplatform.portal", "exo.portal.starter.war", "war", portal.version);
+  portal.starter.deployName = "starter";
+  product.addDependencies(portal.starter);  
   
 
   // cometd (requried for CS)
