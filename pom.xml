@@ -66,6 +66,8 @@
     <module>server/tomcat/patch</module>
     <module>server/jboss/patch</module>
     <module>server/jboss/patch-ear</module>
+    
+    <module>packaging</packaging>
   </modules>
   <issueManagement>
   	<system>JIRA</system>
