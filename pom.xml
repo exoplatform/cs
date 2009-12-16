@@ -21,13 +21,15 @@
   <packaging>pom</packaging>
 
   <properties>
-    <org.exoplatform.kernel.version>2.0.8</org.exoplatform.kernel.version>
-    <org.exoplatform.core.version>2.1.6</org.exoplatform.core.version>
-    <org.exoplatform.ws.version>1.3.4</org.exoplatform.ws.version>
-    <org.exoplatform.jcr.version>1.10.5.1</org.exoplatform.jcr.version>
-    <org.exoplatform.pc.version>2.0.7</org.exoplatform.pc.version>
-    <org.exoplatform.portal.version>2.5.6.2</org.exoplatform.portal.version>
-    <org.exoplatform.webos.version>1.5.3.1</org.exoplatform.webos.version>
+
+    <org.exoplatform.kernel.version>2.0.9-SNAPSHOT</org.exoplatform.kernel.version>
+    <org.exoplatform.core.version>2.1.7-SNAPSHOT</org.exoplatform.core.version>
+    <org.exoplatform.ws.version>1.3.5-SNAPSHOT</org.exoplatform.ws.version>
+    <org.exoplatform.jcr.version>1.10.6-SNAPSHOT</org.exoplatform.jcr.version>
+    <org.exoplatform.pc.version>2.0.8-SNAPSHOT</org.exoplatform.pc.version>
+
+    <org.exoplatform.portal.version>2.5.7-SNAPSHOT</org.exoplatform.portal.version>
+    <org.exoplatform.webos.version>1.5.3-SNAPSHOT</org.exoplatform.webos.version>
 
     <!-- default test configuration -->
     <maven.test.skip>true</maven.test.skip>
