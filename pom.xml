@@ -67,7 +67,7 @@
     <module>server/jboss/patch</module>
     <module>server/jboss/patch-ear</module>
     
-    <module>packaging</packaging>
+    <module>packaging</module>
   </modules>
   <issueManagement>
   	<system>JIRA</system>
