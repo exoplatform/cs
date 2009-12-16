@@ -7,7 +7,7 @@ function getProduct(version) {
   product.name = "eXoPortal" ;
   product.portalwar = "portal.war" ;
   product.codeRepo = "portal" ;//module in modules/portal/module.js
-  product.serverPluginVersion = "${org.exoplatform.portal.version}"; // CHANGED for CS to match portal version. It was ${project.version}
+  product.serverPluginVersion = java.lang.System.getProperty("org.exoplatform.portal.version") ; // CHANGED for CS to match portal version. It was ${project.version}
 
   var kernel = Module.GetModule("kernel") ;
   var core = Module.GetModule("core") ;

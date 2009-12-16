@@ -56,10 +56,10 @@
          <artifactId>cs.packaging.module</artifactId>
          <version>${project.version}</version>
          <type>js</type>
-       </dependency>       
-       <dependency>
+       </dependency>        
+	   <dependency>
          <groupId>org.exoplatform.cs</groupId>
-         <artifactId>portal.packaging.product</artifactId>
+         <artifactId>cs.packaging.product</artifactId>
          <version>${project.version}</version>
          <type>js</type>
        </dependency> 
@@ -187,6 +187,7 @@
                               <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
                               <argument>-Dclean.server=${exo.projects.app.tomcat.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
+							  <argument>-Dorg.exoplatform.portal.version=${org.exoplatform.portal.version}</argument>
                               <argument>-Xshare:auto</argument>
                               <argument>-Xms128m</argument>
                               <argument>-Xmx512m</argument>
@@ -195,7 +196,7 @@
                               <argument>org.mozilla.javascript.tools.shell.Main</argument>
                               <argument>${basedir}/target/exopackage/javascript/eXo/eXo.js</argument>
                               <argument>exobuild</argument>
-                              <argument>--product=portal</argument>
+                              <argument>--product=cs</argument>
                               <argument>--deploy=tomcat</argument>
                            </arguments>
                         </configuration>
@@ -287,6 +288,7 @@
                               <argument>-Dexo.m2.repos=file:${settings.localRepository},http://maven2.exoplatform.org/rest/maven2,http://repository.jboss.org/maven2</argument>
                               <argument>-Dclean.server=${exo.projects.app.jboss.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
+							  <argument>-Dorg.exoplatform.portal.version=${org.exoplatform.portal.version}</argument>
                               <argument>-Xshare:auto</argument>
                               <argument>-Xms128m</argument>
                               <argument>-Xmx512m</argument>
@@ -295,7 +297,7 @@
                               <argument>org.mozilla.javascript.tools.shell.Main</argument>
                               <argument>${basedir}/target/exopackage/javascript/eXo/eXo.js</argument>
                               <argument>exobuild</argument>
-                              <argument>--product=portal</argument>
+                              <argument>--product=cs</argument>
                               <argument>--deploy=jbossear</argument>
                            </arguments>
                         </configuration>
