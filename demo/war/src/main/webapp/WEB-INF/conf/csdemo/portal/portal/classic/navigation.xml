@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <node-navigation>
-  <owner-type>group</owner-type>  
-	<owner-id>platform/users</owner-id>
-	<priority>2</priority>
-  <description>collaboration demo users navigation</description>
+	<priority>1</priority>
   
   <page-nodes> 
+    <node>
+	  <uri>home</uri>
+	  <name>home</name>
+	  <label>#{portal.csdemo.home}</label>
+	  <page-reference>portal::classic::homepage</page-reference>	    
+	 </node>
+	 
+   <node>
+    <uri>register</uri>
+    <name>register</name>
+    <label>#{portal.csdemo.register}</label>
+    <visible>false</visible>
+    <page-reference>portal::classic::register</page-reference>
+   </node><!--
+   
   	   <node>
 	    <uri>webos</uri>
 	    <name>webos</name>
@@ -34,21 +46,21 @@
 		    <page-reference>group::platform/users::calendar</page-reference>
 	  	</node>
 	  	
-	  	<!--<node>
+	  	<node>
 		    <uri>chat</uri>
 		    <name>chat</name>
 		    <label>#{platform.users.collaboration.chat}</label>
 		    <page-reference>group::platform/users::chat</page-reference>
 	  	</node>	
 	  	
-	  	--><!--<node>
+	  	<node>
 		    <uri>chatbar</uri>
 		    <name>chatbar</name>
 		    <label>#{platform.users.collaboration.chatbar}</label>
 		    <page-reference>group::platform/users::chatbar</page-reference>
 	  	</node>	
 	  	  
-	  --><!--<node>
+	  <node>
 		    <uri>sitemap</uri>
 		    <name>sitemap</name>
 		    <label>#{platform.users.sitemap}</label>

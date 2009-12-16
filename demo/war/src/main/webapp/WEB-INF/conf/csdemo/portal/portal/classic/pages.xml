@@ -1,9 +1,50 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <page-set>
 	
-
+	
+	<page>
+    <name>homepage</name>
+    <title>Home Page</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <portlet-application>
+      <portlet>
+        <application-ref>home</application-ref>
+        <portlet-ref>HomePagePortlet</portlet-ref>
+        <preferences>
+          <preference>
+            <name>template</name>
+      			<value>par:/groovy/portal/webui/component/UIHomePagePortlet.gtmpl</value>
+      			<read-only>false</read-only>
+          </preference>
+        </preferences>
+      </portlet>
+      <title>cs Home Page</title>
+      <access-permissions>Everyone</access-permissions>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </portlet-application>
+  </page>
   
   <page>
+    <name>register</name>
+    <title>Register</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>    
+    <portlet-application>
+      <portlet>
+        <application-ref>exoadmin</application-ref>
+        <portlet-ref>AccountPortlet</portlet-ref>
+      </portlet>
+      <title>New Account</title>
+      <access-permissions>*:/platform/guests</access-permissions>
+      <show-info-bar>false</show-info-bar>      
+    </portlet-application>
+  </page>
+
+  
+  <!--<page>
  		<page-id>group::platform/users::mail</page-id>
   	<owner-type>group</owner-type>
     <owner-id>platform/users</owner-id>
@@ -48,7 +89,7 @@
     </application>  
   </page>
  
- <!--<page>
+ <page>
   	<page-id>group::platform/users::chat</page-id>
   	<owner-type>group</owner-type>
     <owner-id>platform/users</owner-id>
@@ -63,7 +104,7 @@
     </application>
    </page>
    
-   --><!--<page>
+   <page>
   	<page-id>group::platform/users::chatbar</page-id>
   	<owner-type>group</owner-type>
     <owner-id>platform/users</owner-id>
@@ -77,7 +118,7 @@
       <show-info-bar>false</show-info-bar>       
     </application>
    </page>  
-  -->
+  
    <page>
   	<page-id>group::platform/users::webos</page-id>
   	<owner-type>group</owner-type>
@@ -116,15 +157,15 @@
       <show-info-bar>false</show-info-bar>       
     </application>
     
-    <!-- 
+     
      <application>
       <instance-id>group#platform/users:/chatbar/ChatBarPortlet/chatbar</instance-id>    
       <title>Chat Bar Portlet</title>
       <show-info-bar>false</show-info-bar>       
     </application>
-     -->      
+           
   
   </page>    	 
     	  
-</page-set>
+--></page-set>
 
