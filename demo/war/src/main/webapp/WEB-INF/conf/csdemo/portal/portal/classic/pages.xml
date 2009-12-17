@@ -9,12 +9,12 @@
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
-        <application-ref>home</application-ref>
+        <application-ref>web</application-ref>
         <portlet-ref>HomePagePortlet</portlet-ref>
         <preferences>
           <preference>
             <name>template</name>
-      			<value>par:/groovy/portal/webui/component/UIHomePagePortlet.gtmpl</value>
+      			<value>system:/templates/UIHomePagePortlet.gtmpl</value>
       			<read-only>false</read-only>
           </preference>
         </preferences>
