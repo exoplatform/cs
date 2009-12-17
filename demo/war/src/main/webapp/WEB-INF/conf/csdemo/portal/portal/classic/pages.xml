@@ -43,51 +43,58 @@
     </portlet-application>
   </page>
 
-  
-  <!--<page>
- 		<page-id>group::platform/users::mail</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/users</owner-id>
+<page>
     <name>mail</name>
+    <title>Mail</title>
     <access-permissions>*:/platform/users</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
     
-    <application>
-      <instance-id>group#platform/users:/mail/MailPortlet/mail</instance-id>    
+    <portlet-application>
+      <portlet>
+        <application-ref>mail</application-ref>
+        <portlet-ref>MailPortlet</portlet-ref>
+      </portlet>
       <title>Mail Portlet</title>
+      <access-permissions>*:/platform/users</access-permissions>
       <show-info-bar>false</show-info-bar>      
-    </application>  
+    </portlet-application>  
   </page>
   
   <page>
-  	<page-id>group::platform/users::calendar</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/users</owner-id>
     <name>calendar</name>
+    <title>Calendar</title>
     <access-permissions>*:/platform/users</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
     
-    <application>
-      <instance-id>group#platform/users:/calendar/CalendarPortlet/calendars</instance-id>    
+    <portlet-application>
+      <portlet>
+        <application-ref>calendar</application-ref>
+        <portlet-ref>CalendarPortlet</portlet-ref>
+      </portlet>   
       <title>Calendar Portlet</title>
+      <access-permissions>*:/platform/users</access-permissions>
       <show-info-bar>false</show-info-bar>      
-    </application>  
+    </portlet-application>  
   </page>
   
   <page>
-  	<page-id>group::platform/users::contact</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/users</owner-id>
     <name>contact</name>
+    <title>Contact</title>
     <access-permissions>*:/platform/users</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
     
-    <application>
-      <instance-id>group#platform/users:/contact/ContactPortlet/contact</instance-id>    
+    <portlet-application>
+    <portlet>
+        <application-ref>contact</application-ref>
+        <portlet-ref>ContactPortlet</portlet-ref>
+      </portlet>    
       <title>Contact Portlet</title>
+      <access-permissions>*:/platform/users</access-permissions>
       <show-info-bar>false</show-info-bar>      
-    </application>  
+    </portlet-application>  
   </page>
+  
+  <!--
  
  <page>
   	<page-id>group::platform/users::chat</page-id>

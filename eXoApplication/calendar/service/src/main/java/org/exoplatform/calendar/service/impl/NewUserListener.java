@@ -68,8 +68,9 @@ public class NewUserListener extends UserEventListener {
   private List<String> ignore_users_ ;
 
   private CalendarSetting defaultCalendarSetting_ ;
-
-
+  
+  
+  public NewUserListener() {};
   /**
    * 
    * @param  Calendar service geeting from the Portlet Container

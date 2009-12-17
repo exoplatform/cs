@@ -2,7 +2,7 @@
   import org.exoplatform.portal.webui.util.Util ;
   String toururi = Util.getPortalRequestContext().getPortalURI() + "tour";
   def prContext = _ctx.getRequestContext().getParentAppRequestContext();
-  String user = prContext.getRemoteUser() ;
+  String user = null; //prContext.getRemoteUser() ;
   String calendarUrl = Util.getPortalRequestContext().getPortalURI() + "calendar" ;
   String mailUrl = Util.getPortalRequestContext().getPortalURI() + "mail" ;
   String contactUrl = Util.getPortalRequestContext().getPortalURI() + "contact" ;
