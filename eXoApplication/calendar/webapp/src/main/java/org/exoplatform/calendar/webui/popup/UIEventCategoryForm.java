@@ -34,7 +34,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
@@ -113,9 +112,17 @@ public class UIEventCategoryForm extends UIForm {
       eventCat.setName(name) ;
       eventCat.setDescription(description) ;
       try {
-        if(uiForm.isAddNew_) calendarService.saveEventCategory(username, eventCat, null, true) ;
+        if(uiForm.isAddNew_) {
+          for (String defaultName : uiManager.defaultEventCategoriesMap.values())
+            if (defaultName.equalsIgnoreCase(eventCat.getName()))
+              throw new ItemExistsException();
+          calendarService.saveEventCategory(username, eventCat, null, true) ;
+        }
         else { 
           eventCat = uiForm.getEventCategory() ;
+          for (String defaultName : uiManager.defaultEventCategoriesMap.values())
+            if (defaultName.equalsIgnoreCase(name) && !eventCat.getName().equalsIgnoreCase(name))
+              throw new ItemExistsException();
           eventCat.setName(name) ;
           eventCat.setDescription(description) ;
           calendarService.saveEventCategory(username, eventCat, new String[]{name, uiForm.getCategoryDescription()}, false) ; 

@@ -82,7 +82,7 @@ public class UIYearView extends UICalendarView {
     String username = CalendarUtils.getCurrentUser() ;
     EventQuery eventQuery = new EventQuery() ;
     
-    if(!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null")&& !categoryId_.toLowerCase().equals("all")
+    if(!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null")
         && !categoryId_.equals("calId")) {
       eventQuery.setCategoryId(new String[]{categoryId_}) ;
     }

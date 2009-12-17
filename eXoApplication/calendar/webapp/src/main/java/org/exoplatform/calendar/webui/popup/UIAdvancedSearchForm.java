@@ -33,6 +33,7 @@ import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UIActionBar;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -93,6 +94,10 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     CalendarService cservice = CalendarUtils.getCalendarService() ;
     options.add(new SelectItemOption<String>("", "")) ;
     for(Calendar cal : cservice.getUserCalendars(username, true)) {
+      if (cal.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+        String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+        cal.setName(newName);
+      }
       options.add(new SelectItemOption<String>(cal.getName(), Calendar.TYPE_PRIVATE + CalendarUtils.COLON + cal.getId())) ;
     }
     List<GroupCalendarData> groupCals  = cservice.getGroupCalendars(CalendarUtils.getUserGroups(username), true, username) ;
@@ -106,6 +111,10 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     GroupCalendarData sharedData  = cservice.getSharedCalendars(CalendarUtils.getCurrentUser(), true) ;
     if(sharedData != null) {
       for(Calendar cal : sharedData.getCalendars()) {
+        if (cal.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+          String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+          cal.setName(newName);
+        }
         String owner = "" ;
         if(cal.getCalendarOwner() != null) owner = cal.getCalendarOwner() + "- " ;
         options.add(new SelectItemOption<String>(owner + cal.getName(), Calendar.TYPE_SHARED + CalendarUtils.COLON + cal.getId())) ;
@@ -115,7 +124,13 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("", "")) ;
     for(EventCategory cat : cservice.getEventCategories(CalendarUtils.getCurrentUser())) {
-      options.add(new SelectItemOption<String>(cat.getName(), cat.getId())) ;
+      if (cat.getId().contains("defaultEventCategoryId") && cat.getName().contains("defaultEventCategoryName")) {
+        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + cat.getId());
+        options.add(new SelectItemOption<String>(newName, cat.getId())) ;
+        cat.setName(newName);
+      } else {
+        options.add(new SelectItemOption<String>(cat.getName(), cat.getId())) ;        
+      }
     }
     addChild(new UIFormSelectBox(CATEGORY, CATEGORY, options)) ;
     addChild(new UIFormSelectBox(STATE, STATE, getStatus()).setRendered(false)) ;

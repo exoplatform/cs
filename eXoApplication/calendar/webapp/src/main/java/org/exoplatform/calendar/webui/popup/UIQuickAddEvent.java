@@ -230,7 +230,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     return findComponentById(id) ;
   }
   public void setSelectedCategory(String value) {getUIFormSelectBox(FIELD_CATEGORY).setValue(value) ;}
+
   private String getEventCategory() {return getUIFormSelectBox(FIELD_CATEGORY).getValue() ;}
+
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   public void setEvent(boolean isEvent) { isEvent_ = isEvent ; }

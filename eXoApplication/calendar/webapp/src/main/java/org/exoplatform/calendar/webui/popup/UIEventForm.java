@@ -373,7 +373,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(CalendarUtils.getCurrentUser()) ;
     for(EventCategory category : eventCategories) {
-      options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
+      if (category.getId().contains("defaultEventCategoryId") && category.getName().contains("defaultEventCategoryName")) {
+        String newName = CalendarUtils.getResourceBundle("UICalendarView.label." + category.getId());
+        options.add(new SelectItemOption<String>(newName, category.getId())) ;
+      } else {
+        options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;        
+      }
     }
     return options ;
   }
