@@ -42,7 +42,7 @@
          <groupId>org.exoplatform.tool</groupId>
          <artifactId>exopackage</artifactId>
          <type>zip</type>
-         <version>1.2.0-SNAPSHOT</version>
+         <version>${org.exoplatform.exopackage.version}</version>
       </dependency>
 
       <dependency>
@@ -72,7 +72,7 @@
        <dependency>
          <groupId>org.exoplatform.portletcontainer</groupId>
          <artifactId>portletcontainer.packaging.module</artifactId>
-         <version>${org.exoplatform.pc.version}</version>
+         <version>${org.exoplatform.portletcontainer.version}</version>
          <type>js</type>
        </dependency>
        <dependency>
@@ -109,7 +109,7 @@
                 <plugin>
                     <groupId>org.exoplatform.maven.plugins</groupId>
                     <artifactId>maven-exobuild-plugin</artifactId>
-                    <version>1.2.0-SNAPSHOT</version>
+                    <version>${org.exoplatform.mvnexobuild.version}</version>
                     <executions>
                         <execution>
                             <phase>install</phase><goals><goal>exobuild</goal></goals>
