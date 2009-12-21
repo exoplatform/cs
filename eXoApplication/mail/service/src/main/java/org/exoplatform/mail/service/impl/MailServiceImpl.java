@@ -114,8 +114,6 @@ public class MailServiceImpl implements MailService, Startable {
 
   private JCRDataStorage            storage_;
   
-  private IMAPStore imapStore_ = null;
-
   private EMLImportExport           emlImportExport_;
 
   private Map<String, CheckingInfo> checkingLog_;
@@ -188,13 +186,18 @@ public class MailServiceImpl implements MailService, Startable {
   private void saveFolder(String username, String accountId, Folder folder, boolean b) throws Exception {
     Account account = getAccountById(username, accountId);
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder() && b) {
+    	IMAPFolder imapFolder = null;
       try {
         Connector connector = new ImapConnector(account);
-        IMAPFolder imapFolder = (IMAPFolder) connector.createFolder(folder);
+        imapFolder = (IMAPFolder) connector.createFolder(folder);
         saveFolder(username, accountId, null, imapFolder);
       } catch(Exception e) {
         return;
-      }
+      }finally {
+			if (imapFolder != null && imapFolder.isOpen()) {
+				imapFolder.close(true);
+			}
+		}
     } else {
       storage_.saveFolder(username, accountId, folder);
     }
@@ -873,13 +876,20 @@ public class MailServiceImpl implements MailService, Startable {
     CheckingInfo info = new CheckingInfo();
     String key = username + ":" + accountId;
     checkingLog_.put(key, info);
-    Account account = getAccountById(username, accountId);
-    IMAPStore store = openIMAPConnection(username, account, info);  
-    if (store != null) {
-      checkingLog_.get(key).setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
-      synchImapFolders(username, accountId, null, store.getDefaultFolder().list());
-      checkingLog_.get(key).setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
-    }
+    IMAPStore store = null;
+    try {
+	    Account account = getAccountById(username, accountId);
+	    store = openIMAPConnection(username, account, info);  
+	    if (store != null) {
+	      checkingLog_.get(key).setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
+	      synchImapFolders(username, accountId, null, store.getDefaultFolder().list());
+	      checkingLog_.get(key).setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
+	    }
+    } finally {
+		if (store != null && store.isConnected()) {
+			store.close();
+		}
+	}
   }
   
   private List<javax.mail.Folder> synchImapFolders(String username, String accountId, Folder parentFolder, javax.mail.Folder[] folders) throws Exception {
@@ -1005,7 +1015,6 @@ public class MailServiceImpl implements MailService, Startable {
       try {
         imapStore.connect(account.getIncomingHost(), Integer.valueOf(account.getIncomingPort()), 
                         account.getIncomingUser(), account.getIncomingPassword());
-        imapStore_ = imapStore;      
       } catch (AuthenticationFailedException e) {
         if (!account.isSavePassword()) {   // about remember password, in the first time get email.
           account.setIncomingPassword("");
@@ -1055,7 +1064,6 @@ public class MailServiceImpl implements MailService, Startable {
     IMAPStore store = openIMAPConnection(username, account, info);  
     
     if (store != null) {
-      imapStore_ = store;
       List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
       if (synchFolders) {
         info.setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
@@ -1082,6 +1090,7 @@ public class MailServiceImpl implements MailService, Startable {
         } finally {
           checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);    
           removeCheckingInfo(username, accountId);
+          store.close();
         }
       } else {
         for (javax.mail.Folder folder : folderList) {
@@ -1797,11 +1806,12 @@ public class MailServiceImpl implements MailService, Startable {
   public Message loadTotalMessage(String username, String accountId, Message msg) throws Exception {
     Account account = getAccountById(username, accountId);
     try {
-      if (!msg.isLoaded() && (imapStore_ != null || openIMAPConnection(username, account) != null)) {
+    	IMAPStore store = openIMAPConnection(username, account);
+      if (!msg.isLoaded() && store != null) {
         javax.mail.Message message = null;
         javax.mail.Folder fd = null;
         URLName url = new URLName(getFolder(username, accountId, msg.getFolders()[0]).getURLName());
-        fd = imapStore_.getFolder(url);
+        fd = store.getFolder(url);
         if (fd != null) {
           if (fd.isOpen()) {
             message = ((IMAPFolder)fd).getMessageByUID(Long.valueOf(msg.getUID()));
@@ -1829,9 +1839,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void stop() {
-    try {
-      if (imapStore_ != null) imapStore_.close();
-    } catch(Exception e) { }
   }
 
   public synchronized void addListenerPlugin(ComponentPlugin listener) throws Exception {
