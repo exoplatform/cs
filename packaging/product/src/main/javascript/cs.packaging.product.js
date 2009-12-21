@@ -7,7 +7,7 @@ function getProduct(version) {
   product.name = "eXoCS" ;
   product.portalwar = "portal.war" ;
   product.codeRepo = "cs" ;
-  product.version = "${project.version}" ;
+  product.version = "${project.version}";
   product.serverPluginVersion = "${org.exoplatform.portal.version}" ;
 
   var kernel = Module.GetModule("kernel") ;
@@ -37,7 +37,7 @@ function getProduct(version) {
   product.addServerPatch("jboss",  cs.server.jboss.patch) ;
   product.addServerPatch("jbossear",  portal.server.jbossear.patch) ;
   product.addServerPatch("jonas",  portal.server.jonas.patch) ;
-  product.addServerPatch("ear",  portal.server.websphere.patch) 
+  product.addServerPatch("wasear",  portal.server.websphere.patch) 
  
   
 
