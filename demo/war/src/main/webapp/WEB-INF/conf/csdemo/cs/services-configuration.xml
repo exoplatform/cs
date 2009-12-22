@@ -2,7 +2,36 @@
 
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
 	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
-	
+	<component>
+    <key>org.exoplatform.calendar.service.CalendarService</key>
+    <type>org.exoplatform.calendar.service.impl.CalendarServiceImpl</type>
+  </component> 
+  <component>
+    <key>org.exoplatform.contact.service.ContactService</key>
+    <type>org.exoplatform.contact.service.impl.ContactServiceImpl</type>
+  </component> 
+  <component>
+    <key>org.exoplatform.content.service.ContentDAO</key>
+    <type>org.exoplatform.content.service.impl.ContentDAOImpl</type>     
+  </component>
+  <component>
+  	<type>org.exoplatform.services.authentication.rest.RESTAuthenticator</type>
+  </component>
+  <component>
+    <type>org.exoplatform.services.organization.rest.xml.RESTOrganizationServiceXMLImpl</type>
+  </component>
+  <component>
+    <type>org.exoplatform.services.organization.rest.json.RESTOrganizationServiceJSONImpl</type>
+  </component>
+  <component>
+  	<type>org.exoplatform.services.authentication.rest.RESTAuthenticator</type>
+  </component>
+  <component>
+    <type>org.exoplatform.services.organization.rest.xml.RESTOrganizationServiceXMLImpl</type>
+  </component>
+  <component>
+    <type>org.exoplatform.services.organization.rest.json.RESTOrganizationServiceJSONImpl</type>
+  </component>
 	<component>
 		<key>org.exoplatform.services.mail.MailService</key>
 		<type>org.exoplatform.services.mail.impl.MailServiceImpl</type>
@@ -112,7 +141,7 @@
     <type>org.exoplatform.content.service.impl.ContentDAOImpl</type>     
   </component>
     
-  <external-component-plugins>  
+  --><external-component-plugins>  
     <target-component>org.exoplatform.content.service.ContentDAO</target-component>      
     <component-plugin>
       <name>content.new.user.listener</name>
@@ -179,4 +208,4 @@
     	</component-plugin>      
   	</external-component-plugins>
   
---></configuration>
+</configuration>

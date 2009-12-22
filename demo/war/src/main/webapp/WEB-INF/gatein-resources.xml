@@ -16,7 +16,13 @@
     <application-name>web</application-name>
     <portlet-name>HomePagePortlet</portlet-name>
     <skin-name>Default</skin-name>
-    <css-path>/templates/skin/webui/component/UIBannerPortlet/DefaultStylesheet.css</css-path>
+    <css-path>/templates/skin/webui/component/UIHomePagePortlet/DefaultStylesheet.css</css-path>
+  </portlet-skin>
+  <portlet-skin>
+	<application-name>web</application-name>
+	<portlet-name>BannerPortlet</portlet-name>
+	<skin-name>Default</skin-name>
+	<css-path>/templates/skin/webui/component/UIBannerPortlet/DefaultStylesheet.css</css-path>
   </portlet-skin>	
 </gatein-resources>
 
