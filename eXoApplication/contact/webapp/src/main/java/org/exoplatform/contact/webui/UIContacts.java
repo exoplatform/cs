@@ -1352,10 +1352,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContacts uiContacts = event.getSource() ;
       String objectId = event.getRequestContext().getRequestParameter(OBJECTID);
       String emails = null ;
-      
       if (!ContactUtils.isEmpty(objectId)) {
-        if (uiContacts.contactMap.containsKey(objectId))
-          emails = uiContacts.contactMap.get(objectId).getEmailAddress() ;
+        if (uiContacts.contactMap.containsKey(objectId)) {
+    	  String email = uiContacts.contactMap.get(objectId).getEmailAddress();
+    	  if (!ContactUtils.isEmpty(email))
+    	    emails = email.split(",")[0].split(";")[0];     	
+        }
         else emails = objectId ;
       } else {
         List<String> contactIds = uiContacts.getCheckedContacts() ;
@@ -1370,8 +1372,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         for (String id : contactIds) {
           String email = uiContacts.contactMap.get(id).getEmailAddress() ;
           if (!ContactUtils.isEmpty(email)) {
-            if (buffer.length() > 0) buffer.append(", " + email) ;
-            else buffer.append(email) ;
+        	String priorityEmail = email.split(",")[0].split(";")[0];
+            if (buffer.length() > 0) buffer.append(", " + priorityEmail) ;
+            else buffer.append(priorityEmail) ;
           }
         }
         emails = buffer.toString() ; 

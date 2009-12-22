@@ -547,7 +547,7 @@ public class JCRDataStorage {
         Node contact = it.nextNode();
         if (contact.hasProperty("exo:emailAddress")
             && !Utils.isEmpty(contact.getProperty("exo:emailAddress").getString()))
-          address.add(contact.getProperty("exo:emailAddress").getString());
+          address.add(contact.getProperty("exo:emailAddress").getString().split(",")[0].split(";")[0]);
       }
       return address;
     } finally {
@@ -569,7 +569,7 @@ public class JCRDataStorage {
     while (it.hasNext()){
       Node contact = it.nextNode();
       if(contact.hasProperty("exo:emailAddress") && !Utils.isEmpty(contact.getProperty("exo:emailAddress").getString()))
-        address.add(contact.getProperty("exo:emailAddress").getString());
+        address.add(contact.getProperty("exo:emailAddress").getString().split(",")[0].split(";")[0]);
     }
     return address ;
     } finally {
@@ -593,7 +593,7 @@ public class JCRDataStorage {
         while (it.hasNext()){
           Node contact = it.nextNode();
           if(contact.hasProperty("exo:emailAddress") && !Utils.isEmpty(contact.getProperty("exo:emailAddress").getString()))
-            address.add(contact.getProperty("exo:emailAddress").getString());
+            address.add(contact.getProperty("exo:emailAddress").getString().split(",")[0].split(";")[0]);
         }
         return address ;         
       } 
