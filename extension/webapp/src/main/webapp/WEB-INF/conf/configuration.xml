@@ -10,7 +10,11 @@
   <!--<import>war:/cs-extension/jcr/repository-configuration.xml</import> 
   
   --><!-- new apps in registry  -->
-  <import>war:/cs-extension/portal/application-registry-configuration.xml</import>  
+  <import>war:/cs-extension/portal/application-registry-configuration.xml</import>
+  
+  <import>war:/cs-extension/portal/portal-configuration.xml</import>   
+  
+  <import>war:/cs-extension/common/common-configuration.xml</import>
   
   <!-- main CS configuration  -->
   <import>war:/cs-extension/cs/cs-configuration.xml</import>

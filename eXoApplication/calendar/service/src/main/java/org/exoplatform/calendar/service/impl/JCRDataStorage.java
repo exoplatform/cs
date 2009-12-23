@@ -2898,15 +2898,17 @@ public class JCRDataStorage{
 
   @SuppressWarnings("unused")
   private SessionProvider createUserProvider() {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
+      return SessionProvider.createSystemProvider() ;
+	  /*ExoContainer container = ExoContainerContext.getCurrentContainer();
     SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    return service.getSessionProvider(null) ;    
+    return service.getSessionProvider(null) ;   */ 
   }  
 
   private SessionProvider createSystemProvider() {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
+	  return SessionProvider.createSystemProvider() ;
+    /*ExoContainer container = ExoContainerContext.getCurrentContainer();
     SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    return service.getSystemSessionProvider(null) ;    
+    return service.getSystemSessionProvider(null ) ;  */ 
   }
 
 

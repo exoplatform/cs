@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<page-set>
+	
+	
+	<!--<page>
+    <name>homepage</name>
+    <title>Home Page</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>HomePagePortlet</portlet-ref>
+        <preferences>
+          <preference>
+            <name>template</name>
+      			<value>system:/templates/UIHomePagePortlet.gtmpl</value>
+      			<read-only>false</read-only>
+          </preference>
+        </preferences>
+      </portlet>
+      <title>cs Home Page</title>
+      <access-permissions>Everyone</access-permissions>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </portlet-application>
+  </page>
+  
+  <page>
+    <name>register</name>
+    <title>Register</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>    
+    <portlet-application>
+      <portlet>
+        <application-ref>exoadmin</application-ref>
+        <portlet-ref>AccountPortlet</portlet-ref>
+      </portlet>
+      <title>New Account</title>
+      <access-permissions>*:/platform/guests</access-permissions>
+      <show-info-bar>false</show-info-bar>      
+    </portlet-application>
+  </page>
+
+--><page>
+    <name>mail</name>
+    <title>Mail</title>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    
+    <portlet-application>
+      <portlet>
+        <application-ref>mail</application-ref>
+        <portlet-ref>MailPortlet</portlet-ref>
+      </portlet>
+      <title>Mail Portlet</title>
+      <access-permissions>*:/platform/users</access-permissions>
+      <show-info-bar>false</show-info-bar>      
+    </portlet-application>  
+  </page>
+  
+  <page>
+    <name>calendar</name>
+    <title>Calendar</title>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    
+    <portlet-application>
+      <portlet>
+        <application-ref>calendar</application-ref>
+        <portlet-ref>CalendarPortlet</portlet-ref>
+      </portlet>   
+      <title>Calendar Portlet</title>
+      <access-permissions>*:/platform/users</access-permissions>
+      <show-info-bar>false</show-info-bar>      
+    </portlet-application>  
+  </page>
+  
+  <page>
+    <name>contact</name>
+    <title>Contact</title>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    
+    <portlet-application>
+    <portlet>
+        <application-ref>contact</application-ref>
+        <portlet-ref>ContactPortlet</portlet-ref>
+      </portlet>    
+      <title>Contact Portlet</title>
+      <access-permissions>*:/platform/users</access-permissions>
+      <show-info-bar>false</show-info-bar>      
+    </portlet-application>  
+  </page>
+  
+  <!--
+ 
+ <page>
+  	<page-id>group::platform/users::chat</page-id>
+  	<owner-type>group</owner-type>
+    <owner-id>platform/users</owner-id>
+    <name>chat</name>     
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>   
+    
+    <application>
+      <instance-id>group#platform/users:/chat/ChatPortlet/chat</instance-id>    
+      <title>Chat Portlet</title>
+      <show-info-bar>false</show-info-bar>       
+    </application>
+   </page>
+   
+   <page>
+  	<page-id>group::platform/users::chatbar</page-id>
+  	<owner-type>group</owner-type>
+    <owner-id>platform/users</owner-id>
+    <name>chatbar</name>     
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>   
+    
+    <application>
+      <instance-id>group#platform/users:/chatbar/ChatBarPortlet/chatbar</instance-id>    
+      <title>Chat Bar Portlet</title>
+      <show-info-bar>false</show-info-bar>       
+    </application>
+   </page>  
+  
+   <page>
+  	<page-id>group::platform/users::webos</page-id>
+  	<owner-type>group</owner-type>
+    <owner-id>platform/users</owner-id>
+    <name>webos</name>
+    <factory-id>Desktop</factory-id>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <show-max-window>true</show-max-window>
+    
+    <application>
+      <instance-id>group#platform/users:/mail/MailPortlet/mail</instance-id>    
+      <title>Mail Portlet</title>
+      <show-info-bar>true</show-info-bar>
+      <show-application-state>true</show-application-state>
+    </application>
+    
+    <application>
+      <instance-id>group#platform/users:/calendar/CalendarPortlet/calendars</instance-id>    
+      <title>Calendar Portlet</title>
+      <show-info-bar>true</show-info-bar>
+      <show-application-state>true</show-application-state>
+    </application>
+    
+    <application>
+      <instance-id>group#platform/users:/contact/ContactPortlet/contact</instance-id>    
+      <title>Contact Portlet</title>
+      <show-info-bar>true</show-info-bar>
+      <show-application-state>true</show-application-state>
+    </application>    
+          
+      
+    <application>
+      <instance-id>group#platform/users:/chat/ChatPortlet/chat</instance-id>    
+      <title>Chat Portlet</title>
+      <show-info-bar>false</show-info-bar>       
+    </application>
+    
+     
+     <application>
+      <instance-id>group#platform/users:/chatbar/ChatBarPortlet/chatbar</instance-id>    
+      <title>Chat Bar Portlet</title>
+      <show-info-bar>false</show-info-bar>       
+    </application>
+           
+  
+  </page>    	 
+    	  
+--></page-set>
+

@@ -220,7 +220,7 @@
              <webModule>
                <groupId>org.exoplatform.cs</groupId>
                <artifactId>exo.cs.eXoApplication.mail.webapp</artifactId>
-               <contextRoot>calendar</contextRoot>
+               <contextRoot>mail</contextRoot>
                 <bundleFileName>mail.war</bundleFileName>
              </webModule>             
               

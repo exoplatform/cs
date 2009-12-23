@@ -78,10 +78,10 @@
                                  <value>
                                   <string>chatbar</string>
                                 </value>                                                                                                       
-                                <value>
+                                <!--<value>
                                   <string>cs</string>
                                 </value>                                  
-								<value>
+								--><value>
 									<string>csdemo</string>
 								</value>
 							</collection>

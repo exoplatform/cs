@@ -46,7 +46,7 @@ function getProduct(version) {
   product.addDependencies(cs.eXoApplication.chatbar);
   product.addDependencies(cs.eXoApplication.content);
   product.addDependencies(cs.web.csResources);  
-  product.addDependencies(cs.extension);
+  product.addDependencies(cs.extension.webapp);
 
   // CS demo
   product.addDependencies(cs.demo.portal);

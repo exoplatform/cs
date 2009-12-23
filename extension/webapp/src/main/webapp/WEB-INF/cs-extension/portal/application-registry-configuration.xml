@@ -24,58 +24,63 @@
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>CollaborationSuite</string></field>
 		                  <field name="applicationName"><string>CalendarPorlet</string></field>
-						          <field name="displayName"><string>Calendar porlet</string></field>
-		                  <field name="applicationType"><string>portlet</string></field>
-		                  <field name="applicationGroup"><string>CollaborationSuite</string></field>                
+						  <field name="displayName"><string>Calendar porlet</string></field>
+						  <field name="description"><string>Calendar porlet</string></field>
+		                  <field name="type"><string>portlet</string></field>
+		                  <field name="contentId"><string>calendar/CalendarPorlet</string></field>                
 		                </object>
 	                </value>
-									<value>                 
+					<value>                 
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>CollaborationSuite</string></field>
 		                  <field name="applicationName"><string>MailPorlet</string></field>
-						          <field name="displayName"><string>Mail Portlet</string></field>
-		                  <field name="applicationType"><string>portlet</string></field>
-		                  <field name="applicationGroup"><string>CollaborationSuite</string></field>                
+						  <field name="displayName"><string>Mail Portlet</string></field>
+						  <field name="description"><string>Mail Portlet</string></field>
+		                  <field name="type"><string>portlet</string></field>
+		                  <field name="contentId"><string>mail/MailPorlet</string></field>                
 		                </object>
 	                </value>
-					        <value>                 
+					<value>                 
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>CollaborationSuite</string></field>
 		                  <field name="applicationName"><string>ContactPortlet</string></field>
-						          <field name="displayName"><string>Contact Portlet</string></field>
-		                  <field name="applicationType"><string>portlet</string></field>
-		                  <field name="applicationGroup"><string>CollaborationSuite</string></field>                
+						  <field name="displayName"><string>Contact Portlet</string></field>
+						  <field name="description"><string>Contact Portlet</string></field>
+		                  <field name="type"><string>portlet</string></field>
+		                  <field name="contentId"><string>contact/ContactPortlet</string></field>                
 		                </object>
 	                </value>
-									<value>                 
+					<value>                 
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>CollaborationSuite</string></field>
 		                  <field name="applicationName"><string>ChatPortlet</string></field>
-						          <field name="displayName"><string>Chat Portlet</string></field>
-		                  <field name="applicationType"><string>portlet</string></field>
-		                  <field name="applicationGroup"><string>CollaborationSuite</string></field>                
+						  <field name="displayName"><string>Chat Portlet</string></field>
+						  <field name="description"><string>Chat Portlet</string></field>
+		                  <field name="type"><string>portlet</string></field>
+		                  <field name="contentId"><string>chat/ChatPortlet</string></field>                
 		                </object>
 	                </value>
-									<value>                 
+					<value>                 
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>CollaborationSuite</string></field>
 		                  <field name="applicationName"><string>ChatbarPortlet</string></field>
-						          <field name="displayName"><string>Chatbar Portlet</string></field>
-		                  <field name="applicationType"><string>portlet</string></field>
-		                  <field name="applicationGroup"><string>CollaborationSuite</string></field>                
+						  <field name="displayName"><string>Chatbar Portlet</string></field>
+						  <field name="description"><string>Chatbar Portlet</string></field>
+		                  <field name="type"><string>portlet</string></field>
+		                  <field name="contentId"><string>chatbar/ChatbarPortlet</string></field>                
 		                </object>
 	                </value>
-									<value>                 
+					<value>                 
 		                <object type="org.exoplatform.application.registry.Application">                     
 		                  <field  name="categoryName"><string>CollaborationSuite</string></field>
 		                  <field name="applicationName"><string>ContentPortlet</string></field>
-						          <field name="displayName"><string>Rss Reader Portlet</string></field>
-		                  <field name="applicationType"><string>portlet</string></field>
-		                  <field name="applicationGroup"><string>CollaborationSuite</string></field>                
+						  <field name="displayName"><string>Rss Reader Portlet</string></field>
+						  <field name="description"><string>Rss Reader Portlet</string></field>
+		                  <field name="type"><string>portlet</string></field>
+		                  <field name="contentId"><string>content/ContentPortlet</string></field>                
 		                </object>
 	                </value>
 								            
-		              
 		            </collection>                               
 	            </field> 
 	          </object>        

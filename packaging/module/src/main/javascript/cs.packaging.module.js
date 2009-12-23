@@ -78,15 +78,19 @@ function getModule(params)
   module.eXoApplication.chatbar = new Project("org.exoplatform.cs", "exo.cs.eXoApplication.chatbar.webapp", "war", module.version) ;
   module.eXoApplication.chatbar.deployName = "chatbar";
   
+  // CS resources and services
   module.web = {}
   module.web.webservice = 
     new Project("org.exoplatform.cs", "exo.cs.web.webservice", "jar",  module.version);
   module.web.csResources = 
     new Project("org.exoplatform.cs", "exo.cs.web.csResources", "war", module.version) ;
-  module.extension = 
+	
+	// CS extension 
+  module.extension = {};
+  module.extension.webapp = 
     new Project("org.exoplatform.cs", "exo.cs.extension.webapp", "war", module.version).
       addDependency(new Project("org.exoplatform.cs", "exo.cs.extension.config", "jar", module.version));
-      module.extension.deployName = "cs";
+      module.extension.webapp.deployName = "cs-extension";
   
   
   /**
@@ -112,7 +116,7 @@ function getModule(params)
    // demo rest endpoint	   
    module.demo.rest = 
        new Project("org.exoplatform.cs", "exo.cs.demo.rest-war", "war", module.version);
-       module.extension.deployName = "rest-csdemo"; 
+       module.demo.rest.deployName = "rest-csdemo"; 
        
    /**
    * Configure and deploy Openfire
