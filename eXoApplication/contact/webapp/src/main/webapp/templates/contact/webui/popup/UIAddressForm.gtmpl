@@ -65,7 +65,7 @@
                     %>
                   </td>
                   <td class="text BorderAddress"><%=contact.getFullName()%></td>
-                  <td class="text"><%=(contact.getEmailAddress() != null ? contact.getEmailAddress() : "")%></td>
+                  <td class="text"><%=(contact.getEmailAddresses() != null ? ContactUtils.listToString(contact.getEmailAddresses()) : "")%></td>
                 </tr>
               <%}%>
         </tbody>

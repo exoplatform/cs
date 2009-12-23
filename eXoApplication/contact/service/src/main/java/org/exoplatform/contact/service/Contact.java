@@ -16,7 +16,9 @@
  */
 package org.exoplatform.contact.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.services.jcr.util.IdGenerator;
@@ -120,7 +122,18 @@ public class Contact {
   public String getJobTitle() { return jobTitle ; }
   public void   setJobTitle(String s) { jobTitle = s ; }
   
-  public String getEmailAddress() { return emailAddress ; }
+  public List<String> getEmailAddresses() { 
+    if (emailAddress == null || emailAddress.length() ==0) return null;
+    List<String> emailList = new ArrayList<String>();
+    for (String emails : emailAddress.split(","))
+      for (String email : emails.split(";"))
+        emailList.add(email.trim());
+    return emailList ;   
+  }
+  public String getEmailAddress() {
+    if (emailAddress == null || emailAddress.length() ==0) return null;
+    return emailAddress.split(";")[0].split(",")[0].trim();
+  }
   public void   setEmailAddress(String s) { emailAddress = s ; }
   
   public String getExoId()  { return exoId ; }

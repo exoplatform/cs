@@ -246,7 +246,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     
     //getUIStringInput(EMAIL).setValue(ct.getEmailAddress());
     List<String> list ;
-    String emails = ct.getEmailAddress() ;
+    String emails = MailUtils.listToString(ct.getEmailAddresses()) ;
     if (MailUtils.isFieldEmpty(emails)) list = new ArrayList<String>() ;
     else list = Arrays.asList(emails.split(Utils.SEMI_COLON)) ;
     if(uiFormMultiValue != null) removeChildById(EMAIL);

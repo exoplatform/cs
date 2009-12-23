@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -120,7 +121,7 @@ public class UIAddressSearchForm extends UIForm implements UIPopupComponent {
       UIMailPortlet uiPortlet = uiAddressSearchForm.getAncestorOfType(UIMailPortlet.class);
       String toAddress = "";
       for (Contact contact : uiAddressSearchForm.getCheckedContact()) {   
-        toAddress += contact.getEmailAddress() + "," ;
+        toAddress += MailUtils.listToString(contact.getEmailAddresses()) + "," ;
       }
       UIAdvancedSearchForm uiAdvancedSearchForm = uiPortlet.findFirstComponentOfType(UIAdvancedSearchForm.class);
       

@@ -147,7 +147,7 @@ public class UITags extends UIComponent {
       uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ; 
       List<ContactData> data = new ArrayList<ContactData>() ;
       for(Contact contact : contacts) {
-        ContactData contactData = uiExportForm.new ContactData(contact.getId(), contact.getFullName(), contact.getEmailAddress()) ;
+        ContactData contactData = uiExportForm.new ContactData(contact.getId(), contact.getFullName(), ContactUtils.listToString(contact.getEmailAddresses())) ;
         data.add(contactData) ;
       }
       Map<String, Contact> contactMap = new HashMap<String, Contact>() ;

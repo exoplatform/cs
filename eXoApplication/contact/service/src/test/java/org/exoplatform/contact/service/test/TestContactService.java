@@ -35,6 +35,7 @@ import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
+import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 
 /**
@@ -215,8 +216,8 @@ public class TestContactService extends BaseContactServiceTestCase {
                  contact.getContactType(),
                  saved.getContactType());
     assertEquals("Saved contact attributes don't match",
-                 contact.getEmailAddress(),
-                 saved.getEmailAddress());
+                 contact.getEmailAddresses(),
+                 saved.getEmailAddresses());
     assertEquals("Saved contact attributes don't match", contact.getExoId(), saved.getExoId());
     assertEquals("Saved contact attributes don't match",
                  contact.getFirstName(),
@@ -392,7 +393,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     contactService.saveContact(root, contact2, true);
 
     List<String> emails = contactService.getEmailsByAddressBook(root, rootBook1.getId());
-    List<String> expected = Arrays.asList(new String[] {contact1.getEmailAddress(), contact2.getEmailAddress()});
+    List<String> expected = Arrays.asList(new String[] {Utils.listToString(contact1.getEmailAddresses()), Utils.listToString(contact2.getEmailAddresses())});
     assertContainsAll("Email addresses don't match", expected, emails);
     Contact contact3 = createNewContactInAddressBooks(rootBook2);
     contact3.setEmailAddress(null);
@@ -416,14 +417,14 @@ public class TestContactService extends BaseContactServiceTestCase {
     contactService.saveContact(john, contact, true);
     //List<String> emails = contactService.getAllEmailBySharedGroup(root, addressBookId);
     List<String> emails = datastorage.getAllEmailBySharedGroup(root, addressBookId);
-    List<String> expected = Arrays.asList(new String[] {contact.getEmailAddress()});
+    List<String> expected = contact.getEmailAddresses();
     assertContainsAll("Email addresses of shared address book don't match", expected, emails);
     
     // add a second one and verify it is also returned
     Contact contact2 = createNewContactInAddressBooks(ab);
     contactService.saveContact(john, contact, true);
     emails = datastorage.getAllEmailBySharedGroup(root, addressBookId);
-    expected = Arrays.asList(new String[] {contact.getEmailAddress(), contact2.getEmailAddress()});
+    expected = Arrays.asList(new String[] {contact.getEmailAddresses(), contact2.getEmailAddresses()});
     assertContainsAll("Email addresses of shared address book don't match", expected, emails);
   }
 
@@ -478,7 +479,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     
     // verify values
     List<String> expectedValues = new ArrayList<String>();
-    expectedValues.addAll(Arrays.asList(new String[] {contact.getFullName() + "::" + contact.getEmailAddress(), contact2.getFullName() + "::" + contact2.getEmailAddress(), contact3.getFullName() + "::" + contact3.getEmailAddress()}));
+    expectedValues.addAll(Arrays.asList(new String[] {contact.getFullName() + "::" + Utils.listToString(contact.getEmailAddresses()), contact2.getFullName() + "::" + contact2.getEmailAddresses(), contact3.getFullName() + "::" + contact3.getEmailAddresses()}));
     List<String> actualValues = new ArrayList<String>();
     actualValues.addAll(emails.values());
     assertContainsAll("Email Values don't match", expectedValues, actualValues);
@@ -832,10 +833,10 @@ public void testGetSharedContactsByFilter() throws Exception {
                                                       new String(),
                                                       new String(),
                                                       new String());
-    assertEquals(contactService.searchContact(root, contactFilter)
+    assertEquals(Utils.listToString(contactService.searchContact(root, contactFilter)
                                .getAll()
                                .get(0)
-                               .getEmailAddress(), shareContact.getEmailAddress());
+                               .getEmailAddresses()), Utils.listToString(shareContact.getEmailAddresses()));
 
     // search email:
     contactFilter.setAccountPath(" /jcr:root/Users/root/ApplicationData/ContactApplication/contacts");

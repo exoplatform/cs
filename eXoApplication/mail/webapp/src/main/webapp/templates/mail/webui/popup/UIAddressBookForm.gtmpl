@@ -254,7 +254,7 @@
                                </td>
                             </tr>
                             <% } %>
-                            <% if (!MailUtils.isFieldEmpty(selectedContact.getEmailAddress())) { %>
+                            <% if (!MailUtils.isFieldEmpty(MailUtils.listToString(selectedContact.getEmailAddresses()))) { %>
                             <tr>
                               <td class="InfoLabel">
                                 <div class="InfoLabel"><%=_ctx.appRes(uicomponent.id+ ".label.email") %>:</div>
@@ -262,7 +262,7 @@
                               <td class="InfoTitle1">
                                 <table class="InfoTitle2" >
                                   <%
-                                  	String emailAddresses = selectedContact.getEmailAddress() ;
+                                  	String emailAddresses = MailUtils.listToString(selectedContact.getEmailAddresses()) ;
                                   	if (emailAddresses != null && !emailAddresses.equals("")) {
                                   		List<String> emails = new ArrayList<String>() ;
                           						emails.addAll(Arrays.asList(emailAddresses.split(";"))) ;

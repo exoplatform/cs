@@ -115,7 +115,7 @@
                           </tr>
                           <% } %>
                           <% 
-                          email = contact.getEmailAddress() ;
+                          email = ContactUtils.listToString(contact.getEmailAddresses()) ;
                           if (!ContactUtils.isEmpty(email)){
                             List<String> emails = new ArrayList<String>() ;
                           	emails.addAll(Arrays.asList(email.split(";"))) ;   

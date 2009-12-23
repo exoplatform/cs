@@ -62,7 +62,6 @@ import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.jcr.util.IdGenerator;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.impl.GroupImpl;
@@ -323,7 +322,7 @@ public class JCRDataStorage {
     if(contactNode.hasProperty("exo:gender"))contact.setGender(contactNode.getProperty("exo:gender").getString());
     if(contactNode.hasProperty("exo:birthday"))contact.setBirthday(contactNode.getProperty("exo:birthday").getDate().getTime());
     if(contactNode.hasProperty("exo:jobTitle"))contact.setJobTitle(contactNode.getProperty("exo:jobTitle").getString());
-    if(contactNode.hasProperty("exo:emailAddress"))contact.setEmailAddress(contactNode.getProperty("exo:emailAddress").getString());
+    if(contactNode.hasProperty("exo:emailAddress"))contact.setEmailAddress(valuesToString(contactNode.getProperty("exo:emailAddress").getValues()));
     
     if(contactNode.hasProperty("exo:exoId"))contact.setExoId(contactNode.getProperty("exo:exoId").getString());
     if(contactNode.hasProperty("exo:googleId"))contact.setGoogleId(contactNode.getProperty("exo:googleId").getString());
@@ -545,9 +544,11 @@ public class JCRDataStorage {
       List<String> address = new ArrayList<String>();
       while (it.hasNext()) {
         Node contact = it.nextNode();
-        if (contact.hasProperty("exo:emailAddress")
-            && !Utils.isEmpty(contact.getProperty("exo:emailAddress").getString()))
-          address.add(contact.getProperty("exo:emailAddress").getString().split(",")[0].split(";")[0]);
+        try {
+          String emails = valuesToString(contact.getProperty("exo:emailAddress").getValues());
+          if (!Utils.isEmpty(emails))
+            address.add(emails.split(",")[0].split(";")[0]);
+        } catch (PathNotFoundException e) { }
       }
       return address;
     } finally {
@@ -568,8 +569,11 @@ public class JCRDataStorage {
     List<String> address = new ArrayList<String>();
     while (it.hasNext()){
       Node contact = it.nextNode();
-      if(contact.hasProperty("exo:emailAddress") && !Utils.isEmpty(contact.getProperty("exo:emailAddress").getString()))
-        address.add(contact.getProperty("exo:emailAddress").getString().split(",")[0].split(";")[0]);
+      try {
+        String emails = valuesToString(contact.getProperty("exo:emailAddress").getValues());
+        if(!Utils.isEmpty(emails))
+          address.add(emails.split(",")[0].split(";")[0]);
+      } catch (PathNotFoundException e) {}
     }
     return address ;
     } finally {
@@ -592,8 +596,11 @@ public class JCRDataStorage {
         List<String> address = new ArrayList<String>();
         while (it.hasNext()){
           Node contact = it.nextNode();
-          if(contact.hasProperty("exo:emailAddress") && !Utils.isEmpty(contact.getProperty("exo:emailAddress").getString()))
-            address.add(contact.getProperty("exo:emailAddress").getString().split(",")[0].split(";")[0]);
+          try {
+            String emails = valuesToString(contact.getProperty("exo:emailAddress").getValues());
+            if(!Utils.isEmpty(emails))
+              address.add(emails.split(",")[0].split(";")[0]);
+          } catch (PathNotFoundException e) {}
         }
         return address ;         
       } 
@@ -1289,7 +1296,8 @@ public class JCRDataStorage {
     } else try { contactNode.getProperty("exo:birthday").remove() ; } catch (PathNotFoundException e) {} // cs-2021
     
     contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
-    contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
+    if (contact.getEmailAddresses() != null)
+      contactNode.setProperty("exo:emailAddress", contact.getEmailAddresses().toArray(new String[] {}));
     
     contactNode.setProperty("exo:exoId", contact.getExoId());
     contactNode.setProperty("exo:googleId", contact.getGoogleId());
@@ -2036,7 +2044,7 @@ public class JCRDataStorage {
   private void feedEmailResult(Map<String, String> emails, Node contactNode) throws Exception {
     String id = contactNode.getProperty("exo:id").getString();
     String fullName = contactNode.getProperty("exo:fullName").getString() ;
-    String emailAddresses = contactNode.getProperty("exo:emailAddress").getString();
+    String emailAddresses = valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
     emails.put(id, fullName + Utils.SPLIT + emailAddresses) ;
   }
   
@@ -2224,7 +2232,8 @@ public class JCRDataStorage {
       contactNode.setProperty("exo:birthday", dateTime) ;
     }
     contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
-    contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
+    if (contact.getEmailAddresses() != null)
+      contactNode.setProperty("exo:emailAddress", contact.getEmailAddresses().toArray(new String[] {}));
     
     contactNode.setProperty("exo:exoId", contact.getExoId());
     contactNode.setProperty("exo:googleId", contact.getGoogleId());
@@ -2462,6 +2471,18 @@ public class JCRDataStorage {
   
   private Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception {
     return (Node) getSession(sessionProvider).getItem(nodePath);
+  }
+  
+  private String valuesToString(Value[] values) {
+    if (values == null) return null;
+	  StringBuilder strs = new StringBuilder();
+    try {
+      for (Value value : values) {
+        if (strs.length() == 0) strs.append(value.getString());
+        else strs.append(";" + value.getString());
+      }
+    } catch (Exception e) {}
+    return strs.toString();
   }
   
   private Session getSession(SessionProvider sprovider) throws Exception{

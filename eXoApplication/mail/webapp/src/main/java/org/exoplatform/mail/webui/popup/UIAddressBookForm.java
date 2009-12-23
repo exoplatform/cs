@@ -474,11 +474,10 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       String emails =  new String("");
       for (Contact contact : uiForm.getContacts()) {
         if(uiForm.isCheckedContact(contact.getId())){        
-          String emailAddresses = contact.getEmailAddress();
-          if(emailAddresses!= null && emailAddresses.length()>0){
-            String[] str = emailAddresses.split(";");
+          String emailAddress = contact.getEmailAddress();
+          if(emailAddress!= null && emailAddress.length()>0){
             if(emails.length() > 0) emails += ", ";
-            emails += str[0];
+            emails += emailAddress.trim();
           } 
         }  
       }

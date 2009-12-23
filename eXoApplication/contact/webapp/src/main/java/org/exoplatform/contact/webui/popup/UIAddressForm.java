@@ -277,10 +277,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         uiAddressForm.newCheckedList_.put(ct.getId(), ct) ;
       }
       for (Contact contact : uiAddressForm.newCheckedList_.values()) {
-        if(contact.getEmailAddress() != null) { 
-          toAddress += contact.getFullName() + "<" + contact.getEmailAddress() + "> ," ;
+        if(contact.getEmailAddresses() != null) { 
+          toAddress += contact.getFullName() + "<" + contact.getEmailAddresses() + "> ," ;
           if(sb.length() > 0) sb.append(ContactUtils.COMMA) ;
-          sb.append(contact.getEmailAddress()) ;
+          sb.append(contact.getEmailAddresses()) ;
         }
       }
       /*List<String> listMail = Arrays.asList( sb.toString().split(MailUtils.COMMA)) ; 
@@ -344,13 +344,13 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         uiAddressForm.newCheckedList_.put(ct.getId(), ct) ;
       }
       for (Contact contact : uiAddressForm.newCheckedList_.values()) {
-        if(contact.getEmailAddress() != null)
-          toAddress += contact.getFullName() + "<" + contact.getEmailAddress() + "> ," ;
+        if(contact.getEmailAddresses() != null)
+          toAddress += contact.getFullName() + "<" + contact.getEmailAddresses() + "> ," ;
       }
       List<String> listMail = Arrays.asList( sb.toString().split(ContactUtils.COMMA)) ; 
       String email = null ;
       for(Contact c : checkedContact) {
-        email = c.getEmailAddress() ;
+        email = ContactUtils.listToString(c.getEmailAddresses()) ;
         if(!listMail.contains(email)) {
           if(sb != null && sb.length() > 0) sb.append(ContactUtils.COMMA) ;
           if(email != null) sb.append(email) ;

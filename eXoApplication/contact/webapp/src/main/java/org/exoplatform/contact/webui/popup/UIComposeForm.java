@@ -24,16 +24,13 @@ import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -110,6 +107,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   }
   
   
+  @SuppressWarnings("deprecation")
   public void init(List<Account> accs, String toEmails) throws Exception {
     fromOptions.clear() ;
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;

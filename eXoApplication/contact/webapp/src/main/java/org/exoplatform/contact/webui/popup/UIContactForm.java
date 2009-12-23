@@ -157,7 +157,7 @@ public class UIContactForm extends UIFormTabPane {
     
     profileTab.setFieldBirthday(contact.getBirthday());
     profileTab.setFieldJobName(contact.getJobTitle());
-    profileTab.setFieldEmail(contact.getEmailAddress());   
+    profileTab.setFieldEmail(ContactUtils.listToString(contact.getEmailAddresses()));   
     ContactAttachment contactAttachment = contact.getAttachment();
     if (contactAttachment != null) {
       profileTab.setContact(contact) ;

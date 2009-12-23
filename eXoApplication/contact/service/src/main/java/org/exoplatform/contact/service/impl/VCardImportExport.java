@@ -210,7 +210,7 @@ public class VCardImportExport implements ContactImportExport {
 
       // email address
       
-      String strEmail = contact.getEmailAddress() ;
+      String strEmail = Utils.listToString(contact.getEmailAddresses()) ;
       if (strEmail != null) {
         EmailAddress email ;
         StringTokenizer tokens = new StringTokenizer(strEmail, ";", false);

@@ -31,11 +31,9 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.jcr.PathNotFoundException;
-import javax.jcr.RepositoryException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactPageList;
@@ -62,9 +60,7 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Account;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -717,6 +713,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   }
   
   static public class DNDContactsActionListener extends EventListener<UIContacts> {
+    @SuppressWarnings("unchecked")
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       uiContacts.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
@@ -1290,8 +1287,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   static public class EmailComparator implements Comparator {
     private static boolean isAsc ;
     public int compare(Object o1, Object o2) throws ClassCastException {
-      String email1 = ((Contact) o1).getEmailAddress() ;
-      String email2 = ((Contact) o2).getEmailAddress() ;
+      String email1 = ContactUtils.listToString(((Contact) o1).getEmailAddresses()) ;
+      String email2 = ContactUtils.listToString(((Contact) o2).getEmailAddresses()) ;
       if (ContactUtils.isEmpty(email1) || ContactUtils.isEmpty(email2)) return 0 ;
       if (isAsc == true) return email1.compareTo(email2) ;
       else return email2.compareTo(email1) ;
@@ -1354,7 +1351,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String emails = null ;
       if (!ContactUtils.isEmpty(objectId)) {
         if (uiContacts.contactMap.containsKey(objectId)) {
-    	  String email = uiContacts.contactMap.get(objectId).getEmailAddress();
+    	  String email = ContactUtils.listToString(uiContacts.contactMap.get(objectId).getEmailAddresses());
     	  if (!ContactUtils.isEmpty(email))
     	    emails = email.split(",")[0].split(";")[0];     	
         }
@@ -1372,9 +1369,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         for (String id : contactIds) {
           String email = uiContacts.contactMap.get(id).getEmailAddress() ;
           if (!ContactUtils.isEmpty(email)) {
-        	String priorityEmail = email.split(",")[0].split(";")[0];
-            if (buffer.length() > 0) buffer.append(", " + priorityEmail) ;
-            else buffer.append(priorityEmail) ;
+            if (buffer.length() > 0) buffer.append(", " + email) ;
+            else buffer.append(email) ;
           }
         }
         emails = buffer.toString() ; 
@@ -1389,7 +1385,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      
       List<Account> acc = ContactUtils.getAccounts() ;
       UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;
       uiComposeForm.init(acc, emails) ;

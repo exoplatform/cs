@@ -199,7 +199,7 @@ public class ContactPageList extends JCRPageList {
     if (contactNode.hasProperty("exo:jobTitle"))
       contact.setJobTitle(contactNode.getProperty("exo:jobTitle").getString());
     if (contactNode.hasProperty("exo:emailAddress"))
-      contact.setEmailAddress(contactNode.getProperty("exo:emailAddress").getString());
+      contact.setEmailAddress(valuesToString(contactNode.getProperty("exo:emailAddress").getValues()));
 
     if (contactNode.hasProperty("exo:exoId"))
       contact.setExoId(contactNode.getProperty("exo:exoId").getString());
@@ -371,7 +371,7 @@ public class ContactPageList extends JCRPageList {
       String email = null;
       String fullName = null;
       try {
-        email = contactNode.getProperty("exo:emailAddress").getString();
+        email = valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
       } catch (PathNotFoundException e) {
         email = "";
       }
@@ -405,5 +405,16 @@ public class ContactPageList extends JCRPageList {
   private QueryImpl createXPathQuery(Session session, String username, String xpath) throws Exception {
     QueryManager queryManager = session.getWorkspace().getQueryManager();
     return (QueryImpl) queryManager.createQuery(xpath, Query.XPATH);
+  }
+  private String valuesToString(Value[] values) {
+    if (values == null) return null;
+    StringBuilder strs = new StringBuilder();
+    try {
+      for (Value value : values) {
+        if (strs.length() == 0) strs.append(value.getString());
+        else strs.append(";" + value.getString());
+      }
+    } catch (Exception e) {}
+    return strs.toString();
   }
 }

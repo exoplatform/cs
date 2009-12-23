@@ -195,4 +195,14 @@ public class ContactUtils {
     return builder.toString() ;
   }
   
+  public static String listToString(List<String> list) {
+    if (list == null || list.size() == 0) return ""; 
+    StringBuilder builder = new StringBuilder();
+    for (String str : list) {
+      if (builder.length() > 0) builder.append("; " + str);
+      else builder.append(str);
+    }
+    return builder.toString();
+  }
+  
 }
