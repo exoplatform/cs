@@ -78,13 +78,13 @@
        <dependency>
          <groupId>org.exoplatform.portal</groupId>
          <artifactId>portal.packaging.module</artifactId>
-         <version>2.5.7-SNAPSHOT</version>
+         <version>${org.exoplatform.portal.version}</version>
          <type>js</type>
        </dependency> 
        <dependency>
          <groupId>org.exoplatform.webos</groupId>
          <artifactId>webos.packaging.module</artifactId>
-         <version>1.5.3-SNAPSHOT</version>
+         <version>${org.exoplatform.webos.version}</version>
          <type>js</type>
        </dependency> 
        <dependency>
