@@ -17,7 +17,7 @@
   <groupId>org.exoplatform.cs</groupId>
   <artifactId>cs</artifactId>
   <name>eXo Collaboration Suite</name>
-  <version>1.3.3-SNAPSHOT</version>
+  <version>1.3.4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -142,9 +142,9 @@
               <tasks>
                 <copy failonerror="false" todir="${basedir}/target/${project.build.finalName}/WEB-INF/classes">
                   <fileset dir="${basedir}/src/main/webapp/WEB-INF/classes">
-                    <include name="**/*_en.properties"/>
+                    <include name="**/*_en.properties" />
                   </fileset>
-                  <globmapper from="*_en.properties" to="*.properties"/>
+                  <globmapper from="*_en.properties" to="*.properties" />
                 </copy>
               </tasks>
             </configuration>
