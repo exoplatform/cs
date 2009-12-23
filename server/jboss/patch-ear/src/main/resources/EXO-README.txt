@@ -1,5 +1,5 @@
 ==============================================
-    Release Notes - exo-cs - Version 1.3.2
+    Release Notes - exo-cs - Version 1.3.3
 ==============================================
 
 ===============
@@ -29,11 +29,13 @@ experience more productive. It offers several ways to to view and organize your 
 =============
  What's new?
 =============
-exo Collaboration Suite 1.3 features several noteworthy changes:
+exo Collaboration Suite 1.3.3 features several noteworthy changes:
 
     * General
-          o Upgraded to portal 2.5.5
-          o Compatible with webos 1.5
+          o Upgraded to portal 2.5.7
+          o Compatible with jcr 1.10.6
+          o Compatible with webos 1.5.3
+          
           o Right to left (RTL) orientation support
           o Arabic translations
     * Calendar
@@ -63,7 +65,7 @@ Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/
 - System Requirements
         Web Browser: IE6, IE7, FF2, FF3 (recommended), Safari.
         JVM: version 1.5.0_09 or higher
-        Application Server : Tomcat, jboss
+        Application Server : jboss
         Building Tools: Maven 2.0.6 and up
         openfire server version 3.4.5 for more information visit here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Chat+Configuration
 
@@ -80,18 +82,15 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
    * NOTE for cygwin's user: the JAVA_HOME must be in MS Windows format like: "C:\Program Files\JDK 1.5"
     Example use: export JAVA_HOME=`cygpath -w "$JAVA_HOME"`; to convert unix like format to MS Windows format.
    
-   * Start all servers by one command for Unix/Linux/cygwin environment:
-      Go to exo-jboss/bin and run command:
-      ./run.sh
    
    * Start exo-jboss server:
    
      +) On the Windows platform
-       Open a DOS prompt command, go to exo-tomcat/bin and type the command:
+       Open a DOS prompt command, go to exo-jboss/bin and type the command:
          run.bat start
 
      +) On Unix/Linux/cygwin
-       Open a terminal, go to exo-tomcat/bin and type the command:
+       Open a terminal, go to exo-jboss/bin and type the command:
          ./run.sh
     
    * Start exo-openfire server:
@@ -136,7 +135,118 @@ All those accounts have the default password "exo".
 ===========
  CHANGELOG
 ===========
+- 1.3.3
+
+** Bug
+    * [CS-3191] - IE7: Drag & drop event/task is fail in special case
+    * [CS-3310] - Safari: don't open Chat room immediately when join room
+    * [CS-3315] - Messages are not displayed in chat window
+    * [CS-3341] - IE7: when view message at Vertical Layout, Can't resize detail message pane
+    * [CS-3344] - IE7: little error at List view
+    * [CS-3345] - Occur some fails when run CS in Vietnamese 
+    * [CS-3350] - IE7/Webos: Little UI error at Chat portlet 
+    * [CS-3406] - Reply message:  wrong content of this message when content contain some special icons on gmail 
+    * [CS-3428] - FF : webos, all portlets are been empty in special case 
+    * [CS-3465] - CS on portal 2.5.6 : Occur some fails when run
+    * [CS-3527] - The chat doesn't work on any navigator
+    * [CS-3529] - when reply a message which has some icons in content , in Compose form show attachments of corresponding icons 
+    * [CS-3530] - Drag n drop of Chat window in webos moves all conversations windows
+    * [CS-3533] - UI error at Reminder tab
+    * [CS-3535] - Icons on Chat Bar are hidden when open User workspace
+    * [CS-3536] - IE,Safari : Only see 5 users in a room 
+    * [CS-3537] - "show message from" is wrong when users login on computers , current date/time on them  are different 
+    * [CS-3546] - some fields in Add/Edit Event form automatically back status before when refresh
+    * [CS-3547] - Now Name of Add/edit event form is only Event , it is wrong 
+    * [CS-3549] - POP3: when drag&drop/Move  message, message is not shown at destination folder
+    * [CS-3585] - Webos : don't show all user in contact list if the list too long
+    * [CS-3588] - Can not create RSS/CalDAV with Calendar have only event/task which are stored category [all]
+    * [CS-3592] - can not import event from invitation mail to calendar portlet in special case 
+    * [CS-3597] - Contact: not way to edit a contact when I view it in "full mode"
+    * [CS-3598] - IE6: chat bar is not at bottom browser
+    * [CS-3605] - Chatbar: messages and labels i18n
+    * [CS-3607] - can  create 2 calendars that name of them are the same
+    * [CS-3608] - new calendar is not shown on quick add event/task form in special case
+    * [CS-3610] - don't search all event/task of calendar in special case 
+    * [CS-3611] - FF 3.5 :UI error at chat room when message is too long
+    * [CS-3614] - webos: UI error when view Chat portlet in French
+    * [CS-3615] - Webos: UI error when view Calendar portlet in French
+    * [CS-3618] - status of user is not shown exactly on contact list when he has just added by other user 
+    * [CS-3619] - Can't delete/edit/mark all read/create new subfolder  folder when edit name of that folder before
+    * [CS-3621] - FF: appear unexpected icon on Compose new message form
+    * [CS-3637] - unknown error when add tag for contact which belong to shared calendar
+    * [CS-3642] - don't attach image into contact
+    * [CS-3668] - Unknown error when create contact with picture 
+
+
+** Improvement
+    * [CS-931] - Edit last contact of the list in vcard view
+    * [CS-2496] - set SSL for incoming and outgoing mails as default settings
+    * [CS-2501] - Should be hide or disable "Every" field at tab Reminder of add/edit event/task form when don't repeat
+    * [CS-2503] - Describe correctly the status of the Mail Portlet without account
+    * [CS-2895] - use buttons in message view
+    * [CS-3005] - Chat: Should focus on existing room when create new room with name is the same with existing one
+    * [CS-3023] - should fill specific group into Group combobox on Calendar Import form when right click on a specific group and select Import
+    * [CS-3155] - Calendar: Hidden calendar is shown automatically after adding new event/task on it
+    * [CS-3156] - Chat, IE7, WebOS: New added user is not updated in list when click Refresh in invite user form
+    * [CS-3176] - improve drag and drop contact, mail, calendar make dragged item is transparent and have only border
+    * [CS-3272] - Separate synchronizing folder and message with IMAP protocol
+    * [CS-3277] - IE8 support
+    * [CS-3336] - hardcoded URLS in openfire.xml
+    * [CS-3591] - should not allow to delete "Collected Addresses"
+
+
+** Task
+    * [CS-2977] - check w3c code for some right click menu of mail 
+    * [CS-3679] - Cleanup the build process to be able to deploy on eXo Nexus with the release plugin for 1.2.x 
+
+
+** Sub-task
+    * [CS-3651] - DEV: always require enter username/pass although inputted username/pass exactly 
+    * [CS-3656] - [DEV] Don't search all events/tasks in calendar
+    * [CS-3657] - [TEST] Don't search all events/tasks in calendar
+    * [CS-3662] - [DEV] can not import event from invitation mail to calendar portlet
+    * [CS-3663] - [TEST] can not import event from invitation mail to calendar portlet
+    * [CS-3664] - [DEV] should not allow to delete "Collected Addresses
+    * [CS-3680] - Build - Cleanup the profile with properties, remove the reporting and emma config, add parent pom v6
+    * [CS-3681] - Build - Integrate module.js in the project to be used by exopackage and maven-exobuild-plugin
+    * [CS-3687] - Use Kernel, Core, JCR, PC, Portal, WebOS SNAPSHOTs
+
+
 - 1.3.2
+
+** Bug
+    * [CS-911] - Events spanning 2 years are not highlighted
+    * [CS-2482] - List view: should be hide events/tasks of calendar which is uncheck in calendar list
+    * [CS-2498] - some users are not shown at task delegation field when have many users , who was added into Task delegation
+    * [CS-2506] - Dragging a link displays 'javascript:void(0)'
+    * [CS-2621] -  Error when run email reminder job and  popup reminder job
+    * [CS-3004] -   Chat: MacOS, FF3: Little error when show room config form
+    * [CS-3017] - Room owner can not see other in joining room users list 
+    * [CS-3033] - should disable the some functions on right menu of a group address book
+    * [CS-3165] - unnecessary exception found while concurrently creating events
+    * [CS-3171] - Don't arrange mail in time order when filter with adding tag
+    * [CS-3246] - contact list in public room is empty in special case 
+    * [CS-3307] - IE6: UI error when show event in Week/week work view, day view, month view
+    * [CS-3309] - Safari : List View: UI error when view event/task which store attachment
+    * [CS-3318] - don't send file in IE8 while chatting
+    * [CS-3319] - IE8: user Can't save file when another user send file
+    * [CS-3326] - Safari : Still Keep session of user when that user logout 
+    * [CS-3327] - SMTP Error when sending mail : could not connect to SMTP server
+    * [CS-3343] - IE7: UI error when search contact in case Result is empty
+    * [CS-3351] - Content of alert message is wrong when join room in special case 
+    * [CS-3355] -  if add star for message can't resize Detail message pane when view in Vertical layout
+    * [CS-3371] - Can only see the messages I send in a private chat or in a room
+    * [CS-3372] - Functionality "Show messages from" doesn't work
+    * [CS-3402] - IMAP folders containing '/' not handled properly
+    * [CS-3416] - automatically hide event/task of calendar when create new event/task in special case 
+    * [CS-3462] - UI error when open portlets on Webos
+
+** Improvement
+    * [CS-569] - Fetch headers
+    * [CS-2488] - do not destroy events when deleting a category
+    * [CS-2656] - In Jboss: Do not display un-public room in the list Join room of owner
+    * [CS-2761] - Order of the columns in message list
+    * [CS-3159] - Room owner can not see his private room in Join room list
 
 - 1.3.1
 ** Bug
