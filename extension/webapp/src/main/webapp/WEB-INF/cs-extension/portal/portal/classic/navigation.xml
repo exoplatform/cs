@@ -6,14 +6,14 @@
     <node>
 	  <uri>home</uri>
 	  <name>home</name>
-	  <label>#{portal.csdemo.home}</label>
+	  <label>#{portal.classic.home}</label>
 	  <page-reference>portal::classic::homepage</page-reference>	    
 	 </node>
 	 
    <node>
     <uri>register</uri>
     <name>register</name>
-    <label>#{portal.csdemo.register}</label>
+    <label>#{portal.classic.register}</label>
     <visible>true</visible>
     <page-reference>portal::classic::register</page-reference>
    </node>

@@ -3,7 +3,7 @@
 
   def rcontext = _ctx.getRequestContext() ;
   def jsManager = rcontext.getJavascriptManager();
-  jsManager.importJavascript("eXo.communication.chat.eXoChat", "/chat/javascript/");
+  //jsManager.importJavascript("eXo.communication.chat.eXoChat", "/chat/javascript/");
   jsManager.addJavascript("eXo.communication.chat.eXoChat.applicationId = '" + uicomponent.getId() + "';");
   jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChat.init");
 %>
