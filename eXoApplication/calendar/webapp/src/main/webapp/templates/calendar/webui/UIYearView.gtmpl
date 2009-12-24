@@ -1,0 +1,135 @@
+<%
+	import java.util.Map;
+	import java.util.Calendar;
+	import java.util.GregorianCalendar;
+	uiform.begin() ;
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setSelected("'+uiform.id+'") ;') ;
+ 	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
+	int currentYear = uicomponent.getCurrentYear() ;
+	Calendar cal =  new GregorianCalendar() ;
+	cal.setTimeInMillis(uicomponent.getCurrentCalendar().getTimeInMillis()) ;
+	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.YEAR)) ;
+ 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.YEAR)) ;
+ 	Map value = uicomponent.getValueMap() ;
+ 	dayOfYear = 1 ;
+%>
+<div class="UIYearView" style="display: block;">
+	<div class="TitleBar">		
+		<table>
+			<body>
+				<tr>
+					<td>
+						<a href="$linkDayPrevious">
+							<div class="BackIcon" title="<%=uiform.getLabel('previousYear')%>"><span></span></div>
+						</a>
+					</td>
+					<td>
+						<div class="Title"><%=uiform.getLabel('year')%> $currentYear</div>
+					</td>
+					<td>
+						<a href="$linkDayNext">
+							<div class="NextIcon" title="<%=uiform.getLabel('nextYear')%>"><span></span></div>
+						</a>
+					</td>
+				</tr>
+			</body>
+		</table>
+	</div>
+	<div class="DayWorkingArea">
+		<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
+			<col width="33%"><col width="33%"><col width="33%">
+        <tbody>
+        	<%
+        		quarter = 0 ;
+        		month = 0 ;
+        		while(quarter++ < 4) {
+        			println "<tr>" ;
+        			i = 0 
+        			while (i++ < 3) {
+        				cssClass = "CalendarContentNomal" ;
+        				if(uicomponent.isCurrentMonth(month, currentYear)) {
+	        				cssClass = "CalendarMatchedEventContent" ;
+	        			}
+	        		monthName = uicomponent.getMonthName(month) ;
+	        		cal.set(Calendar.YEAR, currentYear) ;
+	        		cal.set(Calendar.MONTH, month) ;
+	        		cal.set(Calendar.DATE, 1) ;
+	        		monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+cal.getTimeInMillis() ;  
+	        		//monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=1" ;
+        	 %>
+        	 <td class="$cssClass">
+							<div class="WeekSuburdbar">
+								<a href="<%=uicomponent.event("GotoDate", monthViewAction)%>">
+									$monthName 
+								</a>
+							</div>
+							<div class="MonthList">
+								<div class="WeekList">
+								  <%for(day in uicomponent.getDaysNameTitle()) {
+									  	cssClass = "DayTitle" ;
+											if(day.equals(uicomponent.getDaysNameTitle()[0])) cssClass = "SundayTitle" ;
+									%>
+									<div class="$cssClass"><%=day.substring(0,1)%></div>
+								  <%}%>
+	  							<div style="clear: both"><span></span></div>
+	  						</div>
+	  						<div class="DayList">
+    							<table class="UIGrid" id="" cellspacing="0" borderspacing="0">
+			  						<tbody>
+			  							<%
+												week = 0 ; 
+												dayOfMonth = 1 ;
+												validDay = 0 ;
+												daysInMonth = uicomponent.getDaysInMonth(month, currentYear) ;
+												while ( week++ < 6   ) {
+											    println "<tr>";
+											    dayOfWeek = 0 ;
+											    while (dayOfWeek++ < 7) {
+											    	startDayOfWeek = uicomponent.getDayOfWeek(currentYear, month, dayOfMonth) ;
+											      if (week == 1 && startDayOfWeek == dayOfWeek) {
+											        validDay = 1;
+											      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
+											        validDay = 0;
+											      }
+											      if (validDay) {
+											      	highlight = "" ;
+											      	cal.set(Calendar.MONTH, month) ;
+											      	cal.set(Calendar.DAY_OF_MONTH, dayOfMonth) ;
+											      	dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+ cal.getTimeInMillis();
+											      	//dayActionLink = uicomponent.TYPE_DAY +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
+											      	if(value.get(dayOfYear) != null) {
+											      		highlight = "Highlight" ;
+											      	}
+											      	%> 
+											      	 <td class="$highlight">
+												      	 <a href="<%=uicomponent.event("GotoDate", dayActionLink)%>">
+												      	 	$dayOfMonth
+												      	 </a>
+											      	 </td>
+											       	<%
+											       	dayOfYear++ ;
+											        dayOfMonth++ ;
+											      } else {
+											        println "<td>&nbsp;</td>" ;
+											      }											      
+											    }
+											    println "</tr>" ;
+								  			}									  			 
+											%>
+			  						</tbody>
+			  					</table>
+			  				</div>
+		  				</div>
+        	 <%
+        				month++ ; 
+        			}
+        			println "</tr>" ;
+        			if(month > 11) { break ;}
+        		}
+        	%>
+				</tbody>			        				
+			</table>
+		</div>					        
+	</div>
+<%uiform.end();%>	

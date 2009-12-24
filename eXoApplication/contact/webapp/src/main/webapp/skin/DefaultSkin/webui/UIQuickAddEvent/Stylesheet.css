@@ -1,0 +1,35 @@
+.UIContactPortlet .UIQuickAddEvent {
+	background-color: #ffffff;
+	padding: 8px;
+}
+
+.UIContactPortlet .UIQuickAddEvent .HorizontalLayout {
+	background-color: #f7f7f7;
+	padding: 8px;
+}
+
+.UIContactPortlet .UIQuickAddEvent .UIFormWithTitle {
+	margin: 8px auto ;
+}
+
+.UIContactPortlet .UIQuickAddEvent .HorizontalLayout .DateTime {
+	float: left;
+	margin-right: 3px;
+}
+
+.UIContactPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Date {
+	float: left;
+}
+
+.UIContactPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Date input{
+	font-size: 11px;
+	width: 104px;
+}
+
+.UIContactPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Time{
+	font-size: 11px;
+}
+
+.UIContactPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Time .selectbox{
+	width: 104px;
+}

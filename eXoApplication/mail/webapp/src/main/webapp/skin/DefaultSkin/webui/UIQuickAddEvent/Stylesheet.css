@@ -1,0 +1,36 @@
+.UIMailPortlet .UIQuickAddEvent {
+	background-color: #ffffff;
+	padding: 8px;
+}
+
+.UIMailPortlet .UIQuickAddEvent .HorizontalLayout {
+	background-color: #f7f7f7;
+	padding: 8px;
+}
+
+.UIMailPortlet .UIQuickAddEvent .UIFormWithTitle {
+	margin: 8px auto ;
+}
+
+.UIMailPortlet .UIQuickAddEvent .HorizontalLayout .DateTime {
+	float: left;
+	margin-right: 3px;
+}
+
+.UIMailPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Date {
+	float: left;
+}
+
+.UIMailPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Date input{
+	font-size: 11px;
+	width: 104px;
+}
+
+.UIMailPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Time{
+	font-size: 11px;
+}
+
+.UIMailPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Time .selectbox{
+	width: 104px;
+}
+

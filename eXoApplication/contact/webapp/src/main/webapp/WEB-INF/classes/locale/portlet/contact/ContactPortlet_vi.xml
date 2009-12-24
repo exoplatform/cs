@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <javax>
+    <portlet>
+      <title>Tiếng việt</title>
+    </portlet>
+  </javax>
+  <UIContactPopupWindow>
+    <title>
+      <AddNewContact>Thêm/sửa liên lạc</AddNewContact>
+      <UICategoryForm>Nhóm</UICategoryForm>
+      <AddNewEvent>Thêm sự kiện</AddNewEvent>
+      <ExportForm>Xuất liên lạc</ExportForm>
+      <ImportAddress>Nhập địa chỉ</ImportAddress>
+      <ImportContacts>Nhập liên lạc</ImportContacts>
+      <UIExportAddressBookForm>Xuất địa chỉ</UIExportAddressBookForm>
+      <UITagForm>Thêm/sửa thẻ</UITagForm>
+      <ContactDetails>Chi tiết liên lạc</ContactDetails>
+      <UIMoveContactsForm>Di chuyển liên lạc</UIMoveContactsForm>
+      <UIEditTagForm>Sửa thẻ</UIEditTagForm>
+      <UIAdvancedSearchForm>Tìm kiếm nâng cao</UIAdvancedSearchForm>
+      <UIPermissionGroupForm>Chia sẻ nhóm</UIPermissionGroupForm>
+      <UIPermissionContactForm>Chia sẻ liên lạc</UIPermissionContactForm>
+      <UIPermissionContactsForm>Chia sẻ các liên lạc</UIPermissionContactsForm>
+      <UIMoveToPublicForm>Di chuyển tới nhóm chung</UIMoveToPublicForm>
+      <UIComposeForm>Gửi thư</UIComposeForm>
+    </title>
+  </UIContactPopupWindow>
+  <contactActionUIPopupWindow>
+    <title>
+      <UIAddressForm>Chọn thư</UIAddressForm>
+      <UICategoryForm>Nhóm</UICategoryForm>
+      <UIImageForm>Chọn ảnh</UIImageForm>
+      <UIComposeForm>Gửi thư</UIComposeForm>
+    </title>
+  </contactActionUIPopupWindow>
+  <UIPopupGroupSelector>
+    <title>
+      <UIGroupSelector>Chọn nhóm</UIGroupSelector>
+    </title>
+  </UIPopupGroupSelector>
+  <UIPopupWindowUserSelect>
+    <title>
+      <UIUserSelector>Chọn người dùng</UIUserSelector>
+    </title>
+  </UIPopupWindowUserSelect>
+  <!--
+  #org.exoplatform.contact.webui.popup.UICategorySelect
+  -->
+  <UICategorySelect>
+    <label>
+      <category>Nhóm</category>
+      <action>
+        <AddCategory>Thêm nhóm</AddCategory>
+      </action>
+    </label>
+  </UICategorySelect>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIContactForm
+  -->
+  <UIContactForm>
+    <label>
+      <contactName>Tên liên lạc</contactName>
+      <firstName>Họ</firstName>
+      <lastName>Tên</lastName>
+      <nickName>Tên đệm</nickName>
+      <gender>Giới tính</gender>
+      <option>
+        <day>ngày</day>
+        <month>tháng</month>
+        <year>năm</year>
+      </option>
+      <day>ngày</day>
+      <month>tháng</month>
+      <year>năm</year>
+      <birthday>Ngày sinh</birthday>
+      <jobTitle>Nghề nghiệp</jobTitle>
+      <multiEmail>Thư</multiEmail>
+      <exoChat>Exo Chat</exoChat>
+      <google>Gtalk</google>
+      <msn>MSN</msn>
+      <aolAim>AOL/AIM</aolAim>
+      <yahoo>Yahoo!</yahoo>
+      <irc>IRC</irc>
+      <skype>Skype</skype>
+      <icq>ICQ</icq>
+      <homeAddress>Địa chỉ nhà</homeAddress>
+      <homeCity>Tỉnh/thành</homeCity>
+      <homeState_province>Bang</homeState_province>
+      <homePostalCode>Mã bưu điện</homePostalCode>
+      <homeCountry>Quốc gia</homeCountry>
+      <homePhone1>Số máy 1</homePhone1>
+      <homePhone2>Số máy 2</homePhone2>
+      <homeFax>Fax</homeFax>
+      <personalSite>Trang cá nhân</personalSite>
+      <workAddress>Địa chỉ làm việc</workAddress>
+      <workCity>Tỉnh/thành</workCity>
+      <workState_province>Bang</workState_province>
+      <workPostalCode>Mã bưu điện</workPostalCode>
+      <workCountry>Quốc gia</workCountry>
+      <workPhone1>Số máy 1</workPhone1>
+      <workPhone2>Số máy 2</workPhone2>
+      <workFax>Fax</workFax>
+      <mobilePhone>Di động</mobilePhone>
+      <webPage>Web</webPage>
+      <note>Chú thích</note>
+      <selectGroups>Chọn các nhóm</selectGroups>
+      <editPermission>Quyền sửa</editPermission>
+      <male>Nam</male>
+      <female>Nữ</female>
+      <action>
+        <SelectUser>Chọn người dùng</SelectUser>
+        <SelectMemberShip>Chọn quyền</SelectMemberShip>
+      </action>
+      <delete>Xóa</delete>
+      <change>Sửa</change>
+      <picture>ảnh</picture>
+    </label>
+    <action>
+      <Save>Lưu</Save>
+      <Cancel>Hủy</Cancel>
+    </action>
+    <tab>
+      <label>
+        <protileTab>Tiểu sử</protileTab>
+        <imContactTab>IM liên lạc</imContactTab>
+        <homeTab>Nơi ở</homeTab>
+        <workTab>Nơi làm việc</workTab>
+        <noteTab>Chú thích</noteTab>
+        <shareContactTab>Chia sẻ</shareContactTab>
+      </label>
+    </tab>
+    <msg>
+      <invalid-birthday>Trường ngày sinh nhập sai</invalid-birthday>
+      <contact-deleted>Liên lạc đã bị xóa</contact-deleted>
+      <address-deleted>Nhóm đã bị xóa</address-deleted>
+      <removedPer>Quyền đã bị xóa</removedPer>
+      <too-manyField>Thêm quá nhiều trường</too-manyField>
+      <nameTooLong>Tên nhập quá dài</nameTooLong>
+      <jobTooLong>Nghề nghiệp nhập quá dài</jobTooLong>
+    </msg>
+  </UIContactForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UICategoryForm
+  -->
+  <UICategoryForm>
+    <action>
+      <Save>Lưu</Save>
+      <Cancel>Hủy</Cancel>
+    </action>
+    <msg>
+      <existed-categoryName>Tên nhóm đã tồn tại</existed-categoryName>
+      <userExisted-categoryName>Tên {0} đã tồn tại</userExisted-categoryName>
+      <category-deleted>Nhóm đã bị xóa</category-deleted>
+      <non-permission>Đã bị xóa quyền</non-permission>
+      <nameTooLong>Tên quá dài</nameTooLong>
+    </msg>
+    <label>
+      <categoryName>Tên nhóm</categoryName>
+      <description>Mô tả</description>
+    </label>
+  </UICategoryForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIImportForm
+  -->
+  <UIImportForm>
+    <action>
+      <Cancel>#{word.cancel}</Cancel>
+      <Save>#{word.save}</Save>
+    </action>
+    <label>
+      <type>Kiểu</type>
+      <upload>Đưa lên</upload>
+      <category />
+      <action>
+        <AddCategory>Thêm nhóm</AddCategory>
+      </action>
+      <categoryInput>Chọn nhóm</categoryInput>
+    </label>
+    <msg>
+      <fileName-empty>Cần chọn tệp</fileName-empty>
+      <fileName-error>chỉ cung cấp tệp " VCF."</fileName-error>
+      <invalid-format>Tệp không đúng định dạng</invalid-format>
+      <uploadResource-empty>Chọn tệp và bấm vào biểu tượng đưa lên</uploadResource-empty>
+      <addGroup-required>Cần chọn nhóm</addGroup-required>
+      <address-deleted>Nhóm này đã bị xóa</address-deleted>
+      <too-many-contact>Không thể nhập liên lạc, số liên lạc lớn hơn {0}</too-many-contact>
+    </msg>
+  </UIImportForm>
+  <!--
+  #Please dont delete continuous line
+  -->
+  <!--
+  #org.exoplatform.contact.webui.popup.UIExportForm
+  -->
+  <UIExportForm>
+    <action>
+      <Cancel>#{word.cancel}</Cancel>
+      <Save>#{word.save}</Save>
+    </action>
+    <label>
+      <type>Kiểu</type>
+      <fileName>Tên tệp</fileName>
+      <exportSelected></exportSelected>
+      <exportAll>Xuất được chọn</exportAll>
+      <cancel>Hủy</cancel>
+      <email>Thư</email>
+      <name>Tên</name>
+      <addressBook>Nhóm :</addressBook>
+      <tag>Thẻ:</tag>
+      <checkAll>Chọn hết</checkAll>
+      <available>Sãn sàng</available>
+      <export>Xuất</export>
+    </label>
+    <msg>
+      <check-contact-required>Chọn liên lạc để xuất</check-contact-required>
+      <manyContacts>Không thể xuất. Số liên lạc vượt quá {0}</manyContacts>
+      <deletedPer>Quyền trên liên lạc đã bị xóa</deletedPer>
+    </msg>
+  </UIExportForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIExportAddressBookForm
+  -->
+  <UIExportAddressBookForm>
+    <action>
+      <Cancel>#{word.cancel}</Cancel>
+      <Save>#{word.save}</Save>
+    </action>
+    <label>
+      <type>Kiểu</type>
+      <fileName>Tên tệp</fileName>
+      <title>Xuất nhóm</title>
+      <exportSelected>Xuất chọn</exportSelected>
+      <exportAll>Xuất hết</exportAll>
+      <cancel>Hủy</cancel>
+      <name>Tên</name>
+      <checkAll>Chọn hết</checkAll>
+    </label>
+    <checkGroup-required>Chọn nhóm để xuất</checkGroup-required>
+    <msg>
+      <there-is-not-contacts-exists>Không có liên lạc nào</there-is-not-contacts-exists>
+    </msg>
+    <many-Contacts>Không thể xuất, số liên lạc vượt quá {0}!</many-Contacts>
+  </UIExportAddressBookForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UITagForm
+  -->
+  <UITagForm>
+    <label>
+      <contact>Liên lạc</contact>
+      <tagName>Tên</tagName>
+      <color>Màu</color>
+      <shareContactTab>chia sẻ nhóm</shareContactTab>
+    </label>
+    <msg>
+      <tagName-existed>Tên thẻ đã tồn tại</tagName-existed>
+      <checkTag-required>Bạn cần chọn thẻ</checkTag-required>
+      <contact-not-existed>Liên lạc không còn tồn tại</contact-not-existed>
+      <contact-not-exist-remove>Liên lạc không còn tồn tại</contact-not-exist-remove>
+      <nameTooLong>Tên thẻ quá dài</nameTooLong>
+      <noTagRemoved>Thẻ {0} không có trong liên lạc nào</noTagRemoved>
+    </msg>
+    <action>
+      <Add>Thêm</Add>
+      <Cancel>Hủy</Cancel>
+      <Remove>Xóa</Remove>
+    </action>
+  </UITagForm>
+  <UITag>
+    <msg>
+      <noContactToExport>Không có liên lạc để xuất</noContactToExport>
+    </msg>
+  </UITag>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIEditTagForm
+  -->
+  <UIEditTagForm>
+    <label>
+      <tagName>Tên</tagName>
+      <description>Mô tả</description>
+      <color>Màu</color>
+    </label>
+    <msg>
+      <tagName-existed>Tên thẻ đã tồn tại</tagName-existed>
+      <tag-deleted>Thẻ đã bị xóa</tag-deleted>
+      <nameTooLong>Tên thẻ quá dài</nameTooLong>
+    </msg>
+    <action>
+      <Save>Lưu</Save>
+      <Cancel>Hủy</Cancel>
+    </action>
+  </UIEditTagForm>
+  <!--
+  #org.exoplatform.contact.webui.UIContacts
+  -->
+  <UIContacts>
+    <label>
+      <checkContact>Đánh dấu</checkContact>
+      <edit>Sửa</edit>
+      <copy>Sao Chép</copy>
+      <shared>Chia sẻ</shared>
+      <sendEmail>Gửi thư</sendEmail>
+      <instantMessage>Nhắn tin</instantMessage>
+      <tag>Thẻ</tag>
+      <move>Di chuyển</move>
+      <delete>Xóa</delete>
+      <print>In</print>
+      <export>Xuất</export>
+      <vcard>VCard</vcard>
+      <jobTitle>Nghề nghiệp</jobTitle>
+      <workPhone>Điên thoại</workPhone>
+      <addressBook>Nhóm</addressBook>
+      <email>Thư</email>
+      <name>Tên</name>
+      <searchResult>Kết quả tìm kiếm</searchResult>
+      <of>Của</of>
+      <contacts>Liên lạc</contacts>
+      <sharedContacts>Liên lạc chia sẻ</sharedContacts>
+      <copyContacts>Sao Chép</copyContacts>
+      <webSite>Trang web</webSite>
+      <viewDetails>Xem chi tiết</viewDetails>
+      <firstPage>Về đầu trang</firstPage>
+      <previousPage>Trang trước</previousPage>
+      <nextPage>Trang sau</nextPage>
+      <lastPage>Trang cuối</lastPage>
+      <checkAll>Chọn hết</checkAll>
+      <sortByName>Xếp theo tên</sortByName>
+      <sortByEmail>xếp theo Thư</sortByEmail>
+      <sortByJobTitle>xếp theo nghề nghiệp</sortByJobTitle>
+      <available>Sẵn sàng</available>
+      <notContactFound>Không có liên lạc</notContactFound>
+      <mobile>Di động</mobile>
+    </label>
+    <msg>
+      <confirm-delete>Bạn có chắc muốn xóa ?</confirm-delete>
+      <cannotMove>Không thể di chuyển liên lạc này</cannotMove>
+      <no-email-found>Không có thư nào</no-email-found>
+      <cannot-move>Không thể di chuyển liên lạc này</cannot-move>
+      <cannot-move-ownerContact>Không thể di chuyển liên lạc chủ nhân</cannot-move-ownerContact>
+      <cannot-share>Không thể chia sẻ các liên lạc này</cannot-share>
+      <cannot-delete>Không thẻ xóa liên lạc này</cannot-delete>
+      <cannot-delete-ownerContact>Không thể xóa liên lạc chủ nhân</cannot-delete-ownerContact>
+      <non-permission>Bạn không có quyền thực hiện thao tác này</non-permission>
+      <contact-deleted>Liên lạc đã bị xóa</contact-deleted>
+      <checkContact-toDelete>Chọn liên lạc để xóa</checkContact-toDelete>
+      <checkContact-toCopy>Chọn liên lạc để sao chép</checkContact-toCopy>
+      <checkContact-toSendMail>Chọn liên lạc để gửi thư</checkContact-toSendMail>
+      <checkContact-toPrint>Chọn liên lạc để in</checkContact-toPrint>
+      <checkContact-toMove>Chọn liên lạc để di chuyển</checkContact-toMove>
+      <checkContact-toTag>Chọn liên lạc để gán thẻ</checkContact-toTag>
+      <chatApp-notAvaiable>ứng dụng Tán gẫu chưa sẵn sàng</chatApp-notAvaiable>
+      <checkContact-toChat>Chọn liên lạc để tán gẫu</checkContact-toChat>
+      <contact-not-existed>Liên lạc không còn tồn tại</contact-not-existed>
+      <have-no-item>Bạn chưa chọn liên lạc nào</have-no-item>
+    </msg>
+    <action>
+      <print>In</print>
+      <Cancel>Hủy</Cancel>
+    </action>
+  </UIContacts>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIMoveContactsForm
+  -->
+  <UIMoveContactsForm>
+    <action>
+      <Cancel>Hủy</Cancel>
+    </action>
+    <msg>
+      <selectGroup-required>Cần chọn nhóm để di chuyển</selectGroup-required>
+      <non-permission>Bạn không có quyền di chuyển</non-permission>
+      <contact-not-existed>Liên lạc không tồn tại</contact-not-existed>
+      <contact-deleted>Liên lạc đã bị xóa</contact-deleted>
+    </msg>
+    <label>
+      <contacts>Các liên lạc :</contacts>
+      <toPrivate>Tới các nhóm riêng :</toPrivate>
+      <toShared>Tới các nhóm được chia sẻ:</toShared>
+    </label>
+  </UIMoveContactsForm>
+  <!--
+  #org.exoplatform.contact.webui.UIAddressBooks
+  -->
+  <UIAddressBooks>
+    <msg>
+      <confirm-delete>Bạn có chắc muốn xóa nhóm này ?</confirm-delete>
+      <groupCannot-deleted>Không thể xóa nhóm này</groupCannot-deleted>
+      <not-already>Chưa sãn sàng</not-already>
+      <noContactToExport>Không có liên lạc để xuất</noContactToExport>
+      <invalidAddress>Nhóm nhập không đúng</invalidAddress>
+      <no-email-found>Không có thư nào</no-email-found>
+      <non-permission>Bạn không có quyền thực hiện thao tác này</non-permission>
+      <removedPer>Quyền của bạn đã bị xóa</removedPer>
+    </msg>
+    <label>
+      <sharedContacts>Chia sẻ liên lạc</sharedContacts>
+      <addressBooks>Các nhóm</addressBooks>
+      <addAddress>Thêm nhóm</addAddress>
+      <importAddress>Nhập nhóm</importAddress>
+      <exportAddress>Xuất nhóm</exportAddress>
+      <personalAddress>Nhóm cá nhân</personalAddress>
+      <publicAddress>Nhóm chung</publicAddress>
+      <addContact>Thêm liên lạc</addContact>
+      <copyContacts>Sao chép</copyContacts>
+      <pasteContacts>Dán</pasteContacts>
+      <share>Chia sẻ</share>
+      <exportContacts>Xuất liên lạc</exportContacts>
+      <importContacts>Nhập liên lạc</importContacts>
+      <edit>Sửa</edit>
+      <sendEmail>Gửi thư</sendEmail>
+      <delete>Xóa</delete>
+      <print>In</print>
+      <collapse-expand>Cuộn/trải</collapse-expand>
+      <defaultAddName>Các liên lạc của tôi</defaultAddName>
+      <collectedAddresses>Địa chỉ tự cập nhật</collectedAddresses>
+      <defaultAddDes>Đây là nhóm mặc định</defaultAddDes>
+    </label>
+  </UIAddressBooks>
+  <!--
+  #org.exoplatform.contact.webui.UITags
+  -->
+  <UITags>
+    <msg>
+      <confirm-delete>Bạn có chắc muốn xóa thẻ này ?</confirm-delete>
+    </msg>
+    <label>
+      <tags>Các thẻ</tags>
+      <printContacts>In</printContacts>
+      <exportContacts>Xuất</exportContacts>
+      <delete>Xóa</delete>
+      <edit>Sửa</edit>
+      <collapse-expand>Cuộn/trải</collapse-expand>
+      <addTag>Thêm thẻ</addTag>
+    </label>
+  </UITags>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIImageForm
+  -->
+  <UIImageForm>
+    <action>
+      <Save>Lưu</Save>
+      <Cancel>Hủy</Cancel>
+    </action>
+    <label>
+      <upload>Tải lên</upload>
+    </label>
+  </UIImageForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UISendEmail
+  -->
+  <UISendEmail>
+    <action>
+      <Send>Gửi thư</Send>
+      <Cancel>Hủy</Cancel>
+    </action>
+    <label>
+      <to>Người nhận</to>
+      <subject>Chủ đề</subject>
+      <content>Nội dung</content>
+    </label>
+  </UISendEmail>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIContactPreviewForm
+  -->
+  <UIContactPreviewForm>
+    <action>
+      <Cancel>Hủy</Cancel>
+      <print>In</print>
+      <printPreview>Xem trước in</printPreview>
+    </action>
+    <label>
+      <profile>Tiểu sử</profile>
+      <nickname>Tên hiệu :</nickname>
+      <gender>Giới tính :</gender>
+      <email>Thư :</email>
+      <birthday>Ngày sinh :</birthday>
+      <work>Làm việc</work>
+      <city>Thành phố :</city>
+      <state-province>Bang</state-province>
+      <postalCode>Mã bưu điện :</postalCode>
+      <country>Quốc gia :</country>
+      <map>Bản đồ</map>
+      <workPhone1>Điện thoại 1</workPhone1>
+      <workPhone2>Điện thoại 2:</workPhone2>
+      <webPage>Web :</webPage>
+      <instantMessaginContacts>Im</instantMessaginContacts>
+      <exoChat>eXo Chat:</exoChat>
+      <google>Gtalk :</google>
+      <msn>Msn :</msn>
+      <aol-aim>AOL/AIM :</aol-aim>
+      <yahoo>Yahoo :</yahoo>
+      <icr>IRC :</icr>
+      <skype>Skype :</skype>
+      <icq>Icq :</icq>
+      <home>Nơi ở</home>
+      <street>Phố:</street>
+      <country-region>Khu vực :</country-region>
+      <homePhone1>Điện thoại 1 :</homePhone1>
+      <homePhone2>Điện thoại 2 :</homePhone2>
+      <homeFax>Fax :</homeFax>
+      <note>Ghi chú</note>
+      <address>Địa chỉ :</address>
+      <workFax>Fax :</workFax>
+      <mobilePhone>Di động :</mobilePhone>
+    </label>
+  </UIContactPreviewForm>
+  <!--
+  #org.exoplatform.contact.webui.UIContactPreview
+  -->
+  <UIContactPreview>
+    <label>
+      <lastUpdated>Sửa lần cuối</lastUpdated>
+      <profile>tiểu sử</profile>
+      <nickname>Tên hiệu :</nickname>
+      <gender>Giới tính :</gender>
+      <email>Thư :</email>
+      <birthday>Ngày sinh :</birthday>
+      <work>Làm việc</work>
+      <city>Thành phố :</city>
+      <state-province>Bang :</state-province>
+      <postalCode>Mã bưu điện :</postalCode>
+      <country>Quốc gia :</country>
+      <map>Bản đồ</map>
+      <workPhone1>Điện thoại 1 :</workPhone1>
+      <workPhone2>Điện thoại 2 :</workPhone2>
+      <webPage>Web :</webPage>
+      <instantMessaginContacts>IM</instantMessaginContacts>
+      <exoChat>eXo Chat:</exoChat>
+      <google>Google Talk :</google>
+      <msn>Msn :</msn>
+      <aol-aim>AOL/AIM :</aol-aim>
+      <yahoo>Yahoo :</yahoo>
+      <icr>Icr :</icr>
+      <skype>Skype :</skype>
+      <icq>Icq :</icq>
+      <home>Nơi ở</home>
+      <street>Phố:</street>
+      <country-region>Khu vực :</country-region>
+      <homePhone1>Điện thoại :</homePhone1>
+      <homePhone2>Điện thoại 2:</homePhone2>
+      <homeFax>Fax :</homeFax>
+      <note>Ghi chú</note>
+      <address>Địa chỉ :</address>
+      <contactDetails>Chi tiết liên lạc</contactDetails>
+      <viewFull>Xem toàn bộ</viewFull>
+      <workFax>Fax :</workFax>
+      <mobilePhone>Di động :</mobilePhone>
+    </label>
+  </UIContactPreview>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIAttachFileForm
+  -->
+  <UIAttachFileForm>
+    <msg>
+      <selectFile-required>Bạn cần chọn tệp và tải lên</selectFile-required>
+      <invalid-image>Không đúng định dạng ảnh</invalid-image>
+    </msg>
+  </UIAttachFileForm>
+  <!--
+  #org.exoplatform.contact.webui.UIActionBar
+  -->
+  <UIActionBar>
+    <label>
+      <contactsList>Danh sách</contactsList>
+      <vcard>Danh thiếp</vcard>
+      <contact>Liên lạc</contact>
+      <addressBook>Nhóm</addressBook>
+      <addNew>Thêm mới</addNew>
+      <importAddress>Nhập nhóm</importAddress>
+      <exportAddress>Xuất nhóm</exportAddress>
+      <default>Mặc định</default>
+      <navigation>Đinh hướng</navigation>
+      <addressbooks>Các nhóm</addressbooks>
+      <tags>Các thẻ</tags>
+      <details>Chi tiết</details>
+      <customLayoutView>Tùy biến giao diện</customLayoutView>
+      <contactsView>Hiển thị</contactsView>
+      <layoutView>Tùy biến giao diện</layoutView>
+      <addEvent>Thêm sự kiện</addEvent>
+      <event>Sự kiện</event>
+    </label>
+  </UIActionBar>
+  <!--
+  #org.exoplatform.contact.webui.UISearchForm
+  -->
+  <UISearchForm>
+    <msg>
+      <no-text-to-search>Nhập thông tin tìm kiếm</no-text-to-search>
+      <text-search-error>Thông tin tìm kiếm lỗi</text-search-error>
+    </msg>
+    <label>
+      <inputValue>Giá trị nhập :</inputValue>
+      <advanceSearch>Tìm kiếm nâng cao</advanceSearch>
+      <search>Tìm</search>
+    </label>
+  </UISearchForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIAdvancedSearchForm
+  -->
+  <UIAdvancedSearchForm>
+    <action>
+      <Search>Tìm </Search>
+      <Cancel>Hủy</Cancel>
+    </action>
+    <label>
+      <text>Thông tin</text>
+      <fullName>Tên đầy đủ</fullName>
+      <firstName>Họ</firstName>
+      <lastName>Tên</lastName>
+      <nickName>Tên hiệu</nickName>
+      <gender>Giới tính</gender>
+      <jobTitle>Nghề nghiệp</jobTitle>
+      <email>Thư</email>
+      <option>
+        <Male>Nam</Male>
+        <Female>Nữ</Female>
+      </option>
+    </label>
+    <msg>
+      <no-text-to-search>Nhập thông tin tìm kiếm</no-text-to-search>
+      <text-search-error>Thông tin tìm kiếm lỗi</text-search-error>
+    </msg>
+  </UIAdvancedSearchForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIGroupSelector
+  -->
+  <UIGroupSelector>
+    <label>
+      <selectUser>Chọn người dùng</selectUser>
+      <selectGroup>Chọn nhóm</selectGroup>
+      <selectMemberShip>Chọn quan hệ</selectMemberShip>
+    </label>
+    <msg>
+      <invalid-username>Tên người dùng không đúng</invalid-username>
+    </msg>
+  </UIGroupSelector>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIUserSelector
+  -->
+  <UIUserSelector>
+    <label>
+      <selectUser>Chọn người dùng</selectUser>
+      <selectGroup>Chọn nhóm</selectGroup>
+      <selectMemberShip>Chọn quan hệ</selectMemberShip>
+    </label>
+  </UIUserSelector>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIComposeForm
+  -->
+  <UIComposeForm>
+    <msg>
+      <to-field-empty>Nhập thư đến</to-field-empty>
+      <send-mail-error>Gửi thư lỗi</send-mail-error>
+      <send-mail-succsessfuly>Gửi thư thành công</send-mail-succsessfuly>
+      <invalidAcc>Cấu hình tài khoản mail sai</invalidAcc>
+      <save-sent-error>Lỗi lưu thư được gửi</save-sent-error>
+      <invalid-email>Địa chỉ thư không đúng</invalid-email>
+    </msg>
+    <label>
+      <sendMail>Gửi thư</sendMail>
+      <discard>Hủy</discard>
+      <from>Từ</from>
+      <to>Đến</to>
+      <subject>Chủ đề</subject>
+    </label>
+  </UIComposeForm>
+  <!--
+  #org.exoplatform.contact.webui.popup.UIAddEditPermission
+  -->
+  <UIAddEditPermission>
+    <msg>
+      <confirm-delete>Bạn có chắc muốn xóa ?</confirm-delete>
+      <cannot-deleteShared>Không thể xóa quyền này</cannot-deleteShared>
+    </msg>
+    <header>
+      <viewPermission>Quyền xem</viewPermission>
+      <editPermission>Quyền sửa</editPermission>
+      <action>Thao tác</action>
+    </header>
+    <action>
+      <title>
+        <Edit>Sửa</Edit>
+        <Delete>Xóa</Delete>
+      </title>
+    </action>
+    <label>
+      <true>Có</true>
+      <false>Không</false>
+    </label>
+  </UIAddEditPermission>
+  <!--
+  #org.exoplatform.contact.webui.popup.UISharedForm
+  -->
+  <UISharedForm>
+    <label>
+      <addressName>Tên nhóm</addressName>
+      <contactName>Tên liên lạc</contactName>
+      <user>Người dùng</user>
+      <group>Nhóm</group>
+      <canEdit>Quyền sửa</canEdit>
+      <action>
+        <SelectUser>Chọn người dùng</SelectUser>
+        <SelectGroup>Chọn nhóm</SelectGroup>
+      </action>
+      <UIInputUserSelect>UISharedForm</UIInputUserSelect>
+      <UIPopupWindow>UISharedForm</UIPopupWindow>
+    </label>
+    <action>
+      <Save>Lưu</Save>
+      <Cancel>Hủy</Cancel>
+    </action>
+    <msg>
+      <empty-username>Nhập người dùng muốn chia sẻ</empty-username>
+      <not-exist-username>Người dùng {0} không tồn tại</not-exist-username>
+      <cannot-change-username>Không thể chuyển tên người dùng khi đang sửa quyền</cannot-change-username>
+      <shared-yourself>Khổng thể chia sẻ cho chính bạn</shared-yourself>
+    </msg>
+  </UISharedForm>
+  <!--
+  #Please dont edit label "UISharedForm"
+  -->
+  <!--
+  #org.exoplatform.contact.webui.popup.UISharedContactsForm
+  -->
+  <UISharedContactsForm>
+    <label>
+      <contactName>Tên liên lạc:</contactName>
+      <user>Người dùng</user>
+      <group>Nhóm</group>
+      <canEdit>Quyền sửa</canEdit>
+      <action>
+        <SelectUser>Chọn người dùng</SelectUser>
+        <SelectGroup>Chọn nhóm</SelectGroup>
+      </action>
+      <UIInputUserSelect>UISharedContactsForm</UIInputUserSelect>
+      <UIPopupWindow>UISharedContactsForm</UIPopupWindow>
+    </label>
+    <action>
+      <Save>Lưu</Save>
+      <Cancel>Hủy</Cancel>
+    </action>
+    <msg>
+      <empty-username>Nhập người dùng muốn chia sẻ</empty-username>
+      <contacts-shared>Chia sẻ liên lạc thành công</contacts-shared>
+      <not-exist-username>Người dùng không tồn tại</not-exist-username>
+      <invalid-username>Người dùng không tồn tại</invalid-username>
+    </msg>
+  </UISharedContactsForm>
+  <!--
+  # please dont edit label UISharedContactsForm
+  -->
+  <!--
+  #org.exoplatform.contact.webui.popup.UIIMContactInputSet
+  -->
+  <imContactTab>
+    <label>
+      <googleTalk>Google Talk</googleTalk>
+      <msn>MSN</msn>
+      <aol-aim>AOL/AIM</aol-aim>
+      <yahoo>Yahoo</yahoo>
+      <IRC>IRC</IRC>
+      <skype>Skype</skype>
+      <ICQ>ICQ</ICQ>
+    </label>
+  </imContactTab>
+  <!--
+  #org.exoplatform.contact.webui.popup.UITagInfo
+  -->
+  <UITagInfo>
+    <label>
+      <tag>Thẻ</tag>
+      <tagName>Tên thẻ</tagName>
+    </label>
+  </UITagInfo>
+  <!--
+  #org.exoplatform.contact.webui.UIWelcomeContact
+  -->
+  <UIWelcomeContact>
+    <label>
+      <label0>Chào mừng</label0>
+      <label1>Trình quản lý các liên lạc của bạn</label1>
+      <label2>Tổng thể</label2>
+      <label3>Úng dụng quản lý liên lạc eXo được tích hợp trong Hệ thống Hợp tác eXo. Ứng dụng giúp quản lý các liên lạc được nhập bằng tay, nhập từ tệp thậm chí là tự động lưu. Các liên lạc của bạn được phân thành các nhóm và chia sẻ dễ dàng trong Hệ thống Hợp tác của bạn.</label3>
+      <label4>Các đặc tính</label4>
+      <label5>Ứng dụng quản lý liên lạc eXo đáp ứng nhiều đặc tính làm tăng hiệu suất của bạn : chia sẻ, tìm kiếm, gán thẻ, danh thiếp và các thao tác với nhóm.</label5>
+    </label>
+  </UIWelcomeContact>
+ 
+  <!--
+  #org.exoplatform.contact.ContactUtils
+  -->
+  <ContactUtils>
+    <label>
+      <emptyName>(không được đặt tên)</emptyName>
+    </label>
+  </ContactUtils>
+</bundle>
+

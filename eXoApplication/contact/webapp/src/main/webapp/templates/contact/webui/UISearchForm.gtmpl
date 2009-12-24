@@ -1,0 +1,18 @@
+<%
+	uiform.begin()
+	def rcontext = _ctx.getRequestContext() ;  
+	action = uicomponent.event("Search") ;
+	rcontext.getJavascriptManager().addJavascript('eXo.cs.Utils.captureInput("inputValue") ;') ;
+%>
+<div class="UISearchForm">
+	<a href="<%=uicomponent.event("AdvancedSearch")%>" class="AdvancedSearch" title="<%=_ctx.appRes(uicomponent.getName() + ".label.advanceSearch")%>"><span></span></a>
+	<a href="<%=uicomponent.event("Search")%>" class="Search" title="<%=_ctx.appRes(uicomponent.getName() + ".label.search")%>"><span></span></a>
+	<%uiform.renderChild("inputValue")%>
+	<%
+		String label = _ctx.appRes(uicomponent.getName() + ".label.inputValue") ;
+	%>
+	<div class="ClearSearchForm"><span></span></div>
+</div>
+<%uiform.end();%>
+
+

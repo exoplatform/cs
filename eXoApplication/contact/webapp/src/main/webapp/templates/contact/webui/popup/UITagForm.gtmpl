@@ -1,0 +1,87 @@
+<% 
+	import org.exoplatform.contact.ContactUtils;
+ %>
+<% String fieldName; %>
+<div class="UIForm $uicomponent.id">
+  <%uiform.begin()%>
+  <div class="HorizontalLayout">
+    <div class="FormContainer">
+      <table class="UIFormGrid">
+      	<% 
+   				int i = 0 ;
+   				String[] contacts = uicomponent.contactNames ;
+   				String[] tags = uicomponent.tagNames ;
+   				while (i < contacts.length) {  	
+      	%>
+      	<tr>
+      		<td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.contact")%> &nbsp; <%=contacts[i]%> :</td>
+      		<td class="FieldComponent" colspan="2"><%= ContactUtils.encodeHTML(tags[i]) %></td>      	
+	      <% i ++ ; 
+	      	 }
+	      %>
+	      </tr>
+	      <% 
+	        for(field in uiform.getChildren()) { 
+	          if(field.isRendered()) {
+	      %>
+              <tr>
+	              <%
+	              	fieldName = uicomponent.getLabel(field.getName());
+	              	if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId())) {
+	              		if (uicomponent.tags.containsKey(field.getName())) {
+	              %>
+		              		<td class="FieldLabel">
+	                      <%= ContactUtils.encodeHTML(uicomponent.tags.get(field.getName())) %>
+	                  	</td>
+	              <% 	} else { %>                
+		  	              <td class="FieldLabel">
+		                      <%=uicomponent.getLabel(field.getName()) %>
+		                  </td>
+                   
+                  <% } %>
+                  
+  	              <td class="FieldComponent">
+  	              <% 
+  	              	if (uicomponent.tags.containsValue(field.getName())) { 
+  	              		name = field.getName() ;
+  	               %>
+		  	              <input type="checkbox" class="checkbox" value="false" name="$name"/>
+		  	          <% } else {%>
+  	              		<% uiform.renderField(field) %>
+  	              <% } %>
+  	              </td>
+	              <%} else {%>
+	                <td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>
+	              <%}%>
+	            </tr>
+	      <%
+	          }
+	        }
+	      %>
+      </table>
+      <div class="UIAction"> 
+        <table class="ActionContainer" align="center">
+        	<tr>
+        		<td align="center">
+		          <% for(action in uicomponent.getActions()) { 
+                	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+                   String link = uicomponent.event(action) ;
+          		%>
+          		<a href="$link" class="ActionButton LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle">
+                      $actionLabel
+                    </div>
+                  </div>
+                </div>
+           		</a>
+          		<%}%>        
+          	</td>
+          </tr>  
+        </table>
+      </div>
+    </div>
+  </div>
+  <%uiform.end()%>
+</div>

@@ -1,0 +1,110 @@
+<%
+  import org.exoplatform.contact.service.AddressBook;
+  import org.exoplatform.contact.ContactUtils;
+	uiform.begin()
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("'+uiform.id+'") ;') ;
+%>
+  
+<div class="UIExportAddressBookForm">
+	<div class="ExportContact">
+		<div class="WorkingContainer">
+  		<div class="Title"><%=_ctx.appRes(uicomponent.getName() + ".label.title")%></div>
+  
+			<div class="UIMessageList" is>
+				<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+  				<thead>
+  					<tr>
+  			      <th style="text-align: left; padding-left:2px;" class="text"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/></th>
+  		        <th style="width: 91%; padding-left: 7px;" class="text">
+  		        	<div> <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
+  		        </th>
+  	 	      </tr>
+  	 	    </thead>
+  	 	      <tbody>
+  	 	    <%  
+						Map contactGroups = uicomponent.getContactGroups();
+						Map sharedGroups = uicomponent.getSharedContactGroups();
+						Map publicGroups = uicomponent.getPublicContactGroup();
+						for (String group : uicomponent.getAddress()) {
+							checkboxField = uicomponent.getChildById(group) ;
+							groupDes = "" ;
+							groupName = "" ;
+							if (contactGroups.containsKey(group)) {
+								groupName = ContactUtils.encodeHTML(contactGroups.get(group)) ;
+								groupDes = groupName ;
+							} else if (sharedGroups.containsKey(group)) {
+								groupName = ContactUtils.encodeHTML(ContactUtils.getDisplayAdddressShared(sharedGroups.get(group).getSharedUserId(), sharedGroups.get(group).getName())) ;
+								groupDes = groupName ;
+							} else {
+								groupDes = publicGroups.get(group) ;
+								groupName = ContactUtils.getPublicGroupName(groupDes) ;
+							}
+						%>	
+							<tr class="UIContactList">
+  						  <td class="text" style="padding-left:2px;">
+  						  	<%
+  						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
+  						  	%>
+  						  </td>
+								<td class="text" title="$groupDes">
+									<%= groupName %>
+								</td>
+   			     	</tr>
+							
+					<% } %>
+						
+						
+  	   			</tbody>
+				</table>
+				
+				<%_ctx.include("app:/templates/contact/webui/popup/UIPageIterator.gtmpl");%>
+			</div>
+
+			<div class="ExportForm">
+				<table class="UIFormGrid">
+	      	<tr>
+	  	      <td class="FieldLabel"><%= _ctx.appRes("UIExportAddressBookForm.label.name") %></td>
+	  	      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.NAME))%></td>
+	        </tr>
+	        <tr>
+	  	      <td class="FieldLabel"><%= _ctx.appRes("UIExportAddressBookForm.label.type") %></td>
+	  	      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.TYPE))%></td>
+	        </tr>
+	 			</table>
+    	</div>
+    </div>
+  </div>    
+			<div class="UIAction"> 
+        <table class="ActionContainer" align="center">
+          <tr>
+            <td align="center"> 
+          	<a href="<%=uicomponent.event("Save", "all")%>" class="ActionButton LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.getName() + ".label.exportAll")%> </div>
+                  </div>
+                </div>
+              </a>
+          
+             <a href="<%=uicomponent.event("Save", "selected")%>" class="ActionButton LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.getName() + ".label.exportSelected")%> </div>
+                  </div>
+                </div>
+              </a>
+              <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
+
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle">  <%=_ctx.appRes(uicomponent.getName() + ".label.cancel")%> </div>
+                  </div>
+                </div>
+              </a>
+            </td>
+          </tr>
+        </table>
+      </div> 
+</div>       
+<%uiform.end()%>	

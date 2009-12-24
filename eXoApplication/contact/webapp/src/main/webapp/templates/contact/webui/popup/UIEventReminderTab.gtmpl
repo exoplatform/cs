@@ -1,0 +1,62 @@
+<%
+	uiForm = uicomponent.getParentFrom() ;
+%>	
+<div class="UIAddNewEvent">
+	<div class="ReminderByEmail">
+		<%uiForm.renderField(uicomponent.REMIND_BY_EMAIL); %>
+		<div class="FieldLabel" style="float: left;">
+			<%=uiForm.getLabel(uicomponent.REMIND_BY_EMAIL)%>
+		</div>
+		<div style="clear: left;"><span></span></div>
+	  <table class="UIFormGrid">
+	    <tbody>
+	      <tr>
+	        <td class="FieldLabel" >
+	          <%=uiForm.getLabel(uicomponent.EMAIL_REMIND_BEFORE); %>
+	        </td>
+	        <td class="FieldComponent">
+	        	<% uiForm.renderField(uicomponent.EMAIL_REMIND_BEFORE)  ; %>
+	        </td>
+	      </tr>
+	      <tr>
+	      	<td class="FieldLabel">
+	          <%=uiForm.getLabel(uicomponent.EMAIL_IS_REPEAT)%> 
+	        </td>
+	      	<td>
+      			<table>
+					    <tbody>
+					      <tr>
+					        <td class="FieldComponent" style="width: 80px;">
+					        	<% uiForm.renderField(uicomponent.EMAIL_IS_REPEAT);%>
+					        </td>
+					        <td class="FieldLabel" style="width:70px;">
+					           <%=uiForm.getLabel(uicomponent.EMAIL_REPEAT_INTERVAL)%>
+					        </td>
+					        <td class="FieldComponent">
+					          <% uiForm.renderField(uicomponent.EMAIL_REPEAT_INTERVAL)  ; %>
+					        </td>
+					      </tr>
+					    </tbody>
+					  </table>
+					</td>
+	      </tr>
+	      <tr>
+	        <td class="FieldLabel" >
+	           <%=uiForm.getLabel(uicomponent.FIELD_EMAIL_ADDRESS)%>
+	        </td>
+	        <td class="FieldComponent">
+	          <% 
+	          	uiForm.renderField(uicomponent.FIELD_EMAIL_ADDRESS)
+		          String actionLabel =  uiForm.getLabel("SelectEmail")  ;
+				    	String actionLink = uiForm.event("AddEmailAddress") ;
+				      println "<a title=\"" + actionLabel + "\" href=\"" + actionLink +"\">";
+				      println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" class=\"AddNewNodeIcon\"/>" ;
+				      println  "</a>";
+	          %>
+	          
+	        </td>
+	      </tr>
+	    </tbody>
+	  </table>
+	</div>
+</div>

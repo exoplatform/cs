@@ -1,0 +1,16 @@
+
+.UICalendarPortlet .UIHeaderBar{
+
+}
+
+.UICalendarPortlet .UIHeaderBar .AddCategoryIcon {
+	background-position: left -27px;
+}
+
+.UICalendarPortlet .UIHeaderBar .ViewTypeSelect .UIPopupCategory {
+	left: 315px;
+	position:absolute;
+	top: 22px;
+	width: auto;
+}
+

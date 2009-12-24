@@ -1,0 +1,17 @@
+.UIContactPortlet .UITagForm {
+	padding: 10px;
+	min-width: 400px;
+}
+
+.UIContactPortlet .UITagForm .HorizontalLayout {
+	margin: auto;
+	background: #f3f3f3;
+}
+
+.UIContactPortlet .UITagForm .UIForm .UIFormGrid td.FieldComponent {
+	white-space: normal;
+}
+
+.UIContactPortlet .UITagForm .UIForm .UIFormGrid td.FieldLabel {
+	white-space: normal;
+}

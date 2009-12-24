@@ -1,0 +1,98 @@
+
+.UIMailPortlet .UIMailSetting {
+	min-width: 600px;
+}
+
+/*****************************FlatTabStyle****************************************/
+
+.UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .SelectedTab {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+}
+
+.UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .NormalTab {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+}
+
+.UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .TabIcon {
+	margin: 1px 4px 0px 4px;
+	padding-left: 25px; /* orientation=rt */
+	padding-right: 25px; /* orientation=lt */
+}
+
+.UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .ShortcutKeyIcon {
+	background: url('icons/ShortcutkeyIcon.gif') no-repeat center;
+	height: 27px; width: 24px;
+}
+
+.UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .AccountIcon {
+	background: url('icons/AccountIcon.gif') no-repeat center;
+	height: 25px; width: 24px;
+}
+
+.UIMailPortlet .UIMailSetting .UITabSelector .UITabContentContainer {
+	border: 1px solid #d5d5d5;
+}
+
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout {
+	border: none;
+	padding: 0px 0px 20px 0px;
+}
+
+/******************************Layout Setting Style********************************/
+
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .VerticalSplitContainer {
+	display:block;
+	float:left;
+}
+
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .HorizontalSplitContainer {
+	display:block;
+	float:left;
+	margin-left:50px;
+}
+
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .VerticalSplitContainer .ImgVeticalSplit{
+	background: url('background/ItemSelector.gif') no-repeat left top;
+	width:270px;
+	height:168px;
+}
+
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .HorizontalSplitContainer .ImgHorizontalSplit{
+	background: url('background/ItemSelector.gif') no-repeat left -168px;
+	width:270px;
+	height:168px;
+}
+
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .NoSplitContainer .ImgNoSplit{
+	background: url('background/ItemSelector.gif') no-repeat left top;
+	width:270px;
+	height:168px;
+}
+
+.UIMailPortlet .UIMailSetting .UIForm .NoSplitContainer .MiddleSection {
+	width: 10px;
+	height: 15px;
+	display:block;
+	float:left;	
+	background: url('background/IconChange.gif') no-repeat center;
+	margin-left:131px;
+	margin-top:72px;
+}
+
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .NoSplitContainer {
+	display:block;
+	margin-top:10px;
+	float:left;
+}
+
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .LayoutSettingRadio {
+	width:10px;
+}
+
+.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .LayoutSettingHeader {
+	font-weight:bold;
+}
+
+

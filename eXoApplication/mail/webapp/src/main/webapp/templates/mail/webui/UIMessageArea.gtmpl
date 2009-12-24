@@ -1,0 +1,88 @@
+<%
+  import org.exoplatform.mail.webui.UIMessageList ;
+  import org.exoplatform.mail.webui.UIMessagePreview ;
+  import org.exoplatform.mail.webui.UIFetchingBar ;
+  
+  def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().importJavascript('eXo.mail.UIMailDragDrop','/mail/javascript/');
+  
+  if (uicomponent.isVerticalLayout()) {
+    rcontext.getJavascriptManager().importJavascript('eXo.mail.VerticalSpliter','/mail/javascript/');
+    if (uicomponent.getUIMessagePreview().getMessage() != null) {
+      rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.VerticalSpliter.initVerticalLayout');
+    }
+  } else if (uicomponent.isHorizontalLayout()) {
+    rcontext.getJavascriptManager().importJavascript('eXo.mail.Spliter','/mail/javascript/');
+  }
+  rcontext.getJavascriptManager().importJavascript('eXo.cs.FormHelper','/csResources/javascript/');
+  rcontext.getJavascriptManager().importJavascript('eXo.cs.AdvancedTooltip','/csResources/javascript/');
+  rcontext.getJavascriptManager().importJavascript('eXo.cs.TableMan','/csResources/javascript/');
+  rcontext.getJavascriptManager().importJavascript('eXo.cs.TableDnD','/csResources/javascript/');
+  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.UIMailDragDrop.onLoad');
+%>
+
+<div class="MailWorkingDetails SpliterContainer">
+	<%uicomponent.renderChild(UIFetchingBar.class);%>
+	<div id="<%=uicomponent.getId()%>">
+  <%
+    if (uicomponent.isVerticalLayout()) {
+      if (uicomponent.getUIMessagePreview().getMessage() == null) {
+  %>
+      <div id="VeticalLeftLayout" style="width:100%; float:left;">
+        <div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px; overflow:none; min-width:600px; width:100%">    
+        <%uicomponent.renderChild(UIMessageList.class);%>
+        </div>
+      </div>
+ <%   } else { 
+        if (!uicomponent.getUIMessagePreview().isHideMessageList()) {
+ %> 
+         <div id="VeticalLeftLayout" style="width:100%; float:left;">
+         <div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px; overflow:none; min-width:600px; width:100%">    
+           <%uicomponent.renderChild(UIMessageList.class);%>
+           </div>
+         </div>
+         <div class="VerticalResizeReadingPane" id="ResizeReadingPane" style="border-left:1px solid #C0C0C0; float:left" onmousedown="eXo.mail.VerticalSpliter.doResize(event, this);">
+           <span></span>
+         </div>
+         <div id="VerticalRightLayout" style="width:50%; float:left;">
+ <%
+        } else {
+ %>
+           <div id="VerticalRightLayout" style="width:100%; float:left; scroll:auto;">
+ <%
+        }
+ %>
+        <div id="SpliterResizableArea">    
+          <%uicomponent.renderChild(UIMessagePreview.class);%>
+        </div>  
+      </div>
+	<%
+      }
+    } else if (uicomponent.isHorizontalLayout()) {
+	%>
+  	<div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px">		
+  		<%uicomponent.renderChild(UIMessageList.class);%>
+  	</div>
+  	<div class="ResizeReadingPane" id="ResizeReadingPane" onmousedown="eXo.cs.Spliter.doResize(event, this);"><span></span></div>
+  	<div id="SpliterResizableArea">
+  		<%uicomponent.renderChild(UIMessagePreview.class);%>
+  	</div>
+  <%
+	  } else if (uicomponent.isNoSplitLayout()) {
+  	  if (uicomponent.getUIMessagePreview().getMessage() != null) {
+  %>	    
+        <div id="SpliterResizableArea">
+  	      <%uicomponent.renderChild(UIMessagePreview.class);%>
+  	    </div>
+  <% 	  
+  	  } else {
+  %>
+      <div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px">    
+        <%uicomponent.renderChild(UIMessageList.class);%>
+      </div>  
+  <%	  
+  	  }
+	  }
+  %>
+</div>
+</div>

@@ -1,0 +1,144 @@
+<%
+  import org.exoplatform.web.application.JavascriptManager;
+  
+  def rcontext = _ctx.getRequestContext() ;
+  JavascriptManager jsmanager = rcontext.getJavascriptManager();
+  jsmanager.addJavascript('eXo.contact.UIContactPortlet.imFormOnload(\'' + uicomponent.id + '\');');
+%>
+<div class="UIIMContact $uicomponent.id" id="$uicomponent.id">
+  <div class="FormContainer ProfileContainer">
+	  <table class="UIFormGrid">
+      <tbody>
+      	<tr>
+          <td colspan="2" class="FieldComponent">
+					   	
+			      <div class="FormContainer">
+			        <table class="UIFormGrid">
+			          <tbody>
+			            <%								
+			      			  field = uicomponent.getChildById("exoChat")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent">
+			                <%uicomponent.renderUIComponent(field)%>
+			                <div id="<%=uicomponent.id%>_PopupMenu" onclick="eXo.contact.UIContactPortlet.showImMenu(this, event);" style="cursor: pointer; display: inline">
+                        <img class="ActionsAddIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/>
+                        <% /*Begin Popup Menu*/ %>
+                        <span style="position: absolute;">
+                          <div class="UIPopupCategory" style="display: none;">
+                            <div class="UIRightClickPopupMenu" style="display: block;">
+                              <div class="UIContextMenuContainer">
+                                <div class="TopLeftRightClickPopupMenu">
+                                  <div class="TopRightRightClickPopupMenu">
+                                    <div class="TopCenterRightClickPopupMenu"><span></span></div>
+                                  </div>
+                                </div>
+                                <div class="MiddleLeftRightClickPopupMenu">
+                                  <div class="MiddleRightRightClickPopupMenu">
+                                    <div class="UIRightPopupMenuContainer">
+                                      <span class="MenuItem">   
+                                        <div class="ItemIcon ContactIcon" fieldname="google"><%=_ctx.appRes(uicomponent.getName() + ".label.googleTalk")%></div>
+                                      </span>
+                                      <span class="MenuItem">   
+                                        <div class="ItemIcon ContactIcon" fieldname="msn"><%=_ctx.appRes(uicomponent.getName() + ".label.msn")%></div>
+                                      </span>
+                                      <span class="MenuItem">   
+                                        <div class="ItemIcon ContactIcon" fieldname="aolAim"><%=_ctx.appRes(uicomponent.getName() + ".label.aol-aim")%></div>
+                                      </span>
+                                      <span class="MenuItem">   
+                                        <div class="ItemIcon ContactIcon" fieldname="yahoo"><%=_ctx.appRes(uicomponent.getName() + ".label.yahoo")%></div>
+                                      </span>
+                                      <span class="MenuItem">   
+                                        <div class="ItemIcon ContactIcon" fieldname="irc"><%=_ctx.appRes(uicomponent.getName() + ".label.IRC")%></div>
+                                      </span>
+                                      <span class="MenuItem">   
+                                        <div class="ItemIcon ContactIcon" fieldname="skype"><%=_ctx.appRes(uicomponent.getName() + ".label.skype")%></div>
+                                      </span>
+                                      <span class="MenuItem">   
+                                        <div class="ItemIcon ContactIcon" fieldname="icq"><%=_ctx.appRes(uicomponent.getName() + ".label.ICQ")%></div>
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="BottomLeftRightClickPopupMenu">
+                                <div class="BottomRightRightClickPopupMenu">
+                                  <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+                                </div>
+                              </div>
+                              </div>
+                            </div>
+                          </div>
+                        </span>
+                        <% /*End Popup Menu*/ %>
+                      </div>
+                    </td>
+			            </tr>
+			            <%								
+			      			  field = uicomponent.getChildById("google")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			            </tr>
+			            <%							
+			      			  field = uicomponent.getChildById("msn")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			            </tr>
+			            <%							
+			      			  field = uicomponent.getChildById("aolAim")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			            </tr>
+			            <%							
+			      			  field = uicomponent.getChildById("yahoo")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			            </tr>
+			            <%							
+			      			  field = uicomponent.getChildById("irc")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			            </tr>
+			            <%							
+			      			  field = uicomponent.getChildById("skype")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			            </tr>
+			            <%							
+			      			  field = uicomponent.getChildById("icq")
+			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+							   	%>
+			            <tr>
+		                <td class="FieldLabel"> $label </td>
+			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+			            </tr>
+                  
+			          </tbody>
+			        </table>
+			        
+			      </div>
+					</td>
+		    </tr>
+	    </tbody>
+	  </table>
+	</div>
+</div>				        

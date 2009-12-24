@@ -1,0 +1,348 @@
+<%
+	import org.exoplatform.mail.service.Folder;
+  import org.exoplatform.mail.service.Utils;
+  import org.exoplatform.mail.MailUtils;
+%>
+<div class="UIFolderContainer" id="<%=uicomponent.getId()%>">
+<%  
+	String compId = uicomponent.getId() ;
+  def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.UIMailPortlet.restoreFolderState()');  
+	rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.initNavigationAction("'+compId+'");'); 
+%>
+<div class="TitleBar">
+  <div class="DownArrow3Icon" title="Collapse this Panel"><span></span></div>
+  <div class="Title FolderIcon"><%=_ctx.appRes(uicomponent.id+ ".label.folders") %></div>
+  <div class="ActionIcon" onclick="eXo.cs.Utils.show(this, event);">
+      <% /*Begin Popup Menu*/ %>
+      <div style="position: relative;height:1px;">
+            <div class="UIRightClickPopupMenu" style="display: none;">
+            	<div class="UIContextMenuContainer">
+	              <div class="TopLeftRightClickPopupMenu">
+			            <div class="TopRightRightClickPopupMenu">
+			              <div class="TopCenterRightClickPopupMenu"><span></span></div>
+			            </div>
+			          </div>
+			          <div class="MiddleLeftRightClickPopupMenu">
+			            <div class="MiddleRightRightClickPopupMenu">
+		          
+		                <div class="UIRightPopupMenuContainer">
+		                  <%
+		                     for(action in uicomponent.getActions()) {
+		                     String nameItem = _ctx.appRes(uicomponent.getName() + ".action." + action);
+		                     String classIconItem = action + "Icon";
+		                  %>
+		                  			
+		                  	   <div class="MenuItem" >   
+				                      <a class="ItemIcon $classIconItem" href="<%=uicomponent.event(action)%>" >
+				                        $nameItem
+				                      </a>
+		                      </div>
+		                  
+		                     <!--<a class="MenuItem" href="<%=uicomponent.event(action)%>" >   
+		                      <div class="ItemIcon $classIconItem" >
+		                        $nameItem
+		                      </div>
+		                     </a>-->
+		                  <%}%>
+		                  <div class="RightClickCustomItem"></div>
+		                </div>
+		          
+		              </div>
+		            </div>
+		            <div class="BottomLeftRightClickPopupMenu">
+              <div class="BottomRightRightClickPopupMenu">
+                <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+              </div>
+            </div>
+          		</div>
+          	</div>
+	        </div>
+  <% /*End Popup Menu*/ %>
+  </div>
+  <div style="clear: both"><span></span></div>
+</div>
+<div>
+<div class="MailFolderList">
+  <%for(Folder f : uicomponent.getDefaultFolders()) {
+    String id = f.getId() ;
+    String name = f.getName();
+    String status = "" ;
+    String icon = name + "Icon" ;
+    long msgQuantity = f.getNumberOfUnreadMessage();
+    if (f.name == Utils.FD_SENT || f.name == Utils.FD_TRASH) msgQuantity = 0;
+    if (f.name == Utils.FD_SPAM || f.name == Utils.FD_DRAFTS) msgQuantity = f.getTotalMessage();
+    String actionLink = uicomponent.event('ChangeFolder', id);
+    String cssClass = "NormalLabel" ;
+    if(id.equals(uicomponent.getSelectedFolder())) {
+      cssClass = "SelectedLabel" ;
+    }
+  %>
+  
+  <div class="Icon Folder $icon $cssClass" folder="$id">
+    <a class="FolderLink" href="$actionLink"><%=_ctx.appRes(uicomponent.getName() + ".label." + name)%>
+      <% 
+         print "<span id=\"" + id + "\" class=\"MailQuantity\">" ;
+         if(msgQuantity > 0) print "($msgQuantity)";
+         print "</span>" ;
+      %>
+    </a>
+  </div>
+  <%}%>
+</div>
+
+<% /*Popup menu for Default (Inbox, Drafts, Sent, Spam) forder*/ %>
+<div class="UIRightClickPopupMenu" id="UIDefaultFolderPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.defaultFolderPopupMenuCallback">
+	<div class="UIContextMenuContainer">
+	  <div class="TopLeftRightClickPopupMenu" id="test">
+	    <div class="TopRightRightClickPopupMenu">
+	      <div class="TopCenterRightClickPopupMenu"><span></span></div>
+	    </div>
+	  </div>
+	  
+	  <div class="MiddleLeftRightClickPopupMenu">
+	    <div class="MiddleRightRightClickPopupMenu">
+	      <div class="UIRightPopupMenuContainer">
+	      	<div class="MenuItem">   
+	          <a class="ItemIcon AddFolderIcon" href="<%=uicomponent.event("AddFolder", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %></a>
+	        </div>
+	        <div class="MenuItem">   
+	          <a class="ItemIcon MarkAll" href="<%=uicomponent.event("MarkRead", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </a>
+	        </div>
+	      
+	        <!--<a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
+	          <div class="ItemIcon AddFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %> </div>
+	        </a>
+	        <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "id")%>">   
+	          <div class="ItemIcon MarkAll"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </div>
+	        </a>-->
+	        <!--<a class="MenuItem" href="<%=uicomponent.event("MoveToTrash", "id")%>">   
+	          <div class="ItemIcon MoveToTrash"> <%=_ctx.appRes(uicomponent.id+ ".label.move-all-to-trash") %> </div>
+	        </a>-->
+	      </div>
+	    </div>
+	  </div>
+	  
+	  <div class="BottomLeftRightClickPopupMenu">
+	    <div class="BottomRightRightClickPopupMenu">
+	      <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+	    </div>
+	  </div>           
+	</div>
+</div>  
+<% /* End popup menu for Drafts forder*/ %>
+
+<% /*Popup menu for Trash forder*/ %>
+<div class="UIRightClickPopupMenu" id="UITrashFolderPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.defaultFolderPopupMenuCallback">
+  <div class="UIContextMenuContainer">
+    <div class="TopLeftRightClickPopupMenu" id="test">
+      <div class="TopRightRightClickPopupMenu">
+        <div class="TopCenterRightClickPopupMenu"><span></span></div>
+      </div>
+    </div>
+    
+    <div class="MiddleLeftRightClickPopupMenu">
+      <div class="MiddleRightRightClickPopupMenu">
+        <div class="UIRightPopupMenuContainer">
+        	<div class="MenuItem">   
+            <a class="ItemIcon AddFolderIcon" href="<%=uicomponent.event("AddFolder", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %> </a>
+          </div>
+        	<div class="MenuItem">   
+            <a class="ItemIcon MarkAll" href="<%=uicomponent.event("MarkRead", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </a>
+          </div>
+          <div class="MenuItem">   
+          	<a class="ItemIcon EmptyIcon" href="<%=uicomponent.event("EmptyFolder", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.empty-trash") %> </a>
+          </div>
+        	<!--
+          <a class="MenuItem" href="<%=uicomponent.event("AddFolder", "id")%>">   
+            <div class="ItemIcon AddFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.new-folder") %> </div>
+          </a>
+          <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "id")%>">   
+            <div class="ItemIcon MarkAll"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </div>
+          </a>
+          <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
+          <div class="ItemIcon EmptyIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.empty-trash") %> </div>
+          </a>-->
+        </div>
+      </div>
+    </div>
+    
+    <div class="BottomLeftRightClickPopupMenu">
+      <div class="BottomRightRightClickPopupMenu">
+        <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+      </div>
+    </div>           
+  </div>
+</div>  
+
+<% /* End popup menu for Drafts forder*/ %>
+
+<div class="MyFolder">
+
+<% /*Popup menu for Customized forder*/ %>
+<div class="UIRightClickPopupMenu" id="UIFolderListPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.defaultFolderPopupMenuCallback">
+	<div class="UIContextMenuContainer">
+	  <div class="TopLeftRightClickPopupMenu" id="test">
+	    <div class="TopRightRightClickPopupMenu">
+	      <div class="TopCenterRightClickPopupMenu"><span></span></div>
+	    </div>
+	  </div>
+	  
+	  <div class="MiddleLeftRightClickPopupMenu">
+	    <div class="MiddleRightRightClickPopupMenu">
+	      <div class="UIRightPopupMenuContainer">
+          <div class="MenuItem">   
+            <a class="ItemIcon AddFolderIcon" href="<%=uicomponent.event("AddSubFolder", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.new-subfoder") %> </a>
+          </div>  
+          <div class="MenuItem">   
+	          <a class="ItemIcon RenameFolderIcon" href="<%=uicomponent.event("RenameFolder", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.rename") %> </a>
+	        </div>
+	        <div class="MenuItem">   
+	          <a class="ItemIcon RemoveFolderIcon" href="<%=uicomponent.event("RemoveFolder", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.remove") %> </a>
+	        </div>
+          <div class="MenuItem">   
+            <a class="ItemIcon MarkAll" href="<%=uicomponent.event("MarkRead", "id")%>"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </a>
+          </div>
+          
+          <!--<a class="MenuItem" href="<%=uicomponent.event("AddSubFolder", "id")%>">   
+            <div class="ItemIcon AddFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.new-subfoder") %> </div>
+          </a>  
+          <a class="MenuItem" href="<%=uicomponent.event("RenameFolder", "id")%>">   
+	          <div class="ItemIcon RenameFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.rename") %> </div>
+	        </a>
+	        <a class="MenuItem" href="<%=uicomponent.event("RemoveFolder", "id")%>">   
+	          <div class="ItemIcon RemoveFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.remove") %> </div>
+	        </a>
+          <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "id")%>">   
+            <div class="ItemIcon MarkAll"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </div>
+          </a>-->
+          <!--<a class="MenuItem" href="<%=uicomponent.event("MoveToTrash", "id")%>">   
+          <div class="ItemIcon MoveToTrash"> <%=_ctx.appRes(uicomponent.id+ ".label.move-all-to-trash") %> </div>
+        </a>-->
+	      </div>
+	    </div>
+	  </div>
+	  
+	  <div class="BottomLeftRightClickPopupMenu">
+	    <div class="BottomRightRightClickPopupMenu">
+	      <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+	    </div>
+	  </div>           
+	</div>
+</div>  
+<% /* End popup menu for Customized forder*/ %>
+
+<%
+def customFolders = uicomponent.getCustomizeFolders();
+def enableSync = uicomponent.isImap();
+%>
+
+<div class="TitleBar">
+  <div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+  <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.my-folders") %></div>
+  <% if(enableSync){ %>
+    <div id="SynchronizeIconRefreshFolder" class="SyncIcon" title="" onclick="javascript:eXo.mail.MailServiceHandler.synchImapFolders(true); this.className = 'SyncingIcon';"><span></span></div>
+  <% } %>
+  <div style="clear: both"><span></span></div>
+</div>
+<div class="MyFolderContent">
+<% 
+  public void printNodes(String path, boolean enableSync) throws Exception {
+    if (!path.equals("") && uicomponent.getSubFolders(path).size() > 0) {
+      println("<div class=\"Collapse\" >");
+      for (Folder cf : uicomponent.getSubFolders(path)) {
+        boolean hasSubfolder = (uicomponent.getSubFolders(cf.getPath()).size() > 0)
+        if (cf != null) {
+          String pid = cf.getId() ;
+          String name = MailUtils.encodeHTML(cf.getName());
+          long pUnreadMess = cf.getNumberOfUnreadMessage();
+          String pCssClass = "CloseFolder" ;
+          String selectedClass = "NormalLabel";
+          boolean isChecking = false;
+          String checking = "NotCheckingIcon";
+          String collapse = _ctx.appRes(uicomponent.id+ ".label.click-to-collapse") ;
+          String title = _ctx.appRes(uicomponent.id+ ".label.click-to-expand") + "," + _ctx.appRes(uicomponent.id+ ".label.click-to-collapse") ;
+          String pActionLink = uicomponent.event('ChangeFolder', pid);
+          if(pid.equals(uicomponent.getSelectedFolder())) {
+            if (uicomponent.isChecking()) isChecking = true;
+	       selectedClass = "SelectedLabel" ;
+	      }
+          String iconFolder = "Folder";
+          if (hasSubfolder) iconFolder = "ParentFolder";
+          StringBuilder builder = new StringBuilder() ;
+          builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder $iconFolder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
+          if (isChecking) builder.append("<div class='CheckingIcon'></div>");
+          if (cf.getType() != 2) {
+          	 if(enableSync){
+              builder.append("<a class=\"FolderLink CustomizeFolder\" title=\"$name\" actionlink=\"$pActionLink\" onclick=\"javascript:eXo.mail.UIMailPortlet.lazySync(this,\'$pid\');\" href=\"javascript:void(0);\"  folder=\"").append(pid).append("\">");
+             } else {
+              builder.append("<a class=\"FolderLink CustomizeFolderPop3\" title=\"$name\"  href=\"$pActionLink\" onclick=\"event.cancelBubble = true;\" folder=\"").append(pid).append("\">");
+             }
+          } else {
+            builder.append("<a>");
+          }
+          builder.append(name);
+          builder.append("<span id=\"" + pid + "\" class=\"MailQuantity\">")
+          if(pUnreadMess > 0) builder.append("($pUnreadMess)");
+          builder.append("</span>");
+          builder.append("</a>");
+          builder.append("</div>")
+          println(builder.toString());
+          if (hasSubfolder) { 
+            printNodes(cf.getPath(), true);
+          }
+        }
+      }
+      println("</div>");
+    }
+  }
+
+  for (Folder cf : customFolders) {
+    if (cf != null) {
+      String pid = cf.getId() ;
+      String name = MailUtils.encodeHTML(cf.getName());
+      boolean hasSubfolder = (uicomponent.getSubFolders(cf.getPath()).size() > 0);
+      long pUnreadMess = cf.getNumberOfUnreadMessage();
+      String pCssClass = "CloseFolder" ;
+      String pActionLink = uicomponent.event('ChangeFolder', pid);
+      String selectedClass = "NormalLabel";
+      boolean isChecking = false;
+      String collapse = _ctx.appRes(uicomponent.id+ ".label.click-to-collapse") ;
+      String title = _ctx.appRes(uicomponent.id+ ".label.click-to-expand") + "," + _ctx.appRes(uicomponent.id+ ".label.click-to-collapse") ;
+      if(pid.equals(uicomponent.getSelectedFolder())) {
+       if (uicomponent.isChecking()) isChecking = true;
+       selectedClass = "SelectedLabel" ;
+      }
+      StringBuilder builder = new StringBuilder() ;
+      String iconFolder = "Folder";
+      if (hasSubfolder) iconFolder = "ParentFolder";
+      builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder Folder $iconFolder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
+      if (isChecking) builder.append("<div class='CheckingIcon'></div>");
+      if (cf.getType() != 2) {
+         if(enableSync){
+              builder.append("<a class=\"FolderLink CustomizeFolder\" title=\"$name\" actionlink=\"$pActionLink\" onclick=\"javascript:eXo.mail.UIMailPortlet.lazySync(this,\'$pid\');\" href=\"javascript:void(0);\"  folder=\"").append(pid).append("\">");
+         } else {
+              builder.append("<a class=\"FolderLink CustomizeFolderPop3\" title=\"$name\"  href=\"$pActionLink\" onclick=\"event.cancelBubble = true;\" folder=\"").append(pid).append("\">");
+         }
+      } else {
+        builder.append("<a>");
+      }
+      builder.append(name);
+      builder.append("<span id=\"" + pid + "\" class=\"MailQuantity\">")
+      if(pUnreadMess > 0) builder.append("($pUnreadMess)");
+      builder.append("</span>")
+      builder.append("</a>");
+      builder.append("</div>");
+      println(builder.toString());
+
+      if (hasSubfolder) { 
+        printNodes(cf.getPath(), enableSync);
+      }
+    }
+  }
+  //printNodes(uicomponent.getCustomerFolderPath());  
+%>
+</div>
+</div>
+</div>
+</div>

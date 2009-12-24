@@ -1,0 +1,137 @@
+<%
+  import java.util.ArrayList;
+  import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
+  import org.exoplatform.contact.ContactUtils;
+  uiform.begin();
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("'+uiform.id+'") ;') ;
+%>
+
+<div class="UIExportContactForm">
+	<div class="ExportContact">
+		<div class="WorkingContainer">
+		<% 
+		    if (!ContactUtils.isEmpty(uicomponent.getSelectedGroup())) {
+		      text = uicomponent.getSelectedGroup().trim();
+		      des = text ;
+		      if (ContactUtils.getUserGroups().contains(text)) {
+		      	text = ContactUtils.getPublicGroupName(text) ;
+		      }
+		%>
+		  <div class="Title" title="$des">  
+		      <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%> <%=text%>
+		  </div>
+		  <%} else if (!ContactUtils.isEmpty(uicomponent.getSelectedTag())) {
+		      text = uicomponent.getSelectedTag();
+		  %>
+		  <div class="Title" > 
+		      <%=_ctx.appRes(uicomponent.getName() + ".label.tag")%> <%=text%>
+		  </div>
+		  <%} %>
+
+		 
+	  
+			<div class="UIMessageList">
+				<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+		  		<thead>
+		  			<tr>		  			
+		  		    <th style="width: 25px; padding-left: 1px;" class="text"><input type="checkbox" class="checkbox" name="checkAll " title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/></th>
+		  		    <th style="width: 40%; padding-left: 2px;" class="text">
+		  		      	<div>  <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
+		  		    </th>
+		 	      	<th class="text" style="padding-left: 7px;">
+		  		    	 	<div><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
+		  		    </th>
+		  	 	  </tr>
+		  	 	</thead>
+		  	 	<tbody>
+		  	 		<%  
+							ContactData[] contacts = uicomponent.getContacts();
+							for(contact in contacts) {
+								checkboxField = uicomponent.getChildById(contact.getId()) ;
+						%>
+		  			<tr class="UIContactList" selectedTag="<%=uicomponent.getSelectedTag()%>">
+		  			  <td class="text" style="padding-left: 2px;">
+			  			  	<%
+			  			  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
+			  			  	%>
+		  			  </td>
+							<td>
+								<div class="State OfflineIcon" title="Available"> 
+									<% 
+										String name = "" ;
+										if (contact.getFullName() != null) {
+											if (contact.getFullName().length() > 40) name = contact.getFullName().substring(0, 40) + "..." ;
+											else name = contact.getFullName();
+										}
+									 %>
+									<%= ContactUtils.encodeHTML(name) %>
+								</div>
+							</td>
+							<td><%=(contact.getEmail()==null ? "" : contact.getEmail().replaceAll(";", "; "))%></td>
+		
+		   			</tr>
+		     	<% } %>  
+		  	  </tbody>
+				</table>
+				
+				<%_ctx.include("app:/templates/contact/webui/popup/UIPageIterator.gtmpl");%>
+			</div>
+			
+			<div class="ExportForm">
+			  <table class="UIFormGrid">
+			    <tr>
+			      <% 
+			      	field = uicomponent.getChildById(uicomponent.NAME) ;
+			      	if (field != null) {
+			       %>
+			      <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.name") %></td>
+			      <td class="FieldComponent"><%uicomponent.renderField(field)%></td>
+			      <% } %>
+			    </tr>
+			    <tr>
+			      <% 
+			      	field = uicomponent.getChildById(uicomponent.TYPE) ;
+			      	if (field != null) {
+			       %>
+			      <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.type") %></td>
+			      <td class="FieldComponent"><%uicomponent.renderField(field)%></td>
+			      <% } %>
+			    </tr>
+			  </table>
+		  </div>
+		</div>
+	</div>  
+        
+	<div class="UIAction"> 
+		<table class="ActionContainer" align="center">
+		  <tr>
+		    <td align="center">		
+		  	  <a href="<%=uicomponent.event("Save", "all")%>" class="ActionButton LightBlueStyle">
+		        <div class="ButtonLeft">
+		          <div class="ButtonRight">
+		            <div class="ButtonMiddle">  <%=_ctx.appRes(uicomponent.getName() + ".label.exportAll")%>  </div>
+		          </div>
+		        </div>
+		      </a>
+		  
+		      <a href="<%=uicomponent.event("Save", "selected")%>" class="ActionButton LightBlueStyle">
+		        <div class="ButtonLeft">
+		          <div class="ButtonRight">
+		            <div class="ButtonMiddle">  <%=_ctx.appRes(uicomponent.getName() + ".label.exportSelected")%>  </div>
+		          </div>
+		        </div>
+		      </a>
+		      <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
+		        <div class="ButtonLeft">
+		          <div class="ButtonRight">
+		            <div class="ButtonMiddle">  <%=_ctx.appRes(uicomponent.getName() + ".label.cancel")%>  </div>
+		          </div>
+		        </div>
+		      </a>
+		    </td>
+		  </tr>
+		</table>
+  </div>        
+</div>
+<%uiform.end()%>	

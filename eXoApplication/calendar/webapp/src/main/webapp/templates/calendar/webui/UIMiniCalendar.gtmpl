@@ -1,0 +1,157 @@
+<%
+	import java.text.DateFormat;
+	import java.text.SimpleDateFormat;
+	import java.util.Map ;
+	import org.exoplatform.calendar.CalendarUtils;
+	import java.util.Locale;
+	import org.exoplatform.webui.application.WebuiRequestContext;
+	
+	int currentYear = uicomponent.getCurrentYear() ;
+	int currentMonth = uicomponent.getCurrentMonth() ;
+	int currentDay = uicomponent.getCurrentCalendar().get(Calendar.DAY_OF_YEAR) ;
+	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT,String.valueOf(uicomponent.TYPE_MONTH)) ;
+ 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,String.valueOf(uicomponent.TYPE_MONTH)) ;
+ 	String linkYearNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(uicomponent.TYPE_YEAR)) ;
+ 	String linkYearPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,String.valueOf(uicomponent.TYPE_YEAR)) ;
+	uiform.begin();
+ 	monthName = uicomponent.getMonthName(currentMonth) ;
+ 	cssClass = "CalendarContentNomal" ;
+ 	if(uicomponent.isCurrentMonth(currentMonth, currentYear)) {
+		cssClass = "CalendarMatchedEventContent" ;
+	}
+	
+  WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+ 	Locale locale = context.getParentAppRequestContext().getLocale() ;
+	DateFormat sdf = new  SimpleDateFormat("d", locale) ;
+	sdf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
+	DateFormat sdtf = new  SimpleDateFormat("MM/d", locale) ;
+ 	sdtf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
+	Map data = uicomponent.getData() ;
+%>
+<div class="UIMiniCalendar">
+	<div class="MiniCalendarContainer">
+		<div class="YearSelector">
+			<div onclick="$linkDayNext" class="RightControlButton">
+				<div class="NextYearSelector" title="<%=_ctx.appRes('UIMonthView.label.nextMonth')%>"><span></span></div>
+			</div>
+			<div class="MonthSelector RightControlButton">
+				<table>
+					<tbody>
+						<tr>
+							<td>
+								<div onclick="$linkYearPrevious">
+									<div class="PreviousMonthSelector" title="<%=_ctx.appRes('UIYearView.label.previousYear')%>"><span></span></div>
+								</div>
+							</td>
+							<td>
+								<div class="Title">
+								<%
+										monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
+										yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
+								%>
+								<a href="<%=uicomponent.event("GotoDate", monthViewAction)%>" style="color:orange;">
+									$monthName 
+								</a>,  
+								<a style="color:blue">
+									$currentYear
+								</a>
+								</div>
+							</td>
+							<td>
+								<div onclick="$linkYearNext">
+									<div class="NextMonthSelector" title="<%=_ctx.appRes('UIYearView.label.nextYear')%>"><span></span></div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div onclick="$linkDayPrevious" class="RightControlButton">
+				<div class="PreviousYearSelector" title="<%=_ctx.appRes('UIMonthView.label.previousMonth')%>"><span></span></div>
+			</div>
+			<div style="clear: right;"><span></span></div>
+		</div> 
+		<div class="MonthList">
+			<div class="WeekList">
+			  <%for(day in uicomponent.getDaysName()) {
+				  	cssStyle = "DayTitle" ;
+						if(day.equals(uicomponent.getDaysName()[0])) cssStyle = "SundayTitle" ;
+				%>
+			<div class="$cssStyle"><%=day.substring(0,1)%></div>
+			  <%}%>
+  					<div style="clear: left;"><span></span></div>
+  				</div>
+  				<div class="DayList">
+  					<table class="UIGrid" id="" cellspacing="0" cellpadding="0">
+  						<tbody>
+  						<%
+  						 calendar = uicomponent.getInstanceTempCalendar()  ;
+  						 calendar.setTime(uicomponent.getBeginDateOfMonthView().getTime()) ;
+  						 
+					week = 0 ; 
+					dayOfMonth = 1 ;
+					validDay = 0 ;
+					daysInMonth = uicomponent.getDaysInMonth(currentMonth, currentYear) ;
+					while ( week++ < uicomponent.getWeeksOfTheMonth(currentYear, currentMonth, 1)  ) {
+				    println "<tr>";
+				    dayOfWeek = 0 ;
+				    while (dayOfWeek++ < 7) {
+				    	startDayOfWeek = uicomponent.getDayOfWeek(currentYear, currentMonth, dayOfMonth) ;
+				      if (week == 1 && startDayOfWeek == dayOfWeek) {
+				        validDay = 1;
+				      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
+				        validDay = 0;
+				      }
+				       	styleClass = "" ;
+				       	highlight = "" ;
+                dayStyle = ""
+						   dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+ calendar.getTime().getTime() ;
+				       actionLink = uicomponent.event("GotoDate", dayActionLink) ;
+				      if (validDay) {
+						    if(data.get(calendar.get(Calendar.DAY_OF_YEAR)) != null) {
+						    	highlight = "Highlight" ;
+						    } 
+					      if (uicomponent.isCurrentDay(dayOfMonth, currentMonth, currentYear )) {
+						       styleClass = "Today";
+						    } else if(calendar.get(Calendar.DAY_OF_YEAR) == currentDay)  {
+						        styleClass = "SelectedDay";
+						    } 
+                if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                  dayStyle = "Sunday" ;
+                } else if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                  dayStyle = "Saturday" ;
+                }
+				       //sdf.setCalendar(calendar) ;
+				       %>
+				      
+				        <td class="$highlight $styleClass $dayStyle">
+			        		<div class="MiniCalendarActions" onclick="$actionLink">
+  	                <%=sdf.format(calendar.getTime())%> 
+			       			</div>
+				       	</td>
+				       <% 
+				       dayOfMonth++ ;
+				      } else {
+				        %>
+				        <td class="OtherMonth">
+			        		<div class="MiniCalendarActions" onclick="$actionLink">
+			       				<%=sdf.format(calendar.getTime())%> 
+			       			</div>
+				       	</td>
+				      <%
+				      }
+				     calendar.add(Calendar.DATE, 1) ;
+				    }
+				    println "</tr>" ;
+	  			}	
+	  			 
+				%>
+  				</tbody>
+  			</table>
+  						
+    	</div>
+  	</div>
+	  
+	</div>
+</div>
+<%uiform.end();%>

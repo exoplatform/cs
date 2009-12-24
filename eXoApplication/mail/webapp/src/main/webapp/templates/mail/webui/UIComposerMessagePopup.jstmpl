@@ -1,0 +1,124 @@
+<div class="$uicomponent.id UIApplication" id="$uicomponent.id">
+  <div class="ApplicationMinWidth">
+  
+  	<div class="UIMessageCompose" style="padding: 5px;" >
+			<div class="UIToolbar">
+				<div class="HeaderToolbar">
+					<div class="LeftBar">
+						<div class="RightBar">
+							<div class="CenterBar">
+								<div class="MailListActionsbar">
+									<a href="#" class="ControlButton">
+										<div class="IconHolder SendMailIcon">
+											<div class="Label">Send mail</div>
+										</div>
+									</a>
+									<div class="SeparatorLine"><span></span></div>
+									<a href="#" class="ControlButton">
+										<div class="IconHolder SaveAsADraftIcon">
+											<div class="Label">Save as a Draft</div>
+										</div>
+									</a>
+									<div class="SeparatorLine"><span></span></div>
+									<a href="#" class="ControlButton">
+										<div class="IconHolder DiscardIcon">
+											<div class="Label">Discard</div>
+										</div>
+									</a>
+									<div class="SeparatorLine"><span></span></div>
+									<a href="#" class="ControlButton">
+										<div class="IconHolder AttachFileIcon">
+											<div class="Label">Attach File</div>
+										</div>
+									</a>
+									<div class="SeparatorLine"><span></span></div>
+									<a href="#" class="ControlButton">
+										<div class="IconHolder PriorityIcon">
+											<div class="Label DownArrow1Icon">Message Priority</div>
+										</div>
+									</a>
+									<div class="SeparatorLine"><span></span></div>
+									<a href="#" class="ControlButton">
+										<div class="IconHolder EditorOptionsIcon">
+											<div class="Label DownArrow1Icon">Editor Options</div>
+										</div>
+									</a>
+									<div style="clear:left;"><span></span></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+<!-- End Mail ControlBar -->
+<!-- Start  Message Address -->
+			<div class="MessageAddress">
+				<div class="UIForm $uicomponent.id">
+				  <div class="HorizontalLayout">
+				    <div class="FormContainer">
+				      <table class="UIFormGrid">
+	              <tr>
+  	              <td class="FieldLabel">From:</td>
+  	              <td class="FieldComponent">
+  	              	<table>
+  	              		<td>
+		  	              	<select name="Phuong">
+		  	              		<option value="male" selected="selected">Phuong Pham Dang (phuong.pham@exoplatform.com)</option>
+													<option value="male" selected="selected">Hieu Luong Trung (hieu.luong@exoplatform.com)</option>
+													<option value="female">Nguyet Nguyen Anh (nguyet.nguyen@exoplatform.com)</option>
+												</select>
+											</td>
+											<td class="AddAddress">
+												<a href="#">|Add CC|</a>
+			                	<a href="#">Add BCC|</a>
+		                	</td>
+	                	</table>
+	                </td>
+		            </tr>
+		            <tr>
+  	              <td class="FieldLabel">To:</td>
+  	              <td class="FieldComponent"><input type="input" class="input" value="Benjamin (benjamin.mestrallet@exoplatform.com)"/></td>
+		            </tr>
+		            <tr>
+  	              <td class="FieldLabel">CC:</td>
+  	              <td class="FieldComponent"><textarea type="input" class="textarea" >Benjamin (benjamin.mestrallet@exoplatform.com),Tuan Nguyen (tuan08@gmail.com)</textarea></td>
+		            </tr>
+		            <tr>
+  	              <td class="FieldLabel">Subject:</td>
+  	              <td class="FieldComponent"><input type="input" class="input" value="eXo Mail and Forum Screenshots"/></td>
+		            </tr>
+		            <tr>
+  	              <td class="FieldLabel">Attachments:</td>
+  	              <td class="FieldComponent">
+  	              	<div class="AttachmentIcon ZipFileIcon">
+  	              		<div>eXo Mail Screenshots.zip - 200K</div>
+  	              	</div>
+  	              	<a href="#" class="RemoveButton">[Remove]</a>
+  	              	<div style="clear:left;"><span></span></div>
+  	              </td>
+		            </tr>
+				      </table>
+				    </div>
+				  </div>
+				</div>
+			</div>
+<!-- End Compose Message Address -->
+<!-- Start Compose Message Detail -->
+			<div class="MessageContent">
+				<div class="PlainTextMessage">
+					Hi Benjamin !<p>
+					Could you please have a look on these screenshots for mail and forum.<p>
+					Thanks!<p>
+					-Phuong<p>
+					-----------------------<p>
+
+					Phuong Pham Dang<p>
+					eXo Platform SAS<p>
+					Vietnam Office</p>
+				</div>
+			</div>
+<!-- End Compose Message Detail -->
+  	</div>
+  
+  </div>
+</div>

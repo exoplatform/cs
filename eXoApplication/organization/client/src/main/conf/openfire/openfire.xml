@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    This file stores bootstrap properties needed by Openfire.
+    Property names must be in the format: "prop.name.is.blah=value"
+    That will be stored as:
+        <prop>
+            <name>
+                <is>
+                    <blah>value</blah>
+                </is>
+            </name>
+        </prop>
+
+    Most properties are stored in the Openfire database. A
+	property viewer and editor is included in the admin console.
+-->
+<!-- root element, all properties must be under this element -->
+<jive> 
+  <adminConsole> 
+    <!-- Disable either port by setting the value to -1 -->  
+    <port>9090</port>  
+    <securePort>9091</securePort> 
+  </adminConsole>  
+  <admin> 
+    <!-- Use this section to define users that will have admin privileges. Below,
+          you will find two ways to specify which users are admins. Admins will
+          have access to the admin console (only local users) and may have also access
+          to other functionalities like ad-hoc commands. -->  
+    <!-- By default, only the user with the username "admin" can login
+         to the admin console. Alternatively, you can specify a comma-delimitted
+         list usernames that should be authorized to login to the admin console
+         by setting the <authorizedUsernames> field below. -->  
+    <authorizedUsernames>root</authorizedUsernames>  
+    <!-- Comma-delimitted list of bare JIDs. The JIDs may belong to local
+         or remote users. -->  
+    <!-- <authorizedJIDs></authorizedJIDs> --> 
+  </admin>  
+  <locale>en</locale>  
+  <provider> 
+    <authorizedUser> 
+      <name>root</name>  
+      <password>exo</password> 
+    </authorizedUser>  
+    <auth> 
+      <className>org.exoplatform.rest.client.openfire.ExoAuthProvider</className> 
+    </auth>  
+    <user> 
+      <className>org.exoplatform.rest.client.openfire.ExoUserProvider</className> 
+    </user>  
+    <group> 
+      <className>org.exoplatform.rest.client.openfire.ExoGroupProvider</className> 
+    </group> 
+  </provider>  
+  <!--
+    Query parameters can be specified as "param=value".
+    Example:
+    <queryX>param=value</queryX>
+    X - number.     
+  -->  
+  <exoAuthProvider> 
+    <authenticationURL>http://localhost:8080/rest/organization/authenticate/</authenticationURL>  
+    <authenticationMethod>POST</authenticationMethod> 
+  </exoAuthProvider>  
+  <exoUserProvider> 
+    <findUsersURL>http://localhost:8080/rest/organization/xml/user/find-all/</findUsersURL>  
+    <findUsersMethod>GET</findUsersMethod>  
+    <getUsersURL>http://localhost:8080/rest/organization/xml/user/view-range/</getUsersURL>  
+    <getUsersMethod>GET</getUsersMethod>  
+    <usersCountURL>http://localhost:8080/rest/organization/xml/user/count/</usersCountURL>  
+    <usersCountMethod>GET</usersCountMethod>  
+    <userInfoURL>http://localhost:8080/rest/organization/xml/user/info/</userInfoURL>  
+    <userInfoMethod>GET</userInfoMethod> 
+  </exoUserProvider>  
+  <exoGroupProvider> 
+    <groupInfoURL>http://localhost:8080/rest/organization/xml/group/info/</groupInfoURL>  
+    <groupInfoMethod>GET</groupInfoMethod>  
+    <getGroupsAllURL>http://localhost:8080/rest/organization/xml/group/view-all/</getGroupsAllURL>  
+    <getGroupsAllMethod>GET</getGroupsAllMethod>  
+    <getGroupsRangeURL>http://localhost:8080/rest/organization/xml/group/view-from-to/</getGroupsRangeURL>  
+    <getGroupsRangeMethod>GET</getGroupsRangeMethod>  
+    <getGroupsForUserURL>http://localhost:8080/rest/organization/xml/group/groups-for-user/</getGroupsForUserURL>  
+    <getGroupsForUserMethod>GET</getGroupsForUserMethod>  
+    <groupsCountURL>http://localhost:8080/rest/organization/xml/group/count</groupsCountURL>  
+    <groupsCountMethod>GET</groupsCountMethod> 
+  </exoGroupProvider>  
+  <!-- Network settings. By default, Openfire will bind to all network interfaces.
+      Alternatively, you can specify a specific network interfaces that the server
+      will listen on. For example, localhost. This setting is generally only useful
+       on multi-homed servers. -->  
+  <!--
+    <network>
+        <interface></interface>
+    </network>
+    -->  
+  <connectionProvider> 
+    <className>org.jivesoftware.database.EmbeddedConnectionProvider</className> 
+  </connectionProvider>
+  <!--connectionProvider> 
+    <className>org.jivesoftware.database.DefaultConnectionProvider</className> 
+  </connectionProvider>  
+  <database> 
+    <defaultProvider> 
+      <driver>com.mysql.jdbc.Driver</driver>  
+      <serverURL>jdbc:mysql://localhost:3306/openfire</serverURL>  
+      <username>openfire</username>  
+      <password>openfire</password>  
+      <minConnections>5</minConnections>  
+      <maxConnections>15</maxConnections>  
+      <connectionTimeout>1.0</connectionTimeout> 
+    </defaultProvider> 
+  </database-->  
+  <setup>true</setup> 
+</jive>

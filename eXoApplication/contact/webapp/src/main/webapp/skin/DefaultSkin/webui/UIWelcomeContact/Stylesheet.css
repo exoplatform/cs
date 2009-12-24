@@ -1,0 +1,44 @@
+.UIContactPortlet .UIWelcomeContact {
+	padding: 8px;
+	background-color: #ffffff;
+}
+
+.UIContactPortlet .UIWelcomeContact .WelcomeContact {
+	height: 25px;
+}
+
+.UIContactPortlet .UIWelcomeContact .WelcomeContact .LabelWelcomeContact {
+	float: left;
+	color: #469ae2;
+	font-size: 14px;
+}
+
+.UIContactPortlet .UIWelcomeContact .WelcomeContact .LabelComment {
+	float: right;
+	color: #8a8a8a;
+	font-size: 10px;
+	padding:3px 0px;
+}
+
+.UIContactPortlet .UIWelcomeContact .LogoContact {
+	background: url('Background/LogoContact225x59.gif') no-repeat left;
+	width: 225px; height: 59px; margin-left: 40px;
+}
+
+.UIContactPortlet .UIWelcomeContact .OverviewContact {
+	color: #f7941e;
+	font-size: 12px;
+	font-weight: bolder;
+	border-bottom: 1px solid #c7c7c7;
+}
+
+.UIContactPortlet .UIWelcomeContact .ContentContact {
+	padding: 4px 0px;
+}
+
+.UIContactPortlet .UIWelcomeContact .FeaturesContact {
+	color: #f7941e;
+	font-size: 12px;
+	font-weight: bolder;
+	border-bottom: 1px solid #c7c7c7;
+}

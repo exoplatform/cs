@@ -1,0 +1,146 @@
+.UIContactPortlet .UIVCards {
+	border: 1px solid #c0c0c0;
+	padding: 1px;
+	margin-top: 4px;
+}
+
+.UIContactPortlet .UIVCards .VCardsBar {
+	background: #e7e7e7;
+	line-height: 27px;
+	height: 27px;
+	padding: 0px 0px 0px 5px ;
+}
+
+.UIContactPortlet .UIVCards .VCardsBar .Subject {
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/VcardIcon.gif') no-repeat left center;
+	padding-left: 25px; /* orientation=lt */
+	padding-right: 25px; /* orientation=rt */
+	font-size: 14px;
+	font-weight: bold;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+}
+
+.UIContactPortlet .UIVCards .UIVCardsContent {
+	padding: 5px;
+	background: white;
+}
+
+.UIContactPortlet .UIVCards .UIVCardsContent .WorkVCardsContent{
+	padding: 5px;
+}
+
+.UIContactPortlet .UIVCards .WorkVCardsContent .LeftVCardsContent {
+	width: 49.5%;
+	float: left;
+}
+
+.UIContactPortlet .UIVCards .WorkVCardsContent .RightVCardsContent {
+	width: 49.5%;
+	float: right;
+}
+
+.UIContactPortlet .UIVCards .VCardContent {
+	border: solid 1px #c0c0c0;
+	padding: 1px;
+	margin: 0px 0px 10px 0px;
+	background: white;
+}
+
+.UIContactPortlet .UIVCards .TitleVCards {
+	height: 24px;
+	cursor: move;
+	padding: 0px 7px;
+}
+
+.UIContactPortlet .UIVCards .SelectedVCard .TitleVCards {
+	background: #bec0fd;
+	height: auto;
+	padding: 2px 7px 6px 7px;
+}
+
+.UIContactPortlet .UIVCards .NormalVCard .TitleVCards {
+	background: #d7ddfe;
+	height: auto;
+	padding: 2px 7px 6px 7px;
+}
+
+.UIContactPortlet .UIVCards .TitleVCards .StateIcon {
+	background-position: left 2px; /* orientation=lt */
+	background-position: right 2px; /* orientation=rt */
+	line-height: 16px; height: auto;
+	width: 70%;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	padding-left: 18px; /* orientation=lt */
+	padding-right: 18px; /* orientation=rt */
+	font-weight: bold; font-size: 13px;
+	color: #1e1f21;
+}
+
+.UIContactPortlet .UIVCards .TitleVCards .TagIcon {
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 20px; /* orientation=rt */
+	line-height: 25px;
+	height: 22px;
+	cursor: pointer;
+}
+
+.UIContactPortlet .UIVCards .ContainerVCards  {
+	padding: 8px 10px 10px 10px;
+}
+
+.UIContactPortlet .UIVCards .ContainerVCards .AvatasIcon {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	border: solid 1px #545454;
+}
+
+.UIContactPortlet .UIVCards .ContainerVCards .AvatarMember {
+	background: url('background/AvatasMember63x81.gif') no-repeat ;
+}
+
+.UIContactPortlet .UIVCards .ContainerVCards .EmptyAvatarMember {
+	background: url('background/EmptyAvatasMember.gif') no-repeat ;
+}
+
+.UIContactPortlet .UIVCards .ContainerVCards .WorkContainerVCards {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	padding-left: 13px; /* orientation=lt */
+	padding-right: 13px; /* orientation=rt */
+}
+
+.UIContactPortlet .UIVCards .WorkContainerVCards .JobMember {
+	font-size: 13px;
+	color: #1e1f21;
+}
+
+.UIContactPortlet .UIVCards .ContainerVCards .WorkContainerVCards .InformationsMember {
+	padding: 10px 0px 0px 0px;
+}
+
+.UIContactPortlet .UIVCards .ContainerVCards .WorkContainerVCards .InfoMember {
+	line-height: 18px;
+}
+
+.UIContactPortlet .UIVCards .ContainerVCards .WorkContainerVCards .InfoMember a {
+	color: #0a41ae;
+}
+
+.UIContactPortlet .UIVCards .ContainerVCards .InformationsMember .MailIcon {
+	background: url('icons/16x16/MailMemberIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/16x16/MailMemberIcon.gif') no-repeat right center; /* orientation=rt */
+	padding-left: 20px; /* orientation=lt */
+	padding-left: 25px; /* orientation=rt */
+	padding-right: 20px; /* orientation=rt */
+	line-height: 20px;
+	margin-left: 5px; /* orientation=lt */
+	margin-right: 5px; /* orientation=rt */
+}
+
+.UIContactPortlet .TagIcon .UIPopupCategory {
+	top: 20px;
+}

@@ -1,0 +1,420 @@
+<% 
+	import org.exoplatform.contact.service.AddressBook;
+	import java.util.Map;
+	import org.exoplatform.services.organization.OrganizationService;
+	import org.exoplatform.contact.ContactUtils;
+%>
+
+<div class="UIAddressBooks" id="<%=uicomponent.getId()%>">
+	<div class="TitleBar">
+		<div class="TitleIcon "><%=_ctx.appRes(uicomponent.getName() + ".label.addressBooks")%></div>
+		<div class="ActionIcon" onclick="eXo.contact.UIContactPortlet.show(this, event);">
+			<% /*Begin Popup Menu*/ %>
+				<div style="position: relative;height:1px;">
+  				<div class="UIRightClickPopupMenu" style="display: none;">
+  					<div class="UIContextMenuContainer">
+							  <div class="TopLeftRightClickPopupMenu">
+	          			<div class="TopRightRightClickPopupMenu">
+	            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+	          			</div>
+	        			</div>
+				        <div class="MiddleLeftRightClickPopupMenu">
+				          <div class="MiddleRightRightClickPopupMenu">
+	              		<div class="UIRightPopupMenuContainer">
+	                    <div class="MenuItem">
+		                    <a class="ItemIcon AddressIcon"  href="<%=uicomponent.event("AddAddress")%>">
+		                      <%=_ctx.appRes(uicomponent.getName() + ".label.addAddress")%>
+		                    </a>
+	                    </div>
+	                    <div class="MenuItem">
+		                    <a class="ItemIcon ImportAddressIcon" href="<%=uicomponent.event("ImportAddress")%>">
+		                      <%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>
+		                    </a>
+	                    </div>
+	                    <div class="MenuItem">
+		                    <a class="ItemIcon ExportAddressIcon" href="<%=uicomponent.event("ExportAddress")%>">
+		                      <%=_ctx.appRes(uicomponent.getName() + ".label.exportAddress")%>
+		                    </a>
+	                    </div>
+										</div>
+		          		</div>
+		        		</div>
+					      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+	      			</div>
+				    </div>
+  		</div>
+  		<% /*End Popup Menu*/ %>
+		</div>
+	
+  <div style="clear: both"><span></span></div>
+	</div>
+	<div class="PersonalAddress">
+		<div class="AddressTitle">
+			<div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.personalAddress")%></div>
+		</div>
+		<%
+				
+			AddressBook[] contactGroups = uicomponent.getGroups();
+			for(contactGroup in contactGroups) {
+				String groupId = contactGroup.getId() ;
+				String actionLink  = uicomponent.event("SelectGroup", groupId) ;	
+				cssClass = "Normal" ;				
+				if(groupId.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;		
+				
+				icon = "AddressIcon" ;
+				if (ContactUtils.isCollectedAddressBook(groupId)) icon = "AddressIcon2" ;
+				
+				if ((contactGroup.getViewPermissionUsers() != null && contactGroup.getViewPermissionUsers().length > 0)
+						|| (contactGroup.getViewPermissionGroups() != null && contactGroup.getViewPermissionGroups().length > 0)) {
+					icon = "SharedAddressIcon" ;		
+				}
+		%>
+	
+		<div id="$groupId" addressType="0" class="ItemList $cssClass PrivateAddressBook" isDefault="<%=uicomponent.isDefault(groupId)%>">
+			<div onclick="$actionLink"  class="IconHolder $icon" title="<%=ContactUtils.encodeHTML(contactGroup.getName())%>">
+				<%= ContactUtils.encodeHTML(contactGroup.getName())%>
+			</div>
+		</div>
+		<% } %>		
+	</div>
+	
+			<%
+				cssClass = "" ;
+				if (uicomponent.isSelectSharedContacts()) cssClass = "Selected" ;
+				String sharedContactLink  = uicomponent.event("SelectSharedContact") ;
+			 %>
+	<div class="PersonalAddress">
+	
+		<% 
+			if (uicomponent.hasSharedContacts() == true) {
+		 %>
+		<div class="AddressTitle $cssClass">			
+			<div class="Label" style="font-weight: bold;">
+				<a href="$sharedContactLink">
+					<%=_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")%>
+				</a>	
+			</div>
+		</div>
+		<% 
+			} else {
+		 %>
+		<div class="AddressTitle $cssClass">			
+			<div class="Label" >
+				<a href="$sharedContactLink">
+					<%=_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")%>
+				</a>	
+			</div>
+		</div>
+		
+		<% 
+			}
+		 %>
+		<% 
+		Map sharedGroups =	uicomponent.getSharedGroups() ;
+		for(group in sharedGroups.keySet()) {
+			String actionLink  = uicomponent.event("SelectSharedGroup", group) ;	
+			cssClass = "Normal" ;			
+			if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;
+			groupName = ContactUtils.getDisplayAdddressShared(sharedGroups.get(group).getSharedUserId(), sharedGroups.get(group).getName()) ;
+	 %>
+		<div id="$group" addressType="1" class="ItemList $cssClass ShareAddressBook" havePermission="<%=uicomponent.havePermission(group)%>" isDefault="<%=uicomponent.isDefault(group)%>">
+			<div onclick="$actionLink" class="IconHolder AddressIcon" title="<%=ContactUtils.encodeHTML(groupName)%>">
+				<%= ContactUtils.encodeHTML(groupName) %>
+			</div>
+		</div>
+		<% } %>
+	</div>
+	
+	<div class="PublicAddress">
+		<div class="AddressTitle">
+			<div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.publicAddress")%></div>
+		</div>
+		<%
+			List groupContacts = uicomponent.getPublicContactGroups();
+			for(group in groupContacts) {
+				cssClass = "Normal" ;
+				name = ContactUtils.getPublicGroupName(group) ;
+				//String[] array = group.split("/") ;
+				//int i = array.length - 1 ;
+				//name = array[i] ;
+				String actionLink  = uicomponent.event("SelectPublicGroup", group) ;				
+				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;	
+				
+			%>
+				<div id="$group" title="$group" class="ItemList $cssClass PublicAddressBook" addressType="2" >
+					<div onclick="$actionLink" class="IconHolder AddressIcon" >$name</div>
+				</div>
+		<% } %>
+	</div>
+	
+	
+	<% /*Begin Popup Menu*/ %>
+				
+	  	<div class="UIRightClickPopupMenu" id="UIAddressBookPopupMenu0" eXoCallback="eXo.contact.UIContactPortlet.addressBookCallback">
+	  		<div class="UIContextMenuContainer">
+				  <div class="TopLeftRightClickPopupMenu">
+		  			<div class="TopRightRightClickPopupMenu">
+							<div class="TopCenterRightClickPopupMenu"><span></span></div>
+		  			</div>
+					</div>
+	      	<div class="MiddleLeftRightClickPopupMenu">
+	          <div class="MiddleRightRightClickPopupMenu">
+  						<div class="UIRightPopupMenuContainer">
+  						
+				  			<div class="MenuItem">   
+			            <a class="ItemIcon ContactIcon" href="<%=uicomponent.event("AddContact", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>
+			            </a>
+				        </div>
+				        
+				        <div class="MenuItem">
+			            <a class="ItemIcon CopyAddressIcon" href="<%=uicomponent.event("CopyAddress", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>
+			            </a>
+				        </div>
+ 
+								 <% 
+									String color = "";
+									if(uicomponent.canPaste() == true) {
+										actionlink = uicomponent.event("PasteContacts", "id") ;
+									} else {
+										actionlink = "javascript: void(0);" ;
+										color = "style='color : #cccccc ;'" ;
+									}
+								%>
+				        <div class="MenuItem">
+			            <a $color class="ItemIcon PasteIcon" href="$actionlink">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.pasteContacts")%>
+			            </a>
+				        </div>						        
+				        
+				        <div class="MenuItem">
+			            <a class="ItemIcon ShareIcon" href="<%=uicomponent.event("ShareGroup", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.share")%>
+			            </a>
+				        </div>				     
+				        <div class="MenuItem">
+			            <a class="ItemIcon ExportContactIcon" href="<%=uicomponent.event("ExportAddress", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.exportContacts")%>
+			            </a>
+				        </div>
+				        <div class="MenuItem">   
+			            <a class="ItemIcon ImportContactIcon" href="<%=uicomponent.event("ImportAddress", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.importContacts")%>
+			            </a>
+				        </div>
+				        <div class="MenuItem">
+			            <a class="ItemIcon EditActionIcon" href="<%=uicomponent.event("EditGroup", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.edit")%>
+			            </a>
+				        </div>
+				        
+				        <div class="MenuItem">
+			            <a class="ItemIcon EmailIcon" href="<%=uicomponent.event("SendEmail", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.sendEmail")%>
+			            </a>
+				        </div>
+				        
+				        <div class="MenuItem">
+			            <a class="ItemIcon DeleteIcon" href="<%=uicomponent.event("DeleteGroup", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>
+			            </a> 
+				        </div>					        
+				   	 			
+				        <div class="MenuItem">
+			            <a class="ItemIcon PrintIcon" href="<%=uicomponent.event("Print", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.print")%>  
+			            </a>
+				        </div>
+							
+ 
+							</div>
+			  		</div>
+					</div>
+		      <div class="BottomLeftRightClickPopupMenu">
+		        <div class="BottomRightRightClickPopupMenu">
+		          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+		        </div>
+		      </div>
+				</div>
+			</div>
+	  			
+	  		<% /*End Popup Menu*/ %>
+	  	<% /*Begin Popup Menu*/ %>
+				
+	  	<div class="UIRightClickPopupMenu" id="UIAddressBookPopupMenu1" eXoCallback="eXo.contact.UIContactPortlet.addressBookCallback">
+	  		<div class="UIContextMenuContainer">
+				  <div class="TopLeftRightClickPopupMenu">
+		  			<div class="TopRightRightClickPopupMenu">
+							<div class="TopCenterRightClickPopupMenu"><span></span></div>
+		  			</div>
+					</div>
+	      	<div class="MiddleLeftRightClickPopupMenu">
+	          <div class="MiddleRightRightClickPopupMenu">
+  						<div class="UIRightPopupMenuContainer">
+				  			<div class="MenuItem">
+			            <a class="ItemIcon ContactIcon" href="<%=uicomponent.event("AddContact", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>
+			            </a>
+				        </div>
+				        
+				        <div class="MenuItem">
+			            <a class="ItemIcon CopyAddressIcon" href="<%=uicomponent.event("CopyAddress", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>
+			            </a>
+				        </div>
+ 
+								 <% 
+									//String color = "";
+									if(uicomponent.canPaste() == true) {
+										actionlink = uicomponent.event("PasteContacts", "id") ;
+									} else {
+										actionlink = "javascript: void(0);" ;
+										color = "style='color : #cccccc ;'" ;
+									}
+								%>
+				        <div class="MenuItem">
+			            <a $color class="ItemIcon PasteIcon" href="$actionlink">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.pasteContacts")%>
+			            </a>
+				        </div>						        
+				        
+				        <div class="MenuItem">   
+			            <a class="ItemIcon ShareIcon" style="color:#cccccc" href="javascript:void(0) ;">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.share")%>
+			            </a>
+				        </div>				     
+				        <div class="MenuItem">
+			            <a class="ItemIcon ExportContactIcon" href="<%=uicomponent.event("ExportAddress", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.exportContacts")%>
+			            </a>
+				        </div>
+				        
+				        <div class="MenuItem">
+			            <a class="ItemIcon ImportContactIcon" href="<%=uicomponent.event("ImportAddress", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.importContacts")%>
+			            </a>
+				        </div>
+				        
+				        <div class="MenuItem">
+			            <a class="ItemIcon EditActionIcon" href="<%=uicomponent.event("EditGroup", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.edit")%>
+			            </a>
+				        </div>
+				        
+				        <div class="MenuItem">
+			            <a class="ItemIcon EmailIcon" href="<%=uicomponent.event("SendEmail", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.sendEmail")%>
+			            </a>
+				        </div>
+				        
+				        <div class="MenuItem">
+			            <a class="ItemIcon DeleteIcon1" href="<%=uicomponent.event("DeleteSharedGroup", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.discard")%>
+			            </a> 
+				        </div>					        
+				   	 			
+				        <div class="MenuItem">
+			            <a class="ItemIcon PrintIcon" href="<%=uicomponent.event("Print", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.print")%>  
+			            </a>
+				        </div>
+							
+ 
+							</div>
+			  		</div>
+					</div>
+		      <div class="BottomLeftRightClickPopupMenu">
+		        <div class="BottomRightRightClickPopupMenu">
+		          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+		        </div>
+		      </div>
+				</div>
+			</div>
+	  			
+	  		<% /*End Popup Menu*/ %>
+	  	<% /*Begin Popup Menu*/ %>
+				
+	  	<div class="UIRightClickPopupMenu" id="UIAddressBookPopupMenu2" eXoCallback="eXo.contact.UIContactPortlet.addressBookCallback">
+	  		<div class="UIContextMenuContainer">
+				  <div class="TopLeftRightClickPopupMenu">
+		  			<div class="TopRightRightClickPopupMenu">
+							<div class="TopCenterRightClickPopupMenu"><span></span></div>
+		  			</div>
+					</div>
+	      	<div class="MiddleLeftRightClickPopupMenu">
+	          <div class="MiddleRightRightClickPopupMenu">
+  						<div class="UIRightPopupMenuContainer">
+				  			<div class="MenuItem">   
+			            <a class="ItemIcon ContactIcon" style='color : #cccccc ;' href="javascript:void(0) ;">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>
+			            </a>
+				        </div>
+				        
+				        <div class="MenuItem">
+			            <a class="ItemIcon CopyAddressIcon" href="<%=uicomponent.event("CopyAddress", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>
+			            </a>
+				        </div>
+				        <div class="MenuItem">   
+			            <a class="ItemIcon PasteIcon" style="color:#cccccc" href="javascript:void(0) ;">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.pasteContacts")%>
+			            </a> 
+				        </div>					        
+				        
+				        <div class="MenuItem">   
+			            <a class="ItemIcon ShareIcon"  style="color:#cccccc" href="javascript:void(0) ;">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.share")%>
+			            </a>
+				        </div>				     
+				        <div class="MenuItem">
+			            <a class="ItemIcon ExportContactIcon" href="<%=uicomponent.event("ExportAddress", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.exportContacts")%>
+			            </a>
+				        </div>
+				        <div class="MenuItem">   
+			            <a class="ItemIcon ImportContactIcon" style="color:#cccccc" href="javascript:void(0) ;">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.importContacts")%>
+			            </a>
+				        </div>
+				        <div class="MenuItem">   
+			            <a class="ItemIcon EditActionIcon" style="color:#cccccc" href="javascript:void(0) ;">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.edit")%>
+			            </a>
+				        </div>
+				        
+				        <div class="MenuItem">
+			            <a class="ItemIcon EmailIcon" href="<%=uicomponent.event("SendEmail", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.sendEmail")%>
+			            </a>
+				        </div>
+				        
+				        <div class="MenuItem">   
+			            <a class="ItemIcon DeleteIcon" style="color:#cccccc" href="javascript:void(0) ;">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>
+			            </a> 
+				        </div>					        
+  
+			          <div class="MenuItem">
+			            <a class="ItemIcon PrintIcon" href="<%=uicomponent.event("Print", "id")%>">
+			              <%=_ctx.appRes(uicomponent.getName() + ".label.print")%>  
+			            </a>
+				        </div>
+				        
+							</div>
+			  		</div>
+					</div>
+		      <div class="BottomLeftRightClickPopupMenu">
+		        <div class="BottomRightRightClickPopupMenu">
+		          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+		        </div>
+		      </div>
+				</div>
+			</div>
+	  			
+	  		<% /*End Popup Menu*/ %>		
+</div>

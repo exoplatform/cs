@@ -1,0 +1,98 @@
+
+/********************* UIAttachFileForm ***************************/
+.UICalendarPortlet .UIAttachFileForm {
+	background: #f3f3f3;
+	padding: 10px;
+}
+
+.UICalendarPortlet .UIAttachFileForm .HorizontalLayout {
+	border: none;
+}
+
+/********************* UICalendarCategoryManager ***************************/
+.UICalendarPortlet .UICalendarCategoryManager {
+	padding: 10px;
+	min-width: 400px;
+}
+
+.UICalendarPortlet .UICalendarCategoryManager .UICalendarCategoryForm {
+	margin-top: 10px;
+}
+
+/********************* UIEventCategoryManager ***************************/
+
+.UICalendarPortlet .UIEventCategoryManager .UIEventCategoryForm {
+	margin-top: 10px;
+}
+
+/********************* UIExportForm ***************************/
+.UICalendarPortlet .UIExportForm {
+	padding: 10px;
+}
+
+.UICalendarPortlet .UIExportForm .HorizontalLayout {
+	border: none;
+}
+
+/*===================UIForm=======================*/
+
+.UICalendarPortlet .UIEventCategoryManager {
+	padding: 8px;
+	min-width: 400px;
+}
+
+.UICalendarPortlet .UIEventCategoryManager .UIGrid .ActionContainer {
+	width: 60px;
+}
+
+.UICalendarPortlet .SelectMemberIcon {
+	width: 16px ; height: 16px;
+}
+
+.UICalendarPortlet .SelectUserIcon {
+	width: 16px ; height: 16px;
+}
+.UICalendarPortlet .SelectGroupIcon {
+	width: 16px ; height: 16px;
+}
+/********************************** UICalendarSettingForm ***************************************/
+.UICalendarPortlet .setting{
+}
+.UICalendarPortlet .setting .WorkingTime{
+ float: left;/* orientation=lt */
+ float: right;/* orientation=rt */
+}
+.UICalendarPortlet .setting .WorkingTime .selectbox{
+ width: 70px;
+}
+.UICalendarPortlet .setting .WorkingTimeCheck {
+ float:left;/* orientation=lt */
+ float: right;/* orientation=rt */
+}
+
+.UICalendarPortlet .defaultCalendarTab td.FieldLabel {
+	text-align:left;/* orientation=lt */
+	text-align:right;/* orientation=rt */
+}
+.UICalendarPortlet .defaultCalendarTab td.FieldComponent {
+	text-align:left;/* orientation=rt */
+	text-align:right;/* orientation=lt */
+}
+/********************************** UISelectUserForm ***************************************/
+.UISelectUserForm {
+	padding: 10px;
+}
+
+.UICalendarPortlet .UIImportForm {
+	padding: 10px;
+	min-width: 400px;
+}
+
+.UICalendarPortlet .UIImportForm .HorizontalLayout {
+	padding: 10px;
+	background: #f3f3f3;
+}
+
+.UICalendarPortlet .UIQuickAddEvent {
+	min-width: 400px;
+}

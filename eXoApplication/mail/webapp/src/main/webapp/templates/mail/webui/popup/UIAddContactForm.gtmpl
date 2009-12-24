@@ -1,0 +1,160 @@
+<% 
+	import org.exoplatform.contact.service.Contact;
+  import org.exoplatform.contact.service.ContactAttachment;
+	uiform.begin() 
+%>
+<div style="overflow-x:auto; width:99%;">
+<div><div style="width:620px;" ><span style="display:none;"></span></div></div>
+<div  style="_width:expression(this.previousSibling.offsetWidth - 22 + 'px'); !border:1px solid white; _margin:auto;">
+<div class="UIAddNewContact"> 
+
+<div class="UIForm AddGroupContact">
+  <div class="HorizontalLayout">
+    <table class="UIFormGrid">
+      <tbody>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.address-book") %></td>
+          <td class="FieldComponent">
+            <% uicomponent.renderField(uicomponent.SELECT_GROUP)%>
+            <% if (!uicomponent.isEdited_) {%><a href="<%=uicomponent.event("AddGroup")%>" title="Add Address Book"><img class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt=""/></a><%}%>
+         	</td>           
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+  
+<div class="UIForm ProfileContent">
+  <div class="HorizontalLayout">
+    <table class="UIFormGrid">
+      <tbody>
+        <tr>
+          <td class="FieldComponent" colspan="2">
+            <div class="FormContainer">
+              <table class="UIFormGrid">
+                <tbody>
+                  <tr>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.first-name") %> </td>
+                    <td class="FieldComponent">
+                      <% uicomponent.renderField(uicomponent.FIRST_NAME)%>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.last-name") %> </td>
+                    <td class="FieldComponent">
+                      <% uicomponent.renderField(uicomponent.LAST_NAME)%>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.nick-name") %> </td>
+                    <td class="FieldComponent">
+                      <% uicomponent.renderField(uicomponent.NICKNAME)%>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.gender") %> </td>
+                    <td class="FieldComponent">
+                    	<% 
+                    		maleChecked = "" ;
+                    		femaleChecked = "" ;
+                    		gender = uicomponent.getFieldGender() ;
+                    		if (gender != null && gender.equalsIgnoreCase("male")) maleChecked = "checked" ; 
+												else if (gender != null && gender.equalsIgnoreCase("female"))femaleChecked = "checked" ;
+                    	 %>
+                    
+                      <input class="radio" type="radio" value="Male" $maleChecked name="gender"/>
+          	 					<span style="padding:0px 20px 0px 5px" class="Lable">
+												<%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %>
+											</span>
+											<input class="radio" type="radio" value="Female" $femaleChecked name="gender"/>
+											<span style="padding-left:3px;" class="Lable">
+											 	 <%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %>
+											 </span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.birthday") %> </td>
+                    <td class="FieldComponent">
+                      <% uicomponent.renderField(uicomponent.DAY)%>
+                      <span>-</span>  
+                      <% uicomponent.renderField(uicomponent.MONTH)%>
+                      <span>-</span>
+                      <% uicomponent.renderField(uicomponent.YEAR)%>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.job-title") %> </td>
+                    <td class="FieldComponent">
+                    <% uicomponent.renderField(uicomponent.JOBTITLE)%>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.email") %> </td>
+                    <td class="FieldComponent">
+                    <% uicomponent.renderField(uicomponent.EMAIL)%>
+                    </td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+              
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="AvatarContent">
+      <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.picture") %>:</div>
+      <% 
+      	String imageLink = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
+				Contact contact = uicomponent.getTempContact() ;
+				if (contact != null) {
+					ContactAttachment att = contact.getAttachment() ;
+					if (att != null) {	
+						try {
+							imageLink = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+							imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
+						} catch (Exception e) {}
+					}
+				}
+      %>
+      <div class="Avatar">
+        <img src="$imageLink" width=63 height=81 class="ImgAvatar"/>
+      </div>
+      <div class="Action">  
+        <a href="<%=uicomponent.event("ChangeImage")%>"><%=_ctx.appRes(uicomponent.id+ ".label.change") %> | </a>
+        <a href="<%=uicomponent.event("DeleteImage")%>"><%=_ctx.appRes(uicomponent.id+ ".label.delete") %></a>      
+      </div>
+    </div>
+    
+    <div style="clear:left;"><span></span></div>
+  </div>
+</div>
+
+</div>
+
+<div class="UIAction">
+<table class="ActionContainer">
+  <tr>
+    <td align="center">
+      <% for(action in uicomponent.getActions()) { 
+             String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+             String link = uicomponent.event(action) ;
+      %>
+      <div onclick="$link" class="ActionButton LightBlueStyle">
+      <div class="ButtonLeft">
+        <div class="ButtonRight">
+          <div class="ButtonMiddle">
+            <a href="#">$actionLabel</a>
+          </div>
+        </div>
+        </div>
+      </div>
+      <%}%>
+    </td>
+  </tr>
+</table>
+</div>
+</div>
+</div>
+<% uiform.end() %>  

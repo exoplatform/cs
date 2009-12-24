@@ -1,0 +1,178 @@
+<%
+	import java.text.DateFormat;
+	import java.text.SimpleDateFormat;
+	import org.exoplatform.calendar.CalendarUtils;
+	import java.util.Locale;
+	import org.exoplatform.webui.application.WebuiRequestContext;
+	
+	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+ 	Locale locale = context.getParentAppRequestContext().getLocale() ;
+ 	
+	DateFormat df = new SimpleDateFormat("MMM, dd, yyyy", locale) ;
+	uiForm = uicomponent.getParentFrom() ;
+	int timeInterval = 15;
+	int blocks = 60/timeInterval ;
+	public int mod(int value, int div) {
+		return (value % div) ;
+	}
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.initCheck("' + uicomponent.id + '") ;') ;
+%>
+<div class="UIAddNewEvent $uicomponent.id" id="$uicomponent.id" serverTimeZone="<%=uicomponent.getServerTimeZone()%>" >
+  <div class="NewEventAttendee">
+    <div class="UIFormInputSet">
+      <div class="UIFormInputSetWithAction">
+        <div class="FormContainer">
+          <div class="DateTimeContainer">
+            <div class="ApplySelectedDate">
+              <div class="Field">
+                <%uiForm.renderField(uicomponent.FIELD_CHECK_TIME)%>
+              </div>
+              <div class="Label">
+                <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_CHECK_TIME)%>
+                :
+              </div>
+              <div style="clear: both;">
+                <span></span>
+              </div>
+            </div>
+            <div>
+              <div class="Field">
+                <%uiForm.renderField(uicomponent.FIELD_DATEALL)%>
+              </div>
+              <div class="Label">
+                <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_DATEALL)%>
+                :
+              </div>
+              <div class="TimeField">
+	              <div class="Field">
+	               <%uiForm.renderField(uicomponent.FIELD_TO_TIME)%>
+	              </div>
+	              <div class="Label">
+	                <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_FROM_TIME)%>
+	                :
+	              </div>
+	              <div class="Field">
+	               <%uiForm.renderField(uicomponent.FIELD_FROM_TIME)%>
+	              </div>
+	              <div class="Label">
+	                <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_TO_TIME)%>
+	                :
+	              </div>
+              </div>
+              <div style="clear: right;">
+                <span></span>
+              </div>
+            </div>
+            <div style="clear: left;">
+              <span></span>
+            </div>
+          </div>
+          <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0" dateValue="<%=uicomponent.getDateValue()%>" exocallback="eXo.calendar.UICalendarPortlet.callbackSelectionX() ;">
+            <tbody>
+              <tr class="TitleBar">
+                <td style="width:28%;">
+                  <div class="LeftSide">
+                    <a href="<%=uiForm.event("MovePrevious")%>">
+                      <img src="/eXoResources/skin/sharedImages/Blank.gif" class="BackIcon" title="<%=_ctx.appRes('UIDayView.label.previousDay')%>"></a>
+                    <span class="Title">
+                      <%=df.format(uicomponent.calendar_.getTime())%>
+                    </span><a href="<%=uiForm.event("MoveNext")%>">
+                      <img src="/eXoResources/skin/sharedImages/Blank.gif" class="NextIcon" title="<%=_ctx.appRes('UIDayView.label.nextDay')%>"></a>
+                  </div>
+                </td>
+                <%
+									int i = 0 ;
+									while(i < 24){
+										if(i < 10) {
+											mylabel = "0" + i ;
+										}else {
+											mylabel = i ;
+										}
+                %>
+								<td colspan="4"; class="TimeNumber">$mylabel</td>
+                <%	
+										i++ ;
+									}
+                %>
+              </tr>
+              <tr>
+                <td>
+                  <div class="LeftSide">
+                    <a href="<%=uiForm.event("DeleteUser")%>">
+                      <div class="DeleteUserIcon" title="<%=uiForm.getLabel('DeleteUsername')%>">
+                        <span></span>
+                      </div>
+                    </a><a href="<%=uiForm.event("AddUser",uicomponent.id)%>">
+                      <div class="AddUserIcon" title="<%=uiForm.getLabel('AddUsername')%>">
+                        <span></span>
+                      </div>
+                    </a>
+                    <div class="Title">
+                      <%=uiForm.getLabel('Participants')%>
+                    </div>
+                    <div style="clear: both">
+                    </div>
+                </td>
+                <%
+									styleClassF = "ParticipantsFreeTime" ;
+									j = 0
+									while(j < 96){
+                %>
+                <td class="$styleClassF UICellBlock">
+                  &nbsp;</td>
+                <%
+									j ++ ;
+								}								
+                %>
+              </tr>
+              <% Map parMap = uicomponent.getMap() ; %>
+              <%for(String p in uicomponent.getParticipants()) {%>
+              <tr busytime="<%=parMap.get(p);%>" userTimeZone="<%=uicomponent.getUserTimeZone(p)%>">
+                <td>
+                  <div class="LeftSide">
+                    <div class="Input">
+                      <%uiForm.renderField(p)%>
+                    </div>
+                    <div class="Title">$p</div>
+                    <div style="clear: left;">
+                      <span></span>
+                    </div>
+                  </div>
+                </td>
+                <%
+										j = 0 ;
+										styleClassF = "FreeTime" ;										
+										while(j < 96){										
+                %>
+                <td class="$styleClassF">
+                  &nbsp;</td>
+                <%
+										j ++ ;
+									}%>
+              </tr>
+              <%}%>
+            </tbody>
+          </table>
+          <div class="ThiefBox">
+            <div class="Label">
+              <%=uiForm.getLabel('BusyTimes')%>
+            </div>
+            <div class="BusyTime">
+              <span></span>
+            </div>
+            <div class="Label">
+              <%=uiForm.getLabel('FreeTimes')%>
+            </div>
+            <div class="FreeTime">
+              <span></span>
+            </div>
+            <div style="clear: both;">
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

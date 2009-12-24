@@ -1,0 +1,18 @@
+<div class="UIDropDownItemSelector">
+  <div class="ItemSelectorContainer">
+    <div class="ItemInfoBar" >
+      <div class="LeftItemInfoBar">
+        <div class="RightItemInfoBar">
+          <div class="MiddleItemInfoBar" title="Show List" >
+            <div class="Icon AccountIcon"><span></span></div>
+            <div class="SelectedItemLabel">Default Account</div>
+            <div class="DropDownSelectIcon"><span></span></div>
+            <div style="clear:both;"><span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<a class="AddAccountIcon" href = "#" title="Add New Account"><span></span></a>
+<div style="clear:left"><span></span></div>

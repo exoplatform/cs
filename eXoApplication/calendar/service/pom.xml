@@ -1,0 +1,82 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
+	<parent>
+		<groupId>org.exoplatform.cs</groupId>
+		<artifactId>cs</artifactId>
+		<version>1.3.3</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
+	<name>eXo CS Calendar Service</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.exoplatform.core</groupId>
+			<artifactId>exo.core.component.security.core</artifactId>
+			<version>${org.exoplatform.core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.exoplatform.core</groupId>
+			<artifactId>exo.core.component.organization.jdbc</artifactId>
+			<version>${org.exoplatform.core.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.exoplatform.portal</groupId>
+			<artifactId>exo.portal.component.resources</artifactId>
+			<version>${org.exoplatform.portal.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.exoplatform.jcr</groupId>
+			<artifactId>exo.jcr.component.ext</artifactId>
+			<version>${org.exoplatform.jcr.version}
+			</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.exoplatform.cs</groupId>
+			<artifactId>exo.cs.eXoApplication.mail.service</artifactId>
+			<version>1.3.3</version>
+		</dependency>
+
+		<!--
+			dependency> <groupId>org.exoplatform.ws</groupId>
+			<artifactId>exo.ws.frameworks.cometd.service</artifactId>
+			<version>${org.exoplatform.ws.version}</version>
+			<scope>provided</scope> </dependency -->
+
+		<dependency>
+			<groupId>org.exoplatform.ws</groupId>
+			<artifactId>exo.ws.frameworks.cometd.service</artifactId>
+			<version>${org.exoplatform.ws.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.exoplatform.ws</groupId>
+			<artifactId>exo.ws.frameworks.json</artifactId>
+			<version>${org.exoplatform.ws.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ical4j</groupId>
+			<artifactId>ical4j</artifactId>
+			<version>1.0-beta5</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>rome</groupId>
+			<artifactId>rome</artifactId>
+			<version>0.8</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jcrom</groupId>
+			<artifactId>jcrom</artifactId>
+			<version>1.2</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+</project>

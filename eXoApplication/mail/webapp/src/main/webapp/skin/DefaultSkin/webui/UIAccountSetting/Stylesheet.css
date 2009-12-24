@@ -1,0 +1,175 @@
+.UIMailPortlet .UIAccountSetting {
+  mmin-width: 720px;
+}
+
+.UIMailPortlet .UIAccountSetting .AccountSetting {
+	border: 1px solid #c0c0c0;
+	padding: 10px;
+	background: #f3f3f3;
+}
+
+/*===========================AccountSettingCategory===========================*/
+
+.UIMailPortlet .UIAccountSetting .AccountSettingCategory {
+	width: 212px; height: 342px;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	background: white;
+	border: 1px solid #a5a5a5;
+}
+
+.UIMailPortlet .UIAccountSetting .AccountSettingCategory .CategoryControlBar {
+	background: url('background/BgTitleTag1x20.gif') repeat-x ;
+	height: 20px; line-height: 20px;
+	padding: 0px 10px 0px 8px;
+}
+
+.UIMailPortlet .UIAccountSetting .AccountSettingCategory .CategoryControlBar .Title {
+	color: #3d3d3d;
+	font-weight: bold;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+}
+
+.UIMailPortlet .UIAccountSetting .AccountSettingCategory .CategoryControlBar .DeleteIcon {
+	background: url('icons/DeleteIcon.gif') no-repeat center ;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	height: 18px; width: 20px;
+	cursor: pointer;
+	margin: 0px 0px 0px 4px; /* orientation=lt */
+	margin: 0px 4px 0px 0px; /* orientation=rt */
+}
+
+.UIMailPortlet .UIAccountSetting .AccountSettingCategory .CategoryControlBar .AddIcon {
+	background: url('icons/AddIcon.gif') no-repeat center ;
+	float: right;
+	height: 18px; width: 20px;
+	cursor: pointer;
+	margin: 0px 0px 0px 4px;
+}
+
+.UIMailPortlet .UIAccountSetting .AccountSettingCategory .AccountSettingList {
+	color: #3d3d3d;
+	overflow-y: auto;
+	height: 322px;
+}
+
+.UIMailPortlet .UIAccountSetting .AccountSettingCategory .NormalItem {
+	padding: 0px 27px;
+	line-height: 22px;
+	margin: 2px 0px;
+}
+
+.UIMailPortlet .UIAccountSetting .AccountSettingCategory .SelectedItem {
+	padding: 0px 27px;
+	margin: 2px 0px;
+	line-height: 22px;
+	background: #cbdaf4 url('icons/SelectedIcon.gif') no-repeat 5% center; /* orientation=lt */
+	background: #cbdaf4 url('icons/SelectedIcon.gif') no-repeat 95% center; /* orientation=rt */
+}
+/************************************AccountSettingContainer*************************************/
+
+.UIMailPortlet .UIAccountSetting .AccountSettingContainer {
+	margin-left: 223px; /* orientation=lt */
+	margin-right: 223px; /* orientation=rt */
+}
+
+.UIMailPortlet .UIAccountSetting .UITabPane .TabPaneContent {
+	padding: 0px 8px 8px 8px;
+}
+
+.UIMailPortlet .UIAccountSetting .UIHorizontalTabs {
+	background: url('background/HorizontalTabBackground.gif') repeat-x bottom;
+}
+
+.UIMailPortlet .UIAccountSetting .UIHorizontalTabs .NormalTabStyle .SelectedTab {
+	float: left;
+}
+
+.UIAccountSetting .UIHorizontalTabs .NormalTabStyle .NormalTab {
+	float: left;
+}
+
+.UIMailPortlet .UIAccountSetting .UIFormTabPane {
+	padding: 0px;
+}
+
+.UIMailPortlet .UIAccountSetting .UITabPane .UITabContentContainer {
+	border: 1px solid #939393;
+	border-top: none;
+	height: 100%;
+}
+
+.UIMailPortlet .UIAccountSetting .UITabPane .UITabContentContainer .UITabContent {
+	border: 1px solid white;	
+	border-top: none;
+	padding: 0px;
+	height: 100%;
+}
+
+.UIMailPortlet .UIAccountSetting .UIForm .HorizontalLayout .serverSettings {
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.UIMailPortlet .UIAccountSetting .UITabPane .UIForm {
+}
+
+.UIMailPortlet .UIAccountSetting .UITabPane .UIForm .HorizontalLayout {
+	border: none;
+}
+
+.UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid td.FieldLabel {
+	width: 150px;
+}
+
+.UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid input {
+	float: left;
+}
+
+.UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid .FieldComponent a {
+	color: black;
+}
+
+.UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid .Icon {
+	float: left;
+	line-height: 20px;
+}
+
+.UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid .DefaultIcon {
+	background: url('icons/DefaultIcon.gif') no-repeat left center;
+	padding-left: 24px; 
+}
+
+.UIMailPortlet .UIAccountSetting .UIForm .UIFormInputSet {
+	padding: 15px 10px;
+	height: 287px;
+	width: auto;
+}
+
+/************************************UIAction*************************************/
+
+.UIMailPortlet .UIForm .UIFormGrid #outgoingUsername {
+	width:170px;
+}
+
+.UIMailPortlet .UIForm .UIFormGrid #outgoingPassword {
+	width:170px;
+}
+
+.UIMailPortlet .UIForm .UIFormGrid  #messageComeInFolder {
+	width:150px;
+}
+
+.UIMailPortlet .UIForm .fetchOptions .UIFormGrid .fromDateTimePicker input {
+	width:150px;
+}
+
+.UIMailPortlet .UIForm .fetchOptions .UIFormGrid .fromDateTimePicker .CalendarTimeBox .CalendarTimeBoxM input.InputTime {
+	width:15px;
+}
+
+.UIMailPortlet .UIForm .fetchOptions .UIFormGrid {
+   margin-left: 40px;
+}

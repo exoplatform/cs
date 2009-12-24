@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <!--
+  #####################################################################################
+  #                           EXCEPTION MAPPINGS                                      #
+  #####################################################################################
+  -->
+  <key>تجربة بالعربية</key>
+  <!--
+  #############################################################################
+  #  org.exoplatform.content.webui.component.UIContentForm 					#
+  #############################################################################
+  -->
+  <UIContentForm>
+    <label>
+      <name>الاسم</name>
+      <description>وصف</description>
+      <id>المعرف الوحيد</id>
+      <url>عنوان الموارد الموحد(URL)</url>
+      <label>رمز</label>
+      <type>نوع</type>
+    </label>
+    <title>تغيير/إضافة محتوى</title>
+    <action>
+      <Cancel>#{word.cancel}</Cancel>
+      <Save>#{word.save}</Save>
+    </action>
+    <msg>
+      <SameNode>هذه العقدة موجودة من قبل، الرجاء أدخل عقدة أخرى !</SameNode>
+      <UrlNull>الرجاء إدخال عنوان الموارد الموحد(URL)</UrlNull>
+    </msg>
+  </UIContentForm>
+  <UIDetailContent>
+    <msg>
+      <NotFound>محتوى غير موجود !</NotFound>
+    </msg>
+  </UIDetailContent>
+  <!--
+  #############################################################################
+  #          org.exoplatform.content.webui.component.UIContentDetail 					#
+  #############################################################################
+  -->
+  <UIContentDetail>
+    <action>
+      <refresh>تحديث</refresh>
+    </action>
+    <label>
+      <description>وصف</description>
+    </label>
+  </UIContentDetail>
+  <UIDescription>
+    <title>
+      <contentPortlet>وصف المدخل الخاص بالمحتوى</contentPortlet>
+    </title>
+    <content>
+      <contentPortlet>وصف المدخل الخاص بالمحتوى -قارىء الـRSS</contentPortlet>
+    </content>
+  </UIDescription>
+  <UIContentNavigation>
+    <removeNode>هل أنت حقا متأكد من حذف هذه العقدة ؟</removeNode>
+    <label>
+      <rssreader>قارىء الـRSS</rssreader>
+    </label>
+  </UIContentNavigation>
+  <!--
+  ##############################################################################
+  -->
+  <URLValidator>
+    <msg>
+      <Invalid-Url>شكل عنوان الموارد الموحد(URL) الخاص بالمجال {0} غير صحيح</Invalid-Url>
+    </msg>
+  </URLValidator>
+</bundle>
+

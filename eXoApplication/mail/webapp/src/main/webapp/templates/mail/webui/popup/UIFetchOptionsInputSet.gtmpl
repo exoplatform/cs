@@ -1,0 +1,56 @@
+<%
+/**
+ * Created by The eXo Platform SARL
+ * Author : Phung Hai Nam 
+ *          phunghainam@mail.com
+ * @version: $Id$
+ * Oct 9, 2006  
+ */
+
+  import org.exoplatform.mail.webui.popup.UIAccountSetting;
+%>
+<div class="UIFormInputSet $uicomponent.id" id="$uicomponent.id">
+  <table class="UIFormGrid">
+    <tbody>                  
+      <%              
+        field = uicomponent.getChildById(UIAccountSetting.FIELD_CHECKMAIL_AUTO)
+        label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+      %>
+      <tr>
+        <td class="FieldComponent" style="text-align: left" colspan="3"><%uicomponent.renderUIComponent(field)%>&nbsp;&nbsp;&nbsp;&nbsp;$label</td>
+      </tr>
+      
+      <%              
+        field = uicomponent.getChildById(UIAccountSetting.FIELD_LEAVE_ON_SERVER)
+        if (field != null) {
+        label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+      %>
+        <tr>
+          <td class="FieldComponent" style="text-align: left" colspan="3"><%uicomponent.renderUIComponent(field)%>&nbsp;&nbsp;&nbsp;&nbsp;$label</td>
+        </tr>
+      <%
+        }
+      %>
+      
+      <%              
+        field = uicomponent.getChildById(UIAccountSetting.CHECK_FROM_DATE)
+        label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+      %>
+      <tr>
+        <td class="FieldComponent" style="text-align: left" colspan="2"><%uicomponent.renderUIComponent(field)%>&nbsp;&nbsp;&nbsp;&nbsp;$label&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td  class="fromDateTimePicker">
+        <%if (uicomponent.getChildById(UIAccountSetting.FROM_DATE) != null)  uicomponent.renderUIComponent(uicomponent.getChildById(UIAccountSetting.FROM_DATE))%></td>
+      </tr>
+      
+      <%              
+        field = uicomponent.getChildById(UIAccountSetting.FIELD_INCOMING_FOLDER)
+        label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+      %>
+      <tr>
+        <td class="FieldLabel" style="text-align: left" colspan="2"><%uicomponent.renderUIComponent(uicomponent.getChildById(UIAccountSetting.IS_CUSTOM_INBOX))%>&nbsp;&nbsp;&nbsp;&nbsp;$label&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+      </tr> 
+      
+    </tbody>
+  </table>  
+</div>    
