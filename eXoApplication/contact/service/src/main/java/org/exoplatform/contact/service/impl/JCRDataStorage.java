@@ -708,6 +708,12 @@ public class JCRDataStorage {
         if(addressType.equals(PERSONAL)) {        
           saveContact(username, contact, false) ;
         }else if(addressType.equals(SHARED)) {
+         //CS-2389
+         if (!haveEditPermissionOnAddressBook(username, contact.getAddressBookIds()[0]) || 
+             (contact.getContactType().equals(SHARED) && !haveEditPermissionOnContact(username, contact))){
+           System.out.println("\n Do not have edit permission. \n");
+           throw new Exception();
+         }
          saveContactToSharedAddressBook(username, contact.getAddressBookIds()[0], contact, true) ;
          if (privateContactHome.hasNode(contact.getId()))
            privateContactHome.getNode(contact.getId()).remove() ;
@@ -821,6 +827,12 @@ public class JCRDataStorage {
           while(iter.hasNext()) {
             addressBook = iter.nextProperty().getParent() ;
             if(addressBook.getName().equals(id)) {
+
+              //CS-2389
+              if (!haveEditPermissionOnAddressBook(username, addressbook.getId())){
+                System.out.println("\n Do not have edit permission. \n");
+                throw new Exception();
+              }
               groupNode = addressBook ;
               break ;
             }
@@ -1089,6 +1101,11 @@ public class JCRDataStorage {
   
   
   public void removeSharedContact(String username, String addressBookId, String contactId) throws Exception {
+    //CS-2389
+    if (!haveEditPermissionOnAddressBook(username, addressBookId)){
+      System.out.println("\n Do not have edit permission. \n");
+      throw new Exception();
+    }
     Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
     PropertyIterator iter2 = sharedAddressBookMock.getReferences() ;
     Node addressBook ;      
@@ -1146,6 +1163,12 @@ public class JCRDataStorage {
       try{
         Node contactNode = iter.nextProperty().getParent() ;
         if(contactNode.getName().equals(contact.getId())) {
+//        CS-2389
+          if (!haveEditPermissionOnAddressBook(username, contact.getAddressBookIds()[0]) && !haveEditPermissionOnContact(username, contact)){
+            System.out.println("\n Do not have edit permission. \n");
+            throw new Exception();
+          }
+          
           isEdit = true ;
           contactToNode(contactNode.getParent(), contact, false) ;
           contactNode.getParent().getSession().save() ;
@@ -1165,6 +1188,12 @@ public class JCRDataStorage {
     while(iter.hasNext()) {
       addressBook = iter.nextProperty().getParent() ;
       if(addressBook.getName().equals(addressBookId)) {
+        //CS-2389
+        if (!haveEditPermissionOnAddressBook(username, addressBookId) && !haveEditPermissionOnContact(username, contact)){
+          System.out.println("\n Do not have edit permission. \n");
+          throw new Exception();
+        }
+        
         Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
         contact.setOwner(false) ;
         contactToNode(contactHomeNode, contact, isNew) ;
@@ -2120,6 +2149,11 @@ public class JCRDataStorage {
     }
   }
   public void pasteAddressBook(String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
+    // CS-2389
+    if (destType.equals(SHARED) && !haveEditPermissionOnAddressBook(username, destAddress)) {
+      System.out.println("\n Do not have edit permission. \n");
+      throw new Exception();
+    }
     SessionProvider sysProvider = createSystemProvider();
     try {
       if (srcType.equals(PERSONAL)) {
@@ -2172,6 +2206,11 @@ public class JCRDataStorage {
   
   
   public List<Contact> pasteContacts(String username, String destAddress, String destType,  Map<String, String> contactsMap) throws Exception {
+    // CS-2389
+    if (destType.equals(SHARED) && !haveEditPermissionOnAddressBook(username, destAddress)){
+      System.out.println("\n Do not have edit permission. \n");
+      throw new Exception();
+    }
     SessionProvider sProvider = null ;
     try {
       sProvider = createSystemProvider() ;    
@@ -2187,6 +2226,13 @@ public class JCRDataStorage {
         } else { // test here
           contact = getSharedContact(username, contactId) ;
           if (contact ==  null) contact = getSharedContactAddressBook(username, contactId) ;
+          
+//        CS-2389
+          if (contact != null && !haveEditPermissionOnContact(username, contact)
+              && !haveEditPermissionOnAddressBook(username,contact.getAddressBookIds()[0])){
+            System.out.println("\n Do not have edit permission. \n");
+            throw new Exception();
+          }
         }        
         if (contact != null) contacts.add(contact) ; 
       }    
@@ -2483,6 +2529,52 @@ public class JCRDataStorage {
       }
     } catch (Exception e) {}
     return strs.toString();
+  }
+  
+  private boolean haveEditPermissionOnAddressBook(String username, String addressBookId) throws Exception {
+    AddressBook addressbook = getSharedAddressBookById(username, addressBookId);
+    if (addressbook.getEditPermissionUsers() != null &&
+        Arrays.asList(addressbook.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
+      return true ;
+    }
+    String[] editPerGroups = addressbook.getEditPermissionGroups() ;
+    if (editPerGroups != null) {                  
+      List<String> groupIds = new ArrayList<String>() ;
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      OrganizationService organizationService = 
+        (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ;
+      Object[] groupsOfUser = organizationService.getGroupHandler().findGroupsOfUser(username).toArray() ;
+      for (Object object : groupsOfUser) {
+        String groupId = ((GroupImpl)object).getId() ;
+        groupIds.add(groupId) ;
+      }                  
+      for (String editPer : editPerGroups)
+        if (groupIds.contains(editPer)) return true ;
+    }
+    return false;
+  }
+  
+  private boolean haveEditPermissionOnContact(String username, Contact contact) throws Exception {
+    if (contact.getEditPermissionUsers() != null &&
+        Arrays.asList(contact.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
+      return true ;
+    }
+    List<String> groupIds = new ArrayList<String>() ;
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    OrganizationService organizationService = 
+      (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ;
+    Object[] groupsOfUser = organizationService.getGroupHandler().findGroupsOfUser(username).toArray() ;
+    for (Object object : groupsOfUser) {
+      String groupId = ((GroupImpl)object).getId() ;
+      groupIds.add(groupId) ;
+    }
+    String[] editPerGroups = contact.getEditPermissionGroups() ;
+    if (editPerGroups != null)
+      for (String editPer : editPerGroups)
+        if (groupIds.contains(editPer)) {
+          return true ;
+        }
+    return false ;
   }
   
   private Session getSession(SessionProvider sprovider) throws Exception{

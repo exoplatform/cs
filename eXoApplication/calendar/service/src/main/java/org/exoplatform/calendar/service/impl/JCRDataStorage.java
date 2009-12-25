@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -71,7 +72,9 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.Membership;
+import org.exoplatform.services.organization.OrganizationService;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -2490,6 +2493,12 @@ public class JCRDataStorage{
       while(iter.hasNext()) {
         calendar = iter.nextProperty().getParent() ;
         if(calendar.getProperty(Utils.EXO_ID).getString().equals(calendarId)) {
+          
+          //CS-2389
+          if (!canEdit(calendar, username)){
+            System.out.println("\n Do not have edit permission. \n");
+            throw new Exception();
+          }
           Node reminderFolder = getReminderFolder(event.getFromDateTime()) ;
           saveEvent(calendar, event, reminderFolder, isNew) ;
           calendar.save() ;
@@ -2499,6 +2508,40 @@ public class JCRDataStorage{
     }
   } 
 
+  @SuppressWarnings("unchecked")
+  private boolean canEdit(Node calNode, String username) throws Exception {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    OrganizationService oService = 
+      (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ;
+    StringBuffer sb = new StringBuffer(username) ;
+    if(oService != null) {
+      Collection<Group> groups = oService.getGroupHandler().findGroupsOfUser(username) ;
+      for(Group g : groups) {
+        sb.append(Utils.COMMA).append(g.getId()).append(Utils.SLASH_COLON).append(Utils.ANY) ;
+        sb.append(Utils.COMMA).append(g.getId()).append(Utils.SLASH_COLON).append(username) ;
+        Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUserAndGroup(username, g.getId()) ;
+        for(Membership mp : memberShipsType) {
+          sb.append(Utils.COMMA).append(g.getId()).append(Utils.SLASH_COLON).append(Utils.ANY_OF + mp.getMembershipType()) ;
+        }
+      }
+    }
+    
+    Value[] editValues = calNode.getProperty(Utils.EXO_EDIT_PERMISSIONS).getValues() ;
+    List<String> editPerms = new ArrayList<String>() ;
+    for(Value v : editValues) {
+      editPerms.add(v.getString()) ;
+    }
+    if(editPerms != null) {
+      String[] checkPerms = sb.toString().split(Utils.COMMA);
+      for(String sp : editPerms) {
+        for (String cp : checkPerms) {
+          if(sp.equals(cp)) {return true ;}      
+        }
+      }      
+    }
+    return false ;
+  }
+  
   public List<CalendarEvent> getEvents(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     List<String> filterList = new ArrayList<String>() ;
