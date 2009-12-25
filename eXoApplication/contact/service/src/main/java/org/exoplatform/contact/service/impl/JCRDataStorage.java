@@ -2494,9 +2494,10 @@ public class JCRDataStorage {
    * @see SessionProvider#close();
    */
   private void closeSessionProvider(SessionProvider sessionProvider) {
-    if (sessionProvider != null) {
-      sessionProvider.close();
-    }
+      //TODO re-check this
+//    if (sessionProvider != null) {
+//      sessionProvider.close();
+//    }
   }
   
   public void saveAddress(String username, String emailAddress) throws Exception {

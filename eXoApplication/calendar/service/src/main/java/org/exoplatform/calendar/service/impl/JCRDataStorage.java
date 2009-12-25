@@ -125,7 +125,7 @@ public class JCRDataStorage{
 
 
   public Node getPublicCalendarServiceHome() throws Exception {
-    SessionProvider sProvider = createSystemProvider();
+    SessionProvider sProvider = SessionProvider.createSystemProvider();
     Node publicApp = getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(), sProvider);
     try {
       return publicApp.getNode(Utils.CALENDAR_APP);
