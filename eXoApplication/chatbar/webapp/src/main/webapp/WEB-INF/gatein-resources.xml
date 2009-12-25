@@ -7,7 +7,7 @@
 
   <portlet-skin>
     <application-name>chatbar</application-name>
-    <portlet-name>ChatbarPortlet</portlet-name>
+    <portlet-name>ChatBarPortlet</portlet-name>
     <skin-name>Default</skin-name>
     <css-path>/skin/DefaultStylesheet.css</css-path>
   </portlet-skin>
