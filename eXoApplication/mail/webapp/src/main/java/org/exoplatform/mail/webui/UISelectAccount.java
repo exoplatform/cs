@@ -19,6 +19,10 @@ package org.exoplatform.mail.webui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
@@ -75,7 +79,7 @@ public class UISelectAccount extends UIForm {
   }
   
   private List<SelectItemOption<String>> getValues() throws Exception {
-    MailService mailSvr = getApplicationComponent(MailService.class) ;
+    MailService mailSvr = (MailService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(MailService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<Account> accountList = new ArrayList<Account>(); 
     accountList =  mailSvr.getAccounts(username) ;

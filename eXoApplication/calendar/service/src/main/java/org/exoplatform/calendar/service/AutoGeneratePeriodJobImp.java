@@ -47,7 +47,7 @@ public class AutoGeneratePeriodJobImp  implements Job {
     SessionProvider provider = SessionProvider.createSystemProvider();
     JobDataMap jdatamap = jContext.getJobDetail().getJobDataMap();    
     String numberLimited = jdatamap.getString("event_number") ;
-    CalendarService calSvr = (CalendarService)container.getComponentInstanceOfType(CalendarService.class) ;
+    CalendarService calSvr = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class) ;
     try {
       List<FeedData>  data  = calSvr.getFeeds(null) ;
       for(FeedData d : data) {

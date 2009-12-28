@@ -6,6 +6,7 @@
   <description>collaboration demo users navigation</description>
   
   <page-nodes> 
+  	  <!-- 
   	   <node>
 	    <uri>webos</uri>
 	    <name>webos</name>
@@ -32,7 +33,7 @@
 		    <name>calendar</name>
 		    <label>#{platform.users.collaboration.calendar}</label>
 		    <page-reference>group::platform/users::calendar</page-reference>
-	  	</node>
+	  	</node> -->
 	  	
 	  	<!--<node>
 		    <uri>chat</uri>

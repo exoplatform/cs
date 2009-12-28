@@ -2952,7 +2952,8 @@ public class JCRDataStorage {
    */
   private void closeSessionProvider(SessionProvider sessionProvider) {
     if (sessionProvider != null) {
-      sessionProvider.close();
+      //TODO check this when update to gatein
+      //sessionProvider.close();
     }
   }
   

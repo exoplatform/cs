@@ -2,6 +2,16 @@
 
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
 	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">  
+	<component>
+    <key>org.exoplatform.services.scheduler.JobSchedulerService</key>
+    <type>org.exoplatform.services.scheduler.impl.JobSchedulerServiceImpl</type>
+  </component>
+  <component>
+     <type>org.exoplatform.services.scheduler.impl.QuartzSheduler</type>
+   </component>
+   <component>
+      <type>org.exoplatform.services.scheduler.QueueTasks</type>
+   </component>
   <component>
     <key>org.exoplatform.calendar.service.CalendarService</key>
     <type>org.exoplatform.calendar.service.impl.CalendarServiceImpl</type>
@@ -9,7 +19,11 @@
   <component>
     <key>org.exoplatform.contact.service.ContactService</key>
     <type>org.exoplatform.contact.service.impl.ContactServiceImpl</type>
-  </component> 
+  </component>
+  <component>
+    <key>org.exoplatform.mail.service.MailService</key>
+    <type>org.exoplatform.mail.service.impl.MailServiceImpl</type>
+  </component>  
   <component>
     <key>org.exoplatform.content.service.ContentDAO</key>
     <type>org.exoplatform.content.service.impl.ContentDAOImpl</type>     
