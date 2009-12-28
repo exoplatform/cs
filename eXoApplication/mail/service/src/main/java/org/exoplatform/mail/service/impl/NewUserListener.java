@@ -117,7 +117,7 @@ public class NewUserListener extends UserEventListener {
     } catch (Exception e) {
       e.printStackTrace() ;
     } finally {
-      sProvider.close();
+      //sProvider.close();
     }
   }
 

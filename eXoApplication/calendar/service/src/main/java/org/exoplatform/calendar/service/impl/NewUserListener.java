@@ -189,7 +189,7 @@ public class NewUserListener extends UserEventListener {
     } catch (Exception e) {
       e.printStackTrace() ;
     } finally {
-      sessionProviderService.removeSessionProvider(null);
+      //sessionProviderService.removeSessionProvider(null);
     }
   }
 
@@ -216,7 +216,7 @@ public class NewUserListener extends UserEventListener {
     } catch (Exception e) {
       e.printStackTrace() ;
     } finally {
-      session.close() ;
+      //session.close() ;
     }
     super.postDelete(user);
   }

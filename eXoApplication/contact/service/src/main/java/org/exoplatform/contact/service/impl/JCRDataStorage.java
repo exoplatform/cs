@@ -307,7 +307,7 @@ public class JCRDataStorage {
       log.error("Public contact " + userId + " not found");
       return null ;
     } finally {
-      provider.close();
+      //provider.close();
     }
   }  
   
@@ -577,7 +577,7 @@ public class JCRDataStorage {
     }
     return address ;
     } finally {
-      provider.close();
+      //provider.close();
     }
   }
   
@@ -1231,7 +1231,7 @@ public class JCRDataStorage {
                                                   .append(" order by @exo:fullName,@exo:id ascending");
       return new ContactPageList(username, 10, queryString.toString(), SHARED) ;
     } finally {
-      sysProvider.close();
+      //sysProvider.close();
     }
   }
 
@@ -1245,7 +1245,7 @@ public class JCRDataStorage {
                                                 .append("order by @exo:fullName,@exo:id ascending");
     return new ContactPageList(null, 10, queryString.toString(), PUBLIC) ;
     } finally {
-      sysProvider.close();
+      //sysProvider.close();
     }
   }
   
@@ -1296,7 +1296,7 @@ public class JCRDataStorage {
       contactNode.setProperty(PROP_ADDRESSBOOK_REFS, ls.toArray(new String[] {}));
       contactNode.save();
     } finally {
-      provider.close();
+      //provider.close();
     }
   }
   
@@ -1549,7 +1549,7 @@ public class JCRDataStorage {
       }
       return new DataPageList(Arrays.asList(contacts.values().toArray(new Contact[] {})), 10, null, false) ;
     } finally {
-      sysProvider.close();
+      //sysProvider.close();
     }
   }
   
@@ -1614,7 +1614,7 @@ public class JCRDataStorage {
         }
       }
     } finally {
-     if (sysProvider != null) sysProvider.close();
+     //if (sysProvider != null) sysProvider.close();
     }
   }
 
@@ -1699,7 +1699,7 @@ public class JCRDataStorage {
         }
       }
     } finally {
-      if (sysProvider != null) sysProvider.close();
+     // if (sysProvider != null) sysProvider.close();
     }
   }
 
@@ -1853,7 +1853,7 @@ public class JCRDataStorage {
         }
       }
     } finally {
-      if (sysProvider != null) sysProvider.close();
+     // if (sysProvider != null) sysProvider.close();
     }
   }
  
@@ -1966,7 +1966,7 @@ public class JCRDataStorage {
     contactList.addAll(contacts.values()) ;    
     return new DataPageList(contactList, 10, null, false) ;
     } finally {
-     if (sysProvider != null) sysProvider.close();
+     //if (sysProvider != null) sysProvider.close();
     }
   }
   
@@ -2065,7 +2065,7 @@ public class JCRDataStorage {
       }      
       return emails ;
     } finally {
-      if (sysProvider != null) sysProvider.close();
+     // if (sysProvider != null) sysProvider.close();
     }
   }
 
@@ -2145,7 +2145,7 @@ public class JCRDataStorage {
       }      
     }
     } finally {
-      if (sysProvider != null) sysProvider.close();
+      //if (sysProvider != null) sysProvider.close();
     }
   }
   public void pasteAddressBook(String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
@@ -2200,7 +2200,7 @@ public class JCRDataStorage {
         copyNodes(sysProvider, username, publicContactHome, iter, destAddress, destType) ;        
       }
     } finally {
-      sysProvider.close();
+      //sysProvider.close();
     }
   }
   

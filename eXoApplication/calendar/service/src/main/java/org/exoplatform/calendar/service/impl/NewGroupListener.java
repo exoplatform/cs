@@ -90,7 +90,8 @@ public class NewGroupListener extends GroupEventListener {
     try {
       calendarService_.savePublicCalendar(calendar, isNew, null) ;
     } finally {
-      sProvider.close();
+      //TODO check session status here
+    	//sProvider.close();
     }
   }
   @Override
@@ -107,7 +108,8 @@ public class NewGroupListener extends GroupEventListener {
       }
       super.postDelete(group);
     } finally {
-      sProvider.close(); 
+    	//TODO check session status here
+    	//sProvider.close();
     }    
   }
   

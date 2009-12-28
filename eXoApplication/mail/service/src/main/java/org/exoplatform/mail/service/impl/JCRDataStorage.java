@@ -2300,7 +2300,7 @@ public class JCRDataStorage {
       sProvider = createSessionProvider();
       return getFolderHome(sProvider, username, accountId).getPath();
     } finally {
-      sProvider.close();
+      //sProvider.close();
     }
   }
 
@@ -2322,7 +2322,7 @@ public class JCRDataStorage {
       }
       return childFolders;
     } finally {
-      sProvider.close();
+      //sProvider.close();
     }
   }
 

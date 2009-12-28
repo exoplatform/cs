@@ -6,5 +6,135 @@
     <key>org.exoplatform.calendar.service.CalendarService</key>
     <type>org.exoplatform.calendar.service.impl.CalendarServiceImpl</type>
   </component>    
+  
+  <external-component-plugins>
+  	<target-component>org.exoplatform.services.organization.OrganizationService</target-component>
+	  
+	  <component-plugin>
+	    <name>calendar.new.user.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.calendar.service.impl.NewUserListener</type>
+	    <description>description</description>
+	    <init-params>
+        <value-param>
+        	<name>defaultEventCategories</name>
+        	<value>Meeting,Calls,Clients,Holiday,Anniversary</value><!-- Multi value, use coma (,) to split values-->
+        </value-param>
+        <value-param>
+        	<name>defaultCalendarCategory</name>
+        	<value>My group</value><!-- Single value-->
+        </value-param>
+        <value-param>
+        	<name>defaultCalendar</name>
+        	<value>Default</value><!-- Multi value, use coma (,) to split values-->
+        </value-param>
+        <!--Params for default calendar setting-->
+        <value-param>
+         <name>viewType</name>
+         <value>1</value><!-- DAY_VIEW = "0" ; WEEK_VIEW = "1" ; MONTH_VIEW = "2" ; YEAR_VIEW = "3" ; LIST_VIEW = "4" ; SCHEDULE_VIEW = "5" ; WORKING_VIEW = "6" ;-->
+        </value-param>
+        
+        <value-param>
+         <name>timeInterval</name>
+         <value>15</value><!-- in minutes -->
+        </value-param>
+        
+        <value-param>
+         <name>weekStartOn</name>
+         <value>2</value><!--SUNDAY = "1" ; MONDAY = "2" ; TUESDAY = "3" ; WEDNESDAY = "4" ; THURSDAY = "5" ; FRIDAY = "6" ;SATURDAY = "7" ;-->
+        </value-param>
+        
+        <value-param>
+         <name>dateFormat</name>
+         <value>MM/dd/yyyy</value>
+        </value-param>
+        
+        <value-param>
+         <name>timeFormat</name>
+         <value>HH:mm</value> <!-- HH:mm/hh:mm a -->
+        </value-param>
+        
+        <value-param>
+         <name>localeId</name>
+         <value>BEL</value><!-- see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
+        </value-param>
+        
+         <value-param>
+         <name>timezoneId</name>
+         <value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
+        </value-param>
+        
+         <value-param>
+         <name>baseUrlForRss</name>
+         <value></value>
+        </value-param>
+        
+         <value-param>
+         <name>isShowWorkingTime</name>
+         <value>false</value><!-- boolean true/false -->
+        </value-param>
+        
+         <value-param>
+         <name>workingTimeBegin</name>
+         <value>08:00</value><!--  -->
+        </value-param>
+        
+         <value-param>
+	         <name>workingTimeEnd</name>
+	         <value>18:00</value><!--  -->
+        </value-param>
+        
+        <values-param>
+	        <name>ignoredUsers</name>
+	        <description>Definition users to ignore create default calendar</description>
+	        <!-- 
+	        <value>demo</value> 
+	        <value>marry</value>
+	         -->
+        </values-param>
+        
+        
+	    </init-params>    
+	  </component-plugin>
+	  
+	  <component-plugin>
+	    <name>calendar.new.group.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.calendar.service.impl.NewGroupListener</type>
+	    <description>description</description>
+	    <init-params>
+        <value-param>
+        	<name>defaultEditPermission</name>
+        	<value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
+        </value-param>
+        <value-param>
+        	<name>defaultViewPermission</name>
+        	<value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
+        </value-param>
+        
+        <value-param>
+	      	<name>defaultLocale</name>
+	        <value>BEL</value><!-- see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
+      	</value-param>
+      
+      	<value-param>
+	      	<name>defaultTimeZone</name>
+	      	<value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
+      	</value-param>	
+      
+        <values-param>
+	        <name>ignoredGroups</name>
+	        <description>Definition group to ignore create default calendar</description>
+	        <!-- 
+	        <value>/platform/guests</value>
+	         -->
+        </values-param>
+        
+        
+	    </init-params>    
+	  </component-plugin>
+	  
+	  
+  </external-component-plugins>   
  	
 </configuration>

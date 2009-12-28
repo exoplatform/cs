@@ -352,7 +352,7 @@ public class JCRDataStorage{
       } catch (Exception e) {
         e.printStackTrace() ;
       } finally {
-        provider.close() ;
+       // provider.close() ;
       }
       try {
         removeFeed(username, calendarId) ;        
@@ -841,7 +841,7 @@ public class JCRDataStorage{
     } catch (Exception e) {
       e.printStackTrace() ;
     } finally {
-      systemSession.close() ;
+      //systemSession.close() ;
     }
     return events ;
   }
@@ -872,7 +872,7 @@ public class JCRDataStorage{
     } catch (Exception e) {
       e.printStackTrace() ;
     } finally {
-      systemSession.close() ;
+      //systemSession.close() ;
     }
     return events ;
   }
@@ -942,7 +942,7 @@ public class JCRDataStorage{
       } catch (Exception e) {
         e.printStackTrace() ;
       } finally {
-        systemSession.close() ;
+       // systemSession.close() ;
       }
     }else {
       saveEvent(calendarNode, event, null, isNew) ;
@@ -962,7 +962,7 @@ public class JCRDataStorage{
       } catch (Exception e) {
         e.printStackTrace() ;        
       } finally {
-        systemSession.close() ;
+        //systemSession.close() ;
       }
       removeReminder(eventNode) ;
       eventNode.remove() ;
@@ -1056,7 +1056,7 @@ public class JCRDataStorage{
       } catch (Exception e) {
         e.printStackTrace() ;
       } finally {
-        systemSession.close() ;
+       // systemSession.close() ;
       }
       return event;
     }
@@ -1091,7 +1091,7 @@ public class JCRDataStorage{
     }catch (Exception e) {
       e.printStackTrace() ;
     } finally {
-      systemSession.close() ;
+      //systemSession.close() ;
     }
     event.setAttachment(getAttachments(eventNode)) ;
     if(eventNode.hasProperty(Utils.EXO_INVITATION)){
@@ -1152,7 +1152,7 @@ public class JCRDataStorage{
       }catch (Exception e) {
         e.printStackTrace() ;
       } finally {
-        systemSession.close() ;
+        //systemSession.close() ;
       }
     }
     eventNode.setProperty(Utils.EXO_SUMMARY, event.getSummary()) ;
@@ -1306,7 +1306,8 @@ public class JCRDataStorage{
       eventFolder.getSession().refresh(true) ;
       eventFolder.getSession().save() ;
     } finally {
-      provider.close() ;
+         //TODO check this in new gatein
+    	//provider.close() ;
     }
     try {
       provider = createSystemProvider() ;
@@ -1337,7 +1338,8 @@ public class JCRDataStorage{
       }
     } catch (Exception e) {
     } finally {
-      provider.close() ;
+        //TODO check this in new GateIn
+    	//provider.close() ;
     }
   }
 
@@ -2144,7 +2146,8 @@ public class JCRDataStorage{
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
-      systemSession.close() ;
+        //TODO
+    	//systemSession.close() ;
     }
     return new EventPageList(events, 10);    
   }
@@ -2562,7 +2565,7 @@ public class JCRDataStorage{
     } catch (Exception e) {
       e.printStackTrace() ;
     } finally {
-      systemSession.close() ;
+      //systemSession.close() ;
     }
     return events ;
   }
@@ -2770,7 +2773,7 @@ public class JCRDataStorage{
     } catch (Exception e) {
       e.printStackTrace() ;
     } finally {
-      systemSession.close() ;
+      //systemSession.close() ;
     }
   }
 
@@ -2818,7 +2821,7 @@ public class JCRDataStorage{
       }
     } catch (Exception e) {
     } finally {
-      session.close() ;
+     // session.close() ;
     }
   }
 
@@ -2890,7 +2893,7 @@ public class JCRDataStorage{
     } catch (Exception e) {
       throw new  Exception(e.getClass().toString(),e.fillInStackTrace());
     } finally {
-      session.close() ;
+      //session.close() ;
     }
   }
 
@@ -2963,7 +2966,7 @@ public class JCRDataStorage{
   @SuppressWarnings("unused")
   private void closeSessionProvider(SessionProvider sessionProvider) {
     if (sessionProvider != null) {
-      sessionProvider.close();
+      //sessionProvider.close();
     }
   }
 

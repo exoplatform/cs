@@ -6,5 +6,19 @@
     <key>org.exoplatform.contact.service.ContactService</key>
     <type>org.exoplatform.contact.service.impl.ContactServiceImpl</type>
   </component>    
-		
+	<external-component-plugins>
+  	<target-component>org.exoplatform.services.organization.OrganizationService</target-component>	
+		 <component-plugin>
+	    <name>contact.new.user.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.contact.service.impl.NewUserListener</type>
+	    <description>description</description>
+	  </component-plugin>
+	  <component-plugin>
+	    <name>contact.new.membership.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.contact.service.impl.NewMembershipListener</type>
+	    <description>description</description>	     
+	  </component-plugin>
+	 </external-component-plugins>
 </configuration>

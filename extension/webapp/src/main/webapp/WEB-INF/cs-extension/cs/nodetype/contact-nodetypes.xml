@@ -31,7 +31,7 @@
   		<propertyDefinition name="exo:jobTitle" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
   		</propertyDefinition>  		
-  		<propertyDefinition name="exo:emailAddress" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  		<propertyDefinition name="exo:emailAddress" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition>  		
   		<propertyDefinition name="exo:exoId" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
