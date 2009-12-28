@@ -15,7 +15,7 @@
   <import>war:/conf/csdemo/cs/content/content-service-configuration.xml</import>
   <import>war:/conf/csdemo/cs/organization/organization-service-configuration.xml</import>
   <import>war:/conf/csdemo/cs/webservice/webservice-configuration.xml</import>
-  <!--<import>war:/conf/csdemo/cs/chat/chat-service-configuration.xml</import>
+  <import>war:/conf/csdemo/cs/chat/chat-service-configuration.xml</import>
   
-  --><import>war:/conf/csdemo/cs/services-configuration.xml</import>
+  <import>war:/conf/csdemo/cs/services-configuration.xml</import>
  </configuration>

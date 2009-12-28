@@ -41,11 +41,13 @@ import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.RuntimeDelegate;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.services.resources.ResourceBundleService;
+import org.exoplatform.services.rest.impl.RuntimeDelegateImpl;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.xmpp.bean.ConfigRoomBean;
@@ -157,6 +159,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
 
   private static final CacheControl cc;
   static {
+	//TODO: to find the reason why RESTXMPPService loaded before ResourceBinder
+	RuntimeDelegate.setInstance(new RuntimeDelegateImpl());
     cc = new CacheControl();
     cc.setNoCache(true);
     cc.setNoStore(true);
