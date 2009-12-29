@@ -658,7 +658,6 @@ LayoutManager.prototype.reset = function(){
 	eXo.core.Browser.setCookie(this.layoutId,"",1);
 	if(this.resetCallback) this.resetCallback() ;
 };
-
 eXo.cs.UINavigation = new UINavigation() ;
 
 /*
@@ -776,3 +775,6 @@ DateTimeFormater.prototype.format = function (date, mask, utc) {
 };
 
 eXo.cs.DateTimeFormater = new DateTimeFormater();
+
+eXo.calendar.LayoutManager = new LayoutManager("calendarlayout");
+eXo.contact.LayoutManager = new LayoutManager("contactLayout");

@@ -1,3 +1,5 @@
+eXo.require('eXo.cs.CSUtils', '/csResources/javascript/'); 
+
 function UIContactPortlet() {
 	
 }
@@ -372,7 +374,6 @@ UIContactPortlet.prototype.adddressPrint = function (){
 	var DOMUtil = eXo.core.DOMUtil ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
 	var UIContactContainer = document.getElementById("UIContactContainer") ;
-	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	var div = document.createElement("div") ;
 	div.className = "UIPrintContainer UIContactPortlet" ;
 	var printContainer = UIContactContainer.cloneNode(true) ;
@@ -381,7 +382,6 @@ UIContactPortlet.prototype.adddressPrint = function (){
 	div.appendChild(printContainer) ;
 	var uiAction = DOMUtil.findFirstDescendantByClass(div, "div", "UIAction") ;
 	DOMUtil.addClass(uiAction, "Printable") ;
-	if(uiControlWorkspace) uiControlWorkspace.style.display = "none" ;
 	UIPortalApplication.style.visibility = "hidden" ;
 	eXo.contact.UIContactPortlet.pageBackground = document.body.style.background ;
 	document.body.style.background = "transparent" ;
@@ -395,9 +395,7 @@ UIContactPortlet.prototype.adddressPrint = function (){
 UIContactPortlet.prototype.cancelPrint = function (obj){
 	var UIPrintContainer = eXo.core.DOMUtil.findAncestorByClass(obj, "UIPrintContainer") ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
-	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	eXo.core.DOMUtil.removeElement(UIPrintContainer) ;
-	if(uiControlWorkspace) uiControlWorkspace.style.display = "block" ;
 	UIPortalApplication.style.display = "block" ;
 	UIPortalApplication.style.height =  "auto";
 	UIPortalApplication.style.overflow =  "";
@@ -411,9 +409,7 @@ UIContactPortlet.prototype.cancelPrint = function (obj){
 UIContactPortlet.prototype.cancelPrintList = function (){
 	var UIPrintContainer = eXo.core.DOMUtil.findFirstDescendantByClass(document.body,"div", "UIPrintContainer") ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
-	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	if(UIPrintContainer) eXo.core.DOMUtil.removeElement(UIPrintContainer) ;
-	if(uiControlWorkspace) uiControlWorkspace.style.display = "block" ;
 	UIPortalApplication.style.display = "block" ;
 	UIPortalApplication.style.height =  "auto";
 	UIPortalApplication.style.overflow =  "";
@@ -433,7 +429,6 @@ UIContactPortlet.prototype.cancelPrintList = function (){
 UIContactPortlet.prototype.printList = function (obj){
 	if(typeof(obj) == "string") obj = document.getElementById(obj) ;
 	obj = eXo.contact.UIContactPortlet.disableAction(obj) ;
-	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	var printContainer = obj.cloneNode(true) ;
 	var uiPopupWindow = eXo.core.DOMUtil.findAncestorByClass(obj,"UIPopupWindow") ;
 	if(uiPopupWindow) uiPopupWindow.style.display = "none";
@@ -450,9 +445,7 @@ UIContactPortlet.prototype.printList = function (obj){
 	if (UIWindowContact) {
 		UIWindowContact.style.display = "none" ;
 	}
-	if(uiControlWorkspace) {
-		uiControlWorkspace.style.display = "none" ;
-	}
+	
 	div.style.position = "absolute" ;
 	div.style.width = "99%" ;
 	//div.style.zIndex =  1000;
@@ -471,7 +464,6 @@ UIContactPortlet.prototype.disableContextMenu = function(evt) {
 };
 
 UIContactPortlet.prototype.checkLayout = function() {
-	eXo.contact.LayoutManager = new LayoutManager("contactLayout");
 	eXo.contact.LayoutManager.layouts = [] ;
 	var DOMUtil = eXo.core.DOMUtil ;
 	var contactLayout1 = DOMUtil.findFirstDescendantByClass(document.getElementById("UIContactPortlet"), "div", "UINavigationContainer");                                                   
@@ -748,7 +740,9 @@ UIContactPortlet.prototype.showPopupCustomLayoutView = function(obj, evt) {
 UIContactPortlet.prototype.refreshData = function() {
 	window.onload = function() {
 		if(!document.getElementById("UIContacts")) return ;
-		eXo.webui.UIForm.submitForm('contact#UIContacts','Refresh', true)		
+		var uiContacts = document.getElementById("UIContacts");
+		var portletFragment = eXo.core.DOMUtil.findAncestorByClass(uiContacts,"PORTLET-FRAGMENT");		
+		eXo.webui.UIForm.submitForm(portletFragment.parentNode.id+ '#UIContacts','Refresh', true);		
 	} ;
 } ;
 

@@ -11,6 +11,7 @@
     <skin-name>Default</skin-name>
     <css-path>/skin/DefaultStylesheet.css</css-path>
   </portlet-skin>
+	<!--
   <javascript>
 		<param>
 			<js-module>eXo.communication.chat.eXoChatBar</js-module>
@@ -167,6 +168,6 @@
 			<js-path>/javascript/eXo/communication/chat/webui/UIPopupMessages.js</js-path>
 		</param>
   </javascript>
-  
+-->  
 </gatein-resources>
 

@@ -573,10 +573,6 @@ UIMailPortlet.prototype.swapMenu = function(oldmenu, clickobj){
     var uiDesktop = document.getElementById("UIPageDesktop");
     var menuX = Browser.findPosX(clickobj) - eXo.cs.Utils.getScrollLeft(clickobj);
     var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight - eXo.cs.Utils.getScrollTop(clickobj);
-    if ((Browser.browserType == "ie") && !document.getElementById("UIPageDesktop")) {
-        if (document.getElementById("UIControlWorkspace") && !eXo.core.I18n.isRT()) 
-            menuX -= document.getElementById("UIControlWorkspace").offsetWidth;
-    }
     menuY += document.documentElement.scrollTop;
     if (document.getElementById("tmpMenuElement")) 
         DOMUtil.removeElement(document.getElementById("tmpMenuElement"));

@@ -656,7 +656,6 @@ UICalendarPortlet.prototype.resetLayoutCallback = function(){
  * Check layout configuration when page load to render a right layout
  */
 UICalendarPortlet.prototype.checkLayout = function(){
-	eXo.calendar.LayoutManager = new LayoutManager("calendarlayout");
 	var	layout1 = document.getElementById("UICalendarContainer") ;
 	var	layout2 = document.getElementById("UIMiniCalendar") ;
 	var	layout3 = document.getElementById("UICalendars") ;
@@ -1937,12 +1936,7 @@ UICalendarPortlet.prototype.swapIeMenu = function(menu, clickobj){
     if ((y + uiRightClickPopupMenu.offsetHeight) > browserHeight) {
         y = browserHeight - uiRightClickPopupMenu.offsetHeight;
     }
-    //TODO: fix on IE7 when there is the ControlWorkspace. This bug occurs only developing parameter assigned false
-    if (Browser.isIE7()) {
-        var uiControWorkspace = document.getElementById("UIControlWorkspace");
-        if (uiControWorkspace) 
-            x -= uiControWorkspace.offsetWidth;
-    }
+    
     DOMUtil.addClass(menu, "UICalendarPortlet UIEmpty");
     menu.style.zIndex = 2000;
     menu.style.left = x + "px";
@@ -1959,8 +1953,6 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
     var Browser = eXo.core.Browser;
     var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
     var uiDesktop = document.getElementById("UIPageDesktop");
-    var uiWorkSpaceWidth = (document.getElementById("UIControlWorkspace")) ? document.getElementById("UIControlWorkspace").offsetWidth : 0;
-    uiWorkSpaceWidth = (Browser.isIE6() || Browser.isIE7()) ? 2 * uiWorkSpaceWidth : uiWorkSpaceWidth;
     if (document.getElementById("tmpMenuElement")) 
         DOMUtil.removeElement(document.getElementById("tmpMenuElement"));
     var tmpMenuElement = oldmenu.cloneNode(true);
@@ -1977,7 +1969,7 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
         document.getElementById(this.portletName).appendChild(tmpMenuElement);
     }
 		
-    var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth;
+    var menuX = Browser.findPosX(clickobj) ;
     var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight;
     if (arguments.length > 2) {
         menuY -= arguments[2].scrollTop;
@@ -2554,23 +2546,6 @@ UICalendarPortlet.prototype.fixFirstLoad = function(){
         }
     }
     
-};
-
-eXo.portal.UIControlWorkspace._showWorkspace = eXo.portal.UIControlWorkspace.showWorkspace ;
-
-eXo.portal.UIControlWorkspace.showWorkspace = function(){
-    
-		eXo.portal.UIControlWorkspace._showWorkspace();
-		
-    if ((eXo.core.Browser.browserType != "ie") && !eXo.core.Browser.isDesktop()) {
-        if (document.getElementById("UIWeekView")) {
-            eXo.calendar.UICalendarMan.initWeek();
-            eXo.calendar.UIWeekView.setSize();
-        }
-        if (document.getElementById("UIMonthView")) {
-            eXo.calendar.UICalendarMan.initMonth();
-        }
-    }
 };
 
 UICalendarPortlet.prototype.fixForMaximize = function(){

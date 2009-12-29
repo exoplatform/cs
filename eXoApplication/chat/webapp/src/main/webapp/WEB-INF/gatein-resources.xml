@@ -11,6 +11,7 @@
     <skin-name>Default</skin-name>
     <css-path>/skin/DefaultStylesheet.css</css-path>
   </portlet-skin>
+	<!--
   <javascript>
 		<param>
 			<js-module>eXo.communication.chat.eXoChat</js-module>
@@ -29,7 +30,7 @@
 			<js-path>/csResources/javascript/</js-path>
 		</param>
   </javascript>
-  --><javascript>
+  <javascript>
 		<param>
 			<js-module>eXo.communication.chat.core.AdvancedDOMEvent</js-module>
 			<js-path>/javascript/eXo/communication/chat/core/AdvancedDOMEvent.js</js-path>
@@ -161,6 +162,6 @@
 			<js-path>/javascript/eXo/communication/chat/webui/UIJoinRoomPopupWindow.js</js-path>
 		</param>
   </javascript>
-  
+ --> 
 </gatein-resources>
 

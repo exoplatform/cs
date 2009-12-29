@@ -6,7 +6,6 @@ function UIContextMenu(){
 	this.preventForms = true ;
 	this.portletCssClass = "UICalendarPortlet" ;
 }
-
 UIContextMenu.prototype.getCallback = function(menu) {
   if(!menu) return ;
 	var callback = menu.getAttribute("eXoCallback") ;

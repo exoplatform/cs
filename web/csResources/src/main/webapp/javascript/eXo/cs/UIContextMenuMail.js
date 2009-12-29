@@ -1,6 +1,6 @@
 function UIContextMenuMail(){
 }
-UIContextMenuMail.prototype = new UIContextMenu() ;
+UIContextMenuMail.prototype = eXo.webui.UIContextMenu;
 UIContextMenuMail.prototype.portletCssClass = "UIMailPortlet" ;
 UIContextMenuMail.prototype.setup = function(evt) {
 	var _e = window.event || evt ;

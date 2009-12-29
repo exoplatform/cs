@@ -1,6 +1,6 @@
 function UIContextMenuCon(){
 }
-UIContextMenuCon.prototype = new UIContextMenu() ;
+UIContextMenuCon.prototype = eXo.webui.UIContextMenu;
 UIContextMenuCon.prototype.portletCssClass = "UIContactPortlet" ;
 UIContextMenuCon.prototype.setup = function(evt) {
 	var _e = window.event || evt ;
