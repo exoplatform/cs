@@ -1,7 +1,7 @@
 <repository-service default-repository="repository">
   <repositories>
-    <repository name="repository" system-workspace="system" default-workspace="portal-system">
-      <security-domain>exo-domain</security-domain>
+    <repository name="repository" system-workspace="system" default-workspace="collaboration">
+      <security-domain>gatein-domain</security-domain>
       <access-control>optional</access-control>
       <authentication-policy>org.exoplatform.services.jcr.impl.core.access.JAASAuthenticator</authentication-policy>
       <workspaces>
@@ -16,7 +16,7 @@
               <property name="swap-directory" value="../temp/swap/collaboration${container.name.suffix}"/>
             </properties>
             <value-storages>
-              <value-storage id="system" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
+              <value-storage id="collaboration" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
                 <properties>
                   <property name="path" value="../temp/values/collaboration${container.name.suffix}"/>
                 </properties>

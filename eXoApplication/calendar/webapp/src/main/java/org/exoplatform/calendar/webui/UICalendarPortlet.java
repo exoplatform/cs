@@ -77,7 +77,12 @@ public class UICalendarPortlet extends UIPortletApplication {
     return CalendarUtils.getCurrentUser() ;
   }
   public String getUserToken()throws Exception {
-    ContinuationService continuation = getApplicationComponent(ContinuationService.class) ;
-    return continuation.getUserToken(this.getRemoteUser());
+    ContinuationService continuation = CalendarUtils.getContinuationService() ;
+    try {
+        return continuation.getUserToken(this.getRemoteUser());
+	  } catch (Exception e) {
+		  System.out.println("\n\n can not get UserToken");
+		  return "" ;
+	  }
   }
 }

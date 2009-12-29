@@ -62,6 +62,7 @@ import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
 /**
  * Created by The eXo Platform SARL
@@ -175,10 +176,10 @@ public class CalendarUtils {
   }
 
   static public CalendarService getCalendarService() throws Exception {
-    return (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+    return (CalendarService)PortalContainer.getInstance().getComponentInstance(CalendarService.class) ;
   }
   static public OrganizationService getOrganizationService() throws Exception {
-    return (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+    return (OrganizationService)PortalContainer.getInstance().getComponentInstance(OrganizationService.class) ;
   }
   public static Calendar getInstanceTempCalendar() { 
     Calendar  calendar = GregorianCalendar.getInstance() ;
@@ -644,7 +645,7 @@ public class CalendarUtils {
   }
 
   static public MailService getMailService() throws Exception {
-    return (MailService)PortalContainer.getComponent(MailService.class) ;
+    return (MailService)PortalContainer.getInstance().getComponentInstance(MailService.class) ;
   }
 
   public static String convertSize(long size) throws Exception {
@@ -788,5 +789,11 @@ public class CalendarUtils {
       return null ;
     }
   }
+  
+  public static ContinuationService getContinuationService() {
+	    ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
+	    return continuation;
+
+	  }
   
 }

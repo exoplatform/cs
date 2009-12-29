@@ -18,7 +18,6 @@ package org.exoplatform.chatbar.webui;
 
 import javax.portlet.PortletRequest;
 
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -55,12 +54,16 @@ public class UIChatBarPortlet extends UIPortletApplication {
   }
   
   public String getUserToken() {
+	  try {
     return this.getContinuationService().getUserToken(this.getRemoteUser());
+	  } catch (Exception e) {
+		  System.out.println("\n\n can not get UserToken");
+		  return "" ;
+	  }
   }
   
   protected ContinuationService getContinuationService() {
-    ExoContainer container = PortalContainer.getInstance();
-    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
+    ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
     return continuation;
 
   }

@@ -22,6 +22,7 @@ import java.util.List;
 import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -42,14 +43,15 @@ import com.sun.syndication.io.XmlReader;
 public class AutoGeneratePeriodJobImp  implements Job {
 
   public void execute(JobExecutionContext jContext) throws JobExecutionException {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    ExoContainer container = PortalContainer.getInstance();
 
     SessionProvider provider = SessionProvider.createSystemProvider();
     JobDataMap jdatamap = jContext.getJobDetail().getJobDataMap();    
     String numberLimited = jdatamap.getString("event_number") ;
-    CalendarService calSvr = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class) ;
+    CalendarService calSvr = (CalendarService)PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class) ;
     try {
-      List<FeedData>  data  = calSvr.getFeeds(null) ;
+      
+    	List<FeedData>  data  = calSvr.getFeeds(null) ;
       for(FeedData d : data) {
         URL feedUrl = new URL(d.getUrl());
         SyndFeedInput input = new SyndFeedInput();

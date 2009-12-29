@@ -71,7 +71,13 @@ public class UIContactPortlet extends UIPortletApplication {
   }
   public String getUserToken()throws Exception {
     ContinuationService continuation = getContinuationService() ;
-    return continuation.getUserToken(ContactUtils.getCurrentUser());
+    
+    try {
+        return continuation.getUserToken(ContactUtils.getCurrentUser());
+	  } catch (Exception e) {
+		  System.out.println("\n\n can not get UserToken");
+		  return "" ;
+	  }
   }
   
 }
