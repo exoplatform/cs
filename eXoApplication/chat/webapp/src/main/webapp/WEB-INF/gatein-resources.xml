@@ -24,7 +24,7 @@
 			<js-path>/javascript/eXo/communication/chat/core/DateFormat.js</js-path>
 		</param>
   </javascript>
-  <!--<javascript>
+  <javascript>
 		<param>
 			<js-module>eXo.cs.CSCometd</js-module>
 			<js-path>/csResources/javascript/</js-path>
