@@ -20,10 +20,7 @@ import java.net.URL;
 import java.util.List;
 
 import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.container.RootContainer;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -43,14 +40,14 @@ import com.sun.syndication.io.XmlReader;
 public class AutoGeneratePeriodJobImp  implements Job {
 
   public void execute(JobExecutionContext jContext) throws JobExecutionException {
-    ExoContainer container = PortalContainer.getInstance();
-
-    SessionProvider provider = SessionProvider.createSystemProvider();
     JobDataMap jdatamap = jContext.getJobDetail().getJobDataMap();    
     String numberLimited = jdatamap.getString("event_number") ;
-    CalendarService calSvr = (CalendarService)PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class) ;
     try {
-      
+      CalendarService calSvr = (CalendarService)RootContainer.getInstance().getComponentInstanceOfType(CalendarService.class) ;
+      if (calSvr == null) {
+        System.out.println("\n\n Can not get calendar service");
+        return ;
+      }
     	List<FeedData>  data  = calSvr.getFeeds(null) ;
       for(FeedData d : data) {
         URL feedUrl = new URL(d.getUrl());
