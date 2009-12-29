@@ -19,6 +19,7 @@ import org.exoplatform.services.rest.resource.ResourceContainer;
  * Modified by : Phung Nam (phunghainam@gmail.com) 
  * 
  */
+@Path("/cs/mail")
 public class MailWebservice implements ResourceContainer {
 
   public static final int MIN_SLEEP_TIMEOUT = 100;
@@ -27,7 +28,7 @@ public class MailWebservice implements ResourceContainer {
   public MailWebservice() {  }
 
   @GET
-  @Path("/cs/mail/checkmail/{username}/{accountId}/{folderId}/")
+  @Path("/checkmail/{username}/{accountId}/{folderId}/")
   //@OutputTransformer(StringOutputTransformer.class)
   public Response checkMail(@PathParam("username")
   String userName, @PathParam("accountId")
@@ -62,7 +63,7 @@ public class MailWebservice implements ResourceContainer {
   }
 
   @GET
-  @Path("/cs/mail/synchfolders/{username}/{accountId}/")
+  @Path("/synchfolders/{username}/{accountId}/")
   //@OutputTransformer(StringOutputTransformer.class)
   public Response synchFolders(@PathParam("username")
   String userName, @PathParam("accountId")
@@ -95,7 +96,7 @@ public class MailWebservice implements ResourceContainer {
   }
   
   @GET
-  @Path("/cs/mail/stopcheckmail/{username}/{accountId}/")
+  @Path("/stopcheckmail/{username}/{accountId}/")
   //@OutputTransformer(StringOutputTransformer.class)
   public Response stopCheckMail(@PathParam("username")
   String userName, @PathParam("accountId")
@@ -134,7 +135,7 @@ public class MailWebservice implements ResourceContainer {
 
   
   @GET
-  @Path("/cs/mail/checkmailjobinfo/{username}/{accountId}/")
+  @Path("/checkmailjobinfo/{username}/{accountId}/")
   //@OutputTransformer(StringOutputTransformer.class)
   public Response getCheckMailJobInfo(@PathParam("username")
   String userName, @PathParam("accountId")
