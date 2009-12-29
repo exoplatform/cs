@@ -24,8 +24,6 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -39,6 +37,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.event.Event.Phase;
 
 /**
@@ -63,7 +62,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   public String editedAddName = null ;
   
   public UICategoryForm() throws Exception {
-    addUIFormInput(new UIFormStringInput(FIELD_CATEGORYNAME_INPUT, FIELD_CATEGORYNAME_INPUT, null).addValidator(MandatoryValidator.class));    
+    addUIFormInput(new UIFormStringInput(FIELD_CATEGORYNAME_INPUT, FIELD_CATEGORYNAME_INPUT, null).addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class,1,40));    
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION_INPUT, FIELD_DESCRIPTION_INPUT, null)) ;    
   }
   
@@ -81,7 +80,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   public void setValues(String groupId, boolean isShared) throws Exception {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
     AddressBook contactGroup ;
     if (isShared) {
       contactGroup = contactService.getSharedAddressBook(username, groupId) ;
@@ -103,12 +101,12 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       // CS-3009
       groupName = ContactUtils.reduceSpace(groupName) ;
       UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class) ;
-      if (ContactUtils.isNameLong(groupName)) {
+      /*if (ContactUtils.isNameLong(groupName)) {
         uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.nameTooLong", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
+      }*/
       UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
       UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
       if (uiAddressBook.getPrivateGroupMap().values().contains(groupName)) {

@@ -956,11 +956,11 @@ public Attachment getAttachment(String attId) {
         String username = CalendarUtils.getCurrentUser() ;
         String calendarId = uiForm.getCalendarId() ;
         String summary = uiForm.getEventSumary().trim() ;
-        if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
+        /*if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
           uiApp.addMessage(new ApplicationMessage("UITaskForm.msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
-        }
+        }*/
         String description = uiForm.getEventDescription() ;
         if(!CalendarUtils.isEmpty(description)) description = description.replaceAll(CalendarUtils.GREATER_THAN, "").replaceAll(CalendarUtils.SMALLER_THAN,"") ;
         CalendarEvent calendarEvent = null ;

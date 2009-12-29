@@ -41,6 +41,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.StringLengthValidator;
 
 
 /**
@@ -65,7 +66,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   private boolean isNew = true ;
   
   public UIEditTagForm() throws Exception {
-    addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null).addValidator(MandatoryValidator.class));
+    addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null).addValidator(MandatoryValidator.class).addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class,1,40));
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION_INPUT, FIELD_DESCRIPTION_INPUT, null)) ;
     addUIFormInput(new UIFormColorPicker(FIELD_COLOR, FIELD_COLOR, Colors.COLORS)) ;   
   }
@@ -101,13 +102,13 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-      if (ContactUtils.isNameLong(tagName)) {
+      /*if (ContactUtils.isNameLong(tagName)) {
         uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.nameTooLong", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-      
+      */
       UIContactPortlet uiContactPortlet = uiEditTagForm.getAncestorOfType(UIContactPortlet.class) ;
       UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;
       if (uiEditTagForm.isNew) {

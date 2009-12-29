@@ -55,6 +55,7 @@ import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NameValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -98,7 +99,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   public UICalendarForm() throws Exception{
     super("UICalendarForm");
     UIFormInputWithActions calendarDetail = new UIFormInputWithActions(INPUT_CALENDAR) ;
-    calendarDetail.addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(MandatoryValidator.class)) ;
+    calendarDetail.addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(MandatoryValidator.class).addValidator(NameValidator.class)) ;
     calendarDetail.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
     calendarDetail.addUIFormInput(new UIFormSelectBox(CATEGORY, CATEGORY, getCategory())) ;
     calendarDetail.addUIFormInput(new UIFormSelectBox(LOCALE, LOCALE, getLocales())) ;
@@ -477,7 +478,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     }
   }
   static  public class SaveActionListener extends EventListener<UICalendarForm> {
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "deprecation" })
     public void execute(Event<UICalendarForm> event) throws Exception {
       try {
         UICalendarForm uiForm = event.getSource() ;
@@ -485,11 +486,11 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         String displayName = uiForm.getUIStringInput(DISPLAY_NAME).getValue() ;
 //      CS-3009
         displayName = CalendarUtils.reduceSpace(displayName) ;
-        if(!CalendarUtils.isNameValid(displayName, CalendarUtils.SPECIALCHARACTER)){
+        /*if(!CalendarUtils.isNameValid(displayName, CalendarUtils.SPECIALCHARACTER)){
           uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-invalid", null, ApplicationMessage.WARNING) ) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
-        }
+        }*/
         displayName = displayName.trim() ;
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
         String username = CalendarUtils.getCurrentUser() ;

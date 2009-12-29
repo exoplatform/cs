@@ -41,6 +41,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NameValidator;
 
 
 /**
@@ -65,7 +66,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   private String tagId;
   
   public UIEditTagForm() throws Exception {       
-    addUIFormInput(new UIFormStringInput(NEW_TAG_NAME, NEW_TAG_NAME, null).addValidator(MandatoryValidator.class)) ;
+    addUIFormInput(new UIFormStringInput(NEW_TAG_NAME, NEW_TAG_NAME, null).addValidator(MandatoryValidator.class).addValidator(NameValidator.class)) ;
     addUIFormInput(new UIFormColorPicker(COLOR, COLOR, Colors.COLORS)) ;
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION,DESCRIPTION,null)) ;    
   }
@@ -112,13 +113,13 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       String newTagName = editTagForm.getUIStringInput(NEW_TAG_NAME).getValue().trim() ;
 //    CS-3009
       newTagName = MailUtils.reduceSpace(newTagName) ;
-      if (!MailUtils.isNameValid(newTagName, MailUtils.SIMPLECHARACTER)) {
+      /*if (!MailUtils.isNameValid(newTagName, MailUtils.SIMPLECHARACTER)) {
         UIApplication uiApp = editTagForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagname-invalid", MailUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       }
-      
+      */
       String description = editTagForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
       String color = editTagForm.getSelectedColor(); 
       UIApplication uiApp = editTagForm.getAncestorOfType(UIApplication.class) ;

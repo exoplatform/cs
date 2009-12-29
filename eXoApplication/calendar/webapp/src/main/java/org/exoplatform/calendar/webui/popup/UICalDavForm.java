@@ -47,6 +47,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NameValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -84,7 +85,7 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = CalendarUtils.getCurrentUser() ;
     UIFormInputWithActions rssInfo = new UIFormInputWithActions(INFO_TAB) ;
-    rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendarCalDav").addValidator(MandatoryValidator.class)) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendarCalDav").addValidator(MandatoryValidator.class).addValidator(NameValidator.class)) ;
     String url = calendarService.getCalendarSetting(username).getBaseURL();
     if(CalendarUtils.isEmpty(url)) url = CalendarUtils.getServerBaseUrl() + "calendar/iCalRss" ;
     rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, url).addValidator(MandatoryValidator.class)) ;
@@ -169,13 +170,13 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
       RssData rssData = new RssData() ;
       String tempName = uiForm.getUIStringInput(UICalDavForm.TITLE).getValue().trim() ;
       if(tempName != null && tempName.length() > 0) {
-        if(!CalendarUtils.isNameValid(tempName, CalendarUtils.SPECIALCHARACTER)) {
+        /*if(!CalendarUtils.isNameValid(tempName, CalendarUtils.SPECIALCHARACTER)) {
           uiForm.setSelectedTab(INFO_TAB) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
           uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.feed-name-invalid", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
-        }
+        }*/
         if(tempName.length() > 4 && tempName.substring(tempName.length() - 4).equals(".rss")) rssData.setName(tempName);
         else rssData.setName(tempName + ".rss") ;
       }else {

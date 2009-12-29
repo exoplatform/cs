@@ -71,12 +71,12 @@ public class MailUtils {
   static public String getCurrentUser() throws Exception { 
     return Util.getPortalRequestContext().getRemoteUser() ; 
   }
-  
+  /*
   public static boolean isNameValid(String name, String[] regex) {
     for(String c : regex){ if(name.contains(c)) return false ;}
     return true ;
   }
-  
+  */
   public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {    
     ContactAttachment contactAttachment = contact.getAttachment();
     if (contactAttachment != null) {

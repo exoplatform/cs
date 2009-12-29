@@ -20,7 +20,6 @@ import javax.jcr.RepositoryException;
 
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
-import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.Util;
@@ -36,6 +35,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NameValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -59,7 +59,8 @@ public class UIEventCategoryForm extends UIForm {
   private EventCategory eventCategory_ = null ;
   protected String categoryName = null ;
   public UIEventCategoryForm() throws Exception{
-    addUIFormInput(new UIFormStringInput(EVENT_CATEGORY_NAME, EVENT_CATEGORY_NAME, null).addValidator(MandatoryValidator.class)) ;
+    addUIFormInput(new UIFormStringInput(EVENT_CATEGORY_NAME, EVENT_CATEGORY_NAME, null)
+      .addValidator(MandatoryValidator.class).addValidator(NameValidator.class)) ;
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
   }
   protected String getCategoryName() {return getUIStringInput(EVENT_CATEGORY_NAME).getValue() ;}
@@ -100,11 +101,11 @@ public class UIEventCategoryForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }*/
-      if(!MailUtils.isNameValid(name, CalendarUtils.EXTENDEDCHARACTER)) {
+     /* if(!MailUtils.isNameValid(name, CalendarUtils.EXTENDEDCHARACTER)) {
         uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
         return ;
-      }
+      }*/
       CalendarService calendarService = CalendarUtils.getCalendarService();
       String description = uiForm.getUIStringInput(UIEventCategoryForm.DESCRIPTION).getValue() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;

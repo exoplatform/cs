@@ -39,6 +39,7 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NameValidator;
 
 
 /**
@@ -61,7 +62,7 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
   private String parentPath_ ;
 
   public UIFolderForm() throws Exception { 
-    addUIFormInput(new UIFormStringInput(FIELD_NAME, FIELD_NAME, null).addValidator(MandatoryValidator.class)) ;
+    addUIFormInput(new UIFormStringInput(FIELD_NAME, FIELD_NAME, null).addValidator(MandatoryValidator.class).addValidator(NameValidator.class)) ;
   }
 
   public String getParentPath() { return parentPath_; }
@@ -80,11 +81,11 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
       folderName = folderName.trim();
-      if(!MailUtils.isNameValid(folderName, MailUtils.SIMPLECHARACTER)) {
+      /*if(!MailUtils.isNameValid(folderName, MailUtils.SIMPLECHARACTER)) {
         uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.name-invalid", MailUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
-      }
+      }*/
       String folderId = Utils.KEY_FOLDERS + IdGenerator.generate() ;
       Folder folder = null ;
       try {

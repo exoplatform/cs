@@ -7,7 +7,6 @@ package org.exoplatform.contact;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +34,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
  * Jul 11, 2007  
  */
 public class ContactUtils {
-  private static String AKONG = "@" ;
+  //private static String AKONG = "@" ;
   final public static String COMMA = ",".intern() ;
   final public static String SEMI_COMMA = ";".intern() ;
   public static final String HTTP = "http://" ; 
@@ -48,13 +47,13 @@ public class ContactUtils {
   public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
     return sharedUserId + " - " + addressName ;
   }
-  
+  /*
   public static boolean isNameLong(String text) {
     if (text == null) return false ;
     if (text.length() > 40) return true ;
     return false ;
   }
-  
+  */
   public static String encodeJCRText(String str) {
     return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
     replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
@@ -75,7 +74,7 @@ public class ContactUtils {
       replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;*/
   }
 //not use
-  public static String filterString(String text, boolean isEmail) {
+  /*public static String filterString(String text, boolean isEmail) {
     if (text == null || text.trim().length() == 0) return "" ;
     for (String str : specialString) {
       text = text.replaceAll(str, "") ;
@@ -90,7 +89,7 @@ public class ContactUtils {
       }
     }
     return text ;
-  }
+  }*/
   static public String getCurrentUser() throws Exception {
     return Util.getPortalRequestContext().getRemoteUser() ; 
   }

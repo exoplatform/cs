@@ -54,6 +54,7 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -81,7 +82,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   final static  private String TODATE = "toDate" ;
 
   public UIAdvancedSearchForm() throws Exception{
-    addChild(new UIFormStringInput(TEXT, TEXT, "")) ;
+    addChild(new UIFormStringInput(TEXT, TEXT, "").addValidator(SpecialCharacterValidator.class)) ;
     List<SelectItemOption<String>> types = new ArrayList<SelectItemOption<String>>() ;
     types.add(new SelectItemOption<String>("", "")) ;
     types.add(new SelectItemOption<String>(CalendarEvent.TYPE_EVENT, CalendarEvent.TYPE_EVENT)) ;
@@ -256,13 +257,13 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         }
       }
       String text = uiForm.getUIStringInput(UIAdvancedSearchForm.TEXT).getValue() ;
-      if(!CalendarUtils.isEmpty(text)) {
+      /*if(!CalendarUtils.isEmpty(text)) {
         if(!CalendarUtils.isNameValid(text, CalendarUtils.EXTENDEDKEYWORD)) {
           uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.error-text-to-search", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
-      }      
+      }   */   
       if(!uiForm.isValidate()){
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

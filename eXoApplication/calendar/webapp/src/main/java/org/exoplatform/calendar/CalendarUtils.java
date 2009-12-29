@@ -420,11 +420,11 @@ public class CalendarUtils {
     }
     return null ;
   }
-
+/*
   public static boolean isNameValid(String name, String[] regexpression) {
     for(String c : regexpression){ if(name.contains(c)) return false ;}
     return true ;
-  }
+  }*/
 
   public static boolean isNameEmpty(String name) {
     return (name == null || name.trim().length() == 0) ;

@@ -22,14 +22,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.poi.hssf.record.formula.functions.Var;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -46,6 +43,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
+import org.exoplatform.webui.form.validator.NameValidator;
 import org.exoplatform.webui.organization.account.UIUserSelector;
 
 /**
@@ -84,7 +82,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   public UISharedForm() throws Exception{
     UISharedTab inputset = new UISharedTab(SHARED_TAB) ;
     inputset.addChild(new UIFormInputInfo(UISharedTab.FIELD_NAME, UISharedTab.FIELD_NAME, null)) ;
-    inputset.addUIFormInput(new UIFormStringInput(UISharedTab.FIELD_USER, UISharedTab.FIELD_USER, null)) ;
+    inputset.addUIFormInput(new UIFormStringInput(UISharedTab.FIELD_USER, UISharedTab.FIELD_USER, null).addValidator(NameValidator.class)) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData selectUserAction = new ActionData() ;
     selectUserAction.setActionListener("SelectPermission") ;
@@ -179,15 +177,14 @@ public void updateSelect(String selectField, String value) throws Exception {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      if(!CalendarUtils.isNameValid(names, SPECIALCHARACTER)) {
+      /*if(!CalendarUtils.isNameValid(names, SPECIALCHARACTER)) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
+      }*/
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       OrganizationService oService = CalendarUtils.getOrganizationService() ;
-      SessionProvider sProvider = SessionProviderFactory.createSessionProvider() ;
       String username = CalendarUtils.getCurrentUser() ;
       List<String> receiverUsers  = new ArrayList<String>() ;
       StringBuffer sb = new StringBuffer() ;

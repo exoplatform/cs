@@ -29,6 +29,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.validator.EmailAddressValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -66,7 +67,7 @@ public class UIEventReminderTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(REMIND_BY_EMAIL, REMIND_BY_EMAIL, false)) ;
     addUIFormInput(new UIFormSelectBox(EMAIL_REMIND_BEFORE, EMAIL_REMIND_BEFORE, emailRemindBeforeOptions));
     //addUIFormInput(new UIFormTextAreaInput(FIELD_EMAIL_ADDRESS, FIELD_EMAIL_ADDRESS, null)) ;
-    addUIFormInput(new UIEmailInput(FIELD_EMAIL_ADDRESS, FIELD_EMAIL_ADDRESS, null)) ;
+    addUIFormInput(new UIEmailInput(FIELD_EMAIL_ADDRESS, FIELD_EMAIL_ADDRESS, null).addValidator(EmailAddressValidator.class)) ;
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(EMAIL_IS_REPEAT, EMAIL_IS_REPEAT, false));
     addUIFormInput(new UIFormSelectBox(EMAIL_REPEAT_INTERVAL, EMAIL_REPEAT_INTERVAL, emailRemindRepeatOptions));
     ActionData addEmailAddress = new ActionData() ;

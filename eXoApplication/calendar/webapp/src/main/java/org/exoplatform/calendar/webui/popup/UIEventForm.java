@@ -487,11 +487,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         errorMsg_ = "UIEventForm.msg.event-email-required" ;
         return false ;
       }
-      else if(!CalendarUtils.isValidEmailAddresses(getEmailAddress())) {
+     /* else if(!CalendarUtils.isValidEmailAddresses(getEmailAddress())) {
         errorMsg_ = "UIEventForm.msg.event-email-invalid" ;
         errorValues = CalendarUtils.invalidEmailAddresses(getEmailAddress()) ;
         return false ;
-      } 
+      } */
     } 
     errorMsg_ = null ;
     return true ;
@@ -1263,11 +1263,11 @@ public Attachment getAttachment(String attId) {
     CalendarSetting calSetting = calendarPortlet.getCalendarSetting() ;
     CalendarService calService = CalendarUtils.getCalendarService() ;
     String summary = uiForm.getEventSumary().trim() ;
-    if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
+   /* if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
       uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       return ;
-    }
+    }*/
     String location = uiForm.getEventPlace() ;
     if(!CalendarUtils.isEmpty(location)) location = location.replaceAll(CalendarUtils.GREATER_THAN, "").replaceAll(CalendarUtils.SMALLER_THAN,"") ;
     String description = uiForm.getEventDescription() ;

@@ -42,9 +42,13 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NameValidator;
+import org.exoplatform.webui.form.validator.StringLengthValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -57,8 +61,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
     template = "app:/templates/contact/webui/popup/UITagForm.gtmpl", 
     events = {
       @EventConfig(listeners = UITagForm.AddActionListener.class),
-      @EventConfig(listeners = UITagForm.RemoveActionListener.class),
-      @EventConfig(listeners = UITagForm.CancelActionListener.class)
+      @EventConfig(listeners = UITagForm.RemoveActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UITagForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UITagForm extends UIForm implements UIPopupComponent {
@@ -70,10 +74,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   private List<Contact> contacts_ = new ArrayList<Contact>();
   private String[] tagNames = null ;
   private String[] contactNames = null ;
-  public UITagForm() throws Exception { setId("UITagForm") ; }
+  public UITagForm() throws Exception { setId("UITagForm") ; }  
   
-  
-  public void setContacts(List<Contact> contacts) { 
+  public void setContacts(List<Contact> contacts) throws Exception { 
     getChildren().clear() ;
     contacts_ = contacts ; 
     
@@ -109,7 +112,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         i ++ ;
       }
     }
-    addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
+    addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null)
+      .addValidator(MandatoryValidator.class).addValidator(NameValidator.class).addValidator(StringLengthValidator.class,1,40));
     addUIFormInput(new UIFormColorPicker(FIELD_COLOR, FIELD_COLOR, Colors.COLORS)) ;
     for (String tagId : tags.keySet()) {
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(tagId, tagId, false));
@@ -170,12 +174,12 @@ public class UITagForm extends UIForm implements UIPopupComponent {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }
-        if (ContactUtils.isNameLong(inputTag)) {
+       /* if (ContactUtils.isNameLong(inputTag)) {
           uiApp.addMessage(new ApplicationMessage("UITagForm.msg.nameTooLong", null, 
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
-        }
+        }*/
         Tag tag = new Tag();
         tag.setName(inputTag);
         tag.setColor(uiTagForm.getSelectedColor()) ;

@@ -24,7 +24,6 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -37,6 +36,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NameValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -59,7 +59,7 @@ public class UICalendarCategoryForm extends UIForm {
   private boolean isAddNew = true ;
   private String categoryId = null ;
   public UICalendarCategoryForm() throws Exception {
-    addUIFormInput(new UIFormStringInput(CATEGORY_NAME, null).addValidator(MandatoryValidator.class)) ;
+    addUIFormInput(new UIFormStringInput(CATEGORY_NAME, null).addValidator(MandatoryValidator.class).addValidator(NameValidator.class)) ;
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
   }
 
@@ -111,11 +111,11 @@ public class UICalendarCategoryForm extends UIForm {
       String categoryName = uiForm.getCategoryName() ;
       // CS-3009
       categoryName = CalendarUtils.reduceSpace(categoryName) ;
-      if(!CalendarUtils.isNameValid(categoryName, CalendarUtils.SPECIALCHARACTER)){
+      /*if(!CalendarUtils.isNameValid(categoryName, CalendarUtils.SPECIALCHARACTER)){
         uiApp.addMessage(new ApplicationMessage("UICalendarCategoryForm.msg.name-invalid", null, ApplicationMessage.WARNING) ) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
+      }*/
       String description = uiForm.getCategoryDescription() ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       try {
