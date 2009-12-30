@@ -98,6 +98,8 @@ import org.picocontainer.Startable;
  * @author <a href="mailto:vitaly.parfonov@gmail.com">Vitaly Parfonov</a>
  * @version $Id: $
  */
+
+@Path("/xmpp")
 public class RESTXMPPService implements ResourceContainer, Startable {
 
   private static final Map<String, String> jsResourceBundle = new HashMap<String, String>(){
@@ -193,7 +195,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   }
 
   @GET
-  @Path("/xmpp/loadJsResourceBundle/{locale}/")
+  @Path("/loadJsResourceBundle/{locale}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response loadJsResourceBundle(@PathParam("locale") String locale){
     ResourceBundle jsRb = this.rbs.getResourceBundle(BUNDLE_NAME, new Locale(locale));
@@ -201,7 +203,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
     try {
       sb.append("eXo.communication.chatbar.locale.ResourceBundle = {\n");
       for(Map.Entry<String, String> entry : jsResourceBundle.entrySet()){
-        sb.append(entry.getValue() + " : \"").append(jsRb.getString(entry.getKey())).append("\",\n");
+    	String value = (jsRb != null && jsRb.getString(entry.getKey()) != null) ? jsRb.getString(entry.getKey()) : entry.getKey();
+        sb.append(entry.getValue() + " : \"").append(value).append("\",\n");
       }
       sb.append("chat_message_finish_load_resource_bundle : \"finish load resource bundle\"\n");
       sb.append("};");
@@ -211,7 +214,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       .cacheControl(cc)
       .build();
     } catch (Exception e){
-      if (log.isDebugEnabled())
+     // if (log.isDebugEnabled())
         e.printStackTrace();
       return Response.status(HTTPStatus.INTERNAL_ERROR).build() ;
     }
@@ -224,7 +227,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/createroom/{username}/")
+  @Path("/muc/createroom/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response createRoom(@PathParam("username") String username,
                              @QueryParam("room") String room,
@@ -269,7 +272,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
 
 
   @POST
-  @Path("/xmpp/muc/configroom/{username}/")
+  @Path("/muc/configroom/{username}/")
   //@InputTransformer(Json2BeanInputTransformer.class)
   public Response configRoom(@PathParam("username") String username,
                              @QueryParam("room") String room,
@@ -306,7 +309,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   }
 
   @GET
-  @Path("/xmpp/muc/getroomconfig/{username}/")
+  @Path("/muc/getroomconfig/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getRoomConfigForm(@PathParam("username") String username,
                                     @QueryParam("room") String room) {
@@ -347,7 +350,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/getroominfo/{username}/")
+  @Path("/muc/getroominfo/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getRoomInfo(@PathParam("username") String username,
                               @QueryParam("room") String room) {
@@ -386,7 +389,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/joinedrooms/{username}/")
+  @Path("/muc/joinedrooms/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getJoinedRooms(@PathParam("username") String username) {
     if (this.rb == null) loadResourceBundle();
@@ -417,7 +420,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
 
   @Deprecated
   @GET
-  @Path("/xmpp/muc/rooms-old/{username}/")
+  @Path("/muc/rooms-old/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getRooms(@PathParam("username") String username) {
     if (this.rb == null) loadResourceBundle();
@@ -459,7 +462,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
 
 
   @GET
-  @Path("/xmpp/muc/rooms/{username}/")
+  @Path("/muc/rooms/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getRooms(@PathParam("username") String username,
                            @QueryParam("from") Integer from,
@@ -491,7 +494,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/decline/{username}/{inviter}/")
+  @Path("/muc/decline/{username}/{inviter}/")
   public Response declineToRoom(@PathParam("username") String username,
                                 @PathParam("inviter") String inviter,
                                 @QueryParam("room") String room,
@@ -515,7 +518,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   }
 
   @GET
-  @Path("/xmpp/muc/destroy/{username}/")
+  @Path("/muc/destroy/{username}/")
   public Response destroyRoom(@PathParam("username") String username,
                               @QueryParam("room") String room,
                               @QueryParam("reason") String reason,
@@ -559,7 +562,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/invite/{username}/{invitee}/")
+  @Path("/muc/invite/{username}/{invitee}/")
   public Response inviteToRoom(@PathParam("username") String username,
                                @PathParam("invitee") String invitee,
                                @QueryParam("room") String room,
@@ -598,7 +601,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/join/{username}/")
+  @Path("/muc/join/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response joinRoom(@PathParam("username") String username,
                            @QueryParam("room") String room,
@@ -655,7 +658,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/leaveroom/{username}/")
+  @Path("/muc/leaveroom/{username}/")
   public Response leftRoom(@PathParam("username") String username,
                            @QueryParam("room") String room) {
     if (this.rb == null) loadResourceBundle();
@@ -693,7 +696,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/changenickname/{username}/{nickname}/")
+  @Path("/muc/changenickname/{username}/{nickname}/")
   public Response changeNickname(@PathParam("username") String username,
                                  @QueryParam("nickname") String nickname,
                                  @QueryParam("room") String room) {
@@ -739,7 +742,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/changestatus/{username}/{mode}/")
+  @Path("/muc/changestatus/{username}/{mode}/")
   public Response changeAvailabilityStatusInRoom(@PathParam("username") String username,
                                                  @PathParam("mode") String mode,
                                                  @QueryParam("room") String room,
@@ -773,7 +776,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/changesubject/{username}/")
+  @Path("/muc/changesubject/{username}/")
   public Response changeSubject(@PathParam("username") String username,
                                 @QueryParam("room") String room,
                                 @QueryParam("subject") String subject) {
@@ -817,7 +820,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/managerole/{username}/")
+  @Path("/muc/managerole/{username}/")
   public Response manageRoleRoom(@PathParam("username") String username,
                                  @QueryParam("room") String room,
                                  @QueryParam("nickname") String nickname,
@@ -872,7 +875,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/manageaffiliation/{username}/")
+  @Path("/muc/manageaffiliation/{username}/")
   public Response manageAffilationRoom(@PathParam("username") String username,
                                        @QueryParam("room") String room,
                                        @QueryParam("nickname") String nickname,
@@ -926,7 +929,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/kick/{username}/")
+  @Path("/muc/kick/{username}/")
   public Response kickUserFromRoom(@PathParam("username") String username,
                                    @QueryParam("room") String room,
                                    @QueryParam("nickname") String nickname,
@@ -981,7 +984,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/muc/ban/{username}/")
+  @Path("/muc/ban/{username}/")
   public Response banUserFromRoom(@PathParam("username") String username,
                                   @QueryParam("room") String room,
                                   @QueryParam("name") String name,
@@ -1037,7 +1040,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @POST
-  @Path("/xmpp/addtransport/")
+  @Path("/addtransport/")
   public Response addTransport(@QueryParam("username") String username,
                                @QueryParam("remoteusername") String remoteUser,
                                @QueryParam("remotepassword") String remotePassword,
@@ -1084,7 +1087,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   }
 
   @GET
-  @Path("/xmpp/roster/add/{username}/{adduser}/")
+  @Path("/roster/add/{username}/{adduser}/")
   public Response addBoddyToRoster(@PathParam("username") String username,
                                    @PathParam("adduser") String adduser,
                                    @QueryParam("nickname") String nickname,
@@ -1120,7 +1123,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/roster/update/{username}/{upduser}/")
+  @Path("/roster/update/{username}/{upduser}/")
   public Response updateBoddy(@PathParam("username") String username,
                               @PathParam("upduser") String upduser,
                               @QueryParam("nickname") String nickname,
@@ -1152,7 +1155,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/roster/group/{username}/{group}/")
+  @Path("/roster/group/{username}/{group}/")
   public Response createGroup(@PathParam("username") String username,
                               @PathParam("group") String group) { 
     if (this.rb == null) loadResourceBundle();
@@ -1171,7 +1174,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/askforsubscription/{username}/{askuser}/")
+  @Path("/askforsubscription/{username}/{askuser}/")
   public Response askForSubscription(@PathParam("username") String username,
                                      @PathParam("askuser") String askuser,
                                      @QueryParam("nickname") String nickname) {
@@ -1198,7 +1201,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/rosterclean/{username}/")
+  @Path("/rosterclean/{username}/")
   public Response cleanBuddylist(@PathParam("username") String username) {
     if (this.rb == null) loadResourceBundle();
     try {
@@ -1229,7 +1232,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/history/getmessages/{usernameto}/{isGroupChat}/")
+  @Path("/history/getmessages/{usernameto}/{isGroupChat}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getAllHistory(@PathParam("usernameto") String usernameto,
                                 @PathParam("isGroupChat") Boolean isGroupChat,
@@ -1271,7 +1274,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/history/getmessages/{usernameto}/{isGroupChat}/{from}/{to}/")
+  @Path("/history/getmessages/{usernameto}/{isGroupChat}/{from}/{to}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getHistoryBetweenDate(@PathParam("usernameto") String usernameto,
                                         @PathParam("isGroupChat") Boolean isGroupChat,
@@ -1324,7 +1327,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/history/getmessages/{usernameto}/{isGroupChat}/{from}/")
+  @Path("/history/getmessages/{usernameto}/{isGroupChat}/{from}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getHistoryFromDateToNow(@PathParam("usernameto") String usernameto,
                                           @PathParam("isGroupChat") Boolean isGroupChat,
@@ -1368,7 +1371,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/history/getinterlocutors/{username}/")
+  @Path("/history/getinterlocutors/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getInterlocutors(@PathParam("username") String username) {
     if (this.rb == null) loadResourceBundle();
@@ -1392,7 +1395,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/history/file/getmessages/{usernameto}/{isGroupChat}/{clientTimezoneOffset}/")
+  @Path("/history/file/getmessages/{usernameto}/{isGroupChat}/{clientTimezoneOffset}/")
   //@OutputTransformer(PassthroughOutputTransformer.class)
   public Response getAllHistoryFile(@PathParam("usernameto") String usernameto,
                                     @PathParam("isGroupChat") Boolean isGroupChat,
@@ -1440,7 +1443,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/history/file/getmessages/{usernameto}/{isGroupChat}/{from}/{clientTimezoneOffset}/")
+  @Path("/history/file/getmessages/{usernameto}/{isGroupChat}/{from}/{clientTimezoneOffset}/")
   //@OutputTransformer(PassthroughOutputTransformer.class)
   public Response getHistoryFromDateToNowFile(@PathParam("usernameto") String usernameto,
                                               @PathParam("isGroupChat") Boolean isGroupChat,
@@ -1495,7 +1498,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/history/file/getmessages/{usernameto}/{isGroupChat}/{from}/{to}/{clientTimezoneOffset}/")
+  @Path("/history/file/getmessages/{usernameto}/{isGroupChat}/{from}/{to}/{clientTimezoneOffset}/")
   //@OutputTransformer(PassthroughOutputTransformer.class)
   public Response getHistoryBetweenDateFile(@PathParam("usernameto") String usernameto,
                                             @PathParam("isGroupChat") Boolean isGroupChat,
@@ -1572,7 +1575,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/getsearchform/{username}/")
+  @Path("/getsearchform/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getSearchUsersForm(@PathParam("username") String username,
                                      @QueryParam(SearchFormFields.SEARCH_SERVICE) String searchService) {
@@ -1605,7 +1608,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/getuserinfo/{username}/{needinfo}/")
+  @Path("/getuserinfo/{username}/{needinfo}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getUserInfo(@PathParam("username") String username,
                               @PathParam("needinfo") String needinfo) {
@@ -1632,7 +1635,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/login2/{forcache}/")
+  @Path("/login2/{forcache}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response login2(@PathParam("forcache") String forcache) {
     if (this.rb == null) loadResourceBundle();
@@ -1702,6 +1705,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
     } catch (XMPPException e) {
       /*if (log.isDebugEnabled()) 
         e.printStackTrace();*/
+    	e.printStackTrace();
       XMPPError error = e.getXMPPError();
       return Response.status(error.getCode())
       .entity(error.getMessage())
@@ -1709,6 +1713,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
     } catch (Exception e) {
       /*if (log.isDebugEnabled())
         e.printStackTrace();*/
+    	e.printStackTrace();
       return Response.status(HTTPStatus.INTERNAL_ERROR)
       .entity("Thrown exception : " + e)
       .build();
@@ -1720,7 +1725,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/logout/{username}/")
+  @Path("/logout/{username}/")
   public Response logout(@PathParam("username") String _username) {
     if (this.rb == null) loadResourceBundle();
     try {
@@ -1744,7 +1749,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/history/messagereceive/{username}/{messageid}/")
+  @Path("/history/messagereceive/{username}/{messageid}/")
   public Response messageReceive(@PathParam("username") String username,
                                  @PathParam("messageid") String messageId) {
     if (this.rb == null) loadResourceBundle();
@@ -1768,7 +1773,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/roster/del/{username}/{removeboddy}/")
+  @Path("/roster/del/{username}/{removeboddy}/")
   public Response removeBuddy(@PathParam("username") String username,
                               @PathParam("removeboddy") String removeboddy) {
     if (this.rb == null) loadResourceBundle();
@@ -1803,7 +1808,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/removetransport/{username}/{transport}/")
+  @Path("/removetransport/{username}/{transport}/")
   public Response removeTransport(@PathParam("username") String username,
                                   @PathParam("transport") String _transport) {
     if (this.rb == null) loadResourceBundle();
@@ -1853,7 +1858,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/searchuser/{username}/")
+  @Path("/searchuser/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response searchUsers(@PathParam("username") String username,
                               @QueryParam(SearchFormFields.SEARCH) String search,
@@ -1896,7 +1901,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @POST
-  @Path("/xmpp/sendmessage/{username}/")
+  @Path("/sendmessage/{username}/")
   //@InputTransformer(Json2BeanInputTransformer.class)
   public Response sendMessage(@PathParam("username") String username, MessageBean messageBean) {
     if (this.rb == null) loadResourceBundle();
@@ -1921,7 +1926,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @POST
-  @Path("/xmpp/muc/sendmessage/{username}/")
+  @Path("/muc/sendmessage/{username}/")
   //@InputTransformer(Json2BeanInputTransformer.class)
   public Response sendMUCMessage(@PathParam("username") String username, 
                                  MessageBean messageBean) {
@@ -1953,7 +1958,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/sendstatus/{username}/{status}/")
+  @Path("/sendstatus/{username}/{status}/")
   public Response setUserStatus(@PathParam("username") String username,
                                 @PathParam("status") String status) {
     if (this.rb == null) loadResourceBundle();
@@ -1981,7 +1986,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/subscribeuser/{username}/{subsuser}/")
+  @Path("/subscribeuser/{username}/{subsuser}/")
   public Response subscribeUser(@PathParam("username") String _username,
                                 @PathParam("subsuser") String _subsuser) {
     if (this.rb == null) loadResourceBundle();
@@ -2002,7 +2007,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/unsubscribeuser/{username}/{unsubsuser}/")
+  @Path("/unsubscribeuser/{username}/{unsubsuser}/")
   public Response unsubscribeUser(@PathParam("username") String username,
                                   @PathParam("unsubsuser") String unsubsuser) {
     if (this.rb == null) loadResourceBundle();
@@ -2023,7 +2028,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/fileexchange/accept/{username}/{uuid}/")
+  @Path("/fileexchange/accept/{username}/{uuid}/")
   //@OutputTransformer(PassthroughOutputTransformer.class)
   public Response acceptFile(@PathParam("username") String username, @PathParam("uuid") String uuid) {
     if (this.rb == null) loadResourceBundle();
@@ -2077,7 +2082,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/xmpp/fileexchange/reject/{username}/{uuid}/")
+  @Path("/fileexchange/reject/{username}/{uuid}/")
   public Response rejectFile(@PathParam("username") String username,
                              @PathParam("uuid") String uuid) {
     if (this.rb == null) loadResourceBundle();

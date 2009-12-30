@@ -3,7 +3,7 @@
   if(user != null && user.trim().length() > 0) { 
 	  def rcontext = _ctx.getRequestContext() ;
 	  def jsManager = rcontext.getJavascriptManager();
-	  //jsManager.importJavascript("eXo.cs.CSCometd", "/csResources/javascript/");
+	  jsManager.importJavascript("eXo.cs.CSCometd", "/csResources/javascript/");
 		jsManager.importJavascript("eXo.communication.chat.eXoChatBar", "/chatbar/javascript/");
 	jsManager.importJavascript("eXo.communication.chat.core.DateFormat", "/chatbar/javascript/");
 	jsManager.importJavascript("eXo.communication.chat.core.AdvancedDOMEvent", "/chatbar/javascript/");

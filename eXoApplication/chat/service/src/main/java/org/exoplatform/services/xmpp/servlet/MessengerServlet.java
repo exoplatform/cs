@@ -99,23 +99,27 @@ public class MessengerServlet extends HttpServlet implements Connector {
   private ServletContext    context;
 
   @Override
-  public void init() throws ServletException {
+  public void init(ServletConfig config) throws ServletException {
 	this.config = config;
 	this.context = config.getServletContext();
-    final String timeOut = this.getInitParameter("connection-timeout");
-    final String timeChekEventStr = this.getInitParameter("time-check-event");
-    if (timeOut != null)
-      connectionTimeout = Integer.parseInt(timeOut);
-    else {
-      LOGGER.info("Connection timeout is not set, default 60000 ms");
-      connectionTimeout = 60 * 1000;
-    }
-    if (timeChekEventStr != null)
-      timeChekEvent = Integer.parseInt(timeChekEventStr);
-    else {
-      LOGGER.info("Timeout for cheking event is not set, default 3000 ms");
-      timeChekEvent = 3 * 1000;
-    }
+	try {
+	    final String timeOut = this.getInitParameter("connection-timeout");
+	    final String timeChekEventStr = this.getInitParameter("time-check-event");
+	    if (timeOut != null)
+	      connectionTimeout = Integer.parseInt(timeOut);
+	    else {
+	      LOGGER.info("Connection timeout is not set, default 60000 ms");
+	      connectionTimeout = 60 * 1000;
+	    }
+	    if (timeChekEventStr != null)
+	      timeChekEvent = Integer.parseInt(timeChekEventStr);
+	    else {
+	      LOGGER.info("Timeout for cheking event is not set, default 3000 ms");
+	      timeChekEvent = 3 * 1000;
+	    }
+	} catch(Exception e){
+		LOGGER.error(e.toString());
+	}
   }
 
   @Override

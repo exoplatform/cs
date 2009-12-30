@@ -18,12 +18,15 @@
 package org.exoplatform.services.authentication.rest;
 
 import javax.security.auth.login.LoginContext;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.exoplatform.common.http.HTTPStatus;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.jaas.BasicCallbackHandler;
 
@@ -31,7 +34,7 @@ import org.exoplatform.services.security.jaas.BasicCallbackHandler;
  * @author <a href="mailto:vitalka_p@ukr.net">Vitaly Parfonov</a>
  * @version $Id: $
  */
-
+@Path("/organization/authenticate")
 public class RESTAuthenticator implements ResourceContainer {
 
   public RESTAuthenticator() {}
@@ -42,12 +45,12 @@ public class RESTAuthenticator implements ResourceContainer {
    *         otherwise return Response with status 403 (Forbidden).
    */
   @POST
-  @Path("/organization/authenticate/")
+  @Path("/authenticate/")
   public Response authenticate(
-      @QueryParam("username") String username,
-      @QueryParam("password") String password) {
+	@FormParam("username") String username,
+	@FormParam("password") String password) {
     try {
-      LoginContext loginContext = new LoginContext("exo-domain",
+      LoginContext loginContext = new LoginContext(ExoContainerContext.getCurrentContainer().getContext().getRealmName(),
           new BasicCallbackHandler(username, password.toCharArray()));
       loginContext.login();
       loginContext.logout();

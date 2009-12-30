@@ -94,7 +94,7 @@
 
 	<filter-mapping>
 		<filter-name>RestEncodingFilter</filter-name>
-		<url-pattern>/rest/*</url-pattern>
+		<url-pattern>/rest-csdemo/*</url-pattern>
 	</filter-mapping>
 
 	<filter-mapping>
@@ -203,7 +203,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>RestServer</servlet-name>
-		<url-pattern>/rest/*</url-pattern>
+		<url-pattern>/rest-csdemo/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
