@@ -9,7 +9,7 @@
 .UIChat {
   border: none;
   background: none;
-  padding: 0
+  padding: 0;
 }
 
 .UIChat .MainWindow {
@@ -176,11 +176,11 @@
 }
 
 .UIChat .IconChat {
-	display:block;
-	height:22px;
-	line-height:27px;
-	margin-left:10px;
-	padding-left:20px;
+	display: block;
+	height: 22px;
+	line-height: 27px;
+	margin-left: 10px;
+	padding-left: 24px;
 }
 
 .UIChat .UITabContainer {
@@ -328,8 +328,8 @@
 }
 
 .UIChat .TitleIconChat .OfflineIcon {
-  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -75px; /* orientation=lt */
-  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -75px; /* orientation=rt */
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -71px; /* orientation=lt */
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -71px; /* orientation=rt */
 }
 
 .UIChat .OfflineIcon {

@@ -16,7 +16,7 @@
 
 .UIChat .LeftContainer {
   background: url('DefaultSkin/background/Background.gif') no-repeat left -30px;
-  padding-left: 2px;	
+  padding-left: 2px;
   height: 30px; line-height: 30px;	
 }
 
@@ -162,11 +162,11 @@
 }
 
 .UIChat .IconChat {
-	display:block;
-	height:22px;
-	line-height:27px;
-	margin-left:10px;
-	padding-left:20px;
+	display: block;
+	height: 22px;
+	line-height: 27px;
+	margin-left: 2px;
+	padding-left: 20px;
 }
 
 .UIChat .UITabContainer {
@@ -279,27 +279,27 @@
   display: block;
 }
 
-.UIChatBarPortlet .UIRightClickPopupMenu .OnlineIcon {
+.UIChatBarPortlet .UIRightClickPopupMenu .MenuItem .OnlineIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -365px; /* orientation=lt */
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -365px; /* orientation=rt */
 }
 
-.UIChatBarPortlet .UIRightClickPopupMenu .OfflineIcon {
-  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -75px; /* orientation=lt */
-	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -75px; /* orientation=rt */
+.UIChatBarPortlet .UIRightClickPopupMenu .MenuItem .OfflineIcon {
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -71px; /* orientation=lt */
+	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -71px; /* orientation=rt */
 }
 
-.UIChatBarPortlet .UIRightClickPopupMenu .AwayIcon {
+.UIChatBarPortlet .UIRightClickPopupMenu .MenuItem .AwayIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -25px; /* orientation=lt */
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -25px; /* orientation=rt */
 }
 
-.UIChatBarPortlet .UIRightClickPopupMenu .ExtendAwayIcon {
+.UIChatBarPortlet .UIRightClickPopupMenu .MenuItem .ExtendAwayIcon {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -300px; /* orientation=lt */
 	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -300px; /* orientation=rt */
 }
 
-.UIChatBarPortlet .UIRightClickPopupMenu .FreeToChat {
+.UIChatBarPortlet .UIRightClickPopupMenu .MenuItem .FreeToChat {
   background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -50px; /* orientation=lt */
 	background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat right -50px; /* orientation=rt */
 }
@@ -1477,32 +1477,30 @@ form {
 }
 
 .UIChatBarPortlet .Actionbar .LeftIconButton {
-	padding-left:4px; /* orientation=lt */
-	padding-right:4px; /* orientation=rt */
-	background:url(DefaultSkin/background/LeftIconButtonBG4x26.gif) no-repeat left top; /* orientation=lt */
-	background:url(DefaultSkin/background/LeftIconButtonBG4x26-rt.gif) no-repeat right top; /* orientation=rt */
+	background: none;
 } 
 
 .UIChatBarPortlet .Actionbar .LeftIconButton:hover {
-	background:url(DefaultSkin/background/LeftIconButtonHightLightBG4x26.gif) no-repeat left top; /* orientation=lt */
-	background:url(DefaultSkin/background/LeftIconButtonHightLightBG4x26-rt.gif) no-repeat right top; /* orientation=rt */
+	background: none;
 }
 
 .UIChatBarPortlet .Actionbar .RightIconButton {
-	padding-right:4px; /* orientation=lt */
-	padding-left:4px; /* orientation=rt */
-	background:url(DefaultSkin/background/RightIconButtonBG4x26.gif) no-repeat right top; /* orientation=lt */
-	background:url(DefaultSkin/background/RightIconButtonBG4x26-rt.gif) no-repeat left top; /* orientation=rt */
+	background: url(/chatbar/skin/DefaultSkin/background/SeperatorLine1x30.gif) no-repeat right top; /* orientation=lt */
+	background: url(/chatbar/skin/DefaultSkin/background/SeperatorLine1x30-rt.gif) no-repeat right top; /* orientation=rt */
+	padding-right: 2px; /* orientation=lt */
+	padding-left: 2px; /* orientation=rt */
 } 
 
 .UIChatBarPortlet .Actionbar .RightIconButton:hover {
-	background:url(DefaultSkin/background/RightIconButtonHightLightBG4x26.gif) no-repeat right top; /* orientation=lt */
-	background:url(DefaultSkin/background/RightIconButtonHightLightBG4x26-rt.gif) no-repeat left top; /* orientation=rt */
+	background: url(/chatbar/skin/DefaultSkin/background/SeperatorLine1x30.gif) no-repeat right top; /* orientation=lt */
+	background: url(/chatbar/skin/DefaultSkin/background/SeperatorLine1x30-rt.gif) no-repeat right top; /* orientation=rt */
+	padding-right: 2px; /* orientation=lt */
+	padding-left: 2px; /* orientation=rt */
 }
 
 .UIChatBarPortlet .Actionbar .CenterIconButton {
-	background:url(DefaultSkin/background/CenterIconButtonBG1x26.gif) repeat-x left;
-  height:26px;
+	background: none;
+	height: 26px;
 } 
 
 .UIChatBarPortlet .Actionbar .CenterIconButton:hover {
@@ -1510,13 +1508,13 @@ form {
 }
 
 .UIChatBarPortlet .SeperatorLine {
-	background: url(/chatbar/skin/DefaultSkin/background/SeperatorLine1x30.gif) no-repeat;
+	background: url(/chatbar/skin/DefaultSkin/background/Background.gif) no-repeat left -421px;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	height:30px;
 	line-height:30px;
-	margin:0px 2px 0px 4px; /* orientation=lt */
-	margin:0px 4px 0px 2px; /* orientation=rt */
+	margin:0px 0px 0px 4px; /* orientation=lt */
+	margin:0px 4px 0px 0px; /* orientation=rt */
 	width:2px;
 }
 
