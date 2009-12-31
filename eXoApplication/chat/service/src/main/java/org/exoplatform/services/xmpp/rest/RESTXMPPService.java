@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -273,6 +274,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
 
   @POST
   @Path("/muc/configroom/{username}/")
+  @Consumes(MediaType.APPLICATION_JSON)
   //@InputTransformer(Json2BeanInputTransformer.class)
   public Response configRoom(@PathParam("username") String username,
                              @QueryParam("room") String room,
@@ -1901,7 +1903,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @POST
+  @Consumes(MediaType.APPLICATION_JSON)
   @Path("/sendmessage/{username}/")
+  
   //@InputTransformer(Json2BeanInputTransformer.class)
   public Response sendMessage(@PathParam("username") String username, MessageBean messageBean) {
     if (this.rb == null) loadResourceBundle();
@@ -1927,6 +1931,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    */
   @POST
   @Path("/muc/sendmessage/{username}/")
+  @Consumes(MediaType.APPLICATION_JSON)
   //@InputTransformer(Json2BeanInputTransformer.class)
   public Response sendMUCMessage(@PathParam("username") String username, 
                                  MessageBean messageBean) {

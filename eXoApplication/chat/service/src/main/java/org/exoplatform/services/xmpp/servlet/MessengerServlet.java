@@ -118,7 +118,7 @@ public class MessengerServlet extends HttpServlet implements Connector {
 	      timeChekEvent = 3 * 1000;
 	    }
 	} catch(Exception e){
-		LOGGER.error(e.toString());
+		LOGGER.error("Can not get init parameters");
 	}
   }
 

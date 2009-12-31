@@ -92,13 +92,16 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
         }
       }
       List<User> list = new ArrayList<User>();
+      start();
       PageList pageList = userHandler.findUsers(query);
       int pages = pageList.getAvailablePage();
       for (int i = 1; i <= pages; i++) {
         list.addAll(pageList.getPage(i));
       }
+      stop();
       return Response.ok(new UserListXMLEntity(list, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
+    	e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
                              .entity("Thrown exception : " + e)
@@ -140,12 +143,15 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
         }
       }
       List<User> list = new ArrayList<User>();
+      start();
       PageList pageList = userHandler.findUsers(query);
       pageList.setPageSize(numResult);
       int page = from / numResult + 1;
       list = pageList.getPage(page);
+      stop();
       return Response.ok(new UserListXMLEntity(list, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
+    	e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
                              .entity("Thrown exception : " + e)
@@ -165,9 +171,11 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
                                 @PathParam("num") Integer numResult) {
     try {
       List<User> list = new ArrayList<User>();
+      start();
       PageList pageList = userHandler.getUserPageList(numResult);
       int page = from / numResult + 1;
       list = pageList.getPage(page);
+      stop();
       return Response.ok(new UserListXMLEntity(list, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
       e.printStackTrace();
@@ -186,9 +194,12 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   //@OutputTransformer(SerializableTransformer.class)
   public Response getUsersCount() {
     try {
+      start();
       int number = userHandler.getUserPageList(20).getAvailable();
+      stop();
       return Response.ok(new CountXMLEntity(number, "users"), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
+    	e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
                              .entity("Thrown exception : " + e)
@@ -204,13 +215,16 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   //@OutputTransformer(SerializableTransformer.class)
   public Response getUser(@PathParam("username") String username) {
     try {
+      start();
       User user = userHandler.findUserByName(username);
+      stop();
       if (user == null) {
         return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username
             + "' not found.").build();
       }
       return Response.ok(new UserXMLEntity(user), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
+    	e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
                              .entity("Thrown exception : " + e)
@@ -226,18 +240,22 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
                            @PathParam("groupId") String groupId) {
     try {
       groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
+      start();
       Group group = groupHandler.findGroupById(groupId);
+      stop();
       if (group == null) {
         return Response.status(HTTPStatus.NOT_FOUND).entity("Group '" + groupId
             + "' not found.").build();
       }
 
       List<User> members = new ArrayList<User>();
+      start();
       PageList pageList = userHandler.findUsersByGroup(groupId);
       int pages = pageList.getAvailablePage();
       for (int i = 1; i <= pages; i++) {
         members.addAll(pageList.getPage(i));
       }
+      stop();
 
       return Response.ok(new GroupXMLEntity(group, members, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE)
                              .build();
@@ -260,17 +278,24 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       Collection<Group> groups = null;
       if (parentId != null && parentId.length() > 0) {
         parentId = (parentId.startsWith("/")) ? parentId : "/" + parentId;
+        start();
         Group parent = groupHandler.findGroupById(parentId);
+        stop();
         if (parent == null) {
           return Response.status(HTTPStatus.NOT_FOUND).entity("Parent '"
               + parentId + "' not found.").build();
         }
+        start();
         groups = groupHandler.findGroups(parent);
+        stop();
       } else {
+    	start();
         groups = groupHandler.findGroups(null);
+        stop();
       }
       return Response.ok(new GroupListXMLEntity(groups, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
+    	e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
                              .entity("Thrown exception : " + e)
@@ -283,11 +308,14 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   //@OutputTransformer(SerializableTransformer.class)
   public Response getGroupsCount() {
     try {
+      start();
       int number = groupHandler.getAllGroups().size();
+      stop();
 
       return Response.ok(new CountXMLEntity(number, "groups"), XML_CONTENT_TYPE).build();
 
     } catch (Exception e) {
+    	e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
                              .entity("Thrown exception : " + e)
@@ -304,15 +332,19 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
   public Response getGroupsOfUser(@Context UriInfo uriInfo,
                                   @QueryParam("username") String username) {
     try {
+    	start();
       if (userHandler.findUserByName(username) == null) {
+    	  stop();
         return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username
             + "' not found.").build();
       }
       Collection<Group> groups = groupHandler.findGroupsOfUser(username);
+      stop();
 
       return Response.ok(new GroupListXMLEntity(groups, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
 
     } catch (Exception e) {
+    	e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
                              .entity("Thrown exception : " + e)
@@ -332,14 +364,19 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       Collection<Group> groups = null;
       if (parentId != null && parentId.length() > 0) {
         parentId = (parentId.startsWith("/")) ? parentId : "/" + parentId;
+        start();
         Group parent = groupHandler.findGroupById(parentId);
         if (parent == null) {
+        	stop();
           return Response.status(HTTPStatus.NOT_FOUND).entity("Parent '"
               + parentId + "' not found.").build();
         }
         groups = groupHandler.findGroups(parent);
+        stop();
       } else {
+    	  start();
         groups = groupHandler.findGroups(null);
+        stop();
       }
 
       Integer amount_ = amount;
@@ -349,6 +386,7 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
                                                         uriInfo.getBaseUri().getPath()),XML_CONTENT_TYPE).build();
 
     } catch (Exception e) {
+    	e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
                              .entity("Thrown exception : " + e)
