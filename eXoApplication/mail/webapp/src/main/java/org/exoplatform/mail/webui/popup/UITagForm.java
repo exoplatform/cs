@@ -43,7 +43,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
 
 
@@ -74,7 +73,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
   
   public void setTagList(List<Tag> tagList) throws Exception {
     tagMap.clear();   
-    addUIFormInput(new UIFormStringInput(SELECT_AVAIABLE_TAG, SELECT_AVAIABLE_TAG, null).addValidator(MandatoryValidator.class).addValidator(NameValidator.class));
+    addUIFormInput(new UIFormStringInput(SELECT_AVAIABLE_TAG, SELECT_AVAIABLE_TAG, null).addValidator(NameValidator.class));
     addUIFormInput(new UIFormColorPicker(TAG_COLOR, TAG_COLOR, Colors.COLORS)) ;
     for(Tag tag : tagList) {
       UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(tag.getName(), tag.getName(), null);
