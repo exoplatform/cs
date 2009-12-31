@@ -465,6 +465,5 @@ function LongPollTransport() {
 	}
 	return instance;
 }
-eXo.cs = {};
 eXo.cs.CSCometd = new CSCometd();
 eXo.portal.LongPollTransport = LongPollTransport.prototype.constructor;

@@ -850,14 +850,18 @@ public class MailServiceImpl implements MailService, Startable {
 			JobDataMap jobData = new JobDataMap();
 			jobData.put(CheckMailJob.USERNAME, username);
 			jobData.put(CheckMailJob.ACCOUNTID, accountId);
-			// ham loadCheckmailJob nay duoc goi voi folderId la empty--> nen o
-			// day
-			// cung phai check truonghop folderId is empty.
-			// Khong nen put vao value empty
+			jobData.put(CheckMailJob.MAILSVR, this);
+		
+			//TODO
+			// 
 			jobData.put(CheckMailJob.FOLDERID, folderId);
 			PeriodInfo periodInfo = new PeriodInfo(new GregorianCalendar()
 					.getTime(), null, 1, 24 * 60 * 60 * 1000);
+			try {
 			schedulerService_.addPeriodJob(info, periodInfo, jobData);
+			} catch (Exception e) {
+			  e.printStackTrace() ;
+			}
 		}
 		return job;
 	}
@@ -1352,6 +1356,7 @@ public class MailServiceImpl implements MailService, Startable {
 		checkingLog_.put(key, info);
 		Account account = getAccountById(userName, accountId);
 		IMAPStore store = openIMAPConnection(userName, account, info);
+		System.out.println("\n\n sync Imap folder ");
 		try {
 			if (store != null) {
 				List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();

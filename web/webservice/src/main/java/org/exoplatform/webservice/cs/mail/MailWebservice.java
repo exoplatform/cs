@@ -90,7 +90,7 @@ public class MailWebservice implements ResourceContainer {
     buffer.append("  </checkingmail>");
     buffer.append("</info>");
     
-    mailService.removeCheckingInfo(userName, accountId);
+    //mailService.removeCheckingInfo(userName, accountId);
     
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
@@ -176,7 +176,7 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
         buffer.append("  </checkingmail>");
         buffer.append("</info>");
-        mailService.removeCheckingInfo(userName, accountId);
+        //mailService.removeCheckingInfo(userName, accountId);
         return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
       } else if (checkingInfo.hasChanged()) {
         buffer.append("<info>");

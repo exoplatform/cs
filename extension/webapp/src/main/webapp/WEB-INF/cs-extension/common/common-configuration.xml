@@ -23,6 +23,7 @@
 					<value>locale.navigation.group.platform.administrators</value>
 					<value>locale.navigation.group.platform.users</value>
 					<value>locale.navigation.group.platform.guests</value>
+					<value>locale.message.chat.serverMessage</value>
 				</values-param>
 				<values-param>
 					<name>portal.resource.names</name>

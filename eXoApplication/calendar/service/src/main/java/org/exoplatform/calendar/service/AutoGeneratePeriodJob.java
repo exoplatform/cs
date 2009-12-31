@@ -29,13 +29,14 @@ import org.quartz.JobDataMap;
  */
 public class AutoGeneratePeriodJob extends PeriodJob {
   private JobDataMap jdatamap_ ;
-  public AutoGeneratePeriodJob(InitParams params) throws Exception {
+  public AutoGeneratePeriodJob(InitParams params, CalendarService calSvr) throws Exception {
     super(params) ;
     ExoProperties props =  params.getPropertiesParam("autogenerate.info").getProperties() ;
     jdatamap_ = new JobDataMap() ;
     String portalName = props.getProperty("portalName") ;
     jdatamap_.put("portalName", portalName) ;
     jdatamap_.put("event_number", props.getProperty("event_number")) ;
- }
+    jdatamap_.put("calendarservice", calSvr);
+  }
   public JobDataMap  getJobDataMap() {  return jdatamap_ ;  }
 }

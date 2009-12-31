@@ -38,12 +38,13 @@ import com.sun.syndication.io.XmlReader;
  * May 14, 2009  
  */
 public class AutoGeneratePeriodJobImp  implements Job {
+  
 
   public void execute(JobExecutionContext jContext) throws JobExecutionException {
     JobDataMap jdatamap = jContext.getJobDetail().getJobDataMap();    
     String numberLimited = jdatamap.getString("event_number") ;
+    CalendarService calSvr = (CalendarService)jdatamap.get("calendarservice") ;
     try {
-      CalendarService calSvr = (CalendarService)RootContainer.getInstance().getComponentInstanceOfType(CalendarService.class) ;
       if (calSvr == null) {
         System.out.println("\n\n Can not get calendar service");
         return ;

@@ -37,11 +37,14 @@ public class CheckMailJob implements Job, InterruptableJob {
   public static final String USERNAME = "userName";
   public static final String ACCOUNTID = "acountId";
   public static final String FOLDERID = "folderId";
+  public static final String MAILSVR = "mailservice";
   private static Log  log = LogFactory.getLog("job.CheckMailJob");
   
   private String username;
   private String accountId;
   private String folderId;
+  
+  private MailService mailService ;
   
   public CheckMailJob() throws Exception {
 		
@@ -49,11 +52,10 @@ public class CheckMailJob implements Job, InterruptableJob {
 
   public void execute(JobExecutionContext context) throws JobExecutionException {
 	    
-	    MailService mailService = getMailService();
 		  
 		  JobDetail jobDetail = context.getJobDetail();
 		  JobDataMap dataMap = jobDetail.getJobDataMap();
-		  
+		  mailService = (MailService)dataMap.get(MAILSVR); 
 		  username = dataMap.getString(USERNAME);
 		  accountId = dataMap.getString(ACCOUNTID);
       folderId = dataMap.getString(FOLDERID);
@@ -64,7 +66,7 @@ public class CheckMailJob implements Job, InterruptableJob {
     } catch (InterruptedException ie) {
       getMailService().stopCheckMail(username, accountId);
 	  } catch (Exception e) {
-		  log.error("Mail check failed for " + context.getJobDetail().getName(), e);
+	    log.error("Mail check failed for " + context.getJobDetail().getName(), e);
 	  } finally {
   	  if (log.isDebugEnabled()) {
         log.debug("\n\n####  Checking mail of " + context.getJobDetail().getName() + " finished ");
@@ -92,7 +94,7 @@ public class CheckMailJob implements Job, InterruptableJob {
 
   public void interrupt() throws UnableToInterruptJobException {
     System.out.println("\n\n######### CALLED INTERRUPT!\n\n");
-    getMailService().stopCheckMail(username, accountId);
+    mailService.stopCheckMail(username, accountId);
   }
   
 }
