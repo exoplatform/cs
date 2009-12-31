@@ -194,7 +194,7 @@ public class UIContactForm extends UIFormTabPane {
     getUIStringInput(FIELD_HOMEPHONE2_INPUT).setValue(contact.getHomePhone2());
     getUIStringInput(FIELD_HOMEFAX_INPUT).setValue(contact.getHomeFax());
     getUIStringInput(FIELD_PERSONALSITE_INPUT).setValue(contact.getPersonalSite());
-    getUIStringInput(FIELD_NOTE_INPUT).setValue(contact.getNote());
+    getUIFormTextAreaInput(FIELD_NOTE_INPUT).setValue(contact.getNote());
   }
   
   static  public class SaveActionListener extends EventListener<UIContactForm> {
