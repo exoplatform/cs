@@ -39,6 +39,8 @@ import javax.ws.rs.core.UriInfo;
 
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
@@ -100,12 +102,13 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
                             @QueryParam("fromLoginDate") String fromLoginDate,
                             @QueryParam("toLogindate") String toLoginDate) {
     try {
-    //TODO : now returned all founded user need be carefully then using wildcard (*)        
+    //TODO : now returned all founded user need be carefully then using wildcard (*)
       Query query = new Query();
       query.setUserName(username);
       query.setFirstName(firstname);
       query.setLastName(lastname);
       query.setEmail(email);
+      start() ;
       if (fromLoginDate != null) {
         try {
           query.setFromLoginDate(DateFormat.getDateTimeInstance().parse(fromLoginDate));
@@ -120,7 +123,8 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
           LOGGER.warn("Thrown exception : " + e);
         }
       }
-      PageList pageList = userHandler.findUsers(query);
+      PageList pageList = organizationService_.getUserHandler().findUsers(query);
+      
       List<User> list = new ArrayList<User>();
       int pages = pageList.getAvailablePage();
       for (int i = 1; i <= pages; i++) {
@@ -132,7 +136,9 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
           listBean.add(new UserBean(user));
       }
       UserListBean user_list = new UserListBean(listBean);
+      stop();
       return Response.ok(user_list, JSON_CONTENT_TYPE).cacheControl(cc).build();
+     
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
@@ -206,6 +212,7 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
         return Response.noContent().cacheControl(cc).build(); 
       Query query = new Query();
       query.setUserName(question);
+      start() ;
       PageList pageList = userHandler.findUsers(query);
       int totalUsers = 0;
       Iterator<User> i = null;
@@ -267,6 +274,7 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
       UserListBean user_list = new UserListBean(uList);
       //user_list.setTotalUser(userHandler.getUserPageList(20).getAvailable());
       user_list.setTotalUser(totalUsers);
+      stop() ;
       return Response.ok(user_list, JSON_CONTENT_TYPE).cacheControl(cc).build();
     } catch (Exception e) {
       e.printStackTrace();
@@ -286,7 +294,9 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
   @Produces(MediaType.APPLICATION_JSON)
   public Response getUser(@PathParam("username") String username) {
     try {
+      start() ;
       User user = userHandler.findUserByName(username);
+      stop() ;
       if (user == null) {
         return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username
             + "' not found.").build();
@@ -319,7 +329,9 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
   @Produces(MediaType.APPLICATION_JSON)
   public Response getUsersCount() {
     try {
+      start() ;
       int number = userHandler.getUserPageList(20).getAvailable();
+      stop();
       return Response.ok(new CountBean(number), JSON_CONTENT_TYPE).cacheControl(cc).build();
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);

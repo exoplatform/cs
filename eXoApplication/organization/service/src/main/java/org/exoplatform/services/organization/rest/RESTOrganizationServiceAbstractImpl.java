@@ -32,6 +32,8 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.common.http.HTTPStatus;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupHandler;
@@ -62,14 +64,24 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
   protected final MembershipHandler     membershipHandler;
 
   protected final MembershipTypeHandler membershipTypeHandler;
+  protected final OrganizationService organizationService_ ;
 
   protected RESTOrganizationServiceAbstractImpl(OrganizationService organizationService) {
     groupHandler = organizationService.getGroupHandler();
     userHandler = organizationService.getUserHandler();
     membershipHandler = organizationService.getMembershipHandler();
     membershipTypeHandler = organizationService.getMembershipTypeHandler();
+    organizationService_ = organizationService ;
   }
 
+  protected void start() {
+    PortalContainer manager = PortalContainer.getInstance() ;
+    ((ComponentRequestLifecycle)organizationService_).startRequest(manager);
+  }
+  protected void stop() {
+    PortalContainer manager = PortalContainer.getInstance() ;
+    ((ComponentRequestLifecycle)organizationService_).endRequest(manager);
+  }
   public Response createGroup(String baseURI,
                               String groupName,
                               String label,
@@ -77,6 +89,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
                               String parentId) {
     Group parent = null;
     Group group = null;
+    start() ;
     try {
       if (parentId != null && parentId.length() > 0) {
         parentId = (parentId.startsWith("/")) ? parentId : "/" + parentId;
@@ -91,6 +104,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
       group.setLabel(label);
       group.setDescription(description);
       groupHandler.addChild(parent, group, true);
+      stop() ;
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
@@ -105,7 +119,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
 
     Membership m = null;
     try {
-
+      start() ;
       User user = userHandler.findUserByName(username);
       if (user == null)
         return Response.status(HTTPStatus.NOT_FOUND).entity("User : '" + username
@@ -124,6 +138,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
         return Response.status(HTTPStatus.NOT_FOUND).entity("MembershipType : '"
             + type + "' not found!").build();
       membershipHandler.linkMembership(user, group, membershipType, true);
+      stop() ;
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
@@ -142,6 +157,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
                              String lastname,
                              String email) {
     try {
+      start() ;
       User user = userHandler.createUserInstance(username);
       if (user == null) {
         return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username
@@ -152,6 +168,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
       user.setLastName(lastname);
       user.setEmail(email);
       userHandler.createUser(user, true);
+      stop() ;
 
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
@@ -165,10 +182,12 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
 
   public Response deleteGroup(String groupId) {
     try {
+      start() ;
       groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
       Group group = groupHandler.findGroupById(groupId);
       if (group != null) {
         groupHandler.removeGroup(group, true);
+        stop() ;
       } else
         return Response.status(HTTPStatus.NOT_FOUND).entity("Group '" + groupId
             + "' not found!").build();
@@ -183,7 +202,9 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
 
   public Response deleteMembership(String membershipId) {
     try {
+      start() ;
       membershipHandler.removeMembership(membershipId, true);
+      stop() ;
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
@@ -195,12 +216,14 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
 
   public Response deleteUser(String username) {
     try {
+      start() ;
       User user = userHandler.findUserByName(username);
       if (user == null) {
         return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username
             + "' not found.").build();
       }
       userHandler.removeUser(username, true);
+      stop() ;
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
@@ -212,6 +235,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
 
   public Response deleteUserFromGroup(String baseURI, String groupId, String username) {
     try {
+      start() ;
       groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
       if (userHandler.findUserByName(username) == null
           || groupHandler.findGroupById(groupId) == null) {
@@ -224,6 +248,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
       for (Membership m : memberships)
         membershipHandler.removeMembership(m.getId(), true);
 
+      stop() ;
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
@@ -239,6 +264,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
                               String label,
                               String description) {
     try {
+      start() ;
       groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
       Group group = groupHandler.findGroupById(groupId);
       if (group == null) {
@@ -250,6 +276,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
       group.setDescription(description);
       groupHandler.saveGroup(group, true);
 
+      stop() ;
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
@@ -266,6 +293,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
                              String lastname,
                              String email) {
     try {
+      start() ;
       User user = userHandler.findUserByName(username);
       user.setPassword(password);
       user.setFirstName(firstname);
@@ -273,6 +301,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
       user.setEmail(email);
 
       userHandler.saveUser(user, true);
+      stop() ;
 
     } catch (Exception e) {
       LOGGER.error("Cannot manage user : ", e);
