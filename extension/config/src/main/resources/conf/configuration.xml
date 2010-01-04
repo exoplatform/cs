@@ -46,7 +46,7 @@
 									<string>rest</string>
 								</value>
 								<value>
-								  <string>web</string>
+								  <string>cs-extension</string>
 								</value>
                 <!-- 
 								<value>
@@ -60,7 +60,7 @@
                                   <string>csResources</string>
                                 </value>   
                                  <value>
-                                  <string>calendar</string>
+                                  <string>web</string>
                                 </value> 
                                 <value>
                                   <string>mail</string>
@@ -78,7 +78,7 @@
                                   <string>content</string>
                                 </value>                                                                                                   					
 								<value>
-								  <string>cs-extension</string>
+								  <string>calendar</string>
 								</value>                            
 							</collection>
 						</field>
