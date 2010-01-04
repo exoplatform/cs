@@ -53,7 +53,7 @@ XMPPCommunicator.prototype.ajaxProcessOverwrite = function(manualMode, ajaxReque
       ajaxRequest.request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8") ;
     }
   } else {
-    ajaxRequest.request.setRequestHeader("Content-Type", "text/xml;charset=UTF-8") ;
+    ajaxRequest.request.setRequestHeader("Content-Type", "application/json;charset=UTF-8") ;
   }
   
   if (ajaxRequest.timeout > 0) setTimeout(ajaxRequest.onTimeoutInternal, ajaxRequest.timeout) ;

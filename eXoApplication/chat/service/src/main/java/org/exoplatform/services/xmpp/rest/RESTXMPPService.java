@@ -1903,9 +1903,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @POST
-  @Consumes(MediaType.APPLICATION_JSON)
   @Path("/sendmessage/{username}/")
-  
+  @Consumes(MediaType.APPLICATION_JSON)
   //@InputTransformer(Json2BeanInputTransformer.class)
   public Response sendMessage(@PathParam("username") String username, MessageBean messageBean) {
     if (this.rb == null) loadResourceBundle();
