@@ -174,11 +174,11 @@
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
 	  					<tr>
-	  			      <th style="width: 30px; padding-left: 11px;" class="text">
+	  			      <th style="width: 18px; padding-left: 7px;" class="text">
 	  			      	<input style="margin: 2px 0px 0px 0px; height: auto;" type="checkbox" class="checkbox" <%= uicomponent.isCheckAll() %> title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/>
 	  			      </th>
 	  						<th style="width: 24px;" class="text"><div class="Icon BlueTagIcon"><span></span></div></th>
-	  		        <th style="width: 24%;" class="text">
+	  		        <th style="width: 20%;" class="text">
 	  		        	
 	  		        	<%
 	  		        		String fullName = uicomponent.fullName ;
@@ -223,7 +223,7 @@
 	  		        	<div style="width: 80%; cursor: pointer;" class="$classArrowEmail" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByEmail")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
 	  		        	</a>
 	  		        </th>
-	 	      	    <th style="width: 120px; " class="text">
+	 	      	    <th style="width: 80px; " class="text">
 	 	      	    
 	 	      	    	<%
 	 	      	    		String jobTitle = uicomponent.jobTitle ;
@@ -245,11 +245,11 @@
 	  		        	<div style="width: 70%; cursor: pointer; white-space: nowrap;" class="$classArrowOrganition" style="padding-right:26px;" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByJobTitle")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.jobTitle")%></div>
 	 	      	    	</a>
 	 	      	    </th>
-	 	      	    <th style="width: 120px; "><div style="white-space: nowrap;"> <%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%></div> </th>
+	 	      	    <th style="width: 80px; "><div style="white-space: nowrap;"> <%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%></div> </th>
 	 	      	    <% 
 	 	      	    	if(isDisplaySearchResult) {	
 	 	      	    %>
-	 	      	    	<th > <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%> </th>
+	 	      	    	<th style="width: 90px; "> <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%> </th>
 	 	      	    <% } %>
 	 	      	    	
 	  	 	      </tr>
@@ -361,7 +361,7 @@
 	  	 	    %>
 								
   						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>"> 
-  						  <td class="text" style="padding-left: 7px; width:23px;">
+  						  <td class="text" style="padding-left: 3px; width:18px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
@@ -401,7 +401,7 @@
 										<%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "_" : ContactUtils.encodeHTML(contact.getJobTitle()))%>
 									</a>
 								</td>
-								<td style="width: 120px;">
+								<td style="width: 80px;">
 									<a href="$actionLink">
 										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "_" : ContactUtils.encodeHTML(contact.getWorkPhone2())) : ContactUtils.encodeHTML(contact.getWorkPhone1()))%>
 									</a>
@@ -446,7 +446,7 @@
 						%>
 							
   						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>">
-  						  <td class="text" style="padding-left: 7px; width: 23px;">
+  						  <td class="text" style="padding-left: 3px; width: 18px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
@@ -774,7 +774,7 @@
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
 					     <div onclick="eXo.contact.UIContactPortlet.showTagMenu(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag">
                 <% /*Begin Popup Menu*/ %>
-                <div style="position: absolute;">
+                <div style="position: relative; height: 0px;">
                   <div class="UIPopupCategory" style="display: none;">
                     <div class="UIRightClickPopupMenu" style="display: block;">
                       <div class="UIContextMenuContainer">
