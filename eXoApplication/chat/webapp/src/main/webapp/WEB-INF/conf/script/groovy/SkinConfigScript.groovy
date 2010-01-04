@@ -4,3 +4,15 @@ SkinService.addSkin(
     "/chat/skin/DefaultStylesheet.css",
     ServletContext
 ) ;
+SkinService.addSkin(
+    "chat/ChatPortlet",
+    "Vista",
+    "/chat/skin/DefaultStylesheet.css",
+    ServletContext
+) ;
+SkinService.addSkin(
+    "chat/ChatPortlet",
+    "Mac",
+    "/chat/skin/DefaultStylesheet.css",
+    ServletContext
+) ;
