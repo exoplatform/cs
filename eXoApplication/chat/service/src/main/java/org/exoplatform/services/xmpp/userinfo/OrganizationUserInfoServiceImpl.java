@@ -18,6 +18,8 @@ package org.exoplatform.services.xmpp.userinfo;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
@@ -39,7 +41,17 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
    * 
    */
   private static OrganizationService organizationService;
-
+  
+  protected void start() {
+    PortalContainer manager = PortalContainer.getInstance() ;
+    ((ComponentRequestLifecycle)organizationService).startRequest(manager);
+  }
+  
+  protected void stop() {
+    PortalContainer manager = PortalContainer.getInstance() ;
+    ((ComponentRequestLifecycle)organizationService).endRequest(manager);
+  }
+	  
   /**
    * @param service the service to set
    */
@@ -59,7 +71,9 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
    */
   public UserInfo getUserInfo(String userID) {
     try {
+      start();
       User user = organizationService.getUserHandler().findUserByName(userID);
+      stop();
       UserInfo userInfo = new UserInfo();
       userInfo.setUserName(user.getUserName());
       userInfo.setFirstName(user.getFirstName());
