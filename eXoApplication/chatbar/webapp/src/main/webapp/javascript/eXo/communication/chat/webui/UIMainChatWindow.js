@@ -1284,8 +1284,10 @@ UIMainChatWindow.prototype.buddyItemActionCallback = function(event) {
       var Browser = eXo.core.Browser;
       intTop = eXo.core.Mouse.mouseyInPage - 1;
       intLeft = eXo.core.Mouse.mousexInPage - 1;
+      /*
       var workspaceControlWidth = 0;
-      try {
+       * 
+	  try {
         workspaceControlWidth = eXo.portal.UIControlWorkspace.width;
       } finally {
         if (isNaN(workspaceControlWidth)) {
@@ -1293,15 +1295,18 @@ UIMainChatWindow.prototype.buddyItemActionCallback = function(event) {
         }
       }
       intLeft -= workspaceControlWidth;
+       */
       if (this.isWebOS) {
         intTop = eXo.core.Mouse.mouseyInPage - Browser.findPosYInContainer(this.rootNode, document.body) - 1;
         intLeft = eXo.core.Mouse.mousexInPage - Browser.findPosXInContainer(this.rootNode, document.body) - 1;
-        if (Browser.isIE7()) {
+        /*
+		if (Browser.isIE7()) {
           if (eXo.portal &&
               eXo.portal.UIControlWorkspace) {
             intLeft += workspaceControlWidth;
           }
         }
+        */
       }
       with (this.buddyItemActionMenuNode.style) {
         top = intTop + 'px';

@@ -67,25 +67,27 @@ UIChatResize.prototype.init = function(event) {
   }
   var oTop = thys.portletWindow.offsetTop;
   var oLeft = thys.portletWindow.offsetLeft;
+/*
   var workspaceControlWidth = 0;
-
   try {
     workspaceControlWidth = eXo.portal.UIControlWorkspace.width;
   } catch (error) {}
-
+*/
   var UIPageDesktopNode = document.getElementById('UIPageDesktop');
   if (UIPageDesktopNode) {
     oTop += eXo.core.Browser.findPosYInContainer(eXo.communication.chatbar.webui.UIMainChatWindow.rootNode, document.body);
     oLeft += eXo.core.Browser.findPosXInContainer(eXo.communication.chatbar.webui.UIMainChatWindow.rootNode, document.body);
-    if (eXo.core.Browser.isIE7()) {
+    /*
+	if (eXo.core.Browser.isIE7()) {
       oLeft -= workspaceControlWidth;
-    }
-  } else {
+    }*/
+  }
+  /* else {
     if ((!eXo.core.Browser.isIE6() &&
         !eXo.core.Browser.isIE7())) {
       oLeft += workspaceControlWidth;
     }
-  }
+  }*/
 
   window.jsconsole.warn('Old height = ' + oHeight);
   with (resizeWindowTmp.style) {

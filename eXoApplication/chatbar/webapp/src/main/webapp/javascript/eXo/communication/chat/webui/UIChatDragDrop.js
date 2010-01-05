@@ -103,8 +103,8 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
   }
   var oTop = uiDragObjectNode.offsetTop;
   var oLeft = uiDragObjectNode.offsetLeft;
+/*
   var workspaceControlWidth = 0;
-
   try {
     workspaceControlWidth = eXo.portal.UIControlWorkspace.width;
   } catch (error) {}
@@ -112,21 +112,24 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
   if (isNaN(workspaceControlWidth)) {
       workspaceControlWidth = 0;
   }
-  
+*/  
   var UIPageDesktopNode = document.getElementById('UIPageDesktop');
   if (UIPageDesktopNode) {
     oTop += eXo.core.Browser.findPosYInContainer(eXo.communication.chatbar.webui.UIMainChatWindow.rootNode, document.body);
     oLeft += eXo.core.Browser.findPosXInContainer(eXo.communication.chatbar.webui.UIMainChatWindow.rootNode, document.body);
-    if (eXo.core.Browser.isIE7()) {
+    /*
+	if (eXo.core.Browser.isIE7()) {
       oLeft -= workspaceControlWidth;
     }
+    */
   } else {
 	if(!eXo.core.Browser.isIE8) 
 	  eXo.core.Browser.isIE8 = function(){return (navigator.userAgent.indexOf('MSIE 8') >= 0);};
-    if ((!eXo.core.Browser.isIE6() &&
+    /*
+	if ((!eXo.core.Browser.isIE6() &&
         !eXo.core.Browser.isIE7() && !eXo.core.Browser.isIE8())) {
       oLeft += workspaceControlWidth;
-    }
+    }*/
   }
   var oPosition = 'absolute';
   var dragTmpNode = document.createElement('div');
@@ -212,6 +215,7 @@ UIChatDragDrop.prototype.dropCallback = function(dndEvent) {
   var realNode = dragObject.realNode;
   var oTop = realNode.offsetTop + (dragObject.offsetTop - dragObject.origTopPos);
   var oLeft = realNode.offsetLeft + (dragObject.offsetLeft - dragObject.origLeftPos);
+  /*
   var workspaceControlWidth = 0;
   try {
     workspaceControlWidth = eXo.portal.UIControlWorkspace.width;
@@ -220,10 +224,14 @@ UIChatDragDrop.prototype.dropCallback = function(dndEvent) {
       workspaceControlWidth = 0;
     }
   }
+  */
+  /*
+   * 
   if (!document.getElementById('UIPageDesktop') &&
       (eXo.core.Browser.isIE6() || eXo.core.Browser.isIE7())) {
     oLeft -= workspaceControlWidth;
   }
+   */
   with (realNode.style) {
     top  = oTop + 'px';
     left = oLeft + 'px';
