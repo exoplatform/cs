@@ -1454,8 +1454,10 @@ form {
 }
 
 .SendFile .BackgroundSendFile .ContentSendFile {
-	float: left;
-	line-height: 16px;
+	line-height:16px;
+	margin-left:66px;
+	overflow:hidden;
+	width:83%;
 }
 
 .SendFile .BackgroundSendFile .ContentSendFile .LableSendFile {
