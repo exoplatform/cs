@@ -2055,7 +2055,6 @@ public class RESTXMPPService implements ResourceContainer, Startable {
           .header("Content-disposition",
                   "attachment; filename=\"" + fileTransfer.getFileName()
                   + "\"").header("Expires", "Sun, 17 Dec 1989 07:30:00 GMT")
-                  .header(HttpHeaders.CONTENT_LENGTH,fileTransfer.getFileSize())
                   .cacheControl(ccIEfixed)
                   .build();
         } else {

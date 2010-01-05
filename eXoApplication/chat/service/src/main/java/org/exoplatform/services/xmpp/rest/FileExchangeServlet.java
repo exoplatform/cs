@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.common.http.HTTPStatus;
@@ -96,9 +97,9 @@ public class FileExchangeServlet extends HttpServlet implements Connector {
           if (session != null) {
             if (fileName != null) {
               //TODO Check this for compatible or not
-              
-//              fileName = FilenameUtils.getName(fileName);
-//              fileType = FilenameUtils.getExtension(fileName);
+              //It's necessary because IE posts full path of uploaded files
+              fileName = FilenameUtils.getName(fileName);
+              fileType = FilenameUtils.getExtension(fileName);
               File file = new File(tmpDir);
               if (file.isDirectory()) {
                 String uuid = UUID.randomUUID().toString();

@@ -22,6 +22,7 @@ import org.exoplatform.webservice.cs.bean.UIStateDataBean;
  * @author Uoc Nguyen
  *
  */
+@Path("/chat/uistateservice")
 public class UIStateService implements ResourceContainer {
   public final static String JSON_CONTENT_TYPE    = "application/json";
   public final static String APPLICATION_NAME = "eXoChat";
@@ -37,7 +38,7 @@ public class UIStateService implements ResourceContainer {
   }
   
   @POST 
-  @Path("/chat/uistateservice/save/{username}/")
+  @Path("/save/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
   //@OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response saveState(@PathParam("username") String userName, UIStateDataBean stateData) throws Exception {
@@ -56,7 +57,7 @@ public class UIStateService implements ResourceContainer {
   }
   
   @GET
-  @Path("/chat/uistateservice/get/{username}/")
+  @Path("/get/{username}/")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getState(@PathParam("username") String username) throws Exception {
     Node uiStateNode = this.getPrivateNode(username);
