@@ -20,7 +20,6 @@ import java.util.List;
 
 import javax.jcr.PathNotFoundException;
 
-import org.exoplatform.mail.Colors;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Tag;
@@ -40,6 +39,7 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.ext.UIFormColorPicker;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
 
@@ -67,7 +67,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   
   public UIEditTagForm() throws Exception {       
     addUIFormInput(new UIFormStringInput(NEW_TAG_NAME, NEW_TAG_NAME, null).addValidator(MandatoryValidator.class).addValidator(NameValidator.class)) ;
-    addUIFormInput(new UIFormColorPicker(COLOR, COLOR, Colors.COLORS)) ;
+    addUIFormInput(new UIFormColorPicker(COLOR, COLOR)) ;
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION,DESCRIPTION,null)) ;    
   }
   

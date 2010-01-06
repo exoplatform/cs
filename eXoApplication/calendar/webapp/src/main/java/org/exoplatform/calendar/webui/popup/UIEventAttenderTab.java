@@ -31,7 +31,6 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -39,6 +38,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
+import org.exoplatform.webui.form.ext.UIFormComboBox;
 
 /**
  * Created by The eXo Platform SARL
@@ -62,11 +62,13 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     setComponentConfig(getClass(), null) ;
     calendar_ = CalendarUtils.getInstanceTempCalendar() ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Map<String, String> fromJsActions = new HashMap<String, String>() ;
-    fromJsActions.put(UIFormComboBox.ON_BLUR, "eXo.calendar.UICombobox.synchronize(this)") ;
-    addUIFormInput(new UIFormComboBox(UIEventAttenderTab.FIELD_FROM_TIME, UIEventAttenderTab.FIELD_FROM_TIME, options , fromJsActions)) ;
-    addUIFormInput(new UIFormComboBox(UIEventAttenderTab.FIELD_TO_TIME, UIEventAttenderTab.FIELD_TO_TIME, options, fromJsActions)) ;
-
+    //Map<String, String> fromJsActions = new HashMap<String, String>() ;
+    //fromJsActions.put(UIFormComboBox.ON_BLUR, "eXo.calendar.UICombobox.synchronize(this)") ;
+    /*addUIFormInput(new UIFormComboBox(UIEventAttenderTab.FIELD_FROM_TIME, UIEventAttenderTab.FIELD_FROM_TIME, options , fromJsActions)) ;
+    addUIFormInput(new UIFormComboBox(UIEventAttenderTab.FIELD_TO_TIME, UIEventAttenderTab.FIELD_TO_TIME, options, fromJsActions)) ;*/
+    addUIFormInput(new UIFormComboBox(UIEventAttenderTab.FIELD_FROM_TIME, UIEventAttenderTab.FIELD_FROM_TIME, options)) ;
+    addUIFormInput(new UIFormComboBox(UIEventAttenderTab.FIELD_TO_TIME, UIEventAttenderTab.FIELD_TO_TIME, options)) ;
+    
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_DATEALL, FIELD_DATEALL, false)) ;
     UIFormCheckBoxInput<Boolean> checkFreeInput = new UIFormCheckBoxInput<Boolean>(FIELD_CHECK_TIME, FIELD_CHECK_TIME, false) ;
     checkFreeInput.setOnChange("OnChange") ;

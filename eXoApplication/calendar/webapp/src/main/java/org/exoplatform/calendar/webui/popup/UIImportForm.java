@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -33,7 +32,6 @@ import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
-import org.exoplatform.calendar.webui.UIFormColorPicker;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -59,6 +57,8 @@ import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormUploadInput;
+import org.exoplatform.webui.form.ext.UIFormColorPicker;
+
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
 
@@ -128,7 +128,8 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
     UIFormSelectBox timeZones = new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones()) ;
     timeZones.setValue(calendarSetting.getTimeZone()) ;
     addUIFormInput(timeZones);
-    addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR, Colors.COLORS));
+    //addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR, Colors.COLORS));
+    addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR));
   }
 
   public void init(String calId, String calType) {

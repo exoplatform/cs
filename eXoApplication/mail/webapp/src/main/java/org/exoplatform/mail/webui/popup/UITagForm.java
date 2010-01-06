@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.mail.Colors;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -43,6 +42,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.ext.UIFormColorPicker;
 import org.exoplatform.webui.form.validator.NameValidator;
 
 
@@ -74,7 +74,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
   public void setTagList(List<Tag> tagList) throws Exception {
     tagMap.clear();   
     addUIFormInput(new UIFormStringInput(SELECT_AVAIABLE_TAG, SELECT_AVAIABLE_TAG, null).addValidator(NameValidator.class));
-    addUIFormInput(new UIFormColorPicker(TAG_COLOR, TAG_COLOR, Colors.COLORS)) ;
+    addUIFormInput(new UIFormColorPicker(TAG_COLOR, TAG_COLOR)) ;
     for(Tag tag : tagList) {
       UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(tag.getName(), tag.getName(), null);
       addUIFormInput(uiCheckBox) ;

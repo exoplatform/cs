@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 
 import javax.jcr.PathNotFoundException;
-
-import org.exoplatform.contact.Colors;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
@@ -33,7 +31,6 @@ import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
-import org.exoplatform.contact.webui.UIFormColorPicker;
 import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -46,6 +43,7 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.ext.UIFormColorPicker;
 import org.exoplatform.webui.form.validator.NameValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 
@@ -113,7 +111,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     }
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null)
       .addValidator(NameValidator.class).addValidator(StringLengthValidator.class,1,40));
-    addUIFormInput(new UIFormColorPicker(FIELD_COLOR, FIELD_COLOR, Colors.COLORS)) ;
+    addUIFormInput(new UIFormColorPicker(FIELD_COLOR, FIELD_COLOR)) ;
     for (String tagId : tags.keySet()) {
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(tagId, tagId, false));
     }

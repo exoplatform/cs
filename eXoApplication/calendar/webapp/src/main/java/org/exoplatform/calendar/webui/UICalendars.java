@@ -25,7 +25,6 @@ import java.util.Map;
 import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -59,6 +58,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.ext.UIFormColorPicker.Colors;
 
 /**
  * Created by The eXo Platform SARL

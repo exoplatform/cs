@@ -14,7 +14,6 @@
 	rcontext.getJavascriptManager().importJavascript('eXo.cs.CSCometd','/csResources/javascript/') ;
   rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactPortlet','/contact/javascript/') ;
 	rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactDragDrop','/contact/javascript/') ;
-  rcontext.getJavascriptManager().importJavascript('eXo.contact.UIColorPicker','/contact/javascript/') ;
  	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu('"+ compId +"') ;") ;
  	
 	rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactAlert','/contact/javascript/') ;

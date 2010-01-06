@@ -21,12 +21,10 @@ import java.util.List;
 
 import javax.jcr.PathNotFoundException;
 
-import org.exoplatform.contact.Colors;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
-import org.exoplatform.contact.webui.UIFormColorPicker;
 import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -40,6 +38,7 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.ext.UIFormColorPicker;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 
@@ -68,7 +67,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   public UIEditTagForm() throws Exception {
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null).addValidator(MandatoryValidator.class).addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class,1,40));
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION_INPUT, FIELD_DESCRIPTION_INPUT, null)) ;
-    addUIFormInput(new UIFormColorPicker(FIELD_COLOR, FIELD_COLOR, Colors.COLORS)) ;   
+    addUIFormInput(new UIFormColorPicker(FIELD_COLOR, FIELD_COLOR)) ;   
   }
   
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
