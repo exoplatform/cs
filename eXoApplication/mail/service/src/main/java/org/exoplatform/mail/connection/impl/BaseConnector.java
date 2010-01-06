@@ -16,9 +16,14 @@
  */
 package org.exoplatform.mail.connection.impl;
 
+import java.util.Properties;
+
+import javax.mail.Session;
 import javax.mail.Store;
 
 import org.exoplatform.mail.connection.Connector;
+import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.Utils;
 
 /**
  * Created by The eXo Platform SAS
@@ -28,4 +33,17 @@ import org.exoplatform.mail.connection.Connector;
  */
 public abstract class BaseConnector implements Connector {
   protected Store store_;
+  
+  public Session getSession(Account account) throws Exception {
+    Properties props = System.getProperties();
+    String socketFactoryClass = "javax.net.SocketFactory";
+    if (account.isIncomingSsl()) socketFactoryClass = Utils.SSL_FACTORY;
+    props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
+    props.setProperty("mail.mime.base64.ignoreerrors", "true");
+    props.setProperty("mail.imap.socketFactory.fallback", "false");
+    return Session.getInstance(props, null);
+  }
+  
+  
+  
 }

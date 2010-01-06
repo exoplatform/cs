@@ -36,7 +36,6 @@ public class AutoGeneratePeriodJob extends PeriodJob {
     String portalName = props.getProperty("portalName") ;
     jdatamap_.put("portalName", portalName) ;
     jdatamap_.put("event_number", props.getProperty("event_number")) ;
-    jdatamap_.put("calendarservice", calSvr);
   }
   public JobDataMap  getJobDataMap() {  return jdatamap_ ;  }
 }

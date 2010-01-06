@@ -63,15 +63,6 @@ public class ImapConnector extends BaseConnector {
 
   public void openStore(Account account) throws Exception { }
   
-  private Session getSession(Account account) throws Exception {
-    Properties props = System.getProperties();
-    String socketFactoryClass = "javax.net.SocketFactory";
-    if (account.isIncomingSsl()) socketFactoryClass = Utils.SSL_FACTORY;
-    props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
-    props.setProperty("mail.mime.base64.ignoreerrors", "true");
-    props.setProperty("mail.imap.socketFactory.fallback", "false");
-    return Session.getInstance(props, null);
-  }
 
   public javax.mail.Folder createFolder(Folder folder) throws Exception {
     return createFolder(null, folder);

@@ -1707,7 +1707,6 @@ public class RESTXMPPService implements ResourceContainer, Startable {
     } catch (XMPPException e) {
       /*if (log.isDebugEnabled()) 
         e.printStackTrace();*/
-    	e.printStackTrace();
       XMPPError error = e.getXMPPError();
       return Response.status(error.getCode())
       .entity(error.getMessage())
@@ -1715,7 +1714,6 @@ public class RESTXMPPService implements ResourceContainer, Startable {
     } catch (Exception e) {
       /*if (log.isDebugEnabled())
         e.printStackTrace();*/
-    	e.printStackTrace();
       return Response.status(HTTPStatus.INTERNAL_ERROR)
       .entity("Thrown exception : " + e)
       .build();

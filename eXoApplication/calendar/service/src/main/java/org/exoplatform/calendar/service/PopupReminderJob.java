@@ -34,17 +34,15 @@ import org.apache.commons.logging.LogFactory;
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.RootContainer;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
 import org.quartz.Job;
-import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -55,12 +53,7 @@ public class PopupReminderJob implements Job {
     try {
       if (log_.isDebugEnabled()) log_.debug("Calendar popup reminder service");
       java.util.Calendar fromCalendar = GregorianCalendar.getInstance() ;  
-      JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
-      ExoContainer container = RootContainer.getInstance();
-      container = ((RootContainer)container).getPortalContainer(jdatamap.getString("portalName"));
-      ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
-
-
+      ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
       Node calendarHome = getPublicServiceHome(provider);
       if(calendarHome == null) return ;
       StringBuffer path = new StringBuffer(getReminderPath(fromCalendar, provider));
@@ -121,6 +114,7 @@ public class PopupReminderJob implements Job {
     } catch (RepositoryException e) {
       if (log_.isDebugEnabled()) log_.debug("Data base not ready!");
     } catch (Exception e) {
+      e.printStackTrace() ;
       if (log_.isDebugEnabled()) log_.debug(e.toString());
     } finally {
       provider.close(); // release sessions
