@@ -87,7 +87,7 @@ public class UIAccountWizardStep1 extends UIFormInputSet implements WizardStep {
     return getUIFormTextAreaInput(FIELD_ACCDESCRIPTION).getValue() ;
   }
   protected void setAccDescription(String value){
-    getUIStringInput(FIELD_ACCDESCRIPTION).setValue(value) ;
+    getUIFormTextAreaInput(FIELD_ACCDESCRIPTION).setValue(value) ;
   }
   public void fillFields(Account acc) {
     fillFields(acc.getLabel(), acc.getDescription()) ;

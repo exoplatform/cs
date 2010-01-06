@@ -243,7 +243,7 @@ public class UIAccountSetting extends UIFormTabPane {
   
   public String getFieldMailSignature() {
     UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
-    return uiInput.getUIStringInput(FIELD_MAIL_SIGNATURE).getValue();
+    return uiInput.getUIFormTextAreaInput(FIELD_MAIL_SIGNATURE).getValue();
   }
   
   
@@ -326,7 +326,7 @@ public class UIAccountSetting extends UIFormTabPane {
     uiIdentityInput.getUIStringInput(FIELD_DISPLAY_NAME).setValue(account.getUserDisplayName()) ;
     uiIdentityInput.getUIStringInput(FIELD_EMAIL_ADDRESS).setValue(account.getEmailAddress()) ;
     uiIdentityInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).setValue(account.getEmailReplyAddress()) ;
-    uiIdentityInput.getUIStringInput(FIELD_MAIL_SIGNATURE).setValue(account.getSignature()) ;
+    uiIdentityInput.getUIFormTextAreaInput(FIELD_MAIL_SIGNATURE).setValue(account.getSignature()) ;
     
     UIFormInputWithActions uiIncomingInput = getChildById(TAB_INCOMING) ;
     uiIncomingInput.getUIStringInput(FIELD_INCOMING_SERVER).setValue(account.getIncomingHost()) ;

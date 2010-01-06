@@ -66,7 +66,7 @@ public class UIEventCategoryForm extends UIForm {
   protected String getCategoryName() {return getUIStringInput(EVENT_CATEGORY_NAME).getValue() ;}
   protected void setCategoryName(String value) {getUIStringInput(EVENT_CATEGORY_NAME).setValue(value) ;}
 
-  protected String getCategoryDescription() {return getUIStringInput(DESCRIPTION).getValue() ;}
+  protected String getCategoryDescription() {return getUIFormTextAreaInput(DESCRIPTION).getValue() ;}
   protected void setCategoryDescription(String value) {getUIFormTextAreaInput(DESCRIPTION).setValue(value) ;}
 
   public void reset() {
@@ -107,7 +107,7 @@ public class UIEventCategoryForm extends UIForm {
         return ;
       }*/
       CalendarService calendarService = CalendarUtils.getCalendarService();
-      String description = uiForm.getUIStringInput(UIEventCategoryForm.DESCRIPTION).getValue() ;
+      String description = uiForm.getUIFormTextAreaInput(UIEventCategoryForm.DESCRIPTION).getValue() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       EventCategory eventCat = new EventCategory() ;
       eventCat.setName(name) ;

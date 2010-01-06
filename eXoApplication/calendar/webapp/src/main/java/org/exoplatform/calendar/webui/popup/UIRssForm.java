@@ -166,7 +166,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
         rssData.setName("eXoCalendar.rss") ;
       }      
       rssData.setUrl(uiForm.getUIStringInput(URL).getValue()) ;
-      rssData.setDescription(uiForm.getUIStringInput(DESCRIPTION).getValue()) ;
+      rssData.setDescription(uiForm.getUIFormTextAreaInput(DESCRIPTION).getValue()) ;
       rssData.setCopyright(uiForm.getUIStringInput(COPYRIGHT).getValue()) ;
       rssData.setLink(uiForm.getUIStringInput(LINK).getValue()) ;
       String title = uiForm.getUIStringInput(TITLE).getValue() ;

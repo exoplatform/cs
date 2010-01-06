@@ -183,7 +183,7 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
         rssData.setName("eXoCalendar.rss") ;
       }      
       rssData.setUrl(uiForm.getUIStringInput(UICalDavForm.URL).getValue()) ;
-      rssData.setDescription(uiForm.getUIStringInput(UICalDavForm.DESCRIPTION).getValue()) ;
+      rssData.setDescription(uiForm.getUIFormTextAreaInput(UICalDavForm.DESCRIPTION).getValue()) ;
       rssData.setCopyright(uiForm.getUIStringInput(UICalDavForm.COPYRIGHT).getValue()) ;
       rssData.setLink(uiForm.getWebDAVServerPrefix()) ;
       String title = uiForm.getUIStringInput(UICalDavForm.TITLE).getValue() ;
