@@ -37,6 +37,8 @@
       <AddEvent>Thêm sự kiện</AddEvent>
       <calendarActions>Tác vụ lịch</calendarActions>
       <groupActions>Tác vụ nhóm</groupActions>
+      <defaultCalendarCategoryId>Nhóm của tôi</defaultCalendarCategoryId>
+      <defaultCalendarId>Mặc định</defaultCalendarId>
     </label>
     <msg>
       <have-no-permission-to-edit>Bạn không có quền sửa chữa!</have-no-permission-to-edit>
@@ -556,6 +558,14 @@
       <can-not-delete-all-event>Không thể xóa tất cả sự kiện</can-not-delete-all-event>
       <feed-list-empty>Danh sách rss chưa tạo</feed-list-empty>
     </msg>
+    <label>
+    	<defaultEventCategoryIdAll>Tất cả</defaultEventCategoryIdAll>
+    	<defaultEventCategoryIdMeeting>Hội họp</defaultEventCategoryIdMeeting>
+    	<defaultEventCategoryIdCalls>Liên lạc</defaultEventCategoryIdCalls>
+    	<defaultEventCategoryIdClients>Khách hàng</defaultEventCategoryIdClients>
+    	<defaultEventCategoryIdHoliday>Kỳ Nghỉ</defaultEventCategoryIdHoliday>   
+    	<defaultEventCategoryIdAnniversary>Kỉ niệm</defaultEventCategoryIdAnniversary> 	
+    </label>
   </UICalendarView>
   <!--
   #org.exoplatform.calendar.webui.UISearchForm
