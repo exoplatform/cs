@@ -33,6 +33,11 @@
 	margin: 2px 0px 0px 0px;
 }
 
+.UICalendarPortlet .UIInsertAddress .UIGrid td input {
+	text-align: center;
+	margin: 2px 0px 0px 0px;
+}
+
 .UICalendarPortlet .UIInsertAddress .UIGrid tbody {
 	background: white;	
 	padding-bottom: 10px;
