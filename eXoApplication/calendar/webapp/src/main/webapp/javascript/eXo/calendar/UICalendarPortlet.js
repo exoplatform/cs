@@ -1975,13 +1975,13 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
         menuY -= arguments[2].scrollTop;
     }
 		if (eXo.core.I18n.isRT()) {
-      menuX -= (eXo.cs.Utils.getElementWidth(this.menuElement) - clickobj.offsetWidth) - uiWorkSpaceWidth;      
+      menuX -= (eXo.cs.Utils.getElementWidth(this.menuElement) - clickobj.offsetWidth);// - uiWorkSpaceWidth;      
     }
     this.menuElement.style.top = menuY + "px";
     this.menuElement.style.left =  menuX + "px";
  		if (eXo.core.I18n.isRT() && Browser.isIE6()) {
       menuX = Browser.findPosXInContainer(clickobj,this.menuElement.offsetParent,true);
-      menuX += uiWorkSpaceWidth/2 ;
+      //menuX += uiWorkSpaceWidth/2 ;
       this.menuElement.style.right = menuX + "px";
       this.menuElement.style.left =  "";
     }
@@ -2705,3 +2705,20 @@ UIWindow.prototype.maximizeWindowEvt = function(evt){
     eXo.calendar.UICalendarPortlet.fixForMaximize();
 };
 }
+
+/*
+ * Override Comobobox
+ * TODO : remove this method when portal fix it
+ */
+UICombobox.prototype.init = function() {
+	var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
+	var uiCombobox = eXo.webui.UICombobox ;
+	var comboList = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace,"input","UIComboboxInput");
+	var i = comboList.length ;
+	while(i--){
+		var onfocus = comboList[i].getAttribute("onfocus") ;
+		var onclick = comboList[i].getAttribute("onclick") ;
+		if(!onfocus) comboList[i].onfocus = uiCombobox.show ;
+		if(!onclick) comboList[i].onclick = uiCombobox.show ;
+	}
+};
