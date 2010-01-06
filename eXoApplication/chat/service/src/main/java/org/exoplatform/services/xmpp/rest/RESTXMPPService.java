@@ -106,6 +106,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   private static final Map<String, String> jsResourceBundle = new HashMap<String, String>(){
     {
       put("chat.message.xmpp.session.is.null", "chat_message_xmpp_session_is_null");
+      put("chat.message.room.creation.error", "chat_message_room_creation_error");
       put("chat.message.room.default.config.commit", "chat_message_room_default_config_commit");
       put("chat.message.room.configuration.error", "chat_message_room_configuration_error");
       put("chat.message.room.password.error", "chat_message_room_password_error");
@@ -259,8 +260,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         return Response.ok(formBean, JSON_CONTENT_TYPE).cacheControl(cc).build();
       } catch (Exception e) {
         /*e.printStackTrace();*/
-        Response.status(HTTPStatus.INTERNAL_ERROR);
-        return Response.ok(rb.getString("chat.message.room.creation.error") + "\n" + e.getMessage())
+        return Response.status(HTTPStatus.INTERNAL_ERROR).entity(rb.getString("chat.message.room.creation.error") + "\n" + e.getMessage())
         .build();
       }
     } else {

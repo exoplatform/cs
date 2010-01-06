@@ -684,6 +684,9 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
     		case 407:
     			window.alert(this.ResourceBundle.chat_message_room_user_not_member);
     			break;
+    		case 500:
+    			window.alert(this.ResourceBundle.chat_message_room_creation_error);
+    			break;
     		case 409:
     		default:
     			break;
