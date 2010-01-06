@@ -57,7 +57,7 @@ import org.exoplatform.services.xmpp.ext.transport.YahooTransport;
  */
 public class XMPPConnectionUtils {
 
-  private static final Log LOGGER = LogFactory.getLog("ConnectionUtils");
+  private static final Log LOGGER = LogFactory.getLog("XMPPConnectionUtils");
 
   /**
    * Discovery Server items.

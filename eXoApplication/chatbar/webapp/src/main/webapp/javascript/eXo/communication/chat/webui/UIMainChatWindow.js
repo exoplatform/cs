@@ -1078,6 +1078,11 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
     case this.OFFLINE_STATUS:
       if (this.userStatus != this.OFFLINE_STATUS) {
 		this.userStatus = this.OFFLINE_STATUS;
+		this.UIAddContactPopupWindow.setVisible(false,null);
+		this.UIChatWindow.destroySession();
+		this.UICreateNewRoomPopupWindow.setVisible(false);
+		this.UIRoomConfigPopupWindow.setVisible(false,null,null);
+		this.UIJoinRoomPopupWindow.setVisible(false);
 		this.buddyListControlObj.cleanup();
 		this.addContactIconNode.onclick = null;
 		var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode, 'div');

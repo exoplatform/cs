@@ -256,8 +256,12 @@ UIAddContactPopupWindow.prototype.selectAllContacts = function(selectMode) {
  * @param {Function} handler will be call to filter contact result before display it in result pane.
  */
 UIAddContactPopupWindow.prototype.setVisible = function(visible, handler){
-  if (!this.UIMainChatWindow.userStatus ||
+  if (!visible || !this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {
+	  if (this.rootNode.style.display != 'none') {
+	    this.rootNode.style.display = 'none';
+	  }
+	  this.handler = null;
     return;
   }
   if (visible) {
@@ -270,11 +274,6 @@ UIAddContactPopupWindow.prototype.setVisible = function(visible, handler){
     this.toggleSelectAllNode.checked = false;
     //this.filterFieldNode.focus();
     this.uiPageIterator.destroy();
-  } else {
-    if (this.rootNode.style.display != 'none') {
-      this.rootNode.style.display = 'none';
-    }
-    this.handler = null;
   }
 };
 

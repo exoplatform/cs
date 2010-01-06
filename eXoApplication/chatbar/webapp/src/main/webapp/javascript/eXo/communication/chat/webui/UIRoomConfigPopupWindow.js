@@ -441,6 +441,9 @@ UIRoomConfigPopupWindow.prototype.relateClose = function(tabId) {
 UIRoomConfigPopupWindow.prototype.setVisible = function(visible, tabId, mustSubmit) {
   if (!this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {
+	   this.roomName = false;
+	   this.rootNode.style.display = 'none';
+	   this.mustSubmit = false;
     return;
   }
   if (this.mustSubmit) {

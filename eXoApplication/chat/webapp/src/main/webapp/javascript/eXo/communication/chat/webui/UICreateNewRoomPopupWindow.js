@@ -31,8 +31,12 @@ UICreateNewRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow)
  * @param {Boolean} visible
  */
 UICreateNewRoomPopupWindow.prototype.setVisible = function(visible) {
-  if (!this.UIMainChatWindow.userStatus ||
+  if (!visible || !this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {
+	  if (this.rootNode.style.display != 'none') {
+	    this.rootNode.style.display = 'none'; 
+	  }
+	  this.roomNameField.value = '';
     return;
   }
   if (visible) {
@@ -41,11 +45,6 @@ UICreateNewRoomPopupWindow.prototype.setVisible = function(visible) {
     }
     this.roomNameField.focus();
     this.UIPopupManager.focusEventFire(this);
-  } else {
-    if (this.rootNode.style.display != 'none') {
-      this.rootNode.style.display = 'none'; 
-    }
-    this.roomNameField.value = '';
   }
 };
 

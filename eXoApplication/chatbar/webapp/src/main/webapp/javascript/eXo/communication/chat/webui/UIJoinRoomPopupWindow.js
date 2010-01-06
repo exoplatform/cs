@@ -257,8 +257,11 @@ UIJoinRoomPopupWindow.prototype.joinSelectedRoomAction = function(obj) {
  * @param {Boolean} visible
  */
 UIJoinRoomPopupWindow.prototype.setVisible = function(visible) {
-  if (!this.UIMainChatWindow.userStatus ||
+  if (!visible || !this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {
+	  if (this.rootNode.style.display != 'none') {
+	    this.rootNode.style.display = 'none'; 
+	  }
     return;
   }
   if (visible) {
@@ -267,10 +270,6 @@ UIJoinRoomPopupWindow.prototype.setVisible = function(visible) {
       this.rootNode.style.display = 'block'; 
     }
     this.UIPopupManager.focusEventFire(this);
-  } else {
-    if (this.rootNode.style.display != 'none') {
-      this.rootNode.style.display = 'none'; 
-    }
   }
 };
 
