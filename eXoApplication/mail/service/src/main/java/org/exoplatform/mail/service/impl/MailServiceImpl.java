@@ -1177,6 +1177,8 @@ public class MailServiceImpl implements MailService, Startable {
                                  javax.mail.Folder mailServerFolder) throws Exception {
     Map<String, javax.mail.Message> msgServerMap = getServerMessageMap(mailServerFolder);
     List<String> msgIDListFromJcrFolder = getMessageIDFromJcrFolder(username, accountId, folderId);
+    if (!mailServerFolder.isOpen())
+      mailServerFolder.open(javax.mail.Folder.READ_WRITE);
     for (String msgID : msgIDListFromJcrFolder) {
       if (!msgServerMap.containsKey(msgID)) {
         storage_.saveTotalMessage(username, accountId, msgID, msgServerMap.get(msgID), null);
@@ -1232,12 +1234,13 @@ public class MailServiceImpl implements MailService, Startable {
     javax.mail.Message[] msgListFromMailServer;
     Map<String, javax.mail.Message> map = null;
     try {
+      if (!mailServerFolder.isOpen())
+        mailServerFolder.open(javax.mail.Folder.READ_WRITE);
       msgListFromMailServer = mailServerFolder.getMessages();
       map = new HashMap<String, javax.mail.Message>();
       for (javax.mail.Message message : msgListFromMailServer) {
         MimeMessage mimeMessage = (MimeMessage) message;
         map.put(mimeMessage.getMessageID(), message);
-        IMAPFolder folder = (IMAPFolder) mailServerFolder;
       }
     } catch (MessagingException e) {
       e.printStackTrace();
@@ -1278,9 +1281,12 @@ public class MailServiceImpl implements MailService, Startable {
                             Utils.generateFID(accountId, Utils.FD_INBOX, false));
     }
     try {
-      if (jcrFolder != null && !Utils.isEmptyField(jcrFolder.getURLName())) {
-        URLName url = new URLName(jcrFolder.getURLName());
+      String urlName = jcrFolder.getURLName();
+      if (jcrFolder != null && !Utils.isEmptyField(urlName)) {
+        URLName url = new URLName(urlName);
         javax.mail.Folder mailServerFolder = store.getFolder(url);
+        if (!mailServerFolder.isOpen())
+          mailServerFolder.open(javax.mail.Folder.READ_WRITE);
         if (mailServerFolder != null) {
           synchImapMessage(userName, accountId, mailServerFolder, key);
 
@@ -1389,18 +1395,19 @@ public class MailServiceImpl implements MailService, Startable {
       return;
 
     String folderId = null;
+    String folderName = folder.getName();
     try {
       if (!folder.isOpen()) {
         folder.open(javax.mail.Folder.READ_ONLY);
       }
-      logger.debug(" #### Getting mails from folder " + folder.getName() + " !");
+      logger.debug(" #### Getting mails from folder " + folderName + " !");
       checkingLog_.get(key).setSyncFolderStatus(CheckingInfo.FINISHED_SYNC_FOLDER);
-      checkingLog_.get(key).setStatusMsg("Getting mails from folder " + folder.getName() + " !");
+      checkingLog_.get(key).setStatusMsg("Getting mails from folder " + folderName + " !");
 
       folderId = Utils.generateFID(accountId,
                                    String.valueOf(((IMAPFolder) folder).getUIDValidity()),
                                    true);
-      if (folder.getName().equalsIgnoreCase(Utils.FD_INBOX))
+      if (folderName.equalsIgnoreCase(Utils.FD_INBOX))
         folderId = Utils.generateFID(accountId, Utils.FD_INBOX, false);
 
       Folder eXoFolder = getFolder(userName, accountId, folderId);
@@ -1425,7 +1432,7 @@ public class MailServiceImpl implements MailService, Startable {
                                                                              null);
       totalNew = msgMap.size();
 
-      logger.debug(" #### Folder " + folder.getName() + " contains " + totalNew + " messages !");
+      logger.debug(" #### Folder " + folderName + " contains " + totalNew + " messages !");
       if (totalNew > 0) {
         int i = 0;
         long msgUID;
@@ -1459,7 +1466,7 @@ public class MailServiceImpl implements MailService, Startable {
           int unreadMsgCount = folder.getUnreadMessageCount();
           if (i < unreadMsgCount) {
             checkingLog_.get(key).setFetching(i + 1);
-            checkingLog_.get(key).setStatusMsg("Synchronizing  " + folder.getName() + " : "
+            checkingLog_.get(key).setStatusMsg("Synchronizing  " + folderName + " : "
                 + (i + 1) + "/" + unreadMsgCount);
           }
           filterList = msgMap.get(msg);
@@ -1528,11 +1535,11 @@ public class MailServiceImpl implements MailService, Startable {
                                                                                 accountId);
         new Thread(downloadContentMail).start();
       }
-      checkingLog_.get(key).setStatusMsg("Finished download for " + folder.getName() + " folder.");
-      logger.debug("#### Synchronization finished for " + folder.getName() + " folder.");
+      checkingLog_.get(key).setStatusMsg("Finished download for " + folderName + " folder.");
+      logger.debug("#### Synchronization finished for " + folderName + " folder.");
 
     } catch (Exception e) {
-      logger.error("Error while checking emails from folder" + folder.getName() + " of username "
+      logger.error("Error while checking emails from folder" + folderName + " of username "
           + userName + " on account " + accountId, e);
       e.printStackTrace();
     }
