@@ -33,6 +33,7 @@ import org.exoplatform.ws.frameworks.cometd.transport.ContinuationServiceDelegat
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.packet.XMPPError;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 
 /**
@@ -201,7 +202,7 @@ public class XMPPMessenger {
         LOGGER.error("Can't create XMPP session for user '" + username + "'. Exception: " + e);
         e.printStackTrace();
       }
-      throw new XMPPException("Error login!");
+      throw new XMPPException(new XMPPError(XMPPError.Condition.remote_server_not_found, "Error login: Openfire server isn't started"));
     }
 
   }
