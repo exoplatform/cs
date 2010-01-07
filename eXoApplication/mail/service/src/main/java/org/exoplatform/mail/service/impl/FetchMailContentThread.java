@@ -27,14 +27,24 @@ import org.exoplatform.mail.service.MimeMessageParser;
 
 public class FetchMailContentThread implements Runnable {
 
-  private JCRDataStorage storage_;
-  private String username_;
-  private String accountId_;
+  private JCRDataStorage                                  storage_;
+
+  private String                                          username_;
+
+  private String                                          accountId_;
+
   private LinkedHashMap<javax.mail.Message, List<String>> msgMap_;
-  private javax.mail.Folder folder_;
-  private int numberMessage_ = 0;
-  
-  public FetchMailContentThread(JCRDataStorage storage, LinkedHashMap<javax.mail.Message, List<String>> msgMap, int numberMessage, javax.mail.Folder folder, String username, String accountId) throws Exception {
+
+  private javax.mail.Folder                               folder_;
+
+  private int                                             numberMessage_ = 0;
+
+  public FetchMailContentThread(JCRDataStorage storage,
+                                LinkedHashMap<javax.mail.Message, List<String>> msgMap,
+                                int numberMessage,
+                                javax.mail.Folder folder,
+                                String username,
+                                String accountId) throws Exception {
     storage_ = storage;
     username_ = username;
     accountId_ = accountId;
@@ -46,28 +56,36 @@ public class FetchMailContentThread implements Runnable {
   public void run() {
     try {
       downloadMailContent();
-    } catch(Exception e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
-  
+
   public void downloadMailContent() throws Exception {
     int j = 0;
     Message msg;
-    List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap_.keySet()) ;
-    if(! folder_.isOpen()) folder_.open(Folder.READ_WRITE) ;
+    List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap_.keySet());
+    if (!folder_.isOpen())
+      folder_.open(Folder.READ_WRITE);
     while (j < numberMessage_) {
       msg = msgList.get(j);
-      storage_.saveTotalMessage(username_, accountId_, MimeMessageParser.getMessageId(msg), msg, null);
+      storage_.saveTotalMessage(username_,
+                                accountId_,
+                                MimeMessageParser.getMessageId(msg),
+                                msg,
+                                null);
       j++;
-    } 
-    
+    }
+    if (folder_.isOpen()) {
+      folder_.close(true);
+    }
   }
-  
+
   public void stop() {
     try {
-      if(folder_.isOpen()) folder_.close(true) ;
-    } catch(Exception e) {
+      if (folder_.isOpen())
+        folder_.close(true);
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
