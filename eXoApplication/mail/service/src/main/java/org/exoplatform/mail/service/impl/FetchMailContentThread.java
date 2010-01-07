@@ -76,9 +76,6 @@ public class FetchMailContentThread implements Runnable {
                                 null);
       j++;
     }
-    if (folder_.isOpen()) {
-      folder_.close(true);
-    }
   }
 
   public void stop() {
@@ -86,7 +83,7 @@ public class FetchMailContentThread implements Runnable {
       if (folder_.isOpen())
         folder_.close(true);
     } catch (Exception e) {
-      e.printStackTrace();
+     // e.printStackTrace();
     }
   }
 }
