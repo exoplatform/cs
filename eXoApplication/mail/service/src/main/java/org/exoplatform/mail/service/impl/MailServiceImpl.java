@@ -354,6 +354,7 @@ public class MailServiceImpl implements MailService, Startable {
         if (msgList == null)
           success = false;
       } catch (Exception e) {
+        e.printStackTrace();
         return;
       }
     }
@@ -466,7 +467,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<Message> getMessagesByFolder(String username, String accountId, String folderId) throws Exception {
-    Folder folder = getFolder(username, accountId, folderId);
     MessageFilter filter = new MessageFilter("Folder");
     filter.setAccountId(accountId);
     filter.setFolder(new String[] { folderId });
@@ -503,6 +503,7 @@ public class MailServiceImpl implements MailService, Startable {
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "true");
     props.put("mail.smtp.connectiontimeout", "0");
     props.put("mail.smtp.timeout", "0");
+    // props.put("mail.debug", "true");
     String socketFactoryClass = "javax.net.SocketFactory";
     if (Boolean.valueOf(isSSl)) {
       socketFactoryClass = Utils.SSL_FACTORY;
@@ -592,6 +593,7 @@ public class MailServiceImpl implements MailService, Startable {
         transport.connect();
       } catch (Exception ex) {
         logger.debug("#### Can not connect to smtp server ...");
+        ex.printStackTrace();
         return;
       }
     }
@@ -617,6 +619,7 @@ public class MailServiceImpl implements MailService, Startable {
 
   @SuppressWarnings("unchecked")
   private Message send(Session session, Transport transport, Message message) throws Exception {
+    System.out.println("\n\t**========>>>>>>send");
     MimeMessage mimeMessage = new MimeMessage(session);
     String status = "";
     InternetAddress addressFrom;
@@ -816,6 +819,9 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   private JobDetail findCheckmailJob(String username, String accountId) throws Exception {
+    // TODO current implementation is inefficient
+    // / Need to upgrade to 2.0.3 and use this instead :
+    // schedulerService_.getJob(info)
     for (Object obj : schedulerService_.getAllJobs()) {
       JobDetail tmp = (JobDetail) obj;
       if (tmp.getName().equals(username + ":" + accountId)) {
@@ -837,6 +843,8 @@ public class MailServiceImpl implements MailService, Startable {
     if (fromDate != null && toDate != null && fromDate.equals(toDate))
       return msgMap;
 
+    if (!folder.isOpen())
+      folder.open(javax.mail.Folder.READ_WRITE);
     if (fromDate == null && toDate == null) {
       messages = folder.getMessages();
     } else {
@@ -1012,11 +1020,12 @@ public class MailServiceImpl implements MailService, Startable {
     for (javax.mail.Folder fd : folders) {
       folderName = fd.getName();
       if (parentFolder == null
-          && (folderName.equalsIgnoreCase(Utils.FD_TRASH)
-              || folderName.equalsIgnoreCase(Utils.FD_DRAFTS)
-              || folderName.equalsIgnoreCase(Utils.FD_SENT) || folderName.equalsIgnoreCase(Utils.FD_SPAM))) {
+          && (folderName.equalsIgnoreCase(Utils.FD_DRAFTS)
+              || folderName.equalsIgnoreCase(Utils.FD_SENT) || folderName.equalsIgnoreCase(Utils.FD_SPAM))
+          || folderName.equalsIgnoreCase(Utils.FD_TRASH)) {
         continue;
       }
+
       int folderType = fd.getType();
       if (!folderName.equalsIgnoreCase(Utils.FD_INBOX)) {
         if (folderType != javax.mail.Folder.HOLDS_FOLDERS) {
@@ -1029,6 +1038,7 @@ public class MailServiceImpl implements MailService, Startable {
 
         serverFolderId.add(folderId);
         Folder folder = storage_.getFolder(username, accountId, folderId);
+
         if (folder == null) {
           folder = new Folder();
           folder.setId(folderId);
@@ -1061,7 +1071,6 @@ public class MailServiceImpl implements MailService, Startable {
         } else {
           localFolders = getSubFolders(username, accountId, parentFolder.getPath());
         }
-
         for (Folder f : localFolders) {
           if (!serverFolderId.contains(f.getId())) {
             deleteLocalFolder(username, accountId, f.getId());
@@ -1221,7 +1230,6 @@ public class MailServiceImpl implements MailService, Startable {
     if (!mailServerFolder.isOpen()) {
       mailServerFolder.open(javax.mail.Folder.READ_ONLY);
     }
-    System.out.println("Folder is open: " + mailServerFolder.isOpen());
     javax.mail.Message[] msgListFromMailServer = mailServerFolder.getMessages();
     for (javax.mail.Message message : msgListFromMailServer) {
       MimeMessage mimeMessage = (MimeMessage) message;
@@ -1407,11 +1415,18 @@ public class MailServiceImpl implements MailService, Startable {
       folderId = Utils.generateFID(accountId,
                                    String.valueOf(((IMAPFolder) folder).getUIDValidity()),
                                    true);
-      if (folderName.equalsIgnoreCase(Utils.FD_INBOX))
-        folderId = Utils.generateFID(accountId, Utils.FD_INBOX, false);
+      // Duy for test
 
+      String[] localFolders = Utils.DEFAULT_FOLDERS;
+      for (String localFolder : localFolders) {
+        if (localFolder.equals(folderName)) {
+          folderId = Utils.generateFID(accountId, localFolder, false);
+        }
+      }
       Folder eXoFolder = getFolder(userName, accountId, folderId);
 
+      // Date lastCheckedDate = eXoFolder.getLastCheckedDate();
+      // Date lastCheckedFromDate = eXoFolder.getLastStartCheckingTime();
       Date checkFromDate = eXoFolder.getCheckFromDate();
 
       if (account.getCheckFromDate() == null) {
@@ -1466,8 +1481,8 @@ public class MailServiceImpl implements MailService, Startable {
           int unreadMsgCount = folder.getUnreadMessageCount();
           if (i < unreadMsgCount) {
             checkingLog_.get(key).setFetching(i + 1);
-            checkingLog_.get(key).setStatusMsg("Synchronizing  " + folderName + " : "
-                + (i + 1) + "/" + unreadMsgCount);
+            checkingLog_.get(key).setStatusMsg("Synchronizing  " + folderName + " : " + (i + 1)
+                + "/" + unreadMsgCount);
           }
           filterList = msgMap.get(msg);
           try {
@@ -1955,13 +1970,27 @@ public class MailServiceImpl implements MailService, Startable {
 
   public List<Folder> getFolders(String username, String accountId, boolean isPersonal) throws Exception {
     List<Folder> folders = new ArrayList<Folder>();
-    for (Folder folder : storage_.getFolders(username, accountId)) {
+    List<Folder> gottenFolderList = storage_.getFolders(username, accountId);
+    for (Folder folder : gottenFolderList) {
+      String urlName = folder.getURLName();
       if (isPersonal) {
-        if (folder.isPersonalFolder())
+        if (folder.isPersonalFolder()) {
           folders.add(folder);
+        }
       } else {
-        if (!folder.isPersonalFolder())
+        if (!folder.isPersonalFolder()) {
+          if (Utils.isEmptyField(urlName)) {
+            CheckingInfo info = new CheckingInfo();
+            String key = username + ":" + accountId;
+            checkingLog_.put(key, info);
+            Account account = getAccountById(username, accountId);
+            IMAPStore store = openIMAPConnection(username, account, info);
+            javax.mail.Folder fd = store.getFolder(folder.getName());
+            folder.setURLName(fd.getURLName().toString());
+            storage_.saveFolder(username, accountId, folder);
+          }
           folders.add(folder);
+        }
       }
     }
     return folders;
@@ -2153,7 +2182,6 @@ public class MailServiceImpl implements MailService, Startable {
       }
     } catch (Exception e) {
       logger.info("Download content failure");
-      e.printStackTrace();
     } finally {
       if (imapStore != null && imapStore.isConnected()) {
         imapStore.close();

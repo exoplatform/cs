@@ -1183,7 +1183,7 @@ public class JCRDataStorage {
         node.setProperty(Utils.IS_LOADED, true);
         node.save();
         MimeMessage cmsg = (MimeMessage) msg;
-        Object obj = new Object();
+        Object obj = null;
         try {
           obj = msg.getContent();
         } catch(MessagingException mex) {
