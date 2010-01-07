@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 
 import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
@@ -44,7 +45,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.ext.UIFormColorPicker;
-import org.exoplatform.webui.form.validator.NameValidator;
+import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 
 /**
@@ -110,7 +111,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       }
     }
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null)
-      .addValidator(NameValidator.class).addValidator(StringLengthValidator.class,1,40));
+      .addValidator(SpecialCharacterValidator.class).addValidator(StringLengthValidator.class,1,40));
     addUIFormInput(new UIFormColorPicker(FIELD_COLOR, FIELD_COLOR)) ;
     for (String tagId : tags.keySet()) {
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(tagId, tagId, false));

@@ -36,7 +36,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.exoplatform.webui.form.validator.NameValidator;
+import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -59,7 +59,7 @@ public class UICalendarCategoryForm extends UIForm {
   private boolean isAddNew = true ;
   private String categoryId = null ;
   public UICalendarCategoryForm() throws Exception {
-    addUIFormInput(new UIFormStringInput(CATEGORY_NAME, null).addValidator(MandatoryValidator.class).addValidator(NameValidator.class)) ;
+    addUIFormInput(new UIFormStringInput(CATEGORY_NAME, null).addValidator(MandatoryValidator.class).addValidator(SpecialCharacterValidator.class)) ;
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
   }
 
