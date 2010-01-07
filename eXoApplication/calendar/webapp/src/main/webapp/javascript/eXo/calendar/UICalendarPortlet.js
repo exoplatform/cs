@@ -191,9 +191,11 @@ UICalendarPortlet.prototype.fillData = function(uiform, data) {
 	fromField.value = formater.format(data.from, dateType);
 	fromFieldTime.style.visibility= "visible";
 	fromFieldTime.value = formater.format(data.fromTime, timeType);	
+	eXo.core.DOMUtil.findNextElementByTagName(fromFieldTime,"input").value = formater.format(data.fromTime, timeType);
 	toField.value = formater.format(data.to, dateType);
 	toFieldTime.style.visibility = "visible";
-	toFieldTime.value = formater.format(data.toTime, timeType); 
+	toFieldTime.value = formater.format(data.toTime, timeType);
+	eXo.core.DOMUtil.findNextElementByTagName(toFieldTime,"input").value = formater.format(data.toTime, timeType);
 	isAllday.checked = data.isAllday ;
 	if(data.calendar)
 		for(i=0; i < calendar.options.length;  i++) {
@@ -1959,16 +1961,14 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
     tmpMenuElement.setAttribute("id", "tmpMenuElement");
     tmpMenuElement.style.zIndex = 1 ;
     this.menuElement = tmpMenuElement;
- 		if(Browser.isIE6()) this.menuElement.style.width = "140px";
+ 	if(Browser.isIE6()) this.menuElement.style.width = "140px";
+    document.body.appendChild(this.menuElement);
     if (uiDesktop) {
-        document.body.appendChild(this.menuElement);
         this.swapIeMenu(this.menuElement, clickobj);
         return;
     }
-    else {
-        document.getElementById(this.portletName).appendChild(tmpMenuElement);
-    }
-		
+    
+	DOMUtil.addClass(this.menuElement, "UICalendarPortlet UIEmpty");
     var menuX = Browser.findPosX(clickobj) ;
     var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight;
     if (arguments.length > 2) {
