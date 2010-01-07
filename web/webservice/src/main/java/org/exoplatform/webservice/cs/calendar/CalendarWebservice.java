@@ -36,6 +36,8 @@ import org.exoplatform.services.rest.resource.ResourceContainer;
  *          exo@exoplatform.com
  * Sep 15, 2009  
  */
+
+@Path("/cs/calendar")
 public class CalendarWebservice implements ResourceContainer{
 
   public final static String JSON_CONTENT_TYPE    = "application/json";
@@ -45,7 +47,7 @@ public class CalendarWebservice implements ResourceContainer{
   public CalendarWebservice() {}
 
   @GET
-  @Path("/cs/calendar/checkPermission/{username}/{calendarId}/{type}/")
+  @Path("/checkPermission/{username}/{calendarId}/{type}/")
   //@OutputTransformer(StringOutputTransformer.class)
   public Response checkPermission(@PathParam("username")
                                   String username, @PathParam("calendarId")
