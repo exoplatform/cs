@@ -142,9 +142,6 @@ All those accounts have the default password "".
     * [CS-3328] - Make categories translatable
     * [CS-3528] - Chat Login : Get password from DB or LDAP
 
-** New Feature
-    * [CS-3693] - Initialize contacts based on attributes of UserProfile
-
 ** Task
     * [CS-1991] - Remove hard coded references to /portal from web\csportal\src\main\webapp\templates\home.gtmpl
     * [CS-1992] - Remove hard coded references to /portal from web\csportal\src\main\webapp\templates\sidebar.gtmpl
