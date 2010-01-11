@@ -19,6 +19,7 @@ package org.exoplatform.services.xmpp.history.impl.jcr;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
@@ -142,7 +143,7 @@ public class HistoryImpl implements Startable{
   /**
    * Queue that holds the messages to log.
    */
-  private Queue<Message> logQueue = new ConcurrentLinkedQueue<Message>();
+  private Queue<HistoricalMessage > logQueue = new ConcurrentLinkedQueue<HistoricalMessage >();
   
   public void start() {
     try{
@@ -212,13 +213,13 @@ public class HistoryImpl implements Startable{
     sysSession.logout();
   }
   
-  public Queue<Message> getLogQueue() {
+  public Queue<HistoricalMessage > getLogQueue() {
     return logQueue;
   }
 
-  public void logMessage(Message message) {
-    // Only log messages that have a subject or body. Otherwise ignore it.
-    if (message.getSubject() != null || message.getBody() != null) {
+  public void logMessage(HistoricalMessage message) {
+    // Only log messages that have a body. Otherwise ignore it.
+    if (message.getBody() != null) {
         logQueue.add(message);
     }
   }
@@ -228,12 +229,12 @@ public class HistoryImpl implements Startable{
    * saving all the message log entries before the service becomes unavailable.
    */
   private void logAllMessages() {
-      Message message;
+	  HistoricalMessage message;
       SessionProvider provider = SessionProvider.createSystemProvider();
       while (!logQueue.isEmpty()) {
         message = logQueue.poll();
           if (message != null) {
-              this.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage(message), provider);
+              this.addHistoricalMessage(message, provider);
           }
       }
       provider.close();
@@ -323,6 +324,8 @@ public class HistoryImpl implements Startable{
                                                   true);
       if (conversation != null) {
         list.addAll(conversation.getMessageList());
+        //Merge new messages from cache
+        list.addAll(getHistoricalMessagesFromCache(usernameTo, usernameFrom, null, null));
         return list;
       }
     } catch (Exception e) {
@@ -373,6 +376,8 @@ public class HistoryImpl implements Startable{
           list.add(message);
         }
         conversationsNode.getSession().save();
+        //Merge new messages from cache
+        list.addAll(getHistoricalMessagesFromCache(usernameTo, usernameFrom, dateFrom, null));
         return list;
       }
     } catch (Exception e) {
@@ -425,6 +430,8 @@ public class HistoryImpl implements Startable{
           Node msgNode = (Node) nodeIterator.next();
           list.add(jcrom.fromNode(HistoricalMessageImpl.class, msgNode));
         }
+        //Merge new messages from cache
+        list.addAll(getHistoricalMessagesFromCache(usernameTo, usernameFrom, dateFrom, dateTo));
         return list;
       }
     } catch (Exception e) {
@@ -512,6 +519,22 @@ public class HistoryImpl implements Startable{
       e.printStackTrace();
     }
     return list;
+  }
+  
+  private List<HistoricalMessage> getHistoricalMessagesFromCache(String usernameTo, String usernameFrom, Date dateFrom, Date dateTo){
+	List<HistoricalMessage> list = new ArrayList<HistoricalMessage>();
+	for(HistoricalMessage msg : logQueue){
+      if(msg.getTo() != null && msg.getFrom() != null){
+        String to = StringUtils.parseName(msg.getTo());
+        String from = StringUtils.parseName(msg.getFrom());
+        Date sendDate = msg.getDateSend();
+        if(to.equals(usernameTo) && from.equals(usernameFrom) || from.equals(usernameTo) && to.equals(usernameFrom))
+          if((dateFrom == null && dateTo == null) || (dateFrom != null && dateTo == null && sendDate.after(dateFrom)) || 
+        	  (dateFrom != null && dateTo != null && sendDate.after(dateFrom) && sendDate.before(dateTo))) 
+            list.add(msg);
+      }
+    }
+	return list;
   }
 
   /**

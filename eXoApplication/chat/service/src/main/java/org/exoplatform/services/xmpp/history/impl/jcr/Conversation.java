@@ -91,10 +91,10 @@ public class Conversation {
   public void addMessage(HistoricalMessageImpl message) {
     if(message == null) return;
     boolean hasExist = false;
-    if(message.getDateSend() != null)
+    if(message.getId() != null)
       for(HistoricalMessageImpl hisMessage: messageList)
       {
-        if(message.getDateSend().equals(hisMessage.getDateSend()) && message.getFrom().equals(hisMessage.getFrom())){
+        if(message.getId().equals(hisMessage.getId()) && message.getFrom().equals(hisMessage.getFrom())){
           hasExist = true;
           break;
         }

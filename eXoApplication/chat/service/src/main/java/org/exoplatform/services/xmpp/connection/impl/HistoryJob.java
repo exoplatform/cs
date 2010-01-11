@@ -24,6 +24,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 import org.exoplatform.services.xmpp.util.HistoryUtils;
 import org.jivesoftware.smack.packet.Message;
@@ -51,13 +52,13 @@ public class HistoryJob implements Job {
       int logBatchSize = Integer.parseInt(jdatamap.getString("logBatchSize"));
       HistoryImpl historyImpl = (HistoryImpl)container.getComponentInstanceOfType(HistoryImpl.class);
       
-      Message message;
+      HistoricalMessage message;
       boolean success;
-      Queue<Message> logQueue = historyImpl.getLogQueue();
+      Queue<HistoricalMessage> logQueue = historyImpl.getLogQueue();
       for (int index = 0; index <= logBatchSize && !logQueue.isEmpty(); index++) {
         message = logQueue.poll();
         if (message != null) {
-            success = historyImpl.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage(message), provider);
+            success = historyImpl.addHistoricalMessage(message, provider);
             if (!success) {
                 logQueue.add(message);
             }

@@ -279,14 +279,15 @@ public class XMPPSessionImpl implements XMPPSession {
         public void processPacket(Packet packet) {
           try {
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
-            packet.setPacketID(CodingUtils.encodeToHex(UUID.randomUUID().toString()));
-            MessageBean message = TransformUtils.messageToBean((Message) packet);
-            message.setDateSend(String.valueOf(new Date().getTime()));
+            if(packet.getPacketID() == null)
+              packet.setPacketID(CodingUtils.encodeToHex(UUID.randomUUID().toString()));
+            HistoricalMessage historyMsg = HistoryUtils.messageToHistoricalMessage((Message) packet);
+            MessageBean message = TransformUtils.messageToBean(historyMsg);
             /*history.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage((Message) packet),
                                          sessionProvider);*/
             //Fix for CS-3246: contact list in public room is empty in special case
             //Because persistence operations are massive -> much delay time -> bug ->to solve by using cache
-            history_.logMessage((Message) packet);
+            history_.logMessage(historyMsg);
             EventsBean eventsBean = new EventsBean();
             eventsBean.addMessage(message);
             eventsBean.setEventId(Packet.nextID());

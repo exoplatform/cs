@@ -47,7 +47,7 @@ public class HistoryUtils {
     historicalMessage.setReceive(false);
     Date delayedDate = getDelayedDate(message);
     if(delayedDate != null)
-      historicalMessage.setDateSend(delayedDate);
+      historicalMessage.setDateSend(new Date(delayedDate.getTime()));
     else
       historicalMessage.setDateSend(Calendar.getInstance().getTime());
     return historicalMessage;

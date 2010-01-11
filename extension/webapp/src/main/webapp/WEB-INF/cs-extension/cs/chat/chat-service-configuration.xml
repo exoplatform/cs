@@ -63,7 +63,7 @@
           <property name="groupName" value="CollaborationSuite"/>
           <property name="job" value="org.exoplatform.services.xmpp.connection.impl.HistoryJob"/>
           <property name="repeatCount" value="0"/>
-          <property name="period" value="3000"/>     
+          <property name="period" value="10000"/>     
           <property name="startTime" value="+0"/>
           <property name="endTime" value=""/>               
         </properties-param>
@@ -71,7 +71,7 @@
           <name>history.info</name>
           <description>save the monitor data  periodically</description>
           <property name="portalName" value="portal"/>
-          <property name="logBatchSize" value="50"/>         
+          <property name="logBatchSize" value="100"/>         
         </properties-param>
       </init-params>
     </component-plugin>
