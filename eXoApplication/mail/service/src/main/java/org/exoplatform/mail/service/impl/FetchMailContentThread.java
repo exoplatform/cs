@@ -57,7 +57,7 @@ public class FetchMailContentThread implements Runnable {
     try {
       downloadMailContent();
     } catch (Exception e) {
-      e.printStackTrace();
+      //e.printStackTrace();
     }
   }
 

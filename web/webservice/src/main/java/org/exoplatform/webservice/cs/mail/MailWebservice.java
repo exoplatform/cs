@@ -93,7 +93,7 @@ public class MailWebservice implements ResourceContainer {
     buffer.append("  </checkingmail>");
     buffer.append("</info>");
 
-    // mailService.removeCheckingInfo(userName, accountId);
+     mailService.removeCheckingInfo(userName, accountId);
 
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
