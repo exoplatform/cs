@@ -5,6 +5,7 @@
 
 .UIContactPortlet .AddNewContact .AddContact .HorizontalLayout {
 	border: none;
+	padding: 0px;
 }
 
 .UIContactPortlet .AddNewContact .AddContact .HorizontalLayout .UIFormInputSet {
