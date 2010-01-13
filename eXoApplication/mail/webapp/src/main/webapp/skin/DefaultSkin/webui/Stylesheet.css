@@ -1824,9 +1824,7 @@
 
 /******************************* UIImportForm ******************************/
 .UIImportForm {
-	background: #F3F3F3;
-	border: 1px solid #c9c9c9;
-	padding: 25px 10px;
+
 }
 
 .UIImportForm .UIForm .HorizontalLayout {
