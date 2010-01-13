@@ -1,5 +1,5 @@
 .UICalendarPortlet .UIInsertAddress {
-	width: 650px;
+	width: 616px;
 	background: #f3f3f3;
 }
 
@@ -56,7 +56,7 @@
 
 .UICalendarPortlet .UIInsertAddress .UIAddressSearchForm {
 	float: left;
-	width: 300px;
+	width: 250px;
 }
 
 .UICalendarPortlet .UIInsertAddress .UIAddressSearchForm input{
@@ -78,9 +78,9 @@
 	color: #555; 
 }
 .UICalendarPortlet .UIInsertAddress .AddressesGroup {
-	width: 300px;
+	width: 290px;
 	height: 32px;
-	margin: 0px 8px 0px 305px;
+	margin: 0px 8px 0px 280px;
 	text-align: right;
 }
 
