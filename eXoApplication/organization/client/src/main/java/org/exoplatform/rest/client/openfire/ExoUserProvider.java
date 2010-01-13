@@ -276,6 +276,22 @@ public class ExoUserProvider implements UserProvider {
 
   /*
    * (non-Javadoc)
+   * @see org.jivesoftware.openfire.user.UserProvider#isEmailRequired()
+   */
+  public boolean isEmailRequired() {
+	return true;
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see org.jivesoftware.openfire.user.UserProvider#isNameRequired()
+   */
+  public boolean isNameRequired() {
+	return true;
+  }
+
+  /*
+   * (non-Javadoc)
    * @see org.jivesoftware.openfire.user.UserProvider#isReadOnly()
    */
   public boolean isReadOnly() {

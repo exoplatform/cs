@@ -76,7 +76,7 @@ public class TransformUtils {
       contactBean.setNickname(re.getName());
       if (re.getStatus() == RosterPacket.ItemStatus.SUBSCRIPTION_PENDING)
         contactBean.setSubscriptionStatus("SUBSCRIPTION_PENDING");
-      if (re.getStatus() == RosterPacket.ItemStatus.UNSUBCRIPTION_PENDING)
+      if (re.getStatus() == RosterPacket.ItemStatus.UNSUBSCRIPTION_PENDING)
         contactBean.setSubscriptionStatus("UNSUBSCRIPTION_PENDING");
       if (re.getType() != null)
         contactBean.setSubscriptionType(re.getType().name());

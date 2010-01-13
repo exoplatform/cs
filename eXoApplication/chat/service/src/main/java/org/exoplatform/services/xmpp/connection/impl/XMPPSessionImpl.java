@@ -234,7 +234,7 @@ public class XMPPSessionImpl implements XMPPSession {
     this.username_ = username;
     try {
       connection_.connect();
-      connection_.login(username, password, null, false);
+      connection_.login(username, password, null);
       if (log.isDebugEnabled())
         log.info("Client '" + username + "' logged in.");
       multiUserChatManager = new MultiUserChatManager();

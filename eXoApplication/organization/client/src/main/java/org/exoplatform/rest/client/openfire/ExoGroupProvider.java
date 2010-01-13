@@ -246,6 +246,15 @@ public class ExoGroupProvider implements GroupProvider {
     params.put("username", user.getNode());
     return getGroupNames(url, method, params);
   }
+  
+  /*
+   * (non-Javadoc)
+   * @see org.jivesoftware.openfire.group.GroupProvider#getSharedGroupsNames()
+   */
+  public Collection<String> getSharedGroupsNames() {
+	// search is not supported
+	return Collections.emptyList();
+  }
 
   /*
    * (non-Javadoc)

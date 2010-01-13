@@ -64,8 +64,8 @@ function getModule(params)
   	  //addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.webapp", "war", module.version)).
       addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.client.openfire", "jar", module.version)).
   	  //addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.webapp", "war", module.version)).
-  	  addDependency(new Project("jabber.smack", "smack", "jar", "3.0.4")).
-  	  addDependency(new Project("jabber.smack", "smackx", "jar", "3.0.4")).
+  	  addDependency(new Project("jivesoftware", "smack", "jar", "3.1.0")).
+  	  addDependency(new Project("jivesoftware", "smackx", "jar", "3.1.0")).
   	  addDependency(new Project("org.jcrom", "jcrom", "jar", "1.2")).
       addDependency(new Project("commons-fileupload", "commons-fileupload", "jar", "1.0")).
 	  addDependency(new Project("commons-io", "commons-io", "jar", "1.3")).
@@ -150,7 +150,7 @@ function deployOpenfireServer(mainServer, module) {
 	  }
   }
    
-  server.cleanServer = "openfire-3.4.5";
+  server.cleanServer = "openfire-3.6.4";
   server.name = "exo-openfire";
   server.serverHome = eXo.env.workingDir + "/" + server.name;
   server.deployLibDir = server.serverHome + "/lib";

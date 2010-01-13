@@ -32,14 +32,14 @@
     </dependency>
     
     <dependency>
-      <groupId>jabber.smack</groupId>
+      <groupId>jivesoftware</groupId>
       <artifactId>smack</artifactId>
-      <version>3.0.4</version>
+      <version>3.1.0</version>
     </dependency>
     <dependency>
-      <groupId>jabber.smack</groupId>
+      <groupId>jivesoftware</groupId>
       <artifactId>smackx</artifactId>
-      <version>3.0.4</version>
+      <version>3.1.0</version>
     </dependency>
     <dependency>
       <groupId>dom4j</groupId>
