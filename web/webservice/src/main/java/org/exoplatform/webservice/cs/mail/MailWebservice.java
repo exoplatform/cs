@@ -3,6 +3,8 @@
  */
 package org.exoplatform.webservice.cs.mail;
 
+import java.util.Map;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -10,11 +12,15 @@ import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Response;
 
 import org.exoplatform.common.http.HTTPStatus;
+import org.exoplatform.contact.service.ContactFilter;
+import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.services.rest.resource.ResourceContainer;
+import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
+import org.exoplatform.ws.frameworks.json.value.JsonValue;
 
 /**
  * @author Uoc Nguyen Modified by : Phung Nam (phunghainam@gmail.com)
@@ -22,16 +28,20 @@ import org.exoplatform.services.rest.resource.ResourceContainer;
 @Path("/cs/mail")
 public class MailWebservice implements ResourceContainer {
 
+  public static final String TEXT_XML = "text/xml".intern() ;
+  public final static String JSON = "application/json".intern();
+  public final static String TEXT = "plain/text".intern();
   public static final int MIN_SLEEP_TIMEOUT = 100;
 
   public static final int MAX_TIMEOUT       = 16;
-
+  
+  
+  //TODO need to organize code, don't keep html content here !
   public MailWebservice() {
   }
 
   @GET
   @Path("/checkmail/{username}/{accountId}/{folderId}/")
-  // @OutputTransformer(StringOutputTransformer.class)
   public Response checkMail(@PathParam("username") String userName,
                             @PathParam("accountId") String accountId,
                             @PathParam("folderId") String folderId) throws Exception {
@@ -40,9 +50,6 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoStore(true);
     MailService mailService = (MailService) PortalContainer.getInstance()
                                                            .getComponentInstanceOfType(MailService.class);
-    // MailService mailService = (MailService)
-    // ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(MailService.class);
-
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
 
     // try to start if no checking info available
@@ -68,7 +75,6 @@ public class MailWebservice implements ResourceContainer {
 
   @GET
   @Path("/synchfolders/{username}/{accountId}/")
-  // @OutputTransformer(StringOutputTransformer.class)
   public Response synchFolders(@PathParam("username") String userName,
                                @PathParam("accountId") String accountId) throws Exception {
     CacheControl cacheControl = new CacheControl();
@@ -100,7 +106,6 @@ public class MailWebservice implements ResourceContainer {
 
   @GET
   @Path("/stopcheckmail/{username}/{accountId}/")
-  // @OutputTransformer(StringOutputTransformer.class)
   public Response stopCheckMail(@PathParam("username") String userName,
                                 @PathParam("accountId") String accountId) throws Exception {
     CacheControl cacheControl = new CacheControl();
@@ -109,17 +114,8 @@ public class MailWebservice implements ResourceContainer {
     MailService mailService = (MailService) ExoContainerContext.getCurrentContainer()
                                                                .getComponentInstanceOfType(MailService.class);
     StringBuffer buffer = new StringBuffer();
-
-    // mailService.stopCheckMail(userName, accountId);
-
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
     if (checkingInfo != null) {
-      // while (checkingInfo.getStatusCode() !=
-      // CheckingInfo.FINISHED_CHECKMAIL_STATUS) {
-      // Thread.sleep(MailWebservice.MIN_SLEEP_TIMEOUT);
-      // continue;
-      // }
-
       buffer.append("<info>");
       buffer.append("  <checkingmail>");
       buffer.append("    <status>" + checkingInfo.getStatusCode() + "</status>");
@@ -135,9 +131,9 @@ public class MailWebservice implements ResourceContainer {
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 
+  
   @GET
   @Path("/checkmailjobinfo/{username}/{accountId}/")
-  // @OutputTransformer(StringOutputTransformer.class)
   public Response getCheckMailJobInfo(@PathParam("username") String userName,
                                       @PathParam("accountId") String accountId) throws Exception {
     CacheControl cacheControl = new CacheControl();
@@ -177,7 +173,6 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
         buffer.append("  </checkingmail>");
         buffer.append("</info>");
-        // mailService.removeCheckingInfo(userName, accountId);
         return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
       } else if (checkingInfo.hasChanged()) {
         buffer.append("<info>");
@@ -208,5 +203,29 @@ public class MailWebservice implements ResourceContainer {
     }
 
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
+  }
+  
+  /**
+   * Get all email from contacts data base  
+   * @param username : userid to validate session and data store
+   * @param keywords : the text to compare with data base
+   * @return application/json content type
+   */
+  @GET
+  @Path("/searchemail/{username}/{keywords}")
+  public Response searchemail(@PathParam("username") String username, @PathParam("keywords") String keywords) throws Exception{
+    ContactService contactSvr = (ContactService) PortalContainer.getInstance().getComponentInstanceOfType(ContactService.class);
+    StringBuffer buffer = new StringBuffer();
+    try {
+      ContactFilter filter = new ContactFilter();
+      filter.setText(keywords);
+      Map<String, String> data = contactSvr.searchEmails(username, filter);
+      JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+      JsonValue json = generatorImpl.createJsonObject(data);
+      buffer.append(json.toString()) ;
+    } catch (Exception e) {
+      buffer.append(e.getLocalizedMessage());
+    }    
+    return Response.ok(buffer.toString(), JSON).build() ;
   }
 }
