@@ -1863,9 +1863,6 @@
 	width: 100%;
 }
 
-.UIFolderForm .UIForm .HorizontalLayout {
-	border: none;
-}
 
 .UIFolderForm .UIForm .UIFormGrid td.FieldLabel {
 	line-height: 20px;
