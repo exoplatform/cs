@@ -424,7 +424,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     Contact contact2 = createNewContactInAddressBooks(ab);
     contactService.saveContact(john, contact, true);
     emails = datastorage.getAllEmailBySharedGroup(root, addressBookId);
-    expected = Arrays.asList(new String[] {contact.getEmailAddresses(), contact2.getEmailAddresses()});
+    expected = Arrays.asList(new String[] {contact.getEmailAddress(), contact2.getEmailAddress()});
     assertContainsAll("Email addresses of shared address book don't match", expected, emails);
   }
 
