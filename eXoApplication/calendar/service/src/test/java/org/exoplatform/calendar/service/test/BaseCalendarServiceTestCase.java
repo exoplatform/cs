@@ -113,7 +113,7 @@ public abstract class BaseCalendarServiceTestCase extends BasicTestCase {
       String containerConf = BaseCalendarServiceTestCase.class.getResource("/conf/portal/test-configuration.xml").toString();
       StandaloneContainer.addConfigurationURL(containerConf);
       container = StandaloneContainer.getInstance();      
-      String loginConf = Thread.currentThread().getContextClassLoader().getResource("login.conf").toString();
+      String loginConf = Thread.currentThread().getContextClassLoader().getResource("conf/portal/login.conf").toString();
       
       if (System.getProperty("java.security.auth.login.config") == null)
         System.setProperty("java.security.auth.login.config", loginConf);
