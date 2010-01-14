@@ -1825,9 +1825,6 @@
 	padding: 25px 10px;
 }
 
-.UIImportForm .UIForm .HorizontalLayout {
-	border: none;
-}
 
 .UIImportForm .UIForm .UIFormGrid td.FieldLabel {
 	line-height: 20px;
