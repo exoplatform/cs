@@ -762,6 +762,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         }
         return;
       } catch (SMTPSendFailedException e) {
+        e.printStackTrace() ;
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;

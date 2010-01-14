@@ -27,7 +27,6 @@ import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.test.BasicTestCase;
@@ -112,8 +111,8 @@ public abstract class BaseMailTestCase extends BasicTestCase {
     try {
       String containerConf = BaseMailTestCase.class.getResource("/conf/portal/test-configuration.xml").toString();
       StandaloneContainer.addConfigurationURL(containerConf);
-      container = StandaloneContainer.getInstance();      
-      String loginConf = Thread.currentThread().getContextClassLoader().getResource("login.conf").toString();
+      container = StandaloneContainer.getInstance();   
+      String loginConf = Thread.currentThread().getContextClassLoader().getResource("conf/portal/login.conf").toString();
       
       if (System.getProperty("java.security.auth.login.config") == null)
         System.setProperty("java.security.auth.login.config", loginConf);
