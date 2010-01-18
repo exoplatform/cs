@@ -30,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.container.monitor.jvm.J2EEServerInfo;
 import org.exoplatform.services.log.ExoLogger;
@@ -69,12 +70,7 @@ public class LogoutFilter implements Filter {
       javax.servlet.http.HttpSession session = httpRequest.getSession(false);
       if (session != null) {
         String sessionId = session.getId();
-        
-        ExoContainer container = ExoContainerContext.getCurrentContainer();
-        if (container instanceof RootContainer) {
-          container = RootContainer.getInstance().getPortalContainer("portal");
-        }
-        ConversationRegistry conversationRegistry = (ConversationRegistry) container.getComponentInstanceOfType(ConversationRegistry.class);
+        ConversationRegistry conversationRegistry = (ConversationRegistry) PortalContainer.getInstance().getComponentInstanceOfType(ConversationRegistry.class);
         if (conversationRegistry!= null && conversationRegistry.getStateKeys(sessionId) != null) {
           log.info("Remove session : " + sessionId);
           session.invalidate();

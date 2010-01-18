@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
@@ -39,11 +40,7 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
   @Override
   public void onEvent(Event<ConversationRegistry, ConversationState> event) throws Exception {
     try {
-      ExoContainer container = ExoContainerContext.getCurrentContainer();
-      if (container instanceof RootContainer) {
-        container = RootContainer.getInstance().getPortalContainer("portal");
-      }
-      MailService mService = (MailService)container.getComponentInstanceOfType(MailService.class) ;
+      MailService mService = (MailService)PortalContainer.getInstance().getComponentInstanceOfType(MailService.class) ;
       String username = event.getData().getIdentity().getUserId();
       List<Account> accList = mService.getAccounts(username);
       for (Account acc : accList) {

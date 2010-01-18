@@ -55,10 +55,8 @@ import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.RootContainer;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-//import org.exoplatform.calendar.service.R;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
@@ -536,9 +534,7 @@ public class VCardImportExport implements ContactImportExport {
   }
 
   protected ContinuationService getContinuationService() {
-    ExoContainer container = RootContainer.getInstance();
-    container = ((RootContainer)container).getPortalContainer("portal");
-    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
+    ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
     return continuation;
 
   }

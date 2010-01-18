@@ -37,6 +37,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.rest.Connector;
 import org.exoplatform.services.xmpp.connection.impl.XMPPMessenger;
@@ -87,9 +88,7 @@ public class FileExchangeServlet extends HttpServlet implements Connector {
       // Parse the request
       try {
         List<FileItem> items = upload.parseRequest(req);
-        ExoContainer container = RootContainer.getInstance();
-        container = ((RootContainer) container).getPortalContainer("portal");
-        XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
+        XMPPMessenger messenger = (XMPPMessenger) PortalContainer.getInstance().getComponentInstanceOfType(XMPPMessenger.class);
         for (FileItem fileItem : items) {
           XMPPSessionImpl session = (XMPPSessionImpl) messenger.getSession(username);
           String fileName = fileItem.getName();

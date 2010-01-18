@@ -18,8 +18,7 @@ package org.exoplatform.contact.webui;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.RootContainer;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
@@ -64,9 +63,7 @@ public class UIContactPortlet extends UIPortletApplication {
   }
   
   protected ContinuationService getContinuationService() {
-    ExoContainer container = RootContainer.getInstance();
-    container = ((RootContainer)container).getPortalContainer("portal");
-    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
+    ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
     return continuation;
   }
   public String getUserToken()throws Exception {

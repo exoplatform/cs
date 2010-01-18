@@ -42,8 +42,7 @@ import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.RootContainer;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
@@ -520,9 +519,7 @@ public class Utils {
   } 
   
   public static ContinuationService getContinuationService() throws Exception {
-    ExoContainer container = RootContainer.getInstance();
-    container = ((RootContainer)container).getPortalContainer("portal");
-    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
+    ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
     return continuation;
   }
   
