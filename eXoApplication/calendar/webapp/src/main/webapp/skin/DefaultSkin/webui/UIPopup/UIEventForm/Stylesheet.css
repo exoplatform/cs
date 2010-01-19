@@ -1,4 +1,6 @@
-.UICalendarPortlet .UIAddNewEvent {
+.UICalendarPortlet .UIAddNewEvent .RemoveFile{
+	float: none;
+	margin-left: 0px;
 }
 
 .UICalendarPortlet .UIAddNewEvent .ReminderByEmail {
