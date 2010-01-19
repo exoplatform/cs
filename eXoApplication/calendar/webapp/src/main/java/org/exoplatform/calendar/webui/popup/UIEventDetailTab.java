@@ -123,7 +123,8 @@ public class UIEventDetailTab extends UIFormInputWithActions {
       removeAction.setActionListener(UIEventForm.ACT_REMOVE) ;
       removeAction.setActionName(UIEventForm.ACT_REMOVE);
       removeAction.setActionParameter(attachdata.getId());
-      removeAction.setActionType(ActionData.TYPE_LINK) ;
+      removeAction.setActionType(ActionData.TYPE_ICON) ;
+      removeAction.setCssIconClass("RemoveFile");
       removeAction.setBreakLine(true) ;
       uploadedFiles.add(removeAction) ;
     }
