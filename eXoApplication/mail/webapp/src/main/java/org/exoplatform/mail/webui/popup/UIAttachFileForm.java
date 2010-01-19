@@ -113,7 +113,8 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
             attachFile.setMimeType(uploadResource.getMimeType()) ;
             attachFile.setSize((long)uploadResource.getUploadedSize());
             attachFile.setResoureId(input.getUploadId()) ;
-            attachList.add(attachFile);
+            attachFile.setPath(uploadResource.getStoreLocation());
+            attachList.add(attachFile);            
           }
         }
       } catch(Exception e) {

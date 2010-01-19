@@ -35,6 +35,7 @@ import java.util.ResourceBundle;
 
 import javax.activation.CommandMap;
 import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.activation.MailcapCommandMap;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
@@ -63,8 +64,6 @@ import javax.mail.search.RecipientStringTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SentDateTerm;
 import javax.mail.search.SubjectTerm;
-import javax.mail.util.ByteArrayDataSource;
-import javax.mail.util.SharedFileInputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -610,6 +609,7 @@ public class MailServiceImpl implements MailService, Startable {
   
   @SuppressWarnings("unchecked")
   private Message send(Session session, Transport transport, Message message) throws Exception {
+    System.out.println("\n\t**========>>>>>>send");
     MimeMessage mimeMessage = new MimeMessage(session);
     String status = "";
     InternetAddress addressFrom;
@@ -640,9 +640,7 @@ public class MailServiceImpl implements MailService, Startable {
     mimeMessage.setSubject(message.getSubject(), "UTF-8");
     mimeMessage.setSentDate(message.getSendDate());
 
-    MimeMultipart multipPartRoot = new MimeMultipart("mixed");
 
-    MimeMultipart multipPartContent = new MimeMultipart("alternative");
 
     List<Attachment> attachList = message.getAttachments();
     if (attachList != null && attachList.size() != 0) {
@@ -652,32 +650,21 @@ public class MailServiceImpl implements MailService, Startable {
       else
         contentPartRoot.setContent(message.getMessageBody(), "text/html; charset=utf-8");
 
+      MimeMultipart multipPartContent = new MimeMultipart("alternative");
       MimeBodyPart mimeBodyPart1 = new MimeBodyPart();
       mimeBodyPart1.setContent(message.getMessageBody(), message.getContentType());
       multipPartContent.addBodyPart(mimeBodyPart1);
-      multipPartRoot.addBodyPart(contentPartRoot);
-
+      
       for (Attachment att : attachList) {
-        InputStream is = null;
-        try {
-          is = att.getInputStream();
-          SharedFileInputStream sharedInputStream = new SharedFileInputStream(att.getName());
-          InputStream inputStream = sharedInputStream.newStream(0L, att.getSize());
-          MimeBodyPart mimeBodyPart = new MimeBodyPart();
-          ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(inputStream,
-                                                                            att.getMimeType());
-          mimeBodyPart.setDataHandler(new DataHandler(byteArrayDataSource));
+        MimeBodyPart mimeBodyPart = new MimeBodyPart();
+        FileDataSource fileDataSource = new FileDataSource(att.getPath());
+        mimeBodyPart.setDataHandler(new DataHandler(fileDataSource));
 
-          mimeBodyPart.setDisposition(Part.ATTACHMENT);
-          mimeBodyPart.setFileName(MimeUtility.encodeText(att.getName(), "utf-8", null));
-          multipPartRoot.addBodyPart(mimeBodyPart);
-        } finally {
-          if (is != null) {
-            is.close();
-          }
-        }
+        mimeBodyPart.setDisposition(Part.ATTACHMENT);
+        mimeBodyPart.setFileName(MimeUtility.encodeText(fileDataSource.getName(), "utf-8", null));
+        multipPartContent.addBodyPart(mimeBodyPart);
       }
-      mimeMessage.setContent(multipPartRoot);
+      mimeMessage.setContent(multipPartContent);
     } else {
       if (message.getContentType() != null && message.getContentType().indexOf("text/plain") > -1)
         mimeMessage.setContent(message.getMessageBody(), "text/plain; charset=utf-8");
@@ -2178,38 +2165,6 @@ public class MailServiceImpl implements MailService, Startable {
     return msg;
   }
   
-//  public Message loadTotalMessage(String username, String accountId, Message msg) throws Exception {
-//    System.out.println("\n\t**========>>>>>>loadTotalMessage...");
-//    Account account = getAccountById(username, accountId);
-//    IMAPStore imapStore = null;
-//    javax.mail.Folder fd = null;
-//    try {
-//      imapStore = openIMAPConnection(username, account);
-//      if (!msg.isLoaded() && imapStore != null) {
-//        javax.mail.Message message = null;
-//        URLName url = new URLName(getFolder(username, accountId, msg.getFolders()[0]).getURLName());
-//        fd = imapStore.getFolder(url);
-//        if (fd != null) {
-//          if (!fd.isOpen()) {
-//            fd.open(javax.mail.Folder.READ_WRITE);
-//          }
-//          message = ((IMAPFolder) fd).getMessageByUID(Long.valueOf(msg.getUID()));
-//          storage_.saveTotalMessage(username, accountId, msg.getId(), message, null);
-//        }
-//      }
-//    } catch (Exception e) {
-//      logger.info("Download content failure");
-//    } finally {
-//      if (imapStore != null && imapStore.isConnected()) {
-//        imapStore.close();
-//      }
-//      if (fd != null && fd.isOpen()) {
-//        fd.close(true);
-//      }
-//    }
-//    return storage_.loadTotalMessage(username, accountId, msg);
-//  }
-
   public List<MailUpdateStorageEventListener> listeners_ = new ArrayList<MailUpdateStorageEventListener>();
 
   public void start() {
@@ -2219,8 +2174,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void stop() {
-    System.out.println("\n\t**========>>>>>>stop");
-//    removeCheckingInfo(username, accountId)
   }
 
   public synchronized void addListenerPlugin(ComponentPlugin listener) throws Exception {
