@@ -30,8 +30,6 @@ import org.exoplatform.contact.service.Utils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -113,7 +111,6 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       
       ContactService service = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      SessionProvider session = SessionProviderFactory.createSessionProvider() ;
       try {
         service.removeContacts(username, tempContact) ;
       } catch (PathNotFoundException e) {}

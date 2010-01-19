@@ -48,7 +48,6 @@ import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UITaskForm;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -144,12 +143,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     for(int i = 0 ; i < CalendarEvent.PRIORITY.length ; i++ ) {
       priorityMap_.put(String.valueOf(i), CalendarEvent.PRIORITY[i]) ;
     }
-  }
-  protected SessionProvider getSession() {
-    return SessionProviderFactory.createSessionProvider() ;
-  }
-  protected SessionProvider getSystemSession() {
-    return SessionProviderFactory.createSystemProvider() ;
   }
   protected Calendar getInstanceTempCalendar() { 
     if(instanceTempCalendar_ != null) return instanceTempCalendar_ ; 

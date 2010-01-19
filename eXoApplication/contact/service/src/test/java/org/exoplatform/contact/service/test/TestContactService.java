@@ -33,6 +33,7 @@ import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.Utils;
@@ -53,12 +54,12 @@ public class TestContactService extends BaseContactServiceTestCase {
 
   private static String  demo = "demo";
 
-  private JCRDataStorage datastorage;
+  private DataStorage datastorage;
 
   public TestContactService() throws Exception {
     super();
     contactService = (ContactService) container.getComponentInstanceOfType(ContactService.class);
-    datastorage = (JCRDataStorage) container.getComponentInstanceOfType(JCRDataStorage.class);
+    datastorage = (DataStorage) container.getComponentInstanceOfType(JCRDataStorage.class);
   }
 
   public void setUp() throws Exception {
@@ -691,7 +692,7 @@ public void testGetSharedContactsByFilter() throws Exception {
     // contactGroup4 is userRoot_'s --> type is PRIVATE
     contactService.moveContacts(root,
                                 Arrays.asList(new Contact[] { contact4 }),
-                                JCRDataStorage.PERSONAL);
+                                DataStorage.PERSONAL);
     pageList = contactService.getPersonalContactsByAddressBook(root, rootBook2.getId()) ;
     pageList.setSession(datastorage.getPersonalContactsHome(sessionProvider, root).getSession()) ;
     assertEquals(pageList.getAll().size(), 3);
@@ -801,9 +802,9 @@ public void testGetSharedContactsByFilter() throws Exception {
     // paste AddressBook
     contactService.pasteAddressBook(john,
                                     johnBook.getId(),
-                                    JCRDataStorage.PERSONAL,
+                                    DataStorage.PERSONAL,
                                     sharedBook.getId(),
-                                    JCRDataStorage.SHARED);
+                                    DataStorage.SHARED);
     pageList = contactService.getSharedContactsByAddressBook(john, sharedAddressBook) ;
     pageList.setSession(datastorage.getSharedContactsHome(sessionProvider, root).getSession()) ;
     assertEquals(pageList.getAll().size(), 1);
@@ -813,7 +814,7 @@ public void testGetSharedContactsByFilter() throws Exception {
     contacts.put(contact3.getId(), contact3.getContactType());
     contactService.pasteContacts(john,
                                  sharedBook.getId(),
-                                 JCRDataStorage.SHARED,
+                                 DataStorage.SHARED,
                                  contacts);
     pageList = contactService.getSharedContactsByAddressBook(john, sharedAddressBook) ;
     pageList.setSession(datastorage.getSharedContactsHome(sessionProvider, root).getSession()) ;
@@ -849,8 +850,8 @@ public void testGetSharedContactsByFilter() throws Exception {
     Tag tag = createTag("tag1");
     // add new and get tag:
     contactService.addTag(root, Arrays.asList(new String[] {
-        contact1.getId() + "::" + JCRDataStorage.PERSONAL,
-        contact4.getId() + "::" + JCRDataStorage.PERSONAL }), Arrays.asList(new Tag[] { tag }));
+        contact1.getId() + "::" + DataStorage.PERSONAL,
+        contact4.getId() + "::" + DataStorage.PERSONAL }), Arrays.asList(new Tag[] { tag }));
     assertNotNull(contactService.getTag(root, tag.getId()));
 
     // update tag:
@@ -869,7 +870,7 @@ public void testGetSharedContactsByFilter() throws Exception {
     // removeContactTag
     contactService.removeContactTag(root,
                                     Arrays.asList(new String[] { contact4.getId() + "::"
-                                        + JCRDataStorage.PERSONAL }),
+                                        + DataStorage.PERSONAL }),
                                     Arrays.asList(new String[] { tag.getId() }));
     assertEquals(contactService.getContactPageListByTag(root, tag.getId())
                                .getAll()
@@ -877,8 +878,8 @@ public void testGetSharedContactsByFilter() throws Exception {
 
     // add tag:
     contactService.addTag(root, Arrays.asList(new String[] {
-        contact1.getId() + "::" + JCRDataStorage.PERSONAL,
-        contact4.getId() + "::" + JCRDataStorage.PERSONAL }), tag.getId());
+        contact1.getId() + "::" + DataStorage.PERSONAL,
+        contact4.getId() + "::" + DataStorage.PERSONAL }), tag.getId());
     assertEquals(contactService.getContactPageListByTag(root, tag.getId())
                                .getAll()
                                .size(), 2);

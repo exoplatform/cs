@@ -32,9 +32,9 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.contact.webui.popup.UIAddEditPermission;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
@@ -158,7 +158,7 @@ public class UIAddressBooks extends UIComponent {
     AddressBook sharedGroup = ContactUtils.getContactService().getSharedAddressBook(currentUser, groupId) ;
     if (sharedGroup == null) return false ;
     if (sharedGroup.getEditPermissionUsers() != null &&
-        Arrays.asList(sharedGroup.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
+        Arrays.asList(sharedGroup.getEditPermissionUsers()).contains(currentUser + DataStorage.HYPHEN)) {
       return true ;
     }
     String[] editPerGroups = sharedGroup.getEditPermissionGroups() ;
@@ -215,11 +215,11 @@ public class UIAddressBooks extends UIComponent {
       String username = ContactUtils.getCurrentUser() ;
       String destType ;
       if (uiAddressBook.privateAddressBookMap_.containsKey(destAddress))
-        destType = JCRDataStorage.PERSONAL ;
+        destType = DataStorage.PERSONAL ;
       else {
-        destType = JCRDataStorage.SHARED ;     
+        destType = DataStorage.SHARED ;     
       }
-      if (destType.equals(JCRDataStorage.SHARED) && (!uiAddressBook.havePermission(destAddress))) {
+      if (destType.equals(DataStorage.SHARED) && (!uiAddressBook.havePermission(destAddress))) {
         UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
           ApplicationMessage.WARNING)) ;
@@ -237,9 +237,9 @@ public class UIAddressBooks extends UIComponent {
           return ;
         }
         String srcType ;
-        if (uiAddressBook.privateAddressBookMap_.containsKey(srcAddress)) srcType = JCRDataStorage.PERSONAL ;
-        else if (uiAddressBook.sharedAddressBookMap_.containsKey(srcAddress)) srcType = JCRDataStorage.SHARED ;
-        else srcType = JCRDataStorage.PUBLIC ;
+        if (uiAddressBook.privateAddressBookMap_.containsKey(srcAddress)) srcType = DataStorage.PERSONAL ;
+        else if (uiAddressBook.sharedAddressBookMap_.containsKey(srcAddress)) srcType = DataStorage.SHARED ;
+        else srcType = DataStorage.PUBLIC ;
         ContactUtils.getContactService().pasteAddressBook(username
             , srcAddress, srcType, destAddress, destType) ;
       } else {
@@ -275,16 +275,16 @@ public class UIAddressBooks extends UIComponent {
         String username = ContactUtils.getCurrentUser() ;
         Map<String, String> privateGroup = uiAddressBook.privateAddressBookMap_ ;
         if (privateGroup.containsKey(addressBookId)) {
-          uiExportForm.setSelectedGroup(JCRDataStorage.PERSONAL + Utils.SPLIT +
+          uiExportForm.setSelectedGroup(DataStorage.PERSONAL + Utils.SPLIT +
               addressBookId + Utils.SPLIT + privateGroup.get(addressBookId)) ;
           contacts = contactService.getPersonalContactsByAddressBook(username, addressBookId) ;
         } else if (ContactUtils.getUserGroups().contains(addressBookId)){        
-          uiExportForm.setSelectedGroup(JCRDataStorage.PUBLIC + Utils.SPLIT +
+          uiExportForm.setSelectedGroup(DataStorage.PUBLIC + Utils.SPLIT +
               addressBookId + Utils.SPLIT + addressBookId) ;
           contacts = contactService.getPublicContactsByAddressBook(addressBookId);
         } else {
           SharedAddressBook address = uiAddressBook.sharedAddressBookMap_.get(addressBookId) ;
-          uiExportForm.setSelectedGroup(JCRDataStorage.SHARED + Utils.SPLIT + 
+          uiExportForm.setSelectedGroup(DataStorage.SHARED + Utils.SPLIT + 
               addressBookId + Utils.SPLIT + ContactUtils.getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
           contacts = contactService.getSharedContactsByAddressBook(
               username, address) ;

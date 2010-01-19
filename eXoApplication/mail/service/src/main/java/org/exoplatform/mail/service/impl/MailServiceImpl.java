@@ -102,7 +102,6 @@ import org.quartz.JobDetail;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
-import com.sun.mail.smtp.SMTPSSLTransport;
 import com.sun.mail.smtp.SMTPSendFailedException;
 import com.sun.mail.smtp.SMTPTransport;
 
@@ -1070,6 +1069,7 @@ public class MailServiceImpl implements MailService, Startable {
         }
 
         folderList.add(fd);
+        //TODO define what is 2 here ?
         if ((folderType == 2) || (fd.list().length > 0)) {
           folderList.addAll(synchImapFolders(username, accountId, getFolder(username,
                                                                             accountId,

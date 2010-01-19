@@ -27,8 +27,8 @@ import javax.jcr.PathNotFoundException;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.Tag;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
@@ -205,7 +205,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
           if (contact.getTags() != null)
             for (String tagId : contact.getTags()) newTagIds.put(tagId, tagId) ;
           contact.setTags(newTagIds.keySet().toArray(new String[] {})) ;
-          contactIds.add(contact.getId() + JCRDataStorage.SPLIT + contact.getContactType()) ;
+          contactIds.add(contact.getId() + DataStorage.SPLIT + contact.getContactType()) ;
         }      
         contactService.addTag(username, contactIds, tags);
       } catch (PathNotFoundException e) {
@@ -241,7 +241,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       noTags.addAll(checkedTags) ;
       for (Contact contact : uiForm.contacts_) {
         contactIds.add(contact.getId()) ;
-        newContactIds.add(contact.getId() + JCRDataStorage.SPLIT + contact.getContactType()) ;
+        newContactIds.add(contact.getId() + DataStorage.SPLIT + contact.getContactType()) ;
         if (contact.getTags() != null) {
           for (String tag : contact.getTags()) noTags.remove(tag) ;          
         }

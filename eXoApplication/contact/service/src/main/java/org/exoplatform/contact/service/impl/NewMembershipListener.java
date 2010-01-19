@@ -33,6 +33,7 @@ import javax.jcr.query.QueryResult;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -63,10 +64,10 @@ public class NewMembershipListener extends MembershipEventListener {
     String username = m.getUserName();
     String groupId = m.getGroupId();
     cservice_.addUserContactInAddressBook(username, groupId) ;
-    JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_, reposervice_) ;
+    DataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_, reposervice_) ;
     SessionProvider systemSession = SessionProvider.createSystemProvider() ;
     try {
-      String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
+      String usersPath = nodeHierarchyCreator_.getJcrPath(DataStorage.USERS_PATH) ;
       Contact contact = cservice_.getPublicContact(username) ;
       QueryManager qm = getSession(systemSession).getWorkspace().getQueryManager();
       Map<String, String> groups = new LinkedHashMap<String, String>() ;
@@ -115,8 +116,8 @@ public class NewMembershipListener extends MembershipEventListener {
     SessionProvider systemSession = SessionProvider.createSystemProvider();
     try {
       cservice_.saveContact(m.getUserName(), contact, false) ;
-      JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_, reposervice_) ;
-      String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
+      DataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_, reposervice_) ;
+      String usersPath = nodeHierarchyCreator_.getJcrPath(DataStorage.USERS_PATH) ;
       QueryManager qm = getSession(systemSession).getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
           + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append( m.getGroupId() + "']") ;        

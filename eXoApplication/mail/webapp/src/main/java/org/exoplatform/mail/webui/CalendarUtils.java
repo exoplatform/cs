@@ -92,7 +92,7 @@ public class CalendarUtils {
     Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;
     String[] groups = new String[objs.length] ;
     for(int i = 0; i < objs.length ; i ++) {
-      groups[i] = ((GroupImpl)objs[i]).getId() ;
+      groups[i] = ((Group)objs[i]).getId() ;
     }
     return groups ;
   }
@@ -101,7 +101,7 @@ public class CalendarUtils {
     Object[] objs = organization.getGroupHandler().getAllGroups().toArray() ;
     String[] groups = new String[objs.length] ;
     for(int i = 0; i < objs.length ; i ++) {
-      groups[i] = ((GroupImpl)objs[i]).getId() ;
+      groups[i] = ((Group)objs[i]).getId() ;
     }
     return groups ;
   }

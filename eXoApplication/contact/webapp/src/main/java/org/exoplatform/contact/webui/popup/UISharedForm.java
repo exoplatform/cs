@@ -28,7 +28,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
@@ -196,7 +196,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         for(String name : array) {
           if (organizationService.getUserHandler().findUserByName(name.trim()) != null) {
             if (!name.trim().equals(username)) {
-              receiveUsers.put(name.trim() + JCRDataStorage.HYPHEN, name.trim() + JCRDataStorage.HYPHEN) ;
+              receiveUsers.put(name.trim() + DataStorage.HYPHEN, name.trim() + DataStorage.HYPHEN) ;
             }
           } else {
             if (invalidUsers.length() == 0) invalidUsers.append(name) ;

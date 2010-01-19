@@ -26,6 +26,7 @@ import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
@@ -45,7 +46,7 @@ public class ContactServiceImpl implements ContactService {
   
   final private static String VCARD = "x-vcard".intern() ;
   
-  private JCRDataStorage storage_ ;
+  private DataStorage storage_ ;
   private Map<String, ContactImportExport> contactImportExport_ = new HashMap<String, ContactImportExport>() ;
   
   public ContactServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService rservice) throws Exception {
@@ -79,21 +80,21 @@ public class ContactServiceImpl implements ContactService {
    * {@inheritDoc}
    */
   public ContactPageList getPersonalContactsByFilter(String username, ContactFilter filter) throws Exception {
-    return storage_.findContactsByFilter(username, filter, JCRDataStorage.PERSONAL) ;
+    return storage_.findContactsByFilter(username, filter, DataStorage.PERSONAL) ;
   }
   
   /**
    * {@inheritDoc}
    */
   public ContactPageList getSharedContactsByFilter(String username, ContactFilter filter) throws Exception {
-    return storage_.findContactsByFilter(username, filter, JCRDataStorage.SHARED) ;
+    return storage_.findContactsByFilter(username, filter, DataStorage.SHARED) ;
   }
   
   /**
    * {@inheritDoc}
    */
   public ContactPageList getPublicContactsByFilter(String username, ContactFilter filter) throws Exception {
-    return storage_.findContactsByFilter(username, filter, JCRDataStorage.PUBLIC) ;
+    return storage_.findContactsByFilter(username, filter, DataStorage.PUBLIC) ;
   }  
   
   /**

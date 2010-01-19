@@ -33,9 +33,7 @@ import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.contact.CalendarUtils;
 import org.exoplatform.contact.webui.Selector;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -447,23 +445,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     eventDetailTab.getUIFormTextAreaInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).setValue(value) ;
   }
 
-  /* protected boolean getPopupReminder() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
-    return eventDetailTab.getUIFormCheckBoxInput(UIEventReminderTab.REMIND_BY_POPUP).isChecked() ;
-  }
-  protected void setPopupReminder(boolean isChecked) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
-    eventDetailTab.getUIFormCheckBoxInput(UIEventReminderTab.REMIND_BY_POPUP).setChecked(isChecked) ;
-  }
-  protected String getPopupReminderTime() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
-    return eventDetailTab.getUIStringInput(UIEventReminderTab.POPUP_REMIND_BEFORE).getValue() ;
-  }
-
-  protected void setPopupReminderTime(String value) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
-    eventDetailTab.getUIStringInput(UIEventReminderTab.POPUP_REMIND_BEFORE).setValue(value) ;
-  }*/
 
   protected void setEventReminders(List<Reminder> reminders){
     if(reminders != null)
@@ -472,13 +453,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
           setEmailReminder(true) ;
           setEmailAddress(r.getEmailAddress()) ;
           setEmailReminderTime(String.valueOf(r.getAlarmBefore())) ; 
-        }/*else if(Reminder.TYPE_POPUP.equals(r.getReminderType())) {
-        setPopupReminder(true) ;
-        setPopupReminderTime(String.valueOf(r.getAlarmBefore())) ;
-        //setPopupReminderSnooze(r.getSnooze()) ;
-      } else {
-        System.out.println("\n\n reminder not supported");
-      }*/
+        } 
       }
   }
   protected String getEmailRemindBefore() {
@@ -521,31 +496,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       email.setFromDateTime(fromDateTime) ;      
       reminders.add(email) ;
     }
-    /*if(getPopupReminder()) {
-      Reminder popup = new Reminder() ;
-      if(currentReminders != null) {
-        for(Reminder rm : currentReminders) {
-          if(rm.getReminderType().equals(Reminder.TYPE_POPUP)) {
-            popup = rm ;
-            break ;
-          }
-        }
-      } 
-      popup.setReminderType(Reminder.TYPE_POPUP) ;
-      popup.setAlarmBefore(Long.parseLong(getPopupReminderTime())) ;
-      popup.setRepeate(Boolean.parseBoolean(isPopupRepeat())) ;
-      popup.setRepeatInterval(Long.parseLong(getPopupRepeatInterVal())) ;
-      popup.setFromDateTime(fromDateTime) ;
-      reminders.add(popup) ;
-    }*/
     return reminders ;
   }
-  protected SessionProvider getSession() {
-    return SessionProviderFactory.createSessionProvider() ;
-  }
-  protected SessionProvider getSystemSession() {
-    return SessionProviderFactory.createSystemProvider() ;
-  }
+   
   protected String getEventPriority() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     return eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_PRIORITY).getValue() ;

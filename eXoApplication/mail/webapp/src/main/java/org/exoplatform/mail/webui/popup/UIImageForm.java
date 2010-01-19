@@ -29,8 +29,6 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -115,7 +113,6 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       contact.setAttachment(attachment) ; 
       ContactService contactSrv = uiForm.getApplicationComponent(ContactService.class);
       String username = MailUtils.getCurrentUser() ;
-      SessionProvider session = SessionProviderFactory.createSessionProvider() ;
       List<String> tempContact = new ArrayList<String>() ;
       tempContact.add(org.exoplatform.contact.service.Utils.contactTempId) ;
       try {

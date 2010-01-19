@@ -62,7 +62,6 @@ import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
@@ -1029,12 +1028,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
   }*/
 
-  protected SessionProvider getSession() {
-    return SessionProviderFactory.createSessionProvider() ;
-  }
-  protected SessionProvider getSystemSession() {
-    return SessionProviderFactory.createSystemProvider() ;
-  }
 
   protected boolean isSendMail() {
     // UIFormInputWithActions uiShareTab = getChildById(TAB_EVENTSHARE) ;
@@ -1167,7 +1160,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       List<org.exoplatform.mail.service.Attachment> attachments = new ArrayList<org.exoplatform.mail.service.Attachment>() ;
       try {
         CalendarService calService = CalendarUtils.getCalendarService() ;
-        OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportEventCalendar(getSystemSession(), fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
+        OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportEventCalendar(fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
         BufferAttachment bf = new BufferAttachment() ;
         bf.setInputStream(is) ;
@@ -1201,7 +1194,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       org.exoplatform.services.mail.Attachment attachmentCal = new org.exoplatform.services.mail.Attachment() ;
       try {
         CalendarService calService = CalendarUtils.getCalendarService() ;
-        OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportEventCalendar(getSystemSession(), fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
+        OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportEventCalendar(fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
         attachmentCal.setInputStream(is) ;
         attachmentCal.setMimeType("text/calendar") ;

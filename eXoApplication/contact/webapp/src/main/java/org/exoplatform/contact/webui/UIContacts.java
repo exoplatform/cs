@@ -39,10 +39,10 @@ import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.contact.webui.popup.UIAddEditPermission;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
@@ -213,7 +213,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public void setSelectSharedContacts(boolean selected) { isSelectSharedContacts = selected ; }
   public boolean isSelectSharedContacts() { return isSelectSharedContacts ; }
   public boolean havePermissionAdd(Contact contact) throws Exception {
-    if (!contact.getContactType().equals(JCRDataStorage.SHARED)) return false ;
+    if (!contact.getContactType().equals(DataStorage.SHARED)) return false ;
     Map<String, SharedAddressBook> sharedGroupMap = getAncestorOfType(
         UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class).getSharedGroups() ;
     String currentUser = ContactUtils.getCurrentUser() ;
@@ -221,7 +221,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       SharedAddressBook add = sharedGroupMap.get(address) ;
       if (add != null) {
         if (add.getEditPermissionUsers() != null &&
-            Arrays.asList(add.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
+            Arrays.asList(add.getEditPermissionUsers()).contains(currentUser + DataStorage.HYPHEN)) {
           return true ;
         }
         String[] editPerGroups = add.getEditPermissionGroups() ;
@@ -236,11 +236,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     return false ;
   }
   public boolean havePermission(Contact contact) throws Exception {
-    if (!contact.getContactType().equals(JCRDataStorage.SHARED)) return true ;
+    if (!contact.getContactType().equals(DataStorage.SHARED)) return true ;
     // contact shared
     String currentUser = ContactUtils.getCurrentUser() ;
     if (contact.getEditPermissionUsers() != null &&
-        Arrays.asList(contact.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
+        Arrays.asList(contact.getEditPermissionUsers()).contains(currentUser + DataStorage.HYPHEN)) {
       return true ;
     }
     String[] editPerGroups = contact.getEditPermissionGroups() ;
@@ -255,7 +255,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       try {
         SharedAddressBook add = sharedGroupMap.get(address) ;
         if (add.getEditPermissionUsers() != null &&
-            Arrays.asList(add.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
+            Arrays.asList(add.getEditPermissionUsers()).contains(currentUser + DataStorage.HYPHEN)) {
           return true ;
         }
         editPerGroups = add.getEditPermissionGroups() ;
@@ -487,7 +487,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       ContactService service = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      if (contact.getContactType().equalsIgnoreCase(JCRDataStorage.PERSONAL)) {
+      if (contact.getContactType().equalsIgnoreCase(DataStorage.PERSONAL)) {
         try {
           contact = service.getContact(username, contactId) ;
         } catch (NullPointerException e) {
@@ -606,7 +606,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       List<String> newContactIds = new ArrayList<String>();
       for (String contactId : contactIds) {
         Contact contact = uiContacts.contactMap.get(contactId) ;
-        newContactIds.add(contactId + JCRDataStorage.SPLIT + contact.getContactType()) ;
+        newContactIds.add(contactId + DataStorage.SPLIT + contact.getContactType()) ;
       }
       try {
         ContactUtils.getContactService().addTag(ContactUtils.getCurrentUser(), newContactIds, tagId);
@@ -669,12 +669,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         }
         for (String id : contactIds) {
           Contact contact = uiContacts.contactMap.get(id) ;         
-          if (contact.getContactType().equals(JCRDataStorage.PUBLIC)) {
+          if (contact.getContactType().equals(DataStorage.PUBLIC)) {
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
                 , ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
-          } else if (contact.getContactType().equals(JCRDataStorage.SHARED)&& uiContacts.isSharedAddress(contact)) {
+          } else if (contact.getContactType().equals(DataStorage.SHARED)&& uiContacts.isSharedAddress(contact)) {
             if (contact.isOwner()) {
               uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
                   , ApplicationMessage.WARNING)) ;
@@ -726,7 +726,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (uiAddressBooks.getSharedGroups().containsKey(addressBookId)) {
         AddressBook group = contactService.getSharedAddressBook(username, addressBookId) ;
         if (group.getEditPermissionUsers() == null || 
-            !Arrays.asList(group.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
+            !Arrays.asList(group.getEditPermissionUsers()).contains(username + DataStorage.HYPHEN)) {
           boolean canEdit = false ;
           String[] editPerGroups = group.getEditPermissionGroups() ;
           if (editPerGroups != null)
@@ -754,13 +754,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           return ;          
-        } if (contact.getContactType().equals(JCRDataStorage.PUBLIC)) {
+        } if (contact.getContactType().equals(DataStorage.PUBLIC)) {
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
               , ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           return ;
-        } else if (contact.getContactType().equals(JCRDataStorage.SHARED)&& uiContacts.isSharedAddress(contact)) {
+        } else if (contact.getContactType().equals(DataStorage.SHARED)&& uiContacts.isSharedAddress(contact)) {
           if (contact.isOwner()) {
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
                 , ApplicationMessage.WARNING)) ;
@@ -787,7 +787,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       for(String contactId : contactIds) {
         Contact contact = uiContacts.contactMap.get(contactId) ;
         if (!contact.getAddressBookIds()[0].equals(addressBookId)) copyedContacts.remove(contactId) ;  
-        if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
+        if (contact.getContactType().equals(DataStorage.SHARED)) {
 //        check for existing contact
           Contact tempContact = null ;
           if (uiContacts.isSharedAddress(contact)) {
@@ -804,7 +804,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             return ;
           }
           sharedContacts.add(contact) ; 
-          copySharedContacts.put(contactId, JCRDataStorage.SHARED) ;
+          copySharedContacts.put(contactId, DataStorage.SHARED) ;
         }
         else {
           contact.setAddressBookIds(new String[] { addressBookId }) ;
@@ -864,7 +864,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           uiContacts.setContact(sharedContacts, false) ;
           uiContacts.pageList_.getAll().addAll(pastedContact) ;
         }
-        if (contacts.size() >0 && type.equals(JCRDataStorage.SHARED)) {
+        if (contacts.size() >0 && type.equals(DataStorage.SHARED)) {
           uiContacts.pageList_.getAll().removeAll(contacts) ;
           for (Contact contact : contacts) {
             uiContacts.pageList_.getAll().add(contactService.getSharedContactAddressBook(username, contact.getId())) ;
@@ -954,13 +954,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
-        } else if (contact.getContactType().equals(JCRDataStorage.PUBLIC)) {
+        } else if (contact.getContactType().equals(DataStorage.PUBLIC)) {
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-delete", null
               , ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
-        } else if (contact.getContactType().equals(JCRDataStorage.SHARED)&& uiContacts.isSharedAddress(contact)) {
+        } else if (contact.getContactType().equals(DataStorage.SHARED)&& uiContacts.isSharedAddress(contact)) {
           if (contact.isOwner()) {
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-delete", null
                 , ApplicationMessage.WARNING)) ;
@@ -992,7 +992,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       for (String id : contactIds) {
         copyedContacts.remove(id) ;
         Contact contact = uiContacts.contactMap.get(id) ;    
-        if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
+        if (contact.getContactType().equals(DataStorage.SHARED)) {
           if (uiContacts.isSharedAddress(contact)) {
             String addressBookId = null ;
             for (String add : contact.getAddressBookIds())
@@ -1108,9 +1108,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       Contact newContact = null ;
       ContactService service = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;      
-      if (oldContact.getContactType().equals(JCRDataStorage.PERSONAL)) {
+      if (oldContact.getContactType().equals(DataStorage.PERSONAL)) {
         newContact = service.getContact(username, contactId) ;
-      } else if(oldContact.getContactType().equals(JCRDataStorage.SHARED)) {
+      } else if(oldContact.getContactType().equals(DataStorage.SHARED)) {
         newContact = service.getSharedContactAddressBook( username, contactId) ;
         if (newContact == null) newContact = service
           .getSharedContact(username, contactId) ;
@@ -1409,7 +1409,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       for (String contactId : uiContacts.getCheckedContacts()) {
         Contact contact = uiContacts.contactMap.get(contactId) ;        
         String contactType = contact.getContactType() ; 
-        if (contactType.equals(JCRDataStorage.PUBLIC) || contactType.equals(JCRDataStorage.SHARED)) {
+        if (contactType.equals(DataStorage.PUBLIC) || contactType.equals(DataStorage.SHARED)) {
           UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-share", null
               , ApplicationMessage.WARNING)) ;

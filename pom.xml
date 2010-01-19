@@ -27,7 +27,7 @@
       
       
       <org.exoplatform.comet.version>2.1.0_gtn_Alpha01</org.exoplatform.comet.version>
-      <org.exoplatform.portal.version>3.0.0-Beta04</org.exoplatform.portal.version>
+      <org.exoplatform.portal.version>3.0.0-Beta05</org.exoplatform.portal.version>
       <exo.tool.framework.junit.version>1.2.0</exo.tool.framework.junit.version>
       <org.exoplatform.exopackage.version>1.1.0-Beta05</org.exoplatform.exopackage.version>
        
@@ -51,7 +51,7 @@
     
     <!-- ************** -->
     <!-- Build settings -->
-	<org.exoplatform.cs.version>2.0.0-Alpha01-SNAPSHOT</org.exoplatform.cs.version>
+	<org.exoplatform.cs.version>2.0.0-Alpha02-SNAPSHOT</org.exoplatform.cs.version>
     <!-- ************** -->
 	
     <!-- default test configuration -->

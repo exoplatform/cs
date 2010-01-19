@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -79,7 +78,7 @@ public class Contact {
    *  0: Private
    *  1: Shared
    *  2: Public */
-  private String contactType = JCRDataStorage.PERSONAL ;  
+  private String contactType = DataStorage.PERSONAL ;  
   private String[] addressBookIds ;
   private String[] tags ;
   private String[] editPermissionUsers ;

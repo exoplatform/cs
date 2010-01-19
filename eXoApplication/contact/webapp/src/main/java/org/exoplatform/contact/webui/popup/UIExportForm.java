@@ -29,9 +29,9 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactContainer;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -190,10 +190,10 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         String[] address = uiForm.selectedGroup.split(Utils.SPLIT) ;
         if (isExportAll) {
           ContactPageList pageList = null ;          
-          if (address[0].equals(JCRDataStorage.PERSONAL)) {
+          if (address[0].equals(DataStorage.PERSONAL)) {
             pageList = contactService.getPersonalContactsByAddressBook(
                 username, address[1]) ;  
-          } else if (address[0].equals(JCRDataStorage.SHARED)) {
+          } else if (address[0].equals(DataStorage.SHARED)) {
             SharedAddressBook sharedAddress = uiContactPortlet.findFirstComponentOfType(
                 UIAddressBooks.class).getSharedGroups().get(address[1]) ;
             pageList = contactService.getSharedContactsByAddressBook(
@@ -222,11 +222,11 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }          
-          if (address[0].equals(JCRDataStorage.PERSONAL)) {
+          if (address[0].equals(DataStorage.PERSONAL)) {
             for(String contactId : contactIds.keySet()) {
               contacts.add(contactService.getContact(username, contactId)) ;              
             }            
-          } else if (address[0].equals(JCRDataStorage.SHARED)) {
+          } else if (address[0].equals(DataStorage.SHARED)) {
             for(String contactId : contactIds.keySet()) {
               //cs-2326
               Contact contact = contactService.getSharedContactAddressBook(username, contactId) ;

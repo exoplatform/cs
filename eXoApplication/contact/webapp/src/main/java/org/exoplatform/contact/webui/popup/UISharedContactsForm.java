@@ -27,7 +27,7 @@ import javax.jcr.PathNotFoundException;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
@@ -194,7 +194,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
         for(String name : array) {
           if (organizationService.getUserHandler().findUserByName(name.trim()) != null) {
             if (!name.trim().equals(username)) {
-              receiverUser.put(name.trim() + JCRDataStorage.HYPHEN, name.trim() + JCRDataStorage.HYPHEN) ;
+              receiverUser.put(name.trim() + DataStorage.HYPHEN, name.trim() + DataStorage.HYPHEN) ;
             }
           } else {
             if (invalidUsers.length() == 0) invalidUsers.append(name) ;
@@ -273,12 +273,12 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
                 (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
           List<User> users = organizationService.getUserHandler().findUsersByGroup(group.trim()).getAll() ;
           for (User user : users) {
-            receiverUserByGroup.put(user.getUserName() + JCRDataStorage.HYPHEN, user.getUserName() + JCRDataStorage.HYPHEN) ;
+            receiverUserByGroup.put(user.getUserName() + DataStorage.HYPHEN, user.getUserName() + DataStorage.HYPHEN) ;
           }
         }        
       } 
-      receiverUser.remove(username + JCRDataStorage.HYPHEN) ;
-      receiverUserByGroup.remove(username + JCRDataStorage.HYPHEN) ;
+      receiverUser.remove(username + DataStorage.HYPHEN) ;
+      receiverUserByGroup.remove(username + DataStorage.HYPHEN) ;
       if (receiverUser.size() > 0 || !ContactUtils.isEmpty(groups)) {
         Map<String, String> viewMapUsers = new LinkedHashMap<String, String>() ;
         for (String user : receiverUser.keySet()) viewMapUsers.put(user, user) ;

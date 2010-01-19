@@ -30,6 +30,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 public interface ContactImportExport {
   
   /**
+   * @deprecated use {@lik #importContact(SessionProvider sProvider, String username, InputStream input, String groupId)} 
    * this method allow import contacts in form of input stream to a address book
    * @param sProvider should use system session
    * @param username userId of current user
@@ -38,6 +39,17 @@ public interface ContactImportExport {
    * @throws Exception
    */
   public void importContact(SessionProvider sProvider, String username, InputStream input, String groupId) throws Exception ;
+  
+  /**
+   * this method allow import contacts in form of input stream to a address book
+   * @param username userId of current user
+   * @param input input stream contains contacts information
+   * @param groupId id of address book that user wants to import contacts to
+   * @throws Exception
+   */
+  public void importContact(String username, InputStream input, String groupId) throws Exception ;
+  
+  
   
   /**
    * this method allow export contacts in form of output stream

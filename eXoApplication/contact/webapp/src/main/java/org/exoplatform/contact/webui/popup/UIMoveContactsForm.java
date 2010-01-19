@@ -28,11 +28,11 @@ import java.util.MissingResourceException;
 import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.AddressBook;
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.SharedAddressBook;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
@@ -40,8 +40,6 @@ import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.contact.webui.UIContacts.EmailComparator;
 import org.exoplatform.contact.webui.UIContacts.FullNameComparator;
 import org.exoplatform.contact.webui.UIContacts.JobTitleComparator;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -117,11 +115,10 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       if (uiMoveContactForm. sharedGroupMap_.containsKey(addressBookId)) {
         AddressBook group = contactService.getSharedAddressBook(username, addressBookId) ;        
         if (group.getEditPermissionUsers() == null || 
-            !Arrays.asList(group.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
+            !Arrays.asList(group.getEditPermissionUsers()).contains(username + DataStorage.HYPHEN)) {
           boolean canEdit = false ;
           String[] editPerGroups = group.getEditPermissionGroups() ;
           if (editPerGroups != null)
@@ -148,7 +145,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       for(String id : uiMoveContactForm.getContactIds()) {
         Contact contact = uiMoveContactForm.movedContacts.get(id) ;
         if (!contact.getAddressBookIds()[0].equals(addressBookId)) copyedContacts.remove(id) ;
-        if (contact.getContactType().equals(JCRDataStorage.SHARED)) {          
+        if (contact.getContactType().equals(DataStorage.SHARED)) {          
           // check for existing contact
           Contact tempContact = null ;
           if (uiContacts.isSharedAddress(contact)) {
@@ -173,7 +170,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
             return ; 
           } 
           sharedContacts.add(contact) ;
-          copySharedContacts.put(id, JCRDataStorage.SHARED) ;
+          copySharedContacts.put(id, DataStorage.SHARED) ;
         } else {
           contacts.add(contact) ;
           contact.setAddressBookIds(new String[] { addressBookId }) ;
@@ -228,7 +225,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
           uiContacts.setContact(sharedContacts, false) ;
           uiContacts.getContactPageList().getAll().addAll(pastedContact) ;
         }
-        if (contacts.size() >0 && type.equals(JCRDataStorage.SHARED)) {
+        if (contacts.size() >0 && type.equals(DataStorage.SHARED)) {
           uiContacts.getContactPageList().getAll().removeAll(contacts) ;
           for (Contact contact : contacts) {
             uiContacts.getContactPageList().getAll().add(contactService.getSharedContactAddressBook(username, contact.getId())) ;

@@ -34,7 +34,6 @@ import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
@@ -316,7 +315,6 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      SessionProvider userSession = SessionProviderFactory.createSessionProvider() ;
       try {
         if(calendarService.getCalendarImportExports(importFormat).isValidate(input.getUploadDataAsStream())) {
           if(uiForm.isNew()) {
@@ -351,7 +349,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
               calendar.setPublic(false) ;
               calendar.setCategoryId(uiForm.getSelectedIdGroup()) ;
               calendarService.saveUserCalendar(username, calendar, true) ;
-              calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendar.getId()) ;
+              calendarService.getCalendarImportExports(importFormat).importToCalendar(username, input.getUploadDataAsStream(), calendar.getId()) ;
             }
             else {
               calendar.setPublic(true) ;              
@@ -417,12 +415,12 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
               calendar.setEditPermission(listPermission.toArray(new String[listPermission.size()])) ;
               
               calendarService.savePublicCalendar(calendar, true, username) ;
-              calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendar.getId()) ;
+              calendarService.getCalendarImportExports(importFormat).importToCalendar(username, input.getUploadDataAsStream(), calendar.getId()) ;
             }
           } else {
             //String calendarId = uiForm.getUIFormSelectBoxGroup(FIELD_TO_CALENDAR).getValue() ;
             String calendarId = uiForm.getCalendarId();
-            calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendarId) ;
+            calendarService.getCalendarImportExports(importFormat).importToCalendar(username, input.getUploadDataAsStream(), calendarId) ;
           }
           UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
           UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;

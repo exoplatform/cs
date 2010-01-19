@@ -30,8 +30,8 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.SharedAddressBook;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.MailUtils;
@@ -95,7 +95,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     AddressBook sharedGroup = getApplicationComponent(ContactService.class).getSharedAddressBook(currentUser, groupId) ;
     if (sharedGroup == null) return false ;
     if (sharedGroup.getEditPermissionUsers() != null &&
-        Arrays.asList(sharedGroup.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
+        Arrays.asList(sharedGroup.getEditPermissionUsers()).contains(currentUser + DataStorage.HYPHEN)) {
       return true ;
     }
     String[] editPerGroups = sharedGroup.getEditPermissionGroups() ;
@@ -106,11 +106,11 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   }
   
   public boolean havePermission(Contact contact) throws Exception {
-    if (!contact.getContactType().equals(JCRDataStorage.SHARED)) return true ;
+    if (!contact.getContactType().equals(DataStorage.SHARED)) return true ;
     // contact shared
     String currentUser = MailUtils.getCurrentUser() ;
     if (contact.getEditPermissionUsers() != null &&
-        Arrays.asList(contact.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
+        Arrays.asList(contact.getEditPermissionUsers()).contains(currentUser + DataStorage.HYPHEN)) {
       return true ;
     }
     String[] editPerGroups = contact.getEditPermissionGroups() ;

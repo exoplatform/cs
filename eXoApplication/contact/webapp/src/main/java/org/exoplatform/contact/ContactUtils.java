@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
 import javax.jcr.RepositoryException;
 
 import org.exoplatform.contact.service.ContactService;
@@ -21,9 +22,9 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.mail.Message;
+import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
 
@@ -109,7 +110,7 @@ public class ContactUtils {
     Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(getCurrentUser()).toArray() ;
     List<String> groupIds = new ArrayList<String>() ;
     for (Object object : objGroupIds) {
-      groupIds.add(((GroupImpl)object).getId()) ;
+      groupIds.add(((Group)object).getId()) ;
     }
     return groupIds ;
   }

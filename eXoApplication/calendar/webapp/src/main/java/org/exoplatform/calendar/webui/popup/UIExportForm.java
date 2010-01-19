@@ -30,14 +30,12 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -143,7 +141,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       OutputStream out = null ;
       try {
         if(uiForm.eventId != null)
-           out = importExport.exportEventCalendar(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), calendarIds.get(0), uiForm.calType, uiForm.eventId) ;
+           out = importExport.exportEventCalendar(CalendarUtils.getCurrentUser(), calendarIds.get(0), uiForm.calType, uiForm.eventId) ;
         else out = importExport.exportCalendar(CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType) ;
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
         DownloadResource dresource = new InputStreamDownloadResource(is, "text/iCalendar") ;

@@ -27,14 +27,15 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -152,7 +153,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(username).toArray() ;
     List<String> groupIds = new ArrayList<String>() ;
     for (Object object : objGroupIds) {
-      groupIds.add(((GroupImpl)object).getId()) ;
+      groupIds.add(((Group)object).getId()) ;
     }
     if(!groupIds.isEmpty()){
       SelectOptionGroup publicContacts = new SelectOptionGroup("public-contacts");
@@ -292,7 +293,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       if (category.equals(uiForm.all)) {       
         uiForm.setContactList(filter) ;
       } else if(category.equals(uiForm.sharedContacts_)) {
-        filter.setType(JCRDataStorage.SHARED);
+        filter.setType(DataStorage.SHARED);
         filter.setSearchSharedContacts(true) ;
         uiForm.setContactList(filter);
       } else {

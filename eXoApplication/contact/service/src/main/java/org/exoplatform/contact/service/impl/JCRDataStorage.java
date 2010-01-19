@@ -46,6 +46,7 @@ import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
@@ -62,9 +63,9 @@ import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.impl.GroupImpl;
 
 /**
  * Created by The eXo Platform SARL
@@ -72,7 +73,7 @@ import org.exoplatform.services.organization.impl.GroupImpl;
  *          hung.nguyen@exoplatform.com
  * Jul 10, 2007  
  */
-public class JCRDataStorage {
+public class JCRDataStorage implements DataStorage {
   
   private static final String PROP_ADDRESSBOOK_REFS = "exo:categories";
   final private static String CONTACTS = "contacts".intern() ;
@@ -85,13 +86,6 @@ public class JCRDataStorage {
   final private static String SHARED_ADDRESSBOOK = "SharedAddressBook".intern() ;
   final private static String SHARED_MIXIN = "exo:contactShared".intern();
   final private static String SHARED_PROP = "exo:sharedId".intern();
-  final public static String USERS_PATH = "usersPath".intern() ;
-  final public static String PERSONAL = "0".intern();
-  final public static String SHARED = "1".intern();
-  final public static String PUBLIC = "2".intern();
-  final public static String SPLIT = "::".intern();
-  final public static String HYPHEN = "shared_".intern();
-  
   private static final Log log = LogFactory.getLog(JCRDataStorage.class);
   
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
@@ -103,12 +97,8 @@ public class JCRDataStorage {
   }  
   
 
-  /**
-   * Get the home node for user data of contact service
-   * @param sProvider
-   * @param username
-   * @return
-   * @throws Exception
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getContactUserDataHome(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
    */
   public Node getContactUserDataHome(SessionProvider sProvider, String username) throws Exception {
 //  CS-3016    
@@ -123,6 +113,9 @@ public class JCRDataStorage {
     }   
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getContactApplicationDataHome(org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   public Node getContactApplicationDataHome(SessionProvider sProvider) throws Exception {
     Node applicationDataHome = getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(),sProvider) ;
     try {
@@ -134,6 +127,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getPersonalContactsHome(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
+   */
   public Node getPersonalContactsHome(SessionProvider sProvider, String username) throws Exception {
     Node userDataHome = getContactUserDataHome(sProvider, username) ;
     try {
@@ -145,6 +141,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getPersonalAddressBooksHome(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
+   */
   public Node getPersonalAddressBooksHome(SessionProvider sProvider, String username) throws Exception {
     Node userDataHome = getContactUserDataHome(sProvider, username) ;
     try {
@@ -156,6 +155,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getPublicContactsHome(org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
   public Node getPublicContactsHome(SessionProvider sProvider) throws Exception {
     Node contactServiceHome = getContactApplicationDataHome(sProvider) ;
     try {
@@ -167,6 +169,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getTagsHome(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
+   */
   public Node getTagsHome(SessionProvider sProvider, String username) throws Exception {
     Node contactServiceHome = getContactUserDataHome(sProvider, username) ;
     try {
@@ -178,11 +183,8 @@ public class JCRDataStorage {
     } 
   }
   
-  /**
-   * get the node that holds references to all address books shared to a given user.
-   * @param userId
-   * @return
-   * @throws Exception
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedAddressBooksHome(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
    */
   public Node getSharedAddressBooksHome(SessionProvider provider, String userId) throws Exception {
       Node userData = getContactUserDataHome(provider, userId);
@@ -208,6 +210,9 @@ public class JCRDataStorage {
   }
   
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedContactsHome(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
+   */
   public Node getSharedContactsHome(SessionProvider provider, String userId) throws Exception {
     Node userData = getContactUserDataHome(provider, userId);
     Node sharedHome;
@@ -232,7 +237,10 @@ public class JCRDataStorage {
 } 
   
  
-  private Node getSharedContact(String userId) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedContact(java.lang.String)
+   */
+  public Node getSharedContact(String userId) throws Exception {
     SessionProvider provider = createSystemProvider();
     Node contactHome = getContactUserDataHome(provider, userId);
     Node sharedHome ;
@@ -254,9 +262,8 @@ public class JCRDataStorage {
     }
   }  
   
-/**
- * @deprecated use {@link #getSharedAddressBooksHome(SessionProvider, String) and provide an appropriate SessionProvider
- * this method leaves a system SessionProvider open.
+/* (non-Javadoc)
+ * @see org.exoplatform.contact.service.impl.DataStorage#getSharedAddressBooksHome(java.lang.String)
  */
   public Node getSharedAddressBooksHome(String userId) throws Exception {
     SessionProvider provider = null;
@@ -282,7 +289,10 @@ public class JCRDataStorage {
   }    
   
 
-  private String [] ValuesToStrings(Value[] Val) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#ValuesToStrings(javax.jcr.Value[])
+   */
+  public String [] ValuesToStrings(Value[] Val) throws Exception {
     if(Val.length == 1) return new String[]{Val[0].getString()};
     String[] Str = new String[Val.length];
     for(int i = 0; i < Val.length; ++i) {
@@ -292,11 +302,8 @@ public class JCRDataStorage {
   }
   
 
-  /**
-   * Load the public contact for a given username
-   * @param userId username for which the corresponding contact will be loaded
-   * @return the contact or null if the contact could not be loaded
-   * @throws Exception
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#loadPublicContactByUser(java.lang.String)
    */
   public Contact loadPublicContactByUser(String userId) throws Exception {
     SessionProvider provider = createSystemProvider();
@@ -311,7 +318,10 @@ public class JCRDataStorage {
     }
   }  
   
-  private Contact getContact(Node contactNode, String contactType) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getContact(javax.jcr.Node, java.lang.String)
+   */
+  public Contact getContact(Node contactNode, String contactType) throws Exception {
     Contact contact = new Contact();
     contact.setContactType(contactType) ;
     if(contactNode.hasProperty("exo:id")) contact.setId(contactNode.getProperty("exo:id").getString()) ;
@@ -380,6 +390,9 @@ public class JCRDataStorage {
     return contact;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#findAllContactsByOwner(java.lang.String)
+   */
   public List<Contact> findAllContactsByOwner(String username) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -399,6 +412,9 @@ public class JCRDataStorage {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#findContactsByFilter(java.lang.String, org.exoplatform.contact.service.ContactFilter, java.lang.String)
+   */
   public ContactPageList findContactsByFilter(String username,
                                                    ContactFilter filter,
                                                    String type) throws Exception {
@@ -444,6 +460,9 @@ public class JCRDataStorage {
   }
   
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#loadPersonalContact(java.lang.String, java.lang.String)
+   */
   public Contact loadPersonalContact(String ownerUserId, String contactId) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -459,6 +478,9 @@ public class JCRDataStorage {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#findPersonalContactsByAddressBook(java.lang.String, java.lang.String)
+   */
   public ContactPageList findPersonalContactsByAddressBook(String owner, String addressBookId) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -478,10 +500,12 @@ public class JCRDataStorage {
       closeSessionProvider(sProvider);
     }
   }
+ 
   
-  enum AddressBookType {Personal, Shared, Public};
-  
- public List<String> findEmailsByAddressBook(String username, String addressBookId) throws AddressBookNotFoundException, Exception {
+ /* (non-Javadoc)
+ * @see org.exoplatform.contact.service.impl.DataStorage#findEmailsByAddressBook(java.lang.String, java.lang.String)
+ */
+public List<String> findEmailsByAddressBook(String username, String addressBookId) throws AddressBookNotFoundException, Exception {
    AddressBookType type = getAddressBookType(username, addressBookId);
 
    if (type == AddressBookType.Personal) {
@@ -494,7 +518,10 @@ public class JCRDataStorage {
    throw new AddressBookNotFoundException(addressBookId);
  }
   
-  private AddressBookType getAddressBookType(String username, String addressBookId) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getAddressBookType(java.lang.String, java.lang.String)
+   */
+  public AddressBookType getAddressBookType(String username, String addressBookId) throws Exception {
     AddressBook shared = getSharedAddressBookById(username, addressBookId);
     if (shared != null) {
       return AddressBookType.Shared;
@@ -520,18 +547,27 @@ public class JCRDataStorage {
 
 
 
-  private AddressBook findPublicAddressBookById(String username, String addressBookId) {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#findPublicAddressBookById(java.lang.String, java.lang.String)
+   */
+  public AddressBook findPublicAddressBookById(String username, String addressBookId) {
     // TODO Auto-generated method stub
     return null;
   }
 
 
-  private AddressBook findPersonalAddressBookById(String username, String addressBookId) {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#findPersonalAddressBookById(java.lang.String, java.lang.String)
+   */
+  public AddressBook findPersonalAddressBookById(String username, String addressBookId) {
     // TODO Auto-generated method stub
     return null;
   }
 
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#findEmailsInPersonalAddressBook(java.lang.String, java.lang.String)
+   */
   public List<String> findEmailsInPersonalAddressBook(String username, String addressBookId) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -556,6 +592,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#findEmailsInPublicAddressBook(java.lang.String, java.lang.String)
+   */
   public List<String> findEmailsInPublicAddressBook(String username, String groupId) throws Exception {
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
     SessionProvider provider = createSystemProvider();
@@ -581,6 +620,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getAllEmailBySharedGroup(java.lang.String, java.lang.String)
+   */
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
     Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
     PropertyIterator iter = sharedAddressBookMock.getReferences() ;
@@ -608,7 +650,10 @@ public class JCRDataStorage {
     return null ;
   }
   
-  private AddressBook toAddressBook(Node contactGroupNode) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#toAddressBook(javax.jcr.Node)
+   */
+  public AddressBook toAddressBook(Node contactGroupNode) throws Exception {
     AddressBook contactGroup = new AddressBook();
     if (contactGroupNode.hasProperty("exo:id")) 
       contactGroup.setId(contactGroupNode.getProperty("exo:id").getString());
@@ -632,6 +677,9 @@ public class JCRDataStorage {
     return contactGroup;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#loadPersonalAddressBook(java.lang.String, java.lang.String)
+   */
   public AddressBook loadPersonalAddressBook(String username, String groupId) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -647,6 +695,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedAddressBookById(java.lang.String, java.lang.String)
+   */
   public AddressBook getSharedAddressBookById(String username, String addressBookId) throws Exception {
     Node sharedAddressBookNode = getSharedAddressBooksHome(username) ;
     PropertyIterator iter = sharedAddressBookNode.getReferences() ;
@@ -660,6 +711,9 @@ public class JCRDataStorage {
     return null ;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#findPersonalAddressBooksByOwner(java.lang.String)
+   */
   public List<AddressBook> findPersonalAddressBooksByOwner(String username) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -677,6 +731,9 @@ public class JCRDataStorage {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#removeContacts(java.lang.String, java.util.List)
+   */
   public List<Contact> removeContacts(String username,
                                       List<String> contactIds) throws Exception {
     SessionProvider sp = null;
@@ -699,11 +756,14 @@ public class JCRDataStorage {
   }
 
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#moveContacts(java.lang.String, java.util.List, java.lang.String)
+   */
   public void moveContacts(String username, List<Contact> contacts, String addressType ) throws Exception {
     SessionProvider sysProvider = null ;
     try {
       sysProvider = createSystemProvider() ;
-      Node privateContactHome = getPersonalContactsHome(sysProvider, username);
+      Node publicContactHome = getPersonalContactsHome(sysProvider, username);
       for(Contact contact : contacts) {
         if(addressType.equals(PERSONAL)) {        
           saveContact(username, contact, false) ;
@@ -715,17 +775,20 @@ public class JCRDataStorage {
            throw new Exception();
          }
          saveContactToSharedAddressBook(username, contact.getAddressBookIds()[0], contact, true) ;
-         if (privateContactHome.hasNode(contact.getId()))
-           privateContactHome.getNode(contact.getId()).remove() ;
+         if (publicContactHome.hasNode(contact.getId()))
+           publicContactHome.getNode(contact.getId()).remove() ;
         }         
       }
-      if(privateContactHome.getSession().hasPendingChanges()) privateContactHome.getSession().save() ;
+      if(publicContactHome.getSession().hasPendingChanges()) publicContactHome.getSession().save() ;
     } finally {
       closeSessionProvider(sysProvider) ;
     }
   }
   
-  private List<String> getUserContactNodesByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getUserContactNodesByGroup(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String, java.lang.String)
+   */
+  public List<String> getUserContactNodesByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
     Node contactHome = getPersonalContactsHome(sProvider, username);
     QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
@@ -740,12 +803,8 @@ public class JCRDataStorage {
     return contactIds ;
   }
   
-  /**
-   * Remove a personal addressBook. Does not clean the contacts it contains
-   * @param username
-   * @param addressBookId
-   * @return
-   * @throws Exception
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#removePersonalAddressBook(java.lang.String, java.lang.String)
    */
   public AddressBook removePersonalAddressBook(String username, String addressBookId) throws Exception {
     SessionProvider sProvider = null;
@@ -771,11 +830,8 @@ public class JCRDataStorage {
     }
   }
 
-  /**
-   * Remove all contacts contained in an address book
-   * @param username
-   * @param addressBookId
-   * @throws Exception
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#clearAddressBook(java.lang.String, java.lang.String)
    */
   public void clearAddressBook(String username, String addressBookId) throws Exception {
     SessionProvider sProvider = null;
@@ -790,6 +846,9 @@ public class JCRDataStorage {
   
   
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#saveContact(java.lang.String, org.exoplatform.contact.service.Contact, boolean)
+   */
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -808,6 +867,9 @@ public class JCRDataStorage {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#savePersonalOrSharedAddressBook(java.lang.String, org.exoplatform.contact.service.AddressBook, boolean)
+   */
   public void savePersonalOrSharedAddressBook(String username, AddressBook addressbook, boolean isNew) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -858,6 +920,9 @@ public class JCRDataStorage {
   
 
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#removeUserShareContact(java.lang.String, java.lang.String, java.lang.String)
+   */
   public void removeUserShareContact(String username, String contactId, String removedUser) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -907,6 +972,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#unshareAddressBook(java.lang.String, java.lang.String, java.lang.String)
+   */
   public void unshareAddressBook(String username, String addressBookId, String removedUser) throws Exception {
     SessionProvider sysProvider = null;
     try {
@@ -958,6 +1026,9 @@ public class JCRDataStorage {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#shareAddressBook(java.lang.String, java.lang.String, java.util.List)
+   */
   public void shareAddressBook(String username, String addressBookId, List<String> receiveUsers) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -973,7 +1044,7 @@ public class JCRDataStorage {
 
       List<Value> valueList = new ArrayList<Value>();
       for (String userId : receiveUsers) {
-        Node sharedAddress = getSharedAddressBooksHome(userId.replaceFirst(JCRDataStorage.HYPHEN, ""));
+        Node sharedAddress = getSharedAddressBooksHome(userId.replaceFirst(DataStorage.HYPHEN, ""));
         boolean isExist = false;
         for (int i = 0; i < values.length; i++) {
           Value value = values[i];
@@ -1017,6 +1088,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#shareContact(java.lang.String, java.lang.String[], java.util.List)
+   */
   public void shareContact(String username, String[] contactIds, List<String> receiveUsers) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -1032,7 +1106,7 @@ public class JCRDataStorage {
         }
         List<Value> valueList = new ArrayList<Value>() ;
         for(String user : receiveUsers) {
-          Node sharedContact = getSharedContact(user.replaceFirst(JCRDataStorage.HYPHEN, "")) ;
+          Node sharedContact = getSharedContact(user.replaceFirst(DataStorage.HYPHEN, "")) ;
           boolean isExist = false ; 
           for (int i = 0; i < values.length; i++) {
             Value value = values[i];
@@ -1066,6 +1140,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#findSharedAddressBooksByUser(java.lang.String)
+   */
   public List<SharedAddressBook> findSharedAddressBooksByUser(String username) throws Exception {
     SessionProvider sysProvider = null;
     try {
@@ -1100,6 +1177,9 @@ public class JCRDataStorage {
   
   
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#removeSharedContact(java.lang.String, java.lang.String, java.lang.String)
+   */
   public void removeSharedContact(String username, String addressBookId, String contactId) throws Exception {
     //CS-2389
     if (!haveEditPermissionOnAddressBook(username, addressBookId)){
@@ -1124,6 +1204,9 @@ public class JCRDataStorage {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedContact(java.lang.String, java.lang.String)
+   */
   public Contact getSharedContact(String username, String contactId) throws Exception {
     Node sharedContactMock = getSharedContact(username) ;
     PropertyIterator iter = sharedContactMock.getReferences() ;
@@ -1131,7 +1214,7 @@ public class JCRDataStorage {
       try{
         Node contactNode = iter.nextProperty().getParent() ;   
         if(contactNode.getName().equals(contactId)) {
-          return getContact(contactNode, JCRDataStorage.SHARED) ;
+          return getContact(contactNode, DataStorage.SHARED) ;
         }
       }catch(Exception e){
         e.printStackTrace() ;
@@ -1140,6 +1223,9 @@ public class JCRDataStorage {
     return null ;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedContacts(java.lang.String)
+   */
   public DataPageList getSharedContacts(String username) throws Exception {
     List<Contact> sharedContacts = new ArrayList<Contact>() ;
     Node sharedContact = getSharedContact(username) ;      
@@ -1155,6 +1241,9 @@ public class JCRDataStorage {
     return new DataPageList(sharedContacts, 10, null, false) ;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#saveSharedContact(java.lang.String, org.exoplatform.contact.service.Contact)
+   */
   public void saveSharedContact(String username, Contact contact) throws Exception  {
     Node sharedContactMock = getSharedContact(username) ;
     PropertyIterator iter = sharedContactMock.getReferences() ;
@@ -1181,6 +1270,9 @@ public class JCRDataStorage {
     if (!isEdit) throw new PathNotFoundException() ;
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#saveContactToSharedAddressBook(java.lang.String, java.lang.String, org.exoplatform.contact.service.Contact, boolean)
+   */
   public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception  {
     Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
     PropertyIterator iter = sharedAddressBookMock.getReferences() ;
@@ -1203,6 +1295,9 @@ public class JCRDataStorage {
     }      
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedContactAddressBook(java.lang.String, java.lang.String)
+   */
   public Contact getSharedContactAddressBook(String username, String contactId) throws Exception {
     Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
     PropertyIterator iter = sharedAddressBookMock.getReferences() ;
@@ -1214,12 +1309,15 @@ public class JCRDataStorage {
         // cs-2073
         Node contactNode = contactHomeNode.getNode(contactId) ;
         if (Arrays.asList(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
-            .contains(addressBook.getProperty("exo:id").getString())) return getContact(contactNode, JCRDataStorage.SHARED) ;
+            .contains(addressBook.getProperty("exo:id").getString())) return getContact(contactNode, DataStorage.SHARED) ;
       } catch (PathNotFoundException e) { }
     }
     return null ;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedContactsByAddressBook(java.lang.String, org.exoplatform.contact.service.SharedAddressBook)
+   */
   public ContactPageList getSharedContactsByAddressBook(String username, SharedAddressBook addressBook) throws Exception {
     if (addressBook == null) return null ;
     SessionProvider sysProvider = createSystemProvider();
@@ -1235,6 +1333,9 @@ public class JCRDataStorage {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getPublicContactsByAddressBook(java.lang.String)
+   */
   public ContactPageList getPublicContactsByAddressBook(String groupId) throws Exception {   
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
     SessionProvider sysProvider = createSystemProvider();
@@ -1249,6 +1350,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getPublicContacts(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String[])
+   */
   public List<GroupContactData> getPublicContacts(SessionProvider sysProvider, String[] groupIds) throws Exception {
     List<GroupContactData> contactByGroup = new ArrayList<GroupContactData>() ;
     List<Contact> contacts;
@@ -1260,6 +1364,9 @@ public class JCRDataStorage {
     return contactByGroup;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getPublicAddressBookContacts(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String[])
+   */
   public List<String> getPublicAddressBookContacts(SessionProvider sysProvider, String[] groupIds) throws Exception {
     List<String> groups = new ArrayList<String>();
     for(String groupId : groupIds) { 
@@ -1268,7 +1375,10 @@ public class JCRDataStorage {
     return groups;
   }
   
-  private boolean hasContacts(SessionProvider sysProvider, String groupId) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#hasContacts(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
+   */
+  public boolean hasContacts(SessionProvider sysProvider, String groupId) throws Exception {
     Node contactHome = getPublicContactsHome(sysProvider);
     QueryManager qm = getSession(sysProvider).getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
@@ -1280,6 +1390,9 @@ public class JCRDataStorage {
     if(result.getNodes().getSize() > 0) return true;
     return false ;
   } 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#addUserContactInAddressBook(java.lang.String, java.lang.String)
+   */
   public void addUserContactInAddressBook(String userId, String addressBookId) throws Exception {
     SessionProvider provider = createSystemProvider();
     try {
@@ -1300,7 +1413,10 @@ public class JCRDataStorage {
     }
   }
   
-  private void contactToNode(Node contactsHome, Contact contact, boolean isNew) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#contactToNode(javax.jcr.Node, org.exoplatform.contact.service.Contact, boolean)
+   */
+  public void contactToNode(Node contactsHome, Contact contact, boolean isNew) throws Exception {
     Node contactNode;
     if (isNew) {
       contactNode = contactsHome.addNode(contact.getId(), "exo:contact"); 
@@ -1405,7 +1521,10 @@ public class JCRDataStorage {
     }    
   }
   
-  private Tag getTag(Node tagNode) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getTag(javax.jcr.Node)
+   */
+  public Tag getTag(Node tagNode) throws Exception {
     Tag tag = new Tag();
     if (tagNode.hasProperty("exo:id"))
       tag.setId(tagNode.getProperty("exo:id").getString());
@@ -1418,6 +1537,9 @@ public class JCRDataStorage {
     return tag;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#updateTag(java.lang.String, org.exoplatform.contact.service.Tag)
+   */
   public void updateTag(String username,Tag tag) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -1434,6 +1556,9 @@ public class JCRDataStorage {
   }
   
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getTag(java.lang.String, java.lang.String)
+   */
   public Tag getTag(String username, String tagId) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -1447,6 +1572,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getTags(java.lang.String)
+   */
   public List<Tag> getTags(String username) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -1464,6 +1592,9 @@ public class JCRDataStorage {
     }    
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getContactPageListByTag(java.lang.String, java.lang.String)
+   */
   public DataPageList getContactPageListByTag(String username, String tagId) throws Exception {
     SessionProvider sysProvider = createSystemProvider();
     try {
@@ -1474,7 +1605,7 @@ public class JCRDataStorage {
       QueryManager qm = null;
       StringBuffer queryString = null ;
       
-      //query on private contacts
+      //query on public contacts
       Node contactHome = getPersonalContactsHome(sysProvider, username);
       qm = getSession(sysProvider).getWorkspace().getQueryManager();
       queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
@@ -1553,6 +1684,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#addTag(java.lang.String, java.util.List, java.lang.String)
+   */
   public void addTag(String username, List<String> contactIds, String tagId) throws Exception {
     Map<String, String> tagMap = new HashMap<String, String> () ;
     tagMap.put(tagId, tagId) ;
@@ -1618,6 +1752,9 @@ public class JCRDataStorage {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#addTag(java.lang.String, java.util.List, java.util.List)
+   */
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
     SessionProvider sysProvider = createSystemProvider();
     Node tagHomeNode = getTagsHome(sysProvider, username);
@@ -1703,7 +1840,10 @@ public class JCRDataStorage {
     }
   }
 
-  private void removeTagInContacts (NodeIterator it, String tagId) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#removeTagInContacts(javax.jcr.NodeIterator, java.lang.String)
+   */
+  public void removeTagInContacts (NodeIterator it, String tagId) throws Exception {
     while (it.hasNext()) {
       Node contactNode = it.nextNode() ;
       if (contactNode.hasProperty("exo:tags")) {
@@ -1717,6 +1857,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#removeTag(java.lang.String, java.lang.String)
+   */
   public Tag removeTag(String username, String tagId) throws Exception {
     SessionProvider sysProvider = createSystemProvider();
     try {
@@ -1727,7 +1870,7 @@ public class JCRDataStorage {
       tagHomeNode.save() ;
       
       // remove tagId in contact property       
-      // query on private contacts
+      // query on public contacts
         Node contactHome = getPersonalContactsHome(sysProvider, username);
         QueryManager qm = getSession(sysProvider).getWorkspace().getQueryManager();
         StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
@@ -1791,6 +1934,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#removeContactTag(java.lang.String, java.util.List, java.util.List)
+   */
   public void removeContactTag(String username, List<String> contactIds, List<String> tags) throws Exception { 
     SessionProvider sysProvider = createSystemProvider();
     try {
@@ -1857,6 +2003,9 @@ public class JCRDataStorage {
     }
   }
  
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#searchContact(java.lang.String, org.exoplatform.contact.service.ContactFilter)
+   */
   public DataPageList searchContact(String username, ContactFilter filter)throws Exception {
     Map<String, Contact> contacts = new LinkedHashMap<String, Contact>() ;
     filter.setUsername(username) ;
@@ -1882,7 +2031,7 @@ public class JCRDataStorage {
       }
     filter.setOwner(null) ;
     if (filter.getType() == null || filter.getType().equals(PERSONAL)) {
-      // private contacts
+      // public contacts
       if(username != null && username.length() > 0) {
         Node contactHome = getPersonalContactsHome(sysProvider, username) ;
         filter.setAccountPath(contactHome.getPath()) ;      
@@ -1927,7 +2076,7 @@ public class JCRDataStorage {
                 if (!contacts.containsKey(contact.getId())) {
                   contacts.put(contact.getId(), contact) ;
                 } else {
-                  contacts.get(contact.getId()).setContactType(JCRDataStorage.SHARED) ;
+                  contacts.get(contact.getId()).setContactType(DataStorage.SHARED) ;
                 }
                 sharedContactIds.remove(contact.getId()) ;
               } 
@@ -1970,6 +2119,9 @@ public class JCRDataStorage {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#findEmailsByFilter(java.lang.String, org.exoplatform.contact.service.ContactFilter)
+   */
   public Map<String, String> findEmailsByFilter(String username, ContactFilter filter)throws Exception {
     Map<String, String> emails = new LinkedHashMap<String, String>() ;
     filter.setUsername(username) ;
@@ -1995,7 +2147,7 @@ public class JCRDataStorage {
         }
         filter.setOwner(null) ;
     
-        // private contacts
+        // public contacts
         if(username != null && username.length() > 0) {
           Node contactHome = getPersonalContactsHome(sysProvider, username) ;
           filter.setAccountPath(contactHome.getPath()) ;      
@@ -2070,7 +2222,10 @@ public class JCRDataStorage {
   }
 
 
-  private void feedEmailResult(Map<String, String> emails, Node contactNode) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#feedEmailResult(java.util.Map, javax.jcr.Node)
+   */
+  public void feedEmailResult(Map<String, String> emails, Node contactNode) throws Exception {
     String id = contactNode.getProperty("exo:id").getString();
     String fullName = contactNode.getProperty("exo:fullName").getString() ;
     String emailAddresses = valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
@@ -2079,7 +2234,10 @@ public class JCRDataStorage {
   
   
   // no public ;
-  private void copyNodes(SessionProvider sProvider, String username,Node srcHomeNode, NodeIterator iter, String destAddress, String destType ) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#copyNodes(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String, javax.jcr.Node, javax.jcr.NodeIterator, java.lang.String, java.lang.String)
+   */
+  public void copyNodes(SessionProvider sProvider, String username,Node srcHomeNode, NodeIterator iter, String destAddress, String destType ) throws Exception {
     SessionProvider sysProvider = createSystemProvider();
     try {
     if (destType.equals(PERSONAL)) {        
@@ -2148,6 +2306,9 @@ public class JCRDataStorage {
       //if (sysProvider != null) sysProvider.close();
     }
   }
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#pasteAddressBook(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+   */
   public void pasteAddressBook(String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
     // CS-2389
     if (destType.equals(SHARED) && !haveEditPermissionOnAddressBook(username, destAddress)) {
@@ -2205,6 +2366,9 @@ public class JCRDataStorage {
   }
   
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#pasteContacts(java.lang.String, java.lang.String, java.lang.String, java.util.Map)
+   */
   public List<Contact> pasteContacts(String username, String destAddress, String destType,  Map<String, String> contactsMap) throws Exception {
     // CS-2389
     if (destType.equals(SHARED) && !haveEditPermissionOnAddressBook(username, destAddress)){
@@ -2261,7 +2425,10 @@ public class JCRDataStorage {
     }
   }
   
-  private Node saveCopyContact(Node contactHomeNode, Contact contact, String destAddress, String destType) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#saveCopyContact(javax.jcr.Node, org.exoplatform.contact.service.Contact, java.lang.String, java.lang.String)
+   */
+  public Node saveCopyContact(Node contactHomeNode, Contact contact, String destAddress, String destType) throws Exception {
     String newId = "Contact" + IdGenerator.generate() ;
     Node contactNode = contactHomeNode.addNode(newId, "exo:contact"); 
     contactNode.setProperty("exo:id", newId);
@@ -2356,6 +2523,9 @@ public class JCRDataStorage {
     return contactNode ;
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#registerNewUser(org.exoplatform.services.organization.User, boolean)
+   */
   public void registerNewUser(User user, boolean isNew) throws Exception {
     Contact contact = null ;
     if (isNew) contact = new Contact() ;
@@ -2401,7 +2571,7 @@ public class JCRDataStorage {
           (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ;
         Object[] groupsOfUser = organizationService.getGroupHandler().findGroupsOfUser(user.getUserName()).toArray() ;
         for (Object object : groupsOfUser) {
-          String id = ((GroupImpl)object).getId() ;
+          String id = ((Group)object).getId() ;
           groupIds.put(id, id) ;
         }
         
@@ -2409,14 +2579,14 @@ public class JCRDataStorage {
         contact.setOwner(true) ;
         contact.setOwnerId(user.getUserName()) ;
         saveContact(user.getUserName(), contact, true) ;
-        String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
+        String usersPath = nodeHierarchyCreator_.getJcrPath(DataStorage.USERS_PATH) ;
         QueryManager qm = getSession(sysProvider).getWorkspace().getQueryManager();
         List<String> recievedUser = new ArrayList<String>() ;
         recievedUser.add(user.getUserName()) ;
 
         
         for (Object object : groupsOfUser) {  
-          String groupId = ((GroupImpl)object).getId() ;
+          String groupId = ((Group)object).getId() ;
           // get all address books that current user can see thank to his groups
           StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
               + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append(groupId + "']") ;        
@@ -2458,13 +2628,10 @@ public class JCRDataStorage {
   }  
   
   
-  /**
-   * Create a session provider for current context. The method first try to get a normal session provider, 
-   * then attempts to create a system provider if the first one was not available.
-   * @return a SessionProvider initialized by current SessionProviderService
-   * @see SessionProviderService#getSessionProvider(null)
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#createSessionProvider()
    */
-  private SessionProvider createSessionProvider() {
+  public SessionProvider createSessionProvider() {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
     SessionProvider provider = service.getSessionProvider(null);
@@ -2475,31 +2642,35 @@ public class JCRDataStorage {
     return provider;
   }
   /*
-  private SessionProvider createUserProvider() {
+  public SessionProvider createUserProvider() {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
     return service.getSessionProvider(null) ;    
   }  
   */
-  private SessionProvider createSystemProvider() {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#createSystemProvider()
+   */
+  public SessionProvider createSystemProvider() {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
     return service.getSystemSessionProvider(null) ;    
   }
   
 
-  /**
-   * Safely closes JCR session provider. Call this method in finally to clean any provider initialized by createSessionProvider()
-   * @param sessionProvider the sessionProvider to close
-   * @see SessionProvider#close();
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#closeSessionProvider(org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
-  private void closeSessionProvider(SessionProvider sessionProvider) {
+  public void closeSessionProvider(SessionProvider sessionProvider) {
       //TODO re-check this
 //    if (sessionProvider != null) {
 //      sessionProvider.close();
 //    }
   }
   
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#saveAddress(java.lang.String, java.lang.String)
+   */
   public void saveAddress(String username, String emailAddress) throws Exception {
     ContactFilter filter = new ContactFilter() ;
     for (String email : Utils.parseEmails(emailAddress)) {
@@ -2516,11 +2687,17 @@ public class JCRDataStorage {
     }
   } 
   
-  private Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getNodeByPath(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
+  public Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception {
     return (Node) getSession(sessionProvider).getItem(nodePath);
   }
   
-  private String valuesToString(Value[] values) {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#valuesToString(javax.jcr.Value[])
+   */
+  public String valuesToString(Value[] values) {
     if (values == null) return null;
 	  StringBuilder strs = new StringBuilder();
     try {
@@ -2532,10 +2709,13 @@ public class JCRDataStorage {
     return strs.toString();
   }
   
-  private boolean haveEditPermissionOnAddressBook(String username, String addressBookId) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#haveEditPermissionOnAddressBook(java.lang.String, java.lang.String)
+   */
+  public boolean haveEditPermissionOnAddressBook(String username, String addressBookId) throws Exception {
     AddressBook addressbook = getSharedAddressBookById(username, addressBookId);
     if (addressbook.getEditPermissionUsers() != null &&
-        Arrays.asList(addressbook.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
+        Arrays.asList(addressbook.getEditPermissionUsers()).contains(username + DataStorage.HYPHEN)) {
       return true ;
     }
     String[] editPerGroups = addressbook.getEditPermissionGroups() ;
@@ -2546,7 +2726,7 @@ public class JCRDataStorage {
         (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ;
       Object[] groupsOfUser = organizationService.getGroupHandler().findGroupsOfUser(username).toArray() ;
       for (Object object : groupsOfUser) {
-        String groupId = ((GroupImpl)object).getId() ;
+        String groupId = ((Group)object).getId() ;
         groupIds.add(groupId) ;
       }                  
       for (String editPer : editPerGroups)
@@ -2555,9 +2735,12 @@ public class JCRDataStorage {
     return false;
   }
   
-  private boolean haveEditPermissionOnContact(String username, Contact contact) throws Exception {
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#haveEditPermissionOnContact(java.lang.String, org.exoplatform.contact.service.Contact)
+   */
+  public boolean haveEditPermissionOnContact(String username, Contact contact) throws Exception {
     if (contact.getEditPermissionUsers() != null &&
-        Arrays.asList(contact.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
+        Arrays.asList(contact.getEditPermissionUsers()).contains(username + DataStorage.HYPHEN)) {
       return true ;
     }
     List<String> groupIds = new ArrayList<String>() ;
@@ -2566,7 +2749,7 @@ public class JCRDataStorage {
       (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ;
     Object[] groupsOfUser = organizationService.getGroupHandler().findGroupsOfUser(username).toArray() ;
     for (Object object : groupsOfUser) {
-      String groupId = ((GroupImpl)object).getId() ;
+      String groupId = ((Group)object).getId() ;
       groupIds.add(groupId) ;
     }
     String[] editPerGroups = contact.getEditPermissionGroups() ;
@@ -2578,7 +2761,10 @@ public class JCRDataStorage {
     return false ;
   }
   
-  private Session getSession(SessionProvider sprovider) throws Exception{
+  /* (non-Javadoc)
+   * @see org.exoplatform.contact.service.impl.DataStorage#getSession(org.exoplatform.services.jcr.ext.common.SessionProvider)
+   */
+  public Session getSession(SessionProvider sprovider) throws Exception{
     ManageableRepository currentRepo = repoService_.getCurrentRepository() ;
     return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo) ;
   }

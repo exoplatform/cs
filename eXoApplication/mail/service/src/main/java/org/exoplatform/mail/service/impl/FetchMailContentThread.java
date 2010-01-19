@@ -23,11 +23,12 @@ import java.util.List;
 import javax.mail.Folder;
 import javax.mail.Message;
 
+import org.exoplatform.mail.service.DataStorage;
 import org.exoplatform.mail.service.MimeMessageParser;
 
 public class FetchMailContentThread implements Runnable {
 
-  private JCRDataStorage                                  storage_;
+  private DataStorage                                  storage_;
 
   private String                                          username_;
 
@@ -39,7 +40,7 @@ public class FetchMailContentThread implements Runnable {
 
   private int                                             numberMessage_ = 0;
 
-  public FetchMailContentThread(JCRDataStorage storage,
+  public FetchMailContentThread(DataStorage storage,
                                 LinkedHashMap<javax.mail.Message, List<String>> msgMap,
                                 int numberMessage,
                                 javax.mail.Folder folder,

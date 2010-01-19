@@ -47,9 +47,7 @@ import org.exoplatform.mail.webui.Selector;
 import org.exoplatform.mail.webui.UIFormComboBox;
 import org.exoplatform.mail.webui.UIFormDateTimePicker;
 import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -584,30 +582,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       email.setFromDateTime(fromDateTime) ;      
       reminders.add(email) ;
     }
-    /*if(getPopupReminder()) {
-      Reminder popup = new Reminder() ;
-      if(currentReminders != null) {
-        for(Reminder rm : currentReminders) {
-          if(rm.getReminderType().equals(Reminder.TYPE_POPUP)) {
-            popup = rm ;
-            break ;
-          }
-        }
-      } 
-      popup.setReminderType(Reminder.TYPE_POPUP) ;
-      popup.setAlarmBefore(Long.parseLong(getPopupReminderTime())) ;
-      popup.setRepeate(Boolean.parseBoolean(isPopupRepeat())) ;
-      popup.setRepeatInterval(Long.parseLong(getPopupRepeatInterVal())) ;
-      popup.setFromDateTime(fromDateTime) ;
-      reminders.add(popup) ;
-    }*/
     return reminders ;
-  }
-  protected SessionProvider getSession() {
-    return SessionProviderFactory.createSessionProvider() ;
-  }
-  protected SessionProvider getSystemSession() {
-    return SessionProviderFactory.createSystemProvider() ;
   }
   protected String getEventPriority() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;

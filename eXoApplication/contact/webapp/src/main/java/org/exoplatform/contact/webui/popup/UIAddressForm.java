@@ -22,21 +22,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.contact.CalendarUtils;
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -51,6 +50,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
@@ -131,7 +131,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(username).toArray() ;
     List<String> groupIds = new ArrayList<String>() ;
     for (Object object : objGroupIds) {
-      groupIds.add(((GroupImpl)object).getId()) ;
+      groupIds.add(((Group)object).getId()) ;
     }
     if(!groupIds.isEmpty()){
       SelectOptionGroup publicContacts = new SelectOptionGroup("public-contacts");

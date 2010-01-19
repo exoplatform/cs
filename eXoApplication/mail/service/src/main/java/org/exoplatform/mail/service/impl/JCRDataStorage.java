@@ -35,16 +35,13 @@ import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
-import javax.mail.BodyPart;
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -61,6 +58,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.DataStorage;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Info;
 import org.exoplatform.mail.service.JCRMessageAttachment;
@@ -87,7 +85,7 @@ import org.exoplatform.ws.frameworks.json.value.JsonValue;
  * Created by The eXo Platform SARL Author : Tuan Nguyen
  * tuan.nguyen@exoplatform.com Jun 23, 2007
  */
-public class JCRDataStorage {
+public class JCRDataStorage implements DataStorage{
   private static final Log     logger       = LogFactory.getLog(Utils.class);
 
   private NodeHierarchyCreator nodeHierarchyCreator_;
@@ -105,7 +103,7 @@ public class JCRDataStorage {
     return nodeHierarchyCreator_.getJcrPath("usersPath");
   }
 
-  private Node getMailHomeNode(SessionProvider sProvider, String username) throws Exception {
+  public Node getMailHomeNode(SessionProvider sProvider, String username) throws Exception {
     if (sProvider == null)
       sProvider = createSystemProvider();
     Node userApp = getNodeByPath(nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)
@@ -158,7 +156,7 @@ public class JCRDataStorage {
     }
   }
 
-  private Account getAccount(SessionProvider sProvider, Node accountNode) throws Exception {
+  public Account getAccount(SessionProvider sProvider, Node accountNode) throws Exception {
     Account account = new Account();
     account.setId(accountNode.getProperty(Utils.EXO_ID).getString());
     try {
@@ -273,7 +271,7 @@ public class JCRDataStorage {
     }
   }
 
-  private QueryImpl createXPathQuery(SessionProvider sProvider,
+  public QueryImpl createXPathQuery(SessionProvider sProvider,
                                      String username,
                                      String accountId,
                                      String xpath) throws Exception {
@@ -380,7 +378,7 @@ public class JCRDataStorage {
     }
   }
 
-  private Message getMessage(Node messageNode) throws Exception {
+  public Message getMessage(Node messageNode) throws Exception {
     Message msg = new Message();
     try {
       msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
@@ -1332,7 +1330,7 @@ public class JCRDataStorage {
     }
   }
 
-  private String getAddresses(javax.mail.Message msg, javax.mail.Message.RecipientType type) throws Exception {
+  public String getAddresses(javax.mail.Message msg, javax.mail.Message.RecipientType type) throws Exception {
     String recipients = "";
     String t = "To";
     if (type.equals(javax.mail.Message.RecipientType.CC))
@@ -1350,7 +1348,7 @@ public class JCRDataStorage {
     return Utils.decodeText(recipients);
   }
 
-  private void increaseFolderItem(SessionProvider sProvider,
+  public void increaseFolderItem(SessionProvider sProvider,
                                   String username,
                                   String accId,
                                   String folderId,
@@ -1371,7 +1369,7 @@ public class JCRDataStorage {
     }
   }
 
-  private StringBuffer setMultiPart(Multipart multipart, Node node, StringBuffer body) {
+  public StringBuffer setMultiPart(Multipart multipart, Node node, StringBuffer body) {
     try {
       boolean readText = true;
       if (multipart.getContentType().toLowerCase().indexOf("multipart/alternative") > -1) {
@@ -1395,7 +1393,7 @@ public class JCRDataStorage {
     return body;
   }
 
-  private StringBuffer setPart(Part part, Node node, StringBuffer body) {
+  public StringBuffer setPart(Part part, Node node, StringBuffer body) {
     try {
       String disposition = part.getDisposition();
       String ct = part.getContentType();
@@ -1505,7 +1503,7 @@ public class JCRDataStorage {
     return body;
   }
 
-  private StringBuffer getNestedMessageBody(Part part, Node node, StringBuffer body) throws Exception {
+  public StringBuffer getNestedMessageBody(Part part, Node node, StringBuffer body) throws Exception {
     try {
       body = setPart((Part) part.getContent(), node, body);
     } catch (ClassCastException e) {
@@ -1528,7 +1526,7 @@ public class JCRDataStorage {
     return body;
   }
 
-  private StringBuffer appendMessageBody(Part part, Node node, StringBuffer body) throws Exception {
+  public StringBuffer appendMessageBody(Part part, Node node, StringBuffer body) throws Exception {
     StringBuffer messageBody = new StringBuffer();
     InputStream is = part.getInputStream();
     String ct = part.getContentType();
@@ -1634,7 +1632,7 @@ public class JCRDataStorage {
     }
   }
 
-  private Node getFolderNodeById(SessionProvider sProvider,
+  public Node getFolderNodeById(SessionProvider sProvider,
                                  String username,
                                  String accountId,
                                  String folderId) throws Exception {
@@ -1826,7 +1824,7 @@ public class JCRDataStorage {
     }
   }
 
-  private void removeFolderInMessages(SessionProvider sProvider,
+  public void removeFolderInMessages(SessionProvider sProvider,
                                       String username,
                                       String accountId,
                                       List<Node> msgNodes,
@@ -1864,7 +1862,7 @@ public class JCRDataStorage {
     }
   }
 
-  private Node getFilterHome(SessionProvider sProvider, String username, String accountId) throws Exception {
+  public Node getFilterHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     if (accountHome.hasNode(Utils.KEY_FILTER))
       return accountHome.getNode(Utils.KEY_FILTER);
@@ -2074,7 +2072,7 @@ public class JCRDataStorage {
     }
   }
 
-  private void runFilter(SessionProvider sProvider,
+  public void runFilter(SessionProvider sProvider,
                          String username,
                          String accountId,
                          MessageFilter filter) throws Exception {
@@ -2113,7 +2111,7 @@ public class JCRDataStorage {
     }
   }
 
-  private Node getMessageHome(SessionProvider sProvider, String username, String accountId) throws Exception {
+  public Node getMessageHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     sProvider = createSessionProvider();
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     Node msgHome = null;
@@ -2126,7 +2124,7 @@ public class JCRDataStorage {
     return msgHome;
   }
 
-  private Node getFolderHome(SessionProvider sProvider, String username, String accountId) throws Exception {
+  public Node getFolderHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     Node folderHome = null;
     try {
@@ -2138,7 +2136,7 @@ public class JCRDataStorage {
     return folderHome;
   }
 
-  private Node getTagHome(SessionProvider sProvider, String username, String accountId) throws Exception {
+  public Node getTagHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     Node tagHome = null;
     try {
@@ -2374,7 +2372,7 @@ public class JCRDataStorage {
     return messages;
   }
 
-  private List<Node> getMessageNodeByFolder(SessionProvider sProvider,
+  public List<Node> getMessageNodeByFolder(SessionProvider sProvider,
                                             String username,
                                             String accountId,
                                             String folderId) throws Exception {
@@ -2565,7 +2563,7 @@ public class JCRDataStorage {
     }
   }
 
-  private Node getDateStoreNode(SessionProvider sProvider,
+  public Node getDateStoreNode(SessionProvider sProvider,
                                 String username,
                                 String accountId,
                                 Date date) throws Exception {
@@ -2598,7 +2596,7 @@ public class JCRDataStorage {
     }
   }
 
-  private List<Node> getMatchingThreadAfter(SessionProvider sProvider,
+  public List<Node> getMatchingThreadAfter(SessionProvider sProvider,
                                             String username,
                                             String accountId,
                                             Node msg) throws Exception {
@@ -2623,7 +2621,7 @@ public class JCRDataStorage {
     return converNodes;
   }
 
-  private Node getMatchingThreadBefore(SessionProvider sProvider,
+  public Node getMatchingThreadBefore(SessionProvider sProvider,
                                        String username,
                                        String accountId,
                                        String inReplyToHeader,
@@ -2648,7 +2646,7 @@ public class JCRDataStorage {
     return converNode;
   }
 
-  private void addMessageToThread(SessionProvider sProvider,
+  public void addMessageToThread(SessionProvider sProvider,
                                   String username,
                                   String accountId,
                                   String inReplyToHeader,
@@ -2688,7 +2686,7 @@ public class JCRDataStorage {
     }
   }
 
-  private void updateLastTimeToParent(String username,
+  public void updateLastTimeToParent(String username,
                                       String accountId,
                                       Node node,
                                       Node parentNode,
@@ -2704,7 +2702,7 @@ public class JCRDataStorage {
     }
   }
 
-  private Node getReferentParent(String username, String accountId, Node node) throws Exception {
+  public Node getReferentParent(String username, String accountId, Node node) throws Exception {
     Node parentNode = null;
     try {
       if (node.hasProperty("exo:conversationId")) {
@@ -2719,7 +2717,7 @@ public class JCRDataStorage {
     return parentNode;
   }
 
-  private Node setIsRoot(String accountId, Node msgNode, Node converNode) throws Exception {
+  public Node setIsRoot(String accountId, Node msgNode, Node converNode) throws Exception {
     boolean isRoot = true;
     try {
       Value[] propFoldersMsgNode = msgNode.getProperty(Utils.MSG_FOLDERS).getValues();
@@ -2747,7 +2745,7 @@ public class JCRDataStorage {
     return msgNode;
   }
 
-  private Node setIsRoot(String accountId, Node msgNode) throws Exception {
+  public Node setIsRoot(String accountId, Node msgNode) throws Exception {
     Node coverNode;
     PropertyIterator iter = msgNode.getReferences();
     msgNode.setProperty(Utils.EXO_IS_ROOT, true);
@@ -2781,7 +2779,7 @@ public class JCRDataStorage {
     return msgNode;
   }
 
-  private void createReference(Node msgNode, Node converNode) throws Exception {
+  public void createReference(Node msgNode, Node converNode) throws Exception {
     List<Value> valueList = new ArrayList<Value>();
     Value[] values = {};
     if (msgNode.isNodeType("exo:messageMixin")) {
@@ -2815,7 +2813,7 @@ public class JCRDataStorage {
    * Move reference : to first parent if it is exist, if not move reference to
    * first child message.
    */
-  private Node moveReference(String accountId, Node node) throws Exception {
+  public Node moveReference(String accountId, Node node) throws Exception {
     List<Value> valueList = new ArrayList<Value>();
     Value[] values = {};
     PropertyIterator iter = node.getReferences();
@@ -3005,7 +3003,7 @@ public class JCRDataStorage {
    * @param msgId
    * @return
    */
-  private byte checkDuplicateStatus(SessionProvider sProvider,
+  public byte checkDuplicateStatus(SessionProvider sProvider,
                                     String username,
                                     Node msgHomeNode,
                                     String accId,
@@ -3256,7 +3254,7 @@ public class JCRDataStorage {
    * @return a SessionProvider initialized by current SessionProviderService
    * @see SessionProviderService#getSessionProvider(null)
    */
-  private SessionProvider createSessionProvider() {
+  public SessionProvider createSessionProvider() {
     ExoContainer container = null;
     try {
       container = PortalContainer.getInstance();
@@ -3278,24 +3276,24 @@ public class JCRDataStorage {
    * @param sessionProvider the sessionProvider to close
    * @see SessionProvider#close();
    */
-  private void closeSessionProvider(SessionProvider sessionProvider) {
+  public void closeSessionProvider(SessionProvider sessionProvider) {
     if (sessionProvider != null) {
       // TODO check this when update to gatein
       // sessionProvider.close();
     }
   }
 
-  private SessionProvider createSystemProvider() {
+  public SessionProvider createSystemProvider() {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
     return service.getSystemSessionProvider(null);
   }
 
-  private Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception {
+  public Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception {
     return (Node) getSession(sessionProvider).getItem(nodePath);
   }
 
-  private Session getSession(SessionProvider sprovider) throws Exception {
+  public Session getSession(SessionProvider sprovider) throws Exception {
     ManageableRepository currentRepo = repoService_.getCurrentRepository();
     return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(),
                                 currentRepo);

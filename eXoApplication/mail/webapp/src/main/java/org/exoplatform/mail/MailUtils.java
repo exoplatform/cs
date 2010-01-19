@@ -41,8 +41,8 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.impl.GroupImpl;
 
 
 /**
@@ -322,7 +322,7 @@ public class MailUtils {
     Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(getCurrentUser()).toArray() ;
     List<String> groupIds = new ArrayList<String>() ;
     for (Object object : objGroupIds) {
-      groupIds.add(((GroupImpl)object).getId()) ;
+      groupIds.add(((Group)object).getId()) ;
     }
     return groupIds ;
   }

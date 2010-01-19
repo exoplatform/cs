@@ -32,6 +32,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 public interface CalendarImportExport {  
   
   /**
+   * @deprecated User {@link #importToCalendar(SessionProvider userSession, String username, InputStream icalInputStream, String calendarId)}
    * The method imports events form icalendar(.ics) or outlook calendar exported .csv file to the system
    * @param userSession session of current user
    * @param username current user name or id
@@ -46,10 +47,30 @@ public interface CalendarImportExport {
    * @param userSession session of current user
    * @param username current user name or id
    * @param icalInputStream data input stream
+   * @param calendarName given calendar name, if the name is null, default calendar name is file name
+   * @throws Exception
+   */
+  public void importCalendar(String username, InputStream icalInputStream, String calendarName) throws Exception ;
+  
+  /**
+   * @deprecated Use {@link #importToCalendar(String username, InputStream icalInputStream, String calendarId)}
+   * The method imports events form icalendar(.ics) or outlook calendar exported .csv file to the system
+   * @param userSession session of current user
+   * @param username current user name or id
+   * @param icalInputStream data input stream
    * @param calendarId given  existed calendar id  
    * @throws Exception
    */
   public void importToCalendar(SessionProvider userSession, String username, InputStream icalInputStream, String calendarId) throws Exception ;
+  
+  /**
+   * The method imports events form icalendar(.ics) or outlook calendar exported .csv file to the system
+   * @param username current user name or id
+   * @param icalInputStream data input stream
+   * @param calendarId given  existed calendar id  
+   * @throws Exception
+   */
+  public void importToCalendar(String username, InputStream icalInputStream, String calendarId) throws Exception ;
   
   /**
    * The method exports events form calendar to icalendar file (.ics) or .csv file
@@ -61,9 +82,20 @@ public interface CalendarImportExport {
    */
   public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception ;
   
+  
+  /**
+   * The method exports events form calendar to icalendar file (.ics) or .csv file
+   * @param username : current user name or id
+   * @param calendarIds : the group calendar ids, if you want to export events from public calendars
+   * @param type : The type of calendar will be exported
+   * @param number : the limitation number of event
+   * @return data output stream
+   * @throws Exception
+   */
   public OutputStream exportCalendar(String username, List<String> calendarIds, String type, int number) throws Exception ;
   
   /**
+   * @deprecated Use {@link #exportEventCalendar(String username, String calendarId, String type, String eventId)}
    * The method export calendar event to output stream by given event id
    * @param userSession session of current user
    * @param username current user name or id
@@ -74,6 +106,19 @@ public interface CalendarImportExport {
    * @throws Exception
    */
   public OutputStream exportEventCalendar(SessionProvider userSession, String username, String calendarId, String type, String eventId) throws Exception ;
+  
+  /**
+   * The method export calendar event to output stream by given event id
+   * @param username current user name or id
+   * @param calendarId given calendar id, the calendar event belong to
+   * @param type The type of calendar will be exported
+   * @param eventId given event id
+   * @return data output stream
+   * @throws Exception
+   */
+  public OutputStream exportEventCalendar(String username, String calendarId, String type, String eventId) throws Exception ;
+  
+  
   
   /**
    * The method maps the input stream to event object

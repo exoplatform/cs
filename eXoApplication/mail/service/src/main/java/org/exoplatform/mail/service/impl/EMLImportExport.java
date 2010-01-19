@@ -24,6 +24,7 @@ import java.util.Properties;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 
+import org.exoplatform.mail.service.DataStorage;
 import org.exoplatform.mail.service.MailImportExport;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
@@ -38,8 +39,8 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  */
 
 public class EMLImportExport implements MailImportExport{
-	private JCRDataStorage jcrDataStorage_ ;
-	public EMLImportExport(JCRDataStorage jcrDataStorage) throws Exception {
+	private DataStorage jcrDataStorage_ ;
+	public EMLImportExport(DataStorage jcrDataStorage) throws Exception {
 		jcrDataStorage_ = jcrDataStorage ;
 	}
 	public OutputStream exportMessage(String username, String accountId, Message message) throws Exception {

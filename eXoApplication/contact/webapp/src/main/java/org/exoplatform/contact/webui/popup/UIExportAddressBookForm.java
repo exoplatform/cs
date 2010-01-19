@@ -26,15 +26,15 @@ import java.util.MissingResourceException;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -124,7 +124,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
     // cs-1796
     List<String> addresList = new ArrayList<String>() ;
     for (String add : checkedAddress.keySet()) {
-      if(sharedGroupMap_.containsKey(add)) addresList.add(add+ JCRDataStorage.HYPHEN + sharedGroupMap_.get(add).getSharedUserId()) ;
+      if(sharedGroupMap_.containsKey(add)) addresList.add(add+ DataStorage.HYPHEN + sharedGroupMap_.get(add).getSharedUserId()) ;
       else addresList.add(add) ;
     }
     return addresList ;
@@ -184,7 +184,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       OutputStream out = null ;
       try {
         out = ContactUtils.getContactService().getContactImportExports(exportFormat).exportContact(
-            SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), groupIds.toArray(new String[]{})) ;        
+            SessionProvider.createSystemProvider(), ContactUtils.getCurrentUser(), groupIds.toArray(new String[]{})) ;        
       } catch (ArrayIndexOutOfBoundsException e) {
         uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.many-Contacts", new Object[]{Utils.limitExport + ""},
             ApplicationMessage.WARNING)) ;

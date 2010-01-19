@@ -54,7 +54,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIComponent;
@@ -158,7 +157,7 @@ public class CalendarUtils {
     Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;
     String[] groups = new String[objs.length] ;
     for(int i = 0; i < objs.length ; i ++) {
-      groups[i] = ((GroupImpl)objs[i]).getId() ;
+      groups[i] = ((Group)objs[i]).getId() ;
     }
     return groups ;
   }
@@ -166,7 +165,7 @@ public class CalendarUtils {
     Object[] objs = getOrganizationService().getGroupHandler().getAllGroups().toArray() ;
     String[] groups = new String[objs.length] ;
     for(int i = 0; i < objs.length ; i ++) {
-      groups[i] = ((GroupImpl)objs[i]).getId() ;
+      groups[i] = ((Group)objs[i]).getId() ;
     }
     return groups ;
   }

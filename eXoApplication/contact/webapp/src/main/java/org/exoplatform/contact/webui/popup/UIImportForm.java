@@ -25,14 +25,13 @@ import java.util.MissingResourceException;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.Utils;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -175,11 +174,9 @@ public class UIImportForm extends UIForm {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;            
           }
-          service.importContact(SessionProviderFactory.createSessionProvider()
-              , ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category + JCRDataStorage.HYPHEN) ;            
+          service.importContact(ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category + DataStorage.HYPHEN) ;            
         } else if (uiAddressBooks.getPrivateGroupMap().containsKey(category)){
-          service.importContact(SessionProviderFactory.createSessionProvider()
-              , ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category) ;
+          service.importContact(ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.address-deleted", null, 
               ApplicationMessage.WARNING)) ;
