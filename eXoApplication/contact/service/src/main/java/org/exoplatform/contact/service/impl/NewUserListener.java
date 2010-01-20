@@ -27,7 +27,6 @@ import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
-import org.exoplatform.services.organization.UserProfileEventListener;
 
 /**
  * Created by The eXo Platform SARL

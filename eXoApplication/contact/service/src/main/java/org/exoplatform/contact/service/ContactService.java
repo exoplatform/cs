@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserProfile;
 
 /**
  * Created by The eXo Platform SARL
@@ -433,6 +434,12 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public void registerNewUser(User user, boolean isNew) throws Exception ;
+  
+  /**
+   * update profile of user.
+   * @throws Exception 
+   */
+  public void updateProfile(UserProfile userProfile) throws Exception ;
   
   /**
    * save collected email addresses

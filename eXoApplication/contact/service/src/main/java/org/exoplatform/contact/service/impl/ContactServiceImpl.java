@@ -35,6 +35,7 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserProfile;
 
 /**
  * Created by The eXo Platform SARL
@@ -387,6 +388,9 @@ public class ContactServiceImpl implements ContactService {
     storage_.registerNewUser(user, isNew) ;
   }
    
+  public void updateProfile(UserProfile userProfile) throws Exception {
+    storage_.updateProfile(userProfile) ;
+  }
   
   ////// LEGACY API //////
   

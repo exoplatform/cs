@@ -20,5 +20,11 @@
 	    <type>org.exoplatform.contact.service.impl.NewMembershipListener</type>
 	    <description>description</description>	     
 	  </component-plugin>
+	  <component-plugin>
+	    <name>contact.new.userprofile.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.contact.service.impl.UpdateUserProfileListener</type>
+	    <description>description</description>	     
+	  </component-plugin>
 	 </external-component-plugins>
 </configuration>
