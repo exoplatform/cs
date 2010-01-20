@@ -431,12 +431,15 @@ public interface ContactService extends ContactServiceLegacy {
   
   /**
    * save default address and default contact of new user
+   * @param user oject user registed
+   * @param isNew edit or save new user
    * @throws Exception 
    */
   public void registerNewUser(User user, boolean isNew) throws Exception ;
   
   /**
-   * update profile of user.
+   * update profile of user to contact.
+   * @param userProfile profile of user to update
    * @throws Exception 
    */
   public void updateProfile(UserProfile userProfile) throws Exception ;

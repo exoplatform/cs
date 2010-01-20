@@ -16,6 +16,9 @@
  */
 package org.exoplatform.contact.service.impl;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +34,13 @@ import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.contact.service.Utils;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 
@@ -388,8 +395,85 @@ public class ContactServiceImpl implements ContactService {
     storage_.registerNewUser(user, isNew) ;
   }
    
+  @SuppressWarnings("deprecation")
   public void updateProfile(UserProfile userProfile) throws Exception {
-    storage_.updateProfile(userProfile) ;
+    Contact contact = storage_.loadPublicContactByUser(userProfile.getUserName()) ;
+    if (contact == null) return; 
+    contact.setNickName(userProfile.getAttribute("user.name.nickName"));
+    try {
+      Date date = new Date(userProfile.getAttribute("user.bdate"));
+      contact.setBirthday(date);
+    } catch (Exception e) { }
+    contact.setGender(userProfile.getAttribute("user.gender"));
+    
+    StringBuilder builderNote = new StringBuilder();
+    if (!Utils.isEmpty(userProfile.getAttribute("user.employer"))) {
+      builderNote.append(userProfile.getAttribute("user.employer"));
+    }
+    if (!Utils.isEmpty(userProfile.getAttribute("user.department"))) {
+      if (builderNote.length() == 0) builderNote.append(userProfile.getAttribute("user.department"));
+      else builderNote.append("\n" + userProfile.getAttribute("user.department"));
+    }
+    if (!Utils.isEmpty(userProfile.getAttribute("user.language"))) {
+      if (builderNote.length() == 0) builderNote.append(userProfile.getAttribute("user.language"));
+      else builderNote.append("\n" + userProfile.getAttribute("user.language"));
+    }
+    contact.setNote(builderNote.toString());
+    contact.setJobTitle(userProfile.getAttribute("user.jobtitle"));
+    
+    StringBuilder builderHomeAddress = new StringBuilder();
+    if (!Utils.isEmpty(userProfile.getAttribute("user.home-info.postal.name"))) {
+      builderHomeAddress.append(userProfile.getAttribute("user.home-info.postal.name"));
+    }
+    if (!Utils.isEmpty(userProfile.getAttribute("user.home-info.postal.street"))) {
+      if (builderHomeAddress.length() == 0) builderHomeAddress.append(userProfile.getAttribute("user.home-info.postal.street"));
+      else builderHomeAddress.append(" " + userProfile.getAttribute("user.home-info.postal.street"));
+    }
+    contact.setHomeAddress(builderHomeAddress.toString());
+
+    contact.setWorkAddress(userProfile.getAttribute("user.business-info.postal.name"));
+    contact.setWorkCity(userProfile.getAttribute("user.business-info.postal.city"));
+    contact.setWorkStateProvince(userProfile.getAttribute("user.business-info.postal.stateprov"));
+    contact.setWorkPostalCode(userProfile.getAttribute("user.business-info.postal.postalcode"));
+    contact.setWorkCountry(userProfile.getAttribute("user.business-info.postal.country"));
+    contact.setWorkPhone1(userProfile.getAttribute("user.business-info.telecom.telephone.number"));
+    contact.setWorkPhone2(userProfile.getAttribute("user.business-info.telecom.mobile.number"));
+    contact.setWebPage(userProfile.getAttribute("user.business-info.online.uri"));
+
+    contact.setHomeCity(userProfile.getAttribute("user.home-info.postal.city"));
+    contact.setHomeState_province(userProfile.getAttribute("user.home-info.postal.stateprov"));
+    contact.setHomePostalCode(userProfile.getAttribute("user.home-info.postal.postalcode"));
+    contact.setHomeCountry(userProfile.getAttribute("user.home-info.postal.country"));
+    contact.setHomePhone1(userProfile.getAttribute("user.home-info.telecom.telephone.number"));
+    contact.setHomePhone2(userProfile.getAttribute("user.home-info.telecom.mobile.number"));
+    contact.setPersonalSite(userProfile.getAttribute("user.home-info.online.uri"));
+    
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    OrganizationService organizationService = 
+      (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ;
+    String email = organizationService.getUserHandler().findUserByName(userProfile.getUserName()).getEmail();
+    StringBuilder builderEmailAddress = new StringBuilder();
+    if (!Utils.isEmpty(email)) {
+      builderEmailAddress.append(email);
+    }
+    if (!Utils.isEmpty(userProfile.getAttribute("user.home-info.online.email"))) {
+      if (builderEmailAddress.length() == 0) builderEmailAddress.append(userProfile.getAttribute("user.home-info.online.email"));
+      else builderEmailAddress.append("," + userProfile.getAttribute("user.home-info.online.email"));
+    }
+    if (!Utils.isEmpty(userProfile.getAttribute("user.business-info.online.email"))) {
+      if (builderEmailAddress.length() == 0) builderEmailAddress.append(userProfile.getAttribute("user.business-info.online.email"));
+      else builderEmailAddress.append("," + userProfile.getAttribute("user.business-info.online.email"));
+    }
+    contact.setEmailAddress(builderEmailAddress.toString());
+
+    Calendar cal = new GregorianCalendar() ;
+    contact.setLastUpdated(cal.getTime()) ;
+    SessionProvider sysProvider = storage_.createSystemProvider() ;
+    try {
+      saveContact(userProfile.getUserName(), contact, false);
+    } finally {
+      storage_.closeSessionProvider(sysProvider);
+    }    
   }
   
   ////// LEGACY API //////

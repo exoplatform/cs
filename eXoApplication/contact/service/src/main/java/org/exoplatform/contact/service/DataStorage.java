@@ -27,7 +27,6 @@ import javax.jcr.Value;
 import org.exoplatform.contact.service.impl.AddressBookNotFoundException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserProfile;
 
 /**
  * Created by The eXo Platform SAS
@@ -252,7 +251,6 @@ public interface DataStorage {
 
   public void registerNewUser(User user, boolean isNew) throws Exception;
 
-  public void updateProfile(UserProfile userProfile) throws Exception ;
   /**
    * Create a session provider for current context. The method first try to get a normal session provider, 
    * then attempts to create a system provider if the first one was not available.
