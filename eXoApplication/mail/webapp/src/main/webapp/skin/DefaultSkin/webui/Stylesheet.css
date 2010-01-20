@@ -299,6 +299,8 @@
 
 .UIMailPortlet .MyFolder .MyFolderContent {
 	padding: 5px 0px 0px 0px;
+	width: 210px;
+	overflow: hidden;
 }
 
 .UIMailPortlet .UIFolderContainer .NormalLabel {
