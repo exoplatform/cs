@@ -9,11 +9,14 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.RuntimeDelegate;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.rest.impl.RuntimeDelegateImpl;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.webservice.cs.bean.UIStateDataBean;
@@ -30,6 +33,17 @@ public class UIStateService implements ResourceContainer {
   public final static String JCR_STATE_NOTE_TYPE="lr:state";
   public final static String JCR_UI_STATE_NOTE_PROPERTY="lr:ui";
   private NodeHierarchyCreator nodeHierarchyCreator;
+  
+  private static final CacheControl cc;
+  static {
+	//TODO: to find the reason why UIStateService loaded before ResourceBinder
+	RuntimeDelegate.setInstance(new RuntimeDelegateImpl());
+    cc = new CacheControl();
+    cc.setNoCache(true);
+    cc.setNoStore(true);
+
+  }
+  
   /**
    * 
    */
@@ -53,7 +67,7 @@ public class UIStateService implements ResourceContainer {
     } catch (Exception e){
     }
     UIStateDataBean stateDataBean = new UIStateDataBean("null");
-    return Response.ok(stateDataBean, JSON_CONTENT_TYPE).build();
+    return Response.ok(stateDataBean, JSON_CONTENT_TYPE).cacheControl(cc).build();
   }
   
   @GET
@@ -63,10 +77,10 @@ public class UIStateService implements ResourceContainer {
     Node uiStateNode = this.getPrivateNode(username);
     if (uiStateNode.hasProperty(JCR_UI_STATE_NOTE_PROPERTY)) {
       UIStateDataBean stateDataBean = new UIStateDataBean(uiStateNode.getProperty(JCR_UI_STATE_NOTE_PROPERTY).getString());
-      return Response.ok(stateDataBean, JSON_CONTENT_TYPE).build();
+      return Response.ok(stateDataBean, JSON_CONTENT_TYPE).cacheControl(cc).build();
     } else {
       UIStateDataBean stateDataBean = new UIStateDataBean();
-      return Response.ok(stateDataBean, JSON_CONTENT_TYPE).build();
+      return Response.ok(stateDataBean, JSON_CONTENT_TYPE).cacheControl(cc).build();
     }
   }
   

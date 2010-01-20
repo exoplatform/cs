@@ -407,17 +407,17 @@ UIMainChatWindow.prototype.destroyAll = function() {
 	  eXo.cs.CSCometd.disconnect();
   }
   var thys = eXo.communication.chat.webui.UIMainChatWindow;
-  var logoutUrl = thys.XMPPCommunicator.SERVICE_URL +
+  /*var logoutUrl = thys.XMPPCommunicator.SERVICE_URL +
                     '/' + thys.XMPPCommunicator.TRANSPORT_XMPP +
                     '/logout/' + thys.userNames[thys.XMPPCommunicator.TRANSPORT_XMPP];
   var iframeNode = document.createElement('iframe');
   window.document.body.appendChild(iframeNode);
-  iframeNode.src = logoutUrl;
+  iframeNode.src = logoutUrl;*/
   try {
     if (eXo.cs.CSCometd.isConnected()) {
     	eXo.cs.CSCometd.disconnect();
     }
-    thys.jabberLogout();
+    //thys.jabberLogout();
   } catch (e) {}
 };
 

@@ -13,12 +13,18 @@ function UIRoomConfigPopupWindow() {
 }
 
 /**
+ * Extends from JSUIBean
+ */
+UIRoomConfigPopupWindow.prototype = new eXo.communication.chat.webui.component.JSUIBean();
+
+/**
  * Initializing method
  *
  * @param {HTMLElement} rootNode
  * @param {UIMainChatWindow} UIMainChatWindow
  */
 UIRoomConfigPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
+  this.id = 'UIRoomConfigPopupWindow';
   var DOMUtil = eXo.core.DOMUtil;
   this.rootNode = rootNode;
   this.UIMainChatWindow = UIMainChatWindow;
@@ -35,6 +41,21 @@ UIRoomConfigPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
       legendNode.style.cursor = 'pointer';
     }
   }
+  this._callback();
+  this._registerEventCallback(this._RELOAD_EVENT, this.onReload);
+};
+
+/**
+ * Use to reload UI states
+ */
+UIRoomConfigPopupWindow.prototype.onReload = function(eventData) {
+  var uiRoomConfigPopupWindow = eXo.communication.chat.webui.UIRoomConfigPopupWindow;
+  uiRoomConfigPopupWindow._isOnLoading = true;
+  var extra = uiRoomConfigPopupWindow._getOption('extra');
+  var tabId = extra['tabId'] ? extra['tabId'] : null;
+  var mustSubmit = extra['mustSubmit'] ? extra['mustSubmit'] : null;
+  uiRoomConfigPopupWindow.setVisible(uiRoomConfigPopupWindow._isVisible(), tabId, mustSubmit);
+  uiRoomConfigPopupWindow._isOnLoading = false;
 };
 
 /**
@@ -439,6 +460,9 @@ UIRoomConfigPopupWindow.prototype.relateClose = function(tabId) {
  * @param {Boolean} mustSubmit
  */
 UIRoomConfigPopupWindow.prototype.setVisible = function(visible, tabId, mustSubmit) {
+  this._setOption('visible', visible);
+  var extra = {tabId : tabId, mustSubmit : mustSubmit};
+  this._setOption('extra', extra);
   if (!this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {
 	  this.roomName = false;

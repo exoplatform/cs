@@ -12,12 +12,18 @@ function UIJoinRoomPopupWindow() {
 }
 
 /**
+ * Extends from JSUIBean
+ */
+UIJoinRoomPopupWindow.prototype = new eXo.communication.chatbar.webui.component.JSUIBean();
+
+/**
  * Initializing method
  *
  * @param {HTMLElement} rootNode
  * @param {UIMainChatWindow} UIMainChatWindow
  */
 UIJoinRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
+  this.id = 'UIJoinRoomPopupWindow';
   this.rootNode = rootNode;
   this.UIMainChatWindow = UIMainChatWindow;
   var DOMUtil = eXo.core.DOMUtil;
@@ -33,6 +39,18 @@ UIJoinRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.pageIteratorNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.uiPageIterator);
   this.uiPageIterator = new eXo.communication.chatbar.webui.UIPageIterator(this.pageIteratorNode);
   this.uiPageIterator.setGotoPageCallback(this.gotoPage);
+  this._callback();
+  this._registerEventCallback(this._RELOAD_EVENT, this.onReload);
+};
+
+/**
+ * Use to reload UI states
+ */
+UIJoinRoomPopupWindow.prototype.onReload = function(eventData) {
+  var uiJoinRoomPopupWindow = eXo.communication.chatbar.webui.UIJoinRoomPopupWindow;
+  uiJoinRoomPopupWindow._isOnLoading = true;
+  uiJoinRoomPopupWindow.setVisible(uiJoinRoomPopupWindow._isVisible());
+  uiJoinRoomPopupWindow._isOnLoading = false;
 };
 
 /**
@@ -257,6 +275,7 @@ UIJoinRoomPopupWindow.prototype.joinSelectedRoomAction = function(obj) {
  * @param {Boolean} visible
  */
 UIJoinRoomPopupWindow.prototype.setVisible = function(visible) {
+  this._setOption('visible', visible);
   if (!visible || !this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {
 	  if (this.rootNode.style.display != 'none') {

@@ -7,6 +7,12 @@
 function UICreateNewRoomPopupWindow() {
 }
 
+
+/**
+ * Extends from JSUIBean
+ */
+UICreateNewRoomPopupWindow.prototype = new eXo.communication.chat.webui.component.JSUIBean();
+
 /**
  * Initializing method
  *
@@ -14,6 +20,7 @@ function UICreateNewRoomPopupWindow() {
  * @param {UIMainChatWindow} UIMainChatWindow
  */
 UICreateNewRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
+  this.id = 'UICreateNewRoomPopupWindow';
   this.rootNode = rootNode;
   this.UIMainChatWindow = UIMainChatWindow;
   var fieldList = this.rootNode.getElementsByTagName('input');
@@ -23,6 +30,18 @@ UICreateNewRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow)
       continue;
     }
   }
+  this._callback();
+  this._registerEventCallback(this._RELOAD_EVENT, this.onReload);
+};
+
+/**
+ * Use to reload UI states
+ */
+UICreateNewRoomPopupWindow.prototype.onReload = function(eventData) {
+  var uiCreateNewRoomPopupWindow = eXo.communication.chat.webui.UICreateNewRoomPopupWindow;
+  uiCreateNewRoomPopupWindow._isOnLoading = true;
+  uiCreateNewRoomPopupWindow.setVisible(uiCreateNewRoomPopupWindow._isVisible());
+  uiCreateNewRoomPopupWindow._isOnLoading = false;
 };
 
 /**
@@ -31,6 +50,7 @@ UICreateNewRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow)
  * @param {Boolean} visible
  */
 UICreateNewRoomPopupWindow.prototype.setVisible = function(visible) {
+  this._setOption('visible', visible);
   if (!visible || !this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {
 	  if (this.rootNode.style.display != 'none') {

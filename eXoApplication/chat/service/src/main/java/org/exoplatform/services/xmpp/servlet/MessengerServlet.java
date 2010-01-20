@@ -30,6 +30,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,6 +49,10 @@ import org.exoplatform.services.rest.impl.EnvironmentContext;
 import org.exoplatform.services.rest.impl.RequestDispatcher;
 import org.exoplatform.services.rest.impl.header.HeaderHelper;
 import org.exoplatform.services.rest.servlet.ServletContainerRequest;
+import org.exoplatform.services.security.ConversationRegistry;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.security.StateKey;
+import org.exoplatform.services.security.web.HttpSessionStateKey;
 //import org.exoplatform.services.rest.servlet.RequestFactory;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -127,6 +132,21 @@ public class MessengerServlet extends HttpServlet implements Connector {
                                                                                        ServletException {
     httpRequest.setCharacterEncoding("UTF-8");
     ExoContainer container = ExoContainerContext.getCurrentContainer();
+    ConversationRegistry conversationRegistry =
+        (ConversationRegistry)container.getComponentInstanceOfType(ConversationRegistry.class);
+    ConversationState state = null;
+    String userId = httpRequest.getRemoteUser();
+    if (userId != null){
+    	HttpSession httpSession = httpRequest.getSession();
+        StateKey stateKey = new HttpSessionStateKey(httpSession);
+        state = conversationRegistry.getState(stateKey);
+        if(state != null){
+        	if(!userId.equals(state.getIdentity().getUserId())){
+        		conversationRegistry.unregister(stateKey);
+        	}
+        }
+    }
+    
     LOGGER.debug("Current Container: " + container);
     /*RequestDispatcher dispatcher = (RequestDispatcher) container.getComponentInstanceOfType(RequestDispatcher.class);
     LOGGER.debug("ResourceDispatcher: " + dispatcher);

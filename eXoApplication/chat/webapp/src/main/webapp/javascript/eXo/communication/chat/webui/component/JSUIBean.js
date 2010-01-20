@@ -308,11 +308,11 @@ JSUIBean.prototype = {
    */
   _reloadOptions : function() {
     this._eventCallback(this._RELOAD_EVENT);
-    if (this._rootNode) {
+    /*if (this._rootNode) {
       this._setVisible(this._getOption('visible'));
       this._setSize(this._getOption('width'), this._getOption('height'));
       this._setPosition(this._getOption('top'), this._getOption('left'));
-    }
+    }*/
   }
 };
 
