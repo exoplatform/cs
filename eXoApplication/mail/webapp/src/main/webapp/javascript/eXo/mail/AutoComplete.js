@@ -1,315 +1,404 @@
 /**
- * @author uocnb
+ * @author Hoang Manh Dung
  */
 
-// ACMain
-function ACMain() {
-  this.dataObj = false ;
-}
+function AutoComplete(){
+	this.REST_URL = eXo.env.portal.context + "/rest/cs/mail/searchemail/";
+};
+/**
+ * Register handler for input
+ * @param {Array} ids is the array of input ids
+ */
+AutoComplete.prototype.init = function(ids){
+	var i = ids.length ;
+	while(i--){
+		document.getElementById(ids[i]).onkeyup = this.pressHandler ;
+	}
+};
 
-ACMain.prototype.init = function(dataObj, rootElement, klazz, updateOnlyNeed) {
-  if (updateOnlyNeed == null) {
-    updateOnlyNeed = true ;
-  }
-  eXo.mail.AutoComplete.ACView.init() ;
-  if (this.dataObj == dataObj) {
-    if (!updateOnlyNeed) {
-      eXo.mail.AutoComplete.ACModel.parseData(dataObj) ;
-    }
-  } else {
-    eXo.mail.AutoComplete.ACModel.parseData(dataObj) ;
-  }
-  eXo.mail.AutoComplete.ACControl.regEvent(rootElement, klazz) ;
-  this.dataObj = dataObj ;
-} ;
+AutoComplete.prototype.pressHandler = function(evt){
+	var me = eXo.mail.AutoComplete;
+	var keyNum = me.captureKey(evt);
+	switch(keyNum){
+		case 13: me.enterHandler(evt, this); break;
+		case 27: me.escapeHandler(evt, this); break;
+		case 38: me.arrowUpHandler(evt, this); break;
+		case 40: me.arrowDownHandler(evt, this); break;
+		default: me.typeHandler(evt, this);
+	}
+	return; 
+};
 
-// ACModelPrototype
-function ACModelPrototype() {
-}
+AutoComplete.prototype.makeRequest = function(url,callback){
+	var request =  eXo.core.Browser.createHttpRequest() ;
+	request.open('GET', url, false) ;
+	request.setRequestHeader("Cache-Control", "max-age=86400") ;
+	request.send(null) ;
+	if(callback) callback(request.responseText) ;
+};
+/**
+ * @return {Array} list contact
+ * @param {Object} data
+ */
+AutoComplete.prototype.processData = function(data){
+	var tmpList = [];
+	var l = data.info.length;
+	for(var i=0; i < l; i++){
+		tmpList.push(data.info[i].split("::")[1]);
+	}
+	return tmpList;
+};
+/**
+ * render drop down menu
+ * @param {Object} data
+ */
+AutoComplete.prototype.renderMenu = function(data){
+	var len = data.length;
+	var menu = this.createMenuContainer("AutoComplete");
+	var html = '';
+	for(i=0; i<len; i++){
+		html += '<div class="AutoCompleteItem">'+ data[i]+ '</div>';		
+	}
+	menu.innerHTML = html ;
+	if(html != '') menu.style.display = "block";
+	else  menu.style.display = "none";
+};
+/**
+ * Complete automatically data to textbox input
+ * @param {Object} data
+ */
+AutoComplete.prototype.typeHandler = function(evt,textbox){
+	var me = eXo.mail.AutoComplete ;
+	var keyword = eXo.mail.AutoComplete.createKeyword(textbox.value);
+	me.activeInput = textbox;
+	if(keyword == '') {
+		eXo.mail.AutoComplete.hideMenu();
+		return;
+	}
+	var url = me.REST_URL + keyword;
+	me.makeRequest(url,me.typeCallback);
+	me.setPosition(me.menu,me.activeInput);
+};
 
-ACModelPrototype.prototype = {
-  contain : function(keyword) { return false ;}
-  ,
-  compare : function(keyword) { return false ;}
-  ,
-  highLight : function(keyword) { return 'Not implement' ;}
-} ;
+AutoComplete.prototype.typeCallback = function(data){
+	var me = eXo.mail.AutoComplete ;
+	eval("var data = " + data.trim());
+	if(typeof(data) != "object") return ;
+	data = me.processData(data);
+	me.renderMenu(data);
+};
+/**
+ * Capture key is pressed by users
+ * @param {Object} data
+ */
+AutoComplete.prototype.captureKey = function(evt){
+	evt = window.event || evt ;
+	var keynum = false ;
+	if(window.event) { /* IE */
+		keynum = evt.keyCode;
+	} else if(evt.which) { /* Netscape/Firefox/Opera */
+		keynum = evt.which ;
+	}
+	if(keynum == 0) {
+		keynum = evt.keyCode ;
+	}
+	return keynum ;
+};
+/**
+ * Move pointer among items
+ */
+AutoComplete.prototype.arrowDownHandler = function(){
+	var me = eXo.mail.AutoComplete;
+	if(!me.currentItem) {
+		me.currentItem = me.menu.firstChild;
+		eXo.core.DOMUtil.addClass(me.currentItem,"AutoCompleteOver");
+		return ;
+	}
+	eXo.core.DOMUtil.replaceClass(me.currentItem,"AutoCompleteOver","");
+	if(me.currentItem.nextSibling) me.currentItem = me.currentItem.nextSibling;
+	else me.currentItem = me.menu.firstChild;
+	eXo.core.DOMUtil.addClass(me.currentItem,"AutoCompleteOver");
+};
 
-// ACModel
-function ACModel() {
-  this.data = [] ;
-  this.separatorChar = ',' ;
-}
+AutoComplete.prototype.arrowUpHandler = function(){
+	var me = eXo.mail.AutoComplete;
+	if(!me.currentItem) {
+		return ;
+	}
+	eXo.core.DOMUtil.replaceClass(me.currentItem,"AutoCompleteOver","");
+	if(me.currentItem.previousSibling) me.currentItem = me.currentItem.previousSibling;
+	else me.currentItem = me.menu.lastChild;
+	eXo.core.DOMUtil.addClass(me.currentItem,"AutoCompleteOver");
+};
 
-ACModel.prototype.init = function() {
-} ;
+AutoComplete.prototype.enterHandler = function(){
+	var me = eXo.mail.AutoComplete;
+	if(me.currentItem) me.activeInput.value = me.currentItem.innerHTML;
+	me.hideMenu();
+};
+
+AutoComplete.prototype.escapeHandler = function(){
+	eXo.mail.AutoComplete.hideMenu();
+};
+
+AutoComplete.prototype.createMenuContainer = function(id){
+	if (document.getElementById(id)) {
+		eXo.core.DOMUtil.listHideElements(document.getElementById(id));
+		document.getElementById(id).innerHTML = "<span></span>";
+		return (this.menu = document.getElementById(id));
+	}
+	var div = document.createElement("div");
+	div.id = id;
+	div.onmouseover = this.overItem;
+	div.onmouseout = this.cleanUp;
+	div.onclick = this.setValue;
+	div.className = "AutoCompleteMenu";
+	document.body.appendChild(div);
+	this.menu = div ;
+	eXo.core.DOMUtil.listHideElements(div);
+	return div;
+};
 
 /**
- * For initialize some temporaty data for test only
+ * @author Hoang Manh Dung
  */
-ACModel.prototype.initTmpData = function() {
-  for (var i=0; i<1500; i++) {
-    var cnt = 0 ;
-    var nameAuto = '' ;
-    while(cnt<10) {
-      nameAuto += String.fromCharCode((Math.random() * 26) + 65) ;
-      cnt ++ ;
-    }
-    this.data[i] = new Contact(nameAuto, nameAuto + '@gmail.com') ;
-  }
-} ;
 
+function AutoComplete(){
+	this.REST_URL = eXo.env.portal.context + "/rest/cs/mail/searchemail/";
+};
 /**
- * 
- * @param {Element} dataNode
+ * Register handler for input
+ * @param {Array} ids is the array of input ids
  */
-ACModel.prototype.parseData = function(dataNode) {
-  dataNode = (dataNode && dataNode.nodeName) ? dataNode : document.getElementById(dataNode) ;
-  objList = dataNode.getElementsByTagName('contact') ;
-  var tmpNameNode = false ;
-  var tmpEmailNode = false ;
-  for (var i=0; i < objList.length; i++) {
-    tmpNameNode = objList[i].getElementsByTagName('name')[0] ;
-    tmpEmailNode = objList[i].getElementsByTagName('email')[0] ;
-    this.data[this.data.length] = new Contact(tmpNameNode.firstChild.nodeValue, tmpEmailNode.firstChild.nodeValue) ;
-  }
-} ;
+AutoComplete.prototype.init = function(ids){
+	var i = ids.length ;
+	while(i--){
+		document.getElementById(ids[i]).onkeyup = this.pressHandler ;
+	}
+};
 
+AutoComplete.prototype.pressHandler = function(evt){
+	var me = eXo.mail.AutoComplete;
+	var keyNum = me.captureKey(evt);
+	switch(keyNum){
+		case 13: me.enterHandler(evt, this); break;
+		case 27: me.escapeHandler(evt, this); break;
+		case 38: me.arrowUpHandler(evt, this); break;
+		case 40: me.arrowDownHandler(evt, this); break;
+		default: me.typeHandler(evt, this);
+	}
+	return; 
+};
+
+AutoComplete.prototype.makeRequest = function(url,callback){
+	var request =  eXo.core.Browser.createHttpRequest() ;
+	request.open('GET', url, false) ;
+	request.setRequestHeader("Cache-Control", "max-age=86400") ;
+	request.send(null) ;
+	if(callback) callback(request.responseText) ;
+};
 /**
- * 
- * @param {String} keyword
+ * @return {Array} list contact
+ * @param {Object} data
  */
-ACModel.prototype.query = function(keyword) {
-  var result = [] ;
-  for (var i=0; i<this.data.length; i++) {
-    if (this.data[i].contain(keyword)) {
-      result[result.length] = this.data[i] ;
-    }
-  }
-  this.currentResult = result ;
-  return result ;
-} ;
-
-// ACKeyboardHandler
-function ACKeyboardHandler() {}
-
-ACKeyboardHandler.prototype = new eXo.core.KeyboardListenerAPI() ;
-
-ACKeyboardHandler.prototype.init = function() {
-  var keyboard = eXo.core.Keyboard ;
-  keyboard.register(eXo.mail.AutoComplete.ACKeyboardHandler) ;
-  keyboard.init() ;
-}
-
-ACKeyboardHandler.prototype.finish = function() {
-  eXo.core.Keyboard.finish() ;
-}
-
-ACKeyboardHandler.prototype.onDefaultCharset = function(keynum, keychar) {
-  eXo.mail.AutoComplete.ACView.show(keychar) ;
-} ;
-
-ACKeyboardHandler.prototype.onAlphabet = eXo.mail.AutoComplete.ACKeyboardHandler.onDefaultCharset ;
-ACKeyboardHandler.prototype.onDigit = eXo.mail.AutoComplete.ACKeyboardHandler.onDefaultCharset ;
-ACKeyboardHandler.prototype.onPunctuation = eXo.mail.AutoComplete.ACKeyboardHandler.onDefaultCharset ;
-
-ACKeyboardHandler.prototype.onUpArrow = function() {
-  eXo.mail.AutoComplete.ACView.highLightPrevious() ;
-  return false ;
-} ;
-
-ACKeyboardHandler.prototype.onDownArrow = function() {
-  eXo.mail.AutoComplete.ACView.highLightNext() ;
-  return false ;
-} ;
-
-ACKeyboardHandler.prototype.onEnter = function() {
-  eXo.mail.AutoComplete.ACView.selectCurrent() ;
-  return false ;
-} ;
-
-// ACView
-function ACView() {
-  this.displayBoxNode = document.createElement('div') ;
-  with(this.displayBoxNode.style) {
-    background = '#efefde' ;
-    color = '#6c6c6c' ;
-    border = 'solid 1px #c7c7c7' ;
-    opacity = '0.85' ;
-    filter = 'alpha(opacity=85)' ;
-    position = 'absolute' ;
-    top = '0px' ;
-    left = '0px' ;
-    padding = '10px' ;
-    display = 'none' ;
-  }
-  document.body.appendChild(this.displayBoxNode) ;
-  this.activeNode = false ;
-  this.currentIndex = 0 ;
-}
-
-ACView.prototype.init = function(event, element) {
-  element = element ? element : this ;
-  this.activeNode = element ;
-  eXo.mail.AutoComplete.ACView.show() ;
-} ;
-
-ACView.prototype.finish = function() {
-  this.activeNode = false ;
-  eXo.mail.AutoComplete.ACView.displayBoxNode.style.display = 'none' ;
-} ;
-
-ACView.prototype.show = function() {
-  this.currentIndex = 0 ;
-  element = this.activeNode ;
-  var displayBoxNode = eXo.mail.AutoComplete.ACView.displayBoxNode ;
-  displayBoxNode.innerHTML = '' ;
-  displayBoxNode.style.display = 'none' ;
-  var keyword = element.value ;
-  if (!keyword || keyword == '') {
-    return ;
-  }
-  var result = eXo.mail.AutoComplete.ACModel.query(keyword) ;
-  if (result.length <= 0) {
-    return ;
-  }
-  
-  var contactItem = document.createElement('div') ;
-  contactItem.className = '_contact_' ;
-  with(contactItem.style) {
-    borderBottom = 'solid 1px #6c6c6c' ;
-    margin = '5px' ;
-  }
-  for (var i=0; i<result.length; i++) {
-    var tmp = contactItem.cloneNode(false) ;
-    tmp.innerHTML = result[i].highLight(keyword) ;
-    displayBoxNode.appendChild(tmp) ;
-  }
-  var topPos = eXo.core.Browser.findPosY(element) + element.offsetHeight ;
-  var leftPos = eXo.core.Browser.findPosX(element) ;
-  with(displayBoxNode.style) {
-    top = topPos + 'px' ;
-    left = leftPos + 'px' ;
-    display = 'block' ;
-  }
-} ;
-
-ACView.prototype.highLightPrevious = function()  {
-  this.currentIndex -- ;
-  this.applyChange() ;
-} ;
-
-ACView.prototype.highLightNext = function()  {
-  this.currentIndex ++ ;
-  this.applyChange() ;
-} ;
-
-ACView.prototype.selectCurrent = function()  {
-  this.activeNode.value = 
-      this.activeNode.value + eXo.mail.AutoComplete.ACModel.result[this.currentIndex] ;
-} ;
-
-ACView.prototype.applyChange = function() {
-  var contactLst = eXo.core.DOMUtil.findDescendantsByClass(this.displayBoxNode, 'div', '_contact_') ;
-  for (var i=0; i<contactLst.length; i++) {
-    var contact = contactLst[i] ;
-    var bgColor = 'none' ;
-    if (i == this.currentIndex) {
-      bgColor = '#121212' ;
-    }
-    contact.style.background = bgColor ;
-  }
-}
-
-// ACControl
-function ACControl() {
-  this.data = []
-} ;
-
-ACControl.prototype.regEvent = function(rootElement, klazz) {
-  if (rootElement && rootElement.length > 0) {
-    for (var i=0; i<rootElement.length; i++) {
-      var tmpNode = document.getElementById(rootElement[i]) ;
-      tmpNode.onfocus = eXo.mail.AutoComplete.ACView.init ;
-      tmpNode.onblur = eXo.mail.AutoComplete.ACView.finish ;
-      tmpNode.onkeyup =  eXo.mail.AutoComplete.ACView.show ;
-    }
-  } else {
-    rootElement = (rootElement && rootElement.nodeName) ? rootElement : document.getElementById(rootElement) ;
-    eList = eXo.core.DOMUtil.findDescendantsByClass(rootElement, '*', klazz) ;
-    for (var i=0; i<eList.length; i++) {
-      var tmpE = eList[i].getElementsByTagName('input') ;
-      if (tmpE) {
-        tmpE = tmpE[0] ;
-      } else {
-        tmpE = eList[i].getElementsByTagName('textarea') ;
-        if (tmpE) {
-          tmpE = tmpE[0] ;
-        }
-      }
-      if (tmpE) {
-        tmpE.onfocus = eXo.mail.AutoComplete.ACView.init ;
-        tmpE.onblur = eXo.mail.AutoComplete.ACView.finish ;
-        tmpE.onkeyup =  eXo.mail.AutoComplete.ACKeyboardHandler.init ;
-      }
-    }
-  }
-} ;
-
-eXo.mail.AutoComplete = {
-  ACMain : new ACMain()
-  ,
-  ACModelPrototype : ACModelPrototype
-  ,
-  ACModel : new ACModel()
-  ,
-  ACView : new ACView()
-  ,
-  ACKeyboardHandler : new ACKeyboardHandler()
-  ,
-  ACControl : new ACControl()
-} ;
-
-// Contact Object
-function Contact(name, emailAddress) {
-  this.name = name.toLowerCase() ;
-  this.emailAddress = emailAddress.toLowerCase() ;
-}
-
-Contact.prototype.constructor = new eXo.mail.AutoComplete.ACModelPrototype() ;
-
+AutoComplete.prototype.processData = function(data){
+	var tmpList = [];
+	var l = data.info.length;
+	for(var i=0; i < l; i++){
+		tmpList.push(data.info[i].split("::")[1]);
+	}
+	return tmpList;
+};
 /**
- * 
- * @param {Contact} obj
+ * render drop down menu
+ * @param {Object} data
  */
-Contact.prototype.compare = function(obj) {
-  if (this.name == obj.name &&  this.emailAddress == obj.emailAddress) {
-    return true ;
-  }
-  return false ;
-} ;
+AutoComplete.prototype.renderMenu = function(data){
+	var len = data.length;
+	var menu = this.createMenuContainer("AutoComplete");
+	var html = '';
+	for(i=0; i<len; i++){
+		html += '<div class="AutoCompleteItem">'+ data[i]+ '</div>';		
+	}
+	menu.innerHTML = html ;
+	if(html != '') menu.style.display = "block";
+	else  menu.style.display = "none";
+};
+/**
+ * Complete automatically data to textbox input
+ * @param {Object} data
+ */
+AutoComplete.prototype.typeHandler = function(evt,textbox){
+	var me = eXo.mail.AutoComplete ;
+	var keyword = eXo.mail.AutoComplete.createKeyword(textbox.value);
+	me.activeInput = textbox;
+	if(keyword == '') {
+		eXo.mail.AutoComplete.hideMenu();
+		return;
+	}
+	var url = me.REST_URL + keyword;
+	me.makeRequest(url,me.typeCallback);
+	me.setPosition(me.menu,me.activeInput);
+};
 
-Contact.prototype.contain = function(keyword) {
-  keyword = keyword.toLowerCase() ;
-  var containName = false ;
-  var containEmailAddress = false ;
-  if (this.name.toLowerCase().indexOf(keyword) == 0) {
-    containName = true ;
-  }
-  if (this.emailAddress.toLowerCase().indexOf(keyword) == 0) {
-    containEmailAddress = true ;
-  }
-  return (containName || containEmailAddress) ;
-} ;
+AutoComplete.prototype.typeCallback = function(data){
+	var me = eXo.mail.AutoComplete ;
+	eval("var data = " + data.trim());
+	if(typeof(data) != "object") return ;
+	data = me.processData(data);
+	me.renderMenu(data);
+};
+/**
+ * Capture key is pressed by users
+ * @param {Object} data
+ */
+AutoComplete.prototype.captureKey = function(evt){
+	evt = window.event || evt ;
+	var keynum = false ;
+	if(window.event) { /* IE */
+		keynum = evt.keyCode;
+	} else if(evt.which) { /* Netscape/Firefox/Opera */
+		keynum = evt.which ;
+	}
+	if(keynum == 0) {
+		keynum = evt.keyCode ;
+	}
+	return keynum ;
+};
+/**
+ * Move pointer among items
+ */
+AutoComplete.prototype.arrowDownHandler = function(){
+	var me = eXo.mail.AutoComplete;
+	if(!me.currentItem) {
+		me.currentItem = me.menu.firstChild;
+		eXo.core.DOMUtil.addClass(me.currentItem,"AutoCompleteOver");
+		return ;
+	}
+	eXo.core.DOMUtil.replaceClass(me.currentItem,"AutoCompleteOver","");
+	if(me.currentItem.nextSibling) me.currentItem = me.currentItem.nextSibling;
+	else me.currentItem = me.menu.firstChild;
+	eXo.core.DOMUtil.addClass(me.currentItem,"AutoCompleteOver");
+};
 
-Contact.prototype.highLight = function(keyword) {
-  var keywordHighLighted = '<span style="color: #000; font-weight: bold">' + keyword + '</span>' ;
-  var nameTmp = this.name.replace(keyword, keywordHighLighted) ;
-  var emailTmp = this.emailAddress.replace(keyword, keywordHighLighted) ;
-  return ('<' + nameTmp +  '> ' + emailTmp) ;
-} ;
+AutoComplete.prototype.arrowUpHandler = function(){
+	var me = eXo.mail.AutoComplete;
+	if(!me.currentItem) {
+		return ;
+	}
+	eXo.core.DOMUtil.replaceClass(me.currentItem,"AutoCompleteOver","");
+	if(me.currentItem.previousSibling) me.currentItem = me.currentItem.previousSibling;
+	else me.currentItem = me.menu.lastChild;
+	eXo.core.DOMUtil.addClass(me.currentItem,"AutoCompleteOver");
+};
 
-Contact.prototype.toString = function() {
-  return ('<b>name:</b> ' + this.name
-          + '<br/><b>emailaddress:</b> ' + this.emailAddress) ;
-} ;
+AutoComplete.prototype.enterHandler = function(){
+	var me = eXo.mail.AutoComplete;
+	if(me.currentItem) me.addValue(me.currentItem);
+	me.hideMenu();
+};
+
+AutoComplete.prototype.escapeHandler = function(){
+	eXo.mail.AutoComplete.hideMenu();
+};
+
+AutoComplete.prototype.createMenuContainer = function(id){
+	if (document.getElementById(id)) {
+		eXo.core.DOMUtil.listHideElements(document.getElementById(id));
+		document.getElementById(id).innerHTML = "<span></span>";
+		return (this.menu = document.getElementById(id));
+	}
+	var div = document.createElement("div");
+	div.id = id;
+	div.onmouseover = this.overItem;
+	div.onmouseout = this.cleanUp;
+	div.onclick = this.setValue;
+	div.className = "AutoCompleteMenu";
+	document.body.appendChild(div);
+	this.menu = div ;
+	eXo.core.DOMUtil.listHideElements(div);
+	return div;
+};
+
+AutoComplete.prototype.setValue = function(evt){
+	var target = eXo.core.EventManager.getEventTargetByClass(evt,"AutoCompleteItem");
+	if(!target) return ;
+	eXo.mail.AutoComplete.addValue(target);
+};
+
+AutoComplete.prototype.addValue = function(obj){
+	var value = "";
+	if(String(eXo.mail.AutoComplete.activeInput.value).indexOf(",") != -1){
+		value += eXo.mail.AutoComplete.activeInput.value;
+	}
+	value = value.substr(0,value.lastIndexOf(",")+1) + " ";
+	value += obj.innerHTML + ", ";
+	eXo.mail.AutoComplete.activeInput.value = value;
+	eXo.mail.AutoComplete.hideMenu();
+};
+
+AutoComplete.prototype.overItem = function(evt){
+	var target = eXo.core.EventManager.getEventTargetByClass(evt,"AutoCompleteItem");
+	var me = eXo.mail.AutoComplete;
+	if(!target) return ;
+	if(me.currentItem) eXo.core.DOMUtil.replaceClass(me.currentItem,"AutoCompleteOver","");
+	eXo.core.DOMUtil.addClass(target,"AutoCompleteOver");
+	me.currentItem = target;
+};
+
+AutoComplete.prototype.setPosition = function(menu,anchor){
+	var x = eXo.core.Browser.findPosX(anchor);
+	var y = eXo.core.Browser.findPosY(anchor);
+	menu.style.left = x + "px";
+	menu.style.top = (y + anchor.offsetHeight) + "px";
+};
+
+AutoComplete.prototype.cleanUp = function(evt){
+	var me = eXo.mail.AutoComplete;
+	if(me.currentItem) eXo.core.DOMUtil.replaceClass(me.currentItem,"AutoCompleteOver","");
+};
+
+AutoComplete.prototype.hideMenu = function(){
+	eXo.mail.AutoComplete.menu.style.display = "none";
+};
+
+AutoComplete.prototype.createKeyword = function(str){
+	if(str.indexOf(",") != -1) {
+		str = str.substr(str.lastIndexOf(",") + 1, str.length);
+	}
+	return str.trim();	
+};
+
+AutoComplete.prototype.overItem = function(evt){
+	var target = eXo.core.EventManager.getEventTargetByClass(evt,"AutoCompleteItem");
+	var me = eXo.mail.AutoComplete;
+	if(!target) return ;
+	if(me.currentItem) eXo.core.DOMUtil.replaceClass(me.currentItem,"AutoCompleteOver","");
+	eXo.core.DOMUtil.addClass(target,"AutoCompleteOver");
+	me.currentItem = target;
+};
+
+AutoComplete.prototype.setPosition = function(menu,anchor){
+	var x = eXo.core.Browser.findPosX(anchor);
+	var y = eXo.core.Browser.findPosY(anchor);
+	menu.style.left = x + "px";
+	menu.style.top = (y + anchor.offsetHeight) + "px";
+};
+
+AutoComplete.prototype.cleanUp = function(evt){
+	var me = eXo.mail.AutoComplete;
+	if(me.currentItem) eXo.core.DOMUtil.replaceClass(me.currentItem,"AutoCompleteOver","");
+};
+
+AutoComplete.prototype.hideMenu = function(){
+	eXo.mail.AutoComplete.menu.style.display = "none";
+};
+
+AutoComplete.prototype.createKeyword = function(str){
+	if(str.indexOf(",") != -1) {
+		str = str.substr(str.lastIndexOf(",") + 1, str.length);
+	}
+	return str.trim();	
+};
+
+eXo.mail.AutoComplete = new AutoComplete();

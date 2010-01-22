@@ -7,8 +7,8 @@
   //rcontext.getJavascriptManager().importJavascript('eXo.core.CoreEditor');
   //rcontext.getJavascriptManager().importJavascript('eXo.core.DefaultKeyboardListerner');
   //rcontext.getJavascriptManager().importJavascript('eXo.core.KeyboardListenerAPI');
-  //rcontext.getJavascriptManager().importJavascript('eXo.mail.AutoComplete','/mail/javascript/');
-  //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.AutoComplete.ACMain.init("autoComplete", ["to", "cc", "bcc"])');
+  rcontext.getJavascriptManager().importJavascript('eXo.mail.AutoComplete','/mail/javascript/');
+  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.AutoComplete.init(["to", "cc", "bcc"])');
 %>
 <% uiform.begin() %>
 <div class="UIConfirmMessage" style="display:none;"><%=_ctx.appRes(uicomponent.id+".msg.no-subject") %></div>

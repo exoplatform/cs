@@ -223,10 +223,11 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
+      if(ConversationState.getCurrent().getIdentity() == null) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build() ;
       String username = ConversationState.getCurrent().getIdentity().getUserId() ;
-      if(username == null) return Response.ok(Status.FORBIDDEN).cacheControl(cacheControl).build() ;
+      if(username == null) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build() ;
       ContactFilter filter = new ContactFilter();
-      filter.setText(keywords);
+      filter.setEmailAddress(keywords);
       Map<String, String> data = contactSvr.searchEmails(username, filter);
       fullData.setInfo(data.values()) ;
     } catch (Exception e) {
