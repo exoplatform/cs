@@ -247,7 +247,7 @@ UIContactDragDrop.prototype.dragCallback = function(dndEvent) {
   }
 } ;
 
-UIContactDragDrop.prototype.dropCallback = function(dndEvent) { 
+UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
   eXo.core.DOMUtil.removeElement(dndEvent.dragObject) ;
   eXo.core.DOMUtil.replaceClass(eXo.contact.UIContactDragDrop.orginalObject,"UIVcardHightLight","");
   delete eXo.contact.UIContactDragDrop.orginalObject;  
@@ -275,16 +275,14 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
       eXo.webui.UIForm.submitForm('UIContacts','Tag', true) ;
       return ;
     }
-
-    if (eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,"PersonalAddress")) {
-      eXo.webui.UIForm.submitForm('contact#UIContacts','SharedContacts', true)
+    if (eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,"PersonalAddress")) { 
+      eXo.webui.UIForm.submitForm('UIContacts','SharedContacts', true);
       return ;
     }
     var contactTypeId = this.foundTargetObjectCatch.getAttribute('tagId') ;
     if (!contactTypeId) {      
     	contactTypeId = this.foundTargetObjectCatch.id ;
     }
-
     if (eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'UITags')) {
 	    uiContacts.action = uiContacts.action + '&objectId=' + contactTypeId ;
 	    eXo.webui.UIForm.submitForm('UIContacts','DNDContactsToTag', true) ;

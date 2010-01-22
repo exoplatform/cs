@@ -112,6 +112,9 @@
 					<a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
 							<div class="Icon CopyContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>"><span></span></div>
 					</a>
+					<a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("SharedContacts")%>" class="ControlButton">
+							<div class="Icon ShareIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")%>"><span></span></div>
+					</a>
 					<div style="clear: both;"><span></span></div>
 				</div>
 				<div class="TitleSearch" ><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
@@ -147,7 +150,9 @@
 					<a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
 							<div class="Icon CopyContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>"><span></span></div>
 					</a>
-					
+					<a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("SharedContacts")%>" class="ControlButton">
+							<div class="Icon ShareIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")%>"><span></span></div>
+					</a>
 					<% if (availableContact > 10) { %>
 					<div class="UIAddressPageList">
 						<div class="ContactIteratorContainer">
