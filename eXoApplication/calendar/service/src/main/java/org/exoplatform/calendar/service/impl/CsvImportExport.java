@@ -434,12 +434,12 @@ public class CsvImportExport implements CalendarImportExport {
     // TODO Auto-generated method stub
     return null;
   }
-  @Override
   public OutputStream exportEventCalendar(String username,
                                           String calendarId,
                                           String type,
                                           String eventId) throws Exception {
+                                            return null;
     //TODO not implemented yet, export for CSV file
-    return null;
+   
   }
 }
