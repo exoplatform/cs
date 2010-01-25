@@ -8,11 +8,8 @@ import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.contact.service.ContactFilter;
@@ -22,8 +19,8 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.services.rest.resource.ResourceContainer;
-import org.exoplatform.services.security.ConversationState;
-import org.exoplatform.webservice.cs.bean.ContactData;
+import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
+import org.exoplatform.ws.frameworks.json.value.JsonValue;
 
 /**
  * @author Uoc Nguyen Modified by : Phung Nam (phunghainam@gmail.com)
@@ -31,15 +28,19 @@ import org.exoplatform.webservice.cs.bean.ContactData;
 @Path("/cs/mail")
 public class MailWebservice implements ResourceContainer {
 
-  public static final String TEXT_XML = "text/xml".intern() ;
-  public final static String JSON = "application/json".intern();
-  public final static String TEXT = "plain/text".intern();
-  public static final int MIN_SLEEP_TIMEOUT = 100;
+  public static final String TEXT_XML          = "text/xml".intern();
 
-  public static final int MAX_TIMEOUT       = 16;
-  
-  
-  //TODO need to organize code, don't keep html content here !
+  public final static String JSON              = "application/json".intern();
+
+  public final static String TEXT              = "plain/text".intern();
+
+  public static final int    MIN_SLEEP_TIMEOUT = 100;
+
+  public static final int    MAX_TIMEOUT       = 16;
+
+  private static int         firstChecked      = 0;
+
+  // TODO need to organize code, don't keep html content here !
   public MailWebservice() {
   }
 
@@ -53,7 +54,12 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoStore(true);
     MailService mailService = (MailService) PortalContainer.getInstance()
                                                            .getComponentInstanceOfType(MailService.class);
-    CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
+    CheckingInfo checkingInfo = null;
+    if (firstChecked == 0) {
+      firstChecked = 1;
+    } else {
+      checkingInfo = mailService.getCheckingInfo(userName, accountId);
+    }
 
     // try to start if no checking info available
     if (checkingInfo == null) {
@@ -72,37 +78,6 @@ public class MailWebservice implements ResourceContainer {
     }
     buffer.append("  </checkingmail>");
     buffer.append("</info>");
-
-    return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
-  }
-
-  @GET
-  @Path("/synchfolders/{username}/{accountId}/")
-  public Response synchFolders(@PathParam("username") String userName,
-                               @PathParam("accountId") String accountId) throws Exception {
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    cacheControl.setNoStore(true);
-    MailService mailService = (MailService) ExoContainerContext.getCurrentContainer()
-                                                               .getComponentInstanceOfType(MailService.class);
-
-    CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
-
-    if (checkingInfo == null) {
-      mailService.synchImapFolders(userName, accountId);
-      checkingInfo = mailService.getCheckingInfo(userName, accountId);
-    }
-
-    StringBuffer buffer = new StringBuffer();
-    buffer.append("<info>");
-    buffer.append("  <checkingmail>");
-    if (checkingInfo != null) {
-      buffer.append("    <status>" + checkingInfo.getSyncFolderStatus() + "</status>");
-    }
-    buffer.append("  </checkingmail>");
-    buffer.append("</info>");
-
-     mailService.removeCheckingInfo(userName, accountId);
 
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
@@ -134,7 +109,6 @@ public class MailWebservice implements ResourceContainer {
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 
-  
   @GET
   @Path("/checkmailjobinfo/{username}/{accountId}/")
   public Response getCheckMailJobInfo(@PathParam("username") String userName,
@@ -207,33 +181,31 @@ public class MailWebservice implements ResourceContainer {
 
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
-  
+
   /**
-   * Get all email from contacts data base, the security level will take from ConversationState   
+   * Get all email from contacts data base
+   * 
+   * @param username : userid to validate session and data store
    * @param keywords : the text to compare with data base
    * @return application/json content type
    */
   @GET
-  @Path("/searchemail/{keywords}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response searchemail(@PathParam("keywords") String keywords) throws Exception{
-    ContactService contactSvr = (ContactService) PortalContainer.getInstance().getComponentInstanceOfType(ContactService.class);
-    ContactData fullData = new ContactData() ;
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    cacheControl.setNoStore(true);
+  @Path("/searchemail/{username}/{keywords}")
+  public Response searchemail(@PathParam("username") String username,
+                              @PathParam("keywords") String keywords) throws Exception {
+    ContactService contactSvr = (ContactService) PortalContainer.getInstance()
+                                                                .getComponentInstanceOfType(ContactService.class);
+    StringBuffer buffer = new StringBuffer();
     try {
-      if(ConversationState.getCurrent().getIdentity() == null) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build() ;
-      String username = ConversationState.getCurrent().getIdentity().getUserId() ;
-      if(username == null) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build() ;
       ContactFilter filter = new ContactFilter();
-      filter.setEmailAddress(keywords);
+      filter.setText(keywords);
       Map<String, String> data = contactSvr.searchEmails(username, filter);
-      fullData.setInfo(data.values()) ;
+      JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+      JsonValue json = generatorImpl.createJsonObject(data);
+      buffer.append(json.toString());
     } catch (Exception e) {
-      e.printStackTrace();
-      return Response.ok(Status.INTERNAL_SERVER_ERROR).cacheControl(cacheControl).build();
-    }    
-    return Response.ok(fullData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build() ;
+      buffer.append(e.getLocalizedMessage());
+    }
+    return Response.ok(buffer.toString(), JSON).build();
   }
 }
