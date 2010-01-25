@@ -50,8 +50,9 @@ function getProduct(version) {
   product.addDependencies(cs.extension.webapp);
 
   // CS demo
-  //product.addDependencies(cs.demo.portal);
-  //product.addDependencies(cs.demo.rest);
+  product.addDependencies(cs.demo.portal);
+  product.addDependencies(cs.demo.cometd);
+  product.addDependencies(cs.demo.rest);
   
   product.addServerPatch("tomcat", cs.server.tomcat.patch) ;
   product.addServerPatch("jboss",  cs.server.jboss.patch) ;
@@ -59,6 +60,8 @@ function getProduct(version) {
 
   /* cleanup duplicated lib */
   //product.removeDependency(new Project("commons-httpclient", "commons-httpclient", "jar", "3.0"));
+  product.removeDependency(new Project("javax.mail", "mail", "jar", "1.4"));
+  product.removeDependency(new Project("rome", "rome", "jar", "0.8"));
    
 
   product.module = cs ;

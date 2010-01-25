@@ -4,7 +4,7 @@
  * A core javascript library using for communicate with services.
  */
 function XMPPCommunicator() {
-  this.SERVICE_URL       = '/chat/messengerservlet';
+  this.SERVICE_URL       = '/chatbar/messengerservlet';
   this.TRANSPORT_XMPP    = 'xmpp';
   this.TRANSPORT_YAHOO   = 'yahoo';
   this.TRANSPORT_GTALK   = 'gtalk';

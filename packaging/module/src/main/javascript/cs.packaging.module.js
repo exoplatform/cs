@@ -113,6 +113,10 @@ function getModule(params)
 	   addDependency(new Project("org.exoplatform.cs", "exo.cs.demo.config", "jar", module.version));
 	   module.demo.portal.deployName = "csdemo";  
 	   
+   module.demo.cometd=
+	new Project("org.exoplatform.cs", "exo.cs.demo.cometd-war", "war", module.version);  	
+	module.demo.cometd.deployName = "cometd-csdemo";
+	
    // demo rest endpoint	   
    module.demo.rest = 
        new Project("org.exoplatform.cs", "exo.cs.demo.rest-war", "war", module.version);

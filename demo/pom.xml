@@ -14,6 +14,7 @@
   <modules>
 	<module>config</module>
 	<module>war</module>
+	<module>cometd-csdemo</module>
 	<module>rest-war</module>
 	<module>ear</module>
   </modules>
