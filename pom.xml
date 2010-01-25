@@ -1,27 +1,58 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
-	<description>eXo Collaboration Suite is made of four applications:
-    * eXo Address Book: is an integrated address book and contacts manager. It not only handles private and public contacts in your organization but also keep precious information such as address, telephone, fax, etc. Furthermore, we also support VCard format, import/export in order to consolidate your existing contacts into a single place.
-    * eXo Calendar: is a personal and shared agenda. It not only helps you schedule your time more quickly and conveniently but also manages your shared and public agendas in the organization efficiently. Moreover, eXo Calendar also facilitates iCal support that helps you easily exchange event/task information with other applications.
-    * eXo Mail: is a full featured email client. It is built with a variety of features designed to make your e-mail experience more productive.
-    * eXo Chat: is an effective and convenient way to communicate online in real time.
-</description>
-	<url>http://wiki.exoplatform.org/xwiki/bin/view/CS/</url>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
 
+    Copyright (C) 2003-2010 eXo Platform SAS.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Affero General Public License
+    as published by the Free Software Foundation; either version 3
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, see <http://www.gnu.org/licenses/>.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform</groupId>
     <artifactId>exo.parent</artifactId>
     <version>8-SNAPSHOT</version>
   </parent>
-
-  <modelVersion>4.0.0</modelVersion>
   <groupId>org.exoplatform.cs</groupId>
   <artifactId>cs</artifactId>
-  <name>eXo Collaboration Suite</name>
   <version>1.3.4-SNAPSHOT</version>
   <packaging>pom</packaging>
-
+  <name>eXo Collaboration Suite</name>
+  <description>eXo Collaboration Suite is made of four applications:
+    * eXo Address Book: is an integrated address book and contacts manager. It not only handles private and public contacts in your organization but also keep precious information such as address, telephone, fax, etc. Furthermore, we also support VCard format, import/export in order to consolidate your existing contacts into a single place.
+    * eXo Calendar: is a personal and shared agenda. It not only helps you schedule your time more quickly and conveniently but also manages your shared and public agendas in the organization efficiently. Moreover, eXo Calendar also facilitates iCal support that helps you easily exchange event/task information with other applications.
+    * eXo Mail: is a full featured email client. It is built with a variety of features designed to make your e-mail experience more productive.
+    * eXo Chat: is an effective and convenient way to communicate online in real time.</description>
+  <url>http://wiki.exoplatform.org/xwiki/bin/view/CS/</url>
+  <organization>
+    <name>eXo Platform SAS</name>
+    <url>http://www.exoplatform.com</url>
+  </organization>
+  <scm>
+    <connection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/1.3.x</connection>
+    <developerConnection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/1.3.x</developerConnection>
+    <url>http://fisheye.exoplatform.org/browse/projects/cs/branches/1.3.x</url>
+  </scm>
+  <issueManagement>
+    <system>JIRA</system>
+    <url>http://jira.exoplatform.org/browse/CS</url>
+  </issueManagement>
+  <ciManagement>
+    <system>hudson</system>
+    <url>http://builder.exoplatform.org/hudson/job/cs-1.3.x-ci/</url>
+  </ciManagement>
   <properties>
-
     <org.exoplatform.kernel.version>2.0.10-SNAPSHOT</org.exoplatform.kernel.version>
     <org.exoplatform.core.version>2.1.8-SNAPSHOT</org.exoplatform.core.version>
     <org.exoplatform.ws.version>1.3.6-SNAPSHOT</org.exoplatform.ws.version>
@@ -31,60 +62,7 @@
     <org.exoplatform.webos.version>1.5.5-SNAPSHOT</org.exoplatform.webos.version>
     <org.exoplatform.exopackage.version>1.2.0</org.exoplatform.exopackage.version>
     <org.exoplatform.mvnexobuild.version>1.2.0</org.exoplatform.mvnexobuild.version>
-
   </properties>
-
-  <modules>
-    <module>web/csportal</module>
-    <module>web/csResources</module>
-    <module>web/webservice</module>
-    <!-- module>tool/migration</module -->
-    
-    <module>eXoApplication/mail/webapp</module>
-    <module>eXoApplication/mail/service</module>
-   
-    <module>eXoApplication/calendar/webapp</module>
-    <module>eXoApplication/calendar/service</module>
-    
-    <module>eXoApplication/contact/webapp</module>
-    <module>eXoApplication/contact/service</module>
-    
-    <module>eXoApplication/content/webapp</module>
-    <module>eXoApplication/content/service</module>
-    
-    <module>eXoApplication/chat/service</module>
-    <module>eXoApplication/chat/webapp</module>
-    
-    <module>eXoApplication/chatbar/webapp</module>
-    
-    <module>eXoApplication/organization/client</module>
-    <module>eXoApplication/organization/service</module>
-    <module>eXoApplication/organization/webapp</module>
-    
-    <module>server/tomcat/patch</module>
-    <module>server/jboss/patch</module>
-    <module>server/jboss/patch-ear</module>
-    
-    <module>packaging</module>
-  </modules>
-  <issueManagement>
-  	<system>JIRA</system>
-  	<url>http://jira.exoplatform.org/browse/CS</url>
-  </issueManagement>
-  <ciManagement>
-  	<system>hudson</system>
-  	<url>http://builder.exoplatform.org/hudson/job/cs/</url>
-  </ciManagement>
-  <scm>
-    <connection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/1.3.x</connection>
-    <developerConnection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/1.3.x</developerConnection>
-    <url>http://fisheye.exoplatform.org/browse/projects/cs/branches/1.3.x</url>
-  </scm>
-  <organization>
-  	<name>eXo Platform SAS</name>
-  	<url>http://www.exoplatform.com</url>
-  </organization>
-
   <build>
     <resources>
       <resource>
@@ -139,9 +117,9 @@
               <tasks>
                 <copy failonerror="false" todir="${basedir}/target/${project.build.finalName}/WEB-INF/classes">
                   <fileset dir="${basedir}/src/main/webapp/WEB-INF/classes">
-                    <include name="**/*_en.properties" />
+                    <include name="**/*_en.properties"/>
                   </fileset>
-                  <globmapper from="*_en.properties" to="*.properties" />
+                  <globmapper from="*_en.properties" to="*.properties"/>
                 </copy>
               </tasks>
             </configuration>
@@ -153,4 +131,28 @@
       </plugin>
     </plugins>
   </build>
+  <modules>
+    <module>web/csportal</module>
+    <module>web/csResources</module>
+    <module>web/webservice</module>
+    <!-- module>tool/migration</module -->
+    <module>eXoApplication/mail/webapp</module>
+    <module>eXoApplication/mail/service</module>
+    <module>eXoApplication/calendar/webapp</module>
+    <module>eXoApplication/calendar/service</module>
+    <module>eXoApplication/contact/webapp</module>
+    <module>eXoApplication/contact/service</module>
+    <module>eXoApplication/content/webapp</module>
+    <module>eXoApplication/content/service</module>
+    <module>eXoApplication/chat/service</module>
+    <module>eXoApplication/chat/webapp</module>
+    <module>eXoApplication/chatbar/webapp</module>
+    <module>eXoApplication/organization/client</module>
+    <module>eXoApplication/organization/service</module>
+    <module>eXoApplication/organization/webapp</module>
+    <module>server/tomcat/patch</module>
+    <module>server/jboss/patch</module>
+    <module>server/jboss/patch-ear</module>
+    <module>packaging</module>
+  </modules>
 </project>
