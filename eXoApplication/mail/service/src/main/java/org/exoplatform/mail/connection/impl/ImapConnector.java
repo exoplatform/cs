@@ -221,6 +221,7 @@ public class ImapConnector extends BaseConnector {
       List<javax.mail.Message> copiedMsgs = new ArrayList<javax.mail.Message>();
       javax.mail.Message msg;
       for (Message m : msgs) {
+        System.out.println("ImapConnector(moveMessage), UID: " + m.getUID());
         msg = fromFolder.getMessageByUID(Long.valueOf(m.getUID()));
         if (msg != null)
           copiedMsgs.add(msg);

@@ -290,7 +290,7 @@ public interface DataStorage {
 
   public List<Message> getReferencedMessages(String username, String accountId, String msgPath) throws Exception;
 
-  public Message loadTotalMessage(String username, String accountId, Message msg) throws Exception;
+  public Message loadTotalMessage(String username, String accountId, Message msg, javax.mail.Message message) throws Exception;
 
   /**
    * 
