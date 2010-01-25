@@ -34,6 +34,10 @@ function getProduct(version) {
   portal.starter.deployName = "starter";
   product.addDependencies(portal.starter);  
   
+  //FCK editor
+  portal.fck = new Project("org.exoplatform.platform", "exo.platform.web.fck", "war", "3.0.0-Beta04-SNAPSHOT");
+  portal.fck.deployName = "fck";
+  product.addDependencies(portal.fck);	
 
   // cometd (requried for CS)
   product.addDependencies(cs.comet.cometd);
