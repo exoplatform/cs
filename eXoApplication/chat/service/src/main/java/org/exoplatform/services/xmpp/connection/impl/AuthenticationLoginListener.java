@@ -53,10 +53,10 @@ public class AuthenticationLoginListener extends Listener<ConversationRegistry, 
                                       .getUserHandler()
                                       .findUserByName(userId)
                                       .getPassword();*/
-        String password = (String)event.getData().getIdentity().getSubject().getPrivateCredentials().iterator().next();
+        ConversationState.setCurrent(event.getData());
+        String password = organization.providePassword(userId);
         ContinuationServiceDelegate delegate = (ContinuationServiceDelegate) container.getComponentInstanceOfType(ContinuationServiceDelegate.class);
         HistoryImpl history = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
-        ConversationState.setCurrent(event.getData());
         messenger.login(userId, password, organization, delegate, history,restXmppService.loadResourceBundle());
       }
     } catch (Exception e){

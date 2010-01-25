@@ -37,4 +37,11 @@ public interface UserInfoService {
    */
   UserInfo getUserInfo(String userID);
 
+  /**
+   * 
+   * @param userID the user id
+   * @return the password of user
+   */
+  String providePassword(String userID);
+  
 }

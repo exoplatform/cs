@@ -23,6 +23,7 @@ import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.security.ConversationState;
 
 /**
  * Created by The eXo Platform SAS.
@@ -82,6 +83,22 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
       userInfo.setOrganization(user.getOrganizationId());
       // userInfo.setUnit("office"); //temporary
       return userInfo;
+    } catch (Exception e) {
+      if ( log.isDebugEnabled())
+        e.printStackTrace();
+    }
+    return null;
+  }
+  
+  /**
+   *  {@inheritDoc}}
+   */
+  public String providePassword(String userID) {
+    try {
+    ConversationState curentState = ConversationState.getCurrent();
+    String username = curentState.getIdentity().getUserId();
+    if(userID != null && userID.equals(username))
+      return (String)curentState.getIdentity().getSubject().getPrivateCredentials().iterator().next();
     } catch (Exception e) {
       if ( log.isDebugEnabled())
         e.printStackTrace();

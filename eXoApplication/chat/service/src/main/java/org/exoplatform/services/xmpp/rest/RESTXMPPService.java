@@ -47,6 +47,8 @@ import javax.ws.rs.ext.RuntimeDelegate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.common.http.HTTPStatus;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.services.rest.impl.RuntimeDelegateImpl;
 import org.exoplatform.services.rest.resource.ResourceContainer;
@@ -1651,7 +1653,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                     .getUserHandler()
                                     .findUserByName(username)
                                     .getPassword();*/
-      String password = (String)curentState.getIdentity().getSubject().getPrivateCredentials().iterator().next();
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      UserInfoService organization = (UserInfoService) container.getComponentInstanceOfType(UserInfoService.class);
+      String password = organization.providePassword(username);
       messenger.login(username, password, organization, delegate, history,rb);
       XMPPSession session = messenger.getSession(username);
       XMPPConnection connection = session.getConnection();
