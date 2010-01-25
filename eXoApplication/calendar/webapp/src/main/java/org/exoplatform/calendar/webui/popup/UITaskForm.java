@@ -1035,7 +1035,7 @@ public Attachment getAttachment(String attId) {
           }
         }
         if(!uiForm.isReminderValid()) {
-          uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues }));
+          uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues }, ApplicationMessage.WARNING));
           uiForm.setSelectedTab(TAB_TASKREMINDER) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -1087,7 +1087,6 @@ public Attachment getAttachment(String attId) {
             listEvent.add(calendarEvent) ;
             calService.moveEvent(fromCal, toCal, fromType, toType, listEvent, username) ;
 
-            // hung.hoang
             CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
             if(calendarView instanceof UIListContainer) {
               UIListContainer uiListContainer = (UIListContainer)calendarView ;
@@ -1114,21 +1113,15 @@ public Attachment getAttachment(String attId) {
                 }                    
               }
             }
-
           }
-
           CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
-
-          // hung.hoang
-          // if (calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;
           uiViewContainer.refresh() ;
           calendarView.setLastUpdatedEventId(calendarEvent.getId()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
           UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-          //UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
 
-          // cs-1825
+          // TODO CS-1825
           //event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;
           uiPopupAction.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;

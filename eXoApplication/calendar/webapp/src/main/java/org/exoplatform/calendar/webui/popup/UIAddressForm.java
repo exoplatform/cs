@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
@@ -164,7 +163,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     setContactList(data);
   }
   
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "deprecation" })
   public List<ContactData> getContactList() {
     try {
       return (List<ContactData>)uiPageIterator_.getPageList().getAll() ;
@@ -172,9 +171,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       return new ArrayList<ContactData>() ;
     }
   }
+  @SuppressWarnings({ "deprecation", "unchecked" })
   public void setContactList(List<ContactData> contactList) throws Exception {
     getUIFormSelectBox(FIELD_GROUP).setOptions(getGroups()) ;
-    ObjectPageList objPageList = new ObjectPageList(contactList, 10) ;
+    org.exoplatform.commons.utils.ObjectPageList objPageList = new org.exoplatform.commons.utils.ObjectPageList(contactList, 10) ;
     uiPageIterator_.setPageList(objPageList) ;
     for (ContactData contact : contactList) {
       UIFormCheckBoxInput uiCheckbox = getUIFormCheckBoxInput(contact.getId()) ;

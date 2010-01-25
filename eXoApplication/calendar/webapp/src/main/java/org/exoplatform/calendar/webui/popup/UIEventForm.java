@@ -483,13 +483,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     if(getEmailReminder()) {
       if(CalendarUtils.isEmpty(getEmailAddress())) {
         errorMsg_ = "UIEventForm.msg.event-email-required" ;
-        return false ;
+        return false ; 
       }
-     /* else if(!CalendarUtils.isValidEmailAddresses(getEmailAddress())) {
+      else if(!CalendarUtils.isValidEmailAddresses(getEmailAddress())) {
         errorMsg_ = "UIEventForm.msg.event-email-invalid" ;
         errorValues = CalendarUtils.invalidEmailAddresses(getEmailAddress()) ;
         return false ;
-      } */
+      }
     } 
     errorMsg_ = null ;
     return true ;
@@ -797,18 +797,18 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       StringBuffer sbAddress = new StringBuffer() ;
       for(String s : getEmailAddress().replaceAll(CalendarUtils.SEMICOLON, CalendarUtils.COMMA).split(CalendarUtils.COMMA)) {
         s = s.trim() ;
-        if(CalendarUtils.isEmailValid(s)) {
+        //if(CalendarUtils.isEmailValid(s)) {
           if(sbAddress.indexOf(s) < 0) {
             if(sbAddress.length() > 0) sbAddress.append(CalendarUtils.COMMA) ;
             sbAddress.append(s) ;
           }  
-        }  
+        //}  
       }
       email.setEmailAddress(sbAddress.toString()) ;
       email.setRepeate(isEmailRepeat()) ;
       email.setRepeatInterval(Long.parseLong(getEmailRepeatInterVal())) ;
       email.setFromDateTime(fromDateTime) ;      
-      reminders.add(email) ;
+      if (!CalendarUtils.isEmpty(email.getEmailAddress())) reminders.add(email) ;
     }
     if(getPopupReminder()) {
       Reminder popup = new Reminder() ;
@@ -1918,7 +1918,7 @@ public Attachment getAttachment(String attId) {
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       //TODO cs-764
       if(!uiForm.isReminderValid()) {
-        uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues} ));
+        uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues}, ApplicationMessage.WARNING));
         uiForm.setSelectedTab(TAB_EVENTREMINDER) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
