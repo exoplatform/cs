@@ -25,6 +25,10 @@
   </component>
   
   <component>
+    <type>org.exoplatform.services.uistate.rest.UIStateService</type>
+  </component>
+  
+  <component>
     <type>org.exoplatform.services.xmpp.connection.impl.XMPPMessenger</type>
     <init-params>
       <properties-param>

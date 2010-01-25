@@ -44,6 +44,10 @@
   </component>
   
   <component>
+    <type>org.exoplatform.services.uistate.rest.UIStateService</type>
+  </component>
+  
+  <component>
     <type>org.exoplatform.services.xmpp.rest.RESTXMPPService</type>
   </component>
   <external-component-plugins>

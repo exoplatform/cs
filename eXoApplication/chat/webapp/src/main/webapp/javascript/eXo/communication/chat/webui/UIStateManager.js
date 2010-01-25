@@ -145,7 +145,7 @@ UIStateManager.prototype.store = function(data) {
     return;
   }
   // Do upload state data to server using url: /portal/rest/chat/uistateservice/save/{user}/{data}
-  var url = '/portal/rest/chat/uistateservice/save/' + this.userName;// + '/';
+  var url = '/chat/messengerservlet/uistateservice/save/' + this.userName;// + '/';
   var handler = new AjaxHandler(this, this.STORE_DATA_AJAX_ACTION);
   if (data) {
     this.ajaxWrapper(handler, url, 'POST', data);
@@ -162,7 +162,7 @@ UIStateManager.prototype.store = function(data) {
  */
 UIStateManager.prototype.reload = function() {
   // Do get state data to server using url: /portal/rest/chat/uistateservice/get/{user}/
-  var url = '/portal/rest/chat/uistateservice/get/' + this.userName;
+  var url = '/chat/messengerservlet/uistateservice/get/' + this.userName;
   var handler = new AjaxHandler(this, this.RELOAD_DATA_AJAX_ACTION);
   this.ajaxWrapper(handler, url, 'GET');
   this.isPropertiesChanged = false;

@@ -45,6 +45,8 @@ import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.uistate.UIStateSession;
+import org.exoplatform.services.uistate.bean.UIStateDataBean;
 import org.exoplatform.services.xmpp.bean.ChangeNickBean;
 import org.exoplatform.services.xmpp.bean.ConfigRoomBean;
 import org.exoplatform.services.xmpp.bean.ContactBean;
@@ -139,7 +141,7 @@ import org.jivesoftware.smackx.search.UserSearchManager;
  * @version $Id: $
  */
 
-public class XMPPSessionImpl implements XMPPSession {
+public class XMPPSessionImpl implements XMPPSession , UIStateSession{
 
   // public enum XMPPEvents {
   // NEW_MESSAGE, NEW_SUBCRIPTION, CHANGE_PRESENCE, CHANGE_ROSTER, MUC_EVENT
@@ -197,6 +199,11 @@ public class XMPPSessionImpl implements XMPPSession {
   /**
    * 
    */
+  private  UIStateDataBean             uiStateData_;
+  
+  /**
+   * 
+   */
   private final ContinuationServiceDelegate delegate_;
   
   /**
@@ -229,6 +236,7 @@ public class XMPPSessionImpl implements XMPPSession {
     this.delegate_ = delegate;
     this.history_ = history;
     this.organization_ = organization;
+    this.uiStateData_ = new UIStateDataBean();
     this.rb_ = rb;
     this.connection_ = new XMPPConnection(XMPPMessenger.getConnectionConfiguration());
     this.username_ = username;
@@ -808,6 +816,14 @@ public class XMPPSessionImpl implements XMPPSession {
       }
     }
     return services;
+  }
+  
+  public UIStateDataBean getUIStateData() {
+    return uiStateData_;
+  }
+
+  public void setUIStateData(UIStateDataBean uiStateData) {
+    uiStateData_ = uiStateData;
   }
 
   /**
