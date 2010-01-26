@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
@@ -76,10 +77,12 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
+import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 
@@ -139,7 +142,7 @@ public class ICalendarImportExport implements CalendarImportExport{
       }
     }
 
- /*   if(exoEvent.getEventType().equals(CalendarEvent.TYPE_TASK)) {
+    /*   if(exoEvent.getEventType().equals(CalendarEvent.TYPE_TASK)) {
       long completed = exoEvent.getCompletedDateTime().getTime() ;
       event.getProperties().add(new Completed(new DateTime(completed)));
       event.getProperties().getProperty(Property.COMPLETED).getParameters()
@@ -249,7 +252,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     calendar.getComponents().add(event);
     return calendar ;
   }
-  
+
   private net.fortuna.ical4j.model.Calendar getVTask(net.fortuna.ical4j.model.Calendar calendar, CalendarEvent exoEvent) throws Exception {
     Uid id = new Uid(exoEvent.getId()) ; 
     long start = exoEvent.getFromDateTime().getTime() ;
@@ -401,8 +404,8 @@ public class ICalendarImportExport implements CalendarImportExport{
     calendar.getComponents().add(event);
     return calendar ;
   }
-  
-  
+
+
   public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
     SessionProvider systemSession = SessionProvider.createSystemProvider() ;
@@ -420,7 +423,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     calendar.getProperties().add(CalScale.GREGORIAN);
     for(CalendarEvent exoEvent : events) {
       if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
-         calendar = getVEvent(calendar, exoEvent) ;        
+        calendar = getVEvent(calendar, exoEvent) ;        
       } else { // task
         calendar = getVTask(calendar, exoEvent) ;
       }
@@ -459,7 +462,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     calendar.getProperties().add(CalScale.GREGORIAN);
     for(CalendarEvent exoEvent : events) {
       if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
-         calendar = getVEvent(calendar, exoEvent) ;        
+        calendar = getVEvent(calendar, exoEvent) ;        
       } else { // task
         calendar = getVTask(calendar, exoEvent) ;
       }
@@ -476,7 +479,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     }  
     return bout;
   }
-  
+
   public OutputStream exportEventCalendar(SessionProvider sProvider, String username, String calendarId, String type, String eventId) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
     List<String> calendarIds = Arrays.asList(new String[]{calendarId}) ;
@@ -552,7 +555,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     }    
     return bout;
   }
-  
+
   public void importCalendar(SessionProvider sProvider, String username, InputStream icalInputStream, String calendarName) throws Exception {
     CalendarBuilder calendarBuilder = new CalendarBuilder() ;
     net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(icalInputStream) ;
@@ -633,8 +636,8 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
         if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
         exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
-        
-		String sValue = "" ;
+
+        String sValue = "" ;
         String eValue = "" ;
         if(event.getStartDate() != null) {
           sValue = event.getStartDate().getValue() ;
@@ -797,11 +800,12 @@ public class ICalendarImportExport implements CalendarImportExport{
       }
     }
   }
-  
+
   public void importCalendar(String username, InputStream icalInputStream, String calendarName) throws Exception {
     CalendarBuilder calendarBuilder = new CalendarBuilder() ;
     net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(icalInputStream) ;
     NodeIterator iter = storage_.getCalendarCategoryHome(username).getNodes() ;
+    CalendarService  calService = (CalendarService)PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class) ;
     Node cat = null;
     String categoryId ;
     //Map<String, VEvent> vEventData = new HashMap<String, VEvent>() ;
@@ -820,7 +824,7 @@ public class ICalendarImportExport implements CalendarImportExport{
       calendarCate.setDescription("Imported icalendar category") ;
       calendarCate.setName("Imported") ;
       categoryId = calendarCate.getId() ;
-      storage_.saveCalendarCategory(username, calendarCate, true) ;
+      calService.saveCalendarCategory(username, calendarCate, true) ;
     }else {
       categoryId = cat.getProperty(Utils.EXO_ID).getString() ;
     }
@@ -831,7 +835,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     exoCalendar.setCategoryId(categoryId) ;
     exoCalendar.setPublic(false) ;
     exoCalendar.setCalendarOwner(username) ;
-    storage_.saveUserCalendar(username, exoCalendar, true) ;   
+    calService.saveUserCalendar(username, exoCalendar, true) ;   
     ComponentList componentList = iCalendar.getComponents() ;
     CalendarEvent exoEvent ;
     for(Object obj : componentList) {
@@ -858,16 +862,11 @@ public class ICalendarImportExport implements CalendarImportExport{
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try{
-            storage_.saveEventCategory(username, evCate, null, true) ;
-          }catch(Exception e){ 
-            for(EventCategory ev : storage_.getEventCategories(username)) {
-              if(ev.getName().equalsIgnoreCase(evCate.getName())) {
-                evCate = ev ;
-                break ;
-              }
-            }
-            //e.printStackTrace() ;
-            System.out.println("\n\n event category " + evCate.getName() + " existed !");
+            calService.saveEventCategory(username, evCate, null, true) ;
+          }catch(ItemExistsException e){ 
+            evCate = calService.getEventCategoryByName(username, evCate.getName());
+          } catch (Exception e) {
+            e.printStackTrace();
           }
           exoEvent.setEventCategoryId(evCate.getId()) ;
           exoEvent.setEventCategoryName(evCate.getName()) ;
@@ -878,8 +877,8 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
         if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
         exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
-        
-    String sValue = "" ;
+
+        String sValue = "" ;
         String eValue = "" ;
         if(event.getStartDate() != null) {
           sValue = event.getStartDate().getValue() ;
@@ -953,7 +952,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         } catch (Exception e) {
           e.printStackTrace() ;
         }
-        storage_.saveUserEvent(username, exoCalendar.getId(), exoEvent, true) ;
+        calService.saveUserEvent(username, exoCalendar.getId(), exoEvent, true) ;
       } else if (obj instanceof VToDo) {
         VToDo event = (VToDo)obj ;
         exoEvent = new CalendarEvent() ;
@@ -961,18 +960,12 @@ public class ICalendarImportExport implements CalendarImportExport{
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try{
-            storage_.saveEventCategory(username, evCate, null, true) ;
-          }catch(Exception e){ 
-            for(EventCategory ev : storage_.getEventCategories(username)) {
-              if(ev.getName().equalsIgnoreCase(evCate.getName())) {
-                evCate = ev ;
-                break ;
-              }
-            }
-            //e.printStackTrace() ;
-            System.out.println("\n\n event category " + evCate.getName() + " existed !");
+            calService.saveEventCategory(username, evCate, null, true) ;
+          }catch(ItemExistsException e){ 
+            evCate = calService.getEventCategoryByName(username, evCate.getName());
+          }catch (Exception e) {
+            e.printStackTrace();
           }
-          exoEvent.setEventCategoryId(evCate.getId()) ;
           exoEvent.setEventCategoryName(evCate.getName()) ;
         } 
         exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
@@ -1038,7 +1031,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         } catch (Exception e) {
           e.printStackTrace() ;
         }
-        storage_.saveUserEvent(username, exoCalendar.getId(), exoEvent, true) ;
+        calService.saveUserEvent(username, exoCalendar.getId(), exoEvent, true) ;
       }
     }
   }
@@ -1162,7 +1155,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
         if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
         exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
-        
+
         String sValue = "" ;
         String eValue = "" ;
         if(event.getStartDate() != null) {
@@ -1258,15 +1251,15 @@ public class ICalendarImportExport implements CalendarImportExport{
           e.printStackTrace() ;
         }
         switch (storage_.getTypeOfCalendar(username, calendarId)){
-          case Utils.PRIVATE_TYPE:
-            storage_.saveUserEvent(username, calendarId, exoEvent, true) ;
-            break;
-          case Utils.SHARED_TYPE:
-            storage_.saveEventToSharedCalendar(username, calendarId, exoEvent, true);
-            break;
-          case Utils.PUBLIC_TYPE:
-            storage_.savePublicEvent(calendarId, exoEvent, true);
-            break;
+        case Utils.PRIVATE_TYPE:
+          storage_.saveUserEvent(username, calendarId, exoEvent, true) ;
+          break;
+        case Utils.SHARED_TYPE:
+          storage_.saveEventToSharedCalendar(username, calendarId, exoEvent, true);
+          break;
+        case Utils.PUBLIC_TYPE:
+          storage_.savePublicEvent(calendarId, exoEvent, true);
+          break;
         }
       }else if(obj instanceof VToDo){ 
         VToDo event = (VToDo)obj ;
@@ -1368,7 +1361,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         } catch (Exception e) {
           e.printStackTrace() ;
         }
-        
+
         switch (storage_.getTypeOfCalendar(username, calendarId)){
         case Utils.PRIVATE_TYPE:
           storage_.saveUserEvent(username, calendarId, exoEvent, true) ;
@@ -1380,7 +1373,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           storage_.savePublicEvent(calendarId, exoEvent, true);
           break;
         }
-       }      
+      }      
     }
   }
 
@@ -1401,7 +1394,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     //Map<String, VEvent> vEventData = new HashMap<String, VEvent>() ;
     Map<String, VFreeBusy> vFreeBusyData = new HashMap<String, VFreeBusy>() ;
     Map<String, VAlarm> vAlarmData = new HashMap<String, VAlarm>() ;
-
+    CalendarService  calService = (CalendarService)PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class) ;
     ComponentList componentList = iCalendar.getComponents() ;
     CalendarEvent exoEvent ;
     for(Object obj : componentList) {
@@ -1427,16 +1420,11 @@ public class ICalendarImportExport implements CalendarImportExport{
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try{
-            storage_.saveEventCategory(username, evCate, null, true) ;
-          }catch(Exception e){ 
-            for(EventCategory ev : storage_.getEventCategories(username)) {
-              if(ev.getName().equalsIgnoreCase(evCate.getName())) {
-                evCate = ev ;
-                break ;
-              }
-            }
-            //e.printStackTrace() ;
-            System.out.println("\n\n event category " + evCate.getName() + " existed !");
+            calService.saveEventCategory(username, evCate, null, true) ;
+          }catch(ItemExistsException e){ 
+            evCate = calService.getEventCategoryByName(username, evCate.getName());
+          } catch (Exception e) {
+            e.printStackTrace();
           }
           exoEvent.setEventCategoryId(evCate.getId()) ;
           exoEvent.setEventCategoryName(evCate.getName()) ;
@@ -1447,7 +1435,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
         if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
         exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
-        
+
         String sValue = "" ;
         String eValue = "" ;
         if(event.getStartDate() != null) {
@@ -1543,15 +1531,15 @@ public class ICalendarImportExport implements CalendarImportExport{
           e.printStackTrace() ;
         }
         switch (storage_.getTypeOfCalendar(username, calendarId)){
-          case Utils.PRIVATE_TYPE:
-            storage_.saveUserEvent(username, calendarId, exoEvent, true) ;
-            break;
-          case Utils.SHARED_TYPE:
-            storage_.saveEventToSharedCalendar(username, calendarId, exoEvent, true);
-            break;
-          case Utils.PUBLIC_TYPE:
-            storage_.savePublicEvent(calendarId, exoEvent, true);
-            break;
+        case Utils.PRIVATE_TYPE:
+          calService.saveUserEvent(username, calendarId, exoEvent, true) ;
+          break;
+        case Utils.SHARED_TYPE:
+          calService.saveEventToSharedCalendar(username, calendarId, exoEvent, true);
+          break;
+        case Utils.PUBLIC_TYPE:
+          calService.savePublicEvent(calendarId, exoEvent, true);
+          break;
         }
       }else if(obj instanceof VToDo){ 
         VToDo event = (VToDo)obj ;
@@ -1560,16 +1548,11 @@ public class ICalendarImportExport implements CalendarImportExport{
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try{
-            storage_.saveEventCategory(username, evCate, null, true) ;
-          }catch(Exception e){ 
-            for(EventCategory ev : storage_.getEventCategories(username)) {
-              if(ev.getName().equalsIgnoreCase(evCate.getName())) {
-                evCate = ev ;
-                break ;
-              }
-            }
-            //e.printStackTrace() ;
-            System.out.println("\n\n event category " + evCate.getName() + " existed !");
+            calService.saveEventCategory(username, evCate, null, true) ;
+          }catch(ItemExistsException e){ 
+            evCate = calService.getEventCategoryByName(username, evCate.getName());
+          } catch (Exception e) {
+            e.printStackTrace();
           }
           exoEvent.setEventCategoryId(evCate.getId()) ;
           exoEvent.setEventCategoryName(evCate.getName()) ;
@@ -1653,19 +1636,19 @@ public class ICalendarImportExport implements CalendarImportExport{
         } catch (Exception e) {
           e.printStackTrace() ;
         }
-        
+
         switch (storage_.getTypeOfCalendar(username, calendarId)){
         case Utils.PRIVATE_TYPE:
-          storage_.saveUserEvent(username, calendarId, exoEvent, true) ;
+          calService.saveUserEvent(username, calendarId, exoEvent, true) ;
           break;
         case Utils.SHARED_TYPE:
-          storage_.saveEventToSharedCalendar(username, calendarId, exoEvent, true);
+          calService.saveEventToSharedCalendar(username, calendarId, exoEvent, true);
           break;
         case Utils.PUBLIC_TYPE:
-          storage_.savePublicEvent(calendarId, exoEvent, true);
+          calService.savePublicEvent(calendarId, exoEvent, true);
           break;
         }
-       }      
+      }      
     }
   }
 }

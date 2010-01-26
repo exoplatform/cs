@@ -213,6 +213,19 @@ public interface CalendarService extends CalendarServiceLegacy {
    * @see EventCategory
    */
   public EventCategory getEventCategory(String username, String eventCategoryId) throws Exception ;
+  
+  /**
+   * The method gets category of event by given id
+   * @param userSession The session of current logedin user
+   * @param username current user name(or user id)
+   * @param eventCategoryName given event category name
+   * @return event category object contents infomations
+   * @throws Exception
+   * @see EventCategory
+   */
+  public EventCategory getEventCategoryByName(String username, String eventCategoryName) throws Exception ;
+  
+  
 
   /**
    * The method gets list events and tasks of given private calendar ids 

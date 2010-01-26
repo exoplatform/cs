@@ -1692,7 +1692,7 @@ UICalendarPortlet.prototype.filterByCategory = function(){
             events[i].style.display = "block";
         }
         else 
-            if (category == "" || category == "all") {
+            if (category == "" || category == "all" || category == "defaultEventCategoryIdAll") {
                 events[i].style.display = "block";
             }
             else 
@@ -1729,7 +1729,7 @@ UICalendarPortlet.prototype.runFilterByCategory = function(){
             events[i].style.display = "block";
         }
         else 
-            if (category == "" || category == "all") {
+            if (category == "" || category == "all" || category == "defaultEventCategoryIdAll") {
                 events[i].style.display = "block";
             }
             else 

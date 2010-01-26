@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
@@ -800,25 +799,26 @@ public class JCRDataStorage implements DataStorage {
     Node eventCategoryHome = getEventCategoryHome(username) ;
     Node eventCategoryNode = null ;
     if(isNew){
+      /*
       NodeIterator iter = eventCategoryHome.getNodes() ;
       while(iter.hasNext()) {
         Node eCategiryNode = iter.nextNode() ;
         if(eventCategory.getName().trim().equalsIgnoreCase(eCategiryNode.getProperty(Utils.EXO_NAME).getString().trim())) {
           throw new ItemExistsException() ;
         }
-      }
+      }*/
       //if(eventCategoryHome.hasNode(eventCategory.getName().toLowerCase())) throw new ItemExistsException() ;
       eventCategoryNode = eventCategoryHome.addNode(eventCategory.getId(), Utils.EXO_EVENT_CATEGORY) ;
       //eventCategoryNode = eventCategoryHome.addNode(eventCategory.getName().toLowerCase(), Utils.EXO_EVENT_CATEGORY) ;
       if(eventCategory.isDataInit()) reparePermissions(eventCategoryNode, username) ;
     }else {
-      NodeIterator iter = eventCategoryHome.getNodes() ;
+      /*NodeIterator iter = eventCategoryHome.getNodes() ;
       while(iter.hasNext()) {
         Node eCategiryNode = iter.nextNode() ;
         if(!eCategiryNode.getName().equalsIgnoreCase(eventCategory.getId()) && eventCategory.getName().trim().equalsIgnoreCase(eCategiryNode.getProperty(Utils.EXO_NAME).getString().trim())) {
           throw new ItemExistsException() ;
         }
-      }
+      }*/
       eventCategoryNode = eventCategoryHome.getNode(eventCategory.getId()) ;
       Node calendarHome = getUserCalendarHome(username) ;
       QueryManager qm = getSession(createSystemProvider()).getWorkspace().getQueryManager();
@@ -950,9 +950,9 @@ public class JCRDataStorage implements DataStorage {
   /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.impl.DataStorage#getEventCategory(java.lang.String, java.lang.String)
    */
-  public EventCategory getEventCategory(String username, String eventCategoryName) throws Exception {
+  public EventCategory getEventCategory(String username, String eventcategoryId) throws Exception {
     Node eventCategoryHome = getEventCategoryHome(username) ;
-    return getEventCategory(eventCategoryHome.getNode(eventCategoryName)) ;
+    return getEventCategory(eventCategoryHome.getNode(eventcategoryId)) ;
   }
 
   //Event APIs

@@ -19,8 +19,12 @@ package org.exoplatform.calendar.service.impl;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
+import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 
 import org.exoplatform.calendar.service.Calendar;
@@ -39,6 +43,7 @@ import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.resources.ResourceBundleService;
 import org.picocontainer.Startable;
 
 /**
@@ -49,13 +54,17 @@ public class CalendarServiceImpl implements CalendarService, Startable {
 
   final public static String                  ICALENDAR             = "ICalendar(.ics)".intern();
   final public static String                  EXPORTEDCSV           = "ExportedCsv(.csv)".intern();
+
+
+  private ResourceBundleService rbs_ ;
   private JCRDataStorage                      storage_;
   private Map<String, CalendarImportExport>   calendarImportExport_ = new LinkedHashMap<String, CalendarImportExport>();
   protected List<CalendarUpdateEventListener> listeners_            = new ArrayList<CalendarUpdateEventListener>(3);
-  public CalendarServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice) throws Exception {
+  public CalendarServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice, ResourceBundleService rbs) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
     calendarImportExport_.put(ICALENDAR, new ICalendarImportExport(storage_));
     calendarImportExport_.put(EXPORTEDCSV, new CsvImportExport(storage_));
+    rbs_ = rbs;
   }
 
   /**
@@ -172,7 +181,10 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                                 EventCategory eventCategory,
                                 String[] values,
                                 boolean isNew) throws Exception {
+    EventCategory ev = getEventCategoryByName(username, eventCategory.getName());
+    if(isNew && ev != null) throw new ItemExistsException();
     storage_.saveEventCategory(username, eventCategory, values, isNew);
+
   }
 
   /**
@@ -199,7 +211,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public CalendarEvent getEvent(String username, String eventId) throws Exception {
     return storage_.getEvent(username, eventId) ;
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -286,7 +298,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                                 rssData,
                                 calendarImportExport_.get(ICALENDAR));
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -418,7 +430,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                                 int answer) throws Exception {
     storage_.confirmInvitation(fromUserId, toUserId, calType, calendarId, eventId, answer);
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -853,20 +865,20 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public void updateCalDav(String usename, String calendarId, CalendarImportExport imp) throws Exception {
     storage_.updateCalDav(usename, calendarId, imp) ;
   }
-  
+
   public void updateCalDav(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception {
     storage_.updateCalDav(usename, calendarId, imp, number) ;
   }
 
   public void updateRss(String usename, String calendarId, CalendarImportExport imp) throws Exception {
     storage_.updateRss(usename, calendarId, imp) ;
-    
+
   }
-  
+
   public void updateRss(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception {
     storage_.updateRss(usename, calendarId, imp, number) ;
   }
-  
+
   public int getTypeOfCalendar(String userName, String calendarId) throws Exception {
     return storage_.getTypeOfCalendar(userName, calendarId);
   }
@@ -877,5 +889,24 @@ public class CalendarServiceImpl implements CalendarService, Startable {
 
   public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception {
     return storage_.generateRss(username,calendarIds, rssData, calendarImportExport_.get(ICALENDAR));
+  }
+
+  @Override
+  public EventCategory getEventCategoryByName(String username, String eventCategoryName) throws Exception {
+    ResourceBundle rb = null ;
+    try { 
+      rb = rbs_.getResourceBundle("locale.portlet.calendar.CalendarPortlet", Locale.getDefault()) ;
+    } catch (MissingResourceException e) {
+      //TODO the fist time load 
+    }
+    for (EventCategory ev : storage_.getEventCategories(username)) {
+      if(ev.getName().equalsIgnoreCase(eventCategoryName)) {
+        return ev ;
+      } else if ((rb != null && eventCategoryName.equalsIgnoreCase(rb.getString("UICalendarView.label."+ev.getId())))) {
+        return ev ;
+      }
+    }
+
+    return null ;
   }
 }
