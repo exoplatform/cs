@@ -22,11 +22,11 @@
     rcontext.getJavascriptManager().addJavascript('eXo.mail.UpdateList.init("' + uicomponent.getAccountId() + '","'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+'");') ;
 	%>
 	<script src="/csResources/javascript/eXo/cs/UIContextMenu.js"></script>
-  <div style="overflow-x:auto;>
+<div style="overflow-x:auto;">
   <div><div style="width:975px;"><span style="display:none;"></span></div></div>
   <div style="_width:expression(this.previousSibling.offsetWidth - 22 + 'px'); !border:1px solid white; _margin:auto;">
 	  <div class="ApplicationMinWidth">
-	  	<div class="UIMailPortlet" id="UIMailPortlet">
+	  	<div class="UIMailPortlet" id="<%=uicomponent.getId()%>">
 	    <%
 	      String accountId = uicomponent.getAccountId();
 	      if (accountId != null && accountId.trim().length() > 0) { 
