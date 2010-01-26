@@ -16,6 +16,8 @@
  */
 package org.exoplatform.contact.service;
 
+import org.exoplatform.contact.service.impl.JCRDataStorage;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Tuan Nguyen
@@ -45,17 +47,30 @@ public class ContactFilter {
   private String type = null ;
   private boolean hasEmails = false;
   private boolean isSearchSharedContacts = false ;
+  private String relate = " and ";
+  private int limit = 0;
   
   public ContactFilter() { isAscending = true ; }
   
   public boolean isSearchSharedContacts()  { return isSearchSharedContacts ; }
-  public void   setSearchSharedContacts(boolean isSearchSharedContacts) { this.isSearchSharedContacts = isSearchSharedContacts ; }
+  public void   setSearchSharedContacts(boolean isSearchSharedContacts) { 
+    this.isSearchSharedContacts = isSearchSharedContacts ; 
+    type = JCRDataStorage.SHARED;
+  }
   
   public String getUsername()  { return username ; }
   public void   setUsername(String s) { username = s ; }
   
   public void setType(String type) { this.type = type ; }
   public String getType() { return type ; }
+  
+  public void setLimit(int limit) { this.limit = limit ; }
+  public int getLimit() { return limit ; }
+  
+  public void searchByAnd(boolean and) {
+    if (and) relate = " and " ; 
+    else relate = " or ";
+  }
   
   public void setText(String fullTextSearch) { this.text = fullTextSearch ; }
   public String getText() { return text ; }
@@ -160,7 +175,7 @@ public class ContactFilter {
     }
     
     if(categories != null && categories.length > 0) {      
-      if(hasConjuntion) stringBuffer.append(" and (") ;
+      if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;  
       for(int i = 0; i < categories.length; i ++) {
         if(i == 0) stringBuffer.append("@exo:categories='" + categories[i] +"'") ;
@@ -171,7 +186,7 @@ public class ContactFilter {
     }
     
     if(tag != null && tag.length > 0) {      
-      if(hasConjuntion) stringBuffer.append(" and (") ;
+      if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
       for(int i = 0; i < tag.length; i ++) {
         if(i == 0) stringBuffer.append("@exo:tags='" + tag[i] +"'") ;
@@ -190,49 +205,49 @@ public class ContactFilter {
     }
     
     if (fullName != null && fullName.trim().length() > 0) {
-      if(hasConjuntion) stringBuffer.append(" and (") ;
+      if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
       stringBuffer.append("jcr:like(@exo:fullName,'%" + fullName + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (firstName != null && firstName.trim().length() > 0) {
-      if(hasConjuntion) stringBuffer.append(" and (") ;
+      if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
       stringBuffer.append("jcr:like(@exo:firstName,'%" + firstName + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (lastName != null && lastName.trim().length() > 0) {
-      if(hasConjuntion) stringBuffer.append(" and (") ;
+      if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
       stringBuffer.append("jcr:like(@exo:lastName, '%" + lastName + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (nickName != null && nickName.trim().length() > 0) {
-      if(hasConjuntion) stringBuffer.append(" and (") ;
+      if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
       stringBuffer.append("jcr:like(@exo:nickName,'%" + nickName + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (gender != null && gender.trim().length() > 0) {
-      if(hasConjuntion) stringBuffer.append(" and (") ;
+      if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
       stringBuffer.append("@exo:gender='" + gender + "'") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (jobTitle != null && jobTitle.trim().length() > 0) {
-      if(hasConjuntion) stringBuffer.append(" and (") ;
+      if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
       stringBuffer.append("jcr:like(@exo:jobTitle, '%" + jobTitle + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (emailAddress != null && emailAddress.trim().length() > 0) {
-      if(hasConjuntion) stringBuffer.append(" and (") ;
+      if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
       stringBuffer.append("jcr:like(@exo:emailAddress, '%" + emailAddress + "%')") ;
       stringBuffer.append(")") ;

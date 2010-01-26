@@ -211,10 +211,10 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       SelectOptionGroup privateGroups = (SelectOptionGroup)getChild(UIFormSelectBoxWithGroups.class).getOptions().get(0) ;
       for (SelectOption option : privateGroups.getOptions())
         if (option.getValue().equals(groupId)) {
-          ctFilter.setType("0") ;
+          ctFilter.setType(DataStorage.PERSONAL) ;
           break ;
         }
-      if (ctFilter.getType() == null) ctFilter.setType("1") ;
+      if (ctFilter.getType() == null) ctFilter.setType(DataStorage.SHARED) ;
       
       
       if (!groupId.equals(sharedContacts_)) ctFilter.setCategories(new String[] {groupId});
@@ -222,7 +222,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       contactList = contactSrv.searchContact(username, ctFilter).getAll();
     } else {
       //ctFilter.setCategories(new String[] {contactSrv.getGroups(username).get(0).getId()});
-      ctFilter.setType("0") ;
+      ctFilter.setType(DataStorage.PERSONAL) ;
       ctFilter.setCategories(new String[] { ((SelectOptionGroup)getChild(UIFormSelectBoxWithGroups.class).getOptions().get(0)).getOptions().get(0).getValue() });
       contactList = contactSrv.searchContact(username, ctFilter).getAll();
     }
