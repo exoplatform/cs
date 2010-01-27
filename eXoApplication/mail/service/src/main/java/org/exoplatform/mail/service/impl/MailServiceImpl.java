@@ -112,7 +112,7 @@ import com.sun.mail.smtp.SMTPTransport;
  */
 public class MailServiceImpl implements MailService, Startable {
 
-  private static final Log          logger       = LogFactory.getLog(MailServiceImpl.class);
+  private static final Log          logger = LogFactory.getLog(MailServiceImpl.class);
 
   private JCRDataStorage            storage_;
 
@@ -143,9 +143,7 @@ public class MailServiceImpl implements MailService, Startable {
 
   public CheckingInfo getCheckingInfo(String username, String accountId) {
     String key = username + ":" + accountId;
-    CheckingInfo checkingInfo = null;
-    checkingInfo = checkingLog_.get(key);
-   
+    CheckingInfo checkingInfo = checkingLog_.get(key);
     return checkingInfo;
   }
 
@@ -206,7 +204,7 @@ public class MailServiceImpl implements MailService, Startable {
           imapFolder.close(true);
         }
       }
-    } else if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
+    } else {
       storage_.saveFolder(username, accountId, folder);
     }
   }
@@ -394,6 +392,8 @@ public class MailServiceImpl implements MailService, Startable {
                           Message msg,
                           String currentFolderId,
                           String destFolderId) throws Exception {
+    System.out.println("\n\t**========>>>>>>moveMessages 3, From folder: " + currentFolderId
+        + "--> To folder: " + destFolderId);
     Account account = getAccountById(username, accountId);
     Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
     Folder destFolder = this.getFolder(username, accountId, destFolderId);
@@ -423,6 +423,8 @@ public class MailServiceImpl implements MailService, Startable {
                           String currentFolderId,
                           String destFolderId,
                           boolean updateReference) throws Exception {
+    System.out.println("\n\t**========>>>>>>moveMessages 4, From folder: " + currentFolderId
+        + "--> To folder: " + destFolderId);
     Account account = getAccountById(username, accountId);
     Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
     Folder destFolder = this.getFolder(username, accountId, destFolderId);
@@ -803,7 +805,8 @@ public class MailServiceImpl implements MailService, Startable {
     // TODO current implementation is inefficient
     // / Need to upgrade to 2.0.3 and use this instead :
     // schedulerService_.getJob(info)
-    for (Object obj : schedulerService_.getAllJobs()) {
+    List<Object> list = schedulerService_.getAllJobs();
+    for (Object obj : list) {
       JobDetail tmp = (JobDetail) obj;
       if (tmp.getName().equals(username + ":" + accountId)) {
         return tmp;
@@ -971,7 +974,7 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void synchImapFolders(String username, String accountId) throws Exception {
-    removeCheckingInfo(username, accountId);
+    System.out.println("\n\t**========>>>>>>synchImapFolders(child)");
     IMAPStore store = null;
     CheckingInfo info = new CheckingInfo();
     String key = username + ":" + accountId;
@@ -1148,6 +1151,7 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public POP3Store openPOPConnection(String username, Account account, CheckingInfo info) {
+    System.out.println("\n\t**========>>>>>>openPOPConnection");
     try {
       logger.debug(" #### Getting mail from " + account.getIncomingHost() + " ... !");
       if (info != null)
@@ -1269,6 +1273,7 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<String> getMessageIDFromJcrFolder(String userName, String accountId, String folderId) throws Exception {
+    System.out.println("\n\t**========>>>>>>getMessageIDFromJcrFolder");
     List<Message> msgListFromJcrFolder = getMessagesByFolder(userName, accountId, folderId);
     List<String> msgIDListFromJcrFolder = new ArrayList<String>();
     for (Message message : msgListFromJcrFolder) {
@@ -1281,6 +1286,7 @@ public class MailServiceImpl implements MailService, Startable {
   public List<String> getMessageIDFromServerMailFolder(String userName,
                                                        String accountId,
                                                        javax.mail.Folder mailServerFolder) throws Exception {
+    System.out.println("\n\t**========>>>>>>getMessageIDFromServerMailFolder");
     List<String> msgIDListFromMailServer = new ArrayList<String>();
 
     if (!mailServerFolder.isOpen()) {
@@ -1295,6 +1301,7 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public Map<String, javax.mail.Message> getServerMessageMap(javax.mail.Folder mailServerFolder) {
+    System.out.println("\n\t**========>>>>>>getServerMessageMap");
     javax.mail.Message[] msgListFromMailServer;
     Map<String, javax.mail.Message> map = null;
     try {
@@ -1662,22 +1669,6 @@ public class MailServiceImpl implements MailService, Startable {
       boolean isImap = account.getProtocol().equals(Utils.IMAP);
 
       try {
-        Properties props = System.getProperties();
-        // this line fix for base64 encode problem with corrupted
-        // attachments
-        props.setProperty("mail.mime.base64.ignoreerrors", "true");
-
-        String socketFactoryClass = "javax.net.SocketFactory";
-        if (account.isIncomingSsl())
-          socketFactoryClass = Utils.SSL_FACTORY;
-
-        if (protocol.equals(Utils.POP3)) {
-          props.setProperty("mail.pop3.socketFactory.fallback", "false");
-          props.setProperty("mail.pop3.socketFactory.class", socketFactoryClass);
-        } else if (protocol.equals(Utils.IMAP)) {
-          props.setProperty("mail.imap.socketFactory.fallback", "false");
-          props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
-        }
         String incomingFolder = "INBOX";
         Store store = openPOPConnection(username, account, info);
 
@@ -1770,6 +1761,7 @@ public class MailServiceImpl implements MailService, Startable {
             try {
               String[] folderIds = { folderId };
               folderList = new ArrayList<String>();
+              folderList.add(incomingFolder);
               tagList = new ArrayList<String>();
               if (filterList != null && filterList.size() > 0) {
                 String tagId;
@@ -1979,7 +1971,6 @@ public class MailServiceImpl implements MailService, Startable {
     List<Folder> folders = new ArrayList<Folder>();
     List<Folder> gottenFolderList = storage_.getFolders(username, accountId);
     for (Folder folder : gottenFolderList) {
-      Account account = getAccountById(username, accountId);
       String urlName = folder.getURLName();
       if (isPersonal) {
         if (folder.isPersonalFolder()) {
@@ -1992,6 +1983,7 @@ public class MailServiceImpl implements MailService, Startable {
             String key = username + ":" + accountId;
             checkingLog_.put(key, info);
             Store store = null;
+            Account account = getAccountById(username, accountId);
             if (account.getProtocol().equals(Utils.POP3)) {
               store = openPOPConnection(username, account, info);
             } else if (account.getProtocol().equals(Utils.IMAP)) {
@@ -2021,6 +2013,12 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public Tag getTag(String username, String accountId, String tagId) throws Exception {
+    Account account = getAccountById(username, accountId);
+    if (account.getProtocol().equals(Utils.POP3)) {
+      CheckingInfo checkingInfo = getCheckingInfo(username, accountId);
+      if (checkingInfo != null)
+        removeCheckingInfo(username, accountId);
+    }
     return storage_.getTag(username, accountId, tagId);
   }
 
@@ -2072,18 +2070,22 @@ public class MailServiceImpl implements MailService, Startable {
                                String folderId,
                                InputStream inputStream,
                                String type) throws Exception {
+    System.out.println("\n\t**========>>>>>>importMessage");
     return emlImportExport_.importMessage(username, accountId, folderId, inputStream, type);
   }
 
   public OutputStream exportMessage(String username, String accountId, Message message) throws Exception {
+    System.out.println("\n\t**========>>>>>>exportMessage");
     return emlImportExport_.exportMessage(username, accountId, message);
   }
 
   public SpamFilter getSpamFilter(String username, String accountId) throws Exception {
+    System.out.println("\n\t**========>>>>>>getSpamFilter");
     return storage_.getSpamFilter(username, accountId);
   }
 
   public void saveSpamFilter(String username, String accountId, SpamFilter spamFilter) throws Exception {
+    System.out.println("\n\t**========>>>>>>saveSpamFilter");
     storage_.saveSpamFilter(username, accountId, spamFilter);
   }
 
@@ -2207,6 +2209,8 @@ public class MailServiceImpl implements MailService, Startable {
       if (fd != null && fd.isOpen()) {
         fd.close(true);
       }
+      
+      removeCheckingInfo(username, accountId);
     }
     return msg;
   }

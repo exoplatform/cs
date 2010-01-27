@@ -38,8 +38,6 @@ public class MailWebservice implements ResourceContainer {
 
   public static final int    MAX_TIMEOUT       = 16;
 
-  private static int         firstChecked      = 0;
-
   // TODO need to organize code, don't keep html content here !
   public MailWebservice() {
   }
@@ -54,12 +52,7 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoStore(true);
     MailService mailService = (MailService) PortalContainer.getInstance()
                                                            .getComponentInstanceOfType(MailService.class);
-    CheckingInfo checkingInfo = null;
-    if (firstChecked == 0) {
-      firstChecked = 1;
-    } else {
-      checkingInfo = mailService.getCheckingInfo(userName, accountId);
-    }
+    CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
 
     // try to start if no checking info available
     if (checkingInfo == null) {
