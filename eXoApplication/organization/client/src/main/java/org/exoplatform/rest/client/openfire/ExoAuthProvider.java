@@ -34,9 +34,9 @@ import org.jivesoftware.util.JiveGlobals;
  */
 public class ExoAuthProvider implements AuthProvider {
   
-  private static final String AUTHENTICATION_URL = "exoAuthProvider.authenticationURL";
-  private static final String AUTHENTICATION_METHOD = "exoAuthProvider.authenticationMethod";
-  private static final String AUTHENTICATION_PARAMS = "exoAuthProvider.authenticationParams";
+  private static final String AUTHENTICATION_URL = "eXo.provider.exoAuthProvider.authenticationURL";
+  private static final String AUTHENTICATION_METHOD = "eXo.provider.exoAuthProvider.authenticationMethod";
+  private static final String AUTHENTICATION_PARAMS = "eXo.provider.exoAuthProvider.authenticationParams";
 
   // URL for authentication users.
   private final String authURL_;
@@ -47,7 +47,7 @@ public class ExoAuthProvider implements AuthProvider {
 
   public ExoAuthProvider() {
     String t = JiveGlobals.getXMLProperty(AUTHENTICATION_URL);
-    authURL_ = t.endsWith("/") ? t : t + "/";
+    authURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     authMethod_ = JiveGlobals.getXMLProperty(AUTHENTICATION_METHOD);
     authParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(AUTHENTICATION_PARAMS));
   }

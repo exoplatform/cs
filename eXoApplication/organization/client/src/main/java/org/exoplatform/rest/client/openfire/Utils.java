@@ -42,6 +42,17 @@ import org.w3c.dom.Document;
 
 class Utils {
 
+  static String getBaseURL(){
+    String serverBaseURL = JiveGlobals.getXMLProperty("eXo.env.serverBaseURL");
+    serverBaseURL = (serverBaseURL != null) ? serverBaseURL : new String("http://localhost:8080/");
+    serverBaseURL = serverBaseURL.endsWith("/") ? serverBaseURL : serverBaseURL + "/";
+    String restContext = JiveGlobals.getXMLProperty("eXo.env.restContextName");
+    restContext = (restContext != null) ? restContext : new String("rest");
+    //If "eXo.env.restContextName" system property exists, it will override value from Openfire.xml 
+    restContext = (System.getProperty("eXo.env.restContextName") != null) ? System.getProperty("eXo.env.restContextName") : restContext;
+    return (serverBaseURL + restContext);
+  }
+  
   private static UsernamePasswordCredentials usernamePasswordCredentials
     = new UsernamePasswordCredentials(
       JiveGlobals.getXMLProperty("provider.authorizedUser.name"),

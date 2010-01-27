@@ -44,25 +44,25 @@ import org.xmpp.packet.JID;
  */
 public class ExoGroupProvider implements GroupProvider {
 
-  private static final String GROUPS_COUNT_URL = "exoGroupProvider.groupsCountURL";
-  private static final String GROUPS_COUNT_METHOD = "exoGroupProvider.groupsCountMethod";
-  private static final String GROUPS_COUNT_PARAMS = "exoGroupProvider.groupsCountParams";
+  private static final String GROUPS_COUNT_URL = "eXo.provider.exoGroupProvider.groupsCountURL";
+  private static final String GROUPS_COUNT_METHOD = "eXo.provider.exoGroupProvider.groupsCountMethod";
+  private static final String GROUPS_COUNT_PARAMS = "eXo.provider.exoGroupProvider.groupsCountParams";
 
-  private static final String GET_GROUPS_ALL_URL = "exoGroupProvider.getGroupsAllURL";
-  private static final String GET_GROUPS_ALL_METHOD = "exoGroupProvider.getGroupsAllMethod";
-  private static final String GET_GROUPS_ALL_PARAMS = "exoGroupProvider.getGroupsAllParams";
+  private static final String GET_GROUPS_ALL_URL = "eXo.provider.exoGroupProvider.getGroupsAllURL";
+  private static final String GET_GROUPS_ALL_METHOD = "eXo.provider.exoGroupProvider.getGroupsAllMethod";
+  private static final String GET_GROUPS_ALL_PARAMS = "eXo.provider.exoGroupProvider.getGroupsAllParams";
 
-  private static final String GET_GROUPS_RANGE_URL = "exoGroupProvider.getGroupsRangeURL";
-  private static final String GET_GROUPS_RANGE_METHOD = "exoGroupProvider.getGroupsRangeMethod";
-  private static final String GET_GROUPS_RANGE_PARAMS = "exoGroupProvider.getGroupsRangeParams";
+  private static final String GET_GROUPS_RANGE_URL = "eXo.provider.exoGroupProvider.getGroupsRangeURL";
+  private static final String GET_GROUPS_RANGE_METHOD = "eXo.provider.exoGroupProvider.getGroupsRangeMethod";
+  private static final String GET_GROUPS_RANGE_PARAMS = "eXo.provider.exoGroupProvider.getGroupsRangeParams";
 
-  private static final String GET_GROUPS_FORUSER_URL = "exoGroupProvider.getGroupsForUserURL";
-  private static final String GET_GROUPS_FORUSER_METHOD = "exoGroupProvider.getGroupsForUserMethod";
-  private static final String GET_GROUPS_FORUSER_PARAMS = "exoGroupProvider.getGroupsForUserParams";
+  private static final String GET_GROUPS_FORUSER_URL = "eXo.provider.exoGroupProvider.getGroupsForUserURL";
+  private static final String GET_GROUPS_FORUSER_METHOD = "eXo.provider.exoGroupProvider.getGroupsForUserMethod";
+  private static final String GET_GROUPS_FORUSER_PARAMS = "eXo.provider.exoGroupProvider.getGroupsForUserParams";
 
-  private static final String GROUP_INFO_URL = "exoGroupProvider.groupInfoURL";
-  private static final String GROUP_INFO_METHOD = "exoGroupProvider.groupInfoMethod";
-  private static final String GROUP_INFO_PARAMS = "exoGroupProvider.groupInfoParams";
+  private static final String GROUP_INFO_URL = "eXo.provider.exoGroupProvider.groupInfoURL";
+  private static final String GROUP_INFO_METHOD = "eXo.provider.exoGroupProvider.groupInfoMethod";
+  private static final String GROUP_INFO_PARAMS = "eXo.provider.exoGroupProvider.groupInfoParams";
 
   // URL for getting information about specified group.
   private final String groupInfoURL_;
@@ -101,31 +101,31 @@ public class ExoGroupProvider implements GroupProvider {
 
   public ExoGroupProvider() {
     String t = JiveGlobals.getXMLProperty(GROUP_INFO_URL);
-    groupInfoURL_ = t.endsWith("/") ? t : t + "/";
+    groupInfoURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     groupInfoMethod_ = JiveGlobals.getXMLProperty(GROUP_INFO_METHOD);
     groupInfoParams_ = Utils.parseQuery(JiveGlobals
         .getXMLProperties(GROUP_INFO_PARAMS));
 
     t = JiveGlobals.getXMLProperty(GET_GROUPS_ALL_URL);
-    getGroupsAllURL_ = t.endsWith("/") ? t : t + "/";
+    getGroupsAllURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     getGroupsAllMethod_ = JiveGlobals.getXMLProperty(GET_GROUPS_ALL_METHOD);
     getGroupsAllParams_ = Utils.parseQuery(JiveGlobals
         .getXMLProperties(GET_GROUPS_ALL_PARAMS));
 
     t = JiveGlobals.getXMLProperty(GET_GROUPS_RANGE_URL);
-    getGroupsRangeURL_ = t.endsWith("/") ? t : t + "/";
+    getGroupsRangeURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     getGroupsRangeMethod_ = JiveGlobals.getXMLProperty(GET_GROUPS_RANGE_METHOD);
     getGroupsRangeParams_ = Utils.parseQuery(JiveGlobals
         .getXMLProperties(GET_GROUPS_RANGE_PARAMS));
 
     t = JiveGlobals.getXMLProperty(GROUPS_COUNT_URL);
-    groupsCountURL_ = t.endsWith("/") ? t : t + "/";
+    groupsCountURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     groupsCountMethod_ = JiveGlobals.getXMLProperty(GROUPS_COUNT_METHOD);
     groupsCountParams_ = Utils.parseQuery(JiveGlobals
         .getXMLProperties(GROUPS_COUNT_PARAMS));
 
     t = JiveGlobals.getXMLProperty(GET_GROUPS_FORUSER_URL);
-    getGroupsForUserURL_ = t.endsWith("/") ? t : t + "/";
+    getGroupsForUserURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     getGroupsForUserMethod_ = JiveGlobals
         .getXMLProperty(GET_GROUPS_FORUSER_METHOD);
     getGroupsForUserParams_ = Utils.parseQuery(JiveGlobals

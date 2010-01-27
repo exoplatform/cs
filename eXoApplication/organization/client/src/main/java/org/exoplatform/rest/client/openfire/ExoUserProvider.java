@@ -48,21 +48,21 @@ import org.w3c.dom.NodeList;
 
 public class ExoUserProvider implements UserProvider {
 
-  private static final String FIND_USERS_URL = "exoUserProvider.findUsersURL";
-  private static final String FIND_USERS_METHHOD = "exoUserProvider.findUsersMethod";
-  private static final String FIND_USERS_PARAMS = "exoUserProvider.findUsersParams";
+  private static final String FIND_USERS_URL = "eXo.provider.exoUserProvider.findUsersURL";
+  private static final String FIND_USERS_METHHOD = "eXo.provider.exoUserProvider.findUsersMethod";
+  private static final String FIND_USERS_PARAMS = "eXo.provider.exoUserProvider.findUsersParams";
 
-  private static final String GET_USERS_URL = "exoUserProvider.getUsersURL";
-  private static final String GET_USERS_METHOD = "exoUserProvider.getUsersMethod";
-  private static final String GET_USERS_PARAMS = "exoUserProvider.getUsersParams";
+  private static final String GET_USERS_URL = "eXo.provider.exoUserProvider.getUsersURL";
+  private static final String GET_USERS_METHOD = "eXo.provider.exoUserProvider.getUsersMethod";
+  private static final String GET_USERS_PARAMS = "eXo.provider.exoUserProvider.getUsersParams";
   
-  private static final String USERS_COUNT_URL = "exoUserProvider.usersCountURL";
-  private static final String USERS_COUNT_METHOD = "exoUserProvider.usersCountMethod";
-  private static final String USERS_COUNT_PARAMS = "exoUserProvider.usersCountParams";
+  private static final String USERS_COUNT_URL = "eXo.provider.exoUserProvider.usersCountURL";
+  private static final String USERS_COUNT_METHOD = "eXo.provider.exoUserProvider.usersCountMethod";
+  private static final String USERS_COUNT_PARAMS = "eXo.provider.exoUserProvider.usersCountParams";
 
-  private static final String USER_INFO_URL = "exoUserProvider.userInfoURL";
-  private static final String USER_INFO_METHOD = "exoUserProvider.userInfoMethod";
-  private static final String USER_INFO_PARAMS = "exoUserProvider.userInfoParams";
+  private static final String USER_INFO_URL = "eXo.provider.exoUserProvider.userInfoURL";
+  private static final String USER_INFO_METHOD = "eXo.provider.exoUserProvider.userInfoMethod";
+  private static final String USER_INFO_PARAMS = "eXo.provider.exoUserProvider.userInfoParams";
 
   // URL for searching user names.
   private final String findUsersURL_;
@@ -95,22 +95,22 @@ public class ExoUserProvider implements UserProvider {
   public ExoUserProvider() {
     String t = JiveGlobals.getXMLProperty(FIND_USERS_URL);
     
-    findUsersURL_ = t.endsWith("/") ? t : t + "/";
+    findUsersURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     findUsersMethod_ = JiveGlobals.getXMLProperty(FIND_USERS_METHHOD);
     findUsersParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(FIND_USERS_PARAMS));
     
     t = JiveGlobals.getXMLProperty(GET_USERS_URL);
-    getUsersURL_ = t.endsWith("/") ? t : t + "/";
+    getUsersURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     getUsersMethod_ = JiveGlobals.getXMLProperty(GET_USERS_METHOD);
     getUsersParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(GET_USERS_PARAMS));
     
     t = JiveGlobals.getXMLProperty(USERS_COUNT_URL);
-    usersCountURL_ = t.endsWith("/") ? t : t + "/";
+    usersCountURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     usersCountMethod_ = JiveGlobals.getXMLProperty(USERS_COUNT_METHOD);
     usersCountParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(USERS_COUNT_PARAMS));
 
     t = JiveGlobals.getXMLProperty(USER_INFO_URL);
-    userInfoURL_ = t.endsWith("/") ? t : t + "/";
+    userInfoURL_ = Utils.getBaseURL() + (t.endsWith("/") ? t : t + "/");
     userInfoMethod_ = JiveGlobals.getXMLProperty(USER_INFO_METHOD);
     userInfoParams_ = Utils.parseQuery(JiveGlobals.getXMLProperties(USER_INFO_PARAMS));
   }

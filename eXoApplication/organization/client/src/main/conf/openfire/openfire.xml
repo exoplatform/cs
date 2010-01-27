@@ -57,33 +57,51 @@
     Example:
     <queryX>param=value</queryX>
     X - number.     
-  -->  
-  <exoAuthProvider> 
-    <authenticationURL>http://localhost:8080/rest/organization/authenticate/authenticate/</authenticationURL>  
-    <authenticationMethod>POST</authenticationMethod> 
-  </exoAuthProvider>  
-  <exoUserProvider> 
-    <findUsersURL>http://localhost:8080/rest/organization/xml/user/find-all/</findUsersURL>  
-    <findUsersMethod>GET</findUsersMethod>  
-    <getUsersURL>http://localhost:8080/rest/organization/xml/user/view-range/</getUsersURL>  
-    <getUsersMethod>GET</getUsersMethod>  
-    <usersCountURL>http://localhost:8080/rest/organization/xml/user/count/</usersCountURL>  
-    <usersCountMethod>GET</usersCountMethod>  
-    <userInfoURL>http://localhost:8080/rest/organization/xml/user/info/</userInfoURL>  
-    <userInfoMethod>GET</userInfoMethod> 
-  </exoUserProvider>  
-  <exoGroupProvider> 
-    <groupInfoURL>http://localhost:8080/rest/organization/xml/group/info/</groupInfoURL>  
-    <groupInfoMethod>GET</groupInfoMethod>  
-    <getGroupsAllURL>http://localhost:8080/rest/organization/xml/group/view-all/</getGroupsAllURL>  
-    <getGroupsAllMethod>GET</getGroupsAllMethod>  
-    <getGroupsRangeURL>http://localhost:8080/rest/organization/xml/group/view-from-to/</getGroupsRangeURL>  
-    <getGroupsRangeMethod>GET</getGroupsRangeMethod>  
-    <getGroupsForUserURL>http://localhost:8080/rest/organization/xml/group/groups-for-user/</getGroupsForUserURL>  
-    <getGroupsForUserMethod>GET</getGroupsForUserMethod>  
-    <groupsCountURL>http://localhost:8080/rest/organization/xml/group/count</groupsCountURL>  
-    <groupsCountMethod>GET</groupsCountMethod> 
-  </exoGroupProvider>  
+  -->
+  <eXo>
+    <env>
+      <serverBaseURL>http://localhost:8080/</serverBaseURL>
+      <!--
+          "restContextName" is used to specify Openfire server is dedicated for which portal. 
+          If "eXo.env.restContextName" system property exists, it will override this value.
+          "eXo.env.restContextName" system property can be set by specifying the -D option 
+          to the java command when running Openfire. Example: If Openfire server is dedicated for "portal" portal 
+          the command will have following format : java -DeXo.env.restContextName=rest -jar ../lib/startup.jar .
+          If Openfire server is dedicated for "csdemo" portal, the command will have following format: 
+          java -DeXo.env.restContextName=rest-csdemo -jar ../lib/startup.jar .
+          By default, Openfire server is dedicated to "portal" portal.
+       -->
+      <restContextName>rest</restContextName>
+    </env>
+    <provider>
+      <exoAuthProvider> 
+        <authenticationURL>/organization/authenticate/authenticate/</authenticationURL>  
+        <authenticationMethod>POST</authenticationMethod> 
+      </exoAuthProvider>  
+      <exoUserProvider> 
+        <findUsersURL>/organization/xml/user/find-all/</findUsersURL>  
+        <findUsersMethod>GET</findUsersMethod>  
+        <getUsersURL>/organization/xml/user/view-range/</getUsersURL>  
+        <getUsersMethod>GET</getUsersMethod>  
+        <usersCountURL>/organization/xml/user/count/</usersCountURL>  
+        <usersCountMethod>GET</usersCountMethod>  
+        <userInfoURL>/organization/xml/user/info/</userInfoURL>  
+        <userInfoMethod>GET</userInfoMethod> 
+      </exoUserProvider>  
+      <exoGroupProvider> 
+        <groupInfoURL>/organization/xml/group/info/</groupInfoURL>  
+        <groupInfoMethod>GET</groupInfoMethod>  
+        <getGroupsAllURL>/organization/xml/group/view-all/</getGroupsAllURL>  
+        <getGroupsAllMethod>GET</getGroupsAllMethod>  
+        <getGroupsRangeURL>/organization/xml/group/view-from-to/</getGroupsRangeURL>  
+        <getGroupsRangeMethod>GET</getGroupsRangeMethod>  
+        <getGroupsForUserURL>/organization/xml/group/groups-for-user/</getGroupsForUserURL>  
+        <getGroupsForUserMethod>GET</getGroupsForUserMethod>  
+        <groupsCountURL>/organization/xml/group/count</groupsCountURL>  
+        <groupsCountMethod>GET</groupsCountMethod> 
+      </exoGroupProvider>
+	</provider>  
+  </eXo>  
   <!-- Network settings. By default, Openfire will bind to all network interfaces.
       Alternatively, you can specify a specific network interfaces that the server
       will listen on. For example, localhost. This setting is generally only useful
