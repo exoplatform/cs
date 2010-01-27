@@ -8,8 +8,11 @@ import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.contact.service.ContactFilter;
@@ -19,8 +22,8 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.services.rest.resource.ResourceContainer;
-import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
-import org.exoplatform.ws.frameworks.json.value.JsonValue;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.webservice.cs.bean.ContactData;
 
 /**
  * @author Uoc Nguyen Modified by : Phung Nam (phunghainam@gmail.com)
@@ -176,29 +179,37 @@ public class MailWebservice implements ResourceContainer {
   }
 
   /**
-   * Get all email from contacts data base
+   * Get all email from contacts data base, the security level will take from ConversationState   
    * 
-   * @param username : userid to validate session and data store
    * @param keywords : the text to compare with data base
    * @return application/json content type
    */
   @GET
-  @Path("/searchemail/{username}/{keywords}")
-  public Response searchemail(@PathParam("username") String username,
-                              @PathParam("keywords") String keywords) throws Exception {
-    ContactService contactSvr = (ContactService) PortalContainer.getInstance()
-                                                                .getComponentInstanceOfType(ContactService.class);
-    StringBuffer buffer = new StringBuffer();
+  @Path("/searchemail/{keywords}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response searchemail(@PathParam("keywords") String keywords) throws Exception{
+	ContactService contactSvr = (ContactService) PortalContainer.getInstance().getComponentInstanceOfType(ContactService.class);
+	ContactData fullData = new ContactData() ;
+	CacheControl cacheControl = new CacheControl();
+	cacheControl.setNoCache(true);
+	cacheControl.setNoStore(true);
     try {
+      if(ConversationState.getCurrent().getIdentity() == null) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build() ;
+      String username = ConversationState.getCurrent().getIdentity().getUserId() ;
+      if(username == null) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build() ;
       ContactFilter filter = new ContactFilter();
-      filter.setText(keywords);
+      filter.setType(org.exoplatform.contact.service.DataStorage.PERSONAL);
+      filter.searchByAnd(false);
+      filter.setFullName(keywords);
+      filter.setNickName(keywords);
+      filter.setLimit(10);
+      filter.setEmailAddress(keywords);
       Map<String, String> data = contactSvr.searchEmails(username, filter);
-      JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
-      JsonValue json = generatorImpl.createJsonObject(data);
-      buffer.append(json.toString());
+      fullData.setInfo(data.values()) ;
     } catch (Exception e) {
-      buffer.append(e.getLocalizedMessage());
+      e.printStackTrace();
+      return Response.ok(Status.INTERNAL_SERVER_ERROR).cacheControl(cacheControl).build();
     }
-    return Response.ok(buffer.toString(), JSON).build();
+    return Response.ok(fullData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build() ;
   }
 }
