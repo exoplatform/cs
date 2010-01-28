@@ -131,26 +131,18 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public String getMailHierarchyNode() throws Exception {
-    System.out.println("\n\t**========>>>>>>getMailHierarchyNode");
     return storage_.getMailHierarchyNode();
 
   }
 
   public void removeCheckingInfo(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>removeCheckingInfo...");
     String key = username + ":" + accountId;
     checkingLog_.remove(key);
   }
 
   public CheckingInfo getCheckingInfo(String username, String accountId) {
-    System.out.println("\n\t**========>>>>>>getCheckingInfo");
     String key = username + ":" + accountId;
     CheckingInfo checkingInfo = checkingLog_.get(key);
-    if (checkingInfo != null) {
-      System.out.println("CheckingInfo is NOT NULL");
-    } else {
-      System.out.println("getCheckingInfo: Checkinginfo is NULL");
-    }
     return checkingInfo;
   }
 
@@ -160,53 +152,43 @@ public class MailServiceImpl implements MailService, Startable {
    * @throws Exception
    */
   public List<Account> getAccounts(String username) throws Exception {
-    System.out.println("\n\t**========>>>>>>getAccounts");
     return storage_.getAccounts(username);
   }
 
   public Account getAccountById(String username, String id) throws Exception {
-    System.out.println("\n\t**========>>>>>>getAccountById");
     return storage_.getAccountById(username, id);
   }
 
   public void saveAccount(String username, Account account, boolean isNew) throws Exception {
-    System.out.println("\n\t**========>>>>>>saveAccount");
     storage_.saveAccount(username, account, isNew);
   }
 
   public void updateAccount(String username, Account account) throws Exception {
-    System.out.println("\n\t**========>>>>>>updateAccount");
     saveAccount(username, account, false);
   }
 
   public void removeAccount(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>removeAccount");
     stopAllJobs(username, accountId);
     storage_.removeAccount(username, accountId);
   }
 
   public Folder getFolder(String username, String accountId, String folderId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getFolder, folderID: " + folderId);
     return storage_.getFolder(username, accountId, folderId);
   }
 
   public String getFolderParentId(String username, String accountId, String folderId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getFolderParentId, folderID: " + folderId);
     return storage_.getFolderParentId(username, accountId, folderId);
   }
 
   public boolean isExistFolder(String username, String accountId, String parentId, String folderName) throws Exception {
-    System.out.println("\n\t**========>>>>>>isExistFolder");
     return storage_.isExistFolder(username, accountId, parentId, folderName);
   }
 
   public void saveFolder(String username, String accountId, Folder folder) throws Exception {
-    System.out.println("\n\t**========>>>>>>saveFolder 1");
     saveFolder(username, accountId, folder, true);
   }
 
   private void saveFolder(String username, String accountId, Folder folder, boolean b) throws Exception {
-    System.out.println("\n\t**========>>>>>>saveFolder 2");
     Account account = getAccountById(username, accountId);
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder() && b) {
       IMAPFolder imapFolder = null;
@@ -227,7 +209,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void saveFolder(String username, String accountId, String parentId, Folder folder) throws Exception {
-    System.out.println("\n\t**========>>>>>>saveFolder 3 ");
     saveFolder(username, accountId, parentId, folder, true);
   }
 
@@ -236,7 +217,6 @@ public class MailServiceImpl implements MailService, Startable {
                           String parentId,
                           Folder folder,
                           boolean b) throws Exception {
-    System.out.println("\n\t**========>>>>>>saveFolder 4");
     Account account = getAccountById(username, accountId);
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder() && b) {
       try {
@@ -258,8 +238,6 @@ public class MailServiceImpl implements MailService, Startable {
                           String accountId,
                           Folder parentFolder,
                           javax.mail.Folder serverFolder) throws Exception {
-    System.out.println("\n\t**========>>>>>>saveFolder: userName, accountId, parentFolder, serverFolder");
-
     String folderId;
     Folder folder;
     if (serverFolder.getType() != javax.mail.Folder.HOLDS_FOLDERS) {
@@ -291,7 +269,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void renameFolder(String username, String accountId, String newName, String folderId) throws Exception {
-    System.out.println("\n\t**========>>>>>>renameFolder");
     Account account = getAccountById(username, accountId);
     Folder folder = this.getFolder(username, accountId, folderId);
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder()) {
@@ -307,12 +284,10 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   private void deleteLocalFolder(String username, String accountId, String folderId) throws Exception {
-    System.out.println("\n\t**========>>>>>>deleteLocalFolder");
     storage_.removeUserFolder(username, accountId, folderId);
   }
 
   public void removeUserFolder(String username, String accountId, String folderId) throws Exception {
-    System.out.println("\n\t**========>>>>>>removeUserFolder");
     Account account = getAccountById(username, accountId);
     Folder folder = this.getFolder(username, accountId, folderId);
     boolean success = true;
@@ -329,32 +304,26 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<MessageFilter> getFilters(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getFilters");
     return storage_.getFilters(username, accountId);
   }
 
   public MessageFilter getFilterById(String username, String accountId, String filterId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getFilterById");
     return storage_.getFilterById(username, accountId, filterId);
   }
 
   public void saveFilter(String username, String accountId, MessageFilter filter, boolean applyAll) throws Exception {
-    System.out.println("\n\t**========>>>>>>saveFilter");
     storage_.saveFilter(username, accountId, filter, applyAll);
   }
 
   public void removeFilter(String username, String accountId, String filterId) throws Exception {
-    System.out.println("\n\t**========>>>>>>removeFilter");
     storage_.removeFilter(username, accountId, filterId);
   }
 
   public Message getMessageById(String username, String accountId, String msgId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMessageById");
     return storage_.getMessageById(username, accountId, msgId);
   }
 
   public void removeMessage(String username, String accountId, Message message) throws Exception {
-    System.out.println("\n\t**========>>>>>>removeMessage 1");
     storage_.removeMessage(username, accountId, message);
   }
 
@@ -362,7 +331,6 @@ public class MailServiceImpl implements MailService, Startable {
                              String accountId,
                              List<Message> messages,
                              boolean moveReference) throws Exception {
-    System.out.println("\n\t**========>>>>>>removeMessage 2");
     storage_.removeMessages(username, accountId, messages, moveReference);
   }
 
@@ -371,7 +339,6 @@ public class MailServiceImpl implements MailService, Startable {
                            List<Message> msgList,
                            String currentFolderId,
                            String destFolderId) throws Exception {
-    System.out.println("\n\t**========>>>>>>moveMessages 1");
     Account account = getAccountById(username, accountId);
     Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
     Folder destFolder = this.getFolder(username, accountId, destFolderId);
@@ -396,8 +363,6 @@ public class MailServiceImpl implements MailService, Startable {
                            String currentFolderId,
                            String destFolderId,
                            boolean updateReference) throws Exception {
-    System.out.println("\n\t**========>>>>>>moveMessages 2, From folder: " + currentFolderId
-        + "--> To folder: " + destFolderId);
     Account account = getAccountById(username, accountId);
     Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
     Folder destFolder = this.getFolder(username, accountId, destFolderId);
@@ -426,8 +391,6 @@ public class MailServiceImpl implements MailService, Startable {
                           Message msg,
                           String currentFolderId,
                           String destFolderId) throws Exception {
-    System.out.println("\n\t**========>>>>>>moveMessages 3, From folder: " + currentFolderId
-        + "--> To folder: " + destFolderId);
     Account account = getAccountById(username, accountId);
     Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
     Folder destFolder = this.getFolder(username, accountId, destFolderId);
@@ -457,8 +420,6 @@ public class MailServiceImpl implements MailService, Startable {
                           String currentFolderId,
                           String destFolderId,
                           boolean updateReference) throws Exception {
-    System.out.println("\n\t**========>>>>>>moveMessages 4, From folder: " + currentFolderId
-        + "--> To folder: " + destFolderId);
     Account account = getAccountById(username, accountId);
     Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
     Folder destFolder = this.getFolder(username, accountId, destFolderId);
@@ -482,7 +443,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public MessagePageList getMessagePageList(String username, MessageFilter filter) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMessagePageList");
     return storage_.getMessagePageList(username, filter);
   }
 
@@ -491,12 +451,10 @@ public class MailServiceImpl implements MailService, Startable {
                           String targetMsgPath,
                           Message message,
                           boolean isNew) throws Exception {
-    System.out.println("\n\t**========>>>>>>saveMessage");
     storage_.saveMessage(username, accountId, targetMsgPath, message, isNew);
   }
 
   public List<Message> getMessagesByTag(String username, String accountId, String tagId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMessagesByTag");
     MessageFilter filter = new MessageFilter("Tag");
     filter.setAccountId(accountId);
     filter.setFolder(new String[] { tagId });
@@ -504,7 +462,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<Message> getMessagesByFolder(String username, String accountId, String folderId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMessagesByFolder");
     MessageFilter filter = new MessageFilter("Folder");
     filter.setAccountId(accountId);
     filter.setFolder(new String[] { folderId });
@@ -513,17 +470,14 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<Message> getMessages(String username, MessageFilter filter) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMessages");
     return storage_.getMessages(username, filter);
   }
 
   public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception {
-    System.out.println("\n\t**========>>>>>>saveMessage");
     storage_.saveMessage(username, accountId, message, isNew);
   }
 
   public Message sendMessage(String username, String accId, Message message) throws Exception {
-    System.out.println("\n\t**========>>>>>>sendMessage with username, acc, message");
     Account acc = getAccountById(username, accId);
     return sendMessage(username, acc, message);
   }
@@ -592,7 +546,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void sendMessage(Message message) throws Exception {
-    System.out.println("\n\t**========>>>>>>sendMessage with message");
     List<Message> msgList = new ArrayList<Message>();
     msgList.add(message);
     sendMessages(msgList, message.getServerConfiguration());
@@ -659,7 +612,6 @@ public class MailServiceImpl implements MailService, Startable {
 
   @SuppressWarnings("unchecked")
   private Message send(Session session, Transport transport, Message message) throws Exception {
-    System.out.println("\n\t**========>>>>>>send");
     MimeMessage mimeMessage = new MimeMessage(session);
     String status = "";
     InternetAddress addressFrom;
@@ -774,7 +726,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void checkMail(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>checkMail with username, accountId");
     JobDetail job = loadCheckmailJob(username, accountId);
 
     // trigger now
@@ -784,8 +735,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void checkMail(String username, String accountId, String folderId) throws Exception {
-    System.out.println("\n\t**========>>>>>>checkMail with username, accountId, folderId: "
-        + folderId);
     if (Utils.isEmptyField(folderId))
       checkMail(username, accountId);
     else {
@@ -799,11 +748,9 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void stopCheckMail(String username, String accountId) {
-    System.out.println("\n\t**========>>>>>>stopCheckMail");
     CheckingInfo checkingInfo = getCheckingInfo(username, accountId);
     if (checkingInfo != null) {
       checkingInfo.setRequestStop(true);
-      System.out.println("Requested check loop to stop ");
       try {
         removeCheckingInfo(username, accountId);
       } catch (Exception e) {
@@ -812,14 +759,12 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void stopAllJobs(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>stopAllJobs");
     JobInfo info = CheckMailJob.getJobInfo(username, accountId);
     stopCheckMail(username, accountId);
     schedulerService_.removeJob(info);
   }
 
   private JobDetail loadCheckmailJob(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>loadCheckmailJob with account is empty");
     return loadCheckmailJob(username, accountId, "");
   }
 
@@ -830,8 +775,6 @@ public class MailServiceImpl implements MailService, Startable {
    * @throws Exception
    */
   private JobDetail loadCheckmailJob(String username, String accountId, String folderId) throws Exception {
-    System.out.println("\n\t**========>>>>>>loadCheckmailJob(parent)");
-
     JobInfo info = CheckMailJob.getJobInfo(username, accountId);
     JobDetail job = findCheckmailJob(username, accountId);
     if (job == null) {
@@ -853,7 +796,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   private JobDetail findCheckmailJob(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>findCheckmailJob");
     // TODO current implementation is inefficient
     // / Need to upgrade to 2.0.3 and use this instead :
     // schedulerService_.getJob(info)
@@ -873,7 +815,6 @@ public class MailServiceImpl implements MailService, Startable {
                                                                       Date fromDate,
                                                                       Date toDate,
                                                                       List<MessageFilter> filters) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMessages");
     javax.mail.Message[] messages;
     SearchTerm searchTerm = null;
 
@@ -1027,10 +968,10 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void synchImapFolders(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>synchImapFolders(child)");
     IMAPStore store = null;
+    CheckingInfo info = new CheckingInfo();
     String key = username + ":" + accountId;
-    CheckingInfo info = checkingLog_.get(key);
+    checkingLog_.put(key, info);
     try {
       Account account = getAccountById(username, accountId);
       store = openIMAPConnection(username, account, info);
@@ -1050,7 +991,6 @@ public class MailServiceImpl implements MailService, Startable {
                                                    String accountId,
                                                    Folder parentFolder,
                                                    javax.mail.Folder[] folders) throws Exception {
-    System.out.println("\n\t**========>>>>>>synchImapFolders(parent)");
     List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
     List<String> serverFolderId = new ArrayList<String>();
     String folderId, folderName;
@@ -1133,12 +1073,10 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public IMAPStore openIMAPConnection(String username, Account account) {
-    System.out.println("\n\t**========>>>>>>openIMAPConnection with CheckingInfo is NULL");
     return openIMAPConnection(username, account, null);
   }
 
   public IMAPStore openIMAPConnection(String username, Account account, CheckingInfo info) {
-    System.out.println("\n\t**========>>>>>>openIMAPConnection(parent)");
     try {
       logger.debug(" #### Getting mail from " + account.getIncomingHost() + " ... !");
       if (info != null)
@@ -1183,7 +1121,6 @@ public class MailServiceImpl implements MailService, Startable {
         }
         return null;
       } catch (IllegalStateException e) {
-        System.out.println("\n\t***>>>>>>>ILLEGAL STATE EXCEPTION");
         e.printStackTrace();
         return null;
       } catch (Exception e) {
@@ -1206,7 +1143,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public POP3Store openPOPConnection(String username, Account account, CheckingInfo info) {
-    System.out.println("\n\t**========>>>>>>openPOPConnection");
     try {
       logger.debug(" #### Getting mail from " + account.getIncomingHost() + " ... !");
       if (info != null)
@@ -1248,7 +1184,6 @@ public class MailServiceImpl implements MailService, Startable {
           info.setStatusMsg("The username or password may be wrong.");
           info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
         }
-        e.printStackTrace();
         return null;
       } catch (MessagingException e) {
         logger.debug("Exception while connecting to server : " + e.getMessage());
@@ -1258,8 +1193,6 @@ public class MailServiceImpl implements MailService, Startable {
         }
         return null;
       } catch (IllegalStateException e) {
-        System.out.println("\n\t***>>>>>>>ILLEGAL STATE EXCEPTION");
-        e.printStackTrace();
         return null;
       } catch (Exception e) {
         logger.debug("Exception while connecting to server : " + e.getMessage());
@@ -1284,7 +1217,6 @@ public class MailServiceImpl implements MailService, Startable {
                                    String accountId,
                                    List<Message> msgListFromJcrFolder,
                                    List<String> msgIDListFromMailServer) throws Exception {
-    System.out.println("\n\t**========>>>>>>removeMessageFromJCR");
     for (Message message : msgListFromJcrFolder) {
       String id = message.getId();
       if (!msgIDListFromMailServer.contains(id)) {
@@ -1297,7 +1229,6 @@ public class MailServiceImpl implements MailService, Startable {
                                  String accountId,
                                  String folderId,
                                  javax.mail.Folder mailServerFolder) throws Exception {
-    System.out.println("\n\t**========>>>>>>addMessageNotInJCR");
     Map<String, javax.mail.Message> msgServerMap = getServerMessageMap(mailServerFolder);
     List<String> msgIDListFromJcrFolder = getMessageIDFromJcrFolder(username, accountId, folderId);
     if (!mailServerFolder.isOpen())
@@ -1313,7 +1244,6 @@ public class MailServiceImpl implements MailService, Startable {
                                                                             String accountId,
                                                                             String folderId,
                                                                             javax.mail.Folder mailServerFolder) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMessageNotInJCR");
     Map<String, javax.mail.Message> msgServerMap = getServerMessageMap(mailServerFolder);
     LinkedHashMap<javax.mail.Message, List<String>> msgJCRMap = new LinkedHashMap<javax.mail.Message, List<String>>();
     List<String> msgIDListFromJcrFolder = getMessageIDFromJcrFolder(username, accountId, folderId);
@@ -1328,7 +1258,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<String> getMessageIDFromJcrFolder(String userName, String accountId, String folderId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMessageIDFromJcrFolder");
     List<Message> msgListFromJcrFolder = getMessagesByFolder(userName, accountId, folderId);
     List<String> msgIDListFromJcrFolder = new ArrayList<String>();
     for (Message message : msgListFromJcrFolder) {
@@ -1341,7 +1270,6 @@ public class MailServiceImpl implements MailService, Startable {
   public List<String> getMessageIDFromServerMailFolder(String userName,
                                                        String accountId,
                                                        javax.mail.Folder mailServerFolder) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMessageIDFromServerMailFolder");
     List<String> msgIDListFromMailServer = new ArrayList<String>();
 
     if (!mailServerFolder.isOpen()) {
@@ -1356,7 +1284,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public Map<String, javax.mail.Message> getServerMessageMap(javax.mail.Folder mailServerFolder) {
-    System.out.println("\n\t**========>>>>>>getServerMessageMap");
     javax.mail.Message[] msgListFromMailServer;
     Map<String, javax.mail.Message> map = null;
     try {
@@ -1379,8 +1306,6 @@ public class MailServiceImpl implements MailService, Startable {
                                                   String accountId,
                                                   String folderId,
                                                   String key) throws Exception {
-    System.out.println("\n\t**========>>>>>>mergeMessageBetweenJcrAndServerMail --> FolderID: "
-        + folderId);
     Folder jcrFolder = getFolder(userName, accountId, folderId);
     if (jcrFolder == null || Utils.isEmptyField(jcrFolder.getURLName())) {
       jcrFolder = getFolder(userName,
@@ -1434,9 +1359,9 @@ public class MailServiceImpl implements MailService, Startable {
                                       String accountId,
                                       String folderId,
                                       boolean synchFolders) throws Exception {
-    System.out.println("\n\t**========>>>>>>getSynchnizeImapServer");
+    CheckingInfo info = new CheckingInfo();
     String key = userName + ":" + accountId;
-    CheckingInfo info = checkingLog_.get(key);
+    checkingLog_.put(key, info);
     Account account = getAccountById(userName, accountId);
     IMAPStore store = openIMAPConnection(userName, account, info);
     try {
@@ -1502,8 +1427,6 @@ public class MailServiceImpl implements MailService, Startable {
                                 String accountId,
                                 javax.mail.Folder folder,
                                 String key) throws Exception {
-    System.out.println("\n\t**========>>>>>>synchImapMessage----: folder name: "
-        + folder.getFullName());
     Account account = getAccountById(userName, accountId);
     boolean saved = false;
     int totalNew = -1;
@@ -1676,7 +1599,6 @@ public class MailServiceImpl implements MailService, Startable {
                                                                         Date lastCheckedDate,
                                                                         Date checkFromDate,
                                                                         Date lastCheckedFromDate) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMessageMap");
     LinkedHashMap<javax.mail.Message, List<String>> msgMap = new LinkedHashMap<javax.mail.Message, List<String>>();
     List<MessageFilter> filters = getFilters(username, accountId);
     Account account = getAccountById(username, accountId);
@@ -1708,12 +1630,10 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<Message> checkNewMessage(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>checkNewMessage with folderId is NULL");
     return checkNewMessage(username, accountId, null);
   }
 
   public List<Message> checkNewMessage(String username, String accountId, String folderId) throws Exception {
-    System.out.println("\n\t**========>>>>>>checkNewMessag");
     Account account = getAccountById(username, accountId);
     List<Message> messageList = new ArrayList<Message>();
     if (account != null) {
@@ -1729,12 +1649,12 @@ public class MailServiceImpl implements MailService, Startable {
 
   // TODO: refactor code for checking mail from POP3 server.
   public List<Message> checkPop3Server(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>checkPop3Server");
     Account account = getAccountById(username, accountId);
     List<Message> messageList = new ArrayList<Message>();
     if (account != null) {
+      CheckingInfo info = new CheckingInfo();
       String key = username + ":" + accountId;
-      CheckingInfo info = checkingLog_.get(key);
+      checkingLog_.put(key, info);
       long t1, t2, tt1, tt2;
       if (Utils.isEmptyField(account.getIncomingPassword()))
         info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
@@ -1782,8 +1702,6 @@ public class MailServiceImpl implements MailService, Startable {
               account.setIncomingPassword("");
               updateAccount(username, account);
               logger.debug("Exception while connecting to server : " + e.getMessage());
-              System.out.println("\n\t***>>>>Exception while connecting to server(POP3P) : "
-                  + e.getMessage());
             }
             info.setStatusMsg("The username or password may be wrong.");
             info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
@@ -1814,7 +1732,6 @@ public class MailServiceImpl implements MailService, Startable {
           } else {
             logger.debug(" #### Getting mails from folder " + incomingFolder + " !");
             info.setStatusMsg("Getting mails from folder " + incomingFolder + " !");
-            System.out.println("\n\t***>>>>Getting mails from folder " + incomingFolder + " !");
           }
           folder.open(javax.mail.Folder.READ_WRITE);
 
@@ -1984,7 +1901,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public LinkedHashMap<javax.mail.Message, List<String>> getPOP3Messages(javax.mail.Folder folder) {
-    System.out.println("\n\t**========>>>>>>getPOP3Messages");
     LinkedHashMap<javax.mail.Message, List<String>> messageMap = new LinkedHashMap<javax.mail.Message, List<String>>();
 
     try {
@@ -1995,7 +1911,6 @@ public class MailServiceImpl implements MailService, Startable {
         messageID.add(mimeMessage.getMessageID());
 
         messageMap.put(message, messageID);
-        System.out.println("\n\t**========>>>>>>getPOP3Messages, subject: " + message.getSubject());
       }
 
     } catch (MessagingException e) {
@@ -2006,7 +1921,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   private String makeStoreFolder(String username, String accountId, String incomingFolder) throws Exception {
-    System.out.println("\n\t**========>>>>>>makeStoreFolder");
     String folderId = Utils.generateFID(accountId, incomingFolder, false);
     Folder storeFolder = storage_.getFolder(username, accountId, folderId);
     if (storeFolder == null) {
@@ -2026,7 +1940,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public SearchTerm getSearchTerm(SearchTerm sTerm, MessageFilter filter) throws Exception {
-    System.out.println("\n\t**========>>>>>>getSearchTerm");
     if (!Utils.isEmptyField(filter.getFrom())) {
       FromStringTerm fsTerm = new FromStringTerm(filter.getFrom());
       if (filter.getFromCondition() == Utils.CONDITION_CONTAIN) {
@@ -2099,22 +2012,20 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void createAccount(String username, Account account) throws Exception {
-    System.out.println("\n\t**========>>>>>>createAccount");
     saveAccount(username, account, true);
   }
 
   public List<Folder> getFolders(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getFolders with username, accountId");
     return storage_.getFolders(username, accountId);
   }
 
   public List<Folder> getFolders(String username, String accountId, boolean isPersonal) throws Exception {
-    System.out.println("\n\t**========>>>>>>getFolders with username, accountId, isPersonal");
     List<Folder> folders = new ArrayList<Folder>();
     List<Folder> gottenFolderList = storage_.getFolders(username, accountId);
     Account account = getAccountById(username, accountId);
+    CheckingInfo info = new CheckingInfo();
     String key = username + ":" + accountId;
-    CheckingInfo info = checkingLog_.get(key);
+    checkingLog_.put(key, info);
     Store store = null;
     for (Folder folder : gottenFolderList) {
       String urlName = folder.getURLName();
@@ -2143,22 +2054,18 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void addTag(String username, String accountId, Tag tag) throws Exception {
-    System.out.println("\n\t**========>>>>>>addTag1");
     storage_.addTag(username, accountId, tag);
   }
 
   public void addTag(String username, String accountId, List<Message> messages, List<Tag> tag) throws Exception {
-    System.out.println("\n\t**========>>>>>>addTag2");
     storage_.addTag(username, accountId, messages, tag);
   }
 
   public List<Tag> getTags(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getTags(many)");
     return storage_.getTags(username, accountId);
   }
 
   public Tag getTag(String username, String accountId, String tagId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getTag(single)");
     return storage_.getTag(username, accountId, tagId);
   }
 
@@ -2166,27 +2073,22 @@ public class MailServiceImpl implements MailService, Startable {
                                    String accountId,
                                    List<Message> msgList,
                                    List<String> tagIdList) throws Exception {
-    System.out.println("\n\t**========>>>>>>removeTagsInMessages");
     storage_.removeTagsInMessages(username, accountId, msgList, tagIdList);
   }
 
   public void removeTag(String username, String accountId, String tag) throws Exception {
-    System.out.println("\n\t**========>>>>>>removeTag");
     storage_.removeTag(username, accountId, tag);
   }
 
   public void updateTag(String username, String accountId, Tag tag) throws Exception {
-    System.out.println("\n\t**========>>>>>>updateTag");
     storage_.updateTag(username, accountId, tag);
   }
 
   public List<Message> getMessageByTag(String username, String accountId, String tagName) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMessageByTag");
     return storage_.getMessageByTag(username, accountId, tagName);
   }
 
   public MessagePageList getMessagePagelistByTag(String username, String accountId, String tagId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMessagePagelistByTag");
     MessageFilter filter = new MessageFilter("Filter By Tag");
     filter.setAccountId(accountId);
     filter.setTag(new String[] { tagId });
@@ -2196,7 +2098,6 @@ public class MailServiceImpl implements MailService, Startable {
   public MessagePageList getMessagePageListByFolder(String username,
                                                     String accountId,
                                                     String folderId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMessagePageListByFolder");
     MessageFilter filter = new MessageFilter("Filter By Folder");
     filter.setAccountId(accountId);
     filter.setFolder(new String[] { folderId });
@@ -2204,12 +2105,10 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public MailSetting getMailSetting(String username) throws Exception {
-    System.out.println("\n\t**========>>>>>>getMailSetting");
     return storage_.getMailSetting(username);
   }
 
   public void saveMailSetting(String username, MailSetting newSetting) throws Exception {
-    System.out.println("\n\t**========>>>>>>saveMailSetting");
     storage_.saveMailSetting(username, newSetting);
   }
 
@@ -2218,22 +2117,18 @@ public class MailServiceImpl implements MailService, Startable {
                                String folderId,
                                InputStream inputStream,
                                String type) throws Exception {
-    System.out.println("\n\t**========>>>>>>importMessage");
     return emlImportExport_.importMessage(username, accountId, folderId, inputStream, type);
   }
 
   public OutputStream exportMessage(String username, String accountId, Message message) throws Exception {
-    System.out.println("\n\t**========>>>>>>exportMessage");
     return emlImportExport_.exportMessage(username, accountId, message);
   }
 
   public SpamFilter getSpamFilter(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getSpamFilter");
     return storage_.getSpamFilter(username, accountId);
   }
 
   public void saveSpamFilter(String username, String accountId, SpamFilter spamFilter) throws Exception {
-    System.out.println("\n\t**========>>>>>>saveSpamFilter");
     storage_.saveSpamFilter(username, accountId, spamFilter);
   }
 
@@ -2295,27 +2190,22 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<AccountData> getAccountDatas(SessionProvider sProvider) throws Exception {
-    System.out.println("\n\t**========>>>>>>getAccountDatas");
     return null;
   }
 
   public String getFolderHomePath(String username, String accountId) throws Exception {
-    System.out.println("\n\t**========>>>>>>getFolderHomePath");
     return storage_.getFolderHomePath(username, accountId);
   }
 
   public List<Folder> getSubFolders(String username, String accountId, String parentPath) throws Exception {
-    System.out.println("\n\t**========>>>>>>getSubFolders");
     return storage_.getSubFolders(username, accountId, parentPath);
   }
 
   public List<Message> getReferencedMessages(String username, String accountId, String msgPath) throws Exception {
-    System.out.println("\n\t**========>>>>>>getReferencedMessages");
     return storage_.getReferencedMessages(username, accountId, msgPath);
   }
 
   public Account getDefaultAccount(String username) throws Exception {
-    System.out.println("\n\t**========>>>>>>getDefaultAccount");
     MailSetting mailSetting = storage_.getMailSetting(username);
     String defaultAccount = mailSetting.getDefaultAccount();
     Account account = null;
@@ -2330,7 +2220,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public Message loadTotalMessage(String username, String accountId, Message msg) throws Exception {
-    System.out.println("\n\t**========>>>>>>loadTotalMessage");
     Account account = getAccountById(username, accountId);
     Store store = null;
     javax.mail.Folder fd = null;
@@ -2377,18 +2266,15 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void stop() {
-    System.out.println("\n\t**========>>>>>>addListenerPlugin");
   }
 
   public synchronized void addListenerPlugin(ComponentPlugin listener) throws Exception {
-    System.out.println("\n\t**========>>>>>>addListenerPlugin");
     if (listener instanceof MailUpdateStorageEventListener) {
       listeners_.add((MailUpdateStorageEventListener) listener);
     }
   }
 
   private Properties getAccountProperties(Account acc) {
-    System.out.println("\n\t**========>>>>>>getAccountProperties");
     Properties props = System.getProperties();
     String smtpUser = acc.getIncomingUser();
     String outgoingHost = acc.getOutgoingHost();
@@ -2418,7 +2304,6 @@ public class MailServiceImpl implements MailService, Startable {
 
   public boolean sendReturnReceipt(String username, String accId, String msgId, ResourceBundle res) throws Exception {
     // TODO need to implement
-    System.out.println("\n\t**========>>>>>>sendReturnReceipt");
     Account acc = getAccountById(username, accId);
     Message msg = getMessageById(username, accId, msgId);
 
