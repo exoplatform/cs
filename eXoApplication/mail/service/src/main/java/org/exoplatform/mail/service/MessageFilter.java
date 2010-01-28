@@ -371,12 +371,15 @@ public class MessageFilter {
     
     if (orderBy_ != null && orderBy_.trim().length() >0) {
       stringBuffer.append(" order by @" + orderBy_ + " ") ;
-      if (isAscending_ && !hasStructure_) stringBuffer.append("ascending") ;
+      //TODO CS-3734
+      //if (isAscending_ && !hasStructure_) stringBuffer.append("ascending") ;
+      if (isAscending_) stringBuffer.append("ascending") ;
       else stringBuffer.append("descending");
 
       if (orderBy_.equalsIgnoreCase(Utils.EXO_LAST_UPDATE_TIME)) {
         stringBuffer.append(" , @" + Utils.EXO_RECEIVEDDATE + " ") ;
-        if (isAscending_ && !hasStructure_) stringBuffer.append("ascending") ;
+        //if (isAscending_ && !hasStructure_) stringBuffer.append("ascending") ;
+        if (isAscending_) stringBuffer.append("ascending") ;
         else stringBuffer.append("descending");
       }
     }

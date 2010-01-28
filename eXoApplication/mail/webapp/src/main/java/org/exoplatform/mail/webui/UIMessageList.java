@@ -1700,7 +1700,11 @@ public class UIMessageList extends UIForm {
         msgFilter.setText("");
         msgFilter.setFolder((uiMessageList.getSelectedFolderId() == null) ? null : new String[] {uiMessageList.getSelectedFolderId()});
         msgFilter.setTag((uiMessageList.getSelectedTagId() == null) ? null : new String[] {uiMessageList.getSelectedTagId()});
-        msgFilter.setHasStructure(false) ;
+        // TODO CS-3734
+        if (uiMessageList.viewMode == UIMessageList.MODE_THREAD){
+          msgFilter.setHasStructure(true) ;
+        }
+        else msgFilter.setHasStructure(false) ;
       }
       try {
         uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, msgFilter));
