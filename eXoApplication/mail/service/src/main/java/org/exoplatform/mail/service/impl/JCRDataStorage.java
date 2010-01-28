@@ -2955,7 +2955,7 @@ public class JCRDataStorage implements DataStorage {
     }
 
     node.setProperty(Utils.EXO_CONTENT_TYPE, msg.getContentType());
-    node.setProperty(Utils.EXO_BODY, strBuffer.toString()+"DUYYYYYYYYYY");
+    node.setProperty(Utils.EXO_BODY, strBuffer.toString());
     node.save();
     return strBuffer.toString();
   }
@@ -3127,7 +3127,29 @@ public class JCRDataStorage implements DataStorage {
         this.getContent(node, msg);
         t3 = System.currentTimeMillis();
         logger.debug("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
+       
+        node.save();
 
+        if (infoObj != null && continuation != null) {
+          infoObj.setFrom(from);
+          infoObj.setMsgId(msgId);
+          infoObj.setIsRead(isReadMessage);
+          infoObj.setSubject(subject);
+          infoObj.setSize(Utils.convertSize(Math.abs(msg.getSize())));
+          infoObj.setAccountId(accId);
+          if (gc != null)
+            infoObj.setDate(gc.getTime().toString());
+          else if (sc != null)
+            infoObj.setDate(sc.getTime().toString());
+          else
+            infoObj.setDate(new Date().toString());
+
+          JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+          JsonValue json = generatorImpl.createJsonObject(infoObj);
+          continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
+        }
+        
+//        saveTotalMessage(username, accId, msgId, msg, sProvider);
         t4 = System.currentTimeMillis();
         logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
         logger.debug("Adding message to thread ...");

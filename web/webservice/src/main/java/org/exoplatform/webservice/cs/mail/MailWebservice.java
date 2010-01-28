@@ -79,6 +79,38 @@ public class MailWebservice implements ResourceContainer {
   }
 
   @GET
+  @Path("/synchfolders/{username}/{accountId}/")
+  public Response synchFolders(@PathParam("username")
+  String userName, @PathParam("accountId")
+  String accountId) throws Exception {
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    MailService mailService = (MailService) ExoContainerContext
+        .getCurrentContainer().getComponentInstanceOfType(MailService.class);
+    
+    CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
+    
+    if (checkingInfo == null) {
+      mailService.synchImapFolders(userName, accountId);
+      checkingInfo = mailService.getCheckingInfo(userName, accountId);
+    } 
+    
+    StringBuffer buffer = new StringBuffer();
+    buffer.append("<info>");
+    buffer.append("  <checkingmail>");
+    if (checkingInfo != null) {
+      buffer.append("    <status>" + checkingInfo.getSyncFolderStatus() + "</status>");
+    }
+    buffer.append("  </checkingmail>");
+    buffer.append("</info>");
+    
+    mailService.removeCheckingInfo(userName, accountId);
+    
+    return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
+  }
+  
+  @GET
   @Path("/stopcheckmail/{username}/{accountId}/")
   public Response stopCheckMail(@PathParam("username") String userName,
                                 @PathParam("accountId") String accountId) throws Exception {
@@ -98,10 +130,12 @@ public class MailWebservice implements ResourceContainer {
       buffer.append("</info>");
 
       checkingInfo.setRequestStop(true);
+      mailService.removeCheckingInfo(userName, accountId);
     } else {
       Response.status(HTTPStatus.INTERNAL_ERROR);
       return Response.ok().build();
     }
+    
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 
