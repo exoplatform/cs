@@ -54,7 +54,11 @@ public class Utils {
     if (isEmpty(emails)) return emailList ;
     for (String email : emails.replaceAll(SEMI_COLON, COMMA).split(COMMA))
     {
+      try {
       email =  InternetAddress.parse(email)[0].getAddress() ;
+      } catch (ArrayIndexOutOfBoundsException e) {
+        // TODO: handle exception
+      }
       if (isValidEmailAddresses(email)) emailList.add(email) ;
     }
     return emailList ;
