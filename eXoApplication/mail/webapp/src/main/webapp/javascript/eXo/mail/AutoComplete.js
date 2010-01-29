@@ -64,10 +64,25 @@ AutoComplete.prototype.processData = function(data){
 	var tmpArr = [];
 	for(var i=0; i < l; i++){
 		tmpArr = a[i].split("::");
+		if(tmpArr[1].indexOf(";")){
+			this.splitEmail(tmpArr[0],tmpArr[1],tmpList);
+			continue;
+		}
 		tmpList.push(tmpArr[0] + " &lt;" + tmpArr[1] + " &gt;");
 	}
 	return tmpList;
 };
+
+
+AutoComplete.prototype.splitEmail = function(value,a, data){	
+	var arr = a.split(";");
+	var l = arr.length;
+	for(var i=0; i < l; i++){
+		data.push(value + " &lt;" + arr[i] + " &gt;");
+	}
+	
+};
+
 /**
  * render drop down menu
  * @param {Object} data
