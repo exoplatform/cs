@@ -1076,6 +1076,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIComposeForm uiForm = event.getSource() ;
       uiForm.setShowCc(!uiForm.isShowCc());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(FIELD_TO_SET)) ;
+      event.getRequestContext().getJavascriptManager().addCustomizedOnLoadScript("eXo.mail.AutoComplete.init(['" + FIELD_TO + "', '" + FIELD_CC + "', '" + FIELD_BCC + "']);");
     }
   }
 
@@ -1084,6 +1085,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIComposeForm uiForm = event.getSource() ;
       uiForm.setShowBcc(!uiForm.isShowBcc());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(FIELD_TO_SET)) ;
+      event.getRequestContext().getJavascriptManager().addCustomizedOnLoadScript("eXo.mail.AutoComplete.init(['" + FIELD_TO + "', '" + FIELD_CC + "', '" + FIELD_BCC + "']);");
     }
   }
 
