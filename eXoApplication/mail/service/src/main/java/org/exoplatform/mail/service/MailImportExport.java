@@ -16,8 +16,9 @@
  */
 package org.exoplatform.mail.service;
 
-import java.io.InputStream;
 import java.io.OutputStream;
+
+import javax.mail.internet.MimeMessage;
 
 
 
@@ -28,6 +29,6 @@ import java.io.OutputStream;
  * Jul 2, 2007  
  */
 public interface MailImportExport {  
-	public boolean importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
+  public boolean importMessage(String username, String accountId, String folderId, MimeMessage mimeMessage, long[] msgUID) throws Exception;
   public OutputStream exportMessage(String username, String accountId,Message message) throws Exception;
 }

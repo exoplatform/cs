@@ -43,12 +43,10 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.mail.Header;
-import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.logging.Log;
@@ -1069,7 +1067,7 @@ public class JCRDataStorage implements DataStorage {
                              boolean saveTotal) throws Exception {
     return saveMessage(username,
                        accId,
-                       0,
+                       null,
                        msg,
                        folderIds,
                        tagList,
@@ -1082,6 +1080,29 @@ public class JCRDataStorage implements DataStorage {
   public boolean saveMessage(String username,
                              String accId,
                              long msgUID,
+                             javax.mail.Message msg,
+                             String folderIds[],
+                             List<String> tagList,
+                             SpamFilter spamFilter,
+                             Info infoObj,
+                             ContinuationService continuation,
+                             boolean saveTotal) throws Exception {
+    long[] messageUID = { msgUID };
+    return saveMessage(username,
+                       accId,
+                       messageUID,
+                       msg,
+                       folderIds,
+                       tagList,
+                       spamFilter,
+                       infoObj,
+                       continuation,
+                       saveTotal);
+  }
+
+  public boolean saveMessage(String username,
+                             String accId,
+                             long[] msgUID,
                              javax.mail.Message msg,
                              String folderIds[],
                              List<String> tagList,
@@ -1133,7 +1154,6 @@ public class JCRDataStorage implements DataStorage {
           }
         }
       } catch (Exception e) {
-
       }
 
       logger.debug("Saving message to JCR ...");
@@ -1150,11 +1170,12 @@ public class JCRDataStorage implements DataStorage {
         msgHomeNode.save();
         node.setProperty(Utils.EXO_ID, msgId);
         try {
-          String uid = String.valueOf(msgUID);
+          String uid = String.valueOf(msgUID[0]);
           if (Utils.isEmptyField(uid))
             uid = MimeMessageParser.getMD5MsgId(msg);
           node.setProperty(Utils.EXO_UID, uid);
         } catch (Exception e) {
+          e.printStackTrace();
         }
         node.setProperty(Utils.EXO_ACCOUNT, accId);
         from = Utils.decodeText(InternetAddress.toString(msg.getFrom())).replaceAll("\"", "");
@@ -1257,7 +1278,6 @@ public class JCRDataStorage implements DataStorage {
         try {
           msgHomeNode.refresh(true);
         } catch (Exception ex) {
-          e.printStackTrace();
           logger.debug(" [WARNING] Can't refresh.");
         }
         logger.debug(" [WARNING] Cancel saving message to JCR.");
@@ -1294,32 +1314,6 @@ public class JCRDataStorage implements DataStorage {
         }
         node.setProperty(Utils.IS_LOADED, true);
         node.save();
-
-        // MimeMessage cmsg = (MimeMessage) msg;
-        // Object obj = null;
-        // try {
-        // obj = msg.getContent();
-        // } catch (MessagingException mex) {
-        // cmsg = new MimeMessage((MimeMessage) msg);
-        // try {
-        // obj = cmsg.getContent();
-        // } catch (MessagingException mex1) {
-        // System.out.println("##### Error when fetch message body");
-        // }
-        // }
-        // String contentType = "text/plain";
-        // if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/*"))
-        // contentType = "text/html";
-        // StringBuffer body = new StringBuffer("");
-        // if (obj instanceof Multipart) {
-        // body = setMultiPart((Multipart) obj, node, body);
-        // } else {
-        // body = setPart(cmsg, node, body);
-        // }
-        // node.setProperty(Utils.EXO_CONTENT_TYPE, contentType);
-        // node.setProperty(Utils.EXO_BODY, Utils.decodeText(body.toString()));
-        // node.save();
-
       } else {
         return false;
       }
@@ -2927,20 +2921,18 @@ public class JCRDataStorage implements DataStorage {
       closeSessionProvider(sProvider);
     }
   }
-  
-  public Message loadTotalMessage(String username,
-                                  String accountId,
-                                  Message msg)throws Exception {
+
+  public Message loadTotalMessage(String username, String accountId, Message msg) throws Exception {
     SessionProvider sProvider = null;
-    try{
+    try {
       sProvider = createSessionProvider();
       Node messageNode = getDateStoreNode(sProvider, username, accountId, msg.getReceivedDate()).getNode(msg.getId());
       msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
-    return msg;
-     } finally {
+      return msg;
+    } finally {
       closeSessionProvider(sProvider);
     }
-}
+  }
 
   public String getContent(Node node, javax.mail.Message msg) throws Exception {
     StringBuffer strBuffer = new StringBuffer();
@@ -3127,7 +3119,7 @@ public class JCRDataStorage implements DataStorage {
         this.getContent(node, msg);
         t3 = System.currentTimeMillis();
         logger.debug("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
-       
+
         node.save();
 
         if (infoObj != null && continuation != null) {
@@ -3148,8 +3140,8 @@ public class JCRDataStorage implements DataStorage {
           JsonValue json = generatorImpl.createJsonObject(infoObj);
           continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
         }
-        
-//        saveTotalMessage(username, accId, msgId, msg, sProvider);
+
+        // saveTotalMessage(username, accId, msgId, msg, sProvider);
         t4 = System.currentTimeMillis();
         logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
         logger.debug("Adding message to thread ...");

@@ -149,7 +149,6 @@ public class ImapConnector extends BaseConnector {
 
   public List<Message> createMessage(List<Message> msgs, Folder folder) throws Exception {
     try {
-      // Todo
       URLName remoteURL = new URLName(folder.getURLName());
       IMAPFolder remoteFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(remoteURL);
       remoteFolder.open(javax.mail.Folder.READ_WRITE);
@@ -221,7 +220,6 @@ public class ImapConnector extends BaseConnector {
       List<javax.mail.Message> copiedMsgs = new ArrayList<javax.mail.Message>();
       javax.mail.Message msg;
       for (Message m : msgs) {
-        System.out.println("ImapConnector(moveMessage), UID: " + m.getUID());
         msg = fromFolder.getMessageByUID(Long.valueOf(m.getUID()));
         if (msg != null)
           copiedMsgs.add(msg);

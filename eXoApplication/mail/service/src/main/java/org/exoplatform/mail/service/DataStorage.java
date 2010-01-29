@@ -123,6 +123,17 @@ public interface DataStorage {
 
   public boolean saveMessage(String username,
                              String accId,
+                             long[] msgUID,
+                             javax.mail.Message msg,
+                             String folderIds[],
+                             List<String> tagList,
+                             SpamFilter spamFilter,
+                             Info infoObj,
+                             ContinuationService continuation,
+                             boolean saveTotal) throws Exception;
+
+  public boolean saveMessage(String username,
+                             String accId,
                              long msgUID,
                              javax.mail.Message msg,
                              String folderIds[],

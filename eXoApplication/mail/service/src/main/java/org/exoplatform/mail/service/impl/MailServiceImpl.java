@@ -37,6 +37,7 @@ import javax.activation.CommandMap;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.activation.MailcapCommandMap;
+import javax.mail.Address;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
 import javax.mail.Header;
@@ -91,6 +92,7 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.services.scheduler.PeriodInfo;
@@ -717,8 +719,7 @@ public class MailServiceImpl implements MailService, Startable {
       status = "There was an unexpected error. Sending Falied !" + e.getMessage();
       throw e;
     } finally {
-      // logger.debug(" #### Info : " + status);
-      System.out.println(status);
+       logger.debug(" #### Info : " + status);
     }
     logger.debug(" #### Info : " + status);
 
@@ -751,6 +752,7 @@ public class MailServiceImpl implements MailService, Startable {
     CheckingInfo checkingInfo = getCheckingInfo(username, accountId);
     if (checkingInfo != null) {
       checkingInfo.setRequestStop(true);
+      System.out.println("Requested check loop to stop ");
       try {
         removeCheckingInfo(username, accountId);
       } catch (Exception e) {
@@ -1121,6 +1123,7 @@ public class MailServiceImpl implements MailService, Startable {
         }
         return null;
       } catch (IllegalStateException e) {
+        System.out.println("\n\t***>>>>>>>ILLEGAL STATE EXCEPTION");
         e.printStackTrace();
         return null;
       } catch (Exception e) {
@@ -1184,6 +1187,7 @@ public class MailServiceImpl implements MailService, Startable {
           info.setStatusMsg("The username or password may be wrong.");
           info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
         }
+        e.printStackTrace();
         return null;
       } catch (MessagingException e) {
         logger.debug("Exception while connecting to server : " + e.getMessage());
@@ -1193,6 +1197,8 @@ public class MailServiceImpl implements MailService, Startable {
         }
         return null;
       } catch (IllegalStateException e) {
+        System.out.println("\n\t***>>>>>>>ILLEGAL STATE EXCEPTION");
+        e.printStackTrace();
         return null;
       } catch (Exception e) {
         logger.debug("Exception while connecting to server : " + e.getMessage());
@@ -1332,8 +1338,8 @@ public class MailServiceImpl implements MailService, Startable {
           Map<String, javax.mail.Message> map = getServerMessageMap(mailServerFolder);
           for (Message message : msgListFromJcrFolder) {
             String id = message.getId();
-            if (map.size() > 0) {
-              javax.mail.Message serverMessage = map.get(id);
+            javax.mail.Message serverMessage = map.get(id);
+            if (serverMessage != null) {
               message.setHasStar(serverMessage.isSet(Flags.Flag.FLAGGED));
               message.setUnread(!serverMessage.isSet(Flags.Flag.SEEN));
               IMAPFolder serverFolder = (IMAPFolder) mailServerFolder;
@@ -1371,8 +1377,8 @@ public class MailServiceImpl implements MailService, Startable {
           info.setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
           info.setStatusMsg("Synchronizing imap folder ...");
           folderList = synchImapFolders(userName, accountId, null, store.getDefaultFolder().list());
-          info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
           info.setStatusMsg("Finished synchronizing imap folder ...");
+          info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
         }
         if (!Utils.isEmptyField(folderId)) {
 
@@ -1445,6 +1451,7 @@ public class MailServiceImpl implements MailService, Startable {
       CheckingInfo info = checkingLog_.get(key);
       if (info != null) {
         info.setSyncFolderStatus(CheckingInfo.FINISHED_SYNC_FOLDER);
+        info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);// Duy
         info.setStatusMsg("Getting mails from folder " + folderName + " !");
       }
       folderId = Utils.generateFID(accountId,
@@ -1581,10 +1588,14 @@ public class MailServiceImpl implements MailService, Startable {
                                                                                   userName,
                                                                                   accountId);
           new Thread(downloadContentMail).start();
+        } else {// Duy
+          info.setStatusMsg("There is no messages in the " + folderName + " folder!");
         }
       }
-      if (info != null)
+      if (info != null) {
         info.setStatusMsg("Finished download for " + folderName + " folder.");
+        info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);// Duy
+      }
       logger.debug("#### Synchronization finished for " + folderName + " folder.");
 
     } catch (Exception e) {
@@ -1702,6 +1713,8 @@ public class MailServiceImpl implements MailService, Startable {
               account.setIncomingPassword("");
               updateAccount(username, account);
               logger.debug("Exception while connecting to server : " + e.getMessage());
+              System.out.println("\n\t***>>>>Exception while connecting to server(POP3P) : "
+                  + e.getMessage());
             }
             info.setStatusMsg("The username or password may be wrong.");
             info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
@@ -1862,6 +1875,7 @@ public class MailServiceImpl implements MailService, Startable {
               } catch (Exception e) {
                 checkingLog_.get(key).setStatusMsg("An error occurs while fetching messsge "
                     + (i + 1));
+                info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
                 e.printStackTrace();
                 i++;
                 continue;
@@ -1883,13 +1897,14 @@ public class MailServiceImpl implements MailService, Startable {
           store.close();
           if (totalNew == 0) {
             info.setStatusMsg("There is no new messages !");
+
           } else {
             info.setStatusMsg("Check mail finished !");
           }
         }
         info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
 
-         removeCheckingInfo(username, accountId);
+        removeCheckingInfo(username, accountId);
 
         logger.debug("/////////////////////////////////////////////////////////////");
         logger.debug("/////////////////////////////////////////////////////////////");
@@ -2117,7 +2132,89 @@ public class MailServiceImpl implements MailService, Startable {
                                String folderId,
                                InputStream inputStream,
                                String type) throws Exception {
-    return emlImportExport_.importMessage(username, accountId, folderId, inputStream, type);
+    Properties props = System.getProperties();
+    Session session = Session.getDefaultInstance(props, null);
+    MimeMessage mimeMessage = new MimeMessage(session, inputStream);
+    long[] msgUID = { 0 };
+    boolean serverImported = importMessageIntoServerMail(username,
+                                                         accountId,
+                                                         folderId,
+                                                         mimeMessage,
+                                                         msgUID);
+    boolean jcrImported = emlImportExport_.importMessage(username,
+                                                         accountId,
+                                                         folderId,
+                                                         mimeMessage,
+                                                         msgUID);
+    boolean result = false;
+    if (serverImported && jcrImported) {
+      result = true;
+    } else if (serverImported && !jcrImported) {
+      // + If the message is imported into server mail but not in JCR--> so this
+      // transaction must be rolled back.
+      // + Remove the imported message from server mail;
+      boolean rollBackResult = removeImportedMessageFromServer(username, accountId, folderId, msgUID);
+      if(rollBackResult)
+        logger.error("Imported message rollback operation is successful");
+    }
+    return result;
+  }
+
+  private boolean removeImportedMessageFromServer(String username,
+                                                  String accountId,
+                                                  String folderId,
+                                                  long[] msgUID) throws Exception {
+
+    boolean result = false;
+    try {
+      IMAPFolder remoteFolder = getIMAPFolder(username, accountId, folderId);
+      javax.mail.Message message = remoteFolder.getMessage((int)msgUID[0]);
+      if (!remoteFolder.isOpen())
+        remoteFolder.open(javax.mail.Folder.READ_WRITE);
+      message.setFlag(Flags.Flag.DELETED, true);
+      remoteFolder.close(true);
+      result = true;
+    } catch (Exception ex) {
+      logger.error("Imported message rollback operation is fail", ex);
+    }
+    return result;
+  }
+
+  private boolean importMessageIntoServerMail(String username,
+                                              String accountId,
+                                              String folderId,
+                                              MimeMessage mimeMessage,
+                                              long[] msgUID) throws Exception {
+    boolean result = false;
+    try {
+      IMAPFolder remoteFolder = getIMAPFolder(username, accountId, folderId);
+      if (!remoteFolder.isOpen()) {
+        remoteFolder.open(javax.mail.Folder.READ_WRITE);
+      }
+      javax.mail.Message[] messages = { mimeMessage };
+      javax.mail.Message[] updatedMsgs = remoteFolder.addMessages(messages);
+      msgUID[0] = remoteFolder.getUIDNext();
+      if (updatedMsgs.length == 1) {
+        result = true;
+      }
+      remoteFolder.close(true);
+    } catch (Exception e) {
+      logger.error("Error in importing message into remote folder", e);
+    }
+
+    return result;
+
+  }
+
+  private IMAPFolder getIMAPFolder(String username, String accountId, String folderId) throws Exception {
+    Folder folder = getFolder(username, accountId, folderId);
+    Account account = getAccountById(username, accountId);
+    IMAPStore store = openIMAPConnection(username, account);
+    URLName remoteURL = new URLName(folder.getURLName());
+
+    IMAPFolder remoteFolder = (IMAPFolder) store.getFolder(remoteURL);
+    return remoteFolder;
+
   }
 
   public OutputStream exportMessage(String username, String accountId, Message message) throws Exception {

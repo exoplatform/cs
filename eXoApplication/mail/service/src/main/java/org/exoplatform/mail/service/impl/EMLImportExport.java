@@ -17,7 +17,6 @@
 package org.exoplatform.mail.service.impl;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
@@ -28,39 +27,47 @@ import org.exoplatform.mail.service.DataStorage;
 import org.exoplatform.mail.service.MailImportExport;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.services.jcr.util.IdGenerator;
-
 
 /**
- * Created by The eXo Platform SARL
- * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
- * Jul 2, 2007  
+ * Created by The eXo Platform SARL Author : Hung Nguyen
+ * hung.nguyen@exoplatform.com Jul 2, 2007
  */
 
-public class EMLImportExport implements MailImportExport{
-	private DataStorage jcrDataStorage_ ;
-	public EMLImportExport(DataStorage jcrDataStorage) throws Exception {
-		jcrDataStorage_ = jcrDataStorage ;
-	}
-	public OutputStream exportMessage(String username, String accountId, Message message) throws Exception {
-		Properties props = System.getProperties();
-    Session session = Session.getInstance(props, null);
+public class EMLImportExport implements MailImportExport {
+  private DataStorage jcrDataStorage_;
+
+  public EMLImportExport(DataStorage jcrDataStorage) throws Exception {
+    jcrDataStorage_ = jcrDataStorage;
+  }
+
+  public OutputStream exportMessage(String username, String accountId, Message message) throws Exception {
+    Properties props = System.getProperties();
+    Session session = Session.getDefaultInstance(props, null);
     MimeMessage mimeMessage = new MimeMessage(session);
     mimeMessage = Utils.mergeToMimeMessage(message, mimeMessage);
     OutputStream outputStream = new ByteArrayOutputStream();
     mimeMessage.writeTo(outputStream);
-		return outputStream;
-	}
+    return outputStream;
+  }
 
-	public boolean importMessage(String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
-		Properties props = System.getProperties();
-    Session session = Session.getInstance(props, null);
-    MimeMessage mimeMessage = new MimeMessage(session, inputStream);
-    mimeMessage.setHeader("Message-ID", "Message" + IdGenerator.generate());
+  public boolean importMessage(String username,
+                               String accountId,
+                               String folderId,
+                               MimeMessage mimeMessage,
+                               long[] msgUID) throws Exception {
     try {
-       return jcrDataStorage_.saveMessage(username, accountId, mimeMessage, new String[] { folderId }, null, null, true);
-    } catch(Exception e) { return false ; }
-	}  
-	
+      return jcrDataStorage_.saveMessage(username,
+                                         accountId,
+                                         msgUID,
+                                         mimeMessage,
+                                         new String[] { folderId },
+                                         null,
+                                         null,
+                                         null,
+                                         null,
+                                         true);
+    } catch (Exception e) {
+      return false;
+    }
+  }
 }
