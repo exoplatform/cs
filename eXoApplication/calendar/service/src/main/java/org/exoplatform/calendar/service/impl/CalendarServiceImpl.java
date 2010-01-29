@@ -891,7 +891,6 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     return storage_.generateRss(username,calendarIds, rssData, calendarImportExport_.get(ICALENDAR));
   }
 
-  @Override
   public EventCategory getEventCategoryByName(String username, String eventCategoryName) throws Exception {
     ResourceBundle rb = null ;
     try { 
@@ -902,11 +901,12 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     for (EventCategory ev : storage_.getEventCategories(username)) {
       if(ev.getName().equalsIgnoreCase(eventCategoryName)) {
         return ev ;
-      } else if ((rb != null && eventCategoryName.equalsIgnoreCase(rb.getString("UICalendarView.label."+ev.getId())))) {
-        return ev ;
+      } else if (rb != null) {
+        try {
+          if (eventCategoryName.equalsIgnoreCase(rb.getString("UICalendarView.label."+ev.getId()))) return ev ;
+        } catch (MissingResourceException e) { }
       }
     }
-
     return null ;
   }
 }

@@ -103,7 +103,7 @@ public class UIEventCategoryForm extends UIForm {
       }*/
       if(!CalendarUtils.isEmpty(name)) name = name.trim() ;
       
-      // CS-3009
+      // TODO CS-3009
       name = CalendarUtils.reduceSpace(name) ;
       if(!CalendarUtils.isEmpty(description)) description = description.trim() ;
       UIEventCategoryManager uiManager = uiForm.getAncestorOfType(UIEventCategoryManager.class) ;
@@ -156,7 +156,7 @@ public class UIEventCategoryForm extends UIForm {
           if(uiEventForm != null){ 
             uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
             uiEventForm.refreshCategory() ;
-            // cs-1905          
+            // TODO CS-1905          
             uiEventForm.setSelectedCategory(uiManager.categoryId_) ;
             uiEventForm.setSelectedCategory(eventCat.getId()) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(UIEventForm.TAB_EVENTDETAIL)) ;
@@ -164,7 +164,7 @@ public class UIEventCategoryForm extends UIForm {
           if(uiTaskForm != null) { 
             uiTaskForm.setSelectedTab(UITaskForm.TAB_TASKDETAIL) ;
             uiTaskForm.refreshCategory() ;
-//          cs-1905
+            // TODO CS-1905
             uiTaskForm.setSelectedCategory(eventCat.getName()) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskForm.getChildById(UITaskForm.TAB_TASKDETAIL)) ;
           }

@@ -125,7 +125,7 @@ public class UIEventCategoryForm extends UIForm {
         UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
         uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
         uiEventForm.refreshCategory() ;
-        //cs-2170
+        // TODO CS-2170
         //uiEventForm.setSelectedCategory(uiForm.categoryName);
         uiEventForm.setSelectedCategory(eventCat.getId());
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
@@ -133,7 +133,7 @@ public class UIEventCategoryForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       } catch (RepositoryException e) {
-        uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-invalid", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-exist", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
         return ;
       } catch (Exception e) {
