@@ -193,7 +193,7 @@ public interface CalendarService extends CalendarServiceLegacy {
    * @param isNew
    * @throws Exception
    */
-  public void saveEventCategory(String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception ;
+  public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception ;
 
   /**
    * Remove event category, all events and tasks belong to this category will be destroyed

@@ -115,7 +115,7 @@ public interface CalendarServiceLegacy {
     public List<EventCategory> getEventCategories(SessionProvider userSession, String username) throws Exception ;
 
     /**
-     * @deprecated use {@link CalendarService#saveEventCategory(String, EventCategory, String[], boolean)}
+     * @deprecated use {@link CalendarService#saveEventCategory(String, EventCategory, boolean)}
      */
     public void saveEventCategory(SessionProvider userSession, String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception ;
 
@@ -255,7 +255,13 @@ public interface CalendarServiceLegacy {
      */
     public void removeSharedEvent(SessionProvider systemSession, String username, String calendarId, String eventId) throws Exception ;
 
-   
+    /**
+     * @deprecated use {@link CalendarService#moveEvent(String, String, String, String, List<CalendarEvent>, String)}
+     */
     public void moveEvent(SessionProvider userSession, String formCalendar, String toCalendar, String formType, String toType, List<CalendarEvent> calEvents, String username) throws Exception ;
   
+    /**
+     * @deprecated use {@link CalendarService#saveEventCategory(String, EventCategory, boolean)}
+     */
+    public void saveEventCategory(String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception ;
 }

@@ -111,12 +111,12 @@ public class UIEventCategoryForm extends UIForm {
       eventCat.setName(name) ;
       eventCat.setDescription(description) ;
       try {
-        if(uiForm.isAddNew_) calendarService.saveEventCategory(username, eventCat, null, true) ;
+        if(uiForm.isAddNew_) calendarService.saveEventCategory(username, eventCat, true) ;
         else { 
           eventCat = uiForm.getEventCategory() ;
           eventCat.setName(name) ;
           eventCat.setDescription(description) ;
-          calendarService.saveEventCategory(username, eventCat, new String[]{name, uiForm.getCategoryDescription()}, false) ; 
+          calendarService.saveEventCategory(username, eventCat, false) ; 
         }
         /*ActionResponse actResponse = event.getRequestContext().getResponse() ;
         actResponse.setEvent(new QName("RefreshCalendar"), null) ;*/

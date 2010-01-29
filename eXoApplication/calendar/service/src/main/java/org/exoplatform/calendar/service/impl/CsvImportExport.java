@@ -345,7 +345,7 @@ public class CsvImportExport implements CalendarImportExport {
           EventCategory evCate = new EventCategory() ;
           evCate.setName(exoEvent.getEventCategoryName()) ;
           try{
-            calServie.saveEventCategory(username, evCate, null, true) ;
+            calServie.saveEventCategory(username, evCate, true) ;
           }catch(ItemExistsException e){ 
              evCate = calServie.getEventCategoryByName(username, evCate.getName());
           }catch (Exception e) {
@@ -399,7 +399,7 @@ public class CsvImportExport implements CalendarImportExport {
         EventCategory evCate = new EventCategory() ;
         evCate.setName(exoEvent.getEventCategoryName()) ;
         try{
-          calService.saveEventCategory(username, evCate, null, true) ;
+          calService.saveEventCategory(username, evCate, true) ;
         }catch(ItemExistsException e){ 
           evCate = calService.getEventCategoryByName(username, evCate.getName());
         }catch (Exception e) {

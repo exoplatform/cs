@@ -117,7 +117,7 @@ public class UIEventCategoryForm extends UIForm {
           for (String defaultName : uiManager.defaultEventCategoriesMap.values())
             if (defaultName.equalsIgnoreCase(eventCat.getName()))
               throw new ItemExistsException();
-          calendarService.saveEventCategory(username, eventCat, null, true) ;
+          calendarService.saveEventCategory(username, eventCat, true) ;
         }
         else { 
           eventCat = uiForm.getEventCategory() ;
@@ -126,7 +126,7 @@ public class UIEventCategoryForm extends UIForm {
               throw new ItemExistsException();
           eventCat.setName(name) ;
           eventCat.setDescription(description) ;
-          calendarService.saveEventCategory(username, eventCat, new String[]{name, uiForm.getCategoryDescription()}, false) ; 
+          calendarService.saveEventCategory(username, eventCat, false) ; 
         }
         Long currentPage = uiManager.getCurrentPage() ;
         uiManager.updateGrid() ;

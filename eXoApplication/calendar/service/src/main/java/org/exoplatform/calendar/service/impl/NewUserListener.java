@@ -158,7 +158,7 @@ public class NewUserListener extends UserEventListener {
       for (int id = 0; id < defaultEventCategoryId.length; id ++) {
         eventCategory.setId(defaultEventCategoryId[id]);
         eventCategory.setName(defaultEventCategoryName[id]);
-        cservice_.saveEventCategory(user.getUserName(), eventCategory, null, true);
+        cservice_.saveEventCategory(user.getUserName(), eventCategory, true);
       }
 
       // save default calendar category

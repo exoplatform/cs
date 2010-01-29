@@ -862,7 +862,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try{
-            calService.saveEventCategory(username, evCate, null, true) ;
+            calService.saveEventCategory(username, evCate, true) ;
           }catch(ItemExistsException e){ 
             evCate = calService.getEventCategoryByName(username, evCate.getName());
           } catch (Exception e) {
@@ -960,7 +960,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try{
-            calService.saveEventCategory(username, evCate, null, true) ;
+            calService.saveEventCategory(username, evCate, true) ;
           }catch(ItemExistsException e){ 
             evCate = calService.getEventCategoryByName(username, evCate.getName());
           }catch (Exception e) {
@@ -1420,7 +1420,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try{
-            calService.saveEventCategory(username, evCate, null, true) ;
+            calService.saveEventCategory(username, evCate, true) ;
           }catch(ItemExistsException e){ 
             evCate = calService.getEventCategoryByName(username, evCate.getName());
           } catch (Exception e) {
@@ -1548,7 +1548,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try{
-            calService.saveEventCategory(username, evCate, null, true) ;
+            calService.saveEventCategory(username, evCate, true) ;
           }catch(ItemExistsException e){ 
             evCate = calService.getEventCategoryByName(username, evCate.getName());
           } catch (Exception e) {

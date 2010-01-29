@@ -166,7 +166,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         CalendarService calService = getApplicationComponent(CalendarService.class) ;
         EventCategory eventCategory = new EventCategory() ;
         eventCategory.setName(eventCategoryName);
-        calService.saveEventCategory(MailUtils.getCurrentUser(), eventCategory, null, true) ;
+        calService.saveEventCategory(MailUtils.getCurrentUser(), eventCategory, true) ;
         selectBox.getOptions().add(new SelectItemOption<String>(eventCategory.getName(), eventCategory.getId())) ;
         setSelectedCategory(eventCategory.getId()) ;
       }

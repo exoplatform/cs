@@ -180,9 +180,17 @@ public interface DataStorage {
   /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.impl.DataStorage#saveEventCategory(java.lang.String, org.exoplatform.calendar.service.EventCategory, java.lang.String[], boolean)
    */
+  
+  /**
+   * @deprecated Use {@link #saveEventCategory(String,EventCategory,boolean)}
+   */
+  @Deprecated
   public void saveEventCategory(String username,
                                 EventCategory eventCategory,
                                 String[] values,
+                                boolean isNew) throws Exception;
+  public void saveEventCategory(String username,
+                                EventCategory eventCategory,
                                 boolean isNew) throws Exception;
 
   /* (non-Javadoc)

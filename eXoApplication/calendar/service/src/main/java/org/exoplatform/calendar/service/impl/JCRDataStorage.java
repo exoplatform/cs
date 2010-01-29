@@ -404,7 +404,6 @@ public class JCRDataStorage implements DataStorage {
       Node calNode = calendarHome.getNode(calendarId) ;
       Calendar calendar = getCalendar(new String[]{calendarId}, username, calNode, true) ;
       NodeIterator iter = calNode.getNodes() ;
-      SessionProvider provider = SessionProvider.createSystemProvider() ;
       try {
         while(iter.hasNext()) {
           Node eventNode = iter.nextNode() ;
@@ -795,7 +794,10 @@ public class JCRDataStorage implements DataStorage {
   /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.impl.DataStorage#saveEventCategory(java.lang.String, org.exoplatform.calendar.service.EventCategory, java.lang.String[], boolean)
    */
-  public void saveEventCategory(String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception {
+  public void saveEventCategory(String username, EventCategory eventCategory,String[] values, boolean isNew) throws Exception {
+    saveEventCategory(username, eventCategory, isNew);
+  }
+  public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception {
     Node eventCategoryHome = getEventCategoryHome(username) ;
     Node eventCategoryNode = null ;
     if(isNew){
@@ -1133,7 +1135,7 @@ public class JCRDataStorage implements DataStorage {
     Node calendarNode = getUserCalendarHome(username).getNode(calendarId);
     if(event.getReminders() != null && event.getReminders().size() > 0) {
       //Need to use system session
-      SessionProvider systemSession = SessionProvider.createSystemProvider();
+      //SessionProvider systemSession = SessionProvider.createSystemProvider();
       try {
         Node reminderFolder = getReminderFolder(event.getFromDateTime()) ;
         saveEvent(calendarNode, event, reminderFolder, isNew) ;
@@ -1324,8 +1326,6 @@ public class JCRDataStorage implements DataStorage {
     if(eventNode.hasProperty(Utils.EXO_SEND_OPTION)) event.setSendOption(eventNode.getProperty(Utils.EXO_SEND_OPTION).getString()) ;
     if(eventNode.hasProperty(Utils.EXO_MESSAGE)) event.setMessage(eventNode.getProperty(Utils.EXO_MESSAGE).getString()) ;
     if(eventNode.hasProperty(Utils.EXO_DATE_MODIFIED)) event.setLastUpdatedTime(eventNode.getProperty(Utils.EXO_DATE_MODIFIED).getDate().getTime()) ;
-
-    SessionProvider systemSession =  SessionProvider.createSystemProvider() ;
     try {
       event.setReminders(getReminders(eventNode)) ;
     }catch (Exception e) {
@@ -1389,7 +1389,6 @@ public class JCRDataStorage implements DataStorage {
         eventNode = calendarNode.addNode(event.getId(), Utils.EXO_CALENDAR_EVENT) ;
         eventNode.setProperty(Utils.EXO_ID, event.getId()) ;
       }
-      SessionProvider systemSession =  SessionProvider.createSystemProvider() ;
       try {
         removeReminder(eventNode) ; 
       }catch (Exception e) {
@@ -2468,8 +2467,7 @@ public class JCRDataStorage implements DataStorage {
    * @see org.exoplatform.calendar.service.impl.DataStorage#searchEvent(java.lang.String, org.exoplatform.calendar.service.EventQuery, java.lang.String[])
    */
   public EventPageList searchEvent(String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception {
-    List<CalendarEvent> events = new ArrayList<CalendarEvent>(); 
-    SessionProvider systemSession = createSystemProvider() ;
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>();
     try {
       if(eventQuery.getCalendarId() == null) {
         events.addAll(getUserEvents(username, eventQuery));
@@ -2971,7 +2969,6 @@ public class JCRDataStorage implements DataStorage {
     filterList.addAll(Arrays.asList(calSetting.getFilterSharedCalendars())) ;
     eventQuery.setFilterCalendarIds(filterList.toArray(new String[]{})) ;
     events.addAll(getUserEvents(username, eventQuery)) ;
-    SessionProvider systemSession = SessionProvider.createSystemProvider() ;
     try {
       events.addAll(getSharedEvents(username, eventQuery)) ;
       if(publicCalendarIds != null && publicCalendarIds.length > 0) { 
@@ -3073,7 +3070,6 @@ public class JCRDataStorage implements DataStorage {
    * @see org.exoplatform.calendar.service.impl.DataStorage#moveEvent(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.List, java.lang.String)
    */
   public void moveEvent(String formCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
-    SessionProvider systemSession = createSystemProvider() ;
     try {
       switch (Integer.parseInt(fromType)) {
       case  Calendar.TYPE_PRIVATE :  
@@ -3219,7 +3215,6 @@ public class JCRDataStorage implements DataStorage {
    * @see org.exoplatform.calendar.service.impl.DataStorage#confirmInvitation(java.lang.String, java.lang.String, int, java.lang.String, java.lang.String, int)
    */
   public void confirmInvitation(String fromUserId, String toUserId,int calType, String calendarId, String eventId, int answer) throws Exception{
-    SessionProvider session = createSystemProvider() ;
     try {
       Map<String, String> pars = new HashMap<String, String>() ;
       CalendarEvent event = null ;
@@ -3273,7 +3268,6 @@ public class JCRDataStorage implements DataStorage {
    * @see org.exoplatform.calendar.service.impl.DataStorage#confirmInvitation(java.lang.String, java.lang.String, java.lang.String, int, java.lang.String, java.lang.String, int)
    */
   public void confirmInvitation(String fromUserId, String confirmingEmail, String confirmingUser,int calType, String calendarId, String eventId, int answer) throws Exception{
-    SessionProvider session = createSystemProvider() ;
     try {
       Map<String, String> pars = new HashMap<String, String>() ;
       CalendarEvent event = null ;

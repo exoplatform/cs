@@ -179,12 +179,20 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    */
   public void saveEventCategory(String username,
                                 EventCategory eventCategory,
-                                String[] values,
                                 boolean isNew) throws Exception {
     EventCategory ev = getEventCategoryByName(username, eventCategory.getName());
-    if(isNew && ev != null) throw new ItemExistsException();
-    storage_.saveEventCategory(username, eventCategory, values, isNew);
-
+    if (ev != null && (isNew || !ev.getId().equals(eventCategory.getId()))) throw new ItemExistsException(); 
+    storage_.saveEventCategory(username, eventCategory, isNew);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public void saveEventCategory(String username,
+                                EventCategory eventCategory,
+                                String[] values,
+                                boolean isNew) throws Exception {
+    saveEventCategory(username, eventCategory, isNew);
   }
 
   /**
@@ -769,7 +777,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                                 EventCategory eventCategory,
                                 String[] values,
                                 boolean isNew) throws Exception {
-    saveEventCategory(username, eventCategory, values, isNew);
+    saveEventCategory(username, eventCategory, isNew);
 
   }
 

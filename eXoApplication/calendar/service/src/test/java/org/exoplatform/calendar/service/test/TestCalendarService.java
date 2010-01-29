@@ -220,7 +220,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     String name = "eventCategoryName" ;
     eventCategory.setName(name) ;
     eventCategory.setDescription("description") ;
-    calendarService_.saveEventCategory(username, eventCategory, null, true) ;
+    calendarService_.saveEventCategory(username, eventCategory, true) ;
     assertEquals(1, calendarService_.getEventCategories(username).size()) ;
     assertNotNull(calendarService_.getEventCategory(username, eventCategory.getId())) ;
 
@@ -275,7 +275,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     EventCategory eventCategory = new EventCategory();
     eventCategory.setName("EventCategoryName1");
     eventCategory.setDescription("EventCategoryDescription");
-    calendarService_.saveEventCategory(username, eventCategory, null, true) ;
+    calendarService_.saveEventCategory(username, eventCategory, true) ;
     
     CalendarEvent calEvent = new CalendarEvent();
     calEvent.setEventCategoryId(eventCategory.getName());
@@ -314,7 +314,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     EventCategory eventCategory = new EventCategory();
     eventCategory.setName("EventCategoryName2");
     eventCategory.setDescription("EventCategoryDescription");
-    calendarService_.saveEventCategory(username, eventCategory, null, true) ;
+    calendarService_.saveEventCategory(username, eventCategory, true) ;
     
     CalendarEvent calEvent = new CalendarEvent();
     calEvent.setEventCategoryId(eventCategory.getName());
@@ -370,7 +370,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     EventCategory eventCategory = new EventCategory();
     eventCategory.setName("LastUpdatedTimeEventCategoryName");
     eventCategory.setDescription("EventCategoryDescription");
-    calendarService_.saveEventCategory(username, eventCategory, null, true) ;
+    calendarService_.saveEventCategory(username, eventCategory, true) ;
     
     CalendarEvent calEvent = new CalendarEvent();
     calEvent.setEventCategoryId(eventCategory.getName());
