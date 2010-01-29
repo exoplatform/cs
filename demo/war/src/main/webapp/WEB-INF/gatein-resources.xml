@@ -19,10 +19,10 @@
     <css-path>/templates/skin/webui/component/UIHomePagePortlet/DefaultStylesheet.css</css-path>
   </portlet-skin>
   <portlet-skin>
-	<application-name>web</application-name>
-	<portlet-name>BannerPortlet</portlet-name>
+	<application-name>csdemo</application-name>
+	<portlet-name>CSBannerPortlet</portlet-name>
 	<skin-name>Default</skin-name>
-	<css-path>/templates/skin/webui/component/UIBannerPortlet/DefaultStylesheet.css</css-path>
+	<css-path>/templates/skin/Stylesheet.css</css-path>
   </portlet-skin>	
 </gatein-resources>
 

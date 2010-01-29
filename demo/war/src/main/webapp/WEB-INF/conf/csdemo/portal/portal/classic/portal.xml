@@ -33,15 +33,8 @@
  	<portal-layout>
 	  <portlet-application>
       <portlet>
-        <application-ref>web</application-ref>
-        <portlet-ref>BannerPortlet</portlet-ref>
-        <preferences>
-          <preference>
-            <name>template</name>
-            <value>system:/templates/UIBannerPortlet.gtmpl</value>
-            <read-only>false</read-only>
-          </preference>
-        </preferences>
+        <application-ref>csdemo</application-ref>
+        <portlet-ref>CSBannerPortlet</portlet-ref>
       </portlet>
       <access-permissions>Everyone</access-permissions>
 	    <show-info-bar>false</show-info-bar>
