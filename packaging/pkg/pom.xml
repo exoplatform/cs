@@ -186,8 +186,7 @@
                               <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument><!-- to get the server ref install -->
                               <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
                               <argument>-Dclean.server=${exo.projects.app.tomcat.version}</argument>
-                              <argument>-Dexo.m2.home=${maven.home}</argument>
-							  <argument>-Dorg.exoplatform.portal.version=${org.exoplatform.portal.version}</argument>
+                              <argument>-Dexo.m2.home=${maven.home}</argument> 
                               <argument>-Xshare:auto</argument>
                               <argument>-Xms128m</argument>
                               <argument>-Xmx512m</argument>
@@ -288,7 +287,6 @@
                               <argument>-Dexo.m2.repos=file://${settings.localRepository}</argument>
                               <argument>-Dclean.server=${exo.projects.app.jboss.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
-							  <argument>-Dorg.exoplatform.portal.version=${org.exoplatform.portal.version}</argument>
                               <argument>-Xshare:auto</argument>
                               <argument>-Xms128m</argument>
                               <argument>-Xmx512m</argument>

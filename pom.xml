@@ -30,6 +30,9 @@
       <org.exoplatform.portal.version>3.0.0-Beta05</org.exoplatform.portal.version>
       <exo.tool.framework.junit.version>1.2.0</exo.tool.framework.junit.version>
       <org.exoplatform.exopackage.version>1.1.0-Beta05</org.exoplatform.exopackage.version>
+	  
+	  <!--plaform dependencies-->
+	  <exo.platform.web.fck.version>3.0.0-Beta04-SNAPSHOT</exo.platform.web.fck.version>
        
       <!-- 3rd parties -->
       <commons-lang.version>2.3</commons-lang.version>
@@ -44,11 +47,39 @@
       <quartz.version>1.5.0-RC2</quartz.version>
       <rome.version>0.9</rome.version>
       <picocontainer.version>1.1</picocontainer.version>
-      <commons-io.version>1.3.2</commons-io.version>
+      <commons-io.version>1.4</commons-io.version>
       <junit.version>3.8.2</junit.version>
       <xpp3.version>1.1.3.4.O</xpp3.version>
       <mockito.version>1.8.1</mockito.version> 
-    
+	  
+	  <!-- exo.cs.extension.ear-->
+	  <org.mortbay.jetty.cometd-bayeux.version>6.1.11</org.mortbay.jetty.cometd-bayeux.version>
+      <org.mortbay.jetty.cometd-api.version>0.9.20080221</org.mortbay.jetty.cometd-api.version>
+	  <org.mortbay.jetty.jetty-util.version>6.1.11</org.mortbay.jetty.jetty-util.version>
+	  <!-- test-calendar-selenium-->
+	  <selenium-java-client-driver.version>1.0-beta-1</selenium-java-client-driver.version>
+	  <!--exo.cs.eXoApplication.calendar.service-->
+	  <ical4j.version>1.0-beta5</ical4j.version>
+	  <jcrom.version>1.2</jcrom.version>
+	  <!--exo.cs.eXoApplication.chat.service-->
+	  <jivesoftware.smack.version>3.1.0</jivesoftware.smack.version>
+	  <jivesoftware.smackx.version>3.1.0</jivesoftware.smackx.version>
+      <dom4j.version>1.6.1</dom4j.version>
+      <commons-fileupload.version>1.2.1</commons-fileupload.version>
+	  <!--exo.cs.eXoApplication.contact.service-->
+	  <jpim-0.1.version>1.0</jpim-0.1.version>
+	  <!--exo.cs.eXoApplication.organization.client.openfire-->
+	  <openfire.version>3.6.4</openfire.version>
+	  <!--exo.cs.eXoApplication.organization.service-->
+	  <commons-codec.version>1.3</commons-codec.version>
+	  <sjsxp.version>1.0</sjsxp.version>
+      <stax-api.version>1.0</stax-api.version>
+	  <!--need when deploy CS-->
+	  <org.fontbox.version>0.1.0</org.fontbox.version>
+	  <jdom.version>1.0</jdom.version>
+	  <org.slf4j.slf4j-api.version>1.5.6</org.slf4j.slf4j-api.version>
+	  <org.slf4j.slf4j-jdk14.version>1.5.6</org.slf4j.slf4j-jdk14.version>
+
     <!-- ************** -->
     <!-- Build settings -->
 	<org.exoplatform.cs.version>2.0.0-Alpha02-SNAPSHOT</org.exoplatform.cs.version>
@@ -269,7 +300,90 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
       <version>${mockito.version}</version>
-    </dependency>                 
+    </dependency>
+	<!-- exo.cs.extension.ear-->
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>cometd-bayeux</artifactId>
+      <version>${org.mortbay.jetty.cometd-bayeux.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>cometd-api</artifactId>
+	  <version>${org.mortbay.jetty.cometd-api.version}</version>
+    </dependency>
+	<dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-util</artifactId>
+	  <version>${org.mortbay.jetty.jetty-util.version}</version>
+    </dependency>
+	<!-- test-calendar-selenium-->
+	<dependency>
+      <groupId>org.openqa.selenium.client-drivers</groupId>
+      <artifactId>selenium-java-client-driver</artifactId>
+	  <version>${selenium-java-client-driver.version}</version>
+    </dependency>
+	<!--exo.cs.eXoApplication.calendar.service-->
+	<dependency>
+	  <groupId>ical4j</groupId>
+	  <artifactId>ical4j</artifactId>
+	  <version>${ical4j.version}</version>
+	</dependency>
+	<dependency>
+	  <groupId>org.jcrom</groupId>
+	  <artifactId>jcrom</artifactId>
+	  <version>${jcrom.version}</version>
+	</dependency>
+	<!--exo.cs.eXoApplication.chat.service-->
+	<dependency>
+      <groupId>jivesoftware</groupId>
+      <artifactId>smack</artifactId>
+	  <version>${jivesoftware.smack.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>jivesoftware</groupId>
+      <artifactId>smackx</artifactId>
+	  <version>${jivesoftware.smackx.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+	  <version>${dom4j.version}</version>
+    </dependency>
+	<dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+	  <version>${commons-fileupload.version}</version>
+    </dependency>
+	<!--exo.cs.eXoApplication.contact.service-->
+	<dependency>
+	  <groupId>net.wimpi.pim</groupId>
+	  <artifactId>jpim-0.1</artifactId>
+	  <version>${jpim-0.1.version}</version>
+	</dependency>
+	<!--exo.cs.eXoApplication.organization.client.openfire-->
+	<dependency>
+      <groupId>openfire</groupId>
+      <artifactId>openfire</artifactId>
+	  <version>${openfire.version}</version>
+    </dependency>
+	<!--exo.cs.eXoApplication.organization.service-->
+	<dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+	  <version>${commons-codec.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.stream</groupId>
+      <artifactId>sjsxp</artifactId>
+	  <version>${sjsxp.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>stax</groupId>
+      <artifactId>stax-api</artifactId>
+	  <version>${stax-api.version}</version>
+    </dependency>
+	
   </dependencies>     
 </dependencyManagement>     
 <build>

@@ -22,9 +22,9 @@ function getModule(params)
     
   module.comet.cometd =
 	new Project("org.exoplatform.comet", "exo-comet-webapp", "war", cometVersion).
-    addDependency(new Project("org.mortbay.jetty", "cometd-bayeux", "jar", "6.1.11")).
-	addDependency(new Project("org.mortbay.jetty", "jetty-util", "jar", "6.1.11")).
-	addDependency(new Project("org.mortbay.jetty", "cometd-api", "jar", "0.9.20080221")).
+    addDependency(new Project("org.mortbay.jetty", "cometd-bayeux", "jar", "${org.mortbay.jetty.cometd-bayeux.version}")).
+	addDependency(new Project("org.mortbay.jetty", "jetty-util", "jar", "${org.mortbay.jetty.jetty-util.version}")).
+	addDependency(new Project("org.mortbay.jetty", "cometd-api", "jar", "${org.mortbay.jetty.cometd-api.version}")).
 	addDependency(new Project("org.exoplatform.comet", "exo-comet-service", "jar", cometVersion));  	
 	module.comet.cometd.deployName = "cometd";
   // CS
@@ -32,8 +32,8 @@ function getModule(params)
   module.eXoApplication = {};
   module.eXoApplication.mail = 
     new Project("org.exoplatform.cs", "exo.cs.eXoApplication.mail.webapp", "war", module.version).
-    addDependency(new Project("javax.mail", "mail", "jar", "1.4.1")).
-	addDependency(new Project("org.fontbox", "fontbox", "jar", "0.1.0")).
+    addDependency(new Project("javax.mail", "mail", "jar", "${javax.mail.mail.version}")).
+	addDependency(new Project("org.fontbox", "fontbox", "jar", "${org.fontbox.version}")).
     addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.mail.service", "jar",  module.version));
 	
   module.eXoApplication.mail.deployName = "mail";
@@ -43,15 +43,15 @@ function getModule(params)
       addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.calendar.service", "jar",  module.version)).
 	  //addDependency(new Project("org.exoplatform.ws", "exo.ws.frameworks.json", "jar", 1.3)).
 	  //addDependency(ws.frameworks.cometd).
-	  addDependency(new Project("rome", "rome", "jar", "0.8")).
-	  addDependency(new Project("jdom", "jdom", "jar", "1.0")).
-      addDependency(new Project("ical4j", "ical4j", "jar", "1.0-beta5")) ;
+	  addDependency(new Project("rome", "rome", "jar", "${rome.version}")).
+	  addDependency(new Project("jdom", "jdom", "jar", "${jdom.version}")).
+      addDependency(new Project("ical4j", "ical4j", "jar", "${ical4j.version}")) ;
   module.eXoApplication.calendar.deployName = "calendar";
     
   module.eXoApplication.contact = 
     new Project("org.exoplatform.cs", "exo.cs.eXoApplication.contact.webapp", "war", module.version).
       addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.contact.service", "jar",  module.version)).
-      addDependency(new Project("net.wimpi.pim", "jpim-0.1", "jar",  "1.0"));
+      addDependency(new Project("net.wimpi.pim", "jpim-0.1", "jar",  "${jpim-0.1.version}"));
   module.eXoApplication.contact.deployName = "contact";
   
   module.eXoApplication.content = 
@@ -66,13 +66,13 @@ function getModule(params)
   	  //addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.webapp", "war", module.version)).
       addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.client.openfire", "jar", module.version)).
   	  //addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.organization.webapp", "war", module.version)).
-  	  addDependency(new Project("jivesoftware", "smack", "jar", "3.1.0")).
-  	  addDependency(new Project("jivesoftware", "smackx", "jar", "3.1.0")).
-  	  addDependency(new Project("org.jcrom", "jcrom", "jar", "1.2")).
-      addDependency(new Project("commons-fileupload", "commons-fileupload", "jar", "1.0")).
-	  addDependency(new Project("commons-io", "commons-io", "jar", "1.3")).
-	  addDependency(new Project("org.slf4j", "slf4j-api", "jar", "1.5.6")).	  
-	  addDependency(new Project("org.slf4j", "slf4j-jdk14", "jar", "1.5.6"))
+  	  addDependency(new Project("jivesoftware", "smack", "jar", "${jivesoftware.smack.version}")).
+  	  addDependency(new Project("jivesoftware", "smackx", "jar", "${jivesoftware.smackx.version}")).
+  	  addDependency(new Project("org.jcrom", "jcrom", "jar", "${jcrom.version}")).
+      addDependency(new Project("commons-fileupload", "commons-fileupload", "jar", "${commons-fileupload.version}")).
+	  addDependency(new Project("commons-io", "commons-io", "jar", "${commons-io.version}")).
+	  addDependency(new Project("org.slf4j", "slf4j-api", "jar", "${org.slf4j.slf4j-api.version}")).	  
+	  addDependency(new Project("org.slf4j", "slf4j-jdk14", "jar", "${org.slf4j.slf4j-jdk14.version}"))
 		  	
   	);
   module.eXoApplication.chat.deployName = "chat";
@@ -156,7 +156,7 @@ function deployOpenfireServer(mainServer, module) {
 	  }
   }
    
-  server.cleanServer = "openfire-3.6.4";
+  server.cleanServer = "openfire-" + "${openfire.version}";
   server.name = "exo-openfire";
   server.serverHome = eXo.env.workingDir + "/" + server.name;
   server.deployLibDir = server.serverHome + "/lib";

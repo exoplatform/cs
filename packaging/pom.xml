@@ -49,21 +49,21 @@
        
        <!-- dependencies for cometd -->
 
-  <dependency>
-    <groupId>org.mortbay.jetty</groupId>
-    <artifactId>cometd-bayeux</artifactId>
-    <version>6.1.11</version>
-  </dependency>
-  <dependency>
-    <groupId>org.mortbay.jetty</groupId>
-    <artifactId>cometd-api</artifactId>
-    <version>0.9.20080221</version>
-  </dependency>
-  <dependency>
-    <groupId>org.mortbay.jetty</groupId>
-    <artifactId>jetty-util</artifactId>
-    <version>6.1.11</version>
-  </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>cometd-bayeux</artifactId>
+      <version>${org.mortbay.jetty.cometd-bayeux.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>cometd-api</artifactId>
+	  <version>${org.mortbay.jetty.cometd-api.version}</version>
+    </dependency>
+	<dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-util</artifactId>
+	  <version>${org.mortbay.jetty.jetty-util.version}</version>
+    </dependency>
 
 
 </dependencies>

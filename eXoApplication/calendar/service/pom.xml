@@ -49,9 +49,7 @@
 			</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
-		 
-
+		
 		<dependency>
       		<groupId>org.exoplatform.comet</groupId>
       		<artifactId>exo-comet-service</artifactId>
@@ -68,20 +66,20 @@
 		<dependency>
 			<groupId>ical4j</groupId>
 			<artifactId>ical4j</artifactId>
-			<version>1.0-beta5</version>
+			<version>${ical4j.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>rome</groupId>
 			<artifactId>rome</artifactId>
-			<version>0.8</version>
+			<version>${rome.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jcrom</groupId>
 			<artifactId>jcrom</artifactId>
-			<version>1.2</version>
+			<version>${jcrom.version}</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

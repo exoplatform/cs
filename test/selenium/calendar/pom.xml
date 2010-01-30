@@ -24,12 +24,12 @@
     </repository>
   </repositories>
   <dependencies>
-    <dependency>
+	<dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.2</version>
-      <scope>test</scope>
-    </dependency>
+      <version>${junit.version}</version>
+	  <scope>test</scope>
+    </dependency> 
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>test-tools</artifactId>
@@ -39,7 +39,7 @@
     <dependency>
       <groupId>org.openqa.selenium.client-drivers</groupId>
       <artifactId>selenium-java-client-driver</artifactId>
-      <version>1.0-beta-1</version>
+      <version>${selenium-java-client-driver.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

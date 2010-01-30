@@ -24,7 +24,7 @@
     <dependency>
       <groupId>openfire</groupId>
       <artifactId>openfire</artifactId>
-      <version>3.6.4</version>
+	  <version>${openfire.version}</version>
     </dependency>
   </dependencies>
 </project>

@@ -7,7 +7,7 @@ function getProduct(version) {
   product.name = "eXoPortal" ;
   product.portalwar = "portal.war" ;
   product.codeRepo = "portal" ;//module in modules/portal/module.js
-  product.serverPluginVersion = java.lang.System.getProperty("org.exoplatform.portal.version") ; // CHANGED for CS to match portal version. It was ${project.version}
+  product.serverPluginVersion = "${org.exoplatform.portal.version}" ; // CHANGED for CS to match portal version. It was ${project.version}
 
   var kernel = Module.GetModule("kernel") ;
   var core = Module.GetModule("core") ;
@@ -35,7 +35,7 @@ function getProduct(version) {
   product.addDependencies(portal.starter);  
   
   //FCK editor
-  portal.fck = new Project("org.exoplatform.platform", "exo.platform.web.fck", "war", "3.0.0-Beta04-SNAPSHOT");
+  portal.fck = new Project("org.exoplatform.platform", "exo.platform.web.fck", "war", "${exo.platform.web.fck.version}");
   portal.fck.deployName = "fck";
   product.addDependencies(portal.fck);	
 
@@ -65,7 +65,6 @@ function getProduct(version) {
   /* cleanup duplicated lib */
   //product.removeDependency(new Project("commons-httpclient", "commons-httpclient", "jar", "3.0"));
   product.removeDependency(new Project("javax.mail", "mail", "jar", "1.4"));
-  product.removeDependency(new Project("rome", "rome", "jar", "0.8"));
    
 
   product.module = cs ;

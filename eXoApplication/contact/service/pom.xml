@@ -36,15 +36,8 @@
       <artifactId>exo.jcr.component.ext</artifactId>
       <version>${org.exoplatform.jcr.version}</version>            
     </dependency>
-    
-    <dependency>
-		  <groupId>net.wimpi.pim</groupId>
-		  <artifactId>jpim-0.1</artifactId>
-		  <version>1.0</version>
-		  <scope>compile</scope>
-	  </dependency>
 		
-		<dependency>
+    <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
       <version>${project.version}</version>            
@@ -61,5 +54,12 @@
       <version>${org.exoplatform.ws.version}</version>
     </dependency> 
 		
+	<dependency>
+	  <groupId>net.wimpi.pim</groupId>
+	  <artifactId>jpim-0.1</artifactId>
+	  <version>${jpim-0.1.version}</version>
+	  <scope>compile</scope>
+	</dependency>
+	
   </dependencies>
 </project>
