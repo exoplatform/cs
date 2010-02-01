@@ -22,8 +22,26 @@
     </dependency>
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.commons</artifactId>
+      <version>${org.exoplatform.kernel.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.component.common</artifactId>
       <version>${org.exoplatform.kernel.version}</version>
+    </dependency>
+    <dependency>
+	  <groupId>org.exoplatform.core</groupId>
+	  <artifactId>exo.core.component.security.core</artifactId>
+	  <version>${org.exoplatform.core.version}</version>
+	  <scope>compile</scope>
+	</dependency>
+	<dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.organization.api</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
@@ -82,6 +100,43 @@
 	  <version>${commons-io.version}</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+	  <version>${javax.servlet.servlet-api.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.jcr</groupId>
+      <artifactId>jcr</artifactId>
+	  <version>${javax.jcr.api.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>quartz</groupId>
+      <artifactId>quartz</artifactId>
+	  <version>${quartz.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+	  <version>${commons-logging.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>picocontainer</groupId>
+      <artifactId>picocontainer</artifactId>
+	  <version>${picocontainer.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
+	  <version>${javax.ws.rs.jsr311-api.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    
   </dependencies>
   <reporting>
     <plugins>

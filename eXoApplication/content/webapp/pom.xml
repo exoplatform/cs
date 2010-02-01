@@ -13,10 +13,34 @@
   <url>http://www.exoplatform.org</url>
   <description>eXo Content application</description>
   
-  <dependencies> 
+  <dependencies>
+  	<dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.container</artifactId>
+      <version>${org.exoplatform.kernel.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.commons</artifactId>
+      <version>${org.exoplatform.kernel.version}</version>
+      <scope>provided</scope>
+    </dependency> 
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.webui.portal</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.webui.core</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.web</artifactId>
       <version>${org.exoplatform.portal.version}</version>
       <scope>provided</scope>
     </dependency>

@@ -13,14 +13,61 @@
   <url>http://www.exoplatform.org</url>
   <description>eXo contact application</description>
   
-  <dependencies> 
+  <dependencies>
+  	<dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.container</artifactId>
+      <version>${org.exoplatform.kernel.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.component.common</artifactId>
+      <version>${org.exoplatform.kernel.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  	<dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.commons</artifactId>
+      <version>${org.exoplatform.kernel.version}</version>
+      <scope>provided</scope>
+    </dependency> 
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.webui.portal</artifactId>
       <version>${org.exoplatform.portal.version}</version>
       <scope>provided</scope>
     </dependency>
-    
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.webui.core</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.web</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.webui.eXo</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.organization.api</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.jcr</groupId>
+      <artifactId>exo.jcr.component.core</artifactId>
+      <version>${org.exoplatform.jcr.version}</version>
+      <scope>provided</scope>      
+    </dependency>
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ext</artifactId>
@@ -50,10 +97,18 @@
     </dependency>
     
     <dependency>
-      		<groupId>org.exoplatform.comet</groupId>
-      		<artifactId>exo-comet-service</artifactId>
-      		<scope>provided</scope>
+      <groupId>org.exoplatform.comet</groupId>
+      <artifactId>exo-comet-service</artifactId>
+      <scope>provided</scope>
     </dependency>
+    
+    <dependency>
+      <groupId>javax.jcr</groupId>
+      <artifactId>jcr</artifactId>
+	  <version>${javax.jcr.api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    
   </dependencies>
   
 
