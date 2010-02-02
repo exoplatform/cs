@@ -200,10 +200,11 @@ public class XMPPMessenger {
       }
     } catch (XMPPException e) {
       if (LOGGER.isDebugEnabled()) {
-        LOGGER.error("Can't create XMPP session for user '" + username + "'. Exception: " + e);
-        e.printStackTrace();
+        LOGGER.error("Can't create XMPP session for user '" + username
+            + "'. Chat Server is not accessible . Please check configuration of the client and server.");
       }
-      throw new XMPPException(new XMPPError(XMPPError.Condition.remote_server_not_found, "Error login: Openfire server isn't started"));
+      throw new XMPPException(new XMPPError(XMPPError.Condition.remote_server_not_found,
+                                            "Error login: Openfire server isn't started"));
     }
 
   }
@@ -234,14 +235,13 @@ public class XMPPMessenger {
       LOGGER.warn("User '" + username + "' is not registered on the server.");
     return session;
   }
-  
+
   /**
-   * 
    * @param username the user name
    * @return the UIStateSession or null if user is not registered on the server.
    */
   public UIStateSession getUISateSession(String username) {
-    return (UIStateSession)sessions_.get(username);
+    return (UIStateSession) sessions_.get(username);
   }
 
 }
