@@ -197,8 +197,8 @@ public class XMPPMessenger {
       }
     } catch (XMPPException e) {
       if (LOGGER.isDebugEnabled()) {
-        LOGGER.error("Can't create XMPP session for user '" + username + "'. Exception: " + e);
-        e.printStackTrace();
+        LOGGER.error("Can't create XMPP session for user '" + username
+            + "'. Chat Server is not accessible . Please check configuration of the client and server.");
       }
       throw new XMPPException("Error login!");
     }
