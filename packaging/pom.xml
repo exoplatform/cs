@@ -25,6 +25,12 @@
          <artifactId>exo.portal.server.tomcat.patch</artifactId>
          <version>${org.exoplatform.portal.version}</version>
        </dependency>       
+
+       <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.server.jboss.patch-ear</artifactId>
+         <version>${org.exoplatform.portal.version}</version>
+       </dependency>     
         
        <dependency>
          <groupId>org.exoplatform.portal</groupId>
@@ -35,15 +41,15 @@
        
        <!-- cometd -->
        <dependency>
-         <groupId>org.exoplatform.comet</groupId>
-         <artifactId>exo-comet-service</artifactId>
-         <version>${org.exoplatform.comet.version}</version>
+         <groupId>org.exoplatform.platform</groupId>
+         <artifactId>exo.platform.commons.comet.service</artifactId>
+         <version>${org.exoplatform.platform.version}</version>
          <type>jar</type>
        </dependency>
        <dependency>
-         <groupId>org.exoplatform.comet</groupId>
-         <artifactId>exo-comet-webapp</artifactId>
-         <version>${org.exoplatform.comet.version}</version>
+         <groupId>org.exoplatform.platform</groupId>
+         <artifactId>exo.platform.commons.comet.webapp</artifactId>
+         <version>${org.exoplatform.platform.version}</version>
          <type>war</type>
        </dependency>
        

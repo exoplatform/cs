@@ -68,9 +68,9 @@
       <scope>provided</scope>      
     </dependency>
     <dependency>
-      <groupId>org.exoplatform.comet</groupId>
-      <artifactId>exo-comet-service</artifactId>
-      <scope>provided</scope>
+		<groupId>org.exoplatform.platform</groupId>
+		<artifactId>exo.platform.commons.comet.service</artifactId>
+		<scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.cs</groupId>

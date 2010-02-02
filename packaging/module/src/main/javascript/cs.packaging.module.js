@@ -16,16 +16,16 @@ function getModule(params)
  
   	// COMET (required by CS)
   	// TODO, should be passed in params and have its own module .js definition 
-  var cometVersion = "${org.exoplatform.comet.version}";
+  var cometVersion = "${org.exoplatform.platform.version}";
   module.comet = {};
 
     
   module.comet.cometd =
-	new Project("org.exoplatform.comet", "exo-comet-webapp", "war", cometVersion).
+	new Project("org.exoplatform.platform", "exo.platform.commons.comet.webapp", "war", cometVersion).
     addDependency(new Project("org.mortbay.jetty", "cometd-bayeux", "jar", "${org.mortbay.jetty.cometd-bayeux.version}")).
 	addDependency(new Project("org.mortbay.jetty", "jetty-util", "jar", "${org.mortbay.jetty.jetty-util.version}")).
 	addDependency(new Project("org.mortbay.jetty", "cometd-api", "jar", "${org.mortbay.jetty.cometd-api.version}")).
-	addDependency(new Project("org.exoplatform.comet", "exo-comet-service", "jar", cometVersion));  	
+	addDependency(new Project("org.exoplatform.platform", "exo.platform.commons.comet.service", "jar", cometVersion));  	
 	module.comet.cometd.deployName = "cometd";
   // CS
 
@@ -41,8 +41,6 @@ function getModule(params)
   module.eXoApplication.calendar = 
     new Project("org.exoplatform.cs", "exo.cs.eXoApplication.calendar.webapp", "war", module.version).
       addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.calendar.service", "jar",  module.version)).
-	  //addDependency(new Project("org.exoplatform.ws", "exo.ws.frameworks.json", "jar", 1.3)).
-	  //addDependency(ws.frameworks.cometd).
 	  addDependency(new Project("rome", "rome", "jar", "${rome.version}")).
 	  addDependency(new Project("jdom", "jdom", "jar", "${jdom.version}")).
       addDependency(new Project("ical4j", "ical4j", "jar", "${ical4j.version}")) ;
