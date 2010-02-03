@@ -682,7 +682,7 @@
 	border-left: 1px solid #e8e8e8; /* orientation=rt */
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
-	padding: 0px 5px;
+	padding: 0px;
 	white-space: nowrap;
 	line-height: 15px;
 }
@@ -698,8 +698,7 @@
 	border-left: none;
 	border-right: 1px solid #e8e8e8; /* orientation=lt */
 	border-left: 1px solid #e8e8e8; /* orientation=rt */
-	padding: 0px 0px 0px 6px; /* orientation=lt */
-	padding: 0px 6px 0px 0px; /* orientation=rt */
+	padding: 0px;
 }
 
 .UIMailPortlet .UIMessageList .UIGrid td a {
@@ -719,6 +718,8 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .ReadItem {
 	white-space: nowrap;
+	padding-left: 6px; /* orientation=lt */
+	padding-right: 6px; /* orientation=rt */	
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .SubjectItem{
@@ -791,7 +792,7 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace input.checkbox {
-	margin: 2px 0px 0px 0px;
+	margin: 2px 0px 0px 2px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .ResizeReadingPane {
@@ -1234,6 +1235,10 @@
 	font-weight: bold ;
 }
 
+.UIMailPortlet .MailWorkingWorkspace .UIGrid .UnreadItem {
+	padding-left: 6px; /* orientation=lt */
+	padding-left: 6px; /* orientation=rt */
+}
 
 /*=======================SubjectMail========================*/
 .UIMailPortlet .SubjectMail {
@@ -1883,7 +1888,7 @@
 
 /******************* UIPopupDeleteAccountContainer ****************/
 .UIPopupDeleteAccountContainer {
-	padding: 10px;
+	padding: 0px;
 }
 
 .UIPopupDeleteAccountContainer .UIAccountList {

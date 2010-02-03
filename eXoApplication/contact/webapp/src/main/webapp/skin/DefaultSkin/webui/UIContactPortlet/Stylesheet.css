@@ -710,6 +710,7 @@
 	float: right; /* orientation=rt */
 	padding-right: 10px; /* orientation=lt */
 	padding-left: 10px; /* orientation=rt */
+	width: 46%;
 }
 
 .UIContactPortlet .InfoContainer .RightContent {
