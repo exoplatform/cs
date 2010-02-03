@@ -46,7 +46,7 @@
 		<servlet-class>org.exoplatform.services.portletcontainer.impl.servlet.ServletWrapper</servlet-class>
 	</servlet>
 
-	<servlet>
+	<!--servlet>
 		<servlet-name>MessengerServlet</servlet-name>
 		<description></description>
 		<servlet-class>org.exoplatform.services.xmpp.servlet.MessengerServlet</servlet-class>
@@ -58,30 +58,30 @@
 			<param-name>time-check-event</param-name>
 			<param-value>1000</param-value>
 		</init-param>
-	</servlet>
+	</servlet-->
   
-  <servlet>
+  <!--servlet>
     <servlet-name>FileExchange</servlet-name>
     <servlet-class>org.exoplatform.services.xmpp.rest.FileExchangeServlet</servlet-class>
-    <!-- init-param>
+    <init-param>
       <param-name>tmpdir</param-name>
       <param-value>/chat/tmp</param-value>
-    </init-param -->
-  </servlet>
+    </init-param>
+  </servlet-->
   
 	<servlet-mapping>
 		<servlet-name>PortletWrapper</servlet-name>
 		<url-pattern>/PortletWrapper</url-pattern>
 	</servlet-mapping>
 
-	<servlet-mapping>
+	<!-- servlet-mapping>
 		<servlet-name>MessengerServlet</servlet-name>
 		<url-pattern>/messengerservlet/*</url-pattern>
-	</servlet-mapping>                   
+	</servlet-mapping-->                   
   
-  <servlet-mapping>
+  <!-- servlet-mapping>
 		<servlet-name>FileExchange</servlet-name>
 		<url-pattern>/fileexchange/*</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping-->
 
 </web-app>

@@ -1,11 +1,11 @@
 <%
   String user = uicomponent.getRemoteUser() ;
   if(user != null && user.trim().length() > 0) { 
-	  def rcontext = _ctx.getRequestContext() ;
-	  def jsManager = rcontext.getJavascriptManager();
-	  jsManager.importJavascript("eXo.cs.CSUtils", "/csResources/javascript/");
-	  jsManager.importJavascript("eXo.cs.CSCometd", "/csResources/javascript/");
-		jsManager.importJavascript("eXo.communication.chat.eXoChatBar", "/chatbar/javascript/");
+	def rcontext = _ctx.getRequestContext() ;
+	def jsManager = rcontext.getJavascriptManager();
+	jsManager.importJavascript("eXo.cs.CSUtils", "/csResources/javascript/");
+	jsManager.importJavascript("eXo.cs.CSCometd", "/csResources/javascript/");
+	jsManager.importJavascript("eXo.communication.chat.eXoChatBar", "/chatbar/javascript/");
 	jsManager.importJavascript("eXo.communication.chat.core.DateFormat", "/chatbar/javascript/");
 	jsManager.importJavascript("eXo.communication.chat.core.AdvancedDOMEvent", "/chatbar/javascript/");
 	jsManager.importJavascript("eXo.communication.chat.core.JSLogger", "/chatbar/javascript/");
@@ -32,8 +32,9 @@
 	jsManager.importJavascript("eXo.communication.chat.webui.UIChatBar", "/chatbar/javascript/");
 	jsManager.importJavascript("eXo.communication.chat.webui.UIPopupMessages", "/chatbar/javascript/");
 
-	  jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.applicationId = '" + uicomponent.getId() + "';");
-	  jsManager.addOnLoadJavascript("eXo.communication.chatbar.eXoChatBar.init");
+	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.applicationId = '" + uicomponent.getId() + "';");
+	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.restcontextname = '" + uicomponent.getRestContextName() + "';");
+	jsManager.addOnLoadJavascript("eXo.communication.chatbar.eXoChatBar.init");
 %>
 <!-- Begin UIChat -->
 <div class="UIChat ChatSharedIcons UIChatBarPortlet" id="UIChatBarPortlet" oncontextmenu="return false;" style="position:fixed;bottom:0px;"

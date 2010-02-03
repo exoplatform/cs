@@ -145,7 +145,8 @@ UIStateManager.prototype.store = function(data) {
     return;
   }
   // Do upload state data to server using url: /portal/rest/chat/uistateservice/save/{user}/{data}
-  var url = '/chatbar/messengerservlet/uistateservice/save/' + this.userName;// + '/';
+  var restContextName = eXo.communication.chatbar.eXoChatBar.restcontextname;
+  var url = '/' + restContextName + '/uistateservice/save/' + this.userName;// + '/';
   var handler = new AjaxHandler(this, this.STORE_DATA_AJAX_ACTION);
   if (data) {
     this.ajaxWrapper(handler, url, 'POST', data);
@@ -162,7 +163,8 @@ UIStateManager.prototype.store = function(data) {
  */
 UIStateManager.prototype.reload = function() {
   // Do get state data to server using url: /portal/rest/chat/uistateservice/get/{user}/
-  var url = '/chatbar/messengerservlet/uistateservice/get/' + this.userName;
+  var restContextName = eXo.communication.chatbar.eXoChatBar.restcontextname;
+  var url = '/' + restContextName + '/uistateservice/get/' + this.userName;
   var handler = new AjaxHandler(this, this.RELOAD_DATA_AJAX_ACTION);
   this.ajaxWrapper(handler, url, 'GET');
   this.isPropertiesChanged = false;

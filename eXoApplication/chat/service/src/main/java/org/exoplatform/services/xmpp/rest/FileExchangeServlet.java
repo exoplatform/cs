@@ -49,6 +49,8 @@ import org.exoplatform.services.xmpp.connection.impl.XMPPSessionImpl;
  * @author <a href="mailto:vitaly.parfonov@gmail.com">Vitaly Parfonov</a>
  * @version $Id: $
  */
+
+@Deprecated
 public class FileExchangeServlet extends HttpServlet implements Connector {
   /**
    * Class logger.

@@ -49,6 +49,16 @@
   </component>
   
   <component>
+    <type>org.exoplatform.services.xmpp.rest.FileExchangeService</type>
+    <!--init-params>
+      <value-param>
+        <name>tmpdir</name>
+        <value>/chat/tmp</value>
+      </value-param>
+    </init-params-->
+  </component>
+  
+  <component>
     <type>org.exoplatform.services.xmpp.rest.RESTXMPPService</type>
   </component>
   <external-component-plugins>
@@ -104,6 +114,20 @@
         </properties-param>
       </init-params>
     </component-plugin>
+  </external-component-plugins>
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.rest.impl.RequestHandlerImpl</target-component>
+      <component-plugin>
+        <name>ws.rs.request.filter</name>
+        <set-method>addPlugin</set-method>
+        <type>org.exoplatform.services.rest.impl.RequestFilterComponentPlugin</type>
+         <init-params>
+            <value-param>
+               <name>RESTXMPPServiceFilter</name>
+               <value>org.exoplatform.services.xmpp.rest.filter.RESTXMPPServiceFilter</value>
+            </value-param>
+         </init-params>
+      </component-plugin>
   </external-component-plugins>
   <external-component-plugins>
   	<target-component>org.exoplatform.services.listener.ListenerService</target-component>

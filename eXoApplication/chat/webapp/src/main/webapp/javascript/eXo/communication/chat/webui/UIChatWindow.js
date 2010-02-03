@@ -1609,7 +1609,8 @@ UIChatWindow.prototype.sendFile = function(fileChooserNode, event) {
   var userName = activeTabControl.tabId.owner;
   var targetUser = activeTabControl.tabId.targetPerson;
   targetUser = targetUser.substr(0, targetUser.indexOf('@'));
-  uploadForm.action = '/chat/fileexchange?username=' + userName + '&requestor=' + targetUser + '&description=' + description;
+  var restContextName =  eXo.communication.chat.eXoChat.restcontextname;
+  uploadForm.action = '/' + restContextName + '/fileexchange?username=' + userName + '&requestor=' + targetUser + '&description=' + description;
 	this.uploadIframe.onload = function() {
 	window.jsconsole.warn('upload completed');
 	//eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('File exchange: Waiting for authorize...', activeTabControl.tabId);

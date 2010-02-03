@@ -67,6 +67,9 @@ public class UIChatPortlet extends UIPortletApplication {
     ExoContainer container = PortalContainer.getInstance();
     ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
     return continuation;
-
+  }
+  
+  protected String getRestContextName() {
+    return PortalContainer.getInstance().getRestContextName();
   }
 }

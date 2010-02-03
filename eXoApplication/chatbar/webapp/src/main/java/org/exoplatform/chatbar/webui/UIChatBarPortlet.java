@@ -65,6 +65,9 @@ public class UIChatBarPortlet extends UIPortletApplication {
   protected ContinuationService getContinuationService() {
     ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
     return continuation;
-
+  }
+  
+  protected String getRestContextName() {
+    return PortalContainer.getInstance().getRestContextName();
   }
 }

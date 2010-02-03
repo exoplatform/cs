@@ -71,6 +71,8 @@ import javax.ws.rs.ext.MessageBodyWriter;
  * @author <a href="mailto:vitaly.parfonov@gmail.com">Vitaly Parfonov</a>
  * @version $Id: $
  */
+
+@Deprecated
 public class MessengerServlet extends HttpServlet implements Connector {
 
   /**
