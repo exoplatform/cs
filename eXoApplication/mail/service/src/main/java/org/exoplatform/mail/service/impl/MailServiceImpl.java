@@ -35,9 +35,8 @@ import java.util.ResourceBundle;
 
 import javax.activation.CommandMap;
 import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
+import javax.activation.DataSource;
 import javax.activation.MailcapCommandMap;
-import javax.mail.Address;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
 import javax.mail.Header;
@@ -65,6 +64,7 @@ import javax.mail.search.RecipientStringTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SentDateTerm;
 import javax.mail.search.SubjectTerm;
+import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -92,7 +92,6 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.services.scheduler.PeriodInfo;
@@ -645,7 +644,7 @@ public class MailServiceImpl implements MailService, Startable {
     mimeMessage.setSentDate(message.getSendDate());
 
     List<Attachment> attachList = message.getAttachments();
-    if (attachList != null && attachList.size() != 0) {
+    if (attachList != null && attachList.size() > 0) {
       MimeBodyPart contentPartRoot = new MimeBodyPart();
       if (message.getContentType() != null && message.getContentType().indexOf("text/plain") > -1)
         contentPartRoot.setContent(message.getMessageBody(), "text/plain; charset=utf-8");
@@ -659,12 +658,18 @@ public class MailServiceImpl implements MailService, Startable {
 
       for (Attachment att : attachList) {
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
-        FileDataSource fileDataSource = new FileDataSource(att.getPath());
-        mimeBodyPart.setDataHandler(new DataHandler(fileDataSource));
-
+        InputStream inputStream = att.getInputStream();
+        String contentType = att.getMimeType();
+        
+        DataSource dataSource = new ByteArrayDataSource(inputStream, contentType);
+        mimeBodyPart.setDataHandler(new DataHandler(dataSource));
         mimeBodyPart.setDisposition(Part.ATTACHMENT);
-        mimeBodyPart.setFileName(MimeUtility.encodeText(fileDataSource.getName(), "utf-8", null));
+        String fileName = att.getName();
+        if (fileName != null && fileName.length() > 0) {
+          mimeBodyPart.setFileName(MimeUtility.encodeText(fileName, "utf-8", null));
+        }
         multipPartContent.addBodyPart(mimeBodyPart);
+
       }
       mimeMessage.setContent(multipPartContent);
     } else {
@@ -693,7 +698,11 @@ public class MailServiceImpl implements MailService, Startable {
       String key = iter.next().toString();
       mimeMessage.setHeader(key, message.getHeaders().get(key));
     }
-    mimeMessage.saveChanges();
+    try {
+      mimeMessage.saveChanges();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
     try {
       transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
       message.setId(MimeMessageParser.getMessageId(mimeMessage));
@@ -719,7 +728,8 @@ public class MailServiceImpl implements MailService, Startable {
       status = "There was an unexpected error. Sending Falied !" + e.getMessage();
       throw e;
     } finally {
-       logger.debug(" #### Info : " + status);
+      // logger.debug(" #### Info : " + status);
+      System.out.println(status);
     }
     logger.debug(" #### Info : " + status);
 
@@ -1327,7 +1337,6 @@ public class MailServiceImpl implements MailService, Startable {
           mailServerFolder.open(javax.mail.Folder.READ_WRITE);
         if (mailServerFolder != null) {
           synchImapMessage(userName, accountId, mailServerFolder, key);
-
           List<String> msgIDListFromMailServer = getMessageIDFromServerMailFolder(userName,
                                                                                   accountId,
                                                                                   mailServerFolder);
@@ -1351,7 +1360,6 @@ public class MailServiceImpl implements MailService, Startable {
       }
     } catch (Exception e) {
       e.printStackTrace();
-      removeCheckingInfo(userName, accountId);
     } finally {
       CheckingInfo info = checkingLog_.get(key);
       if (info != null)
@@ -1381,7 +1389,6 @@ public class MailServiceImpl implements MailService, Startable {
           info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
         }
         if (!Utils.isEmptyField(folderId)) {
-
           mergeMessageBetweenJcrAndServerMail(store, userName, accountId, folderId, key);
         } else {
           for (javax.mail.Folder folder : folderList) {
@@ -1412,6 +1419,7 @@ public class MailServiceImpl implements MailService, Startable {
             removeCheckingInfo(userName, accountId);
           }
         }
+        System.out.println("da check mail xong in getSynchnizeImapServer");
         if (!account.isSavePassword()) {
           account.setIncomingPassword("");
           updateAccount(userName, account);
@@ -1423,6 +1431,9 @@ public class MailServiceImpl implements MailService, Startable {
       }
 
     } finally {
+      if (info != null)
+        info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
+      removeCheckingInfo(userName, accountId);
       if (store != null && store.isConnected()) {
         store.close();
       }
@@ -1588,16 +1599,16 @@ public class MailServiceImpl implements MailService, Startable {
                                                                                   userName,
                                                                                   accountId);
           new Thread(downloadContentMail).start();
-        } else {// Duy
-          info.setStatusMsg("There is no messages in the " + folderName + " folder!");
+
+          if (info != null) {
+            info.setStatusMsg("Finished download for " + folderName + " folder.");
+            logger.debug("#### Synchronization finished for " + folderName + " folder.");
+          }
+        } else {
+          if (info != null)
+            info.setStatusMsg("There is no messages in the " + folderName + " folder!");
         }
       }
-      if (info != null) {
-        info.setStatusMsg("Finished download for " + folderName + " folder.");
-        info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);// Duy
-      }
-      logger.debug("#### Synchronization finished for " + folderName + " folder.");
-
     } catch (Exception e) {
       logger.error("Error while checking emails from folder" + folderName + " of username "
           + userName + " on account " + accountId, e);
@@ -2150,11 +2161,15 @@ public class MailServiceImpl implements MailService, Startable {
     if (serverImported && jcrImported) {
       result = true;
     } else if (serverImported && !jcrImported) {
-      // + If the message is imported into server mail but not in JCR--> so this
+      // + If the message is imported into server mail but not in JCR-->
+      // so this
       // transaction must be rolled back.
       // + Remove the imported message from server mail;
-      boolean rollBackResult = removeImportedMessageFromServer(username, accountId, folderId, msgUID);
-      if(rollBackResult)
+      boolean rollBackResult = removeImportedMessageFromServer(username,
+                                                               accountId,
+                                                               folderId,
+                                                               msgUID);
+      if (rollBackResult)
         logger.error("Imported message rollback operation is successful");
     }
     return result;
@@ -2168,7 +2183,7 @@ public class MailServiceImpl implements MailService, Startable {
     boolean result = false;
     try {
       IMAPFolder remoteFolder = getIMAPFolder(username, accountId, folderId);
-      javax.mail.Message message = remoteFolder.getMessage((int)msgUID[0]);
+      javax.mail.Message message = remoteFolder.getMessage((int) msgUID[0]);
       if (!remoteFolder.isOpen())
         remoteFolder.open(javax.mail.Folder.READ_WRITE);
       message.setFlag(Flags.Flag.DELETED, true);
@@ -2199,6 +2214,7 @@ public class MailServiceImpl implements MailService, Startable {
       }
       remoteFolder.close(true);
     } catch (Exception e) {
+      System.out.println("\n\t**========>>>>>>importMessageIntoServerMail, ex: " + e.getMessage());
       logger.error("Error in importing message into remote folder", e);
     }
 
