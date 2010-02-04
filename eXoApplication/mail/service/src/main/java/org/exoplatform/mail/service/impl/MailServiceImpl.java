@@ -728,8 +728,7 @@ public class MailServiceImpl implements MailService, Startable {
       status = "There was an unexpected error. Sending Falied !" + e.getMessage();
       throw e;
     } finally {
-      // logger.debug(" #### Info : " + status);
-      System.out.println(status);
+       logger.debug(" #### Info : " + status);
     }
     logger.debug(" #### Info : " + status);
 
@@ -762,7 +761,6 @@ public class MailServiceImpl implements MailService, Startable {
     CheckingInfo checkingInfo = getCheckingInfo(username, accountId);
     if (checkingInfo != null) {
       checkingInfo.setRequestStop(true);
-      System.out.println("Requested check loop to stop ");
       try {
         removeCheckingInfo(username, accountId);
       } catch (Exception e) {
@@ -1207,7 +1205,6 @@ public class MailServiceImpl implements MailService, Startable {
         }
         return null;
       } catch (IllegalStateException e) {
-        System.out.println("\n\t***>>>>>>>ILLEGAL STATE EXCEPTION");
         e.printStackTrace();
         return null;
       } catch (Exception e) {
@@ -1419,7 +1416,6 @@ public class MailServiceImpl implements MailService, Startable {
             removeCheckingInfo(userName, accountId);
           }
         }
-        System.out.println("da check mail xong in getSynchnizeImapServer");
         if (!account.isSavePassword()) {
           account.setIncomingPassword("");
           updateAccount(userName, account);
@@ -1462,7 +1458,7 @@ public class MailServiceImpl implements MailService, Startable {
       CheckingInfo info = checkingLog_.get(key);
       if (info != null) {
         info.setSyncFolderStatus(CheckingInfo.FINISHED_SYNC_FOLDER);
-        info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);// Duy
+        info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);
         info.setStatusMsg("Getting mails from folder " + folderName + " !");
       }
       folderId = Utils.generateFID(accountId,
@@ -2214,7 +2210,6 @@ public class MailServiceImpl implements MailService, Startable {
       }
       remoteFolder.close(true);
     } catch (Exception e) {
-      System.out.println("\n\t**========>>>>>>importMessageIntoServerMail, ex: " + e.getMessage());
       logger.error("Error in importing message into remote folder", e);
     }
 
@@ -2357,6 +2352,7 @@ public class MailServiceImpl implements MailService, Startable {
         msg = storage_.loadTotalMessage(username, accountId, msg);
       }
     } catch (Exception e) {
+      e.printStackTrace();
       logger.info("Download content failure");
     } finally {
       if (store != null && store.isConnected()) {
