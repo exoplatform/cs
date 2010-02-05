@@ -6,6 +6,7 @@
   jsManager.importJavascript("eXo.communication.chat.eXoChat", "/chat/javascript/");
   jsManager.addJavascript("eXo.communication.chat.eXoChat.applicationId = '" + uicomponent.getId() + "';");
   jsManager.addJavascript("eXo.communication.chat.eXoChat.restcontextname = '" + uicomponent.getRestContextName() + "';");
+  jsManager.addJavascript("eXo.communication.chat.eXoChat.cometdcontextname = '" + uicomponent.getCometdContextName() + "';");
   jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChat.init");
 %>
 <!-- Begin Notification -->

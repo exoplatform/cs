@@ -21,12 +21,14 @@ import javax.portlet.PortletRequest;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.cometd.EXoCSContinuationBayeux;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+import org.mortbay.cometd.AbstractBayeux;
 
 /**
  * Author : Uoc Nguyen
@@ -71,5 +73,16 @@ public class UIChatPortlet extends UIPortletApplication {
   
   protected String getRestContextName() {
     return PortalContainer.getInstance().getRestContextName();
+  }
+  
+  protected String getCometdContextName() {
+    String cometdContextName = "cometd";
+    try {
+      EXoCSContinuationBayeux bayeux = (EXoCSContinuationBayeux) PortalContainer.getInstance()
+                                                                                .getComponentInstanceOfType(AbstractBayeux.class);
+      return (bayeux == null ? "cometd" : bayeux.getCometdContextName());
+    } catch (Exception e) {
+    }
+    return cometdContextName;
   }
 }

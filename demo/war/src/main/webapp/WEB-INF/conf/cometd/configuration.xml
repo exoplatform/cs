@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
+	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+  <!-- Important: this override will make cometd framework support multi-portal mode , but only with platform 3.0.0-Beta05,
+  with next version of platform, this overrride may be don't have effect -->
+  <component>
+  <key>org.mortbay.cometd.continuation.AbstractBayeux</key>
+  <type>org.exoplatform.services.cometd.EXoCSContinuationBayeux</type>
+ </component>
+  
+ </configuration>

@@ -34,6 +34,7 @@
 
 	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.applicationId = '" + uicomponent.getId() + "';");
 	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.restcontextname = '" + uicomponent.getRestContextName() + "';");
+	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.cometdcontextname = '" + uicomponent.getCometdContextName() + "';");
 	jsManager.addOnLoadJavascript("eXo.communication.chatbar.eXoChatBar.init");
 %>
 <!-- Begin UIChat -->

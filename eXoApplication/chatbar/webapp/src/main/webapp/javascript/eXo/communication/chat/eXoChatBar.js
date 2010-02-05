@@ -59,7 +59,7 @@ eXo.communication.chatbar.eXoChatBar = {
       var userName = UIChatNode.getAttribute('userName');
       eXo.communication.chatbar.core.XMPPCommunicator.init(thys.restcontextname);
       eXo.communication.chatbar.core.LocalTemplateEngine.init('templateArea');
-      eXo.communication.chatbar.webui.UIMainChatWindow.init(thys.applicationId, eXoToken, userName);
+      eXo.communication.chatbar.webui.UIMainChatWindow.init(thys.applicationId, eXoToken, userName, thys.cometdcontextname);
       eXo.communication.chatbar.webui.UIChatDragDrop.init(
         eXo.communication.chatbar.webui.UIMainChatWindow.chatWindowsContainerNode,
         [{className:'WindowBarLeft', tagName: 'div'}, {className: 'PopupTitle', tagName: 'div'}]);

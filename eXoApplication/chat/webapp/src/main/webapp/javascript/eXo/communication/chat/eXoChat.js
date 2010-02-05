@@ -66,7 +66,7 @@ eXo.communication.chat.eXoChat = {
       var userName = UIChatNode.getAttribute('userName');
       eXo.communication.chat.core.XMPPCommunicator.init(thys.restcontextname);
       eXo.communication.chat.core.LocalTemplateEngine.init('templateArea');
-      eXo.communication.chat.webui.UIMainChatWindow.init(thys.applicationId, eXoToken, userName);
+      eXo.communication.chat.webui.UIMainChatWindow.init(thys.applicationId, eXoToken, userName, thys.cometdcontextname);
       eXo.communication.chat.webui.UIChatDragDrop.init(
         eXo.communication.chat.webui.UIMainChatWindow.chatWindowsContainerNode,
         [{className:'WindowBarLeft', tagName: 'div'}, {className: 'PopupTitle', tagName: 'div'}]);

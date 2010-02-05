@@ -175,7 +175,7 @@ function UIMainChatWindow() {
  * @param {String} userToken
  * @param {String} userName
  */
-UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
+UIMainChatWindow.prototype.init = function(rootNode, userToken, userName, cometdContextName) {
   window.jsconsole.debugLevel = this.debugLevel;
   if (this.initialized) {
     this.destroy();
@@ -293,7 +293,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.ResourceBundle = eXo.communication.chatbar.locale.ResourceBundle;*/
   
   // Init cometd service on startup
-  this.initCometd();
+  this.initCometd(cometdContextName);
   this.initialized = true;
 };
 
@@ -319,11 +319,13 @@ UIMainChatWindow.prototype.sessionKeeper = function() {
 /**
  * Cometd connection initialize method.
  */
-UIMainChatWindow.prototype.initCometd = function() {
+UIMainChatWindow.prototype.initCometd = function(cometdContextName) {
   var Cometd = eXo.cs.CSCometd;
   if (!Cometd.isConnected()) {
     Cometd.exoId = this.userName;
     Cometd.exoToken = this.userToken;
+    if(cometdContextName)
+    	Cometd.url = '/' + cometdContextName + '/cometd';
     Cometd.init();
   }
 };
