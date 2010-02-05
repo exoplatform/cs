@@ -9,6 +9,7 @@
 		def rcontext = _ctx.getRequestContext() ;
 	  rcontext.getJavascriptManager().importJavascript('eXo.core.Spliter');
 	 	rcontext.getJavascriptManager().importJavascript('eXo.cs.CSUtils','/csResources/javascript/') ;
+		rcontext.getJavascriptManager().importJavascript('eXo.cs.UIContextMenu','/csResources/javascript/') ;
 		rcontext.getJavascriptManager().importJavascript('eXo.cs.UIContextMenuMail','/csResources/javascript/') ;
 	  rcontext.getJavascriptManager().importJavascript('eXo.mail.UIMailPortlet','/mail/javascript/');
 	  rcontext.getJavascriptManager().importJavascript('eXo.mail.UICombobox','/mail/javascript/') ;
@@ -16,12 +17,15 @@
     rcontext.getJavascriptManager().importJavascript('eXo.cs.CSCometd','/csResources/javascript/') ;
 	  rcontext.getJavascriptManager().importJavascript('eXo.cs.webservice.core.WebserviceManager','/csResources/javascript/') ;
 	  rcontext.getJavascriptManager().importJavascript('eXo.mail.MailServiceHandler','/mail/javascript/') ;
-	  rcontext.getJavascriptManager().addJavascript('eXo.mail.MailServiceHandler.init(eXo.cs.webservice.core.WebserviceManager) ;') ;
+	  rcontext.getJavascriptManager().addJavascript('eXo.cs.restContext = "'+ uicomponent.getRestContextName() +'" ;') ;
+		rcontext.getJavascriptManager().addJavascript('eXo.mail.MailServiceHandler.init(eXo.cs.webservice.core.WebserviceManager) ;') ;
 	  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.showContextMenu('" + uicomponent.id + "') ;") ;
     rcontext.getJavascriptManager().importJavascript('eXo.mail.UpdateList','/mail/javascript/') ;
     rcontext.getJavascriptManager().addJavascript('eXo.mail.UpdateList.init("' + uicomponent.getAccountId() + '","'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+'");') ;
 	%>
+	<!--
 	<script src="/csResources/javascript/eXo/cs/UIContextMenu.js"></script>
+	-->
 <div style="overflow-x:auto;">
   <div><div style="width:975px;"><span style="display:none;"></span></div></div>
   <div style="_width:expression(this.previousSibling.offsetWidth - 22 + 'px'); !border:1px solid white; _margin:auto;">

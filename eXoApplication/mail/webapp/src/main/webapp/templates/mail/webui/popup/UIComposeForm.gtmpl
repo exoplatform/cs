@@ -230,17 +230,4 @@
 </div>
 </div>
 </div>
-
-<!-- Begin Autocomplete -->
-<div id="autoComplete" style="display: none; ">
-  <%
-    for (Contact contact : uicomponent.getContacts()) {
-  %>
-    <contact>
-      <name><%=contact.getFullName()%></name>
-      <email><%=contact.getEmailAddress()%></email>
-    </contact>
-  <% } %>
-</div>
-<!-- End Autocomplete -->
 <% uiform.end() %>

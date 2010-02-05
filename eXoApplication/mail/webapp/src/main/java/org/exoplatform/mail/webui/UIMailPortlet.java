@@ -17,6 +17,7 @@
 package org.exoplatform.mail.webui;
 
 
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
@@ -90,5 +91,8 @@ public class UIMailPortlet extends UIPortletApplication {
 		  System.out.println("\n\n can not get UserToken");
 		  return "" ;
 	  }
+  }
+  public String getRestContextName(){	  
+	  return PortalContainer.getInstance().getRestContextName();
   }
 } 
