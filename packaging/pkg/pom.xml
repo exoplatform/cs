@@ -284,7 +284,7 @@
                               <argument>-Dexo.conf.dir=${basedir}/target/exopackage-conf</argument>
                               <argument>-Dexo.working.dir=${gatein.working.dir}</argument>
                               <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument>
-                              <argument>-Dexo.m2.repos=file://${settings.localRepository}</argument>
+                              <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
                               <argument>-Dclean.server=${exo.projects.app.jboss.version}</argument>
                               <argument>-Dexo.m2.home=${maven.home}</argument>
                               <argument>-Xshare:auto</argument>

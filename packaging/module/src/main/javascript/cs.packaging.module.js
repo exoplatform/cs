@@ -104,6 +104,9 @@ function getModule(params)
   module.server.jboss = {}
   module.server.jboss.patch = 
 	    new Project("org.exoplatform.cs", "exo.cs.server.jboss.patch", "jar", module.version);
+		
+  module.server.jboss.patchear = 
+	    new Project("org.exoplatform.cs", "exo.cs.server.jboss.patch-ear", "jar", module.version);
       
   // CS demo 
    module.demo = {};
