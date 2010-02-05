@@ -40,7 +40,7 @@ public class EventQuery {
   private String state ;
   private String[] orderBy ; 
   private String[] participants ;  
-  private String orderType = "ascending" ;//ascending or descending
+  private String orderType = Utils.ASCENDING;
   private String queryType = Query.XPATH ;
   
   private long limitedItems = 0 ;

@@ -212,7 +212,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     SelectOptionGroup privGrp = new SelectOptionGroup("privateCalendar");
     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      if (c.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+      if (c.getId().equals(org.exoplatform.calendar.service.Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
         String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.DEFAULT_CALENDAR_ID);
         c.setName(newName);
       }
@@ -225,7 +225,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       SelectOptionGroup sharedGrp = new SelectOptionGroup("sharedCalendar");
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
         if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){
-          if (c.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+          if (c.getId().equals(org.exoplatform.calendar.service.Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
             String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.DEFAULT_CALENDAR_ID);
             c.setName(newName);
           }

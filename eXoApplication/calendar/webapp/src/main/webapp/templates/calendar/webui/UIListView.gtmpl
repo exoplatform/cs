@@ -3,7 +3,6 @@
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
 	import java.util.Locale;
-  import org.exoplatform.calendar.webui.UIListView.CalendarEventComparator;
 	import org.exoplatform.webui.application.WebuiRequestContext;
 	uiform.begin() ;
 	def rcontext = _ctx.getRequestContext() ;
@@ -77,21 +76,21 @@
   				<%}%>
   			  <th style="width: 24px;"><div class="AttachmentIcon">&nbsp;</div></th>
           <%
-            String sortLink = uicomponent.event("Sort", CalendarEventComparator.EVENT_PRIORITY.toString()) ;   
+            String sortLink = uicomponent.event("Sort", uicomponent.EVENT_PRIORITY) ;   
             String classCss = "";
-            if (uicomponent.getSortedField() == CalendarEventComparator.EVENT_PRIORITY) {
-              if (uicomponent.isAscending()) classCss = "DownArrow1Icon";
-              else classCss = "UpArrow1Icon";
+            if (uicomponent.getSortedField().equals(uicomponent.EVENT_PRIORITY)) {
+              if (uicomponent.isAscending()) classCss = "UpArrow1Icon";
+              else classCss = "DownArrow1Icon";
             }
           %>
   		    <th style="width: 50px;"><a href="$sortLink" ><div class="$classCss"><%=uiform.getLabel('Priority')%></div></a></th>
           
           <%
-            sortLink = uicomponent.event("Sort", CalendarEventComparator.EVENT_SUMMARY.toString()) ;
+            sortLink = uicomponent.event("Sort", uicomponent.EVENT_SUMMARY) ;
             classCss = "";
-            if (uicomponent.getSortedField() == CalendarEventComparator.EVENT_SUMMARY) {
-              if (uicomponent.isAscending()) classCss = "DownArrow1Icon";
-              else classCss = "UpArrow1Icon";
+            if (uicomponent.getSortedField().equals(uicomponent.EVENT_SUMMARY)) {
+              if (uicomponent.isAscending()) classCss = "UpArrow1Icon";
+              else classCss = "DownArrow1Icon";
             }
           %>
   		    <th >
@@ -99,22 +98,22 @@
   		    </th>
           
           <%
-          sortLink = uicomponent.event("Sort", CalendarEventComparator.EVENT_START.toString()) ;
+          sortLink = uicomponent.event("Sort", uicomponent.EVENT_START) ;
           classCss = "";
-          if (uicomponent.getSortedField() == CalendarEventComparator.EVENT_START) {
-            if (uicomponent.isAscending()) classCss = "DownArrow1Icon";
-            else classCss = "UpArrow1Icon";
+          if (uicomponent.getSortedField().equals(uicomponent.EVENT_START)) {
+            if (uicomponent.isAscending()) classCss = "UpArrow1Icon";
+            else classCss = "DownArrow1Icon";
           }
          %>
  	      	<th >
           <a href="$sortLink" ><div class="$classCss"><%=uiform.getLabel('Start')%></div></a>
  	      	</th>
           <%
-          sortLink = uicomponent.event("Sort", CalendarEventComparator.EVENT_END.toString()) ;
+          sortLink = uicomponent.event("Sort", uicomponent.EVENT_END) ;
           classCss = "";
-          if (uicomponent.getSortedField() == CalendarEventComparator.EVENT_END) {
-            if (uicomponent.isAscending()) classCss = "DownArrow1Icon";
-            else classCss = "UpArrow1Icon";
+          if (uicomponent.getSortedField().equals(uicomponent.EVENT_END)) {
+            if (uicomponent.isAscending()) classCss = "UpArrow1Icon";
+            else classCss = "DownArrow1Icon";
           }
         %>
  	      	<th >

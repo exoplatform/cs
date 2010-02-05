@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.jcr.AccessDeniedException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
@@ -2906,7 +2907,7 @@ public class JCRDataStorage implements DataStorage {
           //CS-2389
           if (!canEdit(calendar, username)){
             System.out.println("\n Do not have edit permission. \n");
-            throw new Exception();
+            throw new AccessDeniedException();
           }
           Node reminderFolder = getReminderFolder(event.getFromDateTime()) ;
           saveEvent(calendar, event, reminderFolder, isNew) ;

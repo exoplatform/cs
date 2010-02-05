@@ -28,6 +28,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UIActionBar;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -179,7 +180,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     List<Calendar> calendars = new ArrayList<Calendar>() ;
     for(GroupCalendarData group : groupCalendars) {      
       for (Calendar calendar : group.getCalendars()) {
-        if (calendar.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+        if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
           String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
           calendar.setName(newName);
         }
@@ -204,7 +205,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     List<Calendar> calendars = new ArrayList<Calendar>(); 
     if(groupCalendars != null) {    
       for (Calendar calendar : groupCalendars.getCalendars()) {
-        if (calendar.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+        if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
           String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
           calendar.setName(newName);
         }

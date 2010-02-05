@@ -28,6 +28,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
@@ -514,7 +515,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
           calendar.setCategoryId(calendarCategoryId) ;
           List<Calendar> pCals = calendarService.getUserCalendars(username, true) ;
           for(Calendar cal : pCals) {
-            if (cal.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+            if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
               String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
               cal.setName(newName);
             }

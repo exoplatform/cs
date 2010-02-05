@@ -765,6 +765,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     eventReminderTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REPEAT_INTERVAL).setValue(String.valueOf(value)) ;
   } 
   protected void setEventReminders(List<Reminder> reminders){
+    if (reminders == null) return;
     for(Reminder rm : reminders) {
       if(Reminder.TYPE_EMAIL.equals(rm.getReminderType())) {
         setEmailReminder(true) ;

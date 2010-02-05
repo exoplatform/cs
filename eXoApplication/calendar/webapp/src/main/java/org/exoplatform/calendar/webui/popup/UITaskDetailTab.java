@@ -27,6 +27,7 @@ import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -180,7 +181,7 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     String username = CalendarUtils.getCurrentUser() ;
     List<Calendar> calendars = calendarService.getUserCalendars(username, true) ;
     for(Calendar c : calendars) {
-      if (c.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+      if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
         String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
         c.setName(newName);
       }

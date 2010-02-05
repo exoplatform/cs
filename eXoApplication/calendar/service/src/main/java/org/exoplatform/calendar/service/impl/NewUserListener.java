@@ -24,6 +24,7 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
@@ -170,7 +171,7 @@ public class NewUserListener extends UserEventListener {
 
       // save default calendar
       Calendar cal = new Calendar();
-      cal.setId(DEFAULT_CALENDAR_ID);
+      cal.setId(Utils.getDefaultCalendarId(user.getUserName()));
       cal.setName(DEFAULT_CALENDAR_NAME);
       cal.setCategoryId(calCategory.getId());
       cal.setDataInit(true) ;

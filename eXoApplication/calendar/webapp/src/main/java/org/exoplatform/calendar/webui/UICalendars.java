@@ -32,6 +32,7 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.popup.UIAddEditPermission;
 import org.exoplatform.calendar.webui.popup.UICalDavForm;
@@ -165,7 +166,7 @@ public class UICalendars extends UIForm  {
     return list ;
   }
   
-  protected List<GroupCalendarData> getPrivateCalendars() throws Exception{
+  public List<GroupCalendarData> getPrivateCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = CalendarUtils.getCurrentUser() ;
     boolean dontShowAll = false;
@@ -178,7 +179,7 @@ public class UICalendars extends UIForm  {
       List<Calendar> calendars = group.getCalendars() ;
       if(calendars != null) {
         for(Calendar calendar : calendars) {
-          if (calendar.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+          if (calendar.getId().equals(Utils.getDefaultCalendarId(username)) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
             String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
             calendar.setName(newName);
           }
@@ -192,7 +193,7 @@ public class UICalendars extends UIForm  {
     return groupCalendars;
   }
 
-  protected List<GroupCalendarData> getPublicCalendars() throws Exception{
+  public List<GroupCalendarData> getPublicCalendars() throws Exception{
     String username = CalendarUtils.getCurrentUser() ;
     String[] groups = CalendarUtils.getUserGroups(username) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -212,7 +213,7 @@ public class UICalendars extends UIForm  {
     return groupCalendars ;
   }
 
-  protected GroupCalendarData getSharedCalendars() throws Exception{
+  public GroupCalendarData getSharedCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     GroupCalendarData groupCalendars = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser(), false) ;
     CalendarSetting setting = calendarService.getCalendarSetting(CalendarUtils.getCurrentUser()) ;
@@ -223,7 +224,7 @@ public class UICalendars extends UIForm  {
     if(groupCalendars != null) {
       List<Calendar> calendars = groupCalendars.getCalendars() ;
       for(Calendar calendar : calendars) {
-        if (calendar.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+        if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
           String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
           calendar.setName(newName);
         }
@@ -672,7 +673,7 @@ public class UICalendars extends UIForm  {
         if(gCalendarData != null) { 
           calendar = gCalendarData.getCalendarById(selectedCalendarId) ;
           if(calendar != null && !CalendarUtils.isEmpty(calendar.getCalendarOwner())){
-            if (calendar.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+            if (calendar.getId().equals(Utils.getDefaultCalendarId(currentUser)) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
               String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
               calendar.setName(newName);
             }
@@ -792,12 +793,12 @@ public class UICalendars extends UIForm  {
       popupAction.deActivate() ;
       UIRssForm uiRssForm = popupAction.activate(UIRssForm.class, 600) ;
       for (Calendar c : userCals)
-        if (c.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+        if (c.getId().equals(Utils.getDefaultCalendarId(user)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
           String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
           c.setName(newName);
         }
       for (Calendar c : sharedCals)
-        if (c.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+        if (c.getId().equals(Utils.getDefaultCalendarId(c.getCalendarOwner())) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
           String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
           c.setName(newName);
         }
@@ -840,12 +841,12 @@ public class UICalendars extends UIForm  {
       popupAction.deActivate() ;
       UICalDavForm uiCalDavForm = popupAction.activate(UICalDavForm.class, 600) ;
       for (Calendar c : userCals)
-        if (c.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+        if (c.getId().equals(Utils.getDefaultCalendarId(user)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
           String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
           c.setName(newName);
         }
       for (Calendar c : sharedCals)
-        if (c.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+        if (c.getId().equals(Utils.getDefaultCalendarId(c.getCalendarOwner())) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
           String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
           c.setName(newName);
         }
@@ -866,7 +867,7 @@ public class UICalendars extends UIForm  {
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
       Calendar cal = calService.getUserCalendar(username, selectedCalendarId) ;
-      if (cal.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+      if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
         String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
         cal.setName(newName);
       }
@@ -949,7 +950,7 @@ public class UICalendars extends UIForm  {
     }
   }
   
-  // CS- 3152 only when list view
+  // TODO CS- 3152 only when list view
   static public class TickActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiCalendars = event.getSource() ;
@@ -958,8 +959,7 @@ public class UICalendars extends UIForm  {
       uiViewContainer.refresh();
       UICalendarContainer uiVContainer = uiPortlet.findFirstComponentOfType(UICalendarContainer.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiVContainer.findFirstComponentOfType(UIMiniCalendar.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
-      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;      
     }
   }  
   

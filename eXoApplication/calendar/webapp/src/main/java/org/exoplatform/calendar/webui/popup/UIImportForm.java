@@ -28,6 +28,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -184,7 +185,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     try {
       for(Calendar c : CalendarUtils.getCalendarService().getUserCalendars(CalendarUtils.getCurrentUser(), true)){
-        if (c.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+        if (c.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
           String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
           c.setName(newName);
         }
@@ -328,7 +329,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
             }*/
             List<Calendar> pCals = calendarService.getUserCalendars(username, true) ;
             for(Calendar cal : pCals) {
-              if (cal.getId().equals(NewUserListener.DEFAULT_CALENDAR_ID) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+              if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
                 String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
                 cal.setName(newName);
               }

@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 
+import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
@@ -165,7 +166,8 @@ public class Utils {
   public static final int PUBLIC_TYPE = 2;
   
   public static final String SPLITTER = "splitter";
-  
+  public static final String ASCENDING = "ascending" ;
+  public static final String DESCENDING = "descending" ;
   /**
    * The method creates instance calendar object with time zone is GMT 0
    * @return GregorianCalendar
@@ -228,4 +230,9 @@ public class Utils {
       }
     return false ;
   } 
+  
+  public static String getDefaultCalendarId(String username) {
+    return new StringBuilder(username).append("_").append(NewUserListener.DEFAULT_CALENDAR_ID).toString();
+  }
+  
 }
