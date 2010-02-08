@@ -993,49 +993,47 @@ public class JCRDataStorage implements DataStorage {
         // nodeMsg.setProperty(Utils.EXO_HASATTACH, false);
         // }
 
-        // List<Attachment> attachments = message.getAttachments();
-        // if (attachments != null && attachments.size() > 0) {
-        // Iterator<Attachment> it = attachments.iterator();
-        // boolean makeNewAtt = isNew;
-        // while (it.hasNext()) {
-        // Attachment file = it.next();
-        // Node nodeFile = null;
-        // Session session = mailHome.getSession();
-        // try {
-        // if (!isNew)
-        // nodeFile = (Node) session.getItem(file.getId());
-        // } catch (Exception e) {
-        // makeNewAtt = true;
-        // }
-        //
-        // if (makeNewAtt) {
-        // Node attHome = null;
-        // try {
-        // attHome = nodeMsg.getNode(Utils.KEY_ATTACHMENT);
-        // } catch (Exception pne) {
-        // attHome = nodeMsg.addNode(Utils.KEY_ATTACHMENT,
-        // Utils.NT_UNSTRUCTURED);
-        // }
-        // nodeFile = attHome.addNode("attachment" + IdGenerator.generate(),
-        // Utils.EXO_MAIL_ATTACHMENT);
-        // nodeFile.setProperty(Utils.EXO_ATT_NAME, file.getName());
-        // }
-        //
-        // Node nodeContent = null;
-        // if (!nodeFile.hasNode(Utils.JCR_CONTENT)) {
-        // nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
-        // } else {
-        // nodeContent = nodeFile.getNode(Utils.JCR_CONTENT);
-        // }
-        // nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
-        // nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
-        // nodeContent.setProperty(Utils.JCR_LASTMODIFIED,
-        // Calendar.getInstance()
-        // .getTimeInMillis());
-        // nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, false);
-        // nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
-        // }
-        // }
+        List<Attachment> attachments = message.getAttachments();
+        if (attachments != null && attachments.size() > 0) {
+          Iterator<Attachment> it = attachments.iterator();
+          boolean makeNewAtt = isNew;
+          while (it.hasNext()) {
+            Attachment file = it.next();
+            Node nodeFile = null;
+            Session session = mailHome.getSession();
+            try {
+              if (!isNew)
+                nodeFile = (Node) session.getItem(file.getId());
+            } catch (Exception e) {
+              makeNewAtt = true;
+            }
+
+            if (makeNewAtt) {
+              Node attHome = null;
+              try {
+                attHome = nodeMsg.getNode(Utils.KEY_ATTACHMENT);
+              } catch (Exception pne) {
+                attHome = nodeMsg.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
+              }
+              nodeFile = attHome.addNode("attachment" + IdGenerator.generate(),
+                                         Utils.EXO_MAIL_ATTACHMENT);
+              nodeFile.setProperty(Utils.EXO_ATT_NAME, file.getName());
+            }
+
+            Node nodeContent = null;
+            if (!nodeFile.hasNode(Utils.JCR_CONTENT)) {
+              nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
+            } else {
+              nodeContent = nodeFile.getNode(Utils.JCR_CONTENT);
+            }
+            nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
+            nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
+            nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance()
+                                                                    .getTimeInMillis());
+            nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, false);
+            nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
+          }
+        }
 
         if (nodeMsg.canAddMixin("mix:referenceable"))
           nodeMsg.addMixin("mix:referenceable");
@@ -1101,6 +1099,31 @@ public class JCRDataStorage implements DataStorage {
                        infoObj,
                        continuation,
                        saveTotal);
+  }
+
+  private boolean checkHasAttachment(javax.mail.Message message) {
+    Object obj;
+    boolean result = false;
+    try {
+      obj = message.getContent();
+      if (obj instanceof Multipart) {
+        Multipart multipart = (Multipart) obj;
+        int partCount = multipart.getCount();
+        for (int i = 0; i < partCount; i++) {
+          BodyPart part = multipart.getBodyPart(i);
+          String disposition = part.getDisposition();
+          if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
+            result = true;
+            break;
+          }
+        }
+      }
+    } catch (IOException e) {
+      logger.debug("IOException: " + e.getMessage());
+    } catch (MessagingException e) {
+      logger.debug("MessagingException: " + e.getMessage());
+    }
+    return result;
   }
 
   public boolean saveMessage(String username,
@@ -1239,6 +1262,8 @@ public class JCRDataStorage implements DataStorage {
         node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
         long priority = MimeMessageParser.getPriority(msg);
         node.setProperty(Utils.EXO_PRIORITY, priority);
+        node.setProperty(Utils.EXO_HASATTACH, this.checkHasAttachment(msg));
+
         node.save();
 
         if (infoObj != null && continuation != null) {
@@ -2913,7 +2938,7 @@ public class JCRDataStorage implements DataStorage {
           } catch (Exception e) {
             logger.debug("Can't load message body");
           }
-        } 
+        }
         if (messageNode.hasNode(Utils.KEY_ATTACHMENT)) {
           NodeIterator msgAttachmentIt = messageNode.getNode(Utils.KEY_ATTACHMENT).getNodes();
           attachments = new ArrayList<Attachment>();
