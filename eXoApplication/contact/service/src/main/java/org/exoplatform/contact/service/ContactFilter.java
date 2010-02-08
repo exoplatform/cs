@@ -132,6 +132,7 @@ public class ContactFilter {
     boolean hasConjuntion = false ;
     StringBuffer stringBuffer = new StringBuffer("[") ;
     
+    if (hasEmails) stringBuffer.append("( ");
     //  desclared full text query
     if(text != null && text.length() > 0) {
       if (username != null && text.equalsIgnoreCase(username)) {
@@ -254,13 +255,7 @@ public class ContactFilter {
       hasConjuntion = true ;
     }
     
-    if (hasEmails) {
-      if (hasConjuntion) stringBuffer.append(" and (");
-      else stringBuffer.append("(") ;
-      stringBuffer.append("@exo:emailAddress");
-      stringBuffer.append(")") ;
-      hasConjuntion = true;
-    }
+    
     
     if (isOwner != null && isOwner.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;
@@ -270,7 +265,14 @@ public class ContactFilter {
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
-    
+    if (hasEmails) {
+      if (hasConjuntion) stringBuffer.append(") and (");
+      else stringBuffer.append("(") ;
+      stringBuffer.append("@exo:emailAddress");
+      stringBuffer.append(")") ;
+      hasConjuntion = true;
+    }
+
     stringBuffer.append("]") ;
     
     if (orderBy != null && orderBy.trim().length() >0) {
