@@ -662,6 +662,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     taskDetailTab.refreshUploadFileList() ;
   }
   protected void setEventReminders(List<Reminder> reminders){
+    if (reminders == null) return;
     UIEventReminderTab taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     for(Reminder r : reminders) {
       if(Reminder.TYPE_EMAIL.equals(r.getReminderType())) {
