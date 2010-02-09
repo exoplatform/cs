@@ -2713,6 +2713,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    */
   public boolean haveEditPermissionOnAddressBook(String username, String addressBookId) throws Exception {
     AddressBook addressbook = getSharedAddressBookById(username, addressBookId);
+    if (addressbook == null) return false;
     if (addressbook.getEditPermissionUsers() != null &&
         Arrays.asList(addressbook.getEditPermissionUsers()).contains(username + DataStorage.HYPHEN)) {
       return true ;
