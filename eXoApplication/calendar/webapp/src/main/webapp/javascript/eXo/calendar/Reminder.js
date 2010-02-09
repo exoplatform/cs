@@ -2,9 +2,11 @@ function Reminder() {
   
 } ;
 
-Reminder.prototype.init = function(eXoUser, eXoToken){
+Reminder.prototype.init = function(eXoUser, eXoToken, cometdContextName){
 	eXo.cs.CSCometd.exoId = eXoUser;
 	eXo.cs.CSCometd.exoToken = eXoToken;
+	if(cometdContextName)
+		eXo.cs.CSCometd.url = '/' + cometdContextName + '/cometd';
 	eXo.cs.CSCometd.subscribe('/eXo/Application/Calendar/messages', function(eventObj) {		
 		eXo.calendar.Reminder.alarm(eventObj) ;
   });

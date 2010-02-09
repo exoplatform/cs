@@ -49,12 +49,15 @@ import org.quartz.JobExecutionException;
 public class ReminderJob implements Job {
   private static Log log_ = LogFactory.getLog("job.RecordsJob");
   public void execute(JobExecutionContext context) throws JobExecutionException {
+    PortalContainer container = Utils.getPortalContainer(context);
+    if(container == null) return;
+    ExoContainer oldContainer = ExoContainerContext.getCurrentContainer();
+    ExoContainerContext.setCurrentContainer(container);
     List<Message> messageList = new ArrayList<Message>();
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
     SessionProvider provider = SessionProvider.createSystemProvider();
     try {
       MailService mailService = 
-        (MailService) PortalContainer.getInstance().getComponentInstanceOfType(MailService.class);
+        (MailService) container.getComponentInstanceOfType(MailService.class);
       if (log_.isDebugEnabled()) log_.debug("Calendar email reminder service");
       java.util.Calendar fromCalendar = GregorianCalendar.getInstance() ;  
       JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
@@ -121,6 +124,7 @@ public class ReminderJob implements Job {
       if (log_.isDebugEnabled()) log_.debug(e.toString());
     } finally {
       provider.close() ;
+      ExoContainerContext.setCurrentContainer(oldContainer);
     }
     if (log_.isDebugEnabled()) log_.debug("File plan job done");
   }

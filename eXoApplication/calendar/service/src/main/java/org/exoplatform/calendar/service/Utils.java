@@ -21,9 +21,12 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 
 import org.exoplatform.calendar.service.impl.NewUserListener;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
+import org.quartz.JobExecutionContext;
 
 /**
  * Created by The eXo Platform SARL
@@ -235,4 +238,14 @@ public class Utils {
     return new StringBuilder(username).append("_").append(NewUserListener.DEFAULT_CALENDAR_ID).toString();
   }
   
+  public static PortalContainer getPortalContainer(JobExecutionContext context){
+    if(context == null)
+      return null;
+    String portalName = context.getJobDetail().getGroup();
+    if(portalName == null)
+      return null;
+    if(portalName.indexOf(":")>0)
+      portalName = portalName.substring(0, portalName.indexOf(":"));
+    return RootContainer.getInstance().getPortalContainer(portalName);
+  }
 }

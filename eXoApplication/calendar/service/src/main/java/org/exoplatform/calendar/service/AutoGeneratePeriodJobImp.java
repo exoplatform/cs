@@ -20,6 +20,8 @@ import java.net.URL;
 import java.util.List;
 
 import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.quartz.Job;
@@ -42,9 +44,13 @@ public class AutoGeneratePeriodJobImp  implements Job {
   
 
   public void execute(JobExecutionContext jContext) throws JobExecutionException {
+    PortalContainer container = Utils.getPortalContainer(jContext);
+    if(container == null) return;
+    ExoContainer oldContainer = ExoContainerContext.getCurrentContainer();
+    ExoContainerContext.setCurrentContainer(container);
     JobDataMap jdatamap = jContext.getJobDetail().getJobDataMap();    
     String numberLimited = jdatamap.getString("event_number") ;
-    CalendarService calSvr = (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class) ;
+    CalendarService calSvr = (CalendarService) container.getComponentInstanceOfType(CalendarService.class) ;
     try {
       if (calSvr == null) {
         System.out.println("\n\n Can not get calendar service");
@@ -63,6 +69,9 @@ public class AutoGeneratePeriodJobImp  implements Job {
       }
     } catch (Exception e) {
       e.printStackTrace() ;
+    }
+    finally{
+      ExoContainerContext.setCurrentContainer(oldContainer);
     }
 
   }

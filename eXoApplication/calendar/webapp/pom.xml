@@ -93,6 +93,12 @@
       <scope>provided</scope>
     </dependency>    
    
+   <dependency>
+       <groupId>org.mortbay.jetty</groupId>
+       <artifactId>cometd-bayeux</artifactId>
+       <version>${org.mortbay.jetty.cometd-bayeux.version}</version>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>

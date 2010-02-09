@@ -21,6 +21,7 @@ import java.util.TimeZone;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
@@ -28,6 +29,8 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+import org.mortbay.cometd.AbstractBayeux;
+import org.mortbay.cometd.continuation.EXoContinuationBayeux;
 
 
 /**
@@ -84,5 +87,16 @@ public class UICalendarPortlet extends UIPortletApplication {
 		  System.out.println("\n\n can not get UserToken");
 		  return "" ;
 	  }
+  }
+  
+  protected String getCometdContextName() {
+    String cometdContextName = "cometd";
+    try {
+      EXoContinuationBayeux bayeux = (EXoContinuationBayeux) PortalContainer.getInstance()
+                                                                                .getComponentInstanceOfType(AbstractBayeux.class);
+      return (bayeux == null ? "cometd" : bayeux.getCometdContextName());
+    } catch (Exception e) {
+    }
+    return cometdContextName;
   }
 }

@@ -49,11 +49,15 @@ import org.quartz.JobExecutionException;
 public class PopupReminderJob implements Job {
   private static Log log_ = LogFactory.getLog("job.PopupRecordsJob");
   public void execute(JobExecutionContext context) throws JobExecutionException {
+    PortalContainer container = Utils.getPortalContainer(context);
+    if(container == null) return;
+    ExoContainer oldContainer = ExoContainerContext.getCurrentContainer();
+    ExoContainerContext.setCurrentContainer(container);
     SessionProvider provider = SessionProvider.createSystemProvider();
     try {
       if (log_.isDebugEnabled()) log_.debug("Calendar popup reminder service");
       java.util.Calendar fromCalendar = GregorianCalendar.getInstance() ;  
-      ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
+      ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
       Node calendarHome = getPublicServiceHome(provider);
       if(calendarHome == null) return ;
       StringBuffer path = new StringBuffer(getReminderPath(fromCalendar, provider));
@@ -118,6 +122,7 @@ public class PopupReminderJob implements Job {
       if (log_.isDebugEnabled()) log_.debug(e.toString());
     } finally {
       provider.close(); // release sessions
+      ExoContainerContext.setCurrentContainer(oldContainer);
     }
     if (log_.isDebugEnabled()) log_.debug("File plan job done");
   }
