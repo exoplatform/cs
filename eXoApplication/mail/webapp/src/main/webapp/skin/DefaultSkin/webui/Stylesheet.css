@@ -132,6 +132,8 @@
 	padding: 0px 2px;
 }
 
+
+
 /********UISelectAccount*********/
 
 .UIMailPortlet .UISelectAccount {
@@ -551,8 +553,13 @@
 	margin: 0px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace  a {
+.UIMailPortlet .MailWorkingWorkspace a {
 	
+}
+
+.UIMailPortlet .MailWorkingWorkspace .RemoveBtn {
+	background: url('/mail/skin/DefaultSkin/webui/skinIcons/16x16/icons/Dustbin.gif') no-repeat left center;
+	height: 16px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .Here a {
@@ -1238,6 +1245,10 @@
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .UnreadItem {
 	padding-left: 6px; /* orientation=lt */
 	padding-left: 6px; /* orientation=rt */
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIFormUploadInput .SelectFileFrame {
+	width: auto;
 }
 
 /*=======================SubjectMail========================*/
