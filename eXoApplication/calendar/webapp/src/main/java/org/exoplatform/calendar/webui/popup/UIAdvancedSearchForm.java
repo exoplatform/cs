@@ -276,7 +276,16 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         query.setEventType(uiForm.getUIFormSelectBox(UIAdvancedSearchForm.TYPE).getValue()) ;
         if(uiForm.isSearchTask()) query.setState(uiForm.getTaskState()) ; 
         String calendarId = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.CALENDAR).getValue() ;
-        if(calendarId != null && calendarId.trim().length() > 0) query.setCalendarId(new String[]{calendarId}) ;
+        UICalendars uiCalendars = uiForm.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class); 
+        List<String> checkedCals = uiCalendars.getCheckedCalendars() ;
+        if(calendarId != null && calendarId.trim().length() > 0){
+          try {
+            query.setCalendarId(new String[]{calendarId.split(CalendarUtils.COLON)[1].trim()}) ;            
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+          //if (!checkedCals.contains(calendarId)) query.setCalendarId(new String[]{"null"}) ; 
+        }
         String categoryId = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.CATEGORY).getValue() ;
         if(categoryId != null && categoryId.trim().length() > 0) query.setCategoryId(new String[]{categoryId}) ;
         java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
@@ -319,26 +328,27 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         uiListView.setIsAscending(order);*/
         //Collections.sort(resultList, uiListView.ceCompare_);
         
-        UICalendars uiCalendars = uiForm.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class);
-        List<String> checkedCals = uiCalendars.getCheckedCalendars() ;  
-        List<String> calendarIds = new ArrayList<String>() ; 
-        for (GroupCalendarData groupCalendarData : uiCalendars.getPrivateCalendars())
-          for (org.exoplatform.calendar.service.Calendar calendar : groupCalendarData.getCalendars())
-            if (checkedCals.contains(calendar.getId())) calendarIds.add(calendar.getId());
-        for (GroupCalendarData calendarData : uiCalendars.getPublicCalendars())
-          for (org.exoplatform.calendar.service.Calendar  calendar : calendarData.getCalendars())
-            if (checkedCals.contains(calendar.getId())) calendarIds.add(calendar.getId());
-        GroupCalendarData shareClas = uiCalendars.getSharedCalendars();
-        if (shareClas != null)
-          for (org.exoplatform.calendar.service.Calendar calendar : shareClas.getCalendars())
-            if (checkedCals.contains(calendar.getId())) {
-              calendarIds.add(calendar.getId());
-            }
-        if (calendarIds.size() > 0)
-          query.setCalendarId(calendarIds.toArray(new String[] {}));
-        else {
-          query.setCalendarId(new String[] {"null"});
+        if (query.getCalendarId() == null) { 
+          List<String> calendarIds = new ArrayList<String>() ; 
+          for (GroupCalendarData groupCalendarData : uiCalendars.getPrivateCalendars())
+            for (org.exoplatform.calendar.service.Calendar calendar : groupCalendarData.getCalendars())
+              if (checkedCals.contains(calendar.getId())) calendarIds.add(calendar.getId());
+          for (GroupCalendarData calendarData : uiCalendars.getPublicCalendars())
+            for (org.exoplatform.calendar.service.Calendar  calendar : calendarData.getCalendars())
+              if (checkedCals.contains(calendar.getId())) calendarIds.add(calendar.getId());
+          GroupCalendarData shareClas = uiCalendars.getSharedCalendars();
+          if (shareClas != null)
+            for (org.exoplatform.calendar.service.Calendar calendar : shareClas.getCalendars())
+              if (checkedCals.contains(calendar.getId())) {
+                calendarIds.add(calendar.getId());
+              }
+          if (calendarIds.size() > 0)
+            query.setCalendarId(calendarIds.toArray(new String[] {}));
+          else {
+            query.setCalendarId(new String[] {"null"});
+          }          
         }
+        
         query.setOrderBy(new String[] {Utils.EXO_SUMMARY});
         uiListView.update(new EventPageListQuery(username, query.getQueryStatement(), 10)) ;
         calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;        
