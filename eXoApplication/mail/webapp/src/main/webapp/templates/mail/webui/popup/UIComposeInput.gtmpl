@@ -30,7 +30,7 @@
           println  "</a>";
 	      } else if(action.actionType == action.TYPE_LINK){
           println "<a title=\"" + action.actionName + "\" href=\"" + actionLink +"\">";
-          println actionLabel
+		  println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt='' class=\"RemoveBtn\""
           println  "</a>";
 	      }
 	      
