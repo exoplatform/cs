@@ -29,8 +29,8 @@
       <org.exoplatform.exopackage.version>1.1.0-Beta05</org.exoplatform.exopackage.version>
 	  
 	  <!--platform dependencies-->
-	  <org.exoplatform.platform.version>3.0.0-CR01-SNAPSHOT</org.exoplatform.platform.version> 
-	  <exo.platform.web.fck.version>3.0.0-Beta05</exo.platform.web.fck.version>
+	  <org.exoplatform.platform.version>3.0.0-Alpha01</org.exoplatform.platform.version> 
+	  <!-- exo.platform.web.fck.version>3.0.0-Beta05</exo.platform.web.fck.version -->
        
       <!-- 3rd parties -->
       <commons-lang.version>2.3</commons-lang.version>
