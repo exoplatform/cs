@@ -24,10 +24,9 @@ JAVA_OPTS="$YOURKIT_PROFILE_OPTION $JAVA_OPTS $LOG_OPTS $SECURITY_OPTS $EXO_OPTS
 export JAVA_OPTS
 TOMCAT_BIN=`pwd`;
 
-OPENFIRE_BIN="$TOMCAT_BIN/../../exo-openfire/bin"
-# RED5_HOME="$TOMCAT_BIN/../../exo-red5"
-chmod -R +x $OPENFIRE_BIN
-export PATH="$OPENFIRE_BIN:$PATH"
+CHATSERVER_BIN="$TOMCAT_BIN/../../exo-chatserver/bin"
+chmod -R +x $CHATSERVER_BIN
+export PATH="$CHATSERVER_BIN:$PATH"
 
 # Launches openfire
 echo "========================================="
@@ -39,18 +38,8 @@ else
   openfire start
 fi
 
-# echo "========================================="
-# echo "Starting Red5 deamon server";
-#cd "$RED5_HOME";
-#chmod +x *.sh;
-#if [ ! -d "logs" ]; then
-  #mkdir logs;
-#fi
-#./red5-shutdown.sh > /dev/null;
-#nohup ./red5.sh > ./logs/deamon.log &
-
 echo "========================================="
-echo "Starting tomcat server"
+echo "Starting Tomcat server"
 # Launches the server
 cd "$TOMCAT_BIN";
 exec "$PRGDIR"./catalina.sh "$@"

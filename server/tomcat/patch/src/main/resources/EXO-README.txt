@@ -70,7 +70,7 @@ Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/
 - Collaboration suite quick start guide
   Collaboration suite have 2 servers need to run at same time to use:
     +) exo-tomcat: this is main tomcat server include Collaboration web applications and all dependencies.     
-    +) exo-openfire: a Jabber server used for Chat applications
+    +) exo-chatserver: a Jabber server used for Chat applications
 
 Need to set the JAVA_HOME variable for run Collaboration suite's servers.
 +) How to start Collaboration sute:
@@ -90,13 +90,13 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
        Go to exo-tomcat/bin by DOS Command (cmd) and run command:
        eXo.bat run 
     
-   * Start exo-openfire server:
+   * Start exo-chatserver server:
      +) On the Windows platform
-       Open a DOS prompt command, go to exo-openfire/bin and type the command:
+       Open a DOS prompt command, go to exo-chatserver/bin and type the command:
          openfired.exe
 
      +) On Unix/Linux
-       Open a terminal, go to exo-openfire/bin and type the command:
+       Open a terminal, go to exo-chatserver/bin and type the command:
          ./openfire start
 
 -) How to access the eXo Collaboration Suite
