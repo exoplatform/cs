@@ -158,7 +158,7 @@ function deployOpenfireServer(mainServer, module) {
   }
    
   server.cleanServer = "openfire-" + "${openfire.version}";
-  server.name = "exo-openfire";
+  server.name = "exo-chatserver";
   server.serverHome = eXo.env.workingDir + "/" + server.name;
   server.deployLibDir = server.serverHome + "/lib";
   server.openfireJar = "exo.cs.eXoApplication.organization.client.openfire-" + module.version + ".jar" ;

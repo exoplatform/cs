@@ -49,12 +49,12 @@ Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/
         JVM: version 1.6.0_0 or higher
         Application Server : tomcat-6.0.16 
         Building Tools: Maven 2.2.1 and up
-        openfire server version 3.4.5 for more information visit here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Chat+Configuration
+        openfire server version 3.6.4 for more information visit here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Chat+Configuration
 
 - Collaboration suite quick start guide
   Collaboration suite have 2 servers need to run at same time to use:
     +) tomcat: this is main tomcat server include Collaboration web applications and all dependencies.     
-    +) exo-openfire: a Jabber server used for Chat applications
+    +) exo-chatserver: a Jabber server used for Chat applications
 
 Need to set the JAVA_HOME variable for run Collaboration suite's servers.
 +) How to start Collaboration sute:
@@ -78,13 +78,13 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
        Open a terminal, go to tomcat/bin and type the command:
          ./eXo.sh run
     
-   * Start exo-openfire server:
+   * Start exo-chatserver server:
      +) On the Windows platform
-       Open a DOS prompt command, go to exo-openfire/bin and type the command:
+       Open a DOS prompt command, go to exo-chatserver/bin and type the command:
          openfired.exe
 
      +) On Unix/Linux
-       Open a terminal, go to exo-openfire/bin and type the command:
+       Open a terminal, go to exo-chatserver/bin and type the command:
          ./openfire start
 
 -) How to access the eXo Collaboration Suite
