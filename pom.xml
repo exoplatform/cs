@@ -86,9 +86,6 @@
 	<org.exoplatform.cs.version>2.0.0-Alpha02-SNAPSHOT</org.exoplatform.cs.version>
     <!-- ************** -->
 	
-    <!-- default test configuration -->
-    <maven.test.skip>true</maven.test.skip>
-    <maven.test.failure.ignore>true</maven.test.failure.ignore>
     <!-- maven-release-plugin -->
 	
     <arguments>-Prelease,pkg-tomcat,pkg-jbossas,run-its</arguments>
