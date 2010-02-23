@@ -89,6 +89,7 @@
 				<%
 					List groupCalendars = uicomponent.getPrivateCalendars() ;
 					for(groupData in groupCalendars) {
+						if (groupData.getCalendars().size() > 0) {
 				%>
 				<div class="UIVTab">  	
   				<div class="CalendarSelectedFlatStyle">
@@ -106,10 +107,10 @@
 				<%	
 						List calendars = groupData.getCalendars() ;
 						for(calendar in calendars) {
-						String calId = calendar.getId() ;
-            String icon = "CalendarIcon" ;
-            if(calendar.getViewPermission()!= null && calendar.getViewPermission().length > 0) { icon = "SharedCalendarIcon"}
-						if(uicomponent.getChildById(calId) != null) {
+							String calId = calendar.getId() ;
+	            String icon = "CalendarIcon" ;
+	            if(calendar.getViewPermission()!= null && calendar.getViewPermission().length > 0) { icon = "SharedCalendarIcon"}
+							if(uicomponent.getChildById(calId) != null) {
 				%>
   					<div class="CalendarItem $calendar.calendarColor CalendarItemPrivate" calColor="$calendar.calendarColor" canEdit="true" id="$calId" calType="0" >
   							<div class="CheckBox"><%uiform.renderField(calId)%></div>
@@ -117,12 +118,13 @@
   							<!--<div class="DownArrow1Icon"><span></span></div>-->
   							<div style="clear: both"><span></span></div>
   					</div>
-				<% }
+				<% 		}
 						}
 				%>
 					</div>
 				</div>	
 				<%
+						}
 					}
 				%>  				
 			</div>
@@ -184,8 +186,9 @@
 				<%
 					List publicCalendars = uicomponent.getPublicCalendars() ;
 					for(groupData in publicCalendars) {
-					title = groupData.getName() ;
-					label = title.substring(title.lastIndexOf("/") + 1) ;  
+						if (groupData.getCalendars().size() > 0) {
+							title = groupData.getName() ;
+							label = title.substring(title.lastIndexOf("/") + 1) ;  
 				%>
 				<div class="UIVTab">  	
   				<div class="CalendarSelectedFlatStyle">
@@ -219,6 +222,7 @@
 				</div>	
 				<%
 					}
+						}
 				%>  				
 			</div>
 		</div>
