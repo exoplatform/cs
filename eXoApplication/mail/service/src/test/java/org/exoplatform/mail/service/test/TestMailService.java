@@ -16,10 +16,13 @@
  */
 package org.exoplatform.mail.service.test;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import javax.mail.AuthenticationFailedException;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
@@ -160,10 +163,22 @@ public class TestMailService extends BaseMailTestCase{
     sbBody.append("<b>Hello "+accPop.getIncomingUser()+"</b>").append("<br/>").append(Calendar.getInstance().getTime().toString()) ;
     message.setMessageBody(sbBody.toString()) ;
     //javax.mail.AuthenticationFailedException
+    try { 
     mailService_.sendMessage(username, accImap.getId(), message) ;
     
     System.out.println("\n\n Message has been sent use IMAP !");
-    
+    }
+    catch (AuthenticationFailedException e) {
+    	e.printStackTrace();
+    	System.out.println("\n\n Message can not be sent, check your configuration!");
+    }
+    catch (UnknownHostException e) {
+    	e.printStackTrace();
+    	System.out.println("\n\n Message can not be sent check your net work connection!");
+    }
+    catch (Exception e) {
+		e.printStackTrace();
+	}
     mailService_.removeAccount(username, accPop.getId()) ;
     mailService_.removeAccount(username, accImap.getId()) ;
 
@@ -176,7 +191,7 @@ public class TestMailService extends BaseMailTestCase{
     
     Account accImap = createAccountObj(Utils.IMAP) ;
     mailService_.createAccount(username, accImap) ;
-
+    try{
     mailService_.checkNewMessage(username, accPop.getId()) ;
     
     MessageFilter filter = new MessageFilter("testFilter") ;
@@ -188,12 +203,23 @@ public class TestMailService extends BaseMailTestCase{
     //assertEquals(mailService_.getMessages(sProvider, username, filter).size(),0) ;
 
     assertNotNull(mailService_.getFolders(username, accPop.getId(), false)) ;
-    
+    }
+    catch (AuthenticationFailedException e) {
+    	e.printStackTrace();
+    	System.out.println("\n\n Message can not be sent, check your configuration!");
+    }
+    catch (UnknownHostException e) {
+    	e.printStackTrace();
+    	System.out.println("\n\n Message can not be sent check your net work connection!");
+    }
+    catch (Exception e) {
+		e.printStackTrace();
+	}
     mailService_.removeAccount(username, accPop.getId()) ;
     mailService_.removeAccount(username, accImap.getId()) ;
   }
   
-  //Add custom folder
+  //TODO have to move it to test connector, Add custom folder
   public void testAddFolder() throws Exception {
     Account accPop = createAccountObj(Utils.POP3) ;
     mailService_.createAccount(username, accPop) ;

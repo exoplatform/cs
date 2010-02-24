@@ -110,6 +110,7 @@ public abstract class BaseMailTestCase extends BasicTestCase {
   private static void initContainer() {
     try {
       String containerConf = BaseMailTestCase.class.getResource("/conf/portal/test-configuration.xml").toString();
+      System.out.println("\n\n containerConf" + containerConf);
       StandaloneContainer.addConfigurationURL(containerConf);
       container = StandaloneContainer.getInstance();   
       String loginConf = Thread.currentThread().getContextClassLoader().getResource("conf/portal/login.conf").toString();

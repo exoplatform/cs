@@ -93,7 +93,7 @@
 	          <values-param>
 	            <name>autoCreatedInNewRepository</name>
 	            <description>Node types configuration file</description>
-	            <value>jar:/conf/portal/test-mail-nodetypes.xml</value>	            
+	            <value>classpath:/conf/portal/test-mail-nodetypes.xml</value>	            
 	          </values-param>
 	        </init-params>
         </component-plugin>
@@ -107,7 +107,7 @@
       <init-params>
         <value-param>
           <name>locale.config.file</name>
-          <value>jar:/conf/portal/locales-config.xml</value>
+          <value>classpath:/conf/portal/locales-config.xml</value>
         </value-param>
       </init-params>
   </component>
@@ -120,7 +120,7 @@
         <value-param>
           <name>conf-path</name>
           <description>JCR configuration file</description>
-          <value>jar:/conf/portal/repository-configuration.xml</value>
+          <value>classpath:/conf/portal/repository-configuration.xml</value>
         </value-param>
       </init-params>
   </component>
