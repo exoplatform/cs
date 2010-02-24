@@ -20,7 +20,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.exoplatform.container.StandaloneContainer;
+import org.exoplatform.commons.chromattic.ChromatticManager;
+import org.exoplatform.component.test.AbstractGateInTest;
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
@@ -29,8 +34,6 @@ import org.exoplatform.services.jcr.impl.core.RepositoryImpl;
 import org.exoplatform.services.jcr.impl.core.SessionImpl;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
-import org.exoplatform.services.security.MembershipEntry;
-import org.exoplatform.services.xmpp.connection.impl.XMPPMessenger;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.Interlocutor;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoricalMessageImpl;
@@ -39,15 +42,20 @@ import org.exoplatform.services.xmpp.history.impl.jcr.InterlocutorImpl;
 import org.exoplatform.services.xmpp.util.HistoryUtils;
 import org.jivesoftware.smack.packet.Message;
 
-import junit.framework.TestCase;
-
 /**
  * Created by The eXo Platform SAS.
  * 
  * @author <a href="mailto:vitaly.parfonov@gmail.com">Vitaly Parfonov</a>
  * @version $Id: $
  */
-public class HistoryTest extends TestCase {
+@ConfiguredBy({
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.organization-configuration.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.cs.eXoApplication.chat.service.test-configuration.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration2.xml")
+})
+public class HistoryTest extends AbstractGateInTest {
 
   protected SessionImpl          session;
 
@@ -55,29 +63,29 @@ public class HistoryTest extends TestCase {
 
   protected RepositoryService    repositoryService;
 
-  protected StandaloneContainer  container;
-
+  protected PortalContainer      container;
+  
+  protected ChromatticManager chromatticManager;
+  
   private HistoryImpl            historyImpl;
 
   private SessionProviderService spService;
 
-  private XMPPMessenger          messenger;
-
   public void setUp() throws Exception {
-    StandaloneContainer.addConfigurationPath("src/test/java/conf/standalone/test-configuration.xml");
-    container = StandaloneContainer.getInstance();
+    container = PortalContainer.getInstance();
+    chromatticManager = (ChromatticManager)container.getComponentInstanceOfType(ChromatticManager.class);
     if (System.getProperty("java.security.auth.login.config") == null)
       System.setProperty("java.security.auth.login.config",
-                         "src/test/java/conf/standalone/login.conf");
+                         "src/test/java/conf/login.conf");
     Identity identity = new Identity("root");
     ConversationState state = new ConversationState(identity);
     ConversationState.setCurrent(state);
     repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
     repository = (RepositoryImpl) repositoryService.getDefaultRepository();
-    messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
     spService = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
     spService.setSessionProvider(null, SessionProvider.createAnonimProvider());
     historyImpl = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
+    begin();
   }
 
   public void testSaveMessage() {
@@ -86,18 +94,18 @@ public class HistoryTest extends TestCase {
     System.out.println("==========================================================");
     assertNotNull(container);
     ThreadLocalSessionProviderService sessionProviderService = (ThreadLocalSessionProviderService) container.getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
-    Message message = new Message("root", Message.Type.chat);
+    Message message = new Message("root@localhost", Message.Type.chat);
     message.setBody("hello");
-    message.setFrom("marry");
+    message.setFrom("marry@localhost");
     System.out.println("Initial message:");
     System.out.println("----------------------------------------------------------");
     dumpMessage(message);
     System.out.println("----------------------------------------------------------");
     historyImpl.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage(message),
                                      sessionProviderService.getSessionProvider(null));
-    message = new Message("marry", Message.Type.chat);
+    message = new Message("marry@localhost", Message.Type.chat);
     message.setBody("how are you?");
-    message.setFrom("root");
+    message.setFrom("root@localhost");
     System.out.println("Initial message:");
     System.out.println("----------------------------------------------------------");
     dumpMessage(message);
@@ -218,6 +226,8 @@ public class HistoryTest extends TestCase {
         container.stopContainer();
       }
     }
+    chromatticManager.getSynchronization().setSaveOnClose(false);
+    end();
     super.tearDown();
   }
 

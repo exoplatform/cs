@@ -16,13 +16,15 @@
  */
 package org.exoplatform.services.xmpp.test;
 
-import org.exoplatform.container.StandaloneContainer;
+import org.exoplatform.commons.chromattic.ChromatticManager;
+import org.exoplatform.component.test.AbstractGateInTest;
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.impl.mock.DummyOrganizationService;
 import org.exoplatform.services.xmpp.userinfo.OrganizationUserInfoServiceImpl;
 import org.exoplatform.services.xmpp.userinfo.UserInfo;
-
-import junit.framework.TestCase;
 
 /**
  * Created by The eXo Platform SAS.
@@ -30,23 +32,31 @@ import junit.framework.TestCase;
  * @author <a href="mailto:vitaly.parfonov@gmail.com">Vitaly Parfonov</a>
  * @version $Id: $
  */
-public class UserInfoTest extends TestCase {
+@ConfiguredBy({
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.organization-configuration.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.cs.eXoApplication.chat.service.test-configuration.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration2.xml")
+})
+public class UserInfoTest extends AbstractGateInTest {
 
-  protected StandaloneContainer           container;
-
+  protected ChromatticManager chromatticManager;
+  
   private OrganizationUserInfoServiceImpl infoServiceImpl;
 
   protected void setUp() throws Exception {
-    super.setUp();
-
-    StandaloneContainer.addConfigurationPath("src/test/java/conf/standalone/test-configuration.xml");
-    container = StandaloneContainer.getInstance();
-    OrganizationService service = (OrganizationService) container.getComponentInstanceOfType(DummyOrganizationService.class);
+    PortalContainer portalContainer = PortalContainer.getInstance();
+    chromatticManager = (ChromatticManager)portalContainer.getComponentInstanceOfType(ChromatticManager.class);
+    if (System.getProperty("java.security.auth.login.config") == null)
+      System.setProperty("java.security.auth.login.config",
+                         "src/test/java/conf/login.conf");
+    OrganizationService service = (OrganizationService)portalContainer.getComponentInstanceOfType(OrganizationService.class);
     infoServiceImpl = new OrganizationUserInfoServiceImpl(service);
+    begin();
   }
 
   public void testGetUserInfo() {
-    assertNotNull(container);
     System.out.println("==========================================================");
     System.out.println("Testing geting userinfo from OrgService");
     System.out.println("==========================================================");
@@ -60,6 +70,8 @@ public class UserInfoTest extends TestCase {
   }
 
   protected void tearDown() throws Exception {
+    chromatticManager.getSynchronization().setSaveOnClose(false);
+    end();
     super.tearDown();
   }
 

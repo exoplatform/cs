@@ -1,11 +1,8 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
 	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
   <component>
-    <type>org.exoplatform.services.organization.impl.mock.DummyOrganizationService</type>
+    <type>org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService</type>
   </component>
-  
-   
-  
   <component>
     <key>org.exoplatform.services.jcr.RepositoryService</key>
     <type>org.exoplatform.services.jcr.impl.RepositoryServiceImpl</type>
@@ -36,32 +33,15 @@
     </component-plugins>
   </component>
   <component>
-      <key>org.exoplatform.services.jcr.config.RepositoryServiceConfiguration</key>
-      <type>org.exoplatform.services.jcr.impl.config.RepositoryServiceConfigurationImpl</type>
-      <init-params>
-        <value-param>
-          <name>conf-path</name>
-          <description>JCR configuration file</description>
-          <value>test-jcr-config.xml</value>
-        </value-param>
-        <properties-param>
-          <name>working-conf</name>
-          <description>working-conf</description>
-          <property name="sourceName" value="jdbcjcr"/>
-          <property name="dialect" value="hsqldb"/>
-        </properties-param>
-      </init-params>
-  </component>
-  <component>
    <type>org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl</type>
    <init-params>
       <value-param>
         <name>workspace</name>
-        <value>ws</value>
+        <value>portal-test</value>
       </value-param>
       <value-param>
         <name>repository</name>
-        <value>db1</value> 
+        <value>repository</value> 
       </value-param>
       <value-param>
         <name>path</name>
