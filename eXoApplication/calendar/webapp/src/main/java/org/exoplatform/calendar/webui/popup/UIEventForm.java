@@ -765,7 +765,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     eventReminderTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REPEAT_INTERVAL).setValue(String.valueOf(value)) ;
   } 
   protected void setEventReminders(List<Reminder> reminders){
-    if (reminders == null) return;
     for(Reminder rm : reminders) {
       if(Reminder.TYPE_EMAIL.equals(rm.getReminderType())) {
         setEmailReminder(true) ;
@@ -985,18 +984,18 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   
 //TODO cs-839
   public void setParticipant(String values) throws Exception{
-	  //participants_.clear() ;
-	    OrganizationService orgService = CalendarUtils.getOrganizationService() ;
-	    StringBuffer sb = new StringBuffer() ;
-	    for(String s : values.split(CalendarUtils.BREAK_LINE)) {
-	      User user = orgService.getUserHandler().findUserByName(s) ; 
-	      if(user != null) {
-	        participants_.put(s.trim(), user.getEmail()) ;
-	        if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.BREAK_LINE) ;
-	        sb.append(s.trim()) ;
-	      }
-	    }
-	    ((UIEventAttenderTab)getChildById(TAB_EVENTATTENDER)).updateParticipants(getParticipantValues()) ;
+    //participants_.clear() ;
+      OrganizationService orgService = CalendarUtils.getOrganizationService() ;
+      StringBuffer sb = new StringBuffer() ;
+      for(String s : values.split(CalendarUtils.BREAK_LINE)) {
+        User user = orgService.getUserHandler().findUserByName(s) ; 
+        if(user != null) {
+          participants_.put(s.trim(), user.getEmail()) ;
+          if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.BREAK_LINE) ;
+          sb.append(s.trim()) ;
+        }
+      }
+      ((UIEventAttenderTab)getChildById(TAB_EVENTATTENDER)).updateParticipants(getParticipantValues()) ;
   }
   
   public String  getParticipantStatus() {
@@ -1197,6 +1196,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportEventCalendar(fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
         attachmentCal.setInputStream(is) ;
+        attachmentCal.setName("icalendar.ics");
         attachmentCal.setMimeType("text/calendar") ;
         message.addAttachment(attachmentCal) ;
       } catch (Exception e) {
@@ -1220,7 +1220,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
 
   public String cleanValue(String values) throws Exception{
-	  String[] tmpArr = values.split(",");
+    String[] tmpArr = values.split(",");
       List<String> list = Arrays.asList(tmpArr);
       java.util.Set<String> set = new java.util.HashSet<String>(list);
       String[] result = new String[set.size()];
@@ -1230,7 +1230,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           data += "," + s;
       }
       data = data.substring(1);
-	  return data;
+    return data;
   }
 public Attachment getAttachment(String attId) {
     UIEventDetailTab uiDetailTab = getChildById(TAB_EVENTDETAIL) ;
