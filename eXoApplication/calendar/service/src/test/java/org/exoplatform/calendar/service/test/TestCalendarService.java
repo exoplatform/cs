@@ -30,6 +30,7 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 
 /**
@@ -56,7 +57,6 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     super.setUp();
   }
 
-  
   public void testCalendar() throws Exception {
     CalendarCategory calCategory = new CalendarCategory() ;
     calCategory.setName("categoryName") ;
@@ -139,17 +139,21 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     cal.setName("myCalendar") ;
     cal.setCategoryId(calCategory.getId()) ;
     cal.setPublic(true) ;    
+    cal.setViewPermission(new String[]{"*.*"});
+    cal.setEditPermission(new String[]{"*.*", "john"});
+    
     calendarService_.saveUserCalendar(username, cal, true) ;
 
+    //Share calendar   
     List<String> receiverUser = new ArrayList<String>() ;
-    receiverUser.add("sharedUser") ;
+    receiverUser.add("john") ;
     calendarService_.shareCalendar(username, cal.getId(), receiverUser) ;
-    Calendar sharedCalendar = calendarService_.getSharedCalendars("sharedUser", true).getCalendarById(cal.getId()) ;
+    Calendar sharedCalendar = calendarService_.getSharedCalendars("john", true).getCalendarById(cal.getId()) ;
     assertEquals("myCalendar", sharedCalendar.getName()) ;
     
     sharedCalendar.setDescription("shared description") ;
-    calendarService_.saveSharedCalendar("sharedUser", sharedCalendar) ;
-    Calendar editedCalendar = calendarService_.getSharedCalendars("sharedUser", true).getCalendarById(cal.getId()) ;
+    calendarService_.saveSharedCalendar("john", sharedCalendar) ;
+    Calendar editedCalendar = calendarService_.getSharedCalendars("john", true).getCalendarById(cal.getId()) ;
     assertEquals("shared description", editedCalendar.getDescription()) ;
     
     CalendarEvent calendarEvent = new CalendarEvent() ;
@@ -158,19 +162,19 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
     calendarEvent.setFromDateTime(new Date()) ;
     calendarEvent.setToDateTime(new Date()) ;
-    calendarService_.saveEventToSharedCalendar("sharedUser", cal.getId(), calendarEvent, true) ;
+    calendarService_.saveEventToSharedCalendar("john", cal.getId(), calendarEvent, true) ;
     List<String> calendarIds = new ArrayList<String>() ;
     calendarIds.add(cal.getId()) ;
      
     CalendarEvent event = calendarService_.getUserEventByCalendar(username, calendarIds).get(0) ;
     assertEquals("calendarEvent", event.getSummary()) ;
     
-    calendarService_.removeSharedEvent("sharedUser", cal.getId(), calendarEvent.getId()) ;
+    calendarService_.removeSharedEvent("john", cal.getId(), calendarEvent.getId()) ;
     List<CalendarEvent> events = calendarService_.getUserEventByCalendar(username, calendarIds);
     assertEquals(0, events.size()) ;
     
-    calendarService_.removeSharedCalendar("sharedUser", cal.getId()) ;
-    assertNull(calendarService_.getSharedCalendars("sharedUser", true)) ;
+    calendarService_.removeSharedCalendar("john", cal.getId()) ;
+    assertNull(calendarService_.getSharedCalendars("john", true)) ;
     calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   }
 
