@@ -62,18 +62,8 @@ public class JsonResponseOrgserviceTest extends AbstractResourceTest {
 
   public void setUp() throws Exception {
     super.setUp();
-    
-    /*String containerConf = JsonResponseOrgserviceTest.class.getResource("/conf/standalone/test-configuration.xml").toString();
-    
-    StandaloneContainer.setConfigurationURL(containerConf);
-    container = StandaloneContainer.getInstance();
-    orgService = (OrganizationService) container
-        .getComponentInstanceOfType(OrganizationService.class);
-    jsonOrgService = (RESTOrganizationServiceJSONImpl) container
-        .getComponentInstanceOfType(RESTOrganizationServiceJSONImpl.class);
-
-    dispatcher = (ResourceDispatcher) container
-        .getComponentInstanceOfType(ResourceDispatcher.class);*/
+    orgService = (OrganizationService) container.getComponentInstanceOfType(OrganizationService.class);
+    jsonOrgService = (RESTOrganizationServiceJSONImpl) container.getComponentInstanceOfType(RESTOrganizationServiceJSONImpl.class);
 
   }
 

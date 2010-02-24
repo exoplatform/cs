@@ -2,20 +2,14 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
 	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
   <component>
-    <type>org.exoplatform.services.rest.transformer.EntityTransformerFactory</type>
-  </component>
+      <type>org.exoplatform.services.rest.impl.RequestHandlerImpl</type>
+   </component>
+   <component>
+      <type>org.exoplatform.services.rest.impl.RequestDispatcher</type>
+   </component>
   <component>
-    <type>org.exoplatform.services.rest.ResourceDispatcher</type>
-  </component>
-  <component>
-    <type>org.exoplatform.services.rest.ResourceBinder</type>
-    <init-params>
-      <value-param>
-        <name>ws1</name>
-        <value>org.exoplatform.services.rest.container.HTTPAnnotatedContainerResolvingStrategy</value>
-      </value-param>
-    </init-params>
-  </component>
+      <type>org.exoplatform.services.rest.impl.ResourceBinder</type>
+   </component>
   <component>
     <type>org.exoplatform.services.organization.impl.mock.DummyOrganizationService</type>
   </component>

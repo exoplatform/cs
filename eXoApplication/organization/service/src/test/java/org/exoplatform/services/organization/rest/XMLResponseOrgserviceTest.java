@@ -26,6 +26,7 @@ import java.util.List;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.StreamingOutput;
+import javax.ws.rs.ext.RuntimeDelegate;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -41,6 +42,8 @@ import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.organization.rest.xml.RESTOrganizationServiceXMLImpl;
 import org.exoplatform.services.rest.impl.ContainerResponse;
 import org.exoplatform.services.rest.impl.MultivaluedMapImpl;
+import org.exoplatform.services.rest.impl.RequestDispatcher;
+import org.exoplatform.services.rest.impl.RuntimeDelegateImpl;
 import org.exoplatform.services.rest.tools.ByteArrayContainerResponseWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -66,19 +69,10 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
   static final String             baseURI = "http://localhost:8080/rest/";
 
   public void setUp() throws Exception {
+    RuntimeDelegate.setInstance(new RuntimeDelegateImpl());
     super.setUp();
-    
-    /*String containerConf = XMLResponseOrgserviceTest.class.getResource("/conf/standalone/test-configuration.xml").toString();
-    
-    StandaloneContainer.setConfigurationURL(containerConf);
-    container = StandaloneContainer.getInstance();
-    orgService = (OrganizationService) container
-        .getComponentInstanceOfType(OrganizationService.class);
-    xmlOrgService = (RESTOrganizationServiceXMLImpl) container
-        .getComponentInstanceOfType(RESTOrganizationServiceXMLImpl.class);
-
-    dispatcher = (ResourceDispatcher) container
-        .getComponentInstanceOfType(ResourceDispatcher.class);*/
+    orgService = (OrganizationService) container.getComponentInstanceOfType(OrganizationService.class);
+    xmlOrgService = (RESTOrganizationServiceXMLImpl) container.getComponentInstanceOfType(RESTOrganizationServiceXMLImpl.class);
 
   }
 
