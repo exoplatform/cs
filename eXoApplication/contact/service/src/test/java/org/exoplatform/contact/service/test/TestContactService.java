@@ -58,12 +58,12 @@ public class TestContactService extends BaseContactServiceTestCase {
 
   public TestContactService() throws Exception {
     super();
-    contactService = (ContactService) container.getComponentInstanceOfType(ContactService.class);
-    datastorage = (DataStorage) container.getComponentInstanceOfType(JCRDataStorage.class);
   }
 
   public void setUp() throws Exception {
     super.setUp();
+    contactService = (ContactService) container.getComponentInstanceOfType(ContactService.class);
+    datastorage = (DataStorage) container.getComponentInstanceOfType(JCRDataStorage.class);
     clearUserData(john);
     clearUserData(root);
     clearUserData(demo);
@@ -621,8 +621,8 @@ public void testGetSharedContactsByFilter() throws Exception {
     // rootBook2.getId()));
 
     // share group:
-     sharedBook.setEditPermissionUsers(new String[]{john});
-     
+     sharedBook.setEditPermissionUsers(new String[]{john + DataStorage.HYPHEN});
+     contactService.saveAddressBook(root, sharedBook, false);
      ;
      contactService.shareAddressBook(root, sharedBook.getId(), Arrays.asList(new String[]{john, demo})) ;
     // johnBook.setEditPermissionGroups(new String[]{root});
@@ -718,13 +718,14 @@ public void testGetSharedContactsByFilter() throws Exception {
     // share contact to user:
     // contactService_.shareContact(sProvider_, userRoot_, new
     // String[]{contact1.getId()}, Arrays.asList(new String[]{userMarry_}));
-    contact2.setEditPermissionUsers(new String[] { john });
+    contact2.setEditPermissionUsers(new String[] { john+ DataStorage.HYPHEN });
     contactService.shareContact(root,
                                 new String[] { contact2.getId() },
                                 Arrays.asList(new String[] { john, demo }));
 
     // save shared contact:
     contact2.setFullName("Mai Van Ha");
+    contactService.saveContact(root, contact2, false);
     contactService.saveSharedContact(john, contact2);
     assertEquals(contactService.getContact(root, contact2.getId()).getFullName(), "Mai Van Ha");
 

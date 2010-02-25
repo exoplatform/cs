@@ -23,14 +23,17 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.exoplatform.container.StandaloneContainer;
+import org.exoplatform.commons.chromattic.ChromatticManager;
+import org.exoplatform.component.test.AbstractGateInTest;
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
-import org.exoplatform.test.BasicTestCase;
 
 /**
  * Created by The eXo Platform SAS
@@ -38,37 +41,43 @@ import org.exoplatform.test.BasicTestCase;
  *          hung.nguyen@exoplatform.com
  * May 7, 2008  
  */
-public abstract class BaseContactServiceTestCase extends BasicTestCase {
+@ConfiguredBy({
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.organization-configuration.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/portal/exo.cs.eXoApplication.contact.service.test-configuration.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/portal/exo.cs.eXoApplication.contact.service.portal-configuration.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml")
+})
+public abstract class BaseContactServiceTestCase extends AbstractGateInTest {
 
   protected static Log          log = LogFactory.getLog("sample.services.test");  
 
   protected static RepositoryService   repositoryService;
-  protected static StandaloneContainer container;
+  protected static PortalContainer container;
   
   protected final static String REPO_NAME = "repository".intern();
   protected final static String SYSTEM_WS = "system".intern();
-  protected final static String COLLABORATION_WS = "collaboration".intern();
+  protected final static String COLLABORATION_WS = "portal-test".intern();
   protected static Node root_ = null;
   protected SessionProvider sessionProvider;
   private static SessionProviderService sessionProviderService = null;
   
-  static {
-    // we do this in static to save a few cycles
-    initContainer();
-    initJCR();
-  }
-
+  protected static ChromatticManager chromatticManager;
 
   
   public BaseContactServiceTestCase() throws Exception {    
   }
   
   public void setUp() throws Exception {
+    initContainer();
+    initJCR();
     startSystemSession();
+    begin();
   }
   
   public void tearDown() throws Exception {
-
+    chromatticManager.getSynchronization().setSaveOnClose(false);
+    end();
   }
   protected void startSystemSession() {
     sessionProvider = sessionProviderService.getSystemSessionProvider(null) ;
@@ -110,15 +119,13 @@ public abstract class BaseContactServiceTestCase extends BasicTestCase {
   }
   private static void initContainer() {
     try {
-    String containerConf = BaseContactServiceTestCase.class.getResource("/conf/portal/test-configuration.xml").toString();
-    StandaloneContainer.addConfigurationURL(containerConf);
-    container = StandaloneContainer.getInstance();
+      container = PortalContainer.getInstance();
+      chromatticManager = (ChromatticManager)container.getComponentInstanceOfType(ChromatticManager.class);
+      String loginConf = Thread.currentThread().getContextClassLoader().getResource("conf/portal/login.conf").toString();
     
-    String loginConf = Thread.currentThread().getContextClassLoader().getResource("conf/portal/login.conf").toString();
-    
-    if (System.getProperty("java.security.auth.login.config") == null)
-      System.setProperty("java.security.auth.login.config", loginConf);
-    }
+      if (System.getProperty("java.security.auth.login.config") == null)
+        System.setProperty("java.security.auth.login.config", loginConf);
+      }
     catch (Exception e) {
       throw new RuntimeException("Failed to initialize standalone container: " + e.getMessage(),e);
     }
