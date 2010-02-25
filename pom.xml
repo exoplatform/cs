@@ -25,6 +25,7 @@
       <org.exoplatform.ws.version>2.1.0-Beta05</org.exoplatform.ws.version>
       <org.exoplatform.jcr.version>1.12.0-Beta05</org.exoplatform.jcr.version>
       <org.exoplatform.portal.version>3.0.0-Beta05</org.exoplatform.portal.version>
+	  <org.exoplatform.portal.cp.version>3.0.0-Beta05-CP01</org.exoplatform.portal.cp.version>
       <exo.tool.framework.junit.version>1.2.0</exo.tool.framework.junit.version>
       <org.exoplatform.exopackage.version>1.1.0-Beta05</org.exoplatform.exopackage.version>
 	  <version.chromattic>1.0.0-beta13</version.chromattic>
