@@ -500,12 +500,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
 
   protected String getEmailAddress() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
-    return eventDetailTab.getUIStringInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).getValue() ;
+    return eventDetailTab.getUIFormTextAreaInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).getValue() ;
   }
 
   protected void setEmailAddress(String value) {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
-    eventDetailTab.getUIFormTextAreaInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).setValue(value) ;
+    eventDetailTab.getUIFormTextAreaInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).setValue(value);
   }
 
   /* protected boolean getPopupReminder() {
