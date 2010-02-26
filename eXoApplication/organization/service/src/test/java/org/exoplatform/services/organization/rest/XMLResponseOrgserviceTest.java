@@ -58,21 +58,15 @@ import org.w3c.dom.NodeList;
 
 public class XMLResponseOrgserviceTest extends AbstractResourceTest {
 
-  //StandaloneContainer             container;
-
-  OrganizationService             orgService;
-
   RESTOrganizationServiceXMLImpl xmlOrgService;
 
-  //ResourceDispatcher              dispatcher;
-
-  static final String             baseURI = "http://localhost:8080/rest/";
+  static final String             baseURI = "";
 
   public void setUp() throws Exception {
     RuntimeDelegate.setInstance(new RuntimeDelegateImpl());
     super.setUp();
-    orgService = (OrganizationService) container.getComponentInstanceOfType(OrganizationService.class);
     xmlOrgService = (RESTOrganizationServiceXMLImpl) container.getComponentInstanceOfType(RESTOrganizationServiceXMLImpl.class);
+    registry(xmlOrgService);
 
   }
 
@@ -88,12 +82,13 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
    * we should pass "username" parameter only by QueryParam!
    * others parameters are groupId and type 
    */
-  public void testFindMemberships() throws Exception {
+  //"/organization/xml/membership/view-all/" is not present in RESTOrganizationServiceXMLImpl, it was removed from Liveroom
+  /*public void testFindMemberships() throws Exception {
 
     MembershipHandler hMembership = orgService.getMembershipHandler();
 
-    /*MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+    MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();
     MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     // admin - user from DummyOrganizationService
     String username = "admin";
@@ -102,10 +97,10 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
 
     String extURI = "/organization/xml/membership/view-all/";
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
-    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
+    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
 
     Response response = null;
-    response = dispatcher.dispatch(request);*/
+    response = dispatcher.dispatch(request);
     ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
@@ -162,7 +157,7 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
       
     }
     
-  }
+  }*/
 
 //  public void testFindUsers() throws Exception {
 //
@@ -247,13 +242,13 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
 //
 //
 //  }
-
-  public void testFindUsersRange() throws Exception {
+  //"/organization/xml/user/view-from-to/" is not present in RESTOrganizationServiceXMLImpl, it was removed from Liveroom
+  /*public void testFindUsersRange() throws Exception {
 
     UserHandler hUser = orgService.getUserHandler();
 
-    /*MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+    MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();
     MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     // admin - user from DummyOrganizationService
     String username = "admin";
@@ -266,10 +261,10 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
         to.toString());
     
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
-    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "POST", mv, qp);
+    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "POST", mv, qp);
 
     Response response = null;
-    response = dispatcher.dispatch(request);*/
+    response = dispatcher.dispatch(request);
     ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
@@ -309,13 +304,13 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
     assertEquals( nd_list.getLength(), list.size() );
     
 
-  }
+  }*/
   
+  //"/organization/xml/group/filter/" is not present in RESTOrganizationServiceXMLImpl, it was removed from Liveroom
+  /*public void testGetAllGroup() throws Exception {
 
-  public void testGetAllGroup() throws Exception {
-
-    /*MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();*/
+    MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();
 	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
 
     String group_exclude = "";
@@ -323,10 +318,10 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
 
     String extURI = "/organization/xml/group/filter/";
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
-    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
+    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
 
     Response response = null;
-    response = dispatcher.dispatch(request);*/
+    response = dispatcher.dispatch(request);
     ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
@@ -371,20 +366,13 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
     }
     
 
-  }
+  }*/
 
   public void testGetGroup() throws Exception {
-    /*MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();*/
-	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
-
-    String group_id = "/admin";
-    String extURI = "/organization/xml/group/info/" + "admin";
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+    String group_id = "/administrators";
+    String extURI = "/organization/xml/group/info/" + "administrators";
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
-    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
-
-    Response response = null;
-    response = dispatcher.dispatch(request);*/
     ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
@@ -415,29 +403,24 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
 
     GroupHandler hGroup = orgService.getGroupHandler();
     UserHandler hUser = orgService.getUserHandler();
-    
+    start();
     Collection<User> members = hUser.findUsersByGroup(group_id).getAll();
     Group group = hGroup.findGroupById(group_id);
     
     NodeList nd_list = document.getElementsByTagName("name");
     assertEquals( nd_list.item(0).getTextContent(), group.getGroupName() );
     
-    nd_list = document.getElementsByTagName("membership");
+    nd_list = document.getElementsByTagName("user");
     
     assertEquals(members.size(), nd_list.getLength());
-    
+    stop();
     
   }
 
   public void testGetGroupsCount() throws Exception {
-    //MultivaluedMetadata mv = new MultivaluedMetadata();
-	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String extURI = "/organization/xml/group/count/";
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
-    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
-
-    Response response = null;
-    response = dispatcher.dispatch(request);*/
     ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
@@ -465,28 +448,21 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
     factory.setNamespaceAware(true);        
     DocumentBuilder builder = factory.newDocumentBuilder();
     Document document = builder.parse(pi);
-
+    start();
     GroupHandler hGroup = orgService.getGroupHandler();
     int quantity = hGroup.getAllGroups().size();
-
+    stop();
     String number = document.getElementsByTagName("number").item(0).getTextContent();
 
     assertEquals(quantity, Integer.parseInt(number));
   }
 
   public void testGetGroupsOfUser() throws Exception {
-    /*MultivaluedMetadata mv = new MultivaluedMetadata();
-    MultivaluedMetadata qp = new MultivaluedMetadata();*/
-	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
-    String username = "admin";
-    h.putSingle("username", username);
+	  MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+    String username = "root";
 
-    String extURI = "/organization/xml/group/groups-for-user/";
+    String extURI = "/organization/xml/group/groups-for-user/?username=root";
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
-    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
-
-    Response response = null;
-    response = dispatcher.dispatch(request);*/
     ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
@@ -514,10 +490,10 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
     factory.setNamespaceAware(true);        
     DocumentBuilder builder = factory.newDocumentBuilder();
     Document document = builder.parse(pi);
-
+    start();
     GroupHandler hGroup = orgService.getGroupHandler();
     Collection<Group> groups = hGroup.findGroupsOfUser(username);
-    
+    stop();
     int size = document.getElementsByTagName("group").getLength();
     
     assertEquals(size, groups.size() );
@@ -526,16 +502,11 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
   }
 
   public void testGetUser() throws Exception {
-    //MultivaluedMetadata mv = new MultivaluedMetadata();
-	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
-    String username = "admin";
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+    String username = "root";
 
     String extURI = String.format("/organization/xml/user/info/%s/", username);
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
-    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
-
-    Response response = null;
-    response = dispatcher.dispatch(request);*/
     ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
@@ -563,7 +534,7 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
     factory.setNamespaceAware(true);        
     DocumentBuilder builder = factory.newDocumentBuilder();
     Document document = builder.parse(pi);
-
+    start();
     UserHandler hUser = orgService.getUserHandler();
     User user = hUser.findUserByName(username);
     
@@ -572,19 +543,14 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
     String _username = map.getNamedItem("user-name").getTextContent();
     
     assertEquals( _username, user.getUserName());
-    
+    stop();
   }
   
 
   public void testGetUsers() throws Exception {
-    //MultivaluedMetadata mv = new MultivaluedMetadata();
-	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
-    String extURI = "/organization/xml/users/";
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+    String extURI = "/organization/xml/user/find-all/";
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
-    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
-
-    Response response = null;
-    response = dispatcher.dispatch(request);*/
     ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
@@ -612,25 +578,20 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
     factory.setNamespaceAware(true);        
     DocumentBuilder builder = factory.newDocumentBuilder();
     Document document = builder.parse(pi);
-
+    start();
     UserHandler hUser = orgService.getUserHandler();
     Collection<User> user_list = hUser.findUsers(new Query()).getAll();
     
     int size = document.getElementsByTagName("user").getLength();
     
     assertEquals(size, user_list.size() );
-    
+    stop();
   }
 
   public void testGetUsersCount() throws Exception {
-    //MultivaluedMetadata mv = new MultivaluedMetadata();
-	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     String extURI = "/organization/xml/user/count/";
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
-    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
-
-    Response response = null;
-    response = dispatcher.dispatch(request);*/
     ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
@@ -658,10 +619,10 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
     factory.setNamespaceAware(true);        
     DocumentBuilder builder = factory.newDocumentBuilder();
     Document document = builder.parse(pi);
-
+    start();
     UserHandler hUser = orgService.getUserHandler();
     int quantity = hUser.findUsers(new Query()).getAll().size();
-    
+    stop();
     String number = document.getElementsByTagName("number").item(0).getTextContent();
 
     assertEquals(quantity, Integer.parseInt(number));
@@ -669,15 +630,10 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
   }
 
   public void testUsersRange() throws Exception {
-    //MultivaluedMetadata mv = new MultivaluedMetadata();
-	MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
     Integer offset = 0, amount = 5;
     String extURI = String.format("/organization/xml/user/view-range/%s/%s/", offset, amount);
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
-    /*Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
-
-    Response response = null;
-    response = dispatcher.dispatch(request);*/
     ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
     assertNotNull(response);
     assertEquals(HTTPStatus.OK, response.getStatus());
@@ -707,7 +663,7 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
     Document document = builder.parse(pi);
 
     UserHandler userHandler = orgService.getUserHandler();
-    
+    start();
     List<User> list = userHandler.findUsers(new Query()).getAll();
     int prevFrom = -1;
     if (offset > 0)
@@ -716,7 +672,7 @@ public class XMLResponseOrgserviceTest extends AbstractResourceTest {
     int to = (offset + amount < list.size()) ? offset + amount : list.size();
     
     int size = list.subList(offset, to).size();
-    
+    stop();
     int user_list_size = document.getElementsByTagName("user").getLength();
     
     assertEquals(size, user_list_size);

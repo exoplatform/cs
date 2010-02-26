@@ -38,6 +38,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.rest.RESTOrganizationServiceAbstractImpl;
+import org.exoplatform.services.organization.rest.json.UserBean;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 
 /**
@@ -175,8 +176,13 @@ public class RESTOrganizationServiceXMLImpl extends RESTOrganizationServiceAbstr
       PageList pageList = userHandler.getUserPageList(numResult);
       int page = from / numResult + 1;
       list = pageList.getPage(page);
+      List<User> cloneList = new ArrayList<User>();
+      for (User user : list) {
+        if (user != null)
+          cloneList.add(user);
+      }
       stop();
-      return Response.ok(new UserListXMLEntity(list, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
+      return Response.ok(new UserListXMLEntity(cloneList, uriInfo.getBaseUri().getPath()), XML_CONTENT_TYPE).build();
     } catch (Exception e) {
       e.printStackTrace();
       LOGGER.error("Thrown exception : " + e);

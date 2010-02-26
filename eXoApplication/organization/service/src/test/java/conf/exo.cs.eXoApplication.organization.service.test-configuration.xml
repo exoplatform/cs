@@ -11,9 +11,6 @@
       <type>org.exoplatform.services.rest.impl.ResourceBinder</type>
    </component>
   <component>
-    <type>org.exoplatform.services.organization.impl.mock.DummyOrganizationService</type>
-  </component>
-  <component>
   	<type>org.exoplatform.services.authentication.rest.RESTAuthenticator</type>
   </component>
   <component>
@@ -24,7 +21,6 @@
   </component>
   
   <remove-configuration>org.exoplatform.services.scheduler.JobSchedulerService</remove-configuration>
-  <remove-configuration>org.exoplatform.services.database.HibernateService</remove-configuration>
   <remove-configuration>org.exoplatform.services.remote.group.CommunicationService</remove-configuration>
   
 </configuration>

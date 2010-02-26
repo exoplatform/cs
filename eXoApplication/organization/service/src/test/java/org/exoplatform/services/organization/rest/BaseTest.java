@@ -17,31 +17,48 @@
 
 package org.exoplatform.services.organization.rest;
 
-import org.exoplatform.container.StandaloneContainer;
+import org.exoplatform.commons.chromattic.ChromatticManager;
+import org.exoplatform.component.test.AbstractGateInTest;
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.rest.impl.ApplicationContextImpl;
+import org.exoplatform.services.rest.impl.ProviderBinder;
 import org.exoplatform.services.rest.impl.RequestHandlerImpl;
 import org.exoplatform.services.rest.impl.ResourceBinder;
-import org.exoplatform.services.rest.impl.ProviderBinder;
-
-import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:andrew00x@gmail.com">Andrey Parfonov</a>
  * @version $Id: $
  */
-public abstract class BaseTest extends TestCase {
+@ConfiguredBy({
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.organization-configuration.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.cs.eXoApplication.organization.service.test-configuration.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml"),
+  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration2.xml")
+  })
+public abstract class BaseTest extends AbstractGateInTest {
 
-  protected StandaloneContainer container;
+  protected PortalContainer container;
   
   protected ProviderBinder providers;
 
   protected ResourceBinder     binder;
 
   protected RequestHandlerImpl requestHandler;
+  
+  protected OrganizationService  orgService;
+ 
+  protected ChromatticManager chromatticManager;
 
   public void setUp() throws Exception {
-    StandaloneContainer.setConfigurationPath("src/test/java/conf/standalone/test-configuration.xml");
-    container = StandaloneContainer.getInstance();
+    container = PortalContainer.getInstance();
+    chromatticManager = (ChromatticManager)container.getComponentInstanceOfType(ChromatticManager.class);
+    orgService = (OrganizationService) container.getComponentInstanceOfType(OrganizationService.class);
     binder = (ResourceBinder) container.getComponentInstanceOfType(ResourceBinder.class);
     requestHandler = (RequestHandlerImpl) container.getComponentInstanceOfType(RequestHandlerImpl.class);
     ProviderBinder.setInstance(new ProviderBinder());
@@ -50,6 +67,14 @@ public abstract class BaseTest extends TestCase {
     ApplicationContextImpl.setCurrent(new ApplicationContextImpl(null, null, providers));
     binder.clear();
   }
+  
+  protected void start() {
+    ((ComponentRequestLifecycle)orgService).startRequest(container);
+  }
+  
+  protected void stop() {
+    ((ComponentRequestLifecycle)orgService).endRequest(container);
+  }  
   
   public void tearDown() throws Exception {
   }
