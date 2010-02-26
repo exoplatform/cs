@@ -1,5 +1,5 @@
 ==============================================
-    Release Notes - exo-cs - Version 2.0.0 Alpha01
+    Release Notes - exo-cs - Version 2.0.0 Alpha02
 ==============================================
 
 ===============
@@ -23,17 +23,18 @@ Searching for events/tasks in calendars also very convenient with full text sear
 *eXo Mail is a mail client that is built with a variety of features designed to make your e-mail
 experience more productive. It offers several ways to to view and organize your mails in-box and conversation.
 
-*eXo Chat is a live web-based Instant Messaging system. It is a Jabber chat implemented over the open xmpp protocol. With it, you can send instant message, exchange files real-time, store, export your conversation's history and sort by date, week, month. Group conversation very useful for co-working and group meeting online. eXo Chat comes in 2 flavors, the Chat application an webOS friendly windowed application and Chat Bar, an ubiquitous tiny chat bar that you can put on classic pages so that portal users can chat from wherever they are.
+*eXo Chat is a live web-based Instant Messaging system. It is a Jabber chat implemented over the open xmpp protocol. With it, you can send instant message, exchange files real-time, store, export your conversation's history and sort by date, week, month. Group conversation very useful for co-working and group meeting online. eXo Chat comes in 2 flavours, the Chat application an webOS friendly windowed application and Chat Bar, an ubiquitous tiny chat bar that you can put on classic pages so that portal users can chat from wherever they are.
 
 
 =============
  What's new?
 =============
-exo Collaboration Suite 2.0.0 Alpha01
+exo Collaboration Suite 2.0.0 Alpha02
 
     * General
-          o Upgraded to GateIn 3.0 Beta4, http://www.jboss.org/gatein/
-          o No WebOS in this version  
+          o Upgraded to GateIn 3.0 Beta5, http://www.jboss.org/gatein/
+          o No WebOS in this version 
+          o Enable csportal for demo portal 
          
           
 Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
@@ -49,11 +50,11 @@ Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/
         JVM: version 1.6.0_0 or higher
         Application Server : jboss-5.1.0.GA
         Building Tools: Maven 2.2.1 and up
-        openfire server version 3.4.5 for more information visit here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Chat+Configuration
+        openfire server version 3.6.4 for more information visit here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Chat+Configuration
 
 - Collaboration suite quick start guide
   Collaboration suite have 2 servers need to run at same time to use:
-    +) jboss: this is main jobs server include Collaboration web applications and all dependencies.     
+    +) jobs: this is main jobss server include Collaboration web applications and all dependencies.     
     +) exo-openfire: a Jabber server used for Chat applications
 
 Need to set the JAVA_HOME variable for run Collaboration suite's servers.
@@ -63,10 +64,7 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
    
    * NOTE for cygwin's user: the JAVA_HOME must be in MS Windows format like: "C:\Program Files\JDK 1.5"
     Example use: export JAVA_HOME=`cygpath -w "$JAVA_HOME"`; to convert unix like format to MS Windows format.
-   
-   * Start all servers by one command for Unix/Linux/cygwin environment:
-      Go to jboss/bin and run command:
-      ./run.sh
+    
    
    * Start jboss server:
    
@@ -81,7 +79,7 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
    * Start exo-openfire server:
      +) On the Windows platform
        Open a DOS prompt command, go to exo-openfire/bin and type the command:
-         openfired.exe
+         run.bat
 
      +) On Unix/Linux
        Open a terminal, go to exo-openfire/bin and type the command:
@@ -93,7 +91,8 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
    Classic :
       http://localhost:8080/portal
       http://localhost:8080/portal/public/classic
-    
+   CS demo portal  
+      http://localhost:8080/csdemo
 
 You can log into the portal with the following accounts: root, john, marry, demo.
 All those accounts have the default password "gtn".
@@ -113,14 +112,64 @@ All those accounts have the default password "gtn".
      Company site        http://www.exoplatform.com
      Community JIRA      http://jira.exoplatform.org
      Community site      http://www.exoplatform.org
-     Community gatein    http://www.jboss.org/gatein/
+     Community gatein    http://www.jboss.org/gatein/ 
      Developers wiki     http://wiki.exoplatform.org
-     
-    
-==========
+
+
+===========
  CHANGELOG
 ===========
+- 2.0.0 Alpha02
 
+** Bug
+    * [CS-3539] - lost last message when show message from "today" in special case
+    * [CS-3606] - Chat room loss when refreshing the browser page or even changing menu
+    * [CS-3708] - Some mails do not display message's content
+    * [CS-3720] - ContinuationService getUserToken NPE exception when run both csdemo and extension
+    * [CS-3768] - Can not save event/task in special case 
+    * [CS-3769] - Can not send remind email for more than 1 user
+    * [CS-3775] - Unknown error when send an email with attachment
+    * [CS-3776] - Do not show event/task of imported calendar
+    * [CS-3782] - csdemo and rest-csdemo webapps are not deployed
+    * [CS-3785] - Can not move message when it is not original message
+    * [CS-3789] - After reading 1 imported email, the number unread email of folder is not discounted
+    * [CS-3821] - Can not get mail from pop3
+    * [CS-3837] - Set align for attributes of UserProfile  
+    * [CS-3838] - Show popup message when create or delete account
+    * [CS-3877] - NPE on PopupReminder at startup
+    * [CS-3907] - Impossible to send event invitation
+    * [CS-3913] - Cannot make Chat work
+    * [CS-3920] - JBoss patch doesn't contain the specific server.xml with SSO
+
+
+
+
+
+** Improvement
+    * [CS-3333] - Share a temporary selection of contacts
+    * [CS-3528] - Perform XMPP authentication based on current user credentials
+    * [CS-3544] - Better support for move messages in IMAP
+    * [CS-3771] - remove wasted space
+    * [CS-3825] - Put a cleaner message in Chat application when the chat server is not available / remove stack trace
+    * [CS-3921] - Auto-complete should provide easy way to slect email when user has multipe email
+
+** New Feature
+    * [CS-382] - Autocomplete in To: CC: and BCC:
+    * [CS-3693] - public contacts attributes based on portal's user profile
+
+** Task
+    * [CS-1138] - Refactoring : JCRDataStorage does not implement DataStorage
+    * [CS-2429] - add xsd to the xml configurations
+    * [CS-3422] - Migrate webservices to WS 2
+    * [CS-3427] - Upgrade openfre dependency
+    * [CS-3770] - Enable csdemo portal
+    * [CS-3794] - Find a way to configure 2 openfire
+    * [CS-3795] - Cleanup dependencies
+    * [CS-3796] - Upgrade to gatein beta5
+    * [CS-3858] - Chat service don't support multi-portal mode
+    * [CS-3866] - Edit the background in [Delete account] form
+    * [CS-3867] - Edit the background in [Attach] form while creating event or task
+ 
 
 - 2.0.0 Alpha01
 
@@ -141,7 +190,6 @@ All those accounts have the default password "gtn".
 ** Improvement
     * [CS-3328] - Make categories translatable
     * [CS-3528] - Chat Login : Get password from DB or LDAP
-
 
 ** Task
     * [CS-1991] - Remove hard coded references to /portal from web\csportal\src\main\webapp\templates\home.gtmpl
@@ -166,5 +214,7 @@ All those accounts have the default password "gtn".
     * [CS-3752] - [DEV] Chat: failure to send file 
     * [CS-3760] - [DEV] should disable chat room when user offline
     * [CS-3762] - [DEV]  Don't show warning message when user create new room without permission 
+
+
 
 

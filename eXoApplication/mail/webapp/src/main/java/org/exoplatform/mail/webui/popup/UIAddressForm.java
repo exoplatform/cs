@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.commons.utils.ObjectPageList;
-import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.AddressBook;
+import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.DataStorage;
@@ -37,7 +37,6 @@ import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -74,6 +73,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UIAddressForm extends UIForm implements UIPopupComponent {
   public static final String CONTACT_SEARCH = "contact-search".intern();
   public static final String CONTACT_GROUP = "contact-group".intern();
+  public static final String SELECTED_GROUP = "selected-group".intern();
 
   public LinkedHashMap<String, ContactData> checkedList_ = new LinkedHashMap<String, ContactData>() ;
   public LinkedHashMap<String, ContactData> newCheckedList_ = new LinkedHashMap<String, ContactData>() ;
@@ -82,9 +82,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   private String selectedAddressId_ = "" ;
   private String recipientsType_ = "";
   private UIPageIterator uiPageList_ ;
-  private String all = "all";
-  private String sharedContacts_ = "sharedContacts";
-  
+  public static String all = "all";
+  public static String sharedContacts_ = "sharedContacts";
+
   public void setRecipientsType(String type) {
     recipientsType_ = type;
   }
@@ -102,6 +102,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
 
   public UIAddressForm() throws Exception {
+    addUIFormInput(new UIFormCheckBoxInput<Boolean>(SELECTED_GROUP, SELECTED_GROUP, false));
     addUIFormInput(new UIFormStringInput(CONTACT_SEARCH, CONTACT_SEARCH, null)) ;
     UIFormSelectBoxWithGroups uiSelect = new UIFormSelectBoxWithGroups(CONTACT_GROUP, CONTACT_GROUP, getOptions()) ;
     uiSelect.setOnChange("ChangeGroup") ;
@@ -135,7 +136,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       }
       options.add(personalContacts);
     }
-    
+
     DataPageList sharedContacts = contactSrv.getSharedContacts(username) ;    
     List<SharedAddressBook> sharedAdds = contactSrv.getSharedAddressBooks(username);
     if(!sharedAdds.isEmpty() || sharedContacts.getAll().size() > 0) {
@@ -247,7 +248,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       if (category.equals(uiAddressForm.all)) {
         uiAddressForm.setContactList(new ContactFilter()) ;
       } else if (category.equals(uiAddressForm.sharedContacts_)) {
-        
+
         ContactFilter filter = new ContactFilter() ; 
         filter.setSearchSharedContacts(true) ;
         ContactService contactSrv = uiAddressForm.getApplicationComponent(ContactService.class);
@@ -320,8 +321,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   static public class ReplaceActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiAddressForm = event.getSource() ;
+      boolean isSendToGroup = uiAddressForm.getUIFormCheckBoxInput(UIAddressForm.SELECTED_GROUP).isChecked();
       List<ContactData> checkedContact = uiAddressForm.getCheckedContact();
-      if(checkedContact.isEmpty()) {
+      if(checkedContact.isEmpty() && !isSendToGroup) {
         UIApplication uiApp = uiAddressForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.contact-email-required",null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -353,7 +355,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         if(addresses != null && addresses.trim().length() > 0) {
           String add = contact.getEmail().replace(";", ",") ;
           if(uiEventForm != null) {
-           if(sb.length() > 0) sb.append(",") ;
+            if(sb.length() > 0) sb.append(",") ;
             sb.append(add) ;
           } else {  
             String[] eAddresses = null;
@@ -383,16 +385,41 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         uiAddressForm.checkedList_ = uiAddressForm.newCheckedList_ ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
       } else if (uiComposeForm != null) {
+      //Check the checked group
+        String value1 = "";
+        String value2 = "";
+        if(isSendToGroup) {
+          try{
+          value1 = ((UIFormSelectBoxWithGroups)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).getValue();
+          String[] values = ((UIFormSelectBoxWithGroups)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).getSelectedValues();
+          value2 = values[0];
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+        }
+        
         if (uiAddressForm.getRecipientType().equals("to")) {
+          uiComposeForm.getGroupDataValues(UIComposeForm.FIELD_TO_GROUP).clear();
+          uiComposeForm.addGroupDataValue(UIComposeForm.FIELD_TO_GROUP, value1, value2);
+          uiComposeForm.refreshGroupFileList(UIComposeForm.FIELD_TO_GROUP);
+          
           uiComposeForm.setFieldToValue(toAddress) ;
           uiComposeForm.setToContacts(checkedContact) ;
         }
         if (uiAddressForm.getRecipientType().equals("cc")) {
+          uiComposeForm.getGroupDataValues(UIComposeForm.FIELD_CC_GROUP).clear();
+          uiComposeForm.addGroupDataValue(UIComposeForm.FIELD_CC_GROUP, value1, value2);
+          uiComposeForm.refreshGroupFileList(UIComposeForm.FIELD_CC_GROUP);
+          
           uiComposeForm.setFieldCcValue(toAddress) ;
           uiComposeForm.setCcContacts(checkedContact) ;
         }
 
         if (uiAddressForm.getRecipientType().equals("bcc")) {
+          uiComposeForm.getGroupDataValues(UIComposeForm.FIELD_BCC_GROUP).clear();
+          uiComposeForm.addGroupDataValue(UIComposeForm.FIELD_BCC_GROUP, value1, value2);
+          uiComposeForm.refreshGroupFileList(UIComposeForm.FIELD_BCC_GROUP);
+          
           uiComposeForm.setFieldBccValue(toAddress) ;
           uiComposeForm.setBccContacts(checkedContact) ;
         }
@@ -407,8 +434,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   static public class AddActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiAddressForm = event.getSource() ;
-      List<ContactData> checkedContact = uiAddressForm.getCheckedContact();     
-      if(checkedContact.size() <= 0) {
+      List<ContactData> checkedContact = uiAddressForm.getCheckedContact(); 
+      boolean isSendToGroup = uiAddressForm.getUIFormCheckBoxInput(UIAddressForm.SELECTED_GROUP).isChecked();
+      if(checkedContact.size() <= 0 && !isSendToGroup) {
         UIApplication uiApp = uiAddressForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.contact-email-required",null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -471,17 +499,35 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
             }
           } 
         }
+        //Check the checked group
+        String value1 = "";
+        String value2 = "";
+        if(isSendToGroup) {
+          try{
+          value1 = ((UIFormSelectBoxWithGroups)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).getValue();
+          String[] values = ((UIFormSelectBoxWithGroups)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).getSelectedValues();
+          value2 = values[0];
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+        }
         if (uiAddressForm.getRecipientType().equals("to")) {
+          uiComposeForm.addGroupDataValue(UIComposeForm.FIELD_TO_GROUP, value1, value2);
+          uiComposeForm.refreshGroupFileList(UIComposeForm.FIELD_TO_GROUP);
           uiComposeForm.setFieldToValue(toAddress) ;
           uiComposeForm.setToContacts(new ArrayList<ContactData>(uiAddressForm.newCheckedList_.values())) ;
         } else if (uiAddressForm.getRecipientType().equals("cc")) {
+          uiComposeForm.addGroupDataValue(UIComposeForm.FIELD_CC_GROUP, value1, value2);
+          uiComposeForm.refreshGroupFileList(UIComposeForm.FIELD_CC_GROUP);
           uiComposeForm.setFieldCcValue(toAddress) ;
           uiComposeForm.setCcContacts(new ArrayList<ContactData>(uiAddressForm.newCheckedList_.values())) ;
         } else if (uiAddressForm.getRecipientType().equals("bcc")) {
+          uiComposeForm.addGroupDataValue(UIComposeForm.FIELD_BCC_GROUP, value1, value2);
+          uiComposeForm.refreshGroupFileList(UIComposeForm.FIELD_BCC_GROUP);
           uiComposeForm.setFieldBccValue(toAddress) ;
           uiComposeForm.setBccContacts(new ArrayList<ContactData>(uiAddressForm.newCheckedList_.values())) ;
         }
-
+       
         uiAddressForm.checkedList_ = uiAddressForm.newCheckedList_ ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm.getChildById(UIComposeForm.FIELD_TO_SET)) ;
       }
@@ -509,7 +555,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm);           
     }
   }
-  
+
   public class ContactData {
     private String id ;
     private String fullName ;
@@ -545,5 +591,5 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       return email;
     }
   }
-  
+
 }

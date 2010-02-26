@@ -23,10 +23,10 @@
 	        actionLabel = temp.substring(0, 30) + "..." + sizeLabel ;}
 	      }
 	      if(action.actionType == action.TYPE_ICON) {
-          uiForm.renderField(action.getActionParameter());
-          println "<a title=\"" + action.actionName + "\" href=\"" + actionLink +"\">";
+          if(action.isShowLabel) { println  actionLabel  ;}
+		  println "<a title=\"" + action.actionName + "\" href=\"" + actionLink +"\">";
 	        println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt='' class=\"" + action.cssIconClass +"\"/>" ;
-	        if(action.isShowLabel) { println  actionLabel  ;}
+	        
           println  "</a>";
 	      } else if(action.actionType == action.TYPE_LINK){
           println "<a title=\"" + action.actionName + "\" href=\"" + actionLink +"\">";
@@ -56,7 +56,12 @@
 	      <%uiForm.renderField("to")%> 
 	    </td>
 	  </tr>
-	  <%/* vietnt */%>
+<!-- render group -->
+	  <tr>
+	   <td></td>
+	   <td colspan="2"><%renderActions("To_Group")%></td>
+	  </tr>
+	   
 	  <tr>
 	    <td class="CCAndBCCFieldLabel">
 	    	
@@ -87,6 +92,11 @@
 	  	                  <%uiForm.renderField("cc")%> 
 	  	                </td>
 	  	              </tr>
+	  	              <!-- render group -->
+					  <tr>
+					   <td></td>
+					   <td colspan="2"><%renderActions("Cc_Group")%></td>
+					  </tr>
 	  <%
 	  String displayBcc = "display:none" ;
 	  if (uicomponent.showBcc_) { displayBcc = "" ; }
@@ -96,6 +106,11 @@
 	  	<td class="FieldComponent" colspan="2">
 	  	 <%uiForm.renderField("bcc")%> 
 	  	</td>
+	  </tr>
+	  <!-- render group -->
+	  <tr>
+	   <td></td>
+	   <td colspan="2"><%renderActions("Bc_Group")%></td>
 	  </tr>
 	  <tr>
 	    <td class="SubjectFieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.subject") %> :&nbsp;&nbsp;</td>

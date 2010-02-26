@@ -1,11 +1,9 @@
 .UIMailPortlet .UIInsertAddress {
-	width: 640px;
 	background: #f3f3f3;
 }
 
 .UIMailPortlet .UIInsertAddress .InsertAddressContainer {
 	padding: 10px;
-	border: 1px solid #c0c0c0;
 }
 
 .UIMailPortlet .UIInsertAddress .AddressContainer {
@@ -34,35 +32,22 @@
 	padding: 4px 0px 0px 5px;
 }
 
-.UIMailPortlet .UIInsertAddress .UIGrid .BorderAddress {
-	border-right: 1px solid #e8e8e8;
-}
-
 /*********************************************UISearch*****************************************/
 
-.UIMailPortlet .UIInsertAddress .UISearchForm {
-	float: left;
-	width: 300px;
-}
 
-.UIMailPortlet .UIInsertAddress .UISearchForm .SearchIcon {
+.UIMailPortlet .UIInsertAddress .UISearch .SearchIcon {
   background: url('icons/SearchIcon.gif') no-repeat center;
-  float: left;
-  height: 20px; width: 24px;
+  padding: 10px 12px;
 }
 
-.UIMailPortlet .UIInsertAddress .AddressesGroup {
-	margin: 0px 8px 0px 305px;
-	text-align: right;
-}
 
-.UIMailPortlet .UIInsertAddress .AddressesGroup .AddressLabel {
-	float: left;
+
+.UIMailPortlet .UIInsertAddress .AddressLabel {
 	width: 120px;
 	padding: 0px 4px;
 }
 
-.UIMailPortlet .UIInsertAddress .AddressesGroup select {
+.UIMailPortlet .UIInsertAddress select {
 	width: 160px;
 	margin: 10px 0px 0px 0px;
 	font-size: 11px;
@@ -71,18 +56,9 @@
 /*********************************************ListAddress*****************************************/
 
 .UIMailPortlet .UIInsertAddress .ListAddress {
-	background: white;
-	width: 616px;	height: auto;
+	height: auto;
 	overflow-y: auto;
 	overflow-x: hidden;
-	border: 1px solid #b7b7b7;
-}
-
-
-.UIMailPortlet .UIInsertAddress .ListAddress .UIGrid {
-	border-top: none;
-	border-left: none;
-	border-right: none;
 }
 
 .UIMailPortlet .UIInsertAddress .ListAddress .UIGrid .BlueDownArrowIcon{

@@ -14,19 +14,18 @@
           <div class="LeftBar">
             <div class="RightBar">
               <div class="MiddleBar">
-                <div class="UISearchForm">
-                  <div class="QuickSet">
-                    <div class="SearchTitle"><%=_ctx.appRes(uicomponent.id+ ".label.contact-search") %>:</div>
+                    <span class="SearchTitle"><%=_ctx.appRes(uicomponent.id+ ".label.contact-search") %>:</span>
                     <% uiform.renderField(uiform.CONTACT_SEARCH) %>
                     <a class="SearchIcon" href="<%=uicomponent.event("SearchContact")%>" title="<%=_ctx.appRes(uicomponent.id+ '.label.quick-search') %>"><span></span></a>
-                  </div>  
-                </div>
-                <div class="AddressesGroup">
-                  <div class="AddressLabel"><%=_ctx.appRes(uicomponent.id+ ".label.addresses-from-group") %> : </div>
+                  
+                 
+                  <span class="SelectedLabel"><%=_ctx.appRes(uicomponent.id+ ".label.selected-group") %> : </span>
+                    <% uiform.renderField(uiform.SELECTED_GROUP) %>                   
+                   
+                  <span class="AddressLabel"><%=_ctx.appRes(uicomponent.id+ ".label.addresses-from-group") %> : </span>
                     <% uiform.renderField(uiform.CONTACT_GROUP) %>                   
-                  <div style="clear:left"><span></span></div>
-                </div>
-                <div style="clear:left"><span></span></div>
+                  
+                
               </div>
             </div>
           </div>

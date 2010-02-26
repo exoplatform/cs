@@ -20,9 +20,12 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
@@ -30,6 +33,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
@@ -99,7 +103,8 @@ import com.sun.mail.smtp.SMTPSendFailedException;
                    @EventConfig(listeners = UIComposeForm.UseVisualEdiorActionListener.class),
                    @EventConfig(listeners = UIComposeForm.ShowCcActionListener.class),
                    @EventConfig(listeners = UIComposeForm.ShowBccActionListener.class), 
-                   @EventConfig(listeners = UIComposeForm.ReturnReceiptActionListener.class)
+                   @EventConfig(listeners = UIComposeForm.ReturnReceiptActionListener.class),
+                   @EventConfig(listeners = UIComposeForm.RemoveGroupActionListener.class)
                  }
 )
 public class UIComposeForm extends UIForm implements UIPopupComponent {
@@ -127,6 +132,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   private Boolean isReturnReceipt = false ;
   private int composeType_ = MESSAGE_NEW;
   private String accountId_ ;
+
+  private Map<String, HashMap<String, String>> groupData ;
+  final static public String FIELD_TO_GROUP = "To_Group";
+  final static public String FIELD_CC_GROUP = "Cc_Group";
+  final static public String FIELD_BCC_GROUP = "Bcc_Group";
+
   public String parentPath_ ;
 
   public List<ContactData> toContacts = new ArrayList<ContactData>();
@@ -144,7 +155,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     String username = MailUtils.getCurrentUser();
     accountId_ = accountId ;
     MailService mailSrv = getApplicationComponent(MailService.class);
-    
+
     // img
     if (msg != null && msg.getAttachments() != null) {
       try {
@@ -236,7 +247,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     RepositoryService rService = getApplicationComponent(RepositoryService.class) ;    
     return rService.getCurrentRepository().getConfiguration().getName() ;
   }
-  
+
   public List<ContactData> getToContacts() { return toContacts; }
   public void setToContacts(List<ContactData> contactList) { toContacts = contactList; }
 
@@ -389,7 +400,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       String replyTo = msg.getReplyTo();
       setFieldToValue(replyTo);
       setPriority(msg.getPriority());
-      
+
       String replyCc = "";
 
       String msgTo = (msg.getMessageTo() != null) ? msg.getMessageTo() : "" ;
@@ -447,7 +458,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       if (!subject.toLowerCase().startsWith("fwd:")) subject = "Fwd: " + subject ;
       setFieldSubjectValue(subject);
       setPriority(msg.getPriority());
-      
+
       setFieldToValue("");
       if (msg != null && msg.hasAttachment()) {
         for (Attachment att : msg.getAttachments()) {
@@ -627,18 +638,22 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       if (message != null) parentPath_ = message.getPath() ;
       message = new Message(); 
     }
-    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
-    String usename = uiPortlet.getCurrentUser() ;
+    String usename = MailUtils.getCurrentUser() ;
     MailService mailSvr = this.getApplicationComponent(MailService.class) ;
     Account account = mailSvr.getAccountById(usename, this.getFieldFromValue());
     String from = account.getUserDisplayName() + "<" + account.getEmailAddress() + ">" ;
     String subject = getFieldSubjectValue() ;
+
     String to = getFieldToValue() ;
     if (to != null && to.indexOf(";") > -1) to = to.replace(';', ',') ;
+    to =  addAllMailFromGroup(to, FIELD_TO_GROUP);
     String cc = getFieldCcValue() ;
     if (cc != null && cc.indexOf(";") > -1) cc = cc.replace(';', ',') ;
+    cc =  addAllMailFromGroup(cc, FIELD_CC_GROUP);
     String bcc = getFieldBccValue() ;
     if (bcc != null && bcc.indexOf(";") > -1) bcc = bcc.replace(';', ',') ;
+    bcc =  addAllMailFromGroup(bcc, FIELD_BCC_GROUP);
+
     String body = getFieldContentValue() ;
     Long priority = getPriority();
     message.setSendDate(new Date()) ;
@@ -683,6 +698,51 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     }
     return message;
   }
+  /**
+   * 
+   * @param to : exited value from to, cc, bcc field 
+   * @param fieldToGroup : groupId to lookup email
+   * @return String of all email
+   */
+  private String addAllMailFromGroup(String to, String fieldToGroup)  throws Exception{
+    if(to == null) to ="";
+    StringBuffer s = new StringBuffer();
+    String category = "";
+    try{
+      ContactFilter filter = new ContactFilter() ;
+
+          for(String groupId : getGroupDataValues(fieldToGroup).values()){
+            if(UIAddressForm.all.equals(groupId)) {
+              //TODO filter set nothing
+            } else if(UIAddressForm.sharedContacts_.equals(groupId)) {
+              filter.setSearchSharedContacts(true);
+              
+            } else {
+              
+            }
+          }
+
+      //    filter.setSearchSharedContacts(true) ;
+      //   
+      //    filter.setCategories(new String[]{category});
+      //    
+
+      ContactService contactSrv = getApplicationComponent(ContactService.class);
+      Map<String, String> resultMap = contactSrv.searchEmails(MailUtils.getCurrentUser(), filter) ; 
+
+
+      for(String fullnameAndEmail : resultMap.values()) {
+
+        if(s.length() > 0)s.append(",");
+        s.append(fullnameAndEmail.split("::")[1]);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return to +","+ InternetAddress.parse(s.toString());
+  }
+
 
   public boolean fromDrafts() {    
     return (getMessage() != null && getMessage().getFolders()[0].equals(Utils.generateFID(accountId_, Utils.FD_DRAFTS, false)) || getComposeType() == MESSAGE_IN_DRAFT) ;
@@ -796,7 +856,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         composeForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
       }
-      
+
     }
   }
 
@@ -1096,7 +1156,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
   }
-  
+
   private boolean validateMessage(Event<UIComposeForm> event, Message msg) throws Exception {
     String msgWarning = null;
     if (!MailUtils.isValidEmailAddresses(msg.getMessageTo())) {
@@ -1116,4 +1176,82 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 
     return true;
   }
+
+  /**
+   *   
+   * @param key : field add the group
+   * @param value1 : group id
+   * @param value2 : group name
+   */
+  public void addGroupDataValue(String key, String value1, String value2){
+    if(groupData == null) groupData = new LinkedHashMap<String, HashMap<String,String>>();
+    if(groupData.get(key) == null) groupData.put(key, new HashMap<String, String>());
+    groupData.get(key).put(value1, value2);
+  }  
+  /**
+   * 
+   * @param key : field add the group
+   * @return Map data of group with group id and group name
+   */
+  public HashMap<String, String> getGroupDataValues(String key){
+    if(groupData == null) return new HashMap<String, String>();
+    return groupData.get(key) ;
+  }
+  public void setGroupData(Map<String, HashMap<String, String>> groupData) {
+    this.groupData = groupData;
+  }
+  public Map<String, HashMap<String, String>> getGroupData() {
+    return groupData;
+  }
+  /**
+   * 
+   * @param key : the field add group
+   * @return List of action data has been made
+   */
+  public List<ActionData> getGroupActionData(String key) {
+    List<ActionData> groupAction = new ArrayList<ActionData>();
+    for (String groupId : getGroupDataValues(key).keySet() ) {
+      ActionData removeAction = new ActionData();
+      removeAction.setActionListener("RemoveGroup");
+      removeAction.setActionName(groupId);
+      removeAction.setActionParameter(key + MailUtils.SEMICOLON + groupId);
+      removeAction.setCssIconClass("RemoveBtn");
+      removeAction.setActionType(ActionData.TYPE_ICON);
+      removeAction.setBreakLine(false);
+      removeAction.setShowLabel(true);
+      groupAction.add(removeAction); 
+    }
+    return groupAction;
+  }
+
+
+
+  /**
+   * update ui ;
+   */
+  public void refreshGroupFileList(String key) throws Exception {
+    UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
+    inputSet.setActionField(key, getGroupActionData(key)) ;
+
+  }
+
+  static public class RemoveGroupActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm uiComposeForm = event.getSource() ;
+      String keyAndId = event.getRequestContext().getRequestParameter(OBJECTID);
+
+      try{
+        uiComposeForm.getGroupDataValues(keyAndId.split(MailUtils.SEMICOLON)[0]).remove(keyAndId.split(MailUtils.SEMICOLON)[1]);
+        uiComposeForm.refreshGroupFileList(keyAndId.split(MailUtils.SEMICOLON)[0]) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm.getChildById(FIELD_TO_SET)) ;
+
+      }catch (Exception e) {
+        e.printStackTrace();
+        return;
+      }
+
+    }
+  }
+
+
 }
