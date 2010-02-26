@@ -45,126 +45,144 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.ext.UIFormColorPicker;
 import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
 
-
 /**
- * Created by The eXo Platform SARL
- * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
- * Aus 01, 2007 2:48:18 PM 
+ * Created by The eXo Platform SARL Author : Hung Nguyen
+ * hung.nguyen@exoplatform.com Aus 01, 2007 2:48:18 PM
  */
-@ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template =  "system:/groovy/webui/form/UIForm.gtmpl",
-    events = {
-      @EventConfig(listeners = UITagForm.AddActionListener.class), 
-      @EventConfig(listeners = UITagForm.RemoveActionListener.class,  phase = Phase.DECODE), 
-      @EventConfig(listeners = UITagForm.CancelActionListener.class, phase = Phase.DECODE)
-    }  
-)
-public class UITagForm extends UIForm implements UIPopupComponent{
-  public static final String SELECT_AVAIABLE_TAG = "tag-name";
-  public static final String TAG_COLOR = "choose-color" ;
-  public static final String TAG_MESSAGE = "TagMessage";
-  
-  private Map<String, Message> messageMap = new HashMap<String, Message>() ;
-  private Map<String, Tag> tagMap = new HashMap<String, Tag>();
-  
-  public UITagForm() { }
-  
+
+@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "app:/templates/mail/webui/UITagForm.gtmpl", events = {
+    @EventConfig(listeners = UITagForm.AddActionListener.class),
+    @EventConfig(listeners = UITagForm.RemoveActionListener.class, phase = Phase.DECODE),
+    @EventConfig(listeners = UITagForm.CancelActionListener.class, phase = Phase.DECODE) })
+public class UITagForm extends UIForm implements UIPopupComponent {
+
+  public static final String   SELECT_AVAIABLE_TAG = "tag-name";
+
+  public static final String   TAG_COLOR           = "choose-color";
+
+  public static final String   TAG_MESSAGE         = "TagMessage";
+
+  private Map<String, Message> messageMap          = new HashMap<String, Message>();
+
+  private Map<String, Tag>     tagMap              = new HashMap<String, Tag>();
+
+  private List<String>         checkedTagList      = null;
+
+  public UITagForm() {
+  }
+
   public void setTagList(List<Tag> tagList) throws Exception {
-    tagMap.clear();   
+    tagMap.clear();
     addUIFormInput(new UIFormStringInput(SELECT_AVAIABLE_TAG, SELECT_AVAIABLE_TAG, null).addValidator(SpecialCharacterValidator.class));
-    addUIFormInput(new UIFormColorPicker(TAG_COLOR, TAG_COLOR)) ;
-    for(Tag tag : tagList) {
-      UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(tag.getName(), tag.getName(), null);
-      addUIFormInput(uiCheckBox) ;
+    addUIFormInput(new UIFormColorPicker(TAG_COLOR, TAG_COLOR));
+    for (Tag tag : tagList) {
+      UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(tag.getName(),
+                                                                                 tag.getName(),
+                                                                                 null);
+      if(checkedTagList != null && checkedTagList.size() > 0 &&  checkedTagList.contains(tag.getName()))
+        uiCheckBox.setChecked(true);
+      addUIFormInput(uiCheckBox);
       tagMap.put(tag.getName(), tag);
     }
   }
-  
+
   public String getLabel(String id) {
     try {
-      return super.getLabel(id) ;
+      return super.getLabel(id);
     } catch (Exception e) {
-      return id ;
+      return id;
     }
   }
-  
-  public String[] getActions() { return new String[] {"Add", "Remove", "Cancel"}; }
-  
+
+  public String[] getActions() {
+    return new String[] { "Add", "Remove", "Cancel" };
+  }
+
   public List<Tag> getTagList() {
     return new ArrayList<Tag>(tagMap.values());
   }
-  
+
   public void setMessageList(List<Message> messageList) throws Exception {
     messageMap.clear();
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
-    String username = uiPortlet.getCurrentUser() ;
+    String username = uiPortlet.getCurrentUser();
     String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = getApplicationComponent(MailService.class);
-    for(Message msg : messageList) {
-      String subject = (msg.getSubject() != null) ? msg.getSubject() : "" ;
-      String mesSub = getLabel("subject") + " : " + ((subject.length() >= 30) ? (subject.substring(0, 30) + "...") : subject);
+    for (Message msg : messageList) {
+      String subject = (msg.getSubject() != null) ? msg.getSubject() : "";
+      String mesSub = getLabel("subject") + " : "
+          + ((subject.length() >= 30) ? (subject.substring(0, 30) + "...") : subject);
       UIFormInputInfo uiTags = new UIFormInputInfo(TAG_MESSAGE, TAG_MESSAGE, null);
       String tags = "";
       if (msg.getTags() != null && msg.getTags().length > 0) {
+        checkedTagList = new ArrayList<String>();
+
         for (int i = 0; i < msg.getTags().length; i++) {
-          if (i > 0) tags += ", ";
+          if (i > 0)
+            tags += ", ";
           Tag tag = mailSrv.getTag(username, accountId, msg.getTags()[i]);
           tags += "[" + tag.getName() + "]";
+          checkedTagList.add(tag.getName());
         }
-      } else tags = getLabel("no-tag") ;
-      
+      } else
+        tags = getLabel("no-tag");
+
       uiTags.setName(mesSub);
       uiTags.setValue(tags);
-      addUIFormInput(uiTags) ;
+      addUIFormInput(uiTags);
       messageMap.put(msg.getId(), msg);
     }
   }
-  
+
   public List<Message> getMessageList() {
     return new ArrayList<Message>(messageMap.values());
   }
-  
+
   public List<Tag> getCheckedTags() throws Exception {
     List<Tag> tagList = new ArrayList<Tag>();
     for (Tag tag : getTagList()) {
       UIFormCheckBoxInput<Boolean> checkbox = getChildById(tag.getName());
       if (checkbox != null && checkbox.isChecked()) {
         tagList.add(tag);
-      } 
+      }
     }
     return tagList;
   }
-  
+
   public String getSelectedColor() {
-    return getChild(UIFormColorPicker.class).getValue() ;
+    return getChild(UIFormColorPicker.class).getValue();
   }
+
   public void setSelectedColor(String value) {
-    getChild(UIFormColorPicker.class).setValue(value) ;
+    getChild(UIFormColorPicker.class).setValue(value);
   }
-  public void activate() throws Exception {}
-  public void deActivate() throws Exception {}
-  
-  static  public class AddActionListener extends EventListener<UITagForm> {
+
+  public void activate() throws Exception {
+  }
+
+  public void deActivate() throws Exception {
+  }
+
+  static public class AddActionListener extends EventListener<UITagForm> {
     public void execute(Event<UITagForm> event) throws Exception {
-      UITagForm uiTagForm = event.getSource(); 
+      UITagForm uiTagForm = event.getSource();
       String newTagName = uiTagForm.getUIStringInput(SELECT_AVAIABLE_TAG).getValue();
-//    CS-3009
-      newTagName = MailUtils.reduceSpace(newTagName) ;
+      // CS-3009
+      newTagName = MailUtils.reduceSpace(newTagName);
       String tagColor = uiTagForm.getSelectedColor();
       UIMailPortlet uiPortlet = uiTagForm.getAncestorOfType(UIMailPortlet.class);
       UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class);
-      String username = uiPortlet.getCurrentUser() ;
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
+                                  .getSelectedValue();
       MailService mailSrv = uiTagForm.getApplicationComponent(MailService.class);
       List<Tag> tagList = new ArrayList<Tag>();
 
       if (newTagName != null && newTagName.trim().length() > 0) {
         boolean isExist = false;
         newTagName = newTagName.trim();
-        for (Tag tag: mailSrv.getTags(username, accountId)) {
-          if (tag.getName().equals(newTagName)) { 
+        for (Tag tag : mailSrv.getTags(username, accountId)) {
+          if (tag.getName().equals(newTagName)) {
             isExist = true;
             tagList.add(tag);
           }
@@ -176,89 +194,102 @@ public class UITagForm extends UIForm implements UIPopupComponent{
           newTag.setDescription("Tag's description");
           tagList.add(newTag);
         } else {
-          UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tag-already-exists", null, ApplicationMessage.INFO)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class);
+          uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tag-already-exists",
+                                                  null,
+                                                  ApplicationMessage.INFO));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
           return;
-        }        
-      } 
-      
+        }
+      }
+
       tagList.addAll(uiTagForm.getCheckedTags());
       if (tagList.size() <= 0) {
-        UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.have-to-choose-at-least-a-tag", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.have-to-choose-at-least-a-tag",
+                                                null,
+                                                ApplicationMessage.INFO));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
       mailSrv.addTag(username, accountId, uiTagForm.getMessageList(), tagList);
-      
+
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      List<String> tagIdList = new ArrayList<String>() ;
-      for (Tag tag : tagList) tagIdList.add(tag.getId()) ;
+      List<String> tagIdList = new ArrayList<String>();
+      for (Tag tag : tagList)
+        tagIdList.add(tag.getId());
       for (Message msg : uiTagForm.getMessageList()) {
         if (uiMessageList.messageList_.containsKey(msg.getId())) {
           if (msg.getTags() != null && msg.getTags().length > 0) {
-            for (int i=0 ; i < msg.getTags().length; i++) {
-              if (!tagIdList.contains(msg.getTags()[i])) tagIdList.add(msg.getTags()[i]) ;
+            for (int i = 0; i < msg.getTags().length; i++) {
+              if (!tagIdList.contains(msg.getTags()[i]))
+                tagIdList.add(msg.getTags()[i]);
             }
           }
-          msg.setTags(tagIdList.toArray(new String[]{})) ;
-          uiMessageList.messageList_.put(msg.getId(), msg) ;
+          msg.setTags(tagIdList.toArray(new String[] {}));
+          uiMessageList.messageList_.put(msg.getId(), msg);
         }
       }
-      uiPortlet.cancelAction() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer) ;
+      uiPortlet.cancelAction();
+      event.getRequestContext()
+           .addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer);
     }
   }
-  
-  static  public class RemoveActionListener extends EventListener<UITagForm> {
+
+  static public class RemoveActionListener extends EventListener<UITagForm> {
     public void execute(Event<UITagForm> event) throws Exception {
-      UITagForm uiTagForm = event.getSource(); 
+      UITagForm uiTagForm = event.getSource();
       UIMailPortlet uiPortlet = uiTagForm.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
+                                  .getSelectedValue();
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      
+
       List<String> tagList = new ArrayList<String>();
-      for (Tag tag : uiTagForm.getCheckedTags()) tagList.add(tag.getId()); 
-      
+      for (Tag tag : uiTagForm.getCheckedTags())
+        tagList.add(tag.getId());
+
       if (tagList.size() <= 0) {
-        UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.have-to-choose-at-least-a-tag", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.have-to-choose-at-least-a-tag",
+                                                null,
+                                                ApplicationMessage.INFO));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
-      
+
       mailSrv.removeTagsInMessages(username, accountId, uiTagForm.getMessageList(), tagList);
       for (Message msg : uiTagForm.getMessageList()) {
-        List<String> newTags = new ArrayList<String>() ;
+        List<String> newTags = new ArrayList<String>();
         if (msg.getTags() != null && msg.getTags().length > 0) {
-          for (int i = 0 ; i < msg.getTags().length; i++) {
-            if (!tagList.contains(msg.getTags()[i])) newTags.add(msg.getTags()[i]) ;
+          for (int i = 0; i < msg.getTags().length; i++) {
+            if (!tagList.contains(msg.getTags()[i]))
+              newTags.add(msg.getTags()[i]);
           }
         }
-        msg.setTags(newTags.toArray(new String[]{})) ;
-        
+        msg.setTags(newTags.toArray(new String[] {}));
+
         String selectedTagId = uiMsgList.getSelectedTagId();
         if (selectedTagId == null || newTags.contains(selectedTagId)) {
-          uiMsgList.messageList_.put(msg.getId(), msg) ;
+          uiMsgList.messageList_.put(msg.getId(), msg);
         } else {
-          uiMsgList.messageList_.remove(msg.getId()) ;
+          uiMsgList.messageList_.remove(msg.getId());
         }
       }
       if (uiMsgList.messageList_.size() % uiMsgList.getMessagePageList().getAvailablePage() == 0) {
         uiMsgList.updateList();
-      } 
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getAncestorOfType(UIMessageArea.class)) ;
-      uiPortlet.cancelAction() ;
+      }
+      event.getRequestContext()
+           .addUIComponentToUpdateByAjax(uiMsgList.getAncestorOfType(UIMessageArea.class));
+      uiPortlet.cancelAction();
     }
   }
-  
-  static  public class CancelActionListener extends EventListener<UITagForm> {
+
+  static public class CancelActionListener extends EventListener<UITagForm> {
     public void execute(Event<UITagForm> event) throws Exception {
-      UITagForm uiForm = event.getSource() ;
+      UITagForm uiForm = event.getSource();
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class);
       uiPortlet.cancelAction();
     }
