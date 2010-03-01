@@ -40,7 +40,7 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/contact/webui/popup/UIContactPreviewForm.gtmpl",
+    template = "app:/templates/contact/webui/UIContactPreview.gtmpl",
     events = {  
       @EventConfig(listeners = UIContactPreviewForm.SendEmailActionListener.class) ,
       @EventConfig(listeners = UIContactPreviewForm.CancelActionListener.class)
@@ -53,7 +53,7 @@ public class UIContactPreviewForm extends UIForm implements UIPopupComponent {
   public UIContactPreviewForm() { }  
   public void setContact(Contact c) { contact_ = c; }
   public Contact getContact() { return contact_; }
-  
+  public boolean isPopup() { return true; }
   public void setPrintForm(boolean isPrint) { isPrintForm = isPrint ; }
   public boolean isPrintForm() { return isPrintForm ; }
   

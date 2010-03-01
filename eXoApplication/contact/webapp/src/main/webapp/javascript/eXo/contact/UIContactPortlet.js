@@ -724,6 +724,25 @@ UIContactPortlet.prototype.show = function(obj, evt){
 	else uiPopupCategory.style.display = "none" ;
 };
 
+UIContactPortlet.prototype.showHideInfo = function(obj){
+	var table = eXo.core.DOMUtil.findAncestorByTagName(obj,"table");
+	var emails = eXo.core.DOMUtil.findDescendantsByClass(table, "tr", "HideEmailAddress");
+	var len = emails.length ;
+	if (emails[0].style.display == "none") {
+		for(var i = 0; i < len ; i++) {
+			emails[i].style.display = "";
+		}
+		var showMore = eXo.core.DOMUtil.findFirstDescendantByClass(table, "tr", "ShowMore").style.display = "none";
+		var hide = eXo.core.DOMUtil.findFirstDescendantByClass(table, "tr", "Hide").style.display = "";
+	} else {
+		for(var i = 0; i < len ; i++) {
+			emails[i].style.display = "none";
+		}
+		var showMore = eXo.core.DOMUtil.findFirstDescendantByClass(table, "tr", "ShowMore").style.display = "";
+		var hide = eXo.core.DOMUtil.findFirstDescendantByClass(table, "tr", "Hide").style.display = "none";
+	}
+};
+
 UIContactPortlet.prototype.showPopupCustomLayoutView = function(obj, evt) {
   var root = document.getElementById("UIContactPortlet");
   var objWelcome = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "UIWelcomeContact");

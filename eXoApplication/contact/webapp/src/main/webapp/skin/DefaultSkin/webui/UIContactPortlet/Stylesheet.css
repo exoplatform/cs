@@ -713,10 +713,34 @@
 	width: 46%;
 }
 
+.UIContactPortlet .InfoContainer .LeftContentProfile {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	padding-right: 10px; /* orientation=lt */
+	padding-left: 10px; /* orientation=rt */
+	width: 25%;
+}
+
+.UIContactPortlet .InfoContainer .CenterContentProfile {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	padding-right: 10px; /* orientation=lt */
+	padding-left: 10px; /* orientation=rt */
+	width: 30%;
+}
+
 .UIContactPortlet .InfoContainer .RightContent {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	width: 46%;
+	padding-left: 10px; /* orientation=lt */
+	padding-right: 10px; /* orientation=rt */
+}
+
+.UIContactPortlet .InfoContainer .RightContentProfile {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+	width: 30%;
 	padding-left: 10px; /* orientation=lt */
 	padding-right: 10px; /* orientation=rt */
 }

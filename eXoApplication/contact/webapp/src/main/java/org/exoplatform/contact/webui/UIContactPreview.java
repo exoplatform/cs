@@ -25,10 +25,8 @@ import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -61,6 +59,7 @@ public class UIContactPreview extends UIComponent  {
     PortalContainer pcontainer =  PortalContainer.getInstance() ;
     return pcontainer.getPortalContainerInfo().getContainerName() ;  
   }
+  public boolean isPopup() { return false; }
   public String getRepository() throws Exception {
     RepositoryService rService = getApplicationComponent(RepositoryService.class) ;    
     return rService.getCurrentRepository().getConfiguration().getName() ;

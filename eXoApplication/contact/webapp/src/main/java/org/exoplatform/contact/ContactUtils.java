@@ -7,14 +7,19 @@ package org.exoplatform.contact;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.jcr.RepositoryException;
 
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
@@ -205,4 +210,34 @@ public class ContactUtils {
     return builder.toString();
   }
   
+  public static int getAge(Contact contact) {
+    if (contact == null) return 0;
+    Calendar birthday = new GregorianCalendar() ;
+    birthday.setTime(contact.getBirthday());
+    Calendar now = new GregorianCalendar() ;
+    return now.get(Calendar.YEAR) - birthday.get(Calendar.YEAR);
+  }
+  
+  public static Map<String, String> getIMs(Contact contact) {
+    Map<String, String> ims = new LinkedHashMap<String, String>();
+    if (!isEmpty(contact.getExoId())) ims.put("exoChat", contact.getExoId());
+    if (!isEmpty(contact.getGoogleId())) ims.put("google", contact.getGoogleId());
+    if (!isEmpty(contact.getMsnId())) ims.put("msn", contact.getMsnId());
+    if (!isEmpty(contact.getAolId())) ims.put("aol-aim", contact.getAolId());
+    if (!isEmpty(contact.getYahooId())) ims.put("yahoo", contact.getYahooId());
+    if (!isEmpty(contact.getIcrId())) ims.put("icr", contact.getIcrId());
+    if (!isEmpty(contact.getSkypeId())) ims.put("skype", contact.getSkypeId());
+    if (!isEmpty(contact.getIcqId())) ims.put("icq", contact.getIcqId());
+    return ims;
+  }
+  
+  public static Map<String, String> getPhones(Contact contact) {
+    Map<String, String> phones = new LinkedHashMap<String, String>();
+    if (!isEmpty(contact.getWorkPhone1())) phones.put("workPhone1", contact.getWorkPhone1());
+    if (!isEmpty(contact.getWorkPhone2())) phones.put("workPhone2", contact.getWorkPhone2());
+    if (!isEmpty(contact.getHomePhone1())) phones.put("homePhone1", contact.getHomePhone1());
+    if (!isEmpty(contact.getHomePhone2())) phones.put("homePhone2", contact.getHomePhone2());
+    if (!isEmpty(contact.getMobilePhone())) phones.put("mobilePhone", contact.getMobilePhone());
+    return phones;
+  }
 }
