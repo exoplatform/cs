@@ -781,6 +781,19 @@ UIMailPortlet.prototype.lazySync = function(obj, fId){
 	}, 5*1000);
 }
 
+UIMailPortlet.prototype.fixFCKforSafari = function(){
+	if(eXo.core.Browser.browserType != "safari") return ;
+	try{
+		var editorFrame = FCKeditorAPI.Instances.messageContent.EditingArea.TargetElement.firstChild	
+		editorFrame.style.height = editorFrame.parentNode.offsetHeight + "px";
+		clearTimeout(this.fixSafariTimeout);
+		return ;
+	
+	}catch(e){
+		this.fixSafariTimeout = setTimeout("eXo.mail.UIMailPortlet.fixFCKforSafari();",100);
+	}	
+};
+
 eXo.mail.UIMailPortlet = new UIMailPortlet();
 // Override submit method of UIForm to add a comfirm message
 UIForm.prototype.tmpMethod = eXo.webui.UIForm.submitForm;
