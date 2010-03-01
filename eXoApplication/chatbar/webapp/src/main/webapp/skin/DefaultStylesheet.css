@@ -1366,6 +1366,14 @@ form {
   color: #0044bb;
 }
 
+.MessagesBox .MessageLink {
+  color: #0044BB;
+  text-decoration: none;
+}
+
+.MessagesBox .MessageLink:hover {
+  text-decoration: underline;
+}
 /**************************** Send File*****************************/
 .SendFile {
 	padding: 8px 15px 8px 8px;

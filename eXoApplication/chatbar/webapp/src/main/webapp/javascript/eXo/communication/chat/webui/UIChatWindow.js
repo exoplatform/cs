@@ -583,7 +583,7 @@ UITabControl.prototype.messageFilter = function(msg) {
 
   // Treat all url format as link.
   var urlRegex = /((http|https|ftp|mail|news|yahoo|skype|msn|apt):\/\/([\w\d_\.]+@)?((w{3})\.)?[\w\d_\-\.]+\.\w{1,3}(:\d{1,5})?\/?([^\s<>"';]+)?)/gi;
-  msg = msg.replace(urlRegex, '<a href="$1" title="Go to $1" target="_blank">$1</a>');
+  msg = msg.replace(urlRegex, '<a class="MessageLink" href="$1" title="Go to $1" target="_blank">$1</a>');
   //msg = msg.replace(urlRegex, this.linkFactory);
   
   msg = msg.replace(/(;{2}&\w+;{3})/gi, function(text) { return text.replace(/;;/g, '');});
