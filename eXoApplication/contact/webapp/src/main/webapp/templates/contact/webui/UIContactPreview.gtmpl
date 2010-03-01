@@ -173,7 +173,7 @@
                     				</td>
                     			</tr>
                     		<% } %>
-                        <% if (!ContactUtils.isEmpty(contact.getGoogleId())) {  hadIm = true; %>
+                        <% if (!ContactUtils.isEmpty(contact.getGoogleId())) { %>
                     			<% if (hadIm) { %>
                     			<tr  class="HideEmailAddress" style="$stylePrint">
                     				<td><span></span></td>
@@ -183,8 +183,8 @@
                     					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.google")%></span>
                     				</td>
                     			</tr>
-                    			<% } %>
-                          <% if (!ContactUtils.isEmpty(contact.getMsnId())) {  hadIm = true; %>
+                    			<%   hadIm = true; } %>
+                          <% if (!ContactUtils.isEmpty(contact.getMsnId())) {  %>
                           	<% if (hadIm) { %>
                     			<tr class="HideEmailAddress" style="$stylePrint">
                     				<td><span></span></td>
@@ -194,8 +194,8 @@
 															<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.msn")%></span>                  				
                     				</td>
                     			</tr>
-                    			<% } %>
-                          <% if (!ContactUtils.isEmpty(contact.getAolId())) {  hadIm = true; %>
+                    			<%  hadIm = true; } %>
+                          <% if (!ContactUtils.isEmpty(contact.getAolId())) {  %>
                           	<% if (hadIm) { %>
                     			<tr class="HideEmailAddress" style="$stylePrint">
                     				<td><span></span></td>
@@ -205,8 +205,8 @@
                     					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.aol-aim")%></span>
                     				</td>
                     			</tr>
-                    			<% } %>
-                          <% if (!ContactUtils.isEmpty(contact.getYahooId())) {  hadIm = true; %>
+                    			<%  hadIm = true; } %>
+                          <% if (!ContactUtils.isEmpty(contact.getYahooId())) {%>
                           	<% if (hadIm) { %>
                     			<tr class="HideEmailAddress" style="$stylePrint">
                     				<td><span></span></td>
@@ -216,8 +216,8 @@
                     					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.yahoo")%></span>	
                     				</td>
                     			</tr>
-                    			<% } %>
-                          <% if (!ContactUtils.isEmpty(contact.getIcrId())) {  hadIm = true; %>
+                    			<%   hadIm = true; } %>
+                          <% if (!ContactUtils.isEmpty(contact.getIcrId())) { %>
                           	<% if (hadIm) { %>
                     			<tr class="HideEmailAddress" style="$stylePrint">
                     				<td><span></span></td>
@@ -227,8 +227,8 @@
                     					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.icr")%></span>
                     				</td>
                     			</tr>                    			
-                    			<% } %>
-                          <% if (!ContactUtils.isEmpty(contact.getSkypeId())) {  hadIm = true; %>
+                    			<%  hadIm = true;  } %>
+                          <% if (!ContactUtils.isEmpty(contact.getSkypeId())) {%>
                           	<% if (hadIm) { %>
                     			<tr class="HideEmailAddress" style="$stylePrint">
                     				<td><span></span></td>
@@ -238,7 +238,7 @@
                     					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.skype")%></span>
                     				</td>
                     			</tr>                    			
-                    			<% } %>
+                    			<%   hadIm = true;  } %>
                           <% if (!ContactUtils.isEmpty(contact.getIcqId())) { %>
                           	<% if (hadIm) { %>
                     			<tr class="HideEmailAddress" style="$stylePrint">
@@ -286,7 +286,7 @@
                     				</td>
                     			</tr>
                     		<% } %>
-                        <% if (!ContactUtils.isEmpty(contact.getWorkPhone1())) {  hadPhone = true; %>
+                        <% if (!ContactUtils.isEmpty(contact.getWorkPhone1())) { %>
                     			<% if (hadPhone) { %>
                     			<tr  class="HideEmailAddress" style="$stylePrint">
                     				<td><span></span></td>
@@ -296,8 +296,8 @@
                     					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.work")%></span>
                     				</td>
                     			</tr>
-                    			<% } %>
-                          <% if (!ContactUtils.isEmpty(contact.getWorkPhone2())) {  hadPhone = true; %>
+                    			<% hadPhone = true; } %>
+                          <% if (!ContactUtils.isEmpty(contact.getWorkPhone2())) { %>
                           	<% if (hadPhone) { %>
                     			<tr class="HideEmailAddress" style="$stylePrint">
                     				<td><span></span></td>
@@ -307,8 +307,8 @@
 															<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.work")%></span>                  				
                     				</td>
                     			</tr>
-                    			<% } %>
-                          <% if (!ContactUtils.isEmpty(contact.getHomePhone1())) {  hadPhone = true; %>
+                    			<%  hadPhone = true;  } %>
+                          <% if (!ContactUtils.isEmpty(contact.getHomePhone1())) {  %>
                           	<% if (hadPhone) { %>
                     			<tr class="HideEmailAddress" style="$stylePrint">
                     				<td><span></span></td>
@@ -318,8 +318,8 @@
                     					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.home")%></span>
                     				</td>
                     			</tr>
-                    			<% } %>
-                          <% if (!ContactUtils.isEmpty(contact.getHomePhone2())) {  hadPhone = true; %>
+                    			<%  hadPhone = true; } %>
+                          <% if (!ContactUtils.isEmpty(contact.getHomePhone2())) { %>
                           	<% if (hadPhone) { %>
                     			<tr class="HideEmailAddress" style="$stylePrint">
                     				<td><span></span></td>
@@ -329,7 +329,7 @@
                     					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.home")%></span>	
                     				</td>
                     			</tr>
-                    			<% } %>
+                    			<%  hadPhone = true;  } %>
                                              			
                     			<% if ((ContactUtils.getPhones(contact).keySet().size() > 1) && !uicomponent.isPopup()) { %>
                     			<tr class="ShowMore">
