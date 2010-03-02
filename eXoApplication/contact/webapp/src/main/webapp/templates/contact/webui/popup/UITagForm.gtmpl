@@ -72,6 +72,7 @@
                   <div class="ButtonRight">
                     <div class="ButtonMiddle">
                       $actionLabel
+      <div class="UIAction">
                     </div>
                   </div>
                 </div>
