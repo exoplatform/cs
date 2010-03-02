@@ -2062,8 +2062,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
             String temp = sharedContactHomeNode.getPath().split(usersPath)[1] ;
             String userId = temp.split(split)[1] ;
             filter.setUsername(userId) ;
-            
-            qm = sharedContactHomeNode.getSession().getWorkspace().getQueryManager() ;      
+            qm = getSession(sysProvider).getWorkspace().getQueryManager() ;      
             query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
             NodeIterator it = query.execute().getNodes() ;
             while(it.hasNext()) {

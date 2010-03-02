@@ -267,7 +267,7 @@ public class ContactFilter {
     }
     if (hasEmails) {
       if (hasConjuntion) stringBuffer.append(") and (");
-      else stringBuffer.append(" true) and(") ;
+      else stringBuffer.append(" @exo:id) and (") ;
       stringBuffer.append("@exo:emailAddress");
       stringBuffer.append(")") ;
       hasConjuntion = true;
