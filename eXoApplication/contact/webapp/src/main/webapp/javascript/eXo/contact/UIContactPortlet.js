@@ -44,13 +44,15 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 		//tr = DOMUtil.findAncestorByClass(src, "VCardContent") ;
 		id = tr.getAttribute("id") ;
 	} else {
-		tr = DOMUtil.findAncestorByTagName(src, "tr") ;
+		tr = DOMUtil.findAncestorByClass(src, "ContactPreviewDetails");
 		if (tr != null) {
-			var checkbox = DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;		
-			id = checkbox.name ;
-		} else {
-			tr = DOMUtil.findAncestorByClass(src, "ContactPreviewDetails");
 			id = tr.getAttribute("id");
+		} else {
+			tr = DOMUtil.findAncestorByTagName(src, "tr") ;
+			if (tr != null) {
+				var checkbox = DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;
+				id = checkbox.name ;
+			}
 		}
 	}
   var type = tr.getAttribute("type").toLowerCase() ;
