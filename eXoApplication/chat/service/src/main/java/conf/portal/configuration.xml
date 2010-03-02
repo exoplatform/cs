@@ -19,7 +19,7 @@
       </value-param>
       <value-param>
         <name>path</name>
-        <value>exo:applicaton/eXoChat/history</value>
+        <value>exo:applications/eXoChat/history</value>
       </value-param>
     </init-params>
   </component>
