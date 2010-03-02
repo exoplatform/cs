@@ -872,7 +872,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           }
           if (ALL.equals(groupId)) {
             ContactFilter filter = new ContactFilter();
-//            filter.setType(PUBLIC);
             allEmailMap.putAll(contactSrv.searchEmails(MailUtils.getCurrentUser(), filter));
           } else if (SHARED.equals(groupId)) {
             ContactFilter filter = new ContactFilter();
@@ -884,7 +883,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
             if (!MailUtils.isFieldEmpty(label)) {
               filter.setCategories(new String[] {label});
             }
-//            filter.setType(PERSONAL);
             otherEmailMap.putAll(contactSrv.searchEmails(MailUtils.getCurrentUser(), filter));
           }
         }
