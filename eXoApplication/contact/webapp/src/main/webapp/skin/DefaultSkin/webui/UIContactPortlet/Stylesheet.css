@@ -672,7 +672,7 @@
 
 .UIContactPortlet .ContactPreviewContainer .State {
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/OnlineIcon.gif') no-repeat left center;
-	padding-left: 20px;
+	padding-left: 2px;
 	line-height: 25px;
 	font-size: 14px;
 	font-weight: bold;
@@ -680,7 +680,7 @@
 
 .UIContactPortlet .ContactPreviewContainer .Job {
 	font-size: 13px;
-	padding-left: 20px;
+	padding-left: 2px;
 }
 
 .UIContactPortlet .ContactPreviewContainer .InfoContainer {
@@ -718,7 +718,7 @@
 	float: right; /* orientation=rt */
 	padding-right: 10px; /* orientation=lt */
 	padding-left: 10px; /* orientation=rt */
-	width: 25%;
+	width: 35%;
 }
 
 .UIContactPortlet .InfoContainer .CenterContentProfile {

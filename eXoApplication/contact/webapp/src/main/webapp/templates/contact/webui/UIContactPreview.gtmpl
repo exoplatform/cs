@@ -56,35 +56,48 @@
 									} catch (Exception e) {}
 								}
 			  				%>
-								<img src="$imageLink" width=63 height=81 class="Avatar"/>
+								
 								<div class="InfoContainer"  style="padding:0px;">
 									<div class="Content" style="padding:0px;">
 										
-										<div class="LeftContentProfile">									  	
-											<div class="State"><%= ContactUtils.encodeHTML(contact.getFullName()) %></div>
-											<% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
-													 <div class="Job"> <%= ContactUtils.encodeHTML(contact.getJobTitle()) %></div>
-											<% } %>
-											<% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
-												<% if (!uicomponent.isPopup() || !uicomponent.isPrintForm) { 
-														 emailAdd = contact.getEmailAddress();
-														 subEmail = emailAdd;
-														 if (emailAdd.length() > 25 && !uicomponent.isPopup()) subEmail = emailAdd.substring(0, 25) + "..." ;
-												%>
-													 <div class="Job" >
-													   <a title="$emailAdd" style="color:blue;border-bottom:1px solid blue;" href="<%=uicomponent.event("SendEmail", emailAdd)%>">
-													 	   <%= ContactUtils.encodeHTML(subEmail) %>
-													 	 </a>
-													 </div>
-												<% } else { %>
-															<div class="Job" >	
-													 	   <%= ContactUtils.encodeHTML(contact.getEmailAddress()) %>
-													 		</div>
-												<% } %>
-											<% } %>
-											<% if (!ContactUtils.isEmpty(contact.getWorkPhone1())) { %>
-													 <div class="Job"> <%= ContactUtils.encodeHTML(contact.getWorkPhone1()) %><span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.work")%></span></div>
-											<% } %>
+										<div class="LeftContentProfile">
+											<table>
+												<tr>
+													<td width="20%">
+														<img src="$imageLink" width=63 height=81 class="Avatar"/>
+													</td>
+													<td style="padding-left:0px;">
+														
+														<div class="State"><%= ContactUtils.encodeHTML(contact.getFullName()) %></div>
+														<% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
+																 <div class="Job"> <%= ContactUtils.encodeHTML(contact.getJobTitle()) %></div>
+														<% } %>
+														<% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
+															<% if (!uicomponent.isPopup() || !uicomponent.isPrintForm) { 
+																	 emailAdd = contact.getEmailAddress();
+																	 subEmail = emailAdd;
+																	 if (emailAdd.length() > 25 && !uicomponent.isPopup()) subEmail = emailAdd.substring(0, 25) + "..." ;
+															%>
+																 <div class="Job" >
+																   <a title="$emailAdd" style="color:blue;border-bottom:1px solid blue;" href="<%=uicomponent.event("SendEmail", emailAdd)%>">
+																 	   <%= ContactUtils.encodeHTML(subEmail) %>
+																 	 </a>
+																 </div>
+															<% } else { %>
+																		<div class="Job" >	
+																 	   <%= ContactUtils.encodeHTML(contact.getEmailAddress()) %>
+																 		</div>
+															<% } %>
+														<% } %>
+														<% if (!ContactUtils.isEmpty(contact.getWorkPhone1())) { %>
+																 <div class="Job"> <%= ContactUtils.encodeHTML(contact.getWorkPhone1()) %><span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.work")%></span></div>
+														<% } %>
+																	
+													</td>
+												</tr>
+											</table>
+																		  	
+											
 										</div>
                     <div class="CenterContentProfile">
                     	<div>
