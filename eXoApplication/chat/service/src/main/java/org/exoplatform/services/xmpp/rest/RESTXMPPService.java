@@ -109,6 +109,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
     {
       put("chat.message.xmpp.session.is.null", "chat_message_xmpp_session_is_null");
       put("chat.message.room.creation.error", "chat_message_room_creation_error");
+      put("chat.message.room.show.config", "chat_message_room_show_config");
       put("chat.message.room.default.config.commit", "chat_message_room_default_config_commit");
       put("chat.message.room.configuration.error", "chat_message_room_configuration_error");
       put("chat.message.room.password.error", "chat_message_room_password_error");
