@@ -30,7 +30,7 @@
           println  "</a>";
 	      } else if(action.actionType == action.TYPE_LINK){
           println "<a title=\"" + action.actionName + "\" href=\"" + actionLink +"\">";
-		  println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt='' class=\"RemoveBtn\""
+		  println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt='' class=\"RemoveBtn\" />"
           println  "</a>";
 	      }
 	      
@@ -110,7 +110,7 @@
 	  <!-- render group -->
 	  <tr>
 	   <td></td>
-	   <td colspan="2"><%renderActions("Bc_Group")%></td>
+	   <td colspan="2"><%renderActions("Bcc_Group")%></td>
 	  </tr>
 	  <tr>
 	    <td class="SubjectFieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.subject") %> :&nbsp;&nbsp;</td>
