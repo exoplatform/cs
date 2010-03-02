@@ -245,11 +245,11 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiAddressForm = event.getSource();
       String category = ((UIFormSelectBoxWithGroups)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).getValue() ;
-      if (category.equals(uiAddressForm.all)) {
+      if (category.equals(UIAddressForm.all)) {
         uiAddressForm.setContactList(new ContactFilter()) ;
-      } else if (category.equals(uiAddressForm.sharedContacts_)) {
-
-        ContactFilter filter = new ContactFilter() ; 
+      } else if (category.equals(UIAddressForm.sharedContacts_)) {
+        ContactFilter filter = new ContactFilter() ;
+        filter.setType(DataStorage.SHARED);
         filter.setSearchSharedContacts(true) ;
         ContactService contactSrv = uiAddressForm.getApplicationComponent(ContactService.class);
         Map<String, String> resultMap = contactSrv.searchEmails(MailUtils.getCurrentUser(), filter) ;
@@ -291,9 +291,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       ContactFilter filter = new ContactFilter() ;
       if(!MailUtils.isFieldEmpty(text))
         filter.setText(MailUtils.encodeJCRText(text)) ;
-      if (category.equals(uiForm.all)) {       
+      if (category.equals(UIAddressForm.all)) {       
         uiForm.setContactList(filter) ;
-      } else if(category.equals(uiForm.sharedContacts_)) {
+      } else if(category.equals(UIAddressForm.sharedContacts_)) {
         filter.setType(DataStorage.SHARED);
         filter.setSearchSharedContacts(true) ;
         uiForm.setContactList(filter);
