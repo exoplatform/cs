@@ -289,8 +289,6 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
     new component.BuddyListControl(this.buddyListNode, this.buddyItemActionCallbackWrapper, this);
   this.lang = eXo.core.I18n.getLanguage();
   this.jabberLoadJsResourceBundle(this.lang);
-  /*eXo.require("eXo.communication.chat.locale." + this.lang, "/chatbar/javascript/");
-  this.ResourceBundle = eXo.communication.chatbar.locale.ResourceBundle;*/
   
   // Init cometd service on startup
   this.initCometd();

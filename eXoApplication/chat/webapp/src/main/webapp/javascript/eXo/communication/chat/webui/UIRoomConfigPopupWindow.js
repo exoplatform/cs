@@ -123,7 +123,9 @@ UIRoomConfigPopupWindow.prototype.switchGroupOptionsAnimate = function() {
     thys.openingNode.percent = percent;
   } else {
     var openLegendNode = thys.openingNode.getElementsByTagName('legend')[0];
-    openLegendNode.innerHTML = openLegendNode.innerHTML.replace(/^Show\s/, '');
+    //openLegendNode.innerHTML = openLegendNode.innerHTML.replace(/^Show\s/, '');
+    if(thys.willOpeningLegendNode)
+      openLegendNode.innerHTML = thys.willOpeningLegendNode;
     openingContentNode.style.opacity = '';
     openingContentNode.style.filter = '';
     openingContentNode.style.display = 'block';
@@ -134,7 +136,9 @@ UIRoomConfigPopupWindow.prototype.switchGroupOptionsAnimate = function() {
     thys.openingNode = null;
 
     var closeLegendNode = thys.closingNode.getElementsByTagName('legend')[0];
-    closeLegendNode.innerHTML = 'Show ' + closeLegendNode.innerHTML;
+    //closeLegendNode.innerHTML = 'Show ' + closeLegendNode.innerHTML;
+    thys.willOpeningLegendNode = closeLegendNode.innerHTML;
+    closeLegendNode.innerHTML = eXo.communication.chat.webui.UIMainChatWindow.ResourceBundle.chat_message_room_show_config.replace('{0}', closeLegendNode.innerHTML);
     closingContentNode.style.opacity = '';
     closingContentNode.style.filter = '';
     closingContentNode.style.display = 'none';

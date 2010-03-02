@@ -106,6 +106,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   private static final Map<String, String> jsResourceBundle = new HashMap<String, String>(){
     {
       put("chat.message.xmpp.session.is.null", "chat_message_xmpp_session_is_null");
+      put("chat.message.room.show.config", "chat_message_room_show_config");
       put("chat.message.room.default.config.commit", "chat_message_room_default_config_commit");
       put("chat.message.room.configuration.error", "chat_message_room_configuration_error");
       put("chat.message.room.password.error", "chat_message_room_password_error");
@@ -202,7 +203,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
     try {
       sb.append("eXo.communication.chatbar.locale.ResourceBundle = {\n");
       for(Map.Entry<String, String> entry : jsResourceBundle.entrySet()){
-        sb.append(entry.getValue() + " : \"").append(jsRb.getString(entry.getKey())).append("\",\n");
+        String value = (jsRb != null && jsRb.getString(entry.getKey()) != null) ? jsRb.getString(entry.getKey()) : entry.getKey();
+        sb.append(entry.getValue() + " : \"").append(value).append("\",\n");
       }
       sb.append("chat_message_finish_load_resource_bundle : \"finish load resource bundle\"\n");
       sb.append("};");
