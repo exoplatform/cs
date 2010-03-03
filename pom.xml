@@ -92,21 +92,6 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <includes>
-            <include implementation="java.lang.String">**/${test.classes}*.java</include>
-          </includes>
-          <systemProperties>
-            <property>
-              <name>mock.portal.dir</name>
-              <value>${exo.projects.directory.src}/portal/tags/2.5.7/web/portal/src/main/webapp</value>
-            </property>
-          </systemProperties>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
