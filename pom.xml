@@ -61,7 +61,6 @@
     <org.exoplatform.portal.version>2.5.8-SNAPSHOT</org.exoplatform.portal.version>
     <org.exoplatform.webos.version>1.5.5-SNAPSHOT</org.exoplatform.webos.version>
     <org.exoplatform.exopackage.version>1.2.0</org.exoplatform.exopackage.version>
-    <org.exoplatform.mvnexobuild.version>1.2.0</org.exoplatform.mvnexobuild.version>
   </properties>
   <build>
     <resources>
