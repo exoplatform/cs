@@ -66,7 +66,7 @@
 													<td width="20%">
 														<img src="$imageLink" width=63 height=81 class="Avatar"/>
 													</td>
-													<td style="padding-left:0px;">
+													<td style="padding-left:10px;">
 														
 														<div class="State"><%= ContactUtils.encodeHTML(contact.getFullName()) %></div>
 														<% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
@@ -293,7 +293,7 @@
                     				<td style="padding-left:0px;"><%=_ctx.appRes("UIContactPreview.label.phone")%></td>
                     		
                     		<% if (!ContactUtils.isEmpty(contact.getMobilePhone())) { hadPhone = true; %>                    		
-                    				<td style="padding-left:2x;">
+                    				<td style="padding-left:2px;">
                     					<%= ContactUtils.encodeHTML(contact.getMobilePhone()) %>
                     					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.work")%></span>
                     				</td>
@@ -457,7 +457,7 @@
                             <td class="InfoTitle1">
 			                        <table class="InfoTitle2" >
 			                          <tr>
-			                          	<td width="30%"><div><%=_ctx.appRes("UIContactPreview.label.fax")%></div></td>
+			                          	<td width="5%"><div><%=_ctx.appRes("UIContactPreview.label.fax")%></div></td>
 			                            <td><div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkFax()) %></div></td>
 			                          </tr>
 			                        </table>
@@ -554,7 +554,7 @@
                             <td class="InfoTitle1">
 			                        <table class="InfoTitle2" >
 			                          <tr>
-			                          	<td width="30%"><div><%=_ctx.appRes("UIContactPreview.label.fax")%></div></td>
+			                          	<td width="5%"><div><%=_ctx.appRes("UIContactPreview.label.fax")%></div></td>
 			                            <td><div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomeFax()) %></div></td>
 			                          </tr>
 			                        </table>

@@ -751,19 +751,19 @@
 
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle1 {
-	white-space: nowrap;
+	white-space: normal;
 	padding: 0px 10px 0px 4px;
 	width: 100%;
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle2 {
-	white-space: nowrap;
+	white-space: normal;
 	width: 100%; 
 	table-layout: fixed;
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoTitle3 {
-	white-space: nowrap;
+	white-space: normal;
 
 }
 
