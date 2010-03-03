@@ -23,9 +23,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Node;
@@ -2563,18 +2565,18 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         
         // save contact
         contact.setId(user.getUserName()) ;
-        Map<String, String> groupIds = new LinkedHashMap<String, String>() ;
-        groupIds.put(addressbook.getId(), addressbook.getId()) ;   
+        Set<String> groupIds = new HashSet<String>() ;
+        groupIds.add(addressbook.getId()) ;   
         ExoContainer container = ExoContainerContext.getCurrentContainer();
         OrganizationService organizationService = 
           (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ;
         Object[] groupsOfUser = organizationService.getGroupHandler().findGroupsOfUser(user.getUserName()).toArray() ;
         for (Object object : groupsOfUser) {
           String id = ((Group)object).getId() ;
-          groupIds.put(id, id) ;
+          groupIds.add(id) ;
         }
         
-        contact.setAddressBookIds(groupIds.keySet().toArray(new String[] {})) ;
+        contact.setAddressBookIds(groupIds.toArray(new String[] {})) ;
         contact.setOwner(true) ;
         contact.setOwnerId(user.getUserName()) ;
         saveContact(user.getUserName(), contact, true) ;
