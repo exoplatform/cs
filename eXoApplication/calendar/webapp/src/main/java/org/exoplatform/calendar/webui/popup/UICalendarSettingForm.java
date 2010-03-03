@@ -69,6 +69,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   final private static String SETTING_CALENDAR_TAB = "setting".intern() ;
   final private static String DEFAULT_CALENDAR_TAB = "defaultCalendarTab".intern() ;
   final private static String DEFAULT_CALENDARS = "defaultCalendars".intern() ;
+  final private static String FEED_TAB = "feed-tab".intern();
   final private static String DEFAULT_CALENDARS_NOTE = "note".intern() ;
   private Map<String, String> names_ = new HashMap<String, String>() ;
   public String[] sharedCalendarColors_  = null ;
@@ -79,6 +80,9 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     setSelectedTab(setting.getId()) ;
     UICalendarSettingDisplayTab defaultCalendarsTab  = new UICalendarSettingDisplayTab(DEFAULT_CALENDAR_TAB) ;    
     addUIFormInput(defaultCalendarsTab) ;
+    //Add Feed Tab
+    //UICalendarSettingFeedTab uiFeedTab = new UICalendarSettingFeedTab(FEED_TAB);
+    //addUIFormInput(uiFeedTab);
   }
 
   public void activate() throws Exception {}
@@ -167,13 +171,10 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       UIFormCheckBoxInput<Boolean> input = defaultCalendarsTab.getChildById(calId) ;
       if(input != null) input.setChecked(false) ;
     }
+    
+    
   }
- /* private SessionProvider getSession() {
-    return SessionProviderFactory.createSessionProvider() ;
-  }*/
-/*  private SessionProvider getSystemSession() {
-    return SessionProviderFactory.createSystemProvider() ;
-  }*/
+ 
   protected List<Calendar> getPrivateCalendars(CalendarService calendarService, String username) throws Exception{
     boolean showAll = true;
     List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(username, showAll) ;

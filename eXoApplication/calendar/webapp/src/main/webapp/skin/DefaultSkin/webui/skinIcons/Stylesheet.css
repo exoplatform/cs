@@ -913,3 +913,16 @@
 
 /***************************END UIRightClickPopupMenu*********************/
 /*********************************************************************/
+
+.UICalendarPortlet .ICalIcon {
+  background:url("/calendar/skin/DefaultSkin/webui/skinIcons/icons/CalendarIcons.gif") no-repeat scroll left -1087px transparent;
+  cursor: pointer;
+  width: 17px;
+  height: 17px;
+}
+
+.UICalendarPortlet .RemoveBtn {
+	background: url('/mail/skin/DefaultSkin/webui/skinIcons/16x16/icons/Dustbin.gif') no-repeat left center;
+	height: 16px;
+	width: 16px;
+}

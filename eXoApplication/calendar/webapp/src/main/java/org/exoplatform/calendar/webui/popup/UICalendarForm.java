@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
+import org.exoplatform.calendar.webui.UIFormInputInfoAction;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
@@ -56,6 +58,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.ext.UIFormColorPicker;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
+import org.hibernate.mapping.Array;
 
 /**
  * Created by The eXo Platform SARL
@@ -64,16 +67,17 @@ import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
-    events = {
-      @EventConfig(listeners = UICalendarForm.SaveActionListener.class),
-      @EventConfig(listeners = UICalendarForm.AddCategoryActionListener.class,  phase=Phase.DECODE),
-      @EventConfig(listeners = UICalendarForm.SelectPermissionActionListener.class, phase=Phase.DECODE),
-      @EventConfig(listeners = UICalendarForm.ResetActionListener.class, phase=Phase.DECODE),
-      @EventConfig(listeners = UICalendarForm.CancelActionListener.class, phase=Phase.DECODE),
-      @EventConfig(listeners = UICalendarForm.SelectTabActionListener.class, phase=Phase.DECODE)
-    }
+                 lifecycle = UIFormLifecycle.class,
+                 template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
+                 events = {
+                   @EventConfig(listeners = UICalendarForm.SaveActionListener.class),
+                   @EventConfig(listeners = UICalendarForm.AddCategoryActionListener.class,  phase=Phase.DECODE),
+                   @EventConfig(listeners = UICalendarForm.SelectPermissionActionListener.class, phase=Phase.DECODE),
+                   @EventConfig(listeners = UICalendarForm.ResetActionListener.class, phase=Phase.DECODE),
+                   @EventConfig(listeners = UICalendarForm.CancelActionListener.class, phase=Phase.DECODE),
+                   @EventConfig(listeners = UICalendarForm.SelectTabActionListener.class, phase=Phase.DECODE),
+                   @EventConfig(listeners = UICalendarForm.RemoveRssActionListener.class, phase=Phase.DECODE)
+                 }
 )
 public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, UISelector{
   final public static String DISPLAY_NAME = "displayName" ;
@@ -88,6 +92,10 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   final public static String TIMEZONE = "timeZone" ;
   final public static String LOCALE = "locale" ;
   final public static String PERMISSION_SUB = "_permission".intern() ;
+  final public static String PUBLIC_URL = "public-url".intern();
+  final public static String PRIVATE_URL = "private-url".intern();
+  final public static String PRIVATE_URL_MSG = "private-url-msg-active".intern();
+  final public static String PRIVATE_URL_MSG_D = "private-url-msg-deactive".intern();
 
   public Map<String, String> permission_ = new HashMap<String, String>() ;
   public Map<String, Map<String, String>> perms_ = new HashMap<String, Map<String, String>>() ;
@@ -105,7 +113,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     calendarDetail.addUIFormInput(new UIFormSelectBox(LOCALE, LOCALE, getLocales())) ;
     calendarDetail.addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones())) ;
     calendarDetail.addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR));
-    //calendarDetail.addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR, Colors.COLORS)) ;
+
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData addCategory = new ActionData() ;
     addCategory.setActionListener("AddCategory") ;
@@ -148,13 +156,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   public String[] getActions(){
     return new String[]{"Save", "Reset", "Cancel"} ;
   }
- /* private SessionProvider getSession()  {
-    return SessionProviderFactory.createSessionProvider() ;
-  }
 
-  private SessionProvider getSystemSession()  {
-    return SessionProviderFactory.createSystemProvider() ;
-  }*/
   private  List<SelectItemOption<String>> getCategory() throws Exception {
     String username = CalendarUtils.getCurrentUser() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -207,39 +209,75 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       setSelectedColor(null) ;
       lockCheckBoxFields(false) ;
     } else {
-      /*  //Calendar calendar = null ;
-      CalendarService calService = CalendarUtils.getCalendarService() ;
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
-      if(CalendarUtils.PRIVATE_TYPE.equals(calType_)) {
-        calendar = calService.getUserCalendar(getSession(), username, calendarId_) ;
-      } else if(CalendarUtils.SHARED_TYPE.equals(calType_)) {
-        Iterator iter = calService.getSharedCalendars(getSystemSession(), username, true).getCalendars().iterator() ;
-        while (iter.hasNext()) {
-          Calendar cal = ((Calendar)iter.next()) ;
-          if(cal.getId().equals(calendarId_)) {
-            calendar = cal ;
-            break ;
-          }
-        }
-      } else if(CalendarUtils.PUBLIC_TYPE.equals(calType_)) {
-        calendar = calService.getGroupCalendar(getSystemSession(), calendarId_) ;
-      }
-      if(calendar != null) */
       init(calendar_) ;
     }
 
   }
   public boolean isAddNew() { return isAddNew_ ; }
   public void init(Calendar calendar) throws Exception {
+
     isAddNew_ = false ;
     calendar_ = calendar ;
     //calendarId_ = calendar.getId() ;
+
+    //Add feed field  
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR);
+    String url = null;
+    try { 
+       
+      url = calendar.getPublicUrl();
+      
+      if(url != null) {
+        
+        UIFormInputInfoAction publicUrl = (UIFormInputInfoAction)getChildById(PUBLIC_URL);
+        if(publicUrl == null ) {
+          publicUrl = new UIFormInputInfoAction(PUBLIC_URL, PUBLIC_URL, null);
+          calendarDetail.addUIFormInput(publicUrl);
+        }
+        List<ActionData> icalActs = new ArrayList<ActionData>();
+        ActionData icalAct = new ActionData();
+        icalAct.setActionListener(url);
+        icalAct.setActionName(url);
+        icalAct.setActionType(ActionData.TYPE_ICON);
+        icalAct.setCssIconClass("ICalIcon");
+        icalActs.add(icalAct);
+        ActionData removeAct = new ActionData();
+        removeAct.setActionListener("RemoveRss");
+        removeAct.setCssIconClass("RemoveBtn");
+        removeAct.setActionName(removeAct.getActionListener());
+        removeAct.setActionType(UIFormInputInfoAction.TYPE_BUTTON);
+        icalActs.add(removeAct);
+        publicUrl.setActionField(PUBLIC_URL,icalActs);
+        
+      } 
+      //TODO implement later 
+      /*url = calendar.getPrivateUrl();
+      if(url != null) {
+        UIFormInputInfoAction privateUrl = (UIFormInputInfoAction)getChildById(PRIVATE_URL);
+        if(privateUrl == null) {
+          privateUrl = new UIFormInputInfoAction(PRIVATE_URL, PRIVATE_URL, getLabel(PRIVATE_URL_MSG));
+          calendarDetail.addUIFormInput(privateUrl);
+        }
+        ActionData rssFeed = new ActionData();
+        rssFeed.setActionListener("ActiveIcalFeed");
+        //rssFeed.setActionListener("DeactiveIcalFeed");
+        rssFeed.setActionName(url);
+        rssFeed.setShowLabel(true);
+        rssFeed.setActionType(ActionData.TYPE_LINK);
+        rssFeed.setCssIconClass("FeedLink");
+        privateUrl.setActionField(PRIVATE_URL, Arrays.asList(rssFeed));
+        
+      }
+      */
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
     setDisplayName(calendar.getName()) ;
     setDescription(calendar.getDescription()) ;
     UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
     sharing.setRendered(true) ;
     if(CalendarUtils.PUBLIC_TYPE.equals(calType_)) {
-      UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
       calendarDetail.removeChildById(CATEGORY) ;
       calendarDetail.setActionField(CATEGORY, null) ;
       for(String groupId : calendar.getGroups()) {
@@ -262,10 +300,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
                   }
                 }
               }
-              /*if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.COMMA) ;
-              if(s.startsWith("*")) sb.append(UIGroupSelector.TYPE_MEMBERSHIP + ":/"+ groupId + ":/"+ s) ;
-              else sb.append(UIGroupSelector.TYPE_USER + ":/"+ groupId + ":/"+ s) ;*/
-              //updateSelect(groupId + PERMISSION_SUB, sb.toString())  ;
             }
           }
           uiInput.setValue(sb.toString()) ;
@@ -485,7 +519,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         UICalendarForm uiForm = event.getSource() ;
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         String displayName = uiForm.getUIStringInput(DISPLAY_NAME).getValue() ;
-//      CS-3009
+        //      CS-3009
         displayName = CalendarUtils.reduceSpace(displayName) ;
         /*if(!CalendarUtils.isNameValid(displayName, CalendarUtils.SPECIALCHARACTER)){
           uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-invalid", null, ApplicationMessage.WARNING) ) ;
@@ -550,7 +584,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }
-          
+
           // CS-3607
           List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(selected.toArray(new String[] {}), false, username) ;
           for (GroupCalendarData groupCalendarData : groupCalendars) {
@@ -570,7 +604,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
               }
             }
           }
-          
+
           calendar.setPublic(isPublic) ;
           calendar.setGroups(selected.toArray((new String[]{})));
           List<String> listPermission = new ArrayList<String>() ;
@@ -640,10 +674,21 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       calendarPortlet.cancelAction() ;
     }
   }
-  
+
   static public class SelectTabActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
+    }
+  }
+  static public class RemoveRssActionListener extends EventListener<UICalendarForm> {
+    public void execute(Event<UICalendarForm> event) throws Exception {
+      UICalendarForm uiForm = event.getSource();
+      uiForm.calendar_.setPublicUrl(null);
+      UIFormInputWithActions calendarDetail = uiForm.getChildById(INPUT_CALENDAR);
+      UIFormInputInfoAction uiInput = calendarDetail.getChildById(PUBLIC_URL);
+      if(uiInput != null) uiInput.removeActionField(PUBLIC_URL);
+      else return ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;      
     }
   }
 }

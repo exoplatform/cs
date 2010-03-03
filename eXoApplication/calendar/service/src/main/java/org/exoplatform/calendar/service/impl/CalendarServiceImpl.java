@@ -184,7 +184,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     if (ev != null && (isNew || !ev.getId().equals(eventCategory.getId()))) throw new ItemExistsException(); 
     storage_.saveEventCategory(username, eventCategory, isNew);
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -917,4 +917,5 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     }
     return null ;
   }
+
 }

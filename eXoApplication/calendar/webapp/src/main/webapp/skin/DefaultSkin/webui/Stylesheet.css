@@ -327,3 +327,14 @@
 .UICalendarPortlet .UIHightlightEvent {
 	border:solid 1px red;
 }
+
+.UICalendarPortlet .ICalIcon{
+ border:solid 1px red;
+}
+
+.UICalendarPortlet .FeedLink{
+}
+
+.UICalendarPortlet .RemoveBtn {
+	
+}

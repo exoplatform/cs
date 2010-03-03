@@ -227,7 +227,15 @@
 	  		</propertyDefinition>	  
 	  		<propertyDefinition name="exo:timeZone" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
-	  		</propertyDefinition>	  
+	  		</propertyDefinition>	 
+	  		
+	  		<!-- added from cs 2.0.0 Beta01 -->
+	  		<propertyDefinition name="exo:publicUrl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	
+	  		<propertyDefinition name="exo:privateUrl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition> 
 	  		  			
   		</propertyDefinitions>
   		<childNodeDefinitions>

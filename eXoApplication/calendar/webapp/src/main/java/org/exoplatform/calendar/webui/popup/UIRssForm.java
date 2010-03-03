@@ -28,6 +28,7 @@ import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -133,6 +134,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       UIRssForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       CalendarService calendarService = CalendarUtils.getCalendarService();
+      String username = CalendarUtils.getCurrentUser();
       UIFormInputWithActions rssCalendars = uiForm.getChildById(INPUT_RSSCAL) ;
       List<UIComponent> children = rssCalendars.getChildren() ;
       List<String> calendarIds = new ArrayList<String> () ;
@@ -176,15 +178,28 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
         rssData.setPubDate(uiForm.getUIDateTimePicker(PUBLIC_DATE).getCalendar().getTime()) ;
       
       LinkedHashMap<String, Calendar> calendars = new LinkedHashMap<String, Calendar>() ;
+      
+      Calendar cal = null;
       for (String calId : calendarIds) {
+        String url =  CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ PortalContainer.getCurrentRestContextName() + "/cs/calendar/rss/"+username+"/"+calId;
         if (uiForm.userCals_.containsKey(calId)) {
-          calendars.put(calId + Utils.SPLITTER + Utils.PRIVATE_TYPE, uiForm.userCals_.get(calId)) ;
+          cal = calendarService.getUserCalendar(CalendarUtils.getCurrentUser(), calId);
+          cal.setPublicUrl(url+"/"+ Utils.PRIVATE_TYPE);
+          calendarService.saveUserCalendar(username, cal, false);
+          //calendars.put(calId + Utils.SPLITTER + Utils.PRIVATE_TYPE, uiForm.userCals_.get(calId)) ;
         } else if (uiForm.sharedCals_.containsKey(calId)) {
-          calendars.put(calId + Utils.SPLITTER + Utils.SHARED_TYPE, uiForm.sharedCals_.get(calId)) ;
+          cal = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser(), true).getCalendarById(calId);
+          cal.setPublicUrl(url+"/"+ Utils.PRIVATE_TYPE);
+          calendarService.saveSharedCalendar(username, cal);
+          //calendars.put(calId + Utils.SPLITTER + Utils.SHARED_TYPE, uiForm.sharedCals_.get(calId)) ;
         } else if (uiForm.publicCals_.containsKey(calId)) {
-          calendars.put(calId + Utils.SPLITTER + Utils.PUBLIC_TYPE, uiForm.publicCals_.get(calId)) ;
+          cal = calendarService.getGroupCalendar(calId);
+          cal.setPublicUrl(url+"/"+ Utils.PRIVATE_TYPE);
+          calendarService.savePublicCalendar(cal, false, username);
+          //calendars.put(calId + Utils.SPLITTER + Utils.PUBLIC_TYPE, uiForm.publicCals_.get(calId)) ;
         }
       }      
+      /*
       int result = calendarService.generateRss(CalendarUtils.getCurrentUser(), calendars, rssData) ;
       if(result < 0) {
         uiForm.setSelectedTab(INPUT_RSSINFO) ;
@@ -192,7 +207,8 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
         uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.no-data-generated", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
+      }*/
+      
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;  
       Object[] object = new Object[]{title} ;

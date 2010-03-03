@@ -64,6 +64,8 @@ public class Utils {
   public static final String EXO_IS_OVER = "exo:isOver".intern() ;
   public static final String EXO_CALENDAR_PUBLIC_EVENT = "exo:calendarPublicEvent".intern() ;
   public static final String EXO_EVENT_CATEGORY = "exo:eventCategory".intern() ;
+  public static final String EXO_PUBLIC_URL = "exo:publicUrl".intern();
+  public static final String EXO_PRIVATE_URL = "exo:privateUrl".intern();
   
   public static final String EXO_DATA = "exo:data".intern() ;
   public static final String EXO_ICAL_DATA = "exo:iCalData".intern() ;

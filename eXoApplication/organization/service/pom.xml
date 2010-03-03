@@ -47,7 +47,8 @@
       <version>${org.exoplatform.portal.version}</version>
       <scope>compile</scope>
     </dependency>
-    <dependency>
+    <!-- for exteds test -->
+	<dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.test.core</artifactId>
       <version>${org.exoplatform.portal.version}</version>
@@ -83,6 +84,7 @@
       <version>${version.chromattic}</version>
       <scope>test</scope>
     </dependency>
+	<!-- end for test dependencies -->
     <dependency>
       <groupId>javax.xml.stream</groupId>
       <artifactId>stax-api</artifactId>

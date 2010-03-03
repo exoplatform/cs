@@ -508,6 +508,6 @@ public interface DataStorage {
 
   public Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception;
 
-  public Session getSession(SessionProvider sprovider) throws Exception;
+  public Session getSession(SessionProvider sprovider) throws Exception; 
 
 }

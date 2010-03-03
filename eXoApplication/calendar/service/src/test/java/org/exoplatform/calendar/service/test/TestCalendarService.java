@@ -16,10 +16,10 @@
  */
 package org.exoplatform.calendar.service.test;
 
-import java.util.Date;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.calendar.service.Calendar;
@@ -30,7 +30,6 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
-import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 
 /**
@@ -395,8 +394,13 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     assertNotNull(modifiedDate);
     assertTrue(modifiedDate.after(createdDate));
     
-    calendarService_.removeEventCategory(username, eventCategory.getName()) ;
+    calendarService_.removeEventCategory(username, eventCategory.getId()) ;
     calendarService_.removeUserCalendar(username, cal.getId()) ;
     calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   }
+  
+  
+  
+   
+  
 }
