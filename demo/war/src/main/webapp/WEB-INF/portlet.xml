@@ -55,5 +55,137 @@
     </portlet-preferences>
     
   </portlet>
+  
+  <portlet>
+    <description xml:lang="EN">CSDemo CSS Controler Portlet</description>
+    <portlet-name>CSDemoCSSControlerPortlet</portlet-name>
+    <display-name xml:lang="EN">CSDemo CSS Controler Portlet</display-name>
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
+    
+    <init-param>
+      <name>webui.configuration</name>
+      <value>/WEB-INF/conf/portlet/web/CSDemoCSSControlerPortlet/webui/configuration.xml</value>
+    </init-param>    
+
+    <expiration-cache>0</expiration-cache>
+    <supports>
+      <mime-type>text/html</mime-type>
+    </supports>
+    <supported-locale>en</supported-locale>
+    <resource-bundle>locale.portal.webui</resource-bundle>
+    <portlet-info>
+      <title>CSDemo CSS Controler Portlet</title>
+      <short-title>CSDemo CSS Controler Portlet</short-title>
+      <keywords>System</keywords>
+    </portlet-info>    
+    
+    <portlet-preferences>
+      <preference>
+        <name>template</name>
+        <value>system:/templates/UICSDemoCSSControlerPortlet.gtmpl</value>
+        <read-only>false</read-only>
+      </preference>
+    </portlet-preferences>
+    
+  </portlet>
+  
+  <portlet>
+    <description xml:lang="EN">ContactToolbar Portlet</description>
+    <portlet-name>UserToolBarContactPortlet</portlet-name>
+    <display-name xml:lang="EN">ContactToolbar Portlet</display-name>
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
+    
+    <init-param>
+      <name>webui.configuration</name>
+      <value>/WEB-INF/conf/portlet/toolbar/UserToolBarContactPortlet/webui/configuration.xml</value>
+    </init-param>    
+
+    <expiration-cache>0</expiration-cache>
+    <supports>
+      <mime-type>text/html</mime-type>
+    </supports>
+    <supported-locale>en</supported-locale>
+    <resource-bundle>locale.portal.webui</resource-bundle>
+    <portlet-info>
+      <title>ContactToolbar Portlet</title>
+      <short-title>ContactToolbar Portlet</short-title>
+      <keywords>System</keywords>
+    </portlet-info>    
+    
+    <portlet-preferences>
+      <preference>
+        <name>template</name>
+        <value>system:/templates/toolbar/UIUserToolBarContactPortlet.gtmpl</value>
+        <read-only>false</read-only>
+      </preference>
+    </portlet-preferences>
+    
+  </portlet>
+  
+  <portlet>
+    <description xml:lang="EN">MailToolbar Portlet</description>
+    <portlet-name>UserToolBarMailPortlet</portlet-name>
+    <display-name xml:lang="EN">MailToolbar Portlet</display-name>
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
+    
+    <init-param>
+      <name>webui.configuration</name>
+      <value>/WEB-INF/conf/portlet/toolbar/UserToolBarMailPortlet/webui/configuration.xml</value>
+    </init-param>    
+
+    <expiration-cache>0</expiration-cache>
+    <supports>
+      <mime-type>text/html</mime-type>
+    </supports>
+    <supported-locale>en</supported-locale>
+    <resource-bundle>locale.portal.webui</resource-bundle>
+    <portlet-info>
+      <title>MailToolbar Portlet</title>
+      <short-title>MailToolbar Portlet</short-title>
+      <keywords>System</keywords>
+    </portlet-info>    
+    
+    <portlet-preferences>
+      <preference>
+        <name>template</name>
+        <value>system:/templates/toolbar/UIUserToolBarMailPortlet.gtmpl</value>
+        <read-only>false</read-only>
+      </preference>
+    </portlet-preferences>
+    
+  </portlet>
+  
+  <portlet>
+    <description xml:lang="EN">CalendarToolbar Portlet</description>
+    <portlet-name>UserToolBarCalendarPortlet</portlet-name>
+    <display-name xml:lang="EN">CalendarToolbar Portlet</display-name>
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
+    
+    <init-param>
+      <name>webui.configuration</name>
+      <value>/WEB-INF/conf/portlet/toolbar/UserToolBarCalendarPortlet/webui/configuration.xml</value>
+    </init-param>    
+
+    <expiration-cache>0</expiration-cache>
+    <supports>
+      <mime-type>text/html</mime-type>
+    </supports>
+    <supported-locale>en</supported-locale>
+    <resource-bundle>locale.portal.webui</resource-bundle>
+    <portlet-info>
+      <title>CalendarToolbar Portlet</title>
+      <short-title>CalendarToolbar Portlet</short-title>
+      <keywords>System</keywords>
+    </portlet-info>    
+    
+    <portlet-preferences>
+      <preference>
+        <name>template</name>
+        <value>system:/templates/toolbar/UIUserToolBarCalendarPortlet.gtmpl</value>
+        <read-only>false</read-only>
+      </preference>
+    </portlet-preferences>
+    
+  </portlet>
 
 </portlet-app>

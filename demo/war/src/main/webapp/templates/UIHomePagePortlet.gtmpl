@@ -1,5 +1,8 @@
 <%
   import org.exoplatform.portal.webui.util.Util ;
+  
+  String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;
+  
   String toururi = Util.getPortalRequestContext().getPortalURI() + "tour";
   def prContext = _ctx.getRequestContext().getParentAppRequestContext();
   String user = prContext.getRemoteUser() ;
@@ -36,7 +39,19 @@
 										</div>
 									</div>
 								</div>
-								<div class="LoginButton">
+							  <%if(prContext.getRemoteUser() != null) {%>
+								<div class="LoginButton" onclick="eXo.portal.logout();">
+									<div class="LoginButtonL">
+										<div class="LoginButtonR">
+											<div class="LoginButtonC">
+												<div class="BoldLabel">Logout</div>
+												<div class="NormalLabel">END USING CS</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							  <%} else {%>
+								<div class="LoginButton" onclick="$signInAction">
 									<div class="LoginButtonL">
 										<div class="LoginButtonR">
 											<div class="LoginButtonC">
@@ -46,6 +61,7 @@
 										</div>
 									</div>
 								</div>
+							  <%}%>
 							</div>
 						</div>
 						<table style="table-layout: fixed; width: 100%;-width: auto;">
@@ -53,7 +69,7 @@
 								<td>
 									<div class="HomePortletContainer">
 										<div class="ContainerBox">
-											<div class="IconCalenda"><a href="$calendarUrl"><span></span></a></div>
+											<div class="IconCalenda"><a href="$calendarUrl" class="IconLink"><span></span></a></div>
 										</div>
 										<div class="ContentProductsCS">
 											<div class="ProductLabel">Calendar</div>
@@ -67,7 +83,7 @@
 								<td>
 									<div class="BlockAddressBook HomePortletContainer">
 										<div class="ContainerBox">
-											<div class="IconAddressBook"><a href="$calendarUrl"><span></span></a></div>
+											<div class="IconAddressBook"><a href="$contactUrl" class="IconLink"><span></span></a></div>
 										</div>
 										<div class="ContentProductsCS">
 											<div class="ProductLabel">Address Book</div>
@@ -84,7 +100,7 @@
 								<td>
 									<div class="HomePortletContainer">
 										<div class="ContainerBox">
-											<div class="IconChat"><a href="$calendarUrl"><span></span></a></div>
+											<div class="IconChat"><a href="$chatUrl" class="IconLink"><span></span></a></div>
 										</div>
 										<div class="ContentProductsCS">
 											<div class="ProductLabel">Chat</div>
@@ -98,7 +114,7 @@
 								<td>
 									<div class="BlockAddressBook HomePortletContainer">
 										<div class="ContainerBox">
-											<div class="IconMail"><a href="$calendarUrl"><span></span></a></div>
+											<div class="IconMail"><a href="$mailUrl" class="IconLink"><span></span></a></div>
 										</div>
 										<div class="ContentProductsCS">
 											<div class="ProductLabel">Mail</div>

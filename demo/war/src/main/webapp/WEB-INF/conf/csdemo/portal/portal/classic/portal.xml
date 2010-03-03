@@ -31,7 +31,7 @@
   </properties>
     
  	<portal-layout>
-	  <portlet-application>
+	  <!--portlet-application>
       <portlet>
         <application-ref>csdemo</application-ref>
         <portlet-ref>CSBannerPortlet</portlet-ref>
@@ -56,7 +56,7 @@
       </portlet>
       <access-permissions>Everyone</access-permissions>
 	    <show-info-bar>false</show-info-bar>
-	  </portlet-application>
+	  </portlet-application-->
 	  
 	  <page-body> </page-body>
 	  
@@ -72,6 +72,14 @@
        <portlet>
          <application-ref>web</application-ref>
          <portlet-ref>FooterPortlet</portlet-ref>
+       </portlet>
+       <access-permissions>Everyone</access-permissions>
+       <show-info-bar>false</show-info-bar>
+     </portlet-application>
+     <portlet-application>
+       <portlet>
+         <application-ref>csdemo</application-ref>
+         <portlet-ref>CSDemoCSSControlerPortlet</portlet-ref>
        </portlet>
        <access-permissions>Everyone</access-permissions>
        <show-info-bar>false</show-info-bar>

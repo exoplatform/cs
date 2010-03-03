@@ -31,6 +31,7 @@
 
 .UIHomePagePortlet .HomePortletAdBackround .RegisterButton{
 	float: left;
+	cursor: pointer;
 }
 
 .UIHomePagePortlet .HomePortletAdBackround .RegisterButton .RegisterButtonL{
@@ -63,6 +64,7 @@
 .UIHomePagePortlet .HomePortletAdBackround .LoginButton{
 	float: left;
 	margin-left: 12px;
+	cursor: pointer;
 }
 
 .UIHomePagePortlet .HomePortletAdBackround .LoginButton .LoginButtonL{
@@ -149,6 +151,12 @@
 	width: 102px;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
+}
+
+.UIHomePagePortlet .HomePortletContainer .ContainerBox .IconLink{
+	height: 88px;
+	width: 65px;
+	display: block;
 }
 
 
