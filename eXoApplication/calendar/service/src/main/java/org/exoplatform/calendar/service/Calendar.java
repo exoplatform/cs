@@ -89,11 +89,17 @@ public class Calendar {
   private boolean isPublic = false ;
   private String categoryId ;
   private String[] groups ;
+  
+  private String publicUrl;
+  private String privateUrl;
+  
   public Calendar() throws Exception{
     id = "calendar" + IdGenerator.generate() ;
     timeZone = TimeZone.getDefault().getID() ;
     locale = Locale.getDefault().getISO3Country() ;
   }
+  
+  
   public String getId() { return id ; }
   public void setId(String id) { this.id = id ; }
   
@@ -137,5 +143,17 @@ public class Calendar {
   }
   public String getCalendarOwner() {
     return calendarOwner;
+  }
+  public void setPublicUrl(String publicUrl) {
+    this.publicUrl = publicUrl;
+  }
+  public String getPublicUrl() {
+    return publicUrl;
+  }
+  public void setPrivateUrl(String privateUrl) {
+    this.privateUrl = privateUrl;
+  }
+  public String getPrivateUrl() {
+    return privateUrl;
   }
 }
