@@ -569,6 +569,13 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
             }
           }
         }
+        if (uiAddressForm.getRecipientType().equals("to")) {
+          uiComposeForm.setFieldToValue(toAddress);
+        } else if (uiAddressForm.getRecipientType().equals("cc")) {
+          uiComposeForm.setFieldCcValue(toAddress);
+        } else if (uiAddressForm.getRecipientType().equals("bcc")) {
+          uiComposeForm.setFieldBccValue(toAddress);
+        }
         // Check the checked group
         String value1 = "";
         String value2 = "";
@@ -580,33 +587,32 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           } catch (Exception e) {
             e.printStackTrace();
           }
+          String gottenAddress = uiAddressForm.addressBooksMap.get(value1);
+          if (gottenAddress != null) {
+            String[] arrString = gottenAddress.split("_");
+            if (arrString.length > 0)
+              value1 = arrString[0];
+            uiComposeForm.addAddressBooksMap(value2, gottenAddress);
+          } else {
+            uiComposeForm.addAddressBooksMap(value2, value1);
+          }
+          if (uiAddressForm.getRecipientType().equals("to")) {
+            uiComposeForm.addGroupDataValue(UIComposeForm.FIELD_TO_GROUP, value1, value2);
+            uiComposeForm.refreshGroupFileList(UIComposeForm.FIELD_TO_GROUP);
+            uiComposeForm.setFieldToValue(toAddress);
+            uiComposeForm.setToContacts(new ArrayList<ContactData>(uiAddressForm.newCheckedList_.values()));
+          } else if (uiAddressForm.getRecipientType().equals("cc")) {
+            uiComposeForm.addGroupDataValue(UIComposeForm.FIELD_CC_GROUP, value1, value2);
+            uiComposeForm.refreshGroupFileList(UIComposeForm.FIELD_CC_GROUP);
+            uiComposeForm.setFieldCcValue(toAddress);
+            uiComposeForm.setCcContacts(new ArrayList<ContactData>(uiAddressForm.newCheckedList_.values()));
+          } else if (uiAddressForm.getRecipientType().equals("bcc")) {
+            uiComposeForm.addGroupDataValue(UIComposeForm.FIELD_BCC_GROUP, value1, value2);
+            uiComposeForm.refreshGroupFileList(UIComposeForm.FIELD_BCC_GROUP);
+            uiComposeForm.setFieldBccValue(toAddress);
+            uiComposeForm.setBccContacts(new ArrayList<ContactData>(uiAddressForm.newCheckedList_.values()));
+          }
         }
-        String gottenAddress = uiAddressForm.addressBooksMap.get(value1);
-        if (gottenAddress != null) {
-          String[] arrString = gottenAddress.split("_");
-          if (arrString.length > 0)
-            value1 = arrString[0];
-          uiComposeForm.addAddressBooksMap(value2, gottenAddress);
-        } else {
-          uiComposeForm.addAddressBooksMap(value2, value1);
-        }
-        if (uiAddressForm.getRecipientType().equals("to")) {
-          uiComposeForm.addGroupDataValue(UIComposeForm.FIELD_TO_GROUP, value1, value2);
-          uiComposeForm.refreshGroupFileList(UIComposeForm.FIELD_TO_GROUP);
-          uiComposeForm.setFieldToValue(toAddress);
-          uiComposeForm.setToContacts(new ArrayList<ContactData>(uiAddressForm.newCheckedList_.values()));
-        } else if (uiAddressForm.getRecipientType().equals("cc")) {
-          uiComposeForm.addGroupDataValue(UIComposeForm.FIELD_CC_GROUP, value1, value2);
-          uiComposeForm.refreshGroupFileList(UIComposeForm.FIELD_CC_GROUP);
-          uiComposeForm.setFieldCcValue(toAddress);
-          uiComposeForm.setCcContacts(new ArrayList<ContactData>(uiAddressForm.newCheckedList_.values()));
-        } else if (uiAddressForm.getRecipientType().equals("bcc")) {
-          uiComposeForm.addGroupDataValue(UIComposeForm.FIELD_BCC_GROUP, value1, value2);
-          uiComposeForm.refreshGroupFileList(UIComposeForm.FIELD_BCC_GROUP);
-          uiComposeForm.setFieldBccValue(toAddress);
-          uiComposeForm.setBccContacts(new ArrayList<ContactData>(uiAddressForm.newCheckedList_.values()));
-        }
-
         uiAddressForm.checkedList_ = uiAddressForm.newCheckedList_;
         event.getRequestContext()
              .addUIComponentToUpdateByAjax(uiComposeForm.getChildById(UIComposeForm.FIELD_TO_SET));
