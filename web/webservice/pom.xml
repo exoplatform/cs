@@ -69,13 +69,6 @@
     </dependency>   
     
     <dependency>
-      <groupId>org.exoplatform.cs</groupId>
-      <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    
-    <dependency>
       <groupId>commons-chain</groupId>
       <artifactId>commons-chain</artifactId>
 	  <version>${commons-chain.version}</version>
@@ -94,5 +87,59 @@
 	  <version>${javax.ws.rs.jsr311-api.version}</version>
       <scope>compile</scope>
     </dependency>
+	
+	<!-- for exteds test -->
+	
+	<dependency>
+		<groupId>org.exoplatform.portal</groupId>
+		<artifactId>exo.portal.component.resources
+		</artifactId>
+		<version>${org.exoplatform.portal.version}
+		</version>
+	</dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    
+	<dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.test.core</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.test.jcr</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.test.organization</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.portal</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.portal</artifactId>
+      <version>${org.exoplatform.portal.cp.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.core</artifactId>
+      <version>${version.chromattic}</version>
+      <scope>test</scope>
+    </dependency>
+	
   </dependencies>
 </project>
