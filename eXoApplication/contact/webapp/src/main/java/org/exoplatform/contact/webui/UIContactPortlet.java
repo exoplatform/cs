@@ -28,53 +28,54 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
 /**
- * Author : Nguyen Quang Hung
- *          hung.nguyen@exoplatform.com
- * Aug 01, 2007
+ * Author : Nguyen Quang Hung hung.nguyen@exoplatform.com Aug 01, 2007
  */
-@ComponentConfig(
-    lifecycle = UIApplicationLifecycle.class,
-    template = "app:/templates/contact/webui/UIContactPortlet.gtmpl"
-)
+@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/templates/contact/webui/UIContactPortlet.gtmpl")
 public class UIContactPortlet extends UIPortletApplication {
 
   public UIContactPortlet() throws Exception {
-    //addChild(UIBannerContainer.class, null, null) ;
-    addChild(UIActionBar.class, null, null) ;
-    addChild(UIWorkingContainer.class, null, null) ;
-    UIPopupAction uiPopupAction = addChild(UIPopupAction.class, null, null) ;
-    uiPopupAction.setId("UIContactPopupAction") ;
-    UIPopupWindow uiPopupWindow = uiPopupAction.getChild(UIPopupWindow.class) ;
-    uiPopupWindow.setId("UIContactPopupWindow") ;
+    // addChild(UIBannerContainer.class, null, null) ;
+    addChild(UIActionBar.class, null, null);
+    addChild(UIWorkingContainer.class, null, null);
+    UIPopupAction uiPopupAction = addChild(UIPopupAction.class, null, null);
+    uiPopupAction.setId("UIContactPopupAction");
+    UIPopupWindow uiPopupWindow = uiPopupAction.getChild(UIPopupWindow.class);
+    uiPopupWindow.setId("UIContactPopupWindow");
   }
 
   public void renderPopupMessages() throws Exception {
     UIPopupMessages popupMess = getUIPopupMessages();
-    if(popupMess == null)  return ;
-    WebuiRequestContext  context =  WebuiRequestContext.getCurrentInstance() ;
+    if (popupMess == null)
+      return;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
     popupMess.processRender(context);
   }
-  
+
   public void cancelAction() throws Exception {
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    UIPopupAction popupAction = getChild(UIPopupAction.class) ;
-    popupAction.deActivate() ;
-    context.addUIComponentToUpdateByAjax(popupAction) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+    UIPopupAction popupAction = getChild(UIPopupAction.class);
+    popupAction.deActivate();
+    context.addUIComponentToUpdateByAjax(popupAction);
   }
-  
+
   protected ContinuationService getContinuationService() {
-    ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
+    ContinuationService continuation = (ContinuationService) PortalContainer.getInstance()
+                                                                            .getComponentInstanceOfType(ContinuationService.class);
     return continuation;
   }
-  public String getUserToken()throws Exception {
-    ContinuationService continuation = getContinuationService() ;
-    
+
+  public String getUserToken() throws Exception {
+    ContinuationService continuation = getContinuationService();
+
     try {
-        return continuation.getUserToken(ContactUtils.getCurrentUser());
-	  } catch (Exception e) {
-		  System.out.println("\n\n can not get UserToken");
-		  return "" ;
-	  }
+      return continuation.getUserToken(ContactUtils.getCurrentUser());
+    } catch (Exception e) {
+      System.out.println("\n\n can not get UserToken");
+      return "";
+    }
   }
-  
+
+  public String getRestContextName() {
+    return PortalContainer.getInstance().getRestContextName();
+  }
 }

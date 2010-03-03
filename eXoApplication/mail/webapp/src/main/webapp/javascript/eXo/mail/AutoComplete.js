@@ -13,6 +13,7 @@ AutoComplete.prototype.init = function(ids){
 	if(eXo.cs.restContext) this.REST_URL = eXo.env.portal.context + "/" + eXo.cs.restContext + "/cs/mail/searchemail/";  
 	var i = ids.length ;
 	while(i--){
+		if(!document.getElementById(ids[i])) continue;
 		document.getElementById(ids[i]).onkeyup = function(evt){
 			evt = window.event || evt;
 			eXo.mail.AutoComplete.pressHandler(evt,this);

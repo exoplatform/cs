@@ -12,6 +12,7 @@
 	rcontext.getJavascriptManager().importJavascript('eXo.cs.UIContextMenuCon','/csResources/javascript/') ;
  	rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;
 	rcontext.getJavascriptManager().importJavascript('eXo.cs.CSCometd','/csResources/javascript/') ;
+	rcontext.getJavascriptManager().addJavascript('eXo.cs.restContext = "'+ uicomponent.getRestContextName() +'" ;') ;
   rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactPortlet','/contact/javascript/') ;
 	rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactDragDrop','/contact/javascript/') ;
  	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu('"+ compId +"') ;") ;
