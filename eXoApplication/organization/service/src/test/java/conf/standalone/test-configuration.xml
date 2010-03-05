@@ -16,7 +16,8 @@
     </init-params>
   </component>
   <component>
-    <type>org.exoplatform.services.organization.impl.mock.DummyOrganizationService</type>
+    <key>org.exoplatform.services.organization.OrganizationService</key>
+    <type>org.exoplatform.services.organization.rest.CSDummyOrganizationService</type>
   </component>
   <component>
   	<type>org.exoplatform.services.authentication.rest.RESTAuthenticator</type>

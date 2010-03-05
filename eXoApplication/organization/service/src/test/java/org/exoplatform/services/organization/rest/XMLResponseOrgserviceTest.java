@@ -99,7 +99,8 @@ public class XMLResponseOrgserviceTest extends TestCase {
    * we should pass "username" parameter only by QueryParam!
    * others parameters are groupId and type 
    */
-  public void testFindMemberships() throws Exception {
+  //"/organization/xml/membership/view-all/" is not present in RESTOrganizationServiceXMLImpl, it was removed from Liveroom
+  /*public void testFindMemberships() throws Exception {
 
     MembershipHandler hMembership = orgService.getMembershipHandler();
 
@@ -171,7 +172,7 @@ public class XMLResponseOrgserviceTest extends TestCase {
       
     }
     
-  }
+  }*/
 
 //  public void testFindUsers() throws Exception {
 //
@@ -257,7 +258,8 @@ public class XMLResponseOrgserviceTest extends TestCase {
 //
 //  }
 
-  public void testFindUsersRange() throws Exception {
+  //"/organization/xml/user/view-from-to/" is not present in RESTOrganizationServiceXMLImpl, it was removed from Liveroom
+  /*public void testFindUsersRange() throws Exception {
 
     UserHandler hUser = orgService.getUserHandler();
 
@@ -315,10 +317,10 @@ public class XMLResponseOrgserviceTest extends TestCase {
     assertEquals( nd_list.getLength(), list.size() );
     
 
-  }
+  }*/
   
-
-  public void testGetAllGroup() throws Exception {
+  //"/organization/xml/group/filter/" is not present in RESTOrganizationServiceXMLImpl, it was removed from Liveroom
+  /*public void testGetAllGroup() throws Exception {
 
     MultivaluedMetadata mv = new MultivaluedMetadata();
     MultivaluedMetadata qp = new MultivaluedMetadata();
@@ -375,7 +377,7 @@ public class XMLResponseOrgserviceTest extends TestCase {
     }
     
 
-  }
+  }*/
 
   public void testGetGroup() throws Exception {
     MultivaluedMetadata mv = new MultivaluedMetadata();
@@ -577,11 +579,12 @@ public class XMLResponseOrgserviceTest extends TestCase {
 
   public void testGetUsers() throws Exception {
     MultivaluedMetadata mv = new MultivaluedMetadata();
+    MultivaluedMetadata qp = new MultivaluedMetadata();
+    
+    String extURI = "/organization/xml/user/find-all";
 
-    String extURI = "/organization/xml/users/";
-
-    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, null);
-
+    Request request = new Request(null, new ResourceIdentifier(baseURI, extURI), "GET", mv, qp);
+    
     Response response = null;
     response = dispatcher.dispatch(request);
     assertNotNull(response);

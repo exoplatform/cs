@@ -43,6 +43,11 @@
       <version>${org.exoplatform.kernel.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.resources</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+    </dependency>
+    <dependency>
       <groupId>jabber.smack</groupId>
       <artifactId>smack</artifactId>
       <version>3.0.4</version>

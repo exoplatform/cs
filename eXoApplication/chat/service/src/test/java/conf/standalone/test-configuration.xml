@@ -2,8 +2,17 @@
   <component>
     <type>org.exoplatform.services.organization.impl.mock.DummyOrganizationService</type>
   </component>
-  
-   
+
+  <component>
+    <key>org.exoplatform.services.resources.LocaleConfigService</key>
+    <type>org.exoplatform.services.resources.impl.LocaleConfigServiceImpl</type>
+      <init-params>
+        <value-param>
+          <name>locale.config.file</name>
+          <value>jar:/conf/standalone/locales-config.xml</value>
+        </value-param>
+      </init-params>
+  </component>
   
   <component>
     <key>org.exoplatform.services.jcr.RepositoryService</key>
