@@ -4,7 +4,7 @@
   def rcontext = _ctx.getRequestContext() ;
   String actionLink = uicomponent.event('SearchContact') ;
   rcontext.getJavascriptManager().addJavascript('eXo.cs.Utils.captureInput("'+uiform.CONTACT_SEARCH+'","'+actionLink+'") ;') ;
-  rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("' + uiform.id + '"); ') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init(eXo.core.DOMUtil.findFirstDescendantByClass(document.getElementById("' + uiform.id + '"),"div","AddressContainer")); ') ;
  %>
 <div class="UIInsertAddress">
   <div class="InsertAddressContainer">
@@ -36,7 +36,7 @@
     <div class="AddressContainer">
       <div class="ListAddress">
       
-        <table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+        <table cellspacing="0" borderspacing="0" class="UIGrid">
             <thead>
               <tr>
                 <th style="width:20px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4" /></th>
