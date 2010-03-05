@@ -89,8 +89,15 @@
         </div>
         <div class="ContactContainer">
           <div class="Title ContactIcon">
-            <%=_ctx.appRes(uicomponent.id+ ".label.contact") %>
+			<div style="float:left;">
+		            <%=_ctx.appRes(uicomponent.id+ ".label.contact") %>
+			</div>
+			 <div style="margin-left: 180px;">
+				<!-- input type="checkbox" class="checkbox" value="4" / -->
+				<% uiform.renderField(uiform.SELECT_ALL) %>
+			 </div>
           </div>
+
           <div class="ListContact">
           	<table>
             <% 
