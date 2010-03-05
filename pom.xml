@@ -91,7 +91,7 @@
 	
     <!-- maven-release-plugin -->
 	
-    <arguments>-Prelease,pkg-tomcat,pkg-jbossas,run-its</arguments>
+    <arguments>-Prelease,pkg-tomcat,arc-tomcat,pkg-jbossas,arc-jbossas,run-its -Dgatein.working.dir=target</arguments>
 
   </properties>
 
