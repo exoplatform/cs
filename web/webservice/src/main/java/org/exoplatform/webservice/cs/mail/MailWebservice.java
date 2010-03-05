@@ -131,6 +131,7 @@ public class MailWebservice implements ResourceContainer {
 
       checkingInfo.setRequestStop(true);
       mailService.removeCheckingInfo(userName, accountId);
+      mailService.stopCheckMail(userName, accountId);
     } else {
       Response.status(HTTPStatus.INTERNAL_ERROR);
       return Response.ok().build();
