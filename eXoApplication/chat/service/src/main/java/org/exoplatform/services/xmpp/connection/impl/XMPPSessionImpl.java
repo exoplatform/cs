@@ -1258,7 +1258,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
       multiUserChatManager.addMultiUserChat(chat);
     }
     if (!chat.isJoined()) {
-      if (isPasswordRequired(room)) {
+      if (password != null) {
         chat.join(nickname, password);
       } else
         chat.join(nickname);

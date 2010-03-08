@@ -1805,10 +1805,14 @@ UIMainChatWindow.prototype.jabberDeclineJoinRoom = function(inviter, roomName) {
 UIMainChatWindow.prototype.jabberJoinToRoom = function(roomName, askPassword) {
   var password = '';
   if (askPassword) {
-    password = window.prompt(this.ResourceBundle.chat_message_room_secret_key_to_access, '');
-    if (!password) {
-      return;
-    }
+	if(askPassword == true){
+      password = window.prompt(this.ResourceBundle.chat_message_room_secret_key_to_access, '');
+      if (!password) {
+        return;
+      }
+	}else{
+	  password = askPassword;
+	}
   }
   this.activeAction = this.JOIN_TO_ROOM_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
