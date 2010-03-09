@@ -495,7 +495,7 @@
                             }
                             if (isImage) {
                         %> 
-      						  		      <img class="AttachmentFile" style="height:auto ;width: 200px;padding-right: 5px" src="$attLink">
+      						  		      <img class="AttachmentFile" style="height:auto ;width: 200px;padding-right: 5px;" src="$attLink">
       						  		<%
                             } else if (isSupportedIcon){
                         %>

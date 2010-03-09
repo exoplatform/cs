@@ -2063,3 +2063,11 @@
 	background: blue;
 	color:white;
 }
+
+
+/*CS-3997 Style*/
+
+.UIMailPortlet .UIPopupWindow  .UIAddNewEvent .RemoveFile {
+	float:none;
+	margin-left:0;
+}

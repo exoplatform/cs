@@ -433,7 +433,8 @@
 }
 
 .UIMailPortlet .EmptyIcon {
-	background: url('icons/EmptyIcon.gif') no-repeat left center;
+	background: url('icons/EmptyIcon.gif') no-repeat left center; /* orientation=lt */
+	background: url('icons/EmptyIcon-rt.gif') no-repeat right center; /* orientation=rt */
 }
 
 .UIMailPortlet .MarkAll {
