@@ -262,12 +262,18 @@ UITabControl.prototype.fileTransportRequestEventFire = function(FTReqEvent) {
  */
 UITabControl.prototype.fileTransportResponseEventFire = function(FTResEvent) {
   var msgContent = '';
-  if (FTResEvent.status == 'complete') {
-    //msgContent = 'File exchange: [' + FTResEvent.fileName + '] completed.';
-	msgContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_response_completed.replace('{0}', FTResEvent.fileName);
-  } else {
-    //msgContent = 'File exchange: [' + FTResEvent.fileName + '] denied.';
-	msgContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_response_denied.replace('{0}', FTResEvent.fileName);
+  switch (FTResEvent.status) {
+  case 'complete':
+    msgContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_response_completed.replace('{0}', FTResEvent.fileName);
+    break;
+  case 'error':
+    msgContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_response_denied.replace('{0}', FTResEvent.fileName);
+    msgContent += ' ';
+    msgContent += this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_response_receiver_offline;
+    break;
+  default :
+    msgContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_response_denied.replace('{0}', FTResEvent.fileName);
+    break;
   }
   eXo.communication.chat.webui.UIChatWindow.insertCustomMsg(msgContent, this.tabId);
 };

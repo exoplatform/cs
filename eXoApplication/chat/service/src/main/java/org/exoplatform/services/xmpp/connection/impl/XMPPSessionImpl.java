@@ -1655,9 +1655,12 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         while (!transfer.isDone()) {
           Thread.sleep(1000);
         }
-        if (transfer.getStatus().equals(Status.error)) {
+        //when sending file for an user who isn't in the contact list (CS-3989), an error is return with null message, so
+        //statements in the following comments create a NullPointerException Exception and it forbid the error message
+        //returned to client. So don't call OutgoingFileTransfer.getError().getMessage() in this situation.
+        /*if (transfer.getStatus().equals(Status.error)) {
           log.error("ERROR!!! " + transfer.getError().getMessage());
-        }
+        }*/
         JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
         FileTransferResponseBean responseBean = new FileTransferResponseBean(transfer,
                                                                              connection_.getUser());

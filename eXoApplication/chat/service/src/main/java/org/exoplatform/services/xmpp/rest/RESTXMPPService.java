@@ -126,6 +126,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       put("chat.message.file.transport.request", "chat_message_file_transport_request");
       put("chat.message.file.transport.response.completed", "chat_message_file_transport_response_completed");
       put("chat.message.file.transport.response.denied", "chat_message_file_transport_response_denied");
+      put("chat.message.file.transport.response.receiver.offline", "chat_message_file_transport_response_receiver_offline");
       put("chat.message.file.event.time.out", "chat_message_file_event_time_out");
       put("chat.message.file.exchange.waiting.for.authorize", "chat_message_file_exchange_waiting_for_authorize");
       put("chat.message.file.exchange.uploading.file.to.server", "chat_message_file_exchange_uploading_file_to_server");
