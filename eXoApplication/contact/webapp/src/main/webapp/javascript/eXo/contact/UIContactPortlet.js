@@ -343,10 +343,15 @@ UIContactPortlet.prototype.tagCallback = function(evt) {
 } ;
 
 UIContactPortlet.prototype.printpreview = function (obj){
-
 	var DOMUtil = eXo.core.DOMUtil ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
-	var UIContactPreview = DOMUtil.findAncestorByClass(obj, "UIContactPreview") ;
+	var UIContactPreview = DOMUtil.findAncestorByClass(obj, "UIContactPreview") ;	
+	var a = eXo.core.DOMUtil.findDescendantsByTagName(UIContactPreview, 'a');
+	for (var i = 0; i < a.length; i++) {
+		if (a[i].title && (a[i].title.length > 0) && (a[i].title.indexOf('@') > -1 )) {
+			 a[i].innerHTML = a[i].title;		
+		}
+	}
 	var form = eXo.core.DOMUtil.findAncestorByTagName(obj, "form") ;
 	var printLabel = DOMUtil.findFirstDescendantByClass(obj, 'div','ButtonMiddle') ;
 	if(obj.getAttribute("printLabel")) printLabel.innerHTML = obj.getAttribute("printLabel") ;
@@ -772,6 +777,33 @@ UIContactPortlet.prototype.showTagMenu = function(obj, event) {
 	var uiPopupCategory = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div","UIPopupCategory") ;
 	uiPopupCategory.style.left = - eXo.core.DOMUtil.findFirstDescendantByClass(uiPopupCategory,"div","UIRightClickPopupMenu").offsetWidth + "px" ;
 } ;
+
+UIContactPortlet.prototype.fitStringToWidth = function (id, str,index) {
+	var td = document.getElementById(id);
+	var width = td.offsetWidth;
+
+	var span = document.createElement("spannnn");
+	span.className=td.className;
+	span.style.display='inline';
+	span.style.visibility = 'hidden';
+	span.style.padding = '0px';
+	document.body.appendChild(span);
+	span.innerHTML = str;
+	if (span.offsetWidth*2 > width) {
+		var currentLengthPixel = span.offsetWidth*2;
+		var currentLengthChars = str.length;
+		while (currentLengthPixel > width) {
+			currentLengthChars = currentLengthChars - 1;
+			span.innerHTML = str.substring(0,currentLengthChars);
+			currentLengthPixel = span.offsetWidth*2;
+		}
+		str = span.innerHTML;
+		var a = eXo.core.DOMUtil.findDescendantsByTagName(td, 'a')[index-1];
+		a.innerHTML = str + "...";
+  }
+  document.body.removeChild(span);
+};
+
 /*
 UIContactPortlet.prototype.setUpCheckboxCallback = function(obj){
 	obj = (typeof(obj) == "string")? document.getElementById(obj) : obj ;

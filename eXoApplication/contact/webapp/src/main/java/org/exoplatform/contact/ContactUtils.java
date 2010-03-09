@@ -233,11 +233,11 @@ public class ContactUtils {
   
   public static Map<String, String> getPhones(Contact contact) {
     Map<String, String> phones = new LinkedHashMap<String, String>();
-    if (!isEmpty(contact.getWorkPhone1())) phones.put("workPhone1", contact.getWorkPhone1());
-    if (!isEmpty(contact.getWorkPhone2())) phones.put("workPhone2", contact.getWorkPhone2());
-    if (!isEmpty(contact.getHomePhone1())) phones.put("homePhone1", contact.getHomePhone1());
-    if (!isEmpty(contact.getHomePhone2())) phones.put("homePhone2", contact.getHomePhone2());
-    if (!isEmpty(contact.getMobilePhone())) phones.put("mobilePhone", contact.getMobilePhone());
+    if (!isEmpty(contact.getWorkPhone1())) phones.put(contact.getWorkPhone1(), "work");
+    if (!isEmpty(contact.getWorkPhone2())) phones.put(contact.getWorkPhone2(), "work");
+    if (!isEmpty(contact.getHomePhone1())) phones.put(contact.getHomePhone1(), "home");
+    if (!isEmpty(contact.getHomePhone2())) phones.put(contact.getHomePhone2(), "home");
+    if (!isEmpty(contact.getMobilePhone())) phones.put(contact.getMobilePhone(),"home");
     return phones;
   }
 }
