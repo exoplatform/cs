@@ -316,6 +316,7 @@
         <personal-contacts>Các nhóm cá nhân</personal-contacts>
         <public-contacts>Các nhóm chung</public-contacts>
         <shared-contacts>Các nhóm được chia sẻ</shared-contacts>
+        <public-groups-contacts>Public groups</public-groups-contacts>
       </label>
     </optionGroup>
   </UIAddressForm>

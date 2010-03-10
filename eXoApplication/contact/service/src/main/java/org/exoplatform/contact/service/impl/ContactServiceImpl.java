@@ -16,6 +16,7 @@
  */
 package org.exoplatform.contact.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -37,6 +38,7 @@ import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.Utils;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
@@ -57,9 +59,44 @@ public class ContactServiceImpl implements ContactService {
   private DataStorage storage_ ;
   private Map<String, ContactImportExport> contactImportExport_ = new HashMap<String, ContactImportExport>() ;
   
-  public ContactServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService rservice) throws Exception {
+  private boolean groupsBroadcastingMode = false;
+  
+  private List<String> nonPublicGroups = new ArrayList<String>();
+  
+  private static final String GROUPSBROADCASTING = "GroupsBroadcasting".intern();
+  
+  private static final String NONPUBLICGROUPS = "NonPublicGroups".intern();
+  
+  private static final String TRUE = "true".intern();
+  
+  public ContactServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService rservice, InitParams initParams) throws Exception {
       storage_ = new JCRDataStorage(nodeHierarchyCreator, rservice) ;
       contactImportExport_.put(VCARD, new VCardImportExport(storage_)) ;
+      if(initParams != null && initParams.getValuesParam(GROUPSBROADCASTING) != null){
+        List values = initParams.getValuesParam(GROUPSBROADCASTING).getValues();
+        if(TRUE.equalsIgnoreCase(values.get(0).toString()))
+          groupsBroadcastingMode = true;
+        if(groupsBroadcastingMode && initParams.getValuesParam(NONPUBLICGROUPS) != null){
+          values = initParams.getValuesParam(NONPUBLICGROUPS).getValues();
+          for (Object object : values) {
+            nonPublicGroups.add(object.toString());
+          }
+        }
+      }
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public boolean groupsBroadcastingEnabled(){
+    return groupsBroadcastingMode;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public List<String> getNonPublicGroups() {
+    return nonPublicGroups;
   }
   
   /**

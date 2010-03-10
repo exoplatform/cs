@@ -317,6 +317,7 @@
         <personal-contacts>دفاتر شخصيّة</personal-contacts>
         <public-contacts>دفاتر عموميّة</public-contacts>
         <shared-contacts>دفاتر مُشترَكة</shared-contacts>
+        <public-groups-contacts>المجموعات العموميّة</public-groups-contacts>
       </label>
     </optionGroup>
   </UIAddressForm>

@@ -5,6 +5,19 @@
 	<component>
     <key>org.exoplatform.contact.service.ContactService</key>
     <type>org.exoplatform.contact.service.impl.ContactServiceImpl</type>
+    <init-params>
+      <values-param>
+        <name>GroupsBroadcasting</name>
+        <description>Using groups broadcasting mode (true/false)</description>
+        <value>false</value>
+      </values-param>
+      <values-param>
+        <name>NonPublicGroups</name>
+        <description>Groups that shouldn't be displayed in broadcast list. This feature only takes effect when GroupsBroadcasting is set to true</description>
+        <value>/platform/users</value>
+        <value>/platform/guests</value>
+      </values-param>
+    </init-params>
   </component>    
 	<external-component-plugins>
   	<target-component>org.exoplatform.services.organization.OrganizationService</target-component>	
