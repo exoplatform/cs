@@ -20,3 +20,75 @@
 @import url(control/Stylesheet.css);
 @import url(view/Stylesheet.css);
 
+.UIWorkingWorkspace {
+	width: auto;
+}
+
+.UIPageBody .VIEW-PAGEBODY .UIPage {
+	padding:0px;
+}
+
+.UIPageBody .BLPagebody {
+	background:none;
+	height:0px;
+	padding-left:0px;
+}
+
+.UIPageBody .BRPagebody {
+	background:0px;
+	height:0px;
+	padding-right:0px;
+}
+
+.UIPageBody .BMPagebody {
+	background:0px;
+	height:0px;
+}
+
+.UIWorkingWorkspace .UIFooterPortlet {
+	background:white;
+	margin:0;
+}
+
+.UIWorkingWorkspace  .UIFooterPortlet .CopyrightInfo {
+	color:#8A8A8A;
+	font-size:10px;
+	font-weight:bold;
+	height:30px;
+	line-height:30px;
+	padding-right:90px;
+	text-align:right;
+}
+
+.UIToolbarContainer {
+	height:auto;
+	background: #c0c0c0;	
+	padding:40px 0px 0px 0px;
+}
+
+.UIToolbarContainer .NormalContainerBlock .ToolbarContainer {
+	background: #232d36;	
+}
+
+.UIToolbarContainer .NormalContainerBlock .ToolbarContainer .TRContainer{
+	padding: 0px 90px;
+}
+
+.UIToolbarContainer .ToolbarContainer a {
+	color:#ababab;
+}
+
+.UIToolbarContainer .UIHorizontalTabs .UITab {
+	background: none;
+}
+
+.UIStarToolBarPortlet {
+	background:transparent url(/csdemo/templates/skin/webui/component/UIBannerPortlet/DefaultSkin/background/GateinLogo2.gif) no-repeat 2px;
+	height:32px;
+	width:64px;
+}
+
+.UIToolbarContainer .GroupIcon {
+	background:transparent url(/csdemo/templates/skin/webui/component/UIBannerPortlet/DefaultSkin/background/GroupIcon.gif) no-repeat left 5px;
+	margin-left:10px;
+}
