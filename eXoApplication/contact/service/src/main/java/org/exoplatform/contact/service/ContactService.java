@@ -441,4 +441,16 @@ public interface ContactService extends ContactServiceLegacy {
    */
   public void saveAddress(String username, String emailAddress) throws Exception ;
   
+  /**
+   * Check whether groups broadcasting mode is enabled or not
+   * @return boolean
+   */
+  public boolean groupsBroadcastingEnabled();
+  
+  /**
+   * Return the list of non public groups when groups broadcasting mode is enabled
+   * @return List<String>
+   */
+  public List<String> getNonPublicGroups();
+  
 }

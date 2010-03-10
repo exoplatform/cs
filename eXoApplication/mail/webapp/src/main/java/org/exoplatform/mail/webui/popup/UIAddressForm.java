@@ -33,6 +33,7 @@ import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.services.organization.OrganizationService;
@@ -124,6 +125,8 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   public List<SelectItem> getOptions() throws Exception {
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
+    boolean groupsBroadcastingEnabled = contactSrv.groupsBroadcastingEnabled();
+    List<String>  nonPublicGroups = contactSrv.getNonPublicGroups();
     List<SelectItem> options = new ArrayList<SelectItem>() ;
     options.add(new SelectOption(all, all)) ;
     List<AddressBook> contactGroup = contactSrv.getGroups(username);
@@ -155,11 +158,29 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       groupIds.add(((GroupImpl)object).getId()) ;
     }
     if(!groupIds.isEmpty()){
+      if(groupsBroadcastingEnabled)
+        groupIds.removeAll(nonPublicGroups);
       SelectOptionGroup publicContacts = new SelectOptionGroup("public-contacts");
       for(String publicCg : groupIds) {
         publicContacts.addOption(new SelectOption(publicCg, publicCg)) ;
       }
       options.add(publicContacts);
+    }
+    if(groupsBroadcastingEnabled){
+      Object[] objPublicGroupIds = organizationService.getGroupHandler().getAllGroups().toArray() ;
+      List<String> publicGroupIds = new ArrayList<String>() ;
+      for (Object object : objPublicGroupIds) {
+        publicGroupIds.add(((GroupImpl)object).getId()) ;
+      }
+      publicGroupIds.removeAll(groupIds);
+      publicGroupIds.removeAll(nonPublicGroups);
+      if(!publicGroupIds.isEmpty()){
+        SelectOptionGroup publicContacts = new SelectOptionGroup("public-groups-contacts");
+        for(String publicCg : publicGroupIds) {
+          publicContacts.addOption(new SelectOption(publicCg, publicCg)) ;
+        }
+        options.add(publicContacts);
+      }
     }
     return options ;
   }
