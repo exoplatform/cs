@@ -411,7 +411,7 @@
                     contentType = "text/plain" ;
                   }
                 %>
-                <iframe src="" style="border: 0px" frameborder="0" class="MessageDetails" id="$frameId"></iframe>
+                <iframe src="" style="border: 0px; min-height: 40px;" frameborder="0" class="MessageDetails" id="$frameId"></iframe>
                 <%
                   rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe('" + textAreaId + "', '" + frameId + "', '" + styleExpand + "', '" + contentType + "');") ;
                 %>
