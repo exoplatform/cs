@@ -3,8 +3,8 @@
 <%@ page import="org.exoplatform.portal.config.UserPortalConfigService"%>
 <%
 	RootContainer rootContainer = RootContainer.getInstance() ;
-  PortalContainer manager = rootContainer.getPortalContainer(session.getServletContext().getServletContextName()) ;
-  UserPortalConfigService userPortalConfigService = (UserPortalConfigService) manager.getComponentInstanceOfType(UserPortalConfigService.class) ;
-	response.sendRedirect(request.getContextPath() + "/public/"+userPortalConfigService.getDefaultPortal()+"/");
+	PortalContainer manager = rootContainer.getPortalContainer(session.getServletContext().getServletContextName()) ;
+ 	UserPortalConfigService userPortalConfigService = (UserPortalConfigService) manager.getComponentInstanceOfType(UserPortalConfigService.class) ;
+				response.sendRedirect(request.getContextPath() + "/public/"+userPortalConfigService.getDefaultPortal()+"/");
 %>
 
