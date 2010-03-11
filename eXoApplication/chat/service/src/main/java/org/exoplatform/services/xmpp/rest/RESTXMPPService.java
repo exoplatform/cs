@@ -123,6 +123,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       put("chat.message.confirm.allow.to.see.status", "chat_message_confirm_allow_to_see_status");
       put("chat.message.confirm.remove.buddy", "chat_message_confirm_remove_buddy");
       put("chat.message.system.info", "chat_message_system_info");
+      put("chat.message.administrative.message", "chat_message_administrative_message");
       put("chat.message.file.transport.request", "chat_message_file_transport_request");
       put("chat.message.file.transport.response.completed", "chat_message_file_transport_response_completed");
       put("chat.message.file.transport.response.denied", "chat_message_file_transport_response_denied");

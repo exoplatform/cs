@@ -401,7 +401,10 @@ UITabControl.prototype.initUI = function(buddyId) {
   
   var fullNameMap = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap ;
   var fullName = this.tabId.targetPerson ;
-  fullName = fullName.substr(0, fullName.indexOf('@'));
+  if(fullName.indexOf('@') > -1)
+    fullName = fullName.substr(0, fullName.indexOf('@'));
+  else
+    fullName = this.UIMainChatWindow.ResourceBundle.chat_message_administrative_message;
 	var uid = this.tabId.targetPerson ;
 	if (fullNameMap[uid] != null) {
   	fullName = fullNameMap[uid] ;
