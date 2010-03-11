@@ -32,6 +32,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.MissingResourceException;
 
 import javax.jcr.PathNotFoundException;
 import javax.mail.internet.InternetAddress;
@@ -321,8 +322,10 @@ public class CalendarUtils {
   public static List<SelectItemOption<String>> getLocaleSelectBoxOptions(Locale[] locale) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(Locale local :  locale) {
-      String country = local.getISO3Country() ;
-      if( country != null && country.trim().length() > 0)  options.add(new SelectItemOption<String>(local.getDisplayCountry() + "(" +local.getDisplayLanguage()+")" ,country)) ;
+      try {
+        String country = local.getISO3Country() ;
+        if( country != null && country.trim().length() > 0)  options.add(new SelectItemOption<String>(local.getDisplayCountry() + "(" +local.getDisplayLanguage()+")" ,country)) ;
+      } catch (MissingResourceException e) {}
     }  
     Collections.sort(options, new SelectComparator()) ;
     return options ;
