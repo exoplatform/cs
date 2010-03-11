@@ -1,21 +1,22 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>exo.cs.eXoApplication.organization</artifactId>
     <version>2.0.0-Beta01-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.cs.eXoApplication.organization.service</artifactId>
-	<name>eXo Organization Service implement for chat</name>
-  <description />
+  <name>eXo Organization Service implement for chat</name>
+  <description/>
   <dependencies>
-  	<dependency>
+    <dependency>
       <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.container</artifactId>
       <version>${org.exoplatform.kernel.version}</version>
       <scope>compile</scope>
     </dependency>
-  	<dependency>
+    <dependency>
       <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.commons</artifactId>
       <version>${org.exoplatform.kernel.version}</version>
@@ -26,7 +27,7 @@
       <artifactId>exo.ws.rest.core</artifactId>
       <version>${org.exoplatform.ws.version}</version>
     </dependency>
-	<dependency>
+    <dependency>
       <groupId>org.exoplatform.ws</groupId>
       <artifactId>exo.ws.commons</artifactId>
       <version>${org.exoplatform.ws.version}</version>
@@ -48,7 +49,7 @@
       <scope>compile</scope>
     </dependency>
     <!-- for exteds test -->
-	<dependency>
+    <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.test.core</artifactId>
       <version>${org.exoplatform.portal.version}</version>
@@ -75,8 +76,8 @@
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.portal</artifactId>
       <version>${org.exoplatform.portal.cp.version}</version>
-      <type>test-jar</type>
       <scope>test</scope>
+      <type>test-jar</type>
     </dependency>
     <dependency>
       <groupId>org.chromattic</groupId>
@@ -84,7 +85,7 @@
       <version>${version.chromattic}</version>
       <scope>test</scope>
     </dependency>
-	<!-- end for test dependencies -->
+    <!-- end for test dependencies -->
     <dependency>
       <groupId>javax.xml.stream</groupId>
       <artifactId>stax-api</artifactId>
@@ -106,15 +107,14 @@
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
-	  <version>${commons-logging.version}</version>
+      <version>${commons-logging.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>javax.ws.rs</groupId>
       <artifactId>jsr311-api</artifactId>
-	  <version>${javax.ws.rs.jsr311-api.version}</version>
+      <version>${javax.ws.rs.jsr311-api.version}</version>
       <scope>compile</scope>
     </dependency>
-    
   </dependencies>
 </project>

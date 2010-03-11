@@ -1,18 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project>
-  <parent>
-	<groupId>org.exoplatform.cs</groupId>
-	<artifactId>cs</artifactId>
-	<version>1.4-SNAPSHOT</version>
-  </parent> 
-
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.exoplatform.cs</groupId>
+    <artifactId>cs</artifactId>
+    <version>1.4-SNAPSHOT</version>
+  </parent>
   <artifactId>exo.cs.tool.migration</artifactId>
-  <packaging>jar</packaging>
   <version>${org.exoplatform.cs.version}</version>
+  <packaging>jar</packaging>
   <name>exo cs migration tool</name>
-  <url>http://www.exoplatform.org</url>
   <description>CS migration tool to update cs versions</description>
-
+  <url>http://www.exoplatform.org</url>
   <dependencies>
     <!--dependency>
 	  <groupId>org.exoplatform.kernel</groupId>
@@ -20,21 +19,20 @@
 	  <version>${org.exoplatform.kernel.version}</version>
 	  <scope>provided</scope>
 	</dependency -->
-      <dependency>
-	  <groupId>org.exoplatform.jcr</groupId>
-	  <artifactId>exo.jcr.component.core</artifactId>
-	  <version>${org.exoplatform.jcr.version}</version>
-	  <scope>provided</scope>
-	</dependency>
-	<dependency>
-	  <groupId>org.exoplatform.jcr</groupId>
-	  <artifactId>exo.jcr.component.ext</artifactId>
-	  <version>${org.exoplatform.jcr.version}</version>
-	  <scope>provided</scope>
-	</dependency>
-  </dependencies> 
-  
+    <dependency>
+      <groupId>org.exoplatform.jcr</groupId>
+      <artifactId>exo.jcr.component.core</artifactId>
+      <version>${org.exoplatform.jcr.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.jcr</groupId>
+      <artifactId>exo.jcr.component.ext</artifactId>
+      <version>${org.exoplatform.jcr.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
   <build>
-	<finalName>exo.cs.migration.tool</finalName>
+    <finalName>exo.cs.migration.tool</finalName>
   </build>
 </project>

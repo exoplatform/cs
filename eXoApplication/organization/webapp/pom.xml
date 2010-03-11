@@ -1,16 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project>
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>cs</artifactId>
     <version>1.4-SNAPSHOT</version>
-  </parent> 
-
-  <modelVersion>4.0.0</modelVersion>
+  </parent>
   <artifactId>exo.cs.eXoApplication.organization.webapp</artifactId>
-  <packaging>war</packaging>
   <version>${org.exoplatform.cs.version}</version>
+  <packaging>war</packaging>
   <name>eXo REST Organization Tool</name>
-
   <build>
     <finalName>organization</finalName>
   </build>

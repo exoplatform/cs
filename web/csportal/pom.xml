@@ -1,17 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project>
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>cs</artifactId>
     <version>1.4-SNAPSHOT</version>
-  </parent> 
-
-  <modelVersion>4.0.0</modelVersion>
+  </parent>
   <artifactId>exo.cs.web.portal</artifactId>
-  <packaging>war</packaging> 
   <version>${org.exoplatform.cs.version}</version>
+  <packaging>war</packaging>
   <name>eXo CS Portal web module</name>
-  
-    <dependencies>
+  <dependencies>
     <!-- 
       CS portal is built by war overlay of portal war.
       We get all files that we didn't redefine from portal.war 
@@ -21,11 +20,9 @@
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.web.portal</artifactId>
       <version>${org.exoplatform.portal.version}</version>
-          <type>war</type>
-         <scope>runtime</scope>      
+      <scope>runtime</scope>
+      <type>war</type>
     </dependency>
   </dependencies>
-  
-  <build>    
-  </build>
+  <build/>
 </project>

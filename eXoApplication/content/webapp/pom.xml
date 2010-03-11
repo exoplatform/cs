@@ -1,20 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>exo.cs.eXoApplication.content</artifactId>
     <version>2.0.0-Beta01-SNAPSHOT</version>
-  </parent> 
-
-  <modelVersion>4.0.0</modelVersion>
+  </parent>
   <artifactId>exo.cs.eXoApplication.content.webapp</artifactId>
-   
   <packaging>war</packaging>
   <name>eXo Content application</name>
-  <url>http://www.exoplatform.org</url>
   <description>eXo Content application</description>
-  
+  <url>http://www.exoplatform.org</url>
   <dependencies>
-  	<dependency>
+    <dependency>
       <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.container</artifactId>
       <version>${org.exoplatform.kernel.version}</version>
@@ -25,7 +23,7 @@
       <artifactId>exo.kernel.commons</artifactId>
       <version>${org.exoplatform.kernel.version}</version>
       <scope>provided</scope>
-    </dependency> 
+    </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.webui.portal</artifactId>
@@ -44,15 +42,13 @@
       <version>${org.exoplatform.portal.version}</version>
       <scope>provided</scope>
     </dependency>
-    
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.content.service</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
-    </dependency>    
+    </dependency>
   </dependencies>
-
   <build>
     <finalName>content</finalName>
   </build>

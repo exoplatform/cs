@@ -1,19 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>exo.cs.eXoApplication.contact</artifactId>
     <version>2.0.0-Beta01-SNAPSHOT</version>
-  </parent> 
-
-  <modelVersion>4.0.0</modelVersion>
+  </parent>
   <artifactId>exo.cs.eXoApplication.contact.service</artifactId>
   <packaging>jar</packaging>
   <name>eXo contact service</name>
-  <url>http://www.exoplatform.org</url>
   <description>eXo contact service</description>
-  
+  <url>http://www.exoplatform.org</url>
   <dependencies>
-  	<dependency>
+    <dependency>
       <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.commons</artifactId>
       <version>${org.exoplatform.kernel.version}</version>
@@ -58,8 +57,8 @@
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.portal</artifactId>
       <version>${org.exoplatform.portal.cp.version}</version>
-      <type>test-jar</type>
       <scope>test</scope>
+      <type>test-jar</type>
     </dependency>
     <dependency>
       <groupId>org.chromattic</groupId>
@@ -71,55 +70,51 @@
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.core</artifactId>
       <version>${org.exoplatform.jcr.version}</version>
-      <scope>compile</scope>      
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ext</artifactId>
-      <version>${org.exoplatform.jcr.version}</version>            
+      <version>${org.exoplatform.jcr.version}</version>
     </dependency>
-		
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
-      <version>${project.version}</version>            
+      <version>${project.version}</version>
     </dependency>
-    
     <dependency>
-       <groupId>org.exoplatform.platform</groupId>
-       <artifactId>exo.platform.commons.comet.service</artifactId>
+      <groupId>org.exoplatform.platform</groupId>
+      <artifactId>exo.platform.commons.comet.service</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.ws</groupId>
       <artifactId>exo.ws.frameworks.json</artifactId>
       <version>${org.exoplatform.ws.version}</version>
-    </dependency> 
-		
-	<dependency>
+    </dependency>
+    <dependency>
       <groupId>javax.jcr</groupId>
       <artifactId>jcr</artifactId>
-	  <version>${javax.jcr.api.version}</version>
+      <version>${javax.jcr.api.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
-	  <version>${commons-logging.version}</version>
+      <version>${commons-logging.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>javax.mail</groupId>
       <artifactId>mail</artifactId>
-	  <version>${javax.mail.mail.version}</version>
+      <version>${javax.mail.mail.version}</version>
       <scope>compile</scope>
     </dependency>
-	<dependency>
-	  <groupId>net.wimpi.pim</groupId>
-	  <artifactId>jpim-0.1</artifactId>
-	  <version>${jpim-0.1.version}</version>
-	  <scope>compile</scope>
-	</dependency>
-	
+    <dependency>
+      <groupId>net.wimpi.pim</groupId>
+      <artifactId>jpim-0.1</artifactId>
+      <version>${jpim-0.1.version}</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>

@@ -1,14 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>exo.cs.eXoApplication.chat</artifactId>
     <version>2.0.0-Beta01-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.cs.eXoApplication.chat.service</artifactId>
   <name>eXo Chat Service</name>
-  <description />
-
+  <description/>
   <dependencies>
     <dependency>
       <groupId>org.exoplatform.ws</groupId>
@@ -32,12 +32,12 @@
       <version>${org.exoplatform.kernel.version}</version>
     </dependency>
     <dependency>
-	  <groupId>org.exoplatform.core</groupId>
-	  <artifactId>exo.core.component.security.core</artifactId>
-	  <version>${org.exoplatform.core.version}</version>
-	  <scope>compile</scope>
-	</dependency>
-	<dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.security.core</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>org.exoplatform.core</groupId>
       <artifactId>exo.core.component.organization.api</artifactId>
       <version>${org.exoplatform.core.version}</version>
@@ -75,8 +75,8 @@
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.portal</artifactId>
       <version>${org.exoplatform.portal.cp.version}</version>
-      <type>test-jar</type>
       <scope>test</scope>
+      <type>test-jar</type>
     </dependency>
     <dependency>
       <groupId>org.chromattic</groupId>
@@ -94,85 +94,84 @@
       <artifactId>exo.jcr.component.core</artifactId>
       <version>${org.exoplatform.jcr.version}</version>
     </dependency>
-	<dependency>
-       <groupId>org.exoplatform.platform</groupId>
-       <artifactId>exo.platform.commons.comet.service</artifactId>
-	  <scope>provided</scope>
+    <dependency>
+      <groupId>org.exoplatform.platform</groupId>
+      <artifactId>exo.platform.commons.comet.service</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.ws</groupId>
       <artifactId>exo.ws.frameworks.json</artifactId>
       <version>${org.exoplatform.ws.version}</version>
     </dependency>
-	<dependency>
+    <dependency>
       <groupId>jivesoftware</groupId>
       <artifactId>smack</artifactId>
-	  <version>${jivesoftware.smack.version}</version>
+      <version>${jivesoftware.smack.version}</version>
     </dependency>
     <dependency>
       <groupId>jivesoftware</groupId>
       <artifactId>smackx</artifactId>
-	  <version>${jivesoftware.smackx.version}</version>
+      <version>${jivesoftware.smackx.version}</version>
     </dependency>
     <dependency>
       <groupId>dom4j</groupId>
       <artifactId>dom4j</artifactId>
-	  <version>${dom4j.version}</version>
+      <version>${dom4j.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jcrom</groupId>
       <artifactId>jcrom</artifactId>
-	  <version>${jcrom.version}</version>
-    </dependency> 
+      <version>${jcrom.version}</version>
+    </dependency>
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
-	  <version>${commons-fileupload.version}</version>
+      <version>${commons-fileupload.version}</version>
       <scope>provided</scope>
     </dependency>
-	<dependency>
+    <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-	  <version>${commons-io.version}</version>
+      <version>${commons-io.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
-	  <version>${javax.servlet.servlet-api.version}</version>
+      <version>${javax.servlet.servlet-api.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>javax.jcr</groupId>
       <artifactId>jcr</artifactId>
-	  <version>${javax.jcr.api.version}</version>
+      <version>${javax.jcr.api.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>quartz</groupId>
       <artifactId>quartz</artifactId>
-	  <version>${quartz.version}</version>
+      <version>${quartz.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
-	  <version>${commons-logging.version}</version>
+      <version>${commons-logging.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-	  <version>${picocontainer.version}</version>
+      <version>${picocontainer.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>javax.ws.rs</groupId>
       <artifactId>jsr311-api</artifactId>
-	  <version>${javax.ws.rs.jsr311-api.version}</version>
+      <version>${javax.ws.rs.jsr311-api.version}</version>
       <scope>compile</scope>
     </dependency>
-    
   </dependencies>
   <reporting>
     <plugins>
@@ -180,10 +179,10 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <configuration>
-           <configLocation>${exo.projects.directory.config}/exo-checkstyle-checker.xml</configLocation>
-           <suppressionsLocation>${exo.projects.directory.config}/exo-checkstyle-suppressions.xml</suppressionsLocation>
+          <configLocation>${exo.projects.directory.config}/exo-checkstyle-checker.xml</configLocation>
+          <suppressionsLocation>${exo.projects.directory.config}/exo-checkstyle-suppressions.xml</suppressionsLocation>
         </configuration>
       </plugin>
-  </plugins>
-</reporting>
+    </plugins>
+  </reporting>
 </project>

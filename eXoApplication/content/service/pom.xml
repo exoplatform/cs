@@ -1,19 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>exo.cs.eXoApplication.content</artifactId>
     <version>2.0.0-Beta01-SNAPSHOT</version>
-  </parent> 
-
-  <modelVersion>4.0.0</modelVersion>
+  </parent>
   <artifactId>exo.cs.eXoApplication.content.service</artifactId>
   <packaging>jar</packaging>
   <name>eXo Content service</name>
-  <url>http://www.exoplatform.org</url>
   <description>eXo Content service</description>
-  
+  <url>http://www.exoplatform.org</url>
   <dependencies>
-  	<dependency>
+    <dependency>
       <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.container</artifactId>
       <version>${org.exoplatform.kernel.version}</version>
@@ -41,20 +40,17 @@
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.portal</artifactId>
       <version>${org.exoplatform.portal.version}</version>
-    </dependency> 
-    
+    </dependency>
     <dependency>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.xml-parser</artifactId>
       <version>${org.exoplatform.portal.version}</version>
-    </dependency> 
-    
+    </dependency>
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ext</artifactId>
       <version>${org.exoplatform.jcr.version}</version>
     </dependency>
-    
     <dependency>
       <groupId>org.jibx</groupId>
       <artifactId>jibx-run</artifactId>
@@ -70,28 +66,26 @@
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
-	  <version>${commons-lang.version}</version>
+      <version>${commons-lang.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>javax.jcr</groupId>
       <artifactId>jcr</artifactId>
-	  <version>${javax.jcr.api.version}</version>
+      <version>${javax.jcr.api.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
-	  <version>${commons-httpclient.version}</version>
+      <version>${commons-httpclient.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>pull-parser</groupId>
       <artifactId>pull-parser</artifactId>
-	  <version>${pull-parser.version}</version>
+      <version>${pull-parser.version}</version>
       <scope>compile</scope>
     </dependency>
-        
   </dependencies>
-   
 </project>

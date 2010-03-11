@@ -1,19 +1,17 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>exo.cs.eXoApplication.mail</artifactId>
     <version>2.0.0-Beta01-SNAPSHOT</version>
-  </parent> 
-
-  
-  <artifactId>exo.cs.eXoApplication.mail.service</artifactId>   
+  </parent>
+  <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
   <packaging>jar</packaging>
   <name>eXo mail service</name>
-  <url>http://www.exoplatform.org</url>
   <description>eXo mail service</description>
-  
-  <dependencies> 
+  <url>http://www.exoplatform.org</url>
+  <dependencies>
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.component.common</artifactId>
@@ -31,8 +29,7 @@
       <version>${org.exoplatform.kernel.version}</version>
       <scope>compile</scope>
     </dependency>
-    
-  	<dependency>
+    <dependency>
       <groupId>org.exoplatform.core</groupId>
       <artifactId>exo.core.component.security.core</artifactId>
       <version>${org.exoplatform.core.version}</version>
@@ -48,64 +45,61 @@
       <version>${org.exoplatform.core.version}</version>
       <scope>compile</scope>
     </dependency>
-    
-  	<dependency>
+    <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.core</artifactId>
       <version>${org.exoplatform.jcr.version}</version>
-      <scope>compile</scope>      
+      <scope>compile</scope>
     </dependency>
-  	<dependency>
+    <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ext</artifactId>
-      <version>${org.exoplatform.jcr.version}</version>      
+      <version>${org.exoplatform.jcr.version}</version>
     </dependency>
-     
     <dependency>
-       <groupId>org.exoplatform.platform</groupId>
-       <artifactId>exo.platform.commons.comet.service</artifactId>
+      <groupId>org.exoplatform.platform</groupId>
+      <artifactId>exo.platform.commons.comet.service</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.ws</groupId>
       <artifactId>exo.ws.frameworks.json</artifactId>
       <version>${org.exoplatform.ws.version}</version>
-    </dependency> 
-    
+    </dependency>
     <dependency>
       <groupId>javax.jcr</groupId>
       <artifactId>jcr</artifactId>
-	  <version>${javax.jcr.api.version}</version>
+      <version>${javax.jcr.api.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
-	  <version>${javax.activation.activation.version}</version>
+      <version>${javax.activation.activation.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
-	  <version>${commons-logging.version}</version>
+      <version>${commons-logging.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>picocontainer</groupId>
       <artifactId>picocontainer</artifactId>
-	  <version>${picocontainer.version}</version>
+      <version>${picocontainer.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>quartz</groupId>
       <artifactId>quartz</artifactId>
-	  <version>${quartz.version}</version>
+      <version>${quartz.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>javax.mail</groupId>
       <artifactId>mail</artifactId>
-	  <version>${javax.mail.mail.version}</version>
+      <version>${javax.mail.mail.version}</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
