@@ -1442,7 +1442,10 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     } else try { contactNode.getProperty("exo:birthday").remove() ; } catch (PathNotFoundException e) {}
     
     contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
-    if (contact.getEmailAddresses() != null)
+    
+    if (contact.getEmailAddresses() == null || contact.getEmailAddress().length()==0)
+      contactNode.setProperty("exo:emailAddress", new String[] {""});
+    else
       contactNode.setProperty("exo:emailAddress", contact.getEmailAddresses().toArray(new String[] {}));
     
     contactNode.setProperty("exo:exoId", contact.getExoId());
