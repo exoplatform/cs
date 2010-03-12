@@ -118,6 +118,8 @@ public class UIActionBar extends UIContainer {
       UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionAddressContainer");
       uiPopupAction.activate(uiPopupContainer, 800, 0, true) ;
       UIAddressBookForm uiAddressBookForm = uiPopupContainer.createUIComponent(UIAddressBookForm.class, null, null);
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      uiAddressBookForm.setSelectedContactMap(uiAddressBookForm, contactId);
       uiPopupContainer.addChild(uiAddressBookForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }

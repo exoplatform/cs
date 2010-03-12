@@ -429,7 +429,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
         if(!uiContact.isEdited_) {
           contact.setAddressBookIds(new String[] {groupId}) ;
           if (uiContact.isPrivateGroup(groupId)) {
-            contactSrv.saveContact(username, contact, true);
+            contactSrv.saveContact(username, contact, true);//
             contact = contactSrv.getContact(username, contact.getId()) ;
           } else {
             if (!uiContact.havePermission(groupId)) {
@@ -437,7 +437,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
               return ;
             }
-            contactSrv.saveContactToSharedAddressBook(username, groupId, contact, true) ;
+            contactSrv.saveContactToSharedAddressBook(username, groupId, contact, true) ;//
             contact = contactSrv.getSharedContactAddressBook(username, contact.getId()) ;
           }  
         } else {
@@ -447,10 +447,10 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
               return ;
             }
-            contactSrv.saveSharedContact(username, contact) ;
+            contactSrv.saveSharedContact(username, contact) ;//
             contact = contactSrv.getSharedContact(username, contact.getId()) ;
           } else if (uiContact.isPrivateGroup(groupId)) {
-            contactSrv.saveContact(uiPortlet.getCurrentUser(), contact, false);
+            contactSrv.saveContact(uiPortlet.getCurrentUser(), contact, false);//
             contact = contactSrv.getContact(username, contact.getId()) ;
           } else { 
             if (!uiContact.havePermission(groupId)) {
@@ -458,7 +458,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
               return ;
             }
-            contactSrv.saveContactToSharedAddressBook(username, groupId, contact, false) ;
+            contactSrv.saveContactToSharedAddressBook(username, groupId, contact, false) ;//
             contact = contactSrv.getSharedContactAddressBook(username, contact.getId()) ;
           }
         }
@@ -466,10 +466,8 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
         if (uiAddress != null) {
           if(!uiContact.isEdited_) { 
             uiAddress.updateGroup(groupId) ;
-            uiAddress.refrestContactList(groupId);
-          } else {
-            uiAddress.refrestContactList(uiContact.selectedGroup_);
           }
+          uiAddress.refrestContactList(uiContact.selectedGroup_);
           uiAddress.setSelectedContact(contact);
           uiContact.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress.getParent()) ;
