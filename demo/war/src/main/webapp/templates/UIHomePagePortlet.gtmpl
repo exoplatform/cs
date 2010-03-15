@@ -134,21 +134,40 @@
 		<td class="sidebarTDContaineCS">
 			<div class="SideBar">	
 				<div class="SideBarContainer">
-					<div class="DownloadButton">
-					<% String downloadurl = _ctx.appRes("UIHomePagePortlet.cs-url") %>
-						<div style="height: 23px"><span></span></div>
-						<a href="<%=downloadurl%>" style="margin-left: 84px;" class="TextDownload"><%=_ctx.appRes("UIHomePagePortlet.cs-download")%></a><br/>
-						<div style="margin-left: 84px;" >PRIMUM LEO FEUGIAT VITAE</div>
-						<a href="<%=downloadurl%>" >&nbsp;</a>
+					
+					<div class="SideBarTL">
+						<div class="SideBarTR">
+							<div class="SideBarTC"><span></span></div>
+						</div>
 					</div>
-					<div class="NormalText">
-						<div ><%=_ctx.appRes("UIHomePagePortlet.cs-feedback")%></div>
-						<% String feedbackurl=_ctx.appRes("UIHomePagePortlet.cs-feedback-url")%>
-						<a href="<%=feedbackurl%>" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-send-feedback")%></a>
-					</div>					 
-                        
-					<div class="NormalText">meet the community<br/>
-<a href="http://wiki.exoplatform.org/xwiki/bin/view/CS" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-wiki")%></a>&nbsp;&nbsp;<a href="http://forum.exoplatform.com" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-forum")%></a></div>
+					<div class="SideBarML">
+						<div class="SideBarMR">
+							<div class="SideBarMC">
+								<div class="DownloadButton">
+								<% String downloadurl = _ctx.appRes("UIHomePagePortlet.cs-url") %>
+									<div style="height: 23px"><span></span></div>
+									<a href="<%=downloadurl%>" style="margin-left: 84px;" class="TextDownload"><%=_ctx.appRes("UIHomePagePortlet.cs-download")%></a><br/>
+									<div style="margin-left: 84px;" >PRIMUM LEO FEUGIAT VITAE</div>
+									<a href="<%=downloadurl%>" >&nbsp;</a>
+								</div>
+								<div class="NormalText">
+									<div ><%=_ctx.appRes("UIHomePagePortlet.cs-feedback")%></div>
+									<% String feedbackurl=_ctx.appRes("UIHomePagePortlet.cs-feedback-url")%>
+									<a href="<%=feedbackurl%>" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-send-feedback")%></a>
+								</div>					 
+			                        
+								<div class="NormalText">meet the community<br/>
+			<a href="http://wiki.exoplatform.org/xwiki/bin/view/CS" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-wiki")%></a>&nbsp;&nbsp;<a href="http://forum.exoplatform.com" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-forum")%></a></div>
+							</div>
+						</div>
+					</div>
+									
+					<div class="SideBarBL">
+						<div class="SideBarBR">
+							<div class="SideBarBC"><span></span></div>
+						</div>
+					</div>
+									
 									
 				</div>
 			</div>

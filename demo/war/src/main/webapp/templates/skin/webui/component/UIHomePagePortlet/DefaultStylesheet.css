@@ -223,12 +223,56 @@
 }
 
 .SideBar { 
-	margin:14px 90px 22px 20px;
+	margin:14px 90px 22px 0px;
 }
 
 .SideBarContainer {
 
 }
+
+.SideBar .SideBarTL{ 
+	background:url('DefaultSkin/background/SideBarTL.gif') no-repeat left top;
+	padding-left: 6px;
+}
+
+.SideBar .SideBarTR{ 
+	background:url('DefaultSkin/background/SideBarTR.gif') no-repeat right top;
+	padding-right: 6px;
+}
+
+.SideBar .SideBarTC{ 
+	border-top: 1px solid #cfcfcf;
+	height: 5px;
+}
+
+.SideBar .SideBarML{ 
+	border-left: 1px solid #cfcfcf;
+}
+
+.SideBar .SideBarMR{ 
+	border-right: 1px solid #cfcfcf;
+}
+
+.SideBar .SideBarMC{ 
+	padding: 8px 8px 162px 8px;
+}
+
+.SideBar .SideBarBL{ 
+	background:url('DefaultSkin/background/SideBarBL.gif') no-repeat left top;
+	padding-left: 6px;
+}
+
+.SideBar .SideBarBR{ 
+	background:url('DefaultSkin/background/SideBarBR.gif') no-repeat right top;
+	padding-right: 6px;
+}
+
+.SideBar .SideBarBC{ 
+	border-bottom: 1px solid #cfcfcf;
+	height: 5px;
+}
+
+
 
 .SideBar .DownloadButton{
 	background:url('DefaultSkin/background/DownloadButton.gif') no-repeat center top;
@@ -237,6 +281,7 @@
 	display: block;
 	width: 100%;
 	cursor: pointer;
+	border-bottom: 1px solid #b7b7b7;
 }
 
 .SideBar .DownloadButton .TextDownload{
