@@ -718,7 +718,7 @@
 	float: right; /* orientation=rt */
 	padding-right: 10px; /* orientation=lt */
 	padding-left: 10px; /* orientation=rt */
-	width: 35%;
+	width: 40%;
 }
 
 .UIContactPortlet .InfoContainer .CenterContentProfile {
@@ -740,7 +740,7 @@
 .UIContactPortlet .InfoContainer .RightContentProfile {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	width: 30%;
+	width: 25%;
 	padding-left: 10px; /* orientation=lt */
 	padding-right: 10px; /* orientation=rt */
 }
