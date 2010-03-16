@@ -915,9 +915,9 @@
 /*********************************************************************/
 
 .UICalendarPortlet .ICalIcon {
-  background:url("/calendar/skin/DefaultSkin/webui/skinIcons/icons/CalendarIcons.gif") no-repeat scroll left -1087px transparent;
+  background:url("/calendar/skin/DefaultSkin/webui/skinIcons/icons/CalendarIcons.gif") no-repeat scroll left -1909px transparent;
   cursor: pointer;
-  width: 17px;
+  width: 23px;
   height: 17px;
 }
 
