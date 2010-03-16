@@ -100,7 +100,7 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddContact.getParent()) ;
         } else if (uiAddressBook != null) {
           uiAddressBook.updateGroup(group.getId()) ;
-          uiAddressBook.refrestContactList(group.getId()) ; 
+          uiAddressBook.refrestContactList(group.getId(), null) ; 
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
         }
       }
