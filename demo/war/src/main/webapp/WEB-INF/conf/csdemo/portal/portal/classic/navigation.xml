@@ -7,6 +7,7 @@
 	  <uri>home</uri>
 	  <name>home</name>
 	  <label>#{portal.classic.home}</label>
+	  <visibility>DISPLAYED</visibility>
 	  <page-reference>portal::classic::homepage</page-reference>	    
 	 </node>
 	 
@@ -14,7 +15,7 @@
     <uri>register</uri>
     <name>register</name>
     <label>#{portal.classic.register}</label>
-    <visible>true</visible>
+    <visibility>DISPLAYED</visibility>
     <page-reference>portal::classic::register</page-reference>
    </node>
    
@@ -22,6 +23,7 @@
     <uri>contact</uri>
     <name>contact</name>
     <label>#{platform.users.collaboration.contact}</label>
+    <visibility>DISPLAYED</visibility>
     <page-reference>portal::classic::contact</page-reference>
    </node>
   	
@@ -29,6 +31,7 @@
     <uri>mail</uri>
     <name>mail</name>
     <label>#{platform.users.collaboration.mail}</label>
+    <visibility>DISPLAYED</visibility>
     <page-reference>portal::classic::mail</page-reference>
    </node>
   	
@@ -36,6 +39,7 @@
     <uri>calendar</uri>
     <name>calendar</name>
     <label>#{platform.users.collaboration.calendar}</label>
+    <visibility>DISPLAYED</visibility>
     <page-reference>portal::classic::calendar</page-reference>
    </node>
    

@@ -21,10 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.commons.chromattic.ChromatticManager;
-import org.exoplatform.component.test.AbstractGateInTest;
-import org.exoplatform.component.test.ConfigurationUnit;
-import org.exoplatform.component.test.ConfiguredBy;
-import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.component.test.*;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
@@ -55,7 +52,7 @@ import org.jivesoftware.smack.packet.Message;
   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml"),
   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration2.xml")
 })
-public class HistoryTest extends AbstractGateInTest {
+public class HistoryTest extends AbstractKernelTest {
 
   protected SessionImpl          session;
 

@@ -27,15 +27,15 @@
     <url>http://builder.exoplatform.org/hudson/job/cs-trunk-ci/</url>
   </ciManagement>
   <properties>
-    <org.exoplatform.kernel.version>2.2.0-Beta05</org.exoplatform.kernel.version>
-    <org.exoplatform.core.version>2.3.0-Beta05</org.exoplatform.core.version>
-    <org.exoplatform.ws.version>2.1.0-Beta05</org.exoplatform.ws.version>
-    <org.exoplatform.jcr.version>1.12.0-Beta05</org.exoplatform.jcr.version>
-    <org.exoplatform.portal.version>3.0.0-Beta05</org.exoplatform.portal.version>
-    <org.exoplatform.portal.cp.version>3.0.0-Beta05-CP01</org.exoplatform.portal.cp.version>
+    <org.exoplatform.kernel.version>2.2.0-GA</org.exoplatform.kernel.version>
+    <org.exoplatform.core.version>2.3.0-GA</org.exoplatform.core.version>
+    <org.exoplatform.ws.version>2.1.0-GA</org.exoplatform.ws.version>
+    <org.exoplatform.jcr.version>1.12.0-GA</org.exoplatform.jcr.version>
+    <org.exoplatform.portal.version>3.0.0-GA</org.exoplatform.portal.version>
+    <!--org.exoplatform.portal.cp.version>3.0.0-GA</org.exoplatform.portal.cp.version-->
     <exo.tool.framework.junit.version>1.2.0</exo.tool.framework.junit.version>
     <org.exoplatform.exopackage.version>1.1.0-Beta05</org.exoplatform.exopackage.version>
-    <version.chromattic>1.0.0-beta13</version.chromattic>
+    <version.chromattic>1.0.0</version.chromattic>
     <!--platform dependencies-->
     <org.exoplatform.platform.version>3.0.0-Alpha01</org.exoplatform.platform.version>
     <!-- exo.platform.web.fck.version>3.0.0-Beta05</exo.platform.web.fck.version -->
@@ -374,6 +374,30 @@
               <property>
                 <name>java.naming.factory.initial</name>
                 <value>org.exoplatform.services.naming.SimpleContextFactory</value>
+              </property>
+              <property>
+                <name>java.util.logging.config.class</name>
+                <value>org.exoplatform.component.test.logging.LogConfigurator</value>
+              </property>
+              <property>
+                <name>com.arjuna.ats.arjuna.objectstore.objectStoreDir</name>
+                <value>${project.build.directory}</value>
+              </property>
+              <property>
+                <name>gatein.test.datasource.driver</name>
+                <value>org.hsqldb.jdbcDriver</value>
+              </property>
+              <property>
+                <name>gatein.test.datasource.url</name>
+                <value>jdbc:hsqldb:file:${project.build.directory}/gateindb</value>
+              </property>
+              <property>
+                <name>gatein.test.datasource.username</name>
+                <value>sa</value>
+              </property>
+              <property>
+                <name>gatein.test.datasource.password</name>
+                <value></value>
               </property>
             </systemProperties>
           </configuration>

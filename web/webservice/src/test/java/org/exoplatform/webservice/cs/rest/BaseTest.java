@@ -18,10 +18,7 @@
 package org.exoplatform.webservice.cs.rest;
 
 import org.exoplatform.commons.chromattic.ChromatticManager;
-import org.exoplatform.component.test.AbstractGateInTest;
-import org.exoplatform.component.test.ConfigurationUnit;
-import org.exoplatform.component.test.ConfiguredBy;
-import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.component.test.*;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.organization.OrganizationService;
@@ -41,7 +38,7 @@ import org.exoplatform.services.rest.impl.ResourceBinder;
   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml"),
   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration2.xml")
   })
-public abstract class BaseTest extends AbstractGateInTest {
+public abstract class BaseTest extends AbstractKernelTest {
 
   protected PortalContainer container;
   

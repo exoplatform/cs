@@ -524,9 +524,17 @@ public class JsonResponseOrgserviceTest extends AbstractResourceTest {
     User entity = (User) response.getEntity();
 
     UserHandler hUser = orgService.getUserHandler();
+    start();
     User user = hUser.findUserByName(username);
-
-    assertEquals(entity, user);
+    stop();
+    
+    List<UserBean> listBean1 = new ArrayList<UserBean>();
+    listBean1.add(new UserBean(entity));
+    UserListBean userListBean1= new UserListBean(listBean1);
+    List<UserBean> listBean2 = new ArrayList<UserBean>();
+    listBean2.add(new UserBean(user));
+    UserListBean userListBean2= new UserListBean(listBean2);
+    assertEquals(userListBean1, userListBean2);
 
   }
 

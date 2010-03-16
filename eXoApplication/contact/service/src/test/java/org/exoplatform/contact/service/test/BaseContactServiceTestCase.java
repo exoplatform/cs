@@ -24,10 +24,7 @@ import javax.jcr.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.commons.chromattic.ChromatticManager;
-import org.exoplatform.component.test.AbstractGateInTest;
-import org.exoplatform.component.test.ConfigurationUnit;
-import org.exoplatform.component.test.ConfiguredBy;
-import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.component.test.*;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
@@ -48,7 +45,7 @@ import org.exoplatform.services.security.Identity;
   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/portal/exo.cs.eXoApplication.contact.service.portal-configuration.xml"),
   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml")
 })
-public abstract class BaseContactServiceTestCase extends AbstractGateInTest {
+public abstract class BaseContactServiceTestCase extends AbstractKernelTest {
 
   protected static Log          log = LogFactory.getLog("sample.services.test");  
 
