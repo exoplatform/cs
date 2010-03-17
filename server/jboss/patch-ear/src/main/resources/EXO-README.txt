@@ -51,7 +51,10 @@ experience more productive. It offers several ways to to view and organize your 
 
 
     * General
-          o Upgraded to GateIn 3.0 RC1 and dependencies http://www.jboss.org/gatein/
+          o Upgraded to GateIn 3.0 GA and dependencies http://www.jboss.org/gatein/
+          o Finish auto-complete in both mail and contact application when send mail
+          o Improve contact detail view for nicer 
+          o Finish implementation for remote access calendar for public mode
           
          
           
@@ -138,7 +141,46 @@ All those accounts have the default password "gtn".
  CHANGELOG
 ===========
 - 2.0.0 Beta01
+  ** Bug
+    * [CS-3772] - Do not display tag's name in [Tag Message] form
+    * [CS-3783] - Little error when folder's name is long
+    * [CS-3790] - Still show message's content when an email is removed from tag
+    * [CS-3791] - Unknown error when select user to send reminder while creating 1 event in Mail application
+    * [CS-3849] - Can not join un-public room when user put right password 
+    * [CS-3907] - Impossible to send event invitation
+    * [CS-3913] - Chat does not work :   "Keystore was tampered" 
+    * [CS-3953] -  Fix for labels i18n
+    * [CS-3989] - Users can chat to each other but can not send file when user cancel add contact invitation
+    * [CS-4010] - Little error in Contact form when email address is long
 
+** Documentation
+    * [CS-3788] - Update documentation auto-complete in To: CC: and BCC:
+
+** Improvement
+    * [CS-3673] - Room of administrative messages should be assigned a name 
+    * [CS-3682] - highlight links in chat room
+    * [CS-3835] - More concise contact sheet
+    * [CS-3882] - Do not display empty group of calendars
+    * [CS-3937] - Chat server packaging improvements
+
+** New Feature
+    * [CS-1316] - Send mail to group of users
+    * [CS-3888] - Public iCal URL for calendars
+    * [CS-3908] - Auto-complete in To: CC: and BCC contact app
+
+** Task
+    * [CS-2731] - Optimize calendar queries
+    * [CS-3700] - Replace text "Remove" by icon in forms to add/edit event or task
+    * [CS-3797] - Release CS 2.0 - Alpha2
+    * [CS-3884] - Using "HashSet<String>" instead of "HashMap<String, String>", if  values==keys
+    * [CS-3917] - Rename eXoLiveroom.sh
+    * [CS-3918] - "eXo undefined" when starting with gatein.sh
+    * [CS-3927] - Remove scroll bar in [Change image] form
+    * [CS-3948] - rename the folder inside eXoChatServer.2.0.0-XXX.zip
+    * [CS-3951] - Update the build to deploy binary bundles on release
+    * [CS-3952] - chat peristence in erroneous ppath
+    * [CS-3959] - Upgrade to GateIn GA
+  
 - 2.0.0 Alpha02
 
 ** Bug
