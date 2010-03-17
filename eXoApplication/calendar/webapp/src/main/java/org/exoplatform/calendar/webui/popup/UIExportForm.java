@@ -30,7 +30,6 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
@@ -75,7 +74,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   public UIExportForm() throws Exception {
     addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ; 
-    options.add(new SelectItemOption<String>(CalendarServiceImpl.ICALENDAR, CalendarServiceImpl.ICALENDAR)) ;
+    options.add(new SelectItemOption<String>(CalendarService.ICALENDAR, CalendarService.ICALENDAR)) ;
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
   }
   public void setCalType(String type) {calType = type ; }

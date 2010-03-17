@@ -129,9 +129,9 @@ public class CalendarUtils {
   public static final String[] FORMATPATTERNS = {FORMATPATTERN1,FORMATPATTERN2,FORMATPATTERN3,FORMATPATTERN4} ;
   public static final String TWELVE_HOURS  = "12-Hours".intern() ;
   public static final String TWENTY_FOUR_HOURS  = "24-Hours".intern() ;
-  
+
   public static final String BREAK_LINE = "\n".intern() ;
-  
+
   public static final String DATETIMEFORMAT = DATEFORMAT +" " +TIMEFORMAT;   
   public static final int DEFAULT_TIMEITERVAL = 15;
   public static final long MILISECONS_OF_DAY = 24*60*59*1000;
@@ -147,7 +147,7 @@ public class CalendarUtils {
     AT, SHARP, MONEY_MARK, PERCENT,EXPONENT,AND,STAR,PLUS,OPEN_SQUARE_BRACKET,CLOSE_SQUARE_BRACKET,
     OPEN_SHARP_BRACKET,CLOSE_SHARP_BRACKET,OPEN_PARENTHESIS,CLOSE_PARENTHESIS};
   public static final String SIMPLECHARACTER[] = {GREATER_THAN,SMALLER_THAN};
-  
+
   final public static String FIELD_SEND = "send".intern();
   final public static String ITEM_ALWAYS = "always".intern();
   final public static String ITEM_NERVER = "never".intern();
@@ -423,7 +423,7 @@ public class CalendarUtils {
     }
     return null ;
   }
-/*
+  /*
   public static boolean isNameValid(String name, String[] regexpression) {
     for(String c : regexpression){ if(name.contains(c)) return false ;}
     return true ;
@@ -441,7 +441,7 @@ public class CalendarUtils {
     + "/" ;
     return url ;
   }
-  
+
   static public String getTimeZone(String timezone) {
     TimeZone timeZone = TimeZone.getTimeZone(timezone) ;
     int rawOffset = timeZone.getRawOffset()  ;
@@ -521,7 +521,7 @@ public class CalendarUtils {
         String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
         c.setName(newName);
       }
-      
+
       privGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
     }
     if(privGrp.getOptions().size() > 0) options.add(privGrp);
@@ -559,7 +559,7 @@ public class CalendarUtils {
     }
     return options ;
   }
-  
+
   public static List<SelectItem> getCalendarCategoryOption() throws Exception {
     List<SelectItem> options = new ArrayList<SelectItem>() ;
     CalendarService calendarService = getCalendarService() ;
@@ -594,9 +594,9 @@ public class CalendarUtils {
       }
       if(pubGrp.getOptions().size()>0) options.add(pubGrp);
     }
-    
+
     return options ;
-    
+
   }
 
   public static List<org.exoplatform.calendar.service.Calendar> getCalendars() throws Exception {
@@ -642,7 +642,7 @@ public class CalendarUtils {
     return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
     replaceAll("'", "&apos;").replaceAll("\"", "&quot;");
   }
-  
+
   public static String encodeHTML(String htmlContent) throws Exception {
     return htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
     .replaceAll("<", "&lt;").replaceAll(">", "&gt;") ;
@@ -677,10 +677,10 @@ public class CalendarUtils {
       e.printStackTrace();
       return false;
     }
-    
+
     return true ;
   }
-  
+
   public static String invalidEmailAddresses(String addressList) {
     StringBuilder invalidEmails = new StringBuilder("") ;
     addressList = addressList.replaceAll(SEMICOLON,COMMA) ;
@@ -718,7 +718,7 @@ public class CalendarUtils {
     }
     return invalidNames.toString() ;
   }
-  
+
   public static String parseEmailAddress(String address) {
     try {
       InternetAddress[] iAdds = InternetAddress.parse(address, true);
@@ -762,7 +762,7 @@ public class CalendarUtils {
     time += confTimeZone.getRawOffset();
     return String.valueOf(time);
   }
-  
+
   public static List<SelectItemOption<String>> getSendValue(String more) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     if(more != null) 
@@ -772,7 +772,7 @@ public class CalendarUtils {
     options.add(new SelectItemOption<String>(CalendarSetting.ACTION_ASK, CalendarSetting.ACTION_ASK)) ;
     return options ;
   }
-  
+
   public static String reduceSpace(String s) {
     if (isEmpty(s)) return "" ;
     String[] words = s.split(" ") ;
@@ -783,7 +783,7 @@ public class CalendarUtils {
     }
     return builder.toString() ;
   }
-  
+
   public static String getResourceBundle(String key) {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     ResourceBundle res = context.getApplicationResourceBundle() ;
@@ -794,11 +794,25 @@ public class CalendarUtils {
       return null ;
     }
   }
-  
-  public static ContinuationService getContinuationService() {
-	    ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
-	    return continuation;
 
-	  }
-  
+  public static ContinuationService getContinuationService() {
+    ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
+    return continuation;
+
+  }
+
+  public static String getLabel(String componentid, String id) throws Exception
+  {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+    ResourceBundle res = context.getApplicationResourceBundle();
+    String label = componentid + ".label." + id;
+    try
+    {
+      return res.getString(label);
+    }
+    catch (MissingResourceException e)
+    {
+      return id;
+    }
+  }
 }

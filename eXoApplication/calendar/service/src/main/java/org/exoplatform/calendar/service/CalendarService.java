@@ -31,6 +31,9 @@ import javax.jcr.Node;
 
 public interface CalendarService extends CalendarServiceLegacy {
 
+  final public static String                  ICALENDAR             = "ICalendar(.ics)".intern();
+  final public static String                  EXPORTEDCSV           = "ExportedCsv(.csv)".intern();
+
   /**
    * The method gets all calendar category of current user from data base
    * @param username current user name
@@ -557,4 +560,5 @@ public interface CalendarService extends CalendarServiceLegacy {
   public void updateCalDav(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception ;
   
   public int getTypeOfCalendar(String userName, String calendarId) throws Exception;
+  
 }

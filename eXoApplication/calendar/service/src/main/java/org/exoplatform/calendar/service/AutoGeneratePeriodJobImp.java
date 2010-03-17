@@ -19,7 +19,6 @@ package org.exoplatform.calendar.service;
 import java.net.URL;
 import java.util.List;
 
-import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -64,11 +63,11 @@ public class AutoGeneratePeriodJobImp  implements Job {
         if (feed.getEntries() == null || feed.getEntries().size() == 0) continue ;
         SyndEntry entry = (SyndEntry)feed.getEntries().get(0);
         String calId = entry.getLink().substring(entry.getLink().lastIndexOf("/")+1) ;
-        calSvr.updateRss(entry.getAuthor(), calId, calSvr.getCalendarImportExports(CalendarServiceImpl.ICALENDAR),Integer.parseInt(numberLimited)) ;
-        calSvr.updateCalDav(entry.getAuthor(), calId, calSvr.getCalendarImportExports(CalendarServiceImpl.ICALENDAR),Integer.parseInt(numberLimited)) ;
+        calSvr.updateRss(entry.getAuthor(), calId, calSvr.getCalendarImportExports(CalendarService.ICALENDAR),Integer.parseInt(numberLimited)) ;
+        calSvr.updateCalDav(entry.getAuthor(), calId, calSvr.getCalendarImportExports(CalendarService.ICALENDAR),Integer.parseInt(numberLimited)) ;
       }
     } catch (Exception e) {
-      e.printStackTrace() ;
+     // e.printStackTrace() ;
     }
     finally{
       ExoContainerContext.setCurrentContainer(oldContainer);

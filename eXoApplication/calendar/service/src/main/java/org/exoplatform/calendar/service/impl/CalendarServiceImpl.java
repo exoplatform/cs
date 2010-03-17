@@ -52,18 +52,14 @@ import org.picocontainer.Startable;
  */
 public class CalendarServiceImpl implements CalendarService, Startable {
 
-  final public static String                  ICALENDAR             = "ICalendar(.ics)".intern();
-  final public static String                  EXPORTEDCSV           = "ExportedCsv(.csv)".intern();
-
-
   private ResourceBundleService rbs_ ;
   private JCRDataStorage                      storage_;
   private Map<String, CalendarImportExport>   calendarImportExport_ = new LinkedHashMap<String, CalendarImportExport>();
   protected List<CalendarUpdateEventListener> listeners_            = new ArrayList<CalendarUpdateEventListener>(3);
   public CalendarServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice, ResourceBundleService rbs) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
-    calendarImportExport_.put(ICALENDAR, new ICalendarImportExport(storage_));
-    calendarImportExport_.put(EXPORTEDCSV, new CsvImportExport(storage_));
+    calendarImportExport_.put(CalendarService.ICALENDAR, new ICalendarImportExport(storage_));
+    calendarImportExport_.put(CalendarService.EXPORTEDCSV, new CsvImportExport(storage_));
     rbs_ = rbs;
   }
 
@@ -304,7 +300,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     return storage_.generateRss(username,
                                 calendars,
                                 rssData,
-                                calendarImportExport_.get(ICALENDAR));
+                                calendarImportExport_.get(CalendarService.ICALENDAR));
   }
 
   /**
@@ -314,7 +310,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     return storage_.generateCalDav(username,
                                    calendars,
                                    rssData,
-                                   calendarImportExport_.get(ICALENDAR));
+                                   calendarImportExport_.get(CalendarService.ICALENDAR));
   }
 
   /**
@@ -892,11 +888,11 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   }
 
   public int generateCalDav(String username, List<String> calendarIds, RssData rssData) throws Exception {
-    return storage_.generateCalDav(username,calendarIds, rssData, calendarImportExport_.get(ICALENDAR));
+    return storage_.generateCalDav(username,calendarIds, rssData, calendarImportExport_.get(CalendarService.ICALENDAR));
   }
 
   public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception {
-    return storage_.generateRss(username,calendarIds, rssData, calendarImportExport_.get(ICALENDAR));
+    return storage_.generateRss(username,calendarIds, rssData, calendarImportExport_.get(CalendarService.ICALENDAR));
   }
 
   public EventCategory getEventCategoryByName(String username, String eventCategoryName) throws Exception {
@@ -917,5 +913,4 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     }
     return null ;
   }
-
 }

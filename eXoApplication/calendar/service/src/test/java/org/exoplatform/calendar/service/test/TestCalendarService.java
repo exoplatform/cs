@@ -30,7 +30,6 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
-import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 
 /**
  * Created by The eXo Platform SARL
@@ -239,7 +238,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     List<String> calendarIds = new ArrayList<String>() ;
     calendarIds.add(cal.getId()) ;
     OutputStream out = calendarService_.getCalendarImportExports(
-        CalendarServiceImpl.ICALENDAR).exportCalendar(username, calendarIds, "0") ;
+        CalendarService.ICALENDAR).exportCalendar(username, calendarIds, "0") ;
     ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
     
     assertNotNull(calendarService_.removeUserEvent(username, cal.getId(), calendarEvent.getId())) ;
@@ -247,7 +246,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     assertNotNull(calendarService_.removeUserCalendar(username, cal.getId())) ;
     
     startSessionAs(username) ;
-    calendarService_.getCalendarImportExports(CalendarServiceImpl.ICALENDAR)
+    calendarService_.getCalendarImportExports(CalendarService.ICALENDAR)
      .importCalendar(sessionProvider, username, is, "importedCalendar") ;
     List<Calendar> cals = calendarService_.getUserCalendars(username, true) ;
     List<String> newCalendarIds = new ArrayList<String>() ;

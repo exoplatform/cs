@@ -181,7 +181,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       
       Calendar cal = null;
       for (String calId : calendarIds) {
-        String url =  CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ PortalContainer.getCurrentRestContextName() + "/cs/calendar/rss/"+username+"/"+calId;
+        String url =  CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ PortalContainer.getCurrentRestContextName() + "/private/cs/calendar/subscribe/"+username+"/"+calId;
         if (uiForm.userCals_.containsKey(calId)) {
           cal = calendarService.getUserCalendar(CalendarUtils.getCurrentUser(), calId);
           cal.setPublicUrl(url+"/"+ Utils.PRIVATE_TYPE);

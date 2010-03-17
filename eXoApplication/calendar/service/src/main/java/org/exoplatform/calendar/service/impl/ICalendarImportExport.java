@@ -156,6 +156,7 @@ public class ICalendarImportExport implements CalendarImportExport{
       event.getProperties().getProperty(Property.STATUS).getParameters()
       .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
     }*/
+    if(exoEvent.getAttachment()!= null)
     if(!exoEvent.getAttachment().isEmpty()) {
       for(Attachment att : exoEvent.getAttachment()) {
         byte bytes[] = new byte[att.getInputStream().available()] ; 
@@ -169,6 +170,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         event.getProperties().add(attach) ;
       }
     } 
+    if(exoEvent.getReminders() != null )
     if(!exoEvent.getReminders().isEmpty()) {
       for(Reminder r : exoEvent.getReminders()){
         VAlarm reminder = new VAlarm(new DateTime(r.getFromDateTime())) ;
@@ -1650,6 +1652,28 @@ public class ICalendarImportExport implements CalendarImportExport{
         }
       }      
     }
+  }
+
+  @Override
+  public ByteArrayOutputStream exportEventCalendar(CalendarEvent exoEvent) throws Exception {
+    net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
+    calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
+    calendar.getProperties().add(Version.VERSION_2_0);
+    calendar.getProperties().add(CalScale.GREGORIAN);
+        if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
+          calendar = getVEvent(calendar, exoEvent) ;
+        } else {
+          calendar = getVTask(calendar, exoEvent) ;
+        }
+    ByteArrayOutputStream bout = new ByteArrayOutputStream();
+    CalendarOutputter output = new CalendarOutputter();
+    try {
+      output.output(calendar, bout) ;
+    }catch(ValidationException e) {
+      e.printStackTrace() ;
+      return null ;
+    }    
+    return bout;
   }
 }
 

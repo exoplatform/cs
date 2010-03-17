@@ -42,7 +42,6 @@ import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
-import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -1159,7 +1158,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       List<org.exoplatform.mail.service.Attachment> attachments = new ArrayList<org.exoplatform.mail.service.Attachment>() ;
       try {
         CalendarService calService = CalendarUtils.getCalendarService() ;
-        OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportEventCalendar(fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
+        OutputStream out = calService.getCalendarImportExports(CalendarService.ICALENDAR).exportEventCalendar(fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
         BufferAttachment bf = new BufferAttachment() ;
         bf.setInputStream(is) ;
@@ -1193,7 +1192,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       org.exoplatform.services.mail.Attachment attachmentCal = new org.exoplatform.services.mail.Attachment() ;
       try {
         CalendarService calService = CalendarUtils.getCalendarService() ;
-        OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportEventCalendar(fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
+        OutputStream out = calService.getCalendarImportExports(CalendarService.ICALENDAR).exportEventCalendar(fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
         attachmentCal.setInputStream(is) ;
         attachmentCal.setName("icalendar.ics");

@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.service.impl;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -436,5 +437,10 @@ public class CsvImportExport implements CalendarImportExport {
                                             return null;
     //TODO not implemented yet, export for CSV file
    
+  }
+  @Override
+  public ByteArrayOutputStream exportEventCalendar(CalendarEvent event) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

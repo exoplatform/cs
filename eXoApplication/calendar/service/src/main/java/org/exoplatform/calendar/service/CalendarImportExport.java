@@ -16,6 +16,7 @@
  **/
 package org.exoplatform.calendar.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
@@ -135,4 +136,11 @@ public interface CalendarImportExport {
    */
   public boolean isValidate(InputStream icalInputStream) throws Exception ;
   
+  /**
+   * The method export binary from evet object
+   * @param event : event object
+   * @return binary ics file
+   * @throws Exception
+   */
+  public ByteArrayOutputStream exportEventCalendar(CalendarEvent event) throws Exception;
 }

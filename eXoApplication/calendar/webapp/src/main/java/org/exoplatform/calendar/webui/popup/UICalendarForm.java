@@ -33,7 +33,7 @@ import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
-import org.exoplatform.calendar.webui.UIFormInputInfoAction;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
@@ -58,7 +58,6 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.ext.UIFormColorPicker;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
-import org.hibernate.mapping.Array;
 
 /**
  * Created by The eXo Platform SARL
@@ -76,7 +75,9 @@ import org.hibernate.mapping.Array;
                    @EventConfig(listeners = UICalendarForm.ResetActionListener.class, phase=Phase.DECODE),
                    @EventConfig(listeners = UICalendarForm.CancelActionListener.class, phase=Phase.DECODE),
                    @EventConfig(listeners = UICalendarForm.SelectTabActionListener.class, phase=Phase.DECODE),
-                   @EventConfig(listeners = UICalendarForm.RemoveRssActionListener.class, phase=Phase.DECODE)
+                   @EventConfig(listeners = UICalendarForm.OpenActionListener.class, phase=Phase.DECODE),
+                   @EventConfig(listeners = UICalendarForm.ActiveActionListener.class, phase=Phase.DECODE),
+                   @EventConfig(listeners = UICalendarForm.DeactiveActionListener.class, phase=Phase.DECODE)
                  }
 )
 public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, UISelector{
@@ -94,8 +95,18 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   final public static String PERMISSION_SUB = "_permission".intern() ;
   final public static String PUBLIC_URL = "public-url".intern();
   final public static String PRIVATE_URL = "private-url".intern();
-  final public static String PRIVATE_URL_MSG = "private-url-msg-active".intern();
-  final public static String PRIVATE_URL_MSG_D = "private-url-msg-deactive".intern();
+  final public static String PUBLIC_URL_MSG = "public-url-msg-active".intern();
+  final public static String PUBLIC_URL_MSG_D = "public-url-msg-deactive".intern();
+  final public static String ACT_SELECT_PERM = "SelectPermission".intern();
+  final public static String ACT_ADD_CATEGORY = "AddCategory".intern();
+
+  final public static String ACT_OPEN = "Open".intern();
+  final public static String ACT_SUBSCRIBE = "Subscribe".intern();
+  final public static String ACT_ACTIVE = "Active".intern();
+  final public static String ACT_DEACTIVE = "Deactive".intern();
+
+  final public static String PUBLIC_BASE_URL = "/cs/calendar/subscribe/".intern();
+  final public static String PRIVATE_BASE_URL = "/private/cs/calendar/private/".intern();
 
   public Map<String, String> permission_ = new HashMap<String, String>() ;
   public Map<String, Map<String, String>> perms_ = new HashMap<String, Map<String, String>>() ;
@@ -104,6 +115,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   public String calType_ =  CalendarUtils.PRIVATE_TYPE ;
   private boolean isAddNew_ = true ;
   public String groupCalId_ = null ;
+  protected boolean isPublicUrl_;
+
   public UICalendarForm() throws Exception{
     super("UICalendarForm");
     UIFormInputWithActions calendarDetail = new UIFormInputWithActions(INPUT_CALENDAR) ;
@@ -116,9 +129,9 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData addCategory = new ActionData() ;
-    addCategory.setActionListener("AddCategory") ;
+    addCategory.setActionListener(ACT_ADD_CATEGORY) ;
     addCategory.setActionType(ActionData.TYPE_ICON) ;
-    addCategory.setActionName("AddCategory") ;
+    addCategory.setActionName(ACT_ADD_CATEGORY) ;
     actions.add(addCategory) ;
     calendarDetail.setActionField(CATEGORY, actions) ;
     setSelectedTab(calendarDetail.getId()) ;
@@ -134,14 +147,14 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         sharing.addUIFormInput(new UIFormStringInput(group+PERMISSION_SUB ,group+PERMISSION_SUB, null)) ;
         actions = new ArrayList<ActionData> () ;
         ActionData editPermission = new ActionData() ;
-        editPermission.setActionListener("SelectPermission") ;
+        editPermission.setActionListener(ACT_SELECT_PERM) ;
         editPermission.setActionName("SelectUser") ;
         editPermission.setActionParameter(UISelectComponent.TYPE_USER + ":" + group+PERMISSION_SUB) ;
         editPermission.setActionType(ActionData.TYPE_ICON) ;
         editPermission.setCssIconClass("SelectUserIcon") ;
         actions.add(editPermission) ;
         ActionData membershipPerm = new ActionData() ;
-        membershipPerm.setActionListener("SelectPermission") ;
+        membershipPerm.setActionListener(ACT_SELECT_PERM) ;
         membershipPerm.setActionName("SelectMemberShip") ;
         membershipPerm.setActionParameter(UISelectComponent.TYPE_MEMBERSHIP + ":" + group+PERMISSION_SUB) ;
         membershipPerm.setActionType(ActionData.TYPE_ICON) ;
@@ -151,6 +164,34 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       }
     }
     addChild(sharing) ;
+
+
+    UIFormInputInfo privateUrl = new UIFormInputInfo(PRIVATE_URL, PRIVATE_URL, null);
+
+    ActionData privateAction = new ActionData();
+    privateAction.setActionListener(ACT_OPEN);
+    privateAction.setActionParameter("");
+    privateAction.setActionName(ACT_OPEN);
+    privateAction.setActionType(ActionData.TYPE_ICON);
+    privateAction.setCssIconClass("ICalIcon");
+
+    calendarDetail.setActionField(PRIVATE_URL, Arrays.asList(privateAction));
+    calendarDetail.addUIFormInput(privateUrl);
+
+    String message = CalendarUtils.getLabel("UICalendarForm", PUBLIC_URL_MSG_D);
+    UIFormInputInfo publicUrl = new UIFormInputInfo(PUBLIC_URL, PUBLIC_URL, null);
+
+    ActionData enable = new ActionData();
+    enable.setActionListener(ACT_ACTIVE);
+    enable.setActionName(ACT_ACTIVE);
+    enable.setShowLabel(true);
+    enable.setActionType(ActionData.TYPE_LINK);
+    enable.setCssIconClass("FeedLink");
+
+    calendarDetail.setActionField(PUBLIC_URL, Arrays.asList(enable));
+    publicUrl.setValue(message);
+    calendarDetail.addUIFormInput(publicUrl);
+    
   }
 
   public String[] getActions(){
@@ -222,57 +263,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 
     //Add feed field  
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR);
-    String url = null;
-    try { 
-       
-      url = calendar.getPublicUrl();
-      
-      if(url != null) {
-        
-        UIFormInputInfoAction publicUrl = (UIFormInputInfoAction)getChildById(PUBLIC_URL);
-        if(publicUrl == null ) {
-          publicUrl = new UIFormInputInfoAction(PUBLIC_URL, PUBLIC_URL, null);
-          calendarDetail.addUIFormInput(publicUrl);
-        }
-        List<ActionData> icalActs = new ArrayList<ActionData>();
-        ActionData icalAct = new ActionData();
-        icalAct.setActionListener(url);
-        icalAct.setActionName(url);
-        icalAct.setActionType(ActionData.TYPE_ICON);
-        icalAct.setCssIconClass("ICalIcon");
-        icalActs.add(icalAct);
-        ActionData removeAct = new ActionData();
-        removeAct.setActionListener("RemoveRss");
-        removeAct.setCssIconClass("RemoveBtn");
-        removeAct.setActionName(removeAct.getActionListener());
-        removeAct.setActionType(UIFormInputInfoAction.TYPE_BUTTON);
-        icalActs.add(removeAct);
-        publicUrl.setActionField(PUBLIC_URL,icalActs);
-        
-      } 
-      //TODO implement later 
-      /*url = calendar.getPrivateUrl();
-      if(url != null) {
-        UIFormInputInfoAction privateUrl = (UIFormInputInfoAction)getChildById(PRIVATE_URL);
-        if(privateUrl == null) {
-          privateUrl = new UIFormInputInfoAction(PRIVATE_URL, PRIVATE_URL, getLabel(PRIVATE_URL_MSG));
-          calendarDetail.addUIFormInput(privateUrl);
-        }
-        ActionData rssFeed = new ActionData();
-        rssFeed.setActionListener("ActiveIcalFeed");
-        //rssFeed.setActionListener("DeactiveIcalFeed");
-        rssFeed.setActionName(url);
-        rssFeed.setShowLabel(true);
-        rssFeed.setActionType(ActionData.TYPE_LINK);
-        rssFeed.setCssIconClass("FeedLink");
-        privateUrl.setActionField(PRIVATE_URL, Arrays.asList(rssFeed));
-        
-      }
-      */
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
     setDisplayName(calendar.getName()) ;
     setDescription(calendar.getDescription()) ;
     UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
@@ -315,7 +305,39 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     setLocale(calendar.getLocale()) ;
     setTimeZone(calendar.getTimeZone()) ;
     setSelectedColor(calendar.getCalendarColor()) ;
+    if(calendar.getPrivateUrl() == null || calendar.getPrivateUrl().isEmpty()) {
+      String privateUrl = CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ 
+      PortalContainer.getCurrentRestContextName() + PRIVATE_BASE_URL + CalendarUtils.getCurrentUser()+"/"+
+      calendar.getId() +"/"+ calType_ ;
+      calendar_.setPrivateUrl(privateUrl);
+    }
+    ActionData privateAction = new ActionData();
+    privateAction.setActionListener(ACT_OPEN);
+    privateAction.setActionParameter(calendar_.getPrivateUrl());
+    privateAction.setActionName(ACT_OPEN);
+    privateAction.setActionType(ActionData.TYPE_ICON);
+    privateAction.setCssIconClass("ICalIcon");
 
+    calendarDetail.setActionField(PRIVATE_URL, Arrays.asList(privateAction));
+
+    UIFormInputInfo publicUrl = calendarDetail.getChildById(PUBLIC_URL);
+    if(calendar.getPublicUrl() == null || calendar.getPublicUrl().isEmpty()) {
+      publicUrl.setValue(getLabel(PUBLIC_URL_MSG_D));
+    } else if (!calendar.getPublicUrl().isEmpty()){
+      publicUrl.setValue("");
+      List<ActionData> acts = new ArrayList<ActionData>();
+      ActionData link = new ActionData();
+      link.setActionListener(ACT_OPEN);
+      link.setActionName(PUBLIC_URL_MSG);
+      link.setActionParameter(calendar.getPublicUrl());
+      link.setShowLabel(true);
+      link.setActionType(ActionData.TYPE_LINK);
+      link.setCssIconClass("FeedLink");
+      acts.add(link);
+      ActionData act = switchAct(1);
+      acts.add(act);
+      calendarDetail.setActionField(PUBLIC_URL, acts);
+    } 
   }
 
   protected String getDisplayName() {
@@ -540,6 +562,17 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         calendar.setTimeZone(uiForm.getTimeZone()) ;
         calendar.setCalendarColor(uiForm.getSelectedColor()) ;
         calendar.setCalendarOwner(username) ;
+        String url =  CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ 
+        PortalContainer.getCurrentRestContextName() + PRIVATE_BASE_URL + CalendarUtils.getCurrentUser()+"/"+
+        calendar.getId() +"/"+ uiForm.calType_ ;
+        calendar.setPrivateUrl(url);
+        if(uiForm.isPublicUrl_) url = CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ 
+        PortalContainer.getCurrentRestContextName() + PUBLIC_BASE_URL + CalendarUtils.getCurrentUser()+"/"+
+        calendar.getId() +"/"+ uiForm.calType_ ;
+        else url = null;
+
+        calendar.setPublicUrl(url);
+
         if(CalendarUtils.PRIVATE_TYPE.equals(uiForm.calType_)) {
           if(CalendarUtils.isEmpty(calendarCategoryId)) {
             uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null, ApplicationMessage.WARNING) ) ;
@@ -680,15 +713,89 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
     }
   }
-  static public class RemoveRssActionListener extends EventListener<UICalendarForm> {
+
+  static public class OpenActionListener extends EventListener<UICalendarForm> {
+    public void execute(Event<UICalendarForm> event) throws Exception {
+      UICalendarForm uiForm = event.getSource();
+      if(uiForm.isAddNew_) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.need-save-calendar-first", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      } else {
+        String url = event.getRequestContext().getRequestParameter(OBJECTID);
+        if(url ==null || url.isEmpty()) return;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ; 
+        event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + url + "');");
+      }
+    }
+  }
+
+  static public class ActiveActionListener extends EventListener<UICalendarForm> {
+    public void execute(Event<UICalendarForm> event) throws Exception {
+      UICalendarForm uiForm = event.getSource();
+
+      if(uiForm.isAddNew_) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.need-save-calendar-first", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      } else {
+        String url =  CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ 
+        PortalContainer.getCurrentRestContextName() + PUBLIC_BASE_URL + CalendarUtils.getCurrentUser()+"/"+
+        uiForm.calendar_.getId() +"/"+ uiForm.calType_ ;
+        uiForm.calendar_.setPublicUrl(url);
+        UIFormInputWithActions calendarDetail = uiForm.getChildById(INPUT_CALENDAR);
+        UIFormInputInfo uiInput = calendarDetail.getChildById(PUBLIC_URL);
+        uiInput.setValue("");
+
+        List<ActionData> acts = new ArrayList<ActionData>();
+        ActionData link = new ActionData();
+        link.setActionListener(ACT_OPEN);
+        link.setActionName(PUBLIC_URL_MSG);
+        link.setActionParameter(url);
+        link.setShowLabel(true);
+        link.setActionType(ActionData.TYPE_LINK);
+        link.setCssIconClass("FeedLink");
+        acts.add(link);
+        ActionData act = uiForm.switchAct(1);
+        acts.add(act);
+        calendarDetail.setActionField(PUBLIC_URL, acts);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;     
+      }
+    }
+  }
+
+  static public class DeactiveActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource();
       uiForm.calendar_.setPublicUrl(null);
       UIFormInputWithActions calendarDetail = uiForm.getChildById(INPUT_CALENDAR);
-      UIFormInputInfoAction uiInput = calendarDetail.getChildById(PUBLIC_URL);
-      if(uiInput != null) uiInput.removeActionField(PUBLIC_URL);
-      else return ;
+      UIFormInputInfo uiInput = calendarDetail.getChildById(PUBLIC_URL);
+      uiInput.setValue(uiForm.getLabel(PUBLIC_URL_MSG_D));
+      ActionData act = uiForm.switchAct(0);
+      calendarDetail.setActionField(PUBLIC_URL, Arrays.asList(act));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;      
     }
+  }
+
+  public ActionData switchAct(int i) {
+    if(0 == i) {
+      ActionData enable = new ActionData();
+      enable.setActionListener(ACT_ACTIVE);
+      enable.setActionName(ACT_ACTIVE);
+      enable.setShowLabel(true);
+      enable.setActionType(ActionData.TYPE_LINK);
+      enable.setCssIconClass("FeedLink");
+      return enable ;
+    } else if(1 == i) {
+      ActionData disable = new ActionData();
+      disable.setActionListener(ACT_DEACTIVE);
+      disable.setActionName(ACT_DEACTIVE);
+      disable.setShowLabel(true);
+      disable.setCssIconClass("FeedLink");
+      disable.setActionName(disable.getActionListener());
+      disable.setActionType(ActionData.TYPE_LINK);
+      return disable; 
+    } else 
+      return null;
   }
 }
