@@ -37,6 +37,9 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RssData;
+import org.exoplatform.calendar.service.impl.CsvImportExport;
+import org.exoplatform.calendar.service.impl.ICalendarImportExport;
+import org.exoplatform.calendar.service.impl.JCRDataStorage;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
@@ -49,6 +52,13 @@ public class MockCalendarService implements CalendarService{
 
   private Calendar cal_;
   private Map<String, List<CalendarEvent>> data_;
+  private Map<String, CalendarImportExport>   calendarImportExport_ = new LinkedHashMap<String, CalendarImportExport>();
+  
+  public MockCalendarService() throws Exception{
+    calendarImportExport_.put(CalendarService.ICALENDAR, new ICalendarImportExport(new JCRDataStorage(null, null)));
+    calendarImportExport_.put(CalendarService.EXPORTEDCSV, new CsvImportExport(new JCRDataStorage(null, null)));
+  }
+  
   @Override
   public void addListenerPlugin(CalendarUpdateEventListener listener) throws Exception {
     // TODO Auto-generated method stub
@@ -125,7 +135,7 @@ public class MockCalendarService implements CalendarService{
   @Override
   public CalendarImportExport getCalendarImportExports(String type) {
     // TODO Auto-generated method stub
-    return null;
+    return calendarImportExport_.get(type);
   }
 
   @Override
@@ -254,8 +264,6 @@ public class MockCalendarService implements CalendarService{
 
   @Override
   public List<CalendarEvent> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception {
-    
-    
     // TODO Auto-generated method stub
     return data_.get(calendarIds.get(0));
   }
@@ -383,6 +391,8 @@ public class MockCalendarService implements CalendarService{
 
   @Override
   public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
+    
+    data_.get(cal_.getId()).add(event);
     // TODO Auto-generated method stub
     
   }
@@ -782,5 +792,4 @@ public class MockCalendarService implements CalendarService{
     // TODO Auto-generated method stub
     
   }
-
 }

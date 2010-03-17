@@ -16,21 +16,31 @@
  */
 package org.exoplatform.webservice.cs.calendar;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.common.http.HTTPStatus;
@@ -195,7 +205,7 @@ public class CalendarWebservice implements ResourceContainer{
     for(CalendarEvent e : events) {
       entry = new SyndEntryImpl();
       entry.setTitle(e.getSummary());                
-      entry.setLink(cal.getPublicUrl() + Utils.SLASH + e.getId());        
+      entry.setLink(cal.getPublicUrl().replaceFirst("rss","subscribe") + Utils.SLASH + e.getId());    
       entry.setAuthor(auhtor) ;
       description = new SyndContentImpl();
       description.setType(Utils.MIMETYPE_TEXTPLAIN);
@@ -210,5 +220,75 @@ public class CalendarWebservice implements ResourceContainer{
     String feedXML = output.outputString(feed);      
     feedXML = StringUtils.replace(feedXML,"&amp;","&");  
     return feedXML;
+  }
+
+  /**
+   * 
+   * @param username : 
+   * @param calendarId
+   * @param type
+   * @param eventId
+   * @return Icalendar data
+   * @throws Exception
+   */
+  @GET
+  //@Produces("text/calendar")
+  @Path("/subscribe/{username}/{calendarId}/{type}")
+  public Response publicProcess(@PathParam("username")
+                              String username, @PathParam("calendarId")
+                              String calendarId, @PathParam("type")
+                              String type) throws Exception {
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    try {
+
+      CalendarService calService = (CalendarService)ExoContainerContext
+      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
+      OutputStream out = icalEx.exportCalendar(username, Arrays.asList(calendarId), type);
+      InputStream in = new ByteArrayInputStream(out.toString().getBytes());
+      return Response.ok(in, "text/calendar")
+      .header("Cache-Control", "private max-age=600, s-maxage=120").
+      header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
+    }
+  }
+  
+  /**
+   * 
+   * @param username : 
+   * @param calendarId
+   * @param type
+   * @param eventId
+   * @return Icalendar data
+   * @throws Exception
+   */
+  @GET
+  //@Produces("text/calendar")
+  @Path("private/{username}/{calendarId}/{type}")
+  public Response privateProcess(@PathParam("username")
+                              String username, @PathParam("calendarId")
+                              String calendarId, @PathParam("type")
+                              String type) throws Exception {
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    try {
+
+      CalendarService calService = (CalendarService)ExoContainerContext
+      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
+      OutputStream out = icalEx.exportCalendar(username, Arrays.asList(calendarId), type);
+      InputStream in = new ByteArrayInputStream(out.toString().getBytes());
+      return Response.ok(in, "text/calendar")
+      .header("Cache-Control", "private max-age=600, s-maxage=120").
+      header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
+    }
   }
 }

@@ -129,5 +129,11 @@
       <version>${version.chromattic}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>ical4j</groupId>
+      <artifactId>ical4j</artifactId>
+      <version>${ical4j.version}</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>

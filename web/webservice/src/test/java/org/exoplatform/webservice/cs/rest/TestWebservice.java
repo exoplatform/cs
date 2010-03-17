@@ -17,6 +17,9 @@
 
 package org.exoplatform.webservice.cs.rest;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response.Status;
@@ -24,6 +27,7 @@ import javax.ws.rs.ext.RuntimeDelegate;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.services.organization.UserHandler;
@@ -92,6 +96,18 @@ public class TestWebservice extends AbstractResourceTest {
     System.out.println("\n\n extURI " + extURI);
     calendarService.saveUserCalendar(username, cal, true);
     
+    CalendarEvent event = new CalendarEvent();
+    event.setSummary("test");
+    event.setDescription("event description");
+    event.setCalendarId(cal.getId());
+    event.setEventCategoryId("eventCategoryId");
+    event.setEventCategoryName("EventCategirtName");
+    event.setFromDateTime(new Date());
+    event.setToDateTime(new Date());
+    calendarService.saveUserEvent(username, cal.getId(), event, true);
+    
+    event.setLocation(extURI.replaceFirst("rss", "subscribe") +"/"+ event.getId());
+    
     ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
 
     ContainerResponse response = service("GET", extURI, baseURI, h, null, writer);
@@ -103,7 +119,12 @@ public class TestWebservice extends AbstractResourceTest {
     //assertEquals(HTTPStatus.NO_CONTENT, response.getStatus());
     //assertEquals(HTTPStatus.INTERNAL_ERROR, response.getStatus());
     assertEquals(HTTPStatus.OK, response.getStatus());
-    //assertEquals(MediaType.APPLICATION_XML, response.getContentType());
+    
+    response = service("GET", event.getLocation(), baseURI, h, null, writer);
+    //System.out.println("\n\n " + response.getContentType());
+    //assertEquals(HTTPStatus.OK, response.getStatus());
+    
+    //assertEquals(MediaType.APPLICATION_OCTET_STREAM_TYPE, response.getContentType());
      
     stop();
   }
