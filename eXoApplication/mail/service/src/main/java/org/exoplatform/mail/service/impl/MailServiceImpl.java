@@ -314,6 +314,14 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void saveFilter(String username, String accountId, MessageFilter filter, boolean applyAll) throws Exception {
+    String toFolder = filter.getApplyFolder();
+    List<Message> messageList = storage_.getMessagePageList(username, filter).getAll(username);
+    String fromFolder = null;
+    if (messageList.size() > 0) {
+      fromFolder = messageList.get(0).getFolders()[0];
+    }
+    moveMessages(username, accountId, messageList, fromFolder, toFolder);
+
     storage_.saveFilter(username, accountId, filter, applyAll);
   }
 
@@ -1247,15 +1255,37 @@ public class MailServiceImpl implements MailService, Startable {
         msgList.add(message);
       }
     }
+    
     return msgList;
   }
 
   public void addMessageNotInJCR(String username,
                                  String accountId,
                                  String folderId,
-                                 Set<javax.mail.Message> msgSet) throws Exception {
+                                 javax.mail.Folder mailServerFolder) throws Exception {
+    Map<String, javax.mail.Message> msgServerMap = getServerMessageMap(mailServerFolder);
+    List<String> msgIDListFromJcrFolder = getMessageIDFromJcrFolder(username, accountId, folderId);
+    if (!mailServerFolder.isOpen())
+      mailServerFolder.open(javax.mail.Folder.READ_WRITE);
+    Set<String> msgKeySet = msgServerMap.keySet();
+//    for (String msgID : msgIDListFromJcrFolder) {
+//      if (!msgServerMap.containsKey(msgID)) {
+//        storage_.saveTotalMessage(username, accountId, msgID, msgServerMap.get(msgID), null);
+//      }
+//    }
+    for (String msgID : msgKeySet) {
+      if (!msgIDListFromJcrFolder.contains(msgID)) {
+        storage_.saveTotalMessage(username, accountId, msgID, msgServerMap.get(msgID), null);
+      }
+    }
+  }
+
+  public void addMessageNotInJCR(String username,
+                                 String accountId,
+                                 String folderId,
+                                 List<javax.mail.Message> messageList) throws Exception {
     Map<String, javax.mail.Message> msgServerMap = new HashMap<String, javax.mail.Message>();
-    for (javax.mail.Message message : msgSet) {
+    for (javax.mail.Message message : messageList) {
       MimeMessage mimeMessage = (MimeMessage) message;
       msgServerMap.put(mimeMessage.getMessageID(), message);
     }
@@ -1272,32 +1302,60 @@ public class MailServiceImpl implements MailService, Startable {
     List<Message> msgListFromJcrFolder = getMessagesByFolder(userName, accountId, folderId);
     List<String> msgIDListFromJcrFolder = new ArrayList<String>();
     for (Message message : msgListFromJcrFolder) {
-      String key = userName + ":" + accountId;
-      CheckingInfo info = checkingLog_.get(key);
-      if (info != null) {
-        msgIDListFromJcrFolder.add(message.getId());
-      }
+      msgIDListFromJcrFolder.add(message.getId());
     }
 
     return msgIDListFromJcrFolder;
   }
 
-  public List<String> getMessageIDFromServerMailFolder(Set<javax.mail.Message> msgSet) throws Exception {
+  public List<String> getMessageIDFromServerMailFolder(String userName,
+                                                       String accountId,
+                                                       javax.mail.Folder mailServerFolder) throws Exception {
     List<String> msgIDListFromMailServer = new ArrayList<String>();
-    for (javax.mail.Message message : msgSet) {
+
+    if (!mailServerFolder.isOpen()) {
+      mailServerFolder.open(javax.mail.Folder.READ_ONLY);
+    }
+    javax.mail.Message[] msgListFromMailServer = mailServerFolder.getMessages();
+    for (javax.mail.Message message : msgListFromMailServer) {
       MimeMessage mimeMessage = (MimeMessage) message;
       msgIDListFromMailServer.add(mimeMessage.getMessageID());
     }
     return msgIDListFromMailServer;
   }
 
+  public List<String> getMessageIDFromServerMailFolder(List<javax.mail.Message> messageList) throws Exception {
+    List<String> msgIDListFromMailServer = new ArrayList<String>();
+    for (javax.mail.Message message : messageList) {
+      MimeMessage mimeMessage = (MimeMessage) message;
+      msgIDListFromMailServer.add(mimeMessage.getMessageID());
+    }
+    return msgIDListFromMailServer;
+  }
+
+  public Map<String, javax.mail.Message> getServerMessageMap(javax.mail.Folder mailServerFolder) {
+    javax.mail.Message[] msgListFromMailServer;
+    Map<String, javax.mail.Message> map = null;
+    try {
+      if (!mailServerFolder.isOpen())
+        mailServerFolder.open(javax.mail.Folder.READ_WRITE);
+      msgListFromMailServer = mailServerFolder.getMessages();
+      map = new HashMap<String, javax.mail.Message>();
+      for (javax.mail.Message message : msgListFromMailServer) {
+        MimeMessage mimeMessage = (MimeMessage) message;
+        map.put(mimeMessage.getMessageID(), message);
+      }
+    } catch (MessagingException e) {
+    }
+    return map;
+  }
   public Map<String, javax.mail.Message> getServerMessageMap(String username,
                                                              String accountId,
-                                                             Set<javax.mail.Message> msgSet) {
+                                                             List<javax.mail.Message> messageList) {
     Map<String, javax.mail.Message> map = null;
     try {
       map = new HashMap<String, javax.mail.Message>();
-      for (javax.mail.Message message : msgSet) {
+      for (javax.mail.Message message : messageList) {
         MimeMessage mimeMessage = (MimeMessage) message;
         map.put(mimeMessage.getMessageID(), message);
       }
@@ -1326,26 +1384,25 @@ public class MailServiceImpl implements MailService, Startable {
         if (!mailServerFolder.isOpen())
           mailServerFolder.open(javax.mail.Folder.READ_WRITE);
         if (mailServerFolder != null) {
-          Set<javax.mail.Message> msgSet = synchImapMessage(userName,
-                                                            accountId,
-                                                            mailServerFolder,
-                                                            key);
-          List<String> msgIDListFromMailServer = getMessageIDFromServerMailFolder(msgSet);
+          synchImapMessage(userName, accountId, mailServerFolder, key);
+          List<String> msgIDListFromMailServer = getMessageIDFromServerMailFolder(userName,
+                                                                                  accountId,
+                                                                                  mailServerFolder);
           List<Message> msgListFromJcrFolder = getMessagesByFolder(userName, accountId, folderId);
           msgListFromJcrFolder = removeMessageFromJCR(userName,
                                                       accountId,
                                                       msgListFromJcrFolder,
                                                       msgIDListFromMailServer);
-          addMessageNotInJCR(userName, accountId, folderId, msgSet);
-          Map<String, javax.mail.Message> map = getServerMessageMap(userName, accountId, msgSet);
+          addMessageNotInJCR(userName, accountId, folderId, mailServerFolder);
+          Map<String, javax.mail.Message> map = getServerMessageMap(mailServerFolder);
           for (Message message : msgListFromJcrFolder) {
-              String id = message.getId();
-              javax.mail.Message serverMessage = map.get(id);
-              message.setHasStar(serverMessage.isSet(Flags.Flag.FLAGGED));
-              message.setUnread(!serverMessage.isSet(Flags.Flag.SEEN));
-              IMAPFolder serverFolder = (IMAPFolder) mailServerFolder;
-              message.setUID(String.valueOf(serverFolder.getUID(serverMessage)));
-              storage_.saveMessage(userName, accountId, message, false);
+            String id = message.getId();
+            javax.mail.Message serverMessage = map.get(id);
+            message.setHasStar(serverMessage.isSet(Flags.Flag.FLAGGED));
+            message.setUnread(!serverMessage.isSet(Flags.Flag.SEEN));
+            IMAPFolder serverFolder = (IMAPFolder) mailServerFolder;
+            message.setUID(String.valueOf(serverFolder.getUID(serverMessage)));
+            storage_.saveMessage(userName, accountId, message, false);
           }
         }
       }
@@ -1422,21 +1479,20 @@ public class MailServiceImpl implements MailService, Startable {
     }
   }
 
-  private Set<javax.mail.Message> synchImapMessage(String userName,
-                                                   String accountId,
-                                                   javax.mail.Folder folder,
-                                                   String key) throws Exception {
+  private void synchImapMessage(String userName,
+                                                    String accountId,
+                                                    javax.mail.Folder folder,
+                                                    String key) throws Exception {
     Account account = getAccountById(userName, accountId);
     boolean saved = false;
     int totalNew = -1;
     Info infoObj = new Info();
     ContinuationService continuation = Utils.getContinuationService();
     if (folder == null)
-      return null;
+      return;
 
     String folderId = null;
     String folderName = folder.getName();
-    LinkedHashMap<javax.mail.Message, List<String>> msgMapForStore = new LinkedHashMap<javax.mail.Message, List<String>>();
     CheckingInfo info = checkingLog_.get(key);
     try {
       if (!folder.isOpen()) {
@@ -1492,7 +1548,6 @@ public class MailServiceImpl implements MailService, Startable {
             Date lastFromDate = null, receivedDate = null;
             List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap.keySet());
             SpamFilter spamFilter = getSpamFilter(userName, account.getId());
-
             while (i < totalNew) {
               info = checkingLog_.get(key);
               if (info != null && info.isRequestStop()) {
@@ -1549,7 +1604,6 @@ public class MailServiceImpl implements MailService, Startable {
                                                infoObj,
                                                continuation,
                                                false);
-                  msgMapForStore.put(msg, filterList);
                   if (saved && !leaveOnserver)
                     msg.setFlag(Flags.Flag.DELETED, true);
 
@@ -1567,6 +1621,7 @@ public class MailServiceImpl implements MailService, Startable {
                     eXoFolder.setLastStartCheckingTime(lastFromDate);
                   }
                 } catch (Exception e) {
+                  e.printStackTrace();
                   i++;
                   continue;
                 }
@@ -1577,7 +1632,7 @@ public class MailServiceImpl implements MailService, Startable {
             }
             saveFolder(userName, accountId, eXoFolder, false);
             FetchMailContentThread downloadContentMail = new FetchMailContentThread(storage_,
-                                                                                    msgMapForStore,
+                                                                                    msgMap,
                                                                                     i,
                                                                                     folder,
                                                                                     userName,
@@ -1590,13 +1645,13 @@ public class MailServiceImpl implements MailService, Startable {
         }
       }
     } catch (Exception e) {
+      e.printStackTrace();
       logger.error("Error while checking emails from folder" + folderName + " of username "
           + userName + " on account " + accountId, e);
       if (info != null)
         info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
       stopAllJobs(userName, accountId);
     }
-    return msgMapForStore.keySet();
   }
 
   private LinkedHashMap<javax.mail.Message, List<String>> getMessageMap(String username,
@@ -1708,8 +1763,6 @@ public class MailServiceImpl implements MailService, Startable {
               account.setIncomingPassword("");
               updateAccount(username, account);
               logger.debug("Exception while connecting to server : " + e.getMessage());
-              System.out.println("\n\t***>>>>Exception while connecting to server(POP3P) : "
-                  + e.getMessage());
             }
             info.setStatusMsg("The username or password may be wrong.");
             info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
