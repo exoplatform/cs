@@ -442,15 +442,18 @@ public interface ContactService extends ContactServiceLegacy {
   public void saveAddress(String username, String emailAddress) throws Exception ;
   
   /**
-   * Check whether groups broadcasting mode is enabled or not
-   * @return boolean
+   * use this method to look all public AddressBookIds corresponding to groups in which the user has at least one membership.
+   * @param user The username of the user
+   * @return A collection of the found AddressBookIds. The return collection cannot be null, but it can be empty if no AddressBookId is found.
    */
-  public boolean groupsBroadcastingEnabled();
+  public List<String> getPublicAddressBookIdsOfUser(String user) throws Exception;
   
   /**
-   * Return the list of non public groups when groups broadcasting mode is enabled
-   * @return List<String>
+   * Use this method to get all public AddressBookIds corresponding to groups that the user has the permission to view (including groups
+   * in which the user has at least one membership).
+   * @param user The username of the user
+   * @return
    */
-  public List<String> getNonPublicGroups();
+  public List<String> getAllsPublicAddressBookIds(String user) throws Exception;
   
 }

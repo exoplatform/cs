@@ -125,8 +125,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   public List<SelectItem> getOptions() throws Exception {
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
-    boolean groupsBroadcastingEnabled = contactSrv.groupsBroadcastingEnabled();
-    List<String>  nonPublicGroups = contactSrv.getNonPublicGroups();
     List<SelectItem> options = new ArrayList<SelectItem>() ;
     options.add(new SelectOption(all, all)) ;
     List<AddressBook> contactGroup = contactSrv.getGroups(username);
@@ -150,38 +148,26 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       sharedAddress.addOption(new SelectOption(sharedContacts_, sharedContacts_));
       options.add(sharedAddress);
     }
-    OrganizationService organizationService = 
-      (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(username).toArray() ;
-    List<String> groupIds = new ArrayList<String>() ;
-    for (Object object : objGroupIds) {
-      groupIds.add(((GroupImpl)object).getId()) ;
-    }
-    if(!groupIds.isEmpty()){
-      if(groupsBroadcastingEnabled)
-        groupIds.removeAll(nonPublicGroups);
+    
+    List<String> publicAddressBookIdsOfUser = contactSrv.getPublicAddressBookIdsOfUser(username);
+    if(!publicAddressBookIdsOfUser.isEmpty()){
       SelectOptionGroup publicContacts = new SelectOptionGroup("public-contacts");
-      for(String publicCg : groupIds) {
+      for(String publicCg : publicAddressBookIdsOfUser) {
         publicContacts.addOption(new SelectOption(publicCg, publicCg)) ;
       }
       options.add(publicContacts);
     }
-    if(groupsBroadcastingEnabled){
-      Object[] objPublicGroupIds = organizationService.getGroupHandler().getAllGroups().toArray() ;
-      List<String> publicGroupIds = new ArrayList<String>() ;
-      for (Object object : objPublicGroupIds) {
-        publicGroupIds.add(((GroupImpl)object).getId()) ;
+    
+    List<String> publicAddressBookIds = contactSrv.getAllsPublicAddressBookIds(username);
+    publicAddressBookIds.removeAll(publicAddressBookIdsOfUser);
+    if(!publicAddressBookIds.isEmpty()){
+      SelectOptionGroup publicContacts = new SelectOptionGroup("public-groups-contacts");
+      for(String publicCg : publicAddressBookIds) {
+        publicContacts.addOption(new SelectOption(publicCg, publicCg)) ;
       }
-      publicGroupIds.removeAll(groupIds);
-      publicGroupIds.removeAll(nonPublicGroups);
-      if(!publicGroupIds.isEmpty()){
-        SelectOptionGroup publicContacts = new SelectOptionGroup("public-groups-contacts");
-        for(String publicCg : publicGroupIds) {
-          publicContacts.addOption(new SelectOption(publicCg, publicCg)) ;
-        }
-        options.add(publicContacts);
-      }
+      options.add(publicContacts);
     }
+    
     return options ;
   }
 

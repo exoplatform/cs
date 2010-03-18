@@ -31,10 +31,13 @@ import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 
 /**
@@ -50,11 +53,11 @@ public class ContactServiceImpl implements ContactService {
   private JCRDataStorage storage_ ;
   private Map<String, ContactImportExport> contactImportExport_ = new HashMap<String, ContactImportExport>() ;
   
-  private boolean groupsBroadcastingMode = false;
+  private boolean userCanSeeAllGroupAddressBooks = false;
   
   private List<String> nonPublicGroups = new ArrayList<String>();
   
-  private static final String GROUPSBROADCASTING = "GroupsBroadcasting".intern();
+  private static final String USERCANSEEALLGROUPADDRESSBOOKS = "UserCanSeeAllGroupAddressBooks".intern();
   
   private static final String NONPUBLICGROUPS = "NonPublicGroups".intern();
   
@@ -63,11 +66,11 @@ public class ContactServiceImpl implements ContactService {
   public ContactServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService rservice, InitParams initParams) throws Exception {
       storage_ = new JCRDataStorage(nodeHierarchyCreator, rservice) ;
       contactImportExport_.put(VCARD, new VCardImportExport(storage_)) ;
-      if(initParams != null && initParams.getValuesParam(GROUPSBROADCASTING) != null){
-        List values = initParams.getValuesParam(GROUPSBROADCASTING).getValues();
+      if(initParams != null && initParams.getValuesParam(USERCANSEEALLGROUPADDRESSBOOKS) != null){
+        List values = initParams.getValuesParam(USERCANSEEALLGROUPADDRESSBOOKS).getValues();
         if(TRUE.equalsIgnoreCase(values.get(0).toString()))
-          groupsBroadcastingMode = true;
-        if(groupsBroadcastingMode && initParams.getValuesParam(NONPUBLICGROUPS) != null){
+          userCanSeeAllGroupAddressBooks = true;
+        if(userCanSeeAllGroupAddressBooks && initParams.getValuesParam(NONPUBLICGROUPS) != null){
           values = initParams.getValuesParam(NONPUBLICGROUPS).getValues();
           for (Object object : values) {
             nonPublicGroups.add(object.toString());
@@ -79,15 +82,36 @@ public class ContactServiceImpl implements ContactService {
   /**
    * {@inheritDoc}
    */
-  public boolean groupsBroadcastingEnabled(){
-    return groupsBroadcastingMode;
+  public List<String> getPublicAddressBookIdsOfUser(String user) throws Exception {
+    OrganizationService organizationService = 
+      (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class) ;
+    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(user).toArray() ;
+    List<String> groupIds = new ArrayList<String>() ;
+    for (Object object : objGroupIds) {
+      groupIds.add(((Group)object).getId()) ;
+    }
+    if(userCanSeeAllGroupAddressBooks)
+      groupIds.removeAll(nonPublicGroups);
+    return groupIds ;
   }
-  
+
   /**
    * {@inheritDoc}
    */
-  public List<String> getNonPublicGroups() {
-    return nonPublicGroups;
+  public List<String> getAllsPublicAddressBookIds(String user) throws Exception {
+    List<String> publicGroupIds = new ArrayList<String>() ;
+    if(userCanSeeAllGroupAddressBooks){
+      OrganizationService organizationService = 
+        (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class) ;
+      Object[] objPublicGroupIds = organizationService.getGroupHandler().getAllGroups().toArray() ;
+      for (Object object : objPublicGroupIds) {
+        publicGroupIds.add(((Group)object).getId()) ;
+      }
+      publicGroupIds.removeAll(nonPublicGroups);
+    } else {
+      publicGroupIds = getPublicAddressBookIdsOfUser(user);
+    }
+    return publicGroupIds;
   }
   
   /**
