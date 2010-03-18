@@ -382,7 +382,7 @@
 									</div>
 								</td>
 									<% 
-										email = ContactUtils.listToString(contact.getEmailAddresses()) ;
+										email = contact.getEmailAddress() ;
 			  		  			String subEmail ;
 										if (ContactUtils.isEmpty(email)) subEmail = "_" ;
 	  		  					else {
@@ -468,7 +468,7 @@
 									</div>
 								</td>
 								<% 
-										email = ContactUtils.listToString(contact.getEmailAddresses());
+										email = contact.getEmailAddress();
 			  		  					String subEmail ;
 										if (ContactUtils.isEmpty(email)) subEmail = "_" ;
 			  		  					else {
@@ -671,8 +671,8 @@
 			  		<% } %>  
 			  		  <div class="InformationsMember">
 								<% 
-								if (!ContactUtils.isEmpty(ContactUtils.listToString(contact.getEmailAddresses()))) { 
-									email = ContactUtils.listToString(contact.getEmailAddresses()) ;
+								if (!ContactUtils.isEmpty(contact.getEmailAddress())) { 
+									email = contact.getEmailAddress() ;
 	              	String[] emails = email.split(";") ;
 									for (int index = 1; index <= emails.length; index ++) {
 										emailAdd = emails[index-1].trim() ;
@@ -841,8 +841,8 @@
 			  		<% } %>  
 			  		  <div class="InformationsMember">
 			  		  	<% 
-								if (!ContactUtils.isEmpty(ContactUtils.listToString(contact.getEmailAddresses()))) { 
-									email = ContactUtils.listToString(contact.getEmailAddresses()) ;
+								if (!ContactUtils.isEmpty(contact.getEmailAddress())) { 
+									email = contact.getEmailAddress() ;
 	              	String[] emails = email.split(";") ;
 									for (int index =1; index <= emails.length; index ++) {
 										emailAdd = emails[index-1].trim() ;
