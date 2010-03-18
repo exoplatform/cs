@@ -152,8 +152,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   public List<SelectItem> getOptions() throws Exception {
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
-    boolean groupsBroadcastingEnabled = contactSrv.groupsBroadcastingEnabled();
-    List<String>  nonPublicGroups = contactSrv.getNonPublicGroups();
     List<SelectItem> options = new ArrayList<SelectItem>();
     options.add(new SelectOption(all, all));
     addressBooksMap.put(all, allContacts + "_" + all);
@@ -181,43 +179,30 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       sharedAddress.addOption(new SelectOption(sharedContacts_, sharedContacts_));
       options.add(sharedAddress);
     }
+    
     OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
-    Object[] objGroupIds = organizationService.getGroupHandler()
-                                              .findGroupsOfUser(username)
-                                              .toArray();
-    Map<String, String> groupMap = new HashMap<String, String>();
-    for (Object object : objGroupIds) {
-      groupMap.put(((Group) object).getId(), ((Group) object).getGroupName());
-    }
-    if (!groupMap.isEmpty()) {
+    
+    List<String> publicAddressBookIdsOfUser = contactSrv.getPublicAddressBookIdsOfUser(username);
+    if(!publicAddressBookIdsOfUser.isEmpty()){
       SelectOptionGroup publicContacts = new SelectOptionGroup(publicContact);
-      Set<String> groupIds = groupMap.keySet();
-      if(groupsBroadcastingEnabled)
-        groupIds.removeAll(nonPublicGroups);
-      for (String publicCg : groupIds) {
-        publicContacts.addOption(new SelectOption(groupMap.get(publicCg), publicCg));
-        addressBooksMap.put(publicCg, groupMap.get(publicCg) + "_" + PUBLIC);
-
+      for (String publicCg : publicAddressBookIdsOfUser) {
+        publicContacts.addOption(new SelectOption(organizationService.getGroupHandler().findGroupById(publicCg).getGroupName(), publicCg));
+        addressBooksMap.put(publicCg, organizationService.getGroupHandler().findGroupById(publicCg).getGroupName() + "_" + PUBLIC);
       }
       options.add(publicContacts);
     }
-    if(groupsBroadcastingEnabled){
-      Object[] objPublicGroupIds = organizationService.getGroupHandler().getAllGroups().toArray() ;
-      List<String> publicGroupIds = new ArrayList<String>() ;
-      for (Object object : objPublicGroupIds) {
-        publicGroupIds.add(((Group)object).getId()) ;
+    
+    List<String> publicAddressBookIds = contactSrv.getAllsPublicAddressBookIds(username);
+    publicAddressBookIds.removeAll(publicAddressBookIdsOfUser);
+    if(!publicAddressBookIds.isEmpty()){
+      SelectOptionGroup publicContacts = new SelectOptionGroup("public-groups-contacts");
+      for(String publicCg : publicAddressBookIds) {
+        publicContacts.addOption(new SelectOption(publicCg, publicCg)) ;
+        addressBooksMap.put(publicCg, publicCg + "_" + PUBLIC);
       }
-      publicGroupIds.removeAll(groupMap.keySet());
-      publicGroupIds.removeAll(nonPublicGroups);
-      if(!publicGroupIds.isEmpty()){
-        SelectOptionGroup publicContacts = new SelectOptionGroup("public-groups-contacts");
-        for(String publicCg : publicGroupIds) {
-          publicContacts.addOption(new SelectOption(publicCg, publicCg)) ;
-          addressBooksMap.put(publicCg, publicCg + "_" + PUBLIC);
-        }
-        options.add(publicContacts);
-      }
+      options.add(publicContacts);
     }
+    
     return options;
   }
 

@@ -7,13 +7,13 @@
     <type>org.exoplatform.contact.service.impl.ContactServiceImpl</type>
     <init-params>
       <values-param>
-        <name>GroupsBroadcasting</name>
-        <description>Using groups broadcasting mode (true/false)</description>
+        <name>UserCanSeeAllGroupAddressBooks</name>
+        <description>User can see all GroupAddressBooks or only GroupAddressBooks that the user has at least one membership</description>
         <value>false</value>
       </values-param>
       <values-param>
         <name>NonPublicGroups</name>
-        <description>Groups that shouldn't be displayed in broadcast list. This feature only takes effect when GroupsBroadcasting is set to true</description>
+        <description>Groups that shouldn't be displayed in broadcast list. This feature only takes effect when UserCanSeeAllGroupAddressBooks is set to true</description>
         <value>/platform/users</value>
         <value>/platform/guests</value>
       </values-param>
