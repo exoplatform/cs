@@ -67,6 +67,11 @@
       <type>js</type>
     </dependency>
     <dependency>
+      <groupId>org.gatein.wci</groupId>
+      <artifactId>wci-tomcat</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+    </dependency>
+    <dependency>
       <groupId>c3p0</groupId>
       <artifactId>c3p0</artifactId>
     </dependency>
