@@ -73,12 +73,15 @@ public class ContactServiceImpl implements ContactService {
   public ContactServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService rservice, InitParams initParams) throws Exception {
       storage_ = new JCRDataStorage(nodeHierarchyCreator, rservice) ;
       contactImportExport_.put(VCARD, new VCardImportExport(storage_)) ;
-      if(initParams != null && initParams.getValuesParam(USERCANSEEALLGROUPADDRESSBOOKS) != null){
-        List values = initParams.getValuesParam(USERCANSEEALLGROUPADDRESSBOOKS).getValues();
-        if(TRUE.equalsIgnoreCase(values.get(0).toString()))
-          userCanSeeAllGroupAddressBooks = true;
-        if(userCanSeeAllGroupAddressBooks && initParams.getValuesParam(NONPUBLICGROUPS) != null){
-          values = initParams.getValuesParam(NONPUBLICGROUPS).getValues();
+      if(initParams != null){
+        if(initParams.getValuesParam(USERCANSEEALLGROUPADDRESSBOOKS) != null){
+          List values = initParams.getValuesParam(USERCANSEEALLGROUPADDRESSBOOKS).getValues();
+          if(TRUE.equalsIgnoreCase(values.get(0).toString())){
+            userCanSeeAllGroupAddressBooks = true;
+          }
+        }
+        if(initParams.getValuesParam(NONPUBLICGROUPS) != null){
+          List values = initParams.getValuesParam(NONPUBLICGROUPS).getValues();
           for (Object object : values) {
             nonPublicGroups.add(object.toString());
           }
@@ -97,8 +100,7 @@ public class ContactServiceImpl implements ContactService {
     for (Object object : objGroupIds) {
       groupIds.add(((Group)object).getId()) ;
     }
-    if(userCanSeeAllGroupAddressBooks)
-      groupIds.removeAll(nonPublicGroups);
+    groupIds.removeAll(nonPublicGroups);
     return groupIds ;
   }
 
@@ -114,10 +116,10 @@ public class ContactServiceImpl implements ContactService {
       for (Object object : objPublicGroupIds) {
         publicGroupIds.add(((Group)object).getId()) ;
       }
-      publicGroupIds.removeAll(nonPublicGroups);
     } else {
       publicGroupIds = getPublicAddressBookIdsOfUser(user);
     }
+    publicGroupIds.removeAll(nonPublicGroups);
     return publicGroupIds;
   }
   
