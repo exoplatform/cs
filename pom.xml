@@ -98,6 +98,11 @@
     <!-- TODO : import dependencyManagement of platform, instead of redefining those properties -->
     <dependencies>
       <dependency>
+        <groupId>c3p0</groupId>
+        <artifactId>c3p0</artifactId>
+        <version>0.9.1.2</version>
+      </dependency>
+      <dependency>
         <groupId>org.exoplatform.kernel</groupId>
         <artifactId>exo.kernel.container</artifactId>
         <version>${org.exoplatform.kernel.version}</version>
