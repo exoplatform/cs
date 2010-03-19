@@ -23,14 +23,13 @@ import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.service.impl.NewUserListener;
-import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -98,14 +97,17 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       if(!CalendarUtils.isEmpty(sa.getSharedUserId())) name = sa.getSharedUserId() + "-" ;
       options.add(new SelectItemOption<String>(name + sa.getName(), sa.getId())) ;
     }
-    Object[] objGroups = 
-      CalendarUtils.getOrganizationService().getGroupHandler().findGroupsOfUser(CalendarUtils.getCurrentUser()).toArray() ;
-    for (Object object : objGroups) {
-      if(object != null) {
-        GroupImpl g = (GroupImpl)object ;
-        options.add(new SelectItemOption<String>(g.getGroupName(), g.getId())) ;
+    
+    List<String> publicAddressBookIds = contactService.getAllsPublicAddressBookIds(CalendarUtils.getCurrentUser());
+    if (!publicAddressBookIds.isEmpty()) {
+      for (String publicCg : publicAddressBookIds) {
+        options.add(new SelectItemOption<String>(CalendarUtils.getOrganizationService()
+                                                              .getGroupHandler()
+                                                              .findGroupById(publicCg)
+                                                              .getGroupName(), publicCg));
       }
     }
+    
     return options;
   }
 
