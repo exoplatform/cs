@@ -206,12 +206,13 @@
                     <!--argument>-Dexo.src.dir=NONE</argument-->
                     <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument>
                     <!-- to get the server ref install -->
-                    <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
+                    <argument>-Dexo.m2.repos=file:${settings.localRepository},http://repository.exoplatform.org/all</argument>
                     <argument>-Dclean.server=${exo.projects.app.tomcat.version}</argument>
                     <argument>-Dexo.m2.home=${maven.home}</argument>
                     <argument>-Xshare:auto</argument>
-                    <argument>-Xms128m</argument>
-                    <argument>-Xmx512m</argument>
+                    <argument>-Xms64m</argument>
+                    <argument>-Xmx1024m</argument>
+                    <argument>-XX:MaxPermSize=512m</argument>
                     <argument>-classpath</argument>
                     <argument>${basedir}/target/exopackage/lib/js.jar</argument>
                     <argument>org.mozilla.javascript.tools.shell.Main</argument>
@@ -285,12 +286,13 @@
                     <argument>-Dexo.conf.dir=${basedir}/target/exopackage-conf</argument>
                     <argument>-Dexo.working.dir=${gatein.working.dir}</argument>
                     <argument>-Dexo.dep.dir=${exo.projects.directory.dependencies}</argument>
-                    <argument>-Dexo.m2.repos=file:${settings.localRepository}</argument>
+                    <argument>-Dexo.m2.repos=file:${settings.localRepository},http://repository.exoplatform.org/all</argument>
                     <argument>-Dclean.server=${exo.projects.app.jboss.version}</argument>
                     <argument>-Dexo.m2.home=${maven.home}</argument>
                     <argument>-Xshare:auto</argument>
-                    <argument>-Xms128m</argument>
-                    <argument>-Xmx512m</argument>
+                    <argument>-Xms64m</argument>
+                    <argument>-Xmx1024m</argument>
+                    <argument>-XX:MaxPermSize=512m</argument>
                     <argument>-classpath</argument>
                     <argument>${basedir}/target/exopackage/lib/js.jar</argument>
                     <argument>org.mozilla.javascript.tools.shell.Main</argument>
@@ -309,7 +311,6 @@
         </plugins>
       </build>
     </profile>
-    <!-- assembly is not compatible with relocation of tomcat to exo-working -->
     <profile>
       <id>arc-tomcat</id>
       <build>
@@ -334,7 +335,6 @@
         </plugins>
       </build>
     </profile>
-    <!-- assembly is not compatible with relocation of jboss to exo-working -->
     <profile>
       <id>arc-jbossas</id>
       <build>
