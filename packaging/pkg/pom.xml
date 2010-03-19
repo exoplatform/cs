@@ -80,6 +80,11 @@
       <artifactId>nekohtml</artifactId>
       <version>1.9.9</version>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.5.6</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
