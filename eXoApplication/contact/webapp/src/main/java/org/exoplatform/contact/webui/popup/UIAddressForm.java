@@ -126,20 +126,28 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       }
       options.add(sharedContacts);
     }
-    OrganizationService organizationService = 
-      (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(username).toArray() ;
-    List<String> groupIds = new ArrayList<String>() ;
-    for (Object object : objGroupIds) {
-      groupIds.add(((Group)object).getId()) ;
-    }
-    if(!groupIds.isEmpty()){
+    
+    OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
+    
+    List<String> publicAddressBookIdsOfUser = contactSrv.getPublicAddressBookIdsOfUser(username);
+    if(!publicAddressBookIdsOfUser.isEmpty()){
       SelectOptionGroup publicContacts = new SelectOptionGroup("public-contacts");
-      for(String publicCg : groupIds) {
+      for (String publicCg : publicAddressBookIdsOfUser) {
+        publicContacts.addOption(new SelectOption(organizationService.getGroupHandler().findGroupById(publicCg).getGroupName(), publicCg));
+      }
+      options.add(publicContacts);
+    }
+    
+    List<String> publicAddressBookIds = contactSrv.getAllsPublicAddressBookIds(username);
+    publicAddressBookIds.removeAll(publicAddressBookIdsOfUser);
+    if(!publicAddressBookIds.isEmpty()){
+      SelectOptionGroup publicContacts = new SelectOptionGroup("public-groups-contacts");
+      for(String publicCg : publicAddressBookIds) {
         publicContacts.addOption(new SelectOption(publicCg, publicCg)) ;
       }
       options.add(publicContacts);
     }
+    
     return options ;
   }
 
