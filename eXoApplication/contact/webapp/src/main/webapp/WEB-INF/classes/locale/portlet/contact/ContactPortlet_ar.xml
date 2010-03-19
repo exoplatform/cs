@@ -403,6 +403,7 @@
       <exportAddress>تصدير</exportAddress>
       <personalAddress>شخصيّة</personalAddress>
       <publicAddress>عمُوميّة</publicAddress>
+      <publicGroups>Public Groups</publicGroups>
       <addContact>أضف</addContact>
       <copyContacts>نسخ</copyContacts>
       <pasteContacts>ألصق</pasteContacts>

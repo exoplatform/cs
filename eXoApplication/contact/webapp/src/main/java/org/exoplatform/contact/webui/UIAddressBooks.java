@@ -136,9 +136,16 @@ public class UIAddressBooks extends UIComponent {
     return groupList;
   }
   
-  public String[] getPublicContactGroups() throws Exception {
-    return ContactUtils.getUserGroups().toArray(new String[] {}) ;
+  public List<String> getGroupsOfUser() throws Exception {
+    return ContactUtils.getContactService().getPublicAddressBookIdsOfUser(ContactUtils.getCurrentUser()) ;
   }
+  
+  public List<String> getPublicContactGroups() throws Exception {
+    List<String> publicAddressBookIds = ContactUtils.getContactService().getAllsPublicAddressBookIds(ContactUtils.getCurrentUser()) ;
+    publicAddressBookIds.removeAll(getGroupsOfUser());
+    return publicAddressBookIds;
+  }
+  
   public boolean isSelectSharedContacts() {
     return getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class).isSelectSharedContacts() ;    
   }
