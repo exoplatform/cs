@@ -399,6 +399,7 @@
       <exportAddress>Xuất nhóm</exportAddress>
       <personalAddress>Nhóm cá nhân</personalAddress>
       <publicAddress>Nhóm chung</publicAddress>
+      <publicGroups>Public Groups</publicGroups>
       <addContact>Thêm liên lạc</addContact>
       <copyContacts>Sao chép</copyContacts>
       <pasteContacts>Dán</pasteContacts>

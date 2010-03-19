@@ -134,7 +134,7 @@
 			<div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.publicAddress")%></div>
 		</div>
 		<%
-			List groupContacts = uicomponent.getPublicContactGroups();
+			List groupContacts = uicomponent.getGroupsOfUser();
 			for(group in groupContacts) {
 				cssClass = "Normal" ;
 				name = ContactUtils.getPublicGroupName(group) ;
@@ -151,6 +151,26 @@
 		<% } %>
 	</div>
 	
+    <% if(!uicomponent.getPublicContactGroups().isEmpty()) { %>
+    <div class="PublicAddress">
+      <div class="AddressTitle">
+        <div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.publicGroups")%></div>
+      </div>
+      <%
+        List publicGroupContacts = uicomponent.getPublicContactGroups();
+        for(group in publicGroupContacts) {
+          cssClass = "Normal" ;
+          name = ContactUtils.getPublicGroupName(group) ;
+          String actionLink  = uicomponent.event("SelectPublicGroup", group) ;				
+          if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;	
+          				
+       %>
+          <div id="$group" title="$group" class="ItemList $cssClass PublicAddressBook" addressType="2" >
+            <div onclick="$actionLink" class="IconHolder AddressIcon" >$name</div>
+          </div>
+       <% } %>
+     </div>
+     <% } %>
 	
 	<% /*Begin Popup Menu*/ %>
 				
