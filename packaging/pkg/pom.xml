@@ -69,7 +69,7 @@
     <dependency>
       <groupId>org.gatein.wci</groupId>
       <artifactId>wci-tomcat</artifactId>
-      <version>${org.exoplatform.portal.version}</version>
+      <version>${gatein.wci.version}</version>
     </dependency>
     <dependency>
       <groupId>c3p0</groupId>
