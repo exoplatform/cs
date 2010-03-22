@@ -13,8 +13,8 @@
       </values-param>
       <values-param>
         <name>NonPublicGroups</name>
-        <description>Groups that shouldn't be displayed in broadcast list</description>
-        <!--value>/platform/users</value>
+        <description>Groups that shouldn't be displayed in broadcast list. Wildcards may be used in groups name</description>
+        <!--value>/platform/user*</value>
         <value>/platform/guests</value-->
       </values-param>
     </init-params>
