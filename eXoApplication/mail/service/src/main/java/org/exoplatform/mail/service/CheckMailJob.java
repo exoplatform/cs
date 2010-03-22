@@ -18,8 +18,6 @@ package org.exoplatform.mail.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.scheduler.JobInfo;
@@ -56,7 +54,9 @@ public class CheckMailJob implements Job, InterruptableJob {
   }
 
   public void execute(JobExecutionContext context) throws JobExecutionException {
-    MailService mailService = getMailService();
+    PortalContainer container = getPortalContainer(context);
+    //MailService mailService = getMailService();
+    MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
     JobDetail jobDetail = context.getJobDetail();
     JobDataMap dataMap = jobDetail.getJobDataMap();
     username = dataMap.getString(USERNAME);
@@ -101,6 +101,13 @@ public class CheckMailJob implements Job, InterruptableJob {
   public void interrupt() throws UnableToInterruptJobException {
     System.out.println("\n\n######### CALLED INTERRUPT!\n\n");
     getMailService().stopCheckMail(username, accountId);
+  }
+  public static PortalContainer getPortalContainer(JobExecutionContext context) {
+    if(context == null) return null;
+    String portalName = context.getJobDetail().getGroup();
+    if(portalName == null) return null;
+    if(portalName.indexOf(":") > 0) portalName = portalName.substring(0, portalName.indexOf(":"));
+    return RootContainer.getInstance().getPortalContainer(portalName);
   }
 
 }
