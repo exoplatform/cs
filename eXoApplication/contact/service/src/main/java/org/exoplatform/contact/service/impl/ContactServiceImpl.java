@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOCase;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.AddressBook;
@@ -82,6 +84,27 @@ public class ContactServiceImpl implements ContactService {
       }
   }
   
+//TODO: optimize this fuction
+  private List<String> excludeWildCardMatchs(List<String> sourceList , List<String> wildCards) throws Exception {
+    List<String> groupIds = new ArrayList<String>() ;
+    if(sourceList != null && !sourceList.isEmpty()){
+      for (String object : sourceList) {
+        groupIds.add(object) ;
+      }
+    }
+    if(wildCards == null || wildCards.isEmpty() || sourceList == null ||sourceList.isEmpty()){
+      return groupIds;
+    }
+    for(String wildCard : wildCards) {
+      for(String s : sourceList){
+        if(FilenameUtils.wildcardMatch(s, wildCard, IOCase.INSENSITIVE)){
+          groupIds.remove(s);
+        }
+      }
+    }
+    return groupIds;
+  }
+  
   /**
    * {@inheritDoc}
    */
@@ -93,7 +116,7 @@ public class ContactServiceImpl implements ContactService {
     for (Object object : objGroupIds) {
       groupIds.add(((Group)object).getId()) ;
     }
-    groupIds.removeAll(nonPublicGroups);
+    groupIds = excludeWildCardMatchs(groupIds, nonPublicGroups);
     return groupIds ;
   }
 
@@ -112,7 +135,7 @@ public class ContactServiceImpl implements ContactService {
     } else {
       publicGroupIds = getPublicAddressBookIdsOfUser(user);
     }
-    publicGroupIds.removeAll(nonPublicGroups);
+    publicGroupIds = excludeWildCardMatchs(publicGroupIds, nonPublicGroups);
     return publicGroupIds;
   }
   
