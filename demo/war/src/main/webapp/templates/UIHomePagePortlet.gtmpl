@@ -16,8 +16,10 @@
    calendarUrl = "#" ;
    mailUrl = "#" ;
    contactUrl = "#" ;
-   chatUrl = "#" ;  
+  
   } ;
+  
+   chatUrl = "#" ;  
   
   
 %>
@@ -34,8 +36,8 @@
 									<div class="LoginButtonL">
 										<div class="LoginButtonR">
 											<div class="LoginButtonC">
-												<div class="BoldLabel">Logout</div>
-												<div class="NormalLabel">END USING CS</div>
+												<div class="BoldLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-sign-out")%></div>
+												<div class="NormalLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-sign-out-detail")%></div>
 											</div>
 										</div>
 									</div>
@@ -45,8 +47,8 @@
 									<div class="LoginButtonL">
 										<div class="LoginButtonR">
 											<div class="LoginButtonC">
-												<div class="BoldLabel">Login</div>
-												<div class="NormalLabel">START USING CS</div>
+												<div class="BoldLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-sign-in")%></div>
+												<div class="NormalLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-sign-in-detail")%></div>
 											</div>
 										</div>
 									</div>
@@ -56,13 +58,13 @@
 									<div class="RegisterButtonL">
 										<div class="RegisterButtonR">
 											<div class="RegisterButtonC">
-												<div class="BoldLabel">Register</div>
-												<div class="NormalLabel">CREAT NEW ACCOUNT</div>
+												<div class="BoldLabel"><a href="$registerUrl"><%=_ctx.appRes("UIHomePagePortlet.cs-register")%></a></div>
+												<div class="NormalLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-register-detail")%></div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="VersionDemo">VERSION 1.0.X</div>
+								<div class="VersionDemo"><%=_ctx.appRes("UIHomePagePortlet.cs-slogan")%></div>
 							</div>
 						</div>
 						<table style="table-layout: fixed; width: 100%;-width: auto;">
@@ -73,11 +75,14 @@
 											<div class="IconCalenda"><a href="$calendarUrl" class="IconLink"><span></span></a></div>
 										</div>
 										<div class="ContentProductsCS">
-											<div class="ProductLabel">Calendar</div>
-											<div class="Text">- Aliquam tristique rutrum .</div>
-											<div class="Text">- Donec euismod mi nec nulla .</div>
-											<div class="Text">- Et mollis elit tempus. </div>
-											
+											<div class="ProductLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-1")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-2")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-3")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-4")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-5")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-6")%></div>
+								
 										</div>
 									</div>
 								</td>
@@ -87,10 +92,13 @@
 											<div class="IconAddressBook"><a href="$contactUrl" class="IconLink"><span></span></a></div>
 										</div>
 										<div class="ContentProductsCS">
-											<div class="ProductLabel">Address Book</div>
-											<div class="Text">- Aliquam tristique rutrum .</div>
-											<div class="Text">- Donec euismod mi nec nulla .</div>
-											<div class="Text">- Et mollis elit tempus. </div>
+											<div class="ProductLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-1")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-2")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-3")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-4")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-5")%></div>
+											<div class="Text"><span></span></div>
 											
 										</div>
 									</div>
@@ -104,10 +112,12 @@
 											<div class="IconChat"><a href="$chatUrl" class="IconLink"><span></span></a></div>
 										</div>
 										<div class="ContentProductsCS">
-											<div class="ProductLabel">Chat</div>
-											<div class="Text">- Aliquam tristique rutrum .</div>
-											<div class="Text">- Donec euismod mi nec nulla .</div>
-											<div class="Text">- Et mollis elit tempus. </div>
+											<div class="ProductLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-chat")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-chat-1")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-chat-2")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-chat-3")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-chat-4")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-chat-5")%></div>
 											
 										</div>
 									</div>
@@ -118,10 +128,12 @@
 											<div class="IconMail"><a href="$mailUrl" class="IconLink"><span></span></a></div>
 										</div>
 										<div class="ContentProductsCS">
-											<div class="ProductLabel">Mail</div>
-											<div class="Text">- Aliquam tristique rutrum .</div>
-											<div class="Text">- Donec euismod mi nec nulla .</div>
-											<div class="Text">- Et mollis elit tempus. </div>
+											<div class="ProductLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-mail")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-mail-1")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-mail-2")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-mail-3")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-mail-4")%></div>
+											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-mail-5")%></div>
 											
 										</div>
 									</div>
@@ -148,7 +160,7 @@
 								<% String downloadurl = _ctx.appRes("UIHomePagePortlet.cs-url") %>
 									<div style="height: 13px"><span></span></div>
 									<a href="<%=downloadurl%>" style="margin-left: 74px;" class="TextDownload"><%=_ctx.appRes("UIHomePagePortlet.cs-download")%></a><br/>
-									<div style="margin-left: 74px;" >PRIMUM LEO FEUGIAT VITAE</div>
+									<div style="margin-left: 74px;" ><%=_ctx.appRes("UIHomePagePortlet.cs-product-intro")%></div>
 									<a href="<%=downloadurl%>" >&nbsp;</a>
 								</div>
 								<div class="NormalText">

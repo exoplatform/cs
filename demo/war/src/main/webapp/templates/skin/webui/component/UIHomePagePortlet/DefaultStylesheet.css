@@ -116,7 +116,6 @@
 
 .UIHomePagePortlet .HomePortletContainer {
 	background: #fbfbfc url('DefaultSkin/background/Bg.gif') repeat-x left top;
-	height: 115px;
 	border: solid 1px #d7d7d7;
 	-moz-border-radius:3px;
 	-webkit-border-radius:3px;
@@ -138,7 +137,6 @@
 	height: auto;
 	margin-left: 100px; /* orientation=lt */
 	margin-right: 100px; /* orientation=rt */
-	height: 115px;
 }
 
 .UIHomePagePortlet .HomePortletContainer .ContentProductsCS .ProductLabel{

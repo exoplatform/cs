@@ -31,16 +31,6 @@
         <param-value>/rest/private</param-value>
       </init-param>
     </filter>
-    
-   
-
-   <filter-mapping>
-  <!-- This must be before ThreadLocalSessionProviderInitializedFilter for URI /rest/private/* -->
-    <filter-name>AnonymousUserContextRedirectionFilter</filter-name>
-    <url-pattern>/rest/private/*</url-pattern>
-  </filter-mapping>
-  
-  
 
 	<!-- ================================================================== -->
 	<!--   RESOURCE FILTER TO CACHE MERGED JAVASCRIPT AND CSS               -->
@@ -50,6 +40,13 @@
 		<filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
 	</filter>
 
+    
+    <filter-mapping>
+     <!-- This must be before ThreadLocalSessionProviderInitializedFilter for URI /rest/private/* -->
+    <filter-name>AnonymousUserContextRedirectionFilter</filter-name>
+    <url-pattern>/rest/private/*</url-pattern>
+    </filter-mapping>
+  
 	<filter-mapping>
 		<filter-name>ResourceRequestFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -70,18 +67,20 @@
 		<servlet-class>org.gatein.wci.api.GateInServlet</servlet-class>
 		<load-on-startup>0</load-on-startup>
 	</servlet>
+	
+	<servlet>
+    <servlet-name>RestServer</servlet-name>
+    <description>eXo - Platform REST Server</description>
+    <servlet-class>org.exoplatform.services.rest.servlet.RestServlet</servlet-class>
+    <load-on-startup>4</load-on-startup>
+   </servlet>
 	<!--  =================================================================  -->
 	<servlet-mapping>
 		<servlet-name>GateInServlet</servlet-name>
 		<url-pattern>/gateinservlet</url-pattern>
 	</servlet-mapping>
 	
-  <servlet>
-    <servlet-name>RestServer</servlet-name>
-    <description>eXo - Platform REST Server</description>
-    <servlet-class>org.exoplatform.services.rest.servlet.RestServlet</servlet-class>
-    <load-on-startup>4</load-on-startup>
-  </servlet>
+  
   
   <servlet-mapping>
     <servlet-name>RestServer</servlet-name>
