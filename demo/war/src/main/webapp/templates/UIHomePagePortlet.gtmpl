@@ -76,12 +76,12 @@
 										</div>
 										<div class="ContentProductsCS">
 											<div class="ProductLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-1")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-2")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-3")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-4")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-5")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-6")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-1")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-2")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-3")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-4")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-5")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-calendar-6")%></div>
 								
 										</div>
 									</div>
@@ -93,11 +93,11 @@
 										</div>
 										<div class="ContentProductsCS">
 											<div class="ProductLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-1")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-2")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-3")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-4")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-5")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-1")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-2")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-3")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-4")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-5")%></div>
 											<div class="Text"><span></span></div>
 											
 										</div>
@@ -113,11 +113,11 @@
 										</div>
 										<div class="ContentProductsCS">
 											<div class="ProductLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-chat")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-chat-1")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-chat-2")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-chat-3")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-chat-4")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-chat-5")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-chat-1")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-chat-2")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-chat-3")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-chat-4")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-chat-5")%></div>
 											
 										</div>
 									</div>
@@ -129,11 +129,11 @@
 										</div>
 										<div class="ContentProductsCS">
 											<div class="ProductLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-mail")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-mail-1")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-mail-2")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-mail-3")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-mail-4")%></div>
-											<div class="Text">-<%=_ctx.appRes("UIHomePagePortlet.cs-mail-5")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-mail-1")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-mail-2")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-mail-3")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-mail-4")%></div>
+											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-mail-5")%></div>
 											
 										</div>
 									</div>
@@ -169,8 +169,8 @@
 									<a href="<%=feedbackurl%>" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-send-feedback")%></a>
 								</div>					 
 			                        
-								<div class="NormalText">meet the community<br/>
-			<a href="http://wiki.exoplatform.org/xwiki/bin/view/CS" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-wiki")%></a>&nbsp;&nbsp;<a href="http://forum.exoplatform.com" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-forum")%></a></div>
+								<div class="NormalText"><%=_ctx.appRes("UIHomePagePortlet.cs-community")%><br/>
+			<a href="http://wiki.exoplatform.org/xwiki/bin/view/CS" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-wiki")%></a>&nbsp;|&nbsp;<a href="http://forums.exoplatform.org" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-forum")%></a></div>
 							</div>
 						</div>
 					</div>
