@@ -13,6 +13,7 @@
 	import org.exoplatform.contact.service.impl.NewUserListener;
 	import java.util.HashMap;
 	import java.util.Map;
+	import org.exoplatform.container.PortalContainer;
 
 	uiform.begin() ;
 	def rcontext = _ctx.getRequestContext() ; 
@@ -664,7 +665,7 @@
 								ContactAttachment att = contact.getAttachment() ;
 								if (att != null) {	
 									try {	
-										img = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+										img = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
 										img = img + "?rnd=" + System.currentTimeMillis();
 									} catch (Exception e) {}
 								}

@@ -2,6 +2,7 @@
 	uiForm = uicomponent.getParentFrom() ;
 	import org.exoplatform.contact.service.ContactAttachment;
 	import org.exoplatform.contact.service.Contact;
+	import org.exoplatform.container.PortalContainer;
 %>
 <div id="$uicomponent.id" >
 <div class="Profile">
@@ -142,7 +143,7 @@
 				ContactAttachment att = contact.getAttachment() ;
 				if (att != null) {	
 					try {
-						imageLink = "/"+uiForm.getPortalName()+"/rest/jcr/" +uiForm.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+						imageLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uiForm.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
 						imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
 					} catch (Exception e) {}
 				}
