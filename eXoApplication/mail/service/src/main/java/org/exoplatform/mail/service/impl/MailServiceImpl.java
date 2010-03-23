@@ -2383,6 +2383,7 @@ public class MailServiceImpl implements MailService, Startable {
             if (!fd.isOpen()) {
               fd.open(javax.mail.Folder.READ_WRITE);
             }
+            //TODO CS-4043 message does not exsit on server (when view sent mess and draf please check)
             message = ((IMAPFolder) fd).getMessageByUID(Long.valueOf(msg.getUID()));
             msg = storage_.loadTotalMessage(username, accountId, msg, message);
           }
