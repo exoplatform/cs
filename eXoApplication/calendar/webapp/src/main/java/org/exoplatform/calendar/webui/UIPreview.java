@@ -96,7 +96,7 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
   } 
   public String getImageSource(Attachment attach) throws Exception {
     try {
-    return "/"+ getPortalName()+"/rest/jcr/" + getRepository()+"/" + attach.getWorkspace()+attach.getDataPath() ;
+    return "/"+PortalContainer.getInstance().getRestContextName() + "/private/jcr/" + getRepository()+"/" + attach.getWorkspace()+attach.getDataPath() ;
     } catch (Exception e) {
      return getDownloadLink(attach) ;
     }
