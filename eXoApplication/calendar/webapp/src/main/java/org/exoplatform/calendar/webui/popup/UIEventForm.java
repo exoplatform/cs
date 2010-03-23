@@ -275,6 +275,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       setEventPlace(eventCalendar.getLocation()) ;
       setEventRepeat(eventCalendar.getRepeatType()) ;
       setSelectedEventPriority(eventCalendar.getPriority()) ;
+      if(eventCalendar.getReminders() != null)
       setEventReminders(eventCalendar.getReminders()) ;
       setAttachments(eventCalendar.getAttachment()) ;
       if(eventCalendar.isPrivate()) {
