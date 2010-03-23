@@ -4,6 +4,7 @@
   import org.exoplatform.mail.MailUtils;
   import org.exoplatform.download.DownloadService;
   import org.exoplatform.webui.application.WebuiRequestContext;
+  import org.exoplatform.container.PortalContainer;
   import java.util.Locale;
   
   WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
@@ -161,7 +162,7 @@
 											ContactAttachment att = selectedContact.getAttachment() ;
 											if (att != null) {	
 												try {
-													imageLink = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+													imageLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
 													imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
 												} catch (Exception e) {}
 											}

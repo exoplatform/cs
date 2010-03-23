@@ -8,6 +8,7 @@
   import org.exoplatform.download.DownloadService;
   import org.exoplatform.web.application.JavascriptManager;
   import org.exoplatform.webui.application.WebuiRequestContext;
+  import org.exoplatform.container.PortalContainer;
   import java.util.Locale;
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -74,7 +75,7 @@
           DownloadService dservice = uicomponent.getDownloadService() ;
           String attLink ;
           for (Attachment attach : msg.getAttachments()) {
-          	attLink = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + attach.getPath() ;
+          	attLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository()+"/" + attach.getPath() ;
             //attLink = MailUtils.getImageSource(attach, dservice) ;
             boolean isImage = false ;
             boolean isSupportedIcon = false ;

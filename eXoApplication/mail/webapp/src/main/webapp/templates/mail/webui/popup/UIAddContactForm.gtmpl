@@ -1,6 +1,7 @@
 <% 
 	import org.exoplatform.contact.service.Contact;
-  import org.exoplatform.contact.service.ContactAttachment;
+    import org.exoplatform.contact.service.ContactAttachment;
+    import org.exoplatform.container.PortalContainer;
 	uiform.begin() 
 %>
 <div style="overflow-x:auto; width:99%;">
@@ -112,7 +113,7 @@
 					ContactAttachment att = contact.getAttachment() ;
 					if (att != null) {	
 						try {
-							imageLink = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+							imageLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
 							imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
 						} catch (Exception e) {}
 					}

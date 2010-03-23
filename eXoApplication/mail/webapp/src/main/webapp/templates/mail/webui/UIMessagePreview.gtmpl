@@ -9,7 +9,7 @@
   import javax.mail.internet.MimeUtility;
   import org.exoplatform.webui.application.WebuiRequestContext;
   import java.util.Locale;
-  
+  import org.exoplatform.container.PortalContainer;
   import org.exoplatform.mail.webui.UIMessageList ;
   import org.exoplatform.mail.webui.UIMessagePreview ;
   
@@ -485,7 +485,7 @@
                           if (attLink != null ) {
                             if (attach.getMimeType().toLowerCase().indexOf("image") > -1) {
                               isImage = true ; 
-                              attLink = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository() + attach.getPath() ;
+                              attLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository() + attach.getPath() ;
                             } else if (attach.getMimeType().indexOf("msword") > -1) {
                               isSupportedIcon = true ;
                               attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";
