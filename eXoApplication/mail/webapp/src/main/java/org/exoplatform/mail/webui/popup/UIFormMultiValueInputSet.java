@@ -35,6 +35,7 @@ import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormInputContainer;
 import org.exoplatform.webui.form.validator.Validator;
+import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Author : Nhu Dinh Thuan
@@ -137,12 +138,18 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List> {
       writer.append("</div>") ;
     }    
   }
-
+/*
   public  UIFormInputBase createUIFormInput(int idx) throws Exception {
     Class [] classes = constructor_.getParameterTypes();    
     Object [] params = new Object[classes.length];
     params[0] = getId()+String.valueOf(idx);
     UIFormInputBase inputBase = (UIFormInputBase)constructor_.newInstance(params);
+    addChild(inputBase);
+    return inputBase;    
+  }*/
+  
+  public  UIFormInputBase createUIFormInput(int idx) throws Exception {
+    UIFormInputBase inputBase = new UIFormStringInput(getId()+String.valueOf(idx), getId()+String.valueOf(idx), null);
     addChild(inputBase);
     return inputBase;    
   }
