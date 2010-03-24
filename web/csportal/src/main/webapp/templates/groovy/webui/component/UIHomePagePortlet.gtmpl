@@ -1,5 +1,23 @@
 <%
-  import org.exoplatform.portal.webui.util.Util ;
+  import org.exoplatform.services.resources.ResourceBundleService ;
+  import org.exoplatform.container.PortalContainer;
+  import org.exoplatform.portal.webui.util.Util;
+  import java.util.Locale;
+  import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+  import java.util.ResourceBundle;
+  
+  
+  ResourceBundleService service = 
+      (ResourceBundleService)PortalContainer.getComponent(ResourceBundleService.class) ;
+  Locale locale = Util.getUIPortal().getAncestorOfType(UIPortalApplication.class).getLocale() ;
+  
+  /*
+    Using a specific bundle and not the one provided by WebUI, 
+    so that each project can specify its own messages and translations
+  */
+  ResourceBundle res = service.getResourceBundle("locale.cs.homepage", locale) ;
+  
+  
   String toururi = Util.getPortalRequestContext().getPortalURI() + "tour";
   def prContext = _ctx.getRequestContext().getParentAppRequestContext();
   String user = prContext.getRemoteUser() ;
@@ -27,8 +45,8 @@
 							<div class="RightAdImage">
 								<div class="LeftAdImage">
 									<div class="EmptyBlock"><span></span></div>
-									<div class="ProductSlogan"><%=_ctx.appRes("UIHomePagePortlet.cs-slogan")%></div>
-									<div class="ProductIntro"><%=_ctx.appRes("UIHomePagePortlet.cs-product-intro")%></div>
+									<div class="ProductSlogan"><%=res.getString("UIHomePagePortlet.cs-slogan")%></div>
+									<div class="ProductIntro"><%=res.getString("UIHomePagePortlet.cs-product-intro")%></div>
 								</div>
 							</div>
 						</div>
@@ -41,7 +59,7 @@
 												<div class="RightTitleHomePage">
 													<div class="CenterTitleHomePage">
                                                        <a href="$calendarUrl">
-                                                         <%=_ctx.appRes("UIHomePagePortlet.cs-calendar")%>
+                                                         <%=res.getString("UIHomePagePortlet.cs-calendar")%>
 													   </a>	
 													  </div>
 												</div>
@@ -53,22 +71,22 @@
 										<div class="ContentProductsCS">
 											<div style="height: 13px"><span></span></div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar-1")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-calendar-1")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar-2")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-calendar-2")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar-3")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-calendar-3")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar-4")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-calendar-4")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar-5")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-calendar-5")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-calendar-6")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-calendar-6")%></div>
 											</div>
 										</div>
 									</div>
@@ -80,7 +98,7 @@
 												<div class="RightTitleHomePage">
 													<div class="CenterTitleHomePage">
 												         <a href="$contactUrl">
-												           <%=_ctx.appRes("UIHomePagePortlet.cs-address-book")%>
+												           <%=res.getString("UIHomePagePortlet.cs-address-book")%>
 												          </a>
 												         </div>
 												</div>
@@ -92,19 +110,19 @@
 										<div class="ContentProductsCS">
 											<div style="height: 13px"><span></span></div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book-1")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-address-book-1")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book-2")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-address-book-2")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book-3")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-address-book-3")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book-4")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-address-book-4")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-address-book-5")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-address-book-5")%></div>
 											</div>
 										</div>
 									</div>
@@ -116,7 +134,7 @@
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
-													<div class="CenterTitleHomePage"><a href="$chatUrl"><%=_ctx.appRes("UIHomePagePortlet.cs-chat")%></a></div>
+													<div class="CenterTitleHomePage"><a href="$chatUrl"><%=res.getString("UIHomePagePortlet.cs-chat")%></a></div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
@@ -126,19 +144,19 @@
 										<div class="ContentProductsCS">
 											<div style="height: 13px"><span></span></div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-chat-1")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-chat-1")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-chat-2")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-chat-2")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-chat-3")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-chat-3")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-chat-4")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-chat-4")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-chat-5")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-chat-5")%></div>
 											</div>
 										</div>
 									</div>
@@ -148,7 +166,7 @@
 										<div class="ContainerBox">
 											<div class="LeftTitleHomePage">
 												<div class="RightTitleHomePage">
-													<div class="CenterTitleHomePage"><a href="$mailUrl"><%=_ctx.appRes("UIHomePagePortlet.cs-mail")%></a></div>
+													<div class="CenterTitleHomePage"><a href="$mailUrl"><%=res.getString("UIHomePagePortlet.cs-mail")%></a></div>
 												</div>
 											</div>
 											<div class="ContainerIcon">
@@ -158,19 +176,19 @@
 										<div class="ContentProductsCS">
 											<div style="height: 13px"><span></span></div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-mail-1")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-mail-1")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-mail-2")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-mail-2")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-mail-3")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-mail-3")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-mail-4")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-mail-4")%></div>
 											</div>
 											<div class="Bullet">
-												<div class="Text"><%=_ctx.appRes("UIHomePagePortlet.cs-mail-5")%></div>
+												<div class="Text"><%=res.getString("UIHomePagePortlet.cs-mail-5")%></div>
 											</div>
 										</div>
 									</div>
@@ -189,8 +207,8 @@
 						<div class="LeftButton">
 							<div class="RightButton">
 								<div class="CenterButton">
-								<a href="$registerUrl" style="color: white; margin-top: 5px;"><%=_ctx.appRes("UIHomePagePortlet.cs-sign-up")%></a>
-								<a href="$registerUrl" style="color: white;" class="TextBntColla"><%=_ctx.appRes("UIHomePagePortlet.cs-register")%></a></div>
+								<a href="$registerUrl" style="color: white; margin-top: 5px;"><%=res.getString("UIHomePagePortlet.cs-sign-up")%></a>
+								<a href="$registerUrl" style="color: white;" class="TextBntColla"><%=res.getString("UIHomePagePortlet.cs-register")%></a></div>
 							</div>
 						</div>
 					 
@@ -199,14 +217,14 @@
 					<div class="DownloadButton">
 					<% String downloadurl = _ctx.appRes("UIHomePagePortlet.cs-url") %>
 						<div style="height: 45px"><span></span></div>
-						<a href="<%=downloadurl%>" style="color: white;" class="TextDownload"><%=_ctx.appRes("UIHomePagePortlet.cs-download")%></a><br/>
+						<a href="<%=downloadurl%>" style="color: white;" class="TextDownload"><%=res.getString("UIHomePagePortlet.cs-download")%></a><br/>
 						<a href="<%=downloadurl%>" style="color: white;">&nbsp;</a>
 					</div>
 					<div class="DotLine"><span></span></div>
 					<div style="margin: 17px 0px;">
-						<div class="NormalText"><%=_ctx.appRes("UIHomePagePortlet.cs-feedback")%></div>
-						<% String feedbackurl=_ctx.appRes("UIHomePagePortlet.cs-feedback-url")%>
-						<a href="<%=feedbackurl%>" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-send-feedback")%></a>
+						<div class="NormalText"><%=res.getString("UIHomePagePortlet.cs-feedback")%></div>
+						<% String feedbackurl=res.getString("UIHomePagePortlet.cs-feedback-url")%>
+						<a href="<%=feedbackurl%>" class="ProVersion"><%=res.getString("UIHomePagePortlet.cs-send-feedback")%></a>
 					</div>					 
                         <%if(user != null && user.trim().length() > 0) { %>
                         <div class="DotLine"><span></span></div>
@@ -214,14 +232,14 @@
 						<div class="LeftButton">
 							<div class="RightButton">
 								<div class="CenterButton">
-								<a href="$webosUrl" style="color: white; margin-top: 5px;"><%=_ctx.appRes("UIHomePagePortlet.cs-webos")%></a>
-								<a href="$webosUrl" style="color: white;" class="TextBntColla"><%=_ctx.appRes("UIHomePagePortlet.cs-desktop")%></a></div>
+								<a href="$webosUrl" style="color: white; margin-top: 5px;"><%=res.getString("UIHomePagePortlet.cs-webos")%></a>
+								<a href="$webosUrl" style="color: white;" class="TextBntColla"><%=res.getString("UIHomePagePortlet.cs-desktop")%></a></div>
 							</div>
 						</div>
 						<%}%>					
  					<div class="DotLine"><span></span></div>
-					<div class="NormalText"><%=_ctx.appRes("UIHomePagePortlet.cs-more")%><br/>
-the <a href="http://wiki.exoplatform.org/xwiki/bin/view/CS" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-wiki")%></a> <%=_ctx.appRes("UIHomePagePortlet.cs-and")%> <a href="http://forum.exoplatform.com" class="ProVersion"><%=_ctx.appRes("UIHomePagePortlet.cs-forum")%></a></div>
+					<div class="NormalText"><%=res.getString("UIHomePagePortlet.cs-more")%><br/>
+the <a href="http://wiki.exoplatform.org/xwiki/bin/view/CS" class="ProVersion"><%=res.getString("UIHomePagePortlet.cs-wiki")%></a> <%=res.getString("UIHomePagePortlet.cs-and")%> <a href="http://forum.exoplatform.com" class="ProVersion"><%=res.getString("UIHomePagePortlet.cs-forum")%></a></div>
 									
 					<div style="height:69px;"><span></span></div>
 				</div>

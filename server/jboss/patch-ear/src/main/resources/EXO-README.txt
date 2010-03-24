@@ -1,5 +1,5 @@
 ==============================================
-    Release Notes - exo-cs - Version 1.3.3
+    Release Notes - exo-cs - Version 1.3.4
 ==============================================
 
 ===============
@@ -29,7 +29,7 @@ experience more productive. It offers several ways to to view and organize your 
 =============
  What's new?
 =============
-exo Collaboration Suite 1.3.3 features several noteworthy changes:
+exo Collaboration Suite 1.3.4 features several noteworthy changes:
 
     * General
           o Upgraded to portal 2.5.7
@@ -135,7 +135,7 @@ All those accounts have the default password "exo".
 ===========
  CHANGELOG
 ===========
-- 1.3.3
+- 1.3.4
 
 ** Bug
     * [CS-3191] - IE7: Drag & drop event/task is fail in special case
