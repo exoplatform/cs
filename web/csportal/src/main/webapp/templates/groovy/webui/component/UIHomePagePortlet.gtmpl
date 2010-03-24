@@ -215,7 +215,7 @@
 					<div class="DotLine"><span></span></div>
 				    <%}%>
 					<div class="DownloadButton">
-					<% String downloadurl = _ctx.appRes("UIHomePagePortlet.cs-url") %>
+					<% String downloadurl = res.getString("UIHomePagePortlet.cs-url") %>
 						<div style="height: 45px"><span></span></div>
 						<a href="<%=downloadurl%>" style="color: white;" class="TextDownload"><%=res.getString("UIHomePagePortlet.cs-download")%></a><br/>
 						<a href="<%=downloadurl%>" style="color: white;">&nbsp;</a>
