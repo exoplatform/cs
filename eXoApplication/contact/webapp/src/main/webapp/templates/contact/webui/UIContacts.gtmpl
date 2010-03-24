@@ -835,7 +835,7 @@
 								att = contact.getAttachment() ;
 								if (att != null) {	
 									try {
-										img = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+										img = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
 										img = img + "?rnd=" + System.currentTimeMillis();
 									} catch (Exception e) {}
 								}
