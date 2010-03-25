@@ -89,6 +89,8 @@ public class Contact {
   private String ownerId ;
   private ContactAttachment attachment ;
   private Date lastUpdated ;
+  public static final String FEMALE = "female" ;
+  public static final String MALE = "male" ;
   
   public Contact() {
     id = "Contact" + IdGenerator.generate() ;

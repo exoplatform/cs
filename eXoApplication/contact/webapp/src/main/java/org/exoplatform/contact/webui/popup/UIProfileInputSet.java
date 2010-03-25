@@ -62,8 +62,6 @@ public class UIProfileInputSet extends UIFormInputWithActions {
 //public static final String[] months = { "January", "February", "March", "April", "May", "June",
 //"July", "August", "September", "October", "November", "December" } ;
   private static final String FIELD_JOBTITLE_INPUT = "jobTitle";
-  private static final String MALE = "male" ;
-  private static final String FEMALE = "female" ;
   private UIFormMultiValueInputSet uiFormMultiValue = new UIFormMultiValueInputSet(MULTI_EMAIL,MULTI_EMAIL) ;
   private static final String MULTI_EMAIL = "multiEmail".intern() ;
   @SuppressWarnings("unused")
@@ -83,8 +81,8 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     addUIFormInput(new UIFormStringInput(FIELD_LASTNAME_INPUT, FIELD_LASTNAME_INPUT, null).addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class,1,40));
     addUIFormInput(new UIFormStringInput(FIELD_NICKNAME_INPUT, FIELD_NICKNAME_INPUT, null));
     List<SelectItemOption<String>> genderOptions = new ArrayList<SelectItemOption<String>>() ;
-    genderOptions.add(new SelectItemOption<String>(MALE, MALE));
-    genderOptions.add(new SelectItemOption<String>(FEMALE, FEMALE));
+    genderOptions.add(new SelectItemOption<String>(Contact.MALE, Contact.MALE));
+    genderOptions.add(new SelectItemOption<String>(Contact.FEMALE, Contact.FEMALE));
     addUIFormInput(new UIFormRadioBoxInput(FIELD_GENDER_BOX, FIELD_GENDER_BOX, genderOptions));    
     addUIFormInput(new UIFormInputInfo(INFO_BIRTHDAY, INFO_BIRTHDAY, null)) ;
     
