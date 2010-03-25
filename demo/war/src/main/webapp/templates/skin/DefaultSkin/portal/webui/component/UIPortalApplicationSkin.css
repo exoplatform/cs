@@ -92,3 +92,7 @@
 	background:transparent url(/csdemo/templates/skin/webui/component/UIBannerPortlet/DefaultSkin/background/GroupIcon.gif) no-repeat left 5px;
 	margin-left:10px;
 }
+
+.UIToolbarContainer .UITableColumnContainer .MenuItemContainer {
+	z-index: 100;
+}
