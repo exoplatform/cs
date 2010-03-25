@@ -19,6 +19,7 @@ package org.exoplatform.contact.service.test;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,7 +36,9 @@ import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
+import org.exoplatform.contact.service.impl.ContactServiceImpl;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
+import org.exoplatform.services.organization.OrganizationService;
 
 /**
  * Created by The eXo Platform SARL Author : Hung Nguyen
@@ -43,7 +46,7 @@ import org.exoplatform.contact.service.impl.JCRDataStorage;
  */
 
 public class TestContactService extends BaseContactServiceTestCase {
-  private ContactService contactService;
+  private ContactServiceImpl contactService;
 
   private static String  root = "root";
 
@@ -56,7 +59,7 @@ public class TestContactService extends BaseContactServiceTestCase {
 
   public TestContactService() throws Exception {
     super();
-    contactService = (ContactService) container.getComponentInstanceOfType(ContactService.class);
+    contactService = (ContactServiceImpl) container.getComponentInstanceOfType(ContactServiceImpl.class);
     datastorage = (JCRDataStorage) container.getComponentInstanceOfType(JCRDataStorage.class);
   }
 
@@ -96,6 +99,30 @@ public class TestContactService extends BaseContactServiceTestCase {
     parent.getSession().save();
   }
 
+  /**
+   * Test new imlement of contact service
+   * @throws Exception
+   */
+  public void testExcludeGroup() throws Exception{
+    OrganizationService orgService = (OrganizationService) container.getComponentInstanceOfType(OrganizationService.class);
+    contactService.userCanSeeAllGroupAddressBooks = true;
+    List<String> publicAddress = contactService.getPublicAddressBookIdsOfUser(root);    
+    Collection groups = orgService.getGroupHandler().findGroupsOfUser(root);
+    assertEquals(groups.size(), publicAddress.size());
+
+    List<String> allPublicAddress = contactService.getAllsPublicAddressBookIds(root) ;
+    groups = orgService.getGroupHandler().getAllGroups();
+    assertEquals(groups.size(), allPublicAddress.size());
+    
+    contactService.nonPublicGroups.add("/platform/user*");
+    allPublicAddress = contactService.getAllsPublicAddressBookIds(root) ;
+    assertEquals((groups.size() -1), allPublicAddress.size());
+
+    contactService.nonPublicGroups.add("/platform/guests");
+    allPublicAddress = contactService.getAllsPublicAddressBookIds(root) ;
+    assertEquals((groups.size() -2), allPublicAddress.size());
+  }
+  
   public void testSaveGetAddressBook() throws Exception {
     // test the get operation on a non existent address book
     AddressBook shouldBeNull = contactService.getPersonalAddressBook(root, "nonexistent");

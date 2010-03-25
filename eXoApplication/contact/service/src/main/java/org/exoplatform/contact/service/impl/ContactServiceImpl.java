@@ -55,9 +55,9 @@ public class ContactServiceImpl implements ContactService {
   private JCRDataStorage storage_ ;
   private Map<String, ContactImportExport> contactImportExport_ = new HashMap<String, ContactImportExport>() ;
   
-  private boolean userCanSeeAllGroupAddressBooks = false;
+  public boolean userCanSeeAllGroupAddressBooks = false;
   
-  private List<String> nonPublicGroups = new ArrayList<String>();
+  public List<String> nonPublicGroups = new ArrayList<String>();
   
   private static final String USERCANSEEALLGROUPADDRESSBOOKS = "UserCanSeeAllGroupAddressBooks".intern();
   
