@@ -168,8 +168,6 @@ public class MailWebservice implements ResourceContainer {
       }
     }
     if (checkingInfo != null) {
-      System.out.println(checkingInfo.getStatusMsg() + " with code: "
-          + checkingInfo.getStatusCode() + " in getCheckMailJobInfo(WS)");
       if (checkingInfo.getStatusCode() == CheckingInfo.FINISHED_CHECKMAIL_STATUS
           || checkingInfo.getStatusCode() == CheckingInfo.CONNECTION_FAILURE
           || checkingInfo.getStatusCode() == CheckingInfo.RETRY_PASSWORD
