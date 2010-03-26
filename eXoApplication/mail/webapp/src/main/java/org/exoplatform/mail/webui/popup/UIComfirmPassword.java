@@ -17,6 +17,7 @@
 package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UISelectAccount;
@@ -71,10 +72,11 @@ public class UIComfirmPassword extends UIForm implements UIPopupComponent{
       Account acc = mailSrv.getAccountById(username, accountId) ;
       acc.setIsSavePassword(isSavePw) ;
       acc.setIncomingPassword(newPw) ;
-      mailSrv.updateAccount(username, acc) ;
+      mailSrv.updateErrorAccount(username, acc) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.getJavascriptManager().importJavascript("eXo.mail.MailServiceHandler","/mail/javascript/");
       context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
+      context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox() ;");        
       uiPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
     }
