@@ -535,6 +535,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
           uiAddress.setSelectedContact(contact);
           String selectedGroupId = ((UIFormSelectBoxWithGroups) uiAddress.getChildById(SELECT_GROUP)).getValue();
           uiAddress.refrestContactList(selectedGroupId, contact);
+          uiAddress.setCheckAll();
           ((UIFormSelectBoxWithGroups) uiAddress.getChildById(SELECT_GROUP)).setValue(selectedGroupId);
           uiContact.getAncestorOfType(UIPopupAction.class).deActivate();
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress.getParent());

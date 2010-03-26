@@ -66,6 +66,7 @@ import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
     @EventConfig(listeners = UIAddressBookForm.EditContactActionListener.class),
     @EventConfig(listeners = UIAddressBookForm.ChangeGroupActionListener.class),
     @EventConfig(listeners = UIAddressBookForm.CheckContactActionListener.class),
+    @EventConfig(listeners = UIAddressBookForm.CheckAllContactActionListener.class),
     @EventConfig(listeners = UIAddressBookForm.SelectContactActionListener.class),
     @EventConfig(listeners = UIAddressBookForm.SendEmailActionListener.class),
     @EventConfig(listeners = UIAddressBookForm.DeleteContactActionListener.class, confirm = "UIAddressBookForm.msg.confirm-remove-contact"),
@@ -97,7 +98,9 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
     uiSelectGroup.setOnChange("ChangeGroup");
     addUIFormInput(uiSelectGroup);
 
-    addUIFormInput(new UIFormCheckBoxInput<Boolean>(SELECT_ALL, SELECT_ALL, true));
+    UIFormCheckBoxInput<Boolean> uiSelectAll = new UIFormCheckBoxInput<Boolean>(SELECT_ALL, SELECT_ALL, true);
+    uiSelectAll.setOnChange("CheckAllContact");
+    addUIFormInput(uiSelectAll);
     refrestContactList(uiSelectGroup.getValue(), null);
     for (Contact contact : contactList_) {
       String value = checkedContactMap.get(contact.getId());
@@ -223,7 +226,34 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
     }
     return false;
   }
-
+  public void checkAll() throws Exception{
+    boolean isSelectAll = getUIFormCheckBoxInput(UIAddressBookForm.SELECT_ALL).isChecked();
+    List<Contact> contactList = getContacts();
+    if(isSelectAll){
+      for (Contact contact : contactList) {
+        checkedContactMap.put(contact.getId(),"1");
+        selectedContactMap.put(contact.getId(),contact);
+      }        
+    }else {
+      for (Contact contact : contactList) {
+        checkedContactMap.put(contact.getId(),"0");
+        selectedContactMap.clear();
+      }
+    }
+  }
+  
+  public void setCheckAll() throws Exception{
+    List<Contact> contactList = getContacts();
+    int i = 0;
+    for (Entry<String, String> entry : checkedContactMap.entrySet()) {
+        if (entry.getValue().equals("1")) i++; 
+    }
+    if(i == contactList.size()){
+      getUIFormCheckBoxInput(UIAddressBookForm.SELECT_ALL).setChecked(true);
+      return ;
+    }
+    getUIFormCheckBoxInput(UIAddressBookForm.SELECT_ALL).setChecked(false);
+  }
   public DownloadService getDownloadService() {
     return getApplicationComponent(DownloadService.class);
   }
@@ -413,6 +443,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiAddressBook.setSelectedContactMap(uiAddressBook, contactId);
       uiAddressBook.flipFlopCheckedContactMap(contactId);
+      uiAddressBook.setCheckAll();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
@@ -577,7 +608,13 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
 
     }
   }
-
+  static public class CheckAllContactActionListener extends EventListener<UIAddressBookForm> {
+    public void execute(Event<UIAddressBookForm> event) throws Exception {
+      UIAddressBookForm uiAddressBook = event.getSource();
+      uiAddressBook.checkAll();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
+    }
+  }
   static public class SendMultiEmailActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiForm = event.getSource();
