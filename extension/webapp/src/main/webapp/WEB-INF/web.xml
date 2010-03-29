@@ -35,13 +35,13 @@
     
    <filter>
 	  <filter-name>ThreadLocalSessionProviderInitializedFilter</filter-name> 
-	  <filter-class>org.exoplatform.frameworks.jcr.web.ThreadLocalSessionProviderInitializedFilter</filter-class> 
-   </filter>
+	  <filter-class>org.exoplatform.frameworks.jcr.web.ThreadLocalSessionProviderInitializedFilter</filter-class> 
+   </filter>
 
   <filter>
-  <filter-name>SetCurrentIdentityFilter</filter-name> 
-  <filter-class>org.exoplatform.services.security.web.SetCurrentIdentityFilter</filter-class> 
-  </filter>
+   <filter-name>SetCurrentIdentityFilter</filter-name> 
+   <filter-class>org.exoplatform.services.security.web.SetCurrentIdentityFilter</filter-class> 
+  </filter>
 
   <filter>                                                                                                                                     
     <filter-name>RestEncodingFilter</filter-name>                                                                                              
