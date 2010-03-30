@@ -1,5 +1,5 @@
 ====
-    Copyright (C) 2009 eXo Platform SAS.
+    Copyright (C) 2010 eXo Platform SAS.
     
     This is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as
@@ -18,11 +18,11 @@
 ====
 
 ==============================================
-    Release Notes - exo-cs - Version 2.0.0 Beta01
+    Release Notes - exo-cs - Version 2.0.0 Beta02
 ==============================================
 
 ===============
- Introduction
+1 Introduction
 ===============
 
 ** eXo Collaboration Suite provides a rich, Web 2.0 browser-based interface with comprehensive
@@ -46,21 +46,19 @@ experience more productive. It offers several ways to to view and organize your 
 
 
 =============
- What's new?
+2 What's new?
 =============
 
 
     * General
           o Upgraded to GateIn 3.0 GA and dependencies http://www.jboss.org/gatein/
-          o Finish auto-complete in both mail and contact application when send mail
-          o Improve contact detail view for nicer 
-          o Finish implementation for remote access calendar for public mode
+          o 
           
           
     * Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
           
 =========
- INSTALL
+3 INSTALL
 =========
 
 Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Install+Guide
@@ -131,7 +129,7 @@ All those accounts have the default password "gtn".
 
 
 ===========
- RESOURCES
+4 RESOURCES
 ===========
 
      Company site        http://www.exoplatform.com
@@ -142,8 +140,10 @@ All those accounts have the default password "gtn".
 
 
 ===========
- CHANGELOG
+5 CHANGELOG
 ===========
+- 2.0.0 Beta02
+
 - 2.0.0 Beta01
 
 ** Bug
