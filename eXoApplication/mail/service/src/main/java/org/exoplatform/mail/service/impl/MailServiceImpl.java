@@ -138,7 +138,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void removeCheckingInfo(String userName, String accountId) throws Exception {
-    System.out.println("===>>>removeCheckingInfo");
     String key = userName + ":" + accountId;
     checkingLog_.remove(key);
   }
@@ -146,12 +145,6 @@ public class MailServiceImpl implements MailService, Startable {
   public CheckingInfo getCheckingInfo(String userName, String accountId) {
     String key = userName + ":" + accountId;
     CheckingInfo checkingInfo = checkingLog_.get(key);
-    if (checkingInfo != null) {
-      System.out.println("\tCheckingInfo is NOT NULL, " + checkingInfo.getStatusMsg()
-          + " with code:  " + checkingInfo.getStatusCode());
-    } else {
-      System.out.println("\tCheckingInfo is NULLlll");
-    }
     return checkingInfo;
   }
 
@@ -788,7 +781,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void checkMail(String userName, String accountId, String folderId) throws Exception {
-    System.out.println("===>>>checkMail(sv)");
     if (Utils.isEmptyField(folderId))
       checkMail(userName, accountId);
     else {
@@ -799,7 +791,6 @@ public class MailServiceImpl implements MailService, Startable {
         schedulerService_.executeJob(job.getName(), job.getGroup(), job.getJobDataMap());
       }
     }
-    System.out.println("end of checkMail(sv)y");
   }
 
   public void stopCheckMail(String userName, String accountId) {
@@ -1051,7 +1042,6 @@ public class MailServiceImpl implements MailService, Startable {
                                                    String accountId,
                                                    Folder parentFolder,
                                                    javax.mail.Folder[] folders) throws Exception {
-    System.out.println("===>>>synchImapFolders");
     List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
     List<String> serverFolderId = new ArrayList<String>();
     String folderId, folderName;
@@ -1131,7 +1121,6 @@ public class MailServiceImpl implements MailService, Startable {
         }
       }
     }
-    System.out.println("end of synchImapFolders(sv)");
     return folderList;
   }
 
@@ -1394,7 +1383,6 @@ public class MailServiceImpl implements MailService, Startable {
                                                   String accountId,
                                                   String folderId,
                                                   CheckingInfo info) throws Exception {
-    System.out.println("===>>>mergeMessageBetweenJcrAndServerMail");
     Folder jcrFolder = getFolder(userName, accountId, folderId);
     if (jcrFolder == null || Utils.isEmptyField(jcrFolder.getURLName())) {
       jcrFolder = getFolder(userName,
@@ -1465,8 +1453,6 @@ public class MailServiceImpl implements MailService, Startable {
          info.setStatusMsg("Finished synchronizing imap folder ...");
         Thread.sleep(2000);
       }
-      System.out.println("in getSynchnizeImapServer: " + info.getStatusMsg() + " with code: "
-          + info.getStatusCode());
       if (!Utils.isEmptyField(folderId)) {
         mergeMessageBetweenJcrAndServerMail(store, userName, accountId, folderId, info);
       } else {
@@ -1511,8 +1497,6 @@ public class MailServiceImpl implements MailService, Startable {
       logger.debug("/////////////////////////////////////////////////////////////");
     }
     if (info != null) {
-      System.out.println("end of getSynchnizeImapServer: " + info.getStatusMsg() + " with code: "
-          + info.getStatusCode());
       info.setStatusMsg("Finish getting messages");
       info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
     }
@@ -1522,7 +1506,6 @@ public class MailServiceImpl implements MailService, Startable {
                                 String accountId,
                                 javax.mail.Folder folder,
                                 CheckingInfo info) throws Exception {
-    System.out.println("===>>>synchImapMessage");
     Account account = getAccountById(userName, accountId);
     boolean saved = false;
     int totalNew = -1;
@@ -1736,7 +1719,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<Message> checkNewMessage(String username, String accountId, String folderId) throws Exception {
-    System.out.println("==>>>checkNewMessage usrname, acctID, folderID");
     Account account = getAccountById(username, accountId);
     List<Message> messageList = new ArrayList<Message>();
     if (account != null) {
@@ -1747,74 +1729,7 @@ public class MailServiceImpl implements MailService, Startable {
         getSynchnizeImapServer(username, accountId, folderId, synchFolder);
       }
     }
-
-    // CheckingInfo info = new CheckingInfo();
-    // String key = username + ":" + accountId;
-    // checkingLog_.put(key, info);
-    // // info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);
-    // // if (info != null) {
-    // // for (int i = 1; i < 5; i++) {
-    // // Thread.sleep(1500);
-    // // info.setStatusMsg("lay duoc " + i + " messages");
-    // // }
-    // // Thread.sleep(1500);
-    // // info.setStatusMsg("finish in checkNewMail roi");
-    // // info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
-    // // Thread.sleep(1500);
-    // // }
-    // hien1(username, accountId, info);
-    System.out.println("end of checkNewMessage");
     return messageList;
-  }
-
-  private void hien1(String username, String accountId, CheckingInfo info) throws Exception {
-    System.out.println("===>>>hien1");
-    // CheckingInfo info = getCheckingInfo(username, accountId);
-    info.setStatusCode(CheckingInfo.START_SYNC_FOLDER);
-    if (info != null) {
-      for (int i = 1; i < 5; i++) {
-        Thread.sleep(1500);
-        info.setStatusMsg("hien1: lay duoc " + i + " folders");
-      }
-      Thread.sleep(1500);
-      info.setStatusMsg("finish in hien1 roi");
-    }
-    info.setStatusCode(CheckingInfo.FINISH_SYNC_FOLDER);
-    info.setStatusMsg("hien1()finish synch folder");
-    Thread.sleep(1500);
-    hien2(username, accountId, info);
-  }
-
-  private void hien2(String username, String accountId, CheckingInfo info) throws Exception {
-    System.out.println("===>>>hien2");
-    if (info != null) {
-      info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);
-      for (int i = 1; i < 5; i++) {
-        Thread.sleep(1500);
-        info.setStatusMsg("hien2: lay duoc " + i + " messages");
-      }
-      Thread.sleep(1500);
-      info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
-      info.setStatusMsg("finish in hien2 roi");
-    }
-    Thread.sleep(1500);
-    hien3(username, accountId, info);
-  }
-
-  private void hien3(String username, String accountId, CheckingInfo info) throws Exception {
-    System.out.println("===>>>hien3");
-    Thread.sleep(1500);
-    info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);
-    if (info != null) {
-      for (int i = 1; i < 5; i++) {
-        Thread.sleep(1500);
-        info.setStatusMsg("hien3: lay duoc " + i + " messages");
-      }
-      Thread.sleep(1500);
-      info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
-      info.setStatusMsg("finish in hien3 roi");
-      Thread.sleep(1500);
-    }
   }
 
   // TODO: refactor code for checking mail from POP3 server.
