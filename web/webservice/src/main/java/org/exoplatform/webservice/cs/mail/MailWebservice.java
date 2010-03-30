@@ -171,15 +171,16 @@ public class MailWebservice implements ResourceContainer {
       if (checkingInfo.getStatusCode() == CheckingInfo.FINISHED_CHECKMAIL_STATUS
           || checkingInfo.getStatusCode() == CheckingInfo.CONNECTION_FAILURE
           || checkingInfo.getStatusCode() == CheckingInfo.RETRY_PASSWORD
-          || checkingInfo.getStatusCode() == CheckingInfo.START_CHECKMAIL_STATUS
-          || checkingInfo.getStatusCode() == CheckingInfo.START_SYNC_FOLDER
-          || checkingInfo.getStatusCode() == CheckingInfo.FINISH_SYNC_FOLDER){
+          || checkingInfo.getStatusCode() == CheckingInfo.START_CHECKMAIL_STATUS){
         buffer.append("<info>");
         buffer.append("  <checkingmail>");
         buffer.append("    <status>" + checkingInfo.getStatusCode() + "</status>");
         buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
         buffer.append("  </checkingmail>");
         buffer.append("</info>");
+        if(checkingInfo.getStatusCode() == CheckingInfo.FINISHED_CHECKMAIL_STATUS){
+          mailService.removeCheckingInfo(userName, accountId);
+        }
         return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
       } else if (checkingInfo.hasChanged()) {
         buffer.append("<info>");
@@ -200,6 +201,7 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("</info>");
         checkingInfo.setHasChanged(false);
       } else {
+        System.out.println("in ws, other");
         buffer.append("<info>");
         buffer.append("  <checkingmail>");
         buffer.append("    <status>" + CheckingInfo.NO_UPDATE_STATUS + "</status>");
