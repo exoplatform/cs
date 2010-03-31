@@ -143,7 +143,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     } catch (NullPointerException e) { }
     ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
     permissionList.getUIPageIterator().setPageList(objPageList) ;
-    if (currentPage > 1) {
+    if (currentPage > 1 && currentPage <= permissionList.getUIPageIterator().getAvailablePage()) {
       permissionList.getUIPageIterator().setCurrentPage(currentPage) ;
     }
     getChild(UISharedForm.class).setGroup(group) ;
