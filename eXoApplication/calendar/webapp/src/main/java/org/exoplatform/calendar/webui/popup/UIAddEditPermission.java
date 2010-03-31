@@ -101,9 +101,11 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     Collections.sort(dataRow, new UserDataComparator()) ;
     UIGrid permissionList = getChild(UIGrid.class) ;
     ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
-    permissionList.getUIPageIterator().setPageList(objPageList) ;  
-    permissionList.getUIPageIterator().setCurrentPage(currentPage);
-   
+    permissionList.getUIPageIterator().setPageList(objPageList) ;
+  //cs-3854
+    if(currentPage>1 && currentPage<=permissionList.getUIPageIterator().getAvailablePage()){
+      permissionList.getUIPageIterator().setCurrentPage(currentPage);      
+    }
   }
 
   static public class EditActionListener extends EventListener<UIAddEditPermission> {
