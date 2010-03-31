@@ -13,26 +13,7 @@
    <component>
       <type>org.exoplatform.services.scheduler.QueueTasks</type>
    </component>
-  
-	<component>
-		<key>org.exoplatform.services.mail.MailService</key>
-		<type>org.exoplatform.services.mail.impl.MailServiceImpl</type>
-			<init-params>
-				<properties-param>
-					<name>config</name>
-					<property name="mail.smtp.auth.username" value="exoservice@gmail.com" />
-					<property name="mail.smtp.auth.password" value="exoadmin" />
-					<property name="mail.smtp.host" value="smtp.gmail.com" />
-					<property name="mail.smtp.port" value="465" />
-		 			<property name="mail.smtp.starttls.enable" value="true" />
-					<property name="mail.smtp.auth" value="true" />
-					<property name="mail.smtp.debug" value="false" />
-					<property name="mail.smtp.socketFactory.port" value="465" />
-					<property name="mail.smtp.socketFactory.class" value="javax.net.ssl.SSLSocketFactory" />
-					<property name="mail.smtp.socketFactory.fallback" value="false" />
-				</properties-param>
-			</init-params>
-	</component>
+	 
   <external-component-plugins>
     <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
     <component-plugin>
@@ -51,16 +32,6 @@
           <property name="period" value="180000"/>     
           <property name="startTime" value="+0"/>
           <property name="endTime" value=""/>               
-        </properties-param>
-        <properties-param>
-          <name>reminder.info</name>
-          <description>save the monitor data  periodically</description>
-          <property name="timeZone" value="This is TimeZone"/>          
-          <property name="account" value="exoservice@gmail.com"/>          
-          <property name="password" value="exoadmin"/>          
-		  		<property name="ssl" value="true"/> 
-          <property name="outgoing" value="smtp.gmail.com"/>          
-          <property name="port" value="465"/>          
         </properties-param>
       </init-params>
     </component-plugin>
@@ -84,7 +55,7 @@
 				<properties-param>
           <name>popupreminder.info</name>
           <description>save the monitor data  periodically</description>
-          <property name="portalName" value="portal"/> 
+          <property name="portalName" value="csdemo"/> 
         </properties-param>
       </init-params>
     </component-plugin>
@@ -111,7 +82,7 @@
         <properties-param>
           <name>autogenerate.info</name>
           <description>save the monitor data  periodically</description>
-          <property name="portalName" value="portal"/> 
+          <property name="portalName" value="csdemo"/> 
           <property name="event_number" value="100"/>         
         </properties-param>
       </init-params>

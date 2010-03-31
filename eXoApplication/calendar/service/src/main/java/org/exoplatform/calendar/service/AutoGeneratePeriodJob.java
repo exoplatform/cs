@@ -33,8 +33,6 @@ public class AutoGeneratePeriodJob extends PeriodJob {
     super(params) ;
     ExoProperties props =  params.getPropertiesParam("autogenerate.info").getProperties() ;
     jdatamap_ = new JobDataMap() ;
-    String portalName = props.getProperty("portalName") ;
-    jdatamap_.put("portalName", portalName) ;
     jdatamap_.put("event_number", props.getProperty("event_number")) ;
   }
   public JobDataMap  getJobDataMap() {  return jdatamap_ ;  }

@@ -27,6 +27,7 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,13 +35,13 @@ import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.mail.service.MailService;
-import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.mail.MailService;
+import org.exoplatform.services.mail.Message;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -89,10 +90,10 @@ public class ReminderJob implements Job {
         String to = reminder.getProperty(Utils.EXO_EMAIL).getString();				
         if (to != null && to.length() > 0) {
           message = new Message();
-          message.setContentType(org.exoplatform.mail.service.Utils.MIMETYPE_TEXTHTML) ;
-          message.setMessageTo(to);
+          message.setMimeType(MediaType.TEXT_HTML) ;
+          message.setTo(to);
           message.setSubject("[reminder] eXo calendar notify mail !");
-          message.setMessageBody(reminder.getProperty(Utils.EXO_DESCRIPTION).getString());
+          message.setBody(reminder.getProperty(Utils.EXO_DESCRIPTION).getString());
           message.setFrom(jdatamap.getString("account")) ;
           if(isRepeat) {
             if (fromCalendar.getTimeInMillis() >= fromTime) {
@@ -110,12 +111,13 @@ public class ReminderJob implements Job {
           }else {
             reminder.setProperty(Utils.EXO_IS_OVER, true) ;
           }
-          messageList.add(message);
+          //messageList.add(message);
           reminder.save() ;
+          mailService.sendMessage(message);
         }
       }  
       if(!messageList.isEmpty()) {
-        mailService.sendMessages(messageList, config);
+        //mailService.sendMessage(messageList, config);
       }
     } catch (RepositoryException e) {
       if (log_.isDebugEnabled()) log_.debug("Data base not ready !");
