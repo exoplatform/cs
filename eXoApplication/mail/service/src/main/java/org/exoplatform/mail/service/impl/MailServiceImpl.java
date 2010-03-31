@@ -797,10 +797,6 @@ public class MailServiceImpl implements MailService, Startable {
     CheckingInfo checkingInfo = getCheckingInfo(userName, accountId);
     if (checkingInfo != null) {
       checkingInfo.setRequestStop(true);
-      try {
-        removeCheckingInfo(userName, accountId);
-      } catch (Exception e) {
-      }
     }
   }
 
@@ -1389,8 +1385,6 @@ public class MailServiceImpl implements MailService, Startable {
                             accountId,
                             Utils.generateFID(accountId, Utils.FD_INBOX, false));
     }
-    // String key = userName + ":" + accountId;
-    // CheckingInfo info = getCheckingInfo(userName, accountId);
     try {
       String urlName = jcrFolder.getURLName();
       if (jcrFolder != null && !Utils.isEmptyField(urlName)) {
@@ -1462,10 +1456,12 @@ public class MailServiceImpl implements MailService, Startable {
                 && !info.getRequestingForFolder_().equals("checkall")) {
               break;
             }
-            if (info.isRequestStop()) {
+            if (info != null && info.isRequestStop()) {
               if (logger.isDebugEnabled()) {
                 logger.debug("Stop requested on checkmail for " + account.getId());
               }
+              info.setStatusMsg("Stop getting mails from folder " + folder.getName() + " !");// duy
+              Thread.sleep(2000);// duy
               break;
             }
             try {
@@ -1575,6 +1571,11 @@ public class MailServiceImpl implements MailService, Startable {
               if (logger.isDebugEnabled()) {
                 logger.debug("Stop requested on checkmail for " + account.getId());
               }
+              // duy
+              info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
+              info.setStatusMsg("Stop getting mails from folder " + folder.getName() + " !");
+              Thread.sleep(2000);
+              // duy
               break;
             } else if (info != null
                 && !Utils.isEmptyField(info.getRequestingForFolder_())
@@ -1728,6 +1729,7 @@ public class MailServiceImpl implements MailService, Startable {
         getSynchnizeImapServer(username, accountId, folderId, synchFolder);
       }
     }
+
     return messageList;
   }
 

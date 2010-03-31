@@ -102,7 +102,6 @@ public class MailWebservice implements ResourceContainer {
     buffer.append("</info>");
 
     mailService.removeCheckingInfo(userName, accountId);
-
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 
@@ -126,7 +125,7 @@ public class MailWebservice implements ResourceContainer {
       buffer.append("</info>");
 
       checkingInfo.setRequestStop(true);
-      mailService.removeCheckingInfo(userName, accountId);
+//      mailService.removeCheckingInfo(userName, accountId);
       mailService.stopCheckMail(userName, accountId);
     } else {
       Response.status(HTTPStatus.INTERNAL_ERROR);
@@ -200,7 +199,6 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("</info>");
         checkingInfo.setHasChanged(false);
       } else {
-        System.out.println("in ws, other");
         buffer.append("<info>");
         buffer.append("  <checkingmail>");
         buffer.append("    <status>" + CheckingInfo.NO_UPDATE_STATUS + "</status>");
