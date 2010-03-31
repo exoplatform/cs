@@ -75,14 +75,11 @@ public class UISelectFolder extends UIFormInputSet {
   }
 
   public List<Folder> getFolders(boolean isPersonal) throws Exception{
-    System.out.println("===>>>getFolders in UISelectFolder");
     List<Folder> folders = new ArrayList<Folder>() ;
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String username = MailUtils.getCurrentUser() ;
     try {
       folders.addAll(mailSvr.getFolders(username, accountId_, isPersonal)) ;
-//      mailSvr.removeCheckingInfo(username, accountId_);//duy
-      System.out.println("getFolders is call in getFolders of UIselectFolder");
     } catch (Exception e){
       //e.printStackTrace() ;
     }

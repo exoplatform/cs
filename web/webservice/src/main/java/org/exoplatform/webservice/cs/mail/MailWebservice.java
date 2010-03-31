@@ -61,7 +61,6 @@ public class MailWebservice implements ResourceContainer {
     } else if (folderId != null && folderId.trim().length() > 0
         && !folderId.equalsIgnoreCase("checkall")) {
       checkingInfo.setRequestingForFolder_(folderId);
-      System.out.println("checkAll in WS");
     }
 
     StringBuffer buffer = new StringBuffer();

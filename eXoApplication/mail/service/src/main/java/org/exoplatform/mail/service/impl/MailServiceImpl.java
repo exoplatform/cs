@@ -1449,8 +1449,8 @@ public class MailServiceImpl implements MailService, Startable {
         info.setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
         info.setStatusMsg("Synchronizing imap folder ...");
         folderList = synchImapFolders(userName, accountId, null, store.getDefaultFolder().list());
-         info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
-         info.setStatusMsg("Finished synchronizing imap folder ...");
+        info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
+        info.setStatusMsg("Finished synchronizing imap folder ...");
         Thread.sleep(2000);
       }
       if (!Utils.isEmptyField(folderId)) {
@@ -1516,7 +1516,6 @@ public class MailServiceImpl implements MailService, Startable {
 
     String folderId = null;
     String folderName = folder.getName();
-    // CheckingInfo info = getCheckingInfo(userName, accountId);
     try {
       if (!folder.isOpen()) {
         folder.open(javax.mail.Folder.READ_ONLY);
@@ -2210,52 +2209,12 @@ public class MailServiceImpl implements MailService, Startable {
     Session session = Session.getDefaultInstance(props, null);
     MimeMessage mimeMessage = new MimeMessage(session, inputStream);
     long[] msgUID = { 0 };
-    boolean serverImported = importMessageIntoServerMail(userName,
-                                                         accountId,
-                                                         folderId,
-                                                         mimeMessage,
-                                                         msgUID);
-    boolean jcrImported = emlImportExport_.importMessage(userName,
-                                                         accountId,
-                                                         folderId,
-                                                         mimeMessage,
-                                                         msgUID);
-    boolean result = false;
-    if (serverImported && jcrImported) {
-      result = true;
-    } else if (serverImported && !jcrImported) {
-      // + If the message is imported into server mail but not in JCR-->
-      // so this
-      // transaction must be rolled back.
-      // + Remove the imported message from server mail;
-      boolean rollBackResult = removeImportedMessageFromServer(userName,
-                                                               accountId,
-                                                               folderId,
-                                                               msgUID);
-      if (rollBackResult)
-        logger.error("Imported message rollback operation is successful");
-    }
-    return result;
-  }
-
-  private boolean removeImportedMessageFromServer(String userName,
-                                                  String accountId,
-                                                  String folderId,
-                                                  long[] msgUID) throws Exception {
-
     boolean result = false;
     try {
-      IMAPFolder remoteFolder = getIMAPFolder(userName, accountId, folderId);
-      if (remoteFolder != null) {
-        javax.mail.Message message = remoteFolder.getMessage((int) msgUID[0]);
-        if (!remoteFolder.isOpen())
-          remoteFolder.open(javax.mail.Folder.READ_WRITE);
-        message.setFlag(Flags.Flag.DELETED, true);
-        remoteFolder.close(true);
-        result = true;
-      }
+      importMessageIntoServerMail(userName, accountId, folderId, mimeMessage, msgUID);
+      emlImportExport_.importMessage(userName, accountId, folderId, mimeMessage, msgUID);
+      result = true;
     } catch (Exception ex) {
-      logger.error("Imported message rollback operation is fail", ex);
     }
     return result;
   }
