@@ -25,6 +25,7 @@
     <servlet-name>PortletWrapper</servlet-name>
     <servlet-class>org.exoplatform.services.portletcontainer.impl.servlet.ServletWrapper</servlet-class>
   </servlet>
+  <!-- remove this servlet when finish implement rss by webservice -->
   <servlet>
     <servlet-name>icalservlet</servlet-name>
     <servlet-class>org.exoplatform.calendar.ICalServlet</servlet-class>
