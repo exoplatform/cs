@@ -98,7 +98,7 @@
 											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-3")%></div>
 											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-4")%></div>
 											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-5")%></div>
-											<div class="Text"><span></span></div>
+											<div class="Text">&nbsp;</div>
 											
 										</div>
 									</div>
