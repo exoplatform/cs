@@ -92,6 +92,40 @@
 	margin-left:10px;
 }
 
+.UIToolbarContainer .Name a{
+	background:transparent url(/csdemo/templates/skin/webui/component/UIBannerPortlet/DefaultSkin/background/UseIcon.png) no-repeat left 5px;
+	margin-left:10px;
+}
+
+.UIToolbarContainer .SitesIcon {
+	background:transparent url(/csdemo/templates/skin/webui/component/UIBannerPortlet/DefaultSkin/background/SiteIcon.gif) no-repeat left 5px;
+	margin-left:10px;
+}
+
+
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer {
 	z-index: 100;
+	border: 1px solid #555555;
+}
+
+.UIToolbarContainer .UITableColumnContainer .MenuItemContainer .TitleBar{
+	background: #7F858A;
+	color: #333333;
+}
+
+.UIToolbarContainer .UITableColumnContainer .MenuItemContainer .TitleBar{
+	background: #7F858A;
+	color: #333333;
+}
+
+.UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem{
+	background: #adadad;
+}
+
+.UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem a{
+	color: #e9e9e9;
+}
+
+.UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem a:hover{
+	color: white;
 }
