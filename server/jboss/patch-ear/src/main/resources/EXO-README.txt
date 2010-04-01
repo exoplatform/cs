@@ -52,7 +52,11 @@ experience more productive. It offers several ways to to view and organize your 
 
     * General
           o Upgraded to GateIn 3.0 GA and dependencies http://www.jboss.org/gatein/
-          o 
+          o Fix lost image bug
+          o Fix send multiple email
+          o Safari 4 support
+          o Configurable exclusions for group addressbooks
+
           
          
           
@@ -139,7 +143,36 @@ All those accounts have the default password "gtn".
 5 CHANGELOG
 ===========
 - 2.0.0 Beta02
+** Bug
+    * [CS-3854] - Unknown error when delete permission of share calendar
+    * [CS-3857] - [Unplanned] AddressBook Portlet is using OrganizationService instead of ContactService for Importing Groups
+    * [CS-3865] - password prompted even after save
+    * [CS-3976] - Can not send multi email at the same time
+    * [CS-3981] - Can not delete or move the sent messages in Sent folder to others
+    * [CS-3982] - User is not prompted for password
+    * [CS-3985] - Messages are disappeared after editing filter without changing
+    * [CS-3991] - Unknown error when edit 1 event in List view
+    * [CS-3994] - Unknown error when double click on event when see it in List view
+    * [CS-4014] - Contact's image is not show
+    * [CS-4021] - Can not get mail with csdemo
+    * [CS-4031] - [unplanned] Can not view image attachment  of event/task with csdemo
+    * [CS-4037] - Can not get mail without select folder
 
+** Improvement
+    * [CS-3276] - Safari 4 support
+    * [CS-3945] - Configurable exclusions for group addressbooks
+
+** New Feature
+    * [CS-3655] - Select All in AddressBook
+
+** Sub-task
+    * [CS-3960] - [DEV] Configure the exclusion of some predefined groups from Email picker
+    * [CS-4034] - [DEV]After adding new contact in new address book, it show all contacts of My Contact address book
+    * [CS-4035] - [DEV] Can not delete contacts at the same time after editing 1 contact
+    * [CS-4046] - [DEV] Messages are disappeared after editing filter without changing
+    * [CS-4098] - [Dev] Can not get mail without select folder
+    * [CS-4100] - [DEV] Can not move some message at the same time
+    
 - 2.0.0 Beta01
   ** Bug
     * [CS-3772] - Do not display tag's name in [Tag Message] form
