@@ -74,7 +74,7 @@
 }
 
 .UIToolbarContainer .ToolbarContainer a {
-	color:#ababab;
+	color:white;
 }
 
 .UIToolbarContainer .UIHorizontalTabs .UITab {
@@ -120,22 +120,23 @@
 
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer {
 	z-index: 100;
-	border: 1px solid #555555;
+	border: 1px solid #999999;
 }
 
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer .TitleBar{
-	background: #b7b7b7;
+	background: #d7d7d7;
 	opacity: 1;
 }
 
 
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem{
-	background: #d7d7d7;
+	background: #f3f3f3;
 	opacity: 1;
 }
 
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem a{
-	color: white;
+	color: #444444;
+	font-weight: normal;
 }
 
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem a:hover{
