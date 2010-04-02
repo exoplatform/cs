@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.contact.service.AddressBook;
@@ -35,10 +34,8 @@ import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -179,30 +176,35 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       sharedAddress.addOption(new SelectOption(sharedContacts_, sharedContacts_));
       options.add(sharedAddress);
     }
-    
+
     OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
-    
+
     List<String> publicAddressBookIdsOfUser = contactSrv.getPublicAddressBookIdsOfUser(username);
-    if(!publicAddressBookIdsOfUser.isEmpty()){
+    if (!publicAddressBookIdsOfUser.isEmpty()) {
       SelectOptionGroup publicContacts = new SelectOptionGroup(publicContact);
       for (String publicCg : publicAddressBookIdsOfUser) {
-        publicContacts.addOption(new SelectOption(organizationService.getGroupHandler().findGroupById(publicCg).getGroupName(), publicCg));
-        addressBooksMap.put(publicCg, organizationService.getGroupHandler().findGroupById(publicCg).getGroupName() + "_" + PUBLIC);
+        publicContacts.addOption(new SelectOption(organizationService.getGroupHandler()
+                                                                     .findGroupById(publicCg)
+                                                                     .getGroupName(), publicCg));
+        addressBooksMap.put(publicCg, organizationService.getGroupHandler()
+                                                         .findGroupById(publicCg)
+                                                         .getGroupName()
+            + "_" + PUBLIC);
       }
       options.add(publicContacts);
     }
-    
+
     List<String> publicAddressBookIds = contactSrv.getAllsPublicAddressBookIds(username);
     publicAddressBookIds.removeAll(publicAddressBookIdsOfUser);
-    if(!publicAddressBookIds.isEmpty()){
+    if (!publicAddressBookIds.isEmpty()) {
       SelectOptionGroup publicContacts = new SelectOptionGroup("public-groups-contacts");
-      for(String publicCg : publicAddressBookIds) {
-        publicContacts.addOption(new SelectOption(publicCg, publicCg)) ;
+      for (String publicCg : publicAddressBookIds) {
+        publicContacts.addOption(new SelectOption(publicCg, publicCg));
         addressBooksMap.put(publicCg, publicCg + "_" + PUBLIC);
       }
       options.add(publicContacts);
     }
-    
+
     return options;
   }
 
@@ -290,6 +292,16 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       }
     }
     return contactList;
+  }
+
+  // Added fo fixing the CS-4028
+  @SuppressWarnings("unchecked")
+  public List<String> getAllEmailOfCategory() throws Exception {
+    List<String> emailList = new ArrayList<String>();
+    for (ContactData contact : new ArrayList<ContactData>(uiPageList_.getCurrentPageData())) {
+      emailList.add(contact.getEmail());
+    }
+    return emailList;
   }
 
   static public class ChangeGroupActionListener extends EventListener<UIAddressForm> {
@@ -502,6 +514,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   static public class AddActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiAddressForm = event.getSource();
+
       List<ContactData> checkedContact = uiAddressForm.getCheckedContact();
       boolean isSendToGroup = uiAddressForm.getUIFormCheckBoxInput(UIAddressForm.SELECTED_GROUP)
                                            .isChecked();
@@ -535,14 +548,28 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           sb.append(uiEventForm.getEmailAddress());
         }
         List<String> listMail = Arrays.asList(sb.toString().split(MailUtils.COMMA));
-        String email = null;
-        for (ContactData c : uiAddressForm.newCheckedList_.values()) {
-          email = c.getEmail();
-          if (!listMail.contains(email)) {
-            if (sb != null && sb.length() > 0)
-              sb.append(MailUtils.COMMA);
-            if (email != null)
-              sb.append(email.replace(";", ","));
+
+        List<String> emailList = uiAddressForm.getAllEmailOfCategory();
+        // IF: fixed for CS-4028
+        if (isSendToGroup) {
+          for (String email : emailList) {
+            if (!listMail.contains(email)) {
+              if (sb != null && sb.length() > 0)
+                sb.append(MailUtils.COMMA);
+              if (email != null)
+                sb.append(email.replace(";", ","));
+            }
+          }
+        } else {
+          String email = null;
+          for (ContactData c : uiAddressForm.newCheckedList_.values()) {
+            email = c.getEmail();
+            if (!listMail.contains(email)) {
+              if (sb != null && sb.length() > 0)
+                sb.append(MailUtils.COMMA);
+              if (email != null)
+                sb.append(email.replace(";", ","));
+            }
           }
         }
         uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTREMINDER);
