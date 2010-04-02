@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.exoplatform.cs</groupId>
   <artifactId>cs</artifactId>
-  <version>2.0.0-RC1-SNAPSHOT</version>
+  <version>2.0.0-Beta02-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>eXo Collaboration Suite</name>
   <description>eXo Collaboration Suite (CS) made of Address Book, Calendar, Mail and Chat.</description>
@@ -39,7 +39,7 @@
     <version.chromattic>1.0.0</version.chromattic>
     <!--platform dependencies-->
     <org.exoplatform.platform.version>3.0.0-Alpha03</org.exoplatform.platform.version>
-    <!-- exo.platform.web.fck.version>3.0.0-Beta05</exo.platform.web.fck.version -->
+    
     <!-- 3rd parties -->
     <commons-lang.version>2.3</commons-lang.version>
     <commons-chain.version>1.0</commons-chain.version>
@@ -89,8 +89,9 @@
     <org.slf4j.slf4j-jdk14.version>1.5.6</org.slf4j.slf4j-jdk14.version>
     <!-- ************** -->
     <!-- Build settings -->
-    <org.exoplatform.cs.version>2.0.0-Alpha02-SNAPSHOT</org.exoplatform.cs.version>
     <!-- ************** -->
+    <!-- We enforce Java 6 to build to use Chromattic and APT -->
+    <jdk.min.version>1.6</jdk.min.version>
     <!-- maven-release-plugin -->
     <arguments>-Prelease,pkg-tomcat,arc-tomcat,pkg-jbossas,arc-jbossas,run-its -Dgatein.working.dir=target</arguments>
   </properties>
