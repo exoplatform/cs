@@ -187,7 +187,7 @@ UICalendarPortlet.prototype.fillData = function(uiform, data) {
 	var formater = eXo.cs.DateTimeFormater ;
 	var timeType = "HH:MM" ;
 	var dateType = fromField.getAttribute("format").replace("MM","mm") ;
-	if(fromFieldTime.value.trim().length > 5)  timeType = formater.masks.shortTime ;
+	if(this.timeFormat == "hh:mm a")  timeType = formater.masks.shortTime ;
 	fromField.value = formater.format(data.from, dateType);
 	fromFieldTime.style.visibility= "visible";
 	fromFieldTime.value = formater.format(data.fromTime, timeType);	
