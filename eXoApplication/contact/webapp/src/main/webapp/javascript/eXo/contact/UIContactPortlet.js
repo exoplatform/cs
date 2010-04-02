@@ -633,7 +633,7 @@ UIContactPortlet.prototype.imFormOnload = function(root){
     }
   }
   var menuRoot = document.getElementById(root.id + '_PopupMenu') ;
-  var menuItems = domUtil.findDescendantsByClass(menuRoot, 'a', 'ItemIcon') ;
+  var menuItems = domUtil.findDescendantsByClass(menuRoot, 'div', 'ItemIcon') ;
   for (var i=0; i<menuItems.length; i++) {
     menuItems[i].onclick = eXo.contact.UIContactPortlet.showImField ;
   }
