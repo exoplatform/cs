@@ -1,4 +1,19 @@
- 
 <div id="$uicomponent.id" class="$uicomponent.id">
-   
+	<%uicomponent.renderChildren();%>
+	<div class="UIAction"> 
+    <table class="ActionContainer" align="center">
+      <tr>
+        <td align="center">
+         <a href="<%=uicomponent.getParentFrom().event("Add")%>" class="ActionButton LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle"><%= _ctx.appRes(uicomponent.getName() + ".action.add") %></div>
+              </div>
+            </div>
+          </a>
+        </td>
+      </tr>
+    </table>
+	</div>
+	  
 </div>

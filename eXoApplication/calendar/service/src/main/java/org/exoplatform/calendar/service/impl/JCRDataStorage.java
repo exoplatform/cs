@@ -312,8 +312,12 @@ public class JCRDataStorage implements DataStorage {
    * @see org.exoplatform.calendar.service.impl.DataStorage#getUserCalendar(java.lang.String, java.lang.String)
    */
   public Calendar getUserCalendar(String username, String calendarId) throws Exception {
-    Node calendarNode = getUserCalendarHome(username).getNode(calendarId) ;
-    return getCalendar(new String[]{calendarId}, username, calendarNode, true) ;
+    try {
+      Node calendarNode = getUserCalendarHome(username).getNode(calendarId) ;
+      return getCalendar(new String[]{calendarId}, username, calendarNode, true) ;
+    } catch (PathNotFoundException e) {
+      return null;
+    }
   }
   /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.impl.DataStorage#getUserCalendars(java.lang.String, boolean)
@@ -1410,7 +1414,6 @@ public class JCRDataStorage implements DataStorage {
       try {
         eventNode = calendarNode.getNode(event.getId()) ;
       } catch (Exception e) {
-        //System.out.println("\n\n event added");
         eventNode = calendarNode.addNode(event.getId(), Utils.EXO_CALENDAR_EVENT) ;
         eventNode.setProperty(Utils.EXO_ID, event.getId()) ;
       }
@@ -2101,6 +2104,27 @@ public class JCRDataStorage implements DataStorage {
   /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.impl.DataStorage#getFeeds(java.lang.String)
    */
+  
+  public void removeFeedData(String username, String title) {
+    try {    
+      Node rssHome = getRssHome(username);
+      NodeIterator iter = rssHome.getNodes();
+      while (iter.hasNext()) {
+        Node feedNode = iter.nextNode() ;
+        if(feedNode.isNodeType(Utils.EXO_RSS_DATA)) {
+          if (feedNode.getProperty(Utils.EXO_TITLE).getString().equals(title)) {
+            feedNode.remove();
+            break;
+          }
+        }
+      }
+      rssHome.getSession().save();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    
+  }
+  
   public List<FeedData> getFeeds(String username) throws Exception {
     List<FeedData> feeds = new ArrayList<FeedData>() ;
     try {
@@ -2110,13 +2134,18 @@ public class JCRDataStorage implements DataStorage {
         Node feedNode = iter.nextNode() ;
         if(feedNode.isNodeType(Utils.EXO_RSS_DATA)) {
           FeedData feed = new FeedData() ;
-          feed.setTitle(feedNode.getProperty("exo:title").getString()) ;
+          feed.setTitle(feedNode.getProperty(Utils.EXO_TITLE).getString()) ;
           StringBuffer url = new StringBuffer(feedNode.getProperty(Utils.EXO_BASE_URL).getString()) ;  
-          url.append("/").append(PortalContainer.getCurrentPortalContainerName()) ;
+          
+          // TODO CS-3889
+          /*url.append("/").append(PortalContainer.getCurrentPortalContainerName()) ;
           url.append("/").append(feedNode.getSession().getWorkspace().getName()) ;
           url.append("/").append(username)  ;
-          url.append("/").append(feedNode.getName())  ;
+          url.append("/").append(feedNode.getName())  ;*/
           feed.setUrl(url.toString()) ;
+          
+          feed.setContent(feedNode.getProperty(Utils.EXO_CONTENT).getStream());
+          
           feeds.add(feed) ;
         }
       }
@@ -2214,7 +2243,7 @@ public class JCRDataStorage implements DataStorage {
     } catch (Exception e) {
       iCalHome = rssHomeNode.addNode(Utils.RSS_NODE, Utils.NT_UNSTRUCTURED) ;
     }
-    try {         
+    try {
       SyndFeed feed = new SyndFeedImpl();      
       feed.setFeedType(rssData.getVersion());      
       feed.setTitle(rssData.getTitle());
@@ -2224,7 +2253,7 @@ public class JCRDataStorage implements DataStorage {
       SyndEntry entry;
       SyndContent description;
 
-      String portalName = PortalContainer.getCurrentPortalContainerName(); 
+      //String portalName = PortalContainer.getCurrentPortalContainerName(); 
       for(String calendarMap : calendars.keySet()) {
         String calendarId = calendarMap.split(Utils.SPLITTER)[0] ;
         String type = calendarMap.split(Utils.SPLITTER)[1] ;
@@ -2232,19 +2261,25 @@ public class JCRDataStorage implements DataStorage {
         if(out != null) {
           ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
           try {
-            iCalHome.getNode(calendarMap + Utils.ICS_EXT).setProperty(Utils.EXO_DATA, is) ;  
+             iCalHome.getNode(calendarMap + Utils.ICS_EXT).setProperty(Utils.EXO_DATA, is) ;  
           } catch (Exception e) {
             Node ical = iCalHome.addNode(calendarMap + Utils.ICS_EXT, Utils.EXO_ICAL_DATA) ;
             ical.setProperty(Utils.EXO_DATA, is) ;
           }
-          StringBuffer path = new StringBuffer(Utils.SLASH) ;
-          path.append(iCalHome.getName()).append(Utils.SLASH).append(iCalHome.getNode(calendarMap + Utils.ICS_EXT).getName());        
-          String url = getEntryUrl(portalName, rssHomeNode.getSession().getWorkspace().getName(), 
-                                   username, path.toString(), rssData.getUrl()) ;
+          /*StringBuffer path = new StringBuffer(Utils.SLASH) ;
+          path.append(iCalHome.getName()).append(Utils.SLASH).append(iCalHome.getNode(calendarMap + Utils.ICS_EXT).getName());     */
+          
+          //String url = rssData.getUrl();
+          
+          // TODO CS-3889
+          /*String url = getEntryUrl(portalName, rssHomeNode.getSession().getWorkspace().getName(), 
+                                   username, path.toString(), rssData.getUrl()) ;*/
+          
           Calendar exoCal = calendars.get(calendarMap) ;
           entry = new SyndEntryImpl();
-          entry.setTitle(exoCal.getName());                
-          entry.setLink(url);        
+          entry.setTitle(exoCal.getName());    
+          
+          entry.setLink(rssHomeNode.getPath() + Utils.SLASH + calendarId);
           entry.setAuthor(username) ;
           description = new SyndContentImpl();
           description.setType(Utils.MIMETYPE_TEXTPLAIN);
@@ -2257,7 +2292,7 @@ public class JCRDataStorage implements DataStorage {
       if(!entries.isEmpty()) {
         feed.setEntries(entries);      
         feed.setEncoding("UTF-8") ;     
-        SyndFeedOutput output = new SyndFeedOutput();      
+        SyndFeedOutput output = new SyndFeedOutput();
         String feedXML = output.outputString(feed);      
         feedXML = StringUtils.replace(feedXML,"&amp;","&");      
         storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
@@ -2272,6 +2307,7 @@ public class JCRDataStorage implements DataStorage {
     }  
     return 1 ;
   }
+  
   /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.impl.DataStorage#updateRss(java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarImportExport)
    */

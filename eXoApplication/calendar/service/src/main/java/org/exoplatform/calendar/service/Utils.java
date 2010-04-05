@@ -159,6 +159,7 @@ public class Utils {
   public static final String CALDAV_NODE  = "WebDavCalendars".intern() ;
   
   public static final String ICS_EXT  = ".ics".intern() ;
+  public static final String RSS_EXT  = ".rss".intern() ;
   
   final public static String STATUS_EMPTY = "".intern();
   final public static String STATUS_PENDING = "pending".intern();
@@ -173,6 +174,9 @@ public class Utils {
   public static final String SPLITTER = "splitter";
   public static final String ASCENDING = "ascending" ;
   public static final String DESCENDING = "descending" ;
+  
+  public static final String SPACE = " " ;
+  
   /**
    * The method creates instance calendar object with time zone is GMT 0
    * @return GregorianCalendar

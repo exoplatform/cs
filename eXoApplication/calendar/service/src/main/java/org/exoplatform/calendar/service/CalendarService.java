@@ -561,4 +561,7 @@ public interface CalendarService extends CalendarServiceLegacy {
   
   public int getTypeOfCalendar(String userName, String calendarId) throws Exception;
   
+  public List<CalendarEvent> getSharedEventByCalendars(String username, List<String> calendarIds) throws Exception ;
+  
+  public void removeFeedData(String username, String title);
 }

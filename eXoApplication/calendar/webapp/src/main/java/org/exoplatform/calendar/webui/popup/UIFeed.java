@@ -18,10 +18,7 @@ package org.exoplatform.calendar.webui.popup;
 
 import java.util.List;
 
-import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -43,11 +40,16 @@ import org.exoplatform.webui.form.UIForm;
     }
 )
 public class UIFeed extends UIForm implements UIPopupComponent{
+  @SuppressWarnings("unchecked")
+  private List feeds_ = null;
+  
   public UIFeed() {}
   
-  public static List getFeeds() throws Exception {
-    CalendarService calService = CalendarUtils.getCalendarService() ;
-    return calService.getFeeds(CalendarUtils.getCurrentUser()) ;
+  @SuppressWarnings("unchecked")
+  public void setFeeds(List feeds) { feeds_ = feeds ; }
+  @SuppressWarnings("unchecked")
+  public List getFeeds() {
+    return feeds_ ;
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}  
@@ -65,8 +67,9 @@ public class UIFeed extends UIForm implements UIPopupComponent{
   static  public class CloseActionListener extends EventListener<UIFeed> {
     public void execute(Event<UIFeed> event) throws Exception {
       UIFeed uiForm = event.getSource() ;
-      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      calendarPortlet.cancelAction() ;
+      UIPopupAction popupAction = uiForm.getAncestorOfType(UIPopupAction.class);
+      popupAction.deActivate();
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
     }
   }  
 }

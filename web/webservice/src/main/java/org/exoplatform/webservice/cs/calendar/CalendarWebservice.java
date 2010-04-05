@@ -37,6 +37,7 @@ import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.chain.web.WebContext;
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -49,7 +50,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.rest.resource.ResourceContainer;
-
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -71,7 +71,8 @@ import com.sun.syndication.io.SyndFeedOutput;
 @Path("/cs/calendar")
 public class CalendarWebservice implements ResourceContainer{
   public final static String BASE_URL = "/portal/rest".intern();
-
+  public final static String BASE_RSS_URL = "/cs/calendar/rss".intern();
+  
   public CalendarWebservice() {}
 
   protected void start() {
@@ -86,7 +87,7 @@ public class CalendarWebservice implements ResourceContainer{
     .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
     ((ComponentRequestLifecycle)oService).endRequest(manager);
   }
-
+  
   /**
    * 
    * @param username : user id
@@ -171,7 +172,7 @@ public class CalendarWebservice implements ResourceContainer{
       if(cal == null) {
         return Response.status(HTTPStatus.NOT_FOUND).entity("Calendar " + calendarId + "is removed").cacheControl(cacheControl).build();
       } 
-      if(cal.getPublicUrl() == null || cal.getPublicUrl().isEmpty()) {
+      if(cal.getPublicUrl() == null || cal.getPublicUrl().length()==0) {
         return Response.status(HTTPStatus.NO_CONTENT).entity("Calendar " + calendarId + "is not public rss").cacheControl(cacheControl).build();
       }
 

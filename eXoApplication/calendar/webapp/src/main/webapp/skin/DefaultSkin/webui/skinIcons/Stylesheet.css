@@ -286,6 +286,11 @@
 	background: url('icons/CalendarIcons.gif') no-repeat right -1087px; /* orientation=rt */
 }
 
+.UICalendarPortlet .CalendarFeedIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1087px; /* orientation=lt */
+	background: url('icons/CalendarIcons.gif') no-repeat right -1087px; /* orientation=rt */
+}
+
 .UICalendarPortlet .SearchIcon {
 	background: url('icons/CalendarIcons.gif') no-repeat left -1117px; /* orientation=lt */
 	background: url('icons/CalendarIcons.gif') no-repeat right -1117px; /* orientation=rt */

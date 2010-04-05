@@ -913,4 +913,11 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     }
     return null ;
   }
+  public List<CalendarEvent> getSharedEventByCalendars(String username, List<String> calendarIds) throws Exception {
+    return storage_.getSharedEventByCalendars(username,calendarIds) ;
+  }
+  
+  public void removeFeedData(String username, String title) {
+    storage_.removeFeedData(username, title);
+  }
 }

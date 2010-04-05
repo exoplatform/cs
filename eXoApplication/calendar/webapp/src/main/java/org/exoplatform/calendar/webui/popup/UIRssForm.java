@@ -177,7 +177,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       if(uiForm.getUIDateTimePicker(PUBLIC_DATE).getCalendar() != null)
         rssData.setPubDate(uiForm.getUIDateTimePicker(PUBLIC_DATE).getCalendar().getTime()) ;
       
-      LinkedHashMap<String, Calendar> calendars = new LinkedHashMap<String, Calendar>() ;
+      /*LinkedHashMap<String, Calendar> calendars = new LinkedHashMap<String, Calendar>() ;
       
       Calendar cal = null;
       for (String calId : calendarIds) {
@@ -198,16 +198,16 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
           calendarService.savePublicCalendar(cal, false, username);
           //calendars.put(calId + Utils.SPLITTER + Utils.PUBLIC_TYPE, uiForm.publicCals_.get(calId)) ;
         }
-      }      
-      /*
-      int result = calendarService.generateRss(CalendarUtils.getCurrentUser(), calendars, rssData) ;
+      } */   
+
+      int result = calendarService.generateRss(CalendarUtils.getCurrentUser(), calendarIds, rssData) ;
       if(result < 0) {
         uiForm.setSelectedTab(INPUT_RSSINFO) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.no-data-generated", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }*/
+      }
       
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;  

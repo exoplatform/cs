@@ -16,6 +16,8 @@
  **/
 package org.exoplatform.calendar.service;
 
+import java.io.InputStream;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -25,11 +27,21 @@ package org.exoplatform.calendar.service;
 public class FeedData {
   private String title ;
   private String url ;
+  private byte[] content = null ;
   
+  public String getFeed() { return title ; }
   public String getTitle() { return title ; }
   public void setTitle(String title) { this.title = title ; }
   
   public String getUrl() { return url ; }
   public void setUrl(String url) { this.url = url ; }
-    
+  
+  public void setContent(InputStream input) throws Exception{
+    if (input != null) {
+      content = new byte[input.available()] ; 
+      input.read(content) ;
+    }
+    else content = null ;
+  }
+  public byte[] getContent() { return content ; }
 }
