@@ -35,7 +35,7 @@
 									<div class="RegisterButtonL">
 										<div class="RegisterButtonR">
 											<div class="RegisterButtonC">
-												<div class="BoldLabel"><a href="$registerUrl"><%=_ctx.appRes("UIHomePagePortlet.cs-register")%></a></div>
+												<div class="BoldLabel"><a href="$registerUrl" target="_blank" ><%=_ctx.appRes("UIHomePagePortlet.cs-register")%></a></div>
 												<div class="NormalLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-register-detail")%></div>
 											</div>
 										</div>
