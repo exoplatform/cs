@@ -18,7 +18,10 @@ package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -199,9 +202,14 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     String[] groups = CalendarUtils.getUserGroups(username) ;
     List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(groups, true, CalendarUtils.getCurrentUser()) ;
     List<Calendar> calendars = new ArrayList<Calendar>() ;
+    Map<String,Calendar> mapCal = new HashMap<String,Calendar>();
     for(GroupCalendarData group : groupCalendars) {
-      calendars.addAll(group.getCalendars()) ;
+      for(Calendar cal:group.getCalendars()){
+        mapCal.put(cal.getId(), cal);
+      }
     }
+    calendars.addAll(mapCal.values());
+    
     return calendars ;
   }
 
