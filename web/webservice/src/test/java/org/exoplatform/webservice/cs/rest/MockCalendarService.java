@@ -792,4 +792,16 @@ public class MockCalendarService implements CalendarService{
     // TODO Auto-generated method stub
     
   }
+
+  @Override
+  public List<CalendarEvent> getSharedEventByCalendars(String username, List<String> calendarIds) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public void removeFeedData(String username, String title) {
+    // TODO Auto-generated method stub
+    
+  }
 }
