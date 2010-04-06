@@ -3,7 +3,7 @@
 ==============================================
 
 ===============
- Introduction
+1 Introduction
 ===============
 
 ** eXo Collaboration Suite provides a rich, Web 2.0 browser-based interface with comprehensive
@@ -27,37 +27,29 @@ experience more productive. It offers several ways to to view and organize your 
 
 
 =============
- What's new?
+2 What's new?
 =============
 exo Collaboration Suite 1.3.4 features several noteworthy changes:
 
+    
     * General
-          o Upgraded to portal 2.5.7
-          o Compatible with jcr 1.10.6
-          o Compatible with webos 1.5.3
+          o Upgraded to portal 2.5.8
+          o Compatible with jcr 1.10.7 
+          o Compatible with webos 1.5.5
           
-          o Right to left (RTL) orientation support
-          o Arabic translations
     * Calendar
-          o Quick add event and task by javaScript for faster
-          o Revamped participants and invitations dialog
-          o Dynamic iCal generation for feeds (CalDAV and RSS)
+          o Fixbug
     * Mail
-          o IMAP folders listing and fetching
-          o Return receipts
-          o New layouts (vertical, horizontal, switch layout)
+          o Fixbug
     * Address Book
-          o Collected adresses adress book to collect contacts from Mail
-          o Enhanced integration in Mail
+          o Exclusion group of user
     * Chat
-          o Jabber chat server
-          o Chat Bar application
-          o WebOS friendly chat application
+          o Improve package when build product
           
 Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes          
           
 =========
- INSTALL
+3 INSTALL
 =========
 
 Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Install+Guide
@@ -123,7 +115,7 @@ All those accounts have the default password "exo".
 
 
 ===========
- RESOURCES
+4 RESOURCES
 ===========
 
      Company site        http://www.exoplatform.com
@@ -133,9 +125,27 @@ All those accounts have the default password "exo".
 
 
 ===========
- CHANGELOG
+5 CHANGELOG
 ===========
 - 1.3.4
+** Bug
+    * [CS-3012] - when view message which has attachment , attachment of this message is not shown in the first view
+    * [CS-3684] - IE7/safari: Lost a part of portlet chat when open room configuration form
+    * [CS-3734] - Webmail: Sorting messages by date
+    * [CS-3851] - ChatBar does'nt work with Internet Explorer 7
+    * [CS-3857] - [Unplanned] AddressBook Portlet is using OrganizationService instead of ContactService for Importing Groups
+    * [CS-3905] - [IBM JVM] Exception with calendar functions
+    * [CS-3920] - JBoss patch doesn't contain the specific server.xml with SSO
+    * [CS-4000] - [Unplanned] Use of webui_fr.properties
+    * [CS-4012] - Do not receive reminder by pop up
+    * [CS-4013] - Check Contact in AIO1.6,3Snapshop
+
+** Improvement
+    * [CS-3274] - Firefox 3.5 support
+    * [CS-3937] - Chat server packaging improvements
+    * [CS-3945] - Configurable exclusions for group addressbooks
+
+- 1.3.3
 
 ** Bug
     * [CS-3191] - IE7: Drag & drop event/task is fail in special case
