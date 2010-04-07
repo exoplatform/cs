@@ -367,8 +367,8 @@
 }
 
 .UICalendarPortlet .ViewAttachmentIcon {
-	background: url('icons/CalendarIcons.gif') no-repeat left -1400px; /* orientation=lt */
-	background: url('icons/CalendarIcons.gif') no-repeat right -1400px; /* orientation=rt */
+	background: url('icons/CalendarIcons.gif') no-repeat left -1405px; /* orientation=lt */
+	background: url('icons/CalendarIcons.gif') no-repeat right -1405px; /* orientation=rt */
 	cursor:pointer;
 	padding-left:16px; /* orientation=lt */
 	padding-right:16px; /* orientation=rt */
