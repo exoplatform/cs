@@ -710,7 +710,7 @@
       <% 
         } else {
       %>
-          <tbody id="TbodyMessageList" viewing="<%=uicomponent.viewing_%>"><tr><td colspan="9">
+          <tbody id="TbodyMessageList" viewing="<%=uicomponent.viewing_%>"><tr><td colspan="8">
             <div class="MessageNotice">
             <% 
             	if (uicomponent.getAccountId()) {
