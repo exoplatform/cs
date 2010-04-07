@@ -19,6 +19,10 @@
 	margin-top: 10px;
 }
 
+.UICalendarPortlet .UIPopupWindow .UIImportForm .UIFormUploadInput .UploadIframe iframe{
+	width: auto;
+}
+
 /********************* UIEventCategoryManager ***************************/
 
 .UICalendarPortlet .UIEventCategoryManager .UIEventCategoryForm {
