@@ -19,8 +19,7 @@
 }
 
 .UIHomePagePortlet .RightAdImage {
-	background: transparent url('DefaultSkin/background/RightHomePage.gif') no-repeat left 70px; /* orientation=lt */
-	background: transparent url('DefaultSkin/background/RightHomePage-rt.gif') no-repeat right 70px; /* orientation=rt */
+	 
 	height: 190px;
 }
 

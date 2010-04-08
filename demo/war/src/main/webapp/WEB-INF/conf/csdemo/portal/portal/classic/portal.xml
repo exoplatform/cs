@@ -31,6 +31,15 @@
   </properties>
     
  	<portal-layout>
+	 <portlet-application>
+      <portlet>
+        <application-ref>csdemo</application-ref>
+        <portlet-ref>CSBannerPortlet</portlet-ref>
+      </portlet>
+      <access-permissions>Everyone</access-permissions>
+	    <show-info-bar>false</show-info-bar>
+	  </portlet-application>
+	 
 	  <!--portlet-application>
       <portlet>
         <application-ref>csdemo</application-ref>
