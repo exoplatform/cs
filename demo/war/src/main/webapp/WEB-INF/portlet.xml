@@ -56,6 +56,40 @@
     
   </portlet>
   
+  
+  <portlet>
+    <description xml:lang="EN">Footer Portlet</description>
+    <portlet-name>CSFooterPortlet</portlet-name>
+    <display-name xml:lang="EN">Footer Portlet</display-name>
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
+    
+    <init-param>
+      <name>webui.configuration</name>
+      <value>/WEB-INF/conf/portlet/web/FooterPortlet/webui/configuration.xml</value>
+    </init-param>    
+
+    <expiration-cache>0</expiration-cache>
+    <supports>
+      <mime-type>text/html</mime-type>
+    </supports>
+    <supported-locale>en</supported-locale>
+    <resource-bundle>locale.portal.webui</resource-bundle>
+    <portlet-info>
+      <title>Footer Portlet</title>
+      <short-title>Footer Portlet</short-title>
+      <keywords>System</keywords>
+    </portlet-info>    
+    
+    <portlet-preferences>
+      <preference>
+        <name>template</name>
+        <value>system:/templates/UIFooterPortlet.gtmpl</value>
+        <read-only>false</read-only>
+      </preference>
+    </portlet-preferences>
+    
+  </portlet>
+  
   <portlet>
     <description xml:lang="EN">CSDemo CSS Controler Portlet</description>
     <portlet-name>CSDemoCSSControlerPortlet</portlet-name>

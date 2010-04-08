@@ -66,7 +66,9 @@
 }
 
 .UIToolbarContainer .NormalContainerBlock .ToolbarContainer {
-	background: #232d36;	
+    background:none repeat scroll 0 0 #232D36;
+    border-left: 1px solid #232D36;
+    border-right: 1px solid #232D36;
 }
 
 .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .TRContainer{
