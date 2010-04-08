@@ -43,18 +43,23 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectItemOption;
+import org.exoplatform.webui.core.model.SelectOption;
+import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
 
+import com.arjuna.ats.internal.jdbc.drivers.modifiers.list;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
@@ -79,7 +84,7 @@ import com.sun.syndication.io.XmlReader;
     }
 )
 public class UIEditFeed extends UIForm implements UIPopupComponent{
-  final static private String SELECT_CALENDAR = "selectCalendar".intern() ;
+  //final static private String SELECT_CALENDAR = "selectCalendar".intern() ;
   final static private String URL = "url".intern() ;
   final static private String NAME = "name".intern() ;
   final static private String CALENDARS = "calendars".intern() ;
@@ -90,11 +95,11 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
   private boolean isNew_ = false;  
   private static String DEFAULT_FEED_NAME = "defaultFeedName".intern();
   
-  private String getURL(String feedName) {     
+  private String getURL(String feedName) throws Exception {     
     String portalName = CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName();
     String restName = PortalContainer.getCurrentRestContextName();
-    return portalName + Utils.SLASH + restName + CalendarWebservice.BASE_RSS_URL 
-      + Utils.SLASH + feedName + Utils.SLASH + IdGenerator.generate() + Utils.ICS_EXT ;
+    return portalName + Utils.SLASH + restName + CalendarWebservice.BASE_RSS_URL  + Utils.SLASH 
+    + CalendarUtils.getCurrentUser() + Utils.SLASH + feedName + Utils.SLASH + IdGenerator.generate() + Utils.RSS_EXT ;
   }
   
   public UIEditFeed() throws Exception {
@@ -119,8 +124,9 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
     
     addUIFormInput(new UIFormInputInfo(CALENDARS, CALENDARS, null)) ;
 
-    List<SelectItemOption<String>> options = getCalendarsHasEvent();
-    addUIFormInput(new UIFormSelectBox(ADDMORE, ADDMORE, options));
+    List<SelectItem> options = new ArrayList<SelectItem>();
+    UIFormSelectBoxWithGroups formSelectBox = new UIFormSelectBoxWithGroups(ADDMORE, ADDMORE, CalendarUtils.getCalendarOption());
+    addUIFormInput(formSelectBox);
     List<ActionData> actions2 = new ArrayList<ActionData>() ;
     ActionData addCalendar = new ActionData() ;
     addCalendar.setActionListener("AddCalendar") ;
@@ -142,8 +148,8 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
   }
   
   public void setNew(boolean isNew) { isNew_ = isNew ; }
-  
-  public List<SelectItemOption<String>> getCalendarsHasEvent() throws Exception {
+  /*
+  private List<SelectItemOption<String>> getCalendarsHasEvent() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>(SELECT_CALENDAR, SELECT_CALENDAR));
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -186,7 +192,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
       }     
     }
     return options;
-  }
+  }*/
   
   public String[] getActions() {
     return new String[]{"Save", "Close"} ;
@@ -213,7 +219,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
     String username = CalendarUtils.getCurrentUser() ;
     for (int i = 0; i < entries.size(); i ++) {
       SyndEntry entry = entries.get(i);
-      String calendarId = entry.getLink().substring(entry.getLink().lastIndexOf("/")+1).replaceAll(".ics", "") ;
+      String calendarId = entry.getLink().substring(entry.getLink().lastIndexOf("/")+1) ;
       Calendar calendar = null;
       try {
         calendar = calendarService.getUserCalendar(username, calendarId) ;
@@ -222,20 +228,22 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
             String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
             calendar.setName(newName);
           }          
-          feedCalendars.put(calendar.getId() + Utils.SPLITTER + Utils.PRIVATE_TYPE, calendar.getName());
+          feedCalendars.put(Utils.PRIVATE_TYPE + Utils.COLON +  calendar.getId() , calendar.getName());
         } else {
-          calendar = calendarService.getSharedCalendars(username, false).getCalendarById(calendarId);
+          try {
+            calendar = calendarService.getSharedCalendars(username, false).getCalendarById(calendarId);
+          } catch (NullPointerException e) {}
           if (calendar != null) {
             if (calendar.getId().equals(Utils.getDefaultCalendarId(calendar.getCalendarOwner())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
               String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
               calendar.setName(newName);
             }
-            feedCalendars.put(calendar.getId() + Utils.SPLITTER + Utils.SHARED_TYPE
+            feedCalendars.put(Utils.SHARED_TYPE + Utils.COLON + calendar.getId()
                               , CalendarUtils.getDisplayShared(calendar.getCalendarOwner(), calendar.getName()));
           } else {
             calendar = calendarService.getGroupCalendar(calendarId);
             if (calendar != null)
-              feedCalendars.put(calendar.getId() + Utils.SPLITTER + Utils.PUBLIC_TYPE, calendar.getName());
+              feedCalendars.put(Utils.PUBLIC_TYPE + Utils.COLON + calendar.getId(), calendar.getName());
           }
         }
       } catch (Exception e) {
@@ -251,21 +259,28 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
   static  public class AddCalendarActionListener extends EventListener<UIEditFeed> {
     public void execute(Event<UIEditFeed> event) throws Exception {
       UIEditFeed uiForm = event.getSource() ;
-      UIFormSelectBox selectBox = (UIFormSelectBox)uiForm.getUIFormSelectBox(UIEditFeed.ADDMORE);
+      UIFormSelectBoxWithGroups selectBox = (UIFormSelectBoxWithGroups)uiForm.getChildById(UIEditFeed.ADDMORE);
       String selectedCal = selectBox.getValue() ;
-      if (selectedCal.equals(selectBox.getOptions().get(0).getValue())) {
+    /*  if (selectedCal.equals(selectBox.getOptions().get(0).getValue())) {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIEditFeed.msg.selectCalendar", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
+      }*/
       String calName = null;
-      for (SelectItemOption<String> item : selectBox.getOptions())
-        if (item.getValue().equals(selectedCal)) {
-          calName = item.getLabel();
-          break;
+      for (SelectItem item : selectBox.getOptions()) {
+        SelectOptionGroup selectOptionGroup = (SelectOptionGroup)item;
+        boolean isFound = false ;
+        for (SelectOption selectOption : selectOptionGroup.getOptions()) {
+          if (selectOption.getValue().equals(selectedCal)) {
+            calName = selectOption.getLabel();
+            isFound = true;
+            break;
+          }
         }
+        if (isFound) break;
+      }
       uiForm.feedCalendars.put(selectedCal, calName);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
     }
@@ -285,8 +300,8 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
       String username = CalendarUtils.getCurrentUser();
       LinkedHashMap<String, Calendar> calendars = new LinkedHashMap<String, Calendar>();
       for (String key : uiForm.feedCalendars.keySet()) {
-        String calId = key.split(Utils.SPLITTER)[0];
-        String type = key.split(Utils.SPLITTER)[1];
+        String calId = key.split(Utils.COLON)[1];
+        String type = key.split(Utils.COLON)[0];
         if (type.equals(CalendarUtils.PRIVATE_TYPE)) calendars.put(key, calendarService.getUserCalendar(username, calId));
         else if (type.equals(CalendarUtils.SHARED_TYPE))
           calendars.put(key,calendarService.getSharedCalendars(username, false).getCalendarById(calId));
@@ -294,13 +309,25 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
       }
       RssData rssData = new RssData() ;
       String tempName = uiForm.getUIStringInput(NAME).getValue().trim() ;
+      UICalendarSettingFeedTab settingFeedTab = uiForm.getAncestorOfType(UIPopupContainer.class)
+      .findFirstComponentOfType(UICalendarSettingFeedTab.class);
+      for (FeedData feedData : settingFeedTab.getData())
+        if (feedData.getTitle().equals(tempName) && (uiForm.isNew_ || !tempName.equals(uiForm.feedData.getTitle()))) {
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+          uiApp.addMessage(new ApplicationMessage("UIEditFeed.msg.feedName_existed", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      
       if(tempName.length() > 4 && tempName.substring(tempName.length() - 4).equals(Utils.RSS_EXT)) rssData.setName(tempName);
       else rssData.setName(tempName + Utils.RSS_EXT) ;
-      rssData.setUrl(uiForm.getUIStringInput(URL).getValue()) ;
+      String url = uiForm.getUIStringInput(URL).getValue();
+      if (!url.contains(tempName)) url = uiForm.getURL(tempName.replaceAll(Utils.SPACE, CalendarUtils.UNDERSCORE)); 
+      rssData.setUrl(url) ;
       String title = uiForm.getUIStringInput(NAME).getValue() ;
       rssData.setTitle(title) ;
       rssData.setDescription(title);
-      rssData.setLink(uiForm.getUIStringInput(URL).getValue());
+      rssData.setLink(url);
       rssData.setVersion("rss_2.0") ;
       int result ;
       if (uiForm.isNew_) {
@@ -315,9 +342,8 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      UICalendarSettingFeedTab settingFeedTab = uiForm.getAncestorOfType(UIPopupContainer.class)
-        .findFirstComponentOfType(UICalendarSettingFeedTab.class);
-      settingFeedTab  .setFeedList(calendarService.getFeeds(username));
+      
+      settingFeedTab.setFeedList(calendarService.getFeeds(username));
       UIPopupAction popupAction = uiForm.getAncestorOfType(UIPopupAction.class);
       popupAction.deActivate();
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);

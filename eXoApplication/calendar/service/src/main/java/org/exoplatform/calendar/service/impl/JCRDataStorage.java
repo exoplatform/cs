@@ -1931,8 +1931,9 @@ public class JCRDataStorage implements DataStorage {
   /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.impl.DataStorage#storeXML(java.lang.String, javax.jcr.Node, java.lang.String, org.exoplatform.calendar.service.RssData)
    */
-  public void storeXML(String feedXML, Node rssHome, String rssNodeName, RssData rssData) throws Exception{
+  public void storeXML(String feedXML, Node rssHome, RssData rssData) throws Exception{
     Node rss ;
+    String rssNodeName = rssData.getName();
     if(rssHome.hasNode(rssNodeName)) rss = rssHome.getNode(rssNodeName);
     else rss = rssHome.addNode(rssNodeName, Utils.EXO_RSS_DATA);
     rss.setProperty(Utils.EXO_BASE_URL, rssData.getUrl()) ;
@@ -2004,14 +2005,12 @@ public class JCRDataStorage implements DataStorage {
         SyndFeedOutput output = new SyndFeedOutput();      
         String feedXML = output.outputString(feed);      
         feedXML = StringUtils.replace(feedXML,"&amp;","&");      
-        storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
+        storeXML(feedXML, rssHomeNode, rssData); 
         rssHomeNode.getSession().save() ;
       } else {
         System.out.println("No data to make caldav!");
         return -1 ;
-      } 
-
-
+      }
     } catch (Exception e) {
       e.printStackTrace();
       return -1 ;
@@ -2215,7 +2214,7 @@ public class JCRDataStorage implements DataStorage {
         SyndFeedOutput output = new SyndFeedOutput();      
         String feedXML = output.outputString(feed);      
         feedXML = StringUtils.replace(feedXML,"&amp;","&");      
-        storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
+        storeXML(feedXML, rssHomeNode, rssData); 
         rssHomeNode.getSession().save() ;
       } else {
         System.out.println("No data to make rss!");
@@ -2255,15 +2254,15 @@ public class JCRDataStorage implements DataStorage {
 
       //String portalName = PortalContainer.getCurrentPortalContainerName(); 
       for(String calendarMap : calendars.keySet()) {
-        String calendarId = calendarMap.split(Utils.SPLITTER)[0] ;
-        String type = calendarMap.split(Utils.SPLITTER)[1] ;
+        String calendarId = calendarMap.split(Utils.COLON)[1] ;
+        String type = calendarMap.split(Utils.COLON)[0] ;
         OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), type) ;
         if(out != null) {
           ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
           try {
-             iCalHome.getNode(calendarMap + Utils.ICS_EXT).setProperty(Utils.EXO_DATA, is) ;  
+             iCalHome.getNode(calendarMap.replace(Utils.COLON, Utils.UNDERSCORE) + Utils.ICS_EXT).setProperty(Utils.EXO_DATA, is) ;  
           } catch (Exception e) {
-            Node ical = iCalHome.addNode(calendarMap + Utils.ICS_EXT, Utils.EXO_ICAL_DATA) ;
+            Node ical = iCalHome.addNode(calendarMap.replace(Utils.COLON, Utils.UNDERSCORE) + Utils.ICS_EXT, Utils.EXO_ICAL_DATA) ;
             ical.setProperty(Utils.EXO_DATA, is) ;
           }
           /*StringBuffer path = new StringBuffer(Utils.SLASH) ;
@@ -2295,7 +2294,7 @@ public class JCRDataStorage implements DataStorage {
         SyndFeedOutput output = new SyndFeedOutput();
         String feedXML = output.outputString(feed);      
         feedXML = StringUtils.replace(feedXML,"&amp;","&");      
-        storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
+        storeXML(feedXML, rssHomeNode, rssData); 
         rssHomeNode.getSession().save() ;
       } else {
         System.out.println("No data to make rss!");
@@ -2486,7 +2485,7 @@ public class JCRDataStorage implements DataStorage {
         SyndFeedOutput output = new SyndFeedOutput();      
         String feedXML = output.outputString(feed);      
         feedXML = StringUtils.replace(feedXML,"&amp;","&");      
-        storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
+        storeXML(feedXML, rssHomeNode, rssData); 
         rssHomeNode.getSession().save() ;
       } else {
         System.out.println("No data to make caldav!");

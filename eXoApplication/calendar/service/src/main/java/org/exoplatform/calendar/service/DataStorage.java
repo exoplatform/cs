@@ -307,7 +307,7 @@ public interface DataStorage {
    */
   public CalendarSetting getCalendarSetting(String username) throws Exception;
 
-  public void storeXML(String feedXML, Node rssHome, String rssNodeName, RssData rssData) throws Exception;
+  public void storeXML(String feedXML, Node rssHome, RssData rssData) throws Exception;
 
   /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.impl.DataStorage#generateCalDav(java.lang.String, java.util.LinkedHashMap, org.exoplatform.calendar.service.RssData, org.exoplatform.calendar.service.CalendarImportExport)

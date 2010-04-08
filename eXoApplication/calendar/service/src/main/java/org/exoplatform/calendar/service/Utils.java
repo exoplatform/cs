@@ -142,7 +142,7 @@ public class Utils {
   public static final String COMMA = ",".intern();
   public static final String COLON = ":".intern() ;
   public static final String SLASH = "/".intern() ;
-  
+  public static final String UNDERSCORE = "_".intern();
   public static final String SLASH_COLON = "/:".intern() ;
   public static final String COLON_SLASH = ":/".intern() ;
   public static final String ANY = "*.*".intern();
