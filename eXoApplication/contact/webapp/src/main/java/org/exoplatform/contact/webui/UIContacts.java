@@ -30,6 +30,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import javax.jcr.AccessDeniedException;
 import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.contact.ContactUtils;
@@ -887,7 +888,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
     }
   }
-
+  
+  private static void showWarnCanNotMove(UIContacts uiContacts, UIApplication uiApplication,Event<UIContacts> event){
+    uiApplication.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move",
+                                            null,
+                                            ApplicationMessage.WARNING));
+    event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages());
+    event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+  }
+  
   static public class DNDContactsActionListener extends EventListener<UIContacts> {
     @SuppressWarnings("unchecked")
     public void execute(Event<UIContacts> event) throws Exception {
@@ -924,7 +933,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       List<String> contactIds = uiContacts.getCheckedContacts();
       List<Contact> contacts = new ArrayList<Contact>();
       List<Contact> sharedContacts = new ArrayList<Contact>();
+      List<Contact> pastedContact = new ArrayList<Contact>();
       Map<String, String> copySharedContacts = new LinkedHashMap<String, String>();
+      
       for (String contactId : contactIds) {
         Contact contact = uiContacts.contactMap.get(contactId);
         if (contact.getId().equals(ContactUtils.getCurrentUser())) {
@@ -936,20 +947,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           return;
         }
         if (contact.getContactType().equals(DataStorage.PUBLIC)) {
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move",
-                                                  null,
-                                                  ApplicationMessage.WARNING));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+          showWarnCanNotMove(uiContacts,uiApp,event);
           return;
         } else if (contact.getContactType().equals(DataStorage.SHARED)
             && uiContacts.isSharedAddress(contact)) {
           if (contact.isOwner()) {
-            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move",
-                                                    null,
-                                                    ApplicationMessage.WARNING));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+            showWarnCanNotMove(uiContacts,uiApp,event);
             return;
           } else {
             String groupId = null;
@@ -957,17 +960,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
               if (uiAddressBooks.getSharedGroups().containsKey(add))
                 groupId = add;
             if (groupId != null && !uiAddressBooks.havePermission(groupId)) {
-              uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move",
-                                                      null,
-                                                      ApplicationMessage.WARNING));
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+              showWarnCanNotMove(uiContacts,uiApp,event);
               return;
             }
           }
         }
       }
-
       // cs- 1630
       Map<String, String> copyedContacts = uiAddressBooks.getCopyContacts();
       for (String contactId : contactIds) {
@@ -999,13 +997,17 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           contacts.add(contact);
         }
       }
-      List<Contact> pastedContact = new ArrayList<Contact>();
-
+    
       if (sharedContacts.size() > 0) {
-        pastedContact = contactService.pasteContacts(username,
-                                                     addressBookId,
-                                                     type,
-                                                     copySharedContacts);
+        try{
+          pastedContact = contactService.pasteContacts(username, addressBookId, type, copySharedContacts);
+        }catch (AccessDeniedException ade){
+          UIApplication windowWarnPaste = uiContacts.getAncestorOfType(UIApplication.class) ;
+          windowWarnPaste.addMessage(new ApplicationMessage("UIContacts.msg.noshared-pastecontact",
+                                                            null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return; 
+        }
         for (Contact contact : sharedContacts) {
           if (uiContacts.isSharedAddress(contact)) {
             String addressId = null;
@@ -1053,6 +1055,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           contact.setViewPermissionGroups(null);
         }
         // cs-2157
+       
         if (pastedContact.size() > 0) {
           uiContacts.setContact(sharedContacts, false);
           uiContacts.pageList_.getAll().addAll(pastedContact);
@@ -1153,6 +1156,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       for (String id : contactIds) {
         Contact contact = uiContacts.contactMap.get(id);
         if (contact.getId().equals(ContactUtils.getCurrentUser())) {
+          //raise unknown error when delete itself
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-delete-ownerContact",
                                                   null,
                                                   ApplicationMessage.WARNING));
