@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.exoplatform.calendar.service.Calendar;
@@ -30,6 +31,9 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.RssData;
+import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -161,8 +165,10 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calendarEvent.setFromDateTime(new Date()) ;
     calendarEvent.setToDateTime(new Date()) ;
     calendarService_.saveEventToSharedCalendar("john", cal.getId(), calendarEvent, true) ;
-    List<String> calendarIds = new ArrayList<String>() ;
+
+    List<String> calendarIds = new ArrayList<String>() ;    
     calendarIds.add(cal.getId()) ;
+    assertEquals(1,calendarService_.getSharedEventByCalendars("john", calendarIds).size());
      
     CalendarEvent event = calendarService_.getUserEventByCalendar(username, calendarIds).get(0) ;
     assertEquals("calendarEvent", event.getSummary()) ;
@@ -255,7 +261,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     assertEquals(events.get(0).getSummary(), "sum") ;
     
     //remove Event category
-    calendarService_.removeEventCategory(username, eventCategory.getName()) ;
+    calendarService_.removeEventCategory(username, eventCategory.getId()) ;
 
     assertNotNull(calendarService_.removeUserCalendar(username, newCalendarIds.get(0))) ;
     assertNotNull(calendarService_.removeCalendarCategory(username, calCategory.getId())) ;
@@ -295,7 +301,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     assertEquals(1, calendarService_.getGroupEventByCalendar(calendarIds).size()) ;
     assertNotNull(calendarService_.removePublicEvent(cal.getId(),calEvent.getId())) ;
     
-    calendarService_.removeEventCategory(username, eventCategory.getName()) ;
+    calendarService_.removeEventCategory(username, eventCategory.getId()) ;
     calendarService_.removeUserCalendar(username, cal.getId()) ;
     calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   }
@@ -352,7 +358,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     eventQuery.setCalendarId(new String[] { movedCal.getId()}) ;
     assertEquals(1,calendarService_.getEvents(username, eventQuery, new String[] {}).size()) ;
     
-    calendarService_.removeEventCategory(username, eventCategory.getName()) ;
+    calendarService_.removeEventCategory(username, eventCategory.getId()) ;
     calendarService_.removeUserCalendar(username, cal.getId()) ;
     calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   } 
@@ -398,7 +404,55 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   }
   
-  
+  public void testFeed() throws Exception {
+    CalendarCategory calCategory = new CalendarCategory();
+    calCategory.setName("CalendarCategoryName");
+    calendarService_.saveCalendarCategory(username, calCategory, true);
+    
+    Calendar cal = new Calendar();
+    cal.setName("CalendarName") ;
+    cal.setCategoryId(calCategory.getId()) ;
+    cal.setPublic(false) ;
+    calendarService_.saveUserCalendar(username, cal, true) ;
+    
+    EventCategory eventCategory = new EventCategory();
+    eventCategory.setName("EventCategoryName3");
+    eventCategory.setDescription("EventCategoryDescription");
+    calendarService_.saveEventCategory(username, eventCategory, true) ;
+    
+    CalendarEvent calEvent = new CalendarEvent();
+    calEvent.setEventCategoryId(eventCategory.getName());
+    calEvent.setSummary("Have a meeting");
+    java.util.Calendar fromCal = java.util.Calendar.getInstance();
+    java.util.Calendar toCal = java.util.Calendar.getInstance(); 
+    toCal.add(java.util.Calendar.HOUR, 1) ;
+    calEvent.setFromDateTime(fromCal.getTime());
+    calEvent.setToDateTime(toCal.getTime());
+    calendarService_.saveUserEvent(username, cal.getId(), calEvent , true);
+    
+    LinkedHashMap<String, Calendar> calendars = new LinkedHashMap<String, Calendar>();
+    calendars.put(Utils.PRIVATE_TYPE + Utils.COLON + cal.getId(), cal);
+    RssData rssData = new RssData() ;
+    
+    String name = "RSS";
+    rssData.setName(name + Utils.RSS_EXT) ;
+    String url = "http://localhost:8080/csdemo/rest-csdemo/cs/calendar/feed/" + username + Utils.SLASH
+      + name + Utils.SLASH + IdGenerator.generate() + Utils.RSS_EXT;
+    rssData.setUrl(url) ;
+    rssData.setTitle(name) ;
+    rssData.setDescription("Description");
+    rssData.setLink(url);
+    rssData.setVersion("rss_2.0") ; 
+    
+    calendarService_.generateRss(username, calendars, rssData);
+    assertEquals(1, calendarService_.getFeeds(username).size());
+    calendarService_.removeFeedData(username, name);
+    assertEquals(0, calendarService_.getFeeds(username).size());
+    
+    calendarService_.removeEventCategory(username, eventCategory.getId()) ;
+    calendarService_.removeUserCalendar(username, cal.getId()) ;
+    calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
+  }
   
    
   

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.jcr.PathNotFoundException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -398,9 +399,25 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
-
       CalendarService calService = (CalendarService)ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+        .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      Calendar calendar = null;
+      if (type.equals(Utils.PRIVATE_TYPE + "")) {
+        calendar = calService.getUserCalendar(username, calendarId);
+      } else if (type.equals(Utils.SHARED_TYPE + "")) {
+        try {
+          calendar = calService.getSharedCalendars(username, false).getCalendarById(calendarId);
+        } catch (NullPointerException ex) {}
+      } else {
+        try {
+          calendar = calService.getGroupCalendar(calendarId);
+        } catch (PathNotFoundException ex) {}
+      }
+      if ((calendar == null) || Utils.isEmpty(calendar.getPublicUrl())) {
+        return Response.status(HTTPStatus.LOCKED)
+          .entity("Calendar " + calendarId + " is not public access").cacheControl(cacheControl).build();
+      }
+      
       CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
       OutputStream out = icalEx.exportCalendar(username, Arrays.asList(calendarId), type);
       InputStream in = new ByteArrayInputStream(out.toString().getBytes());

@@ -22,6 +22,7 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.webui.popup.UICalendarSettingFeedTab;
 import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
 import org.exoplatform.calendar.webui.popup.UIFeed;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
@@ -167,6 +168,18 @@ public class UIActionBar extends UIContainer  {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
+      UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
+      uiPopupContainer.setId(UIPopupContainer.UICALENDAR_SETTING_POPUP);
+      UICalendarSettingForm uiCalendarSettingForm = uiPopupContainer.addChild(UICalendarSettingForm.class, null, null) ;
+      CalendarService cservice = CalendarUtils.getCalendarService() ;
+      CalendarSetting calendarSetting = calendarPortlet.getCalendarSetting() ;
+      uiCalendarSettingForm.init(calendarSetting, cservice) ;
+      uiCalendarSettingForm.setSelectedTab(uiCalendarSettingForm.getChild(UICalendarSettingFeedTab.class).getId());
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+     /* UIActionBar uiActionBar = event.getSource() ;
+      UICalendarPortlet calendarPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
       List feeds = calService.getFeeds(CalendarUtils.getCurrentUser()) ;
@@ -178,7 +191,7 @@ public class UIActionBar extends UIContainer  {
         UIFeed uiFeed = popupAction.activate(UIFeed.class, 600) ;
         uiFeed.setFeeds(feeds);
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ; 
-      }
+      }*/
     }
   }
 }
