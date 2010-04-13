@@ -144,3 +144,7 @@
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem a:hover{
 	color: #058ee6;
 }
+
+.UIToolbarContainer  .UITableColumnContainer .UIStarToolBarPortlet .TabsContainer{
+	position: relative;
+}
