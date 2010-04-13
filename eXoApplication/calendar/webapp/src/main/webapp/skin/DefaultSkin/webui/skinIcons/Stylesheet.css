@@ -931,3 +931,24 @@
 	height: 16px;
 	width: 16px;
 }
+
+
+
+/***************************Edit Feed*********************/
+
+.UICalendarPortlet .UIEditFeed .ResetURLIcon{
+	background: url('icons/CalendarIcons.gif') no-repeat left -1944px; /* orientation=lt */
+	background: url('icons/CalendarIcons.gif') no-repeat right -1944px; /* orientation=rt */
+	height: 16px;
+	width: 16px;
+}
+
+
+.UICalendarPortlet .UIEditFeed .GenerateURLIcon{
+	background: url('icons/CalendarIcons.gif') no-repeat left -1961px; /* orientation=lt */
+	background: url('icons/CalendarIcons.gif') no-repeat right -1961px; /* orientation=rt */
+	height: 16px;
+	width: 16px;
+}
+
+/***************************The end Edit Feed*********************/

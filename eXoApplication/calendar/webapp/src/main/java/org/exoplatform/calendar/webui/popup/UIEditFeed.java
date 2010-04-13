@@ -110,13 +110,14 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData resetURL = new ActionData() ;
     resetURL.setActionListener("ResetURL") ;
-    resetURL.setCssIconClass("BackIcon");
+    resetURL.setCssIconClass("ResetURLIcon");
     resetURL.setActionType(ActionData.TYPE_ICON) ;
     resetURL.setActionName("ResetURL") ;
     actions.add(resetURL) ;
     
     ActionData generateURL = new ActionData() ;
     generateURL.setActionListener("GenerateURL") ;
+    generateURL.setCssIconClass("GenerateURLIcon");
     generateURL.setActionType(ActionData.TYPE_ICON) ;
     generateURL.setActionName("GenerateURL") ;
     actions.add(generateURL) ;
