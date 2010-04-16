@@ -2316,8 +2316,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
   public void pasteAddressBook(String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
     // CS-2389
     if (destType.equals(SHARED) && !haveEditPermissionOnAddressBook(username, destAddress)) {
-      System.out.println("\n Do not have edit permission. \n");
-      throw new Exception();
+      throw new AccessDeniedException();
     }
     SessionProvider sysProvider = createSystemProvider();
     try {
@@ -2393,11 +2392,10 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         } else { // test here
           contact = getSharedContact(username, contactId) ;
           if (contact ==  null) contact = getSharedContactAddressBook(username, contactId) ;
-          
 //        CS-2389
           if (contact != null && !haveEditPermissionOnContact(username, contact)
               && !haveEditPermissionOnAddressBook(username,contact.getAddressBookIds()[0])){
-            throw new AccessDeniedException();
+            contact = null;
           }
         }        
         if (contact != null) contacts.add(contact) ; 

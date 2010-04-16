@@ -466,4 +466,11 @@ public interface ContactService extends ContactServiceLegacy {
    */
   public List<String> getAllsPublicAddressBookIds(String user) throws Exception;
   
+  /**
+   * Check username whether edit permission of contact
+   * @param user name
+   * @return contact
+   */
+  public boolean haveEditPermissionOnContact(String username, Contact contact) throws Exception;
+  
 }

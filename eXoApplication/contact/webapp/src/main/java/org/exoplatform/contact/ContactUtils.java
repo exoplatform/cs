@@ -21,7 +21,11 @@ import javax.jcr.RepositoryException;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataStorage;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
+import org.exoplatform.contact.webui.UIAddressBooks;
+import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
@@ -30,8 +34,13 @@ import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.model.SelectItemOption;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.form.UIForm;
 
 /**
  * Created by The eXo Platform SARL
@@ -240,4 +249,24 @@ public class ContactUtils {
     if (!isEmpty(contact.getMobilePhone())) phones.put(contact.getMobilePhone(),"home");
     return phones;
   }
+  
+  public static boolean isNullArray(String[] array){
+    if(array.length < 1) return true;
+    return false;
+  }
+  
+  //message warning within null parameter
+  public static UIApplication initWarnPopup(UIComponent uicomponent,String messagekey){
+    UIApplication windowWarn = uicomponent.getAncestorOfType(UIApplication.class) ;
+    windowWarn.addMessage(new ApplicationMessage(messagekey, null, ApplicationMessage.WARNING)) ;
+    return windowWarn;
+  }
+  
+  //message warning within parameter
+  public static UIApplication initPopup(UIComponent uicomponent,String messagekey,Object[] para,int type){
+    UIApplication windowPopup = uicomponent.getAncestorOfType(UIApplication.class) ;
+    windowPopup.addMessage(new ApplicationMessage(messagekey, para, type)) ;
+    return windowPopup;
+  }
 }
+

@@ -671,5 +671,10 @@ public class ContactServiceImpl implements ContactService {
   public void saveAddress(String username, String emailAddress) throws Exception {
     storage_.saveAddress(username, emailAddress) ;
   }
+
+  @Override
+  public boolean haveEditPermissionOnContact(String username, Contact contact) throws Exception {
+    return storage_.haveEditPermissionOnContact(username, contact);
+  }
   
 }

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 
+import javax.jcr.AccessDeniedException;
 import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.contact.ContactUtils;
@@ -178,28 +179,46 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       }
       
       List<Contact> pastedContact = new ArrayList<Contact>() ;
+      List<String> unMove = new ArrayList<String>();
       if (sharedContacts.size() > 0 ) {
-        pastedContact = contactService.pasteContacts(username, addressBookId, type, copySharedContacts) ;
-        
+        try {
+          pastedContact = contactService.pasteContacts(username, addressBookId, type, copySharedContacts);   
+        } catch (AccessDeniedException e) {
+          UIApplication uiApp = ContactUtils.initWarnPopup(uiContacts,"UIContacts.msg.noeditpermission");
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
+        }
         for (Contact contact : sharedContacts) {
-          if (uiContacts.isSharedAddress(contact)) {
-            String addressId = null ;
-            for (String add : contact.getAddressBookIds())
-              if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
-            contactService.removeSharedContact(username, addressId, contact.getId()) ;
-          } else {
-            try {
-              contactService.removeUserShareContact(
-                  contact.getPath(), contact.getId(), username) ;              
-            } catch (PathNotFoundException e) {
-              UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
-              uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed", null, 
-                  ApplicationMessage.WARNING)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              return ; 
-            }
+          if(contactService.haveEditPermissionOnContact(username,contact)){
+            if (uiContacts.isSharedAddress(contact)) {
+              String addressId = null ;
+              for (String add : contact.getAddressBookIds())
+                if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
+              contactService.removeSharedContact(username, addressId, contact.getId()) ;
+             } else {
+              try {
+                contactService.removeUserShareContact(
+                    contact.getPath(), contact.getId(), username) ;              
+              } catch (PathNotFoundException e) {
+                UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
+                uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed", null, 
+                    ApplicationMessage.WARNING)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ; 
+              }
+             }
+            contact.setAddressBookIds(new String[] { addressBookId }) ; 
+          }else unMove.add(contact.getFirstName());
+        } 
+        if(unMove.size()>0){
+          StringBuffer sb = new StringBuffer();
+          for(String ct : unMove){
+            sb.append(ct);
+            if(sb.length()<unMove.size())
+            sb.append(", ");
           }
-          contact.setAddressBookIds(new String[] { addressBookId }) ; 
+          UIApplication uiApp = ContactUtils.initPopup(uiContacts, "UIContacts.msg.noeditpermission.detail", new Object[]{sb.toString()}, ApplicationMessage.WARNING);
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         } 
       } 
       if (contacts.size() > 0) {
@@ -245,12 +264,11 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
         if (contacts.size() > 0) uiContacts.setContact(contacts, false) ;
         if (sharedContacts.size() > 0) uiContacts.setContact(sharedContacts, false) ;
       }
-      uiContacts.updateList() ;
+      uiContacts.setContacts(ContactUtils.getContactService().getSharedContacts(username));
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }
   }
-
   
   static  public class CancelActionListener extends EventListener<UIMoveContactsForm> {
     public void execute(Event<UIMoveContactsForm> event) throws Exception {
@@ -259,5 +277,4 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       contactPortlet.cancelAction() ; 
     }
   }
-  
-}
+} 
