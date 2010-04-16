@@ -99,4 +99,9 @@ public class UICalendarPortlet extends UIPortletApplication {
     }
     return cometdContextName;
   }
+  
+  public String getRestContextName() {
+    return PortalContainer.getInstance().getRestContextName();
+  }
+  
 }

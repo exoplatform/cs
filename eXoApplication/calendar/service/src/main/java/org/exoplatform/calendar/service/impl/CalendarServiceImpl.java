@@ -40,6 +40,7 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RssData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
@@ -52,6 +53,7 @@ import org.picocontainer.Startable;
  */
 public class CalendarServiceImpl implements CalendarService, Startable {
 
+  private ResourceBundle rb_;
   private ResourceBundleService rbs_ ;
   private JCRDataStorage                      storage_;
   private Map<String, CalendarImportExport>   calendarImportExport_ = new LinkedHashMap<String, CalendarImportExport>();
@@ -62,7 +64,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     calendarImportExport_.put(CalendarService.EXPORTEDCSV, new CsvImportExport(storage_));
     rbs_ = rbs;
   }
-
+  
   /**
    * {@inheritDoc}
    */
@@ -109,6 +111,11 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    * {@inheritDoc}
    */
   public List<Calendar> getUserCalendars(String username, boolean isShowAll) throws Exception {
+    try {
+      rb_ = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault()) ;
+    } catch (MissingResourceException e) {
+      //e.printStackTrace(); 
+    }    
     return storage_.getUserCalendars(username, isShowAll);
   }
 
@@ -894,11 +901,26 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception {
     return storage_.generateRss(username,calendarIds, rssData, calendarImportExport_.get(CalendarService.ICALENDAR));
   }
+  
+  public ResourceBundle getResourceBundle() throws Exception {
+    /*try { 
+      
+      System.out.println("\n\n beign \n\n");
+      ResourceBundle bundle = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault()) ;
+      System.out.println("\n\n 11 :" + bundle.getString("UIEditFeed.action.delete") + "\n\n");
+      
+      return rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault()) ;
+    } catch (MissingResourceException e) {
+      e.printStackTrace();
+      return null;
+    }*/
+    return rb_;
+  }
 
   public EventCategory getEventCategoryByName(String username, String eventCategoryName) throws Exception {
     ResourceBundle rb = null ;
     try { 
-      rb = rbs_.getResourceBundle("locale.portlet.calendar.CalendarPortlet", Locale.getDefault()) ;
+      rb = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault()) ;
     } catch (MissingResourceException e) {
       //TODO the fist time load 
     }

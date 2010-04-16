@@ -816,7 +816,4 @@ public class CalendarUtils {
     }
   }
   
-  public static String getDisplayShared(String sharedUserId, String name) {
-    return sharedUserId + "- " + name ;
-  }
 }

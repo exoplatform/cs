@@ -176,7 +176,7 @@ public class Utils {
   public static final String DESCENDING = "descending" ;
   
   public static final String SPACE = " " ;
-  
+  public static final String RESOURCEBUNDLE_NAME = "locale.portlet.calendar.CalendarPortlet";
   /**
    * The method creates instance calendar object with time zone is GMT 0
    * @return GregorianCalendar
@@ -254,4 +254,9 @@ public class Utils {
       portalName = portalName.substring(0, portalName.indexOf(":"));
     return RootContainer.getInstance().getPortalContainer(portalName);
   }
+
+  public static String getDisplaySharedCalendar(String sharedUserId, String calName) {
+    return sharedUserId + "- " + calName ;
+  }
+  
 }

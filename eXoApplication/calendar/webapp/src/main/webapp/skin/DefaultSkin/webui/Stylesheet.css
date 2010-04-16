@@ -337,3 +337,17 @@
 .UICalendarPortlet .RemoveBtn {
 	
 }
+/*AutoComplete Style*/
+.AutoCompleteMenu {
+	position:absolute;
+	border: solid 1px black;
+	background:white;
+}
+.AutoCompleteItem {
+	padding: 3px 3px 3px 1px;
+}
+
+.AutoCompleteOver {
+	background: blue;
+	color:white;
+}

@@ -110,7 +110,7 @@ public class JCRDataStorage implements DataStorage {
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
   private RepositoryService  repoService_ ;
   private static final Log log = LogFactory.getLog(JCRDataStorage.class);
-
+  
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService  repoService) throws Exception {
     nodeHierarchyCreator_ = nodeHierarchyCreator ; 
     repoService_ = repoService ;
@@ -465,6 +465,7 @@ public class JCRDataStorage implements DataStorage {
     if(username!= null && getCalendarSetting(username) != null) defaultCalendars = getCalendarSetting(username).getFilterPublicCalendars() ;
     Node calendarHome = getPublicCalendarHome() ;
     QueryManager qm = getSession(createSystemProvider()).getWorkspace().getQueryManager();
+
     for(String groupId : groupIds) {
       StringBuffer queryString = new StringBuffer("/jcr:root" + calendarHome.getPath() 
                                                   + "//element(*,exo:calendar)[@exo:groups='").

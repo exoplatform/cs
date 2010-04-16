@@ -2,7 +2,13 @@
 import java.util.Map;
 import java.util.Map.Entry;
 import org.exoplatform.calendar.webui.popup.UIEventForm.ParticipantStatus;
-
+try {
+  def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().importJavascript('eXo.calendar.AutoComplete','/calendar/javascript/');
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.AutoComplete.init(["' + uicomponent.ADDMORE + '"]);');
+} catch (Exception e) {
+	e.printStackTrace();
+}
 	uiform.begin() ;	 
 	private void renderActions(String fieldKey) {
 		def actions = uicomponent.getActionField(fieldKey) ;

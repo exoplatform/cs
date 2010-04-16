@@ -18,7 +18,6 @@ package org.exoplatform.calendar.webui.popup;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -43,23 +42,16 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItem;
-import org.exoplatform.webui.core.model.SelectItemOption;
-import org.exoplatform.webui.core.model.SelectOption;
-import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
-import org.exoplatform.webui.form.UIFormSelectBox;
-import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
 
-import com.arjuna.ats.internal.jdbc.drivers.modifiers.list;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
@@ -125,9 +117,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
     
     addUIFormInput(new UIFormInputInfo(CALENDARS, CALENDARS, null)) ;
 
-    List<SelectItem> options = new ArrayList<SelectItem>();
-    UIFormSelectBoxWithGroups formSelectBox = new UIFormSelectBoxWithGroups(ADDMORE, ADDMORE, CalendarUtils.getCalendarOption());
-    addUIFormInput(formSelectBox);
+    addUIFormInput(new UIFormStringInput(ADDMORE, ADDMORE, null));
     List<ActionData> actions2 = new ArrayList<ActionData>() ;
     ActionData addCalendar = new ActionData() ;
     addCalendar.setActionListener("AddCalendar") ;
@@ -240,7 +230,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
               calendar.setName(newName);
             }
             feedCalendars.put(Utils.SHARED_TYPE + Utils.COLON + calendar.getId()
-                              , CalendarUtils.getDisplayShared(calendar.getCalendarOwner(), calendar.getName()));
+                              , Utils.getDisplaySharedCalendar(calendar.getCalendarOwner(), calendar.getName()));
           } else {
             calendar = calendarService.getGroupCalendar(calendarId);
             if (calendar != null)
@@ -260,8 +250,75 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
   static  public class AddCalendarActionListener extends EventListener<UIEditFeed> {
     public void execute(Event<UIEditFeed> event) throws Exception {
       UIEditFeed uiForm = event.getSource() ;
+      String value = uiForm.getUIStringInput(UIEditFeed.ADDMORE).getValue();
+      if (CalendarUtils.isEmpty(value)) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIEditFeed.msg.selectCalendar", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      CalendarService calendarService = CalendarUtils.getCalendarService();
+      String username = CalendarUtils.getCurrentUser();
+      List<String> calNameList = new ArrayList<String>();
+      for (String calName : value.split(","))
+        if (!CalendarUtils.isEmpty(calName)) calNameList.add(calName.trim());
+        try {
+          if (!calNameList.isEmpty()) {
+            for(Calendar cal : calendarService.getUserCalendars(username, true)) {
+              if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+                String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+                cal.setName(newName);
+              }
+              
+              if (calNameList.contains(cal.getName())) {
+                uiForm.feedCalendars.put(Utils.PRIVATE_TYPE + Utils.COLON + cal.getId(), cal.getName());
+                calNameList.remove(cal.getName());
+              }
+            }
+          }
+          if (!calNameList.isEmpty()) {
+            List<GroupCalendarData> groupCals  = calendarService.getGroupCalendars(CalendarUtils.getUserGroups(username), true, username) ;
+            for(GroupCalendarData groupData : groupCals)
+              if(groupData != null) {
+                for(Calendar cal : groupData.getCalendars()) {
+                  if (calNameList.contains(cal.getName())) {
+                    uiForm.feedCalendars.put(Utils.PUBLIC_TYPE + Utils.COLON + cal.getId(), cal.getName());
+                    calNameList.remove(cal.getName());
+                  }
+                }
+              }
+          }
+          if (!calNameList.isEmpty()) {
+            GroupCalendarData sharedData  = calendarService.getSharedCalendars(username, true) ;
+            if(sharedData != null) {
+              for(Calendar cal : sharedData.getCalendars()) {
+                if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+                  String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+                  cal.setName(Utils.getDisplaySharedCalendar(cal.getCalendarOwner(), newName));
+                }
+                if (calNameList.contains(cal.getName())) {
+                  uiForm.feedCalendars.put(Utils.SHARED_TYPE + Utils.COLON + cal.getId(), cal.getName());
+                  calNameList.remove(cal.getName());
+                }
+              }
+            }
+          }  
+          if (!calNameList.isEmpty()) {
+            StringBuilder cal = new StringBuilder();
+            for (String name : calNameList)
+              if (cal.length() == 0) cal.append(name);
+              else cal.append("," + name);
+            UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+            uiApp.addMessage(new ApplicationMessage("UIEditFeed.msg.invalidCalName", new String[] {cal.toString()})) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      /*
       UIFormSelectBoxWithGroups selectBox = (UIFormSelectBoxWithGroups)uiForm.getChildById(UIEditFeed.ADDMORE);
-      String selectedCal = selectBox.getValue() ;
+      String selectedCal = selectBox.getValue() ;*/
     /*  if (selectedCal.equals(selectBox.getOptions().get(0).getValue())) {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
@@ -269,7 +326,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }*/
-      String calName = null;
+     /* String calName = null;
       for (SelectItem item : selectBox.getOptions()) {
         SelectOptionGroup selectOptionGroup = (SelectOptionGroup)item;
         boolean isFound = false ;
@@ -282,7 +339,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
         }
         if (isFound) break;
       }
-      uiForm.feedCalendars.put(selectedCal, calName);
+      uiForm.feedCalendars.put(selectedCal, calName);*/
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
     }
   }

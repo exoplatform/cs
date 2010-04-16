@@ -22,14 +22,17 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.jcr.PathNotFoundException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.calendar.service.Calendar;
@@ -38,13 +41,18 @@ import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.rest.resource.ResourceContainer;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.webservice.cs.bean.CalendarData;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -471,4 +479,104 @@ public class CalendarWebservice implements ResourceContainer{
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
     }
   }
+  
+  /**
+   * Get all email from contacts data base, the security level will take from
+   * ConversationState
+   * 
+   * @param keywords : the text to compare with data base
+   * @return application/json content type
+   */
+  @GET
+  @Path("/searchCalendar/{keywords}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response searchCalendar(@PathParam("keywords") String keywords) throws Exception {
+    CalendarService  calendarService = 
+      (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
+    List<String> calendarNames = new ArrayList<String>();
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    try {
+      if (ConversationState.getCurrent().getIdentity() == null)
+        return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
+      String username = ConversationState.getCurrent().getIdentity().getUserId();
+      if (username == null)
+        return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
+      ResourceBundle resourceBundle = calendarService.getResourceBundle();
+
+      for(Calendar cal : calendarService.getUserCalendars(username, true)) {
+        if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+          String newName = resourceBundle.getString("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+          cal.setName(newName);
+        }        
+        if (cal.getName().contains(keywords)) {
+          calendarNames.add(Utils.PRIVATE_TYPE + Utils.COLON + cal.getId() + Utils.COLON + cal.getName());
+        }
+      }      
+      
+      start();
+      OrganizationService oService = (OrganizationService)ExoContainerContext
+      .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+      Object[] objGroupIds = oService.getGroupHandler().findGroupsOfUser(username).toArray() ;
+      List<String> listGroupIds = new ArrayList<String>() ;
+      for (Object object : objGroupIds) {
+        listGroupIds.add(((Group)object).getId()) ;
+      }
+      stop();
+
+      List<GroupCalendarData> groupCals  = calendarService.getGroupCalendars(listGroupIds.toArray(new String[] {}), true, username) ;
+      for(GroupCalendarData groupData : groupCals)
+        if(groupData != null) {
+          for(Calendar cal : groupData.getCalendars()) {
+            if (cal.getName().contains(keywords)) {
+              calendarNames.add(Utils.PUBLIC_TYPE + Utils.COLON + cal.getId() + Utils.COLON + cal.getName());
+            }
+          }
+        }
+      
+      GroupCalendarData sharedData  = calendarService.getSharedCalendars(username, true) ;
+      if(sharedData != null) {
+        for(Calendar cal : sharedData.getCalendars()) {
+          if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+            String newName = resourceBundle.getString("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+            cal.setName(Utils.getDisplaySharedCalendar(cal.getCalendarOwner(), newName));
+          }
+          if (cal.getName().contains(keywords)){
+            calendarNames.add(Utils.SHARED_TYPE + Utils.COLON + cal.getId() + Utils.COLON + cal.getName());
+          }
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      return Response.ok(Status.INTERNAL_SERVER_ERROR).cacheControl(cacheControl).build();
+    }
+    CalendarData data = new CalendarData();
+    data.setInfo(calendarNames);
+    return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+  }
+  /*
+  private final String[] getUserGroups(String username) throws Exception {
+    OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+    Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;
+    String[] groups = new String[objs.length] ;
+    for(int i = 0; i < objs.length ; i ++) {
+      groups[i] = ((Group)objs[i]).getId() ;
+    }
+    return groups ;
+  }*/
+  
+  /*
+  public static String getResourceBundle(String key) {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    ResourceBundle res = context.getApplicationResourceBundle() ;
+    try {
+      return  res.getString(key);
+    } catch (MissingResourceException e) {      
+      e.printStackTrace() ;
+      return null ;
+    }
+  }
+  */
+  
 }

@@ -19,6 +19,7 @@ package org.exoplatform.calendar.service;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 
@@ -564,4 +565,6 @@ public interface CalendarService extends CalendarServiceLegacy {
   public List<CalendarEvent> getSharedEventByCalendars(String username, List<String> calendarIds) throws Exception ;
   
   public void removeFeedData(String username, String title);
+  
+  public ResourceBundle getResourceBundle() throws Exception;
 }
