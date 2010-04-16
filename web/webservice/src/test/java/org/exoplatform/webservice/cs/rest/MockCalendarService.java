@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 
@@ -803,5 +804,10 @@ public class MockCalendarService implements CalendarService{
   public void removeFeedData(String username, String title) {
     // TODO Auto-generated method stub
     
+  }
+  @Override
+  public ResourceBundle getResourceBundle() throws Exception {
+    // TODO Auto-generated method stub
+    return null;
   }
 }
