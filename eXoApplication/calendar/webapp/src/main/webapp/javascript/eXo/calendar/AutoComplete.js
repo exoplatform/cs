@@ -48,7 +48,7 @@ AutoComplete.prototype.processData = function(data){
 	if(!l || l == 0) return;
 	a = this.reArrange(a,this.typingWords);
 	for(var i=0; i < l; i++){
-		tmpList.push(a[i]);
+		tmpList.push(this.addBiTag(a[i]));
 	}
 	return tmpList;
 };

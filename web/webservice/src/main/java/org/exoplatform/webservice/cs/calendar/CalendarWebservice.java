@@ -509,8 +509,8 @@ public class CalendarWebservice implements ResourceContainer{
         if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
           String newName = resourceBundle.getString("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
           cal.setName(newName);
-        }        
-        if (cal.getName().contains(keywords)) {
+        }
+        if (cal.getName().toLowerCase().contains(keywords)) {
           calendarNames.add(Utils.PRIVATE_TYPE + Utils.COLON + cal.getId() + Utils.COLON + cal.getName());
         }
       }      
@@ -529,7 +529,7 @@ public class CalendarWebservice implements ResourceContainer{
       for(GroupCalendarData groupData : groupCals)
         if(groupData != null) {
           for(Calendar cal : groupData.getCalendars()) {
-            if (cal.getName().contains(keywords)) {
+            if (cal.getName().toLowerCase().contains(keywords)) {
               calendarNames.add(Utils.PUBLIC_TYPE + Utils.COLON + cal.getId() + Utils.COLON + cal.getName());
             }
           }
@@ -542,7 +542,7 @@ public class CalendarWebservice implements ResourceContainer{
             String newName = resourceBundle.getString("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
             cal.setName(Utils.getDisplaySharedCalendar(cal.getCalendarOwner(), newName));
           }
-          if (cal.getName().contains(keywords)){
+          if (cal.getName().toLowerCase().contains(keywords)){
             calendarNames.add(Utils.SHARED_TYPE + Utils.COLON + cal.getId() + Utils.COLON + cal.getName());
           }
         }
