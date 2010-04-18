@@ -36,36 +36,13 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 public interface DataStorage {
 
   /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getPublicCalendarServiceHome(org.exoplatform.services.jcr.ext.common.SessionProvider)
-   */
-  @Deprecated
-  public Node getPublicCalendarServiceHome(SessionProvider sProvider) throws Exception;
-
-  /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.impl.DataStorage#getPublicCalendarServiceHome()
    */
   public Node getPublicCalendarServiceHome() throws Exception;
 
-  /**
-   * @deprecated Use {@link #getSharedCalendarHome()}
-   */
-  @Deprecated
-  public Node getSharedCalendarHome(SessionProvider sProvider) throws Exception;
-
   public Node getSharedCalendarHome() throws Exception;
 
-  /**
-   * @deprecated Use {@link #getPublicRoot()}
-   */
-  public Node getPublicRoot(SessionProvider sysProvider) throws Exception;
-
   public Node getPublicRoot() throws Exception;
-
-  /**
-   * @deprecated Use {@link #getUserCalendarServiceHome(String)}
-   */
-  @Deprecated
-  public Node getUserCalendarServiceHome(SessionProvider removeme, String username) throws Exception;
 
   /**
    * Get the Calendar application user data storage root
@@ -74,12 +51,6 @@ public interface DataStorage {
    * @throws Exception
    */
   public Node getUserCalendarServiceHome(String username) throws Exception;
-
-  /**
-   * @deprecated User {@link #getPublicCalendarHome()}
-   */
-  @Deprecated
-  public Node getPublicCalendarHome(SessionProvider sProvider) throws Exception;
 
   public Node getPublicCalendarHome() throws Exception;
 
@@ -162,11 +133,6 @@ public interface DataStorage {
    */
   public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception;
 
-  public void reparePermissions(Node node, String owner) throws Exception;
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#removeCalendarCategory(java.lang.String, java.lang.String)
-   */
   public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception;
 
   public CalendarCategory getCalendarCategory(Node calCategoryNode) throws Exception;
@@ -181,14 +147,6 @@ public interface DataStorage {
    * @see org.exoplatform.calendar.service.impl.DataStorage#saveEventCategory(java.lang.String, org.exoplatform.calendar.service.EventCategory, java.lang.String[], boolean)
    */
   
-  /**
-   * @deprecated Use {@link #saveEventCategory(String,EventCategory,boolean)}
-   */
-  @Deprecated
-  public void saveEventCategory(String username,
-                                EventCategory eventCategory,
-                                String[] values,
-                                boolean isNew) throws Exception;
   public void saveEventCategory(String username,
                                 EventCategory eventCategory,
                                 boolean isNew) throws Exception;
@@ -282,8 +240,6 @@ public interface DataStorage {
   public void syncRemoveEvent(Node eventFolder, String rootEventId) throws Exception;
 
   public Node getReminderFolder(Date fromDate) throws Exception;
-
-  public Node getEventFolder(SessionProvider provider, Date fromDate) throws Exception;
 
   public Node getEventFolder(Date fromDate) throws Exception;
 

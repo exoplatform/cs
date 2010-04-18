@@ -99,152 +99,10 @@ public class JCRDataStorage implements DataStorage {
   }  
   
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getContactUserDataHome(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
-   */
-  public Node getContactUserDataHome(SessionProvider sProvider, String username) throws Exception {
-//  CS-3016    
-    SessionProvider sessionProvider = createSystemProvider() ;
-    Node userDataHome = getNodeByPath(nodeHierarchyCreator_.getUserApplicationNode(sessionProvider, username).getPath(), sessionProvider)  ;
-    try {
-      return  userDataHome.getNode(CONTACT_APP) ;
-    } catch (PathNotFoundException ex) {
-      Node contactUserDataHome = userDataHome.addNode(CONTACT_APP, NT_UNSTRUCTURED) ;
-      userDataHome.getSession().save() ;
-      return contactUserDataHome ;
-    }   
-  }
-  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getContactApplicationDataHome(org.exoplatform.services.jcr.ext.common.SessionProvider)
-   */
-  public Node getContactApplicationDataHome(SessionProvider sProvider) throws Exception {
-    Node applicationDataHome = getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(),sProvider) ;
-    try {
-      return  applicationDataHome.getNode(CONTACT_APP) ;
-    } catch (PathNotFoundException ex) {
-      Node contactApplicationDataHome = applicationDataHome.addNode(CONTACT_APP, NT_UNSTRUCTURED) ;
-      applicationDataHome.save() ;
-      return contactApplicationDataHome ;
-    }
-  }
-  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getPersonalContactsHome(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
-   */
-  public Node getPersonalContactsHome(SessionProvider sProvider, String username) throws Exception {
-    Node userDataHome = getContactUserDataHome(sProvider, username) ;
-    try {
-      return userDataHome.getNode(CONTACTS) ;
-    } catch (PathNotFoundException ex) {
-      Node personalContactsHome = userDataHome.addNode(CONTACTS, NT_UNSTRUCTURED) ;
-      userDataHome.save() ;
-      return personalContactsHome ;
-    }
-  }
-  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getPersonalAddressBooksHome(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
-   */
-  public Node getPersonalAddressBooksHome(SessionProvider sProvider, String username) throws Exception {
-    Node userDataHome = getContactUserDataHome(sProvider, username) ;
-    try {
-      return userDataHome.getNode(PERSONAL_ADDRESS_BOOKS) ;
-    } catch (PathNotFoundException ex) {
-      Node padHome = userDataHome.addNode(PERSONAL_ADDRESS_BOOKS, NT_UNSTRUCTURED) ;
-      userDataHome.save() ;
-      return padHome ;
-    }
-  }
-  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getPublicContactsHome(org.exoplatform.services.jcr.ext.common.SessionProvider)
-   */
-  public Node getPublicContactsHome(SessionProvider sProvider) throws Exception {
-    Node contactServiceHome = getContactApplicationDataHome(sProvider) ;
-    try {
-      return contactServiceHome.getNode(CONTACTS) ;
-    } catch (PathNotFoundException ex) {
-      Node publicHome = contactServiceHome.addNode(CONTACTS, NT_UNSTRUCTURED) ;
-      contactServiceHome.save() ;
-      return publicHome ;
-    }
-  }
-  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getTagsHome(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
-   */
-  public Node getTagsHome(SessionProvider sProvider, String username) throws Exception {
-    Node contactServiceHome = getContactUserDataHome(sProvider, username) ;
-    try {
-      return contactServiceHome.getNode(TAGS) ;
-    } catch (PathNotFoundException ex) {
-      Node tagHome = contactServiceHome.addNode(TAGS, NT_UNSTRUCTURED) ;
-      contactServiceHome.save() ;
-      return tagHome ;
-    } 
-  }
-  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedAddressBooksHome(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
-   */
-  public Node getSharedAddressBooksHome(SessionProvider provider, String userId) throws Exception {
-      Node userData = getContactUserDataHome(provider, userId);
-      Node sharedHome;
-      if (!userData.hasNode(SHARED_HOME)) {
-        sharedHome = userData.addNode(SHARED_HOME, NT_UNSTRUCTURED);
-        userData.save();
-      } else {
-        sharedHome = userData.getNode(SHARED_HOME);
-      }
-
-      Node sharedAddressBooksHome = null;
-      if (!sharedHome.hasNode(SHARED_ADDRESSBOOK)) {
-        sharedAddressBooksHome = sharedHome.addNode(SHARED_ADDRESSBOOK, NT_UNSTRUCTURED);
-        if (sharedAddressBooksHome.canAddMixin("mix:referenceable")) {
-          sharedAddressBooksHome.addMixin("mix:referenceable");
-        }
-        sharedHome.save();        
-      } else {
-        sharedAddressBooksHome = sharedHome.getNode(SHARED_ADDRESSBOOK);
-      }
-      return sharedAddressBooksHome;
-  }
-  
-  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedContactsHome(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
-   */
-  public Node getSharedContactsHome(SessionProvider provider, String userId) throws Exception {
-    Node userData = getContactUserDataHome(provider, userId);
-    Node sharedHome;
-    if (!userData.hasNode(SHARED_HOME)) {
-      sharedHome = userData.addNode(SHARED_HOME, NT_UNSTRUCTURED);
-      userData.save();
-    } else {
-      sharedHome = userData.getNode(SHARED_HOME);
-    }
-
-    Node sharedContactsHome = null;
-    if (!sharedHome.hasNode(SHARED_CONTACT)) {
-      sharedContactsHome = sharedHome.addNode(SHARED_CONTACT, NT_UNSTRUCTURED);
-      if (sharedContactsHome.canAddMixin("mix:referenceable")) {
-        sharedContactsHome.addMixin("mix:referenceable");
-      }
-      sharedHome.save();        
-    } else {
-      sharedContactsHome = sharedHome.getNode(SHARED_CONTACT);
-    }
-    return sharedContactsHome;
-} 
-  
+     
  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedContact(java.lang.String)
-   */
   public Node getSharedContact(String userId) throws Exception {
-    SessionProvider provider = createSystemProvider();
-    Node contactHome = getContactUserDataHome(provider, userId);
+    Node contactHome = getContactUserDataHome(userId);
     Node sharedHome ;
     try {
       sharedHome = contactHome.getNode(SHARED_HOME) ;
@@ -268,9 +126,7 @@ public class JCRDataStorage implements DataStorage {
  * @see org.exoplatform.contact.service.impl.DataStorage#getSharedAddressBooksHome(java.lang.String)
  */
   public Node getSharedAddressBooksHome(String userId) throws Exception {
-    SessionProvider provider = null;
-      provider = createSystemProvider();
-      Node contactHome = getContactUserDataHome(provider, userId);
+      Node contactHome = getContactUserDataHome(userId);
       Node sharedHome;
       try {
         sharedHome = contactHome.getNode(SHARED_HOME);
@@ -308,16 +164,13 @@ public class JCRDataStorage implements DataStorage {
    * @see org.exoplatform.contact.service.impl.DataStorage#loadPublicContactByUser(java.lang.String)
    */
   public Contact loadPublicContactByUser(String userId) throws Exception {
-    SessionProvider provider = createSystemProvider();
     try {
-      Node contactHomeNode = getPersonalContactsHome(provider, userId) ;
+      Node contactHomeNode = getPersonalContactsHome(userId) ;
       return getContact(contactHomeNode.getNode(userId), PUBLIC);
     } catch (PathNotFoundException e) {
       log.error("Public contact " + userId + " not found");
       return null ;
-    } finally {
-      //provider.close();
-    }
+    } 
   }  
   
   /* (non-Javadoc)
@@ -396,10 +249,7 @@ public class JCRDataStorage implements DataStorage {
    * @see org.exoplatform.contact.service.impl.DataStorage#findAllContactsByOwner(java.lang.String)
    */
   public List<Contact> findAllContactsByOwner(String username) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSessionProvider();
-      Node contactHomeNode = getPersonalContactsHome(sProvider, username);
+      Node contactHomeNode = getPersonalContactsHome(username);
       List<Contact> contacts = new ArrayList<Contact>();
       NodeIterator iter = contactHomeNode.getNodes();
       Contact contact;
@@ -409,9 +259,6 @@ public class JCRDataStorage implements DataStorage {
         contacts.add(contact);
       }
       return contacts;
-    } finally {
-      closeSessionProvider(sProvider);
-    }
   }
 
   /* (non-Javadoc)
@@ -420,23 +267,24 @@ public class JCRDataStorage implements DataStorage {
   public ContactPageList findContactsByFilter(String username,
                                                    ContactFilter filter,
                                                    String type) throws Exception {
-    QueryManager qm = null;
-    SessionProvider sysp = createSystemProvider();
-    try {
+    boolean canfind = false ;
+    
       if (type.equals(PERSONAL)) {
         // look in user home
-        Node contactHomeNode = getPersonalContactsHome(sysp, username);
+        Node contactHomeNode = getPersonalContactsHome(username);
         filter.setAccountPath(contactHomeNode.getPath());
-        qm = getSession(sysp).getWorkspace().getQueryManager();
+        canfind = true;
+        //qm = getSession(createSystemProvider()).getWorkspace().getQueryManager();
       } else if (type.equals(PUBLIC)) {
         // look in all users
-        Node publicContactHomeNode = getPublicContactsHome(sysp);
+        Node publicContactHomeNode = getPublicContactsHome();
         String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH);
         filter.setAccountPath(usersPath);
-        qm = publicContactHomeNode.getSession().getWorkspace().getQueryManager();
+        canfind = true;
+        //qm = publicContactHomeNode.getSession().getWorkspace().getQueryManager();
       } else if (type.equals(SHARED)) {
         // look in contacts shared to username
-        Node sharedAddressBookHolder = getSharedAddressBooksHome(sysp,username);
+        Node sharedAddressBookHolder = getSharedAddressBooksHome(username);
         PropertyIterator iter = sharedAddressBookHolder.getReferences();
         Node addressBook;
         while (iter.hasNext()) {
@@ -444,21 +292,19 @@ public class JCRDataStorage implements DataStorage {
           if (addressBook.getName().equals(filter.getCategories()[0])) {
             Node contacts = addressBook.getParent().getParent().getNode(CONTACTS);
             filter.setAccountPath(contacts.getPath());
-            qm = contacts.getSession().getWorkspace().getQueryManager();
+            canfind = true;
+            //qm = contacts.getSession().getWorkspace().getQueryManager();
             break;
           }
         }
       }
-      if (qm != null) {
+      if (canfind) {
         return new ContactPageList(username,
                                    10,
                                    filter.getStatement(),
                                    type);
       }
       return null;
-    } finally {
-      closeSessionProvider(sysp);
-    }
   }
   
   
@@ -466,28 +312,19 @@ public class JCRDataStorage implements DataStorage {
    * @see org.exoplatform.contact.service.impl.DataStorage#loadPersonalContact(java.lang.String, java.lang.String)
    */
   public Contact loadPersonalContact(String ownerUserId, String contactId) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSessionProvider();
-      Node contactHomeNode = getPersonalContactsHome(sProvider, ownerUserId);
+      Node contactHomeNode = getPersonalContactsHome(ownerUserId);
       try {
         return getContact(contactHomeNode.getNode(contactId), PERSONAL);
       } catch (PathNotFoundException ex) {
         return null;
       }
-    } finally {
-      closeSessionProvider(sProvider);
-    }
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#findPersonalContactsByAddressBook(java.lang.String, java.lang.String)
    */
   public ContactPageList findPersonalContactsByAddressBook(String owner, String addressBookId) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSessionProvider();
-      Node userContactsHome = getPersonalContactsHome(sProvider, owner);
+      Node userContactsHome = getPersonalContactsHome(owner);
       String queryString = new StringBuffer("/jcr:root" + userContactsHome.getPath()
           + "//element(*,exo:contact)[@exo:categories='").append(addressBookId)
                                                          .append("']")
@@ -498,9 +335,6 @@ public class JCRDataStorage implements DataStorage {
                                                      queryString,
                                                      PERSONAL);
       return pageList;
-    } finally {
-      closeSessionProvider(sProvider);
-    }
   }
  
   
@@ -533,34 +367,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     if (personal != null) {
       return AddressBookType.Personal;
     }
-    
-    AddressBook publicAb = findPublicAddressBookById(username, addressBookId);
-    if (publicAb != null) {
-      return AddressBookType.Public;
-    }
-    
-    return null;
-    
-
-
-  }
-
-
-
-
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#findPublicAddressBookById(java.lang.String, java.lang.String)
-   */
-  public AddressBook findPublicAddressBookById(String username, String addressBookId) {
-    // TODO Auto-generated method stub
     return null;
   }
 
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#findPersonalAddressBookById(java.lang.String, java.lang.String)
-   */
   public AddressBook findPersonalAddressBookById(String username, String addressBookId) {
     // TODO Auto-generated method stub
     return null;
@@ -571,11 +380,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    * @see org.exoplatform.contact.service.impl.DataStorage#findEmailsInPersonalAddressBook(java.lang.String, java.lang.String)
    */
   public List<String> findEmailsInPersonalAddressBook(String username, String addressBookId) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSessionProvider();
-      Node contactHome = getPersonalContactsHome(sProvider, username);
-      QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
+      Node contactHome = getPersonalContactsHome(username);
+      QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath()
           + "//element(*,exo:contact)[@exo:categories='").append(addressBookId).append("']");
       NodeIterator it = qm.createQuery(queryString.toString(), Query.XPATH).execute().getNodes();
@@ -589,9 +395,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         } catch (PathNotFoundException e) { }
       }
       return address;
-    } finally {
-      closeSessionProvider(sProvider);
-    }
   }
   
   /* (non-Javadoc)
@@ -599,10 +402,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    */
   public List<String> findEmailsInPublicAddressBook(String username, String groupId) throws Exception {
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
-    SessionProvider provider = createSystemProvider();
-    try {
-    //Node publicContactHome = getPublicContactsHome(provider) ;
-    QueryManager qm = getSession(provider).getWorkspace().getQueryManager();
+    QueryManager qm = getSession(createSystemProvider()).getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
                                                 + "//element(*,exo:contact)[@exo:categories='")
                                                 .append(groupId).append("']");                                                
@@ -617,9 +417,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       } catch (PathNotFoundException e) {}
     }
     return address ;
-    } finally {
-      //provider.close();
-    }
   }
   
   /* (non-Javadoc)
@@ -629,7 +426,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
     PropertyIterator iter = sharedAddressBookMock.getReferences() ;
     Node addressBook ;      
-    QueryManager qm = getSession(createSessionProvider()).getWorkspace().getQueryManager();
+    QueryManager qm = sharedAddressBookMock.getSession().getWorkspace().getQueryManager();
     while(iter.hasNext()) {
       addressBook = iter.nextProperty().getParent() ;
       if(addressBook.getName().equals(addressBookId)) {
@@ -683,18 +480,12 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    * @see org.exoplatform.contact.service.impl.DataStorage#loadPersonalAddressBook(java.lang.String, java.lang.String)
    */
   public AddressBook loadPersonalAddressBook(String username, String groupId) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSessionProvider();
       if (groupId == null)
         return null;
-      Node contactGroupHomeNode = getPersonalAddressBooksHome(sProvider, username);
+      Node contactGroupHomeNode = getPersonalAddressBooksHome(username);
       if (contactGroupHomeNode.hasNode(groupId))
         return toAddressBook(contactGroupHomeNode.getNode(groupId));
       return null;
-    } finally {
-      closeSessionProvider(sProvider);
-    }
   }
   
   /* (non-Javadoc)
@@ -717,10 +508,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    * @see org.exoplatform.contact.service.impl.DataStorage#findPersonalAddressBooksByOwner(java.lang.String)
    */
   public List<AddressBook> findPersonalAddressBooksByOwner(String username) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSessionProvider();
-      Node addressBooksHome = getPersonalAddressBooksHome(sProvider, username);
+      Node addressBooksHome = getPersonalAddressBooksHome(username);
       List<AddressBook> addressBooks = new ArrayList<AddressBook>();
       NodeIterator iter = addressBooksHome.getNodes();
       while (iter.hasNext()) {
@@ -728,9 +516,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         addressBooks.add(toAddressBook(addressBook));
       }
       return addressBooks;
-    } finally {
-      closeSessionProvider(sProvider) ;
-    }
   }
 
   /* (non-Javadoc)
@@ -738,10 +523,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    */
   public List<Contact> removeContacts(String username,
                                       List<String> contactIds) throws Exception {
-    SessionProvider sp = null;
-    try {
-      sp = createSessionProvider();
-      Node contactHomeNode = getPersonalContactsHome(sp, username);
+     
+      Node contactHomeNode = getPersonalContactsHome(username);
       List<Contact> contacts = new ArrayList<Contact>();
       for (String contactId : contactIds) {
         if (contactHomeNode.hasNode(contactId)) {
@@ -752,9 +535,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         }
       }
       return contacts;
-    } finally {
-      closeSessionProvider(sp);
-    }
   }
 
   
@@ -762,10 +542,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    * @see org.exoplatform.contact.service.impl.DataStorage#moveContacts(java.lang.String, java.util.List, java.lang.String)
    */
   public void moveContacts(String username, List<Contact> contacts, String addressType ) throws Exception {
-    SessionProvider sysProvider = null ;
-    try {
-      sysProvider = createSystemProvider() ;
-      Node publicContactHome = getPersonalContactsHome(sysProvider, username);
+      Node publicContactHome = getPersonalContactsHome(username);
       for(Contact contact : contacts) {
         if(addressType.equals(PERSONAL)) {        
           saveContact(username, contact, false) ;
@@ -782,68 +559,33 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         }         
       }
       if(publicContactHome.getSession().hasPendingChanges()) publicContactHome.getSession().save() ;
-    } finally {
-      closeSessionProvider(sysProvider) ;
-    }
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getUserContactNodesByGroup(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String, java.lang.String)
-   */
-  public List<String> getUserContactNodesByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    Node contactHome = getPersonalContactsHome(sProvider, username);
-    QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
-                                                + "//element(*,exo:contact)[@exo:categories='").
-                                                append(groupId).
-                                                append("']");
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
-    List<String> contactIds = new ArrayList<String>();
-    while (it.hasNext()) contactIds.add(it.nextNode().getProperty("exo:id").getString());
-    return contactIds ;
-  }
-  
+   
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#removePersonalAddressBook(java.lang.String, java.lang.String)
    */
   public AddressBook removePersonalAddressBook(String username, String addressBookId) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSessionProvider();
-      Node addressBooksHomeNode = getPersonalAddressBooksHome(sProvider, username);
+      Node addressBooksHomeNode = getPersonalAddressBooksHome(username);
       if (addressBooksHomeNode.hasNode(addressBookId)) {
         // load before removing
         AddressBook contactGroup = loadPersonalAddressBook(username, addressBookId);
-       
         // remove the address book
         addressBooksHomeNode.getNode(addressBookId).remove();
         addressBooksHomeNode.save();
         addressBooksHomeNode.getSession().save();
         // Can not call removeContacts(...) here!!!
-        
-
         return contactGroup;
       }
       return null;
-    } finally {
-      closeSessionProvider(sProvider);
-    }
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#clearAddressBook(java.lang.String, java.lang.String)
    */
   public void clearAddressBook(String username, String addressBookId) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSessionProvider();
-      List<String> contactIds = getUserContactNodesByGroup(sProvider, username, addressBookId);
+      List<String> contactIds = getUserContactNodesByGroup(username, addressBookId);
       removeContacts(username, contactIds);
-    } finally {
-      closeSessionProvider(sProvider);
-    }
   }
   
   
@@ -852,38 +594,24 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    * @see org.exoplatform.contact.service.impl.DataStorage#saveContact(java.lang.String, org.exoplatform.contact.service.Contact, boolean)
    */
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      boolean systemPrivilege = false;
-      if (systemPrivilege) {
-        sProvider = createSessionProvider();  
-      } else {
-        sProvider = createSystemProvider();
-      }
-      
-      Node contactHomeNode = getPersonalContactsHome(sProvider, username);
+     
+      Node contactHomeNode = getPersonalContactsHome(username);
       contactToNode(contactHomeNode, contact, isNew);
       contactHomeNode.getSession().save();
-    } finally {
-      closeSessionProvider(sProvider);
-    }
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#savePersonalOrSharedAddressBook(java.lang.String, org.exoplatform.contact.service.AddressBook, boolean)
    */
   public void savePersonalOrSharedAddressBook(String username, AddressBook addressbook, boolean isNew) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSessionProvider();
       Node groupNode = null ;
       String id = addressbook.getId();
       if (isNew) {
-        groupNode = getPersonalAddressBooksHome(sProvider, username).addNode(id, "exo:contactGroup");
+        groupNode = getPersonalAddressBooksHome(username).addNode(id, "exo:contactGroup");
         groupNode.setProperty("exo:id", id);
       } else {
         try {
-          groupNode = getPersonalAddressBooksHome(sProvider, username).getNode(id);
+          groupNode = getPersonalAddressBooksHome(username).getNode(id);
         } catch (PathNotFoundException e) {
           Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
           PropertyIterator iter = sharedAddressBookMock.getReferences() ;
@@ -913,9 +641,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       groupNode.setProperty("exo:viewPermissionGroups", addressbook.getViewPermissionGroups()) ;
       if (isNew) groupNode.getSession().save() ;
       else groupNode.save() ;
-    } finally {
-      closeSessionProvider(sProvider);
-    } 
   }
 
 
@@ -926,9 +651,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    * @see org.exoplatform.contact.service.impl.DataStorage#removeUserShareContact(java.lang.String, java.lang.String, java.lang.String)
    */
   public void removeUserShareContact(String username, String contactId, String removedUser) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSystemProvider();
+    
       Node contactNode ;
       String split = "/" ;    
       // shared contacts
@@ -936,9 +659,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
         String temp = username.split(usersPath)[1] ;
         String userId = temp.split(split)[1] ;
-        contactNode = getPersonalContactsHome(sProvider, userId).getNode(contactId);
+        contactNode = getPersonalContactsHome(userId).getNode(contactId);
       } else {
-        contactNode = getPersonalContactsHome(sProvider, username).getNode(contactId);
+        contactNode = getPersonalContactsHome(username).getNode(contactId);
       }
       List<String> values = new ArrayList<String>(
           Arrays.asList(ValuesToStrings(contactNode.getProperty(SHARED_PROP).getValues())));
@@ -969,24 +692,19 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       contactNode.setProperty(SHARED_PROP, newValues.toArray(new String[] {}));
       contactNode.save() ;
       contactNode.getSession().save();
-    } finally {
-      closeSessionProvider(sProvider) ;
-    }
   }
   
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#unshareAddressBook(java.lang.String, java.lang.String, java.lang.String)
    */
   public void unshareAddressBook(String username, String addressBookId, String removedUser) throws Exception {
-    SessionProvider sysProvider = null;
-    try {
-      sysProvider = createSystemProvider();// current user may not be the owner, so we require a system provider
-      Node addressBookNode = getPersonalAddressBooksHome(sysProvider, username).getNode(addressBookId);
+    
+      Node addressBookNode = getPersonalAddressBooksHome(username).getNode(addressBookId);
       List<String> values = new ArrayList<String>(Arrays.asList(ValuesToStrings(addressBookNode.getProperty(SHARED_PROP)
                                                                                                .getValues())));
       List<String> newValues = new ArrayList<String>(values);
 
-      Node sharedAddress = getSharedAddressBooksHome(sysProvider, removedUser);
+      Node sharedAddress = getSharedAddressBooksHome(removedUser);
       for (String value : values) {
         Node refNode = sharedAddress.getSession().getNodeByUUID(value);
         if (refNode.getPath().equals(sharedAddress.getPath())) {
@@ -1022,20 +740,13 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       addressBookNode.setProperty(SHARED_PROP, newValues.toArray(new String[] {}));
       addressBookNode.save();
       addressBookNode.getSession().save();
-
-    } finally {
-      closeSessionProvider(sysProvider);
-    }
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#shareAddressBook(java.lang.String, java.lang.String, java.util.List)
    */
   public void shareAddressBook(String username, String addressBookId, List<String> receiveUsers) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSessionProvider();
-      Node addressBookNode = getPersonalAddressBooksHome(sProvider, username).getNode(addressBookId);
+      Node addressBookNode = getPersonalAddressBooksHome(username).getNode(addressBookId);
       Value[] values = {};
       if (addressBookNode.isNodeType(SHARED_MIXIN)) {
         values = addressBookNode.getProperty(SHARED_PROP).getValues();
@@ -1085,20 +796,14 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       }
       addressBookNode.save();
       addressBookNode.getSession().save();
-    } finally {
-      closeSessionProvider(sProvider);
-    }
   }
   
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#shareContact(java.lang.String, java.lang.String[], java.util.List)
    */
   public void shareContact(String username, String[] contactIds, List<String> receiveUsers) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSystemProvider();
       for(String contactId : contactIds) {
-        Node contactNode = getPersonalContactsHome(sProvider, username).getNode(contactId);
+        Node contactNode = getPersonalContactsHome(username).getNode(contactId);
         Value[] values = {};
         if (contactNode.isNodeType(SHARED_MIXIN)) {     
           values = contactNode.getProperty(SHARED_PROP).getValues();
@@ -1137,20 +842,14 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
           contactNode.getSession().save();
         }   
       }   
-    } finally {
-      closeSessionProvider(sProvider) ;
-    }
   }
   
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#findSharedAddressBooksByUser(java.lang.String)
    */
   public List<SharedAddressBook> findSharedAddressBooksByUser(String username) throws Exception {
-    SessionProvider sysProvider = null;
-    try {
-      sysProvider = createSystemProvider(); // reading shared address books requires a system session
       List<SharedAddressBook> addressBooks = new ArrayList<SharedAddressBook>();
-      Node sharedAddress = getSharedAddressBooksHome(sysProvider, username);
+      Node sharedAddress = getSharedAddressBooksHome(username);
       PropertyIterator iter = sharedAddress.getReferences();
       while (iter.hasNext()) {
         try {
@@ -1172,9 +871,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         }
       }
       return addressBooks;
-    } finally {
-      closeSessionProvider(sysProvider);
-    }
   }
   
   
@@ -1322,17 +1018,12 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    */
   public ContactPageList getSharedContactsByAddressBook(String username, SharedAddressBook addressBook) throws Exception {
     if (addressBook == null) return null ;
-    SessionProvider sysProvider = createSystemProvider();
-    try {
-      Node contactHome = getPersonalContactsHome(sysProvider, addressBook.getSharedUserId()) ;
+      Node contactHome = getPersonalContactsHome(addressBook.getSharedUserId()) ;
       StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                   + "//element(*,exo:contact)[(@exo:categories='").
                                                   append(addressBook.getId()).append("')]")
                                                   .append(" order by @exo:fullName,@exo:id ascending");
       return new ContactPageList(username, 10, queryString.toString(), SHARED) ;
-    } finally {
-      //sysProvider.close();
-    }
   }
 
   /* (non-Javadoc)
@@ -1351,53 +1042,12 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     }
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getPublicContacts(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String[])
-   */
-  public List<GroupContactData> getPublicContacts(SessionProvider sysProvider, String[] groupIds) throws Exception {
-    List<GroupContactData> contactByGroup = new ArrayList<GroupContactData>() ;
-    List<Contact> contacts;
-    for(String groupId : groupIds) { 
-      contacts = getPublicContactsByAddressBook(groupId).getAll();
-      if(contacts.size() > 0)
-        contactByGroup.add(new GroupContactData(groupId, contacts));     
-    }
-    return contactByGroup;
-  }
-  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getPublicAddressBookContacts(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String[])
-   */
-  public List<String> getPublicAddressBookContacts(SessionProvider sysProvider, String[] groupIds) throws Exception {
-    List<String> groups = new ArrayList<String>();
-    for(String groupId : groupIds) { 
-      if(hasContacts(sysProvider, groupId))  groups.add(groupId) ; 
-    }
-    return groups;
-  }
-  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#hasContacts(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String)
-   */
-  public boolean hasContacts(SessionProvider sysProvider, String groupId) throws Exception {
-    Node contactHome = getPublicContactsHome(sysProvider);
-    QueryManager qm = getSession(sysProvider).getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
-                                                + "//element(*,exo:contact)[@exo:categories='").
-                                                append(groupId).
-                                                append("']");
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
-    if(result.getNodes().getSize() > 0) return true;
-    return false ;
-  } 
+ 
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#addUserContactInAddressBook(java.lang.String, java.lang.String)
    */
   public void addUserContactInAddressBook(String userId, String addressBookId) throws Exception {
-    SessionProvider provider = createSystemProvider();
-    try {
-      Node contactHome = getPersonalContactsHome(provider, userId);
+      Node contactHome = getPersonalContactsHome(userId);
       Node contactNode = contactHome.getNode(userId);
       Value[] values = contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues();
       List<String> ls = new ArrayList<String>();
@@ -1409,9 +1059,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       ls.add(addressBookId);
       contactNode.setProperty(PROP_ADDRESSBOOK_REFS, ls.toArray(new String[] {}));
       contactNode.save();
-    } finally {
-      //provider.close();
-    }
   }
   
   /* (non-Javadoc)
@@ -1545,18 +1192,12 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    * @see org.exoplatform.contact.service.impl.DataStorage#updateTag(java.lang.String, org.exoplatform.contact.service.Tag)
    */
   public void updateTag(String username,Tag tag) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSessionProvider() ;
-    Node tagHome = getTagsHome(sProvider, username) ;
+    Node tagHome = getTagsHome(username) ;
     Node tagNode = tagHome.getNode(tag.getId());
     tagNode.setProperty("exo:name", tag.getName());
     tagNode.setProperty("exo:description", tag.getDescription());
     tagNode.setProperty("exo:color", tag.getColor());
     tagHome.save();
-    } finally {
-      closeSessionProvider(sProvider) ;
-    }
   }
   
   
@@ -1564,26 +1205,17 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    * @see org.exoplatform.contact.service.impl.DataStorage#getTag(java.lang.String, java.lang.String)
    */
   public Tag getTag(String username, String tagId) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSystemProvider();
-      Node tagHomeNode = getTagsHome(sProvider, username);
+      Node tagHomeNode = getTagsHome(username);
       if (tagHomeNode.hasNode(tagId)) 
         return getTag(tagHomeNode.getNode(tagId));
       return null ;
-    } finally {
-      closeSessionProvider(sProvider) ;
-    }
   }
   
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#getTags(java.lang.String)
    */
   public List<Tag> getTags(String username) throws Exception {
-    SessionProvider sProvider = null;
-    try {
-      sProvider = createSystemProvider();
-    Node tagHomeNode = getTagsHome(sProvider, username);
+    Node tagHomeNode = getTagsHome(username);
     List<Tag> tags = new ArrayList<Tag>();
     NodeIterator iter = tagHomeNode.getNodes();
     while (iter.hasNext()) {
@@ -1591,17 +1223,12 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       tags.add(getTag(tagNode));
     }
     return tags;
-    } finally {
-      closeSessionProvider(sProvider) ; 
-    }    
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#getContactPageListByTag(java.lang.String, java.lang.String)
    */
   public DataPageList getContactPageListByTag(String username, String tagId) throws Exception {
-    SessionProvider sysProvider = createSystemProvider();
-    try {
       Map<String, Contact> contacts = new LinkedHashMap<String, Contact>() ;
       QueryResult result = null ;
       NodeIterator it = null ;
@@ -1610,8 +1237,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       StringBuffer queryString = null ;
       
       //query on public contacts
-      Node contactHome = getPersonalContactsHome(sysProvider, username);
-      qm = getSession(sysProvider).getWorkspace().getQueryManager();
+      Node contactHome = getPersonalContactsHome(username);
+      qm = contactHome.getSession().getWorkspace().getQueryManager();
       queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                   + "//element(*,exo:contact)[@exo:tags='").
                                                   append(tagId).
@@ -1627,7 +1254,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       
       //query on public contacts
       String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;      
-      Node publicContactHome = getPublicContactsHome(sysProvider);
+      Node publicContactHome = getPublicContactsHome();
       qm = publicContactHome.getSession().getWorkspace().getQueryManager();
       queryString = new StringBuffer("/jcr:root" + usersPath 
                                                   + "//element(*,exo:contact)[@exo:tags='")
@@ -1672,7 +1299,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         
         // CS-3644
         //qm = contactHomeNode.getSession().getWorkspace().getQueryManager();
-        qm = getSession(sysProvider).getWorkspace().getQueryManager();
+        //qm = getSession(sysProvider).getWorkspace().getQueryManager();
         query = qm.createQuery(queryString.toString(), Query.XPATH);
         result = query.execute();
         it = result.getNodes();    
@@ -1683,9 +1310,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         }
       }
       return new DataPageList(Arrays.asList(contacts.values().toArray(new Contact[] {})), 10, null, false) ;
-    } finally {
-      //sysProvider.close();
-    }
   }
   
   /* (non-Javadoc)
@@ -1694,16 +1318,14 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
   public void addTag(String username, List<String> contactIds, String tagId) throws Exception {
     Map<String, String> tagMap = new HashMap<String, String> () ;
     tagMap.put(tagId, tagId) ;
-    SessionProvider sysProvider = createSystemProvider();
-    try {
       for(String contact : contactIds) {  
         Node contactNode = null ;
         String contactId = contact.split(SPLIT)[0] ;
         String contactType = contact.split(SPLIT)[1] ;
         if (contactType.equals(PERSONAL)) {
-          contactNode = getPersonalContactsHome(sysProvider, username).getNode(contactId) ;
+          contactNode = getPersonalContactsHome(username).getNode(contactId) ;
         } else if (contactType.equals(PUBLIC)) {
-          contactNode = getPersonalContactsHome(sysProvider, contactId).getNode(contactId);
+          contactNode = getPersonalContactsHome(contactId).getNode(contactId);
         } else {
           Node sharedContactMock = getSharedContact(username) ;      
           PropertyIterator iter = sharedContactMock.getReferences() ;
@@ -1751,20 +1373,15 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
           contactNode.save() ;
         }
       }
-    } finally {
-     //if (sysProvider != null) sysProvider.close();
-    }
   }
 
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#addTag(java.lang.String, java.util.List, java.util.List)
    */
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
-    SessionProvider sysProvider = createSystemProvider();
-    Node tagHomeNode = getTagsHome(sysProvider, username);
+    Node tagHomeNode = getTagsHome(username);
     Map<String, String> tagMap = new HashMap<String, String> () ;
     String newTag = null ;
-    try {    
       for(Tag tag : tags) {
         if(!tagHomeNode.hasNode(tag.getId())) {
           newTag = tag.getId() ;
@@ -1783,10 +1400,10 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         String contactId = contact.split(SPLIT)[0] ;
         String contactType = contact.split(SPLIT)[1] ;
         if (contactType.equals(PERSONAL)) {
-          contactNode = getPersonalContactsHome(sysProvider, username).getNode(contactId) ;
+          contactNode = getPersonalContactsHome(username).getNode(contactId) ;
         } else if (contactType.equals(PUBLIC)) {
           
-          contactNode = getPersonalContactsHome(sysProvider, contactId).getNode(contactId);
+          contactNode = getPersonalContactsHome(contactId).getNode(contactId);
         } else {
           Node sharedContactMock = getSharedContact(username) ;      
           PropertyIterator iter = sharedContactMock.getReferences() ;
@@ -1839,9 +1456,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
           contactNode.save() ;
         }
       }
-    } finally {
-     // if (sysProvider != null) sysProvider.close();
-    }
   }
 
   /* (non-Javadoc)
@@ -1865,9 +1479,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    * @see org.exoplatform.contact.service.impl.DataStorage#removeTag(java.lang.String, java.lang.String)
    */
   public Tag removeTag(String username, String tagId) throws Exception {
-    SessionProvider sysProvider = createSystemProvider();
-    try {
-      Node tagHomeNode = getTagsHome(sysProvider, username);
+      Node tagHomeNode = getTagsHome(username);
       Node tagNode = tagHomeNode.getNode(tagId) ;
       Tag tag = getTag(tagNode) ;
       tagNode.remove();
@@ -1875,8 +1487,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       
       // remove tagId in contact property       
       // query on public contacts
-        Node contactHome = getPersonalContactsHome(sysProvider, username);
-        QueryManager qm = getSession(sysProvider).getWorkspace().getQueryManager();
+        Node contactHome = getPersonalContactsHome(username);
+        QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
         StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                     + "//element(*,exo:contact)[@exo:tags='").
                                                     append(tagId).append("']");
@@ -1886,7 +1498,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         //query on public contacts
         String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
         try {
-        Node publicContactHome = getPublicContactsHome(sysProvider);
+        Node publicContactHome = getPublicContactsHome();
         qm = publicContactHome.getSession().getWorkspace().getQueryManager();
         queryString = new StringBuffer("/jcr:root" + usersPath 
                                                     + "//element(*,exo:contact)[@exo:tags='")
@@ -1928,31 +1540,25 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
               + "//element(*,exo:contact)[@exo:tags='").
               append(tagId).
               append("']");
-          qm = getSession(sysProvider).getWorkspace().getQueryManager();
           query = qm.createQuery(queryString.toString(), Query.XPATH);
           removeTagInContacts(query.execute().getNodes(), tagId) ;
         }
       return tag ; 
-    } finally {
-      closeSessionProvider(sysProvider) ;
-    }
   }
   
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#removeContactTag(java.lang.String, java.util.List, java.util.List)
    */
   public void removeContactTag(String username, List<String> contactIds, List<String> tags) throws Exception { 
-    SessionProvider sysProvider = createSystemProvider();
-    try {
       for(String contact : contactIds) {
         Node contactNode = null ;
         String contactId = contact.split(SPLIT)[0] ;
         String contactType = contact.split(SPLIT)[1] ;
         if (contactType.equals(PERSONAL)) {
-          contactNode = getPersonalContactsHome(sysProvider, username).getNode(contactId) ;
+          contactNode = getPersonalContactsHome(username).getNode(contactId) ;
         } else if (contactType.equals(PUBLIC)) {
           
-          contactNode = getPersonalContactsHome(sysProvider, contactId).getNode(contactId);
+          contactNode = getPersonalContactsHome(contactId).getNode(contactId);
         } else {
           Node sharedContactMock = getSharedContact(username) ;      
           PropertyIterator iter = sharedContactMock.getReferences() ;
@@ -2002,9 +1608,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
           }
         }
       }
-    } finally {
-     // if (sysProvider != null) sysProvider.close();
-    }
   }
  
   /* (non-Javadoc)
@@ -2013,9 +1616,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
   public DataPageList searchContact(String username, ContactFilter filter)throws Exception {
     Map<String, Contact> contacts = new LinkedHashMap<String, Contact>() ;
     filter.setUsername(username) ;
-    SessionProvider sysProvider = createSystemProvider();
-    try {      
-      QueryManager qm = null ;
+      QueryManager qm = getSession(createSystemProvider()).getWorkspace().getQueryManager() ;
       Query query = null ;
       String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
       //public contacts
@@ -2025,7 +1626,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         filter.setAccountPath(usersPath) ;
         // minus shared contacts
         filter.setOwner("true") ; 
-        qm = getSession(sysProvider).getWorkspace().getQueryManager() ;
         query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
         NodeIterator itpublic = query.execute().getNodes();
         while(itpublic.hasNext()) {
@@ -2037,7 +1637,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     if (filter.getType() == null || filter.getType().equals(PERSONAL)) {
       // public contacts
       if(username != null && username.length() > 0) {
-        Node contactHome = getPersonalContactsHome(sysProvider, username) ;
+        Node contactHome = getPersonalContactsHome(username) ;
         filter.setAccountPath(contactHome.getPath()) ;      
         qm = contactHome.getSession().getWorkspace().getQueryManager() ;
         query = qm.createQuery(filter.getStatement(), Query.XPATH) ;      
@@ -2067,7 +1667,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
             String temp = sharedContactHomeNode.getPath().split(usersPath)[1] ;
             String userId = temp.split(split)[1] ;
             filter.setUsername(userId) ;
-            qm = getSession(sysProvider).getWorkspace().getQueryManager() ;      
+            //qm = getSession(sysProvider).getWorkspace().getQueryManager() ;      
             query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
             NodeIterator it = query.execute().getNodes() ;
             while(it.hasNext()) {
@@ -2103,7 +1703,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
           // avoid getAllContacts from contactHomeNode of another user. 
           if (!searchByAddress) filter.setCategories(new String[] {addressBook.getName()}) ;
           filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString()) ;
-          qm = getSession(sysProvider).getWorkspace().getQueryManager();
+          //qm = getSession(sysProvider).getWorkspace().getQueryManager();
           qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;
           query = qm.createQuery(filter.getStatement(), Query.XPATH) ;  
           NodeIterator it = query.execute().getNodes() ;
@@ -2117,9 +1717,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     List<Contact> contactList = new ArrayList<Contact>() ;
     contactList.addAll(contacts.values()) ;    
     return new DataPageList(contactList, 10, null, false) ;
-    } finally {
-     //if (sysProvider != null) sysProvider.close();
-    }
   }
   
   /* (non-Javadoc)
@@ -2129,9 +1726,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     Map<String, String> emails = new LinkedHashMap<String, String>() ;
     filter.setUsername(username) ;
     filter.setHasEmails(true);
-    SessionProvider sysProvider = createSystemProvider();
-    try {
-      QueryManager qm ;
+      QueryManager  qm = getContactUserDataHome(username).getSession().getWorkspace().getQueryManager() ;
       Query query ;
       String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
 //      TODO query public contacts
@@ -2139,7 +1734,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         filter.setAccountPath(usersPath) ;
         // TODO minus shared contacts
         filter.setOwner("true") ; 
-        qm =  getSession(sysProvider).getWorkspace().getQueryManager() ;
+       
         query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
         NodeIterator itpublic = query.execute().getNodes();
         while(itpublic.hasNext()) {
@@ -2152,7 +1747,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
 //      TODO query personal contacts
       if (filter.getType() == null ||  filter.getType().equals(PERSONAL)) {
         if(username != null && username.length() > 0) {
-          Node contactHome = getPersonalContactsHome(sysProvider, username) ;
+          Node contactHome = getPersonalContactsHome(username) ;
           filter.setAccountPath(contactHome.getPath()) ;      
           qm = contactHome.getSession().getWorkspace().getQueryManager() ;
           query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
@@ -2195,7 +1790,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         } catch (PathNotFoundException e) { }
         
         if (!filter.isSearchSharedContacts()) { 
-          Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
+          Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
           PropertyIterator iter = sharedAddressBookMock.getReferences() ;
           Node addressBook ;
           
@@ -2207,7 +1802,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
             filter.setAccountPath(contactHomeNode.getPath()) ;
             if (!hasGroup) filter.setCategories(new String[] {addressBook.getName()}) ;
             filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString()) ;
-            qm = getSession(sysProvider).getWorkspace().getQueryManager();
+            //qm = getSession(sysProvider).getWorkspace().getQueryManager();
             qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;      
             query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
             NodeIterator it = query.execute().getNodes() ;
@@ -2220,9 +1815,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         }     
       }
       return emails ;
-    } finally {
-     // if (sysProvider != null) sysProvider.close();
-    }
   }
 
 
@@ -2236,30 +1828,23 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     emails.put(id, fullName + Utils.SPLIT + emailAddresses) ;
   }
   
-  
-  // no public ;
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#copyNodes(org.exoplatform.services.jcr.ext.common.SessionProvider, java.lang.String, javax.jcr.Node, javax.jcr.NodeIterator, java.lang.String, java.lang.String)
-   */
-  public void copyNodes(SessionProvider sProvider, String username,Node srcHomeNode, NodeIterator iter, String destAddress, String destType ) throws Exception {
-    SessionProvider sysProvider = createSystemProvider();
-    try {
+  public void copyNodes(String username,Node srcHomeNode, NodeIterator iter, String destAddress, String destType ) throws Exception {
     if (destType.equals(PERSONAL)) {        
-      Node contactHomeNode = getPersonalContactsHome(sProvider, username);
+      Node contactHomeNode = getPersonalContactsHome(username);
       while (iter.hasNext()) {
         Node oldNode = iter.nextNode() ;
         String newId = "Contact" + IdGenerator.generate() ;
         try {
           contactHomeNode.getSession().getWorkspace().copy(oldNode.getPath(), contactHomeNode.getPath() + "/" + newId) ;        
         } catch (AccessDeniedException ex) {
-          Node userContactHome = getPersonalContactsHome(sysProvider, oldNode.getProperty("exo:id").getString()) ;
+          Node userContactHome = getPersonalContactsHome(oldNode.getProperty("exo:id").getString()) ;
           userContactHome.getSession().getWorkspace().copy(oldNode.getPath(), contactHomeNode.getPath() + "/" + newId) ; 
         }        
         ExtendedNode extNode ;
         try{
           extNode = (ExtendedNode)contactHomeNode.getNode(newId) ;
         }catch (Exception e) {          
-          extNode = (ExtendedNode)getPersonalContactsHome(sysProvider, username).getNode(newId) ;
+          extNode = (ExtendedNode)getPersonalContactsHome(username).getNode(newId) ;
         }
         if (extNode.canAddMixin("exo:privilegeable")) extNode.addMixin("exo:privilegeable");
         String[] arrayPers = {PermissionType.READ, PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE} ;
@@ -2306,23 +1891,17 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         }         
       }      
     }
-    } finally {
-      //if (sysProvider != null) sysProvider.close();
-    }
   }
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#pasteAddressBook(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-   */
+  
+   
   public void pasteAddressBook(String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
     // CS-2389
     if (destType.equals(SHARED) && !haveEditPermissionOnAddressBook(username, destAddress)) {
       throw new AccessDeniedException();
     }
-    SessionProvider sysProvider = createSystemProvider();
-    try {
       if (srcType.equals(PERSONAL)) {
-        Node contactHome = getPersonalContactsHome(sysProvider, username);
-        QueryManager qm = getSession(sysProvider).getWorkspace().getQueryManager();
+        Node contactHome = getPersonalContactsHome(username);
+        QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
         StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                     + "//element(*,exo:contact)[@exo:categories='").
                                                     append(srcAddress).
@@ -2330,11 +1909,11 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         Query query = qm.createQuery(queryString.toString(), Query.XPATH);
         QueryResult result = query.execute();
         NodeIterator iter = result.getNodes() ;
-        copyNodes(sysProvider, username, contactHome, iter, destAddress, destType) ;      
+        copyNodes(username, contactHome, iter, destAddress, destType) ;      
       } else if (srcType.equals(SHARED)) {
         Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
         PropertyIterator proIter = sharedAddressBookMock.getReferences() ;
-        QueryManager qm = getSession(sysProvider).getWorkspace().getQueryManager();
+        QueryManager qm = sharedAddressBookMock.getSession().getWorkspace().getQueryManager();
         Node addressBook ;      
         while(proIter.hasNext()) {
           addressBook = proIter.nextProperty().getParent() ;
@@ -2347,13 +1926,13 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
             Query query = qm.createQuery(queryString.toString(), Query.XPATH);
             QueryResult result = query.execute();
             NodeIterator iter = result.getNodes() ;
-            copyNodes(sysProvider, username, contactHomeNode, iter, destAddress, destType) ;
+            copyNodes(username, contactHomeNode, iter, destAddress, destType) ;
             break ;          
           }
         }          
       } else {
         String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
-        Node publicContactHome = getPublicContactsHome(sysProvider);
+        Node publicContactHome = getPublicContactsHome();
         QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
         StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath
                                                     + "//element(*,exo:contact)[@exo:categories='")
@@ -2361,11 +1940,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         Query query = qm.createQuery(queryString.toString(), Query.XPATH);
         QueryResult result = query.execute();
         NodeIterator iter = result.getNodes() ;
-        copyNodes(sysProvider, username, publicContactHome, iter, destAddress, destType) ;        
+        copyNodes(username, publicContactHome, iter, destAddress, destType) ;        
       }
-    } finally {
-      //sysProvider.close();
-    }
   }
   
   
@@ -2377,9 +1953,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     if (destType.equals(SHARED) && !haveEditPermissionOnAddressBook(username, destAddress)){
       throw new AccessDeniedException();
     }
-    SessionProvider sProvider = null ;
-    try {
-      sProvider = createSystemProvider() ;    
       List<Contact> contacts = new ArrayList<Contact>() ;
       List<Contact> pastedContacts = new ArrayList<Contact>() ;
       for (String contactId : contactsMap.keySet()) {
@@ -2403,7 +1976,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       
       for (Contact contact : contacts) {
         if (destType.equals(PERSONAL)) {
-          Node contactHomeNode = getPersonalContactsHome(sProvider, username);
+          Node contactHomeNode = getPersonalContactsHome(username);
           pastedContacts.add(getContact(saveCopyContact(contactHomeNode, contact, destAddress, destType), destType)) ; 
         } else if (destType.equals(SHARED)) {
           Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
@@ -2420,9 +1993,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         }       
       }
       return pastedContacts ;
-    }finally {
-      closeSessionProvider(sProvider) ;
-    }
   }
   
   /* (non-Javadoc)
@@ -2538,10 +2108,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       Calendar cal = new GregorianCalendar() ;
       contact.setLastUpdated(cal.getTime()) ;
     }
-    SessionProvider sysProvider = createSystemProvider() ;
-    try {
       if(isNew) {
-        Node addressHome = getPersonalAddressBooksHome(sysProvider, user.getUserName()) ;
+        Node addressHome = getPersonalAddressBooksHome(user.getUserName()) ;
         
         AddressBook addressbook = new AddressBook() ;
         addressbook.setId(NewUserListener.DEFAULTGROUP+user.getUserName()) ;
@@ -2579,12 +2147,10 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         contact.setOwner(true) ;
         contact.setOwnerId(user.getUserName()) ;
         saveContact(user.getUserName(), contact, true) ;
+        QueryManager qm = getSession(createSystemProvider()).getWorkspace().getQueryManager();
         String usersPath = nodeHierarchyCreator_.getJcrPath(DataStorage.USERS_PATH) ;
-        QueryManager qm = getSession(sysProvider).getWorkspace().getQueryManager();
         List<String> recievedUser = new ArrayList<String>() ;
         recievedUser.add(user.getUserName()) ;
-
-        
         for (Object object : groupsOfUser) {  
           String groupId = ((Group)object).getId() ;
           // get all address books that current user can see thank to his groups
@@ -2615,16 +2181,13 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
                 new String[] {contactNode.getProperty("exo:id").getString()}, recievedUser) ;
           }
         }
-        Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sysProvider, user.getUserName()) ;
+        Node userApp = nodeHierarchyCreator_.getUserApplicationNode(createSystemProvider(), user.getUserName()) ;
         userApp.getSession().save() ;
       } else {
         if (contact != null) {
           saveContact(user.getUserName(), contact, false) ; 
         }
       }
-    } finally {
-      closeSessionProvider(sysProvider);
-    }
   }  
   
   /* (non-Javadoc)
@@ -2661,10 +2224,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    * @see org.exoplatform.contact.service.impl.DataStorage#closeSessionProvider(org.exoplatform.services.jcr.ext.common.SessionProvider)
    */
   public void closeSessionProvider(SessionProvider sessionProvider) {
-      //TODO re-check this
-//    if (sessionProvider != null) {
-//      sessionProvider.close();
-//    }
+   if (sessionProvider != null) sessionProvider.close(); 
   }
   
   /* (non-Javadoc)
@@ -2686,9 +2246,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     }
   } 
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getNodeByPath(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
-   */
+  
   public Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception {
     return (Node) getSession(sessionProvider).getItem(nodePath);
   }
@@ -2767,5 +2325,157 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
   public Session getSession(SessionProvider sprovider) throws Exception{
     ManageableRepository currentRepo = repoService_.getCurrentRepository() ;
     return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo) ;
+  }
+
+
+  @Override
+  public Node getContactApplicationDataHome() throws Exception {
+    SessionProvider sProvider = createSystemProvider();
+    Node applicationDataHome = getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(),sProvider) ;
+    try {
+      return  applicationDataHome.getNode(CONTACT_APP) ;
+    } catch (PathNotFoundException ex) {
+      Node contactApplicationDataHome = applicationDataHome.addNode(CONTACT_APP, NT_UNSTRUCTURED) ;
+      applicationDataHome.save() ;
+      return contactApplicationDataHome ;
+    }
+  }
+
+
+  @Override
+  public Node getContactUserDataHome(String username) throws Exception {
+    SessionProvider sessionProvider = createSystemProvider() ;
+    Node userDataHome = getNodeByPath(nodeHierarchyCreator_.getUserApplicationNode(sessionProvider, username).getPath(), sessionProvider)  ;
+    try {
+      return  userDataHome.getNode(CONTACT_APP) ;
+    } catch (PathNotFoundException ex) {
+      Node contactUserDataHome = userDataHome.addNode(CONTACT_APP, NT_UNSTRUCTURED) ;
+      userDataHome.getSession().save() ;
+      return contactUserDataHome ;
+    }   
+  }
+
+
+  @Override
+  public Node getPersonalAddressBooksHome(String username) throws Exception {
+    Node userDataHome = getContactUserDataHome(username) ;
+    try {
+      return userDataHome.getNode(PERSONAL_ADDRESS_BOOKS) ;
+    } catch (PathNotFoundException ex) {
+      Node padHome = userDataHome.addNode(PERSONAL_ADDRESS_BOOKS, NT_UNSTRUCTURED) ;
+      userDataHome.save() ;
+      return padHome ;
+    }
+  }
+
+
+  @Override
+  public Node getPersonalContactsHome(String username) throws Exception {
+    Node userDataHome = getContactUserDataHome(username) ;
+    try {
+      return userDataHome.getNode(CONTACTS) ;
+    } catch (PathNotFoundException ex) {
+      Node personalContactsHome = userDataHome.addNode(CONTACTS, NT_UNSTRUCTURED) ;
+      userDataHome.save() ;
+      return personalContactsHome ;
+    }
+  }
+
+
+  @Override
+  public List<String> getPublicAddressBookContacts(String[] groupIds) throws Exception {
+    List<String> groups = new ArrayList<String>();
+    for(String groupId : groupIds) { 
+      if(hasContacts(groupId))  groups.add(groupId) ; 
+    }
+    return groups;
+  }
+
+
+  @Override
+  public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception {
+    List<GroupContactData> contactByGroup = new ArrayList<GroupContactData>() ;
+    List<Contact> contacts;
+    for(String groupId : groupIds) { 
+      contacts = getPublicContactsByAddressBook(groupId).getAll();
+      if(contacts.size() > 0)
+        contactByGroup.add(new GroupContactData(groupId, contacts));     
+    }
+    return contactByGroup;
+  }
+
+
+  @Override
+  public Node getPublicContactsHome() throws Exception {
+    Node contactServiceHome = getContactApplicationDataHome() ;
+    try {
+      return contactServiceHome.getNode(CONTACTS) ;
+    } catch (PathNotFoundException ex) {
+      Node publicHome = contactServiceHome.addNode(CONTACTS, NT_UNSTRUCTURED) ;
+      contactServiceHome.save() ;
+      return publicHome ;
+    }
+  }
+
+
+  @Override
+  public Node getTagsHome(String username) throws Exception {
+    Node contactServiceHome = getContactUserDataHome(username) ;
+    try {
+      return contactServiceHome.getNode(TAGS) ;
+    } catch (PathNotFoundException ex) {
+      Node tagHome = contactServiceHome.addNode(TAGS, NT_UNSTRUCTURED) ;
+      contactServiceHome.save() ;
+      return tagHome ;
+    } 
+  }
+
+
+  @Override
+  public List<String> getUserContactNodesByGroup(String username, String groupId) throws Exception {
+    
+    Node contactHome = getPersonalContactsHome(username);
+    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
+                                                + "//element(*,exo:contact)[@exo:categories='").
+                                                append(groupId).
+                                                append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    List<String> contactIds = new ArrayList<String>();
+    while (it.hasNext()) contactIds.add(it.nextNode().getProperty("exo:id").getString());
+    return contactIds ;
+  }
+
+
+  @Override
+  public boolean hasContacts(String groupId) throws Exception {
+    Node contactHome = getPublicContactsHome();
+    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
+                                                + "//element(*,exo:contact)[@exo:categories='").
+                                                append(groupId).
+                                                append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    if(result.getNodes().getSize() > 0) return true;
+    return false ;
+  }
+
+
+
+
+  @Override
+  public Node getSharedContactsHome(String user) throws Exception{
+    Node contactHome = getContactUserDataHome(user);
+    Node sharedHome ;
+    try {
+      sharedHome = contactHome.getNode(SHARED_HOME) ;
+    } catch (PathNotFoundException ex) {
+      sharedHome = contactHome.addNode(SHARED_HOME, NT_UNSTRUCTURED) ;
+      contactHome.save();
+    }   
+    return sharedHome;
   }
 }

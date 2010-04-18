@@ -224,14 +224,8 @@ public class Contact {
   public String getContactType()  { return contactType ; }
   public void   setContactType(String s) { contactType = s ; }
   
-  /**
-   * @deprecated use {@link #getAddressBookIds()}
-   */
   public String[] getAddressBook() { return addressBookIds ; }
   
-  /**
-   * @deprecated use {@link #setAddressBookIds(String[])}
-   */
   public void   setAddressBook(String[] s) { addressBookIds = s ; }
   
   public String[] getAddressBookIds() { return addressBookIds ; }

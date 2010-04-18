@@ -30,7 +30,7 @@ import javax.jcr.Node;
  * Jul 11, 2007  
  */
 
-public interface CalendarService extends CalendarServiceLegacy {
+public interface CalendarService {
 
   final public static String                  ICALENDAR             = "ICalendar(.ics)".intern();
   final public static String                  EXPORTEDCSV           = "ExportedCsv(.csv)".intern();

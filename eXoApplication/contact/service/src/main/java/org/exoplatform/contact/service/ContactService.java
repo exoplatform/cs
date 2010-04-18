@@ -28,7 +28,7 @@ import org.exoplatform.services.organization.UserProfile;
  *          hung.nguyen@exoplatform.com
  * Jul 11, 2007  
  */
-public interface ContactService extends ContactServiceLegacy {
+public interface ContactService {
   
   /**
    * get all contacts in all personal address books that belong to current user
@@ -465,7 +465,22 @@ public interface ContactService extends ContactServiceLegacy {
    * @return
    */
   public List<String> getAllsPublicAddressBookIds(String user) throws Exception;
-  
+  /**
+   * search all mail from a group of user 
+   * @param username : given user id
+   * @param groupId : given group id
+   * @return list of mail address
+   * @throws Exception
+   */
+  public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception;
+  /**
+   * search all mail from shared group
+   * @param username : given user id
+   * @param addressBookId : given address book id
+   * @return list of mail address
+   * @throws Exception
+   */
+  public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception;
   /**
    * Check username whether edit permission of contact
    * @param user name

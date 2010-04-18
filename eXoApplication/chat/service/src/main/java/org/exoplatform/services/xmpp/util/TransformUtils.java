@@ -88,7 +88,6 @@ public class TransformUtils {
       contactBean.setGroups(groupNames);
       contactBean.setUser(re.getUser());
       contactBean.setPresence(presenceToBean(roster.getPresence(re.getUser())));
-      Iterator<Presence> iterator = roster.getPresences(re.getUser());
       list.add(contactBean);
     }
     return list;
@@ -157,6 +156,7 @@ public class TransformUtils {
     return rooms;
   }
 
+  @SuppressWarnings("unchecked")
   public static SearchResultsBean reportedSateToSearchResultsBean(ReportedData reportedData) {
     List<Map<String, List<String>>> list = new ArrayList<Map<String, List<String>>>();
     Iterator<ReportedData.Row> reportedDataRows = reportedData.getRows();

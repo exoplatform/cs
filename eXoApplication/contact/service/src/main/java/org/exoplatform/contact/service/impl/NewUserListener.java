@@ -16,14 +16,7 @@
  */
 package org.exoplatform.contact.service.impl;
 
-import java.util.List;
-
-import javax.jcr.Node;
-
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.services.jcr.access.AccessControlEntry;
-import org.exoplatform.services.jcr.access.PermissionType;
-import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
@@ -49,21 +42,6 @@ public class NewUserListener extends UserEventListener {
     cservice_.registerNewUser(user, isNew) ;    
   }
 
-
-  @SuppressWarnings("unused")
-  private void reparePermissions(Node node, String owner) throws Exception {
-    ExtendedNode extNode = (ExtendedNode)node ;
-    if (extNode.canAddMixin("exo:privilegeable")) extNode.addMixin("exo:privilegeable");
-    String[] arrayPers = {PermissionType.READ, PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE} ;
-    extNode.setPermission(owner, arrayPers) ;
-    List<AccessControlEntry> permsList = extNode.getACL().getPermissionEntries() ;    
-    for(AccessControlEntry accessControlEntry : permsList) {
-      extNode.setPermission(accessControlEntry.getIdentity(), arrayPers) ;      
-    } 
-    extNode.removePermission("any") ;
-
-  }
   public void preDelete(User user) throws Exception {
-
   }
 }

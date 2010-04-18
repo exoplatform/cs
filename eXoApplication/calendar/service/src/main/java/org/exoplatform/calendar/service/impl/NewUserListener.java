@@ -25,13 +25,8 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValuesParam;
-import org.exoplatform.services.jcr.ext.app.SessionProviderService;
-import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
 
@@ -94,9 +89,11 @@ public class NewUserListener extends UserEventListener {
   public NewUserListener() {};
   /**
    * 
-   * @param  Calendar service geeting from the Portlet Container
-   * @param params  parameters defined in the cs-plugins-configuration.xml
+   * @param cservice : pass throw create object 
+   * @param params : given by config xml
+   * @throws Exception
    */
+  
   @SuppressWarnings("unchecked")
   public NewUserListener(CalendarService cservice, InitParams params)
   throws Exception {
@@ -150,9 +147,6 @@ public class NewUserListener extends UserEventListener {
       for(String u : ignore_users_) {
         if (user.getUserName().equalsIgnoreCase(u)) return ;
       }
-    SessionProvider sysProvider = createSystemProvider();
-    ThreadLocalSessionProviderService sessionProviderService = (ThreadLocalSessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
-    sessionProviderService.setSessionProvider(null, sysProvider);
     try {
       EventCategory eventCategory = new EventCategory();
       eventCategory.setDataInit(true);
@@ -189,14 +183,11 @@ public class NewUserListener extends UserEventListener {
       }
     } catch (Exception e) {
       e.printStackTrace() ;
-    } finally {
-      //sessionProviderService.removeSessionProvider(null);
-    }
+    }  
   }
 
   @Override
   public void postDelete(User user) throws Exception {
-    SessionProvider session = createSystemProvider(); ;
     String username = user.getUserName() ;
     List<GroupCalendarData> gCalData = cservice_.getCalendarCategories(username, true) ;  
     try {
@@ -216,15 +207,7 @@ public class NewUserListener extends UserEventListener {
         }
     } catch (Exception e) {
       e.printStackTrace() ;
-    } finally {
-      //session.close() ;
-    }
-    super.postDelete(user);
+    }  
   }
   
-  private SessionProvider createSystemProvider() {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    return service.getSystemSessionProvider(null) ;    
-  }
 }

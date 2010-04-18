@@ -23,6 +23,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.exoplatform.services.xmpp.ext.transport.AIMTransport;
+import org.exoplatform.services.xmpp.ext.transport.GtalkTransport;
+import org.exoplatform.services.xmpp.ext.transport.ICQTransport;
+import org.exoplatform.services.xmpp.ext.transport.MSNTransport;
+import org.exoplatform.services.xmpp.ext.transport.Transport;
+import org.exoplatform.services.xmpp.ext.transport.XMPPTransport;
+import org.exoplatform.services.xmpp.ext.transport.YahooTransport;
 import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
@@ -35,19 +44,6 @@ import org.jivesoftware.smackx.ServiceDiscoveryManager;
 import org.jivesoftware.smackx.packet.DiscoverInfo;
 import org.jivesoftware.smackx.packet.DiscoverItems;
 import org.jivesoftware.smackx.packet.DiscoverItems.Item;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.xmpp.bean.FieldBean;
-import org.exoplatform.services.xmpp.bean.FormBean;
-import org.exoplatform.services.xmpp.ext.transport.AIMTransport;
-import org.exoplatform.services.xmpp.ext.transport.GtalkTransport;
-import org.exoplatform.services.xmpp.ext.transport.ICQTransport;
-import org.exoplatform.services.xmpp.ext.transport.MSNTransport;
-import org.exoplatform.services.xmpp.ext.transport.Transport;
-import org.exoplatform.services.xmpp.ext.transport.XMPPTransport;
-import org.exoplatform.services.xmpp.ext.transport.YahooTransport;
 
 /**
  * Created by The eXo Platform SAS.
@@ -232,14 +228,14 @@ public class XMPPConnectionUtils {
     public String toXML() {
       StringBuffer sb = new StringBuffer();
       sb.append("<")
-        .append(getElementName())
-        .append(" xmlns=\"")
-        .append(getNamespace())
-        .append("\"/>");
+      .append(getElementName())
+      .append(" xmlns=\"")
+      .append(getNamespace())
+      .append("\"/>");
       return sb.toString();
     }
   }
-  
-  
-  
+
+
+
 }

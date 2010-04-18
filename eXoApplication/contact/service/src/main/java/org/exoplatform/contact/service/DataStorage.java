@@ -48,42 +48,27 @@ public interface DataStorage {
 
   final public static String HYPHEN     = "shared_".intern();
 
-  /**
-   * Get the home node for user data of contact service
-   * @param sProvider
-   * @param username
-   * @return
-   * @throws Exception
-   */
-  public Node getContactUserDataHome(SessionProvider sProvider, String username) throws Exception;
-
-  public Node getContactApplicationDataHome(SessionProvider sProvider) throws Exception;
-
-  public Node getPersonalContactsHome(SessionProvider sProvider, String username) throws Exception;
-
-  public Node getPersonalAddressBooksHome(SessionProvider sProvider, String username) throws Exception;
-
-  public Node getPublicContactsHome(SessionProvider sProvider) throws Exception;
-
-  public Node getTagsHome(SessionProvider sProvider, String username) throws Exception;
-
+  public Node getContactUserDataHome(String username) throws Exception;
+  
+  public Node getContactApplicationDataHome() throws Exception;
+  
+  public Node getPersonalContactsHome(String username) throws Exception;
+  public Node getPersonalAddressBooksHome(String username) throws Exception;
+  public Node getPublicContactsHome() throws Exception;
+  public Node getTagsHome(String username) throws Exception;
+  
   /**
    * get the node that holds references to all address books shared to a given user.
    * @param userId
    * @return
    * @throws Exception
    */
-  public Node getSharedAddressBooksHome(SessionProvider provider, String userId) throws Exception;
+  public Node getSharedAddressBooksHome(String userId) throws Exception;
 
-  public Node getSharedContactsHome(SessionProvider provider, String userId) throws Exception;
-
+  
+  
   public Node getSharedContact(String userId) throws Exception;
 
-  /**
-   * @deprecated use {@link #getSharedAddressBooksHome(SessionProvider, String) and provide an appropriate SessionProvider
-   * this method leaves a system SessionProvider open.
-   */
-  public Node getSharedAddressBooksHome(String userId) throws Exception;
 
   public String[] ValuesToStrings(Value[] Val) throws Exception;
 
@@ -110,8 +95,6 @@ public interface DataStorage {
 
   public AddressBookType getAddressBookType(String username, String addressBookId) throws Exception;
 
-  public AddressBook findPublicAddressBookById(String username, String addressBookId);
-
   public AddressBook findPersonalAddressBookById(String username, String addressBookId);
 
   public List<String> findEmailsInPersonalAddressBook(String username, String addressBookId) throws Exception;
@@ -131,10 +114,8 @@ public interface DataStorage {
   public List<Contact> removeContacts(String username, List<String> contactIds) throws Exception;
 
   public void moveContacts(String username, List<Contact> contacts, String addressType) throws Exception;
-
-  public List<String> getUserContactNodesByGroup(SessionProvider sProvider,
-                                                 String username,
-                                                 String groupId) throws Exception;
+ 
+  public List<String> getUserContactNodesByGroup(String username, String groupId) throws Exception;
 
   /**
    * Remove a personal addressBook. Does not clean the contacts it contains
@@ -189,11 +170,11 @@ public interface DataStorage {
 
   public ContactPageList getPublicContactsByAddressBook(String groupId) throws Exception;
 
-  public List<GroupContactData> getPublicContacts(SessionProvider sysProvider, String[] groupIds) throws Exception;
+  public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception;
+  public List<String> getPublicAddressBookContacts(String[] groupIds) throws Exception;
 
-  public List<String> getPublicAddressBookContacts(SessionProvider sysProvider, String[] groupIds) throws Exception;
 
-  public boolean hasContacts(SessionProvider sysProvider, String groupId) throws Exception;
+  public boolean hasContacts(String groupId) throws Exception;
 
   public void addUserContactInAddressBook(String userId, String addressBookId) throws Exception;
 
@@ -225,14 +206,8 @@ public interface DataStorage {
 
   public void feedEmailResult(Map<String, String> emails, Node contactNode) throws Exception;
 
-  // no public ;
-  public void copyNodes(SessionProvider sProvider,
-                        String username,
-                        Node srcHomeNode,
-                        NodeIterator iter,
-                        String destAddress,
-                        String destType) throws Exception;
-
+  public void copyNodes(String username,Node srcHomeNode, NodeIterator iter, String destAddress, String destType ) throws Exception;
+  
   public void pasteAddressBook(String username,
                                String srcAddress,
                                String srcType,
@@ -279,6 +254,7 @@ public interface DataStorage {
 
   public Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception;
 
+  
   public String valuesToString(Value[] values);
 
   public boolean haveEditPermissionOnAddressBook(String username, String addressBookId) throws Exception;
@@ -288,5 +264,7 @@ public interface DataStorage {
   public Session getSession(SessionProvider sprovider) throws Exception;
   
   public enum AddressBookType {Personal, Shared, Public};
+  
+  public Node getSharedContactsHome(String user) throws Exception;
 
 }
