@@ -24,8 +24,7 @@
     <div class="UIVerticalSlideTabs">
       <div class="UpArrowBar" title="Up Level">
         <%
-          String upLevelLink = "#" ;
-          if(selectedNode != null) upLevelLink = uicomponent.event("UpLevel") ;                
+          String upLevelLink = uicomponent.event("UpLevel");                
         %>
         <a href="<%=upLevelLink%>">
           <div class="NavigationUpArrowIcon"><span></span></div>
@@ -65,7 +64,7 @@
                 <div class="TabRight">
                   <div class="TabRepeat" onclick="<%=actionLink%>">
                     <div class="<%=cIcon%>"><span></span></div>
-                    <a class="<%=cLabel%>" href="#"><%=node.getLabel()%></a>
+                    <span class="<%=cLabel%>"><%=node.getLabel()%></span>
                     <div class="<%=cButton%>"><span></span></div>
                     <div style="clear: both"><span></span></div>
                   </div>

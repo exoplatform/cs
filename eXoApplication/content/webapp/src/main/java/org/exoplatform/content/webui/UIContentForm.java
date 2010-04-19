@@ -14,7 +14,7 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.content.webui.UIDescription;
+import org.exoplatform.webui.core.UIDescription;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -56,10 +56,10 @@ public class UIContentForm extends UIForm {
     for(int i = 0 ; i < types.size() ; i++) {
       option_.add(new SelectItemOption<String>(types.get(i).toUpperCase(), types.get(i).toString())) ;
     }
-    addUIFormInput(new UIFormStringInput(FIELD_ID, FIELD_ID, null));
+    addUIFormInput(new UIFormStringInput(FIELD_ID, FIELD_ID, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormStringInput(FIELD_URL, FIELD_URL, null).
                    addValidator(URLValidator.class));
-    addUIFormInput(new UIFormStringInput(FIELD_LABEL, FIELD_LABEL, null).
+    addUIFormInput(new UIFormStringInput(FIELD_LABEL, FIELD_LABEL, null).addValidator(MandatoryValidator.class).
                    addValidator(StringLengthValidator.class, 1, 20));
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)).
     addUIFormInput(new UIFormSelectBox(FIELD_TYPE, FIELD_TYPE, option_).
