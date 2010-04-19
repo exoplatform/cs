@@ -56,10 +56,10 @@ public class UIContentForm extends UIForm {
     for(int i = 0 ; i < types.size() ; i++) {
       option_.add(new SelectItemOption<String>(types.get(i).toUpperCase(), types.get(i).toString())) ;
     }
-    addUIFormInput(new UIFormStringInput(FIELD_ID, FIELD_ID, null));
+    addUIFormInput(new UIFormStringInput(FIELD_ID, FIELD_ID, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormStringInput(FIELD_URL, FIELD_URL, null).
                    addValidator(URLValidator.class));
-    addUIFormInput(new UIFormStringInput(FIELD_LABEL, FIELD_LABEL, null).
+    addUIFormInput(new UIFormStringInput(FIELD_LABEL, FIELD_LABEL, null).addValidator(MandatoryValidator.class).
                    addValidator(StringLengthValidator.class, 1, 20));
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)).
     addUIFormInput(new UIFormSelectBox(FIELD_TYPE, FIELD_TYPE, option_).
