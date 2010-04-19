@@ -79,8 +79,8 @@ import org.exoplatform.webui.form.ext.UIFormColorPicker.Colors;
                    @EventConfig(listeners = UICalendars.ExportCalendarActionListener.class), 
                    @EventConfig(listeners = UICalendars.ExportCalendarsActionListener.class), 
                    @EventConfig(listeners = UICalendars.ImportCalendarActionListener.class),
-                   @EventConfig(listeners = UICalendars.GenerateRssActionListener.class), 
-                   @EventConfig(listeners = UICalendars.GenerateCalDavActionListener.class), 
+                   //@EventConfig(listeners = UICalendars.GenerateRssActionListener.class), 
+                   //@EventConfig(listeners = UICalendars.GenerateCalDavActionListener.class), 
                    @EventConfig(listeners = UICalendars.AddEventActionListener.class),
                    @EventConfig(listeners = UICalendars.AddTaskActionListener.class),
                    @EventConfig(listeners = UICalendars.EditCalendarActionListener.class),
@@ -758,7 +758,7 @@ public class UICalendars extends UIForm  {
       }
     }
   }
-
+/*
   static  public class GenerateRssActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
@@ -853,7 +853,7 @@ public class UICalendars extends UIForm  {
       uiCalDavForm.init(userCals, sharedCals, publicCals) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
-  }
+  }*/
   static  public class ShareCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;

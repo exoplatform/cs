@@ -28,6 +28,7 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
@@ -77,6 +78,7 @@ import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
                    @EventConfig(listeners = UICalendarForm.CancelActionListener.class, phase=Phase.DECODE),
                    @EventConfig(listeners = UICalendarForm.SelectTabActionListener.class, phase=Phase.DECODE),
                    @EventConfig(listeners = UICalendarForm.OpenActionListener.class, phase=Phase.DECODE),
+                   @EventConfig(listeners = UICalendarForm.ShowPublicURLActionListener.class, phase=Phase.DECODE),
                    @EventConfig(listeners = UICalendarForm.ActiveActionListener.class, phase=Phase.DECODE),
                    @EventConfig(listeners = UICalendarForm.DeactiveActionListener.class, phase=Phase.DECODE)
                  }
@@ -228,10 +230,13 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   }
   public boolean isAddNew() { return isAddNew_ ; }
   public void init(Calendar calendar) throws Exception {
-
     isAddNew_ = false ;
     calendar_ = calendar ;
-    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR);
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR);    
+    if (calendar.getId().equals(Utils.getDefaultCalendarId(CalendarUtils.getCurrentUser())) && calendar.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+      String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+      calendar.setName(newName);
+    }
     setDisplayName(calendar.getName()) ;
     setDescription(calendar.getDescription()) ;
     UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
@@ -709,6 +714,33 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     }
   }
 
+  static public class ShowPublicURLActionListener extends EventListener<UICalendarForm> {
+    public void execute(Event<UICalendarForm> event) throws Exception {
+      UICalendarForm uiForm = event.getSource();
+      if(uiForm.isAddNew_) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
+        uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.need-save-calendar-first", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      } else {
+        String url = event.getRequestContext().getRequestParameter(OBJECTID);
+        if(url ==null || url.isEmpty()) return;
+        
+        UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+        UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class);
+        
+        UIFeed uiFeed = uiChildPopup.activate(UIFeed.class, 600) ;
+        List<FeedData> feeds = new ArrayList<FeedData>() ;
+        FeedData feedData = new FeedData();
+        feedData.setTitle(uiForm.getDisplayName());
+        feedData.setUrl(url);
+        feeds.add(feedData);
+        uiFeed.setFeeds(feeds);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+        
+      }
+    }
+  }
+  
   static public class ActiveActionListener extends EventListener<UICalendarForm> {
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource();
