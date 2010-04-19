@@ -177,10 +177,4 @@ public class NewUserListener extends UserEventListener {
       e.printStackTrace() ;
     }  
   }
-
-  @Override
-  public void postDelete(User user) throws Exception {
-   
-  }
-  
 }
