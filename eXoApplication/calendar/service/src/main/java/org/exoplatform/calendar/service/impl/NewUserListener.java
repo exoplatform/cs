@@ -185,29 +185,4 @@ public class NewUserListener extends UserEventListener {
       e.printStackTrace() ;
     }  
   }
-
-  @Override
-  public void postDelete(User user) throws Exception {
-    String username = user.getUserName() ;
-    List<GroupCalendarData> gCalData = cservice_.getCalendarCategories(username, true) ;  
-    try {
-      if(!gCalData.isEmpty())
-        for (GroupCalendarData gCal : gCalData) {
-          cservice_.removeCalendarCategory(username, gCal.getId()) ;
-        }
-      List<EventCategory> eCats = cservice_.getEventCategories(username) ;
-      if(!eCats.isEmpty())
-        for(EventCategory ecat : eCats) {
-          cservice_.removeEventCategory(username, ecat.getId()) ;
-        }
-      GroupCalendarData   calData = cservice_.getSharedCalendars(username, true) ;
-      if(calData != null && !calData.getCalendars().isEmpty())
-        for(Calendar cal : calData.getCalendars()) {
-          cservice_.removeSharedCalendar(username, cal.getId()) ;
-        }
-    } catch (Exception e) {
-      e.printStackTrace() ;
-    }  
-  }
-  
 }
