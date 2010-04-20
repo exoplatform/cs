@@ -66,7 +66,9 @@
 }
 
 .UIToolbarContainer .NormalContainerBlock .ToolbarContainer {
-	background: #232d36;	
+    background:none repeat scroll 0 0 #232D36;
+    border-left: 1px solid #232D36;
+    border-right: 1px solid #232D36;
 }
 
 .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .TRContainer{
@@ -74,7 +76,7 @@
 }
 
 .UIToolbarContainer .ToolbarContainer a {
-	color:#ababab;
+	color:white;
 }
 
 .UIToolbarContainer .UIHorizontalTabs .UITab {
@@ -88,7 +90,7 @@
 }
 
 .UIToolbarContainer .GroupIcon {
-	background:transparent url(/csdemo/templates/skin/webui/component/UIBannerPortlet/DefaultSkin/background/GroupIcon.gif) no-repeat left 5px;
+	background:transparent url(/csdemo/templates/skin/webui/component/UIBannerPortlet/DefaultSkin/background/GroupIcon.png) no-repeat left 5px;
 	margin-left:10px;
 }
 
@@ -103,29 +105,46 @@
 }
 
 
+.UIToolbarContainer .MailIcon {
+	background:transparent url(/csdemo/templates/skin/webui/component/UIBannerPortlet/DefaultSkin/background/Mail.png) no-repeat 8px 8px;
+	margin-left:10px;
+}
+
+.UIToolbarContainer .ContactIcon{
+	background:transparent url(/csdemo/templates/skin/webui/component/UIBannerPortlet/DefaultSkin/background/Contact.png) no-repeat 8px 9px;
+	margin-left:10px;
+}
+
+.UIToolbarContainer .CalendarIcon {
+	background:transparent url(/csdemo/templates/skin/webui/component/UIBannerPortlet/DefaultSkin/background/Calenda.png) no-repeat 8px 9px;
+	margin-left:10px;
+}
+
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer {
 	z-index: 100;
-	border: 1px solid #555555;
+	border: 1px solid #999999;
 }
 
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer .TitleBar{
-	background: #7F858A;
-	color: #333333;
+	background: #d7d7d7;
+	opacity: 1;
 }
 
-.UIToolbarContainer .UITableColumnContainer .MenuItemContainer .TitleBar{
-	background: #7F858A;
-	color: #333333;
-}
 
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem{
-	background: #adadad;
+	background: #f3f3f3;
+	opacity: 1;
 }
 
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem a{
-	color: #e9e9e9;
+	color: #444444;
+	font-weight: normal;
 }
 
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem a:hover{
-	color: white;
+	color: #058ee6;
+}
+
+.UIToolbarContainer  .UITableColumnContainer .UIStarToolBarPortlet .TabsContainer{
+	position: relative;
 }

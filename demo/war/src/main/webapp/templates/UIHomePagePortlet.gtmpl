@@ -31,6 +31,16 @@
 						<div class="HomePortletAdBackround">
 							<div class="RightAdImage">
 								<div class="EmptyBlock"><span></span></div>
+								<div class="RegisterButton">
+									<div class="RegisterButtonL">
+										<div class="RegisterButtonR">
+											<div class="RegisterButtonC">
+												<div class="BoldLabel"><a href="$registerUrl" ><%=_ctx.appRes("UIHomePagePortlet.cs-register")%></a></div>
+												<div class="NormalLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-register-detail")%></div>
+											</div>
+										</div>
+									</div>
+								</div>
 								<%if(prContext.getRemoteUser() != null) {%>
 								<div class="LoginButton" onclick="eXo.portal.logout();">
 									<div class="LoginButtonL">
@@ -54,18 +64,8 @@
 									</div>
 								</div>
 							  <%}%>
-								<div class="RegisterButton">
-									<div class="RegisterButtonL">
-										<div class="RegisterButtonR">
-											<div class="RegisterButtonC">
-												<div class="BoldLabel"><a href="$registerUrl"><%=_ctx.appRes("UIHomePagePortlet.cs-register")%></a></div>
-												<div class="NormalLabel"><%=_ctx.appRes("UIHomePagePortlet.cs-register-detail")%></div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="VersionDemo"><%=_ctx.appRes("UIHomePagePortlet.cs-slogan")%></div>
-							</div>
+								
+				     		</div>
 						</div>
 						<table style="table-layout: fixed; width: 100%;-width: auto;">
 							<tr>
@@ -98,7 +98,7 @@
 											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-3")%></div>
 											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-4")%></div>
 											<div class="Text">-&nbsp;<%=_ctx.appRes("UIHomePagePortlet.cs-address-book-5")%></div>
-											<div class="Text"><span></span></div>
+											<div class="Text">&nbsp;</div>
 											
 										</div>
 									</div>

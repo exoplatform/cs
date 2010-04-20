@@ -142,7 +142,7 @@ public class Utils {
   public static final String COMMA = ",".intern();
   public static final String COLON = ":".intern() ;
   public static final String SLASH = "/".intern() ;
-  
+  public static final String UNDERSCORE = "_".intern();
   public static final String SLASH_COLON = "/:".intern() ;
   public static final String COLON_SLASH = ":/".intern() ;
   public static final String ANY = "*.*".intern();
@@ -159,6 +159,7 @@ public class Utils {
   public static final String CALDAV_NODE  = "WebDavCalendars".intern() ;
   
   public static final String ICS_EXT  = ".ics".intern() ;
+  public static final String RSS_EXT  = ".rss".intern() ;
   
   final public static String STATUS_EMPTY = "".intern();
   final public static String STATUS_PENDING = "pending".intern();
@@ -173,6 +174,9 @@ public class Utils {
   public static final String SPLITTER = "splitter";
   public static final String ASCENDING = "ascending" ;
   public static final String DESCENDING = "descending" ;
+  
+  public static final String SPACE = " " ;
+  public static final String RESOURCEBUNDLE_NAME = "locale.portlet.calendar.CalendarPortlet";
   /**
    * The method creates instance calendar object with time zone is GMT 0
    * @return GregorianCalendar
@@ -250,4 +254,9 @@ public class Utils {
       portalName = portalName.substring(0, portalName.indexOf(":"));
     return RootContainer.getInstance().getPortalContainer(portalName);
   }
+
+  public static String getDisplaySharedCalendar(String sharedUserId, String calName) {
+    return sharedUserId + "- " + calName ;
+  }
+  
 }

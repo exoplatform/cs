@@ -19,6 +19,7 @@ package org.exoplatform.calendar.service;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 
@@ -29,7 +30,7 @@ import javax.jcr.Node;
  * Jul 11, 2007  
  */
 
-public interface CalendarService extends CalendarServiceLegacy {
+public interface CalendarService {
 
   final public static String                  ICALENDAR             = "ICalendar(.ics)".intern();
   final public static String                  EXPORTEDCSV           = "ExportedCsv(.csv)".intern();
@@ -561,4 +562,9 @@ public interface CalendarService extends CalendarServiceLegacy {
   
   public int getTypeOfCalendar(String userName, String calendarId) throws Exception;
   
+  public List<CalendarEvent> getSharedEventByCalendars(String username, List<String> calendarIds) throws Exception ;
+  
+  public void removeFeedData(String username, String title);
+  
+  public ResourceBundle getResourceBundle() throws Exception;
 }

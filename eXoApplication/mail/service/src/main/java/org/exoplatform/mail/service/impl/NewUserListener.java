@@ -21,7 +21,6 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
 
@@ -66,7 +65,6 @@ public class NewUserListener extends UserEventListener {
     outgoingPort   = params.getValueParam("outgoingPort").getValue() ;
   }
 
-  @SuppressWarnings("deprecation")
   public void postSave(User user, boolean isNew) throws Exception {
     if(!isNew) return ;
     String fullName     = user.getFullName();
@@ -96,7 +94,6 @@ public class NewUserListener extends UserEventListener {
     acc.setOutgoingHost(outgoingHost);
     acc.setOutgoingPort(outgoingPort);
 
-    SessionProvider sProvider = SessionProvider.createSystemProvider();
     String username = user.getUserName();
     String accId    = acc.getId();
     String folderId = null;
@@ -116,9 +113,7 @@ public class NewUserListener extends UserEventListener {
       }
     } catch (Exception e) {
       e.printStackTrace() ;
-    } finally {
-      //sProvider.close();
-    }
+    } 
   }
 
 }

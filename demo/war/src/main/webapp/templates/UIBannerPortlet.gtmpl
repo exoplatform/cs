@@ -4,53 +4,38 @@
 	
 	def prContext = _ctx.getRequestContext().getParentAppRequestContext();
 	
-	String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;
 	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
 	String portletId = uicomponent.getId() ;	
-	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
+    String pageURI = Util.getPortalRequestContext().getPortalURI() + "home";
 %>
 <div id="$portletId" class="UIBannerPortlet UIApplication">	 
 	<div class="ApplicationMinWidth">
 	  <div class="InlineContainer">
 	    <div class="LeftBanner">
 	      <div class="RightBanner">
-					<%if(prContext.getRemoteUser() != null) {%>
+		  
 	        <div class="MiddleBanner">
-	        	
-						<div class="LeftLoginContainer">
-							<div class="RightLoginContainer">
-								<div class="MiddleLoginContainer">
-									<div class="Name">
-										<%=_ctx.appRes("UILogged.note.loggedUser")%>
-										<a style="padding: 0px 10px 0px 2px; color: red; font-weight:bold; cursor:pointer;" href="$accountSetting">
-											<%=prContext.getRemoteUser();%>
-										</a>
-									</div>
-									<a class="Logout" onclick="eXo.portal.logout();"><%=_ctx.appRes("UILogged.action.signout")%></a>
-									<a class="Language" onclick="$changeLanguageAction"><%=_ctx.appRes("UIExoStart.item.ChangeLanguage")%></a>
-									<div class="ClearBoth"><span></span></div>	
-								</div>							
-					<%} else {%>
-					<div class="MiddleBanner MiddleBannerSignin">
-						<div class="LeftLoginContainer">
-							<div class="RightLoginContainer">
-								<div class="MiddleLoginContainer Signin">
-									<a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>								
-									<a class="Language" onclick="$changeLanguageAction">
-										<%=_ctx.appRes("UIExoStart.item.ChangeLanguage")%>
-									</a>		
-									<div class="ClearBoth"><span></span></div>
-								</div>
-					<%}%>   
+				<a href="$pageURI" class="Version"><%=_ctx.appRes("UIHomePagePortlet.cs-slogan")%></a>
+               <%if(prContext.getRemoteUser() != null) {%>
+	           
+	             <div class="LeftLoginContainer">
+			<div class="RightLoginContainer">
+		<%} else {%>
+		 	 
+			   <div class="LeftLoginContainer MiddleBannerSignin">
+			     <div class="RightLoginContainer">
+				<div class="MiddleLoginContainer Signin">
+			       <a class="Language" onclick="$changeLanguageAction">
+				     <%=_ctx.appRes("UIExoStart.item.ChangeLanguage")%>
+				   </a>		
+				  <div class="ClearBoth"><span></span></div>
+			         </div>
+		  <%}%>   
 							
-							</div>
-							<div style="clear:both"><span></span></div>
-						</div>
-						<%
-						String pageURI = Util.getPortalRequestContext().getPortalURI() + "home";
-						%>	
-						<a href="$pageURI" style="display: block; margin-<%= isLT? "right":"left" %>: 233px; height: 74px;"></a>
-						<div class="ClearBoth"><span></span></div>
+			</div>
+			<div style="clear:both"><span></span></div>
+		    </div>
+		    <div class="ClearBoth"><span></span></div>
 	        </div>
 	      </div>   
 	    </div>

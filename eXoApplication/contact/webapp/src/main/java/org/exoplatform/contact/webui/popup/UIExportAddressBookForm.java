@@ -34,7 +34,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -55,13 +54,13 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
  * Author : Huu-Dung Kieu huu-dung.kieu@bull.be 16 oct. 07 
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/contact/webui/popup/UIExportAddressBookForm.gtmpl",
-    events = {
-      @EventConfig(listeners = UIExportAddressBookForm.SaveActionListener.class),    
-      @EventConfig(listeners = UIExportAddressBookForm.ShowPageActionListener.class, phase=Phase.DECODE),
-      @EventConfig(listeners = UIExportAddressBookForm.CancelActionListener.class, phase=Phase.DECODE)
-    }
+                 lifecycle = UIFormLifecycle.class,
+                 template = "app:/templates/contact/webui/popup/UIExportAddressBookForm.gtmpl",
+                 events = {
+                   @EventConfig(listeners = UIExportAddressBookForm.SaveActionListener.class),    
+                   @EventConfig(listeners = UIExportAddressBookForm.ShowPageActionListener.class, phase=Phase.DECODE),
+                   @EventConfig(listeners = UIExportAddressBookForm.CancelActionListener.class, phase=Phase.DECODE)
+                 }
 )
 public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
   final static private String NAME = "fileName".intern() ;
@@ -71,7 +70,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
   private Map<String, String> publicGroupMap_ = new LinkedHashMap <String, String>() ;
   private Map<String, SharedAddressBook> sharedGroupMap_ = new LinkedHashMap <String, SharedAddressBook>() ;
   private Map<String, String> checkedAddress = new LinkedHashMap<String, String>() ;
-  
+
   public UIExportAddressBookForm() { }
   public String getLabel(String id) throws Exception {
     try {
@@ -80,16 +79,16 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       return id ;
     }
   } 
-  
+
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
-  
+
   public Map<String, String> getContactGroups() throws Exception { return privateGroupMap_; }
   public void setContactGroups(Map<String, String> contactGroups) { privateGroupMap_ = contactGroups ; }
 
   public Map<String, SharedAddressBook> getSharedContactGroups() { return sharedGroupMap_; }
   public void setSharedContactGroups(Map<String, SharedAddressBook> contactGroups) { sharedGroupMap_ = contactGroups ; }
-  
+
   public Map<String, String> getPublicContactGroup() { return publicGroupMap_ ; }//getSharedContactGroup
   public void setPublicContactGroup(Map<String, String> groups) { publicGroupMap_ = groups ; }
 
@@ -146,7 +145,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         uiCheckBox.setChecked(true) ;
       }
   }
-  
+
   static  public class SaveActionListener extends EventListener<UIExportAddressBookForm> {
     public void execute(Event<UIExportAddressBookForm> event) throws Exception {
       UIExportAddressBookForm uiForm = event.getSource() ;
@@ -165,11 +164,11 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         }        
         groupIds = uiForm.getCheckedGroups() ;        
       }
-      
+
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if (groupIds.size() < 1) {
         uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.checkGroup-required", null,
-          ApplicationMessage.WARNING)) ;
+                                                ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;          
       } 
@@ -183,19 +182,18 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       }*/
       OutputStream out = null ;
       try {
-        out = ContactUtils.getContactService().getContactImportExports(exportFormat).exportContact(
-            SessionProvider.createSystemProvider(), ContactUtils.getCurrentUser(), groupIds.toArray(new String[]{})) ;        
+        out = ContactUtils.getContactService().getContactImportExports(exportFormat).exportContact(ContactUtils.getCurrentUser(), groupIds.toArray(new String[]{})) ;        
       } catch (ArrayIndexOutOfBoundsException e) {
         uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.many-Contacts", new Object[]{Utils.limitExport + ""},
-            ApplicationMessage.WARNING)) ;
+                                                ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
       if(out == null) {
-         uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.msg.there-is-not-contacts-exists", null,
-           ApplicationMessage.WARNING)) ;
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-         return ;   
+        uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.msg.there-is-not-contacts-exists", null,
+                                                ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;   
       }
       String contentType = null;
       String extension = null;
@@ -203,7 +201,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         contentType = "text/x-vcard";
         extension = ".vcf";
       }
-      
+
       ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
       DownloadResource dresource = new InputStreamDownloadResource(is, contentType) ;
       DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class) ;
@@ -220,7 +218,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       uiForm.getAncestorOfType(UIContactPortlet.class).cancelAction() ;    
     }
   }
-  
+
   static  public class ShowPageActionListener extends EventListener<UIExportAddressBookForm> {
     public void execute(Event<UIExportAddressBookForm> event) throws Exception {
       UIExportAddressBookForm uiExportForm = event.getSource() ;
@@ -237,12 +235,12 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       event.getRequestContext().addUIComponentToUpdateByAjax(uiExportForm.getAncestorOfType(UIPopupAction.class));           
     }
   }
-  
+
   static  public class CancelActionListener extends EventListener<UIExportAddressBookForm> {
     public void execute(Event<UIExportAddressBookForm> event) throws Exception {
       UIExportAddressBookForm uiForm = event.getSource() ;
       uiForm.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
     }
   }  
-  
+
 }

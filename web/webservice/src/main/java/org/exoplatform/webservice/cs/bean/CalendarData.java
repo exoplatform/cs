@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2007 eXo Platform SAS.
+ * Copyright (C) 2003-2010 eXo Platform SAS.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
@@ -14,18 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.contact.service;
+package org.exoplatform.webservice.cs.bean;
 
+import java.util.Collection;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
- * July 2, 2007  
- * @deprecated use {@link AddressBook} instead.
+ * Created by The eXo Platform SAS
+ * Author : eXoPlatform
+ *          exo@exoplatform.com
+ * Jan 14, 2010  
  */
-public class ContactGroup extends AddressBook {
- public ContactGroup() {
-   super();
- }
+public class CalendarData {
+  private Collection<String> info ;
+
+  public Collection<String> getInfo() {
+    return info;
+  }
+  
+  public void setInfo(Collection<String> info) {
+    this.info = info;
+  }
+ 
+ 
 }

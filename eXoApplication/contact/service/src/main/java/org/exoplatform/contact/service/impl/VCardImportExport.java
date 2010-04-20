@@ -57,7 +57,7 @@ import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
+//import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
@@ -84,13 +84,14 @@ public class VCardImportExport implements ContactImportExport {
     storage_ = storage ;
   }
   
-  public OutputStream exportContact(SessionProvider sProvider, String username, String[] addressBookIds) throws Exception {
+ 
+  public OutputStream exportContact(String username, String[] addressBookIds) throws Exception {
     List<Contact> contactList = new ArrayList<Contact>() ;
     List<String> privateAddress = new ArrayList<String> () ;
     List<String> publicAddress = new ArrayList<String> () ;
     for(String address : addressBookIds){
-      Node contactGroupHome = storage_.getPersonalAddressBooksHome(sProvider, username) ;
-      Node publicContactGroupHome = storage_.getPublicContactsHome(sProvider);
+      Node contactGroupHome = storage_.getPersonalAddressBooksHome(username) ;
+      Node publicContactGroupHome = storage_.getPublicContactsHome();
       try {
       if(contactGroupHome.hasNode(address)) {
         privateAddress.add(address) ;
@@ -101,7 +102,7 @@ public class VCardImportExport implements ContactImportExport {
         if(array.length == 2) {
             ContactPageList pageList = storage_.getSharedContactsByAddressBook(
               username, new SharedAddressBook(null, array[0], array[1])) ;
-    	    if (pageList.getAvailable() + contactList.size() > Utils.limitExport) throw new ArrayIndexOutOfBoundsException() ;
+          if (pageList.getAvailable() + contactList.size() > Utils.limitExport) throw new ArrayIndexOutOfBoundsException() ;
             contactList.addAll(pageList.getAll()) ;
         }         
       }
@@ -270,268 +271,6 @@ public class VCardImportExport implements ContactImportExport {
     marshaller.marshallContacts(out, pimContacts);
 
     return out;
-  }
-  
-  public void importContact(SessionProvider sProvider, String username, InputStream input, String groupId) throws Exception {
-    ContactIOFactory ciof = Pim.getContactIOFactory();
-    ContactUnmarshaller unmarshaller = ciof.createContactUnmarshaller();
-
-    // unmarshall contact
-    addExtensionHandler(eXoGender);
-    addExtensionHandler(eXoExoId);
-    addExtensionHandler(eXoAolId);
-    addExtensionHandler(eXoGoogleId);
-    addExtensionHandler(eXoIcqId);
-    addExtensionHandler(eXoIcrId);
-    addExtensionHandler(eXoSkypeId);
-    addExtensionHandler(eXoMsnId);
-    addExtensionHandler(eXoYahooId);
-    unmarshaller.setStrict(false);
-    unmarshaller.setEncoding(ENCODING);
-
-    net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);    
-    if (pimContacts == null || pimContacts.length == 0) throw new Exception() ;
-    if (pimContacts.length > Utils.limitExport) throw new IndexOutOfBoundsException() ;
-    
-    Reminder re = new Reminder() ;
-    JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
-    re.setSummary("Importing..") ;
-    re.setDescription("Imported") ;
-    re.setReminderOwner(username) ;
-    re.setReminderType(Reminder.TYPE_POPUP) ;
-    re.setFromDateTime(new Date()) ;
-      
-    for (int index = 0; index < pimContacts.length; index++) {
-      Contact contact = new Contact();
-      PersonalIdentity identity = pimContacts[index].getPersonalIdentity();
-      String additionName = null ;
-      try {
-        additionName = identity.getAdditionalName(0);
-      } catch (IndexOutOfBoundsException e) {
-        additionName = "" ;
-      }
-      String fullName = nullToEmptyString(identity.getFormattedName());
-      contact.setFullName(fullName);
-      String lastName = identity.getLastname();
-      String firstName = identity.getFirstname();
-      
-      // add 26-8
-      if (fullName == null || fullName.length() == 0) {
-        fullName = firstName + " " + lastName ;
-        contact.setFullName(fullName) ;
-      }
-      int indexComma = fullName.indexOf(";");
-      if (indexComma >= 0) {
-        int indexSpace = fullName.indexOf(" ") ;
-        firstName = fullName.substring(0, indexSpace).trim() ;
-        contact.setFirstName(firstName) ;
-        lastName = fullName.substring(indexSpace, fullName.length()).trim() ;
-      } else if (firstName != null && firstName.length() > 0){
-        if (firstName.trim().equals(additionName.trim())) contact.setFirstName(firstName) ;
-        else contact.setFirstName(firstName + " " + additionName);
-      }
-       
-      contact.setLastName(lastName); 
-      
-      int size = identity.getAdditionalNameCount();      
-      String nickName = "";
-      size = identity.getNicknameCount();
-      for (int i = 0; i < size; i++) {
-        if (i > 0)
-          nickName += ", ";
-        nickName = identity.getNickname(i);
-      }
-      contact.setNickName(nickName);
-
-      contact.setBirthday(identity.getBirthDate());
-      ContactAttachment attachment = new ContactAttachment();
-      Image photo = identity.getPhoto();
-      if (photo != null) {
-        InputStream is = photo.getInputStream();
-        if (is != null) {
-          attachment.setInputStream(is);
-          String filename = lastName;
-          if ((filename == null) || filename.equals(""))
-            filename = firstName;
-          attachment.setFileName(filename + ".photo");
-          attachment.setMimeType(photo.getContentType());
-          contact.setAttachment(attachment);
-        }
-      }
-
-      OrganizationalIdentity orgid = pimContacts[index].getOrganizationalIdentity();
-      if (orgid != null)
-        contact.setJobTitle(orgid.getTitle());
-        
-      // addresses iterator
-      for (Iterator iters = pimContacts[index].getAddresses(); iters.hasNext();) {
-        Address addr = (Address) iters.next();
-        if (addr.isHome()) {
-          contact.setHomeAddress(addr.getStreet());
-          contact.setHomeCity(addr.getCity());
-          contact.setHomeState_province(addr.getRegion());
-          contact.setHomePostalCode(addr.getPostalCode());
-          contact.setHomeCountry(addr.getCountry());
-
-        } else if (addr.isWork()) {
-          contact.setWorkAddress(addr.getStreet());
-          contact.setWorkCity(addr.getCity());
-          contact.setWorkStateProvince(addr.getRegion());
-          contact.setWorkPostalCode(addr.getPostalCode());
-          contact.setWorkCountry(addr.getCountry());
-        }
-      } // end of addresses for
-
-      String mobilePhone = null;
-
-      String homePhone1 = null;
-      String homePhone2 = null;
-      String homeFax = null;
-
-      String workPhone1 = null;
-      String workPhone2 = null;
-      String workFax = null;
-      Communications communication = pimContacts[index].getCommunications();
-      if (communication != null) {
-        for (Iterator iters = communication.getPhoneNumbers(); iters.hasNext();) {
-          PhoneNumber phone = (PhoneNumber) iters.next();
-          if (phone.isHome() && phone.isFax()) {
-            homeFax = phone.getNumber();            
-          } else if (phone.isHome() && phone.isVoice()) {
-            if (homePhone1 == null)
-              homePhone1 = phone.getNumber();
-            else if (homePhone2 == null)
-              homePhone2 = phone.getNumber();
-          } else if (phone.isWork() && phone.isFax()) {
-            workFax = phone.getNumber();
-          } else if (phone.isWork() && phone.isVoice()) {
-            if (workPhone1 == null)
-              workPhone1 = phone.getNumber();
-            else if (workPhone2 == null)
-              workPhone2 = phone.getNumber();
-          } else if (phone.isCellular()) {
-            mobilePhone = phone.getNumber();
-          } else if (phone.isHome()) { // add to fix bug cs-1478
-            if (homePhone1 == null)
-              homePhone1 = phone.getNumber();
-            else if (homePhone2 == null)
-              homePhone2 = phone.getNumber();
-          }
-        }
-//      add to fix bug cs-1478
-        for (Iterator iters = communication.getPhoneNumbers(); iters.hasNext();) {
-          PhoneNumber phone = (PhoneNumber) iters.next();
-          if (phone.isHome() || phone.isWork() || phone.isCellular()) continue ;
-          if (homePhone1 == null)
-            homePhone1 = phone.getNumber();
-          else if (homePhone2 == null)
-            homePhone2 = phone.getNumber();
-          else if (workPhone1 == null)
-            workPhone1 = phone.getNumber();
-          else if (workPhone2 == null)
-            workPhone2 = phone.getNumber();
-        }
-        String emailAddress = "";
-        for (Iterator iters = communication.getEmailAddresses() ; iters.hasNext();) {
-          EmailAddress email = (EmailAddress) iters.next();
-          if (!emailAddress.equals(""))
-            emailAddress += "; ";
-          emailAddress += email.getAddress();
-        }
-        contact.setEmailAddress(emailAddress);
-      }
-
-      if (mobilePhone != null)
-        contact.setMobilePhone(mobilePhone);
-
-      if (homePhone1 != null) {
-        contact.setHomePhone1(homePhone1);
-        if (homePhone2 != null)
-          contact.setHomePhone2(homePhone2);
-      }
-
-      if (homeFax != null)
-        contact.setHomeFax(homeFax);
-
-      if (workPhone1 != null) {
-        contact.setWorkPhone1(workPhone1);
-        if (workPhone2 != null)
-          contact.setWorkPhone2(workPhone2);
-      }
-
-      if (workFax != null)
-        contact.setWorkFax(workFax);
-
-      contact.setPersonalSite(pimContacts[index].getURL());
-      if ((pimContacts[index].getOrganizationalIdentity() != null)
-          && (pimContacts[index].getOrganizationalIdentity().getOrganization() != null))
-        contact.setWebPage(pimContacts[index].getOrganizationalIdentity().getOrganization().getURL());
-
-      Extensions extensions = pimContacts[index].getExtensions();
-      if (extensions != null) {
-        SimpleExtension ext = (SimpleExtension) extensions.get(eXoGender);
-        if (ext != null)
-          contact.setGender(ext.getValue());
-
-        ext = (SimpleExtension) extensions.get(eXoExoId);
-        if (ext != null)
-          contact.setExoId(ext.getValue());
-
-        ext = (SimpleExtension) extensions.get(eXoAolId);
-        if (ext != null)
-          contact.setAolId(ext.getValue());
-
-        ext = (SimpleExtension) extensions.get(eXoGoogleId);
-        if (ext != null)
-          contact.setGoogleId(ext.getValue());
-
-        ext = (SimpleExtension) extensions.get(eXoIcqId);
-        if (ext != null)
-          contact.setIcqId(ext.getValue());
-
-        ext = (SimpleExtension) extensions.get(eXoIcrId);
-        if (ext != null)
-          contact.setIcrId(ext.getValue());
-
-        ext = (SimpleExtension) extensions.get(eXoSkypeId);
-        if (ext != null)
-          contact.setSkypeId(ext.getValue());
-
-        ext = (SimpleExtension) extensions.get(eXoMsnId);
-        if (ext != null)
-          contact.setMsnId(ext.getValue());
-
-        ext = (SimpleExtension) extensions.get(eXoYahooId);
-        if (ext != null)
-          contact.setYahooId(ext.getValue());
-
-      }
-      if (pimContacts[index].getNote() != null)
-        contact.setNote(pimContacts[index].getNote().replaceAll("\\\\n", "\n"));
-      
-      Date revisionDate = pimContacts[index].getCurrentRevisionDate();
-      
-      if (revisionDate != null)
-        contact.setLastUpdated(revisionDate);
-
-      // ////////////////////////////////
-      // Now we have the contact object
-      // Then store it to JCR storage
-      // ////////////////////////////////
-      
-      if (groupId.contains(DataStorage.HYPHEN)) {
-        String newGroupId = groupId.replace(DataStorage.HYPHEN, "") ;
-        contact.setAddressBookIds(new String[] { newGroupId }) ;
-        storage_.saveContactToSharedAddressBook(username, newGroupId, contact, true) ;
-      } else {
-        contact.setAddressBookIds(new String[] { groupId }) ;
-        storage_.saveContact(username, contact, true);
-      }
-      re.setSummary(String.valueOf(index + 1) + " contacts imported ...") ;
-      JsonValue json = generatorImpl.createJsonObject(re);
-      ContinuationService continuation = getContinuationService() ;
-      continuation.sendMessage(username, "/eXo/Application/Contact/messages", json, re.toString());
-    }
   }
   
   public void importContact(String username, InputStream input, String groupId) throws Exception {

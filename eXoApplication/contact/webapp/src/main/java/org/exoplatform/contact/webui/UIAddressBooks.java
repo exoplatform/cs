@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.jcr.AccessDeniedException;
 import javax.jcr.PathNotFoundException;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
@@ -218,6 +219,7 @@ public class UIAddressBooks extends UIComponent {
   static public class PasteContactsActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
+      UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
       String destAddress = event.getRequestContext().getRequestParameter(OBJECTID);
       String username = ContactUtils.getCurrentUser() ;
       String destType ;
@@ -227,7 +229,6 @@ public class UIAddressBooks extends UIComponent {
         destType = DataStorage.SHARED ;     
       }
       if (destType.equals(DataStorage.SHARED) && (!uiAddressBook.havePermission(destAddress))) {
-        UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
           ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -237,7 +238,7 @@ public class UIAddressBooks extends UIComponent {
       String srcAddress = uiAddressBook.copyAddress ;
       if (!ContactUtils.isEmpty(srcAddress)) {
         if (destAddress.equals(srcAddress)){
-          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+       //   UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.invalidAddress", null,
             ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -247,23 +248,37 @@ public class UIAddressBooks extends UIComponent {
         if (uiAddressBook.privateAddressBookMap_.containsKey(srcAddress)) srcType = DataStorage.PERSONAL ;
         else if (uiAddressBook.sharedAddressBookMap_.containsKey(srcAddress)) srcType = DataStorage.SHARED ;
         else srcType = DataStorage.PUBLIC ;
-        ContactUtils.getContactService().pasteAddressBook(username
-            , srcAddress, srcType, destAddress, destType) ;
+        try{
+          ContactUtils.getContactService().pasteAddressBook(username
+                                                            , srcAddress, srcType, destAddress, destType) ;
+        }catch (AccessDeniedException ade){
+          uiApp = ContactUtils.initWarnPopup(uiAddressBook, "UIContacts.msg.noeditpermission");
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;  
+        }
       } else {
-        ContactUtils.getContactService().pasteContacts(username
-            , destAddress, destType, uiAddressBook.getCopyContacts()) ;
+        try {
+          ContactUtils.getContactService().pasteContacts(username
+                                                         , destAddress
+                                                         ,destType, uiAddressBook.getCopyContacts()) ;
+        } catch (AccessDeniedException e) {
+          uiApp = ContactUtils.initWarnPopup(uiAddressBook,"UIContacts.msg.noeditpermission");
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
+        }
+         
       }
       // bi update neu la shared contacts 
       UIContacts uiContacts = uiAddressBook
       .getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class) ;
       if (!uiContacts.isDisplaySearchResult() && uiAddressBook.selectedGroup != null) {
-        uiContacts.updateList() ;
+        uiContacts.setContacts(ContactUtils.getContactService().getSharedContacts(username));
+        //uiContacts.updateList() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
-    }
+     }
   }
-  
   
   static public class ExportAddressActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {

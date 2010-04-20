@@ -20,7 +20,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.security.ConversationState;
@@ -32,7 +31,7 @@ import org.exoplatform.services.security.ConversationState;
  * @version $Id: $
  */
 public class OrganizationUserInfoServiceImpl implements UserInfoService {
-  
+
   /**
    * Logger.
    */
@@ -42,17 +41,17 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
    * 
    */
   private static OrganizationService organizationService;
-  
+
   protected void start() {
     PortalContainer manager = PortalContainer.getInstance() ;
     ((ComponentRequestLifecycle)organizationService).startRequest(manager);
   }
-  
+
   protected void stop() {
     PortalContainer manager = PortalContainer.getInstance() ;
     ((ComponentRequestLifecycle)organizationService).endRequest(manager);
   }
-	  
+
   /**
    * @param service the service to set
    */
@@ -89,16 +88,16 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
     }
     return null;
   }
-  
+
   /**
    *  {@inheritDoc}}
    */
   public String providePassword(String userID) {
     try {
-    ConversationState curentState = ConversationState.getCurrent();
-    String username = curentState.getIdentity().getUserId();
-    if(userID != null && userID.equals(username))
-      return (String)curentState.getIdentity().getSubject().getPrivateCredentials().iterator().next();
+      ConversationState curentState = ConversationState.getCurrent();
+      String username = curentState.getIdentity().getUserId();
+      if(userID != null && userID.equals(username))
+        return (String)curentState.getIdentity().getSubject().getPrivateCredentials().iterator().next();
     } catch (Exception e) {
       if ( log.isDebugEnabled())
         e.printStackTrace();

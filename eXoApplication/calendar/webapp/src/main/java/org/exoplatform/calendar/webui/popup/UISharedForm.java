@@ -79,10 +79,10 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   private Map<String, String> permission_ = new HashMap<String, String>() ;
   private String calendarId_ ;
   protected boolean isAddNew_ = true ;
-  public UISharedForm() throws Exception{
+  public UISharedForm() throws Exception{ 
     UISharedTab inputset = new UISharedTab(SHARED_TAB) ;
     inputset.addChild(new UIFormInputInfo(UISharedTab.FIELD_NAME, UISharedTab.FIELD_NAME, null)) ;
-    inputset.addUIFormInput(new UIFormStringInput(UISharedTab.FIELD_USER, UISharedTab.FIELD_USER, null).addValidator(NameValidator.class)) ;
+    inputset.addUIFormInput(new UIFormStringInput(UISharedTab.FIELD_USER, UISharedTab.FIELD_USER, null));//.addValidator(NameValidator.class))  if want validate field;
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData selectUserAction = new ActionData() ;
     selectUserAction.setActionListener("SelectPermission") ;
@@ -168,7 +168,7 @@ public void updateSelect(String selectField, String value) throws Exception {
     fieldInput.setValue(sb.toString()) ;
   }  
   static  public class SaveActionListener extends EventListener<UISharedForm> {
-    public void execute(Event<UISharedForm> event) throws Exception {
+    public void execute(Event<UISharedForm> event) throws Exception { 
       UISharedForm uiForm = event.getSource() ;
       String names = uiForm.getUIStringInput(UISharedTab.FIELD_USER).getValue() ;
       if(CalendarUtils.isEmpty(names)) {
@@ -177,12 +177,6 @@ public void updateSelect(String selectField, String value) throws Exception {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      /*if(!CalendarUtils.isNameValid(names, SPECIALCHARACTER)) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }*/
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       OrganizationService oService = CalendarUtils.getOrganizationService() ;
       String username = CalendarUtils.getCurrentUser() ;
@@ -192,15 +186,14 @@ public void updateSelect(String selectField, String value) throws Exception {
         name = name.trim();
         if( oService.getUserHandler().findUserByName(name) != null) { 
           receiverUsers.add(name) ;
-        }
-        else{
-          if(sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
+        }else{
           sb.append(name) ;
+          sb.append(CalendarUtils.COMMA) ;
         }
       }
       if(sb.length() > 0) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-found-user", new Object[]{sb.toString()}, 1)) ;
+        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-founduser", new Object[]{sb.toString()}, 1)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
@@ -210,7 +203,6 @@ public void updateSelect(String selectField, String value) throws Exception {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-
       Calendar cal = calendarService.getUserCalendar(username, uiForm.calendarId_) ;
       Map<String, String> perms = new HashMap<String, String>() ;
       if(cal.getViewPermission() != null) {
@@ -227,11 +219,11 @@ public void updateSelect(String selectField, String value) throws Exception {
       cal.setViewPermission(perms.keySet().toArray(new String[perms.keySet().size()])) ;
       List<String> tempList = new ArrayList<String>() ;
       for(String v : perms.keySet()) {
-        if(Boolean.parseBoolean(perms.get(v))) tempList.add(v) ;
+        if(Boolean.parseBoolean(perms.get(v))) tempList.add(v) ;       
       }
       cal.setEditPermission(tempList.toArray(new String[tempList.size()])) ;
       calendarService.saveUserCalendar(username, cal, false) ;
-      calendarService.shareCalendar(username, uiForm.calendarId_, newUsers) ;
+      calendarService.shareCalendar(username, uiForm.calendarId_, newUsers) ;      
       UIAddEditPermission uiAddEdit = uiForm.getParent() ;
       uiAddEdit.updateGrid(cal, uiAddEdit.getCurrentPage());
       uiForm.setCanEdit(false) ;
@@ -241,16 +233,18 @@ public void updateSelect(String selectField, String value) throws Exception {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class)) ;
     }
   }
+   
   static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
       String currentValue = uiForm.getSharedUser() ;
+      String currentUserName = CalendarUtils.getCurrentUser() ;
       uiForm.permission_.clear() ;
       if(!CalendarUtils.isEmpty(currentValue)) {
         OrganizationService orgService = CalendarUtils.getOrganizationService() ;
         for(String s :currentValue.split(CalendarUtils.COMMA)) {
           s = s.trim() ;
-          if(orgService.getUserHandler().findUserByName(s) != null) {
+          if(orgService.getUserHandler().findUserByName(s) != null && !s.equals(currentUserName)) {
             uiForm.permission_.put(s, s) ;
           }
         }
@@ -259,6 +253,7 @@ public void updateSelect(String selectField, String value) throws Exception {
       UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;
       if(uiPopupWindow == null) uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
       UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
+      //override UIUserSelector to filter user that shared eg: UISharedUserSelector class
       uiUserSelector.setShowSearch(true);
       uiUserSelector.setShowSearchUser(true) ;
       uiUserSelector.setShowSearchGroup(true);
@@ -284,7 +279,6 @@ public void updateSelect(String selectField, String value) throws Exception {
       UIFormStringInput uiInput = uiSharedTab.getUIStringInput(UISharedTab.FIELD_USER);
       String currentValues = uiInput.getValue();
       String values = uiUserSelector.getSelectedUsers();
-      System.out.println(values + "-" + currentValues);
       if(!CalendarUtils.isEmpty(currentValues) && currentValues != "null") values += ","+ currentValues; 
       values = uiShareForm.cleanValue(values);
       uiInput.setValue(values);

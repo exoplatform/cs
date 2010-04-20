@@ -52,14 +52,13 @@ experience more productive. It offers several ways to to view and organize your 
 
     * General
           o Upgraded to GateIn 3.0 GA and dependencies http://www.jboss.org/gatein/
+          o Improve rss manager
+          o Public iCal URL for calendars
           o Fix lost image bug
           o Fix send multiple email
           o Safari 4 support
           o Configurable exclusions for group addressbooks
-
-          
-         
-          
+                  
     * Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
           
 =========
@@ -127,9 +126,14 @@ All those accounts have the default password "gtn".
     
   You will get login form if you are not yet logged in to Collaboration Suite.
 
-
+==============
+4 KNOWN ISSUES
+==============
+ - http://jira.exoplatform.org/browse/CS-4060 
+ + Missing hibernate-core-3.3.2.GA.jar on jboss/server/default/deploy/gatein.ear/lib because deploy tool broblem 
+ 
 ===========
-4 RESOURCES
+5 RESOURCES
 ===========
 
      Company site        http://www.exoplatform.com
@@ -140,38 +144,71 @@ All those accounts have the default password "gtn".
 
 
 ===========
-5 CHANGELOG
+6 CHANGELOG
 ===========
 - 2.0.0 Beta02
+
 ** Bug
+    * [CS-3561] - Missing upload icon in import calendar form
+    * [CS-3706] - Can not quick add event after setting time is AM/PM
+    * [CS-3732] - Drag and drop of a contact with no edit permission produces an unknown error
+    * [CS-3784] - Can not open sub-folder has sub-folder
+    * [CS-3833] - Unknown error when delete permission of share address book/contact
+    * [CS-3851] - ChatBar does'nt work with Internet Explorer 7
     * [CS-3854] - Unknown error when delete permission of share calendar
+    * [CS-3855] - Can not add multi users at the same time for shared calendar
     * [CS-3857] - [Unplanned] AddressBook Portlet is using OrganizationService instead of ContactService for Importing Groups
     * [CS-3865] - password prompted even after save
+    * [CS-3868] - Can not send mail for user has multi email
+    * [CS-3874] - Can not move some message at the same time
+    * [CS-3924] - Always show message in Inforbar 
+    * [CS-3975] - Can not add IM Contact when creating new contact
     * [CS-3976] - Can not send multi email at the same time
+    * [CS-3977] - Exception when share contact for owner
     * [CS-3981] - Can not delete or move the sent messages in Sent folder to others
     * [CS-3982] - User is not prompted for password
     * [CS-3985] - Messages are disappeared after editing filter without changing
     * [CS-3991] - Unknown error when edit 1 event in List view
     * [CS-3994] - Unknown error when double click on event when see it in List view
+    * [CS-3996] - Exception when importe 1 message at the second time
+    * [CS-3999] - Unknown error when edit  share permission of contact
     * [CS-4014] - Contact's image is not show
+    * [CS-4018] - Error in displaying buttons in Add Tag form
     * [CS-4021] - Can not get mail with csdemo
+    * [CS-4026] - Hiding calendars with duplicate named does not work
+    * [CS-4028] - Can not add group user to send remind when create an event in Mail application
     * [CS-4031] - [unplanned] Can not view image attachment  of event/task with csdemo
     * [CS-4037] - Can not get mail without select folder
+    * [CS-4038] - Right click menu still display event when action is done
+    * [CS-4039] - UI error with forms has 2 tabs or more (in csdemo)
+    * [CS-4040] - Error message pop-up (with csdemo)
+    * [CS-4060] - JBoss cannot start
+    * [CS-4070] - The first check-box is not checked when open form to add tag, send mail...
+    * [CS-4084] - Unknown error when add group has edit permission for group calendar
+    * [CS-4089] - IE7: Error in upload form 
+    * [CS-4095] - IE7: Show  error message when drag and drop event/task in Month view
+    * [CS-4108] - The check-box is not unchecked 
+    * [CS-4124] - Can not get mail using pop3
+    * [CS-4127] - [Unplanned] French accentuated characters are corrupted
+    * [CS-4133] - Exception when a user is deleted
+    * [CS-4168] -  Problem in RSS Portlet Refresh
+
+
+
+
 
 ** Improvement
     * [CS-3276] - Safari 4 support
-    * [CS-3945] - Configurable exclusions for group addressbooks
+    * [CS-3883] - Improve RSS feeds content
+    * [CS-3945] - Configurable exclusions for group adressbooks
 
 ** New Feature
+    * [CS-842] - Revamp Feeds management
     * [CS-3655] - Select All in AddressBook
+    * [CS-3888] - Public iCal URL for calendars
+    * [CS-3889] - Multi-calendar RSS Feeds
+    * [CS-3906] - revamp demo portal 
 
-** Sub-task
-    * [CS-3960] - [DEV] Configure the exclusion of some predefined groups from Email picker
-    * [CS-4034] - [DEV]After adding new contact in new address book, it show all contacts of My Contact address book
-    * [CS-4035] - [DEV] Can not delete contacts at the same time after editing 1 contact
-    * [CS-4046] - [DEV] Messages are disappeared after editing filter without changing
-    * [CS-4098] - [Dev] Can not get mail without select folder
-    * [CS-4100] - [DEV] Can not move some message at the same time
     
 - 2.0.0 Beta01
   ** Bug

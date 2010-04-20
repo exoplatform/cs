@@ -46,6 +46,8 @@
 			                      <%=uiform.getLabel("ImportCalendar")%>
 			                    </a>
 			                   </div>
+			                   
+			                   <!--
 			                   <div class="MenuItem">
 			                    <a class="ItemIcon GenerateRssIcon" href="<%=uicomponent.event("GenerateRss")%>">
 			                      <%=uiform.getLabel("GenerateRss")%>
@@ -56,6 +58,8 @@
 			                      <%=uiform.getLabel("GenerateCalDav")%>
 			                    </a>
 			                   </div>
+			                   -->
+			                   
 			                   <div class="MenuItem">   
 			                    <a class="ItemIcon SettingCalendarIcon" href="<%=uicomponent.event("CalendarSetting")%>">
 			                      <%=uiform.getLabel("CalendarSetting")%>

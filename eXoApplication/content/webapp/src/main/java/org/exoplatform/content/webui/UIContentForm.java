@@ -8,13 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.content.service.ContentDAO;
 import org.exoplatform.content.model.ContentNode;
+import org.exoplatform.content.service.ContentDAO;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.content.webui.UIDescription;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -31,41 +30,42 @@ import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.Validator;
 
 @ComponentConfig(
-  lifecycle = UIFormLifecycle.class,
-  template =  "system:/groovy/webui/form/UIFormWithTitle.gtmpl",
-  events = {
-    @EventConfig(listeners = UIContentForm.SaveActionListener.class ),
-    @EventConfig(listeners = UIContentForm.CancelActionListener.class,  phase = Phase.DECODE)
-  }
+                 lifecycle = UIFormLifecycle.class,
+                 template =  "system:/groovy/webui/form/UIFormWithTitle.gtmpl",
+                 events = {
+                   @EventConfig(listeners = UIContentForm.SaveActionListener.class ),
+                   @EventConfig(listeners = UIContentForm.CancelActionListener.class,  phase = Phase.DECODE)
+                 }
 )
 public class UIContentForm extends UIForm {  
-  
+
   final static public String FIELD_ID = "id" ;
   final static public String FIELD_URL = "url" ;
   final static public String FIELD_LABEL = "label" ;
   final static public String FIELD_DESCRIPTION = "description" ;
   final static public String FIELD_TYPE = "type" ;
-  
+
   private ContentNode contentNode ;
-  
+
   private  List<SelectItemOption<String>> option_ = new ArrayList<SelectItemOption<String>>();
-  
+
   public UIContentForm() throws Exception {
     ContentDAO service = (ContentDAO) PortalContainer.getComponent(ContentDAO.class) ;
     List<String> types = service.getTypes() ;
     for(int i = 0 ; i < types.size() ; i++) {
       option_.add(new SelectItemOption<String>(types.get(i).toUpperCase(), types.get(i).toString())) ;
     }
-    addUIFormInput(new UIFormStringInput(FIELD_ID, FIELD_ID, null));
+    addUIFormInput(new UIFormStringInput(FIELD_ID, FIELD_ID, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormStringInput(FIELD_URL, FIELD_URL, null).
                    addValidator(URLValidator.class));
-    addUIFormInput(new UIFormStringInput(FIELD_LABEL, FIELD_LABEL, null).
+    addUIFormInput(new UIFormStringInput(FIELD_LABEL, FIELD_LABEL, null).addValidator(MandatoryValidator.class).
                    addValidator(StringLengthValidator.class, 1, 20));
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)).
     addUIFormInput(new UIFormSelectBox(FIELD_TYPE, FIELD_TYPE, option_).
                    addValidator(MandatoryValidator.class));
+    
   }
-  
+
   public void setContentNode(ContentNode node) throws Exception { 
     contentNode = node;
     if(node != null) {
@@ -76,9 +76,9 @@ public class UIContentForm extends UIForm {
     getUIStringInput(FIELD_ID).setEditable(true).setValue(null) ;
     getUIStringInput(FIELD_URL).setValue(null) ;
     getUIStringInput(FIELD_LABEL).setValue(null) ;
-    getUIStringInput(FIELD_DESCRIPTION).setValue(null);
+    getUIFormTextAreaInput(FIELD_DESCRIPTION).setValue(null);
   }
-  
+
   public ContentNode getContentNode() { return contentNode; }
 
   static public class SaveActionListener extends EventListener<UIContentForm> {
@@ -89,7 +89,7 @@ public class UIContentForm extends UIForm {
       ContentNode contentNode = uiForm.getContentNode();         
       UIRSSReaderPortlet uiPortlet = uiForm.getAncestorOfType(UIRSSReaderPortlet.class) ;
       UIContentNavigation uiNav = uiPortlet.getChild(UIContentNavigation.class);
-      
+
       if(contentNode == null) contentNode= new ContentNode();
       uiForm.invokeSetBindingBean(contentNode);
 
@@ -103,7 +103,7 @@ public class UIContentForm extends UIForm {
           return ;  
         }
       }
-      
+
       if(contentNode != uiForm.getContentNode()) {
         ContentNode existingNode = uiNav.findNode(contentNode.getId()) ;
         if(existingNode != null) {
@@ -117,31 +117,9 @@ public class UIContentForm extends UIForm {
         UIDetailContent uiDetail = uiPortlet.findFirstComponentOfType(UIDetailContent.class) ;
         if(uiDetail.getListItems().size() > 0) uiDetail.refresh(true) ;
       }
-      
-      //-----------------------------
-      
-//      UIContentForm uiForm = event.getSource() ;
-//      ContentNode contentNode = uiForm.getContentNode();         
-//      UIContentPortlet uiPortlet = uiForm.getAncestorOfType(UIContentPortlet.class) ;
-//      UIContentNavigation uiNav = uiPortlet.getChild(UIContentNavigation.class);
-//      
-//      if(contentNode == null) contentNode= new ContentNode();
-//      uiForm.invokeSetBindingBean(contentNode);
-//      
-//      if(contentNode.getId() == null || contentNode.getId().length() == 0){
-//        contentNode.setId(contentNode.getLabel());
-//      }
-//      
-//      try{
-//        uiNav.save(contentNode);
-//        uiNav.setSelectedNode(contentNode.getId());
-//      }catch (Exception ex) {
-//        ApplicationMessage msg = new ApplicationMessage(ex.getMessage(), null, ApplicationMessage.ERROR);
-//        uiForm.getAncestorOfType(UIApplication.class).addMessage(msg) ;
-//      }
     }
   }
-  
+
   static public class CancelActionListener extends EventListener<UIContentForm> {
     public void execute(Event<UIContentForm> event) throws Exception {
       UIContentForm uiForm = event.getSource() ;
@@ -155,12 +133,12 @@ public class UIContentForm extends UIForm {
       //----------------------------
     }
   }
-  
+
   static public class URLValidator implements Validator {
     @SuppressWarnings("unchecked")
     public void validate(UIFormInput uiInput) throws Exception {
       String s = (String)uiInput.getValue();
-//      System.out.println(" \n\n\nTest url: " + s);
+      //      System.out.println(" \n\n\nTest url: " + s);
       if(s == null || s.trim().length() == 0) { return; }
       s=s.trim();
       if (!s.startsWith("http://") && !s.startsWith("shttp://")){ 
@@ -184,7 +162,7 @@ public class UIContentForm extends UIForm {
       }
       uiInput.setValue(s);
     }
-    
+
     //TODO: Tung.Pham added
     private boolean isAllowedSpecialChar(char chr) {
       char[] allowedCharArray = {'_', '-', '.', ':', '/', '?', '=', '&', '%'} ;
@@ -193,6 +171,6 @@ public class UIContentForm extends UIForm {
       }
       return false ;
     }
-    
+
   }
 }

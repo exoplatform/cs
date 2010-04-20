@@ -286,6 +286,16 @@
 	background: url('icons/CalendarIcons.gif') no-repeat right -1087px; /* orientation=rt */
 }
 
+.UICalendarPortlet .UITabContent .ActionContainer .CalendarFeedIcon{
+	background-position: left -1090px; /* orientation=lt */
+	background-position: right -1090px; /* orientation=rt */
+}
+
+.UICalendarPortlet .CalendarFeedIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1087px; /* orientation=lt */
+	background: url('icons/CalendarIcons.gif') no-repeat right -1087px; /* orientation=rt */
+}
+
 .UICalendarPortlet .SearchIcon {
 	background: url('icons/CalendarIcons.gif') no-repeat left -1117px; /* orientation=lt */
 	background: url('icons/CalendarIcons.gif') no-repeat right -1117px; /* orientation=rt */
@@ -362,8 +372,8 @@
 }
 
 .UICalendarPortlet .ViewAttachmentIcon {
-	background: url('icons/CalendarIcons.gif') no-repeat left -1400px; /* orientation=lt */
-	background: url('icons/CalendarIcons.gif') no-repeat right -1400px; /* orientation=rt */
+	background: url('icons/CalendarIcons.gif') no-repeat left -1405px; /* orientation=lt */
+	background: url('icons/CalendarIcons.gif') no-repeat right -1405px; /* orientation=rt */
 	cursor:pointer;
 	padding-left:16px; /* orientation=lt */
 	padding-right:16px; /* orientation=rt */
@@ -926,3 +936,24 @@
 	height: 16px;
 	width: 16px;
 }
+
+
+
+/***************************Edit Feed*********************/
+
+.UICalendarPortlet .UIEditFeed .ResetURLIcon{
+	background: url('icons/CalendarIcons.gif') no-repeat left -1944px; /* orientation=lt */
+	background: url('icons/CalendarIcons.gif') no-repeat right -1944px; /* orientation=rt */
+	height: 16px;
+	width: 16px;
+}
+
+
+.UICalendarPortlet .UIEditFeed .GenerateURLIcon{
+	background: url('icons/CalendarIcons.gif') no-repeat left -1961px; /* orientation=lt */
+	background: url('icons/CalendarIcons.gif') no-repeat right -1961px; /* orientation=rt */
+	height: 16px;
+	width: 16px;
+}
+
+/***************************The end Edit Feed*********************/

@@ -19,13 +19,12 @@
 }
 
 .UIHomePagePortlet .RightAdImage {
-	background: transparent url('DefaultSkin/background/RightHomePage.gif') no-repeat left 70px; /* orientation=lt */
-	background: transparent url('DefaultSkin/background/RightHomePage-rt.gif') no-repeat right 70px; /* orientation=rt */
+	 
 	height: 190px;
 }
 
 .UIHomePagePortlet .HomePortletAdBackround .EmptyBlock{
-	height: 70px;
+	height: 71px;
 }
 
 .UIHomePagePortlet .HomePortletAdBackround .VersionDemo{
@@ -60,17 +59,17 @@
 .UIHomePagePortlet .HomePortletAdBackround .BoldLabel{
 	font-weight: bold;
 	font-size: 13px;
-	color: #5a5a5a;
 }
 
 .UIHomePagePortlet .HomePortletAdBackround .NormalLabel{
 	color: #5a5a5a;
 	font-size: 11px;
+	text-transform:uppercase;
 }
 
 .UIHomePagePortlet .HomePortletAdBackround .LoginButton{
 	float: right;
-	margin-left: 12px;
+	margin-right: 11px;
 	cursor: pointer;
 }
 
@@ -132,8 +131,8 @@
 }
 
 .UIHomePagePortlet .HomePortletContainer .ContentProductsCS {
-	padding-left: 25px; /* orientation=lt */
-	padding-right: 25px; /* orientation=rt */
+	padding: 0px 0px 8px 8px; /* orientation=lt */
+	padding: 0px 8px 8px 0px; /* orientation=rt */
 	height: auto;
 	margin-left: 100px; /* orientation=lt */
 	margin-right: 100px; /* orientation=rt */
@@ -259,7 +258,7 @@
 }
 
 .SideBar .SideBarMC{ 
-	padding: 8px 8px 162px 8px;
+	padding: 8px 8px 193px 8px;
 }
 
 .SideBar .SideBarBL{ 
@@ -280,9 +279,9 @@
 
 
 .SideBar .DownloadButton{
-	background:url('DefaultSkin/background/DownloadButton.gif') no-repeat center top;
-	height: 110px;
-	margin: 20px 0px 0px 0px;
+	background:url('DefaultSkin/background/DownloadButton.png') no-repeat center top;
+	height: 125px;
+	margin: 36px 0px 0px 0px;
 	display: block;
 	width: 100%;
 	cursor: pointer;
@@ -296,7 +295,7 @@
 
 .SideBar .NormalText { 
     line-height:16px;
-	margin-top: 19px;
+	margin-top: 24px;
 	margin-left: 34px;
 }
 

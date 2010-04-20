@@ -16,19 +16,15 @@
  */
 package org.exoplatform.webservice.cs.calendar;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
-import javax.ws.rs.Consumes;
+import javax.jcr.PathNotFoundException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -36,19 +32,27 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.service.FeedData;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.rest.resource.ResourceContainer;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.webservice.cs.bean.CalendarData;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -56,7 +60,9 @@ import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.feed.synd.SyndFeedImpl;
+import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.SyndFeedOutput;
+import com.sun.syndication.io.XmlReader;
 
 
 /**
@@ -70,8 +76,11 @@ import com.sun.syndication.io.SyndFeedOutput;
 
 @Path("/cs/calendar")
 public class CalendarWebservice implements ResourceContainer{
-  public final static String BASE_URL = "/portal/rest".intern();
-
+  public final static String BASE_RSS_URL = "/cs/calendar/feed".intern();
+  public final static String BASE_EVENT_URL = "/cs/calendar/event".intern();
+  final public static String BASE_URL_PUBLIC = "/cs/calendar/subscribe/".intern();
+  final public static String BASE_URL_PRIVATE = "/cs/calendar/private/".intern();
+  
   public CalendarWebservice() {}
 
   protected void start() {
@@ -86,7 +95,7 @@ public class CalendarWebservice implements ResourceContainer{
     .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
     ((ComponentRequestLifecycle)oService).endRequest(manager);
   }
-
+  
   /**
    * 
    * @param username : user id
@@ -136,7 +145,163 @@ public class CalendarWebservice implements ResourceContainer{
     return Response.ok(buffer.toString(), MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
 
-
+  /**
+   * 
+   * @param username : requested user name
+   * @param eventFeedName : contains eventId and CalType
+   * @return : Rss feeds
+   * @throws Exception
+   */
+  @SuppressWarnings("unchecked")
+  @GET
+  @Path("/event/{username}/{eventFeedName}/")
+  public Response event(@PathParam("username")
+                      String username, @PathParam("eventFeedName")
+                      String eventFeedName) throws Exception {
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    try {
+      CalendarService calService = (CalendarService)ExoContainerContext
+      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
+      String eventId = eventFeedName.split(Utils.SPLITTER)[0];
+      String type = eventFeedName.split(Utils.SPLITTER)[1].replace(Utils.ICS_EXT, "");
+      CalendarEvent event = null;
+      if (type.equals(Utils.PRIVATE_TYPE + "")) {
+        event = calService.getEvent(username, eventId);
+      } else if (type.equals(Utils.SHARED_TYPE + "")) {
+        EventQuery eventQuery = new EventQuery();
+        eventQuery.setText(eventId);
+        event = calService.getEvents(username, eventQuery, null).get(0);        
+      } else {
+        EventQuery eventQuery = new EventQuery();
+        eventQuery.setText(eventId);
+        event = calService.getPublicEvents(eventQuery).get(0);
+      }
+      if (event == null) {
+        return Response.status(HTTPStatus.NOT_FOUND).entity("Event " + eventId + "is removed").cacheControl(cacheControl).build();
+      }      
+      OutputStream out = icalEx.exportEventCalendar(event);
+      InputStream in = new ByteArrayInputStream(out.toString().getBytes());
+      return Response.ok(in, "text/calendar")
+      .header("Cache-Control", "private max-age=600, s-maxage=120").
+      header("Content-Disposition", "attachment;filename=\"" + eventId + Utils.ICS_EXT).cacheControl(cacheControl).build();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
+    }
+  }
+  
+  
+  /**
+   * 
+   * @param username : requested user name
+   * @param calendarId : calendar id from system
+   * @param type : calendar type
+   * @return : Rss feeds
+   * @throws Exception
+   */
+  @SuppressWarnings("unchecked")
+  @GET
+  @Path("/feed/{username}/{feedname}/{filename}/")
+  public Response feed(@PathParam("username")
+                      String username, @PathParam("feedname")
+                      String feedname, @PathParam("filename")
+                      String filename) throws Exception {
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    try {
+      CalendarService calService = (CalendarService)ExoContainerContext
+      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      
+      // TODO getFeed(String feedname)
+      FeedData feed = null;
+      for (FeedData feedData : calService.getFeeds(username)) {
+        if (feedData.getTitle().equals(feedname)) {
+          feed = feedData;
+          break;
+        }        
+      }
+      SyndFeedInput input = new SyndFeedInput();
+      SyndFeed syndFeed = input.build(new XmlReader(new ByteArrayInputStream(feed.getContent())));
+      List<SyndEntry> entries = new ArrayList<SyndEntry>(syndFeed.getEntries());
+      List<CalendarEvent> events = new ArrayList<CalendarEvent>();
+      for (SyndEntry entry : entries) {
+        String calendarId = entry.getLink().substring(entry.getLink().lastIndexOf("/")+1) ;
+        List<String> calendarIds = new ArrayList<String>();
+        calendarIds.add(calendarId);
+        Calendar calendar = calService.getUserCalendar(username, calendarId) ;
+        if (calendar != null) {
+          events.addAll(calService.getUserEventByCalendar(username, calendarIds));
+        } else {
+          try {
+            calendar = calService.getSharedCalendars(username, false).getCalendarById(calendarId);
+          } catch (NullPointerException e) {
+            calendar = null;
+          }
+          if (calendar != null) {
+            events.addAll(calService.getSharedEventByCalendars(username, calendarIds));
+          } else {
+            calendar = calService.getGroupCalendar(calendarId);
+            if (calendar != null) {
+              EventQuery eventQuery = new EventQuery();
+              eventQuery.setCalendarId(calendarIds.toArray(new String[]{}));
+              events.addAll(calService.getPublicEvents(eventQuery));
+            }
+          }
+        }        
+      }
+      if(events.size() == 0) {
+        return Response.status(HTTPStatus.NOT_FOUND).entity("Feed " + feedname + "is removed").cacheControl(cacheControl).build();
+      } 
+      return Response.ok(makeFeed(username, events, feed), MediaType.APPLICATION_XML).cacheControl(cacheControl).build();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
+    }
+  }
+  
+  /**
+   * 
+   * @param auhtor : the feed create
+   * @param events : list of event from data
+   * @return
+   * @throws Exception
+   */
+  private String makeFeed(String author, List<CalendarEvent> events, FeedData feedData) throws Exception{
+    String baseURL = feedData.getUrl().split(BASE_RSS_URL)[0];
+    
+    SyndFeed feed = new SyndFeedImpl();      
+    feed.setFeedType("rss_2.0");
+    feed.setTitle(feedData.getTitle());
+    feed.setLink(feedData.getUrl());
+    feed.setDescription(feedData.getTitle());     
+    List<SyndEntry> entries = new ArrayList<SyndEntry>();
+    SyndEntry entry;
+    SyndContent description; 
+    for(CalendarEvent event : events) {
+      entry = new SyndEntryImpl();
+      entry.setTitle(event.getSummary());       
+      entry.setLink(baseURL + BASE_EVENT_URL + Utils.SLASH + author + Utils.SLASH + event.getId() 
+                    + Utils.SPLITTER + event.getCalType() + Utils.ICS_EXT);    
+      entry.setAuthor(author) ;
+      description = new SyndContentImpl();
+      description.setType(Utils.MIMETYPE_TEXTPLAIN);
+      description.setValue(event.getDescription());
+      entry.setDescription(description);        
+      entries.add(entry);
+      entry.getEnclosures() ;
+    }
+    feed.setEntries(entries);      
+    feed.setEncoding("UTF-8") ;     
+    SyndFeedOutput output = new SyndFeedOutput();      
+    String feedXML = output.outputString(feed);      
+    feedXML = StringUtils.replace(feedXML,"&amp;","&");  
+    return feedXML;
+  }
+  
   /**
    * 
    * @param username : requested user name
@@ -171,7 +336,7 @@ public class CalendarWebservice implements ResourceContainer{
       if(cal == null) {
         return Response.status(HTTPStatus.NOT_FOUND).entity("Calendar " + calendarId + "is removed").cacheControl(cacheControl).build();
       } 
-      if(cal.getPublicUrl() == null || cal.getPublicUrl().isEmpty()) {
+      if(cal.getPublicUrl() == null || cal.getPublicUrl().length()==0) {
         return Response.status(HTTPStatus.NO_CONTENT).entity("Calendar " + calendarId + "is not public rss").cacheControl(cacheControl).build();
       }
 
@@ -242,13 +407,33 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
-
       CalendarService calService = (CalendarService)ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+        .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      Calendar calendar = null;
+      if (type.equals(Utils.PRIVATE_TYPE + "")) {
+        calendar = calService.getUserCalendar(username, calendarId);
+      } else if (type.equals(Utils.SHARED_TYPE + "")) {
+        try {
+          calendar = calService.getSharedCalendars(username, false).getCalendarById(calendarId);
+        } catch (NullPointerException ex) {}
+      } else {
+        try {
+          calendar = calService.getGroupCalendar(calendarId);
+        } catch (PathNotFoundException ex) {}
+      }
+      if ((calendar == null) || Utils.isEmpty(calendar.getPublicUrl())) {
+        return Response.status(HTTPStatus.LOCKED)
+          .entity("Calendar " + calendarId + " is not public access").cacheControl(cacheControl).build();
+      }
+      
       CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
       OutputStream out = icalEx.exportCalendar(username, Arrays.asList(calendarId), type);
       InputStream in = new ByteArrayInputStream(out.toString().getBytes());
       return Response.ok(in, "text/calendar")
+      .header("Cache-Control", "private max-age=600, s-maxage=120").
+      header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
+    }catch (NullPointerException ne) {
+      return Response.ok(null, "text/calendar")
       .header("Cache-Control", "private max-age=600, s-maxage=120").
       header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
     } catch (Exception e) {
@@ -277,7 +462,6 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
-
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
@@ -286,9 +470,113 @@ public class CalendarWebservice implements ResourceContainer{
       return Response.ok(in, "text/calendar")
       .header("Cache-Control", "private max-age=600, s-maxage=120").
       header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
+    }catch (NullPointerException ne) {
+      return Response.ok(null, "text/calendar")
+      .header("Cache-Control", "private max-age=600, s-maxage=120").
+      header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
     } catch (Exception e) {
       e.printStackTrace();
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
     }
   }
+  
+  /**
+   * Get all email from contacts data base, the security level will take from
+   * ConversationState
+   * 
+   * @param keywords : the text to compare with data base
+   * @return application/json content type
+   */
+  @GET
+  @Path("/searchCalendar/{keywords}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response searchCalendar(@PathParam("keywords") String keywords) throws Exception {
+    CalendarService  calendarService = 
+      (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
+    List<String> calendarNames = new ArrayList<String>();
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    try {
+      if (ConversationState.getCurrent().getIdentity() == null)
+        return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
+      String username = ConversationState.getCurrent().getIdentity().getUserId();
+      if (username == null)
+        return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
+      ResourceBundle resourceBundle = calendarService.getResourceBundle();
+
+      for(Calendar cal : calendarService.getUserCalendars(username, true)) {
+        if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+          String newName = resourceBundle.getString("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+          cal.setName(newName);
+        }
+        if (cal.getName().toLowerCase().contains(keywords)) {
+          calendarNames.add(Utils.PRIVATE_TYPE + Utils.COLON + cal.getId() + Utils.COLON + cal.getName());
+        }
+      }      
+      
+      start();
+      OrganizationService oService = (OrganizationService)ExoContainerContext
+      .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+      Object[] objGroupIds = oService.getGroupHandler().findGroupsOfUser(username).toArray() ;
+      List<String> listGroupIds = new ArrayList<String>() ;
+      for (Object object : objGroupIds) {
+        listGroupIds.add(((Group)object).getId()) ;
+      }
+      stop();
+
+      List<GroupCalendarData> groupCals  = calendarService.getGroupCalendars(listGroupIds.toArray(new String[] {}), true, username) ;
+      for(GroupCalendarData groupData : groupCals)
+        if(groupData != null) {
+          for(Calendar cal : groupData.getCalendars()) {
+            if (cal.getName().toLowerCase().contains(keywords)) {
+              calendarNames.add(Utils.PUBLIC_TYPE + Utils.COLON + cal.getId() + Utils.COLON + cal.getName());
+            }
+          }
+        }
+      
+      GroupCalendarData sharedData  = calendarService.getSharedCalendars(username, true) ;
+      if(sharedData != null) {
+        for(Calendar cal : sharedData.getCalendars()) {
+          if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
+            String newName = resourceBundle.getString("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
+            cal.setName(Utils.getDisplaySharedCalendar(cal.getCalendarOwner(), newName));
+          }
+          if (cal.getName().toLowerCase().contains(keywords)){
+            calendarNames.add(Utils.SHARED_TYPE + Utils.COLON + cal.getId() + Utils.COLON + cal.getName());
+          }
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      return Response.ok(Status.INTERNAL_SERVER_ERROR).cacheControl(cacheControl).build();
+    }
+    CalendarData data = new CalendarData();
+    data.setInfo(calendarNames);
+    return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+  }
+  /*
+  private final String[] getUserGroups(String username) throws Exception {
+    OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+    Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;
+    String[] groups = new String[objs.length] ;
+    for(int i = 0; i < objs.length ; i ++) {
+      groups[i] = ((Group)objs[i]).getId() ;
+    }
+    return groups ;
+  }*/
+  
+  /*
+  public static String getResourceBundle(String key) {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    ResourceBundle res = context.getApplicationResourceBundle() ;
+    try {
+      return  res.getString(key);
+    } catch (MissingResourceException e) {      
+      e.printStackTrace() ;
+      return null ;
+    }
+  }
+  */
+  
 }

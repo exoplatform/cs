@@ -357,15 +357,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     return uploadedFiles;
   }
 
-  @SuppressWarnings("unchecked")
   public List<String> getCheckedAttach() throws Exception {
     List<String> checkedAttach = new ArrayList<String>();
     for (Attachment att : attachments_) {
-      UIComposeInput inputSet = getChildById(FIELD_TO_SET);
-      UIFormCheckBoxInput uiCheckbox = inputSet.getChildById(att.getId());
-      if (uiCheckbox != null && uiCheckbox.isChecked()) {
         checkedAttach.add(att.getId());
-      }
     }
     return checkedAttach;
   }
@@ -821,17 +816,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     message.setIsReturnReceipt(isReturnReceipt);
 
     List<Attachment> attachments = new ArrayList<Attachment>();
+    long attSize = 0;
     for (Attachment att : this.getAttachFileList()) {
-      if (getCheckedAttach().contains(att.getId()))
+      if (getCheckedAttach().contains(att.getId())) {
         attachments.add(att);
+        attSize += att.getSize();
+      }
     }
 
     message.setAttachements(attachments);
-    long attSize = 0;
-    for (Attachment att : this.getAttachFileList()) {
-      if (getCheckedAttach().contains(att.getId()))
-        attSize += att.getSize();
-    }
     message.setMessageBody(body);
     message.setUnread(false);
     message.setSize(body.getBytes().length + attSize);
@@ -868,7 +861,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
             String[] arr = value.split("_");
             if (arr != null && arr.length > 1) {
               groupId = arr[arr.length - 1];
-            } 
+            }
           }
           if (ALL.equals(groupId)) {
             ContactFilter filter = new ContactFilter();
@@ -881,7 +874,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           } else {
             ContactFilter filter = new ContactFilter();
             if (!MailUtils.isFieldEmpty(label)) {
-              filter.setCategories(new String[] {label});
+              filter.setCategories(new String[] { label });
             }
             otherEmailMap.putAll(contactSrv.searchEmails(MailUtils.getCurrentUser(), filter));
           }
@@ -906,7 +899,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
             mailAddressSet.add(email);
           }
         }
-        int i=0;
+        int i = 0;
         int keySetSize = mailAddressSet.size();
         for (String fullnameAndEmail : mailAddressSet) {
           mailAddresses.append(fullnameAndEmail.split("::")[1]);
@@ -925,9 +918,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       if (internetAddresses.length > 1 && i < internetAddresses.length - 1)
         mailList.append(", ");
     }
-    if(to == null)
+    if (to == null)
       return mailList.toString();
-    else 
+    else
       return to + "," + mailList.toString();
   }
 

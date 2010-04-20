@@ -3,6 +3,12 @@
 	import org.exoplatform.calendar.webui.UICalendarWorkingContainer ;
 	import org.exoplatform.calendar.webui.popup.UIPopupAction ;
 	import org.exoplatform.calendar.service.CalendarSetting;
+	try {
+		def rcontext = _ctx.getRequestContext() ;
+		rcontext.getJavascriptManager().addJavascript('eXo.calendar.restContext = "'+ uicomponent.getRestContextName() +'" ;') ;
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
 %>
 <div class="FixIE">
 <div><div class="FixWidth"><span style="display: none;"></span></div></div>
@@ -69,7 +75,7 @@
 		  rcontext.getJavascriptManager().importJavascript('eXo.cs.CSCometd','/csResources/javascript/') ;
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.Reminder','/calendar/javascript/') ;
 		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.Reminder.init("'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+ '","' + uicomponent.getCometdContextName() + '");') ;
-		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.portletId="' + uicomponent.id + '"') ;
+		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.portletId="' + uicomponent.id + '";') ;
 		%>
 	    <div class="CalendarWorkingWorkspace">
 		    <%uicomponent.renderChild(UIActionBar.class)%>

@@ -26,27 +26,25 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.DataStorage;
-import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
-import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.Utils;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.UserProfile;
 
 /**
@@ -72,6 +70,7 @@ public class ContactServiceImpl implements ContactService {
   
   private static final String TRUE = "true".intern();
   
+  @SuppressWarnings("unchecked")
   public ContactServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService rservice, InitParams initParams) throws Exception {
       storage_ = new JCRDataStorage(nodeHierarchyCreator, rservice) ;
       contactImportExport_.put(VCARD, new VCardImportExport(storage_)) ;
@@ -91,7 +90,6 @@ public class ContactServiceImpl implements ContactService {
       }
   }
 
-  //TODO: optimize this fuction
   private List<String> excludeWildCardMatchs(List<String> sourceList , List<String> wildCards) throws Exception {
     List<String> groupIds = new ArrayList<String>() ;
     if(sourceList != null && !sourceList.isEmpty()){
@@ -216,9 +214,6 @@ public class ContactServiceImpl implements ContactService {
     return storage_.removeContacts(username, contactIds);
   }
   
-  public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception {
-    moveContacts(username, contacts, addressType);
-  }
 
   public void moveContacts(String username, List<Contact> contacts, String addressType ) throws Exception {
     storage_.moveContacts(username, contacts, addressType) ;
@@ -229,10 +224,6 @@ public class ContactServiceImpl implements ContactService {
    */
   public void addUserContactInAddressBook(String userId, String addressBookId) throws Exception {
   	storage_.addUserContactInAddressBook(userId, addressBookId) ;
-  }
-  
-  public List<AddressBook> getGroups(SessionProvider sProvider, String username) throws Exception {
-    return getGroups(username);
   }
 
   public List<AddressBook> getGroups(String username) throws Exception {
@@ -268,17 +259,8 @@ public class ContactServiceImpl implements ContactService {
     return removed;
   }
   
-  
-  public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, String removedUser) throws Exception {
-    removeUserShareContact(username, contactId, removedUser);
-  }
-
   public void removeUserShareContact(String username, String contactId, String removedUser) throws Exception {
     storage_.removeUserShareContact(username, contactId, removedUser) ;
-  }
-  
-  public void shareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> receiveUsers) throws Exception {
-    shareContact(username, contactIds, receiveUsers);
   }
 
   public void shareContact(String username, String[] contactIds, List<String> receiveUsers) throws Exception {
@@ -307,14 +289,8 @@ public class ContactServiceImpl implements ContactService {
     return storage_.findSharedAddressBooksByUser(username) ;
   }
   
-  public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, SharedAddressBook addressBook) throws Exception {
-    return getSharedContactsByAddressBook(username, addressBook);
-  }
   public ContactPageList getSharedContactsByAddressBook(String username, SharedAddressBook addressBook) throws Exception {
   	return storage_.getSharedContactsByAddressBook(username, addressBook) ;
-  }
-  public void removeSharedContact(SessionProvider sProvider, String username, String addressBookId, String contactId) throws Exception {
-    removeSharedContact(username, addressBookId, contactId);
   }
 
   public void removeSharedContact(String username, String addressBookId, String contactId) throws Exception { 
@@ -332,10 +308,7 @@ public class ContactServiceImpl implements ContactService {
   public void saveSharedContact(String username, Contact contact) throws Exception  {
     storage_.saveSharedContact(username, contact) ;
   }
-  
-  public Contact getSharedContact(SessionProvider sProvider, String username, String contactId) throws Exception {
-    return getSharedContact(username, contactId);
-  }
+ 
 
   public Contact getSharedContact(String username, String contactId) throws Exception {
     return storage_.getSharedContact(username, contactId) ;
@@ -345,93 +318,55 @@ public class ContactServiceImpl implements ContactService {
     return storage_.loadPublicContactByUser(contactId);
   }
   
-
-  public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception {
-    return storage_.getPublicContacts(sProvider, groupIds);
-  }
-
-  public Tag getTag(SessionProvider sProvider, String username, String tagName) throws Exception {
-    return getTag(username, tagName);
-  }
-
-  public Tag getTag(String username, String tagName) throws Exception {
-    return storage_.getTag(username, tagName) ;
-  }
-  
-  public List<Tag> getTags(SessionProvider sProvider, String username) throws Exception {
-    return getTags(username);
-  }
+ 
 
   public List<Tag> getTags(String username) throws Exception {
     return storage_.getTags(username);
   }
-  public DataPageList getContactPageListByTag(SessionProvider sProvider, String username, String tagName) throws Exception {
-    return getContactPageListByTag(username, tagName);
-  }
-
+  
   public DataPageList getContactPageListByTag(String username, String tagName) throws Exception {
     return storage_.getContactPageListByTag(username, tagName);
   }
   
-  public void addTag(SessionProvider sProvider, String username, List<String> contactIds, List<Tag> tags) throws Exception {
-    addTag(username, contactIds, tags);
-  }
+  
 
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
     storage_.addTag(username, contactIds, tags);
   }
   
-  public void addTag(SessionProvider sProvider, String username, List<String> contactIds, String tagId) throws Exception {
-    addTag(username, contactIds, tagId);
-  }
+   
 
   public void addTag(String username, List<String> contactIds, String tagId) throws Exception {
 	  storage_.addTag(username, contactIds, tagId);
   }
   
-  public Tag removeTag(SessionProvider sProvider, String username, String tagName) throws Exception {
-    return removeTag(username, tagName);
-  }
+  
 
   public Tag removeTag(String username, String tagName) throws Exception {
     return storage_.removeTag(username, tagName);
   }
   
-  public void updateTag(SessionProvider sProvider, String username,Tag tag) throws Exception {
-    updateTag(username, tag);
-  }
 
   public void updateTag(String username, Tag tag) throws Exception {
     storage_.updateTag(username, tag) ;
   }
   
-  public void removeContactTag(SessionProvider sProvider, String username, List<String> contactIds, List<String> tags) throws Exception {
-    removeContactTag(username, contactIds, tags);
-  }
 
   public void removeContactTag(String username, List<String> contactIds, List<String> tags) throws Exception {
     storage_.removeContactTag(username, contactIds, tags) ;
   }
   
-  public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String groupId) throws Exception {
-    return getPublicContactsByAddressBook(groupId);
-  }
+   
 
   public ContactPageList getPublicContactsByAddressBook(String groupId) throws Exception {
     return storage_.getPublicContactsByAddressBook(groupId) ;
   }
   
-  public void pasteAddressBook(SessionProvider sProvider, String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
-    pasteAddressBook(username, srcAddress, srcType, destAddress, destType);
-  }
 
   public void pasteAddressBook(String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
   	storage_.pasteAddressBook(username, srcAddress, srcType, destAddress, destType) ;
   }
   
-  public List<Contact> pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception {
-    return pasteContacts(username, destAddress, destType, contactsMap);
-  }
 
   public List<Contact> pasteContacts(String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception {
     return storage_.pasteContacts(username, destAddress, destType, contactsMap) ;
@@ -443,10 +378,6 @@ public class ContactServiceImpl implements ContactService {
   
   public String[] getImportExportType() throws Exception {
     return contactImportExport_.keySet().toArray(new String[]{}) ;
-  }
-
-  public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception {
-    return searchContact(username, filter);
   }
   
   public DataPageList searchContact(String username, ContactFilter filter) throws Exception {
@@ -552,86 +483,10 @@ public class ContactServiceImpl implements ContactService {
 
     Calendar cal = new GregorianCalendar() ;
     contact.setLastUpdated(cal.getTime()) ;
-    SessionProvider sysProvider = storage_.createSystemProvider() ;
-    try {
-      saveContact(userProfile.getUserName(), contact, false);
-    } finally {
-      storage_.closeSessionProvider(sysProvider);
-    }    
+    saveContact(userProfile.getUserName(), contact, false);
+      
   }
   
-  ////// LEGACY API //////
-  
-  /**
-   * {@inheritDoc}
-   */
-  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    return getPersonalContactsByAddressBook(username, groupId);
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  public void saveGroup(SessionProvider sProvider, String username, AddressBook group, boolean isNew) throws Exception {
-    saveAddressBook(username,group, isNew);    
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  public AddressBook getGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    return getPersonalAddressBook(username, groupId);
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  public AddressBook removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    return removeAddressBook(username, groupId);
-  }
-    
-  /**
-   * {@inheritDoc}
-   */
-  public AddressBook getSharedGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    return getSharedAddressBook(username, groupId);
-  }  
-  
-  
-  /**
-   * {@inheritDoc}
-   */
-  public List<SharedAddressBook> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception  {
-   return getSharedAddressBooks(username);
-  }  
-  
-  /**
-   * {@inheritDoc}
-   */
-  public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, String removedUser) throws Exception {
-    unshareAddressBook(username, addressBookId,removedUser);
-  }  
-    
-  /**
-   * {@inheritDoc}
-   */
-  public void saveContact(SessionProvider sProvider, String username, Contact contact, boolean isNew) throws Exception {
-    storage_.saveContact(username, contact, isNew);    
-  } 
-  
-  /**
-   * {@inheritDoc}
-   */
-  public List<Contact> getAllContacts(SessionProvider sProvider, String username) throws Exception {
-    return getPersonalContacts(username);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<String> getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    return getEmailsByAddressBook(username, groupId);
-  } 
   
   /**
    * {@inheritDoc}
@@ -642,34 +497,20 @@ public class ContactServiceImpl implements ContactService {
   
   /**
    * {@inheritDoc}
-   */
-  public Contact getPersonalContact(String userId) throws Exception {
-    return getPublicContact(userId) ;
-  }  
-  
-  /**
-   * {@inheritDoc}
    */  
-  public Map<String, String> searchEmails(SessionProvider sessionProvider,  String username, ContactFilter filter)throws Exception {
-    return searchEmails(username, filter) ;
-  }
-    
-  /**
-   * {@inheritDoc}
-   */
-  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception {
-    return storage_.findContactsByFilter(username, filter, type);
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception {
-    return removeContacts(username, contactIds);
-  }
-  
+   
   public void saveAddress(String username, String emailAddress) throws Exception {
     storage_.saveAddress(username, emailAddress) ;
   }
-  
+
+  /**
+   * {@inheritDoc}
+   */
+  public Tag getTag(String username, String tagName) throws Exception {
+    return storage_.getTag(username, tagName) ;
+  }
+
+  public boolean haveEditPermissionOnContact(String username, Contact contact) throws Exception {
+    return storage_.haveEditPermissionOnContact(username, contact);
+  }
 }

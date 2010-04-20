@@ -2071,3 +2071,9 @@
 	float:none;
 	margin-left:0;
 }
+
+/*CS-4089 Style*/
+
+.UIMailPortlet .MailContainer .UIPopupWindow  .UIFormUploadInput .UploadIframe iframe{
+	width: auto;
+}
