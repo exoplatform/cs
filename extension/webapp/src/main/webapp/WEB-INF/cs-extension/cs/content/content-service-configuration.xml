@@ -6,6 +6,22 @@
     <key>org.exoplatform.content.service.ContentDAO</key>
     <type>org.exoplatform.content.service.impl.ContentDAOImpl</type>     
   </component>
-      
+  
+   <external-component-plugins> 
+       <target-component>org.exoplatform.content.service.ContentDAO</target-component>  
+	   <component-plugin>
+	      <name>rssreader.listener</name>
+	      <set-method>addPlugin</set-method>
+	      <type>org.exoplatform.content.service.RSSContentPlugin</type>
+	      <description>rss reader plugin</description>     
+	    </component-plugin>
+	    
+	    <component-plugin>
+	      <name>description.listener</name>
+	      <set-method>addPlugin</set-method>
+	      <type>org.exoplatform.content.service.DescriptionPlugin</type>
+	      <description>Description plugin</description>     
+	    </component-plugin>
+    </external-component-plugins>   
 </configuration>
 

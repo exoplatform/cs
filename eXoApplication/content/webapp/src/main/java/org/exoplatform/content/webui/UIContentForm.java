@@ -63,6 +63,7 @@ public class UIContentForm extends UIForm {
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)).
     addUIFormInput(new UIFormSelectBox(FIELD_TYPE, FIELD_TYPE, option_).
                    addValidator(MandatoryValidator.class));
+    
   }
 
   public void setContentNode(ContentNode node) throws Exception { 
@@ -75,7 +76,7 @@ public class UIContentForm extends UIForm {
     getUIStringInput(FIELD_ID).setEditable(true).setValue(null) ;
     getUIStringInput(FIELD_URL).setValue(null) ;
     getUIStringInput(FIELD_LABEL).setValue(null) ;
-    getUIStringInput(FIELD_DESCRIPTION).setValue(null);
+    getUIFormTextAreaInput(FIELD_DESCRIPTION).setValue(null);
   }
 
   public ContentNode getContentNode() { return contentNode; }
@@ -116,28 +117,6 @@ public class UIContentForm extends UIForm {
         UIDetailContent uiDetail = uiPortlet.findFirstComponentOfType(UIDetailContent.class) ;
         if(uiDetail.getListItems().size() > 0) uiDetail.refresh(true) ;
       }
-
-      //-----------------------------
-
-      //      UIContentForm uiForm = event.getSource() ;
-      //      ContentNode contentNode = uiForm.getContentNode();         
-      //      UIContentPortlet uiPortlet = uiForm.getAncestorOfType(UIContentPortlet.class) ;
-      //      UIContentNavigation uiNav = uiPortlet.getChild(UIContentNavigation.class);
-      //      
-      //      if(contentNode == null) contentNode= new ContentNode();
-      //      uiForm.invokeSetBindingBean(contentNode);
-      //      
-      //      if(contentNode.getId() == null || contentNode.getId().length() == 0){
-      //        contentNode.setId(contentNode.getLabel());
-      //      }
-      //      
-      //      try{
-      //        uiNav.save(contentNode);
-      //        uiNav.setSelectedNode(contentNode.getId());
-      //      }catch (Exception ex) {
-      //        ApplicationMessage msg = new ApplicationMessage(ex.getMessage(), null, ApplicationMessage.ERROR);
-      //        uiForm.getAncestorOfType(UIApplication.class).addMessage(msg) ;
-      //      }
     }
   }
 
