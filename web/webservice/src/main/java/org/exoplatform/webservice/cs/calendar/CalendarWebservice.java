@@ -515,17 +515,7 @@ public class CalendarWebservice implements ResourceContainer{
         }
       }      
       
-      start();
-      OrganizationService oService = (OrganizationService)ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
-      Object[] objGroupIds = oService.getGroupHandler().findGroupsOfUser(username).toArray() ;
-      List<String> listGroupIds = new ArrayList<String>() ;
-      for (Object object : objGroupIds) {
-        listGroupIds.add(((Group)object).getId()) ;
-      }
-      stop();
-
-      List<GroupCalendarData> groupCals  = calendarService.getGroupCalendars(listGroupIds.toArray(new String[] {}), true, username) ;
+      List<GroupCalendarData> groupCals  = calendarService.getGroupCalendars(getUserGroups(username), true, username) ;
       for(GroupCalendarData groupData : groupCals)
         if(groupData != null) {
           for(Calendar cal : groupData.getCalendars()) {
@@ -555,28 +545,18 @@ public class CalendarWebservice implements ResourceContainer{
     data.setInfo(calendarNames);
     return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
-  /*
-  private final String[] getUserGroups(String username) throws Exception {
-    OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-    Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;
-    String[] groups = new String[objs.length] ;
-    for(int i = 0; i < objs.length ; i ++) {
-      groups[i] = ((Group)objs[i]).getId() ;
-    }
-    return groups ;
-  }*/
   
-  /*
-  public static String getResourceBundle(String key) {
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    ResourceBundle res = context.getApplicationResourceBundle() ;
-    try {
-      return  res.getString(key);
-    } catch (MissingResourceException e) {      
-      e.printStackTrace() ;
-      return null ;
+  private final String[] getUserGroups(String username) throws Exception {
+    start();
+    OrganizationService oService = (OrganizationService)ExoContainerContext
+    .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+    Object[] objGroupIds = oService.getGroupHandler().findGroupsOfUser(username).toArray() ;
+    List<String> listGroupIds = new ArrayList<String>() ;
+    for (Object object : objGroupIds) {
+      listGroupIds.add(((Group)object).getId()) ;
     }
+    stop();
+    return listGroupIds.toArray(new String[] {});
   }
-  */
   
 }
