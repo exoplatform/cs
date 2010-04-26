@@ -115,6 +115,7 @@ public class UIContentNavigation extends UIContainer {
     //TODO: Tung.Pham added
     //----------------------------
     UIBreadcumbs uiBreadcumbs = uiDetail.getChild(UIBreadcumbs.class) ;
+    uiBreadcumbs.setTemplate("app:/groovy/rssreader/webui/UIBreadcumbs.gtmpl");
     uiBreadcumbs.setPath(getPath(null, selectedNode_.getId())) ;
     parentNode_ = null ;
     grandNode_ = null ;
