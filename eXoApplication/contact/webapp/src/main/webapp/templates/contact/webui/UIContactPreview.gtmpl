@@ -110,7 +110,7 @@
                     		 <%= ContactUtils.getAge(contact) %> &nbsp; <%=_ctx.appRes("UIContactPreview.label.yearsOld")%>,
                     		 <% } %>
                     		 <% if (contact.getGender() != null) { %>
-                    		  <%= contact.getGender() %>
+                    		  <%=_ctx.appRes("UIContactPreview.label."+contact.getGender()) %>
                     		  <% } %>
                     	</div>	  
                     	<% if (!ContactUtils.isEmpty(contact.getNickName())) { %> 
