@@ -2028,7 +2028,7 @@ UICalendarPortlet.prototype.showHideTime = function(chk){
     var fields = new Array();
     var len = selectboxes.length;
     for (var i = 0; i < len; i++) {
-        if ((selectboxes[i].getAttribute("name") == "toTime") || (selectboxes[i].getAttribute("name") == "fromTime")) {
+        if (selectboxes[i].className == "UIComboboxInput") {
             fields.push(selectboxes[i]);
         }
     }
