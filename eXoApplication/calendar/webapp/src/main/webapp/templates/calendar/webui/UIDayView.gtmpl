@@ -11,7 +11,7 @@
 	import org.exoplatform.webui.application.WebuiRequestContext;
 	import java.util.SimpleTimeZone;
 	uiform.begin() ;
-	
+	Date currentDate = uicomponent.getCurrentDate();
 	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
 	String currentMonthName = uicomponent.getMonthName(currentMonth) ;
@@ -66,13 +66,16 @@
 					</td>
 					<td>
 						<div class="Title $cssClass">
-							$currentDayName,
-						<a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
+						  <span>$currentDayName,
+						<%=uicomponent.renderDayViewInTitleBar("<a href=" + uicomponent.event("GotoDate",monthViewAction)+ ">", "</a>", "<a href=" + uicomponent.event("GotoDate",yearViewAction) + ">", "</a>"); %>
+						</span>
+					<!-- 		<a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
 							$currentMonthName
 						</a>, $currentDay, 
 						<a href="<%=uicomponent.event("GotoDate",yearViewAction)%>">
 							$currentYear
 						</a>
+						-->
 						</div>
 					</td>
 					<td>
