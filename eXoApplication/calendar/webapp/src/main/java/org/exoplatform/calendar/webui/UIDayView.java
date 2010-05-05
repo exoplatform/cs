@@ -16,12 +16,15 @@
  **/
 package org.exoplatform.calendar.webui;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.jcr.PathNotFoundException;
@@ -34,6 +37,7 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -113,22 +117,7 @@ public class UIDayView extends UICalendarView {
     return dataMap ;
   }
   
-  public String renderDayViewInTitleBar(String monthOpenTag, String monthCloseTag, 
-                                        String yearOpenTag, String yearCloseTag) {
-    String formatPattern = "";
-    String dateFormat = this.getDateFormat();
-    if (dateFormat.equalsIgnoreCase(CalendarUtils.FORMATPATTERN1)) { //dd/MM/yyyy
-      formatPattern = "%1$td / %2$s%1$tm%3$s / %4$s%1$tY%5$s";// day/<string>month<string>/<string>year<string>
-    } else if (dateFormat.equalsIgnoreCase(CalendarUtils.FORMATPATTERN2)) {// dd-MM-yyyy
-      formatPattern = "%1$td - %2$s%1$tm%3$s - %4$s%1$tY%5$s";// day-<string>month<string>-<string>year<string>
-    } else if (dateFormat.equalsIgnoreCase(CalendarUtils.FORMATPATTERN3)) { //MM/dd/yyyy
-      formatPattern = "%2$s%1$tm%3$s / %1$td / %4$s%1$tY%5$s";// <string>month<string>/day/<string>year<string>
-    } else if (dateFormat.equalsIgnoreCase(CalendarUtils.FORMATPATTERN4)) { //MM-dd-yyyy
-      formatPattern = "%2$s%1$tm%3$s - %1$td - %4$s%1$tY%5$s";// <string>month<string>/day/<string>year<string>      
-    }
-    return String.format(formatPattern, this.getCurrentCalendar(), monthOpenTag, monthCloseTag, 
-                         yearOpenTag, yearCloseTag);
-  }
+  
   
   static  public class SaveEventActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {

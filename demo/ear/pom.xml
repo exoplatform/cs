@@ -34,6 +34,137 @@
       <version>${project.version}</version>
       <type>war</type>
     </dependency>
+    
+    <!-- CS apps -->
+    
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.mail.webapp</artifactId>
+      <version>${project.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.calendar.webapp</artifactId>
+      <version>${project.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.contact.service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.contact.webapp</artifactId>
+      <version>${project.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.content.service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.content.webapp</artifactId>
+      <version>${project.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.organization.client.openfire</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.organization.service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.chat.service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.chat.webapp</artifactId>
+      <version>${project.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.chatbar.webapp</artifactId>
+      <version>${project.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.web.csResources</artifactId>
+      <version>${project.version}</version>
+      <type>war</type>
+    </dependency>
+     
+    <!-- 3nd parties
+    <dependency>
+      <groupId>org.exoplatform.platform</groupId>
+      <artifactId>exo.platform.commons.comet.webapp</artifactId>
+      <version>${org.exoplatform.platform.version}</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>cometd-bayeux</artifactId>
+      <version>${org.mortbay.jetty.cometd-bayeux.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>cometd-api</artifactId>
+      <version>${org.mortbay.jetty.cometd-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-util</artifactId>
+      <version>${org.mortbay.jetty.jetty-util.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.platform</groupId>
+      <artifactId>exo.platform.commons.comet.service</artifactId>
+      <version>${org.exoplatform.platform.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.exoplatform.kernel</groupId>
+          <artifactId>exo.kernel.container</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.exoplatform.kernel</groupId>
+          <artifactId>exo.kernel.component.common</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.exoplatform.ws</groupId>
+          <artifactId>exo.ws.rest.core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.exoplatform.ws</groupId>
+          <artifactId>exo.ws.commons</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.exoplatform.ws</groupId>
+          <artifactId>exo.ws.frameworks.json</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+     -->
   </dependencies>
   <build>
     <finalName>gatein-exo-cs-sample-${project.version}</finalName>
@@ -50,6 +181,52 @@
               <artifactId>exo.cs.demo.config</artifactId>
               <includeInApplicationXml>true</includeInApplicationXml>
             </jarModule>
+            
+            
+            <jarModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
+            
+            <jarModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
+            
+            <jarModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.contact.service</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
+            
+            <jarModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.chat.service</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
+            
+            <jarModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.content.service</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
+            
+            <jarModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.organization.client.openfire</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
+            
+            <jarModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.organization.service</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
+            
+            
+            
             <webModule>
               <groupId>org.exoplatform.cs</groupId>
               <artifactId>exo.cs.demo.webapp</artifactId>
@@ -60,6 +237,45 @@
               <artifactId>exo.cs.demo.rest-war</artifactId>
               <contextRoot>rest-csdemo</contextRoot>
             </webModule>
+            
+            <webModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.mail.webapp</artifactId>
+              <contextRoot>mail</contextRoot>
+            </webModule>
+            <webModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.calendar.webapp</artifactId>
+              <contextRoot>calendar</contextRoot>
+            </webModule>
+            <webModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.contact.webapp</artifactId>
+              <contextRoot>contact</contextRoot>
+            </webModule>
+            <webModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.chat.webapp</artifactId>
+              <contextRoot>chat</contextRoot>
+            </webModule>
+            <webModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.chatbar.webapp</artifactId>
+              <contextRoot>chatbar</contextRoot>
+            </webModule>
+            <webModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.content.webapp</artifactId>
+              <contextRoot>content</contextRoot>
+            </webModule>
+            <webModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.web.csResources</artifactId>
+              <contextRoot>csResources</contextRoot>
+            </webModule>
+            
+            
+            
           </modules>
         </configuration>
       </plugin>
