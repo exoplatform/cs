@@ -142,6 +142,23 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       priorityMap_.put(String.valueOf(i), CalendarEvent.PRIORITY[i]) ;
     }
   }
+  protected String renderDayViewInTitleBar(String monthOpenTag, String monthCloseTag, 
+                                           String yearOpenTag, String yearCloseTag) {
+       String formatPattern = "";
+       String dateFormat = this.getDateFormat();
+       if (dateFormat.equalsIgnoreCase(CalendarUtils.FORMATPATTERN1)) { //dd/MM/yyyy
+         formatPattern = "%1$td / %2$s%1$tm%3$s / %4$s%1$tY%5$s";// day/<string>month<string>/<string>year<string>
+       } else if (dateFormat.equalsIgnoreCase(CalendarUtils.FORMATPATTERN2)) {// dd-MM-yyyy
+         formatPattern = "%1$td - %2$s%1$tm%3$s - %4$s%1$tY%5$s";// day-<string>month<string>-<string>year<string>
+       } else if (dateFormat.equalsIgnoreCase(CalendarUtils.FORMATPATTERN3)) { //MM/dd/yyyy
+         formatPattern = "%2$s%1$tm%3$s / %1$td / %4$s%1$tY%5$s";// <string>month<string>/day/<string>year<string>
+       } else if (dateFormat.equalsIgnoreCase(CalendarUtils.FORMATPATTERN4)) { //MM-dd-yyyy
+         formatPattern = "%2$s%1$tm%3$s - %1$td - %4$s%1$tY%5$s";// <string>month<string>/day/<string>year<string>      
+       }
+       return String.format(formatPattern, getCurrentCalendar(), monthOpenTag, monthCloseTag, 
+                            yearOpenTag, yearCloseTag);
+     }
+  
   protected SessionProvider getSession() {
     return SessionProviderFactory.createSessionProvider() ;
   }
