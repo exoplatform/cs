@@ -30,6 +30,7 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.UIActionBar;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -282,6 +283,10 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       uiViewContainer.initView(viewType) ;
       uiViewContainer.applySeting() ;
       uiViewContainer.refresh() ;
+      
+      // TODO CS-4165
+      calendarPortlet.findFirstComponentOfType(UICalendarView.class).setCalendarSetting(calendarSetting);
+      
       calendarPortlet.findFirstComponentOfType(UIActionBar.class).setCurrentView(viewType) ;
       calendarPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;

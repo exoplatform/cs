@@ -109,15 +109,18 @@ public class UIMonthView extends UICalendarView {
   }
   public java.util.Calendar getBeginDateOfMonthView() throws Exception{
     java.util.Calendar temCal = getBeginDateOfMonth() ;
-    temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
+    temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
     int amount = temCal.getFirstDayOfWeek() - temCal.get(java.util.Calendar.DAY_OF_WEEK) ;
     temCal.add(java.util.Calendar.DATE, amount) ;
+    while ((temCal.get(Calendar.DATE) < 20) && (temCal.get(Calendar.DATE) != 1)) {
+      temCal.add(Calendar.DATE, -7); 
+    }
     return getBeginDay(temCal) ;
   }
 
   public java.util.Calendar getEndDateOfMonthView() throws Exception{
     java.util.Calendar temCal = getBeginDateOfMonthView() ;
-    temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
+    temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
     temCal.add(java.util.Calendar.DATE, getWeeksOfTheMonth(getCurrentYear(), getCurrentMonth(), 1)*7) ;
     return getBeginDay(temCal) ;
   }
@@ -125,7 +128,6 @@ public class UIMonthView extends UICalendarView {
   public java.util.Calendar getBeginDateOfMonth() throws Exception{
     java.util.Calendar temCal = getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
-    temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
     temCal.set(java.util.Calendar.DATE, 1) ;
     return getBeginDay(temCal) ;
   }
@@ -133,7 +135,6 @@ public class UIMonthView extends UICalendarView {
   public java.util.Calendar getEndDateOfMonth() throws Exception{
     java.util.Calendar temCal = getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
-    temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
     temCal.set(java.util.Calendar.DATE, getDaysInMonth()) ;
     return getEndDay(temCal) ;
   }
