@@ -169,6 +169,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     calendar.setLenient(false) ;
     int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
     calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
+    
+    // TODO CS-4165
+    calendar.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn()));
     return  calendar;
   } 
   public void applySeting() throws Exception {
@@ -327,6 +330,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
   protected int getDayOfWeek(int year, int month, int day) {
     GregorianCalendar gc = new GregorianCalendar(year, month, day) ;
+    gc.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn()));
     return gc.get(java.util.Calendar.DAY_OF_WEEK) ;
   }
   protected  String getMonthName(int month) {
