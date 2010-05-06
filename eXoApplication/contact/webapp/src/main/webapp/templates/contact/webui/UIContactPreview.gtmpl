@@ -87,7 +87,8 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getGender())%></div>
+			                            <div class="InfoTitle3"><%=ContactUtils.encodeHTML(_ctx.appRes("UIContactPreview.label."+contact.getGender()))%></div>
+                                    <!-- <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getGender())%></div> -->
                                    </td>
 			                          </tr>
 			                        </table>
