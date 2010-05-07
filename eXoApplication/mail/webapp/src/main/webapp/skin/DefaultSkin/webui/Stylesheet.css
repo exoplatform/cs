@@ -21,14 +21,14 @@
 .UIWindow .UIMailPortlet {
 	margin: 0px;
 	border: none;
-	min-width: 925px;	
+	min-width: 908px;	
 }
 
 .UIMailPortlet {
 	background: white;
 	border: 1px solid #b7b7b7;
 	margin: 5px;
-	min-width: 945px;	
+	min-width: 908px;	
 }
 
 .UIWindow .UIEmpty {
