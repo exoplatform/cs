@@ -1,6 +1,6 @@
 <div class="ReadingPaneBar">
   <div class="Subject"><span>Subject: </span>
-    <span>Welcome to eXo Mail - eXo Collaboration Suite. </span>
+    <span><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.subject")%></span>  <!-- Welcome to eXo Mail - eXo Collaboration Suite. -->
   </div>
   <div><a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.showHidePreviewPane(this);"><span id="ActionReadingPane" class="MaximizeReadingPane" title="<%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.action.title.togglePreview")%>"></span></a></div>
   <div style="clear:both;"><span></span></div>
@@ -8,29 +8,29 @@
 <div class="ReadingPaneDetails SpliterResizableListArea">
   <div class="SubjectMail">
     <div class="WelcomeMail">
-      <div class="LabelWelcomeMail">Welcome to</div>
-      <div class="LabelComment">please do not reply to this message !</div>
+      <div class="LabelWelcomeMail"><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.welcome")%></div>
+      <div class="LabelComment"><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.commentwarning")%></div>
       <div style="clear:both;"><span></span></div>
     </div>
     <div class="LogoMail">
       <span></span>
     </div>  
     <div class="OverviewMail">
-      Overview
+      <%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.overview")%>
     </div>
     <div class="ContentMail" style="margin-left:25px;">
-      <b>eXo Mail</b> is an open-source mail that is built on foudation of eXo WebOS with variety of new features designed to make your e-mail experience more productive and convenience, as a new way to view your mails inbox and conversation and help to reduce risks and annoyances such as phishing and junk e-mail. Easy to approach the basics as writing, reading, finding and  much more...
+      <b><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.productName")%></b><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.productSummary")%>
     </div>
     <div class="FeaturesMail">
-      Features
+      <%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.features")%>
     </div>
     <div class="ContentMail">
       <ul>
-        <li>Advanced Folder Views : eXo Mail offers a variety of ways for you to organize and display your folders</li>
-        <li>Message Tagging : eXo Mail  allows you to “tag” messages with descriptions that are specific to your needs.</li>
-        <li>Message Filter : eXo Mail  allows you to filter message with special conditions to apply to special folder or tag.</li>
-        <li>Advance Search : eXo Mail  allows you to search message with a lots of options.</li>
-        <li>etc...</li>
+        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.contentline1")%></li>
+        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.contentline2")%></li>
+        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.contentline3")%></li>
+        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.contentline4")%></li>
+        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.contentline5")%></li>
       </ul>
     </div>
   </div>
