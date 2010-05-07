@@ -45,6 +45,7 @@ import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
+import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.contact.webui.popup.UIAddEditPermission;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
@@ -284,6 +285,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     return false;
   }
 
+  public boolean isShareForOther(Contact contact) {
+    if (!contact.getContactType().equals(DataStorage.PERSONAL)) return false;
+    if ((contact.getViewPermissionGroups() != null && contact.getViewPermissionGroups().length > 0) || 
+        (contact.getViewPermissionUsers() != null && contact.getViewPermissionUsers().length > 0))
+        return true;
+    return false;
+  }
+  
   public boolean havePermission(Contact contact) throws Exception {
     if (!contact.getContactType().equals(DataStorage.SHARED))
       return true;

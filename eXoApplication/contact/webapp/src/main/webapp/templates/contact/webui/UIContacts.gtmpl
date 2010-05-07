@@ -378,8 +378,9 @@
 								<td class="text">
 								
 									<% 
-										icon = "OfflineIcon"
+										icon = "OfflineIcon";
 										if (contact.getContactType().equals(JCRDataStorage.PERSONAL) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ; 	
+										if (uicomponent.isShareForOther(contact)) icon = "SharedContact";
 								  %>
 									<div class="State $icon">
 										<a href="$actionLink">
@@ -462,9 +463,10 @@
 								</td>
 								<td class="text">
 									<% 
-										icon = "OfflineIcon"
+										icon = "OfflineIcon";
 										if (contact.getContactType().equals(JCRDataStorage.PERSONAL) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser()))
 										  icon = "OwnerIcon" ; 	
+										if (uicomponent.isShareForOther(contact)) icon = "SharedContact";
 								  %>
 								
 									<div class="State $icon">
@@ -602,8 +604,9 @@
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>">
 			  	<div class="TitleVCards" >
 			  		<% 
-				  		icon = "OfflineIcon"
-						if (contact.getContactType().equals(JCRDataStorage.PERSONAL) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ;
+				  		icon = "OfflineIcon";
+							if (contact.getContactType().equals(JCRDataStorage.PERSONAL) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ;
+			  			if (uicomponent.isShareForOther(contact)) icon = "SharedContact";
 						%>
 				  	<div class="StateIcon $icon"><%= ContactUtils.encodeHTML(contact.getFullName()) %></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
@@ -772,8 +775,9 @@
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>"  isOwner="<%=contact.isOwner()%>">
 			  	<div class="TitleVCards" >
 			  	<% 
-				  	icon = "OfflineIcon"
-					if (contact.getContactType().equals(JCRDataStorage.PERSONAL) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ;					
+				  	icon = "OfflineIcon";
+						if (contact.getContactType().equals(JCRDataStorage.PERSONAL) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ;					
+			  		if (uicomponent.isShareForOther(contact)) icon = "SharedContact";
 					%>
 			  	
 				  	<div class="StateIcon $icon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>

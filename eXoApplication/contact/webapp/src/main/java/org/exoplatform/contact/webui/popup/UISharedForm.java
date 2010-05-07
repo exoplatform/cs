@@ -400,7 +400,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             contactService.shareContact(username, new String[] {contact.getId()}, Arrays.asList(receiveUsers.keySet().toArray(new String[] {}))) ;
           if (receiveUsersByGroups.size() > 0)
             contactService.shareContact(username, new String[] {contact.getId()}, Arrays.asList(receiveUsersByGroups.keySet().toArray(new String[] {}))) ; 
-          
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ; 
         } else {
           Contact contact = uiForm.contact_ ;
           if (uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {

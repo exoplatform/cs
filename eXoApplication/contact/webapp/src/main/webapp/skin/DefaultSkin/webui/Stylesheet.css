@@ -430,7 +430,12 @@
 
 .UIContactPortlet .UIVCardsContent .UIVcardHightLight {
 	border: solid 1px red;	
-}/*AutoComplete Style*/
+}
+
+.UIContactPortlet .SharedContact {
+  background:url("/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/SharedContact.gif") no-repeat; 
+} 
+/*AutoComplete Style*/
 .AutoCompleteMenu {
 	position:absolute;
 	border: solid 1px black;
