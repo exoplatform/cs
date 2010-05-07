@@ -119,6 +119,7 @@
     <action>
       <Save>Lưu</Save>
       <Close>Đóng</Close>
+      <Cancel>Đóng</Cancel>
     </action>
   </UISharedForm>
   <UIAddEditPermission>
