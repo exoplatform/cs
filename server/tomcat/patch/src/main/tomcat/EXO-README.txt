@@ -136,7 +136,11 @@ All those accounts have the default password "gtn".
 ==============
 4 KNOWN ISSUES
 ==============
- - See more here http://wiki.exoplatform.com/xwiki/bin/view/CS/CS+2-0-Beta02+Release+Notes#HKnownIssues
+- On some os (Linux , windows) the tomcat server runs not well, it's very fast and show nothing when you try to connect http://[domainname][port]/portal
+So you do one of 2 way below 
++Go in tomcat/webapp , change starter.war to [prefix]starter.war prefix is the lastest character in alphabet (ex : zstarter.war).
++Or you can move stater.war to somewhere, run the server and after that, put stater.war back to the tomcat/webapp it will be deployed at the last.
+-Re-run the clean server (make sure you remove tomcat/temp/*.*, removed extracted starter folder, remove tomcat/gatein/data/*.* )
 
 ===========
 5 RESOURCES
@@ -152,6 +156,31 @@ All those accounts have the default password "gtn".
 ===========
 6 CHANGELOG
 ===========
+
+- 2.0.0 CR01
+
+** Bug
+    * [CS-3817] - "Time" field is not disabled when check "All day" while creating Event/Task
+    * [CS-4045] - Mistakes in french internationalization in Chat popups
+    * [CS-4060] - JBoss cannot start
+    * [CS-4161] - vertical scrollbar
+    * [CS-4165] - Calendar: parameter "first day of the week" not taken into account
+    * [CS-4170] - Home page of eXo Mail is only in English
+    * [CS-4174] - Agenda: it lacks the French translations 
+    * [CS-4175] - unknown error when create feed navigation on rss reader porlet
+    * [CS-4178] -  Mails : Cannot add a folder 
+    * [CS-4183] - Address book : missing french traduction in contacts
+    * [CS-4193] - Calendar: the "date format" (jj/mm/aaaa) setting is only partially taken into account
+
+** Improvement
+    * [CS-3834] - Distinctive icon for shared contacts
+    * [CS-3955] - Create user profiles lazily
+    * [CS-4008] - Public feed have add more function 
+
+** Task
+    * [CS-3634] - Apply gatein migration prerequisites
+    * [CS-4096] - move components declaration to src/main/resources
+
 - 2.0.0 Beta02
 ** Bug
     * [CS-3561] - Missing upload icon in import calendar form
