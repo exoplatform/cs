@@ -51,13 +51,8 @@ experience more productive. It offers several ways to to view and organize your 
 
 
     * General
-          o Upgraded to GateIn 3.0 GA and dependencies http://www.jboss.org/gatein/
-          o Improve rss manager
-          o Public iCal URL for calendars
-          o Fix lost image bug
-          o Fix send multiple email
-          o Safari 4 support
-          o Configurable exclusions for group addressbook
+          o Bug fix
+          o RSS management improve
 
           
           
