@@ -147,7 +147,6 @@ All those accounts have the default password "gtn".
     * [CS-4045] - Mistakes in french internationalization in Chat popups
     * [CS-4060] - JBoss cannot start
     * [CS-4161] - vertical scrollbar
-    * [CS-4165] - Calendar: parameter "first day of the week" not taken into account
     * [CS-4170] - Home page of eXo Mail is only in English
     * [CS-4174] - Agenda: it lacks the French translations 
     * [CS-4175] - unknown error when create feed navigation on rss reader porlet
@@ -158,8 +157,7 @@ All those accounts have the default password "gtn".
 ** Improvement
     * [CS-3834] - Distinctive icon for shared contacts
     * [CS-3955] - Create user profiles lazily
-    * [CS-4008] - Public feed have add more function 
-
+   
 ** Task
     * [CS-3634] - Apply gatein migration prerequisites
     * [CS-4096] - move components declaration to src/main/resources
