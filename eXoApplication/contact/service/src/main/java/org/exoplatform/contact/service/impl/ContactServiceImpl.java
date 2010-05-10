@@ -110,9 +110,7 @@ public class ContactServiceImpl implements ContactService {
     return groupIds;
   }
   
-  /**
-   * {@inheritDoc}
-   */
+   
   public List<String> getPublicAddressBookIdsOfUser(String user) throws Exception {
     OrganizationService organizationService = 
       (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class) ;
@@ -125,9 +123,7 @@ public class ContactServiceImpl implements ContactService {
     return groupIds ;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+   
   public List<String> getAllsPublicAddressBookIds(String user) throws Exception {
     List<String> publicGroupIds = new ArrayList<String>() ;
     if(userCanSeeAllGroupAddressBooks){
@@ -144,52 +140,37 @@ public class ContactServiceImpl implements ContactService {
     return publicGroupIds;
   }
   
-  /**
-   * {@inheritDoc}
-   */
+   
   public List<Contact> getPersonalContacts(String username) throws Exception {
     return storage_.findAllContactsByOwner(username);
   }
 
-  /**
-   * {@inheritDoc}
-   */  
+   
   public Map<String, String> searchEmails(String username, ContactFilter filter) throws Exception {
     return storage_.findEmailsByFilter(username, filter) ;
   }
   
-  /**
-   * {@inheritDoc}
-   */
+  
   public ContactPageList getPersonalContactsByAddressBook(String ownerId, String addressBookId) throws Exception {
     return storage_.findPersonalContactsByAddressBook(ownerId, addressBookId);
   }
  
 
-  /**
-   * {@inheritDoc}
-   */
+   
   public ContactPageList getPersonalContactsByFilter(String username, ContactFilter filter) throws Exception {
     return storage_.findContactsByFilter(username, filter, DataStorage.PERSONAL) ;
   }
   
-  /**
-   * {@inheritDoc}
-   */
+   
   public ContactPageList getSharedContactsByFilter(String username, ContactFilter filter) throws Exception {
     return storage_.findContactsByFilter(username, filter, DataStorage.SHARED) ;
   }
   
-  /**
-   * {@inheritDoc}
-   */
+   
   public ContactPageList getPublicContactsByFilter(String username, ContactFilter filter) throws Exception {
     return storage_.findContactsByFilter(username, filter, DataStorage.PUBLIC) ;
   }  
-  
-  /**
-   * {@inheritDoc}
-   */
+   
   public List<String> getEmailsByAddressBook(String username, String addressBookId) throws Exception {
     return storage_.findEmailsInPersonalAddressBook(username, addressBookId);
   }
@@ -200,16 +181,11 @@ public class ContactServiceImpl implements ContactService {
     return storage_.loadPersonalContact(username, contactId);
   }
   
-  /**
-   * {@inheritDoc}
-   */
+   
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
     storage_.saveContact(username, contact, isNew);    
   }
-
-  /**
-   * {@inheritDoc}
-   */
+ 
   public List<Contact> removeContacts(String username, List<String> contactIds) throws Exception {
     return storage_.removeContacts(username, contactIds);
   }
@@ -219,9 +195,7 @@ public class ContactServiceImpl implements ContactService {
     storage_.moveContacts(username, contacts, addressType) ;
   }
   
-  /**
-   * {@inheritDoc}
-   */
+   
   public void addUserContactInAddressBook(String userId, String addressBookId) throws Exception {
   	storage_.addUserContactInAddressBook(userId, addressBookId) ;
   }
@@ -230,25 +204,17 @@ public class ContactServiceImpl implements ContactService {
     return storage_.findPersonalAddressBooksByOwner(username);
   }
   
-  /**
-   * {@inheritDoc}
-   */
+  
   public AddressBook getPersonalAddressBook(String username, String addressBookId) throws Exception {
     return storage_.loadPersonalAddressBook(username, addressBookId);
   }
   
-
-  
-  /**
-   * {@inheritDoc}
-   */  
+ 
   public void saveAddressBook(String username, AddressBook group, boolean isNew) throws Exception {
     storage_.savePersonalOrSharedAddressBook(username, group, isNew);    
   } 
   
-  /**
-   * {@inheritDoc}
-   */  
+    
   public AddressBook removeAddressBook(String username, String addressBookId) throws Exception {
     // step 1 : remove content
     storage_.clearAddressBook(username, addressBookId);
@@ -273,18 +239,14 @@ public class ContactServiceImpl implements ContactService {
   	storage_.shareAddressBook(username, addressBookId, receiverUsers) ;
   }
   
-  /**
-   * {@inheritDoc}
-   */
+   
   public void unshareAddressBook(String owner,
                                  String addressBookId,
                                  String unsharedUser) throws Exception {
     storage_.unshareAddressBook(owner, addressBookId, unsharedUser) ;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+   
   public List<SharedAddressBook> getSharedAddressBooks(String username) throws Exception {
     return storage_.findSharedAddressBooksByUser(username) ;
   }
@@ -384,23 +346,15 @@ public class ContactServiceImpl implements ContactService {
     return storage_.searchContact(username, filter) ;
   }
   
-  /**
-   * {@inheritDoc}
-   */
+   
   public AddressBook getSharedAddressBook(String username, String addressBookId) throws Exception {
     return storage_.getSharedAddressBookById(username, addressBookId) ;
   }
-  
-  /**
-   * {@inheritDoc}
-   */
+   
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
     return storage_.getAllEmailBySharedGroup(username, addressBookId) ;
   }
-  
-  /**
-   * {@inheritDoc}
-   */
+   
   public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception { 
     return storage_.findEmailsInPublicAddressBook(username, groupId) ;
   }
@@ -487,25 +441,17 @@ public class ContactServiceImpl implements ContactService {
       
   }
   
-  
-  /**
-   * {@inheritDoc}
-   */
+   
   public void addGroupToPersonalContact(String userId, String groupId) throws Exception {
     addUserContactInAddressBook(userId, groupId);
   }
-  
-  /**
-   * {@inheritDoc}
-   */  
+   
    
   public void saveAddress(String username, String emailAddress) throws Exception {
     storage_.saveAddress(username, emailAddress) ;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+   
   public Tag getTag(String username, String tagName) throws Exception {
     return storage_.getTag(username, tagName) ;
   }
