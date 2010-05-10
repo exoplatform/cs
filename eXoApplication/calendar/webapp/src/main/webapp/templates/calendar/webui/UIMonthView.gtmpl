@@ -42,8 +42,7 @@
 	tf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat dtf = new SimpleDateFormat(dateTimeFormat, locale) ;
 	dtf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM", locale) ;
-	wf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+	DateFormat wf = new  SimpleDateFormat("E", locale) ;
 	DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
 	tempFormat.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	%>
@@ -87,7 +86,7 @@
 					String cssStyle = "" ;
 					if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) cssStyle = "color: red;" ;
 				%>
-			<div class="WeekTitle" style="$cssStyle"><%=calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, locale)%></div>
+			<div class="WeekTitle" style="$cssStyle"><%=wf.format(calendar.getTime())%></div>
 			  <%
 			  	calendar.add(Calendar.DAY_OF_WEEK, 1);
 	      }
