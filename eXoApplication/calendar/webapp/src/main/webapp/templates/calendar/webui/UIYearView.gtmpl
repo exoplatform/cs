@@ -21,6 +21,7 @@
  	dayOfYear = 1 ;
 	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
  	Locale locale = context.getParentAppRequestContext().getLocale() ;
+	DateFormat wf = new  SimpleDateFormat("E", locale) ;
 %>
 <div class="UIYearView" style="display: block;">
 	<div class="TitleBar">		
@@ -83,7 +84,7 @@
 											cssClass = "DayTitle" ;
 											if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) cssClass = "SundayTitle" ;
 										%>
-									<div class="$cssClass"><%=calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, locale).substring(0,1)%></div>
+									<div class="$cssClass"><%=wf.format(calendar.getTime()).substring(0,1)%></div>
 										<%
 											calendar.add(Calendar.DAY_OF_WEEK, 1);
 										}
