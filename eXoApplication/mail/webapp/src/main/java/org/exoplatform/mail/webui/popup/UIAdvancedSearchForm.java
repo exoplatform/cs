@@ -240,6 +240,11 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
           return ;
         }
       }
+      if(!MailUtils.isDate(fromDate) || !MailUtils.isDate(toDate)){
+        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      }
       boolean hasStar = uiSearchForm.hasStar();
       boolean hasAttach = uiSearchForm.hasAttachment();
       long priority = uiSearchForm.getPriority();

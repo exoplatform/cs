@@ -18,6 +18,7 @@ package org.exoplatform.mail;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import java.util.Map;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.search.DateTerm;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
@@ -157,6 +159,31 @@ public class MailUtils {
   public static String formatDate(String format, Date date, Locale locale) {
     Format formatter = new SimpleDateFormat(format, locale);
     return formatter.format(date);
+  }
+  
+  public static boolean isDate(Calendar objCal){
+    if(objCal!=null){
+      try{
+        objCal.getTime();
+        return true;
+      }catch (Exception e) {
+        return false;
+      }
+    }
+    return false;
+  }
+  
+  public static boolean isDate(Object objDate, String format, Locale locale){
+    if(objDate!=null){
+      Format fomatter = new SimpleDateFormat(format, locale);
+      try{
+        fomatter.format(objDate);
+        return true;
+      }catch (Exception e) {
+        return false;
+      }
+    }
+    return false;
   }
   
   public static String formatDate(Date date, Locale locale) {
