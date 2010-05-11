@@ -91,9 +91,14 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       boolean isImage = false ;
       for(String imageType : imageTypes)
         if (fileName.toLowerCase().endsWith(imageType)) isImage = true ;
-      if(Utils.isEmptyField(fileName) || (!isImage)) {
+      if(Utils.isEmptyField(fileName)) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
             ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }else if((!isImage)){
+        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.unformat-imagefile", null, 
+                                                ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
