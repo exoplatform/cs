@@ -4,9 +4,7 @@
       <table class="UIFormGrid">
         <tr>
           <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.EXPORT_FILE_NAME)%></td>
-          <td class="FieldComponent">
-            <%uicomponent.renderField(uicomponent.EXPORT_FILE_NAME)%>
-          </td>
+          <td class="FieldComponent"><%uicomponent.renderField(uicomponent.EXPORT_FILE_NAME)%>*</td>
         </tr>
         <tr>
         <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.EXPORT_FILE_TYPE)%></td>
