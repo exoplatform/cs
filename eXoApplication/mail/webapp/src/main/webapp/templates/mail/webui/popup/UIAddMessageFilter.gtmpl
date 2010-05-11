@@ -11,7 +11,7 @@
 		      <table class="UIFormGrid">
 		        <tr>
 		  	      <td class="FieldLabel" style="width:90px"><%=_ctx.appRes(uicomponent.id+ ".label.filter-name") %>:</td>
-		          <td class="FieldComponent" colspan="2"><%uicomponent.renderField(uicomponent.FILTER_NAME)%></td>
+		          <td class="FieldComponent" colspan="2"><%uicomponent.renderField(uicomponent.FILTER_NAME)%>&nbsp;*</td>
 		        </tr>
 		      </table>
 		    </div>
