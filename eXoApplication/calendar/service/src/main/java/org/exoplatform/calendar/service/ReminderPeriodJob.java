@@ -16,7 +16,6 @@
  **/
 package org.exoplatform.calendar.service;
 
-import org.exoplatform.commons.utils.ExoProperties;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.scheduler.PeriodJob;
 import org.quartz.JobDataMap;

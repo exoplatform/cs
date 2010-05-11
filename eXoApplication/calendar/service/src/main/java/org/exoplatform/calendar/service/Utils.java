@@ -177,6 +177,8 @@ public class Utils {
   
   public static final String SPACE = " " ;
   public static final String RESOURCEBUNDLE_NAME = "locale.portlet.calendar.CalendarPortlet";
+  
+  public static int EVENT_NUMBER = -1;
   /**
    * The method creates instance calendar object with time zone is GMT 0
    * @return GregorianCalendar

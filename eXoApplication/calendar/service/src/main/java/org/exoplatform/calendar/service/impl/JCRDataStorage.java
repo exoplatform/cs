@@ -1993,12 +1993,6 @@ public class JCRDataStorage implements DataStorage {
   public int generateRss(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData, 
                          CalendarImportExport importExport) throws Exception {
     Node rssHomeNode = getRssHome(username) ;
-    Node iCalHome = null ;
-    try {
-      iCalHome = rssHomeNode.getNode(Utils.RSS_NODE) ;
-    } catch (Exception e) {
-      iCalHome = rssHomeNode.addNode(Utils.RSS_NODE, Utils.NT_UNSTRUCTURED) ;
-    }
     try {
       SyndFeed feed = new SyndFeedImpl();      
       feed.setFeedType(rssData.getVersion());      
@@ -2015,22 +2009,6 @@ public class JCRDataStorage implements DataStorage {
         String type = calendarMap.split(Utils.COLON)[0] ;
         OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), type) ;
         if(out != null) {
-          ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
-          try {
-            iCalHome.getNode(calendarMap.replace(Utils.COLON, Utils.UNDERSCORE) + Utils.ICS_EXT).setProperty(Utils.EXO_DATA, is) ;  
-          } catch (Exception e) {
-            Node ical = iCalHome.addNode(calendarMap.replace(Utils.COLON, Utils.UNDERSCORE) + Utils.ICS_EXT, Utils.EXO_ICAL_DATA) ;
-            ical.setProperty(Utils.EXO_DATA, is) ;
-          }
-          /*StringBuffer path = new StringBuffer(Utils.SLASH) ;
-          path.append(iCalHome.getName()).append(Utils.SLASH).append(iCalHome.getNode(calendarMap + Utils.ICS_EXT).getName());     */
-
-          //String url = rssData.getUrl();
-
-          // TODO CS-3889
-          /*String url = getEntryUrl(portalName, rssHomeNode.getSession().getWorkspace().getName(), 
-                                   username, path.toString(), rssData.getUrl()) ;*/
-
           Calendar exoCal = calendars.get(calendarMap) ;
           entry = new SyndEntryImpl();
           entry.setTitle(exoCal.getName());    

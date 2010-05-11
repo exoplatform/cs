@@ -282,8 +282,9 @@ public class CalendarWebservice implements ResourceContainer{
     SyndEntry entry;
     SyndContent description; 
     for(CalendarEvent event : events) {
+      if (Utils.EVENT_NUMBER > 0 && Utils.EVENT_NUMBER <= entries.size()) break;
       entry = new SyndEntryImpl();
-      entry.setTitle(event.getSummary());       
+      entry.setTitle(event.getSummary());
       entry.setLink(baseURL + BASE_EVENT_URL + Utils.SLASH + author + Utils.SLASH + event.getId() 
                     + Utils.SPLITTER + event.getCalType() + Utils.ICS_EXT);    
       entry.setAuthor(author) ;
