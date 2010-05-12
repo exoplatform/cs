@@ -2,7 +2,9 @@
 .UICalendarViewContainer {
 	margin-left: 243px; /* orientation=lt */
 	margin-right: 243px; /* orientation=rt */
-	padding-bottom: 8px;
+
+	padding-top: 8px;
+
 }
 
 .UICalendarViewContainer .UIHeaderBar{
