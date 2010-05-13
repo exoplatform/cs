@@ -311,34 +311,6 @@ UIContactPortlet.prototype.tagCallback = function(evt) {
 	var src = _e.srcElement || _e.target ;
 	src = (src.nodeName.toLowerCase() == "div")? src : src.parentNode ;
 	var tagId = src.getAttribute("tagId") ;
-	
-	// hoang quang hung add
-//	var DOMUtil = eXo.core.DOMUtil ;
-//	var addressBook = (DOMUtil.hasClass(src, "ItemList")) ? src : DOMUtil.findAncestorByClass(src, "ItemList") ;
-//	var canPrint = addressBook.getAttribute("canPrint") ;
-//	var menuItems = DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
-//	var itemLength = menuItems.length ;	
-//	if (canPrint == "true") {
-//		for(var i = 0 ; i < itemLength ; i ++) {
-//			if (DOMUtil.hasClass(menuItems[i],"PrintIcon")) {
-//				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-//				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
-//				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
-//				menuItems[i].parentNode.removeAttribute("oldColor") ;
-//				menuItems[i].parentNode.removeAttribute("oldHref") ;
-//			}
-//		}
-//	} else {
-//		for(var i = 0 ; i < itemLength ; i ++) {
-//			if (DOMUtil.hasClass(menuItems[i],"PrintIcon")) {
-//				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-//				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
-//				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
-//				menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
-//				menuItems[i].parentNode.style.color = "#cccccc" ;
-//			}
-//		}
-//	}
 	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, tagId) ;
 } ;
 
@@ -455,7 +427,7 @@ UIContactPortlet.prototype.printList = function (obj){
 	
 	div.style.position = "absolute" ;
 	div.style.width = "99%" ;
-	//div.style.zIndex =  1000;
+	div.style.zIndex =  100;
 	document.body.insertBefore(div,UIPortalApplication) ;
 	eXo.core.DOMUtil.removeElement(UIAction) ;
 	UIPortalApplication.style.height =  div.offsetHeight + "px";
