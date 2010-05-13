@@ -41,6 +41,8 @@ import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.commons.utils.ExoProperties;
+import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.resources.ResourceBundleService;
@@ -57,11 +59,14 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   private JCRDataStorage                      storage_;
   private Map<String, CalendarImportExport>   calendarImportExport_ = new LinkedHashMap<String, CalendarImportExport>();
   protected List<CalendarUpdateEventListener> listeners_            = new ArrayList<CalendarUpdateEventListener>(3);
-  public CalendarServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice, ResourceBundleService rbs) throws Exception {
+  public CalendarServiceImpl(InitParams params,NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice, ResourceBundleService rbs) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
     calendarImportExport_.put(CalendarService.ICALENDAR, new ICalendarImportExport(storage_));
     calendarImportExport_.put(CalendarService.EXPORTEDCSV, new CsvImportExport(storage_));
     rbs_ = rbs;
+    ExoProperties props =  params.getPropertiesParam("eventNumber.info").getProperties() ;
+    String eventNumber = props.getProperty("eventNumber");
+    Utils.EVENT_NUMBER = Integer.parseInt(eventNumber);
   }
   
   /**

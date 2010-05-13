@@ -59,36 +59,7 @@
         </properties-param>
       </init-params>
     </component-plugin>
-    </external-component-plugins>
-    <external-component-plugins>
-    <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
-    <component-plugin>
-      <name>RssRecordsJob</name>
-      <set-method>addPeriodJob</set-method>
-      <type>org.exoplatform.calendar.service.AutoGeneratePeriodJob</type>
-      <description>add auto update rss, caldav job to the JobSchedulerService</description>
-      <init-params>
-        <properties-param>
-          <name>job.info</name>
-          <description>save the monitor data  periodically</description>
-          <property name="jobName" value="UpdateRssCaldavJob"/>
-          <property name="groupName" value="CollaborationSuite"/>
-          <property name="job" value="org.exoplatform.calendar.service.AutoGeneratePeriodJobImp"/>
-          <property name="repeatCount" value="0"/>
-          <property name="period" value="180000"/>     
-          <property name="startTime" value="+0"/>
-          <property name="endTime" value=""/>               
-        </properties-param>
-        <properties-param>
-          <name>autogenerate.info</name>
-          <description>save the monitor data  periodically</description>
-          <property name="portalName" value="csdemo"/> 
-          <property name="event_number" value="100"/>         
-        </properties-param>
-      </init-params>
-    </component-plugin>
-    
-  </external-component-plugins>   
+    </external-component-plugins>  
   <!--<component>
     <key>org.exoplatform.content.service.ContentDAO</key>
     <type>org.exoplatform.content.service.impl.ContentDAOImpl</type>     
