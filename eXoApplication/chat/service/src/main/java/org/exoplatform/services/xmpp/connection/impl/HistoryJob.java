@@ -21,13 +21,12 @@ import java.util.Queue;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
-import org.exoplatform.services.xmpp.util.HistoryUtils;
-import org.jivesoftware.smack.packet.Message;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -44,11 +43,13 @@ public class HistoryJob implements Job {
   private static Log log = LogFactory.getLog("job.ChatRecordsJob");
   
   public void execute(JobExecutionContext context) throws JobExecutionException {
+    PortalContainer container = getPortalContainer(context);
+    if(container == null) return;
+    ExoContainer oldContainer = ExoContainerContext.getCurrentContainer();
+    ExoContainerContext.setCurrentContainer(container);
     SessionProvider provider = SessionProvider.createSystemProvider();
     try {
       JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
-      ExoContainer container = RootContainer.getInstance();
-      container = ((RootContainer)container).getPortalContainer(jdatamap.getString("portalName"));
       int logBatchSize = Integer.parseInt(jdatamap.getString("logBatchSize"));
       HistoryImpl historyImpl = (HistoryImpl)container.getComponentInstanceOfType(HistoryImpl.class);
       
@@ -65,12 +66,24 @@ public class HistoryJob implements Job {
         }
       }
     } catch (Exception e) {
-      log.error(e.toString());
+      log.error("An exception happened when saving chat message", e);
     }
     finally {
       provider.close(); // release sessions
+      ExoContainerContext.setCurrentContainer(oldContainer);
     }
     
+  }
+  
+  private static PortalContainer getPortalContainer(JobExecutionContext context){
+    if(context == null)
+      return null;
+    String portalName = context.getJobDetail().getGroup();
+    if(portalName == null)
+      return null;
+    if(portalName.indexOf(":")>0)
+      portalName = portalName.substring(0, portalName.indexOf(":"));
+    return RootContainer.getInstance().getPortalContainer(portalName);
   }
 
 }

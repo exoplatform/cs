@@ -109,7 +109,6 @@
 				<properties-param>
 					<name>history.info</name>
 					<description>save the monitor data periodically</description>
-					<property name="portalName" value="portal" />
 					<property name="logBatchSize" value="50" />
 				</properties-param>
 			</init-params>

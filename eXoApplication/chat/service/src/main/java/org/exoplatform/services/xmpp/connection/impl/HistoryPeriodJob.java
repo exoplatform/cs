@@ -35,9 +35,7 @@ public class HistoryPeriodJob extends PeriodJob {
     super(params);
     ExoProperties props =  params.getPropertiesParam("history.info").getProperties() ;
     jdatamap_ = new JobDataMap() ;
-    String portalName = props.getProperty("portalName") ;
     String logBatchSize = props.getProperty("logBatchSize");
-    jdatamap_.put("portalName", portalName) ;
     jdatamap_.put("logBatchSize", logBatchSize);
   }
   
