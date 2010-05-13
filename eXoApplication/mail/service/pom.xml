@@ -102,5 +102,11 @@
       <version>${javax.mail.mail.version}</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+       <groupId>org.exoplatform.tool</groupId>
+       <artifactId>exo.tool.framework.junit</artifactId>
+       <scope>test</scope>
+    </dependency>
+
   </dependencies>
 </project>

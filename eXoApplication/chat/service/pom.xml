@@ -172,6 +172,12 @@
       <version>${javax.ws.rs.jsr311-api.version}</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.component.common</artifactId>
+      <scope>compile</scope>
+    </dependency>
+
   </dependencies>
   <reporting>
     <plugins>

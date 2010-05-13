@@ -116,5 +116,12 @@
       <version>${javax.ws.rs.jsr311-api.version}</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>jtidy</groupId>
+      <artifactId>jtidy</artifactId>
+      <version>${jtidy.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
   </dependencies>
 </project>
