@@ -27,6 +27,8 @@ AutoComplete.prototype.init = function(ids){
 AutoComplete.prototype.pressHandler = function(evt, textbox){
 	var me = eXo.mail.AutoComplete;
 	var keyNum = me.captureKey(evt);
+	evt = window.event || evt ;
+	if (evt.altKey || evt.ctrlKey || evt.shiftKey) return ;
 	switch(keyNum){
 		case 13: me.enterHandler(evt, textbox); break;
 		case 27: me.escapeHandler(evt, textbox); break;
@@ -38,11 +40,16 @@ AutoComplete.prototype.pressHandler = function(evt, textbox){
 };
 
 AutoComplete.prototype.makeRequest = function(url,callback){
-	var request =  eXo.core.Browser.createHttpRequest() ;
-	request.open('GET', url, false) ;
-	request.setRequestHeader("Cache-Control", "max-age=86400") ;
-	request.send(null) ;
-	if(callback) callback(request.responseText) ;
+	if(this.xhr){
+		this.xhr.abort();
+		this.xhr = null;
+		delete this.xhr;
+	}	
+	this.xhr =  eXo.core.Browser.createHttpRequest() ;
+	this.xhr.open('GET', url, false) ;
+	this.xhr.setRequestHeader("Cache-Control", "max-age=86400") ;
+	this.xhr.send(null) ;
+	if(callback) callback(this.xhr.responseText) 
 };
 /**
  * @return unique array
@@ -164,7 +171,7 @@ AutoComplete.prototype.typeHandler = function(evt,textbox){
 	}
 	var url = me.REST_URL + keyword;
 	me.makeRequest(url,me.typeCallback);
-	me.setPosition(me.menu,me.activeInput);
+	if(me.menu) me.setPosition(me.menu,me.activeInput);
 };
 
 AutoComplete.prototype.typeCallback = function(data){
