@@ -19,18 +19,18 @@
       <%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.overview")%>
     </div>
     <div class="ContentMail" style="margin-left:25px;">
-      <b><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.productName")%></b><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.productSummary")%>
+      <%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.label0")%>
     </div>
     <div class="FeaturesMail">
       <%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.features")%>
     </div>
     <div class="ContentMail">
       <ul>
-        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.contentline1")%></li>
-        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.contentline2")%></li>
-        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.contentline3")%></li>
-        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.contentline4")%></li>
-        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.contentline5")%></li>
+        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.label1")%></li>
+        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.label2")%></li>
+        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.label3")%></li>
+        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.label4")%></li>
+        <li><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.label5")%></li>
       </ul>
     </div>
   </div>
