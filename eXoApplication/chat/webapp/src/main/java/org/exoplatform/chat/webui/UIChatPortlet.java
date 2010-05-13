@@ -72,7 +72,12 @@ public class UIChatPortlet extends UIPortletApplication {
   }
   
   protected String getRestContextName() {
-    return PortalContainer.getInstance().getRestContextName();
+    String restBaseUri = Util.getPortalRequestContext().getRequestContextPath() + "/" + PortalContainer.getInstance().getRestContextName();
+    //TODO: modify JS files to remove following codes
+    if(restBaseUri.startsWith("/")){
+      restBaseUri = restBaseUri.substring(1, restBaseUri.length());
+    }
+    return restBaseUri;
   }
   
   protected String getCometdContextName() {
