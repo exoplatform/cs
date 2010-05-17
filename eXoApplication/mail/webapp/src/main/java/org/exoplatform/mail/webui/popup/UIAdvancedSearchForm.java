@@ -16,6 +16,7 @@
  */
 package org.exoplatform.mail.webui.popup;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -190,6 +191,15 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public Calendar getFromDate() {
     return getUIFormDateTimePicker(FIELD_FROM_DATE).getCalendar();
   } 
+  
+  public String getInputFromDate(){
+   return getUIFormDateTimePicker(FIELD_FROM_DATE).getValue(); 
+  }
+  
+  public String getInputToDate(){
+    return getUIFormDateTimePicker(FIELD_TO_DATE).getValue(); 
+   }
+  
   public UIFormDateTimePicker getUIFormDateTimePicker(String id) {
     return findComponentById(id) ;
   }
@@ -217,7 +227,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public void deActivate() throws Exception { }
   
   public String[] getActions() { return new String[] {"Search", "Cancel"}; }
-  
+
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiSearchForm = event.getSource() ;   
@@ -233,18 +243,34 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       String body = uiSearchForm.getMessageBody();
       Calendar fromDate = uiSearchForm.getFromDate();
       Calendar toDate = uiSearchForm.getToDate();
-      if(uiSearchForm.getFromDate() != null && uiSearchForm.getToDate() != null) {
-        if(uiSearchForm.getFromDate().after(uiSearchForm.getToDate())){
+      String fromDateText = uiSearchForm.getInputFromDate();
+      String toDateText = uiSearchForm.getInputToDate();
+      if(!MailUtils.isFieldEmpty(fromDateText)) {
+        if(!MailUtils.isDate(fromDateText,"MM/dd/yyyy")){
+          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return;
+        }
+      }else if(!MailUtils.isFieldEmpty(toDateText)) {
+        if(!MailUtils.isDate(toDateText,"MM/dd/yyyy")){
+          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return;
+        }
+      }
+      if(!MailUtils.isFieldEmpty(fromDateText) && !MailUtils.isFieldEmpty(toDateText)){
+        if(!MailUtils.isDate(fromDateText,"MM/dd/yyyy") || !MailUtils.isDate(toDateText,"MM/dd/yyyy")){
+          uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return;
+        }
+        if(fromDate.after(toDate)){
           uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.date-time-invalid", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
-      }
-      if(!MailUtils.isDate(fromDate) || !MailUtils.isDate(toDate)){
-        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.invalid-date", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return;
-      }
+      }  
+      
       boolean hasStar = uiSearchForm.hasStar();
       boolean hasAttach = uiSearchForm.hasAttachment();
       long priority = uiSearchForm.getPriority();

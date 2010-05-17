@@ -46,6 +46,8 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 
+import com.google.caja.lexer.ParseException;
+
 
 /**
  * Created by The eXo Platform SARL
@@ -162,30 +164,27 @@ public class MailUtils {
   }
   
   public static boolean isDate(Calendar objCal){
-    if(objCal!=null){
-      try{
-        objCal.getTime();
+    if (objCal == null) return false;
+    try{
+      return MailUtils.isDate(objCal.getTime().toString(),"MM/dd/yyyy");
+    }catch (Exception e) {
+      return false;
+    }
+  }
+
+  public static boolean isDate(String isDate, String format){
+    if(isFieldEmpty(isDate)) return false;
+      SimpleDateFormat fomatter = new SimpleDateFormat(format);
+      if(isDate.length() != fomatter.toPattern().length()) return false;
+      fomatter.setLenient(false);
+      try {
+        fomatter.parse(isDate);
         return true;
-      }catch (Exception e) {
+      } catch (java.text.ParseException e) {
         return false;
       }
-    }
-    return false;
   }
-  
-  public static boolean isDate(Object objDate, String format, Locale locale){
-    if(objDate!=null){
-      Format fomatter = new SimpleDateFormat(format, locale);
-      try{
-        fomatter.format(objDate);
-        return true;
-      }catch (Exception e) {
-        return false;
-      }
-    }
-    return false;
-  }
-  
+
   public static String formatDate(Date date, Locale locale) {
     Calendar systemDate =  new GregorianCalendar() ;
     Calendar cal =  new GregorianCalendar() ;
@@ -382,3 +381,4 @@ public class MailUtils {
   }
   
 }
+
