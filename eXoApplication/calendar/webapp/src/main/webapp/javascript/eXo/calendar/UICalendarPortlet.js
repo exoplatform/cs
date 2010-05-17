@@ -2389,7 +2389,7 @@ UICalendarPortlet.prototype.callbackSelectionX = function(){
     var UIComboboxInputs = DOMUtil.findDescendantsByClass(uiTabContentContainer, "input", "UIComboboxInput");
     len = UIComboboxInputs.length;
     var name = null;
-    var timeFormat = this.getTimeFormat(UIComboboxInputs[0]);
+    var timeFormat = this.getTimeFormat(this.synTime(UIComboboxInputs[0]));
     start = this.minToTime(start, timeFormat);
     end = this.minToTime(end, timeFormat);
     if (dateValue) {
@@ -2398,15 +2398,25 @@ UICalendarPortlet.prototype.callbackSelectionX = function(){
         DateContainer.to.value = dateValue;
     }
     for (var i = 0; i < len; i++) {
-        name = UIComboboxInputs[i].name.toLowerCase();
-        if (name.indexOf("from") >= 0) 
+        name = this.synTime(UIComboboxInputs[i]).name.toLowerCase();
+        if (name.indexOf("from") >= 0) {
             UIComboboxInputs[i].value = start;
-        else 
+						this.synTime(UIComboboxInputs[i],start);
+				}
+        else {
             UIComboboxInputs[i].value = end;
+						this.synTime(UIComboboxInputs[i],end);					
+				}
     }
     var cells = eXo.core.DOMUtil.getChildrenByTagName(Highlighter.firstCell.parentNode, "td");
     Highlighter.setAttr(Highlighter.firstCell.cellIndex, Highlighter.lastCell.cellIndex, cells);
 };
+
+UICalendarPortlet.prototype.synTime = function(o,v){
+	var ro = eXo.core.DOMUtil.findPreviousElementByTagName(o,"input");
+	if(!v) return ro;
+	ro.value = v;
+}
 
 /**
  * Sets some properties of UICalendarPortlet object again when user changes setting
