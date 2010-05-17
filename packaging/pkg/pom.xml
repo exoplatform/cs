@@ -92,7 +92,6 @@
       <version>1.3.5-SNAPSHOT</version>
       <type>js</type>
     </dependency>
-    <dependency><groupId>org.exoplatform.ecm.workflow.bp</groupId><artifactId>exo.ecm.workflow.bp.jbpm.holiday</artifactId><version>1.0.7-SNAPSHOT</version><type>jar</type></dependency><!-- 1.0.7-SNAPSHOT-->
   </dependencies>
   <profiles>
     <profile>
