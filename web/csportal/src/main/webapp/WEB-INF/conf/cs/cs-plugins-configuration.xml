@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <configuration>  
+	<!-- 
+	relay it from portal config
 	<component>
 		<key>org.exoplatform.services.mail.MailService</key>
 		<type>org.exoplatform.services.mail.impl.MailServiceImpl</type>
@@ -10,16 +12,17 @@
 					<property name="mail.smtp.auth.username" value="" />
 					<property name="mail.smtp.auth.password" value="" />
 					<property name="mail.smtp.host" value="" />
-					<property name="mail.smtp.port" value="465" />
+					<property name="mail.smtp.port" value="" />
 		 			<property name="mail.smtp.starttls.enable" value="true" />
 					<property name="mail.smtp.auth" value="true" />
 					<property name="mail.smtp.debug" value="false" />
-					<property name="mail.smtp.socketFactory.port" value="465" />
+					<property name="mail.smtp.socketFactory.port" value="" />
 					<property name="mail.smtp.socketFactory.class" value="javax.net.ssl.SSLSocketFactory" />
 					<property name="mail.smtp.socketFactory.fallback" value="false" />
 				</properties-param>
 			</init-params>
 	</component>
+	 -->
   <external-component-plugins>
     <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
     <component-plugin>
