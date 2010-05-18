@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.mail.Folder;
 import javax.mail.Message;
 
 import org.exoplatform.mail.service.MimeMessageParser;
@@ -46,7 +47,8 @@ public class FetchMailContentThread implements Runnable {
     try {
       downloadMailContent();
     } catch(Exception e) {
-      e.printStackTrace();
+      //e.printStackTrace();
+      System.out.println("\n\n Message content error !");
     }
   }
   
@@ -55,6 +57,7 @@ public class FetchMailContentThread implements Runnable {
     Message msg;
     List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap_.keySet()) ;
     while (j < numberMessage_) {
+      if (!folder_.isOpen()) folder_.open(Folder.READ_WRITE);
       msg = msgList.get(j);
       storage_.saveTotalMessage(username_, accountId_, MimeMessageParser.getMessageId(msg), msg, null);
       j++;
