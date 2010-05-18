@@ -195,7 +195,7 @@ public class MailUtils {
     boolean isSameDate = (isSameWeek && (systemDate.get(Calendar.DAY_OF_WEEK) == cal.get(Calendar.DAY_OF_WEEK)));
     if (isSameYear) 
       if (isSameDate) 
-        return (new SimpleDateFormat("HH:mm aaa", locale)).format(date);
+        return (new SimpleDateFormat("hh:mm aaa", locale)).format(date);
       else if (isSameWeek)
         return (new SimpleDateFormat("EEEE", locale)).format(date);
       else if (isSameMonth)
