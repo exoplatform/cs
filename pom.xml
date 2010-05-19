@@ -61,7 +61,7 @@
     <org.exoplatform.portal.version>2.5.9-SNAPSHOT</org.exoplatform.portal.version>
     <org.exoplatform.webos.version>1.5.6-SNAPSHOT</org.exoplatform.webos.version>
     <org.exoplatform.exopackage.version>1.2.3-SNAPSHOT</org.exoplatform.exopackage.version>
-    <org.exoplatform.exobuild.version>1.2.2-SNAPSHOT</org.exoplatform.exobuild.version>
+    <version.exobuild.plugin>1.2.2-SNAPSHOT</version.exobuild.plugin>
   </properties>
   <build>
     <resources>
