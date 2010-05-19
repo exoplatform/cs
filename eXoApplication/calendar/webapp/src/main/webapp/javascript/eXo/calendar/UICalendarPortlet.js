@@ -183,11 +183,15 @@ UICalendarPortlet.prototype.fillData = function(uiform, data) {
 	var isAllday = uiform.elements["allDay"] ;
 	var calendar = uiform.elements["calendar"]; 
 	var category = uiform.elements["category"] ;
+	var eventName = uiform.elements["eventName"];
+	var description = uiform.elements["description"];
 	
 	var formater = eXo.cs.DateTimeFormater ;
 	var timeType = "HH:MM" ;
 	var dateType = fromField.getAttribute("format").replace("MM","mm") ;
 	if(this.timeFormat == "hh:mm a")  timeType = formater.masks.shortTime ;
+	eventName.value = "";
+	description.value = "";
 	fromField.value = formater.format(data.from, dateType);
 	fromFieldTime.style.visibility= "visible";
 	fromFieldTime.value = formater.format(data.fromTime, timeType);	
