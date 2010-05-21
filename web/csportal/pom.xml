@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>cs</artifactId>
-    <version>1.3.5</version>
+    <version>1.3.6-SNAPSHOT</version>
   </parent>
   <artifactId>exo.cs.web.portal</artifactId>
   <packaging>war</packaging>

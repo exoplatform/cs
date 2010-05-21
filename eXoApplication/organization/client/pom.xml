@@ -22,10 +22,10 @@
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>cs</artifactId>
-    <version>1.3.5</version>
+    <version>1.3.6-SNAPSHOT</version>
   </parent>
   <artifactId>exo.cs.eXoApplication.organization.client.openfire</artifactId>
-  <version>1.3.5</version>
+  <version>1.3.6-SNAPSHOT</version>
   <name>eXo CS WS REST Openfire authentication plugin</name>
   <description />
   <dependencies>

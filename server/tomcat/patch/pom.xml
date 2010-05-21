@@ -22,10 +22,10 @@
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>cs</artifactId>
-    <version>1.3.5</version>
+    <version>1.3.6-SNAPSHOT</version>
   </parent>
   <artifactId>exo.cs.server.tomcat.patch</artifactId>
-  <version>1.3.5</version>
+  <version>1.3.6-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>eXo CS Tomcat Server</name>
   <description>eXo Tomcat Server</description>
