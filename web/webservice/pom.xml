@@ -22,7 +22,7 @@
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>cs</artifactId>
-    <version>1.3.5-SNAPSHOT</version>
+    <version>1.3.5</version>
   </parent>
   <artifactId>exo.cs.web.webservice</artifactId>
   <packaging>jar</packaging>
@@ -57,19 +57,19 @@
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
-      <version>1.3.5-SNAPSHOT</version>
+      <version>1.3.5</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.contact.service</artifactId>
-      <version>1.3.5-SNAPSHOT</version>
+      <version>1.3.5</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
-      <version>1.3.5-SNAPSHOT</version>
+      <version>1.3.5</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
