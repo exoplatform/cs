@@ -243,7 +243,7 @@ public class EventQuery {
         //stringBuffer.append("@exo:fromDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"')") ;
         //stringBuffer.append(") or (") ;
         //stringBuffer.append("@exo:fromDateTime < xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
-        stringBuffer.append("@exo:toDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"')") ;
+        stringBuffer.append("@exo:fromDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"')") ;
         //stringBuffer.append(")") ;
         stringBuffer.append(")") ;
         hasConjuntion = true ;
@@ -256,7 +256,7 @@ public class EventQuery {
 //        stringBuffer.append("@exo:fromDateTime < xs:dateTime('"+ISO8601.format(toDate)+"') and ") ;
 //        stringBuffer.append("@exo:toDateTime > xs:dateTime('"+ISO8601.format(toDate)+"')") ;
 //        stringBuffer.append(")") ;
-        stringBuffer.append("@exo:fromDateTime <= xs:dateTime('"+ISO8601.format(toDate)+ "')") ;
+        stringBuffer.append("@exo:toDateTime <= xs:dateTime('"+ISO8601.format(toDate)+ "')") ;
         stringBuffer.append(")") ;
         hasConjuntion = true ;
       }
