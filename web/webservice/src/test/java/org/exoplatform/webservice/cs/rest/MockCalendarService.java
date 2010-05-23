@@ -460,4 +460,10 @@ public class MockCalendarService implements CalendarService{
     // TODO Auto-generated method stub
     return null;
   }
+
+public void initNewUser(String userName, CalendarSetting defaultCalendarSetting)
+		throws Exception {
+	// TODO Auto-generated method stub
+	
+}
 }
