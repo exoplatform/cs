@@ -153,7 +153,8 @@ public class JCRDataStorage implements DataStorage {
     //CS-2356
     //SessionProvider sProvider = createSessionProvider();
     SessionProvider sProvider = createSystemProvider();
-    Node userApp = getNodeByPath(nodeHierarchyCreator_.getUserApplicationNode(sProvider, username).getPath(), sProvider);
+    Node userNode = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username);
+    Node userApp = getNodeByPath(userNode.getPath(), sProvider);
     Node calendarRoot;
     try {
       return userApp.getNode(Utils.CALENDAR_APP);
@@ -952,6 +953,7 @@ public class JCRDataStorage implements DataStorage {
    */
   public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     Node calendarNode = getUserCalendarHome(username).getNode(calendarId);
+    event.setCalendarId(calendarId); // make sur the event is attached to the calendar
     if(event.getReminders() != null && event.getReminders().size() > 0) {
       //Need to use system session
       //SessionProvider systemSession = SessionProvider.createSystemProvider();

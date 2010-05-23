@@ -567,4 +567,6 @@ public interface CalendarService {
   public void removeFeedData(String username, String title);
   
   public ResourceBundle getResourceBundle() throws Exception;
+
+  public void initNewUser(String userName, CalendarSetting defaultCalendarSetting) throws Exception;	
 }

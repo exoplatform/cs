@@ -27,6 +27,8 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValuesParam;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
 
@@ -36,6 +38,8 @@ import org.exoplatform.services.organization.UserEventListener;
  */
 public class NewUserListener extends UserEventListener {
 
+	private static final Log LOG = ExoLogger.getLogger(NewUserListener.class);
+	
   //Calendar params
   //final public static String CALENDAR_CATEGORIES = "defaultCalendarCategory".intern() ;
   //final public static String CALENDAR_NAME  = "defaultCalendar".intern() ;
@@ -144,45 +148,13 @@ public class NewUserListener extends UserEventListener {
   public void postSave(User user, boolean isNew) throws Exception {
     if(!isNew) return ;
     if(ignore_users_ != null && !ignore_users_.isEmpty())
-      for(String u : ignore_users_) {
-        if (user.getUserName().equalsIgnoreCase(u)) return ;
-      }
-    try {
-      EventCategory eventCategory = new EventCategory();
-      eventCategory.setDataInit(true);
-      for (int id = 0; id < defaultEventCategoryId.length; id ++) {
-        eventCategory.setId(defaultEventCategoryId[id]);
-        eventCategory.setName(defaultEventCategoryName[id]);
-        cservice_.saveEventCategory(user.getUserName(), eventCategory, true);
-      }
-
-      // save default calendar category
-      CalendarCategory calCategory = new CalendarCategory();
-      calCategory.setId(DEFAULT_CALENDAR_CATEGORYID);
-      calCategory.setName(DEFAULT_CALENDAR_CATEGORYNAME);
-      calCategory.setDataInit(true) ;
-      cservice_.saveCalendarCategory(user.getUserName(),	calCategory, true);
-
-      // save default calendar
-      Calendar cal = new Calendar();
-      cal.setId(Utils.getDefaultCalendarId(user.getUserName()));
-      cal.setName(DEFAULT_CALENDAR_NAME);
-      cal.setCategoryId(calCategory.getId());
-      cal.setDataInit(true) ;
-      cal.setCalendarOwner(user.getUserName()) ;
-      if(defaultCalendarSetting_ != null) {
-        if(defaultCalendarSetting_.getLocation() != null)
-          cal.setLocale(defaultCalendarSetting_.getLocation()) ;
-        if(defaultCalendarSetting_.getTimeZone() != null)
-          cal.setTimeZone(defaultCalendarSetting_.getTimeZone()) ;
-      }
-      cservice_.saveUserCalendar(user.getUserName(), cal,	true);
-
-      if(defaultCalendarSetting_ != null && user != null) {
-        cservice_.saveCalendarSetting(user.getUserName(), defaultCalendarSetting_) ;
-      }
+        for(String u : ignore_users_) {
+          if (user.getUserName().equalsIgnoreCase(u)) return ;
+        }
+      try {
+    	  cservice_.initNewUser(user.getUserName(), defaultCalendarSetting_);
     } catch (Exception e) {
-      e.printStackTrace() ;
+      LOG.error("Failed to initialize calendar account for " + user.getUserName());
     }  
   }
 }

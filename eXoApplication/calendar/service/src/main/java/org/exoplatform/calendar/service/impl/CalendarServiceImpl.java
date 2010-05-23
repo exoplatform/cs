@@ -546,4 +546,40 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public void removeFeedData(String username, String title) {
     storage_.removeFeedData(username, title);
   }
+
+public void initNewUser(String userName, CalendarSetting defaultCalendarSetting_) throws Exception {
+    EventCategory eventCategory = new EventCategory();
+    eventCategory.setDataInit(true);
+    for (int id = 0; id < NewUserListener.defaultEventCategoryId.length; id ++) {
+      eventCategory.setId(NewUserListener.defaultEventCategoryId[id]);
+      eventCategory.setName(NewUserListener.defaultEventCategoryName[id]);
+      saveEventCategory(userName, eventCategory, true);
+    }
+
+    // save default calendar category
+    CalendarCategory calCategory = new CalendarCategory();
+    calCategory.setId(NewUserListener.DEFAULT_CALENDAR_CATEGORYID);
+    calCategory.setName(NewUserListener.DEFAULT_CALENDAR_CATEGORYNAME);
+    calCategory.setDataInit(true) ;
+    saveCalendarCategory(userName,	calCategory, true);
+
+    // save default calendar
+    Calendar cal = new Calendar();
+    cal.setId(Utils.getDefaultCalendarId(userName));
+    cal.setName(NewUserListener.DEFAULT_CALENDAR_NAME);
+    cal.setCategoryId(calCategory.getId());
+    cal.setDataInit(true) ;
+    cal.setCalendarOwner(userName) ;
+    if(defaultCalendarSetting_ != null) {
+      if(defaultCalendarSetting_.getLocation() != null)
+        cal.setLocale(defaultCalendarSetting_.getLocation()) ;
+      if(defaultCalendarSetting_.getTimeZone() != null)
+        cal.setTimeZone(defaultCalendarSetting_.getTimeZone()) ;
+    }
+    saveUserCalendar(userName, cal,	true);
+
+    if(defaultCalendarSetting_ != null) {
+      saveCalendarSetting(userName, defaultCalendarSetting_) ;
+    }
+}
 }
