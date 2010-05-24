@@ -1,5 +1,5 @@
 ==============================================
-    Release Notes - exo-cs - Version 1.3.4
+    Release Notes - exo-cs - Version 1.3.6
 ==============================================
 
 ===============
@@ -29,30 +29,15 @@ experience more productive. It offers several ways to to view and organize your 
 =============
 2 What's new?
 =============
-exo Collaboration Suite 1.3.4 features several noteworthy changes:
 
-    * General
-          o Upgraded to portal 2.5.7
-          o Compatible with jcr 1.10.6
-          o Compatible with webos 1.5.3
-          
-          o Right to left (RTL) orientation support
-          o Arabic translations
-    * Calendar
-          o Quick add event and task by javaScript for faster
-          o Revamped participants and invitations dialog
-          o Dynamic iCal generation for feeds (CalDAV and RSS)
-    * Mail
-          o IMAP folders listing and fetching
-          o Return receipts
-          o New layouts (vertical, horizontal, switch layout)
-    * Address Book
-          o Collected adresses adress book to collect contacts from Mail
-          o Enhanced integration in Mail
-    * Chat
-          o Jabber chat server
-          o Chat Bar application
-          o WebOS friendly chat application
+
+     * General
+          o Upgraded to kernel 2.0.11
+          o Upgraded to core 2.1.9
+          o Upgraded to portal 2.5.9
+          o Upgraded to jcr 1.10.8 
+          o Upgraded to webos 1.5.6
+          o Fix bugs  
           
 Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes          
           
@@ -135,6 +120,30 @@ All those accounts have the default password "exo".
 ===========
 5 CHANGELOG
 ===========
+- 1.3.6
+
+- 1.3.5
+
+** Bug
+    * [CS-3559] - Chat bar can not be displayed in Vista & Mac Skin
+    * [CS-3561] - Missing upload icon in import calendar form
+    * [CS-3725] - Webmail: Date format error (wrong pattern used)
+    * [CS-4045] - Mistakes in French internationalization in Chat popups
+    * [CS-4133] - Exception when a user is deleted
+    * [CS-4161] - vertical scroll-bar
+    * [CS-4165] - Calendar: parameter "first day of the week" not taken into account
+    * [CS-4168] -  Problem in RSS Portlet Refresh
+    * [CS-4170] - Home page of eXo Mail is only in English
+    * [CS-4174] - Agenda: it lacks the French translations 
+    * [CS-4178] -  Mails : Cannot add a folder 
+    * [CS-4183] - Address book : missing french traduction in contacts
+    * [CS-4193] - Calendar: the "date format" (jj/mm/aaaa) setting is only partially taken into account
+    * [CS-4197] - Remove the use of exoservice gmail Account from MPailService configuration
+    * [CS-4236] - Mail: Mail content is not displayed
+    * [CS-4237] -  Mail - Can NOT move many mails at once
+    * [CS-4268] - A bad translation of the home page of eXo Mail 
+    * [CS-4269] - Calendar: some typo in French
+
 - 1.3.4
  ** Bug
     * [CS-3012] - when view message which has attachment , attachment of this message is not shown in the first view
