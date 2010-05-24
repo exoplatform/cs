@@ -29,8 +29,6 @@ experience more productive. It offers several ways to to view and organize your 
 =============
 2 What's new?
 =============
-exo Collaboration Suite 1.3.4 features several noteworthy changes:
-
     
     * General
           o Upgraded to kernel 2.0.11
