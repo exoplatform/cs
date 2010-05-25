@@ -175,6 +175,9 @@
   <UIAccountSetting>
     <tab>
       <label>
+        <incoming>Incoming</incoming>
+        <outgoing>Outgoing</outgoing>
+        <fetchOptions>Fetch options</fetchOptions>
         <account>حساب</account>
         <identitySettings>الهويّة</identitySettings>
         <serverSettings>الـمُزوّد</serverSettings>
@@ -683,6 +686,7 @@
       <confirm-remove-message>هل ترغب حقّـا في حذف هذه الرّسائل ؟</confirm-remove-message>
     </msg>
     <label>
+      <there-are-no-account>No account, click here to create one.</there-are-no-account>
       <receiving-messages>استلام الرسائل...</receiving-messages>
       <there-are-no-messages>لا تُوجد رسائل</there-are-no-messages>
       <mark-as-read>تمّت قراءتها</mark-as-read>
@@ -802,6 +806,9 @@
     </msg>
     <UIIntroduction>
       <label>
+        <title>Subject:</title>
+        <subject>Welcome to eXo Mail - eXo Collaboration Suite.</subject>
+        <commentwarning>please do not reply to this message !</commentwarning>
         <welcome>مرحبًــا بكم في</welcome>
         <overview>نظرة عامّة</overview>
         <label0>يُعتبَرُ بريد إكزو عميلاً للبريد ذو المصدر المفتوح. هذا العميل الذي يقوم على أساس eXo WebOS يتضمّن العديد من الوظائف الجديدة و المُصمَّمَة  من أجل أن تجعل تجربَتك مع بريدك الإلكتروني أكثر إنتاجية وأكثر مُلائَمَة، مع توفير طريقة جديدة لعرض رسائل البريد الوارد ، والمحادثة ، إلى جانب مُساعدتك على الحدّ من المخاطر أو المُضايقات التي يُمكن التعرُّض لها مثل التصيّـد الالكتروني أو رسائل البريد الالكترونية الغير مرغوب فيها...بريد إكزو هو طريقة سهلة لفهم أُسُس كتابة الرّسائل، قرائتها، العثور على معلومات تضمَّنَتها هذه الأخيرة و أكثر من ذلك من الميزات...</label0>

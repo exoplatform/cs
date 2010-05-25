@@ -175,6 +175,9 @@
   <UIAccountSetting>
     <tab>
       <label>
+        <incoming>Thư đến</incoming>
+        <outgoing>Thư đi</outgoing>
+        <fetchOptions>Cách lấy thư</fetchOptions>
         <account>Tài khoản</account>
         <identitySettings>Đặc tính</identitySettings>
         <serverSettings>Cấu hình máy chủ</serverSettings>
@@ -673,6 +676,7 @@
       <confirm-remove-message>Bạn có chắc muốn xóa các thư này ?</confirm-remove-message>
     </msg>
     <label>
+     <there-are-no-account>Chưa có tài khoản nào, nhấn vào đây để tạo mới</there-are-no-account>
       <receiving-messages>Đang nhận thư...</receiving-messages>
       <there-are-no-messages>Không có thư nào</there-are-no-messages>
       <mark-as-read>Đánh dấu đã đọc</mark-as-read>
@@ -792,6 +796,9 @@
     </msg>
     <UIIntroduction>
       <label>
+        <title>Chủ đề</title>
+        <subject>Chào mừng đến với eXo thư - Bộ sản phẩm cộng </subject>
+        <commentwarning>Làm ơn, không trả lời thư này !</commentwarning>
         <welcome>Chào mừng</welcome>
         <overview>Khái quát</overview>
         <label0>Thư eXo là môt ứng dụng thư phía máy trạm với nhiều đặc tính được thiết kế để làm cho việc dùng thư điện tử của bạn trở nên phong phú và thuận tiện hơn.</label0>
