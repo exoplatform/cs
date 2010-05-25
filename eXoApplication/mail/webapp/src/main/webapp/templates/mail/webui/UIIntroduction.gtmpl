@@ -1,5 +1,5 @@
 <div class="ReadingPaneBar">
-  <div class="Subject"><span>Subject: </span>
+  <div class="Subject"><span><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.title")%></span>
     <span><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.subject")%></span>  <!-- Welcome to eXo Mail - eXo Collaboration Suite. -->
   </div>
   <div><a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.showHidePreviewPane(this);"><span id="ActionReadingPane" class="MaximizeReadingPane" title="<%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.action.title.togglePreview")%>"></span></a></div>
