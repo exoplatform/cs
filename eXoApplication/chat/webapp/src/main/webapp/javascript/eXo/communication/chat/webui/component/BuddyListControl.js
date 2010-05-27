@@ -60,7 +60,13 @@ BuddyItem.prototype.init = function() {
   this.updateStatus(status);
 
 	var uid = this.buddyInfo.user ;
-	eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;	
+	if(eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] == null)
+	  eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;
+	if (uid.indexOf('@') != -1) {
+	  uid = uid.substr(0, uid.indexOf('@'));
+	  if(eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] == null)
+	    eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;
+	}
   //this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.user, true);
   this.iconChatNode.setAttribute('title' ,this.getUserName(this.buddyInfo.user, false));
   this.rootNode.setAttribute('userName', this.buddyInfo.user);  
@@ -253,6 +259,7 @@ BuddyListControl.prototype.room2StandardContactList = function(roomContactList) 
     contact.subscriptionStatus = null;
     contact.subscriptionType = null;
     contact.user = contact.nickname + '@' +  mainServiceName;
+    contact.fullName = roomContactList[i].fullName;
     contactList.push(contact);
   }
   return contactList;

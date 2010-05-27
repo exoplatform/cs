@@ -664,11 +664,19 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
     messageNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.guestMessage);
   }
   var msgTitleNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatIconStatus);
-  if (buddyId.length > this.MAX_MSG_TITLE_LEN) {
-    msgTitleNode.innerHTML = buddyId.substr(0, this.MAX_MSG_TITLE_LEN - 3) + '...';
-  } else {
-    msgTitleNode.innerHTML = buddyId;
+  var fullNameMap = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap ;
+  var fullName = buddyId;
+  if(fullName.indexOf('@') >= 0)
+    fullName = fullName.substr(0, fullName.indexOf('@'));
+  if(fullNameMap[fullName] != null) {
+    fullName = fullNameMap[fullName] ;
   }
+  if(fullName.length > this.MAX_TAB_TITLE_LEN) {
+    msgTitleNode.innerHTML = fullName.substr(0, this.MAX_TAB_TITLE_LEN - 3) + '...';  		
+  } else {
+    msgTitleNode.innerHTML = fullName ;
+  }
+  
   var chatTimeNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatTimeCenter);
   if (this.updatingHistoryMessage ||
       msgObj['dateSend']) {

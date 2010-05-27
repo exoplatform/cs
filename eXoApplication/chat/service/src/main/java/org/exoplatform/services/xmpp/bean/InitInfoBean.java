@@ -63,6 +63,13 @@ public class InitInfoBean {
    * 
    */
   private List<ContactBean>       roster;
+  
+  /**
+   * 
+   */
+  private ContactBean       myProfile;
+  
+  
 
   /**
    * 
@@ -162,8 +169,15 @@ public class InitInfoBean {
   public void setRoster(List<ContactBean> roster) {
     this.roster = roster;
   }
-
   
+  public ContactBean getMyProfile() {
+    return myProfile;
+  }
+
+  public void setMyProfile(ContactBean myProfile) {
+    this.myProfile = myProfile;
+  }
+
   /**
    * @param hostedRooms the hostedRooms to set
    */

@@ -41,6 +41,8 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hdf.event.EventBridge;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
@@ -64,6 +66,7 @@ import org.exoplatform.services.xmpp.bean.InviteBean;
 import org.exoplatform.services.xmpp.bean.KickedBannedBean;
 import org.exoplatform.services.xmpp.bean.MUCPacketBean;
 import org.exoplatform.services.xmpp.bean.MessageBean;
+import org.exoplatform.services.xmpp.bean.OccupantBean;
 import org.exoplatform.services.xmpp.bean.PresenceBean;
 import org.exoplatform.services.xmpp.bean.PrivilegeChangeBean;
 import org.exoplatform.services.xmpp.bean.SubjectChangeBean;
@@ -1368,14 +1371,24 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
    * {@inheritDoc}
    */
   public FullRoomInfoBean getRoomInfoBean(String room) throws XMPPException {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    UserInfoService organization = (UserInfoService) container.getComponentInstanceOfType(UserInfoService.class);
     MultiUserChat chat = getMultiUserChat(room);
     if (chat != null) {
       RoomInfo roomInfo = MultiUserChat.getRoomInfo(connection_, chat.getRoom());
-      Collection<Occupant> occupants = new ArrayList<Occupant>();
+      Collection<OccupantBean> occupants = new ArrayList<OccupantBean>();
       Iterator<String> occ = chat.getOccupants();
       while (occ.hasNext()) {
         String user = (String) occ.next();
-        occupants.add(chat.getOccupant(user));
+        Occupant occupant = chat.getOccupant(user);
+        OccupantBean occupantBean = new OccupantBean();
+        occupantBean.setAffiliation(occupant.getAffiliation());
+        occupantBean.setJid(occupant.getJid());
+        occupantBean.setNick(occupant.getNick());
+        occupantBean.setRole(occupant.getRole());
+        UserInfo userInfo = organization.getUserInfo(occupant.getNick());
+        occupantBean.setFullName(userInfo.getFirstName() + " " + userInfo.getLastName());
+        occupants.add(occupantBean);
       }
       FullRoomInfoBean infoBean = new FullRoomInfoBean(occupants, roomInfo);
       return infoBean;

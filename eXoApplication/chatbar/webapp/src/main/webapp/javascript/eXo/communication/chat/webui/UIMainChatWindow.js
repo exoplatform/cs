@@ -1159,6 +1159,8 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
         this.buddyListControlObj.build(this.serverInfo.roster);
       }
       
+      eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[this.serverInfo.myProfile.user] = this.serverInfo.myProfile.fullName ;	
+      
       this.subscribeCometdTopics();
 
       // Register onunload event to window for clean logout when user leave this page.
