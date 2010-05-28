@@ -35,11 +35,9 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import org.exoplatform.calendar.service.DataStorage;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
@@ -1001,15 +999,19 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           uiChildPopup.activate(enterPasswordDialog, 600, 0);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
         } else {
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-configuration-for-smtp-server",
-                                                  null));
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-configuration-for-smtp-server", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         }
         return;
       } catch (SMTPSendFailedException e) {
         e.printStackTrace();
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed",
-                                                null));
+        if (e.getMessage().contains("Authentication Required")) {
+          uiApp.addMessage(new ApplicationMessage(
+            "UIComposeForm.msg.check-authentication-smtp-outgoingServer", null));
+        } else {
+          uiApp.addMessage(new ApplicationMessage(
+            "UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null));          
+        }        
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       } catch (MessagingException e) {
