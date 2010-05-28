@@ -48,7 +48,7 @@
 	DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
 	tf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat dtf = new SimpleDateFormat(dateFormat+" "+CalendarUtils.TIMEFORMAT, locale) ;
-	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM", locale) ;
+	DateFormat wf = new  SimpleDateFormat("EEE, dd MMM", locale) ;
 	DateFormat tempFormat =  new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
 	tempFormat.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 %>
