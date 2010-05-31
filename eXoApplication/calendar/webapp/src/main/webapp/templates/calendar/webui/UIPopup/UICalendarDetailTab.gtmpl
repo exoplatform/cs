@@ -119,7 +119,7 @@ import org.exoplatform.calendar.webui.popup.UIEventForm.ParticipantStatus;
 		</td>
 		<td class="FieldComponent">
       <% if (!CalendarUtils.isEmpty(parent.calendar_.getPublicUrl())) { %>
-      		  <a title="<%= parent.getLabel(parent.ACT_OPEN)%>" onclick="<%=parent.event("ShowPublicURL",parent.calendar_.getPublicUrl())%>"
+      		  <a title="<%= parent.getLabel(parent.ACT_OPEN)%>" onclick="<%=parent.event("ShowPublicURL",parent.calendar_.getPublicUrl())%>">
       				<img class="ICalIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif">	
             </a>
             <span style="color:grey;font-style: italic;">
