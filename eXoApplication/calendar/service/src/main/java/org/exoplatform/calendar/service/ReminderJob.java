@@ -16,9 +16,7 @@
  **/
 package org.exoplatform.calendar.service;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -35,7 +33,6 @@ import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -54,7 +51,6 @@ public class ReminderJob implements Job {
     if(container == null) return;
     ExoContainer oldContainer = ExoContainerContext.getCurrentContainer();
     ExoContainerContext.setCurrentContainer(container);
-    List<Message> messageList = new ArrayList<Message>();
     SessionProvider provider = SessionProvider.createSystemProvider();
     try {
       MailService mailService = 
@@ -62,13 +58,6 @@ public class ReminderJob implements Job {
       if (log_.isDebugEnabled()) log_.debug("Calendar email reminder service");
       java.util.Calendar fromCalendar = GregorianCalendar.getInstance() ;  
       JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
-      ServerConfiguration config = new ServerConfiguration();
-      config.setUserName(jdatamap.getString("account"));
-      config.setPassword(jdatamap.getString("password"));
-      config.setSsl(jdatamap.getBooleanValueFromString("ssl"));
-      config.setOutgoingSsl(jdatamap.getBooleanValueFromString("ssl")) ;
-      config.setOutgoingHost(jdatamap.getString("outgoing"));
-      config.setOutgoingPort(jdatamap.getString("port"));
       Node calendarHome = getPublicServiceHome(provider);
       if(calendarHome == null) return ;
       StringBuffer path = new StringBuffer(getReminderPath(fromCalendar, provider));
@@ -111,14 +100,10 @@ public class ReminderJob implements Job {
           }else {
             reminder.setProperty(Utils.EXO_IS_OVER, true) ;
           }
-          //messageList.add(message);
           reminder.save() ;
           mailService.sendMessage(message);
         }
       }  
-      if(!messageList.isEmpty()) {
-        //mailService.sendMessage(messageList, config);
-      }
     } catch (RepositoryException e) {
       if (log_.isDebugEnabled()) log_.debug("Data base not ready !");
     } catch (Exception e){
