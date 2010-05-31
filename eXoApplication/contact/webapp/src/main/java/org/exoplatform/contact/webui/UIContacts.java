@@ -1092,6 +1092,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           uiContacts.setContact(sharedContacts, false);
       }
       uiContacts.setContacts(ContactUtils.getContactService().getSharedContacts(username));
+      uiContacts.refreshData();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBooks);
     }
