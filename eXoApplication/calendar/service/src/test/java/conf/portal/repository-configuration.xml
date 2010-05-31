@@ -64,7 +64,7 @@
               <property name="swap-directory" value="target/temp/swap/collaboration"/>
             </properties>
             <value-storages>
-              <value-storage id="knowledge" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
+              <value-storage id="collaboration" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
                 <properties>
                   <property name="path" value="target/temp/values/collaboration"/>
                 </properties>

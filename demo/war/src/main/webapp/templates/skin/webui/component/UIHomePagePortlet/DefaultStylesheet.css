@@ -234,31 +234,23 @@
 
 }
 
-.SideBar .SideBarTL{ 
-	background:url('DefaultSkin/background/SideBarTL.gif') no-repeat left top;
-	padding-left: 6px;
-}
-
-.SideBar .SideBarTR{ 
-	background:url('DefaultSkin/background/SideBarTR.gif') no-repeat right top;
-	padding-right: 6px;
-}
 
 .SideBar .SideBarTC{ 
-	border-top: 1px solid #cfcfcf;
 	height: 5px;
+	background:url('DefaultSkin/background/SideBarT.gif') no-repeat left top;
 }
 
 .SideBar .SideBarML{ 
-	border-left: 1px solid #cfcfcf;
+	border-left: 1px solid #d9d8d8;
 }
 
 .SideBar .SideBarMR{ 
-	border-right: 1px solid #cfcfcf;
+	border-right: 1px solid #d9d8d8;
 }
 
 .SideBar .SideBarMC{ 
 	padding: 8px 8px 193px 8px;
+	background:url('DefaultSkin/background/SideBarMC.gif') repeat-x left top;
 }
 
 .SideBar .SideBarBL{ 
