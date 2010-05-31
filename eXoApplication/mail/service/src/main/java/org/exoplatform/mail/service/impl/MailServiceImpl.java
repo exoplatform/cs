@@ -1482,6 +1482,8 @@ public class MailServiceImpl implements MailService, Startable {
       }
       logger.debug("/////////////////////////////////////////////////////////////");
       logger.debug("/////////////////////////////////////////////////////////////");
+    } else {
+      return;
     }
     if (info != null) {
       info.setStatusMsg("Finish getting messages");
@@ -1539,7 +1541,7 @@ public class MailServiceImpl implements MailService, Startable {
                                                                                accountId,
                                                                                folder,
                                                                                null,
-                                                                               null,
+                                                                               checkFromDate,
                                                                                null);
 
         totalNew = msgMap.size();
