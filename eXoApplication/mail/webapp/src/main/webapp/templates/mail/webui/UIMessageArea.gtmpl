@@ -60,7 +60,7 @@
       }
     } else if (uicomponent.isHorizontalLayout()) {
 	%>
-  	<div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px">		
+  	<div class="UIMessageArea" id="uiMessageListResizableArea" >		
   		<%uicomponent.renderChild(UIMessageList.class);%>
   	</div>
   	<div class="ResizeReadingPane" id="ResizeReadingPane" onmousedown="eXo.cs.Spliter.doResize(event, this);"><span></span></div>
