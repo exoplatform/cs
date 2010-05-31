@@ -45,6 +45,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.wysiwyg.FCKEditorConfig;
 import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
@@ -149,7 +150,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     addUIFormInput(inputSet) ;
     isVisualEditor = true ;
     if (isVisualEditor) {
-      addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true));    
+    	UIFormWYSIWYGInput uiFormWYSIWYGInput = new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, FIELD_MESSAGECONTENT, null);
+        FCKEditorConfig fckconfig = new FCKEditorConfig();
+        fckconfig.put("CustomConfigurationsPath", "/csResources/javascript/eXo/cs/fckconfig.js");
+        uiFormWYSIWYGInput.setFCKConfig(fckconfig);
+        addUIFormInput(uiFormWYSIWYGInput);    
     } else {
       addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null)) ;
     }
