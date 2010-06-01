@@ -7,7 +7,7 @@
 <div class="SearchForm">
 	<a href="<%=uicomponent.event("Advanced")%>"><div class="AdvancedSearch" title="<%=_ctx.appRes(uicomponent.id+ '.label.advance-search') %>"><span></span></div></a>
 	<div class="SeparatorLine"><span></span></div>
-	<a href="<%=uicomponent.event("Search")%>"><div class="Search" title="<%=_ctx.appRes(uicomponent.id+ '.label.search') %>"><span></span></div></a>
+	<a href="<%=uicomponent.event("Search")%>" class="Search"><div title="<%=_ctx.appRes(uicomponent.id+ '.label.search') %>"><span></span></div></a>
   <input class="Input" type="text" id="search" name="search"/>
   <% 
     String label = _ctx.appRes(uicomponent.getName() + ".label.search") ;

@@ -180,13 +180,28 @@ Utils.prototype.onEnter = function(evt) {
   _e.cancelBubble = true ;
   var keynum = eXo.cs.Utils.getKeynum(_e) ;
   if (keynum == 13) {
-    var action = eXo.core.DOMUtil.findPreviousElementByTagName(this, "div") ;
-		if(!action) action = eXo.core.DOMUtil.findNextElementByTagName(this, "div") ;
-    //action = String(action.href).replace("javascript:","").replace("%20","") ;
-    //eval(action) ;
-	action.onclick();
+		eXo.cs.Utils.doAction(this);
   }
 } ;
+
+Utils.prototype.doAction = function(obj){
+	var uiSeachForm = eXo.core.DOMUtil.findAncestorByClass(obj,"UIForm");
+	var actionNode = this.getElementByClass(uiSeachForm,"Search");
+	var nodeName = String(actionNode.nodeName).toLowerCase();
+	switch(nodeName){
+		case "a":	eval(actionNode.href);break;
+		case "div": actionNode.onclick();break;
+		default:actionNode.onclick(); 
+	}
+};
+
+Utils.prototype.getElementByClass = function(parentNode,clazz){
+	var nodeList = parentNode.getElementsByTagName("*");
+	var i = nodeList.length;
+	while(i--){
+		if(eXo.core.DOMUtil.hasClass(nodeList[i],clazz)) return nodeList[i];
+	}
+};
 
 Utils.prototype.cancelSubmit = function() {
   return false ;
