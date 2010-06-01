@@ -111,6 +111,10 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
     	
     if (status == this.FINISHED_CHECKMAIL_STATUS || status == this.CONNECTION_FAILURE || status == this.RETRY_PASSWORD ||
         status == this.REQUEST_STOP_STATUS) {
+    	if (this.serverData.info.checkingmail.statusmsg) {
+    	    var warningLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'WarningMessage') ;
+    	    warningLabel.innerHTML = this.serverData.info.checkingmail.statusmsg;
+    	  }
       this.destroy();    
     }
   } else if(state == this.ERROR_STATE) {
@@ -142,12 +146,33 @@ MailServiceHandler.prototype.synchImapFolders = function(isUpdateUI) {
 	this.makeRequest(url, this.HTTP_GET, '', this.SYNCH_FOLDER_ACTION);
 }
 
+/**
+ * reset visible status of fetching bar as created by template file.
+ */
+MailServiceHandler.prototype.resetStatusBar = function() {
+	if (this.checkMailInfobarNode != null) {
+		eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode,
+				'div', 'LoadingIcon').style.display = 'block';
+		eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode,
+				'div', 'StatusText').style.display = 'block';
+		eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode,
+				'div', 'StopCheckMail').style.display = 'block';
+		eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode,
+				'div', 'StopingCheckMail').style.display = 'none';
+		eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode,
+				'div', 'Here').style.display = 'none';
+		eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode,
+				'div', 'WarningMessage').style.display = 'none';
+		eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode,
+				'div', 'UpdateImapFolder').style.display = 'none';
+	}
+}
+
 MailServiceHandler.prototype.checkMail = function(isUpdateUI, folderId) {
   if (!this.accountId ||
       !this.userName) {
     return;
   }
-  
   this.isUpdateUI_ = isUpdateUI;
   
   this.activeAction = this.CHECK_MAIL_ACTION;
@@ -160,6 +185,7 @@ MailServiceHandler.prototype.checkMail = function(isUpdateUI, folderId) {
     url = url + "checkall" + '/';
   }
   this.makeRequest(url, this.HTTP_GET, '', this.CHECK_MAIL_ACTION);
+  
 };
 
 MailServiceHandler.prototype.stopCheckMail = function() {
@@ -191,6 +217,9 @@ MailServiceHandler.prototype.showStatusBox = function(status) {
  */
 MailServiceHandler.prototype.updateUI = function(status) {
   this.checkMailInfobarNode = document.getElementById(this.uiId);
+  if (status == this.START_CHECKMAIL_STATUS) {
+	  this.resetStatusBar();
+  }
   var statusTxt = '';
   if (this.serverData.info.checkingmail.statusmsg) {
     statusTxt = this.serverData.info.checkingmail.statusmsg;
@@ -214,11 +243,28 @@ MailServiceHandler.prototype.destroy = function() {
 	var st = this.serverData.info.checkingmail.status ;
   if (st == this.FINISHED_CHECKMAIL_STATUS || st == this.CONNECTION_FAILURE || st == this.RETRY_PASSWORD) {
     eXo.core.Browser.setCookie('cs.mail.checkingmail' + this.accountId, 'false');
+    
+//    var list = eXo.core.DOMUtil.getChildrenByTagName(this.checkMailInfobarNode, 'div');
+//    var length = list.length;
+//    for (var i = 0; i < length; i++) {
+//    	list[i].style.display = "none";
+//    }
+    
     var stopLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopCheckMail') ;
+    var warningLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'WarningMessage') ;
     
     stopLabel.style.display = 'none' ;
-    if (st == this.RETRY_PASSWORD && this.checkMailInfobarNode.style.display == 'block') {
-      eXo.webui.UIForm.submitForm('UIMessageList','ComfirmPassword', true) ;
+    if ((st == this.RETRY_PASSWORD || st == this.CONNECTION_FAILURE) && this.checkMailInfobarNode.style.display == 'block') {
+       warningLabel.style.display = "block";
+       stopLabel.style.display = "none";
+       eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'LoadingIcon').style.display = 'none';
+       eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText').style.display = 'none';       
+       if (st == this.RETRY_PASSWORD) {
+    	   // if password is wrong, confirm password form is opened.
+    	   eXo.webui.UIForm.submitForm('UIMessageList','ComfirmPassword', true) ;
+    	   
+       }
+      
     } else if (st == this.FINISHED_CHECKMAIL_STATUS){
       var refeshLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Here');
       eval(eXo.core.DOMUtil.findDescendantsByTagName(refeshLabel, 'a')[0].href.replace("%20", ""));
@@ -226,7 +272,7 @@ MailServiceHandler.prototype.destroy = function() {
     	if (this.checkMailInfobarNode) this.checkMailInfobarNode.style.display = 'none';
     }
   }
-  if (this.checkMailInfobarNode) this.checkMailInfobarNode.style.display = 'none';
+  if (this.checkMailInfobarNode && st == this.FINISHED_CHECKMAIL_STATUS) this.checkMailInfobarNode.style.display = 'none';
 };
 
 eXo.mail.MailServiceHandler = eXo.mail.MailServiceHandler || new MailServiceHandler() ;
