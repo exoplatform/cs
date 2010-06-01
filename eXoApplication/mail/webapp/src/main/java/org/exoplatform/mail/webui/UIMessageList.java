@@ -380,7 +380,14 @@ public class UIMessageList extends UIForm {
             else uiCheckbox.setChecked(false); 
           }
         }
+        
+        if(msg.hasAttachment()) {
+        	System.out.println("\n\n============> Set Attachments \n\n");
+        	Message msgMem = mailSrv.loadTotalMessage(username, accountId, msg) ;
+          msg.setAttachements(msgMem.getAttachments());
+        }
         uiMessagePreview.setMessage(msg);
+        
         List<Message> showedMessages = new ArrayList<Message>() ;
         showedMessages.add(msg) ;
         if (uiMessageList.viewMode == MODE_CONVERSATION) {
@@ -396,6 +403,7 @@ public class UIMessageList extends UIForm {
         }
         uiMessagePreview.setShowedMessages(showedMessages) ;
        
+
         List<Message> msgs  = new ArrayList<Message>();
         List<String> unreadMsgIds = new ArrayList<String>();
         if (msg.isUnread()) msgs.add(msg);
