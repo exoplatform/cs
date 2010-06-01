@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -2365,7 +2366,7 @@ public class MailServiceImpl implements MailService, Startable {
           fd = store.getFolder(url);
           if (fd != null) {
             if (!fd.isOpen()) {
-              fd.open(javax.mail.Folder.READ_WRITE);
+            		fd.open(javax.mail.Folder.READ_WRITE);
             }
             message = ((IMAPFolder) fd).getMessageByUID(Long.valueOf(msg.getUID()));
             msg = storage_.loadTotalMessage(userName, accountId, msg, message);
@@ -2377,6 +2378,9 @@ public class MailServiceImpl implements MailService, Startable {
         msg = storage_.loadTotalMessage(userName, accountId, msg);
       }
     } catch (Exception e) {
+    	try {
+      	msg = storage_.loadTotalMessage(userName, accountId, msg, null);
+      } catch (Exception ex) {}
       logger.info("Download content failure");
     } finally {
       if (store != null && store.isConnected()) {
