@@ -30,9 +30,9 @@ function getProduct(version) {
 
   product.addDependencies(portal.web.portal);
   
-  portal.starter = new Project("org.exoplatform.portal", "exo.portal.starter.war", "war", portal.version);
-  portal.starter.deployName = "starter";
-  product.addDependencies(portal.starter);  
+  //portal.starter = new Project("org.exoplatform.portal", "exo.portal.starter.war", "war", portal.version);
+  //portal.starter.deployName = "starter";
+  //product.addDependencies(portal.starter);  
   
   //FCK editor
   portal.fck = new Project("org.exoplatform.platform", "exo.platform.web.fck", "war", "${org.exoplatform.platform.version}");
