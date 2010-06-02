@@ -3,8 +3,15 @@
  */
 package org.exoplatform.webservice.cs.mail;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Map;
+import java.util.Properties;
 
+import javax.jcr.AccessDeniedException;
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
+import javax.mail.Session;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -19,11 +26,15 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.webservice.cs.bean.ContactData;
+
+import com.sun.mail.imap.IMAPStore;
 
 /**
  * @author Uoc Nguyen Modified by : Phung Nam (phunghainam@gmail.com)
@@ -56,6 +67,8 @@ public class MailWebservice implements ResourceContainer {
     MailService mailService = (MailService) PortalContainer.getInstance()
                                                            .getComponentInstanceOfType(MailService.class);
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
+    
+    //checkingInfo = null;
     if (checkingInfo == null) {
       mailService.checkMail(userName, accountId, folderId);
     } else if (folderId != null && folderId.trim().length() > 0
@@ -66,11 +79,62 @@ public class MailWebservice implements ResourceContainer {
     StringBuffer buffer = new StringBuffer();
     buffer.append("<info>");
     buffer.append("  <checkingmail>");
-    buffer.append("    <status>" + CheckingInfo.START_CHECKMAIL_STATUS + "</status>");
-    if (checkingInfo != null) {
-      buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
+    int stt = CheckingInfo.START_CHECKMAIL_STATUS;
+    String sttMsg = "";
+    if (checkingInfo != null) checkingInfo.getStatusMsg();
+    
+    /////////////////////////////////
+    try {
+      Account account = mailService.getAccountById(userName, accountId);
+      Properties props = System.getProperties();
+      // this line fix for base64 encode problem with corrupted
+      // attachments
+      props.setProperty("mail.mime.base64.ignoreerrors", "true");
 
+      String socketFactoryClass = "javax.net.SocketFactory";
+      if (account.isIncomingSsl()) {
+        socketFactoryClass = Utils.SSL_FACTORY;
+      }
+      props.setProperty("mail.imap.socketFactory.fallback", "false");
+      props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
+
+      Session session = Session.getDefaultInstance(props, null);
+      IMAPStore imapStore = (IMAPStore) session.getStore("imap");
+      try {
+        imapStore.connect(account.getIncomingHost(),
+                          Integer.valueOf(account.getIncomingPort()),
+                          account.getIncomingUser(),
+                          account.getIncomingPassword());
+      } catch (AuthenticationFailedException e) {
+        if (!account.isSavePassword()) {
+          account.setIncomingPassword("");
+        }
+          sttMsg = "The userName or password may be wrong.";
+          stt = CheckingInfo.RETRY_PASSWORD;
+      } catch (MessagingException e) {
+          sttMsg = "Connecting failed. Please check server configuration.";
+          stt = CheckingInfo.CONNECTION_FAILURE;
+      } catch (IllegalStateException e) {
+        
+        e.printStackTrace();
+
+      } catch (Exception e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        StringBuffer sb = sw.getBuffer();
+        sttMsg ="There was an unexpected error. Connecting failed.";
+        stt = CheckingInfo.CONNECTION_FAILURE;
+      }
+    }catch (AccessDeniedException e) {
+      
+    } catch (Exception ex) {
+      ex.printStackTrace();
     }
+    ///////////////////////////////////
+    
+    buffer.append("    <status>" + stt + "</status>");
+    buffer.append("    <statusmsg>" + sttMsg + "</statusmsg>");
     buffer.append("  </checkingmail>");
     buffer.append("</info>");
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();

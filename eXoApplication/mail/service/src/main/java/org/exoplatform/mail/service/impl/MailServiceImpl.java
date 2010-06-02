@@ -777,7 +777,11 @@ public class MailServiceImpl implements MailService, Startable {
 
     // trigger now
     if (job != null) {
-      schedulerService_.executeJob(job.getName(), job.getGroup(), job.getJobDataMap());
+      try {
+        schedulerService_.executeJob(job.getName(), job.getGroup(), job.getJobDataMap());
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
   }
 
@@ -789,7 +793,11 @@ public class MailServiceImpl implements MailService, Startable {
 
       // trigger now
       if (job != null) {
-        schedulerService_.executeJob(job.getName(), job.getGroup(), job.getJobDataMap());
+        try {
+          schedulerService_.executeJob(job.getName(), job.getGroup(), job.getJobDataMap());
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
       }
     }
   }
@@ -1167,6 +1175,9 @@ public class MailServiceImpl implements MailService, Startable {
         }
         return null;
       } catch (IllegalStateException e) {
+        
+        e.printStackTrace();
+        
         return null;
       } catch (Exception e) {
         logger.debug("Exception while connecting to server : " + e.getMessage());
@@ -1183,6 +1194,7 @@ public class MailServiceImpl implements MailService, Startable {
       }
       return imapStore;
     } catch (Exception ex) {
+      ex.printStackTrace();
       return null;
     }
   }
