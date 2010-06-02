@@ -1,26 +1,23 @@
-====
-    Copyright (C) 2009 eXo Platform SAS.
-    
-    This is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Lesser General Public License as
-    published by the Free Software Foundation; either version 2.1 of
-    the License, or (at your option) any later version.
-    
-    This software is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-    Lesser General Public License for more details.
-    
-    You should have received a copy of the GNU Lesser General Public
-    License along with this software; if not, write to the Free
-    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA, or see the FSF site: http://www.fsf.org.
-====
+/**
+ * Copyright (C) 2003-20010 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ **/
 
-==================================================
-    Release Notes - exo-cs - Version 2.0.0 CR01
-==================================================
-
+========================================== 
+    Release Notes - eXo Collaboration - Version 2.0.0
+==========================================
 ===============
 1 Introduction
 ===============
@@ -51,8 +48,7 @@ experience more productive. It offers several ways to to view and organize your 
 
 
     * General
-          o Bug fix
-          o RSS management improve
+           
                   
     * Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
           
@@ -72,7 +68,7 @@ Find the latest install guide here : http://wiki.exoplatform.org/xwiki/bin/view/
 - Collaboration suite quick start guide
   Collaboration suite have 2 servers need to run at same time to use:
     +) jobs: this is main jobss server include Collaboration web applications and all dependencies.     
-    +) exo-openfire: a Jabber server used for Chat applications
+    +) eXo-chatserver: a Jabber server used for Chat applications
 
 Need to set the JAVA_HOME variable for run Collaboration suite's servers.
 +) How to start Collaboration sute:
@@ -93,15 +89,15 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
        Open a terminal, go to jboss/bin and type the command:
          ./run.sh
     
-   * Start exo-openfire server:
+   * Start eXo-chatserver:
      +) On the Windows platform
-       Open a DOS prompt command, go to exo-openfire/bin and type the command:
+       Open a DOS prompt command, go to exo-chatserver/bin and type the command:
          run.bat
 
      +) On Unix/Linux
-       Open a terminal, go to exo-openfire/bin and type the command:
-         ./openfire start
-
+       Open a terminal, go to eXo-chatserver/bin and type the command:
+         "./run.sh  to start
+         
 -) How to access the eXo Collaboration Suite
 
 * Enter one of the following addresses into your browser address bar:
@@ -140,6 +136,7 @@ All those accounts have the default password "gtn".
 ===========
 6 CHANGELOG
 ===========
+- 2.0.0 GA
 - 2.0.0 CR01
 
 ** Bug
