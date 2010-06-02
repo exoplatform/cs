@@ -273,7 +273,7 @@
                     					<span style="color:#B5B6B6"><%=_ctx.appRes("UIContactPreview.label.icq")%></span>	
                     				</td>
                     			</tr>
-                    			
+                    			<% } %>
                     			<% if ((ContactUtils.getIMs(contact).keySet().size() > 1) && !uicomponent.isPopup()) { %>
                     			<tr class="ShowMore">
                     				<td><span></span></td>
@@ -291,7 +291,6 @@
                     					</a>
                     				</td>
                     			</tr>
-                    			<% } %>
                     			<% } %>
                     		</table>
                     	</div>
