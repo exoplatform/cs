@@ -776,13 +776,7 @@ public class MailServiceImpl implements MailService, Startable {
     JobDetail job = loadCheckmailJob(userName, accountId);
 
     // trigger now
-    if (job != null) {
-      try {
-        schedulerService_.executeJob(job.getName(), job.getGroup(), job.getJobDataMap());
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
+    executeJob(job);
   }
 
   public void checkMail(String userName, String accountId, String folderId) throws Exception {
@@ -792,12 +786,16 @@ public class MailServiceImpl implements MailService, Startable {
       JobDetail job = loadCheckmailJob(userName, accountId, folderId);
 
       // trigger now
-      if (job != null) {
-        try {
-          schedulerService_.executeJob(job.getName(), job.getGroup(), job.getJobDataMap());
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
+      executeJob(job);
+    }
+  }
+  
+  private void executeJob(JobDetail job) { 
+    if (job != null) {
+      try {
+        schedulerService_.executeJob(job.getName(), job.getGroup(), job.getJobDataMap());
+      } catch (Exception e) {
+        logger.error("Failed to execute job " + job.getName(), e);
       }
     }
   }
@@ -1175,9 +1173,7 @@ public class MailServiceImpl implements MailService, Startable {
         }
         return null;
       } catch (IllegalStateException e) {
-        
-        e.printStackTrace();
-        
+        logger.error("Exception while connecting to server", e);
         return null;
       } catch (Exception e) {
         logger.debug("Exception while connecting to server : " + e.getMessage());
@@ -1194,7 +1190,7 @@ public class MailServiceImpl implements MailService, Startable {
       }
       return imapStore;
     } catch (Exception ex) {
-      ex.printStackTrace();
+      logger.error("Exception while connecting to server", ex);
       return null;
     }
   }

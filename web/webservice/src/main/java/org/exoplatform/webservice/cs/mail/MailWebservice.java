@@ -115,14 +115,12 @@ public class MailWebservice implements ResourceContainer {
           sttMsg = "Connecting failed. Please check server configuration.";
           stt = CheckingInfo.CONNECTION_FAILURE;
       } catch (IllegalStateException e) {
-        
         e.printStackTrace();
 
       } catch (Exception e) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
-        StringBuffer sb = sw.getBuffer();
         sttMsg ="There was an unexpected error. Connecting failed.";
         stt = CheckingInfo.CONNECTION_FAILURE;
       }
