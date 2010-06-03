@@ -351,3 +351,10 @@
 	background: blue;
 	color:white;
 }
+/*Override style of Right click menu*/
+.UIRightClickPopupMenu .MenuItem .ItemIcon{
+	padding: 0px 5px 0px 28px; /* orientation=lt */
+	padding: 0px 28px 0px 5px; /* orientation=rt */
+	margin: 0px 2px;
+	line-height: 24px;
+}
