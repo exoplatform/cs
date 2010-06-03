@@ -1,8 +1,10 @@
 function UpdateList() { }
 
-UpdateList.prototype.init = function(accountId, eXoUser, eXoToken){
+UpdateList.prototype.init = function(accountId, eXoUser, eXoToken, cometdContextName){
   eXo.cs.CSCometd.exoId = eXoUser;
   eXo.cs.CSCometd.exoToken = eXoToken;
+  if(cometdContextName)
+		eXo.cs.CSCometd.url = '/' + cometdContextName + '/cometd';
   eXo.cs.CSCometd.subscribe('/eXo/Application/mail/messages', function(eventObj) {		
 		eXo.mail.UpdateList.update(eventObj) ;
   });

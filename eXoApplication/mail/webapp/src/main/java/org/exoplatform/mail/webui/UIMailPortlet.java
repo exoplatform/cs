@@ -28,6 +28,8 @@ import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+import org.mortbay.cometd.AbstractBayeux;
+import org.mortbay.cometd.continuation.EXoContinuationBayeux;
 
 /**
  * Author : Phung Hai Nam
@@ -94,5 +96,16 @@ public class UIMailPortlet extends UIPortletApplication {
   }
   public String getRestContextName(){	  
 	  return PortalContainer.getInstance().getRestContextName();
+  }
+  
+  protected String getCometdContextName() {
+    String cometdContextName = "cometd";
+    try {
+      EXoContinuationBayeux bayeux = (EXoContinuationBayeux) PortalContainer.getInstance()
+                                                                                .getComponentInstanceOfType(AbstractBayeux.class);
+      return (bayeux == null ? "cometd" : bayeux.getCometdContextName());
+    } catch (Exception e) {
+    }
+    return cometdContextName;
   }
 } 
