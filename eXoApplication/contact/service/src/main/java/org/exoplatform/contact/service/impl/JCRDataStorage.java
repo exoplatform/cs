@@ -40,6 +40,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.contact.service.AddressBook;
@@ -1817,7 +1818,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return emails ;
   }
 
-
   /* (non-Javadoc)
    * @see org.exoplatform.contact.service.impl.DataStorage#feedEmailResult(java.util.Map, javax.jcr.Node)
    */
@@ -1826,6 +1826,134 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     String fullName = contactNode.getProperty("exo:fullName").getString() ;
     String emailAddresses = valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
     emails.put(id, fullName + Utils.SPLIT + emailAddresses) ;
+  }
+  
+  // created by Duy Tu <tu.duy@exoplatform.com>
+  public List<String> searchEmailsByFilter(String username, ContactFilter filter)throws Exception {
+  	Map<String, String> emails = new LinkedHashMap<String, String>() ;
+  	filter.setUsername(username) ;
+  	filter.setHasEmails(true);
+  	QueryManager  qm = getContactUserDataHome(username).getSession().getWorkspace().getQueryManager() ;
+  	Query query ;
+  	String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
+//      query public contacts
+  	if (filter.getType() == null ||  filter.getType().equals(PUBLIC)) {
+  		filter.setAccountPath(usersPath) ;
+  		// minus shared contacts
+  		filter.setOwner("true") ; 
+  		
+  		query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+  		NodeIterator itpublic = query.execute().getNodes();
+  		while(itpublic.hasNext()) {
+  			Node contactNode = itpublic.nextNode() ;
+  			if (filter.getLimit() > 0 && filter.getLimit() <= emails.size()){
+  				return new ArrayList<String>(emails.values());
+  			}
+  			calculateEmailResult(contactNode, filter, emails);
+  		}
+  		filter.setOwner(null) ;
+  	}
+  	
+//   query personal contacts
+  	if (filter.getType() == null ||  filter.getType().equals(PERSONAL)) {
+  		if(username != null && username.length() > 0) {
+  			Node contactHome = getPersonalContactsHome(username) ;
+  			filter.setAccountPath(contactHome.getPath()) ;      
+  			qm = contactHome.getSession().getWorkspace().getQueryManager() ;
+  			query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+  			NodeIterator it = query.execute().getNodes() ;
+  			while(it.hasNext()) {
+  				Node contactNode = it.nextNode() ;
+  				if (filter.getLimit() > 0 && filter.getLimit() <= emails.size()) {
+  					return new ArrayList<String>(emails.values());
+  				}
+  				calculateEmailResult(contactNode, filter, emails);    
+  			}
+  		}
+  	}
+  	// query shared contacts
+  	if (filter.getType() == null ||  filter.getType().equals(SHARED)) {
+  		try {
+  			Node sharedContact = getSharedContact(username) ;      
+  			PropertyIterator iter = sharedContact.getReferences() ;
+  			while(iter.hasNext()) {
+  				try{
+  					Node sharedContactHomeNode = iter.nextProperty().getParent().getParent() ;
+  					filter.setAccountPath(sharedContactHomeNode.getPath()) ;
+  					
+  					String split = "/" ;
+  					String temp = sharedContactHomeNode.getPath().split(usersPath)[1] ;
+  					String userId = temp.split(split)[1] ;
+  					filter.setUsername(userId) ;
+  					
+  					qm = sharedContactHomeNode.getSession().getWorkspace().getQueryManager() ;      
+  					query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+  					NodeIterator it = query.execute().getNodes() ;
+  					while(it.hasNext()) {
+  						Node contactNode = it.nextNode() ;
+  						if (filter.getLimit() > 0 && filter.getLimit() <= emails.size()) {
+  							return new ArrayList<String>(emails.values());
+  						}
+  						calculateEmailResult(contactNode, filter, emails); 
+  					}
+  				}catch(Exception e){
+  					e.printStackTrace() ;
+  				}
+  			}
+  		} catch (PathNotFoundException e) { }
+  		
+  		if (!filter.isSearchSharedContacts()) { 
+  			Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
+  			PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+  			Node addressBook ;
+  			
+  			// add if to fix bug 1407
+  			boolean hasGroup = (filter.getCategories() != null && filter.getCategories().length > 0) ; 
+  			while(iter.hasNext()) {
+  				addressBook = iter.nextProperty().getParent() ;
+  				Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+  				filter.setAccountPath(contactHomeNode.getPath()) ;
+  				if (!hasGroup) filter.setCategories(new String[] {addressBook.getName()}) ;
+  				filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString()) ;
+  				qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;      
+  				query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+  				NodeIterator it = query.execute().getNodes() ;
+  				while(it.hasNext()) {
+  					Node contactNode = it.nextNode() ;
+  					if (filter.getLimit() > 0 && filter.getLimit() <= emails.size()) {
+  						return new ArrayList<String>(emails.values());
+  					}
+  					calculateEmailResult(contactNode, filter, emails);
+  				}
+  			}
+  		}     
+  	}
+  	return new ArrayList<String>(emails.values());
+  }
+// created by Duy Tu
+  private void calculateEmailResult(Node contactNode, ContactFilter filter, Map<String, String> emails) throws Exception {
+  	String emailAddresses = "";
+  	String fullName = contactNode.getProperty("exo:fullName").getString() ;
+    try {
+    	Value [] values = contactNode.getProperty("exo:emailAddress").getValues();
+    	int i = 0;
+    	String email, classCss;
+      for (Value value : values) {
+      	email = value.getString().trim();
+      	if(email.length() > 0) {
+      		if(emails.containsKey(fullName + email)) continue;
+      		if(i > 2 || filter.getLimit() <= emails.size()) break;
+      		classCss = (emails.isEmpty())?"<div class='AutoCompleteItem AutoCompleteOver'>":"<div class='AutoCompleteItem'>";
+      		emailAddresses = 
+      			classCss + 
+      				StringUtils.replace(fullName, filter.getNickName(), "<b>" + filter.getNickName() + "</b>") + "&lt;" +
+      				StringUtils.replace(email, filter.getNickName(), "<b>" + filter.getNickName() + "</b>") + "&gt;" +
+      			"</div>";
+      		emails.put(fullName + email, emailAddresses) ;
+      		++i;
+      	}
+      }
+    } catch (Exception e) {}
   }
   
   public void copyNodes(String username,Node srcHomeNode, NodeIterator iter, String destAddress, String destType ) throws Exception {
@@ -2259,8 +2387,10 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
 	  StringBuilder strs = new StringBuilder();
     try {
       for (Value value : values) {
-        if (strs.length() == 0) strs.append(value.getString());
-        else strs.append(";" + value.getString());
+      	if(value.getString().trim().length() > 0) {
+	        if (strs.length() == 0) strs.append(value.getString());
+	        else strs.append(";" + value.getString());
+      	}
       }
     } catch (Exception e) {}
     return strs.toString();

@@ -203,6 +203,8 @@ public interface DataStorage {
   public DataPageList searchContact(String username, ContactFilter filter) throws Exception;
 
   public Map<String, String> findEmailsByFilter(String username, ContactFilter filter) throws Exception;
+  
+  public List<String> searchEmailsByFilter(String username, ContactFilter filter)throws Exception;
 
   public void feedEmailResult(Map<String, String> emails, Node contactNode) throws Exception;
 

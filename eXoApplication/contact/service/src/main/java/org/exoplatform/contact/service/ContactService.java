@@ -146,6 +146,7 @@ public interface ContactService {
    */
   public Map<String, String> searchEmails(String username, ContactFilter filter)throws Exception ;
 
+  public List<String> searchEmailsByFilter(String username, ContactFilter filter) throws Exception ;
   /**
    * get contact page list of public address book specific by id of address book
    * @param addressBookId id of address book want to get contacts

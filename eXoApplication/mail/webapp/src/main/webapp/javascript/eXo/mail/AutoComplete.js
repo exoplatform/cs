@@ -1,9 +1,12 @@
 /**
  * @author Hoang Manh Dung
  */
+eXo.require("eXo.core.JSON");
+eXo.require("eXo.core.Keyboard");
 
 function AutoComplete(){
 	this.REST_URL = eXo.env.portal.context + "/rest/cs/mail/searchemail/";
+	this.elm = null;
 };
 /**
  * Register handler for input
@@ -11,30 +14,44 @@ function AutoComplete(){
  */
 AutoComplete.prototype.init = function(ids){
 	if(eXo.cs.restContext) this.REST_URL = eXo.env.portal.context + "/" + eXo.cs.restContext + "/cs/mail/searchemail/";  
-	var i = ids.length ;
-	while(i--){
-		if(!document.getElementById(ids[i])) continue;
-		document.getElementById(ids[i]).onkeyup = function(evt){
-			evt = window.event || evt;
-			eXo.mail.AutoComplete.pressHandler(evt,this);
+	var i = 0;
+	var elm;
+	while(i < ids.length){
+		elm = document.getElementById(ids[i]);
+		if(elm) {
+			elm.onkeydown = function(evt){
+				eXo.mail.AutoComplete.elm = this;
+				eXo.mail.AutoComplete.pressHandler(evt, this);
+			};
 		}
-		eXo.core.DOMUtil.findAncestorByTagName(document.getElementById(ids[i]),"form").onsubmit = function(){
-			return false;
-		}
+		i = i + 1;
+	}
+};
+
+AutoComplete.prototype.startHandler = function() {
+	window.setTimeout(eXo.mail.AutoComplete.timeOutHandler, 20);
+};
+
+AutoComplete.prototype.timeOutHandler = function() {
+	if(eXo.mail.AutoComplete.elm) {
+		eXo.mail.AutoComplete.typeHandler(eXo.mail.AutoComplete.elm);
+		eXo.mail.AutoComplete.elm = null;
 	}
 };
 
 AutoComplete.prototype.pressHandler = function(evt, textbox){
+	if(!evt) var evt = window.event;
 	var me = eXo.mail.AutoComplete;
-	var keyNum = me.captureKey(evt);
-	evt = window.event || evt ;
-	if (evt.altKey || evt.ctrlKey || evt.shiftKey) return ;
+	var keyNum = eXo.core.Keyboard.getKeynum(evt);
 	switch(keyNum){
 		case 13: me.enterHandler(evt, textbox); break;
 		case 27: me.escapeHandler(evt, textbox); break;
 		case 38: me.arrowUpHandler(evt, textbox); break;
 		case 40: me.arrowDownHandler(evt, textbox); break;
-		default: me.typeHandler(evt, textbox);
+		default: {
+			if(keyNum > 40 || keyNum === 8) { me.startHandler();}
+			break;
+		}
 	}
 	return; 
 };
@@ -67,58 +84,58 @@ AutoComplete.prototype.uniqueArray = function(a){
 	}
 	return a;
 }
-/**
- * @return {Array} list contact
- * @param {Object} data
- */
-AutoComplete.prototype.processData = function(data){
-	var tmpList = [];
-	var a = this.uniqueArray(data.info);
-	var l = a.length;
-	if(!l || l == 0) return;
-	a = this.reArrange(a,this.typingWords);
-	var tmpArr = [];
-	for(var i=0; i < l; i++){
-		tmpArr = a[i].split("::"); 
-		if(tmpArr[1].indexOf(";")){
-			this.splitEmail(tmpArr[0],tmpArr[1],tmpList);
-			continue;
-		}
-		tmpList.push(this.addBiTag(tmpArr[0]) + " &lt;" + this.addBiTag(tmpArr[1]) + "&gt;");
-	}
-	return tmpList;
-};
+///**
+// * @return {Array} list contact
+// * @param {Object} data
+// */
+//AutoComplete.prototype.processData = function(data){
+//	var tmpList = [];
+//	var a = this.uniqueArray(data.info);
+//	var l = a.length;
+//	if(!l || l == 0) return;
+//	a = this.reArrange(a,this.typingWords);
+//	var tmpArr = [];
+//	for(var i=0; i < l; i++){
+//		tmpArr = a[i].split("::"); 
+//		if(tmpArr[1].indexOf(";")){
+//			this.splitEmail(tmpArr[0],tmpArr[1],tmpList);
+//			continue;
+//		}
+//		tmpList.push(this.addBiTag(tmpArr[0]) + " &lt;" + this.addBiTag(tmpArr[1]) + "&gt;");
+//	}
+//	return tmpList;
+//};
 
-AutoComplete.prototype.addBiTag = function(bodyText){
-	var newText = "";
-  var i = -1;
-	var searchTerm = this.typingWords;
-  var lcSearchTerm = searchTerm.toLowerCase();
-  var lcBodyText = bodyText.toLowerCase();
-  var highlightStartTag="<b>", highlightEndTag = "</b>";
-  while (bodyText.length > 0) {
-    i = lcBodyText.indexOf(lcSearchTerm, i+1);
-    if (i < 0) {
-      newText += bodyText;
-      bodyText = "";
-    } else {      
-      newText += bodyText.substring(0, i) + highlightStartTag + bodyText.substr(i, searchTerm.length) + highlightEndTag;
-      bodyText = bodyText.substr(i + searchTerm.length);
-      lcBodyText = bodyText.toLowerCase();
-      i = -1;
-    }
-  }
-  
-  return newText;
-}
+//AutoComplete.prototype.addBiTag = function(bodyText){
+//	var newText = "";
+//  var i = -1;
+//	var searchTerm = this.typingWords;
+//  var lcSearchTerm = searchTerm.toLowerCase();
+//  var lcBodyText = bodyText.toLowerCase();
+//  var highlightStartTag="<b>", highlightEndTag = "</b>";
+//  while (bodyText.length > 0) {
+//    i = lcBodyText.indexOf(lcSearchTerm, i+1);
+//    if (i < 0) {
+//      newText += bodyText;
+//      bodyText = "";
+//    } else {      
+//      newText += bodyText.substring(0, i) + highlightStartTag + bodyText.substr(i, searchTerm.length) + highlightEndTag;
+//      bodyText = bodyText.substr(i + searchTerm.length);
+//      lcBodyText = bodyText.toLowerCase();
+//      i = -1;
+//    }
+//  }
+//  
+//  return newText;
+//}
 
-AutoComplete.prototype.splitEmail = function(value,a, data){	
-	var arr = a.split(";");
-	var l = arr.length;
-	for(var i=0; i < l; i++){
-		data.push(this.addBiTag(value) + " &lt;" + this.addBiTag(arr[i]) + "&gt;");
-	}	
-};
+//AutoComplete.prototype.splitEmail = function(value,a, data){	
+//	var arr = a.split(";");
+//	var l = arr.length;
+//	for(var i=0; i < l; i++){
+//		data.push(this.addBiTag(value) + " &lt;" + this.addBiTag(arr[i]) + "&gt;");
+//	}	
+//};
 
 AutoComplete.prototype.reArrange = function(data,str){
 	if(!data) return;	
@@ -140,19 +157,17 @@ AutoComplete.prototype.reArrange = function(data,str){
  * @param {Object} data
  */
 AutoComplete.prototype.renderMenu = function(data){
-	if(!data) {
+	var a = (data.info);
+	var len = a.length;
+	if(!len || len == 0) {
 		this.hideMenu();
 		return;
 	}
-	var len = data.length;
+	
 	var menu = this.createMenuContainer("AutoCompleteMail");
 	var html = '';
 	for(i=0; i<len; i++){
-		if(i == 0){
-			html += '<div class="AutoCompleteItem AutoCompleteOver">'+ data[i]+ '</div>';
-			continue;
-		}
-		html += '<div class="AutoCompleteItem">'+ data[i]+ '</div>';		
+		html += a[i];
 	}
 	menu.innerHTML = html ;
 	this.currentItem = menu.firstChild;
@@ -160,7 +175,7 @@ AutoComplete.prototype.renderMenu = function(data){
 	else  menu.style.display = "none";
 };
 
-AutoComplete.prototype.typeHandler = function(evt,textbox){
+AutoComplete.prototype.typeHandler = function(textbox){
 	var me = eXo.mail.AutoComplete ;
 	var keyword = eXo.mail.AutoComplete.createKeyword(textbox.value);
 	me.activeInput = textbox;
@@ -175,10 +190,10 @@ AutoComplete.prototype.typeHandler = function(evt,textbox){
 };
 
 AutoComplete.prototype.typeCallback = function(data){
+	if(!data) return;
 	var me = eXo.mail.AutoComplete ;
 	eval("var data = " + data.trim());
 	if(typeof(data) != "object") return ;
-	data = me.processData(data);
 	me.renderMenu(data);
 };
 /**

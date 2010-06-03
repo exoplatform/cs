@@ -301,8 +301,7 @@ public class MailWebservice implements ResourceContainer {
       filter.setNickName(keywords);
       filter.setLimit(10);
       filter.setEmailAddress(keywords);
-      Map<String, String> data = contactSvr.searchEmails(username, filter);
-      fullData.setInfo(data.values());
+      fullData.setInfo(contactSvr.searchEmailsByFilter(username, filter));
     } catch (Exception e) {
       log.error("error search email", e);
       return Response.ok(Status.INTERNAL_SERVER_ERROR).cacheControl(cacheControl).build();

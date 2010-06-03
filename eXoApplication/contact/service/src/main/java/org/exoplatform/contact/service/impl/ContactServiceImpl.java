@@ -149,6 +149,10 @@ public class ContactServiceImpl implements ContactService {
   public Map<String, String> searchEmails(String username, ContactFilter filter) throws Exception {
     return storage_.findEmailsByFilter(username, filter) ;
   }
+
+  public List<String> searchEmailsByFilter(String username, ContactFilter filter) throws Exception {
+  	return storage_.searchEmailsByFilter(username, filter) ;
+  }
   
   
   public ContactPageList getPersonalContactsByAddressBook(String ownerId, String addressBookId) throws Exception {
