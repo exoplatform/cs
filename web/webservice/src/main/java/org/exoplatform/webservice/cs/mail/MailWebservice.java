@@ -3,8 +3,6 @@
  */
 package org.exoplatform.webservice.cs.mail;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Map;
 import java.util.Properties;
 
@@ -21,6 +19,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
@@ -52,6 +52,7 @@ public class MailWebservice implements ResourceContainer {
 
   public static final int    MAX_TIMEOUT       = 16;
 
+  private static final Log log = LogFactory.getLog(MailWebservice.class);
   // TODO need to organize code, don't keep html content here !
   public MailWebservice() {
   }
@@ -115,19 +116,16 @@ public class MailWebservice implements ResourceContainer {
           sttMsg = "Connecting failed. Please check server configuration.";
           stt = CheckingInfo.CONNECTION_FAILURE;
       } catch (IllegalStateException e) {
-        e.printStackTrace();
-
+        log.error("cannot connect to server", e);
       } catch (Exception e) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
+        log.error("cannot connect to server", e);
         sttMsg ="There was an unexpected error. Connecting failed.";
         stt = CheckingInfo.CONNECTION_FAILURE;
       }
-    }catch (AccessDeniedException e) {
-      
+    } catch (AccessDeniedException e) {
+      log.error("cannot connect to server", e);
     } catch (Exception ex) {
-      ex.printStackTrace();
+      log.error("cannot connect to server", ex);
     }
     ///////////////////////////////////
     
@@ -306,7 +304,7 @@ public class MailWebservice implements ResourceContainer {
       Map<String, String> data = contactSvr.searchEmails(username, filter);
       fullData.setInfo(data.values());
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("error search email", e);
       return Response.ok(Status.INTERNAL_SERVER_ERROR).cacheControl(cacheControl).build();
     }
     return Response.ok(fullData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
