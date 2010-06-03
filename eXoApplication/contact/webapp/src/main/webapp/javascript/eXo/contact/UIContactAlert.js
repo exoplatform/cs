@@ -2,9 +2,11 @@ function UIContactAlert() {
   
 } ;
 
-UIContactAlert.prototype.init = function(eXoUser, eXoToken){
+UIContactAlert.prototype.init = function(eXoUser, eXoToken, cometdContextName){
   eXo.cs.CSCometd.exoId = eXoUser;
   eXo.cs.CSCometd.exoToken = eXoToken;
+  if(cometdContextName)
+		eXo.cs.CSCometd.url = '/' + cometdContextName + '/cometd';
   eXo.cs.CSCometd.subscribe('/eXo/Application/Contact/messages', function(eventObj) {		
 		eXo.contact.UIContactAlert.alarm(eventObj) ;
   });

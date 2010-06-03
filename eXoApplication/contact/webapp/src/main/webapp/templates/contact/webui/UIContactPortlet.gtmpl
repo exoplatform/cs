@@ -13,12 +13,12 @@
  	rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;
 	rcontext.getJavascriptManager().importJavascript('eXo.cs.CSCometd','/csResources/javascript/') ;
 	rcontext.getJavascriptManager().addJavascript('eXo.cs.restContext = "'+ uicomponent.getRestContextName() +'" ;') ;
-  rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactPortlet','/contact/javascript/') ;
+    rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactPortlet','/contact/javascript/') ;
 	rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactDragDrop','/contact/javascript/') ;
  	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu('"+ compId +"') ;") ;
  	
 	rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactAlert','/contact/javascript/') ;
-	//rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactAlert.init("'+ContactUtils.getCurrentUser()+'","'+uicomponent.getUserToken()+'");') ;
+	rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactAlert.init("'+ContactUtils.getCurrentUser()+'","'+uicomponent.getUserToken()+'","' + uicomponent.getCometdContextName() + '");') ;
  	
 %>
 <div><div style="width: 940px;" ><span style="display: none;"></span></div></div>
