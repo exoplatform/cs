@@ -21,7 +21,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -123,6 +122,7 @@ public class MailServiceImpl implements MailService, Startable {
   private Map<String, CheckingInfo> checkingLog_;
 
   private JobSchedulerService       schedulerService_;
+  private ContinuationService continuationService_;
 
   public MailServiceImpl(NodeHierarchyCreator nodeHierarchyCreator,
                          JobSchedulerService schedulerService,
@@ -781,10 +781,10 @@ public class MailServiceImpl implements MailService, Startable {
       executeJob(job);
     } else {
       logger.warn("client [ "
-          + userName
-          + ":"
-          + accountId
-          + " ] has requested a checking mail job, but the system can not serve because old job hasn't stopped yet!!!");
+                  + userName
+                  + ":"
+                  + accountId
+                  + " ] has requested a checking mail job, but the system can not serve because old job hasn't stopped yet!!!");
     }
   }
 
@@ -807,7 +807,7 @@ public class MailServiceImpl implements MailService, Startable {
       }
     }
   }
-  
+
   private void executeJob(JobDetail job) { 
     if (job != null) {
       try {
@@ -1072,7 +1072,7 @@ public class MailServiceImpl implements MailService, Startable {
       if (parentFolder == null
           && (folderName.equalsIgnoreCase(Utils.FD_DRAFTS)
               || folderName.equalsIgnoreCase(Utils.FD_SENT) || folderName.equalsIgnoreCase(Utils.FD_SPAM))
-          || folderName.equalsIgnoreCase(Utils.FD_TRASH)) {
+              || folderName.equalsIgnoreCase(Utils.FD_TRASH)) {
         continue;
       }
 
@@ -1526,10 +1526,7 @@ public class MailServiceImpl implements MailService, Startable {
     boolean saved = false;
     int totalNew = -1;
     Info infoObj = new Info();
-    ContinuationService continuation = Utils.getContinuationService();
-    if (folder == null)
-      return;
-
+    if (folder == null) return;
     String folderId = null;
     String folderName = folder.getName();
     try {
@@ -1562,7 +1559,7 @@ public class MailServiceImpl implements MailService, Startable {
 
         boolean isImap = account.getProtocol().equals(Utils.IMAP);
         boolean leaveOnserver = (isImap && Boolean.valueOf(account.getServerProperties()
-                                                                  .get(Utils.SVR_LEAVE_ON_SERVER)));
+                                                           .get(Utils.SVR_LEAVE_ON_SERVER)));
 
         LinkedHashMap<javax.mail.Message, List<String>> msgMap = getMessageMap(userName,
                                                                                accountId,
@@ -1600,7 +1597,7 @@ public class MailServiceImpl implements MailService, Startable {
             } else if (info != null
                 && !Utils.isEmptyField(info.getRequestingForFolder_())
                 && !String.valueOf(((IMAPFolder) folder).getUIDValidity())
-                          .equals(Utils.getFolderNameFromFolderId(info.getRequestingForFolder_()))) {
+                .equals(Utils.getFolderNameFromFolderId(info.getRequestingForFolder_()))) {
               break;
             }
             if (info != null) {
@@ -1611,7 +1608,7 @@ public class MailServiceImpl implements MailService, Startable {
               if (info != null && i < unreadMsgCount) {
                 info.setFetching(i + 1);
                 info.setStatusMsg("Synchronizing folder " + folderName + " : " + (i + 1) + "/"
-                    + unreadMsgCount);
+                                  + unreadMsgCount);
               }
               filterList = msgMap.get(msg);
               try {
@@ -1644,7 +1641,7 @@ public class MailServiceImpl implements MailService, Startable {
                                              tagList,
                                              spamFilter,
                                              infoObj,
-                                             continuation,
+                                             this.continuationService_,
                                              false);
                 if (saved && !leaveOnserver)
                   msg.setFlag(Flags.Flag.DELETED, true);
@@ -1659,7 +1656,7 @@ public class MailServiceImpl implements MailService, Startable {
 
                 if (lastFromDate != null
                     && (eXoFolder.getLastStartCheckingTime() == null || eXoFolder.getLastStartCheckingTime()
-                                                                                 .before(lastFromDate))) {
+                        .before(lastFromDate))) {
                   eXoFolder.setLastStartCheckingTime(lastFromDate);
                 }
               } catch (Exception e) {
@@ -1688,11 +1685,11 @@ public class MailServiceImpl implements MailService, Startable {
       }
     } catch (Exception e) {
       logger.error("Error while checking emails from folder" + folderName + " of userName "
-          + userName + " on account " + accountId, e);
+                   + userName + " on account " + accountId, e);
       if (info != null) {
         info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
         info.setStatusMsg("Error while checking emails from folder" + folderName + " of userName "
-            + userName + " on account " + accountId);
+                          + userName + " on account " + accountId);
       }
       stopAllJobs(userName, accountId);
     }
@@ -1839,7 +1836,7 @@ public class MailServiceImpl implements MailService, Startable {
 
         if (totalNew > 0) {
           boolean leaveOnServer = (Boolean.valueOf(account.getServerProperties()
-                                                          .get(Utils.SVR_LEAVE_ON_SERVER)));
+                                                   .get(Utils.SVR_LEAVE_ON_SERVER)));
 
           info.setTotalMsg(totalNew);
 
@@ -1918,7 +1915,7 @@ public class MailServiceImpl implements MailService, Startable {
 
               if (lastFromDate != null
                   && (account.getLastStartCheckingTime() == null || account.getLastStartCheckingTime()
-                                                                           .before(lastFromDate))) {
+                      .before(lastFromDate))) {
                 account.setLastStartCheckingTime(lastFromDate);
               }
             } catch (Exception e) {
@@ -2392,7 +2389,7 @@ public class MailServiceImpl implements MailService, Startable {
           fd = store.getFolder(url);
           if (fd != null) {
             if (!fd.isOpen()) {
-            		fd.open(javax.mail.Folder.READ_WRITE);
+              fd.open(javax.mail.Folder.READ_WRITE);
             }
             message = ((IMAPFolder) fd).getMessageByUID(Long.valueOf(msg.getUID()));
             msg = storage_.loadTotalMessage(userName, accountId, msg, message);
@@ -2404,8 +2401,8 @@ public class MailServiceImpl implements MailService, Startable {
         msg = storage_.loadTotalMessage(userName, accountId, msg);
       }
     } catch (Exception e) {
-    	try {
-      	msg = storage_.loadTotalMessage(userName, accountId, msg, null);
+      try {
+        msg = storage_.loadTotalMessage(userName, accountId, msg, null);
       } catch (Exception ex) {}
       logger.info("Download content failure");
     } finally {
@@ -2494,18 +2491,18 @@ public class MailServiceImpl implements MailService, Startable {
 
     DispositionNotification disNotification = new DispositionNotification();
     disNotification.getNotifications()
-                   .setHeader("Reporting-UA", "cs.exoplatform.com;" + " CS-Mail");
+    .setHeader("Reporting-UA", "cs.exoplatform.com;" + " CS-Mail");
     disNotification.getNotifications().setHeader("MDN-Gateway",
                                                  "smtp;" + " " + acc.getOutgoingHost());
     disNotification.getNotifications().setHeader("Original-Recipient",
                                                  "rfc822;" + " " + msg.getFrom());
     disNotification.getNotifications().setHeader("Final-Recipient",
                                                  "rfc822;" + " " + acc.getUserDisplayName() + "<"
-                                                     + acc.getEmailAddress() + ">");
+                                                 + acc.getEmailAddress() + ">");
     disNotification.getNotifications().setHeader("Original-Message-ID", msg.getId());
     disNotification.getNotifications().setHeader("Disposition",
                                                  "manual-action/MDN-sent-automatically;"
-                                                     + " displayed");
+                                                 + " displayed");
 
     MultipartReport report = new MultipartReport(text, disNotification);
 
@@ -2588,5 +2585,14 @@ public class MailServiceImpl implements MailService, Startable {
       throw e;
     }
     logger.debug(" #### Info : " + status);
+  }
+
+  public ContinuationService getContinuationService() {
+    return continuationService_;
+  }
+
+  public void setContinuationService(ContinuationService continuationService){
+    continuationService_ = continuationService;
+
   }
 }

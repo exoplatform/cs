@@ -18,9 +18,11 @@ package org.exoplatform.mail.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.poi.hssf.record.ContinueRecord;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.scheduler.JobInfo;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.quartz.InterruptableJob;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -57,6 +59,8 @@ public class CheckMailJob implements Job, InterruptableJob {
     PortalContainer container = getPortalContainer(context);
     //MailService mailService = getMailService();
     MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
+    ContinuationService continuationService = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
+    mailService.setContinuationService(continuationService);
     JobDetail jobDetail = context.getJobDetail();
     JobDataMap dataMap = jobDetail.getJobDataMap();
     username = dataMap.getString(USERNAME);

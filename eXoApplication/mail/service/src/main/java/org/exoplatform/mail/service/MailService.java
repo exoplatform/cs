@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
 /**
  * Created by The eXo Platform SARL Author : Tuan Nguyen
@@ -706,7 +707,33 @@ public interface MailService {
    */
   public Message loadTotalMessage(String username, String accountId, Message msg) throws Exception;
 
+  /**
+   * 
+   * @param listener : the listener need to call
+   * @throws Exception 
+   */
   public void addListenerPlugin(ComponentPlugin listener) throws Exception;
-
+  /**
+   * The function add return receipt message for mail, 
+   * when user read the mail, system will ask user to let sender 
+   * know the message has been read or not
+   * @param username : given user id 
+   * @param accId : given account id
+   * @param msgId : message id
+   * @param res : resource bundle to show message by given language 
+   * @return : true or false value to sure that has been sent or not
+   * @throws Exception
+   */
   public boolean sendReturnReceipt(String username, String accId, String msgId, ResourceBundle res) throws Exception;
+  
+  /**
+   * Function to get ContinuationService in current context 
+   * @return : ContinuationService in current container 
+   */
+  public ContinuationService getContinuationService();
+  
+  /**
+   * @param continuationService
+   */
+    public void setContinuationService(ContinuationService continuationService);
 }
