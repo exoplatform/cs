@@ -803,7 +803,7 @@ public class MailServiceImpl implements MailService, Startable {
                     + userName
                     + ":"
                     + accountId
-                    + " ] has requested a checking mail job, but the system can not serve because old job hasn't stop yet!!!");
+                    + " ] has requested a checking mail job, but the system can not serve because old job hasn't stopped yet!!!");
       }
     }
   }
