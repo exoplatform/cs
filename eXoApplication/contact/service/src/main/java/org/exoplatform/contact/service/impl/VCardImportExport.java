@@ -301,7 +301,8 @@ public class VCardImportExport implements ContactImportExport {
     re.setReminderOwner(username) ;
     re.setReminderType(Reminder.TYPE_POPUP) ;
     re.setFromDateTime(new Date()) ;
-      
+    ContinuationService continuation = getContinuationService() ;
+    
     for (int index = 0; index < pimContacts.length; index++) {
       Contact contact = new Contact();
       PersonalIdentity identity = pimContacts[index].getPersonalIdentity();
@@ -530,7 +531,6 @@ public class VCardImportExport implements ContactImportExport {
       }
       re.setSummary(String.valueOf(index + 1) + " contacts imported ...") ;
       JsonValue json = generatorImpl.createJsonObject(re);
-      ContinuationService continuation = getContinuationService() ;
       continuation.sendMessage(username, "/eXo/Application/Contact/messages", json, re.toString());
     }
   }
