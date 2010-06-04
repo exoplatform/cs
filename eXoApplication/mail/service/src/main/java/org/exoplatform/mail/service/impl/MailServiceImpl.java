@@ -774,9 +774,18 @@ public class MailServiceImpl implements MailService, Startable {
 
   public void checkMail(String userName, String accountId) throws Exception {
     JobDetail job = loadCheckmailJob(userName, accountId);
-
-    // trigger now
-    executeJob(job);
+    JobInfo info = CheckMailJob.getJobInfo(userName, accountId);
+    JobDetail oldJob = schedulerService_.getJob(info);
+    if (oldJob == null) {
+      // trigger now
+      executeJob(job);
+    } else {
+      logger.warn("client [ "
+          + userName
+          + ":"
+          + accountId
+          + " ] has requested a checking mail job, but the system can not serve because old job hasn't stopped yet!!!");
+    }
   }
 
   public void checkMail(String userName, String accountId, String folderId) throws Exception {
@@ -784,9 +793,18 @@ public class MailServiceImpl implements MailService, Startable {
       checkMail(userName, accountId);
     else {
       JobDetail job = loadCheckmailJob(userName, accountId, folderId);
-
-      // trigger now
-      executeJob(job);
+      JobInfo info = CheckMailJob.getJobInfo(userName, accountId);
+      JobDetail oldJob = schedulerService_.getJob(info);
+      if (oldJob == null) {
+        // trigger now
+        executeJob(job);
+      } else {
+        logger.warn("client [ "
+                    + userName
+                    + ":"
+                    + accountId
+                    + " ] has requested a checking mail job, but the system can not serve because old job hasn't stop yet!!!");
+      }
     }
   }
   
