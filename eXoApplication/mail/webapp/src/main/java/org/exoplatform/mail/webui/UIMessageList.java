@@ -382,7 +382,6 @@ public class UIMessageList extends UIForm {
         }
         
         if(msg.hasAttachment()) {
-        	System.out.println("\n\n============> Set Attachments \n\n");
         	Message msgMem = mailSrv.loadTotalMessage(username, accountId, msg) ;
           msg.setAttachements(msgMem.getAttachments());
         }

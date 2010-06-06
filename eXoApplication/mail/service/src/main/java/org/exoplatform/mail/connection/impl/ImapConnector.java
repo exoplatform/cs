@@ -207,7 +207,7 @@ public class ImapConnector extends BaseConnector {
     }else if(desFolder.isPersonalFolder() || desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX)){
       return moveMessages(msgs, currentFolder, desFolder,false);
     }
-    
+
     return null;
   }
 
@@ -221,15 +221,17 @@ public class ImapConnector extends BaseConnector {
         URLName toURL = new URLName(fT.getURLName());
         toFolder = (IMAPFolder)((IMAPStore)store_).getFolder(toURL);
       }
-      
+
       fromFolder.open(javax.mail.Folder.READ_WRITE);
       toFolder.open(javax.mail.Folder.READ_WRITE);
       List<javax.mail.Message> copiedMsgs = new ArrayList<javax.mail.Message>();
       javax.mail.Message msg;
       for (Message m : msgs) {
-        msg = fromFolder.getMessageByUID(Long.valueOf(m.getUID()));
-        if (msg != null)
-          copiedMsgs.add(msg);
+        if(m.getUID() != null) {
+          msg = fromFolder.getMessageByUID(Long.valueOf(m.getUID()));
+          if (msg != null)
+            copiedMsgs.add(msg);
+        }
       }
       javax.mail.Message[] updatedMsgs = toFolder.addMessages(copiedMsgs.toArray(new javax.mail.Message[copiedMsgs.size()]));
 
@@ -251,11 +253,10 @@ public class ImapConnector extends BaseConnector {
       toFolder.close(true);
     } catch (Exception e) {
       logger.error("FAIL TO MOVE MESSAGE:", e);
-      return null;
     }
     return msgs;
   }
-  
+
   public boolean markAsRead(List<Message> msgList, Folder f) throws Exception {
     try {
       URLName url = new URLName(f.getURLName());

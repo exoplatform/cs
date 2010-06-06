@@ -378,7 +378,7 @@ public class MailServiceImpl implements MailService, Startable {
         if (msgList == null)
           success = false;
       } catch (Exception e) {
-        return;
+        if(logger.isDebugEnabled()) logger.debug("\n\n move message error " + e.getMessage());
       }
     }
     if (success)
