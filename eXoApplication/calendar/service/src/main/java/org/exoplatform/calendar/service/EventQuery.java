@@ -224,12 +224,17 @@ public class EventQuery {
         stringBuffer.append("@exo:toDateTime > xs:dateTime('"+ISO8601.format(toDate)+"')") ;
         */
         
+        // case where the event span fully the interval (starts before and ends after)
         stringBuffer.append("@exo:fromDateTime <= xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
         stringBuffer.append("@exo:toDateTime >= xs:dateTime('"+ISO8601.format(toDate)+"')") ;
         stringBuffer.append(") or (") ;
+        
+        // case where the event starts in the interval
         stringBuffer.append("@exo:fromDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
         stringBuffer.append("@exo:fromDateTime <= xs:dateTime('"+ISO8601.format(toDate)+"')") ;
         stringBuffer.append(") or (") ;
+        
+        // case  where the event ends in the interval
         stringBuffer.append("@exo:toDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
         stringBuffer.append("@exo:toDateTime <= xs:dateTime('"+ISO8601.format(toDate)+"')") ;
         
