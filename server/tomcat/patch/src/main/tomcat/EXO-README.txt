@@ -16,7 +16,7 @@
  **/
 
 ========================================== 
-    Release Notes - eXo Collaboration - Version 2.0.0
+    Release Notes - eXo Collaboration - Version 2.0.0 CR02
 ========================================== 
 
 ===============
@@ -147,7 +147,67 @@ So you do one of 2 way below
 ===========
 6 CHANGELOG
 ===========
-- 2.0.0 GA
+- 2.0.0 CR02
+
+
+** Bug
+    * [CS-2975] - Calendar RSS feed does not generate links for more than one calendar
+    * [CS-3559] - Chat bar can not be displayed in Vista & Mac Skin
+    * [CS-3725] - Webmail: Date format error (wrong pattern used)
+    * [CS-3729] - [DEV] Can not load FCKEditor when send an email 
+    * [CS-3823] - Display name of created event when open form to create new event
+    * [CS-4102] - Can not see default navigation on cs extension in tomcat with some pc
+    * [CS-4165] - Calendar: parameter "first day of the week" not taken into account
+    * [CS-4170] - Home page of eXo Mail is only in English
+    * [CS-4180] - chat on jboss does not work
+    * [CS-4181] - Error when print contact with extension
+    * [CS-4211] - Error in displaying right-click menu (in Extension)
+    * [CS-4225] -  CSdemo: Return no message when try to view sent messages by Today | This week | Last 30 days
+    * [CS-4226] - Reschedule event with mouse on "Schedule" tab does not work
+    * [CS-4241] - IE7: ICAL icon is not shown when Enable public access calendar
+    * [CS-4247] - Event - There is no Confirmation Link in Invatation email
+    * [CS-4252] - Time field is not shown in some cases
+    * [CS-4253] - Check mail inexactly when limit time to check 
+    * [CS-4259] - Exception when send mail without enable SMTP authentication
+    * [CS-4263] - Alert message is not shown to inform user that invalid username/password
+    * [CS-4264] - Don't update fetched message in Message pane while checking mail
+    * [CS-4269] - Calendar: some typo in French
+    * [CS-4270] - Chat - the user's id is displayed instead of the user name
+    * [CS-4271] - Adressbook refreshes to empty state after mouse move
+    * [CS-4280] - Auto apply server locale to UI event user not setting 
+    * [CS-4291] - Only eXo Chat IM is displayed
+    * [CS-4294] - Chat room loss when refreshing the browser page or even changing menu
+    * [CS-4299] - Remove the use of exoservice gmail Account from MailService configuration
+
+** Feedback
+    * [CS-4164] - csdemo and cs-extention doesn't use the same workspace
+    * [CS-4272] - demo homepage illustration is UGLY
+    * [CS-4273] - quicksearch should run on hit ENTER
+
+** Improvement
+    * [CS-2762] - Limit size of .ics files generated for feeds
+    * [CS-3003] - Allow Whitespace in chat room name
+    * [CS-3276] - Safari 4 support
+    * [CS-3333] - Share a temporary selection of contacts
+    * [CS-3528] - Perform XMPP authentication based on current user credentials
+    * [CS-3544] - Better support for move messages in IMAP
+    * [CS-3682] - highlight links in chat room
+    * [CS-3835] - More concise contact sheet
+    * [CS-3882] - Do not display empty group of calendars
+    * [CS-3885] - Calendar UI glitches
+    * [CS-3887] - Mail ui glitches
+    * [CS-3945] - Configurable exclusions for group adressbooks
+    * [CS-4008] - Public feed have add more function 
+    * [CS-4298] - Preserve Chat bar state when browsing
+
+** New Feature
+    * [CS-1316] - Send mail to group of users
+    * [CS-2813] - Messages Sync
+    * [CS-3655] - Select All in AddressBook
+    * [CS-3693] - public contacts attributes based on portal's user profile
+    * [CS-3908] - Autocomplete in To: CC: and BCC contact app: 
+ 
+
 - 2.0.0 CR01
 
 ** Bug
