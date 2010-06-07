@@ -8,7 +8,7 @@
   </parent>
   <artifactId>exo.cs.packaging.assembly</artifactId>
   <packaging>pom</packaging>
-  <name>eXo CS Packaging Assemblies</name>
+  <name>eXo Collaboration Packaging Assemblies</name>
   <properties>
     <gatein.working.dir>${basedir}/target</gatein.working.dir>
   </properties>
@@ -152,7 +152,7 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <build>
-        <finalName>eXoCS-${project.version}</finalName>
+        <finalName>eXoCollaboration-${project.version}</finalName>
         <plugins>
           <!-- Ensure your environment is correctly setup -->
           <plugin>
@@ -234,7 +234,7 @@
     <profile>
       <id>pkg-jbossas</id>
       <build>
-        <finalName>eXoCS-${project.version}</finalName>
+        <finalName>eXoCollaboration-${project.version}</finalName>
         <plugins>
           <!-- Ensure your environment is correctly setup -->
           <plugin>

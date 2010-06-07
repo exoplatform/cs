@@ -10,8 +10,8 @@
   <artifactId>cs</artifactId>
   <version>2.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>eXo Collaboration Suite</name>
-  <description>eXo Collaboration Suite (CS) made of Address Book, Calendar, Mail and Chat.</description>
+  <name>eXo Collaboration</name>
+  <description>eXo Collaboration made of Address Book, Calendar, Mail and Chat.</description>
   <url>http://wiki.exoplatform.org/xwiki/bin/view/CS/</url>
   <scm>
     <connection>scm:svn:http://svn.exoplatform.org/projects/cs/trunk</connection>
@@ -95,7 +95,7 @@
     <!-- We enforce Java 6 to build to use Chromattic and APT -->
     <jdk.min.version>1.6</jdk.min.version>
     <!-- maven-release-plugin -->
-    <arguments>-Prelease,pkg-tomcat,arc-tomcat,pkg-jbossas,arc-jbossas,run-its -Dgatein.working.dir=target</arguments>
+    <arguments>-Prelease,pkg-tomcat,arc-tomcat,run-its -Dgatein.working.dir=target</arguments>
   </properties>
   <dependencyManagement>
     <!-- TODO : import dependencyManagement of platform, instead of redefining those properties -->
