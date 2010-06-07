@@ -89,7 +89,7 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
     }
     if (url && url != '') {
       this.activeAction = this.GET_CHECK_MAIL_INFO_ACTION;
-      //this.makeRequest(url, this.HTTP_GET, '', this.GET_CHECK_MAIL_INFO_ACTION);
+      this.makeRequest(url, this.HTTP_GET, '', this.GET_CHECK_MAIL_INFO_ACTION);
     }
     if (status != this.NO_UPDATE_STATUS) {
       this.updateUI(status);
@@ -122,7 +122,7 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
 		this.activeAction = this.GET_CHECK_MAIL_INFO_ACTION;
 		this.tryCount ++;
     	url = this.SERVICE_BASED_URL + '/checkmailjobinfo/' + this.userName + '/' + this.accountId + '/';
-    	//this.makeRequest(url, this.HTTP_GET, '', this.GET_CHECK_MAIL_INFO_ACTION);
+    	this.makeRequest(url, this.HTTP_GET, '', this.GET_CHECK_MAIL_INFO_ACTION);
     }
     this.updateUI(state);
     this.destroy();    
