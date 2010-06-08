@@ -32,7 +32,43 @@ MailServiceHandler.prototype.initService = function(uiId, userName, accountId) {
   if (eXo.core.Browser.getCookie('cs.mail.checkingmail' + this.accountId) == 'true') {
     this.checkMail();
   }
+  
+  
+  eXo.cs.CSCometd.subscribe('/eXo/Application/mail/ckmailsts', function(eventObj) {		
+		eXo.mail.MailServiceHandler.updateCheckMailStatus(eventObj);
+  });
+  
+  if (!eXo.cs.CSCometd.isConnected()) {
+	     eXo.cs.CSCometd.init();
+  }
 };
+
+MailServiceHandler.prototype.updateCheckMailStatus = function(obj) {
+	var data = eXo.core.JSON.parse(obj.data);
+	var status = data.status;
+	var previousStatus = data.previousStatus;
+	var statusMsg = data.statusMsg;
+	
+	switch (status) {
+	case START_CHECKMAIL_STATUS:
+		//this status when server start checking mail.
+		break;
+	case CONNECTION_FAILURE:
+		// this status indicates that connection failed. We will show status message as error notice. 
+		break;
+	case RETRY_PASSWORD:
+		// this status indicates that can not connect to mail server due to authentication error. 
+		// We will show status message as error notice and show 'retry password' form.
+		break;
+	case FINISHED_CHECKMAIL_STATUS:
+		// this status notices that the checking mail task has finished.
+		// we will show finish checking mail status and hide the status bar automatically.
+		break;
+	}
+	// code for test. Show status message on status bar.
+	eXo.mail.MailServiceHandler.showStatusBox(data.statusMsg);
+};
+
 
 MailServiceHandler.prototype.setCheckmailTimeout = function(checkMailInterval) {
   this.checkMailInterval = checkMailInterval;
