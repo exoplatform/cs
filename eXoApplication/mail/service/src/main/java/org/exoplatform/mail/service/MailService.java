@@ -397,6 +397,12 @@ public interface MailService {
    * @throws Exception
    */
   public void saveMessage(String username,
+                          Account account,
+                          String targetMsgPath,
+                          Message message,
+                          boolean isNew) throws Exception;
+  //@Deprecated
+  public void saveMessage(String username,
                           String accountId,
                           String targetMsgPath,
                           Message message,

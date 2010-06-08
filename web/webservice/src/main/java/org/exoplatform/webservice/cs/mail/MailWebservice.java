@@ -3,7 +3,6 @@
  */
 package org.exoplatform.webservice.cs.mail;
 
-import java.util.Map;
 import java.util.Properties;
 
 import javax.jcr.AccessDeniedException;
@@ -30,6 +29,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.webservice.cs.bean.ContactData;
@@ -102,14 +102,13 @@ public class MailWebservice implements ResourceContainer {
       Session session = Session.getDefaultInstance(props, null);
       IMAPStore imapStore = (IMAPStore) session.getStore("imap");
       try {
+        if (Utils.isEmptyField(account.getIncomingPassword()))
+          account.setIncomingPassword(IdGenerator.generate());
         imapStore.connect(account.getIncomingHost(),
                           Integer.valueOf(account.getIncomingPort()),
                           account.getIncomingUser(),
                           account.getIncomingPassword());
       } catch (AuthenticationFailedException e) {
-        if (!account.isSavePassword()) {
-          account.setIncomingPassword("");
-        }
           sttMsg = "The userName or password may be wrong.";
           stt = CheckingInfo.RETRY_PASSWORD;
       } catch (MessagingException e) {
@@ -123,7 +122,7 @@ public class MailWebservice implements ResourceContainer {
         stt = CheckingInfo.CONNECTION_FAILURE;
       }
     } catch (AccessDeniedException e) {
-      log.error("cannot connect to server", e);
+      //log.error("cannot connect to server", e);
     } catch (Exception ex) {
       log.error("cannot connect to server", ex);
     }

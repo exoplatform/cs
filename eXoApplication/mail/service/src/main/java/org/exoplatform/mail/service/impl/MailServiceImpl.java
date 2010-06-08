@@ -479,7 +479,7 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void saveMessage(String userName,
-                          String accountId,
+                          Account account,
                           String targetMsgPath,
                           Message message,
                           boolean isNew) throws Exception {
@@ -488,14 +488,22 @@ public class MailServiceImpl implements MailService, Startable {
     String folderId = message.getFolders()[0];
     Folder destFolder = null;
     if (folderId != null) {
-      destFolder = getFolder(userName, accountId, folderId);
+      destFolder = getFolder(userName, account.getId(), folderId);
     }
-    Account account = getAccountById(userName, accountId);
     if (destFolder != null && account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       Connector connector = new ImapConnector(account);
       connector.createMessage(msgList, destFolder);
     }
-    storage_.saveMessage(userName, accountId, targetMsgPath, message, isNew);
+    storage_.saveMessage(userName, account.getId(), targetMsgPath, message, isNew);
+  }
+  
+  public void saveMessage(String userName,
+                          String accountId,
+                          String targetMsgPath,
+                          Message message,
+                          boolean isNew) throws Exception {
+    Account account = getAccountById(userName, accountId);
+    saveMessage(userName, account, targetMsgPath, message, isNew);
   }
 
   public List<Message> getMessagesByTag(String userName, String accountId, String tagId) throws Exception {

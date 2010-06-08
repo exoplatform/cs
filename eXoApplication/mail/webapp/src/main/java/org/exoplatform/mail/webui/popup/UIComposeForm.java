@@ -1093,7 +1093,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 			// Sent
 			// folder
 			try {
-				uiComposeForm.saveToSentFolder(usename, accountId, message);
+			  Account account = mailSvr.getAccountById(usename, accountId);
+				uiComposeForm.saveToSentFolder(usename, account, message);
 				UIMessageList uiMessageList = uiPortlet
 						.findFirstComponentOfType(UIMessageList.class);
 				UIMessagePreview uiMsgPreview = uiPortlet
@@ -1140,7 +1141,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 		}
 	}
 
-	public void saveToSentFolder(String usename, String accountId,
+	public void saveToSentFolder(String usename, Account account,
 			Message message) throws Exception {
 		MailService mailSvr = getApplicationComponent(MailService.class);
 		MailSetting setting = mailSvr.getMailSetting(usename);
@@ -1150,22 +1151,22 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 			message.setReplyTo(message.getMessageTo());
 			message.setIsReturnReceipt(false);
 			message.setIsLoaded(true);
-			message.setFolders(new String[] { Utils.generateFID(accountId,
+			message.setFolders(new String[] { Utils.generateFID(account.getId(),
 					Utils.FD_SENT, false) });
-			mailSvr.saveMessage(usename, accountId, parentPath_, message, true);
+			mailSvr.saveMessage(usename, account, parentPath_, message, true);
 		} else if (fromDrafts) {
-			Folder drafts = mailSvr.getFolder(usename, accountId, Utils
-					.generateFID(accountId, Utils.FD_DRAFTS, false));
+			Folder drafts = mailSvr.getFolder(usename, account.getId(), Utils
+					.generateFID(account.getId(), Utils.FD_DRAFTS, false));
 			if (isSaved) {
-				message.setFolders(new String[] { Utils.generateFID(accountId,
+				message.setFolders(new String[] { Utils.generateFID(account.getId(),
 						Utils.FD_SENT, false) });
-				mailSvr.saveMessage(usename, accountId, parentPath_, message,
+				mailSvr.saveMessage(usename, account, parentPath_, message,
 						false);
 			} else {
-				mailSvr.removeMessage(usename, accountId, message);
+				mailSvr.removeMessage(usename, account.getId(), message);
 			}
 			drafts.setTotalMessage(drafts.getTotalMessage() - 1);
-			mailSvr.saveFolder(usename, accountId, drafts);
+			mailSvr.saveFolder(usename, account.getId(), drafts);
 		}
 	}
 
@@ -1197,14 +1198,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 				message.setFolders(new String[] { draftFolderId });
 				message.setIsLoaded(true);
 				if (!composeForm.fromDrafts()) {
-					mailSvr.saveMessage(usename, accountId,
+					mailSvr.saveMessage(usename, mailSvr.getAccountById(usename, accountId),
 							composeForm.parentPath_, message, true);
 					Folder drafts = mailSvr.getFolder(usename, accountId,
 							draftFolderId);
 					drafts.setTotalMessage(drafts.getTotalMessage() + 1);
 					mailSvr.saveFolder(usename, accountId, drafts);
 				} else {
-					mailSvr.saveMessage(usename, accountId,
+					mailSvr.saveMessage(usename, mailSvr.getAccountById(usename, accountId),
 							composeForm.parentPath_, message, false);
 				}
 			} catch (Exception e) {
