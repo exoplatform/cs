@@ -16,6 +16,7 @@
  */
 package org.exoplatform.mail.service;
 
+
 /**
  * Created by The eXo Platform SAS
  * Author : Nam Phung
@@ -46,6 +47,8 @@ public class CheckingInfo {
   private String requestingForFolder_;
   private String msgId_ ;
   private int syncFolderStatus_ =300;
+  private StatusInfo status_ = new StatusInfo();
+  
   
   public int getTotalMsg() {  return totalMsg_ ; } ;
   public void setTotalMsg(int totalMsg) { 
@@ -71,15 +74,26 @@ public class CheckingInfo {
   }
   
   public String getStatusMsg() { return statusMsg_ ; }
-  public void setStatusMsg(String statusMsg) { 
-    statusMsg_ = statusMsg ; 
-    hasChanged_ = true ;
+  
+  public void setStatusMsg(String statusMsg) {
+    if (statusMsg_ != null && statusMsg_.equals(statusMsg)) {
+      return;
+    }
+    statusMsg_ = statusMsg;
+    status_.setStatusMsg(statusMsg_);
+    hasChanged_ = true;
+
   }
   
   public int getStatusCode() { return statusCode_ ; }
+
   public void setStatusCode(int code) { 
-    statusCode_ = code ; 
-    hasChanged_ = true ;
+    if (statusCode_ != code) {
+      status_.setPreviousStatus(statusCode_);
+      statusCode_ = code ; 
+      status_.setStatus(code);
+      hasChanged_ = true ;
+    }
   }
   
   public boolean hasChanged() { return hasChanged_ ; }
@@ -94,5 +108,11 @@ public class CheckingInfo {
   }
   
   public String getRequestingForFolder_() { return requestingForFolder_; }
-  public void setRequestingForFolder_(String str) { requestingForFolder_ = str ;} 
+  public void setRequestingForFolder_(String str) { requestingForFolder_ = str ;}
+  
+  public StatusInfo getStatus() {
+    return status_;
+  } 
+  
+  
 }

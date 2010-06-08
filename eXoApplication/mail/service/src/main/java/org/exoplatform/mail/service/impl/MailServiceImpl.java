@@ -88,6 +88,7 @@ import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.MimeMessageParser;
 import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.mail.service.SpamFilter;
+import org.exoplatform.mail.service.StatusInfo;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -97,6 +98,9 @@ import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.services.scheduler.PeriodInfo;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+import org.exoplatform.ws.frameworks.json.impl.JsonException;
+import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
+import org.exoplatform.ws.frameworks.json.value.JsonValue;
 import org.picocontainer.Startable;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -1437,6 +1441,7 @@ public class MailServiceImpl implements MailService, Startable {
       if (info != null) {
         info.setStatusMsg("Failed to get messages");
         info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
+        updateCheckingMailStatusByCometd(userName, info);
       }
       stopAllJobs(userName, accountId);
     } finally {
@@ -1460,9 +1465,11 @@ public class MailServiceImpl implements MailService, Startable {
       if (synchFolders) {
         info.setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
         info.setStatusMsg("Synchronizing imap folder ...");
+        updateCheckingMailStatusByCometd(userName, info); // update checking mail job by cometd.
         folderList = synchImapFolders(userName, accountId, null, store.getDefaultFolder().list());
         info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
         info.setStatusMsg("Finished synchronizing imap folder ...");
+        updateCheckingMailStatusByCometd(userName, info);
         Thread.sleep(2000);
       }
       if (!Utils.isEmptyField(folderId)) {
@@ -1515,6 +1522,7 @@ public class MailServiceImpl implements MailService, Startable {
     if (info != null) {
       info.setStatusMsg("Finish getting messages");
       info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
+      updateCheckingMailStatusByCometd(userName, info);
     }
   }
 
@@ -1537,6 +1545,7 @@ public class MailServiceImpl implements MailService, Startable {
       if (info != null) {
         info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);
         info.setStatusMsg("Getting mails from folder " + folder.getName() + " !");
+        updateCheckingMailStatusByCometd(userName, info);
       }
       folderId = Utils.generateFID(accountId,
                                    String.valueOf(((IMAPFolder) folder).getUIDValidity()),
@@ -1591,6 +1600,7 @@ public class MailServiceImpl implements MailService, Startable {
               // duy
               info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
               info.setStatusMsg("Stop getting mails from folder " + folder.getName() + " !");
+              updateCheckingMailStatusByCometd(userName, info);
               Thread.sleep(2000);
               // duy
               break;
@@ -1609,6 +1619,7 @@ public class MailServiceImpl implements MailService, Startable {
                 info.setFetching(i + 1);
                 info.setStatusMsg("Synchronizing folder " + folderName + " : " + (i + 1) + "/"
                                   + unreadMsgCount);
+                updateCheckingMailStatusByCometd(userName, info);
               }
               filterList = msgMap.get(msg);
               try {
@@ -1759,9 +1770,11 @@ public class MailServiceImpl implements MailService, Startable {
       CheckingInfo info = new CheckingInfo();
       checkingLog_.put(key, info);
       long t1, t2, tt1, tt2;
-      if (Utils.isEmptyField(account.getIncomingPassword()))
+      if (Utils.isEmptyField(account.getIncomingPassword())) {
         info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
-
+        updateCheckingMailStatusByCometd(userName, info);
+        return messageList;
+      }
       logger.debug(" #### Getting mail from " + account.getIncomingHost() + " ... !");
       info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !");
       int totalNew = 0;
@@ -2595,4 +2608,19 @@ public class MailServiceImpl implements MailService, Startable {
     continuationService_ = continuationService;
 
   }
+  
+  private void updateCheckingMailStatusByCometd(String userName, CheckingInfo info) {
+    if (info != null && info.hasChanged()) {     
+      try {
+        
+      JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+      JsonValue json = generatorImpl.createJsonObject(info.getStatus());
+      continuationService_.sendMessage(userName, "/eXo/Application/mail/ckmailsts", json);
+      info.setHasChanged(false);
+      } catch (JsonException je) { 
+        logger.warn("can not send cometd message to client [ " + userName + " ]!", je);
+      } 
+    }
+  }
+  
 }
