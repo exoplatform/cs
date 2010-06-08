@@ -70,19 +70,25 @@ public class MailWebservice implements ResourceContainer {
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
     
     //checkingInfo = null;
-    if (checkingInfo == null) {
+    if (checkingInfo == null || checkingInfo.getStatusCode() == CheckingInfo.FINISHED_CHECKMAIL_STATUS) {
       mailService.checkMail(userName, accountId, folderId);
-    } else if (folderId != null && folderId.trim().length() > 0
+    } else {
+      if (checkingInfo != null) {
+        mailService.updateCheckingMailStatusByCometd(userName, checkingInfo);        
+      }
+    }
+    /*if (folderId != null && folderId.trim().length() > 0
         && !folderId.equalsIgnoreCase("checkall")) {
       checkingInfo.setRequestingForFolder_(folderId);
-    }
-
-    StringBuffer buffer = new StringBuffer();
+    }*/
+    StringBuffer buffer = new StringBuffer("");
+    
+    /*
     buffer.append("<info>");
     buffer.append("  <checkingmail>");
     int stt = CheckingInfo.START_CHECKMAIL_STATUS;
     String sttMsg = "";
-    if (checkingInfo != null) checkingInfo.getStatusMsg();
+    if (checkingInfo != null) sttMsg = checkingInfo.getStatusMsg();
     
     /////////////////////////////////
     try {
@@ -132,6 +138,7 @@ public class MailWebservice implements ResourceContainer {
     buffer.append("    <statusmsg>" + sttMsg + "</statusmsg>");
     buffer.append("  </checkingmail>");
     buffer.append("</info>");
+    */
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 

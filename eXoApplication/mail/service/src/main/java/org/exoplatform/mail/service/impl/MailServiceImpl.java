@@ -1080,6 +1080,12 @@ public class MailServiceImpl implements MailService, Startable {
     String folderId, folderName;
 
     for (javax.mail.Folder fd : folders) {
+      /*if(
+      getCheckingInfo(userName, accountId).isRequestStop()) {
+        System.out.println("\n\n user request stop !" );
+        //return folderList;
+        throw new CheckMailInteruptedException("stopped checking emails!");
+      }*/
       folderName = fd.getName();
       if (parentFolder == null
           && (folderName.equalsIgnoreCase(Utils.FD_DRAFTS)
@@ -1117,6 +1123,7 @@ public class MailServiceImpl implements MailService, Startable {
               storage_.saveFolder(userName, accountId, parentFolder.getId(), folder);
             }
           } catch (Exception e) {
+            logger.warn(e);
           }
 
           // update available one
@@ -1193,6 +1200,7 @@ public class MailServiceImpl implements MailService, Startable {
         if (info != null) {
           info.setStatusMsg("The userName or password may be wrong.");
           info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
+          updateCheckingMailStatusByCometd(userName, info);
         }
         return null;
       } catch (MessagingException e) {
@@ -1200,6 +1208,7 @@ public class MailServiceImpl implements MailService, Startable {
         if (info != null) {
           info.setStatusMsg("Connecting failed. Please check server configuration.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
+          updateCheckingMailStatusByCometd(userName, info);
         }
         return null;
       } catch (IllegalStateException e) {
@@ -1215,6 +1224,7 @@ public class MailServiceImpl implements MailService, Startable {
         if (info != null) {
           info.setStatusMsg("There was an unexpected error. Connecting failed.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
+          updateCheckingMailStatusByCometd(userName, info);
         }
         return null;
       }
@@ -1228,9 +1238,10 @@ public class MailServiceImpl implements MailService, Startable {
   public POP3Store openPOPConnection(String userName, Account account, CheckingInfo info) {
     try {
       logger.debug(" #### Getting mail from " + account.getIncomingHost() + " ... !");
-      if (info != null)
+      if (info != null) {
         info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !");
-
+        updateCheckingMailStatusByCometd(userName, info);
+      }
       Properties props = System.getProperties();
       props.setProperty("mail.mime.base64.ignoreerrors", "true");
 
@@ -1259,6 +1270,7 @@ public class MailServiceImpl implements MailService, Startable {
         if (info != null) {
           info.setStatusMsg("The userName or password may be wrong.");
           info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
+          updateCheckingMailStatusByCometd(userName, info);
         }
         return null;
       } catch (MessagingException e) {
@@ -1266,6 +1278,7 @@ public class MailServiceImpl implements MailService, Startable {
         if (info != null) {
           info.setStatusMsg("Connecting failed. Please check server configuration.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
+          updateCheckingMailStatusByCometd(userName, info);
         }
         return null;
       } catch (Exception e) {
@@ -1276,6 +1289,7 @@ public class MailServiceImpl implements MailService, Startable {
         if (info != null) {
           info.setStatusMsg("There was an unexpected error. Connecting failed.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
+          updateCheckingMailStatusByCometd(userName, info);
         }
         return null;
       }
@@ -1468,18 +1482,33 @@ public class MailServiceImpl implements MailService, Startable {
     checkingLog_.put(key, info);
     Account account = getAccountById(userName, accountId);
     IMAPStore store = openIMAPConnection(userName, account, info);
+    
+    //after connect to server, we check stopping mail request of user.
+    if (info.isRequestStop()) {
+      System.out.println("========> stopped checking emails!!!");
+      throw new CheckMailInteruptedException("stopped checking emails!");
+    }
+    
     if (store != null) {
       List<javax.mail.Folder> folderList = null;
       if (synchFolders) {
         info.setSyncFolderStatus(CheckingInfo.START_SYNC_FOLDER);
+        info.setStatusCode(CheckingInfo.START_SYNC_FOLDER);
         info.setStatusMsg("Synchronizing imap folder ...");
         updateCheckingMailStatusByCometd(userName, info); // update checking mail job by cometd.
         folderList = synchImapFolders(userName, accountId, null, store.getDefaultFolder().list());
         info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
+        info.setStatusCode(CheckingInfo.FINISH_SYNC_FOLDER);
         info.setStatusMsg("Finished synchronizing imap folder ...");
         updateCheckingMailStatusByCometd(userName, info);
-        Thread.sleep(2000);
+        //Thread.sleep(2000);
       }
+      
+      if (info.isRequestStop()) {
+        System.out.println("========> stopped checking emails!!!");
+        throw new CheckMailInteruptedException("stopped checking emails!");
+      }
+      
       if (!Utils.isEmptyField(folderId)) {
         mergeMessageBetweenJcrAndServerMail(store, userName, accountId, folderId, info);
       } else {
@@ -1494,7 +1523,10 @@ public class MailServiceImpl implements MailService, Startable {
                 logger.debug("Stop requested on checkmail for " + account.getId());
               }
               info.setStatusMsg("Stop getting mails from folder " + folder.getName() + " !");// duy
-              Thread.sleep(2000);// duy
+              //throw new CheckMailInteruptedException(msg)
+              updateCheckingMailStatusByCometd(userName, info);
+              //Thread.sleep(2000);// duy
+              //Thread.
               break;
             }
             try {
@@ -1503,13 +1535,15 @@ public class MailServiceImpl implements MailService, Startable {
               System.err.println("Failed to open '" + folder.getName() + "' folder as read-only");
               if (info != null) {
                 info.setStatusMsg("Failed to get messages");
-                info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
+                info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
+                updateCheckingMailStatusByCometd(userName, info);
               }
               stopCheckMail(userName, accountId);
             } finally {
               if (info != null) {
                 info.setStatusMsg("Finish getting messages");
-                info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
+                info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
+                updateCheckingMailStatusByCometd(userName, info);
               }
               if (store != null && store.isConnected()) {
                 store.close();
@@ -1518,10 +1552,7 @@ public class MailServiceImpl implements MailService, Startable {
           }
         }
       }
-      if (!account.isSavePassword()) {
-        account.setIncomingPassword("");
-        updateAccount(userName, account);
-      }
+      
       logger.debug("/////////////////////////////////////////////////////////////");
       logger.debug("/////////////////////////////////////////////////////////////");
     } else {
@@ -1545,7 +1576,6 @@ public class MailServiceImpl implements MailService, Startable {
     if (folder == null) return;
     String folderId = null;
     String folderName = folder.getName();
-    try {
       if (!folder.isOpen()) {
         folder.open(javax.mail.Folder.READ_ONLY);
       }
@@ -1577,14 +1607,22 @@ public class MailServiceImpl implements MailService, Startable {
         boolean isImap = account.getProtocol().equals(Utils.IMAP);
         boolean leaveOnserver = (isImap && Boolean.valueOf(account.getServerProperties()
                                                            .get(Utils.SVR_LEAVE_ON_SERVER)));
-
+        //after check folder, we see the stopping request of user.
+        if (info.isRequestStop()) {
+          throw new CheckMailInteruptedException("stopped checking emails!");
+        }
+        
         LinkedHashMap<javax.mail.Message, List<String>> msgMap = getMessageMap(userName,
                                                                                accountId,
                                                                                folder,
                                                                                null,
                                                                                checkFromDate,
                                                                                null);
-
+        //after get messages map, we see the stopping request of user.
+        if (info.isRequestStop()) {
+          throw new CheckMailInteruptedException("stopped checking emails!");
+        }
+        
         totalNew = msgMap.size();
 
         logger.debug(" #### Folder " + folderName + " contains " + totalNew + " messages !");
@@ -1604,14 +1642,14 @@ public class MailServiceImpl implements MailService, Startable {
             if (info != null && info.isRequestStop()) {
               if (logger.isDebugEnabled()) {
                 logger.debug("Stop requested on checkmail for " + account.getId());
-              }
+              }// duy
+              //info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
+              //info.setStatusMsg("Stop getting mails from folder " + folder.getName() + " !");
+              //updateCheckingMailStatusByCometd(userName, info);
+              throw new CheckMailInteruptedException("Stop getting mails from folder " + folder.getName() + " !");
+              //Thread.sleep(2000);
               // duy
-              info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
-              info.setStatusMsg("Stop getting mails from folder " + folder.getName() + " !");
-              updateCheckingMailStatusByCometd(userName, info);
-              Thread.sleep(2000);
-              // duy
-              break;
+              //break;
             } else if (info != null
                 && !Utils.isEmptyField(info.getRequestingForFolder_())
                 && !String.valueOf(((IMAPFolder) folder).getUIDValidity())
@@ -1623,10 +1661,10 @@ public class MailServiceImpl implements MailService, Startable {
               msg = msgList.get(i);
 
               int unreadMsgCount = folder.getUnreadMessageCount();
-              if (info != null && i < unreadMsgCount) {
+              if (info != null/* && i < unreadMsgCount*/) {
                 info.setFetching(i + 1);
-                info.setStatusMsg("Synchronizing folder " + folderName + " : " + (i + 1) + "/"
-                                  + unreadMsgCount);
+                info.setStatusMsg("Synchronizing messages of [" + folderName + "] : " + (i + 1) + "/"
+                                  + totalNew);
                 updateCheckingMailStatusByCometd(userName, info);
               }
               filterList = msgMap.get(msg);
@@ -1688,30 +1726,36 @@ public class MailServiceImpl implements MailService, Startable {
             }
           }
           saveFolder(userName, accountId, eXoFolder, false);
-          FetchMailContentThread downloadContentMail = new FetchMailContentThread(storage_,
+          /*FetchMailContentThread downloadContentMail = new FetchMailContentThread(this, storage_,
                                                                                   msgMap,
                                                                                   i,
                                                                                   folder,
                                                                                   userName,
                                                                                   accountId);
-          new Thread(downloadContentMail).start();
-        } else {
+          new Thread(downloadContentMail).start();*/
+        
+          info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
+          info.setStatusMsg("finished checking email!");
+          updateCheckingMailStatusByCometd(userName, info);
+          } else {
           if (info != null) {
             info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
             info.setStatusMsg("There is no messages in the " + folderName + " folder!");
+            updateCheckingMailStatusByCometd(userName, info);
           }
         }
       }
-    } catch (Exception e) {
+    /*} catch (Exception e) {
       logger.error("Error while checking emails from folder" + folderName + " of userName "
                    + userName + " on account " + accountId, e);
       if (info != null) {
-        info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
+        info.setStatusCode(CheckingInfo.COMMON_ERROR);
         info.setStatusMsg("Error while checking emails from folder" + folderName + " of userName "
                           + userName + " on account " + accountId);
+        updateCheckingMailStatusByCometd(userName, info);
       }
       stopAllJobs(userName, accountId);
-    }
+    }*/
   }
 
   private LinkedHashMap<javax.mail.Message, List<String>> getMessageMap(String userName,
@@ -1758,11 +1802,25 @@ public class MailServiceImpl implements MailService, Startable {
     Account account = getAccountById(username, accountId);
     List<Message> messageList = new ArrayList<Message>();
     if (account != null) {
-      if (account.getProtocol().equals(Utils.POP3)) {
-        return checkPop3Server(username, accountId);
-      } else if (account.getProtocol().equals(Utils.IMAP)) {
-        boolean synchFolder = !(getFolders(username, accountId, true).size() > 0);
-        getSynchnizeImapServer(username, accountId, folderId, synchFolder);
+      try {
+        if (account.getProtocol().equals(Utils.POP3)) {
+          return checkPop3Server(username, accountId);
+        } else if (account.getProtocol().equals(Utils.IMAP)) {
+          boolean synchFolder = !(getFolders(username, accountId, true).size() > 0);
+          getSynchnizeImapServer(username, accountId, folderId, synchFolder);
+        }
+      } catch (CheckMailInteruptedException cme) {
+        System.out.println("=================> catch my exception: interupt checking mail exception");
+        CheckingInfo info = getCheckingInfo(username, accountId);
+        info.setRequestStop(false);
+        info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
+        info.setStatusMsg(cme.getMessage());
+        updateCheckingMailStatusByCometd(username, info);
+      } finally {
+        if (!account.isSavePassword()) {
+          account.setIncomingPassword("");
+          updateAccount(username, account);
+        }
       }
     }
 
@@ -1784,11 +1842,13 @@ public class MailServiceImpl implements MailService, Startable {
         return messageList;
       }
       logger.debug(" #### Getting mail from " + account.getIncomingHost() + " ... !");
+      info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);
       info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !");
+      updateCheckingMailStatusByCometd(userName, info);
       int totalNew = 0;
       boolean isImap = account.getProtocol().equals(Utils.IMAP);
 
-      try {
+//      try {
         // String[] incomingFolders = account.getIncomingFolder().split(",");
 
         // String incomingFolder = incomingFolders[0].trim();
@@ -1804,14 +1864,30 @@ public class MailServiceImpl implements MailService, Startable {
         if (store == null) {
           return messageList;
         }
+        
+        if (info.isRequestStop()) {
+          throw new CheckMailInteruptedException("stopped checking emails");
+        }
+        
         javax.mail.Folder folder = store.getFolder(storeURL.getFile());
+        
+        // after get folder, check stopping request of user.
+        
+        if (info.isRequestStop()) {
+          throw new CheckMailInteruptedException("stopped checking emails");
+        }
+        
         if (!folder.exists()) {
           logger.debug(" #### Folder " + incomingFolder + " is not exists !");
+          info.setStatusCode(CheckingInfo.COMMON_ERROR);
           info.setStatusMsg("Folder " + incomingFolder + " is not exists");
+          updateCheckingMailStatusByCometd(userName, info);
           store.close();
+          return messageList;
         } else {
           logger.debug(" #### Getting mails from folder " + incomingFolder + " !");
           info.setStatusMsg("Getting mails from folder " + incomingFolder + " !");
+          updateCheckingMailStatusByCometd(userName, info);
         }
         folder.open(javax.mail.Folder.READ_WRITE);
 
@@ -1846,6 +1922,13 @@ public class MailServiceImpl implements MailService, Startable {
           }
         }
 
+        /*
+         * after get message map, check stopping request of user.
+         */
+        if (info.isRequestStop()) {
+          throw new CheckMailInteruptedException("stopped checking emails");
+         }
+        
         totalNew = msgMap.size();
 
         logger.debug("=============================================================");
@@ -1886,6 +1969,7 @@ public class MailServiceImpl implements MailService, Startable {
             logger.debug("Fetching message " + (i + 1) + " ...");
             info.setFetching(i + 1);
             info.setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew);
+            updateCheckingMailStatusByCometd(userName, info);
             t1 = System.currentTimeMillis();
 
             filterList = msgMap.get(msg);
@@ -1942,6 +2026,7 @@ public class MailServiceImpl implements MailService, Startable {
             } catch (Exception e) {
               info.setStatusMsg("An error occurs while fetching messsge " + (i + 1));
               info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
+              updateCheckingMailStatusByCometd(userName, info);
               i++;
               continue;
             }
@@ -1956,6 +2041,7 @@ public class MailServiceImpl implements MailService, Startable {
           if (info != null) {
             info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
             info.setStatusMsg("There is no message!");
+            updateCheckingMailStatusByCometd(userName, info);
           }
         }
 
@@ -1968,12 +2054,13 @@ public class MailServiceImpl implements MailService, Startable {
         store.close();
         info.setStatusMsg("Finish fetching mail!");
         info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
+        updateCheckingMailStatusByCometd(userName, info);
 
         logger.debug("/////////////////////////////////////////////////////////////");
         logger.debug("/////////////////////////////////////////////////////////////");
-      } catch (Exception e) {
+      /*} catch (Exception e) {
         logger.error("Error while checking emails for " + userName + " on account " + accountId, e);
-      }
+      }*/
     }
     return messageList;
   }
@@ -2617,7 +2704,7 @@ public class MailServiceImpl implements MailService, Startable {
 
   }
   
-  private void updateCheckingMailStatusByCometd(String userName, CheckingInfo info) {
+  public void updateCheckingMailStatusByCometd(String userName, CheckingInfo info) {
     if (info != null && info.hasChanged()) {     
       try {
         
@@ -2628,6 +2715,18 @@ public class MailServiceImpl implements MailService, Startable {
       } catch (JsonException je) { 
         logger.warn("can not send cometd message to client [ " + userName + " ]!", je);
       } 
+    }
+  }
+  
+  class CheckMailInteruptedException extends Exception {
+    private String message;
+    public CheckMailInteruptedException(String msg) {
+      super();
+      this.message = msg;
+    }
+    
+    public String getMessage() {
+      return message;
     }
   }
   

@@ -23,7 +23,9 @@ import java.util.List;
 import javax.mail.Folder;
 import javax.mail.Message;
 
+import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.DataStorage;
+import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MimeMessageParser;
 
 public class FetchMailContentThread implements Runnable {
@@ -39,13 +41,16 @@ public class FetchMailContentThread implements Runnable {
   private javax.mail.Folder                               folder_;
 
   private int                                             numberMessage_ = 0;
+  
+  private MailService mailService;
 
-  public FetchMailContentThread(DataStorage storage,
+  public FetchMailContentThread(MailService mailService, DataStorage storage,
                                 LinkedHashMap<javax.mail.Message, List<String>> msgMap,
                                 int numberMessage,
                                 javax.mail.Folder folder,
                                 String username,
                                 String accountId) throws Exception {
+    this.mailService = mailService;
     storage_ = storage;
     username_ = username;
     accountId_ = accountId;
@@ -66,10 +71,17 @@ public class FetchMailContentThread implements Runnable {
     int j = 0;
     Message msg;
     List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap_.keySet());
+    
     if (!folder_.isOpen())
       folder_.open(Folder.READ_WRITE);
     while (j < numberMessage_) {
+      CheckingInfo info = mailService.getCheckingInfo(username_, accountId_);
       msg = msgList.get(j);
+      if (info.isRequestStop()) {
+        System.out.println("stop update message at " + msg.getSubject());
+        break;
+      }
+      System.out.println("save msg to database: " + msg.getSubject());
       storage_.saveTotalMessage(username_,
                                 accountId_,
                                 MimeMessageParser.getMessageId(msg),

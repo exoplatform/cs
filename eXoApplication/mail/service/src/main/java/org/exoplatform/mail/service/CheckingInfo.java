@@ -32,6 +32,7 @@ public class CheckingInfo {
   public static final int EXECUTING_FILTER = 203;
   public static final int CONNECTION_FAILURE = 102 ;
   public static final int RETRY_PASSWORD = 103 ;
+  public static final int COMMON_ERROR = 104 ;
   
   public static final int START_SYNC_FOLDER = 301;
   public static final int FINISH_SYNC_FOLDER = 302;
@@ -91,14 +92,18 @@ public class CheckingInfo {
     if (statusCode_ != code) {
       status_.setPreviousStatus(statusCode_);
       statusCode_ = code ; 
-      status_.setStatus(code);
+      status_.setStatus(statusCode_);
       hasChanged_ = true ;
     }
   }
   
   public boolean hasChanged() { return hasChanged_ ; }
   public void setHasChanged(boolean b) { hasChanged_ = b ; }
-  
+  /**
+   * this function is involved to ask stopping request of user. if returned value is true, 
+   * the checking mail job will try to stop.
+   * @return
+   */
   public boolean isRequestStop() { return isRequestStop_ ; }
   public void setRequestStop(boolean b) { isRequestStop_ = b ; }
   

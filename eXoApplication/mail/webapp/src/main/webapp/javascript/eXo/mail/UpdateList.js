@@ -8,6 +8,10 @@ UpdateList.prototype.init = function(accountId, eXoUser, eXoToken, cometdContext
   eXo.cs.CSCometd.subscribe('/eXo/Application/mail/messages', function(eventObj) {		
 		eXo.mail.UpdateList.update(eventObj) ;
   });
+  eXo.cs.CSCometd.subscribe('/eXo/Application/mail/ckmailsts', function(eventObj) {		
+		eXo.mail.MailServiceHandler.updateCheckMailStatus(eventObj);
+  });
+  
 	if (!eXo.cs.CSCometd.isConnected()) {
      eXo.cs.CSCometd.init();
   }

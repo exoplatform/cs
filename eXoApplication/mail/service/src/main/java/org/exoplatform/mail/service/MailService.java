@@ -742,4 +742,11 @@ public interface MailService {
    * @param continuationService
    */
     public void setContinuationService(ContinuationService continuationService);
+    
+    /**
+     * update checking mail status for each client using Cometd.
+     * @param userName
+     * @param info
+     */
+    public void updateCheckingMailStatusByCometd(String userName, CheckingInfo info);
 }

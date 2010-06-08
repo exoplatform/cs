@@ -9,6 +9,7 @@ function MailServiceHandler() {
   this.NO_UPDATE_STATUS = 201;
   this.FINISHED_CHECKMAIL_STATUS = 200;
   this.REQUEST_STOP_STATUS = 202;
+  this.COMMON_ERROR = 104;
   
   this.START_SYNC_FOLDER = 301;
   this.FINISH_SYNC_FOLDER = 302;
@@ -33,14 +34,6 @@ MailServiceHandler.prototype.initService = function(uiId, userName, accountId) {
     this.checkMail();
   }
   
-  
-  eXo.cs.CSCometd.subscribe('/eXo/Application/mail/ckmailsts', function(eventObj) {		
-		eXo.mail.MailServiceHandler.updateCheckMailStatus(eventObj);
-  });
-  
-  if (!eXo.cs.CSCometd.isConnected()) {
-	     eXo.cs.CSCometd.init();
-  }
 };
 
 MailServiceHandler.prototype.updateCheckMailStatus = function(obj) {
@@ -48,25 +41,59 @@ MailServiceHandler.prototype.updateCheckMailStatus = function(obj) {
 	var status = data.status;
 	var previousStatus = data.previousStatus;
 	var statusMsg = data.statusMsg;
-	
+	var stopLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopCheckMail') ;
+	var stoppingLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopingCheckMail') ;
+	var warningLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'WarningMessage') ;
+	var loadingIcon = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'LoadingIcon');
+	var statusText = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
+	console.log(status);
+	if (status != this.FINISHED_CHECKMAIL_STATUS && this.checkMailInfobarNode.style.display == 'none') {
+		this.checkMailInfobarNode.style.display = 'block';
+	}
 	switch (status) {
-	case START_CHECKMAIL_STATUS:
+	case this.START_SYNC_FOLDER:	
+		document.getElementById('SynchronizeIconRefreshFolder').className = "SyncingIcon";
+		break;
+	case this.FINISH_SYNC_FOLDER:
+		document.getElementById('SynchronizeIconRefreshFolder').className = "SyncIcon"; 
+  	var updateImapFolder = document.getElementById("UpdateImapFolder");
+    if (updateImapFolder != null) {
+  		eval(eXo.core.DOMUtil.findDescendantsByTagName(updateImapFolder, 'a')[0].href.replace("%20", ""));
+    }
+	  //this.destroy();
+		break;
+	case this.START_CHECKMAIL_STATUS:
 		//this status when server start checking mail.
 		break;
-	case CONNECTION_FAILURE:
-		// this status indicates that connection failed. We will show status message as error notice. 
-		break;
-	case RETRY_PASSWORD:
+	case this.COMMON_ERROR:
+	case this.CONNECTION_FAILURE:	   
+	case this.RETRY_PASSWORD:
 		// this status indicates that can not connect to mail server due to authentication error. 
 		// We will show status message as error notice and show 'retry password' form.
-		break;
-	case FINISHED_CHECKMAIL_STATUS:
+	  warningLabel.style.display = "block";
+	  stopLabel.style.display = "none";
+	  loadingIcon.style.display = 'none';
+	  statusText.style.display = 'none';
+	  if(status == this.RETRY_PASSWORD){
+			eXo.webui.UIForm.submitForm('UIMessageList','ComfirmPassword', true) ;			
+		}
+		return;
+	case this.FINISHED_CHECKMAIL_STATUS:
 		// this status notices that the checking mail task has finished.
 		// we will show finish checking mail status and hide the status bar automatically.
+		stopLabel.style.display = 'none';
+		loadingIcon.style.display = 'none';
+		stoppingLabel.style.display = 'none';
+		warningLabel.style.display = 'none';
+		statusText.style.display = 'block';
+		closeFetchingBar();
 		break;
 	}
 	// code for test. Show status message on status bar.
 	eXo.mail.MailServiceHandler.showStatusBox(data.statusMsg);
+	function closeFetchingBar(){
+		setTimeout("eXo.mail.MailServiceHandler.checkMailInfobarNode.style.display='none';",60000);
+	}	
 };
 
 
@@ -91,6 +118,7 @@ MailServiceHandler.prototype.setCheckmailTimeout = function(checkMailInterval) {
  * @param {String} action
  */
 MailServiceHandler.prototype.update = function(state, requestObj, action) {
+	return;
   if (state == this.SUCCESS_STATE && requestObj.responseXML) {
     try {
       eval ("this.serverData = " + eXo.cs.Utils.xml2json(requestObj.responseXML, ''));
@@ -230,7 +258,8 @@ MailServiceHandler.prototype.stopCheckMail = function() {
     stopLabel.style.display = 'none' ;
   	var stopingLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopingCheckMail') ;
     stopingLabel.style.display = 'block' ;
-  	
+	var statusText = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
+	statusText.style.display = 'none';
   	this.activeAction = this.STOP_CHECK_MAIL_ACTION;
     var url = this.SERVICE_BASED_URL + '/stopcheckmail/' + this.userName + '/' + this.accountId + '/';
     this.makeRequest(url, this.HTTP_GET, '', this.STOP_CHECK_MAIL_ACTION);
