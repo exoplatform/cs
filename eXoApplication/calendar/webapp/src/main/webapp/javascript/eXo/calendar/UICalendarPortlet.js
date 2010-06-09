@@ -2725,14 +2725,16 @@ UIWindow.prototype.maximizeWindowEvt = function(evt){
  * Override Comobobox
  * TODO : remove this method when portal fix it
  */
-UICombobox.prototype.init = function(textbox) {
-	if(typeof(textbox) == "string") textbox = document.getElementById(textbox) ;
-	var val = textbox.value;
-	textbox = eXo.core.DOMUtil.findNextElementByTagName(textbox,"input") ;
-	textbox.value = val;
-	var UICombobox = eXo.webui.UICombobox ;
-	var onfocus = textbox.getAttribute("onfocus") ;
-	var onclick = textbox.getAttribute("onclick") ;
-	if(!onfocus) textbox.onfocus = UICombobox.show ;
-	if(!onclick) textbox.onclick = UICombobox.show ;
-} ;
+UICombobox.prototype.init = function() {
+	var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
+	var uiCombobox = eXo.webui.UICombobox ;
+	var comboList = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace,"input","UIComboboxInput");
+	var i = comboList.length ;
+	while(i--){
+		comboList[i].value = eXo.core.DOMUtil.findPreviousElementByTagName(comboList[i],"input").value;
+	  var onfocus = comboList[i].getAttribute("onfocus") ;
+	  var onclick = comboList[i].getAttribute("onclick") ;
+	  if(!onfocus) comboList[i].onfocus = uiCombobox.show ;
+	  if(!onclick) comboList[i].onclick = uiCombobox.show ;
+	}
+};
