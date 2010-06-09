@@ -1180,6 +1180,7 @@ public class JCRDataStorage implements DataStorage {
           }
         }
       } catch (Exception e) {
+        logger.warn(e);
       }
 
       logger.debug("Saving message to JCR ...");

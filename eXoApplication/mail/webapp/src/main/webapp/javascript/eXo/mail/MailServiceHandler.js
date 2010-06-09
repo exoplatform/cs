@@ -30,9 +30,10 @@ MailServiceHandler.prototype.initService = function(uiId, userName, accountId) {
   this.uiId = uiId;
   this.accountId = accountId;
   this.userName = userName;
-  if (eXo.core.Browser.getCookie('cs.mail.checkingmail' + this.accountId) == 'true') {
-    this.checkMail();
-  }
+  this.checkMailInfobarNode = document.getElementById(this.uiId);
+  //if (eXo.core.Browser.getCookie('cs.mail.checkingmail' + this.accountId) == 'true') {
+  //  this.checkMail();
+  //}
   
 };
 
@@ -47,6 +48,9 @@ MailServiceHandler.prototype.updateCheckMailStatus = function(obj) {
 	var loadingIcon = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'LoadingIcon');
 	var statusText = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
 	console.log(status);
+	
+	
+	
 	if (status != this.FINISHED_CHECKMAIL_STATUS && this.checkMailInfobarNode.style.display == 'none') {
 		this.checkMailInfobarNode.style.display = 'block';
 	}
@@ -63,14 +67,21 @@ MailServiceHandler.prototype.updateCheckMailStatus = function(obj) {
 	  //this.destroy();
 		break;
 	case this.START_CHECKMAIL_STATUS:
+		statusText.style.display = 'block';
+		stopLabel.style.display = 'block';
+		loadingIcon.style.display = 'block'; 
+		warningLabel.style.display = 'none';
+		stoppingLabel.style.display = 'none';
+		//this.resetStatusBar();
 		//this status when server start checking mail.
 		break;
-	case this.COMMON_ERROR:
+	case this.COMMON_ERROR:		
 	case this.CONNECTION_FAILURE:	   
 	case this.RETRY_PASSWORD:
 		// this status indicates that can not connect to mail server due to authentication error. 
 		// We will show status message as error notice and show 'retry password' form.
 	  warningLabel.style.display = "block";
+	  warningLabel.innerHTML = statusMsg;
 	  stopLabel.style.display = "none";
 	  loadingIcon.style.display = 'none';
 	  statusText.style.display = 'none';
@@ -268,7 +279,6 @@ MailServiceHandler.prototype.stopCheckMail = function() {
 
 
 MailServiceHandler.prototype.showStatusBox = function(status) {
-  this.checkMailInfobarNode = document.getElementById(this.uiId);
   var statusTextNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
   if (this.checkMailInfobarNode.style.display == 'none') {
 	  this.checkMailInfobarNode.style.display = 'block';

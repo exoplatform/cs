@@ -18,8 +18,11 @@ package org.exoplatform.mail.webui;
 
 import javax.jcr.PathNotFoundException;
 
+import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.StatusInfo;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -48,11 +51,104 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 )
 public class UIFetchingBar extends UIForm {
 	
-  private boolean isShown_ = false; 
+  private boolean isShown_ = false;
+  private MailService mailService ;
+  private StatusInfo statusInfo;
   
-  public UIFetchingBar() throws Exception {}
+  public UIFetchingBar() throws Exception {
+    mailService = MailUtils.getMailService();
+    
+  }
 	
-  public boolean isShown() { return isShown_; }
+  
+  
+  public StatusInfo loadStatusInfo() {
+    UIMailPortlet mailportlet = this.getAncestorOfType(UIMailPortlet.class);
+    
+    try {
+      CheckingInfo ckInfo = mailService.getCheckingInfo(mailportlet.getRemoteUser(), mailportlet.getAccountId());
+      if (ckInfo != null) {
+        statusInfo = ckInfo.getStatus();        
+      }
+    } catch (Exception e) {
+       e.printStackTrace();
+    }
+    return statusInfo;
+  }
+  /**
+   * check: show this bar or not.
+   * @return
+   */
+  public boolean isShown() {
+    if (statusInfo != null) {
+      if (statusInfo.getStatus() != CheckingInfo.FINISHED_CHECKMAIL_STATUS) {
+        return true;
+      }
+    }
+    return false;
+
+  }
+  
+  /**
+   * check: show status text or not
+   * @return
+   */
+  public boolean showStatusText() {
+    if (statusInfo != null) {
+      if (statusInfo.getStatus() != CheckingInfo.CONNECTION_FAILURE 
+          && statusInfo.getStatus() != CheckingInfo.RETRY_PASSWORD && 
+          statusInfo.getStatus() != CheckingInfo.COMMON_ERROR
+          && statusInfo.getStatus() != CheckingInfo.REQUEST_STOP_STATUS) {
+        return true;
+      }
+      
+    }
+    return false;
+  }
+  
+  public boolean showStopIcon() {
+    if (statusInfo != null) {
+      if (statusInfo.getStatus() != CheckingInfo.CONNECTION_FAILURE 
+          && statusInfo.getStatus() != CheckingInfo.RETRY_PASSWORD && 
+          statusInfo.getStatus() != CheckingInfo.COMMON_ERROR && 
+          statusInfo.getStatus() != CheckingInfo.FINISHED_CHECKMAIL_STATUS && 
+          statusInfo.getStatus() != CheckingInfo.REQUEST_STOP_STATUS) {
+        return true;
+      }
+      
+    }
+    return false;
+  }
+  
+  public boolean showStoppingIcon() {
+    if (statusInfo != null) {
+      return !showStopIcon() && statusInfo.getStatus() == CheckingInfo.REQUEST_STOP_STATUS;
+    }
+     return false;
+  }
+  
+  public boolean showLoadingIcon() {
+    if (statusInfo != null) {
+      return statusInfo.getStatus() != CheckingInfo.FINISHED_CHECKMAIL_STATUS && 
+      statusInfo.getStatus() != CheckingInfo.CONNECTION_FAILURE 
+      && statusInfo.getStatus() != CheckingInfo.RETRY_PASSWORD && 
+      statusInfo.getStatus() != CheckingInfo.COMMON_ERROR;
+    }
+    return false;
+  }
+  
+  public boolean showWarningMessage() {
+    if (statusInfo != null) {
+      return !showStatusText() && statusInfo.getStatus() != CheckingInfo.REQUEST_STOP_STATUS;
+    }
+     return false;
+  }
+  
+  /**
+   * 
+   * @param b
+   */
+  
   public void setIsShown(boolean b) { isShown_ = b; }
   
   public boolean isUpdate() throws Exception {

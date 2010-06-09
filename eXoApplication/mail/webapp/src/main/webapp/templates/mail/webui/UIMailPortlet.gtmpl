@@ -38,7 +38,7 @@
 	      String accountId = uicomponent.getAccountId();
 	      if (accountId != null && accountId.trim().length() > 0) { 
 	        rcontext.getJavascriptManager().addJavascript('eXo.mail.MailServiceHandler.initService("checkMailInfobar", "' + MailUtils.getCurrentUser() + '", "' + uicomponent.getAccountId() + '") ;') ;
-	        rcontext.getJavascriptManager().addJavascript('eXo.mail.MailServiceHandler.setCheckmailTimeout(' + uicomponent.getPeriodCheckAuto() + ') ;') ;
+	       // rcontext.getJavascriptManager().addJavascript('eXo.mail.MailServiceHandler.setCheckmailTimeout(' + uicomponent.getPeriodCheckAuto() + ') ;') ;
 	      }
 	    %>
 	<!-- Start Mail Banner -->

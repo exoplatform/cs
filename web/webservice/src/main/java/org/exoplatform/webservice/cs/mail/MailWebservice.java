@@ -65,18 +65,20 @@ public class MailWebservice implements ResourceContainer {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
+    if(!isAuthorized(userName)) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
     MailService mailService = (MailService) PortalContainer.getInstance()
                                                            .getComponentInstanceOfType(MailService.class);
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
     
     //checkingInfo = null;
-    if (checkingInfo == null || checkingInfo.getStatusCode() == CheckingInfo.FINISHED_CHECKMAIL_STATUS) {
+    if (checkingInfo == null || checkingInfo.getStatusCode() == CheckingInfo.FINISHED_CHECKMAIL_STATUS
+        || checkingInfo.getStatusCode() == CheckingInfo.CONNECTION_FAILURE || checkingInfo.getStatusCode() == CheckingInfo.RETRY_PASSWORD || 
+        checkingInfo.getStatusCode() == CheckingInfo.COMMON_ERROR) {
       mailService.checkMail(userName, accountId, folderId);
-    } else {
-      if (checkingInfo != null) {
-        mailService.updateCheckingMailStatusByCometd(userName, checkingInfo);        
-      }
-    }
+    } /*else if (checkingInfo != null) {
+      mailService.updateCheckingMailStatusByCometd(userName, checkingInfo);
+      
+    }*/
     /*if (folderId != null && folderId.trim().length() > 0
         && !folderId.equalsIgnoreCase("checkall")) {
       checkingInfo.setRequestingForFolder_(folderId);
@@ -149,6 +151,7 @@ public class MailWebservice implements ResourceContainer {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
+    if(!isAuthorized(userName)) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
     MailService mailService = (MailService) ExoContainerContext.getCurrentContainer()
                                                                .getComponentInstanceOfType(MailService.class);
 
@@ -313,5 +316,11 @@ public class MailWebservice implements ResourceContainer {
       return Response.ok(Status.INTERNAL_SERVER_ERROR).cacheControl(cacheControl).build();
     }
     return Response.ok(fullData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+  }
+  
+  private boolean isAuthorized(String usename) {
+    return (ConversationState.getCurrent() != null && ConversationState.getCurrent().getIdentity() != null && 
+        ConversationState.getCurrent().getIdentity().getUserId() != null && ConversationState.getCurrent().getIdentity().getUserId().equals(usename)  
+    );
   }
 }

@@ -74,8 +74,20 @@ public class CheckMailJob implements Job, InterruptableJob {
       ie.printStackTrace();
       getMailService().stopCheckMail(username, accountId);
     } catch (Exception e) {
-      e.printStackTrace();
-      log.error("Mail check failed for " + context.getJobDetail().getName(), e);
+      log.error(e);
+      CheckingInfo info = null;
+      try {
+        info = mailService.getCheckingInfo(username, accountId);
+      } catch (Exception e1) {
+        // stupid code. nothing to catch here :(.
+        log.error(e1);
+      }
+      if (info != null) {
+        info.setStatusMsg("Failed to get messages");
+        info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
+        mailService.updateCheckingMailStatusByCometd(username, info);
+      }
+      
     } finally {
       if (log.isDebugEnabled()) {
         log.debug("\n\n####  Checking mail of " + context.getJobDetail().getName() + " finished ");

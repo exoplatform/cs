@@ -88,12 +88,15 @@ public class CheckingInfo {
   
   public int getStatusCode() { return statusCode_ ; }
 
-  public void setStatusCode(int code) { 
-    if (statusCode_ != code) {
-      status_.setPreviousStatus(statusCode_);
-      statusCode_ = code ; 
-      status_.setStatus(statusCode_);
-      hasChanged_ = true ;
+  public void setStatusCode(int code) {
+    synchronized (this) {
+      if (statusCode_ != code) {
+        status_.setPreviousStatus(statusCode_);
+        statusCode_ = code ; 
+        status_.setStatus(statusCode_);
+        hasChanged_ = true ;
+      }
+  
     }
   }
   
@@ -105,7 +108,18 @@ public class CheckingInfo {
    * @return
    */
   public boolean isRequestStop() { return isRequestStop_ ; }
-  public void setRequestStop(boolean b) { isRequestStop_ = b ; }
+
+  public void setRequestStop(boolean b) {
+    synchronized (this) {
+      isRequestStop_ = b;
+    }
+    if (statusCode_ != CheckingInfo.REQUEST_STOP_STATUS) {
+      status_.setPreviousStatus(statusCode_);
+      statusCode_ = CheckingInfo.REQUEST_STOP_STATUS; 
+      status_.setStatus(statusCode_);
+      hasChanged_ = true ;
+    }
+  }
   
   public String getMsgId() { return msgId_ ; }
   public void setMsgId(String msgId) { 
