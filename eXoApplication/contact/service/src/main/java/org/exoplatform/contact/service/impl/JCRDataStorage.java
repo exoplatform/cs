@@ -1533,6 +1533,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
   
         Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
         PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+        qm = sharedAddressBookMock.getSession().getWorkspace().getQueryManager();
         Node addressBook ;      
         while(iter.hasNext()) {
           addressBook = iter.nextProperty().getParent() ;
