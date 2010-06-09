@@ -40,7 +40,7 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
   /**
    * 
    */
-  private static OrganizationService organizationService;
+  private final OrganizationService organizationService;
 
   protected void start() {
     PortalContainer manager = PortalContainer.getInstance() ;
