@@ -761,20 +761,26 @@ public class JCRDataStorage implements DataStorage {
       //CS-3482
       // SessionProvider systemSession = SessionProvider.createSystemProvider() ;
       for(CalendarEvent ce : getUserEventByCategory(username, eventCategoryName)) {
-        ce.setEventCategoryId(null);
-        ce.setEventCategoryName(null);
+        /*ce.setEventCategoryId(null);
+        ce.setEventCategoryName(null);*/
+        ce.setEventCategoryId(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL);
+        ce.setEventCategoryName(NewUserListener.DEFAULT_EVENTCATEGORY_NAME_ALL);
         saveUserEvent(username, ce.getCalendarId(), ce, false) ;
         //removeUserEvent(username, ce.getCalendarId(), ce.getId()) ;
       }
       for(CalendarEvent ce : getSharedEventByCategory(username, eventCategoryName)) {
-        ce.setEventCategoryId(null);
-        ce.setEventCategoryName(null);
+        /*ce.setEventCategoryId(null);
+        ce.setEventCategoryName(null);*/
+        ce.setEventCategoryId(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL);
+        ce.setEventCategoryName(NewUserListener.DEFAULT_EVENTCATEGORY_NAME_ALL);
         saveEventToSharedCalendar(username, ce.getCalendarId(), ce, false);
         //removeSharedEvent(username, ce.getCalendarId(), ce.getId()) ;
       }
       for(CalendarEvent ce : getPublicEventByCategory(username, eventCategoryName)) {
-        ce.setEventCategoryId(null);
-        ce.setEventCategoryName(null);
+        /*ce.setEventCategoryId(null);
+        ce.setEventCategoryName(null);*/
+        ce.setEventCategoryId(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL);
+        ce.setEventCategoryName(NewUserListener.DEFAULT_EVENTCATEGORY_NAME_ALL);
         savePublicEvent(ce.getCalendarId(), ce, false) ;
         //removePublicEvent(ce.getCalendarId(), ce.getId()) ;
       } 

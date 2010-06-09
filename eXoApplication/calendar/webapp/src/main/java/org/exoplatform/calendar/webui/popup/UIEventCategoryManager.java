@@ -24,6 +24,7 @@ import java.util.Map;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.calendar.webui.UIActionBar;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -34,9 +35,11 @@ import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.calendar.webui.UISearchForm;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -131,10 +134,17 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
     public void execute(Event<UIEventCategoryManager> event) throws Exception {
       UIEventCategoryManager uiManager = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiManager.getAncestorOfType(UICalendarPortlet.class) ;
-      String eventCategoryName = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String eventCategoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      
+      UIApplication uiApp = uiManager.getAncestorOfType(UIApplication.class) ;
+      if (eventCategoryId.equals(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL)) {
+        uiApp.addMessage(new ApplicationMessage("UIEventCategoryManager.msg.cannot-delete", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
+        return ;        
+      }
       CalendarService calService = uiManager.getApplicationComponent(CalendarService.class) ;
       String username = CalendarUtils.getCurrentUser() ;
-      calService.removeEventCategory(username, eventCategoryName) ;
+      calService.removeEventCategory(username, eventCategoryId) ;
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; 
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
