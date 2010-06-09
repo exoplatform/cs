@@ -64,7 +64,7 @@ DragDrop.prototype.findDropableTarget = function(dndEvent, dropableTargets, mous
       if(foundTarget == null) {
         foundTarget = ele ;
       } else {
-        if(this.isAncestor(foundTarget, ele)) {
+        if(eXo.core.DOMUtil.hasAncestor(ele,foundTarget)) {
           foundTarget = ele ;
         }
       } 
