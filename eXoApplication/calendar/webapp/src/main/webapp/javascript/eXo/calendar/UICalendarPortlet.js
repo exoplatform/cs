@@ -108,7 +108,8 @@ UICalendarPortlet.prototype.postCheck = function(response){
 UICalendarPortlet.prototype.checkPermission = function(eventObj){
 	var calId = eventObj.getAttribute("calid");
 	var calType = eventObj.getAttribute("calType");
-	var url = "/portal/rest/cs/calendar/checkPermission/"+ eXo.cs.CSCometd.exoId +"/"+ calId +"/"+ calType +"/"
+	var baseURL  = (eXo.calendar.restContext)?eXo.env.portal.context+ '/' + eXo.calendar.restContext +'/cs/calendar/checkPermission/':'portal/rest/cs/calendar/checkPermission/';
+	var url = baseURL + eXo.cs.CSCometd.exoId +"/"+ calId +"/"+ calType +"/";
 	this.makeRequest(url,this.postCheck);
 };
 /**
