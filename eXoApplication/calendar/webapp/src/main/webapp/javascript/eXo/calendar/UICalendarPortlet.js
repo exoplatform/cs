@@ -1713,7 +1713,8 @@ UICalendarPortlet.prototype.runFilterByCategory = function(){
     var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer");
 		selectobj = eXo.core.DOMUtil.findFirstDescendantByClass(uiCalendarViewContainer,"select","selectbox");
     if (!selectobj) return;
-    var category = selectobj.options[selectobj.selectedIndex].value;
+    var category = null ;
+		if (selectobj.selectedIndex >= 0 ) category = selectobj.options[selectobj.selectedIndex].value;
     var className = "EventBoxes";
     if (document.getElementById("UIWeekViewGrid")) 
         className = "WeekViewEventBoxes"; // TODO : review event box gettting
