@@ -1286,7 +1286,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
           }
         }
       } catch (PathNotFoundException e) { }
-  
+      //Query shared contacts
       Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
       PropertyIterator iter = sharedAddressBookMock.getReferences() ;
       Node addressBook ;      
@@ -1300,7 +1300,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         
         // CS-3644
         //qm = contactHomeNode.getSession().getWorkspace().getQueryManager();
-        //qm = getSession(sysProvider).getWorkspace().getQueryManager();
+        qm = sharedAddressBookMock.getSession().getWorkspace().getQueryManager();
         query = qm.createQuery(queryString.toString(), Query.XPATH);
         result = query.execute();
         it = result.getNodes();    
