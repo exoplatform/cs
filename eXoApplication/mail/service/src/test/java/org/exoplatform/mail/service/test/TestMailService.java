@@ -216,7 +216,7 @@ public class TestMailService extends BaseMailTestCase{
 		e.printStackTrace();
 	}
     mailService_.removeAccount(username, accPop.getId()) ;
-    mailService_.removeAccount(username, accImap.getId()) ;
+    //mailService_.removeAccount(username, accImap.getId()) ;
   }
   
   //TODO have to move it to test connector, Add custom folder
