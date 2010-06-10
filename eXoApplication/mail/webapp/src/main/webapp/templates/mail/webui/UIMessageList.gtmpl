@@ -11,9 +11,6 @@
  String compId = uicomponent.getId() ; 
  def rcontext = _ctx.getRequestContext() ;	
  rcontext.getJavascriptManager().addJavascript('eXo.mail.CheckBox.init("UIListUsers") ;') ;
- if (uicomponent.getParent().isHorizontalLayout()) {
-   rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.checkLayout() ;') ;
- }
  WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
  Locale locale = context.getParentAppRequestContext().getLocale() ;
  def confirmMsg = _ctx.appRes("UIMessageList.msg.checkMessage-select-no-messages");

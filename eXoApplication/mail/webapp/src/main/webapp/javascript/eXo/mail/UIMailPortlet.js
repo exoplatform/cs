@@ -147,7 +147,7 @@ UIMailPortlet.prototype.closePrint = function(){
         uiPortalApplication.style.display = "block";
     window.scroll(0, 0);
 };
-
+/*
 UIMailPortlet.prototype.switchLayout = function(layout){
     var layoutMan = eXo.mail.LayoutManager;
     if (layout == 0) {
@@ -257,7 +257,7 @@ UIMailPortlet.prototype.checkLayout = function(){
     this.setScroll();
 	} catch(e) {}
 };
-
+*/
 UIMailPortlet.prototype.showHideAddMoreAddress = function(add){
     var elm = document.getElementById(add);
     if (elm.style.display == "none") {
@@ -266,17 +266,21 @@ UIMailPortlet.prototype.showHideAddMoreAddress = function(add){
 };
 
 UIMailPortlet.prototype.showHidePreviewPane = function(obj){
-	try {
-    var DOMUtil = eXo.core.DOMUtil;
-    this.switchLayout(2);
+	var DOMUtil = eXo.core.DOMUtil;
     var actionButton = DOMUtil.findDescendantsByTagName(obj, "span")[0];
     var spliterContainer = DOMUtil.findAncestorByClass(obj, "SpliterContainer");
     var uiMessageArea = DOMUtil.findFirstDescendantByClass(spliterContainer, "div", "UIMessageArea");
-    if (uiMessageArea.style.display == "none") 
-        actionButton.className = "MinimumReadingPane";
-    else 
+		var resizePane = DOMUtil.findNextElementByTagName(uiMessageArea,"div"); 
+    if (uiMessageArea.style.display == "none"){
         actionButton.className = "MaximizeReadingPane";
-	} catch (e) {}
+				uiMessageArea.style.display = "block";
+				resizePane.style.display = "block";
+		} 
+    else {
+        actionButton.className = "MinimumReadingPane";
+				uiMessageArea.style.display = "none";
+				resizePane.style.display = "none";
+		}
 };
 
 UIMailPortlet.prototype.showHideMessageHeader = function(obj){
