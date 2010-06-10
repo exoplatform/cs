@@ -609,6 +609,11 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
       break;
 
     case this.GET_ROOM_INFO_ACTION:
+      // 09/06/2010 add start
+      for (var i=0; i<serverData.occupants.length; i++) {
+    	  eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.occupants[i].nick] = serverData.occupants[i].fullName;	
+      }
+      // 09/06/2010 add end
       this.UIChatWindow.roomInfoEventFired(serverData);
       break;
 
@@ -655,7 +660,13 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
 
     case this.SEND_MESSAGE_ACTION:
       break;
-
+      
+    // 09/06/2010 add start
+    case this.INVITE_JOIN_ROOM_ACTION:
+      eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.myProfile.user] = serverData.myProfile.fullName ;	
+      break;  
+    // 09/06/2010 add end
+        
     case this.LOGOUT_ACTION:
       this.postChangeStatus(this.OFFLINE_STATUS);
       this.UIChatWindow.destroySession();
@@ -1158,7 +1169,7 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
       if (this.serverInfo.roster) {
         this.buddyListControlObj.build(this.serverInfo.roster);
       }
-      
+   
       eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[this.serverInfo.myProfile.user] = this.serverInfo.myProfile.fullName ;	
       
       this.subscribeCometdTopics();

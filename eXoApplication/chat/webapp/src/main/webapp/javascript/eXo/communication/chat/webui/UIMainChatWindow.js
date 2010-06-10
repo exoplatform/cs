@@ -562,6 +562,11 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
       break;
 
     case this.GET_ROOM_INFO_ACTION:
+	  // 09/06/2010 DungLV add start
+      for (var i=0; i<serverData.occupants.length; i++) {
+    	  eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.occupants[i].nick] = serverData.occupants[i].fullName;	
+      }
+      // 09/06/2010 DungLV add end
       this.UIChatWindow.roomInfoEventFired(serverData);
       break;
 
@@ -601,6 +606,12 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
     case this.SEND_MESSAGE_ACTION:
       break;
 
+    // 09/06/2010 DungLV add start
+    case this.INVITE_JOIN_ROOM_ACTION:
+      eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.myProfile.user] = serverData.myProfile.fullName ;	
+      break;  
+    // 09/06/2010 DungLV add end  
+      
     case this.LOGOUT_ACTION:
       this.postChangeStatus(this.OFFLINE_STATUS);
       this.UIChatWindow.destroySession();

@@ -575,15 +575,30 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                @QueryParam("room") String room,
                                @QueryParam("reason") String reason) {
     if (this.rb == null) loadResourceBundle();
+    
+    // 09/06/2010 add start
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    UserInfoService organization = (UserInfoService) container.getComponentInstanceOfType(UserInfoService.class);
+    
+    InitInfoBean inviteeBean = new InitInfoBean();
+    
+    ContactBean inviteeProfile = new ContactBean();
+    inviteeProfile.setUser(invitee);
+    UserInfo inviteeInfo = organization.getUserInfo(invitee);
+    inviteeProfile.setFullName(inviteeInfo.getFirstName() + " " + inviteeInfo.getLastName());
+    inviteeBean.setMyProfile(inviteeProfile);
+    // 09/06/2010 add end
+    
     if (room == null)
       return Response.status(HTTPStatus.BAD_REQUEST)
       .entity(rb.getString("chat.message.roomid.null"))
       .build();
     XMPPSession session = messenger.getSession(username);
+    
     if (session != null) {
       try {
         if (session.inviteToRoom(room, invitee, reason))
-          return Response.ok().cacheControl(cc).build();
+          return Response.ok(inviteeBean, JSON_CONTENT_TYPE).cacheControl(cc).build(); // 09/06/2010 DungLV modify
         return Response.status(HTTPStatus.BAD_REQUEST)//.entity()
         .cacheControl(cc)
         .build();
