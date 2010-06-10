@@ -2748,7 +2748,9 @@ public class MailServiceImpl implements MailService, Startable {
       info.setHasChanged(false);
       } catch (JsonException je) { 
         logger.warn("can not send cometd message to client [ " + userName + " ]!", je);
-      } 
+      } catch (Exception e) {
+        if(logger.isDebugEnabled()) logger.debug("n\n can not send update message to UI " + e.getMessage());
+      }
     }
   }
   
