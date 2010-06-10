@@ -915,7 +915,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIAddressBooks uiAddressBooks = uiContacts.getAncestorOfType(UIWorkingContainer.class)
                                                 .findFirstComponentOfType(UIAddressBooks.class);
-      UIApplication uiApp = null;
+      UIApplication uiApp = uiAddressBooks.getAncestorOfType(UIApplication.class) ;
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser();
       
