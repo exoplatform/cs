@@ -789,12 +789,7 @@ public class MailServiceImpl implements MailService, Startable {
 
   public void checkMail(String userName, String accountId) throws Exception {
     JobDetail job = loadCheckmailJob(userName, accountId);
-    if (job != null) {
-      logger.warn("job [ "
-                  + job.getName()
-                  + " ] still exist. Can not start new job!");
-      
-    }
+    
     /*JobInfo info = CheckMailJob.getJobInfo(userName, accountId);
     JobDetail oldJob = schedulerService_.getJob(info);
     if (oldJob == null) {
@@ -809,12 +804,7 @@ public class MailServiceImpl implements MailService, Startable {
       checkMail(userName, accountId);
     else {
       JobDetail job = loadCheckmailJob(userName, accountId, folderId);
-      if (job != null) {
-        logger.warn("job [ "
-                    + job.getName()
-                    + " ] still exist. Can not start new job!");
-        
-      }
+      
       /*JobInfo info = CheckMailJob.getJobInfo(userName, accountId);
       JobDetail oldJob = schedulerService_.getJob(info);
       if (oldJob == null) {
@@ -881,12 +871,34 @@ public class MailServiceImpl implements MailService, Startable {
                                              24 * 60 * 60 * 1000);
       schedulerService_.addPeriodJob(info, periodInfo, jobData);
     } else {
-      job = new JobDetail(info.getJobName(), info.getGroupName(), info.getJob());
+      JobDetail activeJob = findActiveCheckmailJob(userName, accountId);
+      if (activeJob == null) {
+        executeJob(job);
+      } else {
+        logger.warn("job [ "
+                    + job.getName()
+                    + " ] still exist. Can not start new job!");
+        job = new JobDetail(info.getJobName(), info.getGroupName(), info.getJob());
+      }
     }
     return job;
 
   }
 
+  private JobDetail findActiveCheckmailJob(String userName, String accountId) throws Exception {
+    // TODO current implementation is inefficient
+    // / Need to upgrade to 2.0.3 and use this instead :
+    // schedulerService_.getJob(info)
+    List<Object> list = schedulerService_.getAllExcutingJobs();
+    for (Object obj : list) {
+      JobDetail tmp = (JobDetail) obj;
+      if (tmp.getName().equals(userName + ":" + accountId)) {
+        return tmp;
+      }
+    }
+    return null;
+  }
+  
   private JobDetail findCheckmailJob(String userName, String accountId) throws Exception {
     // TODO current implementation is inefficient
     // / Need to upgrade to 2.0.3 and use this instead :
