@@ -2,6 +2,7 @@ package org.exoplatform.mail.service;
 
 public class StatusInfo {
   private int status_;
+  private String accountId_;
   private int previousStatus_;
   private String statusMsg_;
   
@@ -28,6 +29,14 @@ public class StatusInfo {
   }
   public String getStatusMsg() {
     return statusMsg_;
+  }
+
+  public String getAccountId() {
+    return accountId_;
+  }
+
+  public void setAccountId(String accountId) {
+    this.accountId_ = accountId;
   }
 
 }

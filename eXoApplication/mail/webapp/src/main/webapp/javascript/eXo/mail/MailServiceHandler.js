@@ -42,17 +42,20 @@ MailServiceHandler.prototype.initService = function(uiId, userName, accountId) {
 
 MailServiceHandler.prototype.updateCheckMailStatus = function(obj) {
 	var data = eXo.core.JSON.parse(obj.data);
+	
+	if (this.accountId != data.accountId) {
+		return;
+	}
+	
 	var status = data.status;
 	var previousStatus = data.previousStatus;
-	var statusMsg = data.statusMsg;
+	var statusMsgKey = data.statusMsg;
+	var statusMsg = eXo.core.DOMUtil.findDescendantById(this.checkMailInfobarNode, statusMsgKey).innerHTML ;
 	var stopLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopCheckMail') ;
 	var stoppingLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopingCheckMail') ;
 	var warningLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'WarningMessage') ;
 	var loadingIcon = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'LoadingIcon');
 	var statusText = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
-	console.log(status);
-	
-	
 	
 	if (status != this.FINISHED_CHECKMAIL_STATUS && this.checkMailInfobarNode.style.display == 'none') {
 		this.checkMailInfobarNode.style.display = 'block';
@@ -88,6 +91,11 @@ MailServiceHandler.prototype.updateCheckMailStatus = function(obj) {
 	  stopLabel.style.display = "none";
 	  loadingIcon.style.display = 'none';
 	  statusText.style.display = 'none';
+	// unsubscribe cometd channel
+		if (eXo.cs.CSCometd.isConnected()) {
+			eXo.cs.CSCometd.unsubscribe('/eXo/Application/mail/ckmailsts/' + this.accountId);
+		}
+	  
 	  if(status == this.RETRY_PASSWORD){
 			eXo.webui.UIForm.submitForm('UIMessageList','ComfirmPassword', true) ;			
 		}
@@ -100,11 +108,18 @@ MailServiceHandler.prototype.updateCheckMailStatus = function(obj) {
 		stoppingLabel.style.display = 'none';
 		warningLabel.style.display = 'none';
 		statusText.style.display = 'block';
+		
+		// unsubscribe cometd channel
+		if (eXo.cs.CSCometd.isConnected()) {
+			eXo.cs.CSCometd.unsubscribe('/eXo/Application/mail/ckmailsts/' + this.accountId);
+		}
+		
 		closeFetchingBar();
 		break;
 	}
-	// code for test. Show status message on status bar.
-	eXo.mail.MailServiceHandler.showStatusBox(data.statusMsg);
+	
+	
+	eXo.mail.MailServiceHandler.showStatusBox(statusMsg);
 	function closeFetchingBar(){
 		setTimeout("eXo.mail.MailServiceHandler.checkMailInfobarNode.style.display='none';",60000);
 	}	
@@ -178,11 +193,11 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
     }
     
     var url = false;
-    if (status == this.START_CHECKMAIL_STATUS ||
+    /*if (status == this.START_CHECKMAIL_STATUS ||
         status == this.DOWNLOADING_MAIL_STATUS ||
         status == this.NO_UPDATE_STATUS) {
       url = this.SERVICE_BASED_URL + '/checkmailjobinfo/' + this.userName + '/' + this.accountId + '/';
-    }
+    }*/
     if (url && url != '') {
       this.activeAction = this.GET_CHECK_MAIL_INFO_ACTION;
       //this.makeRequest(url, this.HTTP_GET, '', this.GET_CHECK_MAIL_INFO_ACTION);
@@ -268,6 +283,8 @@ MailServiceHandler.prototype.checkMail = function(isUpdateUI, folderId) {
       !this.userName) {
     return;
   }
+  
+  
   this.isUpdateUI_ = isUpdateUI;
   
   this.activeAction = this.CHECK_MAIL_ACTION;
@@ -279,6 +296,15 @@ MailServiceHandler.prototype.checkMail = function(isUpdateUI, folderId) {
   } else {
     url = url + "checkall" + '/';
   }
+  
+  eXo.cs.CSCometd.subscribe('/eXo/Application/mail/ckmailsts/' + this.accountId, function(eventObj) {		
+		eXo.mail.MailServiceHandler.updateCheckMailStatus(eventObj);
+  });
+  
+  if (!eXo.cs.CSCometd.isConnected()) {
+	     eXo.cs.CSCometd.init();
+  }
+  
   this.makeRequest(url, this.HTTP_GET, '', this.CHECK_MAIL_ACTION);
   
 };
@@ -288,9 +314,9 @@ MailServiceHandler.prototype.stopCheckMail = function() {
   	var stopLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopCheckMail') ;
     stopLabel.style.display = 'none' ;
   	var stopingLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopingCheckMail') ;
-    stopingLabel.style.display = 'block' ;
+//    stopingLabel.style.display = 'none' ;
 	var statusText = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
-	statusText.style.display = 'none';
+	statusText.innerHTML = stopingLabel.innerHTML;
   	this.activeAction = this.STOP_CHECK_MAIL_ACTION;
     var url = this.SERVICE_BASED_URL + '/stopcheckmail/' + this.userName + '/' + this.accountId + '/';
     this.makeRequest(url, this.HTTP_GET, '', this.STOP_CHECK_MAIL_ACTION);
@@ -303,7 +329,8 @@ MailServiceHandler.prototype.showStatusBox = function(status) {
   if (this.checkMailInfobarNode.style.display == 'none') {
 	  this.checkMailInfobarNode.style.display = 'block';
   }
-   if (statusTextNode && status) statusTextNode.innerHTML = status;
+  if (arguments.length <= 0) status = "";
+   if (statusTextNode) statusTextNode.innerHTML = status;
 };
 
 /**

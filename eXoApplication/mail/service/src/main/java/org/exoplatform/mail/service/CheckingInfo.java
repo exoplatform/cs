@@ -37,6 +37,19 @@ public class CheckingInfo {
   public static final int START_SYNC_FOLDER = 301;
   public static final int FINISH_SYNC_FOLDER = 302;
   public static final int FINISHED_SYNC_FOLDER = 303;
+
+  public static final String START_MSG_KEY = "starting-status".intern();
+  public static final String FETCHING_MSG_KEY = "fetching-mail".intern();
+  public static final String START_SYNC_FOLDER_MSG_KEY = "start-sync-folder".intern();
+  public static final String FINISH_SYNC_FOLDER_MSG_KEY = "finish-sync-folder".intern();
+  public static final String FINISH_MSG_KEY = "finish-check-mail".intern();
+  public static final String FINISH_BY_INTERUPTED_KEY = "finish-check-mail-by-interrupted".intern();
+  public static final String CONNECTION_FAILURE_KEY = "error-connection-fail".intern();
+  public static final String RETRY_PASSWORD_KEY = "msg-retry-password".intern();
+  public static final String COMMON_ERROR_KEY = "error-common".intern();
+  
+  
+  
   
   private int totalMsg_ = 0 ;
   private int fetching_ = 0  ;
@@ -48,6 +61,8 @@ public class CheckingInfo {
   private String requestingForFolder_;
   private String msgId_ ;
   private int syncFolderStatus_ =300;
+  
+  
   private StatusInfo status_ = new StatusInfo();
   
   
@@ -91,14 +106,57 @@ public class CheckingInfo {
   public void setStatusCode(int code) {
     synchronized (this) {
       if (statusCode_ != code) {
+        
         status_.setPreviousStatus(statusCode_);
         statusCode_ = code ; 
         status_.setStatus(statusCode_);
+        statusMsg_ = generateStatusMsgKey();
+        status_.setStatusMsg(statusMsg_);
         hasChanged_ = true ;
       }
   
     }
   }
+  /**
+   * assign status as interrupted by user.
+   */
+  public void assignInterruptedStatus() {
+    synchronized (this) {
+      status_.setPreviousStatus(statusCode_);
+      statusCode_ = FINISHED_CHECKMAIL_STATUS;
+      status_.setStatus(statusCode_);
+      statusMsg_ = FINISH_BY_INTERUPTED_KEY;
+      status_.setStatusMsg(statusMsg_);
+      hasChanged_ = true;
+    }
+  }
+  /**
+   * generate resource bundle following to status code.
+   * @return
+   */
+  private String generateStatusMsgKey() {
+    switch (statusCode_) {
+    case START_CHECKMAIL_STATUS:
+      return START_MSG_KEY;
+    case DOWNLOADING_MAIL_STATUS:
+      return FETCHING_MSG_KEY;
+    case START_SYNC_FOLDER:
+      return START_SYNC_FOLDER_MSG_KEY;
+    case FINISH_SYNC_FOLDER:
+      return FINISH_SYNC_FOLDER_MSG_KEY;
+    case FINISHED_CHECKMAIL_STATUS:
+      return FINISH_MSG_KEY;
+    case CONNECTION_FAILURE: 
+      return CONNECTION_FAILURE_KEY;
+    case RETRY_PASSWORD:
+      return RETRY_PASSWORD_KEY;
+    case COMMON_ERROR:
+      return COMMON_ERROR_KEY;
+    default:
+      return "";
+    }
+  }
+  
   
   public boolean hasChanged() { return hasChanged_ ; }
   public void setHasChanged(boolean b) { hasChanged_ = b ; }
@@ -132,6 +190,14 @@ public class CheckingInfo {
   public StatusInfo getStatus() {
     return status_;
   } 
+  
+  public void setAccountId(String accountId) {
+    status_.setAccountId(accountId);
+  }
+  
+  public String getAccountId() {
+    return status_.getAccountId();
+  }
   
   
 }

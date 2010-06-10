@@ -76,10 +76,11 @@ public class MailWebservice implements ResourceContainer {
         || checkingInfo.getStatusCode() == CheckingInfo.CONNECTION_FAILURE || checkingInfo.getStatusCode() == CheckingInfo.RETRY_PASSWORD || 
         checkingInfo.getStatusCode() == CheckingInfo.COMMON_ERROR) {
       mailService.checkMail(userName, accountId, folderId);
-    } /*else if (checkingInfo != null) {
-      mailService.updateCheckingMailStatusByCometd(userName, checkingInfo);
+    } else if (checkingInfo != null) {
+      checkingInfo.setHasChanged(true);
+      mailService.updateCheckingMailStatusByCometd(userName, accountId, checkingInfo);
       
-    }*/
+    }
     /*if (folderId != null && folderId.trim().length() > 0
         && !folderId.equalsIgnoreCase("checkall")) {
       checkingInfo.setRequestingForFolder_(folderId);

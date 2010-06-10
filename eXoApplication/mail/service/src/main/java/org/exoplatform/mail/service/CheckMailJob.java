@@ -82,17 +82,14 @@ public class CheckMailJob implements Job, InterruptableJob {
         // stupid code. nothing to catch here :(.
         log.error(e1);
       }
-      if (info != null) {
-        info.setStatusMsg("Failed to get messages");
+      if (info != null) {        
         info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
-        mailService.updateCheckingMailStatusByCometd(username, info);
+        mailService.updateCheckingMailStatusByCometd(username, accountId, info);
       }
       
     } finally {
       if (log.isDebugEnabled()) {
-        log.debug("\n\n####  Checking mail of " + context.getJobDetail().getName() + " finished ");
-        System.out.println("\n\n####  Checking mail of " + context.getJobDetail().getName()
-            + " finished ");
+        log.debug("\n\n####  Checking mail of " + context.getJobDetail().getName() + " finished ");        
       }
     }
   }

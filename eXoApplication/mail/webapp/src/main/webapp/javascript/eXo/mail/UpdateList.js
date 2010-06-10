@@ -8,15 +8,17 @@ UpdateList.prototype.init = function(accountId, eXoUser, eXoToken, cometdContext
   eXo.cs.CSCometd.subscribe('/eXo/Application/mail/messages', function(eventObj) {		
 		eXo.mail.UpdateList.update(eventObj) ;
   });
-  eXo.cs.CSCometd.subscribe('/eXo/Application/mail/ckmailsts', function(eventObj) {		
-		eXo.mail.MailServiceHandler.updateCheckMailStatus(eventObj);
-  });
+  //eXo.cs.CSCometd.subscribe('/eXo/Application/mail/ckmailsts', function(eventObj) {		
+//		eXo.mail.MailServiceHandler.updateCheckMailStatus(eventObj);
+//  });
   
 	if (!eXo.cs.CSCometd.isConnected()) {
      eXo.cs.CSCometd.init();
   }
   this.accountId_ = accountId;
+  this.msgCount = 0;
 } ;
+
 
 UpdateList.prototype.update = function(obj){
 	var data = eXo.core.JSON.parse(obj.data);	
@@ -134,13 +136,19 @@ UpdateList.prototype.update = function(obj){
 		  	}
 		  }
 		  var form = eXo.core.DOMUtil.findAncestorByTagName(tbodyMsgList, "form");
-		  eXo.mail.UpdateList.sendRequest(form.action,data.msgId, form);
+		  if (this.msgCount < 10) {
+			  this.msgCount++;
+		  } else {
+			  this.msgCount = 0;
+			  eXo.mail.UpdateList.sendRequest(form.action,data.msgId, form);
+		  }
 		}
   }
 } ;
 
 UpdateList.prototype.sendRequest = function(url, msgId, form){
-	url += "&formOp=UpdateList&objectId=" + msgId + "&ajaxRequest=true";
+//	url += "&formOp=UpdateList&objectId=" + msgId + "&ajaxRequest=true";
+	url += "&formOp=Refresh&objectId=" + msgId + "&ajaxRequest=true";
 	if(form == null) {
 		url = (url).split("?")[0];
 	}

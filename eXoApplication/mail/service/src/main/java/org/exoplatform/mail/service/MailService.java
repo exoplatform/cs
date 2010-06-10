@@ -748,5 +748,5 @@ public interface MailService {
      * @param userName
      * @param info
      */
-    public void updateCheckingMailStatusByCometd(String userName, CheckingInfo info);
+    public void updateCheckingMailStatusByCometd(String userName, String accountId, CheckingInfo info);
 }
