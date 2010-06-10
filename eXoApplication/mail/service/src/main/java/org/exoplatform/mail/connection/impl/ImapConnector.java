@@ -165,8 +165,8 @@ public class ImapConnector extends BaseConnector {
         String uid = "";
         for (int l = 0; l < updatedMsgs.length; l++) {
           uid = String.valueOf(remoteFolder.getUID(updatedMsgs[l]));
-          if (Utils.isEmptyField(uid))
-            uid = MimeMessageParser.getMD5MsgId(updatedMsgs[l]);
+         /* if (Utils.isEmptyField(uid))
+            uid = MimeMessageParser.getMD5MsgId(updatedMsgs[l]);*/
           msgs.get(l).setId(MimeMessageParser.getMessageId(updatedMsgs[l]));
           msgs.get(l).setUID(uid);
         }
@@ -201,7 +201,7 @@ public class ImapConnector extends BaseConnector {
   }
 
   public List<Message> moveMessage(List<Message> msgs, Folder currentFolder, Folder desFolder) throws Exception {
-
+    
     if(!desFolder.isPersonalFolder() && !desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX)){
       return moveMessages(msgs, currentFolder, desFolder,true);
     }else if(desFolder.isPersonalFolder() || desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX)){
@@ -243,8 +243,8 @@ public class ImapConnector extends BaseConnector {
         String uid = "";
         for (int l = 0; l < updatedMsgs.length; l++) {
           uid = String.valueOf(fromFolder.getUID(updatedMsgs[l]));
-          if (Utils.isEmptyField(uid))
-            uid = MimeMessageParser.getMD5MsgId(updatedMsgs[l]);
+          /*if (Utils.isEmptyField(uid))
+            uid = MimeMessageParser.getMD5MsgId(updatedMsgs[l]);*/
           msgs.get(l).setUID(uid);
         }
       }

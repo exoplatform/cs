@@ -100,7 +100,8 @@ public interface DataStorage {
                           String targetMsgPath,
                           Message message,
                           boolean isNew) throws Exception;
-
+/**
+ * [POP3]Saving all of message on Local. Or saving the message that sent successfully***/
   public Node saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception;
 
   public boolean saveMessage(String username,
@@ -121,6 +122,8 @@ public interface DataStorage {
                              ContinuationService continuation,
                              boolean saveTotal) throws Exception;
 
+  /**
+   * [IMAP] Saving message header on Local***/
   public boolean saveMessage(String username,
                              String accId,
                              long[] msgUID,

@@ -42,6 +42,7 @@ import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
 import javax.mail.Header;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
@@ -384,6 +385,8 @@ public class MailServiceImpl implements MailService, Startable {
       } catch (Exception e) {
         if(logger.isDebugEnabled()) logger.debug("\n\n move message error " + e.getMessage());
       }
+    }else if (account.getProtocol().equalsIgnoreCase(Utils.POP3)) {
+      //move only on Local
     }
     if (success)
       storage_.moveMessages(userName, accountId, msgList, currentFolderId, destFolderId);
@@ -1280,6 +1283,7 @@ public class MailServiceImpl implements MailService, Startable {
         }
         return null;
       } catch (MessagingException e) {
+        e.printStackTrace();
         logger.debug("Exception while connecting to server : " + e.getMessage());
         if (info != null) {
           info.setStatusMsg("Connecting failed. Please check server configuration.");
@@ -2370,7 +2374,9 @@ public class MailServiceImpl implements MailService, Startable {
     long[] msgUID = { 0 };
     boolean result = false;
     try {
-      importMessageIntoServerMail(userName, accountId, folderId, mimeMessage, msgUID);
+      //importMessageIntoServerMail(userName, accountId, folderId, mimeMessage, msgUID);
+      //emlImportExport_.importMessage(userName, accountId, folderId, mimeMessage, msgUID);
+      msgUID = importMessageIntoServerMail(userName, accountId, folderId, mimeMessage);
       emlImportExport_.importMessage(userName, accountId, folderId, mimeMessage, msgUID);
       result = true;
     } catch (Exception ex) {
@@ -2378,6 +2384,32 @@ public class MailServiceImpl implements MailService, Startable {
     return result;
   }
 
+
+  private long[] importMessageIntoServerMail(String userName,
+                                              String accountId,
+                                              String folderId,
+                                              MimeMessage mimeMessage) throws Exception {
+    IMAPFolder remoteFolder = null;
+    long[] uid = {0};
+    try {
+      remoteFolder = getIMAPFolder(userName, accountId, folderId);
+      if (remoteFolder != null) {
+        if (!remoteFolder.isOpen()) {
+          remoteFolder.open(javax.mail.Folder.READ_WRITE);
+        }
+        javax.mail.Message[] messages = { mimeMessage };
+        javax.mail.Message[] updatedMsgs = remoteFolder.addMessages(messages);
+        uid[0] = remoteFolder.getUIDNext();
+        remoteFolder.close(true);
+      }
+    } catch (Exception e) {
+      logger.error("Error in importing message into remote folder", e);
+    }
+    
+    return uid;
+
+  }
+  
   private boolean importMessageIntoServerMail(String userName,
                                               String accountId,
                                               String folderId,

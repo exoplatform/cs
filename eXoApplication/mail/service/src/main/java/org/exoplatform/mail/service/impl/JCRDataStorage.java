@@ -921,11 +921,12 @@ public class JCRDataStorage implements DataStorage {
 
   public Node saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception {
     SessionProvider sProvider = null;
+    Node nodeMsg = null;
     try {
       sProvider = createSessionProvider();
       Node mailHome = getMailHomeNode(sProvider, username);
       Node homeMsg = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
-      Node nodeMsg = null;
+      
       if (isNew) { // creates the node
         nodeMsg = homeMsg.addNode(message.getId(), Utils.EXO_MESSAGE);
         homeMsg.save();
@@ -981,18 +982,6 @@ public class JCRDataStorage implements DataStorage {
         nodeMsg.setProperty(Utils.MSG_HEADERS, values.toArray(new String[message.getHeaders()
                                                                                 .size()]));
 
-        // if (!isNew) {
-        // NodeIterator nit = nodeMsg.getNodes();
-        // while (nit.hasNext()) {
-        // Node attNode = nit.nextNode();
-        // try {
-        // attNode.remove();
-        // } catch (PathNotFoundException e) {
-        // }
-        // }
-        // nodeMsg.setProperty(Utils.EXO_HASATTACH, false);
-        // }
-
         List<Attachment> attachments = message.getAttachments();
         if (attachments != null && attachments.size() > 0) {
           Iterator<Attachment> it = attachments.iterator();
@@ -1018,6 +1007,8 @@ public class JCRDataStorage implements DataStorage {
               nodeFile = attHome.addNode("attachment" + IdGenerator.generate(),
                                          Utils.EXO_MAIL_ATTACHMENT);
               nodeFile.setProperty(Utils.EXO_ATT_NAME, file.getName());
+              
+              //if(attHome != null) attHome.save();
             }
 
             Node nodeContent = null;
@@ -1031,6 +1022,10 @@ public class JCRDataStorage implements DataStorage {
             nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance()
                                                                     .getTimeInMillis());
             nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, false);
+            
+           /* if(nodeFile != null) nodeFile.save();
+            if(nodeContent != null) nodeContent.save();*/
+            
             nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
           }
         }
@@ -1041,10 +1036,13 @@ public class JCRDataStorage implements DataStorage {
         nodeMsg.setProperty(Utils.IS_LOADED, message.isLoaded());
         nodeMsg.save();
       }
-      return nodeMsg;
-    } finally {
+    
+    } catch(Exception e){
+      e.printStackTrace();
+    }finally {
       closeSessionProvider(sProvider);
     }
+    return nodeMsg;
   }
 
   public boolean saveMessage(String username,
@@ -1057,6 +1055,7 @@ public class JCRDataStorage implements DataStorage {
     return saveMessage(username, accId, msg, folderIds, tagList, spamFilter, null, null, saveTotal);
   }
 
+  //Saving a message without UID
   public boolean saveMessage(String username,
                              String accId,
                              javax.mail.Message msg,
@@ -1199,8 +1198,8 @@ public class JCRDataStorage implements DataStorage {
         node.setProperty(Utils.EXO_ID, msgId);
         try {
           String uid = String.valueOf(msgUID[0]);
-          if (Utils.isEmptyField(uid))
-            uid = MimeMessageParser.getMD5MsgId(msg);
+          /*if (Utils.isEmptyField(uid))
+            uid = MimeMessageParser.getMD5MsgId(msg);*/
           node.setProperty(Utils.EXO_UID, uid);
         } catch (Exception e) {
         }
@@ -1421,9 +1420,7 @@ public class JCRDataStorage implements DataStorage {
             body = setPart(bodyPart, node, body);
             readText = false;
           }
-
         }
-
       }
       if (readText) {
         int n = multipart.getCount();
@@ -2922,20 +2919,22 @@ public class JCRDataStorage implements DataStorage {
                                   Message msg,
                                   javax.mail.Message message) throws Exception {
     SessionProvider sProvider = null;
-    List<Attachment> attachments = null;
+    List<Attachment> attachments = new ArrayList<Attachment>();
+    boolean isGetSucc = false;
     try {
       sProvider = createSessionProvider();
       try {
         Node messageNode = getDateStoreNode(sProvider, username, accountId, msg.getReceivedDate()).getNode(msg.getId());
         Node attNode = null;
         try {
-          attNode = messageNode.getNode(Utils.KEY_ATTACHMENT);
+          attNode = messageNode.getNode(Utils.KEY_ATTACHMENT);//if the message created Local: Sent Item, Draft, ...
         } catch (Exception ex) {
-          logger.debug("[EXO WARNING] Attachment is not existed, loading them from server mail");
+          logger.trace("[EXO WARNING] Attachment is not existed, loading them from server mail", ex);
         }
         if (attNode == null) {
           try {
-            msg.setMessageBody(this.getContent(messageNode, message));
+            msg.setMessageBody(this.getContent(messageNode, message));//rewrite getContent()
+            isGetSucc = true;
           } catch (Exception e) {
             logger.debug("Can't load message body");
           }
@@ -2962,9 +2961,16 @@ public class JCRDataStorage implements DataStorage {
               attachments.add(file);
             }
           }
-          msg.setHasAttachment(true);
-          msg.setAttachements(attachments);
-        }
+       }
+
+       if(isGetSucc){
+        attachments = getAllAttactments(message); 
+       }
+       if(attachments.size() > 0){
+        msg.setHasAttachment(true);
+        msg.setAttachements(attachments);
+       }
+       
       } catch (PathNotFoundException e) {
         logger.debug("[EXO WARNING] PathNotFoundException when load attachment");
       }
@@ -2974,16 +2980,68 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
+  private List<Attachment> getAllAttactments(javax.mail.Message message) throws Exception{
+    List<Attachment> atts = new ArrayList<Attachment>();
+    Multipart mp = (Multipart)message.getContent();
+
+    for(int f = 0; f < mp.getCount(); f++){
+     final Part part = mp.getBodyPart(f) ;
+     Attachment att = new Attachment() {
+      @Override
+      public InputStream getInputStream() throws Exception {
+        return part.getInputStream();
+      }
+    };
+    if(att != null){
+      atts.add(att);
+    }
+    
+     /*String disp = part.getDisposition();
+     if(disp == null || disp.equalsIgnoreCase(Part.ATTACHMENT)){
+       setting all properties for a Attach file here
+     }*/
+    }
+    return atts;
+  }
+  
   public Message loadTotalMessage(String username, String accountId, Message msg) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
       Node messageNode = getDateStoreNode(sProvider, username, accountId, msg.getReceivedDate()).getNode(msg.getId());
-      msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
-      return msg;
-    } finally {
+      
+      //setting attachment files
+      if (messageNode.hasNode(Utils.KEY_ATTACHMENT)){
+        NodeIterator msgAttachmentIt = messageNode.getNode(Utils.KEY_ATTACHMENT).getNodes();
+        List<Attachment> attachments = new ArrayList<Attachment>();
+        while (msgAttachmentIt.hasNext()) {
+          Node node = msgAttachmentIt.nextNode();
+          if (node.isNodeType(Utils.EXO_MAIL_ATTACHMENT)) {
+            JCRMessageAttachment file = new JCRMessageAttachment();
+            file.setId(node.getPath());
+            file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE).getString());
+            file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
+            if(node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
+              file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
+            file.setIsShowInBody(node.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
+            file.setWorkspace(node.getSession().getWorkspace().getName());
+            file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
+            file.setPath("/" + file.getWorkspace() + node.getPath()) ;
+            attachments.add(file);
+          }
+        }
+        msg.setHasAttachment(true);
+        msg.setAttachements(attachments);
+      }
+      msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());        
+    }
+    catch (Exception e) {
+      logger.trace("Can not load message body on Local", e); 
+   }finally {
       closeSessionProvider(sProvider);
     }
+    
+    return msg;
   }
 
   /**
