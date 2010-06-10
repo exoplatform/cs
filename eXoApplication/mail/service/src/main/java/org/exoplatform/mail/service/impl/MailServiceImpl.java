@@ -179,9 +179,8 @@ public class MailServiceImpl implements MailService, Startable {
     String accountId = account.getId();
     CheckingInfo info = getCheckingInfo(userName, accountId);
     String key = userName + ":" + accountId;
-    if (info != null) {
-      info = new CheckingInfo();
-      checkingLog_.put(key, info);
+    if (info == null) {
+      checkingLog_.put(key, new CheckingInfo());
     }
 
     IMAPStore store = openIMAPConnection(userName, account, info);
@@ -221,6 +220,7 @@ public class MailServiceImpl implements MailService, Startable {
         imapFolder = (IMAPFolder) connector.createFolder(folder);
         saveFolder(userName, accountId, null, imapFolder);
       } catch (Exception e) {
+      	e.printStackTrace();
         return;
       } finally {
         if (imapFolder != null && imapFolder.isOpen()) {
@@ -1056,16 +1056,19 @@ public class MailServiceImpl implements MailService, Startable {
       Account account = getAccountById(userName, accountId);
       store = openIMAPConnection(userName, account, info);
       if (store != null) {
-        while (info != null) {
-          info.setStatusCode(CheckingInfo.START_SYNC_FOLDER);
-          synchImapFolders(userName, accountId, null, store.getDefaultFolder().list());
-          if (info != null) {
-            info.setRequestStop(true);
-            info = null;
-          }
-        }
+      	String key = userName + ":" + accountId;
+    		if(info == null) info = new CheckingInfo();
+      	info.setStatusCode(CheckingInfo.START_SYNC_FOLDER);
+      	checkingLog_.put(key, info);
+      	synchImapFolders(userName, accountId, null, store.getDefaultFolder().list());
+        info.setRequestStop(true);
+        info.setStatusCode(CheckingInfo.FINISH_SYNC_FOLDER);
+        info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
+        checkingLog_.put(key, info);
       }
-    } finally {
+    } catch (Exception e) {
+			e.printStackTrace();
+		} finally {
       if (store != null && store.isConnected()) {
         store.close();
       }
@@ -1078,17 +1081,15 @@ public class MailServiceImpl implements MailService, Startable {
                                                    String accountId,
                                                    Folder parentFolder,
                                                    javax.mail.Folder[] folders) throws Exception {
+  	
+  	
+  	
     List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
     List<String> serverFolderId = new ArrayList<String>();
     String folderId, folderName;
 
     for (javax.mail.Folder fd : folders) {
-      /*if(
-      getCheckingInfo(userName, accountId).isRequestStop()) {
-        System.out.println("\n\n user request stop !" );
-        //return folderList;
-        throw new CheckMailInteruptedException("stopped checking emails!");
-      }*/
+
       folderName = fd.getName();
       if (parentFolder == null
           && (folderName.equalsIgnoreCase(Utils.FD_DRAFTS)
@@ -1109,7 +1110,7 @@ public class MailServiceImpl implements MailService, Startable {
 
         serverFolderId.add(folderId);
         Folder folder = storage_.getFolder(userName, accountId, folderId);
-
+        
         if (folder == null) {
           folder = new Folder();
           folder.setId(folderId);
@@ -1130,11 +1131,13 @@ public class MailServiceImpl implements MailService, Startable {
           }
 
           // update available one
-        } else if (folder.getName().equalsIgnoreCase(folderName)) {
-          folder.setName(folderName);
-          folder.setURLName(fd.getURLName().toString());
-          saveFolder(userName, accountId, folder, false);
-        }
+        } else {
+        	if (!folder.getName().equalsIgnoreCase(folderName)) {
+        		folder.setName(folderName);
+        		folder.setURLName(fd.getURLName().toString());
+        		saveFolder(userName, accountId, folder, false);
+        	}
+        } 
 
         folderList.add(fd);
         if ((folderType == 2) || (fd.list().length > 0)) {
@@ -1702,7 +1705,6 @@ public class MailServiceImpl implements MailService, Startable {
                 infoObj.setFolders(folderStr);
 
                 msgUID = ((IMAPFolder) folder).getUID(msg);
-                System.out.println("MailServiceImpl:1693: before save message");
                 saved = storage_.saveMessage(userName,
                                              accountId,
                                              msgUID,
@@ -1713,7 +1715,6 @@ public class MailServiceImpl implements MailService, Startable {
                                              infoObj,
                                              this.continuationService_,
                                              false);
-                System.out.println("MailServiceImpl:1693: after save message");
                 if (saved && !leaveOnserver)
                   msg.setFlag(Flags.Flag.DELETED, true);
 
@@ -2199,7 +2200,7 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<Folder> getFolders(String userName, String accountId, boolean isPersonal) throws Exception {
-    List<Folder> folders = new ArrayList<Folder>();
+  	List<Folder> folders = new ArrayList<Folder>();
     List<Folder> gottenFolderList = storage_.getFolders(userName, accountId);
     Account account = getAccountById(userName, accountId);
     CheckingInfo info = getCheckingInfo(userName, accountId);
@@ -2214,7 +2215,6 @@ public class MailServiceImpl implements MailService, Startable {
         defaultFolders.add(folder);
       }
     }
-
     // if (info != null && account.getProtocol().equals(Utils.POP3)) {
     // store = openPOPConnection(userName, account, info);
     // } else if (info != null && account.getProtocol().equals(Utils.IMAP)) {
@@ -2741,7 +2741,6 @@ public class MailServiceImpl implements MailService, Startable {
   public void updateCheckingMailStatusByCometd(String userName, CheckingInfo info) {
     if (info != null && info.hasChanged()) {     
       try {
-      System.out.println("update status by cometd: " + info.getStatus().getStatusMsg());  
       JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
       JsonValue json = generatorImpl.createJsonObject(info.getStatus());
       continuationService_.sendMessage(userName, "/eXo/Application/mail/ckmailsts", json);

@@ -1,6 +1,9 @@
 /**
  * @author Uoc Nguyen, Nam Phung
  */
+
+eXo.require("eXo.core.JSON");
+
 function MailServiceHandler() {
   this.START_CHECKMAIL_STATUS = 101;
   this.CONNECTION_FAILURE = 102 ;
@@ -129,6 +132,24 @@ MailServiceHandler.prototype.setCheckmailTimeout = function(checkMailInterval) {
  * @param {String} action
  */
 MailServiceHandler.prototype.update = function(state, requestObj, action) {
+
+	// modify Vu Duy Tu
+	if(state === this.SUCCESS_STATE && action === this.SYNCH_FOLDER_ACTION) {
+		try {
+			var data = String(eXo.cs.Utils.xml2json(requestObj.responseXML) + "");
+			data = data.substring((data.lastIndexOf(":")+2), (data.length - 5));
+			if(data*1 == this.FINISH_SYNC_FOLDER){
+				var test = document.getElementById('SynchronizeIconRefreshFolder').className = "SyncIcon";
+				var updateImapFolder = document.getElementById("UpdateImapFolder");
+				if (updateImapFolder != null) {
+					eval(eXo.core.DOMUtil.findDescendantsByTagName(updateImapFolder, 'a')[0].href.replace("%20", ""));
+				}
+			}
+		} catch (e) {
+			alert(e);
+		}
+	}
+	
 	return;
   if (state == this.SUCCESS_STATE && requestObj.responseXML) {
     try {
@@ -171,14 +192,13 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
     }
     
     var statusSync = parseInt(this.serverData.info.checkingmail.syncFolderStatus);
-    
     if (statusSync) {
 	    if (statusSync == this.START_SYNC_FOLDER) {	    	
 	    	document.getElementById('SynchronizeIconRefreshFolder').className = "SyncingIcon"; 
 	    } else if (statusSync == this.FINISH_SYNC_FOLDER) {
 	    	document.getElementById('SynchronizeIconRefreshFolder').className = "SyncIcon"; 
 	    	var updateImapFolder = document.getElementById("UpdateImapFolder");
-	  	      if (updateImapFolder != null) {
+	  	      if (updateImapFolder) {
 	  	    	eval(eXo.core.DOMUtil.findDescendantsByTagName(updateImapFolder, 'a')[0].href.replace("%20", ""));
 	  	      }
 	    }
