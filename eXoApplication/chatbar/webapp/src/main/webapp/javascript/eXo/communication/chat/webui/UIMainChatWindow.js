@@ -765,6 +765,8 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
     case this.CREATE_CONVERSATION_ACTION:
     case this.CONFIG_ROOM_ACTION:
     case this.GET_ROOM_CONFIG_ACTION:
+    	var activeTabControl = this.UIChatWindow.getActiveTabControl();
+    	this.UIRoomConfigPopupWindow.setVisible(false, activeTabControl.tabId);
     	window.alert(this.ResourceBundle.chat_message_room_configuration_error);
     	break;
     //case this.GET_ROOM_INFO_ACTION:
