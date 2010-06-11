@@ -1502,7 +1502,10 @@ public class MailServiceImpl implements MailService, Startable {
     info = getCheckingInfo(userName, accountId);
     if (info == null) {
       info = createCheckingInfo(userName, accountId);
-    }
+    } else {
+	  //reset CheckingInfo to default
+		info = new CheckingInfo();
+	  }
     info.setAccountId(accountId);
     info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);    
    
@@ -1831,7 +1834,11 @@ public class MailServiceImpl implements MailService, Startable {
       info = getCheckingInfo(userName, accountId);
       if (info == null) {
         info = createCheckingInfo(userName, accountId);
-      }
+      } else {
+	  //reset CheckingInfo to default
+		info = new CheckingInfo();
+	  }
+	  
       info.setAccountId(accountId);
       
       long t1, t2, tt1, tt2;
@@ -2261,7 +2268,7 @@ public class MailServiceImpl implements MailService, Startable {
         }
       }
     }
-    removeCheckingInfo(username, accountId);
+   // removeCheckingInfo(username, accountId);
     return folders;
   }
 
