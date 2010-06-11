@@ -16,8 +16,8 @@
     rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;
     rcontext.getJavascriptManager().importJavascript('eXo.cs.CSCometd','/csResources/javascript/') ;
     rcontext.getJavascriptManager().addJavascript('eXo.cs.CSCometd.url = "/'+ uicomponent.getCometdContextName() +'/cometd" ;') ;
-    rcontext.getJavascriptManager().addJavascript('eXo.cs.CSCometd.exoId = "'+uicomponent.getRemoteUser()+'"') ;
-    rcontext.getJavascriptManager().addJavascript('eXo.cs.CSCometd.exoToken = "'+uicomponent.getUserToken()+'"') ;
+    rcontext.getJavascriptManager().addJavascript('eXo.cs.CSCometd.exoId = "'+uicomponent.getRemoteUser()+'";') ;
+    rcontext.getJavascriptManager().addJavascript('eXo.cs.CSCometd.exoToken = "'+uicomponent.getUserToken()+'";') ;
 	  rcontext.getJavascriptManager().importJavascript('eXo.cs.webservice.core.WebserviceManager','/csResources/javascript/') ;
 	  rcontext.getJavascriptManager().addJavascript('eXo.cs.restContext = "'+ uicomponent.getRestContextName() +'" ;') ;
 	  rcontext.getJavascriptManager().importJavascript('eXo.mail.MailServiceHandler','/mail/javascript/') ;
