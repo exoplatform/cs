@@ -13,65 +13,65 @@ function AutoComplete(){
  * @param {Array} ids is the array of input ids
  */
 AutoComplete.prototype.init = function(ids){
+	var me = eXo.mail.AutoComplete;
 	if(eXo.cs.restContext) this.REST_URL = eXo.env.portal.context + "/" + eXo.cs.restContext + "/cs/mail/searchemail/";  
-	var i = 0;
-	var elm;
-	while(i < ids.length){
-		elm = document.getElementById(ids[i]);
-		if(elm) {
-			elm.onkeydown = function(evt){
-				eXo.mail.AutoComplete.elm = this;
-				eXo.mail.AutoComplete.pressHandler(evt, this);
+	var i = ids.length;
+	var input;
+	while(i--){
+		input = document.getElementById(ids[i]);
+		if(input) {
+			input.onkeyup = function(evt){
+				me.pressHandler(evt,this);				
 			};
 		}
-		i = i + 1;
 	}
 };
 
-AutoComplete.prototype.startHandler = function() {
-	window.setTimeout(eXo.mail.AutoComplete.timeOutHandler, 20);
-};
 
-AutoComplete.prototype.timeOutHandler = function() {
-	if(eXo.mail.AutoComplete.elm) {
-		eXo.mail.AutoComplete.typeHandler(eXo.mail.AutoComplete.elm);
-		eXo.mail.AutoComplete.elm = null;
-	}
-};
 
 AutoComplete.prototype.pressHandler = function(evt, textbox){
 	if(!evt) var evt = window.event;
 	var me = eXo.mail.AutoComplete;
+	if (evt.shiftKey || evt.ctrlKey || evt.altKey || (keyNum == 35) || (keyNum == 36)) return;
 	var keyNum = eXo.core.Keyboard.getKeynum(evt);
 	switch(keyNum){
-		case 13: me.enterHandler(evt, textbox); break;
-		case 27: me.escapeHandler(evt, textbox); break;
-		case 38: me.arrowUpHandler(evt, textbox); break;
-		case 40: me.arrowDownHandler(evt, textbox); break;
+		case 13: me.enterHandler(); break;
+		case 27: me.escapeHandler(); break;
+		case 37: 
+		case 38: me.arrowUpHandler(); break;
+		case 39:
+		case 40: me.arrowDownHandler(); break;
 		default: {
-			if(keyNum > 40 || keyNum === 8) { me.startHandler();}
-			break;
+			if(me.typeTimeout) clearTimeout(me.typeTimeout);
+				me.typeTimeout = setTimeout(function(){
+					if(me.xhr){
+						me.xhr.abort();
+						me.xhr = null;
+						delete me.xhr;
+					}					
+					me.typeHandler(textbox);
+					clearTimeout(me.typeTimeout);
+				},100)
+			
 		}
 	}
 	return; 
 };
 
-AutoComplete.prototype.makeRequest = function(url,callback){
-	if(this.xhr){
-		this.xhr.abort();
-		this.xhr = null;
-		delete this.xhr;
-	}	
+AutoComplete.prototype.makeRequest = function(url,callback){	
 	this.xhr =  eXo.core.Browser.createHttpRequest() ;
-	this.xhr.open('GET', url, false) ;
+	this.xhr.open('GET', url, true) ;
 	this.xhr.setRequestHeader("Cache-Control", "max-age=86400") ;
-	this.xhr.send(null) ;
-	if(callback) callback(this.xhr.responseText) 
+	this.xhr.onreadystatechange = function(){
+		if(eXo.mail.AutoComplete.xhr.readyState == 4 && eXo.mail.AutoComplete.xhr.status == 200){			
+			if(callback) callback(eXo.mail.AutoComplete.xhr.responseText);
+		}		
+	}
+	this.xhr.send(null) ; 
 };
-/**
+/*
  * @return unique array
  * @param {Array} a is original array
- */
 AutoComplete.prototype.uniqueArray = function(a){
 	a.sort();
 	for(var i = 1;i < a.length;){
@@ -84,6 +84,7 @@ AutoComplete.prototype.uniqueArray = function(a){
 	}
 	return a;
 }
+ */
 ///**
 // * @return {Array} list contact
 // * @param {Object} data
@@ -136,7 +137,7 @@ AutoComplete.prototype.uniqueArray = function(a){
 //		data.push(this.addBiTag(value) + " &lt;" + this.addBiTag(arr[i]) + "&gt;");
 //	}	
 //};
-
+/*
 AutoComplete.prototype.reArrange = function(data,str){
 	if(!data) return;	
 	var l = data.length;
@@ -151,7 +152,7 @@ AutoComplete.prototype.reArrange = function(data,str){
   }
 	return tmp.concat(tmp2);
 };
-
+*/
 /**
  * render drop down menu
  * @param {Object} data
