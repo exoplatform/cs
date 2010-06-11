@@ -105,6 +105,7 @@ import org.exoplatform.ws.frameworks.json.value.JsonValue;
 import org.picocontainer.Startable;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
@@ -889,9 +890,10 @@ public class MailServiceImpl implements MailService, Startable {
     // TODO current implementation is inefficient
     // / Need to upgrade to 2.0.3 and use this instead :
     // schedulerService_.getJob(info)
-    List<Object> list = schedulerService_.getAllExcutingJobs();
+    List list = schedulerService_.getAllExcutingJobs();
     for (Object obj : list) {
-      JobDetail tmp = (JobDetail) obj;
+      JobExecutionContext jec = (JobExecutionContext) obj;
+      JobDetail tmp = jec.getJobDetail();
       if (tmp.getName().equals(userName + ":" + accountId)) {
         return tmp;
       }
@@ -2803,7 +2805,7 @@ public class MailServiceImpl implements MailService, Startable {
       JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
       JsonValue json = generatorImpl.createJsonObject(info.getStatus());
       continuationService_.sendMessage(userName, "/eXo/Application/mail/ckmailsts/" + accountId, json);
-      logger.info("client [ " + userName + ":" + accountId + " ] is sent message: " + info.getStatus().getStatusMsg());
+      //logger.info("client [ " + userName + ":" + accountId + " ] is sent message: " + info.getStatus().getStatusMsg());
       info.setHasChanged(false);
       } catch (JsonException je) { 
         logger.warn("can not send cometd message to client [ " + userName + " ]!", je);

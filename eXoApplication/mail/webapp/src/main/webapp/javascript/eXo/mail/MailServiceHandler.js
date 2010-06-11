@@ -119,7 +119,7 @@ MailServiceHandler.prototype.updateCheckMailStatus = function(obj) {
 	}
 	
 	
-	eXo.mail.MailServiceHandler.showStatusBox(statusMsg);
+	eXo.mail.MailServiceHandler.showStatusBox(statusMsgKey);
 	function closeFetchingBar(){
 		setTimeout("eXo.mail.MailServiceHandler.checkMailInfobarNode.style.display='none';",60000);
 	}	
@@ -326,11 +326,16 @@ MailServiceHandler.prototype.stopCheckMail = function() {
 
 MailServiceHandler.prototype.showStatusBox = function(status) {
   var statusTextNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
+  var msgNode = eXo.core.DOMUtil.findDescendantById(this.checkMailInfobarNode, status);
   if (this.checkMailInfobarNode.style.display == 'none') {
 	  this.checkMailInfobarNode.style.display = 'block';
   }
-  if (arguments.length <= 0) status = "";
-   if (statusTextNode) statusTextNode.innerHTML = status;
+  
+   if (statusTextNode) {
+	   if (msgNode == null)
+		   statusTextNode.innerHTML = status;
+	   else statusTextNode.innerHTML = msgNode.innerHTML;
+   }
 };
 
 /**

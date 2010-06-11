@@ -390,10 +390,10 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
           WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.initService('checkMailInfobar', '" + MailUtils.getCurrentUser() + "', '" + acc.getId() + "') ;") ;
-          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.setCheckmailTimeout(" + 
-              uiAccCreation.getApplicationComponent(MailService.class).getMailSetting(MailUtils.getCurrentUser()).getPeriodCheckAuto() + ") ;") ;
+          /*context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.setCheckmailTimeout(" + 
+              uiAccCreation.getApplicationComponent(MailService.class).getMailSetting(MailUtils.getCurrentUser()).getPeriodCheckAuto() + ") ;") ;*/
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
-          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox() ;");        
+          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox('checkmail-notice') ;");        
         } catch (AuthenticationFailedException afe) {
           uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.userName-password-incorrect", null, ApplicationMessage.ERROR)) ;
           uiAccCreation.viewStep(4) ;
