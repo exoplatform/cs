@@ -186,7 +186,7 @@ public class MailServiceImpl implements MailService, Startable {
     IMAPStore store = openIMAPConnection(userName, account, info);
     if (store != null) {
       synchImapFolders(userName, accountId);
-      removeCheckingInfo(userName, accountId);
+//      removeCheckingInfo(userName, accountId);
     }
   }
 
@@ -1486,16 +1486,26 @@ public class MailServiceImpl implements MailService, Startable {
     }*/
   }
 
+  private CheckingInfo createCheckingInfo(String userName, String accountId) {
+    String key = userName + ":" + accountId;
+    CheckingInfo info = new CheckingInfo();
+    checkingLog_.put(key, info);
+    return info;
+  }
+  
   private void getSynchnizeImapServer(String userName,
                                       String accountId,
                                       String folderId,
                                       boolean synchFolders) throws Exception {
-    String key = userName + ":" + accountId;
-    CheckingInfo info = new CheckingInfo();
-    info.setAccountId(accountId);
-    info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);
     
-    checkingLog_.put(key, info);
+    CheckingInfo info = null;
+    info = getCheckingInfo(userName, accountId);
+    if (info == null) {
+      info = createCheckingInfo(userName, accountId);
+    }
+    info.setAccountId(accountId);
+    info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);    
+   
     updateCheckingMailStatusByCometd(userName, accountId, info);
     Account account = getAccountById(userName, accountId);
     IMAPStore store = openIMAPConnection(userName, account, info);
@@ -1562,7 +1572,7 @@ public class MailServiceImpl implements MailService, Startable {
 //        info.setStatusMsg("Finish getting messages");
         info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);          
       }
-      removeCheckingInfo(userName, accountId);
+//      removeCheckingInfo(userName, accountId);
       updateCheckingMailStatusByCometd(userName, accountId, info);
     }
   }
@@ -1793,7 +1803,7 @@ public class MailServiceImpl implements MailService, Startable {
         CheckingInfo info = getCheckingInfo(username, accountId);
         info.setRequestStop(false);
         info.assignInterruptedStatus();
-        removeCheckingInfo(username, accountId);
+//        removeCheckingInfo(username, accountId);
         updateCheckingMailStatusByCometd(username, accountId, info);
       } catch (MessagingException e) {
         CheckingInfo info = getCheckingInfo(username, accountId);
@@ -1816,11 +1826,14 @@ public class MailServiceImpl implements MailService, Startable {
   public List<Message> checkPop3Server(String userName, String accountId) throws Exception {
     Account account = getAccountById(userName, accountId);
     List<Message> messageList = new ArrayList<Message>();
-    if (account != null) {
-      String key = userName + ":" + accountId;
-      CheckingInfo info = new CheckingInfo();
+    if (account != null) {      
+      CheckingInfo info = null;
+      info = getCheckingInfo(userName, accountId);
+      if (info == null) {
+        info = createCheckingInfo(userName, accountId);
+      }
       info.setAccountId(accountId);
-      checkingLog_.put(key, info);
+      
       long t1, t2, tt1, tt2;
       if (Utils.isEmptyField(account.getIncomingPassword())) {
         info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
@@ -2030,7 +2043,7 @@ public class MailServiceImpl implements MailService, Startable {
             info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
             //info.setStatusMsg("There is no message!");
             updateCheckingMailStatusByCometd(userName, accountId, info);
-            removeCheckingInfo(userName, accountId);
+//            removeCheckingInfo(userName, accountId);
             return messageList;
           }
         }
