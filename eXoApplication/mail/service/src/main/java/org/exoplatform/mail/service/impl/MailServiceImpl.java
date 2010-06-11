@@ -2027,7 +2027,7 @@ public class MailServiceImpl implements MailService, Startable {
               if (logger.isDebugEnabled()) {
                 logger.debug("Stop requested on checkmail for " + account.getId());
               }
-              break;
+              throw new CheckMailInteruptedException("Stop getting mails from folder " + folder.getName() + " !");
             }
 
             msg = msgList.get(i);
