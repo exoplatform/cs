@@ -23,7 +23,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -42,7 +41,6 @@ import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
 import javax.mail.Header;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
@@ -89,7 +87,6 @@ import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.MimeMessageParser;
 import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.mail.service.SpamFilter;
-import org.exoplatform.mail.service.StatusInfo;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -2052,25 +2049,32 @@ public class MailServiceImpl implements MailService, Startable {
                 }
                 folderIds = folderList.toArray(new String[] {});
               }
-
+              
+              folderStr = "";
+              for (int k = 0; k < folderIds.length; k++) {
+                folderStr += folderIds[k] + ",";
+              }
+              Info infoObj = new Info();
+              infoObj.setFolders(folderStr);
+              
               saved = storage_.savePOP3Message(userName,
                                                accountId,
                                                msg,
                                                folderIds,
                                                tagList,
                                                spamFilter,
-                                               null,
-                                               null);
+                                               infoObj,
+                                               continuationService_);
 
               if (saved) {
                 msg.setFlag(Flags.Flag.SEEN, true);
                 if (!leaveOnServer)
                   msg.setFlag(Flags.Flag.DELETED, true);
 
-                folderStr = "";
+                /*folderStr = "";
                 for (int k = 0; k < folderIds.length; k++) {
                   folderStr += folderIds[k] + ",";
-                }
+                }*/
                 info.setFetchingToFolders(folderStr);
                 info.setMsgId(MimeMessageParser.getMessageId(msg));
               }
