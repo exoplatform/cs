@@ -268,8 +268,8 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       if (setting.getPeriodCheckAuto() != Long.valueOf(period)) { 
-        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.initService('checkMailInfobar', '" + MailUtils.getCurrentUser() + "', '" + defaultAcc + "') ;") ;
-        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.setCheckmailTimeout(" + period + ") ;") ;
+//        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.initService('checkMailInfobar', '" + MailUtils.getCurrentUser() + "', '" + defaultAcc + "') ;") ;
+//        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.setCheckmailTimeout(" + period + ") ;") ;
       }
 	  }
   }
