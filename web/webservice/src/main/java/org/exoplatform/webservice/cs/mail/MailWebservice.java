@@ -171,7 +171,7 @@ public class MailWebservice implements ResourceContainer {
     }
     buffer.append("  </checkingmail>");
     buffer.append("</info>");
-    mailService.removeCheckingInfo(userName, accountId);
+//    mailService.removeCheckingInfo(userName, accountId);
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 
@@ -247,7 +247,7 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("  </checkingmail>");
         buffer.append("</info>");
         if(checkingInfo.getStatusCode() == CheckingInfo.FINISHED_CHECKMAIL_STATUS){
-          mailService.removeCheckingInfo(userName, accountId);
+//          mailService.removeCheckingInfo(userName, accountId);
         }
         return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
       } else if (checkingInfo.hasChanged()) {
