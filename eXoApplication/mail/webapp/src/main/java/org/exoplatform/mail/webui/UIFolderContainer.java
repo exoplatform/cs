@@ -204,7 +204,7 @@ public class UIFolderContainer extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
       MailService mailSvr = uiFolder.getApplicationComponent(MailService.class) ;
       String username = uiFolder.getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
-      mailSvr.removeCheckingInfo(username, accountId);
+      //mailSvr.removeCheckingInfo(username, accountId);
     }
   }
 
