@@ -16,7 +16,7 @@
  **/
 
 ========================================== 
-    Release Notes - eXo Collaboration - Version 2.0.0 CR02
+    Release Notes - eXo Collaboration - Version 2.0.0 GA
 ==========================================
 ===============
 1 Introduction
@@ -48,7 +48,13 @@ experience more productive. It offers several ways to to view and organize your 
 
 
     * General
-           
+     - Complete new feature for auto-complete when sending mail
+     - Fix bug lost attachment when loading mail
+     - Fix bug block ui when fetching email 
+     - Chat keep ui state when refreshing browser or switch application 
+     - Fix bug lost time field when editing event or add event detail
+     - Fix bug can not stop checking mail and update status information 
+     - Fix bug drag and drop contact to addressbook 
                   
     * Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
           
@@ -88,15 +94,17 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
      +) On Unix/Linux/cygwin
        Open a terminal, go to jboss/bin and type the command:
          ./run.sh
-    
+  
    * Start eXo-chatserver:
      +) On the Windows platform
        Open a DOS prompt command, go to exo-chatserver/bin and type the command:
-         run.bat
+         run.bat for using chat in portal
+         run_demo.bat for using chat in csdemo
 
      +) On Unix/Linux
        Open a terminal, go to eXo-chatserver/bin and type the command:
-         "./run.sh  to start
+         ./run.sh for using chat in portal
+         ./run.sh for using chat in csdemo
          
 -) How to access the eXo Collaboration Suite
 
@@ -136,6 +144,31 @@ All those accounts have the default password "gtn".
 ===========
 6 CHANGELOG
 ===========
+- 2.0.0 GA
+** Bug
+    * [CS-4043] - Attachment file is not shown when view messages in Sent folder
+    * [CS-4244] - Calendar - Show error message when all event categories are deteted
+    * [CS-4252] - Time field is not shown in some cases
+    * [CS-4260] - Problem in mail without remember password
+    * [CS-4264] - Don't update fetched message in Message pane while checking mail
+    * [CS-4265] - Imap- Can't check mail any more after stopped check mail
+    * [CS-4266] -  Synchronize folder is invalid in case edit folder in Gmail
+    * [CS-4270] - Chat - the user's id is displayed instead of the user name
+    * [CS-4308] - Calendar - Error message is showed when all Event categories are deleted
+    * [CS-4309] - [MAIL] - Add contact form does not close by click to close button 
+    * [CS-4313] - Chat: Chat app is blocked with new created user
+    * [CS-4315] -  [Contact] Unknown error when click one tag of share contact
+    * [CS-4316] - [Contact] Can't Drag and drop contacts from a shared address book without edit right to personal address book
+    * [CS-4327] - Can't Maximize reading pane
+    * [CS-4330] - proplem when select event category of shared events.
+    * [CS-4332] - exception when starting server 
+    * [CS-4333] - Cannot get mail by pop3 account
+** Feedback
+    * [CS-4218] - Contact autocomplete blocks input on slow server
+** Task
+    * [CS-4297] - ChangeLanguage link on csdemo is not nice
+    * [CS-4314] - Do not delete events when delete event category contains these events.
+    
 - 2.0.0 CR01
 ** Bug
     * [CS-2975] - Calendar RSS feed does not generate links for more than one calendar
