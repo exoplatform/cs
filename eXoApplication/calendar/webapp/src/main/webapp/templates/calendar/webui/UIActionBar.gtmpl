@@ -10,7 +10,7 @@
 				<div class="RightBar">
 					<div class="CenterBar">
 						<div class="Title ControlButton ActionBarButton">
-							<%=_ctx.appRes(uicomponent.id + ".label.QuickAdd")%>
+							<span></span>
 						</div>
 						<div onclick="eXo.calendar.UICalendarPortlet.addQuickShowHidden(this, 1);" class="ControlButton ActionBarButton">
 							<a class="IconHolder QuickAddEvent">
