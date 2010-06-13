@@ -412,21 +412,11 @@ UIMainChatWindow.prototype.destroy = function() {
  * in no-normal way.
  */
 UIMainChatWindow.prototype.destroyAll = function() {
-  if (eXo.cs.CSCometd.isConnected()) {
-	  eXo.cs.CSCometd.disconnect();
-  }
-  var thys = eXo.communication.chatbar.webui.UIMainChatWindow;
-  /*var logoutUrl = thys.XMPPCommunicator.SERVICE_URL +
-                    '/' + thys.XMPPCommunicator.TRANSPORT_XMPP +
-                    '/logout/' + thys.userNames[thys.XMPPCommunicator.TRANSPORT_XMPP];
-  var iframeNode = document.createElement('iframe');
-  window.document.body.appendChild(iframeNode);
-  iframeNode.src = logoutUrl;*/
   try {
     if (eXo.cs.CSCometd.isConnected()) {
     	eXo.cs.CSCometd.disconnect();
     }
-    //thys.jabberLogout();
+    eXo.communication.chatbar.webui.UIStateManager.stopAutoStore();
   } catch (e) {}
 };
 

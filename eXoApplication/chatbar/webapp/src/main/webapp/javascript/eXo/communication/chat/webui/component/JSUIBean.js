@@ -5,6 +5,18 @@
  */
 
 function JSUIBean() {
+  // Default options use in a common UI component
+  this._options = {
+      width : null,
+      height: null,
+      top:null,
+      left:null,
+      visible:null,
+      extra:{}
+  };
+  this._isOnLoading = false;
+  this._listerners = [];
+  this._eventHanlders = {};
 }
 
 JSUIBean.prototype = {
@@ -12,19 +24,6 @@ JSUIBean.prototype = {
   _RELOAD_EVENT : 'reload',
   _RESIZE_EVENT : 'resize',
   _POSITION_EVENT : 'position',
-   
-  // Default options use in a common UI component
-  _options : {
-      width : null,
-      height: null,
-      top:null,
-      left:null,
-      visible:null,
-      extra:{}
-  },
-  _isOnLoading : false,
-  _listerners : [],
-  _eventHanlders : {},
   
   /**
    * Register event call back function

@@ -274,7 +274,7 @@ UIAddContactPopupWindow.prototype.selectAllContacts = function(selectMode) {
  * @param {Function} handler will be call to filter contact result before display it in result pane.
  */
 UIAddContactPopupWindow.prototype.setVisible = function(visible, handler){
-  if(!visible && this.handler != null){
+  if(!visible && this.handler){
     this.handler.addContactPopupIsVisible = false;
 	eXo.communication.chat.webui.UIChatWindow.updateTabList();
   }
@@ -284,14 +284,14 @@ UIAddContactPopupWindow.prototype.setVisible = function(visible, handler){
 	  if (this.rootNode.style.display != 'none') {
 	    this.rootNode.style.display = 'none';
 	  }
-	  this.handler = null;
+	  this.handler = false;
     return;
   }
   if (visible) {
     //window.alert('handler callback: ', handler);
     //window.alert('handler callback: ', handler.addContactActionCallback);
     //eXo.communication.chat.webui.UIMainChatWindow.orgSearchUser();
-	if(!(this.handler != null && handler == null))
+	if(!(this.handler && !handler))
 	  this.handler = handler;
     eXo.communication.chat.webui.UIMainChatWindow.orgFuzzySearchUser('*', 0, 10);
     this.filterFieldNode.value = '';
