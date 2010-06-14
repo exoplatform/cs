@@ -703,27 +703,27 @@ public class MailServiceImpl implements MailService, Startable {
       else
         contentPartRoot.setContent(message.getMessageBody(), "text/html; charset=utf-8");
 
-      MimeMultipart multipPartContent = new MimeMultipart("alternative");
-      MimeBodyPart mimeBodyPart1 = new MimeBodyPart();
-      mimeBodyPart1.setContent(message.getMessageBody(), message.getContentType());
-      multipPartContent.addBodyPart(mimeBodyPart1);
+        MimeMultipart multipPartContent = new MimeMultipart("mixed");
+        MimeBodyPart mimeBodyPart1 = new MimeBodyPart();
+        mimeBodyPart1.setContent(message.getMessageBody(), message.getContentType());
+        multipPartContent.addBodyPart(mimeBodyPart1);
 
-      for (Attachment att : attachList) {
-        MimeBodyPart mimeBodyPart = new MimeBodyPart();
-        InputStream inputStream = att.getInputStream();
-        String contentType = att.getMimeType();
-
-        DataSource dataSource = new ByteArrayDataSource(inputStream, contentType);
-        mimeBodyPart.setDataHandler(new DataHandler(dataSource));
-        mimeBodyPart.setDisposition(Part.ATTACHMENT);
-        String fileName = att.getName();
-        if (fileName != null && fileName.length() > 0) {
-          mimeBodyPart.setFileName(MimeUtility.encodeText(fileName, "utf-8", null));
+        for (Attachment att : attachList) {
+          MimeBodyPart mimeBodyPart = new MimeBodyPart();
+          InputStream inputStream = att.getInputStream();
+          String contentType = att.getMimeType();
+  
+          DataSource dataSource = new ByteArrayDataSource(inputStream, contentType);
+          mimeBodyPart.setDataHandler(new DataHandler(dataSource));
+          mimeBodyPart.setDisposition(Part.ATTACHMENT);
+          String fileName = att.getName();
+          if (fileName != null && fileName.length() > 0) {
+            mimeBodyPart.setFileName(MimeUtility.encodeText(fileName, "utf-8", null));
+          }
+          multipPartContent.addBodyPart(mimeBodyPart);
+  
         }
-        multipPartContent.addBodyPart(mimeBodyPart);
-
-      }
-      mimeMessage.setContent(multipPartContent);
+        mimeMessage.setContent(multipPartContent);
     } else {
       if (message.getContentType() != null && message.getContentType().indexOf("text/plain") > -1)
         mimeMessage.setContent(message.getMessageBody(), "text/plain; charset=utf-8");

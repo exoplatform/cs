@@ -2920,7 +2920,6 @@ public class JCRDataStorage implements DataStorage {
                                   javax.mail.Message message) throws Exception {
     SessionProvider sProvider = null;
     List<Attachment> attachments = new ArrayList<Attachment>();
-    boolean isGetSucc = false;
     try {
       sProvider = createSessionProvider();
       try {
@@ -2933,8 +2932,7 @@ public class JCRDataStorage implements DataStorage {
         }
         if (attNode == null) {
           try {
-            msg.setMessageBody(this.getContent(messageNode, message));//rewrite getContent()
-            isGetSucc = true;
+            msg.setMessageBody(this.getContent(messageNode, message));
           } catch (Exception e) {
             logger.debug("Can't load message body");
           }
@@ -2962,10 +2960,7 @@ public class JCRDataStorage implements DataStorage {
             }
           }
        }
-
-       if(isGetSucc){
-        attachments = getAllAttactments(message); 
-       }
+     
        if(attachments.size() > 0){
         msg.setHasAttachment(true);
         msg.setAttachements(attachments);
@@ -2978,30 +2973,6 @@ public class JCRDataStorage implements DataStorage {
     } finally {
       closeSessionProvider(sProvider);
     }
-  }
-
-  private List<Attachment> getAllAttactments(javax.mail.Message message) throws Exception{
-    List<Attachment> atts = new ArrayList<Attachment>();
-    Multipart mp = (Multipart)message.getContent();
-
-    for(int f = 0; f < mp.getCount(); f++){
-     final Part part = mp.getBodyPart(f) ;
-     Attachment att = new Attachment() {
-      @Override
-      public InputStream getInputStream() throws Exception {
-        return part.getInputStream();
-      }
-    };
-    if(att != null){
-      atts.add(att);
-    }
-    
-     /*String disp = part.getDisposition();
-     if(disp == null || disp.equalsIgnoreCase(Part.ATTACHMENT)){
-       setting all properties for a Attach file here
-     }*/
-    }
-    return atts;
   }
   
   public Message loadTotalMessage(String username, String accountId, Message msg) throws Exception {
