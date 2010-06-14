@@ -104,7 +104,7 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
      +) On Unix/Linux
        Open a terminal, go to eXo-chatserver/bin and type the command:
          ./run.sh for using chat in portal
-         ./run.sh for using chat in csdemo
+         ./run_demo.sh for using chat in csdemo
          
 -) How to access the eXo Collaboration Suite
 
@@ -153,21 +153,21 @@ All those accounts have the default password "gtn".
     * [CS-4264] - Don't update fetched message in Message pane while checking mail
     * [CS-4265] - Imap- Can't check mail any more after stopped check mail
     * [CS-4266] -  Synchronize folder is invalid in case edit folder in Gmail
-    * [CS-4270] - Chat - the user's id is displayed instead of the user name
     * [CS-4308] - Calendar - Error message is showed when all Event categories are deleted
     * [CS-4309] - [MAIL] - Add contact form does not close by click to close button 
     * [CS-4313] - Chat: Chat app is blocked with new created user
     * [CS-4315] -  [Contact] Unknown error when click one tag of share contact
     * [CS-4316] - [Contact] Can't Drag and drop contacts from a shared address book without edit right to personal address book
     * [CS-4327] - Can't Maximize reading pane
-    * [CS-4330] - proplem when select event category of shared events.
+    * [CS-4330] - problem when select event category of shared events.
     * [CS-4332] - exception when starting server 
     * [CS-4333] - Cannot get mail by pop3 account
 ** Feedback
-    * [CS-4218] - Contact autocomplete blocks input on slow server
+    * [CS-4218] - Contact auto-complete blocks input on slow server
 ** Task
     * [CS-4297] - ChangeLanguage link on csdemo is not nice
     * [CS-4314] - Do not delete events when delete event category contains these events.
+
     
 - 2.0.0 CR01
 ** Bug
