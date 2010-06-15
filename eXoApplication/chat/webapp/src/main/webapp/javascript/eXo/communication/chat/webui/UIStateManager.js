@@ -52,7 +52,7 @@ AjaxHandler.prototype.onTimeout = function(requestObj) {
 function UIStateManager() {
   this.STORE_DATA_AJAX_ACTION = 'STORE DATA AJAX ACTION';
   this.RELOAD_DATA_AJAX_ACTION = 'RELOAD DATA AJAX ACTION';
-  this.DEFAULT_TIMEOUT_CHECK = 5*1000;
+  this.DEFAULT_TIMEOUT_CHECK = 1000;
   this.windowList = [];
   this.autoCheckId = false;
   this.isPropertiesChanged = false;
@@ -72,7 +72,7 @@ UIStateManager.prototype = eXo.communication.chat.webui.component.JSUIBeanListen
 UIStateManager.prototype.init = function(userName) {
   this.userName = userName;
   this.reload();
-  //this.autoCheckId = window.setInterval(this.autoStoreCheck, this.DEFAULT_TIMEOUT_CHECK);
+  this.autoCheckId = window.setInterval(this.autoStoreCheck, this.DEFAULT_TIMEOUT_CHECK);
 };
 
 /**
@@ -97,12 +97,7 @@ UIStateManager.prototype._optionChangedEventFire = function(firedObject, propert
   this.isPropertiesChanged = true;
   window.jsconsole.warn('Window option change event fired: ' + firedObject + ', property name: ' + propertyName + ' old value: ' + oldValue + '  new value: ' + newValue);
   window.jsconsole.debug('before: ', this.data);
-  for ( var i = 0; i < this.windowList.length; i++) {
-    var windowObj = this.windowList[i];
-    if (windowObj == firedObject) {
-      this.data[windowObj.id] = windowObj._options;
-    }
-  }
+  this.data[firedObject.id] = firedObject._options;
   window.jsconsole.debug('after: ', this.data);
   if (!this.autoCheckId) {
     this.store();
@@ -144,8 +139,8 @@ UIStateManager.prototype.store = function(data) {
   if (!this.userName) {
     return;
   }
-  // Do upload state data to server using url: /portal/rest/chat/uistateservice/save/{user}/{data}
-  var url = '/portal/rest/chat/uistateservice/save/' + this.userName;// + '/';
+  // Do upload state data to server using url: /chat/messengerservlet/uistateservice/save/{user}/
+  var url = '/chat/messengerservlet/uistateservice/save/' + this.userName;// + '/';
   var handler = new AjaxHandler(this, this.STORE_DATA_AJAX_ACTION);
   if (data) {
     this.ajaxWrapper(handler, url, 'POST', data);
@@ -161,8 +156,8 @@ UIStateManager.prototype.store = function(data) {
  * Reload UI state. Get new UI state data from service.
  */
 UIStateManager.prototype.reload = function() {
-  // Do get state data to server using url: /portal/rest/chat/uistateservice/get/{user}/
-  var url = '/portal/rest/chat/uistateservice/get/' + this.userName;
+  // Do get state data to server using url: /chat/messengerservlet/uistateservice/get/{user}/
+  var url = '/chat/messengerservlet/uistateservice/get/' + this.userName;
   var handler = new AjaxHandler(this, this.RELOAD_DATA_AJAX_ACTION);
   this.ajaxWrapper(handler, url, 'GET');
   this.isPropertiesChanged = false;

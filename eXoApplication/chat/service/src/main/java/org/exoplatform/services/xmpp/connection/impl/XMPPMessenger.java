@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.uistate.UIStateSession;
 import org.exoplatform.services.xmpp.connection.XMPPSession;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 import org.exoplatform.services.xmpp.userinfo.UserInfoService;
@@ -231,5 +232,14 @@ public class XMPPMessenger {
       LOGGER.warn("User '" + username + "' is not registered on the server.");
     return session;
   }
+  
+  /**
+  *
+  * @param username the user name
+  * @return the UIStateSession or null if user is not registered on the server.
+  */
+ public UIStateSession getUISateSession(String username) {
+   return (UIStateSession)sessions_.get(username);
+ }
 
 }

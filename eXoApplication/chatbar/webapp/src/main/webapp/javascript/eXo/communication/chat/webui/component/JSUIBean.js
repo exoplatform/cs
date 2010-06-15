@@ -5,6 +5,18 @@
  */
 
 function JSUIBean() {
+  // Default options use in a common UI component
+  this._options = {
+      width : null,
+      height: null,
+      top:null,
+      left:null,
+      visible:null,
+      extra:{}
+  };
+  this._isOnLoading = false;
+  this._listerners = [];
+  this._eventHanlders = {};
 }
 
 JSUIBean.prototype = {
@@ -12,19 +24,6 @@ JSUIBean.prototype = {
   _RELOAD_EVENT : 'reload',
   _RESIZE_EVENT : 'resize',
   _POSITION_EVENT : 'position',
-   
-  // Default options use in a common UI component
-  _options : {
-      width : null,
-      height: null,
-      top:null,
-      left:null,
-      visible:null,
-      extra:{}
-  },
-  _isOnLoading : false,
-  _listerners : [],
-  _eventHanlders : {},
   
   /**
    * Register event call back function
@@ -308,11 +307,11 @@ JSUIBean.prototype = {
    */
   _reloadOptions : function() {
     this._eventCallback(this._RELOAD_EVENT);
-    if (this._rootNode) {
+    /*if (this._rootNode) {
       this._setVisible(this._getOption('visible'));
       this._setSize(this._getOption('width'), this._getOption('height'));
       this._setPosition(this._getOption('top'), this._getOption('left'));
-    }
+    }*/
   }
 };
 

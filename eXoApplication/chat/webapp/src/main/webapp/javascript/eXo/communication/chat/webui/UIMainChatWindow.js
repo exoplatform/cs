@@ -401,21 +401,11 @@ UIMainChatWindow.prototype.destroy = function() {
  * in no-normal way.
  */
 UIMainChatWindow.prototype.destroyAll = function() {
-  if (eXo.cs.CSCometd.isConnected()) {
-	  eXo.cs.CSCometd.disconnect();
-  }
-  var thys = eXo.communication.chat.webui.UIMainChatWindow;
-  var logoutUrl = thys.XMPPCommunicator.SERVICE_URL +
-                    '/' + thys.XMPPCommunicator.TRANSPORT_XMPP +
-                    '/logout/' + thys.userNames[thys.XMPPCommunicator.TRANSPORT_XMPP];
-  var iframeNode = document.createElement('iframe');
-  window.document.body.appendChild(iframeNode);
-  iframeNode.src = logoutUrl;
   try {
     if (eXo.cs.CSCometd.isConnected()) {
     	eXo.cs.CSCometd.disconnect();
     }
-    thys.jabberLogout();
+    eXo.communication.chat.webui.UIStateManager.stopAutoStore();
   } catch (e) {}
 };
 
@@ -690,6 +680,8 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
     case this.CREATE_CONVERSATION_ACTION:
     case this.CONFIG_ROOM_ACTION:
     case this.GET_ROOM_CONFIG_ACTION:
+    	var activeTabControl = this.UIChatWindow.getActiveTabControl();
+    	this.UIRoomConfigPopupWindow.setVisible(false, activeTabControl.tabId);
 	    window.alert(this.ResourceBundle.chat_message_room_configuration_error);
 	    break;
     //case this.GET_ROOM_INFO_ACTION:
@@ -1016,6 +1008,11 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
     case this.OFFLINE_STATUS:
       if (this.userStatus != this.OFFLINE_STATUS) {
     	this.userStatus = this.OFFLINE_STATUS;
+    	this.UIAddContactPopupWindow.setVisible(false,null);
+		this.UIChatWindow.destroySession();
+		this.UICreateNewRoomPopupWindow.setVisible(false);
+		this.UIRoomConfigPopupWindow.setVisible(false,null,null);
+		this.UIJoinRoomPopupWindow.setVisible(false);
   		this.buddyListControlObj.cleanup();
   		this.addContactIconNode.onclick = null;
   		var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode, 'div');

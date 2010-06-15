@@ -26,6 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
@@ -36,6 +37,8 @@ import org.exoplatform.services.rest.MultivaluedMetadata;
 import org.exoplatform.services.rest.ResourceDispatcher;
 import org.exoplatform.services.rest.Response;
 import org.exoplatform.services.rest.servlet.RequestFactory;
+import org.exoplatform.services.security.ConversationRegistry;
+import org.exoplatform.services.security.ConversationState;
 
 /**
  * Created by The eXo Platform SAS.
@@ -88,6 +91,18 @@ public class MessengerServlet extends HttpServlet implements Connector {
                                                                                        ServletException {
     httpRequest.setCharacterEncoding("UTF-8");
     ExoContainer container = ExoContainerContext.getCurrentContainer();
+    ConversationRegistry conversationRegistry = (ConversationRegistry)container.getComponentInstanceOfType(ConversationRegistry.class);
+    ConversationState state = null;
+    String userId = httpRequest.getRemoteUser();
+    if (userId != null){
+      HttpSession httpSession = httpRequest.getSession();
+      state = conversationRegistry.getState(httpSession.getId());
+      if(state != null){
+        if(!userId.equals(state.getIdentity().getUserId())){
+          conversationRegistry.unregister(httpSession.getId());
+          }
+        }
+      }
     LOGGER.debug("Current Container: " + container);
     ResourceDispatcher dispatcher = (ResourceDispatcher) container.getComponentInstanceOfType(ResourceDispatcher.class);
     LOGGER.debug("ResourceDispatcher: " + dispatcher);

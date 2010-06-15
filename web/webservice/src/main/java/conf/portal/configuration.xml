@@ -2,10 +2,6 @@
 <configuration>
   <component>
     <type>org.exoplatform.webservice.cs.mail.MailWebservice</type>
-  </component>  
-   
-  <component>
-    <type>org.exoplatform.webservice.cs.chat.UIStateService</type>
   </component>
   
   <component>

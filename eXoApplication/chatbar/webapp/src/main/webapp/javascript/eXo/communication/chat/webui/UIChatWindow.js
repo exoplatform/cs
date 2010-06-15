@@ -42,6 +42,7 @@ function UITabControl(tabId, isGroupChat, UIMainChatWindow) {
   this.tabId = tabId;
   this.unreadMessageCnt = 0;
   this.isGroupChat = isGroupChat || false;
+  this.addContactPopupIsVisible = false;
   this.roomConfigured = false;
   // This variable using for detect first message in room chat to make it active.
   this.activeMe = this.isGroupChat;
@@ -159,6 +160,8 @@ UITabControl.prototype.inviteToJoinRoom = function() {
   /*if (this.roomConfigured) {
     eXo.communication.chatbar.webui.UIAddContactPopupWindow.setVisible(true, this);
   }*/
+  this.addContactPopupIsVisible = true;
+  eXo.communication.chatbar.webui.UIChatWindow.updateTabList();
   eXo.communication.chatbar.webui.UIAddContactPopupWindow.setVisible(true, this);
 };
 
@@ -565,6 +568,7 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
     this.activeMe = !this.activeMe;
     this.UIMainChatWindow.UIChatWindow.focusTab(this.tabId.id);
   }
+  this.UIMainChatWindow.UIChatWindow.updateTabList();
 };
 
 /**
@@ -925,7 +929,7 @@ UIChatWindow.prototype.onReload = function(eventData) {
     for ( var i = 0; i < tabList.length; i++) {
       var tab = tabList[i];
       if (tab.targetPerson) {
-        thys.createNewTab(tab.targetPerson, tab.isGroupChat);
+        thys.createNewTab(tab.targetPerson, tab.isGroupChat, tab);
       }
     }
   }
@@ -949,6 +953,7 @@ UIChatWindow.prototype.onReload = function(eventData) {
       thys.focusTab(activeTabId, true);
     }
   }
+  thys.setVisible(visible, null, true);
   thys._isOnLoading = false;
 };
 
@@ -1000,7 +1005,7 @@ UIChatWindow.prototype.destroy = function() {};
  * @param {String} targetPerson
  * @param {Boolean} isGroupChat
  */
-UIChatWindow.prototype.createNewTab = function(targetPerson, isGroupChat) {
+UIChatWindow.prototype.createNewTab = function(targetPerson, isGroupChat, tabState) {
   var tabId = this.getTabId(targetPerson);
   var uiTabControlObj = this.getUITabControl(tabId, isGroupChat, true);
   this.setVisible(true);
@@ -1008,6 +1013,16 @@ UIChatWindow.prototype.createNewTab = function(targetPerson, isGroupChat) {
     this.reloadScrollMgr();
     this.focusTab(tabId.id, true);
     this.updateTabList();
+  }
+  if(tabState){
+    if(tabState.addContactPopupIsVisible){
+      uiTabControlObj.addContactPopupIsVisible = tabState.addContactPopupIsVisible;
+      uiTabControlObj.inviteToJoinRoom();
+    }
+    if(tabState.messages)
+      uiTabControlObj.messagesBoxNode.innerHTML = tabState.messages;
+    if(tabState.unreadMessageCnt)
+      uiTabControlObj.unreadMessageCnt = tabState.unreadMessageCnt;
   }
   return uiTabControlObj;
 };
@@ -1023,11 +1038,14 @@ UIChatWindow.prototype.updateTabList = function() {
   for ( var item in this.tabControlList) {
     var uiTabControlObj = this.tabControlList[item];
     if (uiTabControlObj &&
-        uiTabControlObj.tabId &&
-        !uiTabControlObj.isGroupChat) {
+        uiTabControlObj.tabId) {
       var tab = {};
+      tab.id = uiTabControlObj.tabId.id;
       tab.targetPerson = uiTabControlObj.tabId.targetPerson;
       tab.isGroupChat = uiTabControlObj.isGroupChat;
+      tab.addContactPopupIsVisible = uiTabControlObj.addContactPopupIsVisible;
+      tab.unreadMessageCnt = uiTabControlObj.unreadMessageCnt;
+      tab.messages = uiTabControlObj.messagesBoxNode.innerHTML;
       tabList.push(tab);
     }
   }

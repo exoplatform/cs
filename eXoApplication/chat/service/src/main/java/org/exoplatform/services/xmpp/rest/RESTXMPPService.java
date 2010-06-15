@@ -1657,7 +1657,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       Form form = session.getSearchForm(services.get(0));
       Roster buddyList = session.getConnection().getRoster();
       // ////// Temporary //////////
-      session.removeAllTransport();
+      //session.removeAllTransport();
       // ///////////////////////////
       Collection<String> collectionMUCService = MultiUserChat.getServiceNames(connection);
       String mucService = collectionMUCService.toArray()[0].toString();

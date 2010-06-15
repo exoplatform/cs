@@ -14,12 +14,18 @@ function UIAddContactPopupWindow() {
 }
 
 /**
+* Extends from JSUIBean
+*/
+UIAddContactPopupWindow.prototype = new eXo.communication.chat.webui.component.JSUIBean();
+
+/**
  * Initialize method
  *
  * @param {HTMLElement} rootNode
  * @param {UIMainChatWindow} UIMainChatWindow
  */
 UIAddContactPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
+  this.id = 'UIAddContactPopupWindow';
   this.handler = false;
   var DOMUtil = eXo.core.DOMUtil;
   this.rootNode = rootNode;
@@ -35,6 +41,8 @@ UIAddContactPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.filterFieldNode, 'keyup', this.doSearchContactWrapper, false);
   this.uiPageIterator = new eXo.communication.chat.webui.UIPageIterator(this.pageIteratorNode);
   this.uiPageIterator.setGotoPageCallback(this.doSearchContact);
+  this._callback();
+  this._registerEventCallback(this._RELOAD_EVENT, this.onReload);
 };
 
 /**
@@ -108,6 +116,16 @@ UIAddContactPopupWindow.prototype.updateContactList = function(serverData) {
   }
   this.filterFieldNode.focus();
   this.UIPopupManager.focusEventFire(this);
+};
+
+/**
+* Use to reload UI states
+*/
+UIAddContactPopupWindow.prototype.onReload = function(eventData) {
+  var uiAddContactPopupWindow = eXo.communication.chat.webui.UIAddContactPopupWindow;
+  uiAddContactPopupWindow._isOnLoading = true;
+  uiAddContactPopupWindow.setVisible(uiAddContactPopupWindow._isVisible(), null);
+  uiAddContactPopupWindow._isOnLoading = false;
 };
 
 /**
@@ -256,25 +274,30 @@ UIAddContactPopupWindow.prototype.selectAllContacts = function(selectMode) {
  * @param {Function} handler will be call to filter contact result before display it in result pane.
  */
 UIAddContactPopupWindow.prototype.setVisible = function(visible, handler){
-  if (!this.UIMainChatWindow.userStatus ||
+  if(!visible && this.handler){
+    this.handler.addContactPopupIsVisible = false;
+    eXo.communication.chat.webui.UIChatWindow.updateTabList();
+  }
+  this._setOption('visible', visible);
+  if (!visible || !this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {
+	  if (this.rootNode.style.display != 'none') {
+	      this.rootNode.style.display = 'none';
+	  }
+	  this.handler = false;
     return;
   }
   if (visible) {
     //window.alert('handler callback: ', handler);
     //window.alert('handler callback: ', handler.addContactActionCallback);
     //eXo.communication.chat.webui.UIMainChatWindow.orgSearchUser();
-	this.handler = handler;
+    if(!(this.handler && !handler))
+	  this.handler = handler;
     eXo.communication.chat.webui.UIMainChatWindow.orgFuzzySearchUser('*', 0, 10);
     this.filterFieldNode.value = '';
     this.toggleSelectAllNode.checked = false;
     //this.filterFieldNode.focus();
     this.uiPageIterator.destroy();
-  } else {
-    if (this.rootNode.style.display != 'none') {
-      this.rootNode.style.display = 'none';
-    }
-    this.handler = null;
   }
 };
 
