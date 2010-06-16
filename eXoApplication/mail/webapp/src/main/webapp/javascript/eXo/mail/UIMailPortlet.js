@@ -774,6 +774,9 @@ UIMailPortlet.prototype.isSMTPAuthentication = function(id){
 UIMailPortlet.prototype.lazySync = function(obj, fId){
 	var actionLink = obj.getAttribute("actionlink") ;
 	eval(actionLink);
+	
+	return;
+	//remove automatic checking mail.
 	if(this.isChecked) {
 		window.clearTimeout(this.isChecked);
 		//eXo.mail.MailServiceHandler.stopCheckMail();

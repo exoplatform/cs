@@ -51,25 +51,52 @@ public class CheckingInfo {
   
   
   
-  private int totalMsg_ = 0 ;
-  private int fetching_ = 0  ;
-  private int statusCode_ ;
-  private String statusMsg_;
-  private String fetchingToFolders_;
-  private boolean hasChanged_ ;
-  private boolean isRequestStop_ = false;
-  private String requestingForFolder_;
-  private String msgId_ ;
-  private int syncFolderStatus_ =300;
+  private int                totalMsg_                  = 0;
+
+  private int                fetching_                  = 0;
+
+  private int                statusCode_;
+
+  private String             statusMsg_;
+
+  private String             fetchingToFolders_;
+
+  private boolean            hasChanged_;
+
+  private boolean            isRequestStop_             = false;
+
+  private String             requestingForFolder_;
+
+  private String             msgId_;
+
+  private int                syncFolderStatus_          = 300;
+
+  private StatusInfo         status_                    = new StatusInfo();
   
   
-  private StatusInfo status_ = new StatusInfo();
   
   
   public int getTotalMsg() {  return totalMsg_ ; } ;
   public void setTotalMsg(int totalMsg) { 
     totalMsg_ = totalMsg ; 
     hasChanged_ = true ;
+  }
+  
+  /**
+   * reset values to default.
+   */
+  public void resetValues() {
+    totalMsg_ = 0;
+    fetching_ = 0;
+    statusCode_ = 0;
+    statusMsg_ = "";
+    fetchingToFolders_ = "";
+    hasChanged_ = false;
+    isRequestStop_ = false;
+    requestingForFolder_ = "";
+    msgId_ = "";
+    syncFolderStatus_ = 300;
+    status_ = new StatusInfo();
   }
   
   public int getFetching() { return fetching_ ; }
@@ -167,15 +194,33 @@ public class CheckingInfo {
    */
   public boolean isRequestStop() { return isRequestStop_ ; }
 
+  /**
+   * this function sees the statuscode to determine the job is running or not.
+   * @return true if the job is running, else return false.
+   */
+  public boolean isCheckingMailJobRunning() {
+    return statusCode_ != CheckingInfo.FINISHED_CHECKMAIL_STATUS
+    && statusCode_ != CheckingInfo.CONNECTION_FAILURE && statusCode_ != CheckingInfo.RETRY_PASSWORD && 
+    statusCode_ != CheckingInfo.COMMON_ERROR;
+  }
+  
   public void setRequestStop(boolean b) {
     synchronized (this) {
-      isRequestStop_ = b;
-    }
-    if (statusCode_ != CheckingInfo.REQUEST_STOP_STATUS) {
-      status_.setPreviousStatus(statusCode_);
-      statusCode_ = CheckingInfo.REQUEST_STOP_STATUS; 
-      status_.setStatus(statusCode_);
-      hasChanged_ = true ;
+      if (b) {
+        if (isCheckingMailJobRunning()) {
+          // request to stop checking mail, if the job is running.
+          isRequestStop_ = b;
+          
+          status_.setPreviousStatus(statusCode_);
+          statusCode_ = CheckingInfo.REQUEST_STOP_STATUS;
+          status_.setStatus(statusCode_);
+          hasChanged_ = true;
+          
+
+        }
+      } else {
+        isRequestStop_ = b;
+      }
     }
   }
   

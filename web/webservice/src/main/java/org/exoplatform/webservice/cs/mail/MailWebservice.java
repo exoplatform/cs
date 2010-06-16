@@ -194,7 +194,7 @@ public class MailWebservice implements ResourceContainer {
       buffer.append("  </checkingmail>");
       buffer.append("</info>");
 
-      checkingInfo.setRequestStop(true);
+//      checkingInfo.setRequestStop(true);
 //      mailService.removeCheckingInfo(userName, accountId);
       mailService.stopCheckMail(userName, accountId);
     } else {
