@@ -1062,11 +1062,12 @@ public class MailServiceImpl implements MailService, Startable {
       if (store != null) {
       	String key = userName + ":" + accountId;
     		if(info == null) info = new CheckingInfo();
-      	info.setStatusCode(CheckingInfo.START_SYNC_FOLDER);
+//      	info.setStatusCode(CheckingInfo.START_SYNC_FOLDER);
+      	info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
       	checkingLog_.put(key, info);
       	synchImapFolders(userName, accountId, null, store.getDefaultFolder().list());
-        info.setRequestStop(true);
-        info.setStatusCode(CheckingInfo.FINISH_SYNC_FOLDER);
+//        info.setRequestStop(true);
+//        info.setStatusCode(CheckingInfo.FINISH_SYNC_FOLDER);
         info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
         checkingLog_.put(key, info);
       }
@@ -1077,7 +1078,7 @@ public class MailServiceImpl implements MailService, Startable {
         store.close();
       }
       if (info != null)
-        info.setStatusCode(CheckingInfo.FINISH_SYNC_FOLDER);
+        info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
     }
   }
 
@@ -1504,7 +1505,7 @@ public class MailServiceImpl implements MailService, Startable {
       info = createCheckingInfo(userName, accountId);
     } else {
 	  //reset CheckingInfo to default
-		info = new CheckingInfo();
+		info.resetValues();
 	  }
     info.setAccountId(accountId);
     info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);    
@@ -1836,7 +1837,7 @@ public class MailServiceImpl implements MailService, Startable {
         info = createCheckingInfo(userName, accountId);
       } else {
 	  //reset CheckingInfo to default
-		info = new CheckingInfo();
+		info.resetValues();
 	  }
 	  
       info.setAccountId(accountId);
@@ -2221,8 +2222,6 @@ public class MailServiceImpl implements MailService, Startable {
               javax.mail.Folder fd = store.getFolder(folder.getName());
               folder.setURLName(fd.getURLName().toString());
               storage_.saveFolder(userName, accountId, folder);
-            } else {
-              break;
             }
           }
           folders.add(folder);
