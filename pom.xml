@@ -89,6 +89,7 @@
     <jdom.version>1.0</jdom.version>
     <org.slf4j.slf4j-api.version>1.5.6</org.slf4j.slf4j-api.version>
     <org.slf4j.slf4j-jdk14.version>1.5.6</org.slf4j.slf4j-jdk14.version>
+	<c3p0.version>0.9.1.2</c3p0.version>
     <!-- ************** -->
     <!-- Build settings -->
     <!-- ************** -->
@@ -103,7 +104,7 @@
       <dependency>
         <groupId>c3p0</groupId>
         <artifactId>c3p0</artifactId>
-        <version>0.9.1.2</version>
+        <version>${c3p0.version}</version>
       </dependency>
       <dependency>
         <groupId>org.exoplatform.kernel</groupId>
