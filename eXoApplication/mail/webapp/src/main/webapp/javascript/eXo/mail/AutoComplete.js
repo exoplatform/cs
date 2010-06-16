@@ -5,7 +5,7 @@ eXo.require("eXo.core.JSON");
 eXo.require("eXo.core.Keyboard");
 
 function AutoComplete(){
-	this.REST_URL = eXo.env.portal.context + "/rest/cs/mail/searchemail/";
+	this.REST_URL = eXo.env.portal.context + "/rest/private/cs/mail/searchemail/";
 	this.elm = null;
 };
 /**
@@ -14,7 +14,7 @@ function AutoComplete(){
  */
 AutoComplete.prototype.init = function(ids){
 	var me = eXo.mail.AutoComplete;
-	if(eXo.cs.restContext) this.REST_URL = eXo.env.portal.context + "/" + eXo.cs.restContext + "/cs/mail/searchemail/";  
+	if(eXo.cs.restContext) this.REST_URL = eXo.env.portal.context + "/" + eXo.cs.restContext + "/private/cs/mail/searchemail/";  
 	var i = ids.length;
 	var input;
 	while(i--){

@@ -90,10 +90,9 @@ public class TestWebservice extends AbstractResourceTest {
     cal.setCategoryId(calCategory.getId()) ;
     cal.setPublic(true) ;
     
-    String extURI = "/cs/calendar/rss/" + username + "/" + cal.getId() + "/0";
+    String extURI = "/private/cs/calendar/subscribe/" + username + "/" + cal.getId() + "/0";
     
     cal.setPublicUrl(extURI);
-    System.out.println("\n\n extURI " + extURI);
     calendarService.saveUserCalendar(username, cal, true);
     
     CalendarEvent event = new CalendarEvent();

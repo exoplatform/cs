@@ -118,7 +118,9 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
     setActionField(URL, actions) ;
     
     addUIFormInput(new UIFormInputInfo(CALENDARS, CALENDARS, null)) ;
-    addUIFormInput(new UIFormComboBox(ADDMORE, ADDMORE, getCalendarsOptions()));
+    
+    UIFormComboBox comboBox = new UIFormComboBox(ADDMORE, ADDMORE, getCalendarsOptions());
+    addUIFormInput(comboBox);
 
     List<ActionData> actions2 = new ArrayList<ActionData>() ;
     ActionData addCalendar = new ActionData() ;
@@ -127,6 +129,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
     addCalendar.setActionName("AddCalendar") ;
     actions2.add(addCalendar) ;
     setActionField(ADDMORE, actions2) ;
+    comboBox.setValue(null);
   }
   
   private String getDefaultFeedName() {
@@ -289,6 +292,8 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
         return ;
       }
       uiForm.feedCalendars.put(value, cal.getName());
+      
+      comboBox.setValue(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
      /* CalendarService calendarService = CalendarUtils.getCalendarService();
       String username = CalendarUtils.getCurrentUser();

@@ -6,7 +6,7 @@
 
 	<context-param>
 		<param-name>org.exoplatform.frameworks.jcr.command.web.fckeditor.digitalAssetsWorkspace</param-name>
-		<param-value>portal</param-value>
+		<param-value>csdemo</param-value>
 		<description>Binary assets workspace name</description>
 	</context-param>
 
@@ -35,11 +35,11 @@
 
 
     <filter>
-     <filter-name>AnonymousUserContextRedirectionFilter</filter-name>
-     <filter-class>org.exoplatform.ws.frameworks.servlet.AnonymousUserContextRedirectionFilter</filter-class>
-	   <init-param>
+      <filter-name>AnonymousUserContextRedirectionFilter</filter-name>
+      <filter-class>org.exoplatform.ws.frameworks.servlet.AnonymousUserContextRedirectionFilter</filter-class>
+	    <init-param>
         <param-name>context-name</param-name>
-        <param-value>/rest/private</param-value>
+        <param-value>/rest-csdemo/private</param-value> 
       </init-param>
     </filter>
     
@@ -115,8 +115,8 @@
 	<filter-mapping>
      <!-- This must be before ThreadLocalSessionProviderInitializedFilter for URI /rest/private/* -->
     <filter-name>AnonymousUserContextRedirectionFilter</filter-name>
-    <url-pattern>/rest-csdemo/private/*</url-pattern>
-    </filter-mapping>
+   	<url-pattern>/rest-csdemo/private/*</url-pattern>
+  </filter-mapping>
   
   <filter-mapping>
     <filter-name>ThreadLocalSessionProviderInitializedFilter</filter-name>
@@ -139,7 +139,7 @@
 	<!--           SERVLET                                                  -->
 	<!-- ================================================================== -->
 	<servlet>
-		<servlet-name>portal</servlet-name>
+		<servlet-name>csdemo</servlet-name>
 		<servlet-class>org.exoplatform.portal.application.PortalController</servlet-class>
 		<init-param>
 			<param-name>webui.configuration</param-name>
@@ -203,23 +203,23 @@
 		<url-pattern>/javascript/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>portal</servlet-name>
+		<servlet-name>csdemo</servlet-name>
 		<url-pattern>/private/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>portal</servlet-name>
+		<servlet-name>csdemo</servlet-name>
 		<url-pattern>/public/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>portal</servlet-name>
+		<servlet-name>csdemo</servlet-name>
 		<url-pattern>/admin/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>portal</servlet-name>
+		<servlet-name>csdemo</servlet-name>
 		<url-pattern>/service</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>portal</servlet-name>
+		<servlet-name>csdemo</servlet-name>
 		<url-pattern>/command/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
@@ -239,7 +239,7 @@
     
     <servlet-mapping>
      <servlet-name>RestServer</servlet-name>
-     <url-pattern>/rest-csdemo/private/*</url-pattern>
+     <url-pattern>/rest-csdemo/*</url-pattern>
     </servlet-mapping>
   
 	<session-config>

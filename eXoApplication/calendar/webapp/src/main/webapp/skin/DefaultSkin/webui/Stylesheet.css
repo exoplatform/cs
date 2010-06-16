@@ -337,20 +337,7 @@
 .UICalendarPortlet .RemoveBtn {
 	
 }
-/*AutoComplete Style*/
-.AutoCompleteMenu {
-	position:absolute;
-	border: solid 1px black;
-	background:white;
-}
-.AutoCompleteItem {
-	padding: 3px 3px 3px 1px;
-}
 
-.AutoCompleteOver {
-	background: blue;
-	color:white;
-}
 /*Override style of Right click menu*/
 .UIRightClickPopupMenu .MenuItem .ItemIcon{
 	padding: 0px 5px 0px 28px; /* orientation=lt */

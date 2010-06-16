@@ -40,7 +40,7 @@ import com.sun.mail.imap.IMAPStore;
 /**
  * @author Uoc Nguyen Modified by : Phung Nam (phunghainam@gmail.com)
  */
-@Path("/cs/mail")
+@Path("private/cs/mail")
 public class MailWebservice implements ResourceContainer {
 
   public static final String TEXT_XML          = "text/xml".intern();
@@ -182,6 +182,7 @@ public class MailWebservice implements ResourceContainer {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
+    if(!isAuthorized(userName)) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
     MailService mailService = (MailService) ExoContainerContext.getCurrentContainer()
                                                                .getComponentInstanceOfType(MailService.class);
     StringBuffer buffer = new StringBuffer();
@@ -212,6 +213,7 @@ public class MailWebservice implements ResourceContainer {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
+    if(!isAuthorized(userName)) return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
     MailService mailService = (MailService) ExoContainerContext.getCurrentContainer()
                                                                .getComponentInstanceOfType(MailService.class);
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);

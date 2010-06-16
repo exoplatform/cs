@@ -22,17 +22,14 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.jcr.PathNotFoundException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.calendar.service.Calendar;
@@ -41,18 +38,14 @@ import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
-import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
-import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
-import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
-import org.exoplatform.webservice.cs.bean.CalendarData;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -74,12 +67,13 @@ import com.sun.syndication.io.XmlReader;
 
 
 
-@Path("/cs/calendar")
+@Path("/private/cs/calendar")
 public class CalendarWebservice implements ResourceContainer{
-  public final static String BASE_RSS_URL = "/cs/calendar/feed".intern();
-  public final static String BASE_EVENT_URL = "/cs/calendar/event".intern();
-  final public static String BASE_URL_PUBLIC = "/cs/calendar/subscribe/".intern();
-  final public static String BASE_URL_PRIVATE = "/cs/calendar/private/".intern();
+  public final static String BASE_URL = "/private/cs/calendar".intern();
+  public final static String BASE_RSS_URL = BASE_URL + "/feed".intern();
+  public final static String BASE_EVENT_URL = BASE_URL + "/event".intern();
+  final public static String BASE_URL_PUBLIC = BASE_URL + "/subscribe/".intern();
+  final public static String BASE_URL_PRIVATE = BASE_URL + "/private/".intern();
   
   public CalendarWebservice() {}
 
@@ -114,7 +108,7 @@ public class CalendarWebservice implements ResourceContainer{
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
-    try { 
+    try {
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       Calendar cal = null ;
@@ -154,7 +148,7 @@ public class CalendarWebservice implements ResourceContainer{
    */
   @SuppressWarnings("unchecked")
   @GET
-  @Path("/event/{username}/{eventFeedName}/")
+  @Path("event/{username}/{eventFeedName}/")
   public Response event(@PathParam("username")
                       String username, @PathParam("eventFeedName")
                       String eventFeedName) throws Exception {
@@ -162,6 +156,9 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
+      if(!isAuthorized(username)) return Response.status(HTTPStatus.LOCKED)
+        .entity("Unauthorized: Access is denied").cacheControl(cacheControl).build();
+      
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
@@ -204,7 +201,7 @@ public class CalendarWebservice implements ResourceContainer{
    */
   @SuppressWarnings("unchecked")
   @GET
-  @Path("/feed/{username}/{feedname}/{filename}/")
+  @Path("feed/{username}/{feedname}/{filename}/")
   public Response feed(@PathParam("username")
                       String username, @PathParam("feedname")
                       String feedname, @PathParam("filename")
@@ -213,6 +210,9 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
+      if(!isAuthorized(username))
+        return Response.status(HTTPStatus.LOCKED)
+          .entity("Unauthorized: Access is denied").cacheControl(cacheControl).build();
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       
@@ -311,7 +311,7 @@ public class CalendarWebservice implements ResourceContainer{
    * @return : Rss feeds
    * @throws Exception
    */
-  @GET
+ /* @GET
   @Path("/rss/{username}/{calendarId}/{type}/")
   public Response rss(@PathParam("username")
                       String username, @PathParam("calendarId")
@@ -349,14 +349,14 @@ public class CalendarWebservice implements ResourceContainer{
     }
   }
 
-  /**
+  *//**
    * 
    * @param auhtor : the feed create 
    * @param cal : calendar object data
    * @param events : list of event from data
    * @return
    * @throws Exception
-   */
+   *//*
   private String makeRss(String auhtor, Calendar cal, List<CalendarEvent> events) throws Exception{
 
     SyndFeed feed = new SyndFeedImpl();      
@@ -386,7 +386,7 @@ public class CalendarWebservice implements ResourceContainer{
     String feedXML = output.outputString(feed);      
     feedXML = StringUtils.replace(feedXML,"&amp;","&");  
     return feedXML;
-  }
+  }*/
 
   /**
    * 
@@ -463,6 +463,8 @@ public class CalendarWebservice implements ResourceContainer{
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
+      if(!isAuthorized(username)) return Response.status(HTTPStatus.LOCKED)
+        .entity("Unauthorized: Access is denied").cacheControl(cacheControl).build();
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
@@ -481,83 +483,10 @@ public class CalendarWebservice implements ResourceContainer{
     }
   }
   
-  /**
-   * Get all email from contacts data base, the security level will take from
-   * ConversationState
-   * 
-   * @param keywords : the text to compare with data base
-   * @return application/json content type
-   */
-  @GET
-  @Path("/searchCalendar/{keywords}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response searchCalendar(@PathParam("keywords") String keywords) throws Exception {
-    CalendarService  calendarService = 
-      (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
-    List<String> calendarNames = new ArrayList<String>();
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    cacheControl.setNoStore(true);
-    try {
-      if (ConversationState.getCurrent().getIdentity() == null)
-        return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
-      String username = ConversationState.getCurrent().getIdentity().getUserId();
-      if (username == null)
-        return Response.ok(Status.UNAUTHORIZED).cacheControl(cacheControl).build();
-      ResourceBundle resourceBundle = calendarService.getResourceBundle();
-
-      for(Calendar cal : calendarService.getUserCalendars(username, true)) {
-        if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-          String newName = resourceBundle.getString("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
-          cal.setName(newName);
-        }
-        if (cal.getName().toLowerCase().contains(keywords)) {
-          calendarNames.add(Utils.PRIVATE_TYPE + Utils.COLON + cal.getId() + Utils.COLON + cal.getName());
-        }
-      }      
-      
-      List<GroupCalendarData> groupCals  = calendarService.getGroupCalendars(getUserGroups(username), true, username) ;
-      for(GroupCalendarData groupData : groupCals)
-        if(groupData != null) {
-          for(Calendar cal : groupData.getCalendars()) {
-            if (cal.getName().toLowerCase().contains(keywords)) {
-              calendarNames.add(Utils.PUBLIC_TYPE + Utils.COLON + cal.getId() + Utils.COLON + cal.getName());
-            }
-          }
-        }
-      
-      GroupCalendarData sharedData  = calendarService.getSharedCalendars(username, true) ;
-      if(sharedData != null) {
-        for(Calendar cal : sharedData.getCalendars()) {
-          if (cal.getId().equals(Utils.getDefaultCalendarId(cal.getCalendarOwner())) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
-            String newName = resourceBundle.getString("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
-            cal.setName(Utils.getDisplaySharedCalendar(cal.getCalendarOwner(), newName));
-          }
-          if (cal.getName().toLowerCase().contains(keywords)){
-            calendarNames.add(Utils.SHARED_TYPE + Utils.COLON + cal.getId() + Utils.COLON + cal.getName());
-          }
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-      return Response.ok(Status.INTERNAL_SERVER_ERROR).cacheControl(cacheControl).build();
-    }
-    CalendarData data = new CalendarData();
-    data.setInfo(calendarNames);
-    return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
-  }
-  
-  private final String[] getUserGroups(String username) throws Exception {
-    start();
-    OrganizationService oService = (OrganizationService)ExoContainerContext
-    .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
-    Object[] objGroupIds = oService.getGroupHandler().findGroupsOfUser(username).toArray() ;
-    List<String> listGroupIds = new ArrayList<String>() ;
-    for (Object object : objGroupIds) {
-      listGroupIds.add(((Group)object).getId()) ;
-    }
-    stop();
-    return listGroupIds.toArray(new String[] {});
+  private boolean isAuthorized(String usename) {
+    return (ConversationState.getCurrent() != null && ConversationState.getCurrent().getIdentity() != null && 
+        ConversationState.getCurrent().getIdentity().getUserId() != null && ConversationState.getCurrent().getIdentity().getUserId().equals(usename)  
+    );
   }
   
 }
