@@ -30,7 +30,7 @@ eXo.chatRequire = function(module, jsLocation) {
 eXo.core.HTMLUtil.entities.nbsp = null;
 
 eXo.require("eXo.communication.chat.core.DateFormat", "/chat/javascript/");
-eXo.require("eXo.cs.CSCometd", "/csResources/javascript/");
+//eXo.require("eXo.cs.CSCometd", "/csResources/javascript/");
 eXo.require("eXo.communication.chat.core.AdvancedDOMEvent", "/chat/javascript/");
 eXo.require("eXo.communication.chat.core.JSLogger", "/chat/javascript/");
 eXo.require("eXo.communication.chat.core.XMPPCommunicator", "/chat/javascript/");

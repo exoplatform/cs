@@ -320,6 +320,7 @@ UIMainChatWindow.prototype.sessionKeeper = function() {
  * Cometd connection initialize method.
  */
 UIMainChatWindow.prototype.initCometd = function(cometdContextName) {
+	if(!eXo.cs.CSCometd) eXo.cs.CSCometd = eXo.core.Cometd;
   var Cometd = eXo.cs.CSCometd;
   if (!Cometd.isConnected()) {
     Cometd.exoId = this.userName;

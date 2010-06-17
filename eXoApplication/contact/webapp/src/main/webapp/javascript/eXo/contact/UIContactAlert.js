@@ -3,6 +3,7 @@ function UIContactAlert() {
 } ;
 
 UIContactAlert.prototype.init = function(eXoUser, eXoToken, cometdContextName){
+	if(!eXo.cs.CSCometd) eXo.cs.CSCometd = eXo.core.Cometd;
   eXo.cs.CSCometd.exoId = eXoUser;
   eXo.cs.CSCometd.exoToken = eXoToken;
   if(cometdContextName)

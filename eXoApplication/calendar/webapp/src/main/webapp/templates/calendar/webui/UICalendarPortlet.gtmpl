@@ -72,7 +72,8 @@
 		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu("'+ uicomponent.id +'") ;') ;
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.Highlighter','/calendar/javascript/') ;
 		  rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;		   
-		  rcontext.getJavascriptManager().importJavascript('eXo.cs.CSCometd','/csResources/javascript/') ;
+		  rcontext.getJavascriptManager().addJavascript('if(eXo.core.Cometd) delete eXo.core.Cometd;') ;
+			rcontext.getJavascriptManager().importJavascript('eXo.core.Cometd','/cometd/javascript/') ;
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.Reminder','/calendar/javascript/') ;
 		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.Reminder.init("'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+ '","' + uicomponent.getCometdContextName() + '");') ;
 		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.portletId="' + uicomponent.id + '";') ;
