@@ -63,6 +63,7 @@
       <UIPopupAddEventContainer>Thêm/sửa sự kiện</UIPopupAddEventContainer>
       <UIComfirmPassword>Xác nhận mật khẩu</UIComfirmPassword>
       <UIEnterPasswordDialog>Nhập mật khẩu</UIEnterPasswordDialog>
+      <UIAskmeReturnReceipt>Confirm return receipt</UIAskmeReturnReceipt>
     </title>
   </UIPopupWindow>
   <UIAccountCreation>
@@ -112,13 +113,14 @@
       <email-address-requirement>Nhập địa chỉ thư của tài khoản</email-address-requirement>
       <email-address-is-invalid>Địa chỉ thư không đúng định dạng</email-address-is-invalid>
       <reply-address-is-invalid>Địa chỉ thư phản hồi không đúng định dạng</reply-address-is-invalid>
-      <incoming-server-requirement>Điền tên máy chủ nhập </incoming-server-requirement>
+      <incoming-server-requirement>Điền tên máy chủ nhập</incoming-server-requirement>
       <outgoing-server-requirement>Điền tên máy chủ xuất</outgoing-server-requirement>
       <store-folder-requirement>Nhập thư mục lưu trữ thư</store-folder-requirement>
       <incoming-port-is-not-number>Cổng nhập phải là số. Hãy hỏi quản trị của bạn</incoming-port-is-not-number>
       <outgoing-port-is-not-number>Cổng xuất phải là số. Hãy hỏi quản trị của bạn</outgoing-port-is-not-number>
       <username-requirement>Bạn chưa điền tên đăng nhập</username-requirement>
       <password-requirement>Bạn chưa điền mật khẩu</password-requirement>
+      <create-acc-unsuccessfully>Tài khoản của bạn không thể được cấu hình đúng. Hãy liên hệ với quản lý hệ thống của bạn.</create-acc-unsuccessfully>
     </msg>
     <action>
       <Next>#{word.next}</Next>
@@ -141,7 +143,7 @@
   </UIAccountWizardStep1>
   <UIAccountWizardStep2>
     <info>
-      <label1>Đặc tính thư là tên và địa chỉ thư được dùng trong thư tương ứng của bạn. Mỗi tài khoản thư có một đặc tính thư riêng, người nhận thư sẽ thấy những thông tin này và biết bạn là ai </label1>
+      <label1>Đặc tính thư là tên và địa chỉ thư được dùng trong thư tương ứng của bạn. Mỗi tài khoản thư có một đặc tính thư riêng, người nhận thư sẽ thấy những thông tin này và biết bạn là ai</label1>
     </info>
   </UIAccountWizardStep2>
   <UIAccountWizardStep3>
@@ -158,7 +160,7 @@
   </UIAccountWizardStep4>
   <UIAccountWizardStep5>
     <info>
-      <label1>Bạn hãy kiểm tra lại thông tin bên dưới trước khi lưu lại. </label1>
+      <label1>Bạn hãy kiểm tra lại thông tin bên dưới trước khi lưu lại.</label1>
     </info>
   </UIAccountWizardStep5>
   <UIFormInputSetWithAction>
@@ -205,7 +207,7 @@
       <outgoingServer>Máy chủ đi</outgoingServer>
       <messageComeInFolder>Chọn thư mục Thư đến</messageComeInFolder>
       <leaveMailOnServer>Bỏ các thư trên Máy chủ</leaveMailOnServer>
-      <skipMessageOverMaxSize>Bỏ qua những thư dung lượng quá lơn (> 5M)</skipMessageOverMaxSize>
+      <skipMessageOverMaxSize>Bỏ qua những thư dung lượng quá lơn (&gt; 5M)</skipMessageOverMaxSize>
       <markItAsDeleted>Đánh dấu các thư coi như đã xóa</markItAsDeleted>
       <incomingPort>Cổng đến</incomingPort>
       <outgoingPort>Cổng đi</outgoingPort>
@@ -218,12 +220,16 @@
         <signOnFoot>Cuối thư</signOnFoot>
       </option>
       <delete-acc>Xóa tài khoản</delete-acc>
+      <isOutgoingAuthentication>Cho phép xác nhận SMTP</isOutgoingAuthentication>
+      <useIncomingSettingForOutgoingAuthent>Sử dụng tên/mật khẩu của máy chủ đến</useIncomingSettingForOutgoingAuthent>
+      <outgoingUsername>Tên người dùng</outgoingUsername>
+      <outgoingPassword>Mật khẩu</outgoingPassword>
     </label>
     <msg>
       <edit-acc-successfully>Sửa tài khoản thành công</edit-acc-successfully>
       <edit-acc-unsuccessfully>Sửa tài khoản thành lỗi</edit-acc-unsuccessfully>
       <please-choose-specified-date>Hãy chọn ngày</please-choose-specified-date>
-      <email-address-is-invalid></email-address-is-invalid>
+      <email-address-is-invalid />
       <reply-address-is-invalid>Địa chỉ thư phản hồi không đúng, nên giống dạng sau : votrenom@votresociete.com</reply-address-is-invalid>
       <incoming-port-is-not-number>Cổng đến phải là một số. Hãy hỏi lại quản trị hệ thống của bạn</incoming-port-is-not-number>
       <outgoing-port-is-not-number>Cổng đi phải là một số. Hãy hỏi lại quản trị hệ thống của bạn</outgoing-port-is-not-number>
@@ -264,33 +270,47 @@
         </format>
         <replywith>
           <true>Đính kèm thư gốc</true>
-          <false>Trích dẫn thư gốc </false>
+          <false>Trích dẫn thư gốc</false>
         </replywith>
         <forwardwith>
           <true>Đính kèm thư gốc</true>
           <false>Trích dẫn thư gốc</false>
         </forwardwith>
+        <period.0>Không bao giờ</period.0>
+        <period.5>5 phút</period.5>
+        <period.10>10 phút</period.10>
+        <period.20>20 phút</period.20>
+        <period.30>30 phút</period.30>
+        <period.60>1 giờ</period.60>
       </option>
+      <returnReceipts />
     </label>
     <action>
       <Save>#{word.save}</Save>
       <Cancel>#{word.cancel}</Cancel>
     </action>
+    <tab>
+      <label>
+        <general>Chung</general>
+        <return-receipt>Return Receipts</return-receipt>
+        <layout>Bố cục</layout>
+      </label>
+    </tab>
   </UIMailSettings>
   <UIMailSettings-VerticalLayout>
-  	<label>
-  		<vertical-layout>Chia theo chiều dọc</vertical-layout>
-  	</label>
+    <label>
+      <vertical-layout>Chia theo chiều dọc</vertical-layout>
+    </label>
   </UIMailSettings-VerticalLayout>
   <UIMailSettings-HorizontalLayout>
-  	<label>
-  		<horizontal-layout>Chia theo chiều ngang</horizontal-layout>
-  	</label>
+    <label>
+      <horizontal-layout>Chia theo chiều ngang</horizontal-layout>
+    </label>
   </UIMailSettings-HorizontalLayout>
   <UIMailSettings-NosplitLayout>
-  	<label>
-  		<nosplit-layout>Không chia</nosplit-layout>
-  	</label>
+    <label>
+      <nosplit-layout>Không chia</nosplit-layout>
+    </label>
   </UIMailSettings-NosplitLayout>
   <UIAddressForm>
     <action>
@@ -308,6 +328,12 @@
       <add-address>Thêm địa chỉ</add-address>
       <replace>Thay thế</replace>
       <cancel>#{word.cancel}</cancel>
+      <selected-group>Gửi đến tất cả</selected-group>
+      <checkAll>Kiểm tra tất cả</checkAll>
+      <option>
+        <all>Tất cả liên hệ</all>
+        <sharedContacts>liên hệ được chia sẻ</sharedContacts>
+      </option>
     </label>
     <msg>
       <search-error-keyword>Từ khóa tìm kiếm không được chứa ký  tự đặc biệt</search-error-keyword>
@@ -320,6 +346,7 @@
         <public-contacts>Các nhóm chung</public-contacts>
         <shared-contacts>Các nhóm được chia sẻ</shared-contacts>
         <public-groups-contacts>Public groups</public-groups-contacts>
+        <shared>Sổ địa chỉ chia sẻ</shared>
       </label>
     </optionGroup>
   </UIAddressForm>
@@ -478,6 +505,8 @@
       <plain-text>Văn bản đơn giản</plain-text>
       <add-cc>CC</add-cc>
       <add-bcc>BCC</add-bcc>
+      <options>Lựa chọn</options>
+      <returnReceipt>Return Receipt</returnReceipt>
     </label>
     <msg>
       <to-field-required>Nhập địa chỉ thư người nhận trong trường : Tới</to-field-required>
@@ -497,6 +526,9 @@
       <the-username-or-password-may-be-wrong-sending-failed>Gửi thư lỗi. Kiểm tra tên đăng nhập và mật khẩu</the-username-or-password-may-be-wrong-sending-failed>
       <sorry-there-was-an-error-sending-the-message-sending-failed>Gửi thư lỗi trong quá trình truyền đi!</sorry-there-was-an-error-sending-the-message-sending-failed>
       <there-was-an-unexpected-error-sending-falied>Gửi thư lỗi</there-was-an-unexpected-error-sending-falied>
+      <no-subject>Dường như tin của bạn không có chủ đề. Bạn có muốn gửi không?</no-subject>
+      <please-check-configuration-for-smtp-server>Kết nối đến máy chủ lỗi. Lưu thông điệp và xác định máy chủ gửi.</please-check-configuration-for-smtp-server>
+      <check-authentication-smtp-outgoingServer>Yêu cầu xác thực định danh. Hãy kiểm tra xác thực SMTP của máy chủ gửi.</check-authentication-smtp-outgoingServer>
     </msg>
   </UIComposeForm>
   <!--
@@ -536,6 +568,7 @@
       <upload-error>Không thể tải lên vì tệp quá lớn</upload-error>
       <fileName-error>Tên tệp không đúng, hãy đổi tên tệp và tải lại</fileName-error>
       <size-attachs-must-be-smaller-than-10M>Tổng kích thước tệp đính kẹp không được quá 10M.</size-attachs-must-be-smaller-than-10M>
+      <unformat-imagefile>Tệp không phải định dạng ảnh, hãy chọn lại.</unformat-imagefile>
     </msg>
   </UIAttachFileForm>
   <!--
@@ -571,7 +604,7 @@
       <tag-name>Tên</tag-name>
       <choose-color>Màu</choose-color>
       <subject>Chủ đề</subject>
-      <no-tag></no-tag>
+      <no-tag />
       <tag-description>Mô tả</tag-description>
     </label>
     <action>
@@ -622,7 +655,7 @@
       <email>Địa chỉ</email>
       <server>Máy chủ</server>
       <protocol>Dịch vụ</protocol>
-      <action></action>
+      <action />
     </header>
     <action>
       <Close>#{word.close}</Close>
@@ -638,11 +671,11 @@
   <UIMoveMessageForm>
     <label>
       <folder>Chuyển đến thư mục</folder>
-      <Inbox>Hộp thư đến </Inbox>
+      <Inbox>Hộp thư đến</Inbox>
       <Drafts>Thư nháp</Drafts>
-      <Sent>Thư đã gửi </Sent>
+      <Sent>Thư đã gửi</Sent>
       <Spam>Thư nháp</Spam>
-      <Trash>Thùng rác </Trash>
+      <Trash>Thùng rác</Trash>
     </label>
     <optionGroup>
       <label>
@@ -676,7 +709,7 @@
       <confirm-remove-message>Bạn có chắc muốn xóa các thư này ?</confirm-remove-message>
     </msg>
     <label>
-     <there-are-no-account>Chưa có tài khoản nào, nhấn vào đây để tạo mới</there-are-no-account>
+      <there-are-no-account>Chưa có tài khoản nào, nhấn vào đây để tạo mới</there-are-no-account>
       <receiving-messages>Đang nhận thư...</receiving-messages>
       <there-are-no-messages>Không có thư nào</there-are-no-messages>
       <mark-as-read>Đánh dấu đã đọc</mark-as-read>
@@ -726,12 +759,12 @@
       <previous-page>Trước</previous-page>
       <next-page>Sau</next-page>
       <last-page>Cuối</last-page>
-      <starting>Dấu sao </starting>
+      <starting>Dấu sao</starting>
       <stop>Dừng</stop>
-      <stoping>Đang dừng </stoping>
+      <stoping>Đang dừng</stoping>
       <hide>Ẩn</hide>
       <refresh>Tải lại</refresh>
-      <check-all>Chọn hết </check-all>
+      <check-all>Chọn hết</check-all>
       <attachment>Đính kèm</attachment>
       <sort-by-sender>Sắp theo người gửi.</sort-by-sender>
       <add-star-for-this-message>Đánh dấu sao cho thư</add-star-for-this-message>
@@ -742,6 +775,8 @@
       <total-messages-in-conversation>Tổng số thư trong hội thảo</total-messages-in-conversation>
       <no-subject>(Không co chủ đề)</no-subject>
       <there-are-attachments-could-not-be-loaded-properly>Có tệp đính kèm không được hiển thị !</there-are-attachments-could-not-be-loaded-properly>
+      <groupBy>Nhóm theo</groupBy>
+      <groupByReceivedDate>Ngày nhận</groupByReceivedDate>
     </label>
   </UIMessageList>
   <!--
@@ -760,7 +795,7 @@
       <print>In ấn</print>
       <reply-to-sender>Trả lời</reply-to-sender>
       <reply-to-all>Trả lời tất cả</reply-to-all>
-      <forward>Chuyển tiếp </forward>
+      <forward>Chuyển tiếp</forward>
       <create-filter-from-this>Lọc thư này</create-filter-from-this>
       <move-to-folder>Di chuyển tới thư mục</move-to-folder>
       <tag>Thẻ</tag>
@@ -787,17 +822,21 @@
       <yes>Có</yes>
       <no>Không</no>
       <maybe>Có thể</maybe>
+      <bcc>Bcc</bcc>
+      <back-to-list>Quay lại danh sách</back-to-list>
+      <hide-message-list>Ẩn khung danh sách thư.</hide-message-list>
+      <vertical-split-layout>Hiện khung danh sách thư.</vertical-split-layout>
     </label>
     <msg>
       <trouble-loading-event>Sự kiện này đã bị xóa hoặc bạn đã mất quyền xem !</trouble-loading-event>
       <confirm-remove-message>Bạn có chắc muốn xóa thư này ?</confirm-remove-message>
       <return-receipt-subject>Sắp xếp báo cáo</return-receipt-subject>
-			<return-receipt-text>Thư đã gửi vào {0} tới {1} với chủ đề "{2}" đã được hiển thị. Điều này không đảm bảo thư đã được đọc hay hiểu.</return-receipt-text>
+      <return-receipt-text>Thư đã gửi vào {0} tới {1} với chủ đề "{2}" đã được hiển thị. Điều này không đảm bảo thư đã được đọc hay hiểu.</return-receipt-text>
     </msg>
     <UIIntroduction>
       <label>
         <title>Chủ đề</title>
-        <subject>Chào mừng đến với eXo thư - Bộ sản phẩm cộng </subject>
+        <subject>Chào mừng đến với eXo thư - Bộ sản phẩm cộng</subject>
         <commentwarning>Làm ơn, không trả lời thư này !</commentwarning>
         <welcome>Chào mừng</welcome>
         <overview>Khái quát</overview>
@@ -842,12 +881,25 @@
       <has-attachment>Tệp đính kèm</has-attachment>
       <option>
         <priority />
+        <priority.0>-- Chọn --</priority.0>
+        <priority.1>Cao</priority.1>
+        <priority.3>Trung bình</priority.3>
+        <priority.5>Thấp</priority.5>
       </option>
       <Inbox>Hộp thư đến</Inbox>
       <Drafts>Thư nháp</Drafts>
       <Sent>Thư đã gửi</Sent>
       <Spam>Thư rác</Spam>
       <Trash>Thùng rác</Trash>
+      <search-priority>Độ ưu tiên</search-priority>
+      <search-has-star>Có sao</search-has-star>
+      <search-has-attachment>Có đính kèm</search-has-attachment>
+      <option.0>Bao gồm</option.0>
+      <option.1>Không bao gồm</option.1>
+      <option.2>Là</option.2>
+      <option.3>Không phải là</option.3>
+      <option.4>Bắt đầu với</option.4>
+      <option.5>Kết thúc với</option.5>
     </label>
     <action>
       <Cancel>#{word.cancel}</Cancel>
@@ -856,6 +908,7 @@
     <msg>
       <date-time-invalid>Khoảng thời gian Từ - đến nhập sai</date-time-invalid>
       <search-query-invalid>Từ khóa tìm kiếm không được chứa ký tự đặc biệt.</search-query-invalid>
+      <invalid-date>Sai định dạng</invalid-date>
     </msg>
     <optionGroup>
       <label>
@@ -1063,10 +1116,12 @@
       <Drafts>Thư nháp</Drafts>
       <Sent>Thư đã gửi</Sent>
       <Spam>Thư rác</Spam>
-      <Trash>Thùng rác </Trash>
+      <Trash>Thùng rác</Trash>
       <option>
         <choose-tag>Chọn thẻ</choose-tag>
       </option>
+      <option.0>bao gồm</option.0>
+      <option.1>Không bao gồm</option.1>
     </label>
     <optionGroup>
       <label>
@@ -1106,6 +1161,9 @@
       <birthday>Ngày sinh</birthday>
       <email>Thư điện tử</email>
       <send-multi-email>Gửi thư</send-multi-email>
+      <option>
+        <sharedContacts>Liên hệ được chia sẻ</sharedContacts>
+      </option>
     </label>
     <action>
       <Close>Đóng</Close>
@@ -1119,6 +1177,7 @@
       <cannot-delete-ownerContact>Đây là liên lạc thuộc chủ nhân nên không xóa được</cannot-delete-ownerContact>
       <cannot-delete>Bạn không thể xóa ở đây. Hãy thử vào ứng dụng Liên Lạc để thực hiện</cannot-delete>
       <cannot-edit>Bạn không được cấp quyền sửa liên lạc này.</cannot-edit>
+      <no-selected-contact-to-send-mail>Không thể tìm địa chỉ email</no-selected-contact-to-send-mail>
     </msg>
     <optionGroup>
       <label>
@@ -1138,6 +1197,7 @@
     <title>
       <UIAddGroupForm>Thêm nhóm</UIAddGroupForm>
       <UIPopupAddContactForm>Thêm nhóm</UIPopupAddContactForm>
+      <UIPopupActionComposeContainer>Viết thông điệp mới</UIPopupActionComposeContainer>
     </title>
   </UIChildPopupWindowUIPopupActionAddressContainer>
   <UIChildPopupWindowUIPopupAddContactForm>
@@ -1177,14 +1237,14 @@
       <select-group>Chọn nhóm</select-group>
       <name>Tên</name>
       <first-name>Họ</first-name>
-      <last-name>Tên </last-name>
+      <last-name>Tên</last-name>
       <nickName>Tên hiệu</nickName>
       <email>Thư điện tử</email>
       <gender>Giới tính</gender>
       <day>Ngày</day>
       <month>Tháng</month>
       <year>Năm</year>
-      <birthday>Ngày sinh </birthday>
+      <birthday>Ngày sinh</birthday>
       <jobTitle>Nghề nghiệp</jobTitle>
       <male>Nam</male>
       <female>Nữ</female>
@@ -1208,6 +1268,7 @@
       <add-contact-successfully>Thêm liên lạc thành công.</add-contact-successfully>
       <email-invalid>Trường thư điện tử không đúng định dạng, nên giống như : votrenom@votresociete.com</email-invalid>
       <too-manyField>Số trường quá giới hạn</too-manyField>
+      <non-permission>Ban không có quyền thực hiện hành động này.</non-permission>
     </msg>
     <action>
       <Save>#{word.save}</Save>
@@ -1309,6 +1370,16 @@
         <low>Thấp</low>
       </option>
       <minutes>Phút</minutes>
+      <dateFrom>Từ</dateFrom>
+      <dateTo>Đến</dateTo>
+      <defaultEventCategoryIdAll>Tất cả</defaultEventCategoryIdAll>
+      <defaultEventCategoryIdMeeting>Họp</defaultEventCategoryIdMeeting>
+      <defaultEventCategoryIdCalls>Cuộc gọi</defaultEventCategoryIdCalls>
+      <defaultEventCategoryIdClients>Khách</defaultEventCategoryIdClients>
+      <defaultEventCategoryIdHoliday>Ngày nghỉ</defaultEventCategoryIdHoliday>
+      <defaultEventCategoryIdAnniversary>Lễ kỷ niệm</defaultEventCategoryIdAnniversary>
+      <defaultCalendarCategoryId>Nhóm của tôi</defaultCalendarCategoryId>
+      <defaultCalendarId>Mặc định</defaultCalendarId>
     </label>
     <msg>
       <summary-invalid>Tên sự kiện không được chứa {0} hoặc {1}</summary-invalid>
@@ -1356,6 +1427,7 @@
     <msg>
       <name-invalid>Tên nhóm không được trùng và không chứa ký tự đặc biệt</name-invalid>
       <name-required>Hãy nhập tên nhóm</name-required>
+      <name-exist>This category already exists.</name-exist>
     </msg>
   </UIEventCategoryForm>
   <!--
@@ -1368,6 +1440,7 @@
       <UIEventCategoryManager>Nhóm sự kiện</UIEventCategoryManager>
       <UIPopupActionContainer>Nhóm sự kiện</UIPopupActionContainer>
       <UIAddressForm>Chọn địa chỉ thư</UIAddressForm>
+      <UIAttachFileForm>Tệp đính kèm.</UIAttachFileForm>
     </title>
   </UIChildPopupWindowUIPopupActionEventContainer>
   <!--
@@ -1420,9 +1493,36 @@
       <stoping>Đang dừng</stoping>
       <hide>Ẩn</hide>
       <refresh>Tải lại</refresh>
+      <checkmail-notice>Check email now!</checkmail-notice>
+      <starting-status>Starting...</starting-status>
+      <fetching-mail>Fetching email messages...</fetching-mail>
+      <start-sync-folder>Synchronizing Imap folder...</start-sync-folder>
+      <finish-sync-folder>Synchronizing Imap folder has been finished!</finish-sync-folder>
+      <finish-check-mail>Checking email has been finished successfully!!!</finish-check-mail>
+      <finish-check-mail-by-interrupted>Checking email has been stopped due to user's action!!!</finish-check-mail-by-interrupted>
+      <error-connection-fail>Can not connect to email server!</error-connection-fail>
+      <msg-retry-password>Email account setting is invalid!</msg-retry-password>
+      <error-common>There are some problems while checking email.</error-common>
     </label>
     <msg>
       <deleted_account>Tài khoản đã bị xóa từ trước.</deleted_account>
     </msg>
   </UIFetchingBar>
+  <returnReceipts>
+    <label>
+      <askme>Ask me when someone requests a return receipt</askme>
+      <never>Never send a return receipt</never>
+      <always>Always send a return receipt</always>
+    </label>
+  </returnReceipts>
+  <UIAskmeReturnReceipt>
+    <label>
+      <warning_askme_text>The sender requested to be informed when you read this message. Would you like to tell him ?</warning_askme_text>
+    </label>
+    <action>
+      <Yes>Yes</Yes>
+      <No>No</No>
+    </action>
+  </UIAskmeReturnReceipt>
 </bundle>
+

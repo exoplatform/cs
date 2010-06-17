@@ -37,6 +37,8 @@
       <AddEvent>حدث جديد</AddEvent>
       <calendarActions>الحركات الخاصة بالرزامة</calendarActions>
       <groupActions>الحركات الخاصة بالمجموعة</groupActions>
+      <defaultCalendarCategoryId>My group</defaultCalendarCategoryId>
+      <defaultCalendarId>Default</defaultCalendarId>
     </label>
     <msg>
       <have-no-permission-to-edit>غير مسموح لك لتعديل هذه الرزنامة</have-no-permission-to-edit>
@@ -47,6 +49,7 @@
       <have-no-calendar>تم حذف الرزنامة أو لم يتم صُنعها !</have-no-calendar>
       <calendar-require>عليك أن تُــضيف الرزنامة أولاً</calendar-require>
       <not-support-edit-share-calendar>عملية '' تغيير'' الرزنامة المشتركة 'غير مدعومة' في الوقت الحالي !</not-support-edit-share-calendar>
+      <have-no-item>No items is selected.</have-no-item>
     </msg>
   </UICalendars>
   <!--
@@ -76,6 +79,7 @@
       <UIEventCategoryManager>فئات الأحداث</UIEventCategoryManager>
       <UIPopupAddTaskContainer>مُـهـمَّة</UIPopupAddTaskContainer>
       <UIEventPreview>عرض مسبّق</UIEventPreview>
+      <UIPopupCalendarSettingContainer>Calendar Setting</UIPopupCalendarSettingContainer>
     </title>
   </UICalendarPopupWindow>
   <UICalendarChildPopupWindow>
@@ -86,6 +90,10 @@
       <UICalendarCategoryManager>مجموعة رزنامات</UICalendarCategoryManager>
       <UIEventCategoryManager>فئات الأحداث</UIEventCategoryManager>
       <UIAddressForm>اختر بريد الكتروني</UIAddressForm>
+      <UIFeed>Calendar Feed</UIFeed>
+      <UIInvitationContainer>Invitations</UIInvitationContainer>
+      <UIConfirmForm>Confirm</UIConfirmForm>
+      <UIEditFeed>Edit Feed</UIEditFeed>
     </title>
   </UICalendarChildPopupWindow>
   <UISharedForm>
@@ -123,24 +131,24 @@
     </label>
   </UIAddEditPermission>
   <UIPopupWindowUserSelect>
-  	<title>
-  		<UIUserSelector>Select users</UIUserSelector>
-  	</title>
+    <title>
+      <UIUserSelector>Select users</UIUserSelector>
+    </title>
   </UIPopupWindowUserSelect>
   <UIPopupWindowUserSelectEventForm>
-  	<title>
-  		<UIUserSelector>Select users</UIUserSelector>
-  	</title>
+    <title>
+      <UIUserSelector>Select users</UIUserSelector>
+    </title>
   </UIPopupWindowUserSelectEventForm>
   <UIPopupWindowUserSelectTaskForm>
-  	<title>
-  		<UIUserSelector>Select users</UIUserSelector>
-  	</title>
+    <title>
+      <UIUserSelector>Select users</UIUserSelector>
+    </title>
   </UIPopupWindowUserSelectTaskForm>
   <UIPopupWindowAddUserEventForm>
-  	<title>
-  		<UIUserSelector>Select users</UIUserSelector>
-  	</title>
+    <title>
+      <UIUserSelector>Select users</UIUserSelector>
+    </title>
   </UIPopupWindowAddUserEventForm>
   <!--
   #org.exoplatform.calendar.webui.popup.UICalendarCategoryForm
@@ -184,12 +192,21 @@
         <SelectMemberShip>إختيار العضوية</SelectMemberShip>
         <EditPermission>تبديل الصلاحية</EditPermission>
         <SelectPermission>اختيار صلاحية</SelectPermission>
+        <public-url-msg-active>This calendar is public access.</public-url-msg-active>
+        <Open>Open</Open>
       </action>
       <locale>البلد (الغة)</locale>
       <timeZone>النطاق الزمني</timeZone>
       <selectGroups>عرض المجموعات</selectGroups>
       <selectColor>اللون</selectColor>
       <editPermission>صلاحية التغيير لــ :</editPermission>
+      <public-url>Public URL</public-url>
+      <private-url>Private URL</private-url>
+      <public-url-msg-active>This calendar is public access.</public-url-msg-active>
+      <public-url-msg-deactive>This calendar is not public access.</public-url-msg-deactive>
+      <Open>Open</Open>
+      <Active>Enable Public Access</Active>
+      <Deactive>Disable Public Access</Deactive>
     </label>
     <action>
       <Cancel>الغاء</Cancel>
@@ -204,6 +221,7 @@
       <category-empty>أضف مجموعة من الرزنامات أولا</category-empty>
       <checkbox-public-notchecked>اختر على الأقل مجموعة</checkbox-public-notchecked>
       <checkbox-notchecked>اختر{0} حتى تتمكن من تغيير هذه الصلاحية .</checkbox-notchecked>
+      <need-save-calendar-first>You have to save calendar first!</need-save-calendar-first>
     </msg>
   </UICalendarForm>
   <!--
@@ -232,6 +250,7 @@
       <label>
         <setting>إعدادات</setting>
         <defaultCalendarTab>رزنامات معروضة</defaultCalendarTab>
+        <feedTab>Feeds</feedTab>
       </label>
     </tab>
     <label>
@@ -252,9 +271,30 @@
       <sharedCalendar>رزنامات مُـشترَكـَة</sharedCalendar>
       <publicCalendar>رزنامات المجموعة</publicCalendar>
       <option>
-	    <dd-MM-yyyy>dd-mm-yyyy (ي ي-ش ش-س س س س)</dd-MM-yyyy>
+        <dd-MM-yyyy>dd-mm-yyyy (ي ي-ش ش-س س س س)</dd-MM-yyyy>
         <MM-dd-yyyy>mm-dd-yyyy (ش ش-ي ي-س س س س)</MM-dd-yyyy>
+        <dfm0>dd/mm/yyyy</dfm0>
+        <dfm1>dd-mm-yyyy</dfm1>
+        <dfm2>mm/dd/yyyy</dfm2>
+        <dfm3>mm-dd-yyyy</dfm3>
       </option>
+      <option.0>Day view</option.0>
+      <option.1>Week view</option.1>
+      <option.2>Month view</option.2>
+      <option.3>Year view</option.3>
+      <option.4>List view</option.4>
+      <option.5>Schedule view</option.5>
+      <option.6>Work week</option.6>
+      <option.12-Hours>AM/PM</option.12-Hours>
+      <option.24-Hours>24 Hours</option.24-Hours>
+      <option.1-wst>Sunday</option.1-wst>
+      <option.2-wst>Monday</option.2-wst>
+      <option.3-wst>Tuesday</option.3-wst>
+      <option.4-wst>Wednesday</option.4-wst>
+      <option.5-wst>Thursday</option.5-wst>
+      <option.6-wst>Friday</option.6-wst>
+      <option.7-wst>Saturday</option.7-wst>
+      <send>Send event invitations</send>
     </label>
     <action>
       <Cancel>إلغاء</Cancel>
@@ -290,6 +330,7 @@
       <AddAttachment>إرفاق ملف:</AddAttachment>
       <Save>#{word.save}</Save>
       <Cancel>#{word.cancel}</Cancel>
+      <AddUser>Add participant</AddUser>
     </action>
     <label>
       <eventName>خلاصة الحدث</eventName>
@@ -361,6 +402,14 @@
         <available>موجود</available>
         <outside>غير موجود</outside>
       </option>
+      <info>Participants :</info>
+      <answer>Attending ?</answer>
+      <always>Always</always>
+      <never>Never</never>
+      <ask>Ask</ask>
+      <send>Invitations sending</send>
+      <confirm-msg>"The event will be saved and invitations sent. Do you confirm?"</confirm-msg>
+      <messageName>Invitation message</messageName>
     </label>
     <msg>
       <summary-invalid>خُـلاصة الحدث لا تحتوي على {0}،{1}.</summary-invalid>
@@ -387,6 +436,8 @@
       <cant-send-email>يجب أن يكون لديك حساب في 'رسائل اكزو-eXo Mail' لتتمكن من إرسال رسائل البريد الإلكتروني.</cant-send-email>
       <error-send-email>لا يمكن إرسال الدعوة إلى المشاركين.حاول بعد قليل</error-send-email>
       <event-participant-invalid>invalid participant : {0}</event-participant-invalid>
+      <invalid-username>'{0}' is not a valid user name</invalid-username>
+      <confirm-delete>Do you confirm deletion this participant from the list ?</confirm-delete>
     </msg>
     <optionGroup>
       <label>
@@ -438,13 +489,13 @@
       <AddCalendar>إضافة رزنامة</AddCalendar>
       <permission>Edit permission</permission>
     </label>
-		<optionGroup>
-			<label>
-				<privateCalendar>Private Calendar</privateCalendar>
-				<sharedCalendar>Shared Calendar</sharedCalendar>
-				<publicCalendar>Public Calendar</publicCalendar>
-			</label>
-		</optionGroup>
+    <optionGroup>
+      <label>
+        <privateCalendar>Private Calendar</privateCalendar>
+        <sharedCalendar>Shared Calendar</sharedCalendar>
+        <publicCalendar>Public Calendar</publicCalendar>
+      </label>
+    </optionGroup>
     <msg>
       <file-name-error>يجب عليك  القيام بتحميل اللف أولا</file-name-error>
       <file-type-error>نوع الملف غير صحيح</file-type-error>
@@ -517,6 +568,14 @@
       <can-not-delete-all-event>لا يمكنك القيام بحذف هذه الأحداث</can-not-delete-all-event>
       <feed-list-empty>أنت لم تقم بعد بإحداث تدفق</feed-list-empty>
     </msg>
+    <label>
+      <defaultEventCategoryIdAll>All</defaultEventCategoryIdAll>
+      <defaultEventCategoryIdMeeting>Meeting</defaultEventCategoryIdMeeting>
+      <defaultEventCategoryIdCalls>Calls</defaultEventCategoryIdCalls>
+      <defaultEventCategoryIdClients>Clients</defaultEventCategoryIdClients>
+      <defaultEventCategoryIdHoliday>Holiday</defaultEventCategoryIdHoliday>
+      <defaultEventCategoryIdAnniversary>Anniversary</defaultEventCategoryIdAnniversary>
+    </label>
   </UICalendarView>
   <!--
   #org.exoplatform.calendar.webui.UISearchForm
@@ -597,6 +656,10 @@
         <confirmed>تم تثبيتها</confirmed>
         <canceled>تم إلغاؤها</canceled>
       </option>
+      <option.0>None</option.0>
+      <option.2>Normal</option.2>
+      <option.1>High</option.1>
+      <option.3>Low</option.3>
     </label>
     <action>
       <Cancel>#{word.cancel}</Cancel>
@@ -678,6 +741,7 @@
     </action>
     <msg>
       <confirm-delete>هل تـُؤكد عملية الحذف؟</confirm-delete>
+      <can-not-delete-calendar-in-use>You cannot delete this group. You are editing a calendar in this group.</can-not-delete-calendar-in-use>
     </msg>
   </UICalendarCategoryManager>
   <!--
@@ -696,6 +760,7 @@
     </action>
     <msg>
       <confirm-delete>هل تـُؤكد عملية الحذف؟</confirm-delete>
+      <cannot-delete>Can not delete this event category.</cannot-delete>
     </msg>
   </UIEventCategoryManager>
   <!--
@@ -722,6 +787,7 @@
       <UIListContainer>قائمة</UIListContainer>
       <UIScheduleView>جدول أعمال</UIScheduleView>
       <UIWorkingView>أسبوع العمل</UIWorkingView>
+      <DefaultLayout>Default layout</DefaultLayout>
     </label>
   </UIActionBar>
   <!--
@@ -781,7 +847,12 @@
         <canceled>تم إلغاؤها</canceled>
         <no-repeat>إعادة</no-repeat>
         <repeat>بدون إعادة</repeat>
+        <none>None</none>
+        <normal>Normal</normal>
+        <high>High</high>
+        <low>Low</low>
       </option>
+      <repeat>Repeat</repeat>
     </label>
     <msg>
       <summary-invalid>خُـلاصة الحدث لا تحتوي على {0}،{1}.</summary-invalid>
@@ -1085,6 +1156,7 @@
       <View>عرض</View>
       <Edit>تغيير</Edit>
       <Delete>حذف</Delete>
+      <ExportEvent>Export</ExportEvent>
     </label>
   </ContextMenu>
   <!--
@@ -1113,92 +1185,158 @@
   </UISelectUserForm>
   <!-- #org.exoplatform.calendar.webui.popup.UIInvitationForm -->
   <UIInvitationForm>
-  	<label>
-  	<default-invitation-msg>I am pleased to invite you to our event</default-invitation-msg>
-  	<participant>Participants</participant>
-  	<invitation-msg>Invitation Messages</invitation-msg>
-  	<contact-picker>Contact Picker</contact-picker>
-  	<user-picker>User Picker</user-picker>
-  	<group-picker>Group Picker</group-picker>
-  	</label>
-  	<action>
-  		<Save>Save</Save>
-  		<Cancel>Cancel</Cancel>
-  	</action>
+    <label>
+      <default-invitation-msg>I am pleased to invite you to our event</default-invitation-msg>
+      <participant>Participants</participant>
+      <invitation-msg>Invitation Messages</invitation-msg>
+      <contact-picker>Contact Picker</contact-picker>
+      <user-picker>User Picker</user-picker>
+      <group-picker>Group Picker</group-picker>
+    </label>
+    <action>
+      <Save>Save</Save>
+      <Cancel>Cancel</Cancel>
+    </action>
   </UIInvitationForm>
   <UIEventForm>
-  	<label>
-  		<info>Participants :</info>
-  		<answer>Attending ?</answer>
-  		<always>Always</always>
-  		<never>Never</never>
-  		<ask>Ask</ask>
-  		<send>Send invitations :</send>
-  		<confirm-msg>"Do you want to save and send invitation ?"</confirm-msg>
-  		<messageName>Invitation Message</messageName>
-  	</label>
+    <label>
+      <info>Participants :</info>
+      <answer>Attending ?</answer>
+      <always>Always</always>
+      <never>Never</never>
+      <ask>Ask</ask>
+      <send>Send invitations :</send>
+      <confirm-msg>"Do you want to save and send invitation ?"</confirm-msg>
+      <messageName>Invitation Message</messageName>
+    </label>
   </UIEventForm>
   <shareEvent>
-  	<label>
-  		<private>Private</private>
-  		<public>Public</public>
-  	</label>
+    <label>
+      <private>Private</private>
+      <public>Public</public>
+    </label>
   </shareEvent>
   <status>
-  	<label>
-  		<busy>Busy</busy>
-  		<available>Available</available>
-  		<outside>Outside</outside>
-  	</label>
+    <label>
+      <busy>Busy</busy>
+      <available>Available</available>
+      <outside>Outside</outside>
+    </label>
   </status>
   <send>
-  	<label>
-  		<setting>Use Calendar Setting</setting>
-  		<never>Never</never>
-  		<always>Always</always>
-  		<ask>Ask</ask>
-  	</label>
+    <label>
+      <setting>Use Calendar Setting</setting>
+      <never>Never</never>
+      <always>Always</always>
+      <ask>Ask</ask>
+    </label>
   </send>
   <UICalendarChildPopupWindow>
-  	<title>
-  		<UIInvitationContainer>Invitations</UIInvitationContainer>
-  	</title>
+    <title>
+      <UIInvitationContainer>Invitations</UIInvitationContainer>
+    </title>
   </UICalendarChildPopupWindow>
   <PUIPopupGroupSelector>
-  	<title>
-  		<PGroupSelector>Select group</PGroupSelector>
-  	</title>
+    <title>
+      <PGroupSelector>Select group</PGroupSelector>
+    </title>
   </PUIPopupGroupSelector>
   <UIPopupWindow3>
-  	<title>
-  		<UIAddressForm>Add Contact</UIAddressForm>
-  	</title>
+    <title>
+      <UIAddressForm>Add Contact</UIAddressForm>
+    </title>
   </UIPopupWindow3>
   <UICalendarSettingForm>
-  	<label>
-  		<send>Send event invitations</send>
-  	</label>
+    <label>
+      <send>Send event invitations</send>
+    </label>
   </UICalendarSettingForm>
   <UIPopupWindow>
-  	<title>
-  		<UIAddressForm>Select Address</UIAddressForm>
-  	</title>
+    <title>
+      <UIAddressForm>Select Address</UIAddressForm>
+    </title>
   </UIPopupWindow>
-  
   <!-- #org.exoplatform.calendar.webui.popup.UIConfirmForm -->
   <UICalendarChildPopupWindow>
-  	<title>
-  		<UIConfirmForm>Confirm</UIConfirmForm>
-  	</title>
+    <title>
+      <UIConfirmForm>Confirm</UIConfirmForm>
+    </title>
   </UICalendarChildPopupWindow>
   <UIConfirmForm>
-  	<label>
-  		<confirm>Message</confirm>
-  	</label>
-  	<action>
-  		<ConfirmOK>Save and Send</ConfirmOK>
-  		<ConfirmCancel>Save</ConfirmCancel>
-  	</action>
+    <label>
+      <confirm>Message</confirm>
+    </label>
+    <action>
+      <ConfirmOK>Save and Send</ConfirmOK>
+      <ConfirmCancel>Save</ConfirmCancel>
+    </action>
   </UIConfirmForm>
+  <eventShare>
+    <header>
+      <participant>Participant</participant>
+      <status>Status</status>
+      <action />
+    </header>
+    <action>
+      <title>
+        <Delete>Delete</Delete>
+      </title>
+    </action>
+  </eventShare>
+  <UICalendarSettingFeedTab>
+    <msg>
+      <confirm-delete>Do you confirm deletion this feed from the list ?</confirm-delete>
+    </msg>
+  </UICalendarSettingFeedTab>
+  <feedTab>
+    <header>
+      <feed>Feed</feed>
+      <action>Action</action>
+    </header>
+    <action>
+      <title>
+        <Delete>Delete</Delete>
+        <Edit>Edit</Edit>
+        <CalendarFeed>URL</CalendarFeed>
+      </title>
+      <add>Add</add>
+    </action>
+  </feedTab>
+  <UIEditFeed>
+    <label>
+      <name>Name</name>
+      <defaultFeedName>Calendar_Feed</defaultFeedName>
+      <url>URL</url>
+      <calendars>Calendars</calendars>
+      <addMore>add more</addMore>
+      <option>
+        <selectCalendar>--select calendar--</selectCalendar>
+      </option>
+    </label>
+    <action>
+      <Save>Save</Save>
+      <Close>Close</Close>
+      <delete>Delete</delete>
+      <ResetURL>Reset URL</ResetURL>
+      <GenerateURL>Generate URL</GenerateURL>
+    </action>
+    <msg>
+      <no-data-generated>This calendar is empty. The feed was not generated.</no-data-generated>
+      <feed-has-been-generated>The feed {0} has been generated successfully.</feed-has-been-generated>
+      <invalidCalName>""</invalidCalName>
+      <selectCalendar>Select calendar to generate.</selectCalendar>
+      <feedName_existed>This name already exist please choose a new name.</feedName_existed>
+    </msg>
+  </UIEditFeed>
+  <UIQuckAddEventPopupWindow>
+    <title>
+      <UIQuickAddEvent>Quick add event</UIQuickAddEvent>
+    </title>
+  </UIQuckAddEventPopupWindow>
+  <UIQuckAddTaskPopupWindow>
+    <title>
+      <UIQuickAddTask>Quick add task</UIQuickAddTask>
+    </title>
+  </UIQuckAddTaskPopupWindow>
 </bundle>
 

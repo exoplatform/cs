@@ -63,6 +63,7 @@
       <UIPopupAddEventContainer>إضافة / تغيير حدث</UIPopupAddEventContainer>
       <UIComfirmPassword>أدخل كلمة السر</UIComfirmPassword>
       <UIEnterPasswordDialog>أدخل كلمة السر</UIEnterPasswordDialog>
+      <UIAskmeReturnReceipt>Confirm return receipt</UIAskmeReturnReceipt>
     </title>
   </UIPopupWindow>
   <UIAccountCreation>
@@ -87,7 +88,7 @@
       <emailAddress>عنوان البريد الالكتروني</emailAddress>
       <emailReply>عنوان البريد الالكتروني الخاص بالجواب</emailReply>
       <signature>الإمضاء</signature>
-      <serverType>نوع الـمُزوّد </serverType>
+      <serverType>نوع الـمُزوّد</serverType>
       <incomingServer>الـمُزوّد الداخل</incomingServer>
       <incomingPort>المَـنفذ الداخل</incomingPort>
       <outgoingServer>الـمُزوّد الخارج</outgoingServer>
@@ -102,9 +103,9 @@
       <savePassword>حفظ كلمة السر</savePassword>
     </label>
     <msg>
-      <confirm-cancel>لم تتم بعد عمليّة إنشاء الحساب الخاصّ بك، هل مازلت تريد مُغادرة المُساعد في معالجة الحسابات ؟  </confirm-cancel>
+      <confirm-cancel>لم تتم بعد عمليّة إنشاء الحساب الخاصّ بك، هل مازلت تريد مُغادرة المُساعد في معالجة الحسابات ؟</confirm-cancel>
       <fields-requirement>القيمة منقوصة</fields-requirement>
-      <create-acc-successfully> عملية إنشاء الحساب  قد تمت بنجاح</create-acc-successfully>
+      <create-acc-successfully>عملية إنشاء الحساب  قد تمت بنجاح</create-acc-successfully>
       <getMail-unsuccessfully>طرأ خطأ  أثناء استرجاع الرسائل على الـمُزوّد</getMail-unsuccessfully>
       <userName-password-incorrect>اسم المستخدم أو كلمة السر غير صحيحة</userName-password-incorrect>
       <account-name-requirement>يجب عليك أن تُـعطي اسمـًـا لهذا الحساب</account-name-requirement>
@@ -119,6 +120,7 @@
       <outgoing-port-is-not-number>الرقم الخاص بالمنفذ الداخل يجب أن يكون عددًا، الرجاء طلب الاستفسار من مُدريك (المختص المسؤول عن إدارة عمل أنظمة الحاسوب أو أنظمة الاتصالات أو كليهما معًا).</outgoing-port-is-not-number>
       <username-requirement>أدخل اسم المستخدم الخاص بالبريدات الالكترونية</username-requirement>
       <password-requirement>أدخل كلمة السر الخاصة بالبريدات الالكترونية</password-requirement>
+      <create-acc-unsuccessfully>Your account could not be configured properly. Please contact your administrator.</create-acc-unsuccessfully>
     </msg>
     <action>
       <Next>#{word.next}</Next>
@@ -148,7 +150,7 @@
     <info>
       <label1>قم باختيار الـمُزوّد الداخلي الذي تستعمله</label1>
       <label2>أدخل أسماء مزوّدي البريد الإلكتروني ، على سبيل المثال mail.mycompany.com</label2>
-      <label3> في حالة شكّ، اتصل بـمُـدريك (المختص المسؤول عن إدارة عمل أنظمة الحاسوب أو أنظمة الاتصالات أو كليهما معًا).</label3>
+      <label3>في حالة شكّ، اتصل بـمُـدريك (المختص المسؤول عن إدارة عمل أنظمة الحاسوب أو أنظمة الاتصالات أو كليهما معًا).</label3>
     </info>
   </UIAccountWizardStep3>
   <UIAccountWizardStep4>
@@ -158,7 +160,7 @@
   </UIAccountWizardStep4>
   <UIAccountWizardStep5>
     <info>
-      <label1>تثبّت من صحة المعلومات التالية  قبل خروجك من المساعد في معالجة الحسابات. </label1>
+      <label1>تثبّت من صحة المعلومات التالية  قبل خروجك من المساعد في معالجة الحسابات.</label1>
     </info>
   </UIAccountWizardStep5>
   <UIFormInputSetWithAction>
@@ -191,7 +193,7 @@
       <description>الوصف</description>
       <checkFromDate>فحص الرسائل بعد التاريخ المحدد</checkFromDate>
       <fromDate>الحصول على رسائل البريد الالكترونية التي  يعود تاريخها فقط إلى</fromDate>
-      <yourOutgoingName> المعرف الوحيد للمزود الخارج</yourOutgoingName>
+      <yourOutgoingName>المعرف الوحيد للمزود الخارج</yourOutgoingName>
       <yourEmailAddress>عنوان البريد الالكتروني</yourEmailAddress>
       <replyToAddress>عنوان البريد الالكتروني الخاص بالإجابة</replyToAddress>
       <incomingAccount>المعرف الوحيد للبريدات الالكترونية</incomingAccount>
@@ -200,7 +202,7 @@
       <mailSignature>الإمضاء</mailSignature>
       <placeSignature>إضافة الإمضاء</placeSignature>
       <applySignatureBy>تطبيق الإمضاء بـ</applySignatureBy>
-      <serverType>نوع الـمُزوّد </serverType>
+      <serverType>نوع الـمُزوّد</serverType>
       <incomingServer>الـمُزوّد الداخل</incomingServer>
       <outgoingServer>الـمُزوّد الخارج</outgoingServer>
       <messageComeInFolder>المُـجلّــد الخاص بتجميع الرّسائل</messageComeInFolder>
@@ -215,15 +217,19 @@
       <emptyTrashWhenExit>أفرغ محتوى سلة المهملات عند المغادرة</emptyTrashWhenExit>
       <option>
         <signOnHead>ترويسة  الرسالة</signOnHead>
-        <signOnFoot>أسفل الرسالة </signOnFoot>
+        <signOnFoot>أسفل الرسالة</signOnFoot>
       </option>
       <delete-acc>حذف حساب</delete-acc>
+      <isOutgoingAuthentication>Enable SMTP authentication</isOutgoingAuthentication>
+      <useIncomingSettingForOutgoingAuthent>Use incoming server username/password</useIncomingSettingForOutgoingAuthent>
+      <outgoingUsername>Username</outgoingUsername>
+      <outgoingPassword>Password</outgoingPassword>
     </label>
     <msg>
       <edit-acc-successfully>تم تحديث الحساب</edit-acc-successfully>
       <edit-acc-unsuccessfully>لا يمكن تحديث الحساب</edit-acc-unsuccessfully>
       <please-choose-specified-date>الرجاء اختيار التاريخ المحدد</please-choose-specified-date>
-      <email-address-is-invalid></email-address-is-invalid>
+      <email-address-is-invalid />
       <reply-address-is-invalid>يبدو أن صيغة عنوان البريد الإلكتروني الذي أدخلته غير صالحة. يجب أن تـُـشبه  شيئـًا من هذا القبيل:  votrenom@votresociete.com</reply-address-is-invalid>
       <incoming-port-is-not-number>الرقم الخاص بالمنفذ الداخل يجب أن يكون عددًا، الرجاء طلب الاستفسار من مُدريك (المختص المسؤول عن إدارة عمل أنظمة الحاسوب أو أنظمة الاتصالات أو كليهما معًا).</incoming-port-is-not-number>
       <outgoing-port-is-not-number>الرقم الخاص بالمنفذ الداخل يجب أن يكون عددًا، الرجاء طلب الاستفسار من مُدريك (المختص المسؤول عن إدارة عمل أنظمة الحاسوب أو أنظمة الاتصالات أو كليهما معًا).</outgoing-port-is-not-number>
@@ -243,7 +249,7 @@
       <compose-message-in>تأليف  الرسائل بـواسطة</compose-message-in>
       <reply-forward-as>شكل الرسائل</reply-forward-as>
       <reply-message-with>أجب على الرسائل بواسطة</reply-message-with>
-      <forward-message-with> إعادة توجيه الرسائل بواسطة</forward-message-with>
+      <forward-message-with>إعادة توجيه الرسائل بواسطة</forward-message-with>
       <prefix-message-with>إضافة بادئة للرسائل  بواسطة</prefix-message-with>
       <save-sent-message>حفظ الرسالات التي تم ارسالها في ''البريد المُرسَل''</save-sent-message>
       <general-settings>عامّ</general-settings>
@@ -265,33 +271,47 @@
         </format>
         <replywith>
           <true>الرسالة الأصلية كملف مُــرفق</true>
-          <false>نص الرسالة الأصلية في ''اصُلْب الرسالة'' </false>
+          <false>نص الرسالة الأصلية في ''اصُلْب الرسالة''</false>
         </replywith>
         <forwardwith>
           <true>الرسالة الأصلية كملف مُــرفق</true>
-          <false>نص الرسالة الأصلية في ''اصُلْب الرسالة'' </false>
+          <false>نص الرسالة الأصلية في ''اصُلْب الرسالة''</false>
         </forwardwith>
+        <period.0>Never</period.0>
+        <period.5>5 minutes</period.5>
+        <period.10>10 minutes</period.10>
+        <period.20>20 minutes</period.20>
+        <period.30>30 minutes</period.30>
+        <period.60>1 hour</period.60>
       </option>
+      <returnReceipts />
     </label>
     <action>
       <Save>#{word.save}</Save>
       <Cancel>#{word.cancel}</Cancel>
     </action>
+    <tab>
+      <label>
+        <general>General</general>
+        <return-receipt>Return Receipts</return-receipt>
+        <layout>Layout</layout>
+      </label>
+    </tab>
   </UIMailSettings>
   <UIMailSettings-VerticalLayout>
-  	<label>
-  		<vertical-layout>Vertical Split</vertical-layout>
-  	</label>
+    <label>
+      <vertical-layout>Vertical Split</vertical-layout>
+    </label>
   </UIMailSettings-VerticalLayout>
   <UIMailSettings-HorizontalLayout>
-  	<label>
-  		<horizontal-layout>Horizontal Split</horizontal-layout>
-  	</label>
+    <label>
+      <horizontal-layout>Horizontal Split</horizontal-layout>
+    </label>
   </UIMailSettings-HorizontalLayout>
   <UIMailSettings-NosplitLayout>
-  	<label>
-  		<nosplit-layout>No Split</nosplit-layout>
-  	</label>
+    <label>
+      <nosplit-layout>No Split</nosplit-layout>
+    </label>
   </UIMailSettings-NosplitLayout>
   <UIAddressForm>
     <action>
@@ -299,9 +319,9 @@
       <Cancel>#{word.cancel}</Cancel>
     </action>
     <label>
-      <contact-group>المجموعة </contact-group>
+      <contact-group>المجموعة</contact-group>
       <contact-search>ابحث</contact-search>
-      <change-group>تغيير المجموعة </change-group>
+      <change-group>تغيير المجموعة</change-group>
       <quick-search>عملية بحث سريعة</quick-search>
       <addresses-from-group>دفتر العناوين</addresses-from-group>
       <name>الاسم</name>
@@ -309,6 +329,12 @@
       <add-address>إضافة عنوان بريد الكتروني</add-address>
       <replace>استبدل</replace>
       <cancel>#{word.cancel}</cancel>
+      <selected-group>Send to all</selected-group>
+      <checkAll>Check all</checkAll>
+      <option>
+        <all>All contacts</all>
+        <sharedContacts>shared contacts</sharedContacts>
+      </option>
     </label>
     <msg>
       <search-error-keyword>قم بإدخال نصّ عادي في المجال المخصص للبحث</search-error-keyword>
@@ -321,6 +347,7 @@
         <public-contacts>دفاتر عموميّة</public-contacts>
         <shared-contacts>دفاتر مُشترَكة</shared-contacts>
         <public-groups-contacts>المجموعات العموميّة</public-groups-contacts>
+        <shared>Shared address books</shared>
       </label>
     </optionGroup>
   </UIAddressForm>
@@ -422,7 +449,7 @@
       <name-invalid>اسم المُجلـد لا يحتوي على {0} ، {1} ، {2} ،{3}</name-invalid>
       <error-create-folder>لا يُمكن إنشاء هذا المجلد</error-create-folder>
       <folder-exist>المجلّد '{0}' موجود من السّابق</folder-exist>
-      <add-folder-successfuly> تمّت عمليّة  إنشاء المجلّد '{0}' بنجاح</add-folder-successfuly>
+      <add-folder-successfuly>تمّت عمليّة  إنشاء المجلّد '{0}' بنجاح</add-folder-successfuly>
     </msg>
   </UIFolderForm>
   <!--
@@ -469,7 +496,7 @@
       <send-mail>أرسل</send-mail>
       <save-as-a-draft>مُـسودّة</save-as-a-draft>
       <discard>إلغاء</discard>
-      <attach-file> المُرفق (ــات).</attach-file>
+      <attach-file>المُرفق (ــات).</attach-file>
       <message-priority>الأولويّـة</message-priority>
       <low-priority>ضئيلة</low-priority>
       <normal-priority>مُتوسّطة</normal-priority>
@@ -479,9 +506,11 @@
       <plain-text>عادي</plain-text>
       <add-cc>نسخة إلى</add-cc>
       <add-bcc>نُسخة مخفيّة الوجهة</add-bcc>
+      <options>Options</options>
+      <returnReceipt>Return Receipt</returnReceipt>
     </label>
     <msg>
-      <to-field-required>أدخل على الأقلّ الــ'' مُرسَل إليه'' في المجال ''إلى:'' </to-field-required>
+      <to-field-required>أدخل على الأقلّ الــ'' مُرسَل إليه'' في المجال ''إلى:''</to-field-required>
       <send-mail-error>حدث خطأ أثناء عمليّة إرسال البريد الإلكتروني.</send-mail-error>
       <save-sent-error>حدث خطأ أثناء عمليّة النّسخ في البريد المُــرسَل.</save-sent-error>
       <send-mail-succsessfuly>لقد تمّ إرسال بريدك.</send-mail-succsessfuly>
@@ -498,6 +527,9 @@
       <the-username-or-password-may-be-wrong-sending-failed>اسم المستخدم أو كلمة السر قد تكون خاطئة. فشل في عمليّة الإرسال.</the-username-or-password-may-be-wrong-sending-failed>
       <sorry-there-was-an-error-sending-the-message-sending-failed>عُذرًا ، طرأ خطأ أثناء مُحاولة إرسال الرّسالة. فشل في عمليّة الإرسال!</sorry-there-was-an-error-sending-the-message-sending-failed>
       <there-was-an-unexpected-error-sending-falied>عُذرًا ، طرأ خطأ غير متوقَّع. فشل في عمليّة الإرسال!</there-was-an-unexpected-error-sending-falied>
+      <no-subject>It looks like your message has no Subject. Send anyway ?</no-subject>
+      <please-check-configuration-for-smtp-server>Communication with the server failed. Save the message and verify the outgoing server.</please-check-configuration-for-smtp-server>
+      <check-authentication-smtp-outgoingServer>Authentication Required.Please check SMTP authentication for outgoing server.</check-authentication-smtp-outgoingServer>
     </msg>
   </UIComposeForm>
   <!--
@@ -537,6 +569,7 @@
       <upload-error>حجم هذا الملف ضخم جدّا</upload-error>
       <fileName-error>اسم الملف غير صالح</fileName-error>
       <size-attachs-must-be-smaller-than-10M>الحد الأقصى لحجم المرفقات لا يُمكن أن يتجاوز 10 ميغابايت.</size-attachs-must-be-smaller-than-10M>
+      <unformat-imagefile>The file is not image format, please select again.</unformat-imagefile>
     </msg>
   </UIAttachFileForm>
   <!--
@@ -630,7 +663,7 @@
     </action>
     <msg>
       <confirm-delete>هل ترغب حقّـا في حذف هذا الحساب ؟</confirm-delete>
-      <remove-accout-error>لا يمكنك حذف هذا الحساب </remove-accout-error>
+      <remove-accout-error>لا يمكنك حذف هذا الحساب</remove-accout-error>
     </msg>
   </UIAccountList>
   <!--
@@ -690,7 +723,7 @@
       <receiving-messages>استلام الرسائل...</receiving-messages>
       <there-are-no-messages>لا تُوجد رسائل</there-are-no-messages>
       <mark-as-read>تمّت قراءتها</mark-as-read>
-      <more-actions>أكثر إجراءات </more-actions>
+      <more-actions>أكثر إجراءات</more-actions>
       <mark-as-unread>لم تتمّ قراءتها</mark-as-unread>
       <add-star>إضافة نجمة</add-star>
       <remove-star>حذف النّجمة</remove-star>
@@ -713,7 +746,7 @@
       <print>طباعة</print>
       <reply-to-sender>الردّ</reply-to-sender>
       <reply-to-all>الردّ على الجميع</reply-to-all>
-      <forward> إعادة توجيه</forward>
+      <forward>إعادة توجيه</forward>
       <create-filter-from-this>إنشاء فلتر</create-filter-from-this>
       <move-to-folder>تحويل إلى المُـجلّــد</move-to-folder>
       <tag>إضافة علامة</tag>
@@ -742,7 +775,7 @@
       <hide>إخفاء</hide>
       <refresh>تحديث</refresh>
       <check-all>اختر الجميع</check-all>
-      <attachment> المُرفق (ــات).</attachment>
+      <attachment>المُرفق (ــات).</attachment>
       <sort-by-sender>ترتيب حسب المُرْسِل.</sort-by-sender>
       <add-star-for-this-message>إضافة نجمة لهذه الرّسالة</add-star-for-this-message>
       <sort-by-subject>ترتيب حسب الموضوع.</sort-by-subject>
@@ -752,6 +785,8 @@
       <total-messages-in-conversation>العدد الجملي للرسالات في هذه المحادثة</total-messages-in-conversation>
       <no-subject>(بدون موضوع)</no-subject>
       <there-are-attachments-could-not-be-loaded-properly>لا يُمكن تحميل هذه المُرفقات بشكل سليم !</there-are-attachments-could-not-be-loaded-properly>
+      <groupBy>Group by</groupBy>
+      <groupByReceivedDate>Received date</groupByReceivedDate>
     </label>
   </UIMessageList>
   <!--
@@ -770,7 +805,7 @@
       <print>طباعة</print>
       <reply-to-sender>الردّ</reply-to-sender>
       <reply-to-all>الردّ على الجميع</reply-to-all>
-      <forward> إعادة توجيه</forward>
+      <forward>إعادة توجيه</forward>
       <create-filter-from-this>إنشاء فلتر</create-filter-from-this>
       <move-to-folder>تحويل إلى المُـجلّــد</move-to-folder>
       <tag>إضافة علامة</tag>
@@ -797,12 +832,16 @@
       <yes>Yes</yes>
       <no>No</no>
       <maybe>Maybe</maybe>
+      <bcc>Bcc</bcc>
+      <back-to-list>Back to List</back-to-list>
+      <hide-message-list>Hide message list pane</hide-message-list>
+      <vertical-split-layout>Show message list pane</vertical-split-layout>
     </label>
     <msg>
       <trouble-loading-event>هذا "الحدث" قد تمّ حذفهُ ، أو أنّك قد لا تستطيع الوصول إليه !</trouble-loading-event>
       <confirm-remove-message>هل ترغب حقّـا في حذف هذه الرّسالة؟</confirm-remove-message>
       <return-receipt-subject>Disposition notification</return-receipt-subject>
-			<return-receipt-text>The message sent on {0} to {1} with subject "{2}" has been displayed. This is no guarantee that the message has been read or understood.</return-receipt-text>
+      <return-receipt-text>The message sent on {0} to {1} with subject "{2}" has been displayed. This is no guarantee that the message has been read or understood.</return-receipt-text>
     </msg>
     <UIIntroduction>
       <label>
@@ -846,18 +885,31 @@
       <filter-from-condition>قُـيود على المُرسِـل</filter-from-condition>
       <filter-to-condition>قُـيود على المُرسَل إليه</filter-to-condition>
       <filter-subject-condition>قُـيود على الموضوع</filter-subject-condition>
-      <filter-body-condition>قُيود على''اصُلْب الرسالة'' </filter-body-condition>
+      <filter-body-condition>قُيود على''اصُلْب الرسالة''</filter-body-condition>
       <has-star>بريد له نـجمة</has-star>
       <priority>الأولويّـة</priority>
       <has-attachment>مع المُرفق (ــات).</has-attachment>
       <option>
         <priority />
+        <priority.0>--Choose--</priority.0>
+        <priority.1>High</priority.1>
+        <priority.3>Normal</priority.3>
+        <priority.5>Low</priority.5>
       </option>
       <Inbox>البريد الوارد</Inbox>
       <Drafts>مُــسودّات</Drafts>
       <Sent>البريد المـُــرسَل</Sent>
       <Spam>بريد مزعج</Spam>
       <Trash>سلّة المُــهملات</Trash>
+      <search-priority>Priority</search-priority>
+      <search-has-star>Has star</search-has-star>
+      <search-has-attachment>Has attachment</search-has-attachment>
+      <option.0>contains</option.0>
+      <option.1>does not contain</option.1>
+      <option.2>is</option.2>
+      <option.3>is not</option.3>
+      <option.4>starts with</option.4>
+      <option.5>ends with</option.5>
     </label>
     <action>
       <Cancel>#{word.cancel}</Cancel>
@@ -866,6 +918,7 @@
     <msg>
       <date-time-invalid>التاريخ المُخصصّ لــ'إلى' يجب أن يكون أكبر من التاريخ المُخصصّ لــ'من'.</date-time-invalid>
       <search-query-invalid>لم يتم التعرف على عبارة البحث التي أدخلتها. يرجى التأكد من أنّها مكتوبة بالشكل الصحيح أو حاول أن تختار عبارة أخرى مُبَسَّطـة .</search-query-invalid>
+      <invalid-date>Receive after and Received before field must be date type.</invalid-date>
     </msg>
     <optionGroup>
       <label>
@@ -1080,6 +1133,8 @@
       <option>
         <choose-tag>-- اخـتــر --</choose-tag>
       </option>
+      <option.0>contains</option.0>
+      <option.1>doesn't contain</option.1>
     </label>
     <optionGroup>
       <label>
@@ -1105,7 +1160,7 @@
   -->
   <UIAddressBookForm>
     <label>
-      <select-group>المجموعة </select-group>
+      <select-group>المجموعة</select-group>
       <add-new-group>مجموعة جديدة</add-new-group>
       <add-new-contact>إنشاء جهة اتصال جديدة</add-new-contact>
       <edit-contact>تغيير جهة اتصال</edit-contact>
@@ -1119,6 +1174,9 @@
       <birthday>تاريخ الولادة</birthday>
       <email>البريد الاكتروني</email>
       <send-multi-email>Send Email</send-multi-email>
+      <option>
+        <sharedContacts>Shared contacts</sharedContacts>
+      </option>
     </label>
     <action>
       <Close>إغلاق</Close>
@@ -1132,6 +1190,7 @@
       <cannot-delete-ownerContact>لا يمكنُك حذف جهة الاتّصال هذه، نظرًا لكونها صاحبة الدفتر (دفتر العناوين).</cannot-delete-ownerContact>
       <cannot-delete>إجراء غير مُمكن. حاول استعمال "دفتر العناوين" الخاصّ بإكزو حتّى  تتمكّن من القيام بالوظائف المُـتطوّرة.</cannot-delete>
       <cannot-edit>إجراء غير مُمكن. حاول استعمال "دفتر العناوين" الخاصّ بإكزو حتّى  تتمكّن من القيام بالوظائف المُـتطوّرة.</cannot-edit>
+      <no-selected-contact-to-send-mail>Impossible to find an email address.</no-selected-contact-to-send-mail>
     </msg>
     <optionGroup>
       <label>
@@ -1151,6 +1210,7 @@
     <title>
       <UIAddGroupForm>مجموعة جديدة</UIAddGroupForm>
       <UIPopupAddContactForm>إضافة / تغيير  جهة اتصال</UIPopupAddContactForm>
+      <UIPopupActionComposeContainer>Compose a new message</UIPopupActionComposeContainer>
     </title>
   </UIChildPopupWindowUIPopupActionAddressContainer>
   <UIChildPopupWindowUIPopupAddContactForm>
@@ -1217,10 +1277,11 @@
       <name-required>أدخل الاسم و اللّقب</name-required>
       <birthday-incorrect>صيغة تاريخ الولادة غير صحيحة</birthday-incorrect>
       <date-time-invalid>هذا الشخص لم يُولد بعد...الرّجاء،  تثبّت من صحّة تاريخ الولادة.</date-time-invalid>
-      <email-required>أدخل عنوان البريد الالكتروني </email-required>
+      <email-required>أدخل عنوان البريد الالكتروني</email-required>
       <add-contact-successfully>تمّ إضافة جهة الاتّصال في دفتر العناوين بنجاح.</add-contact-successfully>
-      <email-invalid> يبدو أن صيغة عنوان البريد الإلكتروني الذي أدخلته غير صالحة. يجب أن تـُـشبه  شيئـًا من هذا القبيل:  votrenom@votresociete.com</email-invalid>
+      <email-invalid>يبدو أن صيغة عنوان البريد الإلكتروني الذي أدخلته غير صالحة. يجب أن تـُـشبه  شيئـًا من هذا القبيل:  votrenom@votresociete.com</email-invalid>
       <too-manyField>قمت بإضافة الكثير في هذا المجال</too-manyField>
+      <non-permission>You do not have permission to perform this action.</non-permission>
     </msg>
     <action>
       <Save>#{word.save}</Save>
@@ -1322,6 +1383,16 @@
         <low>ضئيلة</low>
       </option>
       <minutes>دقائق</minutes>
+      <dateFrom>From</dateFrom>
+      <dateTo>To</dateTo>
+      <defaultEventCategoryIdAll>All</defaultEventCategoryIdAll>
+      <defaultEventCategoryIdMeeting>Meeting</defaultEventCategoryIdMeeting>
+      <defaultEventCategoryIdCalls>Calls</defaultEventCategoryIdCalls>
+      <defaultEventCategoryIdClients>Clients</defaultEventCategoryIdClients>
+      <defaultEventCategoryIdHoliday>Holiday</defaultEventCategoryIdHoliday>
+      <defaultEventCategoryIdAnniversary>Anniversary</defaultEventCategoryIdAnniversary>
+      <defaultCalendarCategoryId>My group</defaultCalendarCategoryId>
+      <defaultCalendarId>Default</defaultCalendarId>
     </label>
     <msg>
       <summary-invalid>خُـلاصة الحدث لا تحتوي على {0}،{1}!</summary-invalid>
@@ -1369,6 +1440,7 @@
     <msg>
       <name-invalid>هذه الفئة غير صالحة أو أنّـها وُجــدت سابقًــا</name-invalid>
       <name-required>أعط اسمـًا للفئة</name-required>
+      <name-exist>This category already exists.</name-exist>
     </msg>
   </UIEventCategoryForm>
   <!--
@@ -1381,6 +1453,7 @@
       <UIEventCategoryManager>فئات الأحداث</UIEventCategoryManager>
       <UIPopupActionContainer>فئات الأحداث</UIPopupActionContainer>
       <UIAddressForm>العنوان</UIAddressForm>
+      <UIAttachFileForm>Attach files</UIAttachFileForm>
     </title>
   </UIChildPopupWindowUIPopupActionEventContainer>
   <!--
@@ -1433,10 +1506,36 @@
       <stoping>إيقاف</stoping>
       <hide>إخفاء</hide>
       <refresh>تحديث</refresh>
+      <checkmail-notice>Check email now!</checkmail-notice>
+      <starting-status>Starting...</starting-status>
+      <fetching-mail>Fetching email messages...</fetching-mail>
+      <start-sync-folder>Synchronizing Imap folder...</start-sync-folder>
+      <finish-sync-folder>Synchronizing Imap folder has been finished!</finish-sync-folder>
+      <finish-check-mail>Checking email has been finished successfully!!!</finish-check-mail>
+      <finish-check-mail-by-interrupted>Checking email has been stopped due to user's action!!!</finish-check-mail-by-interrupted>
+      <error-connection-fail>Can not connect to email server!</error-connection-fail>
+      <msg-retry-password>Email account setting is invalid!</msg-retry-password>
+      <error-common>There are some problems while checking email.</error-common>
     </label>
     <msg>
       <deleted_account>تمّ حذف الحساب من الخارج.</deleted_account>
     </msg>
   </UIFetchingBar>
+  <returnReceipts>
+    <label>
+      <askme>Ask me when someone requests a return receipt</askme>
+      <never>Never send a return receipt</never>
+      <always>Always send a return receipt</always>
+    </label>
+  </returnReceipts>
+  <UIAskmeReturnReceipt>
+    <label>
+      <warning_askme_text>The sender requested to be informed when you read this message. Would you like to tell him ?</warning_askme_text>
+    </label>
+    <action>
+      <Yes>Yes</Yes>
+      <No>No</No>
+    </action>
+  </UIAskmeReturnReceipt>
 </bundle>
 

@@ -32,6 +32,7 @@
       <UICategoryForm>دفتر العناوين</UICategoryForm>
       <UIImageForm>تحميل صُورة</UIImageForm>
       <UIComposeForm>إرسال بريد الكتروني</UIComposeForm>
+      <UIPopupContainer />
     </title>
   </contactActionUIPopupWindow>
   <UIPopupGroupSelector>
@@ -140,6 +141,7 @@
       <too-manyField>قمت بإضافة الكثير في هذا المجال.</too-manyField>
       <nameTooLong>الاسم الذي أدخلته في هذا المجال طويلٌ للغاية.</nameTooLong>
       <jobTooLong>المهنة التي أدخلتها في هذا المجال طويلةٌ للغاية.</jobTooLong>
+      <invalid-email>Invalid email address.</invalid-email>
     </msg>
   </UIContactForm>
   <!--
@@ -156,7 +158,7 @@
       <userExisted-categoryName>المستخدم {0}  لديه دفتر عناوين  يَحملُ نفس الاسم، الرّجاء اختر اسمًا آخر.</userExisted-categoryName>
       <category-deleted>لا يُمكنُك القيام بهذا الإجراء، دفتر العناوين هذا لم يعُد موجودًا.</category-deleted>
       <non-permission>لا يُمكنُك القيام بهذا الإجراء لأنّ صلاحيّتك في التّغيير قد تمّ حذفها.</non-permission>
-      <nameTooLong>الاسم الذي أدخلته في هذا المجال طويلٌ للغاية. </nameTooLong>
+      <nameTooLong>الاسم الذي أدخلته في هذا المجال طويلٌ للغاية.</nameTooLong>
     </msg>
     <label>
       <categoryName>الاسم</categoryName>
@@ -210,7 +212,7 @@
       <email>عنوان البريد الالكتروني</email>
       <name>الاسم</name>
       <addressBook>دفتر العناوين :</addressBook>
-      <tag>علامة : </tag>
+      <tag>علامة :</tag>
       <checkAll>اختيار الكُلّ</checkAll>
       <available>موجُود</available>
       <export>تصدير</export>
@@ -260,8 +262,8 @@
       <tagName-existed>هذه العلامة موجودة من السّابق، حاول أن تختار علامةً  أخرى.</tagName-existed>
       <checkTag-required>قُم بتحديد العلامة التي تُريد حذفها.</checkTag-required>
       <contact-not-existed>لا يُمكن إضافة علامة، جهة الاتّصال هذه لم  تعُد موجودةً.</contact-not-existed>
-      <contact-not-exist-remove>لا يُمكن إزالة  هذه العلامة، جهة الاتّصال هذه لم  تعُد موجودةً. </contact-not-exist-remove>
-      <nameTooLong>الاسم الذي أدخلته في هذا المجال طويلٌ للغاية. </nameTooLong>
+      <contact-not-exist-remove>لا يُمكن إزالة  هذه العلامة، جهة الاتّصال هذه لم  تعُد موجودةً.</contact-not-exist-remove>
+      <nameTooLong>الاسم الذي أدخلته في هذا المجال طويلٌ للغاية.</nameTooLong>
       <noTagRemoved>العلامة {0} غير موجودة في أيّ جهة اتّصال و بالتـّـالي لا يُمكنُ إزالتها !</noTagRemoved>
     </msg>
     <action>
@@ -288,7 +290,7 @@
       <tagName-required>أعط اسمًا لهذه العلامة</tagName-required>
       <tagName-existed>هذه العلامة موجودة من السّابق</tagName-existed>
       <tag-deleted>لا يُمكن القيام بهذا الإجراء، هذه العلامة لم تعُد موجودة.</tag-deleted>
-      <nameTooLong>الاسم الذي أدخلته في هذا المجال طويلٌ للغاية. </nameTooLong>
+      <nameTooLong>الاسم الذي أدخلته في هذا المجال طويلٌ للغاية.</nameTooLong>
     </msg>
     <action>
       <Save>حفظ</Save>
@@ -321,7 +323,7 @@
       <of>على</of>
       <contacts>جهات اتّصال</contacts>
       <sharedContacts>(جهات اتّصال مُشتَرَكة)</sharedContacts>
-      <copyContacts>نسخ جهات الاتّصال </copyContacts>
+      <copyContacts>نسخ جهات الاتّصال</copyContacts>
       <webSite>موقع الإنترنت</webSite>
       <viewDetails>رُؤية التّفاصيل</viewDetails>
       <firstPage>الصّفحة الأولى</firstPage>
@@ -356,6 +358,10 @@
       <chatApp-notAvaiable>خدمة دردشة إكزو  غير مُتوفّرة!</chatApp-notAvaiable>
       <checkContact-toChat>يجب عليك تحديد جهات الاتّصال حتّى تتمكّن من التحاور</checkContact-toChat>
       <contact-not-existed>لا يُمكن القيام بهذا الإجراء، جهة الاتّصال هذه لم  تعُد موجودة</contact-not-existed>
+      <have-no-item>No contact is selected.</have-no-item>
+      <noeditpermission>
+        <detail>You have not edit permission for {0} contact. Please check again.</detail>
+      </noeditpermission>
     </msg>
     <action>
       <print>طباعة</print>
@@ -394,6 +400,7 @@
       <no-email-found>لم نتمكّن من العثور على عنوان بريد الكتروني</no-email-found>
       <non-permission>أنت لا تملك الصّلاحيّات الكافية للقيام بهذا الإجراء.</non-permission>
       <removedPer>لا يُمكنُك القيام بهذا الإجراء لأنّ صلاحيّتك في التّغيير قد تمّ حذفها.</removedPer>
+      <confirm-discard>You are about to discard a shared address book. You will no longer be able to see it. Do you confirm?</confirm-discard>
     </msg>
     <label>
       <sharedContacts>جهات اتّصال مُشتَرَكة</sharedContacts>
@@ -417,6 +424,8 @@
       <collapse-expand>إظهار/إخفاء الجميع</collapse-expand>
       <defaultAddName>جهات الاتّصال الخاصّة بي</defaultAddName>
       <defaultAddDes>دفتري الشّخصي</defaultAddDes>
+      <discard>Discard</discard>
+      <collectedAddresses>Collected Addresses</collectedAddresses>
     </label>
   </UIAddressBooks>
   <!--
@@ -425,6 +434,7 @@
   <UITags>
     <msg>
       <confirm-delete>هل ترغب حقّـًا في حذف هذه العلامة ؟</confirm-delete>
+      <no-email-found>No email address was found on this contact.</no-email-found>
     </msg>
     <label>
       <tags>علامات</tags>
@@ -434,6 +444,7 @@
       <edit>تغيير</edit>
       <collapse-expand>إظهار/إخفاء الجميع</collapse-expand>
       <addTag>إضافة علامة جديدة</addTag>
+      <sendEmail>Email</sendEmail>
     </label>
   </UITags>
   <!--
@@ -548,7 +559,25 @@
       <viewFull>عرض مُفَصَّل</viewFull>
       <workFax>الفاكس :</workFax>
       <mobilePhone>الجوّال :</mobilePhone>
+      <workTitle>Work</workTitle>
+      <homeTitle>Home</homeTitle>
+      <fax>(Fax)</fax>
+      <more>more</more>
+      <im>IM</im>
+      <hide>hide</hide>
+      <phone>(Phone)</phone>
+      <mobile>(Mobile)</mobile>
+      <phoneTitle>Phone</phoneTitle>
+      <yearsOld>years old</yearsOld>
+      <alsoKnownAs>Also known as</alsoKnownAs>
+      <Male>Male</Male>
+      <Female>Female</Female>
     </label>
+    <action>
+      <print>Print</print>
+      <Cancel>Cancel</Cancel>
+      <printPreview>Print preview</printPreview>
+    </action>
   </UIContactPreview>
   <!--
   #org.exoplatform.contact.webui.popup.UIAttachFileForm
@@ -581,7 +610,12 @@
       <layoutView>عَرض</layoutView>
       <addEvent>إضافة حدث</addEvent>
       <event>حدث</event>
+      <addContact>Add a contact</addContact>
+      <addAddressBook>Add an Address book</addAddressBook>
     </label>
+    <msg>
+      <cannot-changeView>Close search to change layout.</cannot-changeView>
+    </msg>
   </UIActionBar>
   <!--
   #org.exoplatform.contact.webui.UISearchForm
@@ -602,7 +636,7 @@
   -->
   <UIAdvancedSearchForm>
     <action>
-      <Search>بحث </Search>
+      <Search>بحث</Search>
       <Cancel>إلغاء</Cancel>
     </action>
     <label>
@@ -717,6 +751,7 @@
       <not-exist-username>المستخدم غير مناسب للاشتراك مع:{0}</not-exist-username>
       <cannot-change-username>لا يُمكنُك تغيير المستخدم أثناء القيام بتعديل الاشتراك</cannot-change-username>
       <shared-yourself>لا يُمكنُك أن تشترك فيه بنفسك</shared-yourself>
+      <not-exist-group>{0} is not a group that you can share to.</not-exist-group>
     </msg>
   </UISharedForm>
   <!--
@@ -744,9 +779,11 @@
     </action>
     <msg>
       <empty-username>حدّد  لفائدة من تُريد الاشتراك</empty-username>
-      <contacts-shared>من هُنا فصاعدًا ستكون جهات الاتّصال الّتي اخترتها مُشتَرَكة </contacts-shared>
+      <contacts-shared>من هُنا فصاعدًا ستكون جهات الاتّصال الّتي اخترتها مُشتَرَكة</contacts-shared>
       <not-exist-username>اسم المستخدم هذا لم يعُد موجودًا</not-exist-username>
       <invalid-username>لا يُمكنك الاشتراك مع هذا المستخدم</invalid-username>
+      <not-exist-group>{0} is not a group that you can share to.</not-exist-group>
+      <deleted-contact>Sharing failed. This contact no longer exists.</deleted-contact>
     </msg>
   </UISharedContactsForm>
   <!--
@@ -854,7 +891,7 @@
       </option>
       <minutes>دقائق</minutes>
     </label>
-   <msg>
+    <msg>
       <summary-invalid>خُـلاصة الحدث لا تحتوي على {0}،{1}!</summary-invalid>
       <event-email-invalid>البريدات الالكترونية التي أدخلتها غير صحيحة!</event-email-invalid>
       <email-reminder-required>قم بإختيار التذكير بواسطة بريد الكتروني قبل كل شيء.</email-reminder-required>

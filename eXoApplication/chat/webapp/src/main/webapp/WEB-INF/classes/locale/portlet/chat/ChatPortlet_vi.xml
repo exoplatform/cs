@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bundle>
+  <UIChatPortlet>
+    <label>
+      <backTenPages>Quay lại 10 trang</backTenPages>
+      <nextTenPages>Tiến lên 10 trang</nextTenPages>
+      <previousPage>Trang trước</previousPage>
+      <nextPage>Trang sau</nextPage>
+      <totalPages>Tổng số trang</totalPages>
+      <addNewContact>Thêm liên hệ mới</addNewContact>
+      <addContact>Thêm liên hệ</addContact>
+      <contacts>Liên hệ</contacts>
+      <joinRoom>Tham gia vao phòng</joinRoom>
+      <addRoom>Thêm phòng</addRoom>
+      <onLine>Trực tuyến</onLine>
+      <away>rời xa</away>
+      <extendAway>Extend Away</extendAway>
+      <freeToChat>Rỗi để tán ngẫu</freeToChat>
+      <offLine>Offline</offLine>
+      <sendMessage>Gửi tin</sendMessage>
+      <remove>Xóa</remove>
+      <conversation>Thảo luận</conversation>
+      <done>Xong</done>
+      <search>Tìm kiếm</search>
+      <firstName>Tên đầu</firstName>
+      <lastName>Tên cuối</lastName>
+      <userName>Tên người dùng</userName>
+      <refresh>Làm mới</refresh>
+      <cancel>Hủy</cancel>
+      <quickSearch>Tìm kiếm nhanh</quickSearch>
+      <roomName>Tên</roomName>
+      <roomDescription>Phòng giảm dần</roomDescription>
+      <newRoom>Phòng mới</newRoom>
+      <ok>Ok</ok>
+      <roomConfiguration>Cấu hình phòng</roomConfiguration>
+      <general>Chung</general>
+      <persistentRoom>Phòng cố định</persistentRoom>
+      <presenceBroadcast>Presence Broadcast</presenceBroadcast>
+      <moderator>người điều tiết</moderator>
+      <participant>người tham dự</participant>
+      <visitor>khác</visitor>
+      <whoIs>Ai là</whoIs>
+      <anyOne>bất cứ ai</anyOne>
+      <maxUsers>Số người dùng tối đa</maxUsers>
+      <showSecurity>Bảo mật</showSecurity>
+      <publicRoom>Phòng công cộng</publicRoom>
+      <membersOnly>Chỉ cho thành viên</membersOnly>
+      <allowInvites>Cho phép mời</allowInvites>
+      <reservedNick>Reserved nick</reservedNick>
+      <passwordProtectedRoom>Phòng có password bảo vệ</passwordProtectedRoom>
+      <password>mật khẩu</password>
+      <moderatedRoom>Moderated Room</moderatedRoom>
+      <roomAdmins>Room Admins</roomAdmins>
+      <roomOwners>Room Owners</roomOwners>
+      <waitingForYouToAcceptOneFile>Waiting for you to accept 1 file</waitingForYouToAcceptOneFile>
+      <accept>Chấp nhận</accept>
+      <selectAllNone>Chọn tất cả/không</selectAllNone>
+      <deny>Từ chối</deny>
+      <clickToRemoveThisTab>Click to remove this tab</clickToRemoveThisTab>
+      <exportHistory>Export History</exportHistory>
+      <exportMessagesHistory>Export messages history</exportMessagesHistory>
+      <showMessagesFrom>Show messages from</showMessagesFrom>
+      <today>Hôm nay</today>
+      <thisWeek>Tuần này</thisWeek>
+      <last30Days>30 ngày trước</last30Days>
+      <beginning>Bắt đầu</beginning>
+      <add>Thêm</add>
+      <leave>rời đi</leave>
+      <options>Lựa chọn</options>
+      <closeAllConversations>Đóng tất cả thảo luận</closeAllConversations>
+      <restoreConversationWindow>Restore conversation window</restoreConversationWindow>
+      <minimizeWindow>Minimize Window</minimizeWindow>
+      <previous>Previous</previous>
+      <next>Next</next>
+      <resizeWindow>Resize Window</resizeWindow>
+      <closeWindow>Close Window</closeWindow>
+      <inviteNewFriends>Invite new friends</inviteNewFriends>
+      <leaveChatRoom>Leave</leaveChatRoom>
+      <sendFile>Send file</sendFile>
+    </label>
+  </UIChatPortlet>
+</Bundle>
+

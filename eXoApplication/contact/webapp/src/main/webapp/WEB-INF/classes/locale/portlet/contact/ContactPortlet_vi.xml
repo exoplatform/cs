@@ -32,6 +32,7 @@
       <UICategoryForm>Nhóm</UICategoryForm>
       <UIImageForm>Chọn ảnh</UIImageForm>
       <UIComposeForm>Gửi thư</UIComposeForm>
+      <UIPopupContainer />
     </title>
   </contactActionUIPopupWindow>
   <UIPopupGroupSelector>
@@ -138,6 +139,7 @@
       <too-manyField>Thêm quá nhiều trường</too-manyField>
       <nameTooLong>Tên nhập quá dài</nameTooLong>
       <jobTooLong>Nghề nghiệp nhập quá dài</jobTooLong>
+      <invalid-email>Địa chỉ email không hợp lệ.</invalid-email>
     </msg>
   </UIContactForm>
   <!--
@@ -201,7 +203,7 @@
     <label>
       <type>Kiểu</type>
       <fileName>Tên tệp</fileName>
-      <exportSelected></exportSelected>
+      <exportSelected />
       <exportAll>Xuất được chọn</exportAll>
       <cancel>Hủy</cancel>
       <email>Thư</email>
@@ -259,6 +261,7 @@
       <contact-not-exist-remove>Liên lạc không còn tồn tại</contact-not-exist-remove>
       <nameTooLong>Tên thẻ quá dài</nameTooLong>
       <noTagRemoved>Thẻ {0} không có trong liên lạc nào</noTagRemoved>
+      <tagName-required>Bận cần đặt tên thẻ của bạn.</tagName-required>
     </msg>
     <action>
       <Add>Thêm</Add>
@@ -284,6 +287,7 @@
       <tagName-existed>Tên thẻ đã tồn tại</tagName-existed>
       <tag-deleted>Thẻ đã bị xóa</tag-deleted>
       <nameTooLong>Tên thẻ quá dài</nameTooLong>
+      <tagName-required>Bạn cần đặt tên thẻ của bạn.</tagName-required>
     </msg>
     <action>
       <Save>Lưu</Save>
@@ -352,6 +356,9 @@
       <checkContact-toChat>Chọn liên lạc để tán gẫu</checkContact-toChat>
       <contact-not-existed>Liên lạc không còn tồn tại</contact-not-existed>
       <have-no-item>Bạn chưa chọn liên lạc nào</have-no-item>
+      <noeditpermission>
+        <detail>Ban không có quyền sửa với liên hệ {0}. Hãy kiểm tra lại.</detail>
+      </noeditpermission>
     </msg>
     <action>
       <print>In</print>
@@ -390,6 +397,7 @@
       <no-email-found>Không có thư nào</no-email-found>
       <non-permission>Bạn không có quyền thực hiện thao tác này</non-permission>
       <removedPer>Quyền của bạn đã bị xóa</removedPer>
+      <confirm-discard>Bạn đang định loại bỏ một danh sách địa chỉ được chia sẻ. Bạn sẽ không còn nhìn thấy nó nữa. Bạn có xác nhận không?</confirm-discard>
     </msg>
     <label>
       <sharedContacts>Chia sẻ liên lạc</sharedContacts>
@@ -414,6 +422,7 @@
       <defaultAddName>Các liên lạc của tôi</defaultAddName>
       <collectedAddresses>Địa chỉ tự cập nhật</collectedAddresses>
       <defaultAddDes>Đây là nhóm mặc định</defaultAddDes>
+      <discard>Loại bỏ</discard>
     </label>
   </UIAddressBooks>
   <!--
@@ -422,6 +431,7 @@
   <UITags>
     <msg>
       <confirm-delete>Bạn có chắc muốn xóa thẻ này ?</confirm-delete>
+      <no-email-found>Không địa chỉ email được tìm thấy trên liên hệ này.</no-email-found>
     </msg>
     <label>
       <tags>Các thẻ</tags>
@@ -431,6 +441,7 @@
       <edit>Sửa</edit>
       <collapse-expand>Cuộn/trải</collapse-expand>
       <addTag>Thêm thẻ</addTag>
+      <sendEmail>Email</sendEmail>
     </label>
   </UITags>
   <!--
@@ -545,7 +556,25 @@
       <viewFull>Xem toàn bộ</viewFull>
       <workFax>Fax :</workFax>
       <mobilePhone>Di động :</mobilePhone>
+      <workTitle>Công việc</workTitle>
+      <homeTitle>Nhà</homeTitle>
+      <fax>(Fax)</fax>
+      <more>Nhiều hơn</more>
+      <im>IM</im>
+      <hide>Ẩn</hide>
+      <phone>(Điện thoại)</phone>
+      <mobile>(Điện thoại di động)</mobile>
+      <phoneTitle>Điện thoại</phoneTitle>
+      <yearsOld>tuổi</yearsOld>
+      <alsoKnownAs>Cũng được biết như</alsoKnownAs>
+      <Male>Nam</Male>
+      <Female>Nữ</Female>
     </label>
+    <action>
+      <print>In</print>
+      <Cancel>Hủy</Cancel>
+      <printPreview>duyệt trước bản in</printPreview>
+    </action>
   </UIContactPreview>
   <!--
   #org.exoplatform.contact.webui.popup.UIAttachFileForm
@@ -578,7 +607,12 @@
       <layoutView>Tùy biến giao diện</layoutView>
       <addEvent>Thêm sự kiện</addEvent>
       <event>Sự kiện</event>
+      <addContact>Thêm một liên hệ</addContact>
+      <addAddressBook>Thêm một sổ địa chỉ</addAddressBook>
     </label>
+    <msg>
+      <cannot-changeView>Đóng tìm kiếm để thay đổi sự bố trí.</cannot-changeView>
+    </msg>
   </UIActionBar>
   <!--
   #org.exoplatform.contact.webui.UISearchForm
@@ -599,7 +633,7 @@
   -->
   <UIAdvancedSearchForm>
     <action>
-      <Search>Tìm </Search>
+      <Search>Tìm</Search>
       <Cancel>Hủy</Cancel>
     </action>
     <label>
@@ -714,6 +748,7 @@
       <not-exist-username>Người dùng {0} không tồn tại</not-exist-username>
       <cannot-change-username>Không thể chuyển tên người dùng khi đang sửa quyền</cannot-change-username>
       <shared-yourself>Khổng thể chia sẻ cho chính bạn</shared-yourself>
+      <not-exist-group>{0} không phải là nhóm mà bạn có thể chia sẻ.</not-exist-group>
     </msg>
   </UISharedForm>
   <!--
@@ -744,6 +779,8 @@
       <contacts-shared>Chia sẻ liên lạc thành công</contacts-shared>
       <not-exist-username>Người dùng không tồn tại</not-exist-username>
       <invalid-username>Người dùng không tồn tại</invalid-username>
+      <not-exist-group>{0} không phải là nhóm mà bạn có thể chia sẻ.</not-exist-group>
+      <deleted-contact>Việc chia sẻ bị lỗi. Liên hệ này không tồn tại.</deleted-contact>
     </msg>
   </UISharedContactsForm>
   <!--
@@ -785,7 +822,6 @@
       <label5>Ứng dụng quản lý liên lạc eXo đáp ứng nhiều đặc tính làm tăng hiệu suất của bạn : chia sẻ, tìm kiếm, gán thẻ, danh thiếp và các thao tác với nhóm.</label5>
     </label>
   </UIWelcomeContact>
- 
   <!--
   #org.exoplatform.contact.ContactUtils
   -->

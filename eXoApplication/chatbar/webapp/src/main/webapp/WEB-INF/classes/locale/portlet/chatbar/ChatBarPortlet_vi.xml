@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bundle>
+  <UIChatBarPortlet>
+    <label>
+      <backTenPages>Back 10 pages</backTenPages>
+      <nextTenPages>Next 10 pages</nextTenPages>
+      <previousPage>Previous Page</previousPage>
+      <nextPage>Next Page</nextPage>
+      <totalPages>Total pages</totalPages>
+      <addContact>Add Contact</addContact>
+      <contacts>Contacts</contacts>
+      <joinRoom>Join Room</joinRoom>
+      <addRoom>Add Room</addRoom>
+      <onLine>Online</onLine>
+      <away>Away</away>
+      <extendAway>Extend Away</extendAway>
+      <freeToChat>Free To Chat</freeToChat>
+      <offLine>Offline</offLine>
+      <sendMessage>Send message</sendMessage>
+      <remove>Remove</remove>
+      <conversation>Conversation</conversation>
+      <done>Done</done>
+      <search>Search</search>
+      <firstName>First Name</firstName>
+      <lastName>Last Name</lastName>
+      <userName>UserName</userName>
+      <refresh>Refresh</refresh>
+      <cancel>Cancel</cancel>
+      <quickSearch>Quick Search</quickSearch>
+      <roomName>Name</roomName>
+      <roomDescription>Room Desc</roomDescription>
+      <newRoom>New Room</newRoom>
+      <ok>Ok</ok>
+      <roomConfiguration>Room Configuration</roomConfiguration>
+      <general>General</general>
+      <persistentRoom>Persistent Room</persistentRoom>
+      <presenceBroadcast>Presence Broadcast</presenceBroadcast>
+      <moderator>moderator</moderator>
+      <participant>participant</participant>
+      <visitor>visitor</visitor>
+      <whoIs>Who is</whoIs>
+      <anyOne>anyone</anyOne>
+      <maxUsers>Max Users</maxUsers>
+      <showSecurity>Security</showSecurity>
+      <publicRoom>Public Room</publicRoom>
+      <membersOnly>Members Only</membersOnly>
+      <allowInvites>Allow Invites</allowInvites>
+      <reservedNick>Reserved nick</reservedNick>
+      <passwordProtectedRoom>Password Protected Room</passwordProtectedRoom>
+      <password>Password</password>
+      <moderatedRoom>Moderated Room</moderatedRoom>
+      <roomAdmins>Room Admins</roomAdmins>
+      <roomOwners>Room Owners</roomOwners>
+      <waitingForYouToAcceptOneFile>Waiting for you to accept 1 file</waitingForYouToAcceptOneFile>
+      <accept>Accept</accept>
+      <selectAllNone>Select all/none</selectAllNone>
+      <deny>Deny</deny>
+      <clickToRemoveThisTab>Click to remove this tab</clickToRemoveThisTab>
+      <exportHistory>Export History</exportHistory>
+      <exportMessagesHistory>Export messages history</exportMessagesHistory>
+      <showMessagesFrom>Show messages from</showMessagesFrom>
+      <today>Today</today>
+      <thisWeek>This week</thisWeek>
+      <last30Days>Last 30 days</last30Days>
+      <beginning>Beginning</beginning>
+      <add>Add</add>
+      <leave>Leave</leave>
+      <options>Options</options>
+      <closeAllConversations>Close all conversations</closeAllConversations>
+      <minimizeWindow>Minimize Window</minimizeWindow>
+      <previous>Previous</previous>
+      <next>Next</next>
+      <resizeWindow>Resize Window</resizeWindow>
+      <closeWindow>Close Window</closeWindow>
+      <inviteNewFriends>Invite new friends</inviteNewFriends>
+      <leaveChatRoom>Leave</leaveChatRoom>
+      <sendFile>Send file</sendFile>
+    </label>
+  </UIChatBarPortlet>
+</Bundle>
+
