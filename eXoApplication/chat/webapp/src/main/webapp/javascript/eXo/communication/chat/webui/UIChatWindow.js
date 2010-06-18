@@ -111,6 +111,7 @@ UITabControl.prototype.userLeftRoomEventFired = function(user) {
  */
 UITabControl.prototype.userJoinRoomEventFired = function(user) {
   var userName = user.substr(user.indexOf('/') + 1, user.length-1);
+  var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[userName];
   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
   var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', userName);
   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
@@ -118,6 +119,7 @@ UITabControl.prototype.userJoinRoomEventFired = function(user) {
   var buddyInfo = {
     presence           : {from: user,mode: null, status: null, type: 'available'},
     nickname           : user,
+    fullName		   : fullName,
     groups             : [],
     subscriptionStatus : null,
     subscriptionType   : null,

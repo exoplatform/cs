@@ -1722,6 +1722,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       myProfile.setFullName(myInfo.getFirstName() + " " + myInfo.getLastName());
       initInfoBean.setMyProfile(myProfile);
       
+      // Add 17/06
+      session.addFullUserNames(username, myProfile.getFullName());
+      
       initInfoBean.setSearchServicesNames(services);
       initInfoBean.setHostedRooms(rooms);
       initInfoBean.setTotalRooms(rooms.size());

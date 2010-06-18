@@ -481,4 +481,5 @@ public interface XMPPSession {
   
   RoomInfo getRoomInfo(String room) throws XMPPException;
 
+  void addFullUserNames(String userName, String fullUserName);
 }

@@ -356,6 +356,8 @@ UIMainChatWindow.prototype.unsubscribeCometdTopics = function() {
   Cometd.unsubscribe('/eXo/Application/Chat/subscription');
 
   Cometd.unsubscribe('/eXo/Application/Chat/FileExchange');
+  
+  Cometd.unsubscribe('/eXo/Application/Chat/fullnameExchange');
 }
 
 /**
@@ -390,6 +392,12 @@ UIMainChatWindow.prototype.subscribeCometdTopics = function() {
   Cometd.subscribe('/eXo/Application/Chat/FileExchange', function(eventObj) {
     eXo.communication.chat.webui.UIMainChatWindow.fileExchangeListener(eventObj);
   });
+  
+  //Add 17/06
+  Cometd.subscribe('/eXo/Application/Chat/fullnameExchange', function(eventObj) {
+	    eXo.communication.chatbar.webui.UIMainChatWindow.updateFullNameMap(eventObj);
+  });
+  //Add 17/06
 };
 
 /**
@@ -773,6 +781,17 @@ UIMainChatWindow.prototype.fileExchangeListener = function(eventObj) {
 };
 
 /**
+ * A Cometd listener for update fullName.
+ * All cometd notify about update fullName will be call this function.
+ */
+UIMainChatWindow.prototype.updateFullNameMap = function(eventObj) {
+  var eventId = 'updateFullNameMapCometdEvent_' + (new Date()).getTime();
+  this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
+  eXo.communication.chatbar.webui.UIMainChatWindow.processUpdateFullNameMap(eventId);
+};
+
+
+/**
  * A Cometd listener for message.
  * All cometd notify about message will be call this function.
  */
@@ -911,6 +930,23 @@ UIMainChatWindow.prototype.processFileExchange = function(eventId) {
   if (serverData.fileEvents) {
     this.UIChatWindow.fileExchangeEventFire(serverData.fileEvents);
   }
+  this.serverDataStack[eventId] = null;
+};
+
+/**
+ * Process update fullNameMap event come from Cometd notification
+ */
+UIMainChatWindow.prototype.processUpdateFullNameMap = function(eventId) {
+  var serverData = this.serverDataStack[eventId];
+  window.jsconsole.debug('UpdateFullNameMap event: id:= ' + eventId, serverData);
+  if (!serverData) {
+    this.serverDataStack[eventId] = null;
+  }
+  
+  for (var i=0; i<serverData.occupants.length; i++) {
+	  eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.occupants[i].nick] = serverData.occupants[i].fullName;
+  }
+  
   this.serverDataStack[eventId] = null;
 };
 

@@ -45,13 +45,13 @@ function BuddyItem(buddyInfo, actionCallback, maxUserNameLen, isGroupChat) {
  * Init data and UI template
  */
 BuddyItem.prototype.init = function() {
-  var DOMUtil = eXo.core.DOMUtil;
+	var DOMUtil = eXo.core.DOMUtil;
   this.rootNode = eXo.communication.chatbar.core.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.template);	
 	var nickDis = this.buddyInfo.nickname ;
 	if (nickDis != null && nickDis.indexOf("/") != -1) nickDis = nickDis.split("/")[1] ;
   if (this.isGroupChat) {
     this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
-    this.iconChatNode.innerHTML = this.getUserName(nickDis, true) ;
+    this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.fullName, true) ; // 17/06/2010 modify
   } else {
     this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
     	var fullName = this.buddyInfo.fullName ? this.buddyInfo.fullName : nickDis;

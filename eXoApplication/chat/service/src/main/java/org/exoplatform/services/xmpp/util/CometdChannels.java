@@ -53,5 +53,10 @@ public class CometdChannels {
    * 
    */
   public static final String FILE_EXCHANGE = "/eXo/Application/Chat/FileExchange";
+  
+  /**
+   * 
+   */
+  public static final String FULLNAME_EXCHANGE = "/eXo/Application/Chat/fullnameExchange";
 
 }

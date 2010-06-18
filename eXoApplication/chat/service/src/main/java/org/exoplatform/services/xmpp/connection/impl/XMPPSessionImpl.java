@@ -17,8 +17,6 @@
 package org.exoplatform.services.xmpp.connection.impl;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -37,15 +35,12 @@ import java.util.UUID;
 
 import javax.jcr.RepositoryException;
 
-import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.poi.hdf.event.EventBridge;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.uistate.UIStateSession;
 import org.exoplatform.services.uistate.bean.UIStateDataBean;
@@ -54,7 +49,6 @@ import org.exoplatform.services.xmpp.bean.ConfigRoomBean;
 import org.exoplatform.services.xmpp.bean.ContactBean;
 import org.exoplatform.services.xmpp.bean.DeclineBean;
 import org.exoplatform.services.xmpp.bean.EventsBean;
-import org.exoplatform.services.xmpp.bean.FieldBean;
 import org.exoplatform.services.xmpp.bean.FileTransferEventBean;
 import org.exoplatform.services.xmpp.bean.FileTransferRequestBean;
 import org.exoplatform.services.xmpp.bean.FileTransferResponseBean;
@@ -67,6 +61,7 @@ import org.exoplatform.services.xmpp.bean.KickedBannedBean;
 import org.exoplatform.services.xmpp.bean.MUCPacketBean;
 import org.exoplatform.services.xmpp.bean.MessageBean;
 import org.exoplatform.services.xmpp.bean.OccupantBean;
+import org.exoplatform.services.xmpp.bean.OccupantsBean;
 import org.exoplatform.services.xmpp.bean.PresenceBean;
 import org.exoplatform.services.xmpp.bean.PrivilegeChangeBean;
 import org.exoplatform.services.xmpp.bean.SubjectChangeBean;
@@ -81,15 +76,16 @@ import org.exoplatform.services.xmpp.history.Interlocutor;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 import org.exoplatform.services.xmpp.userinfo.UserInfo;
 import org.exoplatform.services.xmpp.userinfo.UserInfoService;
+import org.exoplatform.services.xmpp.util.CodingUtils;
 import org.exoplatform.services.xmpp.util.CometdChannels;
 import org.exoplatform.services.xmpp.util.HistoryUtils;
 import org.exoplatform.services.xmpp.util.MUCConstants;
 import org.exoplatform.services.xmpp.util.PresenceUtil;
 import org.exoplatform.services.xmpp.util.SearchFormFields;
-import org.exoplatform.services.xmpp.util.CodingUtils;
 import org.exoplatform.services.xmpp.util.TransformUtils;
 import org.exoplatform.services.xmpp.util.XMPPConnectionUtils;
 import org.exoplatform.ws.frameworks.cometd.transport.ContinuationServiceDelegate;
+import org.exoplatform.ws.frameworks.json.impl.JsonException;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
 import org.jivesoftware.smack.PacketInterceptor;
@@ -105,7 +101,6 @@ import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
-import org.jivesoftware.smack.packet.PacketExtension;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.XMPPError;
 import org.jivesoftware.smack.packet.Presence.Type;
@@ -117,7 +112,6 @@ import org.jivesoftware.smackx.filetransfer.FileTransferListener;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
-import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 import org.jivesoftware.smackx.muc.Affiliate;
 import org.jivesoftware.smackx.muc.DefaultParticipantStatusListener;
 import org.jivesoftware.smackx.muc.DefaultUserStatusListener;
@@ -131,7 +125,6 @@ import org.jivesoftware.smackx.muc.SubjectUpdatedListener;
 import org.jivesoftware.smackx.packet.DiscoverInfo;
 import org.jivesoftware.smackx.packet.DiscoverItems;
 import org.jivesoftware.smackx.packet.MUCUser;
-import org.jivesoftware.smackx.packet.Time;
 import org.jivesoftware.smackx.packet.DiscoverInfo.Identity;
 import org.jivesoftware.smackx.packet.DiscoverItems.Item;
 import org.jivesoftware.smackx.packet.MUCUser.Invite;
@@ -221,6 +214,8 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
 
   private final static String   ASCENDING         = "asc";
   
+  private static ArrayList<OccupantBean> beanList = null; 
+  
   private final DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
   
   
@@ -235,6 +230,10 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
                             final ContinuationServiceDelegate delegate,
                             final HistoryImpl history,
                             final ResourceBundle rb) throws XMPPException {
+	// 17/06/2010 add start
+	if (beanList == null) beanList = new ArrayList<OccupantBean>();
+	// 17/06/2010 add end  
+	
     XMPPConnection.DEBUG_ENABLED = true;
     this.delegate_ = delegate;
     this.history_ = history;
@@ -1247,10 +1246,35 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
     return false;
   }
 
+  //17/06/2010 add start
+  @Override
+  public void addFullUserNames(String userName, String fullUserName) {
+	OccupantBean bean = new OccupantBean();
+	bean.setFullName(fullUserName);
+	bean.setNick(userName);
+	beanList.add(bean);
+  }
+  //17/06/2010 add end
+  
   /**
    * {@inheritDoc}
    */
   public void joinRoom(String room, String nickname, String password) throws XMPPException {
+	// 17/06/2010 add start
+	JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+
+	FullRoomInfoBean infoBean = new FullRoomInfoBean();
+	infoBean.setOccupants(beanList);
+	  
+	try {
+		JsonValue json = generatorImpl.createJsonObject(infoBean);
+		for(OccupantBean bean : beanList) {
+			delegate_.sendMessage(bean.getNick(), CometdChannels.FULLNAME_EXCHANGE, json.toString(), null);
+		}
+	} catch (JsonException e) {
+	}
+	// 17/06/2010 add end  
+      
     if (nickname == null)
       nickname = username_;
     MultiUserChat chat = getMultiUserChat(room);
