@@ -514,7 +514,22 @@ Utils.prototype.getElementWidth = function(obj){
 	return obj.offsetWidth;
 };
 
+/**
+ * TODO: remove this method when portal remove Cometd.js file
+ */ 
+
+Utils.prototype.loadPlatformCometd = function(){
+	if(eXo.cs.CSCometd) return;
+	if(eXo.core.Cometd) delete eXo.core.Cometd;
+	eXo.require("eXo.core.Cometd","/cometd/javascript/");
+	eXo.cs.CSCometd = eXo.core.Cometd;
+}
+
 eXo.cs.Utils = new Utils() ;
+eXo.cs.Utils.loadPlatformCometd();
+/**
+ * TODO: remove method call when portal remove Cometd.js file
+ */
 
 /********************* Event Manager ******************/
 
@@ -788,6 +803,7 @@ DateTimeFormater.prototype.format = function (date, mask, utc) {
 		return $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);
 	});
 };
+
 
 eXo.cs.DateTimeFormater = new DateTimeFormater();
 document.onclick = eXo.core.DOMUtil.cleanUpHiddenElements;

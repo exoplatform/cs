@@ -14,8 +14,9 @@
 	  rcontext.getJavascriptManager().importJavascript('eXo.mail.UIMailPortlet','/mail/javascript/');
 	  rcontext.getJavascriptManager().importJavascript('eXo.mail.UICombobox','/mail/javascript/') ;
     rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;
-    rcontext.getJavascriptManager().addJavascript('if(eXo.core.Cometd) delete eXo.core.Cometd;') ;
-		rcontext.getJavascriptManager().importJavascript('eXo.core.Cometd','/cometd/javascript/') ;
+    //rcontext.getJavascriptManager().addJavascript('if(eXo.core.Cometd) delete eXo.core.Cometd;') ;
+		//rcontext.getJavascriptManager().addJavascript('eXo.require("eXo.core.Cometd","/cometd/javascript/");') ;
+	//rcontext.getJavascriptManager().importJavascript('eXo.core.Cometd','/cometd/javascript/') ;
 		rcontext.getJavascriptManager().addJavascript('if(!eXo.cs.CSCometd) eXo.cs.CSCometd = eXo.core.Cometd;') ;
     rcontext.getJavascriptManager().addJavascript('eXo.cs.CSCometd.url = "/'+ uicomponent.getCometdContextName() +'/cometd" ;') ;
     rcontext.getJavascriptManager().addJavascript('eXo.cs.CSCometd.exoId = "'+uicomponent.getRemoteUser()+'";') ;
