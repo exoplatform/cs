@@ -52,18 +52,18 @@ import org.exoplatform.webui.event.EventListener;
  * Oct 3, 2007  
  */
 @ComponentConfig(
-    lifecycle = UIContainerLifecycle.class,
-    events = {
-      @EventConfig(listeners = UIEventCategoryManager.EditActionListener.class),
-      @EventConfig(listeners = UIEventCategoryManager.DeleteActionListener.class, confirm = "UIEventCategoryManager.msg.confirm-delete")
-    }
+                 lifecycle = UIContainerLifecycle.class,
+                 events = {
+                   @EventConfig(listeners = UIEventCategoryManager.EditActionListener.class),
+                   @EventConfig(listeners = UIEventCategoryManager.DeleteActionListener.class, confirm = "UIEventCategoryManager.msg.confirm-delete")
+                 }
 )
 public class UIEventCategoryManager extends UIContainer implements UIPopupComponent {
   public static String[] BEAN_FIELD = {"name"};
   private static String[] ACTION = {"Edit", "Delete"} ;
   public String categoryId_ ;
   Map<String, String> defaultEventCategoriesMap = new LinkedHashMap<String, String>();
-  
+
   public UIEventCategoryManager() throws Exception {
     this.setName("UIEventCategoryManager") ;
     UIGrid categoryList = addChild(UIGrid.class, null , "UIEventCategoryList") ;
@@ -72,7 +72,7 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
     addChild(UIEventCategoryForm.class, null, null) ;
     updateGrid() ;
   }
-  
+
   public long getCurrentPage() {
     return getChild(UIGrid.class).getUIPageIterator().getCurrentPage() ;
   }
@@ -110,7 +110,7 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
     ObjectPageList objPageList = new ObjectPageList(categories, 10) ;
     uiGrid.getUIPageIterator().setPageList(objPageList) ;   
   }
- /* private SessionProvider getSession() {
+  /* private SessionProvider getSession() {
     return SessionProviderFactory.createSessionProvider() ;
   }*/
   static  public class EditActionListener extends EventListener<UIEventCategoryManager> {
@@ -135,9 +135,9 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
       UIEventCategoryManager uiManager = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiManager.getAncestorOfType(UICalendarPortlet.class) ;
       String eventCategoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      
+
       UIApplication uiApp = uiManager.getAncestorOfType(UIApplication.class) ;
-      if (eventCategoryId.equals(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL)) {
+      if (eventCategoryId.equalsIgnoreCase(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL)) {
         uiApp.addMessage(new ApplicationMessage("UIEventCategoryManager.msg.cannot-delete", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
         return ;        
@@ -179,7 +179,7 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
         uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setOptions(UIEventForm.getCategory());
         uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(uiManager.categoryId_) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventDetailTab) ;
-       }
+      }
       if(uiTaskDetailTab != null) {
         uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setOptions(UIEventForm.getCategory());
         uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setValue(uiManager.categoryId_) ;
