@@ -28,16 +28,14 @@
   </ciManagement>
   <properties>
     <org.exoplatform.kernel.version>2.2.0-GA</org.exoplatform.kernel.version>
-    <org.exoplatform.core.version>2.3.0-GA</org.exoplatform.core.version>
-    <org.exoplatform.ws.version>2.1.0-GA</org.exoplatform.ws.version>
-    <org.exoplatform.jcr.version>1.12.0-CP01</org.exoplatform.jcr.version>
-	<org.exoplatform.jcr-services.version>1.12.0-GA</org.exoplatform.jcr-services.version>
+    <org.exoplatform.core.version>2.3.2-GA</org.exoplatform.core.version>
+    <org.exoplatform.ws.version>2.1.2-GA</org.exoplatform.ws.version>
+    <org.exoplatform.jcr.version>1.12.2-GA</org.exoplatform.jcr.version>
     <org.exoplatform.portal.version>3.0.0-GA</org.exoplatform.portal.version>
-    <gatein.wci.version>2.0.0-GA</gatein.wci.version>
-    <!--org.exoplatform.portal.cp.version>3.0.0-GA</org.exoplatform.portal.cp.version-->
+    <gatein.wci.version>2.0.1-GA</gatein.wci.version>
     <exo.tool.framework.junit.version>1.2.0</exo.tool.framework.junit.version>
     <org.exoplatform.exopackage.version>1.1.0-Beta09</org.exoplatform.exopackage.version>
-    <version.chromattic>1.0.0</version.chromattic>
+    <version.chromattic>1.0.3</version.chromattic>
     <!--platform dependencies-->
     <org.exoplatform.platform.version>3.0.0-Alpha03</org.exoplatform.platform.version>
     
