@@ -44,6 +44,9 @@ import org.exoplatform.services.xmpp.connection.impl.XMPPMessenger;
 @Path("/uistateservice")
 public class UIStateService implements ResourceContainer {
   private static final CacheControl cc;
+  
+  private static String unreadMessageCount;
+  
   static {
   //TODO: to find the reason why UIStateService loaded before ResourceBinder
   RuntimeDelegate.setInstance(new RuntimeDelegateImpl());
@@ -60,9 +63,9 @@ public class UIStateService implements ResourceContainer {
   }
   
   @POST 
-  @Path("/save/{username}/")
+  @Path("/save/{username}/{unreadMessageCnt}")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response saveState(@PathParam("username") String userName, UIStateDataBean stateData) throws Exception {
+  public Response saveState(@PathParam("username") String userName, @PathParam("unreadMessageCnt") String unreadMessageCnt, UIStateDataBean stateData) throws Exception {
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
@@ -73,7 +76,9 @@ public class UIStateService implements ResourceContainer {
       }
     } catch (Exception e){
     }
+    unreadMessageCount = unreadMessageCnt;
     UIStateDataBean stateDataBean = new UIStateDataBean("null");
+    stateDataBean.setUnreadMessageCnt(unreadMessageCount);
     return Response.ok(stateDataBean, MediaType.APPLICATION_JSON).cacheControl(cc).build();
   }
   

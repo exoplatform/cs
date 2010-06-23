@@ -57,6 +57,7 @@ function UIStateManager() {
   this.autoCheckId = false;
   this.isPropertiesChanged = false;
   this.data = {};
+  this.unreadMessageCnt = 0;
 }
 
 /**
@@ -141,7 +142,7 @@ UIStateManager.prototype.store = function(data) {
   }
   // Do upload state data to server using url: /portal/rest/chat/uistateservice/save/{user}/{data}
   var restContextName = eXo.communication.chatbar.eXoChatBar.restcontextname;
-  var url = '/' + restContextName + '/uistateservice/save/' + this.userName;// + '/';
+  var url = '/' + restContextName + '/uistateservice/save/' + this.userName + '/' + this.unreadMessageCnt;// + '/';
   var handler = new AjaxHandler(this, this.STORE_DATA_AJAX_ACTION);
   if (data) {
     this.ajaxWrapper(handler, url, 'POST', data);
@@ -174,11 +175,20 @@ UIStateManager.prototype.reload = function() {
  * @param {String} action
  */
 UIStateManager.prototype._ajaxUpdate = function(ajaxHandler, state, requestObject, action) {
-  switch (state) {
+	switch (state) {
     case ajaxHandler.LOADING_STATE:
       break;
     case ajaxHandler.SUCCESS_STATE:
       if (action == this.STORE_DATA_AJAX_ACTION) {
+	    var _data;
+        if (requestObject.responseText) {
+          try {
+            _data = eXo.core.JSON.parse(requestObject.responseText);
+            eXo.communication.chatbar.webui.UIChatWindow.unreadMessageCnt = _data.unreadMessageCnt;
+          } catch (e) {
+            window.jsconsole.error('JSON parser exception');
+          }
+        }
         return;
       }
       var _data;

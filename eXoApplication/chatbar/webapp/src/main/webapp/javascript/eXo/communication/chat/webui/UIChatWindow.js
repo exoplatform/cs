@@ -477,6 +477,10 @@ UITabControl.prototype.updateUnreadMessage = function() {
   if (this.visible &&
       myParent._isVisible()) {
     tabUnreadMessageNode.innerHTML = '';
+    eXo.communication.chatbar.webui.UIStateManager.unreadMessageCnt = eXo.communication.chatbar.webui.UIStateManager.unreadMessageCnt - this.unreadMessageCnt;
+    myParent.unreadMessageCnt = myParent.unreadMessageCnt - this.unreadMessageCnt;
+    if(eXo.communication.chatbar.webui.UIStateManager.unreadMessageCnt < 0) eXo.communication.chatbar.webui.UIStateManager.unreadMessageCnt = 0;
+    if(myParent.unreadMessageCnt < 0) myParent.unreadMessageCnt = 0;
     this.unreadMessageCnt = 0;
     //this.UIMainChatWindow.UISlideAlert.removeMessageByTabId(this.tabId.id);
   } else if (this.unreadMessageCnt > 0) {
@@ -508,9 +512,11 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   var myParent = this.UIMainChatWindow.UIChatWindow;
   if (this.visible &&
       myParent._isVisible()) {
-    this.unreadMessageCnt = 0;
+	this.unreadMessageCnt = 0;
   } else {
-    this.unreadMessageCnt ++;
+    this.unreadMessageCnt++;
+    myParent.unreadMessageCnt++;
+    eXo.communication.chatbar.webui.UIStateManager.unreadMessageCnt++;
   }
   if (msgObj &&
       msgObj.type == 'error') {
@@ -869,6 +875,7 @@ function UIChatWindow() {
   this.LR_COOKIE_SESSION_START = 'LR_COOKIE_SESSION_START';
   this.MINI_BOX_CHAT_ANIMATION_STEP = 1*1000;
   this.miniBoxChatAnimationId = null;
+  this.unreadMessageCnt  = 0;
   eXo.core.Browser.setCookie(this.LR_COOKIE_SESSION_START, (new Date()).getTime());
 }
 
@@ -1186,25 +1193,25 @@ UIChatWindow.prototype.updateUnreadMessage = function() {
       this.blinkMiniBoxChat('NormalMiniBoxChat');
     }
     if (unreadMessageNode) {
-        if (unreadMessageCnt == 0) {
+        if (this.unreadMessageCnt == 0) {
           unreadMessageNode.innerHTML = ''
         } else {
-          unreadMessageNode.innerHTML = '*[' + unreadMessageCnt + ']&nbsp;';
+          unreadMessageNode.innerHTML = '*[' + this.unreadMessageCnt + ']&nbsp;';
         }
-      }
+    }
   } else {
     unreadMessageNode = DOMUtil.findFirstDescendantByClass(this.miniBoxChatNode, 'span', 'UnreadMessage');
-    if (unreadMessageCnt > 0 &&
+    if (this.unreadMessageCnt > 0 &&
         !this.miniBoxChatAnimationId) {
       this.miniBoxChatAnimationId = window.setInterval(this.blinkMiniBoxChat, this.MINI_BOX_CHAT_ANIMATION_STEP);
     }
     if (unreadMessageNode) {
-        if (unreadMessageCnt == 0) {
+        if (this.unreadMessageCnt == 0) {
           unreadMessageNode.innerHTML = ''
         } else {
-          unreadMessageNode.innerHTML = '' + unreadMessageCnt + '';
+          unreadMessageNode.innerHTML = '' + this.unreadMessageCnt + '';
         }
-      }
+    }
   }
  
   this.reloadScrollMgr();
