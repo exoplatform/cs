@@ -44,11 +44,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.RuntimeDelegate;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.services.rest.impl.RuntimeDelegateImpl;
 import org.exoplatform.services.rest.resource.ResourceContainer;
@@ -147,7 +147,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   /**
    * 
    */
-  private final Log           log                  = LogFactory.getLog("lr.RESTXMPPService");
+  private final Log           log                  = ExoLogger.getLogger("lr.RESTXMPPService");
 
   /**
    * 

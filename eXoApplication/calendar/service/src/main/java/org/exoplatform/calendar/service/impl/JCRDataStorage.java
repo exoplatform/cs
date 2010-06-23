@@ -44,8 +44,6 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
@@ -73,6 +71,8 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
@@ -109,7 +109,7 @@ public class JCRDataStorage implements DataStorage {
 
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
   private RepositoryService  repoService_ ;
-  private static final Log log = LogFactory.getLog(JCRDataStorage.class);
+  private static final Log log = ExoLogger.getLogger("cs.calendar.service");
 
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService  repoService) throws Exception {
     nodeHierarchyCreator_ = nodeHierarchyCreator ; 

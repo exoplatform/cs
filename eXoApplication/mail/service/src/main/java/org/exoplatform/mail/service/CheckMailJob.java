@@ -16,11 +16,11 @@
  **/
 package org.exoplatform.mail.service;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.record.ContinueRecord;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.quartz.InterruptableJob;
@@ -43,7 +43,7 @@ public class CheckMailJob implements Job, InterruptableJob {
 
   public static final String MAILSVR         = "mailservice";
 
-  private static Log         log             = LogFactory.getLog("job.CheckMailJob");
+  private static Log         log             = ExoLogger.getLogger("cs.service.job");
 
   private String             username;
 

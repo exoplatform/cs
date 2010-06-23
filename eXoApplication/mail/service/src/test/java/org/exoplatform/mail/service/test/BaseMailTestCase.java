@@ -21,12 +21,13 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.test.BasicTestCase;
@@ -39,10 +40,10 @@ import org.exoplatform.test.BasicTestCase;
  */
 public abstract class BaseMailTestCase extends BasicTestCase {
 
-  protected static Log          log = LogFactory.getLog("sample.services.test");  
+  private static final Log log = ExoLogger.getLogger("cs.mail.service.test");
 
   protected static RepositoryService   repositoryService;
-  protected static StandaloneContainer container;
+  protected static PortalContainer container;
   
   protected final static String REPO_NAME = "repository".intern();
   protected final static String SYSTEM_WS = "system".intern();
@@ -110,9 +111,9 @@ public abstract class BaseMailTestCase extends BasicTestCase {
   private static void initContainer() {
     try {
       String containerConf = BaseMailTestCase.class.getResource("/conf/portal/test-configuration.xml").toString();
-      System.out.println("\n\n containerConf" + containerConf);
-      StandaloneContainer.addConfigurationURL(containerConf);
-      container = StandaloneContainer.getInstance();   
+      //System.out.println("\n\n containerConf" + containerConf);
+      //StandaloneContainer.addConfigurationURL(containerConf);
+      container = PortalContainer.getInstance();   
       String loginConf = Thread.currentThread().getContextClassLoader().getResource("conf/portal/login.conf").toString();
       
       if (System.getProperty("java.security.auth.login.config") == null)

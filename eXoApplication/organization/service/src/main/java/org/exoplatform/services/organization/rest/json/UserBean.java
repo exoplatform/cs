@@ -18,11 +18,7 @@ package org.exoplatform.services.organization.rest.json;
 
 import java.util.Date;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.impl.UserImpl;
 
 /**
  * Created by The eXo Platform SAS.
@@ -33,7 +29,6 @@ public class UserBean {
   /**
    * Class logger.
    */
-  private final Log log = LogFactory.getLog("ws.UserBean");
   private Date createdDate;
   private String email;
   private String firstName;
@@ -42,7 +37,7 @@ public class UserBean {
   private String lastName;
   private String organizationId;
   private String userName;
-  
+
   public UserBean(User user) {
     this.createdDate = user.getCreatedDate();
     this.email = user.getEmail();
@@ -165,5 +160,5 @@ public class UserBean {
   public void setUserName(String userName) {
     this.userName = userName;
   }
-  
+
 }

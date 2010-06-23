@@ -18,23 +18,14 @@
 package org.exoplatform.services.organization.rest;
 
 import java.util.Collection;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
+
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.Membership;
@@ -44,7 +35,6 @@ import org.exoplatform.services.organization.MembershipTypeHandler;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
-//import org.exoplatform.services.rest.Response;
 
 /**
  * Created by The eXo Platform SAS .
@@ -55,7 +45,7 @@ import org.exoplatform.services.organization.UserHandler;
 
 public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganizationService {
 
-  protected static final Log            LOGGER = LogFactory.getLog("ws.RESTOrganizationService");
+  protected static final Log LOGGER = ExoLogger.getLogger("cs.contact.service");
 
   protected final GroupHandler          groupHandler;
 
@@ -96,7 +86,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
         parent = groupHandler.findGroupById(parentId);
         if (parent == null) {
           return Response.status(HTTPStatus.NOT_FOUND).entity("Parent group '"
-              + parentId + "' not found!").build();
+                                                              + parentId + "' not found!").build();
         }
       }
       group = groupHandler.createGroupInstance();
@@ -108,8 +98,8 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      .entity("Thrown exception : " + e)
+      .build();
     }
     // Group Id holder
     return Response.ok(group).build();
@@ -123,12 +113,12 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
       User user = userHandler.findUserByName(username);
       if (user == null)
         return Response.status(HTTPStatus.NOT_FOUND).entity("User : '" + username
-            + "' not found!").build();
+                                                            + "' not found!").build();
       groupId = (groupId.startsWith("/")) ? groupId : "/" + groupId;
       Group group = groupHandler.findGroupById(groupId);
       if (group == null)
         return Response.status(HTTPStatus.NOT_FOUND).entity("Group : '" + groupId
-            + "' not found!").build();
+                                                            + "' not found!").build();
 
       MembershipType membershipType = membershipTypeHandler.findMembershipType(type);
 
@@ -136,14 +126,14 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
 
       if (membershipType == null)
         return Response.status(HTTPStatus.NOT_FOUND).entity("MembershipType : '"
-            + type + "' not found!").build();
+                                                            + type + "' not found!").build();
       membershipHandler.linkMembership(user, group, membershipType, true);
       stop() ;
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      .entity("Thrown exception : " + e)
+      .build();
     }
 
     return Response.ok(m).build();
@@ -161,7 +151,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
       User user = userHandler.createUserInstance(username);
       if (user == null) {
         return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username
-            + "' not found.").build();
+                                                            + "' not found.").build();
       }
       user.setPassword(password);
       user.setFirstName(firstname);
@@ -173,8 +163,8 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      .entity("Thrown exception : " + e)
+      .build();
     }
 
     return null;
@@ -190,12 +180,12 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
         stop() ;
       } else
         return Response.status(HTTPStatus.NOT_FOUND).entity("Group '" + groupId
-            + "' not found!").build();
+                                                            + "' not found!").build();
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      .entity("Thrown exception : " + e)
+      .build();
     }
     return null;
   }
@@ -208,8 +198,8 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      .entity("Thrown exception : " + e)
+      .build();
     }
     return null;
   }
@@ -220,15 +210,15 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
       User user = userHandler.findUserByName(username);
       if (user == null) {
         return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username
-            + "' not found.").build();
+                                                            + "' not found.").build();
       }
       userHandler.removeUser(username, true);
       stop() ;
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      .entity("Thrown exception : " + e)
+      .build();
     }
     return null;
   }
@@ -240,8 +230,8 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
       if (userHandler.findUserByName(username) == null
           || groupHandler.findGroupById(groupId) == null) {
         return Response.status(HTTPStatus.NOT_FOUND)
-                               .entity("Group or user not found!")
-                               .build();
+        .entity("Group or user not found!")
+        .build();
       }
       Collection<Membership> memberships = membershipHandler.findMembershipsByUserAndGroup(username,
                                                                                            groupId);
@@ -252,8 +242,8 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      .entity("Thrown exception : " + e)
+      .build();
     }
     return null;
   }
@@ -269,7 +259,7 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
       Group group = groupHandler.findGroupById(groupId);
       if (group == null) {
         return Response.status(HTTPStatus.NOT_FOUND).entity("Group '" + groupId
-            + "' not found!").build();
+                                                            + "' not found!").build();
       }
       group.setGroupName(name);
       group.setLabel(label);
@@ -280,8 +270,8 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      .entity("Thrown exception : " + e)
+      .build();
     }
     return null;
   }
@@ -306,8 +296,8 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
     } catch (Exception e) {
       LOGGER.error("Cannot manage user : ", e);
       return Response.status(HTTPStatus.INTERNAL_ERROR)
-                             .entity("Thrown exception : " + e)
-                             .build();
+      .entity("Thrown exception : " + e)
+      .build();
     }
     return null;
   }

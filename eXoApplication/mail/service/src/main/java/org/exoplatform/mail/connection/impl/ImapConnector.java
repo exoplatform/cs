@@ -27,13 +27,13 @@ import javax.mail.UIDFolder;
 import javax.mail.URLName;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MimeMessageParser;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
@@ -43,7 +43,7 @@ import com.sun.mail.imap.IMAPStore;
  * Sep 18, 2009
  */
 public class ImapConnector extends BaseConnector {
-  private static final Log logger = LogFactory.getLog(Utils.class);
+  private static final Log logger = ExoLogger.getLogger("cs.mail.service");
 
   private Account          account_;
 

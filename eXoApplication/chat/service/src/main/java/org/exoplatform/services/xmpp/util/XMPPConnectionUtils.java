@@ -23,8 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.xmpp.ext.transport.AIMTransport;
 import org.exoplatform.services.xmpp.ext.transport.GtalkTransport;
 import org.exoplatform.services.xmpp.ext.transport.ICQTransport;
@@ -53,7 +53,7 @@ import org.jivesoftware.smackx.packet.DiscoverItems.Item;
  */
 public class XMPPConnectionUtils {
 
-  private static final Log LOGGER = LogFactory.getLog("XMPPConnectionUtils");
+  private static final Log LOGGER = ExoLogger.getLogger("XMPPConnectionUtils");
 
   /**
    * Discovery Server items.

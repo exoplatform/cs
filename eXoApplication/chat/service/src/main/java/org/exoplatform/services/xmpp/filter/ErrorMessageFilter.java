@@ -16,8 +16,8 @@
  */
 package org.exoplatform.services.xmpp.filter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.jivesoftware.smack.filter.AndFilter;
 import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
@@ -33,7 +33,7 @@ public class ErrorMessageFilter extends AndFilter {
   /**
    * Class logger.
    */
-  private final Log log = LogFactory.getLog(ErrorMessageFilter.class);
+  private final Log log = ExoLogger.getLogger("cs.chat.service");
   
   public ErrorMessageFilter() {
     super();

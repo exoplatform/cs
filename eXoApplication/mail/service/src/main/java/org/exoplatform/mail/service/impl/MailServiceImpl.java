@@ -67,8 +67,6 @@ import javax.mail.search.SentDateTerm;
 import javax.mail.search.SubjectTerm;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.mail.connection.Connector;
 import org.exoplatform.mail.connection.impl.ImapConnector;
@@ -93,6 +91,8 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.services.scheduler.PeriodInfo;
@@ -117,7 +117,7 @@ import com.sun.mail.smtp.SMTPTransport;
  */
 public class MailServiceImpl implements MailService, Startable {
 
-  private static final Log          logger = LogFactory.getLog(MailServiceImpl.class);
+  private static final Log          logger = ExoLogger.getLogger("cs.mail.service");
 
   private JCRDataStorage            storage_;
 

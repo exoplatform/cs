@@ -21,11 +21,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.uistate.UIStateSession;
 import org.exoplatform.services.xmpp.connection.XMPPSession;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
@@ -49,7 +48,7 @@ public class XMPPMessenger {
   /**
    * Logger.
    */
-  protected static final Log             LOGGER                     = LogFactory.getLog("XMPPMessenger");
+  protected static final Log             LOGGER                     = ExoLogger.getLogger("XMPPMessenger");
 
   /**
    * 

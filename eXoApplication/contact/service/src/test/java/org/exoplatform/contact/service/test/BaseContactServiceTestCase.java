@@ -21,14 +21,14 @@ import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.component.test.*;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
 
@@ -47,7 +47,7 @@ import org.exoplatform.services.security.Identity;
 })
 public abstract class BaseContactServiceTestCase extends AbstractKernelTest {
 
-  protected static Log          log = LogFactory.getLog("sample.services.test");  
+  private static final Log log = ExoLogger.getLogger("cs.contact.service.test");
 
   protected static RepositoryService   repositoryService;
   protected static PortalContainer container;

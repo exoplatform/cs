@@ -40,9 +40,9 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
@@ -54,7 +54,7 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
  */
 public class Utils {
   
-  private static final Log logger = LogFactory.getLog(Utils.class);
+  private static final Log logger = ExoLogger.getLogger("cs.mail.service");
   
   public static MailService mailService_;
   public static JobSchedulerService schedulerService_;

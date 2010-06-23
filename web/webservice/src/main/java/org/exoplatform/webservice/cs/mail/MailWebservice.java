@@ -19,8 +19,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
@@ -31,6 +29,8 @@ import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.webservice.cs.bean.ContactData;
@@ -53,7 +53,7 @@ public class MailWebservice implements ResourceContainer {
 
   public static final int    MAX_TIMEOUT       = 16;
 
-  private static final Log log = LogFactory.getLog(MailWebservice.class);
+  private static final Log log = ExoLogger.getLogger("cs.mail.webservice");
   // TODO need to organize code, don't keep html content here !
   public MailWebservice() {
   }
@@ -81,68 +81,7 @@ public class MailWebservice implements ResourceContainer {
       mailService.updateCheckingMailStatusByCometd(userName, accountId, checkingInfo);
       
     }
-    /*if (folderId != null && folderId.trim().length() > 0
-        && !folderId.equalsIgnoreCase("checkall")) {
-      checkingInfo.setRequestingForFolder_(folderId);
-    }*/
     StringBuffer buffer = new StringBuffer("");
-    
-    /*
-    buffer.append("<info>");
-    buffer.append("  <checkingmail>");
-    int stt = CheckingInfo.START_CHECKMAIL_STATUS;
-    String sttMsg = "";
-    if (checkingInfo != null) sttMsg = checkingInfo.getStatusMsg();
-    
-    /////////////////////////////////
-    try {
-      Account account = mailService.getAccountById(userName, accountId);
-      Properties props = System.getProperties();
-      // this line fix for base64 encode problem with corrupted
-      // attachments
-      props.setProperty("mail.mime.base64.ignoreerrors", "true");
-
-      String socketFactoryClass = "javax.net.SocketFactory";
-      if (account.isIncomingSsl()) {
-        socketFactoryClass = Utils.SSL_FACTORY;
-      }
-      props.setProperty("mail.imap.socketFactory.fallback", "false");
-      props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
-
-      Session session = Session.getDefaultInstance(props, null);
-      IMAPStore imapStore = (IMAPStore) session.getStore("imap");
-      try {
-        if (Utils.isEmptyField(account.getIncomingPassword()))
-          account.setIncomingPassword(IdGenerator.generate());
-        imapStore.connect(account.getIncomingHost(),
-                          Integer.valueOf(account.getIncomingPort()),
-                          account.getIncomingUser(),
-                          account.getIncomingPassword());
-      } catch (AuthenticationFailedException e) {
-          sttMsg = "The userName or password may be wrong.";
-          stt = CheckingInfo.RETRY_PASSWORD;
-      } catch (MessagingException e) {
-          sttMsg = "Connecting failed. Please check server configuration.";
-          stt = CheckingInfo.CONNECTION_FAILURE;
-      } catch (IllegalStateException e) {
-        log.error("cannot connect to server", e);
-      } catch (Exception e) {
-        log.error("cannot connect to server", e);
-        sttMsg ="There was an unexpected error. Connecting failed.";
-        stt = CheckingInfo.CONNECTION_FAILURE;
-      }
-    } catch (AccessDeniedException e) {
-      //log.error("cannot connect to server", e);
-    } catch (Exception ex) {
-      log.error("cannot connect to server", ex);
-    }
-    ///////////////////////////////////
-    
-    buffer.append("    <status>" + stt + "</status>");
-    buffer.append("    <statusmsg>" + sttMsg + "</statusmsg>");
-    buffer.append("  </checkingmail>");
-    buffer.append("</info>");
-    */
     return Response.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
 

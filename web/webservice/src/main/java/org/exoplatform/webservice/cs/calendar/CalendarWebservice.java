@@ -305,91 +305,6 @@ public class CalendarWebservice implements ResourceContainer{
   
   /**
    * 
-   * @param username : requested user name
-   * @param calendarId : calendar id from system
-   * @param type : calendar type
-   * @return : Rss feeds
-   * @throws Exception
-   */
- /* @GET
-  @Path("/rss/{username}/{calendarId}/{type}/")
-  public Response rss(@PathParam("username")
-                      String username, @PathParam("calendarId")
-                      String calendarId, @PathParam("type")
-                      String type) throws Exception {
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    cacheControl.setNoStore(true);
-    try {
-
-      CalendarService calService = (CalendarService)ExoContainerContext
-      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-      Calendar cal = null ;
-      switch (Integer.parseInt(type)) {
-      case Utils.PRIVATE_TYPE: cal = calService.getUserCalendar(username, calendarId);
-      break;
-      case Utils.PUBLIC_TYPE: cal = calService.getGroupCalendar(calendarId);
-      break;
-      case Utils.SHARED_TYPE: cal = calService.getSharedCalendars(username, true).getCalendarById(calendarId);
-      default:break;
-      }
-
-      if(cal == null) {
-        return Response.status(HTTPStatus.NOT_FOUND).entity("Calendar " + calendarId + "is removed").cacheControl(cacheControl).build();
-      } 
-      if(cal.getPublicUrl() == null || cal.getPublicUrl().length()==0) {
-        return Response.status(HTTPStatus.NO_CONTENT).entity("Calendar " + calendarId + "is not public rss").cacheControl(cacheControl).build();
-      }
-
-      List<CalendarEvent> events = calService.getUserEventByCalendar(username, Arrays.asList(calendarId));
-      return Response.ok(makeRss(username, cal, events), MediaType.APPLICATION_XML).cacheControl(cacheControl).build();
-    } catch (Exception e) {
-      e.printStackTrace();
-      return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
-    }
-  }
-
-  *//**
-   * 
-   * @param auhtor : the feed create 
-   * @param cal : calendar object data
-   * @param events : list of event from data
-   * @return
-   * @throws Exception
-   *//*
-  private String makeRss(String auhtor, Calendar cal, List<CalendarEvent> events) throws Exception{
-
-    SyndFeed feed = new SyndFeedImpl();      
-    feed.setFeedType("rss_2.0");      
-    feed.setTitle(cal.getName());
-    feed.setLink(cal.getPublicUrl());
-    if(cal.getDescription() == null) cal.setDescription("This is description");
-    feed.setDescription(cal.getDescription());     
-    List<SyndEntry> entries = new ArrayList<SyndEntry>();
-    SyndEntry entry;
-    SyndContent description; 
-    for(CalendarEvent e : events) {
-      entry = new SyndEntryImpl();
-      entry.setTitle(e.getSummary());                
-      entry.setLink(cal.getPublicUrl().replaceFirst("rss","subscribe") + Utils.SLASH + e.getId());    
-      entry.setAuthor(auhtor) ;
-      description = new SyndContentImpl();
-      description.setType(Utils.MIMETYPE_TEXTPLAIN);
-      description.setValue(e.getDescription());
-      entry.setDescription(description);        
-      entries.add(entry);
-      entry.getEnclosures() ;  
-    }
-    feed.setEntries(entries);      
-    feed.setEncoding("UTF-8") ;     
-    SyndFeedOutput output = new SyndFeedOutput();      
-    String feedXML = output.outputString(feed);      
-    feedXML = StringUtils.replace(feedXML,"&amp;","&");  
-    return feedXML;
-  }*/
-
-  /**
-   * 
    * @param username : 
    * @param calendarId
    * @param type
@@ -488,5 +403,6 @@ public class CalendarWebservice implements ResourceContainer{
         ConversationState.getCurrent().getIdentity().getUserId() != null && ConversationState.getCurrent().getIdentity().getUserId().equals(usename)  
     );
   }
+  
   
 }

@@ -16,10 +16,10 @@
  */
 package org.exoplatform.services.xmpp.userinfo;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.security.ConversationState;
@@ -35,7 +35,7 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
   /**
    * Logger.
    */
-  private final Log                        log                    = LogFactory.getLog(OrganizationUserInfoServiceImpl.class);
+  private final Log                        log                    = ExoLogger.getLogger("cs.chat.service");
 
   /**
    * 

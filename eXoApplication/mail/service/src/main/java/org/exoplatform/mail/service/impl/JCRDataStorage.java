@@ -53,8 +53,6 @@ import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -79,6 +77,8 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
@@ -88,7 +88,7 @@ import org.exoplatform.ws.frameworks.json.value.JsonValue;
  * tuan.nguyen@exoplatform.com Jun 23, 2007
  */
 public class JCRDataStorage implements DataStorage {
-  private static final Log     logger       = LogFactory.getLog(Utils.class);
+  private static final Log     logger       = ExoLogger.getLogger("cs.mail.service");
 
   private NodeHierarchyCreator nodeHierarchyCreator_;
 

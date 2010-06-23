@@ -35,12 +35,12 @@ import java.util.UUID;
 
 import javax.jcr.RepositoryException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.uistate.UIStateSession;
 import org.exoplatform.services.uistate.bean.UIStateDataBean;
@@ -180,7 +180,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
   /**
    * Logger.
    */
-  private final Log                         log                    = LogFactory.getLog("lr.XMPPSessionImpl");
+  private final Log                         log                    = ExoLogger.getLogger("lr.XMPPSessionImpl");
 
   /**
    * 

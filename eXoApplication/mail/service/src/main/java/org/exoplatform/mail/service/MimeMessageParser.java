@@ -32,8 +32,8 @@ import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 
 /**
  * Created by The eXo Platform SAS
@@ -42,7 +42,7 @@ import org.apache.commons.logging.LogFactory;
  * Mar 15, 2008  
  */
 public class MimeMessageParser {
-  private static final Log logger = LogFactory.getLog(MimeMessageParser.class);
+  private static final Log logger = ExoLogger.getLogger("cs.mail.service");
   
   public static Calendar getReceivedDate(javax.mail.Message msg) throws Exception {
     Calendar gc = GregorianCalendar.getInstance() ;
