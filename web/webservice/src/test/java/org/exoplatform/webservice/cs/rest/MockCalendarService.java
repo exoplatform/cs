@@ -41,7 +41,6 @@ import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.impl.CsvImportExport;
 import org.exoplatform.calendar.service.impl.ICalendarImportExport;
 import org.exoplatform.calendar.service.impl.JCRDataStorage;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
  * Created by The eXo Platform SAS
@@ -54,16 +53,16 @@ public class MockCalendarService implements CalendarService{
   private Calendar cal_;
   private Map<String, List<CalendarEvent>> data_;
   private Map<String, CalendarImportExport>   calendarImportExport_ = new LinkedHashMap<String, CalendarImportExport>();
-  
+
   public MockCalendarService() throws Exception{
     calendarImportExport_.put(CalendarService.ICALENDAR, new ICalendarImportExport(new JCRDataStorage(null, null)));
     calendarImportExport_.put(CalendarService.EXPORTEDCSV, new CsvImportExport(new JCRDataStorage(null, null)));
   }
-  
+
   @Override
   public void addListenerPlugin(CalendarUpdateEventListener listener) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
@@ -80,7 +79,7 @@ public class MockCalendarService implements CalendarService{
                                 String eventId,
                                 int answer) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
@@ -92,7 +91,7 @@ public class MockCalendarService implements CalendarService{
                                 String eventId,
                                 int answer) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
@@ -283,19 +282,20 @@ public class MockCalendarService implements CalendarService{
                         List<CalendarEvent> calEvents,
                         String username) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception {
-    // TODO Auto-generated method stub
+    System.out.println("\n\n Data clean up");
+    data_.clear();
     return null;
   }
 
   @Override
   public void removeEventCategory(String username, String eventCategoryName) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
@@ -313,13 +313,13 @@ public class MockCalendarService implements CalendarService{
   @Override
   public void removeSharedCalendar(String username, String calendarId) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void removeSharedEvent(String username, String calendarId, String eventId) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
@@ -337,19 +337,19 @@ public class MockCalendarService implements CalendarService{
   @Override
   public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void saveEventCategory(String username, EventCategory eventCategory, boolean isNew) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
@@ -358,25 +358,25 @@ public class MockCalendarService implements CalendarService{
                                         CalendarEvent event,
                                         boolean isNew) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void savePublicCalendar(Calendar calendar, boolean isNew, String username) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void savePublicEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void saveSharedCalendar(String username, Calendar calendar) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
@@ -387,22 +387,28 @@ public class MockCalendarService implements CalendarService{
     data_.put(cal_.getId(), events);
     System.out.println("\n\n calendar Saved");
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
-    
+
     data_.get(cal_.getId()).add(event);
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public EventPageList searchEvent(String username,
                                    EventQuery eventQuery,
                                    String[] publicCalendarIds) throws Exception {
-    // TODO Auto-generated method stub
+    if(data_ != null && cal_ != null && data_.get(cal_.getId()) != null)
+      if(eventQuery.getEventType().equals(CalendarEvent.TYPE_EVENT)) {
+        return new EventPageList(data_.get(cal_.getId()),0);
+      } else if(eventQuery.getEventType().equals(CalendarEvent.TYPE_TASK)) {
+        return new EventPageList(data_.get(cal_.getId()),0);
+      }
+
     return null;
   }
 
@@ -417,31 +423,31 @@ public class MockCalendarService implements CalendarService{
   @Override
   public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void updateCalDav(String usename, String calendarId, CalendarImportExport imp) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void updateCalDav(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void updateRss(String usename, String calendarId, CalendarImportExport imp) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void updateRss(String usename, String calendarId, CalendarImportExport imp, int number) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
@@ -453,7 +459,7 @@ public class MockCalendarService implements CalendarService{
   @Override
   public void removeFeedData(String username, String title) {
     // TODO Auto-generated method stub
-    
+
   }
   @Override
   public ResourceBundle getResourceBundle() throws Exception {
@@ -461,9 +467,9 @@ public class MockCalendarService implements CalendarService{
     return null;
   }
 
-public void initNewUser(String userName, CalendarSetting defaultCalendarSetting)
-		throws Exception {
-	// TODO Auto-generated method stub
-	
-}
+  public void initNewUser(String userName, CalendarSetting defaultCalendarSetting)
+  throws Exception {
+    // TODO Auto-generated method stub
+
+  }
 }

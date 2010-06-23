@@ -93,7 +93,7 @@ public class Calendar {
   private String publicUrl;
   private String privateUrl;
   
-  public Calendar() throws Exception{
+  public Calendar() {
     id = "calendar" + IdGenerator.generate() ;
     timeZone = TimeZone.getDefault().getID() ;
     locale = Locale.getDefault().getISO3Country() ;

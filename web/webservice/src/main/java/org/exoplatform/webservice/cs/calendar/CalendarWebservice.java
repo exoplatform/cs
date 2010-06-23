@@ -19,8 +19,10 @@ package org.exoplatform.webservice.cs.calendar;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.jcr.PathNotFoundException;
@@ -36,10 +38,12 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.common.http.HTTPStatus;
+import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
@@ -67,14 +71,14 @@ import com.sun.syndication.io.XmlReader;
 
 
 
-@Path("/private/cs/calendar")
+@Path("/private/cs/calendar/")
 public class CalendarWebservice implements ResourceContainer{
   public final static String BASE_URL = "/private/cs/calendar".intern();
   public final static String BASE_RSS_URL = BASE_URL + "/feed".intern();
   public final static String BASE_EVENT_URL = BASE_URL + "/event".intern();
   final public static String BASE_URL_PUBLIC = BASE_URL + "/subscribe/".intern();
   final public static String BASE_URL_PRIVATE = BASE_URL + "/private/".intern();
-  
+
   public CalendarWebservice() {}
 
   protected void start() {
@@ -89,7 +93,7 @@ public class CalendarWebservice implements ResourceContainer{
     .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
     ((ComponentRequestLifecycle)oService).endRequest(manager);
   }
-  
+
   /**
    * 
    * @param username : user id
@@ -150,15 +154,15 @@ public class CalendarWebservice implements ResourceContainer{
   @GET
   @Path("event/{username}/{eventFeedName}/")
   public Response event(@PathParam("username")
-                      String username, @PathParam("eventFeedName")
-                      String eventFeedName) throws Exception {
+                        String username, @PathParam("eventFeedName")
+                        String eventFeedName) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
       if(!isAuthorized(username)) return Response.status(HTTPStatus.LOCKED)
-        .entity("Unauthorized: Access is denied").cacheControl(cacheControl).build();
-      
+      .entity("Unauthorized: Access is denied").cacheControl(cacheControl).build();
+
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
@@ -189,8 +193,8 @@ public class CalendarWebservice implements ResourceContainer{
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
     }
   }
-  
-  
+
+
   /**
    * 
    * @param username : requested user name
@@ -203,19 +207,19 @@ public class CalendarWebservice implements ResourceContainer{
   @GET
   @Path("feed/{username}/{feedname}/{filename}/")
   public Response feed(@PathParam("username")
-                      String username, @PathParam("feedname")
-                      String feedname, @PathParam("filename")
-                      String filename) throws Exception {
+                       String username, @PathParam("feedname")
+                       String feedname, @PathParam("filename")
+                       String filename) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
       if(!isAuthorized(username))
         return Response.status(HTTPStatus.LOCKED)
-          .entity("Unauthorized: Access is denied").cacheControl(cacheControl).build();
+        .entity("Unauthorized: Access is denied").cacheControl(cacheControl).build();
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-      
+
       // TODO getFeed(String feedname)
       FeedData feed = null;
       for (FeedData feedData : calService.getFeeds(username)) {
@@ -262,7 +266,7 @@ public class CalendarWebservice implements ResourceContainer{
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
     }
   }
-  
+
   /**
    * 
    * @param auhtor : the feed create
@@ -272,7 +276,7 @@ public class CalendarWebservice implements ResourceContainer{
    */
   private String makeFeed(String author, List<CalendarEvent> events, FeedData feedData) throws Exception{
     String baseURL = feedData.getUrl().split(BASE_RSS_URL)[0];
-    
+
     SyndFeed feed = new SyndFeedImpl();      
     feed.setFeedType("rss_2.0");
     feed.setTitle(feedData.getTitle());
@@ -302,7 +306,7 @@ public class CalendarWebservice implements ResourceContainer{
     feedXML = StringUtils.replace(feedXML,"&amp;","&");  
     return feedXML;
   }
-  
+
   /**
    * 
    * @param username : 
@@ -316,15 +320,15 @@ public class CalendarWebservice implements ResourceContainer{
   //@Produces("text/calendar")
   @Path("/subscribe/{username}/{calendarId}/{type}")
   public Response publicProcess(@PathParam("username")
-                              String username, @PathParam("calendarId")
-                              String calendarId, @PathParam("type")
-                              String type) throws Exception {
+                                String username, @PathParam("calendarId")
+                                String calendarId, @PathParam("type")
+                                String type) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
       CalendarService calService = (CalendarService)ExoContainerContext
-        .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       Calendar calendar = null;
       if (type.equals(Utils.PRIVATE_TYPE + "")) {
         calendar = calService.getUserCalendar(username, calendarId);
@@ -339,9 +343,9 @@ public class CalendarWebservice implements ResourceContainer{
       }
       if ((calendar == null) || Utils.isEmpty(calendar.getPublicUrl())) {
         return Response.status(HTTPStatus.LOCKED)
-          .entity("Calendar " + calendarId + " is not public access").cacheControl(cacheControl).build();
+        .entity("Calendar " + calendarId + " is not public access").cacheControl(cacheControl).build();
       }
-      
+
       CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
       OutputStream out = icalEx.exportCalendar(username, Arrays.asList(calendarId), type);
       InputStream in = new ByteArrayInputStream(out.toString().getBytes());
@@ -357,7 +361,7 @@ public class CalendarWebservice implements ResourceContainer{
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
     }
   }
-  
+
   /**
    * 
    * @param username : 
@@ -371,15 +375,15 @@ public class CalendarWebservice implements ResourceContainer{
   //@Produces("text/calendar")
   @Path("private/{username}/{calendarId}/{type}")
   public Response privateProcess(@PathParam("username")
-                              String username, @PathParam("calendarId")
-                              String calendarId, @PathParam("type")
-                              String type) throws Exception {
+                                 String username, @PathParam("calendarId")
+                                 String calendarId, @PathParam("type")
+                                 String type) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     try {
       if(!isAuthorized(username)) return Response.status(HTTPStatus.LOCKED)
-        .entity("Unauthorized: Access is denied").cacheControl(cacheControl).build();
+      .entity("Unauthorized: Access is denied").cacheControl(cacheControl).build();
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
@@ -397,12 +401,65 @@ public class CalendarWebservice implements ResourceContainer{
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
     }
   }
-  
+
   private boolean isAuthorized(String usename) {
     return (ConversationState.getCurrent() != null && ConversationState.getCurrent().getIdentity() != null && 
         ConversationState.getCurrent().getIdentity().getUserId() != null && ConversationState.getCurrent().getIdentity().getUserId().equals(usename)  
     );
   }
-  
-  
+
+  /**
+   * listing up coming event or task given by current date time
+   * @param username : current loged-in user
+   * @param currentdatetime : current date time using ISO8601 format yyyyMMdd
+   * @param type : event or task
+   * @return page list of event or task
+   * @throws Exception : HTTPStatus.INTERNAL_ERROR , HTTPStatus.UNAUTHORIZED , HTTPStatus.NO_CONTENT
+   */
+  @GET
+  @Path("upcoming/{username}/{currentdatetime}/{type}")
+  public Response upcomingEvent(@PathParam("username")
+                                String username, @PathParam("currentdatetime")
+                                String currentdatetime, @PathParam("type")
+                                String type) throws Exception {
+
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+
+    try {
+
+      if(isAuthorized(username)) {
+        return Response.status(HTTPStatus.UNAUTHORIZED).cacheControl(cacheControl).build();
+      }
+      
+      if(!(CalendarEvent.TYPE_EVENT.equalsIgnoreCase(type) || CalendarEvent.TYPE_TASK.equalsIgnoreCase(type))) {
+        return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cacheControl).build();
+      }
+      
+      SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd") ;
+      java.util.Calendar cal = GregorianCalendar.getInstance();
+      cal.setTime(sf.parse(currentdatetime)) ;
+      CalendarService calService = (CalendarService)ExoContainerContext
+      .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      EventQuery eventQuery = new EventQuery();
+      eventQuery.setFromDate(cal);
+      cal.add(java.util.Calendar.HOUR_OF_DAY, cal.getMaximum(java.util.Calendar.HOUR));
+      eventQuery.setToDate(cal);
+      eventQuery.setEventType(type);
+      eventQuery.setLimitedItems(10);
+      eventQuery.setOrderBy(new String[]{Utils.EXO_FROM_DATE_TIME});
+      EventPageList data =  calService.searchEvent(username, eventQuery, null);
+      if(data == null || data.getAll().isEmpty()) 
+        return Response.status(HTTPStatus.NO_CONTENT).cacheControl(cacheControl).build();
+      
+      return Response.ok(data.getAll(), MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
+    }
+
+  }
+
+
 }
