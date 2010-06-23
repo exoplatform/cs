@@ -28,6 +28,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -215,7 +217,7 @@ public class MailUtils {
     return (!isFieldEmpty(htmlContent)) ? htmlContent.replaceAll("&amp;", "&").replaceAll( "&quot;", "\"")
         .replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&quot;", "\"").replaceAll("&#39;", "'") : "" ;
   }
-  
+      
   public static boolean isInvitation(Message msg) throws Exception {
     return (msg.getHeader("X-Exo-Invitation") != null) ;
   }
@@ -290,6 +292,7 @@ public class MailUtils {
       str = str.replaceAll("&nbsp;", "");
       str = str.replaceAll("&quot;", "\"");
       str = str.replaceAll("\n", "");
+      //str = str.replaceAll("&lt;", "<").replaceAll("&gt;",">");
     } else {
       str = "" ;
     }
@@ -321,7 +324,7 @@ public class MailUtils {
   
   public static String convertTextToHtmlLink(String s) throws Exception {
     if (isFieldEmpty(s)) return "" ;
-    s = decodeHTML(s);
+    //s = decodeHTML(s);
     // for external link with form http:// , https://, ftp://
     s = s.replaceAll("(\r?\n?)(https?|ftp)", "<br /> $2");
     s = s.replaceAll("([^((href|src)=\")])(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", "<a target=\"_blank\" href=\"$0\"> $0 </a>") ;
@@ -332,12 +335,14 @@ public class MailUtils {
   
   public static String insertTargetToHtmlLink(String s) throws Exception {
     if (isFieldEmpty(s)) return "" ;
-    s = decodeHTML(s);
     // for a tag we insert "target=_blank" to open in other window or tab
-    s = s.replaceAll("<(A|a)(.*?)>(.*?)</(A|a)>", "<a $2 target=\"_blank\"> $3 </a>") ;
+    s = s.replaceAll("<(A|a)(.*?)>(.*?)</(A|a)>", "<a $2 target=\"_blank\"> $3 </a>");
     return s ;
   }
   
+  public static void main(String[] args) throws Exception {
+    System.out.println(convertTextToHtmlLink("<a><33r>ds</a>sdfsd@gs.c"));
+  }
   public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
     return sharedUserId + " - " + addressName ;
   }

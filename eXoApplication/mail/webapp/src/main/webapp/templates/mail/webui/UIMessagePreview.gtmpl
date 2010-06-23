@@ -51,6 +51,7 @@
   		  String subject = "(" + _ctx.appRes(uicomponent.id+ ".label.no-subject") + ")"
   		  if (msgRoot.getSubject() != null && msgRoot.getSubject() != "") {
   		    subject = msgRoot.getSubject();
+  		    subject = MailUtils.encodeHTML(subject);
   		  }
   		%>
   		<%=subject%>
@@ -138,9 +139,6 @@
                     </tr>
                   </body>
                 </table>
-                
-                
-                
               </div>
             </div>
           </div>
@@ -418,7 +416,7 @@
   							<textarea id="$textAreaId" class="MessageDetails" style="display:none">
                   <%
                   String msgBody = msg.getMessageBody();
-                    println("<div style='font-family:Tahoma,Verdana,Arial,Helvetica,sans-serif; font-size:12px;'>")
+                    println("<div style='font-family:Tahoma,VeSrdana,Arial,Helvetica,sans-serif; font-size:12px;'><span>")
                     if (contentType.indexOf("text/plain") >= 0) {
                       msgBody = MailUtils.convertTextToHtmlLink(msgBody);
                       println(MailUtils.encodeHTML(msgBody));
@@ -427,7 +425,7 @@
                       msgBody = MailUtils.fillImage(msgBody, uicomponent.getImageLocationMap(msg));
                       println(MailUtils.encodeHTML(msgBody));
                     }
-                    println("</div>");
+                    println("</span></div>");
                   %>
   							</textarea>
                 <%} else {%>
