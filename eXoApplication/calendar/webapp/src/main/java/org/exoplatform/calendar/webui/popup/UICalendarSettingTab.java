@@ -190,7 +190,7 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     return getUIFormSelectBox(WORKINGTIME_BEGIN).getValue() ;
   }
   protected String getWorkingBegin(Locale locale) throws Exception {
-    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+    java.util.Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(getTimeFormat()) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
@@ -203,7 +203,7 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     return timeFormat.format(cal.getTime()) ;
   }
   protected Date getWorkingBeginTime() throws Exception {
-    java.util.Calendar cal = CalendarUtils.getBeginDay(CalendarUtils.getInstanceTempCalendar()) ;
+    java.util.Calendar cal = CalendarUtils.getBeginDay(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     String value = getUIFormSelectBox(WORKINGTIME_BEGIN).getValue() ;
@@ -212,7 +212,7 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     return  cal.getTime()  ;
   }
   protected Date getWorkingBeginTime(Locale locale) throws Exception {
-    java.util.Calendar cal = CalendarUtils.getBeginDay(CalendarUtils.getInstanceTempCalendar()) ;
+    java.util.Calendar cal = CalendarUtils.getBeginDay(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     String value = getUIFormSelectBox(WORKINGTIME_BEGIN).getValue() ;
@@ -228,7 +228,7 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
   }
 
   protected Date getWorkingEndTime() throws Exception{
-    java.util.Calendar cal = CalendarUtils.getBeginDay(CalendarUtils.getInstanceTempCalendar()) ;
+    java.util.Calendar cal = CalendarUtils.getBeginDay(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     dateFormat.setCalendar(cal) ;

@@ -139,9 +139,9 @@ public class UIActionBar extends UIContainer  {
         } 
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
-      renderedChild.setCurrentCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+      renderedChild.setCurrentCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
       renderedChild.refresh() ;
-      uiMiniCalendar.setCurrentCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+      uiMiniCalendar.setCurrentCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarContainer) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;

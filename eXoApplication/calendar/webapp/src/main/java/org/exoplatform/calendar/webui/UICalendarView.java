@@ -29,6 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.jcr.PathNotFoundException;
 
@@ -113,6 +114,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected CalendarSetting calendarSetting_ ;
 
   private String dateTimeFormat_  ;
+  private DateFormat dfFormat = null;
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
   protected Calendar instanceTempCalendar_ = null ;
@@ -126,12 +128,14 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   private boolean allDelete_ = true ;
 
   public UICalendarView() throws Exception{
+    try {
     initCategories() ;
     applySeting() ;
-    calendar_ = getInstanceTempCalendar() ;  
-    calendar_.setLenient(false) ;
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy k:m:s z");
-    simpleDateFormat.setCalendar(calendar_) ;
+    calendar_ = CalendarUtils.getInstanceOfCurrentCalendar();
+    } catch (Exception e) { e.printStackTrace(); }
+//    calendar_.setLenient(false) ;
+//    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy k:m:s z");
+//    simpleDateFormat.setCalendar(calendar_) ;
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
     dfs_ = new DateFormatSymbols(locale) ;
@@ -162,22 +166,29 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     return String.format(formatPattern, getCurrentCalendar(), monthOpenTag, monthCloseTag, 
                          yearOpenTag, yearCloseTag);
   }
-  
+  /**
+   * 
+   * @return an instance of GregorianCalendar with time zone as of calendar setting.
+   */
   protected Calendar getInstanceTempCalendar() { 
-    if(instanceTempCalendar_ != null) return instanceTempCalendar_ ; 
-    Calendar  calendar = GregorianCalendar.getInstance() ;
-    calendar.setLenient(false) ;
-    int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
-    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
+//    if(instanceTempCalendar_ != null) return instanceTempCalendar_ ; 
+//    Calendar  calendar = GregorianCalendar.getInstance() ;
+//    calendar.setLenient(false) ;
+//    calendar.setTimeZone(TimeZone.getTimeZone(calendarSetting_.getTimeZone()));
+//    
+////    int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
+////    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
+//    
+//    // TODO CS-4165
+//    calendar.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn()));
+//    return calendar;
     
-    // TODO CS-4165
-    calendar.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn()));
-    return  calendar;
+    return  (Calendar) calendar_.clone();
   } 
   public void applySeting() throws Exception {
     displayTimes_ = null ;
     timeSteps_ = null ;
-    instanceTempCalendar_ = null ;
+    instanceTempCalendar_ = null;
     try {
       calendarSetting_ = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
     } catch (Exception e) {
@@ -265,6 +276,37 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
   public void refresh() throws Exception {} ;
 
+  
+  protected String renderDateTimeString(Date date) {
+    if (dfFormat == null) {
+      dfFormat = new SimpleDateFormat(dateTimeFormat_);
+      dfFormat.setCalendar(calendar_);
+    }
+    return dfFormat.format(date);
+  }
+  
+  private DateFormat dayFormat = null;
+  protected String renderDayString(Date date) {
+    if (dayFormat == null) {
+      
+      dayFormat = new SimpleDateFormat(calendarSetting_.getDateFormat());
+      dayFormat.setCalendar(calendar_);
+    }
+    
+    return dayFormat.format(date);
+  }
+  
+  private DateFormat timeFormat = null;
+  protected String renderTimeString(Date date) {
+    if (timeFormat == null) {
+      timeFormat = new SimpleDateFormat(calendarSetting_.getTimeFormat());
+      timeFormat.setCalendar(calendar_);
+    }
+    
+    return timeFormat.format(date);
+  }
+  
+  
   public void initCategories() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = CalendarUtils.getCurrentUser();
@@ -388,21 +430,21 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       setCurrentYear(year) ;
     }
     protected boolean isCurrentDay(int day, int month, int year) {
-      Calendar currentCal = CalendarUtils.getInstanceTempCalendar() ;
+      Calendar currentCal = CalendarUtils.getInstanceOfCurrentCalendar() ;
       boolean isCurrentDay = (currentCal.get(Calendar.DATE) == day) ;
       boolean isCurrentMonth = (currentCal.get(Calendar.MONTH) == month) ;
       boolean isCurrentYear = (currentCal.get(Calendar.YEAR) == year) ;
       return (isCurrentDay && isCurrentMonth && isCurrentYear ) ;
     }
     protected boolean isCurrentWeek(int week, int month, int year) {
-      Calendar currentCal = CalendarUtils.getInstanceTempCalendar() ;
+      Calendar currentCal = CalendarUtils.getInstanceOfCurrentCalendar() ;
       boolean isCurrentWeek = currentCal.get(Calendar.WEEK_OF_YEAR) == week ;
       boolean isCurrentMonth = currentCal.get(Calendar.MONTH) == month ;
       boolean isCurrentYear = currentCal.get(Calendar.YEAR) == year ;
       return (isCurrentWeek && isCurrentMonth && isCurrentYear ) ;
     }
     protected boolean isCurrentMonth(int month, int year) {
-      Calendar currentCal = CalendarUtils.getInstanceTempCalendar() ;
+      Calendar currentCal = CalendarUtils.getInstanceOfCurrentCalendar() ;
       boolean isCurrentMonth = currentCal.get(Calendar.MONTH) == month ;
       boolean isCurrentYear = currentCal.get(Calendar.YEAR) == year ;
       return (isCurrentMonth && isCurrentYear ) ;
@@ -485,7 +527,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
       if(displayTimes_ == null) {
         displayTimes_ =   new ArrayList<String>() ;
-        Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+        Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
         cal.set(Calendar.HOUR_OF_DAY, 0) ;
         cal.set(Calendar.MINUTE, 0) ;
         cal.set(Calendar.MILLISECOND, 0) ;
@@ -500,7 +542,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     protected List<String> getDisplayTimes(String timeFormat, int timeInterval, Locale locale) {
       List<String> displayTimes =   new ArrayList<String>() ;
-      Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+      Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
       cal.set(Calendar.HOUR_OF_DAY, 0) ;
       cal.set(Calendar.MINUTE, 0) ;
       cal.set(Calendar.MILLISECOND, 0) ;
@@ -516,7 +558,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     protected Map<String, String> getTimeSteps(String timeFormat, int timeInterval) {
       if(timeSteps_ == null) {
         timeSteps_ = new LinkedHashMap<String, String>() ;
-        Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+        Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
         cal.setTime(getCurrentDate()) ;
         cal.set(Calendar.HOUR_OF_DAY, 0) ;
         cal.set(Calendar.MINUTE, 0) ;

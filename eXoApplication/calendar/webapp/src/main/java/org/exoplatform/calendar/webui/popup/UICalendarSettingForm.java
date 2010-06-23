@@ -301,7 +301,9 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
         defaultFilterCalendars.clear() ;
       }
       uiCalendars.checkAll() ;
+      
       calendarService.saveCalendarSetting(CalendarUtils.getCurrentUser(), calendarSetting) ;
+      
       calendarPortlet.setCalendarSetting(calendarSetting) ;
       String viewType = UICalendarViewContainer.TYPES[Integer.parseInt(calendarSetting.getViewType())] ;
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;

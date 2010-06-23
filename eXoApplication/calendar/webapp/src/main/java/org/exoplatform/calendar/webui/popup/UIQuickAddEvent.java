@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -115,7 +116,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     toField.setDateFormatStyle(calendarSetting.getDateFormat()) ;
     getUIFormCombobox(FIELD_FROM_TIME).setOptions(fromOptions) ;
     getUIFormCombobox(FIELD_TO_TIME).setOptions(toOptions) ;
-    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+    java.util.Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
     /*UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
     cal.setTime(miniCalendar.getCurrentCalendar().getTime());*/
     if(startTime != null) {
@@ -136,23 +137,30 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
     DateFormat df = new SimpleDateFormat(dateFormat ,locale) ;
-    fromField.setValue(df.format(value)) ;
+    fromField.setValue(df.format(value));
     DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
     timeFile.setValue(tf.format(value)) ;
   }
   private Date getEventFromDate(String dateFormat, String timeFormat) throws Exception {
     try {
+      UICalendarPortlet portlet = getAncestorOfType(UICalendarPortlet.class);
+      
       UIFormDateTimePicker fromField = getChildById(FIELD_FROM) ;
       UIFormComboBox timeFile = getChildById(FIELD_FROM_TIME) ;
+      
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       Locale locale = context.getParentAppRequestContext().getLocale() ;
+      
       if(getIsAllDay()) {
         DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
-        df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-        return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
+        df.setCalendar(portlet.getUserCalendar()) ;
+        Date fromDate = df.parse(fromField.getValue());
+        java.util.Calendar calendar = new GregorianCalendar();
+        calendar.setTime(fromDate);
+        return CalendarUtils.getBeginDay(calendar).getTime();
       } 
       DateFormat df = new SimpleDateFormat(dateFormat + " "  + timeFormat, locale) ;
-      df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+      df.setCalendar(portlet.getUserCalendar()) ;
       return df.parse(fromField.getValue() + " " + timeFile.getValue()) ;
     }
     catch (Exception e) {
@@ -173,18 +181,25 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
   private Date getEventToDate(String dateFormat, String timeFormat) throws Exception {
     try {
+      UICalendarPortlet portlet = getAncestorOfType(UICalendarPortlet.class);
+      
       UIFormDateTimePicker toField = getChildById(FIELD_TO) ;
       UIFormComboBox timeFile = getChildById(FIELD_TO_TIME) ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       Locale locale = context.getParentAppRequestContext().getLocale() ;
+      
       if(getIsAllDay()) {
         DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
-        df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-        return CalendarUtils.getEndDay(df.parse(toField.getValue())).getTime();
+        df.setCalendar(portlet.getUserCalendar()) ;
+        Date fromDate = df.parse(toField.getValue());
+        java.util.Calendar calendar = new GregorianCalendar();
+        calendar.setTime(fromDate);
+        return CalendarUtils.getEndDay(calendar).getTime();
       } 
-      DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
-      df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-      return df.parse(toField.getValue() + " " + timeFile.getValue() ) ;
+      DateFormat df = new SimpleDateFormat(dateFormat + " "  + timeFormat, locale) ;
+      df.setCalendar(portlet.getUserCalendar()) ;
+      return df.parse(toField.getValue() + " " + timeFile.getValue()) ;
+      
     } catch (Exception e) {
       e.printStackTrace() ;
       return null ;
@@ -293,7 +308,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         return ;
       }  
       if(uiForm.getIsAllDay()) {
-        java.util.Calendar tempCal = CalendarUtils.getInstanceTempCalendar() ;
+        java.util.Calendar tempCal = CalendarUtils.getInstanceOfCurrentCalendar() ;
         tempCal.setTime(to) ;
         tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
         to = tempCal.getTime() ;
@@ -434,7 +449,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiEventForm.setEventFromDate(uiForm.getEventFromDate(dateFormat, timeFormat),dateFormat, timeFormat) ;
         Date to = uiForm.getEventToDate(dateFormat, timeFormat) ;
         if(uiForm.getIsAllDay()) {
-          java.util.Calendar tempCal = CalendarUtils.getInstanceTempCalendar() ;
+          java.util.Calendar tempCal = CalendarUtils.getInstanceOfCurrentCalendar() ;
           tempCal.setTime(to) ;
           tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
           to = tempCal.getTime() ;
@@ -462,7 +477,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiTaskForm.initForm(calendarSetting, null, null) ;
         Date to = uiForm.getEventToDate(dateFormat, timeFormat) ;
         if(uiForm.getIsAllDay()) {
-          java.util.Calendar tempCal = CalendarUtils.getInstanceTempCalendar() ;
+          java.util.Calendar tempCal = CalendarUtils.getInstanceOfCurrentCalendar() ;
           tempCal.setTime(to) ;
           tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
           to = tempCal.getTime() ;

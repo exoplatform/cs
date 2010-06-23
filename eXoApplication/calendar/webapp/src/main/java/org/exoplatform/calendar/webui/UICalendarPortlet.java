@@ -16,6 +16,8 @@
  **/
 package org.exoplatform.calendar.webui;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -43,9 +45,9 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
     template = "app:/templates/calendar/webui/UICalendarPortlet.gtmpl"
 )
 public class UICalendarPortlet extends UIPortletApplication {
-  private CalendarSetting calendarSetting_ ;
+//  private CalendarSetting calendarSetting_ ;
   public UICalendarPortlet() throws Exception {
-    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()) ;
+//    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()) ;
     UIActionBar uiActionBar = addChild(UIActionBar.class, null, null) ;
     uiActionBar.setCurrentView(UICalendarViewContainer.TYPES[Integer.parseInt(getCalendarSetting().getViewType())]) ;
     addChild(UICalendarWorkingContainer.class, null, null) ;
@@ -54,13 +56,20 @@ public class UICalendarPortlet extends UIPortletApplication {
     uiPopup.getChild(UIPopupWindow.class).setId("UICalendarPopupWindow") ;
   }
   public CalendarSetting getCalendarSetting() throws Exception{
-    if(calendarSetting_ != null ) return calendarSetting_ ;
-    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()) ; 
-    return calendarSetting_ ; 
+    return CalendarUtils.getCurrentCalendarSetting(); 
   }
   public void setCalendarSetting(CalendarSetting setting) throws Exception{
-    calendarSetting_ = setting; 
+    CalendarUtils.setCurrentCalendarSetting(setting); 
   }
+  
+  /**
+   * @return a calendar that contains configuration of the user, such as: Time zone, First day of week.
+   * @throws Exception
+   */
+  public Calendar getUserCalendar() {    
+    return CalendarUtils.getInstanceOfCurrentCalendar();
+  }
+  
   public String getSettingTimeZone() throws Exception {
     return String.valueOf(TimeZone.getTimeZone(getCalendarSetting().getTimeZone()).getRawOffset()/1000/60) ;
   }

@@ -21,7 +21,6 @@
 	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
  	Locale locale = context.getParentAppRequestContext().getLocale() ;
  	
-	DateFormat df = new SimpleDateFormat(dateTimeFormat, locale) ;
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
 	if(isDisplaySearchResult) {
 %> 
@@ -151,8 +150,8 @@
 										<%=event.getSummary()%>
 									</span>	
 								</td>
-								<td class="text"><%=df.format(event.getFromDateTime())%></td>
-								<td class="text"><%=df.format(event.getToDateTime())%></td>
+								<td class="text"><%=uicomponent.renderDateTimeString(event.getFromDateTime())%></td>
+								<td class="text"><%=uicomponent.renderDateTimeString(event.getToDateTime())%></td>
 		   			  </tr>
   					<%
   					}

@@ -174,7 +174,7 @@ public class UIMonthView extends UICalendarView {
         List<CalendarEvent> dataList = new ArrayList<CalendarEvent>(){} ;
         java.util.Calendar tempCalFrom = calendarview.getInstanceTempCalendar() ;
         tempCalFrom.setTimeInMillis((Long.parseLong(value))) ;
-        java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+        java.util.Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
         for(CalendarEvent ce : list) {
           String calendarId = ce.getCalendarId() ;
           if(ce != null) {

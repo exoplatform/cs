@@ -60,7 +60,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   public UIEventAttenderTab(String arg0) {
     super(arg0);
     setComponentConfig(getClass(), null) ;
-    calendar_ = CalendarUtils.getInstanceTempCalendar() ;
+    calendar_ = CalendarUtils.getInstanceOfCurrentCalendar() ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     //Map<String, String> fromJsActions = new HashMap<String, String>() ;
     //fromJsActions.put(UIFormComboBox.ON_BLUR, "eXo.calendar.UICombobox.synchronize(this)") ;
@@ -123,7 +123,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
     DateFormat df = new SimpleDateFormat(calSetting.getDateFormat(),locale) ;
-    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     return df.format(calendar_.getTime()) ;
   }
   protected void moveNextDay() throws Exception{
@@ -161,7 +161,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   protected void setEventFromDate(Date date, String timeFormat) {
     UIFormComboBox timeField = getChildById(FIELD_FROM_TIME) ;
     DateFormat df = new SimpleDateFormat(timeFormat) ;
-    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     timeField.setValue(df.format(date)) ;
     calendar_.setTime(date) ;
   }
@@ -171,7 +171,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   protected void setEventToDate(Date date, String timeFormat) {
     UIFormComboBox timeField = getChildById(FIELD_TO_TIME) ;
     DateFormat df = new SimpleDateFormat(timeFormat) ;
-    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     timeField.setValue(df.format(date)) ;
   }  
 

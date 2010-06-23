@@ -34,7 +34,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
-import java.util.MissingResourceException;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.jcr.PathNotFoundException;
 import javax.mail.internet.InternetAddress;
@@ -182,22 +182,86 @@ public class CalendarUtils {
   static public OrganizationService getOrganizationService() throws Exception {
     return (OrganizationService)PortalContainer.getInstance().getComponentInstance(OrganizationService.class) ;
   }
-  public static Calendar getInstanceTempCalendar() { 
+  
+  /**
+   * calendar setting registry. 
+   */
+  private static ConcurrentHashMap<String, CalendarSetting> calendarSettings_ = new ConcurrentHashMap<String, CalendarSetting>();
+  
+  /**
+   * remove current calendar setting from registry.
+   * @return
+   */
+  public static CalendarSetting removeCurrentCalendarSetting() {
+    try {
+      return calendarSettings_.remove(getCurrentUser());
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+  
+  /**
+   * change value of calendar setting of user in registry.
+   * @param setting
+   */
+  public static void setCurrentCalendarSetting(CalendarSetting setting) {
+    try {
+      calendarSettings_.put(getCurrentUser(), setting);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  /**
+   * 
+   * @return current calendar setting of user. return null if any exception is thrown.
+   */
+  public static CalendarSetting getCurrentCalendarSetting() {
+    
+    try {
+      String user = getCurrentUser();
+      CalendarSetting setting = calendarSettings_.get(user);
+      if (setting == null) {
+        setting = getCalendarService().getCalendarSetting(user) ;
+        calendarSettings_.put(user, setting);
+      }
+      return setting;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+      
+  }
+  
+  /**
+   * @return
+   * @deprecated
+   */
+  public static Calendar getInstanceTempCalendar() {
+    return getInstanceOfCurrentCalendar();
+  }
+  
+  /**
+   * 
+   * @return return an instance of Calendar class which contains user's setting, such as, time zone, first day of week.
+   */
+  public static Calendar getInstanceOfCurrentCalendar() { 
     Calendar  calendar = GregorianCalendar.getInstance() ;
-    calendar.setLenient(false) ;
-    /* try {
-      CalendarSetting setting = getCalendarService().getCalendarSetting(SessionsUtils.getSessionProvider(), getCurrentUser()) ;
-      calendar.setTimeZone(TimeZone.getTimeZone(setting.getTimeZone())) ; 
+    calendar.setLenient(false);
+     try {
+      CalendarSetting setting = getCurrentCalendarSetting();
+      calendar.setTimeZone(TimeZone.getTimeZone(setting.getTimeZone()));
+      calendar.setFirstDayOfWeek(Integer.parseInt(setting.getWeekStartOn())); 
     } catch (Exception e) {
       e.printStackTrace() ;
-    }*/
-    int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
-    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
+    }
+//    int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
+//    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
     return  calendar;
   }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Calendar cal = getInstanceTempCalendar() ;
+    Calendar cal = getInstanceOfCurrentCalendar() ;
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
@@ -216,7 +280,7 @@ public class CalendarUtils {
   }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String labelFormat, String valueFormat) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Calendar cal = getInstanceTempCalendar() ;
+    Calendar cal = getInstanceOfCurrentCalendar() ;
     cal.set(Calendar.DST_OFFSET, 0) ;
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
@@ -237,7 +301,7 @@ public class CalendarUtils {
 
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String labelFormat, String valueFormat, long timeInteval) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Calendar cal = getInstanceTempCalendar() ;
+    Calendar cal = getInstanceOfCurrentCalendar() ;
     cal.set(Calendar.DST_OFFSET, 0) ;
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
@@ -257,7 +321,7 @@ public class CalendarUtils {
   }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String labelFormat, String valueFormat, long timeInteval, Locale locale) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Calendar cal = getInstanceTempCalendar() ;
+    Calendar cal = getInstanceOfCurrentCalendar() ;
     cal.set(Calendar.DST_OFFSET, 0) ;
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
@@ -276,7 +340,7 @@ public class CalendarUtils {
   }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat, int timeInteval) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Calendar cal = getInstanceTempCalendar() ;
+    Calendar cal = getInstanceOfCurrentCalendar() ;
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
@@ -294,27 +358,39 @@ public class CalendarUtils {
     return options ;
   }
 
+  
+  public static String generateTimeZoneLabel(String timeZoneID) {
+    String label = timeZoneID;
+    if(label.lastIndexOf("/") > 0 && label.toLowerCase().lastIndexOf("etc".toLowerCase()) < 0 && label.toLowerCase().lastIndexOf("system") < 0) {
+      TimeZone timeZone = TimeZone.getTimeZone(label) ;
+      int rawOffset = timeZone.getRawOffset() / 60000;
+      int hours = rawOffset / 60;
+      int minutes = Math.abs(rawOffset) % 60;
+      String hrStr = "";
+      if (Math.abs(hours) < 10) {
+        if (hours < 0) {
+          hrStr = "-0" + Math.abs(hours);
+        } else {
+          hrStr = "0" + Math.abs(hours);
+        }
+      } else {
+        hrStr = Integer.toString(hours);
+      }
+      String minStr = (minutes < 10) ? ("0" + Integer.toString(minutes)) : Integer.toString(minutes);
+      label = "(GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : "") 
+      + hrStr + ":" + minStr + ") " + timeZoneID ;
+      //subZoneMap.put(tz,  str) ;
+      //System.out.println("\n\n str "+ str + " saving " + timeZone.getDSTSavings() +" raw off " +  timeZone.getRawOffset()); 
+      
+    }
+    return label;
+  }
+  
   public static List<SelectItemOption<String>> getTimeZoneSelectBoxOptions(String[] timeZoneIds) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for (String tz : timeZoneIds){
       if(tz.lastIndexOf("/") > 0 && tz.toLowerCase().lastIndexOf("etc".toLowerCase()) < 0 && tz.toLowerCase().lastIndexOf("system") < 0) {
-        TimeZone timeZone = TimeZone.getTimeZone(tz) ;
-        int rawOffset = timeZone.getRawOffset() / 60000;
-        int hours = rawOffset / 60;
-        int minutes = Math.abs(rawOffset) % 60;
-        String hrStr = "";
-        if (Math.abs(hours) < 10) {
-          if (hours < 0) {
-            hrStr = "-0" + Math.abs(hours);
-          } else {
-            hrStr = "0" + Math.abs(hours);
-          }
-        } else {
-          hrStr = Integer.toString(hours);
-        }
-        String minStr = (minutes < 10) ? ("0" + Integer.toString(minutes)) : Integer.toString(minutes);
-        String str = "(GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : "") 
-        + hrStr + ":" + minStr + ") " + tz ;
+        String str = generateTimeZoneLabel(tz);
         //subZoneMap.put(tz,  str) ;
         //System.out.println("\n\n str "+ str + " saving " + timeZone.getDSTSavings() +" raw off " +  timeZone.getRawOffset()); 
         options.add(new SelectItemOption<String>(str, tz)) ;
@@ -322,6 +398,28 @@ public class CalendarUtils {
     }
     return options ;
   }
+  
+  public static String getLocationDisplayString(String locationName) {
+    Locale[] avai = Locale.getAvailableLocales();
+    Locale locale = null;
+    for (Locale l : avai) {
+      if (l.getISO3Country().equalsIgnoreCase(locationName)) {
+        locale = l;
+        break;
+      }
+    }
+    
+    if (locale != null) {
+      try {
+        String country = locale.getISO3Country();
+        if (country != null && country.trim().length() > 0)
+          return locale.getDisplayCountry() + "(" + locale.getDisplayLanguage() + ")";
+      } catch (MissingResourceException e) {
+      }
+    }
+    return locationName;
+  }
+  
   @SuppressWarnings("unchecked")
   public static List<SelectItemOption<String>> getLocaleSelectBoxOptions(Locale[] locale) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
@@ -347,8 +445,8 @@ public class CalendarUtils {
   }
 
   public static boolean isAllDayEvent(CalendarEvent eventCalendar) {
-    Calendar cal1 = getInstanceTempCalendar() ;
-    Calendar cal2 = getInstanceTempCalendar() ;
+    Calendar cal1 = getInstanceOfCurrentCalendar() ;
+    Calendar cal2 = getInstanceOfCurrentCalendar() ;
     cal1.setTime(eventCalendar.getFromDateTime()) ;
     cal2.setTime(eventCalendar.getToDateTime()) ;
     return (cal1.get(Calendar.HOUR_OF_DAY) == 0  && 
@@ -364,16 +462,16 @@ public class CalendarUtils {
     ) ;
   }
   public static boolean isSameDate(Date value1, Date value2) {
-    Calendar date1 = getInstanceTempCalendar() ;
+    Calendar date1 = getInstanceOfCurrentCalendar() ;
     date1.setTime(value1) ;
-    Calendar date2 = getInstanceTempCalendar() ;
+    Calendar date2 = getInstanceOfCurrentCalendar() ;
     date2.setTime(value2) ;
     return isSameDate(date1, date2) ;
   }
 
   public static Calendar getBeginDay(Calendar cal) {
-    Calendar newCal = new GregorianCalendar() ;
-    newCal.setTime(cal.getTime()) ;
+    Calendar newCal = (Calendar) cal.clone();
+    
     newCal.set(Calendar.HOUR_OF_DAY, 0) ;
     newCal.set(Calendar.MINUTE, 0) ;
     newCal.set(Calendar.SECOND, 0) ;
@@ -381,8 +479,7 @@ public class CalendarUtils {
     return newCal ;
   }
   public static Calendar getEndDay(Calendar cal)  {
-    Calendar newCal = new GregorianCalendar() ;
-    newCal.setTime(cal.getTime()) ;
+    Calendar newCal = (Calendar) cal.clone();    
     newCal.set(Calendar.HOUR_OF_DAY, 0) ;
     newCal.set(Calendar.MINUTE, 0) ;
     newCal.set(Calendar.SECOND, 0) ;
@@ -391,13 +488,14 @@ public class CalendarUtils {
     return newCal ;
   }
 
-  public static Calendar getBeginDay(Date date) {
-    Calendar cal = getInstanceTempCalendar() ;
+  public static Calendar getBeginDay(Date date) {    
+    Calendar cal = getInstanceOfCurrentCalendar() ;
     cal.setTime(date) ;
     return getBeginDay(cal) ;
   }
+  
   public static Calendar getEndDay(Date date)  {
-    Calendar cal = getInstanceTempCalendar() ;
+    Calendar cal = getInstanceOfCurrentCalendar() ;
     cal.setTime(date) ;
     return getEndDay(cal) ;
   }

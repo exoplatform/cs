@@ -325,7 +325,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       attenderTab.calendar_.setTime(eventCalendar.getFromDateTime()) ;
     } else {
       UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-      java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+      java.util.Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
       try {
         cal.setTimeInMillis(Long.parseLong(formTime)) ;
       } catch (Exception e)      {
@@ -568,11 +568,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     Locale locale = context.getParentAppRequestContext().getLocale() ;
     if(getEventAllDate()) {
       DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
-      df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+      df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
       return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
     } 
     DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
-    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
   }
   protected String getEventFormDateValue () {
@@ -588,10 +588,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
     DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
-    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     fromField.setValue(df.format(date)) ;
     df = new SimpleDateFormat(timeFormat, locale) ;
-    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     timeField.setValue(df.format(date)) ;
     eventAttenderTab.setEventFromDate(date, timeFormat) ;
   }
@@ -604,11 +604,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     Locale locale = context.getParentAppRequestContext().getLocale() ;
     if(getEventAllDate()) {
       DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
-      df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+      df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
       return CalendarUtils.getEndDay(df.parse(toField.getValue())).getTime();
     } 
     DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
-    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     return df.parse(toField.getValue() + " " + timeField.getValue()) ;
   }
   protected void setEventToDate(Date date,String dateFormat, String timeFormat) {
@@ -619,10 +619,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
     DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
-    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     toField.setValue(df.format(date)) ;
     df = new SimpleDateFormat(timeFormat, locale) ;
-    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     timeField.setValue(df.format(date)) ;
     eventAttenderTab.setEventToDate(date, timeFormat) ;
   }
@@ -1299,7 +1299,7 @@ public Attachment getAttachment(String attId) {
             to = CalendarUtils.getEndDay(from).getTime() ;
           } 
           if(uiForm.getEventAllDate()) {
-            java.util.Calendar tempCal = CalendarUtils.getInstanceTempCalendar() ;
+            java.util.Calendar tempCal = CalendarUtils.getInstanceOfCurrentCalendar() ;
             tempCal.setTime(to) ;
             tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
             to = tempCal.getTime() ;
