@@ -694,7 +694,11 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
           calendarService.savePublicCalendar(calendar, uiForm.isAddNew_, username) ;
         } 
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-        calendarPortlet.setCalendarSetting(null) ;
+//        calendarPortlet.setCalendarSetting(null) ;
+        /*
+         * remove cached calendar setting to load new one after that.
+         */
+        CalendarUtils.removeCurrentCalendarSetting();
         calendarPortlet.cancelAction() ;
         UICalendarWorkingContainer uiWorkingContainer = calendarPortlet.getChild(UICalendarWorkingContainer.class) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ; ;

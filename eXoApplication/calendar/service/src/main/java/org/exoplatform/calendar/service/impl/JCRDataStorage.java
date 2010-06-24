@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.Map.Entry;
 
 import javax.jcr.AccessDeniedException;
@@ -1226,6 +1227,8 @@ public class JCRDataStorage implements DataStorage {
     eventNode.setProperty(Utils.EXO_TASK_DELEGATOR, event.getTaskDelegator()) ;
 
     GregorianCalendar dateTime = Utils.getInstanceTempCalendar() ;
+    // convert date time to GMT time zone before saving to database.
+//    dateTime.setTimeZone(TimeZone.getTimeZone("GMT"));
     dateTime.setTime(event.getFromDateTime()) ;
     eventNode.setProperty(Utils.EXO_FROM_DATE_TIME, dateTime) ;
     dateTime.setTime(event.getToDateTime()) ;

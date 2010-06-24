@@ -203,11 +203,16 @@ public class CalendarUtils {
   
   /**
    * change value of calendar setting of user in registry.
-   * @param setting
+   * 
+   * @param setting = null means that current calendar setting will be removed.
    */
   public static void setCurrentCalendarSetting(CalendarSetting setting) {
     try {
-      calendarSettings_.put(getCurrentUser(), setting);
+      if (setting == null) {
+        calendarSettings_.remove(getCurrentUser());
+      } else {
+        calendarSettings_.put(getCurrentUser(), setting);
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }

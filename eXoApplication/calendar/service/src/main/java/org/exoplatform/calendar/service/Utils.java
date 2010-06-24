@@ -19,6 +19,7 @@ package org.exoplatform.calendar.service;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import org.exoplatform.calendar.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
@@ -180,15 +181,18 @@ public class Utils {
   
   public static int EVENT_NUMBER = -1;
   /**
-   * The method creates instance calendar object with time zone is GMT 0
+   * The method creates an instance of calendar object with time zone is GMT 0
    * @return GregorianCalendar
    */
   public static GregorianCalendar getInstanceTempCalendar() { 
     GregorianCalendar  calendar = new GregorianCalendar() ;
-    int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
-    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ;
+//    int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
+//    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ;
+    calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
     return  calendar;
   }
+  
+  
   /**
    * The method validates the string value is empty or not
    * @param string String input value
