@@ -1722,17 +1722,16 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     String tagId = "";
     
     //get contact by tag
-    try {
+    if(filter.getTag() != null){
       if(filter.getTag().length > 0){
-         tagId = filter.getTag()[0];
-         System.out.println(tagId);
-      }
-       if(!Utils.isEmpty(tagId)){
-         DataPageList dpl = getContactPageListByTag(username, tagId);
-         contactList = dpl.getAll();
-      }
-    } catch (Exception e) {}
-    
+        tagId = filter.getTag()[0];
+     }
+      if(!Utils.isEmpty(tagId)){
+        DataPageList dpl = getContactPageListByTag(username, tagId);
+        contactList = dpl.getAll();
+     }
+    }
+
     contactList.addAll(contacts.values()) ;
     
     return new DataPageList(contactList, 10, null, false) ;

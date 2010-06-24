@@ -295,9 +295,10 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
       else
         ctFilter.setSearchSharedContacts(true);
      
-      System.out.println("==========="+ groupId);
-      if(groupId.substring(0,2).equalsIgnoreCase("Tag"))
+      
+      if(groupId.substring(0,3).equalsIgnoreCase("Tag")){
         ctFilter.setTag(new String[]{groupId});
+      }
       
       contactList = contactSrv.searchContact(username, ctFilter).getAll();      
     } else {
@@ -344,7 +345,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
 
   public void activate() throws Exception {
   }
-
+    
   public void deActivate() throws Exception {
   }
 
