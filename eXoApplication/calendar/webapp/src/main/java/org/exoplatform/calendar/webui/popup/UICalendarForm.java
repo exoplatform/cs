@@ -123,10 +123,14 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     calendarDetail.addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(MandatoryValidator.class).addValidator(SpecialCharacterValidator.class)) ;
     calendarDetail.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
     calendarDetail.addUIFormInput(new UIFormSelectBox(CATEGORY, CATEGORY, getCategory())) ;
-    UIFormInputInfo country = new UIFormInputInfo(LOCALE, LOCALE, "");
+    
+    CalendarSetting setting = CalendarUtils.getCurrentCalendarSetting();
+    UIFormStringInput country = new UIFormStringInput(LOCALE, LOCALE, CalendarUtils.getLocationDisplayString(setting.getLocation()));
+    country.setLabel(setting.getLocation());
     country.setEditable(false);
     calendarDetail.addUIFormInput(country) ;
-    UIFormInputInfo timeZone = new UIFormInputInfo(TIMEZONE, TIMEZONE, "");
+    UIFormStringInput timeZone = new UIFormStringInput(TIMEZONE, TIMEZONE, CalendarUtils.generateTimeZoneLabel(setting.getTimeZone()));
+    timeZone.setLabel(setting.getTimeZone());
     timeZone.setEditable(false);
     calendarDetail.addUIFormInput(timeZone);
     calendarDetail.addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR));
@@ -244,13 +248,13 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     }
 //    CalendarSetting setting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting();
     if (setting != null) {
-      UIFormInputInfo info = calendarDetail.getUIFormInputInfo(TIMEZONE);
-      info.setLabel(CalendarUtils.generateTimeZoneLabel(setting.getTimeZone()));
-      info.setValue(setting.getTimeZone());
+      UIFormStringInput info = calendarDetail.getUIStringInput(TIMEZONE);
+      info.setValue(CalendarUtils.generateTimeZoneLabel(setting.getTimeZone()));
+      info.setLabel(setting.getTimeZone());
       
-      info = calendarDetail.getUIFormInputInfo(LOCALE);
+      info = calendarDetail.getUIStringInput(LOCALE);
       info.setValue(CalendarUtils.getLocationDisplayString(setting.getLocation()));
-      
+      info.setLabel(setting.getLocation());
     }
     
     
@@ -377,22 +381,23 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   }
   protected String getLocale() {
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
-    return calendarDetail.getUIFormInputInfo(LOCALE).getValue() ;
+    return calendarDetail.getUIStringInput(LOCALE).getLabel();
   }
   public void setLocale(String value) {
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
-    calendarDetail.getUIFormInputInfo(LOCALE).setValue(CalendarUtils.getLocationDisplayString(value)) ;
+    calendarDetail.getUIStringInput(LOCALE).setValue(CalendarUtils.getLocationDisplayString(value)) ;
+    calendarDetail.getUIStringInput(LOCALE).setLabel(value);
   }
   protected String getTimeZone() {
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
-    return calendarDetail.getUIFormInputInfo(TIMEZONE).getValue() ;
+    return calendarDetail.getUIStringInput(TIMEZONE).getLabel();
   }
 
   public void setTimeZone(String value) {
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
-    UIFormInputInfo timeZone = calendarDetail.getUIFormInputInfo(TIMEZONE);
-    timeZone.setLabel(CalendarUtils.generateTimeZoneLabel(value));
-    timeZone.setValue(value) ;
+    UIFormStringInput timeZone = calendarDetail.getUIStringInput(TIMEZONE);
+    timeZone.setValue(CalendarUtils.generateTimeZoneLabel(value));
+    timeZone.setLabel(value) ;
   }
   @SuppressWarnings("unchecked")
   public void updateSelect(String selectField, String value) throws Exception {

@@ -52,6 +52,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -118,14 +119,19 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
     calCategory.setOnChange("OnChange");
     addUIFormInput(calCategory);
     //cs-2163
-    CalendarSetting calendarSetting = CalendarUtils.getCalendarService()
-      .getCalendarSetting(CalendarUtils.getCurrentUser()) ;
+//    CalendarSetting calendarSetting = CalendarUtils.getCalendarService()
+//      .getCalendarSetting(CalendarUtils.getCurrentUser()) ;
     addUIFormInput(new UIFormStringInput(PERMISSION, PERMISSION, null));
-    UIFormSelectBox locale = new UIFormSelectBox(LOCALE, LOCALE, getLocales()) ;
-    locale.setValue(calendarSetting.getLocation()) ;
+    CalendarSetting setting = CalendarUtils.getCurrentCalendarSetting();
+    UIFormStringInput locale = new UIFormStringInput(LOCALE, LOCALE, CalendarUtils.getLocationDisplayString(setting.getLocation())) ;
+//    locale.setValue(calendarSetting.getLocation()) ;
+    locale.setLabel(setting.getLocation());
+    locale.setEditable(false);
     addUIFormInput(locale);    
-    UIFormSelectBox timeZones = new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones()) ;
-    timeZones.setValue(calendarSetting.getTimeZone()) ;
+    UIFormStringInput timeZones = new UIFormStringInput(TIMEZONE, TIMEZONE, CalendarUtils.generateTimeZoneLabel(setting.getTimeZone())) ;
+    timeZones.setEditable(false);
+//    timeZones.setValue(calendarSetting.getTimeZone()) ;
+    timeZones.setLabel(setting.getTimeZone());
     addUIFormInput(timeZones);
     //addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR, Colors.COLORS));
     addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR));
@@ -224,11 +230,11 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
   }
 
   protected String getTimeZone() {
-    return getUIFormSelectBox(TIMEZONE).getValue() ;
+    return getUIStringInput(TIMEZONE).getLabel();
   }
 
   protected String getLocale() {
-    return getUIFormSelectBox(LOCALE).getValue() ;
+    return getUIStringInput(LOCALE).getLabel();
   }
   public void switchMode(int flag) {
     flag_ = flag ;
@@ -238,8 +244,8 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
       getUIFormTextAreaInput(DESCRIPTION).setRendered(false);
       getUIFormSelectBoxGroup(CATEGORY).setRendered(false);
       getUIStringInput(PERMISSION).setRendered(false);
-      getUIFormSelectBox(TIMEZONE).setRendered(false);
-      getUIFormSelectBox(LOCALE).setRendered(false);
+      getUIStringInput(TIMEZONE).setRendered(false);
+      getUIStringInput(LOCALE).setRendered(false);
       getChild(UIFormColorPicker.class).setRendered(false);
     } else if(flag == ADD_NEW) {
       getUIFormSelectBoxGroup(FIELD_TO_CALENDAR).setRendered(false);
@@ -251,8 +257,8 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
         getUIStringInput(PERMISSION).setRendered(true);
       else
         getUIStringInput(PERMISSION).setRendered(false);
-      getUIFormSelectBox(TIMEZONE).setRendered(true);
-      getUIFormSelectBox(LOCALE).setRendered(true);
+      getUIStringInput(TIMEZONE).setRendered(true);
+      getUIStringInput(LOCALE).setRendered(true);
       getChild(UIFormColorPicker.class).setRendered(true);
     } else {
       System.out.println("Wrong flag(" +flag+ ") only UPDATE_EXIST(1) or ADD_NEW(0) accept ");
