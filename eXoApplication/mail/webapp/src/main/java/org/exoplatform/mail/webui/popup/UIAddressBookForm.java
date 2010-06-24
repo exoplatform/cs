@@ -55,6 +55,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
+import org.exoplatform.contact.service.Tag;
 
 /**
  * Created by The eXo Platform SARL Author : Phung Nam phunghainam@gmail.com Nov
@@ -106,7 +107,6 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
       String value = checkedContactMap.get(contact.getId());
       if (value.equals("1"))
         selectedContactMap.put(contact.getId(), contact);
-
     }
   }
 
@@ -175,9 +175,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
 
     SelectOptionGroup sharedContacts = new SelectOptionGroup("shared-contacts");
     for (SharedAddressBook scg : contactSrv.getSharedAddressBooks(username)) {
-      sharedContacts.addOption(new SelectOption(MailUtils.getDisplayAdddressShared(scg.getSharedUserId(),
-                                                                                   scg.getName()),
-                                                scg.getId()));
+      sharedContacts.addOption(new SelectOption(MailUtils.getDisplayAdddressShared(scg.getSharedUserId(), scg.getName()), scg.getId()));
     }
     sharedContacts.addOption(new SelectOption(sharedContacts_, sharedContacts_));
     options.add(sharedContacts);
@@ -188,6 +186,17 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
      * org.exoplatform.mail.webui.SelectItemOption<String>(publicCg, publicCg))
      * ; } options.add(publicContacts);
      */
+    
+    //Tag's contact
+    List<Tag> tags = contactSrv.getTags(username);
+    if(tags.size() > 0){
+      SelectOptionGroup tagContacts = new SelectOptionGroup("tag-contacts");
+      for (Tag tag : tags) {
+        tagContacts.addOption(new SelectOption(tag.getName(), tag.getId()));
+      }
+      options.add(tagContacts); 
+    }
+    
     return options;
   }
 
@@ -271,13 +280,13 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
     ctFilter.setAscending(true);
 
     if (groupId != null && groupId.trim().length() > 0) {
-      SelectOptionGroup privateGroups = (SelectOptionGroup) getChild(UIFormSelectBoxWithGroups.class).getOptions()
-                                                                                                     .get(0);
+      SelectOptionGroup privateGroups = (SelectOptionGroup) getChild(UIFormSelectBoxWithGroups.class).getOptions().get(0);
       for (SelectOption option : privateGroups.getOptions())
         if (option.getValue().equals(groupId)) {
           ctFilter.setType(DataStorage.PERSONAL);
           break;
         }
+        
       if (ctFilter.getType() == null)
         ctFilter.setType(DataStorage.SHARED);
 
@@ -285,7 +294,12 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
         ctFilter.setCategories(new String[] { groupId });
       else
         ctFilter.setSearchSharedContacts(true);
-      contactList = contactSrv.searchContact(username, ctFilter).getAll();
+     
+      System.out.println("==========="+ groupId);
+      if(groupId.substring(0,2).equalsIgnoreCase("Tag"))
+        ctFilter.setTag(new String[]{groupId});
+      
+      contactList = contactSrv.searchContact(username, ctFilter).getAll();      
     } else {
       ctFilter.setType(DataStorage.PERSONAL);
       ctFilter.setCategories(new String[] { ((SelectOptionGroup) getChild(UIFormSelectBoxWithGroups.class).getOptions()
@@ -543,6 +557,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
         uiAddressBook.refrestContactList(selectedGroupId, contact);
       else
         uiAddressBook.refrestContactList(selectedGroupId, null);
+      
       ((UIFormSelectBoxWithGroups) uiAddressBook.getChildById(SELECT_GROUP)).setValue(selectedGroupId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }

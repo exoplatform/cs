@@ -849,7 +849,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     /**
      * test Search
      */
-    // search contact:
+    // search contact by filter:
     ContactFilter contactFilter = createContactFilter("maivanha1610@gmail.com",
                                                       new String(),
                                                       new String(),
@@ -859,7 +859,8 @@ public class TestContactService extends BaseContactServiceTestCase {
                                                       new String(),
                                                       new String(),
                                                       new String(),
-                                                      new String());
+                                                      new String(),
+                                                      new String[]{});
     assertEquals(Utils.listToString(contactService.searchContact(root, contactFilter)
                                     .getAll()
                                     .get(0)
@@ -1001,7 +1002,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     attachment.setInputStream(new ByteArrayInputStream("should be image data".getBytes()));
     attachment.setMimeType("image/jpg");
     contact.setAttachment(attachment);
-
+    contact.setTags(new String[]{});
     return contact;
   }
 
@@ -1022,7 +1023,8 @@ public class TestContactService extends BaseContactServiceTestCase {
                                             String jobtitle,
                                             String emailAddress,
                                             String isOwner,
-                                            String userName) {
+                                            String userName,
+                                            String[] tags) {
     ContactFilter contactFilter = new ContactFilter();
     contactFilter.setText(text);
     contactFilter.setFullName(fullName);
@@ -1034,6 +1036,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     contactFilter.setEmailAddress(emailAddress);
     contactFilter.setOwner(isOwner);
     contactFilter.setUsername(userName);
+    contactFilter.setTag(tags);
     return contactFilter;
   }
 
