@@ -297,8 +297,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       lockCheckBoxFields(true) ;
       sharing.setRendered(false) ; 
     }
-    setLocale(calendar.getLocale()) ;
-    setTimeZone(calendar.getTimeZone()) ;
+//    setLocale(calendar.getLocale()) ;
+//    setTimeZone(calendar.getTimeZone()) ;
     setSelectedColor(calendar.getCalendarColor()) ;
     if(calendar.getPrivateUrl() == null || calendar.getPrivateUrl().isEmpty()) {
       String privateUrl = CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ 
