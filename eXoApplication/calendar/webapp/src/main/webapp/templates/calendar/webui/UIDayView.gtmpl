@@ -183,7 +183,7 @@
 			            		style = "" ;
 			            		if(isShowWorkingTime) {style = "WorkOffTime" ;}
 			            		Calendar cl = uicomponent.getInstanceTempCalendar() ;
-			            		cl = uicomponent.getBeginDay(uicomponent.getCurrentCalendar()) ;	
+								cl = uicomponent.getBeginDay(cl) ;	
 									  for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
 					String h = full.substring(0,full.lastIndexOf("_")) ;
 					String display = full.substring(full.lastIndexOf("_")+1) ;

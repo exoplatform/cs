@@ -183,7 +183,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 //    calendar.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn()));
 //    return calendar;
     
-    return  (Calendar) calendar_.clone();
+    return  CalendarUtils.getInstanceOfCurrentCalendar();
   } 
   public void applySeting() throws Exception {
     displayTimes_ = null ;
@@ -525,8 +525,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       return  QUICKEDIT_MENU ;
     }
     protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
-      if(displayTimes_ == null) {
-        displayTimes_ =   new ArrayList<String>() ;
+      
+        List<String> displayTimes_ =   new ArrayList<String>() ;
         Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
         cal.set(Calendar.HOUR_OF_DAY, 0) ;
         cal.set(Calendar.MINUTE, 0) ;
@@ -537,18 +537,19 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           displayTimes_.add(df.format(cal.getTime())) ;
           cal.add(java.util.Calendar.MINUTE, timeInterval) ;
         }
-      }
+      
       return displayTimes_ ;
     }
     protected List<String> getDisplayTimes(String timeFormat, int timeInterval, Locale locale) {
       List<String> displayTimes =   new ArrayList<String>() ;
-      Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
+      //Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;
+      Calendar cal = GregorianCalendar.getInstance(locale);
       cal.set(Calendar.HOUR_OF_DAY, 0) ;
       cal.set(Calendar.MINUTE, 0) ;
       cal.set(Calendar.MILLISECOND, 0) ;
       DateFormat valuedf = new SimpleDateFormat(CalendarUtils.TIMEFORMAT, locale) ;
       DateFormat df = new SimpleDateFormat(timeFormat, locale) ;
-      df.setCalendar(cal) ;
+//      df.setCalendar(cal) ;
       for(int i = 0; i < 24*(60/timeInterval); i++) {
         displayTimes.add(valuedf.format(cal.getTime()) +"_"+ df.format(cal.getTime())) ;
         cal.add(java.util.Calendar.MINUTE, timeInterval) ;

@@ -220,7 +220,7 @@
 					boolean flag = false ;
 					style = "none" ;
 					if(isShowWorkingTime) {style = "WorkOffTime" ;}	
-					for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
+					for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, Locale.ENGLISH)){
 					String time = full.substring(0,full.lastIndexOf("_")) ;
 					String display = full.substring(full.lastIndexOf("_")+1) ;
 				if(isShowWorkingTime) {
@@ -237,13 +237,18 @@
               </div>
             </td>
             <%
-					 		cl = uicomponent.getBeginDateOfWeek() ;				
+					 		cl = uicomponent.getBeginDateOfWeek() ;
+					 		DateFormat dayFormat = new SimpleDateFormat(dateFormat, Locale.ENGLISH) ;
+              DateFormat fullDateFormat = new SimpleDateFormat(dateFormat+" "+CalendarUtils.TIMEFORMAT, Locale.ENGLISH) ;
+              dayFormat.setCalendar(cl);
+              fullDateFormat.setCalendar(cl);
+					 						
 						  t = 0 ; 
 							while(t++ < numberOfDays) {
-								df.setCalendar(cl) ;
-					 			startTime = df.format(cl.getTime()) + " " + time;
-					 			dtf.setCalendar(cl) ;
-					 			cl.setTime(dtf.parse(startTime)) ;
+								//df.setCalendar(cl) ;
+					 			startTime = dayFormat.format(cl.getTime()) + " " + time;
+					 			//dtf.setCalendar(cl) ;
+					 			cl.setTime(fullDateFormat.parse(startTime)) ;
 					 			dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
 					 		  if(uicomponent.isCurrentDay(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR))) {
 						  		cssClass = "Today" ;
