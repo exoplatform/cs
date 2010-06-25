@@ -749,4 +749,19 @@ public interface MailService {
      * @param info
      */
     public void updateCheckingMailStatusByCometd(String userName, String accountId, CheckingInfo info);
+    
+    /**
+     * Saving new folder as parent  
+     * @param userName
+     * @param accountId
+     * @param folder*/
+    public boolean saveFolderImapOnline(String userName, String accountId, Folder folder) throws Exception;
+    /**
+     * Saving new folder as child folder  
+     * @param userName
+     * @param accountId
+     * @param parentId
+     * @param folder
+     * */
+    public boolean saveFolderImapOnline(String userName, String accountId, String parentId, Folder folder) throws Exception ;
 }

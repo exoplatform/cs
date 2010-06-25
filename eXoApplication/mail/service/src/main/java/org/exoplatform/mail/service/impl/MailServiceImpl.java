@@ -211,6 +211,27 @@ public class MailServiceImpl implements MailService, Startable {
     saveFolder(userName, accountId, folder, true);
   }
 
+  public boolean saveFolderImapOnline(String userName, String accountId, Folder folder) throws Exception {
+    Account account = getAccountById(userName, accountId);
+    if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder()) {
+      IMAPFolder imapFolder = null;
+      try {
+        Connector connector = new ImapConnector(account);
+        imapFolder = (IMAPFolder) connector.createFolder(folder);
+        saveFolder(userName, accountId, null, imapFolder);
+      } catch (Exception e) {
+        return false;
+      } finally {
+        if (imapFolder != null && imapFolder.isOpen()) {
+          imapFolder.close(true);
+        }
+      }
+    } else {
+      storage_.saveFolder(userName, accountId, folder);
+    }
+    return true;
+  }
+  
   private void saveFolder(String userName, String accountId, Folder folder, boolean b) throws Exception {
     Account account = getAccountById(userName, accountId);
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder() && b) {
@@ -236,6 +257,26 @@ public class MailServiceImpl implements MailService, Startable {
     saveFolder(userName, accountId, parentId, folder, true);
   }
 
+  public boolean saveFolderImapOnline(String userName, String accountId, String parentId, Folder folder) throws Exception {
+    Account account = getAccountById(userName, accountId);
+    if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder() && true) {
+      try {
+        Folder parentFolder = getFolder(userName, accountId, parentId);
+        Connector connector = new ImapConnector(account);
+        IMAPFolder imapFolder = (IMAPFolder) connector.createFolder(parentFolder, folder);
+        if (imapFolder != null) {
+          saveFolder(userName, accountId, parentFolder, imapFolder);
+        }
+      } catch (Exception e) {
+        return false;
+      }
+    } else {//pop3
+      storage_.saveFolder(userName, accountId, parentId, folder);
+      
+    }
+    return true;
+  } 
+  
   private void saveFolder(String userName,
                           String accountId,
                           String parentId,
