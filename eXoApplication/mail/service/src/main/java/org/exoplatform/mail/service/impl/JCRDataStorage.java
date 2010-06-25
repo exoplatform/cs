@@ -1797,7 +1797,7 @@ public class JCRDataStorage implements DataStorage {
       while (nit.hasNext()) {
         Node node = nit.nextNode();
         String fn = node.getProperty(Utils.EXO_NAME).getString();
-        if (fn.trim().equals(folderId))
+        if (fn.trim().equalsIgnoreCase(folderId))
           isExist = true;
       }
     } finally {
