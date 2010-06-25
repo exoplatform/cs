@@ -53,6 +53,8 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
@@ -153,7 +155,9 @@ public class CalendarUtils {
   final public static String ITEM_NERVER = "never".intern();
   final public static String ITEM_ASK = "ask".intern();
   final public static String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+";
-
+  
+  private static Log log = ExoLogger.getLogger(CalendarUtils.class);
+  
   public static final String[] getUserGroups(String username) throws Exception {
     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;
@@ -184,9 +188,9 @@ public class CalendarUtils {
   }
   
   /**
-   * calendar setting registry. 
+   * calendar setting registry by user name. 
    */
-  private static ConcurrentHashMap<String, CalendarSetting> calendarSettings_ = new ConcurrentHashMap<String, CalendarSetting>();
+  private static ConcurrentHashMap<String, CalendarSetting> calendarSettingsByUserName = new ConcurrentHashMap<String, CalendarSetting>();
   
   /**
    * remove current calendar setting from registry.
@@ -194,9 +198,9 @@ public class CalendarUtils {
    */
   public static CalendarSetting removeCurrentCalendarSetting() {
     try {
-      return calendarSettings_.remove(getCurrentUser());
+      return calendarSettingsByUserName.remove(getCurrentUser());
     } catch (Exception e) {
-      e.printStackTrace();
+      log.warn("could not remove calendar setting of the user.", e);
       return null;
     }
   }
@@ -209,30 +213,31 @@ public class CalendarUtils {
   public static void setCurrentCalendarSetting(CalendarSetting setting) {
     try {
       if (setting == null) {
-        calendarSettings_.remove(getCurrentUser());
+        calendarSettingsByUserName.remove(getCurrentUser());
       } else {
-        calendarSettings_.put(getCurrentUser(), setting);
+        calendarSettingsByUserName.put(getCurrentUser(), setting);
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      log.warn("could not set calendar setting for current user", e);
     }
   }
+  
   /**
    * 
-   * @return current calendar setting of user. return null if any exception is thrown.
+   * @return calendar setting of current user. return null if any exception is thrown.
    */
-  public static CalendarSetting getCurrentCalendarSetting() {
+  public static CalendarSetting getCurrentUserCalendarSetting() {
     
     try {
       String user = getCurrentUser();
-      CalendarSetting setting = calendarSettings_.get(user);
+      CalendarSetting setting = calendarSettingsByUserName.get(user);
       if (setting == null) {
         setting = getCalendarService().getCalendarSetting(user) ;
-        calendarSettings_.put(user, setting);
+        calendarSettingsByUserName.put(user, setting);
       }
       return setting;
     } catch (Exception e) {
-      e.printStackTrace();
+      log.warn("could not get calendar setting of user", e);
       return null;
     }
       
@@ -254,7 +259,7 @@ public class CalendarUtils {
     Calendar  calendar = GregorianCalendar.getInstance() ;
     calendar.setLenient(false);
      try {
-      CalendarSetting setting = getCurrentCalendarSetting();
+      CalendarSetting setting = getCurrentUserCalendarSetting();
       calendar.setTimeZone(TimeZone.getTimeZone(setting.getTimeZone()));
       calendar.setFirstDayOfWeek(Integer.parseInt(setting.getWeekStartOn())); 
     } catch (Exception e) {
@@ -363,7 +368,12 @@ public class CalendarUtils {
     return options ;
   }
 
-  
+  /**
+   * render time zone label for a time zone.
+   * @param timeZoneID
+   * @return display string for the time zone id, which contains value of GMT offset and time zone id.
+   * For example, display string for "Asia/Ho_Chi_Minh" would be "(GMT +07:00) Asia/Ho_Chi_Minh".
+   */
   public static String generateTimeZoneLabel(String timeZoneID) {
     String label = timeZoneID;
     if(label.lastIndexOf("/") > 0 && label.toLowerCase().lastIndexOf("etc".toLowerCase()) < 0 && label.toLowerCase().lastIndexOf("system") < 0) {
@@ -404,6 +414,12 @@ public class CalendarUtils {
     return options ;
   }
   
+  /**
+   * render display string for an ISO3 location name.
+   * @param locationName - ISO3 location name
+   * @return display string that contains display country name and display language name. 
+   * For example, output for "VNM" would be "Vietnam(Vietnamese)".
+   */
   public static String getLocationDisplayString(String locationName) {
     Locale[] avai = Locale.getAvailableLocales();
     Locale locale = null;

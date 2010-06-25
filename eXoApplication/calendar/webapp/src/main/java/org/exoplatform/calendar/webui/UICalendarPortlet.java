@@ -56,7 +56,7 @@ public class UICalendarPortlet extends UIPortletApplication {
     uiPopup.getChild(UIPopupWindow.class).setId("UICalendarPopupWindow") ;
   }
   public CalendarSetting getCalendarSetting() throws Exception{
-    return CalendarUtils.getCurrentCalendarSetting(); 
+    return CalendarUtils.getCurrentUserCalendarSetting(); 
   }
   public void setCalendarSetting(CalendarSetting setting) throws Exception{
     CalendarUtils.setCurrentCalendarSetting(setting); 

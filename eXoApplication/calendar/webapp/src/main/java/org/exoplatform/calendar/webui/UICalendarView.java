@@ -29,7 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.jcr.PathNotFoundException;
 
@@ -51,6 +50,8 @@ import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UITaskForm;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -73,7 +74,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   final static protected String EVENT_CATEGORIES = "eventCategories".intern() ;
 //  final static String CURRENTTIME = "ct".intern() ;
 //  final static String TIMEZONE = "tz".intern() ;
-
+  private Log log = ExoLogger.getLogger(this.getClass());
+  
   final public static int TYPE_DAY = 0 ;
   final public static int TYPE_WEEK = 1 ;
   final public static int TYPE_MONTH = 2 ;
@@ -132,7 +134,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     initCategories() ;
     applySeting() ;
     calendar_ = CalendarUtils.getInstanceOfCurrentCalendar();
-    } catch (Exception e) { e.printStackTrace(); }
+    } catch (Exception e) { 
+      log.warn(e);
+    }
 //    calendar_.setLenient(false) ;
 //    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy k:m:s z");
 //    simpleDateFormat.setCalendar(calendar_) ;

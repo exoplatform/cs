@@ -122,7 +122,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
 //    CalendarSetting calendarSetting = CalendarUtils.getCalendarService()
 //      .getCalendarSetting(CalendarUtils.getCurrentUser()) ;
     addUIFormInput(new UIFormStringInput(PERMISSION, PERMISSION, null));
-    CalendarSetting setting = CalendarUtils.getCurrentCalendarSetting();
+    CalendarSetting setting = CalendarUtils.getCurrentUserCalendarSetting();
     UIFormStringInput locale = new UIFormStringInput(LOCALE, LOCALE, CalendarUtils.getLocationDisplayString(setting.getLocation())) ;
 //    locale.setValue(calendarSetting.getLocation()) ;
     locale.setLabel(setting.getLocation());

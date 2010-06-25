@@ -124,7 +124,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     calendarDetail.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
     calendarDetail.addUIFormInput(new UIFormSelectBox(CATEGORY, CATEGORY, getCategory())) ;
     
-    CalendarSetting setting = CalendarUtils.getCurrentCalendarSetting();
+    CalendarSetting setting = CalendarUtils.getCurrentUserCalendarSetting();
     UIFormStringInput country = new UIFormStringInput(LOCALE, LOCALE, CalendarUtils.getLocationDisplayString(setting.getLocation()));
     country.setLabel(setting.getLocation());
     country.setEditable(false);
