@@ -945,6 +945,7 @@ UIChatWindow.prototype.registerEventCallback = function() {
  */
 UIChatWindow.prototype.onReload = function(eventData) {
   var thys = eXo.communication.chatbar.webui.UIChatWindow;
+	thys.rootNode.style.visibility = "hidden";
   thys._isOnLoading = true;
   var visible = thys._isVisible();
   thys.initSession();
@@ -979,6 +980,7 @@ UIChatWindow.prototype.onReload = function(eventData) {
   }
   thys.setVisible(visible, null, true);
   thys._isOnLoading = false;
+	thys.rootNode.style.visibility = "visible";
 };
 
 /**

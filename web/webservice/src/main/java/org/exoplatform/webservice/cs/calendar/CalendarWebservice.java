@@ -43,13 +43,13 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.common.http.HTTPStatus;
-import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.webservice.cs.bean.EventData;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -417,11 +417,9 @@ public class CalendarWebservice implements ResourceContainer{
    * @throws Exception : HTTPStatus.INTERNAL_ERROR , HTTPStatus.UNAUTHORIZED , HTTPStatus.NO_CONTENT
    */
   @GET
-  @Path("upcoming/{username}/{currentdatetime}/{type}")
-  public Response upcomingEvent(@PathParam("username")
-                                String username, @PathParam("currentdatetime")
-                                String currentdatetime, @PathParam("type")
-                                String type) throws Exception {
+  @Path("upcoming/{currentdatetime}")
+  public Response upcomingEvent(@PathParam("currentdatetime")
+                                String currentdatetime) throws Exception {
 
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
@@ -429,13 +427,13 @@ public class CalendarWebservice implements ResourceContainer{
 
     try {
 
-      if(isAuthorized(username)) {
-        return Response.status(HTTPStatus.UNAUTHORIZED).cacheControl(cacheControl).build();
-      }
+      //if(!isAuthorized(username)) {
+        //return Response.status(HTTPStatus.UNAUTHORIZED).cacheControl(cacheControl).build();
+      //}
       
-      if(!(CalendarEvent.TYPE_EVENT.equalsIgnoreCase(type) || CalendarEvent.TYPE_TASK.equalsIgnoreCase(type))) {
-        return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cacheControl).build();
-      }
+      //if(!(CalendarEvent.TYPE_EVENT.equalsIgnoreCase(type) || CalendarEvent.TYPE_TASK.equalsIgnoreCase(type))) {
+        //return Response.status(HTTPStatus.BAD_REQUEST).cacheControl(cacheControl).build();
+      //}
       
       SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd") ;
       java.util.Calendar cal = GregorianCalendar.getInstance();
@@ -445,21 +443,21 @@ public class CalendarWebservice implements ResourceContainer{
       EventQuery eventQuery = new EventQuery();
       eventQuery.setFromDate(cal);
       cal.add(java.util.Calendar.HOUR_OF_DAY, cal.getMaximum(java.util.Calendar.HOUR));
-      eventQuery.setToDate(cal);
-      eventQuery.setEventType(type);
-      eventQuery.setLimitedItems(10);
-      eventQuery.setOrderBy(new String[]{Utils.EXO_FROM_DATE_TIME});
+      //eventQuery.setToDate(cal);
+      //eventQuery.setEventType(type);
+      //eventQuery.setLimitedItems(10);
+      //eventQuery.setOrderBy(new String[]{Utils.EXO_FROM_DATE_TIME});
+      String username = ConversationState.getCurrent().getIdentity().getUserId();
       EventPageList data =  calService.searchEvent(username, eventQuery, null);
       if(data == null || data.getAll().isEmpty()) 
         return Response.status(HTTPStatus.NO_CONTENT).cacheControl(cacheControl).build();
-      
-      return Response.ok(data.getAll(), MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+      EventData eventData = new EventData();
+      eventData.setInfo(data.getAll());
+      return Response.ok(eventData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
     } catch (Exception e) {
       e.printStackTrace();
       return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
     }
 
   }
-
-
 }
