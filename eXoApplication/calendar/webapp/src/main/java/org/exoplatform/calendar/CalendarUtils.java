@@ -263,7 +263,7 @@ public class CalendarUtils {
       calendar.setTimeZone(TimeZone.getTimeZone(setting.getTimeZone()));
       calendar.setFirstDayOfWeek(Integer.parseInt(setting.getWeekStartOn())); 
     } catch (Exception e) {
-      e.printStackTrace() ;
+      log.warn(e);
     }
 //    int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
 //    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 

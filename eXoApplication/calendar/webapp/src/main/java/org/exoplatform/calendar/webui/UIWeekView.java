@@ -131,7 +131,8 @@ public class UIWeekView extends UICalendarView {
   }
   public java.util.Calendar getBeginDateOfWeek() throws Exception{
     java.util.Calendar temCal = getInstanceTempCalendar() ;
-    temCal.setTime(calendar_.getTime()) ;
+//    temCal.get
+//    temCal.setTime(calendar_.getTime()) ;
     /*CalendarSetting calSetting = new CalendarSetting() ;
     try {
       calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
@@ -140,16 +141,14 @@ public class UIWeekView extends UICalendarView {
       CalendarService calService = getApplicationComponent(CalendarService.class) ;
       calSetting  = calService.getCalendarSetting(getSession(),CalendarUtils.getCurrentUser()) ;
     } */
-    if(isShowCustomView_) temCal.setFirstDayOfWeek(Calendar.SUNDAY) ; 
-    else temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
-    if(temCal.getFirstDayOfWeek() > calendar_.get(Calendar.DAY_OF_WEEK)) {
-      temCal.set(java.util.Calendar.WEEK_OF_YEAR, getCurrentWeek()-1) ;
-    } else {
-      temCal.set(java.util.Calendar.WEEK_OF_YEAR, getCurrentWeek()) ;
-
+    if(isShowCustomView_) temCal.setFirstDayOfWeek(Calendar.SUNDAY) ;
+    
+//    else temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
+    if(temCal.getFirstDayOfWeek() > temCal.get(Calendar.DAY_OF_WEEK)) {
+      temCal.add(java.util.Calendar.WEEK_OF_YEAR, -1) ;
     }
-    temCal.setTime(calendar_.getTime()) ;
-    int amout = temCal.getFirstDayOfWeek() - calendar_.get(Calendar.DAY_OF_WEEK) ;
+//    temCal.setTime(calendar_.getTime()) ;
+    int amout = temCal.getFirstDayOfWeek() - temCal.get(Calendar.DAY_OF_WEEK);
     if(isShowCustomView_) amout = amout + 1 ;
     temCal.add(Calendar.DATE, amout) ;
     return getBeginDay(temCal) ;
@@ -157,9 +156,9 @@ public class UIWeekView extends UICalendarView {
 
   public java.util.Calendar getEndDateOfWeek() throws Exception{
     java.util.Calendar temCal = getInstanceTempCalendar() ;
-    temCal.setTime(calendar_.getTime()) ;
+//    temCal.setTime(calendar_.getTime()) ;
     if(isShowCustomView_) temCal.setFirstDayOfWeek(Calendar.SUNDAY) ; 
-    else temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
+//    else temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
     temCal.setTime(getBeginDateOfWeek().getTime()) ;
     int amout = 6 ;
     if(isShowCustomView_) amout = amout - 2 ;
