@@ -18,6 +18,7 @@ package org.exoplatform.mail.webui;
 
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAccountSetting;
@@ -81,6 +82,24 @@ public class UIActionBar extends UIContainer {
         }
         context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox('checkmail-notice') ;");
         uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(true);
+        //cs-4936 /*
+        UIMessageList uimessagelist = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+        uimessagelist.refreshBrowser(accId);
+        /*try {
+          uimessagelist.updateList();          
+        } catch (Exception e) {
+          uiPortlet.findFirstComponentOfType(UIFolderContainer.class).setSelectedFolder(folderId) ;
+          MessageFilter filter = new MessageFilter("Folder"); 
+          filter.setAccountId(accId);
+          filter.setFolder(new String[] {folderId});
+          uimessagelist.setMessageFilter(filter);
+          uimessagelist.setSelectedFolderId(folderId);
+          uimessagelist.setSelectedTagId(null);
+          uimessagelist.init(accId);
+          uimessagelist.viewing_ =  UIMessageList.VIEW_ALL;
+          uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
+        }*/
+         // */
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
     }
