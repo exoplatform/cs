@@ -618,10 +618,11 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
 
     case this.LOAD_JS_RESOURCE_BUNDLE:
       try {
-      	eval(serverData.script);
-      	this.ResourceBundle = eXo.communication.chatbar.locale.ResourceBundle;
+    	var script = serverData.script.replace("eXo.communication.chatbar.locale.ResourceBundle", "eXo.communication.chat.locale.ResourceBundle");
+      	eval(script);
+      	this.ResourceBundle = eXo.communication.chat.locale.ResourceBundle;
       } catch (error){
-      	  alert(serverData.script);
+      	alert(serverData.script);
       }
       break;
       
