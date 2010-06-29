@@ -111,7 +111,7 @@ UITabControl.prototype.userLeftRoomEventFired = function(user) {
  */
 UITabControl.prototype.userJoinRoomEventFired = function(user) {
   var userName = user.substr(user.indexOf('/') + 1, user.length-1);
-  var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[userName];
+  var fullName = eXo.communication.chat.webui.UIChatWindow.fullNameMap[userName];
   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
   var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', userName);
   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
@@ -481,9 +481,9 @@ UITabControl.prototype.updateUnreadMessage = function() {
   if (this.visible &&
       myParent._isVisible()) {
     tabUnreadMessageNode.innerHTML = '';
-    eXo.communication.chatbar.webui.UIStateManager.unreadMessageCnt = eXo.communication.chatbar.webui.UIStateManager.unreadMessageCnt - this.unreadMessageCnt;
+    eXo.communication.chat.webui.UIStateManager.unreadMessageCnt = eXo.communication.chat.webui.UIStateManager.unreadMessageCnt - this.unreadMessageCnt;
     myParent.unreadMessageCnt = myParent.unreadMessageCnt - this.unreadMessageCnt;
-    if(eXo.communication.chatbar.webui.UIStateManager.unreadMessageCnt < 0) eXo.communication.chatbar.webui.UIStateManager.unreadMessageCnt = 0;
+    if(eXo.communication.chat.webui.UIStateManager.unreadMessageCnt < 0) eXo.communication.chat.webui.UIStateManager.unreadMessageCnt = 0;
     if(myParent.unreadMessageCnt < 0) myParent.unreadMessageCnt = 0;
     this.unreadMessageCnt = 0;
     this.UIMainChatWindow.UISlideAlert.removeMessageByTabId(this.tabId.id);
@@ -520,7 +520,7 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   } else {
     this.unreadMessageCnt ++;
     myParent.unreadMessageCnt++;
-    eXo.communication.chatbar.webui.UIStateManager.unreadMessageCnt++;
+    eXo.communication.chat.webui.UIStateManager.unreadMessageCnt++;
   }
   if (msgObj &&
       msgObj.type == 'error') {

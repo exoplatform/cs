@@ -184,7 +184,7 @@ UIStateManager.prototype._ajaxUpdate = function(ajaxHandler, state, requestObjec
         if (requestObject.responseText) {
           try {
             _data = eXo.core.JSON.parse(requestObject.responseText);
-            eXo.communication.chatbar.webui.UIChatWindow.unreadMessageCnt = _data.unreadMessageCnt;
+            eXo.communication.chat.webui.UIChatWindow.unreadMessageCnt = _data.unreadMessageCnt;
           } catch (e) {
             window.jsconsole.error('JSON parser exception');
           }
