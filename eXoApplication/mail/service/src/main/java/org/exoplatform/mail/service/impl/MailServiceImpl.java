@@ -1102,15 +1102,17 @@ public class MailServiceImpl implements MailService, Startable {
       store = openIMAPConnection(userName, account, info);
       if (store != null) {
       	String key = userName + ":" + accountId;
-    		if(info == null) info = new CheckingInfo();
+    		if(info == null) {
+    		  info = new CheckingInfo();
+      	checkingLog_.put(key, info);
+    		}
 //      	info.setStatusCode(CheckingInfo.START_SYNC_FOLDER);
       	info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
-      	checkingLog_.put(key, info);
       	synchImapFolders(userName, accountId, null, store.getDefaultFolder().list());
 //        info.setRequestStop(true);
 //        info.setStatusCode(CheckingInfo.FINISH_SYNC_FOLDER);
         info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
-        checkingLog_.put(key, info);
+//        checkingLog_.put(key, info);
       }
     } catch (Exception e) {
 			e.printStackTrace();

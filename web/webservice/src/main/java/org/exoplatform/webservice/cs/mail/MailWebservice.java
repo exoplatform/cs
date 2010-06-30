@@ -97,7 +97,7 @@ public class MailWebservice implements ResourceContainer {
                                                                .getComponentInstanceOfType(MailService.class);
 
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
-    if (checkingInfo == null) {
+    if (checkingInfo == null || checkingInfo.getSyncFolderStatus() == CheckingInfo.FINISH_SYNC_FOLDER) {
       mailService.synchImapFolders(userName, accountId);
       checkingInfo = mailService.getCheckingInfo(userName, accountId);
     }
