@@ -186,13 +186,18 @@
 				function createRequestUrl(){
 					var prefs = getPrefs();
 					var url = (prefs.url)?prefs.url: "/portal/rest/private/cs/calendar/upcoming" ;
-					url +=  "/" + DateTimeFormater.format((new Date()),"yyyymmdd") + "/event";
+					url +=  "/" + DateTimeFormater.format((new Date()),"yyyymmdd");
 					url += "?rnd=" + (new Date()).getTime();
 					return url;
 				}
 				function getData(){					 
-					var url = createRequestUrl();					
-					ajaxAsyncGetRequest(url,render);
+					var url = createRequestUrl();
+					var params = [];
+		     
+		      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
+		      gadgets.io.makeRequest(url, render, params);
+					//ajaxAsyncGetRequest(url,render);
+					if(typeof(requestInterval) == "undefined") requestInterval = setInterval(getData,300000);
 				}				
 				function render(data){
 					if(!data || data.length == 0){
@@ -235,7 +240,7 @@
 					cont.style.display = "block";
 				}
 				function onLoadHander(){
-					setInterval(getData,5000);
+					getData();
 				}
 				function ajaxAsyncGetRequest(url, callback) {
 					var request =  parent.eXo.core.Browser.createHttpRequest() ;

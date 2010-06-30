@@ -189,13 +189,14 @@
 				function createRequestUrl(){
 					var prefs = getPrefs();
 					var url = (prefs.url)?prefs.url: "/portal/rest/private/cs/calendar/upcoming" ;
-					url +=  "/" + DateTimeFormater.format((new Date()),"yyyymmdd") + "/task";
+					url +=  "/" + DateTimeFormater.format((new Date()),"yyyymmdd");
 					url += "?rnd=" + (new Date()).getTime();
 					return url;
 				}
 				function getData(){					 
 					var url = createRequestUrl();					
 					ajaxAsyncGetRequest(url,render);
+					if(typeof(requestInterval) == "undefined") requestInterval = setInterval(getData,300000);
 				}				
 				function render(data){
 					if(!data || data.length == 0){
@@ -210,9 +211,15 @@
 					var len = (prefs.limit && (parseInt(prefs.limit) > 0) &&  (parseInt(prefs.limit) < data.length))? prefs.limit:data.length;
 					if(prefs.timeformat == "24h") timemask = "HH:MM";
           for(var i = 0 ; i < len; i++){	
-            var item = data[i];
+						var status = "";
+	          var item = data[i];
+						var className = "TaskItem";
+						if(item.eventState == "completed") {
+							status = "checked";
+							className += " TaskDone";
+						}
 						var time = DateTimeFormater.format(new Date(item.fromDateTime.time),timemask);
-            html += '<div class="TaskItem"><input onclick="doTask(this);" type="checkbox" class="checkbox">' + time + ' : <a href="javascript:void(0);" desc="' + item.description + '" onclick="showDetail(this,\''+ time +'\');">'+ item.summary +'</a></div>';
+            html += '<div class="' + className + '"><input ' + status + ' onclick="doTask(this);" type="checkbox" class="checkbox">' + time + ' : <a href="javascript:void(0);" desc="' + item.description + '" onclick="showDetail(this,\''+ time +'\');">'+ item.summary +'</a></div>';
           }
           cont.innerHTML = html;
 					setLink();
@@ -237,7 +244,7 @@
 					cont.style.display = "block";
 				}
 				function onLoadHander(){
-					setInterval(getData,10000);
+					getData();
 				}
 				function ajaxAsyncGetRequest(url, callback) {
 					var request =  parent.eXo.core.Browser.createHttpRequest() ;
