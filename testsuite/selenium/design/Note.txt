@@ -1,0 +1,5 @@
+
+- Make sure all data of application to test are clean
+- Make sure all data in two mails: exotest4@gmail.com (pass: exovietnam) and exotest3@gmail.com (pass: exovietnam) are clean before run the test.
+- Run the file script : Test_Mail.html firstly to create default data used during the test process.
+- Place file Test_Attachment.html in D:/ path
