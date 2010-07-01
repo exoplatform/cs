@@ -8,6 +8,7 @@
  import org.exoplatform.mail.MailUtils;
  import org.exoplatform.webui.application.WebuiRequestContext;
  import java.util.Locale;
+ 
  String compId = uicomponent.getId() ; 
  def rcontext = _ctx.getRequestContext() ;	
  rcontext.getJavascriptManager().addJavascript('eXo.mail.CheckBox.init("UIListUsers") ;') ;
@@ -15,6 +16,7 @@
  Locale locale = context.getParentAppRequestContext().getLocale() ;
  def confirmMsg = _ctx.appRes("UIMessageList.msg.checkMessage-select-no-messages");
  if (uicomponent.getAccountId() != null) uicomponent.refreshBrowser(uicomponent.getAccountId());
+ uicomponent.setFormId();
 %>
 <% /*Start Message Action Bar*/ %>
 <%uiform.begin()%>  

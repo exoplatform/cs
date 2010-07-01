@@ -19,6 +19,7 @@ UpdateList.prototype.init = function(accountId, eXoUser, eXoToken, cometdContext
   this.msgCount = 0;
 } ;
 
+UpdateList.prototype.formId = "";
 
 UpdateList.prototype.update = function(obj){
 	var data = eXo.core.JSON.parse(obj.data);	
@@ -26,7 +27,6 @@ UpdateList.prototype.update = function(obj){
 	var updateListLabel = document.getElementById("UpdateList");
 	var viewing = tbodyMsgList.getAttribute("viewing");
 	var isUpdate = false ;
-
 	if (this.accountId_ == data.accountId) {
 	  var folderIds = data.folders;
   	  var folders = folderIds.split(","); 
@@ -71,7 +71,7 @@ UpdateList.prototype.update = function(obj){
 		  tbodyMsgList.appendChild(tr);
 		  var preTr = eXo.core.DOMUtil.findPreviousElementByTagName(tr, "tr");
 		  if (preTr && !preTr.className) tbodyMsgList.removeChild(preTr);
-		  var href = "href=\"javascript:eXo.webui.UIForm.submitEvent('mail#UIMessageList','SelectMessage','&objectId=" + data.msgId + "')\"";
+		  var href = "href=\"javascript:eXo.webui.UIForm.submitEvent('" + this.formId + "#UIMessageList','SelectMessage','&objectId=" + data.msgId + "')\"";
 		  var clazz = "UnreadItem";
 		  if (data.isRead == 'true') clazz = "ReadItem";
 		  eXo.core.EventManager.addEvent(tr, "mousedown", eXo.mail.UIMailDragDrop.mailMDTrigger);

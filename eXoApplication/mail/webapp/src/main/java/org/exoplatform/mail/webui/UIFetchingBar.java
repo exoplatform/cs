@@ -22,7 +22,9 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.StatusInfo;
+import org.exoplatform.portal.webui.container.UIContainerForm;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -223,7 +225,11 @@ public class UIFetchingBar extends UIForm {
             updateList = true ;
         }
       }
-      if (updateList) uiMsgList.messageList_.put(msg.getId(), msg);
+      if (updateList){
+        //uiMsgList.updateMessagePageList(accountId,uiMsgList.getSelectedFolderId());
+        uiMsgList.messageList_.put(msg.getId(), msg);
+      }
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList);   
     }
   }

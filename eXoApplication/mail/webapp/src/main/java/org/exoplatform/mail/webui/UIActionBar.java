@@ -19,6 +19,7 @@ package org.exoplatform.mail.webui;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MessageFilter;
+import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAccountSetting;
@@ -31,6 +32,7 @@ import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -70,6 +72,7 @@ public class UIActionBar extends UIContainer {
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      
       if(Utils.isEmptyField(accId)) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -82,24 +85,6 @@ public class UIActionBar extends UIContainer {
         }
         context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox('checkmail-notice') ;");
         uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(true);
-        //cs-4936 /*
-        UIMessageList uimessagelist = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-        uimessagelist.refreshBrowser(accId);
-        /*try {
-          uimessagelist.updateList();          
-        } catch (Exception e) {
-          uiPortlet.findFirstComponentOfType(UIFolderContainer.class).setSelectedFolder(folderId) ;
-          MessageFilter filter = new MessageFilter("Folder"); 
-          filter.setAccountId(accId);
-          filter.setFolder(new String[] {folderId});
-          uimessagelist.setMessageFilter(filter);
-          uimessagelist.setSelectedFolderId(folderId);
-          uimessagelist.setSelectedTagId(null);
-          uimessagelist.init(accId);
-          uimessagelist.viewing_ =  UIMessageList.VIEW_ALL;
-          uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
-        }*/
-         // */
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
     }

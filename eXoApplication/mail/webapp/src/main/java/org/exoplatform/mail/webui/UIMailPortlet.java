@@ -41,6 +41,17 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
    template = "app:/templates/mail/webui/UIMailPortlet.gtmpl"
 )
 public class UIMailPortlet extends UIPortletApplication {
+  
+  private String formId = "";
+  
+  public String getFormId() {
+    return formId;
+  }
+
+  public void setFormId(String formId) {
+    this.formId = formId;
+  }
+
   public UIMailPortlet() throws Exception {
     addChild(UIActionBar.class, null, null) ;
     addChild(UINavigationContainer.class, null, null) ;

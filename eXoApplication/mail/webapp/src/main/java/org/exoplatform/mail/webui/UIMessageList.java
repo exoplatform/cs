@@ -52,6 +52,8 @@ import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -145,6 +147,12 @@ public class UIMessageList extends UIForm {
   public UIMessageList() throws Exception {}
 
   public void init(String accountId) throws Exception {
+    String selectedFolderId = Utils.generateFID(accountId,  Utils.FD_INBOX, false);
+    updateMessagePageList(accountId, selectedFolderId);
+    setFormId();
+  }
+
+  public void updateMessagePageList(String accountId, String selectedFolderId) throws Exception{
     accountId_ = accountId ;
     sortedBy_ = Utils.EXO_RECEIVEDDATE ;
     String username = MailUtils.getCurrentUser();
@@ -155,13 +163,14 @@ public class UIMessageList extends UIForm {
       filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
       filter.setHasStructure(true) ;
     }
-    if (accountId != null && accountId != "") {
+    if (!Utils.isEmptyField(accountId)) {
       filter.setAccountId(accountId) ;
       if (filter.getFolder() == null) {
         if (!filter.getName().equals("Search")) {
-          selectedFolderId_ = Utils.generateFID(accountId, Utils.FD_INBOX, false);
+          selectedFolderId_ = selectedFolderId;
           filter.setFolder(new String[] { selectedFolderId_ });
         }
+        
       } else {
         selectedFolderId_ = filter.getFolder()[0];
       }
@@ -174,7 +183,20 @@ public class UIMessageList extends UIForm {
     }
     setMessageFilter(filter);
   }
-
+  
+  public void setFormId(){
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    String formId = ((PortletRequestContext)context).getWindowId();
+    UIMailPortlet mailportlet = getAncestorOfType(UIMailPortlet.class);
+    UIMessageArea uiMsgArea = getAncestorOfType(UIMessageArea.class);
+    if(mailportlet == null){
+     if(uiMsgArea != null) {
+       mailportlet = uiMsgArea.getAncestorOfType(UIMailPortlet.class);
+     }
+    }
+    if(mailportlet != null) mailportlet.setFormId(formId);
+  }
+  
   public boolean isMessagePreviewRendered() {
     try {
       return getAncestorOfType(UIMessageArea.class).getChild(UIMessagePreview.class).isRendered() ;
@@ -365,6 +387,7 @@ public class UIMessageList extends UIForm {
       String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
       if (Utils.isEmptyField(folderId)) folderId = "";
       
+      uiMessageList.updateList();
       Message msg = uiMessageList.messageList_.get(msgId);
       
       if (msg != null) {
@@ -474,6 +497,8 @@ public class UIMessageList extends UIForm {
             mailSrv.toggleMessageProperty(username, accountId, msgL, folderId, Utils.IS_RETURN_RECEIPT, false);
           }
         } 
+        
+      //  event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
       }          
     }
