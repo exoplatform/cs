@@ -125,7 +125,7 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
     } else if(TYPE_GROUP.equals(type_)) {
       Collection  groups = service.getGroupHandler().findGroups(this.getCurrentGroup()) ;    
       for(Object child : groups){
-        children.add(((Group)child).getGroupName()) ;
+        children.add(((Group)child).getId()) ;
       }
     }
     Collections.sort(children) ;

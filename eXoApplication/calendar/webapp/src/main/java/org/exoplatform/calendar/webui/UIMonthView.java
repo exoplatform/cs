@@ -29,8 +29,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -190,7 +189,7 @@ public class UIMonthView extends UICalendarView {
             if(calendar == null) {
               continue ;
             } else {
-              if(!CalendarUtils.PRIVATE_TYPE.equals(ce.getCalType()) && !CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), calendar.getEditPermission(), username)) {
+              if(!CalendarUtils.PRIVATE_TYPE.equals(ce.getCalType()) && !CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), Utils.getEditPerUsers(calendar), username)) {
                 continue ;
               }
               CalendarEvent calEvent = ce ;

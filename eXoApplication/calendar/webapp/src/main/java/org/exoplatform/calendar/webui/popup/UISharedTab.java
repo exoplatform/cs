@@ -38,6 +38,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
 public class UISharedTab extends UIFormInputWithActions {
   final static public String FIELD_NAME = "calendarName".intern() ;
   final static public String FIELD_USER = "username".intern() ;
+  final static public String FIELD_GROUP = "group".intern() ;
   final static public String FIELD_EDIT = "canEdit".intern() ;
   private Map<String, List<ActionData>> actionField_  = new HashMap<String, List<ActionData>>() ;
   protected String calendarName_;

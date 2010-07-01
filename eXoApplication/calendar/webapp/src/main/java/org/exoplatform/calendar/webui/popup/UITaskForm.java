@@ -36,6 +36,7 @@ import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -1021,11 +1022,11 @@ public Attachment getAttachment(String attId) {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         } else {
-          boolean canEdit = false ;
+          boolean canEdit = false ;          
           if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
-            canEdit = CalendarUtils.canEdit(null, currentCalendar.getEditPermission(), username) ;
+            canEdit = CalendarUtils.canEdit(null, Utils.getEditPerUsers(currentCalendar), username) ;
           } else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
-            canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), currentCalendar.getEditPermission(), username) ;
+            canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(),Utils.getEditPerUsers(currentCalendar), username) ;
           }
           if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
             uiPopupAction.deActivate() ;

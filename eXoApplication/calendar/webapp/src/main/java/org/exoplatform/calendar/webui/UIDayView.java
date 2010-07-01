@@ -16,15 +16,12 @@
  **/
 package org.exoplatform.calendar.webui;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.jcr.PathNotFoundException;
@@ -34,10 +31,9 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
-import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -147,7 +143,8 @@ public class UIDayView extends UICalendarView {
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           } else {
-            if(!ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE) && !CalendarUtils.canEdit(calendarview.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), CalendarUtils.getCurrentUser())) {
+            if(!ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE) && !CalendarUtils.canEdit(calendarview.getApplicationComponent(
+                OrganizationService.class), Utils.getEditPerUsers(calendar), CalendarUtils.getCurrentUser())) {
               UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
               uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

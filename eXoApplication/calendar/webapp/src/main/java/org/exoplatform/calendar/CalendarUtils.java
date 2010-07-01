@@ -58,6 +58,7 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.UIComponent;
@@ -649,7 +650,7 @@ public class CalendarUtils {
     if(gcd != null) {
       SelectOptionGroup sharedGrp = new SelectOptionGroup(CalendarUtils.SHARED_CALENDARS);
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
-        if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){
+        if(CalendarUtils.canEdit(null, Utils.getEditPerUsers(c), username)){
           if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
             String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
             c.setName(newName);
@@ -668,7 +669,7 @@ public class CalendarUtils {
       SelectOptionGroup pubGrp = new SelectOptionGroup(CalendarUtils.PUBLIC_CALENDARS);
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
-          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
+          if(CalendarUtils.canEdit(oService, Utils.getEditPerUsers(c), username)){
             pubGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
           }
         }
@@ -733,7 +734,7 @@ public class CalendarUtils {
     GroupCalendarData gcd = calendarService.getSharedCalendars(username, true);
     if(gcd != null) {
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
-        if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){
+        if(CalendarUtils.canEdit(null, Utils.getEditPerUsers(c), username)){
           if (c.getId().equals(Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
             String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
             c.setName(newName);
@@ -747,7 +748,7 @@ public class CalendarUtils {
       OrganizationService oService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
-          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
+          if(CalendarUtils.canEdit(oService, Utils.getEditPerUsers(c), username)){
             list.add(c) ; 
           }
         }
@@ -934,5 +935,4 @@ public class CalendarUtils {
       return id;
     }
   }
-  
 }

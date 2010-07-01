@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.Map.Entry;
 
 import javax.jcr.AccessDeniedException;
@@ -77,6 +76,7 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -313,7 +313,7 @@ public class JCRDataStorage implements DataStorage {
     calendarNode.setProperty(Utils.EXO_DESCRIPTION, calendar.getDescription()) ;
     calendarNode.setProperty(Utils.EXO_CATEGORY_ID, calendar.getCategoryId()) ;
     calendarNode.setProperty(Utils.EXO_VIEW_PERMISSIONS, calendar.getViewPermission()) ;
-    calendarNode.setProperty(Utils.EXO_EDIT_PERMISSIONS, calendar.getEditPermission()) ;
+    calendarNode.setProperty(Utils.EXO_EDIT_PERMISSIONS, calendar.getEditPermission()) ;    
     calendarNode.setProperty(Utils.EXO_GROUPS, calendar.getGroups()) ;
     calendarNode.setProperty(Utils.EXO_LOCALE, calendar.getLocale()) ;
     calendarNode.setProperty(Utils.EXO_TIMEZONE, calendar.getTimeZone()) ;
@@ -500,23 +500,12 @@ public class JCRDataStorage implements DataStorage {
           }
           calendar.setGroups(groups.toArray(new String[groups.size()])) ;
         }
-
         if(calNode.hasProperty(Utils.EXO_VIEW_PERMISSIONS)) {
-          Value[] viewValues = calNode.getProperty(Utils.EXO_VIEW_PERMISSIONS).getValues() ;
-          List<String> viewPerms = new ArrayList<String>() ;
-          for(Value v : viewValues) {
-            viewPerms.add(v.getString()) ;
-          }
-          calendar.setViewPermission(viewPerms.toArray(new String[viewPerms.size()])) ;
+          calendar.setViewPermission(ValuesToStrings(calNode.getProperty(Utils.EXO_VIEW_PERMISSIONS).getValues())) ;
         }
         if(calNode.hasProperty(Utils.EXO_EDIT_PERMISSIONS)) {
-          Value[] editValues = calNode.getProperty(Utils.EXO_EDIT_PERMISSIONS).getValues() ;
-          List<String> editPerms = new ArrayList<String>() ;
-          for(Value v : editValues) {
-            editPerms.add(v.getString()) ;
-          }
-          calendar.setEditPermission(editPerms.toArray(new String[editPerms.size()])) ;
-        }      
+          calendar.setEditPermission(ValuesToStrings(calNode.getProperty(Utils.EXO_EDIT_PERMISSIONS).getValues()));
+        }     
       }  
     } else {
       if(defaultFilterCalendars == null || !Arrays.asList(defaultFilterCalendars).contains(calNode.getName())) {
@@ -544,21 +533,11 @@ public class JCRDataStorage implements DataStorage {
             calendar.setGroups(groups.toArray(new String[groups.size()])) ;
           }
           if(calNode.hasProperty(Utils.EXO_VIEW_PERMISSIONS)) {
-            Value[] viewValues = calNode.getProperty(Utils.EXO_VIEW_PERMISSIONS).getValues() ;
-            List<String> viewPerms = new ArrayList<String>() ;
-            for(Value v : viewValues) {
-              viewPerms.add(v.getString()) ;
-            }
-            calendar.setViewPermission(viewPerms.toArray(new String[viewPerms.size()])) ;
+            calendar.setViewPermission(ValuesToStrings(calNode.getProperty(Utils.EXO_VIEW_PERMISSIONS).getValues())) ;
           }
           if(calNode.hasProperty(Utils.EXO_EDIT_PERMISSIONS)) {
-            Value[] editValues = calNode.getProperty(Utils.EXO_EDIT_PERMISSIONS).getValues() ;
-            List<String> editPerms = new ArrayList<String>() ;
-            for(Value v : editValues) {
-              editPerms.add(v.getString()) ;
-            }
-            calendar.setEditPermission(editPerms.toArray(new String[editPerms.size()])) ;
-          }      
+            calendar.setEditPermission(ValuesToStrings(calNode.getProperty(Utils.EXO_EDIT_PERMISSIONS).getValues())) ;
+          }
         }  
       }
     }
@@ -2538,7 +2517,7 @@ public class JCRDataStorage implements DataStorage {
           calendarNode.setProperty(Utils.EXO_DESCRIPTION, calendar.getDescription()) ;
           calendarNode.setProperty(Utils.EXO_CATEGORY_ID, calendar.getCategoryId()) ;
           calendarNode.setProperty(Utils.EXO_VIEW_PERMISSIONS, calendar.getViewPermission()) ;
-          calendarNode.setProperty(Utils.EXO_EDIT_PERMISSIONS, calendar.getEditPermission()) ;
+          calendarNode.setProperty(Utils.EXO_EDIT_PERMISSIONS, calendar.getEditPermission()) ;         
           calendarNode.setProperty(Utils.EXO_GROUPS, calendar.getGroups()) ;
           calendarNode.setProperty(Utils.EXO_LOCALE, calendar.getLocale()) ;
           calendarNode.setProperty(Utils.EXO_TIMEZONE, calendar.getTimeZone()) ;
@@ -2709,7 +2688,7 @@ public class JCRDataStorage implements DataStorage {
     if(sharedCalendarHome.hasNode(username)) {
       Node userNode = sharedCalendarHome.getNode(username) ;
       PropertyIterator iter = userNode.getReferences() ;
-      Node calendar ;      
+      Node calendar ;
       while(iter.hasNext()) {
         calendar = iter.nextProperty().getParent() ;
         if(calendar.getProperty(Utils.EXO_ID).getString().equals(calendarId)) {
@@ -2724,7 +2703,7 @@ public class JCRDataStorage implements DataStorage {
           calendar.save() ;
           break ;
         }
-      }      
+      }
     }
   } 
 
@@ -2733,9 +2712,8 @@ public class JCRDataStorage implements DataStorage {
    */
   @SuppressWarnings("unchecked")
   public boolean canEdit(Node calNode, String username) throws Exception {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
     OrganizationService oService = 
-      (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ;
+      (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class) ;
     StringBuffer sb = new StringBuffer(username) ;
     if(oService != null) {
       Collection<Group> groups = oService.getGroupHandler().findGroupsOfUser(username) ;
@@ -2752,7 +2730,16 @@ public class JCRDataStorage implements DataStorage {
     Value[] editValues = calNode.getProperty(Utils.EXO_EDIT_PERMISSIONS).getValues() ;
     List<String> editPerms = new ArrayList<String>() ;
     for(Value v : editValues) {
-      editPerms.add(v.getString()) ;
+      String value = v.getString();
+      if (value.contains(Utils.SLASH)) {        
+        if (oService.getGroupHandler().findGroupById(value) != null) {
+          for (User user : oService.getUserHandler().findUsersByGroup(value).getAll()) {
+            editPerms.add(user.getUserName());
+          }            
+        }
+      } else {        
+        editPerms.add(value) ;
+      }
     }
     if(editPerms != null) {
       String[] checkPerms = sb.toString().split(Utils.COMMA);
@@ -3242,5 +3229,162 @@ public class JCRDataStorage implements DataStorage {
   public Session getSession(SessionProvider sprovider) throws Exception{
     ManageableRepository currentRepo = repoService_.getCurrentRepository() ;
     return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo) ;
+  }
+  
+  private String [] ValuesToStrings(Value[] Val) throws Exception {
+    if(Val.length == 1) return new String[]{Val[0].getString()};
+    String[] Str = new String[Val.length];
+    for(int i = 0; i < Val.length; ++i) {
+      Str[i] = Val[i].getString();
+    }
+    return Str;
+  }
+  
+  public void autoShareCalendar(List<String> groupsOfUser, String reciever) throws Exception {
+    Node sharedHome = getSharedCalendarHome();
+    NodeIterator userNodes = sharedHome.getNodes();
+    List<String> sharedCalendars = new ArrayList<String>();
+    while (userNodes.hasNext()){
+      Node sharedNode = userNodes.nextNode();
+      PropertyIterator iter = sharedNode.getReferences() ;
+      while(iter.hasNext()) {
+        try{
+          Node calendarNode = iter.nextProperty().getParent() ;
+          if (!sharedCalendars.contains(calendarNode.getProperty(Utils.EXO_ID).getString())) {
+            sharedCalendars.add(calendarNode.getProperty(Utils.EXO_ID).getString());
+            Value[] viewPers = calendarNode.getProperty(Utils.EXO_VIEW_PERMISSIONS).getValues();
+            for (Value viewPer : viewPers)
+              for (String groupId : groupsOfUser)
+                if (viewPer.getString().equals(groupId)) {
+                  Node sharedCalendarHome = getSharedCalendarHome() ;
+                  Value[] values = {};
+                  if (calendarNode.isNodeType(Utils.EXO_SHARED_MIXIN)) {     
+                    values = calendarNode.getProperty(Utils.EXO_SHARED_ID).getValues();
+                  } else {
+                    calendarNode.addMixin(Utils.EXO_SHARED_MIXIN);     
+                  }
+                  Session systemSession = sharedCalendarHome.getSession() ;
+                  Node userNode ;
+                  List<Value> valueList = new ArrayList<Value>() ;
+                  for (int i = 0; i < values.length; i++) {
+                    Value value = values[i];
+                    valueList.add(value) ;
+                  }
+                  CalendarSetting calSetting = getCalendarSetting(reciever) ;
+                  if(calSetting == null) calSetting = new CalendarSetting() ;
+                  Map<String, String> map = new HashMap<String, String> () ;
+                  for(String key : calSetting.getSharedCalendarsColors()) {
+                    map.put(key.split(":")[0], key.split(":")[1]) ;
+                  }
+                  if(map.get(calendarNode.getProperty(Utils.EXO_ID).getString()) == null)
+                    map.put(calendarNode.getProperty(Utils.EXO_ID).getString(), calendarNode.getProperty("exo:calendarColor").getString()) ;
+                  List<String> calColors = new ArrayList<String>() ;
+                  for(String key : map.keySet()) {
+                    calColors.add(key + ":" +map.get(key)) ;
+                  }
+                  calSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
+                  saveCalendarSetting(reciever, calSetting) ;
+                  try {
+                    userNode = sharedCalendarHome.getNode(reciever) ;
+                  } catch (Exception e) {
+                    userNode = sharedCalendarHome.addNode(reciever, Utils.NT_UNSTRUCTURED) ;
+                    if(userNode.canAddMixin(Utils.MIX_REFERENCEABLE)) {
+                      userNode.addMixin(Utils.MIX_REFERENCEABLE) ;
+                    } 
+                  }
+                  boolean isExist = false ; 
+                  isExist = false;
+                  for (int i = 0; i < values.length; i++) {
+                    Value value = values[i];
+                    String uuid = value.getString();
+                    Node refNode = systemSession.getNodeByUUID(uuid);
+                    if(refNode.getPath().equals(userNode.getPath())) {
+                      isExist = true ; 
+                      break ;
+                    }
+                  }
+                  if(!isExist) {
+                    Value value2add = calendarNode.getSession().getValueFactory().createValue(userNode);
+                    valueList.add(value2add) ;
+                  }      
+                  
+                  if(valueList.size() > 0) {
+                    calendarNode.setProperty(Utils.EXO_SHARED_ID, valueList.toArray( new Value[valueList.size()]));
+                    calendarNode.save() ;
+                    sharedCalendarHome.getSession().save() ;
+                    calendarNode.getSession().save();
+                    systemSession.logout() ;
+                  }                  
+                } 
+          }
+        }catch(Exception e){
+          e.printStackTrace() ;
+        }
+      } 
+    } 
+  }
+  
+  public void autoRemoveShareCalendar(String groupId, String username) throws Exception {
+    Node sharedCalendarHome = getSharedCalendarHome();
+    if(sharedCalendarHome.hasNode(username)) {
+      Node userNode = sharedCalendarHome.getNode(username) ;
+      String uuid = userNode.getProperty("jcr:uuid").getString() ;
+      PropertyIterator iter = userNode.getReferences() ;
+      Node calendar ;
+      CalendarSetting calSetting = getCalendarSetting(username) ;
+      Map<String, String> map = new HashMap<String, String>() ;
+      for(String key : calSetting.getSharedCalendarsColors()) {
+        map.put(key.split(":")[0], key.split(":")[1]) ;
+      }
+      OrganizationService organizationService = 
+        (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class) ;
+      while(iter.hasNext()) {
+        calendar = iter.nextProperty().getParent() ;
+        List<String> viewPers = new ArrayList<String>();
+        for (Value value : calendar.getProperty(Utils.EXO_VIEW_PERMISSIONS).getValues()) {
+          viewPers.add(value.getString());
+        }
+        viewPers.remove(groupId);
+        boolean deleteShared = true ;
+        if (viewPers.contains(username)) deleteShared = false;
+        else {
+          Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(username).toArray() ;
+          for (Object object : groups) {
+            if (viewPers.contains(((Group)object).getId())) {
+              deleteShared = false ;
+              break ;
+            }               
+          }
+        }
+        if (deleteShared) {         
+          for (Value viewPer : calendar.getProperty(Utils.EXO_VIEW_PERMISSIONS).getValues())
+            if (viewPer.getString().equals(groupId)) {       
+              map.remove(calendar.getProperty(Utils.EXO_ID).getString()) ;
+              Value[] values = calendar.getProperty(Utils.EXO_SHARED_ID).getValues() ;
+              List<Value> newValues = new ArrayList<Value>() ;
+              for(Value value : values){
+                if(!value.getString().equals(uuid)) {
+                  newValues.add(value) ;
+                }
+              }
+              List<String> calColors = new ArrayList<String>() ;
+              for(String key : map.keySet()) {
+                calColors.add(key + ":" +map.get(key)) ;
+              }
+              calSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
+              saveCalendarSetting(username, calSetting) ;
+              calendar.setProperty(Utils.EXO_SHARED_ID, newValues.toArray(new Value[newValues.size()])) ;
+              calendar.getSession().save() ;
+              calendar.refresh(true) ;
+              break ;
+            }
+            try {
+              removeFeed(username, calendar.getProperty(Utils.EXO_ID).getString()) ;        
+            } catch (Exception e) {
+              e.printStackTrace() ;
+            } 
+        }
+      }
+    }
   }
 }

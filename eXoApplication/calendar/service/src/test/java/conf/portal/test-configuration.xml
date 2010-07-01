@@ -475,7 +475,13 @@
 	        </object>
 	      </object-param>
 	    </init-params>
-	  </component-plugin>	  	  	  	  
+	  </component-plugin>	  	  	
+		<component-plugin>
+	    <name>calendar.new.membership.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.calendar.service.impl.NewMembershipListener</type>
+	    <description>description</description>	     
+	  </component-plugin>  
 	</external-component-plugins>
 
   <external-component-plugins>
@@ -567,7 +573,14 @@
 	        </object>
 	      </object-param>
 	    </init-params>
-	  </component-plugin>	  	  	  	  
+	  </component-plugin>	  	
+  	
+		<component-plugin>
+	    <name>contact.new.membership.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.contact.service.impl.NewMembershipListener</type>
+	    <description>description</description>	     
+	  </component-plugin>  	  
 	</external-component-plugins>
 	
 	

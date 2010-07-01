@@ -24,13 +24,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Iterator;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
@@ -1324,9 +1324,10 @@ public Attachment getAttachment(String attId) {
           } else {
             boolean canEdit = false ;
             if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
-              canEdit = CalendarUtils.canEdit(null, currentCalendar.getEditPermission(), username) ;
+              canEdit = CalendarUtils.canEdit(null, org.exoplatform.calendar.service.Utils.getEditPerUsers(currentCalendar), username) ;
             } else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
-              canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), currentCalendar.getEditPermission(), username) ;
+              canEdit = CalendarUtils.canEdit(
+                CalendarUtils.getOrganizationService(), org.exoplatform.calendar.service.Utils.getEditPerUsers(currentCalendar), username) ;
             }
             if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
               uiPopupAction.deActivate() ;

@@ -117,7 +117,7 @@ public class Calendar {
   
   public String[] getViewPermission() { return viewPermission ; }
   public void setViewPermission(String[] viewPermission) { this.viewPermission = viewPermission ; }
-
+  
   public String[] getGroups() { return groups ; }
   public void setGroups(String[] groups) { this.groups = groups ;}
 

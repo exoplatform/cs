@@ -86,7 +86,6 @@ public class NewGroupListener extends GroupEventListener {
       if(!perms.contains(groupKey)) perms.add(groupKey) ;
     }
     calendar.setEditPermission(perms.toArray(new String[perms.size()])) ;
-    SessionProvider sProvider = createSystemProvider();
     try {
       calendarService_.savePublicCalendar(calendar, isNew, null) ;
     } finally {
@@ -96,7 +95,6 @@ public class NewGroupListener extends GroupEventListener {
   }
   @Override
   public void postDelete(Group group) throws Exception {
-    SessionProvider sProvider = createSystemProvider();
     try {
       List<GroupCalendarData> gCalData = calendarService_.getGroupCalendars(new String[]{group.getId()}, true, null) ;
       for (GroupCalendarData gc : gCalData) {

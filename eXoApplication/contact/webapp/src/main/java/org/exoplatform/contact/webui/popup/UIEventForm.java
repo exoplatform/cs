@@ -30,6 +30,7 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.contact.CalendarUtils;
 import org.exoplatform.contact.webui.Selector;
 import org.exoplatform.container.PortalContainer;
@@ -182,7 +183,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     if(gcd != null) {
       SelectOptionGroup sharedGrp = new SelectOptionGroup("sharedCalendar");
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
-        if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){
+        if(CalendarUtils.canEdit(null, Utils.getEditPerUsers(c), username)){
           String owner = "" ;
           if(c.getCalendarOwner() != null) owner = c.getCalendarOwner() + "- " ;
           sharedGrp.addOption(new SelectOption(owner + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
@@ -197,7 +198,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       SelectOptionGroup pubGrp = new SelectOptionGroup("publicCalendar");
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
-          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
+          if(CalendarUtils.canEdit(oService, Utils.getEditPerUsers(c), username)){
             pubGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
           }
         }
@@ -621,9 +622,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
           } else { 
             boolean canEdit = false ;
             if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
-              canEdit = CalendarUtils.canEdit(null, currentCalendar.getEditPermission(), username) ;
+              canEdit = CalendarUtils.canEdit(null, Utils.getEditPerUsers(currentCalendar), username) ;
             } else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
-              canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), currentCalendar.getEditPermission(), username) ;
+              canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), Utils.getEditPerUsers(currentCalendar), username) ;
             }
             if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
               uiPopupAction.deActivate() ;

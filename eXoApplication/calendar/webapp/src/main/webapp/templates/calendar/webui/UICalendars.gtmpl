@@ -2,6 +2,7 @@
 	import org.exoplatform.calendar.service.GroupCalendarData;
 	import org.exoplatform.calendar.service.CalendarEvent;
 	import org.exoplatform.calendar.CalendarUtils;
+	import org.exoplatform.calendar.service.Utils;
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkLayout() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterForm("' + uiform.id + '") ;') ;
@@ -160,7 +161,7 @@
 							owner = calendar.getCalendarOwner() + "- " ;
 						}
 				%>
-  					<div class="CalendarItem $color CalendarItemShared"  calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(calendar.getEditPermission())%>">
+  					<div class="CalendarItem $color CalendarItemShared"  calColor="$color" id="$calId" calType="1"  canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar))%>">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon" title="<%=owner + calendar.getName()%>"><span><%=owner + calendar.getName()%></span></div>
   							<!--<div class="DownArrow1Icon"><span></span></div>-->
@@ -212,7 +213,7 @@
 							calId = calendar.getId() ;
 							if(uicomponent.getChildById(calId) != null) {
 				%>
-  					<div class="CalendarItem $calendar.calendarColor CalendarItemPublic"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission())%>" id="$calId" calType="2" >
+  					<div class="CalendarItem $calendar.calendarColor CalendarItemPublic"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar))%>" id="$calId" calType="2" >
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon" title="<%=calendar.getName()%>"><span><%=calendar.getName()%></span></div>
   							<!--<div class="DownArrow1Icon"><span></span></div>-->

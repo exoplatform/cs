@@ -30,6 +30,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.Reminder;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -374,14 +375,14 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UICalendarPortlet.class)) ;
           return ;
         } else {
-          if(CalendarUtils.SHARED_TYPE.equals(uiForm.calType_) && !CalendarUtils.canEdit(null, calendar.getEditPermission(), username)) {
+          if(CalendarUtils.SHARED_TYPE.equals(uiForm.calType_) && !CalendarUtils.canEdit(null, Utils.getEditPerUsers(calendar), username)) {
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null,1));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             uiForm.reset() ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UICalendarPortlet.class)) ;
             return ;
           }
-          if(CalendarUtils.PUBLIC_TYPE.equals(uiForm.calType_) && !uiForm.canEdit(calendar.getEditPermission())) {
+          if(CalendarUtils.PUBLIC_TYPE.equals(uiForm.calType_) && !uiForm.canEdit(Utils.getEditPerUsers(calendar))) {
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             uiForm.reset() ;

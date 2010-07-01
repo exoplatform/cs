@@ -25,10 +25,15 @@ import java.util.ResourceBundle;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -116,9 +121,15 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       UIFormCheckBoxInput checkBox = shareForm.getUIFormCheckBoxInput(UISharedTab.FIELD_EDIT) ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
-      shareForm.setSharedUser(resiceUser) ;
+      
       Calendar cal = calService.getUserCalendar(username, addEdit.calendarId_) ;
-      checkBox.setChecked((cal.getEditPermission() != null) && Arrays.asList(cal.getEditPermission()).contains(resiceUser)) ;
+      if (resiceUser.contains(Utils.SLASH)) {
+        shareForm.setSharedGroup(resiceUser);
+        checkBox.setChecked((cal.getEditPermission() != null) && Arrays.asList(cal.getEditPermission()).contains(resiceUser)) ;
+      } else {
+        shareForm.setSharedUser(resiceUser) ;
+        checkBox.setChecked((cal.getEditPermission() != null) && Arrays.asList(cal.getEditPermission()).contains(resiceUser)) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(shareForm) ;
     }
   }
@@ -129,25 +140,76 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
       Calendar cal = calService.getUserCalendar(username, addEdit.calendarId_) ;
-      if(cal.getViewPermission() != null) {
-        List<String> newPerms = new ArrayList<String>() ;
+      OrganizationService organizationService = 
+        (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+      if (resiceUser.contains(Utils.SLASH)) {
+        List<String> newViewPerms = new ArrayList<String>() ;
         for(String s : cal.getViewPermission()) {
           if(!s.equals(resiceUser)) {
-            newPerms.add(s) ;
+            newViewPerms.add(s) ;
           }
         }
-        cal.setViewPermission(newPerms.toArray(new String[newPerms.size()])) ;
-      }
-      if(cal.getEditPermission() != null) {
-        List<String> newPerms = new ArrayList<String>() ;
-        for(String s : cal.getEditPermission()) {
-          if(!s.equals(resiceUser)) {
-            newPerms.add(s) ;
+        cal.setViewPermission(newViewPerms.toArray(new String[newViewPerms.size()])) ;
+        if(cal.getEditPermission() != null) {
+          List<String> newEditPerms = new ArrayList<String>() ;
+          for(String s : cal.getEditPermission()) {
+            if(!s.equals(resiceUser)) {
+              newEditPerms.add(s) ;
+            }
           }
+          cal.setEditPermission(newEditPerms.toArray(new String[newEditPerms.size()])) ;
         }
-        cal.setEditPermission(newPerms.toArray(new String[newPerms.size()])) ;
-      }
-      calService.removeSharedCalendar(resiceUser, addEdit.calendarId_) ;
+        List<String> viewUsers = new ArrayList<String>() ;
+        if (cal.getViewPermission() != null) {
+          viewUsers = Arrays.asList(cal.getViewPermission()) ;
+        }
+        for (User user : organizationService.getUserHandler().findUsersByGroup(resiceUser).getAll()) {
+          String userId = user.getUserName();
+          boolean deleteShared = true ;
+          if (!viewUsers.contains(userId)) {
+            Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(userId).toArray() ;
+            for (Object object : groups) {
+              if (Arrays.asList(cal.getViewPermission()).contains(((Group)object).getId())) {
+                deleteShared = false ;
+                break ;
+              }               
+            }
+            if (deleteShared) {
+              calService.removeSharedCalendar(userId, addEdit.calendarId_) ;
+            }
+          }
+        }        
+      } else {
+        if(cal.getViewPermission() != null) {
+          List<String> newPerms = new ArrayList<String>() ;
+          for(String s : cal.getViewPermission()) {
+            if(!s.equals(resiceUser)) {
+              newPerms.add(s) ;
+            }
+          }
+          cal.setViewPermission(newPerms.toArray(new String[newPerms.size()])) ;
+        }
+        if(cal.getEditPermission() != null) {
+          List<String> newPerms = new ArrayList<String>() ;
+          for(String s : cal.getEditPermission()) {
+            if(!s.equals(resiceUser)) {
+              newPerms.add(s) ;
+            }
+          }
+          cal.setEditPermission(newPerms.toArray(new String[newPerms.size()])) ;
+        }        
+        boolean deleteShared = true ;
+        Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(resiceUser).toArray() ;
+        for (Object object : groups) {
+          if (Arrays.asList(cal.getViewPermission()).contains(((Group)object).getId())) {
+            deleteShared = false ;
+            break ;
+          }               
+        } 
+        if (deleteShared) {
+          calService.removeSharedCalendar(resiceUser, addEdit.calendarId_) ;
+        }
+      }      
       calService.saveUserCalendar(username, cal, false) ;
       addEdit.updateGrid(cal, addEdit.getCurrentPage());
       event.getRequestContext().addUIComponentToUpdateByAjax(addEdit) ;

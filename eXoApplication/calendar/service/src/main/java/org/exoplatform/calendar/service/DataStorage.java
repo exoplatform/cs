@@ -38,6 +38,9 @@ public interface DataStorage {
   /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.impl.DataStorage#getPublicCalendarServiceHome()
    */
+  
+  final public static String USERS_PATH = "usersPath".intern();
+  
   public Node getPublicCalendarServiceHome() throws Exception;
 
   public Node getSharedCalendarHome() throws Exception;
@@ -465,5 +468,8 @@ public interface DataStorage {
   public Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception;
 
   public Session getSession(SessionProvider sprovider) throws Exception; 
+  
+  public void autoShareCalendar(List<String> groupsOfUser, String reciever) throws Exception ;
 
+  public void autoRemoveShareCalendar(String groupId, String username) throws Exception ;
 }

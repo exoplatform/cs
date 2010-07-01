@@ -53,6 +53,17 @@
         </td>
       </tr>
       <tr>
+      <td class="FieldLabel">
+        <%=uiForm.getLabel(uicomponent.FIELD_GROUP)%>
+      </td>
+      <td class="FieldComponent">
+        <%
+        	uiForm.renderField(uicomponent.FIELD_GROUP)
+        	renderActions(uicomponent.FIELD_GROUP)
+        %>
+      </td>
+    </tr>
+      <tr>
         <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.FIELD_EDIT)%>
         </td>

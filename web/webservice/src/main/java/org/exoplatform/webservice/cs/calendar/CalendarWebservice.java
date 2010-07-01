@@ -124,14 +124,14 @@ public class CalendarWebservice implements ResourceContainer{
         OrganizationService oService = (OrganizationService)ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
         cal = calService.getGroupCalendar(calendarId) ;
-        if(Utils.canEdit(oService, cal.getEditPermission(), username)) {
+        if(Utils.canEdit(oService, Utils.getEditPerUsers(cal), username)) {
           buffer = new StringBuffer("{canEdit:1}");
         } 
         stop();
       } else if(Utils.SHARED_TYPE == Integer.parseInt(type)) {
         if(calService.getSharedCalendars(username, true) != null) {
           cal = calService.getSharedCalendars(username, true).getCalendarById(calendarId) ;
-          if(Utils.canEdit(null, cal.getEditPermission(), username)) {
+          if(Utils.canEdit(null, Utils.getEditPerUsers(cal), username)) {
             buffer = new StringBuffer("{canEdit:1}");
           }  
         } 

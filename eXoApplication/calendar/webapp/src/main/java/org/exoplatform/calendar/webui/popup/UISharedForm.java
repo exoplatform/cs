@@ -25,9 +25,11 @@ import java.util.Map;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -43,7 +45,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
-import org.exoplatform.webui.form.validator.NameValidator;
 import org.exoplatform.webui.organization.account.UIUserSelector;
 
 /**
@@ -58,7 +59,8 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
 	    template = "system:/groovy/webui/form/UIForm.gtmpl",
 	    events = {
 	      @EventConfig(listeners = UISharedForm.SaveActionListener.class),    
-	      @EventConfig(listeners = UISharedForm.SelectPermissionActionListener.class, phase = Phase.DECODE),  
+	      @EventConfig(listeners = UISharedForm.SelectPermissionActionListener.class, phase = Phase.DECODE),
+	      @EventConfig(listeners = UISharedForm.SelectGroupActionListener.class, phase = Phase.DECODE),
 	      @EventConfig(listeners = UISharedForm.CancelActionListener.class)
 	    }
 	),
@@ -81,8 +83,8 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   protected boolean isAddNew_ = true ;
   public UISharedForm() throws Exception{ 
     UISharedTab inputset = new UISharedTab(SHARED_TAB) ;
-    inputset.addChild(new UIFormInputInfo(UISharedTab.FIELD_NAME, UISharedTab.FIELD_NAME, null)) ;
-    inputset.addUIFormInput(new UIFormStringInput(UISharedTab.FIELD_USER, UISharedTab.FIELD_USER, null));//.addValidator(NameValidator.class))  if want validate field;
+    inputset.addChild(new UIFormInputInfo(UISharedTab.FIELD_NAME, UISharedTab.FIELD_NAME, null)) ; 
+    inputset.addUIFormInput(new UIFormStringInput(UISharedTab.FIELD_USER, UISharedTab.FIELD_USER, null));
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData selectUserAction = new ActionData() ;
     selectUserAction.setActionListener("SelectPermission") ;
@@ -92,6 +94,16 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     selectUserAction.setActionParameter(UISelectComponent.TYPE_USER) ;
     actions.add(selectUserAction) ;
     inputset.setActionField(UISharedTab.FIELD_USER, actions) ;
+    inputset.addUIFormInput(new UIFormStringInput(UISharedTab.FIELD_GROUP, UISharedTab.FIELD_GROUP, null));
+    List<ActionData> actionGroups = new ArrayList<ActionData>() ;
+    ActionData selectGroupAction = new ActionData() ;
+    selectGroupAction.setActionListener("SelectPermission") ;
+    selectGroupAction.setActionName("SelectGroup") ;
+    selectGroupAction.setCssIconClass("SelectGroupIcon") ;
+    selectGroupAction.setActionType(ActionData.TYPE_ICON) ;
+    selectGroupAction.setActionParameter(UISelectComponent.TYPE_GROUP) ;
+    actionGroups.add(selectGroupAction) ;
+    inputset.setActionField(UISharedTab.FIELD_GROUP, actionGroups) ;
     inputset.addChild(new UIFormCheckBoxInput<Boolean>(UISharedTab.FIELD_EDIT, UISharedTab.FIELD_EDIT, null)) ;
     addChild(inputset) ;
   }
@@ -136,6 +148,14 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     UISharedTab inputset = getChildById(SHARED_TAB) ;
     return inputset.getUIStringInput(UISharedTab.FIELD_USER).getValue() ;
   }
+  protected void setSharedGroup(String value) {
+    UISharedTab inputset = getChildById(SHARED_TAB) ;
+    inputset.getUIStringInput(UISharedTab.FIELD_GROUP).setValue(value) ;
+  }
+  protected String getSharedGroup() {
+    UISharedTab inputset = getChildById(SHARED_TAB) ;
+    return inputset.getUIStringInput(UISharedTab.FIELD_GROUP).getValue() ;
+  }
   public String[] getActions() {
     return new String[] {"Save","Cancel"} ;
   }
@@ -156,7 +176,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
 	  return data;
   }
 
-public void updateSelect(String selectField, String value) throws Exception {
+  public void updateSelect(String selectField, String value) throws Exception {
     UISharedTab inputset = getChildById(SHARED_TAB) ;
     UIFormStringInput fieldInput = inputset.getUIStringInput(selectField) ;
     permission_.put(value.substring(value.lastIndexOf(":/") + 2), value.substring(value.lastIndexOf(":/") + 2)) ;
@@ -171,103 +191,166 @@ public void updateSelect(String selectField, String value) throws Exception {
     public void execute(Event<UISharedForm> event) throws Exception { 
       UISharedForm uiForm = event.getSource() ;
       String names = uiForm.getUIStringInput(UISharedTab.FIELD_USER).getValue() ;
-      if(CalendarUtils.isEmpty(names)) {
+      String groups = uiForm.getUIStringInput(UISharedTab.FIELD_GROUP).getValue() ;
+      if(CalendarUtils.isEmpty(names) && CalendarUtils.isEmpty(groups)) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       OrganizationService oService = CalendarUtils.getOrganizationService() ;
       String username = CalendarUtils.getCurrentUser() ;
-      List<String> receiverUsers  = new ArrayList<String>() ;
-      StringBuffer sb = new StringBuffer() ;
-      for(String name : Arrays.asList(names.split(CalendarUtils.COMMA))) {
-        name = name.trim();
-        if( oService.getUserHandler().findUserByName(name) != null) { 
-          receiverUsers.add(name) ;
-        }else{
-          sb.append(name) ;
-          sb.append(CalendarUtils.COMMA) ;
-        }
-      }
-      if(sb.length() > 0) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-founduser", new Object[]{sb.toString()}, 1)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      if(receiverUsers.contains(username)) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.found-user", new Object[]{username}, 1)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
       Calendar cal = calendarService.getUserCalendar(username, uiForm.calendarId_) ;
-      Map<String, String> perms = new HashMap<String, String>() ;
-      if(cal.getViewPermission() != null) {
-        for(String v : cal.getViewPermission()) {
-          perms.put(v,String.valueOf(cal.getEditPermission()!= null && Arrays.asList(cal.getEditPermission()).contains(v))) ;
+      Map<String, String> sharedUsers  = new HashMap<String, String>() ;
+      
+      if (!CalendarUtils.isEmpty(names)) {
+        List<String> newUsers = new ArrayList<String>();
+        List<String> receiverUsers  = new ArrayList<String>() ;
+        StringBuffer sb = new StringBuffer() ;
+        for(String name : Arrays.asList(names.split(CalendarUtils.COMMA))) {
+          name = name.trim();
+          if( oService.getUserHandler().findUserByName(name) != null) { 
+            receiverUsers.add(name) ;
+          }else{
+            sb.append(name) ;
+            sb.append(CalendarUtils.COMMA) ;
+          }
         }
+        if(sb.length() > 0) {
+          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-founduser", new Object[]{sb.toString()}, 1)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+        if(receiverUsers.contains(username)) {
+          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.found-user", new Object[]{username}, 1)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+        Map<String, String> perms = new HashMap<String, String>() ;
+        if(cal.getViewPermission() != null) {
+          for(String v : cal.getViewPermission()) {
+            perms.put(v,String.valueOf(cal.getEditPermission()!= null && Arrays.asList(cal.getEditPermission()).contains(v))) ;
+          }
+        }
+        for(String u : receiverUsers) {
+          if(perms.get(u) == null) newUsers.add(u) ; 
+          perms.put(u, String.valueOf(uiForm.canEdit())) ;
+        }
+        for (String newUser : newUsers) {
+          sharedUsers.put(newUser, newUser);
+        }
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+        cal.setViewPermission(perms.keySet().toArray(new String[perms.keySet().size()])) ;
+        List<String> tempList = new ArrayList<String>() ;
+        for(String v : perms.keySet()) {
+          if(Boolean.parseBoolean(perms.get(v))) tempList.add(v) ;       
+        }
+        cal.setEditPermission(tempList.toArray(new String[tempList.size()])) ;
       }
-      List<String> newUsers = new ArrayList<String>() ;
-      for(String u : receiverUsers) {
-        if(perms.get(u) == null) newUsers.add(u) ; 
-        perms.put(u, String.valueOf(uiForm.canEdit())) ;
+      
+      if (!CalendarUtils.isEmpty(groups)) {
+        StringBuffer sb = new StringBuffer() ;
+        for(String name : Arrays.asList(groups.split(CalendarUtils.COMMA))) {
+          name = name.trim();
+          if( oService.getGroupHandler().findGroupById(name) != null) {
+            for (User user : oService.getUserHandler().findUsersByGroup(name.trim()).getAll()) {
+              String userId = user.getUserName();
+              sharedUsers.put(userId, userId);
+            }
+          } else{
+            sb.append(name) ;
+            sb.append(CalendarUtils.COMMA) ;
+          }
+        }
+        if(sb.length() > 0) {
+          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-foundgroup", new Object[]{sb.toString()}, 1)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+        sharedUsers.remove(username);
+        Map<String, String> perms = new HashMap<String, String>() ;
+        if(cal.getViewPermission() != null) {
+          for(String v : cal.getViewPermission()) {
+            perms.put(v,String.valueOf(cal.getEditPermission() != null && Arrays.asList(cal.getEditPermission()).contains(v))) ;
+          }
+        }
+        for(String groupId : groups.split(CalendarUtils.COMMA)) { 
+          perms.put(groupId, String.valueOf(uiForm.canEdit())) ;
+        }
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+        cal.setViewPermission(perms.keySet().toArray(new String[perms.keySet().size()])) ;
+        List<String> tempList = new ArrayList<String>() ;
+        for(String v : perms.keySet()) {
+          if(Boolean.parseBoolean(perms.get(v))) tempList.add(v) ;       
+        }
+        cal.setEditPermission(tempList.toArray(new String[tempList.size()])) ;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
-      cal.setViewPermission(perms.keySet().toArray(new String[perms.keySet().size()])) ;
-      List<String> tempList = new ArrayList<String>() ;
-      for(String v : perms.keySet()) {
-        if(Boolean.parseBoolean(perms.get(v))) tempList.add(v) ;       
-      }
-      cal.setEditPermission(tempList.toArray(new String[tempList.size()])) ;
+      
       calendarService.saveUserCalendar(username, cal, false) ;
-      calendarService.shareCalendar(username, uiForm.calendarId_, newUsers) ;      
+      calendarService.shareCalendar(username, uiForm.calendarId_, Arrays.asList(sharedUsers.keySet().toArray(new String[sharedUsers.keySet().size()]))) ;      
       UIAddEditPermission uiAddEdit = uiForm.getParent() ;
       uiAddEdit.updateGrid(cal, uiAddEdit.getCurrentPage());
       uiForm.setCanEdit(false) ;
       uiForm.setSharedUser(null) ;
+      uiForm.setSharedGroup(null) ;
       uiForm.permission_.clear() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class)) ;
     }
   }
    
+  static  public class SelectGroupActionListener extends EventListener<UIGroupSelector> {   
+    public void execute(Event<UIGroupSelector> event) throws Exception {
+      UIGroupSelector uiForm = event.getSource() ;
+      String user = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      uiForm.getAncestorOfType(UISharedForm.class).updateSelect(UISharedTab.FIELD_GROUP, user) ;      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
+    }
+  }
+  
   static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
-      String currentValue = uiForm.getSharedUser() ;
-      String currentUserName = CalendarUtils.getCurrentUser() ;
-      uiForm.permission_.clear() ;
-      if(!CalendarUtils.isEmpty(currentValue)) {
-        OrganizationService orgService = CalendarUtils.getOrganizationService() ;
-        for(String s :currentValue.split(CalendarUtils.COMMA)) {
-          s = s.trim() ;
-          if(orgService.getUserHandler().findUserByName(s) != null && !s.equals(currentUserName)) {
-            uiForm.permission_.put(s, s) ;
-          }
-        }
-      }
+      String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;
-      if(uiPopupWindow == null) uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
-      UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
-      //override UIUserSelector to filter user that shared eg: UISharedUserSelector class
-      uiUserSelector.setShowSearch(true);
-      uiUserSelector.setShowSearchUser(true) ;
-      uiUserSelector.setShowSearchGroup(true);
-      uiPopupWindow.setUIComponent(uiUserSelector);
-      uiPopupWindow.setShow(true);
-      uiPopupWindow.setWindowSize(740, 400) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;	
-//      String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
-//      UIPopupAction childPopup = uiForm.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
-//      UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 500) ;
-//      uiGroupSelector.setType(permType) ;
-//      uiGroupSelector.setSelectedGroups(null) ;
-//      uiGroupSelector.setComponent(uiForm, new String[]{UISharedTab.FIELD_USER}) ;
-//      event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;
+      if (permType.equals(UISelectComponent.TYPE_USER)) {
+        String currentValue = uiForm.getSharedUser() ;
+        String currentUserName = CalendarUtils.getCurrentUser() ;
+        uiForm.permission_.clear() ;
+        if(!CalendarUtils.isEmpty(currentValue)) {
+          OrganizationService orgService = CalendarUtils.getOrganizationService() ;
+          for(String s :currentValue.split(CalendarUtils.COMMA)) {
+            s = s.trim() ;
+            if(orgService.getUserHandler().findUserByName(s) != null && !s.equals(currentUserName)) {
+              uiForm.permission_.put(s, s) ;
+            }
+          }
+        }
+        
+        if(uiPopupWindow == null) uiPopupWindow = uiContainer
+          .addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
+        UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
+        //override UIUserSelector to filter user that shared eg: UISharedUserSelector class
+        uiUserSelector.setShowSearch(true);
+        uiUserSelector.setShowSearchUser(true) ;
+        uiUserSelector.setShowSearchGroup(true);
+        uiPopupWindow.setUIComponent(uiUserSelector);
+        uiPopupWindow.setShow(true);
+        uiPopupWindow.setWindowSize(740, 400) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+      } else {        
+        UIPopupAction childPopup = uiContainer.getChild(UIPopupAction.class) ;
+        UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 600) ;
+        uiGroupSelector.setType(permType) ;
+        uiGroupSelector.setSelectedGroups(null) ; 
+        uiGroupSelector.setComponent(uiForm, new String[]{UISharedTab.FIELD_GROUP}) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;
+      }
     }
   }
   static  public class AddActionListener extends EventListener<UIUserSelector> {

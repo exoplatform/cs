@@ -250,8 +250,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      
-      // xong phan xu ly recieve users
+
       if (uiForm.isSharedGroup) {
         AddressBook contactGroup = uiForm.group_ ;
         if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {

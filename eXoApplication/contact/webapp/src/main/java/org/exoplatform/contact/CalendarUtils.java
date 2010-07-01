@@ -31,6 +31,7 @@ import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -223,7 +224,7 @@ public class CalendarUtils {
     if(gcd != null) {
       options.add(new SelectItemOption<String>(CalendarUtils.SHARED_CALENDARS, "")) ;
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
-        if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){
+        if(CalendarUtils.canEdit(null, Utils.getEditPerUsers(c), username)){
           options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
         }
       }
@@ -234,7 +235,7 @@ public class CalendarUtils {
       options.add(new SelectItemOption<String>(CalendarUtils.PUBLIC_CALENDARS, "")) ;
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
-          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
+          if(CalendarUtils.canEdit(oService, Utils.getEditPerUsers(c),username)){
             options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
           }
         }
@@ -295,4 +296,5 @@ public class CalendarUtils {
     calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
     return  calendar;
   }
+  
 }

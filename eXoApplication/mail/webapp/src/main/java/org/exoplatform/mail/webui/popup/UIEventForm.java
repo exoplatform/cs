@@ -224,7 +224,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     if(gcd != null) {
       SelectOptionGroup sharedGrp = new SelectOptionGroup("sharedCalendar");
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
-        if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){
+        if(CalendarUtils.canEdit(null, org.exoplatform.calendar.service.Utils.getEditPerUsers(c), username)){
           if (c.getId().equals(org.exoplatform.calendar.service.Utils.getDefaultCalendarId(username)) && c.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
             String newName = CalendarUtils.getResourceBundle("UIEventForm.label." + NewUserListener.DEFAULT_CALENDAR_ID);
             c.setName(newName);
@@ -243,7 +243,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       SelectOptionGroup pubGrp = new SelectOptionGroup("publicCalendar");
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
-          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
+          if(CalendarUtils.canEdit(oService, org.exoplatform.calendar.service.Utils.getEditPerUsers(c), username)){
             pubGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
           }
         }
@@ -786,9 +786,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
           } else { 
             boolean canEdit = false ;
             if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
-              canEdit = CalendarUtils.canEdit(null, currentCalendar.getEditPermission(), username) ;
+              canEdit = CalendarUtils.canEdit(null, org.exoplatform.calendar.service.Utils.getEditPerUsers(currentCalendar), username) ;
             } else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
-              canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), currentCalendar.getEditPermission(), username) ;
+              canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), org.exoplatform.calendar.service.Utils.getEditPerUsers(currentCalendar), username) ;
             }
             if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
               uiPopupAction.deActivate() ;

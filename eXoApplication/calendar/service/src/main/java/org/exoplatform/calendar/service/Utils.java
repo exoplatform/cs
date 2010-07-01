@@ -16,17 +16,20 @@
  **/
 package org.exoplatform.calendar.service;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.service.impl.NewUserListener;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.quartz.JobExecutionContext;
 
 /**
@@ -263,6 +266,25 @@ public class Utils {
 
   public static String getDisplaySharedCalendar(String sharedUserId, String calName) {
     return sharedUserId + "- " + calName ;
+  }
+  
+  public static String[] getEditPerUsers(org.exoplatform.calendar.service.Calendar calendar) throws Exception {
+    List<String> sharedUsers = new ArrayList<String>(); 
+    OrganizationService organizationService = 
+      (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class) ;
+    if (calendar.getEditPermission() != null)
+      for (String editPer : calendar.getEditPermission()) {
+        if (editPer.contains(Utils.SLASH)) {
+          if (organizationService.getGroupHandler().findGroupById(editPer) != null) {
+            for (User user : organizationService.getUserHandler().findUsersByGroup(editPer).getAll()) {
+              sharedUsers.add(user.getUserName());
+            }            
+          }
+        } else {
+          sharedUsers.add(editPer);
+        }
+      }
+    return sharedUsers.toArray(new String[sharedUsers.size()]);
   }
   
 }

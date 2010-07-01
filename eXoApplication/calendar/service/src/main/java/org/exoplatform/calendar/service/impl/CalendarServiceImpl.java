@@ -42,9 +42,13 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.commons.utils.ExoProperties;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.resources.ResourceBundleService;
 import org.picocontainer.Startable;
 
@@ -547,7 +551,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     storage_.removeFeedData(username, title);
   }
 
-public void initNewUser(String userName, CalendarSetting defaultCalendarSetting_) throws Exception {
+  public void initNewUser(String userName, CalendarSetting defaultCalendarSetting_) throws Exception {
     EventCategory eventCategory = new EventCategory();
     eventCategory.setDataInit(true);
     for (int id = 0; id < NewUserListener.defaultEventCategoryId.length; id ++) {
@@ -581,5 +585,14 @@ public void initNewUser(String userName, CalendarSetting defaultCalendarSetting_
     if(defaultCalendarSetting_ != null) {
       saveCalendarSetting(userName, defaultCalendarSetting_) ;
     }
-}
+    OrganizationService organizationService = 
+      (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class) ;
+    Object[] groupsOfUser = organizationService.getGroupHandler().findGroupsOfUser(userName).toArray() ;
+    List<String> groups = new ArrayList<String>();
+    for (Object object : groupsOfUser) {
+      String groupId = ((Group)object).getId() ;
+      groups.add(groupId);
+    }
+    storage_.autoShareCalendar(groups, userName);
+  }
 }
