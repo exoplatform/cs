@@ -25,7 +25,6 @@ import java.util.Map;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.services.organization.OrganizationService;
@@ -35,7 +34,9 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -179,7 +180,8 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   public void updateSelect(String selectField, String value) throws Exception {
     UISharedTab inputset = getChildById(SHARED_TAB) ;
     UIFormStringInput fieldInput = inputset.getUIStringInput(selectField) ;
-    permission_.put(value.substring(value.lastIndexOf(":/") + 2), value.substring(value.lastIndexOf(":/") + 2)) ;
+    permission_.put(value, value) ;
+    //permission_.put(value.substring(value.lastIndexOf(":/") + 2), value.substring(value.lastIndexOf(":/") + 2)) ;
     StringBuilder sb = new StringBuilder() ;
     for(String s : permission_.values()) {
       if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
@@ -303,9 +305,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     }
   }
    
-  static  public class SelectGroupActionListener extends EventListener<UIGroupSelector> {   
-    public void execute(Event<UIGroupSelector> event) throws Exception {
-      UIGroupSelector uiForm = event.getSource() ;
+  static  public class SelectGroupActionListener extends EventListener<org.exoplatform.webui.organization.account.UIGroupSelector> {   
+    public void execute(Event<org.exoplatform.webui.organization.account.UIGroupSelector> event) throws Exception {
+      org.exoplatform.webui.organization.account.UIGroupSelector uiForm = event.getSource() ;
       String user = event.getRequestContext().getRequestParameter(OBJECTID) ;
       uiForm.getAncestorOfType(UISharedForm.class).updateSelect(UISharedTab.FIELD_GROUP, user) ;      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
@@ -316,8 +318,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
       String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;
+      UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;  
+      uiContainer.removeChild(UIPopupWindow.class) ;
+      uiForm.removeChild(UIPopupWindow.class) ;
       if (permType.equals(UISelectComponent.TYPE_USER)) {
         String currentValue = uiForm.getSharedUser() ;
         String currentUserName = CalendarUtils.getCurrentUser() ;
@@ -331,7 +334,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             }
           }
         }
-        
+        UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;
         if(uiPopupWindow == null) uiPopupWindow = uiContainer
           .addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
         UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
@@ -343,13 +346,23 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         uiPopupWindow.setShow(true);
         uiPopupWindow.setWindowSize(740, 400) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
-      } else {        
-        UIPopupAction childPopup = uiContainer.getChild(UIPopupAction.class) ;
-        UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 600) ;
+      } else {
+        UIPopupWindow uiPopupWindow = uiForm.addChild(UIPopupWindow.class, null, "UIPopupGroupSelector");
+        org.exoplatform.webui.organization.account.UIGroupSelector uiGroupSelector = 
+          uiForm.createUIComponent(org.exoplatform.webui.organization.account.UIGroupSelector.class, null,null) ;
+        uiPopupWindow.setUIComponent(uiGroupSelector);
+        uiGroupSelector.setId("UIGroupSelector");
+        uiGroupSelector.getChild(UITree.class).setId("TreeGroupSelector");
+        uiGroupSelector.getChild(UIBreadcumbs.class).setId("BreadcumbsGroupSelector");
+        uiForm.getChild(UIPopupWindow.class).setShow(true);
+        uiPopupWindow.setWindowSize(540, 0) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+        
+       /* UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 600) ;
         uiGroupSelector.setType(permType) ;
         uiGroupSelector.setSelectedGroups(null) ; 
-        uiGroupSelector.setComponent(uiForm, new String[]{UISharedTab.FIELD_GROUP}) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;
+        uiGroupSelector.setComponent(uiForm, new String[]{UISharedTab.FIELD_GROUP}) ;*/
+        //event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;
       }
     }
   }
