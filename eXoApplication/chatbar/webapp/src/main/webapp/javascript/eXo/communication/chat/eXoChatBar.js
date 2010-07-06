@@ -74,9 +74,15 @@ eXo.communication.chatbar.eXoChatBar = {
   },
   setWidth : function(){
 		var obj = document.getElementById('UIChatBarPortlet');
+		var uiWindow = eXo.core.DOMUtil.findAncestorByClass(obj,"UIWindow");
+		if(uiWindow) {
+			obj = uiWindow;
+			obj.style.position = "fixed";
+			obj.style.bottom = "0px";
+		}
 		var uiPage = document.getElementById('UIPage') ;
 		if(obj || (uiPage.offsetWidth < obj.offsetWidth)){
-			obj.style.width = (uiPage.offsetWidth - 16) + "px";
+			obj.style.width = uiPage.offsetWidth + "px";
 		}
 		if(eXo.core.Browser.isIE6()){
 			obj.style.position = "absolute";

@@ -89,7 +89,7 @@
 }
 
 .UIChat .Actionbar {
-  margin-bottom: 5px;
+  margin-bottom: 0px;
 }
 
 .UIChat .Actionbar .RowContainer {
@@ -1430,10 +1430,17 @@ form {
 }
 
 .UIChatBarPortlet{
-	padding:0px 8px;
-	min-width: 960px;
+	min-width: 900px;
+	position:fixed;
+	bottom:1px;
+	padding:0px;
 }
 
+.UIWindow .UIChatBarPortlet {
+	min-width: 0px;
+	position:static;
+	bottom:auto;
+}
 .UIChatBarPortlet .CenterContainer {
 	background:transparent url(/chatbar/skin/DefaultSkin/background/chatbarbackground.gif) repeat-x center top;
 }
