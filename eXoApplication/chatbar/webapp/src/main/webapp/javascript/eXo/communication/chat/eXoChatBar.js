@@ -54,7 +54,7 @@ eXo.communication.chatbar.eXoChatBar = {
   init : function() {
     try {
       var thys = eXo.communication.chatbar.eXoChatBar;
-      var UIChatNode = document.getElementById('UIChatBarPortlet');
+      var UIChatNode = document.getElementById(eXo.communication.chatbar.eXoChatBar.applicationId);
       var eXoToken = UIChatNode.getAttribute('eXoToken');
       var userName = UIChatNode.getAttribute('userName');
       eXo.communication.chatbar.core.XMPPCommunicator.init(thys.restcontextname);
@@ -66,14 +66,14 @@ eXo.communication.chatbar.eXoChatBar = {
       eXo.communication.chatbar.webui.UIMainChatWindow.xLogin(userName);
 	  eXo.communication.chatbar.eXoChatBar.setWidth();
 	  var div = document.createElement("div");
-	  div.style.height = document.getElementById("UIChatBarPortlet").offsetHeight + "px";
+	  div.style.height = document.getElementById(eXo.communication.chatbar.eXoChatBar.applicationId).offsetHeight + "px";
 	  document.body.appendChild(div);
     } catch (e) {
       throw (new Error('Error while loading chat application.'));
     }
   },
   setWidth : function(){
-		var obj = document.getElementById('UIChatBarPortlet');
+		var obj = document.getElementById(eXo.communication.chatbar.eXoChatBar.applicationId);
 		var uiWindow = eXo.core.DOMUtil.findAncestorByClass(obj,"UIWindow");
 		if(uiWindow) {
 			obj = uiWindow;

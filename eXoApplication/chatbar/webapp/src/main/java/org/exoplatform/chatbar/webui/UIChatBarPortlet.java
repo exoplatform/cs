@@ -16,13 +16,16 @@
  **/
 package org.exoplatform.chatbar.webui;
 
+import javax.portlet.PortletMode;
 import javax.portlet.PortletRequest;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
@@ -35,40 +38,44 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
  * May 04, 2009
  */
 @ComponentConfig(
-   lifecycle = UIApplicationLifecycle.class, 
-   template = "app:/templates/chatbar/webui/UIChatBarPortlet.gtmpl"
-
+                 lifecycle = UIApplicationLifecycle.class
 )
 public class UIChatBarPortlet extends UIPortletApplication {
   private String windowId; 
+
+  protected static final String VIEWMODE_TEMP = "app:/templates/chatbar/webui/UIChatBarPortlet.gtmpl" ;
+  protected static final String EDITMODE_TEMP = "app:/templates/chatbar/webui/UIChatBarEdit.gtmpl" ;
+
+  private String templatePath_ = VIEWMODE_TEMP ;
+
   public UIChatBarPortlet() throws Exception {
     PortletRequestContext context = (PortletRequestContext)  WebuiRequestContext.getCurrentInstance() ;
     PortletRequest prequest = context.getRequest() ;
     windowId = prequest.getWindowID() ;
   }
-  
+
   public String getId() {
     return windowId ;
   }
-  
+
   public String getRemoteUser() {
     return Util.getPortalRequestContext().getRemoteUser() ;
   }
-  
+
   public String getUserToken() {
-	  try {
-    return this.getContinuationService().getUserToken(this.getRemoteUser());
-	  } catch (Exception e) {
-		  System.out.println("\n\n can not get UserToken");
-		  return "" ;
-	  }
+    try {
+      return this.getContinuationService().getUserToken(this.getRemoteUser());
+    } catch (Exception e) {
+      System.out.println("\n\n can not get UserToken");
+      return "" ;
+    }
   }
-  
+
   protected ContinuationService getContinuationService() {
     ContinuationService continuation = (ContinuationService) PortalContainer.getInstance().getComponentInstanceOfType(ContinuationService.class);
     return continuation;
   }
-  
+
   protected String getRestContextName() {
     String restBaseUri = Util.getPortalRequestContext().getRequestContextPath() + "/" + PortalContainer.getInstance().getRestContextName();
     //TODO: modify JS files to remove following codes
@@ -77,15 +84,49 @@ public class UIChatBarPortlet extends UIPortletApplication {
     }
     return restBaseUri;
   }
-  
+
   protected String getCometdContextName() {
     String cometdContextName = "cometd";
     try {
       EXoContinuationBayeux bayeux = (EXoContinuationBayeux) PortalContainer.getInstance()
-                                                                                .getComponentInstanceOfType(AbstractBayeux.class);
+      .getComponentInstanceOfType(AbstractBayeux.class);
       return (bayeux == null ? "cometd" : bayeux.getCometdContextName());
     } catch (Exception e) {
     }
     return cometdContextName;
+  }
+
+  public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {    
+    try {
+      PortletRequestContext portletReqContext = (PortletRequestContext)  context ;
+      if(portletReqContext.getApplicationMode() == PortletMode.VIEW) {
+        templatePath_ = VIEWMODE_TEMP;
+      } else if(portletReqContext.getApplicationMode() == PortletMode.EDIT) {
+        UIConfigForm uiForm = getChild(UIConfigForm.class) ;
+        if(uiForm == null) uiForm = addChild(UIConfigForm.class, null, null);
+        uiForm.reset() ;
+        uiForm.init();
+
+        templatePath_ = EDITMODE_TEMP;
+      }
+      super.processRender(app, context);
+    } catch (Exception e) {
+      log.error("Cannot display the content of the chatbar", e);
+    }
+  }
+
+  public String getTemplate() {
+    return templatePath_;
+  }
+
+  public void setTemplate(String temp) {
+    templatePath_ = temp;
+  }
+  
+  protected void renderPopupMessages() throws Exception {
+    UIPopupMessages popupMess = getUIPopupMessages();
+    if(popupMess == null)  return ;
+    WebuiRequestContext  context =  WebuiRequestContext.getCurrentInstance() ;
+    popupMess.processRender(context);
   }
 }

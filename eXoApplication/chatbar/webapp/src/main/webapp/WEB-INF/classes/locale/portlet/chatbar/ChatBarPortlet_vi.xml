@@ -77,5 +77,10 @@
       <sendFile>Send file</sendFile>
     </label>
   </UIChatBarPortlet>
+  <UIConfigForm>
+   <msg>
+    <save-successful>Portlet preferences saved!</save-successful>
+   </msg>
+  </UIConfigForm>
 </Bundle>
 

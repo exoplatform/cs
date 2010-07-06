@@ -182,7 +182,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName, cometd
   }
   this.rootNode = (typeof(rootNode) == 'string') ? document.getElementById(rootNode) : rootNode;
   var DOMUtil = eXo.core.DOMUtil;
-  this.rootNode                   = DOMUtil.findDescendantById(this.rootNode, 'UIChatBarPortlet');
+  this.rootNode                   = DOMUtil.findDescendantById(this.rootNode, eXo.communication.chatbar.eXoChatBar.applicationId);
 
   this.AdvancedDOMEvent           = eXo.communication.chatbar.core.AdvancedDOMEvent;
   this.XMPPCommunicator           = eXo.communication.chatbar.core.XMPPCommunicator;
