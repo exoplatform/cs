@@ -6,7 +6,4 @@
 - Some cases can not recorded: Export/Import in Calendar/Mail/Contact(SNF_CS_50,SNF_CS_51,SNF_CS_19,SNF_CS_20)
 - The cases related to Chat is  not recorded. It should be tested manually because it needs the interaction of at least 2 browsers
 
-SNF_CS_50
-SNF_CS_51
-SNF_CS_19
-SNF_CS_20
+
