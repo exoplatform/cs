@@ -55,6 +55,7 @@ eXo.communication.chatbar.eXoChatBar = {
     try {
       var thys = eXo.communication.chatbar.eXoChatBar;
       var UIChatNode = document.getElementById(eXo.communication.chatbar.eXoChatBar.applicationId);
+			UIChatNode = eXo.core.DOMUtil.findDescendantById(UIChatNode,eXo.communication.chatbar.eXoChatBar.applicationId);
       var eXoToken = UIChatNode.getAttribute('eXoToken');
       var userName = UIChatNode.getAttribute('userName');
       eXo.communication.chatbar.core.XMPPCommunicator.init(thys.restcontextname);
@@ -74,6 +75,7 @@ eXo.communication.chatbar.eXoChatBar = {
   },
   setWidth : function(){
 		var obj = document.getElementById(eXo.communication.chatbar.eXoChatBar.applicationId);
+		obj = eXo.core.DOMUtil.findDescendantById(obj,eXo.communication.chatbar.eXoChatBar.applicationId);
 		var uiWindow = eXo.core.DOMUtil.findAncestorByClass(obj,"UIWindow");
 		if(uiWindow) {
 			obj = uiWindow;
@@ -81,9 +83,7 @@ eXo.communication.chatbar.eXoChatBar = {
 			obj.style.bottom = "0px";
 		}
 		var uiPage = document.getElementById('UIPage') ;
-		if(obj || (uiPage.offsetWidth < obj.offsetWidth)){
-			obj.style.width = uiPage.offsetWidth + "px";
-		}
+		if(obj)	obj.style.width = uiPage.offsetWidth + "px";
 		if(eXo.core.Browser.isIE6()){
 			obj.style.position = "absolute";
 			obj.style.top = (eXo.core.Browser.getBrowserHeight() - obj.offsetHeight + document.documentElement.scrollTop) + "px";
