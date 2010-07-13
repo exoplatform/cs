@@ -19,14 +19,29 @@
 
 -->
 
-<messagebundle>  
+<messagebundle>
+	<msg name="baseurl">
+  	Base url
+  </msg>
+	<msg name="subscribeurl">
+  	Subscription url
+  </msg>
+	<msg name="limit">
+  	Page size
+  </msg>
+	<msg name="format">
+  	Date time format
+  </msg>
   <msg name="showall">
-  	Show all
+  	More
   </msg>
 	<msg name="noevent">
   	No task on today
   </msg>
 	<msg name="back">
   	Back
+  </msg>
+	<msg name="confirm">
+  	Are you sure this task completed?
   </msg>
 </messagebundle>

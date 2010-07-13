@@ -19,7 +19,19 @@
 
 -->
 
-<messagebundle>  
+<messagebundle>
+	<msg name="baseurl">
+  	Base url
+  </msg>
+	<msg name="subscribeurl">
+  	Subscription url
+  </msg>
+	<msg name="limit">
+  	Number of items is displayed
+  </msg>
+	<msg name="format">
+  	Date time format
+  </msg>
   <msg name="showall">
   	Show all
   </msg>

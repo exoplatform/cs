@@ -13,12 +13,13 @@
 		<Locale lang="vi" messages="/csResources/gadgets/events/locale/vi.xml" />
 		<Require feature="setprefs"/>
 	</ModulePrefs>
-	<UserPref name="url" display_name="Base url" datatype="string" default_value="/portal/rest/private/cs/calendar/upcoming" required="true"/>
-	<UserPref name="limit" display_name="Item per a page" default_value="10" datatype="string"/>  
-	<UserPref name="timeformat" display_name="Time format" default_value="AM/PM" datatype="enum" >
+	<UserPref name="url" display_name="__MSG_baseurl__" datatype="string" value="/calendar" required="true"/>
+	<UserPref name="subscribeurl" display_name="__MSG_subscribeurl__" datatype="string" value="/portal/rest/private/cs/calendar/upcoming" required="true"/>
+	<UserPref name="limit" display_name="__MSG_limit__" default_value="10" datatype="string"/>  
+	<UserPref name="timeformat" display_name="__MSG_format__" default_value="AM/PM" datatype="enum" >
     <EnumValue value="AM/PM" />
     <EnumValue value="24h" />	
-  </UserPref>	 
+  </UserPref>
   <Content type="html">
     <![CDATA[  
       <div class="Container">
@@ -172,31 +173,33 @@
 					var prefs = new gadgets.Prefs();
 					var limit = prefs.getString("limit");
 					var url   = prefs.getString("url");
+					var subscribeurl   = prefs.getString("subscribeurl");
 					var timeformat  = prefs.getString("timeformat");
 					return {
 						"limit": limit,
 						"url"  : url,
+						"subscribeurl"  : subscribeurl,
 						"timeformat" : timeformat
 					}
 				}
-				function setLink(){					
+				function setLink(){
+					var prefs = new gadgets.Prefs();
+					var url   = prefs.getString("url");
 					var a = document.getElementById("showall");
-					a.href = "http://localhost:8080/portal/private/classic/calendar";
+					url = (url)?url: "portal/private/classic/calendar";
+					a.href = url;
 				}
 				function createRequestUrl(){
 					var prefs = getPrefs();
-					var url = (prefs.url)?prefs.url: "/portal/rest/private/cs/calendar/upcoming" ;
-					url +=  "/" + DateTimeFormater.format((new Date()),"yyyymmdd");
-					url += "?rnd=" + (new Date()).getTime();
-					return url;
+					var limit = (prefs.limit && (parseInt(prefs.limit) > 0))? prefs.limit:0;
+					var subscribeurl = (prefs.subscribeurl)?prefs.subscribeurl: "/portal/rest/private/cs/calendar/getissues" ;
+					subscribeurl +=  "/" + DateTimeFormater.format((new Date()),"yyyymmdd") + "/Event/" + limit ;
+					subscribeurl += "?rnd=" + (new Date()).getTime();
+					return subscribeurl;
 				}
 				function getData(){					 
-					var url = createRequestUrl();
-					var params = [];
-		     
-		      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
-		      gadgets.io.makeRequest(url, render, params);
-					//ajaxAsyncGetRequest(url,render);
+					var url = createRequestUrl();					
+					ajaxAsyncGetRequest(url,render);
 					if(typeof(requestInterval) == "undefined") requestInterval = setInterval(getData,300000);
 				}				
 				function render(data){
