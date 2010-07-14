@@ -1004,7 +1004,7 @@ public class JCRDataStorage implements DataStorage {
               } catch (Exception pne) {
                 attHome = nodeMsg.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
               }
-              nodeFile = attHome.addNode("attachment" + IdGenerator.generate(),
+              nodeFile = attHome.addNode("Attachment" + IdGenerator.generate(),
                                          Utils.EXO_MAIL_ATTACHMENT);
               nodeFile.setProperty(Utils.EXO_ATT_NAME, file.getName());
               
@@ -1475,8 +1475,7 @@ public class JCRDataStorage implements DataStorage {
           body = getNestedMessageBody(part, node, body);
         }
       }
-      if ((disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT))
-          || part.isMimeType("image/*")) {
+      if ((disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) || part.isMimeType("image/*")){
         Node attHome = null;
         try {
           attHome = node.getNode(Utils.KEY_ATTACHMENT);
@@ -1494,7 +1493,7 @@ public class JCRDataStorage implements DataStorage {
           attId = attId.substring(0, attId.length() - 1);
         } else if (disposition != null
             && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || part.isMimeType("image/*"))) {
-          attId = "attachment" + IdGenerator.generate();
+          attId = "Attachment" + IdGenerator.generate();
         }
 
         if (attHome.hasNode(attId)) {
@@ -1533,13 +1532,20 @@ public class JCRDataStorage implements DataStorage {
           node.setProperty(Utils.ATT_IS_LOADED_PROPERLY, false);
         }
         nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
-        node.setProperty(Utils.EXO_HASATTACH, true);
+        if ((disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)))
+          node.setProperty(Utils.EXO_HASATTACH, true);  
+        else node.setProperty(Utils.EXO_HASATTACH, false);
       }
     } catch (Exception e) {
     }
     return body;
   }
 
+/*  private StringBuffer appendPicsInBody(Part part, StringBuffer body){
+      String imgLink = MailUtils.getIMGLinkResource(part);
+      
+  }
+*/  
   public StringBuffer getNestedMessageBody(Part part, Node node, StringBuffer body) throws Exception {
     try {
       body = setPart((Part) part.getContent(), node, body);

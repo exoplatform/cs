@@ -394,12 +394,11 @@
   								</div>
   								<div style="clear: both;"><span></span></div>
   							</div>
-                
                 <% 
                   if (!MailUtils.isInvitation(msg)) {
                   String frameId = "IframeMessagePreview" + msgIndex ;
                   String textAreaId = "MessageDetails" + msgIndex ;
-                  String contentType = msg.getContentType() ;
+                  String contentType = msg.getHeader("Content-Type");//msg.getContentType() ;
                   if (contentType != null) {
                     if (contentType.indexOf(";") > -1) {
                       contentType = contentType.substring(0, contentType.indexOf(";")) ;
@@ -419,11 +418,11 @@
                     println("<div style='font-family:Tahoma,Verdana,Arial,Helvetica,sans-serif; font-size:12px;'><span>")
                     if (contentType.indexOf("text/plain") >= 0) {
                       msgBody = MailUtils.convertTextToHtmlLink(msgBody);
-                      println(MailUtils.encodeHTML(msgBody));
+                      println(msgBody);
                     } else {
                       msgBody = MailUtils.insertTargetToHtmlLink(msgBody);
                       msgBody = MailUtils.fillImage(msgBody, uicomponent.getImageLocationMap(msg));
-                      println(MailUtils.encodeHTML(msgBody));
+                      println(msgBody);
                     }
                     println("</span></div>");
                   %>
@@ -493,11 +492,11 @@
                             }
                             if (isImage) {
                         %> 
-      						  		      <img class="AttachmentFile" style="height:auto ;width: 200px;padding-right: 5px;" src="$attLink">
+      						  		      <img class="AttachmentFile" style="height:auto ;width: 200px;padding-right: 5px;" src="$attLink" />
       						  		<%
                             } else if (isSupportedIcon){
                         %>
-                              <img class="AttachmentFile" src="$attLink">
+                              <img class="AttachmentFile" src="$attLink"/>
                         <%     
                             }
                           }

@@ -72,7 +72,8 @@ public class UIActionBar extends UIContainer {
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      
+      String formId = ((PortletRequestContext)context).getWindowId();
+      uiPortlet.setFormId(formId);
       if(Utils.isEmptyField(accId)) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
