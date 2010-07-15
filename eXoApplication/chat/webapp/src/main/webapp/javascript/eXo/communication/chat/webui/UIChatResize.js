@@ -65,9 +65,11 @@ UIChatResize.prototype.init = function(event) {
       oHeight = tmpNode.offsetHeight;
     }
   }
+  var extraLeft = (thys.portletWindow.offsetParent)?eXo.core.Browser.findPosX(thys.portletWindow.offsetParent):0;
   var oTop = thys.portletWindow.offsetTop;
-  var oLeft = thys.portletWindow.offsetLeft;
-  var workspaceControlWidth = 0;
+  var oLeft = thys.portletWindow.offsetLeft + extraLeft;
+  /*
+	var workspaceControlWidth = 0;
 
   try {
     workspaceControlWidth = eXo.portal.UIControlWorkspace.width;
@@ -92,6 +94,7 @@ UIChatResize.prototype.init = function(event) {
   }
 
   window.jsconsole.warn('Old height = ' + oHeight);
+  */
   with (resizeWindowTmp.style) {
     position   = 'absolute';
     top        = oTop + 'px';
@@ -166,7 +169,7 @@ UIChatResize.prototype.endResizeWindowEvt = function(event) {
       newHeight = thys.portletWindow.minHeight;
     }
   }
-  window.jsconsole.warn('New height = ' + newHeight);
+  //window.jsconsole.warn('New height = ' + newHeight);
 
   thys.portletWindow.style.width = newWidth + 'px';
   thys.portletWindow.style.height = newHeight + 'px';

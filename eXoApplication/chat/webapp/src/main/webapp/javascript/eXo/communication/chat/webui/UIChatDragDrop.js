@@ -101,8 +101,10 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
       }
     }
   }
+  var extraLeft = (uiDragObjectNode.offsetParent)?eXo.core.Browser.findPosX(uiDragObjectNode.offsetParent):0;
   var oTop = uiDragObjectNode.offsetTop;
-  var oLeft = uiDragObjectNode.offsetLeft;
+  var oLeft = uiDragObjectNode.offsetLeft + extraLeft;
+	/*
   var workspaceControlWidth = 0;
 
   try {
@@ -126,6 +128,7 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
       oLeft += workspaceControlWidth;
     }
   }
+  */
   var oPosition = 'absolute';
   var dragTmpNode = document.createElement('div');
   with (dragTmpNode.style) {
@@ -210,7 +213,8 @@ UIChatDragDrop.prototype.dropCallback = function(dndEvent) {
   var realNode = dragObject.realNode;
   var oTop = realNode.offsetTop + (dragObject.offsetTop - dragObject.origTopPos);
   var oLeft = realNode.offsetLeft + (dragObject.offsetLeft - dragObject.origLeftPos);
-  var workspaceControlWidth = 0;
+  /*
+	var workspaceControlWidth = 0;
   try {
     workspaceControlWidth = eXo.portal.UIControlWorkspace.width;
   } finally {
@@ -222,6 +226,7 @@ UIChatDragDrop.prototype.dropCallback = function(dndEvent) {
       (eXo.core.Browser.isIE6() || eXo.core.Browser.isIE7())) {
     oLeft -= workspaceControlWidth;
   }
+  */
   with (realNode.style) {
     top  = oTop + 'px';
     left = oLeft + 'px';

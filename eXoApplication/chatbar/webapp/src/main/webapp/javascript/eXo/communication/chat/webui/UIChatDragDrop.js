@@ -101,8 +101,9 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
       }
     }
   }
+  var extraLeft = (uiDragObjectNode.offsetParent)?eXo.core.Browser.findPosX(uiDragObjectNode.offsetParent):0;
   var oTop = uiDragObjectNode.offsetTop;
-  var oLeft = uiDragObjectNode.offsetLeft;
+  var oLeft = uiDragObjectNode.offsetLeft + extraLeft;
 /*
   var workspaceControlWidth = 0;
   try {
@@ -112,17 +113,15 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
   if (isNaN(workspaceControlWidth)) {
       workspaceControlWidth = 0;
   }
-*/  
   var UIPageDesktopNode = document.getElementById('UIPageDesktop');
   if (UIPageDesktopNode) {
     oTop += eXo.core.Browser.findPosYInContainer(eXo.communication.chatbar.webui.UIMainChatWindow.rootNode, document.body);
     oLeft += eXo.core.Browser.findPosXInContainer(eXo.communication.chatbar.webui.UIMainChatWindow.rootNode, document.body);
-    /*
 	if (eXo.core.Browser.isIE7()) {
       oLeft -= workspaceControlWidth;
     }
-    */
   } else {
+  */
 	if(!eXo.core.Browser.isIE8) 
 	  eXo.core.Browser.isIE8 = function(){return (navigator.userAgent.indexOf('MSIE 8') >= 0);};
     /*
@@ -130,7 +129,7 @@ UIChatDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, eve
         !eXo.core.Browser.isIE7() && !eXo.core.Browser.isIE8())) {
       oLeft += workspaceControlWidth;
     }*/
-  }
+  //}
   var oPosition = 'absolute';
   var dragTmpNode = document.createElement('div');
   with (dragTmpNode.style) {

@@ -65,8 +65,9 @@ UIChatResize.prototype.init = function(event) {
       oHeight = tmpNode.offsetHeight;
     }
   }
+	var extraLeft = (thys.portletWindow.offsetParent)?eXo.core.Browser.findPosX(thys.portletWindow.offsetParent):0;
   var oTop = thys.portletWindow.offsetTop;
-  var oLeft = thys.portletWindow.offsetLeft;
+  var oLeft = thys.portletWindow.offsetLeft + extraLeft;
 /*
   var workspaceControlWidth = 0;
   try {
