@@ -16,10 +16,6 @@
  */
 package org.exoplatform.cs.ext.impl;
 
-import java.util.Date;
-
-import org.exoplatform.container.PortalContainer;
- 
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.social.core.space.SpaceListenerPlugin;
@@ -44,8 +40,9 @@ public class ContactDataInitialize extends SpaceListenerPlugin {
 
   @Override
   public void applicationAdded(SpaceLifeCycleEvent event) {
+    try {
     Space space = event.getSpace();
-    
+   
       
     }catch (Exception e) {
       log.debug(e.getMessage());
