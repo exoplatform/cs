@@ -511,17 +511,6 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   }
   
   public ResourceBundle getResourceBundle() throws Exception {
-    /*try { 
-      
-      System.out.println("\n\n beign \n\n");
-      ResourceBundle bundle = rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault()) ;
-      System.out.println("\n\n 11 :" + bundle.getString("UIEditFeed.action.delete") + "\n\n");
-      
-      return rbs_.getResourceBundle(Utils.RESOURCEBUNDLE_NAME, Locale.getDefault()) ;
-    } catch (MissingResourceException e) {
-      e.printStackTrace();
-      return null;
-    }*/
     return rb_;
   }
 

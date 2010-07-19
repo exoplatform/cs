@@ -482,7 +482,7 @@ public class CalendarWebservice implements ResourceContainer{
 	  String username = ConversationState.getCurrent().getIdentity().getUserId();
 	  CalendarEvent task = calService.getEvent(username, taskid);
 	  String calendarId = task.getCalendarId();
-	  task.setEventState("completed");
+	  task.setEventState(CalendarEvent.COMPLETED);
 	  calService.saveUserEvent(username, calendarId, task, false);
 	  return Response.ok("true", MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
 	  } catch(Exception e){
