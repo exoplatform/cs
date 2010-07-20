@@ -75,12 +75,12 @@ import com.sun.syndication.io.XmlReader;
 
 
 
-@Path("/private/cs/calendar/")
+@Path("/")
 public class CalendarWebservice implements ResourceContainer{
   public final static String BASE_URL = "/private/cs/calendar".intern();
   public final static String BASE_RSS_URL = BASE_URL + "/feed".intern();
   public final static String BASE_EVENT_URL = BASE_URL + "/event".intern();
-  final public static String BASE_URL_PUBLIC = BASE_URL + "/subscribe/".intern();
+  final public static String BASE_URL_PUBLIC = "/cs/calendar/subscribe/".intern();
   final public static String BASE_URL_PRIVATE = BASE_URL + "/private/".intern();
   private Log log = ExoLogger.getExoLogger("calendar.webservice");
 
@@ -108,7 +108,7 @@ public class CalendarWebservice implements ResourceContainer{
    * @throws Exception
    */
   @GET
-  @Path("/checkPermission/{username}/{calendarId}/{type}/")
+  @Path("/private/cs/calendar/checkPermission/{username}/{calendarId}/{type}/")
   public Response checkPermission(@PathParam("username")
                                   String username, @PathParam("calendarId")
                                   String calendarId, @PathParam("type")
@@ -157,7 +157,7 @@ public class CalendarWebservice implements ResourceContainer{
    */
   @SuppressWarnings("unchecked")
   @GET
-  @Path("event/{username}/{eventFeedName}/")
+  @Path("/private/cs/calendar/event/{username}/{eventFeedName}/")
   public Response event(@PathParam("username")
                         String username, @PathParam("eventFeedName")
                         String eventFeedName) throws Exception {
@@ -210,7 +210,7 @@ public class CalendarWebservice implements ResourceContainer{
    */
   @SuppressWarnings("unchecked")
   @GET
-  @Path("feed/{username}/{feedname}/{filename}/")
+  @Path("/private/cs/calendar/feed/{username}/{feedname}/{filename}/")
   public Response feed(@PathParam("username")
                        String username, @PathParam("feedname")
                        String feedname, @PathParam("filename")
@@ -323,7 +323,7 @@ public class CalendarWebservice implements ResourceContainer{
    */
   @GET
   //@Produces("text/calendar")
-  @Path("/subscribe/{username}/{calendarId}/{type}")
+  @Path("/cs/calendar/subscribe/{username}/{calendarId}/{type}")
   public Response publicProcess(@PathParam("username")
                                 String username, @PathParam("calendarId")
                                 String calendarId, @PathParam("type")
@@ -378,7 +378,7 @@ public class CalendarWebservice implements ResourceContainer{
    */
   @GET
   //@Produces("text/calendar")
-  @Path("private/{username}/{calendarId}/{type}")
+  @Path("/private/cs/calendar/private/{username}/{calendarId}/{type}")
   public Response privateProcess(@PathParam("username")
                                  String username, @PathParam("calendarId")
                                  String calendarId, @PathParam("type")
@@ -422,7 +422,7 @@ public class CalendarWebservice implements ResourceContainer{
    * @throws Exception : HTTPStatus.INTERNAL_ERROR , HTTPStatus.UNAUTHORIZED , HTTPStatus.NO_CONTENT
    */
   @GET
-  @Path("getissues/{currentdatetime}/{type}/{limit}")
+  @Path("/private/cs/calendar/getissues/{currentdatetime}/{type}/{limit}")
   public Response upcomingEvent(@PathParam("currentdatetime")
                                 String currentdatetime, @PathParam("type")
                                 String type, @PathParam("limit")
@@ -479,7 +479,7 @@ public class CalendarWebservice implements ResourceContainer{
    * @return true/false
    */
   @GET
-  @Path("updatestatus/{taskid}")
+  @Path("/private/cs/calendar/updatestatus/{taskid}")
   public Response updateStatus(@PathParam("taskid")
                                 String taskid) throws Exception {	  
 	  CacheControl cacheControl = new CacheControl();
