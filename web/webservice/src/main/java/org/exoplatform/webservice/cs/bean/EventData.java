@@ -28,7 +28,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
  */
 public class EventData {
 	private List<CalendarEvent> info ;
-
+	private String userTimezoneOffset;
  
 	public List<CalendarEvent> getInfo() {
 	  return info;
@@ -37,4 +37,10 @@ public class EventData {
 	public void setInfo(List<CalendarEvent> info) {
 	  this.info = info;
 	} 
+	public void setUserTimezoneOffset(String timezoneOffset) {
+		this.userTimezoneOffset = timezoneOffset;
+	}
+	public String getUserTimezoneOffset() {
+		return this.userTimezoneOffset;
+	}
 }

@@ -35,11 +35,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.groovy.ast.stmt.TryCatchStatement;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
@@ -48,6 +48,8 @@ import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
@@ -80,6 +82,7 @@ public class CalendarWebservice implements ResourceContainer{
   public final static String BASE_EVENT_URL = BASE_URL + "/event".intern();
   final public static String BASE_URL_PUBLIC = BASE_URL + "/subscribe/".intern();
   final public static String BASE_URL_PRIVATE = BASE_URL + "/private/".intern();
+  private Log log = ExoLogger.getExoLogger("calendar.webservice");
 
   public CalendarWebservice() {}
 
@@ -191,7 +194,7 @@ public class CalendarWebservice implements ResourceContainer{
       .header("Cache-Control", "private max-age=600, s-maxage=120").
       header("Content-Disposition", "attachment;filename=\"" + eventId + Utils.ICS_EXT).cacheControl(cacheControl).build();
     } catch (Exception e) {
-      e.printStackTrace();
+      if(log.isDebugEnabled()) log.debug(e.getMessage());
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
     }
   }
@@ -264,7 +267,7 @@ public class CalendarWebservice implements ResourceContainer{
       } 
       return Response.ok(makeFeed(username, events, feed), MediaType.APPLICATION_XML).cacheControl(cacheControl).build();
     } catch (Exception e) {
-      e.printStackTrace();
+      if(log.isDebugEnabled()) log.debug(e.getMessage());
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
     }
   }
@@ -359,7 +362,7 @@ public class CalendarWebservice implements ResourceContainer{
       .header("Cache-Control", "private max-age=600, s-maxage=120").
       header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
     } catch (Exception e) {
-      e.printStackTrace();
+      if(log.isDebugEnabled()) log.debug(e.getMessage());
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
     }
   }
@@ -399,7 +402,7 @@ public class CalendarWebservice implements ResourceContainer{
       .header("Cache-Control", "private max-age=600, s-maxage=120").
       header("Content-Disposition", "attachment;filename=\"" + calendarId + ".ics").cacheControl(cacheControl).build();
     } catch (Exception e) {
-      e.printStackTrace();
+      if(log.isDebugEnabled()) log.debug(e.getMessage());
       return Response.status(HTTPStatus.INTERNAL_ERROR).entity(e).cacheControl(cacheControl).build();
     }
   }
@@ -453,13 +456,18 @@ public class CalendarWebservice implements ResourceContainer{
       String username = ConversationState.getCurrent().getIdentity().getUserId();
       eventQuery.setEventType(type);
       EventPageList data =  calService.searchEvent(username, eventQuery, null);
+      CalendarSetting calSetting = calService.getCalendarSetting(username);
+      String timezoneId = calSetting.getTimeZone();
+      TimeZone userTimezone = TimeZone.getTimeZone(timezoneId);
+      int timezoneOffset = userTimezone.getRawOffset() + userTimezone.getDSTSavings();
       if(data == null || data.getAll().isEmpty()) 
         return Response.status(HTTPStatus.NO_CONTENT).cacheControl(cacheControl).build();
       EventData eventData = new EventData();
       eventData.setInfo(data.getAll());
+      eventData.setUserTimezoneOffset(Integer.toString(timezoneOffset));
       return Response.ok(eventData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
     } catch (Exception e) {
-      e.printStackTrace();
+      if(log.isDebugEnabled()) log.debug(e.getMessage());
       return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
     }
 
