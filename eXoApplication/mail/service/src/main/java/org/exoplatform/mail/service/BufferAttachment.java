@@ -41,6 +41,7 @@ public class BufferAttachment extends Attachment{
     //inputStream = is ; 
     bytes = new byte[is.available()] ; 
     is.read(bytes) ;
+    this.setSize(bytes.length);
   }
   
 }

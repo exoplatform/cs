@@ -67,12 +67,14 @@ import javax.mail.search.SentDateTerm;
 import javax.mail.search.SubjectTerm;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.mail.connection.Connector;
 import org.exoplatform.mail.connection.impl.ImapConnector;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.CheckMailJob;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.Folder;
@@ -2806,6 +2808,14 @@ public class MailServiceImpl implements MailService, Startable {
     public String getMessage() {
       return message;
     }
+  }
+
+  public BufferAttachment getAttachmentFromDMS(String userName, String relPath) throws Exception {
+    return storage_.getAttachmentFromDMS(userName, relPath);
+  }
+  
+  public String[] getDMSDataInfo(String userName) throws Exception {
+    return storage_.getDMSDataInfo(userName);
   }
   
 }

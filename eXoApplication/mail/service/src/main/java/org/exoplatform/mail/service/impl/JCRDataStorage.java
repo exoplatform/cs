@@ -58,6 +58,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.DataStorage;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Info;
@@ -3300,4 +3301,51 @@ public class JCRDataStorage implements DataStorage {
     return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(),
                                 currentRepo);
   }
+  
+  public BufferAttachment getAttachmentFromDMS(String userName, String relPath) throws Exception {
+    SessionProvider sProvider = SessionProvider.createSystemProvider(); 
+    try {
+      Node node = nodeHierarchyCreator_.getUserNode(sProvider, userName);
+
+      Node fileNode = node.getNode(relPath);
+
+      if (!fileNode.getPrimaryNodeType().getName().equals("nt:file"))
+        return null;
+      Node fileContentNode = fileNode.getNode(Utils.JCR_CONTENT);
+      BufferAttachment attachFile = new BufferAttachment();
+      attachFile.setId("Attachment" + IdGenerator.generate());
+      String fileName = fileNode.getName();
+
+      attachFile.setName(fileName);
+      attachFile.setInputStream(fileContentNode.getProperty(Utils.JCR_DATA).getStream());
+      attachFile.setMimeType(fileContentNode.getProperty(Utils.JCR_MIMETYPE).getString());
+      
+      return attachFile;
+    } finally {
+      sProvider.close();
+    }
+    
+  }
+  
+  public String[] getDMSDataInfo(String userName) throws Exception {
+    String[] arr = new String[3];
+    RepositoryService service = (RepositoryService) PortalContainer.getInstance()
+                                                                   .getComponentInstanceOfType(RepositoryService.class);
+
+    arr[0] = service.getCurrentRepository().getConfiguration().getName();
+
+    // service.getCurrentRepository().getConfiguration().getDefaultWorkspaceName();
+    SessionProvider sProvider = SessionProvider.createSystemProvider();
+    try {
+      Node node = nodeHierarchyCreator_.getUserNode(SessionProvider.createSystemProvider(),
+                                                    userName);
+
+      arr[1] = node.getSession().getWorkspace().getName();
+      arr[2] = node.getPath();
+      return arr;
+    } finally {
+      sProvider.close();
+    }
+  }
+   
 }

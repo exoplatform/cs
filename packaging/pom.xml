@@ -257,6 +257,11 @@
 		<artifactId>openfire</artifactId>
 		<version>${openfire.version}</version>
 	  </dependency>
+      <dependency>
+      <groupId>org.exoplatform.ecms</groupId>
+      <artifactId>exo-ecms-core-webui</artifactId>
+      <version>${org.exoplatform.ecms.version}</version>      
+    </dependency>
 	</dependencies>
 	<modules>
 		<module>module</module>

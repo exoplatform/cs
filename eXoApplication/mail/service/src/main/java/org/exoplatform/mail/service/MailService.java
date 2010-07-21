@@ -764,4 +764,16 @@ public interface MailService {
      * @param folder
      * */
     public boolean saveFolderImapOnline(String userName, String accountId, String parentId, Folder folder) throws Exception ;
+    
+    public BufferAttachment getAttachmentFromDMS(String userName, String relPath) throws Exception;
+    
+    /**
+     * get info of user to init UI selector of DMS.
+     * @param userName
+     * @return array of strings. it contains 3 elements: 1 is repository name, 2 is workspace name, 
+     * 3 is root path.
+     * @throws Exception
+     */
+    public String[] getDMSDataInfo(String userName) throws Exception;
+    
 }

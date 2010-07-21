@@ -17,6 +17,7 @@ function getModule(params)
   	// COMET (required by CS)
   	// TODO, should be passed in params and have its own module .js definition 
   var cometVersion = "${org.exoplatform.platform.version}";
+
   module.comet = {};
 
     
@@ -34,7 +35,8 @@ function getModule(params)
     new Project("org.exoplatform.cs", "exo.cs.eXoApplication.mail.webapp", "war", module.version).
     addDependency(new Project("javax.mail", "mail", "jar", "${javax.mail.mail.version}")).
 	addDependency(new Project("org.fontbox", "fontbox", "jar", "${org.fontbox.version}")).
-    addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.mail.service", "jar",  module.version));
+    addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.mail.service", "jar",  module.version)).
+    addDependency(new Project("org.exoplatform.ecms", "exo-ecms-core-webui", "jar",  "${org.exoplatform.ecms.version}"));
 	
   module.eXoApplication.mail.deployName = "mail";
     

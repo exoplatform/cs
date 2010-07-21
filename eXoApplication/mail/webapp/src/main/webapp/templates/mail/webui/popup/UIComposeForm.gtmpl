@@ -58,6 +58,14 @@
 									</a>
 									
 									<div class="SeparatorLine"><span></span></div>
+									<% if (uicomponent.hasECMS()) { %>
+									<a href="<%=uicomponent.event("CallDMSSelector")%>" class="ControlButton">
+										<div class="IconHolder ">
+											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
+										</div>
+									</a>
+									<% } %>
+									<div class="SeparatorLine"><span></span></div>
 									
 									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
 										<div class="IconHolder PriorityIcon">

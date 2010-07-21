@@ -352,5 +352,9 @@ public interface DataStorage {
   public Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception;
 
   public Session getSession(SessionProvider sprovider) throws Exception;
+  
+  public BufferAttachment getAttachmentFromDMS(String userName, String relPath) throws Exception;
+  
+  
 
 }

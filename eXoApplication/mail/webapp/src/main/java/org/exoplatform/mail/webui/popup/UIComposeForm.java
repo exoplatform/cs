@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.jcr.Node;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -42,6 +43,9 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.ecm.utils.text.Text;
+import org.exoplatform.ecm.webui.selector.UISelectable;
+import org.exoplatform.ecm.webui.tree.selectone.UIOneNodePathSelector;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
@@ -51,6 +55,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
@@ -58,6 +63,8 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.upload.UploadService;
@@ -66,6 +73,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -103,8 +111,9 @@ import com.sun.mail.smtp.SMTPSendFailedException;
 		@EventConfig(listeners = UIComposeForm.ShowCcActionListener.class),
 		@EventConfig(listeners = UIComposeForm.ShowBccActionListener.class),
 		@EventConfig(listeners = UIComposeForm.ReturnReceiptActionListener.class),
+		@EventConfig(listeners = UIComposeForm.CallDMSSelectorActionListener.class),
 		@EventConfig(listeners = UIComposeForm.RemoveGroupActionListener.class) })
-public class UIComposeForm extends UIForm implements UIPopupComponent {
+public class UIComposeForm extends UIForm implements UIPopupComponent, UISelectable {
 	final static public String FIELD_TO_SET = "toSet".intern();
 
 	final static public String FIELD_FROM = "from";
@@ -1293,6 +1302,33 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 					.addUIComponentToUpdateByAjax(uiChildPopup);
 		}
 	}
+	
+  static public class CallDMSSelectorActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm uiForm = event.getSource();//
+      UIPopupActionContainer actionContainer = uiForm.getParent();
+      UIPopupActionDMSAdapted uiChildPopup = actionContainer.getChildById("UIPopupActionCompose");
+      if(uiChildPopup == null) {
+        uiChildPopup = actionContainer.addChild(UIPopupActionDMSAdapted.class, null, "UIPopupActionCompose");
+      }
+      UIPopupWindow uiPopup = uiChildPopup.getChild(UIPopupWindow.class);
+      uiPopup.setId("UIChildPopupWindow");
+      uiPopup.setWindowSize(600, 600);
+      UIOneNodePathSelector uiOneNodePathSelector = uiChildPopup.createUIComponent(UIOneNodePathSelector.class, null, null);
+      
+      MailService service = (MailService) uiForm.getApplicationComponent(MailService.class);
+      String[] info = service.getDMSDataInfo(CalendarUtils.getCurrentUser());
+      uiOneNodePathSelector.setRootNodeLocation(info[0], info[1], info[2]);
+      uiOneNodePathSelector.init(SessionProviderFactory.createSessionProvider());
+      
+      uiPopup.setUIComponent(uiOneNodePathSelector);
+      uiOneNodePathSelector.setSourceComponent(uiForm, null);
+      uiPopup.setRendered(true);
+      uiPopup.setShow(true);
+      uiPopup.setResizable(true);
+      event.getRequestContext().addUIComponentToUpdateByAjax(actionContainer);
+    }
+  }
 
 	static public class DownloadActionListener extends
 			EventListener<UIComposeForm> {
@@ -1665,4 +1701,60 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 		}
 	}
 
+  @Override
+  public void doSelect(String selectField, Object value) throws Exception {
+//    UIApplication application = getAncestorOfType(UIApplication.class);
+//    application.getUIPopupMessages().addMessage(new ApplicationMessage(selectField + value + "", null));
+    
+    String valueString = value.toString();
+    String relPath = valueString.substring(valueString.indexOf(":/") + 2);
+
+    MailService service = (MailService) this.getApplicationComponent(MailService.class);
+    BufferAttachment attachFile = service.getAttachmentFromDMS(CalendarUtils.getCurrentUser(),
+                                                               relPath);
+    if (attachFile == null) return;
+    
+    this.addToUploadFileList(attachFile);
+    this.refreshUploadFileList();
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+    context.addUIComponentToUpdateByAjax(this);
+  //System.out.println(fileNode.getPrimaryNodeType().getName());
+//   System.out.println(node.getPath());
+   
+  }
+
+  public boolean hasECMS() {    
+    try {
+      Class.forName("org.exoplatform.services.cms.CmsService");
+    } catch (ClassNotFoundException e) {
+      return false;
+    }
+    try {
+      if (PortalContainer.getInstance().getComponentInstancesOfType(CmsService.class) != null)
+        return true;
+    } catch (Exception e) {
+      return false;
+    }
+    return false;
+  }
+  
+  
+  public String getTitle(Node node) throws Exception {
+    String title = null;
+    if (node.hasNode("jcr:content")) {
+      Node content = node.getNode("jcr:content");
+      if (content.hasProperty("dc:title")) {
+        try {
+          title = content.getProperty("dc:title").getValues()[0].getString();
+        } catch(Exception ex) {}
+      }
+    } else if (node.hasProperty("exo:title")) {
+      title = node.getProperty("exo:title").getValue().getString();
+    }
+    if ((title==null) || ((title!=null) && (title.trim().length()==0))) {
+      title = node.getName();
+    }
+    return Text.unescapeIllegalJcrChars(title);   
+  }
+  
 }
