@@ -135,43 +135,46 @@ public class ContactFilter {
     if (hasEmails) stringBuffer.append("( ");
     //  desclared full text query
     if(text != null && text.length() > 0) {
-      if (username != null && text.equalsIgnoreCase(username)) {
-        stringBuffer.append("(@exo:id = '" + text + "' or ")
-                    .append("@exo:fullName = '" + text + "' or ")
-                    .append("@exo:firstName = '" + text + "' or")
-                    .append("@exo:lastName = '" + text + "' or")
-                    .append("@exo:nickName = '" + text + "' or")
-                    .append("@exo:jobTitle = '" + text + "' or")
-                    .append("@exo:workAddress = '" + text + "' or")
-                    .append("@exo:workCity = '" + text + "' or")
-                    .append("@exo:workState_province = '" + text + "' or")
-                    .append("@exo:workPhone1 = '" + text + "' or")
-                    .append("@exo:workPhone2 = '" + text + "' or")
-                    .append("@exo:workFax = '" + text + "' or")
-                    .append("@exo:mobilePhone = '" + text + "' or")
-                    .append("@exo:webPage = '" + text + "' or")
-                    .append("@exo:exoId = '" + text + "' or")
-                    .append("@exo:googleId = '" + text + "' or")
-                    .append("@exo:msnId = '" + text + "' or")
-                    .append("@exo:aolId = '" + text + "' or")
-                    .append("@exo:yahooId = '" + text + "' or")
-                    .append("@exo:icrId = '" + text + "' or")
-                    .append("@exo:skypeId = '" + text + "' or")
-                    .append("@exo:icqId = '" + text + "' or")
-                    .append("@exo:homeAddress = '" + text + "' or")
-                    .append("@exo:homeCity = '" + text + "' or")
-                    .append("@exo:homeState_province = '" + text + "' or")
-                    .append("@exo:homePostalCode = '" + text + "' or")
-                    .append("@exo:homeCountry = '" + text + "' or")
-                    .append("@exo:homePhone1 = '" + text + "' or")
-                    .append("@exo:homePhone2 = '" + text + "' or")
-                    .append("@exo:homeFax = '" + text + "' or")
-                    .append("@exo:personalSite = '" + text + "' or")
-                    .append("@exo:note = '" + text + "' or")                    
-                    .append("@exo:workCountry = '" + text + "')") ;
-      } else {
-        stringBuffer.append("jcr:contains(., '").append(text).append("')") ;
-      }      
+      text = text.toUpperCase();
+      //if (username != null && text.equalsIgnoreCase(username)) {
+      stringBuffer.append("(fn:upper-case(@exo:id) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:fullName) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:firstName) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:lastName) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:nickName) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:jobTitle) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:workAddress) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:workCity) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:workState_province) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:workPhone1) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:workPhone2) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:workFax) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:mobilePhone) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:webPage) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:exoId) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:googleId) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:msnId) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:aolId) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:yahooId) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:icrId) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:skypeId) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:icqId) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:homeAddress) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:homeCity) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:homeState_province) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:homePostalCode) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:homeCountry) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:homePhone1) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:homePhone2) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:homeFax) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:personalSite) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:note) = '" + text + "' or")                    
+                  .append(" fn:upper-case(@exo:workCountry) = '" + text + "')") ;
+      /*} else {
+        
+        System.out.println("\n\n else \n\n");
+        stringBuffer.append("jcr:contains(., '").append(text.toUpperCase()).append("')") ;
+      }  */    
       hasConjuntion = true ;
     }
     
@@ -208,28 +211,28 @@ public class ContactFilter {
     if (fullName != null && fullName.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append("jcr:like(@exo:fullName,'%" + fullName + "%')") ;
+      stringBuffer.append("jcr:like(fn:upper-case(@exo:fullName),'%" + fullName.toUpperCase() + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (firstName != null && firstName.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append("jcr:like(@exo:firstName,'%" + firstName + "%')") ;
+      stringBuffer.append("jcr:like(fn:upper-case(@exo:firstName),'%" + firstName.toUpperCase() + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (lastName != null && lastName.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append("jcr:like(@exo:lastName, '%" + lastName + "%')") ;
+      stringBuffer.append("jcr:like(fn:upper-case(@exo:lastName), '%" + lastName.toUpperCase() + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (nickName != null && nickName.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append("jcr:like(@exo:nickName,'%" + nickName + "%')") ;
+      stringBuffer.append("jcr:like(fn:upper-case(@exo:nickName),'%" + nickName.toUpperCase() + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
@@ -243,14 +246,14 @@ public class ContactFilter {
     if (jobTitle != null && jobTitle.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append("jcr:like(@exo:jobTitle, '%" + jobTitle + "%')") ;
+      stringBuffer.append("jcr:like(fn:upper-case(@exo:jobTitle), '%" + jobTitle.toUpperCase() + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (emailAddress != null && emailAddress.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(relate + "(") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append("jcr:like(@exo:emailAddress, '%" + emailAddress + "%')") ;
+      stringBuffer.append("jcr:like(fn:upper-case(@exo:emailAddress), '%" + emailAddress.toUpperCase() + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
