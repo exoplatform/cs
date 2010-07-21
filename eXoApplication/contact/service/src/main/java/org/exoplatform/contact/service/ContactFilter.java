@@ -168,7 +168,8 @@ public class ContactFilter {
                   .append(" fn:upper-case(@exo:homePhone2) = '" + text + "' or")
                   .append(" fn:upper-case(@exo:homeFax) = '" + text + "' or")
                   .append(" fn:upper-case(@exo:personalSite) = '" + text + "' or")
-                  .append(" fn:upper-case(@exo:note) = '" + text + "' or")                    
+                  .append(" fn:upper-case(@exo:note) = '" + text + "' or")
+                  .append(" fn:upper-case(@exo:emailAddress) = '" + text + "' or")
                   .append(" fn:upper-case(@exo:workCountry) = '" + text + "')") ;
       /*} else {
         
