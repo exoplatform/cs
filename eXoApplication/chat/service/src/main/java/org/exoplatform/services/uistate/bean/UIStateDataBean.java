@@ -26,6 +26,8 @@ package org.exoplatform.services.uistate.bean;
 public class UIStateDataBean {
   private String data;
   
+  private String unreadMessageCnt;
+  
   /**
    * 
    */
@@ -53,5 +55,21 @@ public class UIStateDataBean {
    */
   public String getData() {
     return data;
+  }
+  
+  /**
+   * 
+   * @return
+   */
+  public String getUnreadMessageCnt() {
+	return unreadMessageCnt;
+  }
+
+  /**
+   * 
+   * @param unreadMessageCnt
+   */
+  public void setUnreadMessageCnt(String unreadMessageCnt) {
+	this.unreadMessageCnt = unreadMessageCnt;
   }
 }

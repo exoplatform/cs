@@ -46,6 +46,8 @@ public class UIStateService implements ResourceContainer {
   
   private static final CacheControl cc;
   
+  private static String unreadMessageCount;
+  
   static {
     cc = new CacheControl();
     cc.setNoCache(true);
@@ -59,10 +61,10 @@ public class UIStateService implements ResourceContainer {
   }
   
   @HTTPMethod(HTTPMethods.POST)
-  @URITemplate("/uistateservice/save/{username}/")
+  @URITemplate("/uistateservice/save/{username}/{unreadMessageCnt}/")
   @InputTransformer(Json2BeanInputTransformer.class)
   @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response saveState(@URIParam("username") String userName, UIStateDataBean stateData) throws Exception {
+  public Response saveState(@URIParam("username") String userName,  @URIParam("unreadMessageCnt") String unreadMessageCnt, UIStateDataBean stateData) throws Exception {
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
@@ -73,7 +75,9 @@ public class UIStateService implements ResourceContainer {
       }
     } catch (Exception e){
     }
+    unreadMessageCount = unreadMessageCnt;
     UIStateDataBean stateDataBean = new UIStateDataBean("null");
+    stateDataBean.setUnreadMessageCnt(unreadMessageCount);
     return Response.Builder.ok(stateDataBean, JSON_CONTENT_TYPE).cacheControl(cc).build();
   }
   
