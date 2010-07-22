@@ -1,0 +1,725 @@
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java	(revision 48687)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java	(working copy)
+@@ -40,6 +40,8 @@
+ import org.apache.commons.lang.time.DateFormatUtils;
+ import org.apache.commons.logging.Log;
+ import org.apache.poi.hdf.event.EventBridge;
++import org.exoplatform.container.ExoContainer;
++import org.exoplatform.container.ExoContainerContext;
+ import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
+ import org.exoplatform.services.jcr.ext.common.SessionProvider;
+ import org.exoplatform.services.log.ExoLogger;
+@@ -63,6 +65,7 @@
+ import org.exoplatform.services.xmpp.bean.KickedBannedBean;
+ import org.exoplatform.services.xmpp.bean.MUCPacketBean;
+ import org.exoplatform.services.xmpp.bean.MessageBean;
++import org.exoplatform.services.xmpp.bean.OccupantBean;
+ import org.exoplatform.services.xmpp.bean.PresenceBean;
+ import org.exoplatform.services.xmpp.bean.PrivilegeChangeBean;
+ import org.exoplatform.services.xmpp.bean.SubjectChangeBean;
+@@ -86,6 +89,7 @@
+ import org.exoplatform.services.xmpp.util.TransformUtils;
+ import org.exoplatform.services.xmpp.util.XMPPConnectionUtils;
+ import org.exoplatform.ws.frameworks.cometd.transport.ContinuationServiceDelegate;
++import org.exoplatform.ws.frameworks.json.impl.JsonException;
+ import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
+ import org.exoplatform.ws.frameworks.json.value.JsonValue;
+ import org.jivesoftware.smack.PacketInterceptor;
+@@ -217,6 +221,8 @@
+ 
+   private final static String   ASCENDING         = "asc";
+   
++  private static ArrayList<OccupantBean> beanList = null;
++  
+   private final DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+   
+   
+@@ -231,6 +237,10 @@
+                             final ContinuationServiceDelegate delegate,
+                             final HistoryImpl history,
+                             final ResourceBundle rb) throws XMPPException {
++	// 17/06/2010 add start
++	if (beanList == null) beanList = new ArrayList<OccupantBean>();
++	// 17/06/2010 add end  
++	  
+     XMPPConnection.DEBUG_ENABLED = true;
+     this.delegate_ = delegate;
+     this.history_ = history;
+@@ -1242,12 +1252,36 @@
+     return false;
+   }
+ 
++  //17/06/2010 add start
++  public void addFullUserNames(String userName, String fullUserName) {
++  	OccupantBean bean = new OccupantBean();
++  	bean.setFullName(fullUserName);
++  	bean.setNick(userName);
++  	beanList.add(bean);
++  }
++  //17/06/2010 add end
++  
+   /**
+    * {@inheritDoc}
+    */
+   public void joinRoom(String room, String nickname, String password) throws XMPPException {
+-    if (nickname == null)
+-      nickname = username_;
++	// 17/06/2010 add start
++	JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
++	
++	FullRoomInfoBean infoBean = new FullRoomInfoBean();
++	infoBean.setOccupants(beanList);
++		  
++	try {
++		JsonValue json = generatorImpl.createJsonObject(infoBean);
++		for(OccupantBean bean : beanList) {
++			delegate_.sendMessage(bean.getNick(), CometdChannels.FULLNAME_EXCHANGE, json.toString(), null);
++		}
++	} catch (JsonException e) {
++	}
++	// 17/06/2010 add end
++	
++	if (nickname == null)
++    nickname = username_;
+     MultiUserChat chat = getMultiUserChat(room);
+     if (chat == null) {
+       String roomJID = validateRoomJID(room);
+@@ -1366,14 +1400,24 @@
+    * {@inheritDoc}
+    */
+   public FullRoomInfoBean getRoomInfoBean(String room) throws XMPPException {
++    ExoContainer container = ExoContainerContext.getCurrentContainer();
++    UserInfoService organization = (UserInfoService) container.getComponentInstanceOfType(UserInfoService.class);
+     MultiUserChat chat = getMultiUserChat(room);
+     if (chat != null) {
+       RoomInfo roomInfo = MultiUserChat.getRoomInfo(connection_, chat.getRoom());
+-      Collection<Occupant> occupants = new ArrayList<Occupant>();
++      Collection<OccupantBean> occupants = new ArrayList<OccupantBean>();
+       Iterator<String> occ = chat.getOccupants();
+       while (occ.hasNext()) {
+         String user = (String) occ.next();
+-        occupants.add(chat.getOccupant(user));
++        Occupant occupant = chat.getOccupant(user);
++        OccupantBean occupantBean = new OccupantBean();
++        occupantBean.setAffiliation(occupant.getAffiliation());
++        occupantBean.setJid(occupant.getJid());
++        occupantBean.setNick(occupant.getNick());
++        occupantBean.setRole(occupant.getRole());
++        UserInfo userInfo = organization.getUserInfo(occupant.getNick());
++        occupantBean.setFullName(userInfo.getFirstName() + " " + userInfo.getLastName());
++        occupants.add(occupantBean);
+       }
+       FullRoomInfoBean infoBean = new FullRoomInfoBean(occupants, roomInfo);
+       return infoBean;
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/XMPPSession.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/XMPPSession.java	(revision 48687)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/XMPPSession.java	(working copy)
+@@ -481,4 +481,5 @@
+   
+   RoomInfo getRoomInfo(String room) throws XMPPException;
+ 
++  void addFullUserNames(String userName, String fullUserName);
+ }
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/FullRoomInfoBean.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/FullRoomInfoBean.java	(revision 48687)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/FullRoomInfoBean.java	(working copy)
+@@ -18,7 +18,6 @@
+ 
+ import java.util.Collection;
+ 
+-import org.jivesoftware.smackx.muc.Occupant;
+ import org.jivesoftware.smackx.muc.RoomInfo;
+ 
+ /**
+@@ -37,7 +36,7 @@
+   /**
+    * 
+    */
+-  private Collection<Occupant> occupants;
++  private Collection<OccupantBean> occupants;
+ 
+   /**
+    * 
+@@ -54,7 +53,7 @@
+    * @param occupants the occupants
+    * @param roomInfo the roominfo
+    */
+-  public FullRoomInfoBean(Collection<Occupant> occupants, RoomInfo roomInfo) {
++  public FullRoomInfoBean(Collection<OccupantBean> occupants, RoomInfo roomInfo) {
+     super();
+     this.occupants = occupants;
+     this.roomInfo = roomInfo;
+@@ -79,14 +78,14 @@
+   /**
+    * @return the occupants
+    */
+-  public Collection<Occupant> getOccupants() {
++  public Collection<OccupantBean> getOccupants() {
+     return occupants;
+   }
+ 
+   /**
+    * @param occupants the occupants to set
+    */
+-  public void setOccupants(Collection<Occupant> occupants) {
++  public void setOccupants(Collection<OccupantBean> occupants) {
+     this.occupants = occupants;
+   }
+ 
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/OccupantBean.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/OccupantBean.java	(revision 0)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/OccupantBean.java	(revision 0)
+@@ -0,0 +1,79 @@
++/*
++ * Copyright (C) 2003-2010 eXo Platform SAS.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Affero General Public License
++ * as published by the Free Software Foundation; either version 3
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see<http://www.gnu.org/licenses/>.
++ */
++package org.exoplatform.services.xmpp.bean;
++
++/**
++ * Created by The eXo Platform SAS
++ * Author : viet nguyen
++ *          viet.nguyen@exoplatform.com
++ * May 27, 2010  
++ */
++public class OccupantBean {
++
++  private String affiliation;
++  
++  private String role;
++  
++  private String jid;
++  
++  private String nick;
++  
++  private String fullName;
++
++  public String getAffiliation() {
++    return affiliation;
++  }
++
++  public void setAffiliation(String affiliation) {
++    this.affiliation = affiliation;
++  }
++
++  public String getRole() {
++    return role;
++  }
++
++  public void setRole(String role) {
++    this.role = role;
++  }
++
++  public String getJid() {
++    return jid;
++  }
++
++  public void setJid(String jid) {
++    this.jid = jid;
++  }
++
++  public String getNick() {
++    return nick;
++  }
++
++  public void setNick(String nick) {
++    this.nick = nick;
++  }
++
++  public String getFullName() {
++    return fullName;
++  }
++
++  public void setFullName(String fullName) {
++    this.fullName = fullName;
++  }
++  
++  
++  
++}
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/InitInfoBean.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/InitInfoBean.java	(revision 48687)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/InitInfoBean.java	(working copy)
+@@ -63,6 +63,11 @@
+    * 
+    */
+   private List<ContactBean>       roster;
++  
++  /**
++  *
++  */
++  private ContactBean       myProfile;
+ 
+   /**
+    * 
+@@ -162,8 +167,15 @@
+   public void setRoster(List<ContactBean> roster) {
+     this.roster = roster;
+   }
++  
++  public ContactBean getMyProfile() {
++    return myProfile;
++  }
+ 
+-  
++  public void setMyProfile(ContactBean myProfile) {
++    this.myProfile = myProfile;
++  }
++
+   /**
+    * @param hostedRooms the hostedRooms to set
+    */
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/rest/RESTXMPPService.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/rest/RESTXMPPService.java	(revision 48687)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/rest/RESTXMPPService.java	(working copy)
+@@ -37,6 +37,8 @@
+ import org.apache.commons.logging.Log;
+ import org.exoplatform.common.http.HTTPMethods;
+ import org.exoplatform.common.http.HTTPStatus;
++import org.exoplatform.container.ExoContainer;
++import org.exoplatform.container.ExoContainerContext;
+ import org.exoplatform.services.log.ExoLogger;
+ import org.exoplatform.services.resources.ResourceBundleService;
+ import org.exoplatform.services.rest.CacheControl;
+@@ -563,11 +565,26 @@
+    */
+   @HTTPMethod(HTTPMethods.GET)
+   @URITemplate("/xmpp/muc/invite/{username}/{invitee}/")
++  @OutputTransformer(Bean2JsonOutputTransformer.class)
+   public Response inviteToRoom(@URIParam("username") String username,
+                                @URIParam("invitee") String invitee,
+                                @QueryParam("room") String room,
+                                @QueryParam("reason") String reason) {
+     if (this.rb == null) loadResourceBundle();
++    
++    // 09/06/2010 add start
++    ExoContainer container = ExoContainerContext.getCurrentContainer();
++    UserInfoService organization = (UserInfoService) container.getComponentInstanceOfType(UserInfoService.class);
++    
++    InitInfoBean inviteeBean = new InitInfoBean();
++    
++    ContactBean inviteeProfile = new ContactBean();
++    inviteeProfile.setUser(invitee);
++    UserInfo inviteeInfo = organization.getUserInfo(invitee);
++    inviteeProfile.setFullName(inviteeInfo.getFirstName() + " " + inviteeInfo.getLastName());
++    inviteeBean.setMyProfile(inviteeProfile);
++    // 09/06/2010 add end
++    
+     if (room == null)
+       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                              .errorMessage(rb.getString("chat.message.roomid.null"))
+@@ -575,8 +592,8 @@
+     XMPPSession session = messenger.getSession(username);
+     if (session != null) {
+       try {
+-        if (session.inviteToRoom(room, invitee, reason))
+-          return Response.Builder.ok().cacheControl(cc).build();
++    	if (session.inviteToRoom(room, invitee, reason))
++            return Response.Builder.ok(inviteeBean, JSON_CONTENT_TYPE).cacheControl(cc).build(); // 09/06/2010 DungLV modify
+         return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)//.errorMessage()
+                                .cacheControl(cc)
+                                .build();
+@@ -1691,6 +1708,15 @@
+         initInfoBean.setRoster(list) ;
+       } catch (Exception e) { }
+   
++      ContactBean myProfile = new ContactBean();
++      myProfile.setUser(username);
++      UserInfo myInfo = organization.getUserInfo(username);
++      myProfile.setFullName(myInfo.getFirstName() + " " + myInfo.getLastName());
++      initInfoBean.setMyProfile(myProfile);
++      
++      // Add 17/06
++      session.addFullUserNames(username, myProfile.getFullName());
++      
+       initInfoBean.setSearchServicesNames(services);
+       initInfoBean.setHostedRooms(rooms);
+       initInfoBean.setTotalRooms(rooms.size());
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/util/CometdChannels.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/util/CometdChannels.java	(revision 48687)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/util/CometdChannels.java	(working copy)
+@@ -54,4 +54,8 @@
+    */
+   public static final String FILE_EXCHANGE = "/eXo/Application/Chat/FileExchange";
+ 
++  /**
++   * 
++   */
++  public static final String FULLNAME_EXCHANGE = "/eXo/Application/Chat/fullnameExchange";
+ }
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(revision 48687)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(working copy)
+@@ -111,6 +111,7 @@
+  */
+ UITabControl.prototype.userJoinRoomEventFired = function(user) {
+   var userName = user.substr(user.indexOf('/') + 1, user.length-1);
++  var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[userName];
+   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
+   var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', userName);
+   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
+@@ -118,6 +119,7 @@
+   var buddyInfo = {
+     presence           : {from: user,mode: null, status: null, type: 'available'},
+     nickname           : user,
++    fullName		   : fullName,
+     groups             : [],
+     subscriptionStatus : null,
+     subscriptionType   : null,
+@@ -661,10 +663,17 @@
+     messageNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.guestMessage);
+   }
+   var msgTitleNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatIconStatus);
+-  if (buddyId.length > this.MAX_MSG_TITLE_LEN) {
+-    msgTitleNode.innerHTML = buddyId.substr(0, this.MAX_MSG_TITLE_LEN - 3) + '...';
++  var fullNameMap = eXo.communication.chat.webui.UIChatWindow.fullNameMap ;
++  var fullName = buddyId;
++  if(fullName.indexOf('@') >= 0)
++    fullName = fullName.substr(0, fullName.indexOf('@'));
++  if(fullNameMap[fullName] != null) {
++    fullName = fullNameMap[fullName] ;
++  }
++  if(fullName.length > this.MAX_TAB_TITLE_LEN) {
++    msgTitleNode.innerHTML = fullName.substr(0, this.MAX_TAB_TITLE_LEN - 3) + '...';
+   } else {
+-    msgTitleNode.innerHTML = buddyId;
++	msgTitleNode.innerHTML = fullName ;
+   }
+   var chatTimeNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatTimeCenter);
+   if (this.updatingHistoryMessage ||
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js	(revision 48687)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js	(working copy)
+@@ -351,6 +351,8 @@
+   Cometd.unsubscribe('/eXo/Application/Chat/subscription');
+ 
+   Cometd.unsubscribe('/eXo/Application/Chat/FileExchange');
++  
++  Cometd.unsubscribe('/eXo/Application/Chat/fullnameExchange');
+ }
+ 
+ /**
+@@ -385,6 +387,12 @@
+   Cometd.subscribe('/eXo/Application/Chat/FileExchange', function(eventObj) {
+     eXo.communication.chat.webui.UIMainChatWindow.fileExchangeListener(eventObj);
+   });
++  
++  // Add 17/06
++  Cometd.subscribe('/eXo/Application/Chat/fullnameExchange', function(eventObj) {
++    eXo.communication.chatbar.webui.UIMainChatWindow.updateFullNameMap(eventObj);
++  });
++  //Add 17/06
+ };
+ 
+ /**
+@@ -548,6 +556,11 @@
+       break;
+ 
+     case this.GET_ROOM_INFO_ACTION:
++	  // 09/06/2010 add start
++      for (var i=0; i<serverData.occupants.length; i++) {
++    	  eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.occupants[i].nick] = serverData.occupants[i].fullName;	
++      }
++      // 09/06/2010 add end
+       this.UIChatWindow.roomInfoEventFired(serverData);
+       break;
+ 
+@@ -587,6 +600,12 @@
+     case this.SEND_MESSAGE_ACTION:
+       break;
+ 
++    // 09/06/2010 add start
++    case this.INVITE_JOIN_ROOM_ACTION:
++      eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.myProfile.user] = serverData.myProfile.fullName ;	
++      break;  
++    // 09/06/2010 add end
++      
+     case this.LOGOUT_ACTION:
+       this.postChangeStatus(this.OFFLINE_STATUS);
+       this.UIChatWindow.destroySession();
+@@ -754,6 +773,16 @@
+ };
+ 
+ /**
++ * A Cometd listener for update fullName.
++ * All cometd notify about update fullName will be call this function.
++ */
++UIMainChatWindow.prototype.updateFullNameMap = function(eventObj) {
++  var eventId = 'updateFullNameMapCometdEvent_' + (new Date()).getTime();
++  this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
++  eXo.communication.chatbar.webui.UIMainChatWindow.processUpdateFullNameMap(eventId);
++};
++
++/**
+  * A Cometd listener for message.
+  * All cometd notify about message will be call this function.
+  */
+@@ -896,6 +925,23 @@
+ };
+ 
+ /**
++ * Process update fullNameMap event come from Cometd notification
++ */
++UIMainChatWindow.prototype.processUpdateFullNameMap = function(eventId) {
++  var serverData = this.serverDataStack[eventId];
++  window.jsconsole.debug('UpdateFullNameMap event: id:= ' + eventId, serverData);
++  if (!serverData) {
++    this.serverDataStack[eventId] = null;
++  }
++  
++  for (var i=0; i<serverData.occupants.length; i++) {
++	  eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.occupants[i].nick] = serverData.occupants[i].fullName;
++  }
++  
++  this.serverDataStack[eventId] = null;
++};
++
++/**
+  * Process group chat message event come from Cometd notification
+  */
+ UIMainChatWindow.prototype.processGroupChat = function(eventId) {
+@@ -1084,6 +1130,8 @@
+         this.buddyListControlObj.build(this.serverInfo.roster);
+       }
+       
++      eXo.communication.chat.webui.UIChatWindow.fullNameMap[this.serverInfo.myProfile.user] = this.serverInfo.myProfile.fullName ;
++      
+       this.subscribeCometdTopics();
+ 
+       // Register onunload event to window for clean logout when user leave this page.
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(revision 48687)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(working copy)
+@@ -49,7 +49,7 @@
+ 	if(nickDis != null && nickDis.indexOf("/") != -1) nickDis = nickDis.split("/")[1] ;
+   if (this.isGroupChat) {
+     this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
+-    this.iconChatNode.innerHTML = this.getUserName(nickDis, true) ;
++    this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.fullName, true) ; // 17/06/2010 modify
+   } else {
+     this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
+ 	    var fullName = this.buddyInfo.fullName ? this.buddyInfo.fullName : nickDis;
+@@ -60,7 +60,13 @@
+   this.updateStatus(status);
+ 
+ 	var uid = this.buddyInfo.user ;
+-	eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;	
++	if(eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] == null)
++	  eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;
++	if (uid.indexOf('@') != -1) {
++	  uid = uid.substr(0, uid.indexOf('@'));
++	  if(eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] == null)
++	    eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;
++	}
+   //this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.user, true);
+   this.iconChatNode.setAttribute('title' ,this.getUserName(this.buddyInfo.user, false));
+   this.rootNode.setAttribute('userName', this.buddyInfo.user);  
+@@ -253,6 +259,7 @@
+     contact.subscriptionStatus = null;
+     contact.subscriptionType = null;
+     contact.user = contact.nickname + '@' +  mainServiceName;
++    contact.fullName = roomContactList[i].fullName;
+     contactList.push(contact);
+   }
+   return contactList;
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(revision 48687)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(working copy)
+@@ -111,6 +111,7 @@
+  */
+ UITabControl.prototype.userJoinRoomEventFired = function(user) {
+   var userName = user.substr(user.indexOf('/') + 1, user.length-1);
++  var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[userName];
+   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
+   var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', userName);
+   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
+@@ -118,6 +119,7 @@
+   var buddyInfo = {
+     presence           : {from: user,mode: null, status: null, type: 'available'},
+     nickname           : user,
++    fullName		   : fullName,
+     groups             : [],
+     subscriptionStatus : null,
+     subscriptionType   : null,
+@@ -657,10 +659,17 @@
+     messageNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.guestMessage);
+   }
+   var msgTitleNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatIconStatus);
+-  if (buddyId.length > this.MAX_MSG_TITLE_LEN) {
+-    msgTitleNode.innerHTML = buddyId.substr(0, this.MAX_MSG_TITLE_LEN - 3) + '...';
++  var fullNameMap = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap ;
++  var fullName = buddyId;
++  if(fullName.indexOf('@') >= 0)
++    fullName = fullName.substr(0, fullName.indexOf('@'));
++  if(fullNameMap[fullName] != null) {
++    fullName = fullNameMap[fullName] ;
++  }
++  if(fullName.length > this.MAX_TAB_TITLE_LEN) {
++    msgTitleNode.innerHTML = fullName.substr(0, this.MAX_TAB_TITLE_LEN - 3) + '...';
+   } else {
+-    msgTitleNode.innerHTML = buddyId;
++	msgTitleNode.innerHTML = fullName ;
+   }
+   var chatTimeNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatTimeCenter);
+   if (this.updatingHistoryMessage ||
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js	(revision 48687)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js	(working copy)
+@@ -358,6 +358,8 @@
+   Cometd.unsubscribe('/eXo/Application/Chat/subscription');
+ 
+   Cometd.unsubscribe('/eXo/Application/Chat/FileExchange');
++  
++  Cometd.unsubscribe('/eXo/Application/Chat/fullnameExchange');
+ }
+ 
+ /**
+@@ -392,6 +394,12 @@
+   Cometd.subscribe('/eXo/Application/Chat/FileExchange', function(eventObj) {
+     eXo.communication.chatbar.webui.UIMainChatWindow.fileExchangeListener(eventObj);
+   });
++  
++  // Add 17/06
++  Cometd.subscribe('/eXo/Application/Chat/fullnameExchange', function(eventObj) {
++    eXo.communication.chatbar.webui.UIMainChatWindow.updateFullNameMap(eventObj);
++  });
++  //Add 17/06
+ };
+ 
+ /**
+@@ -595,6 +603,11 @@
+       break;
+ 
+     case this.GET_ROOM_INFO_ACTION:
++      // 09/06/2010 add start
++      for (var i=0; i<serverData.occupants.length; i++) {
++      	  eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.occupants[i].nick] = serverData.occupants[i].fullName;	
++      }
++      // 09/06/2010 add end
+       this.UIChatWindow.roomInfoEventFired(serverData);
+       break;
+ 
+@@ -642,6 +655,12 @@
+     case this.SEND_MESSAGE_ACTION:
+       break;
+ 
++    // 09/06/2010 add start
++    case this.INVITE_JOIN_ROOM_ACTION:
++      eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.myProfile.user] = serverData.myProfile.fullName ;	
++      break;  
++    // 09/06/2010 add end
++      
+     case this.LOGOUT_ACTION:
+       this.postChangeStatus(this.OFFLINE_STATUS);
+       this.UIChatWindow.destroySession();
+@@ -814,6 +833,16 @@
+ };
+ 
+ /**
++ * A Cometd listener for update fullName.
++ * All cometd notify about update fullName will be call this function.
++ */
++UIMainChatWindow.prototype.updateFullNameMap = function(eventObj) {
++  var eventId = 'updateFullNameMapCometdEvent_' + (new Date()).getTime();
++  this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
++  eXo.communication.chatbar.webui.UIMainChatWindow.processUpdateFullNameMap(eventId);
++};
++
++/**
+  * A Cometd listener for message.
+  * All cometd notify about message will be call this function.
+  */
+@@ -956,6 +985,23 @@
+ };
+ 
+ /**
++ * Process update fullNameMap event come from Cometd notification
++ */
++UIMainChatWindow.prototype.processUpdateFullNameMap = function(eventId) {
++  var serverData = this.serverDataStack[eventId];
++  window.jsconsole.debug('UpdateFullNameMap event: id:= ' + eventId, serverData);
++  if (!serverData) {
++    this.serverDataStack[eventId] = null;
++  }
++  
++  for (var i=0; i<serverData.occupants.length; i++) {
++	  eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.occupants[i].nick] = serverData.occupants[i].fullName;
++  }
++  
++  this.serverDataStack[eventId] = null;
++};
++
++/**
+  * Process group chat message event come from Cometd notification
+  */
+ UIMainChatWindow.prototype.processGroupChat = function(eventId) {
+@@ -1144,6 +1190,8 @@
+         this.buddyListControlObj.build(this.serverInfo.roster);
+       }
+       
++      eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[this.serverInfo.myProfile.user] = this.serverInfo.myProfile.fullName ;
++      
+       this.subscribeCometdTopics();
+ 
+       // Register onunload event to window for clean logout when user leave this page.
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(revision 48687)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(working copy)
+@@ -51,7 +51,7 @@
+ 	if (nickDis != null && nickDis.indexOf("/") != -1) nickDis = nickDis.split("/")[1] ;
+   if (this.isGroupChat) {
+     this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
+-    this.iconChatNode.innerHTML = this.getUserName(nickDis, true) ;
++    this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.fullName, true) ; // 17/06/2010 modify
+   } else {
+     this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
+     	var fullName = this.buddyInfo.fullName ? this.buddyInfo.fullName : nickDis;
+@@ -62,7 +62,13 @@
+   this.updateStatus(status);
+ 
+ 	var uid = this.buddyInfo.user ;
+-	eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;	
++	if(eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[uid] == null)
++	  eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;
++	if (uid.indexOf('@') != -1) {
++	  uid = uid.substr(0, uid.indexOf('@'));
++	  if(eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[uid] == null)
++	    eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;
++	}
+   //this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.user, true);
+   this.iconChatNode.setAttribute('title' ,this.getUserName(this.buddyInfo.user, false));
+   this.rootNode.setAttribute('userName', this.buddyInfo.user);  
+@@ -256,6 +262,7 @@
+     contact.subscriptionStatus = null;
+     contact.subscriptionType = null;
+     contact.user = contact.nickname + '@' +  mainServiceName;
++    contact.fullName = roomContactList[i].fullName;
+     contactList.push(contact);
+   }
+   return contactList;
