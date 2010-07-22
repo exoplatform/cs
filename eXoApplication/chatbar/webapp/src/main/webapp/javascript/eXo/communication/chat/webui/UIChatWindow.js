@@ -939,6 +939,7 @@ UIChatWindow.prototype.onReload = function(eventData) {
   var thys = eXo.communication.chatbar.webui.UIChatWindow;
   thys._isOnLoading = true;
   var visible = thys._isVisible();
+  thys.rootNode.style.visibility = "hidden";
   thys.initSession();
   var tabList = thys._getOption('tabs');
   if (tabList) {
@@ -971,6 +972,7 @@ UIChatWindow.prototype.onReload = function(eventData) {
   }
   thys.setVisible(visible, null, true);
   thys._isOnLoading = false;
+  thys.rootNode.style.visibility = "visible";
 };
 
 /**
