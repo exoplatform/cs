@@ -18,7 +18,6 @@ package org.exoplatform.services.xmpp.bean;
 
 import java.util.Collection;
 
-import org.jivesoftware.smackx.muc.Occupant;
 import org.jivesoftware.smackx.muc.RoomInfo;
 
 /**
@@ -37,7 +36,7 @@ public class FullRoomInfoBean {
   /**
    * 
    */
-  private Collection<Occupant> occupants;
+  private Collection<OccupantBean> occupants;
 
   /**
    * 
@@ -54,7 +53,7 @@ public class FullRoomInfoBean {
    * @param occupants the occupants
    * @param roomInfo the roominfo
    */
-  public FullRoomInfoBean(Collection<Occupant> occupants, RoomInfo roomInfo) {
+  public FullRoomInfoBean(Collection<OccupantBean> occupants, RoomInfo roomInfo) {
     super();
     this.occupants = occupants;
     this.roomInfo = roomInfo;
@@ -79,14 +78,14 @@ public class FullRoomInfoBean {
   /**
    * @return the occupants
    */
-  public Collection<Occupant> getOccupants() {
+  public Collection<OccupantBean> getOccupants() {
     return occupants;
   }
 
   /**
    * @param occupants the occupants to set
    */
-  public void setOccupants(Collection<Occupant> occupants) {
+  public void setOccupants(Collection<OccupantBean> occupants) {
     this.occupants = occupants;
   }
 

@@ -49,7 +49,7 @@ BuddyItem.prototype.init = function() {
 	if(nickDis != null && nickDis.indexOf("/") != -1) nickDis = nickDis.split("/")[1] ;
   if (this.isGroupChat) {
     this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
-    this.iconChatNode.innerHTML = this.getUserName(nickDis, true) ;
+    this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.fullName, true) ; // 17/06/2010 modify
   } else {
     this.iconChatNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.nick);
 	    var fullName = this.buddyInfo.fullName ? this.buddyInfo.fullName : nickDis;
@@ -60,7 +60,13 @@ BuddyItem.prototype.init = function() {
   this.updateStatus(status);
 
 	var uid = this.buddyInfo.user ;
-	eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;	
+	if(eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] == null)
+	  eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;
+	if (uid.indexOf('@') != -1) {
+	  uid = uid.substr(0, uid.indexOf('@'));
+	  if(eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] == null)
+	    eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;
+	}
   //this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.user, true);
   this.iconChatNode.setAttribute('title' ,this.getUserName(this.buddyInfo.user, false));
   this.rootNode.setAttribute('userName', this.buddyInfo.user);  
@@ -253,6 +259,7 @@ BuddyListControl.prototype.room2StandardContactList = function(roomContactList) 
     contact.subscriptionStatus = null;
     contact.subscriptionType = null;
     contact.user = contact.nickname + '@' +  mainServiceName;
+    contact.fullName = roomContactList[i].fullName;
     contactList.push(contact);
   }
   return contactList;

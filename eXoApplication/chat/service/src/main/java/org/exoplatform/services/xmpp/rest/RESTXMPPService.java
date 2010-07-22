@@ -37,6 +37,8 @@ import java.util.UUID;
 import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.common.http.HTTPStatus;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.services.rest.CacheControl;
@@ -563,11 +565,26 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    */
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/xmpp/muc/invite/{username}/{invitee}/")
+  @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response inviteToRoom(@URIParam("username") String username,
                                @URIParam("invitee") String invitee,
                                @QueryParam("room") String room,
                                @QueryParam("reason") String reason) {
     if (this.rb == null) loadResourceBundle();
+    
+    // 09/06/2010 add start
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    UserInfoService organization = (UserInfoService) container.getComponentInstanceOfType(UserInfoService.class);
+    
+    InitInfoBean inviteeBean = new InitInfoBean();
+    
+    ContactBean inviteeProfile = new ContactBean();
+    inviteeProfile.setUser(invitee);
+    UserInfo inviteeInfo = organization.getUserInfo(invitee);
+    inviteeProfile.setFullName(inviteeInfo.getFirstName() + " " + inviteeInfo.getLastName());
+    inviteeBean.setMyProfile(inviteeProfile);
+    // 09/06/2010 add end
+    
     if (room == null)
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                              .errorMessage(rb.getString("chat.message.roomid.null"))
@@ -575,8 +592,8 @@ public class RESTXMPPService implements ResourceContainer, Startable {
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
-        if (session.inviteToRoom(room, invitee, reason))
-          return Response.Builder.ok().cacheControl(cc).build();
+    	if (session.inviteToRoom(room, invitee, reason))
+            return Response.Builder.ok(inviteeBean, JSON_CONTENT_TYPE).cacheControl(cc).build(); // 09/06/2010 DungLV modify
         return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)//.errorMessage()
                                .cacheControl(cc)
                                .build();
@@ -1691,6 +1708,15 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         initInfoBean.setRoster(list) ;
       } catch (Exception e) { }
   
+      ContactBean myProfile = new ContactBean();
+      myProfile.setUser(username);
+      UserInfo myInfo = organization.getUserInfo(username);
+      myProfile.setFullName(myInfo.getFirstName() + " " + myInfo.getLastName());
+      initInfoBean.setMyProfile(myProfile);
+      
+      // Add 17/06
+      session.addFullUserNames(username, myProfile.getFullName());
+      
       initInfoBean.setSearchServicesNames(services);
       initInfoBean.setHostedRooms(rooms);
       initInfoBean.setTotalRooms(rooms.size());

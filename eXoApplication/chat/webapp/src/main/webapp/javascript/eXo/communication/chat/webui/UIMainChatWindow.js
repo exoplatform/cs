@@ -351,6 +351,8 @@ UIMainChatWindow.prototype.unsubscribeCometdTopics = function() {
   Cometd.unsubscribe('/eXo/Application/Chat/subscription');
 
   Cometd.unsubscribe('/eXo/Application/Chat/FileExchange');
+  
+  Cometd.unsubscribe('/eXo/Application/Chat/fullnameExchange');
 }
 
 /**
@@ -385,6 +387,12 @@ UIMainChatWindow.prototype.subscribeCometdTopics = function() {
   Cometd.subscribe('/eXo/Application/Chat/FileExchange', function(eventObj) {
     eXo.communication.chat.webui.UIMainChatWindow.fileExchangeListener(eventObj);
   });
+  
+  // Add 17/06
+  Cometd.subscribe('/eXo/Application/Chat/fullnameExchange', function(eventObj) {
+    eXo.communication.chatbar.webui.UIMainChatWindow.updateFullNameMap(eventObj);
+  });
+  //Add 17/06
 };
 
 /**
@@ -548,6 +556,11 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
       break;
 
     case this.GET_ROOM_INFO_ACTION:
+	  // 09/06/2010 add start
+      for (var i=0; i<serverData.occupants.length; i++) {
+    	  eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.occupants[i].nick] = serverData.occupants[i].fullName;	
+      }
+      // 09/06/2010 add end
       this.UIChatWindow.roomInfoEventFired(serverData);
       break;
 
@@ -587,6 +600,12 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
     case this.SEND_MESSAGE_ACTION:
       break;
 
+    // 09/06/2010 add start
+    case this.INVITE_JOIN_ROOM_ACTION:
+      eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.myProfile.user] = serverData.myProfile.fullName ;	
+      break;  
+    // 09/06/2010 add end
+      
     case this.LOGOUT_ACTION:
       this.postChangeStatus(this.OFFLINE_STATUS);
       this.UIChatWindow.destroySession();
@@ -754,6 +773,16 @@ UIMainChatWindow.prototype.fileExchangeListener = function(eventObj) {
 };
 
 /**
+ * A Cometd listener for update fullName.
+ * All cometd notify about update fullName will be call this function.
+ */
+UIMainChatWindow.prototype.updateFullNameMap = function(eventObj) {
+  var eventId = 'updateFullNameMapCometdEvent_' + (new Date()).getTime();
+  this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
+  eXo.communication.chatbar.webui.UIMainChatWindow.processUpdateFullNameMap(eventId);
+};
+
+/**
  * A Cometd listener for message.
  * All cometd notify about message will be call this function.
  */
@@ -892,6 +921,23 @@ UIMainChatWindow.prototype.processFileExchange = function(eventId) {
   if (serverData.fileEvents) {
     this.UIChatWindow.fileExchangeEventFire(serverData.fileEvents);
   }
+  this.serverDataStack[eventId] = null;
+};
+
+/**
+ * Process update fullNameMap event come from Cometd notification
+ */
+UIMainChatWindow.prototype.processUpdateFullNameMap = function(eventId) {
+  var serverData = this.serverDataStack[eventId];
+  window.jsconsole.debug('UpdateFullNameMap event: id:= ' + eventId, serverData);
+  if (!serverData) {
+    this.serverDataStack[eventId] = null;
+  }
+  
+  for (var i=0; i<serverData.occupants.length; i++) {
+	  eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.occupants[i].nick] = serverData.occupants[i].fullName;
+  }
+  
   this.serverDataStack[eventId] = null;
 };
 
@@ -1083,6 +1129,8 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
       if (this.serverInfo.roster) {
         this.buddyListControlObj.build(this.serverInfo.roster);
       }
+      
+      eXo.communication.chat.webui.UIChatWindow.fullNameMap[this.serverInfo.myProfile.user] = this.serverInfo.myProfile.fullName ;
       
       this.subscribeCometdTopics();
 

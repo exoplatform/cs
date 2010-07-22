@@ -111,6 +111,7 @@ UITabControl.prototype.userLeftRoomEventFired = function(user) {
  */
 UITabControl.prototype.userJoinRoomEventFired = function(user) {
   var userName = user.substr(user.indexOf('/') + 1, user.length-1);
+  var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[userName];
   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
   var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', userName);
   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
@@ -118,6 +119,7 @@ UITabControl.prototype.userJoinRoomEventFired = function(user) {
   var buddyInfo = {
     presence           : {from: user,mode: null, status: null, type: 'available'},
     nickname           : user,
+    fullName		   : fullName,
     groups             : [],
     subscriptionStatus : null,
     subscriptionType   : null,
@@ -661,10 +663,17 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
     messageNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.guestMessage);
   }
   var msgTitleNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatIconStatus);
-  if (buddyId.length > this.MAX_MSG_TITLE_LEN) {
-    msgTitleNode.innerHTML = buddyId.substr(0, this.MAX_MSG_TITLE_LEN - 3) + '...';
+  var fullNameMap = eXo.communication.chat.webui.UIChatWindow.fullNameMap ;
+  var fullName = buddyId;
+  if(fullName.indexOf('@') >= 0)
+    fullName = fullName.substr(0, fullName.indexOf('@'));
+  if(fullNameMap[fullName] != null) {
+    fullName = fullNameMap[fullName] ;
+  }
+  if(fullName.length > this.MAX_TAB_TITLE_LEN) {
+    msgTitleNode.innerHTML = fullName.substr(0, this.MAX_TAB_TITLE_LEN - 3) + '...';
   } else {
-    msgTitleNode.innerHTML = buddyId;
+	msgTitleNode.innerHTML = fullName ;
   }
   var chatTimeNode = DOMUtil.findFirstDescendantByClass(messageNode, 'div', this.CSS_CLASS.chatTimeCenter);
   if (this.updatingHistoryMessage ||

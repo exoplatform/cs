@@ -40,6 +40,8 @@ import javax.jcr.RepositoryException;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
 import org.apache.poi.hdf.event.EventBridge;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
@@ -63,6 +65,7 @@ import org.exoplatform.services.xmpp.bean.InviteBean;
 import org.exoplatform.services.xmpp.bean.KickedBannedBean;
 import org.exoplatform.services.xmpp.bean.MUCPacketBean;
 import org.exoplatform.services.xmpp.bean.MessageBean;
+import org.exoplatform.services.xmpp.bean.OccupantBean;
 import org.exoplatform.services.xmpp.bean.PresenceBean;
 import org.exoplatform.services.xmpp.bean.PrivilegeChangeBean;
 import org.exoplatform.services.xmpp.bean.SubjectChangeBean;
@@ -86,6 +89,7 @@ import org.exoplatform.services.xmpp.util.CodingUtils;
 import org.exoplatform.services.xmpp.util.TransformUtils;
 import org.exoplatform.services.xmpp.util.XMPPConnectionUtils;
 import org.exoplatform.ws.frameworks.cometd.transport.ContinuationServiceDelegate;
+import org.exoplatform.ws.frameworks.json.impl.JsonException;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
 import org.jivesoftware.smack.PacketInterceptor;
@@ -217,6 +221,8 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
 
   private final static String   ASCENDING         = "asc";
   
+  private static ArrayList<OccupantBean> beanList = null;
+  
   private final DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
   
   
@@ -231,6 +237,10 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
                             final ContinuationServiceDelegate delegate,
                             final HistoryImpl history,
                             final ResourceBundle rb) throws XMPPException {
+	// 17/06/2010 add start
+	if (beanList == null) beanList = new ArrayList<OccupantBean>();
+	// 17/06/2010 add end  
+	  
     XMPPConnection.DEBUG_ENABLED = true;
     this.delegate_ = delegate;
     this.history_ = history;
@@ -1242,12 +1252,36 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
     return false;
   }
 
+  //17/06/2010 add start
+  public void addFullUserNames(String userName, String fullUserName) {
+  	OccupantBean bean = new OccupantBean();
+  	bean.setFullName(fullUserName);
+  	bean.setNick(userName);
+  	beanList.add(bean);
+  }
+  //17/06/2010 add end
+  
   /**
    * {@inheritDoc}
    */
   public void joinRoom(String room, String nickname, String password) throws XMPPException {
-    if (nickname == null)
-      nickname = username_;
+	// 17/06/2010 add start
+	JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+	
+	FullRoomInfoBean infoBean = new FullRoomInfoBean();
+	infoBean.setOccupants(beanList);
+		  
+	try {
+		JsonValue json = generatorImpl.createJsonObject(infoBean);
+		for(OccupantBean bean : beanList) {
+			delegate_.sendMessage(bean.getNick(), CometdChannels.FULLNAME_EXCHANGE, json.toString(), null);
+		}
+	} catch (JsonException e) {
+	}
+	// 17/06/2010 add end
+	
+	if (nickname == null)
+    nickname = username_;
     MultiUserChat chat = getMultiUserChat(room);
     if (chat == null) {
       String roomJID = validateRoomJID(room);
@@ -1366,14 +1400,24 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
    * {@inheritDoc}
    */
   public FullRoomInfoBean getRoomInfoBean(String room) throws XMPPException {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    UserInfoService organization = (UserInfoService) container.getComponentInstanceOfType(UserInfoService.class);
     MultiUserChat chat = getMultiUserChat(room);
     if (chat != null) {
       RoomInfo roomInfo = MultiUserChat.getRoomInfo(connection_, chat.getRoom());
-      Collection<Occupant> occupants = new ArrayList<Occupant>();
+      Collection<OccupantBean> occupants = new ArrayList<OccupantBean>();
       Iterator<String> occ = chat.getOccupants();
       while (occ.hasNext()) {
         String user = (String) occ.next();
-        occupants.add(chat.getOccupant(user));
+        Occupant occupant = chat.getOccupant(user);
+        OccupantBean occupantBean = new OccupantBean();
+        occupantBean.setAffiliation(occupant.getAffiliation());
+        occupantBean.setJid(occupant.getJid());
+        occupantBean.setNick(occupant.getNick());
+        occupantBean.setRole(occupant.getRole());
+        UserInfo userInfo = organization.getUserInfo(occupant.getNick());
+        occupantBean.setFullName(userInfo.getFirstName() + " " + userInfo.getLastName());
+        occupants.add(occupantBean);
       }
       FullRoomInfoBean infoBean = new FullRoomInfoBean(occupants, roomInfo);
       return infoBean;
