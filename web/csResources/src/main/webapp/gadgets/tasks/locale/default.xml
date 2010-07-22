@@ -20,6 +20,9 @@
 -->
 
 <messagebundle>
+	<msg name="title">
+  	My Task
+  </msg>
 	<msg name="baseurl">
   	Base url
   </msg>

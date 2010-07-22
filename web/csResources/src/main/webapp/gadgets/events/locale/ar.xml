@@ -19,7 +19,10 @@
 
 -->
 
-<messagebundle>  
+<messagebundle>
+	<msg name="title">
+  	Upcoming Events
+  </msg>
 	<msg name="baseurl">
   	Base url
   </msg>

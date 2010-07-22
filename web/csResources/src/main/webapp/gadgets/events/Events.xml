@@ -23,8 +23,12 @@
   <Content type="html">
     <![CDATA[  
       <div class="Container">
+				<div class="TitleContainer">
+					<div class="Title">__MSG_title__</div>
+					<a id="showall" href="/calendar" target="top">__MSG_showall__</a>
+					<div style="clear:both;"><span></span></div>
+				</div>
 				<div id="container"><span></span></div>
-				<div class="ShowAll"><a id="showall" href="/calendar" target="top">__MSG_showall__</a></div>
 			</div>
 			<div id="detail" style="display:none;"><span></span></div>
       <style type="text/css">
@@ -34,11 +38,7 @@
 			}
 			.Container a {
 				text-decoration:none;
-			}
-			.Container .ShowAll{
-				text-align:right;
-			}
-			
+			}			
 			.Container li.EventItem {
 				padding: 3px 0px 3px 20px;
 				background: url(/csResources/gadgets/events/skin/event.png) no-repeat top left;
@@ -48,6 +48,22 @@
 				margin: 0px;
 				padding-left: 10px;
 				list-style-type:none;
+			}
+			.Container .TitleContainer{
+				border-bottom: #FFCF01 5px solid;
+				font-weight:bold;
+				padding: 3px 0px;
+				margin-bottom:5px;
+			}
+			.Container .TitleContainer .Title{				
+				float:left;
+			}
+			.Container .TitleContainer a{				
+				float:right;
+			}
+			.Container .Warning{				
+				text-align:center;
+				color:red;
 			}
       </style>
   
@@ -185,7 +201,7 @@
 				function setLink(){
 					var prefs = new gadgets.Prefs();
 					var url   = prefs.getString("url");
-					var baseUrl = top.location.host + parent.eXo.env.portal.context + "/" + parent.eXo.env.portal.accessMode + "/" + parent.eXo.env.portal.portalName;
+					var baseUrl = "http://" +  top.location.host + parent.eXo.env.portal.context + "/" + parent.eXo.env.portal.accessMode + "/" + parent.eXo.env.portal.portalName;
 
 					var a = document.getElementById("showall");
 					url = (url)?baseUrl + url: baseUrl + "/calendar";
@@ -256,7 +272,7 @@
 				  request.setRequestHeader("Cache-Control", "max-age=86400") ;
 				  request.send(null) ;
 					request.onreadystatechange = function(){
-						if(request.readyState == 4 && request.status == 200){
+						if(request.readyState == 4 && (request.status == 200 || request.status == 204)){
 							callback(gadgets.json.parse(request.responseText));
 						}
 					}					
@@ -264,6 +280,7 @@
 				function notify(){
 					var msg = gadgets.Prefs().getMsg("noevent");
 					document.getElementById("container").innerHTML = '<div class="Warning">' + msg + '</div>';
+					setLink();
 				}
         gadgets.util.registerOnLoadHandler(onLoadHander);
       </script>

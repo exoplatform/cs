@@ -20,7 +20,10 @@
 -->
 
 <messagebundle>
-  <msg name="baseurl">
+  <msg name="title">
+  	Upcoming Events
+  </msg>
+	<msg name="baseurl">
   	Base url
   </msg>
 	<msg name="subscribeurl">
