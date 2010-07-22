@@ -124,7 +124,9 @@
                                 <div class="LeftIconButton">
                                     <div class="RightIconButton">
                                         <div class="CenterIconButton">
-                                            <a class="IconHolder ContactManageIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.addContact");%>"><%=_ctx.appRes("UIChatBarPortlet.label.contacts");%></a>
+                                      <!--      <a class="IconHolder ContactManageIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.addContact");%>"><%=_ctx.appRes("UIChatBarPortlet.label.contacts");%></a> 
+									  -->
+											<a class="IconHolder ContactManageIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.addContact");%>"></a> 
                                         </div>
                                     </div>
                                 </div>
@@ -268,12 +270,21 @@
                                 <span></span>
                             </div>
                         </div>
-                        <div style="padding: 5px 5px 0px 0px; display: none;">
+                        
+						<!-- writed by hoa.do --> 
+						<div class="LContent">
+							<a class="ItemBar Email" href="#"></a>
+							<a class="ItemBar Contact" href="#"></a>
+							<a class="ItemBar Calendar" href="#"></a>
+						</div>
+						<!-- end -->
+						<div class="Copyright">Powered by eXoplatform</div>
+						<div style="padding: 5px 5px 0px 0px; display: none;">
                             <div class="FilterField">
                                 <span></span>
                             </div>
                         </div>
-                        <div class="ClearRight">
+                        <div class="ClearBoth">
                             <span></span>
                         </div>
                     </div>
