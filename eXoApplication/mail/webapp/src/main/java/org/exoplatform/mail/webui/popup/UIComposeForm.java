@@ -356,7 +356,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       }
       break;
     case MESSAGE_REPLY :
-      setFieldToValue(msg.getReplyTo());
+      setFieldToValue(msg.getReplyTo()==null? msg.getFrom():msg.getReplyTo());
       subject = msg.getSubject();
       if (!subject.toLowerCase().startsWith("re:")) subject = "Re: " + subject ;
       setFieldSubjectValue(subject);
@@ -386,7 +386,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       subject = msg.getSubject();
       if (!subject.toLowerCase().startsWith("re:")) subject = "Re: " + subject ;
       setFieldSubjectValue(subject);
-      String replyTo = msg.getReplyTo();
+      String replyTo = msg.getReplyTo()==null? msg.getFrom():msg.getReplyTo();
       setFieldToValue(replyTo);
       setPriority(msg.getPriority());
       
