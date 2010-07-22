@@ -1,0 +1,22 @@
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIComposeForm.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIComposeForm.java	(revision 48696)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIComposeForm.java	(working copy)
+@@ -356,7 +356,7 @@
+       }
+       break;
+     case MESSAGE_REPLY :
+-      setFieldToValue(msg.getReplyTo());
++      setFieldToValue(msg.getReplyTo()==null? msg.getFrom():msg.getReplyTo());
+       subject = msg.getSubject();
+       if (!subject.toLowerCase().startsWith("re:")) subject = "Re: " + subject ;
+       setFieldSubjectValue(subject);
+@@ -386,7 +386,7 @@
+       subject = msg.getSubject();
+       if (!subject.toLowerCase().startsWith("re:")) subject = "Re: " + subject ;
+       setFieldSubjectValue(subject);
+-      String replyTo = msg.getReplyTo();
++      String replyTo = msg.getReplyTo()==null? msg.getFrom():msg.getReplyTo();
+       setFieldToValue(replyTo);
+       setPriority(msg.getPriority());
+       
