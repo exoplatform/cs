@@ -546,7 +546,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       Node publicContactHome = getPersonalContactsHome(username);
       for(Contact contact : contacts) {
         if(addressType.equals(PERSONAL)) {        
-          saveContact(username, contact, false) ;
+          saveContactUser(username, contact, false) ;
         }else if(addressType.equals(SHARED)) {
          //CS-2389
          if (!haveEditPermissionOnAddressBook(username, contact.getAddressBookIds()[0]) || 
@@ -595,10 +595,16 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    * @see org.exoplatform.contact.service.impl.DataStorage#saveContact(java.lang.String, org.exoplatform.contact.service.Contact, boolean)
    */
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
-     
       Node contactHomeNode = getPersonalContactsHome(username);
       contactToNode(contactHomeNode, contact, isNew);
       contactHomeNode.getSession().save();
+      contactHomeNode.getSession().logout();
+  }
+
+  private void saveContactUser(String username, Contact contact, boolean isNew) throws Exception {
+  	Node contactHomeNode = getPersonalContactsHome(username);
+  	contactToNode(contactHomeNode, contact, isNew);
+  	contactHomeNode.getSession().save();
   }
 
   /* (non-Javadoc)
@@ -2291,7 +2297,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         contact.setAddressBookIds(groupIds.toArray(new String[] {})) ;
         contact.setOwner(true) ;
         contact.setOwnerId(user.getUserName()) ;
-        saveContact(user.getUserName(), contact, true) ;
+        saveContactUser(user.getUserName(), contact, true) ;
         QueryManager qm = getSession(createSystemProvider()).getWorkspace().getQueryManager();
         String usersPath = nodeHierarchyCreator_.getJcrPath(DataStorage.USERS_PATH) ;
         List<String> recievedUser = new ArrayList<String>() ;
@@ -2330,7 +2336,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         userApp.getSession().save() ;
       } else {
         if (contact != null) {
-          saveContact(user.getUserName(), contact, false) ; 
+          saveContactUser(user.getUserName(), contact, false) ; 
         }
       }
   }  
@@ -2386,7 +2392,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         contact.setFullName(name) ;
         contact.setEmailAddress(email) ;
         contact.setAddressBookIds(new String[] {NewUserListener.ADDRESSESGROUP + username}) ;
-        saveContact(username, contact, true) ;
+        saveContactUser(username, contact, true) ;
       }
     }
   } 
