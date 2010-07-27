@@ -165,7 +165,7 @@ public class MessageFilter {
   
   public boolean hasStructure() { return hasStructure_ ; }
   public void setHasStructure(boolean hasStructure) { this.hasStructure_ = hasStructure ; }
-  
+    
   public String getStatement() throws Exception{
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountPath_ + "//element(*,exo:message)");
     boolean hasConjuntion = false ;
@@ -180,8 +180,12 @@ public class MessageFilter {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;    
       for(int i = 0; i < excludeFolders_.length; i ++) {
-        if(i == 0) stringBuffer.append("@exo:folders!='" + excludeFolders_[i] +"'") ;
-        else stringBuffer.append(" and @exo:folders!='" + excludeFolders_[i] +"'") ;
+        if (excludeFolders_[i] != null && excludeFolders_[i].trim().length() > 0) {
+          if (i == 0)
+            stringBuffer.append("@exo:folders!='" + excludeFolders_[i] + "'");
+          else
+            stringBuffer.append(" and @exo:folders!='" + excludeFolders_[i] + "'");
+        }
       }
       stringBuffer.append(")") ;
       hasConjuntion = true ;
@@ -191,8 +195,13 @@ public class MessageFilter {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;    
       for(int i = 0; i < folders_.length; i ++) {
-        if(i == 0) stringBuffer.append("@exo:folders='" + folders_[i] +"'") ;
-        else stringBuffer.append(" or @exo:folders='" + folders_[i] +"'") ;
+        if (folders_[i] != null && folders_[i].trim().length() > 0) {
+          if (i == 0)
+            stringBuffer.append("fn:upper-case(@exo:folders)='" + folders_[i].toUpperCase() + "'");
+          else
+            stringBuffer.append(" or fn:upper-case(@exo:folders)='" + folders_[i].toUpperCase()
+                + "'");
+        }
       }
       stringBuffer.append(")") ;
       hasConjuntion = true ;
@@ -202,8 +211,12 @@ public class MessageFilter {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
       for(int i = 0; i < tags_.length; i ++) {
-        if(i == 0) stringBuffer.append("@exo:tags='" + tags_[i] +"'") ;
-        else stringBuffer.append(" or @exo:tags='" + tags_[i] +"'") ;
+        if (tags_[i] != null && tags_[i].trim().length() > 0) {
+          if (i == 0)
+            stringBuffer.append("fn:upper-case(@exo:tags)='" + tags_[i].toUpperCase() + "'");
+          else
+            stringBuffer.append(" or fn:upper-case(@exo:tags)='" + tags_[i].toUpperCase() + "'");
+        }
       }
       stringBuffer.append(")") ;
       hasConjuntion = true ;
@@ -214,22 +227,22 @@ public class MessageFilter {
       else stringBuffer.append("(") ;
       switch (getFromCondition()) {
         case Utils.CONDITION_CONTAIN :
-          stringBuffer.append(" jcr:like(@exo:from, '%" + from_ + "%')") ;
+          stringBuffer.append(" jcr:like(fn:upper-case(@exo:from), '%" + from_.toUpperCase() + "%')") ;
           break;
         case Utils.CONDITION_NOT_CONTAIN :
-          stringBuffer.append(" fn:not(jcr:like(@exo:from, '%" + from_ + "%'))") ;
+          stringBuffer.append(" fn:not(jcr:like(fn:upper-case(@exo:from), '%" + from_.toUpperCase() + "%'))") ;
           break;
         case Utils.CONDITION_IS :
-          stringBuffer.append(" @exo:from = '" + from_ + "'") ;
+          stringBuffer.append(" fn:upper-case(@exo:from) = '" + from_.toUpperCase() + "'") ;
           break ;
         case Utils.CONDITION_NOT_IS :
-          stringBuffer.append(" @exo:from != '" + from_ + "'") ;
+          stringBuffer.append(" fn:upper-case(@exo:from) != '" + from_.toUpperCase() + "'") ;
           break;
         case Utils.CONDITION_STARTS_WITH :
-          stringBuffer.append(" jcr:like(@exo:from, '" + from_ + "%')") ;
+          stringBuffer.append(" jcr:like(fn:upper-case(@exo:from), '" + from_.toUpperCase() + "%')") ;
           break;
         case Utils.CONDITION_ENDS_WITH :
-          stringBuffer.append(" jcr:like(@exo:from, '%" + from_ + "')") ;
+          stringBuffer.append(" jcr:like(fn:upper-case(@exo:from), '%" + from_.toUpperCase() + "')") ;
           break;
       }
       stringBuffer.append(")") ;
@@ -241,22 +254,22 @@ public class MessageFilter {
       else stringBuffer.append("(") ;
       switch (getToCondition()) {
         case Utils.CONDITION_CONTAIN :
-          stringBuffer.append(" jcr:like(@exo:to, '%" + to_ + "%')") ;
+          stringBuffer.append(" jcr:like(fn:upper-case(@exo:to), '%" + to_.toUpperCase() + "%')") ;
           break;
         case Utils.CONDITION_NOT_CONTAIN :
-          stringBuffer.append(" fn:not(jcr:like(@exo:to, '%" + to_ + "%'))") ;
+          stringBuffer.append(" fn:not(jcr:like(fn:upper-case(@exo:to), '%" + to_.toUpperCase() + "%'))") ;
           break;
         case Utils.CONDITION_IS :
-          stringBuffer.append(" @exo:to = '" + to_ + "'") ;
+          stringBuffer.append(" fn:upper-case(@exo:to) = '" + to_.toUpperCase() + "'") ;
           break ;
         case Utils.CONDITION_NOT_IS :
-          stringBuffer.append(" @exo:to != '" + to_ + "'") ;
+          stringBuffer.append(" fn:upper-case(@exo:to) != '" + to_.toUpperCase() + "'") ;
           break;
         case Utils.CONDITION_STARTS_WITH :
-          stringBuffer.append(" jcr:like(@exo:to, '" + to_ + "%')") ;
+          stringBuffer.append(" jcr:like(fn:upper-case(@exo:to), '" + to_.toUpperCase() + "%')") ;
           break;
         case Utils.CONDITION_ENDS_WITH :
-          stringBuffer.append(" jcr:like(@exo:to, '%" + to_ + "')") ;
+          stringBuffer.append(" jcr:like(fn:upper-case(@exo:to), '%" + to_.toUpperCase() + "')") ;
           break;
       }
       stringBuffer.append(")") ;
@@ -276,16 +289,16 @@ public class MessageFilter {
           stringBuffer.append(" fn:not(jcr:contains(@exo:subject, '" + subject_ + "'))") ;
           break;
         case Utils.CONDITION_IS :
-          stringBuffer.append(" @exo:subject = '" + subject_ + "'") ;
+          stringBuffer.append(" fn:upper-case(@exo:subject) = '" + subject_.toUpperCase() + "'") ;
           break ;
         case Utils.CONDITION_NOT_IS :
-          stringBuffer.append(" @exo:subject != '" + subject_ + "'") ;
+          stringBuffer.append(" fn:upper-case(@exo:subject) != '" + subject_.toUpperCase() + "'") ;
           break;
         case Utils.CONDITION_STARTS_WITH :
-          stringBuffer.append(" jcr:like(@exo:subject, '" + subject_ + "%')") ;
+          stringBuffer.append(" jcr:like(fn:upper-case(@exo:subject), '" + subject_.toUpperCase() + "%')") ;
           break;
         case Utils.CONDITION_ENDS_WITH :
-          stringBuffer.append(" jcr:like(@exo:subject, '%" + subject_ + "')") ;
+          stringBuffer.append(" jcr:like(fn:upper-case(@exo:subject), '%" + subject_.toUpperCase() + "')") ;
           break;
       }
       stringBuffer.append(")") ;
