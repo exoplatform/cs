@@ -956,7 +956,7 @@ UIChatWindow.prototype.onReload = function(eventData) {
     window.jsconsole.warn('Focus tab: ' + thys._getOption('activeTabId'));
     var activeTabId = thys._getOption('activeTabId');
     if (!activeTabId ||
-        !thys.tabControlList[thys.getTabId(activeTabId)]) {
+        !thys.tabControlList[activeTabId]) {
       activeTabId = thys.getTabId(tabList[tabList.length - 1].targetPerson).id;
     }
     if (thys.rootNode.offsetHeight > 0) {
@@ -1039,8 +1039,10 @@ UIChatWindow.prototype.createNewTab = function(targetPerson, isGroupChat, tabSta
     }
     if(tabState.messages)
       uiTabControlObj.messagesBoxNode.innerHTML = tabState.messages;
-    if(tabState.unreadMessageCnt)
+    if(tabState.unreadMessageCnt){
       uiTabControlObj.unreadMessageCnt = tabState.unreadMessageCnt;
+      uiTabControlObj.updateUnreadMessage();
+    }
   }
   return uiTabControlObj;
 };
@@ -1172,10 +1174,10 @@ UIChatWindow.prototype.displayMessage = function(targetPerson, msg, isGroupChat)
 UIChatWindow.prototype.updateUnreadMessage = function() {
   var DOMUtil = eXo.core.DOMUtil;
   var unreadMessageNode = null;
-  var unreadMessageCnt = 0;
+  this.unreadMessageCnt = 0;
   for (var item in this.tabControlList) {
     if (this.tabControlList[item] instanceof UITabControl) {
-      unreadMessageCnt += this.tabControlList[item].unreadMessageCnt;
+      this.unreadMessageCnt += this.tabControlList[item].unreadMessageCnt;
     }
   }
   if (this._isVisible()) {
