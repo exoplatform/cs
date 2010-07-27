@@ -216,7 +216,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
           String attLink = MailUtils.getImageSource(attach, getDownloadService());
           if (attLink != null && attach.getMimeType().toLowerCase().indexOf("image") > -1
               && attach.isShownInBody()) {
-            attLink = "/" + getPortalName() + "/rest/jcr/" + getRepository() + attach.getPath();
+           // attLink = "/" + getPortalName() + "/rest/jcr/" + getRepository() + attach.getPath();
+            attLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" + getRepository() + attach.getPath() ;
             imgLinks.add(attLink);
           }
         }
