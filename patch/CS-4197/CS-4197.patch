@@ -1,0 +1,15 @@
+Index: web/csportal/src/main/webapp/WEB-INF/conf/cs/cs-plugins-configuration.xml
+===================================================================
+--- web/csportal/src/main/webapp/WEB-INF/conf/cs/cs-plugins-configuration.xml	(revision 49650)
++++ web/csportal/src/main/webapp/WEB-INF/conf/cs/cs-plugins-configuration.xml	(working copy)
+@@ -46,8 +46,8 @@
+           <name>reminder.info</name>
+           <description>save the monitor data  periodically</description>
+           <property name="timeZone" value="This is TimeZone"/>          
+-          <property name="account" value="exoservice@gmail.com"/>          
+-          <property name="password" value="exoadmin"/>          
++          <property name="account" value=""/> <!-- name of email account. For example: abcxyz@gmail.com -->          
++          <property name="password" value=""/> <!-- password of email account -->
+ 		  		<property name="ssl" value="true"/> 
+           <property name="outgoing" value="smtp.gmail.com"/>          
+           <property name="port" value="465"/>          
