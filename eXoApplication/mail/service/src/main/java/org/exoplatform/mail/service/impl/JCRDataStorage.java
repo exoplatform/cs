@@ -18,7 +18,6 @@ package org.exoplatform.mail.service.impl;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -1100,22 +1099,20 @@ public class JCRDataStorage implements DataStorage {
                        continuation,
                        saveTotal);
   }
-
+  
+  /**
+   *return true if the message has not attachment, false if else **/
   private boolean checkHasAttachment(javax.mail.Message message) {
-    Object obj;
-    boolean result = false;
     try {
-      obj = message.getContent();
+      Object obj = message.getContent();
       if (obj instanceof Multipart) {
         Multipart multipart = (Multipart) obj;
         int partCount = multipart.getCount();
         for (int i = 0; i < partCount; i++) {
           BodyPart part = multipart.getBodyPart(i);
           String disposition = part.getDisposition();
-          if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
-            result = true;
-            break;
-          }
+          if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT))
+            return true;
         }
       }
     } catch (IOException e) {
@@ -1123,9 +1120,10 @@ public class JCRDataStorage implements DataStorage {
     } catch (MessagingException e) {
       logger.debug("MessagingException: " + e.getMessage());
     }
-    return result;
+    return false;
   }
-
+  
+  @SuppressWarnings("unchecked")
   public boolean saveMessage(String username,
                              String accId,
                              long[] msgUID,
@@ -1264,9 +1262,8 @@ public class JCRDataStorage implements DataStorage {
         long priority = MimeMessageParser.getPriority(msg);
         node.setProperty(Utils.EXO_PRIORITY, priority);
         node.setProperty(Utils.EXO_HASATTACH, this.checkHasAttachment(msg));
-
         node.save();
-
+      
         if (infoObj != null && continuation != null) {
           infoObj.setFrom(from);
           infoObj.setMsgId(msgId);
@@ -1534,19 +1531,14 @@ public class JCRDataStorage implements DataStorage {
         }
         nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
         if ((disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)))
-          node.setProperty(Utils.EXO_HASATTACH, true);  
+          node.setProperty(Utils.EXO_HASATTACH, true);
         else node.setProperty(Utils.EXO_HASATTACH, false);
       }
     } catch (Exception e) {
     }
     return body;
   }
-
-/*  private StringBuffer appendPicsInBody(Part part, StringBuffer body){
-      String imgLink = MailUtils.getIMGLinkResource(part);
-      
-  }
-*/  
+  
   public StringBuffer getNestedMessageBody(Part part, Node node, StringBuffer body) throws Exception {
     try {
       body = setPart((Part) part.getContent(), node, body);
@@ -2946,7 +2938,6 @@ public class JCRDataStorage implements DataStorage {
         }
         if (messageNode.hasNode(Utils.KEY_ATTACHMENT)) {
           NodeIterator msgAttachmentIt = messageNode.getNode(Utils.KEY_ATTACHMENT).getNodes();
-          attachments = new ArrayList<Attachment>();
           while (msgAttachmentIt.hasNext()) {
             Node node = msgAttachmentIt.nextNode();
             if (node.isNodeType(Utils.EXO_MAIL_ATTACHMENT)) {
@@ -2967,12 +2958,10 @@ public class JCRDataStorage implements DataStorage {
             }
           }
        }
-     
        if(attachments.size() > 0){
-        msg.setHasAttachment(true);
-        msg.setAttachements(attachments);
+         msg.setAttachements(attachments);
+        if( !checkImgShowInBody(attachments)) msg.setHasAttachment(true);
        }
-       
       } catch (PathNotFoundException e) {
         logger.debug("[EXO WARNING] PathNotFoundException when load attachment");
       }
@@ -2980,6 +2969,15 @@ public class JCRDataStorage implements DataStorage {
     } finally {
       closeSessionProvider(sProvider);
     }
+  }
+  
+  private boolean checkImgShowInBody(List<Attachment> atts){
+    if(atts.size() > 0){
+      for(Attachment att : atts)
+        if(!att.isShownInBody()) return false;
+    }
+    
+    return true;
   }
   
   public Message loadTotalMessage(String username, String accountId, Message msg) throws Exception {

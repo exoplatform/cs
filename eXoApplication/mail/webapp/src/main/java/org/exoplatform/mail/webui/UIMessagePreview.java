@@ -630,4 +630,14 @@ public class UIMessagePreview extends UIComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview.getParent()) ;
     }
   }
+  
+  public boolean isShowPicInBody(Message msg){
+    List<Attachment> atts = msg.getAttachments();
+    if(atts != null && atts.size()>0){
+      for (Attachment attach : atts) {
+        if(!attach.isShownInBody()) return false; 
+      }  
+    }
+    return true;
+  }
 }
