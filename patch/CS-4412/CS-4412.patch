@@ -1,0 +1,1055 @@
+Index: eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/JCRDataStorage.java
+===================================================================
+--- eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/JCRDataStorage.java	(revision 49590)
++++ eXoApplication/calendar/service/src/main/java/org/exoplatform/calendar/service/impl/JCRDataStorage.java	(working copy)
+@@ -418,11 +418,11 @@
+   }  
+ 
+   public Calendar removeGroupCalendar(String calendarId) throws Exception {
+-    SessionProvider sProvider = createSystemProvider(); 
++//    SessionProvider sProvider = createSystemProvider(); 
+     // TODO : system session ensure we can remove the calendar, but it is not safe! 
+     // Anyone can remove the public calendar by calling the API
+ 
+-    Node calendarHome = getPublicCalendarHome(sProvider);
++    Node calendarHome = getPublicCalendarHome();
+     if (calendarHome.hasNode(calendarId)) {
+       Node calNode = calendarHome.getNode(calendarId);
+       Calendar calendar = getCalendar(new String[] { calendarId }, null, calNode, true);
+@@ -532,10 +532,9 @@
+   }  
+ 
+   public List<GroupCalendarData> getCalendarCategories(String username, boolean isShowAll) throws Exception {
+-    SessionProvider sProvider = createSessionProvider();
+     //try {
+     Node calendarHome = getUserCalendarHome(username);
+-    NodeIterator iter = getCalendarCategoryHome(sProvider, username).getNodes();
++    NodeIterator iter = getCalendarCategoryHome(null, username).getNodes();
+     List<GroupCalendarData> calendarCategories = new ArrayList<GroupCalendarData>();
+     List<Calendar> calendars;
+     calendarHome.getSession().refresh(false);
+@@ -573,8 +572,7 @@
+   }
+ 
+   public List<CalendarCategory> getCategories(String username) throws Exception {
+-    SessionProvider sProvider = createSessionProvider();
+-    Node calendarCategoryHome = getCalendarCategoryHome(sProvider, username) ;
++    Node calendarCategoryHome = getCalendarCategoryHome(null, username) ;
+     NodeIterator iter = calendarCategoryHome.getNodes() ;
+     List<CalendarCategory> calendarCategories = new ArrayList<CalendarCategory> () ;
+     while(iter.hasNext()) {
+@@ -1513,12 +1511,21 @@
+     }
+     return attachments ;
+   }
++  
+   public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception {
+     Node calendarHome = getUserCalendarServiceHome(username) ;
+     addCalendarSetting(calendarHome, setting) ;
+     calendarHome.save() ;
++    calendarHome.getSession().logout();
+   }
+ 
++  private void saveCalendarSetting(CalendarSetting setting, String username) throws Exception {
++  	Node calendarHome = getUserCalendarServiceHome(username) ;
++  	addCalendarSetting(calendarHome, setting) ;
++  	calendarHome.save() ;
++  }
++
++  
+   private void addCalendarSetting(Node calendarHome, CalendarSetting setting) throws Exception {
+     Node settingNode ;
+     try {
+@@ -1784,6 +1791,7 @@
+           feeds.add(feed) ;
+         }
+       }
++      rssHome.getSession().logout();
+     } catch (Exception e) {
+       log.debug(e);
+     }
+@@ -2150,11 +2158,11 @@
+     Query query ;
+     CalendarSetting calSetting = getCalendarSetting(username)  ;
+     SessionProvider systemSession = createSystemProvider() ;
+-    Node calendarHome = getUserCalendarHome(username) ;
+-    Node calendarShareNode = getSharedCalendarHome() ;
+-    Node publicCalHome = getPublicCalendarHome() ;
+-    QueryManager  qm = getSession(systemSession).getWorkspace().getQueryManager() ;
+     try {
++    	Node calendarHome = getUserCalendarHome(username) ;
++    	Node calendarShareNode = getSharedCalendarHome() ;
++    	Node publicCalHome = getPublicCalendarHome() ;
++    	QueryManager  qm = getSession(systemSession).getWorkspace().getQueryManager() ;
+       // private events
+       if(username != null && username.length() > 0) {
+         eventQuery.setCalendarPath(calendarHome.getPath()) ;
+@@ -2185,7 +2193,9 @@
+       mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterPublicCalendars()) ;
+     } catch (Exception e) {
+       e.printStackTrace() ;
+-    }  
++    } finally {
++    	systemSession.close();
++    }
+     return mapData ;    
+   }
+ 
+@@ -2268,7 +2278,7 @@
+         calColors.add(key + ":" +map.get(key)) ;
+       }
+       calSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
+-      saveCalendarSetting(user, calSetting) ;
++      saveCalendarSetting(calSetting, user) ;
+       try {
+         userNode = sharedCalendarHome.getNode(user) ;
+       } catch (Exception e) {
+@@ -2364,7 +2374,7 @@
+           }
+           calColors.add(calendar.getId()+Utils.COLON+calendar.getCalendarColor());
+           usCalSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
+-          saveCalendarSetting(username, usCalSetting) ;
++          saveCalendarSetting(usCalSetting, username) ;
+           calendarNode.save() ;
+           break ;
+         }
+@@ -2449,7 +2459,7 @@
+             calColors.add(key + ":" +map.get(key)) ;
+           }
+           calSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
+-          saveCalendarSetting(username, calSetting) ;
++          saveCalendarSetting(calSetting, username) ;
+           calendar.setProperty(Utils.EXO_SHARED_ID, newValues.toArray(new Value[newValues.size()])) ;
+           List<String> viewPerms = new ArrayList<String>() ;
+           if(calendar.hasProperty(Utils.EXO_VIEW_PERMISSIONS)) {
+Index: eXoApplication/contact/service/src/main/java/org/exoplatform/contact/service/impl/JCRDataStorage.java
+===================================================================
+--- eXoApplication/contact/service/src/main/java/org/exoplatform/contact/service/impl/JCRDataStorage.java	(revision 49590)
++++ eXoApplication/contact/service/src/main/java/org/exoplatform/contact/service/impl/JCRDataStorage.java	(working copy)
+@@ -57,7 +57,6 @@
+ import org.exoplatform.services.jcr.access.SystemIdentity;
+ import org.exoplatform.services.jcr.core.ExtendedNode;
+ import org.exoplatform.services.jcr.core.ManageableRepository;
+-import org.exoplatform.services.jcr.ext.app.SessionProviderService;
+ import org.exoplatform.services.jcr.ext.common.SessionProvider;
+ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+ import org.exoplatform.services.jcr.util.IdGenerator;
+@@ -110,10 +109,9 @@
+    * @return
+    * @throws Exception
+    */
+-  public Node getContactUserDataHome(SessionProvider sProvider, String username) throws Exception {
++  private Node getContactUserDataHome(SessionProvider sProvider, String username) throws Exception {
+ //  CS-3016    
+-    SessionProvider sessionProvider = createSystemProvider() ;
+-    Node userDataHome = getNodeByPath(nodeHierarchyCreator_.getUserApplicationNode(sessionProvider, username).getPath(), sessionProvider)  ;
++    Node userDataHome = getNodeByPath(nodeHierarchyCreator_.getUserApplicationNode(sProvider, username).getPath(), sProvider)  ;
+     try {
+       return  userDataHome.getNode(CONTACT_APP) ;
+     } catch (PathNotFoundException ex) {
+@@ -123,7 +121,7 @@
+     }   
+   }
+   
+-  public Node getContactApplicationDataHome(SessionProvider sProvider) throws Exception {
++  private Node getContactApplicationDataHome(SessionProvider sProvider) throws Exception {
+     Node applicationDataHome = getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(),sProvider) ;
+     try {
+       return  applicationDataHome.getNode(CONTACT_APP) ;
+@@ -232,9 +230,8 @@
+ } 
+   
+  
+-  private Node getSharedContact(String userId) throws Exception {
+-    SessionProvider provider = createSystemProvider();
+-    Node contactHome = getContactUserDataHome(provider, userId);
++  private Node getSharedContact(SessionProvider sProvider, String userId) throws Exception {
++    Node contactHome = getContactUserDataHome(sProvider, userId);
+     Node sharedHome ;
+     try {
+       sharedHome = contactHome.getNode(SHARED_HOME) ;
+@@ -307,7 +304,7 @@
+       log.error("Public contact " + userId + " not found");
+       return null ;
+     } finally {
+-      provider.close();
++      closeSessionProvider(provider);
+     }
+   }  
+   
+@@ -381,9 +378,9 @@
+   }
+ 
+   public List<Contact> findAllContactsByOwner(String username) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+-      sProvider = createSessionProvider();
++//      sProvider = createSessionProvider();
+       Node contactHomeNode = getPersonalContactsHome(sProvider, username);
+       List<Contact> contacts = new ArrayList<Contact>();
+       NodeIterator iter = contactHomeNode.getNodes();
+@@ -445,9 +442,9 @@
+   
+   
+   public Contact loadPersonalContact(String ownerUserId, String contactId) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+-      sProvider = createSessionProvider();
++//      sProvider = createSessionProvider();
+       Node contactHomeNode = getPersonalContactsHome(sProvider, ownerUserId);
+       try {
+         return getContact(contactHomeNode.getNode(contactId), PERSONAL);
+@@ -460,9 +457,9 @@
+   }
+ 
+   public ContactPageList findPersonalContactsByAddressBook(String owner, String addressBookId) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+-      sProvider = createSessionProvider();
++//      sProvider = createSessionProvider();
+       Node userContactsHome = getPersonalContactsHome(sProvider, owner);
+       String queryString = new StringBuffer("/jcr:root" + userContactsHome.getPath()
+           + "//element(*,exo:contact)[@exo:categories='").append(addressBookId)
+@@ -533,9 +530,9 @@
+ 
+ 
+   public List<String> findEmailsInPersonalAddressBook(String username, String addressBookId) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+-      sProvider = createSessionProvider();
++//      sProvider = createSessionProvider();
+       Node contactHome = getPersonalContactsHome(sProvider, username);
+       QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
+       StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath()
+@@ -572,31 +569,36 @@
+     }
+     return address ;
+     } finally {
+-      provider.close();
++      closeSessionProvider(provider);
+     }
+   }
+   
+   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
+-    Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
+-    PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+-    Node addressBook ;      
+-    QueryManager qm = getSession(createSessionProvider()).getWorkspace().getQueryManager();
+-    while(iter.hasNext()) {
+-      addressBook = iter.nextProperty().getParent() ;
+-      if(addressBook.getName().equals(addressBookId)) {
+-        StringBuffer queryString = new StringBuffer("/jcr:root" + addressBook.getParent().getParent().getNode(CONTACTS).getPath() 
+-                        + "//element(*,exo:contact)[(@exo:categories='").
+-                        append(addressBookId).append("')]") ;
+-        NodeIterator it = qm.createQuery(queryString.toString(), Query.XPATH).execute().getNodes();
+-        List<String> address = new ArrayList<String>();
+-        while (it.hasNext()){
+-          Node contact = it.nextNode();
+-          if(contact.hasProperty("exo:emailAddress") && !Utils.isEmpty(contact.getProperty("exo:emailAddress").getString()))
+-            address.add(contact.getProperty("exo:emailAddress").getString());
+-        }
+-        return address ;         
+-      } 
+-    }
++  	SessionProvider sysProvider = createSystemProvider();
++  	try {
++	  	Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
++	    PropertyIterator iter = sharedAddressBookMock.getReferences() ;
++	    Node addressBook ;      
++	    QueryManager qm = getSession(createSessionProvider()).getWorkspace().getQueryManager();
++	    while(iter.hasNext()) {
++	      addressBook = iter.nextProperty().getParent() ;
++	      if(addressBook.getName().equals(addressBookId)) {
++	        StringBuffer queryString = new StringBuffer("/jcr:root" + addressBook.getParent().getParent().getNode(CONTACTS).getPath() 
++	                        + "//element(*,exo:contact)[(@exo:categories='").
++	                        append(addressBookId).append("')]") ;
++	        NodeIterator it = qm.createQuery(queryString.toString(), Query.XPATH).execute().getNodes();
++	        List<String> address = new ArrayList<String>();
++	        while (it.hasNext()){
++	          Node contact = it.nextNode();
++	          if(contact.hasProperty("exo:emailAddress") && !Utils.isEmpty(contact.getProperty("exo:emailAddress").getString()))
++	            address.add(contact.getProperty("exo:emailAddress").getString());
++	        }
++	        return address ;         
++	      } 
++	    }
++  	} finally {
++  		closeSessionProvider(sysProvider);
++  	}
+     return null ;
+   }
+   
+@@ -625,9 +627,9 @@
+   }
+ 
+   public AddressBook loadPersonalAddressBook(String username, String groupId) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+-      sProvider = createSessionProvider();
++//      sProvider = createSessionProvider();
+       if (groupId == null)
+         return null;
+       Node contactGroupHomeNode = getPersonalAddressBooksHome(sProvider, username);
+@@ -640,22 +642,26 @@
+   }
+   
+   public AddressBook getSharedAddressBookById(String username, String addressBookId) throws Exception {
+-    Node sharedAddressBookNode = getSharedAddressBooksHome(username) ;
+-    PropertyIterator iter = sharedAddressBookNode.getReferences() ;
+-    Node addressBook ;      
+-    while(iter.hasNext()) {
+-      addressBook = iter.nextProperty().getParent() ;
+-      if(addressBook.getName().equals(addressBookId)) {
+-        return toAddressBook(addressBook) ;
++  	SessionProvider sProvider = createSessionProvider();
++    try {
++      Node sharedAddressBookNode = getSharedAddressBooksHome(sProvider, username) ;
++      PropertyIterator iter = sharedAddressBookNode.getReferences() ;
++      Node addressBook ;      
++      while(iter.hasNext()) {
++        addressBook = iter.nextProperty().getParent() ;
++        if(addressBook.getName().equals(addressBookId)) {
++          return toAddressBook(addressBook) ;
++        }
+       }
++    } finally {
++    	closeSessionProvider(sProvider);
+     }
+     return null ;
+   }
+ 
+   public List<AddressBook> findPersonalAddressBooksByOwner(String username) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSessionProvider();;
+     try {
+-      sProvider = createSessionProvider();
+       Node addressBooksHome = getPersonalAddressBooksHome(sProvider, username);
+       List<AddressBook> addressBooks = new ArrayList<AddressBook>();
+       NodeIterator iter = addressBooksHome.getNodes();
+@@ -665,7 +671,7 @@
+       }
+       return addressBooks;
+     } finally {
+-      closeSessionProvider(sProvider) ;
++    	closeSessionProvider(sProvider);
+     }
+   }
+ 
+@@ -734,9 +740,9 @@
+    * @throws Exception
+    */
+   public AddressBook removePersonalAddressBook(String username, String addressBookId) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+-      sProvider = createSessionProvider();
++//      sProvider = createSessionProvider();
+       Node addressBooksHomeNode = getPersonalAddressBooksHome(sProvider, username);
+       if (addressBooksHomeNode.hasNode(addressBookId)) {
+         // load before removing
+@@ -764,9 +770,8 @@
+    * @throws Exception
+    */
+   public void clearAddressBook(String username, String addressBookId) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+-      sProvider = createSessionProvider();
+       List<String> contactIds = getUserContactNodesByGroup(sProvider, username, addressBookId);
+       removeContacts(username, contactIds);
+     } finally {
+@@ -777,14 +782,14 @@
+   
+   
+   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+-      boolean systemPrivilege = false;
+-      if (systemPrivilege) {
+-        sProvider = createSessionProvider();  
+-      } else {
+-        sProvider = createSystemProvider();
+-      }
++//      boolean systemPrivilege = false;
++//      if (systemPrivilege) {
++//  //      sProvider = createSessionProvider();  
++//      } else {
++//  //      sProvider = createSystemProvider();
++//      }
+       
+       Node contactHomeNode = getPersonalContactsHome(sProvider, username);
+       contactToNode(contactHomeNode, contact, isNew);
+@@ -795,9 +800,8 @@
+   }
+ 
+   public void savePersonalOrSharedAddressBook(String username, AddressBook addressbook, boolean isNew) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSessionProvider();
+     try {
+-      sProvider = createSessionProvider();
+       Node groupNode = null ;
+       String id = addressbook.getId();
+       if (isNew) {
+@@ -807,7 +811,7 @@
+         try {
+           groupNode = getPersonalAddressBooksHome(sProvider, username).getNode(id);
+         } catch (PathNotFoundException e) {
+-          Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
++          Node sharedAddressBookMock = getSharedAddressBooksHome(sProvider, username) ;
+           PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+           Node addressBook ;      
+           while(iter.hasNext()) {
+@@ -839,9 +843,9 @@
+ 
+ 
+   public void removeUserShareContact(String username, String contactId, String removedUser) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+-      sProvider = createSystemProvider();
++//      sProvider = createSystemProvider();
+       Node contactNode ;
+       String split = "/" ;    
+       // shared contacts
+@@ -856,7 +860,7 @@
+       List<String> values = new ArrayList<String>(
+           Arrays.asList(ValuesToStrings(contactNode.getProperty(SHARED_PROP).getValues())));
+       List<String> newValues = new ArrayList<String>(values) ;
+-      Node sharedContact = getSharedContact(removedUser) ;
++      Node sharedContact = getSharedContact(sProvider, removedUser) ;
+       for (String value : values) {
+         Node refNode = sharedContact.getSession().getNodeByUUID(value);
+         if(refNode.getPath().equals(sharedContact.getPath())) {
+@@ -888,7 +892,7 @@
+   }
+   
+   public void unshareAddressBook(String username, String addressBookId, String removedUser) throws Exception {
+-    SessionProvider sysProvider = null;
++    SessionProvider sysProvider = createSystemProvider();
+     try {
+       sysProvider = createSystemProvider();// current user may not be the owner, so we require a system provider
+       Node addressBookNode = getPersonalAddressBooksHome(sysProvider, username).getNode(addressBookId);
+@@ -939,9 +943,8 @@
+   }
+ 
+   public void shareAddressBook(String username, String addressBookId, List<String> receiveUsers) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+-      sProvider = createSessionProvider();
+       Node addressBookNode = getPersonalAddressBooksHome(sProvider, username).getNode(addressBookId);
+       Value[] values = {};
+       if (addressBookNode.isNodeType(SHARED_MIXIN)) {
+@@ -953,7 +956,7 @@
+ 
+       List<Value> valueList = new ArrayList<Value>();
+       for (String userId : receiveUsers) {
+-        Node sharedAddress = getSharedAddressBooksHome(userId.replaceFirst(JCRDataStorage.HYPHEN, ""));
++        Node sharedAddress = getSharedAddressBooksHome(sProvider, userId.replaceFirst(JCRDataStorage.HYPHEN, ""));
+         boolean isExist = false;
+         for (int i = 0; i < values.length; i++) {
+           Value value = values[i];
+@@ -993,14 +996,13 @@
+       addressBookNode.save();
+       addressBookNode.getSession().save();
+     } finally {
+-      closeSessionProvider(sProvider);
++    	closeSessionProvider(sProvider);
+     }
+   }
+   
+   public void shareContact(String username, String[] contactIds, List<String> receiveUsers) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+-      sProvider = createSystemProvider();
+       for(String contactId : contactIds) {
+         Node contactNode = getPersonalContactsHome(sProvider, username).getNode(contactId);
+         Value[] values = {};
+@@ -1012,7 +1014,7 @@
+         }
+         List<Value> valueList = new ArrayList<Value>() ;
+         for(String user : receiveUsers) {
+-          Node sharedContact = getSharedContact(user.replaceFirst(JCRDataStorage.HYPHEN, "")) ;
++          Node sharedContact = getSharedContact(sProvider, user.replaceFirst(JCRDataStorage.HYPHEN, "")) ;
+           boolean isExist = false ; 
+           for (int i = 0; i < values.length; i++) {
+             Value value = values[i];
+@@ -1047,7 +1049,7 @@
+   }
+   
+   public List<SharedAddressBook> findSharedAddressBooksByUser(String username) throws Exception {
+-    SessionProvider sysProvider = null;
++    SessionProvider sysProvider = createSystemProvider();
+     try {
+       sysProvider = createSystemProvider(); // reading shared address books requires a system session
+       List<SharedAddressBook> addressBooks = new ArrayList<SharedAddressBook>();
+@@ -1081,26 +1083,33 @@
+   
+   
+   public void removeSharedContact(String username, String addressBookId, String contactId) throws Exception {
+-    Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
+-    PropertyIterator iter2 = sharedAddressBookMock.getReferences() ;
+-    Node addressBook ;      
+-    while(iter2.hasNext()) {
+-      addressBook = iter2.nextProperty().getParent() ;
+-      
+-      // need improved
+-      if(addressBook.getName().equals(addressBookId)) {
+-        Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+-        try {
+-          contactHomeNode.getNode(contactId).remove() ;        
+-          contactHomeNode.getSession().save() ;
+-          break ;
+-        } catch (PathNotFoundException e) { }      
+-      }
+-    }
++		SessionProvider sProvider = createSessionProvider();
++		try {
++	  	Node sharedAddressBookMock = getSharedAddressBooksHome(sProvider, username) ;
++	    PropertyIterator iter2 = sharedAddressBookMock.getReferences() ;
++	    Node addressBook ;      
++			while (iter2.hasNext()) {
++				addressBook = iter2.nextProperty().getParent();
++
++				// need improved
++				if (addressBook.getName().equals(addressBookId)) {
++					Node contactHomeNode = addressBook.getParent().getParent().getNode(
++							CONTACTS);
++					try {
++						contactHomeNode.getNode(contactId).remove();
++						contactHomeNode.getSession().save();
++						break;
++					} catch (PathNotFoundException e) {
++					}
++				}
++			}
++		} finally {
++			closeSessionProvider(sProvider);
++		}
+   }
+ 
+-  public Contact getSharedContact(String username, String contactId) throws Exception {
+-    Node sharedContactMock = getSharedContact(username) ;
++  private Contact getSharedContact(SessionProvider sProvider, String username, String contactId) throws Exception {
++		Node sharedContactMock = getSharedContact(sProvider, username) ;
+     PropertyIterator iter = sharedContactMock.getReferences() ;
+     while(iter.hasNext()) {
+       try{
+@@ -1112,73 +1121,102 @@
+         e.printStackTrace() ;
+       }
+     }
+-    return null ;
++		return null ;
+   }
+   
++  public Contact getSharedContact(String username, String contactId) throws Exception {
++  	SessionProvider sProvider = createSessionProvider();
++		try {
++			return getSharedContact(sProvider, username, contactId) ;
++		}finally {
++			closeSessionProvider(sProvider);
++		}
++  }
++  
+   public DataPageList getSharedContacts(String username) throws Exception {
+     List<Contact> sharedContacts = new ArrayList<Contact>() ;
+-    Node sharedContact = getSharedContact(username) ;      
+-    PropertyIterator iter = sharedContact.getReferences() ;
+-    while(iter.hasNext()) {
+-      try{
+-        Node contactNode = iter.nextProperty().getParent() ;
+-        sharedContacts.add(getContact(contactNode, SHARED)) ;
+-      }catch(Exception e){
+-        e.printStackTrace() ;
+-      }
+-    }
++    SessionProvider sProvider = createSessionProvider();
++		try {
++			Node sharedContact = getSharedContact(sProvider, username) ;      
++	    PropertyIterator iter = sharedContact.getReferences() ;
++	    while(iter.hasNext()) {
++	      try{
++	        Node contactNode = iter.nextProperty().getParent() ;
++	        sharedContacts.add(getContact(contactNode, SHARED)) ;
++	      }catch(Exception e){
++	        e.printStackTrace() ;
++	      }
++	    }
++		}finally {
++			closeSessionProvider(sProvider);
++		}
+     return new DataPageList(sharedContacts, 10, null, false) ;
+   }
+ 
+   public void saveSharedContact(String username, Contact contact) throws Exception  {
+-    Node sharedContactMock = getSharedContact(username) ;
+-    PropertyIterator iter = sharedContactMock.getReferences() ;
+-    boolean isEdit = false ;
+-    while(iter.hasNext()) {
+-      try{
+-        Node contactNode = iter.nextProperty().getParent() ;
+-        if(contactNode.getName().equals(contact.getId())) {
+-          isEdit = true ;
+-          contactToNode(contactNode.getParent(), contact, false) ;
+-          contactNode.getParent().getSession().save() ;
+-          return ;
+-        }
+-      }catch(Exception e){
+-        e.printStackTrace() ;
+-      }
+-    }
+-    if (!isEdit) throw new PathNotFoundException() ;
++  	SessionProvider sProvider = createSessionProvider();
++		try {
++		  Node sharedContactMock = getSharedContact(sProvider, username) ;
++	    PropertyIterator iter = sharedContactMock.getReferences() ;
++	    boolean isEdit = false ;
++	    while(iter.hasNext()) {
++	      try{
++	        Node contactNode = iter.nextProperty().getParent() ;
++	        if(contactNode.getName().equals(contact.getId())) {
++	          isEdit = true ;
++	          contactToNode(contactNode.getParent(), contact, false) ;
++	          contactNode.getParent().getSession().save() ;
++	          return ;
++	        }
++	      }catch(Exception e){
++	        e.printStackTrace() ;
++	      }
++	    }
++	    if (!isEdit) throw new PathNotFoundException() ;
++		}finally {
++			closeSessionProvider(sProvider);
++		}
+   }
+ 
+   public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception  {
+-    Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
+-    PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+-    Node addressBook ;      
+-    while(iter.hasNext()) {
+-      addressBook = iter.nextProperty().getParent() ;
+-      if(addressBook.getName().equals(addressBookId)) {
+-        Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+-        contact.setOwner(false) ;
+-        contactToNode(contactHomeNode, contact, isNew) ;
+-        contactHomeNode.getSession().save() ;   
+-        return ;
+-      }
+-    }      
++  	SessionProvider sysProvider = createSystemProvider();
++    try {
++	  	Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
++	    PropertyIterator iter = sharedAddressBookMock.getReferences() ;
++	    Node addressBook ;      
++	    while(iter.hasNext()) {
++	      addressBook = iter.nextProperty().getParent() ;
++	      if(addressBook.getName().equals(addressBookId)) {
++	        Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
++	        contact.setOwner(false) ;
++	        contactToNode(contactHomeNode, contact, isNew) ;
++	        contactHomeNode.getSession().save() ;   
++	        return ;
++	      }
++	    }
++    } finally {
++      closeSessionProvider(sysProvider);
++    }
+   }
+   
+   public Contact getSharedContactAddressBook(String username, String contactId) throws Exception {
+-    Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
+-    PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+-    Node addressBook ;      
+-    while(iter.hasNext()) {
+-      addressBook = iter.nextProperty().getParent() ;
+-      Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+-      try {
+-        // cs-2073
+-        Node contactNode = contactHomeNode.getNode(contactId) ;
+-        if (Arrays.asList(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
+-            .contains(addressBook.getProperty("exo:id").getString())) return getContact(contactNode, JCRDataStorage.SHARED) ;
+-      } catch (PathNotFoundException e) { }
++  	SessionProvider sysProvider = createSystemProvider();
++    try {
++	  	Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
++	    PropertyIterator iter = sharedAddressBookMock.getReferences() ;
++	    Node addressBook ;      
++	    while(iter.hasNext()) {
++	      addressBook = iter.nextProperty().getParent() ;
++	      Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
++	      try {
++	        // cs-2073
++	        Node contactNode = contactHomeNode.getNode(contactId) ;
++	        if (Arrays.asList(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
++	            .contains(addressBook.getProperty("exo:id").getString())) return getContact(contactNode, JCRDataStorage.SHARED) ;
++	      } catch (PathNotFoundException e) { }
++	    }
++    } finally {
++      closeSessionProvider(sysProvider);
+     }
+     return null ;
+   }
+@@ -1194,7 +1232,7 @@
+                                                   .append(" order by @exo:fullName,@exo:id ascending");
+       return new ContactPageList(username, 10, queryString.toString(), SHARED) ;
+     } finally {
+-      sysProvider.close();
++      closeSessionProvider(sysProvider);
+     }
+   }
+ 
+@@ -1202,13 +1240,13 @@
+     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
+     SessionProvider sysProvider = createSystemProvider();
+     try {
+-    StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
++    	StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
+                                                 + "//element(*,exo:contact)[@exo:categories='")
+                                                 .append(groupId).append("' and @exo:isOwner='true'] ")
+                                                 .append("order by @exo:fullName,@exo:id ascending");
+-    return new ContactPageList(null, 10, queryString.toString(), PUBLIC) ;
++    	return new ContactPageList(null, 10, queryString.toString(), PUBLIC) ;
+     } finally {
+-      sysProvider.close();
++      closeSessionProvider(sysProvider);
+     }
+   }
+   
+@@ -1259,7 +1297,7 @@
+       contactNode.setProperty(PROP_ADDRESSBOOK_REFS, ls.toArray(new String[] {}));
+       contactNode.save();
+     } finally {
+-      provider.close();
++      closeSessionProvider(provider);
+     }
+   }
+   
+@@ -1381,7 +1419,7 @@
+   }
+   
+   public void updateTag(String username,Tag tag) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+       sProvider = createSessionProvider() ;
+     Node tagHome = getTagsHome(sProvider, username) ;
+@@ -1397,9 +1435,9 @@
+   
+   
+   public Tag getTag(String username, String tagId) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+-      sProvider = createSystemProvider();
++//      sProvider = createSystemProvider();
+       Node tagHomeNode = getTagsHome(sProvider, username);
+       if (tagHomeNode.hasNode(tagId)) 
+         return getTag(tagHomeNode.getNode(tagId));
+@@ -1410,9 +1448,9 @@
+   }
+   
+   public List<Tag> getTags(String username) throws Exception {
+-    SessionProvider sProvider = null;
++    SessionProvider sProvider = createSystemProvider();
+     try {
+-      sProvider = createSystemProvider();
++//      sProvider = createSystemProvider();
+     Node tagHomeNode = getTagsHome(sProvider, username);
+     List<Tag> tags = new ArrayList<Tag>();
+     NodeIterator iter = tagHomeNode.getNodes();
+@@ -1470,7 +1508,7 @@
+       
+       // query on shared contacts
+       try {
+-        Node sharedContact = getSharedContact(username) ;      
++        Node sharedContact = getSharedContact(sysProvider, username) ;      
+         PropertyIterator iter = sharedContact.getReferences() ;
+         while(iter.hasNext()) {
+           try{
+@@ -1486,7 +1524,7 @@
+         }
+       } catch (PathNotFoundException e) { }
+   
+-      Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
++      Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
+       PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+       Node addressBook ;      
+       while(iter.hasNext()) {
+@@ -1511,7 +1549,7 @@
+       }
+       return new DataPageList(Arrays.asList(contacts.values().toArray(new Contact[] {})), 10, null, false) ;
+     } finally {
+-      sysProvider.close();
++      closeSessionProvider(sysProvider);
+     }
+   }
+   
+@@ -1529,7 +1567,7 @@
+         } else if (contactType.equals(PUBLIC)) {
+           contactNode = getPersonalContactsHome(sysProvider, contactId).getNode(contactId);
+         } else {
+-          Node sharedContactMock = getSharedContact(username) ;      
++          Node sharedContactMock = getSharedContact(sysProvider, username) ;      
+           PropertyIterator iter = sharedContactMock.getReferences() ;
+           while(iter.hasNext()) {
+             try{
+@@ -1543,7 +1581,7 @@
+             }
+           }
+           if (contactNode == null) {
+-            Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
++            Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
+             PropertyIterator iter1 = sharedAddressBookMock.getReferences() ;
+             Node addressBook ;      
+             while(iter1.hasNext()) {
+@@ -1576,7 +1614,7 @@
+         }
+       }
+     } finally {
+-     if (sysProvider != null) sysProvider.close();
++     if (sysProvider != null) closeSessionProvider(sysProvider);
+     }
+   }
+ 
+@@ -1609,7 +1647,7 @@
+           
+           contactNode = getPersonalContactsHome(sysProvider, contactId).getNode(contactId);
+         } else {
+-          Node sharedContactMock = getSharedContact(username) ;      
++          Node sharedContactMock = getSharedContact(sysProvider, username) ;      
+           PropertyIterator iter = sharedContactMock.getReferences() ;
+           while(iter.hasNext()) {
+             try{
+@@ -1623,7 +1661,7 @@
+             }
+           }
+           if (contactNode == null) {
+-            Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
++            Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
+             PropertyIterator iter1 = sharedAddressBookMock.getReferences() ;
+             Node addressBook ;      
+             while(iter1.hasNext()) {
+@@ -1661,7 +1699,7 @@
+         }
+       }
+     } finally {
+-      if (sysProvider != null) sysProvider.close();
++      closeSessionProvider(sysProvider);
+     }
+   }
+ 
+@@ -1709,12 +1747,12 @@
+         query = qm.createQuery(queryString.toString(), Query.XPATH);
+         removeTagInContacts(query.execute().getNodes(), tagId) ;
+         } finally {
+-          //sysProvider.close();
++          //closeSessionProvider(sysProvider);
+         }
+         
+         // query on shared contacts
+         try {
+-          Node sharedContact = getSharedContact(username) ;      
++          Node sharedContact = getSharedContact(sysProvider, username) ;      
+           PropertyIterator iter = sharedContact.getReferences() ;
+           while(iter.hasNext()) {
+             try{
+@@ -1733,7 +1771,7 @@
+           }
+         } catch (PathNotFoundException e) { }
+   
+-        Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
++        Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
+         PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+         Node addressBook ;      
+         while(iter.hasNext()) {
+@@ -1766,7 +1804,7 @@
+           
+           contactNode = getPersonalContactsHome(sysProvider, contactId).getNode(contactId);
+         } else {
+-          Node sharedContactMock = getSharedContact(username) ;      
++          Node sharedContactMock = getSharedContact(sysProvider, username) ;      
+           PropertyIterator iter = sharedContactMock.getReferences() ;
+           while(iter.hasNext()) {
+             try {
+@@ -1780,7 +1818,7 @@
+             }
+           }
+           if (contactNode == null) {
+-            Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
++            Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
+             PropertyIterator iter1 = sharedAddressBookMock.getReferences() ;
+             Node addressBook ;      
+             while(iter1.hasNext()) {
+@@ -1815,7 +1853,7 @@
+         }
+       }
+     } finally {
+-      if (sysProvider != null) sysProvider.close();
++      closeSessionProvider(sysProvider);
+     }
+   }
+  
+@@ -1861,7 +1899,7 @@
+     if (filter.getType() == null || filter.getType().equals(SHARED)) {
+     //share contacts
+       try {
+-        Node sharedContact = getSharedContact(username) ;      
++        Node sharedContact = getSharedContact(sysProvider, username) ;      
+         PropertyIterator iter = sharedContact.getReferences() ;
+         List<Contact> sharedContacts = getSharedContacts(username).getAll() ;
+         List<String> sharedContactIds = new ArrayList<String>() ;
+@@ -1900,7 +1938,7 @@
+         }
+       } catch (PathNotFoundException e) { }
+       if (filter.isSearchSharedContacts() == false) {
+-        Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
++        Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
+         PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+         Node addressBook ;      
+         boolean searchByAddress = false ;
+@@ -1928,7 +1966,7 @@
+     contactList.addAll(contacts.values()) ;    
+     return new DataPageList(contactList, 10, null, false) ;
+     } finally {
+-     if (sysProvider != null) sysProvider.close();
++    	closeSessionProvider(sysProvider);
+     }
+   }
+   
+@@ -1975,7 +2013,7 @@
+   
+       //share contacts
+       try {
+-        Node sharedContact = getSharedContact(username) ;      
++        Node sharedContact = getSharedContact(sysProvider, username) ;      
+         PropertyIterator iter = sharedContact.getReferences() ;
+         while(iter.hasNext()) {
+           try{
+@@ -2027,7 +2065,7 @@
+       }      
+       return emails ;
+     } finally {
+-      if (sysProvider != null) sysProvider.close();
++      closeSessionProvider(sysProvider);
+     }
+   }
+ 
+@@ -2078,7 +2116,7 @@
+       }
+       contactHomeNode.getSession().save() ;
+     } else if (destType.equals(SHARED)) {
+-      Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
++      Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
+       PropertyIterator proIter = sharedAddressBookMock.getReferences() ;
+       Node addressBook ;
+       while(proIter.hasNext()) {
+@@ -2107,7 +2145,7 @@
+       }      
+     }
+     } finally {
+-      if (sysProvider != null) sysProvider.close();
++      closeSessionProvider(sysProvider);
+     }
+   }
+   public void pasteAddressBook(String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
+@@ -2125,7 +2163,7 @@
+         NodeIterator iter = result.getNodes() ;
+         copyNodes(sysProvider, username, contactHome, iter, destAddress, destType) ;      
+       } else if (srcType.equals(SHARED)) {
+-        Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
++        Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
+         PropertyIterator proIter = sharedAddressBookMock.getReferences() ;
+         QueryManager qm = getSession(sysProvider).getWorkspace().getQueryManager();
+         Node addressBook ;      
+@@ -2157,15 +2195,14 @@
+         copyNodes(sysProvider, username, publicContactHome, iter, destAddress, destType) ;        
+       }
+     } finally {
+-      sysProvider.close();
++      closeSessionProvider(sysProvider);
+     }
+   }
+   
+   
+   public List<Contact> pasteContacts(String username, String destAddress, String destType,  Map<String, String> contactsMap) throws Exception {
+-    SessionProvider sProvider = null ;
++    SessionProvider sProvider = createSystemProvider() ;
+     try {
+-      sProvider = createSystemProvider() ;    
+       List<Contact> contacts = new ArrayList<Contact>() ;
+       List<Contact> pastedContacts = new ArrayList<Contact>() ;
+       for (String contactId : contactsMap.keySet()) {
+@@ -2176,7 +2213,7 @@
+         } else if (type.equals(PUBLIC)) {
+           contact = loadPublicContactByUser(contactId) ;
+         } else { // test here
+-          contact = getSharedContact(username, contactId) ;
++          contact = getSharedContact(sProvider, username, contactId) ;
+           if (contact ==  null) contact = getSharedContactAddressBook(username, contactId) ;
+         }        
+         if (contact != null) contacts.add(contact) ; 
+@@ -2187,7 +2224,7 @@
+           Node contactHomeNode = getPersonalContactsHome(sProvider, username);
+           pastedContacts.add(getContact(saveCopyContact(contactHomeNode, contact, destAddress, destType), destType)) ; 
+         } else if (destType.equals(SHARED)) {
+-          Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
++          Node sharedAddressBookMock = getSharedAddressBooksHome(sProvider, username) ;
+           PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+           Node addressBook ;      
+           while(iter.hasNext()) {
+@@ -2202,7 +2239,7 @@
+       }
+       return pastedContacts ;
+     }finally {
+-      closeSessionProvider(sProvider) ;
++    	closeSessionProvider(sProvider);
+     }
+   }
+   
+@@ -2409,14 +2446,15 @@
+    * @see SessionProviderService#getSessionProvider(null)
+    */
+   private SessionProvider createSessionProvider() {
+-    ExoContainer container = ExoContainerContext.getCurrentContainer();
+-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+-    SessionProvider provider = service.getSessionProvider(null);
+-    if (provider == null) {
+-      log.info("No user session provider was available, using a system session provider");
+-      provider = service.getSystemSessionProvider(null);
+-    }
+-    return provider;
++//    ExoContainer container = ExoContainerContext.getCurrentContainer();
++//    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
++//    SessionProvider provider = service.getSessionProvider(null);
++//    if (provider == null) {
++//      log.info("No user session provider was available, using a system session provider");
++//      provider = service.getSystemSessionProvider(null);
++//    }
++//    return provider;
++  	return SessionProvider.createSystemProvider() ;    
+   }
+   /*
+   private SessionProvider createUserProvider() {
+@@ -2426,9 +2464,10 @@
+   }  
+   */
+   private SessionProvider createSystemProvider() {
+-    ExoContainer container = ExoContainerContext.getCurrentContainer();
+-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+-    return service.getSystemSessionProvider(null) ;    
++//    ExoContainer container = ExoContainerContext.getCurrentContainer();
++//    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
++//  	return service.getSystemSessionProvider(null) ; 
++  	return SessionProvider.createSystemProvider() ;    
+   }
+   
+ 
