@@ -1,0 +1,77 @@
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(revision 49589)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(working copy)
+@@ -943,7 +943,7 @@
+     window.jsconsole.warn('Focus tab: ' + thys._getOption('activeTabId'));
+     var activeTabId = thys._getOption('activeTabId');
+     if (!activeTabId ||
+-        !thys.tabControlList[thys.getTabId(activeTabId)]) {
++        !thys.tabControlList[activeTabId]) {
+       activeTabId = thys.getTabId(tabList[tabList.length - 1].targetPerson).id;
+     }
+     if (thys.rootNode.offsetHeight > 0) {
+@@ -1025,8 +1025,10 @@
+     }
+     if(tabState.messages)
+       uiTabControlObj.messagesBoxNode.innerHTML = tabState.messages;
+-    if(tabState.unreadMessageCnt)
+-    	uiTabControlObj.unreadMessageCnt = tabState.unreadMessageCnt;
++    if(tabState.unreadMessageCnt){
++      uiTabControlObj.unreadMessageCnt = tabState.unreadMessageCnt;
++      uiTabControlObj.updateUnreadMessage();
++    }
+   }
+   return uiTabControlObj;
+ };
+@@ -1158,10 +1160,10 @@
+ UIChatWindow.prototype.updateUnreadMessage = function() {
+   var DOMUtil = eXo.core.DOMUtil;
+   var unreadMessageNode = null;
+-  var unreadMessageCnt = 0;
++  this.unreadMessageCnt = 0;
+   for (var item in this.tabControlList) {
+     if (this.tabControlList[item] instanceof UITabControl) {
+-      unreadMessageCnt += this.tabControlList[item].unreadMessageCnt;
++      this.unreadMessageCnt += this.tabControlList[item].unreadMessageCnt;
+     }
+   }
+   if (this._isVisible()) {
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(revision 49589)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(working copy)
+@@ -939,7 +939,7 @@
+     window.jsconsole.warn('Focus tab: ' + thys._getOption('activeTabId'));
+     var activeTabId = thys._getOption('activeTabId');
+     if (!activeTabId ||
+-        !thys.tabControlList[thys.getTabId(activeTabId)]) {
++        !thys.tabControlList[activeTabId]) {
+       activeTabId = thys.getTabId(tabList[tabList.length - 1].targetPerson).id;
+     }
+     if (thys.rootNode.offsetHeight > 0) {
+@@ -1021,8 +1021,10 @@
+     }
+     if(tabState.messages)
+       uiTabControlObj.messagesBoxNode.innerHTML = tabState.messages;
+-    if(tabState.unreadMessageCnt)
++    if(tabState.unreadMessageCnt){
+       uiTabControlObj.unreadMessageCnt = tabState.unreadMessageCnt;
++      uiTabControlObj.updateUnreadMessage();
++    }
+   }
+   return uiTabControlObj;
+ };
+@@ -1154,10 +1156,10 @@
+ UIChatWindow.prototype.updateUnreadMessage = function() {
+   var DOMUtil = eXo.core.DOMUtil;
+   var unreadMessageNode = null;
+-  var unreadMessageCnt = 0;
++  this.unreadMessageCnt = 0;
+   for (var item in this.tabControlList) {
+     if (this.tabControlList[item] instanceof UITabControl) {
+-      unreadMessageCnt += this.tabControlList[item].unreadMessageCnt;
++      this.unreadMessageCnt += this.tabControlList[item].unreadMessageCnt;
+     }
+   }
+   if (this._isVisible()) {
