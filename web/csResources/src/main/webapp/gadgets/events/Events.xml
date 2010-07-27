@@ -1,40 +1,40 @@
-	<?xml version="1.0" encoding="UTF-8" ?>
-	<Module>
-	  <ModulePrefs author="eXoPlatform"
-			title="Upcoming events"
-			directory_title="Upcoming events"
-			title_url="http://www.exoplatform.org"
-			description="Upcoming events list."
-			thumbnail="/csResources/gadgets/events/skin/thumb.png">
-			<Locale messages="/csResources/gadgets/events/locale/default.xml" />
-			<Locale lang="ar" messages="/csResources/gadgets/events/locale/ar.xml" language_direction="rtl"/>
-			<Locale lang="fr" messages="/csResources/gadgets/events/locale/fr.xml" />
-			<Locale lang="vi" messages="/csResources/gadgets/events/locale/vi.xml" />
-			<Require feature="setprefs"/>
-			<Require feature="dynamic-height"/>
-		</ModulePrefs>
-		<UserPref name="url" display_name="__MSG_baseurl__" datatype="string" value="/calendar" required="true"/>
-		<UserPref name="subscribeurl" display_name="__MSG_subscribeurl__" datatype="string" value="/portal/rest/private/cs/calendar/upcoming" required="true"/>
-		<UserPref name="limit" display_name="__MSG_limit__" default_value="10" datatype="string"/>  
-		<UserPref name="timeformat" display_name="__MSG_format__" default_value="AM/PM" datatype="enum" >
-	    <EnumValue value="AM/PM" />
-	    <EnumValue value="24h" />	
-	  </UserPref>
-	  <Content type="html">
-	    <![CDATA[
-				<link rel="stylesheet" href="skin/events.css" type="text/css"/>
-				<script type="text/javascript" src="events.js"></script>
-	      <div class="UIGadgetThemes UIYellowThemes">
-					<div class="TitGad ClearFix">
-						<a href="#demo" class="IconDropDown" id="ShowAll" >__MSG_showall__</a>
-						<div class="ContTit">__MSG_title__</div>
-					</div>
-					<div class="GadCont UpcomingEvents" id="ItemContainer">
-						<!--
-						<a href="#demo" class="IconLink">09:00<span>Daily Meeting</span></a>
-						-->
-					</div>
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs author="eXoPlatform"
+		title="Upcoming events"
+		directory_title="Upcoming events"
+		title_url="http://www.exoplatform.org"
+		description="Upcoming events list."
+		thumbnail="/csResources/gadgets/events/skin/thumb.png">
+		<Locale messages="/csResources/gadgets/events/locale/default.xml" />
+		<Locale lang="ar" messages="/csResources/gadgets/events/locale/ar.xml" language_direction="rtl"/>
+		<Locale lang="fr" messages="/csResources/gadgets/events/locale/fr.xml" />
+		<Locale lang="vi" messages="/csResources/gadgets/events/locale/vi.xml" />
+		<Require feature="setprefs"/>
+		<Require feature="dynamic-height"/>
+	</ModulePrefs>
+	<UserPref name="url" display_name="__MSG_baseurl__" datatype="string" value="/calendar" required="true"/>
+	<UserPref name="subscribeurl" display_name="__MSG_subscribeurl__" datatype="string" value="/portal/rest/private/cs/calendar/upcoming" required="true"/>
+	<UserPref name="limit" display_name="__MSG_limit__" default_value="10" datatype="string"/>  
+	<UserPref name="timeformat" display_name="__MSG_format__" default_value="AM/PM" datatype="enum" >
+    <EnumValue value="AM/PM" />
+    <EnumValue value="24h" />	
+  </UserPref>
+  <Content type="html">
+    <![CDATA[
+			<link rel="stylesheet" href="skin/events.css" type="text/css"/>
+			<script type="text/javascript" src="skin/events.js"></script>
+      <div class="UIGadgetThemes UIYellowThemes">
+				<div class="TitGad ClearFix">
+					<a href="#demo" class="IconDropDown" id="ShowAll" >__MSG_showall__</a>
+					<div class="ContTit">__MSG_title__</div>
 				</div>
-	    ]]>
-	  </Content>
-	</Module>
+				<div class="GadCont UpcomingEvents" id="ItemContainer">
+					<!--
+					<a href="#demo" class="IconLink">09:00<span>Daily Meeting</span></a>
+					-->
+				</div>
+			</div>
+    ]]>
+  </Content>
+</Module>
