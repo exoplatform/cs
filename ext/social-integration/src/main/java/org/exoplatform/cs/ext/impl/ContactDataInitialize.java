@@ -22,6 +22,7 @@ import org.exoplatform.social.core.space.SpaceListenerPlugin;
 import org.exoplatform.social.core.space.model.Space;
 import org.exoplatform.social.core.space.spi.SpaceLifeCycleEvent;
 
+
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform

@@ -16,11 +16,21 @@
  */
 package org.exoplatform.cs.ext.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.calendar.service.Calendar;
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.social.core.space.SpaceListenerPlugin;
 import org.exoplatform.social.core.space.model.Space;
 import org.exoplatform.social.core.space.spi.SpaceLifeCycleEvent;
+import org.exoplatform.webservice.cs.calendar.CalendarWebservice;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
+
 
 /**
  * Created by The eXo Platform SAS
@@ -31,7 +41,13 @@ import org.exoplatform.social.core.space.spi.SpaceLifeCycleEvent;
 public class CalendarDataInitialize extends SpaceListenerPlugin {
 
   private static final Log log = ExoLogger.getLogger(CalendarDataInitialize.class);
-
+  public static final String ANY = "*.*".intern();
+  public static final String SLASH_COLON = "/:".intern() ;
+  public static final String SLASH = "/".intern();
+  public static final String COLON = ":".intern() ;
+  public static final String SPLITER = "://".intern();
+  public static final String PUBLIC_TYPE = "2".intern();
+  
   @Override
   public void applicationActivated(SpaceLifeCycleEvent event) {
     // TODO Auto-generated method stub
@@ -42,9 +58,29 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
   public void applicationAdded(SpaceLifeCycleEvent event) {
     try {
       Space space = event.getSpace();
-
+      
+      PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance() ;
+      String baseUrl = portletRequestContext.getRequest().getScheme() + SPLITER + 
+      portletRequestContext.getRequest().getServerName() + COLON +
+      String.format("%s",portletRequestContext.getRequest().getServerPort()) 
+      + SLASH ;
+      CalendarService calService = (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
+      String username = Util.getPortalRequestContext().getRemoteUser() ; 
+      Calendar calendar = new Calendar() ;
+      calendar.setPublic(false) ;
+      calendar.setGroups((new String[]{space.getGroupId()}));
+      calendar.setName(space.getName()) ;
+      String url =  baseUrl + PortalContainer.getCurrentPortalContainerName() +SLASH+ 
+      PortalContainer.getCurrentRestContextName() + CalendarWebservice.BASE_URL_PRIVATE + username +SLASH+
+      calendar.getId() +SLASH+ PUBLIC_TYPE;
+      calendar.setPrivateUrl(url);
+      calendar.setEditPermission(new String[]{space.getGroupId()+ SLASH_COLON + ANY}) ;
+      //calendar.setCalendarColor() ;
+      calendar.setCalendarOwner(username) ;
+      calService.savePublicCalendar(calendar, true, username);
+      
     }catch (Exception e) {
-      log.debug(e.getMessage());
+      log.error(e.getMessage());
     }
   }
 

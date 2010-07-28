@@ -45,8 +45,21 @@
       <scope>provided</scope>
     </dependency>
     
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.webui.core</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>provided</scope>
+    </dependency>
     
     <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.webui.portal</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    
+     <dependency>
       <groupId>org.exoplatform.social</groupId>
       <artifactId>exo.social.component.core</artifactId>
       <version>${org.exoplatform.social.version}</version>
@@ -63,6 +76,20 @@
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.contact.service</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.web.webservice</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>

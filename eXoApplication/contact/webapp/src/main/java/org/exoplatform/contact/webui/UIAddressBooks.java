@@ -27,10 +27,11 @@ import java.util.ResourceBundle;
 
 import javax.jcr.AccessDeniedException;
 import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataStorage;
@@ -63,25 +64,28 @@ import org.exoplatform.webui.event.EventListener;
  * hung.nguyen@exoplatform.com Aus 01, 2007 2:48:18 PM
  */
 
-@ComponentConfig(template = "app:/templates/contact/webui/UIAddressBooks.gtmpl", events = {
-    @EventConfig(listeners = UIAddressBooks.AddContactActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.CopyAddressActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.PasteContactsActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.AddAddressActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.ImportAddressActionListener.class), 
-    @EventConfig(listeners = UIAddressBooks.ExportAddressActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.EditGroupActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.ShareGroupActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.DeleteGroupActionListener.class
-        , confirm = "UIAddressBooks.msg.confirm-delete"),
-    @EventConfig(listeners = UIAddressBooks.DeleteSharedGroupActionListener.class
-        , confirm = "UIAddressBooks.msg.confirm-discard"),
-    @EventConfig(listeners = UIAddressBooks.SelectGroupActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.SelectPublicGroupActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.SelectSharedContactActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.SelectSharedGroupActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.PrintActionListener.class),
-    @EventConfig(listeners = UIAddressBooks.SendEmailActionListener.class) }
+@ComponentConfig(
+                 template = "app:/templates/contact/webui/UIAddressBooks.gtmpl", 
+                 events = {
+                  @EventConfig(listeners = UIAddressBooks.AddContactActionListener.class),
+                  @EventConfig(listeners = UIAddressBooks.CopyAddressActionListener.class),
+                  @EventConfig(listeners = UIAddressBooks.PasteContactsActionListener.class),
+                  @EventConfig(listeners = UIAddressBooks.AddAddressActionListener.class),
+                  @EventConfig(listeners = UIAddressBooks.ImportAddressActionListener.class), 
+                  @EventConfig(listeners = UIAddressBooks.ExportAddressActionListener.class),
+                  @EventConfig(listeners = UIAddressBooks.EditGroupActionListener.class),
+                  @EventConfig(listeners = UIAddressBooks.ShareGroupActionListener.class),
+                  @EventConfig(listeners = UIAddressBooks.DeleteGroupActionListener.class
+                      , confirm = "UIAddressBooks.msg.confirm-delete"),
+                  @EventConfig(listeners = UIAddressBooks.DeleteSharedGroupActionListener.class
+                      , confirm = "UIAddressBooks.msg.confirm-discard"),
+                  @EventConfig(listeners = UIAddressBooks.SelectGroupActionListener.class),
+                  @EventConfig(listeners = UIAddressBooks.SelectPublicGroupActionListener.class),
+                  @EventConfig(listeners = UIAddressBooks.SelectSharedContactActionListener.class),
+                  @EventConfig(listeners = UIAddressBooks.SelectSharedGroupActionListener.class),
+                  @EventConfig(listeners = UIAddressBooks.PrintActionListener.class),
+                  @EventConfig(listeners = UIAddressBooks.SendEmailActionListener.class) 
+                 }
 )
     
 public class UIAddressBooks extends UIComponent {
