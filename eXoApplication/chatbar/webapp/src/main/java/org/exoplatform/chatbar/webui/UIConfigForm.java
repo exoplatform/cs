@@ -41,11 +41,9 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 @ComponentConfig(
                  lifecycle = UIFormLifecycle.class,
-                 template = "system:/groovy/webui/form/UIForm.gtmpl",
-                 //TODO using this template to customize app:/templates/chatbar/webui/UIConfigForm.gtmpl
+                 template = "app:/templates/chatbar/webui/UIConfigForm.gtmpl",
                  events = {
                    @EventConfig(listeners = UIConfigForm.SaveActionListener.class)
-                  // @EventConfig(listeners = UIConfigForm.CloseActionListener.class, phase = Phase.DECODE)
                  }
 )
 
@@ -80,9 +78,9 @@ public class UIConfigForm extends UIForm {
     try {
       PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance() ;
       PortletPreferences preferences = pcontext.getRequest().getPreferences() ;
-      getUIFormCheckBoxInput(CAL_APP).setChecked(Boolean.getBoolean(preferences.getValue(CAL_APP, null)));
-      getUIFormCheckBoxInput(MAIL_APP).setChecked(Boolean.getBoolean(preferences.getValue(MAIL_APP, null)));
-      getUIFormCheckBoxInput(CON_APP).setChecked(Boolean.getBoolean(preferences.getValue(CON_APP, null)));
+      getUIFormCheckBoxInput(CAL_APP).setChecked(Boolean.parseBoolean(preferences.getValue(CAL_APP, null)));
+      getUIFormCheckBoxInput(MAIL_APP).setChecked(Boolean.parseBoolean(preferences.getValue(MAIL_APP, null)));
+      getUIFormCheckBoxInput(CON_APP).setChecked(Boolean.parseBoolean(preferences.getValue(CON_APP, null)));
 
       getUIStringInput(CAL_URL).setValue(preferences.getValue(CAL_URL, null));
       getUIStringInput(MAIL_URL).setValue(preferences.getValue(MAIL_URL, null));
@@ -102,10 +100,25 @@ public class UIConfigForm extends UIForm {
       try {
         UIConfigForm uiForm = event.getSource() ;
         PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance() ;
-        PortletPreferences preferences = pcontext.getRequest().getPreferences() ;
+        PortletPreferences preferences = pcontext.getRequest().getPreferences();
         //TODO update value here
 
+        boolean isShowMail = uiForm.getUIFormCheckBoxInput(MAIL_APP).isChecked();
+        boolean isShowCalendar = uiForm.getUIFormCheckBoxInput(CAL_APP).isChecked();
+        boolean isShowContact = uiForm.getUIFormCheckBoxInput(CON_APP).isChecked();
+        preferences.setValue(MAIL_APP, String.valueOf(isShowMail));
+        preferences.setValue(CAL_APP, String.valueOf(isShowCalendar));
+        preferences.setValue(CON_APP, String.valueOf(isShowContact));
+
+        String mailLink = uiForm.getUIStringInput(MAIL_URL).getValue();
+        String calendarLink = uiForm.getUIStringInput(CAL_URL).getValue();
+        String contactLink = uiForm.getUIStringInput(CON_URL).getValue();
+        preferences.setValue(MAIL_URL, mailLink);
+        preferences.setValue(CAL_URL, calendarLink);
+        preferences.setValue(CON_URL, contactLink);
+
         preferences.store();
+
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIConfigForm.msg.save-successful", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
@@ -116,25 +129,4 @@ public class UIConfigForm extends UIForm {
     }
 
   }
-
-//  static  public class CloseActionListener extends EventListener<UIConfigForm>{
-//
-//    public void execute(Event<UIConfigForm> event) throws Exception {
-//      try {
-//        UIConfigForm uiForm = event.getSource() ;
-//        UIChatBarPortlet uiChatBar =  uiForm.getAncestorOfType(UIChatBarPortlet.class );
-//        uiChatBar.setTemplate(UIChatBarPortlet.VIEWMODE_TEMP);
-//        uiForm.reset();
-//        PortletRequestContext pcontext = (PortletRequestContext)event.getRequestContext() ;
-//        pcontext.setApplicationMode(PortletMode.VIEW);
-//        event.getRequestContext().addUIComponentToUpdateByAjax(uiChatBar) ;
-//      } catch (Exception e) {
-//        e.printStackTrace() ;
-//      }
-//
-//    }
-
-//  }
-
-
 }

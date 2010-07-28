@@ -17,8 +17,10 @@
 package org.exoplatform.chatbar.webui;
 
 import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 
+import org.exoplatform.chatbar.Utils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiApplication;
@@ -121,6 +123,32 @@ public class UIChatBarPortlet extends UIPortletApplication {
 
   public void setTemplate(String temp) {
     templatePath_ = temp;
+  }
+  
+  protected boolean isShowEmailLink () {
+    return Boolean.parseBoolean(getPortLPortletPreferences().getValue(UIConfigForm.MAIL_APP, null));
+  }
+  protected boolean isShowCalendarLink () {
+    return Boolean.parseBoolean(getPortLPortletPreferences().getValue(UIConfigForm.CAL_APP, null));
+  }
+  protected boolean isShowContactLink () {
+    return Boolean.parseBoolean(getPortLPortletPreferences().getValue(UIConfigForm.CON_APP, null));
+  }
+  
+  protected String getEmailLink () {
+    return Utils.getServerBaseUrl() + Utils.getPortalName() +"/"+  getPortLPortletPreferences().getValue(UIConfigForm.MAIL_URL, null);
+  }
+  protected String getCalendarLink () {
+    return Utils.getServerBaseUrl() + Utils.getPortalName() +"/"+  getPortLPortletPreferences().getValue(UIConfigForm.CAL_URL, null);
+  }
+  protected String getContactLink () {
+    return Utils.getServerBaseUrl() + Utils.getPortalName() +"/"+ getPortLPortletPreferences().getValue(UIConfigForm.CON_URL, null);
+  }
+  
+  
+  private PortletPreferences getPortLPortletPreferences() {
+    PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance() ;
+    return pcontext.getRequest().getPreferences() ;
   }
   
   protected void renderPopupMessages() throws Exception {

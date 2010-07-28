@@ -1,6 +1,81 @@
-
-<div id="<%=uicomponent.id%>">
-    
+<% 
+  String fieldName;
+  def uiForm = uicomponent ; 
+%>
+<div class="UIForm $uicomponent.id">
+	<%uiform.begin()%>
+	<div class="HorizontalLayout">
+		<div class="FormContainer">
+			<table class="UIFormGrid">
+				 
+							<tr>
+							  <td class="FieldLabel">
+								 <%=uiForm.getLabel(uicomponent.MAIL_APP)%>
+							  </td>
+							  <td class="FieldComponent">
+								 <%uiForm.renderField(uicomponent.MAIL_APP)%>
+							  </td>
+							  <td class="FieldComponent">
+								  <%uiForm.renderField(uicomponent.MAIL_URL)%>
+							  </td>
+								 
+							</tr>
+							
+							<tr>
+							  <td class="FieldLabel">
+								 <%=uiForm.getLabel(uicomponent.CON_APP)%>
+							  </td>
+							  <td class="FieldComponent">
+								 <%uiForm.renderField(uicomponent.CON_APP)%>
+							  </td>
+							  <td class="FieldComponent">
+								  <%uiForm.renderField(uicomponent.CON_URL)%>
+							  </td>
+								 
+							</tr>
+							
+							<tr>
+							  <td class="FieldLabel">
+								 <%=uiForm.getLabel(uicomponent.CAL_APP)%>
+							  </td>
+							  <td class="FieldComponent">
+								 <%uiForm.renderField(uicomponent.CAL_APP)%>
+							  </td>
+							  <td class="FieldComponent">
+								  <%uiForm.renderField(uicomponent.CAL_URL)%>
+							  </td>
+								 
+							</tr>
+							<tr>
+							 <td colspan="3" class="FieldLabel">
+								  <%=uiForm.getLabel(uicomponent.INFO)%>
+							 </td>
+							</tr> 
+				 
+			</table>
+			<div class="UIAction"> 
+				<table class="ActionContainer">
+					<tr>
+						<td>
+							<% for(action in uicomponent.getActions()) { 
+									 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+									 String link = uicomponent.event(action);
+							%>
+							<div onclick="$link" class="ActionButton LightBlueStyle" onmouseover="this.style.color = '#058ee6'" onmouseout="this.style.color='black'">
+								<div class="ButtonLeft">
+									<div class="ButtonRight">
+										<div class="ButtonMiddle">
+											<a href="javascript:void(0);">$actionLabel</a>
+										</div>
+									</div>
+								</div>
+					 		</div>
+							<%}%>				
+						</td>
+					</tr>	
+				</table>
+			</div>
+		</div>
+	</div>
+	<%uiform.end()%>
 </div>
-
- 

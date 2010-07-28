@@ -273,9 +273,16 @@
                         
 						<!-- writed by hoa.do --> 
 						<div class="LContent">
-							<a class="ItemBar Email" href="#"></a>
-							<a class="ItemBar Contact" href="#"></a>
-							<a class="ItemBar Calendar" href="#"></a>
+						    <% if(uicomponent.isShowEmailLink()) { %>
+								<a class="ItemBar Email" href="<%=uicomponent.getEmailLink()%>"></a>
+							<% } 
+							   if(uicomponent.isShowContactLink()) {%>
+								<a class="ItemBar Contact" href="<%=uicomponent.getContactLink()%>"></a>
+							<% }
+							   if(uicomponent.isShowCalendarLink()) {  
+							%>
+								<a class="ItemBar Calendar" href="<%=uicomponent.getCalendarLink()%>"></a>
+							<% }%>
 						</div>
 						<!-- end -->
 						<div class="Copyright">Powered by eXoplatform</div>
