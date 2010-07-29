@@ -7,28 +7,28 @@ Summary
 The Proposal
 Problem description
 
-What is the problem to fix ?
+What is the problem to fix?
 
     *  the advanced search function in Mail is case sensitive. The issue requires to change this function to be case insensitive.
 
 Fix description
 
-How is the problem fixed ?
+How is the problem fixed?
 
     *  change JCR query. Using fn:upper-case() functions to convert keywords to upper case before querying.
 
-Patch informations:
+Patch information:
 Patch files:
 File CS-4399.patch
 
 Tests to perform
 
-Tests performed at DevLevel ?
+Tests performed at DevLevel?
 * Unit Test cases.
 
 * Sniff test for advanced search function in mail.
 
-Tests performed at QA/Support Level ?
+Tests performed at QA/Support Level?
 *
 
 
@@ -49,9 +49,9 @@ Will previous configuration continue to work?
 
 Risks and impacts
 
-Can this bug fix have an impact on current client projects ?
+Can this bug fix have an impact on current client projects?
 
-    * Function or ClassName change ?
+    * Function or ClassName change?
           o Function: org.exoplatform.mail.service.MessageFilter.getStatement()
 
 Is there a performance risk/cost?
