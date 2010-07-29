@@ -23,10 +23,10 @@ File CS-4197.patch
 
 Tests to perform
 
-Tests performed at DevLevel ?
+Tests performed at DevLevel?
 * Unit Test case.
 
-Tests performed at QA/Support Level ?
+Tests performed at QA/Support Level?
 *
 
 
