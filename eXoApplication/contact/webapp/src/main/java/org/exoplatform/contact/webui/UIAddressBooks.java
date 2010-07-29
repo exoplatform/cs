@@ -223,6 +223,7 @@ public class UIAddressBooks extends UIComponent {
   static public class PasteContactsActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
+      UIWorkingContainer uiWorkingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class);
       UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
       String destAddress = event.getRequestContext().getRequestParameter(OBJECTID);
       String username = ContactUtils.getCurrentUser() ;
@@ -272,14 +273,14 @@ public class UIAddressBooks extends UIComponent {
         }
          
       }
-      // bi update neu la shared contacts 
+      
       UIContacts uiContacts = uiAddressBook
-      .getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class) ;
+        .getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class) ;
       if (!uiContacts.isDisplaySearchResult() && uiAddressBook.selectedGroup != null) {
-        uiContacts.setContacts(ContactUtils.getContactService().getSharedContacts(username));
-        //uiContacts.updateList() ;
+        //uiContacts.setContacts(ContactUtils.getContactService().getSharedContacts(username));
+        uiContacts.updateList() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
-      }
+      }    
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
      }
   }
