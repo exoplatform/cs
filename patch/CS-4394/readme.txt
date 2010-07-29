@@ -7,28 +7,28 @@ iSummary
 The Proposal
 Problem description
 
-What is the problem to fix ?
+What is the problem to fix?
 
     * After minimize and maximize the chat windows, the unread message is not updated 
 
 Fix description
 
-How the problem is fixed ?
+How is the problem fixed?
 
     * Update java script to clear unread message after it has been read
 
-Patch informations:
+Patch information:
 Patches files:
 CS-4394.patch
 
 Tests to perform
 
-Tests performed at DevLevel ?
+Tests performed at DevLevel?
 * Send some message between 2 users
 * Minimize chat window and other user still send messages
 * Maximize chat window the unread message on tab have to disappear  
 
-Tests performed at QA/Support Level ?
+Tests performed at QA/Support Level?
 * Yes
 
 
@@ -49,7 +49,7 @@ Previous configuration will continue to work?
 
 Risks and impacts
 
-Is this bug fix can have an impact on current client projects ?
+Can this bug fix have an impact on current client projects?
 
     * Function or ClassName change ? No
 
