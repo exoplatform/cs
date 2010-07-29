@@ -1317,10 +1317,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       uiPopup.setWindowSize(600, 600);
       UIOneNodePathSelector uiOneNodePathSelector = uiChildPopup.createUIComponent(UIOneNodePathSelector.class, null, null);
       uiOneNodePathSelector.setAcceptedNodeTypesInPathPanel(new String[] {org.exoplatform.ecm.webui.utils.Utils.NT_FILE});
-      
       MailService service = (MailService) uiForm.getApplicationComponent(MailService.class);
       String[] info = service.getDMSDataInfo(CalendarUtils.getCurrentUser());
       uiOneNodePathSelector.setRootNodeLocation(info[0], info[1], info[2]);
+      uiOneNodePathSelector.setIsDisable(info[1], true);
+      uiOneNodePathSelector.setIsShowSystem(false);
       uiOneNodePathSelector.init(SessionProviderFactory.createSessionProvider());
       uiPopup.setUIComponent(uiOneNodePathSelector);
       uiOneNodePathSelector.setSourceComponent(uiForm, null);
