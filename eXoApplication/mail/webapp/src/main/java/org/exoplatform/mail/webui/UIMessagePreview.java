@@ -309,7 +309,10 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
           selector.setSourceComponent(uiMsgPreview, null);
           MailService service = (MailService) uiMsgPreview.getApplicationComponent(MailService.class);
           String[] info = service.getDMSDataInfo(CalendarUtils.getCurrentUser());
+          
           selector.setRootNodeLocation(info[0], info[1], info[2]);
+          selector.setIsDisable(info[1], true);
+          selector.setIsShowSystem(false);
           selector.init(SessionProviderFactory.createSessionProvider());
           
           UIPopupActionDMSAdapted popupAction = uiMsgPreview.getChild(UIPopupActionDMSAdapted.class);
