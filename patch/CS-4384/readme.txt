@@ -3,35 +3,33 @@ Summary
     * Status: Mail: message reply: Field "To" is empty
     * CCP Issue: CCP-469, Product Jira Issue: CS-4384
     * Complexity: N/A
-    * Impacted Client(s): BFPME and probably all.
-    * Client expectations (date/content): N/A
-
+   
 The Proposal
 Problem description
 
-What is the problem to fix ?
+What is the problem to fix?
 
     *  the to field in Mail message is empty when trying to reply to a received message
 
 Fix description
 
-How the problem is fixed ?
+How is the problem fixed?
 
     *  this is fixed by putting the value of from property from the received mail on which we will respond.
 
-Patch informations:
+Patch information:
 Patches files:
 CS-4384.patch
 
 Tests to perform
 
-Which test should have detect the issue ?
+Which test should have detect the issue?
 *
 
-Is a test missing in the TestCase file ?
+Is a test missing in the TestCase file?
 *
 
-Added UnitTest ?
+Added UnitTest?
 *
 
 Recommended Performance test?
@@ -40,7 +38,7 @@ Recommended Performance test?
 
 Documentation changes
 
-Where is the documentation for this feature ?
+Where is the documentation for this feature?
 *
 
 Changes Needed:
@@ -49,7 +47,7 @@ Changes Needed:
 
 Configuration changes
 
-Is this bug changing the product configuration ?
+Is this bug changing the product configuration?
 *
 
 Describe configuration changes:
@@ -61,10 +59,10 @@ Previous configuration will continue to work?
 
 Risks and impacts
 
-Is there a risk applying this bug fix ?
+Is there a risk applying this bug fix?
 *
 
-Is this bug fix can have an impact on current client projects ?
+Can this bug fix  have an impact on current client projects?
 *
 
 Is there a performance risk/cost?
