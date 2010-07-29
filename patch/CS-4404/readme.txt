@@ -7,27 +7,27 @@ Summary
 The Proposal
 Problem description
 
-What is the problem to fix ?
+What is the problem to fix?
 
     *  Search in address book is case sensitive 
 
 Fix description
 
-How the problem is fixed ?
+How is the problem fixed?
 
     * We change the query syntax to make sure is none case sensitive  
 
-Patch informations:
+Patch information:
 Patches files:
 CS-4404.patch
 
 Tests to perform
 
-Tests performed at DevLevel ?
+Tests performed at DevLevel?
 * Add some contact with case sensitive 
 * Perform action search in both type case and none case sensitive
 
-Tests performed at QA/Support Level ?
+Tests performed at QA/Support Level?
 * Yes
 
 
@@ -48,7 +48,7 @@ Previous configuration will continue to work?
 
 Risks and impacts
 
-Is this bug fix can have an impact on current client projects ?
+Can this bug fix have an impact on current client projects?
 
     * Function or ClassName change ? No
 
