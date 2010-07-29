@@ -1,4 +1,5 @@
 <%
+	import org.exoplatform.mail.webui.popup.UIPopupActionDMSAdapted;
   import org.exoplatform.mail.service.Message;
   import org.exoplatform.mail.service.Utils; 
   import org.exoplatform.mail.service.Attachment;
@@ -473,6 +474,7 @@
                       if (!attach.isShownInBody()) {
                         if (attach.isLoadedProperly()) {
                         String downloadAction = uicomponent.event("DownloadAttachment", msg.getId() + "&attachId=" + attach.getId());
+                        String saveToDMSAction = uicomponent.event("SaveAttachmentToDMS", msg.getId() + "&attachId=" + attach.getId());
                     %>
       						  	<div class="AttachmentContent">
                         <%
@@ -515,10 +517,15 @@
         										if (validType) {
       										%>
 														<span class="Icon ViewDownloadIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view") %></a></span>
+														<span class="Icon DownloadIcon"> <a href="$saveToDMSAction"><%=_ctx.appRes(uicomponent.id+ ".label.download") %></a></span>
 													<% 
       											}	
       										%>
-														<span class="Icon DownloadIcon"> <a href="$downloadAction"><%=_ctx.appRes(uicomponent.id+ ".label.download") %></a></span></div>
+														<span class="Icon DownloadIcon"> <a href="$downloadAction"><%=_ctx.appRes(uicomponent.id+ ".label.download") %></a></span>
+														<% if (org.exoplatform.mail.MailUtils.hasECMS()) { %>
+														<span class="Icon DownloadIcon"> <a href="$saveToDMSAction"><%=_ctx.appRes(uicomponent.id+ ".label.save-to-dms") %></a></span>
+														<% } %>
+														</div>
       						  		</div>
       						  		<div style="clear: left;"><span></span></div>
       						  	</div>
@@ -569,4 +576,7 @@
     _ctx.include("app:/templates/mail/webui/UIIntroduction.gtmpl");
   } 
 %>
+<%uicomponent.renderChild(UIPopupActionDMSAdapted.class);%>
+
+
 </div>

@@ -38,6 +38,7 @@ import javax.activation.CommandMap;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.MailcapCommandMap;
+import javax.jcr.Node;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
 import javax.mail.Header;
@@ -2816,6 +2817,14 @@ public class MailServiceImpl implements MailService, Startable {
   
   public String[] getDMSDataInfo(String userName) throws Exception {
     return storage_.getDMSDataInfo(userName);
+  }
+
+  
+
+  @Override
+  public Node getDMSSelectedNode(String userName, String relPath) throws Exception {
+    // TODO Auto-generated method stub
+    return storage_.getDMSSelectedNode(userName, relPath);
   }
   
 }

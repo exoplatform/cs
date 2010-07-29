@@ -3346,4 +3346,14 @@ public class JCRDataStorage implements DataStorage {
     }
   }
    
+  public Node getDMSSelectedNode(String userName, String relPath) throws Exception {
+    SessionProvider sProvider = SessionProvider.createSystemProvider();
+    Node userNode = nodeHierarchyCreator_.getUserNode(sProvider, userName);
+    try {
+      Node folderNode = userNode.getNode(relPath);
+      return folderNode;
+    } catch (Exception e) {
+      return null;
+    }
+  }
 }

@@ -21,6 +21,8 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.jcr.Node;
+
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
@@ -775,5 +777,7 @@ public interface MailService {
      * @throws Exception
      */
     public String[] getDMSDataInfo(String userName) throws Exception;
+    
+    public Node getDMSSelectedNode(String userName, String relPath) throws Exception;
     
 }

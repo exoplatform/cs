@@ -45,6 +45,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 
@@ -384,6 +385,26 @@ public class MailUtils {
     }
     return builder.toString();
   }
+  
+  /**
+   * this function check appearance of ECMS product in our container.
+   * @return
+   */
+  public static boolean hasECMS() {    
+    try {
+      Class.forName("org.exoplatform.services.cms.CmsService");
+    } catch (ClassNotFoundException e) {
+      return false;
+    }
+    try {
+      if (PortalContainer.getInstance().getComponentInstancesOfType(CmsService.class) != null)
+        return true;
+    } catch (Exception e) {
+      return false;
+    }
+    return false;
+  }
+  
   
 }
 
