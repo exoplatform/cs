@@ -26,7 +26,7 @@ Tests to perform
 Tests performed at DevLevel ?
 * Yes, Run unit test, jcr session detector (http://wiki.exoplatform.org/xwiki/bin/view/JCR/Session+leak+detector) and selenium automation script test 
 
-Tests performed at QA/Support Level ?
+Tests performed at QA/Support Level?
 * Yes
 
 
@@ -47,7 +47,7 @@ Will previous configuration continue to work?
 
 Risks and impacts
 
-Can this bug fix have an impact on current client projects ?
+Can this bug fix have an impact on current client projects?
 
     * Function or ClassName change ? Yes
 
