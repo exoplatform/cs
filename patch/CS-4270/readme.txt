@@ -3,20 +3,18 @@ Summary
     * Status: Chat - display user id instead of user name.
     * CCP Issue: CCP-421, Product Jira Issue : CS-4270
     * Complexity: N/A
-    * Impacted Client(s): N/A
-    * Client expectations (date/content): N/A
-
+    
 The Proposal
 Problem description
 
-What is the problem to fix ?
+What is the problem to fix?
 
     * Up to now, user id is shown in all conversation windows (private, group/chat room) and title windows (where're they?). This issue requests to display the full name instead.
          
 
 Fix description
 
-How is the problem fixed ?
+How is the problem fixed?
 
     * The current version of chat server (open fire server and smack) doesn't provide the full name of chat users. We have to therefore inject the full name when the data is ready to put back to the browser. These data are obtained from Portal.
 
@@ -27,13 +25,13 @@ CS-4270.patch
 
 Tests to perform
 
-Which test should have detect the issue ?
+Which test should have detect the issue?
 * 
 
-Is a test missing in the TestCase file ?
+Is a test missing in the TestCase file?
 * No
 
-Added UnitTest ?
+Added UnitTest?
 * No
 
 Recommended Performance test?
@@ -42,7 +40,7 @@ Recommended Performance test?
 
 Documentation changes
 
-Where is the documentation for this feature ?
+Where is the documentation for this feature?
 * It has only in the issue detail CS-4270
 
 Changes Needed:
@@ -51,7 +49,7 @@ Changes Needed:
 
 Configuration changes
 
-Is this bug changing the product configuration ?
+Is this bug changing the product configuration?
 * No
 
 Describe configuration changes:
@@ -63,10 +61,10 @@ Previous configuration will continue to work?
 
 Risks and impacts
 
-Is there a risk applying this bug fix ?
+Is there a risk applying this bug fix?
 * No
 
-Is this bug fix can have an impact on current client projects ?
+Can this bug fix have an impact on current client projects?
 * Yes, it is a customer request.
 
 Is there a performance risk/cost?
