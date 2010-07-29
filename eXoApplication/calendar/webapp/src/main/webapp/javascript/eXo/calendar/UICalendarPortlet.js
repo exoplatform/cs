@@ -95,7 +95,8 @@ UICalendarPortlet.prototype.restorePosition = function(eventObj){
 UICalendarPortlet.prototype.postCheck = function(response){
 	var me = eXo.calendar.UICalendarPortlet ;
 	eval("var data = " + response);
-	if(parseInt(data.canEdit) == 0){
+	var isEdit = data.permission;
+	if(!isEdit){
 		me.notify(me.activeEventObject);		
 		me.restorePosition(me.activeEventObject);
 	}else{

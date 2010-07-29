@@ -29,7 +29,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 public class EventData {
 	private List<CalendarEvent> info ;
 	private String userTimezoneOffset;
- 
+	private Boolean isEdit;
 	public List<CalendarEvent> getInfo() {
 	  return info;
 	}
@@ -42,5 +42,11 @@ public class EventData {
 	}
 	public String getUserTimezoneOffset() {
 		return this.userTimezoneOffset;
+	}	
+	public void setPermission(Boolean isEdit) {
+		this.isEdit = isEdit;
+	}
+	public Boolean getPermission() {
+		return this.isEdit;
 	}
 }

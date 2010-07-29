@@ -113,7 +113,8 @@ public class CalendarWebservice implements ResourceContainer{
                                   String username, @PathParam("calendarId")
                                   String calendarId, @PathParam("type")
                                   String type) throws Exception {
-    StringBuffer buffer = new StringBuffer();
+    //StringBuffer buffer = new StringBuffer();
+	EventData eventData = new EventData();
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
@@ -121,31 +122,32 @@ public class CalendarWebservice implements ResourceContainer{
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       Calendar cal = null ;
-      buffer.append("{canEdit:0}");
+      eventData.setPermission(false);
       if(Utils.PRIVATE_TYPE == Integer.parseInt(type)) {
-        buffer = new StringBuffer("{canEdit:1}");
+    	  eventData.setPermission(true);
       } else if(Utils.PUBLIC_TYPE == Integer.parseInt(type)) {
         start();
         OrganizationService oService = (OrganizationService)ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
         cal = calService.getGroupCalendar(calendarId) ;
         if(Utils.canEdit(oService, Utils.getEditPerUsers(cal), username)) {
-          buffer = new StringBuffer("{canEdit:1}");
+        	eventData.setPermission(true);
         } 
         stop();
       } else if(Utils.SHARED_TYPE == Integer.parseInt(type)) {
         if(calService.getSharedCalendars(username, true) != null) {
           cal = calService.getSharedCalendars(username, true).getCalendarById(calendarId) ;
           if(Utils.canEdit(null, Utils.getEditPerUsers(cal), username)) {
-            buffer = new StringBuffer("{canEdit:1}");
+        	  eventData.setPermission(true);
           }  
         } 
       }  
     } catch (Exception e) {
       //e.printStackTrace() ;
-      buffer = new StringBuffer("{ERROR:500 " + e + "}") ;
+      //buffer = new StringBuffer("{ERROR:500 " + e + "}") ;
+    	eventData.setPermission(false);
     } 
-    return Response.ok(buffer.toString(), MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+    return Response.ok(eventData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
 
   /**
