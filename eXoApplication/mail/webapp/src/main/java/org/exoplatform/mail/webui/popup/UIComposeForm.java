@@ -1316,12 +1316,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       uiPopup.setId("UIChildPopupWindow");
       uiPopup.setWindowSize(600, 600);
       UIOneNodePathSelector uiOneNodePathSelector = uiChildPopup.createUIComponent(UIOneNodePathSelector.class, null, null);
+      uiOneNodePathSelector.setAcceptedNodeTypesInPathPanel(new String[] {org.exoplatform.ecm.webui.utils.Utils.NT_FILE});
       
       MailService service = (MailService) uiForm.getApplicationComponent(MailService.class);
       String[] info = service.getDMSDataInfo(CalendarUtils.getCurrentUser());
       uiOneNodePathSelector.setRootNodeLocation(info[0], info[1], info[2]);
       uiOneNodePathSelector.init(SessionProviderFactory.createSessionProvider());
-      
       uiPopup.setUIComponent(uiOneNodePathSelector);
       uiOneNodePathSelector.setSourceComponent(uiForm, null);
       uiPopup.setRendered(true);
@@ -1711,35 +1711,33 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
     String relPath = valueString.substring(valueString.indexOf(":/") + 2);
 
     MailService service = (MailService) this.getApplicationComponent(MailService.class);
-    BufferAttachment attachFile = service.getAttachmentFromDMS(CalendarUtils.getCurrentUser(),
-                                                               relPath);
-    if (attachFile == null) return;
-    
-    this.addToUploadFileList(attachFile);
-    this.refreshUploadFileList();
+    UIApplication uiApp = this.getAncestorOfType(UIApplication.class);
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-    context.addUIComponentToUpdateByAjax(this);
+    ApplicationMessage message = null;
+    BufferAttachment attachFile = null;
+    try {
+      attachFile = service.getAttachmentFromDMS(CalendarUtils.getCurrentUser(),
+                                                               relPath);
+    } catch (Exception e) {
+      message = new ApplicationMessage("UIComposeForm.msg.DMSSelector.load-error", null, ApplicationMessage.ERROR);
+    }
+    if (attachFile == null) {
+      message = new ApplicationMessage("UIComposeForm.msg.DMSSelector.selected-path", null, ApplicationMessage.WARNING);
+    } else {
+      this.addToUploadFileList(attachFile);
+      this.refreshUploadFileList();
+      
+      context.addUIComponentToUpdateByAjax(this);
+    }
+    if (message != null) {
+      uiApp.addMessage(message);
+      context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+    }
   //System.out.println(fileNode.getPrimaryNodeType().getName());
 //   System.out.println(node.getPath());
    
   }
 
-  public boolean hasECMS() {    
-    try {
-      Class.forName("org.exoplatform.services.cms.CmsService");
-    } catch (ClassNotFoundException e) {
-      return false;
-    }
-    try {
-      if (PortalContainer.getInstance().getComponentInstancesOfType(CmsService.class) != null)
-        return true;
-    } catch (Exception e) {
-      return false;
-    }
-    return false;
-  }
-  
-  
   public String getTitle(Node node) throws Exception {
     String title = null;
     if (node.hasNode("jcr:content")) {

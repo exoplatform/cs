@@ -58,10 +58,10 @@
 									</a>
 									
 									<div class="SeparatorLine"><span></span></div>
-									<% if (uicomponent.hasECMS()) { %>
+									<% if (org.exoplatform.mail.MailUtils.hasECMS()) { %>
 									<a href="<%=uicomponent.event("CallDMSSelector")%>" class="ControlButton">
 										<div class="IconHolder ">
-											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
+											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-from-dms") %></div>
 										</div>
 									</a>
 									<% } %>
