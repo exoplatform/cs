@@ -143,8 +143,12 @@ public class UIDayView extends UICalendarView {
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           } else {
-            if(!ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE) && !CalendarUtils.canEdit(calendarview.getApplicationComponent(
-                OrganizationService.class), Utils.getEditPerUsers(calendar), CalendarUtils.getCurrentUser())) {
+            // cs-4429: fix for group calendar permission
+            if((ce.getCalType().equals(CalendarUtils.SHARED_TYPE) && !CalendarUtils.canEdit(calendarview.getApplicationComponent(
+                        OrganizationService.class), Utils.getEditPerUsers(calendar), CalendarUtils.getCurrentUser())) ||
+               (ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE) && !CalendarUtils.canEdit(calendarview.getApplicationComponent(
+                        OrganizationService.class), calendar.getEditPermission(), CalendarUtils.getCurrentUser()))) 
+            {
               UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
               uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
