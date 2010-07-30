@@ -38,6 +38,7 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RssData;
+import org.exoplatform.calendar.service.impl.CalendarEventListener;
 import org.exoplatform.calendar.service.impl.CsvImportExport;
 import org.exoplatform.calendar.service.impl.ICalendarImportExport;
 import org.exoplatform.calendar.service.impl.JCRDataStorage;
@@ -471,5 +472,11 @@ public class MockCalendarService implements CalendarService{
   throws Exception {
     // TODO Auto-generated method stub
 
+  }
+
+  @Override
+  public void addListenerPlugin(CalendarEventListener listener) throws Exception {
+    // TODO Auto-generated method stub
+    
   }
 }

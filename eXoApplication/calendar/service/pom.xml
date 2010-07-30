@@ -139,5 +139,20 @@
       <artifactId>exo.kernel.component.command</artifactId>
       <version>${org.exoplatform.kernel.version}</version>
     </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.social</groupId>
+      <artifactId>exo.social.component.core</artifactId>
+      <version>${org.exoplatform.social.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.social</groupId>
+      <artifactId>exo.social.component.common</artifactId>
+      <version>${org.exoplatform.social.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    
   </dependencies>
 </project>

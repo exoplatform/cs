@@ -14,32 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.calendar.service.impl;
+package org.exoplatform.contact.service.impl;
 
-import org.exoplatform.calendar.service.CalendarEvent;
-import org.exoplatform.calendar.service.EventLifeCycle;
-import org.exoplatform.container.component.BaseComponentPlugin;
+import org.exoplatform.contact.service.ContactLifeCycle;
 
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
  *          exo@exoplatform.com
- * Jul 19, 2010  
+ * Jul 30, 2010  
  */
-public class CalendarEventListener extends BaseComponentPlugin implements EventLifeCycle {
+public class ContactEventListener implements ContactLifeCycle {
 
   @Override
-  public void savePublicEvent(CalendarEvent event, String calendarId) {
+  public void saveNecontact() {
     // TODO Auto-generated method stub
     
   }
 
   @Override
-  public void updatePublicEvent(CalendarEvent event, String calendarId) {
+  public void updateContact() {
     // TODO Auto-generated method stub
     
   }
-
-
 
 }

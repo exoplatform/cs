@@ -92,9 +92,10 @@ public class Calendar {
   
   private String publicUrl;
   private String privateUrl;
+  public static final String CALENDAR_PREF = "calendar".intern();
   
   public Calendar() {
-    id = "calendar" + IdGenerator.generate() ;
+    id = CALENDAR_PREF + IdGenerator.generate() ;
     timeZone = TimeZone.getDefault().getID() ;
     locale = Locale.getDefault().getISO3Country() ;
   }

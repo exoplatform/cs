@@ -42,7 +42,6 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.commons.utils.ExoProperties;
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -63,6 +62,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   private JCRDataStorage                      storage_;
   private Map<String, CalendarImportExport>   calendarImportExport_ = new LinkedHashMap<String, CalendarImportExport>();
   protected List<CalendarUpdateEventListener> listeners_            = new ArrayList<CalendarUpdateEventListener>(3);
+  protected List<CalendarEventListener> eventListeners_ = new ArrayList<CalendarEventListener>(3);
+
   public CalendarServiceImpl(InitParams params,NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice, ResourceBundleService rbs) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
     calendarImportExport_.put(CalendarService.ICALENDAR, new ICalendarImportExport(storage_));
@@ -72,7 +73,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     String eventNumber = props.getProperty("eventNumber");
     Utils.EVENT_NUMBER = Integer.parseInt(eventNumber);
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -271,6 +272,10 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    */
   public void savePublicEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     storage_.savePublicEvent(calendarId, event, isNew);
+    for(CalendarEventListener cel : eventListeners_) {
+      if(isNew) cel.savePublicEvent(event, calendarId);
+      else cel.updatePublicEvent(event, calendarId);
+    }
   }
 
   /**
@@ -509,7 +514,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception {
     return storage_.generateRss(username,calendarIds, rssData, calendarImportExport_.get(CalendarService.ICALENDAR));
   }
-  
+
   public ResourceBundle getResourceBundle() throws Exception {
     return rb_;
   }
@@ -583,5 +588,10 @@ public class CalendarServiceImpl implements CalendarService, Startable {
       groups.add(groupId);
     }
     storage_.autoShareCalendar(groups, userName);
+  }
+
+  @Override
+  public void addListenerPlugin(CalendarEventListener listener) throws Exception {
+    eventListeners_.add(listener);    
   }
 }

@@ -49,6 +49,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 public class UIConfigForm extends UIForm {
 
+  public static final String BASE_PATH = "showCalendarLink".intern();
   public static final String CAL_APP = "showCalendarLink".intern();
   public static final String MAIL_APP = "showMailLink".intern();
   public static final String CON_APP = "showContactLink".intern();

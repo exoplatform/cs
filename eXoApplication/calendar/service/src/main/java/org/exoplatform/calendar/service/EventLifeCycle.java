@@ -24,7 +24,18 @@ package org.exoplatform.calendar.service;
  */
 public interface EventLifeCycle {
   
-  public void savePublicEvent() ;
+  /**
+   * Post save new event for group calendar
+   * @param event : given event object
+   * @param calendarId : given id of calendar object
+   */
+  public void savePublicEvent(CalendarEvent event, String calendarId);
   
+  /**
+   * Post update event for group calendar
+   * @param event : given event object to be updated
+   * @param calendarId : given id of calendar object
+   */
+  public void updatePublicEvent(CalendarEvent event, String calendarId);
 
 }

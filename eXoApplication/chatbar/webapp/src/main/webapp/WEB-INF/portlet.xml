@@ -32,6 +32,13 @@
     </portlet-info>     
     
     <portlet-preferences>
+    
+            <preference>
+				<name>basePath</name>
+				<value>portal/private/</value>  
+				<read-only>false</read-only>
+			</preference>   
+    
 			<preference>
 				<name>showMailLink</name>
 				<value>true</value> <!--true/false -->
@@ -52,19 +59,19 @@
 			
 			<preference>
 				<name>mailUrl</name>
-				<value>mail</value> <!--String -->
+				<value>mail</value> <!--String page name-->
 				<read-only>false</read-only>
 			</preference>
 			
 			<preference>
 				<name>calendarUrl</name>
-				<value>calendar</value> <!--String -->
+				<value>calendar</value> <!--String page name -->
 				<read-only>false</read-only>
 			</preference>
 			
 			<preference>
 				<name>contactUrl</name>
-				<value>contact</value> <!--String -->
+				<value>contact</value> <!--String page name-->
 				<read-only>false</read-only>
 			</preference>
 			

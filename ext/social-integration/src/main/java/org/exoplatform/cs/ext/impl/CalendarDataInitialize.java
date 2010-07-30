@@ -58,15 +58,18 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
   public void applicationAdded(SpaceLifeCycleEvent event) {
     try {
       Space space = event.getSpace();
-      
       PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance() ;
       String baseUrl = portletRequestContext.getRequest().getScheme() + SPLITER + 
       portletRequestContext.getRequest().getServerName() + COLON +
       String.format("%s",portletRequestContext.getRequest().getServerPort()) 
       + SLASH ;
       CalendarService calService = (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
+      String calendarId = Calendar.CALENDAR_PREF + space.getId();
       String username = Util.getPortalRequestContext().getRemoteUser() ; 
-      Calendar calendar = new Calendar() ;
+      Calendar calendar = calService.getGroupCalendar(calendarId);
+      if(calendar == null) {
+        calendar = new Calendar();
+      calendar.setId(calendarId);
       calendar.setPublic(false) ;
       calendar.setGroups((new String[]{space.getGroupId()}));
       calendar.setName(space.getName()) ;
@@ -78,7 +81,7 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
       //calendar.setCalendarColor() ;
       calendar.setCalendarOwner(username) ;
       calService.savePublicCalendar(calendar, true, username);
-      
+      }        
     }catch (Exception e) {
       log.error(e.getMessage());
     }

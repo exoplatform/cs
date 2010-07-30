@@ -126,27 +126,31 @@ public class UIChatBarPortlet extends UIPortletApplication {
   }
   
   protected boolean isShowEmailLink () {
-    return Boolean.parseBoolean(getPortLPortletPreferences().getValue(UIConfigForm.MAIL_APP, null));
+    return Boolean.parseBoolean(getPortletPreferences().getValue(UIConfigForm.MAIL_APP, null));
   }
   protected boolean isShowCalendarLink () {
-    return Boolean.parseBoolean(getPortLPortletPreferences().getValue(UIConfigForm.CAL_APP, null));
+    return Boolean.parseBoolean(getPortletPreferences().getValue(UIConfigForm.CAL_APP, null));
   }
   protected boolean isShowContactLink () {
-    return Boolean.parseBoolean(getPortLPortletPreferences().getValue(UIConfigForm.CON_APP, null));
+    return Boolean.parseBoolean(getPortletPreferences().getValue(UIConfigForm.CON_APP, null));
   }
   
   protected String getEmailLink () {
-    return Utils.getServerBaseUrl() + Utils.getPortalName() +"/"+  getPortLPortletPreferences().getValue(UIConfigForm.MAIL_URL, null);
+    return Utils.getServerBaseUrl() + getBasePath() + Utils.getPortalName() +"/"+  getPortletPreferences().getValue(UIConfigForm.MAIL_URL, null);
   }
   protected String getCalendarLink () {
-    return Utils.getServerBaseUrl() + Utils.getPortalName() +"/"+  getPortLPortletPreferences().getValue(UIConfigForm.CAL_URL, null);
+    return Utils.getServerBaseUrl() + getBasePath() + Utils.getPortalName() +"/"+  getPortletPreferences().getValue(UIConfigForm.CAL_URL, null);
   }
   protected String getContactLink () {
-    return Utils.getServerBaseUrl() + Utils.getPortalName() +"/"+ getPortLPortletPreferences().getValue(UIConfigForm.CON_URL, null);
+    return Utils.getServerBaseUrl() + getBasePath() + Utils.getPortalName() +"/"+ getPortletPreferences().getValue(UIConfigForm.CON_URL, null);
   }
   
+  protected String getBasePath() {
+   return getPortletPreferences().getValue(UIConfigForm.BASE_PATH, null);
+ }
   
-  private PortletPreferences getPortLPortletPreferences() {
+  
+  private PortletPreferences getPortletPreferences() {
     PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance() ;
     return pcontext.getRequest().getPreferences() ;
   }

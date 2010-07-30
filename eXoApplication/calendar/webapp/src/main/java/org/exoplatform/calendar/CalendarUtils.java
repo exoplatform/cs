@@ -668,7 +668,7 @@ public class CalendarUtils {
       SelectOptionGroup pubGrp = new SelectOptionGroup(CalendarUtils.PUBLIC_CALENDARS);
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
-          if(CalendarUtils.canEdit(oService, Utils.getEditPerUsers(c), username)){
+          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
             pubGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
           }
         }

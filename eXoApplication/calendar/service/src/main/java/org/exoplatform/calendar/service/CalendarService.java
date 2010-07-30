@@ -23,6 +23,8 @@ import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 
+import org.exoplatform.calendar.service.impl.CalendarEventListener;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -540,6 +542,9 @@ public interface CalendarService {
   public void confirmInvitation(String fromUserId, String confirmingEmail, String confirmingUser, int calType,String calendarId, String eventId, int answer) throws Exception ;
   
   public void addListenerPlugin(CalendarUpdateEventListener listener) throws Exception ;
+  
+  public void addListenerPlugin(CalendarEventListener listener) throws Exception ;
+  
   /**
    * The method update exited rss data when calendar has been changed
    * @param usename 
