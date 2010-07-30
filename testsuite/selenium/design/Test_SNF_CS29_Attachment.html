@@ -17,6 +17,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>windowMaximize</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-Attachment-</td>
 	<td></td>
@@ -27,7 +32,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//div[@class='LoginButton']</td>
 	<td></td>
 </tr>
@@ -39,7 +44,7 @@
 <tr>
 	<td>type</td>
 	<td>username</td>
-	<td>john</td>
+	<td>mary</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -47,173 +52,18 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>-- Add Mail Account</td>
-	<td></td>
-</tr>
-<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Mail</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder AccountSettingIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Step 1</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>accountName</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>accountName</td>
-	<td>Test_29_account</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>description</td>
-	<td>Test_29_account_description</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Next</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Step 2</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>outgoingName</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>outgoingName</td>
-	<td>Test_29</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>emailAddress</td>
-	<td>exotest3@gmail.com</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>emailReply</td>
-	<td>exotest3@gmail.com</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>signature</td>
-	<td>Test_29_Signature</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Next</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Step 3</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>incomingServer</td>
-	<td>imap.gmail.com</td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>incomingServer</td>
-	<td>imap.gmail.com</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Next</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Step 4</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>userName</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>userName</td>
-	<td>exotest3</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>password</td>
-	<td>exovietnam</td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Next</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Step 5</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>Test_29_account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Test_29_account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>getMail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>getMail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Finish</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>10000</td>
 	<td></td>
 </tr>
 <tr>
@@ -237,7 +87,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder ComposeIcon']</td>
 	<td></td>
 </tr>
@@ -262,8 +112,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@class='UIToolbar']//div[@class='IconHolder AttachFileIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>file</td>
 	<td></td>
 </tr>
 <tr>
@@ -272,7 +127,7 @@
 	<td>D:\Test_Attachment.html</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//img[@class='UploadButton']</td>
 	<td></td>
 </tr>
@@ -287,7 +142,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Save</td>
 	<td></td>
 </tr>
@@ -302,7 +157,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@class='UIToolbar']//div[@class='IconHolder SendMailIcon']</td>
 	<td></td>
 </tr>
@@ -317,8 +172,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@class='MailFolderList']//div[3]/a</td>
+	<td>click</td>
+	<td>link=Sent</td>
 	<td></td>
 </tr>
 <tr>
@@ -332,52 +187,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>-- Delete Create Account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>//div[@class='UISelectAccount']//div[@title='Manage accounts']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Delete account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>link=Delete account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>Test_29_account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Test_29_account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIAccountList']//img[@class='DeleteIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@class='UIAccountList']//img[@class='DeleteIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForConfirmation</td>
-	<td>Are you sure you want to delete this account?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
@@ -402,7 +212,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>//div[@class='LoginButton']</td>
 	<td></td>
 </tr>
@@ -422,7 +232,7 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
 	<td></td>
 </tr>
@@ -442,13 +252,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>link=Mail</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>- Check Get Mail</td>
+	<td>-- Check Get Mail</td>
 	<td></td>
 </tr>
 <tr>
@@ -457,13 +267,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAt</td>
+	<td>click</td>
 	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder CheckMailIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>pause</td>
-	<td>5000</td>
+	<td>10000</td>
 	<td></td>
 </tr>
 <tr>
@@ -477,53 +287,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>-- Delete Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@id='uiMessageGrid']//table[@id='UIListUsers']/tbody[1]//input[1]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@id='uiMessageGrid']//table[@id='UIListUsers']/tbody[1]//input[1]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIMessageActionsBar']//div[@class='IconHolder DeleteIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
-	<td>xpath=//div[@class='UIMessageActionsBar']//div[@class='IconHolder DeleteIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForConfirmation</td>
-	<td>Are you sure you want to delete this(these) message(s)?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>5000</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementNotPresent</td>
-	<td>link=Test29_Attachment_Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementNotPresent</td>
-	<td>link=Test29_Attachment_Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAt</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>close</td>
+	<td></td>
 	<td></td>
 </tr>
 

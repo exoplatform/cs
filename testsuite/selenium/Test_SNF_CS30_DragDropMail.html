@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://localhost:8080/portal/public/classic/" />
-<title>Test_SNF_CS25_ComposeMail</title>
+<title>Test_SNF_CS30_DragDropMail</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_SNF_CS25_ComposeMail</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_CS30_DragDropMail</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -23,7 +23,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-Compose Mail-</td>
+	<td>-Drag and Drop Mail-</td>
 	<td></td>
 </tr>
 <tr>
@@ -67,149 +67,24 @@
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>10000</td>
-	<td></td>
-</tr>
-<tr>
 	<td>echo</td>
-	<td>-- Compose mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder ComposeIcon']</td>
+	<td>-- Drag and Drop Mail</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>to</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>to</td>
-	<td>exotest4@gmail.com</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>subject</td>
-	<td>Test25_Compose_Mail</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>xpath=//div[@class='UIToolbar']//div[@class='IconHolder SendMailIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Check Compose Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='MailFolderList']//div[3]/a</td>
+	<td>xpath=//div[@id='uiMessageGrid']//table[@id='UIListUsers']/tbody[1]//input[1]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//div[@class='MailFolderList']//div[3]/a</td>
+	<td>xpath=//div[@id='uiMessageGrid']//table[@id='UIListUsers']/tbody[1]//input[1]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Test25_Compose_Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>link=Test25_Compose_Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Verify Mail was sent successfully</td>
-	<td></td>
-</tr>
-<tr>
-	<td>open</td>
-	<td>/csdemo</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-Check Mail-</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@class='LoginButton']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[@class='LoginButton']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>username</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>username</td>
-	<td>demo</td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>password</td>
-	<td>gtn</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>5000</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Goto Mail Account</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>link=Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Check Get Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder CheckMailIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder CheckMailIcon']</td>
-	<td></td>
+	<td>dragAndDropToObject</td>
+	<td>link=eXo_Test</td>
+	<td>link=Sent</td>
 </tr>
 <tr>
 	<td>pause</td>
@@ -217,13 +92,78 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Check moved mail in Sent</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>link=Test25_Compose_Mail</td>
+	<td>link=Sent</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Sent</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=eXo_Test</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>link=Test25_Compose_Mail</td>
+	<td>link=eXo_Test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Drag and Drop back Inbox</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@id='uiMessageGrid']//table[@id='UIListUsers']/tbody[1]//input[1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=//div[@id='uiMessageGrid']//table[@id='UIListUsers']/tbody[1]//input[1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>dragAndDropToObject</td>
+	<td>link=eXo_Test</td>
+	<td>link=Inbox</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>10000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Check moved mail in Inbox</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Inbox</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Inbox</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=eXo_Test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>link=eXo_Test</td>
 	<td></td>
 </tr>
 <tr>

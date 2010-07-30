@@ -3,13 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="http://localhost:8080/portal/public/classic/" />
-<title>Test_SNF_CS25_ComposeMail</title>
+<link rel="selenium.base" href="" />
+<title>Test_SNF_CS41_ManageAddressBook</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Test_SNF_CS25_ComposeMail</td></tr>
+<tr><td rowspan="1" colspan="3">Test_SNF_CS41_ManageAddressBook</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -23,7 +23,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-Compose Mail-</td>
+	<td>-Manage Address Book-</td>
 	<td></td>
 </tr>
 <tr>
@@ -44,7 +44,7 @@
 <tr>
 	<td>type</td>
 	<td>username</td>
-	<td>mary</td>
+	<td>john</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -57,183 +57,158 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>link=Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>10000</td>
-	<td></td>
-</tr>
-<tr>
 	<td>echo</td>
-	<td>-- Compose mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder ComposeIcon']</td>
+	<td>-- Add Address Book</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>to</td>
+	<td>link=Contacts</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Contacts</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Address Book</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Address Book</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>categoryName</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>to</td>
-	<td>exotest4@gmail.com</td>
+	<td>categoryName</td>
+	<td>Address_Book_41</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>subject</td>
-	<td>Test25_Compose_Mail</td>
+	<td>description</td>
+	<td>Address_Book_41_description</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//div[@class='UIToolbar']//div[@class='IconHolder SendMailIcon']</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Check Compose Mail</td>
+	<td>-- Verify Address book created</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='MailFolderList']//div[3]/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>xpath=//div[@class='MailFolderList']//div[3]/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Test25_Compose_Mail</td>
+	<td>xpath=//div[@class='PersonalAddress']//div[@title='Address_Book_41']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>link=Test25_Compose_Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=Sign out</td>
+	<td>xpath=//div[@class='PersonalAddress']//div[@title='Address_Book_41']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Verify Mail was sent successfully</td>
+	<td>-- Edit the added address book</td>
 	<td></td>
 </tr>
 <tr>
-	<td>open</td>
-	<td>/csdemo</td>
+	<td>mouseOver</td>
+	<td>xpath=//div[@class='PersonalAddress']//div[@title='Address_Book_41']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>-Check Mail-</td>
+	<td>contextMenu</td>
+	<td>xpath=//div[@class='PersonalAddress']//div[@title='Address_Book_41']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Edit</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Verify edited value</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>username</td>
+	<td>//input[@value='Address_Book_41']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>categoryName</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>username</td>
-	<td>demo</td>
+	<td>categoryName</td>
+	<td>Address_Book_41_Edited</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>password</td>
-	<td>gtn</td>
+	<td>description</td>
+	<td>Address_Book_41_description_Edited</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
+	<td>link=Save</td>
 	<td></td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>5000</td>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@class='PersonalAddress']//div[@title='Address_Book_41_Edited']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Goto Mail Account</td>
+	<td>-- Delete Address Book</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseOver</td>
+	<td>xpath=//div[@class='PersonalAddress']//div[@title='Address_Book_41_Edited']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>contextMenu</td>
+	<td>xpath=//div[@class='PersonalAddress']//div[@title='Address_Book_41_Edited']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Mail</td>
+	<td>link=Delete</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Mail</td>
+	<td>link=Delete</td>
 	<td></td>
 </tr>
 <tr>
-	<td>echo</td>
-	<td>-- Check Get Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder CheckMailIcon']</td>
+	<td>assertConfirmation</td>
+	<td>This address book will be deleted. Do you confirm?</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder CheckMailIcon']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>10000</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Test25_Compose_Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>link=Test25_Compose_Mail</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
 	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>close</td>
-	<td></td>
 	<td></td>
 </tr>
 
