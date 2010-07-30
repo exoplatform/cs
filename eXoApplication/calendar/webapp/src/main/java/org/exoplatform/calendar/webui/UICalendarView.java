@@ -488,7 +488,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         org.exoplatform.calendar.service.Calendar cal = null ;
         if(CalendarUtils.PUBLIC_TYPE.equals(ce.getCalType())){
           cal = calService.getGroupCalendar(ce.getCalendarId());
-          if(CalendarUtils.canEdit(orService,Utils.getEditPerUsers(cal), username)) {
+          // cs-4429: fix for group calendar permission
+          if(CalendarUtils.canEdit(orService,cal.getEditPermission(), username)) {
             calService.removePublicEvent(ce.getCalendarId(), ce.getId()) ;
           } else {
             allDelete_ = false ;
@@ -886,7 +887,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             List<GroupCalendarData> publicData = uiCalendarView.getPublicCalendars(username) ;
             for (GroupCalendarData calendarData : publicData) {
               if(calendarData.getCalendarById(calendarId) != null) {
-                canEdit = CalendarUtils.canEdit(oSevices, Utils.getEditPerUsers(calendarData.getCalendarById(calendarId)), username) ;
+                // cs-4429: fix for group calendar permission
+                canEdit = CalendarUtils.canEdit(oSevices, (calendarData.getCalendarById(calendarId)).getEditPermission(), username) ;
                 break ;
               }
             }
@@ -951,8 +953,12 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           } else {
-            if(!CalendarUtils.PRIVATE_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(
-                OrganizationService.class), Utils.getEditPerUsers(calendar), CalendarUtils.getCurrentUser())) {
+            // cs-4429: fix for group calendar permission
+            if((CalendarUtils.SHARED_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(
+                      OrganizationService.class), Utils.getEditPerUsers(calendar), CalendarUtils.getCurrentUser())) ||
+               (CalendarUtils.PUBLIC_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(
+                      OrganizationService.class), calendar.getEditPermission(), CalendarUtils.getCurrentUser()))) 
+            {
               UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
               uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -1304,7 +1310,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 		        if(calType.equals(CalendarUtils.SHARED_TYPE)) {
 		          canEdit = CalendarUtils.canEdit(null, Utils.getEditPerUsers(calendar), currentUser) ;
 		        } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-		          canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), Utils.getEditPerUsers(calendar), currentUser) ;
+		          // cs-4429: fix for group calendar permission
+		          canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), calendar.getEditPermission(), currentUser) ;
 		        }
 		        if(!calType.equals(CalendarUtils.PRIVATE_TYPE) && !canEdit) {
 		          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null)) ;
