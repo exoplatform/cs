@@ -255,7 +255,8 @@ public class UICalendars extends UIForm  {
       return CalendarUtils.canEdit(null, Utils.getEditPerUsers(calendar), currentUser) ;
     } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
       calendar = calService.getGroupCalendar(calendarId) ;
-      return CalendarUtils.canEdit(uiComponent.getApplicationComponent(OrganizationService.class), Utils.getEditPerUsers(calendar), currentUser) ;
+      // cs-4429: fix for group calendar permissions
+      return CalendarUtils.canEdit(uiComponent.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), currentUser) ;
     }  
     return false ;
   }
@@ -486,18 +487,24 @@ public class UICalendars extends UIForm  {
       }
       try {
         Calendar calendar = null ;
-        if(CalendarUtils.PRIVATE_TYPE.equals(calType)) { 
+        if(CalendarUtils.PRIVATE_TYPE.equals(calType)) 
+        { 
           calendar = calService.getUserCalendar(username, calendarId) ;
         } else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
           calendar = calService.getGroupCalendar(calendarId) ;
         }
-        if(calendar == null){
+        if(calendar == null)
+        {
           UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
-        } else  {
-          if(!CalendarUtils.PRIVATE_TYPE.equals(calType) && !uiComponent.canEdit(Utils.getEditPerUsers(calendar))) {
+        } else  
+        {
+          // cs-4429: fix for group calendar permission
+          if((CalendarUtils.SHARED_TYPE.equals(calType) && !uiComponent.canEdit(Utils.getEditPerUsers(calendar))) ||
+             (CalendarUtils.PUBLIC_TYPE.equals(calType) && !uiComponent.canEdit(calendar.getEditPermission()))) 
+          {
             UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -554,7 +561,8 @@ public class UICalendars extends UIForm  {
             for(GroupCalendarData groupCal : uiComponent.getPublicCalendars()) {
               for(Calendar cal : groupCal.getCalendars()) {
                 if(cal.getId().equals(calendarId)) {
-                  canEdit = CalendarUtils.canEdit(oService, Utils.getEditPerUsers(groupCal.getCalendarById(calendarId)), username) ;
+                  // cs-4429: fix for group calendar permission
+                  canEdit = CalendarUtils.canEdit(oService, (groupCal.getCalendarById(calendarId)).getEditPermission(), username) ;
                   break ;
                 }
               }
@@ -697,7 +705,8 @@ public class UICalendars extends UIForm  {
         if(calType.equals(CalendarUtils.SHARED_TYPE)) {
           canEdit = CalendarUtils.canEdit(null, Utils.getEditPerUsers(calendar), currentUser) ;
         } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-          canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), Utils.getEditPerUsers(calendar), currentUser) ;
+          // cs-4429: fix for group calendar permission
+          canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), calendar.getEditPermission(), currentUser) ;
         }
         if(!calType.equals(CalendarUtils.PRIVATE_TYPE) && !canEdit) {
           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null)) ;
@@ -916,7 +925,8 @@ public class UICalendars extends UIForm  {
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           } else {
-            if(!CalendarUtils.canEdit(uiComponent.getApplicationComponent(OrganizationService.class), Utils.getEditPerUsers(calendar), username)){
+            // cs-4429: fix for group calendar permission
+            if(!CalendarUtils.canEdit(uiComponent.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), username)){
               UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
               uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, ApplicationMessage.WARNING)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
