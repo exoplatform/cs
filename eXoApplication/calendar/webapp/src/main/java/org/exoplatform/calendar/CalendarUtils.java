@@ -747,7 +747,8 @@ public class CalendarUtils {
       OrganizationService oService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
-          if(CalendarUtils.canEdit(oService, Utils.getEditPerUsers(c), username)){
+          // cs-4429: fix for group calendar permission
+          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
             list.add(c) ; 
           }
         }
