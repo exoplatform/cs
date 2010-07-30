@@ -1,0 +1,275 @@
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/core/XMPPCommunicator.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/core/XMPPCommunicator.js	(revision 49987)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/core/XMPPCommunicator.js	(working copy)
+@@ -4,7 +4,7 @@
+  * A core javascript library using for communicate with services.
+  */
+ function XMPPCommunicator() {
+-  this.SERVICE_URL       = '/chat/messengerservlet';
++  this.SERVICE_URL       = '/portal/rest';
+   this.TRANSPORT_XMPP    = 'xmpp';
+   this.TRANSPORT_YAHOO   = 'yahoo';
+   this.TRANSPORT_GTALK   = 'gtalk';
+@@ -103,7 +103,7 @@
+  * @param {AjaxHandler} handler
+  */
+ XMPPCommunicator.prototype.orgFuzzySearchUser = function(question, from, to, handler) {
+-	var url = '/rest/organization/json/user/find-user-in-range/?question=' + question + '&from=' + from + '&to=' + to;
++	var url = '/portal/rest/organization/json/user/find-user-in-range/?question=' + question + '&from=' + from + '&to=' + to;
+   var request = new eXo.portal.AjaxRequest('GET', url, null);
+   this.initRequest(request, handler);
+   request.process() ;
+@@ -122,7 +122,7 @@
+  * @param {AjaxHandler} handler
+  */
+ XMPPCommunicator.prototype.orgSearchUser = function(userName, handler) {
+-  var url = '/rest/organization/json/user/find-all/?username=' + userName;
++  var url = '/portal/rest/organization/json/user/find-all/?username=' + userName;
+   var request = new eXo.portal.AjaxRequest('GET', url, null);
+   this.initRequest(request, handler);
+   request.process() ;
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(revision 49987)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(working copy)
+@@ -1779,7 +1779,7 @@
+   var targetPerson = activeTabControl.tabId.targetPerson;
+   targetPerson = targetPerson.substr(0, targetPerson.indexOf('@'));
+   var currentUser = this.UIMainChatWindow.userNames[this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP];
+-  var url = '/chat/messengerservlet/' + this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP + '/history/file/getmessages/' + targetPerson + '/' + activeTabControl.isGroupChat + '/';
++  var url = '/portal/rest/' + this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP + '/history/file/getmessages/' + targetPerson + '/' + activeTabControl.isGroupChat + '/';
+   if (startDate) {
+     url += startDate + '/';
+   }
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIStateManager.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIStateManager.js	(revision 49987)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIStateManager.js	(working copy)
+@@ -141,7 +141,7 @@
+     return;
+   }
+   // Do upload state data to server using url: /chat/messengerservlet/uistateservice/save/{user}/
+-  var url = '/chat/messengerservlet/uistateservice/save/' + this.userName + '/' + this.unreadMessageCnt;// + '/';
++  var url = '/portal/rest/uistateservice/save/' + this.userName + '/' + this.unreadMessageCnt;// + '/';
+   var handler = new AjaxHandler(this, this.STORE_DATA_AJAX_ACTION);
+   if (data) {
+     this.ajaxWrapper(handler, url, 'POST', data);
+@@ -158,7 +158,7 @@
+  */
+ UIStateManager.prototype.reload = function() {
+   // Do get state data to server using url: /chat/messengerservlet/uistateservice/get/{user}/
+-  var url = '/chat/messengerservlet/uistateservice/get/' + this.userName;
++  var url = '/portal/rest/uistateservice/get/' + this.userName;
+   var handler = new AjaxHandler(this, this.RELOAD_DATA_AJAX_ACTION);
+   this.ajaxWrapper(handler, url, 'GET');
+   this.isPropertiesChanged = false;
+Index: eXoApplication/chat/webapp/src/main/webapp/WEB-INF/web.xml
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/WEB-INF/web.xml	(revision 49987)
++++ eXoApplication/chat/webapp/src/main/webapp/WEB-INF/web.xml	(working copy)
+@@ -9,15 +9,7 @@
+ 		<filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
+ 	</filter>
+ 
+-	<filter>
+-		<filter-name>SetCurrentIdentityFilter</filter-name>
+-		<filter-class>org.exoplatform.services.security.web.SetCurrentIdentityFilter</filter-class>
+-		<init-param>
+-		  <param-name>portalContainerName</param-name>
+-		  <param-value>portal</param-value>
+-		</init-param>
+-	</filter>
+-	
++	 
+   <filter>
+     <filter-name>LogoutFilter</filter-name>
+     <filter-class>org.exoplatform.services.xmpp.servlet.LogoutFilter</filter-class>
+@@ -25,14 +17,11 @@
+ 
+   <filter-mapping>
+     <filter-name>LogoutFilter</filter-name>
+-    <url-pattern>/messengerservlet/xmpp/logout/*</url-pattern>
++    <url-pattern>/portal/rest/xmpp/logout/*</url-pattern>
+   </filter-mapping>  
+    
++	 
+ 	<filter-mapping>
+-		<filter-name>SetCurrentIdentityFilter</filter-name>
+-		<url-pattern>/*</url-pattern>
+-	</filter-mapping>
+-	<filter-mapping>
+ 		<filter-name>ResourceRequestFilter</filter-name>
+ 		<url-pattern>/*</url-pattern>
+ 	</filter-mapping>
+@@ -54,19 +43,7 @@
+ 		<servlet-class>org.exoplatform.services.portletcontainer.impl.servlet.ServletWrapper</servlet-class>
+ 	</servlet>
+ 
+-	<servlet>
+-		<servlet-name>MessengerServlet</servlet-name>
+-		<description></description>
+-		<servlet-class>org.exoplatform.services.xmpp.servlet.MessengerServlet</servlet-class>
+-		<init-param>
+-			<param-name>connection-timeout</param-name>
+-			<param-value>60000</param-value>
+-		</init-param>
+-		<init-param>
+-			<param-name>time-check-event</param-name>
+-			<param-value>1000</param-value>
+-		</init-param>
+-	</servlet>
++	 
+   
+   <servlet>
+     <servlet-name>FileExchange</servlet-name>
+@@ -82,10 +59,7 @@
+ 		<url-pattern>/PortletWrapper</url-pattern>
+ 	</servlet-mapping>
+ 
+-	<servlet-mapping>
+-		<servlet-name>MessengerServlet</servlet-name>
+-		<url-pattern>/messengerservlet/*</url-pattern>
+-	</servlet-mapping>                   
++	                
+   
+   <servlet-mapping>
+ 		<servlet-name>FileExchange</servlet-name>
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/core/XMPPCommunicator.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/core/XMPPCommunicator.js	(revision 49987)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/core/XMPPCommunicator.js	(working copy)
+@@ -4,7 +4,7 @@
+  * A core javascript library using for communicate with services.
+  */
+ function XMPPCommunicator() {
+-  this.SERVICE_URL       = '/chat/messengerservlet';
++  this.SERVICE_URL       = '/portal/rest';
+   this.TRANSPORT_XMPP    = 'xmpp';
+   this.TRANSPORT_YAHOO   = 'yahoo';
+   this.TRANSPORT_GTALK   = 'gtalk';
+@@ -103,7 +103,7 @@
+  * @param {AjaxHandler} handler
+  */
+ XMPPCommunicator.prototype.orgFuzzySearchUser = function(question, from, to, handler) {
+-	var url = '/rest/organization/json/user/find-user-in-range/?question=' + question + '&from=' + from + '&to=' + to;
++	var url = '/portal/rest/organization/json/user/find-user-in-range/?question=' + question + '&from=' + from + '&to=' + to;
+   var request = new eXo.portal.AjaxRequest('GET', url, null);
+   this.initRequest(request, handler);
+   request.process() ;
+@@ -122,7 +122,7 @@
+  * @param {AjaxHandler} handler
+  */
+ XMPPCommunicator.prototype.orgSearchUser = function(userName, handler) {
+-  var url = '/rest/organization/json/user/find-all/?username=' + userName;
++  var url = '/portal/rest/organization/json/user/find-all/?username=' + userName;
+   var request = new eXo.portal.AjaxRequest('GET', url, null);
+   this.initRequest(request, handler);
+   request.process() ;
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(revision 49987)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(working copy)
+@@ -1779,7 +1779,7 @@
+   var targetPerson = activeTabControl.tabId.targetPerson;
+   targetPerson = targetPerson.substr(0, targetPerson.indexOf('@'));
+   var currentUser = this.UIMainChatWindow.userNames[this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP];
+-  var url = '/chat/messengerservlet/' + this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP + '/history/file/getmessages/' + targetPerson + '/' + activeTabControl.isGroupChat + '/';
++  var url = '/portal/rest/' + this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP + '/history/file/getmessages/' + targetPerson + '/' + activeTabControl.isGroupChat + '/';
+   if (startDate) {
+     url += startDate + '/';
+   }
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIStateManager.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIStateManager.js	(revision 49987)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIStateManager.js	(working copy)
+@@ -141,7 +141,7 @@
+     return;
+   }
+   // Do upload state data to server using url: /chatbar/messengerservlet/uistateservice/save/{user}/
+-  var url = '/chatbar/messengerservlet/uistateservice/save/' + this.userName + '/' + this.unreadMessageCnt;// + '/';
++  var url = '/portal/rest/uistateservice/save/' + this.userName + '/' + this.unreadMessageCnt;// + '/';
+   var handler = new AjaxHandler(this, this.STORE_DATA_AJAX_ACTION);
+   if (data) {
+     this.ajaxWrapper(handler, url, 'POST', data);
+@@ -158,7 +158,7 @@
+  */
+ UIStateManager.prototype.reload = function() {
+   // Do get state data to server using url: /chatbar/messengerservlet/uistateservice/get/{user}/
+-  var url = '/chatbar/messengerservlet/uistateservice/get/' + this.userName;
++  var url = '/portal/rest/uistateservice/get/' + this.userName;
+   var handler = new AjaxHandler(this, this.RELOAD_DATA_AJAX_ACTION);
+   this.ajaxWrapper(handler, url, 'GET');
+   this.isPropertiesChanged = false;
+Index: eXoApplication/chatbar/webapp/src/main/webapp/WEB-INF/web.xml
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/WEB-INF/web.xml	(revision 49987)
++++ eXoApplication/chatbar/webapp/src/main/webapp/WEB-INF/web.xml	(working copy)
+@@ -9,14 +9,7 @@
+ 		<filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
+ 	</filter>
+ 
+-	<filter>
+-		<filter-name>SetCurrentIdentityFilter</filter-name>
+-		<filter-class>org.exoplatform.services.security.web.SetCurrentIdentityFilter</filter-class>
+-		<init-param>
+-		  <param-name>portalContainerName</param-name>
+-		  <param-value>portal</param-value>
+-		</init-param>
+-	</filter>
++	 
+ 	
+   <filter>
+     <filter-name>LogoutFilter</filter-name>
+@@ -25,14 +18,10 @@
+ 
+   <filter-mapping>
+     <filter-name>LogoutFilter</filter-name>
+-    <url-pattern>/messengerservlet/xmpp/logout/*</url-pattern>
++    <url-pattern>/portal/rest/xmpp/logout/*</url-pattern>
+   </filter-mapping>
+-     
++   
+ 	<filter-mapping>
+-		<filter-name>SetCurrentIdentityFilter</filter-name>
+-		<url-pattern>/*</url-pattern>
+-	</filter-mapping>
+-	<filter-mapping>
+ 		<filter-name>ResourceRequestFilter</filter-name>
+ 		<url-pattern>/*</url-pattern>
+ 	</filter-mapping>
+@@ -54,20 +43,7 @@
+ 		<servlet-class>org.exoplatform.services.portletcontainer.impl.servlet.ServletWrapper</servlet-class>
+ 	</servlet>
+ 
+-	<servlet>
+-		<servlet-name>MessengerServlet</servlet-name>
+-		<description></description>
+-		<servlet-class>org.exoplatform.services.xmpp.servlet.MessengerServlet</servlet-class>
+-		<init-param>
+-			<param-name>connection-timeout</param-name>
+-			<param-value>60000</param-value>
+-		</init-param>
+-		<init-param>
+-			<param-name>time-check-event</param-name>
+-			<param-value>1000</param-value>
+-		</init-param>
+-	</servlet>
+-  
++	 
+   <servlet>
+     <servlet-name>FileExchange</servlet-name>
+     <servlet-class>org.exoplatform.services.xmpp.rest.FileExchangeServlet</servlet-class>
+@@ -82,11 +58,7 @@
+ 		<url-pattern>/PortletWrapper</url-pattern>
+ 	</servlet-mapping>
+ 
+-	<servlet-mapping>
+-		<servlet-name>MessengerServlet</servlet-name>
+-		<url-pattern>/messengerservlet/*</url-pattern>
+-	</servlet-mapping>                   
+-  
++	 
+   <servlet-mapping>
+ 		<servlet-name>FileExchange</servlet-name>
+ 		<url-pattern>/fileexchange/*</url-pattern>
