@@ -243,7 +243,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       SelectOptionGroup pubGrp = new SelectOptionGroup("publicCalendar");
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
-          if(CalendarUtils.canEdit(oService, org.exoplatform.calendar.service.Utils.getEditPerUsers(c), username)){
+          // cs-4429: fix for group calendar permission
+          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
             pubGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
           }
         }
@@ -788,7 +789,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
             if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
               canEdit = CalendarUtils.canEdit(null, org.exoplatform.calendar.service.Utils.getEditPerUsers(currentCalendar), username) ;
             } else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
-              canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), org.exoplatform.calendar.service.Utils.getEditPerUsers(currentCalendar), username) ;
+              // cs-4429: fix for group calendar permission
+              canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), currentCalendar.getEditPermission(), username) ;
             }
             if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
               uiPopupAction.deActivate() ;
