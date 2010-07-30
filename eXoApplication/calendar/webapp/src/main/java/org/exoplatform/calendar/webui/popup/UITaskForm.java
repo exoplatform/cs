@@ -1026,7 +1026,8 @@ public Attachment getAttachment(String attId) {
           if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
             canEdit = CalendarUtils.canEdit(null, Utils.getEditPerUsers(currentCalendar), username) ;
           } else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
-            canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(),Utils.getEditPerUsers(currentCalendar), username) ;
+            // cs-4429: fix for group calendar permission
+            canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(),currentCalendar.getEditPermission(), username) ;
           }
           if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
             uiPopupAction.deActivate() ;
