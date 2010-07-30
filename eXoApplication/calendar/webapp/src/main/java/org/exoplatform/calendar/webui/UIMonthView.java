@@ -189,7 +189,10 @@ public class UIMonthView extends UICalendarView {
             if(calendar == null) {
               continue ;
             } else {
-              if(!CalendarUtils.PRIVATE_TYPE.equals(ce.getCalType()) && !CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), Utils.getEditPerUsers(calendar), username)) {
+              // cs-4429: fix for group calendar permission
+              if((CalendarUtils.SHARED_TYPE.equals(ce.getCalType()) && !CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), Utils.getEditPerUsers(calendar), username)) ||
+                 (CalendarUtils.PUBLIC_TYPE.equals(ce.getCalType()) && !CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), calendar.getEditPermission(), username))) 
+              {
                 continue ;
               }
               CalendarEvent calEvent = ce ;
