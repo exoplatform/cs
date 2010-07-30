@@ -130,7 +130,8 @@ public class CalendarWebservice implements ResourceContainer{
         OrganizationService oService = (OrganizationService)ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
         cal = calService.getGroupCalendar(calendarId) ;
-        if(Utils.canEdit(oService, Utils.getEditPerUsers(cal), username)) {
+        // cs-4429: fix for group calendar permission
+        if(Utils.canEdit(oService, cal.getEditPermission(), username)) {
         	eventData.setPermission(true);
         } 
         stop();
