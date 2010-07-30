@@ -26,7 +26,7 @@
       <link rel="stylesheet" href="skin/tasks.css" type="text/css"/>
 			<div class="UIGadgetThemes UIYellowThemes">
 				<div class="TitGad ClearFix">
-					<a href="#demo" class="IconDropDown" id="ShowAll" >__MSG_showall__</a>
+					<a href="#demo" class="IconDropDown" id="ShowAll" target="_blank">__MSG_showall__</a>
 					<div class="ContTit">__MSG_title__</div>
 				</div>
 				<div class="GadCont MyTasks" id="ItemContainer">
