@@ -247,7 +247,8 @@ public class CalendarUtils {
       options.add(new SelectItemOption<String>(CalendarUtils.PUBLIC_CALENDARS, "")) ;
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
-          if(CalendarUtils.canEdit(oService, Utils.getEditPerUsers(c), username)){
+          // cs-4429: fix for group calendar permission
+          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
             options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
           }
         }
