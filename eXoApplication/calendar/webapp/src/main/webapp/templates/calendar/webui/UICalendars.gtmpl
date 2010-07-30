@@ -213,7 +213,7 @@
 							calId = calendar.getId() ;
 							if(uicomponent.getChildById(calId) != null) {
 				%>
-  					<div class="CalendarItem $calendar.calendarColor CalendarItemPublic"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(Utils.getEditPerUsers(calendar))%>" id="$calId" calType="2" >
+  					<div class="CalendarItem $calendar.calendarColor CalendarItemPublic"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission())%>" id="$calId" calType="2" >
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon" title="<%=calendar.getName()%>"><span><%=calendar.getName()%></span></div>
   							<!--<div class="DownArrow1Icon"><span></span></div>-->
