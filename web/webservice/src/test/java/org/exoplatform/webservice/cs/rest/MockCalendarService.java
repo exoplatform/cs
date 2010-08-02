@@ -475,7 +475,7 @@ public class MockCalendarService implements CalendarService{
   }
 
   @Override
-  public void addListenerPlugin(CalendarEventListener listener) throws Exception {
+  public void addEventListenerPlugin(CalendarEventListener listener) throws Exception {
     // TODO Auto-generated method stub
     
   }

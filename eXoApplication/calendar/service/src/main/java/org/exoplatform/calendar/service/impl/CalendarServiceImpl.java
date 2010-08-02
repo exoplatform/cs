@@ -591,7 +591,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   }
 
   @Override
-  public void addListenerPlugin(CalendarEventListener listener) throws Exception {
+  public void addEventListenerPlugin(CalendarEventListener listener) throws Exception {
     eventListeners_.add(listener);    
   }
 }

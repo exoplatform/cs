@@ -34,7 +34,7 @@
     <target-component>org.exoplatform.calendar.service.CalendarService</target-component>
     <component-plugin>
       <name>CalendarEventListener</name>
-      <set-method>addListenerPlugin</set-method>
+      <set-method>addEventListenerPlugin</set-method>
       <type>org.exoplatform.cs.ext.impl.CalendarSpaceActivityPublisher</type>
     </component-plugin>
   </external-component-plugins>

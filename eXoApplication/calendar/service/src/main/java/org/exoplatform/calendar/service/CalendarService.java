@@ -543,7 +543,7 @@ public interface CalendarService {
   
   public void addListenerPlugin(CalendarUpdateEventListener listener) throws Exception ;
   
-  public void addListenerPlugin(CalendarEventListener listener) throws Exception ;
+  public void addEventListenerPlugin(CalendarEventListener listener) throws Exception ;
   
   /**
    * The method update exited rss data when calendar has been changed
