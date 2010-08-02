@@ -64,7 +64,6 @@ import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.upload.UploadService;
@@ -1308,12 +1307,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource();//
       UIPopupActionContainer actionContainer = uiForm.getParent();
-      UIPopupActionDMSAdapted uiChildPopup = actionContainer.getChildById("UIPopupActionCompose");
+      UIPopupAction uiChildPopup = actionContainer.getChildById("UIPopupActionDMSSelector");
       if(uiChildPopup == null) {
-        uiChildPopup = actionContainer.addChild(UIPopupActionDMSAdapted.class, null, "UIPopupActionCompose");
+        uiChildPopup = actionContainer.addChild(UIPopupAction.class, null, "UIPopupActionDMSSelector");
       }
       UIPopupWindow uiPopup = uiChildPopup.getChild(UIPopupWindow.class);
-      uiPopup.setId("UIChildPopupWindow");
+      uiPopup.setId("UIPopupWindowDMSSelector");
       uiPopup.setWindowSize(600, 600);
       UIOneNodePathSelector uiOneNodePathSelector = uiChildPopup.createUIComponent(UIOneNodePathSelector.class, null, null);
       uiOneNodePathSelector.setAcceptedNodeTypesInPathPanel(new String[] {org.exoplatform.ecm.webui.utils.Utils.NT_FILE});
