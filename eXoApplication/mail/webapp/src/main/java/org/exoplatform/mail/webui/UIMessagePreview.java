@@ -54,7 +54,6 @@ import org.exoplatform.mail.webui.popup.UIExportForm;
 import org.exoplatform.mail.webui.popup.UIMoveMessageForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
-import org.exoplatform.mail.webui.popup.UIPopupActionDMSAdapted;
 import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.mail.webui.popup.UIViewAllHeaders;
@@ -118,7 +117,6 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
   private Attachment    selectedAttachment_;
 
   public UIMessagePreview() throws Exception {
-    addChild(UIPopupActionDMSAdapted.class, null, null);
   }
 
   public Message getMessage() throws Exception {
@@ -288,7 +286,8 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       String attId = event.getRequestContext().getRequestParameter("attachId");
-
+      UIMailPortlet portlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       if (msg != null) {
         List<Attachment> attList = msg.getAttachments();
@@ -301,8 +300,9 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
 
         if (att != null) {
           uiMsgPreview.setSelectedAttachment_(att);
-
-          UIOneNodePathSelector selector = uiMsgPreview.createUIComponent(UIOneNodePathSelector.class,
+          UIPopupAction popupAction = portlet.getChild(UIPopupAction.class);
+          
+          UIOneNodePathSelector selector = popupAction.createUIComponent(UIOneNodePathSelector.class,
                                                                           null,
                                                                           null);
           selector.setAcceptedNodeTypesInPathPanel(new String[] {org.exoplatform.ecm.webui.utils.Utils.NT_UNSTRUCTURED, org.exoplatform.ecm.webui.utils.Utils.NT_FOLDER});
@@ -314,8 +314,6 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
           selector.setIsDisable(info[1], true);
           selector.setIsShowSystem(false);
           selector.init(SessionProviderFactory.createSessionProvider());
-          
-          UIPopupActionDMSAdapted popupAction = uiMsgPreview.getChild(UIPopupActionDMSAdapted.class);
 
           UIPopupWindow popupChildWindow = popupAction.getChild(UIPopupWindow.class);
           popupChildWindow.setUIComponent(selector);
@@ -325,7 +323,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
 
           popupChildWindow.setResizable(true);
           // popupAction.activate(selector, 600, 600);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
+          event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
         }
 
       }

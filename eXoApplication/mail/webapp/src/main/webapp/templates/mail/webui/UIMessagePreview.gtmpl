@@ -1,5 +1,4 @@
 <%
-	import org.exoplatform.mail.webui.popup.UIPopupActionDMSAdapted;
   import org.exoplatform.mail.service.Message;
   import org.exoplatform.mail.service.Utils; 
   import org.exoplatform.mail.service.Attachment;
@@ -576,7 +575,5 @@
     _ctx.include("app:/templates/mail/webui/UIIntroduction.gtmpl");
   } 
 %>
-<%uicomponent.renderChild(UIPopupActionDMSAdapted.class);%>
-
 
 </div>
