@@ -70,6 +70,8 @@ public class ContactServiceImpl implements ContactService {
   
   private static final String TRUE = "true".intern();
   
+  private List<ContactEventListener> listeners_ = new ArrayList<ContactEventListener>(3);
+  
   @SuppressWarnings("unchecked")
   public ContactServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService rservice, InitParams initParams) throws Exception {
       storage_ = new JCRDataStorage(nodeHierarchyCreator, rservice) ;
@@ -462,5 +464,10 @@ public class ContactServiceImpl implements ContactService {
 
   public boolean haveEditPermissionOnContact(String username, Contact contact) throws Exception {
     return storage_.haveEditPermissionOnContact(username, contact);
+  }
+
+  @Override
+  public void addListenerPlugin(ContactEventListener listener) throws Exception {
+    listeners_.add(listener);
   }
 }

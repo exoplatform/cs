@@ -19,6 +19,7 @@ package org.exoplatform.contact.service;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.contact.service.impl.ContactEventListener;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 
@@ -488,5 +489,7 @@ public interface ContactService {
    * @return contact
    */
   public boolean haveEditPermissionOnContact(String username, Contact contact) throws Exception;
+  
+  public void addListenerPlugin(ContactEventListener listener) throws Exception ;
   
 }

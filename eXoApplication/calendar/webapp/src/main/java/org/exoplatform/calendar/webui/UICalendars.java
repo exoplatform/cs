@@ -77,8 +77,6 @@ import org.exoplatform.webui.form.ext.UIFormColorPicker.Colors;
                    @EventConfig(listeners = UICalendars.ExportCalendarActionListener.class), 
                    @EventConfig(listeners = UICalendars.ExportCalendarsActionListener.class), 
                    @EventConfig(listeners = UICalendars.ImportCalendarActionListener.class),
-                   //@EventConfig(listeners = UICalendars.GenerateRssActionListener.class), 
-                   //@EventConfig(listeners = UICalendars.GenerateCalDavActionListener.class), 
                    @EventConfig(listeners = UICalendars.AddEventActionListener.class),
                    @EventConfig(listeners = UICalendars.AddTaskActionListener.class),
                    @EventConfig(listeners = UICalendars.EditCalendarActionListener.class),

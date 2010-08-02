@@ -17,6 +17,7 @@
 package org.exoplatform.contact.service.impl;
 
 import org.exoplatform.contact.service.ContactLifeCycle;
+import org.exoplatform.container.component.BaseComponentPlugin;
 
 /**
  * Created by The eXo Platform SAS
@@ -24,7 +25,7 @@ import org.exoplatform.contact.service.ContactLifeCycle;
  *          exo@exoplatform.com
  * Jul 30, 2010  
  */
-public class ContactEventListener implements ContactLifeCycle {
+public class ContactEventListener extends BaseComponentPlugin implements ContactLifeCycle {
 
   @Override
   public void saveNecontact() {

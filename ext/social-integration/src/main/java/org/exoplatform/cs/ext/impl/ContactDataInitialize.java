@@ -43,7 +43,7 @@ public class ContactDataInitialize extends SpaceListenerPlugin {
   public void applicationAdded(SpaceLifeCycleEvent event) {
     try {
     Space space = event.getSpace();
-   
+    
       
     }catch (Exception e) {
       log.debug(e.getMessage());

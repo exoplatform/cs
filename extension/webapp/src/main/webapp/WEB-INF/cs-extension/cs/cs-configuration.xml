@@ -13,14 +13,6 @@
       <type>org.exoplatform.services.scheduler.QueueTasks</type>
    </component>
   
-  <!-- UI Extension plug-in -->
-  
-  <component>
-    <key>org.exoplatform.webui.ext.UIExtensionManager</key>
-    <type>org.exoplatform.webui.ext.impl.UIExtensionManagerImpl</type>
-  </component>
-     
-	
   <external-component-plugins>
     <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
     <component-plugin>
@@ -144,28 +136,5 @@
     	</component-plugin>      
   	</external-component-plugins>
   	
-  	
-  <!-- UI Extension plug-in -->
-   
-  <external-component-plugins>
-    <target-component>org.exoplatform.webui.ext.UIExtensionManager</target-component>
-    <component-plugin>
-      <name>add.action</name>
-      <set-method>registerUIExtensionPlugin</set-method>
-      <type>org.exoplatform.webui.ext.UIExtensionPlugin</type>
-      <init-params>
-        <object-param>
-          <name>EditPage</name>
-          <object type="org.exoplatform.webui.ext.UIExtension">
-            <field name="type"><string>toolbar class</string></field>
-            <field name="rank"><int>300</int></field>
-            <field name="name"><string>SelectFile</string></field>
-            <field name="component"><string>implment</string></field>
-          </object>
-        </object-param>
-                 
-      </init-params>
-    </component-plugin>
-  </external-component-plugins>
   
 </configuration>

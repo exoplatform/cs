@@ -20,11 +20,17 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
+import javax.portlet.PortletPreferences;
+
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.social.core.space.model.Space;
+import org.exoplatform.social.core.space.spi.SpaceService;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPopupWindow;
@@ -45,9 +51,7 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
     template = "app:/templates/calendar/webui/UICalendarPortlet.gtmpl"
 )
 public class UICalendarPortlet extends UIPortletApplication {
-//  private CalendarSetting calendarSetting_ ;
   public UICalendarPortlet() throws Exception {
-//    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()) ;
     UIActionBar uiActionBar = addChild(UIActionBar.class, null, null) ;
     uiActionBar.setCurrentView(UICalendarViewContainer.TYPES[Integer.parseInt(getCalendarSetting().getViewType())]) ;
     addChild(UICalendarWorkingContainer.class, null, null) ;
@@ -60,6 +64,16 @@ public class UICalendarPortlet extends UIPortletApplication {
   }
   public void setCalendarSetting(CalendarSetting setting) throws Exception{
     CalendarUtils.setCurrentCalendarSetting(setting); 
+  }
+  
+  @Override
+  public void processRender(WebuiRequestContext context) throws Exception {
+    String spaceId = getSpaceId();
+    if(spaceId != null) {
+      CalendarSetting setting = getCalendarSetting();
+      setting.setFilterPublicCalendars(new String[]{org.exoplatform.calendar.service.Calendar.CALENDAR_PREF + spaceId});
+    }
+    super.processRender(context);
   }
   
   /**
@@ -111,6 +125,24 @@ public class UICalendarPortlet extends UIPortletApplication {
   
   public String getRestContextName() {
     return PortalContainer.getInstance().getRestContextName();
+  }
+  
+  public String getSpaceId(){
+
+    try {
+      PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+      PortletPreferences pref = pcontext.getRequest().getPreferences();
+      if(pref.getValue("SPACE_URL", null) != null) {
+        String url = pref.getValue("SPACE_URL", null);
+        SpaceService sService = (SpaceService) PortalContainer.getInstance().getComponentInstanceOfType(SpaceService.class);
+        Space space = sService.getSpaceByUrl(url) ;
+        return space.getId() ;
+      }
+      return null;
+    } catch (Exception e) {
+      return null;
+    }
+
   }
   
 }
