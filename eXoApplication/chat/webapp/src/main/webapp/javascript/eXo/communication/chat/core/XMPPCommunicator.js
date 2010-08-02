@@ -4,7 +4,7 @@
  * A core javascript library using for communicate with services.
  */
 function XMPPCommunicator() {
-  this.SERVICE_URL       = '/chat/messengerservlet';
+  this.SERVICE_URL       = '/portal/rest';
   this.TRANSPORT_XMPP    = 'xmpp';
   this.TRANSPORT_YAHOO   = 'yahoo';
   this.TRANSPORT_GTALK   = 'gtalk';
@@ -103,7 +103,7 @@ XMPPCommunicator.prototype.initRequest = function(ajaxRequest, handler) {
  * @param {AjaxHandler} handler
  */
 XMPPCommunicator.prototype.orgFuzzySearchUser = function(question, from, to, handler) {
-	var url = '/rest/organization/json/user/find-user-in-range/?question=' + question + '&from=' + from + '&to=' + to;
+	var url = '/portal/rest/organization/json/user/find-user-in-range/?question=' + question + '&from=' + from + '&to=' + to;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process() ;
@@ -122,7 +122,7 @@ XMPPCommunicator.prototype.orgFuzzySearchUser = function(question, from, to, han
  * @param {AjaxHandler} handler
  */
 XMPPCommunicator.prototype.orgSearchUser = function(userName, handler) {
-  var url = '/rest/organization/json/user/find-all/?username=' + userName;
+  var url = '/portal/rest/organization/json/user/find-all/?username=' + userName;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process() ;

@@ -1779,7 +1779,7 @@ UIChatWindow.prototype.exportHistory = function() {
   var targetPerson = activeTabControl.tabId.targetPerson;
   targetPerson = targetPerson.substr(0, targetPerson.indexOf('@'));
   var currentUser = this.UIMainChatWindow.userNames[this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP];
-  var url = '/chat/messengerservlet/' + this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP + '/history/file/getmessages/' + targetPerson + '/' + activeTabControl.isGroupChat + '/';
+  var url = '/portal/rest/' + this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP + '/history/file/getmessages/' + targetPerson + '/' + activeTabControl.isGroupChat + '/';
   if (startDate) {
     url += startDate + '/';
   }

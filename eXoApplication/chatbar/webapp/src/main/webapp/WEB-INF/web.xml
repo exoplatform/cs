@@ -9,14 +9,7 @@
 		<filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
 	</filter>
 
-	<filter>
-		<filter-name>SetCurrentIdentityFilter</filter-name>
-		<filter-class>org.exoplatform.services.security.web.SetCurrentIdentityFilter</filter-class>
-		<init-param>
-		  <param-name>portalContainerName</param-name>
-		  <param-value>portal</param-value>
-		</init-param>
-	</filter>
+	 
 	
   <filter>
     <filter-name>LogoutFilter</filter-name>
@@ -25,13 +18,9 @@
 
   <filter-mapping>
     <filter-name>LogoutFilter</filter-name>
-    <url-pattern>/messengerservlet/xmpp/logout/*</url-pattern>
+    <url-pattern>/portal/rest/xmpp/logout/*</url-pattern>
   </filter-mapping>
-     
-	<filter-mapping>
-		<filter-name>SetCurrentIdentityFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+   
 	<filter-mapping>
 		<filter-name>ResourceRequestFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -54,20 +43,7 @@
 		<servlet-class>org.exoplatform.services.portletcontainer.impl.servlet.ServletWrapper</servlet-class>
 	</servlet>
 
-	<servlet>
-		<servlet-name>MessengerServlet</servlet-name>
-		<description></description>
-		<servlet-class>org.exoplatform.services.xmpp.servlet.MessengerServlet</servlet-class>
-		<init-param>
-			<param-name>connection-timeout</param-name>
-			<param-value>60000</param-value>
-		</init-param>
-		<init-param>
-			<param-name>time-check-event</param-name>
-			<param-value>1000</param-value>
-		</init-param>
-	</servlet>
-  
+	 
   <servlet>
     <servlet-name>FileExchange</servlet-name>
     <servlet-class>org.exoplatform.services.xmpp.rest.FileExchangeServlet</servlet-class>
@@ -82,11 +58,7 @@
 		<url-pattern>/PortletWrapper</url-pattern>
 	</servlet-mapping>
 
-	<servlet-mapping>
-		<servlet-name>MessengerServlet</servlet-name>
-		<url-pattern>/messengerservlet/*</url-pattern>
-	</servlet-mapping>                   
-  
+	 
   <servlet-mapping>
 		<servlet-name>FileExchange</servlet-name>
 		<url-pattern>/fileexchange/*</url-pattern>
