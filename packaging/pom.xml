@@ -67,9 +67,9 @@
 		<version>${org.exoplatform.core.version}</version>
 	  </dependency>
 	  <dependency>
-		<groupId>org.exoplatform.platform</groupId>
+		<groupId>org.exoplatform.commons</groupId>
 		<artifactId>exo.platform.commons.comet.service</artifactId>
-		<version>${org.exoplatform.platform.version}</version>
+		<version>${org.exoplatform.commons.version}</version>
 	  </dependency>
 	  <dependency>
 		<groupId>org.exoplatform.portal</groupId>

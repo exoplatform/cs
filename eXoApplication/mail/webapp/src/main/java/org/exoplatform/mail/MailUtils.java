@@ -18,7 +18,6 @@ package org.exoplatform.mail;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,12 +27,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.mail.search.DateTerm;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
@@ -48,8 +44,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
-
-import com.google.caja.lexer.ParseException;
 
 
 /**
@@ -67,116 +61,116 @@ public class MailUtils {
   public static final String SMALLER_THAN = "<".intern() ;
   final public static String SPECIALCHARACTER[] = {"?", "[", "(", "|", ")", "*", "\\", "+", "}", "{", "^", "$", "\""
     ,"!", "#", "%", "&", ":", ">", "<", "~", "`", "]", "'", "/", "-"} ; ;
-  final public static String SUPPORTED_VIEW_TYPE_ATTACH[] = {"gif", "png", "jpg", "jpec", "bmp"} ;
-  final public static String SIMPLECHARACTER[] = {GREATER_THAN, SMALLER_THAN, "'", "\""};
-  final public static int MAX_POPUP_WIDTH = 900;
-  
-  static public MailService getMailService() throws Exception {
-    return (MailService)PortalContainer.getComponent(MailService.class) ;
-  }
-  
-  static public String getCurrentUser() throws Exception { 
-    return Util.getPortalRequestContext().getRemoteUser() ; 
-  }
-  /*
+    final public static String SUPPORTED_VIEW_TYPE_ATTACH[] = {"gif", "png", "jpg", "jpec", "bmp"} ;
+    final public static String SIMPLECHARACTER[] = {GREATER_THAN, SMALLER_THAN, "'", "\""};
+    final public static int MAX_POPUP_WIDTH = 900;
+
+    static public MailService getMailService() throws Exception {
+      return (MailService)PortalContainer.getComponent(MailService.class) ;
+    }
+
+    static public String getCurrentUser() throws Exception { 
+      return Util.getPortalRequestContext().getRemoteUser() ; 
+    }
+    /*
   public static boolean isNameValid(String name, String[] regex) {
     for(String c : regex){ if(name.contains(c)) return false ;}
     return true ;
   }
-  */
-  public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {    
-    ContactAttachment contactAttachment = contact.getAttachment();
-    if (contactAttachment != null) {
-      InputStream input = contactAttachment.getInputStream() ;
-      byte[] imageBytes = null ;
-      if (input != null) {
-        imageBytes = new byte[input.available()] ;
-        input.read(imageBytes) ;
-        ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
-        InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
-        dresource.setDownloadName(contactAttachment.getFileName()) ;
-        return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
+     */
+    public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {    
+      ContactAttachment contactAttachment = contact.getAttachment();
+      if (contactAttachment != null) {
+        InputStream input = contactAttachment.getInputStream() ;
+        byte[] imageBytes = null ;
+        if (input != null) {
+          imageBytes = new byte[input.available()] ;
+          input.read(imageBytes) ;
+          ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
+          InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
+          dresource.setDownloadName(contactAttachment.getFileName()) ;
+          return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
+        }
       }
+      return null ;
     }
-    return null ;
-  }
-  
-  static public OrganizationService getOrganizationService() throws Exception {
-    return (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-  }
-  
-  public static String encodeJCRText(String str) {
-    return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
-    replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
-  }
-  
-  public static String convertSize(long size) throws Exception {
-    return Utils.convertSize(size);
-  }
-  
-  public static String getImageSource(Attachment attach, DownloadService dservice) throws Exception {      
-    if (attach != null) {
-      InputStream input = attach.getInputStream() ;
-      byte[] imageBytes = null ;
-      if (input != null) {
-        imageBytes = new byte[input.available()] ;
-        input.read(imageBytes) ;
-        ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
-        InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
-        dresource.setDownloadName(attach.getName()) ;
-        return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
-      }
-    }
-    return null ;
-  }
-  
-  public static String fillImage(String body, Map<String, String> imageLocationMap) throws Exception {
-    String attId = "", src = "";
-    if (imageLocationMap.size() > 0) {
-      while (body.indexOf("\"cid:") > -1) {        
-        attId = body.substring(body.indexOf("\"cid:") + 5, body.length());
-        attId = attId.substring(0, attId.indexOf("\""));
-        src = "\"" + imageLocationMap.get(attId);
-        body = body.replaceFirst("\"cid:(.*?)", src);
-      }
-    }
-    return body;
-  }
-  
-  public static boolean isFieldEmpty(String s) {
-    return (s == null || s.trim().length() == 0);    
-  }
-  
-//  public static boolean isChecking(String username, String accountId) throws Exception {
-//    try {
-//      ExoContainer container = ExoContainerContext.getCurrentContainer();
-//      JobSchedulerService schedulerService = 
-//        (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
-//      List allJobs = schedulerService.getAllJobs() ;
-//      for(Object obj : allJobs) {
-//        if(((JobDetail)obj).getName().equals(username + ":" + accountId)) return true ; 
-//      }
-//    } catch(Exception e) { }
-//    
-//    return false ;
-//  }
-  
-  public static String formatDate(String format, Date date, Locale locale) {
-    Format formatter = new SimpleDateFormat(format, locale);
-    return formatter.format(date);
-  }
-  
-  public static boolean isDate(Calendar objCal){
-    if (objCal == null) return false;
-    try{
-      return MailUtils.isDate(objCal.getTime().toString(),"MM/dd/yyyy");
-    }catch (Exception e) {
-      return false;
-    }
-  }
 
-  public static boolean isDate(String isDate, String format){
-    if(isFieldEmpty(isDate)) return false;
+    static public OrganizationService getOrganizationService() throws Exception {
+      return (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+    }
+
+    public static String encodeJCRText(String str) {
+      return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
+      replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
+    }
+
+    public static String convertSize(long size) throws Exception {
+      return Utils.convertSize(size);
+    }
+
+    public static String getImageSource(Attachment attach, DownloadService dservice) throws Exception {      
+      if (attach != null) {
+        InputStream input = attach.getInputStream() ;
+        byte[] imageBytes = null ;
+        if (input != null) {
+          imageBytes = new byte[input.available()] ;
+          input.read(imageBytes) ;
+          ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
+          InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
+          dresource.setDownloadName(attach.getName()) ;
+          return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
+        }
+      }
+      return null ;
+    }
+
+    public static String fillImage(String body, Map<String, String> imageLocationMap) throws Exception {
+      String attId = "", src = "";
+      if (imageLocationMap.size() > 0) {
+        while (body.indexOf("\"cid:") > -1) {        
+          attId = body.substring(body.indexOf("\"cid:") + 5, body.length());
+          attId = attId.substring(0, attId.indexOf("\""));
+          src = "\"" + imageLocationMap.get(attId);
+          body = body.replaceFirst("\"cid:(.*?)", src);
+        }
+      }
+      return body;
+    }
+
+    public static boolean isFieldEmpty(String s) {
+      return (s == null || s.trim().length() == 0);    
+    }
+
+    //  public static boolean isChecking(String username, String accountId) throws Exception {
+    //    try {
+    //      ExoContainer container = ExoContainerContext.getCurrentContainer();
+    //      JobSchedulerService schedulerService = 
+    //        (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
+    //      List allJobs = schedulerService.getAllJobs() ;
+    //      for(Object obj : allJobs) {
+    //        if(((JobDetail)obj).getName().equals(username + ":" + accountId)) return true ; 
+    //      }
+    //    } catch(Exception e) { }
+    //    
+    //    return false ;
+    //  }
+
+    public static String formatDate(String format, Date date, Locale locale) {
+      Format formatter = new SimpleDateFormat(format, locale);
+      return formatter.format(date);
+    }
+
+    public static boolean isDate(Calendar objCal){
+      if (objCal == null) return false;
+      try{
+        return MailUtils.isDate(objCal.getTime().toString(),"MM/dd/yyyy");
+      }catch (Exception e) {
+        return false;
+      }
+    }
+
+    public static boolean isDate(String isDate, String format){
+      if(isFieldEmpty(isDate)) return false;
       SimpleDateFormat fomatter = new SimpleDateFormat(format);
       if(isDate.length() != fomatter.toPattern().length()) return false;
       fomatter.setLenient(false);
@@ -186,225 +180,221 @@ public class MailUtils {
       } catch (java.text.ParseException e) {
         return false;
       }
-  }
+    }
 
-  public static String formatDate(Date date, Locale locale) {
-    Calendar systemDate =  new GregorianCalendar() ;
-    Calendar cal =  new GregorianCalendar() ;
-    cal.setTime(date);
-    boolean isSameYear = (systemDate.get(Calendar.YEAR) == cal.get(Calendar.YEAR)) ;
-    boolean isSameMonth = (systemDate.get(Calendar.MONTH) == cal.get(Calendar.MONTH)) ;
-    boolean isSameWeek = (isSameMonth && (systemDate.get(Calendar.WEEK_OF_MONTH) == cal.get(Calendar.WEEK_OF_MONTH)));
-    boolean isSameDate = (isSameWeek && (systemDate.get(Calendar.DAY_OF_WEEK) == cal.get(Calendar.DAY_OF_WEEK)));
-    if (isSameYear) 
-      if (isSameDate) 
-        return (new SimpleDateFormat("hh:mm aaa", locale)).format(date);
-      else if (isSameWeek)
-        return (new SimpleDateFormat("EEEE", locale)).format(date);
-      else if (isSameMonth)
-        return (new SimpleDateFormat("EEEE, dd", locale)).format(date);
+    public static String formatDate(Date date, Locale locale) {
+      Calendar systemDate =  new GregorianCalendar() ;
+      Calendar cal =  new GregorianCalendar() ;
+      cal.setTime(date);
+      boolean isSameYear = (systemDate.get(Calendar.YEAR) == cal.get(Calendar.YEAR)) ;
+      boolean isSameMonth = (systemDate.get(Calendar.MONTH) == cal.get(Calendar.MONTH)) ;
+      boolean isSameWeek = (isSameMonth && (systemDate.get(Calendar.WEEK_OF_MONTH) == cal.get(Calendar.WEEK_OF_MONTH)));
+      boolean isSameDate = (isSameWeek && (systemDate.get(Calendar.DAY_OF_WEEK) == cal.get(Calendar.DAY_OF_WEEK)));
+      if (isSameYear) 
+        if (isSameDate) 
+          return (new SimpleDateFormat("hh:mm aaa", locale)).format(date);
+        else if (isSameWeek)
+          return (new SimpleDateFormat("EEEE", locale)).format(date);
+        else if (isSameMonth)
+          return (new SimpleDateFormat("EEEE, dd", locale)).format(date);
+        else 
+          return (new SimpleDateFormat("MMM dd", locale)).format(date);
       else 
-        return (new SimpleDateFormat("MMM dd", locale)).format(date);
-    else 
-      return (new SimpleDateFormat("MMM dd, yyyy", locale)).format(date);
-  }
-  
-  public static String encodeHTML(String htmlContent) throws Exception {
-    return (!isFieldEmpty(htmlContent)) ? htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
-        .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&#39;") : "" ;
-  }
-  
-  public static String decodeHTML(String htmlContent) throws Exception {
-    return (!isFieldEmpty(htmlContent)) ? htmlContent.replaceAll("&amp;", "&").replaceAll( "&quot;", "\"")
-        .replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&quot;", "\"").replaceAll("&#39;", "'") : "" ;
-  }
-      
-  public static boolean isInvitation(Message msg) throws Exception {
-    return (msg.getHeader("X-Exo-Invitation") != null) ;
-  }
-  
-  public static String getEventFrom(Message msg) throws Exception {
-    String from = null;
-    if (isInvitation(msg)) {
-      from = msg.getHeader("X-Exo-Invitation").split(";")[0].trim() ;
+        return (new SimpleDateFormat("MMM dd, yyyy", locale)).format(date);
     }
-    return from ;
-  }
-  
-  public static String getEventTo(Message msg) throws Exception {
-    String to = null;
-    if (isInvitation(msg)) {
-      to = msg.getHeader("X-Exo-Invitation").split(";")[1].trim() ;
+
+    public static String encodeHTML(String htmlContent) throws Exception {
+      return (!isFieldEmpty(htmlContent)) ? htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
+                                          .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&#39;") : "" ;
     }
-    return to ;
-  }
-  
-  public static String getAddressTo(Message msg) throws Exception {
-    String to = null;
-    if (isInvitation(msg)) {
-      to = msg.getHeader("To").trim() ;
+
+    public static String decodeHTML(String htmlContent) throws Exception {
+      return (!isFieldEmpty(htmlContent)) ? htmlContent.replaceAll("&amp;", "&").replaceAll( "&quot;", "\"")
+                                          .replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&quot;", "\"").replaceAll("&#39;", "'") : "" ;
     }
-    return to ;
-  }
-  
-  public static String getEventType(Message msg) throws Exception {
-    String eventType = null;
-    if (isInvitation(msg)) {
-      eventType = msg.getHeader("X-Exo-Invitation").split(";")[2].trim() ;
+
+    public static boolean isInvitation(Message msg) throws Exception {
+      return (msg.getHeader("X-Exo-Invitation") != null) ;
     }
-    return eventType ;
-  }
-  
-  public static String getCalendarId(Message msg) throws Exception {
-    String calId = null;
-    if (isInvitation(msg)) {
-      calId = msg.getHeader("X-Exo-Invitation").split(";")[3].trim() ;
-    }
-    return calId ;
-  }
-  
-  public static String getCalendarEventId(Message msg) throws Exception {
-    String calEvenId = null;
-    if (isInvitation(msg)) {
-      calEvenId = msg.getHeader("X-Exo-Invitation").split(";")[4].trim() ;
-    }
-    return calEvenId ;
-  }
-  
-  public static boolean isValidEmailAddresses(String addressList) throws Exception {
-    if (isFieldEmpty(addressList))  return true ;
-    boolean isInvalid = true ;
-    try {
-      InternetAddress[] iAdds = InternetAddress.parse(addressList, true);
-      
-      String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
-      for (int i = 0 ; i < iAdds.length; i ++) {
-        if(!iAdds[i].getAddress().toString().matches(emailRegex)) isInvalid = false;
+
+    public static String getEventFrom(Message msg) throws Exception {
+      String from = null;
+      if (isInvitation(msg)) {
+        from = msg.getHeader("X-Exo-Invitation").split(";")[0].trim() ;
       }
-    } catch(AddressException e) {
-      return false ;
+      return from ;
     }
-    return isInvalid ;
-  }
-  
-  public static String html2string(String str) throws Exception {
-    if (str != null) {
-      str = str.replaceAll("<[^>]*>", "");
-      str = str.replaceAll("&nbsp;", "");
-      str = str.replaceAll("&quot;", "\"");
-      str = str.replaceAll("\n", "");
-      //str = str.replaceAll("&lt;", "<").replaceAll("&gt;",">");
-    } else {
-      str = "" ;
+
+    public static String getEventTo(Message msg) throws Exception {
+      String to = null;
+      if (isInvitation(msg)) {
+        to = msg.getHeader("X-Exo-Invitation").split(";")[1].trim() ;
+      }
+      return to ;
     }
-    return str;
-  }
-  
-  //TODO : need to improve later
-  public static String html2text(String str) throws Exception {
-    if (str != null) {
-      str = str.replaceAll("<br*/?>", "\n");
-      str = str.replaceAll("<[^>]*>", "");
-      str = str.replaceAll("&nbsp;", "");
-      str = str.replaceAll("&quot;", "\"");
-    } else {
-      str = "" ;
+
+    public static String getAddressTo(Message msg) throws Exception {
+      String to = null;
+      if (isInvitation(msg)) {
+        to = msg.getHeader("To").trim() ;
+      }
+      return to ;
     }
-    return str;
-  }
-  
-  //TODO : need to improve later
-  public static String text2html(String str) throws Exception {
-    if (str != null) {
-      str = str.replaceAll("\n", "<br />");
-    } else {
-      str = "" ;
+
+    public static String getEventType(Message msg) throws Exception {
+      String eventType = null;
+      if (isInvitation(msg)) {
+        eventType = msg.getHeader("X-Exo-Invitation").split(";")[2].trim() ;
+      }
+      return eventType ;
     }
-    return str;
-  }
-  
-  public static String convertTextToHtmlLink(String s) throws Exception {
-    if (isFieldEmpty(s)) return "" ;
-    //s = decodeHTML(s);
-    // for external link with form http:// , https://, ftp://
-    s = s.replaceAll("(\r?\n?)(https?|ftp)", "<br /> $2");
-    s = s.replaceAll("([^((href|src)=\")])(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", "<a target=\"_blank\" href=\"$0\"> $0 </a>") ;
-    // for email 
-    s = s.replaceAll("(\\s)([_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5})", "$1<a target=\"_blank\" href=\"mailto:$2\"> $2 </a>") ;
-    return s ;
-  }
-  
-  public static String insertTargetToHtmlLink(String s) throws Exception {
-    if (isFieldEmpty(s)) return "" ;
-    // for a tag we insert "target=_blank" to open in other window or tab
-    s = s.replaceAll("<(A|a)(.*?)>(.*?)</(A|a)>", "<a $2 target=\"_blank\"> $3 </a>");
-    return s ;
-  }
-  
-  public static void main(String[] args) throws Exception {
-    System.out.println(convertTextToHtmlLink("<a><33r>ds</a>sdfsd@gs.c"));
-  }
-  public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
-    return sharedUserId + " - " + addressName ;
-  }
-  
-  public static List<String> getUserGroups() throws Exception {
-    OrganizationService organizationService = 
-      (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(getCurrentUser()).toArray() ;
-    List<String> groupIds = new ArrayList<String>() ;
-    for (Object object : objGroupIds) {
-      groupIds.add(((Group)object).getId()) ;
+
+    public static String getCalendarId(Message msg) throws Exception {
+      String calId = null;
+      if (isInvitation(msg)) {
+        calId = msg.getHeader("X-Exo-Invitation").split(";")[3].trim() ;
+      }
+      return calId ;
     }
-    return groupIds ;
-  }
-  
-  public static String reduceSpace(String s) {
-    if (isFieldEmpty(s)) return "" ;
-    String[] words = s.split(" ") ;
-    StringBuilder builder = new StringBuilder() ;
-    for (String word : words) {
-      if (builder.length() > 0 && word.trim().length() > 0) builder.append(" ") ;
-      builder.append(word.trim()) ;
+
+    public static String getCalendarEventId(Message msg) throws Exception {
+      String calEvenId = null;
+      if (isInvitation(msg)) {
+        calEvenId = msg.getHeader("X-Exo-Invitation").split(";")[4].trim() ;
+      }
+      return calEvenId ;
     }
-    return builder.toString() ;
-  }
-  
-  public static boolean isSearchValid(String name, String[] regex) {
-    if (isFieldEmpty(name)) return true ;
-    for(String c : regex){ if(name.contains(c)) return false ;}
-    return true ;
-  }
-  
-  public static String listToString(List<String> list) {
-    if (list == null || list.size() == 0) return ""; 
-    StringBuilder builder = new StringBuilder();
-    for (String str : list) {
-      if (builder.length() > 0) builder.append("; " + str);
-      else builder.append(str);
+
+    public static boolean isValidEmailAddresses(String addressList) throws Exception {
+      if (isFieldEmpty(addressList))  return true ;
+      boolean isInvalid = true ;
+      try {
+        InternetAddress[] iAdds = InternetAddress.parse(addressList, true);
+
+        String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
+        for (int i = 0 ; i < iAdds.length; i ++) {
+          if(!iAdds[i].getAddress().toString().matches(emailRegex)) isInvalid = false;
+        }
+      } catch(AddressException e) {
+        return false ;
+      }
+      return isInvalid ;
     }
-    return builder.toString();
-  }
-  
-  /**
-   * this function check appearance of ECMS product in our container.
-   * @return
-   */
-  public static boolean hasECMS() {    
-    try {
-      Class.forName("org.exoplatform.services.cms.CmsService");
-    } catch (ClassNotFoundException e) {
-      return false;
+
+    public static String html2string(String str) throws Exception {
+      if (str != null) {
+        str = str.replaceAll("<[^>]*>", "");
+        str = str.replaceAll("&nbsp;", "");
+        str = str.replaceAll("&quot;", "\"");
+        str = str.replaceAll("\n", "");
+        //str = str.replaceAll("&lt;", "<").replaceAll("&gt;",">");
+      } else {
+        str = "" ;
+      }
+      return str;
     }
-    try {
-      if (PortalContainer.getInstance().getComponentInstancesOfType(CmsService.class) != null)
-        return true;
-    } catch (Exception e) {
-      return false;
+
+    //TODO : need to improve later
+    public static String html2text(String str) throws Exception {
+      if (str != null) {
+        str = str.replaceAll("<br*/?>", "\n");
+        str = str.replaceAll("<[^>]*>", "");
+        str = str.replaceAll("&nbsp;", "");
+        str = str.replaceAll("&quot;", "\"");
+      } else {
+        str = "" ;
+      }
+      return str;
     }
-    return false;
-  }
-  
-  
+
+    //TODO : need to improve later
+    public static String text2html(String str) throws Exception {
+      if (str != null) {
+        str = str.replaceAll("\n", "<br />");
+      } else {
+        str = "" ;
+      }
+      return str;
+    }
+
+    public static String convertTextToHtmlLink(String s) throws Exception {
+      if (isFieldEmpty(s)) return "" ;
+      //s = decodeHTML(s);
+      // for external link with form http:// , https://, ftp://
+      s = s.replaceAll("(\r?\n?)(https?|ftp)", "<br /> $2");
+      s = s.replaceAll("([^((href|src)=\")])(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", "<a target=\"_blank\" href=\"$0\"> $0 </a>") ;
+      // for email 
+      s = s.replaceAll("(\\s)([_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5})", "$1<a target=\"_blank\" href=\"mailto:$2\"> $2 </a>") ;
+      return s ;
+    }
+
+    public static String insertTargetToHtmlLink(String s) throws Exception {
+      if (isFieldEmpty(s)) return "" ;
+      // for a tag we insert "target=_blank" to open in other window or tab
+      s = s.replaceAll("<(A|a)(.*?)>(.*?)</(A|a)>", "<a $2 target=\"_blank\"> $3 </a>");
+      return s ;
+    }
+
+    public static void main(String[] args) throws Exception {
+      System.out.println(convertTextToHtmlLink("<a><33r>ds</a>sdfsd@gs.c"));
+    }
+    public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
+      return sharedUserId + " - " + addressName ;
+    }
+
+    public static List<String> getUserGroups() throws Exception {
+      OrganizationService organizationService = 
+        (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+      Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(getCurrentUser()).toArray() ;
+      List<String> groupIds = new ArrayList<String>() ;
+      for (Object object : objGroupIds) {
+        groupIds.add(((Group)object).getId()) ;
+      }
+      return groupIds ;
+    }
+
+    public static String reduceSpace(String s) {
+      if (isFieldEmpty(s)) return "" ;
+      String[] words = s.split(" ") ;
+      StringBuilder builder = new StringBuilder() ;
+      for (String word : words) {
+        if (builder.length() > 0 && word.trim().length() > 0) builder.append(" ") ;
+        builder.append(word.trim()) ;
+      }
+      return builder.toString() ;
+    }
+
+    public static boolean isSearchValid(String name, String[] regex) {
+      if (isFieldEmpty(name)) return true ;
+      for(String c : regex){ if(name.contains(c)) return false ;}
+      return true ;
+    }
+
+    public static String listToString(List<String> list) {
+      if (list == null || list.size() == 0) return ""; 
+      StringBuilder builder = new StringBuilder();
+      for (String str : list) {
+        if (builder.length() > 0) builder.append("; " + str);
+        else builder.append(str);
+      }
+      return builder.toString();
+    }
+
+    /**
+     * this function check appearance of ECMS product in our container.
+     * @return
+     */
+    public static boolean hasECMS() {    
+      try {
+        Class.forName("org.exoplatform.services.cms.CmsService");
+      } catch (ClassNotFoundException e) {
+        return false;
+      }
+      try {
+        return (PortalContainer.getInstance().getComponentInstancesOfType(CmsService.class) != null);
+      } catch (Exception e) {
+        return false;
+      }
+    }
 }
 

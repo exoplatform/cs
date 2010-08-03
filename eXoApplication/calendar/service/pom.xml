@@ -62,9 +62,10 @@
       <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.exoplatform.platform</groupId>
+   <dependency>
+      <groupId>org.exoplatform.commons</groupId>
       <artifactId>exo.platform.commons.comet.service</artifactId>
+      <version>${org.exoplatform.commons.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

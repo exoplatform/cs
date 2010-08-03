@@ -53,13 +53,7 @@
       <artifactId>exo.portal.component.portal</artifactId>
       <version>${org.exoplatform.portal.version}</version>
     </dependency>
-    <!-- dependency>
-      <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.component.portal</artifactId>
-      <version>${org.exoplatform.portal.cp.version}</version>
-      <scope>test</scope>
-      <type>test-jar</type>
-    </dependency-->
+     
     <dependency>
       <groupId>org.chromattic</groupId>
       <artifactId>chromattic.core</artifactId>
@@ -83,8 +77,9 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.exoplatform.platform</groupId>
+      <groupId>org.exoplatform.commons</groupId>
       <artifactId>exo.platform.commons.comet.service</artifactId>
+      <version>${org.exoplatform.commons.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
