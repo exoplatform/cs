@@ -26,7 +26,7 @@
   </parent>
   <groupId>org.exoplatform.cs</groupId>
   <artifactId>cs</artifactId>
-  <version>1.3.6</version>
+  <version>1.3.7-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>eXo Collaboration Suite</name>
   <description>eXo Collaboration Suite is made of four applications:
@@ -40,9 +40,9 @@
     <url>http://www.exoplatform.com</url>
   </organization>
   <scm>
-    <connection>scm:svn:http://svn.exoplatform.org/projects/cs/tags/1.3.6</connection>
-    <developerConnection>scm:svn:http://svn.exoplatform.org/projects/cs/tags/1.3.6</developerConnection>
-    <url>http://fisheye.exoplatform.org/browse/projects/cs/tags/1.3.6</url>
+    <connection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/1.3.x</connection>
+    <developerConnection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/1.3.x</developerConnection>
+    <url>http://fisheye.exoplatform.org/browse/projects/cs/branches/1.3.x</url>
   </scm>
   <issueManagement>
     <system>JIRA</system>
