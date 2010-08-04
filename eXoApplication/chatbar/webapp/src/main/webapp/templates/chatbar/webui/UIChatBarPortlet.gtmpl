@@ -35,7 +35,7 @@
 	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.applicationId = '" + uicomponent.getId() + "';");
 	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.restcontextname = '" + uicomponent.getRestContextName() + "';");
 	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.cometdcontextname = '" + uicomponent.getCometdContextName() + "';");
-	jsManager.addOnLoadJavascript("eXo.communication.chatbar.eXoChatBar.init");
+	jsManager.addOnLoadJavascript("eXo.communication.chatbar.eXoChatBar.init()");
 %>
 <!-- Begin UIChat -->
 <div class="UIChat ChatSharedIcons UIChatBarPortlet" id="<%=uicomponent.id%>" oncontextmenu="return false;"
@@ -251,7 +251,7 @@
                                     <div class="RightIconButton">
                                         <div class="CenterIconButton">
                                             <div class="Arrow">
-                                                <div class="IconHolder OfflineIcon" title="<%=uicomponent.getRemoteUser()%>">
+                                                <div class="IconHolder <%=uicomponent.getCSSClassStatus()%>" title="<%=uicomponent.getStatus()%>" id="id-state-chat">
                                                     <div class="StatusIcon">
                                                         <div class="Text" user="<%=uicomponent.getRemoteUser()%>">
                                                             <span></span>

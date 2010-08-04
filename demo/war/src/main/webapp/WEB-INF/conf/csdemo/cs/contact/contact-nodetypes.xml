@@ -111,7 +111,7 @@
   		</propertyDefinition>
   		<propertyDefinition name="exo:mobilePhone" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
-  		</propertyDefinition>s
+  		</propertyDefinition>
   		<propertyDefinition name="exo:webPage" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
   		</propertyDefinition>

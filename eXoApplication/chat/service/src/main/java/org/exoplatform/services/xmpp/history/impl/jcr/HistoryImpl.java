@@ -19,7 +19,6 @@ package org.exoplatform.services.xmpp.history.impl.jcr;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
@@ -27,7 +26,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
@@ -43,10 +41,10 @@ import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.impl.core.NodeImpl;
+import org.exoplatform.services.uistate.rest.Status;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.Interlocutor;
 import org.exoplatform.services.xmpp.util.CodingUtils;
-import org.exoplatform.services.xmpp.util.HistoryUtils;
 import org.jcrom.Jcrom;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.util.StringUtils;
@@ -118,6 +116,17 @@ public class HistoryImpl implements Startable{
   /**
    * 
    */
+  private static final String USERCHATSTATUS_NT             = "lr:userchatstatus".intern();
+  
+  private static final String USERCHATSTATUS                = "userchatstatus".intern();
+  
+  private static final String STATUS                        = "lr:status".intern();
+  
+  private static final String USERID                        = "lr:userId".intern();
+  
+  /**
+   * 
+   * */
   private String              historyPath;
 
   /**
@@ -154,6 +163,8 @@ public class HistoryImpl implements Startable{
       jcrom.map(Conversation.class);
       jcrom.map(InterlocutorImpl.class);
       jcrom.map(Participant.class);
+      
+      jcrom.map(UserChatStatus.class);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -207,6 +218,15 @@ public class HistoryImpl implements Startable{
         pNode.addMixin("exo:privilegeable");
       }
       pNode.setPermission(SystemIdentity.ANY, PermissionType.ALL);
+      
+      //user chat status 
+      Node node_ = node.addNode(historyPath, HISTORY_NT);
+      NodeImpl ucsNode = (NodeImpl) node_.addNode(USERCHATSTATUS, USERCHATSTATUS_NT);
+      if (ucsNode.canAddMixin("exo:privilegeable")) {
+        ucsNode.addMixin("exo:privilegeable");
+      }
+      ucsNode.setPermission(SystemIdentity.ANY, PermissionType.ALL);
+      //ucsNode.setProperty("lr:status", Status.DEFAULT_STATUS);
       sysSession.save();
     }
     
@@ -777,5 +797,81 @@ public class HistoryImpl implements Startable{
       return null;
     }
   }
+  
+  /**
+   * Saving user chat status
+   * @param provider
+   * @param userId
+   * @param status
+   * **/
+  public void saveUserChatStatus(SessionProvider provider, String userId, String status) throws Exception{
+    Node nodeUCS = getUCSNode(provider);
+    UserChatStatus ucs = getUCS(nodeUCS);
+    if(nodeUCS == null){ //add new lr:userchatstatus node
+      ManageableRepository repository = repositoryService.getRepository(repositopryName);
+      Session session = provider.getSession(wsName, repository);
+      Node node = session.getRootNode();
+      Node tmpNode = node.getNode(historyPath);
+      if(tmpNode == null) tmpNode = node.addNode(historyPath);
+      //Node fNode = node.addNode(path[path.length - 1], HISTORY_NT);
+      NodeImpl ucsNode = (NodeImpl) tmpNode.addNode(USERCHATSTATUS, USERCHATSTATUS_NT);
+      if (ucsNode.canAddMixin("exo:privilegeable")) {
+        ucsNode.addMixin("exo:privilegeable");
+      }
+      ucsNode.setPermission(SystemIdentity.ANY, PermissionType.ALL);
+     // ucsNode.setProperty(USERID, CodingUtils.encodeToHex(userId));
+      ucsNode.setProperty(STATUS, status);
+      session.save();
+      session.logout();
+    }else { //update lr:status property
+      if(ucs != null){
+        ucs = new UserChatStatus(userId);
+        ucs.setStatus(status);
+        jcrom.updateNode(nodeUCS, ucs);
+        nodeUCS.getSession().save();
+      }
+    }
+  }
 
+  /**
+   * Getting user chat status 
+   * */
+  public String getPrevStatus(SessionProvider provider){
+    Node nodeUCS = getUCSNode(provider);
+    UserChatStatus ucs = getUCS(nodeUCS);
+    if(ucs != null) {
+      return ucs.getStatus();
+    }
+    return null;
+  }
+  
+  /**
+   * Getting user chat status from Node 
+   * */
+  public UserChatStatus getUCS(Node nodeUCS){
+    UserChatStatus ucs = null;
+    try {
+      if(nodeUCS != null)
+       ucs  = jcrom.fromNode(UserChatStatus.class, nodeUCS);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+    return ucs;
+  }
+  
+  /**
+   * Getting exist user chat status node 
+   * */
+  public Node getUCSNode(SessionProvider sessionProvider){
+    Node ucsNode = null;
+    try {
+      ManageableRepository repository = repositoryService.getRepository(repositopryName);
+      Session session = sessionProvider.getSession(wsName, repository);
+       ucsNode = session.getRootNode().getNode(historyPath + "/" + USERCHATSTATUS);
+    } catch (Exception e) {
+   //   e.printStackTrace();
+    }
+    return ucsNode;
+  }
 }

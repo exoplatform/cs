@@ -48,6 +48,24 @@
     </init-params>
   </component>
   
+  <!-- ***************** configuration user chat state *********-->
+	<component>
+		<type>org.exoplatform.services.uistate.rest.Status</type>
+		<init-params>
+			<properties-param>
+				<name>chat-status</name>
+				 <property name="mode" value="Free to chat" /> 
+				<!--<property name="mode" value="Available" />-->  
+				<!--<property name="mode" value="Unavailable" >-->
+				<!--<property name="mode" value="Away" />-->
+				<!--<property name="mode" value="Do not disturb" />-->
+				<!--<property name="mode" value="Extend away" />  
+			--></properties-param>
+		</init-params>
+	</component>
+	<!-- end configuration of state -->
+  
+  
   <component>
     <type>org.exoplatform.services.xmpp.rest.FileExchangeService</type>
     <!--init-params>

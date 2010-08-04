@@ -16,6 +16,8 @@
  */
 package org.exoplatform.services.xmpp.connection.impl;
 
+import java.util.Map;
+
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.listener.Event;
@@ -24,6 +26,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationRegistry;
 import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.uistate.rest.Status;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 import org.exoplatform.services.xmpp.rest.RESTXMPPService;
 import org.exoplatform.services.xmpp.userinfo.UserInfoService;
@@ -45,6 +48,8 @@ public class AuthenticationLoginListener extends Listener<ConversationRegistry, 
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
       RESTXMPPService restXmppService = (RESTXMPPService)container.getComponentInstanceOfType(RESTXMPPService.class);
+
+      Status status = (Status)container.getComponentInstance(Status.class);
       if(messenger != null && restXmppService != null){
         String userId = event.getData().getIdentity().getUserId() ;
         UserInfoService organization = (UserInfoService) container.getComponentInstanceOfType(UserInfoService.class);
@@ -56,6 +61,10 @@ public class AuthenticationLoginListener extends Listener<ConversationRegistry, 
         String password = organization.providePassword(userId);
         ContinuationServiceDelegate delegate = (ContinuationServiceDelegate) container.getComponentInstanceOfType(ContinuationServiceDelegate.class);
         HistoryImpl history = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
+        /*if(status != null){
+          Map<String, String> stmap = status.getPreviousStatus();
+        }*/
+        
         messenger.login(userId, password, organization, delegate, history,restXmppService.loadResourceBundle());
       }
     } catch (Exception e){

@@ -123,7 +123,15 @@ function UIMainChatWindow() {
   this.DO_NOT_DISTURB_STATUS              = "Do not disturb";
   this.AWAY_STATUS                        = "Away";
   this.EXTEND_AWAY_STATUS                 = "Extend away";
-
+  
+  //Status Icon
+  this.ONLINEICON		                  = "OnlineIcon";
+  this.AWAYICON         		          = "AwayIcon";
+  this.EXTENDAWAYICON           		  = "ExtendAwayIcon";
+  this.FREETOICON                         = "FreeToChat";
+  this.OFFLINEICON                        = "OfflineIcon";
+  
+  
   // Maximum connection to try after request is error in case false to connect to service.
   this.MAX_CONNECTION_TRY = 5;
   this.CHECK_EVENT_TIMEOUT = 1*1000;
@@ -1081,7 +1089,53 @@ UIMainChatWindow.prototype.processGroupChat = function(eventId) {
  */
 UIMainChatWindow.prototype.xLogin = function(userName) {
   this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] = userName;
-  this.preChangeStatus(this.ONLINE_STATUS);
+  var statusText = this.getStatus_();
+  if(statusText != null && statusText != undefined) this.preChangeStatus(statusText);
+  else this.preChangeStatus(this.getPreviousStatus_(userName));
+};
+
+UIMainChatWindow.prototype.getStatus_ = function(){
+	return document.getElementById('id-state-chat').getAttribute('title');
+};
+
+UIMainChatWindow.prototype.setStatus_ = function(st){
+	document.getElementById('id-state-chat').setAttribute('title', st);
+};
+/** getting previous status
+ * @param {String} userName**/
+UIMainChatWindow.prototype.status = this.ONLINE_STATUS ;
+
+UIMainChatWindow.prototype.statusIcon = this.ONLINEICON;
+
+UIMainChatWindow.prototype.getPreviousStatus_ = function(userName) {
+	var STATUSTEXT_TAG = "statusText";
+	var STATUSICON_TAG = "statusIcon";
+	var url = this.XMPPCommunicator.SERVICE_URL + '/' + this.XMPPCommunicator.TRANSPORT_XMPP + '/getprevstatus/' + userName;
+	var request = new eXo.portal.AjaxRequest('GET', url, null);
+	request.onreadystatechange = function(responeText) {
+	  if (xmlhttp.readyState == 4) {
+	    if (xmlhttp.status == 200){
+	    	var st_ = UIMainChatWindow.parseXMLRespone(responseText, STATUSTEXT_TAG);
+	    	var sticon_ = UIMainChatWindow.parseXMLRespone(responseText, STATUSICON_TAG);
+	    	if(st_ != null && sticon_ != null){
+	    		UIMainChatWindow.status = UIMainChatWindow.parseXMLRespone(responseText, STATUSTEXT_TAG);
+		    	UIMainChatWindow.statusIcon = UIMainChatWindow.parseXMLRespone(responseText, STATUSICON_TAG);		
+	    	}
+	    }
+      }   
+    };
+   request.process() ;
+   return status;
+};
+
+/**
+ * Parsing response XML***/
+UIMainChatWindow.prototype.parseXMLRespone = function(resp, tagname){
+	if(resp != null){
+		tagObj = document.getElementsByTagName(tagname);
+		if(tagObj != null && tagObj.length > 0) return tagObj[0].innerHTML;
+	}
+	return null;
 };
 
 /**
@@ -1118,7 +1172,6 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
           (this.userStatus != this.ONLINE_STATUS)) {
         this.jabberSendStatus(this.ONLINE_STATUS);
       }
-
       break;
     case this.OFFLINE_STATUS:
       if (this.userStatus != this.OFFLINE_STATUS) {
@@ -1153,6 +1206,7 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
     default:
       break;
   }
+  this.setStatus_(status);
 };
 
 /**

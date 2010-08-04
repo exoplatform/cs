@@ -16,13 +16,16 @@
  **/
 package org.exoplatform.chatbar.webui;
 
+import java.util.Map;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
-
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.chatbar.Utils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.uistate.rest.Status;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -50,10 +53,28 @@ public class UIChatBarPortlet extends UIPortletApplication {
 
   private String templatePath_ = VIEWMODE_TEMP ;
 
+  private String status_icon = Status.ONLINEICON; 
+  
+  private String status_  = Status.DEFAULT_STATUS;
+  
   public UIChatBarPortlet() throws Exception {
     PortletRequestContext context = (PortletRequestContext)  WebuiRequestContext.getCurrentInstance() ;
     PortletRequest prequest = context.getRequest() ;
     windowId = prequest.getWindowID() ;
+    
+    //get previous status
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    Status status = null;
+    String statusicon_ = "", st_ = "";
+    if(container != null) status = (Status)container.getComponentInstance(Status.class);
+    if(status !=null){
+      Map<String, String> statusmap = status.getPreviousStatus();
+      if(statusmap.size() > 0)
+        st_ = statusmap.keySet().toArray(new String[]{""})[0];
+        statusicon_ = statusmap.values().toArray(new String[]{""})[0];
+        setCSSClassStatus(statusicon_);
+        setStatus(st_);
+    }
   }
 
   public String getId() {
@@ -161,4 +182,20 @@ public class UIChatBarPortlet extends UIPortletApplication {
     WebuiRequestContext  context =  WebuiRequestContext.getCurrentInstance() ;
     popupMess.processRender(context);
   }
+  
+  /**
+   * Get CSS class to assign previous status for current session***/
+  public String getCSSClassStatus(){
+    return status_icon;
+  }
+  
+  public void setCSSClassStatus(String classIcon){
+    status_icon = classIcon;
+  }
+  /**
+   * Get StatusText, use for show title of status***/
+  public String getStatus(){
+    return status_;
+  }
+  public void setStatus(String status){ status_ = status;}
 }

@@ -17,6 +17,7 @@
 package org.exoplatform.services.xmpp.connection.impl;
 
 import org.exoplatform.container.ExoContainer;
+
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
@@ -25,6 +26,7 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationRegistry;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.xmpp.connection.XMPPSession;
+import org.exoplatform.services.uistate.rest.Status;
 
 /**
  * Created by The eXo Platform SAS
@@ -41,10 +43,19 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
+    //Saving user-chat-state
+     
+      Status status = (Status)container.getComponentInstance(Status.class);
       if(messenger != null){
         String userId = event.getData().getIdentity().getUserId() ;
         XMPPSession session = messenger.getSession(userId);
         if (session != null) session.removeAllTransport();
+        if(status != null && userId != null && !userId.equals("")){
+          
+          status.saveChatStatus(userId, status.getStatus_());  
+        }else   {
+          log.debug("Can not save user chat status"); 
+        }
         messenger.logout(userId);
       }
      } catch (Exception e){

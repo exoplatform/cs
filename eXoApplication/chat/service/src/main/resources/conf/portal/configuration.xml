@@ -6,7 +6,7 @@
 		<key>org.exoplatform.services.xmpp.userinfo.UserInfoService</key>
 		<type>org.exoplatform.services.xmpp.userinfo.OrganizationUserInfoServiceImpl</type>
 	</component>
-<!-- 
+	
 	<component>
 		<type>org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl</type>
 		<init-params>
@@ -24,7 +24,7 @@
 			</value-param>
 		</init-params>
 	</component>
- -->
+	
 	<component>
 		<type>org.exoplatform.services.xmpp.connection.impl.XMPPMessenger</type>
 		<init-params>
@@ -45,6 +45,23 @@
 		</init-params>
 	</component>
 
+	<!-- ***************** configuration user chat state *********-->
+	<component>
+		<type>org.exoplatform.services.uistate.rest.Status</type>
+		<init-params>
+			<properties-param>
+				<name>chat-status</name>
+				 <property name="mode" value="Free to chat" />
+				<!--<property name="mode" value="Available" />--> 
+				<!--<property name="mode" value="Unavailable" />-->
+				<!--<property name="mode" value="Away" />-->
+				<!--<property name="mode" value="Do not disturb" />-->
+				<!--<property name="mode" value="Extend away" />-->
+			</properties-param>
+		</init-params>
+	</component>
+	<!-- end configuration of state -->
+	
 	<component>
 		<type>org.exoplatform.services.uistate.rest.UIStateService</type>
 	</component>
@@ -60,6 +77,7 @@
 	<component>
 		<type>org.exoplatform.services.xmpp.rest.RESTXMPPService</type>
 	</component>
+	
 	<external-component-plugins>
 		<target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
 		<component-plugin>
