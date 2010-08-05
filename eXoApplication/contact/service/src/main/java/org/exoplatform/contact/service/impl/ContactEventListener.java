@@ -29,7 +29,7 @@ import org.exoplatform.container.component.BaseComponentPlugin;
 public class ContactEventListener extends BaseComponentPlugin implements ContactLifeCycle {
 
   @Override
-  public void saveNecontact(String username, Contact contact) {
+  public void saveContact(String username, Contact contact) {
     // TODO Auto-generated method stub
     
   }

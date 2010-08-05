@@ -27,7 +27,7 @@ import org.exoplatform.contact.service.impl.ContactEventListener;
  */
 public class ContactSpaceActivityPublisher extends ContactEventListener{
   @Override
-  public void saveNecontact(String username, Contact contact) {
+  public void saveContact(String username, Contact contact) {
     // TODO Auto-generated method stub
     
   }

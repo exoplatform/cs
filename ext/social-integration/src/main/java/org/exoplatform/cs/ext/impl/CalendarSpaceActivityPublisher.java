@@ -40,7 +40,7 @@ public class CalendarSpaceActivityPublisher extends CalendarEventListener {
   public void savePublicEvent(CalendarEvent event, String calendarId) {
     try {
       Class.forName("org.exoplatform.social.core.manager.IdentityManager") ;
-      String msg = "new event: " + event.getSummary() + " has been added!"; 
+      String msg = "A new event has been added : " + event.getSummary();
       String body = event.getDescription();
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class); 
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
@@ -57,7 +57,7 @@ public class CalendarSpaceActivityPublisher extends CalendarEventListener {
     public void updatePublicEvent(CalendarEvent event, String calendarId) {
       try {
         Class.forName("org.exoplatform.social.core.manager.IdentityManager") ;
-        String msg = "the event: "+ event.getSummary() + " has been updated!"; 
+        String msg = "The following event has been updated: " + event.getSummary(); 
         String body = event.getDescription();
         IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class); 
         ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);

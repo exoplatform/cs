@@ -16,6 +16,8 @@
  */
 package org.exoplatform.cs.ext.impl;
 
+import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.social.core.space.SpaceListenerPlugin;
@@ -43,8 +45,11 @@ public class ContactDataInitialize extends SpaceListenerPlugin {
   public void applicationAdded(SpaceLifeCycleEvent event) {
     try {
     Space space = event.getSpace();
+    ContactService contactService = (ContactService)PortalContainer.getComponent(ContactService.class);
     
-      
+    contactService.getPersonalAddressBook(space.getRegistration(), addressBookID);
+    
+    
     }catch (Exception e) {
       log.debug(e.getMessage());
     }

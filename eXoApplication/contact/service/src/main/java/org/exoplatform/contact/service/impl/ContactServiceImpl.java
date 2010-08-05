@@ -191,7 +191,7 @@ public class ContactServiceImpl implements ContactService {
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
     storage_.saveContact(username, contact, isNew);   
     for(ContactEventListener ce : listeners_) {
-      if(isNew) ce.saveNecontact(username, contact) ;
+      if(isNew) ce.saveContact(username, contact) ;
       else ce.updateContact(username, contact);
     }
   }
