@@ -49,6 +49,7 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.resources.ResourceBundleService;
+import org.hibernate.hql.ast.tree.FromClause;
 import org.picocontainer.Startable;
 
 /**
@@ -170,6 +171,10 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    */
   public void savePublicCalendar(Calendar calendar, boolean isNew, String username) throws Exception {
     storage_.savePublicCalendar(calendar, isNew, username);
+  }
+  
+  public void savePublicCalendar(Calendar calendar, boolean isNew) throws Exception {
+    storage_.savePublicCalendar(calendar, isNew, null);
   }
 
   /**
@@ -441,6 +446,15 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                         List<CalendarEvent> calEvents,
                         String username) throws Exception {
     storage_.moveEvent(formCalendar, toCalendar, fromType, toType, calEvents, username);
+    if (fromType.equalsIgnoreCase(toType)
+        && toType.equalsIgnoreCase(String.valueOf(Calendar.TYPE_PUBLIC))
+        && formCalendar.equalsIgnoreCase(toCalendar)) {
+      for (CalendarEventListener cel : eventListeners_) {
+        for (CalendarEvent event : calEvents)
+          cel.updatePublicEvent(event, toCalendar);
+
+      }
+    }
   }
 
   /**

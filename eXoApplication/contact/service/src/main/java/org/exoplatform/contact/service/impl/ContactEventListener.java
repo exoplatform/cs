@@ -16,6 +16,7 @@
  */
 package org.exoplatform.contact.service.impl;
 
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactLifeCycle;
 import org.exoplatform.container.component.BaseComponentPlugin;
 
@@ -28,13 +29,13 @@ import org.exoplatform.container.component.BaseComponentPlugin;
 public class ContactEventListener extends BaseComponentPlugin implements ContactLifeCycle {
 
   @Override
-  public void saveNecontact() {
+  public void saveNecontact(String username, Contact contact) {
     // TODO Auto-generated method stub
     
   }
 
   @Override
-  public void updateContact() {
+  public void updateContact(String username, Contact contact) {
     // TODO Auto-generated method stub
     
   }

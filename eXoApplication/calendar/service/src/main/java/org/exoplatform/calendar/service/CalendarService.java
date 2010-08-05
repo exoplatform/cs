@@ -166,13 +166,18 @@ public interface CalendarService {
   public List<GroupCalendarData> getGroupCalendars(String[] groupIds, boolean isShowAll, String username) throws Exception ;  
 
   /**
-   * The method save calendar to public area (group calendar)
-   * @param calendar
-   * @param isNew Boolean value will be checked is it add new or update infomations only
-   * @param username current user name(or user id)
-   * @throws Exception
+   * @deprecated
+   * @see #savePublicCalendar(Calendar calendar, boolean isNew)
    */
   public void savePublicCalendar(Calendar calendar, boolean isNew, String username) throws Exception ;  
+  /**
+  * The method save calendar to public area (group calendar)
+  * @param calendar
+  * @param isNew Boolean value will be checked is it add new or update infomations only
+  * @param username current user name(or user id)
+  * @throws Exception
+  */
+  public void savePublicCalendar(Calendar calendar, boolean isNew) throws Exception ;  
 
   /**
    * Remove the group calendar form data base, every events, tasks inside this calendar will be removed too

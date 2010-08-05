@@ -29,8 +29,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -718,7 +720,7 @@ public class CalendarUtils {
 
   }
 
-  public static List<org.exoplatform.calendar.service.Calendar> getCalendars() throws Exception {
+  public static List<org.exoplatform.calendar.service.Calendar> getAllOfCurrentUserCalendars() throws Exception {
     List<org.exoplatform.calendar.service.Calendar> list = new ArrayList<org.exoplatform.calendar.service.Calendar>() ;
     CalendarService calendarService = getCalendarService() ;
     String username = getCurrentUser() ;
@@ -921,6 +923,38 @@ public class CalendarUtils {
 
   }
 
+  public List<org.exoplatform.calendar.service.Calendar> getAllOfCalendars(String username) throws Exception {
+    List<org.exoplatform.calendar.service.Calendar> calendars = new ArrayList<org.exoplatform.calendar.service.Calendar>();
+    CalendarService calendarService = getCalendarService();
+    /*---- get private calendars ----*/
+    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(username, true);
+    for (GroupCalendarData group : groupCalendars) {
+      for (org.exoplatform.calendar.service.Calendar calendar : group.getCalendars()) {
+        calendars.add(calendar);
+      }
+    }
+
+    /*---- get public calendars ----*/
+    String[] groups = CalendarUtils.getUserGroups(username);
+    groupCalendars = calendarService.getGroupCalendars(groups, true, CalendarUtils.getCurrentUser());
+    Map<String, org.exoplatform.calendar.service.Calendar> mapCal = new HashMap<String, org.exoplatform.calendar.service.Calendar>();
+    for (GroupCalendarData group : groupCalendars) {
+      for (org.exoplatform.calendar.service.Calendar cal : group.getCalendars()) {
+        mapCal.put(cal.getId(), cal);
+      }
+    }
+    calendars.addAll(mapCal.values());
+
+    /*---- get shared calendars ----*/
+    GroupCalendarData groupCalendar = calendarService.getSharedCalendars(username, true);
+    if (groupCalendars != null) {
+      for (org.exoplatform.calendar.service.Calendar calendar : groupCalendar.getCalendars()) {
+        calendars.add(calendar);
+      }
+    }
+    return calendars;
+  }   
+  
   public static String getLabel(String componentid, String id) throws Exception
   {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();

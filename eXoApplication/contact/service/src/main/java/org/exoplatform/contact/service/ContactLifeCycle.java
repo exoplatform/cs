@@ -23,7 +23,7 @@ package org.exoplatform.contact.service;
  * Jul 30, 2010  
  */
 public interface ContactLifeCycle{
-  public void saveNecontact();
-  public void updateContact();
+  public void saveNecontact(String username, Contact contact);
+  public void updateContact(String username, Contact contact);
 
 }

@@ -181,7 +181,7 @@ public class UICalendars extends UIForm  {
           }
           colorMap_.put(Calendar.TYPE_PRIVATE + CalendarUtils.COLON + calendar.getId(), calendar.getCalendarColor()) ;
           if(getUIFormCheckBoxInput(calendar.getId()) == null){
-            addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(true)) ;
+            addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(isInSpace(calendar.getId()))) ;
           } 
         }
       }
@@ -189,19 +189,32 @@ public class UICalendars extends UIForm  {
     return groupCalendars;
   }
 
+  /**
+   * 
+   * @param calendarId
+   * @return true if the portlet is access from Social Space or the calendar is used for Social Space.
+   * else return false.
+   */
+  protected boolean isInSpace(String calendarId) {
+    UICalendarPortlet calendarPortlet = this.getAncestorOfType(UICalendarPortlet.class);
+    String spaceId = calendarPortlet.getSpaceId();
+    return (spaceId == null || (spaceId != null && calendarId.contains(spaceId)));
+  }
+  
   public List<GroupCalendarData> getPublicCalendars() throws Exception{
     String username = CalendarUtils.getCurrentUser() ;
     String[] groups = CalendarUtils.getUserGroups(username) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(groups, false, username) ;
-    Map<String, String> map = new HashMap<String, String> () ;    
+    Map<String, String> map = new HashMap<String, String> () ;
     for(GroupCalendarData group : groupCalendars) {
       List<Calendar> calendars = group.getCalendars() ;
       for(Calendar calendar : calendars) {
         map.put(calendar.getId(), calendar.getId()) ;
         colorMap_.put(Calendar.TYPE_PUBLIC + CalendarUtils.COLON + calendar.getId(), calendar.getCalendarColor()) ;
-        if(getUIFormCheckBoxInput(calendar.getId()) == null){
-          addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(true)) ;
+        UIFormCheckBoxInput checkbox = getUIFormCheckBoxInput(calendar.getId());
+        if(checkbox == null){
+          addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(isInSpace(calendar.getId()))) ;
         }
       }
     }
@@ -228,7 +241,7 @@ public class UICalendars extends UIForm  {
         if(color == null) color = calendar.getCalendarColor() ;
         colorMap_.put(Calendar.TYPE_SHARED + CalendarUtils.COLON + calendar.getId(), color) ;
         if(getUIFormCheckBoxInput(calendar.getId()) == null){
-          addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(true)) ;
+          addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(isInSpace(calendar.getId()))) ;
         }
       }
     }

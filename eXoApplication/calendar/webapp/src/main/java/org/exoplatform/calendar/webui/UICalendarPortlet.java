@@ -17,13 +17,11 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import javax.portlet.PortletPreferences;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.container.PortalContainer;
@@ -65,17 +63,7 @@ public class UICalendarPortlet extends UIPortletApplication {
   public void setCalendarSetting(CalendarSetting setting) throws Exception{
     CalendarUtils.setCurrentCalendarSetting(setting); 
   }
-  
-  @Override
-  public void processRender(WebuiRequestContext context) throws Exception {
-    String spaceId = getSpaceId();
-    if(spaceId != null) {
-      CalendarSetting setting = getCalendarSetting();
-      setting.setFilterPublicCalendars(new String[]{org.exoplatform.calendar.service.Calendar.CALENDAR_PREF + spaceId});
-    }
-    super.processRender(context);
-  }
-  
+
   /**
    * @return a calendar that contains configuration of the user, such as: Time zone, First day of week.
    * @throws Exception

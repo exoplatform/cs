@@ -19,9 +19,12 @@ package org.exoplatform.cs.ext.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -58,27 +61,22 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
   public void applicationAdded(SpaceLifeCycleEvent event) {
     try {
       Space space = event.getSpace();
-      PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance() ;
-      String baseUrl = portletRequestContext.getRequest().getScheme() + SPLITER + 
-      portletRequestContext.getRequest().getServerName() + COLON +
-      String.format("%s",portletRequestContext.getRequest().getServerPort()) 
-      + SLASH ;
       CalendarService calService = (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
       String calendarId = Calendar.CALENDAR_PREF + space.getId();
-      String username = Util.getPortalRequestContext().getRemoteUser() ; 
-      Calendar calendar = calService.getGroupCalendar(calendarId);
+      String username = space.getGroupId();
+      Calendar calendar = null;
+      try {
+        calendar = calService.getGroupCalendar(calendarId);
+      } catch (Exception pfe) {
+        // do nothing here. this case occurs because desired calendar is not exist.
+      }
       if(calendar == null) {
         calendar = new Calendar();
       calendar.setId(calendarId);
       calendar.setPublic(false) ;
       calendar.setGroups((new String[]{space.getGroupId()}));
       calendar.setName(space.getName()) ;
-      String url =  baseUrl + PortalContainer.getCurrentPortalContainerName() +SLASH+ 
-      PortalContainer.getCurrentRestContextName() + CalendarWebservice.BASE_URL_PRIVATE + username +SLASH+
-      calendar.getId() +SLASH+ PUBLIC_TYPE;
-      calendar.setPrivateUrl(url);
       calendar.setEditPermission(new String[]{space.getGroupId()+ SLASH_COLON + ANY}) ;
-      //calendar.setCalendarColor() ;
       calendar.setCalendarOwner(username) ;
       calService.savePublicCalendar(calendar, true, username);
       }        

@@ -16,6 +16,7 @@
  */
 package org.exoplatform.cs.ext.impl;
 
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.impl.ContactEventListener;
 
 /**
@@ -25,5 +26,16 @@ import org.exoplatform.contact.service.impl.ContactEventListener;
  * Jul 30, 2010  
  */
 public class ContactSpaceActivityPublisher extends ContactEventListener{
+  @Override
+  public void saveNecontact(String username, Contact contact) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void updateContact(String username, Contact contact) {
+    // TODO Auto-generated method stub
+    
+  }
 
 }
