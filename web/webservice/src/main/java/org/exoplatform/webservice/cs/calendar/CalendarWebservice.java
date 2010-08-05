@@ -500,4 +500,21 @@ public class CalendarWebservice implements ResourceContainer{
 		  return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
 	  }
   }
+  @GET
+  @Path("/private/cs/calendar/getcalendars")
+  public Response getCalendars() throws Exception{
+	  CacheControl cacheControl = new CacheControl();
+	  cacheControl.setNoCache(true);
+	  cacheControl.setNoStore(true);
+	  try{		  
+		  CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+		  String username = ConversationState.getCurrent().getIdentity().getUserId();
+		  List<Calendar> calList = calService.getUserCalendars(username, true);
+		  EventData data = new EventData();
+		  data.setCalendars(calList);
+		  return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+	  }catch(Exception e){
+		  return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
+	  }
+  }
 }

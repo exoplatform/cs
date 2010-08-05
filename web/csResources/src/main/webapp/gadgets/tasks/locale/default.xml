@@ -30,19 +30,28 @@
   	Subscription url
   </msg>
 	<msg name="limit">
-  	Page size
+  	Number of items is displayed
   </msg>
 	<msg name="format">
   	Date time format
-  </msg>
+  </msg>  
   <msg name="showall">
-  	More
+  	Show all
   </msg>
 	<msg name="noevent">
   	No task on today
   </msg>
-	<msg name="back">
-  	Back
+	<msg name="calendars">
+  	Calendar
+  </msg>
+	<msg name="setting">
+  	Setting
+  </msg>
+	<msg name="save">
+  	Save
+  </msg>
+	<msg name="cancel">
+  	Cancel
   </msg>
 	<msg name="confirm">
   	Are you sure this task completed?

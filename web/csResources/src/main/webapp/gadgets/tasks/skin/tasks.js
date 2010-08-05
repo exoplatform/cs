@@ -119,30 +119,31 @@ function eXoEventGadget(){
 } ;
 
 eXoEventGadget.prototype.getPrefs = function(){
-	var prefs = new gadgets.Prefs();
-	var limit = prefs.getString("limit");
-	var url   = prefs.getString("url");
-	var subscribeurl   = prefs.getString("subscribeurl");
-	var timeformat  = prefs.getString("timeformat");
-	return {
-		"limit": limit,
-		"url"  : url,
-		"subscribeurl"  : subscribeurl,
-		"timeformat" : timeformat
+	var setting = (new gadgets.Prefs()).getString("setting");
+	if(setting =="") setting = ["/calendar","/portal/rest/private/cs/calendar/getissues","10","AM/PM","defaultCalendarName"];
+	else {
+		setting = setting.split(":");
 	}
+	this.prefs = {
+		"url"  : setting[0],
+		"subscribeurl"  : setting[1],
+		"limit": setting[2],
+		"timeformat" : setting[3],
+		"calendars"  : setting[4]
+	}
+	return this.prefs;
 }
 
 //TODO: Need a new solution for creating url replace for using parent 
 eXoEventGadget.prototype.setLink = function(){
-	var prefs = new gadgets.Prefs();
-	var url   = prefs.getString("url");
+	var url   = eXoEventGadget.prefs.url;
 	var baseUrl = "http://" +  top.location.host + parent.eXo.env.portal.context + "/" + parent.eXo.env.portal.accessMode + "/" + parent.eXo.env.portal.portalName;
 	var a = document.getElementById("ShowAll");
 	url = (url)?baseUrl + url: baseUrl + "/calendar";
 	a.href = url;
 }
 eXoEventGadget.prototype.createRequestUrl = function(){
-	var prefs = eXoEventGadget.getPrefs();
+	var prefs = eXoEventGadget.prefs || eXoEventGadget.getPrefs();
 	var limit = (prefs.limit && (parseInt(prefs.limit) > 0))? prefs.limit:0;
 	var subscribeurl = (prefs.subscribeurl)?prefs.subscribeurl: "/portal/rest/private/cs/calendar/getissues" ;
 	subscribeurl +=  "/" + DateTimeFormater.format((new Date()),"yyyymmdd") + "/Task/" + limit ;
@@ -162,7 +163,7 @@ eXoEventGadget.prototype.render =  function(data){
 		return;
 	}
 	var cont = document.getElementById("ItemContainer");
-	var prefs = eXoEventGadget.getPrefs();
+	var prefs = eXoEventGadget.prefs || eXoEventGadget.getPrefs();
 	var gadgetPref = new gadgets.Prefs();
 	var timemask = "h:MM TT";
 	var html = '';
@@ -184,7 +185,7 @@ eXoEventGadget.prototype.render =  function(data){
 		html += '<input type="checkbox" ' + status + ' name="checkbox" onclick="eXoEventGadget.doTask(this);" ' + disable + ' value="'+ item.id +'"></input>';
 		html += '<label onclick="eXoEventGadget.showDetail(this);">' + time + '<span>'+ item.summary +'</span></label>';
 		html += '</div>';
-		if(item.description) html += '<div class="EventDetail">' + item.description + '</div>';
+		if(item.description) html += '<div class="TaskDetail">' + item.description + '</div>';
 	}		
   cont.innerHTML = html;
 	eXoEventGadget.setLink();
@@ -202,6 +203,8 @@ eXoEventGadget.prototype.showDetail = function(obj){
 }
 
 eXoEventGadget.prototype.onLoadHander = function(){
+	eXoEventGadget.getPrefs();
+	eXoEventGadget.getCalendars();
 	eXoEventGadget.getData();
 }
 eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
@@ -228,7 +231,8 @@ eXoEventGadget.prototype.doTask = function(obj){
 	var confirmMsg = gadgetPref.getMsg("confirm");
 	if(confirm(confirmMsg)){
 		var taskitem = obj.parentNode;
-		var url = "/portal/rest/private/cs/calendar/updatestatus/" + obj.value;
+		var url = eXoEventGadget.createRequestUrl();
+		url = url.replace(/calendar.*$/ig,"calendar/updatestatus/"+obj.value);
 		eXoEventGadget.ajaxAsyncGetRequest(url);
 		eXoEventGadget.swapClass(taskitem);
 		obj.disabled = true;
@@ -245,6 +249,74 @@ eXoEventGadget.prototype.notify = function(){
 	var msg = gadgets.Prefs().getMsg("noevent");
 	document.getElementById("ItemContainer").innerHTML = '<div class="Warning">' + msg + '</div>';
 	eXoEventGadget.setLink();
+}
+
+eXoEventGadget.prototype.getCalendars = function(){
+	var url = eXoEventGadget.createRequestUrl();
+	url = url.replace(/calendar.*$/ig,"calendar/getcalendars/");
+	eXoEventGadget.ajaxAsyncGetRequest(url,eXoEventGadget.write2Setting);
+}
+
+eXoEventGadget.prototype.write2Setting = function(data){
+	var frmSetting = document.getElementById("Setting");
+	data = eXoEventGadget.convertCalendar(data.calendars);
+	var html = '';
+	for(var i=0,len = data.length; i < len;i++){
+		html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+	}
+	frmSetting["calendars"].innerHTML = html;
+}
+eXoEventGadget.prototype.convertCalendar = function(data){
+	var arr = new Array();
+	var len = data.length;
+	for(var i = 0; i < len; i++){
+		arr.push({"name":data[i].name,"id":data[i].calendarId});
+	}
+	return arr;
+}
+
+eXoEventGadget.prototype.showHideSetting = function(isShow){
+	var frmSetting = document.getElementById("Setting");
+	var display = "";
+	if(isShow) {
+		eXoEventGadget.loadSetting();
+		display = "block";
+	}	else display = "none";
+	frmSetting.style.display = display;
+	gadgets.window.adjustHeight();
+}
+
+eXoEventGadget.prototype.saveSetting = function(){
+	var prefs = new gadgets.Prefs();
+	var frmSetting = document.getElementById("Setting");
+	var setting = eXoEventGadget.createSetting(frmSetting);
+	prefs.set("setting",setting);	
+	return false;
+}
+
+eXoEventGadget.prototype.createSetting = function(frmSetting){
+	var setting = "";
+	setting += frmSetting["url"].value + ":";
+	setting += frmSetting["subscribeurl"].value + ":";
+	setting += frmSetting["limit"].value + ":";
+	setting += frmSetting["timeformat"].options[frmSetting["timeformat"].selectedIndex].text + ":";
+	setting += frmSetting["calendars"].options[frmSetting["calendars"].selectedIndex].text;
+	return setting;
+}
+
+eXoEventGadget.prototype.loadSetting = function(){
+	var frmSetting = document.getElementById("Setting");
+	frmSetting["url"].value = eXoEventGadget.prefs.url;
+	frmSetting["subscribeurl"].value = eXoEventGadget.prefs.subscribeurl;
+	frmSetting["limit"].value = eXoEventGadget.prefs.limit;
+	eXoEventGadget.selectedValue(frmSetting["timeformat"],eXoEventGadget.prefs.timeformat);
+	eXoEventGadget.selectedValue(frmSetting["calendars"],eXoEventGadget.prefs.calendars);
+}
+
+eXoEventGadget.prototype.selectedValue = function(selectbox,value){
+	for(var i = 0, len = selectbox.options.length; i < len; i++){
+		if(value == selectbox.options[i].text) selectbox.selectedIndex = i;
+	}
 }
 
 eXoEventGadget =  new eXoEventGadget();

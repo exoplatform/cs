@@ -20,6 +20,8 @@ import java.util.List;
 
 import org.exoplatform.calendar.service.CalendarEvent;
 
+import org.exoplatform.calendar.service.Calendar;
+
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -30,10 +32,11 @@ public class EventData {
 	private List<CalendarEvent> info ;
 	private String userTimezoneOffset;
 	private Boolean isEdit;
+	private List<Calendar> calendars;
+	
 	public List<CalendarEvent> getInfo() {
 	  return info;
-	}
-	
+	}	
 	public void setInfo(List<CalendarEvent> info) {
 	  this.info = info;
 	} 
@@ -49,4 +52,11 @@ public class EventData {
 	public Boolean getPermission() {
 		return this.isEdit;
 	}
+	public List<Calendar> getCalendars() {
+	  return calendars;
+	}
+	
+	public void setCalendars(List<Calendar> calendars) {
+	  this.calendars = calendars;
+	}	
 }

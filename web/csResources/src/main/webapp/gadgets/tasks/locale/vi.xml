@@ -34,17 +34,26 @@
   </msg>
 	<msg name="format">
   	Date time format
-  </msg>
+  </msg>  
   <msg name="showall">
-  	Xem thêm
+  	Show all
   </msg>
 	<msg name="noevent">
-  	No event on today
+  	No task on today
   </msg>
-	<msg name="back">
-  	Back
+	<msg name="calendars">
+  	Calendar
+  </msg>
+	<msg name="setting">
+  	Setting
+  </msg>
+	<msg name="save">
+  	Save
+  </msg>
+	<msg name="cancel">
+  	Cancel
   </msg>
 	<msg name="confirm">
-  	Bạn có chắc đã xong việc?
+  	Are you sure this task completed?
   </msg>
 </messagebundle>
