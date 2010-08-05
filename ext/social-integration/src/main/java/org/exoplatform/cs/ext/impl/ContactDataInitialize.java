@@ -45,9 +45,7 @@ public class ContactDataInitialize extends SpaceListenerPlugin {
   public void applicationAdded(SpaceLifeCycleEvent event) {
     try {
     Space space = event.getSpace();
-    ContactService contactService = (ContactService)PortalContainer.getComponent(ContactService.class);
     
-    contactService.getPersonalAddressBook(space.getRegistration(), addressBookID);
     
     
     }catch (Exception e) {
