@@ -14,8 +14,8 @@
   <description>eXo Collaboration made of Address Book, Calendar, Mail and Chat.</description>
   <url>http://wiki.exoplatform.org/xwiki/bin/view/CS/</url>
   <scm>
-   <connection>scm:svn:http://svn.exoplatform.org/projects/cs/trunk</connection>
-   <developerConnection>scm:svn:http://svn.exoplatform.org/projects/cs/trunk</developerConnection>
+   <connection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/2.1.x</connection>
+   <developerConnection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/2.1.x</developerConnection>
    <url>http://fisheye.exoplatform.org/browse/cs/trunk</url>
   </scm>
   <issueManagement>
