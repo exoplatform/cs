@@ -271,6 +271,10 @@ public class ContactServiceImpl implements ContactService {
 
   public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception {
     storage_.saveContactToSharedAddressBook(username, addressBookId, contact, isNew) ;
+    for(ContactEventListener ce : listeners_) {
+      if(isNew) ce.saveContact(username, contact) ;
+      else ce.updateContact(username, contact);
+    }
   }
 
   public Contact getSharedContactAddressBook(String username, String contactId) throws Exception {
