@@ -479,4 +479,10 @@ public class MockCalendarService implements CalendarService{
     // TODO Auto-generated method stub
     
   }
+
+  @Override
+  public void savePublicCalendar(Calendar calendar, boolean isNew) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
 }
