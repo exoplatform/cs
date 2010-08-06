@@ -47,8 +47,6 @@ public class CalendarSpaceActivityPublisher extends CalendarEventListener {
       String spaceId = calendarId.split(Calendar.CALENDAR_PREF)[1]; 
       Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
       activityM.recordActivity(spaceIdentity, SpaceService.SPACES_APP_ID, msg , body);
-    } catch (ClassNotFoundException e) {
-      if(LOG.isDebugEnabled()) LOG.debug("Please check the integrated project does the social deploy? " +e.getMessage());
     } catch (Exception e) {
       LOG.error("Can not record Activity for space when event added " +e.getMessage());
     }
@@ -64,8 +62,6 @@ public class CalendarSpaceActivityPublisher extends CalendarEventListener {
         String spaceId = calendarId.split(Calendar.CALENDAR_PREF)[1]; 
         Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
         activityM.recordActivity(spaceIdentity, SpaceService.SPACES_APP_ID, msg , body);
-      } catch (ClassNotFoundException e) {
-        if(LOG.isDebugEnabled()) LOG.debug("Please check the integrated project does the social deploy? " +e.getMessage());
       } catch (Exception e) {
         LOG.error("Can not record Activity for space when event updated " +e.getMessage());
       }
