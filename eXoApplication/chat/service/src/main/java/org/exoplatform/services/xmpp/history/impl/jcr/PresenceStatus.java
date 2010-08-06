@@ -23,33 +23,43 @@ package org.exoplatform.services.xmpp.history.impl.jcr;
  * Jul 26, 2010  
  */
 
+import org.exoplatform.services.xmpp.util.CodingUtils;
 import org.jcrom.annotations.JcrName;
 import org.jcrom.annotations.JcrNode;
 import org.jcrom.annotations.JcrPath;
 import org.jcrom.annotations.JcrProperty;
 
-@JcrNode(nodeType = "lr:userchatstatus")
-public class UserChatStatus {
+@JcrNode(nodeType = "lr:presencestatus")
+public class PresenceStatus {
 
   /**
    * assigned by userId***/
   @JcrName
-  private String                  ucs_name;                                            
+  private String                  hexName;                                            
 
   @JcrPath
   private String                  path;
   
   /**
    * set/get [lr:status] node property**/
+  
   @JcrProperty(name = "lr:status")
   private String                  status;
 
-  public UserChatStatus(){
+  
+  @JcrProperty(name = "lr:userid")
+  private String                  userId;
+  
+  public PresenceStatus(){
     //nothing
   }
   
-  public UserChatStatus(String userId){
-    ucs_name = userId;
+  /**
+   * userId be encode to Hex code by CodingUtils.encode() method***/
+  public PresenceStatus(String userId, String status){
+    this.userId = userId;
+    this.status = status;
+    this.hexName = CodingUtils.encodeToHex(userId);
   }
   
   public String getStatus() {
@@ -60,13 +70,12 @@ public class UserChatStatus {
     this.status = status;
   }
   
-
-  public String getUs_name() {
-    return ucs_name;
+  public String getUserId() {
+    return userId;
   }
-
-  public void setUs_name(String usName) {
-    ucs_name = usName;
+  
+  public void setUserId(String userId) {
+    this.userId = userId;
   }
 
   public String getPath() {
@@ -75,6 +84,14 @@ public class UserChatStatus {
 
   public void setPath(String path) {
     this.path = path;
+  }
+  
+  public String getHexName() {
+    return hexName;
+  }
+
+  public void setHexName(String hexName) {
+    this.hexName = hexName;
   }
 
 }

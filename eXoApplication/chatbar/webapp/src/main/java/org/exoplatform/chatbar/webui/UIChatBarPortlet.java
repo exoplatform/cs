@@ -25,7 +25,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.chatbar.Utils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.uistate.rest.Status;
+import org.exoplatform.services.presence.DefaultPresenceStatus;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -53,9 +53,9 @@ public class UIChatBarPortlet extends UIPortletApplication {
 
   private String templatePath_ = VIEWMODE_TEMP ;
 
-  private String status_icon = Status.ONLINEICON; 
+  private String status_icon = DefaultPresenceStatus.ONLINEICON; 
   
-  private String status_  = Status.DEFAULT_STATUS;
+  private String status_  = DefaultPresenceStatus.DEFAULT_STATUS;
   
   public UIChatBarPortlet() throws Exception {
     PortletRequestContext context = (PortletRequestContext)  WebuiRequestContext.getCurrentInstance() ;
@@ -64,11 +64,11 @@ public class UIChatBarPortlet extends UIPortletApplication {
     
     //get previous status
     ExoContainer container = ExoContainerContext.getCurrentContainer();
-    Status status = null;
+    DefaultPresenceStatus dps = null;
     String statusicon_ = "", st_ = "";
-    if(container != null) status = (Status)container.getComponentInstance(Status.class);
-    if(status !=null){
-      Map<String, String> statusmap = status.getPreviousStatus();
+    if(container != null) dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
+    if(dps !=null){
+      Map<String, String> statusmap = dps.getPreviousStatus(this.getRemoteUser());
       if(statusmap.size() > 0)
         st_ = statusmap.keySet().toArray(new String[]{""})[0];
         statusicon_ = statusmap.values().toArray(new String[]{""})[0];

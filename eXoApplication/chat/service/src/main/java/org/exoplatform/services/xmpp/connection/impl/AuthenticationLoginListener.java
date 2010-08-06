@@ -24,9 +24,9 @@ import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.services.presence.DefaultPresenceStatus;
 import org.exoplatform.services.security.ConversationRegistry;
 import org.exoplatform.services.security.ConversationState;
-import org.exoplatform.services.uistate.rest.Status;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 import org.exoplatform.services.xmpp.rest.RESTXMPPService;
 import org.exoplatform.services.xmpp.userinfo.UserInfoService;
@@ -49,7 +49,7 @@ public class AuthenticationLoginListener extends Listener<ConversationRegistry, 
       XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
       RESTXMPPService restXmppService = (RESTXMPPService)container.getComponentInstanceOfType(RESTXMPPService.class);
 
-      Status status = (Status)container.getComponentInstance(Status.class);
+      DefaultPresenceStatus status = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
       if(messenger != null && restXmppService != null){
         String userId = event.getData().getIdentity().getUserId() ;
         UserInfoService organization = (UserInfoService) container.getComponentInstanceOfType(UserInfoService.class);

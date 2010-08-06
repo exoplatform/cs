@@ -47,7 +47,7 @@
 
 	<!-- ***************** configuration user chat state *********-->
 	<component>
-		<type>org.exoplatform.services.uistate.rest.Status</type>
+		<type>org.exoplatform.services.presence.DefaultPresenceStatus</type>
 		<init-params>
 			<properties-param>
 				<name>chat-status</name>

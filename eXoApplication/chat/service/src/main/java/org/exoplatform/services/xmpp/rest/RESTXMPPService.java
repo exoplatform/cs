@@ -31,7 +31,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-import javax.jws.soap.InitParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -40,7 +39,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.RuntimeDelegate;
@@ -48,14 +46,13 @@ import javax.ws.rs.ext.RuntimeDelegate;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.services.presence.DefaultPresenceStatus;
 import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.services.rest.impl.RuntimeDelegateImpl;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
-import org.exoplatform.services.uistate.rest.Status;
 import org.exoplatform.services.xmpp.bean.ConfigRoomBean;
 import org.exoplatform.services.xmpp.bean.ContactBean;
 import org.exoplatform.services.xmpp.bean.FormBean;
@@ -96,7 +93,6 @@ import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.muc.HostedRoom;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.RoomInfo;
-import org.json.HTTP;
 import org.picocontainer.Startable;
 
 /**
@@ -2000,8 +1996,14 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                                 @PathParam("status") String status) {
     if (this.rb == null) loadResourceBundle();
     XMPPSession session = messenger.getSession(username);
-    Status st = new Status();
-    st.setStatus_(status);
+    DefaultPresenceStatus dps = new DefaultPresenceStatus();
+    dps.setStatus_(status);
+    //DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
+    if(dps != null){
+      dps.savePresenceStatus(username, status);  
+    }else   {
+      log.debug("Can not save presence status from service sendstatus() method"); 
+    }
     
     if(session != null){
       Presence presence = PresenceUtil.getPresence(status);
@@ -2152,14 +2154,14 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   @Path("/getprevstatus/{username}/")
   public Response getPreviousStatus(@PathParam("username") String username){
     ExoContainer container = ExoContainerContext.getCurrentContainer();
-    Status status = null;
+    DefaultPresenceStatus dps = null;
     if (this.rb == null) loadResourceBundle();
     XMPPSession session = messenger.getSession(username);
     if(session != null){
       if(container != null)
-        status = (Status)container.getComponentInstance(Status.class);
-      if(status != null){
-        Map<String, String> statusmap = status.getPreviousStatus();
+        dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
+      if(dps != null){
+        Map<String, String> statusmap = dps.getPreviousStatus(username);
         String responseText = "<staustext>" + statusmap.keySet().toArray(new String[]{""})[0]+ "</staustext>";
         responseText += "<responseIcon>" + statusmap.values().toArray(new String[]{""})[0] + "</responseIcon>"; 
         return Response.ok().entity(responseText).build();

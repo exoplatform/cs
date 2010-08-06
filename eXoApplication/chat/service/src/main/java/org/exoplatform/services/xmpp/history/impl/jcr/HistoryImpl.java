@@ -28,6 +28,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -41,7 +42,8 @@ import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.impl.core.NodeImpl;
-import org.exoplatform.services.uistate.rest.Status;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.Interlocutor;
 import org.exoplatform.services.xmpp.util.CodingUtils;
@@ -116,13 +118,13 @@ public class HistoryImpl implements Startable{
   /**
    * 
    */
-  private static final String USERCHATSTATUS_NT             = "lr:userchatstatus".intern();
+  private static final String DEFAULTPRESENCESTATUS_NT             = "lr:defaultpresencestatus".intern();
   
-  private static final String USERCHATSTATUS                = "userchatstatus".intern();
+  private static final String DEFAULTPRESENCESTATUS                = "defaultpresencestatus".intern();
   
-  private static final String STATUS                        = "lr:status".intern();
+  private static final String STATUS                               = "lr:status".intern();
   
-  private static final String USERID                        = "lr:userId".intern();
+  private static final String USERID                               = "lr:userid".intern();
   
   /**
    * 
@@ -144,6 +146,10 @@ public class HistoryImpl implements Startable{
    */
   private RepositoryService   repositoryService;
 
+  public RepositoryService getRepositoryService() {
+    return repositoryService;
+  }
+
   /**
    * 
    */
@@ -153,6 +159,8 @@ public class HistoryImpl implements Startable{
    * Queue that holds the messages to log.
    */
   private Queue<HistoricalMessage > logQueue = new ConcurrentLinkedQueue<HistoricalMessage >();
+  
+  Log log = ExoLogger.getExoLogger(this.getClass());
   
   public void start() {
     try{
@@ -164,7 +172,7 @@ public class HistoryImpl implements Startable{
       jcrom.map(InterlocutorImpl.class);
       jcrom.map(Participant.class);
       
-      jcrom.map(UserChatStatus.class);
+      jcrom.map(PresenceStatus.class);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -185,6 +193,8 @@ public class HistoryImpl implements Startable{
     historyPath = initParams.getValueParam("path").getValue();
     wsName = initParams.getValueParam("workspace").getValue();
     repositopryName = initParams.getValueParam("repository").getValue();
+    
+    if(jcrom == null) jcrom = new Jcrom();
   }
   
   /**
@@ -217,16 +227,16 @@ public class HistoryImpl implements Startable{
       if (pNode.canAddMixin("exo:privilegeable")) {
         pNode.addMixin("exo:privilegeable");
       }
+    
       pNode.setPermission(SystemIdentity.ANY, PermissionType.ALL);
       
       //user chat status 
-      Node node_ = node.addNode(historyPath, HISTORY_NT);
-      NodeImpl ucsNode = (NodeImpl) node_.addNode(USERCHATSTATUS, USERCHATSTATUS_NT);
-      if (ucsNode.canAddMixin("exo:privilegeable")) {
-        ucsNode.addMixin("exo:privilegeable");
+      NodeImpl dps = (NodeImpl) fNode.addNode(DEFAULTPRESENCESTATUS, DEFAULTPRESENCESTATUS_NT);
+      if (dps.canAddMixin("exo:privilegeable")) {
+        dps.addMixin("exo:privilegeable");
       }
-      ucsNode.setPermission(SystemIdentity.ANY, PermissionType.ALL);
-      //ucsNode.setProperty("lr:status", Status.DEFAULT_STATUS);
+      dps.setPermission(SystemIdentity.ANY, PermissionType.ALL);
+
       sysSession.save();
     }
     
@@ -804,31 +814,64 @@ public class HistoryImpl implements Startable{
    * @param userId
    * @param status
    * **/
-  public void saveUserChatStatus(SessionProvider provider, String userId, String status) throws Exception{
-    Node nodeUCS = getUCSNode(provider);
-    UserChatStatus ucs = getUCS(nodeUCS);
-    if(nodeUCS == null){ //add new lr:userchatstatus node
-      ManageableRepository repository = repositoryService.getRepository(repositopryName);
-      Session session = provider.getSession(wsName, repository);
-      Node node = session.getRootNode();
-      Node tmpNode = node.getNode(historyPath);
-      if(tmpNode == null) tmpNode = node.addNode(historyPath);
-      //Node fNode = node.addNode(path[path.length - 1], HISTORY_NT);
-      NodeImpl ucsNode = (NodeImpl) tmpNode.addNode(USERCHATSTATUS, USERCHATSTATUS_NT);
-      if (ucsNode.canAddMixin("exo:privilegeable")) {
-        ucsNode.addMixin("exo:privilegeable");
+  public void savePresenceStatus(SessionProvider provider, String userId, String status) throws Exception{
+    Node dpsNode = getDefaultPresenceStatusNode(provider);
+    String hexName = CodingUtils.encodeToHex(userId);
+    PresenceStatus presenceStatus = getPresenceStatus(dpsNode, hexName);
+    
+    if(dpsNode == null){ //add new lr:userchatstatus node
+      try {
+        ManageableRepository repository = repositoryService.getRepository(repositopryName);
+        Session session = provider.getSession(wsName, repository);
+        Node node = session.getRootNode();
+        Node fNode = null;
+        Node historyNode = node.getNode(historyPath);
+        String[] path = historyPath.split("/");
+        
+        if (historyNode == null) {
+          Node tmpNode;
+          for (int i = 0; i < path.length - 1; i++) {
+            if (node.hasNode(path[i]))
+              tmpNode = node.getNode(path[i]);
+            else
+              tmpNode = node.addNode(path[i]);
+            node = tmpNode;
+          }
+         fNode = node.addNode(path[path.length - 1], HISTORY_NT);
+        }else{
+          fNode = historyNode.getNode(path[path.length - 1]);
+        }
+        
+        NodeImpl dps = (NodeImpl) fNode.addNode(DEFAULTPRESENCESTATUS, DEFAULTPRESENCESTATUS_NT);
+        if (dps.canAddMixin("exo:privilegeable")) {
+          dps.addMixin("exo:privilegeable");
+        }
+        dps.setPermission(SystemIdentity.ANY, PermissionType.ALL);
+        presenceStatus = new PresenceStatus(userId, status);
+        //presenceStatus.setStatus(status);
+       // String presenceStatusPath = historyPath + "/" + DEFAULTPRESENCESTATUS;
+      //  if(dps.getPath().equals(presenceStatusPath)) presenceStatus.setPath(presenceStatusPath);
+        
+        addPresenceStatus(dps, presenceStatus);
+        
+        session.save();
+        session.logout();
+      } catch (Exception e) {
+        log.error("Could not add a new node for [lr:defaultpresecestatus] node type: " + e.getMessage());
       }
-      ucsNode.setPermission(SystemIdentity.ANY, PermissionType.ALL);
-     // ucsNode.setProperty(USERID, CodingUtils.encodeToHex(userId));
-      ucsNode.setProperty(STATUS, status);
-      session.save();
-      session.logout();
     }else { //update lr:status property
-      if(ucs != null){
-        ucs = new UserChatStatus(userId);
-        ucs.setStatus(status);
-        jcrom.updateNode(nodeUCS, ucs);
-        nodeUCS.getSession().save();
+      if(presenceStatus == null){
+        presenceStatus = new PresenceStatus(userId, status);
+        //presenceStatus.setStatus(status);
+        addPresenceStatus(dpsNode, presenceStatus);
+      }else{
+        if(presenceStatus.getHexName().equals(hexName)){
+          presenceStatus.setStatus(status);
+          Node presenceStatusNode = dpsNode.getNode(presenceStatus.getHexName());
+          jcrom.updateNode(presenceStatusNode, presenceStatus);
+          //presenceStatusNode.getSession().save();
+          dpsNode.getSession().save();
+        }
       }
     }
   }
@@ -836,42 +879,58 @@ public class HistoryImpl implements Startable{
   /**
    * Getting user chat status 
    * */
-  public String getPrevStatus(SessionProvider provider){
-    Node nodeUCS = getUCSNode(provider);
-    UserChatStatus ucs = getUCS(nodeUCS);
-    if(ucs != null) {
-      return ucs.getStatus();
+  public String getPresenceStatusHistory(SessionProvider provider, String userId){
+    Node dpsNode = getDefaultPresenceStatusNode(provider);
+    String hexName = CodingUtils.encodeToHex(userId);
+    PresenceStatus ps = getPresenceStatus(dpsNode, hexName);
+    if(ps != null) {
+      return ps.getStatus();
     }
+    
+    
     return null;
   }
   
-  /**
-   * Getting user chat status from Node 
-   * */
-  public UserChatStatus getUCS(Node nodeUCS){
-    UserChatStatus ucs = null;
+  
+  private void addPresenceStatus(Node dpsNode, PresenceStatus presenceStatus){
     try {
-      if(nodeUCS != null)
-       ucs  = jcrom.fromNode(UserChatStatus.class, nodeUCS);
+      jcrom.addNode(dpsNode, presenceStatus);
+      dpsNode.getSession().save();
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("Could not add new a node to [lr:presencestatus] node type: " + e.getMessage());
+    }
+  }
+  /**
+   * Getting presence status from Node 
+   * */
+  public PresenceStatus getPresenceStatus(Node dpsNode, String hexName){
+    PresenceStatus presenceStatus = null;
+    try {
+      if(dpsNode.hasNode(hexName)){
+        Node presenceStatusNode = dpsNode.getNode(hexName);
+        presenceStatus  = jcrom.fromNode(PresenceStatus.class, presenceStatusNode);  
+      }
+    }catch (Exception e) {
+      log.error("Getting a PresenceStatus fail: " + e.getMessage(), e.getCause());
     }
     
-    return ucs;
+    return presenceStatus;
   }
   
   /**
    * Getting exist user chat status node 
    * */
-  public Node getUCSNode(SessionProvider sessionProvider){
-    Node ucsNode = null;
+  private Node getDefaultPresenceStatusNode(SessionProvider sessionProvider){
+    Node defaultPresenceStatusNode = null;
     try {
       ManageableRepository repository = repositoryService.getRepository(repositopryName);
       Session session = sessionProvider.getSession(wsName, repository);
-       ucsNode = session.getRootNode().getNode(historyPath + "/" + USERCHATSTATUS);
+      Node root = session.getRootNode();
+      defaultPresenceStatusNode = root.getNode(historyPath + "/" + DEFAULTPRESENCESTATUS) ;
     } catch (Exception e) {
-   //   e.printStackTrace();
-    }
-    return ucsNode;
+      log.error("Default Presence status  node is not exist:  " + e.getMessage());
+    }    
+    return defaultPresenceStatusNode;
   }
+  
 }

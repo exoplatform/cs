@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.uistate.rest;
+package org.exoplatform.services.presence;
 
 import java.util.HashMap;
 
@@ -27,8 +27,6 @@ import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 /**
  * Created by The eXo Platform SAS
  * Author : Nguyen Van Hoang
@@ -36,7 +34,7 @@ import com.sun.org.apache.bcel.internal.generic.NEW;
  * Jul 2, 2010  
  */
 
-public class Status {
+public class DefaultPresenceStatus {
     
   public final static String DEFAULT_STATUS              =     "Available";
   public final static String OFFLINE_STATUS              =     "Unavailable";
@@ -60,22 +58,18 @@ public class Status {
     status_ = status;
   }
   
-  public Status() {}
+  public DefaultPresenceStatus() {}
   
   private String statusIcon_ = ONLINEICON;
   
   private Map<String, String> statusmap = new HashMap<String, String>();//statusText|statusIcon
   
-  public Status(InitParams param){
+  public DefaultPresenceStatus(InitParams param){
     PropertiesParam pparam = param.getPropertiesParam("chat-status");
     if(pparam != null){
       status_ = (pparam.getProperty("mode") == null)?DEFAULT_STATUS:pparam.getProperty("mode");
     }
-    /*if(status_.equalsIgnoreCase(Status.DEFAULT_STATUS)) statusIcon_ = ONLINEICON;
-    if(status_.equalsIgnoreCase(Status.AWAY_STATUS)) statusIcon_ = AWAYICON;
-    if(status_.equalsIgnoreCase(Status.EXTEND_AWAY_STATUS)) statusIcon_ = EXTENDAWAYICON;
-    if(status_.equalsIgnoreCase(Status.FREE_TO_CHAT_STATUS)) statusIcon_ = FREETOICON;
-    if(status_.equalsIgnoreCase(Status.OFFLINE_STATUS))statusIcon_ = OFFLINEICON;*/
+    
     if(!getStatusIcon_(status_).equals(""))
       statusIcon_ = getStatusIcon_(status_);
     statusmap.clear();
@@ -85,22 +79,22 @@ public class Status {
   
   private String getStatusIcon_(String status_){
     String stIcon_ = "";
-    if(status_.equalsIgnoreCase(Status.DEFAULT_STATUS)) stIcon_ = ONLINEICON;
-    if(status_.equalsIgnoreCase(Status.AWAY_STATUS)) stIcon_ = AWAYICON;
-    if(status_.equalsIgnoreCase(Status.EXTEND_AWAY_STATUS)) stIcon_ = EXTENDAWAYICON;
-    if(status_.equalsIgnoreCase(Status.FREE_TO_CHAT_STATUS)) stIcon_ = FREETOICON;
-    if(status_.equalsIgnoreCase(Status.OFFLINE_STATUS))stIcon_ = OFFLINEICON;
+    if(status_.equalsIgnoreCase(DefaultPresenceStatus.DEFAULT_STATUS)) stIcon_ = ONLINEICON;
+    if(status_.equalsIgnoreCase(DefaultPresenceStatus.AWAY_STATUS)) stIcon_ = AWAYICON;
+    if(status_.equalsIgnoreCase(DefaultPresenceStatus.EXTEND_AWAY_STATUS)) stIcon_ = EXTENDAWAYICON;
+    if(status_.equalsIgnoreCase(DefaultPresenceStatus.FREE_TO_CHAT_STATUS)) stIcon_ = FREETOICON;
+    if(status_.equalsIgnoreCase(DefaultPresenceStatus.OFFLINE_STATUS))stIcon_ = OFFLINEICON;
     return stIcon_;
   }
   
   /**
    * Getting user chat status**/
-  public Map<String, String> getPreviousStatus(){
+  public Map<String, String> getPreviousStatus(String userId){
     //get status from jcr here
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     HistoryImpl history = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
     SessionProvider provider = SessionProvider.createSystemProvider();
-    String status = history.getPrevStatus(provider);
+    String status = history.getPresenceStatusHistory(provider, userId);
     if(status != null) {
       setStatus_(status);
       if(!getStatusIcon_(status).equals(""))
@@ -114,13 +108,13 @@ public class Status {
   
   /**
    * Saving user chat status**/
-  public void saveChatStatus(String userId, String status){
+  public void savePresenceStatus(String userId, String status){
     //if can not get status form jcr, then set status default
     try {
       SessionProvider provider = SessionProvider.createSystemProvider();
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       HistoryImpl history = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
-      history.saveUserChatStatus(provider, userId, status);  
+      history.savePresenceStatus(provider, userId, status);  
       if(provider != null) provider.close();
     } catch (Exception e) {
       e.printStackTrace();
