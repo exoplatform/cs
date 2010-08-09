@@ -247,11 +247,19 @@
                                     </div>
                                 </div>
                                 <!-- Right Click Popup Online-->
+                                <%
+                                  def statusIcon = uicomponent.getCSSClassStatus();
+                                  def presencestatus = uicomponent.getStatus();
+                                  if(statusIcon == null || presencestatus == null){
+                                    presencestatus = "Unavailable";
+                                    statusIcon = "OfflineIcon";
+                                  }
+                                %>
                                 <div class="LeftIconButton">
                                     <div class="RightIconButton">
                                         <div class="CenterIconButton">
                                             <div class="Arrow">
-                                                <div class="IconHolder <%=uicomponent.getCSSClassStatus()%>" title="<%=uicomponent.getStatus()%>" id="id-state-chat">
+                                                <div class="IconHolder <%=statusIcon%>" title="<%=presencestatus%>" id="id-state-chat">
                                                     <div class="StatusIcon">
                                                         <div class="Text" user="<%=uicomponent.getRemoteUser()%>">
                                                             <span></span>

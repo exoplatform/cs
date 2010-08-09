@@ -28,7 +28,6 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -121,10 +120,6 @@ public class HistoryImpl implements Startable{
   private static final String DEFAULTPRESENCESTATUS_NT             = "lr:defaultpresencestatus".intern();
   
   private static final String DEFAULTPRESENCESTATUS                = "defaultpresencestatus".intern();
-  
-  private static final String STATUS                               = "lr:status".intern();
-  
-  private static final String USERID                               = "lr:userid".intern();
   
   /**
    * 
@@ -230,7 +225,7 @@ public class HistoryImpl implements Startable{
     
       pNode.setPermission(SystemIdentity.ANY, PermissionType.ALL);
       
-      //user chat status 
+      //defaul presence status *** initialize [lr:defaultpresencestatus] node type 
       NodeImpl dps = (NodeImpl) fNode.addNode(DEFAULTPRESENCESTATUS, DEFAULTPRESENCESTATUS_NT);
       if (dps.canAddMixin("exo:privilegeable")) {
         dps.addMixin("exo:privilegeable");
@@ -819,7 +814,7 @@ public class HistoryImpl implements Startable{
     String hexName = CodingUtils.encodeToHex(userId);
     PresenceStatus presenceStatus = getPresenceStatus(dpsNode, hexName);
     
-    if(dpsNode == null){ //add new lr:userchatstatus node
+    if(dpsNode == null){ //add new lr:defaultpresencestatus\lr:presencestatus node
       try {
         ManageableRepository repository = repositoryService.getRepository(repositopryName);
         Session session = provider.getSession(wsName, repository);
@@ -850,7 +845,7 @@ public class HistoryImpl implements Startable{
         presenceStatus = new PresenceStatus(userId, status);
         //presenceStatus.setStatus(status);
        // String presenceStatusPath = historyPath + "/" + DEFAULTPRESENCESTATUS;
-      //  if(dps.getPath().equals(presenceStatusPath)) presenceStatus.setPath(presenceStatusPath);
+      //  if(!dps.getPath().equals(presenceStatusPath)) presenceStatus.setPath(presenceStatusPath);
         
         addPresenceStatus(dps, presenceStatus);
         
@@ -866,11 +861,18 @@ public class HistoryImpl implements Startable{
         addPresenceStatus(dpsNode, presenceStatus);
       }else{
         if(presenceStatus.getHexName().equals(hexName)){
+          Node presenceStatusNode = null;
           presenceStatus.setStatus(status);
-          Node presenceStatusNode = dpsNode.getNode(presenceStatus.getHexName());
-          jcrom.updateNode(presenceStatusNode, presenceStatus);
-          //presenceStatusNode.getSession().save();
-          dpsNode.getSession().save();
+          try {
+            if(dpsNode.hasNode(presenceStatus.getHexName())){
+              presenceStatusNode = dpsNode.getNode(presenceStatus.getHexName());
+              System.out.println("\n\n\n" + presenceStatusNode.getPath() + ":" + presenceStatusNode.getName());
+              jcrom.updateNode(presenceStatusNode, presenceStatus);
+              dpsNode.getSession().save();
+            }
+           } catch (Exception e) {
+             log.error("Could not update [lr:presencestatus] node: " + e.getMessage());
+          }
         }
       }
     }
@@ -886,8 +888,6 @@ public class HistoryImpl implements Startable{
     if(ps != null) {
       return ps.getStatus();
     }
-    
-    
     return null;
   }
   
@@ -928,7 +928,7 @@ public class HistoryImpl implements Startable{
       Node root = session.getRootNode();
       defaultPresenceStatusNode = root.getNode(historyPath + "/" + DEFAULTPRESENCESTATUS) ;
     } catch (Exception e) {
-      log.error("Default Presence status  node is not exist:  " + e.getMessage());
+      log.error("Default Presence status node is not exist:  " + e.getMessage());
     }    
     return defaultPresenceStatusNode;
   }

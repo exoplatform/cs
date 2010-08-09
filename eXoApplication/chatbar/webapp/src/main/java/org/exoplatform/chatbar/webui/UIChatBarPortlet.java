@@ -17,6 +17,7 @@
 package org.exoplatform.chatbar.webui;
 
 import java.util.Map;
+
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
@@ -26,6 +27,8 @@ import org.exoplatform.chatbar.Utils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.presence.DefaultPresenceStatus;
+import org.exoplatform.services.xmpp.connection.XMPPSession;
+import org.exoplatform.services.xmpp.connection.impl.XMPPMessenger;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -64,17 +67,26 @@ public class UIChatBarPortlet extends UIPortletApplication {
     
     //get previous status
     ExoContainer container = ExoContainerContext.getCurrentContainer();
+    XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
+    XMPPSession session = messenger.getSession(this.getRemoteUser());
     DefaultPresenceStatus dps = null;
     String statusicon_ = "", st_ = "";
     if(container != null) dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
-    if(dps !=null){
-      Map<String, String> statusmap = dps.getPreviousStatus(this.getRemoteUser());
-      if(statusmap.size() > 0)
-        st_ = statusmap.keySet().toArray(new String[]{""})[0];
-        statusicon_ = statusmap.values().toArray(new String[]{""})[0];
-        setCSSClassStatus(statusicon_);
-        setStatus(st_);
-    }
+    
+    if(session != null){//chat server available
+      if(dps !=null){
+        Map<String, String> statusmap = dps.getPreviousStatus(this.getRemoteUser());
+        if(statusmap.size() > 0)
+          st_ = statusmap.keySet().toArray(new String[]{""})[0];
+          statusicon_ = statusmap.values().toArray(new String[]{""})[0];
+          setCSSClassStatus(statusicon_);
+          setStatus(st_);
+      }  
+    }else {
+      setCSSClassStatus(null);
+      setStatus(null);
+    } 
+    
   }
 
   public String getId() {
