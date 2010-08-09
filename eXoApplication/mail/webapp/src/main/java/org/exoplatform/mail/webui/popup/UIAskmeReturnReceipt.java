@@ -30,7 +30,6 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -48,25 +47,25 @@ import com.sun.mail.smtp.SMTPSendFailedException;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/mail/webui/popup/UIAskmeReturnReceipt.gtmpl",
-    events = {
-      @EventConfig(listeners = UIAskmeReturnReceipt.YesActionListener.class), 
-      @EventConfig(listeners = UIAskmeReturnReceipt.NoActionListener.class)
-    }
+                 lifecycle = UIFormLifecycle.class,
+                 template =  "app:/templates/mail/webui/popup/UIAskmeReturnReceipt.gtmpl",
+                 events = {
+                   @EventConfig(listeners = UIAskmeReturnReceipt.YesActionListener.class), 
+                   @EventConfig(listeners = UIAskmeReturnReceipt.NoActionListener.class)
+                 }
 )
 public class UIAskmeReturnReceipt extends UIForm implements UIPopupComponent {
   public static final String WARNING_ASKME_TEXT = "warning_askme_text".intern();
   private Message selectedMsg;
-  
+
   public UIAskmeReturnReceipt() throws Exception { }
-  
+
   public void activate() throws Exception {}
   public void deActivate() throws Exception{}
- 
+
   public Message getSelectedMsg() { return selectedMsg; }
   public void setSelectedMsg(Message msg) { selectedMsg = msg; }
-  
+
   static  public class YesActionListener extends EventListener<UIAskmeReturnReceipt> {
     public void execute(Event<UIAskmeReturnReceipt> event) throws Exception {
       UIAskmeReturnReceipt uiForm = event.getSource();
@@ -98,7 +97,7 @@ public class UIAskmeReturnReceipt extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      
+
       List<Message> msgs = new ArrayList<Message>();
       msgs.add(uiForm.getSelectedMsg());
       mailService.toggleMessageProperty(username, accId, msgs, "", Utils.IS_RETURN_RECEIPT, true);
@@ -108,7 +107,7 @@ public class UIAskmeReturnReceipt extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getParent()) ;
     }
   }
-  
+
   static  public class NoActionListener extends EventListener<UIAskmeReturnReceipt> {
     public void execute(Event<UIAskmeReturnReceipt> event) throws Exception {
       UIAskmeReturnReceipt uiForm = event.getSource() ;
