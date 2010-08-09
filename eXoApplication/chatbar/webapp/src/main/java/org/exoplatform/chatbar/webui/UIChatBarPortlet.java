@@ -157,20 +157,16 @@ public class UIChatBarPortlet extends UIPortletApplication {
   }
   
   protected String getEmailLink () {
-    return Utils.getServerBaseUrl() + getBasePath() + Utils.getPortalName() +"/"+  getPortletPreferences().getValue(UIConfigForm.MAIL_URL, null);
+    return Utils.getServerBaseUrl() + getPortletPreferences().getValue(UIConfigForm.MAIL_URL, null);
   }
   protected String getCalendarLink () {
-    return Utils.getServerBaseUrl() + getBasePath() + Utils.getPortalName() +"/"+  getPortletPreferences().getValue(UIConfigForm.CAL_URL, null);
+    return Utils.getServerBaseUrl() + getPortletPreferences().getValue(UIConfigForm.CAL_URL, null);
   }
   protected String getContactLink () {
-    return Utils.getServerBaseUrl() + getBasePath() + Utils.getPortalName() +"/"+ getPortletPreferences().getValue(UIConfigForm.CON_URL, null);
+    return Utils.getServerBaseUrl() + getPortletPreferences().getValue(UIConfigForm.CON_URL, null);
   }
   
-  protected String getBasePath() {
-   return getPortletPreferences().getValue(UIConfigForm.BASE_PATH, null);
- }
-  
-  
+
   private PortletPreferences getPortletPreferences() {
     PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance() ;
     return pcontext.getRequest().getPreferences() ;
