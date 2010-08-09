@@ -16,23 +16,17 @@
  */
 package org.exoplatform.cs.ext.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.social.core.space.SpaceListenerPlugin;
 import org.exoplatform.social.core.space.model.Space;
 import org.exoplatform.social.core.space.spi.SpaceLifeCycleEvent;
-import org.exoplatform.webservice.cs.calendar.CalendarWebservice;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
 
 
 /**
@@ -51,6 +45,12 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
   public static final String SPLITER = "://".intern();
   public static final String PUBLIC_TYPE = "2".intern();
   
+  private final InitParams params;
+  
+  public CalendarDataInitialize(InitParams params) {
+    this.params = params;
+  }
+  
   @Override
   public void applicationActivated(SpaceLifeCycleEvent event) {
     // TODO Auto-generated method stub
@@ -59,6 +59,21 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
 
   @Override
   public void applicationAdded(SpaceLifeCycleEvent event) {
+    String portletName = "";
+    try {
+      portletName = params.getValueParam("portletName").getValue();
+    } catch (Exception e) {
+      // do nothing here. It means that initparam is not configured.
+    }
+    
+    if (!portletName.equals(event.getSource())) {
+      /*
+       * this function is called only if Calendar Portlet is added to Social Space.
+       * Hence, if the application added to space do not have the name as configured, we will be out now.
+       */
+      return;
+    }
+    
     try {
       Space space = event.getSpace();
       CalendarService calService = (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
