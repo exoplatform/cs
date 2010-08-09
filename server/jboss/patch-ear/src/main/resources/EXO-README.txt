@@ -16,7 +16,7 @@
  **/
 
 ========================================== 
-    Release Notes - eXo Collaboration - Version 2.0.0 GA
+    Release Notes - eXo Collaboration - Version 2.2.0
 ==========================================
 ===============
 1 Introduction
@@ -48,14 +48,7 @@ experience more productive. It offers several ways to to view and organize your 
 
 
     * General
-     - Complete new feature for auto-complete when sending mail
-     - Fix bug lost attachment when loading mail
-     - Fix bug block ui when fetching email 
-     - Chat keep ui state when refreshing browser or switch application 
-     - Fix bug lost time field when editing event or add event detail
-     - Fix bug can not stop checking mail and update status information 
-     - Fix bug drag and drop contact to addressbook 
-                  
+     -  
     * Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
           
 =========
@@ -144,6 +137,8 @@ All those accounts have the default password "gtn".
 ===========
 6 CHANGELOG
 ===========
+- 2.2.0 
+- 2.1.0 
 - 2.0.0 GA
 ** Bug
     * [CS-4043] - Attachment file is not shown when view messages in Sent folder
