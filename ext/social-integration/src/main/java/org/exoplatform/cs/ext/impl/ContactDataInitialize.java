@@ -19,15 +19,14 @@ package org.exoplatform.cs.ext.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
@@ -47,6 +46,12 @@ public class ContactDataInitialize extends SpaceListenerPlugin {
 
   private static final Log log = ExoLogger.getLogger(ContactDataInitialize.class);
 
+  private final InitParams params;
+  
+  public ContactDataInitialize(InitParams params) {
+    this.params = params;
+  }
+  
   @Override
   public void applicationActivated(SpaceLifeCycleEvent event) {
     // TODO Auto-generated method stub
@@ -55,6 +60,22 @@ public class ContactDataInitialize extends SpaceListenerPlugin {
 
   @Override
   public void applicationAdded(SpaceLifeCycleEvent event) {
+    String portletName = "";
+    try {
+      portletName = params.getValueParam("portletName").getValue();
+    } catch (Exception e) {
+      // do nothing here. It means that initparam is not configured.
+    }
+    
+    if (!portletName.equals(event.getSource())) {
+      /*
+       * this function is called only if Contact Portlet is added to Social Space.
+       * Hence, if the application added to space do not have the name as configured, we will do nothing.
+       */
+      return;
+    }
+    
+    
     try {
       String firstMem = null;
       Space space = event.getSpace();
