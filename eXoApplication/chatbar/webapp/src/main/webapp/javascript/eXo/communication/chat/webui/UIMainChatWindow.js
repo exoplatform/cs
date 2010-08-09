@@ -1089,9 +1089,23 @@ UIMainChatWindow.prototype.processGroupChat = function(eventId) {
  */
 UIMainChatWindow.prototype.xLogin = function(userName) {
   this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] = userName;
-  var statusText = this.getStatus_();
-  if(statusText != null && statusText != undefined) this.preChangeStatus(statusText);
+  var presenceStatus = this.getStatus_();
+ // matchPresenceStatusIcon_(presenceStatus);
+  if(presenceStatus != null && presenceStatus != undefined) this.preChangeStatus(presenceStatus);
   else this.preChangeStatus(this.getPreviousStatus_(userName));
+};
+
+UIMainChatWindow.prototype.matchPresenceStatusIcon_  = function(presenceStatus){
+	var presenceStatusIcon = "";
+	if(presenceStatus != null){
+		if(presenceStatus == this.ONLINE_STATUS) 		 presenceStatusIcon = this.ONLINEICON;
+		if(presenceStatus == this.FREE_TO_CHAT_STATUS) 	 presenceStatusIcon = this.FREETOICON;
+		if(presenceStatus == this.AWAY_STATUS) 			 presenceStatusIcon = this.AWAYICON;
+		if(presenceStatus == this.EXTEND_AWAY_STATUS) 	 presenceStatusIcon = this.EXTENDAWAYICON;
+		if(presenceStatus == this.OFFLINE_STATUS) 		 presenceStatusIcon = this.OFFLINEICON;
+	}
+	
+	if(presenceStatusIcon != "") document.getElementById('id-state-chat').className = "IconHolder " + presenceStatusIcon;
 };
 
 UIMainChatWindow.prototype.getStatus_ = function(){
