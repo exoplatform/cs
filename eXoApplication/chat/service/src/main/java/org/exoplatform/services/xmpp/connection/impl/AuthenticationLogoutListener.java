@@ -43,7 +43,7 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
-    //Saving user-chat-state
+    //Saving presence status
       DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
       if(messenger != null){
         String userId = event.getData().getIdentity().getUserId() ;

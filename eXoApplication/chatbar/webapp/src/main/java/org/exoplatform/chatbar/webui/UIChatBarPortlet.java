@@ -16,19 +16,12 @@
  **/
 package org.exoplatform.chatbar.webui;
 
-import java.util.Map;
-
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.chatbar.Utils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.presence.DefaultPresenceStatus;
-import org.exoplatform.services.xmpp.connection.XMPPSession;
-import org.exoplatform.services.xmpp.connection.impl.XMPPMessenger;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -56,37 +49,25 @@ public class UIChatBarPortlet extends UIPortletApplication {
 
   private String templatePath_ = VIEWMODE_TEMP ;
 
-  private String status_icon = DefaultPresenceStatus.ONLINEICON; 
-  
-  private String status_  = DefaultPresenceStatus.DEFAULT_STATUS;
+  private String status_  = null;
   
   public UIChatBarPortlet() throws Exception {
     PortletRequestContext context = (PortletRequestContext)  WebuiRequestContext.getCurrentInstance() ;
     PortletRequest prequest = context.getRequest() ;
     windowId = prequest.getWindowID() ;
     
-    //get previous status
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    //get previous status, now we use not this mesthod.
+/*  ExoContainer container = ExoContainerContext.getCurrentContainer();
     XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
     XMPPSession session = messenger.getSession(this.getRemoteUser());
     DefaultPresenceStatus dps = null;
-    String statusicon_ = "", st_ = "";
     if(container != null) dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
-    
     if(session != null){//chat server available
-      if(dps !=null){
-        Map<String, String> statusmap = dps.getPreviousStatus(this.getRemoteUser());
-        if(statusmap.size() > 0)
-          st_ = statusmap.keySet().toArray(new String[]{""})[0];
-          statusicon_ = statusmap.values().toArray(new String[]{""})[0];
-          setCSSClassStatus(statusicon_);
-          setStatus(st_);
+      if(dps != null){
+        String ps = dps.getPreviousStatus(this.getRemoteUser());
+        if(ps != null) setStatus(ps);
       }  
-    }else {
-      setCSSClassStatus(null);
-      setStatus(null);
-    } 
-    
+    }else  setStatus(null);*/
   }
 
   public String getId() {
@@ -191,15 +172,6 @@ public class UIChatBarPortlet extends UIPortletApplication {
     popupMess.processRender(context);
   }
   
-  /**
-   * Get CSS class to assign previous status for current session***/
-  public String getCSSClassStatus(){
-    return status_icon;
-  }
-  
-  public void setCSSClassStatus(String classIcon){
-    status_icon = classIcon;
-  }
   /**
    * Get StatusText, use for show title of status***/
   public String getStatus(){

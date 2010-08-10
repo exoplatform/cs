@@ -49,7 +49,7 @@ public class AuthenticationLoginListener extends Listener<ConversationRegistry, 
       XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
       RESTXMPPService restXmppService = (RESTXMPPService)container.getComponentInstanceOfType(RESTXMPPService.class);
 
-      DefaultPresenceStatus status = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
+      DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
       if(messenger != null && restXmppService != null){
         String userId = event.getData().getIdentity().getUserId() ;
         UserInfoService organization = (UserInfoService) container.getComponentInstanceOfType(UserInfoService.class);

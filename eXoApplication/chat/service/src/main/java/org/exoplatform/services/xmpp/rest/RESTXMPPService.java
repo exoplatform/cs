@@ -2160,18 +2160,13 @@ public class RESTXMPPService implements ResourceContainer, Startable {
     if(session != null){
       if(container != null)
         dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
-      if(dps != null){
-        Map<String, String> statusmap = dps.getPreviousStatus(username);
-        String responseText = "<staustext>" + statusmap.keySet().toArray(new String[]{""})[0]+ "</staustext>";
-        responseText += "<responseIcon>" + statusmap.values().toArray(new String[]{""})[0] + "</responseIcon>"; 
-        return Response.ok().entity(responseText).build();
+      if(dps != null){// null then set default value
+        String ps = dps.getPreviousStatus(username);
+        String responseXml = "<presencestaus>" + ps + "</presencestaus>";
+        return Response.ok().entity(responseXml).build();
       }
-    }else {
-      return Response.status(HTTPStatus.INTERNAL_ERROR)
-      .entity(rb.getString("chat.message.room.xmppsession.null"))
-      .build();
     }
     
-    return Response.ok().entity("Away").build();
+    return Response.ok().entity("undefined").build();//server chat is not available
   }
 }
