@@ -866,7 +866,6 @@ public class HistoryImpl implements Startable{
           try {
             if(dpsNode.hasNode(presenceStatus.getHexName())){
               presenceStatusNode = dpsNode.getNode(presenceStatus.getHexName());
-              System.out.println("\n\n\n" + presenceStatusNode.getPath() + ":" + presenceStatusNode.getName());
               jcrom.updateNode(presenceStatusNode, presenceStatus);
               dpsNode.getSession().save();
             }
