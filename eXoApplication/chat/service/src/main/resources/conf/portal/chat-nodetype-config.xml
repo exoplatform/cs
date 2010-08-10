@@ -109,22 +109,41 @@
 		</childNodeDefinitions>
 	</nodeType>
 
-
-	<nodeType name="lr:userchatstatus" isMixin="false" hasOrderableChildNodes="false">
-	   <supertypes>
+<nodeType name="lr:presencestatus" isMixin="false" hasOrderableChildNodes="false">
+	    <supertypes>
       <supertype>nt:base</supertype>
     </supertypes>
     <propertyDefinitions>
+    <propertyDefinition name="lr:userid" requiredType="String"
+        autoCreated="true" onParentVersion="COPY" mandatory="true"
+        protected="false" multiple="false">
+        <valueConstraints />
+        <defaultValues />
+      </propertyDefinition>
       <propertyDefinition name="lr:status" requiredType="String"
-        autoCreated="false" onParentVersion="COPY" mandatory="false"
+        autoCreated="true" onParentVersion="COPY" mandatory="true"
         protected="false" multiple="false">
         <valueConstraints />
         <defaultValues />
       </propertyDefinition>
     </propertyDefinitions>
 	</nodeType>
-
-
+	
+<nodeType name="lr:defaultpresencestatus" isMixin="false" hasOrderableChildNodes="false">
+	  <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+		<childNodeDefinitions>
+      <childNodeDefinition name="*" defaultPrimaryType="lr:presencestatus"
+        autoCreated="false" mandatory="false" onParentVersion="VERSION"
+        protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>lr:presencestatus</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+    </childNodeDefinitions>
+	</nodeType>
+	
 	<nodeType name="lr:conversation" isMixin="false"
 		hasOrderableChildNodes="false">
 		<supertypes>
@@ -211,11 +230,11 @@
 				</requiredPrimaryTypes>
 			</childNodeDefinition>
 			<childNodeDefinition name="*"
-        defaultPrimaryType="lr:userchatstatus" autoCreated="false"
+        defaultPrimaryType="lr:defaultpresencestatus" autoCreated="false"
         mandatory="false" onParentVersion="VERSION" protected="false"
         sameNameSiblings="false">
         <requiredPrimaryTypes>
-          <requiredPrimaryType>lr:userchatstatus</requiredPrimaryType>
+          <requiredPrimaryType>lr:defaultpresencestatus</requiredPrimaryType>
         </requiredPrimaryTypes>
       </childNodeDefinition>
 		</childNodeDefinitions>

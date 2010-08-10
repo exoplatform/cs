@@ -1028,10 +1028,30 @@ UIMainChatWindow.prototype.processGroupChat = function(eventId) {
  * @param {String} userName
  */
 UIMainChatWindow.prototype.xLogin = function(userName) {
+  var UNDEFINED = 'undefined';
   this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] = userName;
-  var statusText = this.getStatus_();
-  if(statusText != null && statusText != undefined) this.preChangeStatus(statusText);
-  else this.preChangeStatus(this.getPreviousStatus_(userName));
+  var presenceStatus = this.getPreviousStatus_(userName);
+  if(presenceStatus == null || presenceStatus == UNDEFINED)//chat server is not available
+	  presenceStatus = this.OFFLINE_STATUS;
+
+  if(presenceStatus == 'default_presence_status')  presenceStatus = this.FREE_TO_CHAT_STATUS;// this status must be match within status in chat configuration xml
+  this.setStatus_(presenceStatus);
+  this.matchPresenceStatusIcon_(presenceStatus);
+  this.preChangeStatus(presenceStatus);
+};
+
+UIMainChatWindow.prototype.matchPresenceStatusIcon_  = function(presenceStatus){
+	var presenceStatusIcon = '';
+	if(presenceStatus != null){
+		if(presenceStatus == this.ONLINE_STATUS) 		 presenceStatusIcon = this.ONLINEICON;
+		if(presenceStatus == this.FREE_TO_CHAT_STATUS) 	 presenceStatusIcon = this.FREETOICON;
+		if(presenceStatus == this.AWAY_STATUS) 			 presenceStatusIcon = this.AWAYICON;
+		if(presenceStatus == this.EXTEND_AWAY_STATUS) 	 presenceStatusIcon = this.EXTENDAWAYICON;
+		if(presenceStatus == this.OFFLINE_STATUS) 		 presenceStatusIcon = this.OFFLINEICON;
+	}
+	
+	if(presenceStatusIcon != '') document.getElementById('id-state-chat').className = 'IconHolder ' + presenceStatusIcon;
+	else document.getElementById('id-state-chat').className = "IconHolder " + this.OFFLINEICON;
 };
 
 UIMainChatWindow.prototype.getStatus_ = function(){
@@ -1041,36 +1061,36 @@ UIMainChatWindow.prototype.getStatus_ = function(){
 UIMainChatWindow.prototype.setStatus_ = function(st){
 	document.getElementById('id-state-chat').setAttribute('title', st);
 };
-
+/** getting previous status
+ * @param {String} userName**/
 UIMainChatWindow.prototype.status = this.ONLINE_STATUS ;
 
 UIMainChatWindow.prototype.statusIcon = this.ONLINEICON;
 
 UIMainChatWindow.prototype.getPreviousStatus_ = function(userName) {
-	var STATUSTEXT_TAG = "statusText";
-	var STATUSICON_TAG = "statusIcon";
+	var STATUSTEXT_TAG = 'presencestaus';
 	var url = this.XMPPCommunicator.SERVICE_URL + '/' + this.XMPPCommunicator.TRANSPORT_XMPP + '/getprevstatus/' + userName;
 	var request = new eXo.portal.AjaxRequest('GET', url, null);
-	request.onreadystatechange = function(responeText) {
+	request.onreadystatechange = function(responseXML) {
 	  if (xmlhttp.readyState == 4) {
 	    if (xmlhttp.status == 200){
-	    	var st_ = UIMainChatWindow.parseXMLRespone(responseText, STATUSTEXT_TAG);
-	    	var sticon_ = UIMainChatWindow.parseXMLRespone(responseText, STATUSICON_TAG);
-	    	if(st_ != null && sticon_ != null){
-	    		UIMainChatWindow.status = UIMainChatWindow.parseXMLRespone(responseText, STATUSTEXT_TAG);
-		    	UIMainChatWindow.statusIcon = UIMainChatWindow.parseXMLRespone(responseText, STATUSICON_TAG);		
-	    	}
+	      var st_ = UIMainChatWindow.parseXMLRespone(responseXML, STATUSTEXT_TAG);
+	      UIMainChatWindow.status = st_;
+	    }else{//500 or 404
+	    	//notify to user that server chat is not available/ cause by network problem
+	        UIMainChatWindow.status = "undefined";
 	    }
-      }   
+      }else UIMainChatWindow.status = null;
     };
+    
    request.process() ;
-   return status;
+   return this.status;
 };
 
 /**
  * Parsing response XML***/
-UIMainChatWindow.prototype.parseXMLRespone = function(resp, tagname){
-	if(resp != null){
+UIMainChatWindow.prototype.parseXMLRespone = function(responseXML, tagname){
+	if(responseXML != null){
 		tagObj = document.getElementsByTagName(tagname);
 		if(tagObj != null && tagObj.length > 0) return tagObj[0].innerHTML;
 	}

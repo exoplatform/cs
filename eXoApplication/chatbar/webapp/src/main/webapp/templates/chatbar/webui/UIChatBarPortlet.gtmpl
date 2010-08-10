@@ -251,7 +251,7 @@
                                     <div class="RightIconButton">
                                         <div class="CenterIconButton">
                                             <div class="Arrow">
-                                                <div class="IconHolder <%=uicomponent.getCSSClassStatus()%>" title="<%=uicomponent.getStatus()%>" id="id-state-chat">
+                                                <div class="IconHolder" title="" id="id-state-chat">
                                                     <div class="StatusIcon">
                                                         <div class="Text" user="<%=uicomponent.getRemoteUser()%>">
                                                             <span></span>
