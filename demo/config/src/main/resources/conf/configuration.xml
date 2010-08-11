@@ -84,6 +84,9 @@
 								--><value>
 									<string>csdemo</string>
 								</value>
+								<value>
+                					<string>fck</string>
+              					</value> 
 							</collection>
 						</field>
 					</object>
