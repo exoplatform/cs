@@ -31,4 +31,7 @@
 	<gadget name="taskslist">
 		<path>/gadgets/tasks/Tasks.xml</path>
 	</gadget>
+	<gadget name="messageslist">
+		<path>/gadgets/messages/Messages.xml</path>
+	</gadget>
 </gadgets>

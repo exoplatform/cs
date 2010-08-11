@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs author="eXoPlatform"
+		title="Unread Messages"
+		directory_title="Unread Messages"
+		title_url="http://www.exoplatform.org"
+		description="Unread Messages list."
+		thumbnail="/csResources/gadgets/messages/skin/thumb.png">
+		<Locale messages="/csResources/gadgets/messages/locale/default.xml" />
+		<Locale lang="ar" messages="/csResources/gadgets/messages/locale/ar.xml" language_direction="rtl"/>
+		<Locale lang="fr" messages="/csResources/gadgets/messages/locale/fr.xml" />
+		<Locale lang="vi" messages="/csResources/gadgets/messages/locale/vi.xml" />
+		<Require feature="setprefs"/>
+		<Require feature="dynamic-height"/>
+	</ModulePrefs>
+	<UserPref name="url" display_name="__MSG_baseurl__" datatype="string" value="/mail" required="true"/>
+	<UserPref name="subscribeurl" display_name="__MSG_subscribeurl__" datatype="string" value="/portal/rest/private/cs/mail/unreadMail" required="true"/>
+	<UserPref name="limit" display_name="__MSG_limit__" default_value="5" datatype="string"/>
+	<UserPref name="account" display_name="__MSG_account__" default_value="" datatype="string"/>
+	<UserPref name="folder" display_name="__MSG_folder__" default_value="" datatype="string"/>
+	<UserPref name="tag" display_name="__MSG_tag__" default_value="" datatype="string"/>
+  <Content type="html">
+    <![CDATA[
+			<link rel="stylesheet" href="skin/messages.css" type="text/css"/>
+
+			<script type="text/javascript"src="skin/messages.js"></script>
+
+			<form id="SettingMessage" onSubmit="return eXoMessageGadget.saveSetting();" action="#" style="display:none;">
+				<table>
+					<tr>
+						<td>__MSG_account__</td>
+						<td>
+							<select type="text" name="account">
+								<option value="0">Default</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>__MSG_folder__</td>
+						<td>
+							<select type="text" name="folder">
+								<option value="0">Inbox</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>__MSG_tag__</td>
+						<td>
+							<select type="text" name="tag">
+								<option value="0">Default</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>__MSG_limit__</td>
+						<td><input type="text" name="limit" value="5"></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="submit" name="save" value="__MSG_save__">
+							<input type="button" name="cancel" value="__MSG_cancel__" onclick="eXoMessageGadget.showHideSetting(false);">
+						</td>					
+					</tr>
+				</table>
+			</form>
+      <div class="UIGadgetThemes UIYellowThemes">
+				<div class="TitGad ClearFix">
+					<div class="ContTit">__MSG_title__</div>
+				</div>
+				<div class="GadCont UnreadMessages" id="ItemContainer"></div>
+			</div>
+			<div class="SettingButton" style="padding: 10px 15px;">
+				<a href="javascript:eXoMessageGadget.showHideSetting(true);">__MSG_setting__</a>
+			<div>
+    ]]>
+  </Content>
+</Module>

@@ -4,12 +4,8 @@
  */
 package org.exoplatform.webservice.cs.mail;
 
-import java.util.Properties;
+import java.util.List;
 
-import javax.jcr.AccessDeniedException;
-import javax.mail.AuthenticationFailedException;
-import javax.mail.MessagingException;
-import javax.mail.Session;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -24,18 +20,17 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.webservice.cs.bean.ContactData;
-
-import com.sun.mail.imap.IMAPStore;
+import org.exoplatform.webservice.cs.bean.MessageData;
 
 /**
  * @author Uoc Nguyen Modified by : Phung Nam (phunghainam@gmail.com)
@@ -223,7 +218,7 @@ public class MailWebservice implements ResourceContainer {
   }
 
   /**
-   * Get all email from contacts data base, the security level will take from
+   * Get all emails from contacts data base, the security level will take from
    * ConversationState
    * 
    * @param keywords : the text to compare with data base
@@ -258,6 +253,51 @@ public class MailWebservice implements ResourceContainer {
       return Response.ok(Status.INTERNAL_SERVER_ERROR).cacheControl(cacheControl).build();
     }
     return Response.ok(fullData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+  }
+  
+  /**
+   * list header of unread mails , the security level will take from
+   * ConversationState
+   * 
+   * @param accountId : the text to compare with data base
+   * @param folderId : the text to compare with data base
+   * @param tagId : the text to compare with data base
+   * @param limit : number of return mails
+   * @return application/json content type
+   */
+  @GET
+  @Path("/unreadMail/{accountId}/{folderId}/{tagId}/{limit}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response unreadMail(@PathParam("accountId") String accountId,
+                             @PathParam("folderId") String folderId,
+                             @PathParam("tagId") String tagId,
+                             @PathParam("limit") int limit) throws Exception {
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    MailService mailService = (MailService) ExoContainerContext
+      .getCurrentContainer().getComponentInstanceOfType(MailService.class);
+    String username = ConversationState.getCurrent().getIdentity().getUserId();
+    if (Utils.isEmptyField(accountId))
+      accountId = mailService.getAccounts(username).get(0).getId();
+    if (Utils.isEmptyField(folderId) && Utils.isEmptyField(tagId))
+      folderId = Utils.generateFID(accountId, Utils.FD_INBOX, false);
+    MessageFilter filter = new MessageFilter("Folder");
+    filter.setAccountId(accountId);
+    if (!Utils.isEmptyField(folderId)) filter.setFolder(new String[] { folderId });
+    if (!Utils.isEmptyField(tagId)) filter.setTag(new String[] { tagId });
+    filter.setViewQuery("@" + Utils.EXO_ISUNREAD + "='true'");
+    List<Message> messList = mailService.getMessages(username, filter);
+    MessageData data = new MessageData();
+    data.setTags(mailService.getTags(username, accountId));
+    data.setAccounts(mailService.getAccounts(username));
+    data.setFolders(mailService.getFolders(username, accountId));
+    try {
+      data.setInfo(messList.subList(0, limit));      
+    } catch (IndexOutOfBoundsException e) {
+      data.setInfo(messList.subList(0, messList.size()));
+    }
+    return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
   
   private boolean isAuthorized(String usename) {

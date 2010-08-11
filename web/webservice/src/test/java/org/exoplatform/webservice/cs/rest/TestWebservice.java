@@ -35,6 +35,7 @@ import org.exoplatform.services.rest.impl.MultivaluedMapImpl;
 import org.exoplatform.services.rest.impl.RuntimeDelegateImpl;
 import org.exoplatform.services.rest.tools.ByteArrayContainerResponseWriter;
 import org.exoplatform.webservice.cs.calendar.CalendarWebservice;
+import org.exoplatform.webservice.cs.mail.MailWebservice;
 
 /**
  * Created by The eXo Platform SARL Author : Volodymyr Krasnikov
@@ -44,6 +45,7 @@ import org.exoplatform.webservice.cs.calendar.CalendarWebservice;
 public class TestWebservice extends AbstractResourceTest {
 
 	CalendarWebservice calendarWebservice;
+	MailWebservice mailWebservice;
 	CalendarService calendarService;
 
 	static final String             baseURI = "";
@@ -52,8 +54,12 @@ public class TestWebservice extends AbstractResourceTest {
 		RuntimeDelegate.setInstance(new RuntimeDelegateImpl());
 		super.setUp();
 		calendarWebservice = (CalendarWebservice) container.getComponentInstanceOfType(CalendarWebservice.class);
+		mailWebservice = (MailWebservice) container.getComponentInstanceOfType(MailWebservice.class);
 		calendarService = (MockCalendarService) container.getComponentInstanceOfType(MockCalendarService.class);
+		
 		registry(calendarWebservice);
+		registry(mailWebservice);
+		
 		//registry(calendarService);
 	}
 
@@ -206,6 +212,7 @@ public class TestWebservice extends AbstractResourceTest {
 		}
 
 	}
+	
 	public void testUpdateStatus() throws Exception {
 		MultivaluedMap<String, String> h = new MultivaluedMapImpl();
 		String username = "root";
@@ -232,4 +239,20 @@ public class TestWebservice extends AbstractResourceTest {
 		assertNotSame(Response.Status.NOT_FOUND, response.getStatus());
 
 	}
+	
+  public void testUnreadMail() {
+    try {
+      MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+      String username = "root";
+      h.putSingle("username", username);
+      String mailURI = "/private/cs/mail/unreadMail/ / / /5";
+      ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+      ContainerResponse response = service("GET", mailURI, baseURI, h, null, writer);
+      assertNotNull(response);
+      assertNotSame(Response.Status.NOT_FOUND, response.getStatus());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
 }
