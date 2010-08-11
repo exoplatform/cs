@@ -17,7 +17,7 @@
   <Content type="html">
     <![CDATA[
 			<script type="text/javascript" src="skin/tasks.js"></script>
-      <link rel="stylesheet" href="skin/tasks.css" type="text/css"/>
+      <link type="text/css" href="skin/tasks.css" rel="stylesheet">
 			<form id="Setting" onSubmit="return eXoEventGadget.saveSetting();" action="#" style="display:none;">
 			<table>
 				<tr>
@@ -60,6 +60,9 @@
 			<div class="UIGadgetThemes UIYellowThemes">
 				<div class="TitGad ClearFix">
 					<a href="#demo" class="IconDropDown" id="ShowAll" target="_blank">__MSG_showall__</a>
+					<div class="SettingButton" id="SettingButton" title="__MSG_setting__">
+						<a href="javascript:eXoEventGadget.showHideSetting(true);"><span></span></a>
+					</div>
 					<div class="ContTit">__MSG_title__</div>
 				</div>
 				<div class="GadCont MyTasks" id="ItemContainer">
@@ -71,9 +74,6 @@
 	        -->
 				</div>
 			</div>
-			<div class="SettingButton" style="padding: 10px 15px;">
-				<a href="javascript:eXoEventGadget.showHideSetting(true);">__MSG_setting__</a>
-			<div>
     ]]>
   </Content>
 </Module>
