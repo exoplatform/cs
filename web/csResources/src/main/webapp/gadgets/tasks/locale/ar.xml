@@ -21,7 +21,7 @@
 
 <messagebundle>
 	<msg name="title">
-  	My Task
+  	My Tasks
   </msg>
 	<msg name="baseurl">
   	Base url
@@ -39,7 +39,7 @@
   	Show all
   </msg>
 	<msg name="noevent">
-  	No task on today
+  	No tasks for today
   </msg>
 	<msg name="calendars">
   	Calendar

@@ -115,7 +115,7 @@ DOMUtil.prototype.findNextElementByTagName = function(element, tagName) {
 } ;
 
 DOMUtil = new DOMUtil();
-function eXoEventGadget(){	
+function eXoEventGadget(){
 } ;
 
 eXoEventGadget.prototype.getPrefs = function(){
@@ -206,6 +206,8 @@ eXoEventGadget.prototype.onLoadHander = function(){
 	eXoEventGadget.getPrefs();
 	eXoEventGadget.getCalendars();
 	eXoEventGadget.getData();
+	eXoEventGadget.trigger();
+	gadgets.window.adjustHeight();
 }
 eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
 	/*	
@@ -317,6 +319,25 @@ eXoEventGadget.prototype.selectedValue = function(selectbox,value){
 	for(var i = 0, len = selectbox.options.length; i < len; i++){
 		if(value == selectbox.options[i].text) selectbox.selectedIndex = i;
 	}
+}
+
+eXoEventGadget.prototype.trigger = function(){
+	this.moreButton = document.getElementById("ShowAll");
+  this.settingButton = document.getElementById("SettingButton");
+  this.hiddenTimeout = null;
+  this.moreButton.onmouseover = this.moveOver;
+  this.moreButton.onmouseout = this.moveOut;
+  this.settingButton.onmouseover = this.moveOver;
+  this.settingButton.onmouseout = this.moveOut;
+}
+eXoEventGadget.prototype.moveOver = function(){
+  if(eXoEventGadget.hiddenTimeout) window.clearTimeout(eXoEventGadget.hiddenTimeout);  
+  eXoEventGadget.settingButton.style.display = "block";
+}
+eXoEventGadget.prototype.moveOut = function(){
+  eXoEventGadget.hiddenTimeout = window.setTimeout(function(){
+    eXoEventGadget.settingButton.style.display = "none";
+  },200);
 }
 
 eXoEventGadget =  new eXoEventGadget();
