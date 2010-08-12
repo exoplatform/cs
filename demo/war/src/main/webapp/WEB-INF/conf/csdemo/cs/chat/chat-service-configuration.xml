@@ -53,7 +53,7 @@
 		<type>org.exoplatform.services.presence.DefaultPresenceStatus</type>
 		<init-params>
 			<properties-param>
-				<name>chat-status</name>
+				<name>presence-status</name>
 				 <property name="mode" value="Free to chat" /> 
 				<!--<property name="mode" value="Available" /> --> 
 				<!--<property name="mode" value="Unavailable" />-->

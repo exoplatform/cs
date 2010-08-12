@@ -679,8 +679,8 @@ XMPPCommunicator.prototype.getSubscriptionrequests = function(userName, transpor
  * @param {String} transportName
  * @param {AjaxHandler} handler
  */
-XMPPCommunicator.prototype.removeTransport = function(userName, transportName, handler) {
-  var url = this.SERVICE_URL + '/' + transportName + '/logout/' + userName;
+XMPPCommunicator.prototype.removeTransport = function(userName, transportName, handler, status) {
+  var url = this.SERVICE_URL + '/' + transportName + '/logout/' + userName + '/' + status;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   this.synchronousXHR(request);

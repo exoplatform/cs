@@ -131,7 +131,11 @@ function UIMainChatWindow() {
   this.FREETOICON                         = "FreeToChat";
   this.OFFLINEICON                        = "OfflineIcon";
   
-  
+  this.SEVER_IS_NOT_AVAILABLE 			  = 'server_is_not_available';
+
+  this.DEFAULT_PRESENCE_STATUS			  = 'default_presence_status';
+
+  this.status							  = this.ONLINE_STATUS ;
   // Maximum connection to try after request is error in case false to connect to service.
   this.MAX_CONNECTION_TRY = 5;
   this.CHECK_EVENT_TIMEOUT = 1*1000;
@@ -1088,15 +1092,7 @@ UIMainChatWindow.prototype.processGroupChat = function(eventId) {
  * @param {String} userName
  */
 UIMainChatWindow.prototype.xLogin = function(userName) {
-  var UNDEFINED = 'undefined';
-  this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] = userName;
-  var presenceStatus = this.getPreviousStatus_(userName);
-  if(presenceStatus == null || presenceStatus == UNDEFINED)//chat server is not available
-	  presenceStatus = this.OFFLINE_STATUS;
-  if(presenceStatus == 'default_presence_status')  presenceStatus = this.ONLINE_STATUS;
-  this.setStatus_(presenceStatus);
-  this.matchPresenceStatusIcon_(presenceStatus);
-  this.preChangeStatus(presenceStatus);
+	this.getPreviousStatus_(userName);
 };
 
 UIMainChatWindow.prototype.matchPresenceStatusIcon_  = function(presenceStatus){
@@ -1110,7 +1106,6 @@ UIMainChatWindow.prototype.matchPresenceStatusIcon_  = function(presenceStatus){
 	}
 	
 	if(presenceStatusIcon != '') document.getElementById('id-state-chat').className = 'IconHolder ' + presenceStatusIcon;
-	else document.getElementById('id-state-chat').className = "IconHolder " + this.OFFLINEICON;
 };
 
 UIMainChatWindow.prototype.getStatus_ = function(){
@@ -1125,26 +1120,29 @@ UIMainChatWindow.prototype.setStatus_ = function(st){
 };
 /** getting previous status
  * @param {String} userName**/
-UIMainChatWindow.prototype.status = this.ONLINE_STATUS ;
-
-UIMainChatWindow.prototype.statusIcon = this.ONLINEICON;
 
 UIMainChatWindow.prototype.getPreviousStatus_ = function(userName) {
-	var STATUSTEXT_TAG = 'presencestaus';
 	var url = this.XMPPCommunicator.SERVICE_URL + '/' + this.XMPPCommunicator.TRANSPORT_XMPP + '/getprevstatus/' + userName;
 	var request = new eXo.portal.AjaxRequest('GET', url, null);
-	request.onreadystatechange = function(responeXML) {
-	  if (xmlhttp.readyState == 4) {
-	    if (xmlhttp.status == 200){
-	      var st_ = UIMainChatWindow.parseXMLRespone(responseXML, STATUSTEXT_TAG);
-	      UIMainChatWindow.status = st_;
-	    }else{//500 or 404
-	    	//notify to user that server chat is not available/ cause by network problem
-	      UIMainChatWindow.status = "undefined";
-	    }
-      }   
-    };
-    
+	request.onSuccess = function(request){
+		var presenceStatus = request.responseText;
+		var uiMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
+		uiMainChatWindow.userNames[uiMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP] = uiMainChatWindow.userName;
+		if(presenceStatus == null || presenceStatus == uiMainChatWindow.SEVER_IS_NOT_AVAILABLE){//chat server is not available
+		   presenceStatus = uiMainChatWindow.OFFLINE_STATUS;
+		}else if(presenceStatus == uiMainChatWindow.DEFAULT_PRESENCE_STATUS){
+		  presenceStatus = uiMainChatWindow.ONLINE_STATUS;// this status must be match within status in chat configuration xml
+		}	  
+		uiMainChatWindow.matchPresenceStatusIcon_(presenceStatus);
+		uiMainChatWindow.preChangeStatus(presenceStatus);
+	}
+	
+	request.onError = function(request){
+		var uiMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
+		uiMainChatWindow.matchPresenceStatusIcon_(uiMainChatWindow.OFFLINE_STATUS);
+		uiMainChatWindow.preChangeStatus(uiMainChatWindow.OFFLINE_STATUS);
+	}
+	
    request.process() ;
    return this.status;
 };
@@ -1206,7 +1204,8 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
 		this.addContactIconNode.onclick = null;
 		var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode, 'div');
 		userStatusIconNode.className = 'IconHolder'+' '+'OfflineIcon';
-        this.jabberLogout();
+		 this.jabberLogout();
+       // this.jabberLogout(this.OFFLINE_STATUS);
       }
       break;
     case this.AWAY_STATUS:

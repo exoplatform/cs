@@ -1659,12 +1659,24 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   @GET
   @Path("/login2/{forcache}/")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response login2(@PathParam("forcache") String forcache) {
+  public Response login2(@PathParam("forcache") String forcache) {//,  @PathParam("status") String _status
+   
     if (this.rb == null) loadResourceBundle();
     try {
       // log.info("Random number for cache problem: " + forcache);
       ConversationState curentState = ConversationState.getCurrent();
       String username = curentState.getIdentity().getUserId();
+      
+   /*   //save presensce status
+      DefaultPresenceStatus dps = new DefaultPresenceStatus();
+      dps.setStatus_(_status); 
+      //DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
+      if(dps != null){
+        dps.savePresenceStatus(username, _status);  
+      }else   {
+        log.debug("Login: Can not save presence status from sendstatus() service"); 
+      }*/
+      
       if (log.isDebugEnabled())
         log.info("Userid for login : " + username);
       /*String password = organization.getOrganizationService()
@@ -1757,9 +1769,19 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    */
   @GET
   @Path("/logout/{username}/")
-  public Response logout(@PathParam("username") String _username) {
+  public Response logout(@PathParam("username") String _username) {//, @PathParam("status") String _status
     if (this.rb == null) loadResourceBundle();
     try {
+      /*//save presensce status
+      DefaultPresenceStatus dps = new DefaultPresenceStatus();
+      dps.setStatus_(_status); 
+      //DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
+      if(dps != null){
+        dps.savePresenceStatus(_username, _status);  
+      }else   {
+        log.debug("Logout: Can not save presence status from sendstatus() service"); 
+      }*/
+      
       XMPPSession session =    messenger.getSession(_username);
       if (session != null) session.removeAllTransport();
       messenger.logout(_username);
@@ -1998,7 +2020,6 @@ public class RESTXMPPService implements ResourceContainer, Startable {
     XMPPSession session = messenger.getSession(username);
     DefaultPresenceStatus dps = new DefaultPresenceStatus();
     dps.setStatus_(status);
-    //DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
     if(dps != null){
       dps.savePresenceStatus(username, status);  
     }else   {
@@ -2162,11 +2183,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
       if(dps != null){// null then set default value
         String ps = dps.getPreviousStatus(username);
-        String responseXml = "<presencestaus>" + ps + "</presencestaus>";
-        return Response.ok().entity(responseXml).build();
+        return Response.ok(ps, MediaType.TEXT_PLAIN).build();
       }
     }
-    
-    return Response.ok().entity("undefined").build();//server chat is not available
+    return Response.ok("server_is_not_available", MediaType.TEXT_PLAIN).build();
   }
 }

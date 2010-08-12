@@ -46,7 +46,7 @@ public class DefaultPresenceStatus {
   public DefaultPresenceStatus() {}
   
   public DefaultPresenceStatus(InitParams param){
-    PropertiesParam pparam = param.getPropertiesParam("chat-status");
+    PropertiesParam pparam = param.getPropertiesParam("presence-status");
     if(pparam != null){
       status_ = (pparam.getProperty("mode") == null)?DEFAULT_STATUS:pparam.getProperty("mode");
     }
