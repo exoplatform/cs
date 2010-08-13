@@ -79,7 +79,10 @@
                                 </value>                                                                                                   					
 								<value>
 								  <string>calendar</string>
-								</value>                            
+								</value>      								
+								<value>
+                					<string>fck</string>
+              					</value>                  				                 
 							</collection>
 						</field>
 					</object>
