@@ -48,17 +48,32 @@
 											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.discard") %></div>
 										</div>
 									</a>
-									
+
 									<div class="SeparatorLine"><span></span></div>
 									
 									<a href="<%=uicomponent.event("Attachment")%>" class="ControlButton">
 										<div class="IconHolder AttachFileIcon">
+											<div class="Label">Attach</div>
+										</div>
+									</a>
+									<div class="SeparatorLine"><span></span></div>
+									
+									<a href="#" class="ControlButton">
+										<div class="IconHolder AttachServerIcon">
+											<div class="Label">Attach a server file</div>
+										</div>
+									</a>
+
+									<div class="SeparatorLine"><span></span></div>
+									
+									<a href="#" class="ControlButton">
+										<div class="IconHolder AttachLocalIcon">
 											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
 										</div>
 									</a>
-									
-									<div class="SeparatorLine"><span></span></div>
+
 									<% if (org.exoplatform.mail.MailUtils.hasECMS()) { %>
+									<div class="SeparatorLine"><span></span></div>
 									<a href="<%=uicomponent.event("CallDMSSelector")%>" class="ControlButton">
 										<div class="IconHolder ">
 											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-from-dms") %></div>
@@ -116,7 +131,7 @@
 					      		<% /*End Popup Menu*/ %>
 									</div>
 									
-									<div class="SeparatorLine"><span></span></div>
+									
 									
 									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
 										<div class="IconHolder EditorOptionsIcon">
