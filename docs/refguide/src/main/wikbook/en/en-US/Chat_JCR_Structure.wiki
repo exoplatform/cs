@@ -1,0 +1,12 @@
+
+h1. Chat JCR Structure
+
+Chat data is saved in eXo-JCR in form of node.
+
+ *conversations*: when user create a conversation, information about this conversation storage in public path :  /exo:applicaton/eXoChat/history/conversations/%conversation_id%.
+
+ *participants*: in a group chat usually contains participants , these participants storage in public path :
+	/exo:applicaton/eXoChat/history/participants/%participant_id%.
+
+
+ *state* : state of chat window include width,height,top,left,visible,extra,activeTabId,tabs... storage in private path : /Users/root/ApplicationData/eXoChat/uistate.

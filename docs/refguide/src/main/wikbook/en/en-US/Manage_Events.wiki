@@ -1,0 +1,456 @@
+
+
+h1. Manage Events
+
+
+
+
+h1. Add an Event
+
+eXo Calendar application allows you to add new events by following steps:
+
+*Step 1\.* Open the *Add Event* form by three ways:
+
++The 1^st^ way+: On the tool bar, click the *Event* icon for quick add Event or the *Add Event* icon for detail add event.
+
+
+!AddEvent-topnav.png!
+
+
++The 2^nd^ way+: Create an event directly on the calendar view panel by right clicking on it and select the *Add new event* in the drop down list menu or left click directly at the date/time you want to add a new event or drag/drop on calendar view panel to add an event with the specific time.
+
+
+!AddEvent1.png!
+
+
++The 3^rd^ way+: Create an event directly at the calendars selector level by right clicking on the calendar name and select the *Add Event* item in menu:
+
+
+!AddEvent2.png!
+
+
+The *Quick add event* dialog will appear:
+
+
+!QuickAddEvent.png!
+
+
+
+
+|| Name || Description ||
+| Event Summary | The event title. This field is required. |
+| Description | The detail description of the event. |
+| From | The start date/time of the event. |
+| To | The end date/time of the event. |
+| All day | All day option allows setting the event duration to be all day or not. If you don't check this option, you have to define the start date/time and end date/time. By default, the start date and end date is the current date. |
+| Calendar | The calendar will include the event. |
+| Event Category | The category will include the event. |
+| Save button | To accept saving new event. |
+| More detail button | To show the event in more details that allows defining more properties for the event. |
+| Cancel button | To exit the *Add event* dialog without adding new. |
+
+
+*Step 2.* Fill values in the required fields.
+
+*Step 3.* Complete adding a new event by clicking the *Save* button.
+
+The added event will be displayed when viewing the calendar in which the event is stored.
+
+When the *More details* button is clicked or add event by clicking the *Add event* button in the menu bar, the *Add/Edit events* form will be displayed with some tabs (Detail, Reminders, Participants and Schedule) which allows you to define your events in more details:
+
+
+
+
+!AddEditEvents.png!
+
+
+
+
+The *Detail* tab contains basic information for an event:
+
+|| Name || Description ||
+| Event summary | The event title. This field is required. |
+| Description | The detail description of the event. |
+| Location | The location where the event will take place. |
+| From | The start date/time of the event. |
+| To | The end date/time of the event. |
+| All day | All day option allows setting the event duration to be all day or not. If you don't select this option, you have to define the start date/time and end date/time. By default, the start date and end date is current date. |
+| Priority | The priority level of this event: None, Normal, High and Low. |
+| Repeat | The repeated time or recurring time for the event, such as weekly team meeting, monthly report... There are many available options: No repeat, Daily, Working days, Weekend, Weekly, Monthly, Yearly |
+| Calendar | The calendar will include the event. |
+| Event Category | The category will include the event. To create a new event category, click the icon
+!PlusIcon.png!
+   to open the *Event Categories* dialog: |
+
+
+
+!EventCategories.png!
+
+
+Enter a event category and description (optional), then click the *Save* button. Your new *Event category* is immediately available in the *Event categories* dialog.
+
+ *Attachments*: To attach files to the event, the attachments may be a spreadsheet or a presentation needed for the event. Click the
+!PlusIcon.png!
+ icon, the *Attach files* dialog will appear:
+
+
+!AttachFiles.png!
+
+
+- Click on the *Browse*... button and select any file from your computer. Next, click the *upload* icon
+
+!iconupload.gif!
+
+  to upload the selected file. After uploading, the uploaded files is displayed. You can add more or remove the uploaded file by clicking the delete icon corresponding to it.
+
+
+
+
+!FileAttach.png!
+
+
+
+- Click on the *Save* button to accept attaching the selected files to the event. After attaching, the attachments are displayed like below. The attachment file can be removed by clicking on the the *Remove* link corresponding to it.
+
+
+
+
+!Detail.png!
+
+
+
+The *Reminders* tab:
+The reminder function is used to remind users who will take part in the event. A reminder includes summary information about the event such as title, time, place where that event will happen...
+
+
+
+
+!ReminderTab1.2.png!
+
+
+{info}
+From CS 1.3, there are some changes in *Reminder* and *Participants* tab
+{info}
+
+
+!EventRemindertab.png!
+
+
+
+*Remind by mail*:
+
+
+|| Name || Description ||
+| before start time | The time when the mail reminder is sent before the event starts. |
+| Repeat reminder every | The repeat option allows setting the event's email reminder repeat or not.  |
+| Also send reminders to | List of email addresses to which the reminder will be sent. Default value is the email address of the current user. You can manually input the email address list or select from *Select email* dialog by clicking on the
+!icon.gif!
+    icon to open the *Select email* dialog: |
+
+
+
+
+
+
+!SelectMail.png!
+
+
+- Email addresses are available in list and can be selected by selecting its check box(s).
+- The *Address Book* and *Search* function allow filtering and searching the expected email result.
+- Click the *Add* button to add selected emails to the *Also send reminders to* fields or click the *Replace* button to replace existing emails by the selected emails or click the *Close* button to close this form.
+
+After adding the email addresses, the email addresses of the selected contacts are displayed in the *Also send reminders to* field of the *Reminders* tab.
+
+When *Remind by email* function is used, the notification email about the event will be sent at the time like at the defined time.
+
+*Show a notification pop up*:
+
+
+|| Name || Description ||
+| before start time| The time you will receive pop up reminder before the event starts. |
+| Repeat reminder every | Repeat option allows setting the event's pop up reminder repeat or not. The interval time (in every xxx minutes) the pop up reminder will be repeated before the event starts. |
+
+
+When *Show a notification pop up* is used, the notification pop up about the event will appear when using eXo Calendar at the time like its definition.
+
+The *Participants* tab: This tab allows you to select other users to join your event.
+
+
+!ParticipantsTab.png!
+
+
+
+|| Name || Description ||
+| Event privacy | The privacy of the event. An event may be public or private.(At present, public or private has information meaning only. There is no effect) |
+| Show participants as | The status of participants. There are 3 options:Busy, Available and Outside. In case Busy or Outside option is selected, when viewing the event/task schedule, the time the participant takes part in the event/task will be in red. In case the *Available* option is selected, when viewing the event/task schedule, the time the participant takes part in the event/task will be in white. |
+| Participants     |   The list of users who will be participants and receive an  invitation by email (If Send an invitation option is selected). You can click on the
+!PlusIcon.png!
+ icon to add more participants. |
+| Send invitations | This option will be loaded with the values defined  in the Calendar Settings. There are 3 options that can be reselected: *Never*, *Always*, *Ask*. *Never* means the event invitation will not be sent to any participant,*Always*: the event invitations will always be sent to the participants, *Ask*: a confirmation message will be displayed to ask whether you want to send the invitation or not. To send an invitation, you must create an account in eXo Mail. |
+
+
+
+*Steps to select users to participants to invite box*:
+
+To add users to the *Participant* column, click the
+!PlusIcon.png!
+    icon at the right of the *Participants* field:
+
+
+!Invitations.png!
+
+
+Click the
+!MailIcon.png!
+   if you want to add participants from the Address Book. The *Select Address* dialog will be displayed:
+
+
+
+!SelectAddress.png!
+
+
+
+Click the
+!UserIcon.png!
+    if you want to add users. The *Select users* dialog will be displayed:
+
+
+!SelectUser.png!
+
+
+
+
+- Users 's email addresses and user names which are available in list can be selected by selecting its check box(s).
+- The *Group*, *Search* and *Address books* function allow filtering and searching expected user result.
+- Click the *Add* button to add the selected users or email addresses to the *Invitations* form.
+- In the *Invitation* form:
+* Click the *Add* button to add the selected users or email addresses to the *Participant* column
+* Click the *Cancel* button if you want to close this form without adding users or email addresses.
+
+After adding users or email addresses, the selected user names and email addresses are displayed in the *Participant* column.
+
+
+
+!AddEditEventsAfter.png!
+
+
+The *Schedule* tab: This tab allows you to check the availability of the participants in a defined slot of time (by default, it is the start and end time of the event which you define in the detail tab). By ticking on the check box in front of the participants' names, you may check the availability for all or the selected users.
+
+The selected users in the *participants* field of the *Participants* tab will be displayed in the participant list of the *Schedule* tab.
+
+
+
+!Shedule.png!
+
+
+*Steps to add participants:*
+- Click the *Add attendee* icon
+!iconhuman1.gif!
+     on the left pane.
+- The *Select user* form appears and follows steps like when adding participants in the *Participants* tab.
+
+*Steps to delete participants:*
+- Select participant's name that you want to delete by select the User check box and then click the *Remove attendee* icon
+!iconhuman2!
+    on the left pane.
+- The selected participants are deleted from participants list of the *Schedule* tab and the *Participants* tab.
+
+*Check availability*
+- Add any users to the participants list. For example, add user *john* and *root* who attends to other events.
+- Then, select the *Apply selected date* check box. It means that the selected date From/To on the left pane is applied.
+- Availability time of user *john* and user *root* are shown :
+
+
+
+!ScheduleAvailability.png!
+
+
+
+You can select the slot of time to check visually by moving a mouse in the time pane. The selected period will become green and the corresponding times will be displayed in *From* and *To* fields of the *Detail* tab.
+h1. View an Event
+
+To view an event of a specific calendar in more details, directly right click on the event in Calendar View Panel and select the *view* item in menu:
+
+
+!view1.gif!
+
+
+The *Preview* dialog will appear:
+
+
+!Preview.gif!
+
+
+In the *Preview* dialog, if the event includes an attachment, you can view image attachment by clicking (+) view icon or download any attachment by directly clicking on the attachment's title, a pop up will be displayed, available for saving the attachment file into the local disk :
+
+
+!Opening.gif!
+
+
+
+
+
+
+
+h1. Edit an Event
+
+
+You can make changes to the existing event by following these guides:
+
+
+
+*Step 1\.* Open the *Edit* event form by right clicking on the event that you want to edit and select edit item in menu:
+
+
+!Edit.gif!
+
+
+The *Add/Edit events* form is displayed and full filled with all information event, available for editing like when add new event:
+
+
+
+!EventDetail.png!
+
+
+
+*Step 2.* Modify information of the selected event by following the steps as you create a new event.
+
+*Step 3.* Complete editing by clicking the *Save* button to accept saving changes.
+
++*Note :*+
+
+- When editing you can add, remove the attachment files or download them by directly clicking on the titles
+- If you only want to change the start date and time of the event, you can also use drag and drop feature to edit the time for the event directly on the Calendar view panel.
+- You can only edit events in Personal, Shared and Group calendars which you have edit permission.
+
+
+
+
+
+
+h1. Delete an Event
+
+You can remove an event from a calendar. Following these steps to delete an event:
+
++The 1^st^ way+:
+
+*Step 1\.* Right click on the event you want to delete and then select the *Delete* item in menu.
+
+
+!delete.gif!
+
+
+The confirmation message will appear:
+
+
+!Confirmation.gif!
+
+
+*Step 2.* Complete deleting by clicking the *OK* button in the confirmation message.
+
++The 2^nd^ way+:
+
+*Step 1.*\ In month view and list view, it possible to tick check box in front of event name and click the
+!DeleteChecked.gif!
+   icon in the action bar.
+
+
+!meeting1.gif!
+
+
+*Step 2.* The confirmation message will appear, click the *OK* button to accept deleting the selected event or click the *Cancel* button to exit deleting event.
+{info}
+*Note :*You can only delete events in personal, shared and group calendars which you have edit permission.
+{info}
+
+
+
+
+
+
+
+
+
+
+h1. Drag and Drop an Event
+
+Drag and drop is a nice feature to change the start date and time of an event. Just need click on the event, drag it and drop it on the new day, new time area in the Calendar view panel.
+
+
+!DragDrop.png!
+
+
+To change event duration (in day view, week view and working view only), use your mouse and the control at the bottom of the event.
+
+
+!DragDrop2.png!
+
+
+According to Calendar panel view's features, drag and drop feature can be applied to the date and time differently.
+
+In Day view, all events are shown in 1 day, you can change the event time in one day only. In Week and Work Week view, all events are shown in 1 week, you can change both the event time and the event date.
+
+In Month view, all events are shown in 1 moth, you can can change the event date only. You can also change more events at same time by ticking on their check boxes and using drag and drop feature.
+
+{info}
+*Note :* You can only drag and drop events in personal, shared and group calendars which you have edit permission. For example, if you drag and drop an event which you do not have edit permission, a warning message shows that: 'You are not allow to edit this event/task'.
+{info}
+
+
+
+
+
+
+
+
+
+h1. Export an Event
+
+This function allows exporting one event to a separate file on your computer. Follow guides to export an event:
+
+*Step 1\.* Right click on the event that you want to export and select *Export* in menu:
+
+
+!export.gif!
+
+
+# dialog to export an event will appear:
+
+
+!ExportCalendars.gif!
+
+
+*Step 2.* Enter a file name to export.
+
+*Step 3.* Click the *Save* button to accept exporting the event. A pop up will appear:
+
+
+!opening1.gif!
+
+
+*Step 4.* Click the *OK* button to save the exported file into local disk.
+
+{info}
+*Note:* In fact, exporting an event means exporting a calendar with one event only. Therefore, the exported file format and the way to export an event is similar with the way to export a calendar with multiple events and tasks.
+{info}
+
+
+
+
+
+
+
+
+h1. Import an Event
+
+You can also import an event into the specific calendar.
+In fact, importing an event means importing a calendar with one event only. Therefore, the way to import an event is similar to the way to import a calendar.
+You can see *Import Calendars* in [Manage Calendars] for more details.
+
+
+
+
+
+
+
+

@@ -1,0 +1,429 @@
+
+h1. Manage Calendars
+
+
+
+After being created, a calendar will be categorized in the group that you choose for it. You can add, edit, delet, export and share tasks/events with others users. There are three calendar types: *Personal calendars*, *Shared calendars* and *Group calendars*.
+
+h1. Add Calendars
+
+All created calendars will be listed under the *Personal calendars* category on the left Navigation panel. You can add a new Calendar by following these steps:
+
+
+*Step 1*\. Open the *Calendar* form by three main ways:
+
++The 1^st^ way+: Left click the
+!icon7.gif!
+   icon at the right top of the calendar list and then select the *Add calendar* item in the menu:
+
+
+!AddCalendar1.3.4.png!
+
+
++The 2^nd^ way+: Right click on the calendar group's name which exists in list and then select *Add calendar* in the drop down list menu:
+
+
+!AddCalendar1.3.4b.png!
+
+
++The 3^rd^ way+: You can also add a new calendar from the Mail portlet.
+
+The *Calendar* dialog will appear:
+
+
+!CalendarForm.png!
+
+
+
+The *Calendar details* tab includes:
+
+
+|| Name || Description ||
+| Display name | The name of the calendar. This field is required . |
+| Description | The description of the calendar. |
+| Groups | The group contains your calendar. You can chose a group from the existing group list or quick add a new group by clicking the
+!iconimport.gif!
+   icon at the right Groups combo box. The *Calendar group* dialog will be displayed and it allows adding a new group directly in the *Calendar* dialog. |
+| Country(Language) | The location for the calendar. |
+| Time zone | The displayed time zone for the calendar activities. You can personalize your calendar time zone. |
+| Color | The displayed color for the calendar activities. You can personalize it. |
+| Save button | To accept saving a new calendar. |
+| Reset button | To set blank entry for all inputted fields. |
+| Cancel button | To exit the *Calendar* dialog without adding a new calendar. |
+
+
+The *Groups* tab:
+
+
+!AddCalendar-Groupstab.png!
+
+
+Groups tab allows sharing Calendars with other groups/users. To share a calendar, check the group check box(s) that you want to share. Users of the checked groups will be able to view this calendar. Besides, you can define who can edit the calendar in each group.
+
+To grant the edit permission to individual users in group, follow these steps:
+
+- Click the
+!iconhuman.gif!
+   icon at the right of the *Edit permission* column.
+
+-  Select a user in a special group. For example: select *john* in *administrators* group.
+
+
+!UserSelectorForm.gif!
+
+
+To grant edit permission to a membership type in group, follow these steps:
+
+- Click the
+!iconhuman1.gif!
+     icon at the right of the *Edit permission* column.
+
+- Select a membership in the group. For example: select *manager* role in *administrators* group.
+
+
+!UserSelectorForm1.gif!
+
+
+*Step 2.* Enter values for fields in the *Calendar* form.
+
+*Step 3.* Complete adding a new calendar by clicking the *Save* button. The new added calendar will appear in the calendar list.
+
+{info}
+*Note:* When you fill values in the *Group* tab, the calendar will appear in the *Group calendars* category. All members of the
+corresponding groups will be able to view that calendar. If you don't want your calendar to be a public one, leave the
+*Group tab* empty.
+{info}
+h1. Edit Calendars
+
+
+Following these steps to make changes to the selected calendar.
+
+
+*Step 1*\. Right click on the calendar's name (e.g: Relax Calendar) to open the drop down list menu then select the *Edit* item:
+
+
+!Edit1.gif!
+
+
+The *Calendar* form will appear with all information displayed, available for editing:
+
+- With personal calendar: (The calendar can't been shared with any one) There is only one *Calendar details* tab.
+
+
+!CalendarForm2.gif!
+
+
+- With group calendar: (The calendar can been shared with users belonging to the shared group).There are *Calendar details* and *Groups* tab:
+
+
+!CalendarForm3.gif!
+
+
+*Step 2.* Make changes in the *Calendar* form.
+
+*Step 3.* Complete editing by clicking the *Save* button.
+
+{info}
+*Note:* You can edit any personal calendar. In addition, you can also edit a shared or group calendar when you have edit permission. For instance, when you right click on the calendar's name that you do not have the edit permission, the *Edit* item will be disabled in the drop down list menu.
+
+Edit permission allows you to add, edit or delete events/tasks which exist in that calendar.
+{info}
+
+
+
+
+
+
+
+h1. Remove Calendars
+
+You can remove a calendar as well as all events/tasks stored inside it by following these steps:
+
+
+*Step 1*\. Right click on the calendar's name then select *Remove* from the drop down list menu:
+
+
+!Remove.gif!
+
+
+*Step 2.* Complete deleting by clicking the *OK* button in the confirmation message or click the *Cancel* button to escape removing calendar.
+
+The removed calendar will not be displayed in the calendar list panel. All events/tasks inside that calendar will also be removed.
+
+{info}
+*Note:* In fact, if you do not have edit permission on the shared calendar, removing a shared calendar means that you only
+remove it from your calendar list. Other users will continue seeing and working on it in their calenders list.
+{info}
+
+
+
+
+
+
+
+
+h1. Share Calendars
+
+
+You can share an existing calendar with other users and allow other users to participate in activities on it. Permissions in a shared calendar are set in two levels:
+
+- The *View permission* allows you to view a calendar and its events/tasks, however you can not change any information. It means that you can not add/edit/delete events/tasks, edit, import and export Calendars. For example, right click on the shared calendar's name that you do not have edit permission and select the *Add event* item in menu, a warning message shows that "You are not allowed to edit this calendar".
+
+- The *Edit permission* allows you to view and change information of a calendar such as edit, delete or add, edit, delete events/tasks inside the shared calendar, export the shared calender.
+
+To share a calendar, follow these steps :
+
+*Step 1\.* Right click on the calendar's name to open the drop down list menu then select the *Share* item:
+
+
+!Share.gif!
+
+
+The *Share calendar* form will appear:
+
+
+!ShareCalendarForm.gif!
+
+
+
+|| Name || Description ||
+| Calendar name | The name of the calendar you choose to share. |
+| User name | The name of the users who you want to share your calendar with. |
+| Edit permission | The option allows granting edit permission on the calendar to the selected user. |
+| Save button | To accept sharing the calendar. |
+| Close button | To exit the calendar without sharing. |
+
+
+*Step 2.* Select users to share:
+
+- Click on the
+!iconhuman2.gif!
+      icon at the right of the *User name* field.
+
+- Select users that you want to share. For example, select a user *John* in */platform/ administrator* group. (You can also manually input in the *User name* field). Shared users are displayed in the *User name* field.
+
+
+!ShareCalendarForm1.gif!
+
+
+- Select the *Edit permission* check box if you want to share edit permission with the selected users.
+
+*Step 3.* Complete sharing a calendar by clicking the *Save* button. After sharing a calendar, the shared users will be displayed in the *Share* table:
+
+
+!ShareCalendarForm2.gif!
+
+
+You can:
+- Click the *Edit* icon
+!iconedit1.gif!
+  to edit permissions of a shared user.
+- Click the *Delete* icon
+!icondelete1.gif!
+  corresponding to the shared user to delete him/her from the shared table. The deleted shared users will not be able to view the shared calendar any more.
+
+
+
+
+
+
+
+
+
+
+
+
+
+h1. Change Calendar Colors
+
+Change the Calendar Colors help you distinguish activities in different Calendars better.
+
+Follow these steps to change a Calendar Color:
+
+
+!CalendarsForm.gif!
+
+
+
+
+*Step 1.* Right click on the calendar's name to open the drop down list menu and then select a color for your calendar. There are 32 available colors in the palette:
+
+
+!CalendarsForm1.gif!
+
+
+*Step 2.*\ Change color by selecting color from the palette. After being changed, a calendar will be displayed with the new selected color.
+
+
+
+h1. Export Calendars
+
+You can export a calendar to a separate file on your computer. You can only export a calendar which has at least one event inside it. However, you also can export any types of Calendar including personal, shared and group calendar if you have edit permission.
+Do as follows:
+
+*Step 1\.* Open the *Export Calendars* form by two ways:
+
++The 1^st^ way+: Right click on the calendar group's name to open the drop down list menu then select *Export all* in the menu:
+
+
+!Export.gif!
+
+
++The 2^nd^ way+: Right click on the calendar's name and select the *Export* item in the menu:
+
+
+!Export1.gif!
+
+
+The *Export calendars* form will appear:
+
+
+!ExportCalendarsForm.gif!
+
+
+*Step 2.* Enter a file name in the corresponding field,
+
+*Step 3.* Select a type of export format in list box. For instance, ICalendar (.ics).
+
+*Step 4.* Select one or more available calendars which you want to export by selecting its checkbox(s).
+
+*Step 5.* Click the *Save* button to accept exporting the selected calendars.
+
+There will be a window pop up with 3 choices:
+
+- *Download the File*: To download the exported file.
+- *Open the File*: To directly open the exported file.
+- *Cancel the File*: To cancel exporting.
+
+
+!OpeningForm.gif!
+
+
+You can only open the file if you have an application installed on your computer that supports the format of the exported file.
+
+{info}
+*Note:* You can export personal, shared and public calendar which you have edit permission.
+{info}
+
+
+!OpeningForm1.gif!
+
+
+
+
+
+
+h1. Import Calendars
+
+You can import one or more calendars in a file from your computer to the selected calendar group in eXo Calendar :
+
+*Step 1\.* Open the *Import Calendars* form by three ways:
+
++The 1^st^ way+: Left click the
+!icon.gif!
+ icon at the right top of the calendar list and then select *Import* in the menu:
+
+
+!ImportAgenda.png!
+
+
++The 2^nd^ way+: Right click on the calendar group's name to open the drop down list menu then select *Import*:
+
+
+!import2.gif!
+
+
++The 3^rd^ way+: Right click on the specific calender in the calendar list and select the *Import* item in the menu:
+
+
+
+!import3.gif!
+
+
+The *Import calendars* form will appear:
+
+
+!ImportForm.png!
+
+
+
+|| Name || Description ||
+| Format | The format of the imported file. There are 2 options: *.ics and *.csv. |
+| Upload file | The path of the uploaded file. |
+| Browse button | To select the uploaded file from a local disk |
+|
+
+!iconupload.gif!
+
+ | To uploaded the selected file. |
+| Calendar'name | The display name of the imported calendar. |
+|
+!iconcollapse.gif!
+ | This icon is used to collapse the current form to a form used to import an uploaded file to the existing calendar. |
+
+
+
+!ImportCalendarsForm2.gif!
+
+
+In this form,
+!iconimport.gif!
+    icon next to the *Import to Calendar* field is used to import an uploaded file to a new calendar.
+
+
+|| Name || Description ||
+| Description | The brief description about the imported calendar. |
+| Groups | The group that the imported calendar belongs to. |
+| Country | The country of the imported calendar. |
+| Time zone | The time zone of the imported calendar. |
+| Color | The color of the imported calendar. |
+| Save button | To accept importing a calendar. |
+| Cancel button | To exit the *Import calendars* form. |
+
+
+*Step 2.* Select the type of the import format. For example: IExportedCsv(.csv)
+
+*Step 3.* Click the *Browse*... button to select a file (For example: *.csv) which is imported from your computer and then click on the *Upload* icon
+
+!iconupload.gif!
+
+ to upload the selected file. For example, select and upload eXoPlan.csv file.
+
+
+!ImportCalendarsForm3.gif!
+
+
+*Step 4.* Define the properties for the imported calendar.
+
+*Step 5.* Click the *Save* button to accept importing calendar with the selected file.
+
+After importing, in case the uploaded file is imported into an existing calendar, all events/tasks inside the uploaded file will be imported into the selected calendar. On the other hand, a new imported calendar will be displayed with the predefined display name or its default name in case the *Display name* field is left blankly :
+
+
+!Calendars.gif!
+
+
+{info}
+*Note:* You can only import calendars to a personal calendar. At present, two file formats are supported for importing: *.ics and *.csv.
+{info}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

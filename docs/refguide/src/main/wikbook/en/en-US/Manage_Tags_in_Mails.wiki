@@ -1,0 +1,176 @@
+
+h1. Manage Tags in Mails
+
+
+
+h1. Tag Messages
+
+eXo Mail provides users with tags of filtering or categorizing messages from different folders. A single message can be assigned many tags at a time. Using tags make it easy for you to find your messages in the folder you stored them.
+To assign a tag for one or more messages, do one of the following ways:
+
++The 1^st^ way+: This way is used to create a tag that has not assigned to any message.
+
+*Step 1\.* Click the
+!icon.png!
+ icon on the right corner of the *Tags* bar and select *Add a new tag* in drop down list menu.
+
+
+!AddEditTag.png!
+
+
+
+
+|| Name || Description ||
+| New name | The name of the new tag. This field is required. |
+| Color | The color of the tag. |
+| Description | The brief description of the tag. |
+| Save button | To accept saving tag. |
+| Cancel | To exit the *Add/Edit tag* dialog. |
+
+
+*Step 2.* Enter values to the required fields.
+
+*Step 3.* Complete adding a tag by clicking the *Save* button.
+
+The new tag will be updated at the tag list and users can add this tag to any message.
+
++The 2^nd^ way+:
+
+*Step 1\.* Select message(s) by selecting its check box(s).
+
+*Step 2.* Right click on one of the selected messages and select *Tag* in the drop down list menu:
+
+
+!Tag.png!
+
+
++The 3^rd^ way+:
+
+*Step 1\. Select message(s) by selecting its check box(s).
+
+*Step 2.* Select the *Tag message* item in the *More Actions* drop down list menu on the action bar:
+
+
+!TagMessages.png!
+
+
++The 4^th^ way+:
+
+* Click on one message to open it.
+* Click the
+!icon1.png!
+        icon at the right corner of message 's content and select *Tag* in drop down list menu:
+
+
+!Tag1.png!
+
+
++The 5^th^ way+:
+
+*Step 1\.* Select message(s) by selecting its check box(s).
+
+*Step 2.* Drag these messages and then drop them to the container of the tag.
+
+
+!AddTag.png!
+
+
+The *Add Tag* form appears:
+
+
+
+|| Name || Description ||
+| Tag Name | The name of the tag. This is words and keywords used to describe the same messages. |
+| Choose Color | The color of the tag which can be changed by clicking on color area to choose other color. |
+| Add button | To accept adding message to new tag |
+| Remove button | To remove tags in case there are some existing tags. |
+| Cancel button | To exit the *Add Tag* form. |
+
+
+*Step 3.* Fill out this form (Give tag name, change color).
+
+*Step 4.* Complete adding a tag by clicking the *Add* button.
+
+In case there are already tags in list, the *Add tag* form is displayed:
+
+
+!AddTag1.png!
+
+
+You can add a new tag for your message by entering a new Tag name or update your messages to the existing tags by selecting its check box(s) and click the *Add* button.
+If you want to remove the existing tags, your can tick on its check box(s) and click the *Remove* button or click the *Cancel* to close the *Add Tag* form.
+In case you want to tag a message with a specific tag, you can drag and drop it directly to that tag. The message are added tags will be marked by the tag icon :
+
+
+!Messages.png!
+
+
+
+
+
+
+
+
+
+
+
+h1. Edit Tags
+
+You can edit one tag in the tag list by :
+
+*Step 1\.* Right click on the tag you want to edit in the tag list on the left pane:
+
+
+!EditTag.png!
+
+
+The *Edit Tag* dialog will appear:
+
+
+!EditTagForm.png!
+
+
+*Step 2.* Change tag's information.
+
+*Step 3.* Complete editing by clicking the *Save* button or click *Cancel* to exit the *Edit tag* dialog.
+
+
+
+h1. Remove Tags
+
+You can remove tags from the the tag list by following guides:
+
+Right click on the tag that you want to remove from the list and then select the *Remove* item in drop down list menu:
+
+
+!Remove.png!
+
+
+The selected tag will be removed from the list and it also will be removed from all messages to which the tag was assigned.
+
+
+
+
+h1. Empty Tags
+
+This function allows you to remove the selected tags from messages tagged with it. To empty tag, do as follows:
+
+Right click on the tag you want to empty and select the *Empty* item in the drop down list menu:
+
+
+!Empty.png!
+
+
+The selected tag will be removed from all messages. After emptying, click on the emptied tag, no message is shown on the message list pane.
+
+
+h1. Change Tag Colors
+
+You can change the color of a tag in the tag list by right clicking on the tag you want to change and then selecting one color in the color area. There are 32 available colors in the color area:
+
+
+!Color.png!
+
+
+
+

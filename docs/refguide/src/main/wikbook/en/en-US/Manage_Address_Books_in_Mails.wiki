@@ -1,0 +1,363 @@
+
+h1. Manage Address Books in Mails
+
+
+
+h1. Overview
+
+An Address Book in a Mail application provides users with a list of contacts and can be retrieved for sending mail. This section will explain some additional actions related to Address Book management.
+
+h1. eXo CS 1.3
+
+h2. Add a Group
+
+You can add a new Address Book group by following these steps:
+
+*Step 1\.* Click the
+!ContactsButton.png!
+  button on the tool bar to go into the *Contacts* form:
+
+
+!ContactsForm.png!
+
+
+
+*Step 2.* Click the
+!AddAddressBookButton.png!
+ button to add a new Address Book. The *Add Address Book* form will appear:
+
+
+!AddAddressBookForm.png!
+
+
+
+
+|| Name|| Description ||
+| Group name|	The name of the Address Book. This field is required. |
+| Description|	The Address Book description.  |
+| Add button|	To accept adding new Address Book. |
+| Cancel button|	To exit the *Add Address Book* form. |
+
+
+*Step 3.* Enter values in this form.
+
+*Step 4.* Complete adding new Address Book by clicking the *Add* button.
+
+
+
+
+
+
+
+
+
+
+
+
+
+h2. Add a Contact
+
+You can also add a new contact into a group by following these steps:
+
+*Step 1\.* Open the *Contacts* form:
+
++The 1^st^ way+: Click the
+!AddContactsButton.png!
+ button on the *Contacts* form.
+
++The 2^nd^ way+: This way is used to add a sender of a message to a specific group.
+Right click on a message to add a sender to the contact list and then select *Add sender to contacts*.
+
+
+!AddtoContacts1.3.4.png!
+
+
++The 3^rd^ way+:  This way is also used to add a sender of a message to the specific group.
+Open the message that you want to add a sender to a contact list and then click the
+!DowIcon.gif!
+  icon at the right corner of the message 's content. Select the *Add to contacts* item in the drop down list menu:
+
+
+!AddtoContactsMenu1.3.4.png!
+
+
+The *Add/Edit New Contact* dialog will appear:
+
+
+!EditContactForm.png!
+
+
+
+
+|| Name||Description ||
+| Address Book|	The Address Book in which the contact is stored. The Address Book can be selected from the existing ones in the combo box or created a new one by clicking the
+!PlusIcon.png!
+  icon to add new group immediately .	 |
+| First Name|	The first name of the contact. This field is required. In the second and third way, value of this field is the sender 's first name of this mail. |
+| Last Name|	The last name of the contact. This field is required. In the second and third way, value of this field is the sender 's last name of this mail. |
+| Nick Name|	The nick name of the contact. |
+| Gender|	The gender of the contact. There are two options: Male and Female. |
+| Birthday|	The birthday of the contact. |
+| Job Title|	The job's title of the contact. |
+| Email|	The email address of the contact. In the second and third way, value of this field is the sender ' s email of this mail. |
+| Save button|	To save a new contact. |
+| Cancel button|	To exit the *Add/Edit New Contact* dialog. |
+
+
+To add a picture to the contact, click the *Change* link to open the *Change Image* form:
+
+
+!ChangeImage.png!
+
+
+- Select the uploaded file from local computer by clicking the
+!BrowserIcon.gif!
+ button.
+- Upload the selected file by clicking the
+!UploadIcon.gif!
+  icon.
+- Click the *Save* button to accept saving the uploaded file.
+
+*Step 2.* Input contact information, change or remove contact's picture by clicking the *Change/Remove* link.
+
+*Step 3.* Complete adding a new contact by clicking the *Save* button.
+
+
+
+
+
+
+
+
+
+
+
+h2. Edit a Contact
+
+You can edit a contact in a specific group.
+
+*Step 1\.* Open the *Contact* form by clicking the
+!AddressBookIcon.gif!
+ button on the main tool bar.
+
+*Step 2.* Select the contact which you want to edit in the *Address Book* form.
+
+*Step 3.* Click  the
+!EditButton.png!
+ button, the *Add/Edit New Contact* form will be shown with detail information:
+
+
+!AddEditContactForm1.gif!
+
+
+*Step 4.* Change contacts 's information.
+
+*Step 5.* Complete editing by clicking the *Save* button.
+
+
+
+h2. Delete a Contact
+
+You also can delete a contact from a specific group. Following these guides to delete a contact:
+
+*Step 1\.* Open the *Address Book* form by clicking
+!AddressBookIcon.gif!
+  on the main tool bar.
+
+*Step 2.* Select the contact which you want to delete in the *Address Book* form.
+
+*Step 3.* Select the
+!DeleteContactIcon.gif!
+   button, the confirm message will be shown. Click the *OK* button to delete a contact or click the *Cancel* button to quit.
+
+
+
+
+h2. Send a mail to the selected contacts
+
+{info}
+Since CS 1.3
+{info}
+
+You easily send a mail to the selected contact by following guides:
+
+*Step 1\.* Select the contact that you want to send a email.
+
+*Step 2.* Click the *Send Email* button.
+The *Compose a new message* form will appear with the *To* field is input with all the selected email addresses.
+
+*Step 3.* Compose the mail content and send it.
+
+
+
+h1. eXo CS 1.3.3
+
+h2. Adding a new address book
+This function is used to add new address books. Following these simpe guides:
+
+
+1\. Click the
+!Contacts.png!
+ button on the tool bar to go into the *Contacts* form:
+
+
+!Contact1.3.3.png!
+
+
+2. Click the *Add Address Book* button to add a new address book. The *Add Address Book* form will appear:
+
+
+!AddAddressBook1.3.3.png!
+
+
+
+Details:
+
+|| Field          || Meaning ||
+| Group name     |	Then name of the Address Book. This field is required. |
+| Description     |	The group description  |
+| Add button        |      	To accept adding a new Group |
+| Cancel button     |	To exit the *Add Address Book* form. |
+
+
+3. Enter values in this form
+
+4. Complete adding a new address book by clicking the *Add* button.
+
+
+
+
+
+
+
+h2. Adding a new account
+
+
+This function is used to add new contact into a group. Following these simple guides:
+
+
+1\. Open the *Contact* form
+
++The 1^st^ way+: Click on
+!AddButton.png!
+ button on the Address Book form.
+
++The 2^nd^ way+: This way is used to add the sender of a message to a specific group.
+Right click on a message  to add the sender to contacts list and then select Add to contacts.
+
+
+!AddContact2.png!
+
+
++The 3^rd^ way+: This way is also used to add a sender of a message to a specific group.
+Open the message that you want to add the sender to contact list and then click   icon at the right corner of the message 's content. Select the Add to contacts item in the drop down list menu:
+
+
+!AddContact3.png!
+
+
+The *Contact* form will appear:
+
+
+!AddContact1.3.3.png!
+
+
+
+Details:
+
+|| Name||Description ||
+| Address Book|	The Address Book in which the contact is stored. The Address Book can be selected from the existing ones in the combo box or created a new one by clicking the
+!PlusIcon.gif!
+  icon to add new group immediately .	 |
+| First Name|	The first name of the contact. This field is required. In the second and third way, value of this field is the sender 's first name of this mail. |
+| Last Name|	The last name of the contact. This field is required. In the second and third way, value of this field is the sender 's last name of this mail. |
+| Nick Name|	The nick name of the contact. |
+| Gender|	The gender of the contact. There are two options: Male and Female. |
+| Birthday|	The birthday of the contact. |
+| Job Title|	The job's title of the contact. |
+| Email|	The email address of the contact. In the second and third way, value of this field is the sender ' s email of this mail. |
+| Save button|	To save a new contact. |
+| Cancel button|	To exit the *Add/Edit New Contact* dialog. |
+
+
+To add a picture to the contact, click the *Change* link to open the *Change Image* form:
+
+
+!ChangeImage.png!
+
+
+- Select the uploaded file from local computer by clicking the
+!BrowserIcon.gif!
+ button.
+- Upload the selected file by clicking the
+!UploadIcon.gif!
+  icon.
+- Click the *Save* button to accept saving the uploaded file.
+
+2. Input contact information, change or remove contact's picture by clicking the *Change/Remove* link.
+
+3. Complete adding a new contact by clicking the *Save* button.
+
+
+
+h2. Edit a Contact
+
+
+Follow these steps to edit a contact in a specific group.
+
+
+*Step 1\.* Open the *Contacts* form by clicking the
+!Contacts.png!
+ button in the main tool bar.
+
+*Step 2.* Select the contact which you want to edit in the *Contacts*
+
+*Step 3.* Click the
+!EditButton1.3.3.png!
+ button, the *Contact* form will be shown with detail information, available for editing.
+
+
+!EditContactForm.png!
+
+
+*Step 4.* Change the contact 's information.
+
+*Step 5.* Complete editing by clicking the *Save* button.
+
+
+
+
+h2. Delete a Contact
+
+You also can delete a contact from a specific group. Following these guides to delete a contact:
+
+1\. Open the *Address Book* form by clicking
+!Contacts.png!
+  on the main tool bar.
+
+2. Select the contact which you want to delete in the *Address Book* form.
+
+3. Select the
+!DeleteContactIcon.gif!
+   button, the confirm message will be shown. Click the *OK* button to delete a contact or click the *Cancel* button to quit.
+
+
+
+
+h2. Send a mail to the selected contacts
+
+
+You easily send a mail to the selected contact by following guides:
+
+1\. Select the contact that you want to send a email.
+
+2. Click the *Send Email* button.
+The *Compose a new message* form will appear with the *To* field is input with all the selected email addresses.
+
+3. Compose the mail content and send it.
+
+
+
+
+
+

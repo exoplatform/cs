@@ -1,0 +1,69 @@
+h1. eXo Calendar
+
+
+
+
+
+h1. What is Calendar?
+Calendar is a system of timekeeping that defines the beginning, length and divisions of the year. It is a list of events. In eXo Calendar, you can have many calendars for many purposes.
+
+h1. What is Event?
+Event is something that happens at a given place and time. In eXo Calendar, you can add events into different calendars.
+
+h1. What is Task?
+Task is something that need to be done at a given place and time. In eXo Calendar, you can add tasks into different calendars.
+
+
+
+h1. What is eXo Calendar?
+
+eXo Calendar is a web based agenda application that allows users to record events/tasks such as appointments, meetings, birthday, examination.. on an electronic calendar. With eXo Calendar, it is easy to keep track of all important events/tasks in your life in one place.
+Only by using eXo Calendar can you add events, invitations as well as share with colleagues, friends and family or only keep things for yourself.
+
+
+!Calendar1.3.4.png!
+
+
+
+
+!Calendar-exp.png!
+
+
+eXo Calendar includes the following features:
+
+* Create multiple personal calendars, manage calendars easily with calendar groups.
+* Quickly create an event or a task using the *Quick Add* dialog.
+* Create events and tasks in details.
+* Create all-day events.
+* View other attender's availability schedules.
+* Create recurring events.
+* Get reminders.
+* View calendars by various views: day, week, month and year .
+* Quickly view events day by day by navigating the mini-calendar.
+* Share calendars with others.
+* Import/Export calendars.
+* Publish your calendars with RSS, CalDAV.
+* Search events/tasks in calendars.
+* Print your agenda.
+
+
+
+h1. What is eXo Calendar Group?
+
+Calendar groups allows you to categorize your calendar types easily. One calendar group may contain one or more calendars added by yourself.
+By default, eXo Calendar provides a group in the *Personal Calendars* category named *My group*.
+
+
+
+h1. What is eXo Calendar Category?
+
+Categories are used to classify events and tasks. For example, you could use a *Meeting* category for all meetings with your colleagues or customers in your company.
+By default, eXo Calendar provides 5 categories: Calls, Meeting, Holiday, Clients, Anniversary. You can add and view events/tasks in the default categories. In addition, you also can edit, delete default categories or create a new category by yourself.
+
+
+
+
+
+
+
+

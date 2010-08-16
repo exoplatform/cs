@@ -1,0 +1,137 @@
+h1. CS Install Guide
+
+This install guide will help you to get up and running with eXo CS on your computer in *5 minutes*. It is pretty straightforward :
+
+
+*Requirements*
+* +OS+ : *Windows*, *Linux* or *MAC OS X*.
+* +Memory+ : *1GB* of RAM and at least one 1.5 Ghz processor.
+* +Disk+ : *150MB* of disk space is necessary for the install
+* +Browser+ : *Firefox 3* or *Internet Explorer 7*
+
+This guide let you run a pre-built bundle for *demonstration and evaluation purposes only*. If you need to go further, have a look at these docs :
+- [CS:CS Integration into an Existing Portal]
+- [CS:CS Migration from 1-0 to 1-2]
+- [CS:CS General Configuration] doc
+
+
+
+h2. Download
+
+Download the last binary bundle of CS. All released versions are available for download on *[OW2 Forge |http://forge.ow2.org/projects/exoplatform]*.
+
+It is a 70MB download, *make sure you have enough free disk space* on your hard drive.
+
+
+
+
+h2. Extract
+
+Unzip tomcat version to hard drive to a directory. We will call that directory *$EXTRACT_FOLDER* until the end of the article
+You will need at least 150MB free  disk space to extract the file.
+
+{info}
+CS comes with a builtin file-based database (HSQL). Which means any data created with CS apps will take some more space on the disk. Make sure you have enough disk space for your emails, calendar and contacts information that you will create during your evaluation.
+{info}
+
+h2. Launch
+h3. Launch cs on tomcat server
++Prerequisites+ :
+- eXo *CS 1 requires a Java 5 environment*, make sure the JAVA_HOME environment variable point to a JRE 5 folder
+- eXo *CS 2 requires a Java 6 environment*, make sure the JAVA_HOME environment variable point to a JRE 6 folder
+- the exo server will run on portal 8080, make sure this port is not currently in use
+- the chat server will require additional ports 5222 and 7777. Make sure these ports are not currently in use
+
++Launch instructions+ :
+
+* Using command line, go to *{{$EXTRACT_FOLDER/bin}}* and start the server :
+** Windows : {code}eXo.bat run{code}
+** Linux / Mac OS : {code}chmod+x *.sh ; eXo.sh run{code}
+
+* Wait for the server to start. You should see something like this on the console :
+{code}INFO: Server startup in 15359 ms{code}
+
+
+* eXo CS is now ready to use. Point your browser to [http//localhost:8080-portal]
+
+h3. Launch the chat server (since 1.3 the chat application integrated to cs)
+Since CS 1.3, a Chat application is available. Currently it requires to start a second server.
+
+
++Chat server launch instructions+ :
+* Using command line, go to *exo-openfire/bin* and start the server :
+ ** Window : {code}openfired.exe{code}
+ ** Unix/Linux/Mac OS : {code}./openfire start{code}
+
+h3. Launch the chat server for cs 2.0
+{info}
+since 2.0 we support multiple portal so chat server have extra params when start
+{info}
++Chat server 2.0 launch instructions+ :
+
+
+* When you are using our exo-chatserver provide in package, you can use this run script
+ ** Window for portal : {code}run.bat{code}  For csdemo : {code}run_demo.bat{code}
+ ** Unix/Linux/Mac OS for protal : {code}./run.sh{code}  for csdemo {code}./run_demo.sh{code}
+* We have this one in chat-server/conf/openfire.xml
+{code}
+<env>
+      <serverBaseURL>http://localhost:8080/</serverBaseURL>
+
+      <restContextName>rest</restContextName>
+    </env>
+
+{code}
+|| Name || Value || Description ||
+| restContextName | rest | this used to specify Openfire server is dedicated for portal classic. |
+| restContextName | rest-csdemo | this used to specify Openfire server is dedicated for cs demo. |
+
+          If "eXo.env.restContextName" system property exists, it will override this value.
+          "eXo.env.restContextName" system property can be set by specifying the -D option
+          to the java command when running Openfire. Example: If Openfire server is dedicated for "portal" portal
+          the command will have following format :
+          - *java -DeXo.env.restContextName=rest -jar ../lib/startup.jar* .
+          If Openfire server is dedicated for "csdemo" portal, the command will have following format:
+          - *java -DeXo.env.restContextName=rest-csdemo -jar ../lib/startup.jar* .
+          By default, Openfire server is dedicated to "portal" portal.
+
+-
+_Congratulations, you have successfully installed  eXo Collaboration Suite!_
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

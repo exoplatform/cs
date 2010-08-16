@@ -1,0 +1,128 @@
+
+
+h1. Generate RSS
+
+
+
+
+
+Generating RSS allows you to publish your calendar as a RSS feed. An URL will be built to follow events in a RSS reader. Following these below steps to generate RSS in the Calendar:
+
+*Step 1\.* Click the
+!icon.gif!
+       icon on the right pane of the calendar list and select the *Generate RSS* item in the menu:
+
+
+!RSSGenerate.png!
+
+
+The *Generate RSS* dialog will be displayed with two tabs: Informations and Calendar. The *Informations* tab includes:
+
+
+!GenerateRSSform.png!
+
+
+
+
+|| Name || Description ||
+| Title | The title of a calendar feed when it generates RSS. The default value of this field is eXoCalendar. |
+| URL | The URL link of Rss calendar |
+| Description | The brief description of the generated calendar. |
+| Copyright | The name of the organization that makes this product. |
+| Link | The web page address of yours (Default is www.exoplatform.org). |
+| Publish date | The date/time when calendar is generated (default is date/time of the current day. |
+| Generate button | To start generating RSS. |
+| Cancel button | To close the *Generate RSS* dialog. |
+
+
+The *Calendars* tab:  allows you to select your calendars which you want to generate RSS (as far as it is possible to select multiple calendars ). Selecting the check box in front of a calendar's name to select calendars which will be generated.
+
+
+!CalendarsTab.png!
+
+
+*Step 2.* Fill values in the required fields in the *Informations* tab.
+
+*Step 3.* Select calendars which will be generated RSS by selecting its check box.
+
+*Step 4.* Complete generating by clicking the *Save* button.
+
+After generating, a message will be displayed:
+
+
+!RSSGenerate3.png!
+
+
+Then, click on the
+!buttonRSS.gif!
+     button in the main tool bar, the *Calendar Feed* form will appear and show the  Rss title, Rss URL:
+
+
+!RSSGenerate4.png!
+
+
+Next, click on Rss title shown in bold text (e.g eXoCalendar), a window is opened:
+
+
+!RSSGenerate5.png!
+
+
+You can copy and paste this address link into any calendar product which supports the RSS format (For instance: Mozilla Sunbird application). Then you can directly view that application.
+
+
+{info}
+since CS 1.3
+{info}
+
+You can directly view events of the calendar in applications that support *Subscribe to Remote Calendar*.
+
+For example: Using Mozilla Sunbird application. Choose *File* --> *Subscribe to Remote Calendar*
+
+
+!Subscribe1.jpg!
+
+
+The *Create New Calendar* dialog appears. Select *On the Network* and click the *Next* button.
+
+
+!Subscribe2.jpg!
+
+
+In this form, paste the Rss URL into the *Location* field and then click the *Next* button to go to the next step.
+
+
+!Subscribe3.jpg!
+
+
+Enter a name for your calendar and colorize your events in the dialog below:
+
+
+
+!Subscribe4.jpg!
+
+
+
+ Click the *Next* button to go to the final step.
+
+
+
+!Subscribe5.jpg!
+
+
+Click the *Finish* button to finish creating your calendar on Mozilla Sunbird. The existing events are displayed:
+
+
+
+!Subscribe6a.jpg!
+
+
+Whenever you want to view the new updated events in the calendar, right click on that calendar and select *Reload Remote Calendars*. After 3 minutes, the events automatically updated on this calendar.
+
+
+
+!Subscribe7.jpg!
+
+
+
+
+

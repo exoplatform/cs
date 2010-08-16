@@ -1,0 +1,73 @@
+
+h1. Mail Settings
+
+
+
+
+
+You can customize the behaviors of eXo Mail for your own needs.
+
+1\. Click the button
+!SettingIcon.gif!
+ on the tool bar. The form to set mails will appear:
+
+{info}
+Since CS 1.3, there are more two tabs *Return Receipts* and *Layout*
+{info}
+
+This form will contain two more tab: *Return Receipts* that allows setting the option for receipt notification and the *Lay out* tab that allow personalizing the Mail layout.
+
+
+!MailSettings1.3.png!
+
+
+
+The *General* tab:
+
+
+|| Name || Description ||
+| Default Account  |  The default account (includes the display name and the email address) of the current user. Users can select one of accounts in list.  |
+| Number of conversations per page  | The number of conversations which will be displayed per page: 10, 20, 30... or 70 messages per one page in message list pane.  |
+| Automatically check mail every  | The interval time the system will automatically check mail: 5 minutes, 10 minutes, 20 minutes, 30 minutes or 1 hour. If 20 minutes is selected, after 20 minutes, the mail application will automatically get mail one time. |
+| Compose message with |	The default format of the message used when composing a message. There are 2 options: rich text and plain text. Rich text allows composing with some effects such font style, size, color... while Plain text allows simple text only. |
+| Reply message with | There are two options: one allows replying a message as an attachment and another allows replying a message with text only. |
+| Forward message with | There are two options: one allows forwarding a message as an attachment. Another allows forwarding a message with text only.	 |
+| Save sent message in Sent Folder | The option allows saving sent messages in the *Sent* folder or not. |
+
+
+
+The *Return Receipt* tab: allows setting an option for the receipt notification.
+For example, after reading a new mail in your Inbox, you can determine whether to send a notification to the sender or not to inform that you have read the message.
+
+
+!MailSettings21.3.png!
+
+
+Details:
+
+|| Field || Description ||
+| Ask me when someone request a return receipt  | This option allows you to receive an alert to inform that someone wants to receive your notification about return receipt. |
+| Never send a return receipt | This option will ignore all requests for a return receipt from you. |
+| Always send a return receipt  | This option allows always sending a return receipt to anyone who requests it. |
+
+
+The *Layout* tab: allows you to personalize the layout for mails.
+
+
+
+!MailSettings31.3.png!
+
+
+Normally, the default mail layout is *Horizontal Split*; however, you can set other layout for your mails such as: *Vertical Split* or *No Split* by simply selecting on the check box corresponding to the layout that you want to set.
+
+2. Set your mails according to your own needs.
+
+
+3. Click the *Save* button to save the changes or the *Cancel* button to quit this form.
+
+
+
+
+
+
+

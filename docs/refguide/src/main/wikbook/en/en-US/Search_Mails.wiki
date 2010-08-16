@@ -1,0 +1,80 @@
+
+
+h1. Search Mails
+
+
+
+ We provide two types of useful search when you want to find your needed mails: quick search and advanced search.
+
+h1. Quick Search
+
+You can do a quick search with a specific keyword. All messages from different folders having text matching with your search team will be displayed in the *Search Result* form.
+
+
+To do a quick search, do as follows:
+
+1\. Enter a search term into the *Search* field:
+
+
+!SearchArea.gif!
+
+
+2. Click the
+!SearchIcon.gif!
+  icon.
+
+For example, quick search with "minh" term. All messages matching with "minh" term are listed in the *Search Result* form.
+
+
+ The *Search Result* form will be displayed:
+
+
+!SearchResultForm.png!
+
+
+{info}
+Note: The default search is not done in  *Spam* and *Trash* folder. The messages in *Spam* and *Trash* folder can be searched by positioning to them.
+{info}
+
+
+
+h1. Advanced Search
+
+Advanced search allows you to specify precise search criteria.
+
+1\. Click the
+!SearchIcon.gif!
+ icon on the right of the search box. The *Advanced Search* form will appear:
+
+
+!AdvanceSearchForm.gif!
+
+
+In this form, you can set one, few or all criteria for your search:
+
+
+|| Name|| Description  ||
+| Search in folder| 	The folder which you want to search in. |
+| From|	The condition corresponding to sender's name or mail addresses. There are some options: |
+| contains| includes the terms  in search box. |
+| doesn't contain| do not include the term in search box. |
+| is| include exactly the term in search box. |
+| is not| do not include exactly the term in search box. |
+| starts with|  starts with the term in search box. |
+| Does not start with| do not start with the term in search box. |
+| To|	The condition corresponding to receiver 's  name or mail address.	 |
+| Subject|	The condition corresponding to message subject.  |
+| Message|	The condition corresponding to message content. |
+| Received before...Received after|	The interval time the search messages were received. |
+| Has Star|	The option allows searching messages have star or not. |
+| Has attachment|	The option allows searching messages have attachment or not. |
+| Priority|	The priority of the search messages. |
+
+
+
+2. Define Search conditions.
+
+3. Click the *Search* button to launch the search. All messages matching with your criteria(s) will be listed in the *Search Result* form.
+
+
+

@@ -1,0 +1,87 @@
+
+h1. Create New Rooms
+
+
+Creating a new room helps you communicate with the other contacts easily and effectively. It means that you add people into a group to talk together. Chat rooms are set up to handle group discussions so whoever join the same room can acquire what is happening in this room.
+
+*Step 1.* Click the
+!JoinRoomIcon.png!
+ icon on the chat bar and select *Add Room*
+
+
+!AddRoom1.3.4.png!
+
+
+The *New Room* dialog will appear:
+
+
+!newroomform.png!
+
+
+Details:
+
+|| Name      || Description ||
+|  Room name 	| The name of the room. This field is required. |
+|
+!okbutton.png!
+ button  |	To accept adding a new room. |
+|
+!cancel.png!
+  button	|  To exit/close the *New Room* form. |
+
+
+*Step 2.* Enter a value into the *Room name* field in this form.
+
+*Step 3.* Click the *OK* button to accept creating a new room.
+
+After creating a new room, there will be a *Room Configuration* form to configure some information related to the created room:
+
+
+
+!RoomConfig.png!
+
+
+Details:
+
+|| Name     || Description ||
+| General  | This part contains all general information of the created room |
+| Room name    |	The name of created room. You can not change value of this field.  |
+| Persistent Room     |	This option is to allow the room will be remain without  any member or not. |
+| Enable logging   |	This option allows to log room's conversations or not. |
+| Presence Broadcast    |	Sets the list of roles of which presence will be broadcasted to the rest of the occupants. This feature is useful for implementing "invisible" occupants. |
+|  Who is       |	Users corresponding to the selected groups in ''Presence Broadcast will received the inform message.	 |
+| Room Desc      |	The brief description of the created room. |
+|  Max users     |	The maximum users can join the created room. |
+
+
+*Security*: This part includes all security information of the created room. To show Security information like illustration below, click *Show Security* label:
+
+
+!RoomConfig2.png!
+
+
+Details:
+
+|| Name   || Description ||
+| Public Room    | 	This option is to allow publishing the created room or not. It means after the room is created, all users can join this room. |
+| Member only    |	This option is to publish for members of the created room only or not. |
+|  Allow Invites   |	Sets if occupants can invite other users to the room. If the room does not require an invitation to enter (i.e. is not members-only) then any occupant can send invitations. On the other hand, if the room is members-only and occupants cannot send invitation then only the room owners and admins are allowed to send invitations. |
+| Reserved nick   |	This option is to prevent anonymous users or not. It means if this option is checked, only registered users can join this room. |
+| Password Protected Room     |	The option to allow having a password to enter the room or not. |
+| Password      |  	The password is used to protect the room. This field is shown only when 'Password Protected Room' option is checked. |
+| Moderated Room    |	This option is to require approve/reject the created room or not. |
+| Room Admins    | 	Members that are administration of the created room.	 |
+| Room Owners     |	The email address of room's creator. |
+
+
+*Step 4.* Set values in the *Room Configuration* form.
+
+*Step 5*. Click the *OK* button in the *Room Configuration* form to accept setting values or click the *Cancel* button to quit without creating a new room.
+
+After creating a new room, the *Conversation* window will open with status *locked*. With this status, both the creator and other members can't join this room to chat. You have to wait until your configuration is confirmed by server with the message *This room is now unlocked*. It means this room has the *unlocked* status and users can join this room to communicate.
+
+
+!ChatWindow.png!
+
+
+

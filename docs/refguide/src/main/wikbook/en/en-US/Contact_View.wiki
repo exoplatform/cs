@@ -1,0 +1,49 @@
+
+h1. Contact View
+
+
+
+
+You can personalize your contact view from different view types. At present, you contacts can be viewed by List or VCards:
+
+h1. List View
+
+The list view displays all contacts in the list panel and details information of the selected contact in the Contact view panel. To view contacts by the list view, do as follows:
+
+In the Main tool bar, click the *View* icon then select *List* in the menu:
+
+
+!ListView.png!
+
+
+The contacts are displayed in the below list:
+
+
+
+!Listview.png!
+
+
+
+h1. VCards View
+
+The Vcards view displays all contacts in the Vcard form. Following guides to view contacts in VCards:
+
+On the Main tool bar, click the *View* icon then select *Vcards* in the menu:
+
+
+
+!VCardsView.png!
+
+
+
+The contacts are displayed as Thumbnails:
+
+You can click the *View Details* to see the contact details in a pop up.
+
+In case the contact is tagged, a tag icon is shown at the right corner where shows all the tags of the contact. You can click on the specific tag in the menu pop up for details.
+
+
+!VCardsViewDisplay.png!
+
+
+

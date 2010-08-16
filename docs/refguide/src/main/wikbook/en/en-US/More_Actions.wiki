@@ -1,0 +1,193 @@
+
+
+h1. More Actions
+
+
+
+You can take more actions on mail to differentiate messages quickly and easily.
+
+{info}
+For *CS 1.3.3*, the *More Actions* menu has small UI changes, the functions are as the same as the previous version
+{info}
+
+
+!MoreActions1.3.3.png!
+
+
+h1. Mark as Read
+
+This function allows marking one or more messages as Read by removing bold format of message. Following one of these ways to mark messages as Read:
+
++The 1^st^ way+:
+
+*Step 1\.* Select messages to mark as Read by selecting its check box(s).
+
+*Step 2.* Select the *Mark as read* item in the *More Actions* in the drop down list menu on the action bar:
+
+
+!MarkAsRead.gif!
+
+
++The 2^nd^ way+: This function is used to mark all unread messages in a specific folder.
+
+*Step 1\.* Right click on the folder which contains messages that you want to mark as Read.
+
+*Step 2*. Select *Mark all read* in the drop down list menu. All selected Unread messages will be marked as Read.
+
+
+h1. Mark as Unread
+
+This function allows marking one or more messages as Unread by setting bold format on message.
+
+*Step 1\.* Check message(s) which you want to mark as Unread by selecting its check box(s).
+
+*Step 2.* Select *Mark as unread* in the *More Actions* menu on the action bar:
+
+
+!MarkAsUnread.gif!
+
+
+All the selected read messages will be marked as unread.
+
+
+h1. Add a Star
+
+
+Follow these steps to add a Star to a message to make it more outstanding than others:
+
++The 1^st^ way+:
+
+*Step 1\.* Select message(s) to set star by selecting its check box(s).
+
+*Step 2.* Select the *Add star* item in the *More Actions* in the drop down list menu on the action bar:
+
+
+!AddStar.gif!
+
+
++The 2^nd^ way+:
+
+In the message list pane, click on gray star icon corresponding to the message which you want to add a star.After marking, the selected messages will be appended a icon
+!star.gif!
+                    so that you can identify them easily:
+
+
+!StarMessages.gif!
+
+
+
+
+h1. Remove a Star
+
+This function is used to remove a star from a message appended with a star:
+
++The 1^st^ way+:
+
+*Step 1\.* Check starred messages by selecting its check box(s).
+
+*Step 2.* Select the *Remove star* item in the *More Actions* in the drop down list menu on the action bar:
+
+
+!RemoveStar.gif!
+
+
++The 2^nd^ way+:
+
+In the message list panel, click on yellow star icon corresponding to the message you want to remove a star. Stars will be removed on the selected messages. It is changed from yellow to gray color.
+
+
+
+h1. Import a Message
+
+You can import a message from your computer to the specific folder.
+
+Do as by follows:
+
+*Step 1\.* Select the *Import message* item in the *More Actions* drop down list menu on the action bar:
+
+
+!ImportMessages.gif!
+
+
+The *Import Message* dialog will appear:
+
+
+!ImportMessagesForm!
+
+
+
+
+|| Name || Description ||
+| Choose file (.eml) | The name of the file which you want to import from your computer. Click the !Browse.gif !    button to get one file .eml from the computer and then click
+! Arrow.gif!
+      icon to upload the file. |
+| Import message to folder | The folder where the message will be imported. |
+| Import button | To start importing a message. |
+| Cancel | To exit the *Import Message* dialog. |
+
+
+*Step 2.* Enter the required values in *Import Message* dialog.
+
+*Step 3.* Complete importing by clicking the *Import* button.
+
++*Note :*+  By default your imported file must be in *.eml format.
+
+
+
+
+h1. Not Spam
+
+
+This function is used to report one or more messages in the *Spam* folder as not spam:
+
+*Step 1\.* Go into the *Spam* folder and then check messages that you want to report as not spam.
+
+*Step 2.* Select icon
+!Mail.gif!
+  on the action bar.
+
+*Step 3.* All selected messages will be moved back to the *Inbox* folder.
+
+
+
+
+h1. View full Header
+
+The header's information displayed by default only includes: sender's email address, receivers 's email address and subject of the mail. If you want to view full headers of a mail you can do as follows:
+
+*Step 1\.* Open the message on which you want to view full headers.
+
+*Step 2.* Click the
+!icon1.gif!
+    icon on the right corner of message 's content and select *View full headers* in the drop down list menu:
+
+
+!ViewFullHeaders.gif!
+
+
+The *Full Message Headers* pop up will appear:
+
+
+!FullMessageHeaders.gif!
+
+
+
+
+h1. Collect Email Addresses
+
+
+{info}
+Since CS version 1.3
+{info}
+
+When you receive emails from contacts that do not exist in the Address Book, these contacts will be automatically added into your Address Book.
+
+
+
+
+
+
+
+
+
+

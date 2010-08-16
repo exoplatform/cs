@@ -1,0 +1,169 @@
+
+h1. How a chat session works and maintained
+
+
+
+h1. Overview
+
+This page explains how a chat session works and maintained.
+
+Chat service utilizes Smack library for communicating with XMPP servers (ex: Openfire). The connection between a portal user and a XMPP server is managed and maintained by *XMPPSessionImpl* class which wraps the class org.jivesoftware.smack.XMPPConnection in Smack library. The detail document about Smack is located at http://www.igniterealtime.org/builds/smack/docs/latest/documentation/
+
+{info}
+Smack includes built-in debugging consoles that will let you track all XML traffic between the client and XMPP server . Debugging mode can be enabled by set the Java system property smack.debugEnabled to true when start application server :
+
+-Dsmack.debugEnabled=true
+
+The more detail can be found at http://www.igniterealtime.org/builds/smack/docs/latest/documentation/debugging.html
+{info}
+
+h1. How connection is maintain between user and Openfire server
+
+When a new XMPPSessionImpl is created and destroyed:
+
+h2. A new XMPPSessionImpl is created when:
+
+CS 1.3.x:
+* After a portal login,
+
+* After using online action in Chat(ChatBar) portlet
+
+* After Chat(ChatBar) portlet is loaded (after switch to Chat portlet, after refresh Chat(ChatBar) portlet, or after switch to use other portlets when using ChatBar).
+
+CS 2.0:
+* After a portal login
+
+* After using online action in Chat(ChatBar) portlet.
+
+h2. A XMPPSessionImpl is destroyed when:
+
+CS 1.3.x:
+* After a portal logout
+
+* After using offline action in Chat(ChatBar) portlet
+
+* When *unload* event of window is called: in the progression of refreshing Chat(ChatBar) portlet, in the progression of switching from Chat portlet to other portlet, or in the progression of switching to use other portlets when using ChatBar.
+
+CS 2.0:
+* After a portal logout
+
+* After using offline action in Chat(ChatBar) portlet.
+
+Two functions: {{login2}} and {{logout}} of *XMPPRestService*  is responsible for creating a new *XMPPSessionImpl* and destroying an existed XMPPSessionImpl. They can be called by listeners: *AuthenticationLoginListener*, *AuthenticationLogoutListener* or from client(browser) through Rest protocol ({{jabberLogin}}, {{jabberLogout}} in *UIMainChatWindow*.js).
+
+{info}
+If ignoring online, offline actions of Chat(ChatBar) portlet:
+
+CS 1.3.x: The chat session only maintained when standing at chat or chatbar portlet (don't refresh, don't switch portlet).
+
+CS 2.0: The chat session is synchronized with the portal session.
+{info}
+
+h1. How chat connection and openfire connection works
+
+h2. Establishing a Connection
+
+The XMPPConnection class is used to create a connection to an XMPP server. Below are code examples in *XMPPSessionImpl*  for making a connection:
+{code}
+public class XMPPSessionImpl {
+  private final XMPPConnection connection_;
+  private MultiUserChatManager multiUserChatManager;
+  private FileTransferManager fileTransferManager;
+  private final ContinuationServiceDelegate delegate_;
+  ...
+  connection_ = new XMPPConnection(XMPPMessenger.getConnectionConfiguration());
+  connection_.connect();
+  connection_.login(username, password, null);
+  multiUserChatManager = new MultiUserChatManager();
+  fileTransferManager = new FileTransferManager(connection_);
+  ...
+}
+{code}
+h2. Reading and Writing Packets
+
+h3. Writing Packets
+Each message to the XMPP server from a client and vice versa is called a packet and is sent as XML. The org.jivesoftware.smack.packet package contains classes that encapsulate the three different basic packet types allowed by XMPP (message, presence, and IQ).
+
+Below are code examples in *XMPPSessionImpl* for sending mesage between 2 user
+
+{code}
+public void sendMessage(Message message) {
+  if (connection_.isConnected()) {
+    connection_.sendPacket(message);
+  }
+}
+{code}
+
+Below are code examples in *XMPPSessionImpl* for messages to users in a room.
+
+{code}
+public void sendMessageToMUC(String room, String body) throws XMPPException {
+  MultiUserChat chat = multiUserChatManager.getMultiUserChat(room);
+  Message message = chat.createMessage();
+  message.setBody(body);
+  message.setFrom(getUsername());
+  chat.sendMessage(message);
+}
+{code}
+
+h3. Reading Packets
+Smack provides two ways to read incoming packets: *PacketListener*, and *PacketCollector*. Both use *PacketFilter* instances to determine which packets should be processed. A packet listener is used when you want to take some action whenever a packet happens to come in. Packet listeners can be created using an XMPPConnection instance.
+
+Below are code examples in *XMPPSessionImpl* to read incoming messages and send to browser through an appropriate cometd channel.
+
+{code}
+MessageFilter msgFilter = new MessageFilter();
+connection_.addPacketListener(new PacketListener() {
+  public void processPacket(Packet packet) {
+  ...
+  EventsBean eventsBean = new EventsBean();
+  eventsBean.addMessage((Message)packet);
+  JsonValue json = generatorImpl.createJsonObject(eventsBean);
+  delegate_.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
+  ...
+  }
+}, msgFilter);
+{code}
+
+It's similar like above with other listener: *FileTransferListener* for file transfer, *RosterListener* for users status  in contact list, *InvitationListener* for chat room, *ErrorMessageFilter*, *SubscriptionFilter* for request/response to add an user to a contact list...
+
+h1. How messages are sended
+
+h2. How messages are sended:
+
+Client(Browser) ->{{jabberSendMessage}} in UIMainChatWindow.js --Rest protocol--> {{sendMessage}} or {{sendMUCMessage}} in RESTXMPPService -> XMPPSessionImpl --XMPP protocol-->XMPP server (Openfire).
+
+h2. How messages are received:
+
+XMPP server --XMPP protocol--> a proper PacketListener of XMPPSessionImpl -> a proper channel of Cometd Server --Bayeux protocol--> a proper listener({{messageListener}}, {{groupChatListener}}, {{presenceListener}}, {{rosterListener}}, {{subscriptionListener}}, {{fileExchangeListener}}) of Client(Browser) (these listeners are in UIMainChatWindow.js )
+
+h1. How Client(Browser) utilizes Cometd
+
+Browser utilize Cometd through [Bayeux protocol|http://svn.cometd.org/trunk/bayeux/bayeux.html] which is implemented in *CSCometd.js*
+
+Steps:
+
+h2. Handshake
+
+# Bayeux client initiates a connection negotiation by sending a message to the "/meta/handshake" channel.
+# successful handshake response MUST contain the message fields in which has *clientId* : A newly generated unique ID string.
+
+h2. Connect
+
+After a Bayeux client has discovered the server's capabilities with a handshake exchange, a connection is established by sending a message to the "/meta/connect" channel. Request contain the *clientId* returned in the handshake response.
+
+h2. Subcribe
+
+# connected Bayeux client may send subscribe messages to register interest in a channel and to request that messages published to that channel are delivered to itself.
+
+h2. Publish
+
+# Bayeux client can publish events on a channel by sending event messages. Application events are published in event messages sent from a Bayeux client to a Bayeux server and are delivered in event messages sent from a Bayeux server to a Bayeux client. Event messages MUST be delivered to clients if the client is subscribed to the channel of the event message.
+
+h2. Unsubscribe
+
+# connected Bayeux client may send unsubscribe messages to cancel interest in a channel and to request that messages published to that channel are not delivered to itself.
+
+h2. Disconnect
+
+When a connected client wishes to quit operation it should send a request to the "/meta/disconnect" channel for the server to remove any client-related state.

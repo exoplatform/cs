@@ -1,0 +1,29 @@
+h1. Mail JCR Structure
+
+Mail are saved in eXo-JCR in form of node.
+
+By default when initialize data all data of mail application will store at : /Users/%username%/ApplicationData/MailApplication
+
+{code}
++ Users
+   + %username%
+     + ApplicationData
+       + MailApplication
+         + %account_id%
+           + %folder_id%
+           + %message_id%
+             +%attachment_id%
+           + %tag_id%
+ {code}
+
+ *Account*: In order to get mails from the other mail service to eXo Mail, you need to create an account in eXo Mail which connects  to a real existing email account.Account will add to this /Users/%username%/ApplicationData/MailApplication/%account_id%
+
+ *Folders*: Using folders makes your message management easier and more flexible. There are some default folders that are generated automatically after completing creating a new account successfully: Inbox, Drafts, Sent, Spam, Trash. Folder is storage in : /Users/%username%/ApplicationData/MailApplication/%account_id%/%folder_id%.
+
+ *Messages*: is the exchange of computer-stored messages by telecommunication. Message in a account storage in : /Users/%username%/ApplicationData/MailApplication/%account_id%/%message_id%.
+
+ *Tags*: eXo Mail allows assigning tags to messages. Tags are used as labels which allows filtering or categorizing messages from different folders. A single message can be assigned to many tags at a time. Using tags make it easy for you  to find your messages independently of the folder you stored them.Tag in a account storage in : /Users/%username%/ApplicationData/MailApplication/%account_id%/%tag_id%.
+
+*Attachment*: the attach file of a message is a part of message's body so when we store it to the data we save in /Users/%username%/ApplicationData/MailApplication/%account_id%/%message_id%/%attachment_id%.
+if when the attach was corrupted by any reason we will mark it like broken attach file
+

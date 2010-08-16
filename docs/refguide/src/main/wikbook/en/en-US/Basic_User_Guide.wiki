@@ -1,0 +1,90 @@
+
+h1. CS Basic User Guide
+
+
+
+
+
+h1. Overview
+
+This guide is focused on all basic functions of eXo CS that users should follow to find how easy it is to take all actions in eXo CS. You should start studying this guide by reading and understanding the frequently used terms.
+
+h1. Terms
+
+
+[eXo Address Book|CS:Address Book], [eXo Calendar|CS:Calendar], [eXo Mail|CS:Mail], [eXo Chat and Chat Room|LR:eXo Chat and Chat Room]
+
+
+
+h1. User Manual
+
+*Account*
+
+* [Register New Accounts]
+* [Sign In and Sign Out]
+
+
+*eXo AdressBook*
+
+* [Manage Address Books]
+* [CS:Manage Contacts]
+* [CS:Search Contacts]
+* [CS:Configure Address Books]
+* [CS:Manage Tags]
+
+
+*eXo Calendar*
+
+* [CS:Manage Calendars]
+* [CS:Manage Calendar Groups]
+* [CS:Manage Events]
+* [CS:Manage Tasks]
+* [CS:Manage Categories]
+* [CS:Search Tasks and Events]
+* [Calendar View]
+* [Calendar Settings]
+* [Generate RSS]
+* [Generate CalDAV]
+
+*eXo Mail*
+
+
+
+* [CS:Manage Accounts]
+* [CS:Manage Folders]
+* [CS:Manage Mails]
+* [CS:Manage Tags in Mails]
+* [CS:More Actions]
+* [CS:Manage Filters]
+* [CS:Manage Address Books in Mails]
+* [CS:Add Events]
+* [CS:Search Mails]
+* [Custom Layout]
+* [Mail Settings]
+
+
+{info}
+Since CS 1.3, we integrate eXo Chat from eXo Liveroom to eXo CS
+{info}
+
+*eXo Chat*
+
+
+* [LR:Change Statuses]
+* [LR:Create New Rooms]
+* [LR:Join and Leave Rooms]
+* [Chat|LR:Chat instantly]
+* [LR:Manage Contacts]
+* [LR:Add Contacts into Rooms]
+* [LR:Room Configuration]
+* [LR:Send Files]
+* [Export History|LR:Export History]
+* [LR:Show Messages]
+
+
+
+
+
+
+
+

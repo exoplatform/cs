@@ -1,0 +1,65 @@
+
+h1. Sign In and Sign Out
+
+
+
+
+
+
+
+h1. Sign In
+
+After registering, you can sign in the portal by following these simple steps:
+
+1\. Go to the portal by inputting the portal URL into your address bar (e.g: http://localhost:8080/portal)
+
+2. Click *Sign in* link at the top right of page. The *Sign in* form will appear like the illustration below:
+
+
+!SignIn.png!
+
+
+3. Input your registered *User name* and *Password*.
+
+- *User name*:		is your registered user name.
+- *Password*:		is your registered password.
+
+4. Click the *Sign in* button to accept or *Discard* to escape the sign in form.
+
+After signing in, you will be redirected to the authenticated home page(this homepage is from CS version 1.3):
+
+
+
+!CSAfterSignIn.png!
+
+
+{info}
+For CS 1.3.3
+{info}
+
+
+
+!CSSignIn1.3.3.png!
+
+
+{info}
+For CS 1.3.4
+{info}
+
+
+
+!CSsignin1.3.4.png!
+
+
+
+
+
+h1. Sign Out
+
+You easily end your current portal session and get back to the anonymous portal:
+
+In the upper right corner of the screen, click on *Sign out*:
+
+
+
+!SignOut.png!

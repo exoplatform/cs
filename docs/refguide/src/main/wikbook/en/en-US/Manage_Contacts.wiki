@@ -1,0 +1,523 @@
+
+h1. Manage Contacts
+
+
+
+eXo Address Book helps you manage Contacts easily and effectively by adding, editing, deleting, copying, etc Contacts.
+
+h1. Add Contacts
+
+You can add new Contacts to the Personal Address Books and Shared Address Books if you have edit permission. Follow these steps to add a new contact:
+
+*Step 1\.* Show the *Add Contact* form by three ways:
+
++The 1^st^ way+:  Click the
+!AddContactIcon.gif!
+ icon on the main tool bar.
+
++The 2^nd^ way+:  Right click on an address book (for example My Contacts), and select the *Add* item in the menu.
+
++The 3^rd^ way+:  You can also create a new contact from the Mail portlet.
+
+
+!AddContactMenu.gif!
+
+
+The *Add/Edit Contact* form will appear:
+
+
+!AddEditContactForm.gif!
+
+
+The *Add/Edit Contact* form consists of the *Address Book* selector and the *Contact Detail* pane.
+
+
+*Address Book* selector
+
+The Address Book Selector allows you to select an Address Book from the existing list or quickly create a new Address Book without going out.
+
+To create a new Address Book, click the
+!PlusIcon.gif!
+  icon to open the *Add/Edit Address Book* form and add a new Address Book like when creating a new one.
+
+The *Contact Detail* pane
+
+It includes 5 tabs: *Profile*, *Work*, *IM Contact*, *Home* and *Note*.
+
+- The *Profile tab* contains main information about the contact:
+
+
+!AddContactProfileTabForm.gif!
+
+
+These *First Name* and *Last Name* fields are mandatory. If your want to change a picture (avatar) for the contact, click the *Update* link to upload a photo from your computer. The dialog to upload a photo looks like:
+
+
+!AddContactUploadImageForm.jpg!
+
+
+
+|| Name||Description ||
+| 		Browse button| 			To select a file from your local disk. |
+| 		!UploadIcon.png! |			To upload your selected file. |
+| 		*Save* button    |			To accept saving the uploaded file. |
+| 		*Cancel* button  |			To exit the *Upload Image* dialog. |
+
+
+After uploading the selected file, click the *Save* button to update your new avatar.
+
+If you want to remove your uploaded photo, you can click the *"Delete"* link below your picture.
+The
+!PlusIcon.gif!
+                 icon at the *Email* field allows you to add more email addresses for the contact. When it is clicked, more Email address fields appear:
+
+
+!AddContactEmail.gif!
+
+
+
+More email addresses can be inputted in the *Email* field or deleted by clicking the
+!DeleteIcon.gif!
+ icon.
+
+- The *Work* tab contains work information of the contact:
+
+
+!AddContactWorkTabForm.gif!
+
+
+The *IM Contact* tab contains information about chat nick. The default one is eXo Chat. You can click the icon
+!PlusAndOtherIcon.gif!
+ to add more.
+
+
+!AddContactIMContactTabForm.gif!
+
+
+- The *Home* tab contains home information of the contact:
+
+
+!AddContactHomeTabForm.gif!
+
+
+- The *Note* tab contains note information of the contact:
+
+
+!AddContactNoteTabForm.gif!
+
+
+*Step 2.* Input information into the *Add/Edit Contact* dialog.
+
+*Step 3.* Click the *Save* button to accept adding a new contact or the *Cancel* button to exit the dialog without adding.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+h1. Edit Contacts
+
+You can only edit a contact of Personal or Shared Address Books if you have edit permission:
+
+*Step 1\.* Right click on an available contact in list then select *Edit* in the drop down list menu.
+
+ The *Add/Edit Contact* form will appear for editing:
+
+
+!AddEditContactForm.gif!
+
+
+*Step 2.* Change information of the current contact.
+
+*Step 3.* Click the *Save* button to accept changes or click the *Cancel* button to quit without saving any changes.
+
+
+
+
+
+h1. Delete Contacts
+
+ You can only delete a personal contact or shared address books (if you have edit permission) by 2 following ways:
+	
++The 1^st^ way+:
+
+*Step 1\.* Right click on a contact of the Address Book which is opening and then select *"Delete"* in the menu.
+
+*Step 2.* Click the *Delete* button on the confirmation message to delete the selected contact or click *Cancel* to quit.
+
++The 2^nd^ way+:
+
+
+*Step 1\.* Select the check box(s) in the first column to select one or more contacts and click the *Delete* icon
+!DeleteIcon.gif!
+ on the action bar.
+
+*Step 2.* Click the *Delete* button in the confirmation message to delete the selected contact(s) or click *Cancel* to quit.
+
+
+
+
+
+
+h1. Copy/Paste Contacts
+
+You can copy contact(s) to another Address Books:
+
+*Step 1\.* Select the *Copy* function by one of following ways:
+
++The 1^st^ way+: Right click on a contact of an Address Book and select *Copy* in the drop down list menu:
+
+
+!CopyContactMenu.gif!
+
+
++The 2^nd^ way+: Select the contacts you want to copy by selecting the check-box in the first column, then click the *Copy* icon on the action bar.
+
++The 3^rd^ way+: Right click on an Address Book which has one or more contacts and select *Copy* in menu.
+
+*Step 2.* Select a destination Address Book to copy your selected contacts by right - clicking on the destination Address Book and select *Paste* in the drop down list menu:
+
+
+!PasteContactMenu.gif!
+
+
+{info}
+*Note:*You can copy contacts of all address books but you can only paste contacts into the personal and shared address books if you have edit permission.
+{info}
+
+
+
+
+h1. Move Contacts
+
+You can move one or more contacts from one Address Book to another Address Book.
+
+*Step 1\. Select the *Move* function  by two ways:
+
++The 1^st^ way+: Right click on a contact and select *Move* in the drop down list menu.
+
++The 2^nd^ way+: Select one or more contacts that you want to move by selecting the check-box(s) in the first column, then click the
+!MoveIcon.gif!
+ icon on the action bar.
+
+The *Move contact* dialog will appear:
+
+
+!MoveContactForm.gif!
+
+
+*Step 2.* Move a contact by right clicking on the destination Address Book which you want to move the contact to. Besides, you can click the *Cancel* button to exit dialog without moving.
+
++The 3^rd^ way+: Move contacts by using drag and drop feature. You can drag and drop one or more contacts at a time.
+	
+- *Drag and drop one contact*: Moving a cursor on the corresponding row in the contact in list and when cursor becomes the
+!HandIcon.gif!
+ ,
+ press the left-mouse and drag the selected contact to the Address Book on the left pane.
+
+- *Drag and drop many contacts*: Select contacts by selecting the check box in the first column and moving a cursor to contacts in list until it becomes the
+!HandIcon.gif!
+ icon, press the left-mouse and drag the selected contact to the Address Book on the left pane.
+
+{info}
+*Note:* You can only move contacts of Personal or Shared Address Book if you have edit permission. It impossible to move the default Contacts, Contacts in Address book which you do not have edit permission and contacts in the public Address Book.
+{info}
+
+
+
+
+
+
+h1. Export Contacts
+
+This function allows exporting one or more contacts to a file in your computer.
+	
+*Step1\.* Select the *Export* function by one of two ways:
+
++The 1^st^ way+: Right click on one contact in the contact list and select the *Export* item in the drop down list menu:
+
+
+!ExportContactsMenu.png!
+
+
++The 2^nd^ way+: Right click on a specific Address Book name and select the * Export* item in the drop down list menu:
+
+
+!ExportContactsMenu1.png!
+
+
+The *Export Contacts* dialog  will appear:
+
+
+!ExportContactsForm.png!
+
+
+*Step 2.* Select one or more contact(s) which you want to export by selecting its check box(s).
+
+*Step 3.* Enter file name in the *Name* field and select export format.
+
+*Step 4.* Click the *Export all*  button to export all contacts in all pages, click the *Export only selected* button to export the selected contacts or click the *Cancel* button to quit.
+
+	 The browser will show a pop up with 3 options:
+
+- *Open File*: To directly open the exported file.
+- *Save File*: To save the exported file to your local disk.
+- *Cancel File*: To cancel exporting a file.
+h1. Import Contacts
+
+This function allows importing one or more contacts from a file in your computer to the selected Address Book. Following these steps to import a contact:
+
+
+*Step 1\*. Select the *Import* function by one of following ways:
++The 1^st^ way+: Click the
+
+!ImportIcon.gif!
+
+icon in main tool bar.
+
++The 2^nd^ way+: Click the
+!DowIcon.gif!
+  icon on the navigation pane and then select *Import*:
+
+
+!ImportContactMenu.gif!
+
+
++The 3^rd^ way+: Right click on a Personal or Shared Address Book which you have edit permission and select *Import* in the drop down list menu:
+
+
+!ImportContactMenu1.gif!
+
+
+	The *Import contact* dialog will appear:
+
+
+!ImportContactForm.gif!
+
+
+*Ste[ 2.* Select an Address Book in the drop down list menu or create a new one by clicking the
+!PlusIcon.gif!
+   icon to open the *Add new category* form and Create a new Address Book.
+
+*Step 3.* Select a file format in the Import format field.
+
+*Step 4.* Browse the exported file from your computer and click the *Upload* icon
+!UploadIcon.gif!
+ next to the *Browse*... button to upload the selected file.
+
+*Step 5.* Click the *Save* button to accept importing contacts in the selected file or click the *Cancel* button to quit.
+
+{info}
+*Note:* You can only import contacts to Personal or Shared Address Books if you have edit permission.
+{info}
+
+
+
+
+
+
+
+h1. Print Contacts
+
+You are able to  print information of the selected contact(s). You can print one or more contacts at the same time.
+
+*Print one Contact:*
+
++The 1^st^ way+:
+
+*Step 1\.* Right click on a contact in list and select *Print* in drop down list menu:
+
+
+!PrintContactsMenu.png!
+
+
+Single contact print preview dialog appears with detailed information:
+
+
+!PrintContactsPreview.png!
+
+
+*Step 2.* Click the *Print* button to print or click the *Close* button to quit the Contact print preview dialog.
+
++The 2^nd^ way+:
+
+*Step 1\.* Click *View* on the main menu, then select *Vcard* like:
+
+
+!VcardsMenu.gif!
+
+
+The contact will be displayed in Vcard view:
+
+
+!PrintContactsVcard1.png!
+
+
+*Step 2.* Click on *View Details* link to open the contact in detail pop up. The pop up is shown with the *Print Preview* button that allows you to view and print the contact like the 1st way.	
+
+*Print many contacts:*
+
+*Step 1\.* Select contact(s) that you want to print by selecting its check box(s) in the first column and then click the *Print* icon
+!PrintIcon.gif!
+  on the action bar:
+
+
+!PrintManyContacts.png!
+
+
+Multiple contacts print preview dialog will appear with summary information:
+
+
+!PrintContactsVcards.png!
+
+
+*Step 2.* Click the *Print* button to print or *Cancel* button to quit without printing.
+h1. Sort Contact Lists
+
+This function allows sorting contact list by Name, Email or Job title. You can sort contact list by clicking on the title of a column.
+For example, click Name column to sort contact list by name. The first click will do a descending sort
+!DowIcon.gif!
+
+The second click will do an ascending sort !UpIcon.gif!
+
+h1. Share Contacts
+
+This function allows sharing contact(s) with one or more users, groups. Shared user/group(s) may have view permission or edit permission on the shared contacts
+- View permission: The shared users can not make changes on the shared contact in case having view permission only. However, they can move and delete shared contact.
+- Edit permission: allows  users to view, copy, export, print, move and delete and also edit the shared contact. The shared users can make changes on the shared contact in case having edit permission.
+
+{info}
+*Note :*
+Moving and deleting the shared contact action can be done but it only means that the shared user can move or delete the shared contact from his/her shared contact view. The original shared contact still exists in the other shared user's contact view. The shared contact is only deleted completely and no longer sharing with all shared users in case the creator/author of the shared remove it.
+{info}
+
+*Share Contacts with Users/Groups*
+
+*Step 1\.* Right click on one contact you want to share (e.g demo exo contact) and select *Share* in menu. The *Share contact to other users* dialog appears:
+
+
+!SharedContactToOtherUsersForm.gif!
+
+
+h2. Share Contacts with Users
+
+- In *Share contact to other users* dialog : click the *select user* icon
+!SelectUserIcon.gif!
+  to open the *User Selector* dialog:
+
+
+!UserSelectorForm.gif!
+
+
+- Select a group in the left pane and then select an user of the selected group from the right pane. The selected user will be displayed in text box of the *User* field.
+
+
+h2. Share Contacts with Groups
+
+- In the *Share contact* dialog : click the *select group* icon
+!SelectGroupIcon.gif!
+ by Group field.
+- The *Group Selector* dialog appears:
+
+
+!GroupSelectorForm.gif!
+
+
+- Select the group path from the left pane and the group corresponding with the path will be shown on the right pane. The selected group will be displayed in text box of the *Group* field.
+
+*Step 2.* Select *Can edit?* check box in form if you want to grant edit permission.
+
+*Step 3.* Click the *Save* button to accept sharing with the selected users or click the *Cancel* button to quit.
+
+After sharing, the shared users/groups will be updated into Share table in the *Share contact to other users* dialog with detail information:
+
+
+!SharedContactToOtherUsers1.gif!
+
+
+
+In the Actions column, the edit icon is used to change *Can edit* permission of the specific user/group.
+If you want to change the *Can edit* permission of the specific user/group, click on edit icon corresponding with it.
+
+*Step 4.* In addition, the *Delete* icon is used to remove the specific user/group from Share table.
+If you want to delete the specific user/group, click on delete icon corresponding with it and select *OK* in the confirmation message dialog :
+
+
+!ConfirmRemoveSharedPermissionForm.gif!
+
+
+After removing, the deleted users or users in the deleted group can not view the shared contacts any more.
+
+{info}
+*Note :*
+ When having shared contacts, Shared link is shown and set in bold. Shared users can click on Shared link to view shared contacts from the other users like:
+
+
+!Shared.gif!
+
+{info}
+
+
+
+
+
+
+
+
+
+
+h1. Send Mails to Contacts
+
+You can send a mail directly to one or more contacts in your Address Book. To take this action, you firstly need to:
+- Add at least one account in eXo Mail application
+- Have the email address of the contact which you want to send mail.
+Email address of selected account will be used to send mail to a contact. If you don't have any account mail, the Default acount(exoservice@gmail.com) will be used to send mail.
+
+Send a mail to a contact by following these steps :	
+*Step 1\.* Select the *Email* function by one of following ways:
+
++The 1^st^ way+: Right click on the contact which you want to send a mail to and select *Email* in the drop down list menu :
+
+
+!MailContact.png!
+
+
++The 2^nd^ way+: Select the contact(s) that you want to send a mail by selecting its check box(s) in the first column and then click the *Email* icon
+!EmailIcon.gif!
+  on the action bar :
+
+
+!MailManyContacts.png!
+
+
++The 3^rd^ way+:  Right click on an Address Book which has one or more contacts and select *Email* in the menu:
+
+
+!SendMailMenu3.gif!
+
+
++The 4^th^ way+: Click on email address of a contact when viewing contacts, a details *Send mail* dialog will appear:
+
+
+!SendMailForm.gif!
+
+
+*Step 2.* Email address of contacts that you want to send mail to will be listed in the *To* field. You can manually edit or input more email addresses for this field.
+
+*Step 3.* Input text to the *Subject* field and content of message.
+
+*Step 4.* Click the *Send Mail* button to send your message to the selected contacts.
+After sending, the *Send mail* dialog will be automatically closed, all email addresses listed in the *To:* field will receive the sent mail.

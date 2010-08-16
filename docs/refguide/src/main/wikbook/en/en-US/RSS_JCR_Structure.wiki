@@ -1,0 +1,36 @@
+
+*RSS content* is saved in eXo-JCR in form of node.
+
+When user add a content node include Id, URL, Description, type.. information of this content is storaged in private path : /Users/%username%/ApplicationData/ContentService/contentNavigation.xml.
+
+ Properties of content node are defined in content-nodetypes.xml :
+{code}
+<nodeType name="exo:content" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+    <supertypes>
+      <supertype>nt:base</supertype>
+    </supertypes>
+    <propertyDefinitions>
+	  		<propertyDefinition name="id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="ownerType" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>	  			  			  		
+	  		<propertyDefinition name="ownerId" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>	  		
+	 			<propertyDefinition name="dataType" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="data" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="createdDate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="modifiedDate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  			  			  		
+    </propertyDefinitions>
+  </nodeType>
+{code}

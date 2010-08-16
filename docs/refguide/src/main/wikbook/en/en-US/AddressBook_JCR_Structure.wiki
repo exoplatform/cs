@@ -1,0 +1,133 @@
+
+h1. AddressBook JCR Structure
+
+
+
+h1. Overview
+
+eXo AddressBook stores its data in JCR under each user's Application Data node. The following diagram shows how AddressBook storage structure is organized.
+
+!addressbookstorage.png!
+
+
+*ContactApplication* : is the application data root for AddressBook application. Each user has its own application data node. For example for user _root_ it would be {{/Users/root/ApplicationData/ContactApplication}}
+
+*contactGroup* : is the root node for all personal address books of the user. Each address book is a node of type {{exo:contactGroup}}. An address book node is named after the ID of the address book. it also contains information such as the displayed name, description and permissions.
+
+*contacts* is the root node for all personal contacts of the user. Each contact is a node of type {{exo:contact}}.
+
+*Shared* is the root node for data shared to the user. In eXo AddressBook one can be shared individual contacts and also entire address books. When shared, an {{exo:contactGroup}} or an  {{exo:contact}} receives the mixin {{exo:contactShared}} which gives it the ability to reference one of the node below :
+* *SharedAddressBook* : is the {{mix:referenceable}} node that will be referenced by address books shared to this user
+* *SharedContact* : is the {{mix:referenceable}} node that will be referenced by contacts shared to this user.
+
+*tags* is the root node for personal tags created by the user. Each tag is a node of type {{exo:contactTag}}.
+
+
+{note}
+TODO : public contacts and address books. What we put in /exo:applications/ContactApplication/contacts
+{note}.
+
+We do not put any contact or address book in /exo:applications/.. All *public contacts* we storage in personal path like /Users/%user-id%/ApplicationData/ContactApplication/contacts . And these contacts specified by owner property equals true if it is public contact.
+
+
+
+h1. Nodetypes
+
+h2. Address Book
+
+Address Books are stored with nodetype {{exo:contactGroup}}.
+
+|| Name || Description || Type ||
+| exo:id | ID of the addressbook, same as the node name | String |
+| exo:name | Display name for the address book | String |
+| exo:description | Description for this address Book | String |
+| exo:viewPermissionUsers | List of usernames that have view permissions on this address book | String (multiple) |
+| exo:editPermissionUsers | List of usernames that have edit permissions on this address book | String (multiple) |
+| exo:viewPermissionGroups | List of groups (/group/subgroup) that have view permissions on this address book | String (multiple) |
+| exo:editPermissionGroups | List of groups that have view permissions on this address book | String (multiple) |
+
+
+h2. Contact
+
+Contacts are stored with nodetype {{exo:contact}}.
+
+|| Name || Description || Type ||
+| exo:id | ID of the contact (same as node name) | String |
+| exo:path | - | - |
+| exo:categories | list of address book IDs (name and exo:id property) where this contact appears | String (multiple) |
+| exo:viewPermissionUsers | List of usernames that have view permissions on this contact | String (multiple) |
+| exo:editPermissionUsers | List of usernames that have edit permissions on this contact | String (multiple) |
+| exo:viewPermissionGroups | List of groups (/group/subgroup) that have view permissions on this contact | String (multiple) |
+| exo:editPermissionGroups | List of groups that have view permissions on this contact | String (multiple) |
+| exo:tags | List of tag IDs (name and exo:id property) | String (multiple) |
+| exo:isOwner |  | Boolean |
+| exo:ownerId | username of owner of this contact | String |
+| exo:lastUpdated | Date of Last update | Date |
+|  |
+| exo:fullName | Full contact name (initialized with first + last name) | String |
+| exo:firstName | Firstname | String |
+| exo:lastName | Lastname | String |
+| exo:nickname | User screen name | String |
+| exo:gender | gender | String {Male,Female} |
+| exo:birthday | Birth date | Date |
+| exo:jobTitle | Job title | String |
+| exo:emailAddress | email addresses (period-separated) | String  |
+| exo:exoId | eXo Chat ID | String |
+| exo:googleId  | GTalk ID | String |
+| exo:msnId  | MSN Chat ID | String |
+| exo:aolId  | GAIM ID | String |
+| exo:yahooId  | Yahoo Chat ID | String |
+| exo:ircId  | IRC ID | String |
+| exo:skypeId  | Skype ID | String |
+| exo:icqId  | ICS Chat ID | String |
+| exo:homeAddress  | home address | String |
+| exo:homeCity | home city | String |
+| exo:homeState_province | home state/province | String |
+| exo:homePostalCode | home postal code | String |
+| exo:homeCountry | home country | String |
+| exo:homePhone1 | home phone | String |
+| exo:homePhone2 | secondary home phone | String |
+| exo:homeFax | home Fax | String |
+| exo:personalSite | Personal website | String |
+|  |
+| exo:workAddress  | Work address | String |
+| exo:workCity | Work city | String |
+| exo:workState_province | Work state/province | String |
+| exo:workPostalCode | Work postal code | String |
+| exo:workCountry | Work country | String |
+| exo:workPhone1 | Professional phone | String |
+| exo:workPhone2 | secondary Professional phone | String |
+| exo:workFax | Professional Fax | String |
+| exo:mobilePhone | Mobile phone number | String |
+| exo:webSite | Professional website | String |
+| exo:note | additionnal notes | String |
+
+
+h2. Shared Contacts and Address Books
+
+Shared contacts and address books are represented by the mixin {{exo:contactShared}}
+
+|| Name || Description || Type ||
+| exo:sharedId | Reference to the SharedAddressBook or SharedContact node of target user | Reference (multiple) |
+| exo:sharedUserId |username of the sharing user |String |
+
+h1. Tags
+
+Tags are represented by the mixin {{exo:contactTag}}.
+
+|| Name || Description || Type ||
+| exo:iD | ID of the tag | String |
+| exo:name |display name of the tag |String |
+| exo:description |description for this tag|String |
+| exo:color | name of the color (web palette) to use | String |
+
+h1. Usage of eXo AdressBook API
+
+{info}
+Refer to the [Components Registry|Products Tech Overview:Components Registry#CS]
+{info}
+
+
+
+
+

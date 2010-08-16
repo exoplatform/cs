@@ -1,0 +1,45 @@
+h1. WebDav CalDav Access Configuration
+
+{info}
+This configuration will allow you access the .ics file with authentication permission
+{info}
+
+* override portal configuration for webdav access
+
+- make sure you have this in configuration file exo-tomcat/webapps/portal/WEB-INF/web.xml
+- for integrated project with cs override here web/csportal/src/main/webapp/WEB-INF/web.xml
+- add the filter
+{code:xml}
+
+ <filter>
+    <filter-name>AnonymousUserContextRedirectionFilter</filter-name>
+    <filter-class>org.exoplatform.ws.frameworks.servlet.AnonymousUserContextRedirectionFilter</filter-class>
+		<init-param>
+      <param-name>context-name</param-name>
+      <param-value>/rest/private</param-value>
+    </init-param>
+  </filter>
+
+
+{code}
+- add filter mapping
+{code:xml}
+   <filter-mapping>
+  <!-- This must be before ThreadLocalSessionProviderInitializedFilter for URI /rest/private/*-->
+    <filter-name>AnonymousUserContextRedirectionFilter</filter-name>
+    <url-pattern>/rest/private/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>ThreadLocalSessionProviderInitializedFilter</filter-name>
+    <url-pattern>/rest/private/*</url-pattern>
+  </filter-mapping>
+
+{code}
+- and servlet mapping
+{code:xml}
+  <servlet-mapping>
+    <servlet-name>RestServer</servlet-name>
+    <url-pattern>/rest/private/*</url-pattern>
+  </servlet-mapping>
+{code}

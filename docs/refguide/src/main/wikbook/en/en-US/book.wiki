@@ -1,0 +1,78 @@
+
+h1. Installation
+{include:document="Install_Guide.wiki"}
+
+h1. Configuration
+{include:document="CS_General_Configuration.wiki"}
+
+h2. Calendar
+{include:document="Default_Calendar_Configuration.wiki"}
+{include:document="Email_Reminder_Plugin_Configuration.wiki"}
+{include:document="WebDav_CalDav_Access_Configuration.wiki"}
+
+h2. AdressBook
+{include:document="Default_Address_Book_Configuration.wiki"}
+
+h2. Mail
+{include:document="Default_Mail_Account_Configuration.wiki"}
+{include:document="Mail_in_other_CS_Modules.wiki"}
+{include:document="Authentication_Logout_Listener.wiki"}
+_
+h2. Chat
+{include:document="Chat_Configuration.wiki"}
+
+h2. Content
+{include:document="RSS_Configuration.wiki"}
+
+h1. Integration
+{include:document="CS_Integration_into_an_Existing_Portal.wiki"}
+
+h1. Migration
+{include:document="CS_Migration_from_1-0_to_1-2.wiki"}
+{include:document="CS_Migration_from_1-2_to_1-3.wiki"}
+{include:document="CS_Migration_from_1-3_to_2-0.wiki"}
+{include:document="Data_migration_plugin.wiki"}
+
+h1. Development
+
+h2. Calendar
+{include:document="Calendar_JCR_Structure.wiki"}
+
+h2. AddressBook
+{include:document="AddressBook_JCR_Structure.wiki"}
+{include:document="AddressBook_show-hidden_group_for_function_send_mail_to_group_user.wiki"}
+
+h2. Mail
+{include:document="Mail_JCR_Structure.wiki"}
+{include:document="IMAP_Support.wiki"}
+{include:document="Portlet_Integration_of_eXo_Mail_API.wiki"}
+
+h2. Chat
+{include:document="Chat_JCR_Structure.wiki"}
+{include:document="Portlet_Integration_of_eXo_Chat_API.wiki"}
+{include:document="How_a_chat_session_works_and_maintained.wiki"}
+
+h2. RSS
+{include:document="RSS_JCR_Structure.wiki"}
+{include:document="Portlet_Integration_of_eXo_Content_API.wiki"}
+
+h2. Services Inventory
+
+See ProductsTechOverview:Components_Registry#CS
+
+
+h1. Dependencies
+{include:document="Dependencies.wiki"}
+
+
+h1. Trash
+
+Documentation imported from wiki.exoplatform.org not referenced in original CS Manual.
+
+{include:document="Integration_HOW_TO.wiki"}
+{include:document="Add_Event.wiki"}
+{include:document="CS_Configuration_Migration_from_1-0_to_1-2.wiki"}
+{include:document="CS_Videos.wiki"}
+{include:document="Basic_User_Guide.wiki"}
+{include:document="ContactService_Configuration.wiki"}
+

@@ -1,0 +1,75 @@
+
+h1. Adding Events
+
+
+This function interacts with calendar application that allows quickly adding new events into your calendar instead of directly going to calendar application . Following guides to add an event:
+
+* Open the *Add event* form by clicking the
+!EventIcon.gif!
+button on the main tool bar. The *Add event* form will appear :
+
+
+!EventForm.gif!
+
+
+Details:
+The *Event Detail* tab contains basic event information:
+
+|| Name||Description ||
+| Event Summary|	The title of the event. |
+| Description|	The detailed description of the event |
+| Location|	The location where the event will take place |
+| From|	The start date/time of the event |
+| To|	The end date/time of the event |
+| All day| The option allows selecting the duration of the task to be all day or not. |
+| Priority| 	The priority level of the task.  |
+| Repeat|	 Interval time that you will be asked for a repeated reminder after every x minutes. |
+| Calendar|	The calendar  in which the event will be stored. |
+| Event Category| 	The category that the event belongs to. |
+
+
+To create a new Event category, click the
+!PlusIcon.gif!
+icon, the *Event Categories* form appears :
+
+
+!EventCategoryForm.gif!
+
+
+	Give an event category name and description (optional) then click the *Save* button to quickly create a new category.
+*Save* button:	To accept saving the event.
+*Cancel* button:	To exit the *Add event* form.
+
+*Reminders* tab: the reminder function allows you to remind an event by mail.
+
+
+!EventRemindersTabForm.gif!
+
+
+*Reminder by mail*:
+
+|| Name||Description ||
+| When event starts in next|	The time you will receive mail reminder before event starts. |
+| Repeat|	Repeat option allows setting reminder repeat or not for the event. |
+| every|	The interval time (in every xxx minutes) the reminder will be repeated before event starts |
+| Send reminder to|	List of email addresses to which the reminder will be sent. |
+
+You can manually input email address list or select from the *Select email* dialog by clicking on the
+!PlusIcon.gif!
+icon to open the *Address book* form :
+
+
+!EventAddressForm.gif!
+
+
+- Email addresses are available in list and can be selected  by ticking on its check box(s).
+- Address from group  and Search function allow filtering and searching expected email result.
+- Click the *Add* button to add selected emails to the *Send reminders to* field or click the *Replace* button to replace existing emails by selected emails or click the *Cancel* button to close this form.
+
+After adding email addresses successfully, the email addresses of selected contacts are displayed on the *Send reminders to* field of *Reminders* tab.
+*  Input values into the *Add event* form
+*  Complete adding new event by clicking the *Save* button.
+
+
+
+

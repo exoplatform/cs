@@ -1,0 +1,21 @@
+
+h1. eXo Chat Technical Documentation
+
+
+
+h2. Introduction
+eXo Chat is a system that allows users to communicate in real time using easily accessible web interfaces. It is a type of internet online Chat distinguished by its simplicity and accessibility to users who do not wish to take the time to install and learn to use specialized chat software. This trait allows users instantaneous access and only a web browser is required to chat.
+We now integrated chat to Exo collaboration suite from version 1.3 to help you in real communication with your collaborators. We are supporting file transfer, room chat, history record and much more useful features in the near future.
+
+
+h2. Technologies
+We use Extensible Messaging and Presence Protocol (XMPP), an open XML-based protocol originally aimed at near-real-time, extensible instant messaging (IM) and presence information (e.g. buddy lists). eXo Chat is an XMPP client, that enables you to connect to an XMPP server for instant messaging with other people over the Internet by web-base.
+
+
+h2. Advanced documentation
+Now eXo Chat working with openfire-3.4.5 and almost browsers like IE 6,7,8 Firefox 2,3 Safari 3,4.
+About the configuration, refer [here|http://wiki.exoplatform.org/xwiki/bin/view/CS/Chat+Configuration].
+
+
+
+

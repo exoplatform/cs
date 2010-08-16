@@ -1,0 +1,12 @@
+h1. IMAP Support
+
+{info}
+CS 1.3 and later provides full IMAP support for mail
+{info}
+
+
+- When creating an account with a server which supports IMAP, CS synchronizes Imap folders and messages when fetching mails.
+- With IMAP support, exo mail provides lazy loading of messages: Initially eXo Mail only fetches message headers and when you click to view details it fetches the message content. The time for loading messages and folders depends on the network speed, the number of messages in the folders and the number folders of account. So it can considerably slowdown the request progress. (Mostly network speed problem).
+- eXo Mail allows the user to limit the number of messages by defining a minimum date. Then, only messages received after that date are fetched from the mail server.
+- eXo Mail allows to connect the same account at the same time from many clients. However, the mail server the number of concurrent connections, for example : gmail has limitation 10 connections at the same time on one Imap account.
+

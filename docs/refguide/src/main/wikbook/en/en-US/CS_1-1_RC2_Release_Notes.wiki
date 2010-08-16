@@ -1,0 +1,122 @@
+
+h1. eXo CS 1.1 RC2 Release Notes
+
+
+
+
+
+
+h2. Notable changes
+* Refresh message when checking email
+* Faster when open event and task form
+* Import export free / busy / out-site status of event
+* Fix access deny when checking email with 2 accounts
+
+
+
+h2. API Changes
+
+CS does not maintain a public API.
+
+
+h2. Dependencies Changes
+
+Portal 2.2
+
+h2. How to upgrade
+
+We will provide a complete upgrade guide from 1.0 for 1.1 final release.
+
+h2. System Requirements
+* Web Browser: IE6, IE7, FF2, FF3 (recommanded), Safari.
+* JVM: version 1.5.0_xx only
+* Application Server : Tomcat, JBoss
+* Building Tools: Maven 2.0.6 and up
+
+h2. Other resources and links
+* [Community JIRA|http://jira.exoplatform.org/browse/CS]
+* [Subversion|http://svn.exoplatform.org/projects/cs/tags/1.1RC2]
+* [Download|http://download.forge.objectweb.org/exoplatform/]
+* [Live demo|http://cs.demo.exoplatform.org]
+* [Announces|http://blog.exoplatform.org/tags/cs/]
+* [Company site|http://www.exoplatform.com]
+
+
+
+
+
+
+
+
+
+h2. Detailed Changelog
+
+
+Complete list of issues fixed in eXo-CS Version 1.1 RC2. Find details [on JIRA|http://jira.exoplatform.org/secure/ReleaseNote.jspa?version=10569&styleName=Text&projectId=10060&Create=Create].
+{code:xml}
+ ** Bug
+    * [CS-702] - Improve performance when pressing Today button
+    * [CS-1999] - UI error when import calendar. See attachment.
+    * [CS-2070] - UI error when view contact which is shared by Vcard in special case
+    * [CS-2079] - Unkown error when perform some actions on message in special case
+    * [CS-2085] - Wrong number of mail fetching when start - stop check mail
+    * [CS-2087] - Time on event and Time on View panel  are not similar when drag and drop
+    * [CS-2147] - UI error when name of attachment is so long
+    * [CS-2148] - Can't uncheck reminder for event/task
+    * [CS-2151] - Wrong outside/inside icon when add/view event/task
+    * [CS-2152] - Can't edit event which is imported in special case
+    * [CS-2156] - Tags area is shown again after hided it in special case
+    * [CS-2157] - unknown error when drag&drop contact of shared address book in special case
+    * [CS-2158] - List view: Can't double click on event/task of shared calendar of shared user to open edit form
+    * [CS-2161] - occur wrong message when open import form in special case
+    * [CS-2165] - IE7: Can't close print form
+    * [CS-2166] - Name of shared contact is double at export address books  form in special case
+    * [CS-2168] - List view : Don't update View panel when refresh in case had new event/task which have been just created by other user
+    * [CS-2169] - UI error when click corresponding check box of shared event which  was moved to other calendar by other user
+    * [CS-2172] - Unknown error after send message
+    * [CS-2173] - inside/outside icon is lost when event is imported
+    * [CS-2174] - Wrong word in  Add/Edit address book
+    * [CS-2237] - still send reminder mail and show popup reminder of event in case deleted that event
+    * [CS-2243] - Name of Account and Messages of it  are not corresponding in special case
+    * [CS-2249] - Can't check mail after sending  invitation mail with default account mailt at calendar porlet
+    * [CS-2250] - UI error when view event with priority
+    * [CS-2252] - StringIndexOutOfBoundsException when clicking a simple link on the web mail
+    * [CS-2253] - Automatically redirected to the first page after a refresh
+    * [CS-2267] - Don't show inside icon of event if it is created from webmail portlet
+    * [CS-2270] - Don't get the first mail when  fetch mail in special case
+    * [CS-2273] - when reply with original message as an attachment , original message is not attached with the reply message
+    * [CS-2310] - Cannot import / export email in special case
+
+
+
+** Improvement
+    * [CS-650] - Unexpected page redirects in case deleting Event/Task in Search Result Page
+    * [CS-1949] - week/work week view: UI flick after creating event/task  in special case
+    * [CS-1959] - Refresh messages panel while fetching
+    * [CS-2017] - Still can create 2 Address books OR 2 Calendars  are the same name in special case
+    * [CS-2163] - Default vaules of new calendar when import event should be like values which is set in setting calendar
+    * [CS-2167] - Name of events/tasks OR contacts  begin with space : when sort events/tasks or contacts by name , they are not in alphabetical order
+    * [CS-2170] - Show new value when add values by add icon in some forms
+    * [CS-2238] - Check W3C
+    * [CS-2269] - should be change some labels at Task form
+
+** New Feature
+    * [CS-2164] - Show date/time of event on re-size
+
+
+
+
+
+
+{code}
+
+
+
+
+
+
+
+
+
+
+

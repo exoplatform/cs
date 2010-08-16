@@ -1,0 +1,84 @@
+
+h1. Manage Chat Contacts
+
+You easily manage contacts in your contact list by adding or removing a contact. Following these simple guide to manage your contacts effectively:
+
+
+
+
+
+h1. Add a Contact
+
+
+Following guides to add a contact into your contact list:
+
+
+
+*Step 1\.* Click the
+!ContactsIcon1.3.4.png!
+ icon on the chat bar and then select *Add Contact*
+
+
+
+!AddContacts1.3.4.png!
+
+
+The *Add Contact* form will appear:
+
+
+!AddContactsForm.png!
+
+
+*Step 2.* Select one or more contacts in the account list by selecting the check boxes. You also can quick search in this form to display only contacts that you need:
+
+- Enter information related to the contacts that you want to quick search into the *Search* text.
+- All contacts in list that match with search term will be displayed immediately under.
+
+For example:
+
+
+!addcontact2.png!
+
+
+*Step 3.* Select contacts in the founded list to add contacts into your contact list.
+
+*Step 4.* Click the *Refresh* button to clear the selected contacts, click the *Add contact* button to add contact into your contact list .
+
+The contact that you want to add will receive a request message:
+
+
+!httpsays.png!
+
+
+- Click the *OK* button if he/she accepts your request.
+- Or click the *Cancel* button to deny your adding.
+
+*Step 5.* If he/she accepts, you also receive an inform message like above illustration. Click the *OK* button to accept.
+
+After adding a contact, the added contact will be shown in your contact list.
+
+
+
+
+
+
+h1. Remove a Contact
+
+
+You can remove a contact from your contact list by following guides:
+
+
+*Step 1\.* Right click on the contact that you want to remove from your contact list and select *Remove*:
+
+
+!RemoveContact1.3.4.png!
+
+
+There will be a confirmation message.
+
+
+!Confirmation.png!
+
+
+*Step 2.* Accept removing the selected contact by clicking the *OK* button or click the *Cancel* button to quit without removing.
+

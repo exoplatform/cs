@@ -1,0 +1,31 @@
+
+h1. Portlet Integration of eXo API
+
+Import eXo Chat Service to your portlet : Insert this code snippet to pom.xml file of your portlet :
+{code}
+<dependency>
+    <groupId>org.exoplatform.cs</groupId>
+    <artifactId>exo.cs.eXoApplication.chat.service</artifactId>
+    <version>1.3</version>
+  </dependency>
+{code}
+
+*API Usage*
+
+eXo Chat Service provides some APIs for working with chat as create room, join room...
+
+*Create room* :You can use the following API to create a room:
+{code}
+public Response createRoom(@URIParam("username") String username,
+                             @QueryParam("room") String room,
+                             @QueryParam("nickname") String nickname)
+
+{code}
+*Join room* :You can use the following API to join a room:
+{code}
+public Response joinRoom(@URIParam("username") String username,
+                           @QueryParam("room") String room,
+                           @QueryParam("nickname") String nickname,
+                           @QueryParam("password") String password)
+
+{code}

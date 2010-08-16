@@ -1,0 +1,138 @@
+h1. Calendar JCR Structure
+
+
+
+h1. Overview
+
+eXo Calendar is a JCR based application. Calendar information is saved in eXo-JCR under user's application data directory.
+
+!calendarstorage.png!
+
+
+h1. Categories
+
+*Categories* are used to classify events and tasks. For example, you could use a 'Meeting' category for all meetings with your colleagues or customers in your company. By default, eXo Calendar provides 5 categories:
+* Calls
+* Meeting
+* Holiday
+* Clients
+* Anniversary
+
+Categories are stored in {{/Users/%username%/ApplicationData/CalendarApplication/categories/%calendarCategory_id%}}
+
+h1. Event Categories
+
+ *Event Categories* are used to classify events and tasks. For example, you could use a 'Meeting' category for all meetings with your colleagues or customers in your company. By default, eXo Calendar provides 5 categories: Calls, Meeting, Holiday, Clients, Anniversary.Event Category is storage in /Users/%username%/ApplicationData/CalendarApplication/%eventCategory_id%
+with shared events we will support reference event_category for receive user.
+
+h1. Calendar Settings
+
+*Calendar Settings* allow personalizing your calendar view according to available features. eXo calendar brings you a wide range of custom settings to set your own calendar.
+
+The date base will store here:
+
+<tt>
+/Users/%user_name%/ApplicationData/CalendarApplication/calendarSetting
+</tt>
+
+{code}
+<nodeType	name="exo:calendarSetting" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+  		<supertypes>
+  			<supertype>nt:base</supertype>
+  		</supertypes>
+  		<propertyDefinitions>
+	  		<propertyDefinition name="exo:viewType" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:timeInterval" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  		
+	  		<propertyDefinition name="exo:weekStartOn" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	
+	  		<propertyDefinition name="exo:dateFormat" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  					
+	  		<propertyDefinition name="exo:timeFormat" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  					
+	  		<propertyDefinition name="exo:location" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:timeZone" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:showWorkingTime" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:workingTimeBegin" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:workingTimeEnd" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+	  		<propertyDefinition name="exo:baseUrl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  					
+	  		<propertyDefinition name="exo:defaultPrivateCalendars" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  					
+	  		<propertyDefinition name="exo:defaultPublicCalendars" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>	
+	  		<propertyDefinition name="exo:defaultSharedCalendars" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>	
+	  		<propertyDefinition name="exo:sharedCalendarsColors" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  	
+  		</propertyDefinitions>
+ 	 	</nodeType>
+{code}
+
+since version 1.1 has new property exo:sendOption
+{code}
+                        <propertyDefinition name="exo:sendOption" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  			<valueConstraints/>
+</propertyDefinition>
+{code}
+|| Setting property || Description || Possible values ||
+| exo:viewType | default view each time user log-in and goes to calendar application  | list or format of value(s) |
+
+Calendar Settings are stored in {{/Users/%username%/ApplicationData/CalendarApplication}}.
+
+
+
+
+h1. Calendars
+
+ *Calendars* After being created, a calendar will be categorized in the group that you choose for it. It can be added tasks/events, edited, deleted, exported and shared with others users. There are three types of calendar: personal calendars, shared calendars and group calendars. Calendar is storage in {{/Users/%username%/ApplicationData/CalendarApplication/%calendar_id%}}.
+
+h1. Reminders
+
+_Reminders_ is the system notification when user need to remind the upcoming event, it has two kind of reminders:
+
+* *Popup Reminders* : Notify user by a popup on user interface.
+
+* *Email Reminders* : Notify user by email.
+
+And both of them will store data in:
+
+{{/*Public application place*/CalendarApplication/Y+%year to created event%/M+%month to created event%/D+%day to creted event%/reminders/%event_id%/%reminder_id%}}
+
+For example, a reminder (id=9234) for an event (id=19445) that will take place the 15 of October 2010 would be stored as follows:
+{{/Application Data/CalendarApplication/Y2010/M10/D15/reminders/19445/9234}}.
+
+
+
+
+
+
+
+h1. Usage of eXo Calendar API
+
+{note}
+TODO. Refer to [Components Registry|Products Tech Overview:Components Registry#CS]
+{note}
+
+

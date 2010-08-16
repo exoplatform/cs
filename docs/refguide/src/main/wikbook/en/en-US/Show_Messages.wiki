@@ -1,0 +1,23 @@
+
+h1. Show Messages
+
+
+Sometimes you may want to show messages in specific intervals, eXo Chat will help you to do this with simple steps .
+
+
+
+!ConversationWindow.png!
+
+
+
+Select a time interval in the default time intervals next to the *Show messages from:* label:
+
+
+|| Name || Description ||
+| Today  | To show all messages of the current date. |
+| This week | To show all messages of the current week. |
+| Last 30 days | To show all messages from last 30 days to the current date. |
+| Begin  | To show all messages from the beginning in this room to the current date. |
+
+
+All messages created within the time and date that you chose will be shown in the *Conversation* window.

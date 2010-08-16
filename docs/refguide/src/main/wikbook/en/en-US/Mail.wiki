@@ -1,0 +1,27 @@
+
+h1. eXo Mail
+
+
+
+Only by using a common web browser such as:  Internet Explorer, Firefox or Safari, etc do eXo Portal provide users with useful and convenient eXo Mail.
+
+eXo Mail is a web based application that allows you to send, receive, view your mails through Internet without actually downloading it to your computer. Users not only take advantages of eXo Mail by keeping and receiving all important messages, files and pictures forever but also by looking for and viewing their needed messages easily whenever they want. Additionally, eXo Mail is smoothly integrated with other Collaboration Suite modules such as Address Book and Calendar.
+
+
+For these reasons above, eXo Mail is really an efficient and economic communication mean that improves productivity and facilitates internal and external communications via Internet.
+
+
+
+!MailMainScreen.png!
+
+
+
+
+
+!MailExp.png!
+
+
+
+
+
+

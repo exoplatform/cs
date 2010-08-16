@@ -1,0 +1,185 @@
+
+h1. eXo CS 1.2.2 Release Notes
+
+
+
+
+
+
+h2. Notable Changes
+
+See also [Notable Changes in CS 12:1|CS:CS 1-2-1 Release+Notes#Notablechanges]
+
+* *Calendar*
+** Fixed an issue with multiple popup reminder at the same time
+* *Mail*
+** Fixed an issue with UTF-8 for mail
+* *AddressBook*
+** Made AddressBook application vertically elastic
+* *RSS Reader*
+** Added UTF-8 encoding support
+
+
+
+
+
+
+h2. API Changes
+
+CS does not maintain a public API.
+
+h2. Dependencies Changes
+ * portal 2.5.3
+ * webos  1.5
+ * kernel 2.0.7
+ * core 2.1.5
+ * ws 1.3.3
+ * jcr 1.10.3
+ * pc 2.0.6
+
+
+
+
+h2. System Requirements
+* Web Browser: IE6, IE7, FF2, FF3 (recommended), Safari.
+* JVM: version 1.5.0_10 or higher
+* Application Server : Tomcat, Jboss
+* Building Tools: Maven 2.0.6 and up
+
+
+h2. How Install
+
+Follow the Install Guide [visit here|http://wiki.exoplatform.org/xwiki/bin/view/CS/Install+Guide]
+
+
+h2. How to upgrade
+
+If you need to know how to update the version [visit here|http://wiki.exoplatform.org/xwiki/bin/view/CS/Upgrade+Instructions]
+
+
+
+
+h2. Other resources and links
+* [Community JIRA|http://jira.exoplatform.org/browse/CS]
+* [Subversion|http://svn.exoplatform.org/projects/cs/tags/1.2.2]
+* [Download|http://download.forge.objectweb.org/exoplatform/]
+* [Announces|http://blog.exoplatform.org/tags/cs/]
+* [Company site|http://www.exoplatform.com]
+
+
+
+
+
+h2. Detailed Changelog
+h3. Version 1.2.2
+{code}
+** Bug
+    * [CS-1397] - multiple reminders at the same time
+    * [CS-2505] - Typo on home page
+    * [CS-2510] - RSS Portlet : Portlet does not manage accent correctly when the feed contains accent
+    * [CS-2610] - MAC OS: Little error when show add new contact pop up in mail application
+    * [CS-2621] -  Error when run email reminder job and  popup reminder job
+    * [CS-2669] - Overloaded methods in UICalendarPortlet.js
+    * [CS-2716] - Don't change label on menu of custom layout when change custom layout
+    * [CS-2847] - WYSIWYG in compose dialog does not support i18n
+    * [CS-2867] - impossible to change time by mouse
+    * [CS-2868] - UNknown error while exporting an email
+    * [CS-2883] - UI error when open User workspace
+    * [CS-2888] - ics import - duration is one day later
+    * [CS-2890] - Show blank message when try to view Contact search result in Vcard
+    * [CS-2893] - IE7-WeOS: Can not do anything after logout/login while checking mail
+    * [CS-2894] - shared calendar is shown in many times in special case
+    * [CS-2896] -  IE 7: while standing at search form : Can't open add/edit event/task form,Can't show menu when right click on calendar
+    * [CS-2910] - Don't show pop up reminder
+    * [CS-2913] - UI error when try to some actions on email of account which was deleted in special case
+    * [CS-2914] - IE7: Error in displaying Compose mail form when there are many email addresses
+    * [CS-2915] - Replace Save button in Password required popup by Cancel
+    * [CS-2916] - wrong default date time of event when create on month view
+    * [CS-2917] - Error in showing email address of receivers when "Reply to all" from Sent folder (auto put to cc field)
+    * [CS-2918] - Always auto change priority of draft mail to "Normal" when edit a saved draft with high or low priority
+    * [CS-2923] - Don't show event when use Calendar Sunbird programmer to subscribe calendar with Caldav
+    * [CS-2930] - Can't drag and drop mail
+    * [CS-2986] - Show wrong event when add event from 13/07/2009 00:00 to 14/07/2009 23:59
+    * [CS-2998] - Field label is missing in Generate RSS popup
+    * [CS-3001] - Error in showing email address of receivers when review Sent folder
+    * [CS-3025] - has an unexpected icon at Add/edit new contact form when add sender to contacts
+    * [CS-3075] - Choose hours does not work when creating/editing event/task
+    * [CS-3082] - unknown error when importing an address book after trying to upload a file larger than sizelimit
+    * [CS-3097] - JCR session leak in AuthenticationLogoutListener
+    * [CS-3396] - can't not view  message detail
+    * [CS-3399] - FF :Can't import contact in special case
+    * [CS-3403] - UI at Compose form
+
+** Improvement
+    * [CS-2566] - Make AddressBook application vertically elastic
+    * [CS-2895] - use buttons in message view
+
+** Task
+    * [CS-2615] - Resource Bundles and FR translation review
+    * [CS-2891] - Remove duplicate Cometd.js on cs, use only one form portal
+    * [CS-2892] - fix calendar porlet id to avoid duplicate id on hole products
+{code}
+h3. Version 1.2.1
+{code}
+ ** Bug
+    * [CS-2477] - Safari: Wrong UI of Manage account Icon
+    * [CS-2479] - Priority Icon and Outside Icon overlay together
+    * [CS-2480] - Safari: UI error at Export contacts form
+    * [CS-2531] - In RSS content plug-in, char-set used to read xml rss is always utf-8
+    * [CS-2667] - Error with page iterator in  some forms of CS
+
+** Task
+    * [CS-2426] - Upgrade to portal 2.5.3
+    * [CS-2624] - Check new parent pom 1.1.1 to be used in trunks and new releases
+    * [CS-2642] - Back port ui bugs when update portal 2.5.3 from 1.3 to 1.2.x
+    * [CS-2697] - rename source folder to resource folder for deploy context
+{code}
+h3. Version 1.2
+{code}
+** Bug
+    * [CS-2334] - Small typo in home page (at least on cd demo site)
+    * [CS-2393] - Message list is not updated in special case
+    * [CS-2399] - after sending a message , can't know who is at BCC field
+    * [CS-2403] - lost the path of uploaded file when click on Import to new calendar Icon or  import to the existing calendar Icon at the Import calendar form
+    * [CS-2407] - UI error when have many address mail in participants to invite field  when view invitation mail
+    * [CS-2487] - event time: rework the minute treatment
+    * [CS-2489] - Event Schedule: Status of participants is always empty
+    * [CS-2493] - Unknow error when execute function when standing at last page (page number > 1)
+    * [CS-2499] - Can't delete calendar which belong to calendar group in case the calendar has event(s)
+
+** Doc
+    * [CS-2400] - Apply wiki homepage guidelines
+    * [CS-2406] - Add wiki about the org.exoplatform.mail.service.AuthenticationLogoutListener plugin
+    * [CS-2423] - Integration HOW TO
+    * [CS-2424] - Install Guide
+
+
+** Improvement
+    * [CS-293] - Do not display image in Preview an Event/Task when click ''Download'' button
+    * [CS-521] - Warning on empty subject email
+    * [CS-784] - Conversation column in List View
+    * [CS-1267] - Show All addressbooks option
+    * [CS-1385] - Calendar is checked again after reload browser although unchecked
+    * [CS-1421] - Tooltips on minicalendar
+
+** Task
+
+    * [CS-2405] - Remove duplicate class SelectOptionGroup, SelectItem,SelectOption (on Contact porlet) and use it form portal
+    * [CS-2418] - Backport menu from 1.1
+    * [CS-2442] - Change bundle keys to be compliant with xml format
+{code}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

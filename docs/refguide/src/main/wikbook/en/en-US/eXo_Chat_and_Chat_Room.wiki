@@ -1,0 +1,31 @@
+
+
+h1. eXo Chat and Chat Room
+
+
+
+
+
+h1. Chat
+
+
+Chat describes the way people exchange electronic messages with one or more other computer users in real time. Typically, people in online chat sessions type messages to others using their keyboards. The message then appears on the screens of all the participants.
+
+
+With eXo Chat, you can:
+
+- Add contacts into your contact list.
+- Communicate with other users logged in .
+- Create a new room or join one or more existing rooms.
+
+
+!ChatPortlet.png!
+
+
+h1. Chat Room
+
+
+Chat Room is the online space where participants have simultaneous discussions. A Chat Room allows several people or even large groups to communicate simultaneously.
+It is really a convenient place on the Internet where people can meet and communicate together by typing messages.
+
+

@@ -1,0 +1,89 @@
+
+
+h1. Generate CalDAV
+
+
+
+
+Generating CalDAV allows you to generate your calendar to the address link. You can copy and paste this address link to another application installed in your computer.
+
+Following these steps to generate CalDAV in Calendars:
+
+*Step1\.* Click the
+!icon.gif!
+   icon on the right pane of the calendar list and select the *Generate CalDAV* item in menu:
+
+
+!Generate.gif!
+
+
+The *Generate CalDAV* dialog is displayed with two tabs: *Informations* and *Calendars*:
+
+The *Informations* tab includes:
+
+
+!InformationsTab.png!
+
+
+
+
+|| Name || Description ||
+| Rss title | The title of a calendar feed of the generated Rss (default is eXoCalendar). |
+| Rss URL | Input URL which stores Rss calendar ( default is http://localhost:8080/calendar/iCalRss). |
+| Description | The brief description about the generated calendar. |
+| Copyright | The name of organization making this product. |
+| Publish date | The date/time when calendar is generated (default is current day). |
+| Generate button | To start generating CalDAV. |
+| Cancel button | To close the *Generate CalDAV* dialog. |
+
+
+The *Calendars* tab:
+This tab allows selecting the calendar which you want to generate CalDAV (as far as it is possible to select multiple calendars).
+
+
+!CalendarsTab.png!
+
+
+*Step 2.* Fill values in the required fields in the *Informations* tab.
+
+*Step 3.* Select calendars which will be generated CalDAV by selecting its check box.
+
+*Step 4.* Complete generating CalDAV by clicking the *Save* button. After generating, the inform message will be displayed:
+
+
+!Message.gif!
+
+
+Then, click the
+!buttonRSS.gif!
+   button in the main tool bar, the *Calendar Feed* dialog will appear and show Rss title, Rss URL:
+
+
+!CalendarFeed.gif!
+
+
+Next, click at Rss title shown in the bold text, a window will appear:
+
+
+!Mozilla.gif!
+
+
+Right click on a Calendar name and select *Copy Link location* in menu, then paste this address link into any calendar product that supports the iCal format (For instance: Mozilla Sunbird application). You can view directly that application.
+{info}
+Note: When you view the calendar generated CalDAV in another application. You must input user name and password.
+{info}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

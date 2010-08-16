@@ -1,0 +1,138 @@
+
+h1. View Message
+
+
+ Viewing mails of the specific folder in a variety types helps you get rid of boring in continuously viewing only one mail template. eXo Mail provides many view types:
+
+h2. View as
+
+
+h3. View as List
+
+This view arranges the message as a list . You can view messages according to this way by:
+Select *Organize as* --> *List* in the *View* menu on the action bar:
+
+
+!ViewListMenu.gif!
+
+
+{info}
+since CS 1.3.3 just select *View as* on the action bar and select one of the three view types: *List*, *Thread* and *Conversation*
+{info}
+
+
+!ListView1.3.3.png!
+
+
+The messages will be arranged :
+
+
+!ViewListForm.gif!
+
+
+h3. View as Thread
+
+This view arranges messages as a tree structure. All replies are shown as sub nodes:
+Click on *View as* on the action bar:
+
+
+!ViewAsThread.png!
+
+
+{info}
+For older versions
+{info}
+Do as follows:
+Select *Organize as* --> *Thread* in the *View* menu on the action bar:
+
+
+!ViewThreadMenu.gif!
+
+
+The message and its replies will be displayed :
+
+
+!ViewThreadForm.gif!
+
+
+h3. View as Conversation
+
+With this view, the messages which are the replies of one mail will not be displayed in the message list but on the message pane.
+To view messages as conversation, do as follows:
+Select *Organize as* --> Conversation* in the *View* menu on the action bar:
+
+
+!ViewConversationMenu.gif!
+
+
+The mail and its replies will be displayed like :
+
+
+!ViewConversationForm.gif!
+
+
+
+
+
+
+
+
+h2. View Starred messages
+This function is used to view all messages which are appended stars in list.
+
+To view only Starred messages, click on *Filter* button on the action bar then select *Starred*
+
+{info}
+For older version: Select *Starred* in View menu on the action bar.
+{info}
+
+
+h2. View Unstar messages
+This function is used to view all messages which are not appended stars in list. Only need to select *Unstarred* in the *View* menu on the action bar to view those messages.
+
+h2. View Unread message
+This function is used to view all messages which are not read in list.
+
+To view unread message, click on the *Filter* button on action bar then select *Unread* from the drop down menu
+
+{info}
+For older versions, click on the *View as* button on the action bar then select *Unread* from drop down menu
+{info}
+h2. View Read message
+This function is used to view all messages which are read in list. Select *Read* in the *View* menu on the action bar to view the read messages.
+
+h2. View message with attachment
+This function is used to view all messages which have attachment. Select *With attachment* in the *View* menu on the action bar to view those messages.
+
+h2. Maximize Reading Pane
+
+This function is used to maximize their reading pane. To do this action, click  the
+!UpIcon.gif!
+ icon on the right corner of the reading pane like:
+
+
+!MaximizeReadingPane.gif!
+
+
+
+
+h2. Sort messages
+
+This function is used to sort messages in list according to some conditions.
+By default, messages in list will be sorted by  *'Date & Time '* in ascending order. However, you can also change  sort by *Sender*, *Subject*, *Size* and *Priority*.
+
+
+!SortForm.gif!
+
+
+To change the sort order , click on a column header of message list pane.
+
+The first click will sort messages in list into descending order. It is represented by the
+!DowIcon.gif!
+  icon.
+The second click will sort messages in list into ascending order. It is represented by the
+!UpIcon1.gif!
+ icon.
+
+
+

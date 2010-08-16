@@ -1,0 +1,214 @@
+
+<h1>Collaboration Suite Manual</h1>
+
+#toc("1" "3" "true")
+
+
+This module depends on [eXo Portal|Portal:WebHome], therefore you should also study the [Portal:Portal Manual].
+
+* [CS:Sitemap]
+* [CS:Features]
+
+h1. Terms
+
+[eXo Content portlet|CS:RSS Reader Portlet],[eXo Address Book|CS:Address Book], [eXo Calendar|CS:Calendar], [eXo Mail|CS:Mail], [eXo Chat and Chat Room|CS:eXo Chat and Chat Room], [eXo Quick Chat|CS:Chat Bar]
+
+
+
+
+
+h1. User Manual
+
+* [CS Videos]
+
+*Account*
+
+* [Register New Accounts]
+* [Sign In and Sign Out]
+* [Portal:Account and Password Retrieval]
+
+*eXo Reader*
+
+* [RSS Reader Portlet]
+
+*eXo AddressBook* 
+
+* [Manage Address Books]
+* [CS:Manage Contacts]
+* [CS:Search Contacts]
+* [CS:Configure Address Books]
+* [CS:Manage Tags]
+* [CS:Contact View]
+* [CS:Layout Configuration]
+
+
+*eXo Calendar*
+
+* [CS:Manage Calendars]
+* [CS:Manage Calendar Groups]
+* [CS:Manage Events]
+* [CS:Manage Tasks]
+* [CS:Manage Categories]
+* [CS:Search Tasks and Events]
+* [Calendar View]
+* [Calendar Settings]
+* [Generate RSS]
+* [Generate CalDAV]
+
+*eXo Mail*
+
+
+
+* [CS:Manage Accounts]
+* [CS:Manage Folders]
+* [CS:Manage Mails]
+* [CS:View Mail]
+* [CS:Manage Tags in Mails]
+* [CS:More Actions]
+* [CS:Manage Filters]
+* [CS:Manage Address Books in Mails]
+* [CS:Add Events]
+* [CS:Search Mails]
+* [Custom Layout] 
+* [Mail Settings]
+
+
+
+*eXo Chat* (since 1.3)
+
+* [eXo Chat|eXo Chat]
+* [Chat Bar] 
+* [Change Statuses]
+* [Create New Rooms]
+* [Join and Leave Rooms]
+* [Chat instantly]
+* [Manage Chat Contacts]
+* [Add Contacts into Rooms]
+* [Room Configuration]
+* [Send Files]
+* [Export History]
+* [Show Messages]
+
+
+
+
+
+
+
+
+h1. Administration
+
+Please refer to the [Portal:Portal Manual#Administration].
+
+
+
+h1. Installation
+* [CS:Install Guide]
+
+h1. Configuration
+
+* [CS:CS General Configuration]
+
+* *Calendar*
+  ** [CS:Default Calendar Configuration]
+  ** [CS:Email Reminder Plugin Configuration]  
+  ** [CS:WebDav CalDav Access Configuration]  
+
+* *AdressBook*
+** [CS:Default Address Book Configuration]
+
+* *Mail*
+  ** [CS:Default Mail Account Configuration]
+  ** [CS:Mail in other CS Modules]
+  ** [CS:Authentication Logout Listener]
+ 
+* *Chat*
+  ** [CS:Chat Configuration]
+
+* *Content*
+  ** [CS:RSS Configuration]  
+
+
+
+
+
+
+
+
+
+
+
+
+
+h1. Integration
+
+* [CS:CS Integration into an Existing Portal] 
+
+
+
+h1. Release Notes and Dependencies
+* [CS:Release Notes]
+* [CS:Dependencies]
+
+h1. Migration
+* [CS Migration from 10 to 1:2 | CS:CS Migration from 1-0 to 1-2] 
+* [CS Migration from 12 to 1:3 | CS:CS Migration from 1-2 to 1-3] 
+* [CS Migration from 13 to 2:0 | CS:CS Migration from 1-3 to 2-0] 
+
+
+
+h1. Technical Foundations
+
+* [Main:Overall Architecture]
+* [Portal|Portal:]
+* [Portlet Container| PC:]
+* [Java Content Repository| JCR:]
+* [Web Services| WS:]
+* [eXo Core| Core:]
+* [eXo Kernel| Kernel:]
+
+
+
+h1. Development
+
+* [Developers' zone| Main:Developers]
+* [eXo JavaDocs| http//docs:exoplatform.org]
+* [Products+Tech+Overview:Components Registry#CS]
+
+* *Calendar*
+    ** [CS:Calendar JCR Structure]
+* *AddressBook*
+    ** [CS:AddressBook JCR Structure]
+    ** [CS:AddressBook show-hidden group for function send mail to group user]
+
+* *Mail*
+  ** [Mail JCR Structure]
+  ** [CS:IMAP Support]
+  ** [Portlet Integration of eXo Mail API]
+
+* *Chat*
+  ** [Chat JCR Structure]
+  ** [Portlet Integration of eXo Chat API]
+  ** [How a chat session works and maintained]
+
+* *RSS*
+  ** [RSS JCR Structure]
+  ** [Portlet Integration of eXo Content API]
+
+
+
+
+
+
+
+
+
+
+
+h1. Support
+
+- [Forums|http//www.exoplatform.com/portal/public/en/forum?portal:componentId=forum&portal.type=action&portal.isSecure=false&uicomponent=UIBreadcumbs&op=ChangePath&objectId=forumCategory88afa455c0a8020100a6752323da4b60]
+- [FAQ|http://faq.exoplatform.com]
+- [JIRA|http://jira.exoplatform.org/browse/CS]
+
+eXo Platform SAS also provides [professional support|http://www.exoplatform.com/portal/public/en/services/support] for eXo Collaboration Suite.

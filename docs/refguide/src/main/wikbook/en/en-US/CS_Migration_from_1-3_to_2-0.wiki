@@ -1,0 +1,76 @@
+
+h1. CS Migration from 1-3 to 2-0
+
+
+
+
+This article explains how to upgrade from CS 1.3 to KS 2.0
+
+h2. Migration Procedure
+
+* *Main progress for migrate CS from 1.3 to 2.0 version*
+
+** - Export data from CS 1.3 to XML
+** - Upgrade CS application to 2.0
+** - Migrate data from 1.3 to 2.0 and export to XML file
+** - Import data 2.0 to CS
+
+* *Detail steps*
+
+** 1. Check-out, build and deploy _exo.cs.datamigration-2.0.jar_ to your current CS 1.3 in folder ../lib
+** 2. Start server: The datamigration service will export your current data in 1.3 version to xml file in folder _d:/data_
+** 3. Stop server
+** 4. Upgrade to CS 2.0
+*** - Check out and build CS 2.0
+*** - Copy below files to ../lib folder of tomcat and remove the corresponding files in 1.3 version there
+**** - _exo.cs.eXoApplication.common-2.0.jar_
+**** - _exo.cs.eXoApplication.calendar.service-2.0.jar_
+**** - _exo.cs.eXoApplication.contact.service-2.0.jar_
+**** - _exo.cs.web.webservice-2.0.jar_
+*** - Replace below files in ../webapps folder and remove folders with same naming there
+**** - _calendar.war_
+**** - _contact.war_
+**** - _csResources.war_
+*** - Replace cs folder from ../csportal/WEB-INF/conf to ../portal/WEB-INF/conf
+** 5. Open ../portal/WEB-INF/conf/configuration.xml file and remove the line below:{code:xml}
+<import>war:/conf/cs/cs-plugins-configuration.xml</import>
+{code}
+** 6. Restart server: datamigration service will import data exported from step 2 and migrate data to 2.0 format and export data in 2.0 format to xml file in folder ~~d:/data~~
+** 7. Stop server
+** 8. Open ../portal/WEB-INF/conf/configuration.xml file and add the line below:{code:xml}
+<import>war:/conf/cs/cs-plugins-configuration.xml</import>
+{code}
+** 9. Restart server: The data in 2.0 format exported from step 5 will import to your KS 2.0.
+** 10. After server started successful stop server and remove file _exo.cs.datamigration-2.0.jar_ in ../lib folder and remove folder _d:/data_ then restart server again
+
++*Note:*+
+** - You can change _data_ folder path and input/output file name in configuration.xml file in migration service
+
+
+
+h2. Data structure changes
+h3. Calendar nodetypes changed
+* Node property added *exo:publicUrl* , *exo:privateUrl* to *exo:calendar*
+{code:xml}
+<propertyDefinition name="exo:publicUrl" requiredType="String" autoCreated="false" mandatory="false"        onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+</propertyDefinition>	
+<propertyDefinition name="exo:privateUrl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+</propertyDefinition>
+{code}
+
+1.1.1 Contact nodetypes changed
+
+* Change property *exo:emailAddress* of *exo:contact* from multiple="false" to multiple="true"
+
+1.1.1.1 1.3 version
+{code:xml}
+<propertyDefinition name="exo:emailAddress" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+{code}
+h4. 2.0 version
+{code:xml}
+<propertyDefinition name="exo:emailAddress" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+{code}
+
+

@@ -1,0 +1,346 @@
+
+h1. eXo CS 1.0 Release Notes
+
+
+
+
+
+
+h2. Notable changes
+
+
+h2. API Changes
+
+CS does not maintain a public API.
+h2. Dependencies Changes
+ * portal 2.0.1
+ * kernel 2.0.1
+ * core 2.0.2
+ * ws 1.1.2
+ * jcr 1.8.3
+ * pc 2.0rc5
+
+
+h2. How to upgrade
+ If you need to know how to update the version [visit here|http://wiki.exoplatform.org/xwiki/bin/view/CS/Upgrade+Instructions]
+
+
+
+
+h2. System Requirements
+* Web Browser: IE6, IE7, FF2, FF3 (recommended), Safari.
+* JVM: version 1.5.0_xx only
+* Application Server : Tomcat, Jboss
+* Building Tools: Maven 2.0.6 and up
+
+
+h2. Other resources and links
+* [Community JIRA|http://jira.exoplatform.org/browse/CS]
+* [Subversion|http://svn.exoplatform.org/projects/cs/tags/1.0]
+* [API documentation|http://docs.exoplatform.org]
+* [Download|http://download.forge.objectweb.org/exoplatform/]
+* [Live demo|http://cs.demo.exoplatform.org]
+* [Announces|http://blog.exoplatform.org/tags/cs/]
+* [Company site|http://www.exoplatform.com]
+
+
+
+
+
+
+
+
+
+
+
+h2. Detailed Changelog cs 1.0
+
+{code:xml}
+
+
+** Bug
+    * [CS-106] - High light not right day in mini calendar and Year View
+    * [CS-128] - Session timeout when open in folder in special
+    * [CS-159] - In Import contact form: value in upload file text box is auto reset when do add address book
+    * [CS-227] - Do not high light date in mini calendar in special case
+    * [CS-263] - Do not display event in day view and list view although selected date
+    * [CS-265] - NullPointerException on first access to http://localhost:8080/portal
+    * [CS-287] - Can not view by Message with Attachment with a message which Edited in Draft folder
+    * [CS-304] - Bug unknown error when move message in special case
+    * [CS-309] - Error when show blank IM Contact list in Add/Edit contact form
+    * [CS-317] - In IE 6.0:Error UI when close ''open Control workspace'' in calendar porlet. See file attach
+    * [CS-320] - In IE 6.0: Can not drag and drop message to folder
+    * [CS-336] - In IE 6.0/ Web OS: do not show content of porlets. see file attach
+    * [CS-352] - Do not have content of message when save a message received to Draft folder
+    * [CS-354] - Error UI of Contact and Mail porlet in Desktop. See file attach
+    * [CS-358] - Date formats are not used for 'edit'
+    * [CS-370] - At day, week and month view: Filter category do not refresh after add new category
+    * [CS-385] - Get category name for event in share calendar don't exact
+    * [CS-394] - List group in Group Selector pop up is wrong. See file attach
+    * [CS-397] - In Month view: Do not show menu function when right click at Event/Task in more
+    * [CS-400] - In Mail porlet: Menu at  More action and View functions is show below preview pane. see file attach
+    * [CS-411] - View message isn't exact when sort message by Date and Time. See file attach
+    * [CS-414] - month view : superposition of events
+    * [CS-418] - Do not show conversation of message which tagged when click on tag name
+    * [CS-422] - now, Email Reminder isn't working
+    * [CS-424] - In First time, Error JS when view Event/Task in share calendar. See file attach
+    * [CS-425] - In calendar setting:  schedule view is displayed when select calendar view is list view. see file attach
+    * [CS-426] - Still can search info of new user although this user don't display in public address book
+    * [CS-427] - In Add/ Edit Event form: ticking at "All day" check box don't save
+    * [CS-430] - Bug unknown error when edit contact in share address book after sort contact
+    * [CS-431] - Still can change color of share calendar which user without edit permission
+    * [CS-432] - In IE 6.0/ Month view: Date pane don't display when drag event/Task. See file attach
+    * [CS-436] - Error happen in Add event form after select email in reminder tab
+    * [CS-437] - Time of event isn't updated after edit Event
+    * [CS-450] - Message error appears when select "Instant message" in menu. See file attach
+    * [CS-459] - In Search result: Bug unknown error when delete message in conversation
+    * [CS-462] - In IE 7.0: Error UI in View event form when click on "Download" button
+    * [CS-471] - Don't check Attendee's free/busy when time of event is more one day
+    * [CS-478] - Search result isn't exact in special case
+    * [CS-486] - Still check Free/busy in current date although user is busy in other day
+    * [CS-491] - Check box All day in Attendee's free/busy isn't working
+    * [CS-505] - Impossible to get mail with attachment file is sent from Old Yahoo mail version
+    * [CS-506] - Body of message is lost after click on "Attach file" button in Create new pop up
+    * [CS-520] - In spite of no file is attached, attachment symbol is shown
+    * [CS-543] - Add event form: next month isn't exactly in special case
+    * [CS-546] - User log-in always display in participant box although removed directly
+    * [CS-548] - Display message "Can not save event" but event is still saved.
+    * [CS-549] - Always show user share in share box although saved
+    * [CS-550] - Do not show contact of user log-in in My contact when search
+    * [CS-551] - In advanced search: search event  by "To Date" isn't exact
+    * [CS-553] - Category which added by mail application do not show in list category of calendar
+    * [CS-560] - Unknown Error when deleting mail
+    * [CS-561] - In Contact, Calendar porlet: Pop up is displayed beside navigation bar. See file attach
+    * [CS-562] - In IE 6,7: do not show icon of working view. See file attach
+    * [CS-563] - In IE 6, 7: Message error when select working view. See file attach
+    * [CS-564] - In IE 6, 7: Show drop down list of date & year above select box. See file attach
+    * [CS-565] - In IE 6,7: Can not select IM Contact in list
+    * [CS-567] - Still can move, Delete contact share when user without edit permission
+    * [CS-568] - In Add/Remove tag form: show contact name is null in special case.
+    * [CS-575] - Add Participant: Can not search user by first name & last name
+    * [CS-577] - Displaying both group name and user of group in share table when only select group
+    * [CS-578] - Bug unknown error when add tag for contact in public address
+    * [CS-579] - Attachment is empty
+    * [CS-582] - Check validation for email address
+    * [CS-583] - FireFox : Advance Search- Priority Label is shown invalidly
+    * [CS-584] - IE 6: Create New Mail Form, From combo box is shown invalidly
+    * [CS-593] - Lack of tag icon
+    * [CS-594] - In Add Calendar form: do not clear value in share calendar tab when click "Reset" button
+    * [CS-595] - IE 6: View Contact is shown invalidly
+    * [CS-597] - Invalid size unit when attaching file at Add Event/Add Task form
+    * [CS-605] - Wrong alert message at  Add Task Form
+    * [CS-607] - Check for import calendar function
+    * [CS-608] - Bug unknown error when edit contact in special case
+    * [CS-609] - Share Calendar: select one user, but  the other users who already in user shared list also shown in User name text box
+    * [CS-612] - Advance Search: Search by Task option, no data is shown
+    * [CS-615] - Add/edit Calendar form: User icons disappear when pressing on Reset button
+    * [CS-616] - IE 6: Full fill all steps of creating new Account. However, alert "Some value is required" is alway shown
+    * [CS-617] - Session timeout when click on "RSS" button after generate
+    * [CS-618] - Import messages: Number of folder messages is added by 1 when importing, but there is no message is shown when viewing folder
+    * [CS-619] - Still display event although deleted
+    * [CS-623] - Share Address Book: Address book is not shared in special case
+    * [CS-628] - Error when view RSS URL of generate CalDAV
+    * [CS-629] - In Week view: View day is unexacting after change week start
+    * [CS-630] - Import  csv file: Can NOT import in case csv file contains Events/appointment having Description
+    * [CS-632] - Unknown error in special case of Generate RSS
+    * [CS-637] - IE 6: Mail Application- Add Address Book Form is broken
+    * [CS-638] - Unknown error in special case of Copy and Paste Address Book
+    * [CS-639] - IE 6: Error when viewing in desktop screen
+    * [CS-644] - Error typo for Contact Detail Form
+    * [CS-647] - Session Timeout  and showing code in case Print contact Tag
+    * [CS-648] - Unknown error in case ticking all Address book for exporting
+    * [CS-660] - IE 6: Invalid Compose form
+    * [CS-661] - Forward mail from Old yahoo version, mail content is invalid
+    * [CS-662] - Move contact Form: Address Book name is shown invalid
+    * [CS-663] - Session time out in special case of moving contacts
+    * [CS-664] - In Share address: Bug unknown error when share for user log-in
+    * [CS-667] - Add a warning message when click at ''copy contact'' icon in case: do not select any contact
+    * [CS-669] - Using delete icon in menu bar it is possible to delete default contact:
+    * [CS-671] - Search function work invalidly, events of imported calendar is not shown
+    * [CS-672] - Calendar combo box item name is shown invalidly
+    * [CS-673] - Address Book item is shown invalidly. Unexpected adding new contact can be done
+    * [CS-675] - In List view: Can not add Category for Event/Task when editing
+    * [CS-677] - In List view: can not next to page 2 to view event
+    * [CS-678] - In Reminder tab: Tick at check box reminder still checked although removed
+    * [CS-679] - Reminder tab: Show text "null" in Email list field in special case
+    * [CS-682] - Check mail: Fetching message isn't exact when have more mail received (about 100 mails)
+    * [CS-683] - In List view: Removing file attach also saved although only click on "Cancel" button
+    * [CS-684] - Bug unknown error when open folder in special case
+    * [CS-685] - Invalid name of Address book at Search result form
+    * [CS-692] - Failed to create filter with character '['
+    * [CS-701] - Edit a public calendar: invalid user names are shown in case adding more than 2 users for edit permission
+    * [CS-715] - search box is not aligned correctly
+    * [CS-717] - Unknown error on search
+    * [CS-722] - system show that question on one row without breaking.
+    * [CS-746] - 'Edit permission' label is not translatable on share dialog
+    * [CS-747] - Wrong title for user selector in Share address-book
+    * [CS-752] - Gender value is not translated on contact details
+    * [CS-754] - typo in categories names
+    * [CS-755] - Cannot edit a calendar imported from an ics generated from google calendar
+    * [CS-765] - Calendar settings are not translatable
+    * [CS-766] - Delete calendar does nothing
+    * [CS-767] - No repeat value is not i18ned
+    * [CS-768] - Event category selector not fully i18ned
+    * [CS-769] - Value not i18ned on advanced search
+    * [CS-770] - Calendar sharing dialog not properly i18ned
+    * [CS-771] - Not right message in case try to add/replace new attender while he already be added
+    * [CS-772] - User don't has permission to perform some action on public calendar but still Can set permission by itself in special case
+    * [CS-789] - Showing contact of address book isn't exact
+    * [CS-794] - Date column does not use user locale
+    * [CS-796] - Date format on print preview
+    * [CS-797] - Compose form doesn't show the appropriate labels
+    * [CS-813] - residual problems with french version
+    * [CS-817] - Displaying value in Task delegation field is incorrect.
+    * [CS-821] - support multiple language for Address Book form, Filter form
+    * [CS-826] - Put text of Search Form to resource bundle
+    * [CS-832] - Free/Busy time not correctly updated in some cases
+    * [CS-833] - Long subject causes a display problem on message pane
+    * [CS-836] -  Must double Click to add sender to contact
+    * [CS-837] - Do not show the content of message and UI error  when the subject of message is very long
+    * [CS-838] - Do not show the content of message and UI error  when the subject of message is very long
+    * [CS-847] - Tool-tip expanding preview pane is not i18ned
+    * [CS-849] - Attach form is not i18ned
+    * [CS-854] - UIAddressForm is not i18ned
+    * [CS-857] -   exo-spff In Add/Edit Task form: Change "Event detail" tab to "Task detail" tab Created: Friday 02:46 AM   Updated: Friday 02:46 AM
+    * [CS-858] - Right Popup on a message is broken in Firefox3
+    * [CS-862] - Style sheet of  table headers in UIMessageList  in Fire fox 3
+    * [CS-865] - Select address pop up: Show contact of address book isn't exact
+    * [CS-877] - Bug unknown error when delete contacts in address book in special case
+    * [CS-878] - Encoding special characters
+    * [CS-880] - Edit draft message: Format content of message by Plain text although Rich text selected
+    * [CS-884] - Saving sent mail don't exact in special case
+    * [CS-896] - When Create Event in currently day, 'Reminder by mail' function is executed incorrectly And ' repeater reminder' function don't perform
+    * [CS-924] - Nothing happens when delete address book in French
+    * [CS-934] - No way to go to previous/next day when show events/tasks only in List View
+    * [CS-950] - Handle all exceptions when checking mail.
+    * [CS-968] - Save as Draft: Unknown error happens after search
+    * [CS-977] - Show duplicate tag name in message in special case
+    * [CS-982] - In FireFox / Forward message: Content of message don't display when open Attach file form
+    * [CS-1000] - Show size of message is "0B" in special case
+
+
+
+
+** Improvement
+    * [CS-23] - Need to some changes with Print function a contact
+    * [CS-29] - should add [Close] function which allow user close ''Contact Detail'' form
+    * [CS-31] - Improve Search function
+    * [CS-36] - Should be validate name of Address book when the name exists.
+    * [CS-92] - Need to some changes with view contact
+    * [CS-351] - Improve folder listing
+    * [CS-361] - Display working hours in day view
+    * [CS-371] - Don't show empty information in contact details
+    * [CS-379] - Use elastic layout
+    * [CS-384] - Add status icon for address book after shared and allow stop sharing address book
+    * [CS-415] - RSS Base URL should not be a user settings
+    * [CS-421] - Need to have alert message when user delete a public calendar which without edit permission
+    * [CS-429] - Do not display full To: field when it is too big
+    * [CS-433] - Improve select calendar list in add event/task popup
+    * [CS-443] - Show 'View' action only for supported attachment types
+    * [CS-456] - In Mail setting: Should default reply/forward message is original message included attachment
+    * [CS-482] - Only should show group name in share pane after select group
+    * [CS-497] - improve encoding support
+    * [CS-540] - Make the arrows button consistent when pressing to perform action
+    * [CS-554] - It is useful to shown CC information in case message includes CC emails
+    * [CS-585] - Create new mail form is shown invalidly in case viewing in desktop screen
+    * [CS-586] - Check email validation for To, CC, BCC field at Create new mail form
+    * [CS-587] - Address Book: Confirmation message should be shown before deleting contact
+    * [CS-589] - Change alert message for Add Event Group Name
+    * [CS-590] - Add Event form: Change typo for many data item in combo box for professional look
+    * [CS-596] - Add Edit & Delete function with share and public calendar when user have edit permission
+    * [CS-604] - Improve Task detail View
+    * [CS-610] - It is useful to make it possible to delete tasks/events at 1 time
+    * [CS-614] - Change Priority item with upper case for formal view
+    * [CS-620] - Fire Fox: Contact Detail View: Country/Region label is shown invalidly
+    * [CS-621] - Inconsistent Label for Contact thumb
+    * [CS-625] - Message tag icon is shown invalidly
+    * [CS-633] - View RSS link, image is shown invalidly
+    * [CS-640] - Add new tag popup menu is required
+    * [CS-641] - Imported file name is shown invalidly
+    * [CS-643] - No need to show many scroll bars at Add/Edit Address Book  form
+    * [CS-645] - Consider for Delete Function
+    * [CS-646] - Remove function for Public calendar has wrong effect on Calendar setting
+    * [CS-649] - Flag is required for Event/Task with High priority
+    * [CS-651] - Need to Improve Share Default contact (My contacts)
+    * [CS-656] - Improve Add new Event and Task Form in case attached file name is too long
+    * [CS-689] - Check mark for View As...
+    * [CS-698] - View Event Detail: "Show this event as"  is shown without data
+    * [CS-700] - It should be possible for User who has NOT edit permission can remove public calendar from his/her view
+    * [CS-703] - Attach file name is shown invalidly
+    * [CS-704] - First and Last page index do not work
+    * [CS-759] - provide i18n properties for list view
+    * [CS-790] - Remove text from logo
+    * [CS-816] - Calendar settings values are not translated
+    * [CS-885] - Change label from "Address from group" to "Address book". See file attach
+    * [CS-919] - Should not automatically share for sub groups when share an address book for parent group
+
+
+** Task
+    * [CS-226] - add confirm message when delete Event/Task by icon delete
+    * [CS-282] - In First time: show calendar is public when log-in by user who has right access
+    * [CS-298] - should show all calendars when add new event in calendar select box
+    * [CS-389] - Color pickup when add tag
+    * [CS-600] - Click on main check box, sub check boxes are not ticked
+    * [CS-613] - Location and Time Zone field of Add new Calendar should shown with default value set for Location and Time Zone in Calendar setting
+    * [CS-642] - Send Mail at Contact Application, Sent Mail should be saved at Sent Folder of Mail Application
+    * [CS-665] - Importing CSV file, Priority field must be loaded
+    * [CS-670] - New user of shared user group must be possible to view shared address book
+    * [CS-716] - Add missing titles to forms
+    * [CS-721] - Remove IM icons until chat is integrated
+    * [CS-723] - Collapse/expand
+    * [CS-725] - Remove Available tool-tip on contact list
+    * [CS-727] - Remove move label on toolbar
+    * [CS-728] - Remove 'beta' in application title picture
+    * [CS-737] - Remove 'beta' in application title picture
+    * [CS-738] - Remove 'beta' in application title picture
+    * [CS-741] - Need some improvements to distinguish Personal & group calendar
+    * [CS-742] - Error in displaying attached file list in special case
+    * [CS-758] - remove unimplemented menus
+    * [CS-781] - Hide collapse/expand where it is not implemented
+    * [CS-783] - i18n default folder names
+    * [CS-792] - Missing i18n for toolbar
+    * [CS-793] - i18n Message list
+    * [CS-795] - Missing i18n for message pane
+    * [CS-798] - Folder names in Message move are not i18ned
+    * [CS-799] - Tag Message form not fully i18ned
+    * [CS-802] - Account edit form i18n
+    * [CS-803] - Address Book is not fully translatable
+    * [CS-804] - Add/Edit contact i18n properties not applied
+    * [CS-805] - Remove reminder tab
+    * [CS-806] - i18n filter dialog
+    * [CS-807] - Add/edit filter not fully i18ned
+    * [CS-808] - Filter details not i18ned
+    * [CS-809] - Search tool-tips not i18ned
+    * [CS-810] - Advanced search not fully i18ned
+    * [CS-811] - Mail settings  form is not i18ned
+    * [CS-812] - Remove popup reminder panel until implemented
+    * [CS-814] - Select user dialog i18n resulting problems
+    * [CS-825] - i18n for "My contact" default address book
+    * [CS-828] - show date incorrectly in calendar reminder
+    * [CS-835] - i18n for mini-calendar, views
+    * [CS-844] - Cleanup i18n on add address book form
+    * [CS-856] - i18n for add new event in exo-mail portlet (reminder tab)
+    * [CS-921] - Add SetCurrentIdentityFilter
+    * [CS-946] - Homepage picture
+    * [CS-947] - i18n csportal
+
+
+
+
+
+{code}
+
+
+h2. Other resources and links
+* [Company site   |     http//www:exoplatform.com]
+* [Community JIRA |     http//jira:exoplatform.org]
+* [Community site |     http//www:exoplatform.org]
+* [Developers wiki|     http//wiki:exoplatform.org]
+
+
+
+
+
+
+
+

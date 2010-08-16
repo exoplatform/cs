@@ -1,0 +1,120 @@
+
+h1. eXo CS 1.1 RC1 Release Notes
+
+
+
+
+
+
+h2. Notable changes
+* Add more button when manage account on mail porlet
+* Change UI when import event to calendar
+* Smart check mail when attachment has error
+* Can add TAG for shared contacts
+* Show shared address book on mail porlet
+* Smarter send mail invitation (no need to create account)
+* Smarter send mail from contact porlet (no need to create account)
+
+h2. API Changes
+
+CS does not maintain a public API.
+
+
+h2. Dependencies Changes
+
+None.
+
+h2. How to upgrade
+
+We will provide a complete upgrade guide from 1.0 for 1.1 final release.
+
+h2. System Requirements
+* Web Browser: IE6, IE7, FF2, FF3 (recommanded), Safari.
+* JVM: version 1.5.0_xx only
+* Application Server : Tomcat, JBoss
+* Building Tools: Maven 2.0.6 and up
+
+h2. Other resources and links
+* [Community JIRA|http://jira.exoplatform.org/browse/CS]
+* [Subversion|http://svn.exoplatform.org/projects/cs/tags/1.1RC1]
+* [Download|http://download.forge.objectweb.org/exoplatform/]
+* [Live demo|http://cs.demo.exoplatform.org]
+* [Announces|http://blog.exoplatform.org/tags/cs/]
+* [Company site|http://www.exoplatform.com]
+
+
+
+
+
+
+
+
+h2. Detailed Changelog
+
+
+Complete list of issues fixed in eXo-CS Version 1.1 RC1. Find details [on JIRA|http://jira.exoplatform.org/secure/ReleaseNote.jspa?version=10527&styleName=Text&projectId=10060&Create=Create].
+{code:xml}
+ ** Bug
+    * [CS-1683] - In IE 6: Error Page iterator when open User workspace in special case.
+    * [CS-1740] - Don't view calendar when subcribe CalDav
+    * [CS-1892] - Add event from invitation mail: Can't select  email for Remider from Select mail form by click Replace button
+    * [CS-1899] - Address book field in Add/Edit contact of shared contact is empty but in search form, Value of This field is Shared contact
+    * [CS-1902] - total messages will be fetched in a checking mail time is incorrect in special case
+    * [CS-1906] - Message is fetched again in special case
+    * [CS-1908] - Occur wrong message when select contact which has many emails to send reminder
+    * [CS-1911] - Don't leave User from Task delegations field of Task when The User was deleted
+    * [CS-1946] - Don't show menu when right click event on Month view in special  case
+    * [CS-1950] - Type view on Action bar is not update when close search form
+    * [CS-1954] - wrong font when compose mail in Vietnamese
+    * [CS-1955] - More actions Menu is disappeared in special case
+    * [CS-1958] - Account wizzard step3 bad UI
+    * [CS-1987] - Don't show current time of Task when create a task from a specific calendar
+    * [CS-2010] - List view: double click to edit event, resort list
+    * [CS-2013] - Format of birthday field of contact should be the same at the both address book porlet and webmail porlet
+    * [CS-2021] - Don't update birthday of contact in special case
+    * [CS-2066] - week view/work week view : Still show Export Event option on menu when right-click on View panel
+    * [CS-2069] - Can't select email for reminder email by click Replace button when create event on webmail porlet
+    * [CS-2073] - Contact in moved automatically to other address book in special case
+    * [CS-2076] - UI error when open attach file form of event from web mail
+    * [CS-2077] - Lack week 53 (from date 28 to 30) of 2008 calendar when view by week and work week
+    * [CS-2080] - There's a gap between hours in the calendar and the grid from schedule tab
+    * [CS-2083] - Can't save event category in shared user when share event
+    * [CS-2086] - Occur fail when fetched mail for an account with pop3 in special case
+    * [CS-2090] - Character encoding problems in invitations
+    * [CS-2154] - Wong flag color when add event/task with priority
+    * [CS-2155] - month view: broken UI when change custom layout
+
+
+
+** Improvement
+    * [CS-695] - Drag and Drop move performance
+    * [CS-1904] - Do not show Export event menu for tasks
+    * [CS-1957] - Wrong display when input time to From To field in add/edit events/tasks
+    * [CS-1980] - Wrong message when do actions from actions bar without any account
+    * [CS-1993] - Accounts Button
+    * [CS-1994] - Change Icon of accounts menu
+    * [CS-2007] - Wrong confirmation message when removing a shared calendar
+    * [CS-2014] - Default event category at add event/task form is incorrect in special case
+    * [CS-2071] - Need show more detail message when send mail without save password
+    * [CS-2074] - Day view, scroll bar is not run when drag and drop event with multi-hour
+    * [CS-2075] - Week and work week view, don't add event from outside time space. See attachment
+    * [CS-2078] - Show Fw: Fwd: Fwd when forward a message in many times. See attachment
+    * [CS-2081] - english label in popup creating filter in mail portlet
+    * [CS-2082] - Wrong default address book when add contact from webmail
+    * [CS-2088] - Accounts Button show wizzard if no account
+
+
+
+
+
+{code}
+
+
+
+
+
+
+
+
+
+

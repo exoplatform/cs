@@ -1,0 +1,139 @@
+
+h1. eXo CS 2.0.0 Alpha01 Release Notes
+
+
+
+
+
+
+h2. Notable Changes
+
+
+* *General*
+** Cs integrated with Gatein Beta4
+** No WebOS in this version
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+h2. API Changes
+
+CS does not maintain a public API.
+
+h2. Dependencies Changes
+
+ * kernel 2.2.0-Beta05
+ * core 2.3.0-Beta05
+ * ws 2.1.0-Beta05
+ * jcr 1.12.0-Beta05
+ * Comet 2.1.0_gtn_Alpha01
+ * GateIn Beta4
+
+
+
+h2. System Requirements
+* Web Browser: IE6, IE7, FF2, FF3 (recommended), Safari.
+* JVM: version 1.6.0 or higher
+* Application Server : Tomcat, Jboss
+* openfire server version 3.4.5 for more information visit here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Chat+Configuration
+* Building Tools: Maven 2.2.1 and up
+
+h2. How Install
+
+Follow the Install Guide [visit here|http://wiki.exoplatform.org/xwiki/bin/view/CS/Install+Guide]
+
+
+h2. How to upgrade
+
+If you need to know how to update the version [visit here|http://wiki.exoplatform.org/xwiki/bin/view/CS/Upgrade+Instructions]
+
+
+
+
+h2. Other resources and links
+* [Community JIRA|http://jira.exoplatform.org/browse/CS]
+* [Subversion|http://svn.exoplatform.org/projects/cs/tags/2.0.0-Alpha01]
+* [Download|http://download.forge.objectweb.org/exoplatform/]
+* [Announces|http://blog.exoplatform.org/tags/cs/]
+* [Company site|http://www.exoplatform.com]
+
+
+
+
+
+
+h2. Detailed Changelog
+h3. Version 2.0.0 Alpha01
+{code}
+** Bug
+    * [CS-3473] - after report messages are spam, can't do these messages are not spam
+    * [CS-3560] - should disable chat room when  user offline
+    * [CS-3672] - Don't show warning message when user create new room without permission
+    * [CS-3674] - Calendar porlet loss action bar button when run on AIL project
+    * [CS-3676] - WebOS, IE7, Chat: Can not send file
+    * [CS-3686] - AddressBook Picker gets all addresses
+    * [CS-3688] - All-in-one :Mail:  Message pane: invalid display
+    * [CS-3719] - java script loading order error
+    * [CS-3749] - Event/Task is automatic returned to the created date/time after drag and drop
+    * [CS-3750] - Unknown error when generate RSS
+    * [CS-3753] - Error in Mail pop-up
+
+** Improvement
+    * [CS-3328] - Make categories translatable
+    * [CS-3528] - Chat Login : Get password from DB or LDAP
+
+
+** Task
+    * [CS-1991] - Remove hard coded references to /portal from web\csportal\src\main\webapp\templates\home.gtmpl
+    * [CS-1992] - Remove hard coded references to /portal from web\csportal\src\main\webapp\templates\sidebar.gtmpl
+    * [CS-2271] - Deprecate shared UI components
+    * [CS-2272] - Remove deprecated components
+    * [CS-2389] - Guard permission management in service
+    * [CS-2616] - Check compatible when kernel clean up configuration.xml
+    * [CS-2649] - Update Validator class from Portal to replace static Utils check function
+    * [CS-3173] - Cometd study and update for mail service
+    * [CS-3635] - Create source code subtree
+    * [CS-3636] - Split csportal between extension and demo
+    * [CS-3666] - Remove <testFailureIgnore>false</testFailureIgnore> from parent pom of CS projects
+    * [CS-3717] - upgrade to Gatein beta4
+    * [CS-3718] - Incorrect inheritance in pkg/pom.xml
+
+
+** Sub-task
+    * [CS-2454] - [DEV] occur some fails when check an email with big attachment
+    * [CS-3382] - DEV:  if add star for message can't resize Detail message pane when view in Vertical layout
+    * [CS-3456] - DEV: IMAP folders containing '/' not handled properly
+    * [CS-3752] - [DEV] Chat: failure to send file
+    * [CS-3760] - [DEV] should disable chat room when user offline
+    * [CS-3762] - [DEV]  Don't show warning message when user create new room without permission
+
+
+{code}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

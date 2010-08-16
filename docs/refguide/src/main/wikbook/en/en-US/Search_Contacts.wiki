@@ -1,0 +1,55 @@
+
+h1. Search Contacts
+
+
+
+You can easily and quickly find contacts that you want by doing the Quick Search or Advanced Search:
+
+h1. Quick Search
+
+You can quickly search all contacts with the specific keyword. All contacts that have a text matching with your search term will be displayed in the *Search Result* form.
+
+Following these steps to do a quick search:
+
+*Step 1\.* Enter a word in the *Search* field at the top of the Address Book list:
+
+
+!SimpleSearchForm.gif!
+
+
+*Step 2.* Click the *Search* icon
+!SearchIcon.gif!
+
+
+For example, quick search with the "Nguyen" term. All contacts matching with "Nguyen" term are listed on the *Search Result* dialog. The *Search Result* will be displayed:
+
+
+!SearchResultForm.gif!
+
+
+
+
+
+
+
+
+
+h1. Advanced Search
+
+Advanced Search allows you to make a search with multiple criteria:
+
+*Step 1\.* Click the *Advanced Search* icon
+!AdvanceSearchIcon.gif!
+ . The *Advanced Search* form appears:
+
+
+!AdvanceSearchForm.gif!
+
+
+*Step 2.* In this form, you can set one or few criteria(s) for your search.
+
+*Step 3.* Click the *Search* button to do search. All contacts matching with your criteria(s) will be listed in the *Search Result* dialog.
+
+
+
+

@@ -1,0 +1,50 @@
+
+h1. Join and Leave Rooms
+
+
+
+
+h1. Join a Room
+
+By joining a room, you can chat with other people in different rooms. Following these simple guides to join a room :
+
+*Step 1.* Click on the
+!RoomIcon1.3.4.png!
+ on the chat bar, then select *Join Room*:
+
+
+!JoinRoom1.3.4.png!
+
+
+The *Join Room* dialog will appear:
+
+
+!RoomSelect.png!
+
+
+*Step 2.* Select one room in this list by checking the radio button.
+
+*Step 3.* Click the *Refresh* button to clear the selected rooms or click the *Join Room* button to join and get a *Conversation* window to chat with users in this room or click the *Cancel* button to quit.
+
+The *Conversation* window corresponding to the selected room will display:
+
+
+!ChatWindow.png!
+
+
+
+
+
+
+h1. Leave a Room
+
+
+When you do not want to join a current room,
+
+Follow these steps to leave a room:
+
+Click the
+!LeaveButton.png!
+     button in the *Conversation* form of current room.
+
+Your *Conversation* window of this room will be disappeared and you can't receive any instance message from this room. In addition, your nick name also disappears from the nick name list of other member's *Conversation* window.

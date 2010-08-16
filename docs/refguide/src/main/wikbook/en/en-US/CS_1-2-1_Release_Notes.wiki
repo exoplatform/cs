@@ -1,0 +1,100 @@
+
+h1. eXo CS 1.2.1 Release Notes
+
+
+
+
+
+
+h2. Notable changes
+
+
+* Update fully to portal 2.5.3
+* Keep selected tab when refresh browser
+* Working compatible with webos 1.5
+* Remove temporary file apter upload
+* Smarter Rss reader with given encode from server
+* Support jboss server
+
+
+
+h2. API Changes
+
+CS does not maintain a public API.
+h2. Dependencies Changes
+ * portal 2.5.3
+ * webos  1.5
+ * kernel 2.0.7
+ * core 2.1.5
+ * ws 1.3.3
+ * jcr 1.10.3
+ * pc 2.0.6
+
+
+
+h2. How to upgrade
+ If you need to know how to update the version [visit here|http://wiki.exoplatform.org/xwiki/bin/view/CS/Upgrade+Instructions]
+
+
+
+
+h2. System Requirements
+* Web Browser: IE6, IE7, FF2, FF3 (recommended), Safari.
+* JVM: version 1.5.0_xx only
+* Application Server : Tomcat, Jboss
+* Building Tools: Maven 2.0.6 and up
+
+
+h2. Other resources and links
+* [Community JIRA|http://jira.exoplatform.org/browse/CS]
+* [Subversion|http://svn.exoplatform.org/projects/cs/tags/1.2.1]
+* [Download|http://download.forge.objectweb.org/exoplatform/]
+* [Live demo|http://cs.demo.exoplatform.org]
+* [Announces|http://blog.exoplatform.org/tags/cs/]
+* [Company site|http://www.exoplatform.com]
+
+
+
+
+
+
+
+
+
+
+
+h2. Detailed Changelog cs 1.2.1
+
+{code:xml}
+ ** Bug
+    * [CS-2477] - Safari: Wrong UI of Manage account Icon
+    * [CS-2479] - Priority Icon and Outside Icon overlay together
+    * [CS-2480] - Safari: UI error at Export contacts form
+    * [CS-2531] - In RSS content plugin, charset used to read xml rss is always utf-8
+    * [CS-2667] - Error with page iterator in  some forms of CS
+** Task
+    * [CS-2426] - Upgrade to portal 2.5.3
+    * [CS-2624] - Check new parent pom 1.1.1 to be used in trunks and new releases
+    * [CS-2642] - Back port ui bugs when update portal 2.5.3 from 1.3 to 1.2.x
+    * [CS-2697] - rename source folder to resource folder for deploy context
+{code}
+
+
+
+
+
+h2. Other resources and links
+* [Company site   |     http//www:exoplatform.com]
+* [Community JIRA |     http//jira:exoplatform.org]
+* [Community site |     http//www:exoplatform.org]
+* [Developers wiki|     http//wiki:exoplatform.org]
+
+
+
+
+
+
+
+
+
+

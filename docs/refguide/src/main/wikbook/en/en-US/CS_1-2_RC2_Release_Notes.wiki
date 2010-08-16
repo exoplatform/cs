@@ -1,0 +1,148 @@
+
+{note}
+1.2 is in progress, this page is subject to changes...
+{note}
+
+h1. eXo CS 1.2 RC2 Release Notes
+
+
+
+
+
+
+h2. Notable changes
+* Run on portal 2.5
+
+
+
+h2. API Changes
+
+CS does not maintain a public API.
+
+
+
+
+
+h2. Dependencies Changes
+
+Portal 2.5
+
+h2. How to upgrade
+
+TODO
+
+h2. System Requirements
+* Web Browser: IE6, IE7, FF2, FF3 (recommanded), Safari.
+* JVM: version 1.5.0_xx only
+* Application Server : Tomcat, JBoss
+* Building Tools: Maven 2.0.6 and up
+
+h2. Other resources and links
+* [Community JIRA|http://jira.exoplatform.org/browse/CS]
+* [Subversion|http://svn.exoplatform.org/projects/cs/tags/1.2RC1]
+* [Download|http://download.forge.objectweb.org/exoplatform/]
+* [Live demo|http://cs.demo.exoplatform.org]
+* [Announces|http://blog.exoplatform.org/tags/cs/]
+* [Company site|http://www.exoplatform.com]
+
+
+
+
+
+
+
+
+
+h2. Detailed Changelog
+
+
+Complete list of issues fixed. Find details [on http//jira:exoplatform.org-secure-ReleaseNote.jspa?version=10360&styleName=Html&projectId=10060&Create=Create].
+{code:xml}
+
+Release Notes - exo-cs - Version cs-1.2RC2
+
+** Bug
+    * [CS-829] - Lower memory usage on Fetch mail
+    * [CS-1686] - Unclosed SessionProviders
+    * [CS-2162] - Unknown error when Move all to trash in special case
+    * [CS-2332] - IE7: Unknown error when delete account which is checking mail
+    * [CS-2333] - still check mail when user logout , and when login again to check mail , occur fail
+    * [CS-2386] - Can't print mail from " Action on this message" at Preview pane
+    * [CS-2391] - Adding user function is not worked properly and occur wrong mesage when open seclet user form on IE7
+    * [CS-2393] - Message list is not updated in special case
+    * [CS-2399] - after sending a message , can't know who is at BCC field
+    * [CS-2401] - Can open Add/edit Event/task form by double click on event/task
+    * [CS-2403] - lost the path of uploaded file when click on Import to new calendar Icon or  import to the existing calendar Icon at the Import calendar form
+    * [CS-2404] - IE7: Occur Wrong message when Perform to open Select Users Form
+    * [CS-2407] - UI error when have many address mail in participans to invite field  when view invitation mail
+    * [CS-2409] - Reminder mail is not sent when come reminder time of event
+    * [CS-2412] - After closing print form, Can't drag &drop contacts if don't refresh browser
+    * [CS-2413] - My contact is not shown in special case
+    * [CS-2415] - [Contact] Show UNKNOWN ERROR after click on my contact
+    * [CS-2416] - occur some fails when check an email with big attachment
+    * [CS-2417] - occur wrong message when enter invalid User into Participants to invite field
+
+
+** Doc
+    * [CS-2400] - Apply wiki homepage guidelines
+    * [CS-2406] - Add wiki about the org.exoplatform.mail.service.AuthenticationLogoutListener plugin
+    * [CS-2423] - Integration HOW TO
+    * [CS-2424] - Install Guide
+    * [CS-2425] - Review existing technical docs
+
+
+** Improvement
+    * [CS-293] - Do not display image in Preview an Event/Task when click ''Download'' button
+    * [CS-412] - month view use drag and drop to reschedule an event
+    * [CS-488] - adding a new event on another one
+    * [CS-521] - Warning on empty subject email
+    * [CS-668] - Improve send mail performance in case mail containing many attachments
+    * [CS-762] - Improve Reminders tab
+    * [CS-784] - Conversation column in List View
+    * [CS-957] - Address book: Provide more space for email address field
+    * [CS-1161] - Use right click for actions on calendars
+    * [CS-1163] - Hide check mail bar after stop
+    * [CS-1267] - Show All addressbooks option
+    * [CS-1312] - Icon for events taking place out of office
+    * [CS-1385] - Calendar is checked again after reload browser although unchecked
+    * [CS-1421] - Tooltips on minicalendar
+    * [CS-1515] - Has a space at bottom of porlet in special case. See file attach
+    * [CS-1800] - Reuse user selector component in portal
+    * [CS-2150] - Can't Send mail in special case
+    * [CS-2302] - refresh ui when account modifyed or removed
+    * [CS-2317] - Optimize queries by using QueryImpl.execute(offset,limit)
+
+** New Feature
+    * [CS-1784] - export selected event(s) or task(s)  to icalendar
+    * [CS-2422] - Finalize the Upgrade tool
+
+** Task
+    * [CS-782] - Implement collapse/expand
+    * [CS-1137] - refactoring : Remove SessionProvider from service interfaces
+    * [CS-1138] - Refactoring : JCRDataStorage does not implement DataStorage
+    * [CS-1139] - Refactoring : lower jcr api down to JCRDataStorage
+    * [CS-1487] - Refactor CheckMailJob management
+    * [CS-1687] - Upgrade dependencies and build to target portal 2.5
+    * [CS-1741] - refactor pathes code
+    * [CS-1975] - Configure JCR CAS storage
+    * [CS-2072] - update mail dependencies package to new released version java mail 1.4.1
+    * [CS-2291] - Refactoring : relevant exceptions in service API
+    * [CS-2315] - Review and check English typos of eXo Address Book and eXo Mail on wiki
+    * [CS-2388] - Refactor API
+    * [CS-2405] - Remove duplicate class SelectOptionGroup, SelectItem,SelectOption (on Contact porlet) and use it form portal
+    * [CS-2418] - Backport menu from 1.1
+    * [CS-2443] - Make CalendarService compliant vith previous version
+
+{code}
+
+
+
+
+
+
+
+
+
+
+
+
