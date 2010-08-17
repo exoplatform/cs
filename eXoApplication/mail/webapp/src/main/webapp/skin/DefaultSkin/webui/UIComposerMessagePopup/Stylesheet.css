@@ -172,7 +172,7 @@
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout input {
-	width: 99.5%;
+	width: 85.8%;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout select {
@@ -185,7 +185,8 @@
 
 
 .UIMessageCompose .UIForm .HorizontalLayout textarea {
-	width: 99.5%; height: 40px; 
+	width: 85.8%; 
+	height: 40px; 
 	font-family: tahoma;
 	overflow:auto;
 }
