@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-    <parent>
+  <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>cs</artifactId>
     <version>2.1.0-SNAPSHOT</version>
@@ -11,7 +11,7 @@
   <artifactId>exo.cs.docs</artifactId>
   <packaging>pom</packaging>
 
-  <name>CS documentation</name>
+  <name>eXo Collaboration Documentation</name>
 
   <properties>
     <wikbook.source>${project.build.directory}/wikbook-src</wikbook.source>
@@ -24,4 +24,3 @@
     <module>refguide</module>
   </modules>
 </project>
-
