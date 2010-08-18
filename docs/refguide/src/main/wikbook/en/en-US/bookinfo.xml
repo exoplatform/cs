@@ -1,5 +1,5 @@
 <bookinfo>
-  <title>eXo Collaboration</title>
+  <title>eXo Collaboration Reference Guide</title>
   <subtitle>${artifactId} - ${version}</subtitle>
   <edition>${version}</edition>
   <pubsnumber>1</pubsnumber>
