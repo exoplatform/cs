@@ -95,7 +95,10 @@
 	background-position: left; /* orientation=rt */
 	margin-top: 4px;
 }
-	 
+
+
+
+
 .UIMessageCompose .MailListActionsbar .ControlButton .AttachServerIcon {
 	background: url('icons/24x24/AttachServerIcon.png') no-repeat left top; /* orientation=lt */
 	background: url('icons/24x24/AttachServerIcon.png') no-repeat right top; /* orientation=rt */
@@ -106,7 +109,7 @@
 	background: url('icons/24x24/AttachLocalIcon.png') no-repeat right top; /* orientation=rt */
 }
 
- /*===========================Compose Message Address==================================*/
+/*===========================Compose Message Address==================================*/
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageCompose .MessageAddress {
 	background: #f3f3f3;
@@ -169,7 +172,7 @@
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout input {
-	width: 99.5%;
+	width: 85.8%;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout select {
@@ -182,7 +185,8 @@
 
 
 .UIMessageCompose .UIForm .HorizontalLayout textarea {
-	width: 99.5%; height: 40px; 
+	width: 85.8%; 
+	height: 40px; 
 	font-family: tahoma;
 	overflow:auto;
 }
@@ -309,3 +313,14 @@
 	width:99.5%; height: 252px; text-align: left ;
 }
 
+
+/*========================= Add style for Platform by trung.nguyen ============================*/
+
+
+.UIPopupActionComposeContainer .UIComposeForm .UIMessageCompose .UIToolbar .HeaderToolbar{
+	height: auto;
+}
+
+.UIPopupActionComposeContainer .UIComposeForm .UIMessageCompose .HeaderToolbar .CenterBar{
+	height: auto;
+}
