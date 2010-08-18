@@ -1,6 +1,60 @@
 eXoMessageGadget.prototype.onLoadHander = function(){
-	eXoMessageGadget.getData();
+	  eXoMessageGadget.showAccounts();
+	  eXoMessageGadget.getData();
 }
+
+eXoMessageGadget.prototype.showAccounts = function(){
+	var subscribeurl = "/portal/rest/private/cs/mail/getAccounts" ;
+	subscribeurl += "?rnd=" + (new Date()).getTime();
+	this.ajaxAsyncGetRequest(subscribeurl,eXoMessageGadget.renderAccounts);
+	if(typeof(requestInterval) == "undefined") requestInterval = setInterval(eXoMessageGadget.getData,300000);
+}
+
+eXoMessageGadget.prototype.renderAccounts = function(data){
+  var frmSetting = document.getElementById("SettingMessage");
+  var noAccount = document.getElementById("noAccount");
+  var content = document.getElementById("content");
+  if (data) {
+    frmSetting.style.display="block";
+    content.style.display="block";
+    noAccount.style.display="none";
+  	var html = '';
+  	for(var i=0,len = data.info.length; i < len;i++){
+  		html += '<option value="' + data.info[i].id + '">' + data.info[i].userDisplayName + '</option>';
+  	}
+  	frmSetting["account"].innerHTML = html;
+  	eXoMessageGadget.getFoldersTags();
+  } else {
+    noAccount.style.display="block";
+    frmSetting.style.display="none";
+    content.style.display="none";
+  }  
+}
+
+eXoMessageGadget.prototype.getFoldersTags = function(){
+  var frmSetting = document.getElementById("SettingMessage");
+  var accountId = frmSetting["account"].options[frmSetting["account"].selectedIndex].value;
+  var subscribeurl = "/portal/rest/private/cs/mail/getFoldersTags/" +  accountId;
+	subscribeurl += "?rnd=" + (new Date()).getTime();
+	this.ajaxAsyncGetRequest(subscribeurl,eXoMessageGadget.renderFoldersTags);
+	if(typeof(requestInterval) == "undefined") requestInterval = setInterval(eXoMessageGadget.getData,300000);
+}
+
+eXoMessageGadget.prototype.renderFoldersTags = function(data){
+  var frmSetting = document.getElementById("SettingMessage");
+	var html = '<option value=""> -- </option>';
+	for(var i=0,len = data.folders.length; i < len;i++){
+		html += '<option value="' + data.folders[i].id + '">' + data.folders[i].name + '</option>';
+	}
+	frmSetting["folder"].innerHTML = html;
+
+	html = '<option value=""> -- </option>';
+	for(var i=0,len = data.tags.length; i < len;i++){
+		html += '<option value="' + data.tags[i].id + '">' + data.tags[i].name + '</option>';
+	}
+	frmSetting["tag"].innerHTML = html;
+}
+
 eXoMessageGadget.prototype.getData = function(){					 
 	var url = eXoMessageGadget.createRequestUrl();
 	this.ajaxAsyncGetRequest(url,eXoMessageGadget.render);
@@ -17,31 +71,12 @@ eXoMessageGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
 		}
 	}
 }
-eXoMessageGadget.prototype.write2Setting = function(data){
-	var frmSetting = document.getElementById("SettingMessage");
-	var html = '';
-	for(var i=0,len = data.accounts.length; i < len;i++){
-		html += '<option value="' + data.accounts[i].id + '">' + data.accounts[i].userDisplayName + '</option>';
-	}
-	frmSetting["account"].innerHTML = html;
 
-	html = '';
-	for(var i=0,len = data.folders.length; i < len;i++){
-		html += '<option value="' + data.folders[i].id + '">' + data.folders[i].name + '</option>';
-	}
-  html +=  '<option value=""> </option>';
-	frmSetting["folder"].innerHTML = html;
-
-  html = '<option value=""> </option>';
-	for(var i=0,len = data.tags.length; i < len;i++){
-		html += '<option value="' + data.tags[i].id + '">' + data.tags[i].name + '</option>';
-	}
-	frmSetting["tag"].innerHTML = html;
-}
 eXoMessageGadget.prototype.render =  function(data){
 	data = data.info;
 	if(!data || data.length == 0){
 		eXoMessageGadget.notify();
+		eXoMessageGadget.showHideSetting(false);
 		return;
 	}
   var cont = document.getElementById("ItemContainer");	
@@ -55,6 +90,7 @@ eXoMessageGadget.prototype.render =  function(data){
   }
   html += '';
   cont.innerHTML = html;
+  eXoMessageGadget.showHideSetting(false);
 }
 
 eXoMessageGadget.prototype.notify = function(){
@@ -95,12 +131,24 @@ eXoMessageGadget.prototype.getPrefs = function(){
 eXoMessageGadget.prototype.saveSetting = function(){
 	var prefs = new gadgets.Prefs();
 	var frmSetting = document.getElementById("SettingMessage");
-  prefs.set("limit",frmSetting["limit"].value);
+	var limit = frmSetting["limit"].value;
+	var folder = frmSetting["folder"].options[frmSetting["folder"].selectedIndex].value;
+	var tag = frmSetting["tag"].options[frmSetting["tag"].selectedIndex].value;
+	if (isNaN(parseInt(limit)) == true) {
+	  alert(prefs.getMsg("numberRequired"));
+	  return false;
+	}
+	if ((folder.length == 0) && (tag.length == 0)) {
+	  alert(prefs.getMsg("selectfolderTagRequired"));
+	  return false;
+	}
+  prefs.set("limit",limit);
   prefs.set("account",frmSetting["account"].options[frmSetting["account"].selectedIndex].value);
-  prefs.set("folder",frmSetting["folder"].options[frmSetting["folder"].selectedIndex].value);
-  prefs.set("tag",frmSetting["tag"].options[frmSetting["tag"].selectedIndex].value);
+  prefs.set("folder",folder);
+  prefs.set("tag", tag); 
+	frmSetting.style.display = "none";
   //eXoMessageGadget.getData();
-  eXoMessageGadget.showHideSetting(false);
+  //eXoMessageGadget.showHideSetting(false);
 	return false;
 }
 
@@ -108,8 +156,6 @@ eXoMessageGadget.prototype.showHideSetting = function(isShow){
 	var frmSetting = document.getElementById("SettingMessage");
 	var display = "";
 	if(isShow) {
-        var url = eXoMessageGadget.createRequestUrl();
-	this.ajaxAsyncGetRequest(url,eXoMessageGadget.write2Setting);
 		display = "block";
 	}	else display = "none";
 	frmSetting.style.display = display;

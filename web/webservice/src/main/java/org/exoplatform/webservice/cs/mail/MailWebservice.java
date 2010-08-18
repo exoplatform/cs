@@ -20,6 +20,7 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -29,7 +30,9 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.webservice.cs.bean.AccountsData;
 import org.exoplatform.webservice.cs.bean.ContactData;
+import org.exoplatform.webservice.cs.bean.FoldersTagsData;
 import org.exoplatform.webservice.cs.bean.MessageData;
 
 /**
@@ -278,10 +281,6 @@ public class MailWebservice implements ResourceContainer {
     MailService mailService = (MailService) ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(MailService.class);
     String username = ConversationState.getCurrent().getIdentity().getUserId();
-    if (Utils.isEmptyField(accountId))
-      accountId = mailService.getAccounts(username).get(0).getId();
-    if (Utils.isEmptyField(folderId) && Utils.isEmptyField(tagId))
-      folderId = Utils.generateFID(accountId, Utils.FD_INBOX, false);
     MessageFilter filter = new MessageFilter("Folder");
     filter.setAccountId(accountId);
     if (!Utils.isEmptyField(folderId)) filter.setFolder(new String[] { folderId });
@@ -289,14 +288,55 @@ public class MailWebservice implements ResourceContainer {
     filter.setViewQuery("@" + Utils.EXO_ISUNREAD + "='true'");
     List<Message> messList = mailService.getMessages(username, filter);
     MessageData data = new MessageData();
-    data.setTags(mailService.getTags(username, accountId));
-    data.setAccounts(mailService.getAccounts(username));
-    data.setFolders(mailService.getFolders(username, accountId));
     try {
-      data.setInfo(messList.subList(0, limit));      
+      data.setInfo(messList.subList(0, limit));
     } catch (IndexOutOfBoundsException e) {
       data.setInfo(messList.subList(0, messList.size()));
     }
+    return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+  }
+  
+  /**
+   * list accounts of current user , the security level will take from
+   * ConversationState
+   * @return application/json content type
+   */
+  @GET
+  @Path("/getAccounts/")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getAccounts() throws Exception {
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    MailService mailService = (MailService) ExoContainerContext
+      .getCurrentContainer().getComponentInstanceOfType(MailService.class);
+    String username = ConversationState.getCurrent().getIdentity().getUserId();
+    List<Account> accounts = mailService.getAccounts(username);
+    if (accounts.size() == 0) return Response.noContent().build();
+    AccountsData data = new AccountsData();
+    data.setInfo(accounts);
+    return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+  }
+  
+  /**
+   * list folders and tags of current accounts, the security level will take from
+   * ConversationState
+   * @param accountId : the text to compare with data base
+   * @return application/json content type
+   */
+  @GET
+  @Path("/getFoldersTags/{accountId}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response getFoldersTags(@PathParam("accountId") String accountId) throws Exception {
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    MailService mailService = (MailService) ExoContainerContext
+      .getCurrentContainer().getComponentInstanceOfType(MailService.class);
+    String username = ConversationState.getCurrent().getIdentity().getUserId();
+    FoldersTagsData data = new FoldersTagsData();
+    data.setFolders(mailService.getFolders(username, accountId));
+    data.setTags(mailService.getTags(username, accountId));
     return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
   

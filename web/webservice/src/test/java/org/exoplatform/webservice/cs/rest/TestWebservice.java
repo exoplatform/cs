@@ -24,6 +24,8 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.RuntimeDelegate;
 
+import junit.framework.AssertionFailedError;
+
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -240,19 +242,42 @@ public class TestWebservice extends AbstractResourceTest {
 
 	}
 	
-  public void testUnreadMail() {
-    try {
-      MultivaluedMap<String, String> h = new MultivaluedMapImpl();
-      String username = "root";
-      h.putSingle("username", username);
-      String mailURI = "/private/cs/mail/unreadMail/ / / /5";
-      ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
-      ContainerResponse response = service("GET", mailURI, baseURI, h, null, writer);
-      assertNotNull(response);
-      assertNotSame(Response.Status.NOT_FOUND, response.getStatus());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+  public void testUnreadMail() throws Exception {
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+    String username = "root";
+    h.putSingle("username", username);
+    String mailURI = "/private/cs/mail/unreadMail/accId/folderId/tagId/5";
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    ContainerResponse response = service("GET", mailURI, baseURI, h, null, writer);
+    assertNotNull(response);
+    if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode())
+      throw new AssertionFailedError("service not found");
+    //assertNotSame(Response.Status.NOT_FOUND.getStatusCode() + "", response.getStatus() + "");
   }
   
+  public void testgetAccounts() throws Exception {
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+    String username = "root";
+    h.putSingle("username", username);
+    String mailURI = "/private/cs/mail/getAccounts/";
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    ContainerResponse response = service("GET", mailURI, baseURI, h, null, writer);
+    assertNotNull(response);
+    if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode())
+      throw new AssertionFailedError("service not found");
+    //assertNotSame(Response.Status.NOT_FOUND.getStatusCode() + "", response.getStatus() + "");
+  }
+  
+  public void testgetFoldersTags() throws Exception {
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+    String username = "root";
+    h.putSingle("username", username);
+    String mailURI = "/private/cs/mail/getFoldersTags/accId";
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    ContainerResponse response = service("GET", mailURI, baseURI, h, null, writer);
+    assertNotNull(response);
+    if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode())
+      throw new AssertionFailedError("service not found");
+    //assertNotSame(Response.Status.NOT_FOUND.getStatusCode() + "", response.getStatus() + "");
+  }
 }

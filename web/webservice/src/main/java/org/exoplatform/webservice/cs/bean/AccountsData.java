@@ -18,7 +18,7 @@ package org.exoplatform.webservice.cs.bean;
 
 import java.util.Collection;
 
-import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.Account;
 
 /**
  * Created by The eXo Platform SAS
@@ -26,8 +26,8 @@ import org.exoplatform.mail.service.Message;
  *          exo@exoplatform.com
  * Jan 14, 2010  
  */
-public class MessageData {
-  private Collection<Message> info ;
-  public Collection<Message> getInfo() { return info; }
-  public void setInfo(Collection<Message> info) { this.info = info; }
+public class AccountsData {
+  private Collection<Account> info ;
+  public Collection<Account> getInfo() { return info; }
+  public void setInfo(Collection<Account> info) { this.info = info; } 
 }

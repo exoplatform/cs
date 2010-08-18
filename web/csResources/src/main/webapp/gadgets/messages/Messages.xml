@@ -13,25 +13,25 @@
 		<Require feature="setprefs"/>
 		<Require feature="dynamic-height"/>
 	</ModulePrefs>
-	<UserPref name="url" display_name="__MSG_baseurl__" datatype="string" value="/mail" required="true"/>
-	<UserPref name="subscribeurl" display_name="__MSG_subscribeurl__" datatype="string" value="/portal/rest/private/cs/mail/unreadMail" required="true"/>
-	<UserPref name="limit" display_name="__MSG_limit__" default_value="5" datatype="string"/>
-	<UserPref name="account" display_name="__MSG_account__" default_value="" datatype="string"/>
-	<UserPref name="folder" display_name="__MSG_folder__" default_value="" datatype="string"/>
-	<UserPref name="tag" display_name="__MSG_tag__" default_value="" datatype="string"/>
+	<UserPref name="url" display_name="__MSG_baseurl__" datatype="hidden" value="/mail" required="true"/>
+	<UserPref name="subscribeurl" display_name="__MSG_subscribeurl__" datatype="hidden" value="/portal/rest/private/cs/mail/unreadMail" required="true"/>
+	<UserPref name="limit" display_name="__MSG_limit__" default_value="5" datatype="hidden"/>
+	<UserPref name="account" display_name="__MSG_account__" default_value="" datatype="hidden"/>
+	<UserPref name="folder" display_name="__MSG_folder__" default_value="" datatype="hidden"/>
+	<UserPref name="tag" display_name="__MSG_tag__" default_value="" datatype="hidden"/>
   <Content type="html">
     <![CDATA[
 			<link rel="stylesheet" href="skin/messages.css" type="text/css"/>
 
-			<script type="text/javascript"src="skin/messages.js"></script>
-
-			<form id="SettingMessage" onSubmit="return eXoMessageGadget.saveSetting();" action="#" style="display:none;">
+<script type="text/javascript" src="skin/messages.js"> </script>
+			<div id="noAccount" style="display:none;color:red;">__MSG_noAccount__</div>
+			<form id="SettingMessage" onSubmit="return eXoMessageGadget.saveSetting();" action="#" style="display:block;">
 				<table>
 					<tr>
 						<td>__MSG_account__</td>
 						<td>
-							<select type="text" name="account">
-								<option value="0">Default</option>
+							<select type="text" name="account" onChange="eXoMessageGadget.getFoldersTags();">
+			
 							</select>
 						</td>
 					</tr>
@@ -39,7 +39,7 @@
 						<td>__MSG_folder__</td>
 						<td>
 							<select type="text" name="folder">
-								<option value="0">Inbox</option>
+								
 							</select>
 						</td>
 					</tr>
@@ -47,7 +47,7 @@
 						<td>__MSG_tag__</td>
 						<td>
 							<select type="text" name="tag">
-								<option value="0">Default</option>
+							
 							</select>
 						</td>
 					</tr>
@@ -63,15 +63,16 @@
 					</tr>
 				</table>
 			</form>
-      <div class="UIGadgetThemes UIYellowThemes">
+      <div id="content" class="UIGadgetThemes UIYellowThemes" style="display:block;">
 				<div class="TitGad ClearFix">
 					<div class="ContTit">__MSG_title__</div>
 				</div>
 				<div class="GadCont UnreadMessages" id="ItemContainer"></div>
-			</div>
-			<div class="SettingButton" style="padding: 10px 15px;">
+<div class="SettingButton" style="padding: 10px 15px;">
 				<a href="javascript:eXoMessageGadget.showHideSetting(true);">__MSG_setting__</a>
 			<div>
+			</div>
+			
     ]]>
   </Content>
 </Module>

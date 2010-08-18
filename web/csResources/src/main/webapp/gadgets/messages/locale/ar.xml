@@ -56,4 +56,13 @@
 	<msg name="setting">
   	Setting
   </msg>
+	<msg name="numberRequired">
+  	Number required in limit field.
+  </msg>
+	<msg name="selectfolderTagRequired">
+  	Select folder or tag is required.
+  </msg>
+	<msg name="noAccount">
+  	no account found , create one in mail application
+  </msg>
 </messagebundle>
