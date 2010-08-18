@@ -975,13 +975,16 @@ GUIMan.prototype.drawEventByDay = function(eventObj, startTime, endTime, dayInfo
   }
   var topPos = dayInfo.eventTop ;
   var leftPos = dayInfo.left ;
-  endTime = new Date(parseInt(endTime));
+  /*
+	endTime = new Date(parseInt(endTime));
   startTime = new Date(parseInt(startTime));
-  var delta = endTime.getDay() - startTime.getDay();
-  if (startTime.getDay() != endTime.getDay()) {
+  var delta = endTime.getDay() - startTime.getDay(); 
+  */
+	var delta = eXo.calendar.UICalendarPortlet.dateDiff(startTime,endTime);
+  if (delta != 0) {
     delta ++ ;
   }
-  delta = (delta < 1) ? 1 : delta;
+  if(delta <= 0) delta = 1;
   var eventLen = Math.round(delta) * (dayInfo.width) + (delta - 1);
 	//eventLen = ((delta > 5) && eXo.core.Browser.isIE6())?(eventLen - 2): eventLen; 
 	eventNode.style.top = topPos + 'px';
