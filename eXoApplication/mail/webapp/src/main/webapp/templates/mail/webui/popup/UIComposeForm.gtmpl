@@ -52,8 +52,8 @@
 									<div class="SeparatorLine"><span></span></div>
 									
 									<a href="<%=uicomponent.event("Attachment")%>" class="ControlButton">
-										<div class="IconHolder AttachFileIcon">
-											<div class="Label">Attach</div>
+										<div class="IconHolder AttachLocalIcon">
+											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
 										</div>
 									</a>
 									<div class="SeparatorLine"><span></span></div>
@@ -62,15 +62,8 @@
 										<div class="IconHolder AttachServerIcon">
 											<div class="Label">Attach a server file</div>
 										</div>
-									</a>
-
-									<div class="SeparatorLine"><span></span></div>
+									</a>			
 									
-									<a href="#" class="ControlButton">
-										<div class="IconHolder AttachLocalIcon">
-											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
-										</div>
-									</a>
 
 									<% if (org.exoplatform.mail.MailUtils.hasECMS()) { %>
 									<div class="SeparatorLine"><span></span></div>
