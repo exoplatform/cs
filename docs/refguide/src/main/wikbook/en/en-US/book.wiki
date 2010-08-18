@@ -1,7 +1,4 @@
 
-h1. Installation
-{include:document="Install_Guide.wiki"}
-
 h1. Configuration
 {include:document="CS_General_Configuration.wiki"}
 
@@ -12,6 +9,7 @@ h2. Calendar
 
 h2. AdressBook
 {include:document="Default_Address_Book_Configuration.wiki"}
+{include:document="ContactService_Configuration.wiki"}
 
 h2. Mail
 {include:document="Default_Mail_Account_Configuration.wiki"}
@@ -24,14 +22,6 @@ h2. Chat
 h2. Content
 {include:document="RSS_Configuration.wiki"}
 
-h1. Integration
-{include:document="CS_Integration_into_an_Existing_Portal.wiki"}
-
-h1. Migration
-{include:document="CS_Migration_from_1-0_to_1-2.wiki"}
-{include:document="CS_Migration_from_1-2_to_1-3.wiki"}
-{include:document="CS_Migration_from_1-3_to_2-0.wiki"}
-{include:document="Data_migration_plugin.wiki"}
 
 h1. Development
 
@@ -61,18 +51,5 @@ h2. Services Inventory
 See ProductsTechOverview:Components_Registry#CS
 
 
-h1. Dependencies
-{include:document="Dependencies.wiki"}
 
-
-h1. Trash
-
-Documentation imported from wiki.exoplatform.org not referenced in original CS Manual.
-
-{include:document="Integration_HOW_TO.wiki"}
-{include:document="Add_Event.wiki"}
-{include:document="CS_Configuration_Migration_from_1-0_to_1-2.wiki"}
-{include:document="CS_Videos.wiki"}
-{include:document="Basic_User_Guide.wiki"}
-{include:document="ContactService_Configuration.wiki"}
 
