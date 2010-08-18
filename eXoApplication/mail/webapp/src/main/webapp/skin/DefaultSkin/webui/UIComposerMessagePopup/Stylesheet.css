@@ -310,6 +310,20 @@
 	padding-right:14px;
 }
 .UIMessageCompose .MessageContent .PlainTextMessage .textarea {
-	width:99.5%; height: 252px; text-align: left ;
+	width:99.5%; 
+	height: 252px; 
+	text-align: left ;
+}
+
+
+/*========================= Add style for Platform3 by trung.nguyen ============================*/
+
+
+.UIPopupActionComposeContainer .UIComposeForm .UIMessageCompose .UIToolbar .HeaderToolbar{
+	height: auto;
+}
+
+.UIPopupActionComposeContainer .UIComposeForm .UIMessageCompose .HeaderToolbar .CenterBar{
+	height: auto;
 }
 
