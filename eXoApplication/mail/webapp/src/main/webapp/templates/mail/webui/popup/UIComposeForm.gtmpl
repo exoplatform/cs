@@ -3,10 +3,6 @@
   import org.exoplatform.contact.service.Contact;
   
   def rcontext = _ctx.getRequestContext() ;
-  //rcontext.getJavascriptManager().importJavascript('eXo.core.Keyboard');
-  //rcontext.getJavascriptManager().importJavascript('eXo.core.CoreEditor');
-  //rcontext.getJavascriptManager().importJavascript('eXo.core.DefaultKeyboardListerner');
-  //rcontext.getJavascriptManager().importJavascript('eXo.core.KeyboardListenerAPI');
   rcontext.getJavascriptManager().importJavascript('eXo.mail.AutoComplete','/mail/javascript/');
   rcontext.getJavascriptManager().addJavascript('eXo.mail.AutoComplete.init(["to", "cc", "bcc"]);eXo.mail.UIMailPortlet.fixFCKforSafari();');
 %>
@@ -52,15 +48,16 @@
 									<div class="SeparatorLine"><span></span></div>
 									
 									<a href="<%=uicomponent.event("Attachment")%>" class="ControlButton">
-										<div class="IconHolder AttachFileIcon">
+										<div class="IconHolder AttachLocalIcon">
 											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
 										</div>
 									</a>
 									
-									<div class="SeparatorLine"><span></span></div>
+									
 									<% if (org.exoplatform.mail.MailUtils.hasECMS()) { %>
+									<div class="SeparatorLine"><span></span></div>
 									<a href="<%=uicomponent.event("CallDMSSelector")%>" class="ControlButton">
-										<div class="IconHolder ">
+										<div class="IconHolder AttachServerIcon">
 											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-from-dms") %></div>
 										</div>
 									</a>

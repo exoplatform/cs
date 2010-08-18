@@ -95,8 +95,18 @@
 	background-position: left; /* orientation=rt */
 	margin-top: 4px;
 }
+	 
+.UIMessageCompose .MailListActionsbar .ControlButton .AttachServerIcon {
+	background: url('icons/24x24/AttachServerIcon.png') no-repeat left top; /* orientation=lt */
+	background: url('icons/24x24/AttachServerIcon.png') no-repeat right top; /* orientation=rt */
+}
 
-/*===========================Compose Message Address==================================*/
+.UIMessageCompose .MailListActionsbar .ControlButton .AttachLocalIcon {
+	background: url('icons/24x24/AttachLocalIcon.png') no-repeat left top; /* orientation=lt */
+	background: url('icons/24x24/AttachLocalIcon.png') no-repeat right top; /* orientation=rt */
+}
+
+ /*===========================Compose Message Address==================================*/
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageCompose .MessageAddress {
 	background: #f3f3f3;
