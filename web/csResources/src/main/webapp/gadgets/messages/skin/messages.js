@@ -106,7 +106,7 @@ var html = '';
 var len = (prefs.limit && (parseInt(prefs.limit) > 0) &&  (parseInt(prefs.limit) < data.length))? prefs.limit:data.length;
 for(var i = 0 ; i < len; i++){	
   var item = data[i];
-	html +=  '<span class="IconLink">'+ item.subject +'</span>';
+	html +=  '<span class="IconLink">'+ item.subject +'</span><br>';
 }
 html += '';
 cont.innerHTML = html;
