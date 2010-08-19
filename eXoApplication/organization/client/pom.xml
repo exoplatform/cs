@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>exo.cs.eXoApplication.organization</artifactId>
-    <version>2.1.0-CR01</version>
+    <version>2.1.0-CR02-SNAPSHOT</version>
   </parent>
   <artifactId>exo.cs.eXoApplication.organization.client.openfire</artifactId>
   <name>eXo WS REST Openfire authentication plugin</name>
