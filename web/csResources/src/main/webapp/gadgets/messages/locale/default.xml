@@ -21,7 +21,7 @@
 
 <messagebundle>
   <msg name="title">
-  	Unread Messages
+  	Messages
   </msg>
 	<msg name="baseurl">
   	Base url
@@ -55,6 +55,9 @@
   </msg>
 	<msg name="setting">
   	Setting
+  </msg>
+	<msg name="showAll">
+  	Show All
   </msg>
 	<msg name="numberRequired">
   	Number required in limit field.

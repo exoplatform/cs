@@ -282,12 +282,15 @@ public class MailWebservice implements ResourceContainer {
       .getCurrentContainer().getComponentInstanceOfType(MailService.class);
     String username = ConversationState.getCurrent().getIdentity().getUserId();
     MessageFilter filter = new MessageFilter("Folder");
+    MessageData data = new MessageData();
+    if (Utils.isEmptyField(accountId)) 
+      return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
     filter.setAccountId(accountId);
     if (!Utils.isEmptyField(folderId)) filter.setFolder(new String[] { folderId });
     if (!Utils.isEmptyField(tagId)) filter.setTag(new String[] { tagId });
     filter.setViewQuery("@" + Utils.EXO_ISUNREAD + "='true'");
+    filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
     List<Message> messList = mailService.getMessages(username, filter);
-    MessageData data = new MessageData();
     try {
       data.setInfo(messList.subList(0, limit));
     } catch (IndexOutOfBoundsException e) {
@@ -312,9 +315,9 @@ public class MailWebservice implements ResourceContainer {
       .getCurrentContainer().getComponentInstanceOfType(MailService.class);
     String username = ConversationState.getCurrent().getIdentity().getUserId();
     List<Account> accounts = mailService.getAccounts(username);
-    if (accounts.size() == 0) return Response.noContent().build();
+    //if (accounts.size() == 0) return Response.noContent().build();
     AccountsData data = new AccountsData();
-    data.setInfo(accounts);
+    if (accounts.size() > 0) data.setInfo(accounts);
     return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
   

@@ -23,7 +23,11 @@
     <![CDATA[
 			<link rel="stylesheet" href="skin/messages.css" type="text/css"/>
 
-<script type="text/javascript" src="skin/messages.js"> </script>
+<script type="text/javascript" src="skin/messages.js">
+
+
+
+</script>
 			<div id="noAccount" style="display:none;color:red;">__MSG_noAccount__</div>
 			<form id="SettingMessage" onSubmit="return eXoMessageGadget.saveSetting();" action="#" style="display:block;">
 				<table>
@@ -63,14 +67,15 @@
 					</tr>
 				</table>
 			</form>
-      <div id="content" class="UIGadgetThemes UIYellowThemes" style="display:block;">
+      <div id="content" class="UIGadgetThemes UIYellowThemes">
 				<div class="TitGad ClearFix">
+					<a href="#demo" class="IconDropDown" id="ShowAllMessage" target="_blank">__MSG_showAll__</a>
+					<div class="SettingButton" id="SettingButtonMessage" title="__MSG_setting__">
+						<a href="javascript:eXoMessageGadget.showHideSetting(true);"><span></span></a>
+					</div>
 					<div class="ContTit">__MSG_title__</div>
 				</div>
 				<div class="GadCont UnreadMessages" id="ItemContainer"></div>
-<div class="SettingButton" style="padding: 10px 15px;">
-				<a href="javascript:eXoMessageGadget.showHideSetting(true);">__MSG_setting__</a>
-			<div>
 			</div>
 			
     ]]>
