@@ -2,13 +2,10 @@ eXoMessageGadget.prototype.onLoadHander = function(){
   eXoMessageGadget.setLink();
   eXoMessageGadget.showAccounts();
   eXoMessageGadget.getData();
-  moreButton = document.getElementById("ShowAllMessage");
-  settingButton = document.getElementById("SettingButtonMessage");
+  TitleMessage = document.getElementById("TitleMessage");
   this.hiddenTimeout = null;
-  moreButton.onmouseover = eXoMessageGadget.moveOver;
-  moreButton.onmouseout = eXoMessageGadget.moveOut;
-  settingButton.onmouseover = eXoMessageGadget.moveOver;
-  settingButton.onmouseout = eXoMessageGadget.moveOut;
+  TitleMessage.onmouseover = eXoMessageGadget.moveOver;
+  TitleMessage.onmouseout = eXoMessageGadget.moveOut;
 }
 
 eXoMessageGadget.prototype.moveOver = function(){
@@ -104,9 +101,12 @@ var prefs = eXoMessageGadget.getPrefs();
 var gadgetPref = new gadgets.Prefs();
 var html = '';
 var len = (prefs.limit && (parseInt(prefs.limit) > 0) &&  (parseInt(prefs.limit) < data.length))? prefs.limit:data.length;
-for(var i = 0 ; i < len; i++){	
+var url   = eXoMessageGadget.getPrefs().url;
+var baseUrl = "http://" +  top.location.host + parent.eXo.env.portal.context + "/" + parent.eXo.env.portal.accessMode + "/" + parent.eXo.env.portal.portalName;
+url = (url)?baseUrl + url: baseUrl + "/mail";
+for(var i = 0 ; i < len; i++){
   var item = data[i];
-	html +=  '<span class="IconLink">'+ item.subject +'</span><br>';
+	html +=  '<a href ="' + url + '" target="_blank">'+ item.subject +'</a><br>';
 }
 html += '';
 cont.innerHTML = html;
@@ -120,6 +120,12 @@ document.getElementById("ItemContainer").innerHTML = '<div class="Warning">' + m
 
 eXoMessageGadget.prototype.setLink = function(){
 	var url   = eXoMessageGadget.getPrefs().url;
+	var frmSetting = document.getElementById("SettingMessage");
+	var baseUrlField = frmSetting["urlMessage"];
+	baseUrlField.value = (url)? url : "/mail";
+	var subscribeurlField = frmSetting["subscribeurlMessage"];
+	var subscribeurl   = eXoMessageGadget.getPrefs().subscribeurl;
+	subscribeurlField.value = (subscribeurl)? subscribeurl : "/portal/rest/private/cs/mail/unreadMail" ;
 	var baseUrl = "http://" +  top.location.host + parent.eXo.env.portal.context + "/" + parent.eXo.env.portal.accessMode + "/" + parent.eXo.env.portal.portalName;
 	var a = document.getElementById("ShowAllMessage");
 	url = (url)?baseUrl + url: baseUrl + "/mail";
@@ -132,7 +138,7 @@ var limit = (prefs.limit && (parseInt(prefs.limit) > 0))? prefs.limit:0;
 var account =  (prefs.account)? prefs.account:" ";
 var folder=  (prefs.folder)? prefs.folder:" ";
 var tag=  (prefs.tag)? prefs.tag:" ";
-var subscribeurl = "/portal/rest/private/cs/mail/unreadMail" ;
+var subscribeurl = (prefs.subscribeurl)?prefs.subscribeurl: "/portal/rest/private/cs/mail/unreadMail" ;
 subscribeurl +=  "/" + account ;
 subscribeurl +=  "/" + folder;
 subscribeurl +=  "/" + tag;
@@ -144,12 +150,14 @@ eXoMessageGadget.prototype.getPrefs = function(){
 var prefs = new gadgets.Prefs();
 var limit = prefs.getString("limit");
 var url   = prefs.getString("url");
+var subscribeurl   = prefs.getString("subscribeurl");
 var account = prefs.getString("account");
 var folder = prefs.getString("folder");
 var tag = prefs.getString("tag");
 return {
 	"limit": limit,
 	"url"  : url,
+	"subscribeurl"  : subscribeurl,
 	"account"  : account ,
 	"folder"  : folder ,
 	"tag"  : tag,
@@ -170,6 +178,8 @@ if ((folder.length == 0) && (tag.length == 0)) {
   alert(prefs.getMsg("selectfolderTagRequired"));
   return false;
 }
+prefs.set("url",frmSetting["urlMessage"].value);
+prefs.set("subscribeurl",frmSetting["subscribeurlMessage"].value);
 prefs.set("limit",limit);
 prefs.set("account",frmSetting["account"].options[frmSetting["account"].selectedIndex].value);
 prefs.set("folder",folder);
@@ -196,3 +206,4 @@ function eXoMessageGadget(){
 eXoMessageGadget =  new eXoMessageGadget();
 
 gadgets.util.registerOnLoadHandler(eXoMessageGadget.onLoadHander);
+

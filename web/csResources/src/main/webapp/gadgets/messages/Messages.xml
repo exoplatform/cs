@@ -26,11 +26,18 @@
 <script type="text/javascript" src="skin/messages.js">
 
 
-
 </script>
 			<div id="noAccount" style="display:none;color:red;">__MSG_noAccount__</div>
 			<form id="SettingMessage" onSubmit="return eXoMessageGadget.saveSetting();" action="#" style="display:block;">
 				<table>
+  				<tr>
+  					<td>__MSG_baseurl__</td>
+  					<td><input type="text" name="urlMessage"></td>
+    			</tr>
+    			<tr>
+    				<td>__MSG_subscribeurl__</td>
+    				<td><input type="text" name="subscribeurlMessage"></td>
+    			</tr>
 					<tr>
 						<td>__MSG_account__</td>
 						<td>
@@ -68,7 +75,7 @@
 				</table>
 			</form>
       <div id="content" class="UIGadgetThemes UIYellowThemes">
-				<div class="TitGad ClearFix">
+				<div class="TitGad ClearFix" id = "TitleMessage">
 					<a href="#demo" class="IconDropDown" id="ShowAllMessage" target="_blank">__MSG_showAll__</a>
 					<div class="SettingButton" id="SettingButtonMessage" title="__MSG_setting__">
 						<a href="javascript:eXoMessageGadget.showHideSetting(true);"><span></span></a>

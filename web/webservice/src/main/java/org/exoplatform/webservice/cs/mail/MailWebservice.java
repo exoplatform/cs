@@ -290,7 +290,12 @@ public class MailWebservice implements ResourceContainer {
     if (!Utils.isEmptyField(tagId)) filter.setTag(new String[] { tagId });
     filter.setViewQuery("@" + Utils.EXO_ISUNREAD + "='true'");
     filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
-    List<Message> messList = mailService.getMessages(username, filter);
+    List<Message> messList;
+    try {
+      messList = mailService.getMessages(username, filter);      
+    } catch (Exception e) {
+      return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+    }
     try {
       data.setInfo(messList.subList(0, limit));
     } catch (IndexOutOfBoundsException e) {
