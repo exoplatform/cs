@@ -3,6 +3,21 @@
 	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
 	
   <component>
+    <type>org.exoplatform.mail.service.impl.JCRDataStorage</type>
+  </component>
+  <component>
+	<key>org.exoplatform.services.scheduler.JobSchedulerService</key>
+	<type>org.exoplatform.services.scheduler.impl.JobSchedulerServiceImpl</type>
+ </component>
+ 
+  <component>
+     <type>org.exoplatform.services.scheduler.impl.QuartzSheduler</type>
+   </component>
+   <component>
+      <type>org.exoplatform.services.scheduler.QueueTasks</type>
+   </component>
+	
+  <component>
     <key>org.exoplatform.mail.service.MailService</key>
     <type>org.exoplatform.mail.service.impl.MailServiceImpl</type>
   </component>    

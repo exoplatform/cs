@@ -44,12 +44,12 @@
 	      <values-param>
 	        <name>autoCreatedInNewRepository</name>
 	        <description>Node types configuration file</description>
-	        <value>war:/conf/csdemo/cs/contact/contact-nodetypes.xml</value>
-	        <value>war:/conf/csdemo/cs/calendar/calendar-nodetypes.xml</value>
-	        <value>war:/conf/csdemo/cs/chat/chat-nodetype-config.xml</value>
-	        <value>war:/conf/csdemo/cs/content/content-nodetypes.xml</value>
-	        <value>war:/conf/csdemo/cs/mail/mail-nodetypes.xml</value>
-	        <value>war:/conf/csdemo/cs/webservice/webservice-nodetype-config.xml</value>
+	        <value>jar:/conf/portal/calendar-nodetypes.xml</value>
+	        <value>jar:/conf/portal/chat-nodetype-config.xml</value>
+	        <value>jar:/conf/portal/contact-nodetypes.xml</value>
+	        <value>jar:/conf/portal/content-nodetypes.xml</value>
+	        <value>jar:/conf/portal/mail-nodetypes.xml</value>
+	        <value>jar:/conf/portal/webservice-nodetype-config.xml</value>
 	      </values-param>
 	    </init-params>
 	  </component-plugin>

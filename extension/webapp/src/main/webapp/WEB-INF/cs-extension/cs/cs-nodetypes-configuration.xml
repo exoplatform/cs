@@ -44,12 +44,12 @@
 	      <values-param>
 	        <name>autoCreatedInNewRepository</name>
 	        <description>Node types configuration file</description>
-	        <value>war:/cs-extension/cs/contact/contact-nodetypes.xml</value>
-	        <value>war:/cs-extension/cs/calendar/calendar-nodetypes.xml</value>
-	        <value>war:/cs-extension/cs/chat/chat-nodetype-config.xml</value>
-	        <value>war:/cs-extension/cs/content/content-nodetypes.xml</value>
-	        <value>war:/cs-extension/cs/mail/mail-nodetypes.xml</value>
-	        <value>war:/cs-extension/cs/webservice/webservice-nodetype-config.xml</value>
+	        <value>jar:/conf/portal/calendar-nodetypes.xml</value>
+	        <value>jar:/conf/portal/chat-nodetype-config.xml</value>
+	        <value>jar:/conf/portal/contact-nodetypes.xml</value>
+	        <value>jar:/conf/portal/content-nodetypes.xml</value>
+	        <value>jar:/conf/portal/mail-nodetypes.xml</value>
+	        <value>jar:/conf/portal/webservice-nodetype-config.xml</value>
 	      </values-param>
 	    </init-params>
 	  </component-plugin>
