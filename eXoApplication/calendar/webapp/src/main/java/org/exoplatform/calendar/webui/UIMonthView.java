@@ -164,7 +164,7 @@ public class UIMonthView extends UICalendarView {
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       String username = CalendarUtils.getCurrentUser() ;
       String value = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      System.out.print(value);
+      //System.out.print(value);
       //String eventId = event.getRequestContext().getRequestParameter(EVENTID) ;
       //String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
       CalendarService calService = CalendarUtils.getCalendarService() ;

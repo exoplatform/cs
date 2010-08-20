@@ -975,10 +975,8 @@ GUIMan.prototype.drawEventByDay = function(eventObj, startTime, endTime, dayInfo
   }
   var topPos = dayInfo.eventTop ;
   var leftPos = dayInfo.left ;
-  endTime = new Date(parseInt(endTime));
-  startTime = new Date(parseInt(startTime));
-  var delta = endTime.getDay() - startTime.getDay();
-  if (startTime.getDay() != endTime.getDay()) {
+  var delta = eXo.calendar.UICalendarPortlet.dateDiff(startTime,endTime);
+  if (delta != 0) {
     delta ++ ;
   }
   delta = (delta < 1) ? 1 : delta;
