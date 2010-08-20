@@ -9,7 +9,7 @@
     <version>2.1.0-CR02-SNAPSHOT</version>
   </parent>
   <artifactId>exo.cs.docs.refguide</artifactId>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
 
 
   <name>eXo Collaboration Reference Guide</name>
