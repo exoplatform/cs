@@ -8,7 +8,7 @@
   </parent>
   <artifactId>exo.cs.ext.social-integration</artifactId>
   <packaging>jar</packaging>
-  <name>eXo social integration jar</name>
+  <name>eXo social integration lib</name>
   <dependencies>
    
     <dependency>
@@ -28,7 +28,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>${org.slf4j.slf4j-simple.version}</version>
+      <version>${org.slf4j.version}</version>
     </dependency>
     
     <dependency>

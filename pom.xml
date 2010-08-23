@@ -27,13 +27,12 @@
     <url>http://builder.exoplatform.org/hudson/job/cs-trunk-ci/</url>
   </ciManagement>
   <properties>
-    <org.exoplatform.kernel.version>2.2.3-GA-SNAPSHOT</org.exoplatform.kernel.version>
-    <org.exoplatform.core.version>2.3.3-GA-SNAPSHOT</org.exoplatform.core.version>
-    <org.exoplatform.ws.version>2.1.3-GA-SNAPSHOT</org.exoplatform.ws.version>
-    <org.exoplatform.jcr.version>1.12.3-GA-SNAPSHOT</org.exoplatform.jcr.version>
-    <org.exoplatform.portal.version>3.1.1-plf-SNAPSHOT</org.exoplatform.portal.version>  
-	
-	<org.exoplatform.ecms.version>2.1.0-SNAPSHOT</org.exoplatform.ecms.version> 
+    <org.exoplatform.kernel.version>2.2.4-GA-SNAPSHOT</org.exoplatform.kernel.version>
+    <org.exoplatform.core.version>2.3.4-GA-SNAPSHOT</org.exoplatform.core.version>
+    <org.exoplatform.ws.version>2.1.4-GA-SNAPSHOT</org.exoplatform.ws.version>
+    <org.exoplatform.jcr.version>1.12.4-GA-SNAPSHOT</org.exoplatform.jcr.version>
+	<org.exoplatform.portal.version>3.1.2-PLF-SNAPSHOT</org.exoplatform.portal.version>	
+	<org.exoplatform.ecms.version>2.1.0-CR02-SNAPSHOT</org.exoplatform.ecms.version> 
     
     <gatein.wci.version>2.0.1-GA</gatein.wci.version>
     <exo.tool.framework.junit.version>1.2.0</exo.tool.framework.junit.version>
@@ -41,10 +40,10 @@
     <version.chromattic>1.0.3</version.chromattic>
 	
 	<!--commons dependencies-->
-	<org.exoplatform.commons.version>1.0.0-CR01-SNAPSHOT</org.exoplatform.commons.version>
+	<org.exoplatform.commons.version>1.0.0-CR02-SNAPSHOT</org.exoplatform.commons.version>
 	      
 	<!-- eXo extended service -->
-	<org.exoplatform.social.version>1.1.0-SNAPSHOT</org.exoplatform.social.version>
+	<org.exoplatform.social.version>1.1.0-CR02-SNAPSHOT</org.exoplatform.social.version>
 	
     <!-- 3rd parties -->
     <commons-lang.version>2.3</commons-lang.version>
@@ -92,9 +91,9 @@
     <!--need when deploy CS-->
     <org.fontbox.version>0.1.0</org.fontbox.version>
     <jdom.version>1.0</jdom.version>
-    <org.slf4j.slf4j-api.version>1.5.6</org.slf4j.slf4j-api.version>
-    <org.slf4j.slf4j-jdk14.version>1.5.6</org.slf4j.slf4j-jdk14.version>
+    <org.slf4j.version>1.5.6</org.slf4j.version>
 	<c3p0.version>0.9.1.2</c3p0.version>
+	<net.sourceforge.nekohtml.version>1.9.9</net.sourceforge.nekohtml.version>
     <!-- ************** -->
     <!-- Build settings -->
     <!-- ************** -->
