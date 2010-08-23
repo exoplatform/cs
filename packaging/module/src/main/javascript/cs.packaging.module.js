@@ -148,8 +148,10 @@ function getModule(params)
 function deployOpenfireServer(mainServer, module) {
 	var deployServerTask = new TaskDescriptor("Release Dependency Task", eXo.env.dependenciesDir) ;
   var server = {};
+
+  // We use only the local repository which must be defined in the repos list
+  server.openfireJarPath = new java.net.URL(eXo.env.m2Repos[0]).getPath();
   
-  server.openfireJarPath = eXo.env.dependenciesDir + "/repository";  
   for (var i=0; i < module.eXoApplication.chat.dependencies.size(); i++) {
 	  var tmpObj = module.eXoApplication.chat.dependencies.get(i).dependencies; 
 	  for (var j=0; j<tmpObj.size(); j++) {
