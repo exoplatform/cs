@@ -1,0 +1,53 @@
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd http://www.exoplaform.org/xml/ns/kernel_1_1.xsd"
+  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd">
+
+  <!-- UI Extension plug-in -->
+  
+  <component>
+    <key>org.exoplatform.webui.ext.UIExtensionManager</key>
+    <type>org.exoplatform.webui.ext.impl.UIExtensionManagerImpl</type>
+  </component>
+  
+  <!-- Action buttons  --> 
+  <external-component-plugins>
+    <target-component>org.exoplatform.webui.ext.UIExtensionManager</target-component>
+    <component-plugin>
+      <name>add.action</name>
+      <set-method>registerUIExtensionPlugin</set-method>
+      <type>org.exoplatform.webui.ext.UIExtensionPlugin</type>
+      <init-params>
+        <object-param>
+          <name>QuickAddEvent</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.cs.ext.control.UIActionBar</string></field>
+            <field name="rank"><int>300</int></field>
+            <field name="name"><string>Add</string></field>
+            <field name="component"><string>org.exoplatform.calendar.webui.action.QuickAddEvent</string></field>
+          </object>
+        </object-param>                 
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+     
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.webui.ext.UIExtensionManager</target-component>
+    <component-plugin>
+      <name>add.action</name>
+      <set-method>registerUIExtensionPlugin</set-method>
+      <type>org.exoplatform.webui.ext.UIExtensionPlugin</type>
+      <init-params>
+        <object-param>
+          <name>QuickAddTask</name>
+          <object type="org.exoplatform.webui.ext.UIExtension">
+            <field name="type"><string>org.exoplatform.cs.ext.control.UIActionBar</string></field>
+            <field name="rank"><int>300</int></field>
+            <field name="name"><string>Add</string></field>
+            <field name="component"><string>org.exoplatform.calendar.webui.action.QuickAddTask</string></field>
+          </object>
+        </object-param>                 
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>   
+ 
+  </configuration>

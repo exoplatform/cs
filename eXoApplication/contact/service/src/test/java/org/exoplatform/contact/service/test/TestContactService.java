@@ -62,7 +62,7 @@ public class TestContactService extends BaseContactServiceTestCase {
   public TestContactService() throws Exception {
     super();
   }
-
+  
   public void setUp() throws Exception {
     super.setUp();
     contactService = (ContactServiceImpl) container.getComponentInstanceOfType(ContactService.class);
@@ -74,6 +74,13 @@ public class TestContactService extends BaseContactServiceTestCase {
     // datastorage.getContactApplicationDataHome();
   }
 
+  public static void main(String[] args)
+  {
+    String s = "huong";
+    String t = "huong";
+    System.out.println("Test if two String objects are identical: " + (s == t));
+    
+  }
   private void clearUserData(String user) throws Exception {
     Node personalContactsHome = datastorage.getPersonalContactsHome(user);
     cleanChildren(personalContactsHome);

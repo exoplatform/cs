@@ -9,9 +9,9 @@
   <artifactId>exo.cs.ext</artifactId>
   <packaging>pom</packaging>
   <name>eXo CS Integration</name>
-  <description>CS Social Integration Pom</description>
+  <description>eXo collaboration extension</description>
   <modules>
     <module>social-integration</module> 
-	<module>ecm-integration</module>   
+	<module>ui-extension</module>   
   </modules>
 </project>
