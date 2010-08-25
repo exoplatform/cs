@@ -45,7 +45,8 @@ import org.exoplatform.social.core.space.spi.SpaceLifeCycleEvent;
 public class ContactDataInitialize extends SpaceListenerPlugin {
 
   private static final Log log = ExoLogger.getLogger(ContactDataInitialize.class);
-
+  
+  public static final String ADDRESSBOOK_ID_PREFIX = "ContactGroupInSpace".intern();
   private final InitParams params;
   
   public ContactDataInitialize(InitParams params) {
@@ -100,7 +101,7 @@ public class ContactDataInitialize extends SpaceListenerPlugin {
       /* --- end --- */
 
       ContactService contactService = (ContactService) PortalContainer.getComponent(ContactService.class);
-      String addrBookId = "ContactGroup" + space.getId();
+      String addrBookId = ADDRESSBOOK_ID_PREFIX + space.getId();
       AddressBook book = null;
       try {
         book = contactService.getPersonalAddressBook(firstMem, addrBookId);

@@ -16,7 +16,6 @@
  */
 package org.exoplatform.cs.ext.impl;
 
-import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.impl.CalendarEventListener;
 import org.exoplatform.container.PortalContainer;
@@ -40,11 +39,16 @@ public class CalendarSpaceActivityPublisher extends CalendarEventListener {
   public void savePublicEvent(CalendarEvent event, String calendarId) {
     try {
       Class.forName("org.exoplatform.social.core.manager.IdentityManager") ;
+      
+      if (calendarId == null || calendarId.indexOf(CalendarDataInitialize.CALENDAR_ID_PREFIX) < 0) {
+        return;
+      }
+      
       String msg = "A new event has been added : " + event.getSummary();
       String body = event.getDescription();
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class); 
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
-      String spaceId = calendarId.split(Calendar.CALENDAR_PREF)[1]; 
+      String spaceId = calendarId.split(CalendarDataInitialize.CALENDAR_ID_PREFIX)[1]; 
       Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
       activityM.recordActivity(spaceIdentity, SpaceService.SPACES_APP_ID, msg , body);
     } catch (Exception e) {
@@ -55,11 +59,15 @@ public class CalendarSpaceActivityPublisher extends CalendarEventListener {
     public void updatePublicEvent(CalendarEvent event, String calendarId) {
       try {
         Class.forName("org.exoplatform.social.core.manager.IdentityManager") ;
+        if (calendarId == null || calendarId.indexOf(CalendarDataInitialize.CALENDAR_ID_PREFIX) < 0) {
+          return;
+        }
+        
         String msg = "The following event has been updated: " + event.getSummary(); 
         String body = event.getDescription();
         IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class); 
         ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
-        String spaceId = calendarId.split(Calendar.CALENDAR_PREF)[1]; 
+        String spaceId = calendarId.split(CalendarDataInitialize.CALENDAR_ID_PREFIX)[1]; 
         Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
         activityM.recordActivity(spaceIdentity, SpaceService.SPACES_APP_ID, msg , body);
       } catch (Exception e) {

@@ -16,7 +16,6 @@
  */
 package org.exoplatform.cs.ext.impl;
 
-import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.impl.ContactEventListener;
 import org.exoplatform.container.PortalContainer;
@@ -40,11 +39,15 @@ public class ContactSpaceActivityPublisher extends ContactEventListener{
   public void saveContact(String username, Contact contact) {
     try {
       Class.forName("org.exoplatform.social.core.manager.IdentityManager") ;
+      String addrBookId = contact.getAddressBook()[0];
+      if (addrBookId == null || addrBookId.indexOf(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX) < 0) {
+        return;
+      }
       String msg = "A new contact has been added : " + contact.getFullName();
       String body = "add new contact ...";
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class); 
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
-      String spaceId = contact.getAddressBookIds()[0].split("ContactGroup")[1]; 
+      String spaceId = addrBookId.split(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX)[1]; 
       Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
       activityM.recordActivity(spaceIdentity, SpaceService.SPACES_APP_ID, msg , body);
     } catch (Exception e) {
@@ -57,11 +60,16 @@ public class ContactSpaceActivityPublisher extends ContactEventListener{
   public void updateContact(String username, Contact contact) {
     try {
       Class.forName("org.exoplatform.social.core.manager.IdentityManager") ;
+      String addrBookId = contact.getAddressBook()[0];
+      if (addrBookId == null || addrBookId.indexOf(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX) < 0) {
+        return;
+      }
       String msg = "The following contact has been updated: " + contact.getFullName(); 
       String body = "update contact...";
+      
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class); 
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
-      String spaceId = contact.getAddressBook()[0].split("ContactGroup")[1]; 
+      String spaceId = addrBookId.split(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX)[1]; 
       Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
       activityM.recordActivity(spaceIdentity, SpaceService.SPACES_APP_ID, msg , body);
     } catch (Exception e) {
