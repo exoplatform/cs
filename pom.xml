@@ -8,15 +8,15 @@
   </parent>
   <groupId>org.exoplatform.cs</groupId>
   <artifactId>cs</artifactId>
-  <version>2.1.0-CR02-SNAPSHOT</version>
+  <version>2.1.0-CR02</version>
   <packaging>pom</packaging>
   <name>eXo Collaboration</name>
   <description>eXo Collaboration made of Address Book, Calendar, Mail and Chat.</description>
   <url>http://wiki.exoplatform.org/xwiki/bin/view/CS/</url>
   <scm>
-   <connection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/2.1.x</connection>
-   <developerConnection>scm:svn:http://svn.exoplatform.org/projects/cs/branches/2.1.x</developerConnection>
-   <url>http://fisheye.exoplatform.org/browse/cs</url>
+   <connection>scm:svn:http://svn.exoplatform.org/projects/cs/tags/2.1.0-CR02</connection>
+   <developerConnection>scm:svn:http://svn.exoplatform.org/projects/cs/tags/2.1.0-CR02</developerConnection>
+   <url>http://fisheye.exoplatform.org/browse/cs/tags/2.1.0-CR02</url>
   </scm>
   <issueManagement>
     <system>jira</system>
