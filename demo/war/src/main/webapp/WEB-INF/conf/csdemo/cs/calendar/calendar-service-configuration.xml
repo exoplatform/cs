@@ -134,6 +134,7 @@
 	        <!-- 
 	        <value>/platform/guests</value>
 	         -->
+	         <value>/spaces/*</value>
         </values-param>
         
         

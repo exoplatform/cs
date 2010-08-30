@@ -63,6 +63,7 @@ public class NewGroupListener extends GroupEventListener {
     String groupId = group.getId();
     if(ignore_groups_ != null && !ignore_groups_.isEmpty())
       for(String g : ignore_groups_) {
+        if(g.contains("/spaces/*") && groupId.toLowerCase().contains("spaces/")) return;
         if(groupId.equalsIgnoreCase(g)) return ;
       }
     boolean isPublic = true;
@@ -86,12 +87,7 @@ public class NewGroupListener extends GroupEventListener {
       if(!perms.contains(groupKey)) perms.add(groupKey) ;
     }
     calendar.setEditPermission(perms.toArray(new String[perms.size()])) ;
-    try {
-      calendarService_.savePublicCalendar(calendar, isNew, null) ;
-    } finally {
-      //TODO check session status here
-    	//sProvider.close();
-    }
+    calendarService_.savePublicCalendar(calendar, isNew) ;
   }
   @Override
   public void postDelete(Group group) throws Exception {
@@ -111,9 +107,4 @@ public class NewGroupListener extends GroupEventListener {
     }    
   }
   
-  private SessionProvider createSystemProvider() {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    return service.getSystemSessionProvider(null) ;    
-  }
 }
