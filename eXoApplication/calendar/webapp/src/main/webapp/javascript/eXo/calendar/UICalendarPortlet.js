@@ -113,6 +113,22 @@ UICalendarPortlet.prototype.checkPermission = function(eventObj){
 	var url = baseURL + eXo.cs.CSCometd.exoId +"/"+ calId +"/"+ calType +"/";
 	this.makeRequest(url,this.postCheck);
 };
+
+/**
+ * 
+ * @param {Object} calendarForm : calendar form DOM node
+ * @return {Object} a checked calendar id
+ */
+UICalendarPortlet.prototype.getCheckedCalendar = function(calendarForm){
+	var checkedCalendars = new Array();
+	var chks = calendarForm.elements;
+	for(var i = 0 , l = chks.length; i < l; i++){
+		if(chks[i].checked && eXo.core.DOMUtil.hasClass(chks[i],"checkbox")) checkedCalendars.push(chks[i]); 
+	}
+	if(!checkedCalendars || checkedCalendars.length == 0) return null;
+	return checkedCalendars[0].name;
+};
+
 /**
  * Show Quick add event and task form 
  * @param {obj, type} has action object, type of form : event 1 | task 2
@@ -139,6 +155,7 @@ UICalendarPortlet.prototype.addQuickShowHiddenWithId = function(obj, type, id){
  */
 UICalendarPortlet.prototype.addQuickShowHiddenWithTime = function(obj, type, fromMilli, toMilli, id){
     var CalendarWorkingWorkspace =  document.getElementById("UICalendarWorkingContainer");
+    var id = this.getCheckedCalendar(this.filterForm);
     var UIQuckAddEventPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddEventPopupWindow");
     var UIQuckAddTaskPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddTaskPopupWindow");
     var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;
@@ -2016,6 +2033,17 @@ UICalendarPortlet.prototype.isAllday = function(form){
                 break;
             }
         }
+       /**
+	 * Preselect calendar when add event/task
+	 */
+	var calendarid = this.getCheckedCalendar(this.filterForm);
+	if(calendarid){
+		var calendar = form.elements["calendar"];
+		for(i=0; i < calendar.options.length;  i++) {
+			var value = calendar.options[i].value ;
+			calendar.options[i].selected = (value.match(calendarid) != null);		   
+		}
+	}
     } 
     catch (e) {
     
