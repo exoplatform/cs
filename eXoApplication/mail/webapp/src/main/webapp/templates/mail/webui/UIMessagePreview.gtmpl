@@ -126,7 +126,7 @@
                         </table>
                        </td>
                       <td >
-                        <% if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0) { %>
+                        <% if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0  && !uicomponent.isShowPicInBody(msg)) { %>
                         <div class="AttachmentIcon"><span></span></div>
                         <% } %>
                       </td>
@@ -401,7 +401,7 @@
                   if (!MailUtils.isInvitation(msg)) {
                   String frameId = "IframeMessagePreview" + msgIndex ;
                   String textAreaId = "MessageDetails" + msgIndex ;
-                  String contentType = msg.getContentType() ;
+                  String contentType = msg.getHeader("Content-Type");//msg.getContentType() ;
                   if (contentType != null) {
                     if (contentType.indexOf(";") > -1) {
                       contentType = contentType.substring(0, contentType.indexOf(";")) ;
@@ -465,7 +465,7 @@
                   </div> 
                 <%}%>
                 <%
-                  if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0) {
+                  if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0  && !uicomponent.isShowPicInBody(msg)) {
                 %>
                   <div class="AttachmentContainer">
     						  	<div class="AttachmentTitle"><%=_ctx.appRes(uicomponent.id+ ".label.attachments") %>:</div>            

@@ -130,13 +130,14 @@ public class UIMessagePreview extends UIComponent {
   public Map<String, String> getImageLocationMap(Message message) throws Exception {
     Map<String, String > imageLocation = new HashMap<String, String>();
     DownloadService dservice = getDownloadService() ;
-    String attLink = "", attId = "";    
-    if (message.getAttachments() != null) {
+    String attLink = "", attId = ""; 
+    if (message.getAttachments() != null && message.getAttachments().size() > 0) {
       for (Attachment att : message.getAttachments()) {
         if (att.isShownInBody()) {
           attLink = MailUtils.getImageSource(att, dservice) ;
           if (attLink != null ) {
             attLink = "/" + getPortalName()+"/rest/jcr/" + getRepository() + att.getPath() ;
+         //   attLink = "/" + PortalContainer.getInstance().getRestContextName() + "/rest/jcr/" + getRepository() + att.getPath();
             attId = att.getId();
             imageLocation.put(attId.substring(attId.lastIndexOf("/") + 1, attId.length()), attLink.substring(0, attLink.lastIndexOf("/") + 1));
           }
@@ -628,5 +629,15 @@ public class UIMessagePreview extends UIComponent {
       uiMsgPreview.setIsHideMessageList(!uiMsgPreview.isHideMessageList());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview.getParent()) ;
     }
+  }
+  
+  public boolean isShowPicInBody(Message msg){
+    List<Attachment> atts = msg.getAttachments();
+    if(atts != null && atts.size()>0){
+      for (Attachment attach : atts) {
+        if(!attach.isShownInBody()) return false; 
+      }  
+    }
+    return true;
   }
 }
