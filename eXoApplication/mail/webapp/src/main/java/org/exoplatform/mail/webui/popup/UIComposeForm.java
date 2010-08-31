@@ -1217,7 +1217,17 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
 					mailSvr.saveMessage(usename, mailSvr.getAccountById(usename, accountId),
 							composeForm.parentPath_, message, false);
 				}
-			} catch (Exception e) {
+			}
+			// CS-4462
+			catch (AuthenticationFailedException e)
+			{
+			  e.printStackTrace();
+			  UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class);
+			  uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.the-username-or-password-may-be-wrong-save-draft-error", null));
+			  event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+			  return;
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 				UIApplication uiApp = composeForm
 						.getAncestorOfType(UIApplication.class);
