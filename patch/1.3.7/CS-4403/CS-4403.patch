@@ -1,0 +1,284 @@
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(revision 51200)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(working copy)
+@@ -18,6 +18,7 @@
+ 
+ import java.io.BufferedReader;
+ import java.io.ByteArrayInputStream;
++import java.io.IOException;
+ import java.io.InputStream;
+ import java.io.InputStreamReader;
+ import java.util.ArrayList;
+@@ -42,6 +43,7 @@
+ import javax.jcr.query.Query;
+ import javax.jcr.query.QueryManager;
+ import javax.jcr.query.QueryResult;
++import javax.mail.BodyPart;
+ import javax.mail.Header;
+ import javax.mail.MessagingException;
+ import javax.mail.Multipart;
+@@ -431,7 +433,13 @@
+       msg.setHasAttachment(messageNode.getProperty(Utils.EXO_HASATTACH).getBoolean());
+     } catch (Exception e) {
+     }
++    
+     try {
++      msg.setHasAttachment(messageNode.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
++    } catch (Exception e) {
++    }
++    
++    try {
+       msg.setHasStar(messageNode.getProperty(Utils.EXO_STAR).getBoolean());
+     } catch (Exception e) {
+     }
+@@ -464,7 +472,6 @@
+     } catch (Exception e) {
+     }
+ 
+-
+     try {
+       Value[] properties = messageNode.getProperty(Utils.MSG_HEADERS).getValues();
+       for (int i = 0; i < properties.length; i++) {
+@@ -975,8 +982,8 @@
+             nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
+             nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
+             nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
+-            nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, false);
+-            nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
++            nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, file.isShownInBody());
++            nodeMsg.setProperty(Utils.EXO_HASATTACH, !file.isShownInBody());
+           }
+         }
+ 
+@@ -1114,6 +1121,8 @@
+         node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
+         long priority = MimeMessageParser.getPriority(msg);
+         node.setProperty(Utils.EXO_PRIORITY, priority);
++        node.setProperty(Utils.EXO_HASATTACH, this.checkHasAttachment(msg));
++        
+         node.save();
+ 
+         if (infoObj != null && continuation != null) {
+@@ -1273,11 +1282,14 @@
+ 
+   private StringBuffer setPart(Part part, Node node, StringBuffer body) {
+     try {
++      boolean hasIMGTag = hasIMGTag(part);
++      boolean isNotAttach = true;
+       String disposition = part.getDisposition();
+       String ct = part.getContentType();
+       if (disposition == null) {
+         if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
+           body = appendMessageBody(part, node, body);
++          hasIMGTag = hasIMGTag | hasIMGTag(part);
+         } else if (part.isMimeType("multipart/alternative")) {
+           Part bodyPart;
+           boolean readText = true;
+@@ -1287,6 +1299,7 @@
+             if (bodyPart.isMimeType("text/html") || bodyPart.isMimeType("multipart/*")) {
+               body = setPart(bodyPart, node, body);
+               readText = false;
++              hasIMGTag = hasIMGTag | hasIMGTag(part);
+             }
+           }
+           if (readText) {
+@@ -1306,6 +1319,7 @@
+         /* this must be presented INLINE, hence inside the body of the message */
+         if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
+           body = appendMessageBody(part, node, body);
++          hasIMGTag = hasIMGTag | hasIMGTag(part);
+         } else if (part.isMimeType("message/rfc822")) {
+           body = getNestedMessageBody(part, node, body);
+         }
+@@ -1329,8 +1343,10 @@
+           attId = part.getHeader("Content-Id")[0].toString();
+           attId = attId.substring(1, attId.length());
+           attId = attId.substring(0, attId.length() - 1);
++          hasIMGTag = true;
++          isNotAttach = false;
+         } else if (disposition != null && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || part.isMimeType("image/*"))) {
+-          attId = "attachment" + IdGenerator.generate();
++          attId = "Attachment" + IdGenerator.generate();
+         } 
+ 
+         if (attHome.hasNode(attId)) return body;
+@@ -1358,7 +1374,7 @@
+           nodeContent.setProperty(Utils.JCR_DATA, part.getInputStream());
+           nodeFile.setProperty(Utils.ATT_IS_LOADED_PROPERLY, true);
+           nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, false);
+-          if ((disposition == null || !disposition.equalsIgnoreCase(Part.ATTACHMENT)) && part.isMimeType("image/*")) {
++          if (((disposition == null || !disposition.equalsIgnoreCase(Part.ATTACHMENT)) && part.isMimeType("image/*")) || hasIMGTag) {
+             nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, true);
+           }
+         } catch (Exception e) {
+@@ -1367,9 +1383,9 @@
+           node.setProperty(Utils.ATT_IS_LOADED_PROPERLY, false);
+         }
+         nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
+-        if ((disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT))) {
++        if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT) && !isNotAttach) {
+           node.setProperty(Utils.EXO_HASATTACH, true);
+-        }
++        }else node.setProperty(Utils.EXO_HASATTACH, false);
+       }
+     } catch (Exception e) {
+       e.printStackTrace();
+@@ -2686,18 +2702,19 @@
+               attachments.add(file);
+             }
+           }
+-          msg.setHasAttachment(true);
+-          msg.setAttachements(attachments);
++          if(attachments.size() > 0){
++            msg.setAttachements(attachments);
++           if( !checkImgShowInBody(attachments)) msg.setHasAttachment(true);
++          }
++          
+         }
+         try {
+           msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
+         } catch(Exception e) {
+-          //e.printStackTrace();
+           logger.debug("Can't load message body");
+         }
+       } catch (PathNotFoundException e) {
+-        //e.printStackTrace();
+-        System.out.println("[EXO WARNING] PathNotFoundException when load attachment");
++        logger.error("[EXO WARNING] PathNotFoundException when load attachment", e);
+       }
+       return msg;
+     } finally {
+@@ -2970,4 +2987,64 @@
+     ManageableRepository currentRepo = repoService_.getCurrentRepository() ;
+     return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo) ;
+   }
++  
++  /**
++   *return true if the message has not attachment, false if else **/
++  private boolean checkHasAttachment(javax.mail.Message message) {
++    try {
++      Object obj = message.getContent();
++      if (obj instanceof Multipart) {
++        Multipart multipart = (Multipart) obj;
++        int partCount = multipart.getCount();
++        for (int i = 0; i < partCount; i++) {
++          BodyPart part = multipart.getBodyPart(i);
++          String disposition = part.getDisposition();
++          if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT) && !hasContentId(part))
++            return true;
++        }
++      }
++    } catch (IOException e) {
++      logger.debug("IOException: " + e.getMessage());
++    } catch (MessagingException e) {
++      logger.debug("MessagingException: " + e.getMessage());
++    }
++    return false;
++  }
++  
++  private boolean checkImgShowInBody(List<Attachment> atts){
++    if(atts.size() > 0){
++      for(Attachment att : atts)
++        if(!att.isShownInBody()) return false;
++    }
++    
++    return true;
++  }
++  
++  /**
++   * checking a Part whether has IMG tag in body
++   * @return {@link Boolean}
++   * @throws IOException */
++  //TODO fix cs-4403 
++  private boolean hasIMGTag(Part part) throws Exception{
++    try {
++      if(part.isMimeType("text/html")){
++        String body = (String)part.getContent();
++        if(body != null && body.indexOf("<img") > -1){
++          String imgtag = body.substring(body.indexOf("<img"), body.length());
++          if(imgtag.length() > 0)
++            imgtag = imgtag.substring(0, imgtag.indexOf(">") + 1);
++          if(body != null && body.contains("<img src=") || imgtag.contains("src")) return true;  
++        }
++      }
++    } catch (MessagingException e) {}
++    
++    return false;
++  }
++ 
++  /**
++   * The attachment in INLINE mode of Content-Disposition header property always has Content-Id value**/
++  private boolean hasContentId(Part part) throws MessagingException{
++    return part.getHeader("Content-Id") == null ? false : true;
++  }
++  
+ }
+\ No newline at end of file
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessagePreview.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessagePreview.java	(revision 51200)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessagePreview.java	(working copy)
+@@ -130,13 +130,14 @@
+   public Map<String, String> getImageLocationMap(Message message) throws Exception {
+     Map<String, String > imageLocation = new HashMap<String, String>();
+     DownloadService dservice = getDownloadService() ;
+-    String attLink = "", attId = "";    
+-    if (message.getAttachments() != null) {
++    String attLink = "", attId = ""; 
++    if (message.getAttachments() != null && message.getAttachments().size() > 0) {
+       for (Attachment att : message.getAttachments()) {
+         if (att.isShownInBody()) {
+           attLink = MailUtils.getImageSource(att, dservice) ;
+           if (attLink != null ) {
+             attLink = "/" + getPortalName()+"/rest/jcr/" + getRepository() + att.getPath() ;
++         //   attLink = "/" + PortalContainer.getInstance().getRestContextName() + "/rest/jcr/" + getRepository() + att.getPath();
+             attId = att.getId();
+             imageLocation.put(attId.substring(attId.lastIndexOf("/") + 1, attId.length()), attLink.substring(0, attLink.lastIndexOf("/") + 1));
+           }
+@@ -629,4 +630,14 @@
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview.getParent()) ;
+     }
+   }
++  
++  public boolean isShowPicInBody(Message msg){
++    List<Attachment> atts = msg.getAttachments();
++    if(atts != null && atts.size()>0){
++      for (Attachment attach : atts) {
++        if(!attach.isShownInBody()) return false; 
++      }  
++    }
++    return true;
++  }
+ }
+Index: eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessagePreview.gtmpl
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessagePreview.gtmpl	(revision 51200)
++++ eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessagePreview.gtmpl	(working copy)
+@@ -126,7 +126,7 @@
+                         </table>
+                        </td>
+                       <td >
+-                        <% if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0) { %>
++                        <% if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0  && !uicomponent.isShowPicInBody(msg)) { %>
+                         <div class="AttachmentIcon"><span></span></div>
+                         <% } %>
+                       </td>
+@@ -401,7 +401,7 @@
+                   if (!MailUtils.isInvitation(msg)) {
+                   String frameId = "IframeMessagePreview" + msgIndex ;
+                   String textAreaId = "MessageDetails" + msgIndex ;
+-                  String contentType = msg.getContentType() ;
++                  String contentType = msg.getHeader("Content-Type");//msg.getContentType() ;
+                   if (contentType != null) {
+                     if (contentType.indexOf(";") > -1) {
+                       contentType = contentType.substring(0, contentType.indexOf(";")) ;
+@@ -465,7 +465,7 @@
+                   </div> 
+                 <%}%>
+                 <%
+-                  if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0) {
++                  if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0  && !uicomponent.isShowPicInBody(msg)) {
+                 %>
+                   <div class="AttachmentContainer">
+     						  	<div class="AttachmentTitle"><%=_ctx.appRes(uicomponent.id+ ".label.attachments") %>:</div>            
