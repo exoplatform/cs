@@ -801,6 +801,12 @@ UIMailPortlet.prototype.fixFCKforSafari = function(){
 	}	
 };
 
+UIMailPortlet.prototype.showHideAttach = function(menu){
+	if(!menu) return ;
+	if(menu.style.display == "none") menu.style.display = "block";
+	else menu.style.display = "none";
+};
+
 eXo.mail.UIMailPortlet = new UIMailPortlet();
 // Override submit method of UIForm to add a comfirm message
 UIForm.prototype.tmpMethod = eXo.webui.UIForm.submitForm;
@@ -828,3 +834,84 @@ UIForm.prototype.isEmpty = function(str){
         return true;
     return false;
 }
+
+//Scroll manager
+function MailScrollManager(){
+};
+
+MailScrollManager.prototype.load = function(id){ 
+	var uiNav = eXo.mail.MailScrollManager ;
+  var container = document.getElementById(id) ;
+  if(container) {
+    var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "CenterBar") ;
+	  var randomId = eXo.core.DOMUtil.generateId("MailScrollbar");
+  	mainContainer.setAttribute("id",randomId);
+    uiNav.scrollMgr = eXo.portal.UIPortalControl.newScrollManager(randomId) ;
+    uiNav.scrollMgr.initFunction = uiNav.initScroll ;
+    uiNav.scrollMgr.mainContainer = mainContainer ;
+    uiNav.scrollMgr.arrowsContainer = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "ScrollButtons") ;
+    uiNav.scrollMgr.loadButtons("MailListActionsbarButton", true) ;
+    var button = eXo.core.DOMUtil.findDescendantsByTagName(uiNav.scrollMgr.arrowsContainer, "div");
+    if(button.length >= 2) {    
+      uiNav.scrollMgr.initArrowButton(button[0],"left", "ScrollLeftButton", "HighlightScrollLeftButton", "DisableScrollLeftButton") ;
+      uiNav.scrollMgr.initArrowButton(button[1],"right", "ScrollRightButton", "HighlightScrollRightButton", "DisableScrollRightButton") ;
+    }
+		
+    uiNav.scrollManagerLoaded = true;
+    uiNav.initScroll() ;
+  }
+} ;
+
+MailScrollManager.prototype.initScroll = function() {
+  var uiNav = eXo.mail.MailScrollManager ;
+  if(!uiNav.scrollManagerLoaded) uiNav.load() ;
+  var elements = uiNav.scrollMgr.elements ;
+  uiNav.scrollMgr.init() ;
+  uiNav.scrollMgr.csCheckAvailableSpace() ;
+  uiNav.scrollMgr.renderElements() ;
+} ;
+
+MailScrollManager.prototype.getItemsByClass = function(root,cssClass){
+  var elements = root.childNodes ;
+  var ln = elements.length ;
+		var list = [] ;
+  for (var k = 0; k < ln; k++) {
+    if (eXo.core.DOMUtil.hasClass(elements[k], cssClass)) {
+    	list.push(elements[k]) ;
+    }
+  }
+  return list ;
+
+}
+
+ScrollManager.prototype.loadButtons = function(elementClass, clean) {
+	if (clean) this.cleanElements();
+	this.elements.clear();
+	var container = eXo.core.DOMUtil.findFirstDescendantByClass(this.mainContainer,"div","MailListActionsbar");
+	var items = eXo.mail.MailScrollManager.getItemsByClass(container, elementClass);
+	for(var i = 0; i < items.length; i++){
+		this.elements.push(items[i]);
+	}
+};
+
+ScrollManager.prototype.csCheckAvailableSpace = function(maxSpace) { // in pixels
+	if (!maxSpace) maxSpace = this.getElementSpace(this.mainContainer) - this.getElementSpace(this.arrowsContainer);
+	var elementsSpace = 0;
+	var margin = 0;
+	var length =  this.elements.length;
+	for (var i = 0; i < length; i++) {
+		elementsSpace += this.getElementSpace(this.elements[i]);
+		//dynamic margin;
+		if (i+1 < length) margin = this.getElementSpace(this.elements[i+1]) / 3;
+		else margin = this.margin;
+		if (elementsSpace + margin < maxSpace) { // If the tab fits in the available space
+			this.elements[i].isVisible = true;
+			this.lastVisibleIndex = i;
+		} else { // If the available space is full
+			this.elements[i].isVisible = false;
+		}
+	}
+};
+
+
+eXo.mail.MailScrollManager = new MailScrollManager();
