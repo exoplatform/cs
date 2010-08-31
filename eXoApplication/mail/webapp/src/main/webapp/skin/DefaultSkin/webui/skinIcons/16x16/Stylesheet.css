@@ -512,3 +512,64 @@
 .UIMailPortlet .SendMailIcon {
 	background: url('icons/SendMailIcon.gif') no-repeat;
 }
+
+/*
+ * Scroll Manager
+ * */
+.UIMailPortlet .ScrollButtons {
+  float: right;
+  padding-top: 7px;
+  display: block;
+}
+
+.UIMailPortlet .ScrollLeftButton {
+  cursor: pointer;
+  background: url('icons/ScollArrow.gif') no-repeat left 0px;
+  width: 17px;
+  height: 17px;
+  padding-left: 17px;
+  margin-right: 5px;
+}
+/* Scroll chat window */
+
+.UIMailPortlet .ScrollRightButton {
+  cursor: pointer;
+  background: url('icons/ScollArrow.gif') no-repeat left -18px;
+  width: 17px;
+  height: 17px;
+  margin-left:5px;
+}
+
+.UIMailPortlet .DisableScrollLeftButton {
+  cursor: pointer;
+  background: url('icons/ScollArrow.gif') no-repeat left -36px;
+  width: 17px;
+  height: 17px;
+  padding-left: 17px;
+  margin-right:5px;
+}
+
+.UIMailPortlet .DisableScrollRightButton { 
+  cursor: pointer;
+  background: url('icons/ScollArrow.gif') no-repeat left -54px;
+  width: 17px;
+  height: 17px;
+  margin-left:5px;
+}
+
+.UIMailPortlet .HighlightScrollLeftButton {
+  cursor: pointer;
+  background: url('icons/ScollArrow.gif') no-repeat left -72px;
+  width: 17px;
+  height: 17px;
+  padding-left: 17px;
+  margin-right: 5px;
+}
+
+.UIMailPortlet .HighlightScrollRightButton {
+  cursor: pointer;
+  background: url('icons/ScollArrow.gif') no-repeat left -90px;
+  width: 17px;
+  height: 17px;
+  margin-left: 5px;
+}

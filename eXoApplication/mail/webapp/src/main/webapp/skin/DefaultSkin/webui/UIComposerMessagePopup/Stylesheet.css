@@ -44,7 +44,7 @@
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .ControlButton .IconHolder {
 	line-height: 26px;
-	margin: 1px 7px 0px 7px;
+	margin: 1px 5px 0px 5px;
 	padding-left: 26px; /* orientation=lt */
 	padding-right: 26px; /* orientation=rt */
 	width: auto;
@@ -99,7 +99,10 @@
 
 
 
-.UIMessageCompose .MailListActionsbar .ControlButton .AttachServerIcon {
+.UIMailPortlet .AttachServerIcon {
+	padding-left: 24px; /* orientation=lt */
+	padding-right: 24px; /* orientation=rt */
+	line-height: 24px;
 	background: url('icons/24x24/AttachServerIcon.png') no-repeat left top; /* orientation=lt */
 	background: url('icons/24x24/AttachServerIcon.png') no-repeat right top; /* orientation=rt */
 }
@@ -313,14 +316,3 @@
 	width:99.5%; height: 252px; text-align: left ;
 }
 
-
-/*========================= Add style for Platform by trung.nguyen ============================*/
-
-
-.UIPopupActionComposeContainer .UIComposeForm .UIMessageCompose .UIToolbar .HeaderToolbar{
-	height: auto;
-}
-
-.UIPopupActionComposeContainer .UIComposeForm .UIMessageCompose .HeaderToolbar .CenterBar{
-	height: auto;
-}
