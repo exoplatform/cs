@@ -17,6 +17,11 @@
     </dependency>
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.web.webservice</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -188,6 +193,11 @@
             <jarModule>
               <groupId>org.exoplatform.cs</groupId>
               <artifactId>exo.cs.extension.config</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
+            <jarModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.web.webservice</artifactId>
               <includeInApplicationXml>true</includeInApplicationXml>
             </jarModule>
             <webModule>
