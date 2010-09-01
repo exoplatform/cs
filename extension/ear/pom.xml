@@ -10,11 +10,11 @@
   <packaging>ear</packaging>
   <name>eXo CS Extension configuration ear</name>
   <dependencies>
-    <dependency>
+    <!--dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.extension.config</artifactId>
       <version>${project.version}</version>
-    </dependency>
+    </dependency-->
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.web.webservice</artifactId>
@@ -190,11 +190,11 @@
               <artifactId>cometd-api</artifactId>
               <includeInApplicationXml>true</includeInApplicationXml>
             </jarModule>
-            <jarModule>
+            <!--jarModule>
               <groupId>org.exoplatform.cs</groupId>
               <artifactId>exo.cs.extension.config</artifactId>
               <includeInApplicationXml>true</includeInApplicationXml>
-            </jarModule>
+            </jarModule-->
             <jarModule>
               <groupId>org.exoplatform.cs</groupId>
               <artifactId>exo.cs.web.webservice</artifactId>
