@@ -339,7 +339,7 @@
 </div>
 <!-- End of BuddyItem action popup menu -->
 <!-- Chat window with tab -->
-<div style="position: absolute; top: 115px; left: 255px; width: 655px; height: 230px;
+<div style="position: absolute; top: 115px; left: 255px; width: 655px; height: auto;
     display: none;" class="UIWindow DefaultTheme UIDragObject UIResizeObject ChatPopup ChatSharedIcons"
     minwidth="545px" minheight="245px">
     <div class="WindowBarLeft">
