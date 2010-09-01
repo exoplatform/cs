@@ -285,7 +285,6 @@
 							<% }%>
 						</div>
 						<!-- end -->
-						<div class="Copyright">Powered by eXoplatform</div>
 						<div style="padding: 5px 5px 0px 0px; display: none;">
                             <div class="FilterField">
                                 <span></span>
