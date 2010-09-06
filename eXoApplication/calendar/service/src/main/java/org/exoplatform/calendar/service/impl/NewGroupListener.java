@@ -10,6 +10,7 @@ import java.util.List;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
@@ -61,9 +62,13 @@ public class NewGroupListener extends GroupEventListener {
   public void postSave(Group group, boolean isNew) throws Exception { 
     if (!isNew) return;
     String groupId = group.getId();
+    String parentId = group.getParentId();
     if(ignore_groups_ != null && !ignore_groups_.isEmpty())
       for(String g : ignore_groups_) {
-        if(g.contains("/spaces/*") && groupId.toLowerCase().contains("spaces/")) return;
+        //if(g.contains("/spaces/*") && groupId.toLowerCase().contains("spaces/")) return;
+    	// CS-4474: ignore create calendar for group of space
+    	if ((g.lastIndexOf(Utils.SLASH_AST) > -1) && parentId.equalsIgnoreCase(g.substring(0, g.lastIndexOf(Utils.SLASH_AST))))
+    		return;
         if(groupId.equalsIgnoreCase(g)) return ;
       }
     boolean isPublic = true;
