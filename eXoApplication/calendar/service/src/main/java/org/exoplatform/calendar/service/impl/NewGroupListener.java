@@ -68,15 +68,8 @@ public class NewGroupListener extends GroupEventListener {
     	if(groupId.equalsIgnoreCase(g)) return ;
         //if(g.contains("/spaces/*") && groupId.toLowerCase().contains("spaces/")) return;
     	// CS-4474: ignore create calendar for group of space
-    	try
-      	{
-      		if ((g.lastIndexOf(Utils.SLASH_AST) > -1) && ((g.substring(0, g.lastIndexOf(Utils.SLASH_AST))).equalsIgnoreCase(parentId)))
-      			return;
-      	}
-      	catch (IndexOutOfBoundsException e)
-      	{
-      		continue;
-      	}
+    	if ((g.lastIndexOf(Utils.SLASH_AST) > -1) && ((g.substring(0, g.lastIndexOf(Utils.SLASH_AST))).equalsIgnoreCase(parentId)))
+    		return;
       }
     boolean isPublic = true;
     Calendar calendar = new Calendar() ;
