@@ -1,0 +1,164 @@
+
+h1. List of Portlets
+
+
+h2. Calendar Portlet
+The Calendar Portlet is packaged in the Calendar.war file.
+
+h3. Description
+Calendar Portlet shows the Calendar application of eXo Collaboration, that  offers a lot of features to users.
+
+The Calendar application includes the following features:
+
+* Create multiple personal calendars, manage calendars easily with calendar groups.
+* Quickly create an event or a task using the *Quick Add* dialog.
+* Create events and tasks in details.
+* Create all-day events.
+* View other attender's availability schedules.
+* Create recurring events.
+* Get reminders.
+* View calendars by various views: day, week, month and year .
+* Quickly view events day by day by navigating the mini-calendar.
+* Share calendars with others.
+* Import/Export calendars.
+* Publish your calendars with RSS, CalDAV.
+* Search events/tasks in calendars.
+* Print your agenda.
+ 
+h3. Portlet.xml
+See the portlet in the project following this path:
+ /exo.cs.eXoApplication.calendar.webapp/src/main/webapp/WEB-INF/portlet.xml
+
+
+h2. Chatbar Portlet
+The Chatbar Portlet is packaged in the Chatbar.war file.
+
+h3. Description
+
+The Chatbar portlet shows the Chatbar application of eXo Collaboration that can be positioned in the portal or page layout as any other, but behaves as a floating box. The bar remains floating at its location even when browser window is scrolled or resized.
+It has a fixed height, but expands horizontally to whatever size is available in its container. This allows to place the portlet in two layout cases :
+
+* Large width area (typically header or footer)
+* Narrow column
+
+Chat Bar application implements all functions of Chat application with the purpose of allowing user to send and receive messages anywhere after he has logged in.
+
+The Chat Bar is a typical toolbar with buttons that open menus.
+It gives access to main chat features :
+
+* Status change and presence indicator
+* Contacts
+* Rooms
+* Minimized conversation window
+
+h3. List of portlet preferences
+The Chatbar Portlet consists some preferences as in the following sample code:
+ 
+{code}
+<portlet-preferences>
+    
+            
+			<preference>
+				<name>showMailLink</name>
+				<value>true</value> <!--true/false -->
+				<read-only>false</read-only>
+			</preference>
+
+			<preference>
+				<name>showCalendarLink</name>
+				<value>true</value> <!--true/false -->
+				<read-only>false</read-only>
+			</preference>
+
+			<preference>
+				<name>showContactLink</name>
+				<value>true</value> <!--true/false -->
+				<read-only>false</read-only>
+			</preference>
+			
+			<preference>
+				<name>mailUrl</name>
+				<value>portal/private/intranet/mail</value> <!--String page name-->
+				<read-only>false</read-only>
+			</preference>
+			
+			<preference>
+				<name>calendarUrl</name>
+				<value>portal/private/intranet/calendar</value> <!--String page name -->
+				<read-only>false</read-only>
+			</preference>
+			
+			<preference>
+				<name>contactUrl</name>
+				<value>portal/private/intranet/contact</value> <!--String page name-->
+				<read-only>false</read-only>
+			</preference>
+			
+			<preference>
+				<name>info</name>
+				<value>info</value> <!--this is only the key to get the resource bundle the full key : UIConfigForm.label.info -->
+				<read-only>true</read-only>
+			</preference>
+	</portlet-preferences>
+{code}
+
+|| Preference Name     || Possible Values || Default || Description || 
+|  showMailLink 	| True / Fault | True | Show the link of the Mail application. |
+| showCalendarLink | True / Fault | True | Show the link of the Calendar application|
+| showContactLink | True / Fault | True | Show the link of the Contact application|
+| mailUrl | Portal/private/intranet/mail | | Link to the Mail application |
+| calendarUrl | Portal/private/intranet/calendar | | Link to the Calendar application|
+| contactUrl | Portal/private/intranet/contact | Link to the Contact application |
+| info | Info| Info | This is only the key to get the resource bundle the full key : UIConfigForm.label.info |
+      
+h3. Portlet.xml
+See the portlet in the project following this path:
+/exo.cs.eXoApplication.chatbar.webapp/src/main/webapp/WEB-INF/portlet.xml
+
+
+h2. Chat Portlet
+The Chat Portlet is packaged in the Chat.war file.
+
+h3. Description
+ The Chat Portlet shows the Chat application of eXo Collaboration that allows users to enter chat rooms and communicate with online others at real time.
+
+h3. Portlet.xml
+See the portlet in the project following this path:
+ /exo.cs.eXoApplication.chat.webapp/src/main/webapp/WEB-INF/portlet.xml
+
+
+
+h2. Contact Portlet
+Contact Portlet is packaged in the Contact.war file.
+
+h3. Description
+Contact Portlet shows the Contact application of eXo Collaboration that allows users to personalize their contact view from different view types such as List view and VCards view.
+
+h3. Portlet.xml
+See the portlet in the project following this path:
+/exo.cs.eXoApplication.contact.webapp/src/main/webapp/WEB-INF/portlet.xml
+
+
+h2. Mail Portlet
+The Mail Portlet is packaged in the Mail.war file.
+
+h3. Description
+Mail Portlet shows the Mail application of eXo Collaboration that offers a lot of feature to users such as sending, receiving or viewing their mails through Internet without actually downloading them to their computer. Users not only take advantages of eXo Mail by keeping and receiving all important messages, files and pictures forever but also by looking for and viewing their needed messages easily whenever they want. Additionally, eXo Mail is smoothly integrated with other Collaboration modules such as Address Book and Calendar.
+
+h3. Portlet.xml
+ See the portlet in the project following this path:
+/exo.cs.eXoApplication.mail.webapp/src/main/webapp/WEB-INF/portlet.xml
+
+
+h2. RSSreader Portlet
+
+The RSSreader Portlet is packaged in the Rssreader.war file.
+
+h3. Description
+eXo Collaboration uses the RSS Reader Portlet that facilitates users to quickly get a view of their favorite feeds around the web. They will get the latest news, the last updated posts from their favorite blogs, latest emails,etc.
+
+h3. Portlet.xml
+See the portlet in the project following this path:
+/eXoApplication/content/webapp/src/main/webapp/WEB-INF/portlet.xml
+
+

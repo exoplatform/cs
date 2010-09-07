@@ -45,7 +45,7 @@ Details:
 
 || Name     || Description ||
 | General  | This part contains all general information of the created room |
-| Room name    |	The name of created room. You can not change value of this field.  |
+| Room name    | The name of created room. You can not change value of this field.  |
 | Persistent Room     |	This option is to allow the room will be remain without  any member or not. |
 | Enable logging   |	This option allows to log room's conversations or not. |
 | Presence Broadcast    |	Sets the list of roles of which presence will be broadcasted to the rest of the occupants. This feature is useful for implementing "invisible" occupants. |

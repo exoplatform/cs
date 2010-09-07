@@ -1,0 +1,159 @@
+h1. Configuration
+
+- List and description of the <component> that can take init-param
+- Description of the <init-params> with meaning of all possible values
+- List of <external-component-plugins> that are necessary to configure the app (such as job scheduler)
+- Other things to configure (ex: chatserver)
+
+h2. External- Component-Pugins
+h3. RepositoryService of Calendar
+
+{code}
+ <external-component-plugins>
+          <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>      
+          <component-plugin> 
+            <name>add.calendar.nodeType</name>
+            <set-method>addPlugin</set-method>
+            <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+            <init-params>
+              <values-param>
+                <name>autoCreatedInNewRepository</name>
+                <description>Node types configuration file</description>
+                <value>jar:/conf/portal/calendar-nodetypes.xml</value>
+              </values-param>
+            </init-params>
+          </component-plugin>
+        </external-component-plugins>
+{code}
+
+h3. RepositoryService  - Chat
+{code}
+  <external-component-plugins>
+                <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
+                <component-plugin>
+                        <name>add.namespaces</name>
+                        <set-method>addPlugin</set-method>
+                        <type>org.exoplatform.services.jcr.impl.AddNamespacesPlugin</type>
+                        <init-params>
+                                <properties-param>
+                                        <name>namespaces</name>
+                                        <property name="lr" value="http://www.exoplatform.org/liveroom/1.0" />
+                                </properties-param>
+                        </init-params>
+                </component-plugin>
+                <component-plugin>
+                        <name>add.nodeType</name>
+                        <set-method>addPlugin</set-method>
+                        <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+                        <init-params>
+                                <values-param>
+                                        <name>autoCreatedInNewRepository</name>
+                                        <description>Node types configuration file</description>
+                                        <value>jar:/conf/portal/chat-nodetype-config.xml</value>
+                                </values-param>
+                        </init-params>
+                </component-plugin>
+        </external-component-plugins>
+
+
+h3. JobSchedulerService   - Chat
+
+        <external-component-plugins>
+                <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
+                <component-plugin>
+                        <name>ChatRecordsJob</name>
+                        <set-method>addPeriodJob</set-method>
+                        <type>org.exoplatform.services.xmpp.connection.impl.HistoryPeriodJob</type>
+                        <description>add chat messages from Openfire Server to History</description>
+                        <init-params>
+                                <properties-param>
+                                        <name>job.info</name>
+                                        <description>save the monitor data periodically</description>
+                                        <property name="jobName" value="messageToHistoricalMessageJob" />
+                                        <property name="groupName" value="CollaborationSuite" />
+                                        <property name="job"
+                                                value="org.exoplatform.services.xmpp.connection.impl.HistoryJob" />
+                                        <property name="repeatCount" value="0" />
+                                        <property name="period" value="3000" />
+                                        <property name="startTime" value="+0" />
+                                        <property name="endTime" value="" />
+                                </properties-param>
+                                <properties-param>
+                                        <name>history.info</name>
+                                        <description>save the monitor data periodically</description>
+                                        <property name="logBatchSize" value="50" />
+                                </properties-param>
+                        </init-params>
+                </component-plugin>
+        </external-component-plugins>
+        <external-component-plugins>
+                <target-component>org.exoplatform.services.rest.impl.RequestHandlerImpl</target-component>
+                <component-plugin>
+                        <name>ws.rs.request.filter</name>
+                        <set-method>addPlugin</set-method>
+                        <type>org.exoplatform.services.rest.impl.RequestFilterComponentPlugin</type>
+                        <init-params>
+                                <value-param>
+                                        <name>RESTXMPPServiceFilter</name>
+                                        <value>org.exoplatform.services.xmpp.rest.filter.RESTXMPPServiceFilter</value>
+                                </value-param>
+                        </init-params>
+                </component-plugin>
+        </external-component-plugins>
+        <external-component-plugins>
+                <target-component>org.exoplatform.services.listener.ListenerService</target-component>
+                <component-plugin>
+                        <name>exo.core.security.ConversationRegistry.register</name>
+                        <set-method>addListener</set-method>
+                        <type>org.exoplatform.services.xmpp.connection.impl.AuthenticationLoginListener</type>
+                        <description>description</description>
+                </component-plugin>
+                <component-plugin>
+                        <name>exo.core.security.ConversationRegistry.unregister</name>
+                        <set-method>addListener</set-method>
+                        <type>org.exoplatform.services.xmpp.connection.impl.AuthenticationLogoutListener</type>
+                        <description>description</description>
+                </component-plugin>
+        </external-component-plugins>
+{code}
+
+
+h3. External component plugin RepositoryService - Contact
+{code}
+<external-component-plugins>
+          <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>      
+          <component-plugin> 
+            <name>add.contact.nodeType</name>
+            <set-method>addPlugin</set-method>
+            <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+            <init-params>
+              <values-param>
+                <name>autoCreatedInNewRepository</name>
+                <description>Node types configuration file</description>
+                <value>jar:/conf/portal/contact-nodetypes.xml</value>
+              </values-param>
+            </init-params>
+          </component-plugin>
+        </external-component-plugins>
+{code}
+
+h3. Repository - Content
+{code}
+ <external-component-plugins>
+          <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>      
+          <component-plugin> 
+            <name>add.contact.nodeType</name>
+            <set-method>addPlugin</set-method>
+            <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+            <init-params>
+              <values-param>
+                <name>autoCreatedInNewRepository</name>
+                <description>Node types configuration file</description>
+                <value>jar:/conf/portal/contact-nodetypes.xml</value>
+              </values-param>
+            </init-params>
+          </component-plugin>
+        </external-component-plugins>
+{code}
+
+
