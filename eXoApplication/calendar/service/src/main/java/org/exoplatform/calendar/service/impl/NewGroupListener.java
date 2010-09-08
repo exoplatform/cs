@@ -10,6 +10,7 @@ import java.util.List;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
@@ -61,9 +62,13 @@ public class NewGroupListener extends GroupEventListener {
   public void postSave(Group group, boolean isNew) throws Exception { 
     if (!isNew) return;
     String groupId = group.getId();
+    String parentId = group.getParentId();
     if(ignore_groups_ != null && !ignore_groups_.isEmpty())
       for(String g : ignore_groups_) {
         if(groupId.equalsIgnoreCase(g)) return ;
+        // CS-4474: ignore create calendar for group of space
+        if ((g.lastIndexOf(Utils.SLASH_AST) > -1) && ((g.substring(0, g.lastIndexOf(Utils.SLASH_AST))).equalsIgnoreCase(parentId)))
+        	return;
       }
     boolean isPublic = true;
     Calendar calendar = new Calendar() ;
@@ -86,12 +91,7 @@ public class NewGroupListener extends GroupEventListener {
       if(!perms.contains(groupKey)) perms.add(groupKey) ;
     }
     calendar.setEditPermission(perms.toArray(new String[perms.size()])) ;
-    try {
-      calendarService_.savePublicCalendar(calendar, isNew, null) ;
-    } finally {
-      //TODO check session status here
-    	//sProvider.close();
-    }
+    calendarService_.savePublicCalendar(calendar, isNew) ;
   }
   @Override
   public void postDelete(Group group) throws Exception {
@@ -109,11 +109,5 @@ public class NewGroupListener extends GroupEventListener {
     	//TODO check session status here
     	//sProvider.close();
     }    
-  }
-  
-  private SessionProvider createSystemProvider() {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    return service.getSystemSessionProvider(null) ;    
   }
 }

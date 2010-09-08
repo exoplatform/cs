@@ -134,6 +134,8 @@
 	        <!-- 
 	        <value>/platform/guests</value>
 	         -->
+	         <!-- single value, use more <value> tags to add more group -->
+	         <value>/spaces/*</value>
         </values-param>
         
         

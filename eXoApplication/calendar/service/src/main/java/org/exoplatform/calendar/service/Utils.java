@@ -151,6 +151,7 @@ public class Utils {
   public static final String COLON_SLASH = ":/".intern() ;
   public static final String ANY = "*.*".intern();
   public static final String ANY_OF = "*.".intern();
+  public static final String SLASH_AST = "/*".intern();
   
   final public static String CALENDAR_REMINDER = "reminders".intern();
   final public static String CALENDAR_APP = "CalendarApplication".intern() ;
