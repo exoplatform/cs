@@ -1140,7 +1140,8 @@ public class JCRDataStorage implements DataStorage {
       long t1, t2, t4;
       String from;
 
-      String msgId = MimeMessageParser.getMessageId(msg);
+      //String msgId = MimeMessageParser.getMessageId(msg);
+      String msgId = "MessageHeader" + IdGenerator.generate() ;
       logger.debug("MessageId = " + msgId);
       Calendar gc = MimeMessageParser.getReceivedDate(msg);
       boolean isReadMessage = MimeMessageParser.isSeenMessage(msg);
