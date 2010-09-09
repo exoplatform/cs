@@ -114,12 +114,28 @@ UICalendarPortlet.prototype.checkPermission = function(eventObj){
 	this.makeRequest(url,this.postCheck);
 };
 /**
+ * 
+ * @param {Object} calendarForm : calendar form DOM node
+ * @return {Object} a checked calendar id
+ */
+UICalendarPortlet.prototype.getCheckedCalendar = function(calendarForm){
+	var checkedCalendars = new Array();
+	var chks = calendarForm.elements;
+	for(var i = 0 , l = chks.length; i < l; i++){
+		if(chks[i].checked && eXo.core.DOMUtil.hasClass(chks[i],"checkbox")) checkedCalendars.push(chks[i]); 
+	}
+	if(!checkedCalendars || checkedCalendars.length == 0) return null;
+	return checkedCalendars[0].name;
+};
+
+/**
  * Show Quick add event and task form 
  * @param {obj, type} has action object, type of form : event 1 | task 2
  */
 UICalendarPortlet.prototype.addQuickShowHidden = function(obj, type){
 	var startTime = new Date().getTime() ;
-    this.addQuickShowHiddenWithTime(obj, type, startTime, startTime + 15*60*1000) ;
+	var id = this.getCheckedCalendar(this.filterForm);	
+	this.addQuickShowHiddenWithTime(obj, type, startTime, startTime + 15*60*1000,id) ;
 } ;
 
 /**
@@ -128,8 +144,8 @@ UICalendarPortlet.prototype.addQuickShowHidden = function(obj, type){
  */
 UICalendarPortlet.prototype.addQuickShowHiddenWithId = function(obj, type, id){
 	var startTime = new Date().getTime() ;
-    var id = (id.match(/calendar[a-zA-Z0-9]+\&/ig)).toString().replace("&","");
-    this.addQuickShowHiddenWithTime(obj, type, startTime, startTime + 15*60*1000, id) ;
+  var id = (id.match(/calendar[a-zA-Z0-9]+\&/ig)).toString().replace("&","");
+  this.addQuickShowHiddenWithTime(obj, type, startTime, startTime + 15*60*1000, id) ;
 } ;
 
 
@@ -139,6 +155,7 @@ UICalendarPortlet.prototype.addQuickShowHiddenWithId = function(obj, type, id){
  */
 UICalendarPortlet.prototype.addQuickShowHiddenWithTime = function(obj, type, fromMilli, toMilli, id){
     var CalendarWorkingWorkspace =  document.getElementById("UICalendarWorkingContainer");
+		var id = this.getCheckedCalendar(this.filterForm);
     var UIQuckAddEventPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddEventPopupWindow");
     var UIQuckAddTaskPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddTaskPopupWindow");
     var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;
@@ -2001,7 +2018,10 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
     }
     
 };
-
+/**
+ * Show/hide time field when event form load
+ * @param {Object} form: Event form
+ */
 UICalendarPortlet.prototype.isAllday = function(form){
     try {
         if (typeof(form) == "string") 
@@ -2016,6 +2036,17 @@ UICalendarPortlet.prototype.isAllday = function(form){
                 break;
             }
         }
+				/**
+				 * Preselect calendar when add event/task
+				 */
+				var calendarid = this.getCheckedCalendar(this.filterForm);
+				if(calendarid){
+					var calendar = form.elements["calendar"];
+					for(i=0; i < calendar.options.length;  i++) {
+						var value = calendar.options[i].value ;
+						calendar.options[i].selected = (value.match(calendarid) != null);		   
+					}
+				}
     } 
     catch (e) {
     
@@ -2059,6 +2090,11 @@ UICalendarPortlet.prototype.showHideField = function(chk, fields){
     }
 };
 
+/**
+ * Show/hide repeat field in Event form
+ * @param {Object} chk : checkbox to check repeat or not
+ */
+
 UICalendarPortlet.prototype.showHideRepeat = function(chk){
     var DOMUtil = eXo.core.DOMUtil;
     var checkbox = DOMUtil.findFirstDescendantByClass(chk, "input", "checkbox");
@@ -2070,6 +2106,10 @@ UICalendarPortlet.prototype.showHideRepeat = function(chk){
 	    repeatField.style.visibility = "hidden";
 		}
 };
+
+/**
+ *  Show/hide repeat field automatically
+ */
 
 UICalendarPortlet.prototype.autoShowRepeatEvent = function(){
 		var DOMUtil = eXo.core.DOMUtil;
