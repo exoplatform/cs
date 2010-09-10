@@ -15,9 +15,10 @@ h2. Gadgets
 h1. Configurations
 {include:document="Configuration.wiki"}
 {include:document="Configuration-component-plugin.wiki"}
-
+{include:document="Chatserver-configuration.wiki"}
 
 h1. Developers reference
+{include:document="Developer-ref.wiki"}
 
 
 

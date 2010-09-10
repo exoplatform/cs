@@ -28,7 +28,7 @@ When this configuration file is executed, the component named org.exoplatform.ca
 {code}
 
 Details:
-||Properties-Param || Property name || Description || Possible Values || Default Values ||
+||Properties-Param || Property name || Description || Possible Value || Default Value ||
 | *eventNumber* | {{eventNumber}} | {{The number of events in a calendar}} | {{interger}} | {{100}} |
 
 h2. HistoryImpl  
@@ -137,45 +137,6 @@ when the server starts, the configuration file that contains the declaration of 
 || Values-param || Description || Possible Values || Default Values ||
 | *UserCanSeeAllGroupAddressBooks* | {{User can see all GroupAddressBooks or only GroupAddressBooks that the user has at least one membership.}} | {{true/false}} | {{false}} |
 | *NonPublicGroups* | {{Groups that shouldn't be displayed in broadcast list. Wildcards may be used in groups name}} | {{true/false}} | None | 
-
-h2. AddActionsPlugin
-The configuration of the AddActionsPlugin is found in WEB-INF/cs-extension/cs/webservice/webservice-configuration.xml
-It is used to register the listener named org.exoplatform.webservice.cs.LastUpdateAction and it is executed basing on eventTypes.
-
-{code:xml}
- 
-  <component>
-  	<type>org.exoplatform.services.jcr.impl.ext.action.SessionActionCatalog</type>
-  	<component-plugins>
-  	<component-plugin>
-    <name>Last Update Action</name>
-    <set-method>addPlugin</set-method>
-    <type>org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin</type>
-    <description>add actions plugin</description>
-    <init-params>
-      <object-param>
-        <name>actions</name>
-        <object type="org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin$ActionsConfig">
-          <field  name="actions">
-            <collection type="java.util.ArrayList">	              
-              <value>
-                <object type="org.exoplatform.services.jcr.impl.ext.action.ActionConfiguration">
-                  <field  name="eventTypes"><string>addNode,changeProperty</string></field>
-                  <field  name="nodeTypes"><string>exo:calendarEvent</string></field> 	                  
-                  <field  name="actionClassName"><string>org.exoplatform.webservice.cs.LastUpdateAction</string></field>
-                </object>
-              </value>
-            </collection>
-          </field>
-        </object>
-      </object-param>
-    </init-params>
-  	</component-plugin>
-  	</component-plugins>
-  </component>
-{code}
-
-|| Object-param || 
 
 
 
