@@ -607,4 +607,15 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public void addEventListenerPlugin(CalendarEventListener listener) throws Exception {
     eventListeners_.add(listener);    
   }
+
+  @Override
+  public void assignGroupTask(String taskId, String calendarId, String assignee) throws Exception {
+    storage_.assignGroupTask(taskId, calendarId, assignee);
+    
+  }
+
+  @Override
+  public void setGroupTaskStatus(String taskId, String calendarId, String status) throws Exception {
+    storage_.setGroupTaskStatus(taskId, calendarId, status);
+  }
 }

@@ -47,6 +47,7 @@ public class ContactDataInitialize extends SpaceListenerPlugin {
   private static final Log log = ExoLogger.getLogger(ContactDataInitialize.class);
   
   public static final String ADDRESSBOOK_ID_PREFIX = "ContactGroupInSpace".intern();
+  
   private final InitParams params;
   
   public ContactDataInitialize(InitParams params) {

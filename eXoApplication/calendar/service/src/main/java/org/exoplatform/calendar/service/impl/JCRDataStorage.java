@@ -3428,4 +3428,42 @@ public class JCRDataStorage implements DataStorage {
       }
     }
   }
+  
+  public void assignGroupTask(String taskId, String calendarId, String assignee) throws Exception {
+    Node calendarNode = getPublicCalendarHome().getNode(calendarId) ;
+    try {
+      Node eventNode = calendarNode.getNode(taskId);
+      String taskDelegator = "";
+      try {
+        taskDelegator = eventNode.getProperty(Utils.EXO_TASK_DELEGATOR).getString();
+      } catch (PathNotFoundException pnfe) {
+        // do nothing here. It means that this property has not been set yet.
+      }
+      if (assignee != null && assignee.length() > 0) {
+        if (taskDelegator == null || taskDelegator.trim().length() == 0) {
+          taskDelegator = assignee;
+        } else {
+          taskDelegator += "," + assignee;
+        }
+        eventNode.setProperty(Utils.EXO_TASK_DELEGATOR, taskDelegator);
+        eventNode.getSession().save();
+      }
+    } finally {
+      calendarNode.getSession().logout();
+    }
+    
+  }
+
+  public void setGroupTaskStatus(String taskId, String calendarId, String status) throws Exception {
+    Node calendarNode = getPublicCalendarHome().getNode(calendarId);
+    try {
+      Node eventNode = calendarNode.getNode(taskId);
+      if (status != null && status.length() > 0) {
+        eventNode.setProperty(Utils.EXO_EVENT_STATE, status);
+        eventNode.getSession().save();
+      } 
+    } finally {
+      calendarNode.getSession().logout();
+    }
+  }
 }

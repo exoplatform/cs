@@ -485,4 +485,16 @@ public class MockCalendarService implements CalendarService{
 	// TODO Auto-generated method stub
 		
   }
+
+  @Override
+  public void assignGroupTask(String taskId, String calendarId, String assignee) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void setGroupTaskStatus(String taskId, String calendarId, String status) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
 }

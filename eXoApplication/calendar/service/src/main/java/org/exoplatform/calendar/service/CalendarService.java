@@ -578,5 +578,23 @@ public interface CalendarService {
   
   public ResourceBundle getResourceBundle() throws Exception;
 
-  public void initNewUser(String userName, CalendarSetting defaultCalendarSetting) throws Exception;	
+  public void initNewUser(String userName, CalendarSetting defaultCalendarSetting) throws Exception;
+  
+  /**
+   * assign a user as delegator for a group task.
+   * @param taskId
+   * @param calendarId
+   * @param assignee
+   * @throws Exception
+   */
+  public void assignGroupTask(String taskId, String calendarId, String assignee) throws Exception;
+  
+  /**
+   * set status value of a group task.
+   * @param taskId
+   * @param calendarId
+   * @param status
+   * @throws Exception
+   */
+  public void setGroupTaskStatus(String taskId, String calendarId, String status) throws Exception;
 }

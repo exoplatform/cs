@@ -20,8 +20,6 @@
   <import>war:/cs-extension/cs/organization/organization-service-configuration.xml</import>
   <import>war:/cs-extension/cs/webservice/webservice-configuration.xml</import>
   <import>war:/cs-extension/cs/chat/chat-service-configuration.xml</import>
-  <!-- social integration configuration -->
-  <import>war:/cs-extension/cs/social-integration/social-integration-configuration.xml</import>
   <!-- main CS configuration  -->
   <import>war:/cs-extension/cs/cs-configuration.xml</import>
     

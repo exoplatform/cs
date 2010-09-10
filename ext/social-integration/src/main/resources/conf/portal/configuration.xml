@@ -1,0 +1,108 @@
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd http://www.exoplaform.org/xml/ns/kernel_1_1.xsd"
+  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd">
+
+ <!-- Social integration -->
+    <external-component-plugins>
+    <target-component>org.exoplatform.social.core.space.spi.SpaceService</target-component>
+    <component-plugin>
+      <name>CalendarDataInitialize</name>
+      <set-method>addSpaceListener</set-method>
+      <type>org.exoplatform.cs.ext.impl.CalendarDataInitialize</type>
+      <init-params>
+				<value-param>
+					<name>portletName</name>
+					<value>CalendarPortlet</value>
+				</value-param>
+			</init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+   <external-component-plugins>
+    <target-component>org.exoplatform.social.core.space.spi.SpaceService</target-component>
+    <component-plugin>
+      <name>ContactDataInitialize</name>
+      <set-method>addSpaceListener</set-method>
+      <type>org.exoplatform.cs.ext.impl.ContactDataInitialize</type>
+      <init-params>
+				<value-param>
+					<name>portletName</name>
+					<value>ContactPortlet</value>
+				</value-param>
+			</init-params>
+    </component-plugin>
+  </external-component-plugins>
+  
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.contact.service.ContactService</target-component>
+    <component-plugin>
+      <name>ContactEventListener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.cs.ext.impl.ContactSpaceActivityPublisher</type>
+    </component-plugin>
+  </external-component-plugins>
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.calendar.service.CalendarService</target-component>
+    <component-plugin>
+      <name>CalendarEventListener</name>
+      <set-method>addEventListenerPlugin</set-method>
+      <type>org.exoplatform.cs.ext.impl.CalendarSpaceActivityPublisher</type>      
+    </component-plugin>
+  </external-component-plugins>
+  
+  <external-component-plugins>
+    <target-component>org.exoplatform.social.core.space.spi.SpaceService</target-component>
+    <component-plugin>
+      <name>portlets.prefs.required</name>
+      <set-method>setPortletsPrefsRequired</set-method>
+      <type>org.exoplatform.social.core.application.PortletPreferenceRequiredPlugin</type>
+            <init-params>      
+              <values-param>
+                <name>portletsPrefsRequired</name>
+                <value>CalendarPortlet</value>
+                <value>ContactPortlet</value>
+              </values-param>
+            </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+	<!-- configure activies plugin -->
+	<external-component-plugins>
+    <target-component>org.exoplatform.webui.ext.UIExtensionManager</target-component>
+    <component-plugin>
+      <name>add.cs.calendar.activity.plugin</name>
+      <set-method>registerUIExtensionPlugin</set-method>
+      <type>org.exoplatform.webui.ext.UIExtensionPlugin</type>
+      <init-params>
+        <object-param>
+          <name>Calendar Space Activity</name>
+          <object type="org.exoplatform.social.webui.activity.UIActivityExtension">
+            <field name="type"><string>org.exoplatform.social.webui.activity.BaseUIActivity</string></field>
+            <field name="name"><string>cs-calendar:spaces</string></field>
+            <field name="component"><string>org.exoplatform.cs.ext.impl.CalendarUIActivity</string></field>
+            <field name="activityBuiderClass"><string>org.exoplatform.cs.ext.impl.CalendarSpaceUIActivityBuilder</string></field>
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>
+    <component-plugin>
+      <name>add.cs.contact.activity.plugin</name>
+      <set-method>registerUIExtensionPlugin</set-method>
+      <type>org.exoplatform.webui.ext.UIExtensionPlugin</type>
+      <init-params>
+        <object-param>
+          <name>Contact Space Activity</name>
+          <object type="org.exoplatform.social.webui.activity.UIActivityExtension">
+            <field name="type"><string>org.exoplatform.social.webui.activity.BaseUIActivity</string></field>
+            <field name="name"><string>cs-contact:spaces</string></field>
+            <field name="component"><string>org.exoplatform.cs.ext.impl.ContactUIActivity</string></field>
+            <field name="activityBuiderClass"><string>org.exoplatform.cs.ext.impl.ContactSpaceUIActivityBuilder</string></field>
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+  <!-- End social intergration -->
+  
+  </configuration>
