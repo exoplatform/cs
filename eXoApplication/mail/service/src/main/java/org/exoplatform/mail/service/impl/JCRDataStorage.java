@@ -942,7 +942,7 @@ public class JCRDataStorage implements DataStorage {
         nodeMsg.setProperty(Utils.EXO_PATH, message.getPath());
         if (!Utils.isEmptyField(message.getFrom()))
           from = message.getFrom().replaceAll("\"", "");
-        nodeMsg.setProperty(Utils.EXO_FROM, from);
+        nodeMsg.setProperty(Utils.EXO_FROM, from.trim());
         if (!Utils.isEmptyField(message.getMessageTo()))
           to = message.getMessageTo().replaceAll("\"", "");
         nodeMsg.setProperty(Utils.EXO_TO, to);
@@ -1205,7 +1205,7 @@ public class JCRDataStorage implements DataStorage {
         }
         node.setProperty(Utils.EXO_ACCOUNT, accId);
         from = Utils.decodeText(InternetAddress.toString(msg.getFrom())).replaceAll("\"", "");
-        node.setProperty(Utils.EXO_FROM, from);
+        node.setProperty(Utils.EXO_FROM, from.trim());
         node.setProperty(Utils.EXO_TO, getAddresses(msg, javax.mail.Message.RecipientType.TO));
         node.setProperty(Utils.EXO_CC, getAddresses(msg, javax.mail.Message.RecipientType.CC));
         node.setProperty(Utils.EXO_BCC, getAddresses(msg, javax.mail.Message.RecipientType.BCC));
@@ -3126,7 +3126,7 @@ public class JCRDataStorage implements DataStorage {
         node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, MimeMessageParser.getInReplyToHeader(msg));
         node.setProperty(Utils.EXO_ACCOUNT, accId);
         from = Utils.decodeText(InternetAddress.toString(msg.getFrom()));
-        node.setProperty(Utils.EXO_FROM, from);
+        node.setProperty(Utils.EXO_FROM, from.trim());
 
         node.setProperty(Utils.EXO_TO, getAddresses(msg, javax.mail.Message.RecipientType.TO));
         node.setProperty(Utils.EXO_CC, getAddresses(msg, javax.mail.Message.RecipientType.CC));
