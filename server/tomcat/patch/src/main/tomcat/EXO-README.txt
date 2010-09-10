@@ -49,7 +49,17 @@ experience more productive. It offers several ways to to view and organize your 
 
 
     * General
-     -  
+     - Integrated with ECMs 
+     + Select file from DMS
+     + Save file to DMS
+     - Integrated with Social
+     + Automatic initialize data when Space add application in calendar, contact
+     + Update activity in Space and customize activity template  
+     - Quick application link on chatbar
+     - Upcomming events gadget
+     - My task gadget
+     - Implemented timezone behavior 
+     
     * Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
           
 =========
@@ -103,7 +113,7 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
        Open a terminal, go to eXo-chatserver/bin and type the command:
          ./run.sh for using chat in portal
          ./run_demo.sh for using chat in csdemo
-         
+   * If on provided chat-server have no run*.* file you can reference here http://wiki.exoplatform.org/xwiki/bin/view/CS/Install%20Guide#HLaunchthechatserverforcs2.0      
 
 -) How to access the eXo Collaboration Suite
 
@@ -143,8 +153,135 @@ All those accounts have the default password "gtn".
 ===========
 6 CHANGELOG
 ===========
-- 2.1.0
+- 2.1.0 GA
+
+** Bug
+    * [CS-1519] - Error when sort sender mail
+    * [CS-3525] - [SAFARI] Fetching bar is always shown with  the same content : Start...stop
+    * [CS-3710] - Bad input for folder name is silently ignored
+    * [CS-3711] - Exception when add 1 tag (include special character) for an email
+    * [CS-3944] - Exo mail could not connect to the exchange server 
+    * [CS-4109] - Js message error after add application to a page
+    * [CS-4162] - Mail content is not valid in sepcial case
+    * [CS-4266] -  Synchronize folder is invalid in case edit folder in Gmail
+    * [CS-4360] - UI broken when select user for [Task delegation]
+    * [CS-4373] - Problem of refresh and unread message displaying
+    * [CS-4390] - Chat portlet does not work on portal classic 
+    * [CS-4394] - Chat - Unread message on chat tab is missed when refresh browser
+    * [CS-4400] - Copy/Patse: There are no contacs message display invalidly
+    * [CS-4402] - Message counld not be sent
+    * [CS-4410] - Can not do some action on the public calendar
+    * [CS-4418] - [Canlendar] User do not have edit permission still drag and drop event
+    * [CS-4436] - Can not run cs with csdemo 
+    * [CS-4442] - initialize application data wrong when adding application to Social Space.
+    * [CS-4443] - chatbar user status is always "free to chat" event if user did not yet login 
+    * [CS-4450] - Tasks Gadget bug with max height
+    * [CS-4451] - Can not load fck editor 
+    * [CS-4456] - User auto offline after refresh or login
+    * [CS-4461] - SEVERE: Can not record Activity for space when contact updated 
+    * [CS-4463] - [eXoMail] Write new mail UI is broken
+    * [CS-4465] - event is not shown full when spread in 2 lines in month view.
+    * [CS-4474] - Duplicate calendars for space groups
+    * [CS-4479] - Can't select file which is create in Site Explorer from server to attach in mail when compose new mail
+    * [CS-4480] - Should use default group calendar for space calendar 
+    * [CS-4506] - [Chat] Char bar does not work
+    * [CS-4516] - Chat works only for predefined users
+    * [CS-4517] - [Calendar] Add Event form - calendar list is shown invalid
+
+** Documentation
+    * [CS-4503] - Reference Guide
+
+** Improvement
+    * [CS-4376] - Attach from DMS
+    * [CS-4454] - MyTasks gadget : Hover on the fll title bar
+    * [CS-4457] - Update Icon for attach file from DMS
+    * [CS-4475] - preselect space calendar when add event/task
+    * [CS-4476] - Do not display left panes of Calendar in spaces
+    * [CS-4477] - More info about events in space activity stream
+    * [CS-4499] - Social Integration : leverage activity plugin
+
+** New Feature
+    * [CS-1325] - Implement Timezone behaviour
+    * [CS-2450] - Tasks Gadget
+    * [CS-3338] - Save to DMS
+    * [CS-3643] - Default presence status
+    * [CS-3654] - Tags as personal lists
+    * [CS-3990] - Share personal calendar to group
+    * [CS-4338] - Access to Mail, Contacts and Calendar from ChatBar
+    * [CS-4339] - Upcomming Events gadget
+    * [CS-4388] - eXo Spaces integration for Calendar
+    * [CS-4389] - eXo Spaces integration for AddressBook
+
+** Task
+    * [CS-4301] - merge CSCometd.js with Cometd.js from platform
+    * [CS-4303] - duplicate  properties file in resource bundle  _en  and .properties
+    * [CS-4371] - move all components declared in jars in extension
+    * [CS-4377] - Upgrade to Gatein 3.1
+    * [CS-4395] -  Add plug-in to initialize default data when space in social created
+    * [CS-4427] - Update fisheye URL in pom.xml
+    * [CS-4434] - update commons version 
+    * [CS-4447] - Organize css following the introduction of gatein 3.1
+
+- 2.1.0 CR03
+
+** Bug
+    * [CS-4462] - [eXoMail] Functional exception management is missing.
+    * [CS-4483] - Warning Unable to coerce 'Event' into a LONG
+    * [CS-4492] -  Chat Conservation form UI is broken in IE 7
+    * [CS-4493] - User using IE7 to login can not send file to another user
+    * [CS-4502] - remove "Powered By eXo Platform" in chat bar
+
+** Improvement
+    * [CS-4482] - Revamp UI composer from in mail app when the header button too long  
+
+** New Feature
+    * [CS-4338] - Access to Mail, Contacts and Calendar from ChatBar
+
+** Task
+    * [CS-4511] - Package web service in EAR extension
+    * [CS-4512] - Remove extension config jar from the ear
+    * [CS-4513] - Remove jboss-web.xml from extension war
+    * [CS-4520] - Release CS 2.1.0-CR03
+
+
+- 2.1.0 CR02
+
+** Bug
+    * [CS-4360] - UI broken when select user for [Task delegation]
+    * [CS-4461] - SEVERE: Can not record Activity for space when contact updated 
+    * [CS-4465] - event is not shown full when spread in 2 lines in month view.
+    * [CS-4488] - openfire deployment uses the hardcoded value eXo.env.dependenciesDir + "/repository" for the location of the local maven repository
+    
+** Task
+    * [CS-4371] - move all components declared in jars in extension
+    * [CS-4447] - Organize css following the introduction of gatein 3.1
+    * [CS-4505] - Release CS 2.1.0-CR02
+
+- 2.1.0 CR01
+
+** Bug
+    * [CS-4410] - Can not do some action on the public calendar
+    * [CS-4436] - Can not run cs with csdemo 
+    * [CS-4442] - initialize application data wrong when adding application to Social Space.
+    * [CS-4450] - Tasks Gadget bug with max height
+    * [CS-4451] - Can not load fck editor 
+    * [CS-4458] -  Scrolling the weeks doesn't change the central view
+    * [CS-4463] - [eXoMail] Write new mail UI is broken
+    * [CS-4486] - German translation instead of french for Calendar
+
+** Improvement
+    * [CS-4457] - Update Icon for attach file from DMS
+
+** New Feature
+    * [CS-2450] - Tasks Gadget
+
+** Task
+    * [CS-4395] -  Add plugin to initialize default data when space in social created
+    * [CS-4469] - base structure for eXo Collaboration Reference Guide
+    * [CS-4485] - Release CS 2.1.0-CR01
+
 - 2.0.0 GA
+
 ** Bug
     * [CS-4043] - Attachment file is not shown when view messages in Sent folder
     * [CS-4244] - Calendar - Show error message when all event categories are deteted
