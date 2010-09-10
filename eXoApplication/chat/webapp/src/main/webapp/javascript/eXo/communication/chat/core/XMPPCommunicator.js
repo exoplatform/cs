@@ -209,21 +209,7 @@ XMPPCommunicator.prototype.addTransport = function(transportName, handler) {
   this.initRequest(request, handler);
   request.process() ;
 };
-
-/**
- * Use for logout.
- * 
- * @param {String} userName
- * @param {String} transportName
- * @param {AjaxHandler} handler
- */
-XMPPCommunicator.prototype.removeTransport = function(userName, transportName, handler) {
-  var url = this.SERVICE_URL + '/' + transportName + '/logout/' + userName;
-  var request = new eXo.portal.AjaxRequest('GET', url, null);
-  this.initRequest(request, handler);
-  request.process() ;
-};
-
+ 
 /**
  * Send a request confirmation for subscribe a contact
  * 
@@ -679,11 +665,11 @@ XMPPCommunicator.prototype.getSubscriptionrequests = function(userName, transpor
  * @param {String} transportName
  * @param {AjaxHandler} handler
  */
-XMPPCommunicator.prototype.removeTransport = function(userName, transportName, handler) {
-  var url = this.SERVICE_URL + '/' + transportName + '/logout/' + userName;
+XMPPCommunicator.prototype.removeTransport = function(userName, transportName, handler, presencestatus) {
+  var url = this.SERVICE_URL + '/' + transportName + '/logout/' + userName + '/' + presencestatus;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
-  this.synchronousXHR(request);
+  this.synchronousXHR(request)
 };
 
 XMPPCommunicator.prototype.loadJsResourceBundle = function(locale, transportName, handler) {

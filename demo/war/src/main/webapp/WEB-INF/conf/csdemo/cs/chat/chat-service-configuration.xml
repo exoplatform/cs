@@ -54,13 +54,8 @@
 		<init-params>
 			<properties-param>
 				<name>chat-status</name>
-				 <property name="mode" value="Free to chat" /> 
-				<!--<property name="mode" value="Available" /> --> 
-				<!--<property name="mode" value="Unavailable" />-->
-				<!--<property name="mode" value="Away" />-->
-				<!--<property name="mode" value="Do not disturb" />-->
-				<!--<property name="mode" value="Extend away" />
-			--></properties-param>
+					<property name="mode" value="Available" /> 
+			</properties-param>
 		</init-params>
 	</component>
 	<!-- end configuration of state -->

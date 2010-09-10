@@ -39,9 +39,6 @@ public class DefaultPresenceStatus {
   public String getStatus_() {
     return status_;
   }
-  public void setStatus_(String status) {
-    status_ = status;
-  }
   
   public DefaultPresenceStatus() {}
   

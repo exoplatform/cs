@@ -797,14 +797,7 @@ public class HistoryImpl implements Startable{
   }
   
   /**
-   * Saving user chat status
-   * @param provider
-   * @param userId
-   * @param status
-   * **/
-  
-  /**
-   * Saving user chat status
+   * Saving presence status chat/chatbar
    * @param provider
    * @param userId
    * @param status
@@ -843,22 +836,18 @@ public class HistoryImpl implements Startable{
         }
         dps.setPermission(SystemIdentity.ANY, PermissionType.ALL);
         presenceStatus = new PresenceStatus(userId, status);
-        //presenceStatus.setStatus(status);
-       // String presenceStatusPath = historyPath + "/" + DEFAULTPRESENCESTATUS;
-      //  if(!dps.getPath().equals(presenceStatusPath)) presenceStatus.setPath(presenceStatusPath);
-        
         addPresenceStatus(dps, presenceStatus);
         
         session.save();
-        session.logout();
+      //  session.logout();
       } catch (Exception e) {
         log.error("Could not add a new node for [lr:defaultpresecestatus] node type: " + e.getMessage());
       }
     }else { //update lr:status property
       if(presenceStatus == null){
         presenceStatus = new PresenceStatus(userId, status);
-        //presenceStatus.setStatus(status);
         addPresenceStatus(dpsNode, presenceStatus);
+        dpsNode.getSession().save();
       }else{
         if(presenceStatus.getHexName().equals(hexName)){
           Node presenceStatusNode = null;
@@ -894,7 +883,7 @@ public class HistoryImpl implements Startable{
   private void addPresenceStatus(Node dpsNode, PresenceStatus presenceStatus){
     try {
       jcrom.addNode(dpsNode, presenceStatus);
-      dpsNode.getSession().save();
+     // dpsNode.getSession().save();
     } catch (Exception e) {
       log.error("Could not add new a node to [lr:presencestatus] node type: " + e.getMessage());
     }

@@ -63,10 +63,6 @@ public class AuthenticationLoginListener extends Listener<ConversationRegistry, 
         
         messenger.login(userId, password, organization, delegate, history,restXmppService.loadResourceBundle());
       }
-      
-      if(dps != null){
-        //dps.getPreviousStatus(userId);
-      }
     } catch (Exception e){
       if(log.isDebugEnabled())
         log.debug(e.getMessage());

@@ -50,13 +50,8 @@
 		<type>org.exoplatform.services.presence.DefaultPresenceStatus</type>
 		<init-params>
 			<properties-param>
-				<name>chat-status</name><!--
-				 <property name="mode" value="Free to chat" />
-				--><property name="mode" value="Available" /> 
-				<!--<property name="mode" value="Unavailable" />-->
-				<!--<property name="mode" value="Away" />-->
-				<!--<property name="mode" value="Do not disturb" />-->
-				<!--<property name="mode" value="Extend away" />-->
+				<name>chat-status</name>
+				   <property name="mode" value="Available" />
 			</properties-param>
 		</init-params>
 	</component>
