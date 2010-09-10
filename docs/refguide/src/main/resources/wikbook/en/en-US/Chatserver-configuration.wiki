@@ -1,0 +1,19 @@
+h1.eXo Chatserver Configuration
+http://wiki.exoplatform.org/xwiki/bin/view/CS/Chat%20Configuration
+h2.  Openfire Configuration
+
+eXo CS 1.3 chat services is a Jabber engine powered by Openfire. eXo will delegate the actual Jabber protocol communication to Openfire.
+
+You have full latitude to configure Openfire. There are two possible ways do it :
+
+the admin console : http://localhost:9090/
+the openfire.xml file, in $openfire_home/conf/
+
+h3. Configuring openfire.xml
+
+h3. eXo specific configuration
+
+h3. eXo addition configuration
+
+h2. System Configuration
+h2. AS configuration
