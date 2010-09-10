@@ -1,159 +1,181 @@
-h1. Configuration
+h1. Components in eXo Collaboration Configuration
+This table shows some main components that take init-param in the applications of eXo Collaboration:
 
-- List and description of the <component> that can take init-param
-- Description of the <init-params> with meaning of all possible values
-- List of <external-component-plugins> that are necessary to configure the app (such as job scheduler)
-- Other things to configure (ex: chatserver)
+|| Applications|| Components || Description ||
+| *Calendar* | {{CalendarServiceImpl}} | {{It is a service that manages calendars in the Calendar application of eXo Collaboration.}}| 
+| *Chat* | {{HistoryImpl}} | {{It is a service that saves the chat history of users.}} |
+|  | {{XMPPMessenger}} | {{It is a service that processes messages of chatters, basing on the XMPP Protocol.}} | 
+|  | {{DefaultPresenceStatus}} | {{It is a component that controls the presence status of chatters.}} |             
+|*Contact* | {{ContactServiceImpl}} | {{It is a service that supplies functions to manage contacts in the Address Book application of eXo Collaboration.}} |
+| *Webservice* | {{AddActionsPlugin}} | {{ It is used to register a listener for the actions on the nodes.}} |
 
-h2. External- Component-Pugins
-h3. RepositoryService of Calendar
+h2. CalendarService
+The configuration of the Calendar application is applied mainly in /eXoApplication/calendar/service/src/main/resources/conf/portal/configuration.xml. 
+Use the CalendarService to configurate the Calendar. The following information will explain details of its configuration.
+When this configuration file is executed, the component named org.exoplatform.calendar.service.impl.CalendarServiceImpl will process the actions of the Calendar application.
 
-{code}
- <external-component-plugins>
-          <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>      
-          <component-plugin> 
-            <name>add.calendar.nodeType</name>
-            <set-method>addPlugin</set-method>
-            <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
-            <init-params>
-              <values-param>
-                <name>autoCreatedInNewRepository</name>
-                <description>Node types configuration file</description>
-                <value>jar:/conf/portal/calendar-nodetypes.xml</value>
-              </values-param>
-            </init-params>
-          </component-plugin>
-        </external-component-plugins>
-{code}
-
-h3. RepositoryService  - Chat
-{code}
-  <external-component-plugins>
-                <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
-                <component-plugin>
-                        <name>add.namespaces</name>
-                        <set-method>addPlugin</set-method>
-                        <type>org.exoplatform.services.jcr.impl.AddNamespacesPlugin</type>
-                        <init-params>
-                                <properties-param>
-                                        <name>namespaces</name>
-                                        <property name="lr" value="http://www.exoplatform.org/liveroom/1.0" />
-                                </properties-param>
-                        </init-params>
-                </component-plugin>
-                <component-plugin>
-                        <name>add.nodeType</name>
-                        <set-method>addPlugin</set-method>
-                        <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
-                        <init-params>
-                                <values-param>
-                                        <name>autoCreatedInNewRepository</name>
-                                        <description>Node types configuration file</description>
-                                        <value>jar:/conf/portal/chat-nodetype-config.xml</value>
-                                </values-param>
-                        </init-params>
-                </component-plugin>
-        </external-component-plugins>
-
-
-h3. JobSchedulerService   - Chat
-
-        <external-component-plugins>
-                <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
-                <component-plugin>
-                        <name>ChatRecordsJob</name>
-                        <set-method>addPeriodJob</set-method>
-                        <type>org.exoplatform.services.xmpp.connection.impl.HistoryPeriodJob</type>
-                        <description>add chat messages from Openfire Server to History</description>
-                        <init-params>
-                                <properties-param>
-                                        <name>job.info</name>
-                                        <description>save the monitor data periodically</description>
-                                        <property name="jobName" value="messageToHistoricalMessageJob" />
-                                        <property name="groupName" value="CollaborationSuite" />
-                                        <property name="job"
-                                                value="org.exoplatform.services.xmpp.connection.impl.HistoryJob" />
-                                        <property name="repeatCount" value="0" />
-                                        <property name="period" value="3000" />
-                                        <property name="startTime" value="+0" />
-                                        <property name="endTime" value="" />
-                                </properties-param>
-                                <properties-param>
-                                        <name>history.info</name>
-                                        <description>save the monitor data periodically</description>
-                                        <property name="logBatchSize" value="50" />
-                                </properties-param>
-                        </init-params>
-                </component-plugin>
-        </external-component-plugins>
-        <external-component-plugins>
-                <target-component>org.exoplatform.services.rest.impl.RequestHandlerImpl</target-component>
-                <component-plugin>
-                        <name>ws.rs.request.filter</name>
-                        <set-method>addPlugin</set-method>
-                        <type>org.exoplatform.services.rest.impl.RequestFilterComponentPlugin</type>
-                        <init-params>
-                                <value-param>
-                                        <name>RESTXMPPServiceFilter</name>
-                                        <value>org.exoplatform.services.xmpp.rest.filter.RESTXMPPServiceFilter</value>
-                                </value-param>
-                        </init-params>
-                </component-plugin>
-        </external-component-plugins>
-        <external-component-plugins>
-                <target-component>org.exoplatform.services.listener.ListenerService</target-component>
-                <component-plugin>
-                        <name>exo.core.security.ConversationRegistry.register</name>
-                        <set-method>addListener</set-method>
-                        <type>org.exoplatform.services.xmpp.connection.impl.AuthenticationLoginListener</type>
-                        <description>description</description>
-                </component-plugin>
-                <component-plugin>
-                        <name>exo.core.security.ConversationRegistry.unregister</name>
-                        <set-method>addListener</set-method>
-                        <type>org.exoplatform.services.xmpp.connection.impl.AuthenticationLogoutListener</type>
-                        <description>description</description>
-                </component-plugin>
-        </external-component-plugins>
+{code:xml}
+<component>
+    <key>org.exoplatform.calendar.service.CalendarService</key>
+    <type>org.exoplatform.calendar.service.impl.CalendarServiceImpl</type>
+                <init-params>
+      <properties-param>
+        <name>eventNumber.info</name>
+        <property name="eventNumber" value="100"/>         
+      </properties-param>
+    </init-params>
+  </component>
 {code}
 
+Details:
+||Properties-Param || Property name || Description || Possible Values || Default Values ||
+| *eventNumber* | {{eventNumber}} | {{The number of events in a calendar}} | {{interger}} | {{100}} |
 
-h3. External component plugin RepositoryService - Contact
-{code}
-<external-component-plugins>
-          <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>      
-          <component-plugin> 
-            <name>add.contact.nodeType</name>
-            <set-method>addPlugin</set-method>
-            <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
-            <init-params>
-              <values-param>
-                <name>autoCreatedInNewRepository</name>
-                <description>Node types configuration file</description>
-                <value>jar:/conf/portal/contact-nodetypes.xml</value>
-              </values-param>
-            </init-params>
-          </component-plugin>
-        </external-component-plugins>
+h2. HistoryImpl  
+The configuration of historyImpl is found in the  /extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml.
+When this configuration file is executed, the component named org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl initalizes all the parameters configured.
+
+{code:xml}
+<component>
+                <type>org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl</type>
+                <init-params>
+                        <value-param>
+                                <name>workspace</name>
+                                <value>collaboration</value>
+                        </value-param>
+                        <value-param>
+                                <name>repository</name>
+                                <value>repository</value>
+                        </value-param>
+                        <value-param>
+                                <name>path</name>
+                                <value>exo:applications/eXoChat/history</value>
+                        </value-param>
+                </init-params>
+        </component>
 {code}
 
-h3. Repository - Content
+Details:
+||Value-Param || Description || Possible Values || Default Values ||
+| *workspace* |{{ Workspace is the workspace name in JCR where history data is stored.}} | {{string}} | {{collaboration}} |
+|*repository*| {{Repository is the repository name in JCR where history data is stored.}} | {{string}} | {{repository}} |
+|*path*| {{Path is JCR path to the location where history data is stored.}} | {{string}} | {{exo:applications/eXoChat/history}}. |
+
+
+h2. XMPPMessenger
+The configuration of the XMPPMessenger component is found in /extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml.
+ It helps eXo Collaboration connect the Openfire instance. 
+
+ {code:xml}
+        <component>
+                <type>org.exoplatform.services.xmpp.connection.impl.XMPPMessenger</type>
+                <init-params>
+                        <properties-param>
+                                <name>openfire-connection-conf</name>
+                                <property name="host" value="127.0.0.1" />
+                                <property name="port" value="5222" />
+                        </properties-param>                      
+                        <properties-param>
+                                <name>send-file</name>
+                                <property name="timeout" value="7200000" />
+                        </properties-param>
+                </init-params>
+        </component>
 {code}
- <external-component-plugins>
-          <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>      
-          <component-plugin> 
-            <name>add.contact.nodeType</name>
-            <set-method>addPlugin</set-method>
-            <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
-            <init-params>
-              <values-param>
-                <name>autoCreatedInNewRepository</name>
-                <description>Node types configuration file</description>
-                <value>jar:/conf/portal/contact-nodetypes.xml</value>
-              </values-param>
-            </init-params>
-          </component-plugin>
-        </external-component-plugins>
+
+Details: 
+||Properties-param || Property name || Description || Possible Values || Default Values ||
+| *openfire-connection-conf* | {{host}} | {{IP address or hostname for the openfire server}} | {{string of integer}} | 127.0.0.1 |
+| | {{port}} | {{port to connect to on the openfire server. Should be the same that set in openfire configuration "Client to Server"}} | {{string of integer}} | {{5222}} |
+| *send-file*| {{timeout}} | {{timeout before aborting attempt to establish a file transfer}} | {{string of integer}} | {{7200000}} |
+
+
+h2. DefaultPresenceStatus
+The configuration of the DefaultPresenceStatus component is found in /extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml.
+
+
+{code:xml}
+         <component>
+                <type>org.exoplatform.services.presence.DefaultPresenceStatus</type>
+                <init-params>
+                        <properties-param>
+                                <name>presence-status</name>
+                                 <property name="mode" value="Free to chat" />                               
+                        </properties-param>
+                </init-params>
+        </component>        
 {code}
+
+Details:
+|| Properties-param || Property name|| Description || Possible Values || Default Values ||
+| *presence-status* | {{mode}} | {{It shows the present status of users}} |  {{string}} | {{Free to chat}} |       
+
+
+
+h2. ContactService
+The configuration of the ContactService component is found in eXoApplication/contact/service/src/main/resources/conf/portal/configuration.xml. 
+when the server starts, the configuration file that contains the declaration of ContactService component is executed, after that a ContactService component is created with params and plugins in the configuration file.
+
+{code:xml}
+ <component>
+    <key>org.exoplatform.contact.service.ContactService</key>
+    <type>org.exoplatform.contact.service.impl.ContactServiceImpl</type>
+    <init-params>
+      <values-param>
+        <name>UserCanSeeAllGroupAddressBooks</name>
+        <description>User can see all GroupAddressBooks or only GroupAddressBooks that the user has at least one membership</description>
+        <value>false</value>
+      </values-param>
+      <values-param>
+        <name>NonPublicGroups</name>
+        <description>Groups that shouldn't be displayed in broadcast list. Wildcards may be used in groups name</description>        
+      </values-param>
+    </init-params>
+  </component>
+{code}
+
+|| Values-param || Description || Possible Values || Default Values ||
+| *UserCanSeeAllGroupAddressBooks* | {{User can see all GroupAddressBooks or only GroupAddressBooks that the user has at least one membership.}} | {{true/false}} | {{false}} |
+| *NonPublicGroups* | {{Groups that shouldn't be displayed in broadcast list. Wildcards may be used in groups name}} | {{true/false}} | None | 
+
+h2. AddActionsPlugin
+The configuration of the AddActionsPlugin is found in WEB-INF/cs-extension/cs/webservice/webservice-configuration.xml
+It is used to register the listener named org.exoplatform.webservice.cs.LastUpdateAction and it is executed basing on eventTypes.
+
+{code:xml}
+ 
+  <component>
+  	<type>org.exoplatform.services.jcr.impl.ext.action.SessionActionCatalog</type>
+  	<component-plugins>
+  	<component-plugin>
+    <name>Last Update Action</name>
+    <set-method>addPlugin</set-method>
+    <type>org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin</type>
+    <description>add actions plugin</description>
+    <init-params>
+      <object-param>
+        <name>actions</name>
+        <object type="org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin$ActionsConfig">
+          <field  name="actions">
+            <collection type="java.util.ArrayList">	              
+              <value>
+                <object type="org.exoplatform.services.jcr.impl.ext.action.ActionConfiguration">
+                  <field  name="eventTypes"><string>addNode,changeProperty</string></field>
+                  <field  name="nodeTypes"><string>exo:calendarEvent</string></field> 	                  
+                  <field  name="actionClassName"><string>org.exoplatform.webservice.cs.LastUpdateAction</string></field>
+                </object>
+              </value>
+            </collection>
+          </field>
+        </object>
+      </object-param>
+    </init-params>
+  	</component-plugin>
+  	</component-plugins>
+  </component>
+{code}
+
+|| Object-param || 
+
 
 

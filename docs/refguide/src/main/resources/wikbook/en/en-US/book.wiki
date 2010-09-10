@@ -5,16 +5,19 @@ h1. Prerequisites
 h1. Applications
 
 
-h2. List of Portlets
+h2. Portlets
 {include:document="List_portlets.wiki"}
 
-h2. List of Gadgets
+h2. Gadgets
 {include:document="list_gadgets.wiki"}
 
 
 h1. Configurations
+{include:document="Configuration.wiki"}
+{include:document="Configuration-component-plugin.wiki"}
 
 
 h1. Developers reference
+
 
 
