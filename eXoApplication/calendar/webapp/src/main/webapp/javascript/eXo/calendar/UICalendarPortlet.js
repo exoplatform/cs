@@ -666,13 +666,31 @@ UICalendarPortlet.prototype.checkLayoutCallback = function(layoutcookie){
 	}
 };
 
+
+UICalendarPortlet.prototype.resetSpaceDefaultLayout = function(){
+	var workingarea = eXo.core.DOMUtil.findNextElementByTagName(eXo.calendar.LayoutManager.layouts[0], "div");
+	eXo.calendar.LayoutManager.layouts[0].style.display = "none";
+	if(eXo.calendar.UICalendarPortlet.isSpace != "null") eXo.core.Browser.setCookie(eXo.calendar.LayoutManager.layoutId,"1",1);
+	if (eXo.core.I18n.isRT()) {
+		workingarea.style.marginRight = "0px";
+	}else{
+		workingarea.style.marginLeft = "0px";
+	}
+	if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
+	if(eXo.core.Browser.isFF() && document.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth();
+};
+
 UICalendarPortlet.prototype.resetLayoutCallback = function(){
+	if(eXo.calendar.UICalendarPortlet.isSpace != "null") {
+		eXo.calendar.UICalendarPortlet.resetSpaceDefaultLayout();
+		return;
+	}
 	var workingarea = eXo.core.DOMUtil.findNextElementByTagName(eXo.calendar.LayoutManager.layouts[0], "div");
 	if (eXo.core.I18n.isRT()) {
-			workingarea.style.marginRight = "243px";
-		}else{
-			workingarea.style.marginLeft = "243px";
-		}
+		workingarea.style.marginRight = "243px";
+	}else{
+		workingarea.style.marginLeft = "243px";
+	}
 	if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
 	if(eXo.core.Browser.isFF() && document.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth();
 };
@@ -684,6 +702,7 @@ UICalendarPortlet.prototype.checkLayout = function(){
 	var	layout1 = document.getElementById("UICalendarContainer") ;
 	var	layout2 = document.getElementById("UIMiniCalendar") ;
 	var	layout3 = document.getElementById("UICalendars") ;
+	if(eXo.calendar.UICalendarPortlet.isSpace != "null") eXo.core.Browser.setCookie(eXo.calendar.LayoutManager.layoutId,"1",1);
 	eXo.calendar.LayoutManager.layouts = [] ;
 	eXo.calendar.LayoutManager.layouts.push(layout1);
 	eXo.calendar.LayoutManager.layouts.push(layout2);
@@ -701,7 +720,7 @@ UICalendarPortlet.prototype.checkLayout = function(){
 UICalendarPortlet.prototype.switchLayout = function(layout){
 	var layoutMan = eXo.calendar.LayoutManager ;
 	if(layout == 0){
-		layoutMan.reset(); 
+		layoutMan.reset();
 		return ;
 	}
 	layoutMan.switchLayout(layout);
