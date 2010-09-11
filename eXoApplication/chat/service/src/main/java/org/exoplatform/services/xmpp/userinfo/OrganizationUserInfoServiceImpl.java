@@ -43,13 +43,13 @@ public class OrganizationUserInfoServiceImpl implements UserInfoService {
   private final OrganizationService organizationService;
 
   protected void start() {
-    PortalContainer manager = PortalContainer.getInstance() ;
-    ((ComponentRequestLifecycle)organizationService).startRequest(manager);
+    //PortalContainer manager = PortalContainer.getInstance() ;
+    //((ComponentRequestLifecycle)organizationService).startRequest(manager);
   }
 
   protected void stop() {
-    PortalContainer manager = PortalContainer.getInstance() ;
-    ((ComponentRequestLifecycle)organizationService).endRequest(manager);
+    //PortalContainer manager = PortalContainer.getInstance() ;
+    //((ComponentRequestLifecycle)organizationService).endRequest(manager);
   }
 
   /**
