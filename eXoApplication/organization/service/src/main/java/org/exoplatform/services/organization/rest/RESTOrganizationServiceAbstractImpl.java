@@ -65,12 +65,12 @@ public abstract class RESTOrganizationServiceAbstractImpl implements RESTOrganiz
   }
 
   protected void start() {
-    PortalContainer manager = PortalContainer.getInstance() ;
-    ((ComponentRequestLifecycle)organizationService_).startRequest(manager);
+    //PortalContainer manager = PortalContainer.getInstance() ;
+    //((ComponentRequestLifecycle)organizationService_).startRequest(manager);
   }
   protected void stop() {
-    PortalContainer manager = PortalContainer.getInstance() ;
-    ((ComponentRequestLifecycle)organizationService_).endRequest(manager);
+    //PortalContainer manager = PortalContainer.getInstance() ;
+    //((ComponentRequestLifecycle)organizationService_).endRequest(manager);
   }
   public Response createGroup(String baseURI,
                               String groupName,

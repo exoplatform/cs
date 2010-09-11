@@ -23,6 +23,7 @@ import java.net.URI;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MultivaluedMap;
 
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.rest.ContainerResponseWriter;
 import org.exoplatform.services.rest.impl.ContainerRequest;
 import org.exoplatform.services.rest.impl.ContainerResponse;
@@ -44,7 +45,7 @@ public abstract class AbstractResourceTest extends BaseTest {
                                    MultivaluedMap<String, String> headers,
                                    byte[] data,
                                    ContainerResponseWriter writer) throws Exception {
-
+	RequestLifeCycle.begin(container);
     if (headers == null)
       headers = new MultivaluedMapImpl();
 
@@ -66,6 +67,7 @@ public abstract class AbstractResourceTest extends BaseTest {
                                                     new InputHeadersMap(headers));
     ContainerResponse response = new ContainerResponse(writer);
     requestHandler.handleRequest(request, response);
+    RequestLifeCycle.end();
     return response;
   }
 
