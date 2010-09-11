@@ -23,8 +23,8 @@ The Calendar application includes the following features:
 * Print your agenda.
  
 h2. Portlet.xml
-See the portlet in the project following this path:
- /eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/portlet.xml
+To see the portlet in the project, please follow this path:
+ _/eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/portlet.xml_
 
 
 h1. Chatbar Portlet
@@ -40,7 +40,7 @@ It has a fixed height, but expands horizontally to whatever size is available in
 
 Chat Bar application implements all functions of Chat application with the purpose of allowing user to send and receive messages anywhere after he has logged in.
 
-The Chat Bar is a typical toolbar with buttons that open menus.
+The Chat Bar is a typical tool-bar with buttons that open menus.
 It gives access to main chat features :
 
 * Status change and presence indicator
@@ -100,18 +100,18 @@ The Chatbar Portlet consists some preferences as in the following sample code:
 	</portlet-preferences>
 {code}
 
-|| Preference Name     || Possible Values || Default Values|| Description || 
-|  *showMailLink* | {{true / false}} | {{true}} | {{true or false value to let users see the application icon or not.}} |
-| *showCalendarLink* | {{true / false}} | {{true}} | {{true or false value to let user see the application icon or not.}} |
-| *showContactLink* | {{true / false}} | {{true}} | {{true or false value to let user see the application icon or not.}} |
-| *mailUrl* | {{string}} | {{Portal/private/intranet/mail}} | {{page url to application page it come when you configuration page.xml and navigation.xml in portal no need to combine with %domain name : port% chatbar will resolve it from server.}} |
-| *calendarUrl* | {{string}} | {{Portal/private/intranet/calendar}} | {{page url to application page it come when you configuration page.xml and navigation.xml in portal no need to combine with %domain name : port% chatbar will resolve it from server.}}|
-| *contactUrl* | {{string}} | {{Portal/private/intranet/contact}} | {{page url to application page it come when you configuration page.xml and navigation.xml in portal no need to combine with %domain name : port% chatbar will resolve it from server.}} |
-| *info* | {{Info}}| {{Info}}| {{This is only the key to get the resource bundle the full key : UIConfigForm.label.info}} |
+|| Preference Name     || Possible Values || Default Values|| Description ||
+|  *showMailLink* | {{true / false}} | {{true}} | true or false value to let users see the application icon or not |
+| *showCalendarLink* | {{true / false}} | {{true}} | true or false value to let user see the application icon or not |
+| *showContactLink* | {{true / false}} | {{true}} | true or false value to let user see the application icon or not |
+| *mailUrl* | {{string}} | {{Portal/private/intranet/mail}} | page url to application page it come when you configuration page.xml and navigation.xml in portal no need to combine with %domain name : port% chatbar will resolve it from server |
+| *calendarUrl* | {{string}} | {{Portal/private/intranet/calendar}} | page url to application page it come when you configuration page.xml and navigation.xml in portal no need to combine with %domain name : port% chatbar will resolve it from server|
+| *contactUrl* | {{string}} | {{Portal/private/intranet/contact}} | page url to application page it come when you configuration page.xml and navigation.xml in portal no need to combine with %domain name : port% chatbar will resolve it from server |
+| *info* | {{Info}}| {{Info}}| This is only the key to get the resource bundle the full key : UIConfigForm.label.info |
       
 h2. Portlet.xml
 See the portlet in the project following this path:
-/eXoApplication/chatbar/webapp/src/main/webapp/WEB-INF/portlet.xml
+_/eXoApplication/chatbar/webapp/src/main/webapp/WEB-INF/portlet.xml_
 
 
 h1. Chat Portlet
@@ -122,7 +122,7 @@ h2. Description
 
 h2. Portlet.xml
 See the portlet in the project following this path:
- /eXoApplication/chat/webapp/src/main/webapp/WEB-INF/portlet.xml
+_/eXoApplication/chat/webapp/src/main/webapp/WEB-INF/portlet.xml_
 
 
 
@@ -134,18 +134,18 @@ Contact Portlet shows the Contact application of eXo Collaboration that allows u
 
 h2. Portlet.xml
 See the portlet in the project following this path:
-/eXoApplication/contact/webapp/src/main/webapp/WEB-INF/portlet.xml
+_/eXoApplication/contact/webapp/src/main/webapp/WEB-INF/portlet.xml_
 
 
 h1. Mail Portlet
 The Mail Portlet is packaged in the Mail.war file.
 
 h2. Description
-Mail Portlet shows the Mail application of eXo Collaboration that offers a lot of feature to users such as sending, receiving or viewing their mails through Internet without actually downloading them to their computer. Users not only take advantages of eXo Mail by keeping and receiving all important messages, files and pictures forever but also by looking for and viewing their needed messages easily whenever they want. Additionally, eXo Mail is smoothly integrated with other Collaboration modules such as Address Book and Calendar.
+Mail Portlet shows the Mail application of eXo Collaboration that offers a lot of features to users such as sending, receiving or viewing their mails through Internet without actually downloading them to their computer. Users not only take advantages of eXo Mail by keeping and receiving all important messages, files and pictures forever but also by looking for and viewing their needed messages easily whenever they want. Additionally, eXo Mail is smoothly integrated with other Collaboration modules such as Address Book and Calendar.
 
 h2. Portlet.xml
  See the portlet in the project following this path:
-/eXoApplication/mail/webapp/src/main/webapp/WEB-INF/portlet.xml
+_/eXoApplication/mail/webapp/src/main/webapp/WEB-INF/portlet.xml_
 
 
 h1. RSSreader Portlet
@@ -157,6 +157,6 @@ eXo Collaboration uses the RSS Reader Portlet that facilitates users to quickly 
 
 h2. Portlet.xml
 See the portlet in the project following this path:
-/eXoApplication/content/webapp/src/main/webapp/WEB-INF/portlet.xml
+_/eXoApplication/content/webapp/src/main/webapp/WEB-INF/portlet.xml_
 
 

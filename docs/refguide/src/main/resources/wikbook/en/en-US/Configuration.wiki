@@ -2,16 +2,16 @@ h1. Components in eXo Collaboration Configuration
 This table shows some main components that take init-param in the applications of eXo Collaboration:
 
 || Applications|| Components || Description ||
-| *Calendar* | {{CalendarServiceImpl}} | {{It is a service that manages calendars in the Calendar application of eXo Collaboration.}}| 
-| *Chat* | {{HistoryImpl}} | {{It is a service that saves the chat history of users.}} |
-|  | {{XMPPMessenger}} | {{It is a service that processes messages of chatters, basing on the XMPP Protocol.}} | 
-|  | {{DefaultPresenceStatus}} | {{It is a component that controls the presence status of chatters.}} |             
-|*Contact* | {{ContactServiceImpl}} | {{It is a service that supplies functions to manage contacts in the Address Book application of eXo Collaboration.}} |
-| *Webservice* | {{AddActionsPlugin}} | {{ It is used to register a listener for the actions on the nodes.}} |
+| *Calendar* | {{CalendarServiceImpl}} | It is a service that manages calendars in the Calendar application of eXo Collaboration|
+| *Chat* | {{HistoryImpl}} | It is a service that saves the chat history of users |
+|  | {{XMPPMessenger}} | It is a service that processes messages of chatters, basing on the XMPP Protocol |
+|  | {{DefaultPresenceStatus}} | It is a component that controls the presence status of chatters |
+|*Contact* | {{ContactServiceImpl}} | It is a service that supplies functions to manage contacts in the Address Book application of eXo Collaboration |
+| *Webservice* | {{AddActionsPlugin}} | It is used to register a listener for the actions on the nodes |
 
 h2. CalendarService
-The configuration of the Calendar application is applied mainly in /eXoApplication/calendar/service/src/main/resources/conf/portal/configuration.xml. 
-Use the CalendarService to configurate the Calendar. The following information will explain details of its configuration.
+The configuration of the Calendar application is applied mainly in _/eXoApplication/calendar/service/src/main/resources/conf/portal/configuration.xml_ 
+Use the CalendarService to configure the Calendar. The following information will explain details of its configuration.
 When this configuration file is executed, the component named org.exoplatform.calendar.service.impl.CalendarServiceImpl will process the actions of the Calendar application.
 
 {code:xml}
@@ -29,11 +29,11 @@ When this configuration file is executed, the component named org.exoplatform.ca
 
 Details:
 ||Properties-Param || Property name || Description || Possible Value || Default Value ||
-| *eventNumber* | {{eventNumber}} | {{The number of events in a calendar}} | {{interger}} | {{100}} |
+| *eventNumber* | {{eventNumber}} | The number of events in a calendar | {{interger}} | {{100}} |
 
 h2. HistoryImpl  
-The configuration of historyImpl is found in the  /extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml.
-When this configuration file is executed, the component named org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl initalizes all the parameters configured.
+The configuration of historyImpl is found in the  _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_
+When this configuration file is executed, the component named _org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl_ initializes all the configured parameters.
 
 {code:xml}
 <component>
@@ -57,13 +57,13 @@ When this configuration file is executed, the component named org.exoplatform.se
 
 Details:
 ||Value-Param || Description || Possible Values || Default Values ||
-| *workspace* |{{ Workspace is the workspace name in JCR where history data is stored.}} | {{string}} | {{collaboration}} |
-|*repository*| {{Repository is the repository name in JCR where history data is stored.}} | {{string}} | {{repository}} |
-|*path*| {{Path is JCR path to the location where history data is stored.}} | {{string}} | {{exo:applications/eXoChat/history}}. |
+| *workspace* | Workspace is the workspace name in JCR where history data is stored | {{string}} | {{collaboration}} |
+|*repository*| Repository is the repository name in JCR where history data is stored | {{string}} | {{repository}} |
+|*path*| Path is JCR path to the location where history data is stored | {{string}} | {{exo:applications/eXoChat/history}}. |
 
 
 h2. XMPPMessenger
-The configuration of the XMPPMessenger component is found in /extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml.
+The configuration of the XMPPMessenger component is found in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_
  It helps eXo Collaboration connect the Openfire instance. 
 
  {code:xml}
@@ -85,13 +85,13 @@ The configuration of the XMPPMessenger component is found in /extension/webapp/s
 
 Details: 
 ||Properties-param || Property name || Description || Possible Values || Default Values ||
-| *openfire-connection-conf* | {{host}} | {{IP address or hostname for the openfire server}} | {{string of integer}} | 127.0.0.1 |
-| | {{port}} | {{port to connect to on the openfire server. Should be the same that set in openfire configuration "Client to Server"}} | {{string of integer}} | {{5222}} |
-| *send-file*| {{timeout}} | {{timeout before aborting attempt to establish a file transfer}} | {{string of integer}} | {{7200000}} |
+| *openfire-connection-conf* | {{host}} | IP address or hostname for the openfire server}} | {{string of integer | 127.0.0.1 |
+| | {{port}} | port to connect to on the openfire server. Should be the same that set in openfire configuration "Client to Server" | {{string of integer}} | {{5222}} |
+| *send-file*| {{timeout}} | timeout before aborting attempt to establish a file transfer | {{string of integer}} | {{7200000}} |
 
 
 h2. DefaultPresenceStatus
-The configuration of the DefaultPresenceStatus component is found in /extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml.
+The configuration of the DefaultPresenceStatus component is found in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_
 
 
 {code:xml}
@@ -108,13 +108,13 @@ The configuration of the DefaultPresenceStatus component is found in /extension/
 
 Details:
 || Properties-param || Property name|| Description || Possible Values || Default Values ||
-| *presence-status* | {{mode}} | {{It shows the present status of users}} |  {{string}} | {{Free to chat}} |       
+| *presence-status* | {{mode}} | It shows the present status of users |  {{string}} | {{Free to chat}} |    
 
 
 
 h2. ContactService
-The configuration of the ContactService component is found in eXoApplication/contact/service/src/main/resources/conf/portal/configuration.xml. 
-when the server starts, the configuration file that contains the declaration of ContactService component is executed, after that a ContactService component is created with params and plugins in the configuration file.
+The configuration of the ContactService component is found in _eXoApplication/contact/service/src/main/resources/conf/portal/configuration.xml_
+when the server starts, the configuration file that contains the declaration of ContactService component is executed, after that a ContactService component is created with params and plug-ins in the configuration file.
 
 {code:xml}
  <component>
@@ -128,15 +128,15 @@ when the server starts, the configuration file that contains the declaration of 
       </values-param>
       <values-param>
         <name>NonPublicGroups</name>
-        <description>Groups that shouldn't be displayed in broadcast list. Wildcards may be used in groups name</description>        
+        <description>Groups that should not be displayed in broadcast list. Wildcards may be used in groups name</description>        
       </values-param>
     </init-params>
   </component>
 {code}
 
 || Values-param || Description || Possible Values || Default Values ||
-| *UserCanSeeAllGroupAddressBooks* | {{User can see all GroupAddressBooks or only GroupAddressBooks that the user has at least one membership.}} | {{true/false}} | {{false}} |
-| *NonPublicGroups* | {{Groups that shouldn't be displayed in broadcast list. Wildcards may be used in groups name}} | {{true/false}} | None | 
+| *UserCanSeeAllGroupAddressBooks* | User can see all GroupAddressBooks or only GroupAddressBooks that the user has at least one membership | {{true/false}} | {{false}} |
+| *NonPublicGroups* | Groups that shouldn't be displayed in broadcast list. Wildcards may be used in groups name | {{true/false}} | N/A |
 
 
 
