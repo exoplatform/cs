@@ -1768,22 +1768,22 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    * @return
    */
   @GET
-  @Path("/logout/{username}/")
-  public Response logout(@PathParam("username") String _username) {//, @PathParam("status") String _status
+  @Path("/logout/{username}/{presencestatus}/")
+  public Response logout(@PathParam("username") String _username, @PathParam("presencestatus") String _presencestatus) {
     if (this.rb == null) loadResourceBundle();
     try {
-      /*//save presensce status
-      DefaultPresenceStatus dps = new DefaultPresenceStatus();
-      dps.setStatus_(_status); 
-      //DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
-      if(dps != null){
-        dps.savePresenceStatus(_username, _status);  
-      }else   {
-        log.debug("Logout: Can not save presence status from sendstatus() service"); 
-      }*/
-      
       XMPPSession session =    messenger.getSession(_username);
-      if (session != null) session.removeAllTransport();
+      if (session != null){
+        ExoContainer container = ExoContainerContext.getCurrentContainer();
+        DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
+        session.setPresenceStatus_(_presencestatus); 
+        if(dps != null){
+          dps.savePresenceStatus(_username, _presencestatus);  
+        }else   {
+          log.debug("Logout: Can not save presence status from sendstatus() service"); 
+        }
+        session.removeAllTransport();
+      }
       messenger.logout(_username);
       return Response.ok().cacheControl(cc).build();
     } catch (XMPPException e) {
@@ -2014,28 +2014,28 @@ public class RESTXMPPService implements ResourceContainer, Startable {
    */
   @GET
   @Path("/sendstatus/{username}/{status}/")
-  public Response setUserStatus(@PathParam("username") String username,
-                                @PathParam("status") String status) {
+  public Response setUserStatus(@PathParam("username") String username, @PathParam("status") String status) {
     if (this.rb == null) loadResourceBundle();
     XMPPSession session = messenger.getSession(username);
-    DefaultPresenceStatus dps = new DefaultPresenceStatus();
-    dps.setStatus_(status);
-    if(dps != null){
-      dps.savePresenceStatus(username, status);  
-    }else   {
-      log.debug("Can not save presence status from service sendstatus() method"); 
-    }
     
     if(session != null){
       Presence presence = PresenceUtil.getPresence(status);
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
+      session.setPresenceStatus_(status); 
+      if(dps != null){
+        dps.savePresenceStatus(username, status);  
+      }else   {
+        log.debug("Can not save presence status from service sendstatus() method"); 
+      }
       if (presence == null)
         return Response.status(HTTPStatus.FORBIDDEN)
         .entity("Get unknow status.")
         .build();
       session.sendPresence(presence);
       return Response.ok().cacheControl(cc).build();
-    }
-    else {
+    }else {
+      log.error("Can not set status. Cause by session closed.");
       return Response.status(HTTPStatus.INTERNAL_ERROR)
       .entity(rb.getString("chat.message.room.xmppsession.null"))
       .build();

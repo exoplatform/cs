@@ -48,12 +48,14 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
       if(messenger != null){
         String userId = event.getData().getIdentity().getUserId() ;
         XMPPSession session = messenger.getSession(userId);
-        if (session != null) session.removeAllTransport();
-        if(dps != null && userId != null && !userId.equals("")){
-          dps.savePresenceStatus(userId, dps.getStatus_());  
-        }else   {
-          log.debug("Can not save user chat status"); 
-        }
+        if (session != null){
+          if(dps != null && userId != null && !userId.equals("")){
+            dps.savePresenceStatus(userId, session.getPresenceStatus_());  
+          }else   {
+            log.debug("Can not save user chat status"); 
+          }
+          session.removeAllTransport();  
+        } 
         messenger.logout(userId);
       }
      } catch (Exception e){

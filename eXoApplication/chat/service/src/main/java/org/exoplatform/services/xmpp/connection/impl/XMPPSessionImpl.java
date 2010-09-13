@@ -41,6 +41,7 @@ import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.services.presence.DefaultPresenceStatus;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.uistate.UIStateSession;
 import org.exoplatform.services.uistate.bean.UIStateDataBean;
@@ -223,6 +224,8 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
    * It's value not from spec. I add it myself for sending real JID of room to UI client.
    */
   private final static String   ROOM_JID_VALUE    = "muc#roomconfig_roomjid";
+  
+  private String status_ = DefaultPresenceStatus.DEFAULT_STATUS;
 
   protected XMPPSessionImpl(String username,
                             String password,
@@ -2173,4 +2176,14 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
     return roomJID;
   }
 
+  /**
+   * set/get presence status***/  
+  public String getPresenceStatus_() {
+    return status_;
+  }
+
+  public void setPresenceStatus_(String status) {
+    status_ = status;
+  }
+  
 }

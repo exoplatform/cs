@@ -1082,7 +1082,6 @@ UIMainChatWindow.prototype.getPreviousStatus_ = function(userName) {
 	}
 	
    request.process() ;
-   return this.status;
 };
 
 /**
@@ -1143,7 +1142,8 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
   		this.addContactIconNode.onclick = null;
   		var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode, 'div');
   		userStatusIconNode.className = 'IconHolder'+' '+'OfflineIcon';
-        this.jabberLogout();
+        //this.jabberLogout();
+        this.jabberLogout(this.OFFLINE_STATUS);
       }
       break;
     case this.AWAY_STATUS:
@@ -1859,7 +1859,7 @@ UIMainChatWindow.prototype.jabberLeaveFromRoom = function(roomName) {
 /**
  * Logout from jabber server
  */
-UIMainChatWindow.prototype.jabberLogout = function() {
+UIMainChatWindow.prototype.jabberLogout = function(presencestatus) {
   if (this.sessionKeeperId) {
     window.clearInterval(this.sessionKeeperId);
     this.sessionKeeperId = false;
@@ -1877,7 +1877,7 @@ UIMainChatWindow.prototype.jabberLogout = function() {
   }
   this.destroy();
   this.activeAction = this.LOGOUT_ACTION;
-  this.XMPPCommunicator.removeTransport(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.removeTransport(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(), presencestatus);
   return false;
 };
 
