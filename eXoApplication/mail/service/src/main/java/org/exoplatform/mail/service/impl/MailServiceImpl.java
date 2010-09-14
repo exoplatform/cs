@@ -897,6 +897,13 @@ public class MailServiceImpl implements MailService, Startable {
       schedulerService_.addPeriodJob(info, periodInfo, jobData);
     } else {
       JobDetail activeJob = findActiveCheckmailJob(userName, accountId);
+      JobDataMap jobData = new JobDataMap();
+      jobData.put(CheckMailJob.USERNAME, userName);
+      jobData.put(CheckMailJob.ACCOUNTID, accountId);
+      if (folderId != null && folderId.length() > 0)
+        jobData.put(CheckMailJob.FOLDERID, folderId);
+      job.setJobDataMap(jobData);
+      
       if (activeJob == null) {
         executeJob(job);
       } else {
