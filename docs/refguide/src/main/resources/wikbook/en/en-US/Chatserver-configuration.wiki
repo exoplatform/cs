@@ -9,11 +9,4 @@ You have full latitude to configure Openfire. There are two possible ways do it 
 the admin console : http://localhost:9090/
 the openfire.xml file, in $openfire_home/conf/
 
-h3. Configuring openfire.xml
 
-h3. eXo specific configuration
-
-h3. eXo addition configuration
-
-h2. System Configuration
-h2. AS configuration

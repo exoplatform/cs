@@ -1,7 +1,4 @@
 
-h1. Prerequisites
-
-
 h1. Applications
 
 
@@ -17,9 +14,6 @@ h1. Configurations
 {include:document="Configuration-component-plugin.wiki"}
 {include:document="Chatserver-configuration.wiki"}
 
-
-h1. Developers reference
-{include:document="Developer-ref.wiki"}
 
 
 
