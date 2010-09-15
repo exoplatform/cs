@@ -86,19 +86,6 @@ public class CalendarWebservice implements ResourceContainer{
 
   public CalendarWebservice() {}
 
-  protected void start() {
-    PortalContainer manager = PortalContainer.getInstance() ;
-    OrganizationService oService = (OrganizationService)ExoContainerContext
-    .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
-    ((ComponentRequestLifecycle)oService).startRequest(manager);
-  }
-  protected void stop() {
-    PortalContainer manager = PortalContainer.getInstance() ;
-    OrganizationService oService = (OrganizationService)ExoContainerContext
-    .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
-    ((ComponentRequestLifecycle)oService).endRequest(manager);
-  }
-
   /**
    * 
    * @param username : user id
@@ -126,7 +113,6 @@ public class CalendarWebservice implements ResourceContainer{
       if(Utils.PRIVATE_TYPE == Integer.parseInt(type)) {
     	  eventData.setPermission(true);
       } else if(Utils.PUBLIC_TYPE == Integer.parseInt(type)) {
-        start();
         OrganizationService oService = (OrganizationService)ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
         cal = calService.getGroupCalendar(calendarId) ;
@@ -134,7 +120,6 @@ public class CalendarWebservice implements ResourceContainer{
         if(Utils.canEdit(oService, cal.getEditPermission(), username)) {
         	eventData.setPermission(true);
         } 
-        stop();
       } else if(Utils.SHARED_TYPE == Integer.parseInt(type)) {
         if(calService.getSharedCalendars(username, true) != null) {
           cal = calService.getSharedCalendars(username, true).getCalendarById(calendarId) ;

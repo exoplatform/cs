@@ -108,7 +108,6 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
       query.setFirstName(firstname);
       query.setLastName(lastname);
       query.setEmail(email);
-      start() ;
       if (fromLoginDate != null) {
         try {
           query.setFromLoginDate(DateFormat.getDateTimeInstance().parse(fromLoginDate));
@@ -136,7 +135,6 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
           listBean.add(new UserBean(user));
       }
       UserListBean user_list = new UserListBean(listBean);
-      stop();
       return Response.ok(user_list, JSON_CONTENT_TYPE).cacheControl(cc).build();
      
     } catch (Exception e) {
@@ -212,7 +210,6 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
         return Response.noContent().cacheControl(cc).build(); 
       Query query = new Query();
       query.setUserName(question);
-      start() ;
       PageList pageList = userHandler.findUsers(query);
       int totalUsers = 0;
       Iterator<User> i = null;
@@ -274,7 +271,6 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
       UserListBean user_list = new UserListBean(uList);
       //user_list.setTotalUser(userHandler.getUserPageList(20).getAvailable());
       user_list.setTotalUser(totalUsers);
-      stop() ;
       return Response.ok(user_list, JSON_CONTENT_TYPE).cacheControl(cc).build();
     } catch (Exception e) {
       e.printStackTrace();
@@ -294,9 +290,7 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
   @Produces(MediaType.APPLICATION_JSON)
   public Response getUser(@PathParam("username") String username) {
     try {
-      start() ;
       User user = userHandler.findUserByName(username);
-      stop() ;
       if (user == null) {
         return Response.status(HTTPStatus.NOT_FOUND).entity("User '" + username
             + "' not found.").build();
@@ -329,9 +323,7 @@ public class RESTOrganizationServiceJSONImpl extends RESTOrganizationServiceAbst
   @Produces(MediaType.APPLICATION_JSON)
   public Response getUsersCount() {
     try {
-      start() ;
       int number = userHandler.getUserPageList(20).getAvailable();
-      stop();
       return Response.ok(new CountBean(number), JSON_CONTENT_TYPE).cacheControl(cc).build();
     } catch (Exception e) {
       LOGGER.error("Thrown exception : " + e);
