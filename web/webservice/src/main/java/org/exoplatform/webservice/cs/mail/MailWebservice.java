@@ -283,11 +283,11 @@ public class MailWebservice implements ResourceContainer {
     String username = ConversationState.getCurrent().getIdentity().getUserId();
     MessageFilter filter = new MessageFilter("Folder");
     MessageData data = new MessageData();
-    if (Utils.isEmptyField(accountId)) 
+    if (Utils.isEmptyField(accountId) || accountId.equals("_")) 
       return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
     filter.setAccountId(accountId);
-    if (!Utils.isEmptyField(folderId)) filter.setFolder(new String[] { folderId });
-    if (!Utils.isEmptyField(tagId)) filter.setTag(new String[] { tagId });
+    if (!Utils.isEmptyField(folderId) && !folderId.equals("_")) filter.setFolder(new String[] { folderId });
+    if (!Utils.isEmptyField(tagId) && !tagId.equals("_")) filter.setTag(new String[] { tagId });
     filter.setViewQuery("@" + Utils.EXO_ISUNREAD + "='true'");
     filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
     List<Message> messList;
