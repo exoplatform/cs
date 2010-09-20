@@ -5,7 +5,7 @@
 		directory_title="Upcoming tasks"
 		title_url="http://www.exoplatform.org"
 		description="Tasks list."
-		thumbnail="/csResources/gadgets/tasks/skin/thumb.png">
+		thumbnail="http://localhost:8080/csResources/gadgets/tasks/skin/Tasks.png">
 		<Locale messages="/csResources/gadgets/tasks/locale/default.xml" />
 		<Locale lang="ar" messages="/csResources/gadgets/tasks/locale/ar.xml" language_direction="rtl"/>
 		<Locale lang="fr" messages="/csResources/gadgets/tasks/locale/fr.xml" />
