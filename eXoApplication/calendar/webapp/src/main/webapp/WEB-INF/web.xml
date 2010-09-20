@@ -24,18 +24,7 @@
   <servlet>
     <servlet-name>PortletWrapper</servlet-name>
     <servlet-class>org.exoplatform.services.portletcontainer.impl.servlet.ServletWrapper</servlet-class>
-  </servlet>
-  <!-- remove this servlet when finish implement rss by webservice -->
-  <servlet>
-    <servlet-name>icalservlet</servlet-name>
-    <servlet-class>org.exoplatform.calendar.ICalServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>icalservlet</servlet-name>
-    <url-pattern>/iCalRss/*</url-pattern>
-  </servlet-mapping> 
+  </servlet> 
   <servlet-mapping>
     <servlet-name>PortletWrapper</servlet-name>
     <url-pattern>/PortletWrapper</url-pattern>

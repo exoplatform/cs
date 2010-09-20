@@ -4,5 +4,4 @@ JavascriptService.addJavascript("eXo.calendar.Highlighter", "/javascript/eXo/cal
 JavascriptService.addJavascript("eXo.calendar.UICalendarDragDrop", "/javascript/eXo/calendar/UICalendarDragDrop.js", ServletContext);
 JavascriptService.addJavascript("eXo.calendar.UICalendarMan", "/javascript/eXo/calendar/UICalendarMan.js", ServletContext);
 JavascriptService.addJavascript("eXo.calendar.UICombobox", "/javascript/eXo/calendar/UICombobox.js", ServletContext);
-JavascriptService.addJavascript("eXo.calendar.UIColorPicker", "/javascript/eXo/calendar/UIColorPicker.js", ServletContext);
 JavascriptService.addJavascript("eXo.calendar.UIWeekView", "/javascript/eXo/calendar/UIWeekView.js", ServletContext);
