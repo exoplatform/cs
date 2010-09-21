@@ -736,8 +736,17 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       } else {
         String url = event.getRequestContext().getRequestParameter(OBJECTID);
         if(url ==null || url.isEmpty()) return;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ; 
-        event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + url + "');");
+        UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+        UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class);
+
+        UIFeed uiFeed = uiChildPopup.activate(UIFeed.class, 600) ;
+        List<FeedData> feeds = new ArrayList<FeedData>() ;
+        FeedData feedData = new FeedData();
+        feedData.setTitle(uiForm.getDisplayName());
+        feedData.setUrl(url);
+        feeds.add(feedData);
+        uiFeed.setFeeds(feeds);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;    
       }
     }
   }
@@ -752,10 +761,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       } else {
         String url = event.getRequestContext().getRequestParameter(OBJECTID);
         if(url ==null || url.isEmpty()) return;
-
         UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
         UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class);
-
         UIFeed uiFeed = uiChildPopup.activate(UIFeed.class, 600) ;
         List<FeedData> feeds = new ArrayList<FeedData>() ;
         FeedData feedData = new FeedData();
@@ -764,7 +771,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         feeds.add(feedData);
         uiFeed.setFeeds(feeds);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
-
       }
     }
   }
