@@ -630,10 +630,14 @@ public class CalendarUtils {
     CalendarService calendarService = getCalendarService() ;
     String username = getCurrentUser();
     /*
+     * hash map to check existence of a calendar in the list. 
+     */
+    Map<String, String> hash = new HashMap<String, String>();
+    /*
      * Modified by Philippe (philippe.aristote@gmail.com)
      * Uses SelectItemOptionGroup to differienciate private, shared and public groups
      */
-
+    
     // private calendars group
     SelectOptionGroup privGrp = new SelectOptionGroup(CalendarUtils.PRIVATE_CALENDARS);
     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(username, true) ;
@@ -642,8 +646,10 @@ public class CalendarUtils {
         String newName = CalendarUtils.getResourceBundle("UICalendars.label." + NewUserListener.DEFAULT_CALENDAR_ID);
         c.setName(newName);
       }
-
-      privGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
+      if (!hash.containsKey(c.getId())) {
+        hash.put(c.getId(), "");
+        privGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
+      }
     }
     if(privGrp.getOptions().size() > 0) options.add(privGrp);
     // shared calendars group
@@ -658,20 +664,27 @@ public class CalendarUtils {
           }
           String owner = "" ;
           if(c.getCalendarOwner() != null) owner = c.getCalendarOwner() + "- " ;
-          sharedGrp.addOption(new SelectOption(owner + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
+          if (!hash.containsKey(c.getId())) {
+            hash.put(c.getId(), "");
+            sharedGrp.addOption(new SelectOption(owner + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
+          }
         }
       }
       if(sharedGrp.getOptions().size() > 0) options.add(sharedGrp);
     }
     // public calendars group
     List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(CalendarUtils.getUserGroups(username), true, username) ;
+    
     if(lgcd != null) {
       OrganizationService oService = getOrganizationService() ;
       SelectOptionGroup pubGrp = new SelectOptionGroup(CalendarUtils.PUBLIC_CALENDARS);
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
           if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
-            pubGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+            if (!hash.containsKey(c.getId())) {
+              hash.put(c.getId(), "");
+              pubGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+            }
           }
         }
 
