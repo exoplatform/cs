@@ -18,6 +18,7 @@ package org.exoplatform.mail.connection.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 
 import javax.mail.Flags;
@@ -240,15 +241,16 @@ public class ImapConnector extends BaseConnector {
       }
 
       if (updatedMsgs.length == msgs.size()) {
-        String uid = "";
-        for (int l = 0; l < updatedMsgs.length; l++) {
-          uid = String.valueOf(fromFolder.getUID(updatedMsgs[l]));
-          /*if (Utils.isEmptyField(uid))
+        try {
+          String uid = "";
+          for (int l = 0; l < updatedMsgs.length; l++) {
+            uid = String.valueOf(fromFolder.getUID(updatedMsgs[l]));
+            /*if (Utils.isEmptyField(uid))
             uid = MimeMessageParser.getMD5MsgId(updatedMsgs[l]);*/
-          msgs.get(l).setUID(uid);
-        }
+            msgs.get(l).setUID(uid);
+          }          
+        } catch (NoSuchElementException e) { }
       }
-
       fromFolder.close(true);
       toFolder.close(true);
     } catch (Exception e) {
