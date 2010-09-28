@@ -177,12 +177,16 @@ UIWeekView.prototype.drag = function(evt) {
 	var height =  UIWeekView.dragElement.offsetHeight ;
 	var deltaY = null ;
 	deltaY = _e.clientY - UIWeekView.mouseY ;
-	if (deltaY % eXo.calendar.UICalendarPortlet.interval == 0) {
-		UIWeekView.dragElement.style.top = UIWeekView.mousePos(_e).y - UIWeekView.offset.y - UIWeekView.containerOffset.y + "px" ;
-	}
-	if (UIWeekView.isCol(_e)) {
-		var posX = eXo.core.Browser.findPosXInContainer(UIWeekView.currentCol, UIWeekView.dragElement.offsetParent) ;
-		UIWeekView.dragElement.style.left = posX + "px" ;
+	var currentTop =  UIWeekView.mousePos(_e).y - UIWeekView.offset.y - UIWeekView.containerOffset.y;
+	var maxTop = UIWeekView.dragElement.offsetParent.scrollHeight - height; 
+	if(currentTop >= 0 && currentTop <= maxTop){
+		if (deltaY % eXo.calendar.UICalendarPortlet.interval == 0) {
+			UIWeekView.dragElement.style.top = currentTop + "px" ;
+		}
+		if (UIWeekView.isCol(_e)) {
+			var posX = eXo.core.Browser.findPosXInContainer(UIWeekView.currentCol, UIWeekView.dragElement.offsetParent) ;
+			UIWeekView.dragElement.style.left = posX + "px" ;
+		}
 	}
 	eXo.calendar.UICalendarPortlet.updateTitle(UIWeekView.dragElement, posY) ;
 	UIWeekView.dragElement.style.width = (UIWeekView.dragElement.parentNode.offsetWidth - 10) + "px";
