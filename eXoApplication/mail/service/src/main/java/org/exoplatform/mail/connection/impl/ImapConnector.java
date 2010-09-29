@@ -113,6 +113,7 @@ public class ImapConnector extends BaseConnector {
       }
       return folder;
     } catch (Exception ex) {
+      ex.printStackTrace();
       return null;
     }
   }
