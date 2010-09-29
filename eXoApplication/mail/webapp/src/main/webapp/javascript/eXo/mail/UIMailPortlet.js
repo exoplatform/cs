@@ -486,6 +486,10 @@ UIMailPortlet.prototype.saveScroll = function(){
     eXo.core.Browser.setCookie("scrollstatus", this.scrollTop, 1);
 };
 
+UIMailPortlet.prototype.encodeHTML = function(str){
+	return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+};
+
 UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand, contentType){
     var frame = document.getElementById(frameId);
     var textAreas = document.getElementById(textAreaId);
@@ -495,13 +499,18 @@ UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand
     if (beforeDisplay == "none") {
         previewArea.style.display = "block";
     }
-    var str = textAreas.value;
+    var mailcontent = textAreas.value;
+     
     if (contentType.indexOf("text/plain") > -1) 
-        str = str.replace(/\n/g, "<br>");
+        mailcontent = this.encodeHTML(mailcontent).replace(/\n/g, "<br>");
+    else 
+    	 mailcontent = mailcontent.replace(/<;/g, "&lt;").replace(/;>/g, "&gt;").replace(/\n/g, "<br>");   
     var doc = frame.contentWindow.document;
     var isDesktop = (document.getElementById("UIPageDesktop") != null) ? true : false;
     doc.open();
-    doc.write(str);
+    doc.write("<div style='font-family:Tahoma,Verdana,Arial,Helvetica,sans-serif; font-size:12px;'><span>");
+    doc.write(mailcontent);
+    doc.write("</span></div>");
     doc.close();
     
     if (eXo.core.Browser.isFF()) {

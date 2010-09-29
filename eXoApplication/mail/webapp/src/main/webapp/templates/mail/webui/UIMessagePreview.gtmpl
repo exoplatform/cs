@@ -394,8 +394,8 @@
   								</div>
   								<div style="clear: both;"><span></span></div>
   							</div>
-                <% 
-                  if (!MailUtils.isInvitation(msg)) {
+              <% 
+                if (!MailUtils.isInvitation(msg)) {
                   String frameId = "IframeMessagePreview" + msgIndex ;
                   String textAreaId = "MessageDetails" + msgIndex ;
                   String contentType = msg.getHeader("Content-Type");//msg.getContentType() ;
@@ -412,21 +412,20 @@
                 <%
                   rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe('" + textAreaId + "', '" + frameId + "', '" + styleExpand + "', '" + contentType + "');") ;
                 %>
+      
   							<textarea id="$textAreaId" class="MessageDetails" style="display:none">
                   <%
                   String msgBody = msg.getMessageBody();
-                    println("<div style='font-family:Tahoma,Verdana,Arial,Helvetica,sans-serif; font-size:12px;'><span>")
-                    if (contentType.indexOf("text/plain") >= 0) {
-                      msgBody = MailUtils.convertTextToHtmlLink(msgBody);
-                      println(msgBody);
-                    } else {
+                  msgBody = MailUtils.camovylageLessGreateTag(msgBody);      
+                    if (contentType.indexOf("text/plain") < 0) {
                       msgBody = MailUtils.insertTargetToHtmlLink(msgBody);
+                      msgBody = MailUtils.convertTextToHtmlLink(msgBody);
                       msgBody = MailUtils.fillImage(msgBody, uicomponent.getImageLocationMap(msg));
-                      println(msgBody);
                     }
-                    println("</span></div>");
+                    println(msgBody);
                   %>
   							</textarea>
+     
                 <%} else {%>
                   <div class="InvitationBG">
                   <%=msg.getMessageBody()%>
