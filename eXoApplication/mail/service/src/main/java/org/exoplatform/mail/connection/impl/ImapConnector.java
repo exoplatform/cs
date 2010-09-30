@@ -22,6 +22,7 @@ import java.util.NoSuchElementException;
 import java.util.Properties;
 
 import javax.mail.Flags;
+import javax.mail.FolderNotFoundException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.UIDFolder;
@@ -175,7 +176,9 @@ public class ImapConnector extends BaseConnector {
       }
 
       remoteFolder.close(true);
-    } catch (Exception e) {
+    } catch (FolderNotFoundException ex) {
+      
+    }catch (Exception e) {
       logger.error("Error in move messages to remote folder", e);
       return null;
     }
