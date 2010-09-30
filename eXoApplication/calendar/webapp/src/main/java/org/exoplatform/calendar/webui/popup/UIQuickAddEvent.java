@@ -56,7 +56,6 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.ext.UIFormComboBox;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -91,7 +90,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   private boolean isEvent_ = true ;
   public UIQuickAddEvent() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null).addValidator(MandatoryValidator.class).addValidator(SpecialCharacterValidator.class)) ;
+    addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null).addValidator(MandatoryValidator.class)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
     addUIFormInput(new UIFormDateTimePicker(FIELD_FROM, FIELD_FROM, new Date(), false).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormDateTimePicker(FIELD_TO, FIELD_TO, new Date(), false).addValidator(MandatoryValidator.class));
@@ -274,6 +273,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String summary = uiForm.getEventSummary().trim() ;
+      summary = CalendarUtils.enCodeTitle(summary);
       /*if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
         uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

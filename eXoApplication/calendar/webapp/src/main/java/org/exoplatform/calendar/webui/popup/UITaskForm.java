@@ -958,6 +958,7 @@ public Attachment getAttachment(String attId) {
         String username = CalendarUtils.getCurrentUser() ;
         String calendarId = uiForm.getCalendarId() ;
         String summary = uiForm.getEventSumary().trim() ;
+        summary = CalendarUtils.enCodeTitle(summary);
         /*if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
           uiApp.addMessage(new ApplicationMessage("UITaskForm.msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
