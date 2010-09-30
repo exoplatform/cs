@@ -1256,6 +1256,7 @@ public Attachment getAttachment(String attId) {
     CalendarSetting calSetting = calendarPortlet.getCalendarSetting() ;
     CalendarService calService = CalendarUtils.getCalendarService() ;
     String summary = uiForm.getEventSumary().trim() ;
+    summary = CalendarUtils.enCodeTitle(summary);
    /* if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
       uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

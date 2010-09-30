@@ -982,4 +982,27 @@ public class CalendarUtils {
       return id;
     }
   }
+  
+  public static String enCodeTitle(String s) {
+    StringBuffer buffer = new StringBuffer();
+    if(s != null) {
+      s = s.replaceAll("(<p>((\\&nbsp;)*)(\\s*)?</p>)|(<p>((\\&nbsp;)*)?(\\s*)</p>)", "<br/>").trim();
+      s = s.replaceFirst("(<br/>)*", "");
+      s = s.replaceAll("(\\w|\\$)(>?,?\\.?\\*?\\!?\\&?\\%?\\]?\\)?\\}?)(<br/><br/>)*", "$1$2");
+      s.replaceAll("&", "&amp;").replaceAll("'", "&apos;");
+      for (int j = 0; j < s.trim().length(); j++) {
+        char c = s.charAt(j);
+        if((int)c == 60){
+          buffer.append("&lt;") ;
+        } else if((int)c == 62){
+          buffer.append("&gt;") ;
+        } else if(c == '\''){
+          buffer.append("&#39") ;
+        } else {
+          buffer.append(c) ;
+        }
+      }
+    }
+    return buffer.toString();
+  }
 }
