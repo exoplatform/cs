@@ -2764,7 +2764,99 @@ UICombobox.prototype.init = function() {
 		comboList[i].value = eXo.core.DOMUtil.findPreviousElementByTagName(comboList[i],"input").value;
 	  var onfocus = comboList[i].getAttribute("onfocus") ;
 	  var onclick = comboList[i].getAttribute("onclick") ;
+	  var onblur = comboList[i].getAttribute("onblur") ;
 	  if(!onfocus) comboList[i].onfocus = uiCombobox.show ;
 	  if(!onclick) comboList[i].onclick = uiCombobox.show ;
+	  if(!onblur)  comboList[i].onblur = uiCombobox.correct ;
 	}
 };
+
+
+//fix for onblur event on calendar
+//For validating
+
+UICombobox.prototype.correct = function() {	
+	 
+	var UICombobox = eXo.webui.UICombobox ; 
+	var value = this.value ;
+	this.value = UICombobox.setValue(value) ;
+} ;
+
+UICombobox.prototype.setValue = function(value) {
+	var value = String(value).trim().toLowerCase() ;
+	var UICombobox = eXo.webui.UICombobox ;
+	var time = UICombobox.digitToTime(value) ;
+	var hour = Number(time.hour) ;
+	var min = Number(time.minutes) ;
+	if (min > 60) min = "00" ;
+	else min = time.minutes ;
+	var timeFormat = UICombobox.getTimeFormat() ;
+	if (timeFormat.am) {
+		var am = String(timeFormat.am).toLowerCase() ;	
+		var pm = String(timeFormat.pm).toLowerCase() ;
+		if (!time) {
+			return UICombobox.defaultValue ;
+		}
+		if (hour > 12) {			
+			hour = "12" ;
+		} else if(hour == 0) {			
+			hour = "12" ;
+		}	else {			
+			hour = time.hour ;
+		}
+		if (value.indexOf(am) >= 0)	min += " " + timeFormat.am ;
+		else if(value.indexOf(pm) >= 0)	min += " " + timeFormat.pm ;
+		else 	min += " " + timeFormat.am ;
+	} else {
+		if (!time) {
+			return "12:00" ;
+		}
+		if (hour > 23) hour = "23" ;
+		else hour = time.hour ;
+	}
+	return hour + ":" + min ;
+} ;
+
+UICombobox.prototype.getTimeFormat= function() {
+	var items = eXo.webui.UICombobox.items ;
+	if (items.length <= 0) return {am:"AM", pm:"PM"} ;
+	var first = eXo.core.DOMUtil.findFirstDescendantByClass(items[0], "div", "UIComboboxLabel").innerHTML ;
+	var last =  eXo.core.DOMUtil.findFirstDescendantByClass(items[items.length - 1], "div", "UIComboboxLabel").innerHTML ;
+	var am = first.match(/[A-Z]+/) ;
+	var pm = last.match(/[A-Z]+/) ;
+	return {am:am, pm:pm} ;
+} ;
+
+UICombobox.prototype.digitToTime = function(stringNo) {
+	stringNo = new String(eXo.webui.UICombobox.getDigit(stringNo)) ;
+	var len = stringNo.length ;
+	if (len <= 0) return false ;
+	switch(len) {
+		case 1 : 
+			stringNo += "0" ;
+			return {"hour": stringNo,"minutes":"00" } ;
+			break ;
+		case 2 :			
+			return {"hour": stringNo,"minutes": "00" } ;
+			break ;
+		case 3 :
+			return {"hour": "0" + stringNo.charAt(0),"minutes": stringNo.charAt(1) + stringNo.charAt(2) } ;
+			break ;
+		case 4 :
+			return {"hour": stringNo.charAt(0) + stringNo.charAt(1),"minutes": stringNo.charAt(2) + stringNo.charAt(3) } ;
+			break ;
+		default: 
+			var newString = stringNo.substring(0,3) ;
+			return eXo.webui.UICombobox.digitToTime(newString) ;
+	}
+} ;
+
+UICombobox.prototype.getDigit = function(stringNo) {
+	var parsedNo = "";
+	for(var n=0; n<stringNo.length; n++) {
+		var i = stringNo.substring(n,n+1);
+		if(i=="1"||i=="2"||i=="3"||i=="4"||i=="5"||i=="6"||i=="7"||i=="8"||i=="9"||i=="0")
+			parsedNo += i;
+	}
+	return parsedNo.toString() ;
+} ;
