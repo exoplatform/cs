@@ -317,27 +317,28 @@ public class MailUtils {
       return str;
     }
 
+    public static String camovylageLessGreateTag(String s){
+      return s.replaceAll("&lt;", "&lt;;").replaceAll("&gt;", ";&gt;");
+    }
+    
     public static String convertTextToHtmlLink(String s) throws Exception {
       if (isFieldEmpty(s)) return "" ;
-      //s = decodeHTML(s);
+      s = decodeHTML(s);
       // for external link with form http:// , https://, ftp://
-      s = s.replaceAll("(\r?\n?)(https?|ftp)", "<br /> $2");
-      s = s.replaceAll("([^((href|src)=\")])(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", "<a target=\"_blank\" href=\"$0\"> $0 </a>") ;
+      s = s.replaceAll("([^((href|src)=\")])(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]?", "<a target=\"_blank\" href=\"$0\"> $0 </a>") ;
       // for email 
       s = s.replaceAll("(\\s)([_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5})", "$1<a target=\"_blank\" href=\"mailto:$2\"> $2 </a>") ;
       return s ;
     }
-
+    
     public static String insertTargetToHtmlLink(String s) throws Exception {
       if (isFieldEmpty(s)) return "" ;
+      s = decodeHTML(s);
       // for a tag we insert "target=_blank" to open in other window or tab
-      s = s.replaceAll("<(A|a)(.*?)>(.*?)</(A|a)>", "<a $2 target=\"_blank\"> $3 </a>");
+      s = s.replaceAll("<;(A|a)(\\s)(.*?);>(.*?)<;/(A|a);>", "<a $2 target=\"_blank\"> $3 </a>");
       return s ;
     }
 
-    public static void main(String[] args) throws Exception {
-      System.out.println(convertTextToHtmlLink("<a><33r>ds</a>sdfsd@gs.c"));
-    }
     public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
       return sharedUserId + " - " + addressName ;
     }
