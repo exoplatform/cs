@@ -412,7 +412,6 @@
                 <%
                   rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe('" + textAreaId + "', '" + frameId + "', '" + styleExpand + "', '" + contentType + "');") ;
                 %>
-      
   							<textarea id="$textAreaId" class="MessageDetails" style="display:none">
                   <%
                   String msgBody = msg.getMessageBody();
@@ -425,7 +424,6 @@
                     println(msgBody);
                   %>
   							</textarea>
-     
                 <%} else {%>
                   <div class="InvitationBG">
                   <%=msg.getMessageBody()%>
@@ -515,7 +513,6 @@
         										if (validType) {
       										%>
 														<span class="Icon ViewDownloadIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view") %></a></span>
-														<span class="Icon DownloadIcon"> <a href="$saveToDMSAction"><%=_ctx.appRes(uicomponent.id+ ".label.download") %></a></span>
 													<% 
       											}	
       										%>
