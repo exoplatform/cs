@@ -292,6 +292,11 @@
 	cursor: pointer;
 }
 
+.UIMailPortlet .UIContextMenuContainer .MenuItem .StarredIcon {
+	background: url('icons/HighLightStarIcon.gif') no-repeat left center;
+	height: auto;
+}
+
 .UIMailPortlet .StarredIcon {
 	background: url('icons/HighLightStarIcon.gif') no-repeat left center;
 	cursor: pointer;	 
