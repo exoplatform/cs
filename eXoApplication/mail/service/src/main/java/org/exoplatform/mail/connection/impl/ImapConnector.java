@@ -22,6 +22,8 @@ import java.util.NoSuchElementException;
 import java.util.Properties;
 
 import javax.mail.Flags;
+import javax.mail.MessageRemovedException;
+import javax.mail.FolderNotFoundException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.UIDFolder;
@@ -167,14 +169,18 @@ public class ImapConnector extends BaseConnector {
         String uid = "";
         for (int l = 0; l < updatedMsgs.length; l++) {
           uid = String.valueOf(remoteFolder.getUID(updatedMsgs[l]));
-         /* if (Utils.isEmptyField(uid))
-            uid = MimeMessageParser.getMD5MsgId(updatedMsgs[l]);*/
+          /*
+           * if (Utils.isEmptyField(uid)) uid =
+           * MimeMessageParser.getMD5MsgId(updatedMsgs[l]);
+           */
           msgs.get(l).setId(MimeMessageParser.getMessageId(updatedMsgs[l]));
           msgs.get(l).setUID(uid);
         }
       }
 
       remoteFolder.close(true);
+    } catch (FolderNotFoundException ex) {
+
     } catch (Exception e) {
       logger.error("Error in move messages to remote folder", e);
       return null;
@@ -203,25 +209,26 @@ public class ImapConnector extends BaseConnector {
   }
 
   public List<Message> moveMessage(List<Message> msgs, Folder currentFolder, Folder desFolder) throws Exception {
-    
-    if(!desFolder.isPersonalFolder() && !desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX)){
-      return moveMessages(msgs, currentFolder, desFolder,true);
-    }else if(desFolder.isPersonalFolder() || desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX)){
-      return moveMessages(msgs, currentFolder, desFolder,false);
+
+    if (!desFolder.isPersonalFolder() && !desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX)) {
+      return moveMessages(msgs, currentFolder, desFolder, true);
+    } else if (desFolder.isPersonalFolder() || desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX)) {
+      return moveMessages(msgs, currentFolder, desFolder, false);
     }
 
     return null;
   }
 
-  private List<Message> moveMessages(List<Message> msgs, Folder fF, Folder fT, boolean isLocalF){
+  private List<Message> moveMessages(List<Message> msgs, Folder fF, Folder fT, boolean isLocalF) {
     try {
       URLName fromURL = new URLName(fF.getURLName());
       IMAPFolder fromFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(fromURL);
       IMAPFolder toFolder = null;
-      if(isLocalF) toFolder = (IMAPFolder) createFolder(fT);
-      else{
+      if (isLocalF)
+        toFolder = (IMAPFolder) createFolder(fT);
+      else {
         URLName toURL = new URLName(fT.getURLName());
-        toFolder = (IMAPFolder)((IMAPStore)store_).getFolder(toURL);
+        toFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(toURL);
       }
 
       fromFolder.open(javax.mail.Folder.READ_WRITE);
@@ -229,7 +236,7 @@ public class ImapConnector extends BaseConnector {
       List<javax.mail.Message> copiedMsgs = new ArrayList<javax.mail.Message>();
       javax.mail.Message msg;
       for (Message m : msgs) {
-        if(m.getUID() != null) {
+        if (m.getUID() != null) {
           msg = fromFolder.getMessageByUID(Long.valueOf(m.getUID()));
           if (msg != null)
             copiedMsgs.add(msg);
@@ -242,18 +249,20 @@ public class ImapConnector extends BaseConnector {
       }
 
       if (updatedMsgs.length == msgs.size()) {
-        try {
-          String uid = "";
-          for (int l = 0; l < updatedMsgs.length; l++) {
-            uid = String.valueOf(fromFolder.getUID(updatedMsgs[l]));
-            /*if (Utils.isEmptyField(uid))
-            uid = MimeMessageParser.getMD5MsgId(updatedMsgs[l]);*/
-            msgs.get(l).setUID(uid);
-          }          
-        } catch (NoSuchElementException e) { }
+        String uid = "";
+        for (int l = 0; l < updatedMsgs.length; l++) {
+          uid = String.valueOf(fromFolder.getUID(updatedMsgs[l]));
+          msgs.get(l).setUID(uid);
+        }
       }
       fromFolder.close(true);
       toFolder.close(true);
+    } catch (NoSuchElementException e) {
+
+    } catch (MessageRemovedException e) {
+
+    } catch (NullPointerException e) {
+
     } catch (Exception e) {
       logger.error("FAIL TO MOVE MESSAGE:", e);
     }

@@ -103,6 +103,7 @@ public class MailUtils {
     }
 
     public static String encodeJCRText(String str) {
+      if(isFieldEmpty(str)) return "";
       return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
       replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
     }
@@ -285,45 +286,28 @@ public class MailUtils {
     }
 
     public static String html2string(String str) throws Exception {
-      if (str != null) {
-        str = str.replaceAll("<[^>]*>", "");
-        str = str.replaceAll("&nbsp;", "");
-        str = str.replaceAll("&quot;", "\"");
-        str = str.replaceAll("\n", "");
-        //str = str.replaceAll("&lt;", "<").replaceAll("&gt;",">");
-      } else {
-        str = "" ;
-      }
-      return str;
+      if(isFieldEmpty(str)) return "";
+      return str.replaceAll("<[^>]*>", "").replaceAll("&nbsp;", "").replaceAll("&quot;", "\"").replaceAll("\n", "");
     }
 
     //TODO : need to improve later
     public static String html2text(String str) throws Exception {
-      if (str != null) {
-        str = str.replaceAll("<br*/?>", "\n");
-        str = str.replaceAll("<[^>]*>", "");
-        str = str.replaceAll("&nbsp;", "");
-        str = str.replaceAll("&quot;", "\"");
-      } else {
-        str = "" ;
-      }
-      return str;
+      if(isFieldEmpty(str)) return "";
+      return str.replaceAll("<br*/?>", "\n").replaceAll("<[^>]*>", "").replaceAll("&nbsp;", "").replaceAll("&quot;", "\"");
+
     }
 
     //TODO : need to improve later
     public static String text2html(String str) throws Exception {
-      if (str != null) {
-        str = str.replaceAll("\n", "<br />");
-      } else {
-        str = "" ;
-      }
-      return str;
+      if(isFieldEmpty(str)) return "";
+      return str.replaceAll("\n", "<br />");
     }
     
     public static String camovylageLessGreateTag(String s){
+      if(isFieldEmpty(s)) return "";
       return s.replaceAll("&lt;", "&lt;;").replaceAll("&gt;", ";&gt;");
     }
-    
+
     public static String convertTextToHtmlLink(String s) throws Exception {
       if (isFieldEmpty(s)) return "" ;
       s = decodeHTML(s);
