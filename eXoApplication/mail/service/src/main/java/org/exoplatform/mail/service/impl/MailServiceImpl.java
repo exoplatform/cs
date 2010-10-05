@@ -52,9 +52,9 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
-import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.search.AndTerm;
 import javax.mail.search.BodyTerm;
 import javax.mail.search.ComparisonTerm;
@@ -68,7 +68,6 @@ import javax.mail.search.SentDateTerm;
 import javax.mail.search.SubjectTerm;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.mail.connection.Connector;
 import org.exoplatform.mail.connection.impl.ImapConnector;
@@ -417,6 +416,7 @@ public class MailServiceImpl implements MailService, Startable {
                            String destFolderId) throws Exception {
     Account account = getAccountById(userName, accountId);
     Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
+    
     Folder destFolder = this.getFolder(userName, accountId, destFolderId);
     boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
