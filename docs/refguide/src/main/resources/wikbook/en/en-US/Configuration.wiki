@@ -1,13 +1,13 @@
 h1. Components in eXo Collaboration Configuration
 This table shows some main components that take init-param in the applications of eXo Collaboration:
 
+
 || Applications|| Components || Description ||
 | *Calendar* | {{CalendarServiceImpl}} | It is a service that manages calendars in the Calendar application of eXo Collaboration|
-| *Chat* | {{HistoryImpl}} | It is a service that saves the chat history of users |
-|  | {{XMPPMessenger}} | It is a service that processes messages of chatters, basing on the XMPP Protocol |
-|  | {{DefaultPresenceStatus}} | It is a component that controls the presence status of chatters |
+| *Chat* | {{HistoryImpl}}  {example}{example}{example}{example} {{XMPPMessenger}} {example}{example}{example}{example}  {{DefaultPresenceStatus}}| It is a service that saves the chat history of users {example}{example} It is a service that processes messages of chat users, basing on the XMPP Protocol  {example}{example}  It is a component that controls the presence status of chat users.|
 |*Contact* | {{ContactServiceImpl}} | It is a service that supplies functions to manage contacts in the Address Book application of eXo Collaboration |
 | *Webservice* | {{AddActionsPlugin}} | It is used to register a listener for the actions on the nodes |
+
 
 h2. CalendarService
 The configuration of the Calendar application is applied mainly in _/eXoApplication/calendar/service/src/main/resources/conf/portal/configuration.xml_ 
@@ -56,7 +56,7 @@ When this configuration file is executed, the component named _org.exoplatform.s
 {code}
 
 Details:
-||Value-Param || Description || Possible Values || Default Values ||
+||Value-Param || Description || Possible Values || Default Value ||
 | *workspace* | Workspace is the workspace name in JCR where history data is stored | {{string}} | {{collaboration}} |
 |*repository*| Repository is the repository name in JCR where history data is stored | {{string}} | {{repository}} |
 |*path*| Path is JCR path to the location where history data is stored | {{string}} | {{exo:applications/eXoChat/history}}. |
@@ -84,10 +84,9 @@ The configuration of the XMPPMessenger component is found in _/extension/webapp/
 {code}
 
 Details: 
-||Properties-param || Property name || Description || Possible Values || Default Values ||
-| *openfire-connection-conf* | {{host}} | IP address or hostname for the openfire server}} | {{string of integer | 127.0.0.1 |
-| | {{port}} | port to connect to on the openfire server. Should be the same that set in openfire configuration "Client to Server" | {{string of integer}} | {{5222}} |
-| *send-file*| {{timeout}} | timeout before aborting attempt to establish a file transfer | {{string of integer}} | {{7200000}} |
+||Properties-param || Property name || Description || Possible Values || Default Value ||
+| *openfire-connection-conf* | {{host}}  {example}{example} {{port}}| IP address or hostname for the openfire server {example}{example}  Port to connect to on the openfire server. Should be the same that set in openfire configuration "Client to Server" | {{integer}} {example}{example} {{integer}} | 127.0.0.1 {example}{example} 5222 |
+| *send-file*| {{timeout}} | timeout before aborting attempt to establish a file transfer | {{integer}} | {{7200000}} |
 
 
 h2. DefaultPresenceStatus
@@ -107,7 +106,7 @@ The configuration of the DefaultPresenceStatus component is found in _/extension
 {code}
 
 Details:
-|| Properties-param || Property name|| Description || Possible Values || Default Values ||
+|| Properties-param || Property name|| Description || Possible Values || Default Value ||
 | *presence-status* | {{mode}} | It shows the present status of users |  {{string}} | {{Free to chat}} |    
 
 
@@ -134,7 +133,7 @@ when the server starts, the configuration file that contains the declaration of 
   </component>
 {code}
 
-|| Values-param || Description || Possible Values || Default Values ||
+|| Values-param || Description || Possible Values || Default Value ||
 | *UserCanSeeAllGroupAddressBooks* | User can see all GroupAddressBooks or only GroupAddressBooks that the user has at least one membership | {{true/false}} | {{false}} |
 | *NonPublicGroups* | Groups that shouldn't be displayed in broadcast list. Wildcards may be used in groups name | {{true/false}} | N/A |
 

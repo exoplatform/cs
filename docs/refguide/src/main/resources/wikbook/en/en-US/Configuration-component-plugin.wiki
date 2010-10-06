@@ -35,8 +35,7 @@ Each user can have a default personal calendar created. Use the NewUserListener 
 {code}
 The configuration is applied mainly in extension _/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-service-configuration.xml_
 
-{code:xml}
- 
+{code:xml} 
 	  <component-plugin>
 	    <name>calendar.new.user.event.listener</name>
 	    <set-method>addListenerPlugin</set-method>
@@ -83,12 +82,12 @@ The configuration is applied mainly in extension _/webapp/src/main/webapp/WEB-IN
         
         <value-param>
          <name>localeId</name>
-         <value>BEL</value><
+         <value>BEL</value>
         </value-param>
         
          <value-param>
          <name>timezoneId</name>
-         <value>Europe/Brussels</value><
+         <value>Europe/Brussels</value>
         </value-param>
         
          <value-param>
@@ -120,9 +119,9 @@ The configuration is applied mainly in extension _/webapp/src/main/webapp/WEB-IN
 	         -->
         </values-param>
           </init-params>    
-	  </component-plugin>
-	  
+	  </component-plugin>	  
 {code}
+
 Explanation:
 * *Name*: {{calendar.new.user.event.listener}} - unique key to avoid duplicate names. Users can change it.
 * *Set-method*: {{addListenerPlugin}} - The function is executed  at the target of the component to register NewUserListener.
@@ -134,17 +133,17 @@ See the details about the init-params of the component in the following table:
 ||Value-params || Description || Possible value|| Default Value ||
 |*defaultEventCategories*| Default event categories for users | {{ String (Comma separated list of category names)}} | {{Meeting,Calls,Clients,Holiday,Anniversary }}|
 |*defaultCalendarCategory*| Name of the calendar group | {{String }} | {{Default }}|
-|*viewType*| default view after user logins and goes to Calendar portlet  | {{0-6 (see below) }} | {{1}}|
-|*timeInterval*| the time unit interval when you drag and move the event (in Day view and Week view only) | {{integer in minutes }} | {{15}}|
-|*weekStartOn*| day to use as the beginning of the week. only affect on Week view | {{1-7 (see below) }} | {{2}}|
+|*viewType*| Default view after user logins and goes to Calendar portlet  | {{0-6 (see below) }} | {{1}}|
+|*timeInterval*| The time unit interval when you drag and move the event (in Day view and Week view only) | {{integer in minutes }} | {{15}}|
+|*weekStartOn*| Day to use as the beginning of the week. only affect on Week view | {{1-7 (see below) }} | {{2}}|
 |*dateFormat*| The display format for dates | {{valid Java Date format }} | {{MM/dd/yyyy}}|
 |*timeFormat*| The display format for time | {{ valid Java Date format}} | {{HH:mm }}|
 |*localeId*| ID of the geographic locale | {{valid locale ID}} | {{BEL}}|
-|*timezoneIds*| user time zone | {{valid TimeZone id}} | {{Europe }}|
-|*baseUrlForRss*| the url to publish the RSS content | {{none }} | {{none}}|
+|*timezoneIds*| User time zone | {{valid TimeZone id}} | {{Europe }}|
+|*baseUrlForRss*| The url to publish the RSS content | {{none }} | {{none}}|
 |*isShowWorkingTime*| Indicate if the working time should be hilighted in day view | {{true/false }} | {{false}}|
-|*workingTimeBegin*| the start time in working time | {{time in timeFormat}} | {{08:00}}|
-|*workingTimeEnd*| the end time in working time | {{time in timeFormat}} | {{18:00}}|
+|*workingTimeBegin*| The start time in working time | {{time in timeFormat}} | {{08:00}}|
+|*workingTimeEnd*| The end time in working time | {{time in timeFormat}} | {{18:00}}|
 |*ignoredUsers*| Definition users to ignore create default calendar | {{user id, use multiple by each line }} | {{demo/marry }}|
 
 *viewType* parameter is encoded by a number as follow:
@@ -204,7 +203,7 @@ The configuration is applied mainly in _extension/webapp/src/main/webapp/WEB-INF
         
         <value-param>
 	      	<name>defaultLocale</name>
-	        <value>BEL</value><
+	        <value>BEL</value>
       	</value-param>
       
       	<value-param>
@@ -234,8 +233,8 @@ Explanation:
 
 See the details about the init-params of the component in the following table:
 || Value-params || Description || Possible values || Default values ||
-| *defaultEditPermission* | The default permission assigned to membership in a specific group to edit calendars and events /tasks of calendar | {{User id,(Multi value membership, use coma (,) to split values)}} | {{*.* means that all members in that group can  modify and add, remove a calendar, events/tasks of the calendar}}|
-| *defaultViewPermission* | The default permission assigned to membership in a specific group to view a calendar and events /tasks of the calendar. }} | {{ User id (Multi value membership, use coma (,) to split values)}} | {{*.* means that all members in that group can view this calendar and all the events/tasks of this calendar.}}|
+| *defaultEditPermission* | The default permission assigned to membership in a specific group to edit calendars and events /tasks of calendar | {{User id }} (Multi value membership, use coma (,) to split values) | {{*.* means that all members in that group can  modify and add, remove a calendar, events/tasks of the calendar}}|
+| *defaultViewPermission* | The default permission assigned to membership in a specific group to view a calendar and events /tasks of the calendar. }} | {{ User id }} (Multi value membership, use coma (,) to split values) | {{*.* means that all members in that group can view this calendar and all the events/tasks of this calendar.}}|
 | *defaultLocale* | The default locale of the calendar | {{Valid locade id}} | {{BEL (see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html )}}|
 | *defaultTimeZone* | The default time zone of calendar | {{Valid timezone id}} | {{Europe/Brussels (see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids)}}|
 | *ignoredGroups* | Definition group to ignore create default calendar | {{ Group id (use line to define multiple value)}} | {{/platform/guests}}|
@@ -309,9 +308,9 @@ See the details about the init-params of the component in the following table:
 || Properties-param || Description || Property names || Description || Possible values || Default values ||
 | *job.info* | save the monitor data  periodically | {{jobName}} | The name of job | {{String}} | {{ReminderJob}}|
 | ** |  | {{groupName}} | The name of group job| {{String}} | {{CollaborationSuite}} |
-| ** |  | {{job}} | {{The name of actual job class| {{Class path}} | {{org.exoplatform.calendar.service.ReminderJob}} |
-| ** |  | {{repeatCount}} | how many times to run this job| {{Long}} | {{0, ( use '0' which means 'run forever)}}  |
-| ** |  | {{period}} | the time interval (millisecond) between job executions| {{Long}} | {{180000}} |
+| ** |  | {{job}} | The name of actual job class| {{Class path}} | {{org.exoplatform.calendar.service.ReminderJob}} |
+| ** |  | {{repeatCount}} | How many times to run this job| {{Long}} | {{0, ( use '0' which means 'run forever)}}  |
+| ** |  | {{period}} | The time interval (millisecond) between job executions| {{Long}} | {{180000}} |
 | ** |  | {{startTime}} | The time the job starts to run| {{Integer}} | {{+0}} |
 | ** |  | {{endTime}} | The time the job ends to run| {{Integer}} | {{none}} |
 
@@ -459,14 +458,14 @@ Explanation:
 
 See the details about the init-params of the component in the following table:
 || Properties-param || Description || Property names || Description || Possible values || Default values ||
-| *job.info* | save the monitor data  periodically | {{jobName}} | {{The name of job}} | {{String}} | {{messageToHistoricalMessageJob}}|
-| ** |  | {{groupName}} | {{The name of group name}}| {{String}} | {{CollaborationSuite}} |
-| ** |  | {{job}} | {{The name of actual job class}}| {{Class path}} | {{org.exoplatform.services.xmpp.connection.impl.HistoryJob}} |
-| ** |  | {{repeatCount}} | {{How many times to run this job}}| {{integer}} | {{0 ( use '0' which means 'run forever)}} |
-| ** |  | {{period}} | {{The time interval (millisecond) between job executions}}| {{Long}} | {{3000}} |
-| ** |  | {{startTime}} | {{The time the job starts running.}}| {{Long}} | {{+0}} |
-| ** |  | {{endTime}} | {{The time the job ends running.}}| {{Long}} | {{none}} |
-| *history.info* | {{save the monitor data  periodically}} | {{logBatchSize}} | {{The maximum number of messages in the cache are saved once the job runs.}}| {{Integer}} | {{50}} |
+| *job.info* | Save the monitor data  periodically | {{jobName}} | The name of job | {{String}} | {{messageToHistoricalMessageJob}}|
+| ** |  | {{groupName}} | The name of group name| {{String}} | {{CollaborationSuite}} |
+| ** |  | {{job}} | The name of actual job class| {{Class path}} | {{org.exoplatform.services.xmpp.connection.impl.HistoryJob}} |
+| ** |  | {{repeatCount}} | How many times to run this job| {{integer}} | {{0}} ( use '0' which means 'run forever) |
+| ** |  | {{period}} | The time interval (millisecond) between job executions| {{Long}} | {{3000}} |
+| ** |  | {{startTime}} | The time the job starts running.| {{Long}} | {{+0}} |
+| ** |  | {{endTime}} | The time the job ends running.| {{Long}} | {{none}} |
+| *history.info* | Save the monitor data  periodically | {{logBatchSize}} | The maximum number of messages in the cache are saved once the job runs.| {{Integer}} | {{50}} |
 
 
 h3. RequestFilterComponentPlugin
@@ -496,7 +495,7 @@ Explanation:
 
 See the details about the init-params of the component in the following table:
 || Value-param || Description || Possible value || Default value ||
-| *RESTXMPPServiceFilter* | {{The name of filter}} | {{Class path}} | {{org.exoplatform.services.xmpp.rest.filter.RESTXMPPServiceFilter}}|
+| *RESTXMPPServiceFilter* | The name of the filter | {{Class path}} | {{org.exoplatform.services.xmpp.rest.filter.RESTXMPPServiceFilter}}|
 
 
 h3. AuthenticationLoginListener and AuthenticationLogoutListener
@@ -521,9 +520,9 @@ h4. AuthenticationLoginListener
 {code}
 
 Explanation:
-* *Name*: exo.core.security.ConversationRegistry.register is the name of plug-in.
-* *Set-method*: addListener is the plug-in registering method. Keep this value.
-* *Type*: org.exoplatform.services.xmpp.connection.impl.AuthenticationLoginListener is a class to execute the requests of the plug-in.
+* *Name*: {{exo.core.security.ConversationRegistry.register}} is the name of plug-in.
+* *Set-method*: {{addListener}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.services.xmpp.connection.impl.AuthenticationLoginListener}} is a class to execute the requests of the plug-in.
 * *Description*: It is used to start the session and log in the chat server.
 
 
@@ -547,8 +546,8 @@ Explanation:
 
 
 h2. Contact Configuration
-The Contact Application is configured by three external component plug-ins: NewUserListener, NewMembershipListener
-and UpdateUserProfileListener. They use the same target component:
+The Contact Application is configured by three external component plug-ins: {{NewUserListener}}, {{NewMembershipListener}}
+and {{UpdateUserProfileListener}}. They use the same target component:
 
 {code:xml}
 <target-component>org.exoplatform.services.organization.OrganizationService</target-component>	
@@ -564,8 +563,7 @@ h3. NewUserListener
 	    <set-method>addListenerPlugin</set-method>
 	    <type>org.exoplatform.contact.service.impl.NewUserListener</type>
 	    <description>description</description>
-	  </component-plugin>
-
+	 </component-plugin>
 {code}
 
 Explaination:
@@ -600,7 +598,6 @@ h3. UpdateUserProfileListener
 	    <type>org.exoplatform.contact.service.impl.UpdateUserProfileListener</type>
 	    <description>description</description>	     
 	  </component-plugin>
-	 </external-component-plugins>
 {code}
 
 
@@ -709,7 +706,7 @@ Explanation:
 
 See the details about the init-params of the component in the following table:
 || value-param || Description || Possible value || Default value ||
-| *portletName* | {{The name of the portlet}} | {{String}} | {{CalendarPortlet}}|
+| *portletName* | The name of the portlet | {{String}} | {{CalendarPortlet}}|
 
 
 h3. ContactDataInitialize
@@ -739,7 +736,7 @@ Explanation:
 
 See the details about the init-params of the component in the following table:
 || value-param || Description || Possible value || Default value ||
-| *portletName* | {{The name of the portlet}} | {{String}} | {{ContactPortlet}}|
+| *portletName* | The name of the portlet | {{String}} | {{ContactPortlet}}|
 
 
 
@@ -810,7 +807,7 @@ Explanation:
 
 See the details about the init-params of the component in the following table:
 || value-param || Description || Possible value || Default value ||
-| *portletsPrefsRequired* | {{ The name of plug-in added to SpaceService}} || {{String}} | {{ContactPortlet / ContactPortlet}}|
+| *portletsPrefsRequired* |  The name of plug-in added to SpaceService || {{String}} | {{ContactPortlet / ContactPortlet}}|
 
 
 

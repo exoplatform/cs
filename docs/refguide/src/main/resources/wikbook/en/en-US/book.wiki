@@ -1,6 +1,7 @@
+h1. Prerequisites
+{include:document="Prequisites.wiki"}
 
 h1. Applications
-
 
 h2. Portlets
 {include:document="List_portlets.wiki"}
@@ -14,6 +15,11 @@ h1. Configurations
 {include:document="Configuration-component-plugin.wiki"}
 {include:document="Chatserver-configuration.wiki"}
 
+h1. Developer reference
 
+h2. Extension points
+{include:document="Overridable_components.wiki"}
 
+h2. Public REST APIs
+{include:document="public_rest_api.wiki"}
 
