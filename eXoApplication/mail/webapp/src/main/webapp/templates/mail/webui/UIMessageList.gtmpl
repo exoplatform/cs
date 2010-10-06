@@ -448,7 +448,7 @@
 	%>
 	
 	<% 
-			height = "200px";
+			height = "210px";
 	    style = "";
 			if (uicomponent.getParent().isNoSplitLayout()) height = "auto;"
 			else  if (uicomponent.getParent().isVerticalLayout()) { 
