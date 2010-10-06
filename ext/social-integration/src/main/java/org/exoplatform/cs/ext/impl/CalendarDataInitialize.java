@@ -44,6 +44,7 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
   public static final String COLON = ":".intern() ;
   public static final String SPLITER = "://".intern();
   public static final String PUBLIC_TYPE = "2".intern();
+  public static final String CALENDAR_ID_PREFIX = "CalendarInSpace";
   
   private final InitParams params;
   
@@ -77,7 +78,7 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
     try {
       Space space = event.getSpace();
       CalendarService calService = (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
-      String calendarId = Calendar.CALENDAR_PREF + space.getId();
+      String calendarId = CALENDAR_ID_PREFIX + space.getId();
       String username = space.getGroupId();
       Calendar calendar = null;
       try {
@@ -101,7 +102,7 @@ public class CalendarDataInitialize extends SpaceListenerPlugin {
   }
 
   @Override
-  public void applicationDeactivated(SpaceLifeCycleEvent event) {
+public void applicationDeactivated(SpaceLifeCycleEvent event) {
   }
 
   @Override

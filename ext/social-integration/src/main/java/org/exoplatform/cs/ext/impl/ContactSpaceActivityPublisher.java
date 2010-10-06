@@ -16,12 +16,15 @@
  */
 package org.exoplatform.cs.ext.impl;
 
-import org.exoplatform.calendar.service.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.impl.ContactEventListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.social.core.activity.model.Activity;
 import org.exoplatform.social.core.identity.model.Identity;
 import org.exoplatform.social.core.identity.provider.SpaceIdentityProvider;
 import org.exoplatform.social.core.manager.ActivityManager;
@@ -36,21 +39,45 @@ import org.exoplatform.social.core.space.spi.SpaceService;
  */
 public class ContactSpaceActivityPublisher extends ContactEventListener{
   private Log LOG = ExoLogger.getLogger(ContactSpaceActivityPublisher.class);
+  public static final String CONTACT_APP_ID = "cs-contact:spaces".intern();
+  public static final String FULL_NAME_KEY = "FullName".intern();
+  public static final String EMAIL_KEY = "EmailContact".intern();
+  public static final String JOB_TITLE_KEY = "JobTitle".intern();
+  public static final String PHONE_KEY = "Phone".intern();
+  public static final String ACTIVITY_TYPE = "ActivityType".intern();
+  public static final String CONTACT_ADD = "ContactAdd".intern();
+  public static final String CONTACT_UPDATE = "ContactUpdate".intern();
+  
   @Override
   public void saveContact(String username, Contact contact) {
     try {
       Class.forName("org.exoplatform.social.core.manager.IdentityManager") ;
-      String msg = "A new contact has been added : " + contact.getFullName();
-      String body = "add new contact ...";
+      String addrBookId = contact.getAddressBook()[0];
+      if (addrBookId == null || addrBookId.indexOf(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX) < 0) {
+        return;
+      }
+      
+      Activity activity = new Activity();
+      activity.setTitle(contact.getFullName());
+      activity.setBody("");
+      
+      Map<String, String> params = new HashMap<String, String>();
+      params.put(EMAIL_KEY, contact.getEmailAddress() != null ? contact.getEmailAddress() : "");
+      params.put(FULL_NAME_KEY, contact.getFullName());
+      params.put(JOB_TITLE_KEY, contact.getJobTitle() != null ? contact.getJobTitle() : "");
+      params.put(PHONE_KEY, contact.getMobilePhone() != null ? contact.getMobilePhone() : "");
+      params.put(ACTIVITY_TYPE, CONTACT_ADD);
+      activity.setTemplateParams(params);
+      activity.setType(CONTACT_APP_ID);
+      
+      
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class); 
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
-      String spaceId = contact.getAddressBookIds()[0].split("ContactGroup")[1]; 
+      String spaceId = addrBookId.split(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX)[1]; 
       Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
-      activityM.recordActivity(spaceIdentity, SpaceService.SPACES_APP_ID, msg , body);
-    } catch (ClassNotFoundException e) {
-      if(LOG.isDebugEnabled()) LOG.debug("Please check the integrated project does the social deploy? " +e.getMessage());
+      activityM.recordActivity(spaceIdentity, activity);
     } catch (Exception e) {
-      LOG.error("Can not record Activity for space when event added " +e.getMessage());
+      LOG.error("Can not record Activity for space when contact added " +e.getMessage());
     }
     
   }
@@ -59,17 +86,31 @@ public class ContactSpaceActivityPublisher extends ContactEventListener{
   public void updateContact(String username, Contact contact) {
     try {
       Class.forName("org.exoplatform.social.core.manager.IdentityManager") ;
-      String msg = "The following contact has been updated: " + contact.getFullName(); 
-      String body = "update contact...";
+      String addrBookId = contact.getAddressBook()[0];
+      if (addrBookId == null || addrBookId.indexOf(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX) < 0) {
+        return;
+      }
+      Activity activity = new Activity();
+      activity.setTitle(contact.getFullName());
+      activity.setBody("");
+      
+      Map<String, String> params = new HashMap<String, String>();
+      params.put(EMAIL_KEY, contact.getEmailAddress() != null ? contact.getEmailAddress() : "");
+      params.put(FULL_NAME_KEY, contact.getFullName());
+      params.put(JOB_TITLE_KEY, contact.getJobTitle() != null ? contact.getJobTitle() : "");
+      params.put(PHONE_KEY, contact.getMobilePhone() != null ? contact.getMobilePhone() : "");
+      params.put(ACTIVITY_TYPE, CONTACT_UPDATE);
+      activity.setTemplateParams(params);
+      activity.setType(CONTACT_APP_ID);
+      
+      
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class); 
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
-      String spaceId = contact.getAddressBook()[0].split("ContactGroup")[1]; 
+      String spaceId = addrBookId.split(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX)[1]; 
       Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
-      activityM.recordActivity(spaceIdentity, SpaceService.SPACES_APP_ID, msg , body);
-    } catch (ClassNotFoundException e) {
-      if(LOG.isDebugEnabled()) LOG.debug("Please check the integrated project does the social deploy? " +e.getMessage());
+      activityM.recordActivity(spaceIdentity, activity);
     } catch (Exception e) {
-      LOG.error("Can not record Activity for space when event updated " +e.getMessage());
+      LOG.error("Can not record Activity for space when contact updated " +e.getMessage());
     }
     
   }
