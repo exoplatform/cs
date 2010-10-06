@@ -1428,6 +1428,35 @@ UIChatWindow.prototype.setVisible = function(visible, event, requestCancelEvent)
     var activeTabControl = this.getActiveTabControl();
     if (activeTabControl) {
       activeTabControl.updateUnreadMessage();
+      var historyStatus = activeTabControl.tabPaneNode.historyStatus;
+      if (!historyStatus) historyStatus = this.CURRENT_CONVERSATION_MESSAGE;
+        var endDate = new Date();
+        var startDate = new Date(endDate);
+        switch (historyStatus) {
+          case this.CURRENT_CONVERSATION_MESSAGE:
+            startDate = new Date(activeTabControl.tabPaneNode.startTime);
+            break;
+          case this.THIS_WEEK_MESSAGE:
+            startDate.setDate(endDate.getDate() - endDate.getDay());
+            break;
+          case this.LAST_30_DAY_MESSAGE:
+            startDate.setDate(endDate.getDate() - 30);
+            break;
+          case this.BEGINNING_MESSAGE:
+            startDate = false;
+            break;
+        }
+        if (startDate) {
+        	startDate.setHours(0);
+        	startDate.setMinutes(0);
+        	startDate.setSeconds(0);
+        	startDate.setMilliseconds(1);
+          startDate = startDate.getTime();
+          endDate = endDate.getTime();
+        }
+      	var targetPerson = activeTabControl.tabId.targetPerson;
+        targetPerson = targetPerson.substr(0, targetPerson.indexOf('@'));
+        this.UIMainChatWindow.jabberGetMessageHistory(targetPerson, startDate, endDate, activeTabControl.isGroupChat);      
     }
     if (this.rootNode.style.display != 'block') {
       this.rootNode.style.display = 'block';
