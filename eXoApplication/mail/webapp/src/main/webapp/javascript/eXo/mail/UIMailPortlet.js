@@ -500,7 +500,7 @@ UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand
         previewArea.style.display = "block";
     }
     var mailcontent = textAreas.value;
-    if (contentType.indexOf("text/plain") > -1) 
+    if (contentType != null && contentType.indexOf("text/plain") > -1) 
         mailcontent = this.encodeHTML(mailcontent).replace(/\n/g, "<br>");
     else 
     	 mailcontent = mailcontent.replace(/<;/g, "&lt;").replace(/;>/g, "&gt;").replace(/\n/g, "<br>");
