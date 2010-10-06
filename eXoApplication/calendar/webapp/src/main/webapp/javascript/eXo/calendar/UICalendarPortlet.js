@@ -1497,7 +1497,7 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
 		var container = DOMUtil.findAncestorByClass(src,"EventWeekContent");
 		var mouseY = (eXo.core.Browser.findMouseRelativeY(container,evt) + container.scrollTop)*60000;
         obj = eXo.core.EventManager.getEventTargetByTagName(evt,"td"); //(DOMUtil.findAncestorByTagName(src, "td")) ? DOMUtil.findAncestorByTagName(src, "td") : src;
-        map = eXo.calendar.UICalendarPortlet.getBeginDay(obj.getAttribute("startTime")) + mouseY;
+				map = Date.parse(obj.getAttribute("startFull"));
         for (var i = 0; i < items.length; i++) {
             if (items[i].style.display == "block") {
                 items[i].style.display = "none";
