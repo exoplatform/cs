@@ -398,13 +398,13 @@
                   if (!MailUtils.isInvitation(msg)) {
                   String frameId = "IframeMessagePreview" + msgIndex ;
                   String textAreaId = "MessageDetails" + msgIndex ;
-                  String contentType = msg.getHeader("Content-Type");//msg.getContentType() ;
+                  String contentType = msg.getHeader("Content-Type");
                   if (contentType != null) {
                     if (contentType.indexOf(";") > -1) {
                       contentType = contentType.substring(0, contentType.indexOf(";")) ;
                     }
                     contentType = contentType.toLowerCase()
-                  } else {
+                  }else {
                     contentType = "text/plain" ;
                   }
                 %>
@@ -513,7 +513,6 @@
         										if (validType) {
       										%>
 														<span class="Icon ViewDownloadIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view") %></a></span>
-														<span class="Icon DownloadIcon"> <a href="$saveToDMSAction"><%=_ctx.appRes(uicomponent.id+ ".label.download") %></a></span>
 													<% 
       											}	
       										%>

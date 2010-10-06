@@ -66,6 +66,8 @@ import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -188,6 +190,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
 	public List<ContactData> ccContacts = new ArrayList<ContactData>();
 
 	public List<ContactData> bccContacts = new ArrayList<ContactData>();
+	
+	private static final Log     logger       = ExoLogger.getLogger(UIComposeForm.class);
 
 	public boolean isVisualEditor() {
 		return isVisualEditor;
@@ -208,51 +212,53 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
     MailService mailSrv = getApplicationComponent(MailService.class);
 
     // img
-    if (msg != null && msg.getAttachments() != null) {
-      try {
-        List<String> imgLinks = new ArrayList<String>();
-        for (Attachment attach : msg.getAttachments()) {
-          String attLink = MailUtils.getImageSource(attach, getDownloadService());
-          if (attLink != null && attach.getMimeType().toLowerCase().indexOf("image") > -1
-              && attach.isShownInBody()) {
-           // attLink = "/" + getPortalName() + "/rest/jcr/" + getRepository() + attach.getPath();
-            attLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" + getRepository() + attach.getPath() ;
-            imgLinks.add(attLink);
-          }
-        }
-        String body = msg.getMessageBody();
-        String[] imgs = body.split("img");
-        List<String> newBody = new ArrayList<String>();
-        for (String img : imgs) {
-          try {
-            int indexSrc = img.indexOf("src");
-            if (indexSrc == -1) {
-              newBody.add(img);
-              continue;
+    if (msg != null){
+      if(msg.getAttachments() != null) {
+        try {
+          List<String> imgLinks = new ArrayList<String>();
+          for (Attachment attach : msg.getAttachments()) {
+            String attLink = MailUtils.getImageSource(attach, getDownloadService());
+            if (attLink != null && attach.getMimeType().toLowerCase().indexOf("image") > -1
+                && attach.isShownInBody()) {
+             // attLink = "/" + getPortalName() + "/rest/jcr/" + getRepository() + attach.getPath();
+              attLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" + getRepository() + attach.getPath() ;
+              imgLinks.add(attLink);
             }
-            int endSrc = img.indexOf("\"", indexSrc + 5);
-            String oldSrc = img.substring(indexSrc + 5, endSrc);
-            String newSrc = imgLinks.get(0);
-            for (String src : imgLinks) {
-              if (src.contains(oldSrc.substring(4))) {
-                newSrc = src;
-                break;
+          }
+          String body = msg.getMessageBody();
+          String[] imgs = body.split("img");
+          List<String> newBody = new ArrayList<String>();
+          for (String img : imgs) {
+            try {
+              int indexSrc = img.indexOf("src");
+              if (indexSrc == -1) {
+                newBody.add(img);
+                continue;
               }
+              int endSrc = img.indexOf("\"", indexSrc + 5);
+              String oldSrc = img.substring(indexSrc + 5, endSrc);
+              String newSrc = imgLinks.get(0);
+              for (String src : imgLinks) {
+                if (src.contains(oldSrc.substring(4))) {
+                  newSrc = src;
+                  break;
+                }
+              }
+              img = img.replace(oldSrc, newSrc);
+              newBody.add("img" + img);
+            } catch (Exception ex) {
+              ex.printStackTrace();
             }
-            img = img.replace(oldSrc, newSrc);
-            newBody.add("img" + img);
-          } catch (Exception ex) {
-            ex.printStackTrace();
           }
+          StringBuilder builder = new StringBuilder();
+          for (String img : newBody)
+            builder.append(img);
+          msg.setMessageBody(builder.toString());
+        } catch (Exception e) {
+          e.printStackTrace();
         }
-        StringBuilder builder = new StringBuilder();
-        for (String img : newBody)
-          builder.append(img);
-        msg.setMessageBody(builder.toString());
-      } catch (Exception e) {
-        e.printStackTrace();
       }
-    }
+    }else logger.info("The message is null, edit the empty draft message. Or attachment(s) message hasn't damaged"); 
     for (Account acc : mailSrv.getAccounts(username)) {
       SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName()
           + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
@@ -838,6 +844,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
 		message.setAccountId(accountId_);
 		message.setFrom(from);
 		String contentType = Utils.MIMETYPE_TEXTHTML;
+		
 		if (!isVisualEditor()) {
 			contentType = Utils.MIMETYPE_TEXTPLAIN;
 		}
