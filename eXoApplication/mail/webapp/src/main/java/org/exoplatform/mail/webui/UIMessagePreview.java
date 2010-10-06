@@ -166,10 +166,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
         if (att.isShownInBody()) {
           attLink = MailUtils.getImageSource(att, dservice);
           if (attLink != null) {
-            // attLink = "/" + getPortalName()+"/rest/jcr/" + getRepository() +
-            // att.getPath() ;
-            attLink = "/" + PortalContainer.getInstance().getRestContextName() + "/private/jcr/"
-                + getRepository() + att.getPath();
+            attLink = "/" + PortalContainer.getInstance().getRestContextName() + "/private/jcr/" + getRepository() + att.getPath();
             attId = att.getId();
             imageLocation.put(attId.substring(attId.lastIndexOf("/") + 1, attId.length()),
                               attLink.substring(0, attLink.lastIndexOf("/") + 1));
