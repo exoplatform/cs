@@ -445,10 +445,13 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
 			isReturnReceipt = msg.isReturnReceipt();
 			setPriority(msg.getPriority());
 			if (msg != null && msg.hasAttachment()) {
-				for (Attachment att : msg.getAttachments()) {
-					if (att.isLoadedProperly())
-						attachments_.add(att);
-				}
+  			try{
+			    for (Attachment att : msg.getAttachments()) {
+	          if (att.isLoadedProperly())
+	            attachments_.add(att);
+	        }  
+			  }catch (Exception e){logger.warn("Attachment was broken.");}
+				
 				if (attachments_.size() > 0) {
 					for (ActionData actionData : getUploadFileList()) {
 						inputSet
