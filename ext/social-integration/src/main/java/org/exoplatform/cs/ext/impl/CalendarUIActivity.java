@@ -1,14 +1,17 @@
 package org.exoplatform.cs.ext.impl;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -55,7 +58,7 @@ public class CalendarUIActivity extends BaseUIActivity {
 
   private String           taskStatus;
 
-  private String           currentUser;
+  private String           timezone           = null;
 
   private String           eventId, calendarId;
 
@@ -71,9 +74,10 @@ public class CalendarUIActivity extends BaseUIActivity {
       User user = getCurrentUser();
       if (user == null)
         return;
-      currentUser = user.getUserName();
       CalendarService calService = (CalendarService) PortalContainer.getInstance()
                                                                     .getComponentInstanceOfType(CalendarService.class);
+      CalendarSetting setting = calService.getCalendarSetting(user.getUserName());
+      timezone = setting.getTimeZone();
       CalendarEvent event = null;
       event = calService.getGroupEvent(calendarId, eventId);
       Map<String, String> pars = new HashMap<String, String>();
@@ -229,7 +233,6 @@ public class CalendarUIActivity extends BaseUIActivity {
     return type;
   }
 
-  SimpleDateFormat dformat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 
   public String getEventStartTime(WebuiBindingContext ctx) {
     String timeStr = getActivityParamValue(CalendarSpaceActivityPublisher.EVENT_STARTTIME_KEY);
@@ -271,9 +274,10 @@ public class CalendarUIActivity extends BaseUIActivity {
     WebuiRequestContext requestContext = ctx.getRequestContext();
     Locale locale = requestContext.getLocale();
     Calendar calendar = GregorianCalendar.getInstance(locale);
-    calendar.setTimeInMillis(time);
-
-    return dformat.format(calendar.getTime());
+    calendar.setTimeZone(TimeZone.getTimeZone(timezone));
+    DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.LONG, locale);
+    df.setCalendar(calendar);
+    return df.format(time);
 
   }
 
