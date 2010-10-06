@@ -501,9 +501,9 @@ UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand
     }
     var mailcontent = textAreas.value;
      
-    if (contentType.indexOf("text/plain") > -1) 
+    if (contentType != null && contentType.indexOf("text/plain") > -1) 
         mailcontent = this.encodeHTML(mailcontent).replace(/\n/g, "<br>");
-    else 
+    else  
     	 mailcontent = mailcontent.replace(/<;/g, "&lt;").replace(/;>/g, "&gt;").replace(/\n/g, "<br>");   
     var doc = frame.contentWindow.document;
     var isDesktop = (document.getElementById("UIPageDesktop") != null) ? true : false;

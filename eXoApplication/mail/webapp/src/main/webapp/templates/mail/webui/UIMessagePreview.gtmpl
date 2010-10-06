@@ -398,14 +398,15 @@
                 if (!MailUtils.isInvitation(msg)) {
                   String frameId = "IframeMessagePreview" + msgIndex ;
                   String textAreaId = "MessageDetails" + msgIndex ;
-                  String contentType = msg.getHeader("Content-Type");//msg.getContentType() ;
+                  String contentType = msg.getHeader("Content-Type");
+                  String contentTypeLocal = msg.getContentType() ;
                   if (contentType != null) {
                     if (contentType.indexOf(";") > -1) {
                       contentType = contentType.substring(0, contentType.indexOf(";")) ;
                     }
                     contentType = contentType.toLowerCase()
-                  } else {
-                    contentType = "text/plain" ;
+                  } else if(contentTypeLocal != null){
+                     contentType = contentTypeLocal;
                   }
                 %>
                 <iframe src="" style="border: 0px; min-height: 40px;" frameborder="0" class="MessageDetails" id="$frameId"></iframe>
@@ -416,7 +417,7 @@
                   <%
                   String msgBody = msg.getMessageBody();
                   msgBody = MailUtils.camovylageLessGreateTag(msgBody);      
-                    if (contentType.indexOf("text/plain") < 0) {
+                    if (contentType != null && contentType.indexOf("text/plain") < 0) {
                       msgBody = MailUtils.insertTargetToHtmlLink(msgBody);
                       msgBody = MailUtils.convertTextToHtmlLink(msgBody);
                       msgBody = MailUtils.fillImage(msgBody, uicomponent.getImageLocationMap(msg));
