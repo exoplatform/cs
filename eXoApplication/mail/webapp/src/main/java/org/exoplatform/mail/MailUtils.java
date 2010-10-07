@@ -318,10 +318,7 @@ public class MailUtils {
       s = s.replaceAll("(\\s)([_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5})", "$1<a target=\"_blank\" href=\"mailto:$2\"> $2 </a>") ;
       return s ;
     }
-public static void main(String[] args) throws Exception {
- String s = "\">http://abc.com";
- System.out.println(MailUtils.convertTextToHtmlLink(s));
-}
+
     public static String insertTargetToHtmlLink(String s) throws Exception {
       if (isFieldEmpty(s)) return "" ;
       s = decodeHTML(s);
