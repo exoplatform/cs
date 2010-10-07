@@ -1,0 +1,9 @@
+# JavaMail IMAP provider Sun Microsystems, Inc
+protocol=imap; type=store; class=org.exoplatform.mail.service.test.mock.ExoMockStore; vendor=eXo platform;
+protocol=imaps; type=store; class=org.exoplatform.mail.service.test.mock.ExoMockStore; vendor=eXo platform;
+# JavaMail SMTP provider Sun Microsystems, Inc
+protocol=smtp; type=transport; class=org.jvnet.mock_javamail.MockTransport; vendor=Mock javamail;
+protocol=smtps; type=transport; class=org.jvnet.mock_javamail.MockTransport; vendor=Mock javamail;
+# JavaMail POP3 provider Sun Microsystems, Inc
+protocol=pop3; type=store; class=org.jvnet.mock_javamail.MockStore; vendor=Mock javamail;
+protocol=pop3s; type=store; class=org.jvnet.mock_javamail.MockStore; vendor=Mock javamail;

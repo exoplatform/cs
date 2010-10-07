@@ -61,6 +61,7 @@
     <org.jibx.jibx-run.version>1.2.1</org.jibx.jibx-run.version>
     <javax.activation.activation.version>1.1</javax.activation.activation.version>
     <org.slf4j.slf4j-simple.version>1.5.6</org.slf4j.slf4j-simple.version>
+    <org.jvnet.mock-javamail.version>1.9</org.jvnet.mock-javamail.version>
     <xml-apis.version>1.0.b2</xml-apis.version>
     <pull-parser.version>2</pull-parser.version>
     <quartz.version>1.5.2</quartz.version>
