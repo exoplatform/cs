@@ -1086,6 +1086,10 @@ UIResizeEvent.prototype.execute = function(evt){
         return;
     }
     else {
+    	var maxDelta = 1440 - UIResizeEvent.outerElement.offsetTop - UIResizeEvent.beforeHeight;
+    	if(mDelta > maxDelta) {
+    		return;
+    	}
         if (mDelta % UIResizeEvent.interval == 0) {
             UIResizeEvent.outerElement.style.height = UIResizeEvent.beforeHeight - 2 + mDelta + "px";
             UIResizeEvent.innerElement.style.height = UIResizeEvent.innerElementHeight + mDelta + "px";
