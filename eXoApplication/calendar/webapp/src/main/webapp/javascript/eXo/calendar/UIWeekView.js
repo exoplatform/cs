@@ -291,6 +291,12 @@ UIWeekView.prototype.showTooltip = function(outer,delta,evt,dir){
 	delta = parseInt(delta * (24 * weekdays * 60 * 60 * 1000) / totalWidth);
 	if(dir) delta = parseInt(outer.getAttribute("startTime")) + delta;
 	else delta = parseInt(outer.getAttribute("endTime")) + delta;
+	
+	// for timezone setting
+	var timezoneOffset = -(new Date()).getTimezoneOffset();
+	var settingTimezone = eXo.calendar.UICalendarPortlet.settingTimezone;
+	delta = delta - timezoneOffset * 60000 + settingTimezone * 60000;
+	
 	var unit = 15*60*1000;
 	delta = parseInt(delta/unit)*unit;
 	var tooltip = eXo.calendar.UIWeekView.tooltip;
