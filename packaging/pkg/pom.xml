@@ -75,12 +75,13 @@
 	  <dependency>
 		<groupId>org.exoplatform.kernel</groupId>
 		<artifactId>exo.kernel.container</artifactId>
-		<version>${org.exoplatform.kernel.version}</version>
+		<version>${org.exoplatform.kernel.version}</version>		
 	  </dependency>
 	  <dependency>
 		<groupId>org.exoplatform.kernel</groupId>
 		<artifactId>exo.kernel.commons</artifactId>
 		<version>${org.exoplatform.kernel.version}</version>
+		<scope>provided</scope>
 	  </dependency>
 	  <dependency>
 		<groupId>org.exoplatform.kernel</groupId>
@@ -97,6 +98,7 @@
 		<groupId>org.exoplatform.jcr</groupId>
 		<artifactId>exo.jcr.component.core</artifactId>
 		<version>${org.exoplatform.jcr.version}</version>
+		<scope>provided</scope>
 	  </dependency>
 	  <dependency>
 		<groupId>org.exoplatform.kernel</groupId>
@@ -161,6 +163,7 @@
 		<groupId>org.exoplatform.portal</groupId>
 		<artifactId>exo.portal.component.portal</artifactId>
 		<version>${org.exoplatform.portal.version}</version>
+		<scope>provided</scope>
 	  </dependency>
 	  <dependency>
 		<groupId>org.exoplatform.portal</groupId>
@@ -171,26 +174,31 @@
 		<groupId>org.exoplatform.portal</groupId>
 		<artifactId>exo.portal.component.web</artifactId>
 		<version>${org.exoplatform.portal.version}</version>
+		<scope>provided</scope>
 	  </dependency>
 	  <dependency>
 		<groupId>org.exoplatform.portal</groupId>
 		<artifactId>exo.portal.component.common</artifactId>
 		<version>${org.exoplatform.portal.version}</version>
+		<scope>provided</scope>
 	  </dependency>
 	  <dependency>
 		<groupId>org.exoplatform.portal</groupId>
 		<artifactId>exo.portal.webui.eXo</artifactId>
 		<version>${org.exoplatform.portal.version}</version>
+		<scope>provided</scope>
 	  </dependency>
 	  <dependency>
 		<groupId>org.exoplatform.portal</groupId>
 		<artifactId>exo.portal.webui.core</artifactId>
 		<version>${org.exoplatform.portal.version}</version>
+		<scope>provided</scope>
 	  </dependency>
 	  <dependency>
 		<groupId>org.exoplatform.portal</groupId>
 		<artifactId>exo.portal.webui.portal</artifactId>
 		<version>${org.exoplatform.portal.version}</version>
+		<scope>provided</scope>
 	  </dependency>
 	  <dependency>
 		<groupId>org.exoplatform.portal</groupId>
@@ -259,6 +267,7 @@
 		<groupId>org.exoplatform.portal</groupId>
 		<artifactId>gatein.portal.component.wsrp</artifactId>
 		<version>${org.exoplatform.portal.version}</version>
+		<scope>provided</scope>
 	  </dependency>
 	  	  
 	  <dependency>
@@ -305,6 +314,7 @@
 		<groupId>org.slf4j</groupId>
 		<artifactId>slf4j-simple</artifactId>
 		<version>${org.slf4j.slf4j-simple.version}</version>
+		<scope>provided</scope>
 	  </dependency>
 	  <dependency>
 		<groupId>xml-apis</groupId>
@@ -378,6 +388,7 @@
 		<groupId>org.jcrom</groupId>
 		<artifactId>jcrom</artifactId>
 		<version>${jcrom.version}</version>
+		<scope>provided</scope>
 	  </dependency>
 	  <!--exo.cs.eXoApplication.chat.service-->
 	  <dependency>
@@ -415,7 +426,8 @@
       <dependency>
       <groupId>org.exoplatform.ecms</groupId>
       <artifactId>exo-ecms-core-webui</artifactId>
-      <version>${org.exoplatform.ecms.version}</version>      
+      <version>${org.exoplatform.ecms.version}</version>
+	  <scope>provided</scope>      
     </dependency>
 	
 	<dependency>
@@ -426,18 +438,21 @@
     <dependency>
       <groupId>org.gatein.wci</groupId>
       <artifactId>wci-exo</artifactId>
-      <version>${org.gatein.wci.version}</version>      
+      <version>${org.gatein.wci.version}</version>
+	  <scope>provided</scope>
     </dependency>
 	<dependency>
       <groupId>org.gatein.wci</groupId>
       <artifactId>wci-tomcat</artifactId>
-      <version>${org.gatein.wci.version}</version> 	     
+      <version>${org.gatein.wci.version}</version>
+	  <scope>provided</scope>
     </dependency>
 
 	<dependency>
       <groupId>org.gatein.pc</groupId>
       <artifactId>pc-controller</artifactId>
-      <version>${org.gatein.pc.version}</version>      
+      <version>${org.gatein.pc.version}</version>
+	  <scope>provided</scope>      
     </dependency>
 	
 	<dependency>
@@ -527,7 +542,13 @@
         <artifactId>nekohtml</artifactId>
         <version>${net.sourceforge.nekohtml.version}</version>
 	</dependency>
-	
+    <dependency>
+      <groupId>net.sourceforge.nekohtml</groupId>
+      <artifactId>nekohtml</artifactId>
+      <version>${net.sourceforge.nekohtml.version}</version>
+      <type>jar</type>
+    </dependency><!-- 1.9.9-->	
+	 	  
   </dependencies>
   <build>
     <plugins>
