@@ -428,11 +428,8 @@ public class MailServiceImpl implements MailService, Startable {
       } catch (Exception e) {
         if(logger.isDebugEnabled()) logger.debug("\n\n move message error " + e.getMessage());
       }
-    }else if (account.getProtocol().equalsIgnoreCase(Utils.POP3)) {
-      //move only on Local
     }
-    if (success)
-      storage_.moveMessages(userName, accountId, msgList, currentFolderId, destFolderId);
+    if (success) storage_.moveMessages(userName, accountId, msgList, currentFolderId, destFolderId);
   }
 
   public void moveMessages(String userName,
@@ -452,16 +449,10 @@ public class MailServiceImpl implements MailService, Startable {
         if (msgList == null)
           success = false;
       } catch (Exception e) {
-        return;
+        logger.error("Mailservice: Move message error", e);
       }
     }
-    if (success)
-      storage_.moveMessages(userName,
-                            accountId,
-                            msgList,
-                            currentFolderId,
-                            destFolderId,
-                            updateReference);
+    if (success) storage_.moveMessages(userName, accountId, msgList, currentFolderId, destFolderId, updateReference);
   }
 
   public void moveMessage(String userName,
@@ -485,7 +476,7 @@ public class MailServiceImpl implements MailService, Startable {
           msg = msgList.get(0);
         }
       } catch (Exception e) {
-        return;
+        if(logger.isDebugEnabled()) logger.debug("Mailservice: Move message fail", e);
       }
     }
     if (success)

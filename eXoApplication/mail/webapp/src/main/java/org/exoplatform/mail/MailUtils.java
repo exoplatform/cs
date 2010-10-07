@@ -312,12 +312,16 @@ public class MailUtils {
       if (isFieldEmpty(s)) return "" ;
       s = decodeHTML(s);
       // for external link with form http:// , https://, ftp://   
-      s = s.replaceAll("([^((href|src)=\")])(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]?", "<a target=\"_blank\" href=\"$0\"> $0 </a>") ;
+      s = s.replaceAll("([^((href|src)=\")])(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]?"," $0");
+      //s = s.replaceAll("([^((href|src)=\")])(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]?", "<a target=\"_blank\" href=\"$0\"> $0 </a>") ;
       // for email 
       s = s.replaceAll("(\\s)([_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5})", "$1<a target=\"_blank\" href=\"mailto:$2\"> $2 </a>") ;
       return s ;
     }
-
+public static void main(String[] args) throws Exception {
+ String s = "\">http://abc.com";
+ System.out.println(MailUtils.convertTextToHtmlLink(s));
+}
     public static String insertTargetToHtmlLink(String s) throws Exception {
       if (isFieldEmpty(s)) return "" ;
       s = decodeHTML(s);
