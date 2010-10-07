@@ -612,7 +612,7 @@ public class MailServiceImpl implements MailService, Startable {
 
     Session session = Session.getDefaultInstance(props, null);
     logger.debug(" #### Sending email ... ");
-    SMTPTransport transport = (SMTPTransport) session.getTransport(Utils.SVR_SMTP);
+    Transport transport = session.getTransport(Utils.SVR_SMTP);
 
     try {
       if (!isSMTPAuth) {
