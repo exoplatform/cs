@@ -285,6 +285,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       String attId = event.getRequestContext().getRequestParameter("attachId");
       UIMailPortlet portlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       
@@ -334,6 +335,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       String attId = event.getRequestContext().getRequestParameter("attachId");
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
@@ -362,6 +364,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
       UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class);
@@ -391,6 +394,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
@@ -416,6 +420,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
 
@@ -442,6 +447,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
 
@@ -468,6 +474,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
@@ -506,6 +513,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
       UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class);
@@ -548,6 +556,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
@@ -569,6 +578,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
 
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
@@ -605,6 +615,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       try {
         Message msg = uiMsgPreview.getShowedMessageById(msgId);
@@ -624,6 +635,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       if (msg != null) {
@@ -648,6 +660,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
@@ -673,6 +686,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
       UIMessagePreview uiMsgPreview = event.getSource();
       String answer = event.getRequestContext().getRequestParameter(OBJECTID);
       String msgId = event.getRequestContext().getRequestParameter("messageId");
+      msgId = MailUtils.decodeMailId(msgId);
       CalendarService calService = uiMsgPreview.getApplicationComponent(CalendarService.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       String fromUserId = MailUtils.getEventFrom(msg);
@@ -765,6 +779,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+      msgId = MailUtils.decodeMailId(msgId);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       Message msg = uiMsgPreview.getShowedMessageById(msgId);

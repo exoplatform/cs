@@ -62,6 +62,8 @@ public class MailUtils {
   final public static String BACKSLASH = "\\".intern() ;
   public static final String GREATER_THAN = ">".intern() ;
   public static final String SMALLER_THAN = "<".intern() ;
+  private static String PLUS_ENCODE = "PLUS_ENCODE_043";
+  private static String EQUAL_ENCODE = "EQUAL_ENCODE_061";
   final public static String SPECIALCHARACTER[] = {"?", "[", "(", "|", ")", "*", "\\", "+", "}", "{", "^", "$", "\""
     ,"!", "#", "%", "&", ":", ">", "<", "~", "`", "]", "'", "/", "-"} ; ;
     final public static String SUPPORTED_VIEW_TYPE_ATTACH[] = {"gif", "png", "jpg", "jpec", "bmp"} ;
@@ -107,7 +109,17 @@ public class MailUtils {
       return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
       replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
     }
+    
+    public static String encodeMailId(String id) {
+      if (id == null) return "";
+      return id.replaceAll("\\+", PLUS_ENCODE).replaceAll("=", EQUAL_ENCODE);
+    }
 
+    public static String decodeMailId(String id) {
+      if (id == null) return "";
+      return id.replaceAll(PLUS_ENCODE, "+").replaceAll(EQUAL_ENCODE, "=");
+    }
+    
     public static String convertSize(long size) throws Exception {
       return Utils.convertSize(size);
     }

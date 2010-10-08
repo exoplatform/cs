@@ -1,5 +1,6 @@
 <%
   import org.exoplatform.webui.core.UIComponent ;
+	import org.exoplatform.mail.MailUtils;
   String[] beanFields =  uicomponent.getBeanFields() ;
   String[] beanActions =  uicomponent.getBeanActions() ;
   UIComponent uiParent = uicomponent.getParent() ;
@@ -42,6 +43,7 @@
 	          def fieldValue = uicomponent.getFieldValue(bean, field) ;
 	          def cssClass = "" ;
 	          if(fieldValue != null) {
+	            fieldValue = MailUtils.encodeHTML(fieldValue);
 	            def fieldClass = fieldValue.getClass() ;
 	            if(fieldClass == Integer.class)  cssClass = "number" ;
 	            else if(fieldClass == java.util.Date.class)  cssClass = "Date" ;
