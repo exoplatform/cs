@@ -75,6 +75,11 @@
       <artifactId>exo.cs.eXoApplication.organization.service</artifactId>
       <version>${project.version}</version>
     </dependency>
+	<dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.organization.client.openfire</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.chat.service</artifactId>
@@ -136,10 +141,13 @@
           <artifactId>slf4j-jdk14</artifactId>
 		</exclusion>
 		<exclusion>
+          <groupId>javax.jcr</groupId>
+          <artifactId>jcr</artifactId>
+		</exclusion>  
+		<exclusion>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-log4j12</artifactId>
 		</exclusion>  
-		
 	   </exclusions>
 		
 	  </dependency>
@@ -262,6 +270,11 @@
             <jarModule>
               <groupId>org.exoplatform.cs</groupId>
               <artifactId>exo.cs.eXoApplication.organization.service</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
+            <jarModule>
+              <groupId>org.exoplatform.cs</groupId>
+              <artifactId>exo.cs.eXoApplication.organization.client.openfire</artifactId>
               <includeInApplicationXml>true</includeInApplicationXml>
             </jarModule>
             <webModule>
