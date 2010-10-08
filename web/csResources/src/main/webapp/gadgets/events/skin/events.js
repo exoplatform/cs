@@ -136,9 +136,9 @@ eXoEventGadget.prototype.getPrefs = function(){
 eXoEventGadget.prototype.setLink = function(){
 	var prefs = new gadgets.Prefs();
 	var url   = prefs.getString("url");
-	var baseUrl = "http://" +  top.location.host + parent.eXo.env.portal.context + "/" + parent.eXo.env.portal.accessMode + "/" + parent.eXo.env.portal.portalName;
+	var baseUrl = top.location.href;
 	var a = document.getElementById("ShowAll");
-	url = (url)?baseUrl + url: baseUrl + "/calendar";
+	url = (url)?url: baseUrl + "/calendar";
 	a.href = url;
 }
 eXoEventGadget.prototype.createRequestUrl = function(){
@@ -201,7 +201,7 @@ eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
   gadgets.io.makeRequest(url, callback, params);
 	return;
 */	
-	var request =  parent.eXo.core.Browser.createHttpRequest() ;
+	var request =  eXoEventGadget.createHttpRequest() ;
   request.open('GET', url, true) ;
   request.setRequestHeader("Cache-Control", "max-age=86400") ;
   request.send(null) ;
@@ -217,6 +217,11 @@ eXoEventGadget.prototype.notify = function(){
 	eXoEventGadget.setLink();
 }
 
+eXoEventGadget.prototype.createHttpRequest = function(){
+	var xhr = new XMLHttpRequest();
+	if(!xhr) xhr = new ActiveXObject("Msxml2.XMLHTTP");
+	return xhr;
+}
 eXoEventGadget =  new eXoEventGadget();
 
 gadgets.util.registerOnLoadHandler(eXoEventGadget.onLoadHander);
