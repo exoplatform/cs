@@ -19,6 +19,7 @@ package org.exoplatform.services.xmpp.connection.impl;
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.log.ExoLogger;
@@ -40,6 +41,9 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
   public void onEvent(Event<ConversationRegistry, ConversationState> event) throws Exception {
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
+      if (container instanceof RootContainer) {
+        container = RootContainer.getInstance().getPortalContainer("portal");
+      }
       XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
       if(messenger != null){
         String userId = event.getData().getIdentity().getUserId() ;
