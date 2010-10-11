@@ -62,14 +62,14 @@
                 <td colspan="2">
                   <div>
                     <table>
-                      <tr>
+                      <tbody>
                         <%              
                           field = uicomponent.getChildById(uicomponent.OUTGOING_USERNAME)
                           label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
                         %>
                         <tr>
-                          <td class="FieldLabel" style="text-align: left"></td>
-                          <td class="FieldComponent">&nbsp;&nbsp;&nbsp;&nbsp;$label&nbsp;&nbsp;&nbsp;&nbsp;<%uicomponent.renderUIComponent(field)%></td>
+                          <td class="FieldLabel" style="text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;$label</td>
+                          <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%><span class="MandatorySignal"> *</span></td>
                         </tr>
                       
                         <%              
@@ -77,10 +77,10 @@
                           label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
                         %>
                         <tr>
-                          <td class="FieldLabel" style="text-align: left"></td>
-                          <td class="FieldComponent">&nbsp;&nbsp;&nbsp;&nbsp;$label&nbsp;&nbsp;&nbsp;&nbsp;<%uicomponent.renderUIComponent(field)%></td>
+                          <td class="FieldLabel" style="text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;$label</td>
+                          <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%><span class="MandatorySignal"> *</span></td>
                         </tr>
-                      </tr>
+                      </tbody>
                     </table>
                   </div>
                 </td>

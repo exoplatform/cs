@@ -759,7 +759,8 @@ public class JCRDataStorage {
   public void saveAccount(String username, Account account, boolean isNew) throws Exception {
     SessionProvider sysProvider = null;
     try {
-      sysProvider = createSessionProvider();
+      //sysProvider = createSessionProvider();
+      sysProvider = createSystemProvider();
       // creates or updates an account, depending on the isNew flag
       Node mailHome = getMailHomeNode(sysProvider, username);
       Node newAccount = null;

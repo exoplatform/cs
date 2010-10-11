@@ -153,8 +153,9 @@ public class UIAccountSetting extends UIFormTabPane {
     UIFormCheckBoxInput<Boolean> useIncomingSetting = new UIFormCheckBoxInput<Boolean>(USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN, null, null);
     outGoingInputSet.addUIFormInput(useIncomingSetting);
     
-    outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_USERNAME, null, null).addValidator(MandatoryValidator.class));
-    outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE).addValidator(MandatoryValidator.class));
+    // CS-4386: remove addValidator
+    outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_USERNAME, null, null));
+    outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE));
     
     UIFetchOptionsInputSet fetchOptionsInputSet = new UIFetchOptionsInputSet(TAB_FETCH_OPTIONS);
     
@@ -356,7 +357,9 @@ public class UIAccountSetting extends UIFormTabPane {
       ((UIFormDateTimePicker) uifetchOptionsInput.getChildById(FROM_DATE)).setEditable(false);
     } else {
       GregorianCalendar cal = new GregorianCalendar();
-      cal.setTime(account.getCheckFromDate());
+      if (account.getCheckFromDate() != null) {
+    	  cal.setTime(account.getCheckFromDate());
+      }
       ((UIFormDateTimePicker) uifetchOptionsInput.getChildById(FROM_DATE)).setCalendar(cal);
     }
     
@@ -480,6 +483,9 @@ public class UIAccountSetting extends UIFormTabPane {
       String incomingPort = uiSetting.getFieldIncomingPort() ;
       String outgoingPort = uiSetting.getFieldOutgoingPort() ;
       String password = uiSetting.getFieldIncomingPassword() ;
+      Boolean isOutgoingAuth = uiSetting.isOutgoingAuthen();
+      String outGoingUsername = uiSetting.getOutgoingUser();
+      String outGoingPassword = uiSetting.getOutgoingPassword();
       
       if (!MailUtils.isValidEmailAddresses(email)) {
         uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.email-address-is-invalid", null, ApplicationMessage.WARNING)) ;
@@ -506,6 +512,23 @@ public class UIAccountSetting extends UIFormTabPane {
         uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.field-password-is-required", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
+      }
+      
+      if(isOutgoingAuth)
+      {
+    	  if(Utils.isEmptyField(outGoingUsername))
+    	  {
+    		  uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.field-username-is-required", null, ApplicationMessage.WARNING));
+    		  event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+    	      return ;
+    	  }
+    	  
+    	  if(Utils.isEmptyField(outGoingPassword))
+    	  {
+    		  uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.field-password-is-required", null, ApplicationMessage.WARNING));
+    		  event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+    	      return ;
+    	  }
       }
       
       acc.setProtocol(uiSetting.getFieldProtocol()) ;

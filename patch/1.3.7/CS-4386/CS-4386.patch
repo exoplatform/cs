@@ -1,0 +1,140 @@
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(revision 52301)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(working copy)
+@@ -759,7 +759,8 @@
+   public void saveAccount(String username, Account account, boolean isNew) throws Exception {
+     SessionProvider sysProvider = null;
+     try {
+-      sysProvider = createSessionProvider();
++      //sysProvider = createSessionProvider();
++      sysProvider = createSystemProvider();
+       // creates or updates an account, depending on the isNew flag
+       Node mailHome = getMailHomeNode(sysProvider, username);
+       Node newAccount = null;
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/NewUserListener.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/NewUserListener.java	(revision 52301)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/NewUserListener.java	(working copy)
+@@ -94,10 +94,12 @@
+     acc.setIncomingPort(incomingPort);  
+     acc.setProtocol(protocol);  
+     acc.setIncomingSsl(isSSL);
++    acc.setOutgoingSsl(isSSL);
+     acc.setIncomingFolder(incomingFolder) ;
+     acc.setServerProperty(Utils.SVR_SMTP_USER, incomingUserName);
+     acc.setOutgoingHost(outgoingHost);
+     acc.setOutgoingPort(outgoingPort);
++    acc.setIsOutgoingAuthentication(false);
+ 
+     SessionProvider sProvider = createSystemProvider();
+     String username = user.getUserName();
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIAccountSetting.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIAccountSetting.java	(revision 52301)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIAccountSetting.java	(working copy)
+@@ -153,8 +153,9 @@
+     UIFormCheckBoxInput<Boolean> useIncomingSetting = new UIFormCheckBoxInput<Boolean>(USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN, null, null);
+     outGoingInputSet.addUIFormInput(useIncomingSetting);
+     
+-    outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_USERNAME, null, null).addValidator(MandatoryValidator.class));
+-    outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE).addValidator(MandatoryValidator.class));
++    // CS-4386: remove addValidator
++    outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_USERNAME, null, null));
++    outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE));
+     
+     UIFetchOptionsInputSet fetchOptionsInputSet = new UIFetchOptionsInputSet(TAB_FETCH_OPTIONS);
+     
+@@ -356,7 +357,9 @@
+       ((UIFormDateTimePicker) uifetchOptionsInput.getChildById(FROM_DATE)).setEditable(false);
+     } else {
+       GregorianCalendar cal = new GregorianCalendar();
+-      cal.setTime(account.getCheckFromDate());
++      if (account.getCheckFromDate() != null) {
++    	  cal.setTime(account.getCheckFromDate());
++      }
+       ((UIFormDateTimePicker) uifetchOptionsInput.getChildById(FROM_DATE)).setCalendar(cal);
+     }
+     
+@@ -480,6 +483,9 @@
+       String incomingPort = uiSetting.getFieldIncomingPort() ;
+       String outgoingPort = uiSetting.getFieldOutgoingPort() ;
+       String password = uiSetting.getFieldIncomingPassword() ;
++      Boolean isOutgoingAuth = uiSetting.isOutgoingAuthen();
++      String outGoingUsername = uiSetting.getOutgoingUser();
++      String outGoingPassword = uiSetting.getOutgoingPassword();
+       
+       if (!MailUtils.isValidEmailAddresses(email)) {
+         uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.email-address-is-invalid", null, ApplicationMessage.WARNING)) ;
+@@ -508,6 +514,23 @@
+         return ;
+       }
+       
++      if(isOutgoingAuth)
++      {
++    	  if(Utils.isEmptyField(outGoingUsername))
++    	  {
++    		  uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.field-username-is-required", null, ApplicationMessage.WARNING));
++    		  event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
++    	      return ;
++    	  }
++    	  
++    	  if(Utils.isEmptyField(outGoingPassword))
++    	  {
++    		  uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.field-password-is-required", null, ApplicationMessage.WARNING));
++    		  event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
++    	      return ;
++    	  }
++      }
++      
+       acc.setProtocol(uiSetting.getFieldProtocol()) ;
+       acc.setLabel(uiSetting.getFieldAccountNameValue()) ;
+       acc.setUserDisplayName(uiSetting.getDisplayName()) ;
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties	(revision 52301)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties	(working copy)
+@@ -132,6 +132,7 @@
+ UIAccountSetting.msg.incoming-port-is-not-number=The port should be a number. Ask your administrator.
+ UIAccountSetting.msg.outgoing-port-is-not-number=The port should be a number. Ask your administrator.
+ UIAccountSetting.msg.field-password-is-required=Please enter the password.
++UIAccountSetting.msg.field-username-is-required=Please enter the username.
+ 
+ UIAccountSetting.action.Save=#{word.save}
+ UIAccountSetting.action.Cancel=#{word.cancel}
+Index: eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/popup/UIOutgoingInputSet.gtmpl
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/popup/UIOutgoingInputSet.gtmpl	(revision 52301)
++++ eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/popup/UIOutgoingInputSet.gtmpl	(working copy)
+@@ -62,14 +62,14 @@
+                 <td colspan="2">
+                   <div>
+                     <table>
+-                      <tr>
++                      <tbody>
+                         <%              
+                           field = uicomponent.getChildById(uicomponent.OUTGOING_USERNAME)
+                           label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+                         %>
+                         <tr>
+-                          <td class="FieldLabel" style="text-align: left"></td>
+-                          <td class="FieldComponent">&nbsp;&nbsp;&nbsp;&nbsp;$label&nbsp;&nbsp;&nbsp;&nbsp;<%uicomponent.renderUIComponent(field)%></td>
++                          <td class="FieldLabel" style="text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;$label</td>
++                          <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%><span class="MandatorySignal"> *</span></td>
+                         </tr>
+                       
+                         <%              
+@@ -77,10 +77,10 @@
+                           label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+                         %>
+                         <tr>
+-                          <td class="FieldLabel" style="text-align: left"></td>
+-                          <td class="FieldComponent">&nbsp;&nbsp;&nbsp;&nbsp;$label&nbsp;&nbsp;&nbsp;&nbsp;<%uicomponent.renderUIComponent(field)%></td>
++                          <td class="FieldLabel" style="text-align: left">&nbsp;&nbsp;&nbsp;&nbsp;$label</td>
++                          <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%><span class="MandatorySignal"> *</span></td>
+                         </tr>
+-                      </tr>
++                      </tbody>
+                     </table>
+                   </div>
+                 </td>

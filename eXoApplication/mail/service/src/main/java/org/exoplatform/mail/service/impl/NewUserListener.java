@@ -94,10 +94,12 @@ public class NewUserListener extends UserEventListener {
     acc.setIncomingPort(incomingPort);  
     acc.setProtocol(protocol);  
     acc.setIncomingSsl(isSSL);
+    acc.setOutgoingSsl(isSSL);
     acc.setIncomingFolder(incomingFolder) ;
     acc.setServerProperty(Utils.SVR_SMTP_USER, incomingUserName);
     acc.setOutgoingHost(outgoingHost);
     acc.setOutgoingPort(outgoingPort);
+    acc.setIsOutgoingAuthentication(false);
 
     SessionProvider sProvider = createSystemProvider();
     String username = user.getUserName();
