@@ -548,7 +548,10 @@
       <version>${net.sourceforge.nekohtml.version}</version>
       <type>jar</type>
     </dependency><!-- 1.9.9-->	
-	 	  
+	<!-- missing dependencies for exobuild tool -->
+    <dependency><groupId>org.exoplatform.commons</groupId><artifactId>exo.platform.commons.comet.webapp</artifactId><version>${org.exoplatform.commons.version}</version><type>war</type></dependency>
+ 	<!-- end -->
+  
   </dependencies>
   <build>
     <plugins>
