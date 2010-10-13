@@ -16,9 +16,6 @@ function getProduct(version) {
   var portal = Module.GetModule("portal", {kernel : kernel, ws:ws, core : core, eXoJcr : eXoJcr});
   var cs = Module.GetModule("cs", {portal:portal, ws:ws});
   
-
-  
-  product.addDependencies(portal.web.rest) ;
   product.addDependencies(portal.portlet.exoadmin) ;
   product.addDependencies(portal.portlet.web) ;
   product.addDependencies(portal.portlet.dashboard) ;
@@ -38,9 +35,6 @@ function getProduct(version) {
   portal.fck = new Project("org.exoplatform.commons", "exo.platform.commons.fck", "war", "${org.exoplatform.commons.version}");
   portal.fck.deployName = "fck";
   product.addDependencies(portal.fck);	
-
-  // cometd (requried for CS)
-  product.addDependencies(cs.comet.cometd);
    
   // CS extension
   product.addDependencies(cs.eXoApplication.calendar);
