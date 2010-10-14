@@ -110,7 +110,7 @@ function getModule(params) {
   // demo rest endpoint	
   module.demo.rest =
     new Project("org.exoplatform.cs", "exo.cs.demo.rest-war", "war", module.version).
-    addDependency(ws.frameworks.servlet);;
+    addDependency(ws.frameworks.servlet);
   module.demo.rest.deployName = "rest-csdemo"; 
        
    /**
