@@ -470,7 +470,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
 				subject = "Re: " + subject;
 			setFieldSubjectValue(subject);
 			setPriority(msg.getPriority());
-			if (msg != null && msg.hasAttachment()) {
+			if (msg != null && msg.hasAttachment() && msg.getAttachments() != null) {
 				for (Attachment att : msg.getAttachments()) {
 					if (att.isLoadedProperly())
 						attachments_.add(att);
