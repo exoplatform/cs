@@ -35,6 +35,9 @@ function getProduct(version) {
   portal.fck = new Project("org.exoplatform.commons", "exo.platform.commons.fck", "war", "${org.exoplatform.commons.version}");
   portal.fck.deployName = "fck";
   product.addDependencies(portal.fck);	
+  
+//cometd (requried for CS)
+  product.addDependencies(cs.comet.cometd);
    
   // CS extension
   product.addDependencies(cs.eXoApplication.calendar);
@@ -45,7 +48,6 @@ function getProduct(version) {
   product.addDependencies(cs.eXoApplication.content);
   product.addDependencies(cs.web.csResources); 
   product.addDependencies(cs.web.webservice);
-  product.addDependencies(cs.extension.webapp);
 
   // CS demo
   product.addDependencies(cs.demo.portal);

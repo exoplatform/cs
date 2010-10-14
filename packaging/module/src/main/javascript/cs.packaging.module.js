@@ -12,6 +12,16 @@ function getModule(params) {
   module.relativeSRCRepo = "cs";
   module.name = "cs";
 
+  var cometVersion = "${org.exoplatform.commons.version}";
+  module.comet = {};
+  module.comet.cometd =
+    new Project("org.exoplatform.commons", "exo.platform.commons.comet.webapp", "war", cometVersion).
+    addDependency(new Project("org.mortbay.jetty", "cometd-bayeux", "jar", "${org.mortbay.jetty.cometd-bayeux.version}")).
+    addDependency(new Project("org.mortbay.jetty", "jetty-util", "jar", "${org.mortbay.jetty.jetty-util.version}")).
+    addDependency(new Project("org.mortbay.jetty", "cometd-api", "jar", "${org.mortbay.jetty.cometd-api.version}")).
+    addDependency(new Project("org.exoplatform.commons", "exo.platform.commons.comet.service", "jar", cometVersion));
+  module.comet.cometd.deployName = "cometd";
+  
   // CS
 
   module.eXoApplication = {};
@@ -68,13 +78,6 @@ function getModule(params) {
     new Project("org.exoplatform.cs", "exo.cs.web.webservice", "jar",  module.version);
   module.web.csResources =
     new Project("org.exoplatform.cs", "exo.cs.web.csResources", "war", module.version) ;
-	
-	// CS extension 
-  module.extension = {};
-  module.extension.webapp =
-    new Project("org.exoplatform.cs", "exo.cs.extension.webapp", "war", module.version);
-    
-  module.extension.webapp.deployName = "cs-extension";
   
   /**
    * Configure and add server path for chat, single sign-on
@@ -101,11 +104,7 @@ function getModule(params) {
   module.demo.portal.deployName = "csdemo";  
 	   
   module.demo.cometd=
-    new Project("org.exoplatform.cs", "exo.cs.demo.cometd-war", "war", module.version).
-    addDependency(new Project("org.mortbay.jetty", "cometd-bayeux", "jar", "${org.mortbay.jetty.cometd-bayeux.version}")).
-    addDependency(new Project("org.mortbay.jetty", "jetty-util", "jar", "${org.mortbay.jetty.jetty-util.version}")).
-    addDependency(new Project("org.mortbay.jetty", "cometd-api", "jar", "${org.mortbay.jetty.cometd-api.version}")).
-    addDependency(new Project("org.exoplatform.commons", "exo.platform.commons.comet.service", "jar", "${org.exoplatform.commons.version}"));
+    new Project("org.exoplatform.cs", "exo.cs.demo.cometd-war", "war", module.version);
   module.demo.cometd.deployName = "cometd-csdemo";
 	
   // demo rest endpoint	
