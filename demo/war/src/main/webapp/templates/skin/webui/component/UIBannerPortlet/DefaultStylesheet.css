@@ -5,26 +5,21 @@
 .UIBannerPortlet {
 	overflow: auto;
 	background: url('DefaultSkin/background/BgBanner.gif') repeat-x bottom center;
-	padding:8px 80px 6px;
-	
+	padding:8px 40px 6px;
+	zoom: 1;
 }
 
-.UIBannerPortlet .LeftBanner {
-  
-}
+
 
 .UIBannerPortlet .RightBanner {
   background: url('DefaultSkin/background/Logo.gif') no-repeat left bottom; /* orientation=lt */
   background: url('DefaultSkin/background/Logo.gif') no-repeat right -74px; /* orientation=rt */
-  height: 50px;
+  height: 57px;
 }
 
-.UIBannerPortlet .MiddleBanner {
-	 
-}
 
-.UIBannerPortlet .LeftLoginContainer {
-   
+
+.UIBannerPortlet .LeftLoginContainer {   
   padding-left: 10px;
   float: right; /* orientation=lt */
   float: left; /* orientation=rt */
@@ -32,8 +27,7 @@
   margin-left: 5px; /* orientation=rt */
 }
 
-.UIBannerPortlet .RightLoginContainer {
-   
+.UIBannerPortlet .RightLoginContainer {   
   padding-right: 5px;
 }
 
@@ -89,7 +83,7 @@
 }
  
 .UIBannerPortlet .MiddleLoginContainer .Language {
-  color:#E7E7E7;
+  color:#F58220;
   cursor:pointer;
   display:block;
   float:left;
@@ -99,12 +93,17 @@
   padding-left:18px;
 }
 
+.UIBannerPortlet .MiddleLoginContainer .Language:hover {
+  color:#8F8F8F;
+}
+
+
 .UIBannerPortlet .Version {
   background: none;
   float:left; /* orientation=lt */
   float:right; /* orientation=rt */
-  padding:26px 0px 0px 150px;  /* orientation=lt */
-  padding:26px 150px 0px 0px;  /* orientation=rt */
+  padding:33px 0px 0px 144px;  /* orientation=lt */
+  padding:33px 144px 0px 0px;  /* orientation=rt */
   color:#050708;
   font-size:12px;
   display:block;

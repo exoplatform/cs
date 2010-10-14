@@ -3,18 +3,25 @@
 	background: #c0c0c0;	
 }
 
-.UIToolbarContainer .NormalContainerBlock .ToolbarContainer {
-    background:none repeat scroll 0 0 #232D36;
-    border-left: 1px solid #232D36;
-    border-right: 1px solid #232D36;
+.UIWorkingWorkspace .UIToolbarContainer  .ToolbarContainer {
+    background:none repeat scroll 0 0 #343a50;
+    border-left: 1px solid #343a50;
+    border-right: 1px solid #343a50;
 }
 
-.UIToolbarContainer .NormalContainerBlock .ToolbarContainer .TRContainer{
-	padding: 0px 90px;
+.UIToolbarContainer  .ToolbarContainer .TRContainer{
+	padding: 0px 40px 0 40px;
 }
 
 .UIToolbarContainer .ToolbarContainer a {
-	color:white;
+	color:#ffd400;
+	padding:0 0 0 20px;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.UIToolbarContainer .ToolbarContainer a:hover {
+	color:#8f8f8f;
 }
 
 .UIToolbarContainer .UIHorizontalTabs .UITab {
@@ -23,7 +30,7 @@
 
 .UIStarToolBarPortlet {
 	background:transparent url(background/Logo_mini.gif) no-repeat 2px;
-	height:32px;
+	height:30px;
 	width:64px;
 }
 
@@ -33,8 +40,9 @@
 }
 
 .UIToolbarContainer .Name a{
-	background:transparent url(background/UseIcon.png) no-repeat left 5px;
-	margin-left:10px;
+	background:none;
+	margin:0;
+	padding:0;
 }
 
 .UIToolbarContainer .SitesIcon {
@@ -44,23 +52,19 @@
 
 
 .UIToolbarContainer .MailIcon {
-	background:transparent url(background/Mail.png) no-repeat 8px 8px;
-	margin-left:10px;
+	background:transparent url(background/BorderList.gif) no-repeat 8px 10px;
 }
 
-.UIToolbarContainer .ContactIcon{
-	background:transparent url(background/Contact.png) no-repeat 8px 9px;
-	margin-left:10px;
-}
 
 .UIToolbarContainer .CalendarIcon {
-	background:transparent url(background/Calenda.png) no-repeat 8px 9px;
-	margin-left:10px;
+	background:transparent url(background/BorderList.gif) no-repeat 8px 10px;
 }
 
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer {
 	z-index: 100;
-	border: 1px solid #999999;
+	width: 150px!important;
+	border: none;
+	top: 31px!important;
 }
 
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer .TitleBar{
@@ -69,20 +73,37 @@
 }
 
 
-.UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem{
-	background: #f3f3f3;
+.UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem{	
 	opacity: 1;
+	border-top: 1px solid #414760;
 }
 
-.UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem a{
-	color: #444444;
+.UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem a {
+	color: #8f8f8f;
 	font-weight: normal;
+	padding:0 0 0 33px;
+	background-color:#30385C;	
 }
 
-.UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem a:hover{
-	color: #058ee6;
+.UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem a:hover {
+	background-color: #20263F;
+	color: #92918f;
 }
+
+
 
 .UIToolbarContainer  .UITableColumnContainer .UIStarToolBarPortlet .TabsContainer{
 	position: relative;
+}
+
+.UIToolbarContainer .ChangeLanguageIcon {
+	background: url('background/ToolbarContainer.png') no-repeat 5px -573px; 
+}
+
+.UIToolbarContainer .ChangeSkinIcon {
+	background-position: 5px -228px ;
+}
+
+.UIToolbarContainer .SignOutIcon {
+	background: url('background/ToolbarContainer.png') no-repeat 5px -603px; 
 }

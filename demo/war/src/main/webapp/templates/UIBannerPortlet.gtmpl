@@ -15,7 +15,7 @@
 	      <div class="RightBanner">
 		  
 	        <div class="MiddleBanner">
-				<a href="$pageURI" class="Version"><%=_ctx.appRes("UIHomePagePortlet.cs-slogan")%></a>
+				
                <%if(prContext.getRemoteUser() != null) {%>
 	           
 	             <div class="LeftLoginContainer">
