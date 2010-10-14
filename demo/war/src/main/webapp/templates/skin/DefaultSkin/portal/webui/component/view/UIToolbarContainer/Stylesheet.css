@@ -15,7 +15,8 @@
 
 .UIToolbarContainer .ToolbarContainer a {
 	color:#ffd400;
-	padding:0 0 0 20px;
+	padding:0 0 0 20px; /* orientation=lt */
+	padding:0 20px 0 0px; /* orientation=rt */
 	font-size: 12px;
 	font-weight: normal;
 }
@@ -52,12 +53,14 @@
 
 
 .UIToolbarContainer .MailIcon {
-	background:transparent url(background/BorderList.gif) no-repeat 8px 10px;
+	background:transparent url(background/BorderList.gif) no-repeat 8px 10px; /* orientation=lt */
+	background:transparent url(background/BorderList.gif) no-repeat 38px 10px; /* orientation=rt */
 }
 
 
 .UIToolbarContainer .CalendarIcon {
-	background:transparent url(background/BorderList.gif) no-repeat 8px 10px;
+	background:transparent url(background/BorderList.gif) no-repeat 8px 10px;  /* orientation=lt */
+	background:transparent url(background/BorderList.gif) no-repeat 60px 10px;  /* orientation=rt */
 }
 
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer {
@@ -81,7 +84,8 @@
 .UIToolbarContainer .UITableColumnContainer .MenuItemContainer .MenuItem a {
 	color: #8f8f8f;
 	font-weight: normal;
-	padding:0 0 0 33px;
+	padding:0 0 0 33px; /* orientation=lt */
+	padding:0 33px 0 0; /* orientation=rt */
 	background-color:#30385C;	
 }
 
@@ -97,13 +101,16 @@
 }
 
 .UIToolbarContainer .ChangeLanguageIcon {
-	background: url('background/ToolbarContainer.png') no-repeat 5px -573px; 
+	background: url('background/ToolbarContainer.png') no-repeat 5px -573px; /* orientation=lt */
+	background: url('background/ToolbarContainer-rt.png') no-repeat 120px -573px; /* orientation=rt */
 }
 
 .UIToolbarContainer .ChangeSkinIcon {
-	background-position: 5px -228px ;
+	background-position: 5px -228px ; /* orientation=lt */
+	background-position: 120px -228px ; /* orientation=rt */
 }
 
 .UIToolbarContainer .SignOutIcon {
-	background: url('background/ToolbarContainer.png') no-repeat 5px -603px; 
+	background: url('background/ToolbarContainer.png') no-repeat 5px -603px; /* orientation=lt */
+	background: url('background/ToolbarContainer-rt.png') no-repeat 120px -603px; /* orientation=rt */
 }

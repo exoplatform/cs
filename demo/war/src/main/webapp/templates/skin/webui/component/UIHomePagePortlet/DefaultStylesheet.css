@@ -1,10 +1,10 @@
-.UIHomePage {
+.UIHomePagePorlet{
 	margin:0 auto;
 	padding-top:7px;
 	width:984px;
 }
 
-.UIHomePage  .CSHomeContainer a:hover {
+.UIHomePagePorlet .CSHomeContainer a:hover {
 	text-decoration: underline;
 }
 
@@ -12,79 +12,92 @@
 	background:#eeeeee;
 }
 
-.UIHomePage .BannerDefault {
-	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/BannerDefault.gif") no-repeat left top;
+.UIHomePagePorlet .BannerDefault {
+	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/BannerDefault.gif") no-repeat center top;  /* orientation=lt */
+	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/BannerDefault-rt.gif") no-repeat center top;  /* orientation=rt */
 	height: 300px;
 	width: 984px;
 }
 
-.UIHomePage .BannerDefault .CSProductName {
+.UIHomePagePorlet .BannerDefault .CSProductName {
 	padding: 66px 45px;
-	text-align: right;	
+	text-align: right;  /* orientation=lt */
+	text-align: left;  /* orientation=rt */
 }
 
-.UIHomePage .BannerDefault .CSProductName h2 {
+.UIHomePagePorlet .BannerDefault .CSProductName h2 {
 	font-size:52px;
 	color: #FFF;
 	font-family:Hattori,Lucida sans,Tahoma,Verdana,Arial,Helvetica,sans-serif;
 	font-weight: normal;
 }
 
-.UIHomePage .BannerDefault .CSProductName h3 {
+.UIHomePagePorlet .BannerDefault .CSProductName h3 {
 	font-size:35px;
 	color: #FFF;
 	font-family:Hattori,Lucida sans,Tahoma,Verdana,Arial,Helvetica,sans-serif;
 	font-weight: normal;
 }
 
-.UIHomePage .BoxButton  {
+.UIHomePagePorlet .BoxButton  {
 	padding:2px 0 4px 0;
 }
 
-.UIHomePage .BoxButton  .Container {
+.UIHomePagePorlet .BoxButton  .Container {
 	width: 492px;
 	height: 94px;	
 }
 
-.UIHomePage .BoxButton  .FL {
-	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/BgDocument.gif") no-repeat left top;
+.UIHomePagePorlet .BoxButton  .FL {
+	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/BgDocument.gif") no-repeat center top;  /* orientation=lt */
+	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/BgDocument-rt.gif") no-repeat center top;  /* orientation=rt */
 }
 
 
-.UIHomePage .BoxButton  .FR {
-	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/BgTry.gif") no-repeat left top;	
+.UIHomePagePorlet .BoxButton  .FR {
+	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/BgTry.gif") no-repeat center top;	/* orientation=lt */
+	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/BgTry-rt.gif") no-repeat center top;	/* orientation=rt */
 }
 
-.UIHomePage .BoxButton  .Container .BoxDocument {
-	padding-left: 66px;
-	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/IconDoc.gif") no-repeat left top;
+.UIHomePagePorlet .BoxButton  .Container .BoxDocument {
+	padding-left: 66px; /* orientation=lt */
+	padding-right: 66px; /* orientation=rt */
+	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/IconDoc.gif") no-repeat left top; /* orientation=lt */
+	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/IconDoc-rt.gif") no-repeat right top; /* orientation=rt */
 	height: 54px;
-	margin: 19px 0 0 15px;
+	margin: 19px 0 0 15px; /* orientation=lt */
+	margin: 19px 15px 0 0; /* orientation=rt */
 }
 
-.UIHomePage .BoxButton  .Container .BoxTry {
-	padding-left: 108px;
+.UIHomePagePorlet .BoxButton  .Container .BoxTry {
+	padding-left: 108px; /* orientation=lt */
+	padding-right: 108px; /* orientation=rt */
 	height: 54px;
-	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/PlatformIcon.gif") no-repeat left top;	
-	margin: 19px 0 0 20px;
+	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/PlatformIcon.gif") no-repeat left top;	 /* orientation=lt */
+	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/PlatformIcon.gif") no-repeat right top;	/* orientation=rt */
+	margin: 19px 0 0 20px; /* orientation=lt */
+	margin: 19px 20px 0 0; /* orientation=rt */
 }
 
-.UIHomePage .BoxButton  .Container  h4 {	
+.UIHomePagePorlet .BoxButton  .Container  h4 {	
 	font-size: 20px;
 	color: #20263f;
 	line-height: 28px;
 }
 
-.UIHomePage .BoxButton  .Container  .ArrowBlue {
+.UIHomePagePorlet .BoxButton  .Container  .ArrowBlue {
 	font-weight: bold;
-	padding-left:14px;
-	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/ArrowBlue.gif") no-repeat left center;	
+	padding-left:14px; /* orientation=lt */
+	padding-right:14px; /* orientation=rt */
+	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/ArrowBlue.gif") no-repeat left center;	/* orientation=lt */
+	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/ArrowBlue-rt.gif") no-repeat right center;	/* orientation=rt */
 	line-height: 25px;
 	font-size: 16px;
 }
 
 .CSHomeContainer  .LeftContainer {
-	margin-right: 270px;
+	margin-right: 270px; /* orientation=lt */
+	margin-left: 270px; /* orientation=rt */
 }
 
 .CSHomeContainer  .LeftContainer .RowContent  a{
@@ -93,7 +106,8 @@
 
 
 .CSHomeContainer  .LeftContainer  .RowContent  {	
-	padding: 5px 0 5px 24px;
+	padding: 5px 0 5px 24px;  /* orientation=lt */
+	padding: 5px 24px 5px 0;  /* orientation=rt */
 }
 
 .CSHomeContainer .LeftContainer  .RowContent .ProductTitle {
@@ -103,9 +117,11 @@
 }
 
 .CSHomeContainer  .LeftContainer  .ListArrow {
-	background:url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/IconList.gif") no-repeat  left center;
+	background:url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/IconList.gif") no-repeat  left center;  /* orientation=lt */
+	background:url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/IconList-rt.gif") no-repeat  right center;  /* orientation=rt */
 	color:#626262;
-	padding-left:15px;
+	padding-left:15px; /* orientation=lt */
+	padding-right:15px; /* orientation=rt */
 	line-height: 20px;
 	
 }
@@ -115,9 +131,11 @@
 }
 
 .CSHomeContainer  .LeftContainer  .Information {
-	background:url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/ArrowBlack.gif") no-repeat  left center;
+	background:url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/ArrowBlack.gif") no-repeat  left center; /* orientation=lt */
+	background:url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/ArrowBlack-rt.gif") no-repeat  right center; /* orientation=rt */
 	font-size: 14px;
-	padding:4px 0 6px 15px;
+	padding:4px 0 6px 15px; /* orientation=lt */
+	padding:4px 15px 6px 0; /* orientation=rt */
 	color: #20263f;
 }
 
@@ -189,11 +207,13 @@
 
 .CSHomeContainer .RightContainer {
 	width: 264px;
-	float: right;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 }
 	
 .CSHomeContainer .RightContainer .DecorationMC .ClearFix{
-	padding: 15px 0 0 6px;
+	padding: 15px 0 0 6px;  /* orientation=lt */
+	padding: 15px 6px 0 0; /* orientation=rt */
 }
 
 
@@ -216,16 +236,18 @@
 	height:54px;
 	margin:auto;
 	width:57px;
-	background:url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/IconPlatForm.png") no-repeat;
+	background:url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/IconPlatForm.png") no-repeat; 
 }
 
 .CSHomeContainer .BlockWebsite  .IconContact {
-	background-position: left -274px;
+	background:url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/IconPlatForm.png") no-repeat left -274px;/* orientation=lt */
+	background:url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/IconPlatForm-rt.png") no-repeat right -274px;/* orientation=rt */
 }
 
 
 .CSHomeContainer  .BlockWebsite .IconResource {
-	background-position: left top;
+	background:url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/IconPlatForm.png") no-repeat left top; /* orientation=lt */
+	background:url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/IconPlatForm-rt.png") no-repeat right top; /* orientation=rt */
 }
 
 .CSHomeContainer .BlockWebsite .IconSupport {

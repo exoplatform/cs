@@ -23,13 +23,11 @@
   
   
 %>
-<div class="UIHomePage">
+<div class="UIHomePagePorlet">
 			<div class="BannerDefault">
 				<div class="CSProductName">
-					<a href="#demo" >
-						<h2>eXo Collaboration</h2>
-						<h3>An Extended Service of eXo Platform 3</h3>
-					</a>	
+					<h2>eXo Collaboration</h2>
+					<h3>An Extended Service of eXo Platform 3</h3>
 				</div>	
 			</div>
 			<div class="ClearFix BoxButton">
@@ -109,7 +107,7 @@
 						<div class="DecorationMR">
 							<div class="DecorationMC ">
 								<div class="RowContent BorderBottom">
-									<p class="Introduction">New to eXo <span class="TextBold">Collaboration?</span></p>
+									<p class="Introduction">New to eXo <span class="TextBold">Collaboration? </span></p>
 									<p class="Introduction">Watch the <a href="http://www.exoplatform.com/company/public/website/resource-viewer?path=/website/eXo-collaboration-GS" class="TxtBlue" target="_blank">Getting Started Guide</a>, or start exploring some of the key features:</p>
 								</div>
 								<div class="ClearFix RowContent">

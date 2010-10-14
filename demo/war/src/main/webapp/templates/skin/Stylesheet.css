@@ -68,11 +68,13 @@ ul {
 /*Css one selector using for general css has same*/
 
 .FL {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 }
 
 .FR {
-	float: right;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 }
 
 
