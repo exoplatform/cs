@@ -324,10 +324,21 @@ public class MailUtils {
       if (isFieldEmpty(s)) return "" ;
       s = decodeHTML(s);
       // for external link with form http:// , https://, ftp://
-      s = s.replaceAll("([^((href|src)=\")])(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]?", "<a target=\"_blank\" href=\"$0\"> $0 </a>") ;
+      String strPattern = "([^((href|src)=\")])(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]?";
+      Pattern pattern = Pattern.compile(strPattern);
+      Matcher matcher = pattern.matcher(s);
+      String tem = "";
+      while(matcher.find()){
+        String link = matcher.group();//.substring(1);
+        String preffix = s.substring(0, s.indexOf(link) + link.length());  
+        tem += preffix.replace(link.substring(1),  "<a target=\"_blank\" href=\"" + link.substring(1) + "\">"+link.substring(1)+"</a>");
+        s = s.substring(s.indexOf(link) + link.length());
+        matcher = pattern.matcher(s);
+      }
+      s = tem;
       // for email 
       s = s.replaceAll("(\\s)([_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5})", "$1<a target=\"_blank\" href=\"mailto:$2\"> $2 </a>") ;
-      return s ;
+      return s;
     }
 
     public static String insertTargetToHtmlLink(String s) throws Exception {
