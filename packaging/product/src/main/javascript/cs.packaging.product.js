@@ -16,9 +16,6 @@ function getProduct(version) {
   var portal = Module.GetModule("portal", {kernel : kernel, ws:ws, core : core, eXoJcr : eXoJcr});
   var cs = Module.GetModule("cs", {portal:portal, ws:ws});
   
-
-  
-  product.addDependencies(portal.web.rest) ;
   product.addDependencies(portal.portlet.exoadmin) ;
   product.addDependencies(portal.portlet.web) ;
   product.addDependencies(portal.portlet.dashboard) ;
@@ -51,7 +48,6 @@ function getProduct(version) {
   product.addDependencies(cs.eXoApplication.content);
   product.addDependencies(cs.web.csResources); 
   product.addDependencies(cs.web.webservice);
-  product.addDependencies(cs.extension.webapp);
 
   // CS demo
   product.addDependencies(cs.demo.portal);
