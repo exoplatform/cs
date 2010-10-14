@@ -50,7 +50,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td colspan="2">
 						<input type="submit" name="save" value="__MSG_save__">
 						<input type="button" name="cancel" value="__MSG_cancel__" onclick="eXoEventGadget.showHideSetting(false);">
 					</td>					
