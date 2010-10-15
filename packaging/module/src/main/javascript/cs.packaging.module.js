@@ -79,6 +79,14 @@ function getModule(params) {
   module.web.csResources =
     new Project("org.exoplatform.cs", "exo.cs.web.csResources", "war", module.version) ;
   
+  //CS extension
+  module.extension = {};
+  module.extension.webapp =
+    new Project("org.exoplatform.cs", "exo.cs.extension.webapp", "war", module.version).
+    addDependency(new Project("org.exoplatform.cs", "exo.cs.extension.config", "jar", module.version)).
+    addDependency(new Project("org.exoplatform.cs", "exo.cs.ext.social-integration", "jar", module.version));
+  module.extension.webapp.deployName = "cs-extension";
+  
   /**
    * Configure and add server path for chat, single sign-on
    */
