@@ -154,7 +154,7 @@
 										</ul>
 									</div>
 								</div>								
-								<div class="RowContent"><p class="Information">Start using eXo Collaboration, <a href="" class="TxtBlue">login as Root</a></p>
+								<div class="RowContent"><p class="Information">Start using eXo Collaboration, <a href="/csdemo/login?username=root&amp;password=gtn&amp;initialURI=/csdemo/private/classic" class="TxtBlue">login as Root</a></p>
 								</div>
 							</div>
 						</div>
