@@ -211,8 +211,8 @@
             <webModule>
               <groupId>org.exoplatform.cs</groupId>
               <artifactId>exo.cs.extension.webapp</artifactId>
-              <contextRoot>collaboration-extension</contextRoot>
-              <bundleFileName>collaboration-extension.war</bundleFileName>
+              <contextRoot>cs-extension</contextRoot>
+              <bundleFileName>cs.war</bundleFileName>
             </webModule>
             <jarModule>
               <groupId>org.exoplatform.cs</groupId>
@@ -285,7 +285,7 @@
               <groupId>org.exoplatform.cs</groupId>
               <artifactId>exo.cs.web.csResources</artifactId>
               <contextRoot>csResources</contextRoot>
-              <bundleFileName>eXoCollaborationResources.war</bundleFileName>
+              <bundleFileName>csResources.war</bundleFileName>
             </webModule>
           </modules>
         </configuration>
