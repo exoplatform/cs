@@ -70,19 +70,8 @@
   line-height: 17px;
 }
 
-.UIBannerPortlet .MiddleLoginContainer .Login {
-  background: url('DefaultSkin/background/Container.gif') no-repeat left -124px;	
-  margin-right: 12px;	
-  padding-left: 20px;
-  cursor: pointer;
-  float: left;	 	
-  font-weight: bold;
-  font-size: 10px;
-  display: block;
-  line-height: 17px;
-}
- 
-.UIBannerPortlet .MiddleLoginContainer .Language {
+
+.UIBannerPortlet .MiddleLoginContainer a {
   color:#F58220;
   cursor:pointer;
   display:block;
@@ -90,10 +79,11 @@
   font-size:12px;
   font-weight:bold;
   line-height:17px;
-  padding-left:18px;
+  padding-left:15px;
+  background: none;
 }
 
-.UIBannerPortlet .MiddleLoginContainer .Language:hover {
+.UIBannerPortlet .MiddleLoginContainer a:hover {
   color:#8F8F8F;
 }
 
