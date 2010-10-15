@@ -15,7 +15,7 @@
 	      <div class="RightBanner">
 		  
 	        <div class="MiddleBanner">
-				<a href="$pageURI" class="Version"><%=_ctx.appRes("UIHomePagePortlet.cs-slogan")%></a>
+				
                <%if(prContext.getRemoteUser() != null) {%>
 	           
 	             <div class="LeftLoginContainer">
@@ -25,6 +25,7 @@
 			   <div class="LeftLoginContainer MiddleBannerSignin">
 			     <div class="RightLoginContainer">
 				<div class="MiddleLoginContainer Signin">
+					<a class="Login" >Signin </a>
 			       <a class="Language" onclick="$changeLanguageAction">
 				     <%=_ctx.appRes("UIExoStart.item.ChangeLanguage")%>
 				   </a>		
