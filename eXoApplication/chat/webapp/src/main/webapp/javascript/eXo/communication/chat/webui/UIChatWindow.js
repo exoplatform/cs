@@ -992,18 +992,18 @@ UIChatWindow.prototype.onReload = function(eventData) {
       var endDate = new Date();
       var startDate = new Date(endDate);
       switch (historyStatus) {
-	      case thys.CURRENT_CONVERSATION_MESSAGE:
-	        startDate = new Date(activeTabControl.tabPaneNode.startTime);
-	        break;
-	      case thys.THIS_WEEK_MESSAGE:
-	        startDate.setDate(endDate.getDate() - endDate.getDay());
-	        break;
-	      case thys.LAST_30_DAY_MESSAGE:
-	        startDate.setDate(endDate.getDate() - 30);
-	        break;
-	      case thys.BEGINNING_MESSAGE:
-	        startDate = false;
-	        break;
+        case thys.CURRENT_CONVERSATION_MESSAGE:
+          startDate = new Date(activeTabControl.tabPaneNode.startTime);
+          break;
+        case thys.THIS_WEEK_MESSAGE:
+          startDate.setDate(endDate.getDate() - endDate.getDay());
+          break;
+        case thys.LAST_30_DAY_MESSAGE:
+          startDate.setDate(endDate.getDate() - 30);
+          break;
+        case thys.BEGINNING_MESSAGE:
+          startDate = false;
+          break;
       }
       if (startDate) {
         startDate.setHours(0);
