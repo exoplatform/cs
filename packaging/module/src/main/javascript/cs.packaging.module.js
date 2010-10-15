@@ -28,7 +28,7 @@ function getModule(params) {
   module.eXoApplication.mail =
     new Project("org.exoplatform.cs", "exo.cs.eXoApplication.mail.webapp", "war", module.version).
     addDependency(new Project("javax.mail", "mail", "jar", "${javax.mail.mail.version}")).
-    addDependency(new Project("org.fontbox", "fontbox", "jar", "${org.fontbox.version}")).
+    addDependency(new Project("org.apache.pdfbox", "fontbox", "jar",  "${org.apache.pdfbox.fontbox.version}")).
     addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.mail.service", "jar",  module.version)).
     addDependency(new Project("org.exoplatform.ecms", "exo-ecms-core-webui", "jar",  "${org.exoplatform.ecms.version}"));
   module.eXoApplication.mail.deployName = "mail";
