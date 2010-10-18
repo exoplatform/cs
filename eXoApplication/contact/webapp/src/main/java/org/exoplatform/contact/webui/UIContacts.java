@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,9 +34,9 @@ import javax.jcr.AccessDeniedException;
 import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
@@ -45,19 +44,18 @@ import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
-import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.contact.webui.popup.UIAddEditPermission;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIComposeForm;
+import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
 import org.exoplatform.contact.webui.popup.UIMoveContactsForm;
+import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupComponent;
+import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UISharedContactsForm;
 import org.exoplatform.contact.webui.popup.UITagForm;
-import org.exoplatform.contact.webui.popup.UIContactForm;
-import org.exoplatform.contact.webui.popup.UIPopupAction;
-import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
@@ -1014,7 +1012,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         }
         for (Contact contact : sharedContacts) {
           //check permission
-          if(contactService.haveEditPermissionOnContact(username,contact)){
+          //if(contactService.haveEditPermissionOnContact(username,contact)){
+          // TODO CS-4542
+          if (uiContacts.havePermission(contact)) {
             if (uiContacts.isSharedAddress(contact)) {
               String addressId = null;
               for (String add : contact.getAddressBookIds())
