@@ -26,6 +26,7 @@
 			     <div class="RightLoginContainer">
 				<div class="MiddleLoginContainer Signin">
 					<a class="Login" >Signin </a>
+					<a>|</a>
 			       <a class="Language" onclick="$changeLanguageAction">
 				     <%=_ctx.appRes("UIExoStart.item.ChangeLanguage")%>
 				   </a>		
