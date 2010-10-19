@@ -95,7 +95,7 @@ public class JCRDataStorage implements DataStorage {
   private RepositoryService    repoService_;
 
   private static final String  MAIL_SERVICE = "MailApplication";
-
+  
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService repoService) {
     nodeHierarchyCreator_ = nodeHierarchyCreator;
     repoService_ = repoService;
@@ -1200,8 +1200,7 @@ public class JCRDataStorage implements DataStorage {
         node.setProperty(Utils.EXO_ID, msgId);
         try {
           String uid = String.valueOf(msgUID[0]);
-          /*if (Utils.isEmptyField(uid))
-            uid = MimeMessageParser.getMD5MsgId(msg);*/
+          if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMsgUID();
           node.setProperty(Utils.EXO_UID, uid);
         } catch (Exception e) {
         }
@@ -1437,6 +1436,8 @@ public class JCRDataStorage implements DataStorage {
 
   public StringBuffer setPart(Part part, Node node, StringBuffer body) {
     try {
+      boolean hasIMGTag = false;
+      boolean isNotAttach = true;
       String disposition = part.getDisposition();
       String ct = part.getContentType();
       if (disposition == null) {
@@ -1475,29 +1476,27 @@ public class JCRDataStorage implements DataStorage {
         } else if (part.isMimeType("message/rfc822")) {
           body = getNestedMessageBody(part, node, body);
         }
-      } 
-      if ((disposition!= null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) || part.isMimeType("image/*")) {
+      }
+      if ((disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) || part.isMimeType("image/*")) {
         Node attHome = null;
+        String attId = "";
         try {
           attHome = node.getNode(Utils.KEY_ATTACHMENT);
         } catch (PathNotFoundException e) {
           attHome = node.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
         }
-
-        String attId = "";
-
         if (part.getHeader("X-Attachment-Id") != null) {
           attId = part.getHeader("X-Attachment-Id")[0].toString();
         } else if (part.getHeader("Content-Id") != null) {
           attId = part.getHeader("Content-Id")[0].toString();
           attId = attId.substring(1, attId.length());
           attId = attId.substring(0, attId.length() - 1);
-        } else {
+          hasIMGTag = true;
+          isNotAttach = false;
+        } else if (disposition != null && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || part.isMimeType("image/*"))) {
           attId = "Attachment" + IdGenerator.generate();
         }
-        
         attId = Utils.encodeURL(attId);
-        
         if (attHome.hasNode(attId)) {
           return body;
         }
@@ -1524,8 +1523,7 @@ public class JCRDataStorage implements DataStorage {
           nodeContent.setProperty(Utils.JCR_DATA, part.getInputStream());
           nodeFile.setProperty(Utils.ATT_IS_LOADED_PROPERLY, true);
           nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, false);
-          if ((disposition == null || !disposition.equalsIgnoreCase(Part.ATTACHMENT))
-              && part.isMimeType("image/*")) {
+          if (((disposition == null || !disposition.equalsIgnoreCase(Part.ATTACHMENT)) && part.isMimeType("image/*")) || hasIMGTag ) {
             nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, true);
           }
         } catch (Exception e) {
@@ -1534,7 +1532,10 @@ public class JCRDataStorage implements DataStorage {
           node.setProperty(Utils.ATT_IS_LOADED_PROPERLY, false);
         }
         nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
-        node.setProperty(Utils.EXO_HASATTACH, true);
+        if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT) && !isNotAttach)
+          node.setProperty(Utils.EXO_HASATTACH, true);
+        else
+          node.setProperty(Utils.EXO_HASATTACH, false);
       }
     } catch (Exception e) {
      logger.warn(e);
@@ -3403,8 +3404,8 @@ public class JCRDataStorage implements DataStorage {
         }
       }
     } catch (MessagingException e) {
+      if(logger.isDebugEnabled()) logger.debug("Cannot analyses a text/html MimeType", e);
     }
-
     return false;
   }
 
