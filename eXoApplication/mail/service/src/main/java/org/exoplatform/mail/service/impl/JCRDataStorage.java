@@ -95,7 +95,7 @@ public class JCRDataStorage implements DataStorage {
   private RepositoryService    repoService_;
 
   private static final String  MAIL_SERVICE = "MailApplication";
-
+  
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService repoService) {
     nodeHierarchyCreator_ = nodeHierarchyCreator;
     repoService_ = repoService;
@@ -1443,14 +1443,13 @@ public class JCRDataStorage implements DataStorage {
 
   public StringBuffer setPart(Part part, Node node, StringBuffer body) {
     try {
-      boolean hasIMGTag = hasIMGTag(part);
+      boolean hasIMGTag = false;
       boolean isNotAttach = true;
       String disposition = part.getDisposition();
       String ct = part.getContentType();
       if (disposition == null) {
         if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
           body = appendMessageBody(part, node, body);
-          hasIMGTag = hasIMGTag | hasIMGTag(part);
         } else if (part.isMimeType("multipart/alternative")) {
           Part bodyPart;
           boolean readText = true;
@@ -1460,7 +1459,6 @@ public class JCRDataStorage implements DataStorage {
             if (bodyPart.isMimeType("text/html") || bodyPart.isMimeType("multipart/*")) {
               body = setPart(bodyPart, node, body);
               readText = false;
-              hasIMGTag = hasIMGTag | hasIMGTag(part);
             }
           }
           if (readText) {
@@ -1482,22 +1480,18 @@ public class JCRDataStorage implements DataStorage {
          */
         if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
           body = appendMessageBody(part, node, body);
-          hasIMGTag = hasIMGTag | hasIMGTag(part);
         } else if (part.isMimeType("message/rfc822")) {
           body = getNestedMessageBody(part, node, body);
         }
       }
-      if ((disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT))
-          || part.isMimeType("image/*")) {
+      if ((disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) || part.isMimeType("image/*")) {
         Node attHome = null;
+        String attId = "";
         try {
           attHome = node.getNode(Utils.KEY_ATTACHMENT);
         } catch (PathNotFoundException e) {
           attHome = node.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
         }
-
-        String attId = "";
-
         if (part.getHeader("X-Attachment-Id") != null) {
           attId = part.getHeader("X-Attachment-Id")[0].toString();
         } else if (part.getHeader("Content-Id") != null) {
@@ -1506,11 +1500,9 @@ public class JCRDataStorage implements DataStorage {
           attId = attId.substring(0, attId.length() - 1);
           hasIMGTag = true;
           isNotAttach = false;
-        } else if (disposition != null
-            && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || part.isMimeType("image/*"))) {
+        } else if (disposition != null && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || part.isMimeType("image/*"))) {
           attId = "Attachment" + IdGenerator.generate();
         }
-
         if (attHome.hasNode(attId)) {
           return body;
         }
@@ -1522,7 +1514,6 @@ public class JCRDataStorage implements DataStorage {
         } else {
           nodeContent.setProperty(Utils.JCR_MIMETYPE, ct);
         }
-
         try {
           if (!Utils.isEmptyField(part.getFileName())) {
             nodeFile.setProperty(Utils.EXO_ATT_NAME, Utils.decodeText(part.getFileName()));
@@ -1532,13 +1523,11 @@ public class JCRDataStorage implements DataStorage {
         } catch (Exception e) {
           nodeFile.setProperty(Utils.EXO_ATT_NAME, "Corrupted attachment");
         }
-
         try {
           nodeContent.setProperty(Utils.JCR_DATA, part.getInputStream());
           nodeFile.setProperty(Utils.ATT_IS_LOADED_PROPERLY, true);
           nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, false);
-          if (((disposition == null || !disposition.equalsIgnoreCase(Part.ATTACHMENT)) && part.isMimeType("image/*"))
-              || hasIMGTag) {
+          if (((disposition == null || !disposition.equalsIgnoreCase(Part.ATTACHMENT)) && part.isMimeType("image/*")) || hasIMGTag) {
             nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, true);
           }
         } catch (Exception e) {
@@ -3404,8 +3393,8 @@ public class JCRDataStorage implements DataStorage {
         }
       }
     } catch (MessagingException e) {
+      if(logger.isDebugEnabled()) logger.debug("Cannot analyses a text/html MimeType", e);
     }
-
     return false;
   }
 
