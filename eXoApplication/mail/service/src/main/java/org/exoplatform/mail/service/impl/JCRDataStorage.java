@@ -1437,14 +1437,11 @@ public class JCRDataStorage implements DataStorage {
 
   public StringBuffer setPart(Part part, Node node, StringBuffer body) {
     try {
-      boolean hasIMGTag = hasIMGTag(part);
-      boolean isNotAttach = true;
       String disposition = part.getDisposition();
       String ct = part.getContentType();
       if (disposition == null) {
         if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
           body = appendMessageBody(part, node, body);
-          hasIMGTag = hasIMGTag | hasIMGTag(part);
         } else if (part.isMimeType("multipart/alternative")) {
           Part bodyPart;
           boolean readText = true;
@@ -1454,7 +1451,6 @@ public class JCRDataStorage implements DataStorage {
             if (bodyPart.isMimeType("text/html") || bodyPart.isMimeType("multipart/*")) {
               body = setPart(bodyPart, node, body);
               readText = false;
-              hasIMGTag = hasIMGTag | hasIMGTag(part);
             }
           }
           if (readText) {
@@ -1476,12 +1472,11 @@ public class JCRDataStorage implements DataStorage {
          */
         if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
           body = appendMessageBody(part, node, body);
-          hasIMGTag = hasIMGTag | hasIMGTag(part);
         } else if (part.isMimeType("message/rfc822")) {
           body = getNestedMessageBody(part, node, body);
         }
-      }
-      if (((disposition == null || !disposition.equalsIgnoreCase(Part.ATTACHMENT)) && part.isMimeType("image/*")) || hasIMGTag) {
+      } 
+      if ((disposition!= null && disposition.equalsIgnoreCase(Part.ATTACHMENT)) || part.isMimeType("image/*")) {
         Node attHome = null;
         try {
           attHome = node.getNode(Utils.KEY_ATTACHMENT);
@@ -1497,13 +1492,12 @@ public class JCRDataStorage implements DataStorage {
           attId = part.getHeader("Content-Id")[0].toString();
           attId = attId.substring(1, attId.length());
           attId = attId.substring(0, attId.length() - 1);
-          hasIMGTag = true;
-          isNotAttach = false;
-        } else if (disposition != null
-            && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || part.isMimeType("image/*"))) {
+        } else {
           attId = "Attachment" + IdGenerator.generate();
         }
-
+        
+        attId = Utils.encodeURL(attId);
+        
         if (attHome.hasNode(attId)) {
           return body;
         }
@@ -1540,11 +1534,10 @@ public class JCRDataStorage implements DataStorage {
           node.setProperty(Utils.ATT_IS_LOADED_PROPERLY, false);
         }
         nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
-        if (disposition != null && disposition.equalsIgnoreCase(Part.ATTACHMENT) && !isNotAttach)
-          node.setProperty(Utils.EXO_HASATTACH, true);
-        else node.setProperty(Utils.EXO_HASATTACH, false);
+        node.setProperty(Utils.EXO_HASATTACH, true);
       }
     } catch (Exception e) {
+     logger.warn(e);
     }
     return body;
   }
@@ -2923,12 +2916,40 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
+  private Map<String, JCRMessageAttachment> getAttachments(Node messageNode) throws Exception {
+    Map<String, JCRMessageAttachment> attachments = new HashMap<String, JCRMessageAttachment>();
+    if (messageNode.hasNode(Utils.KEY_ATTACHMENT)) {
+      NodeIterator msgAttachmentIt = messageNode.getNode(Utils.KEY_ATTACHMENT).getNodes();
+      while (msgAttachmentIt.hasNext()) {
+        Node node = msgAttachmentIt.nextNode();
+        if (node.isNodeType(Utils.EXO_MAIL_ATTACHMENT)) {
+          JCRMessageAttachment file = new JCRMessageAttachment();
+          file.setId(node.getPath());
+          file.setMimeType(node.getNode(Utils.JCR_CONTENT)
+                               .getProperty(Utils.JCR_MIMETYPE)
+                               .getString());
+          file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
+          if (node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
+            file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY)
+                                         .getBoolean());
+          file.setIsShowInBody(node.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
+          file.setWorkspace(node.getSession().getWorkspace().getName());
+          file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
+          file.setPath("/" + file.getWorkspace() + node.getPath());
+          attachments.put(file.getId(), file);
+        }
+      }
+   }
+   return attachments;
+  }
+  
+  
+  
   public Message loadTotalMessage(String username,
                                   String accountId,
                                   Message msg,
                                   javax.mail.Message message) throws Exception {
     SessionProvider sProvider = null;
-    List<Attachment> attachments = new ArrayList<Attachment>();
     try {
       sProvider = createSessionProvider();
       try {
@@ -2940,37 +2961,40 @@ public class JCRDataStorage implements DataStorage {
           logger.trace("[EXO WARNING] Attachment is not existed, loading them from server mail", ex);
         }
         if (attNode == null) {
-          try {
-            msg.setMessageBody(this.getContent(messageNode, message));
-          } catch (Exception e) {
-            logger.debug("Can't load message body");
-          }
-        }
-        if (messageNode.hasNode(Utils.KEY_ATTACHMENT)) {
-          NodeIterator msgAttachmentIt = messageNode.getNode(Utils.KEY_ATTACHMENT).getNodes();
-          while (msgAttachmentIt.hasNext()) {
-            Node node = msgAttachmentIt.nextNode();
-            if (node.isNodeType(Utils.EXO_MAIL_ATTACHMENT)) {
-              JCRMessageAttachment file = new JCRMessageAttachment();
-              file.setId(node.getPath());
-              file.setMimeType(node.getNode(Utils.JCR_CONTENT)
-                                   .getProperty(Utils.JCR_MIMETYPE)
-                                   .getString());
-              file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
-              if (node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
-                file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY)
-                                             .getBoolean());
-              file.setIsShowInBody(node.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
-              file.setWorkspace(node.getSession().getWorkspace().getName());
-              file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
-              file.setPath("/" + file.getWorkspace() + node.getPath());
-              attachments.add(file);
+            String body = this.getContent(messageNode, message);
+            attNode = messageNode.getNode(Utils.KEY_ATTACHMENT); // reload attachments node
+            msg.setMessageBody(body);
+            Map<String, JCRMessageAttachment> mapOfAtts = getAttachments(messageNode); // get all of attachments. they have not been distinguished between attached file and html resource.
+            if (!mapOfAtts.isEmpty()) {
+              boolean attachedFile = false;
+              Iterator<String> attIdIter = mapOfAtts.keySet().iterator();
+              while (attIdIter.hasNext()) {
+                String attId = attIdIter.next();
+                if (body.indexOf("cid:" + attId.substring(attId.lastIndexOf("/") + 1)) >= 0) {
+                  Node anAttNode = (Node) attNode.getSession().getItem(attId);
+                  anAttNode.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, true); // attachment is html resource.
+                  mapOfAtts.get(attId).setIsShowInBody(true);
+                }  else {
+                  attachedFile = true;
+                }
+              }
+              msg.setAttachements(new ArrayList<Attachment>(mapOfAtts.values()));
+              if (!attachedFile) {
+                messageNode.setProperty(Utils.EXO_HASATTACH, false);
+                msg.setHasAttachment(false);
+              } else {
+                messageNode.setProperty(Utils.EXO_HASATTACH, true);
+                msg.setHasAttachment(true);
+              }
+              
+              messageNode.save();
+              
             }
-          }
-       }
-       if(attachments.size() > 0){
-         msg.setAttachements(attachments);
-        if( !checkImgShowInBody(attachments)) msg.setHasAttachment(true);
+            return msg;
+        }
+       Map<String, JCRMessageAttachment> mapOfAtt = getAttachments(messageNode); 
+       if(!mapOfAtt.isEmpty()){
+         msg.setAttachements(new ArrayList<Attachment>(mapOfAtt.values()));
        }
       } catch (PathNotFoundException e) {
         logger.debug("[EXO WARNING] PathNotFoundException when load attachment");
@@ -2979,15 +3003,6 @@ public class JCRDataStorage implements DataStorage {
     } finally {
       closeSessionProvider(sProvider);
     }
-  }
-  
-  private boolean checkImgShowInBody(List<Attachment> atts){
-    if(atts.size() > 0){
-      for(Attachment att : atts)
-        if(!att.isShownInBody()) return false;
-    }
-    
-    return true;
   }
   
   public Message loadTotalMessage(String username, String accountId, Message msg) throws Exception {

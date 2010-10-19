@@ -19,6 +19,8 @@ package org.exoplatform.mail.service;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -457,6 +459,14 @@ public class Utils {
         .replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&quot;", "\"").replaceAll("&#39;", "'") : "" ;
   }
   
+  public static String encodeURL(String urlPart) throws Exception {
+    return URLEncoder.encode(urlPart, "UTF-8");
+  }
+  
+  public static String decodeURL(String encodedPart) throws Exception {
+    return URLDecoder.decode(encodedPart, "UTF-8");
+  }
+    
   public static String decodeText(String str) throws Exception {
     if (isEmptyField(str)) 
       return str ;
