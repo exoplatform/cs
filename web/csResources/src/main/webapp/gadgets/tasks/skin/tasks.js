@@ -120,9 +120,9 @@ function eXoEventGadget(){
 
 eXoEventGadget.prototype.getPrefs = function(){
 	var setting = (new gadgets.Prefs()).getString("setting");
-	if(setting =="") setting = ["/calendar","/portal/rest/private/cs/calendar/getissues","10","AM/PM","defaultCalendarName"];
+	if(setting =="") setting = ["","/portal/rest/private/cs/calendar/getissues","10","AM/PM","defaultCalendarName"];
 	else {
-		setting = setting.split(":");
+		setting = setting.split(";");
 	}
 	this.prefs = {
 		"url"  : setting[0],
@@ -199,7 +199,7 @@ eXoEventGadget.prototype.showDetail = function(obj){
 	if(detail.style.display == "block") detail.style.display = "none";
 	else detail.style.display = "block";
 	this.lastShowItem = detail;
-	gadgets.window.adjustHeight();
+	eXoEventGadget.adjustHeight();
 }
 
 eXoEventGadget.prototype.onLoadHander = function(){
@@ -207,7 +207,7 @@ eXoEventGadget.prototype.onLoadHander = function(){
 	eXoEventGadget.getCalendars();
 	eXoEventGadget.getData();
 	eXoEventGadget.trigger();
-	gadgets.window.adjustHeight();
+	setTimeout(eXoEventGadget.adjustHeight,500);
 }
 eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
 	/*	
@@ -285,7 +285,7 @@ eXoEventGadget.prototype.showHideSetting = function(isShow){
 		display = "block";
 	}	else display = "none";
 	frmSetting.style.display = display;
-	gadgets.window.adjustHeight();
+	eXoEventGadget.adjustHeight();
 }
 
 eXoEventGadget.prototype.saveSetting = function(){
@@ -298,10 +298,10 @@ eXoEventGadget.prototype.saveSetting = function(){
 
 eXoEventGadget.prototype.createSetting = function(frmSetting){
 	var setting = "";
-	setting += frmSetting["url"].value + ":";
-	setting += frmSetting["subscribeurl"].value + ":";
-	setting += frmSetting["limit"].value + ":";
-	setting += frmSetting["timeformat"].options[frmSetting["timeformat"].selectedIndex].text + ":";
+	setting += frmSetting["url"].value + ";";
+	setting += frmSetting["subscribeurl"].value + ";";
+	setting += frmSetting["limit"].value + ";";
+	setting += frmSetting["timeformat"].options[frmSetting["timeformat"].selectedIndex].text + ";";
 	setting += frmSetting["calendars"].options[frmSetting["calendars"].selectedIndex].text;
 	return setting;
 }
@@ -343,6 +343,13 @@ eXoEventGadget.prototype.createHttpRequest = function(){
 	var xhr = new XMLHttpRequest();
 	if(!xhr) xhr = new ActiveXObject("Msxml2.XMLHTTP");
 	return xhr;
+}
+
+eXoEventGadget.prototype.adjustHeight = function(){
+	var frmSetting = document.getElementById("Setting");
+	var gadgetCont = document.getElementById("ItemContainer").parentNode;
+	var height = frmSetting.offsetHeight + gadgetCont.offsetHeight;
+	gadgets.window.adjustHeight(height);
 }
 eXoEventGadget =  new eXoEventGadget();
 
