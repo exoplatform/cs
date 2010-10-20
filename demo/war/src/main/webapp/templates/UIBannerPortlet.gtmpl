@@ -4,6 +4,8 @@
 	
 	def prContext = _ctx.getRequestContext().getParentAppRequestContext();
 	
+  String loginAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;
+  String registerURI = Util.getPortalRequestContext().getPortalURI() + "register";
 	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
 	String portletId = uicomponent.getId() ;	
     String pageURI = Util.getPortalRequestContext().getPortalURI() + "home";
@@ -25,7 +27,8 @@
 			   <div class="LeftLoginContainer MiddleBannerSignin">
 			     <div class="RightLoginContainer">
 				<div class="MiddleLoginContainer Signin">
-					<a class="Login" >Signin </a>
+					<a class="Login" onclick="$loginAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+					<a class="Register" href="$registerURI"><%=_ctx.appRes("UIBannerPortlet.action.register")%></a>
 					<a>|</a>
 			       <a class="Language" onclick="$changeLanguageAction">
 				     <%=_ctx.appRes("UIExoStart.item.ChangeLanguage")%>
