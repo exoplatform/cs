@@ -70,7 +70,6 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.organization.UIUserProfileInputSet;
 
 /**
  * Created by The eXo Platform SARL Author : Hung Nguyen
@@ -166,7 +165,7 @@ public class UIMessagePreview extends UIContainer implements UISelectable {
         if (att.isShownInBody()) {
           attLink = MailUtils.getImageSource(att, dservice);
           if (attLink != null) {
-            attLink = "/" + PortalContainer.getInstance().getRestContextName() + "/private/jcr/" + getRepository() + att.getPath();
+            attLink = MailUtils.getAttachmentLink(att);
             attId = att.getId();
             imageLocation.put(attId.substring(attId.lastIndexOf("/") + 1, attId.length()),
                               attLink.substring(0, attLink.lastIndexOf("/") + 1));

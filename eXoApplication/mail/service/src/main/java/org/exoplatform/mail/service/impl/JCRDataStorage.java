@@ -1496,7 +1496,6 @@ public class JCRDataStorage implements DataStorage {
         } else if (disposition != null && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || part.isMimeType("image/*"))) {
           attId = "Attachment" + IdGenerator.generate();
         }
-        attId = Utils.encodeURL(attId);
         if (attHome.hasNode(attId)) {
           return body;
         }

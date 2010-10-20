@@ -51,6 +51,8 @@ import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -119,6 +121,9 @@ import com.sun.mail.smtp.SMTPSendFailedException;
 )
 
 public class UIMessageList extends UIForm {
+  
+  private static final Log log = ExoLogger.getLogger(UIMessageList.class);
+  
   public static final int MODE_LIST = 1 ;
   public static final int MODE_THREAD = 2 ;
   public static final int MODE_CONVERSATION = 3 ;
@@ -984,9 +989,11 @@ public class UIMessageList extends UIForm {
       List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false);
       if(checkedMsgs.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } else if (checkedMsgs.size() > 1){
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       }      
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
@@ -1035,9 +1042,11 @@ public class UIMessageList extends UIForm {
       List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false);
       if(checkedMsgs.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } else if (checkedMsgs.size() > 1){
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       }      
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
@@ -1053,6 +1062,7 @@ public class UIMessageList extends UIForm {
         if (message != null) message = uiMessageList.getApplicationComponent(MailService.class).loadTotalMessage(uiPortlet.getCurrentUser(), accId, message);
         uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY_ALL);
       } catch (Exception e) {
+        log.warn("Can not initilize Mail message compose form", e);
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
