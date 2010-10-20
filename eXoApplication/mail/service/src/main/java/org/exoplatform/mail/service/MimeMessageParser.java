@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.Random;
 
 import javax.mail.Flags;
 import javax.mail.Header;
@@ -177,13 +178,17 @@ public class MimeMessageParser {
    */
   public static String getMD5MsgId(javax.mail.Message msg) throws Exception {
     // first construct a key by joining all headers
-    String key = "";
+    String key = ""; Enumeration enu = null;
     long t1 = System.currentTimeMillis();
-    Enumeration enu = msg.getAllHeaders() ;
-    while (enu.hasMoreElements()) {
-      Header header = (Header)enu.nextElement() ;
-      key += header.getValue() ;
+    if(msg != null)
+      enu = msg.getAllHeaders() ;
+    if(enu != null){
+      while (enu.hasMoreElements()) {
+        Header header = (Header)enu.nextElement() ;
+        key += header.getValue() ;
+      }  
     }
+    if(key.equals("")) key = String.valueOf(t1);
     String md5 = getMD5(key);
     long t2 = System.currentTimeMillis();
     //TODO : change the log level later
@@ -191,6 +196,13 @@ public class MimeMessageParser {
     logger.error("getMD5MsgId spending time : " + (t2-t1) + "ms");
     return md5;
   }
+ 
+  public static String getMsgUID(){
+    long t1 = System.currentTimeMillis();
+    if(t1 < Long.MAX_VALUE) return String.valueOf(t1);
+    else return String.valueOf(t1 - Long.MAX_VALUE);
+  }
+  
   /**
    * separated getMD5 method ... for a general use.
    * @param s

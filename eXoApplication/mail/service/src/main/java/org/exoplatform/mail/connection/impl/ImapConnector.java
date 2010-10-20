@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Flags;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.UIDFolder;
@@ -168,7 +169,7 @@ public class ImapConnector extends BaseConnector {
           for (int l = 0; l < updatedMsgs.length; l++) {
             if(updatedMsgs[l] != null) {
               uid = String.valueOf(remoteFolder.getUID(updatedMsgs[l]));
-              if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMD5MsgId(updatedMsgs[l]);
+              if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMsgUID();
               msgs.get(l).setId(MimeMessageParser.getMessageId(updatedMsgs[l]));
               msgs.get(l).setUID(uid);
           }
@@ -226,9 +227,11 @@ public class ImapConnector extends BaseConnector {
    Local            -    Local.
    Remote           -    Local.
    Remote           -    Remote.
-   * return {@link List}*/
+   * return {@link List} of mails that were not moved/deleted*/
   private List<Message> moveMessages(List<Message> msgs, Folder sourceFolder, Folder desFolder, boolean isLocalFolder, boolean isRemoteFolder) throws Exception {
     IMAPFolder sourceImapFolder = null, desImapFolder = null;
+    List<Message> successes = new ArrayList<Message>();
+    javax.mail.Message[] updatedMsgs = null;
     try {
       if(isLocalFolder && isRemoteFolder){//local -> remote
         sourceImapFolder = (IMAPFolder) createFolder(sourceFolder);
@@ -252,43 +255,51 @@ public class ImapConnector extends BaseConnector {
         if(!sourceImapFolder.isOpen()) sourceImapFolder.open(javax.mail.Folder.READ_WRITE);
         if(!desImapFolder.isOpen()) desImapFolder.open(javax.mail.Folder.READ_WRITE);  
       } catch (Exception e) {
-        logger.debug("ImapConnector: " + sourceFolder + " or " + desFolder+  " folder was not synchronized with server");
+        logger.debug("ImapConnector: \"" + sourceFolder + "\" or \"" + desFolder+  "\" folder was not synchronized with server\n", e);
       }
        
       if(sourceImapFolder.isOpen() && desImapFolder.isOpen()){
         List<javax.mail.Message> copiedMsgs = new ArrayList<javax.mail.Message>();
-        javax.mail.Message msg;
+        javax.mail.Message msg = null;
         for (Message m : msgs) {
+          try{
           msg = sourceImapFolder.getMessageByUID(Long.valueOf(m.getUID()));
+          successes.add(m);
+          }catch (Exception e){
+            logger.warn("The UID: \"" + m.getUID() + "\" for message: \""+ m.getSubject() +"\" is not exist on server mail\n", e);
+          }
           if (msg != null) copiedMsgs.add(msg);
         }
-        javax.mail.Message[] updatedMsgs = desImapFolder.addMessages(copiedMsgs.toArray(new javax.mail.Message[copiedMsgs.size()]));
-
+        try{
+          updatedMsgs = desImapFolder.addMessages(copiedMsgs.toArray(new javax.mail.Message[copiedMsgs.size()]));
+        }catch(MessagingException me){
+          logger.warn("Cannot add message(s) to server mail\n",  me);
+          return null;
+        }
         for (int k = 0; k < copiedMsgs.size(); k++) {
-          copiedMsgs.get(k).setFlag(Flags.Flag.DELETED, true);
+          try{
+            copiedMsgs.get(k).setFlag(Flags.Flag.DELETED, true);  
+          }catch (Exception e){logger.warn("Cannot mark delete flag to server mail. \n",  e);}
         }
         if (updatedMsgs.length == msgs.size()) {
           String uid = "";
           for (int l = 0; l < updatedMsgs.length; l++) {
            try {
              uid = String.valueOf(desImapFolder.getUID(updatedMsgs[l]));            
-          } catch (Exception e) {
-            if(logger.isDebugEnabled()) logger.debug("Can not get Message UID on server.\n", e);  
-          } 
-          if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMD5MsgId(updatedMsgs[l]);
-          msgs.get(l).setUID(uid);
+            } catch (Exception e) {
+              if(logger.isDebugEnabled()) logger.debug("Can not get Message UID on server. \n", e);  
+            } 
+            if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMsgUID();
+            msgs.get(l).setUID(uid);
           }
-        }
-
+        }else logger.warn("Not all messages moved/deleted");
         sourceImapFolder.close(true);
         desImapFolder.close(true);
-        return msgs;  
       }
-      
     } catch (Exception e) {
       logger.error("ImapConnector: Error in move message.\n",e);
     }
-    return null;
+    return successes;
   }
 
   public boolean markAsRead(List<Message> msgList, Folder f) throws Exception {

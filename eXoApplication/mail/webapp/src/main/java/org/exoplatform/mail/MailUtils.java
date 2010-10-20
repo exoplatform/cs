@@ -17,6 +17,7 @@
 package org.exoplatform.mail;
 
 import java.io.ByteArrayInputStream;
+
 import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -33,7 +34,6 @@ import java.util.regex.Pattern;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.log4j.chainsaw.Main;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.container.PortalContainer;

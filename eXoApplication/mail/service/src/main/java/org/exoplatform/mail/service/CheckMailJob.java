@@ -82,7 +82,6 @@ public class CheckMailJob implements Job, InterruptableJob {
       try {
         info = mailService.getCheckingInfo(username, accountId);
       } catch (Exception e1) {
-        // stupid code. nothing to catch here :(.
         log.error(e1);
       }
       if (info != null) {        

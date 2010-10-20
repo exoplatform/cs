@@ -48,7 +48,7 @@ public interface Connector {
   
   /**
    * Move message(s) between folders.
-   * Return a list of deleted message
+   * Return a list of deleted/moved messages
    * */
   public List<Message> moveMessage(List<Message> msgs, Folder currentFolder, Folder desFolder) throws Exception;
   
