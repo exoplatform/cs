@@ -17,6 +17,7 @@
 package org.exoplatform.mail;
 
 import java.io.ByteArrayInputStream;
+
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -37,8 +38,6 @@ import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
