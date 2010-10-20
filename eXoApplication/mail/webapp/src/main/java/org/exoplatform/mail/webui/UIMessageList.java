@@ -1207,12 +1207,15 @@ public class UIMessageList extends UIForm {
       }
       String trashFolderId = Utils.generateFID(accountId, Utils.FD_TRASH, false) ;
       String selectedFolderId = uiMessageList.getSelectedFolderId() ;
+      Message msgTem = null;
+      List<Message> successList = new ArrayList<Message>();
       try {
         if (selectedFolderId != null && selectedFolderId.equals(trashFolderId)) { 
           mailSrv.removeMessages(username, accountId, appliedMsgList, true);
         } else {
           for (Message message : appliedMsgList)
-            mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], trashFolderId);
+            msgTem = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], trashFolderId);
+          if(msgTem == null) successList.add(null);
         }
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
@@ -1222,6 +1225,11 @@ public class UIMessageList extends UIForm {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
+      }
+      if(successList.size() > 0){
+        UIApplication uiInfoApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiInfoApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiInfoApp.getUIPopupMessages()) ;
       }
       if (msgPreview != null && appliedMsgList.contains(msgPreview)) uiMessagePreview.setMessage(null);
       uiMessageList.updateList();
@@ -1239,6 +1247,7 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       String username = MailUtils.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      List<Message> successList = new ArrayList<Message>();
       if(Utils.isEmptyField(accountId)) {
         UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
@@ -1271,11 +1280,16 @@ public class UIMessageList extends UIForm {
         return; 
       }
       for(Message message: checkedMessageList) {
-        mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.generateFID(accountId, Utils.FD_SPAM, false));
+        Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.generateFID(accountId, Utils.FD_SPAM, false));
+        if(m==null) successList.add(null);
         spamFilter.reportSpam(message);
       }       
       mailSrv.saveSpamFilter(username, accountId, spamFilter);
-
+      if(successList.size() > 0){
+        UIApplication uiInfoApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiInfoApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiInfoApp.getUIPopupMessages()) ;
+      }
       uiMessageList.updateList(); 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));  
@@ -1291,6 +1305,7 @@ public class UIMessageList extends UIForm {
       String username = MailUtils.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+      List<Message> successList = new ArrayList<Message>();
       if(Utils.isEmptyField(accountId)) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -1323,12 +1338,17 @@ public class UIMessageList extends UIForm {
       }
 
       for(Message message: checkedMessageList) {
-        mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.generateFID(accountId, Utils.FD_INBOX, false));
+        Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.generateFID(accountId, Utils.FD_INBOX, false));
+        if(m == null) successList.add(null);
         spamFilter.notSpam(message);
       }       
       mailSrv.saveSpamFilter(username, accountId, spamFilter);
-
-      uiMessageList.updateList(); 
+      if(successList.size() > 0){
+        UIApplication uiInfoApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiInfoApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiInfoApp.getUIPopupMessages()) ;
+      }
+      uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));  
     }
@@ -1576,13 +1596,21 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       List<Message> appliedMsgList = uiMessageList.getCheckedMessage();
       String fromFolderId = uiFolderContainer.getSelectedFolder() ;
+      List<Message> successes = new ArrayList<Message>();
       if (fromFolderId != null) {
-        mailSrv.moveMessages(username, accountId, appliedMsgList, fromFolderId, folderId) ;
+        successes = mailSrv.moveMessages(username, accountId, appliedMsgList, fromFolderId, folderId) ;
       } else {
         for (Message message : appliedMsgList) {
-          mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], folderId);
+          Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], folderId);
+          if(m == null) successes.add(null);
         }
-      }       
+      }    
+      
+      if(successes.size()>0 && successes.size() < appliedMsgList.size() || successes.contains(null) || successes.size() == 0){
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      }
       uiMessageList.updateList();     
       Message msgPreview = uiMsgPreview.getMessage();
       if (msgPreview != null && appliedMsgList.contains(msgPreview)) uiMsgPreview.setMessage(null);

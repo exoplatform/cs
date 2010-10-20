@@ -409,30 +409,28 @@ public class MailServiceImpl implements MailService, Startable {
     storage_.removeMessages(userName, accountId, messages, moveReference);
   }
 
-  public void moveMessages(String userName,
+  public List<Message> moveMessages(String userName,
                            String accountId,
                            List<Message> msgList,
                            String currentFolderId,
                            String destFolderId) throws Exception {
     Account account = getAccountById(userName, accountId);
     Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
-    
+    List<Message> successList = new ArrayList<Message>();
     Folder destFolder = this.getFolder(userName, accountId, destFolderId);
-    boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         Connector connector = new ImapConnector(account);
-        msgList = connector.moveMessage(msgList, currentFolder, destFolder);
-        if (msgList == null)
-          success = false;
+        successList = connector.moveMessage(msgList, currentFolder, destFolder);
       } catch (Exception e) {
-        if(logger.isDebugEnabled()) logger.debug("\n\n move message error " + e.getMessage());
+        if(logger.isDebugEnabled()) logger.debug("MailServiceImpl: Move message error " + e.getMessage());
       }
     }
-    if (success) storage_.moveMessages(userName, accountId, msgList, currentFolderId, destFolderId);
+    if (successList.size() > 0) storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId);
+    return successList;
   }
 
-  public void moveMessages(String userName,
+  public List<Message> moveMessages(String userName,
                            String accountId,
                            List<Message> msgList,
                            String currentFolderId,
@@ -441,21 +439,20 @@ public class MailServiceImpl implements MailService, Startable {
     Account account = getAccountById(userName, accountId);
     Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
     Folder destFolder = this.getFolder(userName, accountId, destFolderId);
-    boolean success = true;
+    List<Message> successList = new ArrayList<Message>();
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         Connector connector = new ImapConnector(account);
-        msgList = connector.moveMessage(msgList, currentFolder, destFolder);
-        if (msgList == null)
-          success = false;
+        successList = connector.moveMessage(msgList, currentFolder, destFolder);
       } catch (Exception e) {
-        logger.error("Mailservice: Move message error", e);
+        logger.error("Mailservice: Move message to trash folder error", e);
       }
     }
-    if (success) storage_.moveMessages(userName, accountId, msgList, currentFolderId, destFolderId, updateReference);
+    if (successList.size() > 0) storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId, updateReference);
+    return successList;
   }
 
-  public void moveMessage(String userName,
+  public Message moveMessage(String userName,
                           String accountId,
                           Message msg,
                           String currentFolderId,
@@ -463,24 +460,22 @@ public class MailServiceImpl implements MailService, Startable {
     Account account = getAccountById(userName, accountId);
     Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
     Folder destFolder = this.getFolder(userName, accountId, destFolderId);
-    boolean success = true;
+    List<Message> successList = new ArrayList<Message>();
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         List<Message> msgList = new ArrayList<Message>();
         Connector connector = new ImapConnector(account);
         msgList.add(msg);
-        msgList = connector.moveMessage(msgList, currentFolder, destFolder);
-        if (msgList == null) {
-          success = false;
-        } else {
-          msg = msgList.get(0);
-        }
+        successList = connector.moveMessage(msgList, currentFolder, destFolder);
       } catch (Exception e) {
-        if(logger.isDebugEnabled()) logger.debug("Mailservice: Move message fail", e);
+        if(logger.isDebugEnabled()) logger.debug("Mailservice: Move message fail. ", e);
       }
     }
-    if (success)
+    if (successList.size() > 0){
       moveMessage(userName, accountId, msg, currentFolderId, destFolderId, true);
+      return msg;
+    }
+    return null;
   }
 
   public void moveMessage(String userName,
@@ -499,16 +494,13 @@ public class MailServiceImpl implements MailService, Startable {
         List<Message> msgList = new ArrayList<Message>();
         msgList.add(msg);
         msgList = connector.moveMessage(msgList, currentFolder, destFolder);
-        if (msgList == null)
-          success = false;
-        else
-          msg = msgList.get(0);
+        if (msgList.size() <= 0) success = false;
+       // else  msg = msgList.get(0);
       } catch (Exception e) {
         return;
       }
     }
-    if (success)
-      storage_.moveMessage(userName, accountId, msg, currentFolderId, destFolderId, updateReference);
+    if (success) storage_.moveMessage(userName, accountId, msg, currentFolderId, destFolderId, updateReference);
   }
 
   public MessagePageList getMessagePageList(String userName, MessageFilter filter) throws Exception {

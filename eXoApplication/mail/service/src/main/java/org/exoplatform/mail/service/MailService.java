@@ -445,13 +445,14 @@ public interface MailService {
    * @param msg
    * @throws Exception
    */
-  public void moveMessages(String username,
+  public List<Message> moveMessages(String username,
                            String accountId,
                            List<Message> msgList,
                            String currentFolderId,
                            String destFolderId) throws Exception;
-
-  public void moveMessages(String username,
+/**
+ * Move message(s) to Trash folder*/
+  public List<Message> moveMessages(String username,
                            String accountId,
                            List<Message> msgList,
                            String currentFolderId,
@@ -466,14 +467,26 @@ public interface MailService {
    * @param msg
    * @param currentFolderId
    * @param destFolderId
+   * @return the moved/deleted message, and return null value if that message hasn't moved/deleted
    * @throws Exception
    */
-  public void moveMessage(String username,
+  public Message moveMessage(String username,
                           String accountId,
                           Message msg,
                           String currentFolderId,
                           String destFolderId) throws Exception;
-
+  /**
+   * Move a message from the current folder to the given folder
+   * 
+   * @param username
+   * @param accountId
+   * @param msg
+   * @param currentFolderId
+   * @param destFolderId
+   * @param updateReference
+   * @return the moved/deleted message, and return null value if that message hasn't moved/deleted
+   * @throws Exception
+   */
   public void moveMessage(String username,
                           String accountId,
                           Message msg,
