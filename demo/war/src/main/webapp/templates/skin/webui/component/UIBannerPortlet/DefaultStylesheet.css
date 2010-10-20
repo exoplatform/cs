@@ -99,3 +99,7 @@
   display:block;
 }
 
+.UIUserSelector .UIAddressSearchForm select {
+	height: auto;
+	padding:1px 0;
+}
