@@ -21,6 +21,8 @@
   
    chatUrl = "#" ;  
   
+  String portalRequestContext = Util.getPortalRequestContext().getRequestContextPath();
+  String autoLoginLink = portalRequestContext + "/" + "login?username=root&amp;password=gtn&amp;initialURI=" + portalRequestContext + "/private/classic";
   
 %>
 <div class="UIHomePagePorlet">
@@ -154,8 +156,9 @@
 										</ul>
 									</div>
 								</div>								
-								<div class="RowContent"><p class="Information">Start using eXo Collaboration, <a href="" class="TxtBlue">login as Root</a></p>
-								</div>
+								<%if(prContext.getRemoteUser() == null) {%>
+								  <div class="RowContent"><p class="Information">Start using eXo Collaboration, <a href="$autoLoginLink" class="TxtBlue">login as Root</a></p></div>
+								<% } %>
 							</div>
 						</div>
 					</div>				
