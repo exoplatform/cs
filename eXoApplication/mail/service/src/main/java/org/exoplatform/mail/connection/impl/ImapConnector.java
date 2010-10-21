@@ -293,7 +293,7 @@ public class ImapConnector extends BaseConnector {
             if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMsgUID();
             msgs.get(l).setUID(uid);
           }
-        }else logger.warn("Not all messages moved/deleted");
+        }else logger.warn("Not all messages were moved/deleted");
         sourceImapFolder.close(true);
         desImapFolder.close(true);
       }
