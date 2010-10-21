@@ -156,8 +156,9 @@
 										</ul>
 									</div>
 								</div>								
-								<div class="RowContent"><p class="Information">Start using eXo Collaboration, <a href="$autoLoginLink" class="TxtBlue">login as Root</a></p>
-								</div>
+								<%if(prContext.getRemoteUser() == null) {%>
+								  <div class="RowContent"><p class="Information">Start using eXo Collaboration, <a href="$autoLoginLink" class="TxtBlue">login as Root</a></p></div>
+								<% } %>
 							</div>
 						</div>
 					</div>				
