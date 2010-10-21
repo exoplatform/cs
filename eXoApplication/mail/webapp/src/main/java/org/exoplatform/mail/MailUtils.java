@@ -31,6 +31,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.jcr.RepositoryException;
 import javax.mail.internet.AddressException;
@@ -361,11 +363,21 @@ public class MailUtils {
     public static String convertTextToHtmlLink(String s) throws Exception {
       if (isFieldEmpty(s)) return "" ;
       s = decodeHTML(s);
-      // for external link with form http:// , https://, ftp://  ([^((href|src)=\")])
-      s = s.replaceAll("([^((href|src)=\")])(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]?", "<a target=\"_blank\" href=\"$0\"> $0 </a>") ;
       // for email 
       s = s.replaceAll("(\\s)([_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5})", "$1<a target=\"_blank\" href=\"mailto:$2\"> $2 </a>") ;
-      return s ;
+      // for external link with form http:// , https://, ftp://
+      String strPattern = "([^((href|src)=\")])(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]?";
+      Pattern pattern = Pattern.compile(strPattern);
+      Matcher matcher = pattern.matcher(s);
+      String tem = "";
+      while(matcher.find()){
+        String link = matcher.group();//.substring(1);
+        String preffix = s.substring(0, s.indexOf(link) + link.length());
+        tem += preffix.replace(link.substring(1),  "<a target=\"_blank\" href=\"" + link.substring(1) + "\">"+link.substring(1)+"</a>");
+        s = s.substring(s.indexOf(link) + link.length());
+        matcher = pattern.matcher(s);
+      }
+      return tem + s;
     }
 
     public static String insertTargetToHtmlLink(String s) throws Exception {
