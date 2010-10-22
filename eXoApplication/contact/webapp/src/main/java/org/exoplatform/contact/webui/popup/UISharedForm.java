@@ -215,10 +215,12 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         StringBuilder invalidGroups = new StringBuilder() ;
         String[] array = groups.split(",") ;
         for(String name : array) {
-          if (organizationService.getGroupHandler().findGroupById(name.trim()) == null) {
-            if (invalidGroups.length() == 0) invalidGroups.append(name) ;
-            else invalidGroups.append(", " + name) ;
-          }
+        	if(name != null && name.trim().length() != 0){
+	          if (organizationService.getGroupHandler().findGroupById(name.trim()) == null) {
+	            if (invalidGroups.length() == 0) invalidGroups.append(name) ;
+	            else invalidGroups.append(", " + name) ;
+	          }
+        	}
         }
         if (invalidGroups.length() > 0) {
           uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-exist-group"
@@ -234,12 +236,14 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       if (!ContactUtils.isEmpty(groups)) {
         String[] arrayGroups = groups.split(",") ; 
         for (String group : arrayGroups) {
-          group = group.trim() ;
-          receiveGroups.put(group, group) ;
-            List<User> users = organizationService.getUserHandler().findUsersByGroup(group.trim()).getAll() ;
-          for (User user : users) {
-            receiveUsersByGroups.put(user.getUserName(), user.getUserName()) ;
-          }
+        	if(group != null && group.trim().length() != 0){
+	          group = group.trim() ;
+	          receiveGroups.put(group, group) ;
+	            List<User> users = organizationService.getUserHandler().findUsersByGroup(group.trim()).getAll() ;
+	          for (User user : users) {
+	            receiveUsersByGroups.put(user.getUserName(), user.getUserName()) ;
+	          }
+        	}
         }
       }      
       receiveUsersByGroups.remove(ContactUtils.getCurrentUser()) ;
