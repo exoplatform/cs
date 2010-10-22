@@ -47,7 +47,7 @@
 	<org.exoplatform.social.version>1.1.1-SNAPSHOT</org.exoplatform.social.version>
 		
     <!-- 3rd parties -->
-    <org.gatein.shindig.version>1.0-r790473-Patch02</org.gatein.shindig.version>
+    <org.gatein.shindig.version>1.0-r790473-Patch04</org.gatein.shindig.version>
     <org.gatein.wci.version>2.0.1-GA</org.gatein.wci.version>
     <commons-lang.version>2.3</commons-lang.version>
     <commons-chain.version>1.0</commons-chain.version>

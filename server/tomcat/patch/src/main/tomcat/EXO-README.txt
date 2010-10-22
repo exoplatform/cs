@@ -16,7 +16,7 @@
  **/
 
 ========================================== 
-    Release Notes - eXo Collaboration - Version 2.1.0
+    Release Notes - eXo Collaboration - Version 2.1.1
 ========================================== 
 
 ===============
@@ -49,16 +49,10 @@ experience more productive. It offers several ways to to view and organize your 
 
 
     * General
-     - Integrated with ECMs 
-     + Select file from DMS
-     + Save file to DMS
-     - Integrated with Social
-     + Automatic initialize data when Space add application in calendar, contact
-     + Update activity in Space and customize activity template  
-     - Quick application link on chatbar
-     - Upcomming events gadget
-     - My task gadget
-     - Implemented timezone behavior 
+	 - New home page
+	 - Remove extension portal, faster runing server 
+	 - Fix bugs listed bellow 
+	 - Support demo online in integraged version called platform 3.0 here http://platform.demo.exoplatform.org
      
     * Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
           
@@ -105,34 +99,25 @@ Need to set the JAVA_HOME variable for run Collaboration suite's servers.
     
    * Start eXo-chatserver:
      +) On the Windows platform
-       Open a DOS prompt command, go to exo-chatserver/bin and type the command:
-         run.bat for using chat in portal
+       Open a DOS prompt command, go to exo-chatserver/bin and type the command:        
          run_demo.bat for using chat in csdemo
 
      +) On Unix/Linux
        Open a terminal, go to eXo-chatserver/bin and type the command:
-         ./run.sh for using chat in portal
          ./run_demo.sh for using chat in csdemo
+		 
    * If on provided chat-server have no run*.* file you can reference here http://wiki.exoplatform.org/xwiki/bin/view/CS/Install%20Guide#HLaunchthechatserverforcs2.0      
 
 -) How to access the eXo Collaboration Suite
 
-* Enter one of the following addresses into your browser address bar:
-   Classic :
-      http://localhost:8080/portal
-      http://localhost:8080/portal/public/classic
+* Enter one of the following addresses into your browser address bar:   
    CS demo portal  
       http://localhost:8080/csdemo
 
-You can log into the portal with the following accounts: root, john, marry, demo.
+You can log into the portal with the following accounts: root, john, mary, demo.
 All those accounts have the default password "gtn".
 
-* Direct link to access applications in Collaboration suite:
-    +) Calendar application: http://localhost:8080/portal/private/classic/calendar     
-    +) Mail application: http://localhost:8080/portal/private/classic/mail     
-    +) Address Book application: http://localhost:8080/portal/private/classic/contact     
-    
-  You will get login form if you are not yet logged in to Collaboration Suite.
+
 
 ==============
 4 KNOWN ISSUES
@@ -153,6 +138,34 @@ All those accounts have the default password "gtn".
 ===========
 6 CHANGELOG
 ===========
+- 2.1.1 
+
+
+** Bug
+    * [CS-4094] - IE: Value in password field is not shown after ticking on check-box to download message or move to the back/next step 
+    * [CS-4162] - Mail content is not valid in sepcial case
+    * [CS-4452] - Mail: Can not do any action on mail sent from Gmail
+    * [CS-4521] - Event or task time goes after 24h
+    * [CS-4539] - Activity for new added event show incorrect end time
+    * [CS-4540] - Unknown error when download attached file from Mail
+    * [CS-4546] - [CS] Still add even sucessfully when input invalid time
+    * [CS-4547] - [Calendar]Show exception when don't have events to export in this calendar
+    * [CS-4548] - [Mail]Show exception when move message to folder
+    * [CS-4549] - [Mail]Show exception click Sent mail
+    * [CS-4550] - [Mail]Problem when delete message
+    * [CS-4553] - [Mail] Show exception when add/edit filter
+    * [CS-4555] - [CS] Register an account, text validation is not display
+    * [CS-4563] - My Tasks gadget setting screen does not show the button correctly
+    * [CS-4567] - Cluster configuration is wrong for Collaboration workspace
+    * [CS-4571] - wrong date time when right click on time table to add event or task
+    * [CS-4572] - Show alert message error when use Switch view mode function with some portlet
+    * [CS-4590] - Can not create an event with attached PDF files
+
+
+** Improvement
+    * [CS-4476] - Do not display left panes of Calendar in spaces
+
+
 - 2.1.0 GA
 
 ** Bug
