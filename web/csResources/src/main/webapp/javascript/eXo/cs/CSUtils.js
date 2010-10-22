@@ -807,5 +807,5 @@ DateTimeFormater.prototype.format = function (date, mask, utc) {
 
 eXo.cs.DateTimeFormater = new DateTimeFormater();
 document.onclick = eXo.core.DOMUtil.cleanUpHiddenElements;
-eXo.calendar.LayoutManager = new LayoutManager("calendarlayout");
-eXo.contact.LayoutManager = new LayoutManager("contactLayout");
+if(!eXo.calendar.LayoutManager) eXo.calendar.LayoutManager = new LayoutManager("calendarlayout");
+if(!eXo.contact.LayoutManager) eXo.contact.LayoutManager = new LayoutManager("contactLayout");
