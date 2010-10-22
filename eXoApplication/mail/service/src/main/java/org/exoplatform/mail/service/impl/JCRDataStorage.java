@@ -3031,7 +3031,6 @@ public class JCRDataStorage implements DataStorage {
             attachments.add(file);
           }
         }
-        msg.setHasAttachment(true);
         msg.setAttachements(attachments);
       }
       msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());        
