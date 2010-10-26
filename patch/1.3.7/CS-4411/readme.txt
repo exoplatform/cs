@@ -2,6 +2,7 @@ Summary
 
     * Status: Chat Room: Messages lost when changing navigation
     * CCP Issue: CCP-500, Product Jira Issue: CS-4411.
+    * Fixed by CS-4439
     * Complexity: N/A
 
 The Proposal
