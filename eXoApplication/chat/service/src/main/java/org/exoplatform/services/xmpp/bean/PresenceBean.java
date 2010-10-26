@@ -37,6 +37,8 @@ public class PresenceBean {
    */
   private String from;
 
+  private String fromName;
+  
   /**
    * 
    */
@@ -81,12 +83,27 @@ public class PresenceBean {
     this.type = type;
     this.status = status;
   }
+  
+  public PresenceBean(String from, String fromName, String mode, String type, String status) {
+    this.from = from;
+    this.fromName = fromName;
+    this.mode = mode;
+    this.type = type;
+    this.status = status;
+  }
 
   /**
    * @return the from
    */
   public String getFrom() {
     return from;
+  }
+  
+  /**
+   * @return the fromName
+   */
+  public String getFromName() {
+	  return fromName;
   }
 
   /**
@@ -108,6 +125,13 @@ public class PresenceBean {
    */
   public void setFrom(String from) {
     this.from = from;
+  }
+  
+  /**
+   * 
+   */
+  public void setFromName(String fromName) {
+	  this.fromName = fromName;
   }
 
   /**

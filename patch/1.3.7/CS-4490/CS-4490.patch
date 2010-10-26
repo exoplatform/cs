@@ -1,0 +1,279 @@
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java	(revision 61475)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java	(working copy)
+@@ -338,6 +338,11 @@
+             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+             PresenceBean subscription = TransformUtils.presenceToBean((Presence) packet);
+             EventsBean eventsBean = new EventsBean();
++            
++            // CS-4490
++            UserInfo userInfo = getUserInfo(subscription.getFrom().split("@")[0]);
++            subscription.setFromName(userInfo.getFirstName() + " " + userInfo.getLastName());
++            
+             eventsBean.addSubscription(subscription);
+             if (subscription.getType().equals(Type.subscribed.name())){
+               Presence presence = connection_.getRoster().getPresence(packet.getFrom());
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/PresenceBean.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/PresenceBean.java	(revision 61475)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/bean/PresenceBean.java	(working copy)
+@@ -37,6 +37,8 @@
+    */
+   private String from;
+ 
++  private String fromName;
++  
+   /**
+    * 
+    */
+@@ -81,6 +83,14 @@
+     this.type = type;
+     this.status = status;
+   }
++  
++  public PresenceBean(String from, String fromName, String mode, String type, String status) {
++    this.from = from;
++    this.fromName = fromName;
++    this.mode = mode;
++    this.type = type;
++    this.status = status;
++  }
+ 
+   /**
+    * @return the from
+@@ -88,6 +98,13 @@
+   public String getFrom() {
+     return from;
+   }
++  
++  /**
++   * @return the fromName
++   */
++  public String getFromName() {
++	  return fromName;
++  }
+ 
+   /**
+    * @return the mode
+@@ -109,6 +126,13 @@
+   public void setFrom(String from) {
+     this.from = from;
+   }
++  
++  /**
++   * 
++   */
++  public void setFromName(String fromName) {
++	  this.fromName = fromName;
++  }
+ 
+   /**
+    * @param mode the mode to set
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(revision 61475)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(working copy)
+@@ -97,8 +97,9 @@
+  */
+ UITabControl.prototype.userLeftRoomEventFired = function(user) {
+   user = user.substr(user.indexOf('/') + 1, user.length-1);
++  var fullName = eXo.communication.chat.webui.UIChatWindow.fullNameMap[user];
+   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, user + ' just left the room');
+-  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_left.replace('{0}', user);
++  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_left.replace('{0}', fullName);
+   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
+   user += '@' + this.UIMainChatWindow.serverInfo.mainServiceName;
+   this.buddyListControlObj.removeBuddy(user);
+@@ -111,9 +112,9 @@
+  */
+ UITabControl.prototype.userJoinRoomEventFired = function(user) {
+   var userName = user.substr(user.indexOf('/') + 1, user.length-1);
+-  var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[userName];
++  var fullName = eXo.communication.chat.webui.UIChatWindow.fullNameMap[userName];
+   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
+-  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', userName);
++  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', fullName);
+   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
+   userName += '@' + this.UIMainChatWindow.serverInfo.mainServiceName;
+   var buddyInfo = {
+@@ -237,7 +238,8 @@
+   var fileTransportNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.sendFile);
+   var labelNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'div', this.CSS_CLASS.sendFileLabel);
+   //var alertContent = this.tabId.targetPerson + ' want to send you [' + FTReqEvent.filename + ']';
+-  var alertContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_request.replace('{0}', this.tabId.targetPerson);
++  var fullName = eXo.communication.chat.webui.UIChatWindow.fullNameMap[this.tabId.targetPerson];
++  var alertContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_request.replace('{0}', fullName);
+   alertContent = alertContent.replace('{1}', FTReqEvent.filename);
+   labelNode.innerHTML = alertContent;
+   var fileNameNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'div', this.CSS_CLASS.sendFileName);
+@@ -411,7 +413,7 @@
+   	tabContactNameNode.innerHTML = fullName ;
+   }
+   
+-  this.tabNameNode.setAttribute('title', this.tabId.targetPerson);
++  this.tabNameNode.setAttribute('title', fullName);
+   this.tabNameNode.tabId = this.tabId.id;
+   this.tabNameNode.className = this.tabNameNode.className;
+   this.tabNameNode.onclick = this.focusTabWrapper;
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js	(revision 61475)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js	(working copy)
+@@ -887,8 +887,13 @@
+         case 'subscribe':
+           var requestUser = subscription.from;
+           requestUser = requestUser.substring(0, requestUser.indexOf('@'));
++          var fullName = eXo.communication.chat.webui.UIChatWindow.fullNameMap[requestUser];
++          if (fullName == null) {
++            fullName = subscription.fromName;
++            eXo.communication.chat.webui.UIChatWindow.fullNameMap[requestUser] = fullName;
++          }
+           var str = this.ResourceBundle.chat_message_confirm_allow_to_see_status;
+-          if (window.confirm(str.replace('{0}', requestUser))) {
++          if (window.confirm(str.replace('{0}', fullName))) {
+             this.jabberSendSubscription(requestUser);
+             this.jabberAddUser(requestUser);
+           } else {
+@@ -959,11 +964,12 @@
+         case this.MUC_ACTION_INVITE_ROOM: 
+           var inviteInfo = mucEvent.invite;
+           var roomName = inviteInfo.room;
++          roomName = roomName.substr(0, roomName.indexOf('@'));
++          var fullName = eXo.communication.chat.webui.UIChatWindow.fullNameMap[inviteInfo.inviter];
+           //var msgBuf = inviteInfo.inviter + ' invite you join to room: "' + roomName + '"';
+-          var msgBuf = this.ResourceBundle.chat_message_room_invite_to_join.replace('{0}', inviteInfo.inviter);
++          var msgBuf = this.ResourceBundle.chat_message_room_invite_to_join.replace('{0}', fullName);
+           msgBuf = msgBuf.replace('{1}', roomName);
+           if (window.confirm(msgBuf)) {
+-            roomName = roomName.substr(0, roomName.indexOf('@'));
+             this.jabberJoinToRoom(roomName, inviteInfo.password);
+           }
+           break;
+@@ -1315,7 +1321,8 @@
+  */
+ UIMainChatWindow.prototype.removeContact = function(buddyId) {
+   var str = this.ResourceBundle.chat_message_confirm_remove_buddy;
+-  if (window.confirm(str.replace('{0}', buddyId))) {
++  var fullName = eXo.communication.chat.webui.UIChatWindow.fullNameMap[buddyId];
++  if (window.confirm(str.replace('{0}', fullName))) {
+     buddyId = buddyId.substring(0, buddyId.indexOf('@'));
+     eXo.communication.chat.webui.UIMainChatWindow.jabberRemoveUser(buddyId);
+   }
+Index: eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js
+===================================================================
+--- eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(revision 61475)
++++ eXoApplication/chat/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(working copy)
+@@ -68,7 +68,9 @@
+ 	    eXo.communication.chat.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;
+ 	}
+   //this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.user, true);
+-  this.iconChatNode.setAttribute('title' ,this.getUserName(this.buddyInfo.user, false));
++  var fullName = this.buddyInfo.fullName ? this.buddyInfo.fullName : nickDis;
++  fullName = fullName ? fullName : this.buddyInfo.user.split('@')[0];
++  this.iconChatNode.setAttribute('title' , this.getUserName(fullName, false));
+   this.rootNode.setAttribute('userName', this.buddyInfo.user);  
+   this.rootNode.setAttribute('nickname', nickDis);
+   eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'contextmenu', this.actionCallback, false);
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(revision 61475)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIChatWindow.js	(working copy)
+@@ -97,8 +97,9 @@
+  */
+ UITabControl.prototype.userLeftRoomEventFired = function(user) {
+   user = user.substr(user.indexOf('/') + 1, user.length-1);
++  var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[user];
+   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, user + ' just left the room');
+-  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_left.replace('{0}', user);
++  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_left.replace('{0}', fullName);
+   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
+   user += '@' + this.UIMainChatWindow.serverInfo.mainServiceName;
+   this.buddyListControlObj.removeBuddy(user);
+@@ -113,7 +114,7 @@
+   var userName = user.substr(user.indexOf('/') + 1, user.length-1);
+   var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[userName];
+   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
+-  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', userName);
++  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', fullName);
+   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
+   userName += '@' + this.UIMainChatWindow.serverInfo.mainServiceName;
+   var buddyInfo = {
+@@ -237,7 +238,8 @@
+   var fileTransportNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.sendFile);
+   var labelNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'div', this.CSS_CLASS.sendFileLabel);
+   //var alertContent = this.tabId.targetPerson + ' want to send you [' + FTReqEvent.filename + ']';
+-  var alertContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_request.replace('{0}', this.tabId.targetPerson);
++  var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[this.tabId.targetPerson];
++  var alertContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_request.replace('{0}', fullName);
+   alertContent = alertContent.replace('{1}', FTReqEvent.filename);
+   labelNode.innerHTML = alertContent;
+   var fileNameNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'div', this.CSS_CLASS.sendFileName);
+@@ -407,7 +409,7 @@
+   } else {
+   	tabContactNameNode.innerHTML = fullName ;
+   }
+-  this.tabNameNode.setAttribute('title', this.tabId.targetPerson);
++  this.tabNameNode.setAttribute('title', fullName);
+   this.tabNameNode.tabId = this.tabId.id;
+   this.tabNameNode.className = this.tabNameNode.className;
+   this.tabNameNode.onclick = this.focusTabWrapper;
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js	(revision 61475)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/UIMainChatWindow.js	(working copy)
+@@ -947,8 +947,13 @@
+         case 'subscribe':
+           var requestUser = subscription.from;
+           requestUser = requestUser.substring(0, requestUser.indexOf('@'));
++          var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[requestUser];
++          if (fullName == null) {
++            fullName = subscription.fromName;
++            eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[requestUser] = fullName;
++          }
+           var str = this.ResourceBundle.chat_message_confirm_allow_to_see_status;
+-          if (window.confirm(str.replace('{0}', requestUser))) {
++          if (window.confirm(str.replace('{0}', fullName))) {
+             this.jabberSendSubscription(requestUser);
+             this.jabberAddUser(requestUser);
+           } else {
+@@ -1019,11 +1024,12 @@
+         case this.MUC_ACTION_INVITE_ROOM: 
+           var inviteInfo = mucEvent.invite;
+           var roomName = inviteInfo.room;
++          roomName = roomName.substr(0, roomName.indexOf('@'));
++          var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[inviteInfo.inviter];
+           //var msgBuf = inviteInfo.inviter + ' invite you join to room: "' + roomName + '"';
+-          var msgBuf = this.ResourceBundle.chat_message_room_invite_to_join.replace('{0}', inviteInfo.inviter);
++          var msgBuf = this.ResourceBundle.chat_message_room_invite_to_join.replace('{0}', fullName);
+           msgBuf = msgBuf.replace('{1}', roomName);
+           if (window.confirm(msgBuf)) {
+-            roomName = roomName.substr(0, roomName.indexOf('@'));
+             this.jabberJoinToRoom(roomName, inviteInfo.password);
+           }
+           break;
+@@ -1379,7 +1385,8 @@
+  */
+ UIMainChatWindow.prototype.removeContact = function(buddyId) {
+   var str = this.ResourceBundle.chat_message_confirm_remove_buddy;
+-  if (window.confirm(str.replace('{0}', buddyId))) {
++  var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[buddyId];
++  if (window.confirm(str.replace('{0}', fullName))) {
+     buddyId = buddyId.substring(0, buddyId.indexOf('@'));
+     eXo.communication.chatbar.webui.UIMainChatWindow.jabberRemoveUser(buddyId);
+   }
+Index: eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(revision 61475)
++++ eXoApplication/chatbar/webapp/src/main/webapp/javascript/eXo/communication/chat/webui/component/BuddyListControl.js	(working copy)
+@@ -70,7 +70,9 @@
+ 	    eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;
+ 	}
+   //this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.user, true);
+-  this.iconChatNode.setAttribute('title' ,this.getUserName(this.buddyInfo.user, false));
++  var fullName = this.buddyInfo.fullName ? this.buddyInfo.fullName : nickDis;
++  fullName = fullName ? fullName : this.buddyInfo.user.split('@')[0];
++  this.iconChatNode.setAttribute('title' , this.getUserName(fullName, false));
+   this.rootNode.setAttribute('userName', this.buddyInfo.user);  
+   this.rootNode.setAttribute('nickname', nickDis);
+   eXo.communication.chatbar.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'contextmenu', this.actionCallback, false);
