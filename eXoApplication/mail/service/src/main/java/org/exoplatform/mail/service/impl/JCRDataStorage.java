@@ -3294,19 +3294,21 @@ public class JCRDataStorage implements DataStorage {
    * 
    * @return a SessionProvider initialized by current SessionProviderService
    * @see SessionProviderService#getSessionProvider(null)
+   * @edit on 26/10/2010: using system provider instead.
    */
   public SessionProvider createSessionProvider() {
-    ExoContainer container = null;
-    try {
-      container = PortalContainer.getInstance();
-    } catch (IllegalStateException ie) {
-      container = ExoContainerContext.getCurrentContainer();
-    }
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    SessionProvider provider = service.getSessionProvider(null);
-    if (provider == null)
-      provider = service.getSystemSessionProvider(null);
-
+    SessionProvider provider = SessionProvider.createSystemProvider() ;
+//    ExoContainer container = null;
+//    try {
+//      container = PortalContainer.getInstance();
+//    } catch (IllegalStateException ie) {
+//      container = ExoContainerContext.getCurrentContainer();
+//    }
+//    
+//    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+//    SessionProvider provider = service.getSessionProvider(null);
+//    if (provider == null)
+//      provider = service.getSystemSessionProvider(null);
     return provider;
   }
 

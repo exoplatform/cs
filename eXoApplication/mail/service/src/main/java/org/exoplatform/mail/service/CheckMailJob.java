@@ -16,7 +16,6 @@
  **/
 package org.exoplatform.mail.service;
 
-import org.apache.poi.hssf.record.ContinueRecord;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.log.ExoLogger;
@@ -74,10 +73,10 @@ public class CheckMailJob implements Job, InterruptableJob {
         mailService.checkNewMessage(username, accountId, folderId);
       }
     } catch (InterruptedException ie) {
-      ie.printStackTrace();
+      log.warn("checking new mail message failed", ie);
       getMailService().stopCheckMail(username, accountId);
     } catch (Exception e) {
-      log.error(e);
+      log.error("checking new mail message failed", e);
       CheckingInfo info = null;
       try {
         info = mailService.getCheckingInfo(username, accountId);
