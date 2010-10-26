@@ -214,47 +214,20 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
     if(msg != null){
       if (msg.getAttachments() != null) {
         try {
-          List<String> imgLinks = new ArrayList<String>();
+          Map<String, String> attachments = new HashMap<String, String>();
           for (Attachment attach : msg.getAttachments()) {
             String attLink = MailUtils.getImageSource(attach, getDownloadService());
-            if (attLink != null && attach.getMimeType().toLowerCase().indexOf("image") > -1
-                && attach.isShownInBody()) {
-             // attLink = "/" + getPortalName() + "/rest/jcr/" + getRepository() + attach.getPath();
-              attLink = "/"+ PortalContainer.getInstance().getRestContextName() + "/private/jcr/" + getRepository() + attach.getPath() ;
-              imgLinks.add(attLink);
+            if (attLink != null) {
+              attLink = MailUtils.getAttachmentLink(attach);
+              String attId = attach.getId();
+              attachments.put(attId.substring(attId.lastIndexOf("/") + 1, attId.length()), attLink.substring(0, attLink.lastIndexOf("/") + 1));
             }
           }
           String body = msg.getMessageBody();
-          String[] imgs = body.split("img");
-          List<String> newBody = new ArrayList<String>();
-          for (String img : imgs) {
-            try {
-              int indexSrc = img.indexOf("src");
-              if (indexSrc == -1) {
-                newBody.add(img);
-                continue;
-              }
-              int endSrc = img.indexOf("\"", indexSrc + 5);
-              String oldSrc = img.substring(indexSrc + 5, endSrc);
-              String newSrc = imgLinks.get(0);
-              for (String src : imgLinks) {
-                if (src.contains(oldSrc.substring(4))) {
-                  newSrc = src;
-                  break;
-                }
-              }
-              img = img.replace(oldSrc, newSrc);
-              newBody.add("img" + img);
-            } catch (Exception ex) {
-              ex.printStackTrace();
-            }
-          }
-          StringBuilder builder = new StringBuilder();
-          for (String img : newBody)
-            builder.append(img);
-          msg.setMessageBody(builder.toString());
+          String newBody = MailUtils.fillImage(body, attachments);
+          msg.setMessageBody(newBody);
         } catch (Exception e) {
-          e.printStackTrace();
+          logger.warn("Error when get attachment link of mail message", e);
         }
       }
     }else logger.info("The message is null, edit the empty draft message. Or attachment message haven't damaged");
@@ -354,7 +327,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
 			if (!attachdata.isShownInBody()) {
 				ActionData fileUpload = new ActionData();
 				fileUpload.setActionListener("Download");
-				fileUpload.setActionParameter(attachdata.getId());
+				fileUpload.setActionParameter(MailUtils.encodeMailId(attachdata.getId()));
 				fileUpload.setActionType(ActionData.TYPE_ICON);
 				fileUpload.setCssIconClass("AttachmentIcon");
 				fileUpload.setActionName(attachdata.getName() + " ("
@@ -364,7 +337,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
 				ActionData removeAction = new ActionData();
 				removeAction.setActionListener("RemoveAttachment");
 				removeAction.setActionName(ACT_REMOVE);
-				removeAction.setActionParameter(attachdata.getId());
+				removeAction.setActionParameter(MailUtils.encodeMailId(attachdata.getId()));
 				removeAction.setCssIconClass("LabelLink");
 				removeAction.setActionType(ActionData.TYPE_LINK);
 				removeAction.setBreakLine(true);
@@ -1354,6 +1327,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
 			UIComposeForm uiComposeForm = event.getSource();
 			String attId = event.getRequestContext().getRequestParameter(
 					OBJECTID);
+			attId = MailUtils.decodeMailId(attId);
 			for (Attachment attach : uiComposeForm.getAttachFileList()) {
 				if (attach.getId().equals(attId)) {
 					DownloadResource dresource = new InputStreamDownloadResource(
@@ -1381,6 +1355,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
 			UIComposeForm uiComposeForm = event.getSource();
 			String attFileId = event.getRequestContext().getRequestParameter(
 					OBJECTID);
+			attFileId = MailUtils.decodeMailId(attFileId);
 			Iterator<Attachment> iter = uiComposeForm.attachments_.iterator();
 			Attachment att;
 			while (iter.hasNext()) {

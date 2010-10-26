@@ -19,6 +19,9 @@ package org.exoplatform.mail;
 import java.io.ByteArrayInputStream;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,11 +34,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.jcr.RepositoryException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -45,6 +51,7 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.CmsService;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 
@@ -108,6 +115,35 @@ public class MailUtils {
       if(isFieldEmpty(str)) return "";
       return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
       replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
+    }
+    
+    public static String encodeURL(String urlPart) {
+      try {
+        return URLEncoder.encode(urlPart, "UTF-8");
+      } catch (UnsupportedEncodingException e) {
+        return urlPart;
+      }
+    }
+    
+    public static String decodeURL(String encodedPart) {
+      try {
+        return URLDecoder.decode(encodedPart, "UTF-8");
+      } catch (UnsupportedEncodingException e) {
+        return encodedPart;
+      }
+    }
+
+    
+    public static String encodeJCRPath2URLPath(String jcrPath) {
+      if (jcrPath == null) return "";
+      String[] arr = jcrPath.split("/");
+      StringBuffer sb = new StringBuffer();
+      for (String s : arr) {
+        sb.append(encodeURL(s)).append("/");
+      }
+      
+      sb.delete(sb.length() - 1, sb.length());
+      return sb.toString();
     }
     
     public static String encodeMailId(String id) {
@@ -219,6 +255,12 @@ public class MailUtils {
         return (new SimpleDateFormat("MMM dd, yyyy", locale)).format(date);
     }
 
+    public static String getAttachmentLink(Attachment att) throws RepositoryException {
+      RepositoryService rService = (RepositoryService) PortalContainer.getComponent(RepositoryService.class);
+      String repository = rService.getCurrentRepository().getConfiguration().getName();
+      return "/" + PortalContainer.getInstance().getRestContextName() + "/private/jcr/" + repository + encodeJCRPath2URLPath(att.getPath());
+    }
+    
     public static String encodeHTML(String htmlContent) throws Exception {
       return (!isFieldEmpty(htmlContent)) ? htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
                                           .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("'", "&#39;") : "" ;
