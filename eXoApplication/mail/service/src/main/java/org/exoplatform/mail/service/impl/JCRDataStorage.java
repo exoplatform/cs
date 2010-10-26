@@ -2939,7 +2939,43 @@ public class JCRDataStorage implements DataStorage {
    return attachments;
   }
   
-  
+  /**
+   * recheck attachments of mail message are in body or attached file.
+   * It will update attachments, save changes to jcr and re-set 'attachments' value for message object 'msg'.
+   * @param messageNode JCR node of message
+   * @param msg - message object (must include body text)
+   * @throws Exception
+   */
+  private Message reCheckAttachment(Node messageNode, Message msg) throws Exception {
+    String body = msg.getMessageBody();
+    Node attNode = messageNode.getNode(Utils.KEY_ATTACHMENT); // reload attachments node
+    Map<String, JCRMessageAttachment> mapOfAtts = getAttachments(messageNode); // get all of attachments. they have not been distinguished between attached file and html resource.
+    if (!mapOfAtts.isEmpty()) {
+      boolean attachedFile = false;
+      Iterator<String> attIdIter = mapOfAtts.keySet().iterator();
+      while (attIdIter.hasNext()) {
+        String attId = attIdIter.next();
+        if (body.indexOf("cid:" + attId.substring(attId.lastIndexOf("/") + 1)) >= 0) {
+          Node anAttNode = (Node) attNode.getSession().getItem(attId);
+          anAttNode.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, true); // attachment is html resource.
+          mapOfAtts.get(attId).setIsShowInBody(true);
+        }  else {
+          attachedFile = true;
+        }
+      }
+      msg.setAttachements(new ArrayList<Attachment>(mapOfAtts.values()));
+      if (!attachedFile) {
+        messageNode.setProperty(Utils.EXO_HASATTACH, false);
+        msg.setHasAttachment(false);
+      } else {
+        messageNode.setProperty(Utils.EXO_HASATTACH, true);
+        msg.setHasAttachment(true);
+      }
+      
+      messageNode.save();
+    }
+    return msg;
+  }
   
   public Message loadTotalMessage(String username,
                                   String accountId,
@@ -2961,34 +2997,8 @@ public class JCRDataStorage implements DataStorage {
         }
         if (attNode == null) {
             String body = this.getContent(messageNode, message);
-            attNode = messageNode.getNode(Utils.KEY_ATTACHMENT); // reload attachments node
             msg.setMessageBody(body);
-            Map<String, JCRMessageAttachment> mapOfAtts = getAttachments(messageNode); // get all of attachments. they have not been distinguished between attached file and html resource.
-            if (!mapOfAtts.isEmpty()) {
-              boolean attachedFile = false;
-              Iterator<String> attIdIter = mapOfAtts.keySet().iterator();
-              while (attIdIter.hasNext()) {
-                String attId = attIdIter.next();
-                if (body.indexOf("cid:" + attId.substring(attId.lastIndexOf("/") + 1)) >= 0) {
-                  Node anAttNode = (Node) attNode.getSession().getItem(attId);
-                  anAttNode.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, true); // attachment is html resource.
-                  mapOfAtts.get(attId).setIsShowInBody(true);
-                }  else {
-                  attachedFile = true;
-                }
-              }
-              msg.setAttachements(new ArrayList<Attachment>(mapOfAtts.values()));
-              if (!attachedFile) {
-                messageNode.setProperty(Utils.EXO_HASATTACH, false);
-                msg.setHasAttachment(false);
-              } else {
-                messageNode.setProperty(Utils.EXO_HASATTACH, true);
-                msg.setHasAttachment(true);
-              }
-              
-              messageNode.save();
-              
-            }
+            msg = reCheckAttachment(messageNode, msg);
             return msg;
         }
        Map<String, JCRMessageAttachment> mapOfAtt = getAttachments(messageNode); 
@@ -3210,7 +3220,11 @@ public class JCRDataStorage implements DataStorage {
             + " B");
         t2 = System.currentTimeMillis();
 
-        this.getContent(node, msg);
+        String body = this.getContent(node, msg);
+        Message fakeMsg = new Message();
+        fakeMsg.setMessageBody(body);
+        fakeMsg = reCheckAttachment(node, fakeMsg);
+        
         t3 = System.currentTimeMillis();
         logger.debug("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
 
