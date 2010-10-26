@@ -5,7 +5,7 @@
 		directory_title="Upcoming events"
 		title_url="http://www.exoplatform.org"
 		description="Upcoming events list."
-		thumbnail="/csResources/gadgets/events/skin/thumb.png">
+		thumbnail="http://localhost:8080/csResources/gadgets/events/skin/Events.png">
 		<Locale messages="/csResources/gadgets/events/locale/default.xml" />
 		<Locale lang="ar" messages="/csResources/gadgets/events/locale/ar.xml" language_direction="rtl"/>
 		<Locale lang="fr" messages="/csResources/gadgets/events/locale/fr.xml" />
