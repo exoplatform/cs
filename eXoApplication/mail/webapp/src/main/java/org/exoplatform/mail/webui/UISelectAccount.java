@@ -103,7 +103,7 @@ public class UISelectAccount extends UIForm {
   public String getSelectedValue() {
     String id = getChild(UIFormSelectBox.class).getValue() ;
     try {
-      if (MailUtils.getMailService().getAccountById(MailUtils.getCurrentUser(), id) != null) {
+      if (!MailUtils.isFieldEmpty(id) && MailUtils.getMailService().getAccountById(MailUtils.getCurrentUser(), id) != null) {
         return id;        
       } else {
         return accountRefreshed;
