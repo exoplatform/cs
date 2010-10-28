@@ -19,10 +19,8 @@ package org.exoplatform.mail.webui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.PortalContainer;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
@@ -63,6 +61,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 ) 
 public class UISelectAccount extends UIForm {
   final static public String FIELD_SELECT = "accSelect" ;
+  static public String accountRefreshed = null ;
   
   public UISelectAccount() throws Exception {
     UIFormSelectBox uiSelect = new UIFormSelectBox(FIELD_SELECT, FIELD_SELECT, getValues()) ;
@@ -90,6 +89,7 @@ public class UISelectAccount extends UIForm {
       if (defaultAcc != null && acc.getId().equals(defaultAcc)) {
         option = new SelectItemOption<String>(acc.getLabel() + " (" + getLabel("default") + ")", acc.getId());
         option.setSelected(true);
+        accountRefreshed = acc.getId();
       }
       options.add(option) ;
     }
@@ -101,7 +101,17 @@ public class UISelectAccount extends UIForm {
   }
   
   public String getSelectedValue() {
-    return getChild(UIFormSelectBox.class).getValue() ;
+    String id = getChild(UIFormSelectBox.class).getValue() ;
+    try {
+      if (MailUtils.getMailService().getAccountById(MailUtils.getCurrentUser(), id) != null) {
+        return id;        
+      } else {
+        return accountRefreshed;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      return accountRefreshed;
+    } 
   }
   
   public void setSelectedValue(String value) {
