@@ -2784,6 +2784,8 @@ UICombobox.prototype.correct = function() {
 	var UICombobox = eXo.webui.UICombobox ; 
 	var value = this.value ;
 	this.value = UICombobox.setValue(value) ;
+	var hiddenField = eXo.core.DOMUtil.findPreviousElementByTagName(comboList[i],"input");
+	hiddenField.value = this.value;
 } ;
 
 UICombobox.prototype.setValue = function(value) {
