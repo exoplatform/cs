@@ -12,6 +12,7 @@
   border-right: 1px solid #fff;
   background: url('DefaultSkin/background/BackgroundChat.gif') repeat-x top;
   padding: 11px 8px;
+	z-index:1;
 }
 
 .UIChat .LeftContainer {
