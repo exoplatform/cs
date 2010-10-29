@@ -112,7 +112,8 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
           if(m == null) successes.add(null);
         }
       }
-      if((successes.size() > 0 && successes.size() < uiMoveMessageForm.getMessageList().size()) || successes.contains(null) || successes.size() == 0){
+      if(successes == null || (successes.size() > 0 && successes.size() < uiMoveMessageForm.getMessageList().size()) ||
+          successes.contains(null) || successes.size() == 0){
         UIApplication uiApp = uiMoveMessageForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

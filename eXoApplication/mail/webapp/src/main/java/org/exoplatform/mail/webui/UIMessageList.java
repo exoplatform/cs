@@ -1614,7 +1614,7 @@ public class UIMessageList extends UIForm {
         }
       }    
       
-      if(successes.size()>0 && successes.size() < appliedMsgList.size() || successes.contains(null) || successes.size() == 0){
+      if(successes == null || successes.size()>0 && successes.size() < appliedMsgList.size() || successes.contains(null) || successes.size() == 0){
         UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

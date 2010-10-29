@@ -426,7 +426,7 @@ public class MailServiceImpl implements MailService, Startable {
         if(logger.isDebugEnabled()) logger.debug("MailServiceImpl: Move message error " + e.getMessage());
       }
     }
-    if (successList.size() > 0) storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId);
+    if (successList != null && successList.size() > 0) storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId);
     return successList;
   }
 
@@ -448,7 +448,7 @@ public class MailServiceImpl implements MailService, Startable {
         logger.error("Mailservice: Move message to trash folder error", e);
       }
     }
-    if (successList.size() > 0) storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId, updateReference);
+    if (successList != null && successList.size() > 0) storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId, updateReference);
     return successList;
   }
 
@@ -471,7 +471,7 @@ public class MailServiceImpl implements MailService, Startable {
         if(logger.isDebugEnabled()) logger.debug("Mailservice: Move message fail. ", e);
       }
     }
-    if (successList.size() > 0){
+    if (successList != null && successList.size() > 0){
       moveMessage(userName, accountId, msg, currentFolderId, destFolderId, true);
       return msg;
     }
@@ -494,7 +494,7 @@ public class MailServiceImpl implements MailService, Startable {
         List<Message> msgList = new ArrayList<Message>();
         msgList.add(msg);
         msgList = connector.moveMessage(msgList, currentFolder, destFolder);
-        if (msgList.size() <= 0) success = false;
+        if (msgList == null || msgList.size() <= 0) success = false;
        // else  msg = msgList.get(0);
       } catch (Exception e) {
         return;
@@ -507,12 +507,13 @@ public class MailServiceImpl implements MailService, Startable {
     return storage_.getMessagePageList(userName, filter);
   }
 
-  public void saveMessage(String userName,
+  public boolean saveMessage(String userName,
                           Account account,
                           String targetMsgPath,
                           Message message,
                           boolean isNew) throws Exception {
     List<Message> msgList = new ArrayList<Message>();
+    List<Message> successList = null;
     msgList.add(message);
     String folderId = message.getFolders()[0];
     Folder destFolder = null;
@@ -521,9 +522,11 @@ public class MailServiceImpl implements MailService, Startable {
     }
     if (destFolder != null && account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       Connector connector = new ImapConnector(account);
-      connector.createMessage(msgList, destFolder);
+      successList = connector.createMessage(msgList, destFolder);
     }
     storage_.saveMessage(userName, account.getId(), targetMsgPath, message, isNew);
+    if(successList != null && successList.size() > 0) return true;
+    return false;
   }
   
   public void saveMessage(String userName,
@@ -612,8 +615,8 @@ public class MailServiceImpl implements MailService, Startable {
                           acc.getOutgoingPassword());
       }
     } catch (Exception ex) {
-      logger.debug("#### Can not connect to smtp server ...");
-      throw ex;
+      if(logger.isDebugEnabled()) logger.debug("#### Can not connect to smtp server ...");
+     throw ex;
     }
     Message msg = send(session, transport, message);
     transport.close();
