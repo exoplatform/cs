@@ -43,14 +43,6 @@
       </tr>
       <tr>
         <td class="FieldLabel">
-          <%=uiForm.getLabel(uicomponent.TIME_INTERVAL)%>
-        </td>
-        <td class="FieldComponent">
-          <%uiForm.renderField(uicomponent.TIME_INTERVAL)%>
-        </td>
-      </tr>
-      <tr>
-        <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.DATE_FORMAT)%>
         </td>
         <td class="FieldComponent">

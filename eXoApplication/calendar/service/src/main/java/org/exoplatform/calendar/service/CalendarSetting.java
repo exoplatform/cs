@@ -35,7 +35,11 @@ public class CalendarSetting {
   public static String LIST_VIEW = "4" ;
   public static String SCHEDULE_VIEW = "5" ;
   public static String WORKING_VIEW = "6" ;
-
+  /**
+   * default value for one moving of event, task on UI. used when drag and drop. 
+   */
+  public final static long DEFAULT_TIME_INTERVAL = 30;
+  
   // time weekStartOn types
   public static String SUNDAY = "1" ;
   public static String MONDAY = "2" ;
@@ -72,7 +76,7 @@ public class CalendarSetting {
   
   public CalendarSetting() {
     viewType = DAY_VIEW ;
-    timeInterval = 15 ;
+    timeInterval = DEFAULT_TIME_INTERVAL;
     weekStartOn = String.valueOf(Calendar.SUNDAY) ;
     dateFormat = "MM/dd/yyyy" ;
     timeFormat = "hh:mm a" ;

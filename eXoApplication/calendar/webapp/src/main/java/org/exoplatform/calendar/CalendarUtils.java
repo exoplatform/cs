@@ -272,69 +272,23 @@ public class CalendarUtils {
     return  calendar;
   }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat) {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Calendar cal = getInstanceOfCurrentCalendar() ;
-    cal.set(Calendar.HOUR_OF_DAY, 0) ;
-    cal.set(Calendar.MINUTE, 0) ;
-    cal.set(Calendar.MILLISECOND, 0) ;
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
-    DateFormat df = new SimpleDateFormat(timeFormat, locale) ;
-    df.setCalendar(cal) ;
-    DateFormat df2 = new SimpleDateFormat(TIMEFORMAT, locale) ;
-    df.setCalendar(cal) ;
-    int time = 0 ;
-    while (time ++ < 24*60/(15)) {
-      options.add(new SelectItemOption<String>(df.format(cal.getTime()), df2.format(cal.getTime()))) ;
-      cal.add(java.util.Calendar.MINUTE, 15) ;
-    }
-    return options ;
+    return getTimesSelectBoxOptions(timeFormat, TIMEFORMAT, CalendarSetting.DEFAULT_TIME_INTERVAL, locale);
   }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String labelFormat, String valueFormat) {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Calendar cal = getInstanceOfCurrentCalendar() ;
-    cal.set(Calendar.DST_OFFSET, 0) ;
-    cal.set(Calendar.HOUR_OF_DAY, 0) ;
-    cal.set(Calendar.MINUTE, 0) ;
-    cal.set(Calendar.MILLISECOND, 0) ;
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    Locale locale = context.getParentAppRequestContext().getLocale() ;
-    DateFormat dfLabel = new SimpleDateFormat(labelFormat, locale) ;
-    dfLabel.setCalendar(cal) ;
-    DateFormat dfValue = new SimpleDateFormat(valueFormat, locale) ;
-    dfValue.setCalendar(cal) ;
-    int time = 0 ;
-    while (time ++ < 24*60/(15)) {
-      options.add(new SelectItemOption<String>(dfLabel.format(cal.getTime()), dfValue.format(cal.getTime()))) ;
-      cal.add(java.util.Calendar.MINUTE, 15) ;
-    }
-    return options ;
+    return getTimesSelectBoxOptions(labelFormat, valueFormat, CalendarSetting.DEFAULT_TIME_INTERVAL);
   }
 
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String labelFormat, String valueFormat, long timeInteval) {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Calendar cal = getInstanceOfCurrentCalendar() ;
-    cal.set(Calendar.DST_OFFSET, 0) ;
-    cal.set(Calendar.HOUR_OF_DAY, 0) ;
-    cal.set(Calendar.MINUTE, 0) ;
-    cal.set(Calendar.MILLISECOND, 0) ;
+    
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
-    DateFormat dfLabel = new SimpleDateFormat(labelFormat, locale) ;
-    dfLabel.setCalendar(cal) ;
-    DateFormat dfValue = new SimpleDateFormat(valueFormat, locale) ;
-    dfValue.setCalendar(cal) ;
-    int time = 0 ;
-    while (time ++ < 24*60/(timeInteval)) {
-      options.add(new SelectItemOption<String>(dfLabel.format(cal.getTime()), dfValue.format(cal.getTime()))) ;
-      cal.add(java.util.Calendar.MINUTE, (int)timeInteval) ;
-    }
-    return options ;
+    return getTimesSelectBoxOptions(labelFormat, valueFormat, timeInteval, locale);
   }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String labelFormat, String valueFormat, long timeInteval, Locale locale) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Calendar cal = getInstanceOfCurrentCalendar() ;
-    cal.set(Calendar.DST_OFFSET, 0) ;
+    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("")); // get a GMT calendar
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
@@ -343,31 +297,23 @@ public class CalendarUtils {
     dfLabel.setCalendar(cal) ;
     DateFormat dfValue = new SimpleDateFormat(valueFormat, locale) ;
     dfValue.setCalendar(cal) ;
-    int time = 0 ;
-    while (time ++ < 24*60/(timeInteval)) {
+    
+    int day = cal.get(Calendar.DAY_OF_MONTH);
+    while (day == cal.get(Calendar.DAY_OF_MONTH)) {
       options.add(new SelectItemOption<String>(dfLabel.format(cal.getTime()), dfValue.format(cal.getTime()))) ;
       cal.add(java.util.Calendar.MINUTE, (int)timeInteval) ;
     }
+    cal.set(Calendar.DAY_OF_MONTH, day);
+    cal.set(Calendar.HOUR_OF_DAY, 23);
+    cal.set(Calendar.MINUTE, 59);
+    cal.set(Calendar.MILLISECOND, 59) ;
+    options.add(new SelectItemOption<String>(dfLabel.format(cal.getTime()), dfValue.format(cal.getTime()))) ;
     return options ;
   }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat, int timeInteval) {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Calendar cal = getInstanceOfCurrentCalendar() ;
-    cal.set(Calendar.HOUR_OF_DAY, 0) ;
-    cal.set(Calendar.MINUTE, 0) ;
-    cal.set(Calendar.MILLISECOND, 0) ;
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
-    DateFormat df = new SimpleDateFormat(timeFormat, locale) ;
-    df.setCalendar(cal) ;
-    DateFormat df2 = new SimpleDateFormat(TIMEFORMAT, locale) ;
-    df2.setCalendar(cal) ;
-    int time = 0 ;
-    while (time ++ < 24*60/(timeInteval)) {
-      options.add(new SelectItemOption<String>(df.format(cal.getTime()), df2.format(cal.getTime()))) ;
-      cal.add(java.util.Calendar.MINUTE, timeInteval) ;
-    }
-    return options ;
+    return getTimesSelectBoxOptions(timeFormat, TIMEFORMAT, timeInteval, locale);
   }
 
   /**

@@ -100,7 +100,6 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       sharedCalendarColors_ = calendarSetting.getSharedCalendarsColors() ;
       UICalendarSettingTab settingTab = getChildById(SETTING_CALENDAR_TAB) ;
       settingTab.setViewType(calendarSetting.getViewType()) ;
-      settingTab.setTimeInterval(String.valueOf(calendarSetting.getTimeInterval())) ;
       settingTab.setWeekStartOn(calendarSetting.getWeekStartOn()) ;
       settingTab.setDateFormat(calendarSetting.getDateFormat()) ;
       settingTab.setTimeFormat(calendarSetting.getTimeFormat()) ;
@@ -256,7 +255,6 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       UICalendarSettingTab settingTab = uiForm.getChildById(UICalendarSettingForm.SETTING_CALENDAR_TAB) ;
       calendarSetting.setSharedCalendarsColors(uiForm.sharedCalendarColors_) ;
       calendarSetting.setViewType(settingTab.getViewType()) ;
-      calendarSetting.setTimeInterval(Long.parseLong(settingTab.getTimeInterval())) ;
       calendarSetting.setWeekStartOn(settingTab.getWeekStartOn()) ;
       calendarSetting.setDateFormat(settingTab.getDateFormat()) ;
       calendarSetting.setTimeFormat(settingTab.getTimeFormat()) ;

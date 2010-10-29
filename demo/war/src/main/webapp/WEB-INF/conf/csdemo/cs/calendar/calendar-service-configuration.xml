@@ -41,11 +41,6 @@
         </value-param>
         
         <value-param>
-         <name>timeInterval</name>
-         <value>15</value><!-- in minutes -->
-        </value-param>
-        
-        <value-param>
          <name>weekStartOn</name>
          <value>2</value><!--SUNDAY = "1" ; MONDAY = "2" ; TUESDAY = "3" ; WEDNESDAY = "4" ; THURSDAY = "5" ; FRIDAY = "6" ;SATURDAY = "7" ;-->
         </value-param>

@@ -78,13 +78,6 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
 
     addUIFormInput(new UIFormSelectBox(VIEW_TYPE, VIEW_TYPE, viewTypes)) ;
 
-    List<SelectItemOption<String>> timeInterval = new ArrayList<SelectItemOption<String>>() ;
-    int i = 5 ;
-    while(i < 121) {
-      timeInterval.add(new SelectItemOption<String>(String.valueOf(i), String.valueOf(i)+"-itv")) ;
-      i += 5;
-    }
-    addUIFormInput(new UIFormSelectBox(TIME_INTERVAL, TIME_INTERVAL, timeInterval)) ;
     List<SelectItemOption<String>> weekStartOn = new ArrayList<SelectItemOption<String>>() ;
     DateFormatSymbols dfs = new DateFormatSymbols() ;  ;
     for(int id =1 ;id<  dfs.getWeekdays().length; id++) {
@@ -131,14 +124,11 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
   protected void setViewType(String value) {
     getUIFormSelectBox(VIEW_TYPE).setValue(value) ;
   }
+  
   protected String getTimeInterval() {
-    String value = getUIFormSelectBox(TIME_INTERVAL).getValue() ;
-    return value.substring(0, value.lastIndexOf("-itv")) ;
+    return String.valueOf(CalendarSetting.DEFAULT_TIME_INTERVAL);
   }
-  protected void setTimeInterval(String value) {
-    value = value + "-itv" ;
-    getUIFormSelectBox(TIME_INTERVAL).setValue(value) ;
-  }
+  
   protected String getWeekStartOn() {
     String value = getUIFormSelectBox(WEEK_START_ON).getValue()  ;
     return value.substring(0, value.lastIndexOf("-wst")) ;

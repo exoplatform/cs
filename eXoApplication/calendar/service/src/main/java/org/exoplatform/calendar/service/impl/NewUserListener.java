@@ -101,10 +101,6 @@ public class NewUserListener extends UserEventListener {
     if(params.getValueParam(ST_VIEW_TYPE) != null) {
       defaultCalendarSetting_.setViewType(params.getValueParam(ST_VIEW_TYPE).getValue()) ;
     }
-    if(params.getValueParam(ST_TIME_INTEVAL) != null) {
-      defaultCalendarSetting_.setTimeInterval(Long.parseLong(params.getValueParam(ST_TIME_INTEVAL).getValue())) ;
-    }
-
     if(params.getValueParam(ST_WEEK_START) != null) {
       defaultCalendarSetting_.setWeekStartOn(params.getValueParam(ST_WEEK_START).getValue()) ;
     }
