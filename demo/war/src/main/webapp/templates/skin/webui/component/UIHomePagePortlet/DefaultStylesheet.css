@@ -82,7 +82,7 @@
 .UIHomePagePorlet .BoxButton  .Container  h4 {	
 	font-size: 20px;
 	color: #20263f;
-	line-height: 28px;
+	line-height: 28px;	
 }
 
 .UIHomePagePorlet .BoxButton  .Container  .ArrowBlue {
@@ -93,7 +93,7 @@
 	background: url("/csdemo/templates/skin/webui/component/UIHomePagePortlet/DefaultSkin/background/ArrowBlue-rt.gif") no-repeat right center;	/* orientation=rt */
 	line-height: 25px;
 	font-size: 16px;
-	display: block;
+	display: block;	
 }
 
 .CSHomeContainer  .LeftContainer {
