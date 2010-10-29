@@ -491,6 +491,7 @@ UITabControl.prototype.updateUnreadMessage = function() {
     tabUnreadMessageNode.innerHTML = '*[' + this.unreadMessageCnt + ']&nbsp;';
   }
   myParent.updateUnreadMessage();
+  myParent.updateTabList();
 };
 
 /**
