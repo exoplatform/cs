@@ -97,8 +97,9 @@ UITabControl.prototype.updateRoster = function(roster) {
  */
 UITabControl.prototype.userLeftRoomEventFired = function(user) {
   user = user.substr(user.indexOf('/') + 1, user.length-1);
+  var fullName = eXo.communication.chat.webui.UIChatWindow.fullNameMap[user];
   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, user + ' just left the room');
-  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_left.replace('{0}', user);
+  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_left.replace('{0}', fullName);
   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
   user += '@' + this.UIMainChatWindow.serverInfo.mainServiceName;
   this.buddyListControlObj.removeBuddy(user);
@@ -113,7 +114,7 @@ UITabControl.prototype.userJoinRoomEventFired = function(user) {
   var userName = user.substr(user.indexOf('/') + 1, user.length-1);
   var fullName = eXo.communication.chat.webui.UIChatWindow.fullNameMap[userName];
   //this.writeMsg(this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO, userName + ' just joined the room');
-  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', userName);
+  var msgBuf = this.UIMainChatWindow.ResourceBundle.chat_message_room_user_join.replace('{0}', fullName);
   this.writeMsg(this.UIMainChatWindow.ResourceBundle.chat_message_system_info, msgBuf);
   userName += '@' + this.UIMainChatWindow.serverInfo.mainServiceName;
   var buddyInfo = {
@@ -237,7 +238,8 @@ UITabControl.prototype.fileTransportRequestEventFire = function(FTReqEvent) {
   var fileTransportNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.sendFile);
   var labelNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'div', this.CSS_CLASS.sendFileLabel);
   //var alertContent = this.tabId.targetPerson + ' want to send you [' + FTReqEvent.filename + ']';
-  var alertContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_request.replace('{0}', this.tabId.targetPerson);
+  var fullName = eXo.communication.chat.webui.UIChatWindow.fullNameMap[this.tabId.targetPerson];
+  var alertContent = this.UIMainChatWindow.ResourceBundle.chat_message_file_transport_request.replace('{0}', fullName);
   alertContent = alertContent.replace('{1}', FTReqEvent.filename);
   labelNode.innerHTML = alertContent;
   var fileNameNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'div', this.CSS_CLASS.sendFileName);
@@ -420,7 +422,7 @@ UITabControl.prototype.initUI = function(buddyId) {
   	tabContactNameNode.innerHTML = fullName ;
   }
   
-  this.tabNameNode.setAttribute('title', this.tabId.targetPerson);
+  this.tabNameNode.setAttribute('title', fullName);
   this.tabNameNode.tabId = this.tabId.id;
   this.tabNameNode.className = this.tabNameNode.className;
   this.tabNameNode.onclick = this.focusTabWrapper;

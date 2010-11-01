@@ -335,6 +335,8 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
             PresenceBean subscription = TransformUtils.presenceToBean((Presence) packet);
             EventsBean eventsBean = new EventsBean();
+            UserInfo userInfo = getUserInfo(subscription.getFrom().split("@")[0]);
+            subscription.setFromName(userInfo.getFirstName() + " " + userInfo.getLastName());
             eventsBean.addSubscription(subscription);
             if (subscription.getType().equals(Type.subscribed.name())){
               Presence presence = connection_.getRoster().getPresence(packet.getFrom());
