@@ -968,8 +968,13 @@ UIMainChatWindow.prototype.processSubscriptions = function(eventId) {
         case 'subscribe':
           var requestUser = subscription.from;
           requestUser = requestUser.substring(0, requestUser.indexOf('@'));
+          var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[requestUser];
+          if (fullName == null) {
+          	fullName = subscription.fromName;
+          	eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[requestUser] = fullName;
+          }
           var str = this.ResourceBundle.chat_message_confirm_allow_to_see_status;
-          if (window.confirm(str.replace('{0}', requestUser))) {
+          if (window.confirm(str.replace('{0}', fullName))) {
             this.jabberSendSubscription(requestUser);
             this.jabberAddUser(requestUser);
           } else {
@@ -1040,11 +1045,12 @@ UIMainChatWindow.prototype.processGroupChat = function(eventId) {
         case this.MUC_ACTION_INVITE_ROOM: 
           var inviteInfo = mucEvent.invite;
           var roomName = inviteInfo.room;
+          roomName = roomName.substr(0, roomName.indexOf('@'));
+          var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[inviteInfo.inviter];
           //var msgBuf = inviteInfo.inviter + ' invite you join to room: "' + roomName + '"';
-          var msgBuf = this.ResourceBundle.chat_message_room_invite_to_join.replace('{0}', inviteInfo.inviter);
+          var msgBuf = this.ResourceBundle.chat_message_room_invite_to_join.replace('{0}', fullName);
           msgBuf = msgBuf.replace('{1}', roomName);
           if (window.confirm(msgBuf)) {
-            roomName = roomName.substr(0, roomName.indexOf('@'));
             this.jabberJoinToRoom(roomName, inviteInfo.password);
           }
           break;
@@ -1466,7 +1472,8 @@ UIMainChatWindow.prototype.removeUserCallback = function(event) {
  */
 UIMainChatWindow.prototype.removeContact = function(buddyId) {
   var str = this.ResourceBundle.chat_message_confirm_remove_buddy;
-  if (window.confirm(str.replace('{0}', buddyId))) {
+  var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[buddyId];
+  if (window.confirm(str.replace('{0}', fullName))) {
     buddyId = buddyId.substring(0, buddyId.indexOf('@'));
     eXo.communication.chatbar.webui.UIMainChatWindow.jabberRemoveUser(buddyId);
   }

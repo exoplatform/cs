@@ -70,7 +70,9 @@ BuddyItem.prototype.init = function() {
 	    eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[uid] = this.buddyInfo.fullName ;
 	}
   //this.iconChatNode.innerHTML = this.getUserName(this.buddyInfo.user, true);
-  this.iconChatNode.setAttribute('title' ,this.getUserName(this.buddyInfo.user, false));
+	var fullName = this.buddyInfo.fullName ? this.buddyInfo.fullName : nickDis;
+	fullName = fullName ? fullName : this.buddyInfo.user.split('@')[0];
+  this.iconChatNode.setAttribute('title' ,this.getUserName(fullName, false));
   this.rootNode.setAttribute('userName', this.buddyInfo.user);  
   this.rootNode.setAttribute('nickname', nickDis);
   eXo.communication.chatbar.core.AdvancedDOMEvent.addEventListener(this.rootNode, 'contextmenu', this.actionCallback, false);
