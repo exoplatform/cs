@@ -136,13 +136,28 @@ public class UIChatBarPortlet extends UIPortletApplication {
   }
   
   protected String getEmailLink () {
-    return Utils.getServerBaseUrl() + getPortletPreferences().getValue(UIConfigForm.MAIL_URL, null);
+    String path = getPortletPreferences().getValue(UIConfigForm.MAIL_URL, null);
+    if (Utils.isUri(path)) {
+      return path;
+    } else {
+      return Utils.getServerBaseUrl() + path;
+    }
   }
   protected String getCalendarLink () {
-    return Utils.getServerBaseUrl() + getPortletPreferences().getValue(UIConfigForm.CAL_URL, null);
+    String path = getPortletPreferences().getValue(UIConfigForm.CAL_URL, null);
+    if (Utils.isUri(path)) {
+      return path;
+    } else {
+      return Utils.getServerBaseUrl() + path;
+    }
   }
   protected String getContactLink () {
-    return Utils.getServerBaseUrl() + getPortletPreferences().getValue(UIConfigForm.CON_URL, null);
+    String path = getPortletPreferences().getValue(UIConfigForm.CON_URL, null);
+    if (Utils.isUri(path)) {
+      return path;
+    } else {
+      return Utils.getServerBaseUrl() + path;
+    }
   }
   
 

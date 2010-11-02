@@ -16,6 +16,9 @@
  */
 package org.exoplatform.chatbar;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 
@@ -26,6 +29,8 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
  * Jul 26, 2010  
  */
 public class Utils {
+  
+  public static final String URL_PATTERN = "((mailto\\:|(news|(ht|f)tp(s?))\\://){1}\\S+)";
   
   public static String getServerBaseUrl() {
     PortletRequestContext portletRequestContext = PortletRequestContext.getCurrentInstance() ;
@@ -40,5 +45,16 @@ public class Utils {
     PortalContainer pcontainer =  PortalContainer.getInstance() ;
     return pcontainer.getPortalContainerInfo().getContainerName() ;  
   }
-
+  
+  
+  public static boolean isUri(String input) {
+    try {
+      if (input == null) return false;
+      Matcher matcher = Pattern.compile(URL_PATTERN).matcher(input);
+      return matcher.find();
+    } catch (Exception e) {
+      return false;
+    }
+  }
+  
 }
