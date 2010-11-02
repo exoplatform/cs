@@ -1103,6 +1103,7 @@ public class JCRDataStorage implements DataStorage {
   
   /**
    *return true if the message has not attachment, false if else **/
+  @Deprecated
   private boolean checkHasAttachment(javax.mail.Message message) {
     try {
       Object obj = message.getContent();
@@ -1263,7 +1264,7 @@ public class JCRDataStorage implements DataStorage {
         node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
         long priority = MimeMessageParser.getPriority(msg);
         node.setProperty(Utils.EXO_PRIORITY, priority);
-        node.setProperty(Utils.EXO_HASATTACH, this.checkHasAttachment(msg));
+        node.setProperty(Utils.EXO_HASATTACH, false);
         node.save();
       
         if (infoObj != null && continuation != null) {
