@@ -222,8 +222,13 @@ eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
 	request.send(null) ;
 	if(!callback) return;
 	request.onreadystatechange = function(){
-		if(request.readyState == 4 && (request.status == 200 || request.status == 204)){
-			callback(gadgets.json.parse(request.responseText));
+		if (request.readyState == 4) {
+			if ((request.status == 200 || request.status == 204)) {
+				callback(gadgets.json.parse(request.responseText));
+			}
+			if (request.status == 404) {
+				eXoEventGadget.notify();
+	  	}
 		}
 	}					
 }
@@ -346,10 +351,12 @@ eXoEventGadget.prototype.createHttpRequest = function(){
 }
 
 eXoEventGadget.prototype.adjustHeight = function(){
-	var frmSetting = document.getElementById("Setting");
-	var gadgetCont = document.getElementById("ItemContainer").parentNode;
-	var height = frmSetting.offsetHeight + gadgetCont.offsetHeight;
-	gadgets.window.adjustHeight(height);
+	setTimeout(function(){
+		var frmSetting = document.getElementById("Setting");
+		var gadgetCont = document.getElementById("ItemContainer").parentNode;
+		var height = frmSetting.offsetHeight + gadgetCont.offsetHeight;
+		gadgets.window.adjustHeight(height);		
+	},500);
 }
 eXoEventGadget =  new eXoEventGadget();
 
