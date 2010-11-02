@@ -4,9 +4,6 @@ body , table, form{
 	font-size: 11px;
 	color: #484848;
 }
-body{
-	padding-bottom:10px;
-}
 a {
 	text-decoration: none;
 }

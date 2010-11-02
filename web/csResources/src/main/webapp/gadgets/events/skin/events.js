@@ -151,7 +151,7 @@ eXoEventGadget.prototype.createRequestUrl = function(){
 }
 eXoEventGadget.prototype.getData = function(){					 
 	var url = eXoEventGadget.createRequestUrl();					
-	this.ajaxAsyncGetRequest(url,eXoEventGadget.render);
+	eXoEventGadget.ajaxAsyncGetRequest(url,eXoEventGadget.render);
 	if(typeof(requestInterval) == "undefined") requestInterval = setInterval(eXoEventGadget.getData,300000);
 }				
 eXoEventGadget.prototype.render =  function(data){
@@ -188,11 +188,12 @@ eXoEventGadget.prototype.showDetail = function(obj){
 	if(detail.style.display == "block") detail.style.display = "none";
 	else detail.style.display = "block";
 	this.lastShowItem = detail;
-	gadgets.window.adjustHeight();
+	eXoEventGadget.adjustHeight();
 }
 
 eXoEventGadget.prototype.onLoadHander = function(){
 	eXoEventGadget.getData();
+	eXoEventGadget.adjustHeight();
 }
 eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
 	/*	
@@ -206,8 +207,13 @@ eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
   request.setRequestHeader("Cache-Control", "max-age=86400") ;
   request.send(null) ;
 	request.onreadystatechange = function(){
-		if(request.readyState == 4 && (request.status == 200 || request.status == 204)){
-			callback(gadgets.json.parse(request.responseText));
+		if (request.readyState == 4) {
+			if ((request.status == 200 || request.status == 204)) {
+				callback(gadgets.json.parse(request.responseText));
+			}
+			if (request.status == 404) {
+				eXoEventGadget.notify();
+	  	}
 		}
 	}					
 }
@@ -217,6 +223,14 @@ eXoEventGadget.prototype.notify = function(){
 	eXoEventGadget.setLink();
 }
 
+
+eXoEventGadget.prototype.adjustHeight = function(){
+	setTimeout(function(){
+		var itemContainer = document.getElementById("ItemContainer").parentNode;
+		var height = itemContainer.offsetHeight;
+		gadgets.window.adjustHeight(height);		
+	},500);
+}
 eXoEventGadget =  new eXoEventGadget();
 
 gadgets.util.registerOnLoadHandler(eXoEventGadget.onLoadHander);
