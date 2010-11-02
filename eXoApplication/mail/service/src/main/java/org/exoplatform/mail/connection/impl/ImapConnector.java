@@ -18,6 +18,7 @@ package org.exoplatform.mail.connection.impl;
 
 import java.util.ArrayList;
 
+
 import java.util.List;
 import java.util.Properties;
 
@@ -152,21 +153,21 @@ public class ImapConnector extends BaseConnector {
   }
 
   public List<Message> createMessage(List<Message> msgs, Folder folder) throws Exception {
-    if(msgs == null || msgs.size() == 0) return null;
+    if(msgs == null || msgs.size() == 0 || folder == null) return null;
     List<Message> successList = new ArrayList<Message>();
     IMAPFolder remoteFolder = null;
     URLName remoteURL = new URLName(folder.getURLName());
     try {
       remoteFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(remoteURL);
     } catch (Exception e) {
-         logger.warn("Cannot get \"" + folder.getURLName() + "\" folder. It will be created on server immediate.", e);
+         logger.warn("Cannot get \"" + folder.getName() + "\" folder. It will be created on server immediate.", e);
        remoteFolder = (IMAPFolder)this.createFolder(folder);
     }
     try {
       if(remoteFolder != null && !remoteFolder.isOpen()) remoteFolder.open(javax.mail.Folder.READ_WRITE);
       else if(remoteFolder == null)return null;
     } catch (Exception e) {
-        logger.error("Cannot open \"" + folder.getURLName() + "\" folder.", e);
+        logger.error("Cannot open \"" + folder.getName() + "\" folder.", e);
     }
     Properties props = System.getProperties();
     Session session = Session.getInstance(props, null);
@@ -251,8 +252,6 @@ public class ImapConnector extends BaseConnector {
   private List<Message> moveMessages(List<Message> msgs, Folder sourceFolder, Folder desFolder, boolean isLocalFolder, boolean isRemoteFolder) throws Exception {
     if(msgs == null || msgs.size() == 0) return null;
     IMAPFolder sourceImapFolder = null, desImapFolder = null;
-    List<Message> successes = new ArrayList<Message>();
-    javax.mail.Message[] movedMsgs = null;
     try {
       if(isLocalFolder && isRemoteFolder){//local -> remote
         sourceImapFolder = (IMAPFolder) createFolder(sourceFolder);
@@ -281,74 +280,39 @@ public class ImapConnector extends BaseConnector {
        
       if(sourceImapFolder.isOpen() && desImapFolder.isOpen()){
         List<javax.mail.Message> copiedMsgs = new ArrayList<javax.mail.Message>();
-        javax.mail.Message msg = null; Message mtem = null;
-        getmessage:
+        javax.mail.Message msg = null;
         for (Message m : msgs) {
           try{
             if(m != null && m.getUID() != null)
               msg = sourceImapFolder.getMessageByUID(Long.valueOf(m.getUID()));
-            else logger.warn("Messag be null or UID null");
+            else logger.warn("Message is null or UID is null.");
           }catch (Exception e){
-            if(createMsgOnImapFolder(sourceImapFolder, m) == null) 
               logger.warn("The UID: \"" + m.getUID() + "\" for message: \""+ m.getSubject() +"\" is not exist on server mail\n", e);
-            else if(!m.equals(mtem)) {
-              logger.info("Try to move message again");
-              mtem = m;
-              break getmessage; 
-            }
           }
-          if (msg != null && !copiedMsgs.contains(msg)) copiedMsgs.add(msg);
+          if (msg != null) copiedMsgs.add(msg);
         }
-        try{
-          if(copiedMsgs != null && copiedMsgs.size() > 0)
-            movedMsgs = desImapFolder.addMessages(copiedMsgs.toArray(new javax.mail.Message[copiedMsgs.size()]));
-          else return null;
-        }catch(MessagingException me){
-          logger.warn("Cannot add message(s) to server mail\n",  me);
-          return null;
-        }
-        for (int k = 0; k < copiedMsgs.size(); k++) {
-          try{
-            copiedMsgs.get(k).setFlag(Flags.Flag.DELETED, true);  
-          }catch (Exception e){logger.warn("Cannot mark delete flag to server mail. \n",  e);}
-        }
-        if (movedMsgs != null && movedMsgs.length > 0 && movedMsgs.length == msgs.size() ) {
-          String uid = "";
-          for (int l = 0; l < movedMsgs.length; l++) {
-            if(movedMsgs[l] != null){
-              try {
-                uid = String.valueOf(desImapFolder.getUID(movedMsgs[l]));            
-             } catch (Exception e) {
-               logger.warn("Can not get Message UID on server. \n", e);  
-             } 
-             if (Utils.isEmptyField(uid) && !Utils.isEmptyField(msgs.get(l).getUID())) uid = msgs.get(l).getUID();
-             msgs.get(l).setUID(uid);
-            }else logger.warn("Movemessages(): Mail server could not append a UID for message: \"" + msgs.get(l).getSubject()+"\"");
-            successes.add(msgs.get(l));
+        if(copiedMsgs != null && copiedMsgs.size() > 0){
+          javax.mail.Message[] messages = copiedMsgs.toArray(new javax.mail.Message[copiedMsgs.size()]);
+          try {
+            sourceImapFolder.copyMessages(messages, desImapFolder);  
+          } catch (Exception e) {
+            logger.warn("Message is not moved", e);
           }
-        }else logger.warn("Not all messages were moved/deleted");
-        
+          Flags flags = new Flags();
+          flags.add(Flags.Flag.DELETED);
+          sourceImapFolder.setFlags(messages, flags, true);
+          sourceImapFolder.expunge();
+          desImapFolder.expunge();
+        }
         sourceImapFolder.close(true);
         desImapFolder.close(true);
       }
     } catch (Exception e) {
       logger.error("ImapConnector: Error in move message.\n", e);
     }
-    return successes;
+    return msgs;
   }
 
-  private javax.mail.Message[] createMsgOnImapFolder(IMAPFolder imapF, Message message) throws Exception{
-    try {
-      Properties props = System.getProperties();
-      Session session = Session.getInstance(props, null);
-      MimeMessage mimeMessage = new MimeMessage(session);
-      javax.mail.Message msgServer = (javax.mail.Message)Utils.mergeToMimeMessage(message, mimeMessage);
-      return  imapF.addMessages(new javax.mail.Message[]{msgServer});      
-    } catch (Exception e) {
-      return null;
-    }
-  }
-  
   public boolean markAsRead(List<Message> msgList, Folder f) throws Exception {
     try {
       URLName url = new URLName(f.getURLName());

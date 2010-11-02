@@ -472,7 +472,7 @@ public class MailServiceImpl implements MailService, Startable {
       }
     }
     if (successList != null && successList.size() > 0){
-      moveMessage(userName, accountId, msg, currentFolderId, destFolderId, true);
+      storage_.moveMessage(userName, accountId, msg, currentFolderId, destFolderId, true);
       return msg;
     }
     return null;
