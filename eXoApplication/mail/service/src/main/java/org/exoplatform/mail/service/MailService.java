@@ -393,12 +393,13 @@ public interface MailService {
    * message.
    * 
    * @param username
-   * @param accountId
+   * @param account
    * @param targetMsgPath this param is path of node
    *          Account/Messages/Year/Month/Day
+   * @return true if save message success. false if else         
    * @throws Exception
    */
-  public void saveMessage(String username,
+  public boolean saveMessage(String username,
                           Account account,
                           String targetMsgPath,
                           Message message,
