@@ -3,9 +3,10 @@
 	import org.exoplatform.portal.webui.util.Util;
 	
 	def prContext = _ctx.getRequestContext().getParentAppRequestContext();
-	
+
   String loginAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;
   String registerURI = Util.getPortalRequestContext().getPortalURI() + "register";
+
 	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
 	String portletId = uicomponent.getId() ;	
     String pageURI = Util.getPortalRequestContext().getPortalURI() + "home";
