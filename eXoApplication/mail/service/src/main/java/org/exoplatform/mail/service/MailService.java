@@ -393,7 +393,7 @@ public interface MailService {
    * message.
    * 
    * @param username
-   * @param accountId
+   * @param account
    * @param targetMsgPath this param is path of node
    *          Account/Messages/Year/Month/Day
    * @return true if save message success. false if else         

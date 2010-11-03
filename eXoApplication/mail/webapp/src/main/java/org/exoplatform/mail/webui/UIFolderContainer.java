@@ -324,7 +324,7 @@ public class UIFolderContainer extends UIContainer {
       for (Message msg : msgList) {
         if (msgPre != null && msg.getId().equals(msgPre.getId())) containPreview = true ;
       }  
-      if(successes.size() > 0 && successes.size() < msgList.size() || successes.size() == 0){
+      if(successes == null || (successes.size() > 0 && successes.size() < msgList.size()) || successes.size() == 0){
         UIApplication uiApp = uiFolderContainer.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

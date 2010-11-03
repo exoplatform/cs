@@ -17,6 +17,7 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.io.ByteArrayInputStream;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
