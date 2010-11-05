@@ -1712,8 +1712,7 @@ public class MailServiceImpl implements MailService, Startable {
             if (info != null) {
               folderIds = new String[] { folderId };
               msg = msgList.get(i);
-
-              unreadMsgCount = folder.getUnreadMessageCount();
+              if(unreadMsgCount > -1) unreadMsgCount = folder.getUnreadMessageCount();
               eXoFolder.setNumberOfUnreadMessage((long)unreadMsgCount);
               if (info != null/* && i < unreadMsgCount*/) {
                 info.setFetching(i + 1);
