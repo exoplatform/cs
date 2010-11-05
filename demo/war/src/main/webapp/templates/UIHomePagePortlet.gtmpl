@@ -28,21 +28,21 @@
 <div class="UIHomePagePorlet">
 			<div class="BannerDefault">
 				<div class="CSProductName">
-					<h2>eXo Collaboration</h2>
-					<h3>An Extended Service of eXo Platform 3</h3>
+					<h2><%=_ctx.appRes("UIHomePagePortlet.cs-title")%></h2>
+					<h3><%=_ctx.appRes("UIHomePagePortlet.cs-subtitle")%></h3>
 				</div>	
 			</div>
 			<div class="ClearFix BoxButton">
 				<div  class="Container FL">
 					<div class="BoxDocument">
-						<h4>Community Members: </h4>
-						<a href="http://docs.exoplatform.org" class="ArrowBlue TxtBlue" target="_blank" >Download eXo Collaboration Documentation</a>
+						<h4><%=_ctx.appRes("UIHomePagePortlet.cs-communityMembers")%> </h4>
+						<a href="http://docs.exoplatform.org" class="ArrowBlue TxtBlue" target="_blank" ><%=_ctx.appRes("UIHomePagePortlet.cs-documentation")%></a>
 					</div>
 				</div>
 				<div  class="Container FR">
 					<div class="BoxTry">
-						<h4>Enterprise or Production Use? </h4>
-						<a href="http://www.exoplatform.com/company/public/website/platform/exo-platform-3" class="ArrowBlue TxtBlue" target="_blank" >Try eXo Platform 3</a>
+						<h4><%=_ctx.appRes("UIHomePagePortlet.cs-usingPurpose")%> </h4>
+						<a href="http://www.exoplatform.com/company/public/website/platform/exo-platform-3" class="ArrowBlue TxtBlue" target="_blank" ><%=_ctx.appRes("UIHomePagePortlet.cs-try")%></a>
 					</div>
 				</div>
 			</div>
@@ -60,31 +60,31 @@
 									<div class="BlockWebsite FL">
 										<a href="http://www.exoplatform.com/company/public/website/company/contact-us" class="IconContact Icon" target="_blank" >										
 										</a>
-										<a href="http://www.exoplatform.com/company/public/website/company/contact-us" class="TxtLinkIcon" target="_blank" >Contact Us</a>
+										<a href="http://www.exoplatform.com/company/public/website/company/contact-us" class="TxtLinkIcon" target="_blank" ><%=_ctx.appRes("UIHomePagePortlet.cs-contact")%></a>
 									</div>
 									<div class="BlockWebsite FL">
 										<a href="http://www.exoplatform.com/company/public/website/resource-center" class="IconResource Icon" target="_blank" > </a>
-										<a href="http://www.exoplatform.com/company/public/website/resource-center" class="TxtLinkIcon" target="_blank" >Resource Center</a>
+										<a href="http://www.exoplatform.com/company/public/website/resource-center" class="TxtLinkIcon" target="_blank" ><%=_ctx.appRes("UIHomePagePortlet.cs-resourceCenter")%></a>
 									</div>
 								</div>
 								<div class="ClearFix">
 									<div class="BlockWebsite FL">
 										<a href="http://support.exoplatform.com" class="IconSupport Icon" target="_blank" > </a>										
-										<a href="http://support.exoplatform.com" class="TxtLinkIcon" target="_blank" >Support</a>
+										<a href="http://support.exoplatform.com" class="TxtLinkIcon" target="_blank" ><%=_ctx.appRes("UIHomePagePortlet.cs-support")%></a>
 									</div>
 									<div class="BlockWebsite FL">
 										<a href="http://www.exoplatform.com/company/public/website/services/development/development-training" class="IconTraining Icon" target="_blank" > </a>											
-										<a href="http://www.exoplatform.com/company/public/website/services/development/development-training" class="TxtLinkIcon" target="_blank" >Training</a>
+										<a href="http://www.exoplatform.com/company/public/website/services/development/development-training" class="TxtLinkIcon" target="_blank" ><%=_ctx.appRes("UIHomePagePortlet.cs-training")%></a>
 									</div>
 								</div>
 								<div class="ClearFix">
 									<div class="BlockWebsite FL">
 										<a href="http://blog.exoplatform.org" class="IconBlog Icon" target="_blank" > </a>
-										<a href="http://blog.exoplatform.org" class="TxtLinkIcon" target="_blank" >eXo Blog</a>
+										<a href="http://blog.exoplatform.org" class="TxtLinkIcon" target="_blank" ><%=_ctx.appRes("UIHomePagePortlet.cs-blog")%></a>
 									</div>
 									<div class="BlockWebsite FL">
 										<a href="http://www.exoplatform.com" class="IconWebsite Icon" target="_blank" > </a>
-										<a href="http://www.exoplatform.com" class="TxtLinkIcon" target="_blank" >eXo Website</a>
+										<a href="http://www.exoplatform.com" class="TxtLinkIcon" target="_blank" ><%=_ctx.appRes("UIHomePagePortlet.cs-website")%></a>
 									</div>
 								</div>							
 							</div>
@@ -109,8 +109,8 @@
 						<div class="DecorationMR">
 							<div class="DecorationMC ">
 								<div class="RowContent BorderBottom">
-									<p class="Introduction TextBold">New to eXo Collaboration?</p>
-									<p class="Introduction">Watch the <a href="http://www.exoplatform.com/company/public/website/resource-viewer?path=/website/eXo-collaboration-GS" class="TxtBlue" target="_blank">Getting Started Guide</a>, or start exploring some of the key features:</p>
+									<p class="Introduction TextBold"><%=_ctx.appRes("UIHomePagePortlet.cs-newToeXo")%></p>
+									<p class="Introduction"><%=_ctx.appRes("UIHomePagePortlet.cs-watch")%> <a href="http://www.exoplatform.com/company/public/website/resource-viewer?path=/website/eXo-collaboration-GS" class="TxtBlue" target="_blank"><%=_ctx.appRes("UIHomePagePortlet.cs-gettingStarted")%></a>, <%=_ctx.appRes("UIHomePagePortlet.cs-startExploring")%></p>
 								</div>
 								<div class="ClearFix RowContent">
 									<div class="FL ColsProduct">
@@ -157,7 +157,7 @@
 									</div>
 								</div>								
 								<%if(prContext.getRemoteUser() == null) {%>
-								  <div class="RowContent"><p class="Information">Start using eXo Collaboration, <a href="$autoLoginLink" class="TxtBlue">login as Root</a></p></div>
+								  <div class="RowContent"><p class="Information"><%=_ctx.appRes("UIHomePagePortlet.cs-startUsing")%>, <a href="$autoLoginLink" class="TxtBlue"><%=_ctx.appRes("UIHomePagePortlet.cs-loginAsRoot")%></a></p></div>
 								<% } %>
 							</div>
 						</div>
