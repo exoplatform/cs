@@ -28,12 +28,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -52,8 +52,8 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -74,6 +74,11 @@
 <tr>
 	<td>echo</td>
 	<td>-- Compose mail</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder ComposeIcon']</td>
 	<td></td>
 </tr>
 <tr>
@@ -148,12 +153,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -172,8 +177,8 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -203,12 +208,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder CheckMailIcon']</td>
+	<td>MailWorkingWorkspace</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//div[@class='UIActionBar']//div[@class='IconHolder CheckMailIcon']</td>
+	<td>//div[@id='MailWorkingWorkspace']/div[1]/div/div/div/div/div/div[1]/div</td>
 	<td></td>
 </tr>
 <tr>
