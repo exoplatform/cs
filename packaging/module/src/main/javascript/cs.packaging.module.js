@@ -84,8 +84,7 @@ function getModule(params) {
   module.extension = {};
   module.extension.webapp =
     new Project("org.exoplatform.cs", "exo.cs.extension.webapp", "war", module.version).
-    addDependency(new Project("org.exoplatform.cs", "exo.cs.extension.config", "jar", module.version)).
-    addDependency(new Project("org.exoplatform.cs", "exo.cs.ext.social-integration", "jar", module.version));
+    addDependency(new Project("org.exoplatform.cs", "exo.cs.extension.config", "jar", module.version));
   module.extension.webapp.deployName = "cs-extension";
   
   /**
@@ -108,8 +107,7 @@ function getModule(params) {
    // demo portal
    module.demo.portal = 
 	   new Project("org.exoplatform.cs", "exo.cs.demo.webapp", "war", module.version).
-	   addDependency(new Project("org.exoplatform.cs", "exo.cs.demo.config", "jar", module.version)).
-	   addDependency(new Project("org.exoplatform.cs", "exo.cs.ext.social-integration", "jar", module.version));
+	   addDependency(new Project("org.exoplatform.cs", "exo.cs.demo.config", "jar", module.version));
    module.demo.portal.deployName = "csdemo";  
 	   
   module.demo.cometd=
