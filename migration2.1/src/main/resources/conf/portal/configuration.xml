@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration>	
+	<component>
+    <type>org.exoplatform.cs.datamigration.MigrateService</type>
+		<init-params>
+		<!--Calendar migration configuration-->
+      
+      <value-param>
+        <name>migrationCalendarNodetypes</name>              
+        <description>Node types configuration file</description>
+        <value>jar:/conf/portal/calendar-nodetypes-migration.xml</value>
+      </value-param>
+      <value-param>
+  			<name>calendarData1.3</name>
+  			<description></description>
+  			<value>file:/home/quanghung/java/data/calendar_data_13.xml</value>
+  		</value-param>
+			<value-param>
+  			<name>calendarData2.1</name>
+  			<description></description>
+  			<value>file:/home/quanghung/java/data/calendar_data_21.xml</value>
+  		</value-param>
+  		
+			<!--Contact migration configuration-->
+      
+      <value-param>
+        <name>migrationContactNodetypes</name>              
+        <description>Node types configuration file</description>
+        <value>jar:/conf/portal/contact-nodetypes-migration.xml</value>
+      </value-param>
+      <value-param>
+  			<name>contactData1.3</name>
+  			<description></description>
+  			<value>file:/home/quanghung/java/data/contact_data_13.xml</value>
+  		</value-param>
+			<value-param>
+  			<name>contactData2.1</name>
+  			<description></description>
+  			<value>file:/home/quanghung/java/data/contact_data_21.xml</value>
+  		</value-param>
+	
+<!--Mail migration configuration-->
+      <value-param>
+  			<name>mailData1.3</name>
+  			<description></description>
+  			<value>file:/home/quanghung/java/data/mail_data_13.xml</value>
+  		</value-param>
+			<value-param>
+  			<name>mailData2.1</name>
+  			<description></description>
+  			<value>file:/home/quanghung/java/data/mail_data_21.xml</value>
+  		</value-param>
+			
+    </init-params>
+  </component>
+</configuration>

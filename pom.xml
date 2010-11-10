@@ -435,6 +435,8 @@
   <modules>
     <module>web</module>
     <module>eXoApplication</module>
+    <module>migration2.1</module>
+    <module>migration2.1-import</module>
     <module>extension</module>
     <module>demo</module>
 	<module>ext</module>
