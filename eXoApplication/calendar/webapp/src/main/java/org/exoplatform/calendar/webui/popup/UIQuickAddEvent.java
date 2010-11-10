@@ -472,11 +472,13 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         //event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       } else {
         uiPopupAction.deActivate() ;
-        UIPopupContainer uiPouContainer  = uiPopupAction.activate(UIPopupContainer.class, 700) ;
-        uiPouContainer.setId(UIPopupContainer.UITASKPOPUP) ;
-        UITaskForm uiTaskForm = uiPouContainer.addChild(UITaskForm.class, null, null) ;
+        UIPopupContainer uiPopupContainer  = uiPopupAction.activate(UIPopupContainer.class, 700) ;
+        uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
+        UITaskForm uiTaskForm = uiPopupContainer.addChild(UITaskForm.class, null, null) ;
         uiTaskForm.update(uiForm.calType_, uiForm.getUIFormSelectBoxGroup(FIELD_CALENDAR).getOptions()) ;
         uiTaskForm.initForm(calendarSetting, null, null) ;
+        String username = CalendarUtils.getCurrentUser() ;
+        uiTaskForm.setEmailAddress(CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username).getEmail()) ;
         Date to = uiForm.getEventToDate(dateFormat, timeFormat) ;
         if(uiForm.getIsAllDay()) {
           java.util.Calendar tempCal = CalendarUtils.getInstanceOfCurrentCalendar() ;
