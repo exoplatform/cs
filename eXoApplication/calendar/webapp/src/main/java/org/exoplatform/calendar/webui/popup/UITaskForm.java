@@ -377,6 +377,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     if(getEmailReminder()) {
       if(CalendarUtils.isEmpty(getEmailAddress())) {
         errorMsg_ = "UIEventForm.msg.event-email-required" ;
+        errorValues = "";
         return false ;
       }
       else if(!CalendarUtils.isValidEmailAddresses(getEmailAddress())) {
@@ -602,7 +603,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     return taskDetailTab.getUIStringInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).getValue() ;
   }
 
-  protected void setEmailAddress(String value) {
+  public void setEmailAddress(String value) {
     UIEventReminderTab taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     taskDetailTab.getUIStringInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).setValue(value) ;
   }
