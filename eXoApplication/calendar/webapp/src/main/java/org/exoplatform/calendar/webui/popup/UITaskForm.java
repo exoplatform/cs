@@ -454,10 +454,15 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     ((UIFormDateTimePicker)taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM))
-    .setValue(CalendarUtils.parse(date, dateFormat, locale)) ;
+    .setValue(df.format(date)) ;
+    
+    df = new SimpleDateFormat(timeFormat, locale) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_FROM_TIME)
-    .setValue(CalendarUtils.parse(date,timeFormat, locale)) ;    
+    .setValue(df.format(date)) ;    
 
   }
 
@@ -485,10 +490,14 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     ((UIFormDateTimePicker)taskDetailTab.getChildById(UITaskDetailTab.FIELD_TO))
-    .setValue(CalendarUtils.parse(date, dateFormat, locale)) ;
+    .setValue(df.format(date)) ;
+    df = new SimpleDateFormat(timeFormat, locale) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_TO_TIME)
-    .setValue(CalendarUtils.parse(date, timeFormat, locale)) ; 
+    .setValue(df.format(date)) ; 
   }
 
   protected boolean getEventAllDate() {
