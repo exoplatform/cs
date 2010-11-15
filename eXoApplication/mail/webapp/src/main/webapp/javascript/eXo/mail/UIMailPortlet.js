@@ -3,6 +3,7 @@ function UIMailPortlet(){
 
 UIMailPortlet.prototype.showContextMenu = function(compid){
     var UIContextMenuMail = eXo.webui.UIContextMenuMail; //eXo.contact.ContextMenu ;
+    this.portletNode = document.getElementById(compid);
     UIContextMenuMail.portletName = compid;
     var config = {
         'preventDefault': false,
@@ -357,7 +358,7 @@ UIMailPortlet.prototype.showMessageAction = function(obj, evt){
 
 UIMailPortlet.prototype.isAllday = function(form){
     if (typeof(form) == "string") 
-        form = document.getElementById(form);
+        form = eXo.mail.UIMailPortlet.getElementById(form);
     if (form.tagName.toLowerCase() != "form") {
         form = eXo.core.DOMUtil.findDescendantsByTagName(form, "form");
     }
@@ -384,7 +385,7 @@ UIMailPortlet.prototype.showHideTime = function(chk){
 UIMailPortlet.prototype.showHideField = function(chk, fields){
     var display = "";
     if (typeof(chk) == "string") 
-        chk = document.getElementById(chk);
+        chk = eXo.mail.UIMailPortlet.getElementById(chk);
     display = (chk.checked) ? "hidden" : "visible";
     var len = fields.length;
     for (var i = 0; i < len; i++) {
@@ -449,7 +450,7 @@ UIMailPortlet.prototype.collapseExpandFolder = function(obj, folderState){
 
 UIMailPortlet.prototype.updateFolderState = function(folderId, folderState){
     if (!this.uiFolderContainerNode) {
-        this.uiFolderContainerNode = document.getElementById('UIFolderContainer');
+        this.uiFolderContainerNode = eXo.mail.UIMailPortlet.getElementById('UIFolderContainer');
     }
     var dateExpire = 365;
     eXo.core.Browser.setCookie('cs.mail.lastfoldershow', folderId, dateExpire);
@@ -462,7 +463,7 @@ UIMailPortlet.prototype.restoreFolderState = function(){
         return;
     }
     var folderState = eXo.core.Browser.getCookie('cs.mail.folderstate');
-    this.uiFolderContainerNode = document.getElementById('UIFolderContainer');
+    this.uiFolderContainerNode = eXo.mail.UIMailPortlet.getElementById('UIFolderContainer');
     var folderNodes = eXo.core.DOMUtil.findDescendantsByClass(this.uiFolderContainerNode, 'div', 'Folder');
     for (var i = 0; i < folderNodes.length; i++) {
         var folderIdTmp = folderNodes[i].getAttribute('folder');
@@ -474,7 +475,7 @@ UIMailPortlet.prototype.restoreFolderState = function(){
 };
 
 UIMailPortlet.prototype.setScroll = function(){
-    var obj = document.getElementById("uiMessageGrid");
+    var obj = eXo.mail.UIMailPortlet.getElementById("uiMessageGrid");
     if (!obj) 
         return;
     var scroll = parseInt(eXo.core.Browser.getCookie("scrollstatus"));
@@ -491,10 +492,10 @@ UIMailPortlet.prototype.encodeHTML = function(str){
 };
 
 UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand, contentType){
-    var frame = document.getElementById(frameId);
-    var textAreas = document.getElementById(textAreaId);
+    var frame = eXo.mail.UIMailPortlet.getElementById(frameId);
+    var textAreas = eXo.mail.UIMailPortlet.getElementById(textAreaId);
     var expandMessage = eXo.core.DOMUtil.findAncestorByClass(frame, "ExpandMessage");
-    var previewArea = document.getElementById("SpliterResizableArea");
+    var previewArea = eXo.mail.UIMailPortlet.getElementById("SpliterResizableArea");
     var beforeDisplay = previewArea.style.display;
     if (beforeDisplay == "none") {
         previewArea.style.display = "block";
@@ -728,7 +729,7 @@ eXo.mail.CheckBox = {
 };
 
 UIMailPortlet.prototype.initNavigationAction = function(navId){
-    var nav = document.getElementById(navId);
+    var nav = eXo.mail.UIMailPortlet.getElementById(navId);
     var titleBars = eXo.core.DOMUtil.findDescendantsByClass(nav, "div", "TitleBar");
     var i = titleBars.length;
     while (i--) {
@@ -758,7 +759,7 @@ UIMailPortlet.prototype.expandCollapse = function(clickObj, clickBar){
 };
 
 UIMailPortlet.prototype.isSMTPAuthentication = function(id){
-	var chk = document.getElementById(id);
+	var chk = eXo.mail.UIMailPortlet.getElementById(id);
 	var checkboxs = eXo.core.DOMUtil.findDescendantsByClass(chk,"input","checkbox");
 	chk = checkboxs[1];
 	var table = eXo.core.DOMUtil.findAncestorByTagName(chk,"table");
@@ -816,6 +817,10 @@ UIMailPortlet.prototype.showHideAttach = function(menu){
 	else menu.style.display = "none";
 };
 
+UIMailPortlet.prototype.getElementById = function(id){
+	return eXo.core.DOMUtil.findDescendantById(this.portletNode,id);
+}
+
 eXo.mail.UIMailPortlet = new UIMailPortlet();
 // Override submit method of UIForm to add a comfirm message
 UIForm.prototype.tmpMethod = eXo.webui.UIForm.submitForm;
@@ -850,7 +855,7 @@ function MailScrollManager(){
 
 MailScrollManager.prototype.load = function(id){ 
 	var uiNav = eXo.mail.MailScrollManager ;
-  var container = document.getElementById(id) ;
+  var container = eXo.mail.UIMailPortlet.getElementById(id) ;
   if(container) {
     var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "CenterBar") ;
 	  var randomId = eXo.core.DOMUtil.generateId("MailScrollbar");

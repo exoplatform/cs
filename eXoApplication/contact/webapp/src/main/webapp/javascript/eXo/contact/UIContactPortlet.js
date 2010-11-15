@@ -7,6 +7,7 @@ function UIContactPortlet() {
 UIContactPortlet.prototype.showContextMenu = function(compid) {
 	try {
 		var UIContextMenuCon = eXo.webui.UIContextMenuCon ;//eXo.contact.ContextMenu ;
+		this.portletNode = document.getElementById("UIContactPortlet");
 		UIContextMenuCon.portletName = compid ;
 		var config = {
 			'preventDefault':false, 
@@ -337,7 +338,7 @@ UIContactPortlet.prototype.printpreview = function (obj){
 } ;
 
 UIContactPortlet.prototype.disableAction = function(cont){
-	if(typeof(cont) == "string") cont = document.getElementById(cont) ;
+	if(typeof(cont) == "string") cont = eXo.contact.UIContactPortlet.getElementById(cont) ;
 	var a = eXo.core.DOMUtil.findDescendantsByTagName(cont, "a") ;
 	var len = a.length ;
 	for(var i = 0 ; i < len ; i ++) {
@@ -352,7 +353,7 @@ UIContactPortlet.prototype.disableAction = function(cont){
 UIContactPortlet.prototype.adddressPrint = function (){
 	var DOMUtil = eXo.core.DOMUtil ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
-	var UIContactContainer = document.getElementById("UIContactContainer") ;
+	var UIContactContainer = eXo.contact.UIContactPortlet.getElementById("UIContactContainer") ;
 	var div = document.createElement("div") ;
 	div.className = "UIPrintContainer UIContactPortlet" ;
 	var printContainer = UIContactContainer.cloneNode(true) ;
@@ -445,11 +446,12 @@ UIContactPortlet.prototype.disableContextMenu = function(evt) {
 UIContactPortlet.prototype.checkLayout = function() {
 	eXo.contact.LayoutManager.layouts = [] ;
 	var DOMUtil = eXo.core.DOMUtil ;
-	var contactLayout1 = DOMUtil.findFirstDescendantByClass(document.getElementById("UIContactPortlet"), "div", "UINavigationContainer");                                                   
-	var contactLayout2 = document.getElementById("UIAddressBooks");
-	var contactLayout3 = document.getElementById("UITags");
-	var contactLayout4 = DOMUtil.findFirstDescendantByClass(document.getElementById("UIContactPortlet"), "div", "UIContactPreview");
-	var contactLayout5 = DOMUtil.findFirstDescendantByClass(document.getElementById("UIContactPortlet"), "div", "ResizeReadingPane");
+	var portletNode = eXo.contact.UIContactPortlet.portletNode;
+	var contactLayout1 = DOMUtil.findFirstDescendantByClass(portletNode, "div", "UINavigationContainer");                                                   
+	var contactLayout2 = eXo.contact.UIContactPortlet.getElementById("UIAddressBooks");
+	var contactLayout3 = eXo.contact.UIContactPortlet.getElementById("UITags");
+	var contactLayout4 = DOMUtil.findFirstDescendantByClass(portletNode, "div", "UIContactPreview");
+	var contactLayout5 = DOMUtil.findFirstDescendantByClass(portletNode, "div", "ResizeReadingPane");
 	eXo.contact.LayoutManager.layouts.push(contactLayout1);
 	eXo.contact.LayoutManager.layouts.push(contactLayout2);
 	eXo.contact.LayoutManager.layouts.push(contactLayout3);
@@ -464,7 +466,7 @@ UIContactPortlet.prototype.checkLayout = function() {
 UIContactPortlet.prototype.swithLayoutCallback = function(layout, status){
 	var layoutMan = eXo.contact.LayoutManager ;
 	var uiContactPortlet = eXo.contact.UIContactPortlet ;
-	var panelWorking = document.getElementById('UIContactContainer');
+	var panelWorking = eXo.contact.UIContactPortlet.getElementById('UIContactContainer');
 	var layoutcookie = eXo.core.Browser.getCookie(layoutMan.layoutId);
 	
 	if((layout == 2) || (layout == 3)){
@@ -510,7 +512,7 @@ UIContactPortlet.prototype.checkLayoutCallback = function(layoutcookie){
 	while(i--){
 		eXo.contact.UIContactPortlet.addCheckedIcon(parseInt(layoutcookie.charAt(i)),false) ;
 		if(parseInt(layoutcookie.charAt(i)) == 1) {
-			var panelWorking = document.getElementById('UIContactContainer');
+			var panelWorking = eXo.contact.UIContactPortlet.getElementById('UIContactContainer');
 			if(eXo.core.I18n.isLT()) panelWorking.style.marginLeft = "0px" ;
 			else  panelWorking.style.marginRight = "0px" ;
 			uiContactPortlet.addCheckedIcon(2,false) ;
@@ -521,8 +523,8 @@ UIContactPortlet.prototype.checkLayoutCallback = function(layoutcookie){
 };
 
 UIContactPortlet.prototype.resetLayoutCallback = function(){
-	var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(document.getElementById("customLayoutViewMenu"), "a", "ItemIcon");
-	var panelWorking = document.getElementById('UIContactContainer');
+	var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(eXo.contact.UIContactPortlet.getElementById("customLayoutViewMenu"), "a", "ItemIcon");
+	var panelWorking = eXo.contact.UIContactPortlet.getElementById('UIContactContainer');
 	var i = itemIcons.length ;
 	while(i--){
 		eXo.core.DOMUtil.addClass(itemIcons[i],'CheckedMenu');
@@ -540,10 +542,10 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
 };
 
 UIContactPortlet.prototype.checkView = function() {
-	var uiContactPortlet = document.getElementById("UIContactPortlet");
+	var uiContactPortlet = eXo.contact.UIContactPortlet.portletNode;
 	var viewIcon = eXo.core.DOMUtil.findFirstDescendantByClass(uiContactPortlet,"div","ViewIcon");
 	var menuItems = eXo.core.DOMUtil.findDescendantsByClass(viewIcon.parentNode,"div","MenuItem");
-	var isVcard = document.getElementById("UIVCards");
+	var isVcard = eXo.contact.UIContactPortlet.getElementById("UIVCards");
 	if (isVcard && eXo.core.DOMUtil.findAncestorByClass(isVcard,"UIContactContainer")) {
 		if(menuItems[0].getAttribute("style")) menuItems[0].removeAttribute("style");
   	menuItems[1].style.background = "#E6E8F5" ;
@@ -580,7 +582,7 @@ UIContactPortlet.prototype.showImMenu = function(obj, event) {
 
 UIContactPortlet.prototype.addCheckedIcon = function(layout, visible) {
   layout = parseInt(layout);
-  var itemIcon = eXo.core.DOMUtil.findDescendantsByClass(document.getElementById("customLayoutViewMenu"), "a", "ItemIcon")[layout];
+  var itemIcon = eXo.core.DOMUtil.findDescendantsByClass(eXo.contact.UIContactPortlet.getElementById("customLayoutViewMenu"), "a", "ItemIcon")[layout];
   if(visible) {
     eXo.core.DOMUtil.addClass(itemIcon,'CheckedMenu');
   } else {
@@ -590,7 +592,7 @@ UIContactPortlet.prototype.addCheckedIcon = function(layout, visible) {
 
 UIContactPortlet.prototype.imFormOnload = function(root){
   var domUtil = eXo.core.DOMUtil ;
-  root = document.getElementById(root) ;
+  root = eXo.contact.UIContactPortlet.getElementById(root) ;
   if (!root) { return false ;}	
   eXo.contact.UIContactPortlet.imFormRoot = root ;
   var menu4Remove = [] ;
@@ -631,7 +633,7 @@ UIContactPortlet.prototype.synchonizeMenu = function(menuRoot, menu4Remove){
 } ;
 
 UIContactPortlet.prototype.isDefaultLayout = function() {	
-	var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(document.getElementById("customLayoutViewMenu"), "a", "ItemIcon");
+	var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(eXo.contact.UIContactPortlet.getElementById("customLayoutViewMenu"), "a", "ItemIcon");
 	var len = itemIcons.length ;
 	var j = 0 ;
 	for(var i = 1 ; i < len ; i++) {
@@ -723,7 +725,7 @@ UIContactPortlet.prototype.showHideInfo = function(obj){
 };
 
 UIContactPortlet.prototype.showPopupCustomLayoutView = function(obj, evt) {
-  var root = document.getElementById("UIContactPortlet");
+  var root = eXo.contact.UIContactPortlet.portletNode;
   var objWelcome = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "UIWelcomeContact");
   var objDetails = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "ContactDetailsMenuItem");
   var objVCards = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "UIVCards");
@@ -737,8 +739,8 @@ UIContactPortlet.prototype.showPopupCustomLayoutView = function(obj, evt) {
 
 UIContactPortlet.prototype.refreshData = function() {
 	window.onload = function() {
-		if(!document.getElementById("UIContacts")) return ;
-		var uiContacts = document.getElementById("UIContacts");
+		if(!eXo.contact.UIContactPortlet.getElementById("UIContacts")) return ;
+		var uiContacts = eXo.contact.UIContactPortlet.getElementById("UIContacts");
 		var portletFragment = eXo.core.DOMUtil.findAncestorByClass(uiContacts,"PORTLET-FRAGMENT");		
 		eXo.webui.UIForm.submitForm(portletFragment.parentNode.id+ '#UIContacts','Refresh', true);		
 	} ;
@@ -775,6 +777,10 @@ UIContactPortlet.prototype.fitStringToWidth = function (id, str,index) {
   }
   document.body.removeChild(span);
 };
+
+UIContactPortlet.prototype.getElementById = function(id){
+	return eXo.core.DOMUtil.findDescendantById(this.portletNode,id);
+}
 
 /*
 UIContactPortlet.prototype.setUpCheckboxCallback = function(obj){
