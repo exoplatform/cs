@@ -1429,7 +1429,7 @@ form {
 .UIChatBarPortlet{
 	min-width: 900px;
 	position:fixed;
-	bottom:1px;
+	bottom:0px;
 	padding:0px;
 }
 
