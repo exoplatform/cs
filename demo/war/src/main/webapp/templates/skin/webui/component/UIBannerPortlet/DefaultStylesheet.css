@@ -41,11 +41,6 @@
   padding: 15px 15px 20px 15px;
 }
 
-.UIBannerPortlet .MiddleLoginContainer a {
-  color: #0d62af;
-	outline: none;
-}
-
 .UIBannerPortlet .MiddleLoginContainer a:hover {
   color: #058ee6;
 }
@@ -59,34 +54,33 @@
 }
 
 .UIBannerPortlet .MiddleLoginContainer .Logout {
-  background: url('DefaultSkin/background/Container.gif') no-repeat left -144px;
-  margin-right: 12px;
-  padding-left: 20px;	 	
-  cursor: pointer;
-  float: left;	
-  font-weight: bold;
-  font-size: 10px;
-  display: block;
-  line-height: 17px;
+	background: url('DefaultSkin/background/Container.gif') no-repeat left -144px;
+	margin-right: 12px;
+	padding-left: 20px;	 	
+	cursor: pointer;
+	float: left;	
+	font-weight: bold;
+	font-size: 10px;
+	display: block;
+	line-height: 17px;
 }
 
-
 .UIBannerPortlet .MiddleLoginContainer a {
-  color:#F58220;
-  cursor:pointer;
-  display:block;
-  float:left;
-  font-size:12px;
-  font-weight:bold;
-  line-height:17px;
-  padding-left:10px;
-  background: none;
+	color:#FFD400;
+	cursor:pointer;
+	display:block;
+	float:left;
+	font-size:12px;
+	font-weight:normal;
+	line-height:17px;
+	padding-left:10px;
+	background: none;
+	outline: none;
 }
 
 .UIBannerPortlet .MiddleLoginContainer a:hover {
   color:#8F8F8F;
 }
-
 
 .UIBannerPortlet .Version {
   background: none;
