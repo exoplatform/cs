@@ -317,12 +317,6 @@
 		<version>${javax.ws.rs.jsr311-api.version}</version>
 	  </dependency>
 	  <dependency>
-		<groupId>org.slf4j</groupId>
-		<artifactId>slf4j-simple</artifactId>
-		<version>${org.slf4j.slf4j-simple.version}</version>
-		<scope>provided</scope>
-	  </dependency>
-	  <dependency>
 		<groupId>xml-apis</groupId>
 		<artifactId>xml-apis</artifactId>
 		<version>${xml-apis.version}</version>

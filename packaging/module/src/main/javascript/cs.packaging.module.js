@@ -65,8 +65,8 @@ function getModule(params) {
     addDependency(new Project("org.jcrom", "jcrom", "jar", "${jcrom.version}")).
     addDependency(new Project("commons-fileupload", "commons-fileupload", "jar", "${commons-fileupload.version}")).
     addDependency(new Project("commons-io", "commons-io", "jar", "${commons-io.version}")).
-    addDependency(new Project("org.slf4j", "slf4j-api", "jar", "${org.slf4j.slf4j-api.version}")).	  
-	  addDependency(new Project("org.slf4j", "slf4j-jdk14", "jar", "${org.slf4j.slf4j-jdk14.version}")));
+    addDependency(new Project("org.slf4j", "slf4j-api", "jar", "${org.slf4j.version}")).	  
+	  addDependency(new Project("org.slf4j", "slf4j-jdk14", "jar", "${org.slf4j.version}")));
   module.eXoApplication.chat.deployName = "chat";
   
   module.eXoApplication.chatbar =
