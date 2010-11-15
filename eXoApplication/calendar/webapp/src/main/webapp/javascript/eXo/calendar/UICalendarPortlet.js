@@ -154,7 +154,7 @@ UICalendarPortlet.prototype.addQuickShowHiddenWithId = function(obj, type, id){
  * @param {obj, type, from, to} has action object, type of form : event 1 | task 2, from in milliseconds, to in milliseconds
  */
 UICalendarPortlet.prototype.addQuickShowHiddenWithTime = function(obj, type, fromMilli, toMilli, id){
-    var CalendarWorkingWorkspace =  document.getElementById("UICalendarWorkingContainer");
+    var CalendarWorkingWorkspace =  eXo.calendar.UICalendarPortlet.getElementById("UICalendarWorkingContainer");
 		var id = this.getCheckedCalendar(this.filterForm);
     var UIQuckAddEventPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddEventPopupWindow");
     var UIQuckAddTaskPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddTaskPopupWindow");
@@ -194,7 +194,7 @@ UICalendarPortlet.prototype.addQuickShowHiddenWithTime = function(obj, type, fro
  * @param {uiform, data} uifrom obj or id, data is array of value for each element of form
  */
 UICalendarPortlet.prototype.fillData = function(uiform, data) {
-	uiform = (typeof uiform == "string") ? document.getElementById(uiform):uiform;
+	uiform = (typeof uiform == "string") ? eXo.calendar.UICalendarPortlet.getElementById(uiform):uiform;
 	var fromField = uiform.elements["from"] ;
 	var fromFieldTime = uiform.elements["fromTime"] ;
 	var toField = uiform.elements["to"] ;
@@ -443,12 +443,12 @@ UICalendarPortlet.prototype.setting = function(){
  * @param {Object} container DOM element contains all calendar events
  */
 UICalendarPortlet.prototype.setFocus = function(){
-  if(document.getElementById("UIWeekView")){
-    var obj = document.getElementById("UIWeekViewGrid") ;
+  if(eXo.calendar.UICalendarPortlet.getElementById("UIWeekView")){
+    var obj = eXo.calendar.UICalendarPortlet.getElementById("UIWeekViewGrid") ;
     var container = eXo.core.DOMUtil.findAncestorByClass(obj,"EventWeekContent") ;
   }
-  else if(document.getElementById("UIDayView")){
-    var obj = document.getElementById("UIDayView") ;
+  else if(eXo.calendar.UICalendarPortlet.getElementById("UIDayView")){
+    var obj = eXo.calendar.UICalendarPortlet.getElementById("UIDayView") ;
 		obj = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "EventBoardContainer");
     var container = eXo.core.DOMUtil.findAncestorByClass(obj, "EventDayContainer");
   } else return ;
@@ -651,8 +651,8 @@ UICalendarPortlet.prototype.switchLayoutCallback = function(layout,status){
 			eXo.core.Browser.setCookie(layoutMan.layoutId,layoutcookie,1);
 		}
 	}
-	if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView") && (layout == 1)) eXo.calendar.UIWeekView.onResize();
-	if(eXo.core.Browser.isFF() && document.getElementById("UIMonthView") && (layout == 1)) eXo.calendar.UICalendarMan.initMonth();
+	if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIWeekView") && (layout == 1)) eXo.calendar.UIWeekView.onResize();
+	if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIMonthView") && (layout == 1)) eXo.calendar.UICalendarMan.initMonth();
 };
 
 UICalendarPortlet.prototype.checkLayoutCallback = function(layoutcookie){
@@ -676,8 +676,8 @@ UICalendarPortlet.prototype.resetSpaceDefaultLayout = function(){
 	}else{
 		workingarea.style.marginLeft = "0px";
 	}
-	if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
-	if(eXo.core.Browser.isFF() && document.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth();
+	if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
+	if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth();
 };
 
 UICalendarPortlet.prototype.resetLayoutCallback = function(){
@@ -691,17 +691,17 @@ UICalendarPortlet.prototype.resetLayoutCallback = function(){
 	}else{
 		workingarea.style.marginLeft = "243px";
 	}
-	if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
-	if(eXo.core.Browser.isFF() && document.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth();
+	if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
+	if(eXo.core.Browser.isFF() && eXo.calendar.UICalendarPortlet.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth();
 };
 
 /**
  * Check layout configuration when page load to render a right layout
  */
 UICalendarPortlet.prototype.checkLayout = function(){
-	var	layout1 = document.getElementById("UICalendarContainer") ;
-	var	layout2 = document.getElementById("UIMiniCalendar") ;
-	var	layout3 = document.getElementById("UICalendars") ;
+	var	layout1 = eXo.calendar.UICalendarPortlet.getElementById("UICalendarContainer") ;
+	var	layout2 = eXo.calendar.UICalendarPortlet.getElementById("UIMiniCalendar") ;
+	var	layout3 = eXo.calendar.UICalendarPortlet.getElementById("UICalendars") ;
 	if(eXo.calendar.UICalendarPortlet.isSpace != "null") eXo.core.Browser.setCookie(eXo.calendar.LayoutManager.layoutId,"1",1);
 	eXo.calendar.LayoutManager.layouts = [] ;
 	eXo.calendar.LayoutManager.layouts.push(layout1);
@@ -732,7 +732,7 @@ UICalendarPortlet.prototype.switchLayout = function(layout){
 UICalendarPortlet.prototype.init = function(){
     try {
         var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
-        var uiDayViewGrid = document.getElementById("UIDayViewGrid");
+        var uiDayViewGrid = eXo.calendar.UICalendarPortlet.getElementById("UIDayViewGrid");
         if (!uiDayViewGrid) 
             return false;
         UICalendarPortlet.viewer = eXo.core.DOMUtil.findFirstDescendantByClass(uiDayViewGrid, "div", "EventBoardContainer");
@@ -1333,6 +1333,7 @@ UICalendarPortlet.prototype.adjustTime = function(currentStart, currentEnd, obj)
  */
 UICalendarPortlet.prototype.showContextMenu = function(compid){
     var UIContextMenu = eXo.webui.UIContextMenu;
+		this.portletNode = document.getElementById(compid);
     this.portletName = compid;
     UIContextMenu.portletName = this.portletName;
     var config = {
@@ -1360,7 +1361,7 @@ UICalendarPortlet.prototype.showContextMenu = function(compid){
 UICalendarPortlet.prototype.fixIE = function(){
     var isDesktop = document.getElementById("UIPageDesktop");
     if ((eXo.core.Browser.browserType == "ie") && isDesktop) {
-        var portlet = document.getElementById(this.portletName);
+        var portlet = this.portletNode;
         var uiResizeBlock = eXo.core.DOMUtil.findAncestorByClass(portlet, "UIResizableBlock");
         var relative = eXo.core.DOMUtil.findFirstDescendantByClass(uiResizeBlock, "div", "FixIE");
         if (!relative) 
@@ -1638,12 +1639,12 @@ UICalendarPortlet.prototype.filterByGroup = function(){
  * @param {Boolean} checked Status of calendar(activated or disactivated)
  */
 UICalendarPortlet.prototype.runFilterByCalendar = function(calid, checked){
-    var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer");
+    var uiCalendarViewContainer = eXo.calendar.UICalendarPortlet.getElementById("UICalendarViewContainer");
     var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
     if (!uiCalendarViewContainer) 
         return;
     var className = "EventBoxes";
-    if (document.getElementById("UIWeekViewGrid")) 
+    if (eXo.calendar.UICalendarPortlet.getElementById("UIWeekViewGrid")) 
         className = "WeekViewEventBoxes"; // TODO : review event box gettting
     var events = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className);
     if (!events) 
@@ -1667,11 +1668,11 @@ UICalendarPortlet.prototype.runFilterByCalendar = function(calid, checked){
 UICalendarPortlet.prototype.resortEvents = function(){
 	
     try { //TODO: review order javascript file 
-        if (document.getElementById("UIMonthView")) 
+        if (eXo.calendar.UICalendarPortlet.getElementById("UIMonthView")) 
             eXo.calendar.UICalendarMan.initMonth();
-        if (document.getElementById("UIDayViewGrid")) 
+        if (eXo.calendar.UICalendarPortlet.getElementById("UIDayViewGrid")) 
             eXo.calendar.UICalendarPortlet.showEvent();
-        if (document.getElementById("UIWeekViewGrid")) {
+        if (eXo.calendar.UICalendarPortlet.getElementById("UIWeekViewGrid")) {
             eXo.calendar.UICalendarMan.initWeek();
             eXo.calendar.UIWeekView.init();
         }
@@ -1686,17 +1687,17 @@ UICalendarPortlet.prototype.resortEvents = function(){
 UICalendarPortlet.prototype.filterByCalendar = function(){
     var calid = this.name;
     var checked = this.checked;
-    var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer");
+    var uiCalendarViewContainer = eXo.calendar.UICalendarPortlet.getElementById("UICalendarViewContainer");
     var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
     if (!uiCalendarViewContainer) 
         return;
     var className = "EventBoxes";
-    if (document.getElementById("UIWeekViewGrid")) 
+    if (eXo.calendar.UICalendarPortlet.getElementById("UIWeekViewGrid")) 
         className = "WeekViewEventBoxes"; // TODO : review event box gettting
     var events = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className);
 
      //CS-3152
-    if ((!events || events.length == 0)&& document.getElementById("UIListView")) {
+    if ((!events || events.length == 0)&& eXo.calendar.UICalendarPortlet.getElementById("UIListView")) {
         eXo.webui.UIForm.submitForm('UICalendars','Tick', true)		
     }
     if (!events) return;
@@ -1720,13 +1721,13 @@ UICalendarPortlet.prototype.filterByCalendar = function(){
  * Filters events by event category
  */
 UICalendarPortlet.prototype.filterByCategory = function(){
-    var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer");
+    var uiCalendarViewContainer = eXo.calendar.UICalendarPortlet.getElementById("UICalendarViewContainer");
     if (!uiCalendarViewContainer) 
         return;
     var category = this.options[this.selectedIndex].value;
     eXo.calendar.UICalendarPortlet.selectedCategory = category;
     var className = "EventBoxes";
-    if (document.getElementById("UIWeekViewGrid")) 
+    if (eXo.calendar.UICalendarPortlet.getElementById("UIWeekViewGrid")) 
         className = "WeekViewEventBoxes"; // TODO : review event box gettting
     var allEvents = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className);
     var events = eXo.calendar.UICalendarPortlet.getEventsForFilter(allEvents);
@@ -1752,19 +1753,19 @@ UICalendarPortlet.prototype.filterByCategory = function(){
  * @param {Object} selectobj Select element
  */
 UICalendarPortlet.prototype.runFilterByCategory = function(){
-    var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer");
+    var uiCalendarViewContainer = eXo.calendar.UICalendarPortlet.getElementById("UICalendarViewContainer");
 		selectobj = eXo.core.DOMUtil.findFirstDescendantByClass(uiCalendarViewContainer,"select","selectbox");
     if (!selectobj) return;
     var category = null ;
 		if (selectobj.selectedIndex >= 0 ) category = selectobj.options[selectobj.selectedIndex].value;
     var className = "EventBoxes";
-    if (document.getElementById("UIWeekViewGrid")) 
+    if (eXo.calendar.UICalendarPortlet.getElementById("UIWeekViewGrid")) 
         className = "WeekViewEventBoxes"; // TODO : review event box gettting
     var allEvents = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className);
     var events = eXo.calendar.UICalendarPortlet.getEventsForFilter(allEvents);
     
      //CS-3152
-    if ((!events || events.length == 0)&& document.getElementById("UIListView")) {
+    if ((!events || events.length == 0)&& eXo.calendar.UICalendarPortlet.getElementById("UIListView")) {
         eXo.webui.UIForm.submitForm('UICalendars','Tick', true)		
     }
     
@@ -1797,7 +1798,7 @@ UICalendarPortlet.prototype.runAction = function(obj){
  */
 UICalendarPortlet.prototype.getFilterForm = function(form){
     if (typeof(form) == "string") 
-        form = document.getElementById(form);
+        form = eXo.calendar.UICalendarPortlet.getElementById(form);
     this.filterForm = form;
     var CalendarGroup = eXo.core.DOMUtil.findDescendantsByClass(form, "input", "CalendarGroup");
     var CalendarItem = eXo.core.DOMUtil.findDescendantsByClass(form, "input", "checkbox");
@@ -1817,7 +1818,7 @@ UICalendarPortlet.prototype.getFilterForm = function(form){
  */
 UICalendarPortlet.prototype.getFilterSelect = function(form){
     if (typeof(form) == "string") 
-        form = document.getElementById(form);
+        form = eXo.calendar.UICalendarPortlet.getElementById(form);
     var eventCategory = eXo.core.DOMUtil.findFirstDescendantByClass(form, "div", "EventCategory");
 		if (!eventCategory) return ;
     var select = eXo.core.DOMUtil.findDescendantsByTagName(eventCategory, "select")[0];
@@ -1843,7 +1844,7 @@ UICalendarPortlet.prototype.setSelected = function(form){
 };
 
 UICalendarPortlet.prototype.listViewDblClick = function(form){
-	form = (typeof(form) == "string")? document.getElementById(form):form ;
+	form = (typeof(form) == "string")? eXo.calendar.UICalendarPortlet.getElementById(form):form ;
 	if(!form) return ;
 	var tr = eXo.core.DOMUtil.findDescendantsByClass(form,"tr","UIListViewRow");
 	var i = tr.length ;
@@ -1884,7 +1885,7 @@ UICalendarPortlet.prototype.listViewDblClickCallback = function(){
  * Filter event when page load
  */
 UICalendarPortlet.prototype.checkFilter = function(){	
-		var w = document.getElementById("UICalendarViewContainer");
+		var w = eXo.calendar.UICalendarPortlet.getElementById("UICalendarViewContainer");
 		if(w.offsetParent && ((w.offsetParent.offsetWidth - w.offsetWidth) < 10)) {
 			eXo.calendar.UICalendarPortlet.firstLoadTimeout = window.setTimeout(eXo.calendar.UICalendarPortlet.checkFilter,0);
 			return ;
@@ -2048,7 +2049,7 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
 UICalendarPortlet.prototype.isAllday = function(form){
     try {
         if (typeof(form) == "string") 
-            form = document.getElementById(form);
+            form = eXo.calendar.UICalendarPortlet.getElementById(form);
         if (form.tagName.toLowerCase() != "form") {
             form = eXo.core.DOMUtil.findDescendantsByTagName(form, "form");
         }
@@ -2104,7 +2105,7 @@ UICalendarPortlet.prototype.showHideTime = function(chk){
 UICalendarPortlet.prototype.showHideField = function(chk, fields){
     var display = "";
     if (typeof(chk) == "string")
-        chk = document.getElementById(chk);  
+        chk = eXo.calendar.UICalendarPortlet.getElementById(chk);  
     display = (chk.checked) ? "hidden" : "visible";
     var len = fields.length;
     for (var i = 0; i < len; i++) {
@@ -2162,7 +2163,7 @@ UICalendarPortlet.prototype.autoShowRepeatEvent = function(){
  */
 UICalendarPortlet.prototype.initSelection = function(){
     var UISelection = eXo.calendar.UISelection;
-    var container = eXo.core.DOMUtil.findFirstDescendantByClass(document.getElementById("UIDayViewGrid"), "div", "EventBoard");
+    var container = eXo.core.DOMUtil.findFirstDescendantByClass(eXo.calendar.UICalendarPortlet.getElementById("UIDayViewGrid"), "div", "EventBoard");
     UISelection.step = 30;
     UISelection.container = container;
     UISelection.block = document.createElement("div");
@@ -2196,7 +2197,7 @@ UISelection.prototype.start = function(evt){
         }
         
         UISelection.startTime = parseInt(Date.parse(src.getAttribute("startFull")));//src.getAttribute("startTime");
-        UISelection.startX = eXo.core.Browser.findPosXInContainer(src, UISelection.container) - document.getElementById(eXo.calendar.UICalendarPortlet.portletName).parentNode.scrollTop;
+        UISelection.startX = eXo.core.Browser.findPosXInContainer(src, UISelection.container) - eXo.calendar.UICalendarPortlet.portletNode.parentNode.scrollTop;
         UISelection.block.style.display = "block";
         UISelection.startY = eXo.core.Browser.findPosYInContainer(src, UISelection.container);
         UISelection.block.style.width = src.offsetWidth + "px";
@@ -2266,7 +2267,7 @@ UISelection.prototype.clear = function(){
         endTime = parseInt(UISelection.startTime) + UISelection.step * 60 * 1000;
     }
 		if(bottom >= UISelection.container.offsetHeight) endTime -= 1;
-	var container = document.getElementById("UICalendarViewContainer");	
+	var container = eXo.calendar.UICalendarPortlet.getElementById("UICalendarViewContainer");	
 	eXo.calendar.UICalendarPortlet.addQuickShowHiddenWithTime(container, 1, startTime, endTime) ;
     //eXo.webui.UIForm.submitEvent(UISelection.viewType, 'QuickAdd', '&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime);
     eXo.core.DOMUtil.listHideElements(UISelection.block);
@@ -2493,7 +2494,7 @@ UICalendarPortlet.prototype.synTime = function(o,v){
  * @param {Object} cpid Component id
  */
 UICalendarPortlet.prototype.initSettingTab = function(cpid){
-    var cp = document.getElementById(cpid);
+    var cp = eXo.calendar.UICalendarPortlet.getElementById(cpid);
     var ck = eXo.core.DOMUtil.findFirstDescendantByClass(cp, "input", "checkbox");
     var div = eXo.core.DOMUtil.findAncestorByTagName(ck, "div");
     eXo.calendar.UICalendarPortlet.workingSetting = eXo.core.DOMUtil.findNextElementByTagName(div, "div");
@@ -2587,9 +2588,9 @@ UICalendarPortlet.prototype.removeEmailReminder = function(obj){
 	uiEmailAddressLabel = uiEmailAddressLabel.innerHTML.toString().trim();
 	uiEmailInput.value = this.removeItem(uiEmailInput.value,uiEmailAddressLabel);
 	eXo.core.DOMUtil.removeElement(uiEmailAddressItem);
-	if(document.getElementById("UIEventForm")) {
+	if(eXo.calendar.UICalendarPortlet.getElementById("UIEventForm")) {
 		eXo.webui.UIForm.submitForm('UIEventForm','RemoveEmail', true);		
-	} else if(document.getElementById("UITaskForm")) { 
+	} else if(eXo.calendar.UICalendarPortlet.getElementById("UITaskForm")) { 
 		eXo.webui.UIForm.submitForm('UITaskForm','RemoveEmail', true);	
 	}
 }
@@ -2605,6 +2606,9 @@ UICalendarPortlet.prototype.removeItem = function(str,removeValue){
 	return tmp.substr(1,tmp.length);
 };
 
+UICalendarPortlet.prototype.getElementById = function(id){
+	return eXo.core.DOMUtil.findDescendantById(this.portletNode,id);
+}
 eXo.calendar.UICalendarPortlet = eXo.calendar.UICalendarPortlet || new UICalendarPortlet();
 eXo.calendar.UIResizeEvent = new UIResizeEvent();
 eXo.calendar.UISelection = new UISelection();
@@ -2618,7 +2622,7 @@ UICalendarPortlet.prototype.fixFirstLoad = function(){
         return;
 		}
     if (document.getElementById("UIPageDesktop")) {
-        if (document.getElementById("UIWeekView")) {
+        if (eXo.calendar.UICalendarPortlet.getElementById("UIWeekView")) {
             eXo.calendar.UICalendarMan.initWeek();
             eXo.calendar.UIWeekView.setSize();
             eXo.calendar.UICalendarPortlet.setFocus();
@@ -2629,15 +2633,15 @@ UICalendarPortlet.prototype.fixFirstLoad = function(){
 };
 
 UICalendarPortlet.prototype.fixForMaximize = function(){
-	var obj = document.getElementById(eXo.calendar.UICalendarPortlet.portletName) ;
+	var obj = eXo.calendar.UICalendarPortlet.portletNode ;
 	var uiWindow = eXo.core.DOMUtil.findAncestorByClass(obj, "UIWindow");
 	if(uiWindow.style.display == "none") return ;
   if ((eXo.core.Browser.browserType != "ie")) {
-      if (document.getElementById("UIWeekView")) {
+      if (eXo.calendar.UICalendarPortlet.getElementById("UIWeekView")) {
           eXo.calendar.UICalendarMan.initWeek();
           eXo.calendar.UIWeekView.setSize();
       }
-      if (document.getElementById("UIMonthView")) {
+      if (eXo.calendar.UICalendarPortlet.getElementById("UIMonthView")) {
           eXo.calendar.UICalendarMan.initMonth();
       }
   }
@@ -2652,7 +2656,7 @@ function CalendarScrollManager(){
 
 CalendarScrollManager.prototype.load = function(){ 
 	var uiNav = eXo.calendar.CalendarScrollManager ;
-  var container = document.getElementById("UIActionBar") ;
+  var container = eXo.calendar.UICalendarPortlet.getElementById("UIActionBar") ;
   if(container) {
     var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "CenterBar") ;
 	  var randomId = eXo.core.DOMUtil.generateId("CalendarScrollbar");
