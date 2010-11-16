@@ -50,9 +50,9 @@ experience more productive. It offers several ways to to view and organize your 
 
     * General
 	 - New home page
-	 - Remove extension portal, faster runing server 
+	 - Remove extension portal, faster running server 
 	 - Fix bugs listed bellow 
-	 - Support demo online in integraged version called platform 3.0 here http://platform.demo.exoplatform.org
+	 - Support demo online in integrated version called platform 3.0 here http://platform.demo.exoplatform.org
      
     * Find the latest release notes here : http://wiki.exoplatform.org/xwiki/bin/view/CS/Release+Notes            
           
@@ -122,7 +122,7 @@ All those accounts have the default password "gtn".
 ==============
 4 KNOWN ISSUES
 ==============
- - Compatible problem of java 5 http://jira.exoplatform.org/browse/CS-4196
+ 
    
 ===========
 5 RESOURCES
@@ -139,7 +139,6 @@ All those accounts have the default password "gtn".
 6 CHANGELOG
 ===========
 - 2.1.1 
-
 
 ** Bug
     * [CS-4094] - IE: Value in password field is not shown after ticking on check-box to download message or move to the back/next step 
