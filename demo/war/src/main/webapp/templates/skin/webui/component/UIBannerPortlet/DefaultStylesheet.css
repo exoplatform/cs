@@ -41,11 +41,6 @@
   padding: 15px 15px 20px 15px;
 }
 
-.UIBannerPortlet .MiddleLoginContainer a {
-  color: #0d62af;
-	outline: none;
-}
-
 .UIBannerPortlet .MiddleLoginContainer a:hover {
   color: #058ee6;
 }
@@ -72,15 +67,16 @@
 
 
 .UIBannerPortlet .MiddleLoginContainer a {
-  color:#F58220;
-  cursor:pointer;
-  display:block;
-  float:left;
-  font-size:12px;
-  font-weight:bold;
-  line-height:17px;
-  padding-left:10px;
-  background: none;
+	color:#FFD400;
+	cursor:pointer;
+	display:block;
+	float:left;
+	font-size:12px;
+	font-weight:normal;
+	line-height:17px;
+	padding-left:10px;
+	background: none;
+	outline: none;
 }
 
 .UIBannerPortlet .MiddleLoginContainer a:hover {
