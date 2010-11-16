@@ -26,7 +26,6 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.UIDFolder;
 import javax.mail.URLName;
-import javax.mail.Flags.Flag;
 import javax.mail.internet.MimeMessage;
 
 import org.exoplatform.mail.service.Account;
@@ -248,7 +247,7 @@ public class ImapConnector extends BaseConnector {
    Remote           -    Remote.
    * return {@link List} of mails that were not moved/deleted*/
   private List<Message> moveMessages(List<Message> msgs, Folder sourceFolder, Folder desFolder, boolean isLocalFolder, boolean isRemoteFolder) throws Exception {
-    if(msgs == null || msgs.size() == 0) return null;
+    if(msgs == null || msgs.size() == 0 || (sourceFolder.getId() == desFolder.getId()) || sourceFolder == null || desFolder == null) return null;
     IMAPFolder sourceImapFolder = null, desImapFolder = null;
     try {
       if(isLocalFolder && isRemoteFolder){//local -> remote
