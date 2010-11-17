@@ -43,7 +43,4 @@ public abstract class BaseConnector implements Connector {
     props.setProperty("mail.imap.socketFactory.fallback", "false");
     return Session.getInstance(props, null);
   }
-  
-  
-  
 }

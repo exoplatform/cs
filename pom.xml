@@ -125,6 +125,12 @@
   <dependencyManagement>
     <!-- TODO : import dependencyManagement of platform, instead of redefining those properties -->
     <dependencies>
+       <dependency>
+	<groupId>org.exoplatform.jcr</groupId>
+        <artifactId>exo.jcr.component.webdav</artifactId>
+	<version>${org.exoplatform.jcr.version}</version>
+	<type>jar</type>
+      </dependency>
       <dependency>
         <groupId>c3p0</groupId>
         <artifactId>c3p0</artifactId>

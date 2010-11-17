@@ -17,9 +17,13 @@
 package org.exoplatform.mail.service.impl;
 
 import java.io.InputStream;
+
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.security.GeneralSecurityException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -67,6 +71,11 @@ import javax.mail.search.SearchTerm;
 import javax.mail.search.SentDateTerm;
 import javax.mail.search.SubjectTerm;
 import javax.mail.util.ByteArrayDataSource;
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.mail.connection.Connector;
@@ -108,10 +117,12 @@ import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 
 import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.imap.IMAPSSLStore;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.pop3.POP3Store;
 import com.sun.mail.smtp.SMTPSendFailedException;
 import com.sun.mail.smtp.SMTPTransport;
+import com.sun.mail.util.MailSSLSocketFactory;
 
 /**
  * Created by The eXo Platform SARL Author : Tuan Nguyen
@@ -567,12 +578,14 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public Message sendMessage(String userName, Account acc, Message message) throws Exception {
+   // Security.addProvider( new com.sun.net.ssl.internal.ssl.Provider());
     String smtpUser = acc.getIncomingUser();
     String outgoingHost = acc.getOutgoingHost();
     String outgoingPort = acc.getOutgoingPort();
     String isSSl = acc.getServerProperties().get(Utils.SVR_OUTGOING_SSL);
     boolean isSMTPAuth = acc.isOutgoingAuthentication();
     Properties props = System.getProperties();
+    String socketFactoryClass = "javax.net.SocketFactory";
     props.put(Utils.SVR_SMTP_USER, smtpUser);
     props.put(Utils.SVR_SMTP_HOST, outgoingHost);
     props.put(Utils.SVR_SMTP_PORT, outgoingPort);
@@ -582,23 +595,39 @@ public class MailServiceImpl implements MailService, Startable {
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "true");
     props.put("mail.smtp.connectiontimeout", "0");
     props.put("mail.smtp.timeout", "0");
-    String socketFactoryClass = "javax.net.SocketFactory";
-    if (Boolean.valueOf(isSSl)) {
-      socketFactoryClass = Utils.SSL_FACTORY;
-      props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
-      props.put("mail.smtp.ssl.protocols", "SSLv3 TLSv1");
-    }
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS, socketFactoryClass);
+    
+    if (Boolean.valueOf(isSSl)) {
+      MailSSLSocketFactory socketFactory = null;
+      try {
+        socketFactory = this.getSSLSocketFactory(outgoingHost);  
+      } catch (Exception e) {
+        logger.error("SMTP SSL: Cannot create a ssl socket between client and server. All host will trusted.");
+        socketFactory = trustAllHost();
+      }
+      props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, true);
+      props.put("mail.smtp.ssl.protocols", "SSLv3 TLSv1");
+      props.put(Utils.SVR_SMTP_STARTTLS_REQUIRED, true);
+      props.put(Utils.MAIL_SMTP_SSL_ENABLE, true);
+      props.put(Utils.SMTP_SSL_FACTORY, socketFactory);
+      props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, false);
+    }
+    
 
     if (isSMTPAuth) {
       props.put(Utils.SVR_SMTP_AUTH, "true");
     } else {
       props.put(Utils.SVR_SMTP_AUTH, "false");
     }
+    
+    props.setProperty("java.security.debug", "certpath");
+    props.setProperty("java.net.debug", "trustmanager");
+    
     Session session = Session.getDefaultInstance(props, null);
-    logger.debug(" #### Sending email ... ");
-    Transport transport = session.getTransport(Utils.SVR_SMTP);
-
+    logger.debug(" #### Sending email ..f  ");
+    //Transport transport = session.getTransport(Utils.SVR_SMTP);
+    SMTPTransport transport = (SMTPTransport)session.getTransport(Utils.SVR_SMTP);
+    
     try {
       if (!isSMTPAuth) {
         transport.connect();
@@ -654,7 +683,7 @@ public class MailServiceImpl implements MailService, Startable {
     }
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
     Session session = Session.getDefaultInstance(props, null);
-    Transport transport = session.getTransport(Utils.SVR_SMTP);
+    Transport transport = session.getTransport(Utils.SVR_SMTPS);
 
     try {
       if (!isSMTPAuth) {
@@ -1213,6 +1242,40 @@ public class MailServiceImpl implements MailService, Startable {
     return folderList;
   }
 
+  public MailSSLSocketFactory getSSLSocketFactory(String host) throws GeneralSecurityException{
+    MailSSLSocketFactory sslsocket = new MailSSLSocketFactory();
+    sslsocket.setTrustedHosts(new String[]{host});
+    TrustManager[] trusts = new TrustManager[]{new ExoMailTrustManager(null, true, host, null)};
+    sslsocket.setTrustManagers(trusts);  
+    
+    return sslsocket; 
+  }
+  
+  public MailSSLSocketFactory trustAllHost(){
+    MailSSLSocketFactory sslsocket = null;
+    try {
+      sslsocket = new MailSSLSocketFactory();
+      sslsocket.setTrustAllHosts(true);
+      sslsocket.setTrustManagers(new TrustManager[]{new X509TrustManager() {
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+           return new X509Certificate[0];
+        }
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+          // do nothing
+        }
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        }
+      }});
+      
+    } catch (Exception e) {
+      logger.warn("Your sun cacerts file was broken. Pls check it at " + ExoMailTrustManager.PATH_CERTS_FILE + "/cacerts", e);
+    }
+    return sslsocket;
+  }
+  
   public IMAPStore openIMAPConnection(String userName, Account account) {
     return openIMAPConnection(userName, account, null);
   }
@@ -1221,25 +1284,32 @@ public class MailServiceImpl implements MailService, Startable {
     try {
       logger.debug(" #### Getting mail from " + account.getIncomingHost() + " ... !");
       Properties props = System.getProperties();
-      // this line fix for base64 encode problem with corrupted
-      // attachments
-      props.setProperty("mail.mime.base64.ignoreerrors", "true");
-
       String socketFactoryClass = "javax.net.SocketFactory";
+      String host = account.getIncomingHost();
+      int port =  Integer.valueOf(account.getIncomingPort());
+      String fallback = "mail.imap.socketFactory.fallback";
+      String imapSocketFactoryClass = "mail.imap.socketFactory.class";
+      props.put("mail.mime.base64.ignoreerrors", "true");
+     
       if (account.isIncomingSsl()) {
-        socketFactoryClass = Utils.SSL_FACTORY;
+        MailSSLSocketFactory socketFactory = null;
+        try {
+          socketFactory = this.getSSLSocketFactory(host);  
+        } catch (GeneralSecurityException ge) {
+          logger.error("Imap SSL: Cannot create a ssl socket between client and server. All host will trusted.");
+          socketFactory = trustAllHost();
+        }
+        props.put(Utils.MAIL_IMAP_SSL_ENABLE, "true");
+        props.put(Utils.IMAP_SSL_FACTORY, socketFactory);
       }
-      props.setProperty("mail.imap.socketFactory.fallback", "false");
-      props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
-
-      Session session = Session.getDefaultInstance(props, null);
+      props.put(fallback, "false");
+      props.put(imapSocketFactoryClass, socketFactoryClass);
+      
+      Session session = Session.getInstance(props, null);
       IMAPStore imapStore = (IMAPStore) session.getStore("imap");
       try {
-        imapStore.connect(account.getIncomingHost(),
-                          Integer.valueOf(account.getIncomingPort()),
-                          account.getIncomingUser(),
-                          account.getIncomingPassword());
-      } catch (AuthenticationFailedException e) {
+        imapStore.connect(host, port, account.getIncomingUser(), account.getIncomingPassword());
+      } catch (AuthenticationFailedException e) {e.printStackTrace();
         if (!account.isSavePassword()) {
           account.setIncomingPassword("");
           updateAccount(userName, account);
@@ -1248,12 +1318,12 @@ public class MailServiceImpl implements MailService, Startable {
         }
         if (info != null) {
 //          info.setStatusMsg("msg-retry-password");
-          info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
+          if(logger.isDebugEnabled()) info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
           updateCheckingMailStatusByCometd(userName, account.getId(), info);
         }
         return null;
-      } catch (MessagingException e) {
-        logger.debug("Exception while connecting to server : " + e.getMessage());
+      } catch (MessagingException e) {e.printStackTrace();
+        if(logger.isDebugEnabled()) logger.debug("Exception while connecting to server : " + e.getMessage());
         if (info != null) {
 //          info.setStatusMsg("Connecting failed. Please check server configuration.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
@@ -1264,7 +1334,7 @@ public class MailServiceImpl implements MailService, Startable {
         logger.error("Exception while connecting to server", e);
         return null;
       } catch (Exception e) {
-        logger.debug("Exception while connecting to server : " + e.getMessage());
+        if(logger.isDebugEnabled()) logger.debug("Exception while connecting to server : " + e.getMessage());
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
@@ -1292,16 +1362,29 @@ public class MailServiceImpl implements MailService, Startable {
         updateCheckingMailStatusByCometd(userName, account.getId(), info);
       }
       Properties props = System.getProperties();
-      props.setProperty("mail.mime.base64.ignoreerrors", "true");
-
+        
+      props.put("mail.mime.base64.ignoreerrors", "true");
       props.put("mail.pop3.host", account.getIncomingHost());
       props.put("mail.pop3.user", account.getIncomingUser());
       props.put("mail.pop3.port", account.getIncomingPort());
-      props.put("mail.pop3.starttls.enable", "true");
       props.put("mail.pop3.auth", "true");
       props.put("mail.pop3.socketFactory.port", account.getIncomingPort());
-      props.put("mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-      props.put("mail.pop3.socketFactory.fallback", "false");
+      
+      if (account.isIncomingSsl()) {
+        MailSSLSocketFactory socketFactory = null;
+        try {
+          socketFactory = this.getSSLSocketFactory(account.getIncomingHost());  
+        } catch (Exception e) {
+          logger.error("Pop3 SSL: Cannot create a ssl socket between client and server. All host will trusted.");
+          socketFactory = trustAllHost();
+        }
+        props.put("mail.pop3.starttls.enable", "true");
+        props.put("mail.pop3.socketFactory.fallback", "false");
+        props.put("mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.put(Utils.POP3_SSL_FACTORY, socketFactory);
+        props.put(Utils.MAIL_POP3_SSL_ENABLE, true);
+      }
+      
       Session session = Session.getDefaultInstance(props, null);
       POP3Store pop3Store = (POP3Store) session.getStore("pop3");
       try {
@@ -2812,12 +2895,12 @@ public class MailServiceImpl implements MailService, Startable {
     return storage_.getDMSDataInfo(userName);
   }
 
-  
-
   @Override
   public Node getDMSSelectedNode(String userName, String relPath) throws Exception {
     // TODO Auto-generated method stub
     return storage_.getDMSSelectedNode(userName, relPath);
   }
+  
+  
   
 }
