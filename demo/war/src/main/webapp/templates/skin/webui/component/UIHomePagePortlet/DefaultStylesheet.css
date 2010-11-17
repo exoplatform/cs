@@ -97,7 +97,6 @@
 .CSHomeContainer .LeftContainer {
 	margin-right: 241px; /* orientation=lt */
 	margin-left: 241px; /* orientation=rt */
-	overflow:hidden;
 }
 
 .CSHomeContainer .LeftContainer .RowContent a {
@@ -111,6 +110,7 @@
 .CSHomeContainer .LeftContainer .RowContent  {	
 	padding: 5px 0px 5px 24px; /* orientation=lt */
 	padding: 5px 24px 5px 0px; /* orientation=rt */
+	overflow:hidden;
 }
 
 .CSHomeContainer .LeftContainer .RowContent .ProductTitle {
