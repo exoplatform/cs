@@ -808,6 +808,7 @@
                 <configuration>
                   <descriptors>
                     <descriptor>src/main/assembly/tomcat-zip.xml</descriptor>
+                    <descriptor>src/main/assembly/chatserver-zip.xml</descriptor>
                   </descriptors>
                 </configuration>
               </execution>
@@ -832,6 +833,7 @@
                 <configuration>
                   <descriptors>
                     <descriptor>src/main/assembly/jbossear-zip.xml</descriptor>
+                    <descriptor>src/main/assembly/chatserver-zip.xml</descriptor>
                   </descriptors>
                 </configuration>
               </execution>
