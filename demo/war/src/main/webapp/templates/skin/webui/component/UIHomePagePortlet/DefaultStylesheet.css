@@ -86,11 +86,12 @@
 	padding-left:18px; /* orientation=lt */
 	padding-right:18px; /* orientation=rt */
 	color: #0068ff;
-	background: url('DefaultSkin/background/ArrowBlue.gif') no-repeat left 2px; /* orientation=lt */
-	background: url('DefaultSkin/background/ArrowBlue-rt.gif') no-repeat right 2px; /* orientation=rt */
+	background: url('DefaultSkin/background/ArrowBlue.gif') no-repeat left 6px; /* orientation=lt */
+	background: url('DefaultSkin/background/ArrowBlue-rt.gif') no-repeat right 6px; /* orientation=rt */
 	line-height: 25px;
 	font-size: 16px;
 	font-weight: bold;
+	display: inline-block;
 }
 
 .CSHomeContainer .LeftContainer {
