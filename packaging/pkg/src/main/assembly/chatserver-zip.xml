@@ -11,14 +11,14 @@
   <fileSets>
     <fileSet>
       <directory>target/exo-chatserver</directory>
-      <outputDirectory></outputDirectory>
+      <outputDirectory>exo-chatserver</outputDirectory>
       <excludes>
         <exclude>**/*.sh</exclude>
       </excludes>
     </fileSet>
     <fileSet>
       <directory>target/exo-chatserver</directory>
-      <outputDirectory></outputDirectory>
+      <outputDirectory>exo-chatserver</outputDirectory>
       <includes>
         <include>**/*.sh</include>
       </includes>
