@@ -18,9 +18,11 @@ package org.exoplatform.mail.service.impl;
 
 import java.io.InputStream;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -73,6 +75,7 @@ import javax.mail.search.SubjectTerm;
 import javax.mail.util.ByteArrayDataSource;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -99,6 +102,7 @@ import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.services.exception.ExoServiceException;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
@@ -123,6 +127,7 @@ import com.sun.mail.pop3.POP3Store;
 import com.sun.mail.smtp.SMTPSendFailedException;
 import com.sun.mail.smtp.SMTPTransport;
 import com.sun.mail.util.MailSSLSocketFactory;
+import com.sun.org.apache.xalan.internal.lib.ExsltBase;
 
 /**
  * Created by The eXo Platform SARL Author : Tuan Nguyen
@@ -601,8 +606,8 @@ public class MailServiceImpl implements MailService, Startable {
       MailSSLSocketFactory socketFactory = null;
       try {
         socketFactory = this.getSSLSocketFactory(outgoingHost);  
-      } catch (Exception e) {
-        logger.error("SMTP SSL: Cannot create a ssl socket between client and server. All host will trusted.");
+      } catch (GeneralSecurityException ge) {
+        logger.error("SMTP SSL: Cannot create a ssl socket between client and server. All host will trusted.", ge);
         socketFactory = trustAllHost();
       }
       props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, true);
@@ -677,10 +682,24 @@ public class MailServiceImpl implements MailService, Startable {
     }
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_PORT, serverConfig.getOutgoingPort());
     if (serverConfig.isOutgoingSsl()) {
-      props.put(Utils.SVR_INCOMING_SSL, String.valueOf(serverConfig.isSsl()));
-      props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
-      props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS, "javax.net.ssl.SSLSocketFactory");
+      MailSSLSocketFactory socketFactory = null;
+      try {
+        socketFactory = this.getSSLSocketFactory(serverConfig.getOutgoingHost());  
+      } catch (GeneralSecurityException ge) {
+        logger.error("SMTP SSL: Cannot create a ssl socket between client and server. All host will trusted.", ge);
+        socketFactory = trustAllHost();
+      }
+      props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, true);
+      props.put("mail.smtp.ssl.protocols", "SSLv3 TLSv1");
+      props.put(Utils.SVR_SMTP_STARTTLS_REQUIRED, true);
+      props.put(Utils.MAIL_SMTP_SSL_ENABLE, true);
+      props.put(Utils.SMTP_SSL_FACTORY, socketFactory);
+   //   props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, false);
+      
+      /*props.put(Utils.SVR_INCOMING_SSL, String.valueOf(serverConfig.isSsl()));
+     */
     }
+    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS, "javax.net.SocketFactory");
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
     Session session = Session.getDefaultInstance(props, null);
     Transport transport = session.getTransport(Utils.SVR_SMTPS);
@@ -1245,9 +1264,12 @@ public class MailServiceImpl implements MailService, Startable {
   public MailSSLSocketFactory getSSLSocketFactory(String host) throws GeneralSecurityException{
     MailSSLSocketFactory sslsocket = new MailSSLSocketFactory();
     sslsocket.setTrustedHosts(new String[]{host});
-    TrustManager[] trusts = new TrustManager[]{new ExoMailTrustManager(null, true, host, null)};
-    sslsocket.setTrustManagers(trusts);  
-    
+    try {
+      TrustManager[] trusts = new TrustManager[]{new ExoMailTrustManager(null, false, host, null)};
+      sslsocket.setTrustManagers(trusts);      
+    } catch (ExoServiceException ee) {
+      throw new GeneralSecurityException();
+    }
     return sslsocket; 
   }
   
@@ -1271,7 +1293,7 @@ public class MailServiceImpl implements MailService, Startable {
       }});
       
     } catch (Exception e) {
-      logger.warn("Your sun cacerts file was broken. Pls check it at " + ExoMailTrustManager.PATH_CERTS_FILE + "/cacerts", e);
+      logger.warn("Your sun cacerts file may be broken. Pls check it at " + ExoMailTrustManager.PATH_CERTS_FILE + "/cacerts", e);
     }
     return sslsocket;
   }
@@ -1309,7 +1331,7 @@ public class MailServiceImpl implements MailService, Startable {
       IMAPStore imapStore = (IMAPStore) session.getStore("imap");
       try {
         imapStore.connect(host, port, account.getIncomingUser(), account.getIncomingPassword());
-      } catch (AuthenticationFailedException e) {e.printStackTrace();
+      } catch (AuthenticationFailedException e) {
         if (!account.isSavePassword()) {
           account.setIncomingPassword("");
           updateAccount(userName, account);
@@ -1369,7 +1391,7 @@ public class MailServiceImpl implements MailService, Startable {
       props.put("mail.pop3.port", account.getIncomingPort());
       props.put("mail.pop3.auth", "true");
       props.put("mail.pop3.socketFactory.port", account.getIncomingPort());
-      
+      props.put("mail.pop3.socketFactory.class", "javax.net.SocketFactory");
       if (account.isIncomingSsl()) {
         MailSSLSocketFactory socketFactory = null;
         try {

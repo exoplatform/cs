@@ -19,7 +19,6 @@ package org.exoplatform.mail.service.impl;
 import java.io.File;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -39,6 +38,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
+import org.exoplatform.commons.exception.ExoException;
+import org.exoplatform.services.exception.ExoServiceException;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 
@@ -79,20 +80,21 @@ public class ExoMailTrustManager implements X509TrustManager {
 
   private File ksfile;
   
-  public ExoMailTrustManager(String relPath, boolean isStorePermanent, String host, String sslProtocol){
+  public ExoMailTrustManager(String relPath, boolean isStorePermanent, String host, String sslProtocol) throws ExoServiceException{
     this(relPath, isStorePermanent);
     this.hostname = host;
     if(sslProtocol != null) this.protocolName = sslProtocol;
   }
   
-  public ExoMailTrustManager(){
+  public ExoMailTrustManager() throws ExoServiceException{
     this(null, true);
   }
   
   /**
    * @param {@link String} the path name of cert file
-   * @param {@link Boolean} whether is store the certs permanent?**/
-  public ExoMailTrustManager(String pathCertFile, boolean storePermanent){
+   * @param {@link Boolean} whether is store the certs permanent?
+   * @throws ExoException **/
+  public ExoMailTrustManager(String pathCertFile, boolean storePermanent) throws ExoServiceException{
     this.isStoreCertPermanent = storePermanent;
     File temFile = null;
     boolean isLoged = false;
@@ -109,6 +111,7 @@ public class ExoMailTrustManager implements X509TrustManager {
       if(!isLoged)log.warn("Cannot refresh trustmanager. The certs that presented by server mail are not stored.\n", e);
       isLoged=true;
     }
+    if(isLoged) throw new ExoServiceException();
   }
   
   public X509Certificate[] getAcceptedIssuers() {
@@ -148,26 +151,27 @@ public class ExoMailTrustManager implements X509TrustManager {
      TrustManager tms[] = tmf.getTrustManagers();
      for (int i = 0; i < tms.length; i++) {
        if (tms[i] instanceof X509TrustManager) {
-         X509TrustManager trustManagerTem = (X509TrustManager)tms[i];
+        /* X509TrustManager trustManagerTem = (X509TrustManager)tms[i];
          X509Certificate[] x509s = trustManagerTem.getAcceptedIssuers();
-        /* for(X509Certificate x509 : x509s){
+         for(X509Certificate x509 : x509s){
            String host = x509.getSubjectDN().toString().split(",")[0].split("=")[1];
            if(this.hostname != null && !this.hostname.equalsIgnoreCase("") &&
                (!host.equalsIgnoreCase(this.hostname) || x509.toString().contains(this.hostname))){
              trustManager = trustManagerTem; return;
            }
           }*/
-         trustManager = trustManagerTem; return;
+         trustManager = (X509TrustManager)tms[i];
+         return;
        }
      }
      throw new NoSuchAlgorithmException("There is no X059TrustManager in TrustManager");
   }
   
   protected void updateCerts(Certificate[] certs, boolean isStoreCertPermanent){
+    String alias = this.hostname;
     try {
       FileOutputStream fos = null;
       X509Certificate x509 = (X509Certificate)certs[0];
-      String alias = this.hostname;
       if(alias == "" || alias == null)
         alias = x509.getSubjectDN().toString().split(",")[0].split("=")[1];
       if(alias == "" || alias == null)
@@ -184,8 +188,7 @@ public class ExoMailTrustManager implements X509TrustManager {
             fos = new FileOutputStream(ExoMailTrustManager.getCertFile(this.pathCertFile));
           this.keystore.store(fos, this.pwdCertFile);
           fos.close();
-          System.out.println("Update cert success");
-        }catch (Exception e){//if cacerts file is readonly
+        }catch (Exception e){//if cacerts file is read-only
           File certtem = new File("certtem.cer");
           OutputStream os = new FileOutputStream(certtem);
           os.write(x509.toString().getBytes());
@@ -197,7 +200,9 @@ public class ExoMailTrustManager implements X509TrustManager {
       }else temporaryCerts.put(alias, certs[0]);
       
       refreshTrustManager();
-    } catch (Exception e) {e.printStackTrace();}
+    } catch (Exception e) {
+      log.warn("The cert of " + alias + " is not updated");
+    }
   }
   
   public static File getCertFile(String relPath) throws Exception{
@@ -212,11 +217,11 @@ public class ExoMailTrustManager implements X509TrustManager {
   
   /**
    * Get KeyStore from java KeyStory file
-   * @return {@link KeyStore}
+   * @return {@link KeyStore}readonly
    * **/
   protected KeyStore getKeyStore(String relPath, char[] password) throws Exception{
     File certfile =  ExoMailTrustManager.getCertFile(relPath);
-    if(!certfile.canWrite()) throw new FileNotFoundException("The " +relPath+ " is readonly. You have not write permission with it.");
+   // if(!certfile.canWrite()) throw new FileNotFoundException("The " +relPath+ " is readonly. You have not write permission with it.");
     this.ksfile = certfile;
     InputStream is = new FileInputStream(certfile);
     KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
