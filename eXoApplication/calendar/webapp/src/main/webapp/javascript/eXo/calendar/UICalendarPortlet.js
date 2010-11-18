@@ -1333,7 +1333,7 @@ UICalendarPortlet.prototype.adjustTime = function(currentStart, currentEnd, obj)
  */
 UICalendarPortlet.prototype.showContextMenu = function(compid){
     var UIContextMenu = eXo.webui.UIContextMenu;
-		this.portletNode = document.getElementById(compid);
+		this.portletNode = eXo.core.DOMUtil.findAncestorByClass(document.getElementById(compid),"PORTLET-FRAGMENT");
     this.portletName = compid;
     UIContextMenu.portletName = this.portletName;
     var config = {
@@ -2137,7 +2137,7 @@ UICalendarPortlet.prototype.showHideRepeat = function(chk){
 
 UICalendarPortlet.prototype.autoShowRepeatEvent = function(){
 		var DOMUtil = eXo.core.DOMUtil;
-		var divEmailObject = document.getElementById("IsEmailRepeatEventReminderTab");
+		var divEmailObject = eXo.calendar.UICalendarPortlet.getElementById("IsEmailRepeatEventReminderTab");
     var checkboxEmail = DOMUtil.findFirstDescendantByClass(divEmailObject, "input", "checkbox");
     var fieldComEmail = DOMUtil.findAncestorByClass(divEmailObject, "FieldComponent");
     var repeatFieldEmail = DOMUtil.findFirstDescendantByClass(fieldComEmail, "div", "RepeatInterval");
@@ -2147,7 +2147,7 @@ UICalendarPortlet.prototype.autoShowRepeatEvent = function(){
 	    repeatFieldEmail.style.visibility = "hidden";
 		}
     
-    var divObjectPopup = document.getElementById("IsPopupRepeatEventReminderTab");
+    var divObjectPopup = eXo.calendar.UICalendarPortlet.getElementById("IsPopupRepeatEventReminderTab");
     var checkboxPopup = DOMUtil.findFirstDescendantByClass(divObjectPopup, "input", "checkbox");
     var fieldComPopup = DOMUtil.findAncestorByClass(divObjectPopup, "FieldComponent");
     var repeatFieldPopup = DOMUtil.findFirstDescendantByClass(fieldComPopup, "div", "RepeatInterval");
@@ -2306,7 +2306,7 @@ UICalendarPortlet.prototype.checkAllInBusy = function(chk){
 UICalendarPortlet.prototype.initCheck = function(container){
     var DOMUtil = eXo.core.DOMUtil;
     if (typeof(container) == "string") 
-        container = document.getElementById(container);
+        container = eXo.calendar.UICalendarPortlet.getElementById(container);
     var dateAll = DOMUtil.findDescendantsByClass(container, "input", "checkbox")[1];
     var serverTimezone = parseInt(container.getAttribute("serverTimezone"));
     var table = DOMUtil.findFirstDescendantByClass(container, "table", "UIGrid");
@@ -2560,7 +2560,7 @@ UICalendarPortlet.prototype.showHideSetting = function(obj){
 
 UICalendarPortlet.prototype.autoShowHideSetting = function(){
 	var DOMUtil = eXo.core.DOMUtil;
-	var eventReminder = document.getElementById("eventReminder");
+	var eventReminder = eXo.calendar.UICalendarPortlet.getElementById("eventReminder");
 	var checkboxEmail = DOMUtil.findFirstDescendantByClass(eventReminder, "input", "checkbox");
 	var uiFormGrid = DOMUtil.findFirstDescendantByClass(eventReminder,"table","UIFormGrid");
 	if(checkboxEmail.checked) {
