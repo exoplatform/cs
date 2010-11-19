@@ -595,7 +595,6 @@ public class MailServiceImpl implements MailService, Startable {
     } else {
       props.put(Utils.SVR_SMTP_AUTH, "false");
     }
-
     Session session = Session.getDefaultInstance(props, null);
     logger.debug(" #### Sending email ... ");
     Transport transport = session.getTransport(Utils.SVR_SMTP);
@@ -1631,6 +1630,7 @@ public class MailServiceImpl implements MailService, Startable {
     if (folder == null) return;
     String folderId = null;
     String folderName = folder.getName();
+    int unreadMsgCount = 0;
       if (!folder.isOpen()) {
         folder.open(javax.mail.Folder.READ_ONLY);
       }
@@ -1713,7 +1713,8 @@ public class MailServiceImpl implements MailService, Startable {
               folderIds = new String[] { folderId };
               msg = msgList.get(i);
 
-              int unreadMsgCount = folder.getUnreadMessageCount();
+              unreadMsgCount = folder.getUnreadMessageCount();
+              eXoFolder.setNumberOfUnreadMessage((long)unreadMsgCount);
               if (info != null/* && i < unreadMsgCount*/) {
                 info.setFetching(i + 1);
               }
