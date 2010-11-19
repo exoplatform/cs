@@ -1,3 +1,4 @@
+
 .UIToolbarContainer {
 	height:auto;
 	background: #c0c0c0;	
@@ -26,7 +27,7 @@
 .UIToolbarContainer .UIHorizontalTabs .UITab {
 	background: url(background/BorderList.gif) no-repeat left 10px; /* orientation=lt */
 	background: url(background/BorderList.gif) no-repeat right 10px; /* orientation=rt */
-	padding:0;
+	padding:0 1px;
 }
 
 .UIToolbarContainer .UIAdminToolbarPortlet {
@@ -41,9 +42,13 @@
 .UIToolbarContainer .UIAdminToolbarPortlet .UIHorizontalTabs .UITab {
 	background: url(background/BorderList.gif) no-repeat left 10px; /* orientation=lt */
 	background: url(background/BorderList.gif) no-repeat right 10px; /* orientation=rt */
-	width: auto!important;
+	width: auto!important; 	
+	padding: 0 1px;
 }
 
+.UIAdminToolbarPortlet .HighlightNavigationTab {
+	zoom:1;
+}
 
 .UIStarToolBarPortlet {
 	background: url(background/Logo_mini.gif) no-repeat left 0px; /* orientation=lt */
@@ -143,7 +148,7 @@
 }
 
 
-.UIToolbarContainer  .UITableColumnContainer .UIStarToolBarPortlet .TabsContainer{
+.UIToolbarContainer  .UITableColumnContainer .UIStarToolBarPortlet {
 	position: relative;
 }
 
