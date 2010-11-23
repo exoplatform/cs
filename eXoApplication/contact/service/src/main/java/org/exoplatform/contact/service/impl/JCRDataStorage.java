@@ -2119,7 +2119,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
 //        CS-2389
           if (contact != null && !haveEditPermissionOnContact(username, contact)
               && !haveEditPermissionOnAddressBook(username,contact.getAddressBookIds()[0])){
-            contact = null;
+            log.error("do not have permission");
+            throw new AccessDeniedException();
           }
         }        
         if (contact != null) contacts.add(contact) ; 
