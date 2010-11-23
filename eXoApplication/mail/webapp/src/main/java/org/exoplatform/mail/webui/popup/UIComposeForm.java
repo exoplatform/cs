@@ -18,6 +18,7 @@ package org.exoplatform.mail.webui.popup;
 
 import java.io.ByteArrayInputStream;
 
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,7 +56,6 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
-import org.exoplatform.mail.service.MimeMessageParser;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.UIFolderContainer;
@@ -1007,7 +1007,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
         }
         return;
       } catch (SMTPSendFailedException e) {
-        e.printStackTrace();
         if (e.getMessage().contains("Authentication Required")) {
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.check-authentication-smtp-outgoingServer",
                                                   null));
@@ -1055,6 +1054,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
                                             a.getResoureId());
         }
       } catch (Exception e) {
+        logger.warn("Message is sent, but it was not saved in Sent folder", e);
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         uiComposeForm.getAncestorOfType(UIPopupAction.class).deActivate();

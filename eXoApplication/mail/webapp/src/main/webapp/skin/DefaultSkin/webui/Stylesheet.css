@@ -2013,6 +2013,11 @@
 	white-space: nowrap;
 }
 
+.UIMailPortlet .UIForm .UIFormGrid td.FieldLabelTitle {
+	white-space: inherit;
+	text-align: center;
+}
+
 .UIMailPortlet .UIPopupActionEventContainer {
 	min-width: 440px;;
 }
