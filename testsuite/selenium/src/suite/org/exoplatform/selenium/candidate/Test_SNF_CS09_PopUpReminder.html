@@ -28,12 +28,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -52,8 +52,13 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
 	<td></td>
 </tr>
 <tr>
@@ -212,11 +217,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>assertConfirmation</td>
-	<td>Are you sure you want to delete?</td>
-	<td></td>
-</tr>
-<tr>
 	<td>waitForElementNotPresent</td>
 	<td>//div[@class='UIListView SpliterResizableListArea']//tr[@class='UIListViewRow']</td>
 	<td></td>
@@ -224,6 +224,11 @@
 <tr>
 	<td>verifyElementNotPresent</td>
 	<td>//div[@class='UIListView SpliterResizableListArea']//tr[@class='UIListViewRow']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Are you sure you want to delete?</td>
 	<td></td>
 </tr>
 <tr>
@@ -236,7 +241,6 @@
 	<td></td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

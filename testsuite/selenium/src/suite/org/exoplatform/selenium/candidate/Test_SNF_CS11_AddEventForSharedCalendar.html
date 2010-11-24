@@ -27,13 +27,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- Login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Login</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -52,13 +62,8 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>5000</td>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -153,12 +158,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -177,8 +182,8 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -234,7 +239,7 @@
 <tr>
 	<td>select</td>
 	<td>calendar</td>
-	<td>label=root- defaultCalendarName</td>
+	<td>label=root - Default</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -242,22 +247,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForTextPresent</td>
-	<td>Test_CS11_Event</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>Test_CS11_Event</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementNotPresent</td>
+	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
@@ -268,12 +258,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -292,8 +282,8 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -419,6 +409,11 @@
 <tr>
 	<td>clickAndWait</td>
 	<td>link=Sign out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>close</td>
+	<td></td>
 	<td></td>
 </tr>
 
