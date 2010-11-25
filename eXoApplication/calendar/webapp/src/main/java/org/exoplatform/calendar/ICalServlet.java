@@ -64,7 +64,7 @@ public class ICalServlet extends HttpServlet {
       RepositoryService repositoryService = 
         (RepositoryService)pcontainer.getComponentInstanceOfType(RepositoryService.class) ;
       
-      session = repositoryService.getDefaultRepository().getSystemSession(wsName) ;
+      session = repositoryService.getCurrentRepository().getSystemSession(wsName) ;
       CalendarService calService = 
         (CalendarService)pcontainer.getComponentInstanceOfType(CalendarService.class) ;
       

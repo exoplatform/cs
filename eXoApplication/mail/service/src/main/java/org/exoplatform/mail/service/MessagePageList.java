@@ -363,7 +363,7 @@ public class MessagePageList extends JCRPageList {
   private Session getJCRSession(String username) throws Exception {
     RepositoryService  repositoryService = (RepositoryService)PortalContainer.getComponent(RepositoryService.class) ;
     SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
-    String defaultWS = repositoryService.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
+    String defaultWS = repositoryService.getCurrentRepository().getConfiguration().getDefaultWorkspaceName() ;
     return sessionProvider.getSession(defaultWS, repositoryService.getCurrentRepository()) ;
   }
 

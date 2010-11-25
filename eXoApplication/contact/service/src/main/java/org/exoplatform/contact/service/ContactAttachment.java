@@ -86,7 +86,7 @@ public class ContactAttachment {
   private Session getSesison()throws Exception {
     RepositoryService repoService = (RepositoryService)PortalContainer
       .getInstance().getComponentInstanceOfType(RepositoryService.class) ;
-    return repoService.getDefaultRepository().getSystemSession(workspace) ;
+    return repoService.getCurrentRepository().getSystemSession(workspace) ;
   }
   
 }

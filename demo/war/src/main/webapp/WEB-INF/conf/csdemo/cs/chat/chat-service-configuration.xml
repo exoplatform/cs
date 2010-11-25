@@ -14,10 +14,6 @@
         <value>collaboration</value>
       </value-param>
       <value-param>
-        <name>repository</name>
-        <value>repository</value> 
-      </value-param>
-      <value-param>
         <name>path</name>
         <value>exo:applications/eXoChat/history</value>
       </value-param>

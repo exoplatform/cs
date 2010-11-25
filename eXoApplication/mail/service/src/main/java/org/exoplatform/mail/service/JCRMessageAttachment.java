@@ -52,6 +52,6 @@ public class JCRMessageAttachment extends Attachment{
   
   private Session getSesison()throws Exception {
     RepositoryService repoService = (RepositoryService)PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class) ;
-    return repoService.getDefaultRepository().getSystemSession(workspace) ;
+    return repoService.getCurrentRepository().getSystemSession(workspace) ;
   }
 }

@@ -77,7 +77,7 @@ public class Attachment  {
   }
   private Session getSesison()throws Exception {
     RepositoryService repoService = (RepositoryService)PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class) ;
-    return repoService.getDefaultRepository().getSystemSession(workspace) ;
+    return repoService.getCurrentRepository().getSystemSession(workspace) ;
   }
   public void setInputStream(InputStream input) throws Exception {
     if (input != null) {
