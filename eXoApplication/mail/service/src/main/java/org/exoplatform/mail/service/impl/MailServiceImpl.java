@@ -226,7 +226,7 @@ public class MailServiceImpl implements MailService, Startable {
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder()) {
       IMAPFolder imapFolder = null;
       try {
-        Connector connector = new ImapConnector(account);
+        Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
         imapFolder = (IMAPFolder) connector.createFolder(folder);
         saveFolder(userName, accountId, null, imapFolder);
       } catch (Exception e) {
@@ -247,7 +247,7 @@ public class MailServiceImpl implements MailService, Startable {
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder() && b) {
       IMAPFolder imapFolder = null;
       try {
-        Connector connector = new ImapConnector(account);
+        Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
         imapFolder = (IMAPFolder) connector.createFolder(folder);
         saveFolder(userName, accountId, null, imapFolder);
       } catch (Exception e) {
@@ -272,7 +272,7 @@ public class MailServiceImpl implements MailService, Startable {
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder() && true) {
       try {
         Folder parentFolder = getFolder(userName, accountId, parentId);
-        Connector connector = new ImapConnector(account);
+        Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
         IMAPFolder imapFolder = (IMAPFolder) connector.createFolder(parentFolder, folder);
         if (imapFolder != null) {
           saveFolder(userName, accountId, parentFolder, imapFolder);
@@ -296,7 +296,7 @@ public class MailServiceImpl implements MailService, Startable {
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder() && b) {
       try {
         Folder parentFolder = getFolder(userName, accountId, parentId);
-        Connector connector = new ImapConnector(account);
+        Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
         IMAPFolder imapFolder = (IMAPFolder) connector.createFolder(parentFolder, folder);
         if (imapFolder != null) {
           saveFolder(userName, accountId, parentFolder, imapFolder);
@@ -348,7 +348,7 @@ public class MailServiceImpl implements MailService, Startable {
     Folder folder = this.getFolder(userName, accountId, folderId);
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder()) {
       try {
-        Connector connector = new ImapConnector(account);
+        Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
         folder = connector.renameFolder(newName, folder);
       } catch (Exception e) {
         return;
@@ -368,7 +368,7 @@ public class MailServiceImpl implements MailService, Startable {
     boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder()) {
       try {
-        Connector connector = new ImapConnector(account);
+        Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
         success = connector.deleteFolder(folder);
       } catch (Exception e) {
         return;
@@ -428,7 +428,7 @@ public class MailServiceImpl implements MailService, Startable {
     Folder destFolder = this.getFolder(userName, accountId, destFolderId);
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
-        Connector connector = new ImapConnector(account);
+        Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
         successList = connector.moveMessage(msgList, currentFolder, destFolder);
       } catch (Exception e) {
         if(logger.isDebugEnabled()) logger.debug("MailServiceImpl: Move message error " + e.getMessage());
@@ -450,7 +450,7 @@ public class MailServiceImpl implements MailService, Startable {
     List<Message> successList = new ArrayList<Message>();
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
-        Connector connector = new ImapConnector(account);
+        Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
         successList = connector.moveMessage(msgList, currentFolder, destFolder);
       } catch (Exception e) {
         logger.error("Mailservice: Move message to trash folder error", e);
@@ -472,7 +472,7 @@ public class MailServiceImpl implements MailService, Startable {
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         List<Message> msgList = new ArrayList<Message>();
-        Connector connector = new ImapConnector(account);
+        Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
         msgList.add(msg);
         successList = connector.moveMessage(msgList, currentFolder, destFolder);
       } catch (Exception e) {
@@ -480,7 +480,7 @@ public class MailServiceImpl implements MailService, Startable {
       }
     }
     if (successList != null && successList.size() > 0){
-      moveMessage(userName, accountId, msg, currentFolderId, destFolderId, true);
+      storage_.moveMessage(userName, accountId, msg, currentFolderId, destFolderId, true);
       return msg;
     }
     return null;
@@ -498,7 +498,7 @@ public class MailServiceImpl implements MailService, Startable {
     boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
-        Connector connector = new ImapConnector(account);
+        Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
         List<Message> msgList = new ArrayList<Message>();
         msgList.add(msg);
         msgList = connector.moveMessage(msgList, currentFolder, destFolder);
@@ -529,7 +529,7 @@ public class MailServiceImpl implements MailService, Startable {
       destFolder = getFolder(userName, account.getId(), folderId);
     }
     if (destFolder != null && account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
-      Connector connector = new ImapConnector(account);
+      Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
       successList = connector.createMessage(msgList, destFolder);
     }
     storage_.saveMessage(userName, account.getId(), targetMsgPath, message, isNew);
@@ -574,7 +574,7 @@ public class MailServiceImpl implements MailService, Startable {
     return sendMessage(userName, acc, message);
   }
 
-  private boolean isGmailAccount(String emailaddr){
+  public static boolean isGmailAccount(String emailaddr){
     if(emailaddr != null && emailaddr.length() > 0 && emailaddr.contains("@")){
       String suffixEmail = emailaddr.split("@")[1];
       if(suffixEmail.equalsIgnoreCase("gmail.com") || suffixEmail.equalsIgnoreCase("google.com")) return true;
@@ -604,13 +604,7 @@ public class MailServiceImpl implements MailService, Startable {
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, false);
 
     if (Boolean.valueOf(isSSl)) {
-      MailSSLSocketFactory socketFactory = null;
-      try {
-        socketFactory = this.getSSLSocketFactory(outgoingHost);  
-      } catch (GeneralSecurityException ge) {
-        logger.error("SMTP SSL: Cannot create a ssl socket between client and server. All host will trusted.", ge);
-        socketFactory = trustAllHost();
-      }
+      MailSSLSocketFactory socketFactory = this.getSSLSocketFactory(outgoingHost);  
       props.put(Utils.SMTP_SSL_FACTORY, socketFactory);
     }
     if(isGmailAccount(smtpUser) || isGmailAccount(acc.getOutgoingUserName())){
@@ -669,13 +663,7 @@ public class MailServiceImpl implements MailService, Startable {
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS, "javax.net.SocketFactory");
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
     if (serverConfig.isOutgoingSsl()) {
-      MailSSLSocketFactory socketFactory = null;
-      try {
-        socketFactory = this.getSSLSocketFactory(serverConfig.getOutgoingHost());  
-      } catch (GeneralSecurityException ge) {
-        logger.error("SMTP SSL: Cannot create a ssl socket between client and server. All host will trusted.", ge);
-        socketFactory = trustAllHost();
-      }
+      MailSSLSocketFactory socketFactory = this.getSSLSocketFactory(serverConfig.getOutgoingHost());  
       props.put(Utils.SMTP_SSL_FACTORY, socketFactory);
     }
     
@@ -1248,14 +1236,18 @@ public class MailServiceImpl implements MailService, Startable {
     return folderList;
   }
 
-  public MailSSLSocketFactory getSSLSocketFactory(String host) throws GeneralSecurityException{
-    MailSSLSocketFactory sslsocket = new MailSSLSocketFactory();
-    sslsocket.setTrustedHosts(new String[]{host});
+  public MailSSLSocketFactory getSSLSocketFactory(String host){
+    MailSSLSocketFactory sslsocket = null;
     try {
+      sslsocket = new MailSSLSocketFactory();
+      sslsocket.setTrustedHosts(new String[]{host});
       TrustManager[] trusts = new TrustManager[]{new ExoMailTrustManager(null, false, host, null)};
       sslsocket.setTrustManagers(trusts);      
-    } catch (ExoServiceException ee) {
-      throw new GeneralSecurityException();
+    }catch(GeneralSecurityException gse){
+      logger.error("Imap SSL: Cannot create a ssl socket between client and server. All host will trusted.");
+      sslsocket = trustAllHost();
+    }catch (Exception e){
+      logger.error("Your email was not trusted by Mail server", e);
     }
     return sslsocket; 
   }
@@ -1302,13 +1294,7 @@ public class MailServiceImpl implements MailService, Startable {
       props.put("mail.mime.base64.ignoreerrors", "true");
       
       if (account.isIncomingSsl()) {
-        MailSSLSocketFactory socketFactory = null;
-        try {
-          socketFactory = this.getSSLSocketFactory(host);  
-        } catch (GeneralSecurityException ge) {
-          logger.error("Imap SSL: Cannot create a ssl socket between client and server. All host will trusted.");
-          socketFactory = trustAllHost();
-        }
+        MailSSLSocketFactory socketFactory = this.getSSLSocketFactory(host);  
         props.put(Utils.MAIL_IMAP_SSL_ENABLE, "true");
         props.put(Utils.IMAP_SSL_FACTORY, socketFactory);
       }
@@ -2579,7 +2565,7 @@ public class MailServiceImpl implements MailService, Startable {
     boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
-        Connector connector = new ImapConnector(account);
+        Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
         if (property.equals(Utils.EXO_STAR)) {
           if (folder != null && !Utils.isEmptyField(folder.getName())) {
             success = connector.setIsStared(msgList, value, folder);

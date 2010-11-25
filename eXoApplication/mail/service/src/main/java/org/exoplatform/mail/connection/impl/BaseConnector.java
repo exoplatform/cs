@@ -25,22 +25,29 @@ import org.exoplatform.mail.connection.Connector;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 
+import com.sun.mail.util.MailSSLSocketFactory;
+
 /**
  * Created by The eXo Platform SAS
  * Author : Phung Hai Nam
  *          nam.phung@exoplatform.com
  * Sep 18, 2009  
+ * Modified by Nguyen Van Hoang
  */
 public abstract class BaseConnector implements Connector {
   protected Store store_;
   
-  public Session getSession(Account account) throws Exception {
+  public Session getSession(Account account, MailSSLSocketFactory sslSocket) throws Exception {
     Properties props = System.getProperties();
     String socketFactoryClass = "javax.net.SocketFactory";
-    if (account.isIncomingSsl()) socketFactoryClass = Utils.SSL_FACTORY;
-    props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
-    props.setProperty("mail.mime.base64.ignoreerrors", "true");
-    props.setProperty("mail.imap.socketFactory.fallback", "false");
+    if (account.isIncomingSsl() && sslSocket != null) {
+      props.put(Utils.MAIL_IMAP_SSL_ENABLE, "true");
+      props.put(Utils.IMAP_SSL_FACTORY, sslSocket);
+      //socketFactoryClass = Utils.SSL_FACTORY;
+    }
+    props.put("mail.imap.socketFactory.class", socketFactoryClass);
+    props.put("mail.mime.base64.ignoreerrors", "true");
+    props.put("mail.imap.socketFactory.fallback", "false");
     return Session.getInstance(props, null);
   }
 }

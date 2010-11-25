@@ -31,6 +31,7 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 
 import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.util.MailSSLSocketFactory;
 
 
 public class TestConnectorService extends BaseMailTestCase {
@@ -176,12 +177,9 @@ public class TestConnectorService extends BaseMailTestCase {
     }
   }
 
-
-
 	private Connector getConnector(Account acc) {
 		try {
-		  
-			return new ImapConnector(acc);
+			return new ImapConnector(acc, new MailSSLSocketFactory());
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			System.out.println("\n\n check your net work connection or account configuration");
@@ -192,7 +190,7 @@ public class TestConnectorService extends BaseMailTestCase {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-		}
+		} 
 		return null;
 	}
 

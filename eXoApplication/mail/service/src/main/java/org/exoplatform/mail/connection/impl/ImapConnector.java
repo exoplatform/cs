@@ -33,11 +33,13 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MimeMessageParser;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.service.impl.MailServiceImpl;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
+import com.sun.mail.util.MailSSLSocketFactory;
 
 /**
  * Created by The eXo Platform SAS Author : Nam Phung nam.phung@exoplatform.com
@@ -48,9 +50,12 @@ public class ImapConnector extends BaseConnector {
 
   private Account          account_;
 
-  public ImapConnector(Account account) throws Exception {
-    Session session = getSession(account);
-    IMAPStore imapStore = (IMAPStore) session.getStore("imap");
+  public ImapConnector(Account account, MailSSLSocketFactory sslSocket) throws Exception {
+    Session session = getSession(account, sslSocket);
+    String protocolName = Utils.SVR_IMAP;
+    String emailaddr = account.getIncomingUser();
+    if(MailServiceImpl.isGmailAccount(emailaddr)) protocolName = Utils.SVR_IMAPS;
+    IMAPStore imapStore = (IMAPStore) session.getStore(protocolName);
     store_ = imapStore;
     account_ = account;
     store_.connect(account_.getIncomingHost(),
