@@ -298,7 +298,7 @@ public class EventPageListQuery extends JCRPageList {
     try {
       RepositoryService repositoryService = (RepositoryService) PortalContainer.getComponent(RepositoryService.class);
       SessionProvider sessionProvider = SessionProvider.createSystemProvider();
-      String defaultWS = repositoryService.getDefaultRepository()
+      String defaultWS = repositoryService.getCurrentRepository()
       .getConfiguration()
       .getDefaultWorkspaceName();
       return sessionProvider.getSession(defaultWS, repositoryService.getCurrentRepository());      

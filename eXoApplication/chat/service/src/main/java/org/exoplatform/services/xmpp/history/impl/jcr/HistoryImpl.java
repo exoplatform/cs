@@ -134,11 +134,6 @@ public class HistoryImpl implements Startable{
   /**
    * 
    */
-  private String              repositopryName;
-
-  /**
-   * 
-   */
   private RepositoryService   repositoryService;
 
   public RepositoryService getRepositoryService() {
@@ -159,7 +154,7 @@ public class HistoryImpl implements Startable{
   
   public void start() {
     try{
-      Session sysSession = this.repositoryService.getRepository(repositopryName).getSystemSession(wsName);
+      Session sysSession = this.repositoryService.getCurrentRepository().getSystemSession(wsName);
       initNodes(sysSession);
       jcrom = new Jcrom();
       jcrom.map(HistoricalMessageImpl.class);
@@ -187,7 +182,6 @@ public class HistoryImpl implements Startable{
     this.repositoryService = repositoryService;
     historyPath = initParams.getValueParam("path").getValue();
     wsName = initParams.getValueParam("workspace").getValue();
-    repositopryName = initParams.getValueParam("repository").getValue();
     
     if(jcrom == null) jcrom = new Jcrom();
   }
@@ -271,7 +265,7 @@ public class HistoryImpl implements Startable{
    * @throws RepositoryConfigurationException
    */
   public ManageableRepository getRepository() throws RepositoryException,RepositoryConfigurationException{
-    return repositoryService.getRepository(repositopryName);
+    return repositoryService.getCurrentRepository();
   }
   
   /**
@@ -779,7 +773,7 @@ public class HistoryImpl implements Startable{
    */
   private Node getConversationsNode(SessionProvider sessionProvider) {
     try {
-      ManageableRepository repository = repositoryService.getRepository(repositopryName);
+      ManageableRepository repository = repositoryService.getCurrentRepository();
       Session session = sessionProvider.getSession(wsName, repository);
       return session.getRootNode().getNode(historyPath + "/" + CONVERSATIONS);
     } catch (Exception e) {
@@ -794,7 +788,7 @@ public class HistoryImpl implements Startable{
    */
   private Node getParticipantsNode(SessionProvider sessionProvider) {
     try {
-      ManageableRepository repository = repositoryService.getRepository(repositopryName);
+      ManageableRepository repository = repositoryService.getCurrentRepository();
       Session session = sessionProvider.getSession(wsName, repository);
       return session.getRootNode().getNode(historyPath + "/" + PARTICIPANTS);
     } catch (Exception e) {
@@ -816,7 +810,7 @@ public class HistoryImpl implements Startable{
     
     if(dpsNode == null){ //add new lr:defaultpresencestatus\lr:presencestatus node
       try {
-        ManageableRepository repository = repositoryService.getRepository(repositopryName);
+        ManageableRepository repository = repositoryService.getCurrentRepository();
         Session session = provider.getSession(wsName, repository);
         Node node = session.getRootNode();
         Node fNode = null;
@@ -922,7 +916,7 @@ public class HistoryImpl implements Startable{
   private Node getDefaultPresenceStatusNode(SessionProvider sessionProvider){
     Node defaultPresenceStatusNode = null;
     try {
-      ManageableRepository repository = repositoryService.getRepository(repositopryName);
+      ManageableRepository repository = repositoryService.getCurrentRepository();
       Session session = sessionProvider.getSession(wsName, repository);
       Node root = session.getRootNode();
       defaultPresenceStatusNode = root.getNode(historyPath + "/" + DEFAULTPRESENCESTATUS) ;

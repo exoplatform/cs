@@ -78,7 +78,7 @@ public class HistoryTest extends AbstractKernelTest {
     ConversationState state = new ConversationState(identity);
     ConversationState.setCurrent(state);
     repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
-    repository = (RepositoryImpl) repositoryService.getDefaultRepository();
+    repository = (RepositoryImpl) repositoryService.getCurrentRepository();
     spService = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
     spService.setSessionProvider(null, SessionProvider.createAnonimProvider());
     historyImpl = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
