@@ -613,9 +613,6 @@ public class MailServiceImpl implements MailService, Startable {
       }
       props.put(Utils.SMTP_SSL_FACTORY, socketFactory);
     }
-    Session session = Session.getDefaultInstance(props, null);
-    logger.debug(" #### Sending email ..f  ");
-    
     if(isGmailAccount(smtpUser) || isGmailAccount(acc.getOutgoingUserName())){
       protocolName = Utils.SVR_SMTPS;
       //props.put(Utils.SMTP_QUIT_WAIT, false);
@@ -626,6 +623,9 @@ public class MailServiceImpl implements MailService, Startable {
       } else {
         props.put(Utils.SVR_SMTP_AUTH, false);
       }
+    Session session = Session.getDefaultInstance(props, null);
+    logger.debug(" #### Sending email ..f  ");
+ 
     SMTPTransport transport = (SMTPTransport)session.getTransport(protocolName);
     try {
       if (!isSMTPAuth) {
@@ -663,11 +663,8 @@ public class MailServiceImpl implements MailService, Startable {
     props.put(Utils.SVR_SMTP_HOST, serverConfig.getOutgoingHost());
     props.put(Utils.SVR_SMTP_PORT, serverConfig.getOutgoingPort());
     boolean isSMTPAuth = serverConfig.isOutgoingAuthentication();
-    if (isSMTPAuth) {
-      props.put(Utils.SVR_SMTP_AUTH, "true");
-    } else {
-      props.put(Utils.SVR_SMTP_AUTH, "false");
-    }
+    String protocolName = Utils.SVR_SMTP;
+    
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_PORT, serverConfig.getOutgoingPort());
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS, "javax.net.SocketFactory");
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
@@ -682,8 +679,6 @@ public class MailServiceImpl implements MailService, Startable {
       props.put(Utils.SMTP_SSL_FACTORY, socketFactory);
     }
     
-    Session session = Session.getDefaultInstance(props, null);
-    String protocolName = Utils.SVR_SMTP;
     if(isGmailAccount(serverConfig.getUserName())){
       protocolName = Utils.SVR_SMTPS;
       //props.put(Utils.SMTP_QUIT_WAIT, false);
@@ -694,6 +689,7 @@ public class MailServiceImpl implements MailService, Startable {
       } else {
         props.put(Utils.SVR_SMTP_AUTH, false);
       }
+    Session session = Session.getDefaultInstance(props, null);
     Transport transport = session.getTransport(protocolName);
     try {
       if (!isSMTPAuth) {
