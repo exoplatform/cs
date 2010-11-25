@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
@@ -80,13 +81,13 @@ public class ExoMailTrustManager implements X509TrustManager {
 
   private File ksfile;
   
-  public ExoMailTrustManager(String relPath, boolean isStorePermanent, String host, String sslProtocol) throws ExoServiceException{
+  public ExoMailTrustManager(String relPath, boolean isStorePermanent, String host, String sslProtocol) throws GeneralSecurityException{
     this(relPath, isStorePermanent);
     this.hostname = host;
     if(sslProtocol != null) this.protocolName = sslProtocol;
   }
   
-  public ExoMailTrustManager() throws ExoServiceException{
+  public ExoMailTrustManager() throws GeneralSecurityException{
     this(null, true);
   }
   
@@ -94,7 +95,7 @@ public class ExoMailTrustManager implements X509TrustManager {
    * @param {@link String} the path name of cert file
    * @param {@link Boolean} whether is store the certs permanent?
    * @throws ExoException **/
-  public ExoMailTrustManager(String pathCertFile, boolean storePermanent) throws ExoServiceException{
+  public ExoMailTrustManager(String pathCertFile, boolean storePermanent) throws GeneralSecurityException{
     this.isStoreCertPermanent = storePermanent;
     File temFile = null;
     boolean isLoged = false;
@@ -111,7 +112,7 @@ public class ExoMailTrustManager implements X509TrustManager {
       if(!isLoged)log.warn("Cannot refresh trustmanager. The certs that presented by server mail are not stored.\n", e);
       isLoged=true;
     }
-    if(isLoged) throw new ExoServiceException();
+    if(isLoged) throw new GeneralSecurityException();
   }
   
   public X509Certificate[] getAcceptedIssuers() {

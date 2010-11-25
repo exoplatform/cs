@@ -57,6 +57,7 @@ import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MimeMessageParser;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.service.impl.MailServiceImpl;
 import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
@@ -969,6 +970,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       String accountId = uiComposeForm.getFieldFromValue();
       String usename = uiPortlet.getCurrentUser();
       Message message = uiComposeForm.getNewMessage();
+      Account acctemp = mailSvr.getAccountById(usename, accountId);
+      String emailAddr = acctemp.getIncomingUser();
       if (!uiComposeForm.validateMessage(event, message))
         return;
       if (MailUtils.isFieldEmpty(message.getMessageTo())
@@ -1011,7 +1014,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
         }
         return;
       } catch (SMTPSendFailedException e) {
-        e.printStackTrace();
         if (e.getMessage().contains("Authentication Required")) {
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.check-authentication-smtp-outgoingServer",
                                                   null));
@@ -1022,8 +1024,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       } catch (MessagingException e) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-unexpected-error-sending-falied",
-                                                null));
+        if(MailServiceImpl.isGmailAccount(emailAddr))
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-connect-to-mailserver", null));
+        else 
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-unexpected-error-sending-falied", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
@@ -1059,6 +1063,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
                                             a.getResoureId());
         }
       } catch (Exception e) {
+        logger.warn("Message is sent, but it was not saved in Sent folder", e);
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         uiComposeForm.getAncestorOfType(UIPopupAction.class).deActivate();

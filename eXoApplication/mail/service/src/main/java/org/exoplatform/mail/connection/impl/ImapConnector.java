@@ -19,6 +19,7 @@ package org.exoplatform.mail.connection.impl;
 import java.util.ArrayList;
 
 
+
 import java.util.List;
 import java.util.Properties;
 
@@ -28,7 +29,6 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.UIDFolder;
 import javax.mail.URLName;
-import javax.mail.Flags.Flag;
 import javax.mail.internet.MimeMessage;
 
 import org.exoplatform.mail.service.Account;
@@ -36,14 +36,17 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MimeMessageParser;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.service.impl.MailServiceImpl;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
+import com.sun.mail.util.MailSSLSocketFactory;
 
 /**
  * Created by The eXo Platform SAS Author : Nam Phung nam.phung@exoplatform.com
+ * Modified by Nguyen Van Hoang
  * Sep 18, 2009
  */
 public class ImapConnector extends BaseConnector {
@@ -51,9 +54,12 @@ public class ImapConnector extends BaseConnector {
 
   private Account          account_;
 
-  public ImapConnector(Account account) throws Exception {
-    Session session = getSession(account);
-    IMAPStore imapStore = (IMAPStore) session.getStore("imap");
+  public ImapConnector(Account account, MailSSLSocketFactory sslSocket) throws Exception {
+    Session session = getSession(account, sslSocket);
+    String protocolName = Utils.SVR_IMAP;
+    String emailaddr = account.getIncomingUser();
+    if(MailServiceImpl.isGmailAccount(emailaddr)) protocolName = Utils.SVR_IMAPS;
+    IMAPStore imapStore = (IMAPStore) session.getStore(protocolName);
     store_ = imapStore;
     account_ = account;
     store_.connect(account_.getIncomingHost(),
@@ -196,7 +202,7 @@ public class ImapConnector extends BaseConnector {
             if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMsgUID();
             msgs.get(l).setId(MimeMessageParser.getMessageId(createdMsgs[l]));
             msgs.get(l).setUID(uid);
-          }logger.warn("creatMessages(): Mail server could not append a new UI for message: " + msgs.get(l).getSubject());
+          }logger.warn("creatMessages(): Mail server could not append a new UID for message: " + msgs.get(l).getSubject());
           successList.add(msgs.get(l));
       }
         remoteFolder.close(true);

@@ -19,9 +19,6 @@ package org.exoplatform.mail.service;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -61,8 +58,11 @@ public class Utils {
   
   public static MailService mailService_;
   public static JobSchedulerService schedulerService_;
-  
   public static final String SVR_SMTP = "smtp" ;
+  public static final String SVR_SMTPS = "smtps" ;
+  public static final String SVR_IMAP = "imap" ;
+  public static final String SVR_IMAPS = "imaps" ;
+  public static final String SVR_POP3S = "pop3s" ;
   public static final String SVR_SMTP_HOST = "mail.smtp.host".intern() ;
   public static final String SVR_SMTP_PORT = "mail.smtp.port".intern() ;  
   public static final String SVR_SMTP_USER = "mail.smtp.user".intern() ;
@@ -72,6 +72,27 @@ public class Utils {
   public static final String SVR_SMTP_SOCKET_FACTORY_PORT = "mail.smtp.socketFactory.port".intern() ;
   public static final String SVR_SMTP_SOCKET_FACTORY_CLASS = "mail.smtp.socketFactory.class".intern() ;
   public static final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory".intern();
+  public static final String SVR_SMTP_SSL_SOCKET_FACTORY_PORT = "mail.smtp.ssl.socketFactory.port";
+  public static final String SVR_SMTPS_AUTH = "mail.smtps.auth";
+  
+  public static final String SMTP_SSL_FACTORY = "mail.smtp.ssl.socketFactory";
+  public static final String IMAP_SSL_FACTORY = "mail.imap.ssl.socketFactory";
+  public static final String POP3_SSL_FACTORY = "mail.pop3.ssl.socketFactory";
+  public static final String SVR_SMTP_STARTTLS_REQUIRED = "mail.smtp.starttls.required";
+  public static final String SVR_IMAP_STARTTLS_REQUIRED = "mail.imap.starttls.required";
+  public static final String SVR_POP3_STARTTLS_REQUIRED = "mail.pop3.starttls.required";
+  public static final String MAIL_IMAP_SSL_ENABLE = "mail.imap.ssl.enable";
+  public static final String MAIL_POP3_SSL_ENABLE = "mail.pop3.ssl.enable";
+  public static final String MAIL_SMTP_SSL_ENABLE = "mail.smtp.ssl.enable";
+  public static final String SMTP_QUIT_WAIT="mail.smtp.quitwait";
+  
+  public static final String SMTP_CONECT_TIMEOUT = "mail.smtp.connectiontimeout";
+  public static final String POP3_CONECT_TIMEOUT = "mail.pop3.connectiontimeout";
+  public static final String IMAP_CONECT_TIMEOUT = "mail.imap.connectiontimeout";
+  //in MS Exchange, a big message maybe insufficience of bytes when received. set it is false to get rid this problem
+  //But neet to certain that Mail server do not implement Imap Partial FETCH
+  public static final String IMAP_MSX_PARTIAL_FETCH = "mail.imap.partialfetch";
+
   
   public static final String SVR_SSL_CLASSNAME = "javax.net.ssl.SSLSocketFactory".intern() ;
   public static final String SVR_MAIL_SMTP_DEBUG = "mail.smtp.debug".intern() ;
@@ -84,6 +105,7 @@ public class Utils {
   public static final String SVR_INCOMING_PORT = "incoming.port".intern() ;
   public static final String SVR_INCOMING_FOLDER = "folder".intern() ;
   public static final String SVR_IS_CUSTOM_INBOX = "isCustomInbox".intern();
+  
   
   public static final String SVR_INCOMING_USERNAME = "incoming.username".intern() ;
   public static final String SVR_INCOMING_PASSWORD = "incoming.password".intern() ;

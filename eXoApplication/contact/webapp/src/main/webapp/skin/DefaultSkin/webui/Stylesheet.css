@@ -208,6 +208,11 @@
 	white-space: nowrap;
 }
 
+.UIMailPortlet .UIForm .UIFormGrid td.FieldLabelTitle {
+	white-space: inherit;
+	text-align: center;
+}
+
 .UIContactPortlet .UIImportForm .UIFormGrid td.FieldComponent {
 	white-space: normal;
 }

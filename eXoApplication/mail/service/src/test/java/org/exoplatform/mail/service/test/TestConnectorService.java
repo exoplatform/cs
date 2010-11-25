@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.mail.AuthenticationFailedException;
+import javax.net.ssl.TrustManager;
 
 import org.exoplatform.mail.connection.Connector;
 import org.exoplatform.mail.connection.impl.ImapConnector;
@@ -31,6 +32,7 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 
 import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.util.MailSSLSocketFactory;
 
 
 public class TestConnectorService extends BaseMailTestCase {
@@ -176,12 +178,10 @@ public class TestConnectorService extends BaseMailTestCase {
     }
   }
 
-
-
 	private Connector getConnector(Account acc) {
 		try {
-		  
-			return new ImapConnector(acc);
+		  MailSSLSocketFactory sslSocket = new MailSSLSocketFactory();
+			return new ImapConnector(acc, sslSocket);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			System.out.println("\n\n check your net work connection or account configuration");
