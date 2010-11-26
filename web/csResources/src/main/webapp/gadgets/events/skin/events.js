@@ -137,6 +137,9 @@ eXoEventGadget.prototype.setLink = function(){
 	var prefs = new gadgets.Prefs();
 	var url   = prefs.getString("url");
 	var baseUrl = top.location.href;
+	if(parent.eXo){
+		 baseUrl = parent.eXo.env.server.context + "/" + parent.eXo.env.portal.accessMode + "/" + parent.eXo.env.portal.portalName;
+	}
 	var a = document.getElementById("ShowAll");
 	url = (url)?url: baseUrl + "/calendar";
 	a.href = url;
@@ -209,7 +212,12 @@ eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
 	request.onreadystatechange = function(){
 		if (request.readyState == 4) {
 			if ((request.status == 200 || request.status == 204)) {
-				callback(gadgets.json.parse(request.responseText));
+				var data = gadgets.json.parse(request.responseText);
+				if(data.info == null) {
+					eXoEventGadget.notify();
+					return;
+				}
+				callback(data);
 			}
 			if (request.status == 404) {
 				eXoEventGadget.notify();
