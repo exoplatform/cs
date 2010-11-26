@@ -16,8 +16,8 @@
 	</ModulePrefs>
   <Content type="html">
     <![CDATA[
-			<script type="text/javascript" src="skin/tasks.js"></script>
       <link type="text/css" href="skin/tasks.css" rel="stylesheet">
+			<script type="text/javascript" src="skin/tasks.js"></script>
 			<form id="Setting" onSubmit="return eXoEventGadget.saveSetting();" action="#" style="display:none;">
 			<table>
 				<tr>

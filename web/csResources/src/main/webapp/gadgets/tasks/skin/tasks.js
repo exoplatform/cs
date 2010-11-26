@@ -152,7 +152,7 @@ eXoEventGadget.prototype.createRequestUrl = function(){
 }
 eXoEventGadget.prototype.getData = function(){					 
 	var url = eXoEventGadget.createRequestUrl();					
-	eXoEventGadget.ajaxAsyncGetRequest(url,eXoEventGadget.render);
+	eXoEventGadget.ajaxAsyncGetRequest(url,eXoEventGadget.render,true);
 	if(typeof(requestInterval) == "undefined") requestInterval = setInterval(eXoEventGadget.getData,300000);
 }				
 eXoEventGadget.prototype.render =  function(data){
@@ -224,7 +224,12 @@ eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
 	request.onreadystatechange = function(){
 		if (request.readyState == 4) {
 			if ((request.status == 200 || request.status == 204)) {
-				callback(gadgets.json.parse(request.responseText));
+				var data = gadgets.json.parse(request.responseText);
+				if(data.info == null) {
+					eXoEventGadget.notify();
+					return;
+				} 
+				callback(data);
 			}
 			if (request.status == 404) {
 				eXoEventGadget.notify();
