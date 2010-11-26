@@ -410,6 +410,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
       rssData.setDescription(title);
       rssData.setLink(url);
       rssData.setVersion("rss_2.0") ;
+      rssData.setOwner(username);
       int result ;
       if (uiForm.isNew_) {
         result = calendarService.generateRss(username, calendars, rssData);        
