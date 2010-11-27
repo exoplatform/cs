@@ -443,7 +443,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     rssData.setDescription("Description");
     rssData.setLink(url);
     rssData.setVersion("rss_2.0") ; 
-    rssData.setOwner(username);
+    //rssData.setOwner(username);
 
     calendarService_.generateRss(username, calendars, rssData);
     assertEquals(1, calendarService_.getFeeds(username).size());
