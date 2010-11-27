@@ -33,7 +33,6 @@ public class RssData {
   private String copyright ;
   private String link ;
   private Date pubDate ;
-  private String owner;
   
   public String getTitle() { return title ; }
   public void setTitle(String title) { this.title = title ; }
@@ -58,8 +57,5 @@ public class RssData {
   
   public void setVersion(String version) { this.version = version ; }
   public String getVersion() { return version ; }
-  
-  public void setOwner(String owner) { this.owner = owner; }
-  public String getOwner() {return owner; }
   
 }
