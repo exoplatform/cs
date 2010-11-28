@@ -965,6 +965,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       String accountId = uiComposeForm.getFieldFromValue();
       String usename = uiPortlet.getCurrentUser();
       Message message = uiComposeForm.getNewMessage();
+      Account acctemp = mailSvr.getAccountById(usename, accountId);
+      String emailAddr = acctemp.getIncomingUser();
       if (!uiComposeForm.validateMessage(event, message))
         return;
       if (MailUtils.isFieldEmpty(message.getMessageTo())
@@ -1017,9 +1019,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       } catch (MessagingException e) {
+        if(Utils.isGmailAccount(emailAddr))
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-connect-to-mailserver", null));
+        else 
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-unexpected-error-sending-falied", null));
         
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-unexpected-error-sending-falied",
-                                                null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }

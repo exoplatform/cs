@@ -21,7 +21,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.security.GeneralSecurityException;
-import java.security.Security;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -96,7 +95,6 @@ import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.services.exception.ExoServiceException;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
@@ -574,14 +572,6 @@ public class MailServiceImpl implements MailService, Startable {
     return sendMessage(userName, acc, message);
   }
 
-  public static boolean isGmailAccount(String emailaddr){
-    if(emailaddr != null && emailaddr.length() > 0 && emailaddr.contains("@")){
-      String suffixEmail = emailaddr.split("@")[1];
-      if(suffixEmail.equalsIgnoreCase("gmail.com") || suffixEmail.equalsIgnoreCase("google.com")) return true;
-    }
-    return false;
-  }
-  
   public Message sendMessage(String userName, Account acc, Message message) throws Exception {
     //Security.addProvider( new com.sun.net.ssl.internal.ssl.Provider());
     String smtpUser = acc.getIncomingUser();
@@ -607,7 +597,7 @@ public class MailServiceImpl implements MailService, Startable {
       MailSSLSocketFactory socketFactory = this.getSSLSocketFactory(outgoingHost);  
       props.put(Utils.SMTP_SSL_FACTORY, socketFactory);
     }
-    if(isGmailAccount(smtpUser) || isGmailAccount(acc.getOutgoingUserName())){
+    if(Utils.isGmailAccount(smtpUser) || Utils.isGmailAccount(acc.getOutgoingUserName())){
       protocolName = Utils.SVR_SMTPS;
       //props.put(Utils.SMTP_QUIT_WAIT, false);
       if(isSMTPAuth) props.put(Utils.SVR_SMTPS_AUTH, true);
@@ -667,7 +657,7 @@ public class MailServiceImpl implements MailService, Startable {
       props.put(Utils.SMTP_SSL_FACTORY, socketFactory);
     }
     
-    if(isGmailAccount(serverConfig.getUserName())){
+    if(Utils.isGmailAccount(serverConfig.getUserName())){
       protocolName = Utils.SVR_SMTPS;
       //props.put(Utils.SMTP_QUIT_WAIT, false);
       if(isSMTPAuth) props.put(Utils.SVR_SMTPS_AUTH, true);
@@ -1303,7 +1293,7 @@ public class MailServiceImpl implements MailService, Startable {
       
       Session session = Session.getInstance(props, null);
       String protocolName = Utils.SVR_IMAP;
-      if(isGmailAccount(emailAddress)) protocolName = Utils.SVR_IMAPS;
+      if(Utils.isGmailAccount(emailAddress)) protocolName = Utils.SVR_IMAPS;
       IMAPStore imapStore = (IMAPStore) session.getStore(protocolName);
       try {
         imapStore.connect(host, port, emailAddress, account.getIncomingPassword());
@@ -1322,7 +1312,7 @@ public class MailServiceImpl implements MailService, Startable {
         return null;
       } catch (MessagingException e) {
         if(logger.isDebugEnabled()) logger.debug("Exception while connecting to server : " + e.getMessage());
-        if(isGmailAccount(emailAddress)) logger.warn("You are using gmail account and certain that your mail account set incoming/outgoing protocol is SSL");
+        if(Utils.isGmailAccount(emailAddress)) logger.warn("You are using gmail account and certain that your mail account set incoming/outgoing protocol is SSL");
         if (info != null) {
 //          info.setStatusMsg("Connecting failed. Please check server configuration.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
@@ -1387,7 +1377,7 @@ public class MailServiceImpl implements MailService, Startable {
       Session session = Session.getDefaultInstance(props, null);
       String protocolName = "pop3";
       String emailAddr = account.getIncomingUser();
-      if(isGmailAccount(emailAddr)) protocolName = Utils.SVR_POP3S;
+      if(Utils.isGmailAccount(emailAddr)) protocolName = Utils.SVR_POP3S;
       POP3Store pop3Store = (POP3Store) session.getStore(protocolName);
       try {
         pop3Store.connect(account.getIncomingHost(),
@@ -1409,7 +1399,7 @@ public class MailServiceImpl implements MailService, Startable {
         return null;
       } catch (MessagingException e) {
         logger.debug("Exception while connecting to server : " + e.getMessage());
-        if(isGmailAccount(emailAddr)) logger.warn("You are using Gmail account and certain that your mail account set incoming/outgoing protocol is SSL");
+        if(Utils.isGmailAccount(emailAddr)) logger.warn("You are using Gmail account and certain that your mail account set incoming/outgoing protocol is SSL");
         if (info != null) {
 //          info.setStatusMsg("Connecting failed. Please check server configuration.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);

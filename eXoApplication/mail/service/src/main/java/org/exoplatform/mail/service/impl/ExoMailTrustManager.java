@@ -40,7 +40,6 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import org.exoplatform.commons.exception.ExoException;
-import org.exoplatform.services.exception.ExoServiceException;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 
