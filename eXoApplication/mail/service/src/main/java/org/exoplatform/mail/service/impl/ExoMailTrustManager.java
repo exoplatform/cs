@@ -17,7 +17,6 @@
 package org.exoplatform.mail.service.impl;
 
 import java.io.File;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -40,7 +39,6 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import org.exoplatform.commons.exception.ExoException;
-import org.exoplatform.services.exception.ExoServiceException;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 
@@ -59,8 +57,10 @@ public class ExoMailTrustManager implements X509TrustManager {
 
   public static final String PATH_CERTS_FILE = System.getProperty("java.home") + File.separatorChar + "lib" + File.separatorChar + "security";
   
+  @SuppressWarnings("unused")
   private static final String PASSWORD_CERT_FILE = "changeit";
   
+  @SuppressWarnings("unused")
   private static final String EXO_CACERT_FILE = "exocacert";
   
   private String pathCertFile ;

@@ -17,7 +17,6 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.io.ByteArrayInputStream;
-
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,7 +56,6 @@ import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MimeMessageParser;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.mail.service.impl.MailServiceImpl;
 import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
@@ -1024,7 +1022,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       } catch (MessagingException e) {
-        if(MailServiceImpl.isGmailAccount(emailAddr))
+        if(Utils.isGmailAccount(emailAddr))
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-connect-to-mailserver", null));
         else 
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-unexpected-error-sending-falied", null));

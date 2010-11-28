@@ -594,4 +594,13 @@ public class Utils {
     buffer.append(name);
     return buffer.toString();
   }
+  
+
+  public static boolean isGmailAccount(String emailaddr){
+    if(emailaddr != null && emailaddr.length() > 0 && emailaddr.contains("@")){
+      String suffixEmail = emailaddr.split("@")[1];
+      if(suffixEmail.equalsIgnoreCase("gmail.com") || suffixEmail.equalsIgnoreCase("google.com")) return true;
+    }
+    return false;
+  }
 }
