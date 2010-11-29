@@ -392,7 +392,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
       String tempName = uiForm.getUIStringInput(NAME).getValue().trim() ;
       UICalendarSettingFeedTab settingFeedTab = uiForm.getAncestorOfType(UIPopupContainer.class)
       .findFirstComponentOfType(UICalendarSettingFeedTab.class);
-      for (FeedData feedData : settingFeedTab.getData())
+      for (FeedData feedData : calendarService.getFeeds(username))
         if (feedData.getTitle().equals(tempName) && (uiForm.isNew_ || !tempName.equals(uiForm.feedData.getTitle()))) {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
           uiApp.addMessage(new ApplicationMessage("UIEditFeed.msg.feedName_existed", null)) ;
@@ -424,7 +424,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
         return ;
       }
       
-      settingFeedTab.setFeedList(calendarService.getFeeds(username));
+      settingFeedTab.setFeedList(calendarService.getUserFeeds(username));
       UIPopupAction popupAction = uiForm.getAncestorOfType(UIPopupAction.class);
       popupAction.deActivate();
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);

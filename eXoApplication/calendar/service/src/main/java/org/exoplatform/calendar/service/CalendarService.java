@@ -398,6 +398,14 @@ public interface CalendarService {
    * @see FeedData
    */
   public List<FeedData> getFeeds(String username) throws Exception  ;
+  
+  /**
+   * @param username current user name(or user id)
+   * @return List of FeedData
+   * @throws Exception
+   * @see FeedData
+   */
+  public List<FeedData> getUserFeeds(String username) throws Exception  ;
 
   /**
    * The method return root of rss data store area

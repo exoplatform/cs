@@ -1928,6 +1928,31 @@ public class JCRDataStorage implements DataStorage {
     }
     return feeds ;
   }
+  
+  public List<FeedData> getUserFeeds(String username) throws Exception {
+    List<FeedData> feeds = new ArrayList<FeedData>() ;
+    try {
+      Node rssHome = getRssHome(username) ;
+      NodeIterator iter = rssHome.getNodes() ;
+      while(iter.hasNext()) {
+        Node feedNode = iter.nextNode() ;
+        String pattern = Utils.SLASH + username + Utils.SLASH + feedNode.getProperty(Utils.EXO_TITLE).getString() + Utils.SLASH;
+        if(feedNode.isNodeType(Utils.EXO_RSS_DATA) 
+            && feedNode.getProperty(Utils.EXO_BASE_URL).getString().contains(pattern)) {
+          FeedData feed = new FeedData() ;
+          feed.setTitle(feedNode.getProperty(Utils.EXO_TITLE).getString()) ;
+          StringBuffer url = new StringBuffer(feedNode.getProperty(Utils.EXO_BASE_URL).getString()) ;  
+          feed.setUrl(url.toString()) ;
+          feed.setContent(feedNode.getProperty(Utils.EXO_CONTENT).getStream());
+          feeds.add(feed) ;
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      log.debug(e);
+    }
+    return feeds;
+  }
 
   /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.impl.DataStorage#generateRss(java.lang.String, java.util.List, org.exoplatform.calendar.service.RssData, org.exoplatform.calendar.service.CalendarImportExport)

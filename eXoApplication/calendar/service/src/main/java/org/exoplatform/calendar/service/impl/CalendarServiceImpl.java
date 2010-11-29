@@ -343,6 +343,13 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public List<FeedData> getFeeds(String username) throws Exception {
     return storage_.getFeeds(username);
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public List<FeedData> getUserFeeds(String username) throws Exception {
+    return storage_.getUserFeeds(username);
+  }
 
   /**
    * {@inheritDoc}

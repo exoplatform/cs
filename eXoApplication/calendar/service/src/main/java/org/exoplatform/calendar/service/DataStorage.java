@@ -282,6 +282,11 @@ public interface DataStorage {
    * @see org.exoplatform.calendar.service.impl.DataStorage#getFeeds(java.lang.String)
    */
   public List<FeedData> getFeeds(String username) throws Exception;
+  
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.impl.DataStorage#getUserFeeds(java.lang.String)
+   */
+  public List<FeedData> getUserFeeds(String username) throws Exception;
 
   /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.impl.DataStorage#generateRss(java.lang.String, java.util.List, org.exoplatform.calendar.service.RssData, org.exoplatform.calendar.service.CalendarImportExport)

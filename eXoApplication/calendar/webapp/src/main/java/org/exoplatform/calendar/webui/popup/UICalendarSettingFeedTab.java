@@ -69,7 +69,7 @@ public class UICalendarSettingFeedTab extends UIFormInputWithActions {
     grid.configure("feed", BEAN_FIELD, ACTION) ;
     grid.getUIPageIterator().setId("FeedListIterator");
     CalendarService calendarService = CalendarUtils.getCalendarService();
-    setFeedList(calendarService.getFeeds(CalendarUtils.getCurrentUser()));
+    setFeedList(calendarService.getUserFeeds(CalendarUtils.getCurrentUser()));
   }
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;
@@ -123,7 +123,7 @@ public class UICalendarSettingFeedTab extends UIFormInputWithActions {
       CalendarService calendarService = CalendarUtils.getCalendarService();
       String username = CalendarUtils.getCurrentUser();
       calendarService.removeFeedData(username, title);
-      uiform.setFeedList(calendarService.getFeeds(username));
+      uiform.setFeedList(calendarService.getUserFeeds(username));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiform);
     }
   }
