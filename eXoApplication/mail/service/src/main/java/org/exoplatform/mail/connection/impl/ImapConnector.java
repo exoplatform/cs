@@ -162,7 +162,7 @@ public class ImapConnector extends BaseConnector {
     try {
       remoteFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(remoteURL);
     } catch (Exception e) {
-         logger.warn("Cannot get \"" + folder.getName() + "\" folder. It will be created on server immediate.", e);
+         logger.warn("Cannot get \"" + folder.getName() + "\" folder. It will be created on server immediate.");
        remoteFolder = (IMAPFolder)this.createFolder(folder);
     }
     try {
@@ -289,17 +289,13 @@ public class ImapConnector extends BaseConnector {
               msg = sourceImapFolder.getMessageByUID(Long.valueOf(m.getUID()));
             else logger.warn("Message is null or UID is null.");
           }catch (Exception e){
-              logger.warn("The UID: \"" + m.getUID() + "\" for message: \""+ m.getSubject() +"\" is not exist on server mail\n", e);
+              logger.warn("The UID: \"" + m.getUID() + "\" for message: \""+ m.getSubject() +"\" is not exist on server mail\n");
           }
           if (msg != null) copiedMsgs.add(msg);
         }
         if(copiedMsgs != null && copiedMsgs.size() > 0){
           javax.mail.Message[] messages = copiedMsgs.toArray(new javax.mail.Message[copiedMsgs.size()]);
-          try {
-            sourceImapFolder.copyMessages(messages, desImapFolder);  
-          } catch (Exception e) {
-            logger.warn("Message is not moved", e);
-          }
+          sourceImapFolder.copyMessages(messages, desImapFolder);  
           Flags flags = new Flags();
           flags.add(Flags.Flag.DELETED);
           sourceImapFolder.setFlags(messages, flags, true);
