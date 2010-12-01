@@ -129,7 +129,7 @@
     <dependency>
       <groupId>org.reflext</groupId>
       <artifactId>reflext.api</artifactId>
-      <version>1.1.0-beta9</version>
+      <version>${org.reflext.version}</version>
       <scope>test</scope>
     </dependency>
 
