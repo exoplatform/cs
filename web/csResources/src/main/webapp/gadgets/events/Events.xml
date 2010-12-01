@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
   <ModulePrefs author="eXoPlatform"
-		title="Upcoming events"
-		directory_title="Upcoming events"
+		title="Upcoming Events"
+		directory_title="Upcoming Events"
 		title_url="http://www.exoplatform.org"
 		description="Upcoming events list."	
 		thumbnail="http://localhost:8080/csResources/gadgets/events/skin/Events.png">
