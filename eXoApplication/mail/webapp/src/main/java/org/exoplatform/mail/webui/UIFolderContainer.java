@@ -205,16 +205,12 @@ public class UIFolderContainer extends UIContainer {
       String username = uiFolder.getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
       Folder currentFolder = mailSvr.getFolder(username, accountId, folderId);
       List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
-      long numberOfUnread = 0;
-      if(msgList.size() > 0){
-        for (Message msg : msgList) {
-          if(msg .isUnread()) numberOfUnread += 1;
-        }
-        if(numberOfUnread > 0 && !MailUtils.isFieldEmpty(folderId)) currentFolder.setNumberOfUnreadMessage(numberOfUnread) ;  
-      }
-      //mailSvr.removeCheckingInfo(username, accountId);
+      long numberOfUnread = Utils.getNumberOfUnreadMessageReally(msgList);
+      if(numberOfUnread >= 0 && currentFolder != null && msgList.size() > 0) currentFolder.setNumberOfUnreadMessage(numberOfUnread) ;
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder);
     }
   }
 

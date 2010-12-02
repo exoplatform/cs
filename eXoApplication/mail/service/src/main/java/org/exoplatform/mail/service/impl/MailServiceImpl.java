@@ -1137,9 +1137,6 @@ public class MailServiceImpl implements MailService, Startable {
                                                    String accountId,
                                                    Folder parentFolder,
                                                    javax.mail.Folder[] folders) throws Exception {
-  	
-  	
-  	
     List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
     List<String> serverFolderId = new ArrayList<String>();
     String folderId, folderName;
@@ -1205,6 +1202,7 @@ public class MailServiceImpl implements MailService, Startable {
         Folder inbox = getFolder(userName, accountId, Utils.generateFID(accountId,
                                                                         Utils.FD_INBOX,
                                                                         false));
+        inbox.setNumberOfUnreadMessage(fd.getNewMessageCount());
         inbox.setURLName(fd.getURLName().toString());
         saveFolder(userName, accountId, inbox, false);
       }
@@ -1229,7 +1227,7 @@ public class MailServiceImpl implements MailService, Startable {
   public MailSSLSocketFactory getSSLSocketFactory(String host){
     MailSSLSocketFactory sslsocket = null;
     try {
-      sslsocket = new MailSSLSocketFactory();
+      sslsocket = new MailSSLSocketFactory();//default protocol is TLS
       sslsocket.setTrustedHosts(new String[]{host});
       TrustManager[] trusts = new TrustManager[]{new ExoMailTrustManager(null, false, host, null)};
       sslsocket.setTrustManagers(trusts);      
@@ -1568,6 +1566,7 @@ public class MailServiceImpl implements MailService, Startable {
                                                                                   accountId,
                                                                                   mailServerFolder);
           List<Message> msgListFromJcrFolder = getMessagesByFolder(userName, accountId, folderId);
+          jcrFolder.setNumberOfUnreadMessage(Utils.getNumberOfUnreadMessageReally(msgListFromJcrFolder));
           msgListFromJcrFolder = removeMessageFromJCR(userName,
                                                       accountId,
                                                       msgListFromJcrFolder,
@@ -1776,7 +1775,7 @@ public class MailServiceImpl implements MailService, Startable {
             if (info != null && info.isRequestStop()) {
               if (logger.isDebugEnabled()) {
                 logger.debug("Stop requested on checkmail for " + account.getId());
-              }// duy
+              }
               throw new CheckMailInteruptedException("Stop getting mails from folder " + folder.getName() + " !");
             } else if (info != null
                 && !Utils.isEmptyField(info.getRequestingForFolder_())
@@ -1936,7 +1935,7 @@ public class MailServiceImpl implements MailService, Startable {
         }
       }
     }
-
+    
     return messageList;
   }
 

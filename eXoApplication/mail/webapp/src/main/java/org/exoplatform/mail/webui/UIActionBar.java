@@ -99,16 +99,12 @@ public class UIActionBar extends UIContainer {
       }
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
-      long numberOfUnread = 0;
-      if(msgList.size() > 0){
-        for (Message msg : msgList) {
-          if(msg .isUnread()) numberOfUnread += 1;
-        }
-        if(numberOfUnread > 0 && !MailUtils.isFieldEmpty(folderId)) currentF.setNumberOfUnreadMessage(numberOfUnread) ;  
-      }
+      long numberOfUnread = Utils.getNumberOfUnreadMessageReally(msgList);
+      if(numberOfUnread >= 0 && !MailUtils.isFieldEmpty(folderId) && msgList.size()>0) currentF.setNumberOfUnreadMessage(numberOfUnread) ;
       UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
     }
   }
 

@@ -17,6 +17,7 @@
 package org.exoplatform.mail.service;
 
 import java.io.InputStream;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.DecimalFormat;
@@ -601,5 +602,14 @@ public class Utils {
     }
     return false;
   }
-   
+  
+  public static long getNumberOfUnreadMessageReally(List<Message> msgList){
+    long numberOfUnread = 0;
+    if(msgList != null && msgList.size() > 0){
+      for (Message msg : msgList) {
+        if(msg .isUnread()) numberOfUnread += 1;
+      }
+    }
+    return numberOfUnread;
+  }
 }
