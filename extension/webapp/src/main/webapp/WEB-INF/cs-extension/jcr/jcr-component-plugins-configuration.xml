@@ -122,7 +122,7 @@
 	    </init-params>            
 	  </component-plugin>
 	</external-component-plugins>
-	
+	<!-- remove external plugin to avoid duplicate with wcm configuration on PLF
 	<external-component-plugins>
   	<target-component>org.exoplatform.services.organization.OrganizationService</target-component>  	
 	  <component-plugin>
@@ -223,5 +223,5 @@
 	      </object-param>
 	    </init-params>
 	  </component-plugin>	  	  	  	  
-	</external-component-plugins>
+	</external-component-plugins> -->
 </configuration>
