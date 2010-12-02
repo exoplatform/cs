@@ -87,13 +87,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>10000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>//a[contains(text(),'Click here to add a new filter')]</td>
+	<td>link=Click here to add a new filter</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//a[contains(text(),'Click here to add a new filter')]</td>
+	<td>link=Click here to add a new filter</td>
 	<td></td>
 </tr>
 <tr>
@@ -141,7 +146,6 @@
 	<td>-- Verify filtered messages --</td>
 	<td></td>
 </tr>
-<!--CS-4425-->
 <tr>
 	<td>click</td>
 	<td>link=Sent</td>
@@ -160,6 +164,11 @@
 <tr>
 	<td>echo</td>
 	<td>-- Edit filter</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='MailWorkingWorkspace']/div[1]/div/div/div/div/div/div[6]/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -214,12 +223,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Inbox</td>
+	<td>//div[@id='UIFolderContainer']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Inbox</td>
+	<td>//div[@id='UIFolderContainer']/div[2]/div[1]/div[1]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
 	<td></td>
 </tr>
 <tr>
@@ -238,8 +252,13 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='MailWorkingWorkspace']/div[1]/div/div/div/div/div/div[6]/div</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
-	<td>//div[@id='MailWorkingWorkspace']/div[1]//div[6]/div</td>
+	<td>//div[@id='MailWorkingWorkspace']/div[1]/div/div/div/div/div/div[6]/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -267,7 +286,6 @@
 	<td></td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

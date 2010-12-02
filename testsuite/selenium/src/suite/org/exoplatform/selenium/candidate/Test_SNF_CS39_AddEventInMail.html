@@ -28,12 +28,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@class='LoginButton']</td>
+	<td>link=Sign in</td>
 	<td></td>
 </tr>
 <tr>
@@ -44,7 +44,7 @@
 <tr>
 	<td>type</td>
 	<td>username</td>
-	<td>mary</td>
+	<td>root</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -52,8 +52,13 @@
 	<td>gtn</td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>xpath=//div[@id='UIPortalLoginFormAction']//a</td>
+	<td>clickAndWait</td>
+	<td>//div[@id='UIPortalLoginFormAction']/div/div/div/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
 	<td></td>
 </tr>
 <tr>
@@ -196,7 +201,6 @@
 	<td></td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
