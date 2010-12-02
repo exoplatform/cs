@@ -180,9 +180,11 @@ UIWeekView.prototype.drag = function(evt) {
 	var currentTop =  UIWeekView.mousePos(_e).y - UIWeekView.offset.y - UIWeekView.containerOffset.y;
 	var maxTop = UIWeekView.dragElement.offsetParent.scrollHeight - height; 
 	if(currentTop >= 0 && currentTop <= maxTop){
+		/*
 		if (deltaY % eXo.calendar.UICalendarPortlet.interval == 0) {
 			UIWeekView.dragElement.style.top = currentTop + "px" ;
-		}
+		}*/
+		UIWeekView.dragElement.style.top = (currentTop - currentTop%eXo.calendar.UICalendarPortlet.interval) + "px" ;
 		if (UIWeekView.isCol(_e)) {
 			var posX = eXo.core.Browser.findPosXInContainer(UIWeekView.currentCol, UIWeekView.dragElement.offsetParent) ;
 			UIWeekView.dragElement.style.left = posX + "px" ;
@@ -756,7 +758,7 @@ UIWeekView.prototype.initSelection = function() {
 	var UISelection = eXo.calendar.UISelection ;
 	var container = document.getElementById("UIWeekViewGrid") ;
 	UISelection.step = 30 ;	
-	UISelection.block = document.createElement("div")
+	UISelection.block = document.createElement("div");
 	UISelection.block.className = "UserSelectionBlock" ;
 	UISelection.container = container ;
 	eXo.core.DOMUtil.findPreviousElementByTagName(container, "div").appendChild(UISelection.block) ;
