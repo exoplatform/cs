@@ -217,7 +217,6 @@ public class UIMessageList extends UIForm {
       Account acc = mailSrv.getAccountById(username, accId);
       if (acc == null) {
         UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
-        UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
         try {
           String selectedAccId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
           if (!MailUtils.isFieldEmpty(selectedAccId)) {
@@ -230,10 +229,6 @@ public class UIMessageList extends UIForm {
           init(null);
           uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         }
-        System.out.println("refresh browser: " + Utils.getNumberOfUnreadMessageReally(new ArrayList<Message>(messageList_.values())));
-        /*Folder currentF = uiFolderContainer.getCurrentFolder();
-        long numUnreadMessage = Utils.getNumberOfUnreadMessageReally(new ArrayList<Message>(messageList_.values()));
-        if(numUnreadMessage >= 0) currentF.setNumberOfUnreadMessage(numUnreadMessage);*/
       }
     } catch (Exception ex) { }
    
