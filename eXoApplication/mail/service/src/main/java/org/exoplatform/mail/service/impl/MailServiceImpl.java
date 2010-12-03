@@ -573,43 +573,74 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public Message sendMessage(String userName, Account acc, Message message) throws Exception {
-    //Security.addProvider( new com.sun.net.ssl.internal.ssl.Provider());
     String smtpUser = acc.getIncomingUser();
     String outgoingHost = acc.getOutgoingHost();
     String outgoingPort = acc.getOutgoingPort();
     String isSSl = acc.getServerProperties().get(Utils.SVR_OUTGOING_SSL);
     boolean isSMTPAuth = acc.isOutgoingAuthentication();
     Properties props = System.getProperties();
-    String protocolName = Utils.SVR_SMTP;
-    String socketFactoryClass = "javax.net.SocketFactory";
-    props.put(Utils.SVR_SMTP_USER, smtpUser);
-    props.put(Utils.SVR_SMTP_HOST, outgoingHost);
-    props.put(Utils.SVR_SMTP_PORT, outgoingPort);
-    props.put("mail.smtp.dsn.notify", "SUCCESS,FAILURE ORCPT=rfc822;" + acc.getEmailAddress());
-    props.put("mail.smtp.dsn.ret", "FULL");
-    props.put("mail.smtp.socketFactory.port", outgoingPort);
-    props.put("mail.smtp.connectiontimeout", "0");
-    props.put("mail.smtp.timeout", "0");
-    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS, socketFactoryClass);
-    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, false);
-
+    String protocolName        = Utils.SVR_SMTP;
+    String smtpPort            = Utils.SVR_SMTP_SOCKET_FACTORY_PORT;
+    String svrSmtpUser         = Utils.SVR_SMTP_USER;
+    String svrSmtpHost         = Utils.SVR_SMTP_HOST;
+    String svrSmtpPort         = Utils.SVR_SMTP_PORT;
+    String dsnNotify           = Utils.SMTP_DNS_NOTIFY;
+    String smtpDnsRet          = Utils.SMTP_DNS_RET;
+    String socketFactoryClass  = Utils.SOCKET_FACTORY;
+    String smtpconnecttimeout  = Utils.SMTP_CONECT_TIMEOUT;
+    String smtptimeout         = Utils.SMTP_TIMEOUT;
+    String smtpSocketFactoryClazz  = Utils.SVR_SMTP_SOCKET_FACTORY_CLASS;
+    String smtpSocketFacFallback   = Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK;
+    String smtpQuitWait            = Utils.SMTP_QUIT_WAIT;
+    
+    String smtpSslProtocols        = "mail.smtp.ssl.protocols";
+    String smtpSslStarttls         = Utils.SVR_SMTP_STARTTLS_ENABLE;
+    String smtpSslFactory          = Utils.SMTP_SSL_FACTORY;
+    String smtpAuth               = Utils.SVR_SMTP_AUTH;
+    
     if (Boolean.valueOf(isSSl)) {
+      protocolName = Utils.SVR_SMTPS;
       MailSSLSocketFactory socketFactory = this.getSSLSocketFactory(outgoingHost);  
-      props.put(Utils.SMTP_SSL_FACTORY, socketFactory);
+      props.put(smtpSslFactory.replace("smtp", "smtps"), socketFactory);
+      smtpPort=Utils.SVR_SMTP_SSL_SOCKET_FACTORY_PORT;
+      props.put(smtpSslStarttls.replace("smtp", "smtps"), true);
+      props.put(smtpSslProtocols.replace("smtp", "smtps"), "SSLv3 TLSv1");
     }
     if(Utils.isGmailAccount(smtpUser) || Utils.isGmailAccount(acc.getOutgoingUserName())){
       protocolName = Utils.SVR_SMTPS;
-      //props.put(Utils.SMTP_QUIT_WAIT, false);
-      if(isSMTPAuth) props.put(Utils.SVR_SMTPS_AUTH, true);
-    }else
-      if (isSMTPAuth) {
-        props.put(Utils.SVR_SMTP_AUTH, true);
-      } else {
-        props.put(Utils.SVR_SMTP_AUTH, false);
-      }
+      props.put(smtpQuitWait.replace("smtp", "smtps"), false);
+      if(isSMTPAuth) props.put(smtpAuth.replace("smtp", "smtps"), true);
+    }
+     
+    if(protocolName.equalsIgnoreCase(Utils.SVR_SMTP)){
+      props.put(svrSmtpUser, smtpUser);
+      props.put(svrSmtpHost, outgoingHost);
+      props.put(svrSmtpPort, outgoingPort);
+      props.put(dsnNotify, "SUCCESS,FAILURE ORCPT=rfc822;" + acc.getEmailAddress());
+      props.put(smtpDnsRet, "FULL");
+      props.put(smtpconnecttimeout, "0");
+      props.put(smtptimeout, "10000");
+      props.put(smtpSocketFactoryClazz, socketFactoryClass);
+      props.put(smtpSocketFacFallback, false);
+      props.put(smtpPort, outgoingPort);
+      if (isSMTPAuth)  props.put(Utils.SVR_SMTP_AUTH, true);
+      else  props.put(Utils.SVR_SMTP_AUTH, false);
+    }else{
+      props.put(svrSmtpUser.replace("smtp", "smtps"), smtpUser);
+      props.put(svrSmtpHost.replace("smtp", "smtps"), outgoingHost);
+      props.put(svrSmtpPort.replace("smtp", "smtps"), outgoingPort);
+      props.put(dsnNotify.replace("smtp", "smtps"), "SUCCESS,FAILURE ORCPT=rfc822;" + acc.getEmailAddress());
+      props.put(smtpDnsRet.replace("smtp", "smtps"), "FULL");
+      props.put(smtpconnecttimeout.replace("smtp", "smtps"), "0");
+      props.put(smtptimeout.replace("smtp", "smtps"), "10000");
+      props.put(smtpSocketFactoryClazz.replace("smtp", "smtps"), socketFactoryClass);
+      props.put(smtpSocketFacFallback.replace("smtp", "smtps"), false);
+      if (isSMTPAuth)  props.put(smtpAuth.replace("smtp", "smtps"), true);
+      else  props.put(smtpAuth.replace("smtp", "smtps"), false);
+    }
     Session session = Session.getDefaultInstance(props, null);
     logger.debug(" #### Sending email ..f  ");
- 
+    if(protocolName.equalsIgnoreCase(Utils.SVR_SMTPS)) session.setProtocolForAddress("rfc822", Utils.SVR_IMAPS);
     SMTPTransport transport = (SMTPTransport)session.getTransport(protocolName);
     try {
       if (!isSMTPAuth) {
