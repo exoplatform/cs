@@ -37,7 +37,12 @@
 				                    </object>  
 				                </value>			                  
 			                </collection>
-			              </field>   			               
+			        </field>   	
+				<field name="mixinTypes">
+			              	<collection type="java.util.ArrayList">
+			              		<value><string>exo:hiddenable</string></value>
+			              	</collection>
+			        </field>		               
 	              	</object>
               	</value>
              		<value>              	
