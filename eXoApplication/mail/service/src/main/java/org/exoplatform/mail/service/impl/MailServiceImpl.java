@@ -51,6 +51,7 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
+import javax.mail.Flags.Flag;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -528,7 +529,11 @@ public class MailServiceImpl implements MailService, Startable {
     }
     if (destFolder != null && account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       Connector connector = new ImapConnector(account, this.getSSLSocketFactory(account.getIncomingHost()));
-      successList = connector.createMessage(msgList, destFolder);
+      try {
+        successList = connector.createMessage(msgList, destFolder);
+      } catch (Exception e) {
+         logger.warn("Cannot add sent message into \"" + destFolder.getName() + "\" folder on server"); 
+      }
     }
     storage_.saveMessage(userName, account.getId(), targetMsgPath, message, isNew);
     if(successList != null && successList.size() > 0) return true;
@@ -1584,7 +1589,6 @@ public class MailServiceImpl implements MailService, Startable {
                             accountId,
                             Utils.generateFID(accountId, Utils.FD_INBOX, false));
     }
-/*    try {*/
       String urlName = jcrFolder.getURLName();
       if (jcrFolder != null && !Utils.isEmptyField(urlName)) {
         URLName url = new URLName(urlName);
@@ -1619,15 +1623,6 @@ public class MailServiceImpl implements MailService, Startable {
           }
         }
       }
- /*   } catch (CheckMailInteruptedException ce) {
-      throw ce;
-    } finally {
-      try {
-        if (store != null && store.isConnected()) {
-          store.close();
-        }
-      } catch (MessagingException me) { logger.warn(me); }
-    }*/
   }
 
   private CheckingInfo createCheckingInfo(String userName, String accountId) {
@@ -1735,7 +1730,7 @@ public class MailServiceImpl implements MailService, Startable {
     if (folder == null) return;
     String folderId = null;
     String folderName = folder.getName();
-    int unreadMsgCount = 0;
+    long unreadMsgCount = 0;
       if (!folder.isOpen()) {
         folder.open(javax.mail.Folder.READ_ONLY);
       }
@@ -1797,8 +1792,6 @@ public class MailServiceImpl implements MailService, Startable {
           Date lastFromDate = null, receivedDate = null;
           List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap.keySet());
           SpamFilter spamFilter = getSpamFilter(userName, account.getId());
-          //info.setStatusMsg("Synchronizing messages of [" + folderName + "] : " + (i + 1) + "/"
-                          //+ totalNew);
           info.setStatusCode(CheckingInfo.DOWNLOADING_MAIL_STATUS);
           updateCheckingMailStatusByCometd(userName, accountId, info);
           while (i < totalNew) {
@@ -1817,9 +1810,7 @@ public class MailServiceImpl implements MailService, Startable {
             if (info != null) {
               folderIds = new String[] { folderId };
               msg = msgList.get(i);
-              if(unreadMsgCount > -1) unreadMsgCount = folder.getUnreadMessageCount();
-              eXoFolder.setNumberOfUnreadMessage((long)unreadMsgCount);
-              if (info != null/* && i < unreadMsgCount*/) {
+              if (info != null) {
                 info.setFetching(i + 1);
               }
               filterList = msgMap.get(msg);
@@ -1855,8 +1846,11 @@ public class MailServiceImpl implements MailService, Startable {
                                              infoObj,
                                              this.continuationService_,
                                              false);
-                if (saved && !leaveOnserver)
-                  msg.setFlag(Flags.Flag.DELETED, true);
+                if (saved){
+                  if(!leaveOnserver) msg.setFlag(Flags.Flag.DELETED, true);
+                  if(!msg.isSet(Flag.SEEN)) unreadMsgCount++;
+                }
+                  
 
                 receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
 
@@ -1881,16 +1875,8 @@ public class MailServiceImpl implements MailService, Startable {
               break;
             }
           }
-          
+          eXoFolder.setNumberOfUnreadMessage(unreadMsgCount);
           saveFolder(userName, accountId, eXoFolder, false);
-          /*FetchMailContentThread downloadContentMail = new FetchMailContentThread(this, storage_,
-                                                                                  msgMap,
-                                                                                  i,
-                                                                                  folder,
-                                                                                  userName,
-                                                                                  accountId);
-          new Thread(downloadContentMail).start();*/
-          
           } 
       }
   }
