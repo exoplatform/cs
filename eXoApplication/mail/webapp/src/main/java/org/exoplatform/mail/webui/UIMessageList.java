@@ -1467,7 +1467,6 @@ public class UIMessageList extends UIForm {
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       List<Message> msgList = new ArrayList<Message>();
       Folder currentFolder = mailSrv.getFolder(username, accountId, folderId);
-      //long numberUnreadMsg = currentFolder.getNumberOfUnreadMessage();
       List<Message> currentMsgList = new ArrayList<Message>(uiMessageList.messageList_.values());
       long numberUnreadMsg = Utils.getNumberOfUnreadMessageReally(currentMsgList);
       

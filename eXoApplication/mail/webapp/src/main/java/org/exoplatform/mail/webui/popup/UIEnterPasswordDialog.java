@@ -137,8 +137,7 @@ public class UIEnterPasswordDialog extends UIForm implements UIPopupComponent{
       
       try {
         if(!composeForm.saveToSentFolder(username, acc, uiForm.getSendMessage())){
-          uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.create-massage-not-successful",
-                                                  null, ApplicationMessage.INFO)) ;
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-sent", null, ApplicationMessage.INFO)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
