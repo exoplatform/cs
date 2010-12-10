@@ -205,12 +205,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     }
     return map.values().toArray(new String[map.values().size()] ) ;
   }
-/*  private SessionProvider getSession() {
-    return SessionProviderFactory.createSessionProvider() ;
-  }
-  private SessionProvider getSystemSession() {
-    return SessionProviderFactory.createSystemProvider() ;
-  }*/
+
   public boolean isSearchTask() {
     return getUIFormSelectBox(TYPE).getValue().equals(CalendarEvent.TYPE_TASK) ; 
   }
@@ -260,13 +255,6 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         }
       }
       String text = uiForm.getUIStringInput(UIAdvancedSearchForm.TEXT).getValue() ;
-      /*if(!CalendarUtils.isEmpty(text)) {
-        if(!CalendarUtils.isNameValid(text, CalendarUtils.EXTENDEDKEYWORD)) {
-          uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.error-text-to-search", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
-      }   */   
       if(!uiForm.isValidate()){
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -326,10 +314,6 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         //CS-3610
         uiListView.setViewType(UIListView.TYPE_BOTH) ;
         calendarPortlet.cancelAction() ;
-        /*uiListView.setSortedField(CalendarEventComparator.EVENT_SUMMARY);        
-        ceCompare.setRevertOrder(order);
-        uiListView.setIsAscending(order);*/
-        //Collections.sort(resultList, uiListView.ceCompare_);
         
         if (query.getCalendarId() == null) { 
           List<String> calendarIds = new ArrayList<String>() ; 

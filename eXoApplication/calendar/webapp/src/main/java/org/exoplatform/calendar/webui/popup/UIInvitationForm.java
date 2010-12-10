@@ -95,11 +95,6 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
     } catch (Exception e) {
       e.printStackTrace() ;
     }
-    /* defaul_msg += CalendarUtils.BREAK_LINE ;
-
-    String summary = getLabel(UIEventDetailTab.FIELD_EVENT)+ CalendarUtils.COLON + event_.getSummary() ;
-    defaul_msg += summary ;
-    defaul_msg += CalendarUtils.BREAK_LINE ;*/
 
     addUIFormInput(new UIFormTextAreaInput(FIELD_PARTICIPANT, FIELD_PARTICIPANT, null)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_INVITATION_MSG, FIELD_INVITATION_MSG, defaul_msg)) ;
@@ -231,17 +226,7 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
                                                 , new String[] { uiInvitationForm.escapeGroupReferences(builder.toString()) }, ApplicationMessage.WARNING));
         
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      }
-
-      /*else {
-        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.event-email-invalid"
-          , new String[] { CalendarUtils.invalidEmailAddresses(uiForm.getInvitationEmail())}));
-        uiForm.setSelectedTab(TAB_EVENTSHARE) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }*/
-      
+      }      
     }
   }
 
@@ -314,26 +299,6 @@ public class UIInvitationForm extends UIForm implements UIPopupComponent {
       uiAddressForm.actions_ = new String[]{"Add", "Cancel"};
       uiAddressForm.setContactList("") ;
       String oldAddress = uiEventForm.getEmailAddress() ;
-      /*
-      List<Contact> allContact = new ArrayList<Contact>() ;
-      ContactService contactService = uiAddressForm.getApplicationComponent(ContactService.class) ;
-      String username = CalendarUtils.getCurrentUser() ;
-      DataPageList dataList = contactService.searchContact(username, new ContactFilter()) ;
-      allContact = dataList.getAll() ;
-      if(!allContact.isEmpty()) {
-        if(!CalendarUtils.isEmpty(oldAddress)) {
-          for(String address : oldAddress.split(",")) {
-            for(Contact c : allContact){
-              if(!CalendarUtils.isEmpty(c.getEmailAddress())) {
-                if(Arrays.asList(c.getEmailAddress().split(";")).contains(address.trim())) {
-                  uiAddressForm.checkedList_.put(c.getId(), c) ;
-                }
-              }
-            }
-          }
-        }
-      }
-      */
       List<ContactData> contacts = uiAddressForm.getContactList() ;
       if(!CalendarUtils.isEmpty(oldAddress)) {
         for(String address : oldAddress.split(",")) {

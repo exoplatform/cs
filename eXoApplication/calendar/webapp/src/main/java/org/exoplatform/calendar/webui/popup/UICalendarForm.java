@@ -316,33 +316,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     privateAction.setCssIconClass("ICalIcon");
     calendarDetail.addUIFormInput(privateUrl);
     calendarDetail.setActionField(PRIVATE_URL, Arrays.asList(privateAction));
-    /*
-    UIFormInputInfo publicUrl = new UIFormInputInfo(PUBLIC_URL, PUBLIC_URL, null);
-    calendarDetail.addUIFormInput(publicUrl);
-    if(CalendarUtils.isEmpty(calendar.getPublicUrl())) {
-      publicUrl.setValue(getLabel(PUBLIC_URL_MSG_D));
-      ActionData enable = switchAct(0);
-      ActionData enable = new ActionData();
-      enable.setActionListener(ACT_ACTIVE);
-      enable.setActionName(ACT_ACTIVE);
-      enable.setShowLabel(true);
-      enable.setActionType(ActionData.TYPE_LINK);
-      enable.setCssIconClass("FeedLink");
-      calendarDetail.setActionField(PUBLIC_URL, Arrays.asList(enable)); 
-    } else {
-      List<ActionData> acts = new ArrayList<ActionData>();
-      ActionData link = new ActionData();
-      link.setActionListener(ACT_OPEN);
-      link.setActionName(PUBLIC_URL_MSG);
-      link.setActionParameter(calendar.getPublicUrl());
-      link.setShowLabel(true);
-      link.setActionType(ActionData.TYPE_LINK);
-      link.setCssIconClass("ICalIcon");
-      acts.add(link);
-      ActionData act = switchAct(1);
-      acts.add(act);
-      calendarDetail.setActionField(PUBLIC_URL, acts);
-    } */
   }
 
   protected String getDisplayName() {
@@ -551,11 +524,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         String displayName = uiForm.getUIStringInput(DISPLAY_NAME).getValue() ;
         //      CS-3009
         displayName = CalendarUtils.reduceSpace(displayName) ;
-        /*if(!CalendarUtils.isNameValid(displayName, CalendarUtils.SPECIALCHARACTER)){
-          uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-invalid", null, ApplicationMessage.WARNING) ) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }*/
         displayName = displayName.trim() ;
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
         String username = CalendarUtils.getCurrentUser() ;
@@ -566,21 +534,12 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         if(!uiForm.isAddNew_) calendar = uiForm.calendar_ ;
         calendar.setName(displayName) ;
         calendar.setDescription(uiForm.getDescription()) ;
-        //        calendar.setLocale(uiForm.getLocale()) ;
-        //        calendar.setTimeZone(uiForm.getTimeZone()) ;
         calendar.setCalendarColor(uiForm.getSelectedColor()) ;
         calendar.setCalendarOwner(username) ;
         String url =  CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ 
         PortalContainer.getCurrentRestContextName() + CalendarWebservice.BASE_URL_PRIVATE + CalendarUtils.getCurrentUser()+"/"+
         calendar.getId() +"/"+ uiForm.calType_ ;
         calendar.setPrivateUrl(url);
-        /* if(uiForm.isPublicUrl_) url = CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ 
-        PortalContainer.getCurrentRestContextName() + PUBLIC_BASE_URL + CalendarUtils.getCurrentUser()+"/"+
-        calendar.getId() +"/"+ uiForm.calType_ ;
-        else url = null;
-
-        calendar.setPublicUrl(url);*/
-
         if(CalendarUtils.PRIVATE_TYPE.equals(uiForm.calType_)) {
           if(CalendarUtils.isEmpty(calendarCategoryId)) {
             uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null, ApplicationMessage.WARNING) ) ;
@@ -699,10 +658,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
           calendarService.savePublicCalendar(calendar, uiForm.isAddNew_, username) ;
         } 
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-        //        calendarPortlet.setCalendarSetting(null) ;
-        /*
-         * remove cached calendar setting to load new one after that.
-         */
         CalendarUtils.removeCurrentCalendarSetting();
         calendarPortlet.cancelAction() ;
         UICalendarWorkingContainer uiWorkingContainer = calendarPortlet.getChild(UICalendarWorkingContainer.class) ;
@@ -788,22 +743,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         PortalContainer.getCurrentRestContextName() + CalendarWebservice.BASE_URL_PUBLIC + CalendarUtils.getCurrentUser()+"/"+
         uiForm.calendar_.getId() +"/"+ uiForm.calType_ ;
         uiForm.calendar_.setPublicUrl(url);
-        /*   UIFormInputWithActions calendarDetail = uiForm.getChildById(INPUT_CALENDAR);
-        UIFormInputInfo uiInput = calendarDetail.getChildById(PUBLIC_URL);
-        uiInput.setValue("");
-
-        List<ActionData> acts = new ArrayList<ActionData>();
-        ActionData link = new ActionData();
-        link.setActionListener(ACT_OPEN);
-        link.setActionName(PUBLIC_URL_MSG);
-        link.setActionParameter(url);
-        link.setShowLabel(true);
-        link.setActionType(ActionData.TYPE_LINK);
-        link.setCssIconClass("FeedLink");
-        acts.add(link);
-        ActionData act = uiForm.switchAct(1);
-        acts.add(act);
-        calendarDetail.setActionField(PUBLIC_URL, acts);*/
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;     
       }
     }
@@ -813,34 +752,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource();
       uiForm.calendar_.setPublicUrl(null);
-      /*UIFormInputWithActions calendarDetail = uiForm.getChildById(INPUT_CALENDAR);
-      UIFormInputInfo uiInput = calendarDetail.getChildById(PUBLIC_URL);
-      uiInput.setValue(uiForm.getLabel(PUBLIC_URL_MSG_D));
-      ActionData act = uiForm.switchAct(0);
-      calendarDetail.setActionField(PUBLIC_URL, Arrays.asList(act));*/
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;      
     }
   }
-  /*
-  public ActionData switchAct(int i) {
-    if(0 == i) {
-      ActionData enable = new ActionData();
-      enable.setActionListener(ACT_ACTIVE);
-      enable.setActionName(ACT_ACTIVE);
-      enable.setShowLabel(true);
-      enable.setActionType(ActionData.TYPE_LINK);
-      enable.setCssIconClass("FeedLink");
-      return enable ;
-    } else if(1 == i) {
-      ActionData disable = new ActionData();
-      disable.setActionListener(ACT_DEACTIVE);
-      disable.setActionName(ACT_DEACTIVE);
-      disable.setShowLabel(true);
-      disable.setCssIconClass("FeedLink");
-      disable.setActionName(disable.getActionListener());
-      disable.setActionType(ActionData.TYPE_LINK);
-      return disable; 
-    } else 
-      return null;
-  }*/
 }

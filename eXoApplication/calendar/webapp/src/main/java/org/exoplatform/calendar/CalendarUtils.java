@@ -833,14 +833,6 @@ public class CalendarUtils {
     }
   }
   public static String getCurrentTime(UIComponent uiCompo) throws Exception {
-    /*UICalendarPortlet calPortlet = uiCompo.getAncestorOfType(UICalendarPortlet.class) ;
-    CalendarSetting conf = calPortlet.getCalendarSetting();
-    java.util.Calendar cal = java.util.Calendar.getInstance();
-    TimeZone confTimeZone = TimeZone.getTimeZone(conf.getTimeZone());
-    Integer tz = (cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET));
-    if(tz == confTimeZone.getRawOffset()) return String.valueOf(cal.getTimeInMillis());
-    Long time = cal.getTimeInMillis() - tz ;
-    time += confTimeZone.getRawOffset();*/
     return String.valueOf(System.currentTimeMillis());
   }
 

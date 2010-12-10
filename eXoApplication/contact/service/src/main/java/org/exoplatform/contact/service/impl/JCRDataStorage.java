@@ -99,9 +99,9 @@ public class JCRDataStorage implements DataStorage {
     repoService_ = repoService ;
   }  
   
-
-     
- 
+  /**
+   * {@inheritDoc}
+   */
   public Node getSharedContact(String userId) throws Exception {
     Node contactHome = getContactUserDataHome(userId);
     Node sharedHome ;
@@ -123,8 +123,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }  
   
-/* (non-Javadoc)
- * @see org.exoplatform.contact.service.impl.DataStorage#getSharedAddressBooksHome(java.lang.String)
+/**
+ * {@inheritDoc}
  */
   public Node getSharedAddressBooksHome(String userId) throws Exception {
       Node contactHome = getContactUserDataHome(userId);
@@ -147,9 +147,8 @@ public class JCRDataStorage implements DataStorage {
       }
   }    
   
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#ValuesToStrings(javax.jcr.Value[])
+  /**
+   * {@inheritDoc}
    */
   public String [] ValuesToStrings(Value[] Val) throws Exception {
     if(Val.length == 1) return new String[]{Val[0].getString()};
@@ -161,8 +160,8 @@ public class JCRDataStorage implements DataStorage {
   }
   
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#loadPublicContactByUser(java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public Contact loadPublicContactByUser(String userId) throws Exception {
     try {
@@ -174,8 +173,8 @@ public class JCRDataStorage implements DataStorage {
     } 
   }  
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getContact(javax.jcr.Node, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public Contact getContact(Node contactNode, String contactType) throws Exception {
     Contact contact = new Contact();
@@ -246,8 +245,8 @@ public class JCRDataStorage implements DataStorage {
     return contact;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#findAllContactsByOwner(java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public List<Contact> findAllContactsByOwner(String username) throws Exception {
       Node contactHomeNode = getPersonalContactsHome(username);
@@ -262,8 +261,8 @@ public class JCRDataStorage implements DataStorage {
       return contacts;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#findContactsByFilter(java.lang.String, org.exoplatform.contact.service.ContactFilter, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public ContactPageList findContactsByFilter(String username,
                                                    ContactFilter filter,
@@ -308,9 +307,8 @@ public class JCRDataStorage implements DataStorage {
       return null;
   }
   
-  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#loadPersonalContact(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public Contact loadPersonalContact(String ownerUserId, String contactId) throws Exception {
       Node contactHomeNode = getPersonalContactsHome(ownerUserId);
@@ -321,8 +319,8 @@ public class JCRDataStorage implements DataStorage {
       }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#findPersonalContactsByAddressBook(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public ContactPageList findPersonalContactsByAddressBook(String owner, String addressBookId) throws Exception {
       Node userContactsHome = getPersonalContactsHome(owner);
@@ -339,9 +337,9 @@ public class JCRDataStorage implements DataStorage {
   }
  
   
- /* (non-Javadoc)
- * @see org.exoplatform.contact.service.impl.DataStorage#findEmailsByAddressBook(java.lang.String, java.lang.String)
- */
+ /**
+  * {@inheritDoc}
+  */
 public List<String> findEmailsByAddressBook(String username, String addressBookId) throws AddressBookNotFoundException, Exception {
    AddressBookType type = getAddressBookType(username, addressBookId);
 
@@ -355,8 +353,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
    throw new AddressBookNotFoundException(addressBookId);
  }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getAddressBookType(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public AddressBookType getAddressBookType(String username, String addressBookId) throws Exception {
     AddressBook shared = getSharedAddressBookById(username, addressBookId);
@@ -376,9 +374,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return null;
   }
 
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#findEmailsInPersonalAddressBook(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public List<String> findEmailsInPersonalAddressBook(String username, String addressBookId) throws Exception {
       Node contactHome = getPersonalContactsHome(username);
@@ -398,8 +395,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return address;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#findEmailsInPublicAddressBook(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public List<String> findEmailsInPublicAddressBook(String username, String groupId) throws Exception {
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
@@ -420,8 +417,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return address ;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getAllEmailBySharedGroup(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
     Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
@@ -450,8 +447,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return null ;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#toAddressBook(javax.jcr.Node)
+  /**
+   * {@inheritDoc}
    */
   public AddressBook toAddressBook(Node contactGroupNode) throws Exception {
     AddressBook contactGroup = new AddressBook();
@@ -477,8 +474,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return contactGroup;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#loadPersonalAddressBook(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public AddressBook loadPersonalAddressBook(String username, String groupId) throws Exception {
       if (groupId == null)
@@ -489,8 +486,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return null;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedAddressBookById(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public AddressBook getSharedAddressBookById(String username, String addressBookId) throws Exception {
     Node sharedAddressBookNode = getSharedAddressBooksHome(username) ;
@@ -505,8 +502,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return null ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#findPersonalAddressBooksByOwner(java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public List<AddressBook> findPersonalAddressBooksByOwner(String username) throws Exception {
       Node addressBooksHome = getPersonalAddressBooksHome(username);
@@ -519,8 +516,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return addressBooks;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#removeContacts(java.lang.String, java.util.List)
+  /**
+   * {@inheritDoc}
    */
   public List<Contact> removeContacts(String username,
                                       List<String> contactIds) throws Exception {
@@ -537,10 +534,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       }
       return contacts;
   }
-
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#moveContacts(java.lang.String, java.util.List, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public void moveContacts(String username, List<Contact> contacts, String addressType ) throws Exception {
       Node publicContactHome = getPersonalContactsHome(username);
@@ -561,10 +557,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       }
       if(publicContactHome.getSession().hasPendingChanges()) publicContactHome.getSession().save() ;
   }
-  
    
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#removePersonalAddressBook(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public AddressBook removePersonalAddressBook(String username, String addressBookId) throws Exception {
       Node addressBooksHomeNode = getPersonalAddressBooksHome(username);
@@ -581,18 +576,16 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return null;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#clearAddressBook(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public void clearAddressBook(String username, String addressBookId) throws Exception {
       List<String> contactIds = getUserContactNodesByGroup(username, addressBookId);
       removeContacts(username, contactIds);
   }
   
-  
-  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#saveContact(java.lang.String, org.exoplatform.contact.service.Contact, boolean)
+  /**
+   * {@inheritDoc}
    */
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
       Node contactHomeNode = getPersonalContactsHome(username);
@@ -607,8 +600,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
   	contactHomeNode.getSession().save();
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#savePersonalOrSharedAddressBook(java.lang.String, org.exoplatform.contact.service.AddressBook, boolean)
+  /**
+   * {@inheritDoc}
    */
   public void savePersonalOrSharedAddressBook(String username, AddressBook addressbook, boolean isNew) throws Exception {
       Node groupNode = null ;
@@ -650,15 +643,10 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       else groupNode.save() ;
   }
 
-
-  
-
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#removeUserShareContact(java.lang.String, java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public void removeUserShareContact(String username, String contactId, String removedUser) throws Exception {
-    
       Node contactNode ;
       String split = "/" ;    
       // shared contacts
@@ -701,8 +689,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       contactNode.getSession().save();
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#unshareAddressBook(java.lang.String, java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public void unshareAddressBook(String username, String addressBookId, String removedUser) throws Exception {
     
@@ -749,8 +737,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       addressBookNode.getSession().save();
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#shareAddressBook(java.lang.String, java.lang.String, java.util.List)
+  /**
+   * {@inheritDoc}
    */
   public void shareAddressBook(String username, String addressBookId, List<String> receiveUsers) throws Exception {
       Node addressBookNode = getPersonalAddressBooksHome(username).getNode(addressBookId);
@@ -805,8 +793,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       addressBookNode.getSession().save();
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#shareContact(java.lang.String, java.lang.String[], java.util.List)
+  /**
+   * {@inheritDoc}
    */
   public void shareContact(String username, String[] contactIds, List<String> receiveUsers) throws Exception {
       for(String contactId : contactIds) {
@@ -851,8 +839,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       }   
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#findSharedAddressBooksByUser(java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public List<SharedAddressBook> findSharedAddressBooksByUser(String username) throws Exception {
       List<SharedAddressBook> addressBooks = new ArrayList<SharedAddressBook>();
@@ -882,8 +870,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
   
   
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#removeSharedContact(java.lang.String, java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public void removeSharedContact(String username, String addressBookId, String contactId) throws Exception {
     //CS-2389
@@ -909,8 +897,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedContact(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public Contact getSharedContact(String username, String contactId) throws Exception {
     Node sharedContactMock = getSharedContact(username) ;
@@ -928,8 +916,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return null ;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedContacts(java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public DataPageList getSharedContacts(String username) throws Exception {
     List<Contact> sharedContacts = new ArrayList<Contact>() ;
@@ -946,8 +934,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return new DataPageList(sharedContacts, 10, null, false) ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#saveSharedContact(java.lang.String, org.exoplatform.contact.service.Contact)
+  /**
+   * {@inheritDoc}
    */
   public void saveSharedContact(String username, Contact contact) throws Exception  {
     Node sharedContactMock = getSharedContact(username) ;
@@ -975,8 +963,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     if (!isEdit) throw new PathNotFoundException() ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#saveContactToSharedAddressBook(java.lang.String, java.lang.String, org.exoplatform.contact.service.Contact, boolean)
+  /**
+   * {@inheritDoc}
    */
   public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception  {
     Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
@@ -1000,8 +988,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     }      
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedContactAddressBook(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public Contact getSharedContactAddressBook(String username, String contactId) throws Exception {
     Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
@@ -1020,8 +1008,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return null ;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getSharedContactsByAddressBook(java.lang.String, org.exoplatform.contact.service.SharedAddressBook)
+  /**
+   * {@inheritDoc}
    */
   public ContactPageList getSharedContactsByAddressBook(String username, SharedAddressBook addressBook) throws Exception {
     if (addressBook == null) return null ;
@@ -1033,8 +1021,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return new ContactPageList(username, 10, queryString.toString(), SHARED) ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getPublicContactsByAddressBook(java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public ContactPageList getPublicContactsByAddressBook(String groupId) throws Exception {   
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
@@ -1050,8 +1038,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
   }
   
  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#addUserContactInAddressBook(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public void addUserContactInAddressBook(String userId, String addressBookId) throws Exception {
       Node contactHome = getPersonalContactsHome(userId);
@@ -1068,8 +1056,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       contactNode.save();
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#contactToNode(javax.jcr.Node, org.exoplatform.contact.service.Contact, boolean)
+  /**
+   * {@inheritDoc}
    */
   public void contactToNode(Node contactsHome, Contact contact, boolean isNew) throws Exception {
     Node contactNode;
@@ -1179,8 +1167,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     }    
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getTag(javax.jcr.Node)
+  /**
+   * {@inheritDoc}
    */
   public Tag getTag(Node tagNode) throws Exception {
     Tag tag = new Tag();
@@ -1195,8 +1183,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return tag;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#updateTag(java.lang.String, org.exoplatform.contact.service.Tag)
+  /**
+   * {@inheritDoc}
    */
   public void updateTag(String username,Tag tag) throws Exception {
     Node tagHome = getTagsHome(username) ;
@@ -1208,8 +1196,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
   }
   
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getTag(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public Tag getTag(String username, String tagId) throws Exception {
       Node tagHomeNode = getTagsHome(username);
@@ -1218,8 +1206,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return null ;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getTags(java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public List<Tag> getTags(String username) throws Exception {
     Node tagHomeNode = getTagsHome(username);
@@ -1232,8 +1220,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return tags;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getContactPageListByTag(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public DataPageList getContactPageListByTag(String username, String tagId) throws Exception {
       Map<String, Contact> contacts = new LinkedHashMap<String, Contact>() ;
@@ -1319,8 +1307,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return new DataPageList(Arrays.asList(contacts.values().toArray(new Contact[] {})), 10, null, false) ;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#addTag(java.lang.String, java.util.List, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public void addTag(String username, List<String> contactIds, String tagId) throws Exception {
     Map<String, String> tagMap = new HashMap<String, String> () ;
@@ -1382,8 +1370,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#addTag(java.lang.String, java.util.List, java.util.List)
+  /**
+   * {@inheritDoc}
    */
   public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
     Node tagHomeNode = getTagsHome(username);
@@ -1465,8 +1453,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#removeTagInContacts(javax.jcr.NodeIterator, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public void removeTagInContacts (NodeIterator it, String tagId) throws Exception {
     while (it.hasNext()) {
@@ -1482,8 +1470,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     }
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#removeTag(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public Tag removeTag(String username, String tagId) throws Exception {
       Node tagHomeNode = getTagsHome(username);
@@ -1554,8 +1542,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return tag ; 
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#removeContactTag(java.lang.String, java.util.List, java.util.List)
+  /**
+   * {@inheritDoc}
    */
   public void removeContactTag(String username, List<String> contactIds, List<String> tags) throws Exception { 
       for(String contact : contactIds) {
@@ -1618,8 +1606,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       }
   }
  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#searchContact(java.lang.String, org.exoplatform.contact.service.ContactFilter)
+  /**
+   * {@inheritDoc}
    */
   public DataPageList searchContact(String username, ContactFilter filter)throws Exception {
     Map<String, Contact> contacts = new LinkedHashMap<String, Contact>() ;
@@ -1743,8 +1731,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return new DataPageList(contactList, 10, null, false) ;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#findEmailsByFilter(java.lang.String, org.exoplatform.contact.service.ContactFilter)
+  /**
+   * {@inheritDoc}
    */
   public Map<String, String> findEmailsByFilter(String username, ContactFilter filter)throws Exception {
     Map<String, String> emails = new LinkedHashMap<String, String>() ;
@@ -1841,8 +1829,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return emails ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#feedEmailResult(java.util.Map, javax.jcr.Node)
+  /**
+   * {@inheritDoc}
    */
   public void feedEmailResult(Map<String, String> emails, Node contactNode) throws Exception {
     String id = contactNode.getProperty("exo:id").getString();
@@ -1979,6 +1967,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     } catch (Exception e) {}
   }
   
+  /**
+   * {@inheritDoc}
+   */
   public void copyNodes(String username,Node srcHomeNode, NodeIterator iter, String destAddress, String destType ) throws Exception {
     if (destType.equals(PERSONAL)) {        
       Node contactHomeNode = getPersonalContactsHome(username);
@@ -2044,7 +2035,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     }
   }
   
-   
+  /**
+   * {@inheritDoc} 
+   */
   public void pasteAddressBook(String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
     // CS-2389
     if (destType.equals(SHARED) && !haveEditPermissionOnAddressBook(username, destAddress)) {
@@ -2095,9 +2088,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       }
   }
   
-  
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#pasteContacts(java.lang.String, java.lang.String, java.lang.String, java.util.Map)
+  /**
+   * {@inheritDoc}
    */
   public List<Contact> pasteContacts(String username, String destAddress, String destType,  Map<String, String> contactsMap) throws Exception {
     // CS-2389
@@ -2147,8 +2139,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return pastedContacts ;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#saveCopyContact(javax.jcr.Node, org.exoplatform.contact.service.Contact, java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public Node saveCopyContact(Node contactHomeNode, Contact contact, String destAddress, String destType) throws Exception {
     String newId = "Contact" + IdGenerator.generate() ;
@@ -2245,8 +2237,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return contactNode ;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#registerNewUser(org.exoplatform.services.organization.User, boolean)
+  /**
+   * {@inheritDoc}
    */
   public void registerNewUser(User user, boolean isNew) throws Exception {
     Contact contact = null ;
@@ -2342,8 +2334,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       }
   }  
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#createSessionProvider()
+  /**
+   * {@inheritDoc}
    */
   public SessionProvider createSessionProvider() {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
@@ -2355,15 +2347,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     }
     return provider;
   }
-  /*
-  public SessionProvider createUserProvider() {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    return service.getSessionProvider(null) ;    
-  }  
-  */
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#createSystemProvider()
+
+  /**
+   * {@inheritDoc}
    */
   public SessionProvider createSystemProvider() {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
@@ -2371,16 +2357,15 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return service.getSystemSessionProvider(null) ;    
   }
   
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#closeSessionProvider(org.exoplatform.services.jcr.ext.common.SessionProvider)
+  /**
+   * {@inheritDoc}
    */
   public void closeSessionProvider(SessionProvider sessionProvider) {
    if (sessionProvider != null) sessionProvider.close(); 
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#saveAddress(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public void saveAddress(String username, String emailAddress) throws Exception {
     ContactFilter filter = new ContactFilter() ;
@@ -2403,8 +2388,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return (Node) getSession(sessionProvider).getItem(nodePath);
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#valuesToString(javax.jcr.Value[])
+  /**
+   * {@inheritDoc}
    */
   public String valuesToString(Value[] values) {
     if (values == null) return null;
@@ -2420,8 +2405,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return strs.toString();
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#haveEditPermissionOnAddressBook(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public boolean haveEditPermissionOnAddressBook(String username, String addressBookId) throws Exception {
     AddressBook addressbook = getSharedAddressBookById(username, addressBookId);
@@ -2447,8 +2432,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return false;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#haveEditPermissionOnContact(java.lang.String, org.exoplatform.contact.service.Contact)
+  /**
+   * {@inheritDoc}
    */
   public boolean haveEditPermissionOnContact(String username, Contact contact) throws Exception {
     if (contact.getEditPermissionUsers() != null &&
@@ -2473,15 +2458,17 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return false ;
   }
   
-  /* (non-Javadoc)
-   * @see org.exoplatform.contact.service.impl.DataStorage#getSession(org.exoplatform.services.jcr.ext.common.SessionProvider)
+  /**
+   * {@inheritDoc}
    */
   public Session getSession(SessionProvider sprovider) throws Exception{
     ManageableRepository currentRepo = repoService_.getCurrentRepository() ;
     return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo) ;
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Node getContactApplicationDataHome() throws Exception {
     SessionProvider sProvider = createSystemProvider();
@@ -2495,7 +2482,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     }
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Node getContactUserDataHome(String username) throws Exception {
     SessionProvider sessionProvider = createSystemProvider() ;
@@ -2509,7 +2498,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     }   
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Node getPersonalAddressBooksHome(String username) throws Exception {
     Node userDataHome = getContactUserDataHome(username) ;
@@ -2522,7 +2513,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     }
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Node getPersonalContactsHome(String username) throws Exception {
     Node userDataHome = getContactUserDataHome(username) ;
@@ -2535,7 +2528,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     }
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<String> getPublicAddressBookContacts(String[] groupIds) throws Exception {
     List<String> groups = new ArrayList<String>();
@@ -2545,7 +2540,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return groups;
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception {
     List<GroupContactData> contactByGroup = new ArrayList<GroupContactData>() ;
@@ -2558,7 +2555,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return contactByGroup;
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Node getPublicContactsHome() throws Exception {
     Node contactServiceHome = getContactApplicationDataHome() ;
@@ -2571,7 +2570,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     }
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Node getTagsHome(String username) throws Exception {
     Node contactServiceHome = getContactUserDataHome(username) ;
@@ -2584,7 +2585,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     } 
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<String> getUserContactNodesByGroup(String username, String groupId) throws Exception {
     
@@ -2602,7 +2605,9 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     return contactIds ;
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean hasContacts(String groupId) throws Exception {
     Node contactHome = getPublicContactsHome();
@@ -2616,10 +2621,10 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     if(result.getNodes().getSize() > 0) return true;
     return false ;
   }
-
-
-
-
+  
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Node getSharedContactsHome(String user) throws Exception{
     Node contactHome = getContactUserDataHome(user);

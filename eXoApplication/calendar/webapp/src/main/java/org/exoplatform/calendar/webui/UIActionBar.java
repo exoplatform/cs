@@ -178,20 +178,6 @@ public class UIActionBar extends UIContainer  {
       uiCalendarSettingForm.init(calendarSetting, cservice) ;
       uiCalendarSettingForm.setSelectedTab(uiCalendarSettingForm.getChild(UICalendarSettingFeedTab.class).getId());
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-     /* UIActionBar uiActionBar = event.getSource() ;
-      UICalendarPortlet calendarPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
-      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-      CalendarService calService = CalendarUtils.getCalendarService() ;
-      List feeds = calService.getFeeds(CalendarUtils.getCurrentUser()) ;
-      if(feeds.isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.feed-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      } else {
-        UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
-        UIFeed uiFeed = popupAction.activate(UIFeed.class, 600) ;
-        uiFeed.setFeeds(feeds);
-        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ; 
-      }*/
     }
   }
 }

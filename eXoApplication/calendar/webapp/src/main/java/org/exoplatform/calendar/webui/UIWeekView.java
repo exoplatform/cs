@@ -133,23 +133,10 @@ public class UIWeekView extends UICalendarView {
   public java.util.Calendar getBeginDateOfWeek() throws Exception{
     java.util.Calendar temCal = getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
-//    temCal.get
-//    temCal.setTime(calendar_.getTime()) ;
-    /*CalendarSetting calSetting = new CalendarSetting() ;
-    try {
-      calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
-    }
-    catch (Exception e) {
-      CalendarService calService = getApplicationComponent(CalendarService.class) ;
-      calSetting  = calService.getCalendarSetting(getSession(),CalendarUtils.getCurrentUser()) ;
-    } */
-    if(isShowCustomView_) temCal.setFirstDayOfWeek(Calendar.SUNDAY) ;
-    
-//    else temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
+    if(isShowCustomView_) temCal.setFirstDayOfWeek(Calendar.SUNDAY) ;    
     if(temCal.getFirstDayOfWeek() > temCal.get(Calendar.DAY_OF_WEEK)) {
       temCal.add(java.util.Calendar.WEEK_OF_YEAR, -1) ;
     }
-//    temCal.setTime(calendar_.getTime()) ;
     int amout = temCal.getFirstDayOfWeek() - temCal.get(Calendar.DAY_OF_WEEK);
     if(isShowCustomView_) amout = amout + 1 ;
     temCal.add(Calendar.DATE, amout) ;
@@ -158,9 +145,7 @@ public class UIWeekView extends UICalendarView {
 
   public java.util.Calendar getEndDateOfWeek() throws Exception{
     java.util.Calendar temCal = getInstanceTempCalendar() ;
-//    temCal.setTime(calendar_.getTime()) ;
     if(isShowCustomView_) temCal.setFirstDayOfWeek(Calendar.SUNDAY) ; 
-//    else temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
     temCal.setTime(getBeginDateOfWeek().getTime()) ;
     int amout = 6 ;
     if(isShowCustomView_) amout = amout - 2 ;
@@ -214,15 +199,6 @@ public class UIWeekView extends UICalendarView {
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           } else {
-            // checked by javascript
-            /*if(!CalendarUtils.PRIVATE_TYPE.equals(calType) && !CalendarUtils.canEdit(calendarview.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), username)) {
-              UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
-              uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              calendarview.refresh() ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-              return ;
-            }*/
             Calendar cal = calendarview.getInstanceTempCalendar() ;
             int hoursBg = (Integer.parseInt(startTime)/60) ;
             int minutesBg = (Integer.parseInt(startTime)%60) ;

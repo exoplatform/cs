@@ -143,20 +143,6 @@ public class ICalendarImportExport implements CalendarImportExport{
       }
     }
 
-    /*   if(exoEvent.getEventType().equals(CalendarEvent.TYPE_TASK)) {
-      long completed = exoEvent.getCompletedDateTime().getTime() ;
-      event.getProperties().add(new Completed(new DateTime(completed)));
-      event.getProperties().getProperty(Property.COMPLETED).getParameters()
-      .add(net.fortuna.ical4j.model.parameter.Value.DATE_TIME);
-
-      event.getProperties().add(new Due(new DateTime(end)));
-      event.getProperties().getProperty(Property.DUE).getParameters()
-      .add(net.fortuna.ical4j.model.parameter.Value.DATE_TIME);
-
-      event.getProperties().add(new Status(exoEvent.getStatus()));
-      event.getProperties().getProperty(Property.STATUS).getParameters()
-      .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
-    }*/
     if(exoEvent.getAttachment()!= null)
     if(!exoEvent.getAttachment().isEmpty()) {
       for(Attachment att : exoEvent.getAttachment()) {
@@ -617,33 +603,10 @@ public class ICalendarImportExport implements CalendarImportExport{
         }
         if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
         if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
-        /*if(vFreeBusyData.get(event.getUid().getValue()) != null) {
-          exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
-        }*/
         if(event.getProperty(Utils.X_STATUS) != null) {
           exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
         }
         if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
-        //List<Reminder> list = null ;
-        /*if(!event.getAlarms().isEmpty()){
-          list = new ArrayList<Reminder>() ;
-          for(Object o : event.getAlarms()){
-            VAlarm reminder = (VAlarm)o ;
-            Reminder r = null ;
-            if( reminder.getAction().equals(Action.EMAIL)) {
-              r = new Reminder(Reminder.TYPE_EMAIL) ;
-            } else if( reminder.getAction().equals(Action.DISPLAY))  {
-              r = new Reminder(Reminder.TYPE_POPUP) ;
-            }
-            r.setFromDateTime(exoEvent.getFromDateTime()) ;
-            //r.setAlarmBefore(reminder.getDuration().getDuration().)
-            list.add(r) ;
-          }
-          if(!list.isEmpty()) {
-            exoEvent.setReminders(list) ;
-          }
-
-        }*/
         PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
         if(!attendees.isEmpty()) {
           String[] invitation = new String[attendees.size()] ;
@@ -703,26 +666,6 @@ public class ICalendarImportExport implements CalendarImportExport{
           exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
         }
         if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
-        //List<Reminder> list = null ;
-        /*if(!event.getAlarms().isEmpty()){
-          list = new ArrayList<Reminder>() ;
-          for(Object o : event.getAlarms()){
-            VAlarm reminder = (VAlarm)o ;
-            Reminder r = null ;
-            if( reminder.getAction().equals(Action.EMAIL)) {
-              r = new Reminder(Reminder.TYPE_EMAIL) ;
-            } else if( reminder.getAction().equals(Action.DISPLAY))  {
-              r = new Reminder(Reminder.TYPE_POPUP) ;
-            }
-            r.setFromDateTime(exoEvent.getFromDateTime()) ;
-            //r.setAlarmBefore(reminder.getDuration().getDuration().)
-            list.add(r) ;
-          }
-          if(!list.isEmpty()) {
-            exoEvent.setReminders(list) ;
-          }
-
-        }*/
         PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
         if(!attendees.isEmpty()) {
           String[] invitation = new String[attendees.size()] ;
@@ -908,26 +851,6 @@ public class ICalendarImportExport implements CalendarImportExport{
           exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
         }
         if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
-        //List<Reminder> list = null ;
-        /*if(!event.getAlarms().isEmpty()){
-            list = new ArrayList<Reminder>() ;
-            for(Object o : event.getAlarms()){
-              VAlarm reminder = (VAlarm)o ;
-              Reminder r = null ;
-              if( reminder.getAction().equals(Action.EMAIL)) {
-                r = new Reminder(Reminder.TYPE_EMAIL) ;
-              } else if( reminder.getAction().equals(Action.DISPLAY))  {
-                r = new Reminder(Reminder.TYPE_POPUP) ;
-              }
-              r.setFromDateTime(exoEvent.getFromDateTime()) ;
-              //r.setAlarmBefore(reminder.getDuration().getDuration().)
-              list.add(r) ;
-            }
-            if(!list.isEmpty()) {
-              exoEvent.setReminders(list) ;
-            }
-
-          }*/
         PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
         if(!attendees.isEmpty()) {
           String[] invitation = new String[attendees.size()] ;
@@ -1014,26 +937,6 @@ public class ICalendarImportExport implements CalendarImportExport{
           exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
         }
         if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
-        //List<Reminder> list = null ;
-        /*if(!event.getAlarms().isEmpty()){
-            list = new ArrayList<Reminder>() ;
-            for(Object o : event.getAlarms()){
-              VAlarm reminder = (VAlarm)o ;
-              Reminder r = null ;
-              if( reminder.getAction().equals(Action.EMAIL)) {
-                r = new Reminder(Reminder.TYPE_EMAIL) ;
-              } else if( reminder.getAction().equals(Action.DISPLAY))  {
-                r = new Reminder(Reminder.TYPE_POPUP) ;
-              }
-              r.setFromDateTime(exoEvent.getFromDateTime()) ;
-              //r.setAlarmBefore(reminder.getDuration().getDuration().)
-              list.add(r) ;
-            }
-            if(!list.isEmpty()) {
-              exoEvent.setReminders(list) ;
-            }
-
-          }*/
         PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
         if(!attendees.isEmpty()) {
           String[] invitation = new String[attendees.size()] ;

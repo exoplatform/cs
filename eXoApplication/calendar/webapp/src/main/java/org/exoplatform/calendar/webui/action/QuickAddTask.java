@@ -42,29 +42,6 @@ public class QuickAddTask extends UIComponent {
       // TODO Auto-generated method stub
       
     }
-    /*
-    public void pro(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ;
-      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-      if(CalendarUtils.getCalendarOption().isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      List<EventCategory> eventCategories = CalendarUtils.getCalendarService().getEventCategories(CalendarUtils.getCurrentUser()) ;
-      if(eventCategories.isEmpty()) {
-        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String formTime = CalendarUtils.getCurrentTime(uiActionBar) ;//event.getRequestContext().getRequestParameter(CURRENTTIME) ;
-      String categoryId = event.getRequestContext().getRequestParameter(CATEGORYID) ;
-      UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
-      UICalendarWorkingContainer workContainer = uiPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class) ;
-      workContainer.getChild(UIPopupWindow.class).setShow(true) ;
-    }
-     */
   }
 
 }

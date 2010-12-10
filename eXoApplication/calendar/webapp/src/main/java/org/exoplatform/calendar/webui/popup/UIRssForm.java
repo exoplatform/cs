@@ -155,13 +155,6 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       RssData rssData = new RssData() ;
       String tempName = uiForm.getUIStringInput(TITLE).getValue().trim() ;
       if(tempName != null && tempName.trim().length() > 0) {
-       /* if(!CalendarUtils.isNameValid(tempName, CalendarUtils.SPECIALCHARACTER)) {
-          uiForm.setSelectedTab(INPUT_RSSINFO) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
-          uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.feed-name-invalid", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }*/
         if(tempName.length() > 4 && tempName.substring(tempName.length() - 4).equals(".rss")) rssData.setName(tempName);
         else rssData.setName(tempName + ".rss") ;
       }else {
@@ -176,29 +169,6 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       rssData.setVersion("rss_2.0") ;
       if(uiForm.getUIDateTimePicker(PUBLIC_DATE).getCalendar() != null)
         rssData.setPubDate(uiForm.getUIDateTimePicker(PUBLIC_DATE).getCalendar().getTime()) ;
-      
-      /*LinkedHashMap<String, Calendar> calendars = new LinkedHashMap<String, Calendar>() ;
-      
-      Calendar cal = null;
-      for (String calId : calendarIds) {
-        String url =  CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName() +"/"+ PortalContainer.getCurrentRestContextName() + "/private/cs/calendar/subscribe/"+username+"/"+calId;
-        if (uiForm.userCals_.containsKey(calId)) {
-          cal = calendarService.getUserCalendar(CalendarUtils.getCurrentUser(), calId);
-          cal.setPublicUrl(url+"/"+ Utils.PRIVATE_TYPE);
-          calendarService.saveUserCalendar(username, cal, false);
-          //calendars.put(calId + Utils.SPLITTER + Utils.PRIVATE_TYPE, uiForm.userCals_.get(calId)) ;
-        } else if (uiForm.sharedCals_.containsKey(calId)) {
-          cal = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser(), true).getCalendarById(calId);
-          cal.setPublicUrl(url+"/"+ Utils.PRIVATE_TYPE);
-          calendarService.saveSharedCalendar(username, cal);
-          //calendars.put(calId + Utils.SPLITTER + Utils.SHARED_TYPE, uiForm.sharedCals_.get(calId)) ;
-        } else if (uiForm.publicCals_.containsKey(calId)) {
-          cal = calendarService.getGroupCalendar(calId);
-          cal.setPublicUrl(url+"/"+ Utils.PRIVATE_TYPE);
-          calendarService.savePublicCalendar(cal, false, username);
-          //calendars.put(calId + Utils.SPLITTER + Utils.PUBLIC_TYPE, uiForm.publicCals_.get(calId)) ;
-        }
-      } */   
 
       int result = calendarService.generateRss(CalendarUtils.getCurrentUser(), calendarIds, rssData) ;
       if(result < 0) {

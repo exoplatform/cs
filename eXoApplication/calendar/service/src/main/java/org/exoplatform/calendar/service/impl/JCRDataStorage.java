@@ -116,7 +116,10 @@ public class JCRDataStorage implements DataStorage {
     nodeHierarchyCreator_ = nodeHierarchyCreator ; 
     repoService_ = repoService ;
   }  
-
+  
+  /**
+   * {@inheritDoc}
+   */
   public Node getPublicCalendarServiceHome() throws Exception {
     SessionProvider sProvider = SessionProvider.createSystemProvider();
     Node publicApp = getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(), sProvider);
@@ -129,7 +132,9 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   public Node getSharedCalendarHome() throws Exception {
     //TODO have to use system session 
     Node calendarServiceHome = getPublicCalendarServiceHome();
@@ -141,15 +146,18 @@ public class JCRDataStorage implements DataStorage {
       return sharedCal;
     }
   }
-
+  
+  /**
+   * {@inheritDoc}
+   */
   public Node getPublicRoot() throws Exception {
     SessionProvider sProvider = createSystemProvider();
     return  getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(), sProvider);
   }  
-
-
-
-
+  
+  /**
+   * {@inheritDoc}
+   */
   public Node getUserCalendarServiceHome(String username) throws Exception {
     //CS-2356
     //SessionProvider sProvider = createSessionProvider();
@@ -168,7 +176,10 @@ public class JCRDataStorage implements DataStorage {
       return calendarRoot;
     }
   }
-
+  
+  /**
+   * {@inheritDoc}
+   */
   public Node getPublicCalendarHome() throws Exception {
     Node calendarServiceHome = getPublicCalendarServiceHome() ;
     try {
@@ -180,7 +191,9 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   public Node getUserCalendarHome(String username) throws Exception {
     Node calendarServiceHome = getUserCalendarServiceHome(username) ;
     try {
@@ -192,11 +205,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getRssHome(java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getRssHome(java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public Node getRssHome(String username) throws Exception {
     Node calendarServiceHome = getSharedCalendarHome() ;
@@ -208,8 +218,10 @@ public class JCRDataStorage implements DataStorage {
       return feed ;
     }
   }
-
-
+  
+  /**
+   * {@inheritDoc}
+   */
   protected Node getCalendarCategoryHome(String username) throws Exception {
     Node calendarServiceHome = getUserCalendarServiceHome(username) ;
     try {
@@ -221,6 +233,12 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
+  /**
+   * 
+   * @param username
+   * @return
+   * @throws Exception
+   */
   protected Node getEventCategoryHome(String username) throws Exception {
     Node calendarServiceHome = getUserCalendarServiceHome(username) ;
     try {
@@ -232,11 +250,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getUserCalendar(java.lang.String, java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getUserCalendar(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public Calendar getUserCalendar(String username, String calendarId) throws Exception {
     try {
@@ -246,11 +261,9 @@ public class JCRDataStorage implements DataStorage {
       return null;
     }
   }
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getUserCalendars(java.lang.String, boolean)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getUserCalendars(java.lang.String, boolean)
+
+  /**
+   * {@inheritDoc}
    */
   public List<Calendar> getUserCalendars(String username, boolean isShowAll) throws Exception {
     Node userCalendarHome = getUserCalendarHome(username);
@@ -263,11 +276,9 @@ public class JCRDataStorage implements DataStorage {
     userCalendarHome.getSession().logout();
     return calList ;
   }
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getUserCalendarsByCategory(java.lang.String, java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getUserCalendarsByCategory(java.lang.String, java.lang.String)
+  
+  /**
+   * {@inheritDoc}
    */
   public List<Calendar> getUserCalendarsByCategory(String username, String calendarCategoryId) throws Exception {
     Node calendarHome = getUserCalendarHome(username) ;    
@@ -289,11 +300,9 @@ public class JCRDataStorage implements DataStorage {
     }
     return calendares;
   }
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#saveUserCalendar(java.lang.String, org.exoplatform.calendar.service.Calendar, boolean)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#saveUserCalendar(java.lang.String, org.exoplatform.calendar.service.Calendar, boolean)
+  
+  /**
+   * {@inheritDoc}
    */
   public void saveUserCalendar(String username, Calendar calendar, boolean isNew) throws Exception {
     Node calendarHome = getUserCalendarHome(username) ;
@@ -329,8 +338,10 @@ public class JCRDataStorage implements DataStorage {
     session.save() ;
     session.logout();
   }
-
-
+  
+  /**
+   * {@inheritDoc}
+   */
   public Calendar removeUserCalendar(String username, String calendarId) throws Exception {
     Node calendarHome = getUserCalendarHome(username) ;
     if(calendarHome.hasNode(calendarId)) {
@@ -361,22 +372,16 @@ public class JCRDataStorage implements DataStorage {
     return null ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getGroupCalendar(java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getGroupCalendar(java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public Calendar getGroupCalendar(String calendarId) throws Exception {
     Node calendarNode = getPublicCalendarHome().getNode(calendarId) ;
     return getCalendar(new String[]{calendarId}, null, calendarNode, true) ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getGroupCalendars(java.lang.String[], boolean, java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getGroupCalendars(java.lang.String[], boolean, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public List<GroupCalendarData> getGroupCalendars(String[] groupIds, boolean isShowAll, String username) throws Exception {
     List<Calendar> calendars ;
@@ -410,7 +415,10 @@ public class JCRDataStorage implements DataStorage {
     calendarHome.getSession().logout();
     return groupCalendars;
   }
-
+  
+  /**
+   * {@inheritDoc}
+   */
   public void savePublicCalendar(Calendar calendar, boolean isNew, String username) throws Exception {
     Node calendarHome = getPublicCalendarHome() ;
     Node calendarNode ;
@@ -442,11 +450,8 @@ public class JCRDataStorage implements DataStorage {
     calendarHome.getSession().logout();
   }  
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#removeGroupCalendar(java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#removeGroupCalendar(java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public Calendar removeGroupCalendar(String calendarId) throws Exception {
     Node calendarHome = getPublicCalendarHome();
@@ -476,8 +481,8 @@ public class JCRDataStorage implements DataStorage {
 
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getCalendar(java.lang.String[], java.lang.String, javax.jcr.Node, boolean)
+  /**
+   * {@inheritDoc}
    */
   public Calendar getCalendar(String[] defaultFilterCalendars, String username, Node calNode, boolean isShowAll) throws Exception {
     Calendar calendar = null ;
@@ -549,11 +554,8 @@ public class JCRDataStorage implements DataStorage {
   }  
 
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getCalendarCategories(java.lang.String, boolean)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getCalendarCategories(java.lang.String, boolean)
+  /**
+   * {@inheritDoc}
    */
   public List<GroupCalendarData> getCalendarCategories(String username, boolean isShowAll) throws Exception {
     //try {
@@ -595,11 +597,8 @@ public class JCRDataStorage implements DataStorage {
     }*/
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getCategories(java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getCategories(java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public List<CalendarCategory> getCategories(String username) throws Exception {
     Node calendarCategoryHome = getCalendarCategoryHome(username) ;
@@ -611,22 +610,16 @@ public class JCRDataStorage implements DataStorage {
     return calendarCategories;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getCalendarCategory(java.lang.String, java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getCalendarCategory(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public CalendarCategory getCalendarCategory(String username, String calendarCategoryId) throws Exception {
     Node calendarCategoryHome = getCalendarCategoryHome(username) ;
     return getCalendarCategory(calendarCategoryHome.getNode(calendarCategoryId)) ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#saveCalendarCategory(java.lang.String, org.exoplatform.calendar.service.CalendarCategory, boolean)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#saveCalendarCategory(java.lang.String, org.exoplatform.calendar.service.CalendarCategory, boolean)
+  /**
+   * {@inheritDoc}
    */
   public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
     Node calCategoryHome = getCalendarCategoryHome(username) ;
@@ -645,7 +638,9 @@ public class JCRDataStorage implements DataStorage {
     session.logout();
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception {
     Node calCategoryHome = getCalendarCategoryHome(username) ;
     Node calCategoryNode = calCategoryHome.getNode(calendarCategoryId) ; 
@@ -655,13 +650,12 @@ public class JCRDataStorage implements DataStorage {
       removeUserCalendar(username, cal.getId()) ;
     }
     calCategoryHome.save() ;
-    //calendarHome.save() ;
     calCategoryHome.getSession().save() ;
     return calCategory ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getCalendarCategory(javax.jcr.Node)
+  /**
+   * {@inheritDoc}
    */
   public CalendarCategory getCalendarCategory(Node calCategoryNode) throws Exception {
     CalendarCategory calCategory = new CalendarCategory() ;
@@ -749,28 +743,19 @@ public class JCRDataStorage implements DataStorage {
       //CS-3482
       // SessionProvider systemSession = SessionProvider.createSystemProvider() ;
       for(CalendarEvent ce : getUserEventByCategory(username, eventCategoryName)) {
-        /*ce.setEventCategoryId(null);
-        ce.setEventCategoryName(null);*/
         ce.setEventCategoryId(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL);
         ce.setEventCategoryName(NewUserListener.DEFAULT_EVENTCATEGORY_NAME_ALL);
         saveUserEvent(username, ce.getCalendarId(), ce, false) ;
-        //removeUserEvent(username, ce.getCalendarId(), ce.getId()) ;
       }
       for(CalendarEvent ce : getSharedEventByCategory(username, eventCategoryName)) {
-        /*ce.setEventCategoryId(null);
-        ce.setEventCategoryName(null);*/
         ce.setEventCategoryId(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL);
         ce.setEventCategoryName(NewUserListener.DEFAULT_EVENTCATEGORY_NAME_ALL);
         saveEventToSharedCalendar(username, ce.getCalendarId(), ce, false);
-        //removeSharedEvent(username, ce.getCalendarId(), ce.getId()) ;
       }
       for(CalendarEvent ce : getPublicEventByCategory(username, eventCategoryName)) {
-        /*ce.setEventCategoryId(null);
-        ce.setEventCategoryName(null);*/
         ce.setEventCategoryId(NewUserListener.DEFAULT_EVENTCATEGORY_ID_ALL);
         ce.setEventCategoryName(NewUserListener.DEFAULT_EVENTCATEGORY_NAME_ALL);
         savePublicEvent(ce.getCalendarId(), ce, false) ;
-        //removePublicEvent(ce.getCalendarId(), ce.getId()) ;
       } 
       eventCategoryNode.remove() ;
       eventCategoryHome.save() ;
@@ -778,7 +763,9 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   public EventCategory getEventCategory(Node eventCatNode) throws Exception {
     EventCategory eventCategory = new EventCategory() ;
     if(eventCatNode.hasProperty(Utils.EXO_ID)) eventCategory.setId(eventCatNode.getProperty(Utils.EXO_ID).getString()) ;
@@ -867,11 +854,8 @@ public class JCRDataStorage implements DataStorage {
     return events ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getUserEventByCategory(java.lang.String, java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getUserEventByCategory(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public List<CalendarEvent> getUserEventByCategory(String username, String eventCategoryId) throws Exception {
     Node calendarHome = getUserCalendarHome(username) ;
@@ -895,11 +879,8 @@ public class JCRDataStorage implements DataStorage {
     return events;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getEvent(java.lang.String, java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getEvent(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public CalendarEvent getEvent(String username, String eventId) throws Exception {
     Node calendarHome = getUserCalendarHome(username) ;
@@ -915,11 +896,8 @@ public class JCRDataStorage implements DataStorage {
     else return null ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getUserEvents(java.lang.String, org.exoplatform.calendar.service.EventQuery)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getUserEvents(java.lang.String, org.exoplatform.calendar.service.EventQuery)
+  /**
+   * {@inheritDoc}
    */
   public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception {
     Node calendarHome = getUserCalendarHome(username) ;
@@ -939,11 +917,8 @@ public class JCRDataStorage implements DataStorage {
     return events ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#saveUserEvent(java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarEvent, boolean)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#saveUserEvent(java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarEvent, boolean)
+  /**
+   * {@inheritDoc}
    */
   public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     Node calendarNode = getUserCalendarHome(username).getNode(calendarId);
@@ -964,11 +939,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#removeUserEvent(java.lang.String, java.lang.String, java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#removeUserEvent(java.lang.String, java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception {
     Node calendarNode = getUserCalendarHome(username).getNode(calendarId);
@@ -992,8 +964,8 @@ public class JCRDataStorage implements DataStorage {
     return null ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#removeReminder(javax.jcr.Node)
+  /**
+   * {@inheritDoc}
    */
   public void removeReminder(Node eventNode)throws Exception {
     if(eventNode.hasProperty(Utils.EXO_FROM_DATE_TIME)) {
@@ -1018,11 +990,8 @@ public class JCRDataStorage implements DataStorage {
     }
   } 
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getGroupEvent(java.lang.String, java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getGroupEvent(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public CalendarEvent getGroupEvent(String calendarId, String eventId) throws Exception {
     Node calendarNode = getPublicCalendarHome().getNode(calendarId) ;
@@ -1031,11 +1000,8 @@ public class JCRDataStorage implements DataStorage {
     return calEvent ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getGroupEventByCalendar(java.util.List)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getGroupEventByCalendar(java.util.List)
+  /**
+   * {@inheritDoc}
    */
   public List<CalendarEvent> getGroupEventByCalendar(List<String> calendarIds) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
@@ -1049,11 +1015,8 @@ public class JCRDataStorage implements DataStorage {
     return events ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getPublicEvents(org.exoplatform.calendar.service.EventQuery)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getPublicEvents(org.exoplatform.calendar.service.EventQuery)
+  /**
+   * {@inheritDoc}
    */
   public List<CalendarEvent> getPublicEvents(EventQuery eventQuery) throws Exception {
     Node calendarHome = getPublicCalendarHome() ;
@@ -1073,11 +1036,9 @@ public class JCRDataStorage implements DataStorage {
     calendarHome.getSession().logout();
     return events ;
   }
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#savePublicEvent(java.lang.String, org.exoplatform.calendar.service.CalendarEvent, boolean)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#savePublicEvent(java.lang.String, org.exoplatform.calendar.service.CalendarEvent, boolean)
+  
+  /**
+   * {@inheritDoc}
    */
   public void savePublicEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     Node calendarNode = getPublicCalendarHome().getNode(calendarId) ;
@@ -1085,11 +1046,8 @@ public class JCRDataStorage implements DataStorage {
     saveEvent(calendarNode, event, reminderFolder, isNew) ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#removePublicEvent(java.lang.String, java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#removePublicEvent(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public CalendarEvent removePublicEvent(String calendarId, String eventId) throws Exception {
     Node calendarNode = getPublicCalendarHome().getNode(calendarId) ;
@@ -1113,8 +1071,8 @@ public class JCRDataStorage implements DataStorage {
   }
 
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getEvent(javax.jcr.Node)
+  /**
+   * {@inheritDoc}
    */
   public CalendarEvent getEvent(Node eventNode) throws Exception {
     CalendarEvent event = new CalendarEvent() ;
@@ -1183,8 +1141,8 @@ public class JCRDataStorage implements DataStorage {
     return event ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#saveEvent(javax.jcr.Node, org.exoplatform.calendar.service.CalendarEvent, javax.jcr.Node, boolean)
+  /**
+   * {@inheritDoc}
    */
   public void saveEvent(Node calendarNode, CalendarEvent event, Node reminderFolder, boolean isNew) throws Exception {
     Node eventNode ;
@@ -1257,8 +1215,9 @@ public class JCRDataStorage implements DataStorage {
     calendarNode.getSession().save() ;
     addEvent(event) ;
   }
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#addReminder(javax.jcr.Node, javax.jcr.Node, org.exoplatform.calendar.service.Reminder)
+  
+  /**
+   * {@inheritDoc}
    */
   public void addReminder(Node eventNode, Node reminderFolder, Reminder reminder) throws Exception {
     Node reminderNode ;
@@ -1321,7 +1280,10 @@ public class JCRDataStorage implements DataStorage {
     if(!reminderFolder.isNew()) reminderFolder.save() ;
     else reminderFolder.getSession().save() ;
   }
-
+  
+  /**
+   * {@inheritDoc}
+   */
   public void addEvent(CalendarEvent event) throws Exception {
     Node eventFolder = getEventFolder(event.getFromDateTime()) ;
     Node publicEvent ;
@@ -1392,8 +1354,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#syncRemoveEvent(javax.jcr.Node, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public void syncRemoveEvent(Node eventFolder, String rootEventId) throws Exception{
     QueryManager qm = getSession(createSystemProvider()).getWorkspace().getQueryManager();
@@ -1410,8 +1372,9 @@ public class JCRDataStorage implements DataStorage {
     eventFolder.getSession().save() ;
     eventFolder.refresh(true) ;
   }
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getReminderFolder(java.util.Date)
+  
+  /**
+   * {@inheritDoc}
    */
   public Node getReminderFolder(Date fromDate)throws Exception {
     //CS-3165
@@ -1431,8 +1394,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getEventFolder(java.util.Date)
+  /**
+   * {@inheritDoc}
    */
   public Node getEventFolder(Date fromDate)throws Exception {
     Node publicApp = getPublicCalendarServiceHome() ;
@@ -1442,14 +1405,13 @@ public class JCRDataStorage implements DataStorage {
     } catch (Exception e) {
       dateFolder.addNode(CALENDAR_EVENT, Utils.NT_UNSTRUCTURED) ;
       getPublicRoot().getSession().save() ;
-      //e.printStackTrace() ;
       return dateFolder.getNode(CALENDAR_EVENT) ;
 
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getDateFolder(javax.jcr.Node, java.util.Date)
+  /**
+   * {@inheritDoc}
    */
   public Node getDateFolder(Node publicApp, Date date) throws Exception {
     java.util.Calendar fromCalendar = new GregorianCalendar() ;
@@ -1476,8 +1438,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getReminders(javax.jcr.Node)
+  /**
+   * {@inheritDoc}
    */
   public List<Reminder> getReminders(Node eventNode) throws Exception {
     List<Reminder> reminders = new ArrayList<Reminder> () ;
@@ -1506,8 +1468,8 @@ public class JCRDataStorage implements DataStorage {
     return reminders ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#addAttachment(javax.jcr.Node, org.exoplatform.calendar.service.Attachment, boolean)
+  /**
+   * {@inheritDoc}
    */
   public void addAttachment(Node eventNode, Attachment attachment, boolean isNew) throws Exception {
     Node attachHome ;
@@ -1544,8 +1506,8 @@ public class JCRDataStorage implements DataStorage {
     nodeContent.setProperty(Utils.JCR_DATA, attachment.getInputStream());
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getAttachments(javax.jcr.Node)
+  /**
+   * {@inheritDoc}
    */
   public List<Attachment> getAttachments(Node eventNode) throws Exception {
     List<Attachment> attachments = new ArrayList<Attachment> () ;
@@ -1575,11 +1537,9 @@ public class JCRDataStorage implements DataStorage {
     }
     return attachments ;
   }
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#saveCalendarSetting(java.lang.String, org.exoplatform.calendar.service.CalendarSetting)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#saveCalendarSetting(java.lang.String, org.exoplatform.calendar.service.CalendarSetting)
+  
+  /**
+   * {@inheritDoc}
    */
   public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception {
     Node calendarHome = getUserCalendarServiceHome(username) ;
@@ -1595,8 +1555,8 @@ public class JCRDataStorage implements DataStorage {
   	calendarHome.save() ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#addCalendarSetting(javax.jcr.Node, org.exoplatform.calendar.service.CalendarSetting)
+  /**
+   * {@inheritDoc}
    */
   public void addCalendarSetting(Node calendarHome, CalendarSetting setting) throws Exception {
     Node settingNode ;
@@ -1624,11 +1584,9 @@ public class JCRDataStorage implements DataStorage {
     settingNode.setProperty(Utils.EXO_SHARED_CALENDAR_COLORS, setting.getSharedCalendarsColors()) ;
     settingNode.setProperty(Utils.EXO_SEND_OPTION, setting.getSendOption()) ;
   }
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getCalendarSetting(java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getCalendarSetting(java.lang.String)
+  
+  /**
+   * {@inheritDoc}
    */
   public CalendarSetting getCalendarSetting(String username) throws Exception{
     Node calendarHome = getUserCalendarServiceHome(username) ;
@@ -1638,7 +1596,13 @@ public class JCRDataStorage implements DataStorage {
 			calendarHome.getSession().logout();
 		}
   }
-
+  
+  /**
+   * 
+   * @param calendarHome
+   * @return
+   * @throws Exception
+   */
   private CalendarSetting getCalendarSetting(Node calendarHome) throws Exception{
   	if(calendarHome.hasNode(CALENDAR_SETTING)){
       CalendarSetting calendarSetting = new CalendarSetting() ;
@@ -1702,8 +1666,8 @@ public class JCRDataStorage implements DataStorage {
   
   
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#storeXML(java.lang.String, javax.jcr.Node, java.lang.String, org.exoplatform.calendar.service.RssData)
+  /**
+   * {@inheritDoc}
    */
   public void storeXML(String feedXML, Node rssHome, RssData rssData) throws Exception{
     Node rss ;
@@ -1716,11 +1680,8 @@ public class JCRDataStorage implements DataStorage {
     rss.setProperty(Utils.EXO_OWNER, rssData.getOwner());
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#generateCalDav(java.lang.String, java.util.LinkedHashMap, org.exoplatform.calendar.service.RssData, org.exoplatform.calendar.service.CalendarImportExport)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#generateCalDav(java.lang.String, java.util.LinkedHashMap, org.exoplatform.calendar.service.RssData, org.exoplatform.calendar.service.CalendarImportExport)
+  /**
+   * {@inheritDoc}
    */
   public int generateCalDav(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData, 
                             CalendarImportExport importExport) throws Exception {
@@ -1793,8 +1754,8 @@ public class JCRDataStorage implements DataStorage {
     return 1 ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#removeFeed(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
   public void removeFeed(String username, String calendarId) throws Exception {
@@ -1872,13 +1833,11 @@ public class JCRDataStorage implements DataStorage {
     rssHome.getSession().save() ; 
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getFeeds(java.lang.String)
+  /**
+   * 
+   * @param username
+   * @param title
    */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getFeeds(java.lang.String)
-   */
-
   public void removeFeedData(String username, String title) {
     try {    
       Node rssHome = getRssHome(username);
@@ -1898,7 +1857,10 @@ public class JCRDataStorage implements DataStorage {
     }
 
   }
-
+  
+  /**
+   * 
+   */
   public List<FeedData> getFeeds(String username) throws Exception {
     List<FeedData> feeds = new ArrayList<FeedData>() ;
     try {
@@ -1911,11 +1873,6 @@ public class JCRDataStorage implements DataStorage {
           feed.setTitle(feedNode.getProperty(Utils.EXO_TITLE).getString()) ;
           StringBuffer url = new StringBuffer(feedNode.getProperty(Utils.EXO_BASE_URL).getString()) ;  
 
-          // TODO CS-3889
-          /*url.append("/").append(PortalContainer.getCurrentPortalContainerName()) ;
-          url.append("/").append(feedNode.getSession().getWorkspace().getName()) ;
-          url.append("/").append(username)  ;
-          url.append("/").append(feedNode.getName())  ;*/
           feed.setUrl(url.toString()) ;
 
           feed.setContent(feedNode.getProperty(Utils.EXO_CONTENT).getStream());
@@ -1930,11 +1887,8 @@ public class JCRDataStorage implements DataStorage {
     return feeds ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#generateRss(java.lang.String, java.util.List, org.exoplatform.calendar.service.RssData, org.exoplatform.calendar.service.CalendarImportExport)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#generateRss(java.lang.String, java.util.List, org.exoplatform.calendar.service.RssData, org.exoplatform.calendar.service.CalendarImportExport)
+  /**
+   * {@inheritDoc}
    */
   public int generateRss(String username, List<String> calendarIds, RssData rssData, 
                          CalendarImportExport importExport) throws Exception {
@@ -2002,11 +1956,8 @@ public class JCRDataStorage implements DataStorage {
     return 1 ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#generateRss(java.lang.String, java.util.LinkedHashMap, org.exoplatform.calendar.service.RssData, org.exoplatform.calendar.service.CalendarImportExport)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#generateRss(java.lang.String, java.util.LinkedHashMap, org.exoplatform.calendar.service.RssData, org.exoplatform.calendar.service.CalendarImportExport)
+  /**
+   * {@inheritDoc}
    */
   public int generateRss(String username, LinkedHashMap<String, Calendar> calendars, RssData rssData, 
                          CalendarImportExport importExport) throws Exception {
@@ -2060,11 +2011,8 @@ public class JCRDataStorage implements DataStorage {
     return 1 ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#updateRss(java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarImportExport)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#updateRss(java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarImportExport)
+  /**
+   * {@inheritDoc}
    */
   public void updateRss(String username, String calendarId, CalendarImportExport imp) throws Exception{
     calendarId = calendarId.substring(0, calendarId.lastIndexOf(".")) ;   
@@ -2091,11 +2039,9 @@ public class JCRDataStorage implements DataStorage {
       }
     }
   }
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#updateRss(java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarImportExport, int)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#updateRss(java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarImportExport, int)
+  
+  /**
+   * {@inheritDoc}
    */
   public void updateRss(String username, String calendarId, CalendarImportExport imp, int number) throws Exception{
     calendarId = calendarId.substring(0, calendarId.lastIndexOf(".")) ;   
@@ -2121,11 +2067,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#updateCalDav(java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarImportExport)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#updateCalDav(java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarImportExport)
+  /**
+   * {@inheritDoc}
    */
   public void updateCalDav(String username, String calendarId, CalendarImportExport imp) throws Exception {
     calendarId = calendarId.substring(0, calendarId.lastIndexOf(".")) ;
@@ -2149,11 +2092,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#updateCalDav(java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarImportExport, int)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#updateCalDav(java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarImportExport, int)
+  /**
+   * {@inheritDoc}
    */
   public void updateCalDav(String username, String calendarId, CalendarImportExport imp, int number)throws Exception {
     calendarId = calendarId.substring(0, calendarId.lastIndexOf(".")) ;
@@ -2176,11 +2116,9 @@ public class JCRDataStorage implements DataStorage {
       rssHome.getSession().save() ;
     }
   }
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#generateCalDav(java.lang.String, java.util.List, org.exoplatform.calendar.service.RssData, org.exoplatform.calendar.service.CalendarImportExport)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#generateCalDav(java.lang.String, java.util.List, org.exoplatform.calendar.service.RssData, org.exoplatform.calendar.service.CalendarImportExport)
+  
+  /**
+   * {@inheritDoc}
    */
   public int generateCalDav(String username, List<String> calendarIds, RssData rssData, 
                             CalendarImportExport importExport) throws Exception {
@@ -2253,12 +2191,8 @@ public class JCRDataStorage implements DataStorage {
     return 1 ;
   }
 
-
-
-
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getEntryUrl(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public String getEntryUrl(String portalName, String wsName, String username, String path, String baseUrl) throws Exception{
     StringBuilder url = new StringBuilder(baseUrl) ;
@@ -2269,11 +2203,8 @@ public class JCRDataStorage implements DataStorage {
     return url.toString();
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#searchEvent(java.lang.String, org.exoplatform.calendar.service.EventQuery, java.lang.String[])
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#searchEvent(java.lang.String, org.exoplatform.calendar.service.EventQuery, java.lang.String[])
+  /**
+   * {@inheritDoc}
    */
   public EventPageList searchEvent(String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
@@ -2316,11 +2247,8 @@ public class JCRDataStorage implements DataStorage {
     return new EventPageList(events, 10);    
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#searchHightLightEvent(java.lang.String, org.exoplatform.calendar.service.EventQuery, java.lang.String[])
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#searchHightLightEvent(java.lang.String, org.exoplatform.calendar.service.EventQuery, java.lang.String[])
+  /**
+   * {@inheritDoc}
    */
   public Map<Integer, String > searchHightLightEvent(String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception {
     Map<Integer, String > mapData = new HashMap<Integer, String>() ;
@@ -2367,9 +2295,8 @@ public class JCRDataStorage implements DataStorage {
     return mapData ;    
   }
 
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#updateMap(java.util.Map, javax.jcr.NodeIterator, java.util.Calendar, java.util.Calendar, java.lang.String[])
+  /**
+   * {@inheritDoc}
    */
   @SuppressWarnings("deprecation")
   public Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate, String[] filterCalIds) throws Exception {
@@ -2419,11 +2346,8 @@ public class JCRDataStorage implements DataStorage {
     return data ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#shareCalendar(java.lang.String, java.lang.String, java.util.List)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#shareCalendar(java.lang.String, java.lang.String, java.util.List)
+  /**
+   * {@inheritDoc}
    */
   public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception {
     Node sharedCalendarHome = getSharedCalendarHome() ;
@@ -2492,11 +2416,8 @@ public class JCRDataStorage implements DataStorage {
 		}
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getSharedCalendars(java.lang.String, boolean)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getSharedCalendars(java.lang.String, boolean)
+  /**
+   * {@inheritDoc}
    */
   public GroupCalendarData getSharedCalendars(String username, boolean isShowAll) throws Exception {
     Node shareCalendarHome = getSharedCalendarHome();
@@ -2525,11 +2446,9 @@ public class JCRDataStorage implements DataStorage {
   	shareCalendarHome.getSession().logout();
     return null ;
   }
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#saveSharedCalendar(java.lang.String, org.exoplatform.calendar.service.Calendar)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#saveSharedCalendar(java.lang.String, org.exoplatform.calendar.service.Calendar)
+  
+  /**
+   * {@inheritDoc}
    */
   public void saveSharedCalendar(String username, Calendar calendar) throws Exception {
     Node sharedCalendarHome = getSharedCalendarHome() ;
@@ -2585,11 +2504,8 @@ public class JCRDataStorage implements DataStorage {
     }      
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getSharedEvents(java.lang.String, org.exoplatform.calendar.service.EventQuery)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getSharedEvents(java.lang.String, org.exoplatform.calendar.service.EventQuery)
+  /**
+   * {@inheritDoc}
    */
   public List<CalendarEvent> getSharedEvents(String username, EventQuery eventQuery) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
@@ -2619,11 +2535,8 @@ public class JCRDataStorage implements DataStorage {
     return events ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getSharedEventByCalendars(java.lang.String, java.util.List)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getSharedEventByCalendars(java.lang.String, java.util.List)
+  /**
+   * {@inheritDoc}
    */
   public List<CalendarEvent> getSharedEventByCalendars(String username, List<String> calendarIds) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
@@ -2646,13 +2559,8 @@ public class JCRDataStorage implements DataStorage {
     return events ;
   }
 
-
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#removeSharedCalendar(java.lang.String, java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#removeSharedCalendar(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public void removeSharedCalendar(String username, String calendarId) throws Exception {
     Node sharedCalendarHome = getSharedCalendarHome() ;
@@ -2713,11 +2621,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#saveEventToSharedCalendar(java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarEvent, boolean)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#saveEventToSharedCalendar(java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarEvent, boolean)
+  /**
+   * {@inheritDoc}
    */
   public void saveEventToSharedCalendar(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  {
     Node sharedCalendarHome = getSharedCalendarHome() ;
@@ -2743,8 +2648,8 @@ public class JCRDataStorage implements DataStorage {
     }
   } 
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#canEdit(javax.jcr.Node, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
   public boolean canEdit(Node calNode, String username) throws Exception {
@@ -2788,11 +2693,8 @@ public class JCRDataStorage implements DataStorage {
     return false ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getEvents(java.lang.String, org.exoplatform.calendar.service.EventQuery, java.lang.String[])
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getEvents(java.lang.String, org.exoplatform.calendar.service.EventQuery, java.lang.String[])
+  /**
+   * {@inheritDoc}
    */
   public List<CalendarEvent> getEvents(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
@@ -2819,11 +2721,8 @@ public class JCRDataStorage implements DataStorage {
   }
 
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#checkFreeBusy(org.exoplatform.calendar.service.EventQuery)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#checkFreeBusy(org.exoplatform.calendar.service.EventQuery)
+  /**
+   * {@inheritDoc}
    */
   public Map<String, String> checkFreeBusy(EventQuery eventQuery) throws Exception {
     Node eventFolder = getEventFolder(eventQuery.getFromDate().getTime()) ;
@@ -2867,11 +2766,8 @@ public class JCRDataStorage implements DataStorage {
     return participantMap ;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#removeSharedEvent(java.lang.String, java.lang.String, java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#removeSharedEvent(java.lang.String, java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public void removeSharedEvent(String username, String calendarId, String eventId) throws Exception {
     Node sharedCalendarHome = getSharedCalendarHome() ;
@@ -2897,11 +2793,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#moveEvent(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.List, java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#moveEvent(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.List, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public void moveEvent(String formCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
     try {
@@ -3042,11 +2935,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#confirmInvitation(java.lang.String, java.lang.String, int, java.lang.String, java.lang.String, int)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#confirmInvitation(java.lang.String, java.lang.String, int, java.lang.String, java.lang.String, int)
+  /**
+   * {@inheritDoc}
    */
   public void confirmInvitation(String fromUserId, String toUserId,int calType, String calendarId, String eventId, int answer) throws Exception{
     try {
@@ -3095,11 +2985,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#confirmInvitation(java.lang.String, java.lang.String, java.lang.String, int, java.lang.String, java.lang.String, int)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#confirmInvitation(java.lang.String, java.lang.String, java.lang.String, int, java.lang.String, java.lang.String, int)
+  /**
+   * {@inheritDoc}
    */
   public void confirmInvitation(String fromUserId, String confirmingEmail, String confirmingUser,int calType, String calendarId, String eventId, int answer) throws Exception{
     try {
@@ -3172,11 +3059,8 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getTypeOfCalendar(java.lang.String, java.lang.String)
-   */
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getTypeOfCalendar(java.lang.String, java.lang.String)
+  /**
+   * {@inheritDoc}
    */
   public int getTypeOfCalendar(String userName, String calendarId){
     try {
@@ -3206,8 +3090,8 @@ public class JCRDataStorage implements DataStorage {
     return Utils.INVALID_TYPE;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#createSessionProvider()
+  /**
+   * {@inheritDoc}
    */
   public SessionProvider createSessionProvider() {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
@@ -3220,30 +3104,24 @@ public class JCRDataStorage implements DataStorage {
     return provider;
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#createUserProvider()
+  /**
+   * {@inheritDoc}
    */
   @SuppressWarnings("unused")
   public SessionProvider createUserProvider() {
     return SessionProvider.createSystemProvider() ;
-    /*ExoContainer container = ExoContainerContext.getCurrentContainer();
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    return service.getSessionProvider(null) ;   */ 
   }  
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#createSystemProvider()
+  /**
+   * {@inheritDoc}
    */
   public SessionProvider createSystemProvider() {
     return SessionProvider.createSystemProvider() ;
-    /*ExoContainer container = ExoContainerContext.getCurrentContainer();
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    return service.getSystemSessionProvider(null ) ;  */ 
   }
 
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#closeSessionProvider(org.exoplatform.services.jcr.ext.common.SessionProvider)
+  /**
+   * {@inheritDoc}
    */
   @SuppressWarnings("unused")
   public void closeSessionProvider(SessionProvider sessionProvider) {
@@ -3252,15 +3130,15 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getNodeByPath(java.lang.String, org.exoplatform.services.jcr.ext.common.SessionProvider)
+  /**
+   * {@inheritDoc}
    */
   public Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception {
     return (Node) getSession(sessionProvider).getItem(nodePath);
   }
 
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.impl.DataStorage#getSession(org.exoplatform.services.jcr.ext.common.SessionProvider)
+  /**
+   * {@inheritDoc}
    */
   public Session getSession(SessionProvider sprovider) throws Exception{
     ManageableRepository currentRepo = repoService_.getCurrentRepository() ;

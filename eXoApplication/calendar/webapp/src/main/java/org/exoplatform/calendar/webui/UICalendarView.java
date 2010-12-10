@@ -72,19 +72,13 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 
 public abstract class UICalendarView extends UIForm  implements CalendarView {
   final static protected String EVENT_CATEGORIES = "eventCategories".intern() ;
-//  final static String CURRENTTIME = "ct".intern() ;
-//  final static String TIMEZONE = "tz".intern() ;
   private Log log = ExoLogger.getLogger(this.getClass());
-  
   final public static int TYPE_DAY = 0 ;
   final public static int TYPE_WEEK = 1 ;
   final public static int TYPE_MONTH = 2 ;
   final public static int TYPE_YEAR = 3 ;
-
   final public static String ACT_NEXT = "MoveNext".intern() ;
   final public static String ACT_PREVIOUS  = "MovePrevious".intern() ;
-
-
   public final static String ACT_ADDNEW_EVENT = "QuickAddNewEvent".intern() ;
   public final static String ACT_ADDNEW_TASK = "QuickAddNewTask".intern() ;
   public final static String[] CONTEXT_MENU = {ACT_ADDNEW_EVENT, ACT_ADDNEW_TASK}  ;
@@ -137,9 +131,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     } catch (Exception e) { 
       log.warn(e);
     }
-//    calendar_.setLenient(false) ;
-//    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy k:m:s z");
-//    simpleDateFormat.setCalendar(calendar_) ;
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
     dfs_ = new DateFormatSymbols(locale) ;
@@ -175,18 +166,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
    * @return an instance of GregorianCalendar with time zone as of calendar setting.
    */
   protected Calendar getInstanceTempCalendar() { 
-//    if(instanceTempCalendar_ != null) return instanceTempCalendar_ ; 
-//    Calendar  calendar = GregorianCalendar.getInstance() ;
-//    calendar.setLenient(false) ;
-//    calendar.setTimeZone(TimeZone.getTimeZone(calendarSetting_.getTimeZone()));
-//    
-////    int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
-////    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
-//    
-//    // TODO CS-4165
-//    calendar.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn()));
-//    return calendar;
-    
     return  CalendarUtils.getInstanceOfCurrentCalendar();
   } 
   public void applySeting() throws Exception {
@@ -327,10 +306,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     UIFormSelectBox categoryInput =   new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options) ;
     addUIFormInput(categoryInput) ;
-    //categoryInput.setValue("Meeting") ;
   }
   protected String getSelectedCategory() {
-    //if("all".equals(getUIFormSelectBox(EVENT_CATEGORIES).getValue())) return null ;
     return getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
   }
   public void setSelectedCategory(String id) {
@@ -510,8 +487,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
       for (CalendarEvent ce : events) {
-        /*if(CalendarUtils.isEmpty(toCalendarId )) toCalendarId = ce.getCalendarId() ;
-        if(CalendarUtils.isEmpty(toType)) toType = ce.getCalType() ;*/
         List<CalendarEvent> list = new ArrayList<CalendarEvent>() ;
         list.add(ce) ;
         calService.moveEvent(ce.getCalendarId(), ce.getCalendarId(), ce.getCalType(), ce.getCalType(), list, username) ;
@@ -1186,13 +1161,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
         String startTime = event.getRequestContext().getRequestParameter("startTime") ;
         String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
-//        String currentTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
-//        try {
-//          Long.parseLong(currentTime) ;
-//          long amount =  Long.parseLong(finishTime) - Long.parseLong(startTime) ;
-//          startTime = currentTime ;          
-//          finishTime = String.valueOf(Long.parseLong(currentTime) + amount) ;
-//        } catch (Exception e) {}
         String selectedCategory = uiForm.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
         UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
@@ -1220,7 +1188,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), startTime, finishTime) ;
         uiQuickAddEvent.update(CalendarUtils.PRIVATE_TYPE, null) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-        //event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
       }
     }
     static  public class MoveNextActionListener extends EventListener<UIMonthView> {

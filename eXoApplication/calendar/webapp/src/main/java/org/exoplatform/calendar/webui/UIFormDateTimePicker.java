@@ -57,35 +57,6 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
     if(date != null) value_ = getFormater().format(date) ;
     if(date != null) value_ = getFormater().format(date) ;
   }
-//  private String getDaysName() { 
-//    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-//    Locale locale = context.getParentAppRequestContext().getLocale() ;
-//    if(locale_ == null) locale_ = locale ;
-//    DateFormatSymbols     dfs_ = new DateFormatSymbols(locale_) ;
-//    StringBuffer sb = new StringBuffer() ;
-//    for(String n : dfs_.getWeekdays()) {
-//      if(n != null && n.trim().length() > 0) {
-//        if(sb.length() > 0) sb.append(",") ;
-//        sb.append(n.substring(0,1)) ;
-//      }
-//    }
-//    return sb.toString() ;
-//  }
-
-//  protected String getMonthsName() { 
-//    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-//    Locale locale = context.getParentAppRequestContext().getLocale() ;
-//    if(locale_ == null) locale_ = locale ;
-//    DateFormatSymbols     dfs_ = new DateFormatSymbols(locale_) ;
-//    StringBuffer sb = new StringBuffer() ;
-//    for(String n : dfs_.getMonths()) {
-//      if(n != null && n.trim().length() > 0) {
-//        if(sb.length() > 0) sb.append(",") ;
-//        sb.append(n) ;
-//      }
-//    }
-//    return sb.toString() ;
-//  }
 
   public UIFormDateTimePicker(String name, String bindField, Date date, boolean isDisplayTime, Locale locale) {
     super(name, bindField, String.class) ;

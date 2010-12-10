@@ -109,31 +109,23 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
     }
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
     addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD));
-    //UIFormSelectBox privateCal = new UIFormSelectBox(FIELD_TO_CALENDAR, FIELD_TO_CALENDAR, getPrivateCalendars()) ;
     UIFormSelectBoxWithGroups privateCal = new UIFormSelectBoxWithGroups(FIELD_TO_CALENDAR, FIELD_TO_CALENDAR, CalendarUtils.getCalendarOption()) ;
     addUIFormInput(privateCal);
     addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(MandatoryValidator.class).addValidator(SpecialCharacterValidator.class));
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null));
-    //addUIFormInput(new UIFormSelectBox(CATEGORY, CATEGORY, getCategory()));
     UIFormSelectBoxWithGroups calCategory = new UIFormSelectBoxWithGroups(CATEGORY, CATEGORY, CalendarUtils.getCalendarCategoryOption());
     calCategory.setOnChange("OnChange");
     addUIFormInput(calCategory);
-    //cs-2163
-//    CalendarSetting calendarSetting = CalendarUtils.getCalendarService()
-//      .getCalendarSetting(CalendarUtils.getCurrentUser()) ;
     addUIFormInput(new UIFormStringInput(PERMISSION, PERMISSION, null));
     CalendarSetting setting = CalendarUtils.getCurrentUserCalendarSetting();
     UIFormStringInput locale = new UIFormStringInput(LOCALE, LOCALE, CalendarUtils.getLocationDisplayString(setting.getLocation())) ;
-//    locale.setValue(calendarSetting.getLocation()) ;
     locale.setLabel(setting.getLocation());
     locale.setEditable(false);
     addUIFormInput(locale);    
     UIFormStringInput timeZones = new UIFormStringInput(TIMEZONE, TIMEZONE, CalendarUtils.generateTimeZoneLabel(setting.getTimeZone())) ;
     timeZones.setEditable(false);
-//    timeZones.setValue(calendarSetting.getTimeZone()) ;
     timeZones.setLabel(setting.getTimeZone());
     addUIFormInput(timeZones);
-    //addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR, Colors.COLORS));
     addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR));
   }
 
@@ -150,16 +142,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
       switchMode(ADD_NEW);
     } 
   }
- /* private  List<SelectItemOption<String>> getCategory() throws Exception {
-    String username = CalendarUtils.getCurrentUser() ;
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<CalendarCategory> categories = calendarService.getCategories(username) ;
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    for(CalendarCategory category : categories) {
-      options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
-    }
-    return options ;
-  }*/
+
   private List<SelectItemOption<String>> getTimeZones() {
     return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
   } 
@@ -328,11 +311,6 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
             if(CalendarUtils.isEmpty(calendarName)) {
               calendarName = resource.getFileName() ;
             } 
-            /*if(!CalendarUtils.isNameValid(calendarName, CalendarUtils.SPECIALCHARACTER)) {
-              uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-name-invalid", null));
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              return ;
-            }*/
             List<Calendar> pCals = calendarService.getUserCalendars(username, true) ;
             for(Calendar cal : pCals) {
               if (cal.getId().equals(Utils.getDefaultCalendarId(username)) && cal.getName().equals(NewUserListener.DEFAULT_CALENDAR_NAME)) {
