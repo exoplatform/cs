@@ -28,9 +28,10 @@
 			     <div class="RightLoginContainer">
 				<div class="MiddleLoginContainer Signin">
 					<a class="Login" onclick="$loginAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
-          <a class="Register" href="$registerURI"><%=_ctx.appRes("UIBannerPortlet.action.register")%></a>
 					<a >|</a>
-			       <a class="Language" onclick="$changeLanguageAction">
+					<a class="Register" href="$registerURI"><%=_ctx.appRes("UIBannerPortlet.action.register")%></a>
+					<a >|</a>
+					<a class="Language" onclick="$changeLanguageAction">
 				     <%=_ctx.appRes("UIExoStart.item.ChangeLanguage")%>
 				   </a>		
 				  <div class="ClearBoth"><span></span></div>
