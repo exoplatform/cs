@@ -28,6 +28,29 @@ function BuddyItem(buddyInfo, actionCallback, maxUserNameLen, isGroupChat) {
     busy            : 'ExtendsAwayIcon',
     dnd             : 'ExtendsAwayIcon'
   };
+  
+  this.CHAT_STATUS_LIST = {
+		  notice		  : '{0} is {1}',
+		  unavailable     : 'Offline',
+		  available       : 'Online',
+		  away            : 'Away',
+		    xa              : 'ExtendAway',
+		    chat            : 'FreeToChat',
+		    busy            : 'ExtendsAway'
+  };
+  
+  
+  var statusList = eXo.communication.chatbar.webui.UIMainChatWindow.ChatStatusList;
+  if (statusList) {
+	  this.CHAT_STATUS_LIST.notice = statusList.getAttribute("statusNotice");
+	  this.CHAT_STATUS_LIST.available = statusList.getAttribute("onLine");
+	  this.CHAT_STATUS_LIST.away = statusList.getAttribute("away");
+	  this.CHAT_STATUS_LIST.xa = statusList.getAttribute("extendAway");
+	  this.CHAT_STATUS_LIST.chat = statusList.getAttribute("freeToChat");
+	  this.CHAT_STATUS_LIST.unavailable = statusList.getAttribute("offLine");
+  }
+  
+  
   this.MAX_USERNAME_LEN = maxUserNameLen || -1;
   this.isGroupChat = isGroupChat;
   if (this.isGroupChat) {
@@ -157,6 +180,7 @@ function BuddyListControl(rootNode, buddyItemActionCallback, UIMainChatWindow) {
   this.BuddyItem = eXo.communication.chatbar.webui.component.BuddyItem;
   this.buddyList = {};
   this.cleanup();  
+  
 }
 
 /**
@@ -253,7 +277,6 @@ BuddyListControl.prototype.room2StandardContactList = function(roomContactList) 
   var mucServiceName = this.UIMainChatWindow.serverInfo.mucServicesNames[0];
   for (var i=0; i<roomContactList.length; i++) {
     if (!roomContactList[i].nick) {
-      debugger;
       continue;
     }
     var contact = {};
@@ -304,23 +327,49 @@ BuddyListControl.prototype.getUserName = function(userNameFullStr) {
   }
 };
 
+BuddyListControl.prototype.hideStatusNotify = function () {
+    var DOMUtil = eXo.core.DOMUtil;
+    var contactsNode = DOMUtil.findFirstDescendantByClass(eXo.communication.chatbar.webui.UIMainChatWindow.chatWindowsContainerNode, 'div', 'ContactArea');
+    eXo.cs.Tooltip.hideToolTip(contactsNode);
+};
+
 /**
  * Use to update presences(contact's status) for each contact in contact list
  *
  * @param {Array[Presence]} presences
  */
 BuddyListControl.prototype.update = function(presences) {
+  var notifyText = "";
   for (var i=0; i<presences.length; i++) {
     var presence = presences[i];
     window.jsconsole.debug('update status for: ' + presence.from);
+    
     var buddyItemObj = this.getBuddyItem(presence.from);
     if (buddyItemObj) {
+      var notifyBuddy = buddyItemObj.CHAT_STATUS_LIST.notice;
+      notifyBuddy = notifyBuddy.replace("{0}", buddyItemObj.buddyInfo.nickname);
       if (presence.mode) {
+        notifyBuddy = notifyBuddy.replace("{1}", buddyItemObj.CHAT_STATUS_LIST[presence.mode]);
         buddyItemObj.updateStatus(presence.mode);
       } else {
+    	notifyBuddy = notifyBuddy.replace("{1}", buddyItemObj.CHAT_STATUS_LIST[presence.type]);
         buddyItemObj.updateStatus(presence.type);
       }
+      notifyText += (notifyBuddy + "<br>");
     }
+    
+  }
+  
+  var DOMUtil = eXo.core.DOMUtil;
+  var contactsNode = DOMUtil.findFirstDescendantByClass(eXo.communication.chatbar.webui.UIMainChatWindow.chatWindowsContainerNode, 'div', 'ContactArea');
+  if (contactsNode && eXo.cs.Tooltip) {
+	  eXo.cs.Tooltip.showToolTipOfElement(contactsNode, notifyText);
+	  if (this.hideToolTipId) {
+		  window.clearTimeout(this.hideToolTipId);
+	  }
+	  this.hideToolTipId = window.setTimeout("eXo.cs.Tooltip.hideToolTip(" +
+	  		"eXo.core.DOMUtil.findFirstDescendantByClass(" +
+	  		"eXo.communication.chatbar.webui.UIMainChatWindow.chatWindowsContainerNode, 'div', 'ContactArea'))", 5000);
   }
 };
 

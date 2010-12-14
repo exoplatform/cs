@@ -31,6 +31,7 @@
 	jsManager.importJavascript("eXo.communication.chat.webui.UIJoinRoomPopupWindow", "/chatbar/javascript/");
 	jsManager.importJavascript("eXo.communication.chat.webui.UIChatBar", "/chatbar/javascript/");
 	jsManager.importJavascript("eXo.communication.chat.webui.UIPopupMessages", "/chatbar/javascript/");
+	jsManager.importJavascript("eXo.communication.chat.webui.UITooltipAtTop", "/chatbar/javascript/");
 
 	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.applicationId = '" + uicomponent.getId() + "';");
 	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.restcontextname = '" + uicomponent.getRestContextName() + "';");
@@ -40,6 +41,10 @@
 <!-- Begin UIChat -->
 <div class="UIChat ChatSharedIcons UIChatBarPortlet" id="<%=uicomponent.id%>" oncontextmenu="return false;"
     exotoken="<%=uicomponent.getUserToken();%>" username="<%=uicomponent.getRemoteUser();%>">
+
+
+<div class="UIChatbarStatusRB" style="display:none;" statusNotice="<%=_ctx.appRes("UIChatBarPortlet.label.status-notice");%>" onLine="<%=_ctx.appRes("UIChatBarPortlet.label.onLine");%>" extendAway="<%=_ctx.appRes("UIChatBarPortlet.label.extendAway");%>" away="<%=_ctx.appRes("UIChatBarPortlet.label.away");%>" freeToChat="<%=_ctx.appRes("UIChatBarPortlet.label.freeToChat");%>" offLine="<%=_ctx.appRes("UIChatBarPortlet.label.offLine");%>"></div>
+    
     <div class="ClearRight">
         <span></span>
     </div>
@@ -75,7 +80,8 @@
                             <div class="SeperatorLine">
                                 <span></span>
                             </div>
-                            <div class="ContactArea IconButton" style="width: 100px;" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);">
+                            <div class="ContactArea IconButton" style="width: 100px;" onclick="eXo.communication.chatbar.webui.UIChatBar.showMenu(this,event);" >
+                                <% _ctx.include("app:/templates/chatbar/webui/UITooltipAtTop.gtmpl"); %>
                                 <!-- Right Click Popup Contact -->
                                 <div style="position: relative;">
                                     <div class="UIRightClickPopupMenu" style="width: 200px; bottom: 0px; right: 0px;

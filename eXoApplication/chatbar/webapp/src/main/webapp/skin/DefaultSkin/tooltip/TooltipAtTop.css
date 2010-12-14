@@ -1,0 +1,31 @@
+.UITooltipAtTop{
+	width:147px;
+	position:absolute;
+	display:none;
+}
+.UITooltipAtTop .UITooltipAtTop_Top{
+	background-image: url('images/tooltipTop.gif');
+	background-repeat:no-repeat;
+	height:16px;	
+}
+.UITooltipAtTop .UITooltipAtTop_Middle{
+	background-image: url('images/tooltipMiddle.gif');
+	background-repeat:repeat-y;	
+	background-position:bottom left;
+	padding-left:7px;
+	padding-right:7px;
+}
+.UITooltipAtTop .UITooltipAtTop_Middle span{
+	position:relative;
+	top:-8px;
+	font-family: Trebuchet MS, Lucida Sans Unicode, Arial, sans-serif;
+	font-size:11px;
+}
+.UITooltipAtTop .UITooltipAtTop_Bottom{
+	background-image: url('images/tooltipBottom.gif');
+	background-repeat:no-repeat;
+	background-repeat:no-repeat;	
+	height:44px;
+	position:relative;
+	top:-6px;
+}

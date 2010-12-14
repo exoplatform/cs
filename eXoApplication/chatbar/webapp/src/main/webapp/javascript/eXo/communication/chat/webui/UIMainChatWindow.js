@@ -254,6 +254,8 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName, cometd
   if(this.ContactAreaNode)
   	this.ContactAreaNode = DOMUtil.findFirstDescendantByClass(this.ContactAreaNode,"div","UIRightClickPopupMenu");
   
+  this.ChatStatusList = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'UIChatbarStatusRB');
+  
   // Notification template
   //this.notificationNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'NotificationArea');
   // Windows and popups.
@@ -263,6 +265,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName, cometd
   this.roomConfigPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'RoomConfigPopup');
   this.joinRoomPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'JoinRoomPopup');
   this.messagesPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'MessagesPopup');
+  
 
   this.UIChatWindow.init(this.chatPopupNode, this);
   this.UIAddContactPopupWindow.init(this.addContactPopupNode, this);
