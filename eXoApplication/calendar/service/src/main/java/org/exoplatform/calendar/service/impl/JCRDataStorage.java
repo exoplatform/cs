@@ -209,14 +209,6 @@ public class JCRDataStorage implements DataStorage {
    * {@inheritDoc}
    */
   public Node getRssHome(String username) throws Exception {
-    /*Node calendarServiceHome = getSharedCalendarHome() ;
-    try {
-      return calendarServiceHome.getNode(FEED) ;
-    } catch (Exception e) {
-      Node feed = calendarServiceHome.addNode(FEED, Utils.NT_UNSTRUCTURED) ;
-      calendarServiceHome.getSession().save() ;
-      return feed ;
-    }*/
     Node calendarServiceHome = getUserCalendarServiceHome(username) ;
     try {
       return calendarServiceHome.getNode(FEED);
