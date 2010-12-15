@@ -44,4 +44,16 @@
 	<msg name="back">
   	Back
   </msg>
+	<msg name="calendars">
+  	Calendar
+  </msg>
+	<msg name="setting">
+  	Setting
+  </msg>
+	<msg name="save">
+  	Save
+  </msg>
+	<msg name="cancel">
+  	Cancel
+  </msg>
 </messagebundle>

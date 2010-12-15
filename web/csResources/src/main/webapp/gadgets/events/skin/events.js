@@ -119,17 +119,19 @@ function eXoEventGadget(){
 } ;
 
 eXoEventGadget.prototype.getPrefs = function(){
-	var prefs = new gadgets.Prefs();
-	var limit = prefs.getString("limit");
-	var url   = prefs.getString("url");
-	var subscribeurl   = prefs.getString("subscribeurl");
-	var timeformat  = prefs.getString("timeformat");
-	return {
-		"limit": limit,
-		"url"  : url,
-		"subscribeurl"  : subscribeurl,
-		"timeformat" : timeformat
+	var setting = (new gadgets.Prefs()).getString("setting");
+	if(setting =="") setting = ["","/portal/rest/private/cs/calendar/getissues","10","AM/PM","defaultCalendarName"];
+	else {
+		setting = setting.split(";");
 	}
+	this.prefs = {
+		"url"  : setting[0],
+		"subscribeurl"  : setting[1],
+		"limit": setting[2],
+		"timeformat" : setting[3],
+		"calendars"  : setting[4]
+	}
+	return this.prefs;
 }
 
 //TODO: Need a new solution for creating url replace for using parent 
@@ -194,8 +196,10 @@ eXoEventGadget.prototype.showDetail = function(obj){
 }
 
 eXoEventGadget.prototype.onLoadHander = function(){
-	eXoEventGadget.getData();
-	eXoEventGadget.adjustHeight();
+	eXoEventGadget.getPrefs();
+	eXoEventGadget.getCalendars();
+	eXoEventGadget.trigger();
+	setTimeout(eXoEventGadget.adjustHeight,500);
 }
 eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
 	/*	
@@ -210,15 +214,12 @@ eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
   request.send(null) ;
 	request.onreadystatechange = function(){
 		if (request.readyState == 4) {
-			if ((request.status == 200 || request.status == 204)) {
+			if (request.status == 200) {
 				var data = gadgets.json.parse(request.responseText);
-				if(data.info == null) {
-					eXoEventGadget.notify();
-					return;
-				}
 				callback(data);
 			}
-			if (request.status == 404) {
+			//IE treats a 204 success response status as 1223. This is very annoying
+			if (request.status == 404  || request.status == 204  || request.status == 1223) {
 				eXoEventGadget.notify();
 	  	}
 		}
@@ -230,14 +231,104 @@ eXoEventGadget.prototype.notify = function(){
 	eXoEventGadget.setLink();
 }
 
-
 eXoEventGadget.prototype.adjustHeight = function(){
 	setTimeout(function(){
-		var itemContainer = document.getElementById("ItemContainer").parentNode;
-		var height = itemContainer.offsetHeight;
+		var frmSetting = document.getElementById("Setting");
+		var gadgetCont = document.getElementById("ItemContainer").parentNode;
+		var height = frmSetting.offsetHeight + gadgetCont.offsetHeight + 10;
 		gadgets.window.adjustHeight(height);		
 	},500);
 }
+
+eXoEventGadget.prototype.getCalendars = function(){
+	var url = eXoEventGadget.createRequestUrl();
+	url = url.replace(/calendar.*$/ig,"calendar/getcalendars/");
+	eXoEventGadget.ajaxAsyncGetRequest(url,eXoEventGadget.write2Setting);
+}
+
+eXoEventGadget.prototype.write2Setting = function(data){
+	var frmSetting = document.getElementById("Setting");
+	data = eXoEventGadget.convertCalendar(data.calendars);
+	var html = '';
+	for(var i=0,len = data.length; i < len;i++){
+		html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+	}
+	frmSetting["calendars"].innerHTML = html;
+	eXoEventGadget.getData();
+}
+
+eXoEventGadget.prototype.convertCalendar = function(data){
+	var arr = new Array();
+	var len = data.length;
+	for(var i = 0; i < len; i++){
+		arr.push({"name":data[i].name,"id":data[i].calendarId});
+	}
+	return arr;
+}
+
+eXoEventGadget.prototype.showHideSetting = function(isShow){
+	var frmSetting = document.getElementById("Setting");
+	var display = "";
+	if(isShow) {
+		eXoEventGadget.loadSetting();
+		display = "block";
+	}	else display = "none";
+	frmSetting.style.display = display;
+	eXoEventGadget.adjustHeight();
+}
+
+eXoEventGadget.prototype.saveSetting = function(){
+	var prefs = new gadgets.Prefs();
+	var frmSetting = document.getElementById("Setting");
+	var setting = eXoEventGadget.createSetting(frmSetting);
+	prefs.set("setting",setting);	
+	return false;
+}
+
+eXoEventGadget.prototype.createSetting = function(frmSetting){
+	var setting = "";
+	setting += frmSetting["url"].value + ";";
+	setting += frmSetting["subscribeurl"].value + ";";
+	setting += frmSetting["limit"].value + ";";
+	setting += frmSetting["timeformat"].options[frmSetting["timeformat"].selectedIndex].text + ";";
+	setting += frmSetting["calendars"].options[frmSetting["calendars"].selectedIndex].text;
+	return setting;
+}
+
+eXoEventGadget.prototype.loadSetting = function(){
+	var frmSetting = document.getElementById("Setting");
+	frmSetting["url"].value = eXoEventGadget.prefs.url;
+	frmSetting["subscribeurl"].value = eXoEventGadget.prefs.subscribeurl;
+	frmSetting["limit"].value = eXoEventGadget.prefs.limit;
+	eXoEventGadget.selectedValue(frmSetting["timeformat"],eXoEventGadget.prefs.timeformat);
+	eXoEventGadget.selectedValue(frmSetting["calendars"],eXoEventGadget.prefs.calendars);
+}
+
+eXoEventGadget.prototype.selectedValue = function(selectbox,value){
+	for(var i = 0, len = selectbox.options.length; i < len; i++){
+		if(value == selectbox.options[i].text) selectbox.selectedIndex = i;
+	}
+}
+
+eXoEventGadget.prototype.trigger = function(){
+	this.moreButton = document.getElementById("ShowAll");
+  this.settingButton = document.getElementById("SettingButton");
+  this.hiddenTimeout = null;
+  this.moreButton.onmouseover = this.moveOver;
+  this.moreButton.onmouseout = this.moveOut;
+  this.settingButton.onmouseover = this.moveOver;
+  this.settingButton.onmouseout = this.moveOut;
+}
+eXoEventGadget.prototype.moveOver = function(){
+  if(eXoEventGadget.hiddenTimeout) window.clearTimeout(eXoEventGadget.hiddenTimeout);  
+  eXoEventGadget.settingButton.style.display = "block";
+}
+eXoEventGadget.prototype.moveOut = function(){
+  eXoEventGadget.hiddenTimeout = window.setTimeout(function(){
+    eXoEventGadget.settingButton.style.display = "none";
+  },200);
+}
+
 eXoEventGadget =  new eXoEventGadget();
 
 gadgets.util.registerOnLoadHandler(eXoEventGadget.onLoadHander);

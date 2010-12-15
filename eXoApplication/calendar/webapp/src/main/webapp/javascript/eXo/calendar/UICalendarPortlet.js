@@ -1327,7 +1327,7 @@ UICalendarPortlet.prototype.adjustTime = function(currentStart, currentEnd, obj)
  */
 UICalendarPortlet.prototype.showContextMenu = function(compid){
     var UIContextMenu = eXo.webui.UIContextMenu;
-		this.portletNode = document.getElementById(compid);
+		this.portletNode = eXo.core.DOMUtil.findAncestorByClass(document.getElementById(compid),"PORTLET-FRAGMENT");
     this.portletName = compid;
     UIContextMenu.portletName = this.portletName;
     var config = {
@@ -2244,6 +2244,7 @@ UISelection.prototype.clear = function(){
     var endTime = UISelection.block.offsetHeight * 60 * 1000 + parseInt(UISelection.startTime);
     var startTime = UISelection.startTime;
 		var bottom = UISelection.block.offsetHeight + UISelection.block.offsetTop;
+
     if (UISelection.block.offsetTop < UISelection.startY) {
         startTime = parseInt(UISelection.startTime) - UISelection.block.offsetHeight * 60 * 1000 + UISelection.step * 60 * 1000;
         endTime = parseInt(UISelection.startTime) + UISelection.step * 60 * 1000;
@@ -2460,6 +2461,7 @@ UICalendarPortlet.prototype.callbackSelectionX = function(){
             UIComboboxInputs[i].value = end;
 						this.synTime(UIComboboxInputs[i],end);					
 				}
+
     }
     var cells = eXo.core.DOMUtil.getChildrenByTagName(Highlighter.firstCell.parentNode, "td");
     Highlighter.setAttr(Highlighter.firstCell.cellIndex, Highlighter.lastCell.cellIndex, cells);
