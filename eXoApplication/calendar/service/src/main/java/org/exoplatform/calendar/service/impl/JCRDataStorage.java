@@ -209,13 +209,22 @@ public class JCRDataStorage implements DataStorage {
    * {@inheritDoc}
    */
   public Node getRssHome(String username) throws Exception {
-    Node calendarServiceHome = getSharedCalendarHome() ;
+    /*Node calendarServiceHome = getSharedCalendarHome() ;
     try {
       return calendarServiceHome.getNode(FEED) ;
     } catch (Exception e) {
       Node feed = calendarServiceHome.addNode(FEED, Utils.NT_UNSTRUCTURED) ;
       calendarServiceHome.getSession().save() ;
       return feed ;
+    }*/
+    Node calendarServiceHome = getUserCalendarServiceHome(username) ;
+    try {
+      return calendarServiceHome.getNode(FEED);
+    }
+    catch (Exception e) {
+      Node feed = calendarServiceHome.addNode(FEED, Utils.NT_UNSTRUCTURED);
+      calendarServiceHome.getSession().save();
+      return feed;
     }
   }
   
@@ -1677,7 +1686,6 @@ public class JCRDataStorage implements DataStorage {
     rss.setProperty(Utils.EXO_BASE_URL, rssData.getUrl()) ;
     rss.setProperty(Utils.EXO_TITLE, rssData.getTitle()) ;
     rss.setProperty(Utils.EXO_CONTENT, new ByteArrayInputStream(feedXML.getBytes()));
-    rss.setProperty(Utils.EXO_OWNER, rssData.getOwner());
   }
 
   /**
@@ -1868,7 +1876,7 @@ public class JCRDataStorage implements DataStorage {
       NodeIterator iter = rssHome.getNodes() ;
       while(iter.hasNext()) {
         Node feedNode = iter.nextNode() ;
-        if(feedNode.isNodeType(Utils.EXO_RSS_DATA) && username.equals(feedNode.getProperty(Utils.EXO_OWNER).getString())) {
+        if(feedNode.isNodeType(Utils.EXO_RSS_DATA)) {
           FeedData feed = new FeedData() ;
           feed.setTitle(feedNode.getProperty(Utils.EXO_TITLE).getString()) ;
           StringBuffer url = new StringBuffer(feedNode.getProperty(Utils.EXO_BASE_URL).getString()) ;  
