@@ -13,6 +13,14 @@
     <exobuild.name>cs</exobuild.name>
     <exobuild.type>module</exobuild.type>
   </properties>
+   <dependencies>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.common</artifactId>
+      <version>${project.version}</version>
+      <type>jar</type>
+    </dependency>
+   </dependencies>
   <build>
     <plugins>
       <plugin>

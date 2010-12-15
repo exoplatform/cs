@@ -40,6 +40,7 @@ function getProduct(version) {
   product.addDependencies(cs.comet.cometd);
    
   // CS extension
+  product.addDependencies(cs.eXoApplication.common);
   product.addDependencies(cs.eXoApplication.calendar);
   product.addDependencies(cs.eXoApplication.contact);
   product.addDependencies(cs.eXoApplication.mail);
