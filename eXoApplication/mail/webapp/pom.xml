@@ -62,6 +62,11 @@
     </dependency>
     <dependency>
       <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>

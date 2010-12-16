@@ -42,6 +42,8 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.cs.common.ext.ExtensionTypes;
+import org.exoplatform.cs.common.ext.UIExtensionUtils;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -76,6 +78,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -206,6 +209,16 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
   public UIComposeForm() throws Exception {
   }
 
+  public List<UIComponent> getDownloadButtons() {
+    List<UIComponent> list = new ArrayList<UIComponent>();
+    Map<String, Object> context = new HashMap<String, Object>();
+    UIMailPortlet portlet = this.getAncestorOfType(UIMailPortlet.class);
+    context.put(UIMailPortlet.class.getName(), portlet);
+    Map<String, UIComponent> components = UIExtensionUtils.getComponents(ExtensionTypes.MAIL_DOWNLOAD_BUTTON, this, context);
+    list.addAll(components.values());
+    return list;
+  }
+  
   @SuppressWarnings("deprecation")
   public void init(String accountId, Message msg, int composeType) throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
