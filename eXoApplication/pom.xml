@@ -10,6 +10,7 @@
   <packaging>pom</packaging>
   <name>eXo CS Applications</name>
   <modules>
+    <module>common</module>
     <module>calendar</module>
     <module>contact</module>
     <module>mail</module>
