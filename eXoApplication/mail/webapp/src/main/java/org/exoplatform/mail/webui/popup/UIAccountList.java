@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.cs.common.webui.UIPopupAction;
+import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;

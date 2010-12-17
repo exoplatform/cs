@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.cs.common.webui.UIPopupAction;
+import org.exoplatform.cs.common.webui.UIPopupActionContainer;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
@@ -28,8 +30,6 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAccountList;
 import org.exoplatform.mail.webui.popup.UIAccountSetting;
-import org.exoplatform.mail.webui.popup.UIPopupAction;
-import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;

@@ -17,6 +17,8 @@
 package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.cs.common.webui.UIPopupAction;
+import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Message;

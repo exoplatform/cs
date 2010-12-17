@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;

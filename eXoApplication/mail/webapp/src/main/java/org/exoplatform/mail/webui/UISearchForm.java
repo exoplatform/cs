@@ -16,12 +16,12 @@
  */
 package org.exoplatform.mail.webui;
 
+import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAdvancedSearchForm;
-import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;

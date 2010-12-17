@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.cs.common.webui.UIPopupAction;
+import org.exoplatform.cs.common.webui.UIPopupActionContainer;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
@@ -33,8 +35,6 @@ import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIEventForm;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIMessageFilter;
-import org.exoplatform.mail.webui.popup.UIPopupAction;
-import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;

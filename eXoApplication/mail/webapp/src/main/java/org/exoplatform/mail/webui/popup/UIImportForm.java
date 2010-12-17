@@ -19,6 +19,7 @@ package org.exoplatform.mail.webui.popup;
 import java.io.InputStream;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;

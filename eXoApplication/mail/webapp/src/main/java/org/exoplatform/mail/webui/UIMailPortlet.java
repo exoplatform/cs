@@ -25,6 +25,7 @@ import javax.jcr.PathNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -32,7 +33,6 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiApplication;

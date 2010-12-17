@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.cs.common.webui.UIPopupAction;
+import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;

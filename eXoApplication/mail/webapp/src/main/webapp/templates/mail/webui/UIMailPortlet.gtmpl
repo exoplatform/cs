@@ -3,7 +3,7 @@
 		import org.exoplatform.mail.webui.UIActionBar ;
 		import org.exoplatform.mail.webui.UINavigationContainer ;
 		import org.exoplatform.mail.webui.UIMessageArea ;
-		import org.exoplatform.mail.webui.popup.UIPopupAction;
+		import org.exoplatform.cs.common.webui.UIPopupAction;
 		import org.exoplatform.mail.MailUtils;
 	// move this to the method processRender
 		def rcontext = _ctx.getRequestContext() ;

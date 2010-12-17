@@ -18,6 +18,8 @@ package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.cs.common.webui.UIPopupAction;
+import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
