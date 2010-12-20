@@ -8,11 +8,6 @@
   rcontext.getJavascriptManager().addJavascript('eXo.mail.MailScrollManager.load("'+ uicomponent.id +'");');
 %>
 <% uiform.begin() %>
-
-<% 
-  def downloadButtons = uicomponent.getDownloadButtons();
-%>
-
 <div class="UIConfirmMessage" style="display:none;"><%=_ctx.appRes(uicomponent.id+".msg.no-subject") %></div>
 <div style="overflow-x: auto; width: 99%;">
 <div><div style="width: 680px;" ><span style="display: none;"></span></div></div>
@@ -55,10 +50,10 @@
 									
 									<div class="ControlButton MailListActionsbarButton" onmouseover="eXo.mail.UIMailPortlet.showView(this, event)">
 										<div onclick="<%=uicomponent.event("Attachment")%>" class="IconHolder AttachLocalIcon">
-											<div class="Label <% if (downloadButtons.size() > 0) print "DownArrow1Icon"; %>"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
+											<div class="Label <% if (org.exoplatform.mail.MailUtils.hasECMS()) print "DownArrow1Icon"; %>"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
 										</div>									
 									
-									<% if (downloadButtons.size() > 0) { %>
+									<% if (org.exoplatform.mail.MailUtils.hasECMS()) { %>
 									<% /*Begin Popup Menu*/ %>
 										<div style="position: relative;">
 					      				<div class="UIRightClickPopupMenu" style="display: none;">
@@ -70,16 +65,12 @@
 							        			</div>
 										        <div class="MiddleLeftRightClickPopupMenu">
 										          <div class="MiddleRightRightClickPopupMenu">
-							              		<div class="UIRightPopupMenuContainer">
-							              		  <% 
-							              		    downloadButtons.each() {
-							              		  %>
-							              		  <a class="MenuItem" href="#">
-                                  <div class="IconHolder">
-							              		    <div class="Label"><% uicomponent.renderChild(it); %></div>
-                                  </div>
-                                  </a>							                   
-							              		  <% } %>
+							              		<div class="UIRightPopupMenuContainer">																	
+							                    <a class="MenuItem" href="<%=uicomponent.event("CallDMSSelector")%>">
+							                    	<div class="IconHolder AttachServerIcon"> 
+																			<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-from-dms") %></div>
+																		</div>
+																	</a>							                   
 																</div>
 								          		</div>
 								        		</div>
