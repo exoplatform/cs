@@ -49,7 +49,7 @@ public class MembershipTypesListBean {
       return true;
     if(this.hashCode() == obj.hashCode())
       return true;
-    if(obj instanceof MembershipListBean){
+    if(obj instanceof MembershipTypesListBean){
       MembershipTypesListBean bean = (MembershipTypesListBean)obj;
       if( membershipTypes.size() == bean.membershipTypes.size() ){
         Iterator<?> it_1 = membershipTypes.iterator();
