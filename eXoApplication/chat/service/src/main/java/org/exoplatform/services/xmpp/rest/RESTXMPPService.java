@@ -2022,6 +2022,10 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       Presence presence = PresenceUtil.getPresence(status);
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
+      String presenceStatus = session.getPresenceStatus_();
+      if (presenceStatus != null && presenceStatus.equalsIgnoreCase(status)) {
+        return Response.ok().cacheControl(cc).build();
+      }
       session.setPresenceStatus_(status); 
       if(dps != null){
         dps.savePresenceStatus(username, status);  
@@ -2183,9 +2187,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
       if(dps != null){// null then set default value
         String ps = dps.getPreviousStatus(username);
-        return Response.ok(ps, MediaType.TEXT_PLAIN).build();
+        return Response.ok(ps, MediaType.TEXT_PLAIN).cacheControl(cc).build();
       }
     }
-    return Response.ok("server_is_not_available", MediaType.TEXT_PLAIN).build();
+    return Response.ok("server_is_not_available", MediaType.TEXT_PLAIN).cacheControl(cc).build();
   }
 }

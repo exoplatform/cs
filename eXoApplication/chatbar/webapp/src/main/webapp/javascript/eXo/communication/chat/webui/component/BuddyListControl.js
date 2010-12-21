@@ -347,7 +347,7 @@ BuddyListControl.prototype.update = function(presences) {
     var buddyItemObj = this.getBuddyItem(presence.from);
     if (buddyItemObj) {
       var notifyBuddy = buddyItemObj.CHAT_STATUS_LIST.notice;
-      notifyBuddy = notifyBuddy.replace("{0}", buddyItemObj.buddyInfo.nickname);
+      notifyBuddy = notifyBuddy.replace("{0}", buddyItemObj.buddyInfo.fullName);
       if (presence.mode) {
         notifyBuddy = notifyBuddy.replace("{1}", buddyItemObj.CHAT_STATUS_LIST[presence.mode]);
         buddyItemObj.updateStatus(presence.mode);
