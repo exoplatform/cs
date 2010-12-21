@@ -48,8 +48,12 @@ import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
+import org.exoplatform.contact.webui.popup.UIPublicAddressPermission;
 import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.services.organization.Membership;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -74,6 +78,7 @@ import org.exoplatform.webui.event.EventListener;
                   @EventConfig(listeners = UIAddressBooks.ImportAddressActionListener.class), 
                   @EventConfig(listeners = UIAddressBooks.ExportAddressActionListener.class),
                   @EventConfig(listeners = UIAddressBooks.EditGroupActionListener.class),
+                  @EventConfig(listeners = UIAddressBooks.PermissionsActionListener.class),
                   @EventConfig(listeners = UIAddressBooks.ShareGroupActionListener.class),
                   @EventConfig(listeners = UIAddressBooks.DeleteGroupActionListener.class
                       , confirm = "UIAddressBooks.msg.confirm-delete"),
@@ -147,7 +152,7 @@ public class UIAddressBooks extends UIComponent {
   
   public List<String> getPublicContactGroups() throws Exception {
     List<String> publicAddressBookIds = ContactUtils.getContactService().getAllsPublicAddressBookIds(ContactUtils.getCurrentUser()) ;
-    publicAddressBookIds.removeAll(getGroupsOfUser());
+    //publicAddressBookIds.removeAll(getGroupsOfUser());
     return publicAddressBookIds;
   }
   
@@ -177,6 +182,31 @@ public class UIAddressBooks extends UIComponent {
     if (editPerGroups != null)
       for (String editPer : editPerGroups)
         if (ContactUtils.getUserGroups().contains(editPer)) return true ;
+    return false ;
+  }
+  
+  public boolean havePermissionsPublicAddress(String groupId) throws Exception {
+    AddressBook addressBook = ContactUtils.getContactService().getPublicAddressBook(ContactUtils.getCurrentUser(), groupId);
+    if (addressBook == null) return false ;
+    if (addressBook.getEditPermissionUsers() != null &&
+        Arrays.asList(addressBook.getEditPermissionUsers()).contains(ContactUtils.getCurrentUser())) {
+      return true ;
+    }
+    String[] editPerGroups = addressBook.getEditPermissionGroups() ;
+    if (editPerGroups != null)
+      for (String editPer : editPerGroups)
+        if (ContactUtils.getUserGroups().contains(editPer.split(Utils.COLON)[0])) {
+          String editGroup = editPer.split(Utils.COLON)[0];
+          String editMembership = null;
+          if (editPer.contains(Utils.COLON)) editMembership = editPer.split(Utils.COLON)[1];
+          if (editMembership.contains(Utils.MEMBERSHIP)) editMembership = editMembership.replace(Utils.MEMBERSHIP, "");
+          if (editMembership.contains("*")) return true;
+          OrganizationService organizationService = 
+            (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+          if (organizationService.getMembershipHandler().findMembershipByUserGroupAndType(
+            ContactUtils.getCurrentUser(), editGroup, editMembership) != null )
+            return true ;
+        }
     return false ;
   }
   
@@ -471,6 +501,23 @@ public class UIAddressBooks extends UIComponent {
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser(); 
       uiAddNewEditPermission.initGroup(contactService.getPersonalAddressBook(username, groupId)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
+    }
+  }
+  
+  static public class PermissionsActionListener extends EventListener<UIAddressBooks> {
+    public void execute(Event<UIAddressBooks> event) throws Exception {
+      UIAddressBooks uiAddressBook = event.getSource();
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIContactPortlet contactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
+      uiPopupContainer.setId("UIPermissionsForm") ;
+      UIPublicAddressPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIPublicAddressPermission.class, null, null);
+      ContactService contactService = ContactUtils.getContactService();
+      String username = ContactUtils.getCurrentUser(); 
+      uiAddNewEditPermission.initGroup(contactService.getPublicAddressBook(username, groupId)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       //event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }

@@ -38,6 +38,9 @@ public class Utils {
   final public static String COMMA = ",".intern() ;
   final public static String contactTempId = "ContacttempId" ;
   public static int limitExport = 150 ;
+  public static final String COLON = ":".intern() ;
+  public static final String MEMBERSHIP = "*.".intern() ;
+  final static public String MANAGER = "manager";
   
   public static String formatDate(String format, Date date) {
     Format formatter = new SimpleDateFormat(format);
@@ -82,4 +85,11 @@ public class Utils {
     return builder.toString();
   }
   
+  public static String encodeGroupId(String id) {
+    return id.replaceAll("/", "&quot;");
+  }
+  
+  public static String decodeGroupId(String id) {
+    return id.replaceAll("&quot;","/");
+  }
 }

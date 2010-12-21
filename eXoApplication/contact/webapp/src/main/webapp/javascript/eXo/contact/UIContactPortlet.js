@@ -276,6 +276,33 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 //				}
 //			}
 //		}		
+	} else { //
+	  
+	  
+	  var havePermission = addressBook.getAttribute("havePermission") ;
+		if (havePermission == "false") {
+			for(var i = 0 ; i < itemLength ; i ++) {
+				if (DOMUtil.hasClass(menuItems[i],"ShareIcon")) {
+					if (menuItems[i].getAttribute("oldHref")) continue ;
+					menuItems[i].setAttribute("oldHref", menuItems[i].href) ;
+					menuItems[i].href = "javascript: void(0) ;" ;
+					menuItems[i].setAttribute("oldColor", DOMUtil.getStyle(menuItems[i], "color")) ;
+					menuItems[i].style.color = "#cccccc" ;
+				}
+			}		
+		} else {
+			for(var i = 0 ; i < itemLength ; i ++) {
+				if (DOMUtil.hasClass(menuItems[i],"ShareIcon")) {
+					if (!menuItems[i].getAttribute("oldHref")) continue ;
+					menuItems[i].href = menuItems[i].getAttribute("oldHref") ;
+					menuItems[i].style.color = menuItems[i].getAttribute("oldColor") ;
+					menuItems[i].removeAttribute("oldColor") ;
+					menuItems[i].removeAttribute("oldHref") ;
+				}
+			}		
+		}
+	  
+	  
 	}
 	
   

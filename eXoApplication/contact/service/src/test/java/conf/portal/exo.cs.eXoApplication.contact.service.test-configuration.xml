@@ -270,6 +270,12 @@
 	    <type>org.exoplatform.contact.service.impl.NewUserListener</type>
 	    <description>description</description>
 	  </component-plugin>
+		<component-plugin>
+	    <name>contact.new.group.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.contact.service.impl.NewGroupListener</type>
+	    <description>description</description>
+	  </component-plugin>
 	  <component-plugin>
 	    <name>contact.new.membership.event.listener</name>
 	    <set-method>addListenerPlugin</set-method>

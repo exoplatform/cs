@@ -186,6 +186,14 @@ public interface ContactService {
   public List<AddressBook> getGroups(String username) throws Exception ;
   
   /**
+   * get all public addresses of user
+   * @param username user name of user get groups
+   * @return list all groups of user 
+   * @throws Exception 
+   */
+  public List<String> getPublicAddresses(String username) throws Exception ;
+  
+  /**
    * Get a personal address book by ID
    * @param owner user ID of the owning user
    * @param addressBookID ID of the address book to retrieve.
@@ -194,7 +202,15 @@ public interface ContactService {
    */
   public AddressBook getPersonalAddressBook(String owner, String addressBookID) throws Exception ;
   
-
+  /**
+   * Get a public address book by ID
+   * @param owner user ID of the owning user
+   * @param addressBookID ID of the address book to retrieve.
+   * @return object ContactGroup for the given ID
+   * @throws Exception 
+   */
+  public AddressBook getPublicAddressBook(String owner, String addressBookID) throws Exception ;
+  
   /**
    * Save a personal or shared address book.
    * @param username user ID of the owner
@@ -492,4 +508,5 @@ public interface ContactService {
   
   public void addListenerPlugin(ContactEventListener listener) throws Exception ;
   
+  public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception ;
 }

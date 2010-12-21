@@ -129,12 +129,7 @@ public class ContactServiceImpl implements ContactService {
   public List<String> getAllsPublicAddressBookIds(String user) throws Exception {
     List<String> publicGroupIds = new ArrayList<String>() ;
     if(userCanSeeAllGroupAddressBooks){
-      OrganizationService organizationService = 
-        (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class) ;
-      Object[] objPublicGroupIds = organizationService.getGroupHandler().getAllGroups().toArray() ;
-      for (Object object : objPublicGroupIds) {
-        publicGroupIds.add(((Group)object).getId()) ;
-      }
+      publicGroupIds = storage_.getPublicAddresses(user);     
     } else {
       publicGroupIds = getPublicAddressBookIdsOfUser(user);
     }
@@ -213,12 +208,20 @@ public class ContactServiceImpl implements ContactService {
   public List<AddressBook> getGroups(String username) throws Exception {
     return storage_.findPersonalAddressBooksByOwner(username);
   }
+  
+  
+  public List<String> getPublicAddresses(String username) throws Exception {
+    return storage_.getPublicAddresses(username);
+  }
 
 
   public AddressBook getPersonalAddressBook(String username, String addressBookId) throws Exception {
     return storage_.loadPersonalAddressBook(username, addressBookId);
   }
 
+  public AddressBook getPublicAddressBook(String username, String addressBookId) throws Exception {
+    return storage_.loadPublicAddressBook(username, addressBookId);
+  }
 
   public void saveAddressBook(String username, AddressBook group, boolean isNew) throws Exception {
     storage_.savePersonalOrSharedAddressBook(username, group, isNew);    
@@ -477,5 +480,9 @@ public class ContactServiceImpl implements ContactService {
   @Override
   public void addListenerPlugin(ContactEventListener listener) throws Exception {
     listeners_.add(listener);
+  }
+  
+  public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception {
+    storage_.savePublicAddressBook(addressbook, isNew);
   }
 }

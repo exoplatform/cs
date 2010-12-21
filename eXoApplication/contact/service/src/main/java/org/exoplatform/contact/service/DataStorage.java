@@ -240,6 +240,8 @@ public interface DataStorage {
    * @throws Exception
    */
   public AddressBook loadPersonalAddressBook(String username, String groupId) throws Exception;
+  
+  public AddressBook loadPublicAddressBook(String username, String groupId) throws Exception;
 
   /**
    * Get a shared address book by id
@@ -708,5 +710,8 @@ public interface DataStorage {
    * @throws Exception
    */
   public Node getSharedContactsHome(String user) throws Exception;
-
+  
+  public List<String> getPublicAddresses(String username) throws Exception ;
+  
+  public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception ;
 }

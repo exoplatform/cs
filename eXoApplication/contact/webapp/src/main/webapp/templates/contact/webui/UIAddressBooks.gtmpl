@@ -129,35 +129,15 @@
 		<% } %>
 	</div>
 	
-	<div class="PublicAddress">
-		<div class="AddressTitle">
-			<div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.publicAddress")%></div>
-		</div>
-		<%
-			List groupContacts = uicomponent.getGroupsOfUser();
-			for(group in groupContacts) {
-				cssClass = "Normal" ;
-				name = ContactUtils.getPublicGroupName(group) ;
-				//String[] array = group.split("/") ;
-				//int i = array.length - 1 ;
-				//name = array[i] ;
-				String actionLink  = uicomponent.event("SelectPublicGroup", group) ;				
-				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;	
-				
-			%>
-				<div id="$group" title="$group" class="ItemList $cssClass PublicAddressBook" addressType="2" >
-					<div onclick="$actionLink" class="IconHolder AddressIcon" >$name</div>
-				</div>
-		<% } %>
-	</div>
-	
-    <% if(!uicomponent.getPublicContactGroups().isEmpty()) { %>
+    <% 
+    	List publicGroupContacts = uicomponent.getPublicContactGroups();
+    	if(!publicGroupContacts.isEmpty()) {    	  
+    %>
     <div class="PublicAddress">
       <div class="AddressTitle">
         <div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.publicGroups")%></div>
       </div>
       <%
-        List publicGroupContacts = uicomponent.getPublicContactGroups();
         for(group in publicGroupContacts) {
           cssClass = "Normal" ;
           name = ContactUtils.getPublicGroupName(group) ;
@@ -165,7 +145,7 @@
           if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;	
           				
        %>
-          <div id="$group" title="$group" class="ItemList $cssClass PublicAddressBook" addressType="2" >
+          <div id="$group" title="$group" class="ItemList $cssClass PublicAddressBook" addressType="2" havePermission="<%=uicomponent.havePermissionsPublicAddress(group)%>">
             <div onclick="$actionLink" class="IconHolder AddressIcon" >$name</div>
           </div>
        <% } %>
@@ -417,7 +397,13 @@
 			            <a class="ItemIcon DeleteIcon" style="color:#cccccc" href="javascript:void(0) ;">
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>
 			            </a> 
-				        </div>					        
+				        </div>
+				        
+				        <div class="MenuItem">   
+  		            <a class="ItemIcon ShareIcon" href="<%=uicomponent.event("Permissions", "id")%>">
+  		              <%=_ctx.appRes(uicomponent.getName() + ".label.permissions")%>
+  		            </a> 
+			        	</div>
   
 			          <div class="MenuItem">
 			            <a class="ItemIcon PrintIcon" href="<%=uicomponent.event("Print", "id")%>">

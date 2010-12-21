@@ -81,6 +81,7 @@ public class JCRDataStorage implements DataStorage {
   private static final String PROP_ADDRESSBOOK_REFS = "exo:categories";
   final private static String CONTACTS = "contacts".intern() ;
   final private static String PERSONAL_ADDRESS_BOOKS = "contactGroup".intern() ;
+  final private static String GROUP_ADDRESS_BOOKS = "GroupAdSdress".intern() ;
   final private static String TAGS = "tags".intern() ;
   final private static String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
   final private static String CONTACT_APP = "ContactApplication".intern() ;
@@ -453,7 +454,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
   public AddressBook toAddressBook(Node contactGroupNode) throws Exception {
     AddressBook contactGroup = new AddressBook();
     if (contactGroupNode.hasProperty("exo:id")) 
-      contactGroup.setId(contactGroupNode.getProperty("exo:id").getString());
+      contactGroup.setId(Utils.decodeGroupId(contactGroupNode.getProperty("exo:id").getString()));
     if (contactGroupNode.hasProperty("exo:name")) 
       contactGroup.setName(contactGroupNode.getProperty("exo:name").getString());
     if (contactGroupNode.hasProperty("exo:description")) 
@@ -486,9 +487,14 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return null;
   }
   
-  /**
-   * {@inheritDoc}
-   */
+  public AddressBook loadPublicAddressBook(String username, String groupId) throws Exception {
+    if (groupId == null) return null;
+    Node contactGroupHomeNode = getPublicAddressHome();
+    if (contactGroupHomeNode.hasNode(Utils.encodeGroupId(groupId)))
+      return toAddressBook(contactGroupHomeNode.getNode(Utils.encodeGroupId(groupId)));
+    return null;
+  }
+
   public AddressBook getSharedAddressBookById(String username, String addressBookId) throws Exception {
     Node sharedAddressBookNode = getSharedAddressBooksHome(username) ;
     PropertyIterator iter = sharedAddressBookNode.getReferences() ;
@@ -516,6 +522,40 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return addressBooks;
   }
 
+  public List<String> getPublicAddresses(String username) throws Exception {
+    OrganizationService organizationService = 
+      (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class) ;
+    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(username).toArray() ;
+    List<String> groupIds = new ArrayList<String>() ;
+    for (Object object : objGroupIds) {
+      groupIds.add(((Group)object).getId()) ;
+    }
+    Node addressBooksHome = getPublicAddressHome();
+    List<String> addressBooks = new ArrayList<String>();
+    NodeIterator iter = addressBooksHome.getNodes();
+    while (iter.hasNext()) {
+      Node addressBook = iter.nextNode();
+      String id = Utils.decodeGroupId(addressBook.getProperty("exo:id").getString());
+      if (addressBook.hasProperty("exo:viewPermissionUsers")) {
+        String[] viewUsers = ValuesToStrings(addressBook.getProperty("exo:viewPermissionUsers").getValues());
+        if (viewUsers.length > 0 && Arrays.asList(viewUsers).contains(username)) {
+          if (!addressBooks.contains(id)) addressBooks.add(id);
+        }
+      }
+      if (addressBook.hasProperty("exo:viewPermissionGroups")) {        
+        String[] viewGroups = ValuesToStrings(addressBook.getProperty("exo:viewPermissionGroups").getValues());
+        for (String viewGroup : viewGroups) {
+          if (viewGroup.contains(Utils.COLON)) viewGroup = viewGroup.split(Utils.COLON)[0];
+          if (groupIds.contains(viewGroup)) {
+            if (!addressBooks.contains(id)) addressBooks.add(id);
+            break;
+          }
+        }
+      }
+    }
+    return addressBooks;
+  }
+  
   /**
    * {@inheritDoc}
    */
@@ -643,9 +683,30 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       else groupNode.save() ;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  public void savePublicAddressBook(AddressBook addressbook, boolean isNew) throws Exception {
+    Node groupNode = null ;
+    String id = Utils.encodeGroupId(addressbook.getId());
+    if (isNew) {
+      groupNode = getPublicAddressHome().addNode(id, "exo:contactGroup");
+      groupNode.setProperty("exo:id", id);
+    } else {
+      try {
+        groupNode = getPublicAddressHome().getNode(id);
+        if (groupNode == null) throw new PathNotFoundException("No address book was found with ID " + addressbook) ; 
+      } catch (PathNotFoundException e) {
+        log.error(e.getMessage());
+      }
+    }
+    groupNode.setProperty("exo:name", addressbook.getName());
+    groupNode.setProperty("exo:description", addressbook.getDescription());
+    groupNode.setProperty("exo:editPermissionUsers", addressbook.getEditPermissionUsers()) ;
+    groupNode.setProperty("exo:viewPermissionUsers", addressbook.getViewPermissionUsers()) ;
+    groupNode.setProperty("exo:editPermissionGroups", addressbook.getEditPermissionGroups()) ;
+    groupNode.setProperty("exo:viewPermissionGroups", addressbook.getViewPermissionGroups()) ;
+    if (isNew) groupNode.getSession().save() ;
+    else groupNode.save() ;
+  }
+
   public void removeUserShareContact(String username, String contactId, String removedUser) throws Exception {
       Node contactNode ;
       String split = "/" ;    
@@ -2481,10 +2542,29 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return contactApplicationDataHome ;
     }
   }
+  
+/*  public void makePublicAddresses() throws Exception {    
+    Node appNode = getContactApplicationDataHome();
+    if (appNode.hasNode(GROUP_ADDRESS_BOOKS)) return;
+    System.out.println("\n\n make \n\n");
+    Node addressHome = appNode.addNode(GROUP_ADDRESS_BOOKS);
+    appNode.getSession().save();
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    OrganizationService organizationService = 
+      (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ;
+    Object[] groupsOfUser = organizationService.getGroupHandler().getAllGroups().toArray();
+    for (Object object : groupsOfUser) {
+      Group group = (Group)object;
+      String groupId = Utils.encodeGroupId(group.getId()) ;
+      Node groupNode = addressHome.addNode(groupId, "exo:contactGroup");
+      groupNode.setProperty("exo:id", groupId); 
+      groupNode.setProperty("exo:name", group.getGroupName());
+      groupNode.setProperty("exo:viewPermissionGroups", new String [] { Utils.decodeGroupId(groupId) }) ;
+      groupNode.setProperty("exo:editPermissionGroups", new String [] {"/platform/administrators"});
+    }
+    addressHome.getSession().save();
+  }*/
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public Node getContactUserDataHome(String username) throws Exception {
     SessionProvider sessionProvider = createSystemProvider() ;
@@ -2565,6 +2645,17 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       return contactServiceHome.getNode(CONTACTS) ;
     } catch (PathNotFoundException ex) {
       Node publicHome = contactServiceHome.addNode(CONTACTS, NT_UNSTRUCTURED) ;
+      contactServiceHome.save() ;
+      return publicHome ;
+    }
+  }
+  
+  public Node getPublicAddressHome() throws Exception {
+    Node contactServiceHome = getContactApplicationDataHome() ;
+    try {
+      return contactServiceHome.getNode(GROUP_ADDRESS_BOOKS) ;
+    } catch (PathNotFoundException ex) {
+      Node publicHome = contactServiceHome.addNode(GROUP_ADDRESS_BOOKS, NT_UNSTRUCTURED) ;
       contactServiceHome.save() ;
       return publicHome ;
     }

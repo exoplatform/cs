@@ -9,7 +9,7 @@
       <values-param>
         <name>UserCanSeeAllGroupAddressBooks</name>
         <description>User can see all GroupAddressBooks or only GroupAddressBooks that the user has at least one membership</description>
-        <value>false</value>
+        <value>true</value>
       </values-param>
       <values-param>
         <name>NonPublicGroups</name>
@@ -25,6 +25,12 @@
 	    <name>contact.new.user.event.listener</name>
 	    <set-method>addListenerPlugin</set-method>
 	    <type>org.exoplatform.contact.service.impl.NewUserListener</type>
+	    <description>description</description>
+	  </component-plugin>
+		<component-plugin>
+	    <name>contact.new.group.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.contact.service.impl.NewGroupListener</type>
 	    <description>description</description>
 	  </component-plugin>
 	  <component-plugin>
