@@ -42,6 +42,19 @@ public class UIOutgoingInputSet extends UIFormInputWithActions {
     super(id) ;  
     setComponentConfig(getClass(), null) ;  
   }
+  
+  public String getUsername(){
+    UIAccountSetting uiAccountSetting = this.getAncestorOfType(UIAccountSetting.class);
+    return uiAccountSetting.getFieldIncomingAccount();
+  }
+  
+  public String getProtocol(){
+    return "SMTP";
+  }
+  
+  public String getHost(){
+    return this.getUIStringInput(FIELD_OUTGOING_SERVER).getValue();
+  }
 }
 
 

@@ -6,6 +6,8 @@ package org.exoplatform.webservice.cs.mail;
 
 import java.util.List;
 
+import javax.security.sasl.Sasl;
+import javax.security.sasl.SaslClient;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -352,5 +354,24 @@ public class MailWebservice implements ResourceContainer {
     return (ConversationState.getCurrent() != null && ConversationState.getCurrent().getIdentity() != null && 
         ConversationState.getCurrent().getIdentity().getUserId() != null && ConversationState.getCurrent().getIdentity().getUserId().equals(usename)  
     );
+  }
+  
+  @GET
+  @Path("/checkforsupportedtypes/{mechs}/{username}/{protocol}/{host}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response checkForSupportedTypes(@PathParam("mechs") String mechanisms, @PathParam("username") String username,
+                                         @PathParam("protocol") String proto, @PathParam("host") String host) throws Exception {
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    String data = "";
+    //Map props = new HashMap();
+    //props.put(Sasl.POLICY_NOPLAINTEXT, "true");
+    //SaslClient sasl = Sasl.createSaslClient(mechanisms, username, protocol, host, props, null);
+    
+    if(mechanisms != null && mechanisms.length()>0){
+     data = mechanisms;  
+    }
+    return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
 }

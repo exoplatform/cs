@@ -247,7 +247,14 @@ public class JCRDataStorage implements DataStorage {
       }
     } catch (Exception e) {
     }
-
+    try {
+      account.setSecureAuthsIncoming(accountNode.getProperty(Utils.EXO_SECURE_AUTHS_INCOMING).getString());
+      account.setSecureAuthsOutgoing(accountNode.getProperty(Utils.EXO_SECURE_AUTHS_OUTGOING).getString());
+      account.setAuthMechsIncoming(accountNode.getProperty(Utils.EXO_AUTH_MECHS_INCOMING).getString());
+      account.setAuthMechsIncoming(accountNode.getProperty(Utils.EXO_AUTH_MECHS_OUTGOING).getString());
+    } catch (Exception e) {
+    }
+    
     return account;
   }
 
@@ -862,13 +869,22 @@ public class JCRDataStorage implements DataStorage {
           newAccount.setProperty(Utils.EXO_SMTPSERVERPROPERTIES,
                                  values.toArray(new String[account.getSmtpServerProperties().size()]));
         }
+        if(account.isIncomingSsl()){
+          newAccount.setProperty(Utils.EXO_SECURE_AUTHS_INCOMING, account.getSecureAuthsIncoming());
+          newAccount.setProperty(Utils.EXO_AUTH_MECHS_INCOMING, account.getAuthMechsIncoming());
+        }
+        if(account.isOutgoingSsl()){
+          newAccount.setProperty(Utils.EXO_SECURE_AUTHS_OUTGOING, account.getSecureAuthsOutgoing());
+          newAccount.setProperty(Utils.EXO_AUTH_MECHS_OUTGOING, account.getAuthMechsOutgoing());
+        }
+        
         // saves changes
         if (isNew)
           mailHome.getSession().save();
         else
           mailHome.save();
       }
-    } finally {
+    }catch(Exception e){e.printStackTrace();} finally {
       closeSessionProvider(sysProvider);
     }
   }

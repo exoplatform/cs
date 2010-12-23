@@ -62,19 +62,22 @@ public class Utils {
   
   public static final String SVR_IMAP = "imap" ;
   public static final String SVR_IMAPS = "imaps" ;
-  public static final String IMAP_SSL_FACTORY = "mail.imap.ssl.socketFactory";
-  public static final String SVR_IMAP_STARTTLS_REQUIRED = "mail.imap.starttls.required";
-  public static final String MAIL_IMAP_SSL_ENABLE = "mail.imap.ssl.enable";
-  public static final String IMAP_CONECT_TIMEOUT = "mail.imap.connectiontimeout";
+  public static final String IMAP_SSL_FACTORY = "mail.imap.ssl.socketFactory".intern();
+  public static final String SVR_IMAP_STARTTLS_REQUIRED = "mail.imap.starttls.required".intern();
+  public static final String MAIL_IMAP_SSL_ENABLE = "mail.imap.ssl.enable".intern();
+  public static final String IMAP_CONECT_TIMEOUT = "mail.imap.connectiontimeout".intern();
+  public static final String IMAP_SSL_STARTTLS_ENABLE = "mail.imap.starttls.enable".intern();
+  public static final String IMAP_SASL_MECHS = "mail.imap.sasl.mechanisms".intern();
   
+  public static final String POP3_SSL_STARTTLS_ENABLE = "mail.pop3.starttls.enable".intern();
   public static final String SVR_POP3S = "pop3s" ;
-  public static final String POP3_SSL_FACTORY = "mail.pop3.ssl.socketFactory";
-  public static final String SVR_POP3_STARTTLS_REQUIRED = "mail.pop3.starttls.required";
-  public static final String MAIL_POP3_SSL_ENABLE = "mail.pop3.ssl.enable";
-  public static final String POP3_CONECT_TIMEOUT = "mail.pop3.connectiontimeout";
+  public static final String POP3_SSL_FACTORY = "mail.pop3.ssl.socketFactory".intern();
+  public static final String SVR_POP3_STARTTLS_REQUIRED = "mail.pop3.starttls.required".intern();
+  public static final String MAIL_POP3_SSL_ENABLE = "mail.pop3.ssl.enable".intern();
+  public static final String POP3_CONECT_TIMEOUT = "mail.pop3.connectiontimeout".intern();
 //in MS Exchange, a big message maybe insufficience of bytes when received. set it is false to get rid this problem
   //But neet to certain that Mail server do not implement Imap Partial FETCH
-  public static final String IMAP_MSX_PARTIAL_FETCH = "mail.imap.partialfetch";
+  public static final String IMAP_MSX_PARTIAL_FETCH = "mail.imap.partialfetch".intern();
   
   public static final String SVR_SMTP = "smtp" ;
   public static final String SVR_SMTPS = "smtps" ;
@@ -86,19 +89,22 @@ public class Utils {
   public static final String SVR_SMTP_SOCKET_FACTORY_FALLBACK = "mail.smtp.socketFactory.fallback".intern() ;
   public static final String SVR_SMTP_SOCKET_FACTORY_PORT = "mail.smtp.socketFactory.port".intern() ;
   public static final String SVR_SMTP_SOCKET_FACTORY_CLASS = "mail.smtp.socketFactory.class".intern() ;
+  public static final String SVR_SMTP_SSL_SOCKET_FACTORY_CLASS = "mail.smtp.ssl.socketFactory.class";
   public static final String SVR_SMTP_SSL_SOCKET_FACTORY_PORT = "mail.smtp.ssl.socketFactory.port";
-  public static final String SVR_SMTPS_AUTH = "mail.smtps.auth";
-  public static final String SVR_SMTP_STARTTLS_REQUIRED = "mail.smtp.starttls.required";
-  public static final String SMTP_SSL_FACTORY = "mail.smtp.ssl.socketFactory";
-  public static final String MAIL_SMTP_SSL_ENABLE = "mail.smtp.ssl.enable";
-  public static final String SMTP_QUIT_WAIT="mail.smtp.quitwait";
-  public static final String SMTP_CONECT_TIMEOUT = "mail.smtp.connectiontimeout";
+  public static final String SVR_SMTPS_AUTH = "mail.smtps.auth".intern();
+  public static final String SVR_SMTP_STARTTLS_REQUIRED = "mail.smtp.starttls.required".intern();
+  public static final String SMTP_SSL_FACTORY = "mail.smtp.ssl.socketFactory".intern();
+  public static final String MAIL_SMTP_SSL_ENABLE = "mail.smtp.ssl.enable".intern();
+  public static final String SMTP_QUIT_WAIT="mail.smtp.quitwait".intern();
+  public static final String SMTP_CONECT_TIMEOUT = "mail.smtp.connectiontimeout".intern();
   public static final String SVR_MAIL_SMTP_DEBUG = "mail.smtp.debug".intern() ;
   public static final String SMTP_ISAUTHENTICATION = "smtp.isauthentication".intern() ;
   public static final String SMTP_USEINCOMINGSETTING = "smtp.useincomingsetting".intern();
   public static final String SMTP_DNS_NOTIFY = "mail.smtp.dsn.notify".intern();
   public static final String SMTP_DNS_RET = "mail.smtp.dsn.ret".intern();
   public static final String SMTP_TIMEOUT = "mail.smtp.timeout";
+  public static final String SMATP_SSL_STARTTLS_ENABLE = "mail.smtp.starttls.enable".intern();
+  public static final String SMTP_AUTH_MECHS = "mail.smtp.auth.mechanisms".intern();
   
   public static final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory".intern();
   public static final String SVR_SSL_CLASSNAME = "javax.net.ssl.SSLSocketFactory".intern() ;
@@ -194,6 +200,10 @@ public class Utils {
   public static final String EXO_ATT_NAME = "exo:fileName".intern() ;
   public static final String EXO_IS_ROOT = "exo:isRoot".intern();
   public static final String EXO_LAST_UPDATE_TIME= "exo:lastUpdateTime".intern();
+  public static final String EXO_SECURE_AUTHS_INCOMING = "exo:secureAuthsIncoming".intern();
+  public static final String EXO_SECURE_AUTHS_OUTGOING = "exo:secureAuthsOutgoing".intern();
+  public static final String EXO_AUTH_MECHS_INCOMING = "exo:authMechsIncoming".intern();
+  public static final String EXO_AUTH_MECHS_OUTGOING = "exo:authMechsOutgoing".intern();
 
   public static final String EXO_MAIL_SETTING = "exo:mailSetting".intern();
   public static final String EXO_NUMBER_MSG_PER_PAGE = "exo:numberMsgPerPage".intern();
@@ -279,6 +289,16 @@ public class Utils {
   
   public static final boolean SHOWCONVERSATION = true ;
   
+  public static final String TLS_SSL = "ssl/tls";//is SSL
+  public static final String STARTTLS = "starttls";
+  
+  public static final String NTLM            = "ntlm";
+  public static final String PLAIN           = "plain";
+  public static final String LOGIN           = "login";
+  public static final String DIGIT_MD5       = "digest-md5";
+  public static final String CRAM_MD5        = "cram-md5";    
+  public static final String KERBEROS_GSSAPI = "kerberos/gssapi";//kerberos v5
+  public static final String[] MECHANISM     = {NTLM, PLAIN, LOGIN, DIGIT_MD5, KERBEROS_GSSAPI, CRAM_MD5};//only support common those type
   
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;

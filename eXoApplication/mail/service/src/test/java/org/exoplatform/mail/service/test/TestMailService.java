@@ -87,6 +87,7 @@ public class TestMailService extends BaseMailTestCase{
       account.setLabel("exomail test account") ;
       account.setOutgoingHost("smtp.gmail.com") ;
       account.setOutgoingPort("465") ;
+      account.setOutgoingSsl(true);
       account.setPlaceSignature("exomailtest pop") ;  
     } else if(Utils.IMAP.equals(protocol)) {
       account.setDescription("Create "+protocol+" account") ;
@@ -104,15 +105,19 @@ public class TestMailService extends BaseMailTestCase{
       account.setOutgoingSsl(true);
       account.setPlaceSignature("exosevice imap") ;
     }
+    account.setSecureAuthsIncoming("XOAUTH");
+    account.setAuthMechsIncoming(Utils.PLAIN);
+    account.setSecureAuthsOutgoing(Utils.TLS_SSL);
+    account.setAuthMechsOutgoing(Utils.PLAIN);
+    
     account.setIsOutgoingAuthentication(true) ;
     account.setUseIncomingForAuthentication(true) ;
     return  account ;
   } 
   //Create account
   public void testAccount() throws Exception {
-
     System.out.println("\n\n Test POP Account" );
-    Account  account = createAccountObj(Utils.POP3) ;
+    Account  account = createAccountObj(Utils.POP3) ; 
     String accId = account.getId() ;
     mailService_.createAccount(username, account) ;
     Account getAccount =  mailService_.getAccountById(username, accId) ;
@@ -126,12 +131,12 @@ public class TestMailService extends BaseMailTestCase{
     Account getAccount2 =  mailService_.getAccountById(username, accId2) ;
     assertNotNull(getAccount2) ;
 
-    Account defaultAcc = mailService_.getDefaultAccount(username) ;
+    Account defaultAcc = mailService_.getDefaultAccount(username);
     assertNotNull(defaultAcc) ;
-    mailService_.removeAccount(username, accId) ;
-    assertNull(mailService_.getAccountById(username, accId)) ;
+    mailService_.removeAccount(username, accId);
+    assertNull(mailService_.getAccountById(username, accId));
     mailService_.removeAccount(username, accId2) ;
-    assertNull(mailService_.getAccountById(username, accId2)) ;
+    assertNull(mailService_.getAccountById(username, accId2));
 
   }
 

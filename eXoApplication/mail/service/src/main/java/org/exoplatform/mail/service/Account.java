@@ -49,6 +49,47 @@ public class Account {
   private Map<String, String> serverProperties ;  
   private Map<String, String> smtpServerProperties ;
   
+  private String secureAuthsIncoming = Utils.STARTTLS;
+  private String secureAuthsOutgoing  = Utils.STARTTLS;
+  private String authMechsIncoming   = Utils.PLAIN;
+  private String authMechsOutgoing    = Utils.PLAIN;
+  
+  public String getSecureAuthsIncoming() {
+    if(secureAuthsIncoming == Utils.TLS_SSL) return "SSL";
+    return secureAuthsIncoming;
+  }
+
+  public void setSecureAuthsIncoming(String secureAuthsIncoming) {
+    this.secureAuthsIncoming = secureAuthsIncoming;
+  }
+
+  public String getSecureAuthsOutgoing() {
+    if(secureAuthsOutgoing == Utils.TLS_SSL) return "SSL";
+    return secureAuthsOutgoing;
+  }
+
+  public void setSecureAuthsOutgoing(String secureAuthsOutgoing) {
+    this.secureAuthsOutgoing = secureAuthsOutgoing;
+  }
+
+  public String getAuthMechsIncoming() {
+    if(authMechsIncoming.equalsIgnoreCase(Utils.KERBEROS_GSSAPI))
+      return "GSSAPI";
+    return authMechsIncoming;
+  }
+
+  public void setAuthMechsIncoming(String authMechsIncoming) {
+    this.authMechsIncoming = authMechsIncoming;
+  }
+
+  public String getAuthMechsOutgoing() {
+    return authMechsOutgoing;
+  }
+
+  public void setAuthMechsOutgoing(String authMechsOutgoing) {
+    this.authMechsOutgoing = authMechsOutgoing;
+  }
+
   public Account() {
     id = Utils.KEY_ACCOUNT + IdGenerator.generate() ;
     setServerProperty(Utils.SVR_LEAVE_ON_SERVER, "true") ;

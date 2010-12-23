@@ -58,9 +58,9 @@ public class ExoMailTrustManager implements X509TrustManager {
 
   public static final String PATH_CERTS_FILE = System.getProperty("java.home") + File.separatorChar + "lib" + File.separatorChar + "security";
   
-  private static final String PASSWORD_CERT_FILE = "changeit";
+  //private static final String PASSWORD_CERT_FILE = "changeit";
   
-  private static final String EXO_CACERT_FILE = "exocacert";
+  //private static final String EXO_CACERT_FILE = "exocacert";
   
   private String pathCertFile ;
   

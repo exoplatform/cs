@@ -758,29 +758,272 @@ UIMailPortlet.prototype.expandCollapse = function(clickObj, clickBar){
     }
 };
 
-UIMailPortlet.prototype.isSMTPAuthentication = function(id){
-	var chk = eXo.mail.UIMailPortlet.getElementById(id);
-	var checkboxs = eXo.core.DOMUtil.findDescendantsByClass(chk,"input","checkbox");
-	chk = checkboxs[1];
-	var table = eXo.core.DOMUtil.findAncestorByTagName(chk,"table");
-	var div = eXo.core.DOMUtil.findDescendantsByTagName(table,"div")[0];
-	var input = eXo.core.DOMUtil.findDescendantsByTagName(div,"input");
-	chk.onclick = function(){
-		if(!this.checked){
-			div.style.display = "none";
-		}else div.style.display = "";
+UIMailPortlet.prototype.updateAuthMechsSupported = function(parentId, mechsSupported){//mech1,mech2,mech3,....
+	if(parentId=='') return;
+	var CLASS = "ChecForSupported";
+	var divParent = document.getElementById(parentId);
+	var notSupported = "line-through;";
+	if(divParent == null) return;
+	var cboCheckForSupported = 	eXo.core.DOMUtil.findFirstDescendantByClass(divParent, "span", CLASS);
+	if(cboCheckForSupported == null) return;
+	//disable all not supported mechanisms here
+	var options = eXo.core.DOMUtil.getChildrenByTagName(cboCheckForSupported, "option");
+	if(options == null || options.length <=0) return;
+	for(var o in options){
+	  if(mechsSupported.IndexOf(options[o].innerHTML) > -1)
+		options[o].style.textDecoration = notSupported; 	
 	}
-	chk = checkboxs[2];
-	chk.onclick = function(){
-		if (!this.checked) {
-			input[1].disabled = false;
-			input[2].disabled = false;
-		}else{
-			input[1].disabled = true;
-			input[2].disabled = true;
+};
+
+UIMailPortlet.prototype.parentId = '';
+
+UIMailPortlet.prototype.checkForSupportedType = function(element){
+/*	if(element == null || element == undefined) return;
+	var mechs = element.getAttribute('mechs');
+	if(mechs == null || mechs.length <= 0) return;
+	var FIELD_AUTHENTICATIONS_MECHANISM_ID = "authenticationMechanism";
+	var FIELD_SECURE_AUTHENTICATION_OUTGOING_ID = "secureAuthenticationOutgoing";
+	var PARENT_CLASS = "FieldInput"; 
+	var parentElm = eXo.core.DOMUtil.findAncestorByClass(element, PARENT_CLASS);
+	var cbos = eXo.core.DOMUtil.getChildrenByTagName(parentElm, "select");
+	if(cbos == null || cbos.length <=0 || parentElm == null) return
+	for(var cbo in cbos){
+		if(cbos[cbo].name = FIELD_AUTHENTICATIONS_MECHANISM_ID) eXo.mail.UIMailPortlet.parentId = FIELD_AUTHENTICATIONS_MECHANISM_ID;
+		if(cbos[cbo].name = FIELD_SECURE_AUTHENTICATION_OUTGOING_ID) eXo.mail.UIMailPortlet.parentId = FIELD_SECURE_AUTHENTICATION_OUTGOING_ID;
+	}
+	var username = "";
+	var protocol = "";
+	var host = "";
+	var url = (eXo.cs.restContext)?eXo.env.portal.context+ '/' + eXo.cs.restContext +'/private/cs/mail':'portal/rest/private/cs/mail';
+	url = url + '/checkforsupportedtypes/' + mechs + "/" + username + "/" protocol + "/" + host;
+	var request = new eXo.portal.AjaxRequest('GET', url, null);
+	request.onSuccess = function(request){
+		var uiMailPortlet = eXo.mail.UIMailPortlet;
+		var mechsSupported = request.responseText;
+		uiMailPortlet.updateAuthMechsSupported(uiMailPortlet.parentId, mechsSupported)
+	}
+	
+	request.onError = function(request){
+		alert('Sorry, eXoMail cannot check for supported authentication mechanisms');
+	}
+	*/
+	alert("eXoMail has not supported this method.");
+};
+
+UIMailPortlet.prototype.validateFieldsIncoming = function(id){
+	var fieldInputClass = "FieldInput";
+	var fieldComponentAutoClass ="FieldComponentAuto";
+	var checForSupportedClass = "CheckForSupported";
+	var checForSupportedClassDisable = "CheckForSupportedDisable";
+	var lableClass = "Label";
+	
+	var divIsIncomingSSL;
+	var cboSecureAuths;
+	var divAuthMechsIncoming;
+	var cboAuthMechs;
+	var buttCheckForSupported;
+	var lblCheckForSupported;
+	
+	var FIELD_IS_INCOMING_SSL_ID = "isSSL";
+	var FIELD_AUTHENTICATIONS_MECHANISM_ID = "authenticationMechanism";
+	var FIELD_SERVER_TYPE_ID = "serverType";
+	
+	var incomingDiv = eXo.mail.UIMailPortlet.getElementById(id);
+	var divs = eXo.core.DOMUtil.findDescendantsByClass(incomingDiv,"div",fieldInputClass);
+	if(divs.length <= 0) return;
+	for(var i in divs){
+		if(divs[i].id == FIELD_IS_INCOMING_SSL_ID){
+			divIsIncomingSSL = eXo.mail.UIMailPortlet.getElementById(FIELD_IS_INCOMING_SSL_ID);
+		}else if(divs[i].id == FIELD_AUTHENTICATIONS_MECHANISM_ID){
+			divAuthMechsIncoming = eXo.mail.UIMailPortlet.getElementById(FIELD_AUTHENTICATIONS_MECHANISM_ID);
+		}	 
+	}
+	var chkIsIncomingSSL = eXo.core.DOMUtil.findFirstDescendantByClass(divIsIncomingSSL, "input", "checkbox");
+	cboSecureAuths = eXo.core.DOMUtil.findFirstDescendantByClass(divIsIncomingSSL,"select","selectbox");
+	
+	cboAuthMechs = 	eXo.core.DOMUtil.findFirstDescendantByClass(divAuthMechsIncoming,"select","selectbox");
+	lblCheckForSupported = eXo.core.DOMUtil.findFirstDescendantByClass(divAuthMechsIncoming,"span",lableClass);
+	buttCheckForSupported = eXo.core.DOMUtil.findFirstDescendantByClass(divAuthMechsIncoming,"span",checForSupportedClass);
+	if(buttCheckForSupported == null)
+	  buttCheckForSupported = eXo.core.DOMUtil.findFirstDescendantByClass(divAuthMechsIncoming,"span",checForSupportedClassDisable);
+		
+	if(chkIsIncomingSSL != null ){
+		var defaultport = divIsIncomingSSL.getAttribute("defaultport");
+		var popports;
+		var imapports;
+		var txtPort;
+		if(defaultport != null && defaultport.split(" ").length > 0){
+			var popports = defaultport.split(" ")[0];
+			var imapports   = defaultport.split(" ")[1];	
 		}
+		var FIELD_INCOMING_PORT_NAME = "incomingPort";
+		var txtPort = eXo.mail.UIMailPortlet.getElementById(FIELD_INCOMING_PORT_NAME);
+		var cboServerType = eXo.core.DOMUtil.findFirstDescendantByClass(incomingDiv, "select", "selectbox");
+		//eXo.core.EventManager.addEvent(chkIsIncomingSSL, 'click', this.checkIncomingSSL);
+		chkIsIncomingSSL.onclick = function(){
+			if(this.checked){
+				cboSecureAuths.removeAttribute('disabled');
+				lblCheckForSupported.style.color = 'black';
+				cboAuthMechs.removeAttribute('disabled');
+				buttCheckForSupported.className =  checForSupportedClass;
+				buttCheckForSupported.onclick= function(){
+					eXo.mail.UIMailPortlet.checkForSupportedType(buttCheckForSupported);
+				}	
+				if(txtPort != null && cboServerType != null && cboServerType.value.toLowerCase() =="imap" && imapports.split(":").length > 0) txtPort.value = imapports.split(":")[0];
+				else if(txtPort != null && cboServerType != null && cboServerType.value.toLowerCase() =="pop3" && popports.split(":").length > 0) txtPort.value = popports.split(":")[0];
+			}else{
+				cboSecureAuths.disabled = true;
+				lblCheckForSupported.style.color = 'gray';
+				cboAuthMechs.disabled = true;
+				buttCheckForSupported.className =  checForSupportedClassDisable;
+				buttCheckForSupported.onclick="";
+				if(txtPort != null && cboServerType != null && cboServerType.value.toLowerCase() =="imap" && imapports.split(":").length > 0) txtPort.value = imapports.split(":")[1];
+				else if(txtPort != null && cboServerType != null && cboServerType.value.toLowerCase() =="pop3" && popports.split(":").length > 0)txtPort.value = popports.split(":")[1];
+			}		
+		};
+	}	
+	return chkIsIncomingSSL.checked;
+};
+
+UIMailPortlet.prototype.validateFieldsOutgoing = function(id){
+	var fieldInputClass = "FieldInput";
+	var fieldComponentAutoClass ="FieldComponentAuto";
+	var checForSupportedClass = "CheckForSupported";
+	var lableClass = "Label";
+	var checForSupportedClassDisable = "CheckForSupportedDisable";
+	
+	var FIELD_AUTHENTICATIONS_MECHANISM_OUTGOING_ID = "authenticationMechanismOutgoing";
+	var FIELD_IS_OUTGOING_SSL_ID = "isOutgoingSsl";
+	var IS_OUTGOING_AUTHENTICATION_ID = "isOutgoingAuthentication";
+	var USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN_ID = "useIncomingSettingForOutgoingAuthent";
+	var OUTGOING_USERNAME_ID = "outgoingUsername";
+	var OUTGOING_PASSWORD_ID = "outgoingPassword";
+
+	var tabElement = eXo.mail.UIMailPortlet.getElementById(id);
+	var chkOutgoingAuthElementDiv;
+	var chkUseIncomingSettingDiv;
+	var txtusernameDiv;
+	var txtpasswordDiv;
+	var chkUseIncomingSetting;
+	
+	var divIsOutgoingSSL;
+	var cboSecureAuths;
+	var divAuthMechsOutgoing;
+	var cboAuthMechs;
+	var buttCheckForSupported;
+	var lblCheckForSupported;
+	var outgoingDiv = eXo.mail.UIMailPortlet.getElementById(id);		
+	var divs = eXo.core.DOMUtil.findDescendantsByClass(outgoingDiv,"div",fieldInputClass);
+	if(divs.length <= 0) return;
+	for(var i in divs){
+		if(divs[i].id == IS_OUTGOING_AUTHENTICATION_ID){
+			 chkOutgoingAuthElementDiv = eXo.mail.UIMailPortlet.getElementById(IS_OUTGOING_AUTHENTICATION_ID);
+		}else if(divs[i].id == USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN_ID){
+			 chkUseIncomingSettingDiv = eXo.mail.UIMailPortlet.getElementById(USE_INCOMINGSETTING_FOR_OUTGOING_AUTHEN_ID);	
+		}else if(divs[i].id == ('id-' +OUTGOING_USERNAME_ID)){
+			 txtusernameDiv = eXo.mail.UIMailPortlet.getElementById('id-'+OUTGOING_USERNAME_ID);
+		}else if(divs[i].id == ('id-' + OUTGOING_PASSWORD_ID)){
+			 txtpasswordDiv = eXo.mail.UIMailPortlet.getElementById('id-'+OUTGOING_PASSWORD_ID);
+		}else if(divs[i].id == FIELD_IS_OUTGOING_SSL_ID){
+			divIsOutgoingSSL = eXo.mail.UIMailPortlet.getElementById(FIELD_IS_OUTGOING_SSL_ID);
+		}else if(divs[i].id == FIELD_AUTHENTICATIONS_MECHANISM_OUTGOING_ID){
+			divAuthMechsOutgoing = eXo.mail.UIMailPortlet.getElementById(FIELD_AUTHENTICATIONS_MECHANISM_OUTGOING_ID);
+		}	 
+	} 
+	
+	var chkOutgoingAuthElement = eXo.core.DOMUtil.findFirstDescendantByClass(chkOutgoingAuthElementDiv,"input","checkbox");
+	chkUseIncomingSetting = eXo.core.DOMUtil.findFirstDescendantByClass(chkUseIncomingSettingDiv,"input","checkbox");
+	
+	var lblusername = eXo.core.DOMUtil.findFirstDescendantByClass(txtusernameDiv, "span", "InputFieldLabel");
+	var lblpassword = eXo.core.DOMUtil.findFirstDescendantByClass(txtpasswordDiv, "span", "InputFieldLabel");
+	var txtusername = eXo.mail.UIMailPortlet.getElementById(OUTGOING_USERNAME_ID);
+	var txtpassword = eXo.mail.UIMailPortlet.getElementById(OUTGOING_PASSWORD_ID);
+	
+	var chkIsOutgoingSSL = eXo.core.DOMUtil.findFirstDescendantByClass(divIsOutgoingSSL, "input", "checkbox");
+	cboSecureAuths = eXo.core.DOMUtil.findFirstDescendantByClass(divIsOutgoingSSL,"select","selectbox");
+	cboAuthMechs = 	eXo.core.DOMUtil.findFirstDescendantByClass(divAuthMechsOutgoing,"select","selectbox");
+	lblCheckForSupported = eXo.core.DOMUtil.findFirstDescendantByClass(divAuthMechsOutgoing,"span",lableClass);
+	buttCheckForSupported = eXo.core.DOMUtil.findFirstDescendantByClass(divAuthMechsOutgoing,"span",checForSupportedClass);
+	if(buttCheckForSupported == null)
+		buttCheckForSupported = eXo.core.DOMUtil.findFirstDescendantByClass(divAuthMechsOutgoing,"span",checForSupportedClassDisable);
+	if(chkIsOutgoingSSL != null && chkIsOutgoingSSL != undefined){
+		var defaultport = divIsOutgoingSSL.getAttribute("defaultport");
+		var FIELD_OUTGOING_PORT_NAME = "outgoingPort";
+		var txtPort = eXo.mail.UIMailPortlet.getElementById(FIELD_OUTGOING_PORT_NAME);
+		chkIsOutgoingSSL.onclick = function(){
+			if(this.checked){
+				cboSecureAuths.removeAttribute('disabled');
+				lblCheckForSupported.style.color = 'black';
+				cboAuthMechs.removeAttribute('disabled');
+				buttCheckForSupported.className =  checForSupportedClass;
+				buttCheckForSupported.onclick= function(){
+					eXo.mail.UIMailPortlet.checkForSupportedType(buttCheckForSupported);
+				}	
+				if(txtPort != null && defaultport != null && defaultport.split(':').length > 0) txtPort.value = defaultport.split(":")[0];  								
+			}else{
+				cboSecureAuths.disabled = true;
+				lblCheckForSupported.style.color = 'gray';
+				cboAuthMechs.disabled = true;
+				buttCheckForSupported.className =  checForSupportedClassDisable;
+				buttCheckForSupported.onclick="";
+				if(txtPort != null && defaultport != null && defaultport.split(':').length > 0) txtPort.value = defaultport.split(":")[1];
+			}		
+		};
 	}
-}
+		
+	if(chkOutgoingAuthElement !=null && chkOutgoingAuthElement != undefined){
+		chkOutgoingAuthElement.onclick = function(){
+			var lblUseIncomingSetting = eXo.core.DOMUtil.findFirstDescendantByClass(chkUseIncomingSettingDiv,"span",lableClass);
+			if(this.checked){
+				if(lblUseIncomingSetting != null && lblUseIncomingSetting != undefined) 
+					lblUseIncomingSetting.style.color = "black";
+				if(chkUseIncomingSetting != null && chkUseIncomingSetting != undefined){
+					chkUseIncomingSetting.removeAttribute('disabled');
+					if(chkUseIncomingSetting.checked){
+						txtusername.disabled = true;
+						txtpassword.disabled = true;
+						lblusername.style.color = "gray";
+						lblpassword.style.color = "gray";
+					}else{
+						txtusername.removeAttribute('disabled');
+						txtpassword.removeAttribute('disabled');
+						lblusername.style.color = "black";
+						lblpassword.style.color = "black";
+					}	
+				}
+			}else{
+				if(lblUseIncomingSetting != null && lblUseIncomingSetting != undefined) 
+					lblUseIncomingSetting.style.color = "gray";
+				if(chkUseIncomingSetting != null && chkUseIncomingSetting != undefined){
+					chkUseIncomingSetting.disabled = true;
+					chkUseIncomingSetting.checked = false;
+				}	
+				txtusername.disabled = true;
+				txtpassword.disabled = true;
+				lblusername.style.color = "gray";
+				lblpassword.style.color = "gray";
+			}
+		};
+	}
+	if(chkUseIncomingSetting != null && chkUseIncomingSetting != undefined){
+		chkUseIncomingSetting.onclick = function(){
+			if(this.checked){
+				txtusername.disabled = true;
+				txtpassword.disabled = true;
+				lblusername.style.color = "gray";
+				lblpassword.style.color = "gray";	
+			}else{
+				txtusername.removeAttribute('disabled');
+				txtpassword.removeAttribute('disabled');
+				lblusername.style.color = "black";
+				lblpassword.style.color = "black";
+			}
+		};	
+	}
+	var chks = chkIsOutgoingSSL.checked + ':' + chkOutgoingAuthElement;
+	return chks;
+};
+
 UIMailPortlet.prototype.lazySync = function(obj, fId){
 	var actionLink = obj.getAttribute("actionlink") ;
 	eval(actionLink);

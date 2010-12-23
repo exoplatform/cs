@@ -17,6 +17,7 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.util.Date;
+
 import java.util.HashMap;
 import java.util.Map;
 

@@ -148,6 +148,75 @@
 	width: auto;
 }
 
+
+.UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid td.FieldButton{
+	width: auto;
+	padding-right: 17px;
+	text-align: left;
+}
+
+.UIMailPortlet .UIAccountSetting .CheckForSupportedDisable{
+	vertical-align:middle;
+	text-align:center;
+	text-decoration:none;
+	font-size:11px;
+	width:65px;
+	padding:3px 3px;
+	color:gray;
+	border:1px solid #DDD;/*#3278BE;*/
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	-o-border-radius:2px;
+	border-radius:2px;
+	background:-moz-linear-gradient(0% 90% 90deg, #EEE, #FFF);
+}
+
+.UIMailPortlet .UIAccountSetting .CheckForSupported{
+	vertical-align:middle;
+	text-align:center;
+	text-decoration:none;
+	font-size:11px;
+	width:65px;
+	padding:3px 3px;
+	cursor:pointer;
+	color:#000;
+	border:1px solid #DDD;/*#3278BE;*/
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	-o-border-radius:2px;
+	border-radius:2px;
+	background:-moz-linear-gradient(0% 90% 90deg, #EEE, #FFF);
+}
+
+.UIMailPortlet .UIAccountSetting .CheckForSupported:hover{
+	background:-moz-linear-gradient(0% 90% 90deg, #EEE, yellow);
+}
+
+.UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid td.InputFieldLabel{
+	width: 150px;
+	text-align: left;
+}
+
+.UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid .FieldInput{
+	fload:left;
+	width:auto;
+}
+
+.UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid .FieldComponentAuto a {
+	color: black;
+	text-align:left;
+}
+.UIMailPortlet .UIAccountSetting .FieldComponentAuto select{
+	width: 100px;
+	paddding:0px 7px; 
+}
+
+.UIMailPortlet .UIAccountSetting .ServerSettings .UIFormGrid .Label{
+	text-align:left;
+	width:auto;
+	padding-left:8px; 
+}
+
 /************************************UIAction*************************************/
 
 .UIMailPortlet .UIForm .UIFormGrid #outgoingUsername {
