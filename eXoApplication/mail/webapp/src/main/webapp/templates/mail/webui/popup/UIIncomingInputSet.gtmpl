@@ -1,0 +1,135 @@
+<%
+/**
+ * Created by The eXo Platform SARL
+ * Author : Nguyen Van Hoang 
+ *          hoangnv01@mail.com
+ * @version: $Id$
+ * December 15, 2010
+ */
+
+  import org.exoplatform.mail.webui.popup.UIAccountSetting;
+  import org.exoplatform.mail.webui.popup.UIAccountCreation;
+  import org.exoplatform.mail.service.Utils;
+  def jsMan = _ctx.getRequestContext().getJavascriptManager() ;
+  jsMan.addJavascript("eXo.mail.UIMailPortlet.validateFieldsIncoming('" + uicomponent.id + "');");
+  def popSslPort = UIAccountCreation.DEFAULT_POPSSL_PORT;
+  def popPort = UIAccountCreation.DEFAULT_POP_PORT;
+  def imapSslPort = UIAccountCreation.DEFAULT_IMAPSSL_PORT;
+  def imapPort = UIAccountCreation.DEFAULT_IMAP_PORT;
+  def port = popSslPort+ ":" + popPort + " "+ imapSslPort + ':' + imapPort;//popsslport:popport imapsslport:imapport 
+  def field;
+  def label;
+  def mechs;
+  for(String mech:Utils.MECHANISM){
+	Integer count =  Utils.MECHANISM.length;
+	if(count >= 1) 
+  		mechs=mechs + mech + ",";
+  	count = count -1;
+  }
+%>
+<div class="UIFormInputSet $uicomponent.id" id="$uicomponent.id">
+  <table class="UIFormGrid">
+    <tbody>                  
+      <%              
+        field = uicomponent.getChildById(UIAccountSetting.FIELD_SERVER_TYPE);
+        label = _ctx.appRes(uicomponent.getParent().id + ".label." + field.getId()) ;
+      %>
+      <tr>
+        <td class="InputFieldLabel">$label</td>
+        <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+      </tr>
+      
+      <%              
+        field = uicomponent.getChildById(UIAccountSetting.FIELD_INCOMING_SERVER);
+        label = _ctx.appRes(uicomponent.getParent().id + ".label." + field.getId()) ;
+      %>
+      <tr>
+        <td class="InputFieldLabel">$label</td>
+        <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+      </tr>
+      
+      <%              
+        field = uicomponent.getChildById(UIAccountSetting.FIELD_INCOMING_PORT);
+        label = _ctx.appRes(uicomponent.getParent().id + ".label." + field.getId()) ;
+      %>
+      <tr>
+        <td class="InputFieldLabel">$label</td>
+        <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+      </tr>
+      
+      <%              
+        field = uicomponent.getChildById(UIAccountSetting.FIELD_INCOMING_ACCOUNT);
+        label = _ctx.appRes(uicomponent.getParent().id + ".label." + field.getId()) ;
+      %>
+      <tr>
+        <td class="InputFieldLabel">$label</td>
+        <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+      </tr> 
+      
+      <%              
+        field = uicomponent.getChildById(UIAccountSetting.FIELD_INCOMING_PASSWORD);
+        label = _ctx.appRes(uicomponent.getParent().id + ".label." + field.getId()) ;
+      %>
+      <tr style="height:30px;">
+        <td class="Label" style="padding-left:0px;">$label</td>
+        <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
+      </tr>
+      
+      <%              
+        field = uicomponent.getChildById(UIAccountSetting.FIELD_IS_SAVE_PASSWORD);
+        label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+      %>
+      <tr style="height:30px;">
+      	<td colspan="2">
+      		<div class="FieldInput">
+      			<span class="FieldComponentAuto"><%uicomponent.renderUIComponent(field)%></span>
+        		<span class="Label">$label</span>		
+      		</div>
+      	</td>
+      </tr>
+      
+      <%              
+        field = uicomponent.getChildById(UIAccountSetting.FIELD_IS_INCOMING_SSL);
+        label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
+        def inputAuthType = uicomponent.getChildById(UIAccountSetting.FIELD_SECURE_AUTHENTICATION_INCOMING);
+        def useSSL = field.isChecked();
+  			if(!useSSL){
+      	 inputAuthType.setEnable(false);
+  			}
+      %>
+      <tr style="height:30px;">
+      	<td colspan="2">
+      		<div class="FieldInput" id='<%=field.getId()%>' defaultport="<%=port%>">
+	      		<span class="FieldComponent"><%uicomponent.renderUIComponent(field)%></span>
+		        <span class="Label">$label</span>
+		        <span class="FieldComponentAuto"><%uicomponent.renderUIComponent(inputAuthType)%></span>
+		    </div> 
+      	</td>
+      </tr>
+      	
+      <%              
+        field = uicomponent.getChildById(UIAccountSetting.FIELD_AUTHENTICATIONS_MECHANISM);
+        label = _ctx.appRes("UIMailSettings.label.authenticationMechanism").replaceAll("\"", "");
+        def labelCheckSupported = _ctx.appRes("UIMailSettings.label.checkForSupported").replaceAll("\"", "");
+        def lblColor = "";
+        def onclickValue = "eXo.mail.UIMailPortlet.checkForSupportedType(this)";
+        def classCheckSupported = "CheckForSupported";
+  		   if(!useSSL || chk == false){
+    			field.setEnable(false);
+    			lblColor = "color:gray;";
+    			onclickValue = ""
+    			classCheckSupported = "CheckForSupportedDisable";   	
+  		   }
+      %>
+      <tr style="height:30px;">
+      	<td colspan="2">
+	  		<div class="FieldInput" id='<%=field.getId()%>'>
+		        <span class="Label" style="padding-left:0px;<%=lblColor%>">$label</span>
+		        <span class="FieldComponentAuto"><%uicomponent.renderUIComponent(field)%></span>
+		        <span class="<%=classCheckSupported%>" mechs="<%=mechs%>" onclick="<%=onclickValue%>" title="<%=chk%>">$labelCheckSupported</span>
+		  	 </div>
+		</td>	  	 
+      </tr>
+    </tbody>
+  </table>  
+</div>    
