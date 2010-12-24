@@ -159,6 +159,8 @@ public class Utils {
   public static final int DENY = 0 ;
   public static final int ACCEPT = 1 ;
   public static final int NOTSURE = 2 ;
+  public static final int ACCEPT_IMPORT = 3;
+  public static final int JUMP_TO_CALENDAR = 4;
   
   public static final String RSS_NODE  = "iCalendars".intern() ;
   public static final String CALDAV_NODE  = "WebDavCalendars".intern() ;

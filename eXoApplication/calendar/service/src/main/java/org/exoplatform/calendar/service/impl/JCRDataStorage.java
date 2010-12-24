@@ -1000,6 +1000,23 @@ public class JCRDataStorage implements DataStorage {
     calEvent.setCalType(String.valueOf(Calendar.TYPE_PUBLIC)) ;
     return calEvent ;
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public CalendarEvent getGroupEvent(String eventId) throws Exception {
+    Node calendarHome = getPublicCalendarHome();
+    String queryString = new StringBuffer("/jcr:root" + calendarHome.getPath()
+                                          + "//element(*,exo:calendarEvent)[@exo:id='").append(eventId)
+                                          .append("']")
+                                          .toString();
+    QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
+    Query query = qm.createQuery(queryString, Query.XPATH) ;
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    if (it.hasNext()) return getEvent(it.nextNode()) ;
+    else return null ;
+  }
 
   /**
    * {@inheritDoc}

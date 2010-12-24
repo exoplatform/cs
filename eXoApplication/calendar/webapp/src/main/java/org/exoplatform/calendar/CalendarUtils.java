@@ -158,6 +158,10 @@ public class CalendarUtils {
   final public static String ITEM_ASK = "ask".intern();
   final public static String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+";
   
+  public final static String INVITATION_URL = "/invitation/".intern();
+  public final static String INVITATION_IMPORT_URL = "/invitation/import/";
+  public final static String INVITATION_DETAIL_URL = "/invitation/detail/";
+  
   private static Log log = ExoLogger.getLogger(CalendarUtils.class);
   
   public static final String[] getUserGroups(String username) throws Exception {
@@ -874,7 +878,7 @@ public class CalendarUtils {
 
   }
 
-  public List<org.exoplatform.calendar.service.Calendar> getAllOfCalendars(String username) throws Exception {
+  public static List<org.exoplatform.calendar.service.Calendar> getAllOfCalendars(String username) throws Exception {
     List<org.exoplatform.calendar.service.Calendar> calendars = new ArrayList<org.exoplatform.calendar.service.Calendar>();
     CalendarService calendarService = getCalendarService();
     /*---- get private calendars ----*/

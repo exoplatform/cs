@@ -287,12 +287,20 @@ public interface CalendarService {
    * @throws Exception
    */
   public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception ;
-
+  
   /**
-   * The menthod gets event or task form group calendar by given calendar id
+   * Get a group event from eventID
+   * @param eventId
+   * @return
+   * @throws Exception
+   */
+  public CalendarEvent getGroupEvent(String eventId) throws Exception;
+  
+  /**
+   * The method gets event or task form group calendar by given calendar id
    * @param calendarId given calendar id
    * @param eventId given event id
-   * @return CalendarEvent object containts infomations and attachments, reminders
+   * @return CalendarEvent object contains information and attachments, reminders
    * @throws Exception
    * @see CalendarEvent
    */

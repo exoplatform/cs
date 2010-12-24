@@ -249,6 +249,13 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception {
     return storage_.removeUserEvent(username, calendarId, eventId);
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public CalendarEvent getGroupEvent(String eventId) throws Exception {
+    return storage_.getGroupEvent(eventId);
+  }
 
   /**
    * {@inheritDoc}

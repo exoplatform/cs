@@ -374,6 +374,14 @@ public interface DataStorage {
    * @throws Exception
    */
   public void removeReminder(Node eventNode) throws Exception;
+  
+  /**
+   * Get a group event
+   * @param eventId
+   * @return
+   * @throws Exception
+   */
+  public CalendarEvent getGroupEvent(String eventId) throws Exception;
 
   /**
    * Get a group event

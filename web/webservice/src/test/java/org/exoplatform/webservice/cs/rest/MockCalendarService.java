@@ -497,4 +497,10 @@ public class MockCalendarService implements CalendarService{
     // TODO Auto-generated method stub
     
   }
+
+  @Override
+  public CalendarEvent getGroupEvent(String eventId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

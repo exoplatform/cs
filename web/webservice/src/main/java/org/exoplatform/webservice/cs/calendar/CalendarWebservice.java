@@ -46,8 +46,6 @@ import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
@@ -502,4 +500,41 @@ public class CalendarWebservice implements ResourceContainer{
 		  return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
 	  }
   }
+  
+  @GET
+  @Path("/cs/calendar/invitation/{calendarId}/{calType}/{eventId}/{inviter}/{invitee}/{answer}")
+  public Response processInvitationReply(@PathParam("calendarId") 
+                                         String calendarId, @PathParam("calType")
+                                         String calType, @PathParam("eventId") 
+                                         String eventId, @PathParam("inviter")
+                                         String inviter, @PathParam("invitee") 
+                                         String invitee, @PathParam("answer") 
+                                         String answer) throws Exception {
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    CalendarService calService = (CalendarService)ExoContainerContext
+                                  .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+    // save invitation status
+    calService.confirmInvitation(inviter, invitee, Integer.parseInt(calType), calendarId, eventId, Integer.parseInt(answer));
+
+    int ans = Integer.parseInt(answer);
+    StringBuffer response = new StringBuffer();
+    response.append("<html><head><title>Invitation Answer</title></head>");
+    response.append("<body>");
+    switch (ans) {
+    case Utils.ACCEPT:
+      response.append("You have accepted invitation from " + inviter);
+      break;
+    case Utils.DENY:
+      response.append("You have denied invitation from " + inviter);
+      break;
+    case Utils.NOTSURE:
+      response.append("You have answered invitation from " + inviter + " : Not sure!");
+      break;
+    }
+    
+    response.append("</body></html>");
+    return Response.ok(response.toString(), MediaType.TEXT_HTML).cacheControl(cacheControl).build();
+  }                                    
 }

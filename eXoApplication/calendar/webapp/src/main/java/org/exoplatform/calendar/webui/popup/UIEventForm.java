@@ -929,6 +929,27 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   protected boolean isSendMail() {
     return false ;
   }
+  
+  public void importInvitationEvent(CalendarSetting calSetting, CalendarEvent event, String calendarId, String formtime) throws Exception {
+    if(event != null) {
+      setEventSumary(event.getSummary()) ;
+      setEventDescription(event.getDescription()) ;
+      setEventAllDate(CalendarUtils.isAllDayEvent(event)) ;
+      setEventFromDate(event.getFromDateTime(),calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+      setEventCheckTime(event.getFromDateTime()) ;
+      setEventToDate(event.getToDateTime(),calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+      setSelectedCalendarId(calendarId) ;
+
+      setEventPlace(event.getLocation()) ;
+      setEventRepeat(event.getRepeatType()) ;
+      setEventReminders(event.getReminders()) ;
+      setAttachments(event.getAttachment()) ;
+ 
+      setMessage(event.getMessage());
+      setParticipantStatusValues(event.getParticipantStatus());
+      
+    }
+  }
 
   protected void sendMail(MailService svr, OrganizationService orSvr,CalendarSetting setting, Account acc, String fromId,  String toId, CalendarEvent event) throws Exception {
     List<Attachment> atts = getAttachments(null, false);
@@ -940,7 +961,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbSubject.append(df.format(event.getFromDateTime())) ;
 
     StringBuffer sbBody = new StringBuffer() ;
-    sbBody.append("<div style=\"margin: 20px auto; padding: 8px; background: rgb(224, 236, 255) none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; width: 400px;\">") ;
+    sbBody.append("<div style=\"margin: 20px auto; padding: 8px; background: rgb(224, 236, 255) none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; width: 500px;\">") ;
     sbBody.append("<table style=\"margin: 0px; padding: 0px; border-collapse: collapse; border-spacing: 0px; width: 100%; line-height: 16px;\">") ;
     sbBody.append("<tbody>") ;
     sbBody.append("<tr>") ;
@@ -993,10 +1014,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       sbBody.append("<td style=\"padding: 4px;\"> ("+atts.size()+") " +sbf.toString()+" </td>");
       sbBody.append("</tr>");
-    }
-    sbBody.append("</tbody>");
-    sbBody.append("</table>");
-    sbBody.append("</div>") ;    
+    }    
 
     StringBuffer sbAddress = new StringBuffer() ;
     if(event.getInvitation()!= null) {
@@ -1031,15 +1049,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     values.append(event.getCalendarId()) ;
     values.append(CalendarUtils.SEMICOLON + " ") ;
     values.append(event.getId()) ;
-    if (acc != null) { // use cs-mail service
-      Message message = new Message() ;
-      message.setSubject(sbSubject.toString()) ;
-      message.setMessageBody(sbBody.toString()) ;
-      message.setMessageTo(sbAddress.toString()) ;
-      message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
-      message.setFrom(user.getEmail()) ;
-      message.setHeader(CalendarUtils.EXO_INVITATION , values.toString()) ;
-      message.setSendDate(new Date()) ;
+    if (acc != null) { // use cs-mail service 
       List<org.exoplatform.mail.service.Attachment> attachments = new ArrayList<org.exoplatform.mail.service.Attachment>() ;
       try {
         CalendarService calService = CalendarUtils.getCalendarService() ;
@@ -1061,48 +1071,98 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       } catch (Exception e) {
         e.printStackTrace() ;
       }
-      message.setAttachements(attachments) ;      
-      svr.sendMessage(user.getUserName(), acc.getId(), message) ;
-      
-      // TODO cs-1141
-      ContactService contactService = (ContactService)PortalContainer.getComponent(ContactService.class) ;
-      contactService.saveAddress(CalendarUtils.getCurrentUser(), sbAddress.toString()) ;
+      for (String s : sbAddress.toString().split(CalendarUtils.COMMA)) {
+        StringBuffer body = new StringBuffer(sbBody.toString());
+        body.append("<tr>");
+        body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
+        body.append("Would you like to attend? </td><td> <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT, invitor, s, event) + "\" >Yes</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.NOTSURE, invitor, s, event) + "\" >Not sure</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.DENY, invitor, s, event) + "\" >No</a>");
+        body.append("</td></tr>");
+        body.append("<tr>");
+        body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
+        body.append("Would you like to see more details? </td><td><a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT_IMPORT, invitor, s, event) + "\" >Import to your eXo Calendar</a> or <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.JUMP_TO_CALENDAR, invitor, s, event) + "\" >Jump to eXo Calendar</a>");
+        body.append("</td></tr>");
+        body.append("</tbody>");
+        body.append("</table>");
+        body.append("</div>") ; 
+        Message message = new Message() ;
+        message.setSubject(sbSubject.toString()) ;
+        message.setMessageBody(body.toString()) ;
+        message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
+        message.setFrom(user.getEmail()) ;
+        message.setMessageTo(s);
+        message.setHeader(CalendarUtils.EXO_INVITATION , values.toString()) ;
+        message.setSendDate(new Date()) ;
+        message.setAttachements(attachments) ;
+        svr.sendMessage(user.getUserName(), acc.getId(), message) ;
+      }    
     } else { // use kernel service
-      org.exoplatform.services.mail.Message  message = new org.exoplatform.services.mail.Message(); 
-      message.setSubject(sbSubject.toString()) ;
-      message.setBody(sbBody.toString()) ;
-      message.setTo(sbAddress.toString()) ;
-      message.setMimeType(Utils.MIMETYPE_TEXTHTML) ;
-      message.setFrom(user.getEmail()) ;
+      CalendarService calService = CalendarUtils.getCalendarService() ;
+      org.exoplatform.services.mail.MailService mService = getApplicationComponent(org.exoplatform.services.mail.impl.MailServiceImpl.class) ;
       org.exoplatform.services.mail.Attachment attachmentCal = new org.exoplatform.services.mail.Attachment() ;
-      try {
-        CalendarService calService = CalendarUtils.getCalendarService() ;
+      try {            
         OutputStream out = calService.getCalendarImportExports(CalendarService.ICALENDAR).exportEventCalendar(fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
         attachmentCal.setInputStream(is) ;
         attachmentCal.setName("icalendar.ics");
         attachmentCal.setMimeType("text/calendar") ;
-        message.addAttachment(attachmentCal) ;
       } catch (Exception e) {
+        attachmentCal = null;
         e.printStackTrace() ;
-      }
-      if(!atts.isEmpty()){
-        for(Attachment att : atts) {
-          org.exoplatform.services.mail.Attachment attachment = new org.exoplatform.services.mail.Attachment() ;
-          attachment.setInputStream(att.getInputStream()) ;
-          attachment.setMimeType(att.getMimeType()) ;
-          message.addAttachment(attachment) ;
+      }     
+      for (String s : sbAddress.toString().split(CalendarUtils.COMMA)) {
+        StringBuffer body = new StringBuffer(sbBody.toString());
+        body.append("<tr>");
+        body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
+        body.append("Would you like to attend? </td><td> <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT, invitor, s, event) + "\" >Yes</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.NOTSURE, invitor, s, event) + "\" >Not sure</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.DENY, invitor, s, event) + "\" >No</a>");
+        body.append("</td></tr>");
+        body.append("<tr>");
+        body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
+        body.append("Would you like to see more details? </td><td><a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT_IMPORT, invitor, s, event) + "\" >Import to your eXo Calendar</a> or <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.JUMP_TO_CALENDAR, invitor, s, event) + "\" >Jump to eXo Calendar</a>");
+        body.append("</td></tr>");
+        body.append("</tbody>");
+        body.append("</table>");
+        body.append("</div>") ; 
+        org.exoplatform.services.mail.Message  message = new org.exoplatform.services.mail.Message(); 
+        message.setSubject(sbSubject.toString()) ;
+        message.setBody(body.toString()) ;
+        message.setTo(s) ;
+        message.setMimeType(Utils.MIMETYPE_TEXTHTML) ;
+        message.setFrom(user.getEmail()) ;
+        if (attachmentCal != null) {
+          message.addAttachment(attachmentCal) ;
         }
+        if(!atts.isEmpty()){
+          for(Attachment att : atts) {
+            org.exoplatform.services.mail.Attachment attachment = new org.exoplatform.services.mail.Attachment() ;
+            attachment.setInputStream(att.getInputStream()) ;
+            attachment.setMimeType(att.getMimeType()) ;
+            message.addAttachment(attachment) ;
+          }
+        }               
+        mService.sendMessage(message) ;
       }
-      org.exoplatform.services.mail.MailService mService = getApplicationComponent(org.exoplatform.services.mail.impl.MailServiceImpl.class) ;
-      mService.sendMessage(message) ;
-//    TODO cs-1141
-      ContactService contactService = (ContactService)PortalContainer.getComponent(ContactService.class) ;
-      contactService.saveAddress(CalendarUtils.getCurrentUser(), sbAddress.toString()) ;
     }
+    ContactService contactService = (ContactService)PortalContainer.getComponent(ContactService.class) ;
+    contactService.saveAddress(CalendarUtils.getCurrentUser(), sbAddress.toString()) ;
   }
 
-
+  protected String getReplyInvitationLink(int answer, User invitor, String invitee, CalendarEvent event) {
+    String portalName = CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName();
+    String restName = portalName + "/" +PortalContainer.getCurrentRestContextName();
+    
+    if (answer == org.exoplatform.calendar.service.Utils.ACCEPT || answer == org.exoplatform.calendar.service.Utils.DENY ||
+        answer == org.exoplatform.calendar.service.Utils.NOTSURE) {
+      return (restName + "/cs/calendar" + CalendarUtils.INVITATION_URL + event.getCalendarId() + "/" + event.getCalType() + "/" + event.getId() + "/" + invitor.getUserName() + "/" + invitee + "/" + answer);
+    }
+    if (answer == org.exoplatform.calendar.service.Utils.ACCEPT_IMPORT) {
+      return (portalName + "/private/classic/calendar" + CalendarUtils.INVITATION_IMPORT_URL + invitor.getUserName() + "/" + event.getId() + "/" + event.getCalType());
+    }
+    if (answer == org.exoplatform.calendar.service.Utils.JUMP_TO_CALENDAR) {
+      return (portalName + "/private/classic/calendar" + CalendarUtils.INVITATION_DETAIL_URL + invitor.getUserName() + "/" + event.getId() + "/" + event.getCalType());
+    }     
+    return "";
+  }
+  
   public String cleanValue(String values) throws Exception{
     String[] tmpArr = values.split(",");
       List<String> list = Arrays.asList(tmpArr);
