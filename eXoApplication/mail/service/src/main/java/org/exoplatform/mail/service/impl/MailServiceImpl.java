@@ -610,7 +610,11 @@ public class MailServiceImpl implements MailService, Startable {
       MailSSLSocketFactory socketFactory = this.getSSLSocketFactory(outgoingHost);  
       props.put(smtpSslFactory.replace("smtp", "smtps"), socketFactory);
       smtpPort=Utils.SVR_SMTP_SSL_SOCKET_FACTORY_PORT;
-      props.put(smtpSslStarttls.replace("smtp", "smtps"), true);
+      if(acc.getSecureAuthsOutgoing().equalsIgnoreCase(Utils.STARTTLS))
+        props.put(smtpSslStarttls.replace("smtp", "smtps"), true);
+      else 
+        props.put(smtpPropSslEnable.replace("smtp", "smtps"), true);
+      props.put(Utils.SMTP_AUTH_MECHS.replace("smtp", "smtps"), acc.getAuthMechsOutgoing());
       props.put(smtpSslProtocols.replace("smtp", "smtps"), "SSLv3 TLSv1");
     }
     if(Utils.isGmailAccount(smtpUser) || Utils.isGmailAccount(acc.getOutgoingUserName())){
@@ -853,9 +857,8 @@ public class MailServiceImpl implements MailService, Startable {
     }
     try {
       smtpMessage = new SMTPMessage(mimeMessage);
-      smtpMessage.setNotifyOptions(SMTPMessage.NOTIFY_NEVER);
+      smtpMessage.setNotifyOptions(SMTPMessage.NOTIFY_FAILURE);//need improve to custom in form compose new mail.
       smtpMessage.saveChanges();
-      //mimeMessage.saveChanges();
     } catch (Exception ex) {
     }
     try {
@@ -1432,11 +1435,12 @@ public class MailServiceImpl implements MailService, Startable {
           logger.error("Pop3 SSL: Cannot create a ssl socket between client and server. All host will trusted.");
           socketFactory = trustAllHost();
         }
-        props.put("mail.pop3.starttls.enable", "true");
         props.put("mail.pop3.socketFactory.fallback", "false");
         props.put("mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         props.put(Utils.POP3_SSL_FACTORY, socketFactory);
-        props.put(Utils.MAIL_POP3_SSL_ENABLE, true);
+        if(account.getSecureAuthsIncoming().equalsIgnoreCase(Utils.STARTTLS))
+            props.put(Utils.POP3_SSL_STARTTLS_ENABLE, true);
+        else props.put(Utils.MAIL_POP3_SSL_ENABLE, true);
       }
       
       Session session = Session.getDefaultInstance(props, null);
@@ -2940,6 +2944,5 @@ public class MailServiceImpl implements MailService, Startable {
     return storage_.getDMSSelectedNode(userName, relPath);
   }
   
-  
-  
 }
+

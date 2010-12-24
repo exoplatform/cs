@@ -6,6 +6,7 @@ package org.exoplatform.webservice.cs.mail;
 
 import java.util.List;
 
+
 import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslClient;
 import javax.ws.rs.GET;
@@ -355,7 +356,7 @@ public class MailWebservice implements ResourceContainer {
         ConversationState.getCurrent().getIdentity().getUserId() != null && ConversationState.getCurrent().getIdentity().getUserId().equals(usename)  
     );
   }
-  
+
   @GET
   @Path("/checkforsupportedtypes/{mechs}/{username}/{protocol}/{host}")
   @Produces(MediaType.APPLICATION_JSON)
@@ -364,13 +365,24 @@ public class MailWebservice implements ResourceContainer {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
-    String data = "";
+    StringBuilder data = new StringBuilder();
     //Map props = new HashMap();
     //props.put(Sasl.POLICY_NOPLAINTEXT, "true");
-    //SaslClient sasl = Sasl.createSaslClient(mechanisms, username, protocol, host, props, null);
+    String[] mechs = mechanisms.split(",");
+    int i = 0;
+    for(String m : mechs){
+      if(m.equalsIgnoreCase("kerberos-gssapi")) mechs[i] = m.substring(m.indexOf("-"));
+      mechs[i] = m;
+      i =+ 1;
+    }
+    SaslClient sasl = Sasl.createSaslClient(mechs, username, proto, host, null, null);
+    if(sasl != null)
+      System.out.println(sasl.getMechanismName());
     
-    if(mechanisms != null && mechanisms.length()>0){
-     data = mechanisms;  
+    if(mechs != null && mechs.length>0){
+      for(String mech : mechs){
+        data.append(mech);
+      }
     }
     return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }

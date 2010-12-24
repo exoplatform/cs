@@ -41,9 +41,13 @@ public abstract class BaseConnector implements Connector {
     Properties props = System.getProperties();
     String socketFactoryClass = "javax.net.SocketFactory";
     if (account.isIncomingSsl() && sslSocket != null) {
-      props.put(Utils.MAIL_IMAP_SSL_ENABLE, "true");
+      
       props.put(Utils.IMAP_SSL_FACTORY, sslSocket);
-      //socketFactoryClass = Utils.SSL_FACTORY;
+      if(account.getSecureAuthsIncoming().equalsIgnoreCase(Utils.STARTTLS))
+        props.put(Utils.IMAP_SSL_STARTTLS_ENABLE, true);
+      else
+        props.put(Utils.MAIL_IMAP_SSL_ENABLE, "true");
+      props.put(Utils.IMAP_SASL_MECHS, account.getAuthMechsIncoming());
     }
     props.put("mail.imap.socketFactory.class", socketFactoryClass);
     props.put("mail.mime.base64.ignoreerrors", "true");

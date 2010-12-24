@@ -83,6 +83,8 @@ public class Account {
   }
 
   public String getAuthMechsOutgoing() {
+    if(authMechsIncoming.equalsIgnoreCase(Utils.KERBEROS_GSSAPI))
+      return "GSSAPI";
     return authMechsOutgoing;
   }
 

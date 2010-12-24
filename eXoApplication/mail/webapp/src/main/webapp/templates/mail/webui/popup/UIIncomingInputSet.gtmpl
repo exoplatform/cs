@@ -19,12 +19,12 @@
   def port = popSslPort+ ":" + popPort + " "+ imapSslPort + ':' + imapPort;//popsslport:popport imapsslport:imapport 
   def field;
   def label;
-  def mechs;
+  def mechs = '';
+  Integer count = 0;
   for(String mech:Utils.MECHANISM){
-	Integer count =  Utils.MECHANISM.length;
-	if(count >= 1) 
-  		mechs=mechs + mech + ",";
-  	count = count -1;
+    if(count == Utils.MECHANISM.length -1) mechs = mechs + mech; 
+    else mechs = mechs + mech + ",";
+    count = count +1;
   }
 %>
 <div class="UIFormInputSet $uicomponent.id" id="$uicomponent.id">
@@ -114,7 +114,7 @@
         def lblColor = "";
         def onclickValue = "eXo.mail.UIMailPortlet.checkForSupportedType(this)";
         def classCheckSupported = "CheckForSupported";
-  		   if(!useSSL || chk == false){
+  		   if(!useSSL){
     			field.setEnable(false);
     			lblColor = "color:gray;";
     			onclickValue = ""
@@ -126,7 +126,7 @@
 	  		<div class="FieldInput" id='<%=field.getId()%>'>
 		        <span class="Label" style="padding-left:0px;<%=lblColor%>">$label</span>
 		        <span class="FieldComponentAuto"><%uicomponent.renderUIComponent(field)%></span>
-		        <span class="<%=classCheckSupported%>" mechs="<%=mechs%>" onclick="<%=onclickValue%>" title="<%=chk%>">$labelCheckSupported</span>
+		        <span class="<%=classCheckSupported%>" mechs="<%=mechs%>" onclick="<%=onclickValue%>" username="<%=uicomponent.getUsername()%>" protocol="<%=uicomponent.getProtocol()%>" host="<%=uicomponent.getHost()%>">$labelCheckSupported</span>
 		  	 </div>
 		</td>	  	 
       </tr>

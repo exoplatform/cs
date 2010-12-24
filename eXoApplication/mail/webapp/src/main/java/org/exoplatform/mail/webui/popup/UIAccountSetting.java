@@ -543,7 +543,7 @@ public class UIAccountSetting extends UIFormTabPane {
       acc.setIncomingSsl(uiSetting.getFieldIsSSL()) ;
       if(uiSetting.getFieldIsSSL()){
         acc.setSecureAuthsIncoming(secureAuthIncoming);
-        acc.setSecureAuthsIncoming(secureAuthMechIncoming);
+        acc.setAuthMechsIncoming(secureAuthMechIncoming);
       }
       acc.setOutgoingSsl(uiSetting.getFieldOutgoingSSL());
       if(uiSetting.getFieldOutgoingSSL()){

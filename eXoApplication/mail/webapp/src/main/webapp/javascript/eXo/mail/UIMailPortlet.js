@@ -778,36 +778,32 @@ UIMailPortlet.prototype.updateAuthMechsSupported = function(parentId, mechsSuppo
 UIMailPortlet.prototype.parentId = '';
 
 UIMailPortlet.prototype.checkForSupportedType = function(element){
-/*	if(element == null || element == undefined) return;
+	if(element == null || element == undefined) return;
 	var mechs = element.getAttribute('mechs');
-	if(mechs == null || mechs.length <= 0) return;
+	var username = element.getAttribute("username");
+	var protocol = element.getAttribute("protocol");
+	var host = element.getAttribute("host");
+	
+	if(mechs == null || mechs.length <= 0 || username == null || protocol == null || host == null) return;
 	var FIELD_AUTHENTICATIONS_MECHANISM_ID = "authenticationMechanism";
 	var FIELD_SECURE_AUTHENTICATION_OUTGOING_ID = "secureAuthenticationOutgoing";
 	var PARENT_CLASS = "FieldInput"; 
 	var parentElm = eXo.core.DOMUtil.findAncestorByClass(element, PARENT_CLASS);
-	var cbos = eXo.core.DOMUtil.getChildrenByTagName(parentElm, "select");
-	if(cbos == null || cbos.length <=0 || parentElm == null) return
-	for(var cbo in cbos){
-		if(cbos[cbo].name = FIELD_AUTHENTICATIONS_MECHANISM_ID) eXo.mail.UIMailPortlet.parentId = FIELD_AUTHENTICATIONS_MECHANISM_ID;
-		if(cbos[cbo].name = FIELD_SECURE_AUTHENTICATION_OUTGOING_ID) eXo.mail.UIMailPortlet.parentId = FIELD_SECURE_AUTHENTICATION_OUTGOING_ID;
-	}
-	var username = "";
-	var protocol = "";
-	var host = "";
+	var cbos = eXo.core.DOMUtil.findFirstDescendantByClass(parentElm, "select", "selectbox");
+	if(cbos == null || parentElm == null) return
 	var url = (eXo.cs.restContext)?eXo.env.portal.context+ '/' + eXo.cs.restContext +'/private/cs/mail':'portal/rest/private/cs/mail';
-	url = url + '/checkforsupportedtypes/' + mechs + "/" + username + "/" protocol + "/" + host;
+	url = url + '/checkforsupportedtypes/' + mechs.replace('/','-') + '/' + username + '/' +  protocol + '/' + host;
 	var request = new eXo.portal.AjaxRequest('GET', url, null);
 	request.onSuccess = function(request){
 		var uiMailPortlet = eXo.mail.UIMailPortlet;
-		var mechsSupported = request.responseText;
+		var mechsSupported = request.responseText; alert(mechsSupported); 
 		uiMailPortlet.updateAuthMechsSupported(uiMailPortlet.parentId, mechsSupported)
 	}
 	
 	request.onError = function(request){
 		alert('Sorry, eXoMail cannot check for supported authentication mechanisms');
 	}
-	*/
-	alert("eXoMail has not supported this method.");
+	//alert("eXoMail has not supported this method.");
 };
 
 UIMailPortlet.prototype.validateFieldsIncoming = function(id){

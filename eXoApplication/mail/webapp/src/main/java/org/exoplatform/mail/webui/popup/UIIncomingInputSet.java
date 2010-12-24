@@ -48,7 +48,7 @@ public class UIIncomingInputSet extends UIFormInputWithActions {
   }
   
   public String getHost(){
-    return this.getUIStringInput(UIAccountSetting.FIELD_INCOMING_ACCOUNT).getValue();
+    return this.getUIStringInput(UIAccountSetting.FIELD_INCOMING_SERVER).getValue();
   }
-  
+    
 }

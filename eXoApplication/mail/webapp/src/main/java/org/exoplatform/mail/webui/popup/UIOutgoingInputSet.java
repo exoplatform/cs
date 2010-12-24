@@ -16,6 +16,7 @@
  */
 package org.exoplatform.mail.webui.popup;
 
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFormInputWithActions;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 
@@ -49,7 +50,7 @@ public class UIOutgoingInputSet extends UIFormInputWithActions {
   }
   
   public String getProtocol(){
-    return "SMTP";
+    return Utils.SVR_SMTP;
   }
   
   public String getHost(){

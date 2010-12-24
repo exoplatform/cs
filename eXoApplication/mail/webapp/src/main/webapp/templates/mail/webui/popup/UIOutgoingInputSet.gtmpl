@@ -16,13 +16,13 @@
 	def smtpSsltPort = UIAccountCreation.DEFAULT_SMTPSSL_PORT;
     def smtpPort= UIAccountCreation.DEFAULT_SMTP_PORT;
     def port = smtpSsltPort+ ":" + smtpPort;//smtpsslport:imapport
-	def mechs;
+	def mechs =  '';
+	Integer count = 0;
     for(String mech:Utils.MECHANISM){
-	 Integer count =  Utils.MECHANISM.length;
-	 if(count >= 1) 
-  		mechs=mechs + mech + ",";
-  	count = count -1;
-   }
+	 if(count == Utils.MECHANISM.length -1) mechs = mechs + mech; 
+  	 else mechs = mechs + mech + ",";
+     count = count +1;
+    }
 %>
 <div class="UIFormInputSet $uicomponent.id" id="$uicomponent.id">
   <table class="UIFormGrid">
@@ -82,7 +82,7 @@
       		<div class="FieldInput" id='<%=fieldMech.getId()%>'>
 		       <span class="Label" style="padding-left:0px;<%=lblColor%>">$labelMech</span>
 		       <span class="FieldComponentAuto"><%uicomponent.renderUIComponent(fieldMech)%></span>
-		       <span class="<%=classCheckSupported%>" mechs="<%=mechs%>" onclick="<%=onclickValue%>">$labelCheckSupported</span>
+		       <span class="<%=classCheckSupported%>" mechs="<%=mechs%>" onclick="<%=onclickValue%>" username="<%=uicomponent.getUsername()%>" protocol="<%=uicomponent.getProtocol()%>" host="<%=uicomponent.getHost()%>">$labelCheckSupported</span>
 		  	 </div>  
 		</td>  	   
       </tr>
