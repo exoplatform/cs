@@ -878,7 +878,6 @@ UIMailPortlet.prototype.validateFieldsIncoming = function(id){
 			}		
 		};
 	}	
-	return chkIsIncomingSSL.checked;
 };
 
 UIMailPortlet.prototype.validateFieldsOutgoing = function(id){
@@ -1016,8 +1015,6 @@ UIMailPortlet.prototype.validateFieldsOutgoing = function(id){
 			}
 		};	
 	}
-	var chks = chkIsOutgoingSSL.checked + ':' + chkOutgoingAuthElement;
-	return chks;
 };
 
 UIMailPortlet.prototype.lazySync = function(obj, fId){

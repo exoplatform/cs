@@ -155,7 +155,7 @@ public class UIAccountSetting extends UIFormTabPane {
     UIOutgoingInputSet outGoingInputSet = new UIOutgoingInputSet(TAB_OUTGOING);
     outGoingInputSet.addUIFormInput(new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null).addValidator(MandatoryValidator.class));
     outGoingInputSet.addUIFormInput(new UIFormStringInput(FIELD_OUTGOING_PORT, null, null).addValidator(MandatoryValidator.class));
-    UIFormCheckBoxInput<Boolean> outgoingssl = new UIFormCheckBoxInput<Boolean>(FIELD_IS_OUTGOING_SSL, null, null);
+    UIFormCheckBoxInput<Boolean> outgoingssl = new UIFormCheckBoxInput<Boolean>(FIELD_IS_OUTGOING_SSL, FIELD_IS_OUTGOING_SSL, null);
     UIFormSelectBox secureAuthsOutgoing = new UIFormSelectBox(FIELD_SECURE_AUTHENTICATION_OUTGOING, null, getSecureAuthsValues()) ;
     //secureAuthsOutgoing.setOnChange("ChangeOutgoingSSLType");
     //outgoingssl.setOnChange("ChangeOutgoingSSL"); 

@@ -59,13 +59,9 @@
 		    if(!useSSL){
 			     inputAuthType.setEnable(false);
 	   			 lblColor = "color:gray;";
-	  			 field.setEnable(false);
 	  			 fieldMech.setEnable(false);
 	  			 onclickValue = ""
 	  			 classCheckSupported = "CheckForSupportedDisable";   	
-		    }else{
-			     field.setEnable(true);
-			     lblColor = "color:black;";
 		    }
       %>
       <tr style="height:30px;">

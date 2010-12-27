@@ -251,8 +251,9 @@ public class JCRDataStorage implements DataStorage {
       account.setSecureAuthsIncoming(accountNode.getProperty(Utils.EXO_SECURE_AUTHS_INCOMING).getString());
       account.setSecureAuthsOutgoing(accountNode.getProperty(Utils.EXO_SECURE_AUTHS_OUTGOING).getString());
       account.setAuthMechsIncoming(accountNode.getProperty(Utils.EXO_AUTH_MECHS_INCOMING).getString());
-      account.setAuthMechsIncoming(accountNode.getProperty(Utils.EXO_AUTH_MECHS_OUTGOING).getString());
+      account.setAuthMechsOutgoing(accountNode.getProperty(Utils.EXO_AUTH_MECHS_OUTGOING).getString());
     } catch (Exception e) {
+      if(logger.isDebugEnabled()) logger.debug("Not all options of " + account.getLabel() + " get completely.", e);
     }
     
     return account;
@@ -877,14 +878,14 @@ public class JCRDataStorage implements DataStorage {
           newAccount.setProperty(Utils.EXO_SECURE_AUTHS_OUTGOING, account.getSecureAuthsOutgoing());
           newAccount.setProperty(Utils.EXO_AUTH_MECHS_OUTGOING, account.getAuthMechsOutgoing());
         }
-        
-        // saves changes
         if (isNew)
           mailHome.getSession().save();
         else
           mailHome.save();
       }
-    }catch(Exception e){e.printStackTrace();} finally {
+    }catch(Exception e){
+       if(logger.isDebugEnabled()) logger.debug(e); 
+    } finally {
       closeSessionProvider(sysProvider);
     }
   }
