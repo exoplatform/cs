@@ -49,7 +49,11 @@ function getModule(params) {
   
   module.eXoApplication.content = 
     new Project("org.exoplatform.cs", "exo.cs.eXoApplication.content.webapp", "war", module.version).
+
+addDependency(new Project("org.exoplatform.ecms", "exo-ecms-core-parser", "jar",  "${org.exoplatform.ecms.version}")).
+
     addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.content.service", "jar",  module.version));
+    
   module.eXoApplication.content.deployName = "content";
   
    
