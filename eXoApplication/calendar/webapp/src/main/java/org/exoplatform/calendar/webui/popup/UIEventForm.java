@@ -1146,19 +1146,20 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     contactService.saveAddress(CalendarUtils.getCurrentUser(), sbAddress.toString()) ;
   }
 
-  protected String getReplyInvitationLink(int answer, User invitor, String invitee, CalendarEvent event) {
-    String portalName = CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName();
-    String restName = portalName + "/" +PortalContainer.getCurrentRestContextName();
+  protected String getReplyInvitationLink(int answer, User invitor, String invitee, CalendarEvent event) throws Exception{
+    String portalURL = CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName();
+    String restURL = portalURL + "/" + PortalContainer.getCurrentRestContextName();
+    String calendarURL = CalendarUtils.getCalendarURL();
     
     if (answer == org.exoplatform.calendar.service.Utils.ACCEPT || answer == org.exoplatform.calendar.service.Utils.DENY ||
         answer == org.exoplatform.calendar.service.Utils.NOTSURE) {
-      return (restName + "/cs/calendar" + CalendarUtils.INVITATION_URL + event.getCalendarId() + "/" + event.getCalType() + "/" + event.getId() + "/" + invitor.getUserName() + "/" + invitee + "/" + answer);
+      return (restURL + "/cs/calendar" + CalendarUtils.INVITATION_URL + event.getCalendarId() + "/" + event.getCalType() + "/" + event.getId() + "/" + invitor.getUserName() + "/" + invitee + "/" + answer);
     }
     if (answer == org.exoplatform.calendar.service.Utils.ACCEPT_IMPORT) {
-      return (portalName + "/private/classic/calendar" + CalendarUtils.INVITATION_IMPORT_URL + invitor.getUserName() + "/" + event.getId() + "/" + event.getCalType());
+      return (calendarURL + CalendarUtils.INVITATION_IMPORT_URL + invitor.getUserName() + "/" + event.getId() + "/" + event.getCalType());
     }
     if (answer == org.exoplatform.calendar.service.Utils.JUMP_TO_CALENDAR) {
-      return (portalName + "/private/classic/calendar" + CalendarUtils.INVITATION_DETAIL_URL + invitor.getUserName() + "/" + event.getId() + "/" + event.getCalType());
+      return (calendarURL + CalendarUtils.INVITATION_DETAIL_URL + invitor.getUserName() + "/" + event.getId() + "/" + event.getCalType());
     }     
     return "";
   }

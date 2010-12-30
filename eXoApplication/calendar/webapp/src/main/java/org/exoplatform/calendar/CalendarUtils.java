@@ -48,12 +48,12 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
-import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -159,8 +159,8 @@ public class CalendarUtils {
   final public static String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+";
   
   public final static String INVITATION_URL = "/invitation/".intern();
-  public final static String INVITATION_IMPORT_URL = "/invitation/import/";
-  public final static String INVITATION_DETAIL_URL = "/invitation/detail/";
+  public final static String INVITATION_IMPORT_URL = "/invitation/import/".intern();
+  public final static String INVITATION_DETAIL_URL = "/invitation/detail/".intern();
   
   private static Log log = ExoLogger.getLogger(CalendarUtils.class);
   
@@ -517,6 +517,26 @@ public class CalendarUtils {
     TimeZone timeZone = TimeZone.getTimeZone(timezone) ;
     int rawOffset = timeZone.getRawOffset()  ;
     return String.valueOf(0 - (rawOffset /60000 + timeZone.getDSTSavings()/60000)) ;
+  }
+  
+  /**
+   * 
+   * @return the base URL to the current calendar application
+   * @throws Exception 
+   */
+  public static String getCalendarURL() throws Exception {
+    PortalRequestContext pContext = Util.getPortalRequestContext();
+    String url = pContext.getRequest().getRequestURL().toString();
+    String selectedNode = Util.getUIPortal().getSelectedNode().getUri() ;
+    String portalName = pContext.getPortalOwner();
+    if (url.indexOf(portalName) > 0) {
+      if(url.indexOf(portalName + "/" + selectedNode) < 0){
+        url = url.replaceFirst(portalName, portalName + "/" + selectedNode) ;
+      } 
+    } 
+    selectedNode = portalName + "/" + selectedNode;
+    url = url.substring(0, url.lastIndexOf(selectedNode) + selectedNode.length());
+    return url;
   }
 
   public static boolean hasEditPermission(String[] savePerms, String[] checkPerms) {
@@ -902,7 +922,7 @@ public class CalendarUtils {
 
     /*---- get shared calendars ----*/
     GroupCalendarData groupCalendar = calendarService.getSharedCalendars(username, true);
-    if (groupCalendars != null) {
+    if (groupCalendar != null) {
       for (org.exoplatform.calendar.service.Calendar calendar : groupCalendar.getCalendars()) {
         calendars.add(calendar);
       }

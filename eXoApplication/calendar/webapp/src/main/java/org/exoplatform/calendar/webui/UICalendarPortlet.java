@@ -168,6 +168,9 @@ public class UICalendarPortlet extends UIPortletApplication {
           event = calService.getEvent(inviter, eventId) ;
         }
         if (event != null) {
+          // update status
+          calService.confirmInvitation(inviter, username, calType, event.getCalendarId(), eventId, Utils.ACCEPT);
+          // pop-up event form
           UIPopupAction uiParentPopup = this.getChild(UIPopupAction.class);
           UIPopupContainer uiPopupContainer = uiParentPopup.activate(UIPopupContainer.class, 700);
           uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP);
@@ -231,7 +234,7 @@ public class UICalendarPortlet extends UIPortletApplication {
             context.addUIComponentToUpdateByAjax(uiParentPopup);
           }
           else {
-            this.addMessage(new ApplicationMessage("UICalendarPortlet.msg.you-dont-have-permission-to-view-this-event", null, ApplicationMessage.WARNING ));
+            this.addMessage(new ApplicationMessage("UICalendarPortlet.msg.have-no-permission-to-view-event", null, ApplicationMessage.WARNING ));
             context.addUIComponentToUpdateByAjax(this.getUIPopupMessages());
           }
         }
