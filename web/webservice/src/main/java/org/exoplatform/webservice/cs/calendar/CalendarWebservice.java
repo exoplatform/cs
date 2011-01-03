@@ -530,7 +530,7 @@ public class CalendarWebservice implements ResourceContainer{
       response.append("You have accepted invitation from " + inviter);
       break;
     case Utils.DENY:
-      response.append("You have denied invitation from " + inviter);
+      response.append("You have refused invitation from " + inviter);
       break;
     case Utils.NOTSURE:
       response.append("You have answered invitation from " + inviter + " : Not sure!");
