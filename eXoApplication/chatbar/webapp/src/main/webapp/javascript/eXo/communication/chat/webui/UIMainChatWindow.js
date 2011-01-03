@@ -1396,9 +1396,8 @@ UIMainChatWindow.prototype.buddyItemActionCallbackWrapper = function(event) {
  * @param {Event} event
  */
 UIMainChatWindow.prototype.buddyItemActionCallback = function(event) {
-//  window.jsconsole.warn('button pressed:' + event.button);
-  var buddyNode = event.srcElement || event.target;
-  this.AdvancedDOMEvent.cancelEvent(event);
+  var buddyNode = eXo.core.EventManager.getEventTarget(event);//event.srcElement || event.target;
+  eXo.core.EventManager.cancelEvent(event);
   buddyNode = eXo.core.DOMUtil.findAncestorByClass(buddyNode, 'TitleIconChat');
   if (!buddyNode) {
     return;
@@ -1418,34 +1417,15 @@ UIMainChatWindow.prototype.buddyItemActionCallback = function(event) {
       var Browser = eXo.core.Browser;
       intTop = eXo.core.Mouse.mouseyInPage - 1;
       intLeft = eXo.core.Mouse.mousexInPage - 1;
-      /*
-      var workspaceControlWidth = 0;
-       * 
-	  try {
-        workspaceControlWidth = eXo.portal.UIControlWorkspace.width;
-      } finally {
-        if (isNaN(workspaceControlWidth)) {
-          workspaceControlWidth = 0;
-        }
-      }
-      intLeft -= workspaceControlWidth;
-       */
       if (this.isWebOS) {
         intTop = eXo.core.Mouse.mouseyInPage - Browser.findPosYInContainer(this.rootNode, document.body) - 1;
         intLeft = eXo.core.Mouse.mousexInPage - Browser.findPosXInContainer(this.rootNode, document.body) - 1;
-        /*
-		if (Browser.isIE7()) {
-          if (eXo.portal &&
-              eXo.portal.UIControlWorkspace) {
-            intLeft += workspaceControlWidth;
-          }
-        }
-        */
       }
       with (this.buddyItemActionMenuNode.style) {
         top = intTop + 'px';
         left = intLeft + 'px';
         display = 'block';
+				zIndex = 1000;
       }
   		if(this.ContactAreaNode){
   			this.ContactAreaNode.style.display = 'block';
