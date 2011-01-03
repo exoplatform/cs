@@ -34,6 +34,7 @@ import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.social.core.space.model.Space;
 import org.exoplatform.social.core.space.spi.SpaceService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -151,6 +152,7 @@ public class UICalendarPortlet extends UIPortletApplication {
       String isAjax = pContext.getRequestParameter("ajaxRequest");
       if(isAjax != null && Boolean.parseBoolean(isAjax)) return;
       String username = CalendarUtils.getCurrentUser();
+      User user = CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username);
       String formTime = CalendarUtils.getCurrentTime(this) ;
       CalendarService calService = CalendarUtils.getCalendarService();
       if (url.contains(CalendarUtils.INVITATION_IMPORT_URL)) {
@@ -169,7 +171,8 @@ public class UICalendarPortlet extends UIPortletApplication {
         }
         if (event != null) {
           // update status
-          calService.confirmInvitation(inviter, username, calType, event.getCalendarId(), eventId, Utils.ACCEPT);
+          //calService.confirmInvitation(inviter, username, calType, event.getCalendarId(), eventId, Utils.ACCEPT);
+          calService.confirmInvitation(inviter, user.getEmail(), username, calType, event.getCalendarId(), eventId, Utils.ACCEPT);
           // pop-up event form
           UIPopupAction uiParentPopup = this.getChild(UIPopupAction.class);
           UIPopupContainer uiPopupContainer = uiParentPopup.activate(UIPopupContainer.class, 700);

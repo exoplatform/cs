@@ -1015,13 +1015,16 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       sbBody.append("<td style=\"padding: 4px;\"> ("+atts.size()+") " +sbf.toString()+" </td>");
       sbBody.append("</tr>");
     }    
-
+    
+    Map<String, String> eXoIdMap = new HashMap<String, String>();
+    
     StringBuffer sbAddress = new StringBuffer() ;
     if(event.getInvitation()!= null) {
       for(String s : event.getInvitation()) {
         s = s.trim() ; 
         if(sbAddress.length() > 0) sbAddress.append(",") ;
         sbAddress.append(s) ;
+        eXoIdMap.put(s, null);
       }
     }    
 
@@ -1033,8 +1036,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       if(user != null) {
         if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.COMMA) ;
         sb.append(user.getEmail()) ;
+        eXoIdMap.put(user.getEmail(), s);
       }
     }
+    
     if(sbAddress.length() > 0 && sb.toString().trim().length() > 0 ) sbAddress.append(",") ;
     sbAddress.append(sb.toString().trim()) ;
     
@@ -1073,13 +1078,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       for (String s : sbAddress.toString().split(CalendarUtils.COMMA)) {
         StringBuffer body = new StringBuffer(sbBody.toString());
+        String eXoId = CalendarUtils.isEmpty(eXoIdMap.get(s)) ? "null":eXoIdMap.get(s);
         body.append("<tr>");
         body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
-        body.append("Would you like to attend? </td><td> <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT, invitor, s, event) + "\" >Yes</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.NOTSURE, invitor, s, event) + "\" >Not sure</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.DENY, invitor, s, event) + "\" >No</a>");
+        body.append("Would you like to attend? </td><td> <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT, invitor, s, eXoId, event) + "\" >Yes</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.NOTSURE, invitor, s, eXoId, event) + "\" >Not sure</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.DENY, invitor, s, eXoId, event) + "\" >No</a>");
         body.append("</td></tr>");
         body.append("<tr>");
         body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
-        body.append("Would you like to see more details? </td><td><a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT_IMPORT, invitor, s, event) + "\" >Import to your eXo Calendar</a> or <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.JUMP_TO_CALENDAR, invitor, s, event) + "\" >Jump to eXo Calendar</a>");
+        body.append("Would you like to see more details? </td><td><a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT_IMPORT, invitor, s, eXoId, event) + "\" >Import to your eXo Calendar</a> or <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.JUMP_TO_CALENDAR, invitor, s, eXoId, event) + "\" >Jump to eXo Calendar</a>");
         body.append("</td></tr>");
         body.append("</tbody>");
         body.append("</table>");
@@ -1111,13 +1117,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }     
       for (String s : sbAddress.toString().split(CalendarUtils.COMMA)) {
         StringBuffer body = new StringBuffer(sbBody.toString());
+        String eXoId = CalendarUtils.isEmpty(eXoIdMap.get(s)) ? "null":eXoIdMap.get(s);
         body.append("<tr>");
         body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
-        body.append("Would you like to attend? </td><td> <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT, invitor, s, event) + "\" >Yes</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.NOTSURE, invitor, s, event) + "\" >Not sure</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.DENY, invitor, s, event) + "\" >No</a>");
+        body.append("Would you like to attend? </td><td> <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT, invitor, s, eXoId, event) + "\" >Yes</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.NOTSURE, invitor, s, eXoId, event) + "\" >Not sure</a>" + " - " + "<a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.DENY, invitor, s, eXoId, event) + "\" >No</a>");
         body.append("</td></tr>");
         body.append("<tr>");
         body.append("<td style=\"padding: 4px;  text-align: right; vertical-align: top; white-space:nowrap;\">");
-        body.append("Would you like to see more details? </td><td><a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT_IMPORT, invitor, s, event) + "\" >Import to your eXo Calendar</a> or <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.JUMP_TO_CALENDAR, invitor, s, event) + "\" >Jump to eXo Calendar</a>");
+        body.append("Would you like to see more details? </td><td><a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.ACCEPT_IMPORT, invitor, s, eXoId, event) + "\" >Import to your eXo Calendar</a> or <a href=\"" + getReplyInvitationLink(org.exoplatform.calendar.service.Utils.JUMP_TO_CALENDAR, invitor, s, eXoId, event) + "\" >Jump to eXo Calendar</a>");
         body.append("</td></tr>");
         body.append("</tbody>");
         body.append("</table>");
@@ -1146,14 +1153,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     contactService.saveAddress(CalendarUtils.getCurrentUser(), sbAddress.toString()) ;
   }
 
-  protected String getReplyInvitationLink(int answer, User invitor, String invitee, CalendarEvent event) throws Exception{
+  protected String getReplyInvitationLink(int answer, User invitor, String invitee, String eXoId, CalendarEvent event) throws Exception{
     String portalURL = CalendarUtils.getServerBaseUrl() + PortalContainer.getCurrentPortalContainerName();
     String restURL = portalURL + "/" + PortalContainer.getCurrentRestContextName();
     String calendarURL = CalendarUtils.getCalendarURL();
     
     if (answer == org.exoplatform.calendar.service.Utils.ACCEPT || answer == org.exoplatform.calendar.service.Utils.DENY ||
         answer == org.exoplatform.calendar.service.Utils.NOTSURE) {
-      return (restURL + "/cs/calendar" + CalendarUtils.INVITATION_URL + event.getCalendarId() + "/" + event.getCalType() + "/" + event.getId() + "/" + invitor.getUserName() + "/" + invitee + "/" + answer);
+      return (restURL + "/cs/calendar" + CalendarUtils.INVITATION_URL + event.getCalendarId() + "/" + event.getCalType() + "/" + event.getId() + "/" + invitor.getUserName() + "/" + invitee + "/" + eXoId + "/" + answer);
     }
     if (answer == org.exoplatform.calendar.service.Utils.ACCEPT_IMPORT) {
       return (calendarURL + CalendarUtils.INVITATION_IMPORT_URL + invitor.getUserName() + "/" + event.getId() + "/" + event.getCalType());

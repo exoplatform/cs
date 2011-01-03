@@ -502,22 +502,25 @@ public class CalendarWebservice implements ResourceContainer{
   }
   
   @GET
-  @Path("/cs/calendar/invitation/{calendarId}/{calType}/{eventId}/{inviter}/{invitee}/{answer}")
+  @Path("/cs/calendar/invitation/{calendarId}/{calType}/{eventId}/{inviter}/{invitee}/{eXoId}/{answer}")
   public Response processInvitationReply(@PathParam("calendarId") 
                                          String calendarId, @PathParam("calType")
                                          String calType, @PathParam("eventId") 
                                          String eventId, @PathParam("inviter")
                                          String inviter, @PathParam("invitee") 
-                                         String invitee, @PathParam("answer") 
+                                         String invitee, @PathParam("eXoId")
+                                         String eXoId, @PathParam("answer") 
                                          String answer) throws Exception {
     CacheControl cacheControl = new CacheControl();
     cacheControl.setNoCache(true);
     cacheControl.setNoStore(true);
     CalendarService calService = (CalendarService)ExoContainerContext
                                   .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+    String userId = eXoId.equals("null")?null:eXoId;
     // save invitation status
-    calService.confirmInvitation(inviter, invitee, Integer.parseInt(calType), calendarId, eventId, Integer.parseInt(answer));
-
+    //calService.confirmInvitation(inviter, invitee, Integer.parseInt(calType), calendarId, eventId, Integer.parseInt(answer));
+    calService.confirmInvitation(inviter, invitee, userId, Integer.parseInt(calType), calendarId, eventId, Integer.parseInt(answer));
+    
     int ans = Integer.parseInt(answer);
     StringBuffer response = new StringBuffer();
     response.append("<html><head><title>Invitation Answer</title></head>");
