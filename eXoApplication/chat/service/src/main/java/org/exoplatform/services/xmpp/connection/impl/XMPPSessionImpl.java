@@ -62,7 +62,6 @@ import org.exoplatform.services.xmpp.bean.KickedBannedBean;
 import org.exoplatform.services.xmpp.bean.MUCPacketBean;
 import org.exoplatform.services.xmpp.bean.MessageBean;
 import org.exoplatform.services.xmpp.bean.OccupantBean;
-import org.exoplatform.services.xmpp.bean.OccupantsBean;
 import org.exoplatform.services.xmpp.bean.PresenceBean;
 import org.exoplatform.services.xmpp.bean.PrivilegeChangeBean;
 import org.exoplatform.services.xmpp.bean.SubjectChangeBean;
@@ -328,6 +327,14 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         }
       }, msgFilter);
 
+      
+      connection_.removePacketListener(new PacketListener() {
+        @Override
+        public void processPacket(Packet removedPacket) {
+          System.out.println("Removed packet: " + removedPacket.getPacketID());
+        }
+      });
+      
       SubscriptionFilter subFilter = new SubscriptionFilter();
       connection_.addPacketListener(new PacketListener() {
         public void processPacket(Packet packet) {
@@ -971,6 +978,18 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
     chat.sendMessage(message);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public void sendMessageToMUC(String room, String body, String messageId) throws XMPPException {
+    MultiUserChat chat = multiUserChatManager.getMultiUserChat(room);
+    Message message = chat.createMessage();
+    message.setPacketID(messageId);
+    message.setBody(body);
+    message.setFrom(getUsername());
+    chat.sendMessage(message);
+  }
+  
   /**
    * {@inheritDoc}
    */

@@ -71,7 +71,7 @@
           java -DeXo.env.restContextName=rest-csdemo -jar ../lib/startup.jar .
           By default, Openfire server is dedicated to "portal" portal.
        -->
-      <restContextName>rest</restContextName>
+      <restContextName>rest-csdemo</restContextName>
     </env>
     <provider>
       <exoAuthProvider> 

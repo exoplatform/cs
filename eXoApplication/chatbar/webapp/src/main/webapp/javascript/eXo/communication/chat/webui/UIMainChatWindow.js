@@ -1709,10 +1709,10 @@ UIMainChatWindow.prototype.jabberGetMessageHistory = function(targetPerson, date
  * @param {String} sendTo
  * @param {MessageObject} msg struct: {to:'buddy id', body:'message body'}
  */
-UIMainChatWindow.prototype.jabberSendMessage = function(sendTo, msg) {
+UIMainChatWindow.prototype.jabberSendMessage = function(sendTo, msgObj) {
   this.activeAction = this.SEND_MESSAGE_ACTION;
-  msg = {to: sendTo, body: msg};
-  var msgPackage = eXo.core.JSON.stringify(msg);//'{"to":"' + sendTo + '", "body":"' + msg + '"}';
+  msg = {to: sendTo, body: msgObj.body, id: msgObj.id};//add id for each chat message
+  var msgPackage = eXo.core.JSON.stringify(msg);//'{"to":"' + sendTo + '", "body":"' + msg + '", "id":"' +newId+ '"}';
   this.XMPPCommunicator.sendMessage(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(), msgPackage);
 };
 
@@ -1991,5 +1991,13 @@ UIMainChatWindow.prototype.aimLogin = function(nodeObj) {};
  * Login to icq chat protocol
  */
 UIMainChatWindow.prototype.icqLogin = function(nodeObj) {};
+
+UIMainChatWindow.prototype.jabberEditMessage(msgId){
+  
+};
+
+UIMainChatWindow.prototype.jabberRemoveMessage(msgId){
+  
+};
 
 eXo.communication.chatbar.webui.UIMainChatWindow = new UIMainChatWindow();

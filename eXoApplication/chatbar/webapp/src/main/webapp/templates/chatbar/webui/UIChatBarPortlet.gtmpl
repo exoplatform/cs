@@ -1,5 +1,5 @@
 <%
-  String user = uicomponent.getRemoteUser() ;
+ String user = uicomponent.getRemoteUser() ;
   if(user != null && user.trim().length() > 0) { 
 	def rcontext = _ctx.getRequestContext() ;
 	def jsManager = rcontext.getJavascriptManager();
@@ -29,18 +29,22 @@
 	jsManager.importJavascript("eXo.communication.chat.webui.UICreateNewRoomPopupWindow", "/chatbar/javascript/");
 	jsManager.importJavascript("eXo.communication.chat.webui.UIRoomConfigPopupWindow", "/chatbar/javascript/");
 	jsManager.importJavascript("eXo.communication.chat.webui.UIJoinRoomPopupWindow", "/chatbar/javascript/");
-	jsManager.importJavascript("eXo.communication.chat.webui.UIChatBar", "/chatbar/javascript/");
 	jsManager.importJavascript("eXo.communication.chat.webui.UIPopupMessages", "/chatbar/javascript/");
 	jsManager.importJavascript("eXo.communication.chat.webui.UITooltipAtTop", "/chatbar/javascript/");
 
 	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.applicationId = '" + uicomponent.getId() + "';");
+	
+  jsManager.importJavascript('eXo.cs.UIContextMenu','/csResources/javascript/') ;
+  jsManager.importJavascript('eXo.cs.UIContextMenuChatbar','/csResources/javascript/') ;
+  jsManager.importJavascript("eXo.communication.chat.webui.UIChatBar", "/chatbar/javascript/");
+  jsManager.addJavascript("eXo.communication.chatbar.webui.UIChatBar.showContextMenu('" + uicomponent.id + "', '"+uicomponent.getRemoteUser()+"');") ;
+   
 	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.restcontextname = '" + uicomponent.getRestContextName() + "';");
 	jsManager.addJavascript("eXo.communication.chatbar.eXoChatBar.cometdcontextname = '" + uicomponent.getCometdContextName() + "';");
 	jsManager.addOnLoadJavascript("eXo.communication.chatbar.eXoChatBar.init");
 %>
 <!-- Begin UIChat -->
-<div class="UIChat ChatSharedIcons UIChatBarPortlet" id="<%=uicomponent.id%>" oncontextmenu="return false;"
-    exotoken="<%=uicomponent.getUserToken();%>" username="<%=uicomponent.getRemoteUser();%>">
+<div class="UIChat ChatSharedIcons UIChatBarPortlet" id="<%=uicomponent.id%>" exotoken="<%=uicomponent.getUserToken();%>" username="<%=uicomponent.getRemoteUser();%>">
 
 
 <div class="UIChatbarStatusRB" style="display:none;" statusNotice="<%=_ctx.appRes("UIChatBarPortlet.label.status-notice");%>" onLine="<%=_ctx.appRes("UIChatBarPortlet.label.onLine");%>" extendAway="<%=_ctx.appRes("UIChatBarPortlet.label.extendAway");%>" away="<%=_ctx.appRes("UIChatBarPortlet.label.away");%>" freeToChat="<%=_ctx.appRes("UIChatBarPortlet.label.freeToChat");%>" offLine="<%=_ctx.appRes("UIChatBarPortlet.label.offLine");%>"></div>
@@ -84,7 +88,7 @@
                                 <% _ctx.include("app:/templates/chatbar/webui/UITooltipAtTop.gtmpl"); %>
                                 <!-- Right Click Popup Contact -->
                                 <div style="position: relative;">
-                                    <div class="UIRightClickPopupMenu" style="width: 200px; bottom: 0px; right: 0px;
+                                    <div class="UIRightClickPopupMenu" id="contact-area-id" style="width: 200px; bottom: 0px; right: 0px;
                                         display: none;">
                                         <div class="UIContextMenuContainer">
                                             <div class="TopLeftRightClickPopupMenu">
@@ -141,7 +145,7 @@
                                 style="width: 60px;">
                                 <!-- Right Click Popup Group -->
                                 <div style="width: 60px; position: relative;">
-                                    <div class="UIRightClickPopupMenu" style="width: 200px; display: block; bottom: 0px;
+                                    <div class="UIRightClickPopupMenu" id="room-area-id" style="width: 200px; display: block; bottom: 0px;
                                         right: 0px; display: none;">
                                         <div class="UIContextMenuContainer">
                                             <div class="TopLeftRightClickPopupMenu">
@@ -198,7 +202,7 @@
                                 style="width: 60px;">
                                 <!-- Right Click Popup Online -->
                                 <div style="width: 60px; position: relative;">
-                                    <div class="UIRightClickPopupMenu" style="width: 150px; bottom: 0px; right: 0px;
+                                    <div class="UIRightClickPopupMenu" id="status-area-id" style="width: 150px; bottom: 0px; right: 0px;
                                         display: none;">
                                         <div class="UIContextMenuContainer">
                                             <div class="TopLeftRightClickPopupMenu">
@@ -1325,8 +1329,39 @@
                         <div class="MiddleRightBoxMessageChat">
                             <div class="UIRightPopupMenuContainer">
                                 <div class="ContextChat">
-                                    <span></span>
-                                </div>
+                                    <!--<span></span>-->
+                                    <% /*Begin Chat message Popup Menu*/ %>
+									<div class="UIRightClickPopupMenu" id="UIChatMsgPopupMenu" eXoCallback="eXo.communication.chatbar.webui.UIChatBar.chatMsgPopupMenuCallback" oncontextmenu="return false;">
+							          <div class="UIContextMenuContainerPopupMenu">
+							            <div class="TopLeftRightClickPopupMenu">
+							              <div class="TopRightRightClickPopupMenu">
+							                <div class="TopCenterRightClickPopupMenu"><span></span></div>
+							              </div>
+							            </div>
+							            
+							            <div class="MiddleLeftRightClickPopupMenu">
+							              <div class="MiddleRightRightClickPopupMenu">
+							                <div class="UIRightPopupMenuContainer">
+							                  <div class="MenuChatMessageItem" id="edit-chat-message-id" chatmessageId="" onclick="eXo.communication.chatbar.webui.UIChatWindow.doProcessMessage(this);">
+							                    <div class="ItemChatMessageIcon EditMessageIcon"><%=_ctx.appRes("UIChatMessage.label.popupmenu.chat-messages-edit") %></div>
+							                  </div>
+							                  <div class="MenuChatMessageItem" id="delete-chat-message-id" chatmessageId="" onclick="eXo.communication.chatbar.webui.UIChatWindow.doProcessMessage(this);">
+							                    <div class="ItemChatMessageIcon DeleteMessageIcon"><%=_ctx.appRes("UIChatMessage.label.popupmenu.chat-messages-delete") %></div>
+							                  </div>
+							                </div>
+							              </div>
+							            </div>
+							            
+							            <div class="BottomLeftRightClickPopupMenu">
+							              <div class="BottomRightRightClickPopupMenu">
+							                <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+							              </div>
+							            </div>
+							          </div>
+							        </div>
+							    <% /*End chat message popup menu*/ %>
+
+                                  </div>
                             </div>
                         </div>
                     </div>
@@ -1378,7 +1413,7 @@
                         <div class="MiddleRightBoxMessageChat">
                             <div class="UIRightPopupMenuContainer">
                                 <div class="ContextChat">
-                                    <span></span>
+                                    <!--<span></span>-->
                                 </div>
                             </div>
                         </div>

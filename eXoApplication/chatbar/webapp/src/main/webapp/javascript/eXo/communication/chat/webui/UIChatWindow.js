@@ -514,19 +514,20 @@ UITabControl.prototype.showAlert = function(msgContent) {
  */
 UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   var myParent = this.UIMainChatWindow.UIChatWindow;
-  if (this.visible &&
-      myParent._isVisible()) {
-	this.unreadMessageCnt = 0;
+  var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
+  var idd = msgObj.id; if(idd == null || idd == undefined) return;
+  if (this.visible && myParent._isVisible()) {
+    this.unreadMessageCnt = 0;
   } else {
     this.unreadMessageCnt++;
     myParent.unreadMessageCnt++;
     eXo.communication.chatbar.webui.UIStateManager.unreadMessageCnt++;
   }
-  if (msgObj &&
-      msgObj.type == 'error') {
+  if (msgObj && msgObj.type == 'error') {
     buddyId = this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO;
     msgObj = msgObj.body;
-  }this.updateUnreadMessage();
+  }
+  this.updateUnreadMessage();
   var buddyIdTmp = buddyId;
   // Detect dupplicated message
   if (this.isGroupChat &&
@@ -548,17 +549,18 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   if (buddyIdTmp.indexOf('@') != -1) {
     buddyIdTmp = buddyIdTmp.substr(0, buddyIdTmp.indexOf('@'));
   }
-  if (this.lastBuddyId != buddyIdTmp ||
-      this.fileTransportRequestIncoming) {
-    msgNode = this.createNewMsgNode(buddyIdTmp, msgObj);
-    this.messagesBoxNode.appendChild(msgNode);
+  if (this.lastBuddyId != buddyIdTmp || this.fileTransportRequestIncoming) {
+    if(myParent.actionbundle.action == null){
+      msgNode = this.createNewMsgNode(buddyIdTmp, msgObj);
+      this.messagesBoxNode.appendChild(msgNode);
+    }
     if (this.fileTransportRequestIncoming) {
       this.fileTransportRequestIncoming = false;
     }
   }
   var contextChatNode = DOMUtil.findFirstDescendantByClass(msgNode, 'div', this.CSS_CLASS.contextChat);
-  var msgTmpNode = document.createElement('div');
-  var msgContent = msgObj['body'] || msgObj;
+  
+  var msgContent = msgObj['body'] || msgObj; 
   msgContent = msgContent + '';
   
   var msgContentTmp = '';
@@ -574,10 +576,25 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
       (msgContent.toLowerCase().indexOf('this room is not anonymous.') != -1)) {
     this.roomConfigured = true;
   }*/
-
-  msgTmpNode.innerHTML = this.messageFilter(msgContent);
-
-  contextChatNode.appendChild(msgTmpNode);
+  var msgItem = null;
+  if(myParent.actionbundle.action == null){
+    msgItem = document.createElement('div');
+    msgItem.className = "ChatMsgItem";
+    msgItem.setAttribute("chatusername", buddyIdTmp);
+    msgItem.id = idd;
+    msgItem.innerHTML = this.messageFilter(msgContent, buddyIdTmp);
+    contextChatNode.appendChild(msgItem);
+  }else if(myParent.actionbundle.action == 'edit'){
+    var messageElementEdited = document.getElementById(myParent.actionbundle.id);
+    if(messageElementEdited == null && messageElementEdited == undefined) return;
+    messageElementEdited.className = "ChatMsgItem";
+    messageElementEdited.setAttribute("chatusername", buddyIdTmp);
+    messageElementEdited.id = myParent.actionbundle.id;
+    messageElementEdited.innerHTML = this.messageFilter(msgContent, buddyIdTmp);
+    myParent.actionbundle.action = null;
+    myParent.actionbundle.id=null;
+    UIMainChatWindow.jabberEditMessage(myParent.actionbundle.id);
+  } 
 
   var max = this.messageContainerNode.scrollHeight - this.messageContainerNode.offsetHeight;
   this.scrollMessageBox();
@@ -596,7 +613,7 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
  *
  * @param {String} msg
  */
-UITabControl.prototype.messageFilter = function(msg) {
+UITabControl.prototype.messageFilter = function(msg, username) {
   // Encode all html entities.
   msg = eXo.core.HTMLUtil.entitiesEncode(msg);
 
@@ -616,9 +633,9 @@ UITabControl.prototype.messageFilter = function(msg) {
   tmpNode.innerHTML = msg;
   tmpNode.style.display = 'none';
   document.body.appendChild(tmpNode);
-  this.textNodeBreakable(tmpNode);
-  msg = tmpNode.innerHTML;
+  msg = this.textNodeBreakable(tmpNode, username);
   tmpNode.parentNode.removeChild(tmpNode);
+  
   return msg;
 };
 
@@ -627,19 +644,22 @@ UITabControl.prototype.messageFilter = function(msg) {
  *
  * @param {HTMLElement} node
  */
-UITabControl.prototype.textNodeBreakable = function(node) {
+UITabControl.prototype.textNodeBreakable = function(node, username) {
   var nodeList = node.childNodes;
+  var uiChatWindow = eXo.communication.chatbar.webui.UIChatWindow;
+  var messageString = '';
   for (var i=0; i<nodeList.length; i++) {
     if (nodeList[i].childNodes) {
-      this.textNodeBreakable(nodeList[i]);
+      messageString = messageString + this.textNodeBreakable(nodeList[i], username);
     }
   }
-  if (node.nodeName == '#text') {
-    var newNode = document.createElement('span');
-    newNode.innerHTML = node.nodeValue.replace(/(.)/g, '$1<wbr>');
-    node.parentNode.insertBefore(newNode, node);
-    node.parentNode.removeChild(node);
-  }
+  if (node.nodeName == '#text')
+    messageString = messageString + node.nodeValue.replace(/(.)/g, '$1<wbr>');
+  return messageString;
+};
+
+UITabControl.prototype.removeMessage(id){
+  
 };
 
 /**
@@ -765,10 +785,13 @@ UITabControl.prototype.sendMessageWrapper = function(event) {
  * - Clear message typing box
  * - Write message to message container box
  */
-UITabControl.prototype.sendMessage = function() {
-  var msgStr = this.msgTypingBox.value;
+UITabControl.prototype.sendMessage = function(msgObj) {
+ // var msgStr = this.msgTypingBox.value;
+  var uiChatWindow = eXo.communication.chatbar.webui.UIChatWindow;
   this.msgTypingBox.value = '';
-  this.writeMsg(this.tabId.owner, msgStr);
+  this.writeMsg(this.tabId.owner, msgObj);
+  uiChatWindow.actionbundle.action = null;
+  uiChatWindow.actionbundle.id=null;
 };
 
 /**
@@ -881,6 +904,8 @@ function UIChatWindow() {
   this.miniBoxChatAnimationId = null;
   this.unreadMessageCnt  = 0;
   eXo.core.Browser.setCookie(this.LR_COOKIE_SESSION_START, (new Date()).getTime());
+  this.EDIT_CHAT_MESSAGE_ID='edit-chat-message-id';
+  this.DEL_CHAT_MESSAGE_ID='delete-chat-message-id';
 }
 
 /**
@@ -1519,17 +1544,19 @@ UIChatWindow.prototype.insertToMessageInputBox = function(txt) {
 UIChatWindow.prototype.sendMsgFromActiveTab = function() {
   var activeTabControl = this.getActiveTabControl();
   var msg = activeTabControl.msgTypingBox.value;
+  var newId = eXo.core.DOMUtil.generateId("ChatMessage");
   if (!msg ||
         (msg && (/^\s+$/).test(msg))) {
     return;
   }
   // Re-Format message
+  msgObj = {'id':newId, 'body':msg};
   if (activeTabControl.isGroupChat) {
-    this.UIMainChatWindow.jabberSendRoomMessage(activeTabControl.tabId.targetPerson, msg);
+    this.UIMainChatWindow.jabberSendRoomMessage(activeTabControl.tabId.targetPerson, msgObj);
   } else {
-    this.UIMainChatWindow.jabberSendMessage(activeTabControl.tabId.targetPerson, msg);
+    this.UIMainChatWindow.jabberSendMessage(activeTabControl.tabId.targetPerson, msgObj);
   }
-  activeTabControl.sendMessage();
+  activeTabControl.sendMessage(msgObj);
 };
 
 /**
@@ -1945,5 +1972,54 @@ UIChatWindow.prototype.autoScroll = function(focusTabIndex) {
   scrollMgr.scrollTo(focusTabIndex);
 };
 // -- / --
+
+//do process message: delete/edit message
+
+UIChatWindow.prototype.doProcessMessage = function(actionElement){
+  if(actionElement == null || actionElement == undefined) return;
+  var DOMUtil = eXo.core.DOMUtil;
+  var chatmsgId = actionElement.getAttribute('chatmessageId');
+  var uiTabControl = this.getActiveTabControl();
+  if(chatmsgId == null || chatmsgId == undefined) return;
+  if(actionElement.id == this.EDIT_CHAT_MESSAGE_ID){
+    //edit chat message
+    this.actionbundle.action = 'edit';
+    this.actionbundle.id     = chatmsgId;
+    var messageChat = document.getElementById(chatmsgId);
+    messageChat = removeWBRtags(messageChat);
+    if(messageChat == null || messageChat == undefined) 
+      messageChat = messageChat.replace(/<wbr>/g, '');
+    uiTabControl.msgTypingBox.value =  messageChat;
+    //uiTabControl.className = ChatEditMessageItem;
+  }else if(actionElement.id == this.DEL_CHAT_MESSAGE_ID){
+    //delete chat message
+    this.actionbundle.action = "delete";
+    this.actionbundle.id     = chatmsgId;
+    var messageChat = document.getElementById(chatmsgId);
+    if(messageChat != null) {
+      messageChat.parentNode.removeChild(messageChat);
+      var success = this.UIMainChatWindow.jabberRemoveMessage(chatmsgId);
+      if(success == 'true')
+        uiTabControl.removeMessage(chatmsgId);
+      else if(success == 'false')
+        alert('Delete message fail');
+    }
+  }
+};
+
+UIChatWindow.prototype.removeWBRtags = function(node) {
+  var nodeList = node.childNodes;
+  var messageString = '';
+  for (var i=0; i<nodeList.length; i++) {
+    if (nodeList[i].childNodes) {
+      messageString = messageString + this.removeWBRtags(nodeList[i]);
+    }
+  }
+  if (node.nodeName == '#text')
+    messageString = messageString + node.nodeValue.replace(/<wbr>/g, '');
+  return messageString;
+};
+
+UIChatWindow.prototype.actionbundle = {'action': null, 'id': null};//default create new message
 
 eXo.communication.chatbar.webui.UIChatWindow = new UIChatWindow();

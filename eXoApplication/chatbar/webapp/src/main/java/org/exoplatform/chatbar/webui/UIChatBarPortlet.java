@@ -55,19 +55,6 @@ public class UIChatBarPortlet extends UIPortletApplication {
     PortletRequestContext context = (PortletRequestContext)  WebuiRequestContext.getCurrentInstance() ;
     PortletRequest prequest = context.getRequest() ;
     windowId = prequest.getWindowID() ;
-    
-    //get previous status, now we use not this mesthod.
-/*  ExoContainer container = ExoContainerContext.getCurrentContainer();
-    XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
-    XMPPSession session = messenger.getSession(this.getRemoteUser());
-    DefaultPresenceStatus dps = null;
-    if(container != null) dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
-    if(session != null){//chat server available
-      if(dps != null){
-        String ps = dps.getPreviousStatus(this.getRemoteUser());
-        if(ps != null) setStatus(ps);
-      }  
-    }else  setStatus(null);*/
   }
 
   public String getId() {
@@ -173,7 +160,6 @@ public class UIChatBarPortlet extends UIPortletApplication {
       return Utils.getServerBaseUrl() + path;
     }
   }
-  
 
   private PortletPreferences getPortletPreferences() {
     PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance() ;
