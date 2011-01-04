@@ -161,8 +161,8 @@ public class UIPublicAddressPermission extends UIContainer implements UIPopupCom
       contactService.savePublicAddressBook(group, false) ;
       uiForm.updateGroupGrid(group);
       event.getRequestContext().addUIComponentToUpdateByAjax(
-          uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;      
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
+          uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChild(UIGrid.class)) ;
     }
   }
   
