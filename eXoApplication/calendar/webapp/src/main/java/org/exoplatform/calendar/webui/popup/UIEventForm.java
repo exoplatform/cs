@@ -930,6 +930,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     return false ;
   }
   
+  /**
+   * Fill data from invitation event to current event form 
+   * @param calSetting
+   * @param event
+   * @param calendarId
+   * @param formtime
+   * @throws Exception
+   */
   public void importInvitationEvent(CalendarSetting calSetting, CalendarEvent event, String calendarId, String formtime) throws Exception {
     if(event != null) {
       setEventSumary(event.getSummary()) ;

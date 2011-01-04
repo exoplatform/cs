@@ -155,7 +155,10 @@ public class Utils {
   
   final public static String CALENDAR_REMINDER = "reminders".intern();
   final public static String CALENDAR_APP = "CalendarApplication".intern() ;
-
+  
+  /**
+   * These constants were used to indicate participant's answer or action in invitation mail  
+   */
   public static final int DENY = 0 ;
   public static final int ACCEPT = 1 ;
   public static final int NOTSURE = 2 ;

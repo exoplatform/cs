@@ -171,7 +171,6 @@ public class UICalendarPortlet extends UIPortletApplication {
         }
         if (event != null) {
           // update status
-          //calService.confirmInvitation(inviter, username, calType, event.getCalendarId(), eventId, Utils.ACCEPT);
           calService.confirmInvitation(inviter, user.getEmail(), username, calType, event.getCalendarId(), eventId, Utils.ACCEPT);
           // pop-up event form
           UIPopupAction uiParentPopup = this.getChild(UIPopupAction.class);
@@ -186,6 +185,9 @@ public class UICalendarPortlet extends UIPortletApplication {
           uiEventForm.setEmailReminder(false) ;
           uiEventForm.setEmailRepeat(false) ;
           context.addUIComponentToUpdateByAjax(uiParentPopup);
+        } else {
+          this.addMessage(new ApplicationMessage("UICalendarPortlet.msg.event-was-not-found", null, ApplicationMessage.ERROR));
+          context.addUIComponentToUpdateByAjax(this.getUIPopupMessages());
         }
         return;
       }

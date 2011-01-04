@@ -291,7 +291,7 @@ public interface CalendarService {
   /**
    * Get a group event from eventID
    * @param eventId
-   * @return
+   * @return CalendarEvent object or null if event was not found
    * @throws Exception
    */
   public CalendarEvent getGroupEvent(String eventId) throws Exception;
