@@ -51,10 +51,6 @@ public class UIConfirmForm extends UIForm implements UIPopupComponent{
   }
 
 
-  public String[] getActions() {
-    // TODO Auto-generated method stub
-    return new String[]{"ConfirmOK","ConfirmCancel"};
-  }
   @Override
    public String event(String name) throws Exception {
     StringBuilder b = new StringBuilder() ;

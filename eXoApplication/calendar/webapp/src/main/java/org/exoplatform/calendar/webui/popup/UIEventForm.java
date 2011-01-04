@@ -1823,6 +1823,15 @@ public Attachment getAttachment(String attId) {
         UIConfirmForm confirmForm =  pAction.activate(UIConfirmForm.class, 500);
         confirmForm.setConfirmMessage(uiForm.confirm_msg);
         confirmForm.setConfig_id(uiForm.getId()) ;
+        
+        String[] actions;
+        if (uiForm.participants_.isEmpty()) {
+          actions = new String[] {"ConfirmCancel"};
+        } else {
+          actions = new String[] {"ConfirmOK","ConfirmCancel"};
+        }
+        
+        confirmForm.setActions(actions);
         event.getRequestContext().addUIComponentToUpdateByAjax(pAction) ;
       }
       else {
