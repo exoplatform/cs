@@ -1825,7 +1825,7 @@ public Attachment getAttachment(String attId) {
         confirmForm.setConfig_id(uiForm.getId()) ;
         
         String[] actions;
-        if (uiForm.participants_.isEmpty()) {
+        if (CalendarUtils.isEmpty(uiForm.getParticipantValues()) && CalendarUtils.isEmpty(uiForm.getInvitationEmail())) {
           actions = new String[] {"ConfirmCancel"};
         } else {
           actions = new String[] {"ConfirmOK","ConfirmCancel"};
