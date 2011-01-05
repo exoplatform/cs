@@ -24,12 +24,9 @@ UIContextMenuChatbar.prototype.show = function(evt) {
 		"y": eXo.core.Browser.findMouseYInPage(_e)
 	} ;
 	var menuElementId = UIContextMenu.getMenuElementId() ;
-	//var currentPortlet = eXo.core.DOMUtil.findAncestorById(UIContextMenu.attachedElement, UIContextMenu.chatbarPortletId);
-	var templateAreaElement = eXo.core.DOMUtil.findAncestorById(UIContextMenu.attachedElement, UIContextMenu.templateAreaId);
-	//if (menuElementId && currentPortlet != null) {
-	if (menuElementId && templateAreaElement != null) {
-		//UIContextMenu.menuElement = eXo.core.DOMUtil.findDescendantById(templateAreaElement, menuElementId) ; 
-		UIContextMenu.menuElement = eXo.core.DOMUtil.findDescendantById(templateAreaElement, menuElementId) ;
+	var currentPortlet = eXo.core.DOMUtil.findAncestorById(UIContextMenu.attachedElement, UIContextMenu.chatbarPortletId);
+	if (menuElementId && currentPortlet != null) {
+		UIContextMenu.menuElement = eXo.core.DOMUtil.findDescendantById(currentPortlet, menuElementId) ;
 		var callback = UIContextMenu.getCallback(UIContextMenu.menuElement) ;
 		if(callback) {
 			callback = callback + "(_e)" ;

@@ -39,6 +39,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.presence.DefaultPresenceStatus;
@@ -293,6 +294,7 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
             if(packet.getPacketID() == null)
               packet.setPacketID(CodingUtils.encodeToHex(UUID.randomUUID().toString()));
+              //packet.setPacketID("Chatmessage-" + IdGenerator.generate());
             HistoricalMessage historyMsg = HistoryUtils.messageToHistoricalMessage((Message) packet);
             MessageBean message = TransformUtils.messageToBean(historyMsg);
             /*history.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage((Message) packet),

@@ -693,4 +693,10 @@ XMPPCommunicator.prototype.loadJsResourceBundle = function(locale, transportName
   request.process() ;
 };
 
+XMPPCommunicator.prototype.removeChatMessage = function(username, transportName, handler, msgId) {
+  var url = this.SERVICE_URL + '/' + transportName + '/removechatmessage/' + username + '/' + msgId;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
 eXo.communication.chatbar.core.XMPPCommunicator = new XMPPCommunicator();

@@ -94,8 +94,15 @@ public class Conversation {
     if(message.getId() != null)
       for(HistoricalMessageImpl hisMessage: messageList)
       {
-        if(message.getId().equals(hisMessage.getId()) && message.getFrom().equals(hisMessage.getFrom())){
+        if(message.getId().equals(hisMessage.getId()) && 
+            message.getFrom().equals(hisMessage.getFrom())){// && hisMessage.getTo().equalsIgnoreCase(hisMessage.getTo())
           hasExist = true;
+          //edit message here
+          List<HistoricalMessageImpl> tmp1 = messageList.subList(0, messageList.indexOf(hisMessage));
+          List<HistoricalMessageImpl> tmp2 = messageList.subList(messageList.indexOf(hisMessage) + 1, messageList.size());
+          messageList = new ArrayList<HistoricalMessageImpl>();
+          messageList.addAll(tmp1);
+          messageList.addAll(tmp2);
           break;
         }
       }

@@ -65,11 +65,12 @@ UIChatBar.prototype.changeAction = function(menu, id){
   var subDivs = eXo.core.DOMUtil.findDescendantsByTagName(menu, "div");
   var UIChatWindow = eXo.communication.chatbar.webui.UIChatWindow;
   var divsLen = subDivs.length;
-  //var divAction = new Array();
   	
   for (var i = 0; i < divsLen; i++) {
-      if (subDivs[i].id == UIChatWindow.EDIT_CHAT_MESSAGE_ID || subDivs[i].id == UIChatWindow.DEL_CHAT_MESSAGE_ID) 
+      if (subDivs[i].id == UIChatWindow.EDIT_CHAT_MESSAGE_ID || subDivs[i].id == UIChatWindow.DEL_CHAT_MESSAGE_ID){
       	subDivs[i].setAttribute('chatmessageId', id);
+      //	if(id == null) subDivs[i].className = "MenuItemDisabled"; 
+      }	
   }
 };
 //end chat message popup menu

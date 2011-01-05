@@ -94,7 +94,8 @@ function UIMainChatWindow() {
   this.JOIN_TO_ROOM_ACTION                = 'Join to room';
   this.LEAVE_FROM_ROOM_ACTION             = 'Leave from room';
   this.LOAD_JS_RESOURCE_BUNDLE            = 'Load js resource bundle';
-
+  this.REMOVE_CHAT_MESSAGE_ACTION         = 'Remove a chat message';
+  
   // MUC event action defined here.
   this.MUC_ACTION_CREATED_ROOM            = 'created';
   this.MUC_ACTION_INVITE_ROOM             = 'invite';
@@ -693,6 +694,10 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
       } catch (error){
     	  alert(serverData.script);
       }
+      break;
+      
+    case this.REMOVE_CHAT_MESSAGE_ACTION:
+      this.isRemovedChatmessageSuccess = true;
       break;
       
     default:
@@ -1996,8 +2001,12 @@ UIMainChatWindow.prototype.jabberEditMessage = function(msgId){
   
 };
 
+UIMainChatWindow.prototype.isRemovedChatmessageSuccess = false;
 UIMainChatWindow.prototype.jabberRemoveMessage = function(msgId){
-  
+  this.activeAction = this.REMOVE_CHAT_MESSAGE_ACTION;
+  var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
+  this.XMPPCommunicator.removeChatMessage(userName, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(), msgId);
+  return isRemovedChatmessageSuccess;
 };
 
 eXo.communication.chatbar.webui.UIMainChatWindow = new UIMainChatWindow();

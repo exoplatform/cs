@@ -659,7 +659,9 @@ UITabControl.prototype.textNodeBreakable = function(node, username) {
 };
 
 UITabControl.prototype.removeMessage = function(id){
-  
+  var removedMsgElement = document.getElementById(id);
+  removedMsgElement.innerHTML = "removed";
+  removedMsgElement.className = "RemovedMessage";
 };
 
 /**
@@ -1999,9 +2001,9 @@ UIChatWindow.prototype.doProcessMessage = function(actionElement){
     if(messageChat != null) {
       messageChat.parentNode.removeChild(messageChat);
       var success = this.UIMainChatWindow.jabberRemoveMessage(chatmsgId);
-      if(success == 'true')
+      if(success == true)
         uiTabControl.removeMessage(chatmsgId);
-      else if(success == 'false')
+      else if(success == false)
         alert('Delete message fail');
     }
   }

@@ -2197,7 +2197,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
   }
   
   @GET
-  @Path("/removemessage/{username}/{msgId}")
+  @Path("/removechatmessage/{username}/{msgId}")
   public Response removeMessage(@PathParam("username") String username, @PathParam("msgId") String id){
     XMPPSession session = messenger.getSession(username);
     OfflineMessageManager oms = new OfflineMessageManager(session.getConnection());

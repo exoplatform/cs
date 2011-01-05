@@ -1775,5 +1775,11 @@ form {
 .UIChatBarPortlet .EditMessageIcon {
   background: transparent url('DefaultSkin/skinIcons/EditMenuPopup.gif') no-repeat left 6px;
 }
+
+.UIChatBarPortlet .RemovedMessage{
+  color:gray;
+  font-style:italic;
+  background-color:green;
+}
 /*chat message popup menu ]*/
 
