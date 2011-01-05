@@ -1992,11 +1992,11 @@ UIMainChatWindow.prototype.aimLogin = function(nodeObj) {};
  */
 UIMainChatWindow.prototype.icqLogin = function(nodeObj) {};
 
-UIMainChatWindow.prototype.jabberEditMessage(msgId){
+UIMainChatWindow.prototype.jabberEditMessage = function(msgId){
   
 };
 
-UIMainChatWindow.prototype.jabberRemoveMessage(msgId){
+UIMainChatWindow.prototype.jabberRemoveMessage = function(msgId){
   
 };
 

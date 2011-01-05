@@ -658,7 +658,7 @@ UITabControl.prototype.textNodeBreakable = function(node, username) {
   return messageString;
 };
 
-UITabControl.prototype.removeMessage(id){
+UITabControl.prototype.removeMessage = function(id){
   
 };
 
