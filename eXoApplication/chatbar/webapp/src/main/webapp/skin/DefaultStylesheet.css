@@ -492,6 +492,9 @@
 }
 
 
+
+
+
 /* For normal page */
 .ResizeArea {
   background: transparent url('DefaultSkin/background/ResizeArea18x18.gif') no-repeat scroll 0%;
@@ -1701,85 +1704,3 @@ form {
 	color: #484848;
 	text-align: center;
 }
-
-/*[chat message popup menu*/
-/*.UIWindow .UIChatBarPortlet1 {
-  margin: 0px;
-  border: none;
-  min-width: 908px;
-}
-.UIChatBarPortlet1 {
-  background: white;
-  min-width: 908px;
-}
-*/
-.UIWindow .UIEmpty {
-  margin: 0px;
-  border: none ;
-  min-width: 0px ;
-}
-
-.UIEmpty {
-  background: none;
-  margin: 0px;
-  min-width: 0px ;
-}
-
-.UIRightClickPopupMenu .MenuChatMessageItem {
-  font-size:11px;
-}
-
-.UIRightClickPopupMenu .MenuChatMessageItem .ItemChatMessageIcon{
-  padding: 0px 5px 0px 26px; /* orientation=lt */
-  padding: 0px 26px 0px 5px; /* orientation=rt */
-  margin: 0px 2px;
-  line-height: 25px;
-}
-
-.UIRightClickPopupMenu .MenuChatMessageItem .ItemChatMessageIcon:hover {
-  background-color: #dee4f2;
-  color: orange;
-}
-
-.UIChatBarPortlet .UIRightClickPopupMenu .ItemChatMessageIcon {
-  text-align: left; /* orientation=lt */
-  text-align: right; /* orientation=rt */
-  height: 25px;
-  line-height: 25px;
-  cursor: pointer;
-  display: block;
-  padding: 0px 0px 0px 26px; /* orientation=lt */
-  padding: 0px 26px 0px 0px; /* orientation=rt */
-}
-
-.UIChatBarPortlet .UIRightClickPopupMenu .ItemChatMessageIcon:hover {
-  color: orange;
-  background-color: #DEE4F2;
-  cursor:point;
-}
-
-.UIChatBarPortlet .UIContextMenuContainerPopupMenu .MenuChatMessageItem .ItemChatMessageIcon{
-  background-position: 4px center; /* orientation=lt */
-  background-position: 98% center; /* orientation=rt */
-}
-
-.UIChatBarPortlet .UIContextMenuContainerPopupMenu {
-  white-space: nowrap;
-  border: 1px solid #929292;
-}
-
-.UIChatBarPortlet .DeleteMessageIcon {
-  background: transparent url('DefaultSkin/skinIcons/DeleteMenuPopup.gif') no-repeat left 6px;
-}
-
-.UIChatBarPortlet .EditMessageIcon {
-  background: transparent url('DefaultSkin/skinIcons/EditMenuPopup.gif') no-repeat left 6px;
-}
-
-.UIChatBarPortlet .RemovedMessage{
-  color:gray;
-  font-style:italic;
-  background-color:green;
-}
-/*chat message popup menu ]*/
-

@@ -39,7 +39,6 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.presence.DefaultPresenceStatus;
@@ -63,6 +62,7 @@ import org.exoplatform.services.xmpp.bean.KickedBannedBean;
 import org.exoplatform.services.xmpp.bean.MUCPacketBean;
 import org.exoplatform.services.xmpp.bean.MessageBean;
 import org.exoplatform.services.xmpp.bean.OccupantBean;
+import org.exoplatform.services.xmpp.bean.OccupantsBean;
 import org.exoplatform.services.xmpp.bean.PresenceBean;
 import org.exoplatform.services.xmpp.bean.PrivilegeChangeBean;
 import org.exoplatform.services.xmpp.bean.SubjectChangeBean;
@@ -294,7 +294,6 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
             if(packet.getPacketID() == null)
               packet.setPacketID(CodingUtils.encodeToHex(UUID.randomUUID().toString()));
-              //packet.setPacketID("Chatmessage-" + IdGenerator.generate());
             HistoricalMessage historyMsg = HistoryUtils.messageToHistoricalMessage((Message) packet);
             MessageBean message = TransformUtils.messageToBean(historyMsg);
             /*history.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage((Message) packet),
@@ -329,14 +328,6 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
         }
       }, msgFilter);
 
-      
-      connection_.removePacketListener(new PacketListener() {
-        @Override
-        public void processPacket(Packet removedPacket) {
-          System.out.println("Removed packet: " + removedPacket.getPacketID());
-        }
-      });
-      
       SubscriptionFilter subFilter = new SubscriptionFilter();
       connection_.addPacketListener(new PacketListener() {
         public void processPacket(Packet packet) {
@@ -980,18 +971,6 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
     chat.sendMessage(message);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public void sendMessageToMUC(String room, String body, String messageId) throws XMPPException {
-    MultiUserChat chat = multiUserChatManager.getMultiUserChat(room);
-    Message message = chat.createMessage();
-    message.setPacketID(messageId);
-    message.setBody(body);
-    message.setFrom(getUsername());
-    chat.sendMessage(message);
-  }
-  
   /**
    * {@inheritDoc}
    */

@@ -87,7 +87,6 @@ import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.XMPPError;
 import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.Form;
-import org.jivesoftware.smackx.OfflineMessageManager;
 import org.jivesoftware.smackx.ReportedData;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
@@ -1966,7 +1965,6 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       Message message = new Message(messageBean.getTo(), Message.Type.chat);
       message.setFrom(from);
       message.setBody(messageBean.getBody());
-      message.setPacketID(messageBean.getId());  System.out.println("SEND MESSAGE: " + messageBean.getId());
       session.sendMessage(message);
       return Response.ok().cacheControl(cc).build();
     } else {
@@ -1993,8 +1991,7 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       String body = messageBean.getBody();
       XMPPSession session = messenger.getSession(username);
       if (session != null) {
-        //session.sendMessageToMUC(room, body);
-        session.sendMessageToMUC(room, body, messageBean.getId());
+        session.sendMessageToMUC(room, body);
         return Response.ok().cacheControl(cc).build();
       } else {
         return Response.status(HTTPStatus.INTERNAL_ERROR).build();
@@ -2194,25 +2191,5 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       }
     }
     return Response.ok("server_is_not_available", MediaType.TEXT_PLAIN).cacheControl(cc).build();
-  }
-  
-  @GET
-  @Path("/removechatmessage/{username}/{msgId}")
-  public Response removeMessage(@PathParam("username") String username, @PathParam("msgId") String id){
-    XMPPSession session = messenger.getSession(username);
-    OfflineMessageManager oms = new OfflineMessageManager(session.getConnection());
-    boolean success = false;
-    if(session != null && oms != null){
-        try {
-          List<String> removedMessagesId = new ArrayList<String>();
-          removedMessagesId.add(id);
-          oms.deleteMessages(removedMessagesId);
-          success = true;
-        } catch (XMPPException e) {
-          e.printStackTrace();
-          success = false;
-        }   
-    }
-    return Response.ok(success, MediaType.TEXT_PLAIN).cacheControl(cc).build();
   }
 }

@@ -328,16 +328,6 @@ public interface XMPPSession {
   void sendMessageToMUC(String room, String body) throws XMPPException;
 
   /**
-   * Send message to the room.
-   * 
-   * @param room the room name
-   * @param body the body of message
-   * @param chat message id
-   * @throws XMPPException the XMPPException
-   */
-  void sendMessageToMUC(String room, String body, String id) throws XMPPException;
-  
-  /**
    * Change presence for current user.
    * 
    * @param presence the new <code>Presence</code>.

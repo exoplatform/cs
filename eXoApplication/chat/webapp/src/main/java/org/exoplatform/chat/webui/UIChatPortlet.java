@@ -29,6 +29,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.mortbay.cometd.AbstractBayeux;
 import org.mortbay.cometd.continuation.EXoContinuationBayeux;
+
 /**
  * Author : Uoc Nguyen
  *          uoc.nguyen@exoplatform.com
@@ -37,6 +38,7 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
 @ComponentConfig(
    lifecycle = UIApplicationLifecycle.class, 
    template = "app:/templates/chat/webui/UIChatPortlet.gtmpl"
+
 )
 public class UIChatPortlet extends UIPortletApplication {
   private String windowId; 
@@ -88,5 +90,4 @@ public class UIChatPortlet extends UIPortletApplication {
     }
     return cometdContextName;
   }
-  
 }
