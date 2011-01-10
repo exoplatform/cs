@@ -208,7 +208,6 @@ eXoEventGadget.prototype.showDetail = function(obj){
 eXoEventGadget.prototype.onLoadHander = function(){
 	eXoEventGadget.getPrefs();
 	eXoEventGadget.getCalendars();
-	eXoEventGadget.getData();
 	eXoEventGadget.trigger();
 	setTimeout(eXoEventGadget.adjustHeight,500);
 }
@@ -226,15 +225,12 @@ eXoEventGadget.prototype.ajaxAsyncGetRequest = function(url, callback) {
 	if(!callback) return;
 	request.onreadystatechange = function(){
 		if (request.readyState == 4) {
-			if ((request.status == 200 || request.status == 204)) {
+			if (request.status == 200) {
 				var data = gadgets.json.parse(request.responseText);
-				if(data.info == null) {
-					eXoEventGadget.notify();
-					return;
-				} 
 				callback(data);
 			}
-			if (request.status == 404) {
+			//IE treats a 204 success response status as 1223. This is very annoying
+			if (request.status == 404  || request.status == 204  || request.status == 1223) {
 				eXoEventGadget.notify();
 	  	}
 		}
@@ -280,6 +276,7 @@ eXoEventGadget.prototype.write2Setting = function(data){
 		html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
 	}
 	frmSetting["calendars"].innerHTML = html;
+	eXoEventGadget.getData();
 }
 eXoEventGadget.prototype.convertCalendar = function(data){
 	var arr = new Array();
