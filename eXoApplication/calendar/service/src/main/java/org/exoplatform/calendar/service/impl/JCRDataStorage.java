@@ -3430,16 +3430,16 @@ public class JCRDataStorage implements DataStorage {
     calendarNode.setProperty(Utils.EXO_REMOTE_SYNC_PERIOD, syncPeriod);
     calendarNode.setProperty(Utils.EXO_REMOTE_USERNAME, (remoteUser==null?"":remoteUser));
     calendarNode.setProperty(Utils.EXO_REMOTE_PASSWORD, (remotePassword==null?"":remotePassword));
-    calendarNode.setProperty(Utils.EXO_REMOTE_LAST_UPDATED, getGreenwichMeanTime());
     calendarNode.save();
     return eXoCalendar;
   }
-  
-  public java.util.Calendar getGreenwichMeanTime() {
-    java.util.Calendar calendar = GregorianCalendar.getInstance();
-    calendar.setLenient(false);
-    int gmtoffset = calendar.get(java.util.Calendar.DST_OFFSET) + calendar.get(java.util.Calendar.ZONE_OFFSET);
-    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset);
-    return calendar;
+
+  @Override
+  public void setRemoteCalendarLastUpdated(String username,
+                                           String calendarId,
+                                           java.util.Calendar timeGMT) throws Exception {
+    Node calendarNode = getUserCalendarHome(username).getNode(calendarId);
+    calendarNode.setProperty(Utils.EXO_REMOTE_LAST_UPDATED, timeGMT);
+    calendarNode.save();
   }
 }

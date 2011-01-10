@@ -752,4 +752,12 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     return remoteCalendarService;
   }
 
+  @Override
+  public void setRemoteCalendarLastUpdated(String owner,
+                                           String calendarId,
+                                           java.util.Calendar timeGMT) throws Exception {
+    storage_.setRemoteCalendarLastUpdated(owner, calendarId, timeGMT);
+    
+  }
+
 }

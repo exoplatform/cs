@@ -364,6 +364,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     Calendar eXoCalendar = storage_.createRemoteCalendar(username, calendarName, remoteUrl, CalendarService.ICALENDAR, syncPeriod, remoteUser, remotePassword);
     
     importRemoteCalendar(username, eXoCalendar.getId(), icalInputStream);
+    storage_.setRemoteCalendarLastUpdated(username, eXoCalendar.getId(), Utils.getGreenwichMeanTime());
     return eXoCalendar;
   }
 
@@ -385,6 +386,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     Calendar eXoCalendar = storage_.createRemoteCalendar(username, calendarName, calDavUrl, CalendarService.CALDAV, syncPeriod, remoteUser, remotePassword);
     
     importRemoteCalendar(username, eXoCalendar.getId(), icalInputStream);
+    storage_.setRemoteCalendarLastUpdated(username, eXoCalendar.getId(), Utils.getGreenwichMeanTime());
     return eXoCalendar;
   }
 
@@ -418,7 +420,9 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       storage_.removeUserEvent(username, remoteCalendarId, event.getId());
     }
     
-    return importRemoteCalendar(username, remoteCalendarId, icalInputStream);
+    Calendar eXoCalendar = importRemoteCalendar(username, remoteCalendarId, icalInputStream);
+    storage_.setRemoteCalendarLastUpdated(username, eXoCalendar.getId(), Utils.getGreenwichMeanTime());
+    return eXoCalendar;
   }
 
 }

@@ -922,4 +922,12 @@ public interface DataStorage {
    * @throws Exception
    */
   public Calendar createRemoteCalendar(String username, String calendarName, String remoteUrl, String remoteType, String syncPeriod, String remoteUser, String remotePassword) throws Exception ;
+  
+  /**
+   * @param username
+   * @param calendarId
+   * @param timeGMT
+   * @throws Exception
+   */
+  public void setRemoteCalendarLastUpdated(String username, String calendarId, java.util.Calendar timeGMT) throws Exception;
 }

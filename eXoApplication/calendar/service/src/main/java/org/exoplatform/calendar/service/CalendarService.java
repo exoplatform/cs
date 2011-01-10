@@ -740,6 +740,14 @@ public interface CalendarService {
   public String getRemoteCalendarLastUpdated(String owner, String calendarId) throws Exception;
   
   /**
+   * @param owner the owner of this calendar
+   * @param calendarId the Id of calendar
+   * @param timeGMT GMT time
+   * @throws Exception
+   */
+  public void setRemoteCalendarLastUpdated(String owner, String calendarId, java.util.Calendar timeGMT) throws Exception;
+  
+  /**
    * Get the RemoteCalendarService object
    * @return
    * @throws Exception

@@ -196,6 +196,21 @@ public class Utils {
   public static final String RESOURCEBUNDLE_NAME = "locale.portlet.calendar.CalendarPortlet";
   
   public static int EVENT_NUMBER = -1;
+  
+  /**
+   * These constants were used to determine synchronization period of remote calendar
+   */
+  public static final String SYNC_AUTO = "auto";
+  public static final String SYNC_5MINS = "5mins";
+  public static final String SYNC_10MINS = "10mins";
+  public static final String SYNC_15MINS = "15mins";
+  public static final String SYNC_1HOUR = "1hour";
+  public static final String SYNC_1DAY = "1day";
+  public static final String SYNC_1WEEK = "1week";
+  public static final String SYNC_1YEAR = "1year";
+  public static String[] SYNC_PERIOD = {SYNC_AUTO, SYNC_5MINS, SYNC_10MINS, SYNC_15MINS, SYNC_1HOUR, SYNC_1DAY, SYNC_1WEEK, SYNC_1YEAR};
+  
+  
   /**
    * The method creates an instance of calendar object with time zone is GMT 0
    * @return GregorianCalendar
@@ -298,6 +313,14 @@ public class Utils {
         }
       }
     return sharedUsers.toArray(new String[sharedUsers.size()]);
+  }
+  
+  public static java.util.Calendar getGreenwichMeanTime() {
+    java.util.Calendar calendar = GregorianCalendar.getInstance();
+    calendar.setLenient(false);
+    int gmtoffset = calendar.get(java.util.Calendar.DST_OFFSET) + calendar.get(java.util.Calendar.ZONE_OFFSET);
+    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset);
+    return calendar;
   }
   
 }

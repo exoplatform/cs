@@ -609,4 +609,12 @@ public class MockCalendarService implements CalendarService{
     // TODO Auto-generated method stub
     return null;
   }
+
+  @Override
+  public void setRemoteCalendarLastUpdated(String owner,
+                                           String calendarId,
+                                           java.util.Calendar timeGMT) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
 }

@@ -25,6 +25,7 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -74,16 +75,6 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
   private static final String AUTO_REFRESH = "autoRefresh".intern();
   private static final String LAST_UPDATED = "lastUpdated".intern();
   
-  private static final String SYNC_NONE = "none";
-  private static final String SYNC_5MINS = "5mins";
-  private static final String SYNC_10MINS = "10mins";
-  private static final String SYNC_15MINS = "15mins";
-  private static final String SYNC_1HOUR = "1hour";
-  private static final String SYNC_1DAY = "1day";
-  private static final String SYNC_1WEEK = "1week";
-  private static final String SYNC_1YEAR = "1year";
-  private static final String[] SYNC_PERIOD = {SYNC_NONE, SYNC_5MINS, SYNC_10MINS, SYNC_15MINS, SYNC_1HOUR, SYNC_1DAY, SYNC_1WEEK, SYNC_1YEAR};
-  
   private String remoteType;
   private boolean isAddNew_ = true; 
   private String calendarId_ = null;
@@ -101,7 +92,7 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     password.setType(UIFormStringInput.PASSWORD_TYPE);
     addUIFormInput(password);
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
-    for (String s : SYNC_PERIOD) {
+    for (String s : Utils.SYNC_PERIOD) {
       options.add(new SelectItemOption<String>(s, s));
     }
     addUIFormInput(new UIFormSelectBox(AUTO_REFRESH, AUTO_REFRESH, options));  
@@ -113,7 +104,7 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     this.remoteType = remoteType;
     setUrl(url);
     this.getUIStringInput(URL).setEditable(false);
-    setSyncPeriod(SYNC_NONE);
+    setSyncPeriod(Utils.SYNC_AUTO);
     setSelectColor(Calendar.COLORS[new  Random().nextInt(Calendar.COLORS.length)]);
     setUseAuthentication(true);
   }
