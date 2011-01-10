@@ -1,0 +1,147 @@
+/*
+ * Copyright (C) 2003-2011 eXo Platform SAS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see<http://www.gnu.org/licenses/>.
+ */
+package org.exoplatform.calendar.webui.popup;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormRadioBoxInput;
+import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.URLValidator;
+import org.exoplatform.webui.event.Event.Phase;
+
+/**
+ * Created by The eXo Platform SAS
+ * Author : eXoPlatform
+ *          exo@exoplatform.com
+ * Jan 4, 2011  
+ */
+@ComponentConfig(
+                 lifecycle = UIFormLifecycle.class,
+                 template = "system:/groovy/webui/form/UIForm.gtmpl",
+                 events = {
+                   @EventConfig(listeners = UISubscribeForm.NextActionListener.class),
+                   @EventConfig(listeners = UISubscribeForm.CancelActionListener.class, phase = Phase.DECODE)
+                 }
+             )
+public class UISubscribeForm extends UIForm implements UIPopupComponent {
+  
+  private final static String URL = "url".intern();
+  private final static String TYPE = "type".intern();
+  
+  public UISubscribeForm() throws Exception {
+    List<SelectItemOption<String>> types = new ArrayList<SelectItemOption<String>>();
+    types.add(new SelectItemOption<String>(CalendarService.ICALENDAR, CalendarService.ICALENDAR));
+    types.add(new SelectItemOption<String>(CalendarService.CALDAV, CalendarService.CALDAV));
+    addUIFormInput(new UIFormRadioBoxInput(TYPE, TYPE, types));
+    addUIFormInput(new UIFormStringInput(URL, URL, null).addValidator(MandatoryValidator.class).addValidator(URLValidator.class));
+  }
+
+  @Override
+  public void activate() throws Exception {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void deActivate() throws Exception {
+    // TODO Auto-generated method stub
+
+  }
+  
+  public void init(String type, String remoteUrl) {
+    setType(type);
+    setUrl(remoteUrl);
+  }
+  
+  protected void setType(String type) {
+    this.getChild(UIFormRadioBoxInput.class).setValue(type);
+  }
+  
+  protected String getType() {
+    return this.getChild(UIFormRadioBoxInput.class).getValue();
+  }
+  
+  protected void setUrl(String url) {
+    this.getUIStringInput(URL).setValue(url);
+  }
+  
+  protected String getUrl() {
+    return this.getUIStringInput(URL).getValue();
+  }
+  
+  public String getLabel(String id) throws Exception {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    ResourceBundle res = context.getApplicationResourceBundle() ;     
+    String label = getId() + ".label." + id;
+    try {
+      return res.getString(label);      
+    } catch (MissingResourceException e) {
+      return id ;
+    }
+  } 
+  
+  public static class CancelActionListener extends EventListener<UISubscribeForm> {
+    public void execute(Event<UISubscribeForm> event) throws Exception {
+      // TODO Auto-generated method stub
+      UISubscribeForm uiform = event.getSource();
+      UICalendarPortlet calendarPortlet = uiform.getAncestorOfType(UICalendarPortlet.class) ;
+      calendarPortlet.cancelAction();
+    }
+
+  }
+
+  public static class NextActionListener extends EventListener<UISubscribeForm> {
+    public void execute(Event<UISubscribeForm> event) throws Exception {
+      UISubscribeForm uiform = event.getSource();
+      UICalendarPortlet calendarPortlet = uiform.getAncestorOfType(UICalendarPortlet.class);
+        
+      String url = uiform.getUIStringInput(URL).getValue();
+      String type = uiform.getChild(UIFormRadioBoxInput.class).getValue();
+      UIApplication uiApp = uiform.getAncestorOfType(UIApplication.class);
+      
+      if (CalendarUtils.isEmpty(type)) {
+        uiApp.addMessage(new ApplicationMessage("UISubscribeForm.msg.remote-type-is-not-null", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+      
+      UIPopupAction uiPopupAction = calendarPortlet.getChild(UIPopupAction.class);
+      uiPopupAction.deActivate();
+      UIRemoteCalendar uiRemoteCalendar = uiPopupAction.activate(UIRemoteCalendar.class, 600);
+      uiRemoteCalendar.init(url, type);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);      
+    }
+  }
+
+}

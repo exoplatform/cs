@@ -26,10 +26,10 @@
 	  		<propertyDefinition name="exo:reminderType" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:fromDateTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:fromTime" requiredType="" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:remindDateTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:remindTime" requiredType="" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>	  			  		
 	  		<propertyDefinition name="exo:isRepeat" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
@@ -358,7 +358,27 @@
 	        <valueConstraints/>
 	      </propertyDefinition>        
 	    </propertyDefinitions>
-	  </nodeType>  	 	
+	  </nodeType>
+	  <nodeType name="exo:remoteCalendar" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+      <propertyDefinitions>
+        <propertyDefinition name="exo:remoteUrl" requiredType="String" autoCreated="false" mandatory="true"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition> 
+        <propertyDefinition name="exo:remoteType" requiredType="String" autoCreated="false" mandatory="true"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>
+        <propertyDefinition name="exo:syncPeriod" requiredType="Long" autoCreated="false" mandatory="true"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>  
+        <propertyDefinition name="exo:lastUpdated" requiredType="Date" autoCreated="false" mandatory="true"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>       
+      </propertyDefinitions>
+    </nodeType>  	 	
 </nodeTypes>  
   
    

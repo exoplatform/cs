@@ -2885,3 +2885,37 @@ UICombobox.prototype.getDigit = function(stringNo) {
 	}
 	return parsedNo.toString() ;
 } ;
+
+UICalendarPortlet.prototype.useAuthenticationForRemoteCalendar = function(id) {
+  var USE_AUTHENTICATION = "useAuthentication";
+  var DIV_USERNAME_ID = "id-username";
+  var DIV_PASSWORD_ID = "id-password"; 
+  var TXT_USERNAME_ID = "username";
+  var TXT_PASSWORD_ID = "password";
+  var labelClass = "InputFieldLabel";
+  
+  var divRemoteCalendar = eXo.calendar.UICalendarPortlet.getElementById(id);
+  var divUseAuthentication = eXo.core.DOMUtil.findDescendantById(divRemoteCalendar, USE_AUTHENTICATION);
+  var chkUseAuthentication = eXo.core.DOMUtil.findFirstDescendantByClass(divUseAuthentication, "input", "checkbox");
+  var divUsername = eXo.core.DOMUtil.findDescendantById(divRemoteCalendar, DIV_USERNAME_ID);
+  var lblUsername = eXo.core.DOMUtil.findFirstDescendantByClass(divUsername, "span", labelClass);
+  var txtUsername = eXo.core.DOMUtil.findDescendantById(divUsername, TXT_USERNAME_ID);
+  
+  var divPassword = eXo.core.DOMUtil.findDescendantById(divRemoteCalendar, DIV_PASSWORD_ID);
+  var lblPassword = eXo.core.DOMUtil.findFirstDescendantByClass(divPassword, "span", labelClass);
+  var txtPassword = eXo.core.DOMUtil.findDescendantById(divPassword, TXT_PASSWORD_ID);
+  chkUseAuthentication.onclick = function(){
+    if(this.checked){
+      txtUsername.removeAttribute('disabled');
+      txtPassword.removeAttribute('disabled');
+      lblUsername.style.color = 'black';
+      lblPassword.style.color = 'black';                   
+    } else {
+      txtUsername.disabled = true;
+      txtPassword.disabled = true;
+      lblUsername.style.color = 'gray';
+      lblPassword.style.color = 'gray';
+    }   
+  };
+  
+}

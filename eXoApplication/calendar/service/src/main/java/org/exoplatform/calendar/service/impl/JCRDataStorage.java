@@ -36,6 +36,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.PropertyIterator;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.nodetype.ConstraintViolationException;
@@ -3356,5 +3357,89 @@ public class JCRDataStorage implements DataStorage {
     } finally {
       calendarNode.getSession().logout();
     }
+  }
+  
+  public boolean isRemoteCalendar(String username, String calendarId) throws Exception {
+    Node calendarNode = getUserCalendarHome(username).getNode(calendarId);
+    if (calendarNode.isNodeType(Utils.EXO_REMOTE_MIXIN)) return true;
+    return false;
+  }
+
+  @Override
+  public Calendar updateRemoteCalendarInfo(String username,
+                                           String calendarId,
+                                           String remoteUrl,
+                                           String calendarName,
+                                           String description,
+                                           String syncPeriod,
+                                           String remoteUser,
+                                           String remotePassword) throws Exception {
+    Node calendarNode = getUserCalendarHome(username).getNode(calendarId);
+    calendarNode.setProperty(Utils.EXO_NAME, calendarName);
+    calendarNode.setProperty(Utils.EXO_DESCRIPTION, description);
+    calendarNode.setProperty(Utils.EXO_REMOTE_URL, remoteUrl);
+    calendarNode.setProperty(Utils.EXO_REMOTE_SYNC_PERIOD, syncPeriod);
+    calendarNode.setProperty(Utils.EXO_REMOTE_USERNAME, (remoteUser==null?"":remoteUser));
+    calendarNode.setProperty(Utils.EXO_REMOTE_PASSWORD, (remotePassword==null?"":remotePassword));
+    calendarNode.save();
+    return getUserCalendar(username, calendarId);
+  }
+  
+  public Calendar createRemoteCalendar(String username, String calendarName, String remoteUrl, String remoteType, String syncPeriod, String remoteUser, String remotePassword) throws Exception {
+    Node cat = null;
+    boolean isExists = false ;
+    String categoryId ;
+      
+    // check if calendar category 'Remote' exists
+    NodeIterator iter = getCalendarCategoryHome(username).getNodes() ;
+    while(iter.hasNext()) {
+      cat = iter.nextNode() ;
+      if(cat.getProperty(Utils.EXO_NAME).getString().equals("Remote")) {
+        isExists = true ;
+        break ;
+      }
+    }
+      
+    if(!isExists) {
+      CalendarCategory calendarCate = new CalendarCategory() ;
+      calendarCate.setDescription("Remote Calendar") ;
+      calendarCate.setName("Remote") ;
+      categoryId = calendarCate.getId() ;
+      saveCalendarCategory(username, calendarCate, true) ;
+    } else {
+      categoryId = cat.getProperty(Utils.EXO_ID).getString() ;
+    }
+     
+    // create new eXo calendar in 'Remote' category
+    Calendar eXoCalendar = new Calendar() ;
+    eXoCalendar.setName(calendarName) ;
+    //exoCalendar.setCalendarColor(org.exoplatform.calendar.service.Calendar.COLORS[new Random().nextInt(org.exoplatform.calendar.service.Calendar.COLORS.length -1)]) ;
+    //exoCalendar.setDescription(iCalendar.getProductId().getValue()) ;
+    eXoCalendar.setCategoryId(categoryId) ;
+    eXoCalendar.setPublic(false) ;
+    eXoCalendar.setCalendarOwner(username) ;
+    saveUserCalendar(username, eXoCalendar, true) ;   
+      
+    // add mixin type exo:remoteCalendar to this calendar
+    Node calendarNode = getUserCalendarHome(username).getNode(eXoCalendar.getId());
+    if (!calendarNode.isNodeType(Utils.EXO_REMOTE_MIXIN)) {     
+      calendarNode.addMixin(Utils.EXO_REMOTE_MIXIN);     
+    }
+    calendarNode.setProperty(Utils.EXO_REMOTE_TYPE, remoteType);
+    calendarNode.setProperty(Utils.EXO_REMOTE_URL, remoteUrl);
+    calendarNode.setProperty(Utils.EXO_REMOTE_SYNC_PERIOD, syncPeriod);
+    calendarNode.setProperty(Utils.EXO_REMOTE_USERNAME, (remoteUser==null?"":remoteUser));
+    calendarNode.setProperty(Utils.EXO_REMOTE_PASSWORD, (remotePassword==null?"":remotePassword));
+    calendarNode.setProperty(Utils.EXO_REMOTE_LAST_UPDATED, getGreenwichMeanTime());
+    calendarNode.save();
+    return eXoCalendar;
+  }
+  
+  public java.util.Calendar getGreenwichMeanTime() {
+    java.util.Calendar calendar = GregorianCalendar.getInstance();
+    calendar.setLenient(false);
+    int gmtoffset = calendar.get(java.util.Calendar.DST_OFFSET) + calendar.get(java.util.Calendar.ZONE_OFFSET);
+    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset);
+    return calendar;
   }
 }

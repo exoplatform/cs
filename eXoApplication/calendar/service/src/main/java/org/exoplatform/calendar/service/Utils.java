@@ -117,6 +117,13 @@ public class Utils {
   public static final String EXO_MESSAGE = "exo:message".intern() ;
   public static final String EXO_PARTICIPANT_STATUS = "exo:participantStatus".intern() ;
   public static final String EXO_DATE_MODIFIED = "exo:dateModified".intern();
+  public static final String EXO_REMOTE_MIXIN = "exo:remoteCalendar".intern();
+  public static final String EXO_REMOTE_URL = "exo:remoteUrl".intern();
+  public static final String EXO_REMOTE_TYPE = "exo:remoteType".intern();
+  public static final String EXO_REMOTE_USERNAME = "exo:username".intern();
+  public static final String EXO_REMOTE_PASSWORD = "exo:password".intern();
+  public static final String EXO_REMOTE_SYNC_PERIOD = "exo:syncPeriod".intern();
+  public static final String EXO_REMOTE_LAST_UPDATED = "exo:lastUpdated".intern();
   
   public static final String X_STATUS = "X-STATUS".intern() ;
   

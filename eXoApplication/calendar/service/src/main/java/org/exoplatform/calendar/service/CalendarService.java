@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 
+import org.apache.commons.httpclient.Credentials;
 import org.exoplatform.calendar.service.impl.CalendarEventListener;
 
 /**
@@ -36,7 +37,8 @@ public interface CalendarService {
 
   final public static String                  ICALENDAR             = "ICalendar(.ics)".intern();
   final public static String                  EXPORTEDCSV           = "ExportedCsv(.csv)".intern();
-
+  final public static String                  CALDAV                = "CalDAV".intern();
+  
   /**
    * The method gets all calendar category of current user from data base
    * @param username current user name
@@ -605,4 +607,136 @@ public interface CalendarService {
    * @throws Exception
    */
   public void setGroupTaskStatus(String taskId, String calendarId, String status) throws Exception;
+  
+  /**
+   * Check if the calendar with given calendarId is a remote calendar
+   * @param username the owner of calendar
+   * @param calendarId the Id of calendar
+   * @return true if this calendar is remote, otherwise false
+   * @throws Exception
+   */
+  public boolean isRemoteCalendar(String username, String calendarId) throws Exception;
+  
+  /**
+   * Check if the remote calendar is public access
+   * @param url the url to remote calendar
+   * @param type type of remote calendar access, iCalendar or CalDav
+   * @return true if the remote calendar is pubilc access, false in otherwise (need authentication)
+   * @throws Exception
+   */
+  boolean isPublicAccessRemoteUrl(String url) throws Exception ;
+  
+  /**
+   * Check if the remote url is valid, in 2 cases of iCalendar url or CalDav url
+   * @param url the remote url
+   * @param type the type of remote calendar access, iCalendar or CalDav
+   * @return true if url is available in case of iCalendar type, in case of CalDav, return true only if the server exists and support CalDav
+   * @throws Exception
+   */
+  boolean isValidRemoteUrl(String url, String type) throws Exception ;
+  
+  /**
+   * Check if the remote url is valid, in 2 cases of iCalendar url or CalDav url, with authentication
+   * @param url the remote url
+   * @param type the type of remote calendar, iCalendar or CalDav
+   * @param username the remote username used to authenticate
+   * @param password the remote password used to authenticate
+   * @return true if remote url is available in case of iCalendar and CalDav access support in case of CalDav
+   * @throws Exception
+   */
+  boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws Exception ;
+  
+  /**
+   * Import an online .ics to local calendar
+   * @param username
+   * @param icalUrl
+   * @param calendarName
+   * @param syncPeriod
+   * @throws Exception
+   */
+  public Calendar importRemoteIcs(String username, String icalUrl, String calendarName, String syncPeriod, Credentials credentials) throws Exception;
+  
+  /**
+   * Import a remote calendar to local calendar through CalDav access
+   * @param username the username
+   * @param calDavUrl the url to caldav calendar
+   * @param calendarName name of new calendar
+   * @param syncPeriod synchronize period of this remote calendar
+   * @param credentials credentials to authenticate with caldav server
+   * @return Calendar object
+   * @throws Exception
+   */
+  public Calendar importCalDavCalendar(String username, String calDavUrl, String calendarName, String syncPeriod, Credentials credentials) throws Exception;
+  
+  /**
+   * Reload remote calendar data
+   * @param username owner of the calendar
+   * @param remoteCalendarId id of the calendar
+   * @return the remote Calendar ojbect
+   * @throws Exception
+   */
+  public Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception;
+  
+  /**
+   * @param username
+   * @param calendarId
+   * @param remoteUrl
+   * @param calendarName
+   * @param description
+   * @param syncPeriod
+   * @param remoteUser
+   * @param remotePassword
+   * @return
+   * @throws Exception
+   */
+  public Calendar updateRemoteCalendarInfo(String username, String calendarId, String remoteUrl, String calendarName, String description, String syncPeriod, String remoteUser, String remotePassword) throws Exception;
+  
+  /**
+   * @param owner the owner of this calendar
+   * @param calendarId the Id of calendar
+   * @return Url of remote calendar
+   * @throws Exception
+   */
+  public String getRemoteCalendarUrl(String owner, String calendarId) throws Exception;
+  
+  /**
+   * @param owner the owner of this calendar
+   * @param calendarId the Id of calendar
+   * @return type of remote calendar
+   * @throws Exception
+   */
+  public String getRemoteCalendarType(String owner, String calendarId) throws Exception;
+  
+  /**
+   * @param owner the owner of this calendar
+   * @param calendarId the Id of calendar
+   * @return remote user of remote calendar
+   * @throws Exception
+   */
+  public String getRemoteCalendarUsername(String owner, String calendarId) throws Exception;
+  
+  /**
+   * @param owner the owner of this calendar
+   * @param calendarId the Id of calendar
+   * @return remote password of remote calendar
+   * @throws Exception
+   */
+  public String getRemoteCalendarPassword(String owner, String calendarId) throws Exception;
+  
+  /**
+   * @param owner the owner of this calendar
+   * @param calendarId the Id of calendar
+   * @return synchronization period of remote calendar
+   * @throws Exception
+   */
+  public String getRemoteCalendarSyncPeriod(String owner, String calendarId) throws Exception;
+  
+  /**
+   * @param owner the owner of this calendar
+   * @param calendarId the Id of calendar
+   * @return last updated of remote calendar
+   * @throws Exception
+   */
+  public String getRemoteCalendarLastUpdated(String owner, String calendarId) throws Exception;
+ 
 }

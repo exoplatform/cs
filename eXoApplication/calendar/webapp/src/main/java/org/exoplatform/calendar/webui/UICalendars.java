@@ -45,6 +45,8 @@ import org.exoplatform.calendar.webui.popup.UIImportForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
+import org.exoplatform.calendar.webui.popup.UIRemoteCalendar;
+import org.exoplatform.calendar.webui.popup.UISubscribeForm;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -86,7 +88,9 @@ import org.exoplatform.webui.form.ext.UIFormColorPicker.Colors;
                    @EventConfig(listeners = UICalendars.ShareCalendarActionListener.class),
                    @EventConfig(listeners = UICalendars.ChangeColorActionListener.class),
                    @EventConfig(listeners = UICalendars.TickActionListener.class),
-                   @EventConfig(listeners = UICalendars.CalendarSettingActionListener.class)
+                   @EventConfig(listeners = UICalendars.CalendarSettingActionListener.class),
+                   @EventConfig(listeners = UICalendars.AddSubscribeActionListener.class),
+                   @EventConfig(listeners = UICalendars.RefreshRemoteCalendarActionListener.class)
                  }
 )
 
@@ -380,6 +384,13 @@ public class UICalendars extends UIForm  {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
         } else {
+          // check if calendar is remote
+          if(calService.isRemoteCalendar(currentUser, calendarId)) {
+            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return;
+          }        
+          
           if(!CalendarUtils.PRIVATE_TYPE.equals(calType) && !uiComponent.canAddTaskAndEvent(uiComponent, calendarId, calType)) {
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -445,6 +456,13 @@ public class UICalendars extends UIForm  {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
         } else {
+          // check if calendar is remote
+          if(calService.isRemoteCalendar(currentUser, calendarId)) {
+            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return;
+          }        
+          
           if(!CalendarUtils.PRIVATE_TYPE.equals(calType) && !uiComponent.canAddTaskAndEvent(uiComponent, calendarId, calType)) {
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -489,6 +507,7 @@ public class UICalendars extends UIForm  {
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
+      
       if(CalendarUtils.SHARED_TYPE.equalsIgnoreCase(calType)) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendars.msg.not-support-edit-share-calendar", null, 1)) ;
@@ -496,7 +515,7 @@ public class UICalendars extends UIForm  {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
         return ;
       }
-      try {
+      try {       
         Calendar calendar = null ;
         if(CalendarUtils.PRIVATE_TYPE.equals(calType)) 
         { 
@@ -512,6 +531,14 @@ public class UICalendars extends UIForm  {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
         } else  
         {
+          // check if remote calendar
+          if (calService.isRemoteCalendar(username, calendarId)) {
+            UIRemoteCalendar uiRemoteCalendar = popupAction.activate(UIRemoteCalendar.class, 600);
+            uiRemoteCalendar.init(calendar);
+            event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+            return;
+          }
+      
           // cs-4429: fix for group calendar permission
           if((CalendarUtils.SHARED_TYPE.equals(calType) && !uiComponent.canEdit(Utils.getEditPerUsers(calendar))) ||
              (CalendarUtils.PUBLIC_TYPE.equals(calType) && !uiComponent.canEdit(calendar.getEditPermission()))) 
@@ -891,5 +918,43 @@ public class UICalendars extends UIForm  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;      
     }
   }  
+  
+  public static class AddSubscribeActionListener extends EventListener<UICalendars> {
+
+    @Override
+    public void execute(Event<UICalendars> event) throws Exception {
+      // TODO Auto-generated method stub
+      UICalendars uiCalendars = event.getSource();
+      UICalendarPortlet uiPortlet = uiCalendars.getAncestorOfType(UICalendarPortlet.class);
+      UIPopupAction popupAction = uiPortlet.getChild(UIPopupAction.class);
+      popupAction.deActivate();
+      popupAction.activate(UISubscribeForm.class, 600);
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
+  
+  public static class RefreshRemoteCalendarActionListener extends EventListener<UICalendars> {
+
+    @Override
+  	public void execute(Event<UICalendars> event) throws Exception {
+  		// TODO Auto-generated method stub
+  		UICalendars uiCalendars = event.getSource();
+  		UICalendarPortlet uiPortlet = uiCalendars.getAncestorOfType(UICalendarPortlet.class);
+  		CalendarService calService = CalendarUtils.getCalendarService() ;
+  		String remoteCalendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+  		String username = CalendarUtils.getCurrentUser();
+  		try {		
+  			calService.refreshRemoteCalendar(username, remoteCalendarId);
+  			UICalendarContainer uiVContainer = uiPortlet.findFirstComponentOfType(UICalendarContainer.class) ;
+  			event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;      
+  		}
+  		catch (Exception e) {
+  			UIApplication uiApp = uiCalendars.getAncestorOfType(UIApplication.class) ;
+  			uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-refresh-remote-calendar", null, ApplicationMessage.WARNING)) ;
+  			event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+  		}
+  	}
+	  
+  }
   
 }

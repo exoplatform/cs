@@ -37,6 +37,11 @@
 			                      <%=uiform.getLabel("AddCalendar")%>
 			                    </a>
 			                   </div>
+			                   <div class="MenuItem">   
+                          <a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event("AddSubscribe")%>">
+                            <%=uiform.getLabel("AddSubscribe")%>
+                          </a>
+                         </div>
 			                    <div class="MenuItem">
 			                    <a class="ItemIcon AddCategoryIcon" href="<%=uicomponent.event("AddEventCategory")%>">
 			                      <%=uiform.getLabel("AddEventCategory")%>
@@ -250,6 +255,11 @@
 		                       <%=uiform.getLabel("AddCalendar")%>
 		                    </a>
 		                   </div>
+		                   <div class="MenuItem">   
+                          <a class="ItemIcon AddCalendarIcon" href="<%=uicomponent.event("AddSubscribe", "id")%>">
+                            <%=uiform.getLabel("AddSubscribe")%>
+                          </a>
+                       </div>
 		          				<div class="MenuItem">   
 		                    <a class="ItemIcon EditGroupIcon" href="<%=uicomponent.event("EditGroup","id")%>">
 		                     	<%=uiform.getLabel("EditGroup")%>
@@ -336,6 +346,12 @@
 		                   <div class="MenuItem">   
 		                    <a class="ItemIcon  SharedCalendarIcon" href="<%=uicomponent.event("ShareCalendar","id")%>">
 		                    	<%=uiform.getLabel("ShareCalendar")%>
+		                    </a>
+		                   </div>	
+		                   
+		                   <div class="MenuItem">   
+		                    <a class="ItemIcon  RefreshRemoteIcon" href="<%=uicomponent.event("RefreshRemoteCalendar","id")%>">
+		                    	<%=uiform.getLabel("RefreshRemoteCalendar")%>
 		                    </a>
 		                   </div>		
 		          		</div>

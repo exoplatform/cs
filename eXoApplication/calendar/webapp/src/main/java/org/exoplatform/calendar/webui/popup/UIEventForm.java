@@ -1816,6 +1816,13 @@ public Attachment getAttachment(String attId) {
         return ;
       }
       else {
+        CalendarService calService = CalendarUtils.getCalendarService();
+        if(calService.isRemoteCalendar(CalendarUtils.getCurrentUser(), uiForm.getCalendarId())) {
+          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return;
+        }
+        
       String sendOption = uiForm.getSendOption();
       if(CalendarSetting.ACTION_ASK.equalsIgnoreCase(sendOption)){
           // Show Confirm

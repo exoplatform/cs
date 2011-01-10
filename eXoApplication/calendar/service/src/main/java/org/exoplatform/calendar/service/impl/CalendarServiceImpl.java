@@ -23,10 +23,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
 import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
-
+import org.apache.commons.httpclient.Credentials;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -39,6 +38,7 @@ import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.RemoteCalendarService;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.commons.utils.ExoProperties;
@@ -63,11 +63,13 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   private Map<String, CalendarImportExport>   calendarImportExport_ = new LinkedHashMap<String, CalendarImportExport>();
   protected List<CalendarUpdateEventListener> listeners_            = new ArrayList<CalendarUpdateEventListener>(3);
   protected List<CalendarEventListener> eventListeners_ = new ArrayList<CalendarEventListener>(3);
-
+  private RemoteCalendarService remoteCalendarService;
+  
   public CalendarServiceImpl(InitParams params,NodeHierarchyCreator nodeHierarchyCreator, RepositoryService reposervice, ResourceBundleService rbs) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
     calendarImportExport_.put(CalendarService.ICALENDAR, new ICalendarImportExport(storage_));
     calendarImportExport_.put(CalendarService.EXPORTEDCSV, new CsvImportExport(storage_));
+    remoteCalendarService = new RemoteCalendarServiceImpl(storage_);
     rbs_ = rbs;
     ExoProperties props =  params.getPropertiesParam("eventNumber.info").getProperties() ;
     String eventNumber = props.getProperty("eventNumber");
@@ -625,4 +627,121 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public void setGroupTaskStatus(String taskId, String calendarId, String status) throws Exception {
     storage_.setGroupTaskStatus(taskId, calendarId, status);
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isRemoteCalendar(String username, String calendarId) throws Exception {
+    return storage_.isRemoteCalendar(username, calendarId);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isPublicAccessRemoteUrl(String url) throws Exception {
+    return remoteCalendarService.isPublicAccessRemoteUrl(url);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isValidRemoteUrl(String url, String type) throws Exception {
+    return remoteCalendarService.isValidRemoteUrl(url, type);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws Exception {
+    return remoteCalendarService.isValidRemoteUrl(url, type, remoteUser, remotePassword);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Calendar updateRemoteCalendarInfo(String username, String calendarId, String remoteUrl, String calendarName, String description, String syncPeriod, String remoteUser, String remotePassword) throws Exception {
+    return storage_.updateRemoteCalendarInfo(username, calendarId, remoteUrl, calendarName, description, syncPeriod, remoteUser, remotePassword);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public Calendar importRemoteIcs(String username, String remoteUrl, String calendarName, String syncPeriod, Credentials credentials) throws Exception {
+    return remoteCalendarService.importRemoteIcs(username, remoteUrl, calendarName, syncPeriod, credentials);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception {
+	  return remoteCalendarService.refreshRemoteCalendar(username, remoteCalendarId);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Calendar importCalDavCalendar(String username, String calDavUrl, String calendarName, String syncPeriod, Credentials credentials) throws Exception {
+    return remoteCalendarService.importCalDavCalendar(username, calDavUrl, calendarName, syncPeriod, credentials);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getRemoteCalendarUrl(String owner, String calendarId) throws Exception {
+    Node calendarNode = storage_.getUserCalendarHome(owner).getNode(calendarId);
+    return calendarNode.getProperty(Utils.EXO_REMOTE_URL).getString();
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getRemoteCalendarType(String owner, String calendarId) throws Exception {
+    Node calendarNode = storage_.getUserCalendarHome(owner).getNode(calendarId);
+    return calendarNode.getProperty(Utils.EXO_REMOTE_TYPE).getString();
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getRemoteCalendarUsername(String owner, String calendarId) throws Exception {
+    Node calendarNode = storage_.getUserCalendarHome(owner).getNode(calendarId);
+    return calendarNode.getProperty(Utils.EXO_REMOTE_USERNAME).getString();
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getRemoteCalendarPassword(String owner, String calendarId) throws Exception {
+    Node calendarNode = storage_.getUserCalendarHome(owner).getNode(calendarId);
+    return calendarNode.getProperty(Utils.EXO_REMOTE_PASSWORD).getString();
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getRemoteCalendarSyncPeriod(String owner, String calendarId) throws Exception {
+    Node calendarNode = storage_.getUserCalendarHome(owner).getNode(calendarId);
+    return calendarNode.getProperty(Utils.EXO_REMOTE_SYNC_PERIOD).getString();
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getRemoteCalendarLastUpdated(String owner, String calendarId) throws Exception {
+    Node calendarNode = storage_.getUserCalendarHome(owner).getNode(calendarId);
+    return calendarNode.getProperty(Utils.EXO_REMOTE_LAST_UPDATED).getString();
+  }
+
 }

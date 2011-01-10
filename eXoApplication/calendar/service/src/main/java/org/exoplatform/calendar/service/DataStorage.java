@@ -881,4 +881,45 @@ public interface DataStorage {
   public void autoShareCalendar(List<String> groupsOfUser, String reciever) throws Exception ;
 
   public void autoRemoveShareCalendar(String groupId, String username) throws Exception ;
+  
+  
+  /**
+   * Check if a calendar is a remote calendar by checking mixin type of calendar node
+   * @param username owner of this calendar
+   * @param calendarId id of this calendar
+   * @return true if calendar node has mixin type exo:remoteCalendar, false if otherwise
+   * @throws Exception
+   */
+  public boolean isRemoteCalendar(String username, String calendarId) throws Exception ;
+  
+  
+  /**
+   * Update information about remote calendar
+   * @param username
+   * @param calendarId
+   * @param remoteUrl
+   * @param calendarName
+   * @param description
+   * @param syncPeriod
+   * @param remoteUser
+   * @param remotePassword
+   * @return
+   * @throws Exception
+   */
+  public Calendar updateRemoteCalendarInfo(String username, String calendarId, String remoteUrl, String calendarName, String description, String syncPeriod, String remoteUser, String remotePassword) throws Exception ;
+  
+  
+  /**
+   * Create a new eXo calendar with mixin type 'exo:remoteCalendar' to store data from remote calendar, this method also creates a 'Remote' category
+   * @param username owner of this calendar
+   * @param calendarName name of this calendar
+   * @param remoteUrl remote url of this calendar
+   * @param remoteType remote type of this calendar, iCalendar or CalDav
+   * @param syncPeriod synchronization period
+   * @param remoteUser remote username to authenticate
+   * @param remotePassword remote password to authenticate
+   * @return Calendar object
+   * @throws Exception
+   */
+  public Calendar createRemoteCalendar(String username, String calendarName, String remoteUrl, String remoteType, String syncPeriod, String remoteUser, String remotePassword) throws Exception ;
 }

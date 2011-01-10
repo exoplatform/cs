@@ -25,6 +25,7 @@ import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 
+import org.apache.commons.httpclient.Credentials;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -502,5 +503,103 @@ public class MockCalendarService implements CalendarService{
   public CalendarEvent getGroupEvent(String eventId) throws Exception {
     // TODO Auto-generated method stub
     return null;
+  }
+
+  @Override
+  public boolean isRemoteCalendar(String username, String calendarId) throws Exception {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public Calendar importCalDavCalendar(String username,
+                           String calDavUrl,
+                           String calendarName,
+                           String syncPeriod,
+                           Credentials credentials) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Calendar importRemoteIcs(String username,
+                              String icalUrl,
+                              String calendarName,
+                              String syncPeriod, Credentials credentials) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getRemoteCalendarUrl(String owner, String calendarId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getRemoteCalendarType(String owner, String calendarId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getRemoteCalendarUsername(String owner, String calendarId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getRemoteCalendarPassword(String owner, String calendarId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getRemoteCalendarSyncPeriod(String owner, String calendarId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getRemoteCalendarLastUpdated(String owner, String calendarId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Calendar updateRemoteCalendarInfo(String username,
+                                           String calendarId,
+                                           String remoteUrl,
+                                           String calendarName,
+                                           String description,
+                                           String syncPeriod,
+                                           String remoteUser,
+                                           String remotePassword) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public boolean isPublicAccessRemoteUrl(String url) throws Exception {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public boolean isValidRemoteUrl(String url, String type) throws Exception {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws Exception {
+    // TODO Auto-generated method stub
+    return false;
   }
 }
