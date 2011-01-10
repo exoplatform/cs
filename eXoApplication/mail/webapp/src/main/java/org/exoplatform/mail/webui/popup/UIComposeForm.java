@@ -1036,8 +1036,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       try {
         Account account = mailSvr.getAccountById(usename, accountId);
         if(!uiComposeForm.saveToSentFolder(usename, account, message)){
-          uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.create-massage-not-successful",
-                                                  null, ApplicationMessage.INFO)) ;
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-sent", null, ApplicationMessage.INFO)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
@@ -1137,8 +1136,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
                               false);
         }
         if(!saveMsgSuccess){
-          composeForm.getAncestorOfType(UIApplication.class).addMessage(new ApplicationMessage("UIMoveMessageForm.msg.create-massage-not-successful",
-                                                                                               null, ApplicationMessage.INFO)) ;
+          composeForm.getAncestorOfType(UIApplication.class).addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-sent", null, ApplicationMessage.INFO)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(composeForm.getAncestorOfType(UIApplication.class)) ;
         }
       }
