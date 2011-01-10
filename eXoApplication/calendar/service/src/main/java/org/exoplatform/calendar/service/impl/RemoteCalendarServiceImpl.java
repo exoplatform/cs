@@ -145,7 +145,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     try {
       if (type.equals(CalendarService.ICALENDAR)) {
         HttpURLConnection httpCon = (HttpURLConnection) (new URL(url)).openConnection();
-        httpCon.setRequestMethod("HEAD");
+        httpCon.setRequestMethod("GET");
         String authString = remoteUser + ":" + remotePassword;
         byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
         String authStringEnc = new String(authEncBytes);

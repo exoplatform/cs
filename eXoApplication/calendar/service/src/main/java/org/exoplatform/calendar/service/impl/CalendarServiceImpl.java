@@ -743,5 +743,13 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     Node calendarNode = storage_.getUserCalendarHome(owner).getNode(calendarId);
     return calendarNode.getProperty(Utils.EXO_REMOTE_LAST_UPDATED).getString();
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public RemoteCalendarService getRemoteCalendarService() throws Exception {
+    return remoteCalendarService;
+  }
 
 }

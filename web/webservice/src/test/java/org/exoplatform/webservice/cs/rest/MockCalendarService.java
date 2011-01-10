@@ -38,6 +38,7 @@ import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.RemoteCalendarService;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.impl.CalendarEventListener;
 import org.exoplatform.calendar.service.impl.CsvImportExport;
@@ -601,5 +602,11 @@ public class MockCalendarService implements CalendarService{
   public boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws Exception {
     // TODO Auto-generated method stub
     return false;
+  }
+
+  @Override
+  public RemoteCalendarService getRemoteCalendarService() throws Exception {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

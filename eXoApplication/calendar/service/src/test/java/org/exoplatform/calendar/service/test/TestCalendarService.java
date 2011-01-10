@@ -35,6 +35,7 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.RemoteCalendarService;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.ICalendarImportExport;
@@ -459,25 +460,20 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   }
   
-  /*public void testRemoteIcs() throws Exception {
+  public void testRemoteIcs() throws Exception {
     String url = "http://www.google.com/calendar/ical/exomailtest@gmail.com/private-462ee65e38f964b0aa64a37b427ed673/basic.ics";
     
     CalendarCategory calCategory = new CalendarCategory();
     calCategory.setName("CalendarCategoryName");
     calendarService_.saveCalendarCategory(username, calCategory, true);
-
-    Calendar cal = new Calendar();
-    cal.setName("CalendarName") ;
+    
+    RemoteCalendarService remoteCalendarService =  calendarService_.getRemoteCalendarService();
+    Calendar cal = remoteCalendarService.importRemoteIcs(username, url, "CalendarName", "None", null);
     cal.setCategoryId(calCategory.getId()) ;
-    cal.setPublic(false) ;
     calendarService_.saveUserCalendar(username, cal, true) ;
     
-    ICalendarImportExport icalImportExport =  (ICalendarImportExport)calendarService_.getCalendarImportExports(CalendarService.ICALENDAR);
-    icalImportExport.importToCalendar(username, url, cal.getId());
+    List<CalendarEvent> events =  calendarService_.getUserEventByCalendar(username, Arrays.asList(cal.getId())); 
     
-    List<CalendarEvent> events =  calendarService_.getUserEventByCalendar(username, Arrays.asList(cal.getId()));
-    System.out.print(events.get(0).getSummary());
- 
     assertTrue(events.size() > 0);
     
     calendarService_.removeUserCalendar(username, cal.getId()) ;
@@ -493,23 +489,19 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calCategory.setName("CalendarCategoryName");
     calendarService_.saveCalendarCategory(username, calCategory, true);
     
-    Calendar cal = new Calendar();
-    cal.setName("CalendarName") ;
+    RemoteCalendarService remoteCalendarService =  calendarService_.getRemoteCalendarService();
+    Credentials credentials = new UsernamePasswordCredentials(userName, password);
+    Calendar cal = remoteCalendarService.importCalDavCalendar(username, url,"CalendarName", "None", credentials);
     cal.setCategoryId(calCategory.getId()) ;
     cal.setPublic(false) ;
     calendarService_.saveUserCalendar(username, cal, true) ;
     
-    ICalendarImportExport icalImportExport =  (ICalendarImportExport)calendarService_.getCalendarImportExports(CalendarService.ICALENDAR);
-    Credentials credentials = new UsernamePasswordCredentials(userName, password);
-    icalImportExport.importCalDavToCalendar(username, url, cal.getId(), credentials);
-    
     List<CalendarEvent> events =  calendarService_.getUserEventByCalendar(username, Arrays.asList(cal.getId()));
-    System.out.print(events.get(events.size() - 1).getSummary());
     
     assertTrue(events.size() > 0);
     
     calendarService_.removeUserCalendar(username, cal.getId()) ;
     calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
-  }*/
+  }
  
 }

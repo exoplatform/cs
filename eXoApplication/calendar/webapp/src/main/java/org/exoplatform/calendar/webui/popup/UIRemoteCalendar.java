@@ -42,6 +42,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.ext.UIFormColorPicker;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 
 
@@ -87,11 +88,12 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
   private boolean isAddNew_ = true; 
   private String calendarId_ = null;
   
-  public UIRemoteCalendar() {
+  public UIRemoteCalendar() throws Exception {
     UIFormStringInput remoteUrl = new UIFormStringInput(URL, URL, null);
+    remoteUrl.addValidator(MandatoryValidator.class);
     //remoteUrl.setEditable(false);
     addUIFormInput(remoteUrl);
-    addUIFormInput(new UIFormStringInput(NAME, NAME, null));
+    addUIFormInput(new UIFormStringInput(NAME, NAME, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(USE_AUTHENTICATION, USE_AUTHENTICATION, null));
     addUIFormInput(new UIFormStringInput(USERNAME, USERNAME, null));
@@ -262,7 +264,7 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
           //check valid url
           if(!calService.isValidRemoteUrl(url, remoteType, remoteUser, remotePassword)) {
             // pop-up error message: invalid caldav url
-            uiApp.addMessage(new ApplicationMessage("UIRemoteCalendar.msg.url-is-invalid", null, ApplicationMessage.WARNING));
+            uiApp.addMessage(new ApplicationMessage("UIRemoteCalendar.msg.url-is-invalid-or-wrong-authentication", null, ApplicationMessage.WARNING));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
           }          

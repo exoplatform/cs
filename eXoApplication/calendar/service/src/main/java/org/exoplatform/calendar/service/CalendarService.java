@@ -738,5 +738,12 @@ public interface CalendarService {
    * @throws Exception
    */
   public String getRemoteCalendarLastUpdated(String owner, String calendarId) throws Exception;
+  
+  /**
+   * Get the RemoteCalendarService object
+   * @return
+   * @throws Exception
+   */
+  public RemoteCalendarService getRemoteCalendarService() throws Exception;
  
 }
