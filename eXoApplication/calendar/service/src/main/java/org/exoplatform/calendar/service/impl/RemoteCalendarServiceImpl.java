@@ -156,9 +156,9 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
           client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
           OptionsMethod options = new OptionsMethod(url);
           client.executeMethod(options);
-          Header[] header = options.getResponseHeaders("DAV");
+          Header header = options.getResponseHeader("DAV");
           if (header == null) return false;
-          Boolean support = options.getResponseHeader("DAV").toString().contains("calendar-access");
+          Boolean support = header.toString().contains("calendar-access");
           options.releaseConnection();
           return support;
         }
