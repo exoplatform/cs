@@ -199,7 +199,7 @@ public class ImapConnector extends BaseConnector {
             if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMsgUID();
             msgs.get(l).setId(MimeMessageParser.getMessageId(createdMsgs[l]));
             msgs.get(l).setUID(uid);
-          }else logger.warn("creatMessages(): Mail server could not append a new UID for message: " + msgs.get(l).getSubject());
+          } else logger.warn("Mail server could not append a new UID for message: " + msgs.get(l).getSubject());
           successList.add(msgs.get(l));
       }
         remoteFolder.close(true);
