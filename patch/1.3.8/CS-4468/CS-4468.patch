@@ -1,0 +1,37 @@
+Index: eXoApplication/organization/client/src/main/java/org/exoplatform/rest/client/openfire/Utils.java
+===================================================================
+--- eXoApplication/organization/client/src/main/java/org/exoplatform/rest/client/openfire/Utils.java	(revision 62007)
++++ eXoApplication/organization/client/src/main/java/org/exoplatform/rest/client/openfire/Utils.java	(working copy)
+@@ -19,6 +19,7 @@
+ 
+ import java.io.IOException;
+ import java.net.URL;
++import java.net.URLEncoder;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+@@ -105,13 +106,13 @@
+     Set<String> key_set = params.keySet();
+     _url += (key_set.size() > 0) ? "?" : ""; 
+     for (String key : key_set)
+-      _url += (key + "=" + params.get(key));
++      _url += (key + "=" + URLEncoder.encode(params.get(key), "UTF-8"));
+     GetMethod get = new GetMethod(_url);
+     get.setDoAuthentication(true);
+     int status = httpClient.executeMethod(get);
+     Document resDoc = null;
+     try {
+-      if (get.getResponseBody().length > 0) {
++      if (get.getResponseBody().length > 0 && get.getStatusCode() == 200) {
+         // if response has body
+         resDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+             .parse(get.getResponseBodyAsStream());
+@@ -141,7 +142,7 @@
+     int status = httpClient.executeMethod(post);
+     Document resDoc = null;
+     try {
+-      if (post.getResponseBody().length > 0) {
++      if (post.getResponseBody().length > 0 && post.getStatusCode() == 200) {
+         // if response has body
+         resDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+             .parse(post.getResponseBodyAsStream());
