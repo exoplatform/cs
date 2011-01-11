@@ -1464,6 +1464,58 @@
 											  <span class="SendFileLabel"><%=_ctx.appRes("UIChatBarPortlet.label.sendFile");%></span>
 											 </form>
 											</div>
+											                      <div class="SeperatorLine">
+                                                <span></span>
+                                            </div>
+            
+											                      <div class="Icon HistoryIcon" onclick="eXo.communication.chatbar.webui.UIChatWindow.showPopupMenu(this, event)">
+											                        <div class="IconHolder HistoryIcon">
+                                                <div class="Label DownArrow1Icon"><%=_ctx.appRes("UIChatBarPortlet.label.history") %></div>
+                                              </div> 
+                                              
+                                              <% /*Begin Popup Menu*/ %>
+                                              <div style="position: relative;">
+                                                  <div class="UIRightClickPopupMenu" style="display: none;">
+                                                    <div class="UIContextMenuContainer">
+                                                      <div class="TopLeftRightClickPopupMenu">
+                                                        <div class="TopRightRightClickPopupMenu">
+                                                          <div class="TopCenterRightClickPopupMenu"><span></span></div>
+                                                        </div>
+                                                      </div>
+                                                      <div class="MiddleLeftRightClickPopupMenu">
+                                                        <div class="MiddleRightRightClickPopupMenu">
+                                                          <div class="UIRightPopupMenuContainer">                                                            
+                                                            <a class="MenuItem" onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,0);" href="#">
+                                                              <div class="ItemIcon"><%=_ctx.appRes("UIChatBarPortlet.label.today");%></div>                                                              
+                                                            </a>
+                                                            
+                                                            <a class="MenuItem" onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,7);" href="#">
+                                                              <div class="ItemIcon"><%=_ctx.appRes("UIChatBarPortlet.label.thisWeek");%></div>                                                              
+                                                            </a>
+                                                            
+                                                            <a class="MenuItem" onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,30);" href="#">
+                                                              <div class="ItemIcon"><%=_ctx.appRes("UIChatBarPortlet.label.last30Days");%></div>                                                              
+                                                            </a>
+                                                            
+                                                            <a class="MenuItem" onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,-1);" href="#">
+                                                              <div class="ItemIcon"><%=_ctx.appRes("UIChatBarPortlet.label.beginning");%></div>                                                              
+                                                            </a>
+                                                          
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      <div class="BottomLeftRightClickPopupMenu">
+                                                      <div class="BottomRightRightClickPopupMenu">
+                                                        <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                    
+                                                </div>
+                                              </div>
+                                              <% /*End Popup Menu*/ %>
+                                            </div>
+											                      
                                             <div class="ClearLeft">
                                                 <span></span>
                                             </div>
@@ -1485,27 +1537,6 @@
                 <div class="ChatContainer">
                     <div class="MessagesContainer MarginContainer">
                         <div class="OverflowMessagesContainer">
-                            <div class="HistoryList">
-                                <div class="LeftHistoryList">
-                                    <div class="RightHistoryList">
-                                        <div class="CenterHistoryList">
-                                            <div class="FixHeight">
-                                                <div class="ContainerHistoryList">
-                                                    <span class="LableHistory"><%=_ctx.appRes("UIChatBarPortlet.label.showMessagesFrom");%>:</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,0);"
-                                                        class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.today");%></a> <span class="Line">|</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,7);"
-                                                            class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.thisWeek");%></a> <span class="Line">|</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,30);"
-                                                                class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.last30Days");%></a> <span class="Line">|</span>
-                                                    <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,-1);"
-                                                        class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.beginning");%></a>
-                                                    <div class="ClearLeft">
-                                                        <span></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="MessagesBox">
                                 <span></span>
                             </div>
@@ -1554,6 +1585,60 @@
                                             </div>
                                             <a class="Icon OptionsIcon" title="<%=_ctx.appRes("UIChatBarPortlet.label.roomConfiguration");%>" onclick="eXo.communication.chatbar.webui.UIChatWindow.configRoom(event);">
                                                 <%=_ctx.appRes("UIChatBarPortlet.label.options");%> </a>
+                                                
+                                            <div class="SeperatorLine">
+                                                <span></span>
+                                            </div>
+                                            
+                                            <div class="Icon HistoryIcon" onclick="eXo.communication.chatbar.webui.UIChatWindow.showPopupMenu(this, event)">
+                                              <div class="IconHolder HistoryIcon">
+                                                <div class="Label DownArrow1Icon"><%=_ctx.appRes("UIChatBarPortlet.label.history") %></div>
+                                              </div> 
+                                              
+                                              <% /*Begin Popup Menu*/ %>
+                                              <div style="position: relative;">
+                                                  <div class="UIRightClickPopupMenu" style="display: none;">
+                                                    <div class="UIContextMenuContainer">
+                                                      <div class="TopLeftRightClickPopupMenu">
+                                                        <div class="TopRightRightClickPopupMenu">
+                                                          <div class="TopCenterRightClickPopupMenu"><span></span></div>
+                                                        </div>
+                                                      </div>
+                                                      <div class="MiddleLeftRightClickPopupMenu">
+                                                        <div class="MiddleRightRightClickPopupMenu">
+                                                          <div class="UIRightPopupMenuContainer">                                                            
+                                                            <a class="MenuItem" onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,0);" href="#">
+                                                              <div class="ItemIcon"><%=_ctx.appRes("UIChatBarPortlet.label.today");%></div>                                                              
+                                                            </a>
+                                                            
+                                                            <a class="MenuItem" onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,7);" href="#">
+                                                              <div class="ItemIcon"><%=_ctx.appRes("UIChatBarPortlet.label.thisWeek");%></div>                                                              
+                                                            </a>
+                                                            
+                                                            <a class="MenuItem" onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,30);" href="#">
+                                                              <div class="ItemIcon"><%=_ctx.appRes("UIChatBarPortlet.label.last30Days");%></div>                                                              
+                                                            </a>
+                                                            
+                                                            <a class="MenuItem" onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,-1);" href="#">
+                                                              <div class="ItemIcon"><%=_ctx.appRes("UIChatBarPortlet.label.beginning");%></div>                                                              
+                                                            </a>
+
+                                                            
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      <div class="BottomLeftRightClickPopupMenu">
+                                                      <div class="BottomRightRightClickPopupMenu">
+                                                        <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                    
+                                                </div>
+                                              </div>
+                                              <% /*End Popup Menu*/ %>
+                                            </div>
+                                            
                                             <div class="ClearLeft">
                                                 <span></span>
                                             </div>
@@ -1574,27 +1659,6 @@
                     </div>
                     <div class="MessagesContainer LeftPane">
                         <div class="OverflowMessagesContainer LeftPane">
-                            <div class="HistoryList">
-                                <div class="LeftHistoryList">
-                                    <div class="RightHistoryList">
-                                        <div class="CenterHistoryList">
-                                            <div class="FixHeight">
-                                                <div class="ContainerHistoryList">
-                                                    <span class="LableHistory"><%=_ctx.appRes("UIChatBarPortlet.label.showMessagesFrom");%>:</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,0);"
-                                                        class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.today");%></a> <span class="Line">|</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,7);"
-                                                            class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.thisWeek");%></a> <span class="Line">|</span> <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,30);"
-                                                                class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.last30Days");%></a> <span class="Line">|</span>
-                                                    <a onclick="eXo.communication.chatbar.webui.UIChatWindow.getMessageHistory(event,-1);"
-                                                        class="LinkHistory" href="#"><%=_ctx.appRes("UIChatBarPortlet.label.beginning");%></a>
-                                                    <div class="ClearLeft">
-                                                        <span></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="MessagesBox">
                                 <span></span>
                             </div>

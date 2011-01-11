@@ -1946,4 +1946,21 @@ UIChatWindow.prototype.autoScroll = function(focusTabIndex) {
 };
 // -- / --
 
+UIChatWindow.prototype.showPopupMenu = function(obj, event){
+  var popup = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu");
+  eXo.cs.Utils.show(obj, event);
+  if (eXo.core.Browser.isIE6()) {
+      if (eXo.core.DOMUtil.findDescendantsByTagName(popup, "iframe").length > 0) 
+          return;
+      var ifr = document.createElement("iframe");
+      ifr.frameBorder = 0;
+      ifr.style.width = popup.offsetWidth + "px";
+      ifr.style.height = popup.offsetHeight + "px";
+      ifr.style.position = "absolute";
+      ifr.style.left = "0px";
+      ifr.style.zIndex = -1;
+      popup.appendChild(ifr);
+  }
+};
+
 eXo.communication.chatbar.webui.UIChatWindow = new UIChatWindow();

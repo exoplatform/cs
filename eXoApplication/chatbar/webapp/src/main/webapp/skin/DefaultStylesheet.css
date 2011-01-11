@@ -708,7 +708,7 @@ form {
 
 .UIConversation .Buttons .Actionbar .SendFileLabel {
   position: relative;
-  left: -60px;
+  left: -10px;
   z-index: 0;
 }
 .UIConversation .Buttons .Actionbar .ChatSendFileForm {
@@ -720,7 +720,7 @@ form {
 	filter: alpha(opacity=0);
 	cursor: pointer;
 	position: relative;
-	width: 85px;
+	width: 35px;
 	z-index: 1;
 	
 }
@@ -1703,4 +1703,22 @@ form {
 	margin: 0 auto;
 	color: #484848;
 	text-align: center;
+}
+
+.UIConversation .Buttons .Actionbar .HistoryIcon {
+  height: 25px;
+  cursor: pointer;
+  padding: 0px 1px;
+} 
+
+.UIConversation .Buttons .Actionbar .HistoryIcon .DownArrow1Icon {
+  background-position:right center;
+  line-height:24px;
+  margin-top:0px;
+  padding-right:16px;
+}
+
+.UIConversation .Buttons .Actionbar .HistoryIcon .UIContextMenuContainer .ItemIcon {
+  padding: 0px 5px;
+  font-weight: normal;
 }
