@@ -1,0 +1,80 @@
+Index: eXoApplication/content/webapp/src/main/webapp/groovy/rssreader/webui/UIDetailContent.gtmpl
+===================================================================
+--- eXoApplication/content/webapp/src/main/webapp/groovy/rssreader/webui/UIDetailContent.gtmpl	(revision 64583)
++++ eXoApplication/content/webapp/src/main/webapp/groovy/rssreader/webui/UIDetailContent.gtmpl	(working copy)
+@@ -20,9 +20,10 @@
+ 						</div>
+ 						<div class="RefreshBar">
+ 							<div class="SeparatorLine"><span></span></div>
+-							<a class="LeftRefreshBar" href="<%=uicomponent.event("Refresh")%>" title="Refresh News">
++							<a class="LeftRefreshBar" href="<%=uicomponent.event("Refresh")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".title.refreshbar")%>">
++
+ 								<div class="RightRefreshBar">
+-									<div class="CenterRefreshBar">Refresh News</div>
++									<div class="CenterRefreshBar"><%=_ctx.appRes(uicomponent.getName() + ".label.refreshbar")%></div>
+ 								</div>
+ 							</a>
+ 							<div style="clear: left;"><span></span></div>
+@@ -49,7 +50,7 @@
+ 	          <div class="NewsDetail">
+ 						  <div class="ContentDetailTitle">
+ 							  <div class="ContentItemIcon ItemIcon"><span></span></div>
+-							  <a href="<%=meta.getLink()%>" target="_blank" title="Go to <%=meta.getTitle()%>">
++							  <a href="<%=meta.getLink()%>" target="_blank" title="<%=_ctx.appRes(uicomponent.getName() + ".goto.page")%> <%=meta.getTitle()%>">
+ 							    <%=meta.getTitle()%>
+ 							  </a>
+ 							</div>
+Index: eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_en.properties
+===================================================================
+--- eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_en.properties	(revision 64583)
++++ eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_en.properties	(working copy)
+@@ -28,4 +28,8 @@
+ UIContentNavigation.removeNode=Are you sure you want to delete this node?
+ UIContentNavigation.label.rssreader=RSS Feed Reader
+ ##############################################################################
+-URLValidator.msg.Invalid-Url=Invalid URL format for the field: {0}
+\ No newline at end of file
++URLValidator.msg.Invalid-Url=Invalid URL format for the field: {0}
++UIDetailContent.label.refreshbar=Refresh Bar
++UIDetailContent.title.refreshbar=Refresh Bar
++UIDetailContent.goto.page=Go to
++
+Index: eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_fr.properties
+===================================================================
+--- eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_fr.properties	(revision 64583)
++++ eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_fr.properties	(working copy)
+@@ -28,3 +28,6 @@
+ UIContentNavigation.label.rssreader=Lecteur de Flux RSS
+ ##############################################################################
+ URLValidator.msg.Invalid-Url=Format de l'URL invalide pour le champ : {0}
++UIDetailContent.label.refreshbar=Actualiser
++UIDetailContent.title.refreshbar=Actualiser
++UIDetailContent.goto.page=Aller à
+Index: eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_de.properties
+===================================================================
+--- eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_de.properties	(revision 64583)
++++ eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_de.properties	(working copy)
+@@ -28,4 +28,7 @@
+ UIContentNavigation.removeNode=Sind Sie sich sicher, dass Sie diesen Knoten l&ouml;schen wollen?
+ UIContentNavigation.label.rssreader=RSS Eingabe Reader
+ ##############################################################################
+-URLValidator.msg.Invalid-Url=Ung&uuml;ltiges URL-Format f&uuml;r das Feld: {0}
+\ No newline at end of file
++URLValidator.msg.Invalid-Url=Ung&uuml;ltiges URL-Format f&uuml;r das Feld: {0}
++UIDetailContent.label.refreshbar=Aktualisieren Bar
++UIDetailContent.title.refreshbar=Aktualisieren Bar
++UIDetailContent.goto.page=Gehen Sie zu
+Index: eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_nl.properties
+===================================================================
+--- eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_nl.properties	(revision 64583)
++++ eXoApplication/content/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/rssreader/RSSReaderPortlet_nl.properties	(working copy)
+@@ -28,4 +28,7 @@
+ UIContentNavigation.removeNode=Wilt u deze node verwijderen?
+ UIContentNavigation.label.rssreader=RSS Feed Reader
+ ##############################################################################
+-URLValidator.msg.Invalid-Url=Ongeldig URL formaat voor veld: {0}
+\ No newline at end of file
++URLValidator.msg.Invalid-Url=Ongeldig URL formaat voor veld: {0}
++UIDetailContent.label.refreshbar=Vernieuwen
++UIDetailContent.title.refreshbar=Vernieuwen
++UIDetailContent.goto.page=Go to

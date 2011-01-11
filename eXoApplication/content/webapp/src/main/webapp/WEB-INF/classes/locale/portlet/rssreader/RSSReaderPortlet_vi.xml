@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <!--
+  #####################################################################################
+  #                           EXCEPTION MAPPINGS                                      #
+  #####################################################################################
+  -->
+  <key>Test Vietnamese</key>
+  <!--
+  #############################################################################
+  #  org.exoplatform.content.webui.component.UIContentForm 					#
+  #############################################################################
+  -->
+  <UIContentForm>
+    <label>
+      <name>Tên</name>
+      <description>Mô tả</description>
+      <id> id</id>
+      <url>URL</url>
+      <label>Tên hiển thị</label>
+      <type>Loại</type>
+    </label>
+    <title>Nội dung</title>
+    <action>
+      <Cancel>#{word.cancel}</Cancel>
+      <Save>#{word.save}</Save>
+    </action>
+    <msg>
+      <SameNode>Id này đã tồn tại</SameNode>
+      <UrlNull>Bạn phải nhập URL</UrlNull>
+    </msg>
+  </UIContentForm>
+  <UIDetailContent>
+    <msg>
+      <NotFound>URL này không tìm thấy. Bạn hãy kiểm tra lại URL!</NotFound>
+    </msg>
+  </UIDetailContent>
+  <!--
+  #############################################################################
+  #          org.exoplatform.content.webui.component.UIContentDetail 					#
+  #############################################################################
+  -->
+  <UIContentDetail>
+    <action>
+      <refresh>Cập nhật</refresh>
+    </action>
+    <label>
+      <description>Mô tả</description>
+    </label>
+  </UIContentDetail>
+  <UIDescription>
+    <title>
+      <contentPortlet>Mô tả</contentPortlet>
+    </title>
+    <content>
+      <contentPortlet>eXo RSS Reader</contentPortlet>
+    </content>
+  </UIDescription>
+  <UIContentNavigation>
+    <removeNode>Bạn có chắc muốn xóa nội dung này?</removeNode>
+    <label>
+      <rssreader>Đọc từ Flux RSS</rssreader>
+    </label>
+  </UIContentNavigation>
+  <!--
+  ##############################################################################
+  -->
+  <URLValidator>
+    <msg>
+      <Invalid-Url>Sai định dạng URL: {0}</Invalid-Url>
+    </msg>
+  </URLValidator>
+  <UIDetailContent>
+   <label>
+     <refreshbar>Cập nhật</refreshbar>
+  </label>
+
+   <title>
+     <refreshbar>Cập nhật</refreshbar>
+   </title>
+
+   <goto>
+     <page>Đi đến</page>
+   </goto>
+
+ </UIDetailContent>
+
+</bundle>
+
