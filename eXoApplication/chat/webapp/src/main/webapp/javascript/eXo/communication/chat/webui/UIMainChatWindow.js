@@ -966,6 +966,10 @@ UIMainChatWindow.prototype.processGroupChat = function(eventId) {
           var roomName = inviteInfo.room;
           roomName = roomName.substr(0, roomName.indexOf('@'));
           var fullName = eXo.communication.chat.webui.UIChatWindow.fullNameMap[inviteInfo.inviter];
+          if (fullName == null) {
+            fullName = inviteInfo.inviterName;
+            eXo.communication.chat.webui.UIChatWindow.fullNameMap[inviteInfo.inviter] = fullName;
+          }
           //var msgBuf = inviteInfo.inviter + ' invite you join to room: "' + roomName + '"';
           var msgBuf = this.ResourceBundle.chat_message_room_invite_to_join.replace('{0}', fullName);
           msgBuf = msgBuf.replace('{1}', roomName);
@@ -1111,6 +1115,7 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
   //userNameNode.innerHTML = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
   var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode, 'div');
   window.jsconsole.warn('User changed status: ' + this.userStatus + ' -> ' + status);
+  var previousStatus = this.userStatus;
   this.userStatus = status;
   var presenceData = {};
   presenceData.from = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] + '@' + this.serverInfo.mainServiceName;
@@ -1144,6 +1149,10 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
       this.AdvancedDOMEvent.addEventListener(window, 'unload', this.destroyAll, false);
       this.preChangeStatus(this.ONLINE_STATUS, true);
       eXo.communication.chat.webui.UIStateManager.init(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]);
+      // push delayed messages from xmppsession to cometd
+      if (previousStatus != this.OFFLINE_STATUS) {
+        eXo.communication.chat.webui.UIMainChatWindow.jabberLoadDelayedMessages(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]);
+      }
       break;
     case this.OFFLINE_STATUS:
       //this.unsubscribeCometdTopics();
@@ -1415,6 +1424,8 @@ UIMainChatWindow.prototype.displayMessages = function(messages, cancelIfNotExist
           }
           messages[lastSenderPoint].body = buffer;
           this.UIChatWindow.displayMessage(messages[lastSenderPoint].from, messages[lastSenderPoint], isGroupChat);
+          var username = messages[lastSenderPoint].to.split('@')[0];
+          eXo.communication.chat.webui.UIMainChatWindow.jabberChatConfirm(username, messages[lastSenderPoint].id);
           lastSenderPoint = i;
           lastSender = msgObj.from;
         }
@@ -1426,6 +1437,8 @@ UIMainChatWindow.prototype.displayMessages = function(messages, cancelIfNotExist
         isGroupChat = true;
       }
       this.UIChatWindow.displayMessage(msgObj.from, msgObj, isGroupChat);
+      var username = msgObj.to.split('@')[0];
+      eXo.communication.chat.webui.UIMainChatWindow.jabberChatConfirm(username, msgObj.id);
     }
   } catch(e) {
     window.jsconsole.error('Look up error! developer');
@@ -1826,6 +1839,17 @@ UIMainChatWindow.prototype.jabberLoadJsResourceBundle = function(locale) {
   this.activeAction = this.LOAD_JS_RESOURCE_BUNDLE;
   this.XMPPCommunicator.loadJsResourceBundle(locale, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
+
+UIMainChatWindow.prototype.jabberChatConfirm = function(toUser, msgId) {
+  this.activeAction = "Confirm received chat message";
+  this.XMPPCommunicator.chatConfirm(toUser, msgId, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+};
+
+UIMainChatWindow.prototype.jabberLoadDelayedMessages = function(username) {
+  this.activeAction = "Load delayed messages";
+  this.XMPPCommunicator.loadDelayedMessages(username, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+};
+
 // -/-
 
 /**

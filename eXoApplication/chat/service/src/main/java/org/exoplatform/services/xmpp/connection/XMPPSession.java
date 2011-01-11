@@ -18,10 +18,13 @@ package org.exoplatform.services.xmpp.connection;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.services.xmpp.bean.ConfigRoomBean;
+import org.exoplatform.services.xmpp.bean.EventsBean;
 import org.exoplatform.services.xmpp.bean.FormBean;
 import org.exoplatform.services.xmpp.bean.FullRoomInfoBean;
+import org.exoplatform.services.xmpp.bean.MessageBean;
 import org.exoplatform.services.xmpp.ext.transport.Transport;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.Interlocutor;
@@ -482,4 +485,8 @@ public interface XMPPSession {
   RoomInfo getRoomInfo(String room) throws XMPPException;
 
   void addFullUserNames(String userName, String fullUserName);
+  
+  public Map<String, EventsBean> getMessageMap();
+  
+  public void sendMessageToCometd(EventsBean eventsBean);
 }

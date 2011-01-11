@@ -34,6 +34,11 @@ public class InviteBean {
    * 
    */
   private String      inviter;
+  
+  /**
+   * 
+   */
+  private String inviterName;
 
   /**
    * 
@@ -71,6 +76,16 @@ public class InviteBean {
     this.reason = reason;
     this.room = room;
   }
+  
+  public InviteBean(String inviter, String inviterName, MessageBean message, String password, String reason, String room) {
+    super();
+    this.inviter = inviter;
+    this.inviterName = inviterName;
+    this.message = message;
+    this.password = password;
+    this.reason = reason;
+    this.room = room;
+  }
 
   /**
    * @return the room
@@ -98,6 +113,14 @@ public class InviteBean {
    */
   public void setInviter(String inviter) {
     this.inviter = inviter;
+  }
+  
+  public String getInviterName() {
+    return inviterName;
+  }
+  
+  public void setInviterName(String inviterName) {
+    this.inviterName = inviterName;
   }
 
   /**

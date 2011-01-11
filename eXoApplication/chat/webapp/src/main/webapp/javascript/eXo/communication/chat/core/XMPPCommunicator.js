@@ -688,4 +688,24 @@ XMPPCommunicator.prototype.loadJsResourceBundle = function(locale, transportName
   request.process() ;
 };
 
+/**
+ * Use to send notification to server that user has received chat message
+ */
+XMPPCommunicator.prototype.chatConfirm = function(username, msgId,  transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/chatconfirm/' + username + '/' + msgId;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+}
+
+/**
+ * Call to push all delayed messages from server to cometd
+ */
+XMPPCommunicator.prototype.loadDelayedMessages = function(username, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/delayedmessages/' + username;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+}
+
 eXo.communication.chat.core.XMPPCommunicator = new XMPPCommunicator();

@@ -28,11 +28,13 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPMethods;
@@ -55,6 +57,7 @@ import org.exoplatform.services.rest.transformer.PassthroughOutputTransformer;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.xmpp.bean.ConfigRoomBean;
 import org.exoplatform.services.xmpp.bean.ContactBean;
+import org.exoplatform.services.xmpp.bean.EventsBean;
 import org.exoplatform.services.xmpp.bean.FormBean;
 import org.exoplatform.services.xmpp.bean.HostedRoomBean;
 import org.exoplatform.services.xmpp.bean.InitInfoBean;
@@ -2129,6 +2132,49 @@ public class RESTXMPPService implements ResourceContainer, Startable {
                              .build();
     }
   }
-
-
+  
+  /**
+   * CS-4411: Lost messages when changing navigation
+   * use to confirm that user has received message
+   * @param username
+   * @param msgid
+   * @return
+   */
+  @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/xmpp/chatconfirm/{username}/{msgid}/") 
+  public Response chatConfirm (@URIParam("username") String username,
+                               @URIParam("msgid") String msgid) {
+    XMPPSession session = messenger.getSession(username);
+    Map<String, EventsBean> messageMap = session.getMessageMap();
+    messageMap.remove(msgid);
+    return Response.Builder.ok().build();
+  }
+  
+  /**
+   * CS-4411: Lost messages when changing navigation
+   * send all delayed message to cometd
+   * @param username
+   * @return
+   */
+  @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/xmpp/delayedmessages/{username}/") 
+  public Response loadDelayedMessages (@URIParam("username") String username) {
+    XMPPSession session = messenger.getSession(username);
+    Map<String, EventsBean> messageMap = session.getMessageMap();
+    Iterator<Entry<String, EventsBean>> iter = messageMap.entrySet().iterator();
+    /*synchronized (messageMap) {
+      while(iter.hasNext()) {
+        Map.Entry<String, EventsBean> entry = (Map.Entry<String, EventsBean>)iter.next();
+        EventsBean message = (EventsBean)entry.getValue();
+        session.sendMessageToCometd(message);
+        iter.remove();
+      }
+    }*/
+    while(iter.hasNext()) {
+      Map.Entry<String, EventsBean> entry = (Map.Entry<String, EventsBean>)iter.next();
+      EventsBean message = (EventsBean)entry.getValue();
+      session.sendMessageToCometd(message);
+    }
+    return Response.Builder.ok().build();
+  }
 }

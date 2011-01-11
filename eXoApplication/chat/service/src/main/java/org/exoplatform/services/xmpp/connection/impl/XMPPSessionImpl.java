@@ -17,8 +17,6 @@
 package org.exoplatform.services.xmpp.connection.impl;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -30,6 +28,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -37,9 +36,7 @@ import java.util.UUID;
 
 import javax.jcr.RepositoryException;
 
-import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
-import org.apache.poi.hdf.event.EventBridge;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
@@ -53,7 +50,6 @@ import org.exoplatform.services.xmpp.bean.ConfigRoomBean;
 import org.exoplatform.services.xmpp.bean.ContactBean;
 import org.exoplatform.services.xmpp.bean.DeclineBean;
 import org.exoplatform.services.xmpp.bean.EventsBean;
-import org.exoplatform.services.xmpp.bean.FieldBean;
 import org.exoplatform.services.xmpp.bean.FileTransferEventBean;
 import org.exoplatform.services.xmpp.bean.FileTransferRequestBean;
 import org.exoplatform.services.xmpp.bean.FileTransferResponseBean;
@@ -81,7 +77,6 @@ import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 import org.exoplatform.services.xmpp.userinfo.UserInfo;
 import org.exoplatform.services.xmpp.userinfo.UserInfoService;
 import org.exoplatform.services.xmpp.util.CometdChannels;
-import org.exoplatform.services.xmpp.util.HistoryUtils;
 import org.exoplatform.services.xmpp.util.MUCConstants;
 import org.exoplatform.services.xmpp.util.PresenceUtil;
 import org.exoplatform.services.xmpp.util.SearchFormFields;
@@ -105,7 +100,6 @@ import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
-import org.jivesoftware.smack.packet.PacketExtension;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.XMPPError;
 import org.jivesoftware.smack.packet.Presence.Type;
@@ -131,7 +125,6 @@ import org.jivesoftware.smackx.muc.SubjectUpdatedListener;
 import org.jivesoftware.smackx.packet.DiscoverInfo;
 import org.jivesoftware.smackx.packet.DiscoverItems;
 import org.jivesoftware.smackx.packet.MUCUser;
-import org.jivesoftware.smackx.packet.Time;
 import org.jivesoftware.smackx.packet.DiscoverInfo.Identity;
 import org.jivesoftware.smackx.packet.DiscoverItems.Item;
 import org.jivesoftware.smackx.packet.MUCUser.Invite;
@@ -225,6 +218,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
   
   private final DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
   
+  private Map<String, EventsBean> messageMap;
   
   /**
    * It's value not from spec. I add it myself for sending real JID of room to UI client.
@@ -256,7 +250,7 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
         log.info("Client '" + username + "' logged in.");
       multiUserChatManager = new MultiUserChatManager();
       fileTransferManager = new FileTransferManager(connection_);
-
+      messageMap = Collections.synchronizedMap(new LinkedHashMap<String, EventsBean>());
       fileTransferManager.addFileTransferListener(new FileTransferListener() {
         public void fileTransferRequest(FileTransferRequest request) {
           try {
@@ -321,7 +315,8 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
             }
             
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
-            delegate_.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
+            messageMap.put(packet.getPacketID(), eventsBean);
+            delegate_.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);          
             if (log.isDebugEnabled())
               log.debug(json.toString());
           } catch (Exception e) {
@@ -378,7 +373,9 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
           try {
             MUCPacketBean bean = new MUCPacketBean();
             bean.setAction(MUCConstants.Action.INVITE);
-            bean.setInvite(new InviteBean(inviter,
+            UserInfo userInfo = getUserInfo(inviter.split("@")[0]);
+            String inviterName = userInfo.getFirstName() + " " + userInfo.getLastName();
+            bean.setInvite(new InviteBean(inviter, inviterName,
                                           TransformUtils.messageToBean(message),
                                           password,
                                           reason,
@@ -596,6 +593,10 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
     }
     if (log.isDebugEnabled())
       log.debug("finish initialize for the user:'" + username + "'.");
+  }
+  
+  public Map<String, EventsBean> getMessageMap() {
+    return messageMap;
   }
   
   
@@ -2178,6 +2179,20 @@ public class XMPPSessionImpl implements XMPPSession, UIStateSession {
         e.printStackTrace();
     }
     return roomJID;
+  }
+  
+  // send a delayed message from messageMap to Cometd
+  public void sendMessageToCometd(EventsBean eventsBean) {
+    try {
+      JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+      JsonValue json = generatorImpl.createJsonObject(eventsBean);
+      delegate_.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
+      
+      if (log.isDebugEnabled())
+        log.debug(json.toString());
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
   }
 
 }
