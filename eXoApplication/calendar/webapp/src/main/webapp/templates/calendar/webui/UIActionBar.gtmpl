@@ -124,8 +124,8 @@
 		      		</div>
 		      		<div class="SeparatorLine ActionBarButton"><span></span></div>
 		      		<div class="ScrollButtons" style="display: none;">
-				      		<div title="Previous" class="ScrollLeftButton">
-				      			<div title="Next" class="ScrollRightButton"><span></span></div>
+				      		<div title="<%=_ctx.appRes(uicomponent.id + '.label.previous')%>" class="ScrollLeftButton">
+				      			<div title="<%=_ctx.appRes(uicomponent.id + '.label.next')%>" class="ScrollRightButton"><span></span></div>
 				      		</div>
 			      	</div>
 						<div style="clear: both;"><span></span></div>

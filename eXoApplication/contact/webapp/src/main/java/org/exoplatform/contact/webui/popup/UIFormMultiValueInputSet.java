@@ -20,6 +20,8 @@ import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -117,8 +119,17 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List> {
 
     UIForm uiForm = getAncestorOfType(UIForm.class) ;
     int size = getChildren().size() ;
-//    ResourceBundle res = context.getApplicationResourceBundle() ;
 
+    ResourceBundle res = context.getApplicationResourceBundle() ;
+    String addItem = "Add Item";
+    String removeItem = "Remove Item";
+    try {
+        addItem =  res.getString("UIFormMultiValueInputSet.label.addItem");
+        removeItem =  res.getString("UIFormMultiValueInputSet.label.removeItem");
+    } catch (MissingResourceException e) {
+      e.printStackTrace() ;
+    }
+    
     for(int i = 0; i < size; i++) {
       UIFormInputBase uiInput = getChild(i) ;
       writer.append("<div class=\"MultiValueContainer\">") ;
@@ -127,11 +138,11 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List> {
       if(i == size - 1) {
         if(size >= 2){
           writer.append("<a href=\"");
-          writer.append(uiForm.event("Remove", getId()+String.valueOf(i))).append("\" title=\"Remove Item\">");
+          writer.append(uiForm.event("Remove", getId()+String.valueOf(i))).append("\" title=\"" + removeItem + "\">");
           writer.append("<img class=\"MultiFieldAction Remove16x16Icon\" src=\"/eXoResources/skin/sharedImages/Blank.gif\" ></a>");
         }
         writer.append("<a href=\"");
-        writer.append(uiForm.event("Add", getId())).append("\" title=\"Add Item\">");
+        writer.append(uiForm.event("Add", getId())).append("\" title=\"" + addItem + "\">");
         writer.append("<img class=\"MultiFieldAction AddNewNodeIcon\" src=\"/eXoResources/skin/sharedImages/Blank.gif\" ></a>");
       }      
       writer.append("</div>") ;

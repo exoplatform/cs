@@ -1,0 +1,1133 @@
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIFormDateTimePicker.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIFormDateTimePicker.java	(revision 61613)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIFormDateTimePicker.java	(working copy)
+@@ -163,6 +163,13 @@
+     if(isDisplayTime_) return dateStyle_ + " " + timeStyle_ ;
+     return dateStyle_ ;
+   }
++  
++  private String getLang() {
++    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
++    Locale locale = context.getParentAppRequestContext().getLocale() ;
++    return locale.getLanguage();
++  }
++  
+   private DateFormat getFormater() {
+     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+     Locale locale = context.getParentAppRequestContext().getLocale() ;
+@@ -175,7 +182,9 @@
+     context.getJavascriptManager().importJavascript("eXo.webui.UICalendar") ;
+     context.getJavascriptManager().importJavascript("eXo.cs.UIDateTimePicker","/csResources/javascript/") ;
+     Writer w = context.getWriter();
+-    w.write("<input "+ disabled +" monthsName='"+ getMonthsName()+"' daysName='"+getDaysName()+"' format='" + getFormatStyle() + "' type='text' onfocus='eXo.cs.UIDateTimePicker.init(this,") ;
++    //w.write("<input "+ disabled +" monthsName='"+ getMonthsName()+"' daysName='"+getDaysName()+"' format='" + getFormatStyle() + "' type='text' onfocus='eXo.cs.UIDateTimePicker.init(this,") ;
++    
++    w.write("<input lang='"+getLang()+"' format='" + getFormatStyle() + "' type='text' onfocus='eXo.cs.UIDateTimePicker.init(this,") ;
+     w.write(String.valueOf(isDisplayTime_));
+     w.write(");' onkeyup='eXo.cs.UIDateTimePicker.show();' name='") ;
+     w.write(getName()) ; w.write('\'') ;
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIFormMultiValueInputSet.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIFormMultiValueInputSet.java	(revision 61613)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIFormMultiValueInputSet.java	(working copy)
+@@ -20,6 +20,8 @@
+ import java.lang.reflect.Constructor;
+ import java.util.ArrayList;
+ import java.util.List;
++import java.util.MissingResourceException;
++import java.util.ResourceBundle;
+ 
+ import org.exoplatform.web.application.ApplicationMessage;
+ import org.exoplatform.webui.application.WebuiRequestContext;
+@@ -117,7 +119,15 @@
+ 
+     UIForm uiForm = getAncestorOfType(UIForm.class) ;
+     int size = getChildren().size() ;
+-//    ResourceBundle res = context.getApplicationResourceBundle() ;
++    ResourceBundle res = context.getApplicationResourceBundle() ;
++    String addItem = "Add Item";
++    String removeItem = "Remove Item";
++    try {
++        addItem =  res.getString("UIFormMultiValueInputSet.label.addItem");
++        removeItem =  res.getString("UIFormMultiValueInputSet.label.removeItem");
++    } catch (MissingResourceException e) {
++      e.printStackTrace() ;
++    }
+ 
+     for(int i = 0; i < size; i++) {
+       UIFormInputBase uiInput = getChild(i) ;
+@@ -127,11 +137,11 @@
+       if(i == size - 1) {
+         if(size >= 2){
+           writer.append("<a href=\"");
+-          writer.append(uiForm.event("Remove", getId()+String.valueOf(i))).append("\" title=\"Remove Item\">");
++          writer.append(uiForm.event("Remove", getId()+String.valueOf(i))).append("\" title=\"" + removeItem + "\">");
+           writer.append("<img class=\"MultiFieldAction Remove16x16Icon\" src=\"/eXoResources/skin/sharedImages/Blank.gif\" ></a>");
+         }
+         writer.append("<a href=\"");
+-        writer.append(uiForm.event("Add", getId())).append("\" title=\"Add Item\">");
++        writer.append(uiForm.event("Add", getId())).append("\" title=\"" + addItem + "\">");
+         writer.append("<img class=\"MultiFieldAction AddNewNodeIcon\" src=\"/eXoResources/skin/sharedImages/Blank.gif\" ></a>");
+       }      
+       writer.append("</div>") ;
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties	(revision 61613)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties	(working copy)
+@@ -889,6 +889,7 @@
+ UIAddContactForm.label.option.day=Day
+ UIAddContactForm.label.option.month=Month
+ UIAddContactForm.label.option.year=Year
++UIAddContactForm.label.addAddress=Ajouter un carnet d'adresse
+ ##################################################################
+       # package org.exoplatform.mail.webui.popup.UIImageForm#
+ ###################################################################
+@@ -992,6 +993,7 @@
+ 
+ UIEventForm.label.defaultCalendarCategoryId=My group
+ UIEventForm.label.defaultCalendarId=Default
++UIEventForm.label.SelectEmail=Select Email
+ ##################################################################
+ #org.exoplatform.calendar.webui.popup.UIEventCategoryForm
+ ##################################################################
+@@ -1052,4 +1054,8 @@
+ UIPopupWindow.title.UIAskmeReturnReceipt=Confirm return receipt
+ UIAskmeReturnReceipt.label.warning_askme_text=The sender requested to be informed when you read this message. Would you like to tell him ?
+ UIAskmeReturnReceipt.action.Yes=Yes
+-UIAskmeReturnReceipt.action.No=No
+\ No newline at end of file
++UIAskmeReturnReceipt.action.No=No
++
++#org.exoplatform.mail.webui.popup.UIFormMultiValueInputSet
++UIFormMultiValueInputSet.label.addItem=Add Item
++UIFormMultiValueInputSet.label.removeItem=Remove Item
+\ No newline at end of file
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_fr.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_fr.properties	(revision 61613)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_fr.properties	(working copy)
+@@ -23,11 +23,11 @@
+ 
+ UIAccountWizardStepIntro.info.label1=Cochez pour ajouter un compte
+ UIAccountWizardStepIntro.info.label2=Cochez pour modifier un compte
+-UIAccountWizardStep1.info.label1=Entrez un nom pour identifier ce compte, par example "Marry au travail"
++UIAccountWizardStep1.info.label1=Entrez un nom pour identifier ce compte, par exemple "Marry au travail"
+ UIAccountWizardStep1.info.label2=Ecrivez un description sur votre compte, par exemple "Le compte que j'utilise pour mes mails professionnels"
+ UIAccountWizardStep2.info.label1=L'identité email est le nom ainsi que l'adresse que vous utiliserez dans votre correspondance email. Chaque compte dispose d'une identité distincte, qui est l'information qui vous identifie auprès de vos destinataires lorsqu'ils reçoivent vos emails
+ UIAccountWizardStep3.info.label1=Choisissez le type de serveur entrant que vous utilisez 
+-UIAccountWizardStep3.info.label2=Entrez les noms des serveurs de messagerie, par example mail.mycompany.com
++UIAccountWizardStep3.info.label2=Entrez les noms des serveurs de messagerie, par exemple mail.votresociete.com
+ UIAccountWizardStep3.info.label3=En cas de doute, contactez votre administrateur
+ UIAccountWizardStep4.info.label1=Entrez l'identifiant et le mot de passe de messagerie
+ UIAccountWizardStep5.info.label1=Vérifiez que les informations ci-dessous sont correctes avant de quitter cet assistant
+@@ -54,7 +54,7 @@
+ 
+ UIAccountCreation.label.getMail=Commencer à collecter les messages maintenant
+ UIFormInputSetWithAction.msg.confirm-delete=Etes-vous certain de vouloir supprimer? 
+-UIAccountCreation.msg.confirm-cancel=Votre compte n'est pas encore configuré.Voulez-vous toujours quitter l'assistant?
++UIAccountCreation.msg.confirm-cancel=Votre compte n'est pas encore configuré. Voulez-vous toujours quitter l'assistant?
+ UIAccountCreation.msg.fields-requirement=Veuillez renseigner tous les champs obligatoires.
+ UIAccountCreation.msg.create-acc-successfully=Le compte a bien été créé.
+ UIAccountCreation.msg.create-acc-unsuccessfully=L'ajout du compte a échoué
+@@ -65,14 +65,14 @@
+ UIAccountCreation.msg.account-name-requirement=Vous devez donner un nom à ce compte.
+ UIAccountCreation.msg.display-name-requirement=Indiquez quel nom sera affiché pour ce compte.
+ UIAccountCreation.msg.email-address-requirement=Vous devez indiquer l'adresse email de ce compte.
+-UIAccountCreation.msg.email-address-is-invalid=L'adresse email semble malformée. Elle devrait ressembler à quelquechose comme votrenom@votresociete.com
+-UIAccountCreation.msg.reply-address-is-invalid=L'adresse de réponse semble malformée. Elle devrait ressembler à quelquechose comme votrenom@votresociete.com
++UIAccountCreation.msg.email-address-is-invalid=L'adresse email semble malformée. Elle devrait ressembler à  votrenom@votresociete.com
++UIAccountCreation.msg.reply-address-is-invalid=L'adresse de réponse semble malformée. Elle devrait ressembler à  votrenom@votresociete.com
+ UIAccountCreation.msg.incoming-server-requirement=Donnez le nom du serveur entrant.
+ UIAccountCreation.msg.outgoing-server-requirement=Donnez le nom du serveur sortant.
+-UIAccountCreation.msg.store-folder-requirement=Indiquez le dossier de collecte des messqges. En cas de doute, laissez 'Inbox'.
+-UIAccountCreation.msg.incoming-port-is-not-number=Le numéro du port entrant doit être un nombre. Renseignez-vous auprez de votre administrateur.
+-UIAccountCreation.msg.outgoing-port-is-not-number=Le numéro du port entrant doit être un nombre. Renseignez-vous auprez de votre administrateur.
+-UIAccountCreation.msg.username-requirement=Entrez l'identfiant de messagerie.
++UIAccountCreation.msg.store-folder-requirement=Indiquez le dossier de collecte des messages. En cas de doute, laissez dans "INBOX".
++UIAccountCreation.msg.incoming-port-is-not-number=Le numéro du port entrant doit être un nombre. Renseignez-vous auprès de votre administrateur.
++UIAccountCreation.msg.outgoing-port-is-not-number=Le numéro du port entrant doit être un nombre. Renseignez-vous auprès de votre administrateur.
++UIAccountCreation.msg.username-requirement=Entrez l'identifiant de messagerie.
+ UIAccountCreation.msg.password-requirement=Entrez le mot de passe de messagerie.
+ 
+ UIAccountCreation.action.Next=#{word.next}
+@@ -90,7 +90,7 @@
+ UIAccountSetting.tab.label.outgoing=Sortant
+ UIAccountSetting.tab.label.fetchOptions=Options de collecte
+ UIAccountSetting.label.accounts=Comptes
+-UIAccountSetting.label.isOutgoingAuthentication=Activer l'authentication SMTP
++UIAccountSetting.label.isOutgoingAuthentication=Activer l'authentification SMTP
+ UIAccountSetting.label.useIncomingSettingForOutgoingAuthent=Utiliser les identifiants du serveur entrant
+ UIAccountSetting.label.outgoingUsername=Utilisateur
+ UIAccountSetting.label.outgoingPassword=Mot de passe
+@@ -111,7 +111,7 @@
+ UIAccountSetting.label.serverType=Type de service
+ UIAccountSetting.label.incomingServer=Serveur entrant
+ UIAccountSetting.label.outgoingServer=Serveur sortant
+-UIAccountSetting.label.messageComeInFolder=Dossier de collecte personalisé
++UIAccountSetting.label.messageComeInFolder=Dossier de collecte personnalisé
+ UIAccountSetting.label.leaveMailOnServer=Laisser les messages sur le serveur
+ UIAccountSetting.label.skipMessageOverMaxSize=Ignorer les messages dont la taille est supérieure à (Max: 5M)
+ UIAccountSetting.label.markItAsDeleted=Marquer les messages téléchargés comme supprimés du serveur
+@@ -125,15 +125,15 @@
+ UIAccountSetting.label.option.signOnFoot=Pied de message
+ UIAccountSetting.label.delete-acc=Supprimer un compte
+ UIAccountSetting.msg.edit-acc-successfully=Le compte a été mis à jour.
+-UIAccountSetting.msg.edit-acc-unsuccessfully=Le compte n'a pas pu être mmis à jour.
++UIAccountSetting.msg.edit-acc-unsuccessfully=Le compte n'a pas pu être mis à jour.
+ UIAccountSetting.msg.please-choose-specified-date=Veuillez indiquer une date.
+-UIAccountSetting.msg.email-address-is-invalid=L'adresse email semble malformée. Elle devrait ressembler à quelquechose comme votrenom@votresociete.com
+-UIAccountSetting.msg.reply-address-is-invalid=L'adresse de réponse semble malformée. Elle devrait ressembler à quelquechose comme votrenom@votresociete.com
+-UIAccountSetting.msg.incoming-port-is-not-number=Le numéro du port doit être un nombre. Renseignez-vous auprez de votre administrateur.
+-UIAccountSetting.msg.outgoing-port-is-not-number=Le numéro du port doit être un nombre. Renseignez-vous auprez de votre administrateur.
++UIAccountSetting.msg.email-address-is-invalid=L'adresse email semble malformée. Elle devrait ressembler à votrenom@votresociete.com
++UIAccountSetting.msg.reply-address-is-invalid=L'adresse de réponse semble malformée. Elle devrait ressembler à votrenom@votresociete.com
++UIAccountSetting.msg.incoming-port-is-not-number=Le numéro du port doit être un nombre. Renseignez-vous auprès de votre administrateur.
++UIAccountSetting.msg.outgoing-port-is-not-number=Le numéro du port doit être un nombre. Renseignez-vous auprès de votre administrateur.
+ UIAccountSetting.msg.field-password-is-required=Entrez le mot de passe.
+ 
+-UIAccountSetting.action.Save=#{word.save}
++UIAccountSetting.action.Save=Enregistrer
+ UIAccountSetting.action.Cancel=#{word.cancel}
+ 
+ UIPopupWindow.title.UIMailSettings=Paramètres de messagerie
+@@ -145,12 +145,12 @@
+ UIMailSettings.label.reply-message-with=Répondre aux messages avec
+ UIMailSettings.label.forward-message-with=Transférer les messages avec
+ UIMailSettings.label.prefix-message-with=Préfixer les messages par
+-UIMailSettings.label.save-sent-message=Sauver les messages envoyés dans le dossier 'Sent'
++UIMailSettings.label.save-sent-message=Enregistrer les messages envoyés dans le dossier "Envoyé"
+ UIMailSettings.label.returnReceipts=
+ returnReceipts.label.askme=Me demander confirmation avant d'envoyer un accusé de réception
+ returnReceipts.label.never=Ne jamais envoyer d'accusé de réception
+ returnReceipts.label.always=Toujours envoyer un accusé de réception
+-UIMailSettings.action.Save = #{word.save}
++UIMailSettings.action.Save =Enregistrer
+ UIMailSettings.action.Cancel = #{word.cancel}
+ UIMailSettings.tab.label.general=Général
+ UIMailSettings.tab.label.return-receipt=Accusés de réception
+@@ -183,7 +183,7 @@
+ UIMailSettings.label.option.forwardwith.false=le texte du message original dans le corps
+ 
+ UIPopupWindow.title.UIAddressForm=Trouver une adresse email
+-UIAddressForm.action.Save=#{word.save}
++UIAddressForm.action.Save=Enregistrer
+ UIAddressForm.action.Cancel=#{word.cancel}
+ 
+ ###################################################################
+@@ -215,7 +215,7 @@
+ ###################################################################
+       # package org.exoplatform.mail.webui.UIFolderContainer#
+ ###################################################################
+-UIFolderContainer.action.AddFolder=Ajouter
++UIFolderContainer.action.AddFolder=Ajouter dossier
+ UIFolderContainer.label.folders=Dossiers
+ UIFolderContainer.label.my-folders=Dossiers Personnels
+ UIFolderContainer.label.new-folder=Nouveau dossier
+@@ -223,7 +223,7 @@
+ UIFolderContainer.label.move-all-to-trash=Mettre dans la corbeille
+ UIFolderContainer.label.empty-trash=Vider la corbeille
+ UIFolderContainer.label.new-subfoder=Nouveau sous-dossier
+-UIFolderContainer.label.rename=Renomer
++UIFolderContainer.label.rename=Renommer
+ UIFolderContainer.label.remove=Supprimer
+ UIFolderContainer.label.Inbox=Boîte de réception
+ UIFolderContainer.label.Drafts=Brouillons
+@@ -240,7 +240,7 @@
+ ###################################################################
+ UIPopupWindow.title.UIFolderForm=Ajouter
+ UIFolderForm.label.folderName=Nom du dossier
+-UIFolderForm.action.Save=#{word.save}
++UIFolderForm.action.Save=Enregistrer
+ UIFolderForm.action.Cancel=#{word.cancel}
+ 
+ UIFolderForm.msg.name-invalid=Un nom de dossier ne doit pas contenir les caractères {0}, {1}, {2} ou {3}.
+@@ -259,10 +259,11 @@
+ UIRenameFolderForm.action.Save=#{word.save}
+ UIRenameFolderForm.action.Cancel=#{word.cancel}
+ 
+-UIRenameFolderForm.msg.error-rename-folder=Erreur au renommage du dossier.
++UIRenameFolderForm.msg.error-rename-folder=Erreur au nommage du dossier.
+ 
+ ###################################################################
+       # package org.exoplatform.mail.webui.popup.UIComposeForm#
++
+ ###################################################################
+ UIPopupWindow.title.UIPopupActionComposeContainer=Composer un nouveau message
+ UIChildPopupWindowUIPopupActionAddressContainer.title.UIPopupActionComposeContainer=Composer un nouveau message
+@@ -302,21 +303,21 @@
+ UIComposeForm.msg.send-mail-error=Une erreur est survenue à l'envoi du message.
+ UIComposeForm.msg.save-sent-error=Une erreur est survenue à la copie dans le dossier 'Sent'.
+ UIComposeForm.msg.send-mail-succsessfuly=Le message a été envoyé.
+-UIComposeForm.msg.save-draft-error=Le message n'a pu être sauver dans le dossier 'Drafts'.
++UIComposeForm.msg.save-draft-error=Le message n'a pas pu être enregistrer dans le dossier Brouillons.
+ UIComposeForm.msg.save-mail-draff=Le message a été sauvé dans le dossier 'Drafts'.
+ UIComposeForm.msg.to-field-empty=Entrez l'adresse du destinataire dans le champs A:.
+ UIComposeForm.msg.subject-field-empty=Votre message doit avoir un objet.
+ UIComposeForm.msg.content-field-empty=Votre message est vide.
+-UIComposeForm.msg.invalid-to-field=L'adresse du champs A: semble malfromée.
+-UIComposeForm.msg.invalid-cc-field=L'adresse du champs CC: semble malfromée.
+-UIComposeForm.msg.invalid-bcc-field=L'adresse du champs BCC: semble malfromée.
++UIComposeForm.msg.invalid-to-field=L'adresse du champ A: semble malformée.
++UIComposeForm.msg.invalid-cc-field=L'adresse du champ Cc: semble malformée.
++UIComposeForm.msg.invalid-bcc-field=L'adresse du champ Cci: semble malformée.
+ UIComposeForm.msg.select-at-least-recipient=Indiquez au moins un destinataire.
+ UIComposeForm.msg.there-was-an-error-parsing-the-addresses-sending-failed=Les adresses emails des destinataires n'ont pu être déterminées. Le message n'a pas été envoyé.
+ UIComposeForm.msg.the-username-or-password-may-be-wrong-sending-failed=Les identifiants sont invalides. Le message n'a pas été envoyé.
+ UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed=Une erreur est survenue lors du transfert. Le message n'a pas été envoyé.
+ UIComposeForm.msg.there-was-an-unexpected-error-sending-falied=Une erreur inattendue est survenue. Le message n'a pas été envoyé.
+ UIComposeForm.msg.no-subject=Il semble que votre message n'a pas de Sujet. Voulez-vous l'envoyer ?
+-UIComposeForm.msg.please-check-configuration-for-smtp-server=La communication avec le serveur a échoué. Sauvez le message et vérifez la configuration du serveur sortant.
++UIComposeForm.msg.please-check-configuration-for-smtp-server=La communication avec le serveur a échoué. Enregistrez le message et vérifiez la configuration du serveur sortant.
+ 
+ ###################################################################
+       # package org.exoplatform.mail.webui.popup.UIAttachFileForm#
+@@ -335,29 +336,29 @@
+ UIAttachFileForm.label.upload9=Fichier 9
+ UIAttachFileForm.label.upload10=Fichier 10
+ UIAttachFileForm.label.add-more=Ajouter plus
+-UIAttachFileForm.action.Save=#{word.save}
++UIAttachFileForm.action.Save=Enregistrer
+ UIAttachFileForm.action.Cancel=#{word.cancel}
+-UIAttachFileForm.msg.file-empty-error=Vous devez télécharger le fichier sur le serveur avant de sauver.
++UIAttachFileForm.msg.file-empty-error=Vous devez télécharger le fichier sur le serveur avant d'enregistrer.
+ UIAttachFileForm.msg.upload-error=Le fichier est trop volumineux.
+ UIAttachFileForm.msg.fileName-error=Le nom du fichier est invalide.
+-UIAttachFileForm.msg.size-attachs-must-be-smaller-than-10M=La taille totale des pièces jointes ne doit pas dépasser 10M
++UIAttachFileForm.msg.size-attachs-must-be-smaller-than-10M=La taille totale des pièces jointes ne doit pas dépasser 10Mo
+ ###################################################################
+       # package org.exoplatform.mail.webui.UITagContainer#
+ ###################################################################
+-UITagContainer.label.tags=Tags
++UITagContainer.label.tags=Etiquettes
+ UITagContainer.label.edit=Modifier
+ UITagContainer.label.remove=Supprimer
+ UITagContainer.label.empty=Vider
+-UITagContainer.action.AddTag=Nouveau tag
+-UITagContainer.msg.confirm-remove-tag=Etes-vous certain de vouloir supprimer ce tag?
++UITagContainer.action.AddTag=Nouvelle étiquette
++UITagContainer.msg.confirm-remove-tag=Etes-vous certain de vouloir supprimer cet étiquette?
+ 
+ ###################################################################
+       # package org.exoplatform.mail.webui.popup.UITagForm#
+ ###################################################################
+-UIPopupWindow.title.UITagForm=Tagger un message
+-UITagForm.label.select-avaiable-tag=Sélectionnez un tag
+-UITagForm.label.tagName=Tag
+-UITagForm.label.tag-name=Tag name
++UIPopupWindow.title.UITagForm=Ajoutez des étiquettes à un message
++UITagForm.label.select-avaiable-tag=Sélectionnez une étiquette
++UITagForm.label.tagName=Etiquette
++UITagForm.label.tag-name=Nom de l'étiquette
+ UITagForm.label.choose-color=Couleur
+ UITagForm.label.subject=Objet
+ UITagForm.label.no-tag=
+@@ -365,24 +366,24 @@
+ UITagForm.action.Add=Ajouter
+ UITagForm.action.Remove=Supprimer
+ UITagForm.action.Cancel=#{word.cancel}
+-UITagForm.msg.tag-already-exists=Ce tag existe déjà.
+-UITagForm.msg.tagname-invalid=Un nom de tag ne peut contenir {0}, {1}, {2} ou {3}.
+-UITagForm.msg.have-to-choose-at-least-a-tag=Vous devez sélectionner au moins un tag.
+-UITagForm.msg.name-tag-no-value=Nommez votre tag.
++UITagForm.msg.tag-already-exists=Cet étiquette existe déjà.
++UITagForm.msg.tagname-invalid=Une étiquette ne peut contenir {0}, {1}, {2} ou {3}.
++UITagForm.msg.have-to-choose-at-least-a-tag=Vous devez sélectionner au moins une étiquette.
++UITagForm.msg.name-tag-no-value=Nommez votre étiquette.
+ ###################################################################
+       # package org.exoplatform.mail.webui.popup.UIEditTagForm#
+ ###################################################################
+-UIPopupWindow.title.UIEditTagForm=Tag
++UIPopupWindow.title.UIEditTagForm=Etiquette
+ UIEditTagForm.label.curTagName=Nom actuel
+ UIEditTagForm.label.newTagName=Nom
+ UIEditTagForm.label.description=Description
+ UIEditTagForm.label.color=Couleur
+-UIEditTagForm.action.Save=#{word.save}
++UIEditTagForm.action.Save=Enregistrer
+ UIEditTagForm.action.Cancel=#{word.cancel}
+-UIEditTagForm.msg.error-rename-tag=Impossible de renommer le tag.
+-UIEditTagForm.msg.name-required=Nommez ce tag.
+-UIEditTagForm.msg.tagname-invalid=Un nom de tag ne peut contenir {0}, {1}, {2} ou {3}.
+-UIEditTagForm.msg.tag-already-exists=Ce tag existe déjà.
++UIEditTagForm.msg.error-rename-tag=Impossible de renommer l'étiquette.
++UIEditTagForm.msg.name-required=Nommez cet étiquette.
++UIEditTagForm.msg.tagname-invalid=Une étiquette ne peut contenir {0}, {1}, {2} ou {3}.
++UIEditTagForm.msg.tag-already-exists=Cet étiquette existe déjà.
+ 
+ ###################################################################
+       # package org.exoplatform.mail.webui.popup.UIAccountList#
+@@ -403,16 +404,19 @@
+ UIChildPopupWindowUIPopupActionComposeContainer.title.UIAddressForm=Contacts
+ UIAddressForm.label.contact-group=Groupe
+ UIAddressForm.label.contact-search=Chercher
+-UIAddressForm.label.change-group=ChangeGroup
++UIAddressForm.label.change-group=Changer de groupe
+ 
++
+ UIAddressForm.label.quick-search=Recherche rapide
+ UIAddressForm.label.addresses-from-group=Carnet d'adresse
+ UIAddressForm.label.name=Nom
+ UIAddressForm.label.email=Email
+ UIAddressForm.label.add-address=Ajouter
+ UIAddressForm.label.replace=Remplacer
++
+ UIAddressForm.label.cancel=#{word.cancel}
+ 
++
+ UIAddressForm.label.option.all=Tous les contacts
+ UIAddressForm.optionGroup.label.personal-contacts=Carnets personnels
+ UIAddressForm.optionGroup.label.public-contacts=Carnets publics
+@@ -453,7 +457,7 @@
+ UIMessageList.label.mark-as-unread=Non lus
+ UIMessageList.label.add-star=Suivre
+ UIMessageList.label.remove-star=Ne plus suivre 
+-UIMessageList.label.tag-message=Tagger
++UIMessageList.label.tag-message=Etiqueter
+ UIMessageList.label.move-message=Déplacer
+ UIMessageList.label.import-message=Importer
+ UIMessageList.label.export-message=Exporter
+@@ -477,7 +481,7 @@
+ UIMessageList.label.forward=Transférer
+ UIMessageList.label.create-filter-from-this=Filtrer les messages similaires
+ UIMessageList.label.move-to-folder=Déplacer dans un dossier
+-UIMessageList.label.tag=Tagger
++UIMessageList.label.tag= Etiqueter
+ UIMessageList.label.delete=Supprimer
+ UIMessageList.label.not-spam=Non indésirable
+ UIMessageList.label.report-spam=Indésirable
+@@ -532,7 +536,7 @@
+ UIMessagePreview.label.forward=Transférer
+ UIMessagePreview.label.create-filter-from-this=Filtrer les messages similaires
+ UIMessagePreview.label.move-to-folder=Déplacer dans le dossier
+-UIMessagePreview.label.tag=Tagger
++UIMessagePreview.label.tag= Etiqueter
+ UIMessagePreview.label.delete=Supprimer
+ UIMessagePreview.label.attachments=Pièces jointes
+ UIMessagePreview.label.reply=Réponse
+@@ -582,7 +586,7 @@
+ UIMessagePreview.UIIntroduction.label.features=Fonctionnalités
+ UIMessagePreview.UIIntroduction.label.label1=Dossiers : organisez vos emails dans une arborescence de dossiers
+ UIMessagePreview.UIIntroduction.label.label2=Tags : marquez les messages avec des étiquettes personalisées afin de les retrouver facilement.
+-UIMessagePreview.UIIntroduction.label.label3=Filtres : filtrez les messages entrant à l'aide de conditions pour les ranger dans des dossiers ou des tags.
++UIMessagePreview.UIIntroduction.label.label3=Filtres : filtrez les messages entrant à l'aide de conditions pour les ranger dans des dossiers ou des étiquettes.
+ UIMessagePreview.UIIntroduction.label.label4=Recherche avancée : Retrouvez vos messages grâce à de nombreuses options de recherche.
+ UIMessagePreview.UIIntroduction.label.label5=Intégration à eXo Collaboration Suite : répondre aux invitations, organiser des réunions, collecter de nouveaux contacts à partir d'eXo Mail grâce aux applications Calendar et Address Book.
+ 
+@@ -655,7 +659,7 @@
+ UIQuickAddEvent.label.popupReminder=Par notification
+ 
+ UIQuickAddEvent.action.MoreDetail=Plus de détails
+-UIQuickAddEvent.action.Save=#{word.save} 	
++UIQuickAddEvent.action.Save=Enregistrer 	
+ UIQuickAddEvent.action.Cancel=#{word.cancel} 	
+ UIQuickAddEvent.msg.calendar-field-required=Choissiez un calendrier avant.
+ UIQuickAddEvent.msg.category-field-required=Ajoutez une catégorie avant.
+@@ -736,14 +740,13 @@
+ UIMessageFilter.label.subject=Objet
+ UIMessageFilter.label.body=Contenu
+ UIMessageFilter.label.folder=Dossiers
+-UIMessageFilter.label.tag=Tag
++UIMessageFilter.label.tag=Etiquette
+ UIMessageFilter.label.this-filter-contains-some-conditions-follow=Ce filtre contient les conditions suivantes
+ UIMessageFilter.label.then-apply-for=Appliquer à
+ UIMessageFilter.label.introduction-title1=Protégez votre boîte de réception des nuisances par email.
+ UIMessageFilter.label.introduction-content1=Le filtre email est conçu pour vous permettre d'éliminer automatiquement les messages indésirables que vous recevez par email.
+ UIMessageFilter.label.introduction-title2=Organisez vos messages automatiquement.
+-UIMessageFilter.label.introduction-content2=Créez des filtres pour déplacer automatiquement les messages dans des dossiers lorsqu'ils arrivent. Vous pouvez également appliquer des tags à la volée.
+-
++UIMessageFilter.label.introduction-content2=Créez des filtres pour déplacer automatiquement les messages dans des dossiers lorsqu'ils arrivent. Vous pouvez également appliquer des étiquettes à la volée.
+ UIMessageFilter.msg.select-no-filter=Choissiez le filtre à modifier.
+ UIMessageFilter.msg.confirm-remove-filter=Confirmez-vous la suppression de ce filtre? 
+ ##################################################################
+@@ -761,12 +764,12 @@
+ UIAddMessageFilter.label.filter-body=Corps de message
+ UIAddMessageFilter.label.filter-body-condition=Condition sur le corps de message
+ UIAddMessageFilter.label.filter-aplly-folder=Déplacer le message dans
+-UIAddMessageFilter.label.filter-aplly-tag=Appliquer le tag
++UIAddMessageFilter.label.filter-aplly-tag=Appliquer l'étiquette
+ UIAddMessageFilter.label.filter-keep-in-inbox=Conserver dans la boîte de réception
+ UIAddMessageFilter.label.apply-all-messages=Exécuter maintenant
+ UIAddMessageFilter.optionGroup.label.default-folder=Dossiers par défaut
+ UIAddMessageFilter.optionGroup.label.my-folder=Dossiers personnels
+-UIAddMessageFilter.action.Save=#{word.save}
++UIAddMessageFilter.action.Save=Enregistrer
+ UIAddMessageFilter.action.Cancel=#{word.cancel}
+ UIAddMessageFilter.msg.filter-name-blank=Nommez le filtre.
+ UIAddMessageFilter.msg.fill-at-lease-field=Vous devez au moins créer une règle pour le filtre.
+@@ -861,7 +864,7 @@
+ UIAddContactForm.msg.date-time-invalid=Hm... Donc cette personne ne serait pas encore née...Vous devriez vérifiez la date d'anniversaire encore une fois.
+ UIAddContactForm.msg.email-required=Donnez l'adresse email.
+ UIAddContactForm.msg.add-contact-successfully=Le contact a été ajouté au carnet d'adresse.
+-UIAddContactForm.action.Save=#{word.save}
++UIAddContactForm.action.Save=Enregistrer
+ UIAddContactForm.action.Cancel=#{word.cancel}
+ UIAddContactForm.optionGroup.label.personal-contacts=Carnets personnels
+ UIAddContactForm.optionGroup.label.public-contacts=Carnets publics
+@@ -885,12 +888,13 @@
+ UIAddContactForm.label.option.day=Jour
+ UIAddContactForm.label.option.month=Mois
+ UIAddContactForm.label.option.year=Année
++UIAddContactForm.label.addAddress=Ajouter un carnet d'adresse
+ ##################################################################
+       # package org.exoplatform.mail.webui.popup.UIImageForm#
+ ###################################################################
+ UIChildPopupWindowUIPopupAddContactForm.title.UIImageForm=Changer d'image
+ UIChildPopupWindowUIPopupActionAddContactContainer.title.UIImageForm=Changer d'image
+-UIImageForm.action.Save=Sauver
++UIImageForm.action.Save=Enregistrer
+ UIImageForm.action.Cancel=Annuler
+ UIImageForm.label.upload=Fichier
+ UIImageForm.msg.selectFile-required=Vous devez télécharger l'image sur le serveur avant.
+@@ -955,7 +959,7 @@
+ UIEventForm.msg.event-email-required=La liste des emails ne doit pas être vide.
+ UIEventForm.msg.have-no-calendar=Ce calendrier a été supprimé.
+ UIEventForm.msg.have-no-permission-to-edit=L'événement n'a pu être ajouté. Vous n'êtes pas autorisé à écrire dans ce calendrier.
+-UIEventForm.action.Save=#{word.save}
++UIEventForm.action.Save=Enregistrer
+ UIEventForm.action.Cancel=#{word.cancel}
+ 
+ UIEventForm.label.option.false=Non
+@@ -966,7 +970,7 @@
+ UIEventForm.label.option.weekly=toutes les semaines
+ UIEventForm.label.option.monthly=tous les mois
+ UIEventForm.label.option.yearly=tous les ans
+-UIEventForm.label.option.weekend=tous les weekend
++UIEventForm.label.option.weekend=tous les week-ends
+ UIEventForm.label.option.workingdays=les jours ouvrés
+ UIEventForm.label.option.none=Aucune
+ UIEventForm.label.option.high=Haute
+@@ -982,11 +986,12 @@
+ UIEventForm.label.defaultCalendarId=non-remboursement
+ 
+ UIEventForm.label.defaultEventCategoryIdAll=tout
+-UIEventForm.label.defaultEventCategoryIdMeeting=meeting
+-UIEventForm.label.defaultEventCategoryIdCalls=cri
++UIEventForm.label.defaultEventCategoryIdMeeting=Réunion
++UIEventForm.label.defaultEventCategoryIdCalls=Appel
+ UIEventForm.label.defaultEventCategoryIdClients=client
+ UIEventForm.label.defaultEventCategoryIdHoliday=vacances
+ UIEventForm.label.defaultEventCategoryIdAnniversary=anniversaire
++UIEventForm.label.SelectEmail=Rechercher une adresse email
+ ##################################################################
+ #org.exoplatform.calendar.webui.popup.UIEventCategoryForm
+ ##################################################################
+@@ -995,7 +1000,7 @@
+ UIEventCategoryForm.label.description=Description
+ UIEventCategoryForm.action.Reset=Réinitialiser
+ UIEventCategoryForm.action.Cancel=#{word.close}
+-UIEventCategoryForm.action.Save=#{word.save}
++UIEventCategoryForm.action.Save=Enregistrer
+ UIEventCategoryForm.msg.name-invalid=Cette catégorie est invalide ou existe déjà.
+ UIEventCategoryForm.msg.name-required=Nommez la catégorie.
+ ##################################################################
+@@ -1038,7 +1043,7 @@
+ UIFetchingBar.label.stop=arrêter
+ UIFetchingBar.label.stoping=arrêt
+ UIFetchingBar.label.hide=masquer
+-UIFetchingBar.label.refresh=refraîchir
++UIFetchingBar.label.refresh=rafraîchir
+ UIFetchingBar.msg.deleted_account=Ce compte n'existe plus
+ 
+ ##################################################################
+@@ -1047,4 +1052,8 @@
+ UIPopupWindow.title.UIAskmeReturnReceipt=Confirmez la réception
+ UIAskmeReturnReceipt.label.warning_askme_text=L'expéditeur a demandé a être informé lorsque vous lirez ce message. Souhaitez-vous le lui dire ?
+ UIAskmeReturnReceipt.action.Yes=Oui
+-UIAskmeReturnReceipt.action.No=Non
++UIAskmeReturnReceipt.action.No=Non
++
++#org.exoplatform.contact.webui.popup.UIFormMultiValueInputSet
++UIFormMultiValueInputSet.label.addItem=Ajouter un contact
++UIFormMultiValueInputSet.label.removeItem=Supprimer un contact
+Index: eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/popup/UIAddContactForm.gtmpl
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/popup/UIAddContactForm.gtmpl	(revision 61613)
++++ eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/popup/UIAddContactForm.gtmpl	(working copy)
+@@ -16,7 +16,7 @@
+           <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.address-book") %></td>
+           <td class="FieldComponent">
+             <% uicomponent.renderField(uicomponent.SELECT_GROUP)%>
+-            <% if (!uicomponent.isEdited_) {%><a href="<%=uicomponent.event("AddGroup")%>" title="Add Address Book"><img class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt=""/></a><%}%>
++            <% if (!uicomponent.isEdited_) {%><a href="<%=uicomponent.event("AddGroup")%>" title="<%=_ctx.appRes(uicomponent.id+ ".label.addAddress") %>"><img class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif" alt=""/></a><%}%>
+          	</td>           
+         </tr>
+       </tbody>
+Index: eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/popup/UIEventDetailTab.gtmpl
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/popup/UIEventDetailTab.gtmpl	(revision 61613)
++++ eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/popup/UIEventDetailTab.gtmpl	(working copy)
+@@ -21,7 +21,7 @@
+ 	        if(temp.length() > 30) {
+ 	        actionLabel = temp.substring(0, 30) + "..." + sizeLabel ;}
+ 	      }
+-		    println "<a title=\"" + action.actionName + "\" href=\"" + actionLink +"\">";
++		    println "<a title=\"" + actionLabel + "\" href=\"" + actionLink +"\">";
+ 	      if(action.actionType == action.TYPE_ICON) {
+ 	        println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" alt='' class=\"" + action.cssIconClass +"\"/>" ;
+ 	        if(action.isShowLabel) { println  actionLabel  ;}
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties	(revision 61613)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet_fr.properties	(working copy)
+@@ -12,7 +12,7 @@
+ UICalendars.label.AddCalendar=Ajouter un calendrier
+ UICalendars.label.AddEventCategory=Ajouter une catégorie
+ UICalendars.label.ImportCalendar=Importer
+-UICalendars.label.GenerateRss=Générer RSS
++UICalendars.label.GenerateRss=Générer le flux RSS
+ UICalendars.label.GenerateCalDav=Générer CalDAV
+ UICalendars.label.CalendarSetting=Préférences
+ UICalendars.label.EditGroup=Modifier
+@@ -74,7 +74,7 @@
+ #org.exoplatform.calendar.webui.popup.UICalendarCategoryForm
+ UICalendarCategoryForm.action.Reset=Réinitialiser
+ UICalendarCategoryForm.action.Cancel=#{word.close}
+-UICalendarCategoryForm.action.Save=#{word.save}
++UICalendarCategoryForm.action.Save=Enregistrer
+ UICalendarCategoryForm.label.categoryName=Nom du groupe
+ UICalendarCategoryForm.label.description=Description
+ UICalendarCategoryForm.msg.category-name-required=Le nom du groupe est obligatoire.
+@@ -82,11 +82,11 @@
+ UICalendarCategoryForm.msg.group-existed=Ce groupe existe déjà
+ 
+ #org.exoplatform.calendar.webui.popup.UICalendarForm
+-UICalendarForm.tab.label.MyTab=My tab
++UICalendarForm.tab.label.MyTab=Mon onglet
+ UICalendarForm.label.selectPermission=Sélectionnez un rôle
+ UICalendarPopupWindow.title.UICalendarForm=Calendrier
+ UICalendarForm.action.Cancel=Annuler
+-UICalendarForm.action.Save=Sauver
++UICalendarForm.action.Save=Enregistrer
+ UICalendarForm.action.Reset=Réinitialiser
+ UICalendarForm.tab.label.public=Groupe
+ UICalendarForm.tab.label.calendarDetail=Détails du calendrier
+@@ -104,7 +104,7 @@
+ UICalendarForm.label.editPermission=Modifiable par
+ UICalendarForm.label.action.EditPermission=Changer la permission
+ UICalendarForm.label.action.SelectPermission=Choisir la permission
+-UICalendarForm.msg.name-invalid=Ce nom de calendrier est invalide, choisissez quelquechose de plus simple.
++UICalendarForm.msg.name-invalid=Ce nom de calendrier est invalide, choisissez un autre nom.
+ UICalendarForm.msg.name-exist=Le nom {0} existe déjà.
+ UICalendarForm.msg.name-not-on-group=Le nom {0} n'est pas dans le gorupe {1}, supprimez le.
+ UICalendarForm.msg.group-empty=Cochez au moins un groupe dans lequel le calendrier sera affiché.
+@@ -116,15 +116,15 @@
+ UIEventCategoryForm.label.description=Description
+ UIEventCategoryForm.action.Reset=Réinitialiser
+ UIEventCategoryForm.action.Cancel=Fermer
+-UIEventCategoryForm.action.Save=Sauver
++UIEventCategoryForm.action.Save=Enregistrer
+ UIEventCategoryForm.msg.name-invalid=Ce nom de groupe n'est pas valide.
+-UIEventCategoryForm.msg.name-is-default=This name is duplicated with the default category, you can not create it.
++UIEventCategoryForm.msg.name-is-default=Ce nom de catégorie existe déjà, vous ne pouvez pas la créer.
+ UIEventCategoryForm.msg.name-exist=Ce nom de groupe existe déjà.
+ #org.exoplatform.calendar.webui.popup.UICalendarSettingForm
+ UICalendarSettingForm.tab.label.setting=Préférences
+ UICalendarSettingForm.tab.label.defaultCalendarTab=Calendriers affichés
+ UICalendarSettingForm.label.viewType=Vue par défaut
+-UICalendarSettingForm.label.timeInterval=Intervale de temps
++UICalendarSettingForm.label.timeInterval=Intervalle de temps
+ UICalendarSettingForm.label.weekStartOn=La semaine commence le
+ UICalendarSettingForm.label.dateFormat=Format de date
+ UICalendarSettingForm.label.timeFormat=Format d'heure
+@@ -161,7 +161,7 @@
+ UICalendarSettingForm.label.option.7-wst=Samedi
+   
+ UICalendarSettingForm.action.Cancel=#{word.cancel}
+-UICalendarSettingForm.action.Save=#{word.save}
++UICalendarSettingForm.action.Save=Enregistrer
+ UICalendarSettingForm.msg.working-time-logic=L'heure de fin de travail doit être supérieure à l'heure de début
+ #org.exoplatform.calendar.webui.popup.UIGroupSelector
+ UICalendarPopupWindow.title.UIGroupSelector=Sélectionnez sur le panneau de droite
+@@ -175,7 +175,7 @@
+ UIEventForm.tab.label.eventShare=Participants
+ UIEventForm.tab.label.eventAttender=Planifier
+ UIEventForm.action.AddAttachment=Joindre un fichier
+-UIEventForm.action.Save=#{word.save}
++UIEventForm.action.Save=Enregistrer
+ UIEventForm.action.Cancel=#{word.cancel}
+ UIEventForm.label.eventName=Objet de l'événement
+ UIEventForm.label.description=Description
+@@ -285,7 +285,7 @@
+ 
+ #org.exoplatform.calendar.webui.popup.UIImportForm
+ UIImportForm.action.Cancel=#{word.cancel}
+-UIImportForm.action.Save=#{word.save}
++UIImportForm.action.Save=Enregistrer
+ UIImportForm.label.type=Format
+ UIImportForm.label.upload=Fichier
+ UIImportForm.label.isAddTo=Choisir un calendrier existant
+@@ -294,7 +294,7 @@
+ UIImportForm.label.description=Description
+ UIImportForm.label.category=Groupes
+ UIImportForm.label.locale=Pays (Langue)
+-UIImportForm.label.timeZone=Time zone
++UIImportForm.label.timeZone=Fuseau horaire
+ UIImportForm.label.selectColor=Couleur
+ UIImportForm.label.AddCalendar=Ajouter un calendrier
+ UIImportForm.label.permission=Modifiable par
+@@ -370,7 +370,7 @@
+ UIQuickAddEvent.optionGroup.label.publicCalendar=Calendriers de groupes
+   
+ UIQuickAddEvent.action.MoreDetail=Plus de détails
+-UIQuickAddEvent.action.Save=#{word.save} 	
++UIQuickAddEvent.action.Save=Enregistrer 	
+ UIQuickAddEvent.action.Cancel=#{word.cancel}
+ 
+ UIQuickAddEvent.msg.summary-invalid=Le nom d'un événement ne doit pas contenir {0} ou {1}.
+@@ -425,7 +425,7 @@
+ UIQuickAddTask.optionGroup.label.publicCalendar=Calendriers de groupe
+ 
+ UIQuickAddTask.action.MoreDetail=Plus de détails
+-UIQuickAddTask.action.Save=#{word.save} 	
++UIQuickAddTask.action.Save=Enregistrer
+ UIQuickAddTask.action.Cancel=#{word.cancel} 	
+ 
+ UIQuickAddTask.msg.summary-invalid=Le nom d'une tâche ne peut pas contenir {0} ou {1}.
+@@ -446,7 +446,7 @@
+ UIAttachFileForm.action.Save=#{word.save} 	
+ UIAttachFileForm.action.Cancel=#{word.cancel} 	
+ UIAttachFileForm.msg.fileName-error=Vérifiez que vous avez bien téléchargé le fichier sélectionné en cliquant sur l'icône de téléchargement
+-UIAttachFileForm.msg.total-attachts-size-over10M=La taille totale des pièces jointes ne peut pas dépasser 10MB.
++UIAttachFileForm.msg.total-attachts-size-over10M=La taille totale des pièces jointes ne peut pas dépasser 10Mo.
+ 
+ #org.exoplatform.calendar.webui.popup.UICalendarCategoryManager
+ UICalendarChildPopupWindow.title.UICalendarCategoryManager=Groupes de calendriers
+@@ -471,7 +471,7 @@
+ UIActionBar.label.QuickAdd=
+ UIActionBar.label.Event=Evénement
+ UIActionBar.label.Task=Tâche
+-UIActionBar.label.CalendarView=
++UIActionBar.label.CalendarView=Vue calendrier
+ UIActionBar.label.CalendarSettings=Préférences
+ UIActionBar.label.RSS=RSS
+ UIActionBar.label.Print=Imprimer
+@@ -481,7 +481,6 @@
+ UIActionBar.label.ShowHideMinicalendar=Basculer le Mini Calendrier
+ UIActionBar.label.ShowHideCalendarList=Basculer la liste des calendriers
+ UIActionBar.label.Today=Aujourd'hui
+-
+ UIActionBar.label.UIDayView=Jour
+ UIActionBar.label.UIWeekView=Semaine
+ UIActionBar.label.UIMonthView=Mois
+@@ -489,15 +488,15 @@
+ UIActionBar.label.UIListContainer=Liste
+ UIActionBar.label.UIScheduleView=Agenda
+ UIActionBar.label.UIWorkingView=Semaine ouvrée
++UIActionBar.label.previous=Précédent
++UIActionBar.label.next=Suivant
+ 
+-
+-
+ #org.exoplatform.calendar.webui.popup.UITaskForm
+ UICalendarPopupWindow.title.UIPopupAddTaskContainer=Tâche
+ UITaskForm.tab.label.eventDetail=Tâche
+ UITaskForm.tab.label.eventReminder=Rappel
+ UITaskForm.action.AddAttachment=Ajouter une pièce jointe
+-UITaskForm.action.Save=#{word.save}
++UITaskForm.action.Save=Enregistrer
+ UITaskForm.action.Cancel=#{word.cancel}
+ UITaskForm.label.eventName=Nom de la tâche
+ UITaskForm.label.description=Description
+@@ -547,7 +546,7 @@
+ UITaskForm.msg.event-email-invalid=Le format d'adresse email n'est pas valide.
+ UITaskForm.msg.add-event-successfully=La tâche a bien été ajoutée.
+ UITaskForm.msg.update-event-successfully=La tâche a bien été mise à jour.
+-UITaskForm.msg.add-event-error=Impossible de sauver la tâche.
++UITaskForm.msg.add-event-error=Impossible d'enregistrer la tâche.
+ UITaskForm.msg.event-summary-required=Le nom de la tâche est onligatoire.
+ UITaskForm.msg.event-calendar-required=Ajoutez un calendrier avant.
+ UITaskForm.msg.event-category-required=Ajoutez une catégorie avant.
+@@ -826,7 +825,7 @@
+ #org.exoplatform.calendar.webui.popup.UIConfirmForm
+ UICalendarChildPopupWindow.title.UIConfirmForm=Confirmation
+ UIConfirmForm.label.confirm=Message
+-UIConfirmForm.action.ConfirmOK=Sauver et Envoyer
++UIConfirmForm.action.ConfirmOK=Enregistrer et Envoyer
+ UIConfirmForm.action.ConfirmCancel=#{word.save}
+ 
+ #org.exoplatform.calendar.webui.popup.UIEventShareTab
+Index: eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet.properties
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet.properties	(revision 61613)
++++ eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/calendar/CalendarPortlet.properties	(working copy)
+@@ -490,10 +490,9 @@
+ UIActionBar.label.UIListContainer=List
+ UIActionBar.label.UIScheduleView=Schedule
+ UIActionBar.label.UIWorkingView=Work week
++UIActionBar.label.previous=Previous
++UIActionBar.label.next=Next
+ 
+-
+-
+-
+ #org.exoplatform.calendar.webui.popup.UITaskForm
+ UICalendarPopupWindow.title.UIPopupAddTaskContainer=Add/Edit tasks
+ UITaskForm.tab.label.eventDetail=Detail
+Index: eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UIActionBar.gtmpl
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UIActionBar.gtmpl	(revision 61613)
++++ eXoApplication/calendar/webapp/src/main/webapp/templates/calendar/webui/UIActionBar.gtmpl	(working copy)
+@@ -124,8 +124,8 @@
+ 		      		</div>
+ 		      		<div class="SeparatorLine ActionBarButton"><span></span></div>
+ 		      		<div class="ScrollButtons" style="display: none;">
+-				      		<div title="Previous" class="ScrollLeftButton">
+-				      			<div title="Next" class="ScrollRightButton"><span></span></div>
++				      		<div title="<%=_ctx.appRes(uicomponent.id + '.label.previous')%>" class="ScrollLeftButton">
++				      			<div title="<%=_ctx.appRes(uicomponent.id + '.label.next')%>" class="ScrollRightButton"><span></span></div>
+ 				      		</div>
+ 			      	</div>
+ 						<div style="clear: both;"><span></span></div>
+Index: eXoApplication/contact/webapp/src/main/java/org/exoplatform/contact/webui/popup/UIFormMultiValueInputSet.java
+===================================================================
+--- eXoApplication/contact/webapp/src/main/java/org/exoplatform/contact/webui/popup/UIFormMultiValueInputSet.java	(revision 61613)
++++ eXoApplication/contact/webapp/src/main/java/org/exoplatform/contact/webui/popup/UIFormMultiValueInputSet.java	(working copy)
+@@ -20,6 +20,8 @@
+ import java.lang.reflect.Constructor;
+ import java.util.ArrayList;
+ import java.util.List;
++import java.util.MissingResourceException;
++import java.util.ResourceBundle;
+ 
+ import org.exoplatform.web.application.ApplicationMessage;
+ import org.exoplatform.webui.application.WebuiRequestContext;
+@@ -117,8 +119,17 @@
+ 
+     UIForm uiForm = getAncestorOfType(UIForm.class) ;
+     int size = getChildren().size() ;
+-//    ResourceBundle res = context.getApplicationResourceBundle() ;
+ 
++    ResourceBundle res = context.getApplicationResourceBundle() ;
++    String addItem = "Add Item";
++    String removeItem = "Remove Item";
++    try {
++        addItem =  res.getString("UIFormMultiValueInputSet.label.addItem");
++        removeItem =  res.getString("UIFormMultiValueInputSet.label.removeItem");
++    } catch (MissingResourceException e) {
++      e.printStackTrace() ;
++    }
++    
+     for(int i = 0; i < size; i++) {
+       UIFormInputBase uiInput = getChild(i) ;
+       writer.append("<div class=\"MultiValueContainer\">") ;
+@@ -127,11 +138,11 @@
+       if(i == size - 1) {
+         if(size >= 2){
+           writer.append("<a href=\"");
+-          writer.append(uiForm.event("Remove", getId()+String.valueOf(i))).append("\" title=\"Remove Item\">");
++          writer.append(uiForm.event("Remove", getId()+String.valueOf(i))).append("\" title=\"" + removeItem + "\">");
+           writer.append("<img class=\"MultiFieldAction Remove16x16Icon\" src=\"/eXoResources/skin/sharedImages/Blank.gif\" ></a>");
+         }
+         writer.append("<a href=\"");
+-        writer.append(uiForm.event("Add", getId())).append("\" title=\"Add Item\">");
++        writer.append(uiForm.event("Add", getId())).append("\" title=\"" + addItem + "\">");
+         writer.append("<img class=\"MultiFieldAction AddNewNodeIcon\" src=\"/eXoResources/skin/sharedImages/Blank.gif\" ></a>");
+       }      
+       writer.append("</div>") ;
+Index: eXoApplication/contact/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/contact/ContactPortlet.properties
+===================================================================
+--- eXoApplication/contact/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/contact/ContactPortlet.properties	(revision 61613)
++++ eXoApplication/contact/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/contact/ContactPortlet.properties	(working copy)
+@@ -552,3 +552,7 @@
+ 
+ #org.exoplatform.contact.ContactUtils
+ ContactUtils.label.emptyName=(unnamed)
++
++#org.exoplatform.contact.webui.popup.UIFormMultiValueInputSet
++UIFormMultiValueInputSet.label.addItem=Add Item
++UIFormMultiValueInputSet.label.removeItem=Remove Item
+Index: eXoApplication/contact/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/contact/ContactPortlet_fr.properties
+===================================================================
+--- eXoApplication/contact/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/contact/ContactPortlet_fr.properties	(revision 61613)
++++ eXoApplication/contact/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/contact/ContactPortlet_fr.properties	(working copy)
+@@ -1,20 +1,20 @@
+ javax.portlet.title=eXo Address Book
+ 
+ UIContactPopupWindow.title.AddNewContact=Contact
+-contactActionUIPopupWindow.title.UIAddressForm=Select Email
++contactActionUIPopupWindow.title.UIAddressForm=Sélectionner Email
+ UIContactPopupWindow.title.UICategoryForm=Carnet d'adresse
+ contactActionUIPopupWindow.title.UICategoryForm=Carnet d'adresse
+-UIContactPopupWindow.title.AddNewEvent=Add Event
++UIContactPopupWindow.title.AddNewEvent=Ajouter événement
+ UIContactPopupWindow.title.ExportForm=Exporter les contacts
+ UIContactPopupWindow.title.ImportAddress=Importer des carnets d'adresse
+ UIContactPopupWindow.title.ImportContacts=Importer des contacts
+ UIContactPopupWindow.title.UIExportAddressBookForm=Exporter des carnets d'adresse
+-UIContactPopupWindow.title.UITagForm=Ajouter supprimer un tag
++UIContactPopupWindow.title.UITagForm=Ajouter supprimer une étiquette
+ contactActionUIPopupWindow.title.UIImageForm=Télécharger une image
+-contactActionUIPopupWindow.title.UIPopupContainer
++contactActionUIPopupWindow.title.UIPopupContainer=
+ UIContactPopupWindow.title.ContactDetails=Fiche de contact
+ UIContactPopupWindow.title.UIMoveContactsForm=Déplacer le contact
+-UIContactPopupWindow.title.UIEditTagForm=Modifier le tag 
++UIContactPopupWindow.title.UIEditTagForm=Modifier l'étiquette
+ UIContactPopupWindow.title.UIAdvancedSearchForm=Recherche avancée
+ UIPopupGroupSelector.title.UIGroupSelector=Sélectionnez un groupe
+ UIPopupWindowUserSelect.title.UIUserSelector=Sélectionnez un utilisateur
+@@ -31,7 +31,7 @@
+ 
+ #org.exoplatform.contact.webui.popup.UIContactForm
+ UIContactForm.label.contactName=Nom du contact
+-UIContactForm.action.Save=#{word.save}
++UIContactForm.action.Save=Enregistrer
+ UIContactForm.action.Cancel=#{word.cancel}
+ UIContactForm.label.firstName=Prénom
+ UIContactForm.label.lastName=Nom
+@@ -100,7 +100,7 @@
+ UIContactForm.msg.jobTooLong=Le titre professionnel est trop long.
+ 
+ #org.exoplatform.contact.webui.popup.UICategoryForm
+-UICategoryForm.action.Save=#{word.save}
++UICategoryForm.action.Save=Enregistrer
+ UICategoryForm.action.Cancel=#{word.cancel}
+ UICategoryForm.msg.existed-categoryName=Ce nom de carnet d'adresse existe déjà, veuillez en choisir un autre.
+ UICategoryForm.msg.userExisted-categoryName={0} a déjà un carnet d'adresse portant ce nom, choisissez un autre nom.
+@@ -112,7 +112,7 @@
+ 
+ #org.exoplatform.contact.webui.popup.UIImportForm
+ UIImportForm.action.Cancel=#{word.cancel}
+-UIImportForm.action.Save=#{word.save}
++UIImportForm.action.Save=Enregistrer
+ UIImportForm.label.type=Format d'import
+ UIImportForm.label.upload=Télécharger un fichier
+ UIImportForm.msg.fileName-empty=Sélectionnez un fichier.
+@@ -144,7 +144,7 @@
+ UIExportForm.label.checkAll=Tout sélectionner
+ UIExportForm.label.available=Disponible
+ UIExportForm.msg.manyContacts=Vous ne pouvez pas importer plus de {0} contacts à la fois.
+-UIExportForm.msg.deletedPer=Vous n'êtes pas autosié à effectuer cette action.
++UIExportForm.msg.deletedPer=Vous n'êtes pas autorisé à effectuer cette action.
+ 
+ #org.exoplatform.contact.webui.popup.UIExportAddressBookForm
+ UIExportAddressBookForm.action.Cancel=#{word.cancel}
+@@ -163,30 +163,30 @@
+ 
+ #org.exoplatform.contact.webui.popup.UITagForm
+ UITagForm.label.contact=Contact
+-UITagForm.label.tagName=Tag
++UITagForm.label.tagName=Etiquette
+ UITagForm.label.color=Couleur
+-UITagForm.msg.tagName-required=Entrez un nouveau nom de tag.
++UITagForm.msg.tagName-required=Entrez un nouveau nom d'étiquette.
+ UITagForm.msg.tagName-existed=Ce tag existe déjà, choisissez en un autre.
+ UITagForm.label.shareContactTab=Gestion du partage
+ UITagForm.action.Add=Ajouter
+ UITagForm.action.Cancel=Annuler
+ UITagForm.action.Remove=Supprimer
+-UITagForm.msg.checkTag-required=Sélectionnez le tag à supprimer.
+-UITag.msg.noContactToExport=Aucun contact dans ce tag n'est sélectionné pour l'export. Ajoutez un moins un contact.
+-UITagForm.msg.contact-not-existed=Impossible de tagger. Ce contact n'existe plus.
+-UITagForm.msg.contact-not-exist-remove=Impossible de détagger. Ce contact n'existe plus.
++UITagForm.msg.checkTag-required=Sélectionnez l'étiquette à supprimer.
++UITag.msg.noContactToExport=Aucun contact dans cet étiquette n'est sélectionné pour l'export. Ajoutez un moins un contact.
++UITagForm.msg.contact-not-existed=Impossible d'étiqueter. Ce contact n'existe plus.
++UITagForm.msg.contact-not-exist-remove=Impossible de détager. Ce contact n'existe plus.
+ UITagForm.msg.nameTooLong=Ce nom est trop long.
+ UITagForm.msg.noTagRemoved={0} n'est affecté à aucun contact.
+ 
+ #org.exoplatform.contact.webui.popup.UIEditTagForm
+-UIEditTagForm.label.tagName=Tag
+-UIEditTagForm.label.description=Desciption
+-UIEditTagForm.msg.tagName-required=Nommez le tag
+-UIEditTagForm.msg.tagName-existed=Ce tag existe déjà. Choisissez un autre nom.
+-UIEditTagForm.action.Save=#{word.save}
++UIEditTagForm.label.tagName=Etiquette
++UIEditTagForm.label.description=Description
++UIEditTagForm.msg.tagName-required=Nommez l'étiquette
++UIEditTagForm.msg.tagName-existed=Cet étiquette existe déjà. Choisissez un autre nom.
++UIEditTagForm.action.Save=Enregistrer
+ UIEditTagForm.action.Cancel=#{word.cancel}
+ UIEditTagForm.label.color=Couleur
+-UIEditTagForm.msg.tag-deleted=Action immpossible, ce tag n'existe plus.
++UIEditTagForm.msg.tag-deleted=Action impossible, cet étiquette n'existe plus.
+ UIEditTagForm.msg.nameTooLong=Ce nom est trop long.
+ 
+ #org.exoplatform.contact.webui.UIContacts
+@@ -199,7 +199,7 @@
+ UIContacts.label.shared=Partager
+ UIContacts.label.sendEmail=Envoyer un email
+ UIContacts.label.instantMessage=Chat
+-UIContacts.label.tag=Tagger
++UIContacts.label.tag=Etiqueter
+ UIContacts.label.move=Déplacer
+ UIContacts.label.delete=Supprimer
+ UIContacts.label.print=Imprimer
+@@ -229,7 +229,7 @@
+ UIContacts.msg.checkContact-toSendMail=Vous devez cocher les contacts destinataires.
+ UIContacts.msg.checkContact-toPrint=Vous devez cocher les contacts à imprimer.
+ UIContacts.msg.checkContact-toMove=Vous devez cocher les contacts à déplacer.
+-UIContacts.msg.checkContact-toTag=Vous devez cocher les contacts à tagger.
++UIContacts.msg.checkContact-toTag=Vous devez cocher les contacts à étiqueter.
+ UIContacts.label.sharedContacts=(Contacts Partagés)
+ UIContacts.msg.chatApp-notAvaiable=L'application eXo Chat n'est pas disponible.
+ UIContacts.msg.checkContact-toChat=Vous devez cocher les contacts pour discuter.
+@@ -256,11 +256,11 @@
+ 
+ #org.exoplatform.contact.webui.popup.UIMoveContactsForm
+ UIMoveContactsForm.action.Cancel=#{word.cancel}
+-UIMoveContactsForm.msg.selectGroup-required=Choissiez le groupe où sauver le contact.
++UIMoveContactsForm.msg.selectGroup-required=Choissiez le groupe où enregistrer le contact.
+ UIMoveContactsForm.msg.non-permission=Vous n'êtes pas autorisé à effectuer cette action.
+ UIMoveContactsForm.label.contacts=Contacts :
+ UIMoveContactsForm.label.toPrivate=Vers les carnets d'adresse privés :
+-UIMoveContactsForm.label.toShared=Vers les carnets d'adress partagés : 
++UIMoveContactsForm.label.toShared=Vers les carnets d'adresse partagés : 
+ UIMoveContactsForm.msg.contact-not-existed=Cette action n'a pu aboutir. Le contact n'existe plus.
+ UIMoveContactsForm.msg.contact-deleted=Cette action n'a pu aboutir. Le contact n'existe plus.
+ 
+@@ -268,7 +268,7 @@
+ UIAddressBooks.msg.confirm-delete=Ce carnet d'adresse sera supprimé. Confirmez-vous?
+ UIAddressBooks.msg.groupCannot-deleted=Ce groupe ne peut être supprimé.
+ UIAddressBooks.msg.not-already=Pas encore
+-UIAddressBooks.msg.noContactToExport=Le carnet aue vous tentez d'exporter est vide.
++UIAddressBooks.msg.noContactToExport=Le carnet que vous tentez d'exporter est vide.
+ UIAddressBooks.msg.invalidAddress=Et si vous choisissiez un carnet d'adresse différent ?
+ UIAddressBooks.msg.no-email-found=Nous n'avons pas trouvé d'adresse email!
+ UIAddressBooks.msg.non-permission=Vous n'êtes pas autorisé à effectuer cette action.
+@@ -278,8 +278,8 @@
+ UIAddressBooks.label.importAddress=Importer
+ UIAddressBooks.label.exportAddress=Exporter
+ UIAddressBooks.label.personalAddress=Personnels
+-UIAddressBooks.label.publicAddress=Publics
+-UIAddressBooks.label.publicGroups=Public Groups
++UIAddressBooks.label.publicAddress=Groupes de contacts
++UIAddressBooks.label.publicGroups=Groupes 
+ UIAddressBooks.label.addContact=Ajouter
+ UIAddressBooks.label.copyContacts=Copier
+ UIAddressBooks.label.pasteContacts=Coller
+@@ -295,12 +295,12 @@
+ UIAddressBooks.label.collapse-expand=déplier/replier tout
+ UIAddressBooks.label.defaultAddName=Mes Contacts
+ UIAddressBooks.label.defaultAddDes=Mon carnet d'adresse personnel
+-UIAddressBooks.msg.removedPer=You do not have edit permission so you can not perform this action!
+-UIAddressBooks.label.collectedAddresses=Collected Addresses
++UIAddressBooks.msg.removedPer=Vous ne disposez pas des privilèges nécessaires pour effectuer cette action.
++UIAddressBooks.label.collectedAddresses= Adresses collectées
+ 
+ #org.exoplatform.contact.webui.UITags
+-UITags.msg.confirm-delete=Confirmez-vous la supression de ce tag ?
+-UITags.label.tags=Tags
++UITags.msg.confirm-delete=Confirmez-vous la suppression de cet étiquette ?
++UITags.label.tags=Etiquettes
+ UITags.label.printContacts=Imprimer les contacts
+ UITags.label.exportContacts=Exporter les contacts
+ UITags.label.delete=Supprimer
+@@ -310,6 +310,7 @@
+ UITags.msg.no-email-found=Aucune adresse email trouvée pour ce contact.
+ UITags.label.addTag=Ajouter
+ 
++
+ #org.exoplatform.contact.webui.popup.UIImageForm
+ UIImageForm.action.Save=#{word.save}
+ UIImageForm.action.Cancel=#{word.cancel}
+@@ -419,7 +420,7 @@
+ UIActionBar.label.default=Réinitialiser
+ UIActionBar.label.navigation=Panneau latéral
+ UIActionBar.label.addressbooks=Carnets d'adresse
+-UIActionBar.label.tags=Tags
++UIActionBar.label.tags=Etiquettes
+ UIActionBar.label.details=Détails
+ UIActionBar.label.customLayoutView=Vue
+ UIActionBar.label.contactsView=Vue
+@@ -460,9 +461,9 @@
+ UIGroupSelector.msg.invalid-username=Vous ne pouvez partager à vous-même.
+ 
+ #org.exoplatform.contact.webui.popup.UIUserSelector
+-UIUserSelector.label.selectUser=Selectionnez un utilisateur
+-UIUserSelector.label.selectGroup=Selectionnez un groupe
+-UIUserSelector.label.selectMemberShip=Selectionnez un rôles
++UIUserSelector.label.selectUser=Sélectionnez un utilisateur
++UIUserSelector.label.selectGroup=Sélectionnez un groupe
++UIUserSelector.label.selectMemberShip=Sélectionnez un rôle
+ 
+ #org.exoplatform.contact.webui.popup.UIComposeForm
+ UIComposeForm.msg.to-field-empty=A qui faut-il l'envoyer?
+@@ -536,8 +537,8 @@
+ imContactTab.label.ICQ=ICQ
+ 
+ #org.exoplatform.contact.webui.popup.UITagInfo
+-UITagInfo.label.tag=Tag
+-UITagInfo.label.tagName=Tag
++UITagInfo.label.tag=Etiquette
++UITagInfo.label.tagName=Etiquette
+ 
+ #org.exoplatform.contact.webui.UIWelcomeContact
+ UIWelcomeContact.label.label0=Bienvenue dans
+@@ -545,7 +546,11 @@
+ UIWelcomeContact.label.label2=Aperçu
+ UIWelcomeContact.label.label3=eXo Address Book est une application intégrée à eXo Collaboration Suite. Elle gère tous les contacts entrés manuellement, importés d'un fichier ou même collectés automatiquement. Vos contacts sont organisés par carnets d'adresse et librement partageables avec vos collaborateurs.
+ UIWelcomeContact.label.label4=Fonctionnalités
+-UIWelcomeContact.label.label5=eXo Address Book offre de nombreuses fonctionnalités pour améliorer votre productivité : partage, recherche, tags, vcards et autres actions de groupe.
++UIWelcomeContact.label.label5=eXo Address Book offre de nombreuses fonctionnalités pour améliorer votre productivité : partage, recherche, étiquettes, vcards et autres actions de groupe.
+ 
+ #org.exoplatform.contact.ContactUtils
+-ContactUtils.label.emptyName=(sans nom)
+\ No newline at end of file
++ContactUtils.label.emptyName=(sans nom)
++
++#org.exoplatform.contact.webui.popup.UIFormMultiValueInputSet
++UIFormMultiValueInputSet.label.addItem=Ajouter un contact
++UIFormMultiValueInputSet.label.removeItem=Supprimer un contact
+Index: web/csportal/src/main/webapp/WEB-INF/classes/locale/cs/homepage_fr.properties
+===================================================================
+--- web/csportal/src/main/webapp/WEB-INF/classes/locale/cs/homepage_fr.properties	(revision 61613)
++++ web/csportal/src/main/webapp/WEB-INF/classes/locale/cs/homepage_fr.properties	(working copy)
+@@ -7,25 +7,25 @@
+ UIHomePagePortlet.cs-calendar-3=Partage de calendrier
+ UIHomePagePortlet.cs-calendar-4=Invitations et rappels
+ UIHomePagePortlet.cs-calendar-5=VÃ©rification de disponibilitÃ©
+-UIHomePagePortlet.cs-calendar-6=Support iCal
++UIHomePagePortlet.cs-calendar-6=Support d'iCal 
+ 
+-UIHomePagePortlet.cs-address-book=Address Book
+-UIHomePagePortlet.cs-address-book-1=Carnets public, partagÃ©s et personels
++UIHomePagePortlet.cs-address-book=Carnet d'adresses
++UIHomePagePortlet.cs-address-book-1=Carnets publics, partagÃ©s et personels
+ UIHomePagePortlet.cs-address-book-2=Partage de carnets et de contacts
+-UIHomePagePortlet.cs-address-book-3=IntÃ©gration avec Mail et Calendar
++UIHomePagePortlet.cs-address-book-3=IntÃ©gration avec Mail et Calendrier
+ UIHomePagePortlet.cs-address-book-4=Recherche avancÃ©e
+-UIHomePagePortlet.cs-address-book-5=Support vCard
++UIHomePagePortlet.cs-address-book-5=Support de vCard
+ 
+ UIHomePagePortlet.cs-mail=Mail
+ UIHomePagePortlet.cs-mail-1=Comptes multiples
+ UIHomePagePortlet.cs-mail-2=Vue conversation, discussion et liste
+-UIHomePagePortlet.cs-mail-3=Tags, suivis et filtres
++UIHomePagePortlet.cs-mail-3=Etiquettes, suivis et filtres
+ UIHomePagePortlet.cs-mail-4=Recherche avancÃ©e
+-UIHomePagePortlet.cs-mail-5=Support IMAP, POP, SMTP
++UIHomePagePortlet.cs-mail-5=Support de IMAP, POP, SMTP 
+ 
+ UIHomePagePortlet.cs-chat=Chat
+ UIHomePagePortlet.cs-chat-1=Messagerie instantanÃ©e
+-UIHomePagePortlet.cs-chat-2=Salles de discussion
++UIHomePagePortlet.cs-chat-2=Salon de Chat
+ UIHomePagePortlet.cs-chat-3=Echange de fichiers
+ UIHomePagePortlet.cs-chat-4=Historique
+ UIHomePagePortlet.cs-chat-5=Protocole XMPP
+@@ -43,4 +43,5 @@
+ UIHomePagePortlet.cs-more=Pour plus d'informations visitez
+ UIHomePagePortlet.cs-wiki=Wiki
+ UIHomePagePortlet.cs-forum=Forum
+-UIHomePagePortlet.cs-and=et
+\ No newline at end of file
++UIHomePagePortlet.cs-and=et
++UIHomePagePortlet.cs-the=les
+\ No newline at end of file
+Index: web/csportal/src/main/webapp/templates/groovy/webui/component/UIHomePagePortlet.gtmpl
+===================================================================
+--- web/csportal/src/main/webapp/templates/groovy/webui/component/UIHomePagePortlet.gtmpl	(revision 61613)
++++ web/csportal/src/main/webapp/templates/groovy/webui/component/UIHomePagePortlet.gtmpl	(working copy)
+@@ -239,7 +239,7 @@
+ 						<%}%>					
+  					<div class="DotLine"><span></span></div>
+ 					<div class="NormalText"><%=res.getString("UIHomePagePortlet.cs-more")%><br/>
+-the <a href="http://wiki.exoplatform.org/xwiki/bin/view/CS" class="ProVersion"><%=res.getString("UIHomePagePortlet.cs-wiki")%></a> <%=res.getString("UIHomePagePortlet.cs-and")%> <a href="http://forum.exoplatform.com" class="ProVersion"><%=res.getString("UIHomePagePortlet.cs-forum")%></a></div>
++					<%=res.getString("UIHomePagePortlet.cs-the")%>&nbsp;<a href="http://wiki.exoplatform.org/xwiki/bin/view/CS" class="ProVersion"><%=res.getString("UIHomePagePortlet.cs-wiki")%></a> <%=res.getString("UIHomePagePortlet.cs-and")%> <a href="http://forum.exoplatform.com" class="ProVersion"><%=res.getString("UIHomePagePortlet.cs-forum")%></a></div>
+ 									
+ 					<div style="height:69px;"><span></span></div>
+ 				</div>

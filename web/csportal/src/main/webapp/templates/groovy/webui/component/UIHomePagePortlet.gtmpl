@@ -239,7 +239,7 @@
 						<%}%>					
  					<div class="DotLine"><span></span></div>
 					<div class="NormalText"><%=res.getString("UIHomePagePortlet.cs-more")%><br/>
-the <a href="http://wiki.exoplatform.org/xwiki/bin/view/CS" class="ProVersion"><%=res.getString("UIHomePagePortlet.cs-wiki")%></a> <%=res.getString("UIHomePagePortlet.cs-and")%> <a href="http://forum.exoplatform.com" class="ProVersion"><%=res.getString("UIHomePagePortlet.cs-forum")%></a></div>
+					<%=res.getString("UIHomePagePortlet.cs-the")%>&nbsp;<a href="http://wiki.exoplatform.org/xwiki/bin/view/CS" class="ProVersion"><%=res.getString("UIHomePagePortlet.cs-wiki")%></a> <%=res.getString("UIHomePagePortlet.cs-and")%> <a href="http://forum.exoplatform.com" class="ProVersion"><%=res.getString("UIHomePagePortlet.cs-forum")%></a></div>
 									
 					<div style="height:69px;"><span></span></div>
 				</div>
