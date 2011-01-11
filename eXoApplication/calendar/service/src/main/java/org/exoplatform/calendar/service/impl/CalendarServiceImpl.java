@@ -672,7 +672,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    * {@inheritDoc}
    */
   public Calendar importRemoteIcs(String username, String remoteUrl, String calendarName, String syncPeriod, Credentials credentials) throws Exception {
-    return remoteCalendarService.importRemoteIcs(username, remoteUrl, calendarName, syncPeriod, credentials);
+    return remoteCalendarService.importRemoteCalendar(username, remoteUrl, ICALENDAR, calendarName, syncPeriod, credentials);
   }
   
   /**
@@ -687,7 +687,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    */
   @Override
   public Calendar importCalDavCalendar(String username, String calDavUrl, String calendarName, String syncPeriod, Credentials credentials) throws Exception {
-    return remoteCalendarService.importCalDavCalendar(username, calDavUrl, calendarName, syncPeriod, credentials);
+    return remoteCalendarService.importRemoteCalendar(username, calDavUrl, CALDAV, calendarName, syncPeriod, credentials);
   }
   
   /**

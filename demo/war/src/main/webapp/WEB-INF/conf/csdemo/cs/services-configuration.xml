@@ -75,7 +75,7 @@
           <property name="jobName" value="SynchronizeRemoteCalendarJob"/>
           <property name="groupName" value="CollaborationSuite"/>
           <property name="job" value="org.exoplatform.calendar.service.SynchronizeRemoteCalendarJob"/>
-          <property name="repeatCount" value="1"/>
+          <property name="repeatCount" value="0"/>
           <property name="period" value="300000"/>     
           <property name="startTime" value="+0"/>
           <property name="endTime" value=""/>               

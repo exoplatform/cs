@@ -44,6 +44,7 @@ import net.fortuna.ical4j.model.property.Clazz;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
@@ -76,32 +77,23 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
   }
   
   @Override
-  public InputStream connectToCalDavCalendar(String calDavUrl,
-                                             String remoteUser,
-                                             String remotePassword) throws Exception {
+  public InputStream connectToRemoteServer(String remoteUrl, String remoteType, String remoteUser, String remotePassword) throws Exception {
     HostConfiguration hostConfig = new HostConfiguration();
-    hostConfig.setHost(calDavUrl);
+    String host = new URL(remoteUrl).getHost();
+    if (StringUtils.isEmpty(host)) host = remoteUrl;
+    hostConfig.setHost(host);
     HttpClient client = new HttpClient();
     client.setHostConfiguration(hostConfig);
+    
+    // basic authentication
     if (!StringUtils.isEmpty(remoteUser)) {
       Credentials credentials = new UsernamePasswordCredentials(remoteUser, remotePassword);  
-      client.getState().setCredentials(AuthScope.ANY, credentials);
+      client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
     }
-    GetMethod get = new GetMethod(calDavUrl);
+    GetMethod get = new GetMethod(remoteUrl);
     client.executeMethod(get);
     InputStream icalInputStream = get.getResponseBodyAsStream();
     return icalInputStream;
-  }
-
-  @Override
-  public InputStream connectToRemoteIcs(String icalUrl, String remoteUser, String remotePassword) throws Exception {
-    URL url = new URL(icalUrl);
-    HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
-    if (!StringUtils.isEmpty(remoteUser)) {
-      String authStringEnc = new String(Base64.encodeBase64(new String(remoteUser + ":" + remotePassword).getBytes()));
-      urlCon.setRequestProperty("Authorization", "Basic " + authStringEnc);
-    }
-    return urlCon.getInputStream();
   }
 
   @Override
@@ -116,7 +108,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     try {
       if (type.equals(CalendarService.ICALENDAR)) {
         HttpURLConnection httpCon = (HttpURLConnection) (new URL(url)).openConnection();
-        httpCon.setRequestMethod("HEAD");
+        httpCon.setRequestMethod("GET");
         return (httpCon.getResponseCode() == HttpURLConnection.HTTP_OK);
       }
       else {
@@ -156,12 +148,16 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         if (type.equals(CalendarService.CALDAV)) {
           HttpClient client = new HttpClient();
           HostConfiguration hostConfig = new HostConfiguration();
-          hostConfig.setHost(url);
+          String host = new URL(url).getHost();
+          if (StringUtils.isEmpty(host)) host = url;
+          hostConfig.setHost(host);
           Credentials credentials = new UsernamePasswordCredentials(remoteUser, remotePassword);
           client.setHostConfiguration(hostConfig);
-          client.getState().setCredentials(AuthScope.ANY, credentials);
+          client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
           OptionsMethod options = new OptionsMethod(url);
           client.executeMethod(options);
+          Header[] header = options.getResponseHeaders("DAV");
+          if (header == null) return false;
           Boolean support = options.getResponseHeader("DAV").toString().contains("calendar-access");
           options.releaseConnection();
           return support;
@@ -352,28 +348,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
   }
   
   @Override
-  public Calendar importRemoteIcs(String username, String remoteUrl, String calendarName, String syncPeriod, Credentials credentials) throws Exception {
-    String remoteUser = null;
-    String remotePassword = null;
-    if (credentials != null) {
-      UsernamePasswordCredentials creds = (UsernamePasswordCredentials) credentials;
-      remoteUser = creds.getUserName();
-      remotePassword = creds.getPassword();
-    }
-    InputStream icalInputStream = connectToRemoteIcs(remoteUrl, remoteUser, remotePassword); 
-    Calendar eXoCalendar = storage_.createRemoteCalendar(username, calendarName, remoteUrl, CalendarService.ICALENDAR, syncPeriod, remoteUser, remotePassword);
-    
-    importRemoteCalendar(username, eXoCalendar.getId(), icalInputStream);
-    storage_.setRemoteCalendarLastUpdated(username, eXoCalendar.getId(), Utils.getGreenwichMeanTime());
-    return eXoCalendar;
-  }
-
-  @Override
-  public Calendar importCalDavCalendar(String username,
-                                       String calDavUrl,
-                                       String calendarName,
-                                       String syncPeriod,
-                                       Credentials credentials) throws Exception {
+  public Calendar importRemoteCalendar(String username, String remoteUrl, String remoteType, String calendarName, String syncPeriod, Credentials credentials) throws Exception {
     String remoteUser = null;
     String remotePassword = null;
     if (credentials != null) {
@@ -381,10 +356,8 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       remotePassword = ((UsernamePasswordCredentials) credentials).getPassword();
     }
     
-    InputStream icalInputStream = connectToCalDavCalendar(calDavUrl, remoteUser, remotePassword);
-    
-    Calendar eXoCalendar = storage_.createRemoteCalendar(username, calendarName, calDavUrl, CalendarService.CALDAV, syncPeriod, remoteUser, remotePassword);
-    
+    InputStream icalInputStream = connectToRemoteServer(remoteUrl, remoteType, remoteUser, remotePassword);
+    Calendar eXoCalendar = storage_.createRemoteCalendar(username, calendarName, remoteUrl, remoteType, syncPeriod, remoteUser, remotePassword);
     importRemoteCalendar(username, eXoCalendar.getId(), icalInputStream);
     storage_.setRemoteCalendarLastUpdated(username, eXoCalendar.getId(), Utils.getGreenwichMeanTime());
     return eXoCalendar;
@@ -404,15 +377,9 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     
     InputStream icalInputStream = null;
     
-    if (CalendarService.ICALENDAR.equals(remoteType)) {
-      icalInputStream = connectToRemoteIcs(remoteUrl, remoteUser, remotePassword);
-    } else {
-      if (CalendarService.CALDAV.equals(remoteType)) {
-        icalInputStream = connectToCalDavCalendar(remoteUrl, remoteUser, remotePassword);
-      }
-    }
+    icalInputStream = connectToRemoteServer(remoteUrl, remoteType, remoteUser, remotePassword);
       
-    // remote all components in local calendar
+    // remove all components in local calendar
     List<String> calendarIds = new ArrayList<String>();
     calendarIds.add(remoteCalendarId);
     List<CalendarEvent> events = storage_.getUserEventByCalendar(username, calendarIds);

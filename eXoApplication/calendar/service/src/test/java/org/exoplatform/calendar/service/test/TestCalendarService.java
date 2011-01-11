@@ -29,7 +29,6 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
-import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
@@ -38,7 +37,6 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RemoteCalendarService;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.Utils;
-import org.exoplatform.calendar.service.impl.ICalendarImportExport;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -468,7 +466,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calendarService_.saveCalendarCategory(username, calCategory, true);
     
     RemoteCalendarService remoteCalendarService =  calendarService_.getRemoteCalendarService();
-    Calendar cal = remoteCalendarService.importRemoteIcs(username, url, "CalendarName", "None", null);
+    Calendar cal = remoteCalendarService.importRemoteCalendar(username, url, CalendarService.ICALENDAR, "CalendarName", "Auto", null) ;
     cal.setCategoryId(calCategory.getId()) ;
     calendarService_.saveUserCalendar(username, cal, true) ;
     
@@ -491,7 +489,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     
     RemoteCalendarService remoteCalendarService =  calendarService_.getRemoteCalendarService();
     Credentials credentials = new UsernamePasswordCredentials(userName, password);
-    Calendar cal = remoteCalendarService.importCalDavCalendar(username, url,"CalendarName", "None", credentials);
+    Calendar cal = remoteCalendarService.importRemoteCalendar(username, url, CalendarService.CALDAV, "CalendarName", "Auto", credentials) ;
     cal.setCategoryId(calCategory.getId()) ;
     cal.setPublic(false) ;
     calendarService_.saveUserCalendar(username, cal, true) ;

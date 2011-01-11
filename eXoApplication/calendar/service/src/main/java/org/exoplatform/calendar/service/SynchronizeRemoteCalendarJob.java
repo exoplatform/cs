@@ -18,7 +18,6 @@ package org.exoplatform.calendar.service;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -91,13 +90,7 @@ public class SynchronizeRemoteCalendarJob implements Job {
         // case 1: if auto refresh calendar, do refresh this calendar
         if (syncPeriod.equals(Utils.SYNC_AUTO)) {          
           
-          if (CalendarService.ICALENDAR.equals(remoteType)) {
-            icalInputStream = remoteCalendarService.connectToRemoteIcs(remoteUrl, remoteUser, remotePassword);
-          } else {
-            if (CalendarService.CALDAV.equals(remoteType)) {
-              icalInputStream = remoteCalendarService.connectToCalDavCalendar(remoteUrl, remoteUser, remotePassword);
-            }
-          }
+          icalInputStream = remoteCalendarService.connectToRemoteServer(remoteUrl, remoteType, remoteUser, remotePassword);
             
           // remove all components in local calendar
           List<String> calendarIds = new ArrayList<String>();
@@ -122,13 +115,7 @@ public class SynchronizeRemoteCalendarJob implements Job {
           if (Utils.SYNC_1YEAR.equals(syncPeriod)) interval = 365 * 7 * 24 * 60 * 60 * 1000;
           
           if (lastUpdate + interval > now) {
-            if (CalendarService.ICALENDAR.equals(remoteType)) {
-              icalInputStream = remoteCalendarService.connectToRemoteIcs(remoteUrl, remoteUser, remotePassword);
-            } else {
-              if (CalendarService.CALDAV.equals(remoteType)) {
-                icalInputStream = remoteCalendarService.connectToCalDavCalendar(remoteUrl, remoteUser, remotePassword);
-              }
-            }
+            icalInputStream = remoteCalendarService.connectToRemoteServer(remoteUrl, remoteType, remoteUser, remotePassword);
               
             // remove all components in local calendar
             List<String> calendarIds = new ArrayList<String>();
@@ -156,15 +143,6 @@ public class SynchronizeRemoteCalendarJob implements Job {
     if (log_.isDebugEnabled()) log_.debug("Succcessfully reload remote calendar.");
     
   }
-  
-  /*private Node getPublicServiceHome(SessionProvider provider) throws Exception {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    NodeHierarchyCreator nodeHierarchyCreator  = (NodeHierarchyCreator) container
-                                                .getComponentInstanceOfType(NodeHierarchyCreator.class);
-    Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(provider) ;
-    if(publicApp != null && publicApp.hasNode(Utils.CALENDAR_APP)) return publicApp.getNode(Utils.CALENDAR_APP) ;
-    return null ;   
-  }*/
   
   private Session getSession(SessionProvider sprovider) throws Exception{
     ExoContainer container = ExoContainerContext.getCurrentContainer();

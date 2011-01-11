@@ -58,24 +58,15 @@ public interface RemoteCalendarService {
   boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws Exception ;
   
   /**
-   * Connect to online ics file to get calendar data
-   * @param icalUrl url of the ics file
-   * @param remoteUser username to authenticate
-   * @param remotePassword password to authenticate
-   * @return iCalendar InputStream
+   * Connect to remote server
+   * @param remoteUrl the remote url
+   * @param remoteType the remote type, iCalendar or CalDav
+   * @param remoteUser remote username to authenticate
+   * @param remotePassword remote password to authenticate
+   * @return response's input stream
    * @throws Exception
    */
-  InputStream connectToRemoteIcs(String icalUrl, String remoteUser, String remotePassword) throws Exception ;
-  
-  /**
-   * Connect to CalDav server to get calendar data
-   * @param caldavUrl url to access calendar via CalDav
-   * @param remoteUser username to authenticate
-   * @param remotePassword password to authenticate
-   * @return iCalendar InputStream
-   * @throws Exception
-   */
-  InputStream connectToCalDavCalendar(String caldavUrl, String remoteUser, String remotePassword) throws Exception ;
+  InputStream connectToRemoteServer(String remoteUrl, String remoteType, String remoteUser, String remotePassword) throws Exception ;
   
   /**
    * Import iCalendar InputStream to local eXo Calendar
@@ -88,17 +79,20 @@ public interface RemoteCalendarService {
   Calendar importRemoteCalendar(String username, String calendarId, InputStream icalInputStream) throws Exception ;
   
   /**
-   * @param username
-   * @param remoteUrl
-   * @param calendarName
-   * @param syncPeriod
-   * @param credentials
-   * @return
+   * Import remote calendar to eXo calendar, contains 2 steps: connect to server then import to local database
+   * @param username owner of this calendar
+   * @param remoteUrl url to the remote calendar
+   * @param remoteType iCalendar or CalDav
+   * @param calendarName name of the local calendar
+   * @param syncPeriod synchronization period
+   * @param credentials the credentials to authenticate
+   * @return Calendar object
    * @throws Exception
    */
-  Calendar importRemoteIcs(String username, String remoteUrl, String calendarName, String syncPeriod, Credentials credentials) throws Exception ;
+  Calendar importRemoteCalendar(String username, String remoteUrl, String remoteType, String calendarName, String syncPeriod, Credentials credentials) throws Exception ;
   
   /**
+   * Reload remote calendar
    * @param username
    * @param remoteCalendarId
    * @return
@@ -106,14 +100,4 @@ public interface RemoteCalendarService {
    */
   Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception ;
   
-  /**
-   * @param username
-   * @param calDavUrl
-   * @param calendarName
-   * @param syncPeriod
-   * @param credentials
-   * @return
-   * @throws Exception
-   */
-  Calendar importCalDavCalendar(String username, String calDavUrl, String calendarName, String syncPeriod, Credentials credentials) throws Exception ;
 }
