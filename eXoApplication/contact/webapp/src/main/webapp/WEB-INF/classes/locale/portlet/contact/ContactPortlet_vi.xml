@@ -689,6 +689,7 @@
       <invalidAcc>Cấu hình tài khoản mail sai</invalidAcc>
       <save-sent-error>Lỗi lưu thư được gửi</save-sent-error>
       <invalid-email>Địa chỉ thư không đúng</invalid-email>
+			<cannot-send>Lỗi gửi thư</cannot-send>
     </msg>
     <label>
       <sendMail>Gửi thư</sendMail>

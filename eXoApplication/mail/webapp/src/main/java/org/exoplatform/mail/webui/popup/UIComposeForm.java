@@ -1136,7 +1136,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
                               false);
         }
         if(!saveMsgSuccess){
-          composeForm.getAncestorOfType(UIApplication.class).addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-sent", null, ApplicationMessage.INFO)) ;
+          composeForm.getAncestorOfType(UIApplication.class).addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-send", null, ApplicationMessage.INFO)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(composeForm.getAncestorOfType(UIApplication.class)) ;
         }
       }

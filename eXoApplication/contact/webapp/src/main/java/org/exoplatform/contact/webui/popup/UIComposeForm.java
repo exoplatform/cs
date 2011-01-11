@@ -277,7 +277,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           message.setReplyTo(message.getMessageTo()) ;
           boolean saveMsgsuccess = mailSvr.saveMessage(username, mailSvr.getAccountById(username, accId), message.getPath(), message, true) ;
           if(!saveMsgsuccess){
-            uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-sent", null, ApplicationMessage.INFO)) ;
+            uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.cannot-send", null, ApplicationMessage.INFO)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           }
           uiChildPopup.deActivate() ;
