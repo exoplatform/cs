@@ -107,44 +107,49 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForTextPresent</td>
-	<td>Test_18_Event</td>
+	<td>waitForElementPresent</td>
+	<td>//div[@title=&quot;Test_18_Event&quot;]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyTextPresent</td>
-	<td>Test_18_Event</td>
+	<td>verifyElementPresent</td>
+	<td>//div[@title=&quot;Test_18_Event&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div[@title='Test_18_Event']</td>
+	<td>//div[@class='EventContainerBorder WeekViewEventBoxes PowderBlue']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>contextMenu</td>
-	<td>//div[@title='Test_18_Event']</td>
+	<td>//div[@class='EventContainerBorder WeekViewEventBoxes PowderBlue']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=View</td>
+	<td>//a[@class='ItemIcon ViewEventIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=View</td>
+	<td>//a[@class='ItemIcon ViewEventIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UICalendarPopupWindow']</td>
+	<td>//div[@class='ViewDescription']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
 	<td>//div[@class='ViewDescription']</td>
 	<td>Test_18_Event_description</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UICalendarPopupWindow']/div/div[1]/div/div/div/div[2]</td>
+	<td></td>
 </tr>
 <tr>
 	<td>click</td>
@@ -456,7 +461,6 @@
 	<td></td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
