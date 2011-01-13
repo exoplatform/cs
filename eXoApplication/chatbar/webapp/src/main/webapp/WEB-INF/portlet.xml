@@ -28,7 +28,7 @@
     <portlet-info>
       <title>Chat Bar Portlet</title>
       <short-title>ChatBarPortlet</short-title>
-      <keywords>chatbar</keywords>
+      <keywords>collaboration</keywords>
     </portlet-info>     
     
     <portlet-preferences>
