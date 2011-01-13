@@ -16,6 +16,7 @@
  */
 package org.exoplatform.calendar.service;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.httpclient.Credentials;
@@ -33,9 +34,9 @@ public interface RemoteCalendarService {
    * @param url the url to remote calendar
    * @param type type of remote calendar access, iCalendar or CalDav
    * @return true if the remote calendar is pubilc access, false in otherwise (need authentication)
-   * @throws Exception
+   * @throws IOException
    */
-  boolean isPublicAccessRemoteUrl(String url) throws Exception ;
+  boolean isPublicAccessRemoteUrl(String url) throws IOException ;
   
   /**
    * Check if the remote url is valid, in 2 cases of iCalendar url or CalDav url
@@ -44,7 +45,7 @@ public interface RemoteCalendarService {
    * @return true if url is available in case of iCalendar type, in case of CalDav, return true only if the server exists and support CalDav
    * @throws Exception
    */
-  boolean isValidRemoteUrl(String url, String type) throws Exception ;
+  boolean isValidRemoteUrl(String url, String type) throws IOException ;
   
   /**
    * Check if the remote url is valid, in 2 cases of iCalendar url or CalDav url, with authentication
@@ -55,7 +56,7 @@ public interface RemoteCalendarService {
    * @return true if remote url is available in case of iCalendar and CalDav access support in case of CalDav
    * @throws Exception
    */
-  boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws Exception ;
+  boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws IOException ;
   
   /**
    * Connect to remote server
@@ -100,4 +101,5 @@ public interface RemoteCalendarService {
    */
   Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception ;
   
+  boolean isValidate(InputStream icalInputStream) throws Exception ;
 }

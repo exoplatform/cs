@@ -568,7 +568,7 @@ public class MockCalendarService implements CalendarService{
   }
 
   @Override
-  public String getRemoteCalendarLastUpdated(String owner, String calendarId) throws Exception {
+  public java.util.Calendar getRemoteCalendarLastUpdated(String owner, String calendarId) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }

@@ -3360,9 +3360,14 @@ public class JCRDataStorage implements DataStorage {
   }
   
   public boolean isRemoteCalendar(String username, String calendarId) throws Exception {
-    Node calendarNode = getUserCalendarHome(username).getNode(calendarId);
-    if (calendarNode.isNodeType(Utils.EXO_REMOTE_MIXIN)) return true;
-    return false;
+    try {
+      Node calendarNode = getUserCalendarHome(username).getNode(calendarId);
+      if (calendarNode.isNodeType(Utils.EXO_REMOTE_MIXIN)) return true;
+      return false;
+    } catch (Exception e) {
+      log.debug(e.getMessage());
+      return false;
+    }
   }
 
   @Override

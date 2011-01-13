@@ -405,6 +405,14 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
           } else {
             //String calendarId = uiForm.getUIFormSelectBoxGroup(FIELD_TO_CALENDAR).getValue() ;
             String calendarId = uiForm.getCalendarId();
+            
+            // if this is remote calendar
+            if(calendarService.isRemoteCalendar(CalendarUtils.getCurrentUser(), calendarId)) {
+              uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING));
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return;
+            }
+            
             calendarService.getCalendarImportExports(importFormat).importToCalendar(username, input.getUploadDataAsStream(), calendarId) ;
           }
           UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;

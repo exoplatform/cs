@@ -90,7 +90,7 @@
                               <td>
                                 <div class="FieldInput" id='id-<%=fieldUsername.getId()%>' style="white-space:nowarp; width:auto;">
                                   <span class="InputFieldLabel" style="width:100px;<%=accountColor%>">$labelUsername</span>
-                                  <span class="FieldComponent"  style="padding-left:7px;"><%uicomponent.renderUIComponent(fieldUsername)%>&nbsp;*</span>
+                                  <span class="FieldComponent"  style="padding-left:7px; width: 210px;"><%uicomponent.renderUIComponent(fieldUsername)%>&nbsp;*</span>
                                 </div>
                               </td>
                             </tr>
@@ -98,7 +98,7 @@
                               <td>
                                 <div class="FieldInput" id='id-<%=fieldPW.getId()%>' style="white-space:nowarp; width:auto;">
                                   <span class="InputFieldLabel" style="width:100px;<%=accountColor%>">$labelPW</span>
-                                  <span class="FieldComponent" style="padding-left:7px;"><%uicomponent.renderUIComponent(fieldPW)%>&nbsp;*</span>
+                                  <span class="FieldComponent" style="padding-left:7px; width: 210px;"><%uicomponent.renderUIComponent(fieldPW)%>&nbsp;*</span>
                                 </div>
                               </td>
                             </tr>
@@ -110,6 +110,17 @@
                 </div>
               </td>
             </tr>
+            <% if (!uicomponent.isAddNew_) { %>
+            <tr><td colspan="2"><br/></td></tr>
+            <tr>
+              <td class="InputFieldLabel">
+                <%=uicomponent.getLabel(uicomponent.LAST_UPDATED)%>
+              </td>
+              <td class="InputFieldLabel">
+                <%=uicomponent.getLastUpdated()%>
+              </td>
+            </tr>
+            <% } %>
           </tbody>
       </table>
       

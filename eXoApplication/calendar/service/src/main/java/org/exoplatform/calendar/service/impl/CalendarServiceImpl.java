@@ -739,9 +739,9 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    * {@inheritDoc}
    */
   @Override
-  public String getRemoteCalendarLastUpdated(String owner, String calendarId) throws Exception {
+  public java.util.Calendar getRemoteCalendarLastUpdated(String owner, String calendarId) throws Exception {
     Node calendarNode = storage_.getUserCalendarHome(owner).getNode(calendarId);
-    return calendarNode.getProperty(Utils.EXO_REMOTE_LAST_UPDATED).getString();
+    return calendarNode.getProperty(Utils.EXO_REMOTE_LAST_UPDATED).getDate();
   }
   
   /**

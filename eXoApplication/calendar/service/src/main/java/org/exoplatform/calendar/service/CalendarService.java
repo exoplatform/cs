@@ -737,7 +737,7 @@ public interface CalendarService {
    * @return last updated of remote calendar
    * @throws Exception
    */
-  public String getRemoteCalendarLastUpdated(String owner, String calendarId) throws Exception;
+  public java.util.Calendar getRemoteCalendarLastUpdated(String owner, String calendarId) throws Exception;
   
   /**
    * @param owner the owner of this calendar

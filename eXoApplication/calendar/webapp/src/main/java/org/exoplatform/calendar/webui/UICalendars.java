@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -943,6 +944,7 @@ public class UICalendars extends UIForm  {
   		CalendarService calService = CalendarUtils.getCalendarService() ;
   		String remoteCalendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
   		String username = CalendarUtils.getCurrentUser();
+  		Calendar calendar = calService.getUserCalendar(username, remoteCalendarId);
   		try {		
   			calService.refreshRemoteCalendar(username, remoteCalendarId);
   			UICalendarContainer uiVContainer = uiPortlet.findFirstComponentOfType(UICalendarContainer.class) ;
@@ -950,7 +952,7 @@ public class UICalendars extends UIForm  {
   		}
   		catch (Exception e) {
   			UIApplication uiApp = uiCalendars.getAncestorOfType(UIApplication.class) ;
-  			uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-refresh-remote-calendar", null, ApplicationMessage.WARNING)) ;
+  			uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-refresh-remote-calendar", new String[] {calendar.getName()}, ApplicationMessage.WARNING)) ;
   			event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
   		}
   	}

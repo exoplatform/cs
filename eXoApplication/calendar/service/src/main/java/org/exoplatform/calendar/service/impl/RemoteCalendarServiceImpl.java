@@ -17,8 +17,10 @@
 package org.exoplatform.calendar.service.impl;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +32,7 @@ import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
+import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.Property;
@@ -61,6 +64,8 @@ import org.exoplatform.calendar.service.RemoteCalendarService;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 
 /**
  * Created by The eXo Platform SAS
@@ -70,6 +75,8 @@ import org.exoplatform.container.PortalContainer;
  */
 public class RemoteCalendarServiceImpl implements RemoteCalendarService {
   
+  private static final Log logger = ExoLogger.getLogger("cs.calendar.service.remote");
+  
   private JCRDataStorage storage_;
   
   public RemoteCalendarServiceImpl(JCRDataStorage storage) {
@@ -77,34 +84,51 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
   }
   
   @Override
-  public InputStream connectToRemoteServer(String remoteUrl, String remoteType, String remoteUser, String remotePassword) throws Exception {
+  public InputStream connectToRemoteServer(String remoteUrl, String remoteType, String remoteUser, String remotePassword) throws IOException {
     HostConfiguration hostConfig = new HostConfiguration();
     String host = new URL(remoteUrl).getHost();
     if (StringUtils.isEmpty(host)) host = remoteUrl;
     hostConfig.setHost(host);
     HttpClient client = new HttpClient();
     client.setHostConfiguration(hostConfig);
-    
+    client.getHttpConnectionManager().getParams().setConnectionTimeout(10000);
+    client.getHttpConnectionManager().getParams().setSoTimeout(10000);
     // basic authentication
     if (!StringUtils.isEmpty(remoteUser)) {
       Credentials credentials = new UsernamePasswordCredentials(remoteUser, remotePassword);  
       client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
     }
     GetMethod get = new GetMethod(remoteUrl);
-    client.executeMethod(get);
-    InputStream icalInputStream = get.getResponseBodyAsStream();
-    return icalInputStream;
+    try {
+      client.executeMethod(get);
+      InputStream icalInputStream = get.getResponseBodyAsStream();
+      return icalInputStream;
+    }
+    catch (IOException e) {
+      logger.debug(e.getMessage());
+      throw new IOException(e.getMessage());
+    }
   }
 
   @Override
-  public boolean isPublicAccessRemoteUrl(String url) throws Exception {
-    HttpURLConnection httpCon = (HttpURLConnection) (new URL(url)).openConnection();
-    httpCon.setRequestMethod("HEAD");
-    return (httpCon.getResponseCode() != HttpURLConnection.HTTP_UNAUTHORIZED);
+  public boolean isPublicAccessRemoteUrl(String url) throws IOException {
+    try {
+      HttpURLConnection httpCon = (HttpURLConnection) (new URL(url)).openConnection();
+      httpCon.setRequestMethod("HEAD");
+      return (httpCon.getResponseCode() != HttpURLConnection.HTTP_UNAUTHORIZED);
+    }
+    catch (MalformedURLException e) {
+      logger.debug(e.getMessage());
+      throw new IOException("Remote URL is invalid. Maybe no legal protocol or URl could not be parsed");
+    }
+    catch (IOException e) {
+      logger.debug(e.getMessage());
+      throw new IOException("Error occurs when connecting to remote server");
+    }
   }
 
   @Override
-  public boolean isValidRemoteUrl(String url, String type) throws Exception {
+  public boolean isValidRemoteUrl(String url, String type) throws IOException {
     try {
       if (type.equals(CalendarService.ICALENDAR)) {
         HttpURLConnection httpCon = (HttpURLConnection) (new URL(url)).openConnection();
@@ -119,21 +143,27 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
           client.setHostConfiguration(hostConfig);
           OptionsMethod options = new OptionsMethod(url);
           client.executeMethod(options);
-          Boolean support = options.getResponseHeader("DAV").getElements().toString().contains("calendar-access");
+          Header header = options.getResponseHeader("DAV");
+          if (header == null) return false;
+          Boolean support = header.toString().contains("calendar-access");
           options.releaseConnection();
           return support;
         }
         return false;
       }
     }
-    catch (Exception e) {
-      e.printStackTrace();
-      return false;
+    catch (MalformedURLException e) {
+      logger.debug(e.getMessage());
+      throw new IOException("Remote URL is invalid. Maybe no legal protocol or URl could not be parsed");
+    }
+    catch (IOException e) {
+      logger.debug(e.getMessage());
+      throw new IOException("Error occurs when connecting to remote server");
     }
   }
 
   @Override
-  public boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws Exception {
+  public boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws IOException {
     try {
       if (type.equals(CalendarService.ICALENDAR)) {
         HttpURLConnection httpCon = (HttpURLConnection) (new URL(url)).openConnection();
@@ -165,9 +195,13 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         return false;
       }
     }
-    catch (Exception e) {
-      e.printStackTrace();
-      return false;
+    catch (MalformedURLException e) {
+      logger.debug(e.getMessage());
+      throw new IOException("Remote URL is invalid. Maybe no legal protocol or URl could not be parsed");
+    }
+    catch (IOException e) {
+      logger.debug(e.getMessage());
+      throw new IOException("Error occurs when connecting to remote server");
     }
   }
 
@@ -176,7 +210,18 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
                                        String calendarId,
                                        InputStream icalInputStream) throws Exception {
     CalendarBuilder calendarBuilder = new CalendarBuilder() ;
-    net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(icalInputStream) ;
+    net.fortuna.ical4j.model.Calendar iCalendar;
+    try {
+      iCalendar = calendarBuilder.build(icalInputStream) ;
+    }
+    catch (ParserException e) {
+      logger.debug(e.getMessage());
+      throw new ParserException("Cannot parsed the input stream. The input stream format must be iCalendar", e.getLineNo());
+    }
+    catch (IOException e) {
+      logger.debug(e.getMessage());
+      throw new IOException("I/O error when parsing input stream");
+    }
     
     CalendarService  calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
     if(calService == null) {
@@ -360,6 +405,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     Calendar eXoCalendar = storage_.createRemoteCalendar(username, calendarName, remoteUrl, remoteType, syncPeriod, remoteUser, remotePassword);
     importRemoteCalendar(username, eXoCalendar.getId(), icalInputStream);
     storage_.setRemoteCalendarLastUpdated(username, eXoCalendar.getId(), Utils.getGreenwichMeanTime());
+    icalInputStream.close();
     return eXoCalendar;
   }
 
@@ -378,7 +424,12 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     InputStream icalInputStream = null;
     
     icalInputStream = connectToRemoteServer(remoteUrl, remoteType, remoteUser, remotePassword);
-      
+    
+    /*if (!isValidate(icalInputStream)) {
+      logger.debug("Error when parsing input stream. The input stream is not in iCalendar format.");
+      throw new IOException("Can't parsing iCalendar input stream");
+    }*/
+    
     // remove all components in local calendar
     List<String> calendarIds = new ArrayList<String>();
     calendarIds.add(remoteCalendarId);
@@ -389,7 +440,19 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     
     Calendar eXoCalendar = importRemoteCalendar(username, remoteCalendarId, icalInputStream);
     storage_.setRemoteCalendarLastUpdated(username, eXoCalendar.getId(), Utils.getGreenwichMeanTime());
+    icalInputStream.close();
     return eXoCalendar;
+  }
+  
+  public boolean isValidate(InputStream icalInputStream) throws Exception {
+    try {
+      CalendarBuilder calendarBuilder = new CalendarBuilder() ;
+      calendarBuilder.build(icalInputStream) ;
+      return true ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+      return false ;
+    }
   }
 
 }

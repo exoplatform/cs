@@ -307,7 +307,15 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.logic-required", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }  
+      }
+      
+      CalendarService calService =  CalendarUtils.getCalendarService() ;
+      if(calService.isRemoteCalendar(CalendarUtils.getCurrentUser(), uiForm.getEventCalendar())) {
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-add-event-on-remote-calendar", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      }
+      
       if(uiForm.getIsAllDay()) {
         java.util.Calendar tempCal = CalendarUtils.getInstanceOfCurrentCalendar() ;
         tempCal.setTime(to) ;
@@ -359,7 +367,6 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         calEvent.setToDateTime(to) ;
         calEvent.setCalType(uiForm.calType_) ;
         
-        CalendarService calService =  CalendarUtils.getCalendarService() ;
         Calendar calendar = null ;
         if(CalendarUtils.PRIVATE_TYPE.equals(uiForm.calType_)) { 
           calendar = calService.getUserCalendar(username, uiForm.getEventCalendar()) ;

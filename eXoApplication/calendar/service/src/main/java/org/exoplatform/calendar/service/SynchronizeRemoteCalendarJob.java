@@ -58,7 +58,8 @@ public class SynchronizeRemoteCalendarJob implements Job {
     ExoContainerContext.setCurrentContainer(container);
     SessionProvider provider = SessionProvider.createSystemProvider();
     CalendarService calService = (CalendarService) container.getComponentInstanceOfType(CalendarService.class);
-    
+    int total = 0;
+    int failed = 0;
     
     try {
       if (log_.isDebugEnabled()) log_.debug("Remote calendar synchronization service");
@@ -77,6 +78,7 @@ public class SynchronizeRemoteCalendarJob implements Job {
       
       // iterate over each calendar in this list, two case:
       while (iter.hasNext()) {
+        total++;
         remoteCalendar = iter.nextNode();
         String remoteCalendarId = remoteCalendar.getProperty(Utils.EXO_ID).getString();
         String username = remoteCalendar.getProperty(Utils.EXO_CALENDAR_OWNER).getString();
@@ -86,37 +88,19 @@ public class SynchronizeRemoteCalendarJob implements Job {
         String remotePassword = remoteCalendar.getProperty(Utils.EXO_REMOTE_PASSWORD).getString();
         String syncPeriod = remoteCalendar.getProperty(Utils.EXO_REMOTE_SYNC_PERIOD).getString();
         
-        
-        // case 1: if auto refresh calendar, do refresh this calendar
-        if (syncPeriod.equals(Utils.SYNC_AUTO)) {          
+        try {
           
-          icalInputStream = remoteCalendarService.connectToRemoteServer(remoteUrl, remoteType, remoteUser, remotePassword);
+          // case 1: if auto refresh calendar, do refresh this calendar
+          if (syncPeriod.equals(Utils.SYNC_AUTO)) {          
             
-          // remove all components in local calendar
-          List<String> calendarIds = new ArrayList<String>();
-          calendarIds.add(remoteCalendarId);
-          List<CalendarEvent> events = calService.getUserEventByCalendar(username, calendarIds);
-          for (CalendarEvent event : events) {
-            calService.removeUserEvent(username, remoteCalendarId, event.getId());
-          }
-          
-          remoteCalendarService.importRemoteCalendar(username, remoteCalendarId, icalInputStream);
-        }
-        else {
-          long lastUpdate = remoteCalendar.getProperty(Utils.EXO_REMOTE_LAST_UPDATED).getDate().getTimeInMillis();
-          long now = System.currentTimeMillis();
-          long interval = 0;
-          if (Utils.SYNC_5MINS.equals(syncPeriod)) interval = 5 * 60 * 1000;
-          if (Utils.SYNC_10MINS.equals(syncPeriod)) interval = 10 * 60 * 1000;
-          if (Utils.SYNC_15MINS.equals(syncPeriod)) interval = 15 * 60 * 1000;
-          if (Utils.SYNC_1HOUR.equals(syncPeriod)) interval = 60 * 60 * 1000;
-          if (Utils.SYNC_1DAY.equals(syncPeriod)) interval = 24 * 60 * 60 * 1000;
-          if (Utils.SYNC_1WEEK.equals(syncPeriod)) interval = 7 * 24 * 60 * 60 * 1000;
-          if (Utils.SYNC_1YEAR.equals(syncPeriod)) interval = 365 * 7 * 24 * 60 * 60 * 1000;
-          
-          if (lastUpdate + interval > now) {
             icalInputStream = remoteCalendarService.connectToRemoteServer(remoteUrl, remoteType, remoteUser, remotePassword);
-              
+            
+            /*if (!remoteCalendarService.isValidate(icalInputStream)) {
+              log_.debug("Error when parsing input stream of remote calendar " + remoteCalendarId +  ".The input stream is not in iCalendar format.");
+              failed++;
+              break;
+            }*/
+            
             // remove all components in local calendar
             List<String> calendarIds = new ArrayList<String>();
             calendarIds.add(remoteCalendarId);
@@ -126,21 +110,60 @@ public class SynchronizeRemoteCalendarJob implements Job {
             }
             
             remoteCalendarService.importRemoteCalendar(username, remoteCalendarId, icalInputStream);
+            calService.setRemoteCalendarLastUpdated(username, remoteCalendarId, Utils.getGreenwichMeanTime());
+          }
+          else {
+            long lastUpdate = remoteCalendar.getProperty(Utils.EXO_REMOTE_LAST_UPDATED).getDate().getTimeInMillis();
+            long now = System.currentTimeMillis();
+            long interval = 0;
+            if (Utils.SYNC_5MINS.equals(syncPeriod)) interval = 5 * 60 * 1000;
+            if (Utils.SYNC_10MINS.equals(syncPeriod)) interval = 10 * 60 * 1000;
+            if (Utils.SYNC_15MINS.equals(syncPeriod)) interval = 15 * 60 * 1000;
+            if (Utils.SYNC_1HOUR.equals(syncPeriod)) interval = 60 * 60 * 1000;
+            if (Utils.SYNC_1DAY.equals(syncPeriod)) interval = 24 * 60 * 60 * 1000;
+            if (Utils.SYNC_1WEEK.equals(syncPeriod)) interval = 7 * 24 * 60 * 60 * 1000;
+            if (Utils.SYNC_1YEAR.equals(syncPeriod)) interval = 365 * 7 * 24 * 60 * 60 * 1000;
+            
+            // if this remote calendar has expired
+            if (lastUpdate + interval < now) {
+              icalInputStream = remoteCalendarService.connectToRemoteServer(remoteUrl, remoteType, remoteUser, remotePassword);
+              
+              /*if (!remoteCalendarService.isValidate(icalInputStream)) {
+                log_.debug("Error when parsing input stream of remote calendar " + remoteCalendarId +  ".The input stream is not in iCalendar format.");
+                failed++;
+                break;
+              }*/
+              
+              // remove all components in local calendar
+              List<String> calendarIds = new ArrayList<String>();
+              calendarIds.add(remoteCalendarId);
+              List<CalendarEvent> events = calService.getUserEventByCalendar(username, calendarIds);
+              for (CalendarEvent event : events) {
+                calService.removeUserEvent(username, remoteCalendarId, event.getId());
+              }
+              
+              remoteCalendarService.importRemoteCalendar(username, remoteCalendarId, icalInputStream);
+              calService.setRemoteCalendarLastUpdated(username, remoteCalendarId, Utils.getGreenwichMeanTime());
+            }
           }
         }
-        
+        catch (Exception e) {
+          log_.debug("Skip this calendar, error when reload remote calendar " + remoteCalendarId +  ". Error message: " + e.getMessage());
+          failed++;
+          break;
+        }
       }      
     } 
     catch (RepositoryException e) {
       if (log_.isDebugEnabled()) log_.debug("Data base not ready!");
     } catch (Exception e) {
       e.printStackTrace() ;
-      if (log_.isDebugEnabled()) log_.debug(e.toString());
+      if (log_.isDebugEnabled()) log_.debug("Exception when synchronize remote calendar. " + e.toString());
     } finally {
       provider.close(); // release sessions
       ExoContainerContext.setCurrentContainer(oldContainer);
     }
-    if (log_.isDebugEnabled()) log_.debug("Succcessfully reload remote calendar.");
+    log_.info("Reload remote calendar completed. Total: " + total + ", Success: " + (total-failed) + ", Failed: " + failed);
     
   }
   
