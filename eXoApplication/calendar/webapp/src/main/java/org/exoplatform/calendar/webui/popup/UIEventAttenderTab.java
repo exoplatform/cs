@@ -54,9 +54,12 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
 
   final public static String FIELD_DATEALL = "dateAll".intern();
   final public static String FIELD_CURRENTATTENDER = "currentAttender".intern() ;
+	private DateFormat	formatDate	= null;
 
   protected Map<String, String> parMap_ = new HashMap<String, String>() ;
   public Calendar calendar_ ;
+  private DateFormat dateFormat ;
+  private DateFormat simpleDateFormat ;
   public UIEventAttenderTab(String arg0) {
     super(arg0);
     setComponentConfig(getClass(), null) ;
@@ -115,16 +118,33 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     return parMap_ ; 
 
   }
+  
+  private DateFormat getSimpleFormatDate() {
+  	return simpleDateFormat;
+  }
+
+  @SuppressWarnings("unused")
+	private DateFormat getFormatDate() {
+  	return formatDate;
+  }
+
+  @SuppressWarnings("unused")
+	private void setFormatDate() throws Exception {
+  	CalendarSetting calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    String frmD = calSetting.getDateFormat();
+    simpleDateFormat = new SimpleDateFormat(frmD,locale) ;
+    frmD = frmD.replaceFirst("MM", "MMM").replaceFirst("dd", "EEE");
+    formatDate = new SimpleDateFormat(frmD,locale) ;
+  }
 
   protected String[] getParticipants() { return parMap_.keySet().toArray(new String[]{}) ; } 
 
   protected String getDateValue() throws Exception  {
-    CalendarSetting calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    Locale locale = context.getParentAppRequestContext().getLocale() ;
-    DateFormat df = new SimpleDateFormat(calSetting.getDateFormat(),locale) ;
-    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
-    return df.format(calendar_.getTime()) ;
+  	DateFormat dateFormat = getSimpleFormatDate();
+  	dateFormat.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
+    return dateFormat.format(calendar_.getTime()) ;
   }
   protected void moveNextDay() throws Exception{
     calendar_.add(Calendar.DATE, 1) ;

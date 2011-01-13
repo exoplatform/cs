@@ -1,14 +1,8 @@
 <%
 	import java.text.DateFormat;
-	import java.text.SimpleDateFormat;
 	import org.exoplatform.calendar.CalendarUtils;
-	import java.util.Locale;
-	import org.exoplatform.webui.application.WebuiRequestContext;
-	
-	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
- 	Locale locale = context.getParentAppRequestContext().getLocale() ;
- 	
-	DateFormat df = new SimpleDateFormat("MMM, dd, yyyy", locale) ;
+	uicomponent.setFormatDate();
+	DateFormat df = uicomponent.getFormatDate() ;
 	uiForm = uicomponent.getParentFrom() ;
 	int timeInterval = 15;
 	int blocks = 60/timeInterval ;
