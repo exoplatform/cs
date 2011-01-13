@@ -32,8 +32,6 @@
 	//rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
 	rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
 	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UIWeekView.onResize') ;
- 	monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
-	yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
  	
  	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
  	Locale locale = context.getParentAppRequestContext().getLocale() ;
@@ -43,6 +41,14 @@
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
 	String startWorkingTime = uicomponent.getStartTime() ;
 	String endWorkingTime = uicomponent.getEndTime() ;
+	Calendar startDateOfWeek = uicomponent.getBeginDateOfWeek();
+	Calendar endDateOfWeek = uicomponent.getEndDateOfWeek();
+	String startDayViewAction = uicomponent.TYPE_DAY +"&currentTime="+ startDateOfWeek.getTimeInMillis();
+	String startMonthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ startDateOfWeek.getTimeInMillis();
+	String startYearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ startDateOfWeek.getTimeInMillis();
+	String endDayViewAction = uicomponent.TYPE_DAY +"&currentTime="+ endDateOfWeek.getTimeInMillis();
+	String endMonthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ endDateOfWeek.getTimeInMillis();
+	String endYearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ endDateOfWeek.getTimeInMillis();
 	boolean isShowWorkingTime = uicomponent.isShowWorkingTime() ;
 	DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
 	DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
@@ -68,8 +74,19 @@
             <div class="Title">
               <%=uiform.getLabel("Week")%>
               $weekNumber, 
-              <a href="<%=uicomponent.event('GotoDate',monthViewAction)%>">$currentMonthName</a>
-							<a href="<%=uicomponent.event('GotoDate',yearViewAction)%>">$currentYear</a>
+              <% if (startDateOfWeek.get(Calendar.MONTH) == endDateOfWeek.get(Calendar.MONTH)) {%>
+              <a href="<%=uicomponent.event('GotoDate',startDayViewAction)%>"><%=startDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a> - 
+              <a href="<%=uicomponent.event('GotoDate',endDayViewAction)%>"><%=endDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a>
+              <a href="<%=uicomponent.event('GotoDate',startMonthViewAction)%>"><%=uicomponent.getMonthName(startDateOfWeek.get(Calendar.MONTH))%></a>
+              <a href="<%=uicomponent.event('GotoDate',startYearViewAction)%>"><%=startDateOfWeek.get(Calendar.YEAR)%></a>
+              <% } else { %>
+	            <a href="<%=uicomponent.event('GotoDate',startDayViewAction)%>"><%=startDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a>
+	            <a href="<%=uicomponent.event('GotoDate',startMonthViewAction)%>"><%=uicomponent.getMonthName(startDateOfWeek.get(Calendar.MONTH))%></a>
+	            <a href="<%=uicomponent.event('GotoDate',startYearViewAction)%>"><%=startDateOfWeek.get(Calendar.YEAR)%></a> - 
+	            <a href="<%=uicomponent.event('GotoDate',endDayViewAction)%>"><%=endDateOfWeek.get(Calendar.DAY_OF_MONTH)%></a>
+	            <a href="<%=uicomponent.event('GotoDate',endMonthViewAction)%>"><%=uicomponent.getMonthName(endDateOfWeek.get(Calendar.MONTH))%></a>
+	            <a href="<%=uicomponent.event('GotoDate',endYearViewAction)%>"><%=endDateOfWeek.get(Calendar.YEAR)%></a>
+							<% } %>
             </div>
           </td>
           <td>

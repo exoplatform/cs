@@ -268,6 +268,7 @@ public class CalendarUtils {
       CalendarSetting setting = getCurrentUserCalendarSetting();
       calendar.setTimeZone(TimeZone.getTimeZone(setting.getTimeZone()));
       calendar.setFirstDayOfWeek(Integer.parseInt(setting.getWeekStartOn())); 
+      calendar.setMinimalDaysInFirstWeek(4);
     } catch (Exception e) {
       log.warn(e);
     }
