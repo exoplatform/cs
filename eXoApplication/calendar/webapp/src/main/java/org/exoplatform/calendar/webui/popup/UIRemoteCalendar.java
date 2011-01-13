@@ -252,7 +252,7 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
       Credentials credentials = null;
       
       try {       
-        if (calService.isPublicAccessRemoteUrl(url)) {
+        if (!uiform.getUseAuthentication()) {
           // check valid url
           if(!calService.isValidRemoteUrl(url, remoteType)) {
             // pop-up error message: invalid ics url
@@ -261,14 +261,7 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
             return;
           }
           credentials = null;          
-        } else {
-          // check useAuthentication
-          if(!uiform.getUseAuthentication()) {
-            // pop-up error message: need authentication
-            uiApp.addMessage(new ApplicationMessage("UIRemoteCalendar.msg.authentication-required", null, ApplicationMessage.WARNING));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
-            return;
-          }          
+        } else {          
           remoteUser = uiform.getRemoteUser();
           remotePassword = uiform.getRemotePassword();          
           if(CalendarUtils.isEmpty(remoteUser)) {

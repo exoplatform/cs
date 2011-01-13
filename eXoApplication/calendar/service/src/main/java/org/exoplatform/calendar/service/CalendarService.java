@@ -618,15 +618,6 @@ public interface CalendarService {
   public boolean isRemoteCalendar(String username, String calendarId) throws Exception;
   
   /**
-   * Check if the remote calendar is public access
-   * @param url the url to remote calendar
-   * @param type type of remote calendar access, iCalendar or CalDav
-   * @return true if the remote calendar is pubilc access, false in otherwise (need authentication)
-   * @throws Exception
-   */
-  boolean isPublicAccessRemoteUrl(String url) throws Exception ;
-  
-  /**
    * Check if the remote url is valid, in 2 cases of iCalendar url or CalDav url
    * @param url the remote url
    * @param type the type of remote calendar access, iCalendar or CalDav

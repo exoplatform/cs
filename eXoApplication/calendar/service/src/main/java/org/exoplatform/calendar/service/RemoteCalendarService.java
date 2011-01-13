@@ -28,15 +28,7 @@ import org.apache.commons.httpclient.Credentials;
  * Jan 10, 2011  
  */
 public interface RemoteCalendarService {
-  
-  /**
-   * Check if the remote calendar is public access
-   * @param url the url to remote calendar
-   * @param type type of remote calendar access, iCalendar or CalDav
-   * @return true if the remote calendar is pubilc access, false in otherwise (need authentication)
-   * @throws IOException
-   */
-  boolean isPublicAccessRemoteUrl(String url) throws IOException ;
+ 
   
   /**
    * Check if the remote url is valid, in 2 cases of iCalendar url or CalDav url

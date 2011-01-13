@@ -635,14 +635,6 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public boolean isRemoteCalendar(String username, String calendarId) throws Exception {
     return storage_.isRemoteCalendar(username, calendarId);
   }
-  
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isPublicAccessRemoteUrl(String url) throws Exception {
-    return remoteCalendarService.isPublicAccessRemoteUrl(url);
-  }
 
   /**
    * {@inheritDoc}

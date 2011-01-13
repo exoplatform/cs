@@ -111,23 +111,6 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
   }
 
   @Override
-  public boolean isPublicAccessRemoteUrl(String url) throws IOException {
-    try {
-      HttpURLConnection httpCon = (HttpURLConnection) (new URL(url)).openConnection();
-      httpCon.setRequestMethod("HEAD");
-      return (httpCon.getResponseCode() != HttpURLConnection.HTTP_UNAUTHORIZED);
-    }
-    catch (MalformedURLException e) {
-      logger.debug(e.getMessage());
-      throw new IOException("Remote URL is invalid. Maybe no legal protocol or URl could not be parsed");
-    }
-    catch (IOException e) {
-      logger.debug(e.getMessage());
-      throw new IOException("Error occurs when connecting to remote server");
-    }
-  }
-
-  @Override
   public boolean isValidRemoteUrl(String url, String type) throws IOException {
     try {
       if (type.equals(CalendarService.ICALENDAR)) {
