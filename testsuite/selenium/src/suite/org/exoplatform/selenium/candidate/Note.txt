@@ -1,3 +1,4 @@
+CS NOTES:
 
 - Make sure all data of application to test are clean
 - Make sure all data in two mails: exotest4@gmail.com (pass: exovietnam) and exotest3@gmail.com (pass: exovietnam) are clean before run the test.
@@ -9,6 +10,10 @@
 - The cases related to Chat is  not recorded. It should be tested manually because it needs the interaction of at least 2 browsers
 
 - SNF_CS_25, SNF_CS_27, SNF_CS_28, SNF_CS_29 : It may be failed because of the checkmail function is slow or on stable
+
+
+
+
 
 
 
