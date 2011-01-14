@@ -28,6 +28,8 @@ import javax.ws.rs.ext.RuntimeDelegate;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.rest.impl.RuntimeDelegateImpl;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.uistate.UIStateSession;
@@ -43,9 +45,8 @@ import org.exoplatform.services.xmpp.connection.impl.XMPPMessenger;
 
 @Path("/uistateservice")
 public class UIStateService implements ResourceContainer {
+  private static final Log log = ExoLogger.getLogger("cs.chat.uistateservice");
   private static final CacheControl cc;
-  
-  private static String unreadMessageCount;
   
   static {
   //TODO: to find the reason why UIStateService loaded before ResourceBinder
@@ -74,11 +75,12 @@ public class UIStateService implements ResourceContainer {
         stateData = (stateData != null) ? stateData : new UIStateDataBean();
         uiSession.setUIStateData(stateData);
       }
-    } catch (Exception e){
+    } catch (Exception e) {
+      if (log.isDebugEnabled()) log.debug("saving UI state failed for user: " + userName, e);
+      return Response.serverError().cacheControl(cc).build();
     }
-    unreadMessageCount = unreadMessageCnt;
     UIStateDataBean stateDataBean = new UIStateDataBean("null");
-    stateDataBean.setUnreadMessageCnt(unreadMessageCount);
+    stateDataBean.setUnreadMessageCnt(unreadMessageCnt);
     return Response.ok(stateDataBean, MediaType.APPLICATION_JSON).cacheControl(cc).build();
   }
   
@@ -92,12 +94,13 @@ public class UIStateService implements ResourceContainer {
       if(messenger != null){
         UIStateSession uiSession = messenger.getUISateSession(userName);
         UIStateDataBean uiStateData = uiSession.getUIStateData();
-        uiStateData = (uiStateData != null) ? uiStateData : new UIStateDataBean();;
+//        uiStateData = (uiStateData != null) ? uiStateData : new UIStateDataBean();;
+        if (uiStateData == null || uiStateData.getData() == null) return Response.noContent().cacheControl(cc).build();
         return Response.ok(uiStateData, MediaType.APPLICATION_JSON).cacheControl(cc).build();
       }
     } catch (Exception e){
+      if (log.isDebugEnabled()) log.debug("Getting UIStage failed for user: " + userName, e);
     }
-    UIStateDataBean stateDataBean = new UIStateDataBean();
-    return Response.ok(stateDataBean, MediaType.APPLICATION_JSON).cacheControl(cc).build();
+    return Response.serverError().cacheControl(cc).build();
   }
 }
