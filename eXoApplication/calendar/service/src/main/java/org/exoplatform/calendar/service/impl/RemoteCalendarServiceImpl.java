@@ -45,7 +45,6 @@ import net.fortuna.ical4j.model.property.Attach;
 import net.fortuna.ical4j.model.property.Attendee;
 import net.fortuna.ical4j.model.property.Clazz;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
@@ -110,69 +109,46 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     }
   }
 
-  @Override
-  public boolean isValidRemoteUrl(String url, String type) throws IOException {
-    try {
-      if (type.equals(CalendarService.ICALENDAR)) {
-        HttpURLConnection httpCon = (HttpURLConnection) (new URL(url)).openConnection();
-        httpCon.setRequestMethod("GET");
-        return (httpCon.getResponseCode() == HttpURLConnection.HTTP_OK);
-      }
-      else {
-        if (type.equals(CalendarService.CALDAV)) {
-          HttpClient client = new HttpClient();
-          HostConfiguration hostConfig = new HostConfiguration();
-          hostConfig.setHost(url);
-          client.setHostConfiguration(hostConfig);
-          OptionsMethod options = new OptionsMethod(url);
-          client.executeMethod(options);
-          Header header = options.getResponseHeader("DAV");
-          if (header == null) return false;
-          Boolean support = header.toString().contains("calendar-access");
-          options.releaseConnection();
-          return support;
-        }
-        return false;
-      }
-    }
-    catch (MalformedURLException e) {
-      logger.debug(e.getMessage());
-      throw new IOException("Remote URL is invalid. Maybe no legal protocol or URl could not be parsed");
-    }
-    catch (IOException e) {
-      logger.debug(e.getMessage());
-      throw new IOException("Error occurs when connecting to remote server");
-    }
-  }
 
   @Override
-  public boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws IOException {
+  public boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws IOException,UnsupportedOperationException {
     try {
+      HttpClient client = new HttpClient();
+      HostConfiguration hostConfig = new HostConfiguration();
+      String host = new URL(url).getHost();
+      if (StringUtils.isEmpty(host)) host = url;
+      hostConfig.setHost(host);
+      client.setHostConfiguration(hostConfig);
+      Credentials credentials = null;
+      client.setHostConfiguration(hostConfig);
+      if (!StringUtils.isEmpty(remoteUser)) {
+        credentials = new UsernamePasswordCredentials(remoteUser, remotePassword);  
+        client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
+      }
+      
       if (type.equals(CalendarService.ICALENDAR)) {
-        HttpURLConnection httpCon = (HttpURLConnection) (new URL(url)).openConnection();
-        httpCon.setRequestMethod("GET");
-        String authString = remoteUser + ":" + remotePassword;
-        byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
-        String authStringEnc = new String(authEncBytes);
-        httpCon.setRequestProperty("Authorization", authStringEnc);
-        return (httpCon.getResponseCode() == HttpURLConnection.HTTP_OK);
+        GetMethod get = new GetMethod(url);
+        client.executeMethod(get);
+        int statusCode = get.getStatusCode();
+        get.releaseConnection();
+        return (statusCode == HttpURLConnection.HTTP_OK);
       }
       else {
         if (type.equals(CalendarService.CALDAV)) {
-          HttpClient client = new HttpClient();
-          HostConfiguration hostConfig = new HostConfiguration();
-          String host = new URL(url).getHost();
-          if (StringUtils.isEmpty(host)) host = url;
-          hostConfig.setHost(host);
-          Credentials credentials = new UsernamePasswordCredentials(remoteUser, remotePassword);
-          client.setHostConfiguration(hostConfig);
-          client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
           OptionsMethod options = new OptionsMethod(url);
           client.executeMethod(options);
           Header header = options.getResponseHeader("DAV");
-          if (header == null) return false;
+          options.releaseConnection();
+          if (header == null) {
+            logger.debug("Cannot connect to remoter server or not support WebDav access");
+            return false;
+          }
           Boolean support = header.toString().contains("calendar-access");
           options.releaseConnection();
+          if (!support) { 
+            logger.debug("Remote server does not support CalDav access");
+            throw new UnsupportedOperationException ("Remote server does not support CalDav access");
+          }
           return support;
         }
         return false;

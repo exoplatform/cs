@@ -640,14 +640,6 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    * {@inheritDoc}
    */
   @Override
-  public boolean isValidRemoteUrl(String url, String type) throws Exception {
-    return remoteCalendarService.isValidRemoteUrl(url, type);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws Exception {
     return remoteCalendarService.isValidRemoteUrl(url, type, remoteUser, remotePassword);
   }

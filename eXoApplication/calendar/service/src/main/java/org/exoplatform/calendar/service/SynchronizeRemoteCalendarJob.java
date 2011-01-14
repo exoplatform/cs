@@ -60,7 +60,7 @@ public class SynchronizeRemoteCalendarJob implements Job {
     CalendarService calService = (CalendarService) container.getComponentInstanceOfType(CalendarService.class);
     int total = 0;
     int failed = 0;
-    
+    long start = System.currentTimeMillis();
     try {
       if (log_.isDebugEnabled()) log_.debug("Remote calendar synchronization service");
       RemoteCalendarService remoteCalendarService = calService.getRemoteCalendarService();
@@ -163,7 +163,9 @@ public class SynchronizeRemoteCalendarJob implements Job {
       provider.close(); // release sessions
       ExoContainerContext.setCurrentContainer(oldContainer);
     }
-    log_.info("Reload remote calendar completed. Total: " + total + ", Success: " + (total-failed) + ", Failed: " + failed);
+    long finish = System.currentTimeMillis();
+    long spent = (finish - start) * 1000; 
+    log_.info("Reload remote calendar completed. Total: " + total + ", Success: " + (total-failed) + ", Failed: " + failed + ". Time spent: " + spent + " s.");
     
   }
   

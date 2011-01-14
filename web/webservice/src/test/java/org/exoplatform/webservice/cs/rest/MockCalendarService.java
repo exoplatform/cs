@@ -587,12 +587,6 @@ public class MockCalendarService implements CalendarService{
   }
 
   @Override
-  public boolean isValidRemoteUrl(String url, String type) throws Exception {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
   public boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws Exception {
     // TODO Auto-generated method stub
     return false;

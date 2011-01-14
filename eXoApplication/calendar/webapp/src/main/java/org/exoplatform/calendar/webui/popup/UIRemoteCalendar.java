@@ -254,7 +254,7 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
       try {       
         if (!uiform.getUseAuthentication()) {
           // check valid url
-          if(!calService.isValidRemoteUrl(url, remoteType)) {
+          if(!calService.isValidRemoteUrl(url, remoteType, remoteUser, remotePassword)) {
             // pop-up error message: invalid ics url
             uiApp.addMessage(new ApplicationMessage("UIRemoteCalendar.msg.url-is-invalid", null, ApplicationMessage.WARNING));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
@@ -280,6 +280,11 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
           }          
           credentials = new UsernamePasswordCredentials(remoteUser, remotePassword);    
         }
+      }
+      catch (UnsupportedOperationException e) {
+        uiApp.addMessage(new ApplicationMessage("UIRemoteCalendar.msg.remote-server-doesnt-support-caldav-access", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
       }
       catch (IOException e) {
         uiApp.addMessage(new ApplicationMessage("UIRemoteCalendar.msg.cannot-connect-to-remote-server", null, ApplicationMessage.WARNING));

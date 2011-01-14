@@ -28,16 +28,6 @@ import org.apache.commons.httpclient.Credentials;
  * Jan 10, 2011  
  */
 public interface RemoteCalendarService {
- 
-  
-  /**
-   * Check if the remote url is valid, in 2 cases of iCalendar url or CalDav url
-   * @param url the remote url
-   * @param type the type of remote calendar access, iCalendar or CalDav
-   * @return true if url is available in case of iCalendar type, in case of CalDav, return true only if the server exists and support CalDav
-   * @throws Exception
-   */
-  boolean isValidRemoteUrl(String url, String type) throws IOException ;
   
   /**
    * Check if the remote url is valid, in 2 cases of iCalendar url or CalDav url, with authentication
@@ -48,7 +38,7 @@ public interface RemoteCalendarService {
    * @return true if remote url is available in case of iCalendar and CalDav access support in case of CalDav
    * @throws Exception
    */
-  boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws IOException ;
+  boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws IOException,UnsupportedOperationException ;
   
   /**
    * Connect to remote server
