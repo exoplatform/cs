@@ -109,7 +109,9 @@ public class CalendarWebservice implements ResourceContainer{
       Calendar cal = null ;
       eventData.setPermission(false);
       if(Utils.PRIVATE_TYPE == Integer.parseInt(type)) {
-    	  eventData.setPermission(true);
+        if(calService.isRemoteCalendar(username, calendarId)) {
+          eventData.setPermission(false);
+        } else eventData.setPermission(true);
       } else if(Utils.PUBLIC_TYPE == Integer.parseInt(type)) {
         OrganizationService oService = (OrganizationService)ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
