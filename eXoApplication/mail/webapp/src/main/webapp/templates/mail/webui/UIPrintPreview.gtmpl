@@ -28,7 +28,7 @@
   %>
   <div class="PrintPreview">
     <div class="PrintHeader" >
-      <div class="PrintLogoMail"><span></span></div>
+      <!-- div class="PrintLogoMail"><span></span></div -->
       <div class="PrintUser"><%=acc.getUserDisplayName()%> &lt; <%=acc.getEmailAddress()%> &gt;</div>
       <div style="clear:left;"><span></span></div>
     </div>

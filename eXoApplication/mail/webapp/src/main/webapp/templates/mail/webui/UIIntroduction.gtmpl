@@ -12,9 +12,9 @@
       <div class="LabelComment"><%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.commentwarning")%></div>
       <div style="clear:both;"><span></span></div>
     </div>
-    <div class="LogoMail">
+    <!-- div class="LogoMail">
       <span></span>
-    </div>  
+    </div -->  
     <div class="OverviewMail">
       <%=_ctx.appRes(uicomponent.getName() + ".UIIntroduction.label.overview")%>
     </div>
