@@ -1322,7 +1322,7 @@
 .UIMailPortlet .PrintPreview .PrintHeader .PrintUser {
 	color: #272727;
 	padding:5px 0px;
-	margin-left: 350px;
+	/* margin-left: 350px; */
 	font-weight: bolder;
 	border-bottom: 1px solid #bbbbbb;
 	text-align: right;
