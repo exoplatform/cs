@@ -77,12 +77,12 @@ public class CalendarSetting {
   public CalendarSetting() {
     viewType = DAY_VIEW ;
     timeInterval = DEFAULT_TIME_INTERVAL;
-    weekStartOn = String.valueOf(Calendar.SUNDAY) ;
-    dateFormat = "MM/dd/yyyy" ;
-    timeFormat = "hh:mm a" ;
+    weekStartOn = null ;
+    dateFormat = null ;
+    timeFormat = null ;
     isShowWorkingTime = false ;
     timeZone = TimeZone.getDefault().getID() ;
-    location = Locale.getDefault().getISO3Country() ;
+    location = null ;
     filterPrivateCalendars = new String[]{} ;
     filterPublicCalendars = new String[]{} ;
     filterSharedCalendars = new String[]{} ;

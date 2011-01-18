@@ -100,6 +100,8 @@ public class NewUserListener extends UserEventListener {
     defaultCalendarSetting_ = new CalendarSetting() ;
     if(params.getValueParam(ST_VIEW_TYPE) != null) {
       defaultCalendarSetting_.setViewType(params.getValueParam(ST_VIEW_TYPE).getValue()) ;
+    } else {
+      defaultCalendarSetting_.setViewType(CalendarSetting.WORKING_VIEW) ;
     }
     if(params.getValueParam(ST_WEEK_START) != null) {
       defaultCalendarSetting_.setWeekStartOn(params.getValueParam(ST_WEEK_START).getValue()) ;
@@ -124,11 +126,28 @@ public class NewUserListener extends UserEventListener {
       if(defaultCalendarSetting_.isShowWorkingTime()) {
         if(params.getValueParam(ST_TIME_BEGIN) != null) {
           defaultCalendarSetting_.setWorkingTimeBegin(params.getValueParam(ST_TIME_BEGIN).getValue()) ;
+        } else {
+          defaultCalendarSetting_.setWorkingTimeBegin("09:00") ;
         }
         if(params.getValueParam(ST_TIME_END) != null) {
           defaultCalendarSetting_.setWorkingTimeEnd(params.getValueParam(ST_TIME_END).getValue()) ;
+        } else {
+          defaultCalendarSetting_.setWorkingTimeEnd("18:00") ;
         }
       }
+    } else {
+      defaultCalendarSetting_.setShowWorkingTime(true) ;
+      if(params.getValueParam(ST_TIME_BEGIN) != null) {
+        defaultCalendarSetting_.setWorkingTimeBegin(params.getValueParam(ST_TIME_BEGIN).getValue()) ;
+      } else {
+        defaultCalendarSetting_.setWorkingTimeBegin("09:00") ;
+      }
+      if(params.getValueParam(ST_TIME_END) != null) {
+        defaultCalendarSetting_.setWorkingTimeEnd(params.getValueParam(ST_TIME_END).getValue()) ;
+      } else {
+        defaultCalendarSetting_.setWorkingTimeEnd("18:00") ;
+      }
+      
     }
     ValuesParam ignoredUsers = params.getValuesParam(ST_USER_IGNORE) ;
     if(ignoredUsers != null && !ignoredUsers.getValues().isEmpty()) {

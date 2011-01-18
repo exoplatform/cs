@@ -1627,10 +1627,13 @@ public class JCRDataStorage implements DataStorage {
       CalendarSetting calendarSetting = new CalendarSetting() ;
       Node settingNode = calendarHome.getNode(CALENDAR_SETTING) ;      
       calendarSetting.setViewType(settingNode.getProperty(Utils.EXO_VIEW_TYPE).getString()) ;
-      calendarSetting.setTimeInterval(settingNode.getProperty(Utils.EXO_TIME_INTERVAL).getLong()) ;
-      calendarSetting.setWeekStartOn(settingNode.getProperty(Utils.EXO_WEEK_START_ON).getString()) ;
-      calendarSetting.setDateFormat(settingNode.getProperty(Utils.EXO_DATE_FORMAT).getString()) ;
-      calendarSetting.setTimeFormat(settingNode.getProperty(Utils.EXO_TIME_FORMAT).getString()) ;
+      calendarSetting.setTimeInterval(settingNode.getProperty(Utils.EXO_TIME_INTERVAL).getLong()) ;      
+      if(settingNode.hasProperty(Utils.EXO_WEEK_START_ON))
+        calendarSetting.setWeekStartOn(settingNode.getProperty(Utils.EXO_WEEK_START_ON).getString()) ;
+      if(settingNode.hasProperty(Utils.EXO_DATE_FORMAT))
+        calendarSetting.setDateFormat(settingNode.getProperty(Utils.EXO_DATE_FORMAT).getString()) ;
+      if(settingNode.hasProperty(Utils.EXO_TIME_FORMAT))
+        calendarSetting.setTimeFormat(settingNode.getProperty(Utils.EXO_TIME_FORMAT).getString()) ;      
       if(settingNode.hasProperty(Utils.EXO_SEND_OPTION)) calendarSetting.setSendOption(settingNode.getProperty(Utils.EXO_SEND_OPTION).getString()) ;
       if(settingNode.hasProperty(Utils.EXO_BASE_URL)) calendarSetting.setBaseURL(settingNode.getProperty(Utils.EXO_BASE_URL).getString()) ;
       if(settingNode.hasProperty(Utils.EXO_LOCATION))
