@@ -605,4 +605,10 @@ public class MockCalendarService implements CalendarService{
     // TODO Auto-generated method stub
     
   }
+
+  @Override
+  public Calendar getRemoteCalendar(String owner, String remoteUrl, String remoteType) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

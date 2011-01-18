@@ -59,6 +59,7 @@ public class SynchronizeRemoteCalendarJob implements Job {
     SessionProvider provider = SessionProvider.createSystemProvider();
     CalendarService calService = (CalendarService) container.getComponentInstanceOfType(CalendarService.class);
     int total = 0;
+    int success = 0;
     int failed = 0;
     long start = System.currentTimeMillis();
     try {
@@ -111,10 +112,11 @@ public class SynchronizeRemoteCalendarJob implements Job {
             
             remoteCalendarService.importRemoteCalendar(username, remoteCalendarId, icalInputStream);
             calService.setRemoteCalendarLastUpdated(username, remoteCalendarId, Utils.getGreenwichMeanTime());
+            success++;
           }
           else {
-            long lastUpdate = remoteCalendar.getProperty(Utils.EXO_REMOTE_LAST_UPDATED).getDate().getTimeInMillis();
-            long now = System.currentTimeMillis();
+            long lastUpdate = remoteCalendar.getProperty(Utils.EXO_REMOTE_LAST_UPDATED).getDate().getTimeInMillis();           
+            long now = Utils.getGreenwichMeanTime().getTimeInMillis();
             long interval = 0;
             if (Utils.SYNC_5MINS.equals(syncPeriod)) interval = 5 * 60 * 1000;
             if (Utils.SYNC_10MINS.equals(syncPeriod)) interval = 10 * 60 * 1000;
@@ -144,13 +146,14 @@ public class SynchronizeRemoteCalendarJob implements Job {
               
               remoteCalendarService.importRemoteCalendar(username, remoteCalendarId, icalInputStream);
               calService.setRemoteCalendarLastUpdated(username, remoteCalendarId, Utils.getGreenwichMeanTime());
+              success++;
             }
           }
         }
         catch (Exception e) {
           log_.debug("Skip this calendar, error when reload remote calendar " + remoteCalendarId +  ". Error message: " + e.getMessage());
           failed++;
-          break;
+          continue;
         }
       }      
     } 
@@ -164,8 +167,8 @@ public class SynchronizeRemoteCalendarJob implements Job {
       ExoContainerContext.setCurrentContainer(oldContainer);
     }
     long finish = System.currentTimeMillis();
-    long spent = (finish - start) * 1000; 
-    log_.info("Reload remote calendar completed. Total: " + total + ", Success: " + (total-failed) + ", Failed: " + failed + ". Time spent: " + spent + " s.");
+    long spent = (finish - start); 
+    log_.info("Reload remote calendar completed. Total: " + total + ", Success: " + success + ", Failed: " + failed + ", Skip: " + (total-success-failed) + ". Time spent: " + spent + " ms.");
     
   }
   

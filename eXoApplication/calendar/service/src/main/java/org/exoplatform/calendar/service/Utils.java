@@ -316,7 +316,7 @@ public class Utils {
   }
   
   public static java.util.Calendar getGreenwichMeanTime() {
-    java.util.Calendar calendar = GregorianCalendar.getInstance();
+    java.util.Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"));
     calendar.setLenient(false);
     int gmtoffset = calendar.get(java.util.Calendar.DST_OFFSET) + calendar.get(java.util.Calendar.ZONE_OFFSET);
     calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset);

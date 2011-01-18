@@ -743,5 +743,9 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     storage_.setRemoteCalendarLastUpdated(owner, calendarId, timeGMT);
     
   }
+  
+  public Calendar getRemoteCalendar(String owner, String remoteUrl, String remoteType) throws Exception {
+    return storage_.getRemoteCalendar(owner, remoteUrl, remoteType);
+  }
 
 }

@@ -735,5 +735,7 @@ public interface CalendarService {
    * @throws Exception
    */
   public RemoteCalendarService getRemoteCalendarService() throws Exception;
+  
+  public Calendar getRemoteCalendar(String owner, String remoteUrl, String remoteType) throws Exception;
  
 }

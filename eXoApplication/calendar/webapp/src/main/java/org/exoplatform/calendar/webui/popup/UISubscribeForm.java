@@ -125,13 +125,22 @@ public class UISubscribeForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UISubscribeForm> event) throws Exception {
       UISubscribeForm uiform = event.getSource();
       UICalendarPortlet calendarPortlet = uiform.getAncestorOfType(UICalendarPortlet.class);
-        
+      CalendarService calService = CalendarUtils.getCalendarService();
+      String username = CalendarUtils.getCurrentUser();
+      
       String url = uiform.getUIStringInput(URL).getValue();
       String type = uiform.getChild(UIFormRadioBoxInput.class).getValue();
       UIApplication uiApp = uiform.getAncestorOfType(UIApplication.class);
       
       if (CalendarUtils.isEmpty(type)) {
         uiApp.addMessage(new ApplicationMessage("UISubscribeForm.msg.remote-type-is-not-null", null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+        return;
+      }
+      
+      // check duplicate remote calendar
+      if (calService.getRemoteCalendar(username, url, type) != null) {
+        uiApp.addMessage(new ApplicationMessage("UISubscribeForm.msg.this-remote-calendar-already-exists", null, ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }

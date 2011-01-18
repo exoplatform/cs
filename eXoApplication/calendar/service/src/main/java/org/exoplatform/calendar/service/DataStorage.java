@@ -930,4 +930,6 @@ public interface DataStorage {
    * @throws Exception
    */
   public void setRemoteCalendarLastUpdated(String username, String calendarId, java.util.Calendar timeGMT) throws Exception;
+  
+  public Calendar getRemoteCalendar(String username, String remoteUrl, String remoteType) throws Exception;
 }

@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -66,7 +67,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
                  template = "app:/templates/calendar/webui/UIPopup/UIRemoteCalendar.gtmpl",
                  events = {
                    @EventConfig(listeners = UIRemoteCalendar.BackActionListener.class),
-                   @EventConfig(listeners = UIRemoteCalendar.FinishActionListener.class),
+                   @EventConfig(listeners = UIRemoteCalendar.SaveActionListener.class),
                    @EventConfig(listeners = UIRemoteCalendar.CancelActionListener.class, phase = Phase.DECODE)
                  }
              )
@@ -135,6 +136,7 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     setCalendarName(calService.getUserCalendar(username, calendarId_).getName());
     setDescription(calendar.getDescription());
     setSelectColor(calendar.getCalendarColor());
+    setSyncPeriod(calService.getRemoteCalendarSyncPeriod(username, calendarId_));
     setUseAuthentication(calService.getRemoteCalendarUsername(username, calendarId_) != null);
     setRemoteUser(calService.getRemoteCalendarUsername(username, calendarId_));
     setRemotePassword(calService.getRemoteCalendarPassword(username, calendarId_));
@@ -142,8 +144,8 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     Locale locale = context.getParentAppRequestContext().getLocale() ;
     DateFormat df = new SimpleDateFormat(calSettings.getDateFormat() + " " + calSettings.getTimeFormat(), locale) ;
+    df.setTimeZone(TimeZone.getTimeZone(calSettings.getTimeZone()));
     java.util.Calendar lastUpdated = calService.getRemoteCalendarLastUpdated(username, calendarId_);
-    lastUpdated.setTimeZone(TimeZone.getTimeZone(calSettings.getTimeZone()));
     setLastUpdated(df.format(lastUpdated.getTime()));
   }
   
@@ -231,7 +233,7 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     return lastUpdated_;
   }
   
-  public static class FinishActionListener extends EventListener<UIRemoteCalendar> {
+  public static class SaveActionListener extends EventListener<UIRemoteCalendar> {
 
     @Override
     public void execute(Event<UIRemoteCalendar> event) throws Exception {

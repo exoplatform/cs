@@ -3447,4 +3447,29 @@ public class JCRDataStorage implements DataStorage {
     calendarNode.setProperty(Utils.EXO_REMOTE_LAST_UPDATED, timeGMT);
     calendarNode.save();
   }
+  
+  public Calendar getRemoteCalendar(String username, String remoteUrl, String remoteType) throws Exception {
+    try {
+      Node calendarHome = getUserCalendarHome(username) ;
+      String queryString = new StringBuffer("/jcr:root" + calendarHome.getPath()
+                                                  + "//element(*,exo:remoteCalendar)[@exo:remoteUrl='").
+                                                  append(remoteUrl).
+                                                  append("' and @exo:remoteType='").
+                                                  append(remoteType).
+                                                  append("']").toString();
+      QueryManager queryManager = calendarHome.getSession().getWorkspace().getQueryManager();
+      Query query = queryManager.createQuery(queryString.toString(), Query.XPATH);
+      QueryResult results = query.execute();
+      NodeIterator iter = results.getNodes(); 
+      if (iter.hasNext()) {
+        Node calNode = iter.nextNode();
+        Calendar calendar = getCalendar(null, username, calNode, true);
+        return calendar;
+      }
+      return null;
+    }
+    catch (Exception e) {
+      return null;
+    }
+  }
 }
