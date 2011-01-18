@@ -1378,7 +1378,7 @@ public class MailServiceImpl implements MailService, Startable {
           updateCheckingMailStatusByCometd(userName, account.getId(), info);
         }
         return null;
-      } catch (MessagingException e) {e.printStackTrace();
+      } catch (MessagingException e) {
         if(logger.isDebugEnabled()) logger.debug("Exception while connecting to server : " + e.getMessage());
         if(Utils.isGmailAccount(emailAddress)) logger.warn("You are using gmail account and certain that your mail account set incoming/outgoing protocol is SSL");
         if (info != null) {
