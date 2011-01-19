@@ -24,7 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.service.SharedAddressBook;
@@ -115,8 +116,9 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(group, group, false));
       listGroup.add(group) ;
     }    
-    ObjectPageList objPageList = new ObjectPageList(listGroup, 10) ;
-    uiPageIterator_.setPageList(objPageList) ;
+    //ObjectPageList objPageList = new ObjectPageList(listGroup, 10) ;
+    LazyPageList<String> pageList = new LazyPageList<String>(new ListAccessImpl<String>(String.class, listGroup), 10);
+    uiPageIterator_.setPageList(pageList) ;
   }
 
   public List<String> getCheckedGroups() throws Exception {

@@ -23,7 +23,8 @@ import java.util.ResourceBundle;
 
 import javax.jcr.PathNotFoundException;
 
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
@@ -115,8 +116,9 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     try {
       currentPage = permissionList.getUIPageIterator().getPageList().getCurrentPage() ;
     } catch (NullPointerException e) { }
-    ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
-    permissionList.getUIPageIterator().setPageList(objPageList) ;
+    //ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
+    LazyPageList<data> pageList = new LazyPageList<data>(new ListAccessImpl<data>(data.class, dataRow), 10); 
+    permissionList.getUIPageIterator().setPageList(pageList) ;
     if (currentPage > 1) {
       permissionList.getUIPageIterator().setCurrentPage(currentPage) ;
     }
@@ -141,8 +143,9 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     try {
       currentPage = permissionList.getUIPageIterator().getPageList().getCurrentPage() ;
     } catch (NullPointerException e) { }
-    ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
-    permissionList.getUIPageIterator().setPageList(objPageList) ;
+    //ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
+    LazyPageList<data> pageList = new LazyPageList<data>(new ListAccessImpl<data>(data.class, dataRow), 10);
+    permissionList.getUIPageIterator().setPageList(pageList) ;
     if (currentPage > 1 && currentPage <= permissionList.getUIPageIterator().getAvailablePage()) {
       permissionList.getUIPageIterator().setCurrentPage(currentPage) ;
     }

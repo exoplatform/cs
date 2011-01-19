@@ -22,7 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.contact.CalendarUtils;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.AddressBook;
@@ -34,7 +35,6 @@ import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -194,8 +194,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
 
   public void setContactList(List<Contact> contactList) throws Exception {
-    ObjectPageList objPageList = new ObjectPageList(contactList, 10) ;
-    uiPageList_.setPageList(objPageList) ;
+    //ObjectPageList objPageList = new ObjectPageList(contactList, 10) ;
+    LazyPageList<Contact> pageList = new LazyPageList<Contact>(new ListAccessImpl<Contact>(Contact.class, contactList), 10);
+    uiPageList_.setPageList(pageList) ;
   }
 
   public void setAlreadyCheckedContact(List<Contact> alreadyCheckedContact) throws Exception {

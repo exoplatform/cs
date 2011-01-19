@@ -24,7 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactPageList;
@@ -95,8 +96,9 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   public void setContacts(Map<String, Contact> contacts) { this.contacts = contacts; }
   public void setContactList(List<ContactData> contactList) throws Exception {
     getChildren().clear() ;
-    ObjectPageList objPageList = new ObjectPageList(contactList, 10) ;
-    uiPageIterator_.setPageList(objPageList) ;
+    //ObjectPageList objPageList = new ObjectPageList(contactList, 10) ;
+    LazyPageList<ContactData> pageList = new LazyPageList<ContactData>(new ListAccessImpl<ContactData>(ContactData.class, contactList), 10);
+    uiPageIterator_.setPageList(pageList) ;
     for (ContactData contact : contactList) {
       UIFormCheckBoxInput uiCheckbox = getUIFormCheckBoxInput(contact.getId()) ;
       if(uiCheckbox == null) {
