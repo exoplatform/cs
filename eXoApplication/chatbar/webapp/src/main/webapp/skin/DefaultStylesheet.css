@@ -153,6 +153,7 @@
 
 .UIChat .BuddyList {
   height: 100%;
+  overflow: auto;
 }
 
 .UIChat .TitleIconChat {
@@ -278,6 +279,7 @@
   padding-left: 24px; /* orientation=lt */
   padding-right: 24px; /* orientation=rt */
   display: block;
+  white-space: nowrap;
 }
 
 .UIChatBarPortlet .UIRightClickPopupMenu .OnlineIcon {
