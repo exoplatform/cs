@@ -162,7 +162,9 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     if(publicCals != null && !publicCals.isEmpty()) {
       defaultCalendarsTab.addChild(new UIFormInputInfo(CalendarUtils.PUBLIC_CALENDARS, CalendarUtils.PUBLIC_CALENDARS, null)) ; 
       for(Calendar calendar : publicCals) {
-        names_.put(calendar.getId(), calendar.getName()) ;
+        String groupName = cservice.getGroupCalendars(calendar.getGroups(), false, username).get(0).getName();
+        names_.put(calendar.getId(), CalendarUtils.getGroupCalendarName(
+          groupName.substring(groupName.lastIndexOf("/") + 1), calendar.getName())) ;
         UIFormCheckBoxInput checkBox = defaultCalendarsTab.getChildById(calendar.getId()) ;
         if(checkBox == null) {
           checkBox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), true) ;

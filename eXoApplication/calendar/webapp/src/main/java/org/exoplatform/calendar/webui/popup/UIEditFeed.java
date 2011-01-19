@@ -159,11 +159,12 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
     }
     List<GroupCalendarData> groupCals  = calendarService.getGroupCalendars(CalendarUtils.getUserGroups(username), true, username) ;
     for(GroupCalendarData groupData : groupCals) {
+      String groupName = groupData.getName();
       if(groupData != null) {
         for(Calendar cal : groupData.getCalendars()) {
           if (feedCalendars.containsKey(cal.getId())) continue;
-          options.add(new SelectItemOption<String>(cal.getName(),Utils.PUBLIC_TYPE + Utils.COLON + cal.getId())) ;
-    
+          options.add(new SelectItemOption<String>(CalendarUtils.getGroupCalendarName(groupName.substring(
+            groupName.lastIndexOf("/") + 1),cal.getName()),Utils.PUBLIC_TYPE + Utils.COLON + cal.getId())) ;    
         }
       }
     }

@@ -103,9 +103,11 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     }
     List<GroupCalendarData> groupCals  = cservice.getGroupCalendars(CalendarUtils.getUserGroups(username), true, username) ;
     for(GroupCalendarData groupData : groupCals) {
+      String groupName = groupData.getName();
       if(groupData != null) {
         for(Calendar cal : groupData.getCalendars()) {
-          options.add(new SelectItemOption<String>(cal.getName(), Calendar.TYPE_PUBLIC + CalendarUtils.COLON + cal.getId())) ;
+          options.add(new SelectItemOption<String>(CalendarUtils.getGroupCalendarName(groupName.substring(
+            groupName.lastIndexOf("/") + 1),cal.getName()), Calendar.TYPE_PUBLIC + CalendarUtils.COLON + cal.getId())) ;
         }
       }
     }

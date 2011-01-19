@@ -648,21 +648,26 @@ public class CalendarUtils {
     
     if(lgcd != null) {
       OrganizationService oService = getOrganizationService() ;
-      SelectOptionGroup pubGrp = new SelectOptionGroup(CalendarUtils.PUBLIC_CALENDARS);
+      SelectOptionGroup pubGrp = new SelectOptionGroup(CalendarUtils.PUBLIC_CALENDARS);      
       for(GroupCalendarData g : lgcd) {
+        String groupName = g.getName();
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
           if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
             if (!hash.containsKey(c.getId())) {
               hash.put(c.getId(), "");
-              pubGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+              pubGrp.addOption(new SelectOption(getGroupCalendarName(groupName.substring(groupName.lastIndexOf("/") + 1),
+                                                                     c.getName()), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
             }
           }
         }
-
       }
       if(pubGrp.getOptions().size() > 0)  options.add(pubGrp);
     }
     return options ;
+  }
+  
+  public static String getGroupCalendarName(String groupName, String calendarName) {
+    return groupName + MINUS + calendarName;
   }
 
   public static List<SelectItem> getCalendarCategoryOption() throws Exception {
