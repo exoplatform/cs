@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.service.Message;
@@ -65,8 +66,9 @@ public class UIViewAllHeaders extends UIGrid  implements UIPopupComponent{
       headers.add(new HeaderData(key, value)) ;
     }
 
-    ObjectPageList objPageList = new ObjectPageList(headers, 15) ;
-    getUIPageIterator().setPageList(objPageList) ; 
+    //ObjectPageList objPageList = new ObjectPageList(headers, 15) ;
+    LazyPageList<HeaderData> pageList = new LazyPageList<HeaderData>(new ListAccessImpl<HeaderData>(HeaderData.class, headers), 15);
+    getUIPageIterator().setPageList(pageList) ; 
   }
 
   public void activate() throws Exception { }

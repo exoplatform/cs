@@ -20,7 +20,8 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.service.Account;
@@ -71,8 +72,9 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
           acc.getServerProperties().get(Utils.SVR_INCOMING_HOST), acc.getProtocol())) ;
     }
 
-    ObjectPageList objPageList = new ObjectPageList(accounts, 10) ;
-    getUIPageIterator().setPageList(objPageList) ; 
+    //ObjectPageList objPageList = new ObjectPageList(accounts, 10) ;
+    LazyPageList<AccountData> pageList = new LazyPageList<AccountData>(new ListAccessImpl<AccountData>(AccountData.class, accounts), 10);
+    getUIPageIterator().setPageList(pageList) ; 
   }
 
   public void activate() throws Exception { }

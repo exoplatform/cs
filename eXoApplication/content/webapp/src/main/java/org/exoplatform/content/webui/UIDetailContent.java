@@ -7,7 +7,8 @@ package org.exoplatform.content.webui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.content.model.ContentItem;
@@ -64,7 +65,7 @@ public class UIDetailContent extends UIContainer {
       PageList pageList = service.getContentData(node_);
       uiIterator_.setPageList(pageList);
     }catch (Exception e) {
-      uiIterator_.setPageList(new ObjectPageList(new ArrayList(), 10)) ;
+      uiIterator_.setPageList(new LazyPageList<ContentItem>(new ListAccessImpl<ContentItem>(ContentItem.class, new ArrayList<ContentItem>()), 10)) ;
     }
   }
   

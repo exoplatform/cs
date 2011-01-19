@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
@@ -176,8 +178,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   @SuppressWarnings({ "deprecation", "unchecked" })
   public void setContactList(List<ContactData> contactList) throws Exception {
     getUIFormSelectBox(FIELD_GROUP).setOptions(getGroups()) ;
-    org.exoplatform.commons.utils.ObjectPageList objPageList = new org.exoplatform.commons.utils.ObjectPageList(contactList, 10) ;
-    uiPageIterator_.setPageList(objPageList) ;
+    //org.exoplatform.commons.utils.ObjectPageList objPageList = new org.exoplatform.commons.utils.ObjectPageList(contactList, 10) ;
+    LazyPageList<ContactData> pageList = new LazyPageList<ContactData>(new ListAccessImpl<ContactData>(ContactData.class, contactList), 10);
+    uiPageIterator_.setPageList(pageList) ;
     for (ContactData contact : contactList) {
       UIFormCheckBoxInput uiCheckbox = getUIFormCheckBoxInput(contact.getId()) ;
       if(uiCheckbox == null) {

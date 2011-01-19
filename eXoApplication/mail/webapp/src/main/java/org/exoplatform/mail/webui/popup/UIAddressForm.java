@@ -23,7 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
@@ -275,8 +276,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
 
   public void setContactList(List<ContactData> contactList) throws Exception {
-    ObjectPageList objPageList = new ObjectPageList(contactList, 10);
-    uiPageList_.setPageList(objPageList);
+    //ObjectPageList objPageList = new ObjectPageList(contactList, 10);
+    LazyPageList<ContactData> pageList = new LazyPageList<ContactData>(new ListAccessImpl<ContactData>(ContactData.class, contactList), 10);
+    uiPageList_.setPageList(pageList);
   }
 
   public void setAlreadyCheckedContact(List<ContactData> alreadyCheckedContact) throws Exception {
@@ -321,7 +323,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       if (groupID != null) {
         if (groupID.equals(uiAddressForm.all)) {
           uiAddressForm.setContactList(new ContactFilter());
-        } else if (groupID.equals(uiAddressForm.SHARED)) {
+        } else if (groupID.equals(UIAddressForm.SHARED)) {
 
           ContactFilter filter = new ContactFilter();
           filter.setSearchSharedContacts(true);
