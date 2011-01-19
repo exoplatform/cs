@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,9 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccess;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.MembershipHandler;
 import org.exoplatform.services.organization.OrganizationService;
@@ -108,8 +111,9 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
 
   public void init(Collection<String> pars) throws Exception{
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
-    ObjectPageList objPageList = new ObjectPageList(service.getUserHandler().getUserPageList(0).getAll(), 10) ;
-    uiIterator_.setPageList(objPageList) ;
+    //ObjectPageList objPageList = new ObjectPageList(service.getUserHandler().getUserPageList(0).getAll(), 10) ;
+    LazyPageList<User> pageList = new LazyPageList<User>(new ListAccessImpl<User>(User.class, service.getUserHandler().getUserPageList(0).getAll()), 10);
+    uiIterator_.setPageList(pageList) ;
     pars_ = pars ;
   }
   private List<SelectItemOption<String>> getGroups() throws Exception {
@@ -257,6 +261,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
         }
         List results = new CopyOnWriteArrayList() ;
         results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
+        
         MembershipHandler memberShipHandler = service.getMembershipHandler();
         String groupId = uiForm.getSelectedGroup();
         if(groupId != null && groupId.trim().length() != 0) {
@@ -266,8 +271,9 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
             }
           }
         }
-        ObjectPageList objPageList = new ObjectPageList(results, 10) ;
-        uiForm.uiIterator_.setPageList(objPageList);
+        //ObjectPageList objPageList = new ObjectPageList(results, 10) ;
+        LazyPageList<User> pageList = new LazyPageList<User>(new ListAccessImpl<User>(User.class, results) , 10);
+        uiForm.uiIterator_.setPageList(pageList);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }

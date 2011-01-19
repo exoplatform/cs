@@ -33,7 +33,8 @@ import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.calendar.webui.UISearchForm;
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -107,8 +108,9 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
       }
     }
     UIGrid uiGrid = getChild(UIGrid.class) ; 
-    ObjectPageList objPageList = new ObjectPageList(categories, 10) ;
-    uiGrid.getUIPageIterator().setPageList(objPageList) ;   
+    //ObjectPageList objPageList = new ObjectPageList(categories, 10) ;
+    LazyPageList<EventCategory> pageList = new LazyPageList<EventCategory>(new ListAccessImpl<EventCategory>(EventCategory.class, categories), 10);
+    uiGrid.getUIPageIterator().setPageList(pageList) ;   
   }
   /* private SessionProvider getSession() {
     return SessionProviderFactory.createSessionProvider() ;

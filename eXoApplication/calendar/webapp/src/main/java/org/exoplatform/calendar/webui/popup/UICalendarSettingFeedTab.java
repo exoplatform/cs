@@ -25,7 +25,8 @@ import java.util.Map;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.FeedData;
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -100,8 +101,9 @@ public class UICalendarSettingFeedTab extends UIFormInputWithActions {
   public long getCurrentPage() { return getChild(UIGrid.class).getUIPageIterator().getCurrentPage();}
   
   public void setFeedList(List<FeedData> feedList) throws Exception {
-    ObjectPageList objPageList = new ObjectPageList(feedList, 10) ;
-    getChild(UIGrid.class).getUIPageIterator().setPageList(objPageList) ;
+    //ObjectPageList objPageList = new ObjectPageList(feedList, 10) ;
+    LazyPageList<FeedData> pageList = new LazyPageList<FeedData>(new ListAccessImpl<FeedData>(FeedData.class, feedList), 10);
+    getChild(UIGrid.class).getUIPageIterator().setPageList(pageList) ;
   }
   protected void updateCurrentPage(int page) throws Exception{
     getChild(UIGrid.class).getUIPageIterator().setCurrentPage(page) ;

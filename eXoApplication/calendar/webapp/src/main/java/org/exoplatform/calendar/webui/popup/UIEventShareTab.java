@@ -25,7 +25,8 @@ import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.webui.popup.UIEventForm.ParticipantStatus;
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIGrid;
@@ -100,8 +101,9 @@ public class UIEventShareTab extends UIFormInputWithActions {
     List<ParticipantStatus> newParStatus = new ArrayList<ParticipantStatus>() ;
     for (ParticipantStatus participantStatus : participantStatusList)
       if (!CalendarUtils.isEmpty(participantStatus.getParticipant())) newParStatus.add(participantStatus) ;
-    ObjectPageList objPageList = new ObjectPageList(newParStatus, 10) ;
-    getChild(UIGrid.class).getUIPageIterator().setPageList(objPageList) ;
+    //ObjectPageList objPageList = new ObjectPageList(newParStatus, 10) ;
+    LazyPageList<ParticipantStatus> pageList = new LazyPageList<ParticipantStatus>(new ListAccessImpl<ParticipantStatus>(ParticipantStatus.class, newParStatus), 10);
+    getChild(UIGrid.class).getUIPageIterator().setPageList(pageList) ;
   }
   protected void updateCurrentPage(int page) throws Exception{
     getChild(UIGrid.class).getUIPageIterator().setCurrentPage(page) ;

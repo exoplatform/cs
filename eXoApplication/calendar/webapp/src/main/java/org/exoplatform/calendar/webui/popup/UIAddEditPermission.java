@@ -28,7 +28,8 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.services.organization.Group;
@@ -105,8 +106,9 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     }
     Collections.sort(dataRow, new UserDataComparator()) ;
     UIGrid permissionList = getChild(UIGrid.class) ;
-    ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
-    permissionList.getUIPageIterator().setPageList(objPageList) ;
+    //ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
+    LazyPageList<data> pageList = new LazyPageList<data>(new ListAccessImpl<data>(data.class, dataRow), 10);
+    permissionList.getUIPageIterator().setPageList(pageList) ;
   //cs-3854
     if(currentPage>1 && currentPage<=permissionList.getUIPageIterator().getAvailablePage()){
       permissionList.getUIPageIterator().setCurrentPage(currentPage);      

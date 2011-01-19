@@ -31,7 +31,8 @@ import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.calendar.webui.UISearchForm;
-import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -87,8 +88,9 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
         calendarCategory.setName(newName);
       }
     UIGrid uiGrid = getChild(UIGrid.class) ; 
-    ObjectPageList objPageList = new ObjectPageList(categories, 20) ;
-    uiGrid.getUIPageIterator().setPageList(objPageList) ;   
+    //ObjectPageList objPageList = new ObjectPageList(categories, 20) ;
+    LazyPageList<CalendarCategory> pageList = new LazyPageList<CalendarCategory>(new ListAccessImpl<CalendarCategory>(CalendarCategory.class, categories), 20) ;
+    uiGrid.getUIPageIterator().setPageList(pageList) ;   
   }
   public void resetForm() {
     getChild(UICalendarCategoryForm.class).reset() ;
@@ -151,4 +153,5 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
       event.getRequestContext().addUIComponentToUpdateByAjax(uiManager.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
+  
 }
