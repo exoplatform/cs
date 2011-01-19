@@ -369,11 +369,19 @@
           onParentVersion="COPY" protected="false" multiple="false">
           <valueConstraints/>
         </propertyDefinition>
-        <propertyDefinition name="exo:syncPeriod" requiredType="Long" autoCreated="false" mandatory="true"
+        <propertyDefinition name="exo:username" requiredType="String" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>
+        <propertyDefinition name="exo:password" requiredType="String" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>
+        <propertyDefinition name="exo:syncPeriod" requiredType="String" autoCreated="false" mandatory="false"
           onParentVersion="COPY" protected="false" multiple="false">
           <valueConstraints/>
         </propertyDefinition>  
-        <propertyDefinition name="exo:lastUpdated" requiredType="Date" autoCreated="false" mandatory="true"
+        <propertyDefinition name="exo:lastUpdated" requiredType="Date" autoCreated="false" mandatory="false"
           onParentVersion="COPY" protected="false" multiple="false">
           <valueConstraints/>
         </propertyDefinition>       

@@ -359,6 +359,34 @@
 	      </propertyDefinition>        
 	    </propertyDefinitions>
 	  </nodeType>  	 	
+	  <nodeType name="exo:remoteCalendar" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+      <propertyDefinitions>
+        <propertyDefinition name="exo:remoteUrl" requiredType="String" autoCreated="false" mandatory="true"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition> 
+        <propertyDefinition name="exo:remoteType" requiredType="String" autoCreated="false" mandatory="true"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>
+        <propertyDefinition name="exo:username" requiredType="String" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>
+        <propertyDefinition name="exo:password" requiredType="String" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>
+        <propertyDefinition name="exo:syncPeriod" requiredType="String" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>  
+        <propertyDefinition name="exo:lastUpdated" requiredType="Date" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>       
+      </propertyDefinitions>
+    </nodeType>
 </nodeTypes>  
   
    
