@@ -168,8 +168,9 @@ public class SynchronizeRemoteCalendarJob implements Job {
     }
     long finish = System.currentTimeMillis();
     long spent = (finish - start); 
-    log_.info("Reload remote calendar completed. Total: " + total + ", Success: " + success + ", Failed: " + failed + ", Skip: " + (total-success-failed) + ". Time spent: " + spent + " ms.");
-    
+    if (total > 0) {
+      log_.info("Reload remote calendar completed. Total: " + total + ", Success: " + success + ", Failed: " + failed + ", Skip: " + (total-success-failed) + ". Time spent: " + spent + " ms.");
+    }
   }
   
   private Session getSession(SessionProvider sprovider) throws Exception{

@@ -368,6 +368,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     return eXoCalendar;
   }
 
+  // TODO: improve this function follow CalDav synchronization operations specification to update faster (avoid fully reload)
   @Override
   public Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception {
     if (!storage_.isRemoteCalendar(username, remoteCalendarId)) {
