@@ -6,6 +6,7 @@
 	try {
 		def rcontext = _ctx.getRequestContext() ;
 		rcontext.getJavascriptManager().addJavascript('eXo.calendar.restContext = "'+ uicomponent.getRestContextName() +'" ;') ;
+		rcontext.getJavascriptManager().addJavascript('eXo.calendar.settingTimezone = "'+ uicomponent.getSettingTimeZone() +'" ;') ;
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -15,6 +16,7 @@
 <div style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); _margin: auto;">
 	<div class="ApplicationMinWidth">
 		<div class="UICalendarPortlet" id="$uicomponent.id">
+			<div class="UICalendarEventTooltip"><span></span></div>
 			<div class="UINotification" style="display:none;">
 				<div class="UIControlInfo">
 					<div class="LeftControlInfo">

@@ -52,6 +52,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.webservice.cs.bean.EventData;
+import org.exoplatform.webservice.cs.bean.SingleEvent;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -497,6 +498,25 @@ public class CalendarWebservice implements ResourceContainer{
 		  List<Calendar> calList = calService.getUserCalendars(username, true);
 		  EventData data = new EventData();
 		  data.setCalendars(calList);
+		  return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+	  }catch(Exception e){
+		  return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();
+	  }
+  }
+  
+  @GET
+  @Path("/private/cs/calendar/getevent/{eventid}")
+  public Response getEvent(@PathParam("eventid") String eventid) throws Exception{
+	  CacheControl cacheControl = new CacheControl();
+	  cacheControl.setNoCache(true);
+	  cacheControl.setNoStore(true);
+	  try{		  
+		  CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+		  String username = ConversationState.getCurrent().getIdentity().getUserId();
+		  CalendarEvent calEvent = calService.getEvent(username, eventid);
+		  SingleEvent data = new SingleEvent();
+		  data.setInfo(calEvent);
+		  //data.setCalendars(calList);
 		  return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
 	  }catch(Exception e){
 		  return Response.status(HTTPStatus.INTERNAL_ERROR).cacheControl(cacheControl).build();

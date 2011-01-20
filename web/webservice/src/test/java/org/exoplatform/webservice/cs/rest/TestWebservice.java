@@ -227,6 +227,18 @@ public class TestWebservice extends AbstractResourceTest {
 		assertNotNull(response);
 		assertNotSame(Response.Status.NOT_FOUND, response.getStatus());
 	}
+	public void testGetEvent() throws Exception {
+		MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+		String username = "root";
+		h.putSingle("username", username);
+		
+		String eventURI = "/private/cs/calendar/getevent/eventid";
+		ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+		ContainerResponse response = service("GET", eventURI, baseURI, h, null, writer);
+		
+		assertNotNull(response);
+		assertNotSame(Response.Status.NOT_FOUND, response.getStatus());
+	}
 	public void testGetCalendars() throws Exception {
 		// TODO Auto-generated method stub
 		MultivaluedMap<String, String> h = new MultivaluedMapImpl();

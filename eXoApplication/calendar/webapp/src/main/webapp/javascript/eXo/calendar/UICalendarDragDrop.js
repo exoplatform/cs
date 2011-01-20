@@ -86,6 +86,7 @@ UICalendarDragDrop.prototype.regDnDItem = function() {
 
 UICalendarDragDrop.prototype.dndTrigger = function(e){
   e = e ? e : window.event;
+	eXo.calendar.EventTooltip.disable();
   if (e.button == 1 || e.which == 1) {
     return eXo.calendar.UICalendarDragDrop.initDnD(eXo.calendar.UICalendarDragDrop.dropableSets, this, this, e);
   }
@@ -165,6 +166,7 @@ UICalendarDragDrop.prototype.initCallback = function(dndEvent) {
 } ;
 
 UICalendarDragDrop.prototype.dragCallback = function(dndEvent) {
+	eXo.calendar.EventTooltip.disable();
 	if(eXo.core.Browser.getBrowserType() == "safari"){
 		if(!this.onMouseMoveCount) this.onMouseMoveCount = 0;
 		this.onMouseMoveCount++;
@@ -202,6 +204,7 @@ UICalendarDragDrop.prototype.dragCallback = function(dndEvent) {
 } ;
 
 UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
+	eXo.calendar.EventTooltip.enable();
   var eventObj = eXo.core.DOMUtil.findDescendantsByClass(dndEvent.dragObject,"div","EventBoxes");
   eXo.calendar.UICalendarDragDrop.highlight(false);
   if ((eXo.calendar.UICalendarDragDrop.pos.x == dndEvent.dragObject.offsetLeft) && (eXo.calendar.UICalendarDragDrop.pos.y == dndEvent.dragObject.offsetTop)) {

@@ -418,6 +418,8 @@ EventMan.prototype.initMonth = function(rootNode){
       continue;
     }
     var eventObj = new EventObject();
+		eXo.core.EventManager.addEvent(allEvents[i],"mouseover",eXo.calendar.EventTooltip.show);
+		eXo.core.EventManager.addEvent(allEvents[i],"mouseout",eXo.calendar.EventTooltip.hide);
     eventObj.init(allEvents[i]);
     this.events.push(eventObj);
   }
