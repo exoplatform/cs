@@ -16,11 +16,8 @@
  **/
 package org.exoplatform.calendar.webui;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.portlet.PortletPreferences;
@@ -65,35 +62,6 @@ import org.mortbay.cometd.continuation.EXoContinuationBayeux;
 )
 public class UICalendarPortlet extends UIPortletApplication {
   public UICalendarPortlet() throws Exception {
-    
-    CalendarService calendarService = CalendarUtils.getCalendarService();
-    String username = CalendarUtils.getCurrentUser();
-    CalendarSetting calendarSetting = calendarService.getCalendarSetting(username);
-    Locale locale = WebuiRequestContext.getCurrentInstance().getLocale();
-    if(calendarSetting.getLocation() == null) {
-      if (!CalendarUtils.isEmpty(locale.getISO3Country())) calendarSetting.setLocation(locale.getISO3Country());
-      else calendarSetting.setLocation(Locale.getDefault().getISO3Country()) ;
-    }
-    if (calendarSetting.getDateFormat() == null) {
-      DateFormat dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM, locale);
-      if (dateFormat  instanceof SimpleDateFormat) {
-        SimpleDateFormat simpleDateFormat = (SimpleDateFormat)dateFormat;
-        calendarSetting.setDateFormat(simpleDateFormat.toPattern());
-      }      
-    }
-    if (calendarSetting.getTimeFormat() == null) {
-      DateFormat dateFormat = SimpleDateFormat.getTimeInstance(SimpleDateFormat.MEDIUM, locale);
-      if (dateFormat  instanceof SimpleDateFormat) {
-        SimpleDateFormat simpleDateFormat = (SimpleDateFormat)dateFormat;
-        calendarSetting.setTimeFormat(simpleDateFormat.toPattern());
-      }
-    }
-    if (calendarSetting.getWeekStartOn() == null) {
-      DateFormat dateFormat = SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM, locale);
-      calendarSetting.setWeekStartOn(dateFormat.getCalendar().getFirstDayOfWeek() + "");
-    }
-    calendarService.saveCalendarSetting(username, calendarSetting);    
-
     UIActionBar uiActionBar = addChild(UIActionBar.class, null, null) ;
     uiActionBar.setCurrentView(UICalendarViewContainer.TYPES[Integer.parseInt(getCalendarSetting().getViewType())]) ;
     addChild(UICalendarWorkingContainer.class, null, null) ;

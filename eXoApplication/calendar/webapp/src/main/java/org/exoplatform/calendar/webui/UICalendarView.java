@@ -568,7 +568,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       return CalendarUtils.DEFAULT_TIMEITERVAL ;
     }
     protected String getTimeFormat() {
-      return calendarSetting_.getTimeFormat();
+      return "HH:mm";
     }
     public void setCalendarSetting(CalendarSetting calendarSetting_) {
       this.calendarSetting_ = calendarSetting_;
