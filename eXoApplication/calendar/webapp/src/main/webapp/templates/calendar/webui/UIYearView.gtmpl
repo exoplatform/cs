@@ -105,6 +105,7 @@
                         	dayStart = uicomponent.getCalendarSetting().getWeekStartOn();
                         	calendar.set(Calendar.DAY_OF_WEEK, Integer.parseInt(dayStart));
 											    dayOfWeek = Integer.parseInt(dayStart) ;
+											    def todayClass = "";
 											    for( count = 1; count < dfs_.getWeekdays().length ; count ++) {
 											    	startDayOfWeek = uicomponent.getDayOfWeek(currentYear, month, dayOfMonth) ;
 											      if (week == 1 && startDayOfWeek == dayOfWeek) {
@@ -114,18 +115,23 @@
 											      }
                             calendar.add(Calendar.DAY_OF_WEEK, 1);
                             dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
+                            
 											      if (validDay) {
 											      	highlight = "" ;
 											      	cal.set(Calendar.MONTH, month) ;
 											      	cal.set(Calendar.DAY_OF_MONTH, dayOfMonth) ;
 											      	dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+ cal.getTimeInMillis();
 											      	//dayActionLink = uicomponent.TYPE_DAY +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
+											      	if (uicomponent.isCurrentDay(dayOfMonth, month, currentYear)) {
+											      	  todayClass = "Today";
+											      	} else {
+											      	  todayClass = "";
+											      	}
 											      	if(value.get(dayOfYear) != null) {
 											      		highlight = "Highlight" ;
 											      	}
 											      	%> 
-											      	 <td class="$highlight">
+											      	 <td class="$todayClass $highlight">
 												      	 <a href="<%=uicomponent.event("GotoDate", dayActionLink)%>">
 												      	 	$dayOfMonth
 												      	 </a>

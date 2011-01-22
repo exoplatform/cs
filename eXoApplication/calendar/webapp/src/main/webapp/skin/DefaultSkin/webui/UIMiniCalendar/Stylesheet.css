@@ -115,6 +115,11 @@
 .UICalendarPortlet .UIMiniCalendar .DayList .UIGrid .Today {
 	background: #ABC7FE;
 }
+
+.UICalendarPortlet .UIMiniCalendar .DayList .UIGrid .CurrentWeek {
+	background: none repeat scroll 0 0 #ABC7FE; 
+}
+
 .UICalendarPortlet .UIMiniCalendar .DayList .UIGrid .OtherMonth {
 	background: #F3F3F3 ; 
 	font-style: italic; 

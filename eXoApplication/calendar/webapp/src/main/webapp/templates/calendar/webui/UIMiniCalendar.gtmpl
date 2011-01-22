@@ -11,6 +11,7 @@
 	int currentYear = uicomponent.getCurrentYear() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
 	int currentDay = uicomponent.getCurrentCalendar().get(Calendar.DAY_OF_YEAR) ;
+	long currentDayInMillis = uicomponent.getInstanceTempCalendar().getTimeInMillis();
 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT,String.valueOf(uicomponent.TYPE_MONTH)) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,String.valueOf(uicomponent.TYPE_MONTH)) ;
  	String linkYearNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(uicomponent.TYPE_YEAR)) ;
@@ -105,15 +106,26 @@
 					validDay = 1 ;
 					daysInMonth = uicomponent.getDaysInMonth(currentMonth, currentYear) ;
 					currentDate = Integer.parseInt(sdf.format(calendar.getTime()));
+					def beginDateOfMonthView = uicomponent.getBeginDateOfMonthView();
+					def currentWeekClass = "";
 					while (week++ < uicomponent.getWeeksOfTheMonth(currentYear, currentMonth, 1) ||  (dayOfMonth <= daysInMonth) ) {
 				    println "<tr>";
 				    dayOfWeek = 0 ;
+				    def firstDayOfWeekInMillis = beginDateOfMonthView.getTimeInMillis();
+            beginDateOfMonthView.add(Calendar.WEEK_OF_MONTH, 1) ;
+            def lastDayOfWeekInMillis = beginDateOfMonthView.getTimeInMillis();
+            if (firstDayOfWeekInMillis <= currentDayInMillis && currentDayInMillis <= lastDayOfWeekInMillis) {
+              currentWeekClass = "CurrentWeek";
+            } else {
+              currentWeekClass = "";
+            }
 				    while (dayOfWeek++ < 7) {
 							if ((week == 1 && currentDate > 8) || (week >= (uicomponent.getWeeksOfTheMonth(currentYear, currentMonth, 1)-1) && currentDate < 8)) {
 				        validDay = 0;
 				      } else {
 								validDay = 1 ;
 							}
+							
 				       	styleClass = "" ;
 				       	highlight = "" ;
                 dayStyle = ""
@@ -136,7 +148,7 @@
 				       //sdf.setCalendar(calendar) ;
 				       %>
 				      
-				        <td class="$highlight $styleClass $dayStyle">
+				        <td class="$highlight $styleClass $dayStyle $currentWeekClass">
 			        		<div class="MiniCalendarActions" onclick="$actionLink">
   	                <%=sdf.format(calendar.getTime())%> 
 			       			</div>
@@ -145,7 +157,7 @@
 				       dayOfMonth++ ;
 				      } else {
 				        %>
-				        <td class="OtherMonth">
+				        <td class="$currentWeekClass OtherMonth">
 			        		<div class="MiniCalendarActions" onclick="$actionLink">
 			       				<%=sdf.format(calendar.getTime())%> 
 			       			</div>

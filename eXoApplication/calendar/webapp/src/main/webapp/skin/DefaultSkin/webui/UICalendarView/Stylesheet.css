@@ -642,12 +642,14 @@
 	
 }
 
-.UIYearView .MonthList .Today {
-	border: 1px solid red;
-	background: #ffffff;
-	color: #0b18c8;
+.UIYearView .MonthList .UIGrid .Today {
 	font-weight: bolder;
 }
+
+.UIYearView .MonthList .UIGrid .Today a {
+	color: red;
+}
+
 .UIYearView .MonthList .Highlight {
 	font-weight: bolder;
 }
