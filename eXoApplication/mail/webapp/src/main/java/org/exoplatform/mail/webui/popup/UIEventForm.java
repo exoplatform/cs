@@ -245,10 +245,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       OrganizationService oService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
       SelectOptionGroup pubGrp = new SelectOptionGroup("publicCalendar");
       for(GroupCalendarData g : lgcd) {
+        String groupName = g.getName();
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
           // cs-4429: fix for group calendar permission
           if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
-            pubGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+            pubGrp.addOption(new SelectOption(MailUtils.getGroupCalendarName(groupName.substring(groupName.lastIndexOf("/") + 1),
+                                                                   c.getName()), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
           }
         }
 

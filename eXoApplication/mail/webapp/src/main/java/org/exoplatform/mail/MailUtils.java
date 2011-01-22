@@ -17,7 +17,6 @@
 package org.exoplatform.mail;
 
 import java.io.ByteArrayInputStream;
-
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -40,8 +39,6 @@ import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -69,6 +66,7 @@ public class MailUtils {
   final public static String BACKSLASH = "\\".intern() ;
   public static final String GREATER_THAN = ">".intern() ;
   public static final String SMALLER_THAN = "<".intern() ;
+  public static final String MINUS = "-".intern();
   private static String PLUS_ENCODE = "PLUS_ENCODE_043";
   private static String EQUAL_ENCODE = "EQUAL_ENCODE_061";
   final public static String SPECIALCHARACTER[] = {"?", "[", "(", "|", ")", "*", "\\", "+", "}", "{", "^", "$", "\""
@@ -447,6 +445,10 @@ public class MailUtils {
       } catch (Exception e) {
         return false;
       }
+    }
+    
+    public static String getGroupCalendarName(String groupName, String calendarName) {
+      return groupName + MINUS + calendarName;
     }
 }
 
