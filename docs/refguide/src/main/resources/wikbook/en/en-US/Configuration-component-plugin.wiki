@@ -1,0 +1,815 @@
+h1. External Component Plug-ins
+
+|| Applications|| Components || Description ||
+| *Calendar*| {{NewUserListener}} | It is a plug-in used to create default personal calendars |
+| | {{NewGroupListener}}| It is a plug-in used to create default group calendars|
+| | {{NewMembershipListener}} | It is plug-in used to share calendars to members of a specific group |
+| | {{ReminderPeriodJob}}| It is a plug-in used to execute sending reminder emails to users |
+| | {{PopupReminderPeriodJob}} | It is a plug-in used to open a pop-up reminder on the browser of users |
+| | {{AddActionsPlugin}} | It is a plug-in that helps the systems automatically update the updated date of  events / tasks in a calendar when the content of these events / tasks are changed |
+| *Chat* | {{HistoryPeriodJob}} | It is a plug-in used to save the chat history of users |
+| | {{RequestFilterComponentPlugin}} | It is used to delete the session of a user when he suddenly closes the browser or changes the session |
+| | {{AuthenticationLoginListener}}| It is used to start the session and log in the chat server |
+| | {{AuthenticationLogoutListener}} | It is used to end the session and log out the chat server |
+| *Contact* | {{NewUserListener}} | It is used to create personal contact data for users |
+| | {{NewMembershipListener}} | It is used to create address book for a specific group |
+| | {{UpdateUserProfileListener}} | It is used to update the personal profile of a user when he changes it on the portal |
+| *Content* | {{RSSContentPlugin}} | It is a formatter used to analyze the data from a RSS rsource|
+| | {{DescriptionPlugin}} | It is a plug-in to represent the data from a RSS source |
+| *Mail* | {{AuthenticationLogoutListener}} | It is a plug-in used to stop checking mails of a user when he logs out |
+| *Social Intergration* | {{CalendarDataInitialize}} | It is a plug-in used to create a calendar for a group in a specific space |
+|  | {{ContactDataInitialize}} | It is a plug-in used to create an address book for a group in a specific space |
+|  | {{ContactSpaceActivityPublisher}} | It is a plug-in used to customize the activity status of a specific space when an event happens on a address book |
+|  | {{CalendarSpaceActivityPublisher}} | It is a plug-in used to customize the activity status of a specific space when an event happens on a calendar |
+|  | {{PortletPreferenceRequiredPlugin}} | It is a plug-in used to declare the application that will automatically create database |
+
+
+
+h2. Calendar Configuration
+
+h3. NewUserListener
+
+Each user can have a default personal calendar created. Use the NewUserListener to configure that. To use the plug-in in the component configuration, you must use the target-component:
+{code:xml}
+<target-component>org.exoplatform.services.organization.OrganizationService</target-component>
+{code}
+The configuration is applied mainly in extension _/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-service-configuration.xml_
+
+{code:xml} 
+	  <component-plugin>
+	    <name>calendar.new.user.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.calendar.service.impl.NewUserListener</type>
+	    <description>description</description>
+	    <init-params>
+        <value-param>
+        	<name>defaultEventCategories</name>
+        	<value>Meeting,Calls,Clients,Holiday,Anniversary</value>
+        </value-param>
+        <value-param>
+        	<name>defaultCalendarCategory</name>
+        	<value>My group</value><!-- Single value-->
+        </value-param>
+        <value-param>
+        	<name>defaultCalendar</name>
+        	<value>Default</value>
+        </value-param>
+        <!--Params for default calendar setting-->
+        <value-param>
+         <name>viewType</name>
+         <value>1</value>
+        </value-param>
+        
+        <value-param>
+         <name>timeInterval</name>
+         <value>15</value><!-- in minutes -->
+        </value-param>
+        
+        <value-param>
+         <name>weekStartOn</name>
+         <value>2</value>
+        </value-param>
+        
+        <value-param>
+         <name>dateFormat</name>
+         <value>MM/dd/yyyy</value>
+        </value-param>
+        
+        <value-param>
+         <name>timeFormat</name>
+         <value>HH:mm</value> <!-- HH:mm/hh:mm a -->
+        </value-param>
+        
+        <value-param>
+         <name>localeId</name>
+         <value>BEL</value>
+        </value-param>
+        
+         <value-param>
+         <name>timezoneId</name>
+         <value>Europe/Brussels</value>
+        </value-param>
+        
+         <value-param>
+         <name>baseUrlForRss</name>
+         <value></value>
+        </value-param>
+        
+         <value-param>
+         <name>isShowWorkingTime</name>
+         <value>false</value><!-- boolean true/false -->
+        </value-param>
+        
+         <value-param>
+         <name>workingTimeBegin</name>
+         <value>08:00</value><!--  -->
+        </value-param>
+        
+         <value-param>
+	         <name>workingTimeEnd</name>
+	         <value>18:00</value><!--  -->
+        </value-param>
+        
+        <values-param>
+	        <name>ignoredUsers</name>
+	        <description>Definition users to ignore create default calendar</description>
+	        <!-- 
+	        <value>demo</value> 
+	        <value>marry</value>
+	         -->
+        </values-param>
+          </init-params>    
+	  </component-plugin>	  
+{code}
+
+Explanation:
+* *Name*: {{calendar.new.user.event.listener}} - unique key to avoid duplicate names. Users can change it.
+* *Set-method*: {{addListenerPlugin}} - The function is executed  at the target of the component to register NewUserListener.
+* *Type*: _{{org.exoplatform.calendar.service.impl.NewUserListener}} -  The class is set up to execute the creation of database.
+* *Description*: It is a plug-in used to create default personal calendars. 
+
+
+See the details about the init-params of the component in the following table:
+||Value-params || Description || Possible value|| Default Value ||
+|*defaultEventCategories*| Default event categories for users | {{ String (Comma separated list of category names)}} | {{Meeting,Calls,Clients,Holiday,Anniversary }}|
+|*defaultCalendarCategory*| Name of the calendar group | {{String }} | {{Default }}|
+|*viewType*| Default view after user logins and goes to Calendar portlet  | {{0-6 (see below) }} | {{1}}|
+|*timeInterval*| The time unit interval when you drag and move the event (in Day view and Week view only) | {{integer in minutes }} | {{15}}|
+|*weekStartOn*| Day to use as the beginning of the week. only affect on Week view | {{1-7 (see below) }} | {{2}}|
+|*dateFormat*| The display format for dates | {{valid Java Date format }} | {{MM/dd/yyyy}}|
+|*timeFormat*| The display format for time | {{ valid Java Date format}} | {{HH:mm }}|
+|*localeId*| ID of the geographic locale | {{valid locale ID}} | {{BEL}}|
+|*timezoneIds*| User time zone | {{valid TimeZone id}} | {{Europe }}|
+|*baseUrlForRss*| The url to publish the RSS content | {{none }} | {{none}}|
+|*isShowWorkingTime*| Indicate if the working time should be hilighted in day view | {{true/false }} | {{false}}|
+|*workingTimeBegin*| The start time in working time | {{time in timeFormat}} | {{08:00}}|
+|*workingTimeEnd*| The end time in working time | {{time in timeFormat}} | {{18:00}}|
+|*ignoredUsers*| Definition users to ignore create default calendar | {{user id, use multiple by each line }} | {{demo/marry }}|
+
+*viewType* parameter is encoded by a number as follow:
+
+0 : Day view
+
+1 : Week view
+
+2 : Month view
+
+3 : Year view
+
+4 : List view
+
+5 : Schedule view
+
+6 : Working days view
+
+*weekStartOn* parameter is encoded as follow:
+
+1 : Sunday
+
+2 : Monday
+
+3 : Tuesday
+
+4 : Wednesday
+
+5 : Thursday
+
+6 : Friday
+
+7 : Saturday
+
+h3. NewGroupListener
+To use the plug-in in the component configuration, you must use the target-component:
+{code:xml}
+<target-component>org.exoplatform.services.organization.OrganizationService</target-component>
+{code}
+The configuration is applied mainly in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-service-configuration.xml_
+
+{code:xml}
+ <component-plugin>
+	    <name>calendar.new.group.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.calendar.service.impl.NewGroupListener</type>
+	    <description>description</description>
+	    <init-params>
+        <value-param>
+        	<name>defaultEditPermission</name>
+        	<value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
+        </value-param>
+        <value-param>
+        	<name>defaultViewPermission</name>
+        	<value>*.*</value>
+        </value-param>
+        
+        <value-param>
+	      	<name>defaultLocale</name>
+	        <value>BEL</value>
+      	</value-param>
+      
+      	<value-param>
+	      	<name>defaultTimeZone</name>
+	      	<value>Europe/Brussels</value>
+      	</value-param>	
+      
+        <values-param>
+	        <name>ignoredGroups</name>
+	        <description>Definition group to ignore create default calendar</description>
+	        <!-- 
+	        <value>/platform/guests</value>
+	         -->
+	        <value>/spaces/*</value> <!--  single value, use more <value> tags to add more group -->
+        </values-param>
+        
+        
+	    </init-params>    
+	  </component-plugin>
+{code}
+
+Explanation: 
+* *Name*: {{calendar.new.group.event.listener}} is the unique key to avoid duplicate names. Users can change it.
+* *Set-method*: {{addListenerPlugin}} is the function is executed  at the target of the component to register NewGroupListener.
+* *Type*: {{org.exoplatform.calendar.service.impl.NewGroupListener}} is the class set up to execute the creation of database.
+* *Description*: It is a plug-in used to create default group calendars.
+
+See the details about the init-params of the component in the following table:
+|| Value-params || Description || Possible values || Default values ||
+| *defaultEditPermission* | The default permission assigned to membership in a specific group to edit calendars and events /tasks of calendar | {{User id }} (Multi value membership, use coma (,) to split values) | {{*.* means that all members in that group can  modify and add, remove a calendar, events/tasks of the calendar}}|
+| *defaultViewPermission* | The default permission assigned to membership in a specific group to view a calendar and events /tasks of the calendar. }} | {{ User id }} (Multi value membership, use coma (,) to split values) | {{*.* means that all members in that group can view this calendar and all the events/tasks of this calendar.}}|
+| *defaultLocale* | The default locale of the calendar | {{Valid locade id}} | {{BEL (see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html )}}|
+| *defaultTimeZone* | The default time zone of calendar | {{Valid timezone id}} | {{Europe/Brussels (see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids)}}|
+| *ignoredGroups* | Definition group to ignore create default calendar | {{ Group id (use line to define multiple value)}} | {{/platform/guests}}|
+
+
+h3. NewMembershipListener
+To use the plug-in in the component configuration, you must use the target-component:
+{code:xml}
+<target-component>org.exoplatform.services.organization.OrganizationService</target-component>
+{code}
+The configuration is applied mainly in 
+_extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/calendar/calendar-service-configuration.xml_
+
+{code:xml}
+	 	 
+	  <component-plugin>
+	    <name>calendar.new.membership.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.calendar.service.impl.NewMembershipListener</type>
+	    <description>description</description>	     
+	  </component-plugin>	    	
+{code}
+Explanation:
+* *Name*: {{calendar.new.membership.event.listener}} is the unique key to avoid duplicate names. Users can change it.
+* *Set-method*: {{addListenerPlugin}} is the function is executed at the target of the component.
+* *Type*: {{org.exoplatform.calendar.service.impl.NewMembershipListener}} is the class is set up to execute the creation of database.
+* *Description*: It is a plug-in used to execute sending reminder emails to users.
+
+
+
+h3. ReminderPeriodJob
+The Calendar application of eXo Collaboration can send event reminders by email by using the email reminder plug-in configuration. You will probably need to adjust this configuration to your own need. The feature is based on a periodic poll of the stored reminders.
+
+You must use the following target component to use the plug-in in this configuration:
+
+{code:xml}
+<target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
+{code}
+
+The configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/cs-configuration.xml_
+
+{code:Xml}
+<component-plugin>
+      <name>RecordsJob</name>
+      <set-method>addPeriodJob</set-method>
+      <type>org.exoplatform.calendar.service.ReminderPeriodJob</type>
+      <description>add e-mail reminder job to the JobSchedulerService</description>
+      <init-params>
+        <properties-param>
+          <name>job.info</name>
+          <description>save the monitor data  periodically</description>
+          <property name="jobName" value="ReminderJob"/>
+          <property name="groupName" value="CollaborationSuite"/>
+          <property name="job" value="org.exoplatform.calendar.service.ReminderJob"/>
+          <property name="repeatCount" value="0"/>
+          <property name="period" value="180000"/>     
+          <property name="startTime" value="+0"/>
+          <property name="endTime" value=""/>               
+        </properties-param>
+        
+      </init-params>
+    </component-plugin>
+{code}
+Explanation:
+* *Name*: {{RecordsJob}} is the name of a schedule job. Keep this value.
+* *Set-method*: {{addPeriodJob}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.calendar.service.ReminderPeriodJob}} is a class that executes to transfer the data into database of Job Scheduler.
+* *Description*: Add email reminder job to the JobSchedulerService.
+
+See the details about the init-params of the component in the following table:
+|| Properties-param || Description || Property names || Description || Possible values || Default values ||
+| *job.info* | save the monitor data  periodically | {{jobName}} | The name of job | {{String}} | {{ReminderJob}}|
+| ** |  | {{groupName}} | The name of group job| {{String}} | {{CollaborationSuite}} |
+| ** |  | {{job}} | The name of actual job class| {{Class path}} | {{org.exoplatform.calendar.service.ReminderJob}} |
+| ** |  | {{repeatCount}} | How many times to run this job| {{Long}} | {{0, ( use '0' which means 'run forever)}}  |
+| ** |  | {{period}} | The time interval (millisecond) between job executions| {{Long}} | {{180000}} |
+| ** |  | {{startTime}} | The time the job starts to run| {{Integer}} | {{+0}} |
+| ** |  | {{endTime}} | The time the job ends to run| {{Integer}} | {{none}} |
+
+
+h3. PopupReminderPeriodJob
+
+You must use the following target component to use the plug-in in this configuration:
+
+{code:xml}
+<target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
+{code}
+
+The configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/cs-configuration.xml_
+
+{code:xml}
+<component-plugin>
+      <name>PopupRecordsJob</name>
+      <set-method>addPeriodJob</set-method>
+      <type>org.exoplatform.calendar.service.PopupReminderPeriodJob</type>
+      <description>add popup reminder job to the JobSchedulerService</description>
+      <init-params>
+        <properties-param>
+          <name>job.info</name>
+          <description>save the monitor data  periodically</description>
+          <property name="jobName" value="PopupReminderJob"/>
+          <property name="groupName" value="CollaborationSuite"/>
+          <property name="job" value="org.exoplatform.calendar.service.PopupReminderJob"/>
+          <property name="repeatCount" value="0"/>
+          <property name="period" value="6000"/>     
+          <property name="startTime" value="+0"/>
+          <property name="endTime" value=""/>               
+        </properties-param>
+	<properties-param>
+          <name>popupreminder.info</name>
+          <description>save the monitor data  periodically</description>
+          <property name="portalName" value="portal"/> 
+        </properties-param>
+      </init-params>
+    </component-plugin>
+{code}
+
+Explanation:
+
+* *Name*: {{PopupRecordsJob}} is the name of the job. Keep this value.
+* *Set-method*: {{addPeriodJob}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.calendar.service.PopupReminderPeriodJob}} is a class that executes to transfer the data into database of Job Scheduler.
+* *Description*: Add popup reminder job to the JobSchedulerService.
+
+See the details about the init-params of the component in the following table:
+|| Properties-param || Description || Property names || Description || Possible values || Default values ||
+| *job.info* | Save the monitor data  periodically | {{jobName}} | The name of job | {{String}} | {{PopupReminderJob}}|
+| ** | {{}} | {{groupName}} | The name of group job| {{String}} | {{CollaborationSuite}} |
+| ** | {{}} | {{job}} | The name of actual job class| {{Class path}} | {{org.exoplatform.calendar.service.PopupReminderJob}} |
+| ** | {{}} | {{repeatCount}} | How many times to run this job| {{Long}} | {{0, ( use '0' which means 'run forever)}} |
+| ** | {{}} | {{period}} | The time interval (millisecond) between job executions| {{Long}} | {{6000}} |
+| ** | {{}} | {{startTime}} | The time the job starts to run| {{Long}} | {{+0}} |
+| ** | {{}} | {{endTime}} | The time the job ends to run| {{Integer}} | {{None}} |
+| *popupreminder.info* | save the monitor data  periodically | {{portalName}} | The name of the portal| {{String}} | {{portal}} |‎‏
+
+h2. AddActionsPlugin
+The configuration of the AddActionsPlugin is found in _WEB-INF/cs-extension/cs/webservice/webservice-configuration.xml_
+It is used to register the listener named {{org.exoplatform.webservice.cs.LastUpdateAction}} and it is executed basing on eventTypes.
+
+{code:xml}
+ 
+  <component>
+  	<type>org.exoplatform.services.jcr.impl.ext.action.SessionActionCatalog</type>
+  	<component-plugins>
+  	<component-plugin>
+    <name>Last Update Action</name>
+    <set-method>addPlugin</set-method>
+    <type>org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin</type>
+    <description>add actions plugin</description>
+    <init-params>
+      <object-param>
+        <name>actions</name>
+        <object type="org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin$ActionsConfig">
+          <field  name="actions">
+            <collection type="java.util.ArrayList">	              
+              <value>
+                <object type="org.exoplatform.services.jcr.impl.ext.action.ActionConfiguration">
+                  <field  name="eventTypes"><string>addNode,changeProperty</string></field>
+                  <field  name="nodeTypes"><string>exo:calendarEvent</string></field> 	                  
+                  <field  name="actionClassName"><string>org.exoplatform.webservice.cs.LastUpdateAction</string></field>
+                </object>
+              </value>
+            </collection>
+          </field>
+        </object>
+      </object-param>
+    </init-params>
+  	</component-plugin>
+  	</component-plugins>
+  </component>
+{code}
+
+* *object-param*: {{Actions}} is the name of the object.
+* *object type*: {{org.exoplatform.services.jcr.impl.ext.action.AddActionsPlugin$ActionsConfig}} is a class used to register the following field names in the table below:
+|| Field name || Description || String ||
+| *eventTypes*| The type of the event | {{addNode,changeProperty}} |
+| *nodeTypes* | The type of the node | {{exo:calendarEvent}}|
+| *actionClassName* | The registration class to execute the actions that the plug-in requires | {{org.exoplatform.webservice.cs.LastUpdateAction}} |
+ 
+h2. Chat Configuration
+The Chat congiguration is applied in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_
+
+h3. HistoryPeriodJob
+
+{code:xml}
+<external-component-plugins>
+                <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
+                <component-plugin>
+                        <name>ChatRecordsJob</name>
+                        <set-method>addPeriodJob</set-method>
+                        <type>org.exoplatform.services.xmpp.connection.impl.HistoryPeriodJob</type>
+                        <description>add chat messages from Openfire Server to History</description>
+                        <init-params>
+                                <properties-param>
+                                        <name>job.info</name>
+                                        <description>save the monitor data periodically</description>
+                                        <property name="jobName" value="messageToHistoricalMessageJob" />
+                                        <property name="groupName" value="CollaborationSuite" />
+                                        <property name="job"
+                                                value="org.exoplatform.services.xmpp.connection.impl.HistoryJob" />
+                                        <property name="repeatCount" value="0" />
+                                        <property name="period" value="3000" />
+                                        <property name="startTime" value="+0" />
+                                        <property name="endTime" value="" />
+                                </properties-param>
+                                <properties-param>
+                                        <name>history.info</name>
+                                        <description>save the monitor data periodically</description>
+                                        <property name="logBatchSize" value="50" />
+                                </properties-param>
+                        </init-params>
+                </component-plugin>
+        </external-component-plugins>
+{code}
+
+Explanation:
+* *Name*: {{ChatRecordsJob}} is the name of the job. Keep this value.
+* *Set-method*: {{addPeriodJob}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.services.xmpp.connection.impl.HistoryPeriodJob}} is a class that executes to transfer the data into the database of Job Scheduler.
+* *Description*: It is used to save chat messages from Openfire Server to History
+
+See the details about the init-params of the component in the following table:
+|| Properties-param || Description || Property names || Description || Possible values || Default values ||
+| *job.info* | Save the monitor data  periodically | {{jobName}} | The name of job | {{String}} | {{messageToHistoricalMessageJob}}|
+| ** |  | {{groupName}} | The name of group name| {{String}} | {{CollaborationSuite}} |
+| ** |  | {{job}} | The name of actual job class| {{Class path}} | {{org.exoplatform.services.xmpp.connection.impl.HistoryJob}} |
+| ** |  | {{repeatCount}} | How many times to run this job| {{integer}} | {{0}} ( use '0' which means 'run forever) |
+| ** |  | {{period}} | The time interval (millisecond) between job executions| {{Long}} | {{3000}} |
+| ** |  | {{startTime}} | The time the job starts running.| {{Long}} | {{+0}} |
+| ** |  | {{endTime}} | The time the job ends running.| {{Long}} | {{none}} |
+| *history.info* | Save the monitor data  periodically | {{logBatchSize}} | The maximum number of messages in the cache are saved once the job runs.| {{Integer}} | {{50}} |
+
+
+h3. RequestFilterComponentPlugin
+
+{code:xml}
+<external-component-plugins>
+    <target-component>org.exoplatform.services.rest.impl.RequestHandlerImpl</target-component>
+      <component-plugin>
+        <name>ws.rs.request.filter</name>
+        <set-method>addPlugin</set-method>
+        <type>org.exoplatform.services.rest.impl.RequestFilterComponentPlugin</type>
+         <init-params>
+            <value-param>
+               <name>RESTXMPPServiceFilter</name>
+               <value>org.exoplatform.services.xmpp.rest.filter.RESTXMPPServiceFilter</value>
+            </value-param>
+         </init-params>
+      </component-plugin>
+  </external-component-plugins>
+{code}
+
+Explanation:
+* *Name*: {{ws.rs.request.filter}} is the name of the filter. Keep this value.
+* *Set-method*: {{addPlugin}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.services.rest.impl.RequestFilterComponentPlugin}} is a class that executes the requests of the plugin.
+* *Description*: It is used to delete the session of a user when he suddenly closes the browser or changes the session.
+
+See the details about the init-params of the component in the following table:
+|| Value-param || Description || Possible value || Default value ||
+| *RESTXMPPServiceFilter* | The name of the filter | {{Class path}} | {{org.exoplatform.services.xmpp.rest.filter.RESTXMPPServiceFilter}}|
+
+
+h3. AuthenticationLoginListener and AuthenticationLogoutListener
+Two functions: login and logout of XMPPRestService is responsible for creating a new XMPPSessionImpl and destroying an existed XMPPSessionImpl. They can be called by listeners: AuthenticationLoginListener, AuthenticationLogoutListener or from client(browser) through Rest protocol (jabberLogin, jabberLogout in UIMainChatWindow.js).
+ 
+You must use the same target component for two external component plug-ins: 
+
+{code:xml}
+<target-component>org.exoplatform.services.listener.ListenerService</target-component>
+{code}
+
+h4. AuthenticationLoginListener
+
+{code:xml}
+ 	
+	  <component-plugin>
+	    <name>exo.core.security.ConversationRegistry.register</name>
+	    <set-method>addListener</set-method>
+	    <type>org.exoplatform.services.xmpp.connection.impl.AuthenticationLoginListener</type>
+	    <description>description</description>	    
+	  </component-plugin>	
+{code}
+
+Explanation:
+* *Name*: {{exo.core.security.ConversationRegistry.register}} is the name of plug-in.
+* *Set-method*: {{addListener}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.services.xmpp.connection.impl.AuthenticationLoginListener}} is a class to execute the requests of the plug-in.
+* *Description*: It is used to start the session and log in the chat server.
+
+
+h4. AuthenticationLogoutListener  
+
+{code:xml}	  
+    <component-plugin>
+	    <name>exo.core.security.ConversationRegistry.unregister</name>
+	    <set-method>addListener</set-method>
+	    <type>org.exoplatform.services.xmpp.connection.impl.AuthenticationLogoutListener</type>
+	    <description>description</description>	    
+    </component-plugin>	  	    
+{code}
+
+Explanation:
+* *Name*: {{exo.core.security.ConversationRegistry.register}} is the name of plug-in.
+* *Set-method*: {{addListener}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.services.xmpp.connection.impl.AuthenticationLogoutListener}} is a class to execute the requests of the plug-in.
+* *Description*: It is used to end the session and log in the chat server.
+
+
+
+h2. Contact Configuration
+The Contact Application is configured by three external component plug-ins: {{NewUserListener}}, {{NewMembershipListener}}
+and {{UpdateUserProfileListener}}. They use the same target component:
+
+{code:xml}
+<target-component>org.exoplatform.services.organization.OrganizationService</target-component>	
+{code}
+
+The Contact configuration is found in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/contact/contact-service-configuration.xml_
+
+h3. NewUserListener
+
+{code:xml}  	
+	 <component-plugin>
+	    <name>contact.new.user.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.contact.service.impl.NewUserListener</type>
+	    <description>description</description>
+	 </component-plugin>
+{code}
+
+Explaination:
+* *Name*: {{contact.new.user.event.listener}} is the name of listener.
+* *Set-method*: {{addListenerPlugin}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.contact.service.impl.NewUserListener}} is a class that executes all the requires of the plug-in.
+* *Description*: It is used to initialize personal contact data for users.
+
+h3. NewMembershipListener
+ 
+{code:xml}
+	  <component-plugin>
+	    <name>contact.new.membership.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.contact.service.impl.NewMembershipListener</type>
+	    <description>description</description>	     
+	  </component-plugin>
+{code}
+
+Explanation:
+* *Name*: {{contact.new.membership.event.listener}} is the name of the listener.
+* *Set-method*: {{addListenerPlugin}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.contact.service.impl.NewMembershipListener}} is a class that executes all the requires of the plug-in.
+* *Description*: It is used to initialize an address book for a specific group.
+
+h3. UpdateUserProfileListener
+
+{code:xml}
+	  <component-plugin>
+	    <name>contact.new.userprofile.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.contact.service.impl.UpdateUserProfileListener</type>
+	    <description>description</description>	     
+	  </component-plugin>
+{code}
+
+
+Explaination:
+* *Name*: {{contact.new.userprofile.event.listener}} is the name of the listener.
+* *Set-method*: {{addListenerPlugin}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.contact.service.impl.UpdateUserProfileListener}} is a class that executes all the requires of the plug-in.
+* *Description*: It is used to update the personal profile of a user when he changes it on the portal.
+
+h2. Content Configuration
+The Content application such as RSS reader of eXo Collaboration is configured by two external component plug-ins: RSSContentPlugin and DescriptionPlugin
+Both the external components plug-ins use the same target component:
+{code:xml}
+<target-component>org.exoplatform.content.service.ContentDAO</target-component> 
+{code}
+This content configuration is applied in _extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/content/content-service-configuration.xml_
+
+h3. RSSContentPluginDescriptionPlugin.
+{code:xml}
+ 	   <component-plugin>
+	      <name>rssreader.listener</name>
+	      <set-method>addPlugin</set-method>
+	      <type>org.exoplatform.content.service.RSSContentPlugin</type>
+	      <description>rss reader plugin</description>     
+	    </component-plugin>
+{code}
+
+
+Explanation:
+* *Name*: {{rssreader.listener}} is the name of the listener.
+* *Set-method*: {{addPlugin}} is the plugin registering method. Keep this value.
+* *Type*: {{org.exoplatform.content.service.RSSContentPlugin}} is a class extending ContentPlugin and implements loadContentMeta method to get content items.
+* *Description*: It is a formater used to analyze the data from a RSS resource.
+
+h3. DescriptionPlugin
+	    
+{code:xml}
+ <component-plugin>
+	      <name>description.listener</name>
+	      <set-method>addPlugin</set-method>
+	      <type>org.exoplatform.content.service.DescriptionPlugin</type>
+	      <description>Description plugin</description>    
+ </component-plugin>
+	    
+{code}
+
+Explanation:
+* *Name*: {{description.listener}} is the name of the listener. 
+* *Set-method*: {{addPlugin}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.content.service.DescriptionPlugin}} is a class that executes all the requires of the plug-in.
+* *Description*: It is a plug-in to represent the data from a RSS source.
+
+h2. Mail Configuration 
+
+h3. AuthenticationLogoutListener
+In the Mail application of eXo Collaboration, when a user check messages for one account, the remote mailbox fetch is performed as a background job. Before CS 1.2, the job was continuing until all messages had been retrieved or when the user stopped the check through the UI. Hence, even when a user was not logged in, the background job was continuing. This can be resource intensive for the server if many users have large mailboxes.
+
+Since CS 1.2, we added the capability to halt the background job when the user session terminates (logout or time out). It makes CS more friendly with server resources. If you want to activate this feature, you need to add a bunch of xml congifuration in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/mail/mail-service-configuration.xml_:
+
+{code:xml}     
+    <external-component-plugins>
+    	<target-component>org.exoplatform.services.listener.ListenerService</target-component>
+   		<component-plugin>   
+            <name>exo.core.security.ConversationRegistry.unregister</name>
+     		<set-method>addListener</set-method>
+            <type>org.exoplatform.mail.service.AuthenticationLogoutListener</type>
+      		<description>description</description>     
+    	</component-plugin>      
+  	</external-component-plugins>
+{code}
+
+Explanation:
+* *Name*: {{exo.core.security.ConversationRegistry.unregister}} is the name of listener.
+* *Set-method*: {{addListener}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.mail.service.AuthenticationLogoutListener}} is a class that executes all the requires of the plug-in.
+* *Description*: It is a plug-in used to stop checking mails of a user when he logs out.
+
+h2. Social Integration Configuration
+The Social Integration Configuration is applied in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/social-integration/social-integration-configuration.xml_
+
+h3. CalendarDataInitialize
+
+{code:Xml}
+<external-component-plugins>
+    <target-component>org.exoplatform.social.core.space.spi.SpaceService</target-component>
+    <component-plugin>
+      <name>CalendarDataInitialize</name>
+      <set-method>addSpaceListener</set-method>
+      <type>org.exoplatform.cs.ext.impl.CalendarDataInitialize</type>
+      <init-params>
+				<value-param>
+					<name>portletName</name>
+					<value>CalendarPortlet</value>
+				</value-param>
+			</init-params>
+    </component-plugin>
+  </external-component-plugins>
+{code}
+
+Explanation:
+* *Name*: {{CalendarDataInitialize}} is the name of plug-in.
+* *Set-method*: {{addSpaceListener}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.cs.ext.impl.CalendarDataInitialize}} is a class that executes all the requires of the plug-in.
+* *Description*: It is used to initialize a calendar for a group in a specific space.
+
+
+See the details about the init-params of the component in the following table:
+|| value-param || Description || Possible value || Default value ||
+| *portletName* | The name of the portlet | {{String}} | {{CalendarPortlet}}|
+
+
+h3. ContactDataInitialize
+{code:Xml}
+<external-component-plugins>
+    <target-component>org.exoplatform.social.core.space.spi.SpaceService</target-component>
+    <component-plugin>
+      <name>ContactDataInitialize</name>
+      <set-method>addSpaceListener</set-method>
+      <type>org.exoplatform.cs.ext.impl.ContactDataInitialize</type>
+      <init-params>
+				<value-param>
+					<name>portletName</name>
+					<value>ContactPortlet</value>
+				</value-param>
+			</init-params>
+    </component-plugin>
+  </external-component-plugins>
+{code}
+
+Explanation:
+* *Name*: {{ContactDataInitialize}} is the name of the plug-in.
+* *Set-method*: {{addSpaceListener}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.cs.ext.impl.ContactDataInitialize}} is a class that executes all the requires of the plug-in.
+* *Description*: It is a plug-in used to initialize an address book for a group in a specific space.
+
+
+See the details about the init-params of the component in the following table:
+|| value-param || Description || Possible value || Default value ||
+| *portletName* | The name of the portlet | {{String}} | {{ContactPortlet}}|
+
+
+
+h3. ContactSpaceActivityPublisher
+{code:xml}
+<external-component-plugins>
+    <target-component>org.exoplatform.contact.service.ContactService</target-component>
+    <component-plugin>
+      <name>ContactEventListener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.exoplatform.cs.ext.impl.ContactSpaceActivityPublisher</type>
+    </component-plugin>
+  </external-component-plugins>
+{code}
+
+Explanation:
+* *Name*: {{ContactEventListener}} is the name of the plug-in.
+* *Set-method*: {{addListenerPlugin}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.cs.ext.impl.ContactSpaceActivityPublisher}} is a class that executes all the requires of the plug-in.
+* *Description*: It is a plug-in used to customize the activity status of a specific space when an event happens on a address book.
+
+h3. CalendarSpaceActivityPublisher
+
+{code:xml}
+<external-component-plugins>
+    <target-component>org.exoplatform.calendar.service.CalendarService</target-component>
+    <component-plugin>
+      <name>CalendarEventListener</name>
+      <set-method>addEventListenerPlugin</set-method>
+      <type>org.exoplatform.cs.ext.impl.CalendarSpaceActivityPublisher</type>      
+    </component-plugin>
+  </external-component-plugins>
+{code}
+
+Explanation:
+* *Name*: {{CalendarEventListener}} is the name of the plug-in.
+* *Set-method*: {{addEventListenerPlugin}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.cs.ext.impl.CalendarSpaceActivityPublisher}} is a class that executes all the requires of the plug-in.
+* *Description*: It is a plug-in used to customize the activity status of a specific space when an event happens on a calendar.
+
+
+h3. PortletPreferenceRequiredPlugin
+
+{code:Xml}
+<external-component-plugins>
+    <target-component>org.exoplatform.social.core.space.spi.SpaceService</target-component>
+    <component-plugin>
+      <name>portlets.prefs.required</name>
+      <set-method>setPortletsPrefsRequired</set-method>
+      <type>org.exoplatform.social.core.application.PortletPreferenceRequiredPlugin</type>
+            <init-params>      
+              <values-param>
+                <name>portletsPrefsRequired</name>
+                <value>CalendarPortlet</value>
+                <value>ContactPortlet</value>
+              </values-param>
+            </init-params>
+    </component-plugin>
+  </external-component-plugins>
+{code}
+
+Explanation:
+* *Name*: {{ortlets.prefs.required}} is the name of the plug-in.
+* *Set-method*: {{setPortletsPrefsRequired}} is the plug-in registering method. Keep this value.
+* *Type*: {{org.exoplatform.social.core.application.PortletPreferenceRequiredPlugin}} is a class that executes all the requires of the plug-in.
+* *Description*: It is a plug-in used to declare the application that will automatically create database.
+
+
+See the details about the init-params of the component in the following table:
+|| value-param || Description || Possible value || Default value ||
+| *portletsPrefsRequired* |  The name of plug-in added to SpaceService || {{String}} | {{ContactPortlet / ContactPortlet}}|
+
+
+
+
+

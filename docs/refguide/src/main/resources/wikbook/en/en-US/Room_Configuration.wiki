@@ -1,0 +1,17 @@
+
+h1. Room Configuration
+
+Only the owner of a room can configure the room's information. Thus if you are not ther owner of a room, you can not take this action.
+Following these steps to configure a room:
+
+
+!Options.png!
+
+
+*Step 1\.* Click the
+!Options1.png!
+     button in the *Conversation* form of that room. The *Room Configuration* form will appear like when you [Create New Rooms].
+
+*Step 2.* Set values for fields in this form.
+
+*Step 3.* Click *OK* button to accept the configuration or click *Cancel* button to quit without changes.
