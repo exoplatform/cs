@@ -1,0 +1,20 @@
+Index: eXoApplication/chatbar/webapp/src/main/webapp/skin/DefaultStylesheet.css
+===================================================================
+--- eXoApplication/chatbar/webapp/src/main/webapp/skin/DefaultStylesheet.css	(revision 65319)
++++ eXoApplication/chatbar/webapp/src/main/webapp/skin/DefaultStylesheet.css	(working copy)
+@@ -152,6 +152,7 @@
+ 
+ .UIChat .BuddyList {
+   height: 100%;
++  overflow: auto;
+ }
+ 
+ .UIChat .TitleIconChat {
+@@ -277,6 +278,7 @@
+   padding-left: 24px; /* orientation=lt */
+   padding-right: 24px; /* orientation=rt */
+   display: block;
++  white-space: nowrap;
+ }
+ 
+ .UIChatBarPortlet .UIRightClickPopupMenu .MenuItem .OnlineIcon {
