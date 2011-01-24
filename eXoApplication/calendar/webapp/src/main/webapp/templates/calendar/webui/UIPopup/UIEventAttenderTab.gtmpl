@@ -1,8 +1,5 @@
 <%
-	import java.text.DateFormat;
 	import org.exoplatform.calendar.CalendarUtils;
-	uicomponent.setFormatDate();
-	DateFormat df = uicomponent.getFormatDate() ;
 	uiForm = uicomponent.getParentFrom() ;
 	int timeInterval = 15;
 	int blocks = 60/timeInterval ;
@@ -70,7 +67,7 @@
                     <a href="<%=uiForm.event("MovePrevious")%>">
                       <img src="/eXoResources/skin/sharedImages/Blank.gif" class="BackIcon" title="<%=_ctx.appRes('UIDayView.label.previousDay')%>"></a>
                     <span class="Title">
-                      <%=df.format(uicomponent.calendar_.getTime())%>
+                      <%=uicomponent.getSimpleFormatDate().format(uicomponent.calendar_.getTime())%>
                     </span><a href="<%=uiForm.event("MoveNext")%>">
                       <img src="/eXoResources/skin/sharedImages/Blank.gif" class="NextIcon" title="<%=_ctx.appRes('UIDayView.label.nextDay')%>"></a>
                   </div>
