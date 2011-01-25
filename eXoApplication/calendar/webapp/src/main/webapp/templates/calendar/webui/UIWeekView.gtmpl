@@ -237,7 +237,11 @@
 					boolean flag = false ;
 					style = "none" ;
 					if(isShowWorkingTime) {style = "WorkOffTime" ;}	
-					for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, Locale.ENGLISH)){
+					
+					String tempTimeFormat = CalendarUtils.TIMEFORMATPATTERNS[0] ;
+					if (timeFormat.startsWith("HH")) tempTimeFormat = CalendarUtils.TIMEFORMATPATTERNS[1] ;
+
+					for(full in uicomponent.getDisplayTimes(tempTimeFormat, timeInterval, Locale.ENGLISH)){
 					String time = full.substring(0,full.lastIndexOf("_")) ;
 					String display = full.substring(full.lastIndexOf("_")+1) ;
 				if(isShowWorkingTime) {

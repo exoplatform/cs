@@ -78,6 +78,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   final private static String DEFAULT_CALENDARS_NOTE = "note".intern() ;
   private Map<String, String> names_ = new HashMap<String, String>() ;
   public String[] sharedCalendarColors_  = null ;
+  private CalendarSetting calendarSetting_ = null;
+  
   public UICalendarSettingForm() throws Exception{
     super("UICalendarSettingForm") ;
     UICalendarSettingTab setting = new UICalendarSettingTab(SETTING_CALENDAR_TAB) ;//.setRendered(true) ;
@@ -97,6 +99,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     names_.clear() ;
     String username = CalendarUtils.getCurrentUser() ;
     if(calendarSetting != null) {
+      calendarSetting_ = calendarSetting;
       sharedCalendarColors_ = calendarSetting.getSharedCalendarsColors() ;
       UICalendarSettingTab settingTab = getChildById(SETTING_CALENDAR_TAB) ;
       settingTab.setViewType(calendarSetting.getViewType()) ;
@@ -253,7 +256,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   static  public class SaveActionListener extends EventListener<UICalendarSettingForm> {
     public void execute(Event<UICalendarSettingForm> event) throws Exception {
       UICalendarSettingForm uiForm = event.getSource() ;      
-      CalendarSetting calendarSetting = new CalendarSetting() ;
+      CalendarSetting calendarSetting = uiForm.calendarSetting_;
       UICalendarSettingTab settingTab = uiForm.getChildById(UICalendarSettingForm.SETTING_CALENDAR_TAB) ;
       calendarSetting.setSharedCalendarsColors(uiForm.sharedCalendarColors_) ;
       calendarSetting.setViewType(settingTab.getViewType()) ;
