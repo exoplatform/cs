@@ -40,7 +40,7 @@ import org.exoplatform.test.BasicTestCase;
  */
 public abstract class BaseMailTestCase extends BasicTestCase {
 
-  private static final Log log = ExoLogger.getLogger("cs.mail.service.test");
+  protected static final Log log = ExoLogger.getLogger("cs.mail.service.test");
 
   protected static RepositoryService   repositoryService;
   protected static PortalContainer container;

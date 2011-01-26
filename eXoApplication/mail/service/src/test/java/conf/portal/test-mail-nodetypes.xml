@@ -106,7 +106,7 @@
   		</propertyDefinition> 
   		<propertyDefinition name="exo:isSavePassword" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
-  		</propertyDefinition> 
+  		</propertyDefinition>
   		<propertyDefinition name="exo:secureAuthsIncoming" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
   		</propertyDefinition>
@@ -119,6 +119,10 @@
   		<propertyDefinition name="exo:authMechsOutgoing" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
   		</propertyDefinition>
+  		<!-- added since 2.2.0  -->
+  		<propertyDefinition name="exo:permissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  			<valueConstraints/>
+  		</propertyDefinition>    
   	</propertyDefinitions>
   	<childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="nt:unstructured" autoCreated="false" mandatory="false"
@@ -276,7 +280,7 @@
   	  </propertyDefinition> 
   	</propertyDefinitions>	
   </nodeType>	  
-
+  
   <nodeType name="exo:mailtag" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>
   		<supertype>nt:base</supertype>
@@ -413,4 +417,15 @@
       </propertyDefinition>
     </propertyDefinitions>
   </nodeType>
+  <!-- add this since cs 2.2.0 -->
+  
+  <nodeType name="exo:accountShared" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+	    <propertyDefinitions>
+	      <propertyDefinition name="exo:sharedId" requiredType="Reference" autoCreated="false" mandatory="true"
+	        onParentVersion="COPY" protected="false" multiple="true">
+	        <valueConstraints/>
+	      </propertyDefinition>        
+	    </propertyDefinitions>
+  </nodeType> 
+	  
 </nodeTypes>

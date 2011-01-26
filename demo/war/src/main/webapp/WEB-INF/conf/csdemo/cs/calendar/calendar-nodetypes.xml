@@ -359,6 +359,7 @@
 	      </propertyDefinition>        
 	    </propertyDefinitions>
 	  </nodeType>  	 
+	  <!-- add this since cs 2.2.0  -->
 	  <nodeType name="exo:remoteCalendar" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
       <propertyDefinitions>
         <propertyDefinition name="exo:remoteUrl" requiredType="String" autoCreated="false" mandatory="true"

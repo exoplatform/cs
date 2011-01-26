@@ -95,7 +95,8 @@ public class JCRDataStorage implements DataStorage {
   private RepositoryService    repoService_;
 
   private static final String  MAIL_SERVICE = "MailApplication";
-  
+  private static final String  MAIL_DELEGATE = "DelegationAccount";
+
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator, RepositoryService repoService) {
     nodeHierarchyCreator_ = nodeHierarchyCreator;
     repoService_ = repoService;
@@ -109,7 +110,7 @@ public class JCRDataStorage implements DataStorage {
     if (sProvider == null)
       sProvider = createSystemProvider();
     Node userApp = getNodeByPath(nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)
-                                                      .getPath(), sProvider);
+                                 .getPath(), sProvider);
     Node mailNode = null;
     try {
       mailNode = userApp.getNode(MAIL_SERVICE);
@@ -121,6 +122,113 @@ public class JCRDataStorage implements DataStorage {
         userApp.save();
     }
     return mailNode;
+  }
+
+  private Node getDelegationHomeNode() throws Exception{
+    SessionProvider sProvider = SessionProvider.createSystemProvider();
+    Node publicApp = getNodeByPath(nodeHierarchyCreator_.getPublicApplicationNode(sProvider).getPath(), sProvider);
+    Node node = null ;
+    try {
+      node = publicApp.getNode(MAIL_DELEGATE) ;
+    } catch (PathNotFoundException e) {
+      node = publicApp.addNode(MAIL_DELEGATE, NT_UNSTRUCTURED) ;
+      publicApp.getSession().save();
+    } finally {
+      sProvider.close();
+    }
+    return node ;
+  }
+
+  public void delegateAccount(String username , String reciver, String accountId) throws Exception {
+
+    Node tempNode = null ;
+    SessionProvider  sProvider = createSessionProvider();
+    try {
+      Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId) ;
+      Value[] values = {};
+      if(accountNode.isNodeType(EXO_SHARED_MIXIN))
+        values = accountNode.getProperty(EXO_SHARED_ID).getValues();
+      else 
+        accountNode.addMixin(EXO_SHARED_MIXIN) ;
+      List<Value> valueList = new ArrayList<Value>() ;
+      for(Value v : values) {
+        valueList.add(v) ;
+      }
+      try {
+        tempNode = getDelegationHomeNode().getNode(reciver) ;
+      } catch (PathNotFoundException e) {
+        tempNode = getDelegationHomeNode().addNode(reciver, NT_UNSTRUCTURED) ;
+        if(tempNode.canAddMixin(MIX_REFERENCEABLE)) tempNode.addMixin(MIX_REFERENCEABLE) ;
+        tempNode.getSession().save();
+      }
+      //Check delegated or not
+      boolean isExist = false ; 
+      isExist = false;
+      for (Value v : values) {
+        Node refNode = tempNode.getSession().getNodeByUUID(v.getString());
+        if(refNode.getPath().equals(tempNode.getPath())) {
+          isExist = true ; 
+          break ;
+        }
+      }
+      if(!isExist) {
+        Value newValue = accountNode.getSession().getValueFactory().createValue(tempNode);
+        valueList.add(newValue) ;
+      }      
+      if(valueList.size() > 0) {
+        accountNode.setProperty(EXO_SHARED_ID, valueList.toArray( new Value[valueList.size()]));
+        accountNode.getSession().save() ;
+        getDelegationHomeNode().getSession().save() ;
+      }
+    } catch (Exception e) {
+      if(logger.isDebugEnabled()) logger.debug(" Delegate account error :  " + e.getMessage()) ;
+
+    } finally {
+      sProvider.close();
+    }
+
+  }
+
+
+  public List<Account> getDelegateAccounts(String userId) throws Exception { 
+    List<Account> accList = new ArrayList<Account>() ;
+    if(getDelegationHomeNode().hasNode(userId)) {
+      SessionProvider  sProvider = createSessionProvider();
+      try {
+        Node tempNode = getDelegationHomeNode().getNode(userId) ;
+        PropertyIterator iter = tempNode.getReferences() ;
+        while(iter.hasNext()) {
+          Node accountNode = iter.nextProperty().getParent() ;
+          accList.add(getAccount(sProvider, accountNode)) ;
+        }
+      } catch (Exception e) {
+        if(logger.isDebugEnabled()) logger.debug(e.getMessage()) ;
+      } finally {
+        sProvider.close();
+      }
+    }
+    return accList;
+  }
+
+  public void removeDelegateAccount(String userId, String accountId) throws Exception{
+    if(getDelegationHomeNode().hasNode(userId)) {
+      Node tempNode = getDelegationHomeNode().getNode(userId) ;
+      String uuid = tempNode.getProperty(JCR_UUID).getString() ;
+      PropertyIterator iter = tempNode.getReferences() ;
+      while(iter.hasNext()) {
+        List<Value> newValues = new ArrayList<Value>() ;
+        Node accountNode = iter.nextProperty().getParent() ;
+        if(!accountNode.getProperty(Utils.EXO_ID).getString().equals(accountId)) continue ; 
+        Value[] values = accountNode.getProperty(EXO_SHARED_ID).getValues() ;
+        for(Value value : values){      
+          if(!value.getString().equals(uuid)) {
+            newValues.add(value) ;
+          }
+        }
+        accountNode.setProperty(EXO_SHARED_ID, newValues.toArray(new Value[newValues.size()])) ;
+        accountNode.save();
+      }
+    }
   }
 
   public Account getAccountById(String username, String id) throws Exception {
@@ -255,8 +363,38 @@ public class JCRDataStorage implements DataStorage {
     } catch (Exception e) {
       if(logger.isDebugEnabled()) logger.debug("Not all options of " + account.getLabel() + " get completely.", e);
     }
-    
+
+    if(accountNode.hasProperty(Utils.EXO_PERMISSIONS)) {
+      Value[] values = accountNode.getProperty(Utils.EXO_PERMISSIONS).getValues() ;
+      account.setPermissions(valuesToMap(values)) ;
+    }
+
     return account;
+  }
+
+
+  private Map<String, String> valuesToMap(Value[] val) throws Exception {
+    Map<String, String> map = new HashMap<String, String>() ;
+    try {
+      for(Value v : val) {
+        map.put(v.getString().split(":")[0], v.getString().split(":")[1]);
+      }
+    } catch (Exception e) {
+      if(logger.isDebugEnabled()) logger.debug("no permission");
+    }
+    return map;
+  }
+
+  private String[] mapToStrings(Map<String, String> map) throws Exception {
+    StringBuilder s = new StringBuilder();
+    try {
+      for(String key : map.keySet()) {
+        s.append(key).append(":").append(map.get(key)).append("/") ;
+      }
+    } catch (Exception e) {
+      if(logger.isDebugEnabled()) logger.debug("permission empty");
+    }
+    return s.toString().split("/");
   }
 
   public Message getMessageById(String username, String accountId, String msgId) throws Exception {
@@ -265,7 +403,7 @@ public class JCRDataStorage implements DataStorage {
       sProvider = createSessionProvider();
       Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
       StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
-          + "//element(*,exo:message)[@exo:id='").append(msgId).append("']");
+                                                  + "//element(*,exo:message)[@exo:id='").append(msgId).append("']");
       QueryImpl queryImpl = createXPathQuery(sProvider, username, accountId, queryString.toString());
       queryImpl.setOffset(0);
       queryImpl.setLimit(1);
@@ -322,12 +460,12 @@ public class JCRDataStorage implements DataStorage {
         }
         try {
           setting.setReplyWithAttach(settingNode.getProperty(Utils.EXO_REPLY_WITH_ATTACH)
-                                                .getBoolean());
+                                     .getBoolean());
         } catch (Exception e) {
         }
         try {
           setting.setForwardWithAtt(settingNode.getProperty(Utils.EXO_FORWARD_WITH_ATTACH)
-                                               .getBoolean());
+                                    .getBoolean());
         } catch (Exception e) {
         }
         try {
@@ -689,11 +827,11 @@ public class JCRDataStorage implements DataStorage {
         if (currentFolderNode != null)
           currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES,
                                         (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES)
-                                                          .getLong() - deUnreadNumber));
+                                            .getLong() - deUnreadNumber));
         if (destFolderNode != null)
           destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES,
                                      (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES)
-                                                    .getLong() + inUnreadNumber));
+                                         .getLong() + inUnreadNumber));
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -702,7 +840,7 @@ public class JCRDataStorage implements DataStorage {
         if (currentFolderNode != null)
           currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE,
                                         (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE)
-                                                          .getLong() - deTotalMessage));
+                                            .getLong() - deTotalMessage));
         if (destFolderNode != null)
           destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE,
                                      (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
@@ -776,11 +914,11 @@ public class JCRDataStorage implements DataStorage {
         if (currentFolderNode != null)
           currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES,
                                         (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES)
-                                                          .getLong() - inUnreadNumber));
+                                            .getLong() - inUnreadNumber));
         if (destFolderNode != null)
           destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES,
                                      (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES)
-                                                    .getLong() + inUnreadNumber));
+                                         .getLong() + inUnreadNumber));
       } catch (Exception e) {
       }
 
@@ -788,7 +926,7 @@ public class JCRDataStorage implements DataStorage {
         if (currentFolderNode != null)
           currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE,
                                         (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE)
-                                                          .getLong() - inTotalMessage));
+                                            .getLong() - inTotalMessage));
         if (destFolderNode != null)
           destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE,
                                      (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
@@ -836,7 +974,7 @@ public class JCRDataStorage implements DataStorage {
         newAccount.setProperty(Utils.EXO_PLACESIGNATURE, account.getPlaceSignature());
         if (account.getLastCheckedDate() != null)
           newAccount.setProperty(Utils.EXO_LAST_CHECKED_TIME, account.getLastCheckedDate()
-                                                                     .getTime());
+                                 .getTime());
         else
           newAccount.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
 
@@ -878,13 +1016,16 @@ public class JCRDataStorage implements DataStorage {
           newAccount.setProperty(Utils.EXO_SECURE_AUTHS_OUTGOING, account.getSecureAuthsOutgoing());
           newAccount.setProperty(Utils.EXO_AUTH_MECHS_OUTGOING, account.getAuthMechsOutgoing());
         }
+        if(account.getPermissions() != null) {
+          newAccount.setProperty(Utils.EXO_PERMISSIONS, mapToStrings(account.getPermissions()));
+        }
         if (isNew)
           mailHome.getSession().save();
         else
           mailHome.save();
       }
     }catch(Exception e){
-       if(logger.isDebugEnabled()) logger.debug(e); 
+      if(logger.isDebugEnabled()) logger.debug(e); 
     } finally {
       closeSessionProvider(sysProvider);
     }
@@ -1003,7 +1144,7 @@ public class JCRDataStorage implements DataStorage {
           values.add(key + "=" + message.getHeaders().get(key));
         }
         nodeMsg.setProperty(Utils.MSG_HEADERS, values.toArray(new String[message.getHeaders()
-                                                                                .size()]));
+                                                                         .size()]));
 
         List<Attachment> attachments = message.getAttachments();
         if (attachments != null && attachments.size() > 0) {
@@ -1041,7 +1182,7 @@ public class JCRDataStorage implements DataStorage {
             nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
             nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
             nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance()
-                                                                    .getTimeInMillis());
+                                    .getTimeInMillis());
             /*
              * nodeFile.setProperty(Utils.ATT_IS_SHOWN_IN_BODY, false);
              * nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
@@ -1405,7 +1546,7 @@ public class JCRDataStorage implements DataStorage {
       if (node != null) {
         if (!isReadMessage) {
           node.setProperty(Utils.EXO_UNREADMESSAGES, node.getProperty(Utils.EXO_UNREADMESSAGES)
-                                                         .getLong() + 1);
+                           .getLong() + 1);
         }
         node.setProperty(Utils.EXO_TOTALMESSAGE,
                          node.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1);
@@ -1517,7 +1658,7 @@ public class JCRDataStorage implements DataStorage {
         } else {
           attId = "Attachment" + IdGenerator.generate();
         }
-        
+
         if (attHome.hasNode(attId)) {
           return body;
         }
@@ -1551,7 +1692,7 @@ public class JCRDataStorage implements DataStorage {
         node.setProperty(Utils.EXO_HASATTACH, true);
       }
     } catch (Exception e) {
-     logger.warn(e);
+      logger.warn(e);
     }
     return body;
   }
@@ -1693,7 +1834,7 @@ public class JCRDataStorage implements DataStorage {
     Session sess = getSession(sProvider);
     QueryManager qm = sess.getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
-        + "//element(*,exo:folder)[@exo:id='").append(folderId).append("']");
+                                                + "//element(*,exo:folder)[@exo:id='").append(folderId).append("']");
     QueryImpl query = (QueryImpl) qm.createQuery(queryString.toString(), Query.XPATH);
     query.setOffset(0);
     query.setLimit(1);
@@ -1785,7 +1926,7 @@ public class JCRDataStorage implements DataStorage {
 
       if (folder.getLastStartCheckingTime() != null)
         myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, folder.getLastStartCheckingTime()
-                                                                       .getTime());
+                             .getTime());
       else
         myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
       if (folder.getCheckFromDate() != null)
@@ -1850,7 +1991,7 @@ public class JCRDataStorage implements DataStorage {
 
       if (folder.getLastStartCheckingTime() != null)
         myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, folder.getLastStartCheckingTime()
-                                                                       .getTime());
+                             .getTime());
       else
         myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
       if (folder.getCheckFromDate() != null)
@@ -2412,7 +2553,7 @@ public class JCRDataStorage implements DataStorage {
       Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
       QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
-          + "//element(*,exo:message)[@exo:tags='").append(tagId).append("']");
+                                                  + "//element(*,exo:message)[@exo:tags='").append(tagId).append("']");
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
       NodeIterator it = result.getNodes();
@@ -2434,7 +2575,7 @@ public class JCRDataStorage implements DataStorage {
     Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
     QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
-        + "//element(*,exo:message)[@exo:folders='").append(folderId).append("']");
+                                                + "//element(*,exo:message)[@exo:folders='").append(folderId).append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
@@ -2519,16 +2660,16 @@ public class JCRDataStorage implements DataStorage {
                                                      username,
                                                      accountId,
                                                      msgNode.getProperty(Utils.MSG_FOLDERS)
-                                                            .getValues()[0].getString());
+                                                     .getValues()[0].getString());
           if (currentFolderNode != null) {
             if (!value) {
               currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES,
                                             (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES)
-                                                              .getLong() - 1));
+                                                .getLong() - 1));
             } else {
               currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES,
                                             (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES)
-                                                              .getLong() + 1));
+                                                .getLong() + 1));
             }
             currentFolderNode.save();
           }
@@ -2662,7 +2803,7 @@ public class JCRDataStorage implements DataStorage {
       Session sess = getSession(sProvider);
       QueryManager qm = sess.getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
-          + "//element(*,exo:message)[@exo:inReplyToHeader='").append(msg.getName()).append("']");
+                                                  + "//element(*,exo:message)[@exo:inReplyToHeader='").append(msg.getName()).append("']");
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
       NodeIterator it = result.getNodes();
@@ -2688,7 +2829,7 @@ public class JCRDataStorage implements DataStorage {
       Session sess = getSession(sProvider);
       QueryManager qm = sess.getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
-          + "//element(*,exo:message)[@exo:id='").append(inReplyToHeader).append("']");
+                                                  + "//element(*,exo:message)[@exo:id='").append(inReplyToHeader).append("']");
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
       NodeIterator it = result.getNodes();
@@ -2940,12 +3081,12 @@ public class JCRDataStorage implements DataStorage {
           JCRMessageAttachment file = new JCRMessageAttachment();
           file.setId(node.getPath());
           file.setMimeType(node.getNode(Utils.JCR_CONTENT)
-                               .getProperty(Utils.JCR_MIMETYPE)
-                               .getString());
+                           .getProperty(Utils.JCR_MIMETYPE)
+                           .getString());
           file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
           if (node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
             file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY)
-                                         .getBoolean());
+                                     .getBoolean());
           file.setIsShowInBody(node.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
           file.setWorkspace(node.getSession().getWorkspace().getName());
           file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
@@ -2953,10 +3094,10 @@ public class JCRDataStorage implements DataStorage {
           attachments.put(file.getId(), file);
         }
       }
-   }
-   return attachments;
+    }
+    return attachments;
   }
-  
+
   /**
    * recheck attachments of mail message are in body or attached file.
    * It will update attachments, save changes to jcr and re-set 'attachments' value for message object 'msg'.
@@ -2989,12 +3130,12 @@ public class JCRDataStorage implements DataStorage {
         messageNode.setProperty(Utils.EXO_HASATTACH, true);
         msg.setHasAttachment(true);
       }
-      
+
       messageNode.save();
     }
     return msg;
   }
-  
+
   public Message loadTotalMessage(String username,
                                   String accountId,
                                   Message msg,
@@ -3007,22 +3148,22 @@ public class JCRDataStorage implements DataStorage {
         Node attNode = null;
         try {
           attNode = messageNode.getNode(Utils.KEY_ATTACHMENT);// if the message
-                                                              // created Local:
-                                                              // Sent Item,
-                                                              // Draft, ...
+          // created Local:
+          // Sent Item,
+          // Draft, ...
         } catch (Exception ex) {
           logger.trace("[EXO WARNING] Attachment is not existed, loading them from server mail", ex);
         }
         if (attNode == null) {
-            String body = this.getContent(messageNode, message);
-            msg.setMessageBody(body);
-            msg = reCheckAttachment(messageNode, msg);
-            return msg;
+          String body = this.getContent(messageNode, message);
+          msg.setMessageBody(body);
+          msg = reCheckAttachment(messageNode, msg);
+          return msg;
         }
-       Map<String, JCRMessageAttachment> mapOfAtt = getAttachments(messageNode); 
-       if(!mapOfAtt.isEmpty()){
-         msg.setAttachements(new ArrayList<Attachment>(mapOfAtt.values()));
-       }
+        Map<String, JCRMessageAttachment> mapOfAtt = getAttachments(messageNode); 
+        if(!mapOfAtt.isEmpty()){
+          msg.setAttachements(new ArrayList<Attachment>(mapOfAtt.values()));
+        }
       } catch (PathNotFoundException e) {
         logger.debug("[EXO WARNING] PathNotFoundException when load attachment");
       }
@@ -3031,7 +3172,7 @@ public class JCRDataStorage implements DataStorage {
       closeSessionProvider(sProvider);
     }
   }
-  
+
   public Message loadTotalMessage(String username, String accountId, Message msg) throws Exception {
     SessionProvider sProvider = null;
     try {
@@ -3048,8 +3189,8 @@ public class JCRDataStorage implements DataStorage {
             JCRMessageAttachment file = new JCRMessageAttachment();
             file.setId(node.getPath());
             file.setMimeType(node.getNode(Utils.JCR_CONTENT)
-                                 .getProperty(Utils.JCR_MIMETYPE)
-                                 .getString());
+                             .getProperty(Utils.JCR_MIMETYPE)
+                             .getString());
             file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
             if (node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
               file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
@@ -3235,14 +3376,14 @@ public class JCRDataStorage implements DataStorage {
         node.setProperty(Utils.MSG_HEADERS, values.toArray(new String[] {}));
 
         logger.debug("Saved body and attachment of message .... size : " + Math.abs(msg.getSize())
-            + " B");
+                     + " B");
         t2 = System.currentTimeMillis();
 
         String body = this.getContent(node, msg);
         Message fakeMsg = new Message();
         fakeMsg.setMessageBody(body);
         fakeMsg = reCheckAttachment(node, fakeMsg);
-        
+
         t3 = System.currentTimeMillis();
         logger.debug("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
 
@@ -3316,17 +3457,17 @@ public class JCRDataStorage implements DataStorage {
    */
   public SessionProvider createSessionProvider() {
     SessionProvider provider = SessionProvider.createSystemProvider() ;
-//    ExoContainer container = null;
-//    try {
-//      container = PortalContainer.getInstance();
-//    } catch (IllegalStateException ie) {
-//      container = ExoContainerContext.getCurrentContainer();
-//    }
-//    
-//    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-//    SessionProvider provider = service.getSessionProvider(null);
-//    if (provider == null)
-//      provider = service.getSystemSessionProvider(null);
+    //    ExoContainer container = null;
+    //    try {
+    //      container = PortalContainer.getInstance();
+    //    } catch (IllegalStateException ie) {
+    //      container = ExoContainerContext.getCurrentContainer();
+    //    }
+    //    
+    //    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    //    SessionProvider provider = service.getSessionProvider(null);
+    //    if (provider == null)
+    //      provider = service.getSystemSessionProvider(null);
     return provider;
   }
 
@@ -3388,7 +3529,7 @@ public class JCRDataStorage implements DataStorage {
   public String[] getDMSDataInfo(String userName) throws Exception {
     String[] arr = new String[3];
     RepositoryService service = (RepositoryService) PortalContainer.getInstance()
-                                                                   .getComponentInstanceOfType(RepositoryService.class);
+    .getComponentInstanceOfType(RepositoryService.class);
 
     arr[0] = service.getCurrentRepository().getConfiguration().getName();
 
@@ -3449,5 +3590,7 @@ public class JCRDataStorage implements DataStorage {
   private boolean hasContentId(Part part) throws MessagingException {
     return part.getHeader("Content-Id") == null ? false : true;
   }
+
+
 
 }

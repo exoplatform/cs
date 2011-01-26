@@ -18,6 +18,7 @@ package org.exoplatform.mail.service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.services.jcr.util.IdGenerator;
@@ -53,6 +54,10 @@ public class Account {
   private String secureAuthsOutgoing  = Utils.STARTTLS;
   private String authMechsIncoming   = Utils.PLAIN;
   private String authMechsOutgoing    = Utils.PLAIN;
+  
+  private Map<String,String> permissions = null ;
+  
+  
   
   public String getSecureAuthsIncoming() {
     if(secureAuthsIncoming == Utils.TLS_SSL) return "SSL";
@@ -275,4 +280,12 @@ public class Account {
   }
   
   public Map<String, String> getSmtpServerProperties() { return smtpServerProperties ; }
+
+  public void setPermissions(Map<String, String> permissions) {
+    this.permissions = permissions;
+  }
+
+  public Map<String, String> getPermissions() {
+    return permissions;
+  }
 }

@@ -49,6 +49,8 @@ public class TestMailService extends BaseMailTestCase{
   private MailService mailService_ ;
   private SessionProvider sProvider ;
   private  String username = "root" ;
+  private  String receiver = "demo" ;
+  
   public static final String TEXT_PLAIN =  "text/plain".intern() ;
   public static final String TEXT_HTML =  "text/html".intern() ;
 
@@ -287,5 +289,37 @@ public class TestMailService extends BaseMailTestCase{
     mailService_.removeMessage(username, accPop.getId(), message) ;
     assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), desfolder.getId()).size(), 0) ;
     mailService_.removeAccount(username, accPop.getId()) ;
+  }
+  
+  public void testDelegateAccount() throws Exception {
+    Account accPop = createAccountObj(Utils.POP3) ;
+    mailService_.createAccount(username, accPop) ;
+    // root delegate his account for demo with read only permission
+    mailService_.delegateAccount(username, receiver, accPop.getId(), Utils.READ_ONLY) ;
+    assertEquals(1, mailService_.getDelegatedAccounts(receiver).size()) ;
+   
+    accPop =  mailService_.getDelegatedAccount(receiver, accPop.getId()) ;
+    assertEquals(Utils.READ_ONLY, accPop.getPermissions().get(receiver)) ;
+    
+    
+    Account accImap = createAccountObj(Utils.IMAP) ;
+    mailService_.createAccount(username, accImap) ;
+   // root delegate his account for demo with send and receive permission 
+    mailService_.delegateAccount(username, receiver, accImap.getId(), Utils.SEND_RECIEVE) ;
+    assertEquals(2, mailService_.getDelegatedAccounts(receiver).size()) ;
+    
+    accImap =  mailService_.getDelegatedAccount(receiver, accImap.getId()) ;
+    assertEquals(Utils.SEND_RECIEVE, accImap.getPermissions().get(receiver)) ;
+   
+    mailService_.removeDelegateAccount(username, receiver, accImap.getId()) ;
+        accImap =  mailService_.getAccountById(username, accImap.getId());
+    assertEquals(null, accImap.getPermissions().get(receiver)) ;
+    
+    assertEquals(1, mailService_.getDelegatedAccounts(receiver).size()) ;
+  
+    //indicate test remove account also remove delegate references 
+    mailService_.removeAccount(username, accPop.getId()) ;
+    assertEquals(0, mailService_.getDelegatedAccounts(receiver).size()) ;
+       
   }
 }

@@ -300,6 +300,11 @@ public class Utils {
   public static final String KERBEROS_GSSAPI = "kerberos/gssapi";//kerberos v5
   public static final String[] MECHANISM     = {NTLM, PLAIN, LOGIN, DIGIT_MD5, KERBEROS_GSSAPI, CRAM_MD5};//only support common those type
   
+  public static final String EXO_PERMISSIONS = "exo:permissions".intern() ;
+  public static final String READ_ONLY = "read".intern();
+  public static final String SEND_RECIEVE = "send".intern();
+  
+  
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
   }

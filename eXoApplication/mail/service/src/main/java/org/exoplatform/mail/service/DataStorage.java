@@ -29,6 +29,8 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
+import com.arjuna.ats.internal.jdbc.drivers.modifiers.list;
+
 /**
  * Created by The eXo Platform SAS
  * Author : eXoPlatform
@@ -36,6 +38,13 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
  * Jan 19, 2010  
  */
 public interface DataStorage {
+
+  public static final String MIX_REFERENCEABLE = "mix:referenceable".intern();
+  public static final String NT_FILE = "nt:file".intern() ;
+  public static final String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
+  public static final String EXO_SHARED_MIXIN = "exo:accountShared".intern();
+  public static final String EXO_SHARED_ID = "exo:sharedId".intern();
+  public static final String JCR_UUID = "jcr:uuid".intern();
 
   public String getMailHierarchyNode() throws Exception;
 
@@ -100,8 +109,8 @@ public interface DataStorage {
                           String targetMsgPath,
                           Message message,
                           boolean isNew) throws Exception;
-/**
- * [POP3]Saving all of message on Local. Or saving the message that sent successfully***/
+  /**
+   * [POP3]Saving all of message on Local. Or saving the message that sent successfully***/
   public Node saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception;
 
   public boolean saveMessage(String username,
@@ -352,9 +361,31 @@ public interface DataStorage {
   public Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception;
 
   public Session getSession(SessionProvider sprovider) throws Exception;
-  
-  public BufferAttachment getAttachmentFromDMS(String userName, String relPath) throws Exception;
-  
-  
 
+  public BufferAttachment getAttachmentFromDMS(String userName, String relPath) throws Exception;
+
+  /**
+   * delegate account to receiver 
+   * @param user
+   * @param receiver
+   * @param accountId
+   * @throws Exception
+   */
+  public void delegateAccount(String user , String receiver, String accountId) throws Exception ;
+
+  /**
+   * remove delegated account of receiver 
+   * @param receiver
+   * @throws Exception
+   */
+  public void removeDelegateAccount(String receiver, String accountId) throws Exception;
+
+  /**
+   * query all delegated accounts for given user id
+   * @param userId
+   * @return
+   * @throws Exception
+   */
+  public List<Account> getDelegateAccounts(String userId) throws Exception;
+ 
 }

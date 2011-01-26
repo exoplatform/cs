@@ -781,10 +781,19 @@ public interface MailService {
      * */
     public boolean saveFolderImapOnline(String userName, String accountId, String parentId, Folder folder) throws Exception ;
     
+    
+    
+    /**
+     * Retrieve attachment from personal document location of user with that given path
+     * @param userName : user id
+     * @param relPath : relative path of file
+     * @return mail service binary attachment 
+     * @throws Exception
+     */
     public BufferAttachment getAttachmentFromDMS(String userName, String relPath) throws Exception;
     
     /**
-     * get info of user to init UI selector of DMS.
+     * get info of user to initialize UI selector of DMS.
      * @param userName
      * @return array of strings. it contains 3 elements: 1 is repository name, 2 is workspace name, 
      * 3 is root path.
@@ -792,6 +801,48 @@ public interface MailService {
      */
     public String[] getDMSDataInfo(String userName) throws Exception;
     
+    /**
+     * Retrieve Node by given relative path 
+     * @param userName : user id
+     * @param relPath  : relative path to node
+     * @return Node object 
+     * @throws Exception
+     */
     public Node getDMSSelectedNode(String userName, String relPath) throws Exception;
+    
+    /**
+     * delegate or update permission for receiver 
+     * @param sender : single userId , the user who given a delegation to other
+     * @param receiver : single userId, the receiver who receive the delegation
+     * @param accountId : the account will be delegated
+     * @throws Exception
+     */
+    public void delegateAccount(String sender, String receiver, String accountId, String permission) throws Exception ;
+    
+    /**
+     * query all delegated accounts for given user id
+     * @param userId : the user who received delegation
+     * @return list of account object with map of permission e.g : root:read or demo:send
+     * @throws Exception
+     */
+    public List<Account> getDelegatedAccounts(String userId) throws Exception ;
+    
+    /**
+     * get specific delegated account of user by given by accountId 
+     * @param userId : the user who received delegation
+     * @param accountId : specific account id
+     * @return An account object with  map of permission e.g : root:read or demo:send
+     * @throws Exception
+     */
+    public Account getDelegatedAccount(String userId, String accountId) throws Exception ;
+    
+    /**
+     * remove, stop delegate account
+     * @param userId
+     * @param receiver
+     * @param accountId
+     * @throws Exception
+     */
+    public void removeDelegateAccount(String userId,  String receiver, String accountId) throws Exception;
     
 }
