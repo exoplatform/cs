@@ -47,7 +47,9 @@ public class UICalendarViewContainer extends UIContainer  {
   final public static String WORKING_VIEW = "UIWorkingView".intern() ;
 
   final public static String[] TYPES = {DAY_VIEW, WEEK_VIEW, MONTH_VIEW, YEAR_VIEW, LIST_VIEW, SCHEDULE_VIEW, WORKING_VIEW} ;
-
+  
+  private String currentViewType_;
+  
   public UICalendarViewContainer() throws Exception {
     initView(null) ;
   }  
@@ -61,6 +63,7 @@ public class UICalendarViewContainer extends UIContainer  {
       calendarSetting =  cservice.getCalendarSetting(username) ;
     }
     if(viewType == null) viewType = TYPES[Integer.parseInt(calendarSetting.getViewType())] ;
+    currentViewType_ = viewType;
     if(DAY_VIEW.equals(viewType)) {
       UIDayView uiView = getChild(UIDayView.class) ;
       if(uiView == null) uiView =  addChild(UIDayView.class, null, null) ;
@@ -111,6 +114,20 @@ public class UICalendarViewContainer extends UIContainer  {
                 setRenderedChild(WEEK_VIEW) ;
               }
     refresh() ;
+  }
+  
+  
+  /**
+   * @return the currentViewType_
+   */
+  public String getCurrentViewType() {
+    return currentViewType_;
+  }
+  /**
+   * @param currentViewType the currentViewType_ to set
+   */
+  public void setCurrentViewType_(String currentViewType) {
+    currentViewType_ = currentViewType;
   }
   public void refresh() throws Exception {
     for(UIComponent comp : getChildren()) {

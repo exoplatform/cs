@@ -11,7 +11,7 @@
 	int currentYear = uicomponent.getCurrentYear() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
 	int currentDay = uicomponent.getCurrentCalendar().get(Calendar.DAY_OF_YEAR) ;
-	long currentDayInMillis = uicomponent.getInstanceTempCalendar().getTimeInMillis();
+	long currentDayInMillis = uicomponent.getCurrentCalendar().getTimeInMillis();
 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT,String.valueOf(uicomponent.TYPE_MONTH)) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,String.valueOf(uicomponent.TYPE_MONTH)) ;
  	String linkYearNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(uicomponent.TYPE_YEAR)) ;
@@ -106,15 +106,16 @@
 					validDay = 1 ;
 					daysInMonth = uicomponent.getDaysInMonth(currentMonth, currentYear) ;
 					currentDate = Integer.parseInt(sdf.format(calendar.getTime()));
-					def beginDateOfMonthView = uicomponent.getBeginDateOfMonthView();
 					def currentWeekClass = "";
 					while (week++ < uicomponent.getWeeksOfTheMonth(currentYear, currentMonth, 1) ||  (dayOfMonth <= daysInMonth) ) {
 				    println "<tr>";
 				    dayOfWeek = 0 ;
-				    def firstDayOfWeekInMillis = beginDateOfMonthView.getTimeInMillis();
-            beginDateOfMonthView.add(Calendar.WEEK_OF_MONTH, 1) ;
-            def lastDayOfWeekInMillis = beginDateOfMonthView.getTimeInMillis();
-            if (firstDayOfWeekInMillis <= currentDayInMillis && currentDayInMillis <= lastDayOfWeekInMillis) {
+				    
+				    def firstDayOfWeekInMillis = calendar.getTimeInMillis();
+            calendar.add(Calendar.WEEK_OF_MONTH, 1) ;
+            def lastDayOfWeekInMillis = calendar.getTimeInMillis();
+            calendar.add(Calendar.WEEK_OF_MONTH, -1) ;
+            if (firstDayOfWeekInMillis <= currentDayInMillis && currentDayInMillis < lastDayOfWeekInMillis) {
               currentWeekClass = "CurrentWeek";
             } else {
               currentWeekClass = "";
@@ -129,7 +130,7 @@
 				       	styleClass = "" ;
 				       	highlight = "" ;
                 dayStyle = ""
-						   dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+ calendar.getTime().getTime() ;
+						   dayActionLink = uicomponent.TYPE_NONE +"&currentTime="+ calendar.getTime().getTime() ;
 				       actionLink = uicomponent.event("GotoDate", dayActionLink) ;
 				      if (validDay) {
 						    if(data.get(calendar.get(Calendar.DAY_OF_YEAR)) != null) {

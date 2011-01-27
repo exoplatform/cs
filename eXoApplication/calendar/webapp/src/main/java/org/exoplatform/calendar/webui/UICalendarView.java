@@ -73,6 +73,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 public abstract class UICalendarView extends UIForm  implements CalendarView {
   final static protected String EVENT_CATEGORIES = "eventCategories".intern() ;
   private Log log = ExoLogger.getLogger(this.getClass());
+  final public static int TYPE_NONE = -1 ;
   final public static int TYPE_DAY = 0 ;
   final public static int TYPE_WEEK = 1 ;
   final public static int TYPE_MONTH = 2 ;
@@ -1072,7 +1073,18 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           UIMiniCalendar uiMiniCalendar = portlet.findFirstComponentOfType(UIMiniCalendar.class) ;
           Calendar cal = calendarview.getInstanceTempCalendar() ;
           cal.setTimeInMillis(Long.parseLong(currentTime)) ;
-          int type = Integer.parseInt(viewType) ; 
+          int type = Integer.parseInt(viewType) ;
+          
+          if (type == TYPE_NONE) {
+            String viewTypeStr =  uiContainer.getCurrentViewType();
+            for (int i = 0; i < UICalendarViewContainer.TYPES.length; i++) {
+              String t = UICalendarViewContainer.TYPES[i];
+              if (t.equals(viewTypeStr)) { 
+                type = i;
+                break;
+              }
+            }
+          }
           uiContainer.initView(UICalendarViewContainer.TYPES[type]) ;
           switch (type){
           case TYPE_DAY : {
