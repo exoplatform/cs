@@ -1,0 +1,503 @@
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/rest/RESTXMPPService.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/rest/RESTXMPPService.java	(revision 65576)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/rest/RESTXMPPService.java	(working copy)
+@@ -18,12 +18,10 @@
+ package org.exoplatform.services.xmpp.rest;
+ 
+ import java.io.ByteArrayInputStream;
++
+ import java.io.ByteArrayOutputStream;
+ import java.io.InputStream;
+-import java.text.DateFormat;
+-import java.text.SimpleDateFormat;
+ import java.util.ArrayList;
+-import java.util.Arrays;
+ import java.util.Calendar;
+ import java.util.Collection;
+ import java.util.Date;
+@@ -1734,9 +1732,10 @@
+       /*if (log.isDebugEnabled()) 
+         e.printStackTrace();*/
+       XMPPError error = e.getXMPPError();
+-      return Response.Builder.withStatus(error.getCode())
+-                             .errorMessage(error.getMessage())
+-                             .build();
++      if(error != null)
++        return Response.Builder.withStatus(error.getCode()).errorMessage(error.getMessage()).build();
++      else
++        return Response.Builder.serverError().errorMessage(e.getMessage()).build();
+     } catch (Exception e) {
+       /*if (log.isDebugEnabled())
+         e.printStackTrace();*/
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(revision 65582)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(working copy)
+@@ -78,6 +78,8 @@
+ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+ import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
+ import org.exoplatform.services.jcr.util.IdGenerator;
++import org.exoplatform.services.security.Identity;
++import org.exoplatform.services.security.IdentityRegistry;
+ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+ import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
+ import org.exoplatform.ws.frameworks.json.value.JsonValue;
+@@ -120,7 +122,7 @@
+   public Account getAccountById(String username, String id) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node mailHome = getMailHomeNode(sProvider, username);
+       if (mailHome.hasNode(id)) {
+         return getAccount(sProvider, mailHome.getNode(id));
+@@ -136,7 +138,7 @@
+     SessionProvider sProvider = null;
+     List<Account> accounts = new ArrayList<Account>();
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node homeNode = getMailHomeNode(sProvider, username);
+       if (homeNode == null) return accounts;
+       NodeIterator it = homeNode.getNodes();
+@@ -245,7 +247,7 @@
+   public Message getMessageById(String username, String accountId, String msgId) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider(); 
++      sProvider = createSessionProvider(username); 
+       Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
+       StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
+                                                   + "//element(*,exo:message)[@exo:id='").append(msgId).append("']");
+@@ -272,7 +274,7 @@
+   public MailSetting getMailSetting(String username) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node homeNode = getMailHomeNode(sProvider, username);
+       Node settingNode = null;
+       if (homeNode.hasNode(Utils.KEY_MAIL_SETTING))
+@@ -342,7 +344,7 @@
+   public MessagePageList getMessagePageList(String username, MessageFilter filter) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
+       filter.setAccountPath(homeMsg.getPath());
+       long pageSize = getMailSetting(username).getNumberMsgPerPage();
+@@ -355,7 +357,7 @@
+   public List<Message> getMessages(String username, MessageFilter filter) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider(); 
++      sProvider = createSessionProvider(username); 
+       Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
+       filter.setAccountPath(homeMsg.getPath());
+       QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
+@@ -521,7 +523,7 @@
+   public void removeAccount(String username, String accountId) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node homeNode = getMailHomeNode(sProvider, username);
+       if (homeNode.hasNode(accountId)) {
+         homeNode.getNode(accountId).remove();
+@@ -535,7 +537,7 @@
+   public void removeMessage(String username, String accountId, Message message) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node msgStoreNode = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
+       try {
+         Node node = msgStoreNode.getNode(message.getId());
+@@ -558,7 +560,7 @@
+   public void removeMessages(String username, String accountId, List<Message> messages, boolean moveReference) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       for (Message message : messages) {
+         Node msgStoreNode = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
+         try {
+@@ -585,7 +587,7 @@
+   public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider(); 
++      sProvider = createSessionProvider(username); 
+       Node messageHome = getMessageHome(sProvider, username, accountId);
+       Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
+       Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
+@@ -695,7 +697,7 @@
+                            String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider(); 
++      sProvider = createSessionProvider(username); 
+       Node messageHome = getMessageHome(sProvider, username, accountId);
+       Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
+       Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
+@@ -759,8 +761,7 @@
+   public void saveAccount(String username, Account account, boolean isNew) throws Exception {
+     SessionProvider sysProvider = null;
+     try {
+-      //sysProvider = createSessionProvider();
+-      sysProvider = createSystemProvider();
++      sysProvider = createSessionProvider(username);
+       // creates or updates an account, depending on the isNew flag
+       Node mailHome = getMailHomeNode(sysProvider, username);
+       Node newAccount = null;
+@@ -834,7 +835,7 @@
+   public void saveMailSetting(String username, MailSetting newSetting) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node mailHome = getMailHomeNode(sProvider, username);
+       Node settingNode = null;
+       try {
+@@ -868,7 +869,7 @@
+     Node msgNode = saveMessage(username, accountId, message, isNew);
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       if (targetMsgPath != null && !targetMsgPath.equals("")) {
+         Node mailHome = getMailHomeNode(sProvider, username);
+         Node targetNode = (Node) mailHome.getSession().getItem(targetMsgPath);
+@@ -882,7 +883,7 @@
+   public Node saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node mailHome = getMailHomeNode(sProvider, username);
+       Node homeMsg = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
+       Node nodeMsg = null;
+@@ -1014,7 +1015,7 @@
+                              String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation, boolean saveTotal) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       long t1, t2, t4;
+       String from ;
+ 
+@@ -1068,7 +1069,7 @@
+         node.setProperty(Utils.EXO_ID, msgId);
+         try {
+           String uid = String.valueOf(msgUID);
+-          if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMD5MsgId(msg);
++          if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMsgUID();
+           node.setProperty(Utils.EXO_UID, uid);
+         } catch(Exception e) {}
+         node.setProperty(Utils.EXO_ACCOUNT, accId);
+@@ -1177,7 +1178,7 @@
+     boolean closeProvider = false;
+     try {
+       if (sProvider == null) {
+-        sProvider = createSessionProvider();
++        sProvider = createSessionProvider(username);
+         closeProvider = true;
+       }
+       Calendar gc = MimeMessageParser.getReceivedDate(msg);
+@@ -1465,7 +1466,7 @@
+     SessionProvider sProvider = null;
+     Folder folder = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node node = getFolderNodeById(sProvider, username, accountId, folderId);
+       if (node != null) {
+         folder = new Folder();
+@@ -1507,7 +1508,7 @@
+   public String getFolderParentId(String username, String accountId, String folderId) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node parentNode = getFolderNodeById(sProvider, username, accountId, folderId).getParent();
+       try {
+         if (parentNode != null)
+@@ -1576,7 +1577,7 @@
+     SessionProvider sProvider = null;
+     List<Folder> folders = new ArrayList<Folder>();
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node folderHomeNode = getFolderHome(sProvider, username, accountId);
+       NodeIterator iter = folderHomeNode.getNodes();
+       while (iter.hasNext()) {
+@@ -1592,7 +1593,7 @@
+   public synchronized void saveFolder(String username, String accountId, Folder folder) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       // gets folder home node of the specified account
+       Node home = getFolderHome(sProvider, username, accountId);
+       Node myFolder = null;
+@@ -1634,7 +1635,7 @@
+     SessionProvider sProvider = null;
+     boolean isExist = false;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node parentNode ;
+       if (parentId != null && parentId.trim().length() > 0) {  
+         parentNode = getFolderNodeById(sProvider, username, accountId, parentId);
+@@ -1657,7 +1658,7 @@
+   public synchronized void saveFolder(String username, String accountId, String parentId, Folder folder) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       // gets folder home node of the specified account
+       Node parentNode = getFolderNodeById(sProvider, username, accountId, parentId);
+       Node myFolder = null;
+@@ -1696,7 +1697,7 @@
+   public void renameFolder(String username, String accountId, String newName, Folder folder) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node myFolder = getFolderNodeById(sProvider, username, accountId, folder.getId());
+       if (myFolder != null) {
+         myFolder.setProperty(Utils.EXO_NAME, newName);
+@@ -1729,7 +1730,7 @@
+   public void removeUserFolder(String username, String accountId, String folderId) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       List<Node> msgNodes = getMessageNodeByFolder(sProvider, username, accountId, folderId);
+       removeFolderInMessages(sProvider, username, accountId, msgNodes, folderId);
+ 
+@@ -1758,7 +1759,7 @@
+     SessionProvider sProvider = null;
+     List<MessageFilter> filterList = new ArrayList<MessageFilter>();
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node filterHomeNode = getFilterHome(sProvider, username, accountId);
+       NodeIterator iter = filterHomeNode.getNodes();
+       while (iter.hasNext()) {
+@@ -1821,7 +1822,7 @@
+     SessionProvider sProvider = null;
+     MessageFilter filter = new MessageFilter("");
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node filterHomeNode = getFilterHome(sProvider, username, accountId);
+       if (filterHomeNode.hasNode(filterId)) {
+         Node filterNode = filterHomeNode.getNode(filterId);
+@@ -1880,7 +1881,7 @@
+   public void saveFilter(String username, String accountId, MessageFilter filter, boolean applyAll) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node home = getFilterHome(sProvider, username, accountId);
+       Node filterNode = null;
+       if (home.hasNode(filter.getId())) { // if the filter exists, gets it
+@@ -1946,7 +1947,7 @@
+   public void removeFilter(String username, String accountId, String filterId) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node filterHome = getFilterHome(sProvider, username, accountId);
+       if (filterHome.hasNode(filterId)) {
+         filterHome.getNode(filterId).remove();
+@@ -1958,7 +1959,7 @@
+   }
+ 
+   private Node getMessageHome(SessionProvider sProvider, String username, String accountId) throws Exception {
+-    sProvider = createSessionProvider();
++    sProvider = createSessionProvider(username);
+     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
+     Node msgHome = null;
+     try {
+@@ -1997,7 +1998,7 @@
+   public void addTag(String username, String accountId, Tag tag) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node tagHome = getTagHome(sProvider, username, accountId);
+       if (!tagHome.hasNode(tag.getId())) {
+         Node tagNode = tagHome.addNode(tag.getId(), Utils.EXO_MAILTAG);
+@@ -2017,7 +2018,7 @@
+   public void addTag(String username, String accountId, List<Message> messages, List<Tag> tagList) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Map<String, String> tagMap = new HashMap<String, String>();
+       Node tagHome = getTagHome(sProvider, username, accountId);
+       for (Tag tag : tagList) {
+@@ -2059,7 +2060,7 @@
+     SessionProvider sProvider = null;
+     List<Tag> tags = new ArrayList<Tag>();
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node tagHomeNode = getTagHome(sProvider, username, accountId);
+       NodeIterator iter = tagHomeNode.getNodes();
+       while (iter.hasNext()) {
+@@ -2089,7 +2090,7 @@
+     SessionProvider sProvider = null;
+     Tag tag = new Tag();
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node tagHomeNode = getTagHome(sProvider, username, accountId);
+       NodeIterator iter = tagHomeNode.getNodes();
+       while (iter.hasNext()) {
+@@ -2119,7 +2120,7 @@
+   public void removeTagsInMessages(String username, String accountId, List<Message> msgList, List<String> tagIds) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node mailHome = getMailHomeNode(sProvider, username);
+       for (Message msg : msgList) {
+         try {
+@@ -2148,7 +2149,7 @@
+   public void removeTag(String username, String accountId, String tagId) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       // remove this tag in all messages
+       List<Message> listMessage = getMessageByTag(username, accountId, tagId);
+       List<String> listTag = new ArrayList<String>();
+@@ -2169,7 +2170,7 @@
+   public void updateTag(String username, String accountId, Tag tag) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node tagHome = getTagHome(sProvider, username, accountId);
+       if (tagHome.hasNode(tag.getId())) {
+         Node tagNode = tagHome.getNode(tag.getId());
+@@ -2187,7 +2188,7 @@
+     SessionProvider sProvider = null;
+     List<Message> messages = new ArrayList<Message>();
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
+       QueryManager qm = getSession(sProvider).getWorkspace().getQueryManager();
+       StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
+@@ -2224,7 +2225,7 @@
+   public Node getSpamFilterHome(String username, String accountId) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
+       if (accountHome.hasNode(Utils.KEY_SPAM_FILTER))
+         return accountHome.getNode(Utils.KEY_SPAM_FILTER);
+@@ -2278,7 +2279,7 @@
+   public void toggleMessageProperty(String username, String accountId, List<Message> msgList, String property, boolean value) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node mailHome = getMailHomeNode(sProvider, username);
+       for (Message msg : msgList) {
+         Node msgNode = (Node) mailHome.getSession().getItem(msg.getPath());
+@@ -2314,7 +2315,7 @@
+   public String getFolderHomePath(String username, String accountId)throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       return getFolderHome(sProvider, username, accountId).getPath();
+     } finally {
+       sProvider.close();
+@@ -2324,7 +2325,7 @@
+   public List<Folder> getSubFolders(String username, String accountId, String parentPath) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node home = getFolderHome(sProvider, username, accountId);
+       Node parentNode = (Node) home.getSession().getItem(parentPath);
+       List<Folder> childFolders = new ArrayList<Folder>();
+@@ -2346,7 +2347,7 @@
+   public void execActionFilter(String username, String accountId, Calendar checkTime) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       List<MessageFilter> msgFilters = getFilters(username, accountId);
+       Node homeMsg = getMessageHome(sProvider, username, accountId);
+       Session sess = getSession(sProvider);
+@@ -2662,7 +2663,7 @@
+   public List<Message> getReferencedMessages(String username, String accountId, String msgPath) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       Node mailHome = getMailHomeNode(sProvider, username);
+       List<Message> msgList = new ArrayList<Message>();
+       Node converNode = (Node) mailHome.getSession().getItem(msgPath);
+@@ -2681,7 +2682,7 @@
+   public Message loadTotalMessage(String username, String accountId, Message msg) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider(); 
++      sProvider = createSessionProvider(username); 
+       try {
+         Node messageNode = getDateStoreNode(sProvider, username, accountId, msg.getReceivedDate()).getNode(msg.getId());
+         if (messageNode.hasNode(Utils.KEY_ATTACHMENT)){
+@@ -2765,7 +2766,7 @@
+                                  SpamFilter spamFilter, Info infoObj, ContinuationService continuation) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+-      sProvider = createSessionProvider();
++      sProvider = createSessionProvider(username);
+       long t1, t2, t3, t4;
+       String from ;
+       String msgId = MimeMessageParser.getMessageId(msg);
+@@ -2949,8 +2950,9 @@
+    * @return a SessionProvider initialized by current SessionProviderService
+    * @see SessionProviderService#getSessionProvider(null)
+    */
+-  private SessionProvider createSessionProvider() {
+-    ExoContainer container = null;    
++  private SessionProvider createSessionProvider(String username) {
++    ExoContainer container = null;
++    
+     try {
+       container = PortalContainer.getInstance();   
+     } catch(IllegalStateException ie) {
+@@ -2958,13 +2960,19 @@
+     } 
+     SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+     SessionProvider provider = service.getSessionProvider(null);    
+-    if (provider == null) provider = service.getSystemSessionProvider(null);
++    if (provider == null || checkNullIdentity(container, username)) provider = service.getSystemSessionProvider(null);
+     
+     return provider;  
+   }
+ 
++  private boolean checkNullIdentity(ExoContainer container, String userId){
++    IdentityRegistry identityRegistry = (IdentityRegistry) container.getComponentInstanceOfType(IdentityRegistry.class);
++    Identity identity = identityRegistry.getIdentity(userId);
++    return identity == null?true:false;
++  }
++  
+   /**
+-   * Safely closes JCR session provider. Call this method in finally to clean any provider initialized by createSessionProvider()
++   * Safely closes JCR session provider. Call this method in finally to clean any provider initialized by createSessionProvider(username)
+    * @param sessionProvider the sessionProvider to close
+    * @see SessionProvider#close();
+    */

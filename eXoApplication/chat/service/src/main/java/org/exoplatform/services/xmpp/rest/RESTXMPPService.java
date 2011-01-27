@@ -18,12 +18,10 @@
 package org.exoplatform.services.xmpp.rest;
 
 import java.io.ByteArrayInputStream;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -1734,9 +1732,10 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       /*if (log.isDebugEnabled()) 
         e.printStackTrace();*/
       XMPPError error = e.getXMPPError();
-      return Response.Builder.withStatus(error.getCode())
-                             .errorMessage(error.getMessage())
-                             .build();
+      if(error != null)
+        return Response.Builder.withStatus(error.getCode()).errorMessage(error.getMessage()).build();
+      else
+        return Response.Builder.serverError().errorMessage(e.getMessage()).build();
     } catch (Exception e) {
       /*if (log.isDebugEnabled())
         e.printStackTrace();*/
