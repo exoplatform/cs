@@ -1589,7 +1589,7 @@ public class JCRDataStorage {
     return folders;
   }
 
-  public void saveFolder(String username, String accountId, Folder folder) throws Exception {
+  public synchronized void saveFolder(String username, String accountId, Folder folder) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
@@ -1654,7 +1654,7 @@ public class JCRDataStorage {
     return isExist;
   }
 
-  public void saveFolder(String username, String accountId, String parentId, Folder folder) throws Exception {
+  public synchronized void saveFolder(String username, String accountId, String parentId, Folder folder) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();

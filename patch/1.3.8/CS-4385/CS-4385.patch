@@ -1,0 +1,2702 @@
+Index: eXoApplication/mail/service/src/test/java/org/exoplatform/mail/service/test/TestMailService.java
+===================================================================
+--- eXoApplication/mail/service/src/test/java/org/exoplatform/mail/service/test/TestMailService.java	(revision 65576)
++++ eXoApplication/mail/service/src/test/java/org/exoplatform/mail/service/test/TestMailService.java	(working copy)
+@@ -246,23 +246,15 @@
+     desfolder.setName("folder test 2 ") ;
+     desfolder.setURLName("folder 2") ;
+     mailService_.saveFolder(username, accPop.getId(), desfolder) ;
+-    
+     message.setFolders(new String[]{folder.getId()}) ;
+     message.setReceivedDate(new Date()) ;
+     mailService_.saveMessage(username, accPop.getId(), message, true) ;
+-    assertNotNull(mailService_.getMessagesByFolder(username, accPop.getId(), folder.getId())) ;
+-    assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), folder.getId()).size(), 1) ;
+-    
+     message = mailService_.getMessageById(username, accPop.getId(), message.getId()) ;
+-    mailService_.moveMessage(username, accPop.getId(), message, folder.getId(), desfolder.getId()) ;
+-    assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), folder.getId()).size(), 0) ;
+-    
++    Message m = mailService_.moveMessage(username, accPop.getId(), message, folder.getId(), desfolder.getId()) ;
++    assertNull("move/delete message fail", m);
+     assertNotNull(mailService_.getMessagesByFolder(username, accPop.getId(), desfolder.getId())) ;
+-    assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), desfolder.getId()).size(), 1) ;
+     mailService_.removeMessage(username, accPop.getId(), message) ;
+     assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), desfolder.getId()).size(), 0) ;
+-    
+-    
+     mailService_.removeAccount(username, accPop.getId()) ;
+   }
+ }
+\ No newline at end of file
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/connection/impl/ImapConnector.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/connection/impl/ImapConnector.java	(revision 65576)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/connection/impl/ImapConnector.java	(working copy)
+@@ -17,10 +17,12 @@
+ package org.exoplatform.mail.connection.impl;
+ 
+ import java.util.ArrayList;
++
+ import java.util.List;
+ import java.util.Properties;
+ 
+ import javax.mail.Flags;
++import javax.mail.MessagingException;
+ import javax.mail.Session;
+ import javax.mail.Store;
+ import javax.mail.UIDFolder;
+@@ -76,7 +78,7 @@
+   public javax.mail.Folder createFolder(Folder folder) throws Exception {
+     return createFolder(null, folder);
+   }
+-
++  
+   public javax.mail.Folder createFolder(Folder parentFolder, Folder folder) throws Exception {
+     IMAPFolder imapFolder = null;
+     if (parentFolder == null) {
+@@ -110,7 +112,7 @@
+         result = folderToBeRenamed.renameTo(f1);
+         folder.setURLName(f1.getURLName().toString());
+         folder.setName(newName) ;
+-        if (!result) logger.info("Error while renaming folder!");
++        if (!result) logger.info("Error while renaming folder!");  
+       } else {
+         logger.info("Folder does not exists!");
+       }
+@@ -150,39 +152,68 @@
+   }
+ 
+   public List<Message> createMessage(List<Message> msgs, Folder folder) throws Exception {
++    if(msgs == null || msgs.size() == 0 || folder == null) return null;
++    List<Message> successList = new ArrayList<Message>();
++    IMAPFolder remoteFolder = null;
++    URLName remoteURL = null;
++    try {    
++      if(folder.getURLName().equals("") && !Utils.isEmptyField(folder.getName())) 
++        remoteFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(folder.getName());
++    }catch (Exception e){
++      if(logger.isDebugEnabled()) logger.debug("Cannot get folder on server by folder name.", e);
++    }
++    try{
++      if(remoteFolder == null){
++        remoteURL = new URLName(folder.getURLName());
++        remoteFolder = (IMAPFolder) ((IMAPStore) store_).getFolder(remoteURL);
++      }
++    } catch (Exception e) {
++      if(logger.isDebugEnabled()) logger.debug("Cannot get folder by a empty URL name.", e);
++       remoteFolder = (IMAPFolder)this.createFolder(folder);
++    }
++    
+     try {
+-      //Todo
+-      URLName remoteURL = new URLName(folder.getURLName());
+-      IMAPFolder remoteFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(remoteURL);
++      if(remoteFolder != null && !remoteFolder.isOpen()) remoteFolder.open(javax.mail.Folder.READ_WRITE);
++      else if(remoteFolder == null)return null;
++    } catch (Exception e) {
++      logger.info("Cannot open \"" + folder.getName() + "\" folder. It will be created on server.");
++      remoteFolder = (IMAPFolder)this.createFolder(folder);
+       remoteFolder.open(javax.mail.Folder.READ_WRITE);
+-      Properties props = System.getProperties();
+-      Session session = Session.getInstance(props, null);
++    }
++    Properties props = System.getProperties();
++    Session session = Session.getInstance(props, null);
++    javax.mail.Message[] messages = new javax.mail.Message[msgs.size()];
++    javax.mail.Message[] createdMsgs = null;
++    for (int i = 0; i < msgs.size(); i++) {
+       MimeMessage mimeMessage = new MimeMessage(session);
+-      javax.mail.Message[] messages = new javax.mail.Message[msgs.size()];
+-      for (int i = 0; i < msgs.size(); i++) {
+-        mimeMessage = Utils.mergeToMimeMessage(msgs.get(i), mimeMessage);
+-        messages[i] = (javax.mail.Message) mimeMessage;
++      mimeMessage = Utils.mergeToMimeMessage(msgs.get(i), mimeMessage);
++      messages[i] = (javax.mail.Message) mimeMessage;
++    }
++    if(remoteFolder.isOpen()){
++      try {
++        createdMsgs = remoteFolder.addMessages(messages);  
++      } catch (MessagingException me) {
++          logger.error("Synchronize message from local to server fail.\n", me);
+       }
+-      if(!remoteFolder.isOpen()) remoteFolder.open(javax.mail.Folder.READ_WRITE);
+-      javax.mail.Message[] updatedMsgs = remoteFolder.addMessages(messages);
+-
+-      if (updatedMsgs.length == msgs.size()) {
++      if (createdMsgs != null && createdMsgs.length > 0 && createdMsgs.length == msgs.size()) {
+         String uid = "";
+-        for (int l = 0; l < updatedMsgs.length; l++) {
+-          if(updatedMsgs[l] != null) {
+-            uid = String.valueOf(remoteFolder.getUID(updatedMsgs[l]));
+-            if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMD5MsgId(updatedMsgs[l]);
+-            msgs.get(l).setId(MimeMessageParser.getMessageId(updatedMsgs[l]));
++        for (int l = 0; l < createdMsgs.length; l++) {
++          if(createdMsgs[l] != null) {
++            try {
++              uid = String.valueOf(remoteFolder.getUID(createdMsgs[l]));
++            } catch (MessagingException me) {
++              if(logger.isDebugEnabled()) logger.debug("Not found UID for \"" +  createdMsgs[l].getSubject() + "\".", me);
++            }
++            if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMsgUID();
++            msgs.get(l).setId(MimeMessageParser.getMessageId(createdMsgs[l]));
+             msgs.get(l).setUID(uid);
+           }
+-        }
++          successList.add(msgs.get(l));
+       }
+-      if(remoteFolder.isOpen())  remoteFolder.close(true);
+-    } catch(Exception e) {
+-      logger.error("Error in move messages to remote folder",e);
+-      return null;
++        remoteFolder.close(true);
++      }else logger.warn("Not all messages are synchronized with server.");
+     }
+-    return msgs;
++    return successList;
+   }
+ 
+   public boolean deleteMessage(List<Message> msgs, Folder folder) throws Exception {
+@@ -203,104 +234,90 @@
+     }
+   }
+ 
+-  public List<Message> moveMessage(List<Message> msgs, Folder currentFolder, Folder desFolder) throws Exception {
+-    try {
+-      if (!currentFolder.isPersonalFolder() && !currentFolder.getName().equalsIgnoreCase(Utils.FD_INBOX)) {
+-        return moveToRemoteFolder(msgs, desFolder);
++  public List<Message> moveMessage(List<Message> msgs, Folder sourceFolder, Folder desFolder) throws Exception {
++      if (!sourceFolder.isPersonalFolder() && !sourceFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && desFolder.isPersonalFolder()) {//local->server
++        return moveMessages(msgs, sourceFolder, desFolder, true, true);
++      }else if(!sourceFolder.isPersonalFolder() && !sourceFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && !desFolder.isPersonalFolder()){//local to local
++        return moveMessages(msgs, sourceFolder, desFolder, true, false);
++      }else if ((sourceFolder.isPersonalFolder() && !desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && !desFolder.isPersonalFolder()) ||
++            (sourceFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && !desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) && !desFolder.isPersonalFolder())) {//server to local
++        return moveMessages(msgs, sourceFolder, desFolder, false, false);
++      }else if((sourceFolder.isPersonalFolder() && desFolder.isPersonalFolder()) ||
++            (sourceFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) &&  desFolder.isPersonalFolder()) || 
++            (desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX) &&  sourceFolder.isPersonalFolder())){//server to server
++        return moveMessages(msgs, sourceFolder, desFolder, false, true);
+       }
+-      if (!desFolder.isPersonalFolder() && !desFolder.getName().equalsIgnoreCase(Utils.FD_INBOX)) {
+-        return moveToLocalFolder(msgs, currentFolder, desFolder);
+-      }
+-
+-      URLName fromURL = new URLName(currentFolder.getURLName());
+-      IMAPFolder fromFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(fromURL);
+-      URLName toURL = new URLName(desFolder.getURLName());
+-      IMAPFolder toFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(toURL);
+-
+-      fromFolder.open(javax.mail.Folder.READ_WRITE);
+-      toFolder.open(javax.mail.Folder.READ_WRITE);
+-      List<javax.mail.Message> copiedMsgs = new ArrayList<javax.mail.Message>();
+-      javax.mail.Message msg;
+-      for (Message m : msgs) {
+-        if(m.getUID() != null) {
+-          msg = fromFolder.getMessageByUID(Long.valueOf(m.getUID()));
+-          if (msg != null) copiedMsgs.add(msg);
+-        }
+-      }
+-      javax.mail.Message[] updatedMsgs = toFolder.addMessages(copiedMsgs.toArray(new javax.mail.Message[copiedMsgs.size()]));
+-
+-      for (int k = 0; k < copiedMsgs.size(); k++) {
+-        copiedMsgs.get(k).setFlag(Flags.Flag.DELETED, true);
+-      }
+-
+-      if (updatedMsgs.length == msgs.size()) {
+-        String uid = "";
+-        for (int l = 0; l < updatedMsgs.length; l++) {
+-          if(updatedMsgs[l] != null) {
+-            uid = String.valueOf(toFolder.getUID(updatedMsgs[l]));
+-            if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMD5MsgId(updatedMsgs[l]);
+-            msgs.get(l).setUID(uid);
+-          }
+-        }
+-      }
+-
+-      fromFolder.close(true);
+-      toFolder.close(true);
+-      return msgs;
+-    } catch (Exception e) {
+-      logger.error("Error in moveMessage()",e);
+-    }
+     return null;
+   }
+ 
+-  private List<Message> moveToLocalFolder(List<Message> msgs, Folder remoteFolder, Folder localFolder) throws Exception {
++  /**
++   * Move message(s). Folder will be synchronized before message(s) moved. There 4 instances when move the message action:
++   (Source folder   ->    Remote folder)
++   Local            -    Remote.
++   Local            -    Local.
++   Remote           -    Local.
++   Remote           -    Remote.
++   * return {@link List} of mails that were not moved/deleted*/
++  private List<Message> moveMessages(List<Message> msgs, Folder sourceFolder, Folder desFolder, boolean isLocalFolder, boolean isRemoteFolder) throws Exception {
++    if(msgs == null || msgs.size() == 0) return null;
++    IMAPFolder sourceImapFolder = null, desImapFolder = null;
+     try {
+-      URLName fromURL = new URLName(remoteFolder.getURLName());
+-      IMAPFolder fromFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(fromURL);
+-      IMAPFolder toFolder = (IMAPFolder) createFolder(localFolder);
+-
+-      fromFolder.open(javax.mail.Folder.READ_WRITE);
+-      toFolder.open(javax.mail.Folder.READ_WRITE);
+-      List<javax.mail.Message> copiedMsgs = new ArrayList<javax.mail.Message>();
+-      javax.mail.Message msg;
+-      for (Message m : msgs) {
+-        msg = fromFolder.getMessageByUID(Long.valueOf(m.getUID()));
+-        if (msg != null) copiedMsgs.add(msg);
++      if(isLocalFolder && isRemoteFolder){//local -> remote
++        sourceImapFolder = (IMAPFolder) createFolder(sourceFolder);
++        URLName desURL = new URLName(desFolder.getURLName());
++        desImapFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(desURL);
++      } else if(isLocalFolder && !isRemoteFolder){//local -> local
++        sourceImapFolder = (IMAPFolder) createFolder(sourceFolder);
++        desImapFolder = (IMAPFolder) createFolder(desFolder);
++      }else if(!isLocalFolder && isRemoteFolder){//remote -> remote
++        URLName srcURL = new URLName(sourceFolder.getURLName());
++        sourceImapFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(srcURL);
++        URLName desURL = new URLName(desFolder.getURLName());
++        desImapFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(desURL);
++      } else if(!isLocalFolder && !isRemoteFolder){//remote -> local
++        URLName srcURL = new URLName(sourceFolder.getURLName());
++        sourceImapFolder = (IMAPFolder) ((IMAPStore)store_).getFolder(srcURL);
++        desImapFolder = (IMAPFolder) createFolder(desFolder);
+       }
+-      javax.mail.Message[] updatedMsgs = toFolder.addMessages(copiedMsgs.toArray(new javax.mail.Message[copiedMsgs.size()]));
+-
+-      for (int k = 0; k < copiedMsgs.size(); k++) {
+-        copiedMsgs.get(k).setFlag(Flags.Flag.DELETED, true);
++      if(sourceImapFolder == null || desImapFolder == null) return null;
++      try {
++        if(!sourceImapFolder.isOpen()) sourceImapFolder.open(javax.mail.Folder.READ_WRITE);
++        if(!desImapFolder.isOpen()) desImapFolder.open(javax.mail.Folder.READ_WRITE);  
++      } catch (Exception e) {
++        if(logger.isDebugEnabled()) logger.debug("ImapConnector: \"" + sourceFolder + "\" or \"" + desFolder+  "\" folder was not synchronized with server\n", e);
+       }
+-
+-      if (updatedMsgs.length == msgs.size()) {
+-        String uid = "";
+-        for (int l = 0; l < updatedMsgs.length; l++) {
+-          uid = String.valueOf(toFolder.getUID(updatedMsgs[l]));
+-          if (Utils.isEmptyField(uid)) uid = MimeMessageParser.getMD5MsgId(updatedMsgs[l]);
+-          msgs.get(l).setUID(uid);
++       
++      if(sourceImapFolder.isOpen() && desImapFolder.isOpen()){
++        List<javax.mail.Message> copiedMsgs = new ArrayList<javax.mail.Message>();
++        javax.mail.Message msg = null;
++        for (Message m : msgs) {
++          try{
++            if(m != null && m.getUID() != null)
++              msg = sourceImapFolder.getMessageByUID(Long.valueOf(m.getUID()));
++            else logger.info("Message is null or UID is null.");
++          }catch (Exception e){
++              logger.info("The UID: \"" + m.getUID() + "\" of message: \""+ m.getSubject() +"\" is not exist on server mail\n");
++          }
++          if (msg != null) copiedMsgs.add(msg);
+         }
++        if(copiedMsgs != null && copiedMsgs.size() > 0){
++          javax.mail.Message[] messages = copiedMsgs.toArray(new javax.mail.Message[copiedMsgs.size()]);
++          sourceImapFolder.copyMessages(messages, desImapFolder);  //exception may be thrown if source and destination folder is not the same backend Store
++          Flags flags = new Flags();
++          flags.add(Flags.Flag.DELETED);
++          sourceImapFolder.setFlags(messages, flags, true);
++          sourceImapFolder.expunge();
++          desImapFolder.expunge();
++        }
++        sourceImapFolder.close(true);
++        desImapFolder.close(true);
+       }
+-
+-      fromFolder.close(true);
+-      toFolder.close(true);
+-      return msgs;
+     } catch (Exception e) {
+-      logger.error("Error in move message to local folder",e);
++      logger.error("ImapConnector: Error in move message.\n", e);
+     }
+-    return null;
+-  }
+-
+-  private List<Message> moveToRemoteFolder(List<Message> msgs,Folder desFolder) throws Exception {
+-    try {
+-      msgs = createMessage(msgs, desFolder);
+-    } catch(Exception e) {
+-      logger.error("Error in move messages to remote folder",e);
+-      return null;
+-    }
+     return msgs;
+   }
+-
++  
+   public boolean markAsRead(List<Message> msgList, Folder f) throws Exception {
+     try {
+       URLName url = new URLName(f.getURLName());
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/connection/Connector.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/connection/Connector.java	(revision 65576)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/connection/Connector.java	(working copy)
+@@ -45,7 +45,10 @@
+   public List<Message> createMessage(List<Message> msgs, Folder folder) throws Exception;
+   
+   public boolean deleteMessage(List<Message> msgs, Folder folder) throws Exception;
+-  
++  /**
++   * Move message(s) between folders.
++   * Return a list of deleted/moved messages
++   * */
+   public List<Message> moveMessage(List<Message> msgs, Folder currentFolder, Folder desFolder) throws Exception;
+   
+   public boolean markAsRead(List<Message> msgList, Folder folder) throws Exception;
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/MailService.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/MailService.java	(revision 65576)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/MailService.java	(working copy)
+@@ -356,11 +356,12 @@
+    * Save message to Account/Messages/Year/Month/Day tree node. If message is new then Day node will create a new node 
+    * if not it will update the exist message.
+    * @param username
+-   * @param accountId
++   * @param account
+    * @param targetMsgPath this param is path of node Account/Messages/Year/Month/Day
++   * @return true if save message success. false if else
+    * @throws Exception
+    */
+-  public void saveMessage(String username, String accountId, String targetMsgPath, Message message, boolean isNew) throws Exception ;
++  public boolean saveMessage(String username, Account account, String targetMsgPath, Message message, boolean isNew) throws Exception ;
+   
+   public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception;
+   
+@@ -394,9 +395,11 @@
+    * @param msg
+    * @throws Exception
+    */
+-  public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception ;
++  public List<Message> moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception ;
+   
+-  public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference) throws Exception ;
++  /**
++   * Move message(s) to Trash folder*/
++  public List<Message> moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference) throws Exception ;
+   
+   /**
+    * Move a message from the current folder to the given folder
+@@ -405,9 +408,10 @@
+    * @param msg
+    * @param currentFolderId
+    * @param destFolderId
++   * @return the moved/deleted message, and return null value if that message hasn't moved/deleted
+    * @throws Exception
+    */
+-  public void moveMessage(String username, String accountId,Message msg, String currentFolderId, String destFolderId) throws Exception ;
++  public Message moveMessage(String username, String accountId,Message msg, String currentFolderId, String destFolderId) throws Exception ;
+ 
+   public void moveMessage(String username, String accountId,Message msg, String currentFolderId, String destFolderId, boolean updateReference) throws Exception ;
+   /**
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/MimeMessageParser.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/MimeMessageParser.java	(revision 65576)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/MimeMessageParser.java	(working copy)
+@@ -26,12 +26,10 @@
+ import java.util.Enumeration;
+ import java.util.GregorianCalendar;
+ import java.util.Locale;
+-
+ import javax.mail.Flags;
+ import javax.mail.Header;
+ import javax.mail.MessagingException;
+ import javax.mail.internet.MimeMessage;
+-
+ import org.apache.commons.logging.Log;
+ import org.apache.commons.logging.LogFactory;
+ 
+@@ -175,15 +173,20 @@
+   /**
+    * @return a MD5 string
+    */
++  @SuppressWarnings("unchecked")
+   public static String getMD5MsgId(javax.mail.Message msg) throws Exception {
+     // first construct a key by joining all headers
+-    String key = "";
++    String key = ""; Enumeration enu = null;
+     long t1 = System.currentTimeMillis();
+-    Enumeration enu = msg.getAllHeaders() ;
+-    while (enu.hasMoreElements()) {
+-      Header header = (Header)enu.nextElement() ;
+-      key += header.getValue() ;
++    if(msg != null)
++      enu = msg.getAllHeaders() ;
++    if(enu != null){
++      while (enu.hasMoreElements()) {
++        Header header = (Header)enu.nextElement() ;
++        key += header.getValue() ;
++      }  
+     }
++    if(key.equals("")) key = String.valueOf(t1);
+     String md5 = getMD5(key);
+     long t2 = System.currentTimeMillis();
+     //TODO : change the log level later
+@@ -191,6 +194,13 @@
+     logger.error("getMD5MsgId spending time : " + (t2-t1) + "ms");
+     return md5;
+   }
++  
++  public static String getMsgUID(){
++    long t1 = System.currentTimeMillis();
++    if(t1 < Long.MAX_VALUE) return String.valueOf(t1);
++    else return String.valueOf(t1 - Long.MAX_VALUE);
++  }
++  
+   /**
+    * separated getMD5 method ... for a general use.
+    * @param s
+@@ -200,7 +210,7 @@
+     try {
+       MessageDigest m = MessageDigest.getInstance("MD5");
+       m.update(s.getBytes(), 0, s.length());
+-      return "" + new BigInteger(1, m.digest()).toString(16);
++      return "" + new BigInteger(1, m.digest()).toString();//if is toString(16), will produce error when we parsing it to Long value
+     } catch (NoSuchAlgorithmException e) {
+       // almost never ... but the idea is we should control all exceptions
+       logger.error("MD5 is not supported !!!");
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/MailServiceImpl.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/MailServiceImpl.java	(revision 65576)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/MailServiceImpl.java	(working copy)
+@@ -133,11 +133,13 @@
+   
+   public void removeCheckingInfo(String username, String accountId) throws Exception {
+     String key = username + ":" + accountId;
++    if(checkingLog_ == null) checkingLog_ = new HashMap<String, CheckingInfo>();
+     checkingLog_.remove(key);
+   }
+ 
+   public CheckingInfo getCheckingInfo(String username, String accountId) {
+     String key = username + ":" + accountId;
++    if(checkingLog_ == null) checkingLog_ = new HashMap<String, CheckingInfo>();
+     return checkingLog_.get(key);
+   }
+ 
+@@ -291,89 +293,104 @@
+     storage_.removeMessages(username, accountId, messages, moveReference);
+   }
+ 
+-  public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
+-    Account account = getAccountById(username, accountId);
+-    Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
+-    Folder destFolder = this.getFolder(username, accountId, destFolderId);
+-    boolean success = true;
++  public List<Message> moveMessages(String userName, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
++    Account account = getAccountById(userName, accountId);
++    Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
++    List<Message> successList = new ArrayList<Message>();
++    Folder destFolder = this.getFolder(userName, accountId, destFolderId);
+     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
+       try {
+         Connector connector = new ImapConnector(account);
+-        msgList = connector.moveMessage(msgList, currentFolder, destFolder);
+-        if (msgList == null) success = false;
+-      } catch(Exception e) {
+-        return;
++        successList = connector.moveMessage(msgList, currentFolder, destFolder);
++      } catch (Exception e) {
++        if(logger.isDebugEnabled()) logger.debug("MailServiceImpl: Move message error " + e.getMessage());
+       }
+     }
+-    if (success) storage_.moveMessages(username, accountId, msgList, currentFolderId, destFolderId);
++    if (successList != null && successList.size() > 0) storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId);
++    return successList;
+   }
+   
+-  public void moveMessages(String username, String accountId, List<Message> msgList,
++  public List<Message> moveMessages(String userName, String accountId, List<Message> msgList,
+                           String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
+-    Account account = getAccountById(username, accountId);
+-    Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
+-    Folder destFolder = this.getFolder(username, accountId, destFolderId);
+-    boolean success = true;
++    Account account = getAccountById(userName, accountId);
++    Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
++    Folder destFolder = this.getFolder(userName, accountId, destFolderId);
++    List<Message> successList = new ArrayList<Message>();
+     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
+       try {
+         Connector connector = new ImapConnector(account);
+-        msgList = connector.moveMessage(msgList, currentFolder, destFolder);
+-        if (msgList == null) success = false;
+-      } catch(Exception e) {
+-        return;
++        successList = connector.moveMessage(msgList, currentFolder, destFolder);
++      } catch (Exception e) {
++        logger.error("Mailservice: Move message to trash folder error", e);
+       }
+     }
+-    if (success) storage_.moveMessages(username, accountId, msgList, currentFolderId, destFolderId, updateReference);
++    if (successList != null && successList.size() > 0) storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId, updateReference);
++    return successList;
+   }
+ 
+-  public void moveMessage(String username, String accountId, Message msg,
+-      String currentFolderId, String destFolderId) throws Exception {
+-    Account account = getAccountById(username, accountId);
+-    Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
+-    Folder destFolder = this.getFolder(username, accountId, destFolderId);
+-    boolean success = true;
++  public Message moveMessage(String userName, String accountId, Message msg,
++    String currentFolderId, String destFolderId) throws Exception {
++    Account account = getAccountById(userName, accountId);
++    Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
++    Folder destFolder = this.getFolder(userName, accountId, destFolderId);
++    List<Message> successList = new ArrayList<Message>();
+     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
+       try {
+-        List<Message> l = new ArrayList<Message>();
++        List<Message> msgList = new ArrayList<Message>();
+         Connector connector = new ImapConnector(account);
+-        l.add(msg);
+-        l = connector.moveMessage(l, currentFolder, destFolder);
+-        if (l == null) success = false;
+-        else msg = l.get(0);
+-      } catch(Exception e) {
+-        return;
++        msgList.add(msg);
++        successList = connector.moveMessage(msgList, currentFolder, destFolder);
++      } catch (Exception e) {
++        if(logger.isDebugEnabled()) logger.debug("Mailservice: Move message fail. ", e);
+       }
+     }
+-    if (success) moveMessage(username, accountId, msg, currentFolderId, destFolderId, true);
++    if (successList != null && successList.size() > 0){
++      storage_.moveMessage(userName, accountId, msg, currentFolderId, destFolderId, true);
++      return msg;
++    }
++    return null;
+   }
+   
+-  public void moveMessage(String username, String accountId, Message msg,
++  public void moveMessage(String userName, String accountId, Message msg,
+ 	  String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
+-    Account account = getAccountById(username, accountId);
+-    Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
+-    Folder destFolder = this.getFolder(username, accountId, destFolderId);
++    Account account = getAccountById(userName, accountId);
++    Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
++    Folder destFolder = this.getFolder(userName, accountId, destFolderId);
+     boolean success = true;
+     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
+       try {
+         Connector connector = new ImapConnector(account);
+-        List<Message> l = new ArrayList<Message>();
+-        l.add(msg);
+-        l = connector.moveMessage(l, currentFolder, destFolder);
+-        if (l == null) success = false;
+-        else msg = l.get(0);
+-      } catch(Exception e) {
++        List<Message> msgList = new ArrayList<Message>();
++        msgList.add(msg);
++        msgList = connector.moveMessage(msgList, currentFolder, destFolder);
++        if (msgList.size() <= 0) success = false;
++      } catch (Exception e) {
+         return;
+       }
+     }
+-    if (success) storage_.moveMessage(username, accountId, msg, currentFolderId, destFolderId, updateReference);
++    if (success) storage_.moveMessage(userName, accountId, msg, currentFolderId, destFolderId, updateReference);
+   }
+ 
+   public MessagePageList getMessagePageList(String username, MessageFilter filter) throws Exception {
+     return storage_.getMessagePageList(username, filter);
+   }
+ 
+-  public void saveMessage(String username, String accountId, String targetMsgPath, Message message, boolean isNew) throws Exception {
+-    storage_.saveMessage(username, accountId, targetMsgPath, message, isNew);
++  public boolean saveMessage(String username, Account account, String targetMsgPath, Message message, boolean isNew) throws Exception {
++    List<Message> msgList = new ArrayList<Message>();
++    List<Message> successList = null;
++    msgList.add(message);
++    String folderId = message.getFolders()[0];
++    Folder destFolder = null;
++    if (folderId != null) {
++      destFolder = getFolder(username, account.getId(), folderId);
++    }
++    if (destFolder != null && account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
++      Connector connector = new ImapConnector(account);
++      successList = connector.createMessage(msgList, destFolder);
++    }
++    storage_.saveMessage(username, account.getId(), targetMsgPath, message, isNew);
++    if(successList != null && successList.size() > 0) return true;
++    return false;
+   }
+ 
+   public List<Message> getMessagesByTag(String username, String accountId, String tagId) throws Exception {
+@@ -873,9 +890,10 @@
+     return msgMap ;
+   }
+   
+-  public void synchImapFolders(String username, String accountId) throws Exception {
++  public synchronized void synchImapFolders(String username, String accountId) throws Exception {
+     CheckingInfo info = new CheckingInfo();
+     String key = username + ":" + accountId;
++    if(checkingLog_ == null) checkingLog_ = new HashMap<String, CheckingInfo>();
+     checkingLog_.put(key, info);
+     IMAPStore store = null;
+     try {
+@@ -893,7 +911,7 @@
+ 	}
+   }
+   
+-  private List<javax.mail.Folder> synchImapFolders(String username, String accountId, Folder parentFolder, javax.mail.Folder[] folders) throws Exception {
++  private synchronized List<javax.mail.Folder> synchImapFolders(String username, String accountId, Folder parentFolder, javax.mail.Folder[] folders) throws Exception {
+     List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
+     List<String> serverFolderId = new ArrayList<String>();
+     String folderId, folderName;
+@@ -1056,9 +1074,11 @@
+     }
+   }
+   
+-  private void getSynchnizeImapServer(String username, String accountId, String folderId, boolean synchFolders) throws Exception {
++  private synchronized void getSynchnizeImapServer(String username, String accountId, String folderId, boolean synchFolders) throws Exception {
+     CheckingInfo info = new CheckingInfo();
+     String key = username + ":" + accountId;
++    if(checkingLog_ == null)
++      checkingLog_ = new HashMap<String, CheckingInfo>();
+     checkingLog_.put(key, info);
+     
+     Account account = getAccountById(username, accountId);
+@@ -1123,7 +1143,7 @@
+     }
+   }
+   
+-  private void synchImapMessage(String username, String accountId, javax.mail.Folder folder, String key) throws Exception {
++  private synchronized void synchImapMessage(String username, String accountId, javax.mail.Folder folder, String key) throws Exception {
+     Account account = getAccountById(username, accountId) ;
+     boolean saved = false ;
+     int totalNew = -1;
+@@ -1132,6 +1152,7 @@
+     if (folder == null) return;
+     try {
+       folder.open(javax.mail.Folder.READ_WRITE);
++      if(checkingLog_ == null) checkingLog_ = new HashMap<String, CheckingInfo>();
+       logger.debug(" #### Getting mails from folder " + folder.getName() + " !");
+       checkingLog_.get(key).setSyncFolderStatus(CheckingInfo.FINISHED_SYNC_FOLDER);
+       checkingLog_.get(key).setStatusMsg("Getting mails from folder " + folder.getName() + " !");
+@@ -1242,7 +1263,7 @@
+       logger.debug("#### Synchronization finished for " + folder.getName() + " folder.");
+ 
+     } catch (Exception e) {
+-      logger.error("Error while checking emails from folder" + folder.getName() + " of username " + username + " on account " + accountId, e);
++      logger.error("Error while checking emails from folder " + folder.getName() + " of username " + username + " on account " + accountId, e);
+     }
+   }
+   
+@@ -1297,9 +1318,11 @@
+   }
+   
+   //TODO: refactor code for checking mail from POP3 server.
+-  public List<Message> checkPop3Server(String username, String accountId) throws Exception {
++  public synchronized List<Message> checkPop3Server(String username, String accountId) throws Exception {
+     Account account = getAccountById(username, accountId);
+     List<Message> messageList = new ArrayList<Message>();
++    if(checkingLog_ == null)
++      checkingLog_ = new HashMap<String, CheckingInfo>();
+     if(account != null) {
+       CheckingInfo info = new CheckingInfo();
+       String key = username + ":" + accountId;
+Index: eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java
+===================================================================
+--- eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(revision 65576)
++++ eXoApplication/mail/service/src/main/java/org/exoplatform/mail/service/impl/JCRDataStorage.java	(working copy)
+@@ -1589,7 +1589,7 @@
+     return folders;
+   }
+ 
+-  public void saveFolder(String username, String accountId, Folder folder) throws Exception {
++  public synchronized void saveFolder(String username, String accountId, Folder folder) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+       sProvider = createSessionProvider();
+@@ -1654,7 +1654,7 @@
+     return isExist;
+   }
+ 
+-  public void saveFolder(String username, String accountId, String parentId, Folder folder) throws Exception {
++  public synchronized void saveFolder(String username, String accountId, String parentId, Folder folder) throws Exception {
+     SessionProvider sProvider = null;
+     try {
+       sProvider = createSessionProvider();
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIFolderContainer.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIFolderContainer.java	(revision 65576)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIFolderContainer.java	(working copy)
+@@ -314,12 +314,16 @@
+       boolean containPreview = false ;
+       Message msgPre = uiMsgPreview.getMessage() ;
+       String trashFolderId = Utils.generateFID(accountId, Utils.FD_TRASH, false) ;     		 
+-
+-      mailSrv.moveMessages(username, accountId, msgList, folderId, trashFolderId, false) ;
+-
++      List<Message> successes = new ArrayList<Message>();
++      successes = mailSrv.moveMessages(username, accountId, msgList, folderId, trashFolderId, false) ;
+       for (Message msg : msgList) {
+         if (msgPre != null && msg.getId().equals(msgPre.getId())) containPreview = true ;
+       }  
++      if(successes == null || (successes.size() > 0 && successes.size() < msgList.size()) || successes.size() == 0){
++        UIApplication uiApp = uiFolderContainer.getAncestorOfType(UIApplication.class) ;
++        uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
++      }
+       uiMsgList.updateList() ;
+       if (containPreview) uiMsgPreview.setMessage(null);
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageList.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageList.java	(revision 65576)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessageList.java	(working copy)
+@@ -1158,12 +1158,15 @@
+       }
+       String trashFolderId = Utils.generateFID(accountId, Utils.FD_TRASH, false) ;
+       String selectedFolderId = uiMessageList.getSelectedFolderId() ;
++      Message msgTem = null;
++      List<Message> successList = new ArrayList<Message>();
+       try {
+         if (selectedFolderId != null && selectedFolderId.equals(trashFolderId)) { 
+           mailSrv.removeMessages(username, accountId, appliedMsgList, true);
+         } else {
+           for (Message message : appliedMsgList)
+-            mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], trashFolderId);
++            msgTem = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], trashFolderId);
++          if(msgTem == null) successList.add(null);
+         }
+       } catch (PathNotFoundException e) {
+         uiMessageList.setMessagePageList(null) ;
+@@ -1174,6 +1177,11 @@
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+         return ;
+       }
++      if(successList.size() > 0){
++        UIApplication uiInfoApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
++        uiInfoApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiInfoApp.getUIPopupMessages()) ;
++      }
+       if (msgPreview != null && appliedMsgList.contains(msgPreview)) uiMessagePreview.setMessage(null);
+       uiMessageList.updateList();
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
+@@ -1189,6 +1197,7 @@
+       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
+       String username = MailUtils.getCurrentUser();
+       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
++      List<Message> successList = new ArrayList<Message>();
+       if(Utils.isEmptyField(accountId)) {
+         UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+@@ -1221,11 +1230,16 @@
+         return; 
+       }
+       for(Message message: checkedMessageList) {
+-        mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.generateFID(accountId, Utils.FD_SPAM, false));
++        Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.generateFID(accountId, Utils.FD_SPAM, false));
++        if(m==null) successList.add(null);
+         spamFilter.reportSpam(message);
+       }       
+       mailSrv.saveSpamFilter(username, accountId, spamFilter);
+-
++      if(successList.size() > 0){
++        UIApplication uiInfoApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
++        uiInfoApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiInfoApp.getUIPopupMessages()) ;
++      }
+       uiMessageList.updateList(); 
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));  
+@@ -1240,6 +1254,7 @@
+       String username = MailUtils.getCurrentUser();
+       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
++      List<Message> successList = new ArrayList<Message>();
+       if(Utils.isEmptyField(accountId)) {
+         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+@@ -1272,12 +1287,17 @@
+       }
+ 
+       for(Message message: checkedMessageList) {
+-        mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.generateFID(accountId, Utils.FD_INBOX, false));
++        Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], Utils.generateFID(accountId, Utils.FD_INBOX, false));
++        if(m == null) successList.add(null);
+         spamFilter.notSpam(message);
+       }       
+       mailSrv.saveSpamFilter(username, accountId, spamFilter);
+-
+-      uiMessageList.updateList(); 
++      if(successList.size() > 0){
++        UIApplication uiInfoApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
++        uiInfoApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiInfoApp.getUIPopupMessages()) ;
++      }
++      uiMessageList.updateList();
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));  
+     }
+@@ -1524,13 +1544,21 @@
+       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+       List<Message> appliedMsgList = uiMessageList.getCheckedMessage();
+       String fromFolderId = uiFolderContainer.getSelectedFolder() ;
++      List<Message> successes = new ArrayList<Message>();
+       if (fromFolderId != null) {
+-        mailSrv.moveMessages(username, accountId, appliedMsgList, fromFolderId, folderId) ;
++        successes = mailSrv.moveMessages(username, accountId, appliedMsgList, fromFolderId, folderId) ;
+       } else {
+         for (Message message : appliedMsgList) {
+-          mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], folderId);
++          Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], folderId);
++          if(m == null) successes.add(null);
+         }
+-      }       
++      }    
++      
++      if(successes == null || (successes.size()>0 && successes.size() < appliedMsgList.size()) || successes.contains(null) || successes.size() == 0){
++        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
++        uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
++      }
+       uiMessageList.updateList();     
+       Message msgPreview = uiMsgPreview.getMessage();
+       if (msgPreview != null && appliedMsgList.contains(msgPreview)) uiMsgPreview.setMessage(null);
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIMoveMessageForm.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIMoveMessageForm.java	(revision 65576)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIMoveMessageForm.java	(working copy)
+@@ -90,6 +90,7 @@
+       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+       String destFolderId = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
+       Folder destFolder =  null ;
++      List<Message> successes = new ArrayList<Message>();
+       try {
+         destFolder =  mailSrv.getFolder(username, accountId, destFolderId);
+       } catch (PathNotFoundException e) { }
+@@ -104,12 +105,19 @@
+       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
+       String fromFolderId = uiFolderContainer.getSelectedFolder() ;
+       if (fromFolderId != null) {
+-        mailSrv.moveMessages(username, accountId, uiMoveMessageForm.getMessageList(), fromFolderId, destFolderId) ;
++        successes = mailSrv.moveMessages(username, accountId, uiMoveMessageForm.getMessageList(), fromFolderId, destFolderId) ;
+       } else {
+         for (Message message : uiMoveMessageForm.getMessageList()) {
+-          mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], destFolderId);
++          Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], destFolderId);
++          if(m == null) successes.add(null);
+         }
+       }
++      if(successes == null || (successes.size() > 0 && successes.size() < uiMoveMessageForm.getMessageList().size()) ||
++          successes.contains(null) || successes.size() == 0){
++        UIApplication uiApp = uiMoveMessageForm.getAncestorOfType(UIApplication.class) ;
++        uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
++      }
+       uiMessageList.updateList(); 
+       Message msgPreview = uiMsgPreview.getMessage();
+       if (msgPreview != null && appliedMsgList.contains(msgPreview)) uiMsgPreview.setMessage(null);
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIEnterPasswordDialog.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIEnterPasswordDialog.java	(revision 65576)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIEnterPasswordDialog.java	(working copy)
+@@ -136,7 +136,12 @@
+       }
+       
+       try {
+-        composeForm.saveToSentFolder(username, accountId, uiForm.getSendMessage());
++        
++        if(!composeForm.saveToSentFolder(username, acc, uiForm.getSendMessage())){
++          uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.create-massage-not-successful",
++                                                  null, ApplicationMessage.INFO)) ;
++          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
++        }
+         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+         uiMessageList.updateList();
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIComposeForm.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIComposeForm.java	(revision 65576)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/popup/UIComposeForm.java	(working copy)
+@@ -17,6 +17,7 @@
+ package org.exoplatform.mail.webui.popup;
+ 
+ import java.io.ByteArrayInputStream;
++
+ import java.io.ByteArrayOutputStream;
+ import java.util.ArrayList;
+ import java.util.Date;
+@@ -75,84 +76,110 @@
+ 
+ import com.sun.mail.smtp.SMTPSendFailedException;
+ 
+-
+ /**
+- * Created by The eXo Platform SARL
+- * Author : Hung Nguyen <hung.nguyen@exoplatform.com>
+- *          Phung Nam <phunghainam@gmail.com>
+- * Aus 01, 2007 2:48:18 PM 
++ * Created by The eXo Platform SARL Author : Hung Nguyen
++ * <hung.nguyen@exoplatform.com> Phung Nam <phunghainam@gmail.com> Aus 01, 2007
++ * 2:48:18 PM
+  */
+-@ComponentConfig(
+-                 lifecycle = UIFormLifecycle.class,
+-                 template = "app:/templates/mail/webui/popup/UIComposeForm.gtmpl",
+-                 events = {
+-                   @EventConfig(listeners = UIComposeForm.SendActionListener.class),      
+-                   @EventConfig(listeners = UIComposeForm.SaveDraftActionListener.class),
+-                   @EventConfig(phase = Phase.DECODE, listeners = UIComposeForm.DiscardChangeActionListener.class),
+-                   @EventConfig(listeners = UIComposeForm.AttachmentActionListener.class),
+-                   @EventConfig(listeners = UIComposeForm.DownloadActionListener.class),
+-                   @EventConfig(listeners = UIComposeForm.RemoveAttachmentActionListener.class),
+-                   @EventConfig(listeners = UIComposeForm.ToActionListener.class),
+-                   @EventConfig(listeners = UIComposeForm.ToCCActionListener.class),
+-                   @EventConfig(listeners = UIComposeForm.ToBCCActionListener.class),
+-                   @EventConfig(listeners = UIComposeForm.ChangePriorityActionListener.class),
+-                   @EventConfig(listeners = UIComposeForm.UseVisualEdiorActionListener.class),
+-                   @EventConfig(listeners = UIComposeForm.ShowCcActionListener.class),
+-                   @EventConfig(listeners = UIComposeForm.ShowBccActionListener.class), 
+-                   @EventConfig(listeners = UIComposeForm.ReturnReceiptActionListener.class)
+-                 }
+-)
++@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "app:/templates/mail/webui/popup/UIComposeForm.gtmpl", events = {
++    @EventConfig(listeners = UIComposeForm.SendActionListener.class),
++    @EventConfig(listeners = UIComposeForm.SaveDraftActionListener.class),
++    @EventConfig(phase = Phase.DECODE, listeners = UIComposeForm.DiscardChangeActionListener.class),
++    @EventConfig(listeners = UIComposeForm.AttachmentActionListener.class),
++    @EventConfig(listeners = UIComposeForm.DownloadActionListener.class),
++    @EventConfig(listeners = UIComposeForm.RemoveAttachmentActionListener.class),
++    @EventConfig(listeners = UIComposeForm.ToActionListener.class),
++    @EventConfig(listeners = UIComposeForm.ToCCActionListener.class),
++    @EventConfig(listeners = UIComposeForm.ToBCCActionListener.class),
++    @EventConfig(listeners = UIComposeForm.ChangePriorityActionListener.class),
++    @EventConfig(listeners = UIComposeForm.UseVisualEdiorActionListener.class),
++    @EventConfig(listeners = UIComposeForm.ShowCcActionListener.class),
++    @EventConfig(listeners = UIComposeForm.ShowBccActionListener.class),
++    @EventConfig(listeners = UIComposeForm.ReturnReceiptActionListener.class) })
+ public class UIComposeForm extends UIForm implements UIPopupComponent {
+-  final static public String FIELD_TO_SET = "toSet".intern() ;
+-  final static public String FIELD_FROM = "from" ;
+-  final static public String FIELD_SUBJECT = "subject" ;
+-  final static public String FIELD_TO = "to" ;
+-  final static public String FIELD_CC = "cc" ;
+-  final static public String FIELD_BCC = "bcc" ;
+-  final static public String FIELD_ATTACHMENTS = "attachments" ;
+-  final static public String FIELD_MESSAGECONTENT = "messageContent" ;
+-  final static public String ACT_TO = "To" ;
+-  final static public String ACT_CC = "ToCC" ;
+-  final static public String ACT_BCC = "ToBCC" ;
+-  final static public String ACT_REMOVE = "remove" ;
+-  final static public int MESSAGE_NEW = 0;
+-  final public int MESSAGE_IN_DRAFT = 1;
+-  final public int MESSAGE_REPLY = 2;
+-  final public int MESSAGE_REPLY_ALL = 3;
+-  final public int MESSAGE_FOWARD = 4;
+-  private List<Attachment> attachments_ = new ArrayList<Attachment>() ;
+-  private Message message_ = null;
+-  private long priority_ = Utils.PRIORITY_NORMAL;
+-  private Boolean isVisualEditor = true;
+-  private Boolean isReturnReceipt = false ;
+-  private int composeType_ = MESSAGE_NEW;
+-  private String accountId_ ;
+-  public String parentPath_ ;
++  final static public String FIELD_TO_SET         = "toSet".intern();
+ 
+-  public List<ContactData> toContacts = new ArrayList<ContactData>();
+-  public List<ContactData> ccContacts = new ArrayList<ContactData>();
+-  public List<ContactData> bccContacts = new ArrayList<ContactData>();
++  final static public String FIELD_FROM           = "from";
+ 
+-  public boolean isVisualEditor() { return isVisualEditor; }
+-  public void setVisualEditor(boolean b) { isVisualEditor = b; }
++  final static public String FIELD_SUBJECT        = "subject";
+ 
+-  public UIComposeForm() throws Exception { }
++  final static public String FIELD_TO             = "to";
+ 
++  final static public String FIELD_CC             = "cc";
++
++  final static public String FIELD_BCC            = "bcc";
++
++  final static public String FIELD_ATTACHMENTS    = "attachments";
++
++  final static public String FIELD_MESSAGECONTENT = "messageContent";
++
++  final static public String ACT_TO               = "To";
++
++  final static public String ACT_CC               = "ToCC";
++
++  final static public String ACT_BCC              = "ToBCC";
++
++  final static public String ACT_REMOVE           = "remove";
++
++  final static public int    MESSAGE_NEW          = 0;
++
++  final public int           MESSAGE_IN_DRAFT     = 1;
++
++  final public int           MESSAGE_REPLY        = 2;
++
++  final public int           MESSAGE_REPLY_ALL    = 3;
++
++  final public int           MESSAGE_FOWARD       = 4;
++
++  private List<Attachment>   attachments_         = new ArrayList<Attachment>();
++
++  private Message            message_             = null;
++
++  private long               priority_            = Utils.PRIORITY_NORMAL;
++
++  private Boolean            isVisualEditor       = true;
++
++  private Boolean            isReturnReceipt      = false;
++
++  private int                composeType_         = MESSAGE_NEW;
++
++  private String             accountId_;
++
++  public String              parentPath_;
++
++  public List<ContactData>   toContacts           = new ArrayList<ContactData>();
++
++  public List<ContactData>   ccContacts           = new ArrayList<ContactData>();
++
++  public List<ContactData>   bccContacts          = new ArrayList<ContactData>();
++
++  public boolean isVisualEditor() {
++    return isVisualEditor;
++  }
++
++  public void setVisualEditor(boolean b) {
++    isVisualEditor = b;
++  }
++
++  public UIComposeForm() throws Exception {
++  }
++
+   @SuppressWarnings("deprecation")
+   public void init(String accountId, Message msg, int composeType) throws Exception {
+-    List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
++    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
+     String username = MailUtils.getCurrentUser();
+-    accountId_ = accountId ;
++    accountId_ = accountId;
+     MailService mailSrv = getApplicationComponent(MailService.class);
+-    
++
+     // img
+     if (msg != null && msg.getAttachments() != null) {
+       try {
+         List<String> imgLinks = new ArrayList<String>();
+         for (Attachment attach : msg.getAttachments()) {
+-          String attLink = MailUtils.getImageSource(attach, getDownloadService()) ;
+-          if (attLink != null && attach.getMimeType().toLowerCase().indexOf("image") > -1 && attach.isShownInBody()) {
+-            attLink = "/"+ getPortalName()+"/rest/jcr/" + getRepository() + attach.getPath() ;
++          String attLink = MailUtils.getImageSource(attach, getDownloadService());
++          if (attLink != null && attach.getMimeType().toLowerCase().indexOf("image") > -1
++              && attach.isShownInBody()) {
++            attLink = "/" + getPortalName() + "/rest/jcr/" + getRepository() + attach.getPath();
+             imgLinks.add(attLink);
+           }
+         }
+@@ -161,7 +188,7 @@
+         List<String> newBody = new ArrayList<String>();
+         for (String img : imgs) {
+           try {
+-            int indexSrc = img.indexOf("src") ;
++            int indexSrc = img.indexOf("src");
+             if (indexSrc == -1) {
+               newBody.add(img);
+               continue;
+@@ -180,105 +207,132 @@
+           } catch (Exception ex) {
+             ex.printStackTrace();
+           }
+-        }      
++        }
+         StringBuilder builder = new StringBuilder();
+-        for (String img : newBody) builder.append(img);
+-        msg.setMessageBody(builder.toString());  
++        for (String img : newBody)
++          builder.append(img);
++        msg.setMessageBody(builder.toString());
+       } catch (Exception e) {
+         e.printStackTrace();
+-      }      
++      }
+     }
+-    for(Account acc : mailSrv.getAccounts(username)) {
+-      SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
+-      if (acc.getId().equals(accountId)) { itemOption.setSelected(true); }
+-      options.add(itemOption) ;
++    for (Account acc : mailSrv.getAccounts(username)) {
++      SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName()
++          + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
++      if (acc.getId().equals(accountId)) {
++        itemOption.setSelected(true);
++      }
++      options.add(itemOption);
+     }
+ 
+     UIComposeInput toSet = new UIComposeInput(FIELD_TO_SET);
+-    toSet.addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options)) ;
+-    toSet.addUIFormInput(new UIFormStringInput(FIELD_TO, null, null)) ;
++    toSet.addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options));
++    toSet.addUIFormInput(new UIFormStringInput(FIELD_TO, null, null));
+ 
+-    UIFormTextAreaInput textAreaCC= new UIFormTextAreaInput(FIELD_CC, FIELD_CC, null);
++    UIFormTextAreaInput textAreaCC = new UIFormTextAreaInput(FIELD_CC, FIELD_CC, null);
+     textAreaCC.setId(FIELD_CC);
+     textAreaCC.setColumns(2);
+-    toSet.addUIFormInput(textAreaCC) ;
++    toSet.addUIFormInput(textAreaCC);
+ 
+     UIFormTextAreaInput textAreaBCC = new UIFormTextAreaInput(FIELD_BCC, FIELD_BCC, null);
+     textAreaBCC.setColumns(2);
+     textAreaBCC.setId(FIELD_BCC);
+-    toSet.addUIFormInput(textAreaBCC) ;
+-    toSet.addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, FIELD_SUBJECT, null)) ;
++    toSet.addUIFormInput(textAreaBCC);
++    toSet.addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, FIELD_SUBJECT, null));
+ 
+-    toSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
+-    toSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
++    toSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null));
++    toSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList());
+ 
+-    addUIFormInput(toSet) ;
++    addUIFormInput(toSet);
+ 
+     MailSetting mailSetting = mailSrv.getMailSetting(username);
+-    isVisualEditor = mailSetting.useWysiwyg() ;
++    isVisualEditor = mailSetting.useWysiwyg();
+     if (isVisualEditor) {
+-      addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, FIELD_MESSAGECONTENT, null, true));    
++      addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, FIELD_MESSAGECONTENT, null, true));
+     } else {
+-      addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, FIELD_MESSAGECONTENT, null)) ;
+-    }  
++      addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, FIELD_MESSAGECONTENT, null));
++    }
+     setPriority(Utils.PRIORITY_NORMAL);
+     setMessage(msg, composeType);
+   }
+ 
+-  public DownloadService getDownloadService() { 
+-    return getApplicationComponent(DownloadService.class) ; 
++  public DownloadService getDownloadService() {
++    return getApplicationComponent(DownloadService.class);
+   }
++
+   public String getPortalName() {
+-    PortalContainer pcontainer =  PortalContainer.getInstance() ;
+-    return pcontainer.getPortalContainerInfo().getContainerName() ;  
++    PortalContainer pcontainer = PortalContainer.getInstance();
++    return pcontainer.getPortalContainerInfo().getContainerName();
+   }
++
+   public String getRepository() throws Exception {
+-    RepositoryService rService = getApplicationComponent(RepositoryService.class) ;    
+-    return rService.getCurrentRepository().getConfiguration().getName() ;
++    RepositoryService rService = getApplicationComponent(RepositoryService.class);
++    return rService.getCurrentRepository().getConfiguration().getName();
+   }
+-  
+-  public List<ContactData> getToContacts() { return toContacts; }
+-  public void setToContacts(List<ContactData> contactList) { toContacts = contactList; }
+ 
+-  public List<ContactData> getCcContacts() { return ccContacts; }
+-  public void setCcContacts(List<ContactData> contactList) { ccContacts = contactList; }
++  public List<ContactData> getToContacts() {
++    return toContacts;
++  }
+ 
+-  public List<ContactData> getBccContacts() { return bccContacts; }
+-  public void setBccContacts(List<ContactData> contactList) { bccContacts = contactList; }
++  public void setToContacts(List<ContactData> contactList) {
++    toContacts = contactList;
++  }
+ 
+-  public int getComposeType() { return composeType_ ; }
+-  public void setComposeType(int t) { composeType_ = t; }
++  public List<ContactData> getCcContacts() {
++    return ccContacts;
++  }
+ 
+-  public List<ActionData> getUploadFileList() throws Exception { 
+-    List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
+-    for(Attachment attachdata : attachments_) {
++  public void setCcContacts(List<ContactData> contactList) {
++    ccContacts = contactList;
++  }
++
++  public List<ContactData> getBccContacts() {
++    return bccContacts;
++  }
++
++  public void setBccContacts(List<ContactData> contactList) {
++    bccContacts = contactList;
++  }
++
++  public int getComposeType() {
++    return composeType_;
++  }
++
++  public void setComposeType(int t) {
++    composeType_ = t;
++  }
++
++  public List<ActionData> getUploadFileList() throws Exception {
++    List<ActionData> uploadedFiles = new ArrayList<ActionData>();
++    for (Attachment attachdata : attachments_) {
+       if (!attachdata.isShownInBody()) {
+-        ActionData fileUpload = new ActionData() ;
+-        fileUpload.setActionListener("Download") ;
++        ActionData fileUpload = new ActionData();
++        fileUpload.setActionListener("Download");
+         fileUpload.setActionParameter(attachdata.getId());
+-        fileUpload.setActionType(ActionData.TYPE_ICON) ;
++        fileUpload.setActionType(ActionData.TYPE_ICON);
+         fileUpload.setCssIconClass("AttachmentIcon");
+-        fileUpload.setActionName(attachdata.getName() + " (" + MailUtils.convertSize(attachdata.getSize()) + ")" ) ;
++        fileUpload.setActionName(attachdata.getName() + " ("
++            + MailUtils.convertSize(attachdata.getSize()) + ")");
+         fileUpload.setShowLabel(true);
+         uploadedFiles.add(fileUpload);
+-        ActionData removeAction = new ActionData() ;
+-        removeAction.setActionListener("RemoveAttachment") ;
++        ActionData removeAction = new ActionData();
++        removeAction.setActionListener("RemoveAttachment");
+         removeAction.setActionName(ACT_REMOVE);
+         removeAction.setActionParameter(attachdata.getId());
+         removeAction.setCssIconClass("LabelLink");
+-        removeAction.setActionType(ActionData.TYPE_LINK) ;
++        removeAction.setActionType(ActionData.TYPE_LINK);
+         removeAction.setBreakLine(true);
+-        uploadedFiles.add(removeAction) ;        
++        uploadedFiles.add(removeAction);
+       }
+     }
+-    return uploadedFiles ;
++    return uploadedFiles;
+   }
+ 
+   @SuppressWarnings("unchecked")
+   public List<String> getCheckedAttach() throws Exception {
+     List<String> checkedAttach = new ArrayList<String>();
+     for (Attachment att : attachments_) {
+-      UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
++      UIComposeInput inputSet = getChildById(FIELD_TO_SET);
+       UIFormCheckBoxInput uiCheckbox = inputSet.getChildById(att.getId());
+       if (uiCheckbox != null && uiCheckbox.isChecked()) {
+         checkedAttach.add(att.getId());
+@@ -288,85 +342,94 @@
+   }
+ 
+   public void refreshUploadFileList() throws Exception {
+-    UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
+-    inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
++    UIComposeInput inputSet = getChildById(FIELD_TO_SET);
++    inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList());
+   }
+ 
+   public void addToUploadFileList(Attachment attachfile) {
+-    attachments_.add(attachfile) ;
+-    UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
++    attachments_.add(attachfile);
++    UIComposeInput inputSet = getChildById(FIELD_TO_SET);
+     inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(attachfile.getId(), null, null).setChecked(true));
+   }
+ 
+   public void removeFromUploadFileList(Attachment attachfile) {
+-    UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
++    UIComposeInput inputSet = getChildById(FIELD_TO_SET);
+     inputSet.removeChildById(attachfile.getId());
+     attachments_.remove(attachfile);
+-  }  
++  }
+ 
+   public void removeUploadFileList() {
+-    UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
++    UIComposeInput inputSet = getChildById(FIELD_TO_SET);
+     for (Attachment att : attachments_) {
+       inputSet.removeChildById(att.getId());
+     }
+-    attachments_.clear() ;
++    attachments_.clear();
+   }
+ 
+   public List<Attachment> getAttachFileList() {
+-    return attachments_ ;
++    return attachments_;
+   }
+ 
+-  public Message getMessage() { return message_; }
+-  public void setMessage(Message message , int composeType) throws Exception { 
+-    setComposeType(composeType) ;
+-    this.message_ = message; 
++  public Message getMessage() {
++    return message_;
++  }
++
++  public void setMessage(Message message, int composeType) throws Exception {
++    setComposeType(composeType);
++    this.message_ = message;
+     fillFields(message_);
+   }
+ 
+   public void fillFields(Message msg) throws Exception {
+     if (msg == null) {
+-      setFieldContentValue("") ;
+-      return ;
++      setFieldContentValue("");
++      return;
+     }
+     MailService mailSrv = MailUtils.getMailService();
+     MailSetting mailSetting = mailSrv.getMailSetting(MailUtils.getCurrentUser());
+-    UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
++    UIComposeInput inputSet = getChildById(FIELD_TO_SET);
+     String subject = "";
+     String replyContent = "";
+     String originalAttId = "";
+     switch (getComposeType()) {
+-    case MESSAGE_IN_DRAFT :
++    case MESSAGE_IN_DRAFT:
+       setFieldSubjectValue(msg.getSubject());
+       setFieldToValue(msg.getMessageTo());
+-      setFieldCcValue(msg.getMessageCc()) ;
+-      setFieldBccValue(msg.getMessageBcc()) ;      
++      setFieldCcValue(msg.getMessageCc());
++      setFieldBccValue(msg.getMessageBcc());
+       setFieldContentValue(formatContent(msg));
+       isReturnReceipt = msg.isReturnReceipt();
+       setPriority(msg.getPriority());
+       if (msg != null && msg.hasAttachment()) {
+         for (Attachment att : msg.getAttachments()) {
+-          if (att.isLoadedProperly()) attachments_.add(att);
++          if (att.isLoadedProperly())
++            attachments_.add(att);
+         }
+         if (attachments_.size() > 0) {
+           for (ActionData actionData : getUploadFileList()) {
+-            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null).setChecked(true));
++            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
++                                                                     null,
++                                                                     null).setChecked(true));
+           }
+           refreshUploadFileList();
+         }
+       }
+       break;
+-    case MESSAGE_REPLY :
+-      setFieldToValue(msg.getReplyTo()==null? msg.getFrom():msg.getReplyTo());
++    case MESSAGE_REPLY:
++      setFieldToValue(msg.getReplyTo() == null ? msg.getFrom() : msg.getReplyTo());
+       subject = msg.getSubject();
+-      if (!subject.toLowerCase().startsWith("re:")) subject = "Re: " + subject ;
++      if (!subject.toLowerCase().startsWith("re:"))
++        subject = "Re: " + subject;
+       setFieldSubjectValue(subject);
+       setPriority(msg.getPriority());
+       if (msg != null && msg.hasAttachment()) {
+         for (Attachment att : msg.getAttachments()) {
+-          if (att.isLoadedProperly()) attachments_.add(att);
++          if (att.isLoadedProperly())
++            attachments_.add(att);
+         }
+       }
+-      if (mailSetting.replyWithAttach()) originalAttId = addOriginalMessageAsAttach(msg);
++      if (mailSetting.replyWithAttach())
++        originalAttId = addOriginalMessageAsAttach(msg);
+       else {
+         replyContent = getReplyContent(msg);
+       }
+@@ -375,45 +438,55 @@
+       if (attachments_.size() > 0) {
+         for (ActionData actionData : getUploadFileList()) {
+           if (actionData.getActionParameter().equals(originalAttId))
+-            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null).setChecked(true));
+-          else 
+-            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null));
++            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
++                                                                     null,
++                                                                     null).setChecked(true));
++          else
++            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
++                                                                     null,
++                                                                     null));
+         }
+         refreshUploadFileList();
+       }
+-      break ;
+-    case MESSAGE_REPLY_ALL :
++      break;
++    case MESSAGE_REPLY_ALL:
+       subject = msg.getSubject();
+-      if (!subject.toLowerCase().startsWith("re:")) subject = "Re: " + subject ;
++      if (!subject.toLowerCase().startsWith("re:"))
++        subject = "Re: " + subject;
+       setFieldSubjectValue(subject);
+-      String replyTo = msg.getReplyTo()==null? msg.getFrom():msg.getReplyTo();
++      String replyTo = msg.getReplyTo() == null ? msg.getFrom() : msg.getReplyTo();
+       setFieldToValue(replyTo);
+       setPriority(msg.getPriority());
+-      
++
+       String replyCc = "";
+ 
+-      String msgTo = (msg.getMessageTo() != null) ? msg.getMessageTo() : "" ;
+-      InternetAddress[] msgToAdds = Utils.getInternetAddress(msgTo) ;
++      String msgTo = (msg.getMessageTo() != null) ? msg.getMessageTo() : "";
++      InternetAddress[] msgToAdds = Utils.getInternetAddress(msgTo);
+ 
+-      MailService mailSvr = this.getApplicationComponent(MailService.class) ;
++      MailService mailSvr = this.getApplicationComponent(MailService.class);
+       Account account = mailSvr.getAccountById(MailUtils.getCurrentUser(), accountId_);
+-      for (int i = 0 ; i < msgToAdds.length; i++) {
+-        if (msgToAdds[i] != null && !msgToAdds[i].getAddress().equalsIgnoreCase(account.getEmailAddress()) &&
+-            !msgToAdds[i].getAddress().equalsIgnoreCase(account.getIncomingUser()) && !msgToAdds[i].getAddress().equalsIgnoreCase(replyTo)) {
+-          if (replyCc.trim().length() > 0) replyCc += ", ";
++      for (int i = 0; i < msgToAdds.length; i++) {
++        if (msgToAdds[i] != null
++            && !msgToAdds[i].getAddress().equalsIgnoreCase(account.getEmailAddress())
++            && !msgToAdds[i].getAddress().equalsIgnoreCase(account.getIncomingUser())
++            && !msgToAdds[i].getAddress().equalsIgnoreCase(replyTo)) {
++          if (replyCc.trim().length() > 0)
++            replyCc += ", ";
+           replyCc += msgToAdds[i].toString();
+         }
+-      }          
++      }
+ 
+-      String msgCc = (msg.getMessageCc() != null) ? msg.getMessageCc() : "" ;
+-      InternetAddress[] msgCcAdds = Utils.getInternetAddress(msgCc) ;
+-      for (int i = 0 ; i < msgCcAdds.length; i++) {
+-        if (msgCcAdds[i] != null && !msgCcAdds[i].getAddress().equalsIgnoreCase(account.getEmailAddress()) &&
+-            !msgCcAdds[i].getAddress().equalsIgnoreCase(account.getIncomingUser())) {
+-          if (replyCc.trim().length() > 0) replyCc += ", ";
++      String msgCc = (msg.getMessageCc() != null) ? msg.getMessageCc() : "";
++      InternetAddress[] msgCcAdds = Utils.getInternetAddress(msgCc);
++      for (int i = 0; i < msgCcAdds.length; i++) {
++        if (msgCcAdds[i] != null
++            && !msgCcAdds[i].getAddress().equalsIgnoreCase(account.getEmailAddress())
++            && !msgCcAdds[i].getAddress().equalsIgnoreCase(account.getIncomingUser())) {
++          if (replyCc.trim().length() > 0)
++            replyCc += ", ";
+           replyCc += msgCcAdds[i].toString();
+         }
+-      }          
++      }
+ 
+       if (replyCc.trim().length() > 0) {
+         setFieldCcValue(replyCc);
+@@ -422,10 +495,12 @@
+ 
+       if (msg != null && msg.hasAttachment()) {
+         for (Attachment att : msg.getAttachments()) {
+-          if (att.isLoadedProperly())  attachments_.add(att);
++          if (att.isLoadedProperly())
++            attachments_.add(att);
+         }
+       }
+-      if (mailSetting.replyWithAttach()) originalAttId = addOriginalMessageAsAttach(msg);
++      if (mailSetting.replyWithAttach())
++        originalAttId = addOriginalMessageAsAttach(msg);
+       else {
+         replyContent = getReplyContent(msg);
+       }
+@@ -434,96 +509,126 @@
+       if (attachments_.size() > 0) {
+         for (ActionData actionData : getUploadFileList()) {
+           if (actionData.getActionParameter().equals(originalAttId))
+-            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null).setChecked(true));
+-          else 
+-            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null));
++            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
++                                                                     null,
++                                                                     null).setChecked(true));
++          else
++            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
++                                                                     null,
++                                                                     null));
+         }
+         refreshUploadFileList();
+       }
+       break;
+-    case MESSAGE_FOWARD : 
+-      String toAddress = msg.getMessageTo() != null ? msg.getMessageTo() : "" ;
++    case MESSAGE_FOWARD:
++      String toAddress = msg.getMessageTo() != null ? msg.getMessageTo() : "";
+       subject = msg.getSubject();
+-      if (!subject.toLowerCase().startsWith("fwd:")) subject = "Fwd: " + subject ;
++      if (!subject.toLowerCase().startsWith("fwd:"))
++        subject = "Fwd: " + subject;
+       setFieldSubjectValue(subject);
+       setPriority(msg.getPriority());
+-      
++
+       setFieldToValue("");
+       if (msg != null && msg.hasAttachment()) {
+         for (Attachment att : msg.getAttachments()) {
+-          if (att.isLoadedProperly()) attachments_.add(att);
++          if (att.isLoadedProperly())
++            attachments_.add(att);
+         }
+       }
+ 
+-      StringBuffer forwardTxt = new StringBuffer("");;
++      StringBuffer forwardTxt = new StringBuffer("");
++      ;
+       if (!mailSetting.forwardWithAtt()) {
+-        forwardTxt.append("<br><br>-------- Original Message --------<br>") ;
+-        forwardTxt.append("Subject: ").append(MailUtils.encodeHTML(msg.getSubject())).append("<br>") ;
+-        forwardTxt.append("Date: ").append(msg.getSendDate()).append("<br>") ;
+-        forwardTxt.append("From: ") ;
++        forwardTxt.append("<br><br>-------- Original Message --------<br>");
++        forwardTxt.append("Subject: ")
++                  .append(MailUtils.encodeHTML(msg.getSubject()))
++                  .append("<br>");
++        forwardTxt.append("Date: ").append(msg.getSendDate()).append("<br>");
++        forwardTxt.append("From: ");
+ 
+-        InternetAddress[] addresses = Utils.getInternetAddress(msg.getFrom()) ;
+-        for (int i = 0 ; i < addresses.length; i++) {
+-          if (i > 0) forwardTxt.append(", ") ;
+-          if (addresses[i] != null) forwardTxt.append(Utils.getPersonal(addresses[i])).append(" \"").append(addresses[i].getAddress()).append("\"") ;
++        InternetAddress[] addresses = Utils.getInternetAddress(msg.getFrom());
++        for (int i = 0; i < addresses.length; i++) {
++          if (i > 0)
++            forwardTxt.append(", ");
++          if (addresses[i] != null)
++            forwardTxt.append(Utils.getPersonal(addresses[i]))
++                      .append(" \"")
++                      .append(addresses[i].getAddress())
++                      .append("\"");
+         }
+-        forwardTxt.append("<br>To: ") ;
++        forwardTxt.append("<br>To: ");
+ 
+-        InternetAddress[] toAddresses = Utils.getInternetAddress(toAddress) ;
+-        for (int i = 0 ; i < toAddresses.length; i++) {
+-          if (i > 0) forwardTxt.append(", ") ;
+-          if (toAddresses[i] != null) forwardTxt.append(Utils.getPersonal(toAddresses[i])).append(" \"").append(toAddresses[i].getAddress()).append("\"") ;
++        InternetAddress[] toAddresses = Utils.getInternetAddress(toAddress);
++        for (int i = 0; i < toAddresses.length; i++) {
++          if (i > 0)
++            forwardTxt.append(", ");
++          if (toAddresses[i] != null)
++            forwardTxt.append(Utils.getPersonal(toAddresses[i]))
++                      .append(" \"")
++                      .append(toAddresses[i].getAddress())
++                      .append("\"");
+         }
+ 
+-        forwardTxt.append("<br><br>").append(formatContent(msg)) ; 
++        forwardTxt.append("<br><br>").append(formatContent(msg));
+       } else {
+         addOriginalMessageAsAttach(msg);
+       }
+       refreshUploadFileList();
+       for (ActionData actionData : getUploadFileList()) {
+-        inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null).setChecked(true));
++        inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
++                                                                 null,
++                                                                 null).setChecked(true));
+       }
+-      setFieldContentValue(forwardTxt.toString()) ;
+-      break ;
+-    default :
++      setFieldContentValue(forwardTxt.toString());
+       break;
++    default:
++      break;
+     }
+   }
+ 
+   private String getReplyContent(Message msg) throws Exception {
+-    String msgContent = formatContent(msg) ;
+-    String content = msgContent ;
+-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+-    Locale locale = context.getParentAppRequestContext().getLocale() ;
++    String msgContent = formatContent(msg);
++    String content = msgContent;
++    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
++    Locale locale = context.getParentAppRequestContext().getLocale();
+     String from = "";
+     try {
+       from = Utils.getAddresses(msg.getFrom())[0];
+-    } catch(Exception e) {}
++    } catch (Exception e) {
++    }
+     if (isVisualEditor) {
+-      content = "<br><br><div> On " + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + from + " wrote: <br>" ;
+-      content += "<blockquote style=\"border-left:1px #cccccc solid ; margin-left: 10px; padding-left: 5px;\">" + msgContent + "</blockquote></div>" ;
++      content = "<br><br><div> On "
++          + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + from
++          + " wrote: <br>";
++      content += "<blockquote style=\"border-left:1px #cccccc solid ; margin-left: 10px; padding-left: 5px;\">"
++          + msgContent + "</blockquote></div>";
+     } else {
+-      content = "\n\n On " + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + from + " wrote: \n\n" ;
++      content = "\n\n On "
++          + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + from
++          + " wrote: \n\n";
+       content += msgContent;
+     }
+-    return content ;
++    return content;
+   }
+ 
+   private String formatContent(Message msg) throws Exception {
+     String msgContent = msg.getMessageBody();
+-    if (isVisualEditor && (msg.getContentType() != null && msg.getContentType().indexOf("text/plain") > -1)) {
+-      msgContent = MailUtils.encodeHTML(msg.getMessageBody()).replaceAll("\n", "<br />") ;
+-    } 
+-    return msgContent ;
++    if (isVisualEditor
++        && (msg.getContentType() != null && msg.getContentType().indexOf("text/plain") > -1)) {
++      msgContent = MailUtils.encodeHTML(msg.getMessageBody()).replaceAll("\n", "<br />");
++    }
++    return msgContent;
+   }
+ 
+   private String addOriginalMessageAsAttach(Message msg) throws Exception {
+     MailService mailSrv = MailUtils.getMailService();
+     String username = MailUtils.getCurrentUser();
+     BufferAttachment att = new BufferAttachment();
+-    ByteArrayOutputStream outputStream = (ByteArrayOutputStream) mailSrv.exportMessage(username, this.accountId_, msg);
++    ByteArrayOutputStream outputStream = (ByteArrayOutputStream) mailSrv.exportMessage(username,
++                                                                                       this.accountId_,
++                                                                                       msg);
+     ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+-    att.setSize((long)inputStream.available());
++    att.setSize((long) inputStream.available());
+     att.setId("Attachment" + IdGenerator.generate());
+     att.setName(msg.getSubject() + ".eml");
+     att.setInputStream(inputStream);
+@@ -532,58 +637,65 @@
+     return att.getId();
+   }
+ 
+-  public long getPriority() { return priority_; }  
+-  public void setPriority(long priority) { priority_ = priority; }
++  public long getPriority() {
++    return priority_;
++  }
+ 
++  public void setPriority(long priority) {
++    priority_ = priority;
++  }
++
+   public String getFieldFromValue() {
+-    UIComposeInput input = getChildById(FIELD_TO_SET) ;
+-    return input.getUIFormSelectBox(FIELD_FROM).getValue() ;
++    UIComposeInput input = getChildById(FIELD_TO_SET);
++    return input.getUIFormSelectBox(FIELD_FROM).getValue();
+   }
+ 
+   public String getFieldSubjectValue() {
+-    UIComposeInput input = getChildById(FIELD_TO_SET) ;
+-    String subject = input.getUIStringInput(FIELD_SUBJECT).getValue() ;
+-    if (subject == null ) subject = "(no subject)";
+-    return subject ;   
++    UIComposeInput input = getChildById(FIELD_TO_SET);
++    String subject = input.getUIStringInput(FIELD_SUBJECT).getValue();
++    if (subject == null)
++      subject = "(no subject)";
++    return subject;
+   }
+ 
+   public void setFieldSubjectValue(String value) {
+-    UIComposeInput input = getChildById(FIELD_TO_SET) ;
+-    input.getUIStringInput(FIELD_SUBJECT).setValue(value) ;
++    UIComposeInput input = getChildById(FIELD_TO_SET);
++    input.getUIStringInput(FIELD_SUBJECT).setValue(value);
+   }
+ 
+   public String getFieldToValue() {
+-    UIComposeInput input = getChildById(FIELD_TO_SET) ;
+-    return input.getUIStringInput(FIELD_TO).getValue() ;
++    UIComposeInput input = getChildById(FIELD_TO_SET);
++    return input.getUIStringInput(FIELD_TO).getValue();
+   }
+ 
+   public void setFieldToValue(String value) {
+-    UIComposeInput input = getChildById(FIELD_TO_SET) ;
++    UIComposeInput input = getChildById(FIELD_TO_SET);
+     input.getUIStringInput(FIELD_TO).setValue(value);
+   }
+ 
+   public String getFieldCcValue() {
+-    UIComposeInput input = getChildById(FIELD_TO_SET) ;
+-    return input.getUIFormTextAreaInput(FIELD_CC).getValue() ;
++    UIComposeInput input = getChildById(FIELD_TO_SET);
++    return input.getUIFormTextAreaInput(FIELD_CC).getValue();
+   }
+ 
+   public void setFieldCcValue(String value) {
+-    UIComposeInput input = getChildById(FIELD_TO_SET) ;
++    UIComposeInput input = getChildById(FIELD_TO_SET);
+     input.getUIFormTextAreaInput(FIELD_CC).setValue(value);
+   }
+ 
+   public String getFieldBccValue() {
+-    UIComposeInput input = getChildById(FIELD_TO_SET) ;
+-    return input.getUIFormTextAreaInput(FIELD_BCC).getValue() ;
++    UIComposeInput input = getChildById(FIELD_TO_SET);
++    return input.getUIFormTextAreaInput(FIELD_BCC).getValue();
+   }
+ 
+   public void setFieldBccValue(String value) {
+-    UIComposeInput input = getChildById(FIELD_TO_SET) ;
++    UIComposeInput input = getChildById(FIELD_TO_SET);
+     input.getUIFormTextAreaInput(FIELD_BCC).setValue(value);
+   }
++
+   public String getFieldAttachmentsValue() {
+-    UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
+-    return inputSet.getUIFormInputInfo(FIELD_ATTACHMENTS).getValue() ;
++    UIComposeInput inputSet = getChildById(FIELD_TO_SET);
++    return inputSet.getUIFormInputInfo(FIELD_ATTACHMENTS).getValue();
+   }
+ 
+   public String getFieldContentValue() {
+@@ -593,7 +705,8 @@
+     } else {
+       content = getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue();
+     }
+-    if (content == null) content = "" ;
++    if (content == null)
++      content = "";
+     return content;
+   }
+ 
+@@ -602,10 +715,15 @@
+     MailService mailSrv = getApplicationComponent(MailService.class);
+     Account account = mailSrv.getAccountById(username, accountId_);
+     if (isVisualEditor) {
+-      if (!MailUtils.isFieldEmpty(account.getSignature()) && !fromDrafts()) {value += "<br><br> -- <br >" + account.getSignature().replace("\n", "<br>") + "";}
++      if (!MailUtils.isFieldEmpty(account.getSignature()) && !fromDrafts()) {
++        value += "<br><br> -- <br >" + account.getSignature().replace("\n", "<br>") + "";
++      }
+       getChild(UIFormWYSIWYGInput.class).setValue(value);
+     } else {
+-      if (!MailUtils.isFieldEmpty(account.getSignature())) { value = MailUtils.html2text(value).replaceAll("\n", "\n > ") + "\n\n -- \n" + account.getSignature() ; }
++      if (!MailUtils.isFieldEmpty(account.getSignature())) {
++        value = MailUtils.html2text(value).replaceAll("\n", "\n > ") + "\n\n -- \n"
++            + account.getSignature();
++      }
+       getUIFormTextAreaInput(FIELD_MESSAGECONTENT).setValue(value);
+     }
+   }
+@@ -616,44 +734,55 @@
+     return contactSrv.getPersonalContacts(username);
+   }
+ 
+-  public void resetFields() { reset() ; }
++  public void resetFields() {
++    reset();
++  }
+ 
+-  public void activate() throws Exception { }
+-  public void deActivate() throws Exception { }
++  public void activate() throws Exception {
++  }
+ 
++  public void deActivate() throws Exception {
++  }
++
+   private Message getNewMessage() throws Exception {
+     Message message = getMessage();
+     if (!fromDrafts()) {
+-      if (message != null) parentPath_ = message.getPath() ;
+-      message = new Message(); 
++      if (message != null)
++        parentPath_ = message.getPath();
++      message = new Message();
+     }
+     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+-    String usename = uiPortlet.getCurrentUser() ;
+-    MailService mailSvr = this.getApplicationComponent(MailService.class) ;
++    String usename = uiPortlet.getCurrentUser();
++    MailService mailSvr = this.getApplicationComponent(MailService.class);
+     Account account = mailSvr.getAccountById(usename, this.getFieldFromValue());
+-    String from = account.getUserDisplayName() + "<" + account.getEmailAddress() + ">" ;
+-    String subject = getFieldSubjectValue() ;
+-    String to = getFieldToValue() ;
+-    if (to != null && to.indexOf(";") > -1) to = to.replace(';', ',') ;
+-    String cc = getFieldCcValue() ;
+-    if (cc != null && cc.indexOf(";") > -1) cc = cc.replace(';', ',') ;
+-    String bcc = getFieldBccValue() ;
+-    if (bcc != null && bcc.indexOf(";") > -1) bcc = bcc.replace(';', ',') ;
+-    String body = getFieldContentValue() ;
++    String from = account.getUserDisplayName() + "<" + account.getEmailAddress() + ">";
++    String subject = getFieldSubjectValue();
++    String to = getFieldToValue();
++    if (to != null && to.indexOf(";") > -1)
++      to = to.replace(';', ',');
++    String cc = getFieldCcValue();
++    if (cc != null && cc.indexOf(";") > -1)
++      cc = cc.replace(';', ',');
++    String bcc = getFieldBccValue();
++    if (bcc != null && bcc.indexOf(";") > -1)
++      bcc = bcc.replace(';', ',');
++    String body = getFieldContentValue();
+     Long priority = getPriority();
+-    message.setSendDate(new Date()) ;
+-    message.setAccountId(accountId_) ;
+-    message.setFrom(from) ;
++    message.setSendDate(new Date());
++    message.setAccountId(accountId_);
++    message.setFrom(from);
+     String contentType = Utils.MIMETYPE_TEXTHTML;
+-    if (!isVisualEditor()) { contentType = Utils.MIMETYPE_TEXTPLAIN; }
++    if (!isVisualEditor()) {
++      contentType = Utils.MIMETYPE_TEXTPLAIN;
++    }
+     message.setContentType(contentType);
+-    message.setSubject(subject) ;
+-    message.setMessageTo(to) ;
+-    message.setMessageCc(cc) ;
++    message.setSubject(subject);
++    message.setMessageTo(to);
++    message.setMessageCc(cc);
+     if (message.getReceivedDate() == null) {
+       message.setReceivedDate(new Date());
+     }
+-    message.setMessageBcc(bcc) ;
++    message.setMessageBcc(bcc);
+     message.setHasStar(false);
+     message.setPriority(priority);
+     message.setIsReturnReceipt(isReturnReceipt);
+@@ -664,248 +793,302 @@
+         attachments.add(att);
+     }
+ 
+-    message.setAttachements(attachments) ;
+-    long attSize = 0 ;
++    message.setAttachements(attachments);
++    long attSize = 0;
+     for (Attachment att : this.getAttachFileList()) {
+       if (getCheckedAttach().contains(att.getId()))
+-        attSize += att.getSize() ;
++        attSize += att.getSize();
+     }
+-    message.setMessageBody(body) ;
++    message.setMessageBody(body);
+     message.setUnread(false);
+-    message.setSize(body.getBytes().length + attSize) ;
++    message.setSize(body.getBytes().length + attSize);
+     if (!Utils.isEmptyField(account.getEmailReplyAddress())) {
+       message.setReplyTo(account.getEmailReplyAddress());
+     } else {
+       message.setReplyTo(from);
+     }
+-    if (getComposeType() == MESSAGE_REPLY || getComposeType() == MESSAGE_REPLY_ALL || getComposeType() == MESSAGE_FOWARD) {
+-      message.setHeader(Utils.HEADER_IN_REPLY_TO, getMessage().getId()) ;
++    if (getComposeType() == MESSAGE_REPLY || getComposeType() == MESSAGE_REPLY_ALL
++        || getComposeType() == MESSAGE_FOWARD) {
++      message.setHeader(Utils.HEADER_IN_REPLY_TO, getMessage().getId());
+     }
+     return message;
+   }
+ 
+-  public boolean fromDrafts() {    
+-    return (getMessage() != null && getMessage().getFolders()[0].equals(Utils.generateFID(accountId_, Utils.FD_DRAFTS, false)) || getComposeType() == MESSAGE_IN_DRAFT) ;
++  public boolean fromDrafts() {
++    return (getMessage() != null
++        && getMessage().getFolders()[0].equals(Utils.generateFID(accountId_, Utils.FD_DRAFTS, false)) || getComposeType() == MESSAGE_IN_DRAFT);
+   }
+ 
+   public String getLabel(String id) {
+     try {
+-      return super.getLabel(id) ;
++      return super.getLabel(id);
+     } catch (Exception e) {
+-      return id ;
++      return id;
+     }
+   }
+ 
+   public void setShowCc(boolean showCc_) {
+-    UIComposeInput uiInput = getChildById(FIELD_TO_SET) ;
++    UIComposeInput uiInput = getChildById(FIELD_TO_SET);
+     uiInput.setShowCc(showCc_);
+   }
+ 
+   public boolean isShowCc() {
+-    UIComposeInput uiInput = getChildById(FIELD_TO_SET) ;
+-    return uiInput.isShowCc() ;
++    UIComposeInput uiInput = getChildById(FIELD_TO_SET);
++    return uiInput.isShowCc();
+   }
+ 
+   public void setShowBcc(boolean showBcc_) {
+-    UIComposeInput uiInput = getChildById(FIELD_TO_SET) ;
+-    uiInput.setShowBcc(showBcc_) ;
++    UIComposeInput uiInput = getChildById(FIELD_TO_SET);
++    uiInput.setShowBcc(showBcc_);
+   }
+ 
+   public boolean isShowBcc() {
+-    UIComposeInput uiInput = getChildById(FIELD_TO_SET) ;
+-    return uiInput.isShowBcc() ;
++    UIComposeInput uiInput = getChildById(FIELD_TO_SET);
++    return uiInput.isShowBcc();
+   }
+ 
+   static public class SendActionListener extends EventListener<UIComposeForm> {
+     public void execute(Event<UIComposeForm> event) throws Exception {
+-      UIComposeForm composeForm = event.getSource() ;
+-      UIMailPortlet uiPortlet = composeForm.getAncestorOfType(UIMailPortlet.class) ;
+-      MailService mailSvr = composeForm.getApplicationComponent(MailService.class) ;
+-      String accountId = composeForm.getFieldFromValue() ;
+-      String usename = uiPortlet.getCurrentUser() ;
++      UIComposeForm composeForm = event.getSource();
++      UIMailPortlet uiPortlet = composeForm.getAncestorOfType(UIMailPortlet.class);
++      MailService mailSvr = composeForm.getApplicationComponent(MailService.class);
++      String accountId = composeForm.getFieldFromValue();
++      String usename = uiPortlet.getCurrentUser();
+ 
+-      Message message = composeForm.getNewMessage() ; 
+-      if (!composeForm.validateMessage(event, message)) return;
+-      if (MailUtils.isFieldEmpty(message.getMessageTo()) &&
+-          MailUtils.isFieldEmpty(message.getMessageCc()) &&
+-          MailUtils.isFieldEmpty(message.getMessageBcc())    ) {
+-        UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class) ;
+-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.select-at-least-recipient", null)) ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+-        return ;
+-      } 
++      Message message = composeForm.getNewMessage();
++      if (!composeForm.validateMessage(event, message))
++        return;
++      if (MailUtils.isFieldEmpty(message.getMessageTo())
++          && MailUtils.isFieldEmpty(message.getMessageCc())
++          && MailUtils.isFieldEmpty(message.getMessageBcc())) {
++        UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class);
++        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.select-at-least-recipient", null));
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
++        return;
++      }
+ 
+-      UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class) ;
++      UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class);
+       try {
+-        mailSvr.sendMessage(usename, message) ;
+-        ContactService contactService = (ContactService)PortalContainer.getComponent(ContactService.class) ;
+-        contactService.saveAddress(usename, message.getMessageTo()) ;
+-        contactService.saveAddress(usename, message.getMessageCc()) ;
+-        contactService.saveAddress(usename, message.getMessageBcc()) ;
++        mailSvr.sendMessage(usename, message);
++        ContactService contactService = (ContactService) PortalContainer.getComponent(ContactService.class);
++        contactService.saveAddress(usename, message.getMessageTo());
++        contactService.saveAddress(usename, message.getMessageCc());
++        contactService.saveAddress(usename, message.getMessageBcc());
+       } catch (AddressException e) {
+-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-error-parsing-the-addresses-sending-failed", null)) ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
++        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-error-parsing-the-addresses-sending-failed",
++                                                null));
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+         return;
+       } catch (AuthenticationFailedException e) {
+-        Account acc = mailSvr.getAccountById(usename, accountId) ;
+-        if (acc.isOutgoingAuthentication() && acc.useIncomingSettingForOutgoingAuthent()) { 
+-          UIPopupActionContainer uiActionContainer = composeForm.getAncestorOfType(UIPopupActionContainer.class) ;
+-          UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+-          UIEnterPasswordDialog enterPasswordDialog =  uiChildPopup.createUIComponent(UIEnterPasswordDialog.class, null, null);
++        Account acc = mailSvr.getAccountById(usename, accountId);
++        if (acc.isOutgoingAuthentication() && acc.useIncomingSettingForOutgoingAuthent()) {
++          UIPopupActionContainer uiActionContainer = composeForm.getAncestorOfType(UIPopupActionContainer.class);
++          UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class);
++          UIEnterPasswordDialog enterPasswordDialog = uiChildPopup.createUIComponent(UIEnterPasswordDialog.class,
++                                                                                     null,
++                                                                                     null);
+           enterPasswordDialog.setAccountId(accountId);
+           enterPasswordDialog.setSendMessage(message);
+-          uiChildPopup.activate(enterPasswordDialog, 600, 0) ;
+-          event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
++          uiChildPopup.activate(enterPasswordDialog, 600, 0);
++          event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
+         } else {
+-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-configuration-for-smtp-server", null)) ;
+-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
++          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-configuration-for-smtp-server",
++                                                  null));
++          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+         }
+         return;
+       } catch (SMTPSendFailedException e) {
+-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null)) ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
++        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed",
++                                                null));
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+         return;
+       } catch (MessagingException e) {
+-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-unexpected-error-sending-falied", null)) ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+-        return ;
++        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-unexpected-error-sending-falied",
++                                                null));
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
++        return;
+       }
+ 
+-      // save to Sent folder and update the number of total messages in Sent folder
++      // save to Sent folder and update the number of total messages in Sent
++      // folder
+       try {
+-        composeForm.saveToSentFolder(usename, accountId, message);
+-        UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+-        UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
++        Account account = mailSvr.getAccountById(usename, accountId);
++        if (!composeForm.saveToSentFolder(usename, account, message)) {
++          uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.create-massage-not-successful",
++                                                  null,
++                                                  ApplicationMessage.INFO));
++          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
++        }
++        UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
++        UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
+         uiMessageList.updateList();
+-        if (uiMsgPreview != null && uiMsgPreview.getMessage() != null && uiMsgPreview.getMessage().getId().equals(message.getId())) {
++        if (uiMsgPreview != null && uiMsgPreview.getMessage() != null
++            && uiMsgPreview.getMessage().getId().equals(message.getId())) {
+           uiMsgPreview.setMessage(null);
+-          event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview.getParent()) ;
++          event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview.getParent());
+         } else {
+-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
++          event.getRequestContext()
++               .addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
+         }
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
++        event.getRequestContext()
++             .addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
+         UIPopupAction uiChildPopup = composeForm.getAncestorOfType(UIPopupAction.class);
+-        uiChildPopup.deActivate() ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+-        for(Attachment a : composeForm.getAttachFileList()) {
+-          UIAttachFileForm.removeUploadTemp(composeForm.getApplicationComponent(UploadService.class), a.getResoureId()) ;
++        uiChildPopup.deActivate();
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
++        for (Attachment a : composeForm.getAttachFileList()) {
++          UIAttachFileForm.removeUploadTemp(composeForm.getApplicationComponent(UploadService.class),
++                                            a.getResoureId());
+         }
+       } catch (Exception e) {
+-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null)) ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+-        composeForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
++        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null));
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
++        composeForm.getAncestorOfType(UIPopupAction.class).deActivate();
+       }
+-      
++
+     }
+   }
+ 
+-  public void saveToSentFolder(String usename, String accountId, Message message) throws Exception {
+-    MailService mailSvr = getApplicationComponent(MailService.class) ;
++  public boolean saveToSentFolder(String usename, Account account, Message message) throws Exception {
++    MailService mailSvr = getApplicationComponent(MailService.class);
+     MailSetting setting = mailSvr.getMailSetting(usename);
+     boolean isSaved = setting.saveMessageInSent();
+     boolean fromDrafts = fromDrafts();
++    boolean saveMsgSuccess = false;
+     if (!fromDrafts && isSaved) {
+-      message.setReplyTo(message.getMessageTo()) ;
++      message.setReplyTo(message.getMessageTo());
+       message.setIsReturnReceipt(false);
+       message.setIsLoaded(true);
+-      message.setFolders(new String[]{ Utils.generateFID(accountId, Utils.FD_SENT, false) }) ;
+-      mailSvr.saveMessage(usename, accountId, parentPath_, message, true) ;
++      message.setFolders(new String[] { Utils.generateFID(account.getId(), Utils.FD_SENT, false) });
++      saveMsgSuccess = mailSvr.saveMessage(usename, account, parentPath_, message, true);
+     } else if (fromDrafts) {
+-      Folder drafts = mailSvr.getFolder(usename, accountId, Utils.generateFID(accountId, Utils.FD_DRAFTS, false));
++      Folder drafts = mailSvr.getFolder(usename,
++                                        account.getId(),
++                                        Utils.generateFID(account.getId(), Utils.FD_DRAFTS, false));
+       if (isSaved) {
+-        message.setFolders(new String[]{ Utils.generateFID(accountId, Utils.FD_SENT, false) }) ;
+-        mailSvr.saveMessage(usename, accountId, parentPath_, message, false) ;
++        message.setFolders(new String[] { Utils.generateFID(account.getId(), Utils.FD_SENT, false) });
++        saveMsgSuccess = mailSvr.saveMessage(usename, account, parentPath_, message, false);
+       } else {
+-        mailSvr.removeMessage(usename, accountId, message);
++        mailSvr.removeMessage(usename, account.getId(), message);
+       }
+       drafts.setTotalMessage(drafts.getTotalMessage() - 1);
+-      mailSvr.saveFolder(usename, accountId, drafts);
++      mailSvr.saveFolder(usename, account.getId(), drafts);
+     }
++    return saveMsgSuccess;
+   }
+ 
+   static public class SaveDraftActionListener extends EventListener<UIComposeForm> {
+     public void execute(Event<UIComposeForm> event) throws Exception {
+-      UIComposeForm composeForm = event.getSource() ;
+-      UIMailPortlet uiPortlet = composeForm.getAncestorOfType(UIMailPortlet.class) ;
+-      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
+-      MailService mailSvr = composeForm.getApplicationComponent(MailService.class) ;
+-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+-      String usename = uiPortlet.getCurrentUser() ;
++      UIComposeForm composeForm = event.getSource();
++      UIMailPortlet uiPortlet = composeForm.getAncestorOfType(UIMailPortlet.class);
++      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
++      MailService mailSvr = composeForm.getApplicationComponent(MailService.class);
++      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
++                                  .getSelectedValue();
++      String usename = uiPortlet.getCurrentUser();
+ 
+-      UIPopupAction uiChildPopup = composeForm.getAncestorOfType(UIPopupAction.class) ;
+-      Message message = composeForm.getNewMessage() ; 
++      UIPopupAction uiChildPopup = composeForm.getAncestorOfType(UIPopupAction.class);
++      Message message = composeForm.getNewMessage();
+       // verify message
+-      if (!composeForm.validateMessage(event, message)) return;
++      if (!composeForm.validateMessage(event, message))
++        return;
+ 
+-      message.setReplyTo(message.getMessageTo()) ;
++      message.setReplyTo(message.getMessageTo());
+       try {
+-        String draftFolderId = Utils.generateFID(accountId, Utils.FD_DRAFTS, false) ;
+-        message.setFolders(new String[]{ draftFolderId }) ;
++        String draftFolderId = Utils.generateFID(accountId, Utils.FD_DRAFTS, false);
++        message.setFolders(new String[] { draftFolderId });
+         message.setIsLoaded(true);
++        Account account = mailSvr.getAccountById(usename, accountId);
++        boolean saveMsgSuccess = false;
+         if (!composeForm.fromDrafts()) {
+-          mailSvr.saveMessage(usename, accountId, composeForm.parentPath_, message, true) ;
++          saveMsgSuccess = mailSvr.saveMessage(usename,
++                                               account,
++                                               composeForm.parentPath_,
++                                               message,
++                                               true);
+           Folder drafts = mailSvr.getFolder(usename, accountId, draftFolderId);
+           drafts.setTotalMessage(drafts.getTotalMessage() + 1);
+           mailSvr.saveFolder(usename, accountId, drafts);
+         } else {
+-          mailSvr.saveMessage(usename, accountId, composeForm.parentPath_, message, false) ;
++          saveMsgSuccess = mailSvr.saveMessage(usename,
++                                               account,
++                                               composeForm.parentPath_,
++                                               message,
++                                               false);
+         }
++        if (!saveMsgSuccess) {
++          composeForm.getAncestorOfType(UIApplication.class)
++                     .addMessage(new ApplicationMessage("UIMoveMessageForm.msg.create-massage-not-successful",
++                                                        null,
++                                                        ApplicationMessage.INFO));
++          event.getRequestContext()
++               .addUIComponentToUpdateByAjax(composeForm.getAncestorOfType(UIApplication.class));
++        }
+       } catch (Exception e) {
+         e.printStackTrace();
+-        UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class) ;
+-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null)) ;
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
++        UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class);
++        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null));
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+       }
+       // update ui
+-      String selectedFolder = uiFolderContainer.getSelectedFolder() ;
+-      if (selectedFolder != null && selectedFolder.equals(Utils.generateFID(accountId, Utils.FD_DRAFTS, false))) {
+-        UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+-        UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
+-        uiMsgList.setMessagePageList(mailSvr.getMessagePageList(usename, uiMsgList.getMessageFilter())) ;
+-        List<Message> showedMsg = uiMsgPreview.getShowedMessages() ;
++      String selectedFolder = uiFolderContainer.getSelectedFolder();
++      if (selectedFolder != null
++          && selectedFolder.equals(Utils.generateFID(accountId, Utils.FD_DRAFTS, false))) {
++        UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
++        UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
++        uiMsgList.setMessagePageList(mailSvr.getMessagePageList(usename,
++                                                                uiMsgList.getMessageFilter()));
++        List<Message> showedMsg = uiMsgPreview.getShowedMessages();
+         try {
+           if (showedMsg != null && showedMsg.size() > 0) {
+             for (Message msg : showedMsg) {
+               if (message.getId().equals(msg.getId())) {
+-                int index = showedMsg.indexOf(msg) ;
+-                showedMsg.remove(index) ;
+-                message = mailSvr.loadTotalMessage(usename, accountId, mailSvr.getMessageById(usename, accountId, message.getId())) ;
+-                showedMsg.add(index, message) ;
++                int index = showedMsg.indexOf(msg);
++                showedMsg.remove(index);
++                message = mailSvr.loadTotalMessage(usename,
++                                                   accountId,
++                                                   mailSvr.getMessageById(usename,
++                                                                          accountId,
++                                                                          message.getId()));
++                showedMsg.add(index, message);
+               }
+             }
+           }
+-        } catch(Exception e) {}
+-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getParent()) ;
++        } catch (Exception e) {
++        }
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getParent());
+       }
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
+-      for(Attachment a : composeForm.getAttachFileList()) {
+-        UIAttachFileForm.removeUploadTemp(composeForm.getApplicationComponent(UploadService.class), a.getResoureId()) ;
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
++      for (Attachment a : composeForm.getAttachFileList()) {
++        UIAttachFileForm.removeUploadTemp(composeForm.getApplicationComponent(UploadService.class),
++                                          a.getResoureId());
+       }
+ 
+-      uiChildPopup.deActivate() ;
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
++      uiChildPopup.deActivate();
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
+     }
+   }
+ 
+   static public class DiscardChangeActionListener extends EventListener<UIComposeForm> {
+     public void execute(Event<UIComposeForm> event) throws Exception {
+-      UIComposeForm uiForm = event.getSource() ;
+-      uiForm.resetFields() ;
+-      for(Attachment a : uiForm.getAttachFileList()) {
+-        UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class), a.getResoureId()) ;
++      UIComposeForm uiForm = event.getSource();
++      uiForm.resetFields();
++      for (Attachment a : uiForm.getAttachFileList()) {
++        UIAttachFileForm.removeUploadTemp(uiForm.getApplicationComponent(UploadService.class),
++                                          a.getResoureId());
+       }
+-      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ; 
+-      uiPopupAction.deActivate() ;
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
++      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
++      uiPopupAction.deActivate();
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+     }
+   }
++
+   static public class AttachmentActionListener extends EventListener<UIComposeForm> {
+     public void execute(Event<UIComposeForm> event) throws Exception {
+-      UIComposeForm uiForm = event.getSource() ;
+-      UIPopupActionContainer uiActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
+-      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+-      uiChildPopup.activate(UIAttachFileForm.class, 600) ;
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
++      UIComposeForm uiForm = event.getSource();
++      UIPopupActionContainer uiActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class);
++      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class);
++      uiChildPopup.activate(UIAttachFileForm.class, 600);
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
+     }
+   }
+ 
+@@ -915,185 +1098,203 @@
+       String attId = event.getRequestContext().getRequestParameter(OBJECTID);
+       for (Attachment attach : uiComposeForm.getAttachFileList()) {
+         if (attach.getId().equals(attId)) {
+-          DownloadResource dresource = new InputStreamDownloadResource(attach.getInputStream(), attach.getMimeType());
+-          DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
++          DownloadResource dresource = new InputStreamDownloadResource(attach.getInputStream(),
++                                                                       attach.getMimeType());
++          DownloadService dservice = (DownloadService) PortalContainer.getInstance()
++                                                                      .getComponentInstanceOfType(DownloadService.class);
+           dresource.setDownloadName(attach.getName());
+           String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+-          event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
+-          break ;
++          event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('"
++              + downloadLink + "');");
++          break;
+         }
+       }
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm.getChildById(FIELD_TO_SET)) ;
++      event.getRequestContext()
++           .addUIComponentToUpdateByAjax(uiComposeForm.getChildById(FIELD_TO_SET));
+     }
+   }
+ 
+   static public class RemoveAttachmentActionListener extends EventListener<UIComposeForm> {
+     public void execute(Event<UIComposeForm> event) throws Exception {
+-      UIComposeForm uiComposeForm = event.getSource() ;
++      UIComposeForm uiComposeForm = event.getSource();
+       String attFileId = event.getRequestContext().getRequestParameter(OBJECTID);
+-      Iterator<Attachment> iter =  uiComposeForm.attachments_.iterator() ;
+-      Attachment att ;
++      Iterator<Attachment> iter = uiComposeForm.attachments_.iterator();
++      Attachment att;
+       while (iter.hasNext()) {
+-        att = (Attachment) iter.next() ;
++        att = (Attachment) iter.next();
+         if (att.getId().equals(attFileId)) {
+-          UIAttachFileForm.removeUploadTemp(uiComposeForm.getApplicationComponent(UploadService.class), att.getResoureId()) ;
+-          iter.remove() ;
++          UIAttachFileForm.removeUploadTemp(uiComposeForm.getApplicationComponent(UploadService.class),
++                                            att.getResoureId());
++          iter.remove();
+         }
+       }
+-      uiComposeForm.refreshUploadFileList() ;
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm.getChildById(FIELD_TO_SET)) ;
++      uiComposeForm.refreshUploadFileList();
++      event.getRequestContext()
++           .addUIComponentToUpdateByAjax(uiComposeForm.getChildById(FIELD_TO_SET));
+     }
+   }
+ 
+   static public class ToActionListener extends EventListener<UIComposeForm> {
+     public void execute(Event<UIComposeForm> event) throws Exception {
+-      UIComposeForm uiComposeForm = event.getSource() ;
+-      UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
+-      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+-      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 650) ; 
++      UIComposeForm uiComposeForm = event.getSource();
++      UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class);
++      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class);
++      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 650);
+ 
+       uiAddress.setRecipientsType(FIELD_TO);
+-      String toAddressString = uiComposeForm.getFieldToValue() ;
+-      InternetAddress[] toAddresses = Utils.getInternetAddress(toAddressString) ;
++      String toAddressString = uiComposeForm.getFieldToValue();
++      InternetAddress[] toAddresses = Utils.getInternetAddress(toAddressString);
+       List<String> emailList = new ArrayList<String>();
+-      for (int i = 0 ; i < toAddresses.length; i++) {
+-        if (toAddresses[i] != null) emailList.add(toAddresses[i].getAddress());
++      for (int i = 0; i < toAddresses.length; i++) {
++        if (toAddresses[i] != null)
++          emailList.add(toAddresses[i].getAddress());
+       }
+ 
+-      List<ContactData> toContact = uiComposeForm.getToContacts() ;
++      List<ContactData> toContact = uiComposeForm.getToContacts();
+       if (toContact != null && toContact.size() > 0) {
+         List<ContactData> contactList = new ArrayList<ContactData>();
+         for (ContactData ct : toContact) {
+-          if (emailList.contains(ct.getEmail())) contactList.add(ct) ;
++          if (emailList.contains(ct.getEmail()))
++            contactList.add(ct);
+         }
+         uiAddress.setAlreadyCheckedContact(contactList);
+       }
+       uiAddress.setAvaiAddressStr(toAddressString);
+ 
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
+     }
+   }
+ 
+   static public class ToCCActionListener extends EventListener<UIComposeForm> {
+     public void execute(Event<UIComposeForm> event) throws Exception {
+-      UIComposeForm uiComposeForm = event.getSource() ;
+-      UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
+-      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+-      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 650) ; 
++      UIComposeForm uiComposeForm = event.getSource();
++      UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class);
++      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class);
++      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 650);
+ 
+       uiAddress.setRecipientsType(FIELD_CC);
+-      String ccAddressString = uiComposeForm.getFieldCcValue() ;
+-      InternetAddress[] ccAddresses = Utils.getInternetAddress(ccAddressString) ;
++      String ccAddressString = uiComposeForm.getFieldCcValue();
++      InternetAddress[] ccAddresses = Utils.getInternetAddress(ccAddressString);
+       List<String> emailList = new ArrayList<String>();
+-      for (int i = 0 ; i < ccAddresses.length; i++) {
+-        if (ccAddresses[i] != null) emailList.add(ccAddresses[i].getAddress());
++      for (int i = 0; i < ccAddresses.length; i++) {
++        if (ccAddresses[i] != null)
++          emailList.add(ccAddresses[i].getAddress());
+       }
+-      List<ContactData> ccContact = uiComposeForm.getCcContacts() ;
++      List<ContactData> ccContact = uiComposeForm.getCcContacts();
+       if (ccContact != null && ccContact.size() > 0) {
+         List<ContactData> contactList = new ArrayList<ContactData>();
+         for (ContactData ct : ccContact) {
+-          if (emailList.contains(ct.getEmail())) contactList.add(ct) ;
++          if (emailList.contains(ct.getEmail()))
++            contactList.add(ct);
+         }
+         uiAddress.setAlreadyCheckedContact(contactList);
+       }
+ 
+       uiAddress.setAvaiAddressStr(ccAddressString);
+ 
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
+     }
+   }
+ 
+   static public class ToBCCActionListener extends EventListener<UIComposeForm> {
+     public void execute(Event<UIComposeForm> event) throws Exception {
+-      UIComposeForm uiComposeForm = event.getSource() ;
+-      UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
+-      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+-      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 650) ; 
++      UIComposeForm uiComposeForm = event.getSource();
++      UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class);
++      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class);
++      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 650);
+ 
+       uiAddress.setRecipientsType(FIELD_BCC);
+-      String bccAddressString = uiComposeForm.getFieldBccValue() ;
+-      InternetAddress[] bccAddresses = Utils.getInternetAddress(bccAddressString) ;
++      String bccAddressString = uiComposeForm.getFieldBccValue();
++      InternetAddress[] bccAddresses = Utils.getInternetAddress(bccAddressString);
+       List<String> emailList = new ArrayList<String>();
+-      for (int i = 0 ; i < bccAddresses.length; i++) {
+-        if (bccAddresses[i] != null) emailList.add(bccAddresses[i].getAddress());
++      for (int i = 0; i < bccAddresses.length; i++) {
++        if (bccAddresses[i] != null)
++          emailList.add(bccAddresses[i].getAddress());
+       }
+-      List<ContactData> bccContact = uiComposeForm.getBccContacts() ;
++      List<ContactData> bccContact = uiComposeForm.getBccContacts();
+       if (bccContact != null && bccContact.size() > 0) {
+         List<ContactData> contactList = new ArrayList<ContactData>();
+         for (ContactData ct : bccContact) {
+-          if (emailList.contains(ct.getEmail())) contactList.add(ct) ;
++          if (emailList.contains(ct.getEmail()))
++            contactList.add(ct);
+         }
+         uiAddress.setAlreadyCheckedContact(contactList);
+       }
+ 
+       uiAddress.setAvaiAddressStr(bccAddressString);
+ 
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+-    }   
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
++    }
+   }
+ 
+   static public class ChangePriorityActionListener extends EventListener<UIComposeForm> {
+     public void execute(Event<UIComposeForm> event) throws Exception {
+-      UIComposeForm uiForm = event.getSource() ;
+-      String priority = event.getRequestContext().getRequestParameter(OBJECTID) ;
+-      uiForm.setPriority(Long.valueOf(priority)) ;
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
++      UIComposeForm uiForm = event.getSource();
++      String priority = event.getRequestContext().getRequestParameter(OBJECTID);
++      uiForm.setPriority(Long.valueOf(priority));
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
+     }
+   }
+ 
+   static public class UseVisualEdiorActionListener extends EventListener<UIComposeForm> {
+     @SuppressWarnings("deprecation")
+     public void execute(Event<UIComposeForm> event) throws Exception {
+-      UIComposeForm uiForm = event.getSource() ;
+-      boolean isVisualEditor = Boolean.valueOf(event.getRequestContext().getRequestParameter(OBJECTID)) ;  
++      UIComposeForm uiForm = event.getSource();
++      boolean isVisualEditor = Boolean.valueOf(event.getRequestContext()
++                                                    .getRequestParameter(OBJECTID));
+       String content = "";
+       if (isVisualEditor) {
+         try {
+-          content = uiForm.getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue() ;
++          content = uiForm.getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue();
+           uiForm.removeChildById(FIELD_MESSAGECONTENT);
+-          UIFormWYSIWYGInput wysiwyg = new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true) ;
+-          uiForm.addUIFormInput(wysiwyg) ;
++          UIFormWYSIWYGInput wysiwyg = new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT,
++                                                              null,
++                                                              null,
++                                                              true);
++          uiForm.addUIFormInput(wysiwyg);
+           wysiwyg.setValue(MailUtils.text2html(content));
+-          uiForm.setVisualEditor(true) ;
+-        } catch(Exception e) { }
++          uiForm.setVisualEditor(true);
++        } catch (Exception e) {
++        }
+       } else {
+         try {
+-          content = uiForm.getChild(UIFormWYSIWYGInput.class).getValue() ;
+-          uiForm.removeChild(UIFormWYSIWYGInput.class) ;
++          content = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
++          uiForm.removeChild(UIFormWYSIWYGInput.class);
+           UIFormTextAreaInput textArea = new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null);
+           textArea.setValue(MailUtils.html2text(content));
+-          uiForm.addUIFormInput(textArea) ;
+-          uiForm.setVisualEditor(false) ;
+-        } catch (Exception e) { }
++          uiForm.addUIFormInput(textArea);
++          uiForm.setVisualEditor(false);
++        } catch (Exception e) {
++        }
+       }
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
+     }
+   }
+ 
+   static public class ShowCcActionListener extends EventListener<UIComposeForm> {
+     public void execute(Event<UIComposeForm> event) throws Exception {
+-      UIComposeForm uiForm = event.getSource() ;
++      UIComposeForm uiForm = event.getSource();
+       uiForm.setShowCc(!uiForm.isShowCc());
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(FIELD_TO_SET)) ;
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(FIELD_TO_SET));
+     }
+   }
+ 
+   static public class ShowBccActionListener extends EventListener<UIComposeForm> {
+     public void execute(Event<UIComposeForm> event) throws Exception {
+-      UIComposeForm uiForm = event.getSource() ;
++      UIComposeForm uiForm = event.getSource();
+       uiForm.setShowBcc(!uiForm.isShowBcc());
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(FIELD_TO_SET)) ;
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(FIELD_TO_SET));
+     }
+   }
+ 
+   static public class ReturnReceiptActionListener extends EventListener<UIComposeForm> {
+     public void execute(Event<UIComposeForm> event) throws Exception {
+-      UIComposeForm uiForm = event.getSource() ;
+-      uiForm.isReturnReceipt = ! uiForm.isReturnReceipt ;      
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
++      UIComposeForm uiForm = event.getSource();
++      uiForm.isReturnReceipt = !uiForm.isReturnReceipt;
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
+     }
+   }
+-  
++
+   private boolean validateMessage(Event<UIComposeForm> event, Message msg) throws Exception {
+     String msgWarning = null;
+     if (!MailUtils.isValidEmailAddresses(msg.getMessageTo())) {
+@@ -1102,12 +1303,12 @@
+       msgWarning = "UIComposeForm.msg.invalid-cc-field";
+     } else if (!MailUtils.isValidEmailAddresses(msg.getMessageBcc())) {
+       msgWarning = "UIComposeForm.msg.invalid-bcc-field";
+-    } 
++    }
+ 
+     if (msgWarning != null) {
+-      UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+-      uiApp.addMessage(new ApplicationMessage(msgWarning, null)) ;
+-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
++      UIApplication uiApp = getAncestorOfType(UIApplication.class);
++      uiApp.addMessage(new ApplicationMessage(msgWarning, null));
++      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+       return false;
+     }
+ 
+Index: eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessagePreview.java
+===================================================================
+--- eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessagePreview.java	(revision 65576)
++++ eXoApplication/mail/webapp/src/main/java/org/exoplatform/mail/webui/UIMessagePreview.java	(working copy)
+@@ -389,13 +389,13 @@
+       MailService mailSrv = uiMsgPreview.getApplicationComponent(MailService.class);
+       String username = MailUtils.getCurrentUser();
+       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+-
++      Message mResult = null;
+       if (msg != null) {
+         String selectedFolderId = uiFolderCon.getSelectedFolder() ;
+         if (selectedFolderId != null && selectedFolderId.equals(Utils.generateFID(accountId, Utils.FD_TRASH, false))) { 
+           mailSrv.removeMessage(username, accountId, msg);
+         } else {
+-          mailSrv.moveMessage(username, accountId, msg, msg.getFolders()[0], Utils.generateFID(accountId, Utils.FD_TRASH, false));
++          mResult = mailSrv.moveMessage(username, accountId, msg, msg.getFolders()[0], Utils.generateFID(accountId, Utils.FD_TRASH, false));
+         }        
+         uiMsgList.updateList();
+         List<Message> showedMsgList = uiMsgPreview.getShowedMessages() ;
+@@ -407,7 +407,11 @@
+           uiMsgPreview.setShowedMessages(null) ;
+         }
+       }
+-
++      if(mResult == null){
++        UIApplication uiInfoApp = uiMsgPreview.getAncestorOfType(UIApplication.class) ;
++        uiInfoApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
++        event.getRequestContext().addUIComponentToUpdateByAjax(uiInfoApp.getUIPopupMessages()) ;
++      }
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderCon.getParent());
+       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea);
+     }
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties	(revision 65576)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet.properties	(working copy)
+@@ -315,7 +315,7 @@
+ UIComposeForm.msg.there-was-an-error-parsing-the-addresses-sending-failed=There was an error parsing the addresses. The message was not sent.
+ UIComposeForm.msg.the-username-or-password-may-be-wrong-sending-failed=The Username or Password may be wrong. The message was not sent.
+ UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed=An error occured during transfer. The message was not sent.
+-UIComposeForm.msg.there-was-an-unexpected-error-sending-falied=There was an unexpected error. The message was not sent.
++UIComposeForm.msg.there-was-an-unexpected-error-sending-falied=There was an unexpected error. The message was not sent. Please check your outgoing host again.
+ UIComposeForm.msg.no-subject=It looks like your message has no Subject. Send anyway ?
+ UIComposeForm.msg.please-check-configuration-for-smtp-server=Communication with the server failed. Save the message and verify the outgoing server.
+ 
+@@ -441,6 +441,8 @@
+ UIMoveMessageForm.label.Spam=Spam
+ UIMoveMessageForm.label.Trash=Trash
+ UIMoveMessageForm.msg.selected-folder-is-not-exits-any-more=The selected folder does not exist anymore.
++UIMoveMessageForm.msg.move_delete_not_successful=Not all messages were moved or deleted. Sorry for our inconvenience.
++UIMoveMessageForm.msg.create-massage-not-successful=Not all messages were created on server. It is only available on client. Sorry for our inconvenience.
+ ##################################################################
+       # package org.exoplatform.mail.webui.UIMessageList#
+ ###################################################################
+Index: eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_fr.properties
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_fr.properties	(revision 65576)
++++ eXoApplication/mail/webapp/src/main/webapp/WEB-INF/classes/locale/portlet/mail/MailPortlet_fr.properties	(working copy)
+@@ -315,7 +315,7 @@
+ UIComposeForm.msg.there-was-an-error-parsing-the-addresses-sending-failed=Les adresses emails des destinataires n'ont pu être déterminées. Le message n'a pas été envoyé.
+ UIComposeForm.msg.the-username-or-password-may-be-wrong-sending-failed=Les identifiants sont invalides. Le message n'a pas été envoyé.
+ UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed=Une erreur est survenue lors du transfert. Le message n'a pas été envoyé.
+-UIComposeForm.msg.there-was-an-unexpected-error-sending-falied=Une erreur inattendue est survenue. Le message n'a pas été envoyé.
++UIComposeForm.msg.there-was-an-unexpected-error-sending-falied=Une erreur inattendue est survenue. Le message n'a pas été envoyé. S'il vous plaît vérifier votre hôte sortants.
+ UIComposeForm.msg.no-subject=Il semble que votre message n'a pas de Sujet. Voulez-vous l'envoyer ?
+ UIComposeForm.msg.please-check-configuration-for-smtp-server=La communication avec le serveur a échoué. Enregistrez le message et vérifiez la configuration du serveur sortant.
+ 
+@@ -443,6 +443,8 @@
+ UIMoveMessageForm.label.Spam=Indésirables
+ UIMoveMessageForm.label.Trash=Corbeille
+ UIMoveMessageForm.msg.selected-folder-is-not-exits-any-more=Le dossier sélectionné n'existe plus.
++UIMoveMessageForm.msg.move_delete_not_successful=Pas tous les messages ont été déplacés ou supprimés. Désolé pour nos désagréments.
++UIMoveMessageForm.msg.create-massage-not-successful=Pas tous les messages ont été créés sur le serveur. Il est disponible uniquement sur le client. Désolé pour nos désagréments.
+ ##################################################################
+       # package org.exoplatform.mail.webui.UIMessageList#
+ ###################################################################
+Index: eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessageList.gtmpl
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessageList.gtmpl	(revision 65576)
++++ eXoApplication/mail/webapp/src/main/webapp/templates/mail/webui/UIMessageList.gtmpl	(working copy)
+@@ -467,7 +467,7 @@
+   	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid" style="table-layout: fixed;-moz-user-select:none;" onselectstart="return false">
+     	<thead>
+     		<tr>
+-    			<th style="width: 20px; padding-left: 7px; " class="Border"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.id+ '.label.check-all') %>" value="4"/></th>
++    			<th style="width: 20px; padding-left: 7px; " class="Border"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.id+ '.label.check-all') %>" name="select-all-messages" value="4"/></th>
+     			<th style="width: 24px;"><div class="StarredIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div></th>
+     			<% if (uicomponent.viewMode != uicomponent.MODE_LIST && uicomponent.viewMode != uicomponent.MODE_GROUP_BY_DATE) {%>
+            <th style="width: 24px;"><div class="TotalMessageIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.total-messages-in-conversation') %>"><span></span></div></th>
+Index: eXoApplication/contact/webapp/src/main/java/org/exoplatform/contact/webui/popup/UIComposeForm.java
+===================================================================
+--- eXoApplication/contact/webapp/src/main/java/org/exoplatform/contact/webui/popup/UIComposeForm.java	(revision 65576)
++++ eXoApplication/contact/webapp/src/main/java/org/exoplatform/contact/webui/popup/UIComposeForm.java	(working copy)
+@@ -272,7 +272,11 @@
+             message.setFolders(new String[]{ Utils.generateFID(accId, Utils.FD_SENT, false) }) ;
+           }
+           message.setReplyTo(message.getMessageTo()) ;
+-          mailSvr.saveMessage(username, accId, message.getPath(), message, true) ;
++          boolean saveMsgsuccess = mailSvr.saveMessage(username, mailSvr.getAccountById(username, accId), message.getPath(), message, true) ;
++          if(!saveMsgsuccess){
++            uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.create-massage-not-successful", null, ApplicationMessage.INFO)) ;
++            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
++          }
+           uiChildPopup.deActivate() ;
+           event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+         } catch (Exception e) {

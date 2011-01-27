@@ -45,7 +45,10 @@ public interface Connector {
   public List<Message> createMessage(List<Message> msgs, Folder folder) throws Exception;
   
   public boolean deleteMessage(List<Message> msgs, Folder folder) throws Exception;
-  
+  /**
+   * Move message(s) between folders.
+   * Return a list of deleted/moved messages
+   * */
   public List<Message> moveMessage(List<Message> msgs, Folder currentFolder, Folder desFolder) throws Exception;
   
   public boolean markAsRead(List<Message> msgList, Folder folder) throws Exception;

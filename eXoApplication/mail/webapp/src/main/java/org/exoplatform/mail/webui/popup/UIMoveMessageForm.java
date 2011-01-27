@@ -90,6 +90,7 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       String destFolderId = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
       Folder destFolder =  null ;
+      List<Message> successes = new ArrayList<Message>();
       try {
         destFolder =  mailSrv.getFolder(username, accountId, destFolderId);
       } catch (PathNotFoundException e) { }
@@ -104,11 +105,18 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
       String fromFolderId = uiFolderContainer.getSelectedFolder() ;
       if (fromFolderId != null) {
-        mailSrv.moveMessages(username, accountId, uiMoveMessageForm.getMessageList(), fromFolderId, destFolderId) ;
+        successes = mailSrv.moveMessages(username, accountId, uiMoveMessageForm.getMessageList(), fromFolderId, destFolderId) ;
       } else {
         for (Message message : uiMoveMessageForm.getMessageList()) {
-          mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], destFolderId);
+          Message m = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], destFolderId);
+          if(m == null) successes.add(null);
         }
+      }
+      if(successes == null || (successes.size() > 0 && successes.size() < uiMoveMessageForm.getMessageList().size()) ||
+          successes.contains(null) || successes.size() == 0){
+        UIApplication uiApp = uiMoveMessageForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.move_delete_not_successful", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
       uiMessageList.updateList(); 
       Message msgPreview = uiMsgPreview.getMessage();

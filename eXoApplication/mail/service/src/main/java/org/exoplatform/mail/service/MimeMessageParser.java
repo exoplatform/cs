@@ -26,12 +26,10 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-
 import javax.mail.Flags;
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -175,15 +173,20 @@ public class MimeMessageParser {
   /**
    * @return a MD5 string
    */
+  @SuppressWarnings("unchecked")
   public static String getMD5MsgId(javax.mail.Message msg) throws Exception {
     // first construct a key by joining all headers
-    String key = "";
+    String key = ""; Enumeration enu = null;
     long t1 = System.currentTimeMillis();
-    Enumeration enu = msg.getAllHeaders() ;
-    while (enu.hasMoreElements()) {
-      Header header = (Header)enu.nextElement() ;
-      key += header.getValue() ;
+    if(msg != null)
+      enu = msg.getAllHeaders() ;
+    if(enu != null){
+      while (enu.hasMoreElements()) {
+        Header header = (Header)enu.nextElement() ;
+        key += header.getValue() ;
+      }  
     }
+    if(key.equals("")) key = String.valueOf(t1);
     String md5 = getMD5(key);
     long t2 = System.currentTimeMillis();
     //TODO : change the log level later
@@ -191,6 +194,13 @@ public class MimeMessageParser {
     logger.error("getMD5MsgId spending time : " + (t2-t1) + "ms");
     return md5;
   }
+  
+  public static String getMsgUID(){
+    long t1 = System.currentTimeMillis();
+    if(t1 < Long.MAX_VALUE) return String.valueOf(t1);
+    else return String.valueOf(t1 - Long.MAX_VALUE);
+  }
+  
   /**
    * separated getMD5 method ... for a general use.
    * @param s
@@ -200,7 +210,7 @@ public class MimeMessageParser {
     try {
       MessageDigest m = MessageDigest.getInstance("MD5");
       m.update(s.getBytes(), 0, s.length());
-      return "" + new BigInteger(1, m.digest()).toString(16);
+      return "" + new BigInteger(1, m.digest()).toString();//if is toString(16), will produce error when we parsing it to Long value
     } catch (NoSuchAlgorithmException e) {
       // almost never ... but the idea is we should control all exceptions
       logger.error("MD5 is not supported !!!");

@@ -356,11 +356,12 @@ public interface MailService {
    * Save message to Account/Messages/Year/Month/Day tree node. If message is new then Day node will create a new node 
    * if not it will update the exist message.
    * @param username
-   * @param accountId
+   * @param account
    * @param targetMsgPath this param is path of node Account/Messages/Year/Month/Day
+   * @return true if save message success. false if else
    * @throws Exception
    */
-  public void saveMessage(String username, String accountId, String targetMsgPath, Message message, boolean isNew) throws Exception ;
+  public boolean saveMessage(String username, Account account, String targetMsgPath, Message message, boolean isNew) throws Exception ;
   
   public void saveMessage(String username, String accountId, Message message, boolean isNew) throws Exception;
   
@@ -394,9 +395,11 @@ public interface MailService {
    * @param msg
    * @throws Exception
    */
-  public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception ;
+  public List<Message> moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception ;
   
-  public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference) throws Exception ;
+  /**
+   * Move message(s) to Trash folder*/
+  public List<Message> moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference) throws Exception ;
   
   /**
    * Move a message from the current folder to the given folder
@@ -405,9 +408,10 @@ public interface MailService {
    * @param msg
    * @param currentFolderId
    * @param destFolderId
+   * @return the moved/deleted message, and return null value if that message hasn't moved/deleted
    * @throws Exception
    */
-  public void moveMessage(String username, String accountId,Message msg, String currentFolderId, String destFolderId) throws Exception ;
+  public Message moveMessage(String username, String accountId,Message msg, String currentFolderId, String destFolderId) throws Exception ;
 
   public void moveMessage(String username, String accountId,Message msg, String currentFolderId, String destFolderId, boolean updateReference) throws Exception ;
   /**

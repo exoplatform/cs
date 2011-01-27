@@ -133,11 +133,13 @@ public class MailServiceImpl implements MailService, Startable {
   
   public void removeCheckingInfo(String username, String accountId) throws Exception {
     String key = username + ":" + accountId;
+    if(checkingLog_ == null) checkingLog_ = new HashMap<String, CheckingInfo>();
     checkingLog_.remove(key);
   }
 
   public CheckingInfo getCheckingInfo(String username, String accountId) {
     String key = username + ":" + accountId;
+    if(checkingLog_ == null) checkingLog_ = new HashMap<String, CheckingInfo>();
     return checkingLog_.get(key);
   }
 
@@ -291,89 +293,104 @@ public class MailServiceImpl implements MailService, Startable {
     storage_.removeMessages(username, accountId, messages, moveReference);
   }
 
-  public void moveMessages(String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
-    Account account = getAccountById(username, accountId);
-    Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
-    Folder destFolder = this.getFolder(username, accountId, destFolderId);
-    boolean success = true;
+  public List<Message> moveMessages(String userName, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
+    Account account = getAccountById(userName, accountId);
+    Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
+    List<Message> successList = new ArrayList<Message>();
+    Folder destFolder = this.getFolder(userName, accountId, destFolderId);
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         Connector connector = new ImapConnector(account);
-        msgList = connector.moveMessage(msgList, currentFolder, destFolder);
-        if (msgList == null) success = false;
-      } catch(Exception e) {
-        return;
+        successList = connector.moveMessage(msgList, currentFolder, destFolder);
+      } catch (Exception e) {
+        if(logger.isDebugEnabled()) logger.debug("MailServiceImpl: Move message error " + e.getMessage());
       }
     }
-    if (success) storage_.moveMessages(username, accountId, msgList, currentFolderId, destFolderId);
+    if (successList != null && successList.size() > 0) storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId);
+    return successList;
   }
   
-  public void moveMessages(String username, String accountId, List<Message> msgList,
+  public List<Message> moveMessages(String userName, String accountId, List<Message> msgList,
                           String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
-    Account account = getAccountById(username, accountId);
-    Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
-    Folder destFolder = this.getFolder(username, accountId, destFolderId);
-    boolean success = true;
+    Account account = getAccountById(userName, accountId);
+    Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
+    Folder destFolder = this.getFolder(userName, accountId, destFolderId);
+    List<Message> successList = new ArrayList<Message>();
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         Connector connector = new ImapConnector(account);
-        msgList = connector.moveMessage(msgList, currentFolder, destFolder);
-        if (msgList == null) success = false;
-      } catch(Exception e) {
-        return;
+        successList = connector.moveMessage(msgList, currentFolder, destFolder);
+      } catch (Exception e) {
+        logger.error("Mailservice: Move message to trash folder error", e);
       }
     }
-    if (success) storage_.moveMessages(username, accountId, msgList, currentFolderId, destFolderId, updateReference);
+    if (successList != null && successList.size() > 0) storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId, updateReference);
+    return successList;
   }
 
-  public void moveMessage(String username, String accountId, Message msg,
-      String currentFolderId, String destFolderId) throws Exception {
-    Account account = getAccountById(username, accountId);
-    Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
-    Folder destFolder = this.getFolder(username, accountId, destFolderId);
-    boolean success = true;
+  public Message moveMessage(String userName, String accountId, Message msg,
+    String currentFolderId, String destFolderId) throws Exception {
+    Account account = getAccountById(userName, accountId);
+    Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
+    Folder destFolder = this.getFolder(userName, accountId, destFolderId);
+    List<Message> successList = new ArrayList<Message>();
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
-        List<Message> l = new ArrayList<Message>();
+        List<Message> msgList = new ArrayList<Message>();
         Connector connector = new ImapConnector(account);
-        l.add(msg);
-        l = connector.moveMessage(l, currentFolder, destFolder);
-        if (l == null) success = false;
-        else msg = l.get(0);
-      } catch(Exception e) {
-        return;
+        msgList.add(msg);
+        successList = connector.moveMessage(msgList, currentFolder, destFolder);
+      } catch (Exception e) {
+        if(logger.isDebugEnabled()) logger.debug("Mailservice: Move message fail. ", e);
       }
     }
-    if (success) moveMessage(username, accountId, msg, currentFolderId, destFolderId, true);
+    if (successList != null && successList.size() > 0){
+      storage_.moveMessage(userName, accountId, msg, currentFolderId, destFolderId, true);
+      return msg;
+    }
+    return null;
   }
   
-  public void moveMessage(String username, String accountId, Message msg,
+  public void moveMessage(String userName, String accountId, Message msg,
 	  String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
-    Account account = getAccountById(username, accountId);
-    Folder currentFolder = this.getFolder(username, accountId, currentFolderId);
-    Folder destFolder = this.getFolder(username, accountId, destFolderId);
+    Account account = getAccountById(userName, accountId);
+    Folder currentFolder = this.getFolder(userName, accountId, currentFolderId);
+    Folder destFolder = this.getFolder(userName, accountId, destFolderId);
     boolean success = true;
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
       try {
         Connector connector = new ImapConnector(account);
-        List<Message> l = new ArrayList<Message>();
-        l.add(msg);
-        l = connector.moveMessage(l, currentFolder, destFolder);
-        if (l == null) success = false;
-        else msg = l.get(0);
-      } catch(Exception e) {
+        List<Message> msgList = new ArrayList<Message>();
+        msgList.add(msg);
+        msgList = connector.moveMessage(msgList, currentFolder, destFolder);
+        if (msgList.size() <= 0) success = false;
+      } catch (Exception e) {
         return;
       }
     }
-    if (success) storage_.moveMessage(username, accountId, msg, currentFolderId, destFolderId, updateReference);
+    if (success) storage_.moveMessage(userName, accountId, msg, currentFolderId, destFolderId, updateReference);
   }
 
   public MessagePageList getMessagePageList(String username, MessageFilter filter) throws Exception {
     return storage_.getMessagePageList(username, filter);
   }
 
-  public void saveMessage(String username, String accountId, String targetMsgPath, Message message, boolean isNew) throws Exception {
-    storage_.saveMessage(username, accountId, targetMsgPath, message, isNew);
+  public boolean saveMessage(String username, Account account, String targetMsgPath, Message message, boolean isNew) throws Exception {
+    List<Message> msgList = new ArrayList<Message>();
+    List<Message> successList = null;
+    msgList.add(message);
+    String folderId = message.getFolders()[0];
+    Folder destFolder = null;
+    if (folderId != null) {
+      destFolder = getFolder(username, account.getId(), folderId);
+    }
+    if (destFolder != null && account.getProtocol().equalsIgnoreCase(Utils.IMAP)) {
+      Connector connector = new ImapConnector(account);
+      successList = connector.createMessage(msgList, destFolder);
+    }
+    storage_.saveMessage(username, account.getId(), targetMsgPath, message, isNew);
+    if(successList != null && successList.size() > 0) return true;
+    return false;
   }
 
   public List<Message> getMessagesByTag(String username, String accountId, String tagId) throws Exception {
@@ -873,9 +890,10 @@ public class MailServiceImpl implements MailService, Startable {
     return msgMap ;
   }
   
-  public void synchImapFolders(String username, String accountId) throws Exception {
+  public synchronized void synchImapFolders(String username, String accountId) throws Exception {
     CheckingInfo info = new CheckingInfo();
     String key = username + ":" + accountId;
+    if(checkingLog_ == null) checkingLog_ = new HashMap<String, CheckingInfo>();
     checkingLog_.put(key, info);
     IMAPStore store = null;
     try {
@@ -893,7 +911,7 @@ public class MailServiceImpl implements MailService, Startable {
 	}
   }
   
-  private List<javax.mail.Folder> synchImapFolders(String username, String accountId, Folder parentFolder, javax.mail.Folder[] folders) throws Exception {
+  private synchronized List<javax.mail.Folder> synchImapFolders(String username, String accountId, Folder parentFolder, javax.mail.Folder[] folders) throws Exception {
     List<javax.mail.Folder> folderList = new ArrayList<javax.mail.Folder>();
     List<String> serverFolderId = new ArrayList<String>();
     String folderId, folderName;
@@ -1056,9 +1074,11 @@ public class MailServiceImpl implements MailService, Startable {
     }
   }
   
-  private void getSynchnizeImapServer(String username, String accountId, String folderId, boolean synchFolders) throws Exception {
+  private synchronized void getSynchnizeImapServer(String username, String accountId, String folderId, boolean synchFolders) throws Exception {
     CheckingInfo info = new CheckingInfo();
     String key = username + ":" + accountId;
+    if(checkingLog_ == null)
+      checkingLog_ = new HashMap<String, CheckingInfo>();
     checkingLog_.put(key, info);
     
     Account account = getAccountById(username, accountId);
@@ -1123,7 +1143,7 @@ public class MailServiceImpl implements MailService, Startable {
     }
   }
   
-  private void synchImapMessage(String username, String accountId, javax.mail.Folder folder, String key) throws Exception {
+  private synchronized void synchImapMessage(String username, String accountId, javax.mail.Folder folder, String key) throws Exception {
     Account account = getAccountById(username, accountId) ;
     boolean saved = false ;
     int totalNew = -1;
@@ -1132,6 +1152,7 @@ public class MailServiceImpl implements MailService, Startable {
     if (folder == null) return;
     try {
       folder.open(javax.mail.Folder.READ_WRITE);
+      if(checkingLog_ == null) checkingLog_ = new HashMap<String, CheckingInfo>();
       logger.debug(" #### Getting mails from folder " + folder.getName() + " !");
       checkingLog_.get(key).setSyncFolderStatus(CheckingInfo.FINISHED_SYNC_FOLDER);
       checkingLog_.get(key).setStatusMsg("Getting mails from folder " + folder.getName() + " !");
@@ -1242,7 +1263,7 @@ public class MailServiceImpl implements MailService, Startable {
       logger.debug("#### Synchronization finished for " + folder.getName() + " folder.");
 
     } catch (Exception e) {
-      logger.error("Error while checking emails from folder" + folder.getName() + " of username " + username + " on account " + accountId, e);
+      logger.error("Error while checking emails from folder " + folder.getName() + " of username " + username + " on account " + accountId, e);
     }
   }
   
@@ -1297,9 +1318,11 @@ public class MailServiceImpl implements MailService, Startable {
   }
   
   //TODO: refactor code for checking mail from POP3 server.
-  public List<Message> checkPop3Server(String username, String accountId) throws Exception {
+  public synchronized List<Message> checkPop3Server(String username, String accountId) throws Exception {
     Account account = getAccountById(username, accountId);
     List<Message> messageList = new ArrayList<Message>();
+    if(checkingLog_ == null)
+      checkingLog_ = new HashMap<String, CheckingInfo>();
     if(account != null) {
       CheckingInfo info = new CheckingInfo();
       String key = username + ":" + accountId;

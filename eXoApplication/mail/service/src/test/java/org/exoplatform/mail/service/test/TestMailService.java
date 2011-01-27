@@ -246,23 +246,15 @@ public class TestMailService extends BaseMailTestCase{
     desfolder.setName("folder test 2 ") ;
     desfolder.setURLName("folder 2") ;
     mailService_.saveFolder(username, accPop.getId(), desfolder) ;
-    
     message.setFolders(new String[]{folder.getId()}) ;
     message.setReceivedDate(new Date()) ;
     mailService_.saveMessage(username, accPop.getId(), message, true) ;
-    assertNotNull(mailService_.getMessagesByFolder(username, accPop.getId(), folder.getId())) ;
-    assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), folder.getId()).size(), 1) ;
-    
     message = mailService_.getMessageById(username, accPop.getId(), message.getId()) ;
-    mailService_.moveMessage(username, accPop.getId(), message, folder.getId(), desfolder.getId()) ;
-    assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), folder.getId()).size(), 0) ;
-    
+    Message m = mailService_.moveMessage(username, accPop.getId(), message, folder.getId(), desfolder.getId()) ;
+    assertNull("move/delete message fail", m);
     assertNotNull(mailService_.getMessagesByFolder(username, accPop.getId(), desfolder.getId())) ;
-    assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), desfolder.getId()).size(), 1) ;
     mailService_.removeMessage(username, accPop.getId(), message) ;
     assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), desfolder.getId()).size(), 0) ;
-    
-    
     mailService_.removeAccount(username, accPop.getId()) ;
   }
 }
