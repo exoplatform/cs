@@ -1,0 +1,24 @@
+Index: web/csportal/src/main/webapp/WEB-INF/classes/locale/cs/homepage.properties
+===================================================================
+--- web/csportal/src/main/webapp/WEB-INF/classes/locale/cs/homepage.properties	(revision 65628)
++++ web/csportal/src/main/webapp/WEB-INF/classes/locale/cs/homepage.properties	(working copy)
+@@ -43,4 +43,5 @@
+ UIHomePagePortlet.cs-more=For more information, visit
+ UIHomePagePortlet.cs-wiki=Wiki
+ UIHomePagePortlet.cs-forum=Forum
+-UIHomePagePortlet.cs-and=and
+\ No newline at end of file
++UIHomePagePortlet.cs-and=and
++UIHomePagePortlet.cs-the=the
+Index: web/csportal/src/main/webapp/WEB-INF/classes/locale/cs/homepage_en.properties
+===================================================================
+--- web/csportal/src/main/webapp/WEB-INF/classes/locale/cs/homepage_en.properties	(revision 65628)
++++ web/csportal/src/main/webapp/WEB-INF/classes/locale/cs/homepage_en.properties	(working copy)
+@@ -43,4 +43,5 @@
+ UIHomePagePortlet.cs-more=For more information, visit
+ UIHomePagePortlet.cs-wiki=Wiki
+ UIHomePagePortlet.cs-forum=Forum
+-UIHomePagePortlet.cs-and=and
+\ No newline at end of file
++UIHomePagePortlet.cs-and=and
++UIHomePagePortlet.cs-the=the
