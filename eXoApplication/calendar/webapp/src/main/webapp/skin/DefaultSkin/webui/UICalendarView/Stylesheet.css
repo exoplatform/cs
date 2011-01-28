@@ -153,9 +153,8 @@
 	 color:red ;
 }
 
-.TitleBar .Title {
-	min-width: 350px;
-	text-align: center;
+.UIDayView .TitleBar .Today a{
+	 color:red ;
 }
 
 .UIDayView .WorkOffTime {

@@ -71,7 +71,7 @@
             </div>
           </td>
           <td>
-            <div class="Title">
+            <div class="Title" style="min-width:350px;text-align:center;">
               <%=uiform.getLabel("Week")%>
               $weekNumber, 
               <% if (startDateOfWeek.get(Calendar.MONTH) == endDateOfWeek.get(Calendar.MONTH)) {%>

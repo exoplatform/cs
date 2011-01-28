@@ -57,7 +57,7 @@
 							</div>
 						</td>
 						<td>
-							<div class="Title">$currentMonthName, 
+							<div class="Title" style="min-width:350px;text-align:center;">$currentMonthName, 
 								<a href="<%=uicomponent.event("GotoDate",yearViewAction)%>">
 									$currentYear
 								</a>

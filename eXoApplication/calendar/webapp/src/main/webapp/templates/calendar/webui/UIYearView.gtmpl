@@ -34,7 +34,7 @@
 						</a>
 					</td>
 					<td>
-						<div class="Title"><%=uiform.getLabel('year')%> $currentYear</div>
+						<div class="Title" style="min-width:250px;text-align:center;"><%=uiform.getLabel('year')%> $currentYear</div>
 					</td>
 					<td>
 						<a href="$linkDayNext">
