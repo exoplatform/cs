@@ -69,11 +69,16 @@ public class UIPublicAddressPermission extends UIContainer implements UIPopupCom
   public void deActivate() throws Exception { }
 
   public void initGroup(AddressBook group) throws Exception{
-    UISelectPermissionsForm shareForm = getChild(UISelectPermissionsForm.class) ;
-    shareForm.setGroup(group) ;
-    shareForm.init() ; 
-    updateGroupGrid(group) ;
-    groupId_ = group.getId() ;
+  	groupId_ = group.getId() ;
+  	updateGroupGrid(group) ;
+    getChild(UISelectPermissionsForm.class).init() ; 
+  }
+  
+  public void processRender(WebuiRequestContext context) throws Exception {
+  	getChild(UIGrid.class).setRendered(true);
+    context.getWriter().append("<span class=\"").append(getId()).append("\" id=\"").append(getId()).append("\">");
+    renderChildren(context) ;
+    context.getWriter().append("</span>");
   }
   
   public void updateGroupGrid(AddressBook group) throws Exception {

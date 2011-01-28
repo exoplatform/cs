@@ -326,6 +326,9 @@ public class UISelectPermissionsForm extends UIForm implements UIPopupComponent,
       if (values == null) return ;
       for (String value : values.split(","))
         uiForm.updateSelect(FIELD_USER, value.trim()) ; 
+      UIPopupWindow uiPoupPopupWindow = uiUserSelector.getParent() ;
+      uiPoupPopupWindow.setUIComponent(null) ;
+      uiPoupPopupWindow.setShow(false) ; 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
     }
   }
