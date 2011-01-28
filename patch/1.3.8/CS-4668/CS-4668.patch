@@ -1,0 +1,31 @@
+Index: eXoApplication/contact/webapp/src/main/webapp/javascript/eXo/contact/UIContactDragDrop.js
+===================================================================
+--- eXoApplication/contact/webapp/src/main/webapp/javascript/eXo/contact/UIContactDragDrop.js	(revision 64279)
++++ eXoApplication/contact/webapp/src/main/webapp/javascript/eXo/contact/UIContactDragDrop.js	(working copy)
+@@ -9,10 +9,10 @@
+   this.listView = false ;
+ } ;
+ 
+-UIContactDragDrop.prototype.init = function() {
++UIContactDragDrop.prototype.init = function(compId) {
+   this.dropableSets = [] ;
+-  this.uiContactPortlet = document.getElementById('UIContactPortlet') ;
+-  this.uiGrid = eXo.core.DOMUtil.findFirstDescendantByClass(this.uiContactPortlet,"table", "UIGrid") ;
++  this.uiContacts = document.getElementById(compId);
++  this.uiGrid = eXo.core.DOMUtil.findFirstDescendantByClass(this.uiContacts,"table", "UIGrid") ;
+   this.getAllDropableSets() ;
+   this.regDnDItem() ;
+ } ;
+Index: eXoApplication/contact/webapp/src/main/webapp/templates/contact/webui/UIContacts.gtmpl
+===================================================================
+--- eXoApplication/contact/webapp/src/main/webapp/templates/contact/webui/UIContacts.gtmpl	(revision 64279)
++++ eXoApplication/contact/webapp/src/main/webapp/templates/contact/webui/UIContacts.gtmpl	(working copy)
+@@ -19,7 +19,7 @@
+   rcontext.getJavascriptManager().importJavascript("eXo.cs.CSUtils","/csResources/javascript") ;
+   rcontext.getJavascriptManager().importJavascript("eXo.cs.FormHelper","/csResources/javascript") ;
+ 	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactDragDrop","/contact/javascript") ;
+-	rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.contact.UIContactDragDrop.init() ;") ;
++	rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.contact.UIContactDragDrop.init('"+ uicomponent.getId() +"') ;") ;
+ 	rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.contact.UIContactPortlet.checkView();') ;
+   rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactPortlet.checkLayout();') ;
+   rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactPortlet.refreshData();') ;

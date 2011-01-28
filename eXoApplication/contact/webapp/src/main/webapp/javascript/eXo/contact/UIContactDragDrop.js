@@ -9,10 +9,10 @@ function UIContactDragDrop() {
   this.listView = false ;
 } ;
 
-UIContactDragDrop.prototype.init = function() {
+UIContactDragDrop.prototype.init = function(compId) {
   this.dropableSets = [] ;
-  this.uiContactPortlet = document.getElementById('UIContactPortlet') ;
-  this.uiGrid = eXo.core.DOMUtil.findFirstDescendantByClass(this.uiContactPortlet,"table", "UIGrid") ;
+  this.uiContacts = document.getElementById(compId);
+  this.uiGrid = eXo.core.DOMUtil.findFirstDescendantByClass(this.uiContacts,"table", "UIGrid") ;
   this.getAllDropableSets() ;
   this.regDnDItem() ;
 } ;
