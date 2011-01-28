@@ -535,6 +535,7 @@ public class MailServiceImpl implements MailService, Startable {
     msgList.add(message);
     String folderId = message.getFolders()[0];
     Folder destFolder = null;
+    boolean success = false;
     if (folderId != null) {
       destFolder = getFolder(userName, account.getId(), folderId);
     }
@@ -545,10 +546,10 @@ public class MailServiceImpl implements MailService, Startable {
       } catch (Exception e) {
         logger.warn("Cannot add sent message into \"" + destFolder.getName() + "\" folder on server"); 
       }
-    }
+    }else if(account.getProtocol().equalsIgnoreCase(Utils.POP3)) success = true;
     storage_.saveMessage(userName, account.getId(), targetMsgPath, message, isNew);
-    if(successList != null && successList.size() > 0) return true;
-    return false;
+    if(successList != null && successList.size() > 0) success = true;
+    return success;
   }
 
   public void saveMessage(String userName,
