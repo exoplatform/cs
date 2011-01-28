@@ -1,0 +1,18 @@
+Index: eXoApplication/calendar/webapp/src/main/webapp/skin/DefaultSkin/webui/Stylesheet.css
+===================================================================
+--- eXoApplication/calendar/webapp/src/main/webapp/skin/DefaultSkin/webui/Stylesheet.css	(revision 65655)
++++ eXoApplication/calendar/webapp/src/main/webapp/skin/DefaultSkin/webui/Stylesheet.css	(working copy)
+@@ -333,4 +333,12 @@
+ 
+ .UICalendarPortlet .UIHightlightEvent {
+ 	border:solid 1px red;
++}
++
++.UICalendarPortlet .UIImportForm .UIFormUploadInput {
++	width: 270px;
++}
++
++.UICalendarPortlet .UIUserSelector .UIAddressSearchForm .SearchIcon {
++	margin: 3px 8px;
+ }
+\ No newline at end of file
