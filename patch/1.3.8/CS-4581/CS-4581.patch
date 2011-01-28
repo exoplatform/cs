@@ -1,0 +1,113 @@
+Index: eXoApplication/mail/webapp/src/main/webapp/javascript/eXo/mail/MailServiceHandler.js
+===================================================================
+--- eXoApplication/mail/webapp/src/main/webapp/javascript/eXo/mail/MailServiceHandler.js	(revision 62267)
++++ eXoApplication/mail/webapp/src/main/webapp/javascript/eXo/mail/MailServiceHandler.js	(working copy)
+@@ -159,6 +159,15 @@
+   } else {
+     url = url + "checkall" + '/';
+   }
++
++  eXo.cs.CSCometd.subscribe('/eXo/Application/mail/ckmailsts/' + this.accountId, function(eventObj) {		
++		eXo.mail.MailServiceHandler.updateCheckMailStatus(eventObj);
++  });
++  
++  if (!eXo.cs.CSCometd.isConnected()) {
++	     eXo.cs.CSCometd.init();
++  }
++  
+   this.makeRequest(url, this.HTTP_GET, '', this.CHECK_MAIL_ACTION);
+ };
+ 
+@@ -176,6 +185,92 @@
+ };
+ 
+ 
++MailServiceHandler.prototype.updateCheckMailStatus = function(obj) {
++	var data = eXo.core.JSON.parse(obj.data);
++	
++	if (this.accountId != data.accountId) {
++		return;
++	}
++	
++	var status = data.status;
++	var previousStatus = data.previousStatus;
++	var statusMsgKey = data.statusMsg;
++	var statusMsg = eXo.core.DOMUtil.findDescendantById(this.checkMailInfobarNode, statusMsgKey).innerHTML ;
++	var stopLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopCheckMail') ;
++	var stoppingLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopingCheckMail') ;
++	var warningLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'WarningMessage') ;
++	var loadingIcon = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'LoadingIcon');
++	var statusText = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
++	
++	if (status != this.FINISHED_CHECKMAIL_STATUS && this.checkMailInfobarNode.style.display == 'none') {
++		this.checkMailInfobarNode.style.display = 'block';
++	}
++	switch (status) {
++	case this.START_SYNC_FOLDER:	
++		document.getElementById('SynchronizeIconRefreshFolder').className = "SyncingIcon";
++		break;
++	case this.FINISH_SYNC_FOLDER:
++		document.getElementById('SynchronizeIconRefreshFolder').className = "SyncIcon"; 
++  	var updateImapFolder = document.getElementById("UpdateImapFolder");
++    if (updateImapFolder != null) {
++  		eval(eXo.core.DOMUtil.findDescendantsByTagName(updateImapFolder, 'a')[0].href.replace("%20", ""));
++    }
++	  //this.destroy();
++		break;
++	case this.START_CHECKMAIL_STATUS:
++		statusText.style.display = 'block';
++		stopLabel.style.display = 'block';
++		loadingIcon.style.display = 'block'; 
++		warningLabel.style.display = 'none';
++		stoppingLabel.style.display = 'none';
++		//this.resetStatusBar();
++		//this status when server start checking mail.
++		break;
++	case this.COMMON_ERROR:		
++	case this.CONNECTION_FAILURE:	   
++	case this.RETRY_PASSWORD:
++		// this status indicates that can not connect to mail server due to authentication error. 
++		// We will show status message as error notice and show 'retry password' form.
++	  warningLabel.style.display = "block";
++	  warningLabel.innerHTML = statusMsg;
++	  stopLabel.style.display = "none";
++	  loadingIcon.style.display = 'none';
++	  statusText.style.display = 'none';
++	// unsubscribe cometd channel
++		if (eXo.cs.CSCometd.isConnected()) {
++			eXo.cs.CSCometd.unsubscribe('/eXo/Application/mail/ckmailsts/' + this.accountId);
++		}
++	  
++	  if(status == this.RETRY_PASSWORD){
++			eXo.webui.UIForm.submitForm('UIMessageList','ComfirmPassword', true) ;			
++		}
++		return;
++	case this.FINISHED_CHECKMAIL_STATUS:
++		// this status notices that the checking mail task has finished.
++		// we will show finish checking mail status and hide the status bar automatically.
++		stopLabel.style.display = 'none';
++		loadingIcon.style.display = 'none';
++		stoppingLabel.style.display = 'none';
++		warningLabel.style.display = 'none';
++		statusText.style.display = 'block';
++		
++		// unsubscribe cometd channel
++		if (eXo.cs.CSCometd.isConnected()) {
++			eXo.cs.CSCometd.unsubscribe('/eXo/Application/mail/ckmailsts/' + this.accountId);
++		}
++		
++		closeFetchingBar();
++		break;
++	}
++	
++	
++	eXo.mail.MailServiceHandler.showStatusBox(statusMsgKey);
++	function closeFetchingBar(){
++		setTimeout("eXo.mail.MailServiceHandler.checkMailInfobarNode.style.display='none';",60000);
++	}	
++};
++
++
+ MailServiceHandler.prototype.showStatusBox = function(status) {
+   this.checkMailInfobarNode = document.getElementById(this.uiId);
+   var statusTextNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
