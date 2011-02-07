@@ -21,39 +21,39 @@
 
 <messagebundle>
 	<msg name="title">
-  	My Tasks
+  	Mes tâches
   </msg>
 	<msg name="baseurl">
-  	Base url
+  	URL de base
   </msg>
 	<msg name="subscribeurl">
-  	Subscription url
+  	URL de Service 
   </msg>
 	<msg name="limit">
-  	Number of items is displayed
+  	Nombre d'item affichés
   </msg>
 	<msg name="format">
-  	Date time format
+  	Format de l'heure
   </msg>  
   <msg name="showall">
-  	Show all
+  	Montrer tout
   </msg>
 	<msg name="noevent">
-  	No tasks for today
+  	Aucune tâche aujourd'hui
   </msg>
 	<msg name="calendars">
-  	Calendar
+  	Calendrier
   </msg>
 	<msg name="setting">
-  	Setting
+  	Réglage
   </msg>
 	<msg name="save">
-  	Save
+  	Enregistrer
   </msg>
 	<msg name="cancel">
-  	Cancel
+  	Annuler
   </msg>
 	<msg name="confirm">
-  	Are you sure this task completed?
+  	Êtes-vous sûr que cette tâche est terminée?
   </msg>
 </messagebundle>
