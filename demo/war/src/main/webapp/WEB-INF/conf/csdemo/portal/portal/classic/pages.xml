@@ -94,85 +94,22 @@
     </portlet-application>  
   </page>
   
-  <!--
- 
- <page>
-  	<page-id>group::platform/users::chat</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/users</owner-id>
-    <name>chat</name>     
-    <access-permissions>*:/platform/users</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>   
-    
-    <application>
-      <instance-id>group#platform/users:/chat/ChatPortlet/chat</instance-id>    
-      <title>Chat Portlet</title>
-      <show-info-bar>false</show-info-bar>       
-    </application>
-   </page>
-   
-   <page>
-  	<page-id>group::platform/users::chatbar</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/users</owner-id>
-    <name>chatbar</name>     
-    <access-permissions>*:/platform/users</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>   
-    
-    <application>
-      <instance-id>group#platform/users:/chatbar/ChatBarPortlet/chatbar</instance-id>    
-      <title>Chat Bar Portlet</title>
-      <show-info-bar>false</show-info-bar>       
-    </application>
-   </page>  
-  
-   <page>
-  	<page-id>group::platform/users::webos</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/users</owner-id>
-    <name>webos</name>
-    <factory-id>Desktop</factory-id>
+  <page>
+    <name>content</name>
+    <title>RSS</title>
     <access-permissions>*:/platform/users</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <show-max-window>true</show-max-window>
     
-    <application>
-      <instance-id>group#platform/users:/mail/MailPortlet/mail</instance-id>    
-      <title>Mail Portlet</title>
-      <show-info-bar>true</show-info-bar>
-      <show-application-state>true</show-application-state>
-    </application>
-    
-    <application>
-      <instance-id>group#platform/users:/calendar/CalendarPortlet/calendars</instance-id>    
-      <title>Calendar Portlet</title>
-      <show-info-bar>true</show-info-bar>
-      <show-application-state>true</show-application-state>
-    </application>
-    
-    <application>
-      <instance-id>group#platform/users:/contact/ContactPortlet/contact</instance-id>    
-      <title>Contact Portlet</title>
-      <show-info-bar>true</show-info-bar>
-      <show-application-state>true</show-application-state>
-    </application>    
-          
-      
-    <application>
-      <instance-id>group#platform/users:/chat/ChatPortlet/chat</instance-id>    
-      <title>Chat Portlet</title>
-      <show-info-bar>false</show-info-bar>       
-    </application>
-    
-     
-     <application>
-      <instance-id>group#platform/users:/chatbar/ChatBarPortlet/chatbar</instance-id>    
-      <title>Chat Bar Portlet</title>
-      <show-info-bar>false</show-info-bar>       
-    </application>
-           
+    <portlet-application>
+    <portlet>
+        <application-ref>content</application-ref>
+        <portlet-ref>RSSReaderPortlet</portlet-ref>
+      </portlet>    
+      <title>RSS Reader Portlet</title>
+      <access-permissions>*:/platform/users</access-permissions>
+      <show-info-bar>false</show-info-bar>      
+    </portlet-application>  
+  </page>
   
-  </page>    	 
-    	  
---></page-set>
+  </page-set>
 

@@ -221,5 +221,38 @@
     </portlet-preferences>
     
   </portlet>
+  
+  <portlet>
+    <description xml:lang="EN">Content Portlet</description>
+    <portlet-name>UserToolBarContentPortlet</portlet-name>
+    <display-name xml:lang="EN">ContentToolbar Portlet</display-name>
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
+    
+    <init-param>
+      <name>webui.configuration</name>
+      <value>/WEB-INF/conf/portlet/toolbar/UserToolBarContentPortlet/webui/configuration.xml</value>
+    </init-param>    
+
+    <expiration-cache>0</expiration-cache>
+    <supports>
+      <mime-type>text/html</mime-type>
+    </supports>
+    <supported-locale>en</supported-locale>
+    <resource-bundle>locale.portal.webui</resource-bundle>
+    <portlet-info>
+      <title>ContentToolbar Portlet</title>
+      <short-title>ContentToolbar Portlet</short-title>
+      <keywords>System</keywords>
+    </portlet-info>    
+    
+    <portlet-preferences>
+      <preference>
+        <name>template</name>
+        <value>system:/templates/toolbar/UIUserToolBarContentPortlet.gtmpl</value>
+        <read-only>false</read-only>
+      </preference>
+    </portlet-preferences>
+    
+  </portlet>
 
 </portlet-app>
