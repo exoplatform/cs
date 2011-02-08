@@ -17,6 +17,7 @@
 package org.exoplatform.mail.webui ;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -1213,12 +1214,20 @@ public class UIMessageList extends UIForm {
       Message msgTem = null;
       List<Message> successList = new ArrayList<Message>();
       try {
-        if (selectedFolderId != null && selectedFolderId.equals(trashFolderId)) { 
-          mailSrv.removeMessages(username, accountId, appliedMsgList, true);
+        if (selectedFolderId != null) {
+          if (selectedFolderId.equals(trashFolderId)) {
+            mailSrv.removeMessages(username, accountId, appliedMsgList, true);
+          } else {
+            for (Message message : appliedMsgList)
+              msgTem = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], trashFolderId);
+            if(msgTem == null) successList.add(null);
+          }
         } else {
-          for (Message message : appliedMsgList)
-            msgTem = mailSrv.moveMessage(username, accountId, message, message.getFolders()[0], trashFolderId);
-          if(msgTem == null) successList.add(null);
+          // if message list is of a tag.
+          String tagId = uiTags.getSelectedTagId();
+          if (!Utils.isEmptyField(tagId)) {
+            mailSrv.removeTagsInMessages(username, accountId, appliedMsgList, Arrays.asList(new String[] {tagId}));
+          }
         }
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
