@@ -1055,7 +1055,95 @@ UIMailPortlet.prototype.showHideAttach = function(menu){
 
 UIMailPortlet.prototype.getElementById = function(id){
 	return eXo.core.DOMUtil.findDescendantById(this.portletNode,id);
-}
+};
+
+UIMailPortlet.prototype.addMoreDelegatedAccounts = function(obj){
+	var tabId = obj.getAttribute("tabId");
+	var DOMUtil = eXo.core.DOMUtil;
+	var tabNode = document.getElementById(tabId);
+	var tableClass = "DelegatedAccountGrid";
+	var FIELD_OWNER_ACCOUNTS_ID = "owner-accounts";
+	var FIELD_DELEGATED_ACCOUNTS_ID = "delegated-accounts";
+	var FIELD_PRIVILEGE_FULL_ID = "full-privilege";
+	var FIELD_PRIVILEGE_READONLY_ID = "readonly-pivilege";
+	
+	var tableNode = DOMUtil.findFirstDescendantByClass(tabNode, "table", tableClass);
+	var ownerUserTd = DOMUtil.findDescendantById(tabNode,FIELD_OWNER_ACCOUNTS_ID);
+	var fullSpan = DOMUtil.findDescendantById(tabNode, FIELD_PRIVILEGE_FULL_ID);
+	var readonlySpan = DOMUtil.findDescendantById(tabNode, FIELD_PRIVILEGE_READONLY_ID);
+	
+	var ownerUser = DOMUtil.findFirstDescendantByClass(ownerUserTd, "select", "selectbox");
+	var delegatedUser = DOMUtil.findDescendantById(tabNode,FIELD_DELEGATED_ACCOUNTS_ID);
+	var full = DOMUtil.findFirstDescendantByClass(fullSpan, "input", "checkbox");
+	var readonly = DOMUtil.findFirstDescendantByClass(readonlySpan, "input", "checkbox");
+		
+	var countRows = tableNode.rows.length;
+	var tbody = DOMUtil.findDescendantsByTagName(tableNode, 'tbody')[0]; 
+	if(tbody == undefined || tbody == null){
+		tbody = document.createElement('tbody');
+		tableNode.appendChild(tbody); 	 
+	}
+	var newRow = tableNode.insertRow(countRows);//row(account(email), delegate to, read only, full, acction)	
+	newRow.insertCell(0).innerHTML = ownerUser.value;
+	newRow.insertCell(1).innerHTML = delegatedUser.value;
+	
+	var cellFullPri = newRow.insertCell(2);
+	var checkboxFull = document.createElement("input");
+	checkboxFull.className="checkbox";
+	checkboxFull.type="checkbox";
+	checkboxFull.name="privilege-full";
+	checkboxFull.checked = full.checked;
+	cellFullPri.appendChild(checkboxFull);
+		
+	var readonlyPri = newRow.insertCell(3)
+	var checkboxReadonly = document.createElement("input");
+	checkboxReadonly.type="checkbox";
+	checkboxReadonly.className="checkbox";
+	checkboxReadonly.name="privilege-readonly";
+	checkboxReadonly.checked = readonly.checked;
+	readonlyPri.appendChild(checkboxReadonly);
+	
+	var cellAction = newRow.insertCell(4);
+	var action = document.createElement("a");
+	action.href="javascript:void(0);";
+	action.innerHTML = "Remove";
+	action.className="ActionsDelegateAccount";
+	cellAction.appendChild(action);
+
+	action.onclick = function(){
+		eXo.mail.UIMailPortlet.removeAccountDelegation(action)
+	}
+	if(countRows <= 0){	
+		tableNode.deleteRow(newRow.indexRow);
+		tbody.appendChild(newRow);
+	}
+	
+};
+
+UIMailPortlet.prototype.removeAccountDelegation = function(obj){
+	var currentRow = obj.parentNode.parentNode;
+	var tableNode = currentRow.parentNode.parentNode;
+	var currentIndex = currentRow.rowIndex;
+	//call mail webservice here
+	//if(scuccess) clean UI
+	tableNode.deleteRow(currentRow);
+};
+
+UIMailPortlet.prototype.validPrivilege = function(tabId){
+	var DOMUtil = eXo.core.DOMUtil;
+	var tabNode = document.getElementById(tabId);
+	var FIELD_PRIVILEGE_FULL_ID = "full-privilege";
+	var FIELD_PRIVILEGE_READONLY_ID = "readonly-pivilege";
+	
+	var fullSpan = DOMUtil.findDescendantById(tabNode, FIELD_PRIVILEGE_FULL_ID);
+	var readonlySpan = DOMUtil.findDescendantById(tabNode, FIELD_PRIVILEGE_READONLY_ID);
+	var full = DOMUtil.findFirstDescendantByClass(fullSpan, "input", "checkbox");
+	var readonly = DOMUtil.findFirstDescendantByClass(readonlySpan, "input", "checkbox");
+	full.onclick = function(){
+		if(this.checked) readonly.disabled = true;
+		else readonly.removeAttribute("disabled");
+	};
+};
 
 eXo.mail.UIMailPortlet = new UIMailPortlet();
 // Override submit method of UIForm to add a comfirm message

@@ -123,6 +123,9 @@
   		<propertyDefinition name="exo:permissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition>    
+  		<propertyDefinition name="exo:delegationPrivilege" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        	<valueConstraints/>
+    	</propertyDefinition>
   	</propertyDefinitions>
   	<childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="nt:unstructured" autoCreated="false" mandatory="false"
@@ -407,6 +410,13 @@
   			<valueConstraints/>
   		</propertyDefinition>
   	</propertyDefinitions>
+ 	<childNodeDefinitions>
+	  <childNodeDefinition name="" defaultPrimaryType="" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" sameNameSiblings="false">
+	      <requiredPrimaryTypes>
+	        <requiredPrimaryType>nt:unstructured</requiredPrimaryType>
+	      </requiredPrimaryTypes>
+	  </childNodeDefinition>	      
+	</childNodeDefinitions>
   </nodeType> 	
   
   <nodeType name="exo:messageMixin" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">

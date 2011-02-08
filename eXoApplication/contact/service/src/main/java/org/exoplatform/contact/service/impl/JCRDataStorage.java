@@ -81,7 +81,7 @@ public class JCRDataStorage implements DataStorage {
   private static final String PROP_ADDRESSBOOK_REFS = "exo:categories";
   final private static String CONTACTS = "contacts".intern() ;
   final private static String PERSONAL_ADDRESS_BOOKS = "contactGroup".intern() ;
-  final private static String GROUP_ADDRESS_BOOKS = "GroupAdSdress".intern() ;
+  final private static String GROUP_ADDRESS_BOOKS = "GroupAddress".intern() ;
   final private static String TAGS = "tags".intern() ;
   final private static String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
   final private static String CONTACT_APP = "ContactApplication".intern() ;
