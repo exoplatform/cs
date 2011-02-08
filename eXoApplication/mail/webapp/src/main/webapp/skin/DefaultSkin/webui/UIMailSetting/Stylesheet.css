@@ -95,4 +95,53 @@
 	font-weight:bold;
 }
 
+/*UIDelegationInputset account*/
+.UIMailPortlet .UIDelegationInputSet{
+	font-color:#747480;
+}
 
+.UIMailPortlet .UIDelegationInputSet .AccountsInput{
+	text-align:center;
+}
+
+.UIMailPortlet .UIDelegationInputSet .AccountsInput .InputField{
+	text-align:left;
+	padding:0px 0px 5px 30px;
+}
+
+.UIMailPortlet .UIDelegationInputSet .PrivilegeSpace{
+	padding:20px 30px;
+	float:left;
+	text-align:left;
+}
+
+.UIMailPortlet .UIDelegationInputSet .PrivilegeLabel{
+	float:left;
+	width:auto;
+	padding:0px 20px 0px 0px;  
+}
+.UIMailPortlet .UIDelegationInputSet .PrivilegeInput{
+	float:left;
+	width:auto;
+	padding: 0px 5px;
+	text-align:left;
+}
+
+.UIMailPortlet .UIDelegationInputSet .AddMoreDelegatedAccount {
+	background: url('icons/add_delegation_icon1.png') no-repeat transparent center ;
+	height: 32px; width: 32px;
+	cursor: pointer;
+	padding:0px 0px 15px 30px;
+}
+
+.UIMailPortlet .UIDelegationInputSet .DelegatedAccountsList{
+	padding:10px 5px;
+}
+
+.UIMailPortlet .UIDelegationAccountGrid {
+ background: #F3F3F3;
+}
+
+.UIMailPortlet .UIDelegationAccountGrid .RemoveIcon{
+	background: url('icons/recyclebin.png') no-repeat transparent center ;
+}

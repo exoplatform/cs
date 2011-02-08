@@ -1,0 +1,92 @@
+<%
+  import org.exoplatform.webui.core.UIComponent ;
+  import org.exoplatform.mail.MailUtils;
+  String[] beanFields =  uicomponent.getBeanFields() ;
+  String[] beanActions =  uicomponent.getBeanActions() ;
+  UIComponent uiParent = uicomponent.getParent() ;
+  String name = uicomponent.getId() ;
+%>
+{%//begin UIDelegationAccountGrid%}
+<div class="$uicomponent.id" id="$uicomponent.id">
+	<table class="UIGrid">
+	  <thead>
+	    <tr>
+	      <%if(name != null) { %>
+	        <%for(field in beanFields) { %>
+	          <th><%=_ctx.appRes(name+".header."+field)%></th>
+	        <%}%>
+	        <%if(beanActions != null) { %>
+	          <th><%=_ctx.appRes(name+".header.action")%></th>
+	        <%}%>
+	      <%}%>
+	      <%if(name == null) {%>
+	        <%for(field in beanFields) { %>
+	          <th><%=_ctx.appRes(uiParent.getName()+".header."+field)%></th>
+	        <%}%>
+	        <%if(beanActions != null && beanActions.length > 0) { %>
+	          <th><%=_ctx.appRes(uiParent.getName()+".header.action")%></th>
+	        <%}%>
+	      <%}%>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  <%
+	    def rowClass = null ;
+	    boolean even = true ;
+	    for (bean in uicomponent.getBeans())  {
+	      if(even) rowClass = "EvenRow" ;  
+	      else rowClass =  "OddRow" ; 
+	      even = !even ;
+	  %>
+	    <tr class="$rowClass">
+	      <%
+	        for(field in beanFields) { 
+	          def fieldValue = uicomponent.getFieldValue(bean, field) ;
+	          def cssClass = "" ;
+	          if(fieldValue != null) {
+	            //fieldValue = MailUtils.encodeHTML(fieldValue);
+	            def fieldClass = fieldValue.getClass() ;
+	            if(fieldClass == Integer.class)  cssClass = "number" ;
+	            else if(fieldClass == java.util.Date.class)  cssClass = "Date" ;
+	            else cssClass = "text" ;
+	          } else {
+	            fieldValue = "";
+	          }
+	          if(field.equals(uicomponent.FULL_PRIVILEGE_FIELD) || field.equals(uicomponent.READONLY_PRIVILEGE_FIELD)){
+	          	def privilegeName=field + "-name";
+	      %>
+	      	<td class="$cssClass" style="overflow:hidden;">
+	      		<input type="checkbox" name="$privilegeName" checked="$fieldValue" class="checkbox"/>
+	      	</td>
+	      	<% }else {%>	
+	          <td class="$cssClass" style="overflow:hidden;">$fieldValue</td>
+	          <%}%>
+	      <%}%>
+	      <%if(beanActions != null && beanActions.length > 0) { %>
+	        <td align="center" style="padding:0px;">         
+	          <div class="ActionContainer" style="margin:0px auto;">
+	            <div class="OverflowContainer" style="margin:auto;">          
+	            <%def beanIdField = uicomponent.getBeanIdField() ; %>          
+	            <%for(action in beanActions) { %>
+	            <%  def beanId = uicomponent.getFieldValue(bean,beanIdField)  ; %>               
+	              <% 
+	                if(action != null) { 
+	                  if(uicomponent.isUseAjax()){
+	              %>             
+	                    <a href="<%=uicomponent.event(action, beanId)%>" title="$action"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon" alt="" ></a>		          
+	              <%  }else{ %>
+	                    <a href="<%=uicomponent.url(action, beanId)%>" title="$action"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon" alt="" ></a>		          
+	              <%  } %> 
+	              <%} %> 
+	            <%}%>                 
+	            </div>
+	          </div>
+	        </td>
+	      <% } %>  
+	    </tr>
+	  <%}%>
+	  </tbody>
+	</table> 
+	<!--End UIDelegationAccountGrid-->
+	<%_ctx.renderUIComponent(uicomponent.getUIPageIterator())%>
+</div>

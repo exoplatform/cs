@@ -25,9 +25,11 @@ import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.AccountDelegation;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.MessageFilter;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
@@ -47,6 +49,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 
 /**
@@ -76,11 +79,18 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
   public static final String SENT_RECEIPT_NEVER = "never".intern();
   public static final String SENT_RECEIPT_ALWAYS = "always".intern();
   public static final String RETURN_RECEIPTS="returnReceipts".intern();
+  
   public static final String TAB_GENERAL = "general".intern();
   public static final String TAB_RETURN_RECEIPT = "return-receipt".intern();
   public static final String TAB_LAYOUT = "layout".intern();
+  public static final String TAB_ACCOUNT_DELEGATION = "account-delegation".intern();
   
-  public UIMailSettings() throws Exception {    
+  public static final String FIELD_OWNER_ACCOUNTS = "owner-accounts".intern();
+  public static final String FIELD_DELEGATED_ACCOUNTS = "delegated-accounts".intern();
+  public static final String FIELD_PRIVILEGE_FULL = "full-privilege".intern();
+  public static final String FIELD_PRIVILEGE_READONLY = "readonly-pivilege".intern();
+  
+  public UIMailSettings() throws Exception {
     super("UIMailSettings");
   }
   
@@ -88,6 +98,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
     UIFormInputSet  generalInputSet = new UIFormInputSet(TAB_GENERAL);
     generalInputSet.addUIFormInput(new UIFormSelectBox(DEFAULT_ACCOUNT, DEFAULT_ACCOUNT, getAccounts()));
     List<SelectItemOption<String>> numberPerPage = new ArrayList<SelectItemOption<String>>();
+    String username = MailUtils.getCurrentUser();
     for (int i = 1; i <= 7; i++) {
       numberPerPage.add(new SelectItemOption<String>(String.valueOf(10*i)));
     }
@@ -127,9 +138,23 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
     returnReceiptOptions.add(new SelectItemOption<String>(SENT_RECEIPT_ALWAYS, SENT_RECEIPT_ALWAYS));
     returnReceiptInputSet.addUIFormInput((new UIFormRadioBoxInput(RETURN_RECEIPTS,RETURN_RECEIPTS, returnReceiptOptions)).setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN));
     
+    //delegate email account
+    UIDelegationInputSet accountDelegate = new UIDelegationInputSet(TAB_ACCOUNT_DELEGATION);  
+    UIFormSelectBox ownerAccounts = new UIFormSelectBox(FIELD_OWNER_ACCOUNTS, FIELD_OWNER_ACCOUNTS, this.getOwnerAccs(username));
+    UIFormStringInput delegatedAccounts = new UIFormStringInput(FIELD_DELEGATED_ACCOUNTS, FIELD_DELEGATED_ACCOUNTS, null);//getDelegatedAccs()
+    UIFormCheckBoxInput<Boolean> fullPrivilege = new UIFormCheckBoxInput<Boolean>(FIELD_PRIVILEGE_FULL, FIELD_PRIVILEGE_FULL, null);
+    UIFormCheckBoxInput<Boolean> readonlyPrivileage = new UIFormCheckBoxInput<Boolean>(FIELD_PRIVILEGE_READONLY, FIELD_PRIVILEGE_READONLY, null);
+    
+    accountDelegate.addUIFormInput(ownerAccounts);
+    accountDelegate.addUIFormInput(delegatedAccounts);
+    accountDelegate.addUIFormInput(fullPrivilege);
+    accountDelegate.addUIFormInput(readonlyPrivileage);
+    
     addUIFormInput(generalInputSet);
     addUIFormInput(returnReceiptInputSet);
     addUIFormInput(layoutInputSet);
+    addUIFormInput(accountDelegate);
+    
     setSelectedTab(generalInputSet.getId()) ;
     fillData() ;
   }
@@ -287,6 +312,25 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
     }
   }
+  
+  public List<SelectItemOption<String>> getOwnerAccs(String username){
+    List<Account> accs = null;
+    try {
+      accs = MailUtils.getMailService().getAccounts(username);
+    } catch (Exception e) {
+       e.printStackTrace(); 
+      return null;
+    }
+    List<SelectItemOption<String>> ownAccs = new ArrayList<SelectItemOption<String>>();
+    SelectItemOption<String> accountOpt = null;
+    if(accs != null && accs.size()>0){
+      for(Account acc:accs){
+        accountOpt = new SelectItemOption<String>(acc.getUserDisplayName(), acc.getEmailAddress());
+        ownAccs.add(accountOpt);
+      }
+    }
+    return ownAccs;
+  } 
 }
 
 

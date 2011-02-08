@@ -1,0 +1,70 @@
+<%
+/**
+* Created by The eXo Platform SARL
+* Author : Nguyen Van Hoang
+*          hoangnv01@mail.com
+* @version: $Id$
+* January 20, 2011
+*/
+  import org.exoplatform.webui.core.UIComponent ;
+  import org.exoplatform.mail.service.Utils;
+	import org.exoplatform.mail.webui.popup.UIMailSettings;
+  import org.exoplatform.mail.service.AccountDelegation;
+  import org.exoplatform.mail.webui.popup.UIDelegationAccountGrid;
+	def label; 
+	def input;
+  def tabId = uicomponent.id;
+  def jsMan = _ctx.getRequestContext().getJavascriptManager() ;
+  jsMan.addJavascript("eXo.mail.UIMailPortlet.validPrivilege('" + tabId + "');");
+%>
+<div class="UIDelegationInputSet" id="$tabId">
+	<div class="AccountsInput"><table style="width:100%;">
+		<tbody>
+      <%
+        input = uicomponent.getChildById(UIMailSettings.FIELD_OWNER_ACCOUNTS);
+        label = _ctx.appRes(uicomponent.getParent().id + ".label." + input.getId()) ;
+        def inputDA = uicomponent.getChildById(UIMailSettings.FIELD_DELEGATED_ACCOUNTS);
+        def labelDA = _ctx.appRes(uicomponent.getParent().id + ".label." + inputDA.getId()) ;
+      %>  
+			<tr>
+				<td class="InputField">$label</td>
+				<td class="InputField">$labelDA</td>
+			</tr>
+      <tr>
+        <td class="InputField" id='<%=input.getId()%>'><%uicomponent.renderUIComponent(input)%></td>
+        <td class="InputField"><%uicomponent.renderUIComponent(inputDA)%></td>  
+      </tr>      
+		</tbody>
+	</table></div>
+	<%
+		label = _ctx.appRes(uicomponent.getParent().id + ".label.privileges");
+		def inputPriFull = uicomponent.getChildById(UIMailSettings.FIELD_PRIVILEGE_FULL);
+		def labelPriFull = _ctx.appRes(uicomponent.getParent().id + ".label." + inputPriFull.getId());
+		def inputPriReadonly = uicomponent.getChildById(UIMailSettings.FIELD_PRIVILEGE_READONLY);
+		def labelPriReadonly = _ctx.appRes(uicomponent.getParent().id + ".label." + inputPriReadonly.getId());
+	%>
+	<div class="PrivilegeSpace">
+    <table><tr><td>
+        <div><span class="PrivilegeLabel">$label:</span></div>
+        <div  class="PrivilegeInput">
+         <span id='<%=inputPriFull.getId()%>'><%uicomponent.renderUIComponent(inputPriFull)%></span>
+         <span>$labelPriFull</span>
+        </div>
+        <div  class="PrivilegeInput">
+          <span id='<%=inputPriReadonly.getId()%>'><%uicomponent.renderUIComponent(inputPriReadonly)%></span>
+          <span>$labelPriReadonly</span>
+        </div>
+      </td></tr>
+      <tr><td>
+        <%
+          label = _ctx.appRes(uicomponent.getParent().id + ".label.add-more-delegated-accounts") ;
+        %>
+        <div  class="AddMoreDelegatedAccount" tabId="$tabId" title="$label" onclick="eXo.mail.UIMailPortlet.addMoreDelegatedAccounts(this)"><span></span></div>
+      </td></tr></table>
+  </div>
+	<div class="DelegatedAccountsList">
+		 <%
+      uicomponent.renderChild(UIDelegationAccountGrid.class);
+     %>
+	</div>	
+</div>
