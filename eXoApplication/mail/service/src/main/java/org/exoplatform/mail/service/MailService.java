@@ -809,6 +809,7 @@ public interface MailService {
      * @throws Exception
      */
     public Node getDMSSelectedNode(String userName, String relPath) throws Exception;
+    
     /**
      * delegate or update permission for receiver 
      * @param sender : single userId , the user who given a delegation to other

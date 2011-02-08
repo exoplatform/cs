@@ -407,13 +407,6 @@
   			<valueConstraints/>
   		</propertyDefinition>
   	</propertyDefinitions>
-  	<childNodeDefinitions>
-	  <childNodeDefinition name="" defaultPrimaryType="" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" sameNameSiblings="false">
-	      <requiredPrimaryTypes>
-	        <requiredPrimaryType>nt:unstructured</requiredPrimaryType>
-	      </requiredPrimaryTypes>
-	  </childNodeDefinition>	      
-	</childNodeDefinitions>
   </nodeType> 	
   
   <nodeType name="exo:messageMixin" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">

@@ -17,7 +17,6 @@
 package org.exoplatform.mail.service.impl;
 
 import java.io.BufferedReader;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -132,7 +131,7 @@ public class JCRDataStorage implements DataStorage {
     try {
       node = publicApp.getNode(MAIL_DELEGATE) ;
     } catch (PathNotFoundException e) {
-      node = publicApp.addNode(MAIL_DELEGATE, Utils.NT_UNSTRUCTURED) ;
+      node = publicApp.addNode(MAIL_DELEGATE, NT_UNSTRUCTURED) ;
       publicApp.getSession().save();
     } finally {
       sProvider.close();
@@ -141,15 +140,16 @@ public class JCRDataStorage implements DataStorage {
   }
 
   public void delegateAccount(String username , String reciver, String accountId) throws Exception {
+
     Node tempNode = null ;
     SessionProvider  sProvider = createSessionProvider();
     try {
       Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId) ;
       Value[] values = {};
-      if(accountNode.isNodeType(Utils.EXO_SHARED_MIXIN))
-        values = accountNode.getProperty(Utils.EXO_SHARED_ID).getValues();
+      if(accountNode.isNodeType(EXO_SHARED_MIXIN))
+        values = accountNode.getProperty(EXO_SHARED_ID).getValues();
       else 
-        accountNode.addMixin(Utils.EXO_SHARED_MIXIN) ;
+        accountNode.addMixin(EXO_SHARED_MIXIN) ;
       List<Value> valueList = new ArrayList<Value>() ;
       for(Value v : values) {
         valueList.add(v) ;
@@ -157,8 +157,8 @@ public class JCRDataStorage implements DataStorage {
       try {
         tempNode = getDelegationHomeNode().getNode(reciver) ;
       } catch (PathNotFoundException e) {
-        tempNode = getDelegationHomeNode().addNode(reciver, Utils.NT_UNSTRUCTURED) ;
-        if(tempNode.canAddMixin(Utils.MIX_REFERENCEABLE)) tempNode.addMixin(Utils.MIX_REFERENCEABLE) ;
+        tempNode = getDelegationHomeNode().addNode(reciver, NT_UNSTRUCTURED) ;
+        if(tempNode.canAddMixin(MIX_REFERENCEABLE)) tempNode.addMixin(MIX_REFERENCEABLE) ;
         tempNode.getSession().save();
       }
       //Check delegated or not
@@ -176,7 +176,7 @@ public class JCRDataStorage implements DataStorage {
         valueList.add(newValue) ;
       }      
       if(valueList.size() > 0) {
-        accountNode.setProperty(Utils.EXO_SHARED_ID, valueList.toArray( new Value[valueList.size()]));
+        accountNode.setProperty(EXO_SHARED_ID, valueList.toArray( new Value[valueList.size()]));
         accountNode.getSession().save() ;
         getDelegationHomeNode().getSession().save() ;
       }
@@ -213,19 +213,19 @@ public class JCRDataStorage implements DataStorage {
   public void removeDelegateAccount(String userId, String accountId) throws Exception{
     if(getDelegationHomeNode().hasNode(userId)) {
       Node tempNode = getDelegationHomeNode().getNode(userId) ;
-      String uuid = tempNode.getProperty(Utils.JCR_UUID).getString() ;
+      String uuid = tempNode.getProperty(JCR_UUID).getString() ;
       PropertyIterator iter = tempNode.getReferences() ;
       while(iter.hasNext()) {
         List<Value> newValues = new ArrayList<Value>() ;
         Node accountNode = iter.nextProperty().getParent() ;
         if(!accountNode.getProperty(Utils.EXO_ID).getString().equals(accountId)) continue ; 
-        Value[] values = accountNode.getProperty(Utils.EXO_SHARED_ID).getValues() ;
+        Value[] values = accountNode.getProperty(EXO_SHARED_ID).getValues() ;
         for(Value value : values){      
           if(!value.getString().equals(uuid)) {
             newValues.add(value) ;
           }
         }
-        accountNode.setProperty(Utils.EXO_SHARED_ID, newValues.toArray(new Value[newValues.size()])) ;
+        accountNode.setProperty(EXO_SHARED_ID, newValues.toArray(new Value[newValues.size()])) ;
         accountNode.save();
       }
     }
@@ -1056,6 +1056,7 @@ public class JCRDataStorage implements DataStorage {
         settingNode.setProperty(Utils.EXO_SAVE_SENT_MESSAGE, newSetting.saveMessageInSent());
         settingNode.setProperty(Utils.EXO_LAYOUT, newSetting.getLayout());
         settingNode.setProperty(Utils.EXO_RETURN_RECEIPT, newSetting.getSendReturnReceipt());
+        // saves change
         settingNode.save();
       }
     } finally {
@@ -3589,5 +3590,7 @@ public class JCRDataStorage implements DataStorage {
   private boolean hasContentId(Part part) throws MessagingException {
     return part.getHeader("Content-Id") == null ? false : true;
   }
+
+
 
 }

@@ -1,6 +1,6 @@
 <%
   import org.exoplatform.webui.core.UIComponent ;
-  import org.exoplatform.mail.MailUtils;
+	import org.exoplatform.mail.MailUtils;
   String[] beanFields =  uicomponent.getBeanFields() ;
   String[] beanActions =  uicomponent.getBeanActions() ;
   UIComponent uiParent = uicomponent.getParent() ;

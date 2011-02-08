@@ -18,7 +18,6 @@ package org.exoplatform.mail.service.test;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,10 +25,8 @@ import java.util.List;
 import javax.mail.AuthenticationFailedException;
 
 import org.exoplatform.mail.service.Account;
-import org.exoplatform.mail.service.AccountDelegation;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
@@ -294,36 +291,25 @@ public class TestMailService extends BaseMailTestCase{
     mailService_.removeAccount(username, accPop.getId()) ;
   }
   
-  public void testMailSetting() throws Exception{
-   /* MailSetting ms = new MailSetting();
-    AccountDelegation ad1 = new AccountDelegation();
-    AccountDelegation ad2 = new AccountDelegation();
-    ms.setAccountDelegation(Arrays.asList(new AccountDelegation[]{ad1, ad2} ));
-    mailService_.saveMailSetting(username, ms);
-    MailSetting ms1 = mailService_.getMailSetting(username);
-    assertNotNull(ms1);
-    assertEquals(ms, ms1);*/
-  }
-  
   public void testDelegateAccount() throws Exception {
     Account accPop = createAccountObj(Utils.POP3) ;
     mailService_.createAccount(username, accPop) ;
     // root delegate his account for demo with read only permission
-    mailService_.delegateAccount(username, receiver, accPop.getId(), Utils.PRIVILEGE_READ_ONLY) ;
+    mailService_.delegateAccount(username, receiver, accPop.getId(), Utils.READ_ONLY) ;
     assertEquals(1, mailService_.getDelegatedAccounts(receiver).size()) ;
    
     accPop =  mailService_.getDelegatedAccount(receiver, accPop.getId()) ;
-    assertEquals(Utils.PRIVILEGE_READ_ONLY, accPop.getPermissions().get(receiver)) ;
+    assertEquals(Utils.READ_ONLY, accPop.getPermissions().get(receiver)) ;
     
     
     Account accImap = createAccountObj(Utils.IMAP) ;
     mailService_.createAccount(username, accImap) ;
    // root delegate his account for demo with send and receive permission 
-    mailService_.delegateAccount(username, receiver, accImap.getId(), Utils.PRIVILEGE_FULL) ;
+    mailService_.delegateAccount(username, receiver, accImap.getId(), Utils.SEND_RECIEVE) ;
     assertEquals(2, mailService_.getDelegatedAccounts(receiver).size()) ;
     
     accImap =  mailService_.getDelegatedAccount(receiver, accImap.getId()) ;
-    assertEquals(Utils.PRIVILEGE_FULL, accImap.getPermissions().get(receiver)) ;
+    assertEquals(Utils.SEND_RECIEVE, accImap.getPermissions().get(receiver)) ;
    
     mailService_.removeDelegateAccount(username, receiver, accImap.getId()) ;
         accImap =  mailService_.getAccountById(username, accImap.getId());
@@ -334,5 +320,6 @@ public class TestMailService extends BaseMailTestCase{
     //indicate test remove account also remove delegate references 
     mailService_.removeAccount(username, accPop.getId()) ;
     assertEquals(0, mailService_.getDelegatedAccounts(receiver).size()) ;
+       
   }
 }

@@ -16,8 +16,6 @@
  */
 package org.exoplatform.mail.service;
 
-import java.util.List;
-
 /**
  * Created by The eXo Platform SARL
  * Author : Phung Hai Nam
@@ -62,16 +60,6 @@ public class MailSetting {
   private long layout_ = HORIZONTAL_LAYOUT; 
   private long sendReceipt_ = SEND_RECEIPT_ASKSME;
   
-  private List<AccountDelegation> accountDelegation;  
-  
-  public List<AccountDelegation> getAccountDelegation() {
-    return accountDelegation;
-  }
-
-  public void setAccountDelegation(List<AccountDelegation> accountDelegation) {
-    this.accountDelegation = accountDelegation;
-  }
-
   public MailSetting() {
     numberMsgPerPage_ = 20;
     periodCheckAuto_ = FIVE_MINS;

@@ -270,8 +270,3 @@
 	background: url('icons/CustomViewIcon.gif') no-repeat left center; /* orientation=lt */
 	background: url('icons/CustomViewIcon.gif') no-repeat right center; /* orientation=rt */
 }
-
-.UIMailPortlet .DelegationIcon{
-	background: url('icons/delegation.png') no-repeat left center; /* orientation=lt */
-	background: url('icons/delegation.png') no-repeat right center; /* orientation=rt */
-}

@@ -30,9 +30,7 @@
 							                  			if("general".equals(inputSet.getName()))
 							                  				layoutIcon="SettingsIcon";
 							                  			if("layout".equals(inputSet.getName()))
-							                  				layoutIcon="LayoutIcon";
-			                                if(uicomponent.TAB_ACCOUNT_DELEGATION.equals(inputSet.getName()))
-                                        layoutIcon="DelegationIcon";        
+							                  				layoutIcon="LayoutIcon";			
 							                  	 %>
 							                  	<div class="TabIcon $layoutIcon"><a href="#" class="Title" style="padding-left:5px;">$tabName</a></div>
                             			<div style="clear:left;"><span></span></div>

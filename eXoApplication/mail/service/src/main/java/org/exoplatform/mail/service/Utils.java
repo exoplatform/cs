@@ -219,20 +219,6 @@ public class Utils {
   public static final String EXO_PATH = "exo:path".intern();
   public static final String EXO_LAYOUT = "exo:layout".intern();
   public static final String EXO_RETURN_RECEIPT = "exo:returnReceipt".intern();
-  public static final String EXO_DELEGATAIONSETTING = "exo:delegations";//email account delegation setting
-  public static final String EXO_USERNAME_DELEGATOR = "exo:user";
-  public static final String EXO_EMAIL_DELEGATOR = "exo:email";
-  public static final String EXO_DELEGATED_USER = "exo:delegatedUser";
-  public static final String EXO_PRIVILEGE = "exo:privilege";//full or readonly
-  public static final String PRIVILEGE_FULL = "FULL";
-  public static final String PRIVILEGE_READ_ONLY = "READONLY";
-  //reference delegated account node
-  public static final String EXO_SHARED_ID = "exo:sharedId";
-  public static final String EXO_PERMISSIONS = "exo:permissions";
-  public static final String EXO_SHARED_MIXIN = "exo:accountShared";
-  
-  public static final String MIX_REFERENCEABLE = "mix:referenceable".intern() ;
-  public static final String JCR_UUID = "jcr:uuid";
   
   public static final String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
   public static final String NT_FILE = "nt:file".intern() ;
@@ -313,6 +299,11 @@ public class Utils {
   public static final String CRAM_MD5        = "cram-md5";    
   public static final String KERBEROS_GSSAPI = "kerberos/gssapi";//kerberos v5
   public static final String[] MECHANISM     = {NTLM, PLAIN, LOGIN, DIGIT_MD5, KERBEROS_GSSAPI, CRAM_MD5};//only support common those type
+  
+  public static final String EXO_PERMISSIONS = "exo:permissions".intern() ;
+  public static final String READ_ONLY = "read".intern();
+  public static final String SEND_RECIEVE = "send".intern();
+  
   
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;

@@ -466,7 +466,7 @@
   	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid" style="table-layout: fixed;-moz-user-select:none;" onselectstart="return false">
     	<thead>
     		<tr>
-    			<th style="width: 20px; padding-left: 0px; " class="Border"><input type="checkbox" name="select-all-messages" class="checkbox" title="<%=_ctx.appRes(uicomponent.id+ '.label.check-all') %>" value="4"/></th>
+    			<th style="width: 20px; padding-left: 0px; " class="Border"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.id+ '.label.check-all') %>" value="4"/></th>
     			<th style="width: 24px;"><div class="StarredIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div></th>
     			<% if (uicomponent.viewMode != uicomponent.MODE_LIST && uicomponent.viewMode != uicomponent.MODE_GROUP_BY_DATE) {%>
            <th style="width: 24px;"><div class="TotalMessageIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.total-messages-in-conversation') %>"><span></span></div></th>
