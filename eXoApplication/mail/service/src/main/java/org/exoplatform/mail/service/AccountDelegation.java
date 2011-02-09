@@ -67,6 +67,15 @@ public class AccountDelegation {
     this.isReadOnly = isRO;
   }
   
+  
+  public AccountDelegation(String id, String accname, String delegateuser, boolean isFull){
+    this.setId(id);
+    this.accountName = accname;
+    this.delegatedUserName = delegateuser;
+    this.isFull = isFull;
+  }
+  
+  
   public AccountDelegation(String id, String accname, String defaultUseremail, String delegateuser, String delegateuserEmail, boolean isFull, boolean isRO){
     this.setId(id);
     this.accountName = accname;

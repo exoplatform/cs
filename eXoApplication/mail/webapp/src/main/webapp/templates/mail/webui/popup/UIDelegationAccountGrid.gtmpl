@@ -6,7 +6,7 @@
   UIComponent uiParent = uicomponent.getParent() ;
   String name = uicomponent.getId() ;
 %>
-{%//begin UIDelegationAccountGrid%}
+
 <div class="$uicomponent.id" id="$uicomponent.id">
 	<table class="UIGrid">
 	  <thead>
@@ -44,7 +44,6 @@
 	          def fieldValue = uicomponent.getFieldValue(bean, field) ;
 	          def cssClass = "" ;
 	          if(fieldValue != null) {
-	            //fieldValue = MailUtils.encodeHTML(fieldValue);
 	            def fieldClass = fieldValue.getClass() ;
 	            if(fieldClass == Integer.class)  cssClass = "number" ;
 	            else if(fieldClass == java.util.Date.class)  cssClass = "Date" ;

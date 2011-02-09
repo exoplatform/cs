@@ -18,11 +18,13 @@ package org.exoplatform.mail.webui.popup;
 
 import java.util.List;
 
-import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.ecm.webui.form.UIFormInputSetWithAction;
 import org.exoplatform.mail.service.AccountDelegation;
 import org.exoplatform.mail.webui.UIFormInputWithActions;
-import org.exoplatform.webui.form.UIFormInputSet;
+import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SAS
@@ -32,13 +34,16 @@ import org.exoplatform.webui.form.UIFormInputSet;
  */
 
 @ComponentConfig(
-                 template = "app:/templates/mail/webui/popup/UIDelegationInputSet.gtmpl"
-               )
-               
+                 template = "app:/templates/mail/webui/popup/UIDelegationInputSet.gtmpl",
+                 events = {
+                     @EventConfig(listeners = UIDelegationInputSet.AddAccountActionListener.class, phase = Phase.DECODE)
+                 }
+)
+
 public class UIDelegationInputSet extends UIFormInputWithActions {
-  
+
   private List<AccountDelegation> ad;
-  
+
   public UIDelegationInputSet(String id){
     super(id);
     setComponentConfig(getClass(), null) ;
@@ -48,16 +53,21 @@ public class UIDelegationInputSet extends UIFormInputWithActions {
       e.printStackTrace();
     }
   }
-  
+
   public void init() throws Exception{
     addChild(UIDelegationAccountGrid.class, null, null);
   }
-  
+
   public List<AccountDelegation> getAccountsDelegation(){
     return ad;
   }
-  
+
   public void setAccountsDelegation(List<AccountDelegation> ad){
     this.ad = ad;
+  }
+
+  static  public class AddAccountActionListener extends EventListener<UIDelegationInputSet> {
+    public void execute(Event<UIDelegationInputSet> event) throws Exception {
+    }
   }
 }

@@ -21,10 +21,12 @@ import java.util.List;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccessImpl;
+import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountDelegation;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -44,37 +46,47 @@ import org.exoplatform.webui.event.EventListener;
                  events = {
                      @EventConfig(listeners = UIDelegationAccountGrid.RemoveActionListener.class, confirm = "UIDelegationAccountGrid.grid.msg.confirm-delete")
                  }
-             )
+)
 public class UIDelegationAccountGrid extends UIGrid {
   public static final String FULL_PRIVILEGE_FIELD = "isFull" ;  
   public static final String READONLY_PRIVILEGE_FIELD = "isReadOnly" ;
-  String fields[] = {"accountEmail","delegatedUserName",UIDelegationAccountGrid.FULL_PRIVILEGE_FIELD,UIDelegationAccountGrid.READONLY_PRIVILEGE_FIELD};
+  String fields[] = {"accountEmail","delegatedUserName",UIDelegationAccountGrid.FULL_PRIVILEGE_FIELD};
   String actions[] = {"Remove"};
   public UIDelegationAccountGrid() throws Exception {
     configure("id",fields, actions);
     updateGrid();
   }
 
+   private boolean isFull (String user, String perms) {
+    return (user != null && perms != null) && (perms.contains(user) && perms.contains(Utils.SEND_RECIEVE)) ;
+  }
+
   public void updateGrid(){
     List<AccountDelegation> delegation = new ArrayList<AccountDelegation>();
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     //test here
-    delegation.add(new AccountDelegation("delegation" + IdGenerator.generate(), "root", "demo0", true, false));
-    delegation.add(new AccountDelegation("delegation" + IdGenerator.generate(), "root", "demo1", false, true));
-    delegation.add(new AccountDelegation("delegation" + IdGenerator.generate(), "root", "demo2", true, false));
-    //
-    
+    try {
+      String currentuser = MailUtils.getCurrentUser();
+      List<Account> acclist =  mailSvr.getDelegatedAccounts(currentuser);
+      for(Account a : acclist) {
+        for (String perm : a.getPermissions().keySet()) {
+          delegation.add(new AccountDelegation("", a.getLabel(),perm, isFull(currentuser,a.getPermissions().get(perm))));
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
     LazyPageList<AccountDelegation> pageList = new LazyPageList<AccountDelegation>(
-        new ListAccessImpl<AccountDelegation>(AccountDelegation.class, delegation), 1);
+        new ListAccessImpl<AccountDelegation>(AccountDelegation.class, delegation), 10);
     getUIPageIterator().setPageList(pageList) ;
   }
-  
+
   static  public class RemoveActionListener extends EventListener<UIDelegationAccountGrid> {
     public void execute(Event<UIDelegationAccountGrid> event) throws Exception {
       UIDelegationAccountGrid uiDelegate = event.getSource();
       UIMailPortlet uiPortlet = uiDelegate.getAncestorOfType(UIMailPortlet.class) ;
       UIApplication uiApp = uiDelegate.getAncestorOfType(UIApplication.class) ;
-      System.out.println(event.getRequestContext().getRequestParameter(OBJECTID));
       uiApp.addMessage(new ApplicationMessage("UIDelegationAccountGrid.msg.remove-delegateion-fail", null)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
     }

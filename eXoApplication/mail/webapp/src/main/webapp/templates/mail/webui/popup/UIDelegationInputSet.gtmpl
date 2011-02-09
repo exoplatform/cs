@@ -8,14 +8,14 @@
 */
   import org.exoplatform.webui.core.UIComponent ;
   import org.exoplatform.mail.service.Utils;
-	import org.exoplatform.mail.webui.popup.UIMailSettings;
+  import org.exoplatform.mail.webui.popup.UIMailSettings;
   import org.exoplatform.mail.service.AccountDelegation;
   import org.exoplatform.mail.webui.popup.UIDelegationAccountGrid;
 	def label; 
 	def input;
   def tabId = uicomponent.id;
   def jsMan = _ctx.getRequestContext().getJavascriptManager() ;
-  jsMan.addJavascript("eXo.mail.UIMailPortlet.validPrivilege('" + tabId + "');");
+ 
 %>
 <div class="UIDelegationInputSet" id="$tabId">
 	<div class="AccountsInput"><table style="width:100%;">
@@ -59,11 +59,11 @@
         <%
           label = _ctx.appRes(uicomponent.getParent().id + ".label.add-more-delegated-accounts") ;
         %>
-        <div  class="AddMoreDelegatedAccount" tabId="$tabId" title="$label" onclick="eXo.mail.UIMailPortlet.addMoreDelegatedAccounts(this)"><span></span></div>
+        <div  class="AddMoreDelegatedAccount" tabId="$tabId" title="$label"  onclick="<%=uicomponent.event("AddAccount")%>"><span></span></div>
       </td></tr></table>
   </div>
 	<div class="DelegatedAccountsList">
-		 <%
+	 <%
       uicomponent.renderChild(UIDelegationAccountGrid.class);
      %>
 	</div>	
