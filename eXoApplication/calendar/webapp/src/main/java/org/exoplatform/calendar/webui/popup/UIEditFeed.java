@@ -130,6 +130,7 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
     actions2.add(addCalendar) ;
     setActionField(ADDMORE, actions2) ;
     comboBox.setValue(null);
+    comboBox.addJsActions(UIFormComboBox.ON_BLUR, "javascript:void(0);");
   }
   
   private String getDefaultFeedName() {
@@ -279,11 +280,11 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
           for (GroupCalendarData calendarData : calendarService.getGroupCalendars(CalendarUtils.getUserGroups(username), false, username))
             if (calendarData.getCalendarById(calendarId) != null) {
               cal = calendarData.getCalendarById(calendarId);
+              cal.setName(Utils.getDisplayGroupCalendar(calendarData.getName(), cal.getName()));
               break;
             }        
           }
       } catch (Exception e) {
-        e.printStackTrace();
         cal = null;
       }
       if (cal == null) {

@@ -159,6 +159,7 @@ public class Utils {
   public static final String ANY = "*.*".intern();
   public static final String ANY_OF = "*.".intern();
   public static final String SLASH_AST = "/*".intern();
+  public static final String MINUS = "-".intern();
   
   final public static String CALENDAR_REMINDER = "reminders".intern();
   final public static String CALENDAR_APP = "CalendarApplication".intern() ;
@@ -278,7 +279,7 @@ public class Utils {
   } 
   
   public static String getDefaultCalendarId(String username) {
-    return new StringBuilder(username).append("_").append(NewUserListener.DEFAULT_CALENDAR_ID).toString();
+    return new StringBuilder(username).append(MINUS).append(NewUserListener.DEFAULT_CALENDAR_ID).toString();
   }
   
   public static PortalContainer getPortalContainer(JobExecutionContext context){
@@ -287,13 +288,17 @@ public class Utils {
     String portalName = context.getJobDetail().getGroup();
     if(portalName == null)
       return null;
-    if(portalName.indexOf(":")>0)
+    if(portalName.indexOf(COLON)>0)
       portalName = portalName.substring(0, portalName.indexOf(":"));
     return RootContainer.getInstance().getPortalContainer(portalName);
   }
 
   public static String getDisplaySharedCalendar(String sharedUserId, String calName) {
-    return sharedUserId + "- " + calName ;
+    return sharedUserId + MINUS + SPACE + calName ;
+  }
+  
+  public static String getDisplayGroupCalendar(String groupId, String calName) {
+    return groupId.substring(groupId.lastIndexOf(SLASH) + 1) + MINUS + calName;
   }
   
   public static String[] getEditPerUsers(org.exoplatform.calendar.service.Calendar calendar) throws Exception {
