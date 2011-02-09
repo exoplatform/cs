@@ -34,9 +34,13 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.services.scheduler.JobInfo;
 import org.quartz.Job;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -48,10 +52,22 @@ import org.quartz.JobExecutionException;
  */
 public class SynchronizeRemoteCalendarJob implements Job {
   
+  public static final String SYNCHRONIZE_REMOTE_CALENDAR_JOB = "SynchonizeRemoteCalendarJob";
+  public static final String SYNCHRONIZE_REMOTE_CALENDAR_GROUP = "SynchonizeRemoteCalendarGroup";
+  final private static String CALENDARS = "calendars".intern() ;
+  
+  public static Boolean isExecuting = false;
+  
   private static Log log_ = ExoLogger.getLogger("cs.calendar.job");
+  
+  public static final String USERNAME = "username";
+  
+  private String username;
   
   @Override
   public void execute(JobExecutionContext context) throws JobExecutionException {
+
+    isExecuting = true;
     PortalContainer container = Utils.getPortalContainer(context);
     if(container == null) return;
     ExoContainer oldContainer = ExoContainerContext.getCurrentContainer();
@@ -64,54 +80,43 @@ public class SynchronizeRemoteCalendarJob implements Job {
     long start = System.currentTimeMillis();
     try {
       if (log_.isDebugEnabled()) log_.debug("Remote calendar synchronization service");
-      RemoteCalendarService remoteCalendarService = calService.getRemoteCalendarService();
       
-      // get list of remote calendar
+      // get info from data map
+      JobDetail jobDetail = context.getJobDetail();
+      JobDataMap dataMap = jobDetail.getJobDataMap();
+      username = dataMap.getString(USERNAME);
+      
+      if (username == null) {
+        return;
+      }
+      
+      // get list of remote calendar of current user
+      Node userCalendarHome = getUserCalendarHome(provider);
       StringBuffer path = new StringBuffer("/jcr:root");
+      path.append(userCalendarHome.getPath());
       path.append("//element(*,exo:remoteCalendar)");
       QueryManager queryManager = getSession(provider).getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(path.toString(), Query.XPATH);
       QueryResult results = query.execute();
       NodeIterator iter = results.getNodes();
       
-      Node remoteCalendar;
-      InputStream icalInputStream = null;
+      Node remoteCalendar;      
       
-      // iterate over each calendar in this list, two case:
+      // iterate over each remote calendar, do refresh job
       while (iter.hasNext()) {
         total++;
         remoteCalendar = iter.nextNode();
         String remoteCalendarId = remoteCalendar.getProperty(Utils.EXO_ID).getString();
-        String username = remoteCalendar.getProperty(Utils.EXO_CALENDAR_OWNER).getString();
-        String remoteUrl = remoteCalendar.getProperty(Utils.EXO_REMOTE_URL).getString();
         String remoteType = remoteCalendar.getProperty(Utils.EXO_REMOTE_TYPE).getString();
-        String remoteUser = remoteCalendar.getProperty(Utils.EXO_REMOTE_USERNAME).getString();
-        String remotePassword = remoteCalendar.getProperty(Utils.EXO_REMOTE_PASSWORD).getString();
         String syncPeriod = remoteCalendar.getProperty(Utils.EXO_REMOTE_SYNC_PERIOD).getString();
         
+        // skip iCalendar type
+        //if (CalendarService.ICALENDAR.equals(remoteType)) continue;
         try {
           
           // case 1: if auto refresh calendar, do refresh this calendar
           if (syncPeriod.equals(Utils.SYNC_AUTO)) {          
-            
-            icalInputStream = remoteCalendarService.connectToRemoteServer(remoteUrl, remoteType, remoteUser, remotePassword);
-            
-            /*if (!remoteCalendarService.isValidate(icalInputStream)) {
-              log_.debug("Error when parsing input stream of remote calendar " + remoteCalendarId +  ".The input stream is not in iCalendar format.");
-              failed++;
-              break;
-            }*/
-            
-            // remove all components in local calendar
-            List<String> calendarIds = new ArrayList<String>();
-            calendarIds.add(remoteCalendarId);
-            List<CalendarEvent> events = calService.getUserEventByCalendar(username, calendarIds);
-            for (CalendarEvent event : events) {
-              calService.removeUserEvent(username, remoteCalendarId, event.getId());
-            }
-            
-            remoteCalendarService.importRemoteCalendar(username, remoteCalendarId, icalInputStream);
-            calService.setRemoteCalendarLastUpdated(username, remoteCalendarId, Utils.getGreenwichMeanTime());
+            calService.refreshRemoteCalendar(username, remoteCalendarId);
             success++;
           }
           else {
@@ -128,24 +133,7 @@ public class SynchronizeRemoteCalendarJob implements Job {
             
             // if this remote calendar has expired
             if (lastUpdate + interval < now) {
-              icalInputStream = remoteCalendarService.connectToRemoteServer(remoteUrl, remoteType, remoteUser, remotePassword);
-              
-              /*if (!remoteCalendarService.isValidate(icalInputStream)) {
-                log_.debug("Error when parsing input stream of remote calendar " + remoteCalendarId +  ".The input stream is not in iCalendar format.");
-                failed++;
-                break;
-              }*/
-              
-              // remove all components in local calendar
-              List<String> calendarIds = new ArrayList<String>();
-              calendarIds.add(remoteCalendarId);
-              List<CalendarEvent> events = calService.getUserEventByCalendar(username, calendarIds);
-              for (CalendarEvent event : events) {
-                calService.removeUserEvent(username, remoteCalendarId, event.getId());
-              }
-              
-              remoteCalendarService.importRemoteCalendar(username, remoteCalendarId, icalInputStream);
-              calService.setRemoteCalendarLastUpdated(username, remoteCalendarId, Utils.getGreenwichMeanTime());
+              calService.refreshRemoteCalendar(username, remoteCalendarId);
               success++;
             }
           }
@@ -155,7 +143,7 @@ public class SynchronizeRemoteCalendarJob implements Job {
           failed++;
           continue;
         }
-      }      
+      }            
     } 
     catch (RepositoryException e) {
       if (log_.isDebugEnabled()) log_.debug("Data base not ready!");
@@ -165,6 +153,7 @@ public class SynchronizeRemoteCalendarJob implements Job {
     } finally {
       provider.close(); // release sessions
       ExoContainerContext.setCurrentContainer(oldContainer);
+      isExecuting = false;
     }
     long finish = System.currentTimeMillis();
     long spent = (finish - start); 
@@ -180,4 +169,25 @@ public class SynchronizeRemoteCalendarJob implements Job {
     return sprovider.getSession(currentRepo.getConfiguration().getDefaultWorkspaceName(), currentRepo) ;
   }
 
+  
+  public static JobInfo getJobInfo(String username) {
+    String jobName = SYNCHRONIZE_REMOTE_CALENDAR_JOB + "_" + username;
+    JobInfo info = new JobInfo(jobName, SYNCHRONIZE_REMOTE_CALENDAR_GROUP, SynchronizeRemoteCalendarJob.class);
+    return info;
+  }
+  
+  private Node getUserCalendarHome(SessionProvider provider) throws Exception {
+    try {
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      NodeHierarchyCreator nodeHierarchyCreator  = (NodeHierarchyCreator) container
+      .getComponentInstanceOfType(NodeHierarchyCreator.class);
+      Node userApp = nodeHierarchyCreator.getUserApplicationNode(provider, username);
+      Node userCalendarApp = userApp.getNode(Utils.CALENDAR_APP);
+      return userCalendarApp.getNode(CALENDARS);
+    }
+    catch (Exception e) {
+      return null ;   
+    }
+  }
+ 
 }

@@ -40,8 +40,10 @@ import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RemoteCalendarService;
 import org.exoplatform.calendar.service.RssData;
+import org.exoplatform.calendar.service.SynchronizeRemoteCalendarJob;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.commons.utils.ExoProperties;
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -49,7 +51,12 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.resources.ResourceBundleService;
+import org.exoplatform.services.scheduler.JobInfo;
+import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.exoplatform.services.scheduler.PeriodInfo;
 import org.picocontainer.Startable;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
 
 /**
  * Created by The eXo Platform SARL Author : Hung Nguyen Quang
@@ -747,5 +754,65 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public Calendar getRemoteCalendar(String owner, String remoteUrl, String remoteType) throws Exception {
     return storage_.getRemoteCalendar(owner, remoteUrl, remoteType);
   }
+  
+  public String getCalDavResourceHref(String username, String calendarId, String eventId) throws Exception {
+    Node eventNode = storage_.getUserCalendarHome(username).getNode(calendarId).getNode(eventId);
+    return eventNode.getProperty(Utils.EXO_CALDAV_HREF).getString();
+  }
+  
+  public String getCalDavResourceEtag(String username, String calendarId, String eventId) throws Exception {
+    Node eventNode = storage_.getUserCalendarHome(username).getNode(calendarId).getNode(eventId);
+    return eventNode.getProperty(Utils.EXO_CALDAV_ETAG).getString();
+  }
+  
+  public void setCalDavResourceHref(String username, String calendarId, String eventId, String href) throws Exception {
+    storage_.setCalDavResourceHref(username, calendarId, eventId, href);
+  }
+  
+  public void setCalDavResourceEtag(String username, String calendarId, String eventId, String etag) throws Exception {
+    storage_.setCalDavResourceEtag(username, calendarId, eventId, etag);
+  }
+  
+  // load synchronize remote calendar job with period
+  public void loadSynchronizeRemoteCalendarJob(String username) throws Exception {
+    ExoContainer container = ExoContainerContext.getCurrentContainer() ;
+    JobSchedulerService schedulerService = 
+      (JobSchedulerService)container.getComponentInstanceOfType(JobSchedulerService.class) ;    
+    JobInfo info = SynchronizeRemoteCalendarJob.getJobInfo(username);
+    JobDetail job = findSynchronizeRemoteCalendarJob(schedulerService, username);
+    if (job == null) {
+      JobDataMap jobData = new JobDataMap();
+      jobData.put(SynchronizeRemoteCalendarJob.USERNAME, username);
+      PeriodInfo periodInfo = new PeriodInfo(null, null, 0, 5 * 60 * 1000);
+      schedulerService.addPeriodJob(info, periodInfo, jobData);
+    }   
+  }
+  
+  public void stopSynchronizeRemoteCalendarJob(String username) throws Exception {
+    JobInfo info = SynchronizeRemoteCalendarJob.getJobInfo(username);
+    ExoContainer container = ExoContainerContext.getCurrentContainer() ;
+    JobSchedulerService schedulerService = 
+      (JobSchedulerService)container.getComponentInstanceOfType(JobSchedulerService.class) ;
+    schedulerService.removeJob(info);
+    schedulerService.removeJobListener(info.getJobName());
+    schedulerService.removeTriggerListener(info.getJobName());
+  }
+  
+  public JobDetail findSynchronizeRemoteCalendarJob(JobSchedulerService schedulerService, String username) throws Exception {
+    // find synchronize job
+    List<Object> list = schedulerService.getAllJobs();
+    for (Object obj : list) {
+      JobDetail jobDetail = (JobDetail) obj;
+      if (jobDetail.getName().equals(SynchronizeRemoteCalendarJob.SYNCHRONIZE_REMOTE_CALENDAR_JOB + "_" + username)) {
+        return jobDetail;
+      }
+    }
+    return null;
+  }
+  
+  public int getRemoteCalendarCount(String username) throws Exception {
+    return storage_.getRemoteCalendarCount(username);
+  }
+  
 
 }

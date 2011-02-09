@@ -923,6 +923,7 @@ public interface DataStorage {
    */
   public Calendar createRemoteCalendar(String username, String calendarName, String remoteUrl, String remoteType, String syncPeriod, String remoteUser, String remotePassword) throws Exception ;
   
+  public void setRemoteEvent(String username, String calendarId, String eventId, String href, String etag) throws Exception;
   /**
    * @param username
    * @param calendarId
@@ -932,4 +933,10 @@ public interface DataStorage {
   public void setRemoteCalendarLastUpdated(String username, String calendarId, java.util.Calendar timeGMT) throws Exception;
   
   public Calendar getRemoteCalendar(String username, String remoteUrl, String remoteType) throws Exception;
+  
+  public int getRemoteCalendarCount(String username) throws Exception ;
+  
+  public void setCalDavResourceHref(String username, String calendarId, String eventId, String href) throws Exception;
+  
+  public void setCalDavResourceEtag(String username, String calendarId, String eventId, String etag) throws Exception;
 }

@@ -41,7 +41,9 @@ function getModule(params) {
     addDependency(new Project("org.exoplatform.cs", "exo.cs.eXoApplication.calendar.service", "jar",  module.version)).
     addDependency(new Project("rome", "rome", "jar", "${rome.version}")).
     addDependency(new Project("jdom", "jdom", "jar", "${jdom.version}")).
-    addDependency(new Project("ical4j", "ical4j", "jar", "${ical4j.version}")) ;
+    addDependency(new Project("ical4j", "ical4j", "jar", "${ical4j.version}")).
+    addDependency(new Project("org.apache.jackrabbit", "jackrabbit-webdav", "jar", "${org.apache.jackrabbit.version}")).
+    addDependency(new Project("org.apache.jackrabbit", "jackrabbit-jcr-commons", "jar", "${org.apache.jackrabbit.version}"));
   module.eXoApplication.calendar.deployName = "calendar";
     
   module.eXoApplication.contact =

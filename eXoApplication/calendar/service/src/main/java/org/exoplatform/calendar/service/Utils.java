@@ -124,6 +124,9 @@ public class Utils {
   public static final String EXO_REMOTE_PASSWORD = "exo:password".intern();
   public static final String EXO_REMOTE_SYNC_PERIOD = "exo:syncPeriod".intern();
   public static final String EXO_REMOTE_LAST_UPDATED = "exo:lastUpdated".intern();
+  public static final String EXO_REMOTE_EVENT_MIXIN = "exo:caldavCalendarEvent".intern();
+  public static final String EXO_CALDAV_HREF = "exo:caldavHref";
+  public static final String EXO_CALDAV_ETAG = "exo:caldavEtag";
   
   public static final String X_STATUS = "X-STATUS".intern() ;
   

@@ -90,7 +90,7 @@ import org.exoplatform.webui.form.ext.UIFormColorPicker.Colors;
                    @EventConfig(listeners = UICalendars.ChangeColorActionListener.class),
                    @EventConfig(listeners = UICalendars.TickActionListener.class),
                    @EventConfig(listeners = UICalendars.CalendarSettingActionListener.class),
-                   @EventConfig(listeners = UICalendars.AddSubscribeActionListener.class),
+                   @EventConfig(listeners = UICalendars.RemoteCalendarActionListener.class),
                    @EventConfig(listeners = UICalendars.RefreshRemoteCalendarActionListener.class)
                  }
 )
@@ -278,6 +278,12 @@ public class UICalendars extends UIForm  {
   }
   public boolean canEdit(String[] savePerms) throws Exception{
     return CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), savePerms, CalendarUtils.getCurrentUser()) ;
+  }
+  
+  public boolean isRemoteCalendar(String calendarId) throws Exception {
+    String username = CalendarUtils.getCurrentUser();
+    CalendarService calService = CalendarUtils.getCalendarService();
+    return calService.isRemoteCalendar(username, calendarId);    
   }
 
 
@@ -586,7 +592,14 @@ public class UICalendars extends UIForm  {
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           } else {
-            calService.removeUserCalendar(username, calendarId) ;
+            Boolean isRemote = calService.isRemoteCalendar(username, calendarId);
+            calService.removeUserCalendar(username, calendarId) ; 
+            if (isRemote) {
+              if (calService.getRemoteCalendarCount(username) == 0) {
+                // remove sync job
+                calService.stopSynchronizeRemoteCalendarJob(username);
+              }
+            }
           }
         }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
           calendar = calService.getGroupCalendar(calendarId) ;
@@ -920,7 +933,7 @@ public class UICalendars extends UIForm  {
     }
   }  
   
-  public static class AddSubscribeActionListener extends EventListener<UICalendars> {
+  public static class RemoteCalendarActionListener extends EventListener<UICalendars> {
 
     @Override
     public void execute(Event<UICalendars> event) throws Exception {
@@ -947,10 +960,15 @@ public class UICalendars extends UIForm  {
   		Calendar calendar = calService.getUserCalendar(username, remoteCalendarId);
   		try {		
   			calService.refreshRemoteCalendar(username, remoteCalendarId);
+  			
+  			// activate SynchronizeRemoteCalendarJob
+  			// calService.loadSynchronizeRemoteCalendarJob(username);
+  			
   			UICalendarContainer uiVContainer = uiPortlet.findFirstComponentOfType(UICalendarContainer.class) ;
   			event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;      
   		}
   		catch (Exception e) {
+  		  e.printStackTrace();
   			UIApplication uiApp = uiCalendars.getAncestorOfType(UIApplication.class) ;
   			uiApp.addMessage(new ApplicationMessage("UICalendars.msg.cant-refresh-remote-calendar", new String[] {calendar.getName()}, ApplicationMessage.WARNING)) ;
   			event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

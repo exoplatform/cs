@@ -153,5 +153,10 @@
       <version>${org.slf4j.slf4j-simple.version}</version>
       <scope>provided</scope>
     </dependency>    
+    <dependency>
+      <groupId>org.apache.jackrabbit</groupId>
+      <artifactId>jackrabbit-webdav</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 </project>

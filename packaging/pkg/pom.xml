@@ -390,6 +390,11 @@
 		<version>${jcrom.version}</version>
 		<scope>provided</scope>
 	  </dependency>
+	  <dependency>
+                <groupId>org.apache.jackrabbit</groupId>
+        	<artifactId>jackrabbit-webdav</artifactId>
+        	<version>${org.apache.jackrabbit.version}</version>
+      	  </dependency>
 	  <!--exo.cs.eXoApplication.chat.service-->
 	  <dependency>
 		<groupId>jivesoftware</groupId>

@@ -78,6 +78,7 @@
     <!--exo.cs.eXoApplication.calendar.service-->
     <ical4j.version>1.0-beta5</ical4j.version>
     <jcrom.version>1.2</jcrom.version>
+    <org.apache.jackrabbit.version>2.1.0</org.apache.jackrabbit.version>
     <!--exo.cs.eXoApplication.chat.service-->
     <jivesoftware.smack.version>3.1.0</jivesoftware.smack.version>
     <jivesoftware.smackx.version>3.1.0</jivesoftware.smackx.version>
@@ -349,6 +350,11 @@
         <artifactId>jcrom</artifactId>
         <version>${jcrom.version}</version>
 	  </dependency>
+      <dependency>
+        <groupId>org.apache.jackrabbit</groupId>
+        <artifactId>jackrabbit-webdav</artifactId>
+        <version>${org.apache.jackrabbit.version}</version>
+      </dependency>
       <!--exo.cs.eXoApplication.chat.service-->
       <dependency>
         <groupId>jivesoftware</groupId>

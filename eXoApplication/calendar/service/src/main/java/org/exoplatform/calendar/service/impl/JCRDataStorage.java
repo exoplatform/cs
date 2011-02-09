@@ -3441,6 +3441,18 @@ public class JCRDataStorage implements DataStorage {
     calendarNode.save();
     return eXoCalendar;
   }
+  
+  public void setRemoteEvent(String username, String calendarId, String eventId, String href, String etag) throws Exception {
+    Node eventNode = getUserCalendarHome(username).getNode(calendarId).getNode(eventId);
+    if (!eventNode.isNodeType(Utils.EXO_REMOTE_EVENT_MIXIN)) {
+      eventNode.addMixin(Utils.EXO_REMOTE_EVENT_MIXIN);
+    }
+    if (href != null) {
+      eventNode.setProperty(Utils.EXO_CALDAV_HREF, href);
+    }
+    eventNode.setProperty(Utils.EXO_CALDAV_ETAG, etag);
+    eventNode.save();
+  }
 
   @Override
   public void setRemoteCalendarLastUpdated(String username,
@@ -3474,5 +3486,47 @@ public class JCRDataStorage implements DataStorage {
     catch (Exception e) {
       return null;
     }
+  }
+  
+  public int getRemoteCalendarCount(String username) throws Exception {
+    try {
+      Node calendarHome = getUserCalendarHome(username) ;
+      String queryString = new StringBuffer("/jcr:root" + calendarHome.getPath()
+                                                  + "//element(*,exo:remoteCalendar)").toString();
+      QueryManager queryManager = calendarHome.getSession().getWorkspace().getQueryManager();
+      Query query = queryManager.createQuery(queryString.toString(), Query.XPATH);
+      QueryResult results = query.execute();
+      NodeIterator iter = results.getNodes(); 
+      int count = 0;
+      while (iter.hasNext()) {
+        iter.nextNode();
+        count++;
+      }
+      return count;
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+      return 0;
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.DataStorage#setCalDavResourceHref(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+   */
+  @Override
+  public void setCalDavResourceHref(String username, String calendarId, String eventId, String href) throws Exception {
+    // TODO Auto-generated method stub
+    Node eventNode = getUserCalendarHome(username).getNode(calendarId).getNode(eventId);
+    eventNode.setProperty(Utils.EXO_CALDAV_HREF, href);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.DataStorage#setCalDavResourceEtag(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+   */
+  @Override
+  public void setCalDavResourceEtag(String username, String calendarId, String eventId, String etag) throws Exception {
+    // TODO Auto-generated method stub
+    Node eventNode = getUserCalendarHome(username).getNode(calendarId).getNode(eventId);
+    eventNode.setProperty(Utils.EXO_CALDAV_HREF, etag);
   }
 }

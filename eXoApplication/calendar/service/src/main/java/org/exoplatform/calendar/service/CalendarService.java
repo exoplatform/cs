@@ -25,6 +25,8 @@ import javax.jcr.Node;
 
 import org.apache.commons.httpclient.Credentials;
 import org.exoplatform.calendar.service.impl.CalendarEventListener;
+import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.quartz.JobDetail;
 
 /**
  * Created by The eXo Platform SARL
@@ -737,5 +739,17 @@ public interface CalendarService {
   public RemoteCalendarService getRemoteCalendarService() throws Exception;
   
   public Calendar getRemoteCalendar(String owner, String remoteUrl, String remoteType) throws Exception;
+  
+  public int getRemoteCalendarCount(String username) throws Exception;
+  
+  public String getCalDavResourceHref(String username, String calendarId, String eventId) throws Exception;
+  
+  public String getCalDavResourceEtag(String username, String calendarId, String eventId) throws Exception;
+  
+  public void loadSynchronizeRemoteCalendarJob(String username) throws Exception ;
+  
+  public JobDetail findSynchronizeRemoteCalendarJob(JobSchedulerService schedulerService, String username) throws Exception ;
+    
+  public void stopSynchronizeRemoteCalendarJob(String username) throws Exception;
  
 }

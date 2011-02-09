@@ -44,6 +44,8 @@ import org.exoplatform.calendar.service.impl.CalendarEventListener;
 import org.exoplatform.calendar.service.impl.CsvImportExport;
 import org.exoplatform.calendar.service.impl.ICalendarImportExport;
 import org.exoplatform.calendar.service.impl.JCRDataStorage;
+import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.quartz.JobDetail;
 
 /**
  * Created by The eXo Platform SAS
@@ -610,5 +612,60 @@ public class MockCalendarService implements CalendarService{
   public Calendar getRemoteCalendar(String owner, String remoteUrl, String remoteType) throws Exception {
     // TODO Auto-generated method stub
     return null;
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#getCalDavResourceHref(java.lang.String, java.lang.String, java.lang.String)
+   */
+  @Override
+  public String getCalDavResourceHref(String username, String calendarId, String eventId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#getCalDavResourceEtag(java.lang.String, java.lang.String, java.lang.String)
+   */
+  @Override
+  public String getCalDavResourceEtag(String username, String calendarId, String eventId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#getRemoteCalendarCount(java.lang.String)
+   */
+  @Override
+  public int getRemoteCalendarCount(String username) throws Exception {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#loadSynchronizeRemoteCalendarJob(java.lang.String)
+   */
+  @Override
+  public void loadSynchronizeRemoteCalendarJob(String username) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#findSynchronizeRemoteCalendarJob(org.exoplatform.services.scheduler.JobSchedulerService, java.lang.String)
+   */
+  @Override
+  public JobDetail findSynchronizeRemoteCalendarJob(JobSchedulerService schedulerService,
+                                                    String username) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#stopSynchronizeRemoteCalendarJob(java.lang.String)
+   */
+  @Override
+  public void stopSynchronizeRemoteCalendarJob(String username) throws Exception {
+    // TODO Auto-generated method stub
+    
   }
 }
