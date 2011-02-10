@@ -42,6 +42,7 @@
 	      <%
 	        for(field in beanFields) { 
 	          def fieldValue = uicomponent.getFieldValue(bean, field) ;
+                  
 	          def cssClass = "" ;
 	          if(fieldValue != null) {
 	            def fieldClass = fieldValue.getClass() ;
@@ -55,7 +56,7 @@
 	          	def privilegeName=field + "-name";
 	      %>
 	      	<td class="$cssClass" style="overflow:hidden;">
-	      		<input type="checkbox" name="$privilegeName" checked="$fieldValue" class="checkbox"/>
+	      		<input type="checkbox" name="$privilegeName" <% if(fieldValue) { print "checked" } %> class="checkbox" />
 	      	</td>
 	      	<% }else {%>	
 	          <td class="$cssClass" style="overflow:hidden;">$fieldValue</td>

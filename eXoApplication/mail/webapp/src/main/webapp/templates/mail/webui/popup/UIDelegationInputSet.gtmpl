@@ -18,7 +18,8 @@
  
 %>
 <div class="UIDelegationInputSet" id="$tabId">
-	<div class="AccountsInput"><table style="width:100%;">
+	<div class="AccountsInput">
+	<table style="width:100%;">
 		<tbody>
       <%
         input = uicomponent.getChildById(UIMailSettings.FIELD_OWNER_ACCOUNTS);
@@ -32,35 +33,44 @@
 			</tr>
       <tr>
         <td class="InputField" id='<%=input.getId()%>'><%uicomponent.renderUIComponent(input)%></td>
-        <td class="InputField"><%uicomponent.renderUIComponent(inputDA)%></td>  
+        <td class="InputField">
+        <div class="AddUserFeild">
+        <%uicomponent.renderUIComponent(inputDA)%>
+        </div>
+        <div class="SelectUser" onclick="<%=uicomponent.event("SelectUser")%>"><span></span></div>
+        <div class="ClearAll"><span></span></div>
+        </td>  
       </tr>      
 		</tbody>
-	</table></div>
+	</table>
+	</div>
 	<%
 		label = _ctx.appRes(uicomponent.getParent().id + ".label.privileges");
 		def inputPriFull = uicomponent.getChildById(UIMailSettings.FIELD_PRIVILEGE_FULL);
 		def labelPriFull = _ctx.appRes(uicomponent.getParent().id + ".label." + inputPriFull.getId());
-		def inputPriReadonly = uicomponent.getChildById(UIMailSettings.FIELD_PRIVILEGE_READONLY);
-		def labelPriReadonly = _ctx.appRes(uicomponent.getParent().id + ".label." + inputPriReadonly.getId());
+		
 	%>
 	<div class="PrivilegeSpace">
-    <table><tr><td>
+    <table>
+      <tr>
+       <td>
         <div><span class="PrivilegeLabel">$label:</span></div>
         <div  class="PrivilegeInput">
          <span id='<%=inputPriFull.getId()%>'><%uicomponent.renderUIComponent(inputPriFull)%></span>
          <span>$labelPriFull</span>
         </div>
-        <div  class="PrivilegeInput">
-          <span id='<%=inputPriReadonly.getId()%>'><%uicomponent.renderUIComponent(inputPriReadonly)%></span>
-          <span>$labelPriReadonly</span>
-        </div>
-      </td></tr>
-      <tr><td>
+       
+        </td>
+      </tr>
+      <tr>
+        <td>
         <%
           label = _ctx.appRes(uicomponent.getParent().id + ".label.add-more-delegated-accounts") ;
         %>
         <div  class="AddMoreDelegatedAccount" tabId="$tabId" title="$label"  onclick="<%=uicomponent.event("AddAccount")%>"><span></span></div>
-      </td></tr></table>
+      </td>
+     </tr>
+    </table>
   </div>
 	<div class="DelegatedAccountsList">
 	 <%

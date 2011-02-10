@@ -25,16 +25,12 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Jan 21, 2011  
  */
 public class AccountDelegation {
+ 
   private String accountName;
-
-  private String accountEmail;
-  
+  private String accountId;
   private String delegatedUserName;
-  
-  private String delegatedUserEmail;
-
-  private boolean isFull;
-  private boolean isReadOnly;
+  private boolean isFull = false;
+  private boolean isReadOnly = true;
   
   private String id;
   
@@ -55,36 +51,19 @@ public class AccountDelegation {
     this.isReadOnly = isReadOnly;
   }
 
-  public AccountDelegation(){
-    setId("AccountDelegationSetting" + IdGenerator.generate()) ;
+  public AccountDelegation() {
+    id = IdGenerator.generate();
   }
-  
-  public AccountDelegation(String id, String accname, String delegateuser, boolean isFull, boolean isRO){
-    this.setId(id);
-    this.accountName = accname;
-    this.delegatedUserName = delegateuser;
-    this.isFull = isFull;
-    this.isReadOnly = isRO;
-  }
-  
-  
-  public AccountDelegation(String id, String accname, String delegateuser, boolean isFull){
-    this.setId(id);
+  public AccountDelegation(String accountId, String accname, String delegateuser, boolean isFull){
+    id = IdGenerator.generate();
+    this.accountId = accountId;
     this.accountName = accname;
     this.delegatedUserName = delegateuser;
     this.isFull = isFull;
   }
   
   
-  public AccountDelegation(String id, String accname, String defaultUseremail, String delegateuser, String delegateuserEmail, boolean isFull, boolean isRO){
-    this.setId(id);
-    this.accountName = accname;
-    this.accountEmail = defaultUseremail;
-    this.delegatedUserName = delegateuser;
-    this.delegatedUserEmail = delegateuserEmail;
-    this.isFull = isFull;
-    this.isReadOnly = isRO;
-  }
+  
   
   public String getId() {
     return id;
@@ -102,14 +81,7 @@ public class AccountDelegation {
     this.accountName = accountName;
   }
 
-  public String getAccountEmail() {
-    return accountEmail;
-  }
-
-  public void setAccountEmail(String accountEmail) {
-    this.accountEmail = accountEmail;
-  } 
-
+ 
   public String getDelegatedUserName() {
     return delegatedUserName;
   }
@@ -118,19 +90,20 @@ public class AccountDelegation {
     this.delegatedUserName = delegatedUserName;
   }
 
-  public String getDelegatedUserEmail() {
-    return delegatedUserEmail;
-  }
-
-  public void setDelegatedUserEmail(String delegatedUserEmail) {
-    this.delegatedUserEmail = delegatedUserEmail;
-  }
-  
+   
   public boolean getIsFull() {
     return isFull;
   }
   
   public boolean getIsReadOnly() {
     return isReadOnly;
+  }
+
+  public void setAccountId(String accountId) {
+    this.accountId = accountId;
+  }
+
+  public String getAccountId() {
+    return accountId;
   }
 }

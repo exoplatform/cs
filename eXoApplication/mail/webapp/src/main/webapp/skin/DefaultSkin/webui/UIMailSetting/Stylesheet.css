@@ -95,6 +95,16 @@
 	font-weight:bold;
 }
 
+.UIMailPortlet .UIMailSetting .SelectUser {
+    height: 24px; 
+    width: 24px;
+	cursor: pointer;
+}
+
+.UIMailPortlet .UIMailSetting .AddUserFeild {
+   float: left;
+}
+
 /*UIDelegationInputset account*/
 .UIMailPortlet .UIDelegationInputSet{
 	font-color:#747480;

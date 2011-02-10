@@ -21,10 +21,7 @@ import java.util.List;
 import org.exoplatform.mail.service.AccountDelegation;
 import org.exoplatform.mail.webui.UIFormInputWithActions;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.Event.Phase;
-import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.core.UIComponent;
 
 /**
  * Created by The eXo Platform SAS
@@ -34,10 +31,8 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-                 template = "app:/templates/mail/webui/popup/UIDelegationInputSet.gtmpl",
-                 events = {
-                     @EventConfig(listeners = UIDelegationInputSet.AddAccountActionListener.class, phase = Phase.DECODE)
-                 }
+                 template = "app:/templates/mail/webui/popup/UIDelegationInputSet.gtmpl"
+
 )
 
 public class UIDelegationInputSet extends UIFormInputWithActions {
@@ -66,8 +61,11 @@ public class UIDelegationInputSet extends UIFormInputWithActions {
     this.ad = ad;
   }
 
-  static  public class AddAccountActionListener extends EventListener<UIDelegationInputSet> {
-    public void execute(Event<UIDelegationInputSet> event) throws Exception {
-    }
+
+
+  @Override
+  public String event(String name) throws Exception {
+    return ((UIComponent)getParent()).event(name) ;
   }
+
 }

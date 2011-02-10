@@ -35,6 +35,8 @@ import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -64,7 +66,8 @@ import org.exoplatform.webui.form.UIFormTabPane;
     events = {
         @EventConfig(listeners = UIMailSettings.SaveActionListener.class),
         @EventConfig(listeners = UIMailSettings.CancelActionListener.class, phase = Phase.DECODE),
-        @EventConfig(listeners = UIMailSettings.SelectTabActionListener.class, phase = Phase.DECODE)
+        @EventConfig(listeners = UIMailSettings.SelectTabActionListener.class, phase = Phase.DECODE),
+        @EventConfig(listeners = UIMailSettings.AddAccountActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
@@ -143,12 +146,12 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
     UIFormSelectBox ownerAccounts = new UIFormSelectBox(FIELD_OWNER_ACCOUNTS, FIELD_OWNER_ACCOUNTS, this.getOwnerAccs(username));
     UIFormStringInput delegatedAccounts = new UIFormStringInput(FIELD_DELEGATED_ACCOUNTS, FIELD_DELEGATED_ACCOUNTS, null);//getDelegatedAccs()
     UIFormCheckBoxInput<Boolean> fullPrivilege = new UIFormCheckBoxInput<Boolean>(FIELD_PRIVILEGE_FULL, FIELD_PRIVILEGE_FULL, null);
-    UIFormCheckBoxInput<Boolean> readonlyPrivileage = new UIFormCheckBoxInput<Boolean>(FIELD_PRIVILEGE_READONLY, FIELD_PRIVILEGE_READONLY, null);
+    //UIFormCheckBoxInput<Boolean> readonlyPrivileage = new UIFormCheckBoxInput<Boolean>(FIELD_PRIVILEGE_READONLY, FIELD_PRIVILEGE_READONLY, null);
     
     accountDelegate.addUIFormInput(ownerAccounts);
     accountDelegate.addUIFormInput(delegatedAccounts);
     accountDelegate.addUIFormInput(fullPrivilege);
-    accountDelegate.addUIFormInput(readonlyPrivileage);
+    //accountDelegate.addUIFormInput(readonlyPrivileage);
     
     addUIFormInput(generalInputSet);
     addUIFormInput(returnReceiptInputSet);
@@ -325,12 +328,64 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
     SelectItemOption<String> accountOpt = null;
     if(accs != null && accs.size()>0){
       for(Account acc:accs){
-        accountOpt = new SelectItemOption<String>(acc.getUserDisplayName(), acc.getEmailAddress());
+        accountOpt = new SelectItemOption<String>(acc.getUserDisplayName(), acc.getId());
         ownAccs.add(accountOpt);
       }
     }
     return ownAccs;
   } 
+  
+  static  public class AddAccountActionListener extends EventListener<UIMailSettings> {
+    public void execute(Event<UIMailSettings> event) throws Exception {
+      try {
+        UIMailSettings settingForm = event.getSource() ;
+        UIDelegationInputSet inputSet = settingForm.getChildById(TAB_ACCOUNT_DELEGATION);
+        MailService mService = MailUtils.getMailService() ;
+        String curentUser = MailUtils.getCurrentUser() ;
+        UIFormSelectBox select = inputSet.getChildById(FIELD_OWNER_ACCOUNTS);
+        UIFormStringInput input = inputSet.getChildById(FIELD_DELEGATED_ACCOUNTS);
+        String receiver = input.getValue();   
+        UIFormCheckBoxInput<Boolean> checkbox = inputSet.getChildById(FIELD_PRIVILEGE_FULL);
+        String permission = Utils.READ_ONLY ;
+        if(checkbox.isChecked()) permission = Utils.SEND_RECIEVE ;
+        OrganizationService orService = MailUtils.getOrganizationService() ;
+        if(MailUtils.isFieldEmpty(receiver)) {
+          UIApplication uiApp = inputSet.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIMailSettings.msg.select-one-user", null, ApplicationMessage.INFO)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        } else if (receiver.contains(MailUtils.COMMA)) {
+          for (String uid : receiver.split(MailUtils.COMMA)) {
+            User us = orService.getUserHandler().findUserByName(uid) ;
+            if(us != null && !uid.equalsIgnoreCase(curentUser)) {
+              mService.delegateAccount(curentUser, uid, select.getValue(), permission);
+            }
+          }
+        } else {
+          User us = orService.getUserHandler().findUserByName(receiver) ;
+          if(us != null && !us.getUserName().equalsIgnoreCase(curentUser)) {
+            mService.delegateAccount(curentUser, receiver, select.getValue(), permission);
+          }
+        }
+        UIDelegationAccountGrid grid = inputSet.getChild(UIDelegationAccountGrid.class);
+        grid.updateGrid();
+        event.getRequestContext().addUIComponentToUpdateByAjax(inputSet) ;
+      } catch (Exception e) {
+        e.printStackTrace();
+        return;
+      }
+
+    }
+  }
+  
+  static  public class SelectUserActionListener extends EventListener<UIMailSettings> {
+    public void execute(Event<UIMailSettings> event) throws Exception {
+      try {
+        } catch (Exception e) {
+          
+        }
+        }
+      }
 }
 
 
