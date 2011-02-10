@@ -412,11 +412,11 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
           MultiStatusResponse multiRes = multiStatus.getResponses()[i];
           href = multiRes.getHref();
           DavPropertySet propSet =  multiRes.getProperties(DavServletResponse.SC_OK);
-          DavProperty<String> calendarData = (DavProperty<String>) propSet.get("calendar-data", CALDAV_NAMESPACE);
-          DavProperty<String> etag = (DavProperty<String>) propSet.get(DavPropertyName.GETETAG.getName(), DavConstants.NAMESPACE);
+          DavProperty calendarData = propSet.get("calendar-data", CALDAV_NAMESPACE);
+          DavProperty etag = propSet.get(DavPropertyName.GETETAG.getName(), DavConstants.NAMESPACE);
           try {
-            net.fortuna.ical4j.model.Calendar iCalEvent = builder.build(new StringReader(calendarData.getValue()));
-            importRemoteCalendarEvent(username, eXoCalendar.getId(), iCalEvent, href, etag.getValue());
+            net.fortuna.ical4j.model.Calendar iCalEvent = builder.build(new StringReader(calendarData.getValue().toString()));
+            importRemoteCalendarEvent(username, eXoCalendar.getId(), iCalEvent, href, etag.getValue().toString());
             storage_.setRemoteCalendarLastUpdated(username, eXoCalendar.getId(), Utils.getGreenwichMeanTime());
           }
           catch (Exception e) {
@@ -576,8 +576,8 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         MultiStatusResponse multiRes = multiStatus.getResponses()[i];
         href = multiRes.getHref();
         DavPropertySet propSet =  multiRes.getProperties(DavServletResponse.SC_OK);
-        DavProperty<String> etag = (DavProperty<String>) propSet.get(DavPropertyName.GETETAG.getName(), DavConstants.NAMESPACE);
-        etags.put(href, etag.getValue());
+        DavProperty etag = propSet.get(DavPropertyName.GETETAG.getName(), DavConstants.NAMESPACE);
+        etags.put(href, etag.getValue().toString());
       }
       
       return etags;
@@ -698,12 +698,12 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         MultiStatusResponse multiRes = multiStatus.getResponses()[i];
         href = multiRes.getHref();
         DavPropertySet propSet =  multiRes.getProperties(DavServletResponse.SC_OK);
-        DavProperty<String> calendarData = (DavProperty<String>) propSet.get(CALDAV_XML_CALENDAR_DATA, CALDAV_NAMESPACE);
-        DavProperty<String> etag = (DavProperty<String>) propSet.get(DavPropertyName.GETETAG.getName(), DavConstants.NAMESPACE);
+        DavProperty calendarData = propSet.get(CALDAV_XML_CALENDAR_DATA, CALDAV_NAMESPACE);
+        DavProperty etag = propSet.get(DavPropertyName.GETETAG.getName(), DavConstants.NAMESPACE);
         try {
-          net.fortuna.ical4j.model.Calendar iCalEvent = calendarBuilder.build(new StringReader(calendarData.getValue()));
+          net.fortuna.ical4j.model.Calendar iCalEvent = calendarBuilder.build(new StringReader(calendarData.getValue().toString()));
           // add new event
-          importRemoteCalendarEvent(username, remoteCalendarId, iCalEvent, href, etag.getValue());
+          importRemoteCalendarEvent(username, remoteCalendarId, iCalEvent, href, etag.getValue().toString());
         } 
         catch (Exception e) {
           logger.debug("Exception occurs when import calendar component " + href + ". Skip this component.");
@@ -718,13 +718,13 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         MultiStatusResponse multiRes = multiStatus.getResponses()[i];
         href = multiRes.getHref();
         DavPropertySet propSet =  multiRes.getProperties(DavServletResponse.SC_OK);
-        DavProperty<String> calendarData = (DavProperty<String>) propSet.get(CALDAV_XML_CALENDAR_DATA, CALDAV_NAMESPACE);
-        DavProperty<String> etag = (DavProperty<String>) propSet.get(DavPropertyName.GETETAG.getName(), DavConstants.NAMESPACE);
+        DavProperty calendarData = propSet.get(CALDAV_XML_CALENDAR_DATA, CALDAV_NAMESPACE);
+        DavProperty etag = propSet.get(DavPropertyName.GETETAG.getName(), DavConstants.NAMESPACE);
         String eventId = updated.get(href);
         try {
-          net.fortuna.ical4j.model.Calendar iCalEvent = calendarBuilder.build(new StringReader(calendarData.getValue()));
+          net.fortuna.ical4j.model.Calendar iCalEvent = calendarBuilder.build(new StringReader(calendarData.getValue().toString()));
           // update event 
-          updateRemoteCalendarEvent(username, remoteCalendarId, eventId, iCalEvent, etag.getValue());
+          updateRemoteCalendarEvent(username, remoteCalendarId, eventId, iCalEvent, etag.getValue().toString());
         }
         catch (Exception e) {
           logger.debug("Exception occurs when import calendar component " + href + ". Skip this component.");

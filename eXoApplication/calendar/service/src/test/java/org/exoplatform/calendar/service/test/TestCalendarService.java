@@ -504,10 +504,6 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     
     Calendar cal;
     try {
-      HttpClient client = new HttpClient();
-      HostConfiguration hostConfig = new HostConfiguration();
-      hostConfig.setHost(new URL(url).getHost());
-      client.getState().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName, password));
       cal = remoteCalendarService.importRemoteCalendar(username, url, CalendarService.CALDAV, "calendarName", "Auto", credentials);
     } catch (IOException e) {
       log.info("Exception occurs when connect to remote calendar. Skip this test.");
