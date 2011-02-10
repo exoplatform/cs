@@ -35,7 +35,7 @@
 	  }
 	}
 	def rcontext = _ctx.getRequestContext() ;	
-	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.isAllday("UITaskForm") ;') ;	
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.isAllday("UITaskForm","' + uiForm.getCalendarId() + '") ;') ;
 %>
 <div id="$uicomponent.id" class="UIAddNewEvent">
   <table class="UIFormGrid">

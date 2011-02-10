@@ -2044,35 +2044,35 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
     
 };
 
-UICalendarPortlet.prototype.isAllday = function(form){
-    try {
-        if (typeof(form) == "string") 
-            form = eXo.calendar.UICalendarPortlet.getElementById(form);
-        if (form.tagName.toLowerCase() != "form") {
-            form = eXo.core.DOMUtil.findDescendantsByTagName(form, "form");
-        }
-        for (var i = 0; i < form.elements.length; i++) {
-            if (form.elements[i].getAttribute("name") == "allDay") {
-                eXo.calendar.UICalendarPortlet.allDayStatus = form.elements[i];
-                eXo.calendar.UICalendarPortlet.showHideTime(form.elements[i]);
-                break;
-            }
-        }
-       /**
-	 * Preselect calendar when add event/task
-	 */
-	var calendarid = this.getCheckedCalendar(this.filterForm);
-	if(calendarid){
-		var calendar = form.elements["calendar"];
-		for(i=0; i < calendar.options.length;  i++) {
-			var value = calendar.options[i].value ;
-			calendar.options[i].selected = (value.match(calendarid) != null);		   
-		}
-	}
-    } 
-    catch (e) {
-    
-    }
+UICalendarPortlet.prototype.isAllday = function(form,selecedCalendarID){
+  try {
+      if (typeof(form) == "string") 
+          form = eXo.calendar.UICalendarPortlet.getElementById(form);
+      if (form.tagName.toLowerCase() != "form") {
+          form = eXo.core.DOMUtil.findDescendantsByTagName(form, "form");
+      }
+      for (var i = 0; i < form.elements.length; i++) {
+          if (form.elements[i].getAttribute("name") == "allDay") {
+              eXo.calendar.UICalendarPortlet.allDayStatus = form.elements[i];
+              eXo.calendar.UICalendarPortlet.showHideTime(form.elements[i]);
+              break;
+          }
+      }
+     /**
+       * Preselect calendar when add event/task
+       */
+      var calendarid = (selecedCalendarID)?selecedCalendarID:this.getCheckedCalendar(this.filterForm);
+      if(calendarid){
+              var calendar = form.elements["calendar"];
+              for(i=0; i < calendar.options.length;  i++) {
+                      var value = calendar.options[i].value ;
+                      calendar.options[i].selected = (value.match(calendarid) != null);                   
+              }
+      }
+  } 
+  catch (e) {
+  
+  }
 };
 
 /**
@@ -2823,7 +2823,7 @@ eXo.calendar.EventTooltip = {
 	},
 	getRealTime: function(data){
 		var time = "";
-		var type = this.isAllday(data);
+		var type = this.isAllday(data,calendarId);
 		var timeFormat = String(eXo.calendar.UICalendarPortlet.timeFormat).toUpperCase();
 		var d = new Date(this.convertTimezone(data.fromDateTime));
 		var d1 = new Date(this.convertTimezone(data.toDateTime));
