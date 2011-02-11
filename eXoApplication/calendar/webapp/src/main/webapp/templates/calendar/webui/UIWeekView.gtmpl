@@ -156,11 +156,11 @@
 	                %>
 	                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" calid="$event.calendarId" startTime="$begindate"  endTime="$enddate" 
 	                startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
-	                 title="$title" actionlink="$actionLink">
+	                  actionlink="$actionLink">
 	                  <div class="$leftClass">
 	                    <span></span>
 	                  </div>
-	                  <div class="EventAlldayContent" title="<%=event.summary%>">
+	                  <div class="EventAlldayContent">
 	                    <%=event.summary%>
 	                  </div>
 	                  <div class="$rightClass">
@@ -220,7 +220,7 @@
           <div style="clear: left;">
             <span></span>
           </div>
-          <div unselectable="on" class="EventContainer" title="$event.summary">$event.summary</div>
+          <div unselectable="on" class="EventContainer">$event.summary</div>
           <div class="ResizeEventContainer" unselectable="on">
             <span></span>
           </div>

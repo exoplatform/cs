@@ -144,7 +144,8 @@ UICalendarPortlet.prototype.addQuickShowHidden = function(obj, type){
  */
 UICalendarPortlet.prototype.addQuickShowHiddenWithId = function(obj, type, id){
 	var startTime = new Date().getTime() ;
-    var id = (id.match(/calendar[a-zA-Z0-9]+\&/ig)).toString().replace("&","");
+		var calType = (id.match(/calType=\s*\d\s*\&/ig)).toString().match(/\d/ig);
+    var id = calType + ":" + (id.match(/calendar[a-zA-Z0-9]+\&/ig)).toString().replace("&","");
     this.addQuickShowHiddenWithTime(obj, type, startTime, startTime + 15*60*1000, id) ;
 } ;
 
@@ -155,7 +156,7 @@ UICalendarPortlet.prototype.addQuickShowHiddenWithId = function(obj, type, id){
  */
 UICalendarPortlet.prototype.addQuickShowHiddenWithTime = function(obj, type, fromMilli, toMilli, id){
     var CalendarWorkingWorkspace =  eXo.calendar.UICalendarPortlet.getElementById("UICalendarWorkingContainer");
-    var id = this.getCheckedCalendar(this.filterForm);
+    var id = (id)?id:this.getCheckedCalendar(this.filterForm);
     var UIQuckAddEventPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddEventPopupWindow");
     var UIQuckAddTaskPopupWindow = eXo.core.DOMUtil.findDescendantById(CalendarWorkingWorkspace,"UIQuckAddTaskPopupWindow");
     var selectedCategory = (eXo.calendar.UICalendarPortlet.filterSelect) ? eXo.calendar.UICalendarPortlet.filterSelect : null;
@@ -2755,15 +2756,6 @@ eXo.calendar.EventTooltip = {
 			url += "/private/cs/calendar/getevent/" + self.currentEvent.getAttribute("eventid");
 			self.makeRequest("GET",url);
 		},self.timer);
-		eXo.core.EventManager.addEvent(self.currentEvent,"mousemove",function(evt){
-			eXo.calendar.EventTooltip.isDnD == true;
-			var evt = window.event || evt;
-			var self = eXo.calendar.EventTooltip;
-			if(self._container){				
-				self._container.style.top = evt.clientY + 10 + document.documentElement.scrollTop + "px";
-				self._container.style.left = evt.clientX + 10 + "px";
-			}
-		});
 	},
 	hide: function(evt){
 		var self = eXo.calendar.EventTooltip;
@@ -2771,7 +2763,6 @@ eXo.calendar.EventTooltip = {
 		self.outTimer = setTimeout(function(){
 			self.hideElement();					
 		},self.timer);
-		eXo.core.EventManager.removeEvent(self.currentEvent,"mousemove");
 		eXo.calendar.EventTooltip.isDnD == false;
 	},
 	hideElement: function(){
@@ -2823,7 +2814,7 @@ eXo.calendar.EventTooltip = {
 	},
 	getRealTime: function(data){
 		var time = "";
-		var type = this.isAllday(data,calendarId);
+		var type = this.isAllday(data);
 		var timeFormat = String(eXo.calendar.UICalendarPortlet.timeFormat).toUpperCase();
 		var d = new Date(this.convertTimezone(data.fromDateTime));
 		var d1 = new Date(this.convertTimezone(data.toDateTime));
@@ -2858,10 +2849,29 @@ eXo.calendar.EventTooltip = {
 		if(data.location)    html += '<div class="Location">' + data.location + '</div>';
 		if(data.priority)    html += '<div class="'+ data.priority.toLowerCase() +'PriorityIcon"><span></span></div>';
 		if(data.status != "null") html += '<div class="Status">' + data.status.replace("-"," ") + '</div>';
-		self._container.innerHTML = html;	
 		self._container.style.display = "block";
+		//var topArrow = self.currentEvent.offsetHeight/2 - 7; 
+		self._container.innerHTML = '<div class="Container">' + html + '</div><div class="Clear"><span></span></div>';	
 		self._container.style.zIndex = 1000;
-	}
+		self.positioning();
+	},
+	positioning: function(){
+		var offsetTooltip = this._container.offsetParent;
+		var offsetEvent = this.currentEvent.offsetParent;
+		if(eXo.calendar.UICalendarPortlet.viewType == "UIDayView") offsetEvent = eXo.core.DOMUtil.findAncestorByClass(offsetEvent,"EventDayContainer");
+		var extraY = (this.currentEvent.offsetHeight - this._container.offsetHeight)/2
+		var extraX = 0;
+		var x = eXo.core.Browser.findPosXInContainer(this.currentEvent,offsetTooltip) + this.currentEvent.offsetWidth;
+		var y = eXo.core.Browser.findPosYInContainer(this.currentEvent,offsetTooltip) - offsetEvent.scrollTop + extraY;		
+		this._container.style.top = y + "px";
+		this._container.style.left = x + "px";
+		var relativeX = eXo.core.Browser.findPosX(this._container) + this._container.offsetWidth;
+		if(relativeX > document.documentElement.offsetWidth) {
+			extraX = document.documentElement.offsetWidth - relativeX;
+			x += extraX;
+			this._container.style.left = x + "px";
+		}
+	}	
 }
 
 

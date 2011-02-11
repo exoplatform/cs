@@ -191,7 +191,7 @@
 									<div class="EventSummary">
 										<div class="<%=event.eventState%>Icon">
 											<div class="<%=event.getPriority()%>PriorityIcon  <%= (event.getPriority() != null)? " PriorityIcon":"" %>">
-												<div class="EventLabel EventPriority" title="<%=event.summary%>" >$event.summary</div>
+												<div class="EventLabel EventPriority">$event.summary</div>
 											</div>
 										</div>
 									</div>
