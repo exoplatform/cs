@@ -232,8 +232,16 @@ public class UIEditFeed extends UIForm implements UIPopupComponent{
                               , Utils.getDisplaySharedCalendar(calendar.getCalendarOwner(), calendar.getName()));
           } else {
             calendar = calendarService.getGroupCalendar(calendarId);
+            List<SelectItemOption<String>> options = getCalendarsOptions();
+            String groupName = null;
+            for (SelectItemOption<String> option : options) {
+              if (option.getValue().contains(calendarId)) {                
+                groupName = option.getLabel() ;
+                break;
+              }
+            }
             if (calendar != null)
-              feedCalendars.put(Utils.PUBLIC_TYPE + Utils.COLON + calendar.getId(), calendar.getName());
+              feedCalendars.put(Utils.PUBLIC_TYPE + Utils.COLON + calendar.getId(), groupName);
           }
         }
       } catch (Exception e) {
