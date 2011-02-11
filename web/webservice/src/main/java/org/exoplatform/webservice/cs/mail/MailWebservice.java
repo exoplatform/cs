@@ -4,7 +4,9 @@
  */
 package org.exoplatform.webservice.cs.mail;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 import javax.security.sasl.Sasl;
@@ -18,7 +20,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.common.http.HTTPStatus;
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.ExoContainerContext;
@@ -31,6 +35,10 @@ import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.Query;
+import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.webservice.cs.bean.AccountsData;
@@ -56,9 +64,15 @@ public class MailWebservice implements ResourceContainer {
 
   private static final Log log = ExoLogger.getLogger("cs.mail.webservice");
   // TODO need to organize code, don't keep html content here !
+  
+  private OrganizationService organizationService;
   public MailWebservice() {
+    
+  } 
+  public MailWebservice(OrganizationService organizationService) {
+    this.organizationService = organizationService;
   }
-
+  
   @GET
   @Path("/checkmail/{username}/{accountId}/{folderId}/")
   public Response checkMail(@PathParam("username") String userName,
@@ -386,4 +400,39 @@ public class MailWebservice implements ResourceContainer {
     }
     return Response.ok(data, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
+  
+  /**
+   * Get all users from portal user data base
+   * @param keywords : the text to compare with data base
+   * @return application/json content type
+   */
+  @SuppressWarnings({"deprecation" })
+  @GET
+  @Path("/searchuser/{keywords}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response searchUser(@PathParam("keywords") String keywords) throws Exception {
+    CacheControl cacheControl = new CacheControl();
+    cacheControl.setNoCache(true);
+    cacheControl.setNoStore(true);
+    ContactData fullData = new ContactData();
+    
+    try {
+      OrganizationService service = (OrganizationService)PortalContainer.getInstance().getComponentInstanceOfType(OrganizationService.class);
+      List<User> user = service.getUserHandler().findUsers(new Query()).getAll();
+      List<String> userList = new ArrayList<String>();
+      if(user != null && user.size() > 0)
+      for(User u : user){
+        String username = u.getUserName();
+        if(username.contains(keywords)){
+          username =  "<div class='AutoCompleteItem'>" + username.replace(keywords,"<b>" + keywords + "</b>") + "</div>";
+          userList.add(username);
+        }
+      }
+      fullData.setInfo(userList);
+    } catch (Exception e) {
+      return Response.status(Status.INTERNAL_SERVER_ERROR).cacheControl(cacheControl).build();
+    }
+    return Response.ok(fullData, MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+  }
+  
 }

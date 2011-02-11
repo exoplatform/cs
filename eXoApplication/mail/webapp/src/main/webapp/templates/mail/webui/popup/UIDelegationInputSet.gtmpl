@@ -15,7 +15,8 @@
 	def input;
   def tabId = uicomponent.id;
   def jsMan = _ctx.getRequestContext().getJavascriptManager() ;
- 
+  jsMan.importJavascript('eXo.mail.AutoComplete','/mail/javascript/');
+  jsMan.addJavascript('eXo.mail.AutoComplete.initUserSeach(["'+ UIMailSettings.FIELD_DELEGATED_ACCOUNTS +'"]);');
 %>
 <div class="UIDelegationInputSet" id="$tabId">
 	<div class="AccountsInput">
@@ -32,7 +33,7 @@
 				<td class="InputField">$labelDA</td>
 			</tr>
       <tr>
-        <td class="InputField" id='<%=input.getId()%>'><%uicomponent.renderUIComponent(input)%></td>
+        <td class="InputField"><%uicomponent.renderUIComponent(input)%></td>
         <td class="InputField">
         <div class="AddUserFeild">
         <%uicomponent.renderUIComponent(inputDA)%>

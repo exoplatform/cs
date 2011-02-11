@@ -18,6 +18,7 @@
 package org.exoplatform.webservice.cs.rest;
 
 import java.text.SimpleDateFormat;
+
 import java.util.Date;
 
 import javax.ws.rs.core.MultivaluedMap;
@@ -292,4 +293,20 @@ public class TestWebservice extends AbstractResourceTest {
       throw new AssertionFailedError("service not found");
     //assertNotSame(Response.Status.NOT_FOUND.getStatusCode() + "", response.getStatus() + "");
   }
+  
+  public void testSearchUser() throws Exception{
+    MultivaluedMap<String, String> h = new MultivaluedMapImpl();
+    String username = "root";
+    h.putSingle("username", username);
+    String keyword = "joh";
+    ContainerResponse response = null;
+    ByteArrayContainerResponseWriter writer = new ByteArrayContainerResponseWriter();
+    String mailURI = "/private/cs/mail/searchuser/" + keyword;
+    response = service("GET", mailURI, baseURI, h, null, writer);
+    assertNotNull(response);
+    
+    if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode())
+      throw new AssertionFailedError("service not found");
+  }
+  
 }

@@ -7,12 +7,16 @@ eXo.require("eXo.core.Keyboard");
 function AutoComplete(){
 	this.REST_URL = eXo.env.portal.context + "/rest/private/cs/mail/searchemail/";
 	this.elm = null;
+	this.ACTION_SEARCH_EMAIL = false;
+	this.ACTION_SEARCH_USER = false;
 };
 /**
  * Register handler for input
  * @param {Array} ids is the array of input ids
  */
 AutoComplete.prototype.init = function(ids){
+	this.ACTION_SEARCH_EMAIL = true;
+	this.ACTION_SEARCH_USER = false;
 	var me = eXo.mail.AutoComplete;
 	if(eXo.cs.restContext) this.REST_URL = eXo.env.portal.context + "/" + eXo.cs.restContext + "/private/cs/mail/searchemail/";  
 	var i = ids.length;
@@ -27,7 +31,24 @@ AutoComplete.prototype.init = function(ids){
 	}
 };
 
-
+AutoComplete.prototype.initUserSeach = function(ids){
+	this.ACTION_SEARCH_USER = true;
+	this.ACTION_SEARCH_EMAIL = false
+	var me = eXo.mail.AutoComplete;
+	this.REST_URL = (eXo.cs.restContext)?eXo.env.portal.context+ '/' + eXo.cs.restContext +'/private/cs/mail/searchuser/':'portal/rest/private/cs/mail/searchuser/';
+	var i = ids.length;
+	var input;
+	while(i--){
+		input = document.getElementById(ids[i]);
+		if(input) {
+			input.onkeyup = function(evt){
+				me.pressHandler(evt,this);				
+			};
+			input.setAttribute("autocomplete", "off");
+            input.form.onsubmit = function(){return false};
+		}
+	}
+};
 
 AutoComplete.prototype.pressHandler = function(evt, textbox){
 	if(!evt) var evt = window.event;
@@ -275,8 +296,13 @@ AutoComplete.prototype.addValue = function(obj){
 		value += eXo.mail.AutoComplete.activeInput.value;
 	}
 	value = value.substr(0,value.lastIndexOf(",")+1) + " ";
-	value += obj.innerHTML + ", ";
-	value = value.replace(/\&lt;/gi,"<").replace(/\&gt;/gi,">");
+	
+	if(this.ACTION_SEARCH_EMAIL == true){	
+		value += obj.innerHTML + ", ";
+		value = value.replace(/\&lt;/gi,"<").replace(/\&gt;/gi,">");
+	}else if(this.ACTION_SEARCH_USER == true){
+		value += obj.innerHTML;
+	}
 	eXo.mail.AutoComplete.activeInput.value = this.stripHTML(value);
 	eXo.mail.AutoComplete.hideMenu();
 	if(eXo.mail.AutoComplete.currentItem) delete eXo.mail.AutoComplete.currentItem;
