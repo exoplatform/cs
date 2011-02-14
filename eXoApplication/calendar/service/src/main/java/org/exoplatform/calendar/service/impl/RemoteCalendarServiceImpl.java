@@ -50,6 +50,7 @@ import net.fortuna.ical4j.model.component.VToDo;
 import net.fortuna.ical4j.model.property.Attach;
 import net.fortuna.ical4j.model.property.Attendee;
 import net.fortuna.ical4j.model.property.Clazz;
+import net.fortuna.ical4j.util.CompatibilityHints;
 
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.Header;
@@ -203,6 +204,8 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
                                        String calendarId,
                                        InputStream icalInputStream) throws Exception {
     CalendarBuilder calendarBuilder = new CalendarBuilder() ;
+    // Enable relaxed-unfolding to allow ical4j parses "folding" line follows iCalendar spec
+    CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
     net.fortuna.ical4j.model.Calendar iCalendar;
     try {
       iCalendar = calendarBuilder.build(icalInputStream) ;
@@ -408,6 +411,9 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         Calendar eXoCalendar = storage_.createRemoteCalendar(username, calendarName, remoteUrl, remoteType, syncPeriod, remoteUser, remotePassword);
         String href;
         CalendarBuilder builder = new CalendarBuilder();
+        // Enable relaxed-unfolding to allow ical4j parses "folding" line follows iCalendar spec
+        CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
+        
         for (int i = 0; i < multiStatus.getResponses().length; i++) {
           MultiStatusResponse multiRes = multiStatus.getResponses()[i];
           href = multiRes.getHref();
@@ -477,6 +483,8 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
   public boolean isValidate(InputStream icalInputStream) throws Exception {
     try {
       CalendarBuilder calendarBuilder = new CalendarBuilder() ;
+      // Enable relaxed-unfolding to allow ical4j parses "folding" line follows iCalendar spec
+      CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
       calendarBuilder.build(icalInputStream) ;
       return true ;
     } catch (Exception e) {
@@ -608,6 +616,8 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     }
     
     CalendarBuilder calendarBuilder = new CalendarBuilder(); 
+    // Enable relaxed-unfolding to allow ical4j parses "folding" line follows iCalendar spec
+    CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
     
     if (!CalendarService.CALDAV.equals(calService.getRemoteCalendarType(username, remoteCalendarId))) {
       throw new UnsupportedOperationException("Not support");
