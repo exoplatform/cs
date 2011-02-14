@@ -286,20 +286,20 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       List<String> defaultFilterCalendars = new ArrayList<String>() ;
       List<String> unCheckList = new ArrayList<String>() ;
       defaultFilterCalendars = uiForm.getUnCheckedList(uiForm.getPrivateCalendars(calendarService, username)) ;
+      calendarSetting.setFilterPrivateCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
       if(!defaultFilterCalendars.isEmpty()){
-        calendarSetting.setFilterPrivateCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
         unCheckList.addAll(defaultFilterCalendars) ;
         defaultFilterCalendars.clear() ;
       }
       defaultFilterCalendars = uiForm.getUnCheckedList(uiForm.getPublicCalendars(calendarService, username)) ;
+      calendarSetting.setFilterPublicCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
       if(!defaultFilterCalendars.isEmpty()){
-        calendarSetting.setFilterPublicCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
         unCheckList.addAll(defaultFilterCalendars) ;
         defaultFilterCalendars.clear() ;
       }
       defaultFilterCalendars = uiForm.getUnCheckedList(uiForm.getSharedCalendars(calendarService, username)) ;
+      calendarSetting.setFilterSharedCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
       if(!defaultFilterCalendars.isEmpty()){
-        calendarSetting.setFilterSharedCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
         unCheckList.addAll(defaultFilterCalendars) ;
         defaultFilterCalendars.clear() ;
       }
