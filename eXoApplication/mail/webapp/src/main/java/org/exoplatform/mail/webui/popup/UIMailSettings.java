@@ -345,6 +345,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         UIFormSelectBox select = inputSet.getChildById(FIELD_OWNER_ACCOUNTS);
         UIFormStringInput input = inputSet.getChildById(FIELD_DELEGATED_ACCOUNTS);
         String receiver = input.getValue();   
+        if(receiver != null) receiver = receiver.trim();
         UIFormCheckBoxInput<Boolean> checkbox = inputSet.getChildById(FIELD_PRIVILEGE_FULL);
         String permission = Utils.READ_ONLY ;
         if(checkbox.isChecked()) permission = Utils.SEND_RECIEVE ;
