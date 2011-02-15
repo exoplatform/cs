@@ -86,7 +86,7 @@ UICalendarDragDrop.prototype.regDnDItem = function() {
 
 UICalendarDragDrop.prototype.dndTrigger = function(e){
   e = e ? e : window.event;
-	eXo.calendar.EventTooltip.disable();
+	eXo.calendar.EventTooltip.disable(e);
   if (e.button == 1 || e.which == 1) {
     return eXo.calendar.UICalendarDragDrop.initDnD(eXo.calendar.UICalendarDragDrop.dropableSets, this, this, e);
   }

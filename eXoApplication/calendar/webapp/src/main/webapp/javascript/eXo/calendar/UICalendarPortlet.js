@@ -1049,7 +1049,7 @@ UIResizeEvent.prototype.init = function(evt){
     //UIResizeEvent.callback = UIResizeEvent.resizeCallback;
 	eXo.calendar.UICalendarPortlet.dropCallback = UIResizeEvent.resizeCallback;
 	eXo.calendar.UICalendarPortlet.setPosition(outerElement);
-	eXo.calendar.EventTooltip.disable();
+	eXo.calendar.EventTooltip.disable(evt);
 };
 
 UIResizeEvent.prototype.getOriginalHeight = function(obj){
@@ -1095,7 +1095,7 @@ UIResizeEvent.prototype.start = function(evt, innerElement, outerElement, contai
  * @param {Object} evt Mouse event
  */
 UIResizeEvent.prototype.execute = function(evt){
-		eXo.calendar.EventTooltip.disable();
+		eXo.calendar.EventTooltip.disable(evt);
     var _e = window.event || evt;
     var UIResizeEvent = eXo.calendar.UIResizeEvent;
     var mouseY = eXo.core.Browser.findMouseRelativeY(UIResizeEvent.container, _e);
@@ -1193,8 +1193,9 @@ UICalendarPortlet.prototype.resetZIndex = function(obj){
  * Initializes drag and drop actions
  * @param {Object} evt Mouse event
  */
+
 UICalendarPortlet.prototype.initDND = function(evt){
-	eXo.calendar.EventTooltip.disable();
+	eXo.calendar.EventTooltip.disable(evt);
 	var _e = window.event || evt;
   eXo.core.EventManager.cancelBubble(evt);
 	if(eXo.core.EventManager.getMouseButton(evt) == 2) return ;
@@ -1216,7 +1217,6 @@ UICalendarPortlet.prototype.initDND = function(evt){
  * @param {Object} evt Mouse event
  */
 UICalendarPortlet.prototype.dragStart = function(evt){
-		eXo.calendar.EventTooltip.disable();
     var _e = window.event || evt;
     var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
     var delta = null;
@@ -2706,18 +2706,7 @@ ScrollManager.prototype.csCheckAvailableSpace = function(maxSpace) { // in pixel
 	}
 };
 
-eXo.calendar.EventTooltip = {
-	/*
-	_data: {
-		start: "Abc",
-		end: "Abc",
-		title: "Abc",
-		description: "Eda",
-		location: "Hanoi",
-		piority: "Abc",  //For task	
-		status: "Abc" //For task
-	},
-	*/
+eXo.calendar.EventTooltip = {	
 	isDnD: false,
 	timer: 1000,
 	getContainer: function(evt){
@@ -2766,17 +2755,17 @@ eXo.calendar.EventTooltip = {
 		eXo.calendar.EventTooltip.isDnD == false;
 	},
 	hideElement: function(){
-		this._container.style.display = "none";
+		if(this._container) this._container.style.display = "none";
 	},
-	disable: function(){
+	disable: function(evt){
 		this.hideElement();
-		this.isDnD = true;
+		if(eXo.core.EventManager.getMouseButton(evt) != 2) this.isDnD = true;
 	},
 	enable: function(){
 		this.isDnD = false;
 	},
 	cleanupTimer:function(evt){
-		eXo.core.EventManager.cancelBubble(evt);
+		//eXo.core.EventManager.cancelBubble(evt);
 		if(this.outTimer) clearTimeout(this.outTimer);
 		if(this.overTimer) clearTimeout(this.overTimer);
 	},
@@ -2785,9 +2774,6 @@ eXo.calendar.EventTooltip = {
 	  request.onSuccess = this.render ;
 	  request.onLoading = function(){
 			eXo.calendar.EventTooltip._container.innerHTML = "Loading...";
-		} ;
-	  request.onTimeout = function(){
-			alert("Connection timeout!");
 		} ;
 	  eXo.portal.CurrentRequest = request ;
 	  request.process() ;
@@ -3094,3 +3080,4 @@ UICalendarPortlet.prototype.useAuthenticationForRemoteCalendar = function(id) {
     }   
   };  
 }
+
