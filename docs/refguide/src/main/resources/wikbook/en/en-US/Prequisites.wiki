@@ -1,21 +1,21 @@
-You can refer the following links to understand more about this developer reference guide: 
+You can refer to the following links to understand more about CS Reference Guide: 
 
-- About GateIn:
+- GateIn:
 	http://docs.jboss.com/gatein/portal/3.1.0-FINAL/reference-guide/en-US/html/index.html
 
-- About OpenSocial gadget:
-  http://wiki.opensocial.org/index.php?title=Main_Page
+- OpenSocial gadget:
+  	http://wiki.opensocial.org/index.php?title=Main_Page
 
-- About WebService:
+- WebService:
 	http://docs.jboss.org/exojcr/1.12.4-GA/developer/en-US/html/part-ws.html
 
-- About Chatserver:
+- Chatserver:
 	http://www.igniterealtime.org/builds/openfire/docs/latest/documentation/javadoc/index.html
 
-- About Vcard:
+- Vcard:
 	http://en.wikipedia.org/wiki/VCard
 
-- About ICalendar standard:
+- ICalendar standard:
 	http://en.wikipedia.org/wiki/ICalendar
 	http://www.ietf.org/rfc/rfc2445.txt
 
