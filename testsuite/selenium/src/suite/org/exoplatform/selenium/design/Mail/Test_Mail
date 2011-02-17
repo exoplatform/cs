@@ -299,7 +299,7 @@
 <tr>
 	<td>type</td>
 	<td>to</td>
-	<td>mary@exoplatform.vn</td>
+	<td>mary@exoplatform.vn, root@exoplatform.vn</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -626,7 +626,6 @@
 	<td></td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
