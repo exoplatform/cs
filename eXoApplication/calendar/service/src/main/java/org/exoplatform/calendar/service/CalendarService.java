@@ -474,8 +474,6 @@ public interface CalendarService {
    */
   public List<CalendarEvent> getEvents(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception ;
   
-  public List<CalendarEvent> getEvents(String username, EventQuery eventQuery, String[] publicCalendarIds, Boolean containRecurrence) throws Exception ;
-
   /**
    * Removed shared calendar, but not the orloginal calendar
    * @param username current user name(or user id)

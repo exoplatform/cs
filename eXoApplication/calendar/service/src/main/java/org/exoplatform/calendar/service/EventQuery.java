@@ -40,6 +40,7 @@ public class EventQuery {
   private String state ;
   private String[] orderBy ; 
   private String[] participants ;  
+  private Boolean excludeRepeatEvent = false;
   private String orderType = Utils.ASCENDING;
   private String queryType = Query.XPATH ;
   
@@ -265,6 +266,10 @@ public class EventQuery {
         stringBuffer.append(")") ;
         hasConjuntion = true ;
       }
+      
+      if (excludeRepeatEvent!=null && excludeRepeatEvent) {
+        stringBuffer.append("and not(@jcr:mixinTypes='exo:repeatCalendarEvent' and @exo:repeat!='" + CalendarEvent.RP_NOREPEAT + "' and @exo:recurrenceId='')");
+      }
       stringBuffer.append("]") ;
       //declared order by
       if(orderBy != null && orderBy.length > 0 && orderType != null && orderType.length() > 0) {
@@ -292,5 +297,11 @@ public class EventQuery {
   }
   public long getLimitedItems() {
     return limitedItems;
+  }
+  public void setexcludeRepeatEvent(Boolean excludeRepeatEvent) {
+    this.excludeRepeatEvent = excludeRepeatEvent;
+  }
+  public Boolean getexcludeRepeatEvent() {
+    return excludeRepeatEvent;
   }
 }

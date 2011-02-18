@@ -120,7 +120,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
                      @EventConfig(listeners = UIEventForm.SelectTabActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.ConfirmOKActionListener.class, name = "ConfirmOK", phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.ConfirmCancelActionListener.class, name = "ConfirmCancel", phase = Phase.DECODE),
-                     @EventConfig(listeners = UIEventForm.ConfirmUpdateInstanceOnly.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.ConfirmUpdateOnlyInstance.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.ConfirmUpdateAllSeries.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.ConfirmUpdateCancel.class, phase = Phase.DECODE)
                    }
@@ -1434,8 +1434,8 @@ public Attachment getAttachment(String attId) {
               List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
               listEvent.add(calendarEvent) ;
               
-              // if the event is a virtual occurrence
-              if (!calendarEvent.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(calendarEvent.getRecurrenceId())) {
+              // if the event (before change) is a virtual occurrence
+              if (!uiForm.calendarEvent_.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(calendarEvent.getRecurrenceId())) {
                 if (!updateSeries) {
                   calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
                 } else {
@@ -1916,12 +1916,12 @@ public Attachment getAttachment(String attId) {
       }
       else {
         CalendarSetting calSetting = uiPortlet.getCalendarSetting();
-        Date oldFromDate = uiForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+        Date fromDate = uiForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
         
         // if it's a virtual recurrence
         CalendarEvent occurrence = uiForm.calendarEvent_;
         if (occurrence != null && !occurrence.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) 
-            && !CalendarUtils.isEmpty(occurrence.getRecurrenceId()) && CalendarUtils.isSameDate(oldFromDate, occurrence.getFromDateTime()) ) {
+            && !CalendarUtils.isEmpty(occurrence.getRecurrenceId()) && CalendarUtils.isSameDate(fromDate, occurrence.getFromDateTime()) ) {
           // popup confirm form
           UIConfirmForm confirmForm =  uiPopupAction.activate(UIConfirmForm.class, 600);
           confirmForm.setConfirmMessage(uiForm.getLabel("update-recurrence-event-confirm-msg"));
@@ -2014,12 +2014,12 @@ public Attachment getAttachment(String attId) {
       uiPopupAction.deActivate();
       
       CalendarSetting calSetting = uiPortlet.getCalendarSetting();
-      Date oldFromDate = uiEventForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+      Date fromDate = uiEventForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
       
       // if it's a virtual recurrence
       CalendarEvent occurrence = uiEventForm.calendarEvent_;
       if (occurrence != null && !occurrence.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) 
-          && !CalendarUtils.isEmpty(occurrence.getRecurrenceId()) && CalendarUtils.isSameDate(oldFromDate, occurrence.getFromDateTime()) ) {
+          && !CalendarUtils.isEmpty(occurrence.getRecurrenceId()) && CalendarUtils.isSameDate(fromDate, occurrence.getFromDateTime()) ) {
         // popup confirm form
         UIConfirmForm confirmForm =  uiPopupAction.activate(UIConfirmForm.class, 600);
         confirmForm.setConfirmMessage(uiEventForm.getLabel("update-recurrence-event-confirm-msg"));
@@ -2043,9 +2043,13 @@ public Attachment getAttachment(String attId) {
       UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class);
       uiPopupAction.deActivate();
       
+      CalendarSetting calSetting = uiPortlet.getCalendarSetting();
+      Date fromDate = uiEventForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+      
       // if it's a virtual recurrence
       CalendarEvent occurrence = uiEventForm.calendarEvent_;
-      if (occurrence != null && !occurrence.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(occurrence.getRecurrenceId())) {
+      if (occurrence != null && !occurrence.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) 
+          && !CalendarUtils.isEmpty(occurrence.getRecurrenceId()) && CalendarUtils.isSameDate(fromDate, occurrence.getFromDateTime()) ) {
         // popup confirm form
         UIConfirmForm confirmForm =  uiPopupAction.activate(UIConfirmForm.class, 600);
         confirmForm.setConfirmMessage(uiEventForm.getLabel("update-recurrence-event-confirm-msg"));
@@ -2060,7 +2064,7 @@ public Attachment getAttachment(String attId) {
     }
   }
   
-  public static class ConfirmUpdateInstanceOnly extends EventListener<UIEventForm> {
+  public static class ConfirmUpdateOnlyInstance extends EventListener<UIEventForm> {
 
     /* (non-Javadoc)
      * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)

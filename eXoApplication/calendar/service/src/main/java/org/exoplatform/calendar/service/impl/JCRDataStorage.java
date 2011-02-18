@@ -27,7 +27,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,15 +39,12 @@ import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
-
-import net.fortuna.ical4j.model.property.RecurrenceId;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.calendar.service.Attachment;
@@ -1057,14 +1053,30 @@ public class JCRDataStorage implements DataStorage {
         exception.setRepeatType(CalendarEvent.RP_NOREPEAT);
         exception.setRecurrenceId(null);
         exception.setRepeatUntilDate(null);
-        exception.setIsExceptionOccurrence(false);
+        exception.setIsExceptionOccurrence(null);
         saveUserEvent(username, exception.getCalendarId(), exception, false);
+        
+        // remove mixin type
+        removeRepeatMixinType(username, exception);
       }
     }
     
     // delete original node
     removeUserEvent(username, originalEvent.getCalendarId(), originalEvent.getId());
     
+  }
+  
+  public void removeRepeatMixinType(String username, CalendarEvent event) throws Exception {
+    try {
+      Node eventNode = getUserCalendarHome(username).getNode(event.getCalendarId()).getNode(event.getId());
+      if (eventNode.isNodeType(Utils.EXO_REPEAT_CALENDAR_EVENT)) {
+        eventNode.removeMixin(Utils.EXO_REPEAT_CALENDAR_EVENT);
+        eventNode.save();
+      }
+    }
+    catch (Exception e) {
+      log.error("Exception when remove exo:repeatCalendarEvent nodetype from event node. Error message: " + e.getMessage());
+    } 
   }
 
   /**
@@ -1396,25 +1408,33 @@ public class JCRDataStorage implements DataStorage {
       if (!eventNode.isNodeType(Utils.EXO_REPEAT_CALENDAR_EVENT)) {
         eventNode.addMixin(Utils.EXO_REPEAT_CALENDAR_EVENT);
         eventNode.addMixin(Utils.MIX_REFERENCEABLE);
+        eventNode.save();
       }
     }
     
-    if (event.getRecurrenceId() != null) eventNode.setProperty(Utils.EXO_RECURRENCE_ID, event.getRecurrenceId());
+    if (event.getRecurrenceId() != null) {
+      if (eventNode.isNodeType(Utils.EXO_REPEAT_CALENDAR_EVENT)) {
+        eventNode.setProperty(Utils.EXO_RECURRENCE_ID, event.getRecurrenceId());
+      }
+    } else {
+      if (eventNode.isNodeType(Utils.EXO_REPEAT_CALENDAR_EVENT)) eventNode.setProperty(Utils.EXO_RECURRENCE_ID, "");
+    }
+    
     if (event.getIsExceptionOccurrence() != null) eventNode.setProperty(Utils.EXO_IS_EXCEPTION, event.getIsExceptionOccurrence());
     if (event.getExcludeId() != null && event.getExcludeId().length > 0) eventNode.setProperty(Utils.EXO_EXCLUDE_ID, event.getExcludeId());
     
     if (event.getRepeatUntilDate() != null) {
       dateTime = Utils.getInstanceTempCalendar() ;
       dateTime.setTime(event.getRepeatUntilDate());
-      if (eventNode.hasProperty(Utils.EXO_REPEAT_UNTIL)) eventNode.setProperty(Utils.EXO_REPEAT_UNTIL, dateTime);
+      if (eventNode.isNodeType(Utils.EXO_REPEAT_CALENDAR_EVENT)) eventNode.setProperty(Utils.EXO_REPEAT_UNTIL, dateTime);
     } else {
-      if (eventNode.hasProperty(Utils.EXO_REPEAT_UNTIL)) eventNode.setProperty(Utils.EXO_REPEAT_UNTIL, (Value)null);
+      if (eventNode.isNodeType(Utils.EXO_REPEAT_CALENDAR_EVENT)) eventNode.setProperty(Utils.EXO_REPEAT_UNTIL, (Value)null);
     }
     
     if (event.getOriginalReference() != null) {
-      if (eventNode.hasProperty(Utils.EXO_ORIGINAL_REFERENCE)) eventNode.setProperty(Utils.EXO_ORIGINAL_REFERENCE, event.getOriginalReference());
+      if (eventNode.isNodeType(Utils.EXO_REPEAT_CALENDAR_EVENT)) eventNode.setProperty(Utils.EXO_ORIGINAL_REFERENCE, event.getOriginalReference());
     } else {
-      if (eventNode.hasProperty(Utils.EXO_ORIGINAL_REFERENCE)) eventNode.setProperty(Utils.EXO_ORIGINAL_REFERENCE, (Value)null);
+      if (eventNode.isNodeType(Utils.EXO_REPEAT_CALENDAR_EVENT)) eventNode.setProperty(Utils.EXO_ORIGINAL_REFERENCE, (Value)null);
     }
     
     calendarNode.getSession().save() ;
@@ -2932,26 +2952,6 @@ public class JCRDataStorage implements DataStorage {
   }
   
   /**
-   * Exclude original and virtual occurrence <br/>
-   * Contain 'real' events: normal event and exception occurrence
-   * @param username
-   * @param eventQuery
-   * @param publicCalendarIds
-   * @param isRecurrence
-   * @return
-   * @throws Exception
-   */
-  public List<CalendarEvent> getEvents(String username, EventQuery eventQuery, String[] publicCalendarIds, Boolean containRecurrence) throws Exception {
-    if (containRecurrence) return getEvents(username, eventQuery, publicCalendarIds);
-    
-    List<CalendarEvent> events = getEvents(username, eventQuery, publicCalendarIds); 
-    List<CalendarEvent> originalRecurEvents = getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate());
- 
-    events.removeAll(originalRecurEvents);
-    return events;
-  }
-  
-  /**
    * Get all active 'original' recurrence event
    * @param username
    * @return
@@ -3031,7 +3031,7 @@ public class JCRDataStorage implements DataStorage {
       }
       return exceptions;
     } catch (Exception e) {
-      log.warn("Exception when get exception occurrences: " + e.getMessage());
+      log.error("Exception when get exception occurrences: " + e.getMessage());
       return null;
     }
   }
@@ -3866,7 +3866,7 @@ public class JCRDataStorage implements DataStorage {
         saveUserEvent(username, toCalendar, originalEvent,  false) ;
       }
     } catch (Exception e) {
-      log.warn("Error when update recurrence series: " + e.getMessage());
+      log.error("Error when update recurrence series: " + e.getMessage());
     }
   }
 

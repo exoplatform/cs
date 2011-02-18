@@ -109,19 +109,20 @@ public class UIWeekView extends UICalendarView {
     toDate.setTime(toDate.getTime()-1);
     endDateOfWeek.setTime(toDate);
     eventQuery.setToDate(endDateOfWeek) ; 
-    
-    // get normal events and exception occurrences
+    eventQuery.setexcludeRepeatEvent(true);
+    // get normal events and exception occurrences, exclude original recurrence events
     List<CalendarEvent> allEvents = calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;
-    List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate());
-    allEvents.removeAll(originalRecurEvents);
     
-    Iterator<CalendarEvent> recurEventsIter = originalRecurEvents.iterator();
-    while (recurEventsIter.hasNext()) {
-      CalendarEvent recurEvent = recurEventsIter.next();
-      Map<String,CalendarEvent> tempMap = calendarService.getOccurrenceEvents(recurEvent, eventQuery.getFromDate(), eventQuery.getToDate());
-      if (tempMap != null) {
-        recurrenceEventsMap.put(recurEvent.getId(), tempMap);
-        allEvents.addAll(tempMap.values());
+    List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate());    
+    if (originalRecurEvents != null && originalRecurEvents.size() > 0) {
+      Iterator<CalendarEvent> recurEventsIter = originalRecurEvents.iterator();
+      while (recurEventsIter.hasNext()) {
+        CalendarEvent recurEvent = recurEventsIter.next();
+        Map<String,CalendarEvent> tempMap = calendarService.getOccurrenceEvents(recurEvent, eventQuery.getFromDate(), eventQuery.getToDate());
+        if (tempMap != null) {
+          recurrenceEventsMap.put(recurEvent.getId(), tempMap);
+          allEvents.addAll(tempMap.values());
+        }
       }
     }
     

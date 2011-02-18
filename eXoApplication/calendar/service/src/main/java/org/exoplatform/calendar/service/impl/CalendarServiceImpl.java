@@ -412,10 +412,6 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                                        String[] publicCalendarIds) throws Exception {
     return storage_.getEvents(username, eventQuery, publicCalendarIds);
   }
-  
-  public List<CalendarEvent> getEvents(String username, EventQuery eventQuery, String[] publicCalendarIds, Boolean containRecurrence) throws Exception {
-    return storage_.getEvents(username, eventQuery, publicCalendarIds, containRecurrence);
-  }
 
   /**
    * {@inheritDoc}

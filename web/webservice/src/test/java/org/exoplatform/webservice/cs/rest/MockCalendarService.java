@@ -681,18 +681,6 @@ public class MockCalendarService implements CalendarService{
   }
 
   /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.CalendarService#getEvents(java.lang.String, org.exoplatform.calendar.service.EventQuery, java.lang.String[], java.lang.Boolean)
-   */
-  @Override
-  public List<CalendarEvent> getEvents(String username,
-                                       EventQuery eventQuery,
-                                       String[] publicCalendarIds,
-                                       Boolean isRecurrence) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  /* (non-Javadoc)
    * @see org.exoplatform.calendar.service.CalendarService#getRecurrenceEvents(java.lang.String)
    */
   @Override
