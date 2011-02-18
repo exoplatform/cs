@@ -1708,11 +1708,12 @@ form {
 }
 
 .UIConversation .Buttons .Actionbar .HistoryIcon {
-  height: 25px;
-  cursor: pointer;
-  padding: 0px 1px;
-} 
+  background: url('DefaultSkin/skinIcons/SmallChatIcons.gif') no-repeat left -422px;
+}
 
+.UIConversation .Buttons .Actionbar .HistoryIcon  .HistoryIcon{
+	background: none;
+}
 .UIConversation .Buttons .Actionbar .HistoryIcon .DownArrow1Icon {
   background-position:right center;
   line-height:24px;

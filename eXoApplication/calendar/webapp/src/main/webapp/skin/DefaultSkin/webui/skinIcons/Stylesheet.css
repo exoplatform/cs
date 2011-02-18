@@ -862,6 +862,11 @@
 	background: url('icons/CalendarIcons.gif') no-repeat right -1891px; /* orientation=rt */
 }
 
+.UICalendarPortlet .MenuItem .RefreshRemoteIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1977px; /* orientation=lt */
+	background: url('icons/CalendarIcons.gif') no-repeat right -1977px; /* orientation=rt */
+}
+
 /* Scroll chat window */
 
 .UICalendarPortlet .ScrollButtons {
