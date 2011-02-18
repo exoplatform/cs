@@ -266,16 +266,20 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       mailSrv.saveMailSetting(username, setting);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       MessageFilter filter = uiMessageList.getMessageFilter() ;
+      String uid = username;
+      if(MailUtils.isDelegated(accountId)) {
+        uid = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
+      }
       if (oldLayout != setting.getLayout()) {
         uiMessageList.getAncestorOfType(UIMessageArea.class).reloadMailSetting();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
       } else if (defaultAcc != null && (!accountId.equals(setting.getDefaultAccount()) || accountId.equals(defaultAcc))){
         uiSelectAccount.updateAccount() ;
         uiSelectAccount.setSelectedValue(accountId);
-        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter));
+        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(uid, filter));
       } else {
         try {
-          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter));
+          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(uid, filter));
         } catch (PathNotFoundException e) {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();

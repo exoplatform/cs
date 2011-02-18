@@ -213,7 +213,9 @@ public class UIActionBar extends UIContainer {
       UIMailPortlet mailPortlet = uiActionBar.getParent() ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       String accId = mailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-      if(Utils.isEmptyField(accId)) {
+      MailService mService = MailUtils.getMailService();
+      String uid = MailUtils.getCurrentUser();
+      if(Utils.isEmptyField(accId) || (mService.getAccounts(uid).isEmpty() && !mService.getDelegatedAccounts(uid).isEmpty())) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
