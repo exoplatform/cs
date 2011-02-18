@@ -2817,7 +2817,14 @@ eXo.calendar.EventTooltip = {
 	getRealTime: function(data){
 		var time = "";
 		var type = this.isAllday(data);
-		var timeFormat = String(eXo.calendar.UICalendarPortlet.timeFormat).toUpperCase();
+		
+		var timeFormat = null;
+		if (eXo.calendar.UICalendarPortlet.timeFormat.indexOf("HH") > -1) {
+			timeFormat = String(eXo.calendar.UICalendarPortlet.timeFormat).toUpperCase();
+		} else {
+			var formater = eXo.cs.DateTimeFormater ;
+			timeFormat = formater.masks.shortTime ;
+		}
 		var d = new Date(this.convertTimezone(data.fromDateTime));
 		var d1 = new Date(this.convertTimezone(data.toDateTime));
 		var df = eXo.cs.DateTimeFormater;
