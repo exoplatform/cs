@@ -56,7 +56,9 @@
 	          	def privilegeName=field + "-name";
 	      %>
 	      	<td class="$cssClass" style="overflow:hidden;">
-	      		<input type="checkbox" name="$privilegeName" <% if(fieldValue) { print "checked" } %> class="checkbox" />
+	      	    <%
+	      	     uicomponent.renderCheckbox(uicomponent.getFieldValue(bean,uicomponent.getBeanIdField()))
+	      	    %>
 	      	</td>
 	      	<% }else {%>	
 	          <td class="$cssClass" style="overflow:hidden;">$fieldValue</td>

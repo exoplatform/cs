@@ -17,17 +17,18 @@
 package org.exoplatform.mail.webui;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupActionContainer;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.service.impl.MailServiceImpl;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAccountSetting;
 import org.exoplatform.mail.webui.popup.UIAddressBookForm;
@@ -52,16 +53,16 @@ import org.exoplatform.webui.event.EventListener;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/UIActionBar.gtmpl",
-    events = {
-        @EventConfig(listeners = UIActionBar.ComposeActionListener.class),
-        @EventConfig(listeners = UIActionBar.CheckMailActionListener.class),
-        @EventConfig(listeners = UIActionBar.AddressActionListener.class),
-        @EventConfig(listeners = UIActionBar.AddEventActionListener.class),
-        @EventConfig(listeners = UIActionBar.FilterActionListener.class),
-        @EventConfig(listeners = UIActionBar.MailSettingsActionListener.class),
-        @EventConfig(listeners = UIActionBar.AccountSettingsActionListener.class)
-    }
+                 template =  "app:/templates/mail/webui/UIActionBar.gtmpl",
+                 events = {
+                     @EventConfig(listeners = UIActionBar.ComposeActionListener.class),
+                     @EventConfig(listeners = UIActionBar.CheckMailActionListener.class),
+                     @EventConfig(listeners = UIActionBar.AddressActionListener.class),
+                     @EventConfig(listeners = UIActionBar.AddEventActionListener.class),
+                     @EventConfig(listeners = UIActionBar.FilterActionListener.class),
+                     @EventConfig(listeners = UIActionBar.MailSettingsActionListener.class),
+                     @EventConfig(listeners = UIActionBar.AccountSettingsActionListener.class)
+                 }
 )
 
 public class UIActionBar extends UIContainer {
@@ -87,22 +88,29 @@ public class UIActionBar extends UIContainer {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } else {
+        try {
         if (MailUtils.isFieldEmpty(folderId)) {
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
         } else {
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true, '" + folderId + "') ;");
-          currentF = mailSrv.getFolder(username, accId, folderId);
+          String uId = username;
+          if(MailUtils.isDelegated(accId)) {
+            uId = mailSrv.getDelegatedAccount(username, accId).getDelegateFrom();
+          }
+          currentF = mailSrv.getFolder(uId, accId, folderId);
           if(currentF.getNumberOfUnreadMessage() < 0) currentF.setNumberOfUnreadMessage(0);
         }
         context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox('checkmail-notice') ;");
         uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(true);
+        } catch (Exception e) {
+         
+        }
       }
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
       long numberOfUnread = Utils.getNumberOfUnreadMessageReally(msgList);
       if(numberOfUnread >= 0 && !MailUtils.isFieldEmpty(folderId) && msgList.size()>0) currentF.setNumberOfUnreadMessage(numberOfUnread) ;
       UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
-      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
     }
@@ -116,22 +124,37 @@ public class UIActionBar extends UIContainer {
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
       String accId = uiSelect.getSelectedValue() ;      
+      String username = MailUtils.getCurrentUser() ;
+      MailService mailSvr = uiPortlet.getApplicationComponent(MailServiceImpl.class);
+      Account acc = mailSvr.getDelegatedAccount(username, accId);
       if(Utils.isEmptyField(accId)) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
+      } else if(MailUtils.isDelegatedAccount(acc, username)) {
+        if(!MailUtils.isFull(username, acc.getPermissions().get(username))) {
+         uiActionBar.showMessage(event);
+        } else {
+          UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+          UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
+          uiPopupAction.activate(uiPopupContainer, MailUtils.MAX_POPUP_WIDTH, 0, true);
+          UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+          uiComposeForm.init(accId, null, 0);
+          uiPopupContainer.addChild(uiComposeForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        }
+      } else {
+        UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+        UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
+        uiPopupAction.activate(uiPopupContainer, MailUtils.MAX_POPUP_WIDTH, 0, true);
+        UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+        uiComposeForm.init(accId, null, 0);
+        uiPopupContainer.addChild(uiComposeForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
-      uiPopupAction.activate(uiPopupContainer, MailUtils.MAX_POPUP_WIDTH, 0, true);
-      
-      UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
-      uiComposeForm.init(accId, null, 0);
-      uiPopupContainer.addChild(uiComposeForm) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
-  
+
   static public class AddressActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
@@ -146,7 +169,7 @@ public class UIActionBar extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
-  
+
   static public class AddEventActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
@@ -162,7 +185,7 @@ public class UIActionBar extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
-  
+
   static public class FilterActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
@@ -183,7 +206,7 @@ public class UIActionBar extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
-  
+
   static public class MailSettingsActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
@@ -208,12 +231,10 @@ public class UIActionBar extends UIContainer {
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
-      if(Utils.isEmptyField(uiSelectAcc.getSelectedValue())) {
-        UIPopupActionContainer uiAccContainer = uiPortlet.createUIComponent(UIPopupActionContainer.class, null, null) ;
-        uiAccContainer.setId("UIAccountPopupCreation");
-        uiAccContainer.addChild(UIAccountCreation.class, null, null) ;
-        uiPopupAction.activate(uiAccContainer, 700, 0, true) ;
-      } else {
+      MailService mService = uiSelectAcc.getApplicationComponent(MailService.class);
+      String userId = MailUtils.getCurrentUser(); 
+      String accountId = uiSelectAcc.getSelectedValue();
+      if(!mService.getAccounts(userId).isEmpty() && mService.getAccountById(userId, accountId) != null) {
         UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 800) ;
         uiPopupContainer.setId("UIAccountPopupSetting");
         UIAccountSetting uiAccountSetting = uiPopupContainer.createUIComponent(UIAccountSetting.class, null, null);
@@ -230,8 +251,20 @@ public class UIActionBar extends UIContainer {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
-      }
+      }else {
+        UIPopupActionContainer uiAccContainer = uiPortlet.createUIComponent(UIPopupActionContainer.class, null, null) ;
+        uiAccContainer.setId("UIAccountPopupCreation");
+        uiAccContainer.addChild(UIAccountCreation.class, null, null) ;
+        uiPopupAction.activate(uiAccContainer, 700, 0, true) ;
+      } 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
+  }
+  
+  private void showMessage(Event event) {
+    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+    uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;
+    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+    return ;
   }
 }

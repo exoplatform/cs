@@ -310,7 +310,8 @@ public class TestMailService extends BaseMailTestCase{
     
     accImap =  mailService_.getDelegatedAccount(receiver, accImap.getId()) ;
     assertEquals(Utils.SEND_RECIEVE, accImap.getPermissions().get(receiver)) ;
-   
+    assertEquals(username, accImap.getDelegateFrom());
+    
     mailService_.removeDelegateAccount(username, receiver, accImap.getId()) ;
         accImap =  mailService_.getAccountById(username, accImap.getId());
     assertEquals(null, accImap.getPermissions().get(receiver)) ;

@@ -42,6 +42,7 @@ import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -114,7 +115,7 @@ public class MailUtils {
       return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
       replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
     }
-    
+
     public static String encodeURL(String urlPart) {
       try {
         return URLEncoder.encode(urlPart, "UTF-8");
@@ -122,7 +123,7 @@ public class MailUtils {
         return urlPart;
       }
     }
-    
+
     public static String decodeURL(String encodedPart) {
       try {
         return URLDecoder.decode(encodedPart, "UTF-8");
@@ -131,7 +132,7 @@ public class MailUtils {
       }
     }
 
-    
+
     public static String encodeJCRPath2URLPath(String jcrPath) {
       if (jcrPath == null) return "";
       String[] arr = jcrPath.split("/");
@@ -139,11 +140,11 @@ public class MailUtils {
       for (String s : arr) {
         sb.append(encodeURL(s)).append("/");
       }
-      
+
       sb.delete(sb.length() - 1, sb.length());
       return sb.toString();
     }
-    
+
     public static String encodeMailId(String id) {
       if (id == null) return "";
       return id.replaceAll("\\+", PLUS_ENCODE).replaceAll("=", EQUAL_ENCODE);
@@ -153,7 +154,7 @@ public class MailUtils {
       if (id == null) return "";
       return id.replaceAll(PLUS_ENCODE, "+").replaceAll(EQUAL_ENCODE, "=");
     }
-    
+
     public static String convertSize(long size) throws Exception {
       return Utils.convertSize(size);
     }
@@ -258,7 +259,7 @@ public class MailUtils {
       String repository = rService.getCurrentRepository().getConfiguration().getName();
       return "/" + PortalContainer.getInstance().getRestContextName() + "/private/jcr/" + repository + encodeJCRPath2URLPath(att.getPath());
     }
-    
+
     public static String encodeHTML(String htmlContent) throws Exception {
       return (!isFieldEmpty(htmlContent)) ? htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
                                           .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("'", "&#39;") : "" ;
@@ -268,7 +269,7 @@ public class MailUtils {
       return (!isFieldEmpty(htmlContent)) ? htmlContent.replaceAll( "&quot;", "\"").replaceAll("&#39;", "'")
                                           .replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&") : "" ;
     }
-    
+
     public static boolean isInvitation(Message msg) throws Exception {
       return (msg.getHeader("X-Exo-Invitation") != null) ;
     }
@@ -354,7 +355,7 @@ public class MailUtils {
       if(isFieldEmpty(str)) return "";
       return str.replaceAll("\n", "<br />");
     }
-    
+
     public static String camovylageLessGreateTag(String s){
       if(isFieldEmpty(s)) return "";
       return s.replaceAll("&lt;", "&lt;;").replaceAll("&gt;", ";&gt;");
@@ -387,7 +388,7 @@ public class MailUtils {
       s = s.replaceAll("<;(A|a)(\\s)(.*?);>(.*?)<;/(A|a);>", "<a $2 target=\"_blank\"> $3 </a>");
       return s ;
     }
- 
+
     public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
       return sharedUserId + " - " + addressName ;
     }
@@ -446,9 +447,42 @@ public class MailUtils {
         return false;
       }
     }
-    
+
     public static String getGroupCalendarName(String groupName, String calendarName) {
       return groupName + MINUS + calendarName;
     }
+
+    public static boolean isDelegatedAccount(Account acc, String recieve) {
+      return (acc != null && acc.getDelegateFrom() != null && recieve != null && !recieve.equalsIgnoreCase(acc.getDelegateFrom()));
+    }
+
+    public static boolean isFull (String user, String perms) {
+      return (user != null && perms != null) && Utils.SEND_RECIEVE.equalsIgnoreCase(perms) ;
+    }
+
+    public static boolean isFull(String id) {
+      try {
+        MailService mService = getMailService();
+        String uid = getCurrentUser();
+        if(mService.getAccountById(uid, id) == null) {
+          Account dAccount = mService.getDelegatedAccount(uid, id);
+          return (isDelegatedAccount(dAccount, uid) && isFull(uid, dAccount.getPermissions().get(uid)));
+        }
+        return true;
+      }catch (Exception e) {
+        //e.printStackTrace();
+        return false;
+      }
+    }
+
+    public static boolean isDelegated(String id) {
+      try {
+        String uid = getCurrentUser();
+        return getMailService().getDelegatedAccount(uid, id) != null;
+      }catch (Exception e) {
+        return false;
+      }
+    }
+
 }
 

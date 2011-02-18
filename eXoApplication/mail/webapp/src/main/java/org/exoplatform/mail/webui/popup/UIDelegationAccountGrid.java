@@ -33,6 +33,7 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 /**
  * Created by The eXo Platform SAS
@@ -43,8 +44,7 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(
                  template = "app:/templates/mail/webui/popup/UIDelegationAccountGrid.gtmpl",
                  events = {
-                     @EventConfig(listeners = UIDelegationAccountGrid.RemoveActionListener.class, confirm = "UIDelegationAccountGrid.grid.msg.confirm-delete"),
-                     @EventConfig(listeners = UIDelegationAccountGrid.UpdateActionListener.class)
+                     @EventConfig(listeners = UIDelegationAccountGrid.RemoveActionListener.class, confirm = "UIDelegationAccountGrid.grid.msg.confirm-delete")
                  }
 )
 public class UIDelegationAccountGrid extends UIGrid {
@@ -74,13 +74,37 @@ public class UIDelegationAccountGrid extends UIGrid {
             delegation.add(bean);
           }
       }
+
+
     } catch (Exception e) {
       e.printStackTrace();
     }
-
     LazyPageList<AccountDelegation> pageList = new LazyPageList<AccountDelegation>(
         new ListAccessImpl<AccountDelegation>(AccountDelegation.class, delegation), 10);
     getUIPageIterator().setPageList(pageList) ;
+    addCheckboxToParent();
+  }
+
+  protected void addCheckboxToParent() {
+    try {
+      List<AccountDelegation>  data = getUIPageIterator().getCurrentPageData() ;
+      UIDelegationInputSet deInputSet = getParent();
+      deInputSet.removeChild(UIFormCheckBoxInput.class);
+      deInputSet.addChild(new UIFormCheckBoxInput<Boolean>(UIMailSettings.FIELD_PRIVILEGE_FULL, UIMailSettings.FIELD_PRIVILEGE_FULL, null));
+      for (AccountDelegation a : data) {
+        UIFormCheckBoxInput<String> cb = new UIFormCheckBoxInput<String>(a.getId(), a.getId(),  null);
+        cb.setChecked(a.isFull());
+        cb.setOnChange("OnChange");
+        deInputSet.addChild(cb);
+      }
+    } catch (Exception e) {
+
+    }
+  }
+
+  protected void renderCheckbox (String id) throws Exception {
+    UIDelegationInputSet deInputSet = getParent();
+    if(deInputSet.getChildById(id) != null) deInputSet.renderChild(id);
   }
 
   static  public class RemoveActionListener extends EventListener<UIDelegationAccountGrid> {
@@ -106,28 +130,4 @@ public class UIDelegationAccountGrid extends UIGrid {
       }
     }
   }   
-
-  static  public class UpdateActionListener extends EventListener<UIDelegationAccountGrid> {
-    public void execute(Event<UIDelegationAccountGrid> event) throws Exception {
-      UIDelegationAccountGrid uiDelegate = event.getSource();
-      UIApplication uiApp = uiDelegate.getAncestorOfType(UIApplication.class) ;
-      String currentuser = MailUtils.getCurrentUser();
-      String delegateId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String perm = Utils.READ_ONLY ;
-      try {
-        MailService mService = MailUtils.getMailService() ;
-        List<AccountDelegation> list = uiDelegate.getUIPageIterator().getCurrentPageData() ;
-        for(AccountDelegation data : list) {
-          if(data.getId().equalsIgnoreCase(delegateId)) {
-            //mService.delegateAccount(currentuser, data.getDelegatedUserName() , data.getAccountId(), perm) ;
-            break;
-          }
-        }
-        uiDelegate.updateGrid();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiDelegate);
-      }catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-  }
 }

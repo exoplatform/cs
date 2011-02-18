@@ -56,7 +56,7 @@ public class Account {
   private String authMechsOutgoing    = Utils.PLAIN;
   
   private Map<String,String> permissions = null ;
-  
+  private String delegateFrom_ = null;
   
   
   public String getSecureAuthsIncoming() {
@@ -287,5 +287,13 @@ public class Account {
 
   public Map<String, String> getPermissions() {
     return permissions;
+  }
+
+  public void setDelegateFrom(String delegateFrom) {
+    this.delegateFrom_ = delegateFrom;
+  }
+
+  public String getDelegateFrom() {
+    return delegateFrom_;
   }
 }

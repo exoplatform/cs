@@ -33,47 +33,48 @@
 				<td class="InputField">$labelDA</td>
 			</tr>
       <tr>
-        <td class="InputField"><%uicomponent.renderUIComponent(input)%></td>
+        <td class="InputField">
+	  <%uicomponent.renderUIComponent(input)%>          
+	</td>
         <td class="InputField">
         <div class="AddUserFeild">
         <%uicomponent.renderUIComponent(inputDA)%>
         </div>
-        <div class="SelectUser" onclick="<%=uicomponent.event("SelectUser")%>"><span></span></div>
-        <div class="ClearAll"><span></span></div>
+         <div class="SelectUser" onclick="<%=uicomponent.event("SelectUser")%>"><span></span></div>
+         <div class="ClearAll"><span></span></div>
+
         </td>  
-      </tr>      
-		</tbody>
-	</table>
-	</div>
-	<%
+      </tr>     
+      <tr>
+	<td>
+        <%
 		label = _ctx.appRes(uicomponent.getParent().id + ".label.privileges");
 		def inputPriFull = uicomponent.getChildById(UIMailSettings.FIELD_PRIVILEGE_FULL);
 		def labelPriFull = _ctx.appRes(uicomponent.getParent().id + ".label." + inputPriFull.getId());
 		
 	%>
 	<div class="PrivilegeSpace">
-    <table>
-      <tr>
-       <td>
+     
         <div><span class="PrivilegeLabel">$label:</span></div>
         <div  class="PrivilegeInput">
          <span id='<%=inputPriFull.getId()%>'><%uicomponent.renderUIComponent(inputPriFull)%></span>
          <span>$labelPriFull</span>
         </div>
-       
-        </td>
-      </tr>
-      <tr>
-        <td>
-        <%
+       <%
           label = _ctx.appRes(uicomponent.getParent().id + ".label.add-more-delegated-accounts") ;
         %>
         <div  class="AddMoreDelegatedAccount" tabId="$tabId" title="$label"  onclick="<%=uicomponent.event("AddAccount")%>"><span></span></div>
-      </td>
-     </tr>
-    </table>
-  </div>
-	<div class="DelegatedAccountsList">
+        
+  	</div>
+
+	</td>
+	<td>
+        </td>
+       </tr> 
+		</tbody>
+	</table>
+	</div>
+		<div class="DelegatedAccountsList">
 	 <%
       uicomponent.renderChild(UIDelegationAccountGrid.class);
      %>

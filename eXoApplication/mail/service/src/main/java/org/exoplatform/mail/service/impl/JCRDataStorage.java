@@ -199,7 +199,9 @@ public class JCRDataStorage implements DataStorage {
         PropertyIterator iter = tempNode.getReferences() ;
         while(iter.hasNext()) {
           Node accountNode = iter.nextProperty().getParent() ;
-          accList.add(getAccount(sProvider, accountNode)) ;
+          Account acc = getAccount(sProvider, accountNode); 
+          acc.setDelegateFrom(accountNode.getParent().getParent().getParent().getName()) ;
+          accList.add(acc) ;
         }
       } catch (Exception e) {
         if(logger.isDebugEnabled()) logger.debug(e.getMessage()) ;

@@ -169,6 +169,7 @@
 	-o-border-radius:2px;
 	border-radius:2px;
 	background:-moz-linear-gradient(0% 90% 90deg, #EEE, #FFF);
+	display: none;
 }
 
 .UIMailPortlet .UIAccountSetting .CheckForSupported{
@@ -186,6 +187,7 @@
 	-o-border-radius:2px;
 	border-radius:2px;
 	background:-moz-linear-gradient(0% 90% 90deg, #EEE, #FFF);
+	display: none;
 }
 
 .UIMailPortlet .UIAccountSetting .CheckForSupported:hover{

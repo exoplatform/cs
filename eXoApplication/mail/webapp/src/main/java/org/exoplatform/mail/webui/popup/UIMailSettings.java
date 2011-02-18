@@ -38,15 +38,14 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
@@ -61,14 +60,15 @@ import org.exoplatform.webui.form.UIFormTabPane;
  * Aug 10, 2007  
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/popup/UIMailSettings.gtmpl",
-    events = {
-        @EventConfig(listeners = UIMailSettings.SaveActionListener.class),
-        @EventConfig(listeners = UIMailSettings.CancelActionListener.class, phase = Phase.DECODE),
-        @EventConfig(listeners = UIMailSettings.SelectTabActionListener.class, phase = Phase.DECODE),
-        @EventConfig(listeners = UIMailSettings.AddAccountActionListener.class, phase = Phase.DECODE)
-    }
+                 lifecycle = UIFormLifecycle.class,
+                 template = "app:/templates/mail/webui/popup/UIMailSettings.gtmpl",
+                 events = {
+                   @EventConfig(listeners = UIMailSettings.SaveActionListener.class),
+                   @EventConfig(listeners = UIMailSettings.CancelActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIMailSettings.SelectTabActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIMailSettings.AddAccountActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIMailSettings.OnChangeActionListener.class, phase = Phase.DECODE)
+                 }
 )
 public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
   public static final String DEFAULT_ACCOUNT = "default-account".intern();
@@ -82,21 +82,21 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
   public static final String SENT_RECEIPT_NEVER = "never".intern();
   public static final String SENT_RECEIPT_ALWAYS = "always".intern();
   public static final String RETURN_RECEIPTS="returnReceipts".intern();
-  
+
   public static final String TAB_GENERAL = "general".intern();
   public static final String TAB_RETURN_RECEIPT = "return-receipt".intern();
   public static final String TAB_LAYOUT = "layout".intern();
   public static final String TAB_ACCOUNT_DELEGATION = "account-delegation".intern();
-  
+
   public static final String FIELD_OWNER_ACCOUNTS = "owner-accounts".intern();
   public static final String FIELD_DELEGATED_ACCOUNTS = "delegated-accounts".intern();
   public static final String FIELD_PRIVILEGE_FULL = "full-privilege".intern();
   public static final String FIELD_PRIVILEGE_READONLY = "readonly-pivilege".intern();
-  
+
   public UIMailSettings() throws Exception {
     super("UIMailSettings");
   }
-  
+
   public void init() throws Exception {
     UIFormInputSet  generalInputSet = new UIFormInputSet(TAB_GENERAL);
     generalInputSet.addUIFormInput(new UIFormSelectBox(DEFAULT_ACCOUNT, DEFAULT_ACCOUNT, getAccounts()));
@@ -114,54 +114,51 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
     periodCheckAuto.add(new SelectItemOption<String>("30 minutes", "period." + String.valueOf(MailSetting.THIRTY_MINS)));
     periodCheckAuto.add(new SelectItemOption<String>("1 hour", "period." + String.valueOf(MailSetting.ONE_HOUR)));
     generalInputSet.addUIFormInput(new UIFormSelectBox(PERIOD_CHECK_AUTO, PERIOD_CHECK_AUTO, periodCheckAuto));
-    
+
     List<SelectItemOption<String>> useWysiwyg = new ArrayList<SelectItemOption<String>>();
     useWysiwyg.add(new SelectItemOption<String>("Rich text editor (HTML format)", "editor.true"));
     useWysiwyg.add(new SelectItemOption<String>("Plain text", "editor.false"));
     generalInputSet.addUIFormInput(new UIFormSelectBox(COMPOSE_MESSAGE_IN, COMPOSE_MESSAGE_IN, useWysiwyg));
-    
+
     List<SelectItemOption<String>> replyWithAtt = new ArrayList<SelectItemOption<String>>();
     replyWithAtt.add(new SelectItemOption<String>("Original message included attachment", "replywith.true"));
     replyWithAtt.add(new SelectItemOption<String>("Original message", "replywith.false"));
     generalInputSet.addUIFormInput(new UIFormSelectBox(REPLY_WITH_ATTACH, REPLY_WITH_ATTACH, replyWithAtt));
-    
+
     List<SelectItemOption<String>> forwardWithAtt = new ArrayList<SelectItemOption<String>>();
     forwardWithAtt.add(new SelectItemOption<String>("Original message included attachment", "forwardwith.true"));
     forwardWithAtt.add(new SelectItemOption<String>("Original message", "forwardwith.false"));
     generalInputSet.addUIFormInput(new UIFormSelectBox(FORWARD_WITH_ATTACH, FORWARD_WITH_ATTACH, forwardWithAtt));
-    
+
     generalInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(SAVE_SENT_MESSAGE, SAVE_SENT_MESSAGE, false));
-    
+
     UIMailLayoutTab layoutInputSet = new UIMailLayoutTab(TAB_LAYOUT);
-    
+
     UIFormInputSet returnReceiptInputSet = new UIFormInputSet(TAB_RETURN_RECEIPT);
     List<SelectItemOption<String>> returnReceiptOptions = new ArrayList<SelectItemOption<String>>();
     returnReceiptOptions.add(new SelectItemOption<String>(SENT_RECEIPT_ASKME, SENT_RECEIPT_ASKME));
     returnReceiptOptions.add(new SelectItemOption<String>(SENT_RECEIPT_NEVER, SENT_RECEIPT_NEVER));
     returnReceiptOptions.add(new SelectItemOption<String>(SENT_RECEIPT_ALWAYS, SENT_RECEIPT_ALWAYS));
     returnReceiptInputSet.addUIFormInput((new UIFormRadioBoxInput(RETURN_RECEIPTS,RETURN_RECEIPTS, returnReceiptOptions)).setAlign(UIFormRadioBoxInput.VERTICAL_ALIGN));
-    
-    //delegate email account
+
     UIDelegationInputSet accountDelegate = new UIDelegationInputSet(TAB_ACCOUNT_DELEGATION);  
     UIFormSelectBox ownerAccounts = new UIFormSelectBox(FIELD_OWNER_ACCOUNTS, FIELD_OWNER_ACCOUNTS, this.getOwnerAccs(username));
     UIFormStringInput delegatedAccounts = new UIFormStringInput(FIELD_DELEGATED_ACCOUNTS, FIELD_DELEGATED_ACCOUNTS, null);//getDelegatedAccs()
     UIFormCheckBoxInput<Boolean> fullPrivilege = new UIFormCheckBoxInput<Boolean>(FIELD_PRIVILEGE_FULL, FIELD_PRIVILEGE_FULL, null);
-    //UIFormCheckBoxInput<Boolean> readonlyPrivileage = new UIFormCheckBoxInput<Boolean>(FIELD_PRIVILEGE_READONLY, FIELD_PRIVILEGE_READONLY, null);
-    
+
     accountDelegate.addUIFormInput(ownerAccounts);
     accountDelegate.addUIFormInput(delegatedAccounts);
     accountDelegate.addUIFormInput(fullPrivilege);
-    //accountDelegate.addUIFormInput(readonlyPrivileage);
-    
+
     addUIFormInput(generalInputSet);
     addUIFormInput(returnReceiptInputSet);
     addUIFormInput(layoutInputSet);
     addUIFormInput(accountDelegate);
-    
+
     setSelectedTab(generalInputSet.getId()) ;
     fillData() ;
   }
-  
+
   public List<SelectItemOption<String>> getAccounts() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
     MailService mailSrv = getApplicationComponent(MailService.class);
@@ -172,7 +169,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
     }
     return options ;
   }
-  
+
   public void fillData() throws Exception {    
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
@@ -181,7 +178,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       long layout = setting.getLayout();
       long sendReturnReceipt = setting.getSendReturnReceipt();
       UIFormInputSet tabGeneral, returnReceipts, tabLayout;
-      
+
       tabGeneral = (UIFormInputSet) getChildById(TAB_GENERAL);
       tabGeneral.getUIFormSelectBox(DEFAULT_ACCOUNT).setValue(setting.getDefaultAccount()) ;
       tabGeneral.getUIFormSelectBox(NUMBER_MSG_PER_PAGE).setValue(String.valueOf(setting.getNumberMsgPerPage()));
@@ -190,7 +187,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       tabGeneral.getUIFormSelectBox(REPLY_WITH_ATTACH).setValue("replywith." + String.valueOf(setting.replyWithAttach()));
       tabGeneral.getUIFormSelectBox(FORWARD_WITH_ATTACH).setValue("forwardwith." + String.valueOf(setting.forwardWithAtt()));
       tabGeneral.getUIFormCheckBoxInput(SAVE_SENT_MESSAGE).setChecked(setting.saveMessageInSent());
-      
+
       returnReceipts = (UIFormInputSet) getChildById(TAB_RETURN_RECEIPT);
       if (sendReturnReceipt == MailSetting.SEND_RECEIPT_ASKSME) 
         ((UIFormRadioBoxInput) returnReceipts.getChildById(RETURN_RECEIPTS)).setValue(SENT_RECEIPT_ASKME);
@@ -198,7 +195,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         ((UIFormRadioBoxInput) returnReceipts.getChildById(RETURN_RECEIPTS)).setValue(SENT_RECEIPT_NEVER);
       else if (sendReturnReceipt == MailSetting.SEND_RECEIPT_ALWAYS) 
         ((UIFormRadioBoxInput) returnReceipts.getChildById(RETURN_RECEIPTS)).setValue(SENT_RECEIPT_ALWAYS);
-      
+
       tabLayout = (UIFormInputSet) getChildById(TAB_LAYOUT);
       if (layout == MailSetting.VERTICAL_LAYOUT) {
         ((UIFormRadioBoxInput) tabLayout.getChildById(UIMailLayoutTab.VERTICAL_LAYOUT)).setValue(UIMailLayoutTab.VERTICAL_LAYOUT_VALUE);
@@ -211,45 +208,41 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       }
     }
   }
-  
+
   public String[] getActions() { return new String[]{"Save", "Cancel"}; }
-  
+
   public void activate() throws Exception { }
 
   public void deActivate() throws Exception { }
-  
+
   static  public class SaveActionListener extends EventListener<UIMailSettings> {
     public void execute(Event<UIMailSettings> event) throws Exception {
-      
       UIMailSettings uiSetting = event.getSource();
-      UIMailLayoutTab uiSettingTab = uiSetting.getChildById(TAB_LAYOUT) ;
-      UIFormRadioBoxInput uiRadio = (UIFormRadioBoxInput)uiSettingTab.getChildById(UIMailLayoutTab.HORIZONTAL_LAYOUT) ;
       //TODO save to data base
-       
-		  UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class);
+      UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
       String accountId = uiSelectAccount.getSelectedValue();
-		  
+
       MailService mailSrv = MailUtils.getMailService();
-		  MailSetting setting = mailSrv.getMailSetting(username);
+      MailSetting setting = mailSrv.getMailSetting(username);
       String defaultAcc = uiSetting.getUIFormSelectBox(DEFAULT_ACCOUNT).getValue() ;
-		  setting.setDefaultAccount(defaultAcc) ;
+      setting.setDefaultAccount(defaultAcc) ;
       setting.setNumberMsgPerPage(Long.valueOf(uiSetting.getUIFormSelectBox(NUMBER_MSG_PER_PAGE).getValue())) ;
-      
+
       String period = uiSetting.getUIFormSelectBox(PERIOD_CHECK_AUTO).getValue() ;
       period = period.substring(period.indexOf(".") + 1, period.length());
-		  setting.setPeriodCheckAuto(Long.valueOf(period)) ;
-      
+      setting.setPeriodCheckAuto(Long.valueOf(period)) ;
+
       String editor = uiSetting.getUIFormSelectBox(COMPOSE_MESSAGE_IN).getValue() ;
       setting.setUseWysiwyg(Boolean.valueOf(editor.substring(editor.indexOf(".") + 1, editor.length()))) ;
-      
+
       String replyWith = uiSetting.getUIFormSelectBox(REPLY_WITH_ATTACH).getValue() ;
       setting.setReplyWithAttach(Boolean.valueOf(replyWith.substring(replyWith.indexOf(".") + 1, replyWith.length())));
       String forwardWith = uiSetting.getUIFormSelectBox(FORWARD_WITH_ATTACH).getValue() ;
       setting.setForwardWithAtt(Boolean.valueOf(forwardWith.substring(forwardWith.indexOf(".") + 1, forwardWith.length())));
       setting.setSaveMessageInSent(uiSetting.getUIFormCheckBoxInput(SAVE_SENT_MESSAGE).isChecked());
-      
+
       UIFormInputSet returnReceiptLayout = (UIFormInputSet) uiSetting.getChildById(TAB_RETURN_RECEIPT);
       String value = ((UIFormRadioBoxInput) returnReceiptLayout.getChildById(UIMailSettings.RETURN_RECEIPTS)).getValue();
       if (value != null) {
@@ -257,7 +250,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         else if (value.equals(UIMailSettings.SENT_RECEIPT_NEVER)) setting.setSendReturnReceipt(MailSetting.SEND_RECEIPT_NEVER);
         else if (value.equals(UIMailSettings.SENT_RECEIPT_ALWAYS)) setting.setSendReturnReceipt(MailSetting.SEND_RECEIPT_ALWAYS);
       }
-      
+
       UIFormInputSet tabLayout = (UIFormInputSet) uiSetting.getChildById(TAB_LAYOUT);
       long oldLayout = setting.getLayout();
       value = ((UIFormRadioBoxInput) tabLayout.getChildById(UIMailLayoutTab.VERTICAL_LAYOUT)).getValue();
@@ -270,9 +263,8 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
           if (value != null && value.equals(UIMailLayoutTab.NO_SPLIT_LAYOUT_VALUE)) setting.setLayout(MailSetting.NO_SPLIT_LAYOUT);
         }
       }
-      
       mailSrv.saveMailSetting(username, setting);
-		  UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       MessageFilter filter = uiMessageList.getMessageFilter() ;
       if (oldLayout != setting.getLayout()) {
         uiMessageList.getAncestorOfType(UIMessageArea.class).reloadMailSetting();
@@ -283,7 +275,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter));
       } else {
         try {
-        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter));
+          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter));
         } catch (PathNotFoundException e) {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -296,12 +288,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       }
       uiSetting.getAncestorOfType(UIPopupAction.class).deActivate();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      if (setting.getPeriodCheckAuto() != Long.valueOf(period)) { 
-//        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.initService('checkMailInfobar', '" + MailUtils.getCurrentUser() + "', '" + defaultAcc + "') ;") ;
-//        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.setCheckmailTimeout(" + period + ") ;") ;
-      }
-	  }
+    }
   }
 
   static  public class CancelActionListener extends EventListener<UIMailSettings> {
@@ -309,19 +296,19 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
     }
   }
-  
+
   static public class SelectTabActionListener extends EventListener<UIMailSettings> {
     public void execute(Event<UIMailSettings> event) throws Exception {
       event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource()) ;      
     }
   }
-  
+
   public List<SelectItemOption<String>> getOwnerAccs(String username){
     List<Account> accs = null;
     try {
       accs = MailUtils.getMailService().getAccounts(username);
     } catch (Exception e) {
-       e.printStackTrace(); 
+      e.printStackTrace(); 
       return null;
     }
     List<SelectItemOption<String>> ownAccs = new ArrayList<SelectItemOption<String>>();
@@ -334,7 +321,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
     }
     return ownAccs;
   } 
-  
+
   static  public class AddAccountActionListener extends EventListener<UIMailSettings> {
     public void execute(Event<UIMailSettings> event) throws Exception {
       try {
@@ -350,13 +337,14 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         String permission = Utils.READ_ONLY ;
         if(checkbox.isChecked()) permission = Utils.SEND_RECIEVE ;
         OrganizationService orService = MailUtils.getOrganizationService() ;
+        UIApplication uiApp = inputSet.getAncestorOfType(UIApplication.class) ;
         if(MailUtils.isFieldEmpty(receiver)) {
-          UIApplication uiApp = inputSet.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIMailSettings.msg.select-one-user", null, ApplicationMessage.INFO)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         } else if (receiver.contains(MailUtils.COMMA)) {
           for (String uid : receiver.split(MailUtils.COMMA)) {
+            uid = uid.trim();
             User us = orService.getUserHandler().findUserByName(uid) ;
             if(us != null && !uid.equalsIgnoreCase(curentUser)) {
               mService.delegateAccount(curentUser, uid, select.getValue(), permission);
@@ -370,6 +358,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         }
         UIDelegationAccountGrid grid = inputSet.getChild(UIDelegationAccountGrid.class);
         grid.updateGrid();
+        inputSet.reset();
         event.getRequestContext().addUIComponentToUpdateByAjax(inputSet) ;
       } catch (Exception e) {
         e.printStackTrace();
@@ -378,15 +367,42 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
 
     }
   }
-  
+
   static  public class SelectUserActionListener extends EventListener<UIMailSettings> {
     public void execute(Event<UIMailSettings> event) throws Exception {
       try {
-        } catch (Exception e) {
-          
-        }
-        }
+      } catch (Exception e) {
+
       }
+    }
+  }
+
+  static  public class OnChangeActionListener extends EventListener<UIMailSettings> {
+    public void execute(Event<UIMailSettings> event) throws Exception {
+      try {
+        UIMailSettings settingForm = event.getSource() ;
+        UIDelegationInputSet inputSet = settingForm.getChildById(TAB_ACCOUNT_DELEGATION);
+        MailService mService = MailUtils.getMailService() ;
+        String curentUser = MailUtils.getCurrentUser() ;
+        UIDelegationAccountGrid uiGrid = inputSet.getChild(UIDelegationAccountGrid.class);
+        List<AccountDelegation> list = uiGrid.getUIPageIterator().getCurrentPageData();
+        for(AccountDelegation acc : list) {
+          UIFormCheckBoxInput<String> cb = inputSet.getChildById(acc.getId());
+          if(cb.isChecked()) {
+            mService.delegateAccount(curentUser, acc.getDelegatedUserName(), acc.getAccountId(), Utils.SEND_RECIEVE);
+          } else {
+            mService.delegateAccount(curentUser, acc.getDelegatedUserName(), acc.getAccountId(), Utils.READ_ONLY);
+          }
+        }
+        UIDelegationAccountGrid grid = inputSet.getChild(UIDelegationAccountGrid.class);
+        grid.updateGrid();
+        event.getRequestContext().addUIComponentToUpdateByAjax(inputSet) ;
+      }  catch (Exception e) {
+        e.printStackTrace();
+        return;
+      }
+    }
+  }
 }
 
 

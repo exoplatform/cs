@@ -17,8 +17,6 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.io.ByteArrayInputStream;
-
-
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -83,15 +81,15 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
+import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.wysiwyg.FCKEditorConfig;
 import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
 
@@ -103,23 +101,23 @@ import com.sun.mail.smtp.SMTPSendFailedException;
  * 2:48:18 PM
  */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "app:/templates/mail/webui/popup/UIComposeForm.gtmpl", events = {
-    @EventConfig(listeners = UIComposeForm.SendActionListener.class),
-    @EventConfig(listeners = UIComposeForm.SaveDraftActionListener.class),
-    @EventConfig(phase = Phase.DECODE, listeners = UIComposeForm.DiscardChangeActionListener.class),
-    @EventConfig(listeners = UIComposeForm.AttachmentActionListener.class),
-    @EventConfig(listeners = UIComposeForm.DownloadActionListener.class),
-    @EventConfig(listeners = UIComposeForm.RemoveAttachmentActionListener.class),
-    @EventConfig(listeners = UIComposeForm.ToActionListener.class),
-    @EventConfig(listeners = UIComposeForm.ToCCActionListener.class),
-    @EventConfig(listeners = UIComposeForm.ToBCCActionListener.class),
-    @EventConfig(listeners = UIComposeForm.ChangePriorityActionListener.class),
-    @EventConfig(listeners = UIComposeForm.UseVisualEdiorActionListener.class),
-    @EventConfig(listeners = UIComposeForm.ShowCcActionListener.class),
-    @EventConfig(listeners = UIComposeForm.ShowBccActionListener.class),
-    @EventConfig(listeners = UIComposeForm.ReturnReceiptActionListener.class),
-    @EventConfig(listeners = UIComposeForm.CallDMSSelectorActionListener.class),
-    @EventConfig(listeners = UIComposeForm.RemoveGroupActionListener.class) })
-public class UIComposeForm extends UIForm implements UIPopupComponent, UISelectable {
+  @EventConfig(listeners = UIComposeForm.SendActionListener.class),
+  @EventConfig(listeners = UIComposeForm.SaveDraftActionListener.class),
+  @EventConfig(phase = Phase.DECODE, listeners = UIComposeForm.DiscardChangeActionListener.class),
+  @EventConfig(listeners = UIComposeForm.AttachmentActionListener.class),
+  @EventConfig(listeners = UIComposeForm.DownloadActionListener.class),
+  @EventConfig(listeners = UIComposeForm.RemoveAttachmentActionListener.class),
+  @EventConfig(listeners = UIComposeForm.ToActionListener.class),
+  @EventConfig(listeners = UIComposeForm.ToCCActionListener.class),
+  @EventConfig(listeners = UIComposeForm.ToBCCActionListener.class),
+  @EventConfig(listeners = UIComposeForm.ChangePriorityActionListener.class),
+  @EventConfig(listeners = UIComposeForm.UseVisualEdiorActionListener.class),
+  @EventConfig(listeners = UIComposeForm.ShowCcActionListener.class),
+  @EventConfig(listeners = UIComposeForm.ShowBccActionListener.class),
+  @EventConfig(listeners = UIComposeForm.ReturnReceiptActionListener.class),
+  @EventConfig(listeners = UIComposeForm.CallDMSSelectorActionListener.class),
+  @EventConfig(listeners = UIComposeForm.RemoveGroupActionListener.class) })
+  public class UIComposeForm extends UIForm implements UIPopupComponent, UISelectable {
   final static public String                   FIELD_TO_SET         = "toSet".intern();
 
   final static public String                   FIELD_FROM           = "from";
@@ -246,7 +244,16 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       }
       options.add(itemOption);
     }
-
+    for(Account acc : mailSrv.getDelegatedAccounts(username)) {
+      if(MailUtils.isFull(username, acc.getPermissions().get(username))) {
+        SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + "("+getLabel("delegated")+")"
+            + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
+        if (acc.getId().equals(accountId)) {
+          itemOption.setSelected(true);
+        }
+        options.add(itemOption);
+      }
+    }
     UIComposeInput toSet = new UIComposeInput(FIELD_TO_SET);
     toSet.addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options));
     toSet.addUIFormInput(new UIFormStringInput(FIELD_TO, null, null));
@@ -340,7 +347,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
         fileUpload.setActionType(ActionData.TYPE_ICON);
         fileUpload.setCssIconClass("AttachmentIcon");
         fileUpload.setActionName(attachdata.getName() + " ("
-            + MailUtils.convertSize(attachdata.getSize()) + ")");
+                                 + MailUtils.convertSize(attachdata.getSize()) + ")");
         fileUpload.setShowLabel(true);
         uploadedFiles.add(fileUpload);
         ActionData removeAction = new ActionData();
@@ -435,8 +442,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
         if (attachments_.size() > 0) {
           for (ActionData actionData : getUploadFileList()) {
             inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-                                                                     null,
-                                                                     null).setChecked(true));
+                null,
+                null).setChecked(true));
           }
           refreshUploadFileList();
         }
@@ -466,12 +473,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
         for (ActionData actionData : getUploadFileList()) {
           if (actionData.getActionParameter().equals(originalAttId))
             inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-                                                                     null,
-                                                                     null).setChecked(true));
+                null,
+                null).setChecked(true));
           else
             inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-                                                                     null,
-                                                                     null));
+                null,
+                null));
         }
         refreshUploadFileList();
       }
@@ -490,8 +497,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       String msgTo = (msg.getMessageTo() != null) ? msg.getMessageTo() : "";
       InternetAddress[] msgToAdds = Utils.getInternetAddress(msgTo);
 
-      MailService mailSvr = this.getApplicationComponent(MailService.class);
-      Account account = mailSvr.getAccountById(MailUtils.getCurrentUser(), accountId_);
+      String uid = MailUtils.getCurrentUser();
+      if(MailUtils.isDelegated(accountId_)) {
+        uid = mailSrv.getDelegatedAccount(MailUtils.getCurrentUser(), accountId_).getDelegateFrom();
+      }
+      Account account = mailSrv.getAccountById(uid, accountId_);
       for (int i = 0; i < msgToAdds.length; i++) {
         if (msgToAdds[i] != null
             && !msgToAdds[i].getAddress().equalsIgnoreCase(account.getEmailAddress())
@@ -537,12 +547,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
         for (ActionData actionData : getUploadFileList()) {
           if (actionData.getActionParameter().equals(originalAttId))
             inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-                                                                     null,
-                                                                     null).setChecked(true));
+                null,
+                null).setChecked(true));
           else
             inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-                                                                     null,
-                                                                     null));
+                null,
+                null));
         }
         refreshUploadFileList();
       }
@@ -568,8 +578,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       if (!mailSetting.forwardWithAtt()) {
         forwardTxt.append("<br><br>-------- Original Message --------<br>");
         forwardTxt.append("Subject: ")
-                  .append(MailUtils.encodeHTML(msg.getSubject()))
-                  .append("<br>");
+        .append(MailUtils.encodeHTML(msg.getSubject()))
+        .append("<br>");
         forwardTxt.append("Date: ").append(msg.getSendDate()).append("<br>");
         forwardTxt.append("From: ");
 
@@ -579,9 +589,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
             forwardTxt.append(", ");
           if (addresses[i] != null)
             forwardTxt.append(Utils.getPersonal(addresses[i]))
-                      .append(" \"")
-                      .append(addresses[i].getAddress())
-                      .append("\"");
+            .append(" \"")
+            .append(addresses[i].getAddress())
+            .append("\"");
         }
         forwardTxt.append("<br>To: ");
 
@@ -591,9 +601,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
             forwardTxt.append(", ");
           if (toAddresses[i] != null)
             forwardTxt.append(Utils.getPersonal(toAddresses[i]))
-                      .append(" \"")
-                      .append(toAddresses[i].getAddress())
-                      .append("\"");
+            .append(" \"")
+            .append(toAddresses[i].getAddress())
+            .append("\"");
         }
 
         forwardTxt.append("<br><br>").append(formatContent(msg));
@@ -603,8 +613,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       refreshUploadFileList();
       for (ActionData actionData : getUploadFileList()) {
         inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-                                                                 null,
-                                                                 null).setChecked(true));
+            null,
+            null).setChecked(true));
       }
       setFieldContentValue(forwardTxt.toString());
       break;
@@ -625,14 +635,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
     }
     if (isVisualEditor) {
       content = "<br><br><div> On "
-          + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + from
-          + " wrote: <br>";
+        + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + from
+        + " wrote: <br>";
       content += "<blockquote style=\"border-left:1px #cccccc solid ; margin-left: 10px; padding-left: 5px;\">"
-          + msgContent + "</blockquote></div>";
+        + msgContent + "</blockquote></div>";
     } else {
       content = "\n\n On "
-          + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + from
-          + " wrote: \n\n";
+        + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + from
+        + " wrote: \n\n";
       content += msgContent;
     }
     return content;
@@ -740,7 +750,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
   public void setFieldContentValue(String value) throws Exception {
     String username = MailUtils.getCurrentUser();
     MailService mailSrv = getApplicationComponent(MailService.class);
-    Account account = mailSrv.getAccountById(username, accountId_);
+
+    Account account = mailSrv.getDelegatedAccount(username, accountId_);
+    if(MailUtils.isDelegatedAccount(account, username)) username = account.getDelegateFrom();
+    account =  mailSrv.getAccountById(username, accountId_);
     if (isVisualEditor) {
       if (!MailUtils.isFieldEmpty(account.getSignature()) && !fromDrafts()) {
         value += "<br><br> -- <br >" + account.getSignature().replace("\n", "<br>") + "";
@@ -749,7 +762,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
     } else {
       if (!MailUtils.isFieldEmpty(account.getSignature())) {
         value = MailUtils.html2text(value).replaceAll("\n", "\n > ") + "\n\n -- \n"
-            + account.getSignature();
+        + account.getSignature();
       }
       getUIFormTextAreaInput(FIELD_MESSAGECONTENT).setValue(value);
     }
@@ -780,7 +793,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
     }
     String usename = MailUtils.getCurrentUser();
     MailService mailSvr = this.getApplicationComponent(MailService.class);
-    Account account = mailSvr.getAccountById(usename, this.getFieldFromValue());
+    Account account = mailSvr.getDelegatedAccount(usename, accountId_);
+    if(MailUtils.isDelegatedAccount(account, usename)) usename = account.getDelegateFrom();
+    account = mailSvr.getAccountById(usename, this.getFieldFromValue());
     String from = account.getUserDisplayName() + "<" + account.getEmailAddress() + ">";
     String subject = getFieldSubjectValue();
 
@@ -968,20 +983,30 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       String accountId = uiComposeForm.getFieldFromValue();
       String usename = uiPortlet.getCurrentUser();
       Message message = uiComposeForm.getNewMessage();
-      Account acctemp = mailSvr.getAccountById(usename, accountId);
+      Account acctemp = mailSvr.getDelegatedAccount(usename, accountId);
+      UIApplication uiApp = uiComposeForm.getAncestorOfType(UIApplication.class);
+      if(MailUtils.isDelegatedAccount(acctemp, usename))
+        if ( !MailUtils.isFull(usename, acctemp.getPermissions().get(usename))) {
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-permission",
+                                                  null));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
+        } else {
+          usename = acctemp.getDelegateFrom();
+        }
+
+      acctemp = mailSvr.getAccountById(usename, accountId);
       String emailAddr = acctemp.getIncomingUser();
       if (!uiComposeForm.validateMessage(event, message))
         return;
       if (MailUtils.isFieldEmpty(message.getMessageTo())
           && MailUtils.isFieldEmpty(message.getMessageCc())
           && MailUtils.isFieldEmpty(message.getMessageBcc())) {
-        UIApplication uiApp = uiComposeForm.getAncestorOfType(UIApplication.class);
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.select-at-least-recipient", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
 
-      UIApplication uiApp = uiComposeForm.getAncestorOfType(UIApplication.class);
       try {
         mailSvr.sendMessage(usename, message);
         ContactService contactService = (ContactService) PortalContainer.getComponent(ContactService.class);
@@ -994,6 +1019,13 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       } catch (AuthenticationFailedException e) {
+        Account dAcc = mailSvr.getDelegatedAccount(usename, accountId);
+        if(MailUtils.isDelegatedAccount(dAcc, usename)){
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-permission",
+                                                  null));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
+          return;
+        }
         Account acc = mailSvr.getAccountById(usename, accountId);
         if (acc.isOutgoingAuthentication() && acc.useIncomingSettingForOutgoingAuthent()) {
           UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class);
@@ -1048,10 +1080,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview.getParent());
         } else {
           event.getRequestContext()
-               .addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
+          .addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
         }
         event.getRequestContext()
-             .addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
+        .addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
         UIPopupAction uiChildPopup = uiComposeForm.getAncestorOfType(UIPopupAction.class);
         uiChildPopup.deActivate();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup);
@@ -1104,7 +1136,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       MailService mailSvr = composeForm.getApplicationComponent(MailService.class);
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
-                                  .getSelectedValue();
+      .getSelectedValue();
       String usename = uiPortlet.getCurrentUser();
 
       UIPopupAction uiChildPopup = composeForm.getAncestorOfType(UIPopupAction.class);
@@ -1121,19 +1153,19 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
         boolean saveMsgSuccess = false;
         if (!composeForm.fromDrafts()) {
           saveMsgSuccess = mailSvr.saveMessage(usename,
-                              mailSvr.getAccountById(usename, accountId),
-                              composeForm.parentPath_,
-                              message,
-                              true);
+                                               mailSvr.getAccountById(usename, accountId),
+                                               composeForm.parentPath_,
+                                               message,
+                                               true);
           Folder drafts = mailSvr.getFolder(usename, accountId, draftFolderId);
           drafts.setTotalMessage(drafts.getTotalMessage() + 1);
           mailSvr.saveFolder(usename, accountId, drafts);
         } else {
           saveMsgSuccess = mailSvr.saveMessage(usename,
-                              mailSvr.getAccountById(usename, accountId),
-                              composeForm.parentPath_,
-                              message,
-                              false);
+                                               mailSvr.getAccountById(usename, accountId),
+                                               composeForm.parentPath_,
+                                               message,
+                                               false);
         }
         if(!saveMsgSuccess){
           composeForm.getAncestorOfType(UIApplication.class).addMessage(new ApplicationMessage("UIMoveMessageForm.msg.create-massage-not-successful",
@@ -1226,7 +1258,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       if (uiChildPopup == null) {
         uiChildPopup = actionContainer.addChild(UIPopupAction.class,
                                                 null,
-                                                "UIPopupActionDMSSelector");
+        "UIPopupActionDMSSelector");
       }
       UIPopupWindow uiPopup = uiChildPopup.getChild(UIPopupWindow.class);
       uiPopup.setId("UIPopupWindowDMSSelector");
@@ -1260,16 +1292,16 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
           DownloadResource dresource = new InputStreamDownloadResource(attach.getInputStream(),
                                                                        attach.getMimeType());
           DownloadService dservice = (DownloadService) PortalContainer.getInstance()
-                                                                      .getComponentInstanceOfType(DownloadService.class);
+          .getComponentInstanceOfType(DownloadService.class);
           dresource.setDownloadName(attach.getName());
           String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
           event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('"
-              + downloadLink + "');");
+                                                                         + downloadLink + "');");
           break;
         }
       }
       event.getRequestContext()
-           .addUIComponentToUpdateByAjax(uiComposeForm.getChildById(FIELD_TO_SET));
+      .addUIComponentToUpdateByAjax(uiComposeForm.getChildById(FIELD_TO_SET));
     }
   }
 
@@ -1290,7 +1322,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       }
       uiComposeForm.refreshUploadFileList();
       event.getRequestContext()
-           .addUIComponentToUpdateByAjax(uiComposeForm.getChildById(FIELD_TO_SET));
+      .addUIComponentToUpdateByAjax(uiComposeForm.getChildById(FIELD_TO_SET));
     }
   }
 
@@ -1400,7 +1432,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource();
       boolean isVisualEditor = Boolean.valueOf(event.getRequestContext()
-                                                    .getRequestParameter(OBJECTID));
+                                               .getRequestParameter(OBJECTID));
       String content = "";
       if (isVisualEditor) {
         try {
@@ -1436,9 +1468,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       uiForm.setShowCc(!uiForm.isShowCc());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(FIELD_TO_SET));
       event.getRequestContext()
-           .getJavascriptManager()
-           .addCustomizedOnLoadScript("eXo.mail.AutoComplete.init(['" + FIELD_TO + "', '"
-               + FIELD_CC + "', '" + FIELD_BCC + "']);");
+      .getJavascriptManager()
+      .addCustomizedOnLoadScript("eXo.mail.AutoComplete.init(['" + FIELD_TO + "', '"
+                                 + FIELD_CC + "', '" + FIELD_BCC + "']);");
     }
   }
 
@@ -1448,9 +1480,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
       uiForm.setShowBcc(!uiForm.isShowBcc());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(FIELD_TO_SET));
       event.getRequestContext()
-           .getJavascriptManager()
-           .addCustomizedOnLoadScript("eXo.mail.AutoComplete.init(['" + FIELD_TO + "', '"
-               + FIELD_CC + "', '" + FIELD_BCC + "']);");
+      .getJavascriptManager()
+      .addCustomizedOnLoadScript("eXo.mail.AutoComplete.init(['" + FIELD_TO + "', '"
+                                 + FIELD_CC + "', '" + FIELD_BCC + "']);");
     }
   }
 
@@ -1568,10 +1600,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent, UISelecta
 
       try {
         uiComposeForm.getGroupDataValues(keyAndId.split(MailUtils.SEMICOLON)[0])
-                     .remove(keyAndId.split(MailUtils.SEMICOLON)[1]);
+        .remove(keyAndId.split(MailUtils.SEMICOLON)[1]);
         uiComposeForm.refreshGroupFileList(keyAndId.split(MailUtils.SEMICOLON)[0]);
         event.getRequestContext()
-             .addUIComponentToUpdateByAjax(uiComposeForm.getChildById(FIELD_TO_SET));
+        .addUIComponentToUpdateByAjax(uiComposeForm.getChildById(FIELD_TO_SET));
 
       } catch (Exception e) {
         e.printStackTrace();

@@ -43,7 +43,8 @@ public class UIDelegationInputSet extends UIFormInputWithActions {
     super(id);
     setComponentConfig(getClass(), null) ;
     try {
-      addChild(UIDelegationAccountGrid.class, null, null).setRendered(true);
+      UIDelegationAccountGrid grid = addChild(UIDelegationAccountGrid.class, null, null).setRendered(true);
+      grid.updateGrid();
     } catch (Exception e) {
       e.printStackTrace();
     }

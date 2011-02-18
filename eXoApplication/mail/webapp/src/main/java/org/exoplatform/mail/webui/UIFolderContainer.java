@@ -77,16 +77,20 @@ public class UIFolderContainer extends UIContainer {
   public List<Folder> getCustomizeFolders() throws Exception{
     return getFolders(true);
   }
-  
+
   public boolean isChecking() { return isChecking_; }
   public void setIsChecking(boolean b) { isChecking_ = b; } 
-  
+
   public List<Folder> getSubFolders(String parentPath) throws Exception {
     MailService mailSvr = MailUtils.getMailService();
     String username = MailUtils.getCurrentUser() ;
     String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    String id = username;
+    if(MailUtils.isDelegated(accountId)) {
+      id = mailSvr.getDelegatedAccount(username, accountId).getDelegateFrom();
+    }
     List<Folder> subFolders = new ArrayList<Folder>();
-    for (Folder f : mailSvr.getSubFolders(username, accountId, parentPath)) {
+    for (Folder f : mailSvr.getSubFolders(id, accountId, parentPath)) {
       subFolders.add(f);
     }
     return subFolders ;
@@ -97,17 +101,25 @@ public class UIFolderContainer extends UIContainer {
     String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
     String accountId = getAncestorOfType(UINavigationContainer.class).
     getChild(UISelectAccount.class).getSelectedValue() ;
-    return mailSvr.getFolder(username, accountId, getSelectedFolder()) ;
+    String id = username;
+    if(MailUtils.isDelegated(accountId)) {
+      id = mailSvr.getDelegatedAccount(username, accountId).getDelegateFrom();
+    }
+    return mailSvr.getFolder(id, accountId, getSelectedFolder()) ;
   }
 
   public List<Folder> getFolders(boolean isPersonal) throws Exception{
     List<Folder> folders = new ArrayList<Folder>() ;
     MailService mailSvr = getApplicationComponent(MailService.class) ;
-    String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
+    String username = MailUtils.getCurrentUser() ;
     String accountId = getAncestorOfType(UINavigationContainer.class).
     getChild(UISelectAccount.class).getSelectedValue() ;
     try {
-      folders.addAll(mailSvr.getFolders(username, accountId, isPersonal)) ;
+      String id = username;
+      if(MailUtils.isDelegated(accountId)) {
+        id = mailSvr.getDelegatedAccount(username, accountId).getDelegateFrom();
+      }
+      folders.addAll(mailSvr.getFolders(id, accountId, isPersonal)) ;
     } catch (Exception e){
       //e.printStackTrace() ;
     }
@@ -123,6 +135,8 @@ public class UIFolderContainer extends UIContainer {
       MailService mailSvr = MailUtils.getMailService();
       String username = MailUtils.getCurrentUser() ;
       String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      Account dAcc = mailSvr.getDelegatedAccount(username, accountId);
+      if(MailUtils.isDelegatedAccount(dAcc, username)) username = dAcc.getDelegateFrom();
       Account acc = mailSvr.getAccountById(username, accountId) ;
       return Utils.IMAP.equalsIgnoreCase(acc.getProtocol());
     } catch (Exception e){
@@ -200,14 +214,16 @@ public class UIFolderContainer extends UIContainer {
       } else {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       }
-      
+
       MailService mailSvr = uiFolder.getApplicationComponent(MailService.class) ;
-      String username = uiFolder.getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
+      String username = MailUtils.getCurrentUser() ;
+      Account acc = mailSvr.getDelegatedAccount(username, accountId);
+      if(MailUtils.isDelegatedAccount(acc, username)) username = acc.getDelegateFrom();
       Folder currentFolder = mailSvr.getFolder(username, accountId, folderId);
       List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
       long numberOfUnread = Utils.getNumberOfUnreadMessageReally(msgList);
       if(numberOfUnread >= 0 && currentFolder != null && msgList.size() > 0) currentFolder.setNumberOfUnreadMessage(numberOfUnread) ;
-      
+
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder);

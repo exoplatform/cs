@@ -96,9 +96,11 @@
 }
 
 .UIMailPortlet .UIMailSetting .SelectUser {
-    height: 24px; 
-    width: 24px;
+    height: 16px; 
+    width: 16px;
 	cursor: pointer;
+	float: left;
+	margin: -2px 5px;
 }
 
 .UIMailPortlet .UIMailSetting .AddUserFeild {
@@ -137,10 +139,11 @@
 }
 
 .UIMailPortlet .UIDelegationInputSet .AddMoreDelegatedAccount {
-	background: url('icons/add_delegation_icon1.png') no-repeat transparent center ;
-	height: 32px; width: 32px;
+	background: url('icons/add_delegation_icon1-rt.png') no-repeat transparent center ;
+       	height: 32px; width: 32px;
 	cursor: pointer;
-	padding:0px 0px 15px 30px;
+	margin: -10px 20px;
+	float: left;
 }
 
 .UIMailPortlet .UIDelegationInputSet .DelegatedAccountsList{

@@ -108,6 +108,7 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.exoplatform.ws.frameworks.json.impl.JsonException;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
+import org.jboss.cache.commands.read.GetDataMapCommand;
 import org.picocontainer.Startable;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -930,7 +931,14 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void stopCheckMail(String userName, String accountId) {
-    CheckingInfo checkingInfo = getCheckingInfo(userName, accountId);
+    String accoutOwner = userName;
+    try {
+      Account delegateAcc = getDelegatedAccount(userName, accountId) ;
+      if(isDelegatedAccount(userName, accountId)) accoutOwner = delegateAcc.getDelegateFrom() ;
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    CheckingInfo checkingInfo = getCheckingInfo(accoutOwner, accountId);
     if (checkingInfo != null) {
       if (logger.isDebugEnabled()) 
         logger.info(" user [ " + userName + " ] request to stop checking emails");
@@ -1183,8 +1191,13 @@ public class MailServiceImpl implements MailService, Startable {
     IMAPStore store = null;
     CheckingInfo info = getCheckingInfo(userName, accountId);
     try {
-      Account account = getAccountById(userName, accountId);
-      store = openIMAPConnection(userName, account, info);
+      Account dAccount = getDelegatedAccount(userName, accountId);
+      String uId = userName;
+      if(isDelegatedAccount(userName, accountId)) {
+        uId = dAccount.getDelegateFrom();
+      }
+      Account account = getAccountById(uId, accountId);
+      store = openIMAPConnection(uId, account, info);
       if (store != null) {
         String key = userName + ":" + accountId;
         if(info == null) {
@@ -1193,7 +1206,7 @@ public class MailServiceImpl implements MailService, Startable {
         }
         //      	info.setStatusCode(CheckingInfo.START_SYNC_FOLDER);
         info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
-        synchImapFolders(userName, accountId, null, store.getDefaultFolder().list());
+        synchImapFolders(uId, accountId, null, store.getDefaultFolder().list());
         //        info.setRequestStop(true);
         //        info.setStatusCode(CheckingInfo.FINISH_SYNC_FOLDER);
         info.setSyncFolderStatus(CheckingInfo.FINISH_SYNC_FOLDER);
@@ -1968,15 +1981,24 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<Message> checkNewMessage(String username, String accountId, String folderId) throws Exception {
-    Account account = getAccountById(username, accountId);
+    String reciever = username;
+    Account dAccount = getDelegatedAccount(username, accountId);
+    if(isDelegatedAccount(username, accountId)) {reciever = dAccount.getDelegateFrom();}
+    Account account = getAccountById(reciever, accountId);
     List<Message> messageList = new ArrayList<Message>();
     if (account != null) {
       try {
         if (account.getProtocol().equals(Utils.POP3)) {
-          return checkPop3Server(username, accountId);
+          if(reciever != null) return checkPop3Server(reciever, accountId);
+          return checkPop3Server(reciever, accountId);
         } else if (account.getProtocol().equals(Utils.IMAP)) {
-          boolean synchFolder = !(getFolders(username, accountId, true).size() > 0);
-          getSynchnizeImapServer(username, accountId, folderId, synchFolder);
+          if(reciever != null) {
+            boolean synchFolder = !(getFolders(reciever, accountId, true).size() > 0);
+            getSynchnizeImapServer(reciever, accountId, folderId, synchFolder);
+          } else {
+          boolean synchFolder = !(getFolders(reciever, accountId, true).size() > 0);
+          getSynchnizeImapServer(reciever, accountId, folderId, synchFolder);
+          }
         }
       } catch (CheckMailInteruptedException cme) {
 
@@ -1994,7 +2016,8 @@ public class MailServiceImpl implements MailService, Startable {
       } finally {
         if (!account.isSavePassword()) {
           account.setIncomingPassword("");
-          updateAccount(username, account);
+          if(reciever != null) updateAccount(reciever, account); 
+          else updateAccount(reciever, account);
         }
       }
     }
@@ -2990,6 +3013,16 @@ public class MailServiceImpl implements MailService, Startable {
     return null;
   }
 
-
+  private  boolean isFullDelegated(Account acc, String recieve) {
+    return (acc != null && acc.getDelegateFrom() != null && recieve != null && !recieve.equalsIgnoreCase(acc.getDelegateFrom()));
+  }
+  
+  private  boolean isDelegatedAccount(String id, String accId) {
+    try {
+    return (getDelegatedAccount(id, accId) != null);
+    } catch (Exception e) {
+     return false;
+    }
+  }
 }
 

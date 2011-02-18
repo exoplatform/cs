@@ -50,25 +50,25 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  */
 
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/UISelectAccount.gtmpl",
-    events = {
-      @EventConfig( listeners = UISelectAccount.AddAccountActionListener.class),
-      @EventConfig( listeners = UISelectAccount.EditAccountActionListener.class),
-      @EventConfig( listeners = UISelectAccount.DeleteAccountActionListener.class),
-      @EventConfig( listeners = UISelectAccount.SelectAccountActionListener.class)
-    }
+                 lifecycle = UIFormLifecycle.class,
+                 template = "app:/templates/mail/webui/UISelectAccount.gtmpl",
+                 events = {
+                   @EventConfig( listeners = UISelectAccount.AddAccountActionListener.class),
+                   @EventConfig( listeners = UISelectAccount.EditAccountActionListener.class),
+                   @EventConfig( listeners = UISelectAccount.DeleteAccountActionListener.class),
+                   @EventConfig( listeners = UISelectAccount.SelectAccountActionListener.class)
+                 }
 ) 
 public class UISelectAccount extends UIForm {
   final static public String FIELD_SELECT = "accSelect" ;
   static public String accountRefreshed = null ;
-  
+
   public UISelectAccount() throws Exception {
     UIFormSelectBox uiSelect = new UIFormSelectBox(FIELD_SELECT, FIELD_SELECT, getValues()) ;
     uiSelect.setOnChange("SelectAccount") ;
     addChild(uiSelect) ; 
   }
-  
+
   public String getLabel(String id) {
     try {
       return super.getLabel(id) ; 
@@ -76,12 +76,13 @@ public class UISelectAccount extends UIForm {
       return id ;
     }
   }
-  
+
   private List<SelectItemOption<String>> getValues() throws Exception {
     MailService mailSvr = (MailService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(MailService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<Account> accountList = new ArrayList<Account>(); 
     accountList =  mailSvr.getAccounts(username) ;
+    accountList.addAll(mailSvr.getDelegatedAccounts(username)) ;
     String defaultAcc = mailSvr.getMailSetting(username).getDefaultAccount();
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
     for(Account acc : accountList) {
@@ -91,33 +92,39 @@ public class UISelectAccount extends UIForm {
         option.setSelected(true);
         accountRefreshed = acc.getId();
       }
+      if(MailUtils.isDelegatedAccount(acc, username)) {
+        option = new SelectItemOption<String>(acc.getLabel() + " (" + getLabel("delegated") + ")", acc.getId());
+        accountRefreshed = acc.getId();
+      }
       options.add(option) ;
     }
     return options ;
   }
-  
+
   public void updateAccount() throws Exception {
     getUIFormSelectBox(FIELD_SELECT).setOptions(getValues());
   }
-  
+
   public String getSelectedValue() {
     String id = getChild(UIFormSelectBox.class).getValue() ;
     try {
       if (!MailUtils.isFieldEmpty(id) && MailUtils.getMailService().getAccountById(MailUtils.getCurrentUser(), id) != null) {
         return id;        
+      } else if(MailUtils.isDelegated(id)){
+        return id; 
       } else {
         return accountRefreshed;
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      // e.printStackTrace();
       return accountRefreshed;
     } 
   }
-  
+
   public void setSelectedValue(String value) {
     getChild(UIFormSelectBox.class).setValue(value) ;
   }
-  
+
   public void refreshItems() throws Exception {
     getChild(UIFormSelectBox.class).getOptions().clear() ;
     getChild(UIFormSelectBox.class).setOptions(getValues()) ;
@@ -140,35 +147,50 @@ public class UISelectAccount extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
-  
+
   static  public class EditAccountActionListener extends EventListener<UISelectAccount> {
     public void execute(Event<UISelectAccount> event) throws Exception {
       UISelectAccount uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      if(Utils.isEmptyField(uiForm.getSelectedValue())) {
+      String username = MailUtils.getCurrentUser();
+      MailService mService = uiApp.getApplicationComponent(MailService.class);
+      if(Utils.isEmptyField(uiForm.getSelectedValue()) || (mService.getAccounts(username).isEmpty() && mService.getDelegatedAccounts(username).isEmpty()) ){
         uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } 
+      String accId = uiForm.getSelectedValue();
+      if(mService.getAccounts(username).isEmpty() && !mService.getDelegatedAccounts(username).isEmpty()){
+        uiForm.showMessage(event);
+        return ;
+      }
+      if(MailUtils.isDelegated(accId) && !mService.getAccounts(username).isEmpty()) {
+        accId = mService.getAccounts(username).get(0).getId();
+      }
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 800) ;
       uiPopupContainer.setId("UIAccountPopupSetting");
       UIAccountSetting uiAccountSetting = uiPopupContainer.createUIComponent(UIAccountSetting.class, null, null);
       uiPopupContainer.addChild(uiAccountSetting) ; 
-      uiAccountSetting.setSelectedAccountId(uiForm.getSelectedValue());
+      uiAccountSetting.setSelectedAccountId(accId);
       uiAccountSetting.fillField();     
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
-  
+
   static  public class DeleteAccountActionListener extends EventListener<UISelectAccount> {
     public void execute(Event<UISelectAccount> event) throws Exception {
       UISelectAccount uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      MailService mService = uiApp.getApplicationComponent(MailService.class);
+      String username = MailUtils.getCurrentUser();
       if(Utils.isEmptyField(uiForm.getSelectedValue())) {
         uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } else if(mService.getAccounts(username).isEmpty() && !mService.getDelegatedAccounts(username).isEmpty()){
+        uiForm.showMessage(event);
         return ;
       } else {
         UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
@@ -180,7 +202,7 @@ public class UISelectAccount extends UIForm {
       }
     }
   }
-  
+
   static  public class SelectAccountActionListener extends EventListener<UISelectAccount> {
     public void execute(Event<UISelectAccount> event) throws Exception {
       UISelectAccount uiSelectAcc = event.getSource() ;
@@ -192,20 +214,23 @@ public class UISelectAccount extends UIForm {
         UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
         MailService mailSvr = uiSelectAcc.getApplicationComponent(MailService.class) ;
         String username = uiPortlet.getCurrentUser();
-        if (mailSvr.getAccountById(username, accId) == null) {
-          List<Account> accs = mailSvr.getAccounts(username);
-          if (accs != null && accs.size() > 0) {
-            accId = accs.get(0).getId();
-            uiSelectAcc.refreshItems();
-          } else {
-            uiSelectAcc.setSelectedValue(null);
-            uiSelectAcc.refreshItems();
-            uiMessageList.init("");
-            uiMessagePreview.setMessage(null);
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
-            return; 
+        if(!MailUtils.isDelegated(accId)){
+          if (mailSvr.getAccountById(username, accId) == null) {
+            List<Account> accs = mailSvr.getAccounts(username);
+            accs.addAll(mailSvr.getDelegatedAccounts(username));
+            if (accs != null && accs.size() > 0) {
+              accId = accs.get(0).getId();
+              uiSelectAcc.refreshItems();
+            } else {
+              uiSelectAcc.setSelectedValue(null);
+              uiSelectAcc.refreshItems();
+              uiMessageList.init("");
+              uiMessagePreview.setMessage(null);
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+              return; 
+            }
           }
-        }
+        }  
         uiSelectAcc.setSelectedValue(accId);
         uiFolder.setSelectedFolder(Utils.generateFID(accId, Utils.FD_INBOX, false));
         MessageFilter filter = new MessageFilter("Folder");
@@ -214,10 +239,16 @@ public class UISelectAccount extends UIForm {
         uiMessageList.setMessageFilter(filter);
         uiMessageList.init(accId);
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
       } catch(Exception e) { 
-        // do nothing
+        e.printStackTrace();
+        return;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
-  }  
+  } 
+  private void showMessage(Event event) {
+    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+    uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;
+    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+  }
 }

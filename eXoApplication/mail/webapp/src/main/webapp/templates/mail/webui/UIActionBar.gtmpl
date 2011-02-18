@@ -9,11 +9,7 @@
 								<%=_ctx.appRes(uicomponent.id+ ".label.check-mail") %>
 							</div>
 						</div>
-						<!-- a onclick="eXo.mail.MailServiceHandler.stopCheckMail()" class="ControlButton">
-							<div class="IconHolder StopCheckMailIcon">
-								<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.stop-check-mail") %></div>
-							</div>
-						</a -->
+						
 						<div onclick="<%=uicomponent.event("Compose")%>" class="ControlButton">
 							<div class="IconHolder ComposeIcon">
 								<%=_ctx.appRes(uicomponent.id+ ".label.compose") %>

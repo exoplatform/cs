@@ -39,11 +39,7 @@
 				                      </a>
 		                      </div>
 		                  
-		                     <!--<a class="MenuItem" href="<%=uicomponent.event(action)%>" >   
-		                      <div class="ItemIcon $classIconItem" >
-		                        $nameItem
-		                      </div>
-		                     </a>-->
+		                    
 		                  <%}%>
 		                  <div class="RightClickCustomItem"></div>
 		                </div>
@@ -340,7 +336,7 @@ def enableSync = uicomponent.isImap();
       }
     }
   }
-  //printNodes(uicomponent.getCustomerFolderPath());  
+  
 %>
 </div>
 </div>
