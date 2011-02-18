@@ -399,7 +399,35 @@
           <valueConstraints/>
         </propertyDefinition>      
       </propertyDefinitions>
-    </nodeType>     	
+    </nodeType>    
+    <nodeType name="exo:repeatCalendarEvent" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+      <propertyDefinitions>
+        <propertyDefinition name="exo:repeatCount" requiredType="Long" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition> 
+        <propertyDefinition name="exo:repeatUntil" requiredType="Date" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>
+        <propertyDefinition name="exo:recurrenceId" requiredType="String" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>
+        <propertyDefinition name="exo:excludeId" requiredType="String" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="true">
+          <valueConstraints/>
+        </propertyDefinition>   
+        <propertyDefinition name="exo:isException" requiredType="Boolean" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>
+        <propertyDefinition name="exo:originalReference" requiredType="Reference" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>   
+      </propertyDefinitions>
+		</nodeType> 	
 </nodeTypes>  
   
    

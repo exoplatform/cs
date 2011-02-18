@@ -127,6 +127,13 @@ public class Utils {
   public static final String EXO_REMOTE_EVENT_MIXIN = "exo:caldavCalendarEvent".intern();
   public static final String EXO_CALDAV_HREF = "exo:caldavHref";
   public static final String EXO_CALDAV_ETAG = "exo:caldavEtag";
+  public static final String EXO_REPEAT_CALENDAR_EVENT = "exo:repeatCalendarEvent";
+  public static final String EXO_REPEAT_COUNT = "exo:repeatCount";
+  public static final String EXO_REPEAT_UNTIL = "exo:repeatUntil";
+  public static final String EXO_RECURRENCE_ID = "exo:recurrenceId";
+  public static final String EXO_IS_EXCEPTION = "exo:isException";
+  public static final String EXO_EXCLUDE_ID = "exo:excludeId";
+  public static final String EXO_ORIGINAL_REFERENCE = "exo:originalReference";
   
   public static final String X_STATUS = "X-STATUS".intern() ;
   
@@ -214,6 +221,7 @@ public class Utils {
   public static final String SYNC_1YEAR = "1year";
   public static String[] SYNC_PERIOD = {SYNC_AUTO, SYNC_5MINS, SYNC_10MINS, SYNC_15MINS, SYNC_1HOUR, SYNC_1DAY, SYNC_1WEEK, SYNC_1YEAR};
   
+ 
   
   /**
    * The method creates an instance of calendar object with time zone is GMT 0

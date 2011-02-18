@@ -210,6 +210,9 @@ UIWeekView.prototype.dropCallback = function() {
 	var currentStart = dragElement.offsetTop + workingStart ;
 	var currentEnd = currentStart + delta ;
 	var currentDate = me.currentCol.getAttribute("startTime").toString() ;
+	var isOccur = dragElement.getAttribute("isoccur");
+    var recurId = dragElement.getAttribute("recurid");
+    if (recurId == "null") recurId = "";
 	var actionLink = dragElement.getAttribute("actionLink");
 	var params = [
 		{name:"calendarId",value:dragElement.getAttribute("calid")},
@@ -217,7 +220,9 @@ UIWeekView.prototype.dropCallback = function() {
 		{name:"finishTime",value:currentEnd},
 		{name:"calType",value:calType},
 		{name:"currentDate",value:currentDate},
-		{name:"eventCategories",value:dragElement.getAttribute("eventcat")}
+		{name:"eventCategories",value:dragElement.getAttribute("eventcat")},
+		{name:"isOccur",value:isOccur},
+		{name:"recurId",value:recurId}
 	];
 	me.currentCol.appendChild(dragElement) ;
 	eXo.calendar.UICalendarPortlet.setTimeValue(dragElement,currentStart,currentEnd,me.currentCol);
@@ -343,6 +348,11 @@ UIWeekView.prototype.resizeCallback = function(evt) {
 	var start =  parseInt(eventBox.getAttribute("startTime")) ;
 	var end =  start + eventBox.offsetHeight ;
 	var calType = parseInt(eventBox.getAttribute("calType")) ;
+	
+	var isOccur = eventBox.getAttribute("isoccur");
+    var recurId = eventBox.getAttribute("recurid");
+    if (recurId == "null") recurId = "";
+    
 	if (eventBox.offsetHeight != UIResizeEvent.beforeHeight) {
 		var actionLink = eventBox.getAttribute("actionLink");
 		var currentDate = eventBox.parentNode.getAttribute("startTime").toString() ;
@@ -352,7 +362,9 @@ UIWeekView.prototype.resizeCallback = function(evt) {
 			{name:"finishTime",value:end},
 			{name:"calType",value:calType},
 			{name:"currentDate",value:currentDate},
-			{name:"eventCategories",value:eventBox.getAttribute("eventcat")}
+			{name:"eventCategories",value:eventBox.getAttribute("eventcat")},
+			{name:"isOccur",value:isOccur},
+			{name:"recurId",value:recurId}
 		];
 		eXo.calendar.UICalendarPortlet.setTimeValue(eventBox,start,end);	
 		eXo.calendar.UIWeekView.setSize();	

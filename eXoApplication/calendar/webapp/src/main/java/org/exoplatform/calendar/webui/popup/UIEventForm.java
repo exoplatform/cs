@@ -44,6 +44,7 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListContainer;
@@ -118,7 +119,10 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
                      @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.SelectTabActionListener.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.ConfirmOKActionListener.class, name = "ConfirmOK", phase = Phase.DECODE),
-                     @EventConfig(listeners = UIEventForm.ConfirmCancelActionListener.class, name = "ConfirmCancel", phase = Phase.DECODE)
+                     @EventConfig(listeners = UIEventForm.ConfirmCancelActionListener.class, name = "ConfirmCancel", phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.ConfirmUpdateInstanceOnly.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.ConfirmUpdateAllSeries.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.ConfirmUpdateCancel.class, phase = Phase.DECODE)
                    }
   )
   ,
@@ -274,6 +278,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       setEventPlace(eventCalendar.getLocation()) ;
       setEventRepeat(eventCalendar.getRepeatType()) ;
+      if (eventCalendar.getRepeatUntilDate() != null) {
+        setEventRepeatUntil(eventCalendar.getRepeatUntilDate(), calSetting.getDateFormat());
+      }
+      
       setSelectedEventPriority(eventCalendar.getPriority()) ;
       if(eventCalendar.getReminders() != null)
       setEventReminders(eventCalendar.getReminders()) ;
@@ -598,6 +606,34 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_REPEAT).setValue(type) ;
   }
+  
+  protected String getEventRepeatUntilValue() {
+    UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    UIFormDateTimePicker untilField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_REPEAT_UNTIL);
+    return  untilField.getValue();
+  }
+  
+  protected Date getEventRepeatUntilDate(String dateFormat) throws Exception {
+    UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    UIFormDateTimePicker untilField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_REPEAT_UNTIL) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    
+    DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
+    return df.parse(untilField.getValue()) ;
+  }
+  
+  protected void setEventRepeatUntil(Date date,String dateFormat) {
+    UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    UIFormDateTimePicker untilField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_REPEAT_UNTIL) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
+    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
+    untilField.setValue(df.format(date)) ;
+  }
+  
   protected String getEventPlace() {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     return eventDetailTab.getUIStringInput(UIEventDetailTab.FIELD_PLACE).getValue();
@@ -1207,11 +1243,12 @@ public Attachment getAttachment(String attId) {
 }
 
   
-  public void SaveAndNoAsk(Event<UIEventForm> event, boolean isSend)throws Exception {
+  public void SaveAndNoAsk(Event<UIEventForm> event, boolean isSend, boolean updateSeries)throws Exception {
     UIEventForm uiForm = event.getSource() ;
     UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
     UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
     UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
+    UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
     UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
     CalendarSetting calSetting = calendarPortlet.getCalendarSetting() ;
     CalendarService calService = CalendarUtils.getCalendarService() ;
@@ -1359,6 +1396,20 @@ public Attachment getAttachment(String attId) {
           //}
           calendarEvent.setLocation(location) ;
           calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
+          
+          if (uiForm.getEventRepeat()!=null && !CalendarEvent.RP_NOREPEAT.equals(uiForm.getEventRepeat())) {
+            if (!CalendarUtils.isEmpty(uiForm.getEventRepeatUntilValue())) {
+              Date until = uiForm.getEventRepeatUntilDate(calSetting.getDateFormat());
+              if (until.before(from)) {
+                // pop-up error message: until date must after from date
+                uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-repeat-until-before-from-date", null, ApplicationMessage.WARNING)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return;
+              }
+              calendarEvent.setRepeatUntilDate(until);
+            }   
+          }
+          
           calendarEvent.setPriority(uiForm.getEventPriority()) ; 
           calendarEvent.setPrivate(UIEventForm.ITEM_PRIVATE.equals(uiForm.getShareType())) ;
           calendarEvent.setEventState(uiForm.getEventState()) ;
@@ -1382,8 +1433,22 @@ public Attachment getAttachment(String attId) {
               String toType = uiForm.newCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
               List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
               listEvent.add(calendarEvent) ;
-              calService.moveEvent(fromCal, toCal, fromType, toType, listEvent, username) ;
-
+              
+              // if the event is a virtual occurrence
+              if (!calendarEvent.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(calendarEvent.getRecurrenceId())) {
+                if (!updateSeries) {
+                  calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
+                } else {
+                  // update series: for todo, now only update concrete occurrence
+                  
+                  //calService.updateRecurrenceSeries(fromCal, toCal, fromType, toType, calendarEvent, username);
+                  calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
+                }
+              } 
+              else {
+                calService.moveEvent(fromCal, toCal, fromType, toType, listEvent, username) ;
+              }
+    
               // hung.hoang
               if(calendarView instanceof UIListContainer) {
                 UIListContainer uiListContainer = (UIListContainer)calendarView ;
@@ -1843,9 +1908,9 @@ public Attachment getAttachment(String attId) {
       }
       else {
         if(CalendarSetting.ACTION_ALWAYS.equalsIgnoreCase(sendOption))
-          uiForm.SaveAndNoAsk(event, true);
+          uiForm.SaveAndNoAsk(event, true, false);
         else
-          uiForm.SaveAndNoAsk(event, false);
+          uiForm.SaveAndNoAsk(event, false, false);
       }
      }
     }
@@ -1917,22 +1982,107 @@ public Attachment getAttachment(String attId) {
   static public class ConfirmOKActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiEventForm = event.getSource();
+      UICalendarPortlet uiPortlet = uiEventForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendarView uiCalendarView = uiPortlet.findFirstComponentOfType(UICalendarView.class);
       UIPopupContainer uiPopupContainer = uiEventForm.getAncestorOfType(UIPopupContainer.class);
       UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class);
       uiPopupAction.deActivate();
-      uiEventForm.SaveAndNoAsk(event, true);
       
+      // if it's a virtual recurrence
+      CalendarEvent occurrence = uiCalendarView.getcurrentOccurrence();
+      if (occurrence != null && !occurrence.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(occurrence.getRecurrenceId())) {
+        // popup confirm form
+        UIConfirmForm confirmForm =  uiPopupAction.activate(UIConfirmForm.class, 600);
+        confirmForm.setConfirmMessage(uiEventForm.getLabel("update-recurrence-event-confirm-msg"));
+        confirmForm.setConfig_id(uiEventForm.getId()) ;
+        
+        String[] actions = new String[] {"ConfirmUpdateOnlyInstance", "ConfirmUpdateAllSeries", "ConfirmUpdateCancel"};
+        confirmForm.setActions(actions);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      } else { 
+        uiEventForm.SaveAndNoAsk(event, true, false);
+      }      
     }
   }
   
   static public class  ConfirmCancelActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiEventForm = event.getSource();
+      UICalendarPortlet uiPortlet = uiEventForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendarView uiCalendarView = uiPortlet.findFirstComponentOfType(UICalendarView.class);
       UIPopupContainer uiPopupContainer = uiEventForm.getAncestorOfType(UIPopupContainer.class);
       UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class);
       uiPopupAction.deActivate();
-      uiEventForm.SaveAndNoAsk(event, false);
+      
+      // if it's a virtual recurrence
+      CalendarEvent occurrence = uiCalendarView.getcurrentOccurrence();
+      if (occurrence != null && !occurrence.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(occurrence.getRecurrenceId())) {
+        // popup confirm form
+        UIConfirmForm confirmForm =  uiPopupAction.activate(UIConfirmForm.class, 600);
+        confirmForm.setConfirmMessage(uiEventForm.getLabel("update-recurrence-event-confirm-msg"));
+        confirmForm.setConfig_id(uiEventForm.getId()) ;
+        
+        String[] actions = new String[] {"ConfirmUpdateOnlyInstance", "ConfirmUpdateAllSeries", "ConfirmUpdateCancel"};
+        confirmForm.setActions(actions);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      } else { 
+        uiEventForm.SaveAndNoAsk(event, false, false);
+      }
     }
+  }
+  
+  public static class ConfirmUpdateInstanceOnly extends EventListener<UIEventForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
+    @Override
+    public void execute(Event<UIEventForm> event) throws Exception {
+      // TODO Auto-generated method stub
+      
+      UIEventForm uiForm = event.getSource();
+ 
+      // update only this occurrence instance
+      uiForm.SaveAndNoAsk(event, false, false);
+      
+      return ;
+    }
+    
+  }
+  
+  public static class ConfirmUpdateAllSeries extends EventListener<UIEventForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
+    @Override
+    public void execute(Event<UIEventForm> event) throws Exception {
+      // TODO Auto-generated method stub
+      UIEventForm uiForm = event.getSource();
+      
+      // update all occurrence in this series
+      uiForm.SaveAndNoAsk(event, false, true);
+    }
+    
+  }
+  
+  public static class ConfirmUpdateCancel extends EventListener<UIEventForm> {
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
+     */
+    @Override
+    public void execute(Event<UIEventForm> event) throws Exception {
+      // TODO Auto-generated method stub
+      // cancel
+      UIEventForm uiEventForm = event.getSource();
+      UICalendarPortlet uiPortlet = uiEventForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupContainer uiPopupContainer = uiEventForm.getAncestorOfType(UIPopupContainer.class);
+      UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class);
+      uiPortlet.cancelAction();
+      uiPopupAction.deActivate();
+    }
+    
   }
 
   public class ParticipantStatus {

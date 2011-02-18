@@ -668,4 +668,88 @@ public class MockCalendarService implements CalendarService{
     // TODO Auto-generated method stub
     
   }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#getOccurrenceEvents(org.exoplatform.calendar.service.CalendarEvent, java.util.Calendar, java.util.Calendar)
+   */
+  @Override
+  public Map<String,CalendarEvent> getOccurrenceEvents(CalendarEvent recurEvent,
+                                                 java.util.Calendar from,
+                                                 java.util.Calendar to) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#getEvents(java.lang.String, org.exoplatform.calendar.service.EventQuery, java.lang.String[], java.lang.Boolean)
+   */
+  @Override
+  public List<CalendarEvent> getEvents(String username,
+                                       EventQuery eventQuery,
+                                       String[] publicCalendarIds,
+                                       Boolean isRecurrence) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#getRecurrenceEvents(java.lang.String)
+   */
+  @Override
+  public List<CalendarEvent> getRecurrenceEvents(String username) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#updateOccurrenceEvent(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.List, java.lang.String)
+   */
+  @Override
+  public void updateOccurrenceEvent(String fromCalendar,
+                                    String toCalendar,
+                                    String fromType,
+                                    String toType,
+                                    List<CalendarEvent> calEvents,
+                                    String username) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public List<CalendarEvent> getOriginalRecurrenceEvents(String username, java.util.Calendar from, java.util.Calendar to) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#getExceptionEvents(java.lang.String, org.exoplatform.calendar.service.CalendarEvent)
+   */
+  @Override
+  public List<CalendarEvent> getExceptionEvents(String username, CalendarEvent recurEvent) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#removeRecurrenceSeries(java.lang.String, org.exoplatform.calendar.service.CalendarEvent)
+   */
+  @Override
+  public void removeRecurrenceSeries(String username, CalendarEvent originalEvent) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#updateRecurrenceSeries(java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.exoplatform.calendar.service.CalendarEvent, java.lang.String)
+   */
+  @Override
+  public void updateRecurrenceSeries(String fromCalendar,
+                                     String toCalendar,
+                                     String fromType,
+                                     String toType,
+                                     CalendarEvent occurrence,
+                                     String username) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
 }

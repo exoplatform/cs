@@ -64,7 +64,10 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class),
       @EventConfig(listeners = UIWeekView.UpdateEventActionListener.class),
       @EventConfig(listeners = UICalendarView.ExportEventActionListener.class),
-      @EventConfig(listeners = UIWeekView.SaveEventActionListener.class)
+      @EventConfig(listeners = UIWeekView.SaveEventActionListener.class),
+      @EventConfig(listeners = UICalendarView.ConfirmDeleteOnlyInstance.class),
+      @EventConfig(listeners = UICalendarView.ConfirmDeleteAllSeries.class),
+      @EventConfig(listeners = UICalendarView.ConfirmDeleteCancel.class)
     }
 
 )
@@ -106,8 +109,23 @@ public class UIWeekView extends UICalendarView {
     toDate.setTime(toDate.getTime()-1);
     endDateOfWeek.setTime(toDate);
     eventQuery.setToDate(endDateOfWeek) ; 
+    
+    // get normal events and exception occurrences
     List<CalendarEvent> allEvents = calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;
-    Iterator iter = allEvents.iterator() ;
+    List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate());
+    allEvents.removeAll(originalRecurEvents);
+    
+    Iterator<CalendarEvent> recurEventsIter = originalRecurEvents.iterator();
+    while (recurEventsIter.hasNext()) {
+      CalendarEvent recurEvent = recurEventsIter.next();
+      Map<String,CalendarEvent> tempMap = calendarService.getOccurrenceEvents(recurEvent, eventQuery.getFromDate(), eventQuery.getToDate());
+      if (tempMap != null) {
+        recurrenceEventsMap.put(recurEvent.getId(), tempMap);
+        allEvents.addAll(tempMap.values());
+      }
+    }
+    
+    Iterator<CalendarEvent> iter = allEvents.iterator() ;
     while(iter.hasNext()) {
       CalendarEvent event = (CalendarEvent)iter.next() ;
       Date beginEvent = event.getFromDateTime() ;
@@ -178,9 +196,23 @@ public class UIWeekView extends UICalendarView {
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
       String currentDate = event.getRequestContext().getRequestParameter("currentDate") ;
+      
+      Boolean isOccur = false;
+      if (!Utils.isEmpty(event.getRequestContext().getRequestParameter(ISOCCUR))) {
+        isOccur = Boolean.parseBoolean(event.getRequestContext().getRequestParameter(ISOCCUR));
+      }
+      // need to get recurrence-id
+      String recurId = null;
+      if (isOccur) recurId = event.getRequestContext().getRequestParameter(RECURID);
+      
       String username = CalendarUtils.getCurrentUser() ;
-      CalendarEvent eventCalendar = calendarview.getDataMap().get(eventId) ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
+      
+      CalendarEvent eventCalendar = calendarview.getDataMap().get(eventId) ;
+      if (isOccur && !Utils.isEmpty(recurId)) {
+        eventCalendar = calendarview.getRecurrenceMap().get(eventId).get(recurId);
+      }
+      
       if(eventCalendar != null) {
         CalendarService calService = CalendarUtils.getCalendarService() ;
         try {
@@ -228,7 +260,14 @@ public class UIWeekView extends UICalendarView {
               return ;
             }
             if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+              if (isOccur && !Utils.isEmpty(recurId)) {
+                List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
+                listEvent.add(eventCalendar);
+                calendarService.updateOccurrenceEvent(calendarId, calendarId, calType, calType, listEvent, username);
+              } else {
               calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;
+              }
+              
             }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
               calendarService.saveEventToSharedCalendar(username, calendarId, eventCalendar, false) ;
             }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){

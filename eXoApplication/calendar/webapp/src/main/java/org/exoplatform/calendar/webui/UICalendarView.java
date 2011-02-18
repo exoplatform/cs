@@ -42,6 +42,7 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.calendar.service.impl.NewUserListener;
+import org.exoplatform.calendar.webui.popup.UIConfirmForm;
 import org.exoplatform.calendar.webui.popup.UIEventCategoryManager;
 import org.exoplatform.calendar.webui.popup.UIEventForm;
 import org.exoplatform.calendar.webui.popup.UIEventShareTab;
@@ -94,6 +95,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   final public static String DAY = "day".intern() ;
   final public static String MONTH = "month".intern() ;
   final public static String YEAR = "year".intern() ;
+  final public static String ISOCCUR = "isOccur".intern();
+  final public static String RECURID = "recurId".intern();
 
   final public static String TYPE_EVENT = CalendarEvent.TYPE_EVENT ;
   final public static String TYPE_TASK = CalendarEvent.TYPE_TASK ;
@@ -121,7 +124,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   private Map<String, String> priorityMap_ = new HashMap<String, String>() ;
   abstract LinkedHashMap<String, CalendarEvent> getDataMap() ;
   protected DateFormatSymbols dfs_  ;
+  protected Map<String,Map<String,CalendarEvent>> recurrenceEventsMap = new LinkedHashMap<String, Map<String,CalendarEvent>>();
 
+  private CalendarEvent currentOccurrence; 
+  
   private boolean allDelete_ = true ;
 
   public UICalendarView() throws Exception{
@@ -620,6 +626,27 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     	}
 		return dataList;
 	}
+    
+    /**
+     * Get data about recurrence events <br/>
+     * Each item of the map has the key is the eventid of recurrence event.
+     * The value is the map contains all occurrence events with the key is the recurrence-id
+     * @return the Map contains recurrence events data
+     */
+    public Map<String,Map<String,CalendarEvent>> getRecurrenceMap() {
+      return recurrenceEventsMap;
+    }
+    
+    
+    public void setCurrentOccurrence(CalendarEvent currentOccurrence) {
+      this.currentOccurrence = currentOccurrence;
+    }
+
+    public CalendarEvent getcurrentOccurrence() {
+      return currentOccurrence;
+    }
+
+
     static  public class AddEventActionListener extends EventListener<UICalendarView> {
       public void execute(Event<UICalendarView> event) throws Exception {
         UICalendarView uiForm = event.getSource() ;
@@ -777,8 +804,20 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiCalendarView.refresh() ;
         }  
         String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+        Boolean isOccur = false;
+        if (!Utils.isEmpty(event.getRequestContext().getRequestParameter(ISOCCUR))) {
+          isOccur = Boolean.parseBoolean(event.getRequestContext().getRequestParameter(ISOCCUR));
+        }
+        // need to get recurrence-id
+        String recurId = null;
+        if (isOccur) recurId = event.getRequestContext().getRequestParameter(RECURID);
+        
         if(uiCalendarView.getDataMap() != null) {
           eventCalendar = uiCalendarView.getDataMap().get(eventId) ;
+          
+          if (isOccur && !Utils.isEmpty(recurId)) {
+            eventCalendar = uiCalendarView.recurrenceEventsMap.get(eventId).get(recurId);
+          }
         }
         if(eventCalendar != null) {
           if(uiCalendarView instanceof UIListView) {
@@ -817,7 +856,14 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         UIPopupContainer uiPopupContainer = uiPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
         CalendarEvent eventCalendar = null ;
         String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-
+        Boolean isOccur = false;
+        if (!Utils.isEmpty(event.getRequestContext().getRequestParameter(ISOCCUR))) {
+          isOccur = Boolean.parseBoolean(event.getRequestContext().getRequestParameter(ISOCCUR));
+        }
+        // need to get recurrence-id
+        String recurId = null;
+        if (isOccur) recurId = event.getRequestContext().getRequestParameter(RECURID);
+        
         // cs-1825
         //event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
@@ -850,6 +896,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         if(uiCalendarView.getDataMap() != null && uiCalendarView.getDataMap().get(eventId) != null) {
           if (eventCalendar == null) {
             eventCalendar = uiCalendarView.getDataMap().get(eventId) ;
+            
+            if (isOccur && !Utils.isEmpty(recurId)) {
+              eventCalendar = uiCalendarView.getRecurrenceMap().get(eventId).get(recurId);
+            }
           }
           CalendarService calendarService = CalendarUtils.getCalendarService() ;
           boolean canEdit = false ;
@@ -872,6 +922,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           }
           if(canEdit) {
             if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
+              if (isOccur && !Utils.isEmpty(recurId)) {
+                uiCalendarView.setCurrentOccurrence(eventCalendar);
+              }
+              
               uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
               UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
               uiEventForm.update(calType, CalendarUtils.getCalendarOption()) ;
@@ -912,11 +966,35 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
         String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
         String username = CalendarUtils.getCurrentUser() ;
+        Boolean isOccur = false;
+        if (!Utils.isEmpty(event.getRequestContext().getRequestParameter(ISOCCUR))) {
+          isOccur = Boolean.parseBoolean(event.getRequestContext().getRequestParameter(ISOCCUR));
+        }
+        // need to get recurrence-id
+        String recurId = null;
+        if (isOccur) recurId = event.getRequestContext().getRequestParameter(RECURID);
+        
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
         UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
+        UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
         uiPortlet.cancelAction() ;
         org.exoplatform.calendar.service.Calendar calendar = null ;
+        
         try {
+          
+          // if event is occurrence event (not exception)
+          if (isOccur && !Utils.isEmpty(recurId)) {
+            CalendarEvent currentOccurrence = uiCalendarView.getRecurrenceMap().get(eventId).get(recurId);
+            uiCalendarView.setCurrentOccurrence(currentOccurrence);
+            UIConfirmForm confirmForm = uiPopupAction.activate(UIConfirmForm.class, 600);
+            confirmForm.setConfirmMessage(uiCalendarView.getLabel("delete-recurrence-event-confirm-msg"));
+            confirmForm.setConfig_id(uiCalendarView.getId());
+            String[] actions = new String[] {"ConfirmDeleteOnlyInstance", "ConfirmDeleteAllSeries", "ConfirmDeleteCancel"};
+            confirmForm.setActions(actions);
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+            return;
+          }
+          
           if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
             calendar = calendarService.getUserCalendar(username, calendarId) ;
           } else if (CalendarUtils.SHARED_TYPE.equals(calType)) {
@@ -951,6 +1029,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
               event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
               return ;
             }
+            
             if(CalendarUtils.PUBLIC_TYPE.equals(calType)){
               calendarService.removePublicEvent(calendarId, eventId) ;
             } else if(CalendarUtils.PRIVATE_TYPE.equals(calType)){
@@ -1335,5 +1414,76 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 			   calService.moveEvent(ce.getCalendarId(), selectedCalendarId, ce.getCalType(), toType, eventList, currentUser) ;	   
 		   }		   
 	   }
+   }
+   
+   public static class ConfirmDeleteOnlyInstance extends EventListener<UICalendarView> {
+     public void execute(Event<UICalendarView> event) throws Exception {
+       // delete the only selected event
+       
+       UICalendarView uiCalendarView = event.getSource() ;
+       UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
+       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+       
+       try {
+         CalendarEvent occurrence = uiCalendarView.getcurrentOccurrence();
+         String eventId = occurrence.getId();
+         String calendarId = occurrence.getCalendarId();
+         String calType = occurrence.getCalType();
+         String recurId = occurrence.getRecurrenceId();
+         String username = CalendarUtils.getCurrentUser() ;
+         CalendarService calService = CalendarUtils.getCalendarService() ;
+         // get the original recurrence node
+         CalendarEvent originalEvent = calService.getEvent(username, eventId) ;
+         // then update the exludeId property: add recurId to this list
+         List<String> excludeId;
+         if (originalEvent.getExcludeId() == null) {
+           excludeId = new ArrayList<String>();
+         } else {
+           excludeId = new ArrayList<String>(Arrays.asList(originalEvent.getExcludeId())); 
+         }
+         excludeId.add(recurId);
+         originalEvent.setExcludeId(excludeId.toArray(new String[0]));
+         calService.saveUserEvent(username, calendarId, originalEvent, false);
+         // update UI
+         uiPopupAction.deActivate();
+       } catch (Exception e) {
+         e.printStackTrace();
+       }
+     }
+   }
+   
+   public static class ConfirmDeleteAllSeries extends EventListener<UICalendarView> {
+     public void execute(Event<UICalendarView> event) throws Exception {
+       UICalendarView uiCalendarView = event.getSource() ;
+       UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
+       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+       
+       try {
+         CalendarEvent occurrence = uiCalendarView.getcurrentOccurrence();
+         String eventId = occurrence.getId();
+         String username = CalendarUtils.getCurrentUser() ;
+         CalendarService calService = CalendarUtils.getCalendarService() ;
+         // get the original recurrence node
+         CalendarEvent originalEvent = calService.getEvent(username, eventId) ;
+        
+         calService.removeRecurrenceSeries(username, originalEvent);
+         
+         uiPopupAction.deActivate();
+       } catch (Exception e) {
+         e.printStackTrace();
+       }
+     }
+   }
+   
+   public static class ConfirmDeleteCancel extends EventListener<UICalendarView> {
+     public void execute(Event<UICalendarView> event) throws Exception {
+       UICalendarView uiCalendarView = event.getSource() ;
+       // cancel
+       uiCalendarView.setCurrentOccurrence(null);
+       UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
+       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+       uiPortlet.cancelAction();
+       uiPopupAction.deActivate();
+     }
    }
 }

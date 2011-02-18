@@ -7,6 +7,7 @@
 	import org.exoplatform.calendar.CalendarUtils;
 	import java.util.Locale;
 	import org.exoplatform.webui.application.WebuiRequestContext;
+	import org.exoplatform.calendar.service.CalendarEvent;
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
  	Calendar currentCalendar = uicomponent.getCurrentCalendar() ;
@@ -153,8 +154,10 @@
 										color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
 										title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
 										actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
+										Boolean isOccur = (event.getRepeatType()!=CalendarEvent.RP_NOREPEAT && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()))?true:false;
+										String recurId = event.getRecurrenceId();
 	                %>
-	                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" calid="$event.calendarId" startTime="$begindate"  endTime="$enddate" 
+	                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" isOccur=$isOccur recurId=$recurId calid="$event.calendarId" startTime="$begindate"  endTime="$enddate" 
 	                startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
 	                  actionlink="$actionLink">
 	                  <div class="$leftClass">
@@ -202,11 +205,14 @@
 						color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
 						//actionLink =  uicomponent.event("UpdateEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 						actionLink =  uicomponent.url("UpdateEvent",event.getId()) ;
+						Boolean isOccur = (event.getRepeatType()!=CalendarEvent.RP_NOREPEAT && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()))?true:false;
+						String recurId = event.getRecurrenceId();
+						
         %>
         <div class="EventContainerBorder WeekViewEventBoxes $color" eventindex="$dayOfWeek"
           style="position: absolute;" eventcat="$event.eventCategoryId" caltype="$event.calType"
           eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on"
-          startTime="$beginTime" endTime="$endTime">
+          startTime="$beginTime" endTime="$endTime" isOccur=$isOccur recurId=$recurId>
            <div class="<%=event.eventState%>Icon">
 	           <div class="<%=event.getPriority()%>PriorityIcon" style="float: left;">
 		            <span></span>
@@ -312,7 +318,7 @@
         <div class="UIRightPopupMenuContainer">
           <%
 			      				for(String act : uicomponent.getQuickEditMenu()) {
-			      				link = uicomponent.event(act,uicomponent.id,"id&$uicomponent.CALENDARID=calId&calType=caltype") ;
+			      				link = uicomponent.event(act,uicomponent.id,"id&$uicomponent.CALENDARID=calId&calType=caltype&isOccur=isOccur&recurId=recurId") ;
 			      				icon = act + "EventIcon" ;
           %>
           <div style="display: none;" class="EventActionMenu MenuItem">

@@ -987,7 +987,10 @@ UICalendarPortlet.prototype.ondblclickCallback = function(){
     var eventId = this.getAttribute("eventId");
     var calendarId = this.getAttribute("calid");
     var calendarType = this.getAttribute("caltype");
-    eXo.webui.UIForm.submitEvent(eXo.calendar.UICalendarPortlet.portletId + '#' + eXo.calendar.UICalendarPortlet.viewType, 'Edit', '&subComponentId=' + eXo.calendar.UICalendarPortlet.viewType + '&objectId=' + eventId + '&calendarId=' + calendarId + '&calType=' + calendarType);
+	var isOccur = this.getAttribute("isOccur");
+	var recurId = this.getAttribute("recurId");
+	if (recurId == "null") recurId = "";
+    eXo.webui.UIForm.submitEvent(eXo.calendar.UICalendarPortlet.portletId + '#' + eXo.calendar.UICalendarPortlet.viewType, 'Edit', '&subComponentId=' + eXo.calendar.UICalendarPortlet.viewType + '&objectId=' + eventId + '&calendarId=' + calendarId + '&calType=' + calendarType + '&isOccur=' + isOccur + '&recurId=' + recurId);
 }
 
 /**
@@ -1458,6 +1461,9 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
 				var eventId = obj.getAttribute("eventid");
         var calendarId = obj.getAttribute("calid");
         var calType = obj.getAttribute("calType");
+        var isOccur = obj.getAttribute("isOccur");
+        var recurId = obj.getAttribute("recurId");
+        if (recurId == "null") recurId = "";
         map = {
             "objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "objectId=" + eventId,
             "calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calendarId=" + calendarId
@@ -1468,7 +1474,17 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
                 "calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calendarId=" + calendarId,
                 "calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calType=" + calType
             };
+            if (isOccur) {
+              map = {
+                  "objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "objectId=" + eventId,
+                  "calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calendarId=" + calendarId,
+                  "calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calType=" + calType,
+                  "isOccur\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "isOccur=" + isOccur,
+                  "recurId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "recurId=" + recurId
+              };
+            }
         }
+        
 		if(!DOMUtil.hasClass(obj,"EventAlldayContainer")){
 			var container = DOMUtil.findAncestorByClass(src,"EventWeekContent");
 			var mouseY = (eXo.core.Browser.findMouseRelativeY(container,evt) + container.scrollTop)*60000;

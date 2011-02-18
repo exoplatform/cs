@@ -18,7 +18,6 @@ package org.exoplatform.calendar.service;
 
 import java.util.Date;
 import java.util.List;
-
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -69,7 +68,7 @@ public class CalendarEvent {
   final public static String RP_WEEKEND = "weekend".intern() ;
   final public static String RP_WORKINGDAYS = "workingdays".intern() ;
 
-  final public static String[] REPEATTYPES = {RP_NOREPEAT, RP_DAILY, RP_WORKINGDAYS, RP_WEEKEND, RP_WEEKLY, RP_MONTHLY, RP_YEARLY} ;
+  final public static String[] REPEATTYPES = {RP_NOREPEAT, RP_DAILY, RP_WORKINGDAYS, RP_WEEKLY, RP_MONTHLY, RP_YEARLY} ;
 
   private String id ;
   private String summary ;
@@ -87,6 +86,13 @@ public class CalendarEvent {
   private String message;
   private String[] participantStatus ;
   private Date lastUpdatedTime;
+  
+  // properties for exo:repeatCalendarEvent mixin type
+  private String recurrenceId;
+  private Boolean isExceptionOccurrence;
+  private String[] excludeId;
+  private Date repeatUntilDate;
+  private String originalReference;
 
   /**
    * Types: TYPE_EVENT, TYPE_TASK, TYPE_JOURNAL
@@ -115,6 +121,29 @@ public class CalendarEvent {
   private List<Attachment> attachment ;
   public CalendarEvent() {
     id = "Event" + IdGenerator.generate() ;
+  }
+  
+  // copy constructor
+  public CalendarEvent(CalendarEvent event) {
+    this.id = event.id;
+    this.summary = event.summary;
+    this.description = event.description;
+    this.fromDateTime = event.fromDateTime;
+    this.toDateTime = event.toDateTime;
+    this.eventCategoryId = event.eventCategoryId;
+    this.message = event.message;
+    this.location = event.location;
+    this.repeatType = event.repeatType;
+    this.calendarId = event.calendarId;
+    List<Attachment> attachments = event.getAttachment();
+    setAttachment(attachments);
+    this.setInvitation(event.getInvitation());
+    this.setParticipant(event.getParticipant());
+    this.setParticipantStatus(event.getParticipantStatus());
+    this.setReminders(event.getReminders());
+    this.setPriority(event.getPriority());
+    this.setLastUpdatedTime(event.getLastUpdatedTime());
+    this.setRepeatUntilDate(event.getRepeatUntilDate());
   }
 
   public String getId() { return id; }
@@ -239,6 +268,76 @@ public class CalendarEvent {
 
   public void setLastUpdatedTime(Date lastUpdatedTime) {
     this.lastUpdatedTime = lastUpdatedTime;
+  }
+
+  /**
+   * @param recurrenceIndex the recurrenceIndex to set
+   */
+  public void setRecurrenceId(String recurrenceId) {
+    this.recurrenceId = recurrenceId;
+  }
+
+  /**
+   * @return the recurrenceIndex
+   */
+  public String getRecurrenceId() {
+    return recurrenceId;
+  }
+
+  /**
+   * @param isExceptionOccurrence the isExceptionOccurrence to set
+   */
+  public void setIsExceptionOccurrence(Boolean isExceptionOccurrence) {
+    this.isExceptionOccurrence = isExceptionOccurrence;
+  }
+
+  /**
+   * @return the isExceptionOccurrence
+   */
+  public Boolean getIsExceptionOccurrence() {
+    return isExceptionOccurrence;
+  }
+
+  /**
+   * @param excludeId the excludeId to set
+   */
+  public void setExcludeId(String[] excludeId) {
+    this.excludeId = excludeId;
+  }
+
+  /**
+   * @return the excludeId
+   */
+  public String[] getExcludeId() {
+    return excludeId;
+  }
+
+  /**
+   * @param repeatUntilDate the repeatUntilDate to set
+   */
+  public void setRepeatUntilDate(Date repeatUntilDate) {
+    this.repeatUntilDate = repeatUntilDate;
+  }
+
+  /**
+   * @return the repeatUntilDate
+   */
+  public Date getRepeatUntilDate() {
+    return repeatUntilDate;
+  }
+
+  /**
+   * @param originalReference the originalReference to set
+   */
+  public void setOriginalReference(String originalReference) {
+    this.originalReference = originalReference;
+  }
+
+  /**
+   * @return the originalReference
+   */
+  public String getOriginalReference() {
+    return originalReference;
   }
     
 }

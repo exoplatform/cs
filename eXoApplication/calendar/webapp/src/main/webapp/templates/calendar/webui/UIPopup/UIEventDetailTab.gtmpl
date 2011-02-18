@@ -119,6 +119,14 @@
       </tr>
       <tr>
         <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_REPEAT_UNTIL)%>
+        </td>
+        <td class="FieldComponent">
+          <%uiForm.renderField(uicomponent.FIELD_REPEAT_UNTIL)%>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.FIELD_CALENDAR)%>
         </td>
         <td class="FieldComponent">

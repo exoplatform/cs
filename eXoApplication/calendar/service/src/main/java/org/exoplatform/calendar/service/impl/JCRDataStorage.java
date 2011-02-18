@@ -20,21 +20,25 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
+import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -43,6 +47,8 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+
+import net.fortuna.ical4j.model.property.RecurrenceId;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.calendar.service.Attachment;
@@ -60,6 +66,7 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -72,6 +79,7 @@ import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
@@ -940,6 +948,124 @@ public class JCRDataStorage implements DataStorage {
       saveEvent(calendarNode, event, null, isNew) ;
     }
   }
+  
+  public void saveOccurrenceEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
+    Node calendarNode = getUserCalendarHome(username).getNode(calendarId);
+    event.setCalendarId(calendarId); // make sur the event is attached to the calendar
+    if(event.getReminders() != null && event.getReminders().size() > 0) {
+      //Need to use system session
+      //SessionProvider systemSession = SessionProvider.createSystemProvider();
+      try {
+        Node reminderFolder = getReminderFolder(event.getFromDateTime()) ;
+        saveOccurrenceEvent(calendarNode, event, reminderFolder, isNew) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      } finally {
+        // systemSession.close() ;
+      }
+    } else {
+      saveOccurrenceEvent(calendarNode, event, null, isNew) ;
+    }
+  }
+  
+  public void saveOccurrenceEvent(Node calendarNode, CalendarEvent event, Node reminderFolder, boolean isNew) throws Exception {
+    Node eventNode ;
+    if(isNew) {
+      
+      // convert a 'virtual' occurrence to 'exception' occurrence
+      Node originalNode = calendarNode.getNode(event.getId());
+      event.setId("Event" + IdGenerator.generate());
+      event.setIsExceptionOccurrence(true);
+      event.setRepeatType(CalendarEvent.RP_NOREPEAT);
+      
+      eventNode = calendarNode.addNode(event.getId(), Utils.EXO_CALENDAR_EVENT) ;
+      eventNode.setProperty(Utils.EXO_ID, event.getId());
+      eventNode.addMixin(Utils.EXO_REPEAT_CALENDAR_EVENT);
+      // make reference to original node
+      eventNode.setProperty(Utils.EXO_ORIGINAL_REFERENCE, originalNode.getUUID());
+      
+      
+      // then save event
+      eventNode.setProperty(Utils.EXO_SUMMARY, event.getSummary()) ;
+      eventNode.setProperty(Utils.EXO_CALENDAR_ID, event.getCalendarId()) ;
+      eventNode.setProperty(Utils.EXO_EVENT_CATEGORYID, event.getEventCategoryId()) ;
+      eventNode.setProperty(Utils.EXO_EVENT_CATEGORY_NAME, event.getEventCategoryName()) ;
+      eventNode.setProperty(Utils.EXO_DESCRIPTION, event.getDescription()) ;
+      eventNode.setProperty(Utils.EXO_LOCATION, event.getLocation()) ;
+      eventNode.setProperty(Utils.EXO_TASK_DELEGATOR, event.getTaskDelegator()) ;
+
+      GregorianCalendar dateTime = Utils.getInstanceTempCalendar() ;
+      dateTime.setTime(event.getFromDateTime()) ;
+      eventNode.setProperty(Utils.EXO_FROM_DATE_TIME, dateTime) ;
+      dateTime.setTime(event.getToDateTime()) ;
+      eventNode.setProperty(Utils.EXO_TO_DATE_TIME, dateTime) ;
+      eventNode.setProperty(Utils.EXO_EVENT_TYPE, event.getEventType()) ;
+      eventNode.setProperty(Utils.EXO_REPEAT, event.getRepeatType()) ;
+      eventNode.setProperty(Utils.EXO_PRIORITY, event.getPriority()) ;
+      eventNode.setProperty(Utils.EXO_IS_PRIVATE, event.isPrivate()) ;
+      eventNode.setProperty(Utils.EXO_EVENT_STATE, event.getEventState()) ;
+      if(event.getInvitation() == null) event.setInvitation(new String[]{}) ; 
+      eventNode.setProperty(Utils.EXO_INVITATION,  event.getInvitation()) ;
+      if(event.getParticipant() == null) event.setParticipant(new String[]{}) ; 
+      eventNode.setProperty(Utils.EXO_PARTICIPANT, event.getParticipant()) ;
+      List<Reminder> reminders = event.getReminders() ;
+      if(reminders != null && !reminders.isEmpty()) {
+        for(Reminder rm : reminders) {
+          rm.setFromDateTime(event.getFromDateTime()) ;
+          addReminder(eventNode, reminderFolder, rm) ;
+        }
+      }
+      if(eventNode.hasNode(Utils.ATTACHMENT_NODE)) {
+        while (eventNode.getNodes().hasNext()) {
+          eventNode.getNodes().nextNode().remove() ;
+        }
+        eventNode.save() ;
+      }
+      List<Attachment> attachments = event.getAttachment() ;
+      if(attachments != null) {
+        for(Attachment att : attachments) {
+          addAttachment(eventNode, att, isNew) ;
+        }
+      }
+      eventNode.setProperty(Utils.EXO_MESSAGE, event.getMessage());
+      eventNode.setProperty(Utils.EXO_SEND_OPTION, event.getSendOption()) ;
+      if(event.getParticipantStatus() == null) event.setParticipantStatus(new String[]{}) ; 
+      eventNode.setProperty(Utils.EXO_PARTICIPANT_STATUS, event.getParticipantStatus()) ;
+      
+      if (event.getRecurrenceId() != null) eventNode.setProperty(Utils.EXO_RECURRENCE_ID, event.getRecurrenceId());
+      if (event.getIsExceptionOccurrence() != null) eventNode.setProperty(Utils.EXO_IS_EXCEPTION, event.getIsExceptionOccurrence());
+      if (event.getExcludeId() != null && event.getExcludeId().length > 0) eventNode.setProperty(Utils.EXO_EXCLUDE_ID, event.getExcludeId());
+      
+      calendarNode.getSession().save() ;
+      addEvent(event) ;
+      
+    } else {
+      saveEvent(calendarNode, event, reminderFolder, false);
+    }
+  }
+  
+  public void removeRecurrenceSeries(String username, CalendarEvent originalEvent) throws Exception {
+    
+    // get the list of exception node
+    if (originalEvent.getRepeatType().equals(CalendarEvent.RP_NOREPEAT)) return;
+    List<CalendarEvent> exceptions = getExceptionEvents(username, originalEvent);
+    if (exceptions != null && exceptions.size() > 0) {
+      for (CalendarEvent exception : exceptions) {
+        // remove all references to original node
+        exception.setOriginalReference(null);
+        // remove some properties on exception node to convert them to normal event
+        exception.setRepeatType(CalendarEvent.RP_NOREPEAT);
+        exception.setRecurrenceId(null);
+        exception.setRepeatUntilDate(null);
+        exception.setIsExceptionOccurrence(false);
+        saveUserEvent(username, exception.getCalendarId(), exception, false);
+      }
+    }
+    
+    // delete original node
+    removeUserEvent(username, originalEvent.getCalendarId(), originalEvent.getId());
+    
+  }
 
   /**
    * {@inheritDoc}
@@ -1113,6 +1239,27 @@ public class JCRDataStorage implements DataStorage {
     if(eventNode.hasProperty(Utils.EXO_SEND_OPTION)) event.setSendOption(eventNode.getProperty(Utils.EXO_SEND_OPTION).getString()) ;
     if(eventNode.hasProperty(Utils.EXO_MESSAGE)) event.setMessage(eventNode.getProperty(Utils.EXO_MESSAGE).getString()) ;
     if(eventNode.hasProperty(Utils.EXO_DATE_MODIFIED)) event.setLastUpdatedTime(eventNode.getProperty(Utils.EXO_DATE_MODIFIED).getDate().getTime()) ;
+    
+    if (eventNode.hasProperty(Utils.EXO_RECURRENCE_ID)) event.setRecurrenceId(eventNode.getProperty(Utils.EXO_RECURRENCE_ID).getString());
+    if (eventNode.hasProperty(Utils.EXO_IS_EXCEPTION)) event.setIsExceptionOccurrence(eventNode.getProperty(Utils.EXO_IS_EXCEPTION).getBoolean());
+    if (eventNode.hasProperty(Utils.EXO_REPEAT_UNTIL)) event.setRepeatUntilDate(eventNode.getProperty(Utils.EXO_REPEAT_UNTIL).getDate().getTime());
+    if(eventNode.hasProperty(Utils.EXO_REPEAT_COUNT)) {}
+    if (eventNode.hasProperty(Utils.EXO_ORIGINAL_REFERENCE)) event.setOriginalReference(eventNode.getProperty(Utils.EXO_ORIGINAL_REFERENCE).getString());
+    
+    if (eventNode.hasProperty(Utils.EXO_EXCLUDE_ID)) {
+      Value[] values = eventNode.getProperty(Utils.EXO_EXCLUDE_ID).getValues();
+      if (values.length == 1) {
+        event.setExcludeId(new String[] {values[0].getString()});
+      } else {
+        String[] excludeIds = new String[values.length];
+        for (int i = 0; i < values.length; i++) {
+          excludeIds[i] = values[i].getString();
+        }
+        event.setExcludeId(excludeIds);
+      }
+    }
+    
+    
     try {
       event.setReminders(getReminders(eventNode)) ;
     }catch (Exception e) {
@@ -1168,7 +1315,19 @@ public class JCRDataStorage implements DataStorage {
     if(isNew) {
       eventNode = calendarNode.addNode(event.getId(), Utils.EXO_CALENDAR_EVENT) ;
       eventNode.setProperty(Utils.EXO_ID, event.getId()) ;
-    }else {
+      String repeatType = event.getRepeatType();
+      if (CalendarEvent.RP_DAILY.equals(repeatType) || CalendarEvent.RP_WEEKLY.equals(repeatType) || CalendarEvent.RP_MONTHLY.equals(repeatType)
+          || CalendarEvent.RP_YEARLY.equals(repeatType)){
+        eventNode.addMixin(Utils.EXO_REPEAT_CALENDAR_EVENT);
+        eventNode.addMixin(Utils.MIX_REFERENCEABLE);
+        eventNode.setProperty(Utils.EXO_RECURRENCE_ID, "");
+        if (event.getRepeatUntilDate() != null) {
+          GregorianCalendar dateTime = Utils.getInstanceTempCalendar() ;
+          dateTime.setTime(event.getRepeatUntilDate());
+          eventNode.setProperty(Utils.EXO_REPEAT_UNTIL, dateTime);
+        }
+      }
+    } else {
       try {
         eventNode = calendarNode.getNode(event.getId()) ;
       } catch (Exception e) {
@@ -1231,6 +1390,33 @@ public class JCRDataStorage implements DataStorage {
     eventNode.setProperty(Utils.EXO_SEND_OPTION, event.getSendOption()) ;
     if(event.getParticipantStatus() == null) event.setParticipantStatus(new String[]{}) ; 
     eventNode.setProperty(Utils.EXO_PARTICIPANT_STATUS, event.getParticipantStatus()) ;
+    
+    String repeatType = event.getRepeatType();
+    if (!Utils.isEmpty(repeatType) && !repeatType.equals(CalendarEvent.RP_NOREPEAT)) {
+      if (!eventNode.isNodeType(Utils.EXO_REPEAT_CALENDAR_EVENT)) {
+        eventNode.addMixin(Utils.EXO_REPEAT_CALENDAR_EVENT);
+        eventNode.addMixin(Utils.MIX_REFERENCEABLE);
+      }
+    }
+    
+    if (event.getRecurrenceId() != null) eventNode.setProperty(Utils.EXO_RECURRENCE_ID, event.getRecurrenceId());
+    if (event.getIsExceptionOccurrence() != null) eventNode.setProperty(Utils.EXO_IS_EXCEPTION, event.getIsExceptionOccurrence());
+    if (event.getExcludeId() != null && event.getExcludeId().length > 0) eventNode.setProperty(Utils.EXO_EXCLUDE_ID, event.getExcludeId());
+    
+    if (event.getRepeatUntilDate() != null) {
+      dateTime = Utils.getInstanceTempCalendar() ;
+      dateTime.setTime(event.getRepeatUntilDate());
+      if (eventNode.hasProperty(Utils.EXO_REPEAT_UNTIL)) eventNode.setProperty(Utils.EXO_REPEAT_UNTIL, dateTime);
+    } else {
+      if (eventNode.hasProperty(Utils.EXO_REPEAT_UNTIL)) eventNode.setProperty(Utils.EXO_REPEAT_UNTIL, (Value)null);
+    }
+    
+    if (event.getOriginalReference() != null) {
+      if (eventNode.hasProperty(Utils.EXO_ORIGINAL_REFERENCE)) eventNode.setProperty(Utils.EXO_ORIGINAL_REFERENCE, event.getOriginalReference());
+    } else {
+      if (eventNode.hasProperty(Utils.EXO_ORIGINAL_REFERENCE)) eventNode.setProperty(Utils.EXO_ORIGINAL_REFERENCE, (Value)null);
+    }
+    
     calendarNode.getSession().save() ;
     addEvent(event) ;
   }
@@ -2733,6 +2919,10 @@ public class JCRDataStorage implements DataStorage {
         eventQuery.setCalendarId(publicCalendarIds) ;
         events.addAll(getPublicEvents(eventQuery)) ;
       }
+      
+      // add recurrence events
+      
+      
     } catch (Exception e) {
       e.printStackTrace() ;
     } finally {
@@ -2740,8 +2930,480 @@ public class JCRDataStorage implements DataStorage {
     }
     return events ;
   }
+  
+  /**
+   * Exclude original and virtual occurrence <br/>
+   * Contain 'real' events: normal event and exception occurrence
+   * @param username
+   * @param eventQuery
+   * @param publicCalendarIds
+   * @param isRecurrence
+   * @return
+   * @throws Exception
+   */
+  public List<CalendarEvent> getEvents(String username, EventQuery eventQuery, String[] publicCalendarIds, Boolean containRecurrence) throws Exception {
+    if (containRecurrence) return getEvents(username, eventQuery, publicCalendarIds);
+    
+    List<CalendarEvent> events = getEvents(username, eventQuery, publicCalendarIds); 
+    List<CalendarEvent> originalRecurEvents = getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate());
+ 
+    events.removeAll(originalRecurEvents);
+    return events;
+  }
+  
+  /**
+   * Get all active 'original' recurrence event
+   * @param username
+   * @return
+   * @throws Exception
+   */
+  public List<CalendarEvent> getOriginalRecurrenceEvents(String username, java.util.Calendar from, java.util.Calendar to) throws Exception {
+    List<CalendarEvent> recurEvents = new ArrayList<CalendarEvent>();
+    
+    Node calendarHome = getUserCalendarHome(username);
+    String queryString = new StringBuffer("/jcr:root" + calendarHome.getPath()
+                                          + "//element(*,exo:repeatCalendarEvent)[@exo:repeat!='").append(CalendarEvent.RP_NOREPEAT)
+                                          .append("' and @exo:recurrenceId=''")
+                                          .append("and (not(@exo:repeatUntil) or @exo:repeatUntil >= xs:dateTime('" + ISO8601.format(from) + "'))]")
+                                          .toString();
+    QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
+    Query query = qm.createQuery(queryString, Query.XPATH) ;
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    while(it.hasNext()) {
+      Node eventNode = it.nextNode();
+      CalendarEvent event = getEvent(eventNode);
+      recurEvents.add(event);
+    }
+    
+    return recurEvents;
+  }
+  
+  /**
+   * Get all 'real' recurrence event, contains both original and exception event
+   * @param username
+   * @return
+   * @throws Exception
+   */
+  public List<CalendarEvent> getRecurrenceEvents(String username) throws Exception {
+    List<CalendarEvent> recurEvents = new ArrayList<CalendarEvent>();
+    
+    Node calendarHome = getUserCalendarHome(username);
+    String queryString = new StringBuffer("/jcr:root" + calendarHome.getPath()
+                                          + "//element(*,exo:repeatCalendarEvent)[@exo:repeat!='").append(CalendarEvent.RP_NOREPEAT)
+                                          .append("']")
+                                          .toString();
+    QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
+    Query query = qm.createQuery(queryString, Query.XPATH) ;
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    while(it.hasNext()) {
+      Node eventNode = it.nextNode();
+      CalendarEvent event = getEvent(eventNode);
+      recurEvents.add(event);
+    }
+    
+    return recurEvents;
+  }
+  
+  /**
+   * Get all exception occurrence from original recurrence event
+   * @param username
+   * @param recurEvent
+   * @return
+   * @throws Exception
+   */
+  public List<CalendarEvent> getExceptionEvents(String username, CalendarEvent recurEvent) throws Exception {
+    
+    if (recurEvent == null || recurEvent.getRepeatType().equals(CalendarEvent.RP_NOREPEAT)) return null;
+    try {
+      Node calendarHome = getUserCalendarHome(username);
+      Node eventNode = calendarHome.getNode(recurEvent.getCalendarId()).getNode(recurEvent.getId());
+      if (eventNode == null || !eventNode.isNodeType(Utils.MIX_REFERENCEABLE)) return null;
+      PropertyIterator propIter = eventNode.getReferences();
+      if (propIter == null) return null;
+      List<CalendarEvent> exceptions = new ArrayList<CalendarEvent>();
+      while (propIter.hasNext()) {
+        Property prop = propIter.nextProperty();
+        Node exceptionNode = prop.getParent();
+        CalendarEvent exception = getEvent(exceptionNode);
+        exceptions.add(exception);
+      }
+      return exceptions;
+    } catch (Exception e) {
+      log.warn("Exception when get exception occurrences: " + e.getMessage());
+      return null;
+    }
+  }
+  
+  
+  /**
+   * Query all occurrences of recurrence event between from and to date. <br/>
+   * The result contains only 'virtual' occurrence events, no exception occurrences
+   * @param recurEvent the original recurrence event
+   * @param from
+   * @param to
+   * @return
+   * @throws Exception
+   */
+  public Map<String, CalendarEvent> getOccurrenceEvents(CalendarEvent recurEvent, java.util.Calendar from, java.util.Calendar to) throws Exception {
+    String repeatType = recurEvent.getRepeatType();
+    if (Utils.isEmpty(repeatType)) return null;
+    
+    if (from.after(to)) {
+      return null;
+    }
+    
+    if (repeatType.equals(CalendarEvent.RP_DAILY)) {
+      return getDailyOccurrences(recurEvent, from, to, false);
+    }
+    
+    if (repeatType.equals(CalendarEvent.RP_WEEKLY)) {
+      return getWeeklyOccurrences(recurEvent, from, to);
+    }
+    
+    // first, implement for monthly type: 'day of month'
+    // todo:
+    // then second, implement for 'day of week' type, i.e: Friday of the second week of the month
+    if (repeatType.equals(CalendarEvent.RP_MONTHLY)) { 
+      return getMonthlyOccurrences(recurEvent, from, to);
+    }
+    
+    if (repeatType.equals(CalendarEvent.RP_YEARLY)) {
+      return getYearlyOccurrences(recurEvent, from, to);
+    }
+    
+    if (repeatType.equals(CalendarEvent.RP_WORKINGDAYS)) {
+      return getDailyOccurrences(recurEvent, from, to, true);
+    }
+    
+    return null;
+  }
 
+  
+  public Map<String, CalendarEvent> getDailyOccurrences(CalendarEvent recurEvent, java.util.Calendar from, java.util.Calendar to, Boolean isWorkingDay) throws Exception {
+    String repeatType = recurEvent.getRepeatType();
+    
+    if (Utils.isEmpty(repeatType) || !repeatType.equals(CalendarEvent.RP_DAILY)) return null;
+    
+    // check if this recurEvent is expired
+    java.util.Calendar until = null;
+    if (recurEvent.getRepeatUntilDate() != null) {
+      until = Utils.getInstanceTempCalendar();
+      until.setTime(recurEvent.getRepeatUntilDate());
+      if (until.before(from)) return null;
+    }
+    
+    java.util.Calendar eventFrom = Utils.getInstanceTempCalendar();
+    eventFrom.setTime(recurEvent.getFromDateTime());
+    
+    java.util.Calendar eventTo = Utils.getInstanceTempCalendar();
+    eventTo.setTime(recurEvent.getToDateTime());
+    
+    if (!eventFrom.before(to)) {
+      return null;
+    }
+    
+    long eventFromInMillis = eventFrom.getTimeInMillis();
+    long eventToInMillis = eventTo.getTimeInMillis();
+    long diff = eventToInMillis - eventFromInMillis;
+    int diffMinutes = (int) (diff / (60 * 1000));
+    
+    java.util.Calendar temp = Utils.getInstanceTempCalendar();
+    temp.setTime(from.getTime());
+    
+    if (eventFrom.before(to) && !eventFrom.before(from)) {
+      temp.setTime(eventFrom.getTime());
+    }
+    
+    temp.set(java.util.Calendar.HOUR_OF_DAY, eventFrom.get(java.util.Calendar.HOUR_OF_DAY));
+    temp.set(java.util.Calendar.MINUTE, eventFrom.get(java.util.Calendar.MINUTE));
+    
+    //while (temp.add(java.util.Calendar.DATE, -1))
+    
+    List<String> excludeIds = null;
+    if (recurEvent.getExcludeId() != null && recurEvent.getExcludeId().length > 0) {
+      excludeIds = new ArrayList<String>(Arrays.asList(recurEvent.getExcludeId()));
+    }
+    
+    Map<String,CalendarEvent> occurrences = new HashMap<String,CalendarEvent>();
+    //int index = 1;
+    for (;!temp.after(to); temp.add(java.util.Calendar.DATE, 1)) {
+      if (temp.before(eventFrom)) {
+        continue;
+      }
+      
+      if (until != null && until.before(temp)) break;
+      
+      int dayOfWeek = temp.get(java.util.Calendar.DAY_OF_WEEK);
+      if (isWorkingDay) {
+        if (dayOfWeek == 1 || dayOfWeek == 7) continue;
+      }
+      
+      CalendarEvent occurrence = new CalendarEvent(recurEvent);  
+      java.util.Calendar occurenceFrom = Utils.getInstanceTempCalendar();
+      occurenceFrom.setTime(temp.getTime());
+      java.util.Calendar occurenceTo = Utils.getInstanceTempCalendar();
+      occurenceTo.setTime(occurenceFrom.getTime());
+      occurenceTo.add(java.util.Calendar.MINUTE, diffMinutes);
+      if ((!occurenceFrom.before(from) && occurenceFrom.before(to)) || (occurenceTo.after(from) && !occurenceTo.after(to)) || (!occurenceFrom.after(from) && !occurenceTo.before(to))) {
+        occurrence.setFromDateTime(occurenceFrom.getTime());
+        occurrence.setToDateTime(occurenceTo.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+        format.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String recurId = format.format(occurenceFrom.getTime());
+        // if this occurrence was listed in the exclude list, skip
+        if (excludeIds != null && excludeIds.contains(recurId)) continue;
+        occurrence.setRecurrenceId(recurId);
+        occurrences.put(recurId, occurrence);
+      }
+    }
+    return occurrences;
+  }
 
+  public Map<String,CalendarEvent> getWeeklyOccurrences(CalendarEvent recurEvent, java.util.Calendar from, java.util.Calendar to) throws Exception {
+    String repeatType = recurEvent.getRepeatType();
+    if (Utils.isEmpty(repeatType) || !repeatType.equals(CalendarEvent.RP_WEEKLY)) return null;
+    
+    // check if this recurEvent is expired
+    java.util.Calendar until = null;
+    if (recurEvent.getRepeatUntilDate() != null) {
+      until = Utils.getInstanceTempCalendar();
+      until.setTime(recurEvent.getRepeatUntilDate());
+      if (until.before(from)) return null;
+    }
+    
+    java.util.Calendar eventFrom = Utils.getInstanceTempCalendar();
+    eventFrom.setTime(recurEvent.getFromDateTime());
+    
+    java.util.Calendar eventTo = Utils.getInstanceTempCalendar();
+    eventTo.setTime(recurEvent.getToDateTime());
+    
+    if (!eventFrom.before(to)) {
+      return null;
+    }
+    
+    long eventFromInMillis = eventFrom.getTimeInMillis();
+    long eventToInMillis = eventTo.getTimeInMillis();
+    long diff = eventToInMillis - eventFromInMillis;
+    int diffMinutes = (int) (diff / (60 * 1000));
+    
+    java.util.Calendar temp = Utils.getInstanceTempCalendar();
+    temp.setTime(from.getTime());
+    
+    if (eventFrom.before(to) && !eventFrom.before(from)) {
+      temp.setTime(eventFrom.getTime());
+    }
+     
+    int eventFromDayOfWeek = eventFrom.get(java.util.Calendar.DAY_OF_WEEK);
+    int tempDayOfWeek = temp.get(java.util.Calendar.DAY_OF_WEEK);
+    
+    if (eventFromDayOfWeek >= tempDayOfWeek) {
+      temp.add(java.util.Calendar.DAY_OF_MONTH, eventFromDayOfWeek - tempDayOfWeek);
+    }
+    else {
+      temp.add(java.util.Calendar.DAY_OF_MONTH, 7-tempDayOfWeek+eventFromDayOfWeek);
+    }
+    
+    temp.set(java.util.Calendar.HOUR_OF_DAY, eventFrom.get(java.util.Calendar.HOUR_OF_DAY));
+    temp.set(java.util.Calendar.MINUTE, eventFrom.get(java.util.Calendar.MINUTE));
+    
+    Map<String,CalendarEvent> occurrences = new HashMap<String,CalendarEvent>();
+    
+    List<String> excludeIds = null;
+    if (recurEvent.getExcludeId() != null && recurEvent.getExcludeId().length > 0) {
+      excludeIds = new ArrayList<String>(Arrays.asList(recurEvent.getExcludeId()));
+    }
+    // now temp is the first day that is same day_of_week with eventFromDate
+    // iterate over each Date same day as event from date
+    for(int i = 0; !temp.after(to);temp.add(java.util.Calendar.DAY_OF_MONTH, 7),i++) {
+      if (temp.before(eventFrom)) {
+        continue;
+      }
+      
+      if (until != null && until.before(temp)) break;
+      
+      CalendarEvent occurrence = new CalendarEvent(recurEvent);  
+      java.util.Calendar occurenceFrom = Utils.getInstanceTempCalendar();
+      occurenceFrom.setTime(temp.getTime());
+      java.util.Calendar occurenceTo = Utils.getInstanceTempCalendar();
+      occurenceTo.setTime(occurenceFrom.getTime());
+      occurenceTo.add(java.util.Calendar.MINUTE, diffMinutes);
+      if ((!occurenceFrom.before(from) && occurenceFrom.before(to)) || (occurenceTo.after(from) && !occurenceTo.after(to)) || (!occurenceFrom.after(from) && !occurenceTo.before(to))) {
+        occurrence.setFromDateTime(occurenceFrom.getTime());
+        occurrence.setToDateTime(occurenceTo.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+        format.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String recurId = format.format(occurenceFrom.getTime());
+        // if this occurrence was listed in the exclude list, skip
+        if (excludeIds != null && excludeIds.contains(recurId)) continue;
+        occurrence.setRecurrenceId(recurId);
+        occurrences.put(recurId,occurrence);
+      }
+    }
+    return occurrences;
+  }
+  
+  public Map<String,CalendarEvent> getMonthlyOccurrences(CalendarEvent monthlyEvent, java.util.Calendar from, java.util.Calendar to) throws Exception {
+    
+    String repeatType = monthlyEvent.getRepeatType();
+    if (Utils.isEmpty(repeatType) || !repeatType.equals(CalendarEvent.RP_MONTHLY)) return null;
+    
+    // check if this monthlyEvent is expired
+    java.util.Calendar until = null;
+    if (monthlyEvent.getRepeatUntilDate() != null) {
+      until = Utils.getInstanceTempCalendar();
+      until.setTime(monthlyEvent.getRepeatUntilDate());
+      if (until.before(from)) return null;
+    }
+    
+    java.util.Calendar eventFrom = Utils.getInstanceTempCalendar();
+    eventFrom.setTime(monthlyEvent.getFromDateTime());
+    
+    java.util.Calendar eventTo = Utils.getInstanceTempCalendar();
+    eventTo.setTime(monthlyEvent.getToDateTime());
+    
+    if (!eventFrom.before(to)) {
+      return null;
+    }
+    
+    long eventFromInMillis = eventFrom.getTimeInMillis();
+    long eventToInMillis = eventTo.getTimeInMillis();
+    long diff = eventToInMillis - eventFromInMillis;
+    int diffMinutes = (int) (diff / (60 * 1000));
+    
+    java.util.Calendar temp = Utils.getInstanceTempCalendar();
+    temp.setTime(from.getTime());
+    
+    if (eventFrom.before(to) && !eventFrom.before(from)) {
+      temp.setTime(eventFrom.getTime());
+    }
+    
+    int eventFromDayOfMonth = eventFrom.get(java.util.Calendar.DAY_OF_MONTH);
+    int tempDayOfMonth = from.get(java.util.Calendar.DAY_OF_MONTH);
+    
+    if (eventFromDayOfMonth >= tempDayOfMonth) {
+      temp.add(java.util.Calendar.DAY_OF_MONTH, eventFromDayOfMonth - tempDayOfMonth);
+    } else {
+     // go to the last day of the from month (the month contains from day)
+     int lastDayOfFromMonth = temp.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+     temp.add(java.util.Calendar.DATE, lastDayOfFromMonth - tempDayOfMonth + eventFromDayOfMonth);
+    }
+    
+    temp.set(java.util.Calendar.HOUR_OF_DAY, eventFrom.get(java.util.Calendar.HOUR_OF_DAY));
+    temp.set(java.util.Calendar.MINUTE, eventFrom.get(java.util.Calendar.MINUTE));
+    
+    Map<String,CalendarEvent> occurrences = new HashMap<String,CalendarEvent>();
+    List<String> excludeIds = null;
+    if (monthlyEvent.getExcludeId() != null && monthlyEvent.getExcludeId().length > 0) {
+      excludeIds = new ArrayList<String>(Arrays.asList(monthlyEvent.getExcludeId()));
+    }
+    // now temp is the first day we need
+    for(int i = 0; !temp.after(to);temp.add(java.util.Calendar.MONTH, 1),i++) {
+      if (temp.before(eventFrom)) {
+        continue;
+      }
+      
+      if (until != null && until.before(temp)) break;
+      
+      CalendarEvent occurrence = new CalendarEvent(monthlyEvent);  
+      java.util.Calendar occurenceFrom = Utils.getInstanceTempCalendar();
+      occurenceFrom.setTime(temp.getTime());
+      java.util.Calendar occurenceTo = Utils.getInstanceTempCalendar();
+      occurenceTo.setTime(occurenceFrom.getTime());
+      occurenceTo.add(java.util.Calendar.MINUTE, diffMinutes);
+      if ((!occurenceFrom.before(from) && occurenceFrom.before(to)) || (occurenceTo.after(from) && !occurenceTo.after(to)) || (!occurenceFrom.after(from) && !occurenceTo.before(to))) {
+        occurrence.setFromDateTime(occurenceFrom.getTime());
+        occurrence.setToDateTime(occurenceTo.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+        format.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String recurId = format.format(occurenceFrom.getTime());
+        // if this occurrence was listed in the exclude list, skip
+        if (excludeIds != null && excludeIds.contains(recurId)) continue;
+        occurrence.setRecurrenceId(recurId);
+        occurrences.put(recurId, occurrence);
+      }
+    }
+    return occurrences;
+  }
+  
+  public Map<String,CalendarEvent> getYearlyOccurrences(CalendarEvent yearlyEvent, java.util.Calendar from, java.util.Calendar to) throws Exception {
+    String repeatType = yearlyEvent.getRepeatType();
+    if (Utils.isEmpty(repeatType) || !repeatType.equals(CalendarEvent.RP_YEARLY)) return null;
+    
+    // check if this yearly event is expired
+    java.util.Calendar until = null;
+    if (yearlyEvent.getRepeatUntilDate() != null) {
+      until = Utils.getInstanceTempCalendar();
+      until.setTime(yearlyEvent.getRepeatUntilDate());
+      if (until.before(from)) return null;
+    }
+    
+    java.util.Calendar eventFrom = Utils.getInstanceTempCalendar();
+    eventFrom.setTime(yearlyEvent.getFromDateTime());
+    
+    java.util.Calendar eventTo = Utils.getInstanceTempCalendar();
+    eventTo.setTime(yearlyEvent.getToDateTime());
+    
+    if (!eventFrom.before(to)) {
+      return null;
+    }
+    
+    long eventFromInMillis = eventFrom.getTimeInMillis();
+    long eventToInMillis = eventTo.getTimeInMillis();
+    long diff = eventToInMillis - eventFromInMillis;
+    int diffMinutes = (int) (diff / (60 * 1000));
+    
+    java.util.Calendar temp = Utils.getInstanceTempCalendar();
+    temp.setTime(from.getTime());
+    
+    
+    if (eventFrom.before(to) && !eventFrom.before(from)) {
+      temp.setTime(eventFrom.getTime());
+    }
+    
+    if (eventFrom.get(java.util.Calendar.YEAR) != temp.get(java.util.Calendar.YEAR)) {
+      temp.setTime(eventFrom.getTime());
+      temp.add(java.util.Calendar.YEAR, 1);
+    }
+    
+    temp.set(java.util.Calendar.HOUR_OF_DAY, eventFrom.get(java.util.Calendar.HOUR_OF_DAY));
+    temp.set(java.util.Calendar.MINUTE, eventFrom.get(java.util.Calendar.MINUTE));
+    
+    Map<String,CalendarEvent> occurrences = new HashMap<String,CalendarEvent>();
+    List<String> excludeIds = null;
+    if (yearlyEvent.getExcludeId() != null && yearlyEvent.getExcludeId().length > 0) {
+      excludeIds = new ArrayList<String>(Arrays.asList(yearlyEvent.getExcludeId()));
+    }
+    // now temp is the first day we need
+    for(int i = 0; !temp.after(to);temp.add(java.util.Calendar.YEAR, 1),i++) {
+      if (temp.before(eventFrom)) {
+        continue;
+      }
+      
+      if (until != null && until.before(temp)) break;
+      
+      CalendarEvent occurrence = new CalendarEvent(yearlyEvent);  
+      java.util.Calendar occurenceFrom = Utils.getInstanceTempCalendar();
+      occurenceFrom.setTime(temp.getTime());
+      java.util.Calendar occurenceTo = Utils.getInstanceTempCalendar();
+      occurenceTo.setTime(occurenceFrom.getTime());
+      occurenceTo.add(java.util.Calendar.MINUTE, diffMinutes);
+      if ((!occurenceFrom.before(from) && occurenceFrom.before(to)) || (occurenceTo.after(from) && !occurenceTo.after(to)) || (!occurenceFrom.after(from) && !occurenceTo.before(to))) {
+        occurrence.setFromDateTime(occurenceFrom.getTime());
+        occurrence.setToDateTime(occurenceTo.getTime());
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+        format.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String recurId = format.format(occurenceFrom.getTime());
+        // if this occurrence was listed in the exclude list, skip
+        if (excludeIds != null && excludeIds.contains(recurId)) continue;
+        occurrence.setRecurrenceId(recurId);
+        occurrences.put(recurId, occurrence);
+      }
+    }
+    return occurrences;
+  }
+    
   /**
    * {@inheritDoc}
    */
@@ -2953,6 +3615,222 @@ public class JCRDataStorage implements DataStorage {
       e.printStackTrace() ;
     } finally {
       //systemSession.close() ;
+    }
+  }
+  
+  /**
+   * This function is used to update a occurrence event. <br/>
+   * A occurrence event after update will be an exception occurrence from recurrence series and will 
+   * be save as an same-name sibling with original recurrence event node 
+   * @param fromCalendar
+   * @param toCalendar
+   * @param fromType
+   * @param toType
+   * @param calEvents
+   * @param username
+   * @throws Exception
+   */
+  public void updateOccurrenceEvent(String fromCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
+    try {
+      switch (Integer.parseInt(fromType)) {
+      case  Calendar.TYPE_PRIVATE :  
+        if(getUserCalendarHome(username).hasNode(fromCalendar)) {
+          switch (Integer.parseInt(toType)) {
+          case Calendar.TYPE_PRIVATE:
+            if(getUserCalendarHome(username).hasNode(toCalendar)){
+              for(CalendarEvent calEvent : calEvents) {
+                
+                // if this event is a 'virtual' occurrence
+                if (calEvent.getIsExceptionOccurrence() == null || !calEvent.getIsExceptionOccurrence()) {
+                  // get the original recurrence event to update excludeId property
+                  CalendarEvent originalEvent = getEvent(username, calEvent.getId());
+                  List<String> excludeId;
+                  if (originalEvent.getExcludeId() == null) {
+                    excludeId = new ArrayList<String>();
+                  } else {
+                    excludeId = new ArrayList<String>(Arrays.asList(originalEvent.getExcludeId())); 
+                  }
+                  excludeId.add(calEvent.getRecurrenceId());
+                  originalEvent.setExcludeId(excludeId.toArray(new String[0]));
+                  saveUserEvent(username, fromCalendar, originalEvent, false);
+                }
+        
+                // if move occurrence to another calendar
+                if(!fromCalendar.equals(toCalendar)) {
+                    
+                  // save occurrence event to the new calendar as a normal event
+                  // remove mixin-type exo:repeatCalendarEvent
+                  calEvent.setRepeatType(CalendarEvent.RP_NOREPEAT);
+                  
+                  // save to new calendar
+                  saveUserEvent(username, toCalendar, calEvent, true);
+                  
+                } else {
+                  // virtual occurrence to exception occurrence
+                  if (calEvent.getIsExceptionOccurrence() == null || !calEvent.getIsExceptionOccurrence()) {
+                    saveOccurrenceEvent(username, toCalendar, calEvent, true);
+                  } else {
+                    // exception occurrence
+                    saveOccurrenceEvent(username, toCalendar, calEvent, false);
+                  }
+                }
+              }
+            }
+            break;
+          case Calendar.TYPE_SHARED:
+            //move events form public to shared calendar
+            /*if(getSharedCalendarHome().hasNode(username)){
+              for(CalendarEvent calEvent : calEvents) {
+                removeUserEvent(username, fromCalendar, calEvent.getId()) ;
+                calEvent.setCalendarId(toCalendar) ;
+                saveEventToSharedCalendar(username, toCalendar, calEvent, getSharedCalendarHome().getNode(username).hasNode(calEvent.getId()));
+              }
+            }*/
+            break;
+          case Calendar.TYPE_PUBLIC:
+            //move events form public to public calendar
+            /*if(getPublicCalendarHome().hasNode(toCalendar)){
+              for(CalendarEvent calEvent : calEvents) {
+                removeUserEvent(username, fromCalendar, calEvent.getId()) ;
+                calEvent.setCalendarId(toCalendar) ;
+                savePublicEvent(toCalendar, calEvent, getPublicCalendarHome().getNode(toCalendar).hasNode(calEvent.getId())) ;
+              }
+            }
+            break;*/
+          default:
+            break;
+          }
+        }
+        break;
+      case Calendar.TYPE_SHARED:
+        if(getSharedCalendarHome().hasNode(username)) {
+          switch (Integer.parseInt(toType)) {
+          case Calendar.TYPE_PRIVATE:
+            //move events form share to public calendar
+            /*if(getUserCalendarHome(username).hasNode(toCalendar)) {
+              for(CalendarEvent calEvent : calEvents) {
+                removeSharedEvent(username, fromCalendar, calEvent.getId()) ;
+                calEvent.setCalendarId(toCalendar) ;
+                saveUserEvent(username, toCalendar, calEvent, getUserCalendarHome(username).getNode(toCalendar).hasNode(calEvent.getId())) ;
+              }
+            }*/
+            break;
+          case Calendar.TYPE_SHARED:
+            //   move events in side shared calendars
+            /*if(getSharedCalendarHome().hasNode(username)){
+              for(CalendarEvent calEvent : calEvents) {
+                if(!fromCalendar.equals(toCalendar)) {
+                  removeSharedEvent(username, fromCalendar, calEvent.getId()) ;
+                  calEvent.setCalendarId(toCalendar) ;
+                  saveEventToSharedCalendar(username, toCalendar, calEvent, getSharedCalendarHome().getNode(username).hasNode(calEvent.getId()));
+                } else {
+                  saveEventToSharedCalendar(username, toCalendar, calEvent, false);
+                }
+              }
+            }*/
+            break;
+          case Calendar.TYPE_PUBLIC:
+            //move events form share to public calendar
+            /*if(getPublicCalendarHome().hasNode(toCalendar)) {
+              for(CalendarEvent calEvent : calEvents) {
+                removeSharedEvent(username, fromCalendar, calEvent.getId()) ;
+                calEvent.setCalendarId(toCalendar) ;
+                savePublicEvent(toCalendar, calEvent, getPublicCalendarHome().getNode(toCalendar).hasNode(calEvent.getId())) ;
+              }
+            }
+            break;
+          default:
+            break;*/
+          }
+        }
+        break;
+      case Calendar.TYPE_PUBLIC:
+        if(getPublicCalendarHome().hasNode(fromCalendar)) {
+          switch (Integer.parseInt(toType)) {
+          case Calendar.TYPE_PRIVATE:
+            //move events from public to public calendar
+            /*if(getUserCalendarHome(username).hasNode(toCalendar)) {
+              for(CalendarEvent calEvent : calEvents) {
+                removePublicEvent(fromCalendar, calEvent.getId()) ;
+                calEvent.setCalendarId(toCalendar) ;
+                saveUserEvent(username, toCalendar, calEvent, getUserCalendarHome(username).getNode(toCalendar).hasNode(calEvent.getId())) ;
+              }
+            }*/
+            break;
+          case Calendar.TYPE_SHARED:
+            //move events from public to shared calendar
+            /*if(getSharedCalendarHome().hasNode(username)){
+              for(CalendarEvent calEvent : calEvents) {
+                removePublicEvent(fromCalendar, calEvent.getId()) ;
+                calEvent.setCalendarId(toCalendar) ;
+                saveEventToSharedCalendar(username, toCalendar, calEvent, true);
+              }
+            }*/
+            break;
+          case Calendar.TYPE_PUBLIC:
+            //move events in side public calendars
+            /*if(getPublicCalendarHome().hasNode(toCalendar)){
+              for(CalendarEvent calEvent : calEvents) {
+                if(!fromCalendar.equals(toCalendar)) {
+                  removePublicEvent(fromCalendar, calEvent.getId()) ;
+                  calEvent.setCalendarId(toCalendar) ;
+                  savePublicEvent(toCalendar, calEvent, getPublicCalendarHome().getNode(toCalendar).hasNode(calEvent.getId())) ;
+                } else {
+                  savePublicEvent(toCalendar, calEvent,  false) ;
+                }
+              }
+            }*/
+            break;
+          default:
+            break;
+          }
+        }
+        break;
+      default:
+        break;
+      }
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    } finally {
+      //systemSession.close() ;
+    }
+  }
+  
+  /**
+   * Update recurrence series
+   * @param fromCalendar
+   * @param toCalendar
+   * @param fromType
+   * @param toType
+   * @param occurence
+   * @param username
+   * @throws Exception
+   */
+  public void updateRecurrenceSeries(String fromCalendar, String toCalendar, String fromType, String toType, CalendarEvent occurrence, String username) throws Exception {
+    
+    // now, for private type only
+    
+    Node originalNode = getUserCalendarHome(username).getNode(fromCalendar).getNode(occurrence.getId());
+    CalendarEvent originalEvent = getEvent(originalNode);
+    
+    // do we need to get the list of exception events?
+    
+    // if move occurrence to another calendar
+    if(!fromCalendar.equals(toCalendar)) {
+      
+      // remove original event from old calendar
+      
+      // save new original event to new calendar
+      
+      removeUserEvent(username, fromCalendar, occurrence.getId()) ;
+      occurrence.setCalendarId(toCalendar) ;
+      //saveUserEvent(username, toCalendar, occurrence, getUserCalendarHome(username).getNode(toCalendar).hasNode(occurrence.getId())) ;
+    } else {
+      // update original event from occurrence
+      
+      
+      // save original event
+      //saveUserEvent(username, toCalendar, occurrence,  false) ;
     }
   }
 

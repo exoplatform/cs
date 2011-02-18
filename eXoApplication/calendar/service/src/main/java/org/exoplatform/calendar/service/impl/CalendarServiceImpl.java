@@ -412,6 +412,10 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                                        String[] publicCalendarIds) throws Exception {
     return storage_.getEvents(username, eventQuery, publicCalendarIds);
   }
+  
+  public List<CalendarEvent> getEvents(String username, EventQuery eventQuery, String[] publicCalendarIds, Boolean containRecurrence) throws Exception {
+    return storage_.getEvents(username, eventQuery, publicCalendarIds, containRecurrence);
+  }
 
   /**
    * {@inheritDoc}
@@ -812,6 +816,78 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   
   public int getRemoteCalendarCount(String username) throws Exception {
     return storage_.getRemoteCalendarCount(username);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#getOccurrenceEvents(org.exoplatform.calendar.service.CalendarEvent, java.util.Calendar, java.util.Calendar)
+   */
+  @Override
+  public Map<String,CalendarEvent> getOccurrenceEvents(CalendarEvent recurEvent,
+                                                 java.util.Calendar from,
+                                                 java.util.Calendar to) throws Exception {
+    // TODO Auto-generated method stub
+    return storage_.getOccurrenceEvents(recurEvent, from, to);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#getRecurrenceEvents(java.lang.String)
+   */
+  @Override
+  public List<CalendarEvent> getRecurrenceEvents(String username) throws Exception {
+    // TODO Auto-generated method stub
+    return storage_.getRecurrenceEvents(username);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#updateOccurrenceEvent(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.List, java.lang.String)
+   */
+  @Override
+  public void updateOccurrenceEvent(String fromCalendar,
+                                    String toCalendar,
+                                    String fromType,
+                                    String toType,
+                                    List<CalendarEvent> calEvents,
+                                    String username) throws Exception {
+    // TODO Auto-generated method stub
+    storage_.updateOccurrenceEvent(fromCalendar, toCalendar, fromType, toType, calEvents, username);
+  }
+
+  @Override
+  public List<CalendarEvent> getOriginalRecurrenceEvents(String username, java.util.Calendar from, java.util.Calendar to) throws Exception {
+    // TODO Auto-generated method stub
+    return storage_.getOriginalRecurrenceEvents(username, from, to);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#getExceptionEvents(org.exoplatform.calendar.service.CalendarEvent)
+   */
+  @Override
+  public List<CalendarEvent> getExceptionEvents(String username, CalendarEvent recurEvent) throws Exception {
+    // TODO Auto-generated method stub
+    return storage_.getExceptionEvents(username, recurEvent);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#removeRecurrenceSeries(java.lang.String, org.exoplatform.calendar.service.CalendarEvent)
+   */
+  @Override
+  public void removeRecurrenceSeries(String username, CalendarEvent originalEvent) throws Exception {
+    // TODO Auto-generated method stub
+    storage_.removeRecurrenceSeries(username, originalEvent);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#updateRecurrenceSeries(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.List, java.lang.String)
+   */
+  @Override
+  public void updateRecurrenceSeries(String fromCalendar,
+                                     String toCalendar,
+                                     String fromType,
+                                     String toType,
+                                     CalendarEvent occurrence,
+                                     String username) throws Exception {
+    // TODO Auto-generated method stub
+    storage_.updateRecurrenceSeries(fromCalendar, toCalendar, fromType, toType, occurrence, username);
   }
   
 
