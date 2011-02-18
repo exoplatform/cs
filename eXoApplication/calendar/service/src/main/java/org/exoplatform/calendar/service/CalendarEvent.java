@@ -135,6 +135,7 @@ public class CalendarEvent {
     this.location = event.location;
     this.repeatType = event.repeatType;
     this.calendarId = event.calendarId;
+    this.sendOption = event.sendOption;
     List<Attachment> attachments = event.getAttachment();
     setAttachment(attachments);
     this.setInvitation(event.getInvitation());

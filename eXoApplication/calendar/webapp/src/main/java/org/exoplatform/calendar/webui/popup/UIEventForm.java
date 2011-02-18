@@ -1441,8 +1441,13 @@ public Attachment getAttachment(String attId) {
                 } else {
                   // update series: for todo, now only update concrete occurrence
                   
-                  //calService.updateRecurrenceSeries(fromCal, toCal, fromType, toType, calendarEvent, username);
-                  calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
+                  if (CalendarUtils.isSameDate(oldCalendarEvent.getFromDateTime(), calendarEvent.getFromDateTime())) {
+                    calService.updateRecurrenceSeries(fromCal, toCal, fromType, toType, calendarEvent, username);
+                  }
+                  else {
+                    //calService.updateRecurrenceSeries(fromCal, toCal, fromType, toType, calendarEvent, username);
+                    calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
+                  }
                 }
               } 
               else {
@@ -1871,7 +1876,10 @@ public Attachment getAttachment(String attId) {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UICalendarView uiCalendarView = uiPortlet.findFirstComponentOfType(UICalendarView.class);
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class);
       //TODO cs-764
       if(!uiForm.isReminderValid()) {
         uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues}, ApplicationMessage.WARNING));
@@ -1907,10 +1915,27 @@ public Attachment getAttachment(String attId) {
         event.getRequestContext().addUIComponentToUpdateByAjax(pAction) ;
       }
       else {
-        if(CalendarSetting.ACTION_ALWAYS.equalsIgnoreCase(sendOption))
-          uiForm.SaveAndNoAsk(event, true, false);
-        else
-          uiForm.SaveAndNoAsk(event, false, false);
+        CalendarSetting calSetting = uiPortlet.getCalendarSetting();
+        Date oldFromDate = uiForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+        
+        // if it's a virtual recurrence
+        CalendarEvent occurrence = uiForm.calendarEvent_;
+        if (occurrence != null && !occurrence.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) 
+            && !CalendarUtils.isEmpty(occurrence.getRecurrenceId()) && CalendarUtils.isSameDate(oldFromDate, occurrence.getFromDateTime()) ) {
+          // popup confirm form
+          UIConfirmForm confirmForm =  uiPopupAction.activate(UIConfirmForm.class, 600);
+          confirmForm.setConfirmMessage(uiForm.getLabel("update-recurrence-event-confirm-msg"));
+          confirmForm.setConfig_id(uiForm.getId()) ;
+          
+          String[] actions = new String[] {"ConfirmUpdateOnlyInstance", "ConfirmUpdateAllSeries", "ConfirmUpdateCancel"};
+          confirmForm.setActions(actions);
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        } else { 
+          if(CalendarSetting.ACTION_ALWAYS.equalsIgnoreCase(sendOption))
+            uiForm.SaveAndNoAsk(event, true, false);
+          else
+            uiForm.SaveAndNoAsk(event, false, false);
+        }            
       }
      }
     }
@@ -1988,9 +2013,13 @@ public Attachment getAttachment(String attId) {
       UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class);
       uiPopupAction.deActivate();
       
+      CalendarSetting calSetting = uiPortlet.getCalendarSetting();
+      Date oldFromDate = uiEventForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+      
       // if it's a virtual recurrence
-      CalendarEvent occurrence = uiCalendarView.getcurrentOccurrence();
-      if (occurrence != null && !occurrence.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(occurrence.getRecurrenceId())) {
+      CalendarEvent occurrence = uiEventForm.calendarEvent_;
+      if (occurrence != null && !occurrence.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) 
+          && !CalendarUtils.isEmpty(occurrence.getRecurrenceId()) && CalendarUtils.isSameDate(oldFromDate, occurrence.getFromDateTime()) ) {
         // popup confirm form
         UIConfirmForm confirmForm =  uiPopupAction.activate(UIConfirmForm.class, 600);
         confirmForm.setConfirmMessage(uiEventForm.getLabel("update-recurrence-event-confirm-msg"));
@@ -2015,7 +2044,7 @@ public Attachment getAttachment(String attId) {
       uiPopupAction.deActivate();
       
       // if it's a virtual recurrence
-      CalendarEvent occurrence = uiCalendarView.getcurrentOccurrence();
+      CalendarEvent occurrence = uiEventForm.calendarEvent_;
       if (occurrence != null && !occurrence.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(occurrence.getRecurrenceId())) {
         // popup confirm form
         UIConfirmForm confirmForm =  uiPopupAction.activate(UIConfirmForm.class, 600);
@@ -2041,11 +2070,14 @@ public Attachment getAttachment(String attId) {
       // TODO Auto-generated method stub
       
       UIEventForm uiForm = event.getSource();
- 
-      // update only this occurrence instance
-      uiForm.SaveAndNoAsk(event, false, false);
-      
-      return ;
+      String sendOption = uiForm.getSendOption();
+      if (CalendarSetting.ACTION_ALWAYS.equals(sendOption)) {
+        uiForm.SaveAndNoAsk(event, true, false);
+      }
+      else {
+        // update only this occurrence instance
+        uiForm.SaveAndNoAsk(event, false, false);
+      }
     }
     
   }
@@ -2059,9 +2091,14 @@ public Attachment getAttachment(String attId) {
     public void execute(Event<UIEventForm> event) throws Exception {
       // TODO Auto-generated method stub
       UIEventForm uiForm = event.getSource();
-      
-      // update all occurrence in this series
-      uiForm.SaveAndNoAsk(event, false, true);
+      String sendOption = uiForm.getSendOption();
+      if (CalendarSetting.ACTION_ALWAYS.equals(sendOption)) {
+        // update all occurrence in this series
+        uiForm.SaveAndNoAsk(event, true, true);
+      }
+      else {
+        uiForm.SaveAndNoAsk(event, false, true);
+      }
     }
     
   }

@@ -3809,28 +3809,64 @@ public class JCRDataStorage implements DataStorage {
   public void updateRecurrenceSeries(String fromCalendar, String toCalendar, String fromType, String toType, CalendarEvent occurrence, String username) throws Exception {
     
     // now, for private type only
-    
-    Node originalNode = getUserCalendarHome(username).getNode(fromCalendar).getNode(occurrence.getId());
-    CalendarEvent originalEvent = getEvent(originalNode);
-    
-    // do we need to get the list of exception events?
-    
-    // if move occurrence to another calendar
-    if(!fromCalendar.equals(toCalendar)) {
+    try {
+      Node originalNode = getUserCalendarHome(username).getNode(fromCalendar).getNode(occurrence.getId());
+      CalendarEvent originalEvent = getEvent(originalNode);
       
-      // remove original event from old calendar
+      // do we need to get the list of exception events?
       
-      // save new original event to new calendar
-      
-      removeUserEvent(username, fromCalendar, occurrence.getId()) ;
-      occurrence.setCalendarId(toCalendar) ;
-      //saveUserEvent(username, toCalendar, occurrence, getUserCalendarHome(username).getNode(toCalendar).hasNode(occurrence.getId())) ;
-    } else {
-      // update original event from occurrence
-      
-      
-      // save original event
-      //saveUserEvent(username, toCalendar, occurrence,  false) ;
+      // if move occurrence to another calendar
+      if(!fromCalendar.equals(toCalendar)) {
+        
+        // remove original event from old calendar
+        removeUserEvent(username, fromCalendar, originalEvent.getId()) ;
+        
+        // save new original event to new calendar
+        CalendarEvent newEvent = new CalendarEvent(originalEvent);
+        newEvent.setId("Event" + IdGenerator.generate());
+        newEvent.setCalendarId(toCalendar);
+        newEvent.setExcludeId(originalEvent.getExcludeId());
+        saveUserEvent(username, toCalendar, newEvent, true);
+      } else {
+        // update original event from occurrence
+        java.util.Calendar fromDate = Utils.getInstanceTempCalendar();
+        fromDate.setTime(originalEvent.getFromDateTime());
+        java.util.Calendar newFromDate = Utils.getInstanceTempCalendar();
+        newFromDate.setTime(occurrence.getFromDateTime());
+        fromDate.set(java.util.Calendar.HOUR_OF_DAY, newFromDate.get(java.util.Calendar.HOUR_OF_DAY));
+        fromDate.set(java.util.Calendar.MINUTE , newFromDate.get(java.util.Calendar.MINUTE));
+        originalEvent.setFromDateTime(fromDate.getTime());
+        
+        // calculate time amount
+        long newFromDateInMillis = newFromDate.getTimeInMillis();
+        java.util.Calendar newToDate = Utils.getInstanceTempCalendar();
+        newToDate.setTime(occurrence.getToDateTime());
+        long newToDateInMillis = newToDate.getTimeInMillis();
+        int diffMinutes = (int)(newToDateInMillis - newFromDateInMillis)/(60 * 1000);
+        
+        java.util.Calendar toDate = Utils.getInstanceTempCalendar();
+        toDate.setTime(fromDate.getTime());
+        toDate.add(java.util.Calendar.MINUTE, diffMinutes);
+        originalEvent.setToDateTime(toDate.getTime());
+        
+        originalEvent.setSummary(occurrence.getSummary());
+        originalEvent.setDescription(occurrence.getDescription());
+        originalEvent.setEventCategoryId(occurrence.getEventCategoryId());
+        originalEvent.setMessage(occurrence.getMessage());
+        originalEvent.setLocation(occurrence.getLocation());
+        List<Attachment> attachments = occurrence.getAttachment();
+        originalEvent.setAttachment(attachments);
+        originalEvent.setInvitation(occurrence.getInvitation());
+        originalEvent.setParticipant(occurrence.getParticipant());
+        originalEvent.setParticipantStatus(occurrence.getParticipantStatus());
+        originalEvent.setReminders(occurrence.getReminders());
+        originalEvent.setPriority(occurrence.getPriority());
+
+        // save original event
+        saveUserEvent(username, toCalendar, originalEvent,  false) ;
+      }
+    } catch (Exception e) {
+      log.warn("Error when update recurrence series: " + e.getMessage());
     }
   }
 
