@@ -514,6 +514,7 @@ public class CalendarWebservice implements ResourceContainer{
 		  CalendarService calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
 		  String username = ConversationState.getCurrent().getIdentity().getUserId();
 		  CalendarEvent calEvent = calService.getEvent(username, eventid);
+		  if(!calEvent.getAttachment().isEmpty()) calEvent.setAttachment(null);
 		  SingleEvent data = new SingleEvent();
 		  data.setInfo(calEvent);
 		  //data.setCalendars(calList);
