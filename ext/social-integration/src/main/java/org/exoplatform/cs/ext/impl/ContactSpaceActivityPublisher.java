@@ -24,12 +24,12 @@ import org.exoplatform.contact.service.impl.ContactEventListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.social.core.activity.model.Activity;
+import org.exoplatform.social.core.activity.model.ExoSocialActivity;
+import org.exoplatform.social.core.activity.model.ExoSocialActivityImpl;
 import org.exoplatform.social.core.identity.model.Identity;
 import org.exoplatform.social.core.identity.provider.SpaceIdentityProvider;
 import org.exoplatform.social.core.manager.ActivityManager;
 import org.exoplatform.social.core.manager.IdentityManager;
-import org.exoplatform.social.core.space.spi.SpaceService;
 
 /**
  * Created by The eXo Platform SAS
@@ -57,7 +57,7 @@ public class ContactSpaceActivityPublisher extends ContactEventListener{
         return;
       }
       
-      Activity activity = new Activity();
+      ExoSocialActivity activity = new ExoSocialActivityImpl();
       activity.setTitle(contact.getFullName());
       activity.setBody("");
       
@@ -90,7 +90,7 @@ public class ContactSpaceActivityPublisher extends ContactEventListener{
       if (addrBookId == null || addrBookId.indexOf(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX) < 0) {
         return;
       }
-      Activity activity = new Activity();
+      ExoSocialActivity activity = new ExoSocialActivityImpl();
       activity.setTitle(contact.getFullName());
       activity.setBody("");
       

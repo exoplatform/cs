@@ -37,12 +37,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.exoplatform.portal</groupId>
-      <artifactId>exo.portal.component.web</artifactId>
-      <version>${org.exoplatform.portal.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.exoplatform.cs</groupId>
       <artifactId>exo.cs.eXoApplication.content.service</artifactId>
       <version>${project.version}</version>

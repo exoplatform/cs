@@ -24,12 +24,12 @@ import org.exoplatform.calendar.service.impl.CalendarEventListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.social.core.activity.model.Activity;
+import org.exoplatform.social.core.activity.model.ExoSocialActivity;
+import org.exoplatform.social.core.activity.model.ExoSocialActivityImpl;
 import org.exoplatform.social.core.identity.model.Identity;
 import org.exoplatform.social.core.identity.provider.SpaceIdentityProvider;
 import org.exoplatform.social.core.manager.ActivityManager;
 import org.exoplatform.social.core.manager.IdentityManager;
-import org.exoplatform.social.core.space.spi.SpaceService;
 
 /**
  * Created by The eXo Platform SAS
@@ -66,7 +66,7 @@ public class CalendarSpaceActivityPublisher extends CalendarEventListener {
       
 //      String msg = "A new event has been added : " + event.getSummary();
 //      String body = event.getDescription();
-      Activity activity = new Activity();
+      ExoSocialActivity activity = new ExoSocialActivityImpl();
       
       String eventType = event.getEventType().equalsIgnoreCase(CalendarEvent.TYPE_EVENT) ? EVENT_ADDED
                                                                                         : TASK_ADDED;
@@ -105,7 +105,7 @@ public class CalendarSpaceActivityPublisher extends CalendarEventListener {
 
 //      String msg = "The following event has been updated: " + event.getSummary();
 //      String body = event.getDescription();
-      Activity activity = new Activity();
+      ExoSocialActivity activity = new ExoSocialActivityImpl();
       activity.setTitle(event.getSummary());
       activity.setBody(event.getDescription());
       Map<String, String> params = new HashMap<String, String>();

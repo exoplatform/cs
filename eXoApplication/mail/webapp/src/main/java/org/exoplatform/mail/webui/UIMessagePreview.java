@@ -864,10 +864,7 @@ import org.exoplatform.webui.event.EventListener;
             cmsService.storeNodeByUUID(Utils.NT_FILE,
                                        folderNode,
                                        inputProps,
-                                       true,
-                                       repoService.getCurrentRepository()
-                                       .getConfiguration()
-                                       .getName());
+                                       true);
             message = new ApplicationMessage("UIMessagePreview.msg.DMSSelector.save-successfully",
                                              new Object[] {selectedAttachment_.getName().replace(".", "&#46;"), folderNode.getName()},
                                              ApplicationMessage.INFO);
