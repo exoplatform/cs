@@ -28,6 +28,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
@@ -131,6 +132,8 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
           } else {
             String selectedAcc = accounts.get(0).getId();
             uiSelectAccount.setSelectedValue(selectedAcc);
+            uiPortlet.findFirstComponentOfType(UIFolderContainer.class)
+              .setSelectedFolder(Utils.generateFID(selectedAcc, Utils.FD_INBOX, false));
             mailSetting.setDefaultAccount(selectedAcc) ;
             uiMessageList.setMessageFilter(null);
             uiMessageList.init(selectedAcc);
