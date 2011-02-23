@@ -87,6 +87,9 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = MailUtils.getCurrentUser();
     String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    if(MailUtils.isDelegated(accountId)) {
+      username = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
+    }
     List<Tag> tagList= mailSrv.getTags(username, accountId);
     
     if (tagList.isEmpty()) return;   
@@ -113,6 +116,10 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       String tagId = editTagForm.getTagId();
       String newTagName = editTagForm.getUIStringInput(NEW_TAG_NAME).getValue().trim() ;
+      
+      if(MailUtils.isDelegated(accountId)) {
+        username = mailService.getDelegatedAccount(username, accountId).getDelegateFrom();
+      }
 //    CS-3009
       newTagName = MailUtils.reduceSpace(newTagName) ;
       /*if (!MailUtils.isNameValid(newTagName, MailUtils.SIMPLECHARACTER)) {

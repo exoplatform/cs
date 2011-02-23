@@ -17,6 +17,7 @@
 package org.exoplatform.mail.service.impl;
 
 import java.io.InputStream;
+
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -108,7 +109,6 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.exoplatform.ws.frameworks.json.impl.JsonException;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
-import org.jboss.cache.commands.read.GetDataMapCommand;
 import org.picocontainer.Startable;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -139,6 +139,8 @@ public class MailServiceImpl implements MailService, Startable {
   private JobSchedulerService       schedulerService_;
   private ContinuationService continuationService_;
 
+  private String currentUser;
+  
   public MailServiceImpl(NodeHierarchyCreator nodeHierarchyCreator,
                          JobSchedulerService schedulerService,
                          RepositoryService reposervice) throws Exception {
@@ -154,11 +156,13 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void removeCheckingInfo(String userName, String accountId) throws Exception {
+   // if(!Utils.isEmptyField(getCurrentUserName())) userName = this.getCurrentUserName();
     String key = userName + ":" + accountId;
     checkingLog_.remove(key);
   }
 
   public CheckingInfo getCheckingInfo(String userName, String accountId) {
+   //if(!Utils.isEmptyField(getCurrentUserName())) userName = this.getCurrentUserName();
     String key = userName + ":" + accountId;
     CheckingInfo info = checkingLog_.get(key);
     return info;
@@ -217,6 +221,8 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public Folder getFolder(String userName, String accountId, String folderId) throws Exception {
+    if(isDelegatedAccount(userName, accountId))
+      userName = getDelegatedAccount(userName, accountId).getDelegateFrom();
     return storage_.getFolder(userName, accountId, folderId);
   }
 
@@ -233,6 +239,8 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public boolean saveFolderImapOnline(String userName, String accountId, Folder folder) throws Exception {
+    Account delegatedAcc = getDelegatedAccount(userName, accountId);
+    if(delegatedAcc != null) userName = delegatedAcc.getDelegateFrom();
     Account account = getAccountById(userName, accountId);
     if (account.getProtocol().equalsIgnoreCase(Utils.IMAP) && folder.isPersonalFolder()) {
       IMAPFolder imapFolder = null;
@@ -566,6 +574,7 @@ public class MailServiceImpl implements MailService, Startable {
     MessageFilter filter = new MessageFilter("Tag");
     filter.setAccountId(accountId);
     filter.setFolder(new String[] { tagId });
+    if(!Utils.isEmptyField(getDelegatorUserName(userName, accountId))) userName = getDelegatorUserName(userName, accountId);
     return getMessages(userName, filter);
   }
 
@@ -1404,7 +1413,6 @@ public class MailServiceImpl implements MailService, Startable {
         return null;
       } catch (MessagingException e) {
         if(logger.isDebugEnabled()) logger.debug("Exception while connecting to server : " + e.getMessage());
-        if(Utils.isGmailAccount(emailAddress)) logger.warn("You are using gmail account and certain that your mail account set incoming/outgoing protocol is SSL");
         if (info != null) {
           //          info.setStatusMsg("Connecting failed. Please check server configuration.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
@@ -1492,7 +1500,6 @@ public class MailServiceImpl implements MailService, Startable {
         return null;
       } catch (MessagingException e) {
         logger.debug("Exception while connecting to server : " + e.getMessage());
-        if(Utils.isGmailAccount(emailAddr)) logger.warn("You are using Gmail account and certain that your mail account set incoming/outgoing protocol is SSL");
         if (info != null) {
           //          info.setStatusMsg("Connecting failed. Please check server configuration.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
@@ -1685,6 +1692,7 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   private CheckingInfo createCheckingInfo(String userName, String accountId) {
+    //if(!Utils.isEmptyField(getCurrentUserName())) userName = this.getCurrentUserName();
     String key = userName + ":" + accountId;
     CheckingInfo info = new CheckingInfo();
     checkingLog_.put(key, info);
@@ -1706,11 +1714,10 @@ public class MailServiceImpl implements MailService, Startable {
     }
     info.setAccountId(accountId);
     info.setStatusCode(CheckingInfo.START_CHECKMAIL_STATUS);    
-
+    
     updateCheckingMailStatusByCometd(userName, accountId, info);
     Account account = getAccountById(userName, accountId);
     IMAPStore store = openIMAPConnection(userName, account, info);
-
     //after connect to server, we check stopping mail request of user.
     if (info.isRequestStop()) {
       throw new CheckMailInteruptedException("stopped checking emails!");
@@ -1895,6 +1902,7 @@ public class MailServiceImpl implements MailService, Startable {
               infoObj.setFolders(folderStr);
 
               msgUID = ((IMAPFolder) folder).getUID(msg);
+              String currentUserName = getCurrentUserName();
               saved = storage_.saveMessage(userName,
                                            accountId,
                                            msgUID,
@@ -1904,7 +1912,7 @@ public class MailServiceImpl implements MailService, Startable {
                                            spamFilter,
                                            infoObj,
                                            this.continuationService_,
-                                           false);
+                                           false, currentUserName);
               if (saved){
                 if(!leaveOnserver) msg.setFlag(Flags.Flag.DELETED, true);
                 if(!msg.isSet(Flag.SEEN)) unreadMsgCount++;
@@ -1980,7 +1988,17 @@ public class MailServiceImpl implements MailService, Startable {
     return checkNewMessage(userName, accountId, null);
   }
 
+  public String getCurrentUserName(){
+    return currentUser;
+  }
+ 
+  public void setCurrentUserName(String username){
+    this.currentUser = username;
+  }
+ 
+  
   public List<Message> checkNewMessage(String username, String accountId, String folderId) throws Exception {
+    currentUser = username;
     String reciever = username;
     Account dAccount = getDelegatedAccount(username, accountId);
     if(isDelegatedAccount(username, accountId)) {reciever = dAccount.getDelegateFrom();}
@@ -2017,7 +2035,7 @@ public class MailServiceImpl implements MailService, Startable {
         if (!account.isSavePassword()) {
           account.setIncomingPassword("");
           if(reciever != null) updateAccount(reciever, account); 
-          else updateAccount(reciever, account);
+          else updateAccount(username, account);
         }
       }
     }
@@ -2197,7 +2215,7 @@ public class MailServiceImpl implements MailService, Startable {
               }
               Info infoObj = new Info();
               infoObj.setFolders(folderStr);
-
+               String currentUserName = getCurrentUserName(); 
               saved = storage_.savePOP3Message(userName,
                                                accountId,
                                                msg,
@@ -2205,7 +2223,7 @@ public class MailServiceImpl implements MailService, Startable {
                                                tagList,
                                                spamFilter,
                                                infoObj,
-                                               continuationService_);
+                                               continuationService_, currentUserName);
 
               if (saved) {
                 msg.setFlag(Flags.Flag.SEEN, true);
@@ -2372,6 +2390,8 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<Folder> getFolders(String userName, String accountId, boolean isPersonal) throws Exception {
+    if(isDelegatedAccount(userName, accountId))
+      userName = getDelegatedAccount(userName, accountId).getDelegateFrom();    
     List<Folder> folders = new ArrayList<Folder>();
     List<Folder> gottenFolderList = storage_.getFolders(userName, accountId);
     Account account = getAccountById(userName, accountId);
@@ -2471,18 +2491,23 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public void addTag(String userName, String accountId, Tag tag) throws Exception {
+    if(!Utils.isEmptyField(getDelegatorUserName(userName, accountId))) userName = getDelegatorUserName(userName, accountId);
     storage_.addTag(userName, accountId, tag);
   }
 
   public void addTag(String userName, String accountId, List<Message> messages, List<Tag> tag) throws Exception {
+    if(isDelegatedAccount(userName, accountId)) userName = getDelegatedAccount(userName, accountId).getDelegateFrom();
     storage_.addTag(userName, accountId, messages, tag);
   }
 
   public List<Tag> getTags(String userName, String accountId) throws Exception {
+    if(isDelegatedAccount(userName, accountId))
+      userName = getDelegatedAccount(userName, accountId).getDelegateFrom();
     return storage_.getTags(userName, accountId);
   }
 
   public Tag getTag(String userName, String accountId, String tagId) throws Exception {
+    if(!Utils.isEmptyField(getDelegatorUserName(userName, accountId))) userName = getDelegatorUserName(userName, accountId);    
     return storage_.getTag(userName, accountId, tagId);
   }
 
@@ -2490,18 +2515,22 @@ public class MailServiceImpl implements MailService, Startable {
                                    String accountId,
                                    List<Message> msgList,
                                    List<String> tagIdList) throws Exception {
+    if(!Utils.isEmptyField(getDelegatorUserName(userName, accountId))) userName = getDelegatorUserName(userName, accountId);
     storage_.removeTagsInMessages(userName, accountId, msgList, tagIdList);
   }
 
   public void removeTag(String userName, String accountId, String tag) throws Exception {
+    if(!Utils.isEmptyField(getDelegatorUserName(userName, accountId))) userName = getDelegatorUserName(userName, accountId);
     storage_.removeTag(userName, accountId, tag);
   }
 
   public void updateTag(String userName, String accountId, Tag tag) throws Exception {
+    if(!Utils.isEmptyField(getDelegatorUserName(userName, accountId))) userName = getDelegatorUserName(userName, accountId);
     storage_.updateTag(userName, accountId, tag);
   }
 
   public List<Message> getMessageByTag(String userName, String accountId, String tagName) throws Exception {
+    if(!Utils.isEmptyField(getDelegatorUserName(userName, accountId))) userName = getDelegatorUserName(userName, accountId);
     return storage_.getMessageByTag(userName, accountId, tagName);
   }
 
@@ -2509,6 +2538,7 @@ public class MailServiceImpl implements MailService, Startable {
     MessageFilter filter = new MessageFilter("Filter By Tag");
     filter.setAccountId(accountId);
     filter.setTag(new String[] { tagId });
+    if(!Utils.isEmptyField(getDelegatorUserName(userName, accountId))) userName = getDelegatorUserName(userName, accountId);
     return getMessagePageList(userName, filter);
   }
 
@@ -2542,6 +2572,8 @@ public class MailServiceImpl implements MailService, Startable {
     try {
       //importMessageIntoServerMail(userName, accountId, folderId, mimeMessage, msgUID);
       //emlImportExport_.importMessage(userName, accountId, folderId, mimeMessage, msgUID);
+      if(isDelegatedAccount(userName, accountId))
+        userName = getDelegatedAccount(userName, accountId).getDelegateFrom();
       msgUID = importMessageIntoServerMail(userName, accountId, folderId, mimeMessage);
       emlImportExport_.importMessage(userName, accountId, folderId, mimeMessage, msgUID);
       result = true;
@@ -2695,6 +2727,8 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<Folder> getSubFolders(String userName, String accountId, String parentPath) throws Exception {
+    if(isDelegatedAccount(userName, accountId))
+      userName = getDelegatedAccount(userName, accountId).getDelegateFrom();
     return storage_.getSubFolders(userName, accountId, parentPath);
   }
 
@@ -2933,10 +2967,10 @@ public class MailServiceImpl implements MailService, Startable {
 
   public void setContinuationService(ContinuationService continuationService){
     continuationService_ = continuationService;
-
   }
 
   public void updateCheckingMailStatusByCometd(String userName, String accountId, CheckingInfo info) {
+    if(!Utils.isEmptyField(getCurrentUserName())) userName = this.getCurrentUserName();
     if (info != null && info.hasChanged()) {     
       try {      
         JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
@@ -3024,5 +3058,12 @@ public class MailServiceImpl implements MailService, Startable {
      return false;
     }
   }
+
+  public String getDelegatorUserName(String currentUserName, String accountId) throws Exception{
+    if(isDelegatedAccount(currentUserName, accountId))
+     return getDelegatedAccount(currentUserName, accountId).getDelegateFrom();
+    return null;
+  }
+  
 }
 

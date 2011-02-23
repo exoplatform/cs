@@ -17,13 +17,13 @@
 package org.exoplatform.mail.webui ;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.jcr.PathNotFoundException;
-import javax.jws.soap.SOAPBinding.Use;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -1603,7 +1603,7 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      if(MailUtils.isDelegated(accId)) {
+      if(!MailUtils.isFull(accId)) {
         uiMessageList.showMessage(event);
         return;
       }
@@ -1611,6 +1611,7 @@ public class UIMessageList extends UIForm {
       UITagForm uiTagForm = uiMessageList.createUIComponent(UITagForm.class, null, null) ;
       String username = uiPortlet.getCurrentUser();
       MailService mailService = uiMessageList.getApplicationComponent(MailService.class);
+      if(MailUtils.isDelegated(accId)) username = mailService.getDelegatedAccount(username, accId).getDelegateFrom();
       List<Tag> listTags = null ; 
       try {
         listTags = mailService.getTags(username, accId);
@@ -1639,11 +1640,12 @@ public class UIMessageList extends UIForm {
       UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class);
       String username = uiPortlet.getCurrentUser() ;
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if(MailUtils.isDelegated(accountId)) {
+      if(!MailUtils.isFull(accountId)) {
         uiMessageList.showMessage(event);
         return;
       }
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+      
       List<Tag> tagList = new ArrayList<Tag>();      
       tagList.add(mailSrv.getTag(username, accountId, tagId));
       mailSrv.addTag(username, accountId, uiMessageList.getCheckedMessage(), tagList);
@@ -1713,7 +1715,9 @@ public class UIMessageList extends UIForm {
         uiMessageList.showMessage(event);
         return;
       }
-
+      if(MailUtils.isDelegated(accountId)) {
+        username = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
+      }
       List<Message> appliedMsgList = uiMessageList.getCheckedMessage();
       String fromFolderId = uiFolderContainer.getSelectedFolder() ;
       List<Message> successes = new ArrayList<Message>();
@@ -1886,6 +1890,7 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser();
       String folderId = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+      
       Folder currentFolder = mailSrv.getFolder(username, accountId, folderId);
       List<Message> currentMsgList = new ArrayList<Message>(uiMessageList.messageList_.values());
       long numberUnreadMsg = Utils.getNumberOfUnreadMessageReally(currentMsgList);

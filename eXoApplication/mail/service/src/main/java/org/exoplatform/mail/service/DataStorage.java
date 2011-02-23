@@ -119,7 +119,7 @@ public interface DataStorage {
                              String folderIds[],
                              List<String> tagList,
                              SpamFilter spamFilter,
-                             boolean saveTotal) throws Exception;
+                             boolean saveTotal, String currentUserName) throws Exception;
 
   public boolean saveMessage(String username,
                              String accId,
@@ -129,7 +129,7 @@ public interface DataStorage {
                              SpamFilter spamFilter,
                              Info infoObj,
                              ContinuationService continuation,
-                             boolean saveTotal) throws Exception;
+                             boolean saveTotal, String currentUserName) throws Exception;
 
   /**
    * [IMAP] Saving message header on Local***/
@@ -142,7 +142,7 @@ public interface DataStorage {
                              SpamFilter spamFilter,
                              Info infoObj,
                              ContinuationService continuation,
-                             boolean saveTotal) throws Exception;
+                             boolean saveTotal, String currentUserName) throws Exception;
 
   public boolean saveMessage(String username,
                              String accId,
@@ -153,7 +153,7 @@ public interface DataStorage {
                              SpamFilter spamFilter,
                              Info infoObj,
                              ContinuationService continuation,
-                             boolean saveTotal) throws Exception;
+                             boolean saveTotal, String currentUserName) throws Exception;
 
   public boolean saveTotalMessage(String username,
                                   String accId,
@@ -339,7 +339,7 @@ public interface DataStorage {
                                  List<String> tagList,
                                  SpamFilter spamFilter,
                                  Info infoObj,
-                                 ContinuationService continuation) throws Exception;
+                                 ContinuationService continuation, String currentUsername) throws Exception;
 
   /**
    * Create a session provider for current context. The method first try to get a normal session provider, 

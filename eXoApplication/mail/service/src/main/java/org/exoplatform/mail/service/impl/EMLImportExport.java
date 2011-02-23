@@ -56,6 +56,7 @@ public class EMLImportExport implements MailImportExport {
                                MimeMessage mimeMessage,
                                long[] msgUID) throws Exception {
     try {
+      String currentUserName = Utils.getMailService().getCurrentUserName();
       return jcrDataStorage_.saveMessage(username,
                                          accountId,
                                          msgUID,
@@ -65,7 +66,7 @@ public class EMLImportExport implements MailImportExport {
                                          null,
                                          null,
                                          null,
-                                         true);
+                                         true, currentUserName);
     } catch (Exception e) {
       return false;
     }

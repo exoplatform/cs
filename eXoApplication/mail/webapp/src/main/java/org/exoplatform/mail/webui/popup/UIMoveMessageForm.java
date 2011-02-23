@@ -23,6 +23,7 @@ import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -92,6 +93,11 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       String destFolderId = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
       Folder destFolder =  null ;
+      
+      if(MailUtils.isDelegated(accountId)) {
+        username = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
+      }
+      
       List<Message> successes = new ArrayList<Message>();
       try {
         destFolder =  mailSrv.getFolder(username, accountId, destFolderId);

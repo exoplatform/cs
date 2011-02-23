@@ -61,7 +61,7 @@
 	      	    %>
 	      	</td>
 	      	<% }else {%>	
-	          <td class="$cssClass" style="overflow:hidden;">$fieldValue</td>
+	          <td class="$cssClass" style="overflow:hidden;" title="$fieldValue">$fieldValue</td>
 	          <%}%>
 	      <%}%>
 	      <%if(beanActions != null && beanActions.length > 0) { %>

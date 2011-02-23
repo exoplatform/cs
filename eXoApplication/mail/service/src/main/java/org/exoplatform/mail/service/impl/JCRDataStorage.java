@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -52,6 +53,7 @@ import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.poi.hslf.record.CurrentUserAtom;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -1215,8 +1217,8 @@ public class JCRDataStorage implements DataStorage {
                              String folderIds[],
                              List<String> tagList,
                              SpamFilter spamFilter,
-                             boolean saveTotal) throws Exception {
-    return saveMessage(username, accId, msg, folderIds, tagList, spamFilter, null, null, saveTotal);
+                             boolean saveTotal, String currentUserName) throws Exception {
+    return saveMessage(username, accId, msg, folderIds, tagList, spamFilter, null, null, saveTotal, currentUserName);
   }
 
   // Saving a message without UID
@@ -1228,7 +1230,7 @@ public class JCRDataStorage implements DataStorage {
                              SpamFilter spamFilter,
                              Info infoObj,
                              ContinuationService continuation,
-                             boolean saveTotal) throws Exception {
+                             boolean saveTotal, String currentUserName) throws Exception {
     return saveMessage(username,
                        accId,
                        null,
@@ -1238,7 +1240,7 @@ public class JCRDataStorage implements DataStorage {
                        spamFilter,
                        infoObj,
                        continuation,
-                       saveTotal);
+                       saveTotal, currentUserName);
   }
 
   public boolean saveMessage(String username,
@@ -1250,7 +1252,7 @@ public class JCRDataStorage implements DataStorage {
                              SpamFilter spamFilter,
                              Info infoObj,
                              ContinuationService continuation,
-                             boolean saveTotal) throws Exception {
+                             boolean saveTotal, String currentUserName) throws Exception {
     long[] messageUID = { msgUID };
     return saveMessage(username,
                        accId,
@@ -1261,7 +1263,7 @@ public class JCRDataStorage implements DataStorage {
                        spamFilter,
                        infoObj,
                        continuation,
-                       saveTotal);
+                       saveTotal, currentUserName);
   }
 
   /**
@@ -1300,7 +1302,7 @@ public class JCRDataStorage implements DataStorage {
                              SpamFilter spamFilter,
                              Info infoObj,
                              ContinuationService continuation,
-                             boolean saveTotal) throws Exception {
+                             boolean saveTotal, String currentUserName) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
@@ -1451,7 +1453,10 @@ public class JCRDataStorage implements DataStorage {
 
           JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
           JsonValue json = generatorImpl.createJsonObject(infoObj);
-          continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
+          if(!Utils.isEmptyField(currentUserName)) 
+            continuation.sendMessage(currentUserName, "/eXo/Application/mail/messages", json);
+          else
+            continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
         }
 
         if (saveTotal)
@@ -3266,7 +3271,7 @@ public class JCRDataStorage implements DataStorage {
                                  List<String> tagList,
                                  SpamFilter spamFilter,
                                  Info infoObj,
-                                 ContinuationService continuation) throws Exception {
+                                 ContinuationService continuation, String currentUserName) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
@@ -3407,7 +3412,9 @@ public class JCRDataStorage implements DataStorage {
 
           JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
           JsonValue json = generatorImpl.createJsonObject(infoObj);
-          continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
+          if(!Utils.isEmptyField(currentUserName))
+            continuation.sendMessage(currentUserName, "/eXo/Application/mail/messages", json);
+          else continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
         }
 
         // saveTotalMessage(username, accId, msgId, msg, sProvider);

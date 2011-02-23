@@ -140,8 +140,9 @@ public class UITagContainer extends UIForm {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
                                   .getSelectedValue();
-      if (accountId != null && accountId != "")
+      if (accountId != null && accountId != ""){
         tagList = mailService.getTags(username, accountId);
+      }  
     } catch (Exception e) {
     }
     return tagList;
@@ -166,6 +167,13 @@ public class UITagContainer extends UIForm {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
                                   .getSelectedValue();
+      if(!MailUtils.isFull(accountId)) {
+        uiPortlet.showMessage(event); 
+        return;
+      }
+      if(MailUtils.isDelegated(accountId)) {
+        username = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
+      } 
       uiMessageList.setMessagePageList(mailSrv.getMessagePagelistByTag(username, accountId, tagId));
       MessageFilter filter = new MessageFilter("Tag");
       filter.setTag(new String[] { tagId });
@@ -179,7 +187,7 @@ public class UITagContainer extends UIForm {
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       uiFolder.setSelectedFolder(null);
       uiTags.setSelectedTagId(tagId);
-
+     
       UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class);
       if (!MailUtils.isFieldEmpty(uiSearchForm.getTextSearch())) {
         uiSearchForm.setTextSearch("");
@@ -205,6 +213,10 @@ public class UITagContainer extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
       }
+      if(!MailUtils.isFull(accId)) {
+        uiPortlet.showMessage(event); 
+        return;
+      }
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
       UIEditTagForm uiTagForm = uiTag.createUIComponent(UIEditTagForm.class, null, null);
       uiPopupAction.activate(uiTagForm, 600, 0, true);
@@ -218,6 +230,14 @@ public class UITagContainer extends UIForm {
       UITagContainer uiTag = event.getSource();
       UIPopupAction uiPopup = uiTag.getAncestorOfType(UIMailPortlet.class)
                                    .getChild(UIPopupAction.class);
+      UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
+      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(!MailUtils.isFull(accountId)) {
+        uiPortlet.showMessage(event); 
+        return;
+      }
+      
       UIEditTagForm uiRenameTagForm = uiPopup.activate(UIEditTagForm.class, 450);
       uiRenameTagForm.setTag(tagId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
@@ -237,6 +257,14 @@ public class UITagContainer extends UIForm {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
                                   .getSelectedValue();
+      if(!MailUtils.isFull(accountId)) {
+        uiPortlet.showMessage(event); 
+        return;
+      }
+      if(MailUtils.isDelegated(accountId)) {
+        username = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
+      }
+
       mailSrv.removeTag(username, accountId, tagId);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       uiMessageList.updateList();
@@ -261,6 +289,10 @@ public class UITagContainer extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
                                   .getSelectedValue();
 
+      if(!MailUtils.isFull(accountId)) {
+        uiPortlet.showMessage(event); 
+        return;
+      }
       List<Message> listMessage = mailSrv.getMessageByTag(username, accountId, tagId);
       List<String> listTag = new ArrayList<String>();
       listTag.add(tagId);
@@ -282,6 +314,13 @@ public class UITagContainer extends UIForm {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
                                   .getSelectedValue();
+      if(!MailUtils.isFull(accountId)) {
+        uiPortlet.showMessage(event); 
+        return;
+      }
+      if(MailUtils.isDelegated(accountId)) {
+        username = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
+      }
       Tag tag = mailSrv.getTag(username, accountId, tagId);
       tag.setColor(color);
       mailSrv.updateTag(username, accountId, tag);

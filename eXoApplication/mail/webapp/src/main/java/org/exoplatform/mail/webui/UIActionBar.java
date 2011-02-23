@@ -89,21 +89,22 @@ public class UIActionBar extends UIContainer {
         return ;
       } else {
         try {
-        if (MailUtils.isFieldEmpty(folderId)) {
-          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
-        } else {
-          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true, '" + folderId + "') ;");
-          String uId = username;
-          if(MailUtils.isDelegated(accId)) {
-            uId = mailSrv.getDelegatedAccount(username, accId).getDelegateFrom();
+          if (MailUtils.isFieldEmpty(folderId)) {
+            context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
+          } else {
+            context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true, '" + folderId + "') ;");
+            String uId = username;
+            if(MailUtils.isDelegated(accId)) {
+              uId = mailSrv.getDelegatedAccount(username, accId).getDelegateFrom();
+            }
+            currentF = mailSrv.getFolder(uId, accId, folderId);
+            if(currentF.getNumberOfUnreadMessage() < 0) currentF.setNumberOfUnreadMessage(0);
           }
-          currentF = mailSrv.getFolder(uId, accId, folderId);
-          if(currentF.getNumberOfUnreadMessage() < 0) currentF.setNumberOfUnreadMessage(0);
-        }
-        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox('checkmail-notice') ;");
-        uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(true);
+          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox('checkmail-notice') ;");
+          uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(true);
         } catch (Exception e) {
-         
+          e.printStackTrace();
+         return;
         }
       }
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
@@ -126,6 +127,7 @@ public class UIActionBar extends UIContainer {
       String accId = uiSelect.getSelectedValue() ;      
       String username = MailUtils.getCurrentUser() ;
       MailService mailSvr = uiPortlet.getApplicationComponent(MailServiceImpl.class);
+      mailSvr.setCurrentUserName(username);
       Account acc = mailSvr.getDelegatedAccount(username, accId);
       if(Utils.isEmptyField(accId)) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;

@@ -17,6 +17,7 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.jcr.PathNotFoundException;
@@ -342,6 +343,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         if(checkbox.isChecked()) permission = Utils.SEND_RECIEVE ;
         OrganizationService orService = MailUtils.getOrganizationService() ;
         UIApplication uiApp = inputSet.getAncestorOfType(UIApplication.class) ;
+        List<String> delegatedUserFail = new ArrayList<String>();
         if(MailUtils.isFieldEmpty(receiver)) {
           uiApp.addMessage(new ApplicationMessage("UIMailSettings.msg.select-one-user", null, ApplicationMessage.INFO)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -349,16 +351,26 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
         } else if (receiver.contains(MailUtils.COMMA)) {
           for (String uid : receiver.split(MailUtils.COMMA)) {
             uid = uid.trim();
-            User us = orService.getUserHandler().findUserByName(uid) ;
+            User us = null;
+            if(!Utils.isEmptyField(uid))
+               us = orService.getUserHandler().findUserByName(uid) ;
             if(us != null && !uid.equalsIgnoreCase(curentUser)) {
               mService.delegateAccount(curentUser, uid, select.getValue(), permission);
-            }
+            }else delegatedUserFail.add(uid);
           }
         } else {
           User us = orService.getUserHandler().findUserByName(receiver) ;
           if(us != null && !us.getUserName().equalsIgnoreCase(curentUser)) {
             mService.delegateAccount(curentUser, receiver, select.getValue(), permission);
-          }
+          }else{
+            delegatedUserFail.clear();
+            delegatedUserFail.add(receiver);
+          } 
+        }
+        if(delegatedUserFail.size()> 0){
+          Object [] obj = delegatedUserFail.toArray();
+          uiApp.addMessage(new ApplicationMessage("UIMailSettings.msg.delegate_fail",Arrays.copyOf(obj, obj.length, String[].class), ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }
         UIDelegationAccountGrid grid = inputSet.getChild(UIDelegationAccountGrid.class);
         grid.updateGrid();

@@ -19,7 +19,6 @@ package org.exoplatform.mail.webui.popup;
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.service.Account;
-import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UISelectAccount;
@@ -71,6 +70,9 @@ public class UIComfirmPassword extends UIForm implements UIPopupComponent{
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      Account dAccount = mailSrv.getDelegatedAccount(username, accountId);
+      if(dAccount != null) username = dAccount.getDelegateFrom();
+      
       Account acc = mailSrv.getAccountById(username, accountId) ;
       acc.setIsSavePassword(isSavePw) ;
       acc.setIncomingPassword(newPw) ;

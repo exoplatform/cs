@@ -301,7 +301,7 @@ AutoComplete.prototype.addValue = function(obj){
 		value += obj.innerHTML + ", ";
 		value = value.replace(/\&lt;/gi,"<").replace(/\&gt;/gi,">");
 	}else if(this.ACTION_SEARCH_USER == true){
-		value += obj.innerHTML;
+		value += obj.innerHTML + ", ";
 	}
 	eXo.mail.AutoComplete.activeInput.value = this.stripHTML(value);
 	eXo.mail.AutoComplete.hideMenu();

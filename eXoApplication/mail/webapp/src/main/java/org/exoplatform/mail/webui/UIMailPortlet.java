@@ -35,12 +35,15 @@ import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.mortbay.cometd.AbstractBayeux;
@@ -205,5 +208,11 @@ public class UIMailPortlet extends UIPortletApplication {
     } catch (Exception e) {
     }
     return cometdContextName;
+  }
+  
+  public void showMessage(Event event) {
+    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+    uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;
+    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
   }
 } 
