@@ -1330,7 +1330,7 @@ public class JCRDataStorage implements DataStorage {
       eventNode.setProperty(Utils.EXO_ID, event.getId()) ;
       String repeatType = event.getRepeatType();
       if (CalendarEvent.RP_DAILY.equals(repeatType) || CalendarEvent.RP_WEEKLY.equals(repeatType) || CalendarEvent.RP_MONTHLY.equals(repeatType)
-          || CalendarEvent.RP_YEARLY.equals(repeatType)){
+          || CalendarEvent.RP_YEARLY.equals(repeatType) || CalendarEvent.RP_WORKINGDAYS.equals(repeatType)){
         eventNode.addMixin(Utils.EXO_REPEAT_CALENDAR_EVENT);
         eventNode.addMixin(Utils.MIX_REFERENCEABLE);
         eventNode.setProperty(Utils.EXO_RECURRENCE_ID, "");
@@ -3160,7 +3160,7 @@ public class JCRDataStorage implements DataStorage {
   public Map<String, CalendarEvent> getDailyOccurrences(CalendarEvent recurEvent, java.util.Calendar from, java.util.Calendar to, Boolean isWorkingDay) throws Exception {
     String repeatType = recurEvent.getRepeatType();
     
-    if (Utils.isEmpty(repeatType) || !repeatType.equals(CalendarEvent.RP_DAILY)) return null;
+    if (Utils.isEmpty(repeatType) || (!repeatType.equals(CalendarEvent.RP_DAILY) && !repeatType.equals(CalendarEvent.RP_WORKINGDAYS))) return null;
     
     // check if this recurEvent is expired
     java.util.Calendar until = null;
@@ -3998,6 +3998,8 @@ public class JCRDataStorage implements DataStorage {
         originalEvent.setParticipantStatus(occurrence.getParticipantStatus());
         originalEvent.setReminders(occurrence.getReminders());
         originalEvent.setPriority(occurrence.getPriority());
+        originalEvent.setRepeatType(occurrence.getRepeatType());
+        originalEvent.setRepeatUntilDate(occurrence.getRepeatUntilDate());
 
         // save original event
         saveUserEvent(username, toCalendar, originalEvent,  false) ;
