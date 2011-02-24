@@ -2860,7 +2860,7 @@ eXo.calendar.EventTooltip = {
 		if(data.status != "null") html += '<div class="Status">' + data.status.replace("-"," ") + '</div>';
 		self._container.style.display = "block";
 		//var topArrow = self.currentEvent.offsetHeight/2 - 7; 
-		self._container.innerHTML = '<div class="Container">' + html + '</div><div class="Clear"><span></span></div>';	
+		self._container.innerHTML = '<div class="BgTLEvent"><div class="BgTREvent"><div class="BgTCEvent"><span></span></div></div></div><div class="BgMLEvent"><div class="BgMREvent"><div class="BgMCEvent">' + html + '</div></div></div><div class="BgBLEvent"><div class="BgBREvent"><div class="BgBCEvent"><span></span></div></div></div><div class="Clear"><span></span></div>';	
 		self._container.style.zIndex = 1000;
 		self.positioning();
 	},

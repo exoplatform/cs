@@ -1389,19 +1389,73 @@
 }
 
 .UICalendarEventTooltip {
-	border:1px solid #ccc;
-	padding:3px;
-	background:#ffc;
+	background: #d4ecee;
 	max-width:300px;
 	min-width:200px;
 	position:absolute;
 	display:none;
 }
+
 .UICalendarEventTooltip .Time {
-	font-weight:bold;
-	border-bottom: 1px #ccc solid;
+	font-weight: bold;
+	color: #595959;
+	margin-bottom: 5px;
 }
 
 .UICalendarEventTooltip .Title {
-	font-weight:bold;
+	font-weight: bold;
+	color: #000;
+	margin-bottom: 5px;
 }
+
+.UICalendarEventTooltip .Description{
+	color: #000;
+	margin-bottom: 5px;
+}
+
+
+.UICalendarEventTooltip .BgTLEvent{
+	background: url('../background/EventDetailBorder.gif') no-repeat left top;
+	padding-left: 6px;
+}
+
+.UICalendarEventTooltip .BgTREvent{
+	background: url('../background/EventDetailBorder.gif') no-repeat right top;
+	padding-right: 5px;
+}
+
+.UICalendarEventTooltip .BgTCEvent{
+	background: url('../background/EventDetailBorder.gif') repeat-x left -7px;
+	height: 7px;
+}
+
+.UICalendarEventTooltip .BgMREvent{
+	background: url('../background/EventDetailMR.gif') repeat-y right top;
+	padding-right: 5px;
+}
+
+.UICalendarEventTooltip .BgMLEvent{
+	padding-left: 5px;
+	background: url('../background/EventDetailML.gif') repeat-y left top;
+}
+
+.UICalendarEventTooltip .BgMCEvent{
+	background: #d4ecee;
+	padding: 13px;
+}
+
+.UICalendarEventTooltip .BgBLEvent{
+	background: url('../background/EventDetailBorder.gif') no-repeat left -14px;
+	padding-left: 7px;
+}
+
+.UICalendarEventTooltip .BgBREvent{
+	background: url('../background/EventDetailBorder.gif') no-repeat right -14px;
+	padding-right: 5px;
+}
+
+.UICalendarEventTooltip .BgBCEvent{
+	background: url('../background/EventDetailBorder.gif') repeat-x left -20px;
+	height: 6px;
+}
+
