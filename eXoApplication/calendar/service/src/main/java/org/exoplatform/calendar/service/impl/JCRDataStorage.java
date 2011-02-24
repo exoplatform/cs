@@ -3082,13 +3082,14 @@ public class JCRDataStorage implements DataStorage {
     if (recurEvent == null || recurEvent.getRepeatType().equals(CalendarEvent.RP_NOREPEAT)) return null;
     try {
       Node calendarHome = null;
-      if (recurEvent.getCalType().equals(Calendar.TYPE_PRIVATE)) {
+      int calType = Integer.parseInt(recurEvent.getCalType());
+      if (calType == Calendar.TYPE_PRIVATE) {
        calendarHome = getUserCalendarHome(username);
       }
-      if (recurEvent.getCalType().equals(Calendar.TYPE_SHARED)) {
+      if (calType == Calendar.TYPE_SHARED) {
         calendarHome = getSharedCalendarHome();
       }
-      if (recurEvent.getCalType().equals(Calendar.TYPE_PUBLIC)) {
+      if (calType == Calendar.TYPE_PUBLIC) {
         calendarHome = getPublicCalendarHome();
       }
       if (calendarHome == null) return null;

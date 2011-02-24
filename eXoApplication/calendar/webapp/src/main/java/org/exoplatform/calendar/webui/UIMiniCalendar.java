@@ -120,6 +120,7 @@ public class UIMiniCalendar extends UICalendarView  {
     Calendar cal = getEndDateOfMonth() ;
     cal.add(java.util.Calendar.MILLISECOND, -1) ;
     eventQuery.setToDate(cal) ;
+    eventQuery.setExcludeRepeatEvent(true);
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     dataMap = calendarService.searchHightLightEvent(CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
   }
