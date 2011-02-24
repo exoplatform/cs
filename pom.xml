@@ -16,15 +16,15 @@
   <scm>
    <connection>scm:svn:http://svn.exoplatform.org/projects/cs/trunk</connection>
    <developerConnection>scm:svn:http://svn.exoplatform.org/projects/cs/trunk</developerConnection>
-   <url>http://fisheye.exoplatform.org/browse/cs/trunk</url>
+   <url>https://fisheye.exoplatform.org/browse/cs/trunk</url>
   </scm>
   <issueManagement>
     <system>jira</system>
-    <url>http://jira.exoplatform.org/browse/CS</url>
+    <url>https://jira.exoplatform.org/browse/CS</url>
   </issueManagement>
   <ciManagement>
     <system>hudson</system>
-    <url>http://builder.exoplatform.org/hudson/job/cs-trunk-ci/</url>
+    <url>https://ci.exoplatform.org/job/cs-trunk-ci/</url>
   </ciManagement>
   <properties>
     <org.exoplatform.kernel.version>2.2.7-GA</org.exoplatform.kernel.version>
