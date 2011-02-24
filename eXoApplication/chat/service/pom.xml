@@ -224,16 +224,4 @@
     </dependency> 
 
   </dependencies>
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <configuration>
-          <configLocation>${exo.projects.directory.config}/exo-checkstyle-checker.xml</configLocation>
-          <suppressionsLocation>${exo.projects.directory.config}/exo-checkstyle-suppressions.xml</suppressionsLocation>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
 </project>
