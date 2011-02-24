@@ -298,10 +298,10 @@ public class EventQuery {
   public long getLimitedItems() {
     return limitedItems;
   }
-  public void setexcludeRepeatEvent(Boolean excludeRepeatEvent) {
+  public void setExcludeRepeatEvent(Boolean excludeRepeatEvent) {
     this.excludeRepeatEvent = excludeRepeatEvent;
   }
-  public Boolean getexcludeRepeatEvent() {
+  public Boolean getExcludeRepeatEvent() {
     return excludeRepeatEvent;
   }
 }

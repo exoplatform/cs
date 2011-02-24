@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -2519,7 +2520,70 @@ public class JCRDataStorage implements DataStorage {
     }finally {
     	calendarHome.getSession().logout();
     }
+    
+    // add data from recurrence event
+    mapData.putAll(searchHighlightRecurrenceEvent(username, eventQuery, publicCalendarIds));
+    
     return mapData ;    
+  }
+  
+  public Map<Integer, String> searchHighlightRecurrenceEvent(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception {
+    Map<Integer, String > mapData = new HashMap<Integer, String>() ;
+    int fromDayOfYear = eventQuery.getFromDate().get(java.util.Calendar.DAY_OF_YEAR);
+    int toDayOfYear = eventQuery.getFromDate().get(java.util.Calendar.DAY_OF_YEAR);
+    int daysOfYear = eventQuery.getFromDate().getMaximum(java.util.Calendar.DAY_OF_YEAR);
+    if(eventQuery.getToDate().get(java.util.Calendar.DAY_OF_YEAR ) > eventQuery.getFromDate().get(java.util.Calendar.DAY_OF_YEAR)) {
+      toDayOfYear = toDayOfYear + daysOfYear ;
+    }
+    java.util.Calendar tempCalendar = Utils.getInstanceTempCalendar();
+    
+    List<CalendarEvent> originalRecurEvents = getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate());    
+    boolean isVictory = false ;
+    if (originalRecurEvents != null && originalRecurEvents.size() > 0) {
+      Iterator<CalendarEvent> recurEventsIter = originalRecurEvents.iterator();
+      while (recurEventsIter.hasNext() && !isVictory) {
+        CalendarEvent recurEvent = recurEventsIter.next();
+        Map<String,CalendarEvent> tempMap = getOccurrenceEvents(recurEvent, eventQuery.getFromDate(), eventQuery.getToDate());
+        if (tempMap != null) {
+          for (CalendarEvent event : tempMap.values().toArray(new CalendarEvent[0])) {
+            if (isVictory) break;
+            tempCalendar.setTime(event.getFromDateTime());
+            int eventFromDayOfYear = tempCalendar.get(java.util.Calendar.DAY_OF_YEAR);
+            if (tempCalendar.get(java.util.Calendar.YEAR) < eventQuery.getFromDate().get(java.util.Calendar.YEAR)) {
+              eventFromDayOfYear = 1 ;
+            }
+            
+            tempCalendar.setTime(event.getToDateTime());
+            int eventToDayOfYear = tempCalendar.get(java.util.Calendar.DAY_OF_YEAR);
+            if (tempCalendar.get(java.util.Calendar.YEAR) > eventQuery.getToDate().get(java.util.Calendar.YEAR)) {
+              eventToDayOfYear = 366 ;
+            }
+            
+            Integer begin = -1 ;
+            Integer end = -1 ;
+            if(fromDayOfYear >= eventFromDayOfYear) {
+              begin = fromDayOfYear ;
+              if(toDayOfYear <= eventToDayOfYear) {
+                end = toDayOfYear ;
+                isVictory = true ;
+              } else {
+                end = eventToDayOfYear ;
+              }
+            } else {
+              begin = eventFromDayOfYear ;
+              if(toDayOfYear <= eventToDayOfYear) {
+                end = toDayOfYear ;
+              } else {
+                end = eventToDayOfYear ;
+              }
+            }
+            if(begin > 0 && end > 0) for(Integer i = begin; i <= end; i++) mapData.put(i, VALUE);
+          }
+            
+        }
+      }
+    }
+    return mapData;
   }
 
   /**
@@ -3017,7 +3081,18 @@ public class JCRDataStorage implements DataStorage {
     
     if (recurEvent == null || recurEvent.getRepeatType().equals(CalendarEvent.RP_NOREPEAT)) return null;
     try {
-      Node calendarHome = getUserCalendarHome(username);
+      Node calendarHome = null;
+      if (recurEvent.getCalType().equals(Calendar.TYPE_PRIVATE)) {
+       calendarHome = getUserCalendarHome(username);
+      }
+      if (recurEvent.getCalType().equals(Calendar.TYPE_SHARED)) {
+        calendarHome = getSharedCalendarHome();
+      }
+      if (recurEvent.getCalType().equals(Calendar.TYPE_PUBLIC)) {
+        calendarHome = getPublicCalendarHome();
+      }
+      if (calendarHome == null) return null;
+      
       Node eventNode = calendarHome.getNode(recurEvent.getCalendarId()).getNode(recurEvent.getId());
       if (eventNode == null || !eventNode.isNodeType(Utils.MIX_REFERENCEABLE)) return null;
       PropertyIterator propIter = eventNode.getReferences();
@@ -3621,7 +3696,7 @@ public class JCRDataStorage implements DataStorage {
   /**
    * This function is used to update a occurrence event. <br/>
    * A occurrence event after update will be an exception occurrence from recurrence series and will 
-   * be save as an same-name sibling with original recurrence event node 
+   * be save as an new event node refers to original node
    * @param fromCalendar
    * @param toCalendar
    * @param fromType
@@ -3679,24 +3754,54 @@ public class JCRDataStorage implements DataStorage {
             break;
           case Calendar.TYPE_SHARED:
             //move events form public to shared calendar
-            /*if(getSharedCalendarHome().hasNode(username)){
+            if(getSharedCalendarHome().hasNode(username)){
               for(CalendarEvent calEvent : calEvents) {
-                removeUserEvent(username, fromCalendar, calEvent.getId()) ;
+                // if this event is a 'virtual' occurrence
+                if (calEvent.getIsExceptionOccurrence() == null || !calEvent.getIsExceptionOccurrence()) {
+                  // get the original recurrence event to update excludeId property
+                  CalendarEvent originalEvent = getEvent(username, calEvent.getId());
+                  List<String> excludeId;
+                  if (originalEvent.getExcludeId() == null) {
+                    excludeId = new ArrayList<String>();
+                  } else {
+                    excludeId = new ArrayList<String>(Arrays.asList(originalEvent.getExcludeId())); 
+                  }
+                  excludeId.add(calEvent.getRecurrenceId());
+                  originalEvent.setExcludeId(excludeId.toArray(new String[0]));
+                  saveUserEvent(username, fromCalendar, originalEvent, false);
+                }
+                
+                //removeUserEvent(username, fromCalendar, calEvent.getId()) ;
                 calEvent.setCalendarId(toCalendar) ;
+                calEvent.setRepeatType(CalendarEvent.RP_NOREPEAT);
                 saveEventToSharedCalendar(username, toCalendar, calEvent, getSharedCalendarHome().getNode(username).hasNode(calEvent.getId()));
               }
-            }*/
+            }
             break;
           case Calendar.TYPE_PUBLIC:
             //move events form public to public calendar
-            /*if(getPublicCalendarHome().hasNode(toCalendar)){
+            if(getPublicCalendarHome().hasNode(toCalendar)){
               for(CalendarEvent calEvent : calEvents) {
-                removeUserEvent(username, fromCalendar, calEvent.getId()) ;
+                //removeUserEvent(username, fromCalendar, calEvent.getId()) ;
+                if (calEvent.getIsExceptionOccurrence() == null || !calEvent.getIsExceptionOccurrence()) {
+                  // get the original recurrence event to update excludeId property
+                  CalendarEvent originalEvent = getEvent(username, calEvent.getId());
+                  List<String> excludeId;
+                  if (originalEvent.getExcludeId() == null) {
+                    excludeId = new ArrayList<String>();
+                  } else {
+                    excludeId = new ArrayList<String>(Arrays.asList(originalEvent.getExcludeId())); 
+                  }
+                  excludeId.add(calEvent.getRecurrenceId());
+                  originalEvent.setExcludeId(excludeId.toArray(new String[0]));
+                  saveUserEvent(username, fromCalendar, originalEvent, false);
+                }
                 calEvent.setCalendarId(toCalendar) ;
+                calEvent.setRepeatType(CalendarEvent.RP_NOREPEAT);
                 savePublicEvent(toCalendar, calEvent, getPublicCalendarHome().getNode(toCalendar).hasNode(calEvent.getId())) ;
               }
             }
-            break;*/
+            break;
           default:
             break;
           }
@@ -3709,8 +3814,24 @@ public class JCRDataStorage implements DataStorage {
             //move events form share to public calendar
             /*if(getUserCalendarHome(username).hasNode(toCalendar)) {
               for(CalendarEvent calEvent : calEvents) {
-                removeSharedEvent(username, fromCalendar, calEvent.getId()) ;
+                //removeSharedEvent(username, fromCalendar, calEvent.getId()) ;
+                // if this event is a 'virtual' occurrence
+                if (calEvent.getIsExceptionOccurrence() == null || !calEvent.getIsExceptionOccurrence()) {
+                  // get the original recurrence event to update excludeId property
+                  CalendarEvent originalEvent = getEvent(username, calEvent.getId());
+                  List<String> excludeId;
+                  if (originalEvent.getExcludeId() == null) {
+                    excludeId = new ArrayList<String>();
+                  } else {
+                    excludeId = new ArrayList<String>(Arrays.asList(originalEvent.getExcludeId())); 
+                  }
+                  excludeId.add(calEvent.getRecurrenceId());
+                  originalEvent.setExcludeId(excludeId.toArray(new String[0]));
+                  saveUserEvent(username, fromCalendar, originalEvent, false);
+                }
+                
                 calEvent.setCalendarId(toCalendar) ;
+                calEvent.setRepeatType(CalendarEvent.RP_NOREPEAT);
                 saveUserEvent(username, toCalendar, calEvent, getUserCalendarHome(username).getNode(toCalendar).hasNode(calEvent.getId())) ;
               }
             }*/
@@ -3720,7 +3841,22 @@ public class JCRDataStorage implements DataStorage {
             /*if(getSharedCalendarHome().hasNode(username)){
               for(CalendarEvent calEvent : calEvents) {
                 if(!fromCalendar.equals(toCalendar)) {
-                  removeSharedEvent(username, fromCalendar, calEvent.getId()) ;
+                  // if this event is a 'virtual' occurrence
+                  if (calEvent.getIsExceptionOccurrence() == null || !calEvent.getIsExceptionOccurrence()) {
+                    // get the original recurrence event to update excludeId property
+                    CalendarEvent originalEvent = getEvent(username, calEvent.getId());
+                    List<String> excludeId;
+                    if (originalEvent.getExcludeId() == null) {
+                      excludeId = new ArrayList<String>();
+                    } else {
+                      excludeId = new ArrayList<String>(Arrays.asList(originalEvent.getExcludeId())); 
+                    }
+                    excludeId.add(calEvent.getRecurrenceId());
+                    originalEvent.setExcludeId(excludeId.toArray(new String[0]));
+                    saveUserEvent(username, fromCalendar, originalEvent, false);
+                  }
+                  
+                  //removeSharedEvent(username, fromCalendar, calEvent.getId()) ;
                   calEvent.setCalendarId(toCalendar) ;
                   saveEventToSharedCalendar(username, toCalendar, calEvent, getSharedCalendarHome().getNode(username).hasNode(calEvent.getId()));
                 } else {

@@ -8,6 +8,7 @@
 	import java.util.Locale;
 	import org.exoplatform.calendar.CalendarUtils;
 	import org.exoplatform.webui.application.WebuiRequestContext;
+	import org.exoplatform.calendar.service.CalendarEvent;
 	uiform.begin() ;
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 	def rcontext = _ctx.getRequestContext() ;
@@ -163,9 +164,11 @@
 				</tbody>
 			</table>
 			<%
+					/*
 					startMonh =  uicomponent.getBeginDateOfMonth() ;
 					endMonth =  uicomponent.getEndDateOfMonth() ;					
 					eventList = uicomponent.getDataMap().values() ;
+					//eventList = uicomponent.eventData_;
 					for(event in eventList){
 					startTime = event.fromDateTime.getTime() ;
 					endTime = event.toDateTime.getTime() ;
@@ -178,15 +181,48 @@
 					}
 					color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.calendarId) ;
 					moveAction = uicomponent.url("MoveEvent",event.getId());
+					Boolean isOccur = (event.getRepeatType()!=CalendarEvent.RP_NOREPEAT && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()))?true:false;
+          String recurId = event.getRecurrenceId();
+          */
+
+            
+          startMonth =  uicomponent.getBeginDateOfMonth() ;
+          endMonth =  uicomponent.getEndDateOfMonth() ;  
+          cl = uicomponent.getBeginDateOfMonthView() ;             
+          t = 0 ; 
+          numberOfDays = 35;
+          while(t++ < numberOfDays) {
+            day = cl.get(Calendar.DATE) ;
+            month = cl.get(Calendar.MONTH) ;
+            year = cl.get(Calendar.YEAR) ;
+            key = uicomponent.keyGen(day, month, year) ;
+            events = uicomponent.getEventData().get(key) ; 
+	          if(events != null) {
+	            for(event in events.values()){ 
+	                startTime = event.fromDateTime.getTime() ;
+	                endTime = event.toDateTime.getTime() ;
+	                startIndex = 0;
+	                endIndex = uicomponent.getCurrentCalendar().getMaximum(Calendar.WEEK_OF_MONTH) ;
+	                if(!event.fromDateTime.before(startMonth.getTime())) {
+	                    Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+	                    cal.setTime(event.fromDateTime) ;
+	                    startIndex = cal.get(Calendar.WEEK_OF_MONTH) ;
+	                }
+	                color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.calendarId) ;
+	                moveAction = uicomponent.url("MoveEvent",event.getId());
+	                Boolean isOccur = (event.getRepeatType()!=CalendarEvent.RP_NOREPEAT && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()))?true:false;
+	                String recurId = event.getRecurrenceId();          
 					%>
+					
+					
 					<div class="DayContentContainer EventBoxes" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" 
 					startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
-					startTime="$startTime" endTime="$endTime" moveAction="$moveAction">
+					startTime="$startTime" endTime="$endTime" moveAction="$moveAction" isOccur="$isOccur" recurId="$recurId">
 						<div class="EventOnDayBorder $color">
 							<div class="EventOnDayContent">
 								<div>
 									<div class="EventCheckbox">
-										<%uicomponent.renderField(uicomponent.getChildById(event.id))%>
+										<%uicomponent.renderField(uicomponent.getChildById(uicomponent.getCheckboxId(event)))%>
 									</div>
 									<div class="EventSummary">
 										<div class="<%=event.eventState%>Icon">
@@ -201,7 +237,12 @@
 						</div>
 					</div>
 					<%
-					}%>	
+					//}
+					  }
+          }
+            cl.add(Calendar.DATE, 1) ;
+          } 
+					%>	
 		</div>
 			</div>
 		</div>
@@ -255,7 +296,7 @@
               		<div class="UIRightPopupMenuContainer">
               			<%
               				for(String act : uicomponent.getQuickEditMenu()) {
-              				link = uicomponent.event(act,uicomponent.id,"id&$uicomponent.CALENDARID=calId&calType=caltype") ;
+              				link = uicomponent.event(act,uicomponent.id,"id&$uicomponent.CALENDARID=calId&calType=caltype&isOccur=isOccur&recurId=recurId") ;
               				icon = act + "EventIcon" ;
               			%>
               				<div class="MenuItem">

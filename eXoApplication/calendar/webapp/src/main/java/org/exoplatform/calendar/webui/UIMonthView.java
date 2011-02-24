@@ -18,9 +18,12 @@ package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.PathNotFoundException;
 
@@ -65,11 +68,15 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
       @EventConfig(listeners = UICalendarView.ExportEventActionListener.class),
       @EventConfig(listeners = UICalendarView.MoveEventActionListener.class),
-      @EventConfig(listeners = UIMonthView.UpdateEventActionListener.class)
+      @EventConfig(listeners = UIMonthView.UpdateEventActionListener.class),
+      @EventConfig(listeners = UICalendarView.ConfirmDeleteOnlyInstance.class),
+      @EventConfig(listeners = UICalendarView.ConfirmDeleteAllSeries.class),
+      @EventConfig(listeners = UICalendarView.ConfirmDeleteCancel.class)
     }
 )
 public class UIMonthView extends UICalendarView {
   private LinkedHashMap<String, CalendarEvent> dataMap_ = new LinkedHashMap<String, CalendarEvent>() ;
+  private Map<String, Map<String,CalendarEvent>> eventData_ = new HashMap<String, Map<String,CalendarEvent>>();
   public UIMonthView() throws Exception{
     super() ;
   }
@@ -87,7 +94,22 @@ public class UIMonthView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(getBeginDateOfMonthView()) ;
     eventQuery.setToDate(getEndDateOfMonthView()) ;
+    eventQuery.setExcludeRepeatEvent(true);
     List<CalendarEvent> allEvents = calendarService.getEvents(username, eventQuery, getPublicCalendars()) ;
+    
+    List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate());    
+    if (originalRecurEvents != null && originalRecurEvents.size() > 0) {
+      Iterator<CalendarEvent> recurEventsIter = originalRecurEvents.iterator();
+      while (recurEventsIter.hasNext()) {
+        CalendarEvent recurEvent = recurEventsIter.next();
+        Map<String,CalendarEvent> tempMap = calendarService.getOccurrenceEvents(recurEvent, eventQuery.getFromDate(), eventQuery.getToDate());
+        if (tempMap != null) {
+          recurrenceEventsMap.put(recurEvent.getId(), tempMap);
+          allEvents.addAll(tempMap.values());
+        }
+      }
+    }
+    
     Iterator childIter = getChildren().iterator() ;
     while(childIter.hasNext()) {
       UIComponent comp = (UIComponent)childIter.next() ;
@@ -97,15 +119,57 @@ public class UIMonthView extends UICalendarView {
     }
     dataMap_.clear() ;
     Iterator<CalendarEvent> eventIter = allEvents.iterator() ;
-    while(eventIter.hasNext()) {
+    /*while(eventIter.hasNext()) {
       CalendarEvent ce = (CalendarEvent)eventIter.next() ; 
+      //eventData_.add(ce);
       dataMap_.put(ce.getId(), ce) ;
       UIFormCheckBoxInput<Boolean> input = new UIFormCheckBoxInput<Boolean>(ce.getId(), ce.getId(), false) ;
       input.setBindingField(ce.getCalendarId()) ;
       addChild(input) ;
       eventIter.remove() ;
+    }*/
+    
+    int maxDay = 35;
+    int i = 0;
+    Calendar c = getBeginDateOfMonthView();
+    
+    while(i++ < maxDay) {
+      Map<String, CalendarEvent> list = new HashMap<String, CalendarEvent>() ;
+      String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
+      eventData_.put(key, list) ;
+      c.add(Calendar.DATE, 1) ;
     }
+    
+    while(eventIter.hasNext()) {
+      CalendarEvent event = eventIter.next();
+      
+      c.setTime(event.getFromDateTime());
+      String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
+      eventData_.get(key).put(event.getId(), event) ;
+      
+      dataMap_.put(event.getId(), event) ;
+      
+      // if event is a occurrence
+      UIFormCheckBoxInput<Boolean> input;
+      if (!CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && !CalendarUtils.isEmpty(event.getRecurrenceId())) {
+        input = new UIFormCheckBoxInput<Boolean>(getCheckboxId(event), getCheckboxId(event), false) ;
+      } else {
+        input = new UIFormCheckBoxInput<Boolean>(event.getId(), event.getId(), false) ;
+      }
+      input.setBindingField(event.getCalendarId()) ;
+      addChild(input) ;
+      
+      eventIter.remove() ;
+    }  
   }
+  
+  public String getCheckboxId(CalendarEvent event) throws Exception {
+    if (!CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && !CalendarUtils.isEmpty(event.getRecurrenceId())) {
+      return event.getId() + "-" + event.getRecurrenceId();
+    }
+    else return event.getId();
+  }
+  
   public java.util.Calendar getBeginDateOfMonthView() throws Exception{
     java.util.Calendar temCal = getBeginDateOfMonth() ;
     temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
@@ -140,15 +204,37 @@ public class UIMonthView extends UICalendarView {
 
   protected List<CalendarEvent> getSelectedEvents() {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
+    UIFormCheckBoxInput<Boolean>  checkbox;
     for(String id : dataMap_.keySet()) {
-      UIFormCheckBoxInput<Boolean>  checkbox = getChildById(id )  ;
+      checkbox = getChildById(id )  ;
       if(checkbox != null && checkbox.isChecked()) events.add(dataMap_.get(id)) ;
     }
+    
+    if (recurrenceEventsMap.isEmpty()) return events;
+    
+    // get all selected events with occurrence event
+    Iterator<String> occurIter = recurrenceEventsMap.keySet().iterator();
+    while (occurIter.hasNext()) {
+      String eventId = occurIter.next();
+      Iterator<String> recurIdIter = recurrenceEventsMap.get(eventId).keySet().iterator();
+      while (recurIdIter.hasNext()) {
+        String recurId = recurIdIter.next();
+        checkbox = getChildById(eventId + "-" + recurId);
+        if(checkbox != null && checkbox.isChecked()) events.add(recurrenceEventsMap.get(eventId).get(recurId)) ;
+      }
+    }
+    
     return events ; 
   }
+  
   public LinkedHashMap<String, CalendarEvent> getDataMap() {
     return dataMap_ ;
   }
+  
+  protected Map<String, Map<String,CalendarEvent>> getEventData() {
+    return eventData_;
+  }
+  
   static  public class ChangeViewActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
@@ -164,13 +250,12 @@ public class UIMonthView extends UICalendarView {
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       String username = CalendarUtils.getCurrentUser() ;
       String value = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      //System.out.print(value);
-      //String eventId = event.getRequestContext().getRequestParameter(EVENTID) ;
-      //String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      
       CalendarService calService = CalendarUtils.getCalendarService() ;
       try {
         List<CalendarEvent> list = calendarview.getSelectedEvents() ;
         List<CalendarEvent> dataList = new ArrayList<CalendarEvent>(){} ;
+        List<CalendarEvent> occurrenceList = new ArrayList<CalendarEvent>();
         java.util.Calendar tempCalFrom = calendarview.getInstanceTempCalendar() ;
         tempCalFrom.setTimeInMillis((Long.parseLong(value))) ;
         java.util.Calendar cal = CalendarUtils.getInstanceOfCurrentCalendar() ;

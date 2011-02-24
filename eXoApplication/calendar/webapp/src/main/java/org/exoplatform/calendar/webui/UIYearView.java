@@ -88,6 +88,7 @@ public class UIYearView extends UICalendarView {
     }
     eventQuery.setFromDate(beginYear) ;
     eventQuery.setToDate(endYear) ;
+    eventQuery.setExcludeRepeatEvent(true);
     yearData_ = calendarService.searchHightLightEvent(username, eventQuery, getPublicCalendars());
     UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
     uiCategory.setValue(categoryId_) ;

@@ -10,6 +10,7 @@
 	import java.util.Locale;
 	import org.exoplatform.webui.application.WebuiRequestContext;
 	import java.util.SimpleTimeZone;
+	import org.exoplatform.calendar.service.CalendarEvent;
 	uiform.begin() ;
 	Date currentDate = uicomponent.getCurrentDate();
 	int currentDay = uicomponent.getCurrentDay() ;
@@ -156,8 +157,10 @@
 								 	color = uicomponent.getColors().get(ce.calType +CalendarUtils.COLON+ ce.getCalendarId()) ;
 								 	//actionLink =  uicomponent.event("SaveEvent",ce.id+"&calendarId="+ce.calendarId+"&startTime=beginTime&finishTime=endTime") ;
 									actionLink = uicomponent.url("SaveEvent",ce.id);
+									Boolean isOccur = (ce.getRepeatType()!=CalendarEvent.RP_NOREPEAT && (ce.getIsExceptionOccurrence() == null || !ce.getIsExceptionOccurrence()))?true:false;
+                  String recurId = ce.getRecurrenceId();
                   %>
-                  <div class="EventContainerBorder EventBoxes $color" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="$ce.id" calid="$ce.calendarId" actionlink="$actionLink"  startTime="$beginTime" endTime="$endTime">
+                  <div class="EventContainerBorder EventBoxes $color" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="$ce.id" calid="$ce.calendarId" actionlink="$actionLink"  startTime="$beginTime" endTime="$endTime" isOccur="$isOccur" recurId="$recurId">
                     <div class="<%=ce.eventState%>Icon">
                     	<div class="<%=ce.getPriority()%>PriorityIcon" style="float:left;"><span></span></div>
                     </div>
@@ -267,7 +270,7 @@
 	      <div class="UIRightPopupMenuContainer">
 	        <%
 	  				for(String act : uicomponent.getQuickEditMenu()) {
-	  				link = uicomponent.event(act,uicomponent.id,"id&$uicomponent.CALENDARID=calId&calType=caltype") ;
+	  				link = uicomponent.event(act,uicomponent.id,"id&$uicomponent.CALENDARID=calId&calType=caltype&isOccur=isOccur&recurId=recurId") ;
 	  				icon = act + "EventIcon" ;
 	        %>
 	        <div class="MenuItem">

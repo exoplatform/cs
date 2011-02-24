@@ -123,6 +123,8 @@ public class UIListView extends UICalendarView {
     if(!getViewType().equals(TYPE_BOTH)) {
       query.setEventType(getViewType()) ;
     }
+    
+    query.setExcludeRepeatEvent(true);
    
     // TODO CS-3152
     UICalendars uiCalendars = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class);
@@ -148,7 +150,9 @@ public class UIListView extends UICalendarView {
     }
     query.setOrderBy(new String[] {Utils.EXO_SUMMARY});
     if(uiListContainer.isDisplaySearchResult())  { update(pageList_) ;
-    } else update(new EventPageListQuery(username, query.getQueryStatement(),10)) ;
+    } else {
+      update(new EventPageListQuery(username, query.getQueryStatement(),10)) ;
+    }
     if(currentPage_ > 0 && currentPage_ <= pageList_.getAvailablePage()) {
       updateCurrentPage(currentPage_) ;
     }

@@ -63,7 +63,10 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
       @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class), 
       @EventConfig(listeners = UICalendarView.ExportEventActionListener.class),
-      @EventConfig(listeners = UIDayView.SaveEventActionListener.class)
+      @EventConfig(listeners = UIDayView.SaveEventActionListener.class),
+      @EventConfig(listeners = UICalendarView.ConfirmDeleteOnlyInstance.class),
+      @EventConfig(listeners = UICalendarView.ConfirmDeleteAllSeries.class),
+      @EventConfig(listeners = UICalendarView.ConfirmDeleteCancel.class)
     }
 )
 public class UIDayView extends UICalendarView {
@@ -87,7 +90,22 @@ public class UIDayView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(begin) ;
     eventQuery.setToDate(end) ;
+    eventQuery.setExcludeRepeatEvent(true);
     events = calendarService.getEvents(username, eventQuery, getPublicCalendars()) ;
+    
+    List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate());    
+    if (originalRecurEvents != null && originalRecurEvents.size() > 0) {
+      Iterator<CalendarEvent> recurEventsIter = originalRecurEvents.iterator();
+      while (recurEventsIter.hasNext()) {
+        CalendarEvent recurEvent = recurEventsIter.next();
+        Map<String,CalendarEvent> tempMap = calendarService.getOccurrenceEvents(recurEvent, eventQuery.getFromDate(), eventQuery.getToDate());
+        if (tempMap != null) {
+          recurrenceEventsMap.put(recurEvent.getId(), tempMap);
+          events.addAll(tempMap.values());
+        }
+      }
+    }
+    
     Iterator<CalendarEvent> iter = events.iterator() ;
     while (iter.hasNext()) {
       CalendarEvent ce = iter.next() ;

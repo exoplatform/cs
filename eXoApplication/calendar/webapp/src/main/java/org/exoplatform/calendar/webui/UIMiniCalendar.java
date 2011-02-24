@@ -64,6 +64,7 @@ public class UIMiniCalendar extends UICalendarView  {
     }*/
     eventQuery.setFromDate(getBeginDateOfMonth()) ;
     eventQuery.setToDate(getEndDateOfMonth()) ;
+    eventQuery.setExcludeRepeatEvent(true);
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     dataMap = calendarService.searchHightLightEvent(CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
   }

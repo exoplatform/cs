@@ -157,7 +157,7 @@
 										Boolean isOccur = (event.getRepeatType()!=CalendarEvent.RP_NOREPEAT && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()))?true:false;
 										String recurId = event.getRecurrenceId();
 	                %>
-	                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" isOccur=$isOccur recurId=$recurId calid="$event.calendarId" startTime="$begindate"  endTime="$enddate" 
+	                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" isOccur="$isOccur" recurId="$recurId" calid="$event.calendarId" startTime="$begindate"  endTime="$enddate" 
 	                startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
 	                  actionlink="$actionLink">
 	                  <div class="$leftClass">
@@ -212,7 +212,7 @@
         <div class="EventContainerBorder WeekViewEventBoxes $color" eventindex="$dayOfWeek"
           style="position: absolute;" eventcat="$event.eventCategoryId" caltype="$event.calType"
           eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on"
-          startTime="$beginTime" endTime="$endTime" isOccur=$isOccur recurId=$recurId>
+          startTime="$beginTime" endTime="$endTime" isOccur="$isOccur" recurId="$recurId">
            <div class="<%=event.eventState%>Icon">
 	           <div class="<%=event.getPriority()%>PriorityIcon" style="float: left;">
 		            <span></span>

@@ -1437,11 +1437,24 @@ UICalendarPortlet.prototype.dayViewCallback = function(evt){
         var eventId = src.getAttribute("eventid");
         var calendarId = src.getAttribute("calid");
         var calType = src.getAttribute("calType");
+        var isOccur = src.getAttribute("isOccur");
+        var recurId = src.getAttribute("recurId");
+        if (recurId == "null") recurId = "";
         map = {
             "objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "objectId=" + eventId,
             "calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calendarId=" + calendarId,
             "calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calType=" + calType
         };
+        if (isOccur) {
+          map = {
+              "objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "objectId=" + eventId,
+              "calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calendarId=" + calendarId,
+              "calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calType=" + calType,
+              "isOccur\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "isOccur=" + isOccur,
+              "recurId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "recurId=" + recurId
+          };
+        }
+        
     }
     eXo.webui.UIContextMenu.changeAction(eXo.webui.UIContextMenu.menuElement, map);
 };
@@ -1581,10 +1594,15 @@ UICalendarPortlet.prototype.monthViewCallback = function(evt){
             var eventId = objvalue.getAttribute("eventId");
             var calendarId = objvalue.getAttribute("calId");
             var calType = objvalue.getAttribute("calType");
+            var isOccur = objvalue.getAttribute("isOccur");
+            var recurId = objvalue.getAttribute("recurId");
+            if (recurId == "null") recurId = "";
             var map = {
                 "objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "objectId=" + eventId,
                 "calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calendarId=" + calendarId,
-                "calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calType=" + calType
+                "calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calType=" + calType,
+                "isOccur\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "isOccur=" + isOccur,
+                "recurId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "recurId=" + recurId
             };
             UIContextMenu.changeAction(UIContextMenu.menuElement, map);
         }

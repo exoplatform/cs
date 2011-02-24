@@ -66,7 +66,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
                  lifecycle = UIFormLifecycle.class,
                  template = "app:/templates/calendar/webui/UIPopup/UIRemoteCalendar.gtmpl",
                  events = {
-                   @EventConfig(listeners = UIRemoteCalendar.BackActionListener.class),
+                   @EventConfig(listeners = UIRemoteCalendar.BackActionListener.class, phase = Phase.DECODE),
                    @EventConfig(listeners = UIRemoteCalendar.SaveActionListener.class),
                    @EventConfig(listeners = UIRemoteCalendar.CancelActionListener.class, phase = Phase.DECODE)
                  }
@@ -136,7 +136,7 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     setCalendarName(calService.getUserCalendar(username, calendarId_).getName());
     setDescription(calendar.getDescription());
     setSelectColor(calendar.getCalendarColor());
-    setSyncPeriod(calService.getRemoteCalendarSyncPeriod(username, calendarId_));
+    //setSyncPeriod(calService.getRemoteCalendarSyncPeriod(username, calendarId_));
     setUseAuthentication(calService.getRemoteCalendarUsername(username, calendarId_) != null);
     setRemoteUser(calService.getRemoteCalendarUsername(username, calendarId_));
     setRemotePassword(calService.getRemoteCalendarPassword(username, calendarId_));

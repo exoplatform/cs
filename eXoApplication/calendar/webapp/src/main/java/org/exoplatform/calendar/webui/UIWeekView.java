@@ -109,7 +109,7 @@ public class UIWeekView extends UICalendarView {
     toDate.setTime(toDate.getTime()-1);
     endDateOfWeek.setTime(toDate);
     eventQuery.setToDate(endDateOfWeek) ; 
-    eventQuery.setexcludeRepeatEvent(true);
+    eventQuery.setExcludeRepeatEvent(true);
     // get normal events and exception occurrences, exclude original recurrence events
     List<CalendarEvent> allEvents = calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;
     

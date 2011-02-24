@@ -41,6 +41,7 @@
                 <%uicomponent.renderField(uicomponent.COLOR)%>
               </td>
             </tr>
+            <!--
             <tr>
               <td class="InputFieldLabel">
                 <%=uicomponent.getLabel(uicomponent.AUTO_REFRESH)%>
@@ -48,7 +49,7 @@
               <td class="FieldComponent">
                 <%uicomponent.renderField(uicomponent.AUTO_REFRESH)%>
               </td>
-            </tr>
+            </tr>  -->
             <tr>
               <td colspan="2">
                 <div>
