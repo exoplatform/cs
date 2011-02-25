@@ -83,7 +83,7 @@ public class UIActionBar extends UIContainer {
       String username = uiPortlet.getCurrentUser();
       Folder currentF = null;
       uiPortlet.setFormId(formId);
-      if(Utils.isEmptyField(accId)) {
+      if(Utils.isEmptyField(accId) || (mailSrv.getAccounts(username).isEmpty() && mailSrv.getDelegatedAccounts(username).isEmpty())) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
@@ -104,7 +104,7 @@ public class UIActionBar extends UIContainer {
           uiPortlet.findFirstComponentOfType(UIFetchingBar.class).setIsShown(true);
         } catch (Exception e) {
           e.printStackTrace();
-         return;
+          return;
         }
       }
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
@@ -129,13 +129,13 @@ public class UIActionBar extends UIContainer {
       MailService mailSvr = uiPortlet.getApplicationComponent(MailServiceImpl.class);
       mailSvr.setCurrentUserName(username);
       Account acc = mailSvr.getDelegatedAccount(username, accId);
-      if(Utils.isEmptyField(accId)) {
+      if(Utils.isEmptyField(accId) || (mailSvr.getAccounts(username).isEmpty() && !MailUtils.isFull(username))) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } else if(MailUtils.isDelegatedAccount(acc, username)) {
         if(!MailUtils.isFull(username, acc.getPermissions().get(username))) {
-         uiActionBar.showMessage(event);
+          uiActionBar.showMessage(event);
         } else {
           UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
           UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
@@ -199,6 +199,7 @@ public class UIActionBar extends UIContainer {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      if(MailUtils.isDelegated(accId)) uiActionBar.showMessage(event);
       UIPopupAction uiPopupAction = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
       UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionFilterContainer");
       uiPopupAction.activate(uiPopupContainer, 600, 0, false) ;
@@ -217,7 +218,7 @@ public class UIActionBar extends UIContainer {
       String accId = mailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       MailService mService = MailUtils.getMailService();
       String uid = MailUtils.getCurrentUser();
-      if(Utils.isEmptyField(accId) || (mService.getAccounts(uid).isEmpty() && !mService.getDelegatedAccounts(uid).isEmpty())) {
+      if(Utils.isEmptyField(accId) || mService.getAccounts(uid).isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
@@ -264,7 +265,7 @@ public class UIActionBar extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
-  
+
   private void showMessage(Event event) {
     UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
     uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;

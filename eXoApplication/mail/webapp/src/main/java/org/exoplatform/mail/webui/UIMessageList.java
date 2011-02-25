@@ -170,7 +170,9 @@ public class UIMessageList extends UIForm {
       filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
       filter.setHasStructure(true) ;
     }
-    if (!Utils.isEmptyField(accountId)) {
+    String id = username;
+    if(MailUtils.isDelegated(accountId)) id = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
+    if (!Utils.isEmptyField(accountId) && mailSrv.getAccountById(id, accountId) != null) {
       Account delegateAccount = mailSrv.getDelegatedAccount(username, accountId);
       if(MailUtils.isDelegatedAccount(delegateAccount, username)) username = delegateAccount.getDelegateFrom();
       filter.setAccountId(accountId) ;
