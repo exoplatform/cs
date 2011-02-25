@@ -115,13 +115,8 @@
       <version>${project.version}</version>
     </dependency>
     
-    <dependency>
-      <groupId>org.exoplatform.cs</groupId>
-      <artifactId>exo.cs.ext.ecm-integration</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-	<!-- missing lib for collaboration ear -->
-	  <dependency>
+     	<!-- missing lib for collaboration ear -->
+	<dependency>
         <groupId>org.jcrom</groupId>
         <artifactId>jcrom</artifactId>
         <version>${jcrom.version}</version>
