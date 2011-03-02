@@ -106,7 +106,7 @@
             %> 
             </div>
             <div class="AttachmentLabel">
-            <div class="NameImage"><%=attach.getName()%></div>
+            <div class="NameImage"><%=MailUtils.decodeAttachName(attach.getName())%></div>
             <div class="Size"><%=_ctx.appRes(uicomponent.id+ ".label.size") %>: <%=MailUtils.convertSize(attach.getSize())%></div>
             </div>
             <div style="clear:left;"><span></span></div>

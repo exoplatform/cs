@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 import javax.jcr.RepositoryException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeUtility;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
@@ -484,5 +485,8 @@ public class MailUtils {
       }
     }
 
+    public static String decodeAttachName(String name) throws Exception {
+      return MimeUtility.decodeText(name);
+    }
 }
 

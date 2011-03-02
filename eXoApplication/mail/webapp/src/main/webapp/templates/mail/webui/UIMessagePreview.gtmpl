@@ -504,11 +504,11 @@
                           }
                         %> 
                         <div class="AttachmentBox">
-      										<div class="AttachmentIcon"><%=attach.getName()%></div>
+      										<div class="AttachmentIcon"><%=MailUtils.decodeAttachName(attach.getName())%></div>
 													<div class="Size"><%=_ctx.appRes(uicomponent.id+ ".label.size") %>: <%=MailUtils.convertSize(attach.getSize())%> &nbsp;&nbsp;&nbsp;
 													<% 
                             boolean validType = false ;
-      											String name = attach.getName().trim() ;
+      											String name = MailUtils.decodeAttachName(attach.getName()).trim() ;
      												for (int i = 0; i < MailUtils.SUPPORTED_VIEW_TYPE_ATTACH.length; i++) {
      												  String type = MailUtils.SUPPORTED_VIEW_TYPE_ATTACH[i].trim() ;
      												  if(name.substring(name.lastIndexOf(".") + 1, name.length()).equalsIgnoreCase(type))

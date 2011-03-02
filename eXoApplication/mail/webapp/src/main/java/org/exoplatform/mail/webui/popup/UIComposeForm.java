@@ -35,6 +35,7 @@ import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeUtility;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
@@ -837,6 +838,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     long attSize = 0;
     for (Attachment att : this.getAttachFileList()) {
       if (getCheckedAttach().contains(att.getId())) {
+        att.setName(MimeUtility.encodeText(att.getName()));
         attachments.add(att);
         attSize += att.getSize();
       }
