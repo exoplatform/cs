@@ -270,7 +270,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected String renderDateTimeString(Date date) {
     if (dfFormat == null) {
       dfFormat = new SimpleDateFormat(dateTimeFormat_);
-      dfFormat.setCalendar(calendar_);
+      Calendar cal = (Calendar) calendar_.clone();
+      dfFormat.setCalendar(cal);
     }
     return dfFormat.format(date);
   }
