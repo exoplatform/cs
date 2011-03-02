@@ -1,25 +1,25 @@
 
-h1. Calendar Portlet {anchor:id=CSref.Portlets.CalendarPortlet}
-The Calendar Portlet is packaged in the Calendar.war file.
+h1. Calendar portlet {anchor:id=CSref.Portlets.CalendarPortlet}
+The Calendar portlet is packaged in the calendar.war file.
 
 h2. Description {anchor:id=CSref.Portlets.Description}
-Calendar Portlet shows the Calendar application of eXo Collaboration that offers a lot of features to users.
+The Calendar portlet shows the Calendar application of eXo Collaboration with a lot of features provided to users.
 
 The Calendar application includes the following features:
 
 * Create multiple personal calendars, manage calendars easily with calendar groups.
-* Quickly create events or tasks using the *Quick Add* dialog.
+* Create events or tasks using the *Quick Add* dialog easily.
 * Create events or tasks in details.
 * Create all-day events.
 * View other attender's availability schedules.
 * Create recurring events.
 * Get reminders.
 * View calendars by various views: day, week, month and year.
-* Quickly view events day-by-day by navigating the mini-calendar.
+* View events day-by-day by navigating the mini-calendar quickly.
 * Share calendars with others.
 * Import/Export calendars.
 * Publish your calendars with RSS, CalDAV.
-* Search events or tasks in calendars.
+* Search for events and/or tasks in calendars.
 * Print your agenda.
  
 h2. Portlet.xml {anchor:id=CSref.Portlets.Portletxml}
@@ -27,8 +27,8 @@ To see the portlet in the project, please follow this path:
  _/eXoApplication/calendar/webapp/src/main/webapp/WEB-INF/portlet.xml_
 
 
-h1. Chatbar Portlet {anchor:id=CSref.Portlets.ChatbatPortlet}
-The Chatbar Portlet is packaged in the Chatbar.war file.
+h1. Chatbar portlet {anchor:id=CSref.Portlets.ChatbatPortlet}
+The Chatbar portlet is packaged in the Chatbar.war file.
 
 h2. Description {anchor:id=CSref.Portlets.ChatbarPortletDescription}
 
@@ -38,7 +38,7 @@ The Chatbar portlet shows the Chatbar application of eXo Collaboration that can 
 
 - Narrow column.
 
-The Chatbar application implements all functions of the Chat application, aiming at sending and receiving messages anywhere after login. The Chatbar is a typical toolbar with buttons to open menus. It gives access to main features of Chat:
+The Chatbar application implements all functions of the Chat application, allowing you to send and receive messages anywhere after you are logged in successfully. The Chatbar is a typical toolbar with buttons to open menus. It gives access to main features of Chat:
 
 - Status change and presence indicator.
 
@@ -141,7 +141,7 @@ h1. Mail Portlet {anchor:id=CSref.Portlets.MailPortlet}
 The Mail Portlet is packaged in the Mail.war file.
 
 h2. Description {anchor:id=CSref.Portlets.MailPortletDescription}
-Mail Portlet shows the Mail application of eXo Collaboration that offers a lot of features to users such as sending, receiving or viewing their mails through Internet without actually downloading them to their computer. Users not only take advantages of eXo Mail by keeping and receiving all important messages, files and pictures forever but also by looking for and viewing their needed messages easily whenever they want. Additionally, eXo Mail is smoothly integrated with other Collaboration modules such as Address Book and Calendar.
+Mail Portlet shows the Mail application of eXo Collaboration that offers a lot of features to users such as sending, receiving or viewing their mails through Internet without actually downloading them to their computer. Users not only take advantages of eXo Mail by keeping and receiving all important messages, files and pictures forever but also by looking for and viewing their needed messages easily whenever they want. Additionally, the Mail application is smoothly integrated with other Collaboration modules, such as Address Book and Calendar.
 
 h2. Portlet.xml {anchor:id=CSref.Portlets.MailPortletxml}
  See the portlet in the project following this path:
@@ -153,10 +153,9 @@ h1. RSSreader Portlet {anchor:id=CSref.Portlets.RSSreaderPortlet}
 The RSSreader Portlet is packaged in the Rssreader.war file.
 
 h2. Description {anchor:id=CSref.Portlets.RSSreaderDescription} 
-eXo Collaboration uses the RSS Reader Portlet that facilitates users to quickly get a view of their favorite feeds around the web. They will get the latest news, the last updated posts from their favorite blogs, latest emails,etc.
+eXo Collaboration uses the RSS Reader Portlet that facilitates users to quickly get a view of their favorite feeds around the web. They will get the latest news, the last updated posts from their favorite blogs, latest emails, and more.
 
 h2. Portlet.xml {anchor:id=CSref.Portlets.RSSreaderPortletxml}
 See the portlet in the project following this path:
 _/eXoApplication/content/webapp/src/main/webapp/WEB-INF/portlet.xml_
-
 

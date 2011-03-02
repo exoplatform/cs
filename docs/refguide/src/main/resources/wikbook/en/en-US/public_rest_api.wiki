@@ -1,133 +1,131 @@
-eXo Collaboration implements and provides many public REST APIS to help built-in applications such as Calender, Chat and Mail to communicate and transfer data with the server. By using these public REST APIs, extended or 3rd party applications can make use of this to develop cool web applications faster without much implementation.
+eXo Collaboration implements and provides many public REST APIS to help built-in applications, such as Calendar, Chat and Mail to communicate and transfer data with the server. By using these public REST APIs, extended or 3rd party applications can make use of this to develop cool web applications faster without much implementation.
 
 
 h1. Calendar application {anchor:id=CSref.PublicRESTAPIs.CalendarApplication}
-Calendar application of eXo Collaboration use CalendarWebservice to provide all  APIs for working with calendar such as create personal calendars, group calendars, share calendars, manage events / tasks, etc.
+The Calendar application of eXo Collaboration uses CalendarWebservice to provide all APIs for working with calendars, such as creating personal/group calendars, sharing calendars, managing events/tasks.
 
-REST API of Calendar portlet is exposed by _org.exoplatform.services.cs.calendar.CalendarWebservice_ class.
-
+The REST API of Calendar portlet is exposed by _org.exoplatform.services.cs.calendar.CalendarWebservice_ class.
 
 || Service name || Service URL || Description || Location ||
-| *CalendarWebservice* | {{$portalname/$restcontextname/private/cs/calendar}} | This service is used to call extended services of Calendar application. | - Maven groupId: org.exoplatform.cs {example}{example} - ArtifactId: exo.cs.web.webservice |
-{note}
-- $portalname: It is the name of the portal
-- $restcontextname: The context name of rest webapplication which is deployed to the "$portalname" portal.
-- Private: is optional and used for protected access only. Such calls will require authentication 
+| *CalendarWebservice* | {{$portalname/$restcontextname/private/cs/calendar}} | Call extended services of the Calendar application. | - Maven groupId: org.exoplatform.cs {example}{example} - ArtifactId: exo.cs.web.webservice |
 
+{note}
+- $portalname: The name of the portal
+- $restcontextname: The context name of rest webapplication which is deployed to the "$portalname" portal.
+- Private: is optional and used for the protected access only. Such calls will require authentication.
 {note}
 
 * *APIs usage*:
 
-Use the following APIs to build all the functions of Calendar application:
+Use the following APIs to build all functions of the Calendar application:
 
-|| Name ||Description || Service URL endpoint || Parameters || Expected Values ||
-| *checkpermission* | It checks the permission of a user to a calendar, aiming at defining if the user has the edit permission to the calendar or not. | {{{/private/cs/calendar/checkPermission/{username}/{calendarId}/type}}}} | username {example}{example} calendarid {example}{example} type | user id {example}{example} calendar id {example}{example} {{{ INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2 }}}|
-| *event* | It returns a feed rss that lists links to access a specific event.| {{{/private/cs/calendar/event/{username}/{eventFeedName}}}} |username {example}{example} eventFeedName | user id {example}{example} string |
-| *feed* | It shows the content of a feed that is a list of events in the "filename" file. |  {{{/private/cs/calendar/feed/{username}/{feedname}/{filename}}}} | username {example}{example} feedname {example}{example}filename | username {example}{example} string {example}{example} string |
-| *publicProcess* | It processes the public calendar when having a remote access request.| {{{/cs/calendar/subscribe/{username}/{calendarId}/{type}}}} | username {example}{example} calendarId {example}{example} type| user id {example}{example} calendar id {example}{example} {{{INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2}}}  |
-| *privateProcess* | It processes the public calendar when having a remote access request. User must enter username and password to access.| {{{/private/cs/calendar/private/{username}/{calendarId}/{type}}}} | username {example}{example} calendarID {example}{example} type |user id {example}{example} calendar id {example}{example} {{{INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2}}}|
-| *upcomingEvent* | It is a list of up coming events in a specific calendar.| {{{/private/cs/calendar/getissues/{currentdatetime}/{type}/{limit}}}} | currentdatatime {example}{example} type {example}{example} limit | valid time format {example}{example} {{{INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2}}} {example}{example} integer |
-| *updateStatus* | To update the status of a task. | {{{/private/cs/calendar/updatestatus/{taskid}}}} | taskid | task id |
-| *getCalendars* | It gets a list of calendars. | /private/cs/calendar/getcalendars| {{no param}} | {{}} |
+|| Name || Description || Service URL endpoint || Parameters || Expected Values ||
+| *checkpermission* | Check the permission of a user to a calendar, aiming at defining if the user has the edit permission to the calendar or not. | {{{/private/cs/calendar/checkPermission/{username}/{calendarId}/type}}}} | username {example}{example} calendarid {example}{example} type | user id {example}{example} calendar id {example}{example} {{{ INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2 }}}|
+| *event* | Return a feed RSS that lists links to access a specific event.| {{{/private/cs/calendar/event/{username}/{eventFeedName}}}} |username {example}{example} eventFeedName | user id {example}{example} string |
+| *feed* | Show the content of a feed that is a list of events in the "filename" file. |  {{{/private/cs/calendar/feed/{username}/{feedname}/{filename}}}} | username {example}{example} feedname {example}{example}filename | username {example}{example} string {example}{example} string |
+| *publicProcess* | Process the public calendar when having a remote access request.| {{{/cs/calendar/subscribe/{username}/{calendarId}/{type}}}} | username {example}{example} calendarId {example}{example} type| user id {example}{example} calendar id {example}{example} {{{INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2}}}  |
+| *privateProcess* | Process the public calendar when having a remote access request. User must enter username and password to access.| {{{/private/cs/calendar/private/{username}/{calendarId}/{type}}}} | username {example}{example} calendarID {example}{example} type |user id {example}{example} calendar id {example}{example} {{{INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2}}}|
+| *upcomingEvent* | The list of upcoming events in a specific calendar.| {{{/private/cs/calendar/getissues/{currentdatetime}/{type}/{limit}}}} | currentdatatime {example}{example} type {example}{example} limit | valid time format {example}{example} {{{INVALID_TYPE = -1 / PRIVATE_TYPE = 0 / SHARED_TYPE = 1 / PUBLIC_TYPE = 2}}} {example}{example} integer |
+| *updateStatus* | Update the status of a task. | {{{/private/cs/calendar/updatestatus/{taskid}}}} | taskid | task id |
+| *getCalendars* | Get a list of calendars. | /private/cs/calendar/getcalendars| {{no param}} | {{}} |
 
  
 h1. Mail application {anchor:id=CSref.PublicRESTAPIs.MailApplication}
 
-Mail application of eXo Collaboration use MailWebservice to provide all  APIs for working with mail as send mail, check mail, store mail to JCR, etc.
+The Mail application of eXo Collaboration uses MailWebservice to provide all APIs for working with mail, such as sending/checking/storing mail to JCR.
 
-REST API of Mail portlet is exposed by _org.exoplatform.services.cs.mail.MailWebservice_ class.
+REST API of the Mail portlet is exposed by _org.exoplatform.services.cs.mail.MailWebservice_ class.
 
 || Service name || Service URL || Description || Location ||
-|*MailWebservice* | {{$portalname/$restcontextname/private/cs/mail}} |This service is used to call extended services of Mail application. | - Maven groupId: org.exoplatform.cs {example}{example} - artifactId: exo.cs.web.webservice |
+|*MailWebservice* | {{$portalname/$restcontextname/private/cs/mail}} |This service is used to call extended services of the Mail application. | - Maven groupId: org.exoplatform.cs {example}{example} - artifactId: exo.cs.web.webservice |
 
 * *APIs Usage*:
-Use the following APIs to build all the functions of Mail application:
+Use the following APIs to build all functions of the Mail application:
 
 
 || Name ||Description || Service URL endpoint || Parameters || Expected Values ||
-|*checkMail* | It executes to check mails when having a request.| {{{/checkmail/{username}/{accountId}/{folderId/}}}}/ | username {example}{example} accountID {example}{example} folderId| user id {example}{example} account id {example}{example} folder id |
-|*synchFolders* | It synchronizes the mail folders in the clients and those in the mail server. |{{{/synchfolders/{username}/{accountId}/}}} | username {example}{example} accountID | user id {example}{example} account id |
-|*stopCheckMail* |to stop checking the mail | {{{/stopcheckmail/{username}/{accountId}/}}}| username {example}{example} accountId| user id {example}{example} account id |
-|*getCheckMailJobInfo* | It is the method to get information of mail-checking job.|{{{/checkmailjobinfo/{username}/{accountId}/}}} | username {example}{example} accountId | user id {example}{example} account id|
-|*searchemail* |It is used to search information from emails|{{{/searchemail/{keywords}}}} | keywords| string |
+|*checkMail* | Check mails when having a request.| {{{/checkmail/{username}/{accountId}/{folderId/}}}}/ | username {example}{example} accountID {example}{example} folderId| user id {example}{example} account id {example}{example} folder id |
+|*synchFolders* | Synchronize the mail folders in the clients and those in the mail server. |{{{/synchfolders/{username}/{accountId}/}}} | username {example}{example} accountID | user id {example}{example} account id |
+|*stopCheckMail* | Stop checking the mail. | {{{/stopcheckmail/{username}/{accountId}/}}}| username {example}{example} accountId| user id {example}{example} account id |
+|*getCheckMailJobInfo* | The method to get information of the mail-checking job.|{{{/checkmailjobinfo/{username}/{accountId}/}}} | username {example}{example} accountId | user id {example}{example} account id|
+|*searchemail* | Search information from emails. |{{{/searchemail/{keywords}}}} | keywords| string |
 
 
 h1. Chat application {anchor:id=CSref.PublicREST_APIs.ChatApplication}
 
-Chat application use some APIs to help users to create a room, join a room, invite other users to room, send files, etc.
+The Chat application uses some APIs to help users create a room, join a room, invite other users to room, or send files, and more.
 
-And the chat application of eXo Collaboration uses two services: RESTXMPPService and FileExchangeService to do these tasks.
+The Chat application of eXo Collaboration uses two services: RESTXMPPService and FileExchangeService to do these tasks.
 
 h2. RESTXMPPService {anchor:id=CSref.PublicREST_APIs.RESTXMPPService}
 
-REST API _RESTXMPPService_ of Chat portlet is exposed by org.exoplatform.services.xmpp.rest.RESTXMPPService class
+REST API _RESTXMPPService_ of the Chat portlet is exposed by org.exoplatform.services.xmpp.rest.RESTXMPPService class
 
 || Service name || Service URL || Description || Location ||
-|*RESTXMPPService* | {{$portalname/$restcontextname/xmpp}} | It is the service to implement all the action sent to the chat server; | * Maven groupid: org.exoplatform.cs {example}{example} * exo.cs.eXoApplication.chat.service| |
+|*RESTXMPPService* | {{$portalname/$restcontextname/xmpp}} | Implement all actions sent to the Chat server; | * Maven groupid: org.exoplatform.cs {example}{example} * exo.cs.eXoApplication.chat.service|
 
 
-* *APIs Usage*: 
-Use the following APIs to build all the functions of Chat application:
+* *APIs Usage*:
+Use the following APIs to build all functions of the Chat application:
 
-|| Name ||Description || Service URL endpoint|| Parameters || Expected Values ||
-|*loadJsResourceBundle* | To read the language files in the chat server.  |{{{/loadJsResourceBundle/{locale}/}}} | locale| locale id |
-|*createRoom* |To create a chat room or a group chat |{{{/muc/createroom/{username}/}}} | username {example}{example} room {example}{example} nickname| user id {example}{example} room name {example}{example} display name |
-|*configRoom* | To establish the configuration of a chat room. | {{{/muc/configroom/{username}/}}} | username {example}{example} room | user id {example}{example} room name |
-|*getRoomConfigForm* |To get the configuration of a chat room created. |{{{/muc/getroomconfig/{username}/}}} | username {example}{example} room| user id {example}{example} room name |
-|*getRoomInfo* |To get the inforamtion of a chat room created |{{{/muc/getroominfo/{username}/}}} |username  {example}{example} room| user id {example}{example} string |
-|*getJoinedRooms* |To list chat rooms that a user has been joined. |{{{/muc/joinedrooms/{username}/}}} | username| user id|
-|*getRooms* |To get a list of group chat or chat rooms created.| {{{/muc/rooms/{username}/}}}| username| user id |
-|*declineToRoom* | To refuse the invitation to join the chat room. | {{{/muc/decline/{username}/{inviter}/}}} |username {example}{example} inviter {example}{example} room {example}{example} reason | user id {example}{example} user id {example}{example} room name {example}{example} string |
-|*destroyRoom* | To delete a chat room created. | {{{/muc/destroy/{username}}}}| username {example}{example} room {example}{example} reason {example}{example} altroom | user id {example}{example} room name {example}{example} string {example}{example} room id |
-|*inviteToRoom* |To invites other users to join a chat room. | {{{/muc/invite/{username}/{invitee}/}}}| username {example}{example} invitee {example}{example} room {example}{example} reason| user id {example}{example} user id {example}{example} room name {example}{example} {{{string}}} |
-|*joinRoom* |To join a chat room. | {{{/muc/join/{username}/}}} |username {example}{example} room {example}{example} nickname {example}{example} password | user id {example}{example} room name {example}{example} display name {example}{example} room password |
-|*leftRoom* |To leave a chat room. |{{{/muc/leaveroom/{username}/}}} | username {example}{example}  room| user id {example}{example} room name |
-|*changeNickname* |To change the nickname of users |{{{/muc/changenickname/{username}/{nickname}/}}} |username {example}{example} nickname| user id {example}{example} display name |
-|*changeAvailabilityStatusInRoom* |To change the status of a user in the chat room. |{{{/muc/changestatus/{username}/{mode}/}}} | username {example}{example} mood {example}{example} room {example}{example} status| user id {example}{example} presence type {example}{example} room name {example}{example} presence type |
-|*changeSubject* |To change the subject of a chat room. |{{{muc/changesubject/{username}/}}} |username {example}{example} room {example}{example} subject| user id {example}{example} room name {example}{example} string |
-|*manageRoleRoom* |To change the role of each user in a chat room. |{{{/muc/managerole/{username}/}}} |username {example}{example} room {example}{example} nickname {example}{example} role {example}{example} command| user id {example}{example}room name {example}{example} display name {example}{example} Participant / moderator {example}{example} grant/revoke |
-|*manageAffilationRoom* |To change the ownership of a chat room. |{{{/muc/manageaffiliation/{username}/}}} | username {example}{example} room {example}{example} nickname {example}{example} affiliation {example}{example} command| user id {example}{example} room name {example}{example} display name {example}{example}String affiliation {example}{example}grant / revoke |
-|*kickUserFromRoom* |To remove a user from the chat room. |{{{/muc/kick/{username}/}}} | username {example}{example} nickname {example}{example}room {example}{example}reason | user id {example}{example} display name {example}{example} room name {example}{example} string |
-|*banUserFromRoom* |To ban a user in the chat room. |{{{/muc/ban/{username}/}}} |username {example}{example} room {example}{example} name {example}{example} reason| user id {example}{example} room name {example}{example}user id {example}{example} string |
-|*addBoddyToRoster* |To add a user into the contact list |{{{/roster/add/{username}/{adduser}}}} | username {example}{example} adduser {example}{example} nickname {example}{example} group  | user id {example}{example} use id {example}{example} display name {example}{example} group id|
-|*updateBoddy* | To update new users into the contact list |{{{/roster/update/{username}/{upduser}/}}} |username {example}{example} upduser {example}{example} nickname {example}{example} group | user id {example}{example} user id {example}{example} display name {example}{example} group id|
-|*createGroup* | To create a chat room. |{{{/roster/group/{username}/{group}/}}} |username {example}{example} group |user id {example}{example} group id  |
-|*askForSubscription* | To change the presence type of a user into Subscription. |{{{/askforsubscription/{username}/{askuser}/}}} |username {example}{example} askuser {example}{example} nickname | user id {example}{example} user id {example}{example} display name  |
-|*cleanBuddylist* | To remove a user from the contact list. |{{{/rosterclean/{username}/}}} | username | user id |
-|*getAllHistory* | To get all the chat history of two users. |{{{/history/getmessages/{usernameto}/{isGroupChat}/}}} |usernameto {example}{example} isGroupChat {example}{example} usernamefrom  | user id {example}{example} true / false {example}{example} user id|
-|*getHistoryBetweenDate* |To get the chat history of two users in a specific period. |{{{/history/getmessages/{usernameto}/{isGroupChat}/{from}/{to}/}}} |usernameto {example}{example} isgroupchat {example}{example} from {example}{example} to {example}{example} usernamefrom | user id {example}{example} true / false {example}{example} valid date format {example}{example} valid date format  {example}{example} user id|
-|*getHistoryFromDateToNow* | To get the chat history of two users from a specific date to the current time. |{{{/history/getmessages/{usernameto}/{isGroupChat}/{from}/}}} | username {example}{example} isGroupChat {example}{example} from {example}{example} usernamefrom| user id {example}{example} true / false {example}{example} valid date format {example}{example} valid date format {example}{example} user id  |
-|*getAllHistoryFile* | To download all the chat history file of two users.|{{{/history/file/getmessages/{usernameto}/{isGroupChat}/{clientTimezoneOffset}/}}} |uernameto {example}{example} isGroupChat {example}{example} clientTimezoneOffset {example}{example} usernamefrom | user id {example}{example} true / false {example}{example}  Long {example}{example} user id |
-|*getHistoryFromDateToNowFile* | To download the chat history file of two users from a specific date to the current time |{{{/history/file/getmessages/{usernameto}/{isGroupChat}/{from}/{clientTimezoneOffset}/}}} |usernameto {example}{example} isGroupChat {example}{example} from {example}{example} clientTimezoneOffset {example}{example} usernamefrom| user id {example}{example} true / false {example}{example} valid date format {example}{example} Long {example}{example} user id |
-|*getHistoryBetweenDateFile* | To download the chat history file of two users in the specific date. |{{{/history/file/getmessages/{usernameto}/{isGroupChat}/{from}/{to}/{clientTimezoneOffset}/}}} |usernameto {example}{example} isGroupChat {example}{example} from {example}{example} to {example}{example} clientTimezoneOffset {example}{example} usernamefrom | user id {example}{example} true / false {example}{example}  valid date format {example}{example} valid date format  {example}{example} Long {example}{example} user id|
-|*getUserInfo* | To get the information of a user |{{{/getuserinfo/{username}/{needinfo}/}}} | username {example}{example} needinfo| user id {example}{example} string |
-|*login2* | To allow a user to log in the chat server. |{{{/login2/{forcache}/}}}| forcache |   |
-|*logout* | To allow a user to log out the chat server  | {{{/logout/{username}/{presencestatus}/}}}| username {example}{example} presencestatus |user id {example}{example} presencestatus |
-|*messageReceive* | To receive a message from other users |{{{/history/messagereceive/{username}/{messageid}/}}} |username{example}{example} messageid | user id {example}{example} message id |
-|*removeBuddy* | To delete a contact from the contact list.| {{{/roster/del/{username}/{removeboddy}/}}} |username {example}{example} removeboddy | user id {example}{example} user id |
-|*removeTransport* | To reset the presence type at the service that is being used. |{{{/removetransport/{username}/{transport}/}}} |username {example}{example} transport |user id {example}{example} transport servive (e.g: Yahoo, XMPP) |
-|*searchUsers* | To search users in the chat server|{{{/searchuser/{username}/}}} | username {example}{example} search {example}{example} byUsername {example}{example} byName {example}{example} byEmail {example}{example} searchService | user id {example}{example} string {example}{example} true / false {example}{example} true /false {example}{example} true / false {example}{example} string |
-|*sendMessage* | To send an message to other users. |{{{/sendmessage/{username}/}}} | username {example}{example} messageBean| usesr id {example}{example} object |
-|*sendMUCMessage* | To send a message to multile users or a group| {{{/muc/sendmessage/{username}/}}} | username {example}{example} messageBean |user id {example}{example} object|
-|*setUserStatus* | To change the status of a user.| {{{/sendstatus/{username}/{status}/}}} | username {example}{example} status | user id {example}{example} available/ unavailabe / do not disturb / away / extend away |
-|*subscribeUser* |To change presence type into Subcribed type |{{{/subscribeuser/{username}/{subsuser}/}}} | username {example}{example} subsuser| user id {example}{example} user id |
-|* unsubscribeUser* | To change presence type into the Unsubscribed type|{{{/unsubscribeuser/{username}/{unsubsuser}/}}} |username {example}{example} unsubsuser| user id {example}{example} user id |
-|*acceptFile* | To accept getting a file sent from another user.|{{{/fileexchange/accept/{username}/{uuid}/}}}| username {example}{example} uuid | user id {example}{example} string |
-|*rejectFile* | To refuse getting a file sent from another user.|{{{/fileexchange/reject/{username}/{uuid}/}}} | username {example}{example} uuid | user id {example}{example} string|
-|*getPreviousStatus* | To get the tatus of a user in the last log-in.| {{{/getprevstatus/{username}/}}} | username | user id |
+|| Name || Description || Service URL endpoint || Parameters || Expected Values ||
+|*loadJsResourceBundle* | Read the language files in the Chat server.  |{{{/loadJsResourceBundle/{locale}/}}} | locale| locale id |
+|*createRoom* | Create a chat room or a group chat |{{{/muc/createroom/{username}/}}} | username {example}{example} room {example}{example} nickname| user id {example}{example} room name {example}{example} display name |
+|*configRoom* | Establish the configuration of a chat room. | {{{/muc/configroom/{username}/}}} | username {example}{example} room | user id {example}{example} room name |
+|*getRoomConfigForm* | Get the configuration of a chat room created. |{{{/muc/getroomconfig/{username}/}}} | username {example}{example} room| user id {example}{example} room name |
+|*getRoomInfo* | Get the inforamtion of a chat room created |{{{/muc/getroominfo/{username}/}}} |username  {example}{example} room| user id {example}{example} string |
+|*getJoinedRooms* | List chat rooms that a user has been joined. |{{{/muc/joinedrooms/{username}/}}} | username| user id|
+|*getRooms* | Get a list of group chat or chat rooms created.| {{{/muc/rooms/{username}/}}}| username| user id |
+|*declineToRoom* | Refuse the invitation to join the chat room. | {{{/muc/decline/{username}/{inviter}/}}} |username {example}{example} inviter {example}{example} room {example}{example} reason | user id {example}{example} user id {example}{example} room name {example}{example} string |
+|*destroyRoom* | Delete a chat room created. | {{{/muc/destroy/{username}}}}| username {example}{example} room {example}{example} reason {example}{example} altroom | user id {example}{example} room name {example}{example} string {example}{example} room id |
+|*inviteToRoom* | Invite other users to join a chat room. | {{{/muc/invite/{username}/{invitee}/}}}| username {example}{example} invitee {example}{example} room {example}{example} reason| user id {example}{example} user id {example}{example} room name {example}{example} {{{string}}} |
+|*joinRoom* | Join a chat room. | {{{/muc/join/{username}/}}} |username {example}{example} room {example}{example} nickname {example}{example} password | user id {example}{example} room name {example}{example} display name {example}{example} room password |
+|*leftRoom* | Leave a chat room. |{{{/muc/leaveroom/{username}/}}} | username {example}{example}  room| user id {example}{example} room name |
+|*changeNickname* | Change the nickname of users |{{{/muc/changenickname/{username}/{nickname}/}}} |username {example}{example} nickname| user id {example}{example} display name |
+|*changeAvailabilityStatusInRoom* | Change the status of a user in the chat room. |{{{/muc/changestatus/{username}/{mode}/}}} | username {example}{example} mood {example}{example} room {example}{example} status| user id {example}{example} presence type {example}{example} room name {example}{example} presence type |
+|*changeSubject* | Change the subject of a chat room. |{{{muc/changesubject/{username}/}}} |username {example}{example} room {example}{example} subject| user id {example}{example} room name {example}{example} string |
+|*manageRoleRoom* | Change the role of each user in a chat room. |{{{/muc/managerole/{username}/}}} |username {example}{example} room {example}{example} nickname {example}{example} role {example}{example} command| user id {example}{example}room name {example}{example} display name {example}{example} Participant / moderator {example}{example} grant/revoke |
+|*manageAffilationRoom* | Change the ownership of a chat room. |{{{/muc/manageaffiliation/{username}/}}} | username {example}{example} room {example}{example} nickname {example}{example} affiliation {example}{example} command| user id {example}{example} room name {example}{example} display name {example}{example}String affiliation {example}{example}grant / revoke |
+|*kickUserFromRoom* | Remove a user from the chat room. |{{{/muc/kick/{username}/}}} | username {example}{example} nickname {example}{example}room {example}{example}reason | user id {example}{example} display name {example}{example} room name {example}{example} string |
+|*banUserFromRoom* | Ban a user in the chat room. |{{{/muc/ban/{username}/}}} |username {example}{example} room {example}{example} name {example}{example} reason| user id {example}{example} room name {example}{example}user id {example}{example} string |
+|*addBoddyToRoster* | Add a user into the contact list. |{{{/roster/add/{username}/{adduser}}}} | username {example}{example} adduser {example}{example} nickname {example}{example} group  | user id {example}{example} use id {example}{example} display name {example}{example} group id|
+|*updateBoddy* | Update new users into the contact list. |{{{/roster/update/{username}/{upduser}/}}} |username {example}{example} upduser {example}{example} nickname {example}{example} group | user id {example}{example} user id {example}{example} display name {example}{example} group id|
+|*createGroup* | Create a chat room. |{{{/roster/group/{username}/{group}/}}} |username {example}{example} group |user id {example}{example} group id  |
+|*askForSubscription* | Change the presence type of a user into Subscription. |{{{/askforsubscription/{username}/{askuser}/}}} |username {example}{example} askuser {example}{example} nickname | user id {example}{example} user id {example}{example} display name  |
+|*cleanBuddylist* | Remove a user from the contact list. |{{{/rosterclean/{username}/}}} | username | user id |
+|*getAllHistory* | Get all the chat history of two users. |{{{/history/getmessages/{usernameto}/{isGroupChat}/}}} |usernameto {example}{example} isGroupChat {example}{example} usernamefrom  | user id {example}{example} true / false {example}{example} user id|
+|*getHistoryBetweenDate* | Get the chat history of two users in a specific period. |{{{/history/getmessages/{usernameto}/{isGroupChat}/{from}/{to}/}}} |usernameto {example}{example} isgroupchat {example}{example} from {example}{example} to {example}{example} usernamefrom | user id {example}{example} true / false {example}{example} valid date format {example}{example} valid date format  {example}{example} user id|
+|*getHistoryFromDateToNow* | Get the chat history of two users from a specific date to the current time. |{{{/history/getmessages/{usernameto}/{isGroupChat}/{from}/}}} | username {example}{example} isGroupChat {example}{example} from {example}{example} usernamefrom| user id {example}{example} true / false {example}{example} valid date format {example}{example} valid date format {example}{example} user id  |
+|*getAllHistoryFile* | Download all the chat history file of two users.|{{{/history/file/getmessages/{usernameto}/{isGroupChat}/{clientTimezoneOffset}/}}} |uernameto {example}{example} isGroupChat {example}{example} clientTimezoneOffset {example}{example} usernamefrom | user id {example}{example} true / false {example}{example}  Long {example}{example} user id |
+|*getHistoryFromDateToNowFile* | Download the chat history file of two users from a specific date to the current time |{{{/history/file/getmessages/{usernameto}/{isGroupChat}/{from}/{clientTimezoneOffset}/}}} |usernameto {example}{example} isGroupChat {example}{example} from {example}{example} clientTimezoneOffset {example}{example} usernamefrom| user id {example}{example} true / false {example}{example} valid date format {example}{example} Long {example}{example} user id |
+|*getHistoryBetweenDateFile* | Download the chat history file of two users in the specific date. |{{{/history/file/getmessages/{usernameto}/{isGroupChat}/{from}/{to}/{clientTimezoneOffset}/}}} |usernameto {example}{example} isGroupChat {example}{example} from {example}{example} to {example}{example} clientTimezoneOffset {example}{example} usernamefrom | user id {example}{example} true / false {example}{example}  valid date format {example}{example} valid date format  {example}{example} Long {example}{example} user id|
+|*getUserInfo* | Get the information of a user. |{{{/getuserinfo/{username}/{needinfo}/}}} | username {example}{example} needinfo| user id {example}{example} string |
+|*login2* | Allow a user to log in the chat server. |{{{/login2/{forcache}/}}}| forcache |   |
+|*logout* | Allow a user to log out the chat server. | {{{/logout/{username}/{presencestatus}/}}}| username {example}{example} presencestatus |user id {example}{example} presencestatus |
+|*messageReceive* | Receive a message from other users. |{{{/history/messagereceive/{username}/{messageid}/}}} |username{example}{example} messageid | user id {example}{example} message id |
+|*removeBuddy* | Delete a contact from the contact list.| {{{/roster/del/{username}/{removeboddy}/}}} |username {example}{example} removeboddy | user id {example}{example} user id |
+|*removeTransport* | Reset the presence type at the service that is being used. |{{{/removetransport/{username}/{transport}/}}} |username {example}{example} transport |user id {example}{example} transport servive (e.g: Yahoo, XMPP) |
+|*searchUsers* | Search users in the chat server|{{{/searchuser/{username}/}}} | username {example}{example} search {example}{example} byUsername {example}{example} byName {example}{example} byEmail {example}{example} searchService | user id {example}{example} string {example}{example} true / false {example}{example} true /false {example}{example} true / false {example}{example} string |
+|*sendMessage* | Send an message to other users. |{{{/sendmessage/{username}/}}} | username {example}{example} messageBean| usesr id {example}{example} object |
+|*sendMUCMessage* | Send a message to multile users or a group. | {{{/muc/sendmessage/{username}/}}} | username {example}{example} messageBean |user id {example}{example} object|
+|*setUserStatus* | Change the status of a user.| {{{/sendstatus/{username}/{status}/}}} | username {example}{example} status | user id {example}{example} available/ unavailabe / do not disturb / away / extend away |
+|*subscribeUser* | Change presence type into Subcribed type. |{{{/subscribeuser/{username}/{subsuser}/}}} | username {example}{example} subsuser| user id {example}{example} user id |
+|*unsubscribeUser* | Change presence type into the Unsubscribed type. |{{{/unsubscribeuser/{username}/{unsubsuser}/}}} |username {example}{example} unsubsuser| user id {example}{example} user id |
+|*acceptFile* | Accept getting a file sent from another user. |{{{/fileexchange/accept/{username}/{uuid}/}}}| username {example}{example} uuid | user id {example}{example} string |
+|*rejectFile* | Refuse getting a file sent from another user.|{{{/fileexchange/reject/{username}/{uuid}/}}} | username {example}{example} uuid | user id {example}{example} string|
+|*getPreviousStatus* | Get the tatus of a user in the last log-in.| {{{/getprevstatus/{username}/}}} | username | user id |
 
 
 
 h2. FileExchangeService {anchor:id=CSref.PublicREST_APIs.FileExchangeService}
 
-REST API _FileExchangeService_ for upload file is defined in org.exoplatform.services.xmpp.rest.FileExchangeService
+REST API _FileExchangeService_ for uploading files is defined in org.exoplatform.services.xmpp.rest.FileExchangeService.
 
 || Service name || Service URL || Description || Location ||
-|*FileExchangeService* | {{$portalname/$restcontextname/fileexchange}} | To upload a file to the server and inform the user that he can download it to his local computer. | - Maven groupid: org.exoplatform.cs {example}{example} - InterfactId: exo.cs.eXoApplication.chat.service|
+|*FileExchangeService* | {{$portalname/$restcontextname/fileexchange}} | Upload a file to the server and inform the user that the file can be downloaded to the local computer. | - Maven groupid: org.exoplatform.cs {example}{example} - InterfactId: exo.cs.eXoApplication.chat.service|
 
 * APIs usage: Use the following APIs to upload and send files to other users:
 
 || Name ||Description || Service URL endpoint || Parameters || Expected Values ||
-|*upload* | To upload a file to the server.| $portalname/$restcontextname/fileexchange | description {example}{example} username {example}{example} requestor {example}{example} isroom| string {example}{example} user id {example}{example} user id {example}{example} true / false |
-
+|*upload* | Upload a file to the server.| $portalname/$restcontextname/fileexchange | description {example}{example} username {example}{example} requestor {example}{example} isroom| string {example}{example} user id {example}{example} user id {example}{example} true / false |
 

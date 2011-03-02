@@ -1,5 +1,4 @@
 h1. Components in eXo Collaboration Configuration {anchor:id=CSref.Configuration.ComponentsineXoCollaborationConfiguration}
-
 This table shows some main components that take init-param in the applications of eXo Collaboration:
 
 || Applications|| Components || Description ||
@@ -63,8 +62,8 @@ Details:
 
 
 h2. XMPPMessenger {anchor:id=CSref.Configuration.XMPPMessenger}
-The configuration of the XMPPMessenger component is found in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_
- It helps eXo Collaboration connect the Openfire instance. 
+The configuration of the XMPPMessenger component is found in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_.
+It helps eXo Collaboration connect the Openfire instance.
 
  {code:xml}
         <component>
@@ -90,8 +89,7 @@ Details:
 
 
 h2. DefaultPresenceStatus {anchor:id=CSref.Configuration.DefaultPresenceStatus}
-The configuration of the DefaultPresenceStatus component is found in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_
-
+The configuration of the DefaultPresenceStatus component is found in _/extension/webapp/src/main/webapp/WEB-INF/cs-extension/cs/chat/chat-service-configuration.xml_.
 
 {code:xml}
          <component>
@@ -134,8 +132,7 @@ when the server starts, the configuration file that contains the declaration of 
 {code}
 
 || Values-param || Description || Possible Values || Default Value ||
-| *UserCanSeeAllGroupAddressBooks* | User can see all GroupAddressBooks or only GroupAddressBooks that the user has at least one membership | {{true/false}} | {{false}} |
-| *NonPublicGroups* | Groups that shouldn't be displayed in broadcast list. Wildcards may be used in groups name | {{true/false}} | N/A |
-
+| *UserCanSeeAllGroupAddressBooks* | User can see all GroupAddressBooks or only GroupAddressBooks that the user has at least one membership. | {{true/false}} | {{false}} |
+| *NonPublicGroups* | Groups that shouldn't be displayed in broadcast list. Wildcards may be used in groups name. | {{true/false}} | N/A |
 
 
