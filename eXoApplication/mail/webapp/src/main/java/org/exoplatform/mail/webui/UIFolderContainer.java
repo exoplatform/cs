@@ -155,6 +155,9 @@ public class UIFolderContainer extends UIContainer {
         uiApp.addMessage(new ApplicationMessage("UIFolderContainer.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
+      }else if (!MailUtils.isFull(accId)){
+        uiFolder.showMessage(event); 
+        return;
       }
       UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       uiPopup.activate(UIFolderForm.class, 450) ;
@@ -168,6 +171,12 @@ public class UIFolderContainer extends UIContainer {
       UIFolderContainer uiFolder = event.getSource() ;
       UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       UIFolderForm uiFolderForm = uiPopup.createUIComponent(UIFolderForm.class, null, null);
+      UIMailPortlet uiPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      if (!MailUtils.isFull(accId)){
+        uiFolder.showMessage(event); 
+        return;
+      }
       uiFolderForm.setParentPath(folderId);
       uiPopup.activate(uiFolderForm, 450, 0, false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
@@ -232,8 +241,15 @@ public class UIFolderContainer extends UIContainer {
 
   static public class RenameFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
-      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIFolderContainer uiFolderContainer = event.getSource() ;
+      UINavigationContainer uiNavigationContainer = uiFolderContainer.getAncestorOfType(UINavigationContainer.class);
+      String accountId = uiNavigationContainer.getChild(UISelectAccount.class).getSelectedValue();
       UIFolderContainer uiFolder = event.getSource() ;
+      if(!MailUtils.isFull(accountId)) {
+        uiFolderContainer.showMessage(event); 
+        return;
+      }
       UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       UIRenameFolderForm uiRenameFolderForm = uiPopup.activate(UIRenameFolderForm.class, 450) ;
       uiRenameFolderForm.setFolderId(folderId);
@@ -250,7 +266,13 @@ public class UIFolderContainer extends UIContainer {
       String username = uiPortlet.getCurrentUser();
       UINavigationContainer uiNavigationContainer = uiFolderContainer.getAncestorOfType(UINavigationContainer.class);
       String accountId = uiNavigationContainer.getChild(UISelectAccount.class).getSelectedValue();
-
+      if(!MailUtils.isFull(accountId)) {
+        uiFolderContainer.showMessage(event); 
+        return;
+      }
+      
+      if(MailUtils.isDelegated(accountId)) username = mailService.getDelegatedAccount(username, accountId).getDelegateFrom();
+      
       mailService.removeUserFolder(username, accountId, folderId);     
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
@@ -281,7 +303,12 @@ public class UIFolderContainer extends UIContainer {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-
+      if(MailUtils.isDelegated(accountId)) username = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
+      
+      if(!MailUtils.isFull(accountId)) {
+        uiFolderContainer.showMessage(event); 
+        return;
+      }
       List<Message> msgList = mailSrv.getMessagesByFolder(username, accountId, folderId) ;
       mailSrv.removeMessages(username, accountId, msgList, false);
 
@@ -304,6 +331,8 @@ public class UIFolderContainer extends UIContainer {
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+      if(MailUtils.isDelegated(accountId)) username = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
+      
       MessageFilter filter = new MessageFilter("");
       filter.setFolder(new String[] {folderId});
       filter.setAccountId(accountId);
@@ -337,6 +366,10 @@ public class UIFolderContainer extends UIContainer {
       String username = uiPortlet.getCurrentUser() ;
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class) ;
+      if(!MailUtils.isFull(accountId)) {
+        uiFolderContainer.showMessage(event); 
+        return;
+      }
       List<Message> msgList = mailSrv.getMessagesByFolder(username, accountId, folderId) ;
       boolean containPreview = false ;
       Message msgPre = uiMsgPreview.getMessage() ;
@@ -356,5 +389,11 @@ public class UIFolderContainer extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
     }
+  }
+
+  public void showMessage(Event event) {
+    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+    uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;
+    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
   }
 }

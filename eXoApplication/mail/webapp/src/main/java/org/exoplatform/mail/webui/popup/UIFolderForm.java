@@ -92,6 +92,7 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       String folderId = Utils.KEY_FOLDERS + IdGenerator.generate() ;
       Folder folder = null ;
       try {
+        if(MailUtils.isDelegated(accountId)) username = mailSvr.getDelegatedAccount(username, accountId).getDelegateFrom();
         if (mailSvr.isExistFolder(username, accountId, uiForm.getParentPath(), folderName)) {
           uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

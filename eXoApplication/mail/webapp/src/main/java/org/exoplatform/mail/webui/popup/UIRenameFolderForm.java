@@ -19,6 +19,7 @@ package org.exoplatform.mail.webui.popup;
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
@@ -70,6 +71,9 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = MailUtils.getCurrentUser();
     String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    Account account = mailSrv.getDelegatedAccount(username, accountId);
+    if(MailUtils.isDelegatedAccount(account, username)) username = account.getDelegateFrom();
+    
     Folder folder = mailSrv.getFolder(username, accountId, folderId);
     getUIFormInputInfo(CUR_FOLDER_NAME).setValue(folder.getName());    
   }
@@ -95,6 +99,7 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
       }
       
       try {
+        if(MailUtils.isDelegated(accountId)) username = mailService.getDelegatedAccount(username, accountId).getDelegateFrom();
         String folderParentId =  mailService.getFolderParentId(username, accountId, folderId) ;
         if (!mailService.isExistFolder(username, accountId, folderParentId, newFolderName)) {
           mailService.renameFolder(username, accountId, newFolderName, folderId) ;

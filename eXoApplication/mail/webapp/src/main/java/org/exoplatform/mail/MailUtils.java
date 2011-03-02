@@ -461,12 +461,12 @@ public class MailUtils {
       return (user != null && perms != null) && Utils.SEND_RECIEVE.equalsIgnoreCase(perms) ;
     }
 
-    public static boolean isFull(String id) {
+    public static boolean isFull(String accountId) {
       try {
         MailService mService = getMailService();
         String uid = getCurrentUser();
-        if(mService.getAccountById(uid, id) == null) {
-          Account dAccount = mService.getDelegatedAccount(uid, id);
+        if(mService.getAccountById(uid, accountId) == null) {
+          Account dAccount = mService.getDelegatedAccount(uid, accountId);
           return (isDelegatedAccount(dAccount, uid) && isFull(uid, dAccount.getPermissions().get(uid)));
         }
         return true;

@@ -246,11 +246,13 @@ public class ImapConnector extends BaseConnector {
 
   /**
    * Move message(s). Folder will be synchronized before message(s) moved. There 4 instances when move the message action:
+   * <pre>
    (Source folder   ->    Remote folder)
    Local            -    Remote.
    Local            -    Local.
    Remote           -    Local.
    Remote           -    Remote.
+   </pre>
    * return {@link List} of mails that were not moved/deleted*/
   private List<Message> moveMessages(List<Message> msgs, Folder sourceFolder, Folder desFolder, boolean isLocalFolder, boolean isRemoteFolder) throws Exception {
     if(msgs == null || msgs.size() == 0 || (sourceFolder.getId() == desFolder.getId()) || sourceFolder == null || desFolder == null) return null;

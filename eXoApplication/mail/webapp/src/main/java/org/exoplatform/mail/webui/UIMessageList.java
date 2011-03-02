@@ -744,11 +744,11 @@ public class UIMessageList extends UIForm {
       MessageFilter filter = uiMessageList.getMessageFilter() ;
       filter.setHasStructure(false) ;
       try {
-        String uid = username;
+        /*String uid = username;
         if(MailUtils.isDelegated(accId)) {
           uid = mailSrv.getDelegatedAccount(username, accId).getDelegateFrom();
-        }
-        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(uid, filter)) ;
+        }*/
+        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter)) ;
       } catch (PathNotFoundException e) {
         uiMessageList.setMessagePageList(null) ;
         uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -787,11 +787,11 @@ public class UIMessageList extends UIForm {
         filter.setHasStructure(true) ;
         filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
         try {
-          String uid = username;
+          /*String uid = username;
           if(MailUtils.isDelegated(accId)) {
             uid = mailSrv.getDelegatedAccount(username, accId).getDelegateFrom();
-          }
-          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(uid, filter)) ;
+          }*/
+          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter)) ;
         } catch (PathNotFoundException e) {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -837,11 +837,11 @@ public class UIMessageList extends UIForm {
         filter.setHasStructure(true) ;
         filter.setOrderBy(Utils.EXO_LAST_UPDATE_TIME);
         try {
-          String uid = username;
+          /*String uid = username;
           if(MailUtils.isDelegated(accId)) {
             uid = mailSrv.getDelegatedAccount(username, accId).getDelegateFrom();
-          }
-          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(uid, filter)) ;
+          }*/
+          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter)) ;
         } catch (PathNotFoundException e) {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
@@ -998,11 +998,11 @@ public class UIMessageList extends UIForm {
       msgFilter.setTag((getSelectedTagId() == null) ? null : new String[] {getSelectedTagId()});
     }
     msgFilter.setHasStructure(false) ;
-    String uid = username ;
+   /* String uid = username ;
     if(MailUtils.isDelegated(accountId)) {
       uid = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
-    }
-    setMessagePageList(mailSrv.getMessagePageList(uid, msgFilter));
+    }*/
+    setMessagePageList(mailSrv.getMessagePageList(username, msgFilter));
   }
 
   static public class ReplyActionListener extends EventListener<UIMessageList> {
@@ -1929,11 +1929,11 @@ public class UIMessageList extends UIForm {
         else msgFilter.setHasStructure(false) ;
       }
       try {
-        String uid = username;
+        /*String uid = username;
         if(MailUtils.isDelegated(accountId)) {
           uid = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
-        }
-        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(uid, msgFilter));
+        }*/
+        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, msgFilter));
         uiMessageList.setMessageFilter(msgFilter);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
       } catch (Exception e) {

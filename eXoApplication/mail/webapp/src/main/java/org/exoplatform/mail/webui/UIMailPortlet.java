@@ -74,6 +74,10 @@ public class UIMailPortlet extends UIPortletApplication {
     addChild(UIActionBar.class, null, null) ;
     addChild(UINavigationContainer.class, null, null) ;
     String accId = getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue();
+    MailService mailSvr = Utils.getMailService();
+    String username = MailUtils.getCurrentUser();
+    /*System.out.println("mailservice:" + mailSvr);
+    if(mailSvr.getAccountById(username, accId) == null && mailSvr.getDelegatedAccount(username, accId) == null) accId = null;*/ 
     UIMessageArea uiMessageArea = createUIComponent(UIMessageArea.class, null, null);
     uiMessageArea.init(accId);
     uiMessageArea.setMailSetting(getMailSetting());
@@ -145,7 +149,7 @@ public class UIMailPortlet extends UIPortletApplication {
       }    
       context.addUIComponentToUpdateByAjax(this);
     }catch (PathNotFoundException ex) {
-      
+      return;
     } catch (Exception ex) {
       ex.printStackTrace();
     } finally {
@@ -210,9 +214,4 @@ public class UIMailPortlet extends UIPortletApplication {
     return cometdContextName;
   }
   
-  public void showMessage(Event event) {
-    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
-    uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;
-    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-  }
 } 

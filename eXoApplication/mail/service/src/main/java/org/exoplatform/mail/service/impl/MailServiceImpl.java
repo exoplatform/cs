@@ -194,11 +194,13 @@ public class MailServiceImpl implements MailService, Startable {
     String accountId = account.getId();
     CheckingInfo info = getCheckingInfo(userName, accountId);
     String key = userName + ":" + accountId;
+    IMAPStore store = null;
     if (info == null) {
       checkingLog_.put(key, new CheckingInfo());
     }
-
-    IMAPStore store = openIMAPConnection(userName, account, info);
+    
+    if (account.getProtocol().equals(Utils.IMAP))
+      store = openIMAPConnection(userName, account, info);
     if (store != null) {
       synchImapFolders(userName, accountId);
       //      removeCheckingInfo(userName, accountId);
@@ -221,8 +223,6 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public Folder getFolder(String userName, String accountId, String folderId) throws Exception {
-    if(isDelegatedAccount(userName, accountId))
-      userName = getDelegatedAccount(userName, accountId).getDelegateFrom();
     return storage_.getFolder(userName, accountId, folderId);
   }
 
@@ -398,10 +398,18 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public List<MessageFilter> getFilters(String userName, String accountId) throws Exception {
+    Account delegatorAcc = getDelegatedAccount(userName, accountId); 
+    if(Utils.isDelegatedAccount(delegatorAcc, userName)) {
+      userName = getDelegatedAccount(userName, accountId).getDelegateFrom();
+    }
     return storage_.getFilters(userName, accountId);
   }
 
   public MessageFilter getFilterById(String userName, String accountId, String filterId) throws Exception {
+    Account delegatorAcc = getDelegatedAccount(userName, accountId); 
+    if(Utils.isDelegatedAccount(delegatorAcc, userName)) {
+      userName = getDelegatedAccount(userName, accountId).getDelegateFrom();
+    }
     return storage_.getFilterById(userName, accountId, filterId);
   }
 
@@ -531,7 +539,11 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   public MessagePageList getMessagePageList(String userName, MessageFilter filter) throws Exception {
-    return storage_.getMessagePageList(userName, filter);
+    Account delegatorAcc = getDelegatedAccount(userName, filter.getAccountId()); 
+    if(Utils.isDelegatedAccount(delegatorAcc, userName)) {
+      userName = getDelegatedAccount(userName, filter.getAccountId()).getDelegateFrom();
+    }
+    return storage_.getMessagePageList(userName, filter);  
   }
 
   public boolean saveMessage(String userName,
@@ -947,11 +959,13 @@ public class MailServiceImpl implements MailService, Startable {
       } catch (Exception e) {
         e.printStackTrace();
       }
+      
     CheckingInfo checkingInfo = getCheckingInfo(accoutOwner, accountId);
     if (checkingInfo != null) {
       if (logger.isDebugEnabled()) 
         logger.info(" user [ " + userName + " ] request to stop checking emails");
       checkingInfo.setRequestStop(true);
+     // checkingInfo.setStatusCode(200);
       updateCheckingMailStatusByCometd(userName, accountId, checkingInfo);
 
     }
@@ -1379,7 +1393,7 @@ public class MailServiceImpl implements MailService, Startable {
       String imapSocketFactoryClass = "mail.imap.socketFactory.class";
       String emailAddress = account.getIncomingUser();
       props.put("mail.mime.base64.ignoreerrors", "true");
-
+      
       if (account.isIncomingSsl()) {
         MailSSLSocketFactory socketFactory = this.getSSLSocketFactory(host);
         if(account.getSecureAuthsIncoming().equalsIgnoreCase(Utils.STARTTLS))
@@ -1459,6 +1473,8 @@ public class MailServiceImpl implements MailService, Startable {
       props.put("mail.pop3.auth", "true");
       props.put("mail.pop3.socketFactory.port", account.getIncomingPort());
       props.put("mail.pop3.socketFactory.class", "javax.net.SocketFactory");
+     // props.put(Utils.POP3_CONECT_TIMEOUT, 10000);
+      
       if (account.isIncomingSsl()) {
         MailSSLSocketFactory socketFactory = null;
         try {
@@ -2570,42 +2586,14 @@ public class MailServiceImpl implements MailService, Startable {
     long[] msgUID = { 0 };
     boolean result = false;
     try {
-      //importMessageIntoServerMail(userName, accountId, folderId, mimeMessage, msgUID);
-      //emlImportExport_.importMessage(userName, accountId, folderId, mimeMessage, msgUID);
       if(isDelegatedAccount(userName, accountId))
-        userName = getDelegatedAccount(userName, accountId).getDelegateFrom();
-      msgUID = importMessageIntoServerMail(userName, accountId, folderId, mimeMessage);
+      userName = getDelegatedAccount(userName, accountId).getDelegateFrom();
+      importMessageIntoServerMail(userName, accountId, folderId, mimeMessage, msgUID);
       emlImportExport_.importMessage(userName, accountId, folderId, mimeMessage, msgUID);
       result = true;
     } catch (Exception ex) {
     }
     return result;
-  }
-
-
-  private long[] importMessageIntoServerMail(String userName,
-                                             String accountId,
-                                             String folderId,
-                                             MimeMessage mimeMessage) throws Exception {
-    IMAPFolder remoteFolder = null;
-    long[] uid = {0};
-    try {
-      remoteFolder = getIMAPFolder(userName, accountId, folderId);
-      if (remoteFolder != null) {
-        if (!remoteFolder.isOpen()) {
-          remoteFolder.open(javax.mail.Folder.READ_WRITE);
-        }
-        javax.mail.Message[] messages = { mimeMessage };
-        javax.mail.Message[] updatedMsgs = remoteFolder.addMessages(messages);
-        uid[0] = remoteFolder.getUIDNext();
-        remoteFolder.close(true);
-      }
-    } catch (Exception e) {
-      logger.error("Error in importing message into remote folder", e);
-    }
-
-    return uid;
-
   }
 
   private boolean importMessageIntoServerMail(String userName,

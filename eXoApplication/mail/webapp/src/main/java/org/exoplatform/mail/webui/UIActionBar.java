@@ -129,7 +129,7 @@ public class UIActionBar extends UIContainer {
       MailService mailSvr = uiPortlet.getApplicationComponent(MailServiceImpl.class);
       mailSvr.setCurrentUserName(username);
       Account acc = mailSvr.getDelegatedAccount(username, accId);
-      if(Utils.isEmptyField(accId) || (mailSvr.getAccounts(username).isEmpty() && !MailUtils.isFull(username))) {
+      if(Utils.isEmptyField(accId) || (mailSvr.getAccounts(username).isEmpty() && !MailUtils.isFull(accId))) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
@@ -199,7 +199,13 @@ public class UIActionBar extends UIContainer {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      if(MailUtils.isDelegated(accId)) uiActionBar.showMessage(event);
+      String username = MailUtils.getCurrentUser();
+      Account delegatorAcc = MailUtils.getMailService().getDelegatedAccount(username, accId);
+      if(MailUtils.isDelegatedAccount(delegatorAcc, username)){
+        uiActionBar.showMessage(event);
+        return;
+      }
+
       UIPopupAction uiPopupAction = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
       UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionFilterContainer");
       uiPopupAction.activate(uiPopupContainer, 600, 0, false) ;

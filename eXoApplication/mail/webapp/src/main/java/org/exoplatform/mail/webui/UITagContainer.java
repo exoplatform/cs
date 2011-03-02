@@ -168,7 +168,7 @@ public class UITagContainer extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
                                   .getSelectedValue();
       if(!MailUtils.isFull(accountId)) {
-        uiPortlet.showMessage(event); 
+        uiTags.showMessage(event); 
         return;
       }
       if(MailUtils.isDelegated(accountId)) {
@@ -214,7 +214,7 @@ public class UITagContainer extends UIForm {
         return;
       }
       if(!MailUtils.isFull(accId)) {
-        uiPortlet.showMessage(event); 
+        uiTag.showMessage(event); 
         return;
       }
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
@@ -234,7 +234,7 @@ public class UITagContainer extends UIForm {
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       if(!MailUtils.isFull(accountId)) {
-        uiPortlet.showMessage(event); 
+        uiTag.showMessage(event); 
         return;
       }
       
@@ -258,7 +258,7 @@ public class UITagContainer extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
                                   .getSelectedValue();
       if(!MailUtils.isFull(accountId)) {
-        uiPortlet.showMessage(event); 
+        uiTag.showMessage(event); 
         return;
       }
       if(MailUtils.isDelegated(accountId)) {
@@ -290,7 +290,7 @@ public class UITagContainer extends UIForm {
                                   .getSelectedValue();
 
       if(!MailUtils.isFull(accountId)) {
-        uiPortlet.showMessage(event); 
+        uiTag.showMessage(event); 
         return;
       }
       List<Message> listMessage = mailSrv.getMessageByTag(username, accountId, tagId);
@@ -315,7 +315,7 @@ public class UITagContainer extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
                                   .getSelectedValue();
       if(!MailUtils.isFull(accountId)) {
-        uiPortlet.showMessage(event); 
+        uiTag.showMessage(event); 
         return;
       }
       if(MailUtils.isDelegated(accountId)) {
@@ -328,5 +328,11 @@ public class UITagContainer extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
+  }
+  
+  public void showMessage(Event event) {
+    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+    uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;
+    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
   }
 }

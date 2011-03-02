@@ -68,6 +68,7 @@ import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.cms.queries.impl.NewUserConfig.User;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
@@ -1140,7 +1141,8 @@ import com.sun.mail.smtp.SMTPSendFailedException;
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class)
       .getSelectedValue();
       String usename = uiPortlet.getCurrentUser();
-
+      if(MailUtils.isDelegated(accountId)) usename = mailSvr.getDelegatedAccount(usename, accountId).getDelegateFrom();
+      
       UIPopupAction uiChildPopup = composeForm.getAncestorOfType(UIPopupAction.class);
       Message message = composeForm.getNewMessage();
       // verify message

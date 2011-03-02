@@ -639,4 +639,8 @@ public class Utils {
     }
     return numberOfUnread;
   }
+  
+  public static boolean isDelegatedAccount(Account acc, String recieve) {
+    return (acc != null && acc.getDelegateFrom() != null && recieve != null && !recieve.equalsIgnoreCase(acc.getDelegateFrom()));
+  }
 }

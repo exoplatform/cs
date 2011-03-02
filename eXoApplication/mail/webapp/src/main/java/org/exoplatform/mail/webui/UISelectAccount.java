@@ -108,17 +108,21 @@ public class UISelectAccount extends UIForm {
   public String getSelectedValue() {
     String id = getChild(UIFormSelectBox.class).getValue() ;
     try {
-      if (!MailUtils.isFieldEmpty(id) && MailUtils.getMailService().getAccountById(MailUtils.getCurrentUser(), id) != null) {
+      String username = MailUtils.getCurrentUser();
+      MailService mailSvr = MailUtils.getMailService();
+      if (!MailUtils.isFieldEmpty(id) && mailSvr.getAccountById(username, id) != null) {
         return id;        
       } else if(MailUtils.isDelegated(id)){
         return id; 
-      } else {
-        return accountRefreshed;
+      } else if(!MailUtils.isFieldEmpty(accountRefreshed)){
+          if((mailSvr.getAccountById(username, accountRefreshed) != null) || mailSvr.getDelegatedAccount(username, accountRefreshed) != null) 
+            return accountRefreshed;
       }
     } catch (Exception e) {
       // e.printStackTrace();
       return accountRefreshed;
     } 
+    return null;
   }
 
   public void setSelectedValue(String value) {

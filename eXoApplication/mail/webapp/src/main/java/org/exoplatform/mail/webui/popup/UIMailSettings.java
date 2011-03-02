@@ -144,7 +144,7 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
 
     UIDelegationInputSet accountDelegate = new UIDelegationInputSet(TAB_ACCOUNT_DELEGATION);  
     UIFormSelectBox ownerAccounts = new UIFormSelectBox(FIELD_OWNER_ACCOUNTS, FIELD_OWNER_ACCOUNTS, this.getOwnerAccs(username));
-    UIFormStringInput delegatedAccounts = new UIFormStringInput(FIELD_DELEGATED_ACCOUNTS, FIELD_DELEGATED_ACCOUNTS, null);//getDelegatedAccs()
+    UIFormStringInput delegatedAccounts = new UIFormStringInput(FIELD_DELEGATED_ACCOUNTS, FIELD_DELEGATED_ACCOUNTS, null);
     UIFormCheckBoxInput<Boolean> fullPrivilege = new UIFormCheckBoxInput<Boolean>(FIELD_PRIVILEGE_FULL, FIELD_PRIVILEGE_FULL, null);
 
     accountDelegate.addUIFormInput(ownerAccounts);
@@ -267,20 +267,22 @@ public class UIMailSettings extends UIFormTabPane implements UIPopupComponent {
       mailSrv.saveMailSetting(username, setting);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       MessageFilter filter = uiMessageList.getMessageFilter() ;
-      String uid = username;
-      if(MailUtils.isDelegated(accountId)) {
+      /*  String uid = username;
+      Account delegatorAcc = mailSrv.getDelegatedAccount(username, accountId); 
+     if(MailUtils.isDelegatedAccount(delegatorAcc, username)) {
         uid = mailSrv.getDelegatedAccount(username, accountId).getDelegateFrom();
-      }
+      }*/
+      
       if (oldLayout != setting.getLayout()) {
         uiMessageList.getAncestorOfType(UIMessageArea.class).reloadMailSetting();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
       } else if (defaultAcc != null && (!accountId.equals(setting.getDefaultAccount()) || accountId.equals(defaultAcc))){
         uiSelectAccount.updateAccount() ;
         uiSelectAccount.setSelectedValue(accountId);
-        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(uid, filter));
+        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter));
       } else {
         try {
-          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(uid, filter));
+          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(username, filter));
         } catch (PathNotFoundException e) {
           uiMessageList.setMessagePageList(null) ;
           uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
