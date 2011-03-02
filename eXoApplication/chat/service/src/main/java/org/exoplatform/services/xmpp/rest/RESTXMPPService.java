@@ -1784,7 +1784,6 @@ public class RESTXMPPService implements ResourceContainer, Startable {
         }
         session.removeAllTransport();
       }
-      messenger.logout(_username);
       return Response.ok().cacheControl(cc).build();
     } catch (XMPPException e) {
       if (log.isDebugEnabled()) 
@@ -1793,6 +1792,9 @@ public class RESTXMPPService implements ResourceContainer, Startable {
       return Response.status(error.getCode())
       .entity(error.getMessage())
       .build();
+    }
+    finally {
+      messenger.logout(_username);
     }
   }
 

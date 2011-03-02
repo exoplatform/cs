@@ -40,28 +40,33 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
   
   @Override
   public void onEvent(Event<ConversationRegistry, ConversationState> event) throws Exception {
+    XMPPMessenger messenger = null;
+    String userId = null;
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
-      XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
-    //Saving presence status
+      messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
+      //Saving presence status
       DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
       if(messenger != null){
-        String userId = event.getData().getIdentity().getUserId() ;
+        userId = event.getData().getIdentity().getUserId() ;
         XMPPSession session = messenger.getSession(userId);
         if (session != null){
           if(dps != null && userId != null && !userId.equals("")){
             dps.savePresenceStatus(userId, session.getPresenceStatus_());  
-          }else   {
-            log.debug("Can not save user chat status"); 
+          } else   {
+            log.error("Can not save user chat status"); 
           }
           session.removeAllTransport();  
         } 
+      }
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
+    finally {
+      if ((userId != null) && (messenger != null)) {
         messenger.logout(userId);
       }
-     } catch (Exception e){
-       if(log.isDebugEnabled())
-        log.debug(e.getMessage());
-      }
+    }
   }
 
 }

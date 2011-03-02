@@ -580,6 +580,10 @@ public class XMPPSessionImpl implements XMPPSession , UIStateSession{
       sessionProvider.getSession(history_.getWorkspace(), history_.getRepository());
 
     } catch (XMPPException e) {
+      // CS-4712: disconnect when login failed
+      if (connection_.isConnected()) {
+        connection_.disconnect();
+      }
       throw new XMPPException("Create XMPP connection for user '" + username + "' failed. ", e);
     } catch (RepositoryException e) {
       if (log.isDebugEnabled())
