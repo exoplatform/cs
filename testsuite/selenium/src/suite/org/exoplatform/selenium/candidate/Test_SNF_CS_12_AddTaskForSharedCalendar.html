@@ -82,6 +82,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//div[@title='Default']</td>
 	<td></td>
@@ -107,6 +112,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>username</td>
 	<td></td>
@@ -122,8 +132,28 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>-- click save--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//form[@id='UISharedForm']/div[2]/div/div/table/tbody/tr/td/div[1]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//form[@id='UISharedForm']/div[2]/div/div/table/tbody/tr/td/div[1]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- close share calendare form</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UICalendarPopupWindow']/div/div[1]//div[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -134,6 +164,11 @@
 <tr>
 	<td>waitForElementPresent</td>
 	<td>//div[@class='SharedCalendarIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
 	<td></td>
 </tr>
 <tr>
@@ -207,6 +242,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//div[@title='root- Default']</td>
 	<td></td>
@@ -224,6 +264,11 @@
 <tr>
 	<td>click</td>
 	<td>link=Task</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
 	<td></td>
 </tr>
 <tr>
@@ -254,6 +299,11 @@
 <tr>
 	<td>click</td>
 	<td>//div[4]/div/div[2]/div/div/div/div/div/div/div[2]/table/tbody/tr/td/div[1]/div/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
 	<td></td>
 </tr>
 <tr>
@@ -312,6 +362,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-- Search for and Delete Task</td>
 	<td></td>
@@ -339,6 +394,16 @@
 <tr>
 	<td>click</td>
 	<td>//div[@class='UIListView SpliterResizableListArea']//tr[@class='UIListViewRow']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>---- delete task</td>
 	<td></td>
 </tr>
 <tr>
@@ -387,6 +452,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//img[@alt='Delete']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//img[@alt='Delete']</td>
 	<td></td>
@@ -417,6 +492,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>link=Sign out</td>
 	<td></td>
@@ -426,7 +506,6 @@
 	<td></td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

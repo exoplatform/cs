@@ -57,6 +57,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-- Add an Contact</td>
 	<td></td>
@@ -69,6 +74,11 @@
 <tr>
 	<td>click</td>
 	<td>link=Contacts</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
 	<td></td>
 </tr>
 <tr>
@@ -212,6 +222,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-- Verify contacts edited</td>
 	<td></td>
@@ -237,7 +252,7 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
+	<td>verifyElementPresent</td>
 	<td>link=Test_43_Edited@gmail.com</td>
 	<td></td>
 </tr>
@@ -252,6 +267,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>---- selecte user to move</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//tr[2]/td[1]/input</td>
 	<td></td>
@@ -259,6 +279,11 @@
 <tr>
 	<td>click</td>
 	<td>//tr[2]/td[1]/input</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>---- Show addressbook to select move</td>
 	<td></td>
 </tr>
 <tr>
@@ -277,6 +302,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>---- select Adressbook </td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//div[2]/div[2]/div/a</td>
 	<td></td>
@@ -284,16 +314,6 @@
 <tr>
 	<td>click</td>
 	<td>//div[2]/div[2]/div/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[2]/div[3]/div</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[2]/div[3]/div</td>
 	<td></td>
 </tr>
 <tr>
@@ -302,6 +322,26 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>---- select adress book contain user</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='addressesjohn']/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='addressesjohn']/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>---- select user to delete</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//td[1]/input</td>
 	<td></td>
@@ -312,8 +352,23 @@
 	<td></td>
 </tr>
 <tr>
+	<td>echo</td>
+	<td>---- delete user</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//form[@id='UIContacts']/div[2]/a[4]/div</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//form[@id='UIContacts']/div[2]/a[4]/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>Are you sure you want to delete this contact ?</td>
 	<td></td>
 </tr>
 <tr>
@@ -326,7 +381,6 @@
 	<td></td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

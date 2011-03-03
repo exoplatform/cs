@@ -57,6 +57,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-- Add Address Book</td>
 	<td></td>
@@ -69,6 +74,11 @@
 <tr>
 	<td>click</td>
 	<td>link=Contacts</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
 	<td></td>
 </tr>
 <tr>
@@ -114,6 +124,11 @@
 <tr>
 	<td>verifyElementPresent</td>
 	<td>xpath=//div[@class='PersonalAddress']//div[@title='Address_Book_41']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
 	<td></td>
 </tr>
 <tr>
@@ -177,6 +192,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>verifyElementPresent</td>
+	<td>xpath=//div[@class='PersonalAddress']//div[@title='Address_Book_41_Edited']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-- Delete Address Book</td>
 	<td></td>
@@ -199,6 +224,11 @@
 <tr>
 	<td>click</td>
 	<td>link=Delete</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>This address book will be deleted. Do you confirm?</td>
 	<td></td>
 </tr>
 <tr>

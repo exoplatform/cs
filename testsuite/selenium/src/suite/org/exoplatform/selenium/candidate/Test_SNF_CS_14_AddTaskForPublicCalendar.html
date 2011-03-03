@@ -182,6 +182,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-- Search for and Delete Task</td>
 	<td></td>
@@ -212,6 +217,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
 	<td>//table[@id='RowContainerDay']//div[@class='IconHolder DeleteTaskIcon']</td>
 	<td></td>
@@ -222,7 +232,22 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
+	<td>assertConfirmation</td>
+	<td>Are you sure you want to delete?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Sign out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
 	<td>link=Sign out</td>
 	<td></td>
 </tr>
