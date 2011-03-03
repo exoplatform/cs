@@ -460,8 +460,11 @@ public class MailServiceImpl implements MailService, Startable {
       } catch (Exception e) {
         if(logger.isDebugEnabled()) logger.debug("MailServiceImpl: Move message error " + e.getMessage());
       }
-    }
-    if (successList != null && successList.size() > 0) storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId);
+    }else if(account.getProtocol().equals(Utils.POP3)) 
+      successList.addAll(msgList);
+    
+    if (successList != null && successList.size() > 0)
+      storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId);
     return successList;
   }
 
@@ -482,7 +485,9 @@ public class MailServiceImpl implements MailService, Startable {
       } catch (Exception e) {
         logger.error("Mailservice: Move message to trash folder error", e);
       }
-    }
+    }else if(account.getProtocol().equals(Utils.POP3)) 
+      successList.addAll(msgList);
+    
     if (successList != null && successList.size() > 0) storage_.moveMessages(userName, accountId, successList, currentFolderId, destFolderId, updateReference);
     return successList;
   }
@@ -505,7 +510,9 @@ public class MailServiceImpl implements MailService, Startable {
       } catch (Exception e) {
         if(logger.isDebugEnabled()) logger.debug("Mailservice: Move message fail. ", e);
       }
-    }
+    }else if(account.getProtocol().equals(Utils.POP3)) 
+      successList.add(msg);
+    
     if (successList != null && successList.size() > 0){
       storage_.moveMessage(userName, accountId, msg, currentFolderId, destFolderId, true);
       return msg;
@@ -534,7 +541,8 @@ public class MailServiceImpl implements MailService, Startable {
       } catch (Exception e) {
         return;
       }
-    }
+    }else if(account.getProtocol().equals(Utils.POP3)) success = true; 
+    
     if (success) storage_.moveMessage(userName, accountId, msg, currentFolderId, destFolderId, updateReference);
   }
 
@@ -965,7 +973,7 @@ public class MailServiceImpl implements MailService, Startable {
       if (logger.isDebugEnabled()) 
         logger.info(" user [ " + userName + " ] request to stop checking emails");
       checkingInfo.setRequestStop(true);
-     // checkingInfo.setStatusCode(200);
+      checkingInfo.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
       updateCheckingMailStatusByCometd(userName, accountId, checkingInfo);
 
     }
@@ -2231,7 +2239,8 @@ public class MailServiceImpl implements MailService, Startable {
               }
               Info infoObj = new Info();
               infoObj.setFolders(folderStr);
-               String currentUserName = getCurrentUserName(); 
+              
+              String currentUserName = getCurrentUserName(); 
               saved = storage_.savePOP3Message(userName,
                                                accountId,
                                                msg,

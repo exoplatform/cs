@@ -284,7 +284,7 @@ public class TestMailService extends BaseMailTestCase{
     mailService_.saveMessage(username, accPop.getId(), message, true) ;
     message = mailService_.getMessageById(username, accPop.getId(), message.getId()) ;
     Message m = mailService_.moveMessage(username, accPop.getId(), message, folder.getId(), desfolder.getId()) ;
-    assertNull("move/delete message fail", m);
+    assertNotNull("move/delete message fail", m);
     assertNotNull(mailService_.getMessagesByFolder(username, accPop.getId(), desfolder.getId())) ;
     mailService_.removeMessage(username, accPop.getId(), message) ;
     assertEquals(mailService_.getMessagesByFolder(username, accPop.getId(), desfolder.getId()).size(), 0) ;
