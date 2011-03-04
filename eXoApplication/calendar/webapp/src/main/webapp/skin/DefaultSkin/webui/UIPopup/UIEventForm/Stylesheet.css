@@ -446,8 +446,11 @@
 .eventShare .UIFormGrid td.FieldLabel {
 	text-align:left; /* orientation=lt */
 	text-align:right; /* orientation=rt */
-	width:18%;
+	width:20%;
 	line-height:16px;
+}
+html>body .eventShare .UIFormGrid td.FieldLabel {
+  width:18%;
 }
 .eventShare .UIFormGrid .AddNewNodeIcon {
 	margin-left:10px; /* orientation=lt */
