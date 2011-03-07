@@ -80,6 +80,7 @@ public class UIYearView extends UICalendarView {
     Calendar endYear = cal ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = CalendarUtils.getCurrentUser() ;
+    String timezone = CalendarUtils.getCurrentUserCalendarSetting().getTimeZone();
     EventQuery eventQuery = new EventQuery() ;
     
     if(!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null")
@@ -90,6 +91,7 @@ public class UIYearView extends UICalendarView {
     eventQuery.setToDate(endYear) ;
     eventQuery.setExcludeRepeatEvent(true);
     yearData_ = calendarService.searchHightLightEvent(username, eventQuery, getPublicCalendars());
+    yearData_.putAll(calendarService.searchHighlightRecurrenceEvent(username, eventQuery, getPublicCalendars(), timezone));
     UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
     uiCategory.setValue(categoryId_) ;
     uiCategory.setOnChange("Onchange") ;

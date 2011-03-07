@@ -204,6 +204,8 @@ UIWeekView.prototype.dropCallback = function() {
 	var start = parseInt(dragElement.getAttribute("startTime")) ;
 	var end = parseInt(dragElement.getAttribute("endTime")) ;
 	var calType = parseInt(dragElement.getAttribute("calType")) ;
+	var calId = dragElement.getAttribute("calid");
+	var eventId = dragElement.getAttribute("eventid");
 	var workingStart = 0 ;
 	if (end == 0) end = 1440 ;
 	var delta = end - start  ;
@@ -228,6 +230,7 @@ UIWeekView.prototype.dropCallback = function() {
 	eXo.calendar.UICalendarPortlet.setTimeValue(dragElement,currentStart,currentEnd,me.currentCol);
 	me.setSize();
 	ajaxAsyncGetRequest(eXo.cs.Utils.createUrl(actionLink,params), false) ;
+	//eXo.webui.UIForm.submitEvent(eXo.calendar.UICalendarPortlet.portletId + '#' + 'UIWeekView', 'UpdateEvent', '&subComponentId=' + 'UIWeekView' + '&objectId=' + eventId + '&calendarId=' + calId + '&calType=' + calType + '&startTime=' + currentStart + '&finishTime=' + currentEnd + '&currentDate=' + currentDate + '&isOccur=' + isOccur + '&recurId=' + recurId);
 	me.cleanUp();
 } ;
 

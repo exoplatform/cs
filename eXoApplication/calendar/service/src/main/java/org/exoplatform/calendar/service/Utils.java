@@ -134,6 +134,10 @@ public class Utils {
   public static final String EXO_IS_EXCEPTION = "exo:isException";
   public static final String EXO_EXCLUDE_ID = "exo:excludeId";
   public static final String EXO_ORIGINAL_REFERENCE = "exo:originalReference";
+  public static final String EXO_REPEAT_INTERVAL = "exo:repeatInterval";
+  public static final String EXO_REPEAT_BYDAY = "exo:repeatByDay";
+  public static final String EXO_REPEAT_BYMONTHDAY = "exo:repeatByMonthDay";
+  public static final String EXO_REPEAT_FINISH_DATE = "exo:repeatFinishDate";
   
   public static final String X_STATUS = "X-STATUS".intern() ;
   

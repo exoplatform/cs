@@ -63,6 +63,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
 
   final public static String FIELD_CHECKALL = "allDay".intern() ;
   final public static String FIELD_REPEAT = "repeat".intern() ;
+  final public static String FIELD_ISREPEAT = "isRepeat".intern();
   final public static String FIELD_REPEAT_UNTIL = "repeatUntil".intern();
   final public static String FIELD_PLACE = "place".intern() ;
   final public static String FIELD_PRIORITY = "priority".intern() ; 
@@ -71,7 +72,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
 
   protected List<Attachment> attachments_ = new ArrayList<Attachment>() ;
   private Map<String, List<ActionData>> actionField_ ;
-
+  
   public UIEventDetailTab(String id) throws Exception {
     super(id);
     setComponentConfig(getClass(), null) ;
@@ -96,10 +97,19 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormDateTimePicker(FIELD_TO, FIELD_TO, new Date(), false));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKALL, FIELD_CHECKALL, null));
     addUIFormInput(new UIFormStringInput(FIELD_PLACE, FIELD_PLACE, null));
-    addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;
+    //addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;
     
-    addUIFormInput(new UIFormDateTimePicker(FIELD_REPEAT_UNTIL, FIELD_REPEAT_UNTIL, null, false));
+    addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISREPEAT, FIELD_ISREPEAT, false));
     
+    ActionData editRepeatAction = new ActionData() ;
+    editRepeatAction.setActionType(ActionData.TYPE_ICON) ;
+    editRepeatAction.setActionName(UIEventForm.ACT_EDITREPEAT) ;
+    editRepeatAction.setActionListener(UIEventForm.ACT_EDITREPEAT) ;
+    List<ActionData> editRepeatActions = new ArrayList<ActionData>() ;
+    editRepeatActions.add(editRepeatAction) ;
+    setActionField(FIELD_ISREPEAT, editRepeatActions) ;
+    
+    //addUIFormInput(new UIFormDateTimePicker(FIELD_REPEAT_UNTIL, FIELD_REPEAT_UNTIL, null, false));
     
     addUIFormInput(new UIFormSelectBox(FIELD_PRIORITY, FIELD_PRIORITY, getPriority())) ;
     ActionData addEmailAddress = new ActionData() ;

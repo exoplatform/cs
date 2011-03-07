@@ -32,6 +32,8 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.Utils;
+import org.exoplatform.calendar.webui.popup.UIConfirmForm;
+import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -69,7 +71,6 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.ConfirmDeleteAllSeries.class),
       @EventConfig(listeners = UICalendarView.ConfirmDeleteCancel.class)
     }
-
 )
 public class UIWeekView extends UICalendarView {
 
@@ -113,12 +114,13 @@ public class UIWeekView extends UICalendarView {
     // get normal events and exception occurrences, exclude original recurrence events
     List<CalendarEvent> allEvents = calendarService.getEvents(username, eventQuery, getPublicCalendars())  ;
     
-    List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate());    
+    List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate(), getPublicCalendars());
+    String timezone = CalendarUtils.getCurrentUserCalendarSetting().getTimeZone();
     if (originalRecurEvents != null && originalRecurEvents.size() > 0) {
       Iterator<CalendarEvent> recurEventsIter = originalRecurEvents.iterator();
       while (recurEventsIter.hasNext()) {
         CalendarEvent recurEvent = recurEventsIter.next();
-        Map<String,CalendarEvent> tempMap = calendarService.getOccurrenceEvents(recurEvent, eventQuery.getFromDate(), eventQuery.getToDate());
+        Map<String,CalendarEvent> tempMap = calendarService.getOccurrenceEvents(recurEvent, eventQuery.getFromDate(), eventQuery.getToDate(), timezone);
         if (tempMap != null) {
           recurrenceEventsMap.put(recurEvent.getId(), tempMap);
           allEvents.addAll(tempMap.values());
@@ -213,6 +215,7 @@ public class UIWeekView extends UICalendarView {
       if (isOccur && !Utils.isEmpty(recurId)) {
         eventCalendar = calendarview.getRecurrenceMap().get(eventId).get(recurId);
       }
+      //CalendarEvent oldEvent = new CalendarEvent(eventCalendar);
       
       if(eventCalendar != null) {
         CalendarService calService = CalendarUtils.getCalendarService() ;
@@ -260,19 +263,19 @@ public class UIWeekView extends UICalendarView {
             if(eventCalendar.getToDateTime().before(eventCalendar.getFromDateTime())) {
               return ;
             }
-            if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-              if (isOccur && !Utils.isEmpty(recurId)) {
-                List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
-                listEvent.add(eventCalendar);
-                calendarService.updateOccurrenceEvent(calendarId, calendarId, calType, calType, listEvent, username);
-              } else {
-              calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;
+            // if it's a 'virtual' occurrence
+            if (isOccur && !Utils.isEmpty(recurId)) {
+              List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
+              listEvent.add(eventCalendar);
+              calendarService.updateOccurrenceEvent(calendarId, calendarId, calType, calType, listEvent, username);
+            } else {
+              if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+                calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;  
+              } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+                calendarService.saveEventToSharedCalendar(username, calendarId, eventCalendar, false) ;
+              } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
+                calendarService.savePublicEvent(calendarId, eventCalendar, false) ;          
               }
-              
-            }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
-              calendarService.saveEventToSharedCalendar(username, calendarId, eventCalendar, false) ;
-            }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
-              calendarService.savePublicEvent(calendarId, eventCalendar, false) ;          
             }
             calendarview.setLastUpdatedEventId(eventId) ;
             calendarview.refresh() ;

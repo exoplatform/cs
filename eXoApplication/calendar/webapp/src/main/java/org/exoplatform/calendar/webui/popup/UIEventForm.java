@@ -19,6 +19,7 @@ package org.exoplatform.calendar.webui.popup;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -122,7 +123,8 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
                      @EventConfig(listeners = UIEventForm.ConfirmCancelActionListener.class, name = "ConfirmCancel", phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.ConfirmUpdateOnlyInstance.class, phase = Phase.DECODE),
                      @EventConfig(listeners = UIEventForm.ConfirmUpdateAllSeries.class, phase = Phase.DECODE),
-                     @EventConfig(listeners = UIEventForm.ConfirmUpdateCancel.class, phase = Phase.DECODE)
+                     @EventConfig(listeners = UIEventForm.ConfirmUpdateCancel.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.EditRepeatActionListener.class, phase = Phase.DECODE)
                    }
   )
   ,
@@ -169,10 +171,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String ACT_DOWNLOAD = "DownloadAttachment".intern() ;
   final public static String ACT_ADDEMAIL = "AddEmailAddress".intern() ;
   final public static String ACT_ADDCATEGORY = "AddCategory".intern() ;
+  final public static String ACT_EDITREPEAT = "EditRepeat".intern();
   final public static String STATUS_EMPTY = "".intern();
   final public static String STATUS_PENDING = "pending".intern();
   final public static String STATUS_YES = "yes".intern();
   final public static String STATUS_NO = "no".intern();
+  public final static String RP_END_BYDATE = "endByDate";
+  public final static String RP_END_AFTER = "endAfter";
+  public final static String RP_END_NEVER = "neverEnd";
+  
   private boolean isAddNew_ = true ;
   private boolean isChangedSignificantly = false;
   private CalendarEvent calendarEvent_ = null ;
@@ -187,6 +194,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private String oldCalendarId_ = null ;
   private String newCalendarId_ = null ;
   private String confirm_msg = "";
+  private CalendarEvent repeatEvent;
+  private String repeatSummary;
+  
   //private String newCategoryId_ = null ;
   public UIEventForm() throws Exception {
     super("UIEventForm");
@@ -252,6 +262,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     if(eventCalendar != null) {
       isAddNew_ = false ;
       calendarEvent_ = eventCalendar ;
+      repeatEvent = new CalendarEvent(calendarEvent_);
       setEventSumary(eventCalendar.getSummary()) ;
       setEventDescription(eventCalendar.getDescription()) ;
       setEventAllDate(CalendarUtils.isAllDayEvent(eventCalendar)) ;
@@ -277,9 +288,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         setSelectedCategory(eventCategoryId) ;
       }
       setEventPlace(eventCalendar.getLocation()) ;
-      setEventRepeat(eventCalendar.getRepeatType()) ;
-      if (eventCalendar.getRepeatUntilDate() != null) {
-        setEventRepeatUntil(eventCalendar.getRepeatUntilDate(), calSetting.getDateFormat());
+      setEventIsRepeat(!eventCalendar.getRepeatType().equals(CalendarEvent.RP_NOREPEAT));
+      setRepeatSummary(buildRepeatSummary(calendarEvent_));
+      // if it's exception occurrence, disabled repeat checkbox, it means you can't convert a exception occurrence to a repeating event 
+      if (calendarEvent_.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(calendarEvent_.getRecurrenceId())
+          && calendarEvent_.getIsExceptionOccurrence()) {
+        getChild(UIEventDetailTab.class).getUIFormCheckBoxInput(UIEventDetailTab.FIELD_ISREPEAT).setEnable(false);
       }
       
       setSelectedEventPriority(eventCalendar.getPriority()) ;
@@ -343,6 +357,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       setSendOption(calSetting.getSendOption());
       getChild(UIEventShareTab.class).setParticipantStatusList(participantStatusList_);
       attenderTab.updateParticipants(pars.toString());
+      setRepeatSummary(buildRepeatSummary(null));
     }
   }
   
@@ -518,19 +533,23 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
 
   protected Date getEventFromDate(String dateFormat,String timeFormat) throws Exception {
-    UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    UIFormDateTimePicker fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
-    UIFormComboBox timeField = eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_FROM_TIME) ;
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    Locale locale = context.getParentAppRequestContext().getLocale() ;
-    if(getEventAllDate()) {
-      DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
+    try {
+      UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+      UIFormDateTimePicker fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
+      UIFormComboBox timeField = eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_FROM_TIME) ;
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      Locale locale = context.getParentAppRequestContext().getLocale() ;
+      if(getEventAllDate()) {
+        DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
+        df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
+        return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
+      } 
+      DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
       df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
-      return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
-    } 
-    DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
-    df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
-    return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
+      return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
+    } catch (Exception e) {
+      return null;
+    }
   }
   protected String getEventFormDateValue () {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
@@ -607,13 +626,23 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_REPEAT).setValue(type) ;
   }
   
+  protected boolean getEventIsRepeat() {
+    UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    return  eventDetailTab.getUIFormCheckBoxInput(UIEventDetailTab.FIELD_ISREPEAT).isChecked();
+  }
+  
+  protected void setEventIsRepeat(boolean isRepeat) {
+    UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    eventDetailTab.getUIFormCheckBoxInput(UIEventDetailTab.FIELD_ISREPEAT).setChecked(isRepeat);
+  }
+  
   protected String getEventRepeatUntilValue() {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimePicker untilField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_REPEAT_UNTIL);
     return  untilField.getValue();
   }
   
-  protected Date getEventRepeatUntilDate(String dateFormat) throws Exception {
+  /*protected Date getEventRepeatUntilDate(String dateFormat) throws Exception {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimePicker untilField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_REPEAT_UNTIL) ;
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
@@ -632,7 +661,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
     df.setCalendar(CalendarUtils.getInstanceOfCurrentCalendar()) ;
     untilField.setValue(df.format(date)) ;
-  }
+  }*/
   
   protected String getEventPlace() {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
@@ -1395,9 +1424,9 @@ public Attachment getAttachment(String attId) {
           }              
           //}
           calendarEvent.setLocation(location) ;
-          calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
+          //calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
           
-          if (uiForm.getEventRepeat()!=null && !CalendarEvent.RP_NOREPEAT.equals(uiForm.getEventRepeat())) {
+          /*if (uiForm.getEventRepeat()!=null && !CalendarEvent.RP_NOREPEAT.equals(uiForm.getEventRepeat())) {
             if (!CalendarUtils.isEmpty(uiForm.getEventRepeatUntilValue())) {
               Date until = uiForm.getEventRepeatUntilDate(calSetting.getDateFormat());
               if (until.before(from)) {
@@ -1408,6 +1437,24 @@ public Attachment getAttachment(String attId) {
               }
               calendarEvent.setRepeatUntilDate(until);
             }   
+          }*/
+          if (uiForm.getEventIsRepeat()) {
+            if (repeatEvent != null) {
+              // copy repeat properties from repeatEvent to calendarEvent
+              calendarEvent.setRepeatType(repeatEvent.getRepeatType());
+              calendarEvent.setRepeatInterval(repeatEvent.getRepeatInterval());
+              calendarEvent.setRepeatCount(repeatEvent.getRepeatCount());
+              calendarEvent.setRepeatUntilDate(repeatEvent.getRepeatUntilDate());
+              calendarEvent.setRepeatByDay(repeatEvent.getRepeatByDay());
+              calendarEvent.setRepeatByMonthDay(repeatEvent.getRepeatByMonthDay());
+            }
+          } else {
+            calendarEvent.setRepeatType(CalendarEvent.RP_NOREPEAT);
+            calendarEvent.setRepeatInterval(0);
+            calendarEvent.setRepeatCount(0);
+            calendarEvent.setRepeatUntilDate(null);
+            calendarEvent.setRepeatByDay(null);
+            calendarEvent.setRepeatByMonthDay(null);
           }
           
           calendarEvent.setPriority(uiForm.getEventPriority()) ; 
@@ -1435,11 +1482,11 @@ public Attachment getAttachment(String attId) {
               listEvent.add(calendarEvent) ;
               
               // if the event (before change) is a virtual occurrence
-              if (!uiForm.calendarEvent_.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(calendarEvent.getRecurrenceId())) {
+              if (!uiForm.calendarEvent_.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(uiForm.calendarEvent_.getRecurrenceId())) {
                 if (!updateSeries) {
                   calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
                 } else {
-                  // update series: for todo, now only update concrete occurrence
+                  // update series:
                   
                   if (CalendarUtils.isSameDate(oldCalendarEvent.getFromDateTime(), calendarEvent.getFromDateTime())) {
                     calService.updateRecurrenceSeries(fromCal, toCal, fromType, toType, calendarEvent, username);
@@ -1620,6 +1667,194 @@ public Attachment getAttachment(String attId) {
     }
   }
   
+  public void setRepeatEvent(CalendarEvent repeatEvent) throws Exception {
+    this.repeatEvent = repeatEvent;
+    setEventIsRepeat(true);
+    setRepeatSummary(buildRepeatSummary(repeatEvent));
+  }
+  
+  public void setRepeatSummary(String summary) {
+    repeatSummary = summary;
+  }
+  
+  public String getRepeatSummary() {
+    return repeatSummary;
+  }
+  
+  public CalendarEvent getRepeatEvent() {
+    return repeatEvent;
+  }
+  
+  /**
+   * Build the repeating summary, i.e: daily every 2 days, until 02/03/2011. <br/>
+   * The summary structure is defined in resource bundle, it contains some parameters and </br> 
+   * will be replaced by values from repeatEvent. <br/> 
+   * <p>There are 6 parameters: {count}, {until}, {interval}, {byDays}, {theDay}, {theNumber}.<br/>
+   * Some labels in resource bundle to define numbers (the first, the second, ...) which were used in summary
+   * @param repeatEvent the repeating event
+   * @return summary string about repeating event
+   * @throws Exception
+   */
+  public String buildRepeatSummary(CalendarEvent repeatEvent) throws Exception {
+    CalendarSetting calSetting = CalendarUtils.getCurrentUserCalendarSetting(); 
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat format = new SimpleDateFormat(calSetting.getDateFormat(), locale);
+    DateFormatSymbols symbols = new DateFormatSymbols(locale);
+    String[] dayOfWeeks = symbols.getWeekdays();
+    
+    String summary = "";
+    if (repeatEvent == null) return "";
+    String repeatType = repeatEvent.getRepeatType();
+    if (repeatType.equals(CalendarEvent.RP_NOREPEAT)) return "";
+    int interval = (int)repeatEvent.getRepeatInterval();
+    int count = (int)repeatEvent.getRepeatCount();
+    Date until = repeatEvent.getRepeatUntilDate();
+    String endType = RP_END_NEVER;
+    if (count > 0) endType = RP_END_AFTER;
+    if (until != null) endType = RP_END_BYDATE;
+    
+    String pattern = "";
+    if (repeatType.equals(CalendarEvent.RP_DAILY)) {
+      if (interval == 1) {
+        //pattern = "Daily";
+        pattern = getLabel("daily");
+      } else {
+        //pattern = "Every {interval} days";
+        pattern = getLabel("every-day");
+      }
+      if (endType.equals(RP_END_AFTER)) {
+        //pattern = "Daily, {count} times";
+        //pattern = "Every {interval} days, {count} times";
+        pattern += (", " + getLabel("count-times"));
+      } 
+      if (endType.equals(RP_END_BYDATE)) {
+        //pattern = "Daily, until {until}";
+        //pattern = "Every {interval} days, until {until}";
+        pattern += (", " + getLabel("until"));
+      }
+
+      summary = pattern.replace("{interval}", String.valueOf(interval)).replace("{count}", String.valueOf(repeatEvent.getRepeatCount()))
+                .replace("{until}", repeatEvent.getRepeatUntilDate()==null?"":format.format(repeatEvent.getRepeatUntilDate()));
+      return summary;
+      
+    }
+    
+    if (repeatType.equals(CalendarEvent.RP_WEEKLY)) {   
+      if (interval == 1) {
+        //pattern = "Weekly on {byDays}";
+        pattern = getLabel("weekly");
+      } else {
+        //pattern = "Every {interval} weeks on {byDays}";
+        pattern = getLabel("every-week");
+      }
+      if (endType.equals(RP_END_AFTER)) {
+        //pattern = "Weekly on {byDays}, {count} times";
+        //pattern = "Every {interval} weeks on {byDays}, {count} times";
+        pattern += ", " + getLabel("count-times");
+      }
+      if (endType.equals(RP_END_BYDATE)) {
+        //pattern = "Weekly on {byDays}, until {until}";
+        //pattern = "Every {interval} weeks on {byDays}, until {until}";
+        pattern += ", " + getLabel("until");
+      }
+      
+      String[] weeklyByDays = repeatEvent.getRepeatByDay();
+      String byDays = ""; // 
+      for (int i = 0; i < weeklyByDays.length; i++) {
+        if (i == 0) byDays = byDays + dayOfWeeks[UIRepeatEventForm.convertToDayOfWeek(weeklyByDays[0])];
+        else byDays += ", " + dayOfWeeks[UIRepeatEventForm.convertToDayOfWeek(weeklyByDays[i])];
+      }
+      summary = pattern.replace("{interval}", String.valueOf(interval)).replace("{count}", String.valueOf(repeatEvent.getRepeatCount()))
+                .replace("{until}", repeatEvent.getRepeatUntilDate()==null?"":format.format(repeatEvent.getRepeatUntilDate())).replace("{byDays}", byDays);
+      return summary;
+      
+    }
+    
+    if (repeatType.equals(CalendarEvent.RP_MONTHLY)) {
+      String monthlyType = UIRepeatEventForm.RP_MONTHLY_BYMONTHDAY;
+      if (repeatEvent.getRepeatByDay() != null && repeatEvent.getRepeatByDay().length > 0) monthlyType = UIRepeatEventForm.RP_MONTHLY_BYDAY;
+            
+      if (interval == 1) {
+        // pattern = "Monthly on" 
+        pattern = getLabel("monthly");
+      } else {
+        // pattern = "Every {interval} months on
+        pattern = getLabel("every-month");
+      }
+      
+      if (monthlyType.equals(UIRepeatEventForm.RP_MONTHLY_BYDAY)) {
+        // pattern = "Monthly on {theNumber} {theDay}
+        // pattern = "Every {interval} months on {theNumber} {theDay}
+        pattern += " " + getLabel("monthly-by-day");
+      } else {
+        // pattern = "Monthly on day {theDay}
+        // pattern = "Every {interval} months on day {theDay}
+        pattern += " " + getLabel("monthly-by-month-day");
+      }
+      
+      if (endType.equals(RP_END_AFTER)) {
+        pattern = pattern += ", " + getLabel("count-times");
+      }
+      if (endType.equals(RP_END_BYDATE)) {
+        pattern = pattern += ", " + getLabel("until");
+      } 
+
+      String theNumber = ""; // the first, the second, the third, ...
+      String theDay = ""; // in monthly by day, it's Monday, Tuesday, ... (day of week), in monthly by monthday, it's 1-31 (day of month)
+      
+      if (monthlyType.equals(UIRepeatEventForm.RP_MONTHLY_BYDAY)) {
+        java.util.Calendar temp = CalendarUtils.getInstanceOfCurrentCalendar();
+        temp.setTime(repeatEvent.getFromDateTime());
+        int weekOfMonth = temp.get(java.util.Calendar.WEEK_OF_MONTH);
+        java.util.Calendar temp2 = CalendarUtils.getInstanceOfCurrentCalendar();
+        temp2.setTime(temp.getTime());
+        temp2.add(java.util.Calendar.DATE, 7);
+        if (temp2.get(java.util.Calendar.MONTH) != temp.get(java.util.Calendar.MONTH)) weekOfMonth = 5;
+        int dayOfWeek = temp.get(java.util.Calendar.DAY_OF_WEEK);
+        String[] weekOfMonths = new String[] {getLabel("summary-the-first"), getLabel("summary-the-second"), getLabel("summary-the-third"),
+            getLabel("summary-the-fourth"), getLabel("summary-the-last")};
+        theNumber = weekOfMonths[weekOfMonth-1];
+        theDay = dayOfWeeks[dayOfWeek];
+      } else {
+        java.util.Calendar temp = CalendarUtils.getInstanceOfCurrentCalendar();
+        temp.setTime(repeatEvent.getFromDateTime());
+        int dayOfMonth = temp.get(java.util.Calendar.DAY_OF_MONTH);
+        theDay = String.valueOf(dayOfMonth);
+      }
+      summary = pattern.replace("{interval}", String.valueOf(interval)).replace("{count}", String.valueOf(repeatEvent.getRepeatCount()))
+      .replace("{until}", repeatEvent.getRepeatUntilDate()==null?"":format.format(repeatEvent.getRepeatUntilDate())).replace("{theDay}", theDay).replace("{theNumber}", theNumber);
+      return summary;
+    }
+    
+    if (repeatType.equals(CalendarEvent.RP_YEARLY)) {
+      if (interval == 1) {
+        // pattern = "Yearly on {theDay}"
+        pattern = getLabel("yearly");
+      } else {
+        // pattern = "Every {interval} years on {theDay}" 
+        pattern = getLabel("every-year");
+      }
+      
+      if (endType.equals(RP_END_AFTER)) {
+        // pattern = "Yearly on {theDay}, {count} times"
+        // pattern = "Every {interval} years on {theDay}, {count} times" 
+        pattern += ", " +getLabel("count-times");
+      }
+      if (endType.equals(RP_END_BYDATE)) {
+        // pattern = "Yearly on {theDay}, until {until}"
+        // pattern = "Every {interval} years on {theDay}, until {until}" 
+        pattern += ", " + getLabel("until");
+      }
+
+      String theDay = format.format(repeatEvent.getFromDateTime()); //
+      summary = pattern.replace("{interval}", String.valueOf(interval)).replace("{count}", String.valueOf(repeatEvent.getRepeatCount()))
+      .replace("{until}", repeatEvent.getRepeatUntilDate()==null?"":format.format(repeatEvent.getRepeatUntilDate())).replace("{theDay}", theDay);
+      return summary;
+    }
+    return summary;
+  }
+
   static  public class AddCategoryActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
@@ -2064,6 +2299,20 @@ public Attachment getAttachment(String attId) {
     }
   }
   
+  public static class EditRepeatActionListener extends EventListener<UIEventForm> {
+
+    @Override
+    public void execute(Event<UIEventForm> event) throws Exception {
+      // TODO Auto-generated method stub
+      UIEventForm uiForm = event.getSource() ;
+      UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
+      UIRepeatEventForm repeatEventForm =  uiChildPopup.activate(UIRepeatEventForm.class, 480) ;
+      repeatEventForm.init(uiForm.repeatEvent);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+    }
+  }
+  
   public static class ConfirmUpdateOnlyInstance extends EventListener<UIEventForm> {
 
     /* (non-Javadoc)
@@ -2123,7 +2372,6 @@ public Attachment getAttachment(String attId) {
       uiPortlet.cancelAction();
       uiPopupAction.deActivate();
     }
-    
   }
 
   public class ParticipantStatus {

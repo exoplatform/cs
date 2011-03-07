@@ -586,6 +586,16 @@ public interface CalendarService {
   
   public List<CalendarEvent> getSharedEventByCalendars(String username, List<String> calendarIds) throws Exception ;
   
+  /**
+   * Get a shared event of user from user name, id of shared calendar, id of shared event
+   * @param username username
+   * @param calendarId id of shared calendar
+   * @param eventId id of shared event
+   * @return the CalendarEvent object
+   * @throws Exception
+   */
+  public CalendarEvent getSharedEvent(String username, String calendarId, String eventId) throws Exception ;
+  
   public void removeFeedData(String username, String title);
   
   public ResourceBundle getResourceBundle() throws Exception;
@@ -753,35 +763,28 @@ public interface CalendarService {
   public void stopSynchronizeRemoteCalendarJob(String username) throws Exception;
   
   /**
-   * Get all virtual occurrences from an original recurrence event 
-   * @param recurEvent
-   * @param from
-   * @param to
-   * @return
+   * Get all virtual occurrences from an original recurrence event  in a period of time <br/>
+   * The result will be depended on the recurrence rule, the start date of recurrence event and the period of time to view.
+   * @param recurEvent the original recurrence event
+   * @param from the from time
+   * @param to the to time
+   * @return the map of CalendarEvent object, each entry will contains an occurrence event object with recurrence-id as the key
    * @throws Exception
    */
-  public Map<String,CalendarEvent> getOccurrenceEvents(CalendarEvent recurEvent, java.util.Calendar from, java.util.Calendar to) throws Exception;
+  public Map<String,CalendarEvent> getOccurrenceEvents(CalendarEvent recurEvent, java.util.Calendar from, java.util.Calendar to, String timezone) throws Exception;
   
   /**
-   * Get all original recurrence events
-   * @param username
-   * @param from
-   * @param to
-   * @return
+   * Get all original recurrence events of an user in period of time
+   * @param username the owner of recurrence event
+   * @param from from time
+   * @param to to time
+   * @return list of CalendarEvent objects
    * @throws Exception
    */
-  public List<CalendarEvent> getOriginalRecurrenceEvents(String username, java.util.Calendar from, java.util.Calendar to) throws Exception;
-  
+  public List<CalendarEvent> getOriginalRecurrenceEvents(String username, java.util.Calendar from, java.util.Calendar to, String[] publicCalendarIds) throws Exception;
+    
   /**
-   * 
-   * @param username
-   * @return
-   * @throws Exception
-   */
-  public List<CalendarEvent> getRecurrenceEvents(String username) throws Exception;
-  
-  /**
-   * Update occurrence event, there are two cases: if this occurrence is virtual, convert it to exception, <br />
+   * Update an occurrence event, there are two cases: if this occurrence is virtual occurrence, convert it to exception, <br />
    * if this occurrence is exception, update it as a normal event
    * @param fromCalendar
    * @param toCalendar
@@ -794,32 +797,44 @@ public interface CalendarService {
   public void updateOccurrenceEvent(String fromCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception ; 
   
   /**
-   * Get all exception occurrences from a original recurrence event
-   * @param username
-   * @param recurEvent
-   * @return
+   * Get all exception occurrences from a original recurrence event, the exception event always belong to same calendar with original recurrence event
+   * @param username the owner of this recurrence event
+   * @param recurEvent the original recurrence event
+   * @return the list of CalendarEvent objects
    * @throws Exception
    */
   public List<CalendarEvent> getExceptionEvents(String username, CalendarEvent recurEvent) throws Exception;
   
   /**
-   * Remove all occurrence from an original recurrence event
-   * @param username
-   * @param originalEvent
+   * Remove only an occurrence instance from recurrence series, this function will get the original event node of the occurrence
+   * and then put the recurrence id of the need-to-delete occurrence to excludeId list of original node.
+   * @param username owner of this occurrence event
+   * @param occurrence the occurrence event object to remove
+   * @throws Exception
+   */
+  public void removeOccurrenceInstance(String username, CalendarEvent occurrence) throws Exception;
+  
+  /**
+   * Remove all occurrence from an recurrence series. It will delete the original event of recurrence series. <br/>
+   * All exception occurrences of this series still exist and will be treated as a normal event
+   * @param username owner of recurrence event, in case of private or shared calendar
+   * @param originalEvent the original recurrence event object
    * @throws Exception
    */
   public void removeRecurrenceSeries(String username, CalendarEvent originalEvent) throws Exception;
   
   /**
-   * Update recurrence series
-   * @param fromCalendar
-   * @param toCalendar
-   * @param fromType
-   * @param toType
-   * @param occurrence
-   * @param username
+   * Update recurrence series from an occurrence, this function is only called if the occurrence event is not changed the from date property. <br/>
+   * In other way, if the occurrence event move to another date, it will be updated as a 'exception' occurrence and not affects to series
+   * @param fromCalendar the calendarId of the calendar which the recurrence event belong to before updating
+   * @param toCalendar the new calendarId of the recurrence event
+   * @param fromType calendarType of recurrence event before updating
+   * @param toType calendarType of recurrence event after updating
+   * @param occurrence the occurrence contains the new data about recurrence series
+   * @param username owner of recurrence event, in case of private and shared calendar
    * @throws Exception
    */
   public void updateRecurrenceSeries(String fromCalendar, String toCalendar, String fromType, String toType, CalendarEvent occurrence, String username) throws Exception ;
  
+  public Map<Integer, String> searchHighlightRecurrenceEvent(String username, EventQuery eventQuery, String[] publicCalendarIds, String timezone) throws Exception ;
 }

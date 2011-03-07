@@ -67,8 +67,10 @@ public class CalendarEvent {
   final public static String RP_YEARLY = "yearly".intern() ;
   final public static String RP_WEEKEND = "weekend".intern() ;
   final public static String RP_WORKINGDAYS = "workingdays".intern() ;
-
-  final public static String[] REPEATTYPES = {RP_NOREPEAT, RP_DAILY, RP_WORKINGDAYS, RP_WEEKLY, RP_MONTHLY, RP_YEARLY} ;
+  
+  final public static String[] RP_WEEKLY_BYDAY = {"MO", "TU", "WE", "TH", "FR", "SA", "SU"}; 
+  
+  final public static String[] REPEATTYPES = {RP_NOREPEAT, RP_DAILY, RP_WEEKLY, RP_MONTHLY, RP_YEARLY} ;
 
   private String id ;
   private String summary ;
@@ -91,8 +93,21 @@ public class CalendarEvent {
   private String recurrenceId;
   private Boolean isExceptionOccurrence;
   private String[] excludeId;
-  private Date repeatUntilDate;
   private String originalReference;
+  
+  private Date repeatUntilDate;
+  private long repeatCount;
+  private long repeatInterval;
+  private long[] repeatBySecond;
+  private long[] repeatByMinute;
+  private long[] repeatByHour;
+  private String[] repeatByDay;
+  private long[] repeatByMonthDay;
+  private long[] repeatByYearDay;
+  private long[] repeatByWeekNo;
+  private long[] repeatByMonth;
+  private long[] repeatBySetPos;
+  private String repeatWkst;
 
   /**
    * Types: TYPE_EVENT, TYPE_TASK, TYPE_JOURNAL
@@ -131,11 +146,14 @@ public class CalendarEvent {
     this.fromDateTime = event.fromDateTime;
     this.toDateTime = event.toDateTime;
     this.eventCategoryId = event.eventCategoryId;
+    this.eventCategoryName = event.eventCategoryName;
     this.message = event.message;
     this.location = event.location;
     this.repeatType = event.repeatType;
     this.calendarId = event.calendarId;
+    this.calType = event.calType;
     this.sendOption = event.sendOption;
+    this.status = event.status;
     List<Attachment> attachments = event.getAttachment();
     setAttachment(attachments);
     this.setInvitation(event.getInvitation());
@@ -143,8 +161,12 @@ public class CalendarEvent {
     this.setParticipantStatus(event.getParticipantStatus());
     this.setReminders(event.getReminders());
     this.setPriority(event.getPriority());
-    this.setLastUpdatedTime(event.getLastUpdatedTime());
+    //this.setLastUpdatedTime(event.getLastUpdatedTime());
     this.setRepeatUntilDate(event.getRepeatUntilDate());
+    this.setRepeatCount(event.getRepeatCount());
+    this.setRepeatInterval(event.getRepeatInterval());
+    this.setRepeatByDay(event.getRepeatByDay());
+    this.setRepeatByMonthDay(event.getRepeatByMonthDay());
   }
 
   public String getId() { return id; }
@@ -339,6 +361,174 @@ public class CalendarEvent {
    */
   public String getOriginalReference() {
     return originalReference;
+  }
+
+  /**
+   * @param repeatCount the repeatCount to set
+   */
+  public void setRepeatCount(long repeatCount) {
+    this.repeatCount = repeatCount;
+  }
+
+  /**
+   * @return the repeatCount
+   */
+  public long getRepeatCount() {
+    return repeatCount;
+  }
+
+  /**
+   * @param repeatInterval the repeatInterval to set
+   */
+  public void setRepeatInterval(long repeatInterval) {
+    this.repeatInterval = repeatInterval;
+  }
+
+  /**
+   * @return the repeatInterval
+   */
+  public long getRepeatInterval() {
+    return repeatInterval;
+  }
+
+  /**
+   * @param repeatBySecond the repeatBySecond to set
+   */
+  public void setRepeatBySecond(long[] repeatBySecond) {
+    this.repeatBySecond = repeatBySecond;
+  }
+
+  /**
+   * @return the repeatBySecond
+   */
+  public long[] getRepeatBySecond() {
+    return repeatBySecond;
+  }
+  
+  /**
+   * @return the repeatByMinute
+   */
+  public long[] getRepeatByMinute() {
+    return repeatByMinute;
+  }
+
+  /**
+   * @param repeatByMinute the repeatByMinute to set
+   */
+  public void setRepeatByMinute(long[] repeatByMinute) {
+    this.repeatByMinute = repeatByMinute;
+  }
+
+  /**
+   * @return the repeatByMonthDay
+   */
+  public long[] getRepeatByMonthDay() {
+    return repeatByMonthDay;
+  }
+
+  /**
+   * @param repeatByMonthDay the repeatByMonthDay to set
+   */
+  public void setRepeatByMonthDay(long[] repeatByMonthDay) {
+    this.repeatByMonthDay = repeatByMonthDay;
+  }
+
+  /**
+   * @return the repeatByYearDay
+   */
+  public long[] getRepeatByYearDay() {
+    return repeatByYearDay;
+  }
+
+  /**
+   * @param repeatByYearDay the repeatByYearDay to set
+   */
+  public void setRepeatByYearDay(long[] repeatByYearDay) {
+    this.repeatByYearDay = repeatByYearDay;
+  }
+
+  /**
+   * @return the repeatByWeekNo
+   */
+  public long[] getRepeatByWeekNo() {
+    return repeatByWeekNo;
+  }
+
+  /**
+   * @param repeatByWeekNo the repeatByWeekNo to set
+   */
+  public void setRepeatByWeekNo(long[] repeatByWeekNo) {
+    this.repeatByWeekNo = repeatByWeekNo;
+  }
+
+  /**
+   * @return the repeatByMonth
+   */
+  public long[] getRepeatByMonth() {
+    return repeatByMonth;
+  }
+
+  /**
+   * @param repeatByMonth the repeatByMonth to set
+   */
+  public void setRepeatByMonth(long[] repeatByMonth) {
+    this.repeatByMonth = repeatByMonth;
+  }
+
+  /**
+   * @return the repeatBySetPos
+   */
+  public long[] getRepeatBySetPos() {
+    return repeatBySetPos;
+  }
+
+  /**
+   * @param repeatBySetPos the repeatBySetPos to set
+   */
+  public void setRepeatBySetPos(long[] repeatBySetPos) {
+    this.repeatBySetPos = repeatBySetPos;
+  }
+
+  /**
+   * @return the repeatWkst
+   */
+  public String getRepeatWkst() {
+    return repeatWkst;
+  }
+
+  /**
+   * @param repeatWkst the repeatWkst to set
+   */
+  public void setRepeatWkst(String repeatWkst) {
+    this.repeatWkst = repeatWkst;
+  }
+
+  /**
+   * @param repeatByHour the repeatByHour to set
+   */
+  public void setRepeatByHour(long[] repeatByHour) {
+    this.repeatByHour = repeatByHour;
+  }
+
+  /**
+   * @return the repeatByHour
+   */
+  public long[] getRepeatByHour() {
+    return repeatByHour;
+  }
+
+  /**
+   * @param repeatByDay the repeatByDay to set
+   */
+  public void setRepeatByDay(String[] repeatByDay) {
+    this.repeatByDay = repeatByDay;
+  }
+
+  /**
+   * @return the repeatByDay
+   */
+  public String[] getRepeatByDay() {
+    return repeatByDay;
   }
     
 }

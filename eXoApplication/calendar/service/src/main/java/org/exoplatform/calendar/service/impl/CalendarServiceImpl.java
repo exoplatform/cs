@@ -820,18 +820,9 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   @Override
   public Map<String,CalendarEvent> getOccurrenceEvents(CalendarEvent recurEvent,
                                                  java.util.Calendar from,
-                                                 java.util.Calendar to) throws Exception {
+                                                 java.util.Calendar to, String timezone) throws Exception {
     // TODO Auto-generated method stub
-    return storage_.getOccurrenceEvents(recurEvent, from, to);
-  }
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.CalendarService#getRecurrenceEvents(java.lang.String)
-   */
-  @Override
-  public List<CalendarEvent> getRecurrenceEvents(String username) throws Exception {
-    // TODO Auto-generated method stub
-    return storage_.getRecurrenceEvents(username);
+    return storage_.getOccurrenceEvents(recurEvent, from, to, timezone);
   }
 
   /* (non-Javadoc)
@@ -849,9 +840,9 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   }
 
   @Override
-  public List<CalendarEvent> getOriginalRecurrenceEvents(String username, java.util.Calendar from, java.util.Calendar to) throws Exception {
+  public List<CalendarEvent> getOriginalRecurrenceEvents(String username, java.util.Calendar from, java.util.Calendar to, String[] publicCalendarIds) throws Exception {
     // TODO Auto-generated method stub
-    return storage_.getOriginalRecurrenceEvents(username, from, to);
+    return storage_.getOriginalRecurrenceEvents(username, from, to, publicCalendarIds);
   }
 
   /* (non-Javadoc)
@@ -884,6 +875,32 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                                      String username) throws Exception {
     // TODO Auto-generated method stub
     storage_.updateRecurrenceSeries(fromCalendar, toCalendar, fromType, toType, occurrence, username);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#getSharedEvent(java.lang.String, java.lang.String, java.lang.String)
+   */
+  @Override
+  public CalendarEvent getSharedEvent(String username, String calendarId, String eventId) throws Exception {
+    // TODO Auto-generated method stub
+    return storage_.getSharedEvent(username, calendarId, eventId);
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#removeOccurrenceInstance(java.lang.String, org.exoplatform.calendar.service.CalendarEvent)
+   */
+  @Override
+  public void removeOccurrenceInstance(String username, CalendarEvent occurrence) throws Exception {
+    storage_.removeOccurrenceInstance(username, occurrence);
+  }
+
+  @Override
+  public Map<Integer, String> searchHighlightRecurrenceEvent(String username,
+                                                             EventQuery eventQuery,
+                                                             String[] publicCalendarIds,
+                                                             String timezone) throws Exception {
+    // TODO Auto-generated method stub
+    return storage_.searchHighlightRecurrenceEvent(username, eventQuery, publicCalendarIds, timezone);
   }
   
 

@@ -1,0 +1,28 @@
+.UICalendarPortlet .UIRepeatEventForm .selectbox {
+	/*width: 22px;*/
+}
+
+.UICalendarPortlet .UIRepeatEventForm select {
+	width : 150px;
+}
+
+.UICalendarPortlet .UIRepeatEventForm .RepeatInterval .selectbox {
+	width: 50px;
+}
+
+.UICalendarPortlet .UIRepeatEventForm input {
+	
+}
+
+.UICalendarPortlet .UIRepeatEventForm #endAfterNumber {
+	width: 25px;
+}
+
+.UICalendarPortlet .UIRepeatEventForm #endByDateContainer span, .UICalendarPortlet .UIRepeatEventForm #endByDateContainer #endByDate, .UICalendarPortlet .UIRepeatEventForm #endByDateContainer #endDate {
+  float: left;
+}
+
+.UICalendarPortlet .UIRepeatEventForm #endByDateContainer #endDate input {
+  width: 150px;    	
+	float: left;
+}

@@ -675,16 +675,7 @@ public class MockCalendarService implements CalendarService{
   @Override
   public Map<String,CalendarEvent> getOccurrenceEvents(CalendarEvent recurEvent,
                                                  java.util.Calendar from,
-                                                 java.util.Calendar to) throws Exception {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  /* (non-Javadoc)
-   * @see org.exoplatform.calendar.service.CalendarService#getRecurrenceEvents(java.lang.String)
-   */
-  @Override
-  public List<CalendarEvent> getRecurrenceEvents(String username) throws Exception {
+                                                 java.util.Calendar to, String timezone) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
@@ -704,7 +695,7 @@ public class MockCalendarService implements CalendarService{
   }
 
   @Override
-  public List<CalendarEvent> getOriginalRecurrenceEvents(String username, java.util.Calendar from, java.util.Calendar to) throws Exception {
+  public List<CalendarEvent> getOriginalRecurrenceEvents(String username, java.util.Calendar from, java.util.Calendar to, String[] publicCalendarIds) throws Exception {
     // TODO Auto-generated method stub
     return null;
   }
@@ -739,5 +730,32 @@ public class MockCalendarService implements CalendarService{
                                      String username) throws Exception {
     // TODO Auto-generated method stub
     
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#getSharedEvent(java.lang.String, java.lang.String, java.lang.String)
+   */
+  @Override
+  public CalendarEvent getSharedEvent(String username, String calendarId, String eventId) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /* (non-Javadoc)
+   * @see org.exoplatform.calendar.service.CalendarService#removeOccurrenceInstance(java.lang.String, org.exoplatform.calendar.service.CalendarEvent)
+   */
+  @Override
+  public void removeOccurrenceInstance(String username, CalendarEvent occurrence) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public Map<Integer, String> searchHighlightRecurrenceEvent(String username,
+                                                             EventQuery eventQuery,
+                                                             String[] publicCalendarIds,
+                                                             String timezone) throws Exception {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

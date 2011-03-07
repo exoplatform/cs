@@ -3120,5 +3120,100 @@ UICalendarPortlet.prototype.useAuthenticationForRemoteCalendar = function(id) {
       lblPassword.style.color = 'gray';
     }   
   };  
+} ;
+
+UICalendarPortlet.prototype.editRepeat = function(id) {
+  var eventForm = eXo.calendar.UICalendarPortlet.getElementById(id);
+  var portletFragment = eXo.core.DOMUtil.findAncestorByClass(eventForm,"PORTLET-FRAGMENT");    
+  var repeatContainer = eXo.core.DOMUtil.findDescendantById(eventForm, "repeatContainer");
+  var repeatCheck = eXo.core.DOMUtil.getChildrenByTagName(repeatContainer, "input")[0];
+  var summary = eXo.core.DOMUtil.findFirstDescendantByClass(repeatContainer, "span", "repeatSummary");
+  var editButton = eXo.core.DOMUtil.getChildrenByTagName(repeatContainer, "a")[0];
+  
+  if (repeatCheck.checked) {
+    editButton.style.display = "";
+  } else {
+    editButton.style.display="none";
+  }
+  
+  repeatCheck.onclick = function() {
+    if (repeatCheck.checked) {
+      repeatCheck.checked = false;
+      eXo.webui.UIForm.submitForm(portletFragment.parentNode.id + '#UIEventForm','EditRepeat', true); 
+    } else {
+      summary.innerHTML = "";
+      editButton.style.display = "none";
+    }
+  };
 }
+
+UICalendarPortlet.prototype.changeRepeatType = function(id) {
+  var weeklyByDayClass = "weeklyByDay";
+  var monthlyTypeClass = "monthlyType";
+  var RP_END_AFTER = "endAfter";
+  var RP_END_NEVER = "neverEnd";
+  var RP_END_BYDATE = "endByDate";
+  
+  var repeatingEventForm = eXo.calendar.UICalendarPortlet.getElementById(id);
+  var weeklyByDay = eXo.core.DOMUtil.findFirstDescendantByClass(repeatingEventForm, "tr", weeklyByDayClass);
+  var monthlyType = eXo.core.DOMUtil.findFirstDescendantByClass(repeatingEventForm, "tr", monthlyTypeClass);
+  var repeatTypeSelectBox = eXo.core.DOMUtil.findFirstDescendantByClass(repeatingEventForm, "select", "selectbox");
+  var repeatType = repeatTypeSelectBox.options[repeatTypeSelectBox.selectedIndex].value;
+  var endNever = eXo.core.DOMUtil.findDescendantById(repeatingEventForm, "endNever");
+  var endAfter = eXo.core.DOMUtil.findDescendantById(repeatingEventForm, "endAfter");
+  var endByDate = eXo.core.DOMUtil.findDescendantById(repeatingEventForm, "endByDate");
+  var hiddenEndType = eXo.core.DOMUtil.findDescendantById(repeatingEventForm, "endRepeat");
+  var endByDateContainer = eXo.core.DOMUtil.findDescendantById(repeatingEventForm, "endByDateContainer");
+  var endDateContainer = eXo.core.DOMUtil.findDescendantById(endByDateContainer,  "endDate");
+  var endDate = eXo.core.DOMUtil.getChildrenByTagName(endDateContainer, "input")[0];
+  var count = eXo.core.DOMUtil.findDescendantById(repeatingEventForm, "endAfterNumber");
+  
+  endDate.disabled = true;
+  count.disabled = true;
+  
+  if (endAfter.checked) {
+    count.disabled = false;
+  }
+  
+  if (endByDate.checked) {
+    endDate.disabled = false;
+  }
+  
+  repeatTypeSelectBox.onchange = function() {
+    var type = repeatTypeSelectBox.options[repeatTypeSelectBox.selectedIndex].value;
+    if (type == "weekly") {
+      monthlyType.style.display = 'none';
+      weeklyByDay.style.display = '';
+    } else { 
+      if (type == "monthly") {
+        monthlyType.style.display = '';
+        weeklyByDay.style.display = 'none';
+      } else {
+        monthlyType.style.display = 'none';
+        weeklyByDay.style.display = 'none';
+      }
+    }
+  };
+  
+  endNever.onclick = function() {
+    hiddenEndType.value = RP_END_NEVER;
+    count.disabled = true;
+    endDate.disabled = true;
+  }
+  
+  endAfter.onclick = function() {
+    hiddenEndType.value = RP_END_AFTER;
+    count.disabled = false;
+    if (count.value == null || count.value == "") count.value = 5;
+    endDate.disabled = true;
+  }
+
+  endByDate.onclick = function() {
+    hiddenEndType.value = RP_END_BYDATE;
+    count.disabled = true;
+    endDate.disabled = false;
+    if (endDate.value == null || endDate.value == "") endDate.value = "";
+  }
+
+};
 

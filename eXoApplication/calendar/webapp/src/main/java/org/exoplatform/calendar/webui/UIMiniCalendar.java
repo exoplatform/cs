@@ -66,7 +66,9 @@ public class UIMiniCalendar extends UICalendarView  {
     eventQuery.setToDate(getEndDateOfMonth()) ;
     eventQuery.setExcludeRepeatEvent(true);
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
+    String timezone = CalendarUtils.getCurrentUserCalendarSetting().getTimeZone();
     dataMap = calendarService.searchHightLightEvent(CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
+    dataMap.putAll(calendarService.searchHighlightRecurrenceEvent(CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars(), timezone));
   }
   protected int getWeeksOfTheMonth(int year, int month, int day) {
     Calendar cal = getInstanceTempCalendar() ;
@@ -122,7 +124,9 @@ public class UIMiniCalendar extends UICalendarView  {
     eventQuery.setToDate(cal) ;
     eventQuery.setExcludeRepeatEvent(true);
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
+    String timezone = CalendarUtils.getCurrentUserCalendarSetting().getTimeZone();
     dataMap = calendarService.searchHightLightEvent(CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
+    dataMap.putAll(calendarService.searchHighlightRecurrenceEvent(CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars(), timezone));
   }
   static  public class MoveNextActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {

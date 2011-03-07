@@ -97,12 +97,13 @@ public class UIMonthView extends UICalendarView {
     eventQuery.setExcludeRepeatEvent(true);
     List<CalendarEvent> allEvents = calendarService.getEvents(username, eventQuery, getPublicCalendars()) ;
     
-    List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate());    
+    String timezone = CalendarUtils.getCurrentUserCalendarSetting().getTimeZone();
+    List<CalendarEvent> originalRecurEvents = calendarService.getOriginalRecurrenceEvents(username, eventQuery.getFromDate(), eventQuery.getToDate(), getPublicCalendars());    
     if (originalRecurEvents != null && originalRecurEvents.size() > 0) {
       Iterator<CalendarEvent> recurEventsIter = originalRecurEvents.iterator();
       while (recurEventsIter.hasNext()) {
         CalendarEvent recurEvent = recurEventsIter.next();
-        Map<String,CalendarEvent> tempMap = calendarService.getOccurrenceEvents(recurEvent, eventQuery.getFromDate(), eventQuery.getToDate());
+        Map<String,CalendarEvent> tempMap = calendarService.getOccurrenceEvents(recurEvent, eventQuery.getFromDate(), eventQuery.getToDate(), timezone);
         if (tempMap != null) {
           recurrenceEventsMap.put(recurEvent.getId(), tempMap);
           allEvents.addAll(tempMap.values());

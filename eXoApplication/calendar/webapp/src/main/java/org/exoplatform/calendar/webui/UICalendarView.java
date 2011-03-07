@@ -989,7 +989,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         org.exoplatform.calendar.service.Calendar calendar = null ;
         
         try {
-          
           // if event is occurrence event (not exception)
           if (isOccur && !Utils.isEmpty(recurId)) {
             CalendarEvent currentOccurrence = uiCalendarView.getRecurrenceMap().get(eventId).get(recurId);
@@ -1434,24 +1433,36 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
        
        try {
          CalendarEvent occurrence = uiCalendarView.getcurrentOccurrence();
-         String eventId = occurrence.getId();
          String calendarId = occurrence.getCalendarId();
          String calType = occurrence.getCalType();
-         String recurId = occurrence.getRecurrenceId();
          String username = CalendarUtils.getCurrentUser() ;
          CalendarService calService = CalendarUtils.getCalendarService() ;
-         // get the original recurrence node
-         CalendarEvent originalEvent = calService.getEvent(username, eventId) ;
-         // then update the exludeId property: add recurId to this list
-         List<String> excludeId;
-         if (originalEvent.getExcludeId() == null) {
-           excludeId = new ArrayList<String>();
-         } else {
-           excludeId = new ArrayList<String>(Arrays.asList(originalEvent.getExcludeId())); 
+         
+         org.exoplatform.calendar.service.Calendar calendar = null ;
+         if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
+           calendar = calService.getUserCalendar(username, calendarId) ;
+         } else if (CalendarUtils.SHARED_TYPE.equals(calType)) {
+           GroupCalendarData calendarData = calService.getSharedCalendars(CalendarUtils.getCurrentUser(), true)  ;
+           if(calendarData != null) calendar = calendarData.getCalendarById(calendarId) ;
+         } else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
+           calendar = calService.getGroupCalendar(calendarId) ;
          }
-         excludeId.add(recurId);
-         originalEvent.setExcludeId(excludeId.toArray(new String[0]));
-         calService.saveUserEvent(username, calendarId, originalEvent, false);
+         
+         // cs-4429: fix for group calendar permission
+         if((CalendarUtils.SHARED_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(
+                   OrganizationService.class), Utils.getEditPerUsers(calendar), CalendarUtils.getCurrentUser())) ||
+            (CalendarUtils.PUBLIC_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(
+                   OrganizationService.class), calendar.getEditPermission(), CalendarUtils.getCurrentUser()))) 
+         {
+           UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
+           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1)) ;
+           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+           uiCalendarView.refresh() ;
+           event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+           return ;
+         }
+         
+         calService.removeOccurrenceInstance(username, occurrence);
          // update UI
          uiPopupAction.deActivate();
        } catch (Exception e) {
@@ -1472,8 +1483,46 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
          String username = CalendarUtils.getCurrentUser() ;
          CalendarService calService = CalendarUtils.getCalendarService() ;
          // get the original recurrence node
-         CalendarEvent originalEvent = calService.getEvent(username, eventId) ;
-        
+         String calType = occurrence.getCalType();
+         String calendarId = occurrence.getCalendarId();
+         CalendarEvent originalEvent = null;
+         
+         org.exoplatform.calendar.service.Calendar calendar = null ;
+         if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
+           calendar = calService.getUserCalendar(username, calendarId) ;
+         } else if (CalendarUtils.SHARED_TYPE.equals(calType)) {
+           GroupCalendarData calendarData = calService.getSharedCalendars(CalendarUtils.getCurrentUser(), true)  ;
+           if(calendarData != null) calendar = calendarData.getCalendarById(calendarId) ;
+         } else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
+           calendar = calService.getGroupCalendar(calendarId) ;
+         }
+         
+         // cs-4429: fix for group calendar permission
+         if((CalendarUtils.SHARED_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(
+                   OrganizationService.class), Utils.getEditPerUsers(calendar), CalendarUtils.getCurrentUser())) ||
+            (CalendarUtils.PUBLIC_TYPE.equals(calType) && !CalendarUtils.canEdit(uiCalendarView.getApplicationComponent(
+                   OrganizationService.class), calendar.getEditPermission(), CalendarUtils.getCurrentUser()))) 
+         {
+           UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
+           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1)) ;
+           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+           uiCalendarView.refresh() ;
+           event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+           return ;
+         }
+         
+
+         if (calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+           originalEvent = calService.getEvent(username, eventId) ;
+         }
+         
+         if (calType.equals(CalendarUtils.PUBLIC_TYPE)) {
+           originalEvent = calService.getGroupEvent(occurrence.getCalendarId(), eventId) ;
+         }
+         if (calType.equals(CalendarUtils.SHARED_TYPE)) {
+           originalEvent = calService.getSharedEvent(username, calendarId, eventId);
+         }
+         
          calService.removeRecurrenceSeries(username, originalEvent);
          
          uiPopupAction.deActivate();
