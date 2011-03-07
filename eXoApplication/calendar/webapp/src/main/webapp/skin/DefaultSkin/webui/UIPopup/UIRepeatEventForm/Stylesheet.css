@@ -23,6 +23,5 @@
 }
 
 .UICalendarPortlet .UIRepeatEventForm #endByDateContainer #endDate input {
-  width: 150px;    	
-	float: left;
+  width: 150px;
 }
