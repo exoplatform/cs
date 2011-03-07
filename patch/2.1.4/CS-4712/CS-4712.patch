@@ -1,0 +1,100 @@
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/AuthenticationLogoutListener.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/AuthenticationLogoutListener.java	(revision 66164)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/AuthenticationLogoutListener.java	(working copy)
+@@ -33,37 +33,43 @@
+  * Created by The eXo Platform SAS
+  * Author : viet.nguyen
+  *          vietnt84@gmail.com
+- * Oct 6, 2009  
++ * Oct 6, 2009
+  */
+ public class AuthenticationLogoutListener extends Listener<ConversationRegistry, ConversationState> {
+ 
+   protected static final Log log = ExoLogger.getLogger("chat.AuthenticationLogoutListener");
+-  
++
+   @Override
+   public void onEvent(Event<ConversationRegistry, ConversationState> event) throws Exception {
++
++	  XMPPMessenger messenger = null;
++	  String userId = null;
++
+     try {
+       ExoContainer container = ExoContainerContext.getCurrentContainer();
+-      XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
+-    //Saving presence status
++      messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
++      //Saving presence status
+       DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
+       if(messenger != null){
+-        String userId = event.getData().getIdentity().getUserId() ;
++        userId = event.getData().getIdentity().getUserId() ;
+         XMPPSession session = messenger.getSession(userId);
+         if (session != null){
+           if(dps != null && userId != null && !userId.equals("")){
+-            dps.savePresenceStatus(userId, session.getPresenceStatus_());  
+-          }else   {
+-            log.error("AuthenticationLogoutListener: Can not save user chat status"); 
++            dps.savePresenceStatus(userId, session.getPresenceStatus_());
++          } else {
++            log.error("AuthenticationLogoutListener: Can not save user chat status");
+           }
+           session.removeAllTransport();
+         }
+-      
+-        messenger.logout(userId);
+       }
+-     } catch (Exception e){
+-       if(log.isDebugEnabled())
+-        log.debug(e.getMessage());
+-      }
++    } catch (Exception e) {
++        log.error(e.getMessage());
++    }
++    finally {
++      if ((userId != null) && (messenger != null)) {
++    	 	messenger.logout(userId);
++     	}
++    }
+   }
+ 
+ }
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java	(revision 66164)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/connection/impl/XMPPSessionImpl.java	(working copy)
+@@ -580,6 +580,10 @@
+       sessionProvider.getSession(history_.getWorkspace(), history_.getRepository());
+ 
+     } catch (XMPPException e) {
++      // CS-4712: disconnect when login failed
++      if (connection_.isConnected()) {
++        connection_.disconnect();
++      }
+       throw new XMPPException("Create XMPP connection for user '" + username + "' failed. ", e);
+     } catch (RepositoryException e) {
+       if (log.isDebugEnabled())
+Index: eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/rest/RESTXMPPService.java
+===================================================================
+--- eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/rest/RESTXMPPService.java	(revision 66164)
++++ eXoApplication/chat/service/src/main/java/org/exoplatform/services/xmpp/rest/RESTXMPPService.java	(working copy)
+@@ -1773,7 +1773,7 @@
+         }
+         session.removeAllTransport();
+       }
+-      messenger.logout(_username);
++      //messenger.logout(_username);
+       return Response.ok().cacheControl(cc).build();
+     } catch (XMPPException e) {
+       if (log.isDebugEnabled()) 
+@@ -1783,6 +1783,9 @@
+       .entity(error.getMessage())
+       .build();
+     }
++    finally {
++      messenger.logout(_username);
++    }
+   }
+ 
+   /**

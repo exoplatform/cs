@@ -33,37 +33,43 @@ import org.exoplatform.services.presence.DefaultPresenceStatus;;
  * Created by The eXo Platform SAS
  * Author : viet.nguyen
  *          vietnt84@gmail.com
- * Oct 6, 2009  
+ * Oct 6, 2009
  */
 public class AuthenticationLogoutListener extends Listener<ConversationRegistry, ConversationState> {
 
   protected static final Log log = ExoLogger.getLogger("chat.AuthenticationLogoutListener");
-  
+
   @Override
   public void onEvent(Event<ConversationRegistry, ConversationState> event) throws Exception {
+
+	  XMPPMessenger messenger = null;
+	  String userId = null;
+
     try {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
-      XMPPMessenger messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
-    //Saving presence status
+      messenger = (XMPPMessenger) container.getComponentInstanceOfType(XMPPMessenger.class);
+      //Saving presence status
       DefaultPresenceStatus dps = (DefaultPresenceStatus)container.getComponentInstance(DefaultPresenceStatus.class);
       if(messenger != null){
-        String userId = event.getData().getIdentity().getUserId() ;
+        userId = event.getData().getIdentity().getUserId() ;
         XMPPSession session = messenger.getSession(userId);
         if (session != null){
           if(dps != null && userId != null && !userId.equals("")){
-            dps.savePresenceStatus(userId, session.getPresenceStatus_());  
-          }else   {
-            log.error("AuthenticationLogoutListener: Can not save user chat status"); 
+            dps.savePresenceStatus(userId, session.getPresenceStatus_());
+          } else {
+            log.error("AuthenticationLogoutListener: Can not save user chat status");
           }
           session.removeAllTransport();
         }
-      
-        messenger.logout(userId);
       }
-     } catch (Exception e){
-       if(log.isDebugEnabled())
-        log.debug(e.getMessage());
-      }
+    } catch (Exception e) {
+        log.error(e.getMessage());
+    }
+    finally {
+      if ((userId != null) && (messenger != null)) {
+    	 	messenger.logout(userId);
+     	}
+    }
   }
 
 }
