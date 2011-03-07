@@ -1111,7 +1111,7 @@ public class JCRDataStorage implements DataStorage {
     if (originalEvent.getExcludeId() == null) {
       excludeId = new String[]{recurId};
     } else {
-      List<String> excId = (ArrayList<String>) Arrays.asList(originalEvent.getExcludeId());
+      List<String> excId = new ArrayList<String>(Arrays.asList(originalEvent.getExcludeId()));
       excId.add(recurId);
       excludeId = excId.toArray(new String[0]);
     }

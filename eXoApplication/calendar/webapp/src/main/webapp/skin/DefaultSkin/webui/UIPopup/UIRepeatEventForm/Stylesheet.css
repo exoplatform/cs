@@ -18,7 +18,7 @@
 	width: 25px;
 }
 
-.UICalendarPortlet .UIRepeatEventForm #endByDateContainer span, .UICalendarPortlet .UIRepeatEventForm #endByDateContainer #endByDate, .UICalendarPortlet .UIRepeatEventForm #endByDateContainer #endDate {
+.UICalendarPortlet .UIRepeatEventForm #endByDateContainer #endByDate, .UICalendarPortlet .UIRepeatEventForm #endByDateContainer #endDate {
   float: left;
 }
 
