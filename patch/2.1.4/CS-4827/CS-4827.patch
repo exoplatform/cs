@@ -1,0 +1,468 @@
+Index: eXoApplication/chat/webapp/pom.xml
+===================================================================
+--- eXoApplication/chat/webapp/pom.xml	(revision 66975)
++++ eXoApplication/chat/webapp/pom.xml	(working copy)
+@@ -18,7 +18,7 @@
+     </dependency>
+     <dependency>
+       <groupId>org.exoplatform.portal</groupId>
+-      <artifactId>exo.portal.component.web</artifactId>
++      <artifactId>exo.portal.component.web.api</artifactId>
+       <version>${org.exoplatform.portal.version}</version>
+       <scope>provided</scope>
+     </dependency>
+Index: eXoApplication/mail/webapp/pom.xml
+===================================================================
+--- eXoApplication/mail/webapp/pom.xml	(revision 66975)
++++ eXoApplication/mail/webapp/pom.xml	(working copy)
+@@ -38,7 +38,7 @@
+     </dependency>
+     <dependency>
+       <groupId>org.exoplatform.portal</groupId>
+-      <artifactId>exo.portal.component.web</artifactId>
++      <artifactId>exo.portal.component.web.api</artifactId>
+       <version>${org.exoplatform.portal.version}</version>
+       <scope>provided</scope>
+     </dependency>
+Index: eXoApplication/chatbar/webapp/pom.xml
+===================================================================
+--- eXoApplication/chatbar/webapp/pom.xml	(revision 66975)
++++ eXoApplication/chatbar/webapp/pom.xml	(working copy)
+@@ -18,7 +18,7 @@
+     </dependency>
+     <dependency>
+       <groupId>org.exoplatform.portal</groupId>
+-      <artifactId>exo.portal.component.web</artifactId>
++      <artifactId>exo.portal.component.web.api</artifactId>
+       <version>${org.exoplatform.portal.version}</version>
+       <scope>provided</scope>
+     </dependency>
+Index: eXoApplication/organization/service/src/main/java/org/exoplatform/services/organization/CS4782PicketLinkIDMOrganizationServiceImpl.java
+===================================================================
+--- eXoApplication/organization/service/src/main/java/org/exoplatform/services/organization/CS4782PicketLinkIDMOrganizationServiceImpl.java	(revision 0)
++++ eXoApplication/organization/service/src/main/java/org/exoplatform/services/organization/CS4782PicketLinkIDMOrganizationServiceImpl.java	(revision 0)
+@@ -0,0 +1,38 @@
++/*
++ * Copyright (C) 2003-2011 eXo Platform SAS.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Affero General Public License
++ * as published by the Free Software Foundation; either version 3
++ * of the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, see<http://www.gnu.org/licenses/>.
++ */
++package org.exoplatform.services.organization;
++
++import org.exoplatform.container.xml.InitParams;
++import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
++import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl;
++import org.exoplatform.services.organization.idm.PicketLinkIDMService;
++
++/**
++ * Created by The eXo Platform SAS
++ * Author : viet.nguyen
++ *          viet.nguyen@exoplatform.com
++ * Mar 04, 2011  
++ */
++public class CS4782PicketLinkIDMOrganizationServiceImpl extends PicketLinkIDMOrganizationServiceImpl {
++
++  public CS4782PicketLinkIDMOrganizationServiceImpl(InitParams params,
++                                                    PicketLinkIDMService idmService,
++                                                    NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
++    super(params, idmService);
++  }
++
++}
+Index: eXoApplication/organization/service/pom.xml
+===================================================================
+--- eXoApplication/organization/service/pom.xml	(revision 66975)
++++ eXoApplication/organization/service/pom.xml	(working copy)
+@@ -77,6 +77,12 @@
+       <version>${org.exoplatform.portal.version}</version>
+       <scope>provided</scope>
+     </dependency>
++    <dependency>
++      <groupId>org.exoplatform.portal</groupId>
++      <artifactId>exo.portal.component.identity</artifactId>
++      <version>${org.exoplatform.portal.version}</version>
++      <scope>provided</scope>
++    </dependency>
+     <!--dependency>
+       <groupId>org.exoplatform.portal</groupId>
+       <artifactId>exo.portal.component.portal</artifactId>
+Index: eXoApplication/calendar/webapp/pom.xml
+===================================================================
+--- eXoApplication/calendar/webapp/pom.xml	(revision 66975)
++++ eXoApplication/calendar/webapp/pom.xml	(working copy)
+@@ -44,7 +44,7 @@
+     </dependency>
+     <dependency>
+       <groupId>org.exoplatform.portal</groupId>
+-      <artifactId>exo.portal.component.web</artifactId>
++      <artifactId>exo.portal.component.web.api</artifactId>
+       <version>${org.exoplatform.portal.version}</version>
+       <scope>provided</scope>
+     </dependency>
+Index: eXoApplication/content/webapp/pom.xml
+===================================================================
+--- eXoApplication/content/webapp/pom.xml	(revision 66975)
++++ eXoApplication/content/webapp/pom.xml	(working copy)
+@@ -38,7 +38,7 @@
+     </dependency>
+     <dependency>
+       <groupId>org.exoplatform.portal</groupId>
+-      <artifactId>exo.portal.component.web</artifactId>
++      <artifactId>exo.portal.component.web.api</artifactId>
+       <version>${org.exoplatform.portal.version}</version>
+       <scope>provided</scope>
+     </dependency>
+Index: eXoApplication/contact/webapp/pom.xml
+===================================================================
+--- eXoApplication/contact/webapp/pom.xml	(revision 66975)
++++ eXoApplication/contact/webapp/pom.xml	(working copy)
+@@ -44,7 +44,7 @@
+     </dependency>
+     <dependency>
+       <groupId>org.exoplatform.portal</groupId>
+-      <artifactId>exo.portal.component.web</artifactId>
++      <artifactId>exo.portal.component.web.api</artifactId>
+       <version>${org.exoplatform.portal.version}</version>
+       <scope>provided</scope>
+     </dependency>
+Index: demo/war/pom.xml
+===================================================================
+--- demo/war/pom.xml	(revision 66975)
++++ demo/war/pom.xml	(working copy)
+@@ -33,7 +33,7 @@
+     </dependency>
+     <dependency>
+     	<groupId>org.exoplatform.portal</groupId>
+-    	<artifactId>exo.portal.component.web</artifactId>
++    	<artifactId>exo.portal.component.web.api</artifactId>
+     	<scope>provided</scope>
+     </dependency>
+   </dependencies>
+Index: packaging/pkg/pom.xml
+===================================================================
+--- packaging/pkg/pom.xml	(revision 66975)
++++ packaging/pkg/pom.xml	(working copy)
+@@ -178,7 +178,7 @@
+ 	  </dependency>
+ 	  <dependency>
+ 		<groupId>org.exoplatform.portal</groupId>
+-		<artifactId>exo.portal.component.web</artifactId>
++		<artifactId>exo.portal.component.web.api</artifactId>
+ 		<version>${org.exoplatform.portal.version}</version>
+ 		<scope>provided</scope>
+ 	  </dependency>
+@@ -254,7 +254,7 @@
+ 	  </dependency>
+ 	  <dependency>
+ 		<groupId>org.exoplatform.portal</groupId>
+-		<artifactId>exo.portal.component.dashboard</artifactId>
++		<artifactId>exo.portal.webui.dashboard</artifactId>
+ 		<version>${org.exoplatform.portal.version}</version>
+ 	  </dependency>
+ 	  <dependency>
+Index: server/jboss/patch-ear/src/main/resources/server/default/conf/gatein/portal/csdemo/configuration.xml
+===================================================================
+--- server/jboss/patch-ear/src/main/resources/server/default/conf/gatein/portal/csdemo/configuration.xml	(revision 0)
++++ server/jboss/patch-ear/src/main/resources/server/default/conf/gatein/portal/csdemo/configuration.xml	(revision 0)
+@@ -0,0 +1,126 @@
++<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++  xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd http://www.exoplaform.org/xml/ns/kernel_1_1.xsd"
++  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd">
++
++<!-- This is a placeholder file for kernel components customization.
++This file is loaded in last by csdemo portal.
++You can override any kernel component or define any additional external-component-plugin.
++-->
++<component>
++    <key>org.exoplatform.services.organization.CS4782PicketLinkIDMOrganizationServiceImpl</key>
++    <type>org.exoplatform.cs.CS4782PicketLinkIDMOrganizationServiceImpl</type>
++    <init-params>
++      <object-param>
++        <name>configuration</name>
++        <object type="org.exoplatform.services.organization.idm.Config">
++          <!-- For all ids not mapped with type in 'groupTypeMappings' use parent id path
++               as a group type to store group in PicketLink IDM. The effect of setting
++               this option to false and not providing any mappings under 'groupTypeMappings' option
++               is that there can be only one group with a given name in all GateIn group tree-->
++          <field name="useParentIdAsGroupType">
++            <boolean>true</boolean>
++          </field>
++          <!-- Group stored in PicketLink IDM with a type mapped in 'groupTypeMappings' will
++               automatically be member under mapped parent. Normally groups are linked by
++               PicketLink IDM group association - such relationship won't be needed then. It can
++               be set to false if all groups are added via GateIn APIs
++               This option may be useful with LDAP config as it will make (if set to true) every entry
++               added to LDAP (not via GateIn management UI) appear in GateIn-->
++          <field name="forceMembershipOfMappedTypes">
++            <boolean>true</boolean>
++          </field>
++          <!-- When 'userParentIdAsGroupType is set to true this value will be used to
++               replace all "/" chars in id. This is because "/" is not allowed to be
++               used in group type name in PicketLink IDM-->
++          <field name="pathSeparator">
++            <string>.</string>
++          </field>
++          <!-- Name of a group stored in PicketLink IDM that acts as root group in GateIn - "/" -->
++          <field name="rootGroupName">
++            <string>GTN_ROOT_GROUP</string>
++          </field>
++          <!-- Map groups added with GateIn API as a childs of a given group ID to be stored with a given
++               group type name in PicketLink IDM. If parent ID ends with "/*" then all child groups will
++               have the mapped group type. Otherwise only direct (first level) children will use this type.
++
++               This can be leveraged by LDAP setup. Given LDAP DN configured in PicketLink IDM to
++               store specific group type will then store one given branch in GateIn group tree while
++               all other groups will remain in DB. -->
++          <field name="groupTypeMappings">
++            <map type="java.util.HashMap">
++              <entry>
++                <key><string>/</string></key>
++                <value><string>root_type</string></value>
++              </entry>
++
++              <!-- Uncomment for sample LDAP configuration -->
++              <!--
++              <entry>
++                <key><string>/platform/*</string></key>
++                <value><string>platform_type</string></value>
++              </entry>
++              <entry>
++                <key><string>/organization/*</string></key>
++                <value><string>organization_type</string></value>
++              </entry>
++              -->
++
++
++              <!-- Uncomment for ACME LDAP example -->
++              <!--
++              <entry>
++                <key><string>/acme/roles/*</string></key>
++                <value><string>acme_roles_type</string></value>
++              </entry>
++              <entry>
++                <key><string>/acme/organization_units/*</string></key>
++                <value><string>acme_ou_type</string></value>
++              </entry>
++              -->
++
++              <!-- Uncomment for MSAD ReadOnly LDAP example -->
++              <!--
++              <entry>
++                <key><string>/acme/roles/*</string></key>
++                <value><string>msad_roles_type</string></value>
++              </entry>
++              -->
++            </map>
++          </field>
++          <!-- If this option is used then each Membership created with MembrshipType that is
++               equal to value specified here will be stored in PicketLink IDM as simple
++               Group-User association-->
++          <field name="associationMembershipType">
++            <string>member</string>
++          </field>
++          <!-- if "associationMembershipType" option is used and this option is set to true
++                then Membership with MembershipType configured to be stored as PicketLink IDM association
++                will not be stored as PicketLink IDM Role -->
++          <field name="ignoreMappedMembershipType">
++            <boolean>false</boolean>
++          </field>
++          <!-- If 'true' will use JTA UserTransaction. If 'false' will use IDM transaction API -->
++          <field name="useJTA">
++            <boolean>false</boolean>
++          </field>
++
++          <!-- If PLIDM group will have name containing slash "/" char than it will be replace with following string.
++               Slashes are used in group paths and if present in names may cause unpredictable behaviour -->
++          <field name="slashReplacement">
++            <string>@_@_@</string>
++          </field>
++
++          <!-- If groups should be displayed in a sorted order in the management UI-->
++          <field name="sortGroups">
++            <boolean>true</boolean>
++          </field>
++
++          <!-- If memberships should be displayed in a sorted order in the management UI-->
++          <field name="sortMemberships">
++            <boolean>true</boolean>
++          </field>
++        </object>
++      </object-param>
++    </init-params>
++  </component>
++</configuration>
+\ No newline at end of file
+Index: server/tomcat/patch/src/main/tomcat/gatein/conf/portal/csdemo/configuration.xml
+===================================================================
+--- server/tomcat/patch/src/main/tomcat/gatein/conf/portal/csdemo/configuration.xml	(revision 0)
++++ server/tomcat/patch/src/main/tomcat/gatein/conf/portal/csdemo/configuration.xml	(revision 0)
+@@ -0,0 +1,126 @@
++<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++  xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd http://www.exoplaform.org/xml/ns/kernel_1_1.xsd"
++  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd">
++
++<!-- This is a placeholder file for kernel components customization.
++This file is loaded in last by csdemo portal.
++You can override any kernel component or define any additional external-component-plugin.
++-->
++<component>
++    <key>org.exoplatform.services.organization.OrganizationService</key>
++    <type>org.exoplatform.services.organization.CS4782PicketLinkIDMOrganizationServiceImpl</type>
++    <init-params>
++      <object-param>
++        <name>configuration</name>
++        <object type="org.exoplatform.services.organization.idm.Config">
++          <!-- For all ids not mapped with type in 'groupTypeMappings' use parent id path
++               as a group type to store group in PicketLink IDM. The effect of setting
++               this option to false and not providing any mappings under 'groupTypeMappings' option
++               is that there can be only one group with a given name in all GateIn group tree-->
++          <field name="useParentIdAsGroupType">
++            <boolean>true</boolean>
++          </field>
++          <!-- Group stored in PicketLink IDM with a type mapped in 'groupTypeMappings' will
++               automatically be member under mapped parent. Normally groups are linked by
++               PicketLink IDM group association - such relationship won't be needed then. It can
++               be set to false if all groups are added via GateIn APIs
++               This option may be useful with LDAP config as it will make (if set to true) every entry
++               added to LDAP (not via GateIn management UI) appear in GateIn-->
++          <field name="forceMembershipOfMappedTypes">
++            <boolean>true</boolean>
++          </field>
++          <!-- When 'userParentIdAsGroupType is set to true this value will be used to
++               replace all "/" chars in id. This is because "/" is not allowed to be
++               used in group type name in PicketLink IDM-->
++          <field name="pathSeparator">
++            <string>.</string>
++          </field>
++          <!-- Name of a group stored in PicketLink IDM that acts as root group in GateIn - "/" -->
++          <field name="rootGroupName">
++            <string>GTN_ROOT_GROUP</string>
++          </field>
++          <!-- Map groups added with GateIn API as a childs of a given group ID to be stored with a given
++               group type name in PicketLink IDM. If parent ID ends with "/*" then all child groups will
++               have the mapped group type. Otherwise only direct (first level) children will use this type.
++
++               This can be leveraged by LDAP setup. Given LDAP DN configured in PicketLink IDM to
++               store specific group type will then store one given branch in GateIn group tree while
++               all other groups will remain in DB. -->
++          <field name="groupTypeMappings">
++            <map type="java.util.HashMap">
++              <entry>
++                <key><string>/</string></key>
++                <value><string>root_type</string></value>
++              </entry>
++
++              <!-- Uncomment for sample LDAP configuration -->
++              <!--
++              <entry>
++                <key><string>/platform/*</string></key>
++                <value><string>platform_type</string></value>
++              </entry>
++              <entry>
++                <key><string>/organization/*</string></key>
++                <value><string>organization_type</string></value>
++              </entry>
++              -->
++
++
++              <!-- Uncomment for ACME LDAP example -->
++              <!--
++              <entry>
++                <key><string>/acme/roles/*</string></key>
++                <value><string>acme_roles_type</string></value>
++              </entry>
++              <entry>
++                <key><string>/acme/organization_units/*</string></key>
++                <value><string>acme_ou_type</string></value>
++              </entry>
++              -->
++
++              <!-- Uncomment for MSAD ReadOnly LDAP example -->
++              <!--
++              <entry>
++                <key><string>/acme/roles/*</string></key>
++                <value><string>msad_roles_type</string></value>
++              </entry>
++              -->
++            </map>
++          </field>
++          <!-- If this option is used then each Membership created with MembrshipType that is
++               equal to value specified here will be stored in PicketLink IDM as simple
++               Group-User association-->
++          <field name="associationMembershipType">
++            <string>member</string>
++          </field>
++          <!-- if "associationMembershipType" option is used and this option is set to true
++                then Membership with MembershipType configured to be stored as PicketLink IDM association
++                will not be stored as PicketLink IDM Role -->
++          <field name="ignoreMappedMembershipType">
++            <boolean>false</boolean>
++          </field>
++          <!-- If 'true' will use JTA UserTransaction. If 'false' will use IDM transaction API -->
++          <field name="useJTA">
++            <boolean>false</boolean>
++          </field>
++
++          <!-- If PLIDM group will have name containing slash "/" char than it will be replace with following string.
++               Slashes are used in group paths and if present in names may cause unpredictable behaviour -->
++          <field name="slashReplacement">
++            <string>@_@_@</string>
++          </field>
++
++          <!-- If groups should be displayed in a sorted order in the management UI-->
++          <field name="sortGroups">
++            <boolean>true</boolean>
++          </field>
++
++          <!-- If memberships should be displayed in a sorted order in the management UI-->
++          <field name="sortMemberships">
++            <boolean>true</boolean>
++          </field>
++        </object>
++      </object-param>
++    </init-params>
++  </component>
++</configuration>
+\ No newline at end of file
+Index: pom.xml
+===================================================================
+--- pom.xml	(revision 66975)
++++ pom.xml	(working copy)
+@@ -31,7 +31,7 @@
+     <org.exoplatform.core.version>2.3.8-GA-SNAPSHOT</org.exoplatform.core.version>
+     <org.exoplatform.ws.version>2.1.8-GA-SNAPSHOT</org.exoplatform.ws.version>
+     <org.exoplatform.jcr.version>1.12.8-GA-SNAPSHOT</org.exoplatform.jcr.version>
+-    <org.exoplatform.portal.version>3.1.8-PLF-SNAPSHOT</org.exoplatform.portal.version>
++    <org.exoplatform.portal.version>3.1.8-REBASED-SNAPSHOT</org.exoplatform.portal.version>
+     
+     <org.exoplatform.ecms.version>2.1.4-SNAPSHOT</org.exoplatform.ecms.version> 
+     
+@@ -105,7 +105,7 @@
+ 	<html-parser.version>1.6</html-parser.version>
+ 	<com.sun.xml.bind.version>2.1.7</com.sun.xml.bind.version>
+ 	<org.jvnet.jaxb2.maven2.version>0.1</org.jvnet.jaxb2.maven2.version>
+-	<org.gatein.pc.version>2.1.1-GA</org.gatein.pc.version>
++	<org.gatein.pc.version>2.2.0-GA</org.gatein.pc.version>
+ 	<commons-pool.version>1.2</commons-pool.version>
+ 	<asm.version>1.5.3</asm.version>
+ 	<antlr.version>2.7.6rc1</antlr.version>
+@@ -200,7 +200,7 @@
+       </dependency>
+       <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+-        <artifactId>exo.portal.component.web</artifactId>
++        <artifactId>exo.portal.component.web.api</artifactId>
+         <version>${org.exoplatform.portal.version}</version>
+       </dependency>
+       <dependency>
