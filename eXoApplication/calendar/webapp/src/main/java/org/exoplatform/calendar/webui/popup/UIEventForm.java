@@ -1706,7 +1706,7 @@ public Attachment getAttachment(String attId) {
     String summary = "";
     if (repeatEvent == null) return "";
     String repeatType = repeatEvent.getRepeatType();
-    if (repeatType.equals(CalendarEvent.RP_NOREPEAT)) return "";
+    if (CalendarEvent.RP_NOREPEAT.equals(repeatType) || repeatType == null) return "";
     int interval = (int)repeatEvent.getRepeatInterval();
     int count = (int)repeatEvent.getRepeatCount();
     Date until = repeatEvent.getRepeatUntilDate();
