@@ -288,10 +288,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         setSelectedCategory(eventCategoryId) ;
       }
       setEventPlace(eventCalendar.getLocation()) ;
-      setEventIsRepeat(!eventCalendar.getRepeatType().equals(CalendarEvent.RP_NOREPEAT));
+      setEventIsRepeat(!CalendarEvent.RP_NOREPEAT.equals(eventCalendar.getRepeatType()));
       setRepeatSummary(buildRepeatSummary(calendarEvent_));
       // if it's exception occurrence, disabled repeat checkbox, it means you can't convert a exception occurrence to a repeating event 
-      if (calendarEvent_.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) && !CalendarUtils.isEmpty(calendarEvent_.getRecurrenceId())
+      if (CalendarEvent.RP_NOREPEAT.equals(calendarEvent_.getRepeatType()) && !CalendarUtils.isEmpty(calendarEvent_.getRecurrenceId())
           && calendarEvent_.getIsExceptionOccurrence()) {
         getChild(UIEventDetailTab.class).getUIFormCheckBoxInput(UIEventDetailTab.FIELD_ISREPEAT).setEnable(false);
       }
