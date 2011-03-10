@@ -591,7 +591,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><a target="_blank" href="<%= contact.getWebPage() %>"><%= ContactUtils.encodeHTML(contact.getPersonalSite())%></a></div>
+			                              <div class="InfoTitle3"><a target="_blank" href="<%= contact.getPersonalSite() %>"><%= ContactUtils.encodeHTML(contact.getPersonalSite())%></a></div>
 			                            </td>
 			                          </tr>
 			                        </table>
