@@ -545,8 +545,8 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     client.getHttpConnectionManager().getParams().setConnectionTimeout(10000);
     client.getHttpConnectionManager().getParams().setSoTimeout(10000);
     // basic authentication
-    if (!StringUtils.isEmpty(remoteCalendar.getUsername())) {
-      Credentials credentials = new UsernamePasswordCredentials(remoteCalendar.getUsername(), remoteCalendar.getRemotePassword());
+    if (!StringUtils.isEmpty(remoteCalendar.getRemoteUser())) {
+      Credentials credentials = new UsernamePasswordCredentials(remoteCalendar.getRemoteUser(), remoteCalendar.getRemotePassword());
       client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
     }
     return doCalendarQuery(client, remoteCalendar.getRemoteUrl(), remoteCalendar.getBeforeDate(), remoteCalendar.getAfterDate());
