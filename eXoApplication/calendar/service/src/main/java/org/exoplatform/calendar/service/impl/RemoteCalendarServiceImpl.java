@@ -433,12 +433,11 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       remoteCalendar.setCalendarId(eXoCalendar.getId());
       remoteCalendar.setLastUpdated(Utils.getGreenwichMeanTime());
       importRemoteCalendar(remoteCalendar);
-//      storage_.setRemoteCalendarLastUpdated(remoteCalendar.getUsername(), eXoCalendar.getId(), );
       return eXoCalendar;
     } else {
       if (CalendarService.CALDAV.equals(remoteCalendar.getType())) {
-        MultiStatus multiStatus = connectToCalDavServer(remoteCalendar.getRemoteUrl(), remoteUser, remotePassword);
-// Calendar eXoCalendar = storage_.createRemoteCalendar(remoteCalendar);
+//        MultiStatus multiStatus = connectToCalDavServer(remoteCalendar.getRemoteUrl(), remoteUser, remotePassword);
+        MultiStatus multiStatus = connectToCalDavServer(remoteCalendar);
         String href;
         CalendarBuilder builder = new CalendarBuilder();
         // Enable relaxed-unfolding to allow ical4j parses "folding" line follows iCalendar spec
@@ -478,7 +477,24 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       // remove all components in local calendar
       List<String> calendarIds = new ArrayList<String>();
       calendarIds.add(remoteCalendarId);
-      List<CalendarEvent> events = storage_.getUserEventByCalendar(username, calendarIds);
+//      List<CalendarEvent> events = storage_.getUserEventByCalendar(username, calendarIds);
+      
+      java.util.Calendar from = java.util.Calendar.getInstance();
+      if (remoteCalendar.getBeforeDate() != 0)
+        from.setTimeInMillis(from.getTimeInMillis() + remoteCalendar.getBeforeDate());
+      else
+        from.add(java.util.Calendar.YEAR, -1);
+      java.util.Calendar to = java.util.Calendar.getInstance();
+      if (remoteCalendar.getAfterDate() != 0)
+        to.setTimeInMillis(to.getTimeInMillis() + remoteCalendar.getAfterDate());
+      else
+        to.add(java.util.Calendar.YEAR, 1);
+      
+      EventQuery eventQuery = new EventQuery();
+      eventQuery.setCalendarId(new String[]{remoteCalendarId});
+      eventQuery.setFromDate(from);
+      eventQuery.setToDate(to);
+      List<CalendarEvent> events = storage_.getUserEvents(username, eventQuery);
       for (CalendarEvent event : events) {
         storage_.removeUserEvent(username, remoteCalendarId, event.getId());
       }
@@ -518,22 +534,22 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
    * @return
    * @throws Exception
    */
-  public MultiStatus connectToCalDavServer(String url, String username, String password) throws Exception {
+  public MultiStatus connectToCalDavServer(RemoteCalendar remoteCalendar) throws Exception {
     HostConfiguration hostConfig = new HostConfiguration();
-    String host = new URL(url).getHost();
+    String host = new URL(remoteCalendar.getRemoteUrl()).getHost();
     if (StringUtils.isEmpty(host))
-      host = url;
+      host = remoteCalendar.getRemoteUrl();
     hostConfig.setHost(host);
     HttpClient client = new HttpClient();
     client.setHostConfiguration(hostConfig);
     client.getHttpConnectionManager().getParams().setConnectionTimeout(10000);
     client.getHttpConnectionManager().getParams().setSoTimeout(10000);
     // basic authentication
-    if (!StringUtils.isEmpty(username)) {
-      Credentials credentials = new UsernamePasswordCredentials(username, password);
+    if (!StringUtils.isEmpty(remoteCalendar.getUsername())) {
+      Credentials credentials = new UsernamePasswordCredentials(remoteCalendar.getUsername(), remoteCalendar.getRemotePassword());
       client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
     }
-    return doCalendarQuery(client, url);
+    return doCalendarQuery(client, remoteCalendar.getRemoteUrl(), remoteCalendar.getBeforeDate(), remoteCalendar.getAfterDate());
   }
 
   /**
@@ -816,7 +832,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
    * @return
    * @throws Exception
    */
-  public MultiStatus doCalendarQuery(HttpClient client, String uri) throws Exception {
+  public MultiStatus doCalendarQuery(HttpClient client, String uri, long beforeDate, long afterDate) throws Exception {
     ReportMethod report = null;
     try {
       DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -845,18 +861,25 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       Element todoComp = DomUtil.createElement(doc, CALDAV_XML_COMP_FILTER, CALDAV_NAMESPACE);
       todoComp.setAttribute(CALDAV_XML_COMP_FILTER_NAME, net.fortuna.ical4j.model.component.VEvent.VTODO);
 
-      /*
-       * Element timeRange = DomUtil.createElement(doc, CALDAV_XML_TIME_RANGE, CALDAV_NAMESPACE);
-       * java.util.Calendar start = java.util.Calendar.getInstance();
-       * start.add(java.util.Calendar.YEAR, -1);
-       * java.util.Calendar end = java.util.Calendar.getInstance();
-       * end.add(java.util.Calendar.YEAR, 1);
-       * SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
-       * timeRange.setAttribute(CALDAV_XML_START, format.format(start.getTime()));
-       * timeRange.setAttribute(CALDAV_XML_END, format.format(end.getTime()));
-       * eventComp.appendChild(timeRange);
-       * todoComp.appendChild(timeRange);
-       */
+      Element timeRange = DomUtil.createElement(doc, CALDAV_XML_TIME_RANGE, CALDAV_NAMESPACE);
+      java.util.Calendar start = java.util.Calendar.getInstance();
+      if (beforeDate != 0) {
+        start.setTimeInMillis(start.getTimeInMillis() + beforeDate);
+      } else {
+        start.add(java.util.Calendar.YEAR, -1);
+      }
+      java.util.Calendar end = java.util.Calendar.getInstance();
+      if (afterDate != 0) {
+        end.setTimeInMillis(end.getTimeInMillis() + afterDate);
+      } else {
+        end.add(java.util.Calendar.YEAR, -1);
+      }
+      SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+      timeRange.setAttribute(CALDAV_XML_START, format.format(start.getTime()));
+      timeRange.setAttribute(CALDAV_XML_END, format.format(end.getTime()));
+      eventComp.appendChild(timeRange);
+      todoComp.appendChild(timeRange);
+      
       calendarComp.appendChild(eventComp);
       calendarComp.appendChild(todoComp);
       filter.appendChild(calendarComp);
