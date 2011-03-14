@@ -174,8 +174,10 @@ public class UIAccountSetting extends UIFormTabPane {
     
     UIFetchOptionsInputSet fetchOptionsInputSet = new UIFetchOptionsInputSet(TAB_FETCH_OPTIONS);
     fetchOptionsInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKMAIL_AUTO, null, null));
-    leaveOnServer_ = new UIFormCheckBoxInput<Boolean>(FIELD_LEAVE_ON_SERVER, null, null) ;
-    fetchOptionsInputSet.addUIFormInput(leaveOnServer_);
+    if (Utils.USER_ALLOWED) {
+      leaveOnServer_ = new UIFormCheckBoxInput<Boolean>(FIELD_LEAVE_ON_SERVER, null, null) ;
+      fetchOptionsInputSet.addUIFormInput(leaveOnServer_);      
+    }
     UIFormCheckBoxInput<Boolean> checkFromDate = new UIFormCheckBoxInput<Boolean>(CHECK_FROM_DATE, CHECK_FROM_DATE, null);
     checkFromDate.setOnChange("CheckFromDate");
     fetchOptionsInputSet.addUIFormInput(checkFromDate);
@@ -401,7 +403,8 @@ public class UIAccountSetting extends UIFormTabPane {
     }
     uiIncomingInput.getUIFormSelectBox(FIELD_SERVER_TYPE).setValue(account.getProtocol()) ;
     uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto()) ;
-    uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).setChecked(Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER))) ;
+    if (Utils.USER_ALLOWED) uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER)
+      .setChecked(Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER))) ;
   } 
   
   public String[] getActions() {return new String[]{"Save", "Cancel"};}
@@ -575,10 +578,10 @@ public class UIAccountSetting extends UIFormTabPane {
           acc.setCheckFromDate(null);
         }
       }
-      
-      boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
-      acc.setServerProperty(Utils.SVR_LEAVE_ON_SERVER, String.valueOf(leaveOnServer)) ;
-       
+      if (Utils.USER_ALLOWED) {
+        boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
+        acc.setServerProperty(Utils.SVR_LEAVE_ON_SERVER, String.valueOf(leaveOnServer)) ;        
+      }       
       try {
         mailSrv.updateAccount(username, acc) ;
         UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;

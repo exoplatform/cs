@@ -304,6 +304,8 @@ public class Utils {
   public static final String READ_ONLY = "read".intern();
   public static final String SEND_RECIEVE = "send".intern();
   
+  public static boolean USER_ALLOWED = false;
+  public static boolean IS_LEAVE_MESSAGE = false;
   
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;

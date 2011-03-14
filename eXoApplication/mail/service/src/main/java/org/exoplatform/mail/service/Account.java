@@ -18,7 +18,6 @@ package org.exoplatform.mail.service;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.services.jcr.util.IdGenerator;
@@ -99,7 +98,7 @@ public class Account {
 
   public Account() {
     id = Utils.KEY_ACCOUNT + IdGenerator.generate() ;
-    setServerProperty(Utils.SVR_LEAVE_ON_SERVER, "true") ;
+    setServerProperty(Utils.SVR_LEAVE_ON_SERVER, String.valueOf(Utils.IS_LEAVE_MESSAGE)) ;
   }
   
   /**

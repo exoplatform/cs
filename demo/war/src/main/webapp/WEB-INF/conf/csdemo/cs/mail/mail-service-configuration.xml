@@ -5,6 +5,13 @@
   <component>
     <key>org.exoplatform.mail.service.MailService</key>
     <type>org.exoplatform.mail.service.impl.MailServiceImpl</type>
+		<init-params>
+      <properties-param>
+        <name>leaveOnServer</name>
+        <property name="userAllowed" value="true"/> 
+				<property name="isLeaveMessage" value="true"/>         
+      </properties-param>
+    </init-params>
   </component>    
   
    <external-component-plugins>

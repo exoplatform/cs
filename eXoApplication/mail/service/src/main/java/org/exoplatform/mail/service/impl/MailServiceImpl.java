@@ -17,7 +17,6 @@
 package org.exoplatform.mail.service.impl;
 
 import java.io.InputStream;
-
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -45,7 +44,6 @@ import javax.activation.MailcapCommandMap;
 import javax.jcr.Node;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
-import javax.mail.Flags.Flag;
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
@@ -53,13 +51,14 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
+import javax.mail.Flags.Flag;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
+import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.search.AndTerm;
 import javax.mail.search.BodyTerm;
 import javax.mail.search.ComparisonTerm;
@@ -75,7 +74,9 @@ import javax.mail.util.ByteArrayDataSource;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.exoplatform.commons.utils.ExoProperties;
 import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.mail.connection.Connector;
 import org.exoplatform.mail.connection.impl.ImapConnector;
 import org.exoplatform.mail.service.Account;
@@ -141,13 +142,19 @@ public class MailServiceImpl implements MailService, Startable {
 
   private String currentUser;
   
-  public MailServiceImpl(NodeHierarchyCreator nodeHierarchyCreator,
+  public MailServiceImpl(InitParams params,NodeHierarchyCreator nodeHierarchyCreator,
                          JobSchedulerService schedulerService,
                          RepositoryService reposervice) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
     emlImportExport_ = new EMLImportExport(storage_);
     checkingLog_ = new ConcurrentHashMap<String, CheckingInfo>();
     this.schedulerService_ = schedulerService;
+    
+    ExoProperties props =  params.getPropertiesParam("leaveOnServer").getProperties() ;
+    String userAllowed = props.getProperty("userAllowed");
+    String isLeaveMessage = props.getProperty("isLeaveMessage");
+    Utils.USER_ALLOWED = Boolean.parseBoolean(userAllowed);
+    Utils.IS_LEAVE_MESSAGE = Boolean.parseBoolean(isLeaveMessage);
   }
 
   public String getMailHierarchyNode() throws Exception {
