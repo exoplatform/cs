@@ -1265,18 +1265,21 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
   this.UIChatWindow.updatePresence(presenceData);
   switch (this.userStatus) {
     case this.ONLINE_STATUS:
-      userStatusIconNode.className = 'IconHolder'+' '+'OnlineIcon';
+    	userStatusIconNode.className = 'IconHolder'+' '+'OnlineIcon';
+    	this.UIChatWindow.initSession();
+    	this.subscribeCometdTopics();
+    	// Register onunload event to window for clean logout when user leave this page.
+    	this.AdvancedDOMEvent.addEventListener(window, 'unload', this.destroyAll, false);
+      this.addContactIconNode.onclick = function() {
+    	  eXo.communication.chatbar.webui.UIAddContactPopupWindow.setVisible(true);
+      };
       if (!serverData) {
         break;
       }
       //this.sessionKeeperId = window.setInterval(this.sessionKeeper, this.PORTAL_SESSION_KEEPER_TIME_STEP);
       this.serverInfo = serverData;
-      this.UIChatWindow.initSession();
       this.timeoutCount = 0;
       this.errorCount = 0;
-      this.addContactIconNode.onclick = function() {
-    	 eXo.communication.chatbar.webui.UIAddContactPopupWindow.setVisible(true);
-      };
       // Create buddy list
       if (this.serverInfo.roster) {
         this.buddyListControlObj.build(this.serverInfo.roster);
@@ -1284,10 +1287,7 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
    
       eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[this.serverInfo.myProfile.user] = this.serverInfo.myProfile.fullName ;	
       
-      this.subscribeCometdTopics();
 
-      // Register onunload event to window for clean logout when user leave this page.
-      this.AdvancedDOMEvent.addEventListener(window, 'unload', this.destroyAll, false);
       this.preChangeStatus(this.ONLINE_STATUS, true);
       eXo.communication.chatbar.webui.UIStateManager.init(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]);
       break;
