@@ -101,26 +101,12 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(USE_AUTHENTICATION, USE_AUTHENTICATION, null));
 
-    List<SelectItemOption<String>> ls = new ArrayList<SelectItemOption<String>>();
-    List<SelectItemOption<String>> ls2 = new ArrayList<SelectItemOption<String>>();
-    /*
-     * previous : None, 1 week, 2 weeks, 1 month, 3 months, 6 months, 1 year
-     * next : Forever, 1 week, 2 weeks, 1 month, 3 months, 6 months, 1 year
-     */
-    ls.add(new SelectItemOption<String>(getLabel("None"), "0t"));
-    ls.add(new SelectItemOption<String>("1 " + getLabel("Week"), "1w"));
-    ls.add(new SelectItemOption<String>("2 " + getLabel("Weeks"), "3w"));
-    ls.add(new SelectItemOption<String>("1 " + getLabel("Moth"), "1m"));
-    ls.add(new SelectItemOption<String>("2 " + getLabel("Moths"), "2m"));
-    ls.add(new SelectItemOption<String>("3 " + getLabel("Moths"), "3m"));
-    ls.add(new SelectItemOption<String>("6 " + getLabel("Moths"), "6m"));
-    ls.add(new SelectItemOption<String>("1 " + getLabel("Year"), "1y"));
-    UIFormSelectBox beforeDate = new UIFormSelectBox(FIELD_BEFORE_DATE_SELECTBOX, FIELD_BEFORE_DATE_SELECTBOX, ls);
+    UIFormSelectBox beforeDate = new UIFormSelectBox(FIELD_BEFORE_DATE_SELECTBOX, FIELD_BEFORE_DATE_SELECTBOX, getOptionsSelectBox());
     beforeDate.setDefaultValue("0t");
     addUIFormInput(beforeDate);
-    ls2.addAll(ls);
-    ls2.set(0, new SelectItemOption<String>(getLabel("Forever"), "0t"));
-    UIFormSelectBox afterDate = new UIFormSelectBox(FIELD_AFTER_DATE_SELECTBOX, FIELD_AFTER_DATE_SELECTBOX, ls2);
+    List<SelectItemOption<String>> ls = getOptionsSelectBox();
+    ls.set(0, new SelectItemOption<String>(getLabel("Forever"), "0t"));
+    UIFormSelectBox afterDate = new UIFormSelectBox(FIELD_AFTER_DATE_SELECTBOX, FIELD_AFTER_DATE_SELECTBOX, ls);
     afterDate.setDefaultValue("0t");
     addUIFormInput(afterDate);
 
@@ -134,6 +120,23 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     }
     addUIFormInput(new UIFormSelectBox(AUTO_REFRESH, AUTO_REFRESH, options));  
     addUIFormInput(new UIFormColorPicker(COLOR, COLOR)); 
+  }
+  
+  /*
+   * previous : None, 1 week, 2 weeks, 1 month, 3 months, 6 months, 1 year
+   * next : Forever, 1 week, 2 weeks, 1 month, 3 months, 6 months, 1 year
+   */
+  private List<SelectItemOption<String>> getOptionsSelectBox() throws Exception {
+    List<SelectItemOption<String>> ls = new ArrayList<SelectItemOption<String>>();
+    ls.add(new SelectItemOption<String>(getLabel("None"), "0t"));
+    ls.add(new SelectItemOption<String>("1 " + getLabel("Week"), "1w"));
+    ls.add(new SelectItemOption<String>("2 " + getLabel("Weeks"), "3w"));
+    ls.add(new SelectItemOption<String>("1 " + getLabel("Moth"), "1m"));
+    ls.add(new SelectItemOption<String>("2 " + getLabel("Moths"), "2m"));
+    ls.add(new SelectItemOption<String>("3 " + getLabel("Moths"), "3m"));
+    ls.add(new SelectItemOption<String>("6 " + getLabel("Moths"), "6m"));
+    ls.add(new SelectItemOption<String>("1 " + getLabel("Year"), "1y"));
+    return ls;
   }
   
   public void init(String url, String remoteType) {
