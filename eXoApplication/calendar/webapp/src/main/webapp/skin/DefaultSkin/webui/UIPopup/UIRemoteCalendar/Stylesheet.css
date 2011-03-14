@@ -9,3 +9,7 @@
 .UICalendarPortlet .UIRemoteCalendar #id-password .FieldComponent {
   padding-left: 7px;
 }
+
+.UICalendarPortlet .UIRemoteCalendar .InputFieldLabel {
+  line-height: 30px;
+}
