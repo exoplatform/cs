@@ -76,7 +76,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 )
 public class UIMonthView extends UICalendarView {
   private LinkedHashMap<String, CalendarEvent> dataMap_ = new LinkedHashMap<String, CalendarEvent>() ;
-  private Map<String, Map<String,CalendarEvent>> eventData_ = new HashMap<String, Map<String,CalendarEvent>>();
+  private List<CalendarEvent> eventData_ = new ArrayList<CalendarEvent>();
   public UIMonthView() throws Exception{
     super() ;
   }
@@ -119,37 +119,13 @@ public class UIMonthView extends UICalendarView {
       }
     }
     dataMap_.clear() ;
+    eventData_.clear();
     Iterator<CalendarEvent> eventIter = allEvents.iterator() ;
-    /*while(eventIter.hasNext()) {
-      CalendarEvent ce = (CalendarEvent)eventIter.next() ; 
-      //eventData_.add(ce);
-      dataMap_.put(ce.getId(), ce) ;
-      UIFormCheckBoxInput<Boolean> input = new UIFormCheckBoxInput<Boolean>(ce.getId(), ce.getId(), false) ;
-      input.setBindingField(ce.getCalendarId()) ;
-      addChild(input) ;
-      eventIter.remove() ;
-    }*/
-    
-    int maxDay = 35;
-    int i = 0;
-    Calendar c = getBeginDateOfMonthView();
-    
-    while(i++ < maxDay) {
-      Map<String, CalendarEvent> list = new HashMap<String, CalendarEvent>() ;
-      String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
-      eventData_.put(key, list) ;
-      c.add(Calendar.DATE, 1) ;
-    }
     
     while(eventIter.hasNext()) {
-      CalendarEvent event = eventIter.next();
-      
-      c.setTime(event.getFromDateTime());
-      String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
-      eventData_.get(key).put(event.getId(), event) ;
-      
+      CalendarEvent event = eventIter.next();      
       dataMap_.put(event.getId(), event) ;
-      
+      eventData_.add(event);
       // if event is a occurrence
       UIFormCheckBoxInput<Boolean> input;
       if (!CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && !CalendarUtils.isEmpty(event.getRecurrenceId())) {
@@ -232,7 +208,7 @@ public class UIMonthView extends UICalendarView {
     return dataMap_ ;
   }
   
-  protected Map<String, Map<String,CalendarEvent>> getEventData() {
+  protected List<CalendarEvent> getEventData() {
     return eventData_;
   }
   

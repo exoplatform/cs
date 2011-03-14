@@ -157,7 +157,7 @@
 								 	color = uicomponent.getColors().get(ce.calType +CalendarUtils.COLON+ ce.getCalendarId()) ;
 								 	//actionLink =  uicomponent.event("SaveEvent",ce.id+"&calendarId="+ce.calendarId+"&startTime=beginTime&finishTime=endTime") ;
 									actionLink = uicomponent.url("SaveEvent",ce.id);
-									Boolean isOccur = (ce.getRepeatType()!=CalendarEvent.RP_NOREPEAT && (ce.getIsExceptionOccurrence() == null || !ce.getIsExceptionOccurrence()))?true:false;
+									Boolean isOccur = (ce.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(ce.getRepeatType()) && (ce.getIsExceptionOccurrence() == null || !ce.getIsExceptionOccurrence()));
                   String recurId = ce.getRecurrenceId();
                   %>
                   <div class="EventContainerBorder EventBoxes $color" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="$ce.id" calid="$ce.calendarId" actionlink="$actionLink"  startTime="$beginTime" endTime="$endTime" isOccur="$isOccur" recurId="$recurId">

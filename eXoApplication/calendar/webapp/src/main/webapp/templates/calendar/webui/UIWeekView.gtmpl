@@ -155,7 +155,7 @@
 										color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
 										title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
 										actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
-										Boolean isOccur = (event.getRepeatType()!=CalendarEvent.RP_NOREPEAT && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()))?true:false;
+										Boolean isOccur = (event.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()));
 										String recurId = event.getRecurrenceId();
 	                %>
 	                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" isOccur="$isOccur" recurId="$recurId" calid="$event.calendarId" startTime="$begindate"  endTime="$enddate" 
@@ -206,7 +206,7 @@
 						color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
 						//actionLink =  uicomponent.event("UpdateEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
 						actionLink =  uicomponent.url("UpdateEvent",event.getId()) ;
-						Boolean isOccur = (event.getRepeatType()!=CalendarEvent.RP_NOREPEAT && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()))?true:false;
+						Boolean isOccur = (event.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && (event.getIsExceptionOccurrence() == null || !event.getIsExceptionOccurrence()));
 						String recurId = event.getRecurrenceId();
 						
         %>
