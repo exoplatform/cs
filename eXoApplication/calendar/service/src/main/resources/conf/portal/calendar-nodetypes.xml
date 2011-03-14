@@ -385,6 +385,14 @@
           onParentVersion="COPY" protected="false" multiple="false">
           <valueConstraints/>
         </propertyDefinition>       
+        <propertyDefinition name="exo:beforeDate" requiredType="String" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>       
+        <propertyDefinition name="exo:afterDate" requiredType="String" autoCreated="false" mandatory="false"
+          onParentVersion="COPY" protected="false" multiple="false">
+          <valueConstraints/>
+        </propertyDefinition>       
       </propertyDefinitions>
     </nodeType>  	 	
     <nodeType name="exo:caldavCalendarEvent" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">

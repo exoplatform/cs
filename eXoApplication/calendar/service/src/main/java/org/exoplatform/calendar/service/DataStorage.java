@@ -895,33 +895,20 @@ public interface DataStorage {
   
   /**
    * Update information about remote calendar
-   * @param username
-   * @param calendarId
-   * @param remoteUrl
-   * @param calendarName
-   * @param description
-   * @param syncPeriod
-   * @param remoteUser
-   * @param remotePassword
+   * @param remoteCalendar object content all properties for remote calendar.
    * @return
    * @throws Exception
    */
-  public Calendar updateRemoteCalendarInfo(String username, String calendarId, String remoteUrl, String calendarName, String description, String syncPeriod, String remoteUser, String remotePassword) throws Exception ;
+  public Calendar updateRemoteCalendarInfo(RemoteCalendar remoteCalendar) throws Exception ;
   
   
   /**
    * Create a new eXo calendar with mixin type 'exo:remoteCalendar' to store data from remote calendar, this method also creates a 'Remote' category
-   * @param username owner of this calendar
-   * @param calendarName name of this calendar
-   * @param remoteUrl remote url of this calendar
-   * @param remoteType remote type of this calendar, iCalendar or CalDav
-   * @param syncPeriod synchronization period
-   * @param remoteUser remote username to authenticate
-   * @param remotePassword remote password to authenticate
+   * @param remoteCalendar object content all properties for remote calendar.
    * @return Calendar object
    * @throws Exception
    */
-  public Calendar createRemoteCalendar(String username, String calendarName, String remoteUrl, String remoteType, String syncPeriod, String remoteUser, String remotePassword) throws Exception ;
+  public Calendar createRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception ;
   
   public void setRemoteEvent(String username, String calendarId, String eventId, String href, String etag) throws Exception;
   /**

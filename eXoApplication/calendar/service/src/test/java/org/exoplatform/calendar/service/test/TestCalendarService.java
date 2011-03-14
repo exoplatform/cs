@@ -19,7 +19,6 @@ package org.exoplatform.calendar.service.test;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -27,10 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.httpclient.Credentials;
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -39,10 +35,10 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.RemoteCalendar;
 import org.exoplatform.calendar.service.RemoteCalendarService;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.service.Utils;
-import org.exoplatform.calendar.service.impl.RemoteCalendarServiceImpl;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -464,59 +460,52 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   }
   
-  public void testRemoteIcs() throws Exception {
-    String url = "http://www.google.com/calendar/ical/exomailtest@gmail.com/private-462ee65e38f964b0aa64a37b427ed673/basic.ics";
-    
+  public void testImportRemoteCalendar() throws Exception {
+    // test Remote ICS
     CalendarCategory calCategory = new CalendarCategory();
     calCategory.setName("CalendarCategoryName");
     calendarService_.saveCalendarCategory(username, calCategory, true);
-    RemoteCalendarService remoteCalendarService =  calendarService_.getRemoteCalendarService();
+    RemoteCalendarService remoteCalendarService = calendarService_.getRemoteCalendarService();
+    RemoteCalendar remoteCal = new RemoteCalendar();
+    remoteCal.setType(CalendarService.ICALENDAR);
+    remoteCal.setUsername(username);
+    remoteCal.setRemoteUrl("http://www.google.com/calendar/ical/exomailtest@gmail.com/private-462ee65e38f964b0aa64a37b427ed673/basic.ics");
+    remoteCal.setCalendarId(calCategory.getId());
+    remoteCal.setCalendarName("CalendarName");
+    remoteCal.setSyncPeriod("Auto");
+    remoteCal.setBeforeDate(0);
+    remoteCal.setAfterDate(0);
     Calendar cal;
     try {
-      cal = remoteCalendarService.importRemoteCalendar(username, url, CalendarService.ICALENDAR, "CalendarName", "Auto", null) ;
+      cal = remoteCalendarService.importRemoteCalendar(remoteCal, null);
     } catch (IOException e) {
       log.info("Exception occurs when connect to remote calendar. Skip this test.");
-      assertTrue(true);
       return;
     }
-    cal.setCategoryId(calCategory.getId()) ;
-    calendarService_.saveUserCalendar(username, cal, true) ;
-    
-    List<CalendarEvent> events =  calendarService_.getUserEventByCalendar(username, Arrays.asList(cal.getId())); 
-    
-    assertTrue(events.size() > 0);
-    
-    calendarService_.removeUserCalendar(username, cal.getId()) ;
-    calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
-  }
-  
-  public void testRemoteCaldav() throws Exception {
-    String url = "https://www.google.com/calendar/dav/exomailtest@gmail.com/events/";   
-    String userName = "exomailtest@gmail.com";
-    String password = "exoadmin";
-      
-    CalendarCategory calCategory = new CalendarCategory();
-    calCategory.setName("CalendarCategoryName");
-    calendarService_.saveCalendarCategory(username, calCategory, true);
-    
-    RemoteCalendarServiceImpl remoteCalendarService =  (RemoteCalendarServiceImpl)calendarService_.getRemoteCalendarService();
-    Credentials credentials = new UsernamePasswordCredentials(userName, password);
-    
-    Calendar cal;
+    cal.setCategoryId(calCategory.getId());
+    calendarService_.saveUserCalendar(username, cal, true);
+    checkAssertRemote(cal);
+    calendarService_.removeUserCalendar(username, cal.getId());
+
+    // test RemoteCaldav
+    remoteCal.setType(CalendarService.CALDAV);
+    remoteCal.setRemoteUser("exomailtest@gmail.com");
+    remoteCal.setRemotePassword("exoadmin");
+    remoteCal.setRemoteUrl("https://www.google.com/calendar/dav/exomailtest@gmail.com/events/");
+    Credentials credentials = new UsernamePasswordCredentials(remoteCal.getRemoteUser(), remoteCal.getRemotePassword());
     try {
-      cal = remoteCalendarService.importRemoteCalendar(username, url, CalendarService.CALDAV, "calendarName", "Auto", credentials);
+      cal = remoteCalendarService.importRemoteCalendar(remoteCal, credentials);
     } catch (IOException e) {
       log.info("Exception occurs when connect to remote calendar. Skip this test.");
-      assertTrue(true);
       return;
     }
-    
-    List<CalendarEvent> events =  calendarService_.getUserEventByCalendar(username, Arrays.asList(cal.getId())); 
-    
-    assertTrue(events.size() > 0);
-    
-    calendarService_.removeUserCalendar(username, cal.getId()) ;
-    calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
+    checkAssertRemote(cal);
+    calendarService_.removeUserCalendar(username, cal.getId());
+    calendarService_.removeCalendarCategory(username, calCategory.getId());
   }
- 
+
+  private void checkAssertRemote(Calendar cal) throws Exception {
+    List<CalendarEvent> events = calendarService_.getUserEventByCalendar(username, Arrays.asList(cal.getId()));
+    assertTrue(events.size() > 0);
+  }
 }

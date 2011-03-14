@@ -49,30 +49,24 @@ public interface RemoteCalendarService {
    * @return response's input stream
    * @throws Exception
    */
-  InputStream connectToRemoteServer(String remoteUrl, String remoteType, String remoteUser, String remotePassword) throws Exception ;
+  InputStream connectToRemoteServer(RemoteCalendar remoteCalendar) throws Exception ;
   
   /**
-   * Import iCalendar InputStream to local eXo Calendar
-   * @param username owner of this local calendar
-   * @param calendarId id of this calendar
-   * @param icalInputStream InputStream with iCalendar format
+   * Import iCalendar to local eXo Calendar
+   * @param remoteCalendar object content all properties for remote calendar.
    * @return Calendar object
    * @throws Exception
    */
-  Calendar importRemoteCalendar(String username, String calendarId, InputStream icalInputStream) throws Exception ;
+  Calendar importRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception ;
   
   /**
    * Import remote calendar to eXo calendar, contains 2 steps: connect to server then import to local database
-   * @param username owner of this calendar
-   * @param remoteUrl url to the remote calendar
-   * @param remoteType iCalendar or CalDav
-   * @param calendarName name of the local calendar
-   * @param syncPeriod synchronization period
+   * @param remoteCalendar object content all properties for remote calendar.
    * @param credentials the credentials to authenticate
    * @return Calendar object
    * @throws Exception
    */
-  Calendar importRemoteCalendar(String username, String remoteUrl, String remoteType, String calendarName, String syncPeriod, Credentials credentials) throws Exception ;
+  Calendar importRemoteCalendar(RemoteCalendar remoteCalendar, Credentials credentials) throws Exception ;
   
   /**
    * Reload remote calendar

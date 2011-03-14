@@ -641,105 +641,36 @@ public interface CalendarService {
   boolean isValidRemoteUrl(String url, String type, String remoteUser, String remotePassword) throws Exception ;
   
   /**
-   * Import an online .ics to local calendar
-   * @param username
-   * @param icalUrl
-   * @param calendarName
-   * @param syncPeriod
+   * Import an online .ics or through CalDav access to local calendar
+   * @param remoteCalendar object content all properties for remote calendar.
+   * @param credentials
    * @throws Exception
    */
-  public Calendar importRemoteIcs(String username, String icalUrl, String calendarName, String syncPeriod, Credentials credentials) throws Exception;
-  
-  /**
-   * Import a remote calendar to local calendar through CalDav access
-   * @param username the username
-   * @param calDavUrl the url to caldav calendar
-   * @param calendarName name of new calendar
-   * @param syncPeriod synchronize period of this remote calendar
-   * @param credentials credentials to authenticate with caldav server
-   * @return Calendar object
-   * @throws Exception
-   */
-  public Calendar importCalDavCalendar(String username, String calDavUrl, String calendarName, String syncPeriod, Credentials credentials) throws Exception;
-  
+  public Calendar importRemoteCalendar(RemoteCalendar remoteCalendar, Credentials credentials) throws Exception ;
+
   /**
    * Reload remote calendar data
    * @param username owner of the calendar
-   * @param remoteCalendarId id of the calendar
+   * @param remoteCalendar object content all properties for remote calendar.Id id of the calendar
    * @return the remote Calendar ojbect
    * @throws Exception
    */
   public Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception;
   
   /**
-   * @param username
-   * @param calendarId
-   * @param remoteUrl
-   * @param calendarName
-   * @param description
-   * @param syncPeriod
-   * @param remoteUser
-   * @param remotePassword
+   * @param remoteCalendar object content all properties for remote calendar.
    * @return
    * @throws Exception
    */
-  public Calendar updateRemoteCalendarInfo(String username, String calendarId, String remoteUrl, String calendarName, String description, String syncPeriod, String remoteUser, String remotePassword) throws Exception;
+  public Calendar updateRemoteCalendarInfo(RemoteCalendar remoteCalendar) throws Exception;
   
   /**
    * @param owner the owner of this calendar
    * @param calendarId the Id of calendar
-   * @return Url of remote calendar
+   * @return RemoteCalendar
    * @throws Exception
    */
-  public String getRemoteCalendarUrl(String owner, String calendarId) throws Exception;
-  
-  /**
-   * @param owner the owner of this calendar
-   * @param calendarId the Id of calendar
-   * @return type of remote calendar
-   * @throws Exception
-   */
-  public String getRemoteCalendarType(String owner, String calendarId) throws Exception;
-  
-  /**
-   * @param owner the owner of this calendar
-   * @param calendarId the Id of calendar
-   * @return remote user of remote calendar
-   * @throws Exception
-   */
-  public String getRemoteCalendarUsername(String owner, String calendarId) throws Exception;
-  
-  /**
-   * @param owner the owner of this calendar
-   * @param calendarId the Id of calendar
-   * @return remote password of remote calendar
-   * @throws Exception
-   */
-  public String getRemoteCalendarPassword(String owner, String calendarId) throws Exception;
-  
-  /**
-   * @param owner the owner of this calendar
-   * @param calendarId the Id of calendar
-   * @return synchronization period of remote calendar
-   * @throws Exception
-   */
-  public String getRemoteCalendarSyncPeriod(String owner, String calendarId) throws Exception;
-  
-  /**
-   * @param owner the owner of this calendar
-   * @param calendarId the Id of calendar
-   * @return last updated of remote calendar
-   * @throws Exception
-   */
-  public java.util.Calendar getRemoteCalendarLastUpdated(String owner, String calendarId) throws Exception;
-  
-  /**
-   * @param owner the owner of this calendar
-   * @param calendarId the Id of calendar
-   * @param timeGMT GMT time
-   * @throws Exception
-   */
-  public void setRemoteCalendarLastUpdated(String owner, String calendarId, java.util.Calendar timeGMT) throws Exception;
+  public RemoteCalendar getRemoteCalendar(String owner, String calendarId) throws Exception ;
   
   /**
    * Get the RemoteCalendarService object

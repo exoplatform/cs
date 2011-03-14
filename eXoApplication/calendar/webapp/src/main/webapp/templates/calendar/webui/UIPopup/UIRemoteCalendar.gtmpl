@@ -51,6 +51,22 @@
               </td>
             </tr>  -->
             <tr>
+              <td class="InputFieldLabel">
+                <%=uicomponent.getLabel(uicomponent.FIELD_BEFORE_DATE_SELECTBOX)%>
+              </td>
+              <td class="FieldComponent">
+                <%uicomponent.renderField(uicomponent.FIELD_BEFORE_DATE_SELECTBOX)%>
+              </td>
+            </tr>
+            <tr>
+              <td class="InputFieldLabel">
+                <%=uicomponent.getLabel(uicomponent.FIELD_AFTER_DATE_SELECTBOX)%>
+              </td>
+              <td class="FieldComponent">
+                <%uicomponent.renderField(uicomponent.FIELD_AFTER_DATE_SELECTBOX)%>
+              </td>
+            </tr>
+            <tr>
               <td colspan="2">
                 <div>
                   <table> 

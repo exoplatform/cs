@@ -565,6 +565,7 @@ public class UICalendars extends UIForm  {
           event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
         }
       }catch (PathNotFoundException e) {
+        e.printStackTrace();
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
