@@ -58,16 +58,7 @@ public interface RemoteCalendarService {
    * @throws Exception
    */
   Calendar importRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception ;
-  
-  /**
-   * Import remote calendar to eXo calendar, contains 2 steps: connect to server then import to local database
-   * @param remoteCalendar object content all properties for remote calendar.
-   * @param credentials the credentials to authenticate
-   * @return Calendar object
-   * @throws Exception
-   */
-  Calendar importRemoteCalendar(RemoteCalendar remoteCalendar, Credentials credentials) throws Exception ;
-  
+    
   /**
    * Reload remote calendar
    * @param username
@@ -77,5 +68,4 @@ public interface RemoteCalendarService {
    */
   Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception ;
   
-  boolean isValidate(InputStream icalInputStream) throws Exception ;
 }

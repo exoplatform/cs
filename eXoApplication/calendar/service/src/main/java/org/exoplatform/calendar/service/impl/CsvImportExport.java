@@ -307,7 +307,7 @@ public class CsvImportExport implements CalendarImportExport {
     return null;
   }
   
-  public void importToCalendar(String username, InputStream icalInputStream, String calendarId) throws Exception {
+  public void importToCalendar(String username, InputStream icalInputStream, String calendarId, java.util.Calendar from, java.util.Calendar to) throws Exception {
     List<CalendarEvent> data = process(new BufferedReader(new InputStreamReader(icalInputStream))) ;
     CalendarService calService = (CalendarService)PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
     for(CalendarEvent exoEvent : data) {

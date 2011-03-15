@@ -47,6 +47,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import net.fortuna.ical4j.model.DateList;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.NumberList;
 import net.fortuna.ical4j.model.Period;
@@ -985,6 +986,7 @@ public class JCRDataStorage implements DataStorage {
       } else {
         saveOccurrenceEvent(calendarNode, event, null, isNew) ;
       }
+      return;
     }
     
     if (calType == Calendar.TYPE_SHARED) {
@@ -996,7 +998,7 @@ public class JCRDataStorage implements DataStorage {
         while(iter.hasNext()) {
           calendar = iter.nextProperty().getParent() ;
           if(calendar.getProperty(Utils.EXO_ID).getString().equals(calendarId)) {
-            if (!canEdit(calendar, username)){
+            if (!canEdit(calendar, username)) {
               if (log.isDebugEnabled()) log.debug("\n Do not have edit permission. \n");
               throw new AccessDeniedException();
             }
@@ -1006,12 +1008,14 @@ public class JCRDataStorage implements DataStorage {
           }
         }
       }
+      return;
     }
     
     if (calType == Calendar.TYPE_PUBLIC) {
       Node calendarNode = getPublicCalendarHome().getNode(calendarId) ;
       Node reminderFolder = getReminderFolder(event.getFromDateTime()) ;
       saveOccurrenceEvent(calendarNode, event, reminderFolder, isNew);
+      return;
     }
   }
   
@@ -1020,7 +1024,12 @@ public class JCRDataStorage implements DataStorage {
     if(isNew) {
       
       // convert a 'virtual' occurrence to 'exception' occurrence
-      Node originalNode = calendarNode.getNode(event.getId());
+      Node originalNode = null;
+      try {
+        originalNode = calendarNode.getNode(event.getId());
+      } catch (PathNotFoundException e) {
+        if (log.isDebugEnabled()) log.debug("Original recurrence node not found", e);
+      }
       event.setId("Event" + IdGenerator.generate());
       event.setRepeatType(CalendarEvent.RP_NOREPEAT);
       
@@ -1029,7 +1038,7 @@ public class JCRDataStorage implements DataStorage {
       eventNode.setProperty(Utils.EXO_ID, event.getId());
       eventNode.addMixin(Utils.EXO_REPEAT_CALENDAR_EVENT);
       // make reference to original node
-      eventNode.setProperty(Utils.EXO_ORIGINAL_REFERENCE, originalNode.getUUID());
+      if (originalNode != null ) eventNode.setProperty(Utils.EXO_ORIGINAL_REFERENCE, originalNode.getUUID());
       
       // then save event
       eventNode.setProperty(Utils.EXO_SUMMARY, event.getSummary()) ;
@@ -1090,6 +1099,13 @@ public class JCRDataStorage implements DataStorage {
       addEvent(event) ;
       
     } else {
+      event.setRepeatType(CalendarEvent.RP_NOREPEAT);
+      event.setIsExceptionOccurrence(true);
+      event.setRepeatByDay(null);
+      event.setRepeatCount(0);
+      event.setRepeatInterval(0);
+      event.setRepeatUntilDate(null);
+      event.setRepeatByMonthDay(null);
       saveEvent(calendarNode, event, reminderFolder, false);
     }
   }
@@ -1198,6 +1214,34 @@ public class JCRDataStorage implements DataStorage {
     catch (Exception e) {
       log.error("Exception when remove exo:repeatCalendarEvent mixin type from event node", e);
     } 
+  }
+  
+  public Node getCalendarEventNode(String username, String calType, String calendarId, String eventId) throws Exception {
+    Node eventNode = null;
+    try {
+      if (String.valueOf(Calendar.TYPE_PRIVATE).equals(calType)) eventNode = getUserCalendarHome(username).getNode(calendarId).getNode(eventId);
+      else if (String.valueOf(Calendar.TYPE_PUBLIC).equals(calType)) eventNode = getPublicCalendarHome().getNode(calendarId).getNode(eventId);
+      else if (String.valueOf(Calendar.TYPE_SHARED).equals(calType)) {
+        Node sharedCalendarHome = getSharedCalendarHome();
+        if (sharedCalendarHome.hasNode(username)) {
+          PropertyIterator iter = sharedCalendarHome.getNode(username).getReferences() ;
+          Node calendar;
+          while(iter.hasNext()) {
+            calendar = iter.nextProperty().getParent() ;
+            if (!calendarId.equals(calendar.getProperty(Utils.EXO_ID))) continue;
+            if (calendar.hasNode(eventId)) {
+              eventNode = calendar.getNode(eventId);
+              break;
+            }
+          }
+        }
+      }
+      return eventNode;
+    } catch (Exception e) {
+      if (log.isDebugEnabled()) log.debug("Exception occurs when get calendar event node", e);
+      return null;
+    }
+    
   }
 
   /**
@@ -3479,10 +3523,7 @@ public class JCRDataStorage implements DataStorage {
       }
       recur.setInterval(interval);
     }
-    
-    if (repeatType.equals(CalendarEvent.RP_WORKINGDAYS)) {
-      //return getDailyOccurrences(recurEvent, from, to, true);
-    }
+
     if (recur == null) return null;
     
     // need to pass timezone as function param?
@@ -3491,17 +3532,14 @@ public class JCRDataStorage implements DataStorage {
     DateTime ical4jEventFrom = new DateTime(recurEvent.getFromDateTime());
     ical4jEventFrom.setTimeZone(tz);
     
-    VEvent vevent = new VEvent(ical4jEventFrom, "");
-    vevent.getProperties().add(new RRule(recur));
     DateTime ical4jFrom = new DateTime(from.getTime());
     DateTime ical4jTo = new DateTime(to.getTime());
     Period period = new Period(ical4jFrom, ical4jTo);
-    PeriodList list = vevent.calculateRecurrenceSet(period);
+    DateList list = recur.getDates(ical4jEventFrom, period, net.fortuna.ical4j.model.parameter.Value.DATE_TIME);
     SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
     format.setTimeZone(TimeZone.getTimeZone("GMT"));
-    for (Object p : list) {
-      Period pr = (Period)p;
-      DateTime ical4jStart = pr.getStart();
+    for (Object dt : list) {
+      DateTime ical4jStart = (DateTime) dt;
       ical4jStart.setUtc(true);
       
       // make occurrence

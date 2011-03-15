@@ -516,7 +516,7 @@ public class MockCalendarService implements CalendarService{
   }
 
   @Override
-  public Calendar importRemoteCalendar(RemoteCalendar remoteCalendar, Credentials credentials) throws Exception {
+  public Calendar importRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception {
     return null;
   }
   

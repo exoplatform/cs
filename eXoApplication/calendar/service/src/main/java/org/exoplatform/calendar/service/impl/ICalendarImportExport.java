@@ -18,8 +18,10 @@ package org.exoplatform.calendar.service.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -27,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.TimeZone;
 
 import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
@@ -34,9 +37,11 @@ import javax.jcr.NodeIterator;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.CalendarOutputter;
+import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Dur;
+import net.fortuna.ical4j.model.NumberList;
 import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.ParameterList;
 import net.fortuna.ical4j.model.Property;
@@ -44,6 +49,7 @@ import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.Recur;
 import net.fortuna.ical4j.model.ValidationException;
 import net.fortuna.ical4j.model.WeekDay;
+import net.fortuna.ical4j.model.WeekDayList;
 import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.component.VFreeBusy;
@@ -61,16 +67,19 @@ import net.fortuna.ical4j.model.property.Completed;
 import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.Due;
 import net.fortuna.ical4j.model.property.Duration;
+import net.fortuna.ical4j.model.property.ExDate;
 import net.fortuna.ical4j.model.property.Location;
 import net.fortuna.ical4j.model.property.Priority;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.RRule;
+import net.fortuna.ical4j.model.property.RecurrenceId;
 import net.fortuna.ical4j.model.property.Repeat;
 import net.fortuna.ical4j.model.property.Status;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.model.property.XProperty;
+import net.fortuna.ical4j.util.CompatibilityHints;
 
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
@@ -84,7 +93,8 @@ import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 
 
 /**
@@ -98,6 +108,8 @@ public class ICalendarImportExport implements CalendarImportExport{
   private static final String SHARED_TYPE = String.valueOf(Calendar.TYPE_SHARED) ;
   private static final String PUBLIC_TYPE = String.valueOf(Calendar.TYPE_PUBLIC) ;
   private JCRDataStorage storage_ ;
+  
+  private static final Log logger = ExoLogger.getLogger(ICalendarImportExport.class);
 
   public ICalendarImportExport(JCRDataStorage storage) throws Exception {
     storage_ = storage ;
@@ -774,15 +786,38 @@ public class ICalendarImportExport implements CalendarImportExport{
     }
   }
 
-  public void importToCalendar(String username, InputStream icalInputStream, String calendarId) throws Exception {
+  public void importToCalendar(String username, InputStream icalInputStream, String calendarId, java.util.Calendar from, java.util.Calendar to) throws Exception {
     CalendarBuilder calendarBuilder = new CalendarBuilder() ;
-    net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(icalInputStream) ;
-    //Map<String, VEvent> vEventData = new HashMap<String, VEvent>() ;
+    CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
+    net.fortuna.ical4j.model.Calendar iCalendar;
+    try { 
+      iCalendar = calendarBuilder.build(icalInputStream) ;
+    } catch (ParserException e) {
+      if (logger.isDebugEnabled()) {
+        logger.debug("ParserException occurs when building iCalendar object", e);
+      }
+      throw new ParserException("Cannot parsed the input stream to iCalendar object", e.getLineNo());
+    } catch (IOException e) {
+      if (logger.isDebugEnabled()) {
+        logger.debug("IOException occurs when building iCalendar object", e);
+      }
+      throw new IOException("IOException when parsing input stream to iCalendar object");
+    } finally {
+      icalInputStream.close();
+    }
+    
     Map<String, VFreeBusy> vFreeBusyData = new HashMap<String, VFreeBusy>() ;
     Map<String, VAlarm> vAlarmData = new HashMap<String, VAlarm>() ;
-    CalendarService  calService = (CalendarService)PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class) ;
+    CalendarService  calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
     ComponentList componentList = iCalendar.getComponents() ;
     CalendarEvent exoEvent ;
+    
+    Map<String, String> originalRecurrenceEvents = new HashMap<String, String>();
+    Map<String, List<CalendarEvent>> exceptionOccurrences = new HashMap<String, List<CalendarEvent>>();
+    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+    format.setTimeZone(TimeZone.getTimeZone("GMT"));
+    int calType = storage_.getTypeOfCalendar(username, calendarId);
+    
     for(Object obj : componentList) {
       if(obj instanceof VEvent) {
         VEvent v = (VEvent)obj ;
@@ -798,201 +833,346 @@ public class ICalendarImportExport implements CalendarImportExport{
       }
       if(obj instanceof VFreeBusy) vFreeBusyData.put(((VFreeBusy)obj).getUid().getValue(), (VFreeBusy)obj) ;
     }
+    
     for(Object obj : componentList) {
-      if(obj instanceof VEvent){
+      if(obj instanceof VEvent) {
         VEvent event = (VEvent)obj ;
         exoEvent = new CalendarEvent() ;
-        if(event.getProperty(Property.CATEGORIES) != null) {
-          EventCategory evCate = new EventCategory() ;
-          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
-          try{
-            calService.saveEventCategory(username, evCate, true) ;
-          }catch(ItemExistsException e){ 
-            evCate = calService.getEventCategoryByName(username, evCate.getName());
-          } catch (Exception e) {
-            e.printStackTrace();
+        try {
+          if(event.getProperty(Property.CATEGORIES) != null) {
+            EventCategory evCate = new EventCategory() ;
+            evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
+            try{
+              calService.saveEventCategory(username, evCate, true) ;
+            } catch(ItemExistsException e) { 
+              evCate = calService.getEventCategoryByName(username, evCate.getName());
+            } catch (Exception e) {
+              if (logger.isDebugEnabled()) {
+                logger.debug(e.getMessage(), e);
+              }
+            }
+            exoEvent.setEventCategoryId(evCate.getId()) ;
+            exoEvent.setEventCategoryName(evCate.getName()) ;
+          } 
+          exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
+          exoEvent.setCalendarId(calendarId) ;
+          if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
+          if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
+          if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
+          exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+  
+          String sValue = "" ;
+          String eValue = "" ;
+          if(event.getStartDate() != null) {
+            if (to != null && event.getStartDate().getDate().getTime() > to.getTimeInMillis()) {
+              continue;
+            }              
+            sValue = event.getStartDate().getValue() ;
+            exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
           }
-          exoEvent.setEventCategoryId(evCate.getId()) ;
-          exoEvent.setEventCategoryName(evCate.getName()) ;
-        } 
-        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
-        exoEvent.setCalendarId(calendarId) ;
-        if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
-        if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
-        if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
-        exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
-
-        String sValue = "" ;
-        String eValue = "" ;
-        if(event.getStartDate() != null) {
-          sValue = event.getStartDate().getValue() ;
-          exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
-        }
-        if(event.getEndDate() != null) {
-          eValue = event.getEndDate().getValue() ;
-          exoEvent.setToDateTime(event.getEndDate().getDate()) ;
-        }
-        if (sValue.length() == 8 && eValue.length() == 8 ) {
-          //exoEvent.setAllday(true) ;
-          exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
-        }
-        if (sValue.length() > 8 && eValue.length() > 8 ) {         
-          if("0000".equals(sValue.substring(9,13)) && "0000".equals(eValue.substring(9,13)) ) {
-            //exoEvent.setAllday(true);
+          if(event.getEndDate() != null) {
+            if (from != null && event.getEndDate().getDate().getTime() < from.getTimeInMillis()) {
+              continue;
+            }
+            eValue = event.getEndDate().getValue() ;
+            exoEvent.setToDateTime(event.getEndDate().getDate()) ;
+          }
+          if (sValue.length() == 8 && eValue.length() == 8 ) {
+            //exoEvent.setAllday(true) ;
             exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
           }
-        }
-        if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
-        if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
-        if(vFreeBusyData.get(event.getUid().getValue()) != null) {
-          exoEvent.setEventState(CalendarEvent.ST_BUSY) ;
-        }
-        if(event.getProperty(Utils.X_STATUS) != null) {
-          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
-        }
-        if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
-        PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
-        if(!attendees.isEmpty()) {
-          String[] invitation = new String[attendees.size()] ;
-          for(int i = 0; i < attendees.size(); i ++) {
-            invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
+          if (sValue.length() > 8 && eValue.length() > 8 ) {         
+            if("0000".equals(sValue.substring(9,13)) && "0000".equals(eValue.substring(9,13)) ) {
+              //exoEvent.setAllday(true);
+              exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
+            }
           }
-          exoEvent.setInvitation(invitation) ;
-        }
-        try {
-          RRule r = (RRule)event.getProperty(Property.RRULE) ;
-          if(r != null &&  r.getRecur() != null) {
-            Recur rc = r.getRecur() ;
-            rc.getFrequency();
-            if(Recur.WEEKLY.equalsIgnoreCase(rc.getFrequency())) {
-              if(rc.getDayList().size() == 2) {
-                exoEvent.setRepeatType(CalendarEvent.RP_WEEKEND) ;
-              } else if(rc.getDayList().size() == 5) {
-                exoEvent.setRepeatType(CalendarEvent.RP_WORKINGDAYS) ;
-              } if(rc.getDayList().size() == 7) {
-                exoEvent.setRepeatType(CalendarEvent.RP_WEEKLY) ;
+          if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
+          if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
+          if(vFreeBusyData.get(event.getUid().getValue()) != null) {
+            exoEvent.setEventState(CalendarEvent.ST_BUSY) ;
+          }
+          if(event.getProperty(Utils.X_STATUS) != null) {
+            exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
+          }
+          if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
+          PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
+          if(!attendees.isEmpty()) {
+            String[] invitation = new String[attendees.size()] ;
+            for(int i = 0; i < attendees.size(); i ++) {
+              invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
+            }
+            exoEvent.setInvitation(invitation) ;
+          }
+  
+          try {
+            PropertyList dataList = event.getProperties(Property.ATTACH) ;
+            List<Attachment> attachments = new ArrayList<Attachment>() ;
+            for(Object o : dataList) {
+              Attach a = (Attach)o ;
+              Attachment att = new Attachment() ;
+              att.setName(a.getParameter(Parameter.CN).getValue())  ;
+              att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
+              InputStream in = new ByteArrayInputStream(a.getBinary()) ;
+              att.setSize(in.available());
+              att.setInputStream(in) ;
+              attachments.add(att) ;
+            }
+            if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
+          } catch (Exception e) {
+            if (logger.isDebugEnabled()) {
+              logger.debug(e.getMessage(), e);
+            }
+          }
+          
+          if (event.getProperty(Property.RECURRENCE_ID) != null) {
+            RecurrenceId recurId = (RecurrenceId) event.getProperty(Property.RECURRENCE_ID);
+            exoEvent.setRecurrenceId(format.format(new Date(recurId.getDate().getTime())));
+            String originalId = originalRecurrenceEvents.get(event.getUid().getValue());
+            if (originalId != null) {            
+              Node originalNode = storage_.getCalendarEventNode(username, String.valueOf(calType), calendarId, originalId);
+              CalendarEvent original = storage_.getEvent(originalNode);
+              String uuid = originalNode.getUUID();
+              exoEvent.setOriginalReference(uuid);
+              
+              List<String> excludeId;
+              if (original.getExcludeId() != null && original.getExcludeId().length > 0) {
+                excludeId = new ArrayList<String>(Arrays.asList(original.getExcludeId()));
+              } else {
+                excludeId = new ArrayList<String>();
               }
+              excludeId.add(exoEvent.getRecurrenceId());
+              original.setExcludeId(excludeId.toArray(new String[0]));
+              if (calType == Calendar.TYPE_PRIVATE) storage_.saveUserEvent(username, calendarId, original, false);
+              else if (calType == Calendar.TYPE_PUBLIC) storage_.savePublicEvent(calendarId, original, false);
+              else if (calType == Calendar.TYPE_SHARED) storage_.saveEventToSharedCalendar(username, calendarId, original, false);
+              
             } else {
-              exoEvent.setRepeatType(rc.getFrequency().toLowerCase()) ;
+              if (exceptionOccurrences.get(event.getUid().getValue()) == null) {
+                List<CalendarEvent> exceptions = new ArrayList<CalendarEvent>();
+                exceptions.add(exoEvent);
+                exceptionOccurrences.put(event.getUid().getValue(), exceptions);
+              } else {
+                exceptionOccurrences.get(event.getUid().getValue()).add(exoEvent);
+              }
+            }          
+            storage_.saveOccurrenceEvent(username, calendarId, exoEvent, true);
+          }
+          else {
+            // get properties about recurrence rule
+            if (event.getProperty(Property.RRULE) != null && event.getProperty(Property.RECURRENCE_ID) == null) {
+              RRule rrule = (RRule) event.getProperty(Property.RRULE);
+              Recur recur = rrule.getRecur();
+              String repeatType = recur.getFrequency();
+              int interval = recur.getInterval();
+              if (interval < 1) interval = 1;
+              int count = recur.getCount();
+              net.fortuna.ical4j.model.Date until = recur.getUntil();
+                        
+              exoEvent.setRepeatInterval(interval);
+              if (count > 0) {
+                exoEvent.setRepeatCount(count);
+                exoEvent.setRepeatUntilDate(null);
+              }
+              else {
+                if (until != null) {
+                  Date repeatUntil = new Date(until.getTime());
+                  exoEvent.setRepeatUntilDate(repeatUntil);
+                  exoEvent.setRepeatCount(0);
+                } else {
+                  exoEvent.setRepeatCount(0);
+                  exoEvent.setRepeatUntilDate(null);
+                }
+              }
+      
+              if (Recur.DAILY.equals(repeatType)) exoEvent.setRepeatType(CalendarEvent.RP_DAILY);
+              else if (Recur.YEARLY.equals(repeatType)) exoEvent.setRepeatType(CalendarEvent.RP_YEARLY);
+              else {
+                if (Recur.WEEKLY.equals(repeatType)) {
+                  exoEvent.setRepeatType(CalendarEvent.RP_WEEKLY);
+                  WeekDayList weekDays = recur.getDayList();
+                  if (weekDays != null && weekDays.size() > 0) {
+                    String[] byDays = new String[weekDays.size()];
+                    for (int i = 0; i < byDays.length; i++) {
+                      WeekDay weekDay = (WeekDay) weekDays.get(i);
+                      String day = weekDay.getDay();
+                      int offset = weekDay.getOffset();
+                      if (offset != 0) byDays[i] = String.valueOf(offset) + day;
+                      else byDays[i] = day;
+                    }
+                    exoEvent.setRepeatByDay(byDays);
+                  } else {
+                    exoEvent.setRepeatByDay(null);
+                  }
+                } else {
+                  if (Recur.MONTHLY.equals(repeatType)) {
+                    exoEvent.setRepeatType(CalendarEvent.RP_MONTHLY);
+                    WeekDayList weekDays = recur.getDayList();
+                    if (weekDays != null && weekDays.size() > 0) {
+                      String[] byDays = new String[weekDays.size()];
+                      WeekDay weekDay;
+                      for (int i = 0; i < byDays.length; i++) {
+                        weekDay = (WeekDay) weekDays.get(i);
+                        String day = weekDay.getDay();
+                        int offset = weekDay.getOffset();
+                        if (offset != 0) byDays[i] = String.valueOf(offset) + day;
+                        else byDays[i] = day;
+                      }
+                      exoEvent.setRepeatByDay(byDays);
+                      exoEvent.setRepeatByMonthDay(null);
+                    } else {
+                      NumberList monthdays = recur.getMonthDayList();
+                      if (monthdays != null && monthdays.size() > 0) {
+                        long[] byMonthDays = new long[monthdays.size()];
+                        for (int i = 0; i < byMonthDays.length; i++) {
+                          int monthday = (int) (Integer) monthdays.get(i);
+                          byMonthDays[i] = monthday;
+                        }
+                        exoEvent.setRepeatByDay(null);
+                        exoEvent.setRepeatByMonthDay(byMonthDays);
+                      }
+                    }
+                  }
+                }
+              }
+              
+              originalRecurrenceEvents.put(event.getUid().getValue(), exoEvent.getId());
+              
+              List<String> excludeIds = new ArrayList<String>();
+              PropertyList exdates = event.getProperties(Property.EXDATE);
+              if (exdates != null && exdates.size() > 0) {
+                for (Object exdate : exdates) {
+                  for (Object date : ((ExDate) exdate).getDates()) {
+                    excludeIds.add(format.format(new Date(((net.fortuna.ical4j.model.DateTime) date).getTime())));
+                  }
+                }
+              }
+              
+              List<CalendarEvent> exceptions = exceptionOccurrences.get(event.getUid().getValue());
+              if (exceptions != null && exceptions.size() > 0) {
+                for (CalendarEvent exception : exceptions) {
+                  excludeIds.add(exception.getRecurrenceId());
+                } 
+              }
+              exoEvent.setExcludeId(excludeIds.toArray(new String[0]));
+              
+              if (calType == Utils.PRIVATE_TYPE) storage_.saveUserEvent(username, calendarId, exoEvent, true);
+              else if (calType == Utils.SHARED_TYPE) storage_.saveEventToSharedCalendar(username, calendarId, exoEvent, true);
+              else if (calType == Utils.PUBLIC_TYPE) storage_.savePublicEvent(calendarId, exoEvent, true);
+              
+              Node originalNode = storage_.getCalendarEventNode(username, String.valueOf(calType), calendarId, exoEvent.getId());
+              String uuid = originalNode.getUUID();
+              if (exceptions != null && exceptions.size() > 0) {
+                for (CalendarEvent exception : exceptions) {
+                  exception.setOriginalReference(uuid);
+                  storage_.saveOccurrenceEvent(username, calendarId, exception, false);
+                }
+              }
+            }  else {
+              if (calType == Utils.PRIVATE_TYPE) storage_.saveUserEvent(username, calendarId, exoEvent, true);
+              else if (calType == Utils.SHARED_TYPE) storage_.saveEventToSharedCalendar(username, calendarId, exoEvent, true);
+              else if (calType == Utils.PUBLIC_TYPE) storage_.savePublicEvent(calendarId, exoEvent, true);
             }
           }
         } catch (Exception e) {
-          e.printStackTrace() ;
-        }
-        try {
-          PropertyList dataList = event.getProperties(Property.ATTACH) ;
-          List<Attachment> attachments = new ArrayList<Attachment>() ;
-          for(Object o : dataList) {
-            Attach a = (Attach)o ;
-            Attachment att = new Attachment() ;
-            att.setName(a.getParameter(Parameter.CN).getValue())  ;
-            att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
-            InputStream in = new ByteArrayInputStream(a.getBinary()) ;
-            att.setSize(in.available());
-            att.setInputStream(in) ;
-            attachments.add(att) ;
+          if (logger.isDebugEnabled()) {
+            logger.debug("Exception occurs when import iCalendar component " + event.getUid().getValue() + ". Skip this component.", e);
           }
-          if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
-        } catch (Exception e) {
-          e.printStackTrace() ;
+          continue;
         }
-        switch (storage_.getTypeOfCalendar(username, calendarId)){
-        case Utils.PRIVATE_TYPE:
-          calService.saveUserEvent(username, calendarId, exoEvent, true) ;
-          break;
-        case Utils.SHARED_TYPE:
-          calService.saveEventToSharedCalendar(username, calendarId, exoEvent, true);
-          break;
-        case Utils.PUBLIC_TYPE:
-          calService.savePublicEvent(calendarId, exoEvent, true);
-          break;
-        }
-      }else if(obj instanceof VToDo){ 
+      } else if(obj instanceof VToDo) { 
         VToDo event = (VToDo)obj ;
         exoEvent = new CalendarEvent() ;
-        if(event.getProperty(Property.CATEGORIES) != null) {
-          EventCategory evCate = new EventCategory() ;
-          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
-          try{
-            calService.saveEventCategory(username, evCate, true) ;
-          }catch(ItemExistsException e){ 
-            evCate = calService.getEventCategoryByName(username, evCate.getName());
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-          exoEvent.setEventCategoryId(evCate.getId()) ;
-          exoEvent.setEventCategoryName(evCate.getName()) ;
-        } 
-        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
-        exoEvent.setCalendarId(calendarId) ;
-        if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
-        if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
-        if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
-        exoEvent.setEventType(CalendarEvent.TYPE_TASK) ;
-        if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
-        if (event.getDue() != null) exoEvent.setToDateTime(event.getDue().getDate()) ;
-        if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
-        if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
-        if(vFreeBusyData.get(event.getUid().getValue()) != null) {
-          exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
-        }
-        if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
-        PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
-        if(!attendees.isEmpty()) {
-          String[] invitation = new String[attendees.size()] ;
-          for(int i = 0; i < attendees.size(); i ++) {
-            invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
-          }
-          exoEvent.setInvitation(invitation) ;
-        }
         try {
-          RRule r = (RRule)event.getProperty(Property.RRULE) ;
-          if(r != null &&  r.getRecur() != null) {
-            Recur rc = r.getRecur() ;
-            rc.getFrequency();
-            if(Recur.WEEKLY.equalsIgnoreCase(rc.getFrequency())) {
-              if(rc.getDayList().size() == 2) {
-                exoEvent.setRepeatType(CalendarEvent.RP_WEEKEND) ;
-              } else if(rc.getDayList().size() == 5) {
-                exoEvent.setRepeatType(CalendarEvent.RP_WORKINGDAYS) ;
-              } if(rc.getDayList().size() == 7) {
-                exoEvent.setRepeatType(CalendarEvent.RP_WEEKLY) ;
-              }
-            } else {
-              exoEvent.setRepeatType(rc.getFrequency().toLowerCase()) ;
+          if(event.getProperty(Property.CATEGORIES) != null) {
+            EventCategory evCate = new EventCategory() ;
+            evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
+            try{
+              calService.saveEventCategory(username, evCate, true) ;
+            }catch(ItemExistsException e){ 
+              evCate = calService.getEventCategoryByName(username, evCate.getName());
+            } catch (Exception e) {
+              e.printStackTrace();
             }
+            exoEvent.setEventCategoryId(evCate.getId()) ;
+            exoEvent.setEventCategoryName(evCate.getName()) ;
+          } 
+          exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
+          exoEvent.setCalendarId(calendarId) ;
+          if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
+          if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
+          if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
+          exoEvent.setEventType(CalendarEvent.TYPE_TASK) ;
+          if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
+          if (event.getDue() != null) exoEvent.setToDateTime(event.getDue().getDate()) ;
+          if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
+          if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
+          if(vFreeBusyData.get(event.getUid().getValue()) != null) {
+            exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
+          }
+          if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
+          PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
+          if(!attendees.isEmpty()) {
+            String[] invitation = new String[attendees.size()] ;
+            for(int i = 0; i < attendees.size(); i ++) {
+              invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
+            }
+            exoEvent.setInvitation(invitation) ;
+          }
+          /*try {
+            RRule r = (RRule)event.getProperty(Property.RRULE) ;
+            if(r != null &&  r.getRecur() != null) {
+              Recur rc = r.getRecur() ;
+              rc.getFrequency();
+              if(Recur.WEEKLY.equalsIgnoreCase(rc.getFrequency())) {
+                if(rc.getDayList().size() == 2) {
+                  exoEvent.setRepeatType(CalendarEvent.RP_WEEKEND) ;
+                } else if(rc.getDayList().size() == 5) {
+                  exoEvent.setRepeatType(CalendarEvent.RP_WORKINGDAYS) ;
+                } if(rc.getDayList().size() == 7) {
+                  exoEvent.setRepeatType(CalendarEvent.RP_WEEKLY) ;
+                }
+              } else {
+                exoEvent.setRepeatType(rc.getFrequency().toLowerCase()) ;
+              }
+            }
+          } catch (Exception e) {
+            e.printStackTrace() ;
+          }*/
+          try {
+            PropertyList dataList = event.getProperties(Property.ATTACH) ;
+            List<Attachment> attachments = new ArrayList<Attachment>() ;
+            for(Object o : dataList) {
+              Attach a = (Attach)o ;
+              Attachment att = new Attachment() ;
+              att.setName(a.getParameter(Parameter.CN).getValue())  ;
+              att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
+              InputStream in = new ByteArrayInputStream(a.getBinary()) ;
+              att.setSize(in.available());
+              att.setInputStream(in) ;
+              attachments.add(att) ;
+            }
+            if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
+          } catch (Exception e) {
+            if (logger.isDebugEnabled()) logger.debug("Exception occurs when import attachments for vtodo component", e);
+          }
+  
+          switch (storage_.getTypeOfCalendar(username, calendarId)){
+          case Utils.PRIVATE_TYPE:
+            calService.saveUserEvent(username, calendarId, exoEvent, true) ;
+            break;
+          case Utils.SHARED_TYPE:
+            calService.saveEventToSharedCalendar(username, calendarId, exoEvent, true);
+            break;
+          case Utils.PUBLIC_TYPE:
+            calService.savePublicEvent(calendarId, exoEvent, true);
+            break;
           }
         } catch (Exception e) {
-          e.printStackTrace() ;
-        }
-        try {
-          PropertyList dataList = event.getProperties(Property.ATTACH) ;
-          List<Attachment> attachments = new ArrayList<Attachment>() ;
-          for(Object o : dataList) {
-            Attach a = (Attach)o ;
-            Attachment att = new Attachment() ;
-            att.setName(a.getParameter(Parameter.CN).getValue())  ;
-            att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
-            InputStream in = new ByteArrayInputStream(a.getBinary()) ;
-            att.setSize(in.available());
-            att.setInputStream(in) ;
-            attachments.add(att) ;
+          if (logger.isDebugEnabled()) {
+            logger.debug("Exception occurs when import iCalendar vtodo component " + event.getUid().getValue() + ". Skip this component.", e);
           }
-          if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
-        } catch (Exception e) {
-          e.printStackTrace() ;
-        }
-
-        switch (storage_.getTypeOfCalendar(username, calendarId)){
-        case Utils.PRIVATE_TYPE:
-          calService.saveUserEvent(username, calendarId, exoEvent, true) ;
-          break;
-        case Utils.SHARED_TYPE:
-          calService.saveEventToSharedCalendar(username, calendarId, exoEvent, true);
-          break;
-        case Utils.PUBLIC_TYPE:
-          calService.savePublicEvent(calendarId, exoEvent, true);
-          break;
+          continue;
         }
       }      
     }

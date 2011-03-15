@@ -270,7 +270,6 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
   
   public static class SaveActionListener extends EventListener<UIRemoteCalendar> {
     public void execute(Event<UIRemoteCalendar> event) throws Exception {
-      // TODO Auto-generated method stub
       UIRemoteCalendar uiform = event.getSource();
       UICalendarPortlet calendarPortlet = uiform.getAncestorOfType(UICalendarPortlet.class);
       UIApplication uiApp = uiform.getAncestorOfType(UIApplication.class);
@@ -284,7 +283,6 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
       remoteCalendar.setBeforeDateSave(uiform.getUIFormSelectBox(FIELD_BEFORE_DATE_SELECTBOX).getValue());
       remoteCalendar.setAfterDateSave(uiform.getUIFormSelectBox(FIELD_AFTER_DATE_SELECTBOX).getValue());
       Calendar eXoCalendar = null;
-      Credentials credentials = null;
       
       try {       
         if (!uiform.getUseAuthentication()) {
@@ -295,7 +293,6 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
           }
-          credentials = null;          
         } else {
         	remoteCalendar.setRemoteUser(uiform.getRemoteUser());
         	remoteCalendar.setRemotePassword(uiform.getRemotePassword());
@@ -313,7 +310,6 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
           }          
-          credentials = new UsernamePasswordCredentials(remoteCalendar.getRemoteUser(), remoteCalendar.getRemotePassword());    
         }
       }
       catch (UnsupportedOperationException e) {
@@ -327,14 +323,14 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
         return;
       }
       catch (Exception e) {
-        e.printStackTrace();
+        logger.warn("Exception occurs when connecting to remote server", e);
         return;
       }
       
       try {
         if (uiform.isAddNew_) {
           // access to remote calendar
-        	eXoCalendar = calService.importRemoteCalendar(remoteCalendar, credentials);
+          eXoCalendar = calService.importRemoteCalendar(remoteCalendar);
         } else {
         	remoteCalendar.setCalendarId(uiform.calendarId_) ;
           // update remote calendar info
@@ -348,7 +344,7 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
         calService.saveUserCalendar(remoteCalendar.getUsername(), eXoCalendar, false) ;
       }
       catch (Exception e) {
-        e.printStackTrace();
+        logger.warn("Exception occurs when importing remote calendar", e);
         uiApp.addMessage(new ApplicationMessage("UIRemoteCalendar.msg.cant-import-remote-calendar", null, ApplicationMessage.ERROR));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
         return;
@@ -366,7 +362,6 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
 
     @Override
     public void execute(Event<UIRemoteCalendar> event) throws Exception {
-      // TODO Auto-generated method stub
       // back to UISubscribeForm
       UIRemoteCalendar uiform = event.getSource();
       UICalendarPortlet uiCalendarPortlet = uiform.getAncestorOfType(UICalendarPortlet.class);
@@ -382,7 +377,6 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
 
     @Override
     public void execute(Event<UIRemoteCalendar> event) throws Exception {
-      // TODO Auto-generated method stub
       UIRemoteCalendar uiform = event.getSource();
       UICalendarPortlet calendarPortlet = uiform.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction();

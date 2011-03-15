@@ -674,8 +674,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    * {@inheritDoc}
    */
   @Override
-  public Calendar importRemoteCalendar(RemoteCalendar remoteCalendar, Credentials credentials) throws Exception {
-    return remoteCalendarService.importRemoteCalendar(remoteCalendar, credentials);
+  public Calendar importRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception {
+    return remoteCalendarService.importRemoteCalendar(remoteCalendar);
   }
   
   /**
@@ -763,7 +763,6 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public Map<String,CalendarEvent> getOccurrenceEvents(CalendarEvent recurEvent,
                                                  java.util.Calendar from,
                                                  java.util.Calendar to, String timezone) throws Exception {
-    // TODO Auto-generated method stub
     return storage_.getOccurrenceEvents(recurEvent, from, to, timezone);
   }
 
@@ -777,13 +776,11 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                                     String toType,
                                     List<CalendarEvent> calEvents,
                                     String username) throws Exception {
-    // TODO Auto-generated method stub
     storage_.updateOccurrenceEvent(fromCalendar, toCalendar, fromType, toType, calEvents, username);
   }
 
   @Override
   public List<CalendarEvent> getOriginalRecurrenceEvents(String username, java.util.Calendar from, java.util.Calendar to, String[] publicCalendarIds) throws Exception {
-    // TODO Auto-generated method stub
     return storage_.getOriginalRecurrenceEvents(username, from, to, publicCalendarIds);
   }
 
@@ -792,7 +789,6 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    */
   @Override
   public List<CalendarEvent> getExceptionEvents(String username, CalendarEvent recurEvent) throws Exception {
-    // TODO Auto-generated method stub
     return storage_.getExceptionEvents(username, recurEvent);
   }
 
@@ -801,7 +797,6 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    */
   @Override
   public void removeRecurrenceSeries(String username, CalendarEvent originalEvent) throws Exception {
-    // TODO Auto-generated method stub
     storage_.removeRecurrenceSeries(username, originalEvent);
   }
 
@@ -815,7 +810,6 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                                      String toType,
                                      CalendarEvent occurrence,
                                      String username) throws Exception {
-    // TODO Auto-generated method stub
     storage_.updateRecurrenceSeries(fromCalendar, toCalendar, fromType, toType, occurrence, username);
   }
 
@@ -824,7 +818,6 @@ public class CalendarServiceImpl implements CalendarService, Startable {
    */
   @Override
   public CalendarEvent getSharedEvent(String username, String calendarId, String eventId) throws Exception {
-    // TODO Auto-generated method stub
     return storage_.getSharedEvent(username, calendarId, eventId);
   }
 
@@ -841,7 +834,6 @@ public class CalendarServiceImpl implements CalendarService, Startable {
                                                              EventQuery eventQuery,
                                                              String[] publicCalendarIds,
                                                              String timezone) throws Exception {
-    // TODO Auto-generated method stub
     return storage_.searchHighlightRecurrenceEvent(username, eventQuery, publicCalendarIds, timezone);
   }
   

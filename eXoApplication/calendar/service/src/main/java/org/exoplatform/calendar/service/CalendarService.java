@@ -646,7 +646,7 @@ public interface CalendarService {
    * @param credentials
    * @throws Exception
    */
-  public Calendar importRemoteCalendar(RemoteCalendar remoteCalendar, Credentials credentials) throws Exception ;
+  public Calendar importRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception ;
 
   /**
    * Reload remote calendar data
@@ -767,5 +767,15 @@ public interface CalendarService {
    */
   public void updateRecurrenceSeries(String fromCalendar, String toCalendar, String fromType, String toType, CalendarEvent occurrence, String username) throws Exception ;
  
+  /**
+   * Find all days of month or year that have event/task to highlight from all personal, shared and public calendar of an user <br/>
+   * This function is much same like searchHightLightEvent() function but it only counts for recurrence event
+   * @param username the username of user
+   * @param eventQuery EventQuery object to limit time-range
+   * @param publicCalendarIds list of public calendar
+   * @param timezone timezone
+   * @return 
+   * @throws Exception
+   */
   public Map<Integer, String> searchHighlightRecurrenceEvent(String username, EventQuery eventQuery, String[] publicCalendarIds, String timezone) throws Exception ;
 }

@@ -46,9 +46,11 @@ public interface CalendarImportExport {
    * @param username current user name or id
    * @param icalInputStream data input stream
    * @param calendarId given  existed calendar id  
+   * @param from the first date of current time-range to import event
+   * @param to the last date of current time-range to import event
    * @throws Exception
    */
-  public void importToCalendar(String username, InputStream icalInputStream, String calendarId) throws Exception ;
+  public void importToCalendar(String username, InputStream icalInputStream, String calendarId, java.util.Calendar from, java.util.Calendar to) throws Exception ;
 
   /**
    * The method exports events form calendar to icalendar file (.ics) or .csv file

@@ -477,7 +477,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     remoteCal.setAfterDate(0);
     Calendar cal;
     try {
-      cal = remoteCalendarService.importRemoteCalendar(remoteCal, null);
+      cal = remoteCalendarService.importRemoteCalendar(remoteCal);
     } catch (IOException e) {
       log.info("Exception occurs when connect to remote calendar. Skip this test.");
       return;
@@ -492,9 +492,8 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     remoteCal.setRemoteUser("exomailtest@gmail.com");
     remoteCal.setRemotePassword("exoadmin");
     remoteCal.setRemoteUrl("https://www.google.com/calendar/dav/exomailtest@gmail.com/events/");
-    Credentials credentials = new UsernamePasswordCredentials(remoteCal.getRemoteUser(), remoteCal.getRemotePassword());
     try {
-      cal = remoteCalendarService.importRemoteCalendar(remoteCal, credentials);
+      cal = remoteCalendarService.importRemoteCalendar(remoteCal);
     } catch (IOException e) {
       log.info("Exception occurs when connect to remote calendar. Skip this test.");
       return;

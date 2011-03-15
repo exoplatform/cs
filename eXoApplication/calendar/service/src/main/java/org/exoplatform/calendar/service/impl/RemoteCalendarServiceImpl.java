@@ -25,23 +25,29 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 
+import javax.jcr.Node;
 import javax.jcr.ItemExistsException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
-import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.ComponentList;
+import net.fortuna.ical4j.model.NumberList;
 import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyList;
+import net.fortuna.ical4j.model.Recur;
+import net.fortuna.ical4j.model.WeekDay;
+import net.fortuna.ical4j.model.WeekDayList;
 import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.component.VFreeBusy;
@@ -49,6 +55,9 @@ import net.fortuna.ical4j.model.component.VToDo;
 import net.fortuna.ical4j.model.property.Attach;
 import net.fortuna.ical4j.model.property.Attendee;
 import net.fortuna.ical4j.model.property.Clazz;
+import net.fortuna.ical4j.model.property.ExDate;
+import net.fortuna.ical4j.model.property.RRule;
+import net.fortuna.ical4j.model.property.RecurrenceId;
 import net.fortuna.ical4j.util.CompatibilityHints;
 
 import org.apache.commons.httpclient.Credentials;
@@ -116,22 +125,8 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
   }
 
   @Override
-// public InputStream connectToRemoteServer(String remoteUrl, String remoteType, String remoteUser, String remotePassword) throws IOException {
-  public InputStream connectToRemoteServer(RemoteCalendar remoteCalendar) throws IOException {
-    HostConfiguration hostConfig = new HostConfiguration();
-    String host = new URL(remoteCalendar.getRemoteUrl()).getHost();
-    if (StringUtils.isEmpty(host))
-      host = remoteCalendar.getRemoteUrl();
-    hostConfig.setHost(host);
-    HttpClient client = new HttpClient();
-    client.setHostConfiguration(hostConfig);
-    client.getHttpConnectionManager().getParams().setConnectionTimeout(10000);
-    client.getHttpConnectionManager().getParams().setSoTimeout(10000);
-    // basic authentication
-    if (!StringUtils.isEmpty(remoteCalendar.getRemoteUser())) {
-      Credentials credentials = new UsernamePasswordCredentials(remoteCalendar.getRemoteUser(), remoteCalendar.getRemotePassword());
-      client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
-    }
+  public InputStream connectToRemoteServer(RemoteCalendar remoteCalendar) throws Exception {
+    HttpClient client = getRemoteClient(remoteCalendar);
     GetMethod get = new GetMethod(remoteCalendar.getRemoteUrl());
     try {
       client.executeMethod(get);
@@ -173,13 +168,17 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
           Header header = options.getResponseHeader("DAV");
           options.releaseConnection();
           if (header == null) {
-            logger.debug("Cannot connect to remoter server or not support WebDav access");
+            if (logger.isDebugEnabled()) {
+              logger.debug("Cannot connect to remoter server or not support WebDav access");
+            }
             return false;
           }
           Boolean support = header.toString().contains("calendar-access");
           options.releaseConnection();
           if (!support) {
-            logger.debug("Remote server does not support CalDav access");
+            if (logger.isDebugEnabled()) {
+              logger.debug("Remote server does not support CalDav access");
+            }
             throw new UnsupportedOperationException("Remote server does not support CalDav access");
           }
           return support;
@@ -187,280 +186,56 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         return false;
       }
     } catch (MalformedURLException e) {
-      logger.debug(e.getMessage());
+      if (logger.isDebugEnabled()) logger.debug(e.getMessage(), e);
       throw new IOException("URL is invalid. Maybe no legal protocol or URl could not be parsed");
     } catch (IOException e) {
-      logger.debug(e.getMessage());
+      if (logger.isDebugEnabled()) logger.debug(e.getMessage(), e);
       throw new IOException("Error occurs when connecting to remote server");
     }
   }
 
   @Override
   public Calendar importRemoteCalendar(RemoteCalendar remoteCalendar) throws Exception {
-    // get imputStream by remote url.
-    InputStream icalInputStream = connectToRemoteServer(remoteCalendar);
-    CalendarBuilder calendarBuilder = new CalendarBuilder();
-    // Enable relaxed-unfolding to allow ical4j parses "folding" line follows iCalendar spec
-    CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
-    net.fortuna.ical4j.model.Calendar iCalendar;
-    try {
-      iCalendar = calendarBuilder.build(icalInputStream);
-    } catch (ParserException e) {
-      logger.debug(e.getMessage());
-      throw new ParserException("Cannot parsed the input stream. The input stream format must be iCalendar", e.getLineNo());
-    } catch (IOException e) {
-      logger.debug(e.getMessage());
-      throw new IOException("I/O error when parsing input stream");
-    } finally {
-      icalInputStream.close();
-    }
-
-    CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-    if (calService == null) {
-      calService = (CalendarService) ExoContainerContext.getContainerByName(PortalContainer.getCurrentPortalContainerName()).getComponentInstanceOfType(CalendarService.class);
-    }
-
-    Map<String, VFreeBusy> vFreeBusyData = new HashMap<String, VFreeBusy>();
-    Map<String, VAlarm> vAlarmData = new HashMap<String, VAlarm>();
-
-    Calendar eXoCalendar = calService.getUserCalendar(remoteCalendar.getUsername(), remoteCalendar.getCalendarId());
-
-    // import calendar components
-    ComponentList componentList = iCalendar.getComponents();
-    CalendarEvent exoEvent;
-    for (Object obj : componentList) {
-      if (obj instanceof VEvent) {
-        VEvent v = (VEvent) obj;
-        if (!v.getAlarms().isEmpty()) {
-          for (Object o : v.getAlarms()) {
-            if (o instanceof VAlarm) {
-              VAlarm va = (VAlarm) o;
-              vAlarmData.put(v.getUid().getValue() + ":" + va.getProperty(Property.ACTION).getName(), va);
-            }
-          }
-        }
-
-      }
-      if (obj instanceof VFreeBusy)
-        vFreeBusyData.put(((VFreeBusy) obj).getUid().getValue(), (VFreeBusy) obj);
-    }
-
-    for (Object obj : componentList) {
-      if (obj instanceof VEvent) {
-        VEvent event = (VEvent) obj;
-
-        exoEvent = new CalendarEvent();
-        String sValue = "";
-        String eValue = "";
-        if (event.getStartDate() != null) {
-          if (event.getStartDate().getDate().getTime() > remoteCalendar.getAfterTime().getTimeInMillis())
-            continue;
-          sValue = event.getStartDate().getValue();
-          exoEvent.setFromDateTime(event.getStartDate().getDate());
-        }
-        if (event.getEndDate() != null) {
-          if (event.getEndDate().getDate().getTime() < remoteCalendar.getBeforeTime().getTimeInMillis())
-            continue;
-          eValue = event.getEndDate().getValue();
-          exoEvent.setToDateTime(event.getEndDate().getDate());
-        }
-        if (sValue.length() == 8 && eValue.length() == 8) {
-          // exoEvent.setAllday(true) ;
-          exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
-        }
-        if (sValue.length() > 8 && eValue.length() > 8) {
-          if ("0000".equals(sValue.substring(9, 13)) && "0000".equals(eValue.substring(9, 13))) {
-            // exoEvent.setAllday(true);
-            exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
-          }
-        }
-
-        // exoEvent.setId(event.getUid().toString());
-        if (event.getProperty(Property.CATEGORIES) != null) {
-          EventCategory evCate = new EventCategory();
-          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim());
-          try {
-            calService.saveEventCategory(remoteCalendar.getUsername(), evCate, true);
-          } catch (ItemExistsException e) {
-            evCate = calService.getEventCategoryByName(remoteCalendar.getUsername(), evCate.getName());
-          } catch (Exception e) {
-            logger.debug("Failed to get event of calendar.", e);
-          }
-          exoEvent.setEventCategoryId(evCate.getId());
-          exoEvent.setEventCategoryName(evCate.getName());
-        }
-        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
-        exoEvent.setCalendarId(remoteCalendar.getCalendarId());
-        if (event.getSummary() != null)
-          exoEvent.setSummary(event.getSummary().getValue());
-        if (event.getDescription() != null)
-          exoEvent.setDescription(event.getDescription().getValue());
-        if (event.getStatus() != null)
-          exoEvent.setStatus(event.getStatus().getValue());
-        exoEvent.setEventType(CalendarEvent.TYPE_EVENT);
-
-        if (event.getLocation() != null)
-          exoEvent.setLocation(event.getLocation().getValue());
-        if (event.getPriority() != null)
-          exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
-        if (event.getProperty(Utils.X_STATUS) != null) {
-          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue());
-        }
-        if (event.getClassification() != null)
-          exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue()));
-        PropertyList attendees = event.getProperties(Property.ATTENDEE);
-        if (!attendees.isEmpty()) {
-          String[] invitation = new String[attendees.size()];
-          for (int i = 0; i < attendees.size(); i++) {
-            invitation[i] = ((Attendee) attendees.get(i)).getValue();
-          }
-          exoEvent.setInvitation(invitation);
-        }
-        try {
-          PropertyList dataList = event.getProperties(Property.ATTACH);
-          List<Attachment> attachments = new ArrayList<Attachment>();
-          for (Object o : dataList) {
-            Attach a = (Attach) o;
-            Attachment att = new Attachment();
-            att.setName(a.getParameter(Parameter.CN).getValue());
-            att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue());
-            InputStream in = new ByteArrayInputStream(a.getBinary());
-            att.setSize(in.available());
-            att.setInputStream(in);
-            attachments.add(att);
-          }
-          if (!attachments.isEmpty())
-            exoEvent.setAttachment(attachments);
-        } catch (Exception e) {
-          logger.debug("Failed to get attachment in event.", e);
-        }
-        calService.saveUserEvent(remoteCalendar.getUsername(), remoteCalendar.getCalendarId(), exoEvent, true);
-      } else if (obj instanceof VToDo) {
-        VToDo event = (VToDo) obj;
-        exoEvent = new CalendarEvent();
-        if (event.getProperty(Property.CATEGORIES) != null) {
-          EventCategory evCate = new EventCategory();
-          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim());
-          try {
-            calService.saveEventCategory(remoteCalendar.getUsername(), evCate, true);
-          } catch (ItemExistsException e) {
-            evCate = calService.getEventCategoryByName(remoteCalendar.getUsername(), evCate.getName());
-          } catch (Exception e) {
-            logger.debug("Failed to get event calendar.", e);
-          }
-          exoEvent.setEventCategoryName(evCate.getName());
-        }
-        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
-        exoEvent.setCalendarId(remoteCalendar.getCalendarId());
-        if (event.getSummary() != null)
-          exoEvent.setSummary(event.getSummary().getValue());
-        if (event.getDescription() != null)
-          exoEvent.setDescription(event.getDescription().getValue());
-        if (event.getStatus() != null)
-          exoEvent.setStatus(event.getStatus().getValue());
-        exoEvent.setEventType(CalendarEvent.TYPE_TASK);
-        if (event.getStartDate() != null)
-          exoEvent.setFromDateTime(event.getStartDate().getDate());
-        if (event.getDue() != null)
-          exoEvent.setToDateTime(event.getDue().getDate());
-        // if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
-        if (event.getLocation() != null)
-          exoEvent.setLocation(event.getLocation().getValue());
-        if (event.getPriority() != null)
-          exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
-        if (vFreeBusyData.get(event.getUid().getValue()) != null) {
-          exoEvent.setStatus(CalendarEvent.ST_BUSY);
-        }
-        if (event.getProperty(Utils.X_STATUS) != null) {
-          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue());
-        }
-        if (event.getClassification() != null)
-          exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue()));
-        PropertyList attendees = event.getProperties(Property.ATTENDEE);
-        if (!attendees.isEmpty()) {
-          String[] invitation = new String[attendees.size()];
-          for (int i = 0; i < attendees.size(); i++) {
-            invitation[i] = ((Attendee) attendees.get(i)).getValue();
-          }
-          exoEvent.setInvitation(invitation);
-        }
-        try {
-          PropertyList dataList = event.getProperties(Property.ATTACH);
-          List<Attachment> attachments = new ArrayList<Attachment>();
-          for (Object o : dataList) {
-            Attach a = (Attach) o;
-            Attachment att = new Attachment();
-            att.setName(a.getParameter(Parameter.CN).getValue());
-            att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue());
-            InputStream in = new ByteArrayInputStream(a.getBinary());
-            att.setSize(in.available());
-            att.setInputStream(in);
-            attachments.add(att);
-          }
-          if (!attachments.isEmpty())
-            exoEvent.setAttachment(attachments);
-        } catch (Exception e) {
-          logger.debug("Failed to get attachment in event.", e);
-        }
-        calService.saveUserEvent(remoteCalendar.getUsername(), remoteCalendar.getCalendarId(), exoEvent, true);
-      }
-    }
-    return eXoCalendar;
-  }
-
-  @Override
-  public Calendar importRemoteCalendar(RemoteCalendar remoteCalendar, Credentials credentials) throws Exception {
-    String remoteUser = null;
-    String remotePassword = null;
-    if (credentials != null) {
-      remoteUser = ((UsernamePasswordCredentials) credentials).getUserName();
-      remotePassword = ((UsernamePasswordCredentials) credentials).getPassword();
-    }
-    if(!Utils.isEmpty(remoteUser) && !Utils.isEmpty(remotePassword)) {
-      remoteCalendar.setRemoteUser(remoteUser);
-      remoteCalendar.setRemotePassword(remotePassword);
-    }
     Calendar eXoCalendar = storage_.createRemoteCalendar(remoteCalendar);
     if (CalendarService.ICALENDAR.equals(remoteCalendar.getType())) {
       remoteCalendar.setCalendarId(eXoCalendar.getId());
       remoteCalendar.setLastUpdated(Utils.getGreenwichMeanTime());
-      importRemoteCalendar(remoteCalendar);
+      InputStream icalInputStream = connectToRemoteServer(remoteCalendar);
+      CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      calService.getCalendarImportExports(CalendarService.ICALENDAR).importToCalendar(remoteCalendar.getUsername(), icalInputStream, remoteCalendar.getCalendarId(), remoteCalendar.getBeforeTime(), remoteCalendar.getAfterTime());
       return eXoCalendar;
     } else {
       if (CalendarService.CALDAV.equals(remoteCalendar.getType())) {
         MultiStatus multiStatus = connectToCalDavServer(remoteCalendar);
         String href;
-        CalendarBuilder builder = new CalendarBuilder();
-        // Enable relaxed-unfolding to allow ical4j parses "folding" line follows iCalendar spec
-        CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
-
         for (int i = 0; i < multiStatus.getResponses().length; i++) {
           MultiStatusResponse multiRes = multiStatus.getResponses()[i];
           href = multiRes.getHref();
           DavPropertySet propSet = multiRes.getProperties(DavServletResponse.SC_OK);
-          DavProperty calendarData = propSet.get("calendar-data", CALDAV_NAMESPACE);
+          net.fortuna.ical4j.model.Calendar iCalEvent = getCalDavResource(remoteCalendar, href);
           DavProperty etag = propSet.get(DavPropertyName.GETETAG.getName(), DavConstants.NAMESPACE);
           try {
-            net.fortuna.ical4j.model.Calendar iCalEvent = builder.build(new StringReader(calendarData.getValue().toString()));
-            importRemoteCalendarEvent(remoteCalendar.getUsername(), eXoCalendar.getId(), iCalEvent, href, etag.getValue().toString());
+            importCaldavEvent(remoteCalendar.getUsername(), eXoCalendar.getId(), null, iCalEvent, href, etag.getValue().toString(), true);
             storage_.setRemoteCalendarLastUpdated(remoteCalendar.getUsername(), eXoCalendar.getId(), Utils.getGreenwichMeanTime());
           } catch (Exception e) {
-            logger.debug("Exception occurs when import calendar component " + href + ". Skip this component.");
+            if(logger.isDebugEnabled()) {
+              logger.debug("Exception occurs when import calendar component " + href + ". Skip this component.", e);
+            }
             continue;
           }
         }
-
         return eXoCalendar;
       }
       return null;
     }
   }
 
-  // TODO: improve this function follow CalDav synchronization operations specification to update faster (avoid fully reload)
   @Override
   public Calendar refreshRemoteCalendar(String username, String remoteCalendarId) throws Exception {
     if (!storage_.isRemoteCalendar(username, remoteCalendarId)) {
-      logger.debug("This calendar is not remote calendar.");
+      if (logger.isDebugEnabled()) {
+        logger.debug("This calendar is not remote calendar.");
+      }
       return null;
     }
     RemoteCalendar remoteCalendar = storage_.getRemoteCalendar(username, remoteCalendarId);
@@ -473,10 +248,20 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       eventQuery.setFromDate(remoteCalendar.getBeforeTime());
       eventQuery.setToDate(remoteCalendar.getAfterTime());
       List<CalendarEvent> events = storage_.getUserEvents(username, eventQuery);
-      for (CalendarEvent event : events) {
-        storage_.removeUserEvent(username, remoteCalendarId, event.getId());
+      if (events != null && events.size() > 0) {
+        for (CalendarEvent event : events) {
+          if (Utils.isExceptionOccurrence(event)) continue;
+          else if (Utils.isRepeatEvent(event)) {
+            storage_.removeRecurrenceSeries(username, event);
+          } 
+          else storage_.removeUserEvent(username, remoteCalendarId, event.getId());
+        }
       }
-      Calendar eXoCalendar = importRemoteCalendar(remoteCalendar);
+      
+      Calendar eXoCalendar = storage_.getUserCalendar(username, remoteCalendarId);
+      InputStream icalInputStream = connectToRemoteServer(remoteCalendar);
+      CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+      calService.getCalendarImportExports(CalendarService.ICALENDAR).importToCalendar(username, icalInputStream, remoteCalendarId, remoteCalendar.getBeforeTime(), remoteCalendar.getAfterTime());
       storage_.setRemoteCalendarLastUpdated(username, eXoCalendar.getId(), Utils.getGreenwichMeanTime());
       return eXoCalendar;
     }
@@ -490,19 +275,6 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     return null;
   }
 
-  public boolean isValidate(InputStream icalInputStream) throws Exception {
-    try {
-      CalendarBuilder calendarBuilder = new CalendarBuilder();
-      // Enable relaxed-unfolding to allow ical4j parses "folding" line follows iCalendar spec
-      CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
-      calendarBuilder.build(icalInputStream);
-      return true;
-    } catch (Exception e) {
-      logger.debug("Failed to check validate inputStream.", e);
-      return false;
-    }
-  }
-
   /**
    * First time connect to CalDav server to get data
    * 
@@ -511,21 +283,30 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
    * @throws Exception
    */
   public MultiStatus connectToCalDavServer(RemoteCalendar remoteCalendar) throws Exception {
-    HostConfiguration hostConfig = new HostConfiguration();
-    String host = new URL(remoteCalendar.getRemoteUrl()).getHost();
-    if (StringUtils.isEmpty(host))
-      host = remoteCalendar.getRemoteUrl();
-    hostConfig.setHost(host);
-    HttpClient client = new HttpClient();
-    client.setHostConfiguration(hostConfig);
-    client.getHttpConnectionManager().getParams().setConnectionTimeout(10000);
-    client.getHttpConnectionManager().getParams().setSoTimeout(10000);
-    // basic authentication
-    if (!StringUtils.isEmpty(remoteCalendar.getRemoteUser())) {
-      Credentials credentials = new UsernamePasswordCredentials(remoteCalendar.getRemoteUser(), remoteCalendar.getRemotePassword());
-      client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
-    }
+    HttpClient client = getRemoteClient(remoteCalendar);
     return doCalendarQuery(client, remoteCalendar.getRemoteUrl(), remoteCalendar.getBeforeTime(), remoteCalendar.getAfterTime());
+  }
+  
+  
+  public net.fortuna.ical4j.model.Calendar getCalDavResource(RemoteCalendar remoteCalendar, String href) throws Exception {
+    HttpClient client = getRemoteClient(remoteCalendar);
+    CalendarBuilder builder = new CalendarBuilder();
+    // Enable relaxed-unfolding to allow ical4j parses "folding" line follows iCalendar specification
+    CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
+    
+    try {
+      MultiStatus multiStatus = doCalendarMultiGet(client, remoteCalendar.getRemoteUrl(), new String[] {href});
+      if (multiStatus == null) return null;
+      MultiStatusResponse multiRes = multiStatus.getResponses()[0];
+      DavPropertySet propSet =  multiRes.getProperties(DavServletResponse.SC_OK);
+      DavProperty calendarData = propSet.get(CALDAV_XML_CALENDAR_DATA, CALDAV_NAMESPACE);
+      return builder.build(new StringReader(calendarData.getValue().toString()));
+    } catch (Exception e) {
+      if (logger.isDebugEnabled()) {
+        logger.debug("Can't get resource from CalDav server", e);
+      }
+      return null;
+    }
   }
 
   /**
@@ -613,7 +394,10 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
    */
 
   public Calendar synchronizeWithCalDavServer(RemoteCalendar remoteCalendar) throws Exception {
-    if (!storage_.isRemoteCalendar(remoteCalendar.getUsername(), remoteCalendar.getCalendarId())) {
+    String username = remoteCalendar.getUsername();
+    String remoteCalendarId = remoteCalendar.getCalendarId();
+    
+    if (!storage_.isRemoteCalendar(username, remoteCalendarId)) {
       return null;
     }
     if (!CalendarService.CALDAV.equals(remoteCalendar.getType())) {
@@ -628,19 +412,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     // Enable relaxed-unfolding to allow ical4j parses "folding" line follows iCalendar spec
     CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_UNFOLDING, true);
 
-    HttpClient client = new HttpClient();
-    HostConfiguration hostConfig = new HostConfiguration();
-    String host = new URL(remoteCalendar.getRemoteUrl()).getHost();
-    if (StringUtils.isEmpty(host))
-      host = remoteCalendar.getRemoteUrl();
-    hostConfig.setHost(host);
-    client.setHostConfiguration(hostConfig);
-    Credentials credentials = null;
-    client.setHostConfiguration(hostConfig);
-    if (!StringUtils.isEmpty(remoteCalendar.getRemoteUser())) {
-      credentials = new UsernamePasswordCredentials(remoteCalendar.getRemoteUser(), remoteCalendar.getRemotePassword());
-      client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
-    }
+    HttpClient client = getRemoteClient(remoteCalendar);
 
     java.util.Calendar from = remoteCalendar.getBeforeTime();
     java.util.Calendar to = remoteCalendar.getAfterTime();
@@ -648,18 +420,18 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
 
     // get List of event from local calendar in specific time-range
     EventQuery eventQuery = new EventQuery();
-    eventQuery.setCalendarId(new String[] { remoteCalendar.getCalendarId() });
+    eventQuery.setCalendarId(new String[] { remoteCalendarId });
     eventQuery.setFromDate(from);
     eventQuery.setToDate(to);
 
-    List<CalendarEvent> eXoEvents = calService.getUserEvents(remoteCalendar.getUsername(), eventQuery);
+    List<CalendarEvent> eXoEvents = calService.getUserEvents(username, eventQuery);
     Iterator<CalendarEvent> it = eXoEvents.iterator();
-    // events map contains set of (href, CalendarEvent) pairs in the local calendar
+    // events map contains set of (href, eventId) pairs in the local calendar
     Map<String, String> events = new HashMap<String, String>();
     while (it.hasNext()) {
       CalendarEvent event = it.next();
-      // events.put(calService.getCalDavResourceHref(username, remoteCalendarId, event.getId()), calService.getCalDavResourceEtag(username, remoteCalendarId, event.getId()));
-      events.put(calService.getCalDavResourceHref(remoteCalendar.getUsername(), remoteCalendar.getCalendarId(), event.getId()), event.getId());
+      if (Utils.isExceptionOccurrence(event)) continue;
+      events.put(calService.getCalDavResourceHref(username, remoteCalendarId, event.getId()), event.getId());
     }
 
     // list of href of new events on the server
@@ -683,8 +455,8 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       } else {
         // check need-to-update events
         String eventId = events.get(href);
-        String calendarId = calService.getEvent(remoteCalendar.getUsername(), eventId).getCalendarId();
-        String localEtag = calService.getCalDavResourceEtag(remoteCalendar.getUsername(), calendarId, eventId);
+        String calendarId = calService.getEvent(username, eventId).getCalendarId();
+        String localEtag = calService.getCalDavResourceEtag(username, calendarId, eventId);
         if (!localEtag.equals(etag)) {
           updated.put(href, eventId);
         }
@@ -715,9 +487,11 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         try {
           net.fortuna.ical4j.model.Calendar iCalEvent = calendarBuilder.build(new StringReader(calendarData.getValue().toString()));
           // add new event
-          importRemoteCalendarEvent(remoteCalendar.getUsername(), remoteCalendar.getCalendarId(), iCalEvent, href, etag.getValue().toString());
+          importCaldavEvent(username, remoteCalendarId, null, iCalEvent, href, etag.getValue().toString(), true);
         } catch (Exception e) {
-          logger.debug("Exception occurs when import calendar component " + href + ". Skip this component.");
+          if (logger.isDebugEnabled()) {
+            logger.debug("Exception occurs when import calendar component " + href + ". Skip this component.");
+          }
           continue;
         }
       }
@@ -735,9 +509,11 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         try {
           net.fortuna.ical4j.model.Calendar iCalEvent = calendarBuilder.build(new StringReader(calendarData.getValue().toString()));
           // update event
-          updateRemoteCalendarEvent(remoteCalendar.getUsername(), remoteCalendar.getCalendarId(), eventId, iCalEvent, etag.getValue().toString());
+          importCaldavEvent(username, remoteCalendarId, eventId, iCalEvent, null, etag.getValue().toString(), false);
         } catch (Exception e) {
-          logger.debug("Exception occurs when import calendar component " + href + ". Skip this component.");
+          if (logger.isDebugEnabled()) {
+            logger.debug("Exception occurs when import calendar component " + href + ". Skip this component.");
+          }
           continue;
         }
       }
@@ -747,7 +523,13 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     Iterator<String> iterator = deleted.iterator();
     while (iterator.hasNext()) {
       String eventId = iterator.next();
-      calService.removeUserEvent(remoteCalendar.getUsername(), remoteCalendar.getCalendarId(), eventId);
+      CalendarEvent event = storage_.getUserEvent(username, remoteCalendarId, eventId);
+      event.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
+      if (Utils.isRepeatEvent(event)) {
+        storage_.removeRecurrenceSeries(username, event);
+      } else {
+        calService.removeUserEvent(username, remoteCalendarId, eventId);
+      }
     }
     return calService.getUserCalendar(remoteCalendar.getUsername(), remoteCalendar.getCalendarId());
   }
@@ -814,8 +596,6 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       ReportInfo reportInfo = new ReportInfo(calendarQuery, DavConstants.DEPTH_0);
       DavPropertyNameSet propNameSet = reportInfo.getPropertyNameSet();
       propNameSet.add(DavPropertyName.GETETAG);
-      DavPropertyName calendarData = DavPropertyName.create(CALDAV_XML_CALENDAR_DATA, CALDAV_NAMESPACE);
-      propNameSet.add(calendarData);
 
       // filter element
       Element filter = DomUtil.createElement(doc, CALDAV_XML_FILTER, CALDAV_NAMESPACE);
@@ -830,18 +610,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       todoComp.setAttribute(CALDAV_XML_COMP_FILTER_NAME, net.fortuna.ical4j.model.component.VEvent.VTODO);
 
       Element timeRange = DomUtil.createElement(doc, CALDAV_XML_TIME_RANGE, CALDAV_NAMESPACE);
-//      java.util.Calendar start = java.util.Calendar.getInstance();
-//      if (beforeDate != 0) {
-//        start.setTimeInMillis(start.getTimeInMillis() + beforeDate);
-//      } else {
-//        start.add(java.util.Calendar.YEAR, -1);
-//      }
-//      java.util.Calendar end = java.util.Calendar.getInstance();
-//      if (afterDate != 0) {
-//        end.setTimeInMillis(end.getTimeInMillis() + afterDate);
-//      } else {
-//        end.add(java.util.Calendar.YEAR, 1);
-//      }
+
       SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
       timeRange.setAttribute(CALDAV_XML_START, format.format(from.getTime()));
       timeRange.setAttribute(CALDAV_XML_END, format.format(to.getTime()));
@@ -863,399 +632,357 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         report.releaseConnection();
     }
   }
-
-  /**
-   * Import to local calendar event from iCalendar object with href and etag
-   * 
-   * @param username
-   * @param calendarId
-   * @param iCalendar
-   * @param href
-   * @param etag
-   * @throws Exception
-   */
-  public void importRemoteCalendarEvent(String username, String calendarId, net.fortuna.ical4j.model.Calendar iCalendar, String href, String etag) throws Exception {
-    CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-    if (calService == null) {
-      calService = (CalendarService) ExoContainerContext.getContainerByName(PortalContainer.getCurrentPortalContainerName()).getComponentInstanceOfType(CalendarService.class);
+  
+  
+  public void importCaldavEvent(String username, String calendarId, String eventId, net.fortuna.ical4j.model.Calendar iCalendar, String href, String etag, Boolean isNew) throws Exception {
+    CalendarService  calService = (CalendarService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+    if(calService == null) {
+      calService = (CalendarService) PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
     }
-
-    Map<String, VFreeBusy> vFreeBusyData = new HashMap<String, VFreeBusy>();
-    Map<String, VAlarm> vAlarmData = new HashMap<String, VAlarm>();
-
-//    Calendar eXoCalendar = calService.getUserCalendar(username, calendarId);
-
+    
+    Map<String, VFreeBusy> vFreeBusyData = new HashMap<String, VFreeBusy>() ;
+    Map<String, VAlarm> vAlarmData = new HashMap<String, VAlarm>() ;
+    
+    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+    format.setTimeZone(TimeZone.getTimeZone("GMT"));
+    
+    CalendarEvent original = null;
+    List<CalendarEvent> exceptions = new ArrayList<CalendarEvent>();
+    
     // import calendar components
-    ComponentList componentList = iCalendar.getComponents();
-    CalendarEvent exoEvent;
-    for (Object obj : componentList) {
-      if (obj instanceof VEvent) {
-        VEvent v = (VEvent) obj;
-        if (!v.getAlarms().isEmpty()) {
-          for (Object o : v.getAlarms()) {
+    ComponentList componentList = iCalendar.getComponents() ;
+    CalendarEvent exoEvent ;
+    
+    if (!isNew) {
+      exoEvent = storage_.getEvent(username, eventId);
+      exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
+      
+      if (Utils.isRepeatEvent(exoEvent)) {
+        List<CalendarEvent> oldExceptions = storage_.getExceptionEvents(username, exoEvent);
+        if (oldExceptions != null && oldExceptions.size() > 0) {
+          for (CalendarEvent exception : oldExceptions) {
+            storage_.removeUserEvent(username, calendarId, exception.getId());
+          }
+        }
+      }
+    }
+    
+    for(Object obj : componentList) {
+      
+      if(obj instanceof VFreeBusy) vFreeBusyData.put(((VFreeBusy)obj).getUid().getValue(), (VFreeBusy)obj) ;
+      
+      if(obj instanceof VEvent) {
+        VEvent event = (VEvent)obj ;   
+        if(!event.getAlarms().isEmpty()) {
+          for (Object o : event.getAlarms()) {
             if (o instanceof VAlarm) {
-              VAlarm va = (VAlarm) o;
-              vAlarmData.put(v.getUid().getValue() + ":" + va.getProperty(Property.ACTION).getName(), va);
+              VAlarm va = (VAlarm)o;
+              vAlarmData.put(event.getUid().getValue() + ":" + va.getProperty(Property.ACTION).getName(), va) ;
             }
           }
         }
-
-      }
-      if (obj instanceof VFreeBusy)
-        vFreeBusyData.put(((VFreeBusy) obj).getUid().getValue(), (VFreeBusy) obj);
-    }
-    for (Object obj : componentList) {
-      if (obj instanceof VEvent) {
-        VEvent event = (VEvent) obj;
-        exoEvent = new CalendarEvent();
-        if (event.getProperty(Property.CATEGORIES) != null) {
-          EventCategory evCate = new EventCategory();
-          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim());
+        
+        if (isNew) exoEvent = new CalendarEvent();
+        else exoEvent = storage_.getUserEvent(username, calendarId, eventId);
+        
+        if(event.getProperty(Property.CATEGORIES) != null) {
+          EventCategory evCate = new EventCategory() ;
+          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try {
-            calService.saveEventCategory(username, evCate, true);
-          } catch (ItemExistsException e) {
+            calService.saveEventCategory(username, evCate, true) ;
+          } catch (ItemExistsException e) { 
             evCate = calService.getEventCategoryByName(username, evCate.getName());
           } catch (Exception e) {
-            logger.debug("Failed to get event calendar.", e);
+            if (logger.isDebugEnabled()) {
+              logger.debug("Exception occurs when saving event category for CalDav event", e);
+            }
           }
-          exoEvent.setEventCategoryId(evCate.getId());
-          exoEvent.setEventCategoryName(evCate.getName());
+          exoEvent.setEventCategoryId(evCate.getId()) ;
+          exoEvent.setEventCategoryName(evCate.getName()) ;
         }
-        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
-        exoEvent.setCalendarId(calendarId);
-        if (event.getSummary() != null)
-          exoEvent.setSummary(event.getSummary().getValue());
-        if (event.getDescription() != null)
-          exoEvent.setDescription(event.getDescription().getValue());
-        if (event.getStatus() != null)
-          exoEvent.setStatus(event.getStatus().getValue());
-        exoEvent.setEventType(CalendarEvent.TYPE_EVENT);
+        
+        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
+        exoEvent.setCalendarId(calendarId) ;
+        if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
+        if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
+        if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
+        exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
 
-        String sValue = "";
-        String eValue = "";
-        if (event.getStartDate() != null) {
-          sValue = event.getStartDate().getValue();
-          exoEvent.setFromDateTime(event.getStartDate().getDate());
+        String sValue = "" ;
+        String eValue = "" ;
+        if(event.getStartDate() != null) {
+          sValue = event.getStartDate().getValue() ;
+          exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
         }
-        if (event.getEndDate() != null) {
-          eValue = event.getEndDate().getValue();
-          exoEvent.setToDateTime(event.getEndDate().getDate());
+        if(event.getEndDate() != null) {
+          eValue = event.getEndDate().getValue() ;
+          exoEvent.setToDateTime(event.getEndDate().getDate()) ;
         }
-        if (sValue.length() == 8 && eValue.length() == 8) {
-          // exoEvent.setAllday(true) ;
-          exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
+        if (sValue.length() == 8 && eValue.length() == 8 ) {
+          //exoEvent.setAllday(true) ;
+          exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
         }
-        if (sValue.length() > 8 && eValue.length() > 8) {
-          if ("0000".equals(sValue.substring(9, 13)) && "0000".equals(eValue.substring(9, 13))) {
-            // exoEvent.setAllday(true);
-            exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
+        if (sValue.length() > 8 && eValue.length() > 8 ) {         
+          if("0000".equals(sValue.substring(9,13)) && "0000".equals(eValue.substring(9,13)) ) {
+            //exoEvent.setAllday(true);
+            exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
           }
         }
-        if (event.getLocation() != null)
-          exoEvent.setLocation(event.getLocation().getValue());
-        if (event.getPriority() != null)
-          exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
-        if (event.getProperty(Utils.X_STATUS) != null) {
-          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue());
+        if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
+        if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
+        if(event.getProperty(Utils.X_STATUS) != null) {
+          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
         }
-        if (event.getClassification() != null)
-          exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue()));
-        PropertyList attendees = event.getProperties(Property.ATTENDEE);
-        if (!attendees.isEmpty()) {
-          String[] invitation = new String[attendees.size()];
-          for (int i = 0; i < attendees.size(); i++) {
-            invitation[i] = ((Attendee) attendees.get(i)).getValue();
+        if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
+        PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
+        if(!attendees.isEmpty()) {
+          String[] invitation = new String[attendees.size()] ;
+          for(int i = 0; i < attendees.size(); i ++) {
+            invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
           }
-          exoEvent.setInvitation(invitation);
+          exoEvent.setInvitation(invitation) ;
         }
         try {
-          PropertyList dataList = event.getProperties(Property.ATTACH);
-          List<Attachment> attachments = new ArrayList<Attachment>();
-          for (Object o : dataList) {
-            Attach a = (Attach) o;
-            Attachment att = new Attachment();
-            att.setName(a.getParameter(Parameter.CN).getValue());
-            att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue());
-            InputStream in = new ByteArrayInputStream(a.getBinary());
+          PropertyList dataList = event.getProperties(Property.ATTACH) ;
+          List<Attachment> attachments = new ArrayList<Attachment>() ;
+          for(Object o : dataList) {
+            Attach a = (Attach)o ;
+            Attachment att = new Attachment() ;
+            att.setName(a.getParameter(Parameter.CN).getValue())  ;
+            att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
+            InputStream in = new ByteArrayInputStream(a.getBinary()) ;
             att.setSize(in.available());
-            att.setInputStream(in);
-            attachments.add(att);
+            att.setInputStream(in) ;
+            attachments.add(att) ;
           }
-          if (!attachments.isEmpty())
-            exoEvent.setAttachment(attachments);
+          if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
         } catch (Exception e) {
-          logger.debug("Failed to get attachment event.", e);
+          if (logger.isDebugEnabled()) {
+            logger.debug("Exception occurs when importing attachments from iCalendar object for CalDav event", e);
+          }
         }
-        calService.saveUserEvent(username, calendarId, exoEvent, true);
+        
+        if (event.getProperty(Property.RECURRENCE_ID) != null) {
+          RecurrenceId recurId = (RecurrenceId) event.getProperty(Property.RECURRENCE_ID);
+          exoEvent.setRecurrenceId(format.format(new Date(recurId.getDate().getTime())));
+          if (original != null) {
+            Node originalNode = storage_.getUserCalendarHome(username).getNode(calendarId).getNode(original.getId());
+            String uuid = originalNode.getUUID();
+            exoEvent.setId(originalNode.getName());
+            exoEvent.setOriginalReference(uuid);
+            List<String> excludeId;
+            if (original.getExcludeId() != null && original.getExcludeId().length > 0) {
+              excludeId = new ArrayList<String>(Arrays.asList(original.getExcludeId()));
+            } else {
+              excludeId = new ArrayList<String>();
+            }
+            excludeId.add(exoEvent.getRecurrenceId());
+            original.setExcludeId(excludeId.toArray(new String[0]));
+            storage_.saveUserEvent(username, calendarId, original, false);
+          }
+          else {
+            exceptions.add(exoEvent);
+          }
+          storage_.saveOccurrenceEvent(username, calendarId, exoEvent, true);
+        }
+        else {
+          if (event.getProperty(Property.RRULE) != null && event.getProperty(Property.RECURRENCE_ID) == null) {
+            RRule rrule = (RRule) event.getProperty(Property.RRULE);
+            Recur recur = rrule.getRecur();
+            String repeatType = recur.getFrequency();
+            int interval = recur.getInterval();
+            if (interval < 1) interval = 1;
+            int count = recur.getCount();
+            net.fortuna.ical4j.model.Date until = recur.getUntil();
+                      
+            exoEvent.setRepeatInterval(interval);
+            if (count > 0) {
+              exoEvent.setRepeatCount(count);
+              exoEvent.setRepeatUntilDate(null);
+            }
+            else {
+              if (until != null) {
+                Date repeatUntil = new Date(until.getTime());
+                exoEvent.setRepeatUntilDate(repeatUntil);
+                exoEvent.setRepeatCount(0);
+              } else {
+                exoEvent.setRepeatCount(0);
+                exoEvent.setRepeatUntilDate(null);
+              }
+            }
+            
+            if (Recur.DAILY.equals(repeatType)) exoEvent.setRepeatType(CalendarEvent.RP_DAILY);
+            else if (Recur.YEARLY.equals(repeatType)) exoEvent.setRepeatType(CalendarEvent.RP_YEARLY);
+            else {
+              if (Recur.WEEKLY.equals(repeatType)) {
+                exoEvent.setRepeatType(CalendarEvent.RP_WEEKLY);
+                WeekDayList weekDays = recur.getDayList();
+                if (weekDays != null && weekDays.size() > 0) {
+                  String[] byDays = new String[weekDays.size()];
+                  for (int i = 0; i < byDays.length; i++) {
+                    WeekDay weekDay = (WeekDay) weekDays.get(i);
+                    String day = weekDay.getDay();
+                    int offset = weekDay.getOffset();
+                    if (offset != 0) byDays[i] = String.valueOf(offset) + day;
+                    else byDays[i] = day;
+                  }
+                  exoEvent.setRepeatByDay(byDays);
+                }
+                else {
+                  exoEvent.setRepeatByDay(null);
+                }
+              } else {
+                if (Recur.MONTHLY.equals(repeatType)) {
+                  exoEvent.setRepeatType(CalendarEvent.RP_MONTHLY);
+                  WeekDayList weekDays = recur.getDayList();
+                  if (weekDays != null && weekDays.size() > 0) {
+                    String[] byDays = new String[weekDays.size()];
+                    WeekDay weekDay;
+                    for (int i = 0; i < byDays.length; i++) {
+                      weekDay = (WeekDay) weekDays.get(i);
+                      String day = weekDay.getDay();
+                      int offset = weekDay.getOffset();
+                      if (offset != 0) byDays[i] = String.valueOf(offset) + day;
+                      else byDays[i] = day;
+                    }
+                    exoEvent.setRepeatByDay(byDays);
+                    exoEvent.setRepeatByMonthDay(null);
+                  } else {
+                    NumberList monthdays = recur.getMonthDayList();
+                    if (monthdays != null && monthdays.size() > 0) {
+                      long[] byMonthDays = new long[monthdays.size()];
+                      for (int i = 0; i < byMonthDays.length; i++) {
+                        int monthday = (int) (Integer) monthdays.get(i);
+                        byMonthDays[i] = monthday;
+                      }
+                      exoEvent.setRepeatByDay(null);
+                      exoEvent.setRepeatByMonthDay(byMonthDays);
+                    }
+                  }
+                }
+              }
+            }
+            original = exoEvent;  
+              
+            List<String> excludeIds = new ArrayList<String>();
+            PropertyList exdates = event.getProperties(Property.EXDATE);
+            if (exdates != null && exdates.size() > 0) {
+              for (Object exdate : exdates) {
+                for (Object date : ((ExDate) exdate).getDates()) {
+                  excludeIds.add(format.format(new Date(((net.fortuna.ical4j.model.DateTime) date).getTime())));
+                }
+              }
+            }
+              
+            if (exceptions != null && exceptions.size() > 0) {
+              for (CalendarEvent exception : exceptions) {
+                excludeIds.add(exception.getRecurrenceId());
+              }
+            }
+            exoEvent.setExcludeId(excludeIds.toArray(new String[0]));
+            storage_.saveUserEvent(username, calendarId, exoEvent, isNew);
+            
+            String uuid = storage_.getUserCalendarHome(username).getNode(calendarId).getNode(exoEvent.getId()).getUUID();
+            if (exceptions != null && exceptions.size() > 0) {
+              for (CalendarEvent exception : exceptions) {
+                exception.setOriginalReference(uuid);
+                storage_.saveOccurrenceEvent(username, calendarId, exception, false);
+              }
+            }
+          }
+          else {
+            storage_.saveUserEvent(username, calendarId, exoEvent, isNew);
+          }
+        }
         storage_.setRemoteEvent(username, calendarId, exoEvent.getId(), href, etag);
-      } else if (obj instanceof VToDo) {
-        VToDo event = (VToDo) obj;
-        exoEvent = new CalendarEvent();
-        if (event.getProperty(Property.CATEGORIES) != null) {
-          EventCategory evCate = new EventCategory();
-          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim());
-          try {
-            calService.saveEventCategory(username, evCate, true);
-          } catch (ItemExistsException e) {
+      }
+      
+      else if (obj instanceof VToDo) {
+        VToDo event = (VToDo)obj ;
+        exoEvent = new CalendarEvent() ;
+        if(event.getProperty(Property.CATEGORIES) != null) {
+          EventCategory evCate = new EventCategory() ;
+          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
+          try{
+            calService.saveEventCategory(username, evCate, true) ;
+          } catch(ItemExistsException e){ 
             evCate = calService.getEventCategoryByName(username, evCate.getName());
           } catch (Exception e) {
-            logger.debug("Failed to get event calendar.", e);
+            if (logger.isDebugEnabled()) logger.debug(e.getMessage(), e);
           }
-          exoEvent.setEventCategoryName(evCate.getName());
+          exoEvent.setEventCategoryName(evCate.getName()) ;
+        } 
+        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
+        exoEvent.setCalendarId(calendarId) ;
+        if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
+        if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
+        if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
+        exoEvent.setEventType(CalendarEvent.TYPE_TASK) ;
+        if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
+        if(event.getDue() != null) exoEvent.setToDateTime(event.getDue().getDate()) ;
+        //if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
+        if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
+        if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
+        if(vFreeBusyData.get(event.getUid().getValue()) != null) {
+          exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
         }
-        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
-        exoEvent.setCalendarId(calendarId);
-        if (event.getSummary() != null)
-          exoEvent.setSummary(event.getSummary().getValue());
-        if (event.getDescription() != null)
-          exoEvent.setDescription(event.getDescription().getValue());
-        if (event.getStatus() != null)
-          exoEvent.setStatus(event.getStatus().getValue());
-        exoEvent.setEventType(CalendarEvent.TYPE_TASK);
-        if (event.getStartDate() != null)
-          exoEvent.setFromDateTime(event.getStartDate().getDate());
-        if (event.getDue() != null)
-          exoEvent.setToDateTime(event.getDue().getDate());
-        // if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
-        if (event.getLocation() != null)
-          exoEvent.setLocation(event.getLocation().getValue());
-        if (event.getPriority() != null)
-          exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
-        if (vFreeBusyData.get(event.getUid().getValue()) != null) {
-          exoEvent.setStatus(CalendarEvent.ST_BUSY);
+        if(event.getProperty(Utils.X_STATUS) != null) {
+          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
         }
-        if (event.getProperty(Utils.X_STATUS) != null) {
-          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue());
-        }
-        if (event.getClassification() != null)
-          exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue()));
-        PropertyList attendees = event.getProperties(Property.ATTENDEE);
-        if (!attendees.isEmpty()) {
-          String[] invitation = new String[attendees.size()];
-          for (int i = 0; i < attendees.size(); i++) {
-            invitation[i] = ((Attendee) attendees.get(i)).getValue();
+        if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
+        PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
+        if(!attendees.isEmpty()) {
+          String[] invitation = new String[attendees.size()] ;
+          for(int i = 0; i < attendees.size(); i ++) {
+            invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
           }
-          exoEvent.setInvitation(invitation);
+          exoEvent.setInvitation(invitation) ;
         }
         try {
-          PropertyList dataList = event.getProperties(Property.ATTACH);
-          List<Attachment> attachments = new ArrayList<Attachment>();
-          for (Object o : dataList) {
-            Attach a = (Attach) o;
-            Attachment att = new Attachment();
-            att.setName(a.getParameter(Parameter.CN).getValue());
-            att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue());
-            InputStream in = new ByteArrayInputStream(a.getBinary());
+          PropertyList dataList = event.getProperties(Property.ATTACH) ;
+          List<Attachment> attachments = new ArrayList<Attachment>() ;
+          for(Object o : dataList) {
+            Attach a = (Attach)o ;
+            Attachment att = new Attachment() ;
+            att.setName(a.getParameter(Parameter.CN).getValue())  ;
+            att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
+            InputStream in = new ByteArrayInputStream(a.getBinary()) ;
             att.setSize(in.available());
-            att.setInputStream(in);
-            attachments.add(att);
+            att.setInputStream(in) ;
+            attachments.add(att) ;
           }
-          if (!attachments.isEmpty())
-            exoEvent.setAttachment(attachments);
+          if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
         } catch (Exception e) {
-          logger.debug("Failed to get attachment event.", e);
+          if (logger.isDebugEnabled()) logger.debug("Exception occurs when importing attachments from iCalendar object", e);
         }
-        calService.saveUserEvent(username, calendarId, exoEvent, true);
+        storage_.saveUserEvent(username, calendarId, exoEvent, isNew) ;
         storage_.setRemoteEvent(username, calendarId, exoEvent.getId(), href, etag);
       }
     }
   }
-
+  
   /**
-   * Update local event from iCalendar object
-   * 
-   * @param username
-   * @param calendarId
-   * @param eventId
-   * @param iCalendar
-   * @param etag
+   * Get the HttpClient object to prepare for the connection with remote server
+   * @param remoteCalendar holds information about remote server
+   * @return HttpClient object
+   * @throws Exception
    */
-  public void updateRemoteCalendarEvent(String username, String calendarId, String eventId, net.fortuna.ical4j.model.Calendar iCalendar, String etag) throws Exception {
-    CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-    if (calService == null) {
-      calService = (CalendarService) ExoContainerContext.getContainerByName(PortalContainer.getCurrentPortalContainerName()).getComponentInstanceOfType(CalendarService.class);
+  public HttpClient getRemoteClient(RemoteCalendar remoteCalendar) throws Exception {
+    HostConfiguration hostConfig = new HostConfiguration();
+    String host = new URL(remoteCalendar.getRemoteUrl()).getHost();
+    if (Utils.isEmpty(host))
+      host = remoteCalendar.getRemoteUrl();
+    hostConfig.setHost(host);
+    HttpClient client = new HttpClient();
+    client.setHostConfiguration(hostConfig);
+    client.getHttpConnectionManager().getParams().setConnectionTimeout(10000);
+    client.getHttpConnectionManager().getParams().setSoTimeout(10000);
+    // basic authentication
+    if (!Utils.isEmpty(remoteCalendar.getRemoteUser())) {
+      Credentials credentials = new UsernamePasswordCredentials(remoteCalendar.getRemoteUser(), remoteCalendar.getRemotePassword());
+      client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
     }
-
-    Map<String, VFreeBusy> vFreeBusyData = new HashMap<String, VFreeBusy>();
-    Map<String, VAlarm> vAlarmData = new HashMap<String, VAlarm>();
-
-//    Calendar eXoCalendar = calService.getUserCalendar(username, calendarId);
-
-    // import calendar components
-    ComponentList componentList = iCalendar.getComponents();
-    CalendarEvent exoEvent;
-    for (Object obj : componentList) {
-      if (obj instanceof VEvent) {
-        VEvent v = (VEvent) obj;
-        if (!v.getAlarms().isEmpty()) {
-          for (Object o : v.getAlarms()) {
-            if (o instanceof VAlarm) {
-              VAlarm va = (VAlarm) o;
-              vAlarmData.put(v.getUid().getValue() + ":" + va.getProperty(Property.ACTION).getName(), va);
-            }
-          }
-        }
-
-      }
-      if (obj instanceof VFreeBusy)
-        vFreeBusyData.put(((VFreeBusy) obj).getUid().getValue(), (VFreeBusy) obj);
-    }
-    for (Object obj : componentList) {
-      if (obj instanceof VEvent) {
-        VEvent event = (VEvent) obj;
-        // exoEvent = new CalendarEvent() ;
-        exoEvent = calService.getEvent(username, eventId);
-        if (event.getProperty(Property.CATEGORIES) != null) {
-          EventCategory evCate = new EventCategory();
-          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim());
-          try {
-            calService.saveEventCategory(username, evCate, true);
-          } catch (ItemExistsException e) {
-            evCate = calService.getEventCategoryByName(username, evCate.getName());
-          } catch (Exception e) {
-            logger.debug("Failed to get event calendar.", e);
-          }
-          exoEvent.setEventCategoryId(evCate.getId());
-          exoEvent.setEventCategoryName(evCate.getName());
-        }
-        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
-        exoEvent.setCalendarId(calendarId);
-        if (event.getSummary() != null)
-          exoEvent.setSummary(event.getSummary().getValue());
-        if (event.getDescription() != null)
-          exoEvent.setDescription(event.getDescription().getValue());
-        if (event.getStatus() != null)
-          exoEvent.setStatus(event.getStatus().getValue());
-        exoEvent.setEventType(CalendarEvent.TYPE_EVENT);
-
-        String sValue = "";
-        String eValue = "";
-        if (event.getStartDate() != null) {
-          sValue = event.getStartDate().getValue();
-          exoEvent.setFromDateTime(event.getStartDate().getDate());
-        }
-        if (event.getEndDate() != null) {
-          eValue = event.getEndDate().getValue();
-          exoEvent.setToDateTime(event.getEndDate().getDate());
-        }
-        if (sValue.length() == 8 && eValue.length() == 8) {
-          // exoEvent.setAllday(true) ;
-          exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
-        }
-        if (sValue.length() > 8 && eValue.length() > 8) {
-          if ("0000".equals(sValue.substring(9, 13)) && "0000".equals(eValue.substring(9, 13))) {
-            // exoEvent.setAllday(true);
-            exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() - 1));
-          }
-        }
-        if (event.getLocation() != null)
-          exoEvent.setLocation(event.getLocation().getValue());
-        if (event.getPriority() != null)
-          exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
-        if (event.getProperty(Utils.X_STATUS) != null) {
-          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue());
-        }
-        if (event.getClassification() != null)
-          exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue()));
-        PropertyList attendees = event.getProperties(Property.ATTENDEE);
-        if (!attendees.isEmpty()) {
-          String[] invitation = new String[attendees.size()];
-          for (int i = 0; i < attendees.size(); i++) {
-            invitation[i] = ((Attendee) attendees.get(i)).getValue();
-          }
-          exoEvent.setInvitation(invitation);
-        }
-        try {
-          PropertyList dataList = event.getProperties(Property.ATTACH);
-          List<Attachment> attachments = new ArrayList<Attachment>();
-          for (Object o : dataList) {
-            Attach a = (Attach) o;
-            Attachment att = new Attachment();
-            att.setName(a.getParameter(Parameter.CN).getValue());
-            att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue());
-            InputStream in = new ByteArrayInputStream(a.getBinary());
-            att.setSize(in.available());
-            att.setInputStream(in);
-            attachments.add(att);
-          }
-          if (!attachments.isEmpty())
-            exoEvent.setAttachment(attachments);
-        } catch (Exception e) {
-          logger.debug("Failed to get attachment event.", e);
-        }
-        calService.saveUserEvent(username, calendarId, exoEvent, false);
-        storage_.setRemoteEvent(username, calendarId, exoEvent.getId(), null, etag);
-      } else if (obj instanceof VToDo) {
-        VToDo event = (VToDo) obj;
-        exoEvent = new CalendarEvent();
-        if (event.getProperty(Property.CATEGORIES) != null) {
-          EventCategory evCate = new EventCategory();
-          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim());
-          try {
-            calService.saveEventCategory(username, evCate, true);
-          } catch (ItemExistsException e) {
-            evCate = calService.getEventCategoryByName(username, evCate.getName());
-          } catch (Exception e) {
-            logger.debug("Failed to get event calendar.", e);
-          }
-          exoEvent.setEventCategoryName(evCate.getName());
-        }
-        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE));
-        exoEvent.setCalendarId(calendarId);
-        if (event.getSummary() != null)
-          exoEvent.setSummary(event.getSummary().getValue());
-        if (event.getDescription() != null)
-          exoEvent.setDescription(event.getDescription().getValue());
-        if (event.getStatus() != null)
-          exoEvent.setStatus(event.getStatus().getValue());
-        exoEvent.setEventType(CalendarEvent.TYPE_TASK);
-        if (event.getStartDate() != null)
-          exoEvent.setFromDateTime(event.getStartDate().getDate());
-        if (event.getDue() != null)
-          exoEvent.setToDateTime(event.getDue().getDate());
-        // if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
-        if (event.getLocation() != null)
-          exoEvent.setLocation(event.getLocation().getValue());
-        if (event.getPriority() != null)
-          exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())]);
-        if (vFreeBusyData.get(event.getUid().getValue()) != null) {
-          exoEvent.setStatus(CalendarEvent.ST_BUSY);
-        }
-        if (event.getProperty(Utils.X_STATUS) != null) {
-          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue());
-        }
-        if (event.getClassification() != null)
-          exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue()));
-        PropertyList attendees = event.getProperties(Property.ATTENDEE);
-        if (!attendees.isEmpty()) {
-          String[] invitation = new String[attendees.size()];
-          for (int i = 0; i < attendees.size(); i++) {
-            invitation[i] = ((Attendee) attendees.get(i)).getValue();
-          }
-          exoEvent.setInvitation(invitation);
-        }
-        try {
-          PropertyList dataList = event.getProperties(Property.ATTACH);
-          List<Attachment> attachments = new ArrayList<Attachment>();
-          for (Object o : dataList) {
-            Attach a = (Attach) o;
-            Attachment att = new Attachment();
-            att.setName(a.getParameter(Parameter.CN).getValue());
-            att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue());
-            InputStream in = new ByteArrayInputStream(a.getBinary());
-            att.setSize(in.available());
-            att.setInputStream(in);
-            attachments.add(att);
-          }
-          if (!attachments.isEmpty())
-            exoEvent.setAttachment(attachments);
-        } catch (Exception e) {
-          logger.debug("Failed to get attachment event.", e);
-        }
-        calService.saveUserEvent(username, calendarId, exoEvent, false);
-        storage_.setRemoteEvent(username, calendarId, exoEvent.getId(), null, etag);
-      }
-    }
+    return client;
   }
 
 }

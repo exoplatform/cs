@@ -345,4 +345,12 @@ public class Utils {
     return calendar;
   }
   
+  public static boolean isRepeatEvent(CalendarEvent event) throws Exception {
+    return (event.getRepeatType() != null && !CalendarEvent.RP_NOREPEAT.equals(event.getRepeatType()) && Utils.isEmpty(event.getRecurrenceId()));
+  }
+  
+  public static boolean isExceptionOccurrence(CalendarEvent event) throws Exception {
+    return ((event.getIsExceptionOccurrence() != null && event.getIsExceptionOccurrence() == true) || (Utils.isEmpty(event.getRepeatType()) && !Utils.isEmpty(event.getRecurrenceId())));
+  }
+  
 }
