@@ -403,8 +403,9 @@ public class UIAccountSetting extends UIFormTabPane {
     }
     uiIncomingInput.getUIFormSelectBox(FIELD_SERVER_TYPE).setValue(account.getProtocol()) ;
     uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto()) ;
-    if (Utils.USER_ALLOWED) uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER)
-      .setChecked(Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER))) ;
+    if (Utils.USER_ALLOWED) {
+      uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).setChecked(Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER))) ;
+    }
   } 
   
   public String[] getActions() {return new String[]{"Save", "Cancel"};}

@@ -150,9 +150,9 @@ public class MailServiceImpl implements MailService, Startable {
     checkingLog_ = new ConcurrentHashMap<String, CheckingInfo>();
     this.schedulerService_ = schedulerService;
     
-    ExoProperties props =  params.getPropertiesParam("leaveOnServer").getProperties() ;
-    String userAllowed = props.getProperty("userAllowed");
-    String isLeaveMessage = props.getProperty("isLeaveMessage");
+    ExoProperties props =  params.getPropertiesParam(Utils.LEAVE_ON_SEVER).getProperties() ;
+    String userAllowed = props.getProperty(Utils.USERALLOWED);
+    String isLeaveMessage = props.getProperty(Utils.IS_LEAVEMESSAGE);
     Utils.USER_ALLOWED = Boolean.parseBoolean(userAllowed);
     Utils.IS_LEAVE_MESSAGE = Boolean.parseBoolean(isLeaveMessage);
   }
