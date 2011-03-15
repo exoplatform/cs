@@ -106,7 +106,6 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
   private static final String CALDAV_XML_START = "start";
   private static final String CALDAV_XML_END = "end";
   private static final String CALDAV_XML_COMP_FILTER_NAME = "name";
-//  private static final String CALDAV_XML_TIMEZONE = "timezone";
 
   private static final Log logger = ExoLogger.getLogger("cs.calendar.service.remote");
 
@@ -245,16 +244,6 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       if (obj instanceof VFreeBusy)
         vFreeBusyData.put(((VFreeBusy) obj).getUid().getValue(), (VFreeBusy) obj);
     }
-    java.util.Calendar from = java.util.Calendar.getInstance();
-    if (remoteCalendar.getBeforeDate() != 0)
-      from.setTimeInMillis(from.getTimeInMillis() + remoteCalendar.getBeforeDate());
-    else
-      from.add(java.util.Calendar.YEAR, -1);
-    java.util.Calendar to = java.util.Calendar.getInstance();
-    if (remoteCalendar.getAfterDate() != 0)
-      to.setTimeInMillis(to.getTimeInMillis() + remoteCalendar.getAfterDate());
-    else
-      to.add(java.util.Calendar.YEAR, 1);
 
     for (Object obj : componentList) {
       if (obj instanceof VEvent) {
@@ -264,13 +253,13 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         String sValue = "";
         String eValue = "";
         if (event.getStartDate() != null) {
-          if (event.getStartDate().getDate().getTime() > to.getTimeInMillis())
+          if (event.getStartDate().getDate().getTime() > remoteCalendar.getAfterTime().getTimeInMillis())
             continue;
           sValue = event.getStartDate().getValue();
           exoEvent.setFromDateTime(event.getStartDate().getDate());
         }
         if (event.getEndDate() != null) {
-          if (event.getEndDate().getDate().getTime() < from.getTimeInMillis())
+          if (event.getEndDate().getDate().getTime() < remoteCalendar.getBeforeTime().getTimeInMillis())
             continue;
           eValue = event.getEndDate().getValue();
           exoEvent.setToDateTime(event.getEndDate().getDate());
@@ -427,7 +416,10 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       remoteUser = ((UsernamePasswordCredentials) credentials).getUserName();
       remotePassword = ((UsernamePasswordCredentials) credentials).getPassword();
     }
-
+    if(!Utils.isEmpty(remoteUser) && !Utils.isEmpty(remotePassword)) {
+      remoteCalendar.setRemoteUser(remoteUser);
+      remoteCalendar.setRemotePassword(remotePassword);
+    }
     Calendar eXoCalendar = storage_.createRemoteCalendar(remoteCalendar);
     if (CalendarService.ICALENDAR.equals(remoteCalendar.getType())) {
       remoteCalendar.setCalendarId(eXoCalendar.getId());
@@ -436,7 +428,6 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       return eXoCalendar;
     } else {
       if (CalendarService.CALDAV.equals(remoteCalendar.getType())) {
-//        MultiStatus multiStatus = connectToCalDavServer(remoteCalendar.getRemoteUrl(), remoteUser, remotePassword);
         MultiStatus multiStatus = connectToCalDavServer(remoteCalendar);
         String href;
         CalendarBuilder builder = new CalendarBuilder();
@@ -477,23 +468,10 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       // remove all components in local calendar
       List<String> calendarIds = new ArrayList<String>();
       calendarIds.add(remoteCalendarId);
-//      List<CalendarEvent> events = storage_.getUserEventByCalendar(username, calendarIds);
-      
-      java.util.Calendar from = java.util.Calendar.getInstance();
-      if (remoteCalendar.getBeforeDate() != 0)
-        from.setTimeInMillis(from.getTimeInMillis() + remoteCalendar.getBeforeDate());
-      else
-        from.add(java.util.Calendar.YEAR, -1);
-      java.util.Calendar to = java.util.Calendar.getInstance();
-      if (remoteCalendar.getAfterDate() != 0)
-        to.setTimeInMillis(to.getTimeInMillis() + remoteCalendar.getAfterDate());
-      else
-        to.add(java.util.Calendar.YEAR, 1);
-      
       EventQuery eventQuery = new EventQuery();
       eventQuery.setCalendarId(new String[]{remoteCalendarId});
-      eventQuery.setFromDate(from);
-      eventQuery.setToDate(to);
+      eventQuery.setFromDate(remoteCalendar.getBeforeTime());
+      eventQuery.setToDate(remoteCalendar.getAfterTime());
       List<CalendarEvent> events = storage_.getUserEvents(username, eventQuery);
       for (CalendarEvent event : events) {
         storage_.removeUserEvent(username, remoteCalendarId, event.getId());
@@ -528,9 +506,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
   /**
    * First time connect to CalDav server to get data
    * 
-   * @param url
-   * @param username
-   * @param password
+   * @param remoteCalendar
    * @return
    * @throws Exception
    */
@@ -549,16 +525,15 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       Credentials credentials = new UsernamePasswordCredentials(remoteCalendar.getRemoteUser(), remoteCalendar.getRemotePassword());
       client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
     }
-    return doCalendarQuery(client, remoteCalendar.getRemoteUrl(), remoteCalendar.getBeforeDate(), remoteCalendar.getAfterDate());
+    return doCalendarQuery(client, remoteCalendar.getRemoteUrl(), remoteCalendar.getBeforeTime(), remoteCalendar.getAfterTime());
   }
 
   /**
    * Get a map of pairs (href,etag) from caldav server
    * This calendar query doesn't include calendar-data element to get data faster
    * 
-   * @param url
-   * @param remoteUser
-   * @param remotePassword
+   * @param client
+   * @param uri
    * @param from
    * @param to
    * @return
@@ -667,17 +642,8 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       client.getState().setCredentials(new AuthScope(host, AuthScope.ANY_PORT, AuthScope.ANY_REALM), credentials);
     }
 
-    java.util.Calendar from = java.util.Calendar.getInstance();
-    if (remoteCalendar.getBeforeDate() != 0)
-      from.setTimeInMillis(from.getTimeInMillis() + remoteCalendar.getBeforeDate());
-    else
-      from.add(java.util.Calendar.YEAR, -1);// set from - before
-    java.util.Calendar to = java.util.Calendar.getInstance();
-    if (remoteCalendar.getAfterDate() != 0)
-      to.setTimeInMillis(to.getTimeInMillis() + remoteCalendar.getAfterDate());
-    else
-      to.add(java.util.Calendar.YEAR, 1); // set to - after
-    // cache a List (or Map) of {href, etag} pairs from MultiStatus responses
+    java.util.Calendar from = remoteCalendar.getBeforeTime();
+    java.util.Calendar to = remoteCalendar.getAfterTime();
     Map<String, String> entityTags = getEntityTags(client, remoteCalendar.getRemoteUrl(), from, to);
 
     // get List of event from local calendar in specific time-range
@@ -829,10 +795,12 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
    * 
    * @param client
    * @param uri
+   * @param from
+   * @param to
    * @return
    * @throws Exception
    */
-  public MultiStatus doCalendarQuery(HttpClient client, String uri, long beforeDate, long afterDate) throws Exception {
+  public MultiStatus doCalendarQuery(HttpClient client, String uri, java.util.Calendar from, java.util.Calendar to) throws Exception {
     ReportMethod report = null;
     try {
       DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -862,21 +830,21 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       todoComp.setAttribute(CALDAV_XML_COMP_FILTER_NAME, net.fortuna.ical4j.model.component.VEvent.VTODO);
 
       Element timeRange = DomUtil.createElement(doc, CALDAV_XML_TIME_RANGE, CALDAV_NAMESPACE);
-      java.util.Calendar start = java.util.Calendar.getInstance();
-      if (beforeDate != 0) {
-        start.setTimeInMillis(start.getTimeInMillis() + beforeDate);
-      } else {
-        start.add(java.util.Calendar.YEAR, -1);
-      }
-      java.util.Calendar end = java.util.Calendar.getInstance();
-      if (afterDate != 0) {
-        end.setTimeInMillis(end.getTimeInMillis() + afterDate);
-      } else {
-        end.add(java.util.Calendar.YEAR, -1);
-      }
+//      java.util.Calendar start = java.util.Calendar.getInstance();
+//      if (beforeDate != 0) {
+//        start.setTimeInMillis(start.getTimeInMillis() + beforeDate);
+//      } else {
+//        start.add(java.util.Calendar.YEAR, -1);
+//      }
+//      java.util.Calendar end = java.util.Calendar.getInstance();
+//      if (afterDate != 0) {
+//        end.setTimeInMillis(end.getTimeInMillis() + afterDate);
+//      } else {
+//        end.add(java.util.Calendar.YEAR, 1);
+//      }
       SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
-      timeRange.setAttribute(CALDAV_XML_START, format.format(start.getTime()));
-      timeRange.setAttribute(CALDAV_XML_END, format.format(end.getTime()));
+      timeRange.setAttribute(CALDAV_XML_START, format.format(from.getTime()));
+      timeRange.setAttribute(CALDAV_XML_END, format.format(to.getTime()));
       eventComp.appendChild(timeRange);
       todoComp.appendChild(timeRange);
       

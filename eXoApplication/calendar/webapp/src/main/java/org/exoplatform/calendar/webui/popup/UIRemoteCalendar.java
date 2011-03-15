@@ -131,10 +131,10 @@ public class UIRemoteCalendar extends UIForm implements UIPopupComponent {
     ls.add(new SelectItemOption<String>(getLabel("None"), "0t"));
     ls.add(new SelectItemOption<String>("1 " + getLabel("Week"), "1w"));
     ls.add(new SelectItemOption<String>("2 " + getLabel("Weeks"), "3w"));
-    ls.add(new SelectItemOption<String>("1 " + getLabel("Moth"), "1m"));
-    ls.add(new SelectItemOption<String>("2 " + getLabel("Moths"), "2m"));
-    ls.add(new SelectItemOption<String>("3 " + getLabel("Moths"), "3m"));
-    ls.add(new SelectItemOption<String>("6 " + getLabel("Moths"), "6m"));
+    ls.add(new SelectItemOption<String>("1 " + getLabel("Month"), "1m"));
+    ls.add(new SelectItemOption<String>("2 " + getLabel("Months"), "2m"));
+    ls.add(new SelectItemOption<String>("3 " + getLabel("Months"), "3m"));
+    ls.add(new SelectItemOption<String>("6 " + getLabel("Months"), "6m"));
     ls.add(new SelectItemOption<String>("1 " + getLabel("Year"), "1y"));
     return ls;
   }

@@ -161,6 +161,24 @@ public class RemoteCalendar {
     this.lastUpdated = lastUpdated;
   }
 
+  public Calendar getBeforeTime() {
+    return calculateTime(beforeDate, true);
+  }
+
+  public Calendar getAfterTime() {
+    return calculateTime(afterDate, false);
+  }
+  
+  private Calendar calculateTime(long time, boolean isBefore) {
+    Calendar cal = Calendar.getInstance();
+    if (time != 0) {
+      cal.setTimeInMillis(cal.getTimeInMillis() + time);
+    } else {
+      cal.add(java.util.Calendar.YEAR, (isBefore)?-1:1);
+    }
+    return cal;
+  }
+  
   private long getTimeField(String vls, boolean isBefore) {
     try {
       int vl = Integer.parseInt(vls.substring(0, 1));

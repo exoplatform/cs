@@ -17,7 +17,6 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -565,7 +564,6 @@ public class UICalendars extends UIForm  {
           event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
         }
       }catch (PathNotFoundException e) {
-        e.printStackTrace();
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
