@@ -425,6 +425,13 @@
 .UIWeekView .WorkOffTime {
 	background-color: #f3f3f3;
 }
+
+.UIWeekView .TitleBar .Title {
+	 width:350px;
+	 min-width: 350px;
+	 text-align:center;
+}
+
 .UIEventTooltip {
 	position:absolute;
 	background:yellow;
