@@ -246,7 +246,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     return findComponentById(id) ;
   }
   public void setSelectedCategory(String value) {getUIFormSelectBox(FIELD_CATEGORY).setValue(value) ;}
-
+  
   private String getEventCategory() {return getUIFormSelectBox(FIELD_CATEGORY).getValue() ;}
 
   public void activate() throws Exception {}
@@ -476,6 +476,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiEventForm.setEmailRemindBefore(String.valueOf(5));
         uiEventForm.setEmailReminder(true) ;
         uiEventForm.setEmailRepeat(false) ;
+        if (uiForm.getEventCalendar() != null) uiEventForm.setSelectedCalendarId(uiForm.getEventCalendar());
         //event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       } else {
         uiPopupAction.deActivate() ;
@@ -499,6 +500,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiTaskForm.setEventToDate(to, dateFormat, timeFormat) ;
         uiTaskForm.setEventAllDate(uiForm.getIsAllDay()) ;
         uiTaskForm.setSelectedCategory(uiForm.getEventCategory()) ;
+        if (uiForm.getEventCalendar() != null) uiTaskForm.setSelectedCalendarId(uiForm.getEventCalendar());
       }
       //event.getRequestContext().addUIComponentToUpdateByAjax(porlet.findFirstComponentOfType(UICalendarWorkingContainer.class)) ;
       UIPopupWindow popupWindow = uiForm.getAncestorOfType(UIPopupWindow.class);
