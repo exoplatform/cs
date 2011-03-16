@@ -1281,7 +1281,6 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
 				eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[this.serverInfo.myProfile.user] = this.serverInfo.myProfile.fullName ;	
 				eXo.communication.chatbar.webui.UIStateManager.init(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]);
 				// if user change status from OFFLINE to new status, the new one needs to be sent to server.
-				if (lastStatus == this.OFFLINE_STATUS) 
 			}
 			break;
 	
