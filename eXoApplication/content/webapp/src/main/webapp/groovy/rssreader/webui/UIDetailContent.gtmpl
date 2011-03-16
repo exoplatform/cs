@@ -20,9 +20,9 @@
 						</div>
 						<div class="RefreshBar">
 							<div class="SeparatorLine"><span></span></div>
-							<a class="LeftRefreshBar" href="<%=uicomponent.event("Refresh")%>" title="Refresh News">
+							<a class="LeftRefreshBar" href="<%=uicomponent.event("Refresh")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".title.refreshbar")%>">
 								<div class="RightRefreshBar">
-									<div class="CenterRefreshBar">Refresh News</div>
+								  <div class="CenterRefreshBar"><%=_ctx.appRes(uicomponent.getName() + ".label.refreshbar")%></div>
 								</div>
 							</a>
 							<div style="clear: left;"><span></span></div>
@@ -49,7 +49,7 @@
 	          <div class="NewsDetail">
 						  <div class="ContentDetailTitle">
 							  <div class="ContentItemIcon ItemIcon"><span></span></div>
-							  <a href="<%=meta.getLink()%>" target="_blank" title="Go to <%=meta.getTitle()%>">
+							  <a href="<%=meta.getLink()%>" target="_blank" title="<%=_ctx.appRes(uicomponent.getName() + ".goto.page")%> <%=meta.getTitle()%>">
 							    <%=meta.getTitle()%>
 							  </a>
 							</div>
