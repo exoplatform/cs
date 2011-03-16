@@ -74,7 +74,6 @@ import javax.mail.util.ByteArrayDataSource;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.exoplatform.commons.utils.ExoProperties;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.mail.connection.Connector;
@@ -89,6 +88,7 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Info;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
+import org.exoplatform.mail.service.MailSettingConfig;
 import org.exoplatform.mail.service.MailUpdateStorageEventListener;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
@@ -149,12 +149,9 @@ public class MailServiceImpl implements MailService, Startable {
     emlImportExport_ = new EMLImportExport(storage_);
     checkingLog_ = new ConcurrentHashMap<String, CheckingInfo>();
     this.schedulerService_ = schedulerService;
-    
-    ExoProperties props =  params.getPropertiesParam(Utils.LEAVE_ON_SEVER).getProperties() ;
-    String userAllowed = props.getProperty(Utils.USERALLOWED);
-    String isLeaveMessage = props.getProperty(Utils.IS_LEAVEMESSAGE);
-    Utils.USER_ALLOWED = Boolean.parseBoolean(userAllowed);
-    Utils.IS_LEAVE_MESSAGE = Boolean.parseBoolean(isLeaveMessage);
+    MailSettingConfig objectParam = (MailSettingConfig)params.getObjectParam(Utils.LEAVE_ON_SEVER).getObject();
+    Utils.USER_ALLOWED = objectParam.getUserAllowed();
+    Utils.IS_LEAVE_MESSAGE = Boolean.parseBoolean(objectParam.getDefaultValue());
   }
 
   public String getMailHierarchyNode() throws Exception {

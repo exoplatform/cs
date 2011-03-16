@@ -308,7 +308,7 @@ public class Utils {
   public static boolean IS_LEAVE_MESSAGE = false;
   public static final String LEAVE_ON_SEVER = "leaveOnServer".intern();
   public static final String USERALLOWED = "userAllowed".intern();
-  public static final String IS_LEAVEMESSAGE = "isLeaveMessage".intern();
+  public static final String DEFAULT_VALUE_SETTING = "defaultValue".intern();
   
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
