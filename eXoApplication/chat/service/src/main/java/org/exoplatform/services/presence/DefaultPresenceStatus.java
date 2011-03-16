@@ -21,6 +21,8 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 
 /**
@@ -32,6 +34,8 @@ import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 
 public class DefaultPresenceStatus {
     
+  private static final Log log = ExoLogger.getLogger(DefaultPresenceStatus.class);
+  
   public final static String DEFAULT_STATUS              =     "default_presence_status";
   
   private String status_ = DEFAULT_STATUS;
@@ -56,9 +60,13 @@ public class DefaultPresenceStatus {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     HistoryImpl history = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
     SessionProvider provider = SessionProvider.createSystemProvider();
-    String ps = history.getPresenceStatusHistory(provider, userId);
-    if (ps == null) ps = getStatus_();//set default presence status
-    if(provider != null) provider.close();
+    String ps = null;
+    try {
+      ps = history.getPresenceStatusHistory(provider, userId);
+      if (ps == null) ps = getStatus_();//set default presence status
+    } finally {
+      if(provider != null) provider.close();
+    }
     return ps;
   }
   
@@ -66,14 +74,15 @@ public class DefaultPresenceStatus {
    * Saving user chat status**/
   public void savePresenceStatus(String userId, String status){
     //if can not get status form jcr, then set status default
+    SessionProvider provider = SessionProvider.createSystemProvider();
     try {
-      SessionProvider provider = SessionProvider.createSystemProvider();
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       HistoryImpl history = (HistoryImpl) container.getComponentInstanceOfType(HistoryImpl.class);
       history.savePresenceStatus(provider, userId, status);  
-      if(provider != null) provider.close();
     } catch (Exception e) {
-      e.printStackTrace();
+      if (log.isWarnEnabled()) log.warn("Error when saving present status!", e);
+    } finally {
+      if(provider != null) provider.close();
     }
     
   }

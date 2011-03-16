@@ -600,7 +600,7 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
   var serverData = this.serverDataStack[eventId];
   switch (action) {
     case this.LOGIN_ACTION:
-      this.postChangeStatus(this.ONLINE_STATUS, eventId);
+      this.postChangeStatus(this.lastStatusSent, eventId);
       this.checkAliveId = window.setInterval(this.isChatAlive, this.DEFAULT_CHECK_ALIVE);
       break;
 
@@ -1180,7 +1180,7 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
   }
   event = event || window.event;
   if (event) {
-    eXo.communication.chatbar.core.AdvancedDOMEvent.cancelEvent(event);
+    this.AdvancedDOMEvent.cancelEvent(event);
   }
   this.lastStatusSent = status;
   //this.setChangeStatusMenuVisible(this.statusNode, false);
@@ -1190,14 +1190,16 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
   //userNameNode.innerHTML = userName;
   switch (status) {
     case this.ONLINE_STATUS:
+    case this.AWAY_STATUS:
+    case this.EXTEND_AWAY_STATUS:
+    case this.FREE_TO_CHAT_STATUS:
       if (!this.userStatus ||
           (this.userStatus == this.OFFLINE_STATUS)) {
         this.jabberLogin(userName);
         break;
       }
-      if (skipCheck ||
-          (this.userStatus != this.ONLINE_STATUS)) {
-        this.jabberSendStatus(this.ONLINE_STATUS);
+      if (status != this.userStatus) {
+        this.jabberSendStatus(status);
       }
       break;
     case this.OFFLINE_STATUS:
@@ -1217,21 +1219,6 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
       }
 			eXo.core.DOMUtil.cleanUpHiddenElements();
       break;
-    case this.AWAY_STATUS:
-      if (this.userStatus != this.OFFLINE_STATUS) {
-        this.jabberSendStatus(this.AWAY_STATUS);
-      }
-      break;
-    case this.EXTEND_AWAY_STATUS:
-      if (this.userStatus != this.OFFLINE_STATUS) {
-        this.jabberSendStatus(this.EXTEND_AWAY_STATUS);
-      }
-      break;
-    case this.FREE_TO_CHAT_STATUS:
-      if (this.userStatus != this.OFFLINE_STATUS) {
-        this.jabberSendStatus(this.FREE_TO_CHAT_STATUS);
-      }
-      break;
     default:
       break;
   }
@@ -1246,69 +1233,85 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
  * @param {Event} event
  */
 UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
-  if (!this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] ||
-      !status) {
-    return false;
+	if (!this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] ||
+			!status) {
+		return false;
+	}
+	var serverData = this.serverDataStack[eventId];
+	this.lastStatusSent = false;
+	var DOMUtil = eXo.core.DOMUtil;
+	//var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode, 'div', 'Text');
+	//userNameNode.innerHTML = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
+	var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode, 'div');
+	window.jsconsole.warn('User changed status: ' + this.userStatus + ' -> ' + status);
+	var lastStatus = this.userStatus;
+	this.userStatus = status;
+	var presenceData = {};
+	presenceData.from = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] + '@' + this.serverInfo.mainServiceName;
+	presenceData.mode = null;
+	presenceData.type = this.userStatus;
+	this.UIChatWindow.updatePresence(presenceData);
+	
+	switch (this.userStatus) {
+		case this.ONLINE_STATUS:
+		case this.AWAY_STATUS:
+		case this.EXTEND_AWAY_STATUS:
+		case this.FREE_TO_CHAT_STATUS:
+			if (!lastStatus || lastStatus == this.OFFLINE_STATUS) {
+				// if user has just refreshed browser or change status from offline to other (login)
+				//---
+				this.jabberSendStatus(status); // call update status to server. 
+				this.UIChatWindow.initSession(); // init chat window element.
+				// Register onunload event to window for clean logout when user leave this page.
+				this.AdvancedDOMEvent.addEventListener(window, 'unload', this.destroyAll, false);
+				this.addContactIconNode.onclick = function() {
+					eXo.communication.chatbar.webui.UIAddContactPopupWindow.setVisible(true);
+				};
+				this.subscribeCometdTopics(); // register cometd
+				if (!serverData) {
+					break;
+				}
+				this.serverInfo = serverData;
+				this.timeoutCount = 0;
+				this.errorCount = 0;
+				// Create buddy list
+				if (this.serverInfo.roster) {
+					this.buddyListControlObj.build(this.serverInfo.roster);
+				}
+				eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[this.serverInfo.myProfile.user] = this.serverInfo.myProfile.fullName ;	
+				eXo.communication.chatbar.webui.UIStateManager.init(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]);
+				// if user change status from OFFLINE to new status, the new one needs to be sent to server.
+				if (lastStatus == this.OFFLINE_STATUS) 
+			}
+			break;
+	
+	    case this.OFFLINE_STATUS:
+	      //this.unsubscribeCometdTopics();
+	      this.buddyListControlObj.cleanup();
+	      this.addContactIconNode.onclick = null;
+	      userStatusIconNode.className = 'IconHolder'+' '+'OfflineIcon';
+	      break;
+	    default:
+	      break;
   }
-  var serverData = this.serverDataStack[eventId];
-  this.lastStatusSent = false;
-  var DOMUtil = eXo.core.DOMUtil;
-  //var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode, 'div', 'Text');
-  //userNameNode.innerHTML = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode, 'div');
-  window.jsconsole.warn('User changed status: ' + this.userStatus + ' -> ' + status);
-  this.userStatus = status;
-  var presenceData = {};
-  presenceData.from = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] + '@' + this.serverInfo.mainServiceName;
-  presenceData.mode = null;
-  presenceData.type = this.userStatus;
-  this.UIChatWindow.updatePresence(presenceData);
-  switch (this.userStatus) {
-    case this.ONLINE_STATUS:
-    	userStatusIconNode.className = 'IconHolder'+' '+'OnlineIcon';
-    	this.UIChatWindow.initSession();
-    	this.subscribeCometdTopics();
-    	// Register onunload event to window for clean logout when user leave this page.
-    	this.AdvancedDOMEvent.addEventListener(window, 'unload', this.destroyAll, false);
-      this.addContactIconNode.onclick = function() {
-    	  eXo.communication.chatbar.webui.UIAddContactPopupWindow.setVisible(true);
-      };
-      if (!serverData) {
-        break;
-      }
-      //this.sessionKeeperId = window.setInterval(this.sessionKeeper, this.PORTAL_SESSION_KEEPER_TIME_STEP);
-      this.serverInfo = serverData;
-      this.timeoutCount = 0;
-      this.errorCount = 0;
-      // Create buddy list
-      if (this.serverInfo.roster) {
-        this.buddyListControlObj.build(this.serverInfo.roster);
-      }
-   
-      eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[this.serverInfo.myProfile.user] = this.serverInfo.myProfile.fullName ;	
-      
-
-      this.preChangeStatus(this.ONLINE_STATUS, true);
-      eXo.communication.chatbar.webui.UIStateManager.init(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]);
-      break;
-    case this.OFFLINE_STATUS:
-      //this.unsubscribeCometdTopics();
-      this.buddyListControlObj.cleanup();
-      this.addContactIconNode.onclick = null;
-      userStatusIconNode.className = 'IconHolder'+' '+'OfflineIcon';
-      break;
-    case this.AWAY_STATUS:
-      userStatusIconNode.className = 'IconHolder'+' '+'AwayIcon';
-      break;
-    case this.EXTEND_AWAY_STATUS:
-      userStatusIconNode.className = 'IconHolder'+' '+'ExtendAwayIcon';
-      break;
-    case this.FREE_TO_CHAT_STATUS:
-      userStatusIconNode.className = 'IconHolder'+' '+'FreeToChat';
-      break;
-    default:
-      break;
-  }
+	// set status icon 
+	switch (this.userStatus) {
+	case this.ONLINE_STATUS:
+		userStatusIconNode.className = 'IconHolder'+' '+'OnlineIcon';
+		break;
+	case this.AWAY_STATUS:
+		userStatusIconNode.className = 'IconHolder'+' '+'AwayIcon';
+		break;
+	case this.EXTEND_AWAY_STATUS:
+		userStatusIconNode.className = 'IconHolder'+' '+'ExtendAwayIcon';
+		break;
+	case this.FREE_TO_CHAT_STATUS:
+		userStatusIconNode.className = 'IconHolder'+' '+'FreeToChat';
+		break;
+	case this.OFFLINE_STATUS:
+		userStatusIconNode.className = 'IconHolder'+' '+'OfflineIcon';
+		break;
+	}
   eXo.core.DOMUtil.cleanUpHiddenElements();
 };
 
