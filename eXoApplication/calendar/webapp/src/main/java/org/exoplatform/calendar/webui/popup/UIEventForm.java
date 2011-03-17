@@ -2242,60 +2242,14 @@ public Attachment getAttachment(String attId) {
   static public class ConfirmOKActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiEventForm = event.getSource();
-      UICalendarPortlet uiPortlet = uiEventForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UICalendarView uiCalendarView = uiPortlet.findFirstComponentOfType(UICalendarView.class);
-      UIPopupContainer uiPopupContainer = uiEventForm.getAncestorOfType(UIPopupContainer.class);
-      UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class);
-      uiPopupAction.deActivate();
-      
-      CalendarSetting calSetting = uiPortlet.getCalendarSetting();
-      Date fromDate = uiEventForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
-      
-      // if it's a virtual recurrence
-      CalendarEvent occurrence = uiEventForm.calendarEvent_;
-      if (occurrence != null && !occurrence.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) 
-          && !CalendarUtils.isEmpty(occurrence.getRecurrenceId()) && CalendarUtils.isSameDate(fromDate, occurrence.getFromDateTime()) ) {
-        // popup confirm form
-        UIConfirmForm confirmForm =  uiPopupAction.activate(UIConfirmForm.class, 600);
-        confirmForm.setConfirmMessage(uiEventForm.getLabel("update-recurrence-event-confirm-msg"));
-        confirmForm.setConfig_id(uiEventForm.getId()) ;
-        
-        String[] actions = new String[] {"ConfirmUpdateOnlyInstance", "ConfirmUpdateAllSeries", "ConfirmUpdateCancel"};
-        confirmForm.setActions(actions);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      } else { 
-        uiEventForm.SaveAndNoAsk(event, true, false);
-      }      
+      uiEventForm.confirmSaveEvent(event, true);      
     }
   }
   
   static public class  ConfirmCancelActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiEventForm = event.getSource();
-      UICalendarPortlet uiPortlet = uiEventForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UICalendarView uiCalendarView = uiPortlet.findFirstComponentOfType(UICalendarView.class);
-      UIPopupContainer uiPopupContainer = uiEventForm.getAncestorOfType(UIPopupContainer.class);
-      UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class);
-      uiPopupAction.deActivate();
-      
-      CalendarSetting calSetting = uiPortlet.getCalendarSetting();
-      Date fromDate = uiEventForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
-      
-      // if it's a virtual recurrence
-      CalendarEvent occurrence = uiEventForm.calendarEvent_;
-      if (occurrence != null && !occurrence.getRepeatType().equals(CalendarEvent.RP_NOREPEAT) 
-          && !CalendarUtils.isEmpty(occurrence.getRecurrenceId()) && CalendarUtils.isSameDate(fromDate, occurrence.getFromDateTime()) ) {
-        // popup confirm form
-        UIConfirmForm confirmForm =  uiPopupAction.activate(UIConfirmForm.class, 600);
-        confirmForm.setConfirmMessage(uiEventForm.getLabel("update-recurrence-event-confirm-msg"));
-        confirmForm.setConfig_id(uiEventForm.getId()) ;
-        
-        String[] actions = new String[] {"ConfirmUpdateOnlyInstance", "ConfirmUpdateAllSeries", "ConfirmUpdateCancel"};
-        confirmForm.setActions(actions);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      } else { 
-        uiEventForm.SaveAndNoAsk(event, false, false);
-      }
+      uiEventForm.confirmSaveEvent(event, false);
     }
   }
   
@@ -2303,7 +2257,6 @@ public Attachment getAttachment(String attId) {
 
     @Override
     public void execute(Event<UIEventForm> event) throws Exception {
-      // TODO Auto-generated method stub
       UIEventForm uiForm = event.getSource() ;
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
@@ -2315,13 +2268,8 @@ public Attachment getAttachment(String attId) {
   
   public static class ConfirmUpdateOnlyInstance extends EventListener<UIEventForm> {
 
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
     @Override
-    public void execute(Event<UIEventForm> event) throws Exception {
-      // TODO Auto-generated method stub
-      
+    public void execute(Event<UIEventForm> event) throws Exception {      
       UIEventForm uiForm = event.getSource();
       String sendOption = uiForm.getSendOption();
       if (CalendarSetting.ACTION_ALWAYS.equals(sendOption)) {
@@ -2337,12 +2285,8 @@ public Attachment getAttachment(String attId) {
   
   public static class ConfirmUpdateAllSeries extends EventListener<UIEventForm> {
 
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
     @Override
     public void execute(Event<UIEventForm> event) throws Exception {
-      // TODO Auto-generated method stub
       UIEventForm uiForm = event.getSource();
       String sendOption = uiForm.getSendOption();
       if (CalendarSetting.ACTION_ALWAYS.equals(sendOption)) {
@@ -2358,19 +2302,47 @@ public Attachment getAttachment(String attId) {
   
   public static class ConfirmUpdateCancel extends EventListener<UIEventForm> {
 
-    /* (non-Javadoc)
-     * @see org.exoplatform.webui.event.EventListener#execute(org.exoplatform.webui.event.Event)
-     */
     @Override
     public void execute(Event<UIEventForm> event) throws Exception {
-      // TODO Auto-generated method stub
-      // cancel
       UIEventForm uiEventForm = event.getSource();
       UICalendarPortlet uiPortlet = uiEventForm.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupContainer uiPopupContainer = uiEventForm.getAncestorOfType(UIPopupContainer.class);
       UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class);
       uiPortlet.cancelAction();
       uiPopupAction.deActivate();
+    }
+  }
+  
+  /**
+   * This method was called when user saves event from event form
+   * @param event save event
+   * @param isSend send mail or not
+   * @throws Exception
+   */
+  private void confirmSaveEvent(Event<UIEventForm> event, boolean isSend) throws Exception {
+    UIEventForm uiEventForm = event.getSource();
+    UICalendarPortlet uiPortlet = uiEventForm.getAncestorOfType(UICalendarPortlet.class) ;
+    UIPopupContainer uiPopupContainer = uiEventForm.getAncestorOfType(UIPopupContainer.class);
+    UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class);
+    uiPopupAction.deActivate();
+    
+    CalendarSetting calSetting = uiPortlet.getCalendarSetting();
+    Date fromDate = uiEventForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+    
+    // if it's a virtual recurrence
+    CalendarEvent occurrence = uiEventForm.calendarEvent_;
+    if (occurrence != null && !CalendarEvent.RP_NOREPEAT.equals(occurrence.getRepeatType()) 
+        && !CalendarUtils.isEmpty(occurrence.getRecurrenceId()) && CalendarUtils.isSameDate(fromDate, occurrence.getFromDateTime()) ) {
+      // popup confirm form
+      UIConfirmForm confirmForm =  uiPopupAction.activate(UIConfirmForm.class, 600);
+      confirmForm.setConfirmMessage(uiEventForm.getLabel("update-recurrence-event-confirm-msg"));
+      confirmForm.setConfig_id(uiEventForm.getId()) ;
+      
+      String[] actions = new String[] {"ConfirmUpdateOnlyInstance", "ConfirmUpdateAllSeries", "ConfirmUpdateCancel"};
+      confirmForm.setActions(actions);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    } else { 
+      uiEventForm.SaveAndNoAsk(event, isSend, false);
     }
   }
 

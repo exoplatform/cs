@@ -341,7 +341,7 @@ public class CalendarWebservice implements ResourceContainer{
       }
 
       CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
-      OutputStream out = icalEx.exportCalendar(username, Arrays.asList(calendarId), type);
+      OutputStream out = icalEx.exportCalendar(username, Arrays.asList(calendarId), type, -1);
       InputStream in = new ByteArrayInputStream(out.toString().getBytes());
       return Response.ok(in, "text/calendar")
       .header("Cache-Control", "private max-age=600, s-maxage=120").
@@ -381,7 +381,7 @@ public class CalendarWebservice implements ResourceContainer{
       CalendarService calService = (CalendarService)ExoContainerContext
       .getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
       CalendarImportExport icalEx = calService.getCalendarImportExports(CalendarService.ICALENDAR);
-      OutputStream out = icalEx.exportCalendar(username, Arrays.asList(calendarId), type);
+      OutputStream out = icalEx.exportCalendar(username, Arrays.asList(calendarId), type, -1);
       InputStream in = new ByteArrayInputStream(out.toString().getBytes());
       return Response.ok(in, "text/calendar")
       .header("Cache-Control", "private max-age=600, s-maxage=120").

@@ -53,12 +53,9 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
   private CalendarService calendarService_ ;
   private static String  username = "root";
 
-  //private JCRDataStorage datastorage;
-
   public TestCalendarService() throws Exception {
     super();
     calendarService_ = (CalendarService) container.getComponentInstanceOfType(CalendarService.class);
-    //datastorage = (JCRDataStorage) container.getComponentInstanceOfType(JCRDataStorage.class);
   }
 
   public void setUp() throws Exception {
@@ -250,7 +247,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     List<String> calendarIds = new ArrayList<String>() ;
     calendarIds.add(cal.getId()) ;
     OutputStream out = calendarService_.getCalendarImportExports(
-                                                                 CalendarService.ICALENDAR).exportCalendar(username, calendarIds, "0") ;
+                                                                 CalendarService.ICALENDAR).exportCalendar(username, calendarIds, "0", -1) ;
     ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
 
     assertNotNull(calendarService_.removeUserEvent(username, cal.getId(), calendarEvent.getId())) ;
@@ -259,7 +256,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
 
     startSessionAs(username) ;
     calendarService_.getCalendarImportExports(CalendarService.ICALENDAR)
-    .importCalendar(username, is, "importedCalendar") ;
+      .importCalendar(username, is, null, "importedCalendar", null, null, true);
     List<Calendar> cals = calendarService_.getUserCalendars(username, true) ;
     List<String> newCalendarIds = new ArrayList<String>() ;
     for (Calendar calendar : cals) newCalendarIds.add(calendar.getId()) ;

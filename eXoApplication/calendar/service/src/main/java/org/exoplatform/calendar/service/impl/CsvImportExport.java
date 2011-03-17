@@ -43,7 +43,9 @@ import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Utils;
-import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 
 /**
  * Created by The eXo Platform SAS
@@ -85,6 +87,9 @@ public class CsvImportExport implements CalendarImportExport {
 
   private static final String PRIVATE_TYPE = "0".intern() ;
   private JCRDataStorage storage_ ;
+  
+  private static final Log logger = ExoLogger.getLogger(CsvImportExport.class);
+  
   /** Construct a regex-based CSV parser. */
 
   public CsvImportExport(JCRDataStorage dataStore) {
@@ -246,15 +251,19 @@ public class CsvImportExport implements CalendarImportExport {
   public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception {
     return null;
   }
- 
-
-
   
-  public void importCalendar(String username, InputStream csvInputStream, String calendarName) throws Exception {
-    List<CalendarEvent> data = process(new BufferedReader(new InputStreamReader(csvInputStream))) ;
-    if(data.size() > 0) {
+  public List<CalendarEvent> getEventObjects(InputStream inputStream) throws Exception {
+    return null;
+  }
+  
+  public void importCalendar(String username, InputStream inputStream, String calendarId, String calendarName, java.util.Calendar from, java.util.Calendar to, boolean isNew) throws Exception {
+    List<CalendarEvent> data = process(new BufferedReader(new InputStreamReader(inputStream))) ;
+    if (data == null || data.size() < 1) return;
+    
+    CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+    
+    if (isNew) {
       NodeIterator iter = storage_.getCalendarCategoryHome(username).getNodes() ;
-      CalendarService calServie = (CalendarService)PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
       Node cat = null;
       String categoryId ;
       boolean isExists = false ;
@@ -265,13 +274,13 @@ public class CsvImportExport implements CalendarImportExport {
           break ;
         }
       }
-      if(!isExists) {
+      if (!isExists) {
         CalendarCategory calendarCate = new CalendarCategory() ;
         calendarCate.setDescription("Imported icalendar category") ;
         calendarCate.setName("Imported") ;
         categoryId = calendarCate.getId() ;
-        calServie.saveCalendarCategory(username, calendarCate, true) ;
-      }else {
+        storage_.saveCalendarCategory(username, calendarCate, true) ;
+      } else {
         categoryId = cat.getProperty(Utils.EXO_ID).getString() ;
       }
       org.exoplatform.calendar.service.Calendar exoCalendar = new org.exoplatform.calendar.service.Calendar() ;
@@ -281,45 +290,22 @@ public class CsvImportExport implements CalendarImportExport {
       exoCalendar.setCategoryId(categoryId) ;
       exoCalendar.setPublic(true) ;
       exoCalendar.setCalendarOwner(username) ;
-      calServie.saveUserCalendar(username, exoCalendar, true) ;   
-      for(CalendarEvent exoEvent : data) {
-        if(!Utils.isEmpty(exoEvent.getEventCategoryName())) {
-          EventCategory evCate = new EventCategory() ;
-          evCate.setName(exoEvent.getEventCategoryName()) ;
-          try{
-            calServie.saveEventCategory(username, evCate, true) ;
-          }catch(ItemExistsException e){ 
-             evCate = calServie.getEventCategoryByName(username, evCate.getName());
-          }catch (Exception e) {
-            e.printStackTrace();
-          }
-          exoEvent.setEventCategoryId(evCate.getId()) ;
-          exoEvent.setEventCategoryName(evCate.getName()) ;
-        }
-        exoEvent.setCalendarId(exoCalendar.getId()) ;
-        calServie.saveUserEvent(username, exoCalendar.getId(), exoEvent, true) ;
-      }
+      storage_.saveUserCalendar(username, exoCalendar, true) ; 
+      calendarId = exoCalendar.getId();
     }
-  }
-  
-  public List<CalendarEvent> getEventObjects(InputStream icalInputStream)
-  throws Exception {
-    return null;
-  }
-  
-  public void importToCalendar(String username, InputStream icalInputStream, String calendarId, java.util.Calendar from, java.util.Calendar to) throws Exception {
-    List<CalendarEvent> data = process(new BufferedReader(new InputStreamReader(icalInputStream))) ;
-    CalendarService calService = (CalendarService)PortalContainer.getInstance().getComponentInstanceOfType(CalendarService.class);
+    
     for(CalendarEvent exoEvent : data) {
-      if(!Utils.isEmpty(exoEvent.getEventCategoryName())) {
+      if (!Utils.isEmpty(exoEvent.getEventCategoryName())) {
         EventCategory evCate = new EventCategory() ;
         evCate.setName(exoEvent.getEventCategoryName()) ;
-        try{
+        try {
           calService.saveEventCategory(username, evCate, true) ;
-        }catch(ItemExistsException e){ 
+        } catch (ItemExistsException e) { 
           evCate = calService.getEventCategoryByName(username, evCate.getName());
-        }catch (Exception e) {
-          e.printStackTrace();
+        } catch (Exception e) {
+          if (logger.isDebugEnabled()) {
+            logger.debug("Exception occurs when saving new event category '" + evCate.getName() + "' for event: " + exoEvent.getId(), e);
+          }
         }
         exoEvent.setEventCategoryId(evCate.getId()) ;
         exoEvent.setEventCategoryName(evCate.getName()) ;

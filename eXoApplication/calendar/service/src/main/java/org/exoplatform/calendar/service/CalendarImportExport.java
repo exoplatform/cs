@@ -33,42 +33,23 @@ public interface CalendarImportExport {
 
   /**
    * The method imports events form icalendar(.ics) or outlook calendar exported .csv file to the system
-   * @param userSession session of current user
    * @param username current user name or id
-   * @param icalInputStream data input stream
-   * @param calendarName given calendar name, if the name is null, default calendar name is file name
-   * @throws Exception
-   */
-  public void importCalendar(String username, InputStream icalInputStream, String calendarName) throws Exception ;
-
-  /**
-   * The method imports events form icalendar(.ics) or outlook calendar exported .csv file to the system
-   * @param username current user name or id
-   * @param icalInputStream data input stream
-   * @param calendarId given  existed calendar id  
+   * @param inputStream data input stream
+   * @param calendarId given existed calendar id  
+   * @param calendarName name of the new calendar, if create new
    * @param from the first date of current time-range to import event
-   * @param to the last date of current time-range to import event
+   * @param to to the last date of current time-range to import event
+   * @param isNew import to new calendar or existed calendar
    * @throws Exception
    */
-  public void importToCalendar(String username, InputStream icalInputStream, String calendarId, java.util.Calendar from, java.util.Calendar to) throws Exception ;
+  public void importCalendar(String username, InputStream inputStream, String calendarId, String calendarName, java.util.Calendar from, java.util.Calendar to, boolean isNew) throws Exception ;
 
   /**
-   * The method exports events form calendar to icalendar file (.ics) or .csv file
+   * The method exports events from eXo Calendar to icalendar file (.ics) or .csv file
    * @param username current user name or id
    * @param calendarIds the group calendar ids, if you want to export events from public calendars
    * @param type The type of calendar will be exported
-   * @return data output stream
-   * @throws Exception
-   */
-  public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception ;
-
-
-  /**
-   * The method exports events form calendar to icalendar file (.ics) or .csv file
-   * @param username : current user name or id
-   * @param calendarIds : the group calendar ids, if you want to export events from public calendars
-   * @param type : The type of calendar will be exported
-   * @param number : the limitation number of event
+   * @param number the limitation number of event
    * @return data output stream
    * @throws Exception
    */
@@ -101,7 +82,7 @@ public interface CalendarImportExport {
   public boolean isValidate(InputStream icalInputStream) throws Exception ;
 
   /**
-   * The method export binary from evet object
+   * The method export binary from event object
    * @param event : event object
    * @return binary ics file
    * @throws Exception

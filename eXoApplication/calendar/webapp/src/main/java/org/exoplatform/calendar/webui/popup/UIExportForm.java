@@ -141,7 +141,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       try {
         if(uiForm.eventId != null)
            out = importExport.exportEventCalendar(CalendarUtils.getCurrentUser(), calendarIds.get(0), uiForm.calType, uiForm.eventId) ;
-        else out = importExport.exportCalendar(CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType) ;
+        else out = importExport.exportCalendar(CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType, -1) ;
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
         DownloadResource dresource = new InputStreamDownloadResource(is, "text/iCalendar") ;
         DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class) ;

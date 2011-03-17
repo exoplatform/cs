@@ -202,7 +202,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       remoteCalendar.setLastUpdated(Utils.getGreenwichMeanTime());
       InputStream icalInputStream = connectToRemoteServer(remoteCalendar);
       CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-      calService.getCalendarImportExports(CalendarService.ICALENDAR).importToCalendar(remoteCalendar.getUsername(), icalInputStream, remoteCalendar.getCalendarId(), remoteCalendar.getBeforeTime(), remoteCalendar.getAfterTime());
+      calService.getCalendarImportExports(CalendarService.ICALENDAR).importCalendar(remoteCalendar.getUsername(), icalInputStream, remoteCalendar.getCalendarId(), null, remoteCalendar.getBeforeTime(), remoteCalendar.getAfterTime(), false);
       return eXoCalendar;
     } else {
       if (CalendarService.CALDAV.equals(remoteCalendar.getType())) {
@@ -261,7 +261,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       Calendar eXoCalendar = storage_.getUserCalendar(username, remoteCalendarId);
       InputStream icalInputStream = connectToRemoteServer(remoteCalendar);
       CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
-      calService.getCalendarImportExports(CalendarService.ICALENDAR).importToCalendar(username, icalInputStream, remoteCalendarId, remoteCalendar.getBeforeTime(), remoteCalendar.getAfterTime());
+      calService.getCalendarImportExports(CalendarService.ICALENDAR).importCalendar(username, icalInputStream, remoteCalendarId, null, remoteCalendar.getBeforeTime(), remoteCalendar.getAfterTime(), false);
       storage_.setRemoteCalendarLastUpdated(username, eXoCalendar.getId(), Utils.getGreenwichMeanTime());
       return eXoCalendar;
     }
@@ -321,49 +321,11 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
    * @throws Exception
    */
   public Map<String, String> getEntityTags(HttpClient client, String uri, java.util.Calendar from, java.util.Calendar to) throws Exception {
-
     Map<String, String> etags = new HashMap<String, String>();
-    ReportMethod report = null;
-
+    ReportMethod report = makeCalDavQueryReport(uri, from, to);
+    if (report == null) return null;
+    
     try {
-      DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-      DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-      Document doc = docBuilder.newDocument();
-
-      // root element
-      Element calendarQuery = DomUtil.createElement(doc, CALDAV_XML_CALENDAR_QUERY, CALDAV_NAMESPACE);
-      calendarQuery.setAttributeNS(Namespace.XMLNS_NAMESPACE.getURI(), Namespace.XMLNS_NAMESPACE.getPrefix() + ":" + DavConstants.NAMESPACE.getPrefix(), DavConstants.NAMESPACE.getURI());
-
-      ReportInfo reportInfo = new ReportInfo(calendarQuery, DavConstants.DEPTH_0);
-      DavPropertyNameSet propNameSet = reportInfo.getPropertyNameSet();
-      propNameSet.add(DavPropertyName.GETETAG);
-
-      // filter element
-      Element filter = DomUtil.createElement(doc, CALDAV_XML_FILTER, CALDAV_NAMESPACE);
-
-      Element calendarComp = DomUtil.createElement(doc, CALDAV_XML_COMP_FILTER, CALDAV_NAMESPACE);
-      calendarComp.setAttribute(CALDAV_XML_COMP_FILTER_NAME, net.fortuna.ical4j.model.Calendar.VCALENDAR);
-
-      Element eventComp = DomUtil.createElement(doc, CALDAV_XML_COMP_FILTER, CALDAV_NAMESPACE);
-      eventComp.setAttribute(CALDAV_XML_COMP_FILTER_NAME, net.fortuna.ical4j.model.component.VEvent.VEVENT);
-
-      Element todoComp = DomUtil.createElement(doc, CALDAV_XML_COMP_FILTER, CALDAV_NAMESPACE);
-      todoComp.setAttribute(CALDAV_XML_COMP_FILTER_NAME, net.fortuna.ical4j.model.component.VEvent.VTODO);
-
-      Element timeRange = DomUtil.createElement(doc, CALDAV_XML_TIME_RANGE, CALDAV_NAMESPACE);
-      SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
-      timeRange.setAttribute(CALDAV_XML_START, format.format(from.getTime()));
-      timeRange.setAttribute(CALDAV_XML_END, format.format(to.getTime()));
-
-      eventComp.appendChild(timeRange);
-      todoComp.appendChild(timeRange);
-      calendarComp.appendChild(eventComp);
-      calendarComp.appendChild(todoComp);
-      filter.appendChild(calendarComp);
-
-      reportInfo.setContentElement(filter);
-
-      report = new ReportMethod(uri, reportInfo);
       client.executeMethod(report);
       MultiStatus multiStatus = report.getResponseBodyAsMultiStatus();
 
@@ -377,9 +339,15 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       }
 
       return etags;
-    } finally {
-      if (report != null)
+    } 
+    catch (Exception e) {
+      if (logger.isDebugEnabled()) logger.debug("Exception occurs when querying entity tags from CalDav server", e);
+      return null;
+    }
+    finally {
+      if (report != null) {
         report.releaseConnection();
+      }
     }
   }
 
@@ -573,8 +541,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
   }
 
   /**
-   * Send a calendar-query REPORT request, full time-range
-   * 
+   * Send a calendar-query REPORT request to CalDav server
    * @param client
    * @param uri
    * @param from
@@ -583,53 +550,19 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
    * @throws Exception
    */
   public MultiStatus doCalendarQuery(HttpClient client, String uri, java.util.Calendar from, java.util.Calendar to) throws Exception {
-    ReportMethod report = null;
+    ReportMethod report = makeCalDavQueryReport(uri, from, to);
+    if (report == null) return null;
     try {
-      DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-      DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-      Document doc = docBuilder.newDocument();
-
-      // root element
-      Element calendarQuery = DomUtil.createElement(doc, CALDAV_XML_CALENDAR_QUERY, CALDAV_NAMESPACE);
-      calendarQuery.setAttributeNS(Namespace.XMLNS_NAMESPACE.getURI(), Namespace.XMLNS_NAMESPACE.getPrefix() + ":" + DavConstants.NAMESPACE.getPrefix(), DavConstants.NAMESPACE.getURI());
-
-      ReportInfo reportInfo = new ReportInfo(calendarQuery, DavConstants.DEPTH_0);
-      DavPropertyNameSet propNameSet = reportInfo.getPropertyNameSet();
-      propNameSet.add(DavPropertyName.GETETAG);
-
-      // filter element
-      Element filter = DomUtil.createElement(doc, CALDAV_XML_FILTER, CALDAV_NAMESPACE);
-
-      Element calendarComp = DomUtil.createElement(doc, CALDAV_XML_COMP_FILTER, CALDAV_NAMESPACE);
-      calendarComp.setAttribute(CALDAV_XML_COMP_FILTER_NAME, net.fortuna.ical4j.model.Calendar.VCALENDAR);
-
-      Element eventComp = DomUtil.createElement(doc, CALDAV_XML_COMP_FILTER, CALDAV_NAMESPACE);
-      eventComp.setAttribute(CALDAV_XML_COMP_FILTER_NAME, net.fortuna.ical4j.model.component.VEvent.VEVENT);
-
-      Element todoComp = DomUtil.createElement(doc, CALDAV_XML_COMP_FILTER, CALDAV_NAMESPACE);
-      todoComp.setAttribute(CALDAV_XML_COMP_FILTER_NAME, net.fortuna.ical4j.model.component.VEvent.VTODO);
-
-      Element timeRange = DomUtil.createElement(doc, CALDAV_XML_TIME_RANGE, CALDAV_NAMESPACE);
-
-      SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
-      timeRange.setAttribute(CALDAV_XML_START, format.format(from.getTime()));
-      timeRange.setAttribute(CALDAV_XML_END, format.format(to.getTime()));
-      eventComp.appendChild(timeRange);
-      todoComp.appendChild(timeRange);
-      
-      calendarComp.appendChild(eventComp);
-      calendarComp.appendChild(todoComp);
-      filter.appendChild(calendarComp);
-
-      reportInfo.setContentElement(filter);
-
-      report = new ReportMethod(uri, reportInfo);
       client.executeMethod(report);
       MultiStatus multiStatus = report.getResponseBodyAsMultiStatus();
       return multiStatus;
+    } catch (Exception e) {
+      if (logger.isDebugEnabled()) logger.debug("Exception occurs when querying calendar events from CalDav server", e);
+      return null;
     } finally {
-      if (report != null)
+      if (report != null) {
         report.releaseConnection();
+      }
     }
   }
   
@@ -668,9 +601,6 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     }
     
     for(Object obj : componentList) {
-      
-      if(obj instanceof VFreeBusy) vFreeBusyData.put(((VFreeBusy)obj).getUid().getValue(), (VFreeBusy)obj) ;
-      
       if(obj instanceof VEvent) {
         VEvent event = (VEvent)obj ;   
         if(!event.getAlarms().isEmpty()) {
@@ -681,11 +611,17 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
             }
           }
         }
-        
+      }
+      if(obj instanceof VFreeBusy) vFreeBusyData.put(((VFreeBusy)obj).getUid().getValue(), (VFreeBusy)obj) ;
+    }
+    
+    for (Object obj : componentList) {
+      if (obj instanceof VEvent) {
+        VEvent event = (VEvent)obj ;   
         if (isNew) exoEvent = new CalendarEvent();
         else exoEvent = storage_.getUserEvent(username, calendarId, eventId);
         
-        if(event.getProperty(Property.CATEGORIES) != null) {
+        if (event.getProperty(Property.CATEGORIES) != null) {
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try {
@@ -694,7 +630,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
             evCate = calService.getEventCategoryByName(username, evCate.getName());
           } catch (Exception e) {
             if (logger.isDebugEnabled()) {
-              logger.debug("Exception occurs when saving event category for CalDav event", e);
+              logger.debug("Exception occurs when saving new event category '" + evCate.getName() + "' for CalDav event: " + event.getUid(), e);
             }
           }
           exoEvent.setEventCategoryId(evCate.getId()) ;
@@ -703,9 +639,9 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         
         exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
         exoEvent.setCalendarId(calendarId) ;
-        if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
-        if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
-        if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
+        if (event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
+        if (event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
+        if (event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
         exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
 
         String sValue = "" ;
@@ -719,23 +655,21 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
           exoEvent.setToDateTime(event.getEndDate().getDate()) ;
         }
         if (sValue.length() == 8 && eValue.length() == 8 ) {
-          //exoEvent.setAllday(true) ;
           exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
         }
         if (sValue.length() > 8 && eValue.length() > 8 ) {         
           if("0000".equals(sValue.substring(9,13)) && "0000".equals(eValue.substring(9,13)) ) {
-            //exoEvent.setAllday(true);
             exoEvent.setToDateTime(new Date(event.getEndDate().getDate().getTime() -1)) ;
           }
         }
-        if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
-        if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
-        if(event.getProperty(Utils.X_STATUS) != null) {
+        if (event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
+        if (event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
+        if (event.getProperty(Utils.X_STATUS) != null) {
           exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
         }
-        if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
+        if (event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
         PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
-        if(!attendees.isEmpty()) {
+        if (!attendees.isEmpty()) {
           String[] invitation = new String[attendees.size()] ;
           for(int i = 0; i < attendees.size(); i ++) {
             invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
@@ -758,7 +692,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
           if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
         } catch (Exception e) {
           if (logger.isDebugEnabled()) {
-            logger.debug("Exception occurs when importing attachments from iCalendar object for CalDav event", e);
+            logger.debug("Exception occurs when importing attachments from iCalendar object for CalDav event: " + event.getUid(), e);
           }
         }
         
@@ -900,38 +834,39 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
       else if (obj instanceof VToDo) {
         VToDo event = (VToDo)obj ;
         exoEvent = new CalendarEvent() ;
-        if(event.getProperty(Property.CATEGORIES) != null) {
+        if (event.getProperty(Property.CATEGORIES) != null) {
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
-          try{
+          try {
             calService.saveEventCategory(username, evCate, true) ;
           } catch(ItemExistsException e){ 
             evCate = calService.getEventCategoryByName(username, evCate.getName());
           } catch (Exception e) {
-            if (logger.isDebugEnabled()) logger.debug(e.getMessage(), e);
+            if (logger.isDebugEnabled()) {
+              logger.debug("Exception occurs when saving new event category '" + evCate.getName() + "' for CalDav event: " + event.getUid(), e);
+            }
           }
           exoEvent.setEventCategoryName(evCate.getName()) ;
         } 
         exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
         exoEvent.setCalendarId(calendarId) ;
-        if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
-        if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
-        if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
+        if (event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
+        if (event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
+        if (event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
         exoEvent.setEventType(CalendarEvent.TYPE_TASK) ;
-        if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
-        if(event.getDue() != null) exoEvent.setToDateTime(event.getDue().getDate()) ;
-        //if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
-        if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
-        if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
-        if(vFreeBusyData.get(event.getUid().getValue()) != null) {
+        if (event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
+        if (event.getDue() != null) exoEvent.setToDateTime(event.getDue().getDate()) ;
+        if (event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
+        if (event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
+        if (vFreeBusyData.get(event.getUid().getValue()) != null) {
           exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
         }
-        if(event.getProperty(Utils.X_STATUS) != null) {
+        if (event.getProperty(Utils.X_STATUS) != null) {
           exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
         }
-        if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
+        if (event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
         PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
-        if(!attendees.isEmpty()) {
+        if (!attendees.isEmpty()) {
           String[] invitation = new String[attendees.size()] ;
           for(int i = 0; i < attendees.size(); i ++) {
             invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
@@ -951,9 +886,9 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
             att.setInputStream(in) ;
             attachments.add(att) ;
           }
-          if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
+          if (!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
         } catch (Exception e) {
-          if (logger.isDebugEnabled()) logger.debug("Exception occurs when importing attachments from iCalendar object", e);
+          if (logger.isDebugEnabled()) logger.debug("Exception occurs when importing attachments from iCalendar object: " + event.getUid(), e);
         }
         storage_.saveUserEvent(username, calendarId, exoEvent, isNew) ;
         storage_.setRemoteEvent(username, calendarId, exoEvent.getId(), href, etag);
@@ -984,5 +919,59 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
     }
     return client;
   }
+  
+  /**
+   * Make the new REPORT method object to query calendar component on CalDav server
+   * @param uri the URI to the calendar collection on server 
+   * @param from start date of the time range to filter calendar components
+   * @param to end date of the time range to filter calendar components
+   * @return ReportMethod object
+   * @throws Exception
+   */
+  public ReportMethod makeCalDavQueryReport(String uri, java.util.Calendar from, java.util.Calendar to) throws Exception {
+    ReportMethod report = null;
+    try {
+      DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+      DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+      Document doc = docBuilder.newDocument();
 
+      // root element
+      Element calendarQuery = DomUtil.createElement(doc, CALDAV_XML_CALENDAR_QUERY, CALDAV_NAMESPACE);
+      calendarQuery.setAttributeNS(Namespace.XMLNS_NAMESPACE.getURI(), Namespace.XMLNS_NAMESPACE.getPrefix() + ":" + DavConstants.NAMESPACE.getPrefix(), DavConstants.NAMESPACE.getURI());
+
+      ReportInfo reportInfo = new ReportInfo(calendarQuery, DavConstants.DEPTH_0);
+      DavPropertyNameSet propNameSet = reportInfo.getPropertyNameSet();
+      propNameSet.add(DavPropertyName.GETETAG);
+
+      // filter element
+      Element filter = DomUtil.createElement(doc, CALDAV_XML_FILTER, CALDAV_NAMESPACE);
+
+      Element calendarComp = DomUtil.createElement(doc, CALDAV_XML_COMP_FILTER, CALDAV_NAMESPACE);
+      calendarComp.setAttribute(CALDAV_XML_COMP_FILTER_NAME, net.fortuna.ical4j.model.Calendar.VCALENDAR);
+
+      Element eventComp = DomUtil.createElement(doc, CALDAV_XML_COMP_FILTER, CALDAV_NAMESPACE);
+      eventComp.setAttribute(CALDAV_XML_COMP_FILTER_NAME, net.fortuna.ical4j.model.component.VEvent.VEVENT);
+
+      Element todoComp = DomUtil.createElement(doc, CALDAV_XML_COMP_FILTER, CALDAV_NAMESPACE);
+      todoComp.setAttribute(CALDAV_XML_COMP_FILTER_NAME, net.fortuna.ical4j.model.component.VEvent.VTODO);
+
+      Element timeRange = DomUtil.createElement(doc, CALDAV_XML_TIME_RANGE, CALDAV_NAMESPACE);
+      SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+      timeRange.setAttribute(CALDAV_XML_START, format.format(from.getTime()));
+      timeRange.setAttribute(CALDAV_XML_END, format.format(to.getTime()));
+
+      eventComp.appendChild(timeRange);
+      todoComp.appendChild(timeRange);
+      calendarComp.appendChild(eventComp);
+      calendarComp.appendChild(todoComp);
+      filter.appendChild(calendarComp);
+
+      reportInfo.setContentElement(filter);
+      report = new ReportMethod(uri, reportInfo);
+      return report;
+    } catch (Exception e) {
+      if (logger.isDebugEnabled()) logger.debug("Cannot build report method for CalDav query",e);
+      return null;
+    }
+  }
 }

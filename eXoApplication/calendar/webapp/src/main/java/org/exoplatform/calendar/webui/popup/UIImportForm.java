@@ -334,7 +334,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
               calendar.setPublic(false) ;
               calendar.setCategoryId(uiForm.getSelectedIdGroup()) ;
               calendarService.saveUserCalendar(username, calendar, true) ;
-              calendarService.getCalendarImportExports(importFormat).importToCalendar(username, input.getUploadDataAsStream(), calendar.getId(), null, null) ;
+              calendarService.getCalendarImportExports(importFormat).importCalendar(username, input.getUploadDataAsStream(), calendar.getId(), null, null, null, false) ;
             }
             else {
               calendar.setPublic(true) ;              
@@ -400,7 +400,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
               calendar.setEditPermission(listPermission.toArray(new String[listPermission.size()])) ;
               
               calendarService.savePublicCalendar(calendar, true, username) ;
-              calendarService.getCalendarImportExports(importFormat).importToCalendar(username, input.getUploadDataAsStream(), calendar.getId(), null, null) ;
+              calendarService.getCalendarImportExports(importFormat).importCalendar(username, input.getUploadDataAsStream(), calendar.getId(), null, null, null, false) ;
             }
           } else {
             //String calendarId = uiForm.getUIFormSelectBoxGroup(FIELD_TO_CALENDAR).getValue() ;
@@ -413,7 +413,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent, UISelector
               return;
             }
             
-            calendarService.getCalendarImportExports(importFormat).importToCalendar(username, input.getUploadDataAsStream(), calendarId, null, null) ;
+            calendarService.getCalendarImportExports(importFormat).importCalendar(username, input.getUploadDataAsStream(), calendarId, null, null, null, false) ;
           }
           UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
           UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;

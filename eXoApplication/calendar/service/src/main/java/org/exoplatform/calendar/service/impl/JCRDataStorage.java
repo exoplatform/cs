@@ -2157,7 +2157,7 @@ public class JCRDataStorage implements DataStorage {
       for(String calendarMap : calendars.keySet()) {
         String calendarId = calendarMap.split(Utils.SPLITTER)[0] ;
         String type = calendarMap.split(Utils.SPLITTER)[1] ;
-        OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), type) ;
+        OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), type, -1) ;
         if(out != null) {
           ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
           Node ical = null ;
@@ -2364,7 +2364,7 @@ public class JCRDataStorage implements DataStorage {
       SyndContent description;      
       String portalName = PortalContainer.getCurrentPortalContainerName() ; 
       for(String calendarId : calendarIds) {        
-        OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), "0") ;
+        OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), "0", -1) ;
         if(out != null) {
           ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
           try {
@@ -2429,7 +2429,7 @@ public class JCRDataStorage implements DataStorage {
       for(String calendarMap : calendars.keySet()) {
         String calendarId = calendarMap.split(Utils.COLON)[1] ;
         String type = calendarMap.split(Utils.COLON)[0] ;
-        OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), type) ;
+        OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), type, -1) ;
         if(out != null) {
           Calendar exoCal = calendars.get(calendarMap) ;
           entry = new SyndEntryImpl();
@@ -2477,7 +2477,7 @@ public class JCRDataStorage implements DataStorage {
       while (iter.hasNext()) {
         Node rssCal = iter.nextNode() ;
         if (rssCal.getPath().contains(calendarId)) {
-          OutputStream out = imp.exportCalendar(username, Arrays.asList(new String[]{id}), type) ;
+          OutputStream out = imp.exportCalendar(username, Arrays.asList(new String[]{id}), type, -1) ;
           if(out != null) {
             ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
             rssCal.setProperty(Utils.EXO_DATA, is) ;
@@ -2533,7 +2533,7 @@ public class JCRDataStorage implements DataStorage {
       while (iter.hasNext()) {
         Node rssCal = iter.nextNode() ;
         Node nodeContent = rssCal.getNode(Utils.JCR_CONTENT) ;
-        OutputStream out = imp.exportCalendar(username, Arrays.asList(new String[]{id}), type) ;
+        OutputStream out = imp.exportCalendar(username, Arrays.asList(new String[]{id}), type, -1) ;
         if(out != null) {
           ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
           nodeContent.setProperty(Utils.JCR_DATA, is) ;  
@@ -2592,7 +2592,7 @@ public class JCRDataStorage implements DataStorage {
       SyndEntry entry;
       SyndContent description;
       for(String calendarId : calendarIds) {        
-        OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), "0") ;
+        OutputStream out = importExport.exportCalendar(username, Arrays.asList(new String[]{calendarId}), "0", -1) ;
         if(out != null) {
           ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
           Node ical = null ;
