@@ -26,6 +26,7 @@ import javax.mail.internet.AddressException;
 
 import org.exoplatform.cs.common.webui.UIPopupAction;
 import org.exoplatform.cs.common.webui.UIPopupComponent;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
@@ -80,26 +81,9 @@ public class UIAskmeReturnReceipt extends UIForm implements UIPopupComponent {
       MailService mailService = uiForm.getApplicationComponent(MailService.class);
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       ResourceBundle res = event.getRequestContext().getApplicationResourceBundle() ;
-      try {
-        mailService.sendReturnReceipt(username, accId, selectedMsgId, res);
-      } catch (AddressException e) {
-        uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-error-parsing-the-addresses-sending-failed", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return;
-      } catch (AuthenticationFailedException e) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-configuration-for-smtp-server", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return;
-      } catch (SMTPSendFailedException e) {
-        uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return;
-      } catch (MessagingException e) {
-        uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-unexpected-error-sending-falied", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-
+      
+      MailUtils.sendReturnReceipt(uiApp, event, username, accId, selectedMsgId, res);
+      
       List<Message> msgs = new ArrayList<Message>();
       msgs.add(uiForm.getSelectedMsg());
       mailService.toggleMessageProperty(username, accId, msgs, "", Utils.IS_RETURN_RECEIPT, true);

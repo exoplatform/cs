@@ -210,7 +210,7 @@ public class TestConnectorService extends BaseMailTestCase {
 
 			assertNotNull("Created Message list is NULL", list);
 			assertEquals(1, list.size());
-			boolean asRead = connector.markAsRead(list, folder);
+			boolean asRead = connector.markIsReadStared(list, folder, true, null);
 			assertTrue("Can not mark message as READ", asRead);
 			//assertEquals(true, connector.deleteFolder(folder));
 //			imapFolder.delete(true);
@@ -235,7 +235,7 @@ public class TestConnectorService extends BaseMailTestCase {
 
 			assertNotNull("Created Message list is NULL", list);
 			assertEquals(1, list.size());
-			boolean asUnRead = connector.markAsUnread(list, folder);
+			boolean asUnRead = connector.markIsReadStared(list, folder, false, null);
 			assertTrue("Can not mark message as UnREAD", asUnRead);
 			//assertEquals(true, connector.deleteFolder(folder));
 //			imapFolder.delete(true);
@@ -260,7 +260,7 @@ public class TestConnectorService extends BaseMailTestCase {
 
 			assertNotNull("Created Message list is NULL", list);
 			assertEquals(1, list.size());
-			boolean isStared = connector.setIsStared(list, true, folder);
+			boolean isStared = connector.markIsReadStared(list, folder, null, true);
 			assertTrue("Can not set star", isStared);
 			//assertEquals(true, connector.deleteFolder(folder));
 //			imapFolder.delete(true);
@@ -285,7 +285,7 @@ public class TestConnectorService extends BaseMailTestCase {
 
 			assertNotNull("Created Message list is NULL", list);
 			assertEquals(1, list.size());
-			boolean isNotStared = connector.setIsStared(list, false, folder);
+			boolean isNotStared = connector.markIsReadStared(list, folder, null, false);
 			assertTrue("Message is Stared(unexpected)", isNotStared);
 			//assertEquals(true, connector.deleteFolder(folder));
 //			imapFolder.delete(true);

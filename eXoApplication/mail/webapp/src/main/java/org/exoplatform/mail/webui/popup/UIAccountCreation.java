@@ -214,6 +214,26 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   public void deActivate() throws Exception { }
 
   public void updateValue(String fieldId, String value) { }
+
+  public static void viewSteps(UIAccountCreation uiAccCreation, String step, Event event){
+    UIAccountWizardStep4 uiAccWs4 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP4) ;
+    if(uiAccWs4.isRendered()) {
+      UIAccountWizardStep1 uiAccWs1 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP1) ;
+      UIAccountWizardStep2 uiAccWs2 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP2) ;
+      UIAccountWizardStep3 uiAccWs3 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP3) ;
+      UIAccountWizardStep5 uiAccWs5 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP5) ;
+      String accname = uiAccWs1.getAccName() ;
+      String accOutgoingName = uiAccWs2.getOutgoingName() ;
+      String email = uiAccWs2.getEmailAddress() ;
+      String serverName = uiAccWs3.getIncomingServer();
+      String serverType = uiAccWs3.getServerType(); 
+      String storeFolder = uiAccWs3.getStoreFolder() ;
+      uiAccCreation.password_  = uiAccWs4.getPassword() ;
+      uiAccWs5.fillFields(accname, accOutgoingName, email, serverName, serverType, storeFolder) ;
+    }
+    uiAccCreation.viewStep(Integer.parseInt(step)) ;
+    event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
+  }
   
   public static class ViewStepActionListener extends EventListener<UIAccountCreation>{
     public void execute(Event<UIAccountCreation> event) throws Exception {
@@ -223,46 +243,14 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       WizardStep wss = (WizardStep)uiAccCreation.getChildById(uiAccCreation.getCurrentChild()) ;
       if(nextStep > uiAccCreation.getCurrentStep()) {
         if(wss.isFieldsValid()) { 
-          UIAccountWizardStep4 uiAccWs4 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP4) ;
-          if(uiAccWs4.isRendered()) {
-            UIAccountWizardStep1 uiAccWs1 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP1) ;
-            UIAccountWizardStep2 uiAccWs2 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP2) ;
-            UIAccountWizardStep3 uiAccWs3 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP3) ;
-            UIAccountWizardStep5 uiAccWs5 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP5) ;
-            String accname = uiAccWs1.getAccName() ;
-            String accOutgoingName = uiAccWs2.getOutgoingName() ;
-            String email = uiAccWs2.getEmailAddress() ;
-            String serverName = uiAccWs3.getIncomingServer();
-            String serverType = uiAccWs3.getServerType(); 
-            String storeFolder = uiAccWs3.getStoreFolder() ;
-            uiAccCreation.password_  = uiAccWs4.getPassword() ;
-            uiAccWs5.fillFields(accname, accOutgoingName, email, serverName, serverType, storeFolder) ;
-          }
-          uiAccCreation.viewStep(Integer.parseInt(step)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
+           UIAccountCreation.viewSteps(uiAccCreation, step, event);
         } else {
           UIApplication uiApp = uiAccCreation.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.fields-requirement", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }
       } else {
-        UIAccountWizardStep4 uiAccWs4 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP4) ;
-        if(uiAccWs4.isRendered()) {
-          UIAccountWizardStep1 uiAccWs1 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP1) ;
-          UIAccountWizardStep2 uiAccWs2 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP2) ;
-          UIAccountWizardStep3 uiAccWs3 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP3) ;
-          UIAccountWizardStep5 uiAccWs5 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP5) ;
-          String accname = uiAccWs1.getAccName() ;
-          String accOutgoingName = uiAccWs2.getOutgoingName() ;
-          String email = uiAccWs2.getEmailAddress() ;
-          String serverName = uiAccWs3.getIncomingServer();
-          String serverType = uiAccWs3.getServerType(); 
-          String storeFolder = uiAccWs3.getStoreFolder() ;
-          uiAccCreation.password_  = uiAccWs4.getPassword() ;
-          uiAccWs5.fillFields(accname, accOutgoingName, email, serverName, serverType, storeFolder) ;
-        }
-        uiAccCreation.viewStep(Integer.parseInt(step)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
+        UIAccountCreation.viewSteps(uiAccCreation, step, event);
       }
     }
   }

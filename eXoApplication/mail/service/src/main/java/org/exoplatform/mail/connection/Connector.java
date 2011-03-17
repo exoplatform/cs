@@ -51,10 +51,9 @@ public interface Connector {
    * Return a list of deleted/moved messages
    * */
   public List<Message> moveMessage(List<Message> msgs, Folder currentFolder, Folder desFolder) throws Exception;
-  
-  public boolean markAsRead(List<Message> msgList, Folder folder) throws Exception;
-  
-  public boolean markAsUnread(List<Message> msgList, Folder folder) throws Exception;
-  
-  public boolean setIsStared(List<Message> msgList, boolean isStared, Folder folder) throws Exception;  
+  /**
+   * mark the message is read/unread or stared/not started
+   * @param isRead is read if true, is unread if false. Else if is null, method is going to set stared/not stared
+   * @param isStared is star if true, and is not star if false. Else if is null, method is going to set read/unread**/
+  public boolean markIsReadStared(List<Message> msgList, Folder folder, Object isRead, Object isStared) throws Exception;
 }

@@ -24,23 +24,32 @@ import java.net.URLEncoder;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.jcr.RepositoryException;
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
 
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
+import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.cs.common.webui.UIPopupAction;
+import org.exoplatform.cs.common.webui.UIPopupActionContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Account;
@@ -48,11 +57,17 @@ import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.popup.UIAddContactForm;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.event.Event;
+
+import com.sun.mail.smtp.SMTPSendFailedException;
 
 
 /**
@@ -488,5 +503,69 @@ public class MailUtils {
     public static String decodeAttachName(String name) throws Exception {
       return MimeUtility.decodeText(name);
     }
+    
+    static public ContactService getcontactService() throws Exception {
+      return (ContactService)PortalContainer.getComponent(ContactService.class) ;
+    }
+    public static boolean havePermission(String groupId) throws Exception {
+      String currentUser = MailUtils.getCurrentUser();
+      AddressBook sharedGroup = getcontactService().getSharedAddressBook(currentUser, groupId);
+      if (sharedGroup == null)
+        return false;
+      if (sharedGroup.getEditPermissionUsers() != null
+          && Arrays.asList(sharedGroup.getEditPermissionUsers()).contains(currentUser
+              + DataStorage.HYPHEN)) {
+        return true;
+      }
+      String[] editPerGroups = sharedGroup.getEditPermissionGroups();
+      if (editPerGroups != null)
+        for (String editPer : editPerGroups)
+          if (MailUtils.getUserGroups().contains(editPer))
+            return true;
+      return false;
+    }
+
+    public static void sendReturnReceipt(UIApplication uiApp, Event event, String username, String accid, String msgId, ResourceBundle res) throws Exception{
+      try {
+        getMailService().sendReturnReceipt(username, accid, msgId, res);
+      } catch (AddressException e) {
+        uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-error-parsing-the-addresses-sending-failed", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      } catch (AuthenticationFailedException e) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.please-check-configuration-for-smtp-server", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      } catch (SMTPSendFailedException e) {
+        uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      } catch (MessagingException e) {
+        uiApp.addMessage(new ApplicationMessage("UIEnterPasswordDialog.msg.there-was-an-unexpected-error-sending-falied", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } 
+    }
+    
+    public static void createContactForm(Event event, UIPopupAction uiPopup, Message msg, String componentId) throws Exception{
+      UIPopupActionContainer uiPopupContainer = uiPopup.createUIComponent(UIPopupActionContainer.class, null, componentId) ;
+      uiPopup.activate(uiPopupContainer, 730, 0, true);
+      UIAddContactForm uiAddContactForm = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null);
+      uiPopupContainer.addChild(uiAddContactForm);
+      InternetAddress[] addresses  = Utils.getInternetAddress(msg.getFrom());
+      String personal = (addresses[0] != null) ? Utils.getPersonal(addresses[0]) : "";
+      String firstName = personal;
+      String email = (addresses[0] != null) ? addresses[0].getAddress() : "";
+      String lastName = "";
+      if (personal.indexOf(" ") > 0) {
+        firstName = personal.substring(0, personal.indexOf(" "));
+        lastName = personal.substring(personal.indexOf(" ") + 1, personal.length());
+      }
+      uiAddContactForm.setFirstNameField(firstName);
+      uiAddContactForm.setLastNameField(lastName);
+      uiAddContactForm.setEmailField(email);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
+    }
+    
 }
 

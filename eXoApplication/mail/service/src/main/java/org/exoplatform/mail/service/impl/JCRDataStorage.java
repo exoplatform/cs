@@ -17,6 +17,7 @@
 package org.exoplatform.mail.service.impl;
 
 import java.io.BufferedReader;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +25,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Currency;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -53,7 +53,6 @@ import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.poi.hslf.record.CurrentUserAtom;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -82,6 +81,7 @@ import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+import org.exoplatform.ws.frameworks.json.impl.JsonException;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
 import org.exoplatform.ws.frameworks.json.value.JsonValue;
 
@@ -531,149 +531,7 @@ public class JCRDataStorage implements DataStorage {
   }
 
   public Message getMessage(Node messageNode) throws Exception {
-    Message msg = new Message();
-    try {
-      msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setUID(messageNode.getProperty(Utils.EXO_UID).getString());
-    } catch (Exception e) {
-    }
-    msg.setPath(messageNode.getPath());
-    try {
-      msg.setInReplyToHeader(messageNode.getProperty(Utils.EXO_IN_REPLY_TO_HEADER).getString());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setAccountId(messageNode.getProperty(Utils.EXO_ACCOUNT).getString());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setFrom(messageNode.getProperty(Utils.EXO_FROM).getString());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setMessageTo(messageNode.getProperty(Utils.EXO_TO).getString());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setSubject(messageNode.getProperty(Utils.EXO_SUBJECT).getString());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setMessageCc(messageNode.getProperty(Utils.EXO_CC).getString());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setMessageBcc(messageNode.getProperty(Utils.EXO_BCC).getString());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setReplyTo(messageNode.getProperty(Utils.EXO_REPLYTO).getString());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setContentType(messageNode.getProperty(Utils.EXO_CONTENT_TYPE).getString());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setSize(messageNode.getProperty(Utils.EXO_SIZE).getLong());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setHasAttachment(messageNode.getProperty(Utils.EXO_HASATTACH).getBoolean());
-    } catch (Exception e) {
-    }
-
-    try {
-      msg.setHasAttachment(messageNode.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
-    } catch (Exception e) {
-    }
-
-    try {
-      msg.setHasStar(messageNode.getProperty(Utils.EXO_STAR).getBoolean());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setPriority(messageNode.getProperty(Utils.EXO_PRIORITY).getLong());
-    } catch (Exception e) {
-    }
-    try {
-      msg.setUnread(messageNode.getProperty(Utils.EXO_ISUNREAD).getBoolean());
-    } catch (Exception e) {
-    }
-
-    try {
-      Value[] propFolders = messageNode.getProperty(Utils.MSG_FOLDERS).getValues();
-      String[] folders = new String[propFolders.length];
-      for (int i = 0; i < propFolders.length; i++) {
-        folders[i] = propFolders[i].getString();
-      }
-      msg.setFolders(folders);
-    } catch (Exception e) {
-    }
-
-    try {
-      Value[] propTags = messageNode.getProperty(Utils.EXO_TAGS).getValues();
-      String[] tags = new String[propTags.length];
-      for (int i = 0; i < propTags.length; i++) {
-        tags[i] = propTags[i].getString();
-      }
-      msg.setTags(tags);
-    } catch (Exception e) {
-    }
-
-    try {
-      Value[] properties = messageNode.getProperty(Utils.MSG_HEADERS).getValues();
-      for (int i = 0; i < properties.length; i++) {
-        String property = properties[i].getString();
-        int index = property.indexOf('=');
-        if (index != -1)
-          msg.setHeader(property.substring(0, index), property.substring(index + 1));
-      }
-    } catch (Exception e) {
-    }
-
-    GregorianCalendar cal = new GregorianCalendar();
-    try {
-      cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_RECEIVEDDATE).getLong());
-      msg.setReceivedDate(cal.getTime());
-    } catch (Exception e) {
-    }
-
-    try {
-      cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_SENDDATE).getLong());
-      msg.setSendDate(cal.getTime());
-    } catch (Exception e) {
-    }
-
-    try {
-      cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
-      msg.setLastUpdateDate(cal.getTime());
-    } catch (Exception e) {
-    }
-
-    try {
-      msg.setIsLoaded(messageNode.getProperty(Utils.IS_LOADED).getBoolean());
-    } catch (Exception e) {
-    }
-
-    try {
-      msg.setAttIsLoadedProperly(messageNode.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
-    } catch (Exception e) {
-    }
-
-    try {
-      msg.setIsReturnReceipt(messageNode.getProperty(Utils.IS_RETURN_RECEIPT).getBoolean());
-    } catch (Exception e) {
-    }
-
-    return msg;
+    return Utils.getMessage(messageNode);
   }
 
   public void removeAccount(String username, String accountId) throws Exception {
@@ -1436,29 +1294,9 @@ public class JCRDataStorage implements DataStorage {
         node.setProperty(Utils.EXO_HASATTACH, false);
         node.save();
 
-        if (infoObj != null && continuation != null) {
-          infoObj.setFrom(from);
-          infoObj.setMsgId(msgId);
-          infoObj.setIsRead(isReadMessage);
-          infoObj.setSubject(subject);
-          infoObj.setSize(Utils.convertSize(msgSize));
-          infoObj.setPriority(String.valueOf(priority));
-          infoObj.setAccountId(accId);
-          if (gc != null)
-            infoObj.setDate(gc.getTime().toString());
-          else if (sc != null)
-            infoObj.setDate(sc.getTime().toString());
-          else
-            infoObj.setDate(new Date().toString());
-
-          JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
-          JsonValue json = generatorImpl.createJsonObject(infoObj);
-          if(!Utils.isEmptyField(currentUserName)) 
-            continuation.sendMessage(currentUserName, "/eXo/Application/mail/messages", json);
-          else
-            continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
-        }
-
+        if (infoObj != null && continuation != null)
+          setCometdMessage(continuation, infoObj, from, msgId, isReadMessage, subject, Utils.convertSize(msgSize), 
+                           accId, gc, sc, currentUserName, username);
         if (saveTotal)
           saveTotalMessage(username, accId, msgId, msg, sProvider);
 
@@ -1777,38 +1615,7 @@ public class JCRDataStorage implements DataStorage {
     try {
       sProvider = createSessionProvider();
       Node node = getFolderNodeById(sProvider, username, accountId, folderId);
-      if (node != null) {
-        folder = new Folder();
-        folder.setId(node.getProperty(Utils.EXO_ID).getString());
-        folder.setPath(node.getPath());
-        folder.setURLName(node.getProperty(Utils.EXO_LABEL).getString());
-        folder.setName(node.getProperty(Utils.EXO_NAME).getString());
-        folder.setType(node.getProperty(Utils.EXO_FOLDERTYPE).getLong());
-        folder.setPersonalFolder(node.getProperty(Utils.EXO_PERSONAL).getBoolean());
-        folder.setNumberOfUnreadMessage(node.getProperty(Utils.EXO_UNREADMESSAGES).getLong());
-        folder.setTotalMessage(node.getProperty(Utils.EXO_TOTALMESSAGE).getLong());
-        try {
-          GregorianCalendar cal = new GregorianCalendar();
-          cal.setTimeInMillis(node.getProperty(Utils.EXO_LAST_CHECKED_TIME).getLong());
-          folder.setLastCheckedDate(cal.getTime());
-        } catch (Exception e) {
-          folder.setLastCheckedDate(null);
-        }
-        try {
-          GregorianCalendar cal = new GregorianCalendar();
-          cal.setTimeInMillis(node.getProperty(Utils.EXO_LAST_START_CHECKING_TIME).getLong());
-          folder.setLastStartCheckingTime(cal.getTime());
-        } catch (Exception e) {
-          folder.setLastStartCheckingTime(null);
-        }
-        try {
-          GregorianCalendar cal = new GregorianCalendar();
-          cal.setTimeInMillis(node.getProperty(Utils.EXO_CHECK_FROM_DATE).getLong());
-          folder.setCheckFromDate(cal.getTime());
-        } catch (Exception e) {
-        }
-
-      }
+      if (node != null) folder = getFolder(node);
     } finally {
       closeSessionProvider(sProvider);
     }
@@ -1908,39 +1715,16 @@ public class JCRDataStorage implements DataStorage {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
-      // gets folder home node of the specified account
       Node home = getFolderHome(sProvider, username, accountId);
       Node myFolder = null;
       Node node = getFolderNodeById(sProvider, username, accountId, folder.getId());
-      if (node != null) { // if the folder exists, gets it
+      if (node != null) {
         myFolder = node;
-      } else { // if it doesn't exist, creates it
+      } else {
         myFolder = home.addNode(folder.getId(), Utils.EXO_FOLDER);
         home.save();
       }
-      // sets some properties
-      myFolder.setProperty(Utils.EXO_ID, folder.getId());
-      myFolder.setProperty(Utils.EXO_NAME, folder.getName());
-      myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
-      myFolder.setProperty(Utils.EXO_FOLDERTYPE, folder.getType());
-      myFolder.setProperty(Utils.EXO_LABEL, folder.getURLName());
-      myFolder.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
-      myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder());
-      if (folder.getLastCheckedDate() != null)
-        myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, folder.getLastCheckedDate().getTime());
-      else
-        myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
-
-      if (folder.getLastStartCheckingTime() != null)
-        myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, folder.getLastStartCheckingTime()
-                             .getTime());
-      else
-        myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
-      if (folder.getCheckFromDate() != null)
-        myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, folder.getCheckFromDate().getTime());
-      else
-        myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
-      myFolder.save();
+      saveFolderNode(myFolder, folder);
     } finally {
       closeSessionProvider(sProvider);
     }
@@ -1974,38 +1758,15 @@ public class JCRDataStorage implements DataStorage {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
-      // gets folder home node of the specified account
       Node parentNode = getFolderNodeById(sProvider, username, accountId, parentId);
       Node myFolder = null;
-      if (parentNode.hasNode(folder.getId())) { // if the folder exists,
-        // gets it
+      if (parentNode.hasNode(folder.getId())) {
         myFolder = parentNode.getNode(folder.getId());
-      } else { // if it doesn't exist, creates it
+      } else {
         myFolder = parentNode.addNode(folder.getId(), Utils.EXO_FOLDER);
         parentNode.save();
       }
-      myFolder.setProperty(Utils.EXO_ID, folder.getId());
-      myFolder.setProperty(Utils.EXO_NAME, folder.getName());
-      myFolder.setProperty(Utils.EXO_LABEL, folder.getURLName());
-      myFolder.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
-      myFolder.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
-      myFolder.setProperty(Utils.EXO_FOLDERTYPE, folder.getType());
-      myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder());
-      if (folder.getLastCheckedDate() != null)
-        myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, folder.getLastCheckedDate().getTime());
-      else
-        myFolder.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
-
-      if (folder.getLastStartCheckingTime() != null)
-        myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, folder.getLastStartCheckingTime()
-                             .getTime());
-      else
-        myFolder.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
-      if (folder.getCheckFromDate() != null)
-        myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, folder.getCheckFromDate().getTime());
-      else
-        myFolder.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
-      myFolder.save();
+      saveFolderNode(myFolder, folder);
     } finally {
       closeSessionProvider(sProvider);
     }
@@ -2084,67 +1845,7 @@ public class JCRDataStorage implements DataStorage {
       NodeIterator iter = filterHomeNode.getNodes();
       while (iter.hasNext()) {
         Node filterNode = (Node) iter.next();
-        MessageFilter filter = new MessageFilter("");
-        try {
-          filter.setId((filterNode.getProperty(Utils.EXO_ID).getString()));
-        } catch (Exception e) {
-        }
-        try {
-          filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setFromCondition((int) (filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
-        } catch (Exception e) {
-        }
-        try {
-          filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setToCondition((int) (filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
-        } catch (Exception e) {
-        }
-        try {
-          filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setSubjectCondition((int) (filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
-        } catch (Exception e) {
-        }
-        try {
-          filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setBodyCondition((int) (filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
-        } catch (Exception e) {
-        }
-        try {
-          String folder = filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString();
-          if (!Utils.isEmptyField(folder) && getFolder(username, accountId, folder) != null)
-            filter.setApplyFolder(folder);
-          else
-            filter.setApplyFolder(Utils.generateFID(accountId, Utils.FD_INBOX, false));
-        } catch (Exception e) {
-        }
-        try {
-          filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setApplyForAll(filterNode.getProperty(Utils.EXO_APPLY_FOR_ALL).getBoolean());
-        } catch (Exception e) {
-        }
+        MessageFilter filter = getFilter(filterNode, username, accountId);
         filterList.add(filter);
       }
     } finally {
@@ -2155,72 +1856,13 @@ public class JCRDataStorage implements DataStorage {
 
   public MessageFilter getFilterById(String username, String accountId, String filterId) throws Exception {
     SessionProvider sProvider = null;
-    MessageFilter filter = new MessageFilter("");
+    MessageFilter filter = null;
     try {
       sProvider = createSessionProvider();
       Node filterHomeNode = getFilterHome(sProvider, username, accountId);
       if (filterHomeNode.hasNode(filterId)) {
         Node filterNode = filterHomeNode.getNode(filterId);
-        try {
-          filter.setId((filterNode.getProperty(Utils.EXO_ID).getString()));
-        } catch (Exception e) {
-        }
-        try {
-          filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setFromCondition((int) (filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
-        } catch (Exception e) {
-        }
-        try {
-          filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setToCondition((int) (filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
-        } catch (Exception e) {
-        }
-        try {
-          filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setSubjectCondition((int) (filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
-        } catch (Exception e) {
-        }
-        try {
-          filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setBodyCondition((int) (filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
-        } catch (Exception e) {
-        }
-        try {
-          String folder = filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString();
-          if (!Utils.isEmptyField(folder) && getFolder(username, accountId, folder) != null)
-            filter.setApplyFolder(folder);
-          else
-            filter.setApplyFolder(Utils.generateFID(accountId, Utils.FD_INBOX, false));
-        } catch (Exception e) {
-        }
-        try {
-          filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
-        } catch (Exception e) {
-        }
-        try {
-          filter.setApplyForAll(filterNode.getProperty(Utils.EXO_APPLY_FOR_ALL).getBoolean());
-        } catch (Exception e) {
-        }
+        filter = getFilter(filterNode, username, accountId);
       }
     } finally {
       closeSessionProvider(sProvider);
@@ -2422,23 +2064,7 @@ public class JCRDataStorage implements DataStorage {
       NodeIterator iter = tagHomeNode.getNodes();
       while (iter.hasNext()) {
         Node tagNode = (Node) iter.next();
-        Tag tag = new Tag();
-        try {
-          tag.setId((tagNode.getProperty(Utils.EXO_ID).getString()));
-        } catch (PathNotFoundException e) {
-        }
-        try {
-          tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString());
-        } catch (PathNotFoundException e) {
-        }
-        try {
-          tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString());
-        } catch (PathNotFoundException e) {
-        }
-        try {
-          tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString());
-        } catch (PathNotFoundException e) {
-        }
+        Tag tag = getTag(tagNode);
         tags.add(tag);
       }
     } finally {
@@ -2449,31 +2075,15 @@ public class JCRDataStorage implements DataStorage {
 
   public Tag getTag(String username, String accountId, String tagId) throws Exception {
     SessionProvider sProvider = null;
-    Tag tag = new Tag();
+    Tag tag = null;
     try {
       sProvider = createSessionProvider();
       Node tagHomeNode = getTagHome(sProvider, username, accountId);
       NodeIterator iter = tagHomeNode.getNodes();
       while (iter.hasNext()) {
         Node tagNode = (Node) iter.next();
-        // TODO should break loop when matching the tag node
         if (tagNode.getProperty(Utils.EXO_ID).getString().equals(tagId)) {
-          try {
-            tag.setId((tagNode.getProperty(Utils.EXO_ID).getString()));
-          } catch (PathNotFoundException e) {
-          }
-          try {
-            tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString());
-          } catch (PathNotFoundException e) {
-          }
-          try {
-            tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString());
-          } catch (PathNotFoundException e) {
-          }
-          try {
-            tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString());
-          } catch (PathNotFoundException e) {
-          }
+          tag = getTag(tagNode);
         }
       }
     } finally {
@@ -3085,19 +2695,7 @@ public class JCRDataStorage implements DataStorage {
       while (msgAttachmentIt.hasNext()) {
         Node node = msgAttachmentIt.nextNode();
         if (node.isNodeType(Utils.EXO_MAIL_ATTACHMENT)) {
-          JCRMessageAttachment file = new JCRMessageAttachment();
-          file.setId(node.getPath());
-          file.setMimeType(node.getNode(Utils.JCR_CONTENT)
-                           .getProperty(Utils.JCR_MIMETYPE)
-                           .getString());
-          file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
-          if (node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
-            file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY)
-                                     .getBoolean());
-          file.setIsShowInBody(node.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
-          file.setWorkspace(node.getSession().getWorkspace().getName());
-          file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
-          file.setPath("/" + file.getWorkspace() + node.getPath());
+          JCRMessageAttachment file = Utils.getJCRMessageAttachment(node);
           attachments.put(file.getId(), file);
         }
       }
@@ -3193,18 +2791,7 @@ public class JCRDataStorage implements DataStorage {
         while (msgAttachmentIt.hasNext()) {
           Node node = msgAttachmentIt.nextNode();
           if (node.isNodeType(Utils.EXO_MAIL_ATTACHMENT)) {
-            JCRMessageAttachment file = new JCRMessageAttachment();
-            file.setId(node.getPath());
-            file.setMimeType(node.getNode(Utils.JCR_CONTENT)
-                             .getProperty(Utils.JCR_MIMETYPE)
-                             .getString());
-            file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
-            if (node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
-              file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
-            file.setIsShowInBody(node.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
-            file.setWorkspace(node.getSession().getWorkspace().getName());
-            file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
-            file.setPath("/" + file.getWorkspace() + node.getPath());
+            JCRMessageAttachment file = Utils.getJCRMessageAttachment(node);
             attachments.add(file);
           }
         }
@@ -3393,31 +2980,10 @@ public class JCRDataStorage implements DataStorage {
 
         t3 = System.currentTimeMillis();
         logger.debug("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
-
         node.save();
-
-        if (infoObj != null && continuation != null) {
-          infoObj.setFrom(from);
-          infoObj.setMsgId(msgId);
-          infoObj.setIsRead(isReadMessage);
-          infoObj.setSubject(subject);
-          infoObj.setSize(Utils.convertSize(Math.abs(msg.getSize())));
-          infoObj.setAccountId(accId);
-          if (gc != null)
-            infoObj.setDate(gc.getTime().toString());
-          else if (sc != null)
-            infoObj.setDate(sc.getTime().toString());
-          else
-            infoObj.setDate(new Date().toString());
-
-          JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
-          JsonValue json = generatorImpl.createJsonObject(infoObj);
-          if(!Utils.isEmptyField(currentUserName))
-            continuation.sendMessage(currentUserName, "/eXo/Application/mail/messages", json);
-          else continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
-        }
-
-        // saveTotalMessage(username, accId, msgId, msg, sProvider);
+        if (infoObj != null && continuation != null)
+          setCometdMessage(continuation, infoObj, from, msgId, isReadMessage, 
+                           subject, Utils.convertSize(Math.abs(msg.getSize())), accId, gc, sc, currentUserName, username);
         t4 = System.currentTimeMillis();
         logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
         logger.debug("Adding message to thread ...");
@@ -3600,6 +3166,107 @@ public class JCRDataStorage implements DataStorage {
     return part.getHeader("Content-Id") == null ? false : true;
   }
 
+  private MessageFilter getFilter(Node filterNode, String username, String accountId) throws Exception{
+    MessageFilter filter = new MessageFilter("");
+    if(filterNode.hasProperty(Utils.EXO_ID))
+      filter.setId((filterNode.getProperty(Utils.EXO_ID).getString()));
+    if(filterNode.hasProperty(Utils.EXO_NAME))
+      filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString());
+    if(filterNode.hasProperty(Utils.EXO_FROM))
+      filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
+    if(filterNode.hasProperty(Utils.EXO_FROM_CONDITION))
+      filter.setFromCondition((int) (filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
+    if(filterNode.hasProperty(Utils.EXO_TO))
+      filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
+    if(filterNode.hasProperty(Utils.EXO_TO_CONDITION))
+      filter.setToCondition((int) (filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
+    if(filterNode.hasProperty(Utils.EXO_SUBJECT))
+      filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
+    if(filterNode.hasProperty(Utils.EXO_SUBJECT_CONDITION))
+      filter.setSubjectCondition((int) (filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
+    if(filterNode.hasProperty(Utils.EXO_BODY))
+      filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
+    if(filterNode.hasProperty(Utils.EXO_BODY_CONDITION))
+      filter.setBodyCondition((int) (filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
+    if(filterNode.hasProperty(Utils.EXO_APPLY_FOLDER)){
+      String folder = filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString();
+      if (!Utils.isEmptyField(folder) && getFolder(username, accountId, folder) != null)
+        filter.setApplyFolder(folder);
+      else
+        filter.setApplyFolder(Utils.generateFID(accountId, Utils.FD_INBOX, false));
+    }
+    if(filterNode.hasProperty(Utils.EXO_APPLY_TAG))
+      filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
+    if(filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX))
+      filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
+    if(filterNode.hasProperty(Utils.EXO_APPLY_FOR_ALL))
+      filter.setApplyForAll(filterNode.getProperty(Utils.EXO_APPLY_FOR_ALL).getBoolean());
 
+    return filter;
+  }
 
+  private void saveFolderNode(Node folderNode, Folder folder) throws Exception{
+    folderNode.setProperty(Utils.EXO_ID, folder.getId());
+    folderNode.setProperty(Utils.EXO_NAME, folder.getName());
+    folderNode.setProperty(Utils.EXO_UNREADMESSAGES, folder.getNumberOfUnreadMessage());
+    folderNode.setProperty(Utils.EXO_FOLDERTYPE, folder.getType());
+    folderNode.setProperty(Utils.EXO_LABEL, folder.getURLName());
+    folderNode.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
+    folderNode.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder());
+    if (folder.getLastCheckedDate() != null)
+      folderNode.setProperty(Utils.EXO_LAST_CHECKED_TIME, folder.getLastCheckedDate().getTime());
+    else
+      folderNode.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
+
+    if (folder.getLastStartCheckingTime() != null)
+      folderNode.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, folder.getLastStartCheckingTime()
+                           .getTime());
+    else
+      folderNode.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
+    if (folder.getCheckFromDate() != null)
+      folderNode.setProperty(Utils.EXO_CHECK_FROM_DATE, folder.getCheckFromDate().getTime());
+    else
+      folderNode.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
+    folderNode.save();
+  }
+
+  private void setCometdMessage(ContinuationService continuation, Info infoObj, String from, String msgId, boolean isReadMessage, String subject, String size, String accId, Calendar gc, Calendar sc, String currentUserName, String username){
+    infoObj.setFrom(from);
+    infoObj.setMsgId(msgId);
+    infoObj.setIsRead(isReadMessage);
+    infoObj.setSubject(subject);
+    infoObj.setSize(size);
+    infoObj.setAccountId(accId);
+    if (gc != null)
+      infoObj.setDate(gc.getTime().toString());
+    else if (sc != null)
+      infoObj.setDate(sc.getTime().toString());
+    else
+      infoObj.setDate(new Date().toString());
+
+    JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+    JsonValue json = null;
+    try {
+      json = generatorImpl.createJsonObject(infoObj);
+    } catch (JsonException e) {
+      if(logger.isDebugEnabled()) logger.debug("Cannot create json object for cometd", e);
+      return;
+    }
+    if(!Utils.isEmptyField(currentUserName))
+      continuation.sendMessage(currentUserName, "/eXo/Application/mail/messages", json);
+    else continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
+  }
+  
+  public Tag getTag(Node tagNode) throws Exception{
+    Tag tag = new Tag();
+    if(tagNode.hasProperty(Utils.EXO_ID))
+      tag.setId((tagNode.getProperty(Utils.EXO_ID).getString()));
+    if(tagNode.hasProperty(Utils.EXO_NAME))
+      tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString());
+    if(tagNode.hasProperty(Utils.EXO_DESCRIPTION))
+      tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString());
+    if(tagNode.hasProperty(Utils.EXO_COLOR))
+      tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString());
+    return tag;
+  }
 }

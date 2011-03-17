@@ -388,64 +388,13 @@ import org.exoplatform.webui.event.EventListener;
 
   static public class ReplyActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
-      UIMessagePreview uiMsgPreview = event.getSource();
-      String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
-      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
-      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if(!MailUtils.isFull(accId)) {
-        uiMsgPreview.showMessage(event);
-        return;
-      }
-
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
-      if (msgId != null) {
-        Message msg = uiMsgPreview.getShowedMessageById(msgId);
-        if (msg != null) {
-          UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class,
-                                                                                    null,
-                                                                                    "UIPopupActionComposeContainer");
-          uiPopupAction.activate(uiPopupContainer, MailUtils.MAX_POPUP_WIDTH, 0, true);
-          UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class,
-                                                                           null,
-                                                                           null);
-          uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_REPLY);
-          uiPopupContainer.addChild(uiComposeForm);
-        }
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      UIMessagePreview.reply(event, false);
     }
   }
 
   static public class ReplyAllActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
-      UIMessagePreview uiMsgPreview = event.getSource();
-      String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      msgId = MailUtils.decodeMailId(msgId);
-      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
-      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if(!MailUtils.isFull(accId)) {
-        uiMsgPreview.showMessage(event);
-        return;
-      }
-
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
-      if (msgId != null) {
-        Message msg = uiMsgPreview.getShowedMessageById(msgId);
-        if (msg != null) {
-          UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class,
-                                                                                    null,
-          "UIPopupActionComposeContainer");
-          uiPopupAction.activate(uiPopupContainer, MailUtils.MAX_POPUP_WIDTH, 0, true);
-          UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class,
-                                                                           null,
-                                                                           null);
-          uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_REPLY_ALL);
-          uiPopupContainer.addChild(uiComposeForm);
-        }
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
-
+      UIMessagePreview.reply(event, true);
     }
   }
 
@@ -612,29 +561,7 @@ import org.exoplatform.webui.event.EventListener;
       Message msg = uiMsgPreview.getShowedMessageById(msgId);
       if (msg != null) {
         UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
-
-        UIPopupActionContainer uiPopupContainer = uiPopup.createUIComponent(UIPopupActionContainer.class,
-                                                                            null,
-        "UIPopupActionAddContactContainer");
-        uiPopup.activate(uiPopupContainer, 730, 0, true);
-
-        UIAddContactForm uiAddContactForm = uiPopupContainer.createUIComponent(UIAddContactForm.class,
-                                                                               null,
-                                                                               null);
-        uiPopupContainer.addChild(uiAddContactForm);
-        InternetAddress[] addresses = Utils.getInternetAddress(msg.getFrom());
-        String personal = (addresses[0] != null) ? Utils.getPersonal(addresses[0]) : "";
-        String firstName = personal;
-        String email = (addresses[0] != null) ? addresses[0].getAddress() : "";
-        String lastName = "";
-        if (personal.indexOf(" ") > 0) {
-          firstName = personal.substring(0, personal.indexOf(" "));
-          lastName = personal.substring(personal.indexOf(" ") + 1, personal.length());
-        }
-        uiAddContactForm.setFirstNameField(firstName);
-        uiAddContactForm.setLastNameField(lastName);
-        uiAddContactForm.setEmailField(email);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
+        MailUtils.createContactForm(event, uiPopup, msg, "UIPopupActionAddContactContainer");
       }
     }
   }
@@ -943,4 +870,32 @@ import org.exoplatform.webui.event.EventListener;
     uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-no-permission", null)) ;
     event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
   }
+  
+  static void reply(Event<UIMessagePreview> event, boolean isReplyAll) throws Exception{
+    UIMessagePreview uiMsgPreview = event.getSource();
+    String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
+    msgId = MailUtils.decodeMailId(msgId);
+    UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+    String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    if(!MailUtils.isFull(accId)) {
+      uiMsgPreview.showMessage(event);
+      return;
+    }
+    UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
+    if (msgId != null) {
+      Message msg = uiMsgPreview.getShowedMessageById(msgId);
+      if (msg != null) {
+        UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer");
+        uiPopupAction.activate(uiPopupContainer, MailUtils.MAX_POPUP_WIDTH, 0, true);
+        UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+        if(!isReplyAll)
+          uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_REPLY);
+        else
+          uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_REPLY_ALL);
+        uiPopupContainer.addChild(uiComposeForm);
+      }
+    }
+    event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+  }
+  
 }

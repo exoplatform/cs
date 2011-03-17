@@ -24,6 +24,7 @@ import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,12 +32,15 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
+import javax.jcr.Node;
+import javax.jcr.Value;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.URLName;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
@@ -423,6 +427,24 @@ public class Utils {
     else return "";
   }
   
+  public static MimeMessage setHeader(MimeMessage mm, Message message) throws Exception{
+    mm.setHeader("X-Priority", String.valueOf(message.getPriority()));
+    String priority = "Normal";
+    if (message.getPriority() == Utils.PRIORITY_HIGH) {
+      priority = "High";
+    } else if (message.getPriority() == Utils.PRIORITY_LOW) {
+      priority = "Low";
+    }     
+    if (message.getPriority() != 0 ) mm.setHeader("Importance", priority);    
+    Iterator<String> iter = message.getHeaders().keySet().iterator() ;
+    while (iter.hasNext()) {
+      String key = iter.next().toString() ;
+      mm.setHeader(key, message.getHeaders().get(key)) ;
+    }
+    
+    return mm;
+  }
+  
   public static javax.mail.internet.MimeMessage mergeToMimeMessage(Message message, javax.mail.internet.MimeMessage mimeMessage) throws Exception {
     InternetAddress addressFrom = null;
     if (message.getFrom() != null) { 
@@ -446,19 +468,7 @@ public class Utils {
     if (subject == null ) subject = "";
     mimeMessage.setSubject(subject);
     mimeMessage.setSentDate(message.getSendDate());
-    mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));
-    String priority = "Normal";
-    if (message.getPriority() == Utils.PRIORITY_HIGH) {
-      priority = "High";
-    } else if (message.getPriority() == Utils.PRIORITY_LOW) {
-      priority = "Low";
-    }     
-    if (message.getPriority() != 0 ) mimeMessage.setHeader("Importance", priority);    
-    Iterator<String> iter = message.getHeaders().keySet().iterator() ;
-    while (iter.hasNext()) {
-      String key = iter.next().toString() ;
-      mimeMessage.setHeader(key, message.getHeaders().get(key)) ;
-    }
+    mimeMessage = setHeader(mimeMessage, message);
     
     MimeMultipart  mixedPart = new MimeMultipart("mixed");
     MimeMultipart  alternativePart = new MimeMultipart("alternative");
@@ -647,5 +657,103 @@ public class Utils {
   
   public static boolean isDelegatedAccount(Account acc, String recieve) {
     return (acc != null && acc.getDelegateFrom() != null && recieve != null && !recieve.equalsIgnoreCase(acc.getDelegateFrom()));
+  }
+  
+  public static Message getMessage(Node messageNode) throws Exception{
+    Message msg = new Message();
+    if(messageNode.hasProperty(Utils.EXO_ID))
+      msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
+    if(messageNode.hasProperty(Utils.EXO_UID))
+      msg.setUID(messageNode.getProperty(Utils.EXO_UID).getString());
+    msg.setPath(messageNode.getPath());
+    if(messageNode.hasProperty(Utils.EXO_IN_REPLY_TO_HEADER))
+      msg.setInReplyToHeader(messageNode.getProperty(Utils.EXO_IN_REPLY_TO_HEADER).getString());
+    if(messageNode.hasProperty(Utils.EXO_ACCOUNT))
+      msg.setAccountId(messageNode.getProperty(Utils.EXO_ACCOUNT).getString());
+    if(messageNode.hasProperty(Utils.EXO_FROM))
+      msg.setFrom(messageNode.getProperty(Utils.EXO_FROM).getString());
+    if(messageNode.hasProperty(Utils.EXO_TO))
+      msg.setMessageTo(messageNode.getProperty(Utils.EXO_TO).getString());
+    if(messageNode.hasProperty(Utils.EXO_SUBJECT))
+      msg.setSubject(messageNode.getProperty(Utils.EXO_SUBJECT).getString());
+    if(messageNode.hasProperty(Utils.EXO_CC))
+      msg.setMessageCc(messageNode.getProperty(Utils.EXO_CC).getString());
+    if(messageNode.hasProperty(Utils.EXO_BCC))
+      msg.setMessageBcc(messageNode.getProperty(Utils.EXO_BCC).getString());
+    if(messageNode.hasProperty(Utils.EXO_REPLYTO))
+      msg.setReplyTo(messageNode.getProperty(Utils.EXO_REPLYTO).getString());
+    if(messageNode.hasProperty(Utils.EXO_CONTENT_TYPE))
+      msg.setContentType(messageNode.getProperty(Utils.EXO_CONTENT_TYPE).getString());
+    if(messageNode.hasProperty(Utils.EXO_BODY))
+      msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
+    if(messageNode.hasProperty(Utils.EXO_SIZE))
+      msg.setSize(messageNode.getProperty(Utils.EXO_SIZE).getLong());
+    if(messageNode.hasProperty(Utils.EXO_HASATTACH))
+      msg.setHasAttachment(messageNode.getProperty(Utils.EXO_HASATTACH).getBoolean());
+    if(messageNode.hasProperty(Utils.ATT_IS_SHOWN_IN_BODY))
+      msg.setHasAttachment(messageNode.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
+    if(messageNode.hasProperty(Utils.EXO_STAR))
+      msg.setHasStar(messageNode.getProperty(Utils.EXO_STAR).getBoolean());
+    if(messageNode.hasProperty(Utils.EXO_PRIORITY))
+      msg.setPriority(messageNode.getProperty(Utils.EXO_PRIORITY).getLong());
+    if(messageNode.hasProperty(Utils.EXO_ISUNREAD))
+      msg.setUnread(messageNode.getProperty(Utils.EXO_ISUNREAD).getBoolean());
+    if(messageNode.hasProperty(Utils.MSG_FOLDERS)){
+      Value[] propFolders = messageNode.getProperty(Utils.MSG_FOLDERS).getValues();
+      String[] folders = new String[propFolders.length];
+      for (int i = 0; i < propFolders.length; i++) {
+        folders[i] = propFolders[i].getString();
+      }
+      msg.setFolders(folders);
+    }
+    if(messageNode.hasProperty(Utils.EXO_TAGS)){
+    Value[] propTags = messageNode.getProperty(Utils.EXO_TAGS).getValues();
+      String[] tags = new String[propTags.length];
+      for (int i = 0; i < propTags.length; i++) {
+        tags[i] = propTags[i].getString();
+      }
+      msg.setTags(tags);
+    }
+    if(messageNode.hasProperty(Utils.MSG_HEADERS)){
+      Value[] properties = messageNode.getProperty(Utils.MSG_HEADERS).getValues();
+      for (int i = 0; i < properties.length; i++) {
+        String property = properties[i].getString();
+        int index = property.indexOf('=');
+        if (index != -1)
+          msg.setHeader(property.substring(0, index), property.substring(index + 1));
+      }
+    }
+    GregorianCalendar cal = new GregorianCalendar();
+    if(messageNode.hasProperty(Utils.EXO_RECEIVEDDATE))
+        cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_RECEIVEDDATE).getLong());
+      msg.setReceivedDate(cal.getTime());
+      if(messageNode.hasProperty(Utils.EXO_SENDDATE))
+        cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_SENDDATE).getLong());
+      msg.setSendDate(cal.getTime());
+      if(messageNode.hasProperty(Utils.EXO_LAST_CHECKED_TIME))
+        cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_LAST_UPDATE_TIME).getLong());
+      msg.setLastUpdateDate(cal.getTime());
+      if(messageNode.hasProperty(Utils.IS_LOADED))
+        msg.setIsLoaded(messageNode.getProperty(Utils.IS_LOADED).getBoolean());
+      if(messageNode.hasProperty(Utils.ATT_IS_LOADED_PROPERLY))
+        msg.setAttIsLoadedProperly(messageNode.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
+      if(messageNode.hasProperty(Utils.IS_RETURN_RECEIPT))
+        msg.setIsReturnReceipt(messageNode.getProperty(Utils.IS_RETURN_RECEIPT).getBoolean());
+
+    return msg;
+  }
+
+  public static JCRMessageAttachment getJCRMessageAttachment(Node attactNode) throws Exception{
+    JCRMessageAttachment file = new JCRMessageAttachment();
+    file.setId(attactNode.getPath());
+    file.setMimeType(attactNode.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE).getString());
+    file.setName(attactNode.getProperty(Utils.EXO_ATT_NAME).getString());
+    if (attactNode.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
+      file.setIsLoadedProperly(attactNode.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
+    file.setIsShowInBody(attactNode.getProperty(Utils.ATT_IS_SHOWN_IN_BODY).getBoolean());
+    file.setWorkspace(attactNode.getSession().getWorkspace().getName());
+    file.setSize(attactNode.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
+    file.setPath("/" + file.getWorkspace() + attactNode.getPath());
+    return file;
   }
 }

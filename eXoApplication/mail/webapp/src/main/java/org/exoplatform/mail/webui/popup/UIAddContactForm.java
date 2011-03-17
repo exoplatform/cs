@@ -201,28 +201,9 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
         }
     String group = getChild(UIFormSelectBoxWithGroups.class).getValue();
     if (group != null && !group.equals(sharedContacts_)) {
-      if (havePermission(getChild(UIFormSelectBoxWithGroups.class).getValue()))
+      if (MailUtils.havePermission(getChild(UIFormSelectBoxWithGroups.class).getValue()))
         return true;
     }
-    return false;
-  }
-
-  public boolean havePermission(String groupId) throws Exception {
-    String currentUser = MailUtils.getCurrentUser();
-    AddressBook sharedGroup = getApplicationComponent(ContactService.class).getSharedAddressBook(currentUser,
-                                                                                                 groupId);
-    if (sharedGroup == null)
-      return false;
-    if (sharedGroup.getEditPermissionUsers() != null
-        && Arrays.asList(sharedGroup.getEditPermissionUsers()).contains(currentUser
-            + DataStorage.HYPHEN)) {
-      return true;
-    }
-    String[] editPerGroups = sharedGroup.getEditPermissionGroups();
-    if (editPerGroups != null)
-      for (String editPer : editPerGroups)
-        if (MailUtils.getUserGroups().contains(editPer))
-          return true;
     return false;
   }
 
@@ -253,10 +234,9 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       personalContacts.addOption(new SelectOption(pcg.getName(), pcg.getId()));
     }
     options.add(personalContacts);
-
     SelectOptionGroup sharedContacts = new SelectOptionGroup("shared-contacts");
     for (SharedAddressBook scg : contactSrv.getSharedAddressBooks(username)) {
-      if (havePermission(scg.getId()))
+      if (MailUtils.havePermission(scg.getId()))
         sharedContacts.addOption(new SelectOption(MailUtils.getDisplayAdddressShared(scg.getSharedUserId(),
                                                                                      scg.getName()),
                                                   scg.getId()));
@@ -494,7 +474,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
             contactSrv.saveContact(username, contact, true);//
             contact = contactSrv.getContact(username, contact.getId());
           } else {
-            if (!uiContact.havePermission(groupId)) {
+            if (!MailUtils.havePermission(groupId)) {
               uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.non-permission",
                                                       null,
                                                       ApplicationMessage.INFO));
@@ -519,7 +499,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
             contactSrv.saveContact(uiPortlet.getCurrentUser(), contact, false);//
             contact = contactSrv.getContact(username, contact.getId());
           } else {
-            if (!uiContact.havePermission(groupId)) {
+            if (!MailUtils.havePermission(groupId)) {
               uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.non-permission",
                                                       null,
                                                       ApplicationMessage.INFO));

@@ -117,25 +117,6 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
     }
   }
 
-  public boolean havePermission(String groupId) throws Exception {
-    String currentUser = MailUtils.getCurrentUser();
-    AddressBook sharedGroup = getApplicationComponent(ContactService.class).getSharedAddressBook(currentUser,
-                                                                                                 groupId);
-    if (sharedGroup == null)
-      return false;
-    if (sharedGroup.getEditPermissionUsers() != null
-        && Arrays.asList(sharedGroup.getEditPermissionUsers()).contains(currentUser
-                                                                        + DataStorage.HYPHEN)) {
-      return true;
-    }
-    String[] editPerGroups = sharedGroup.getEditPermissionGroups();
-    if (editPerGroups != null)
-      for (String editPer : editPerGroups)
-        if (MailUtils.getUserGroups().contains(editPer))
-          return true;
-    return false;
-  }
-
   public boolean havePermission(Contact contact) throws Exception {
     if (!contact.getContactType().equals(DataStorage.SHARED))
       return true;
@@ -154,7 +135,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent {
         }
 
     if (!getChild(UIFormSelectBoxWithGroups.class).getValue().equals(sharedContacts_)) {
-      if (havePermission(getChild(UIFormSelectBoxWithGroups.class).getValue()))
+      if (MailUtils.havePermission(getChild(UIFormSelectBoxWithGroups.class).getValue()))
         return true;
     }
     return false;

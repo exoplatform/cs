@@ -68,7 +68,6 @@ import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.cms.queries.impl.NewUserConfig.User;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
@@ -412,6 +411,37 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     fillFields(message_);
   }
 
+  private void refreshUploadUI(Message msg, MailSetting mailSetting, UIComposeInput inputSet) throws Exception{
+    String replyContent = "";
+    String originalAttId = "";
+    if (msg != null && msg.hasAttachment()) {
+      for (Attachment att : msg.getAttachments()) {
+        if (att.isLoadedProperly())
+          attachments_.add(att);
+      }
+    }
+    if (mailSetting.replyWithAttach())
+      originalAttId = addOriginalMessageAsAttach(msg);
+    else {
+      replyContent = getReplyContent(msg);
+    }
+    setFieldContentValue(replyContent);
+
+    if (attachments_.size() > 0) {
+      for (ActionData actionData : getUploadFileList()) {
+        if (actionData.getActionParameter().equals(originalAttId))
+          inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
+              null,
+              null).setChecked(true));
+        else
+          inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
+              null,
+              null));
+      }
+      refreshUploadFileList();
+    }
+  }
+  
   public void fillFields(Message msg) throws Exception {
     if (msg == null) {
       setFieldContentValue("");
@@ -421,8 +451,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     MailSetting mailSetting = mailSrv.getMailSetting(MailUtils.getCurrentUser());
     UIComposeInput inputSet = getChildById(FIELD_TO_SET);
     String subject = "";
-    String replyContent = "";
-    String originalAttId = "";
+   
     switch (getComposeType()) {
     case MESSAGE_IN_DRAFT:
       setFieldSubjectValue(msg.getSubject());
@@ -458,32 +487,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         subject = "Re: " + subject;
       setFieldSubjectValue(subject);
       setPriority(msg.getPriority());
-      if (msg != null && msg.hasAttachment()) {
-        for (Attachment att : msg.getAttachments()) {
-          if (att.isLoadedProperly())
-            attachments_.add(att);
-        }
-      }
-      if (mailSetting.replyWithAttach())
-        originalAttId = addOriginalMessageAsAttach(msg);
-      else {
-        replyContent = getReplyContent(msg);
-      }
-      setFieldContentValue(replyContent);
-
-      if (attachments_.size() > 0) {
-        for (ActionData actionData : getUploadFileList()) {
-          if (actionData.getActionParameter().equals(originalAttId))
-            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-                null,
-                null).setChecked(true));
-          else
-            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-                null,
-                null));
-        }
-        refreshUploadFileList();
-      }
+      refreshUploadUI(msg, mailSetting, inputSet);
       break;
     case MESSAGE_REPLY_ALL:
       subject = msg.getSubject();
@@ -531,33 +535,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
         setFieldCcValue(replyCc);
         setShowCc(true);
       }
-
-      if (msg != null && msg.hasAttachment()) {
-        for (Attachment att : msg.getAttachments()) {
-          if (att.isLoadedProperly())
-            attachments_.add(att);
-        }
-      }
-      if (mailSetting.replyWithAttach())
-        originalAttId = addOriginalMessageAsAttach(msg);
-      else {
-        replyContent = getReplyContent(msg);
-      }
-      setFieldContentValue(replyContent);
-
-      if (attachments_.size() > 0) {
-        for (ActionData actionData : getUploadFileList()) {
-          if (actionData.getActionParameter().equals(originalAttId))
-            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-                null,
-                null).setChecked(true));
-          else
-            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(),
-                null,
-                null));
-        }
-        refreshUploadFileList();
-      }
+      refreshUploadUI(msg, mailSetting, inputSet);
       break;
     case MESSAGE_FOWARD:
       String toAddress = msg.getMessageTo() != null ? msg.getMessageTo() : "";

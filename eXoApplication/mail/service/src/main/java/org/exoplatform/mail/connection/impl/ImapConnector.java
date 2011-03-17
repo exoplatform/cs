@@ -26,6 +26,7 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.UIDFolder;
 import javax.mail.URLName;
+import javax.mail.Flags.Flag;
 import javax.mail.internet.MimeMessage;
 
 import org.exoplatform.mail.service.Account;
@@ -314,8 +315,12 @@ public class ImapConnector extends BaseConnector {
     return msgs;
   }
 
-  public boolean markAsRead(List<Message> msgList, Folder f) throws Exception {
+  public boolean markIsReadStared(List<Message> msgList, Folder f, Object isRead, Object isStared) throws Exception {
     try {
+      Flag flag = null;
+      if(isRead != null) isStared = null;
+      else if(isStared != null) isRead = null;
+      
       URLName url = new URLName(f.getURLName());
       IMAPFolder folder = (IMAPFolder) ((IMAPStore) store_).getFolder(url);
       if (!folder.isOpen())
@@ -323,8 +328,21 @@ public class ImapConnector extends BaseConnector {
       javax.mail.Message message;
       for (Message msg : msgList) {
         message = folder.getMessageByUID(Long.valueOf(msg.getUID()));
-        if (message != null)
-          message.setFlag(Flags.Flag.SEEN, true);
+        if (message != null){
+          boolean value = false;
+          if (isRead != null) {
+            value = Boolean.valueOf(isRead.toString());
+            flag = Flags.Flag.SEEN;
+            message.setFlag(flag, value);
+          }else if(isStared != null){
+            flag = Flags.Flag.FLAGGED;
+            value = Boolean.valueOf(isStared.toString());
+            message.setFlag(flag, value);
+          }else if(isStared == null && isRead == null){
+            message.setFlag(Flags.Flag.SEEN, value);
+            message.setFlag(Flags.Flag.FLAGGED, value);
+          }
+        }
       }
       folder.close(true);
       return true;
@@ -332,43 +350,4 @@ public class ImapConnector extends BaseConnector {
       return false;
     }
   }
-
-  public boolean markAsUnread(List<Message> msgList, Folder f) throws Exception {
-    try {
-      URLName url = new URLName(f.getURLName());
-      IMAPFolder folder = (IMAPFolder) ((IMAPStore) store_).getFolder(url);
-      if (!folder.isOpen())
-        folder.open(javax.mail.Folder.READ_WRITE);
-      javax.mail.Message message;
-      for (Message msg : msgList) {
-        message = folder.getMessageByUID(Long.valueOf(msg.getUID()));
-        if (message != null)
-          message.setFlag(Flags.Flag.SEEN, false);
-      }
-      folder.close(true);
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
-  }
-
-  public boolean setIsStared(List<Message> msgList, boolean isStared, Folder f) throws Exception {
-    try {
-      URLName url = new URLName(f.getURLName());
-      IMAPFolder folder = (IMAPFolder) ((IMAPStore) store_).getFolder(url);
-      if (!folder.isOpen())
-        folder.open(javax.mail.Folder.READ_WRITE);
-      javax.mail.Message message;
-      for (Message msg : msgList) {
-        message = folder.getMessageByUID(Long.valueOf(msg.getUID()));
-        if (message != null)
-          message.setFlag(Flags.Flag.FLAGGED, isStared);
-      }
-      folder.close(true);
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
-  }
-
 }
