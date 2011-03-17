@@ -1,6 +1,5 @@
 /**
- * @author Uoc Nguyen
- *  email uoc.nguyen@exoplatform.com
+ * @author Uoc Nguyen email uoc.nguyen@exoplatform.com
  */
 
 // --- Ajax handle --
@@ -11,139 +10,156 @@ function ChatAjaxHandler(action, params) {
 
 /**
  * Default ajax loading callback handle
- *
- * @param {XMLHttpRequest} requestObj
+ * 
+ * @param {XMLHttpRequest}
+ *          requestObj
  */
 ChatAjaxHandler.prototype.onLoading = function(requestObj) {
   var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
-  if (!UIMainChatWindow) return;
-  window.jsconsole.info('[' + this.handler.action + '] ' + UIMainChatWindow.LOADING_STATE);
-  UIMainChatWindow.update(UIMainChatWindow.LOADING_STATE, requestObj, this.handler.action);
+  if (!UIMainChatWindow)
+    return;
+  window.jsconsole.info('[' + this.handler.action + '] '
+      + UIMainChatWindow.LOADING_STATE);
+  UIMainChatWindow.update(UIMainChatWindow.LOADING_STATE, requestObj,
+      this.handler.action);
 };
 
 /**
  * Default ajax success callback handle
- *
- * @param {XMLHttpRequest} requestObj
+ * 
+ * @param {XMLHttpRequest}
+ *          requestObj
  */
 ChatAjaxHandler.prototype.onSuccess = function(requestObj) {
   var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
-  if (!UIMainChatWindow) return;
-  window.jsconsole.info('[' + this.handler.action + '] ' + UIMainChatWindow.SUCCESS_STATE);
-  UIMainChatWindow.update(UIMainChatWindow.SUCCESS_STATE, requestObj, this.handler.action, this.params);
+  if (!UIMainChatWindow)
+    return;
+  window.jsconsole.info('[' + this.handler.action + '] '
+      + UIMainChatWindow.SUCCESS_STATE);
+  UIMainChatWindow.update(UIMainChatWindow.SUCCESS_STATE, requestObj,
+      this.handler.action, this.params);
 };
 
 /**
  * Default ajax error callback handle
- *
- * @param {XMLHttpRequest} requestObj
+ * 
+ * @param {XMLHttpRequest}
+ *          requestObj
  */
 ChatAjaxHandler.prototype.onError = function(requestObj) {
   var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
-  if (!UIMainChatWindow) return;
-  //if(requestObj.status == 401) alert(requestObj.responseText);
-  window.jsconsole.info('[' + this.handler.action + '] ' + UIMainChatWindow.ERROR_STATE);
-  UIMainChatWindow.update(UIMainChatWindow.ERROR_STATE, requestObj, this.handler.action);
+  if (!UIMainChatWindow)
+    return;
+  // if(requestObj.status == 401) alert(requestObj.responseText);
+  window.jsconsole.info('[' + this.handler.action + '] '
+      + UIMainChatWindow.ERROR_STATE);
+  UIMainChatWindow.update(UIMainChatWindow.ERROR_STATE, requestObj,
+      this.handler.action);
 };
 
 /**
  * Default ajax timeout callback handle
- *
- * @param {XMLHttpRequest} requestObj
+ * 
+ * @param {XMLHttpRequest}
+ *          requestObj
  */
 ChatAjaxHandler.prototype.onTimeout = function(requestObj) {
   var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
-  if (!UIMainChatWindow) return;
-  window.jsconsole.info('[' + this.handler.action + '] ' + UIMainChatWindow.TIMEOUT_STATE);
-  UIMainChatWindow.update(UIMainChatWindow.TIMEOUT_STATE, requestObj, this.handler.action);
+  if (!UIMainChatWindow)
+    return;
+  window.jsconsole.info('[' + this.handler.action + '] '
+      + UIMainChatWindow.TIMEOUT_STATE);
+  UIMainChatWindow.update(UIMainChatWindow.TIMEOUT_STATE, requestObj,
+      this.handler.action);
 };
 
-
 /**
- * This object is create to use for manage all action in chat application suchas: call service communicate method,
- * init all sub-component, manage UI, process and manage all thread at once.
+ * This object is create to use for manage all action in chat application
+ * suchas: call service communicate method, init all sub-component, manage UI,
+ * process and manage all thread at once.
  */
 function UIMainChatWindow() {
   // XMPP action.
-  this.LOGIN_ACTION                       = 'Login';
-  this.LOGOUT_ACTION                      = 'Logout';
-  this.SEND_STATUS_ACTION                 = 'Send status';
-  this.GET_MESSAGE_HISTORY_ACTION         = 'Get message history';
-  this.SEND_SUBSCRIPTION_ACTION           = 'Send subscription';
-  this.ASK_4_SUBSCRIPTION_ACTION          = 'Ask for subscription';
-  this.ADD_USER_ACTION                    = 'Add user';
-  this.SEND_MESSAGE_ACTION                = 'Send message';
-  this.GET_SUBSCRIPTION_REQUESTS_ACTION   = 'Get subscription requests';
-  this.CLEAN_BUDDY_LIST_ACTION            = 'Clean buddy list';
-  this.REMOVE_USER_ACTION                 = 'Remove user';
-  this.UNSUBSCRIPT_BUDDY_ACTION           = 'Unsubscript buddy';
-  this.ORG_GET_ALL_CONTACT_ACTION         = 'Org Service get all contact';
-  this.DENIAL_SEND_FILE_ACTION            = 'Denial file exchange';
-  this.ACEPT_SEND_FILE_ACTION             = 'Acept file exchange';
-  this.ORG_FUZZY_SEARCH_USER_ACTION       = 'Org Service fuzzy contact search';
-  this.ORG_COUNT_USER_ACTION              = 'Org Service count user';
-  this.CREATE_ROOM_ACTION                 = 'Create room';
-  this.CREATE_CONVERSATION_ACTION         = 'Create conversation';
-  this.CONFIG_ROOM_ACTION                 = 'Config room';
-  this.GET_ROOM_CONFIG_ACTION             = 'Get room\'s config';
-  this.GET_ROOM_INFO_ACTION               = 'Get room\'s information';
-  this.GET_ROOM_LIST_ACTION               = 'Get room list';
-  this.GET_JOINED_ROOM_LIST_ACTION        = 'Get joined room list';
-  this.INVITE_JOIN_ROOM_ACTION            = 'Invite join room';
-  this.DECLINE_JOIN_ROOM_ACTION           = 'Decline join room';
-  this.JOIN_TO_ROOM_ACTION                = 'Join to room';
-  this.LEAVE_FROM_ROOM_ACTION             = 'Leave from room';
-  this.LOAD_JS_RESOURCE_BUNDLE            = 'Load js resource bundle';
+  this.LOGIN_ACTION = 'Login';
+  this.LOGOUT_ACTION = 'Logout';
+  this.SEND_STATUS_ACTION = 'Send status';
+  this.GET_MESSAGE_HISTORY_ACTION = 'Get message history';
+  this.SEND_SUBSCRIPTION_ACTION = 'Send subscription';
+  this.ASK_4_SUBSCRIPTION_ACTION = 'Ask for subscription';
+  this.ADD_USER_ACTION = 'Add user';
+  this.SEND_MESSAGE_ACTION = 'Send message';
+  this.GET_SUBSCRIPTION_REQUESTS_ACTION = 'Get subscription requests';
+  this.CLEAN_BUDDY_LIST_ACTION = 'Clean buddy list';
+  this.REMOVE_USER_ACTION = 'Remove user';
+  this.UNSUBSCRIPT_BUDDY_ACTION = 'Unsubscript buddy';
+  this.ORG_GET_ALL_CONTACT_ACTION = 'Org Service get all contact';
+  this.DENIAL_SEND_FILE_ACTION = 'Denial file exchange';
+  this.ACEPT_SEND_FILE_ACTION = 'Acept file exchange';
+  this.ORG_FUZZY_SEARCH_USER_ACTION = 'Org Service fuzzy contact search';
+  this.ORG_COUNT_USER_ACTION = 'Org Service count user';
+  this.CREATE_ROOM_ACTION = 'Create room';
+  this.CREATE_CONVERSATION_ACTION = 'Create conversation';
+  this.CONFIG_ROOM_ACTION = 'Config room';
+  this.GET_ROOM_CONFIG_ACTION = 'Get room\'s config';
+  this.GET_ROOM_INFO_ACTION = 'Get room\'s information';
+  this.GET_ROOM_LIST_ACTION = 'Get room list';
+  this.GET_JOINED_ROOM_LIST_ACTION = 'Get joined room list';
+  this.INVITE_JOIN_ROOM_ACTION = 'Invite join room';
+  this.DECLINE_JOIN_ROOM_ACTION = 'Decline join room';
+  this.JOIN_TO_ROOM_ACTION = 'Join to room';
+  this.LEAVE_FROM_ROOM_ACTION = 'Leave from room';
+  this.LOAD_JS_RESOURCE_BUNDLE = 'Load js resource bundle';
 
   // MUC event action defined here.
-  this.MUC_ACTION_CREATED_ROOM            = 'created';
-  this.MUC_ACTION_INVITE_ROOM             = 'invite';
-  this.MUC_ACTION_JOIN_ROOM               = 'joined';
-  this.MUC_ACTION_LEFT_ROOM               = 'left';
+  this.MUC_ACTION_CREATED_ROOM = 'created';
+  this.MUC_ACTION_INVITE_ROOM = 'invite';
+  this.MUC_ACTION_JOIN_ROOM = 'joined';
+  this.MUC_ACTION_LEFT_ROOM = 'left';
 
   // Ajax state.
-  this.LOADING_STATE                      = 'Loading';
-  this.SUCCESS_STATE                      = 'Success';
-  this.ERROR_STATE                        = 'Error';
-  this.TIMEOUT_STATE                      = 'Timeout';
+  this.LOADING_STATE = 'Loading';
+  this.SUCCESS_STATE = 'Success';
+  this.ERROR_STATE = 'Error';
+  this.TIMEOUT_STATE = 'Timeout';
 
   // CSS class.
-  this.LOADING_STATE_CLASS                = 'LoadingIcon';
-  this.ONLINE_STATE_CLASS                 = 'OnlineIcon';
-  this.OFFLINE_STATE_CLASS                = 'OfflineIcon';
+  this.LOADING_STATE_CLASS = 'LoadingIcon';
+  this.ONLINE_STATE_CLASS = 'OnlineIcon';
+  this.OFFLINE_STATE_CLASS = 'OfflineIcon';
 
   // User mode: loged in or not.
-  this.LOGEDIN_MODE                       = 'Loged in';
-  this.NOT_LOGEDIN_MODE                   = 'Not loged in';
+  this.LOGEDIN_MODE = 'Loged in';
+  this.NOT_LOGEDIN_MODE = 'Not loged in';
 
   // XMPP user status.
-  this.ONLINE_STATUS                      = "Available";
-  this.OFFLINE_STATUS                     = "Unavailable";
-  this.FREE_TO_CHAT_STATUS                = "Free to chat";
-  this.DO_NOT_DISTURB_STATUS              = "Do not disturb";
-  this.AWAY_STATUS                        = "Away";
-  this.EXTEND_AWAY_STATUS                 = "Extend away";
-  
-  //Status Icon
-  this.ONLINEICON		                  = "OnlineIcon";
-  this.AWAYICON         		          = "AwayIcon";
-  this.EXTENDAWAYICON           		  = "ExtendAwayIcon";
-  this.FREETOICON                         = "FreeToChat";
-  this.OFFLINEICON                        = "OfflineIcon";
-  
-  this.SEVER_IS_NOT_AVAILABLE 			  = 'server_is_not_available';
+  this.ONLINE_STATUS = "Available";
+  this.OFFLINE_STATUS = "Unavailable";
+  this.FREE_TO_CHAT_STATUS = "Free to chat";
+  this.DO_NOT_DISTURB_STATUS = "Do not disturb";
+  this.AWAY_STATUS = "Away";
+  this.EXTEND_AWAY_STATUS = "Extend away";
 
-  this.DEFAULT_PRESENCE_STATUS			  = 'default_presence_status';
+  // Status Icon
+  this.ONLINEICON = "OnlineIcon";
+  this.AWAYICON = "AwayIcon";
+  this.EXTENDAWAYICON = "ExtendAwayIcon";
+  this.FREETOICON = "FreeToChat";
+  this.OFFLINEICON = "OfflineIcon";
 
-  this.status							  = this.ONLINE_STATUS ;
-  // Maximum connection to try after request is error in case false to connect to service.
+  this.SEVER_IS_NOT_AVAILABLE = 'server_is_not_available';
+
+  this.DEFAULT_PRESENCE_STATUS = 'default_presence_status';
+
+  this.status = this.ONLINE_STATUS;
+  // Maximum connection to try after request is error in case false to connect
+  // to service.
   this.MAX_CONNECTION_TRY = 5;
-  this.CHECK_EVENT_TIMEOUT = 1*1000;
+  this.CHECK_EVENT_TIMEOUT = 1 * 1000;
 
-  // The default value of time to check is Chat application alive: 
-  //    Check is user still in Chat application to avoid missing 
-  //    control after page switch by ajax.
-  this.DEFAULT_CHECK_ALIVE = 3*1000;
+  // The default value of time to check is Chat application alive:
+  // Check is user still in Chat application to avoid missing
+  // control after page switch by ajax.
+  this.DEFAULT_CHECK_ALIVE = 3 * 1000;
 
   // Minimum size of chat window in WebOS page.
   this.MIN_WIDTH = 426;
@@ -162,9 +178,10 @@ function UIMainChatWindow() {
   this.userNames = new Array();
   this.timeoutCount = 0;
   this.errorCount = 0;
-  // Using debugLevel <= 0 to disable js logger. Change it from 1->6 to enable debug level.
+  // Using debugLevel <= 0 to disable js logger. Change it from 1->6 to enable
+  // debug level.
   this.debugLevel = 0;
-  //this.debugLevel = 9;
+  // this.debugLevel = 9;
   this.serverInfo = false;
   this.clientTimezoneOffset = false;
   this.buddyItemActionStack = false;
@@ -177,60 +194,72 @@ function UIMainChatWindow() {
   this.lang = 'en';
   this.ResourceBundle = false;
   // The timeout to request resource to avoid portal's session timeout.
-  this.PORTAL_SESSION_KEEPER_TIME_STEP = 5*1000*60;
+  this.PORTAL_SESSION_KEEPER_TIME_STEP = 5 * 1000 * 60;
 };
 
 /**
  * Initialize function
- *
- * @param {HTMLElement|String} rootNode
- * @param {String} userToken
- * @param {String} userName
+ * 
+ * @param {HTMLElement|String}
+ *          rootNode
+ * @param {String}
+ *          userToken
+ * @param {String}
+ *          userName
  */
-UIMainChatWindow.prototype.init = function(rootNode, userToken, userName, cometdContextName) {
+UIMainChatWindow.prototype.init = function(rootNode, userToken, userName,
+    cometdContextName) {
   window.jsconsole.debugLevel = this.debugLevel;
   if (this.initialized) {
     this.destroy();
   }
-  this.rootNode = (typeof(rootNode) == 'string') ? document.getElementById(rootNode) : rootNode;
+  this.rootNode = (typeof (rootNode) == 'string') ? document
+      .getElementById(rootNode) : rootNode;
   var DOMUtil = eXo.core.DOMUtil;
-  this.rootNode                   = DOMUtil.findDescendantById(this.rootNode, eXo.communication.chatbar.eXoChatBar.applicationId);
+  this.rootNode = DOMUtil.findDescendantById(this.rootNode,
+      eXo.communication.chatbar.eXoChatBar.applicationId);
 
-  this.AdvancedDOMEvent           = eXo.communication.chatbar.core.AdvancedDOMEvent;
-  this.XMPPCommunicator           = eXo.communication.chatbar.core.XMPPCommunicator;
-  this.ChatSessionHandler         = eXo.communication.chatbar.webui.ChatSessionHandler;
-  this.UIAddContactPopupWindow    = eXo.communication.chatbar.webui.UIAddContactPopupWindow;
-  this.UIChatWindow               = eXo.communication.chatbar.webui.UIChatWindow;
+  this.AdvancedDOMEvent = eXo.communication.chatbar.core.AdvancedDOMEvent;
+  this.XMPPCommunicator = eXo.communication.chatbar.core.XMPPCommunicator;
+  this.ChatSessionHandler = eXo.communication.chatbar.webui.ChatSessionHandler;
+  this.UIAddContactPopupWindow = eXo.communication.chatbar.webui.UIAddContactPopupWindow;
+  this.UIChatWindow = eXo.communication.chatbar.webui.UIChatWindow;
   this.UICreateNewRoomPopupWindow = eXo.communication.chatbar.webui.UICreateNewRoomPopupWindow;
-  this.UIRoomConfigPopupWindow    = eXo.communication.chatbar.webui.UIRoomConfigPopupWindow;
-  this.UIJoinRoomPopupWindow      = eXo.communication.chatbar.webui.UIJoinRoomPopupWindow;
-  this.UIPopupMessages            = eXo.communication.chatbar.webui.UIPopupMessages;
-  this.UIChatResize               = eXo.communication.chatbar.webui.UIChatResize;
-  this.UISlideAlert               = eXo.communication.chatbar.webui.UISlideAlert;
+  this.UIRoomConfigPopupWindow = eXo.communication.chatbar.webui.UIRoomConfigPopupWindow;
+  this.UIJoinRoomPopupWindow = eXo.communication.chatbar.webui.UIJoinRoomPopupWindow;
+  this.UIPopupMessages = eXo.communication.chatbar.webui.UIPopupMessages;
+  this.UIChatResize = eXo.communication.chatbar.webui.UIChatResize;
+  this.UISlideAlert = eXo.communication.chatbar.webui.UISlideAlert;
 
   // ----- Specified to used with desktop page----
   this.chatWindowsContainerNode = document.getElementById('UIPageDesktop');
   this.isWebOS = this.chatWindowsContainerNode ? true : false;
   if (this.chatWindowsContainerNode) {
-    var portletFragment = DOMUtil.findAncestorById(this.rootNode, 'PORTLET-FRAGMENT') || DOMUtil.findAncestorByClass(this.rootNode, 'PORTLET-FRAGMENT');
-    portletFragment.className = portletFragment.className.replace('UIApplication', 'UIApplication1');
+    var portletFragment = DOMUtil.findAncestorById(this.rootNode,
+        'PORTLET-FRAGMENT')
+        || DOMUtil.findAncestorByClass(this.rootNode, 'PORTLET-FRAGMENT');
+    portletFragment.className = portletFragment.className.replace(
+        'UIApplication', 'UIApplication1');
     portletFragment.style.height = this.MIN_HEIGHT + 'px';
     portletFragment.style.width = '100%';
-    //var nodeList = DOMUtil.findDescendantsByClass(portletFragment, 'div', /(UIWindow|UIPopupWindow)/);
-    //for (var i=0; i<nodeList.length; i++) {
-      //if (nodeList[i] == this.rootNode) {
-        //continue;
-      //}
-      //this.chatWindowsContainerNode.appendChild(nodeList[i].cloneNode(true));
-      //DOMUtil.removeElement(nodeList[i]);
-    //}
+    // var nodeList = DOMUtil.findDescendantsByClass(portletFragment, 'div',
+    // /(UIWindow|UIPopupWindow)/);
+    // for (var i=0; i<nodeList.length; i++) {
+    // if (nodeList[i] == this.rootNode) {
+    // continue;
+    // }
+    // this.chatWindowsContainerNode.appendChild(nodeList[i].cloneNode(true));
+    // DOMUtil.removeElement(nodeList[i]);
+    // }
     this.rootNode = DOMUtil.findAncestorByClass(this.rootNode, 'UIWindow');
     this.rootNode.style.width = this.MIN_WIDTH + 'px';
     this.rootNode.style.height = this.MIN_HEIGHT + 'px';
     this.rootNode.setAttribute('minwidth', this.MIN_WIDTH + '');
     this.rootNode.setAttribute('minheight', this.MIN_HEIGHT + '');
-    var bottomDecoratorLeftNode = DOMUtil.findFirstChildByClass(this.rootNode, 'div', 'BottomDecoratorLeft');
-    var resizeAreaNode = DOMUtil.findFirstDescendantByClass(bottomDecoratorLeftNode, 'div', 'ResizeArea');
+    var bottomDecoratorLeftNode = DOMUtil.findFirstChildByClass(this.rootNode,
+        'div', 'BottomDecoratorLeft');
+    var resizeAreaNode = DOMUtil.findFirstDescendantByClass(
+        bottomDecoratorLeftNode, 'div', 'ResizeArea');
     if (resizeAreaNode) {
       this.UIChatResize.register(resizeAreaNode, null, true);
     }
@@ -240,32 +269,53 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName, cometd
   // ----- End ---------------------
 
   this.LocalTemplateEngine = eXo.communication.chatbar.core.LocalTemplateEngine;
-  this.addContactIconNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'AddContactIcon');
-  this.statusIconNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'StatusIcon');
-  this.statusNode = DOMUtil.findAncestorByClass(this.statusIconNode, 'StatusArea');
-  this.roomAreaNode = DOMUtil.findFirstDescendantByClass( this.rootNode, 'div', 'RoomArea');
-  //this.statusbarNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'Information');
-  this.loginFormNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'fieldset', 'LoginForm');
-  this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'BuddyList');
-  this.joinedRoomListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'RoomData');
-  this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'BuddyItemActionMenu');
-  //this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'BuddyItemActionMenu');
-  this.ContactAreaNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'ContactArea');
-  if(this.ContactAreaNode)
-  	this.ContactAreaNode = DOMUtil.findFirstDescendantByClass(this.ContactAreaNode,"div","UIRightClickPopupMenu");
-  
-  this.ChatStatusList = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'UIChatbarStatusRB');
-  
+  this.addContactIconNode = DOMUtil.findFirstDescendantByClass(this.rootNode,
+      'div', 'AddContactIcon');
+  this.statusIconNode = DOMUtil.findFirstDescendantByClass(this.rootNode,
+      'div', 'StatusIcon');
+  this.statusNode = DOMUtil.findAncestorByClass(this.statusIconNode,
+      'StatusArea');
+  this.roomAreaNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div',
+      'RoomArea');
+  // this.statusbarNode = DOMUtil.findFirstDescendantByClass(this.rootNode,
+  // 'div', 'Information');
+  this.loginFormNode = DOMUtil.findFirstDescendantByClass(this.rootNode,
+      'fieldset', 'LoginForm');
+  this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div',
+      'BuddyList');
+  this.joinedRoomListNode = DOMUtil.findFirstDescendantByClass(this.rootNode,
+      'div', 'RoomData');
+  this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(
+      this.chatWindowsContainerNode, 'div', 'BuddyItemActionMenu');
+  // this.buddyItemActionMenuNode =
+  // DOMUtil.findFirstDescendantByClass(this.rootNode, 'div',
+  // 'BuddyItemActionMenu');
+  this.ContactAreaNode = DOMUtil.findFirstDescendantByClass(
+      this.chatWindowsContainerNode, 'div', 'ContactArea');
+  if (this.ContactAreaNode)
+    this.ContactAreaNode = DOMUtil.findFirstDescendantByClass(
+        this.ContactAreaNode, "div", "UIRightClickPopupMenu");
+
+  this.ChatStatusList = DOMUtil.findFirstDescendantByClass(
+      this.chatWindowsContainerNode, 'div', 'UIChatbarStatusRB');
+
   // Notification template
-  //this.notificationNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'NotificationArea');
+  // this.notificationNode =
+  // DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div',
+  // 'NotificationArea');
   // Windows and popups.
-  this.chatPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'ChatPopup');
-  this.addContactPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'AddContactPopup');
-  this.createNewRoomPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'CreateNewRoomPopup');
-  this.roomConfigPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'RoomConfigPopup');
-  this.joinRoomPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'JoinRoomPopup');
-  this.messagesPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'MessagesPopup');
-  
+  this.chatPopupNode = DOMUtil.findFirstDescendantByClass(
+      this.chatWindowsContainerNode, 'div', 'ChatPopup');
+  this.addContactPopupNode = DOMUtil.findFirstDescendantByClass(
+      this.chatWindowsContainerNode, 'div', 'AddContactPopup');
+  this.createNewRoomPopupNode = DOMUtil.findFirstDescendantByClass(
+      this.chatWindowsContainerNode, 'div', 'CreateNewRoomPopup');
+  this.roomConfigPopupNode = DOMUtil.findFirstDescendantByClass(
+      this.chatWindowsContainerNode, 'div', 'RoomConfigPopup');
+  this.joinRoomPopupNode = DOMUtil.findFirstDescendantByClass(
+      this.chatWindowsContainerNode, 'div', 'JoinRoomPopup');
+  this.messagesPopupNode = DOMUtil.findFirstDescendantByClass(
+      this.chatWindowsContainerNode, 'div', 'MessagesPopup');
 
   this.UIChatWindow.init(this.chatPopupNode, this);
   this.UIAddContactPopupWindow.init(this.addContactPopupNode, this);
@@ -273,8 +323,8 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName, cometd
   this.UIRoomConfigPopupWindow.init(this.roomConfigPopupNode, this);
   this.UIJoinRoomPopupWindow.init(this.joinRoomPopupNode, this);
   this.UIPopupMessages.init(this.messagesPopupNode, this);
-  
-  //this.UISlideAlert.init(this, this.notificationNode);
+
+  // this.UISlideAlert.init(this, this.notificationNode);
 
   this.UIPopupManager = eXo.communication.chatbar.webui.UIPopupManager;
   this.UIPopupManager.init();
@@ -293,61 +343,67 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName, cometd
   this.userNames = new Array();
   this.isGetMsgInProcess = false;
   this.serverInfo = false;
-  var d = new Date() ;
-  this.clientTimezoneOffset = d.getTimezoneOffset() ;
+  var d = new Date();
+  this.clientTimezoneOffset = d.getTimezoneOffset();
   this.userToken = userToken;
   this.userName = userName;
   this.buddyItemActionStack = {};
   this.serverDataStack = {};
   var component = eXo.communication.chatbar.webui.component;
-  this.buddyListControlObj =
-    new component.BuddyListControl(this.buddyListNode, this.buddyItemActionCallbackWrapper, this);
+  this.buddyListControlObj = new component.BuddyListControl(this.buddyListNode,
+      this.buddyItemActionCallbackWrapper, this);
   this.lang = eXo.core.I18n.getLanguage();
   this.jabberLoadJsResourceBundle(this.lang);
-  /*eXo.require("eXo.communication.chat.locale." + this.lang, "/chatbar/javascript/");
-  this.ResourceBundle = eXo.communication.chatbar.locale.ResourceBundle;*/
-  
+  /*
+   * eXo.require("eXo.communication.chat.locale." + this.lang,
+   * "/chatbar/javascript/"); this.ResourceBundle =
+   * eXo.communication.chatbar.locale.ResourceBundle;
+   */
+
   // Init cometd service on startup
   this.initCometd(cometdContextName);
   this.initialized = true;
 };
 
 /**
- * Check the chat application is alive. Using for case portal using ajax to load another application
- * which overwritten the chat application.
+ * Check the chat application is alive. Using for case portal using ajax to load
+ * another application which overwritten the chat application.
  */
 UIMainChatWindow.prototype.isChatAlive = function() {
-  //TODO CS-3105 logout problem
-  /*if (!document.getElementById('UIChatBarPortlet')) {
-    eXo.communication.chatbar.webui.UIMainChatWindow.jabberLogout();
-  }*/
+  // TODO CS-3105 logout problem
+  /*
+   * if (!document.getElementById('UIChatBarPortlet')) {
+   * eXo.communication.chatbar.webui.UIMainChatWindow.jabberLogout(); }
+   */
 };
 
 /**
- * Using ajax request to keep active status with portal session to avoid portal session timeout.
- * TODO: remove/maintain this method because it is not really affect to portal session.
-UIMainChatWindow.prototype.sessionKeeper = function() {
-  eXo.require("eXo.communication.chatbar.core.PortalSessionKeeper", "/chat/javascript/");
-  eXo.communication.chatbar.core.PortalSessionKeeper = null;
-};
-
-/**
- * Cometd connection initialize method.
+ * Using ajax request to keep active status with portal session to avoid portal
+ * session timeout. TODO: remove/maintain this method because it is not really
+ * affect to portal session. UIMainChatWindow.prototype.sessionKeeper =
+ * function() {
+ * eXo.require("eXo.communication.chatbar.core.PortalSessionKeeper",
+ * "/chat/javascript/"); eXo.communication.chatbar.core.PortalSessionKeeper =
+ * null; };
+ * 
+ * /** Cometd connection initialize method.
  */
 UIMainChatWindow.prototype.initCometd = function(cometdContextName) {
-	if(!eXo.cs.CSCometd) eXo.cs.CSCometd = eXo.core.Cometd;
+  if (!eXo.cs.CSCometd)
+    eXo.cs.CSCometd = eXo.core.Cometd;
   var Cometd = eXo.cs.CSCometd;
   if (!Cometd.isConnected()) {
     Cometd.exoId = this.userName;
     Cometd.exoToken = this.userToken;
-    if(cometdContextName)
-    	Cometd.url = '/' + cometdContextName + '/cometd';
+    if (cometdContextName)
+      Cometd.url = '/' + cometdContextName + '/cometd';
     Cometd.init();
   }
 };
 
 /**
- * Use for login from another object like call from event handle method or in window context.
+ * Use for login from another object like call from event handle method or in
+ * window context.
  */
 UIMainChatWindow.prototype.loginWrapper = function() {
   if (!eXo.cs.CSCometd.isConnected()) {
@@ -378,7 +434,7 @@ UIMainChatWindow.prototype.unsubscribeCometdTopics = function() {
   Cometd.unsubscribe('/eXo/Application/Chat/subscription');
 
   Cometd.unsubscribe('/eXo/Application/Chat/FileExchange');
-  
+
   Cometd.unsubscribe('/eXo/Application/Chat/fullnameExchange');
 }
 
@@ -396,58 +452,67 @@ UIMainChatWindow.prototype.subscribeCometdTopics = function() {
   });
 
   Cometd.subscribe('/eXo/Application/Chat/groupchat', function(eventObj) {
-    eXo.communication.chatbar.webui.UIMainChatWindow.groupChatListener(eventObj);
+    eXo.communication.chatbar.webui.UIMainChatWindow
+        .groupChatListener(eventObj);
   });
 
-  Cometd.subscribe('/eXo/Application/Chat/presence', function(eventObj) {
-    eXo.communication.chatbar.webui.UIMainChatWindow.presenceListener(eventObj);
-  });
+  Cometd.subscribe('/eXo/Application/Chat/presence',
+      function(eventObj) {
+        eXo.communication.chatbar.webui.UIMainChatWindow
+            .presenceListener(eventObj);
+      });
 
   Cometd.subscribe('/eXo/Application/Chat/roster', function(eventObj) {
     eXo.communication.chatbar.webui.UIMainChatWindow.rosterListener(eventObj);
   });
 
   Cometd.subscribe('/eXo/Application/Chat/subscription', function(eventObj) {
-    eXo.communication.chatbar.webui.UIMainChatWindow.subscriptionListener(eventObj);
+    eXo.communication.chatbar.webui.UIMainChatWindow
+        .subscriptionListener(eventObj);
   });
 
   Cometd.subscribe('/eXo/Application/Chat/FileExchange', function(eventObj) {
-    eXo.communication.chatbar.webui.UIMainChatWindow.fileExchangeListener(eventObj);
+    eXo.communication.chatbar.webui.UIMainChatWindow
+        .fileExchangeListener(eventObj);
   });
-  
+
   // Add 17/06
-  Cometd.subscribe('/eXo/Application/Chat/fullnameExchange', function(eventObj) {
-	    eXo.communication.chatbar.webui.UIMainChatWindow.updateFullNameMap(eventObj);
-  });
-  //Add 17/06
+  Cometd.subscribe('/eXo/Application/Chat/fullnameExchange',
+      function(eventObj) {
+        eXo.communication.chatbar.webui.UIMainChatWindow
+            .updateFullNameMap(eventObj);
+      });
+  // Add 17/06
 };
 
 /**
  * Use as finaly task when logout from chat
  */
 UIMainChatWindow.prototype.destroy = function() {
-  this.unsubscribeCometdTopics(); 
+  this.unsubscribeCometdTopics();
   this.initialized = false;
 };
 
 /**
- * Use to make non-ajax request to logout from chat application when user close browser window without
- * logout. This method can avoid 90% problem with chat session keep after user close chat application
- * in no-normal way.
+ * Use to make non-ajax request to logout from chat application when user close
+ * browser window without logout. This method can avoid 90% problem with chat
+ * session keep after user close chat application in no-normal way.
  */
 UIMainChatWindow.prototype.destroyAll = function() {
   try {
     if (eXo.cs.CSCometd.isConnected()) {
-    	eXo.cs.CSCometd.disconnect();
+      eXo.cs.CSCometd.disconnect();
     }
     eXo.communication.chatbar.webui.UIStateManager.stopAutoStore();
-  } catch (e) {}
+  } catch (e) {
+  }
 };
 
 /**
  * Strip out any no-need information from user
- *
- * @param {String} userNameFullStr
+ * 
+ * @param {String}
+ *          userNameFullStr
  */
 UIMainChatWindow.prototype.getUserName = function(userNameFullStr) {
   if (userNameFullStr.indexOf('/') != -1) {
@@ -465,8 +530,8 @@ UIMainChatWindow.prototype.getAjaxHandler = function() {
 };
 
 /**
- * Return time of error trying counter using for reset and avoid flood server in case connection error or
- * service error.
+ * Return time of error trying counter using for reset and avoid flood server in
+ * case connection error or service error.
  */
 UIMainChatWindow.prototype.getTryCount = function() {
   return (this.errorCount + this.timeoutCount);
@@ -482,74 +547,82 @@ UIMainChatWindow.prototype.resetAllTryCount = function() {
 
 // --- Ajax callback update --
 /**
- *  Call from ajax handle callback function when ajax request is ready.
- *  In this method all data is raw data such as: json is in string type and xml is in string type also.
- *
- * @param {Object} state
- * @param {Object} requestObj
+ * Call from ajax handle callback function when ajax request is ready. In this
+ * method all data is raw data such as: json is in string type and xml is in
+ * string type also.
+ * 
+ * @param {Object}
+ *          state
+ * @param {Object}
+ *          requestObj
  */
 UIMainChatWindow.prototype.update = function(state, requestObj, action, params) {
   // Update icon and statusbar message
   switch (state) {
-    case this.LOADING_STATE :
-      //this.statusbarNode.innerHTML = this.LOADING_STATE + '...';
-      if (this.activeActionLoading == action) {
-        this.errorCount ++;
+  case this.LOADING_STATE:
+    // this.statusbarNode.innerHTML = this.LOADING_STATE + '...';
+    if (this.activeActionLoading == action) {
+      this.errorCount++;
+    }
+    this.activeActionLoading = action;
+    break;
+
+  case this.SUCCESS_STATE:
+    var eventId = 'restEvent_' + (new Date()).getTime();
+    this.resetAllTryCount();
+    // this.statusbarNode.innerHTML = this.SUCCESS_STATE;
+    if (requestObj.responseText) {
+      try {
+        this.serverDataStack[eventId] = eXo.core.JSON
+            .parse(requestObj.responseText);
+        window.jsconsole.dir(this.serverDataStack[eventId]);
+      } catch (e) {
+        // TODO
       }
-      this.activeActionLoading = action;
+    }
+    switch (action) {
+    case this.GET_ROOM_INFO_ACTION:
+      if (!requestObj.responseText
+          || (requestObj.responseText && !this.serverDataStack[eventId])
+          || (requestObj.responseText && this.serverDataStack[eventId] && !this.serverDataStack[eventId].roomInfo)) {
+        this.jabberGetRoomInfo(params[0]);
+      } else {
+        eXo.communication.chatbar.webui.UIMainChatWindow.processSuccessAction(
+            action, eventId);
+        this.activeAction = false;
+      }
       break;
-
-    case this.SUCCESS_STATE :
-      var eventId = 'restEvent_' + (new Date()).getTime();
-      this.resetAllTryCount();
-      //this.statusbarNode.innerHTML = this.SUCCESS_STATE;
-      if (requestObj.responseText) {
-        try {
-          this.serverDataStack[eventId] = eXo.core.JSON.parse(requestObj.responseText);
-          window.jsconsole.dir(this.serverDataStack[eventId]);
-        } catch (e) {
-          // TODO
-        }
-      } 
-      switch (action) {
-	    case this.GET_ROOM_INFO_ACTION:
-	      if(!requestObj.responseText || (requestObj.responseText && !this.serverDataStack[eventId]) || (requestObj.responseText && this.serverDataStack[eventId] && !this.serverDataStack[eventId].roomInfo)){
-	        this.jabberGetRoomInfo(params[0]);
-	      }
-	      else {
-	        eXo.communication.chatbar.webui.UIMainChatWindow.processSuccessAction(action, eventId);
-	        this.activeAction = false;
-	      }
-	      break;
-	    default:
-          eXo.communication.chatbar.webui.UIMainChatWindow.processSuccessAction(action, eventId);
-          this.activeAction = false;
-	      break;
-	  }
-      break;
-
-    case this.ERROR_STATE :
-      this.errorCount ++;
-      //this.statusbarNode.innerHTML = this.ERROR_STATE;
-      this.processErrorAction(requestObj, action);
+    default:
+      eXo.communication.chatbar.webui.UIMainChatWindow.processSuccessAction(
+          action, eventId);
       this.activeAction = false;
       break;
+    }
+    break;
 
-    case this.TIMEOUT_STATE :
-      this.timeoutCount ++;
-      //this.statusbarNode.innerHTML = this.TIMEOUT_STATE;
-      this.processTimeoutAction(requestObj, action);
-      this.activeAction = false;
-      break;
+  case this.ERROR_STATE:
+    this.errorCount++;
+    // this.statusbarNode.innerHTML = this.ERROR_STATE;
+    this.processErrorAction(requestObj, action);
+    this.activeAction = false;
+    break;
 
-    default :
-      break;
+  case this.TIMEOUT_STATE:
+    this.timeoutCount++;
+    // this.statusbarNode.innerHTML = this.TIMEOUT_STATE;
+    this.processTimeoutAction(requestObj, action);
+    this.activeAction = false;
+    break;
+
+  default:
+    break;
   }
   if (state != this.LOADING_STATE) {
     this.activeActionLoading = false;
   }
   if (this.getTryCount() == this.MAX_CONNECTION_TRY) {
-    //this.statusbarNode.innerHTML = 'Server down or error! try to reconnect later';
+    // this.statusbarNode.innerHTML = 'Server down or error! try to reconnect
+    // later';
   }
 };
 
@@ -558,145 +631,149 @@ UIMainChatWindow.prototype.update = function(state, requestObj, action, params) 
  */
 
 UIMainChatWindow.prototype.updateJoinedRoomList = function() {
-		var MAX_ROOM_TITLE_LEN = 25;
-		var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-		userName = userName+'@';
-		this.joinedRoomListNode.innerHTML = '' ;
-	  if (this.joinedRooms ) {
-		  var roomList = this.joinedRooms ;
-		  for (var i=0; i<roomList.length; i++) {
-		  		var roomOccupantsList = roomList[i].occupants;
-		  		var isThisUserJoined = false;
-		  		for(var j=0; j<roomOccupantsList.length; j++){
-		  			var occupant = roomOccupantsList[j];
-		  			if(occupant.jid.indexOf(userName)==0){
-		  				isThisUserJoined = true;
-		  				break;
-		  			}
-		  		}
-			    var roomInfo = roomList[i].roomInfo;
-			    var roomNode = document.createElement('div');		
-			    if(isThisUserJoined)    
-			    	roomNode.className = 'TextMemberRoom HightLightTextMemberRoom' ;
-			    else
-			    	roomNode.className = 'TextMemberRoom' ;
-			    var roomLink = document.createElement('div');
-			    var roomName = roomInfo.room.substr(0, roomInfo.room.indexOf('@'));
-			    if(roomName.length > MAX_ROOM_TITLE_LEN)
-			    	roomLink.innerHTML = roomName.substr(0, MAX_ROOM_TITLE_LEN-3)+ '...';
-			    else			    	
-			    	roomLink.innerHTML = roomName ;
-			    roomLink.setAttribute('roomId', roomInfo.room) ;
-			    roomLink.onclick = function(event){
-			    	eXo.communication.chatbar.webui.UIJoinRoomPopupWindow.joinSelectedRoomByIdAction(event);
-			    };
-			    roomNode.appendChild(roomLink);
-			    this.joinedRoomListNode.appendChild(roomNode);			    
-		  }  
-	  }
+  var MAX_ROOM_TITLE_LEN = 25;
+  var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
+  userName = userName + '@';
+  this.joinedRoomListNode.innerHTML = '';
+  if (this.joinedRooms) {
+    var roomList = this.joinedRooms;
+    for ( var i = 0; i < roomList.length; i++) {
+      var roomOccupantsList = roomList[i].occupants;
+      var isThisUserJoined = false;
+      for ( var j = 0; j < roomOccupantsList.length; j++) {
+        var occupant = roomOccupantsList[j];
+        if (occupant.jid.indexOf(userName) == 0) {
+          isThisUserJoined = true;
+          break;
+        }
+      }
+      var roomInfo = roomList[i].roomInfo;
+      var roomNode = document.createElement('div');
+      if (isThisUserJoined)
+        roomNode.className = 'TextMemberRoom HightLightTextMemberRoom';
+      else
+        roomNode.className = 'TextMemberRoom';
+      var roomLink = document.createElement('div');
+      var roomName = roomInfo.room.substr(0, roomInfo.room.indexOf('@'));
+      if (roomName.length > MAX_ROOM_TITLE_LEN)
+        roomLink.innerHTML = roomName.substr(0, MAX_ROOM_TITLE_LEN - 3) + '...';
+      else
+        roomLink.innerHTML = roomName;
+      roomLink.setAttribute('roomId', roomInfo.room);
+      roomLink.onclick = function(event) {
+        eXo.communication.chatbar.webui.UIJoinRoomPopupWindow
+            .joinSelectedRoomByIdAction(event);
+      };
+      roomNode.appendChild(roomLink);
+      this.joinedRoomListNode.appendChild(roomNode);
+    }
+  }
 }
 
 UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
   var serverData = this.serverDataStack[eventId];
   switch (action) {
-    case this.LOGIN_ACTION:
-      this.postChangeStatus(this.lastStatusSent, eventId);
-      this.checkAliveId = window.setInterval(this.isChatAlive, this.DEFAULT_CHECK_ALIVE);
-      break;
+  case this.LOGIN_ACTION:
+    this.postChangeStatus(this.lastStatusSent, eventId);
+    this.checkAliveId = window.setInterval(this.isChatAlive,
+        this.DEFAULT_CHECK_ALIVE);
+    break;
 
-    case this.CREATE_ROOM_ACTION:
-    	if(!serverData){
-    		var uiTabControlObj = this.UIChatWindow.createNewTab(this.newestRoomName+'@'+this.serverInfo.mucServicesNames, true);
-    		uiTabControlObj.roomConfigured = true;
-    	}
-      break;
+  case this.CREATE_ROOM_ACTION:
+    if (!serverData) {
+      var uiTabControlObj = this.UIChatWindow.createNewTab(this.newestRoomName
+          + '@' + this.serverInfo.mucServicesNames, true);
+      uiTabControlObj.roomConfigured = true;
+    }
+    break;
 
-    case this.GET_MESSAGE_HISTORY_ACTION:
-      this.UIChatWindow.updateMessageHistory(serverData.messageList);
-      break;
+  case this.GET_MESSAGE_HISTORY_ACTION:
+    this.UIChatWindow.updateMessageHistory(serverData.messageList);
+    break;
 
-    case this.GET_ROOM_CONFIG_ACTION:
-      window.jsconsole.warn('==================================================');
-      window.jsconsole.debug('Room\' configuration: ', serverData);
-      window.jsconsole.warn('==================================================');
-      this.UIRoomConfigPopupWindow.updateRoomConfig(serverData);
-      break;
+  case this.GET_ROOM_CONFIG_ACTION:
+    window.jsconsole.warn('==================================================');
+    window.jsconsole.debug('Room\' configuration: ', serverData);
+    window.jsconsole.warn('==================================================');
+    this.UIRoomConfigPopupWindow.updateRoomConfig(serverData);
+    break;
 
-    case this.GET_ROOM_INFO_ACTION:
-      // 09/06/2010 add start
-      for (var i=0; i<serverData.occupants.length; i++) {
-    	  eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.occupants[i].nick] = serverData.occupants[i].fullName;
-      }
-      // 09/06/2010 add end
-      this.UIChatWindow.roomInfoEventFired(serverData);
-      break;
-
-    case this.SEND_STATUS_ACTION:
-      this.postChangeStatus(this.lastStatusSent, eventId);
-      break;
-
-    case this.ORG_FUZZY_SEARCH_USER_ACTION:
-    case this.ORG_GET_ALL_CONTACT_ACTION:
-      if (serverData.users) {
-        this.UIAddContactPopupWindow.updateContactList(serverData);
-      }
-      break;
-
-    case this.GET_ROOM_LIST_ACTION:
-      if (serverData)
-        this.UIJoinRoomPopupWindow.updateRoomList(serverData);
-      break;
-
-    case this.GET_JOINED_ROOM_LIST_ACTION:
-      this.joinedRooms = serverData && serverData.joinedRooms ? serverData.joinedRooms : [];
-      this.updateJoinedRoomList();
-      break;
-
-		case this.JOIN_TO_ROOM_ACTION:
-			this.jabberGetJoinedRoomList();
-			break;
-
-		case this.LEAVE_FROM_ROOM_ACTION:
-			eXo.communication.chatbar.webui.UIMainChatWindow.jabberGetJoinedRoomList();
-			break;
-
-    case this.GET_SUBSCRIPTION_REQUESTS_ACTION:
-      break;
-
-    case this.SEND_SUBSCRIPTION_ACTION:
-      break;
-
-    case this.UNSUBSCRIPT_BUDDY_ACTION:
-      break;
-
-    case this.REMOVE_USER_ACTION:
-      break;
-
-    case this.SEND_MESSAGE_ACTION:
-      break;
-      
+  case this.GET_ROOM_INFO_ACTION:
     // 09/06/2010 add start
-    case this.INVITE_JOIN_ROOM_ACTION:
-      eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.myProfile.user] = serverData.myProfile.fullName ;	
-      break;  
+    for ( var i = 0; i < serverData.occupants.length; i++) {
+      eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.occupants[i].nick] = serverData.occupants[i].fullName;
+    }
     // 09/06/2010 add end
-        
-    case this.LOGOUT_ACTION:
-      this.postChangeStatus(this.OFFLINE_STATUS);
-      this.UIChatWindow.destroySession();
-      break;
+    this.UIChatWindow.roomInfoEventFired(serverData);
+    break;
 
-    case this.LOAD_JS_RESOURCE_BUNDLE:
-      try {
-    	eval(serverData.script);
-    	this.ResourceBundle = eXo.communication.chatbar.locale.ResourceBundle;
-      } catch (error){
-    	  alert(serverData.script);
-      }
-      break;
-      
-    default:
-      break;
+  case this.SEND_STATUS_ACTION:
+    this.postChangeStatus(this.lastStatusSent, eventId);
+    break;
+
+  case this.ORG_FUZZY_SEARCH_USER_ACTION:
+  case this.ORG_GET_ALL_CONTACT_ACTION:
+    if (serverData.users) {
+      this.UIAddContactPopupWindow.updateContactList(serverData);
+    }
+    break;
+
+  case this.GET_ROOM_LIST_ACTION:
+    if (serverData)
+      this.UIJoinRoomPopupWindow.updateRoomList(serverData);
+    break;
+
+  case this.GET_JOINED_ROOM_LIST_ACTION:
+    this.joinedRooms = serverData && serverData.joinedRooms ? serverData.joinedRooms
+        : [];
+    this.updateJoinedRoomList();
+    break;
+
+  case this.JOIN_TO_ROOM_ACTION:
+    this.jabberGetJoinedRoomList();
+    break;
+
+  case this.LEAVE_FROM_ROOM_ACTION:
+    eXo.communication.chatbar.webui.UIMainChatWindow.jabberGetJoinedRoomList();
+    break;
+
+  case this.GET_SUBSCRIPTION_REQUESTS_ACTION:
+    break;
+
+  case this.SEND_SUBSCRIPTION_ACTION:
+    break;
+
+  case this.UNSUBSCRIPT_BUDDY_ACTION:
+    break;
+
+  case this.REMOVE_USER_ACTION:
+    break;
+
+  case this.SEND_MESSAGE_ACTION:
+    break;
+
+  // 09/06/2010 add start
+  case this.INVITE_JOIN_ROOM_ACTION:
+    eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.myProfile.user] = serverData.myProfile.fullName;
+    break;
+  // 09/06/2010 add end
+
+  case this.LOGOUT_ACTION:
+    this.postChangeStatus(this.OFFLINE_STATUS);
+    this.UIChatWindow.destroySession();
+    break;
+
+  case this.LOAD_JS_RESOURCE_BUNDLE:
+    try {
+      eval(serverData.script);
+      this.ResourceBundle = eXo.communication.chatbar.locale.ResourceBundle;
+    } catch (error) {
+      alert(serverData.script);
+    }
+    break;
+
+  default:
+    break;
   }
   if (this.serverDataStack[eventId]) {
     this.serverDataStack[eventId] = null;
@@ -712,102 +789,104 @@ UIMainChatWindow.prototype.processTimeoutAction = function(requestObj, action) {
 /**
  * Process all error ajax request action.
  */
-UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
-  // Fix: Automatic logout when open multiple window/tab then close once of them.
-  if (requestObj.status == 400 &&
-      requestObj.responseText == 'XMPPSesion is null!') {
+UIMainChatWindow.prototype.processErrorAction = function(requestObj, action) {
+  // Fix: Automatic logout when open multiple window/tab then close once of
+  // them.
+  if (requestObj.status == 400
+      && requestObj.responseText == 'XMPPSesion is null!') {
     window.jsconsole.warn('You are not login to chat.');
     window.alert(this.ResourceBundle.chat_message_xmpp_session_is_null);
     return;
   }
   switch (action) {
-    case this.JOIN_TO_ROOM_ACTION:
-    	switch(requestObj.status) {
-    		case 401:
-    			//window.alert('Your secret key to join room is not valid.\nPlease try again later.');
-    			window.alert(this.ResourceBundle.chat_message_room_password_error);
-    			//this.UIPopupMessages.warning(this.ResourceBundle.chat_message_room_password_error);
-    			break;
-    		case 403:
-    		case 404:
-    			window.alert(this.ResourceBundle.chat_message_room_not_unlocked_error);
-    			break;
-    		case 407:
-    		    window.alert(this.ResourceBundle.chat_message_room_user_not_member);
-    			break;
-    		case 409:
-    		default:
-    			break;
-    	}
+  case this.JOIN_TO_ROOM_ACTION:
+    switch (requestObj.status) {
+    case 401:
+      // window.alert('Your secret key to join room is not valid.\nPlease try
+      // again later.');
+      window.alert(this.ResourceBundle.chat_message_room_password_error);
+      // this.UIPopupMessages.warning(this.ResourceBundle.chat_message_room_password_error);
       break;
-    //case this.LOGIN_ACTION:
-    //case this.LOGOUT_ACTION:
-    //case this.SEND_STATUS_ACTION:
-    //case this.GET_MESSAGE_HISTORY_ACTION:
-    //case this.SEND_SUBSCRIPTION_ACTION:
-    //case this.ASK_4_SUBSCRIPTION_ACTION:
-    //case this.ADD_USER_ACTION:
-    //case this.SEND_MESSAGE_ACTION:
-    //case this.GET_SUBSCRIPTION_REQUESTS_ACTION:
-    //case this.CLEAN_BUDDY_LIST_ACTION:
-    //case this.REMOVE_USER_ACTION:
-    //case this.UNSUBSCRIPT_BUDDY_ACTION:
-    //case this.ORG_GET_ALL_CONTACT_ACTION:
-    //case this.DENIAL_SEND_FILE_ACTION:
-    //case this.ORG_FUZZY_SEARCH_USER_ACTION:
-    //case this.ORG_COUNT_USER_ACTION:
-    case this.CREATE_ROOM_ACTION:
-    	switch(requestObj.status) {
-    		case 401:
-    			this.jabberJoinToRoom(this.newestRoomName,true);
-    			break;
-    		case 403:
-    		case 404:
-    			window.alert(this.ResourceBundle.chat_message_room_not_unlocked_error);
-    			break;
-    		case 407:
-    			window.alert(this.ResourceBundle.chat_message_room_user_not_member);
-    			break;
-    		case 500:
-    			window.alert(this.ResourceBundle.chat_message_room_creation_error);
-    			break;
-    		case 409:
-    		default:
-    			break;
-    	}
-    	break;
-    case this.CREATE_CONVERSATION_ACTION:
-    case this.CONFIG_ROOM_ACTION:
-    case this.GET_ROOM_CONFIG_ACTION:
-    	var activeTabControl = this.UIChatWindow.getActiveTabControl();
-    	this.UIRoomConfigPopupWindow.setVisible(false, activeTabControl.tabId);
-    	window.alert(this.ResourceBundle.chat_message_room_configuration_error);
-    	break;
-    //case this.GET_ROOM_INFO_ACTION:
-    case this.GET_ROOM_LIST_ACTION:
-    case this.GET_JOINED_ROOM_LIST_ACTION:
-    	this.joinedRooms = [];
-    	this.updateJoinedRoomList();
-    	break;
-    case this.INVITE_JOIN_ROOM_ACTION:
-    case this.DECLINE_JOIN_ROOM_ACTION:
-    case this.LEAVE_FROM_ROOM_ACTION:
-    case this.ACEPT_SEND_FILE_ACTION:
-      if (requestObj.responseText) {
-        window.alert('Service message: ' + requestObj.responseText);        
-      }
+    case 403:
+    case 404:
+      window.alert(this.ResourceBundle.chat_message_room_not_unlocked_error);
       break;
-
+    case 407:
+      window.alert(this.ResourceBundle.chat_message_room_user_not_member);
+      break;
+    case 409:
     default:
       break;
+    }
+    break;
+  // case this.LOGIN_ACTION:
+  // case this.LOGOUT_ACTION:
+  // case this.SEND_STATUS_ACTION:
+  // case this.GET_MESSAGE_HISTORY_ACTION:
+  // case this.SEND_SUBSCRIPTION_ACTION:
+  // case this.ASK_4_SUBSCRIPTION_ACTION:
+  // case this.ADD_USER_ACTION:
+  // case this.SEND_MESSAGE_ACTION:
+  // case this.GET_SUBSCRIPTION_REQUESTS_ACTION:
+  // case this.CLEAN_BUDDY_LIST_ACTION:
+  // case this.REMOVE_USER_ACTION:
+  // case this.UNSUBSCRIPT_BUDDY_ACTION:
+  // case this.ORG_GET_ALL_CONTACT_ACTION:
+  // case this.DENIAL_SEND_FILE_ACTION:
+  // case this.ORG_FUZZY_SEARCH_USER_ACTION:
+  // case this.ORG_COUNT_USER_ACTION:
+  case this.CREATE_ROOM_ACTION:
+    switch (requestObj.status) {
+    case 401:
+      this.jabberJoinToRoom(this.newestRoomName, true);
+      break;
+    case 403:
+    case 404:
+      window.alert(this.ResourceBundle.chat_message_room_not_unlocked_error);
+      break;
+    case 407:
+      window.alert(this.ResourceBundle.chat_message_room_user_not_member);
+      break;
+    case 500:
+      window.alert(this.ResourceBundle.chat_message_room_creation_error);
+      break;
+    case 409:
+    default:
+      break;
+    }
+    break;
+  case this.CREATE_CONVERSATION_ACTION:
+  case this.CONFIG_ROOM_ACTION:
+  case this.GET_ROOM_CONFIG_ACTION:
+    var activeTabControl = this.UIChatWindow.getActiveTabControl();
+    this.UIRoomConfigPopupWindow.setVisible(false, activeTabControl.tabId);
+    window.alert(this.ResourceBundle.chat_message_room_configuration_error);
+    break;
+  // case this.GET_ROOM_INFO_ACTION:
+  case this.GET_ROOM_LIST_ACTION:
+  case this.GET_JOINED_ROOM_LIST_ACTION:
+    this.joinedRooms = [];
+    this.updateJoinedRoomList();
+    break;
+  case this.INVITE_JOIN_ROOM_ACTION:
+  case this.DECLINE_JOIN_ROOM_ACTION:
+  case this.LEAVE_FROM_ROOM_ACTION:
+  case this.ACEPT_SEND_FILE_ACTION:
+    if (requestObj.responseText) {
+      window.alert('Service message: ' + requestObj.responseText);
+    }
+    break;
+
+  default:
+    break;
   }
 };
 
 // Listeners for cometd connection
 
 /**
- * A Cometd listener for group chat.
- * All cometd notify about group chat will be call this function.
+ * A Cometd listener for group chat. All cometd notify about group chat will be
+ * call this function.
  */
 UIMainChatWindow.prototype.groupChatListener = function(eventObj) {
   var eventId = 'groupChatCometdEvent_' + (new Date()).getTime();
@@ -816,8 +895,8 @@ UIMainChatWindow.prototype.groupChatListener = function(eventObj) {
 };
 
 /**
- * A Cometd listener for roster.
- * All cometd notify about roster will be call this function.
+ * A Cometd listener for roster. All cometd notify about roster will be call
+ * this function.
  */
 UIMainChatWindow.prototype.rosterListener = function(eventObj) {
   var eventId = 'rosterCometdEvent_' + (new Date()).getTime();
@@ -826,8 +905,8 @@ UIMainChatWindow.prototype.rosterListener = function(eventObj) {
 };
 
 /**
- * A Cometd listener for presence.
- * All cometd notify about presence will be call this function.
+ * A Cometd listener for presence. All cometd notify about presence will be call
+ * this function.
  */
 UIMainChatWindow.prototype.presenceListener = function(eventObj) {
   var eventId = 'presenceCometdEvent_' + (new Date()).getTime();
@@ -836,18 +915,19 @@ UIMainChatWindow.prototype.presenceListener = function(eventObj) {
 };
 
 /**
- * A Cometd listener for subscription
- * All cometd notify about subscription will be call this function.
+ * A Cometd listener for subscription All cometd notify about subscription will
+ * be call this function.
  */
 UIMainChatWindow.prototype.subscriptionListener = function(eventObj) {
   var eventId = 'subscriptionCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
-  eXo.communication.chatbar.webui.UIMainChatWindow.processSubscriptions(eventId);
+  eXo.communication.chatbar.webui.UIMainChatWindow
+      .processSubscriptions(eventId);
 };
 
 /**
- * A Cometd listener for file exchange.
- * All cometd notify about file exchange will be call this function.
+ * A Cometd listener for file exchange. All cometd notify about file exchange
+ * will be call this function.
  */
 UIMainChatWindow.prototype.fileExchangeListener = function(eventObj) {
   var eventId = 'fileExchangeCometdEvent_' + (new Date()).getTime();
@@ -856,19 +936,19 @@ UIMainChatWindow.prototype.fileExchangeListener = function(eventObj) {
 };
 
 /**
- * A Cometd listener for update fullName.
- * All cometd notify about update fullName will be call this function.
+ * A Cometd listener for update fullName. All cometd notify about update
+ * fullName will be call this function.
  */
 UIMainChatWindow.prototype.updateFullNameMap = function(eventObj) {
   var eventId = 'updateFullNameMapCometdEvent_' + (new Date()).getTime();
   this.serverDataStack[eventId] = eXo.core.JSON.parse(eventObj.data);
-  eXo.communication.chatbar.webui.UIMainChatWindow.processUpdateFullNameMap(eventId);
+  eXo.communication.chatbar.webui.UIMainChatWindow
+      .processUpdateFullNameMap(eventId);
 };
 
-
 /**
- * A Cometd listener for message.
- * All cometd notify about message will be call this function.
+ * A Cometd listener for message. All cometd notify about message will be call
+ * this function.
  */
 UIMainChatWindow.prototype.messageListener = function(eventObj) {
   var eventId = 'messageCometdEvent_' + (new Date()).getTime();
@@ -882,8 +962,7 @@ UIMainChatWindow.prototype.messageListener = function(eventObj) {
  */
 UIMainChatWindow.prototype.processMessages = function(eventId) {
   var serverData = this.serverDataStack[eventId];
-  if (serverData &&
-      serverData.messages) {
+  if (serverData && serverData.messages) {
     window.jsconsole.debug('processMessages: id:= ' + eventId, serverData);
     var messages = serverData.messages;
     this.displayMessages(messages);
@@ -922,10 +1001,11 @@ UIMainChatWindow.prototype.processPresences = function(eventId) {
   var mainPresences = [];
   var roomPresences = [];
   var mucServiceName = this.serverInfo.mucServicesNames[0];
-  for (var i=0; i<presences.length; i++) {
+  for ( var i = 0; i < presences.length; i++) {
     var presence = presences[i];
     presenceUser = presence.from;
-    presenceUser = presenceUser.substr(presenceUser.indexOf('/'), presenceUser.length - 1);
+    presenceUser = presenceUser.substr(presenceUser.indexOf('/'),
+        presenceUser.length - 1);
     if (presenceUser == this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]) {
       continue;
     }
@@ -957,39 +1037,41 @@ UIMainChatWindow.prototype.processSubscriptions = function(eventId) {
   if (serverData.subscriptions) {
     var subscriptions = serverData.subscriptions;
 
-    for (var i=0; i<subscriptions.length; i++) {
+    for ( var i = 0; i < subscriptions.length; i++) {
       var subscription = subscriptions[i];
       switch (subscription.type) {
-        case 'subscribed':
-          break;
-        case 'unsubscribed':
-        	denyUser = subscription.from;
-        	denyUser = denyUser.substring(0, denyUser.indexOf('@'));
-        	//window.alert(denyUser + ' has denied your request to add them to your contact list.');
-        	this.jabberRemoveUser(denyUser);
-          break;
-        case 'subscribe':
-          var requestUser = subscription.from;
-          requestUser = requestUser.substring(0, requestUser.indexOf('@'));
-          var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[requestUser];
-          if (fullName == null) {
-          	fullName = subscription.fromName;
-          	eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[requestUser] = fullName;
-          }
-          var str = this.ResourceBundle.chat_message_confirm_allow_to_see_status;
-          if (window.confirm(str.replace('{0}', fullName))) {
-            this.jabberSendSubscription(requestUser);
-            this.jabberAddUser(requestUser);
-          } else {
-            this.jabberUnsubscriptUser(requestUser);
-          }
-          break;
-        case 'unsubscribe':
-        	denyUser = subscription.from;
-        	denyUser = denyUser.substring(0, denyUser.indexOf('@'));
-        	//window.alert(denyUser + ' has denied your request to add them to your contact list.');
-        	this.jabberRemoveUser(denyUser);
-        	break;
+      case 'subscribed':
+        break;
+      case 'unsubscribed':
+        denyUser = subscription.from;
+        denyUser = denyUser.substring(0, denyUser.indexOf('@'));
+        // window.alert(denyUser + ' has denied your request to add them to your
+        // contact list.');
+        this.jabberRemoveUser(denyUser);
+        break;
+      case 'subscribe':
+        var requestUser = subscription.from;
+        requestUser = requestUser.substring(0, requestUser.indexOf('@'));
+        var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[requestUser];
+        if (fullName == null) {
+          fullName = subscription.fromName;
+          eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[requestUser] = fullName;
+        }
+        var str = this.ResourceBundle.chat_message_confirm_allow_to_see_status;
+        if (window.confirm(str.replace('{0}', fullName))) {
+          this.jabberSendSubscription(requestUser);
+          this.jabberAddUser(requestUser);
+        } else {
+          this.jabberUnsubscriptUser(requestUser);
+        }
+        break;
+      case 'unsubscribe':
+        denyUser = subscription.from;
+        denyUser = denyUser.substring(0, denyUser.indexOf('@'));
+        // window.alert(denyUser + ' has denied your request to add them to your
+        // contact list.');
+        this.jabberRemoveUser(denyUser);
+        break;
       }
     }
   } else if (serverData.presences) {
@@ -1018,15 +1100,16 @@ UIMainChatWindow.prototype.processFileExchange = function(eventId) {
  */
 UIMainChatWindow.prototype.processUpdateFullNameMap = function(eventId) {
   var serverData = this.serverDataStack[eventId];
-  window.jsconsole.debug('UpdateFullNameMap event: id:= ' + eventId, serverData);
+  window.jsconsole
+      .debug('UpdateFullNameMap event: id:= ' + eventId, serverData);
   if (!serverData) {
     this.serverDataStack[eventId] = null;
   }
-  
-  for (var i=0; i<serverData.occupants.length; i++) {
-	  eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.occupants[i].nick] = serverData.occupants[i].fullName;
+
+  for ( var i = 0; i < serverData.occupants.length; i++) {
+    eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[serverData.occupants[i].nick] = serverData.occupants[i].fullName;
   }
-  
+
   this.serverDataStack[eventId] = null;
 };
 
@@ -1036,57 +1119,62 @@ UIMainChatWindow.prototype.processUpdateFullNameMap = function(eventId) {
 UIMainChatWindow.prototype.processGroupChat = function(eventId) {
   var serverData = this.serverDataStack[eventId];
   window.jsconsole.debug('GroupChat: id:= ' + eventId, serverData);
-  if (!serverData) return;
+  if (!serverData)
+    return;
   if (serverData.mucEvents) {
     var mucEvents = serverData.mucEvents;
     var mucServiceName = this.serverInfo.mucServicesNames;
-    var currentRoomUserName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] + '@' + this.serverInfo.mainServiceName;
-    for (var i=0; i<mucEvents.length; i++) {
+    var currentRoomUserName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]
+        + '@' + this.serverInfo.mainServiceName;
+    for ( var i = 0; i < mucEvents.length; i++) {
       var mucEvent = mucEvents[i];
       window.jsconsole.info('MUC event action=' + mucEvent.action);
       switch (mucEvent.action) {
-        case this.MUC_ACTION_INVITE_ROOM: 
-          var inviteInfo = mucEvent.invite;
-          var roomName = inviteInfo.room;
-          roomName = roomName.substr(0, roomName.indexOf('@'));
-          var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[inviteInfo.inviter];
-          //var msgBuf = inviteInfo.inviter + ' invite you join to room: "' + roomName + '"';
-          var msgBuf = this.ResourceBundle.chat_message_room_invite_to_join.replace('{0}', fullName);
-          msgBuf = msgBuf.replace('{1}', roomName);
-          if (window.confirm(msgBuf)) {
-            this.jabberJoinToRoom(roomName, inviteInfo.password);
-          }
-          break;
-        case this.MUC_ACTION_CREATED_ROOM: 
-          var createdRoom = mucEvent.createdRoom;
-          var roomName = createdRoom.roomInfo.room;
-          var uiTabControlObj = this.UIChatWindow.createNewTab(roomName, true);
-          window.jsconsole.info('Room @ ' + roomName + ' has been created.');
-          this.UIRoomConfigPopupWindow.setVisible(true, uiTabControlObj.tabId, true);
-          if (createdRoom.occupants &&
-              createdRoom.occupants.length > 0) {
-            this.UIChatWindow.updateRoster(createdRoom.occupants);
-            continue;
-          }
-          break;
-        case this.MUC_ACTION_JOIN_ROOM: 
-          var roomName = mucEvent.joined.substr(0, mucEvent.joined.indexOf('/'));
-          this.UIChatWindow.createNewTab(roomName, true);
-          if (mucEvent.occupants) {
-            this.UIChatWindow.updateRoster(mucEvent.occupants);
-          } else {
-            this.UIChatWindow.userJoinRoomEventFired(mucEvent.joined, mucEvent.room);
-          }
-          break;
-        case this.MUC_ACTION_LEFT_ROOM: 
-          this.UIChatWindow.userLeftRoomEventFired(mucEvent.left, mucEvent.room);
-          break;
-        default:
-          // Message arrived context
-          if (mucEvent.message) {
-            this.displayMessages(mucEvent.message);
-          }
-          break;
+      case this.MUC_ACTION_INVITE_ROOM:
+        var inviteInfo = mucEvent.invite;
+        var roomName = inviteInfo.room;
+        roomName = roomName.substr(0, roomName.indexOf('@'));
+        var fullName = eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[inviteInfo.inviter];
+        // var msgBuf = inviteInfo.inviter + ' invite you join to room: "' +
+        // roomName + '"';
+        var msgBuf = this.ResourceBundle.chat_message_room_invite_to_join
+            .replace('{0}', fullName);
+        msgBuf = msgBuf.replace('{1}', roomName);
+        if (window.confirm(msgBuf)) {
+          this.jabberJoinToRoom(roomName, inviteInfo.password);
+        }
+        break;
+      case this.MUC_ACTION_CREATED_ROOM:
+        var createdRoom = mucEvent.createdRoom;
+        var roomName = createdRoom.roomInfo.room;
+        var uiTabControlObj = this.UIChatWindow.createNewTab(roomName, true);
+        window.jsconsole.info('Room @ ' + roomName + ' has been created.');
+        this.UIRoomConfigPopupWindow.setVisible(true, uiTabControlObj.tabId,
+            true);
+        if (createdRoom.occupants && createdRoom.occupants.length > 0) {
+          this.UIChatWindow.updateRoster(createdRoom.occupants);
+          continue;
+        }
+        break;
+      case this.MUC_ACTION_JOIN_ROOM:
+        var roomName = mucEvent.joined.substr(0, mucEvent.joined.indexOf('/'));
+        this.UIChatWindow.createNewTab(roomName, true);
+        if (mucEvent.occupants) {
+          this.UIChatWindow.updateRoster(mucEvent.occupants);
+        } else {
+          this.UIChatWindow.userJoinRoomEventFired(mucEvent.joined,
+              mucEvent.room);
+        }
+        break;
+      case this.MUC_ACTION_LEFT_ROOM:
+        this.UIChatWindow.userLeftRoomEventFired(mucEvent.left, mucEvent.room);
+        break;
+      default:
+        // Message arrived context
+        if (mucEvent.message) {
+          this.displayMessages(mucEvent.message);
+        }
+        break;
       }
     }
   }
@@ -1094,88 +1182,113 @@ UIMainChatWindow.prototype.processGroupChat = function(eventId) {
 };
 // -/-
 
-// ---  GUI handle --
+// --- GUI handle --
 /**
  * Use for login call from eXoChat init method.
- *
- * @param {String} userName
+ * 
+ * @param {String}
+ *          userName
  */
 UIMainChatWindow.prototype.xLogin = function(userName) {
-	this.getPreviousStatus_(userName);
+  this.getPreviousStatus_(userName);
 };
 
-UIMainChatWindow.prototype.matchPresenceStatusIcon_  = function(presenceStatus){
-	var presenceStatusIcon = '';
-	if(presenceStatus != null){
-		if(presenceStatus == this.ONLINE_STATUS) 		 presenceStatusIcon = this.ONLINEICON;
-		if(presenceStatus == this.FREE_TO_CHAT_STATUS) 	 presenceStatusIcon = this.FREETOICON;
-		if(presenceStatus == this.AWAY_STATUS) 			 presenceStatusIcon = this.AWAYICON;
-		if(presenceStatus == this.EXTEND_AWAY_STATUS) 	 presenceStatusIcon = this.EXTENDAWAYICON;
-		if(presenceStatus == this.OFFLINE_STATUS) 		 presenceStatusIcon = this.OFFLINEICON;
-	}
-	
-	if(presenceStatusIcon != '') document.getElementById('id-state-chat').className = 'IconHolder ' + presenceStatusIcon;
+UIMainChatWindow.prototype.matchPresenceStatusIcon_ = function(presenceStatus) {
+  var presenceStatusIcon = '';
+  if (presenceStatus != null) {
+    if (presenceStatus == this.ONLINE_STATUS)
+      presenceStatusIcon = this.ONLINEICON;
+    if (presenceStatus == this.FREE_TO_CHAT_STATUS)
+      presenceStatusIcon = this.FREETOICON;
+    if (presenceStatus == this.AWAY_STATUS)
+      presenceStatusIcon = this.AWAYICON;
+    if (presenceStatus == this.EXTEND_AWAY_STATUS)
+      presenceStatusIcon = this.EXTENDAWAYICON;
+    if (presenceStatus == this.OFFLINE_STATUS)
+      presenceStatusIcon = this.OFFLINEICON;
+  }
+
+  if (presenceStatusIcon != '')
+    document.getElementById('id-state-chat').className = 'IconHolder ' + presenceStatusIcon;
 };
 
-UIMainChatWindow.prototype.getStatus_ = function(){
-	return document.getElementById('id-state-chat').getAttribute('title');
+UIMainChatWindow.prototype.getStatus_ = function() {
+  return document.getElementById('id-state-chat').getAttribute('title');
 };
 
-UIMainChatWindow.prototype.setStatus_ = function(st){
-	if(st != null)
-		document.getElementById('id-state-chat').setAttribute('title', st);
-	else 
-		document.getElementById('id-state-chat').setAttribute('title', this.OFFLINE_STATUS);
+UIMainChatWindow.prototype.setStatus_ = function(st) {
+  if (st != null)
+    document.getElementById('id-state-chat').setAttribute('title', st);
+  else
+    document.getElementById('id-state-chat').setAttribute('title',
+        this.OFFLINE_STATUS);
 };
-/** getting previous status
- * @param {String} userName**/
+/*******************************************************************************
+ * getting previous status
+ * 
+ * @param {String}
+ *          userName
+ ******************************************************************************/
 
 UIMainChatWindow.prototype.getPreviousStatus_ = function(userName) {
-	var url = this.XMPPCommunicator.SERVICE_URL + '/' + this.XMPPCommunicator.TRANSPORT_XMPP + '/getprevstatus/' + userName;
-	var request = new eXo.portal.AjaxRequest('GET', url, null);
-	request.onSuccess = function(request){
-		var presenceStatus = request.responseText;
-		var uiMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
-		uiMainChatWindow.userNames[uiMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP] = uiMainChatWindow.userName;
-		if(presenceStatus == null || presenceStatus == uiMainChatWindow.SEVER_IS_NOT_AVAILABLE){//chat server is not available
-		   presenceStatus = uiMainChatWindow.OFFLINE_STATUS;
-		}else if(presenceStatus == uiMainChatWindow.DEFAULT_PRESENCE_STATUS){
-		  presenceStatus = uiMainChatWindow.ONLINE_STATUS;// this status must be match within status in chat configuration xml
-		}	  
-		uiMainChatWindow.matchPresenceStatusIcon_(presenceStatus);
-		uiMainChatWindow.preChangeStatus(presenceStatus);
-	}
-	
-	request.onError = function(request){
-		var uiMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
-		uiMainChatWindow.matchPresenceStatusIcon_(uiMainChatWindow.OFFLINE_STATUS);
-		uiMainChatWindow.preChangeStatus(uiMainChatWindow.OFFLINE_STATUS);
-	}
-	
-   request.process() ;
+  var url = this.XMPPCommunicator.SERVICE_URL + '/'
+      + this.XMPPCommunicator.TRANSPORT_XMPP + '/getprevstatus/' + userName;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  request.onSuccess = function(request) {
+    var presenceStatus = request.responseText;
+    var uiMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
+    uiMainChatWindow.userNames[uiMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP] = uiMainChatWindow.userName;
+    if (presenceStatus == null
+        || presenceStatus == uiMainChatWindow.SEVER_IS_NOT_AVAILABLE) {// chat
+                                                                        // server
+                                                                        // is
+                                                                        // not
+                                                                        // available
+      presenceStatus = uiMainChatWindow.OFFLINE_STATUS;
+    } else if (presenceStatus == uiMainChatWindow.DEFAULT_PRESENCE_STATUS) {
+      presenceStatus = uiMainChatWindow.ONLINE_STATUS;// this status must be
+                                                      // match within status in
+                                                      // chat configuration xml
+    }
+    uiMainChatWindow.matchPresenceStatusIcon_(presenceStatus);
+    uiMainChatWindow.preChangeStatus(presenceStatus);
+  }
+
+  request.onError = function(request) {
+    var uiMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
+    uiMainChatWindow.matchPresenceStatusIcon_(uiMainChatWindow.OFFLINE_STATUS);
+    uiMainChatWindow.preChangeStatus(uiMainChatWindow.OFFLINE_STATUS);
+  }
+
+  request.process();
 };
 
-/**
- * Parsing response XML***/
-UIMainChatWindow.prototype.parseXMLRespone = function(resp, tagname){
-	if(resp != null){
-		tagObj = document.getElementsByTagName(tagname);
-		if(tagObj != null && tagObj.length > 0) return tagObj[0].innerHTML;
-	}
-	return null;
+/*******************************************************************************
+ * Parsing response XML
+ ******************************************************************************/
+UIMainChatWindow.prototype.parseXMLRespone = function(resp, tagname) {
+  if (resp != null) {
+    tagObj = document.getElementsByTagName(tagname);
+    if (tagObj != null && tagObj.length > 0)
+      return tagObj[0].innerHTML;
+  }
+  return null;
 };
 
 /**
  * Pre-Update user status call after status menu is selected.
- *
- * @param {String} status
- * @param {Boolean} skipCheck
- * @param {Event} event
+ * 
+ * @param {String}
+ *          status
+ * @param {Boolean}
+ *          skipCheck
+ * @param {Event}
+ *          event
  */
-UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) {	
-  if (!this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] ||
-      !status ||
-      ((this.userStatus != this.ONLINE_STATUS) && (this.userStatus == status))) {
+UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) {
+  if (!this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]
+      || !status
+      || ((this.userStatus != this.ONLINE_STATUS) && (this.userStatus == status))) {
     return;
   }
   event = event || window.event;
@@ -1183,145 +1296,163 @@ UIMainChatWindow.prototype.preChangeStatus = function(status, skipCheck, event) 
     this.AdvancedDOMEvent.cancelEvent(event);
   }
   this.lastStatusSent = status;
-  //this.setChangeStatusMenuVisible(this.statusNode, false);
+  // this.setChangeStatusMenuVisible(this.statusNode, false);
   var DOMUtil = eXo.core.DOMUtil;
-  //var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode, 'div', 'Text');
+  // var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode,
+  // 'div', 'Text');
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  //userNameNode.innerHTML = userName;
+  // userNameNode.innerHTML = userName;
   switch (status) {
-    case this.ONLINE_STATUS:
-    case this.AWAY_STATUS:
-    case this.EXTEND_AWAY_STATUS:
-    case this.FREE_TO_CHAT_STATUS:
-      if (!this.userStatus ||
-          (this.userStatus == this.OFFLINE_STATUS)) {
-        this.jabberLogin(userName);
-        break;
-      }
-      if (status != this.userStatus) {
-        this.jabberSendStatus(status);
-      }
+  case this.ONLINE_STATUS:
+  case this.AWAY_STATUS:
+  case this.EXTEND_AWAY_STATUS:
+  case this.FREE_TO_CHAT_STATUS:
+    if (!this.userStatus || (this.userStatus == this.OFFLINE_STATUS)) {
+      this.jabberLogin(userName);
       break;
-    case this.OFFLINE_STATUS:
-      if (this.userStatus != this.OFFLINE_STATUS) {
-				this.userStatus = this.OFFLINE_STATUS;
-				this.UIAddContactPopupWindow.setVisible(false,null);
-				this.UIChatWindow.destroySession();
-				this.UICreateNewRoomPopupWindow.setVisible(false);
-				this.UIRoomConfigPopupWindow.setVisible(false,null,null);
-				this.UIJoinRoomPopupWindow.setVisible(false);
-				this.buddyListControlObj.cleanup();
-				this.addContactIconNode.onclick = null;
-				var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode, 'div');
-				userStatusIconNode.className = 'IconHolder'+' '+'OfflineIcon';
-		// this.jabberLogout();
-        this.jabberLogout(this.OFFLINE_STATUS);
-      }
-			eXo.core.DOMUtil.cleanUpHiddenElements();
-      break;
-    default:
-      break;
+    }
+    if (status != this.userStatus) {
+      this.jabberSendStatus(status);
+    }
+    break;
+  case this.OFFLINE_STATUS:
+    if (this.userStatus != this.OFFLINE_STATUS) {
+      this.userStatus = this.OFFLINE_STATUS;
+      this.UIAddContactPopupWindow.setVisible(false, null);
+      this.UIChatWindow.destroySession();
+      this.UICreateNewRoomPopupWindow.setVisible(false);
+      this.UIRoomConfigPopupWindow.setVisible(false, null, null);
+      this.UIJoinRoomPopupWindow.setVisible(false);
+      this.buddyListControlObj.cleanup();
+      this.addContactIconNode.onclick = null;
+      var userStatusIconNode = DOMUtil.findAncestorByTagName(
+          this.statusIconNode, 'div');
+      userStatusIconNode.className = 'IconHolder' + ' ' + 'OfflineIcon';
+      // this.jabberLogout();
+      this.jabberLogout(this.OFFLINE_STATUS);
+    }
+    eXo.core.DOMUtil.cleanUpHiddenElements();
+    break;
+  default:
+    break;
   }
   this.setStatus_(status);
 };
 
 /**
  * Post-Update user status call after status is updated by server.
- *
- * @param {String} status
- * @param {Boolean} skipCheck
- * @param {Event} event
+ * 
+ * @param {String}
+ *          status
+ * @param {Boolean}
+ *          skipCheck
+ * @param {Event}
+ *          event
  */
 UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
-	if (!this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] ||
-			!status) {
-		return false;
-	}
-	var serverData = this.serverDataStack[eventId];
-	this.lastStatusSent = false;
-	var DOMUtil = eXo.core.DOMUtil;
-	//var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode, 'div', 'Text');
-	//userNameNode.innerHTML = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-	var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode, 'div');
-	window.jsconsole.warn('User changed status: ' + this.userStatus + ' -> ' + status);
-	var lastStatus = this.userStatus;
-	this.userStatus = status;
-	var presenceData = {};
-	presenceData.from = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] + '@' + this.serverInfo.mainServiceName;
-	presenceData.mode = null;
-	presenceData.type = this.userStatus;
-	this.UIChatWindow.updatePresence(presenceData);
-	
-	switch (this.userStatus) {
-		case this.ONLINE_STATUS:
-		case this.AWAY_STATUS:
-		case this.EXTEND_AWAY_STATUS:
-		case this.FREE_TO_CHAT_STATUS:
-			if (!lastStatus || lastStatus == this.OFFLINE_STATUS) {
-				// if user has just refreshed browser or change status from offline to other (login)
-				//---
-				this.jabberSendStatus(status); // call update status to server. 
-				this.UIChatWindow.initSession(); // init chat window element.
-				// Register onunload event to window for clean logout when user leave this page.
-				this.AdvancedDOMEvent.addEventListener(window, 'unload', this.destroyAll, false);
-				this.addContactIconNode.onclick = function() {
-					eXo.communication.chatbar.webui.UIAddContactPopupWindow.setVisible(true);
-				};
-				this.subscribeCometdTopics(); // register cometd
-				if (!serverData) {
-					break;
-				}
-				this.serverInfo = serverData;
-				this.timeoutCount = 0;
-				this.errorCount = 0;
-				// Create buddy list
-				if (this.serverInfo.roster) {
-					this.buddyListControlObj.build(this.serverInfo.roster);
-				}
-				eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[this.serverInfo.myProfile.user] = this.serverInfo.myProfile.fullName ;	
-				eXo.communication.chatbar.webui.UIStateManager.init(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]);
-				// if user change status from OFFLINE to new status, the new one needs to be sent to server.
-			}
-			break;
-	
-	    case this.OFFLINE_STATUS:
-	      //this.unsubscribeCometdTopics();
-	      this.buddyListControlObj.cleanup();
-	      this.addContactIconNode.onclick = null;
-	      userStatusIconNode.className = 'IconHolder'+' '+'OfflineIcon';
-	      break;
-	    default:
-	      break;
+  if (!this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP] || !status) {
+    return false;
   }
-	// set status icon 
-	switch (this.userStatus) {
-	case this.ONLINE_STATUS:
-		userStatusIconNode.className = 'IconHolder'+' '+'OnlineIcon';
-		break;
-	case this.AWAY_STATUS:
-		userStatusIconNode.className = 'IconHolder'+' '+'AwayIcon';
-		break;
-	case this.EXTEND_AWAY_STATUS:
-		userStatusIconNode.className = 'IconHolder'+' '+'ExtendAwayIcon';
-		break;
-	case this.FREE_TO_CHAT_STATUS:
-		userStatusIconNode.className = 'IconHolder'+' '+'FreeToChat';
-		break;
-	case this.OFFLINE_STATUS:
-		userStatusIconNode.className = 'IconHolder'+' '+'OfflineIcon';
-		break;
-	}
+  var serverData = this.serverDataStack[eventId];
+  this.lastStatusSent = false;
+  var DOMUtil = eXo.core.DOMUtil;
+  // var userNameNode = DOMUtil.findFirstDescendantByClass(this.statusIconNode,
+  // 'div', 'Text');
+  // userNameNode.innerHTML =
+  // this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
+  var userStatusIconNode = DOMUtil.findAncestorByTagName(this.statusIconNode,
+      'div');
+  window.jsconsole.warn('User changed status: ' + this.userStatus + ' -> '
+      + status);
+  var lastStatus = this.userStatus;
+  this.userStatus = status;
+  var presenceData = {};
+  presenceData.from = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]
+      + '@' + this.serverInfo.mainServiceName;
+  presenceData.mode = null;
+  presenceData.type = this.userStatus;
+  this.UIChatWindow.updatePresence(presenceData);
+
+  switch (this.userStatus) {
+  case this.ONLINE_STATUS:
+  case this.AWAY_STATUS:
+  case this.EXTEND_AWAY_STATUS:
+  case this.FREE_TO_CHAT_STATUS:
+    if (!lastStatus || lastStatus == this.OFFLINE_STATUS) {
+      // if user has just refreshed browser or change status from offline to
+      // other (login)
+      // ---
+      this.jabberSendStatus(status); // call update status to server.
+      this.UIChatWindow.initSession(); // init chat window element.
+      // Register onunload event to window for clean logout when user leave this
+      // page.
+      this.AdvancedDOMEvent.addEventListener(window, 'unload', this.destroyAll,
+          false);
+      this.addContactIconNode.onclick = function() {
+        eXo.communication.chatbar.webui.UIAddContactPopupWindow
+            .setVisible(true);
+      };
+      this.subscribeCometdTopics(); // register cometd
+      if (!serverData) {
+        break;
+      }
+      this.serverInfo = serverData;
+      this.timeoutCount = 0;
+      this.errorCount = 0;
+      // Create buddy list
+      if (this.serverInfo.roster) {
+        this.buddyListControlObj.build(this.serverInfo.roster);
+      }
+      eXo.communication.chatbar.webui.UIChatWindow.fullNameMap[this.serverInfo.myProfile.user] = this.serverInfo.myProfile.fullName;
+      eXo.communication.chatbar.webui.UIStateManager
+          .init(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]);
+      // if user change status from OFFLINE to new status, the new one needs to
+      // be sent to server.
+    }
+    break;
+
+  case this.OFFLINE_STATUS:
+    // this.unsubscribeCometdTopics();
+    this.buddyListControlObj.cleanup();
+    this.addContactIconNode.onclick = null;
+    userStatusIconNode.className = 'IconHolder' + ' ' + 'OfflineIcon';
+    break;
+  default:
+    break;
+  }
+  // set status icon
+  switch (this.userStatus) {
+  case this.ONLINE_STATUS:
+    userStatusIconNode.className = 'IconHolder' + ' ' + 'OnlineIcon';
+    break;
+  case this.AWAY_STATUS:
+    userStatusIconNode.className = 'IconHolder' + ' ' + 'AwayIcon';
+    break;
+  case this.EXTEND_AWAY_STATUS:
+    userStatusIconNode.className = 'IconHolder' + ' ' + 'ExtendAwayIcon';
+    break;
+  case this.FREE_TO_CHAT_STATUS:
+    userStatusIconNode.className = 'IconHolder' + ' ' + 'FreeToChat';
+    break;
+  case this.OFFLINE_STATUS:
+    userStatusIconNode.className = 'IconHolder' + ' ' + 'OfflineIcon';
+    break;
+  }
   eXo.core.DOMUtil.cleanUpHiddenElements();
 };
 
 /**
  * Use to set visible/invisible for status popup menu.
- *
- * @param {HTMLElement} nodeObj
- * @param {Boolean} visible
- * @param {Event} event
+ * 
+ * @param {HTMLElement}
+ *          nodeObj
+ * @param {Boolean}
+ *          visible
+ * @param {Event}
+ *          event
  */
-UIMainChatWindow.prototype.setChangeStatusMenuVisible = function(nodeObj, visible, event) {
+UIMainChatWindow.prototype.setChangeStatusMenuVisible = function(nodeObj,
+    visible, event) {
   event = event || window.event;
   var AdvancedDOMEvent = eXo.communication.chatbar.core.AdvancedDOMEvent;
   if (event) {
@@ -1330,7 +1461,8 @@ UIMainChatWindow.prototype.setChangeStatusMenuVisible = function(nodeObj, visibl
   if (!nodeObj) {
     nodeObj = this.statusNode;
   }
-  var menuNode = eXo.core.DOMUtil.findFirstDescendantByClass(nodeObj, 'div', 'UIRightClickPopupMenu');
+  var menuNode = eXo.core.DOMUtil.findFirstDescendantByClass(nodeObj, 'div',
+      'UIRightClickPopupMenu');
   var display = visible ? 'block' : 'none';
   if (visible == null) {
     display = menuNode.style.display;
@@ -1351,34 +1483,39 @@ UIMainChatWindow.prototype.setChangeStatusMenuVisible = function(nodeObj, visibl
     menuNode.style.left = nodeObj.offsetLeft + 'px';
   }
   if (display == 'block') {
-    AdvancedDOMEvent.addEventListener(document, 'click', this.setChangeStatusMenuVisibleWrapper, false);
+    AdvancedDOMEvent.addEventListener(document, 'click',
+        this.setChangeStatusMenuVisibleWrapper, false);
   } else {
-    AdvancedDOMEvent.removeEventListener(document, 'click', this.setChangeStatusMenuVisibleWrapper, false);
+    AdvancedDOMEvent.removeEventListener(document, 'click',
+        this.setChangeStatusMenuVisibleWrapper, false);
   }
   return false;
 };
 
 /**
  * Wrapper method to use call from window event handle context
- *
- * @param {Event} event
+ * 
+ * @param {Event}
+ *          event
  */
 UIMainChatWindow.prototype.setChangeStatusMenuVisibleWrapper = function(event) {
   event = event || window.event;
   var srcElement = event.srcElement || event.target;
-  if (srcElement.className.indexOf('TabUser') != -1 &&
-      srcElement.className.indexOf('MenuItem') == -1) {
+  if (srcElement.className.indexOf('TabUser') != -1
+      && srcElement.className.indexOf('MenuItem') == -1) {
     if (!eXo.core.DOMUtil.findAncestorByClass(srcElement, 'TabUser')) {
       return true;
     }
   }
-  return eXo.communication.chatbar.webui.UIMainChatWindow.setChangeStatusMenuVisible(null, false);
+  return eXo.communication.chatbar.webui.UIMainChatWindow
+      .setChangeStatusMenuVisible(null, false);
 };
 
 /**
  * Create a new room with room information provided
- *
- * @param {Object} roomInfo with struct {name:'roomName', ...}
+ * 
+ * @param {Object}
+ *          roomInfo with struct {name:'roomName', ...}
  */
 UIMainChatWindow.prototype.createRoomChat = function(roomInfo) {
   this.jabberCreateRoom(roomInfo.name);
@@ -1389,17 +1526,21 @@ UIMainChatWindow.prototype.createRoomChat = function(roomInfo) {
  */
 UIMainChatWindow.prototype.buddyItemActionCallbackWrapper = function(event) {
   event = event || window.event;
-  eXo.communication.chatbar.webui.UIMainChatWindow.buddyItemActionCallback(event);
+  eXo.communication.chatbar.webui.UIMainChatWindow
+      .buddyItemActionCallback(event);
   return false;
 };
 
 /**
  * Call when user left/right click on contact item
- *
- * @param {Event} event
+ * 
+ * @param {Event}
+ *          event
  */
 UIMainChatWindow.prototype.buddyItemActionCallback = function(event) {
-  var buddyNode = eXo.core.EventManager.getEventTarget(event);//event.srcElement || event.target;
+  var buddyNode = eXo.core.EventManager.getEventTarget(event);// event.srcElement
+                                                              // ||
+                                                              // event.target;
   eXo.core.EventManager.cancelEvent(event);
   buddyNode = eXo.core.DOMUtil.findAncestorByClass(buddyNode, 'TitleIconChat');
   if (!buddyNode) {
@@ -1407,43 +1548,47 @@ UIMainChatWindow.prototype.buddyItemActionCallback = function(event) {
   }
   var targetPerson = buddyNode.getAttribute('username');
   switch (event.type) {
-    // Left click
-    case 'click':
-      this.createNewConversation(targetPerson);
-      break;
-    // Right click
-    case 'contextmenu':
-      this.buddyItemActionStack['username'] = targetPerson;
-      var intTop = 0;
-      var intLeft = 0;
-      eXo.core.Mouse.update(event);
-      var Browser = eXo.core.Browser;
-      intTop = eXo.core.Mouse.mouseyInPage - 1;
-      intLeft = eXo.core.Mouse.mousexInPage - 1;
-      if (this.isWebOS) {
-        intTop = eXo.core.Mouse.mouseyInPage - Browser.findPosYInContainer(this.rootNode, document.body) - 1;
-        intLeft = eXo.core.Mouse.mousexInPage - Browser.findPosXInContainer(this.rootNode, document.body) - 1;
-      }
-      with (this.buddyItemActionMenuNode.style) {
-        top = intTop + 'px';
-        left = intLeft + 'px';
-        display = 'block';
-				zIndex = 1000;
-      }
-  		if(this.ContactAreaNode){
-  			this.ContactAreaNode.style.display = 'block';
-  			eXo.core.DOMUtil.listHideElements(this.ContactAreaNode);
-  		}
-      this.AdvancedDOMEvent.addEventListener(document, 'click', this.postProcessBuddyItemAction, false);
-      break;
+  // Left click
+  case 'click':
+    this.createNewConversation(targetPerson);
+    break;
+  // Right click
+  case 'contextmenu':
+    this.buddyItemActionStack['username'] = targetPerson;
+    var intTop = 0;
+    var intLeft = 0;
+    eXo.core.Mouse.update(event);
+    var Browser = eXo.core.Browser;
+    intTop = eXo.core.Mouse.mouseyInPage - 1;
+    intLeft = eXo.core.Mouse.mousexInPage - 1;
+    if (this.isWebOS) {
+      intTop = eXo.core.Mouse.mouseyInPage
+          - Browser.findPosYInContainer(this.rootNode, document.body) - 1;
+      intLeft = eXo.core.Mouse.mousexInPage
+          - Browser.findPosXInContainer(this.rootNode, document.body) - 1;
+    }
+    with (this.buddyItemActionMenuNode.style) {
+      top = intTop + 'px';
+      left = intLeft + 'px';
+      display = 'block';
+      zIndex = 1000;
+    }
+    if (this.ContactAreaNode) {
+      this.ContactAreaNode.style.display = 'block';
+      eXo.core.DOMUtil.listHideElements(this.ContactAreaNode);
+    }
+    this.AdvancedDOMEvent.addEventListener(document, 'click',
+        this.postProcessBuddyItemAction, false);
+    break;
   }
   return false;
 };
 
 /**
  * Call when user select remove menu item from contact item popup menu.
- *
- * @param {Event} event
+ * 
+ * @param {Event}
+ *          event
  */
 UIMainChatWindow.prototype.removeUserCallback = function(event) {
   event = event || window.event;
@@ -1466,10 +1611,11 @@ UIMainChatWindow.prototype.removeContact = function(buddyId) {
 };
 
 /**
- * Create new conversation with contact when user click to menu item
- * in contact popup menu.
- *
- * @param {Event} event
+ * Create new conversation with contact when user click to menu item in contact
+ * popup menu.
+ * 
+ * @param {Event}
+ *          event
  */
 UIMainChatWindow.prototype.createNewConversation = function(targetPerson) {
   this.UIChatWindow.createNewTab(targetPerson);
@@ -1477,7 +1623,8 @@ UIMainChatWindow.prototype.createNewConversation = function(targetPerson) {
 };
 
 /**
- * Post-Process for buddy item action will be call after some pre-process is finished.
+ * Post-Process for buddy item action will be call after some pre-process is
+ * finished.
  */
 UIMainChatWindow.prototype.postProcessBuddyItemAction = function(event, action) {
   event = event || window.event;
@@ -1490,7 +1637,8 @@ UIMainChatWindow.prototype.postProcessBuddyItemAction = function(event, action) 
     }
     var UIMainChatWindow = eXo.communication.chatbar.webui.UIMainChatWindow;
     UIMainChatWindow.buddyItemActionMenuNode.style.display = 'none';
-    eXo.communication.chatbar.core.AdvancedDOMEvent.removeEventListener(document, 'click', UIMainChatWindow.postProcessBuddyItemAction, false);
+    eXo.communication.chatbar.core.AdvancedDOMEvent.removeEventListener(
+        document, 'click', UIMainChatWindow.postProcessBuddyItemAction, false);
     return;
   }
   this.buddyItemActionMenuNode.style.display = 'none';
@@ -1499,26 +1647,27 @@ UIMainChatWindow.prototype.postProcessBuddyItemAction = function(event, action) 
     return;
   }
   switch (action) {
-    case this.REMOVE_USER_ACTION:
-      this.removeContact(targetPerson);
-      break;
-    case this.CREATE_CONVERSATION_ACTION:
-      this.UIChatWindow.createNewTab(targetPerson);
-      break;
-    default:
-      break;
+  case this.REMOVE_USER_ACTION:
+    this.removeContact(targetPerson);
+    break;
+  case this.CREATE_CONVERSATION_ACTION:
+    this.UIChatWindow.createNewTab(targetPerson);
+    break;
+  default:
+    break;
   }
   this.buddyItemActionStack['username'] = false;
 };
 
 /**
- * Using to contact(s) to contact list. This method will be called by UIAddContactPopupWindow window
- * manager object.
- *
- * @param {Array} contactList
+ * Using to contact(s) to contact list. This method will be called by
+ * UIAddContactPopupWindow window manager object.
+ * 
+ * @param {Array}
+ *          contactList
  */
-UIMainChatWindow.prototype.addContacts = function(contactList){
-  for (var i=0; i<contactList.length; i++) {
+UIMainChatWindow.prototype.addContacts = function(contactList) {
+  for ( var i = 0; i < contactList.length; i++) {
     var contact = contactList[i];
     this.jabberAddUser(contact);
   }
@@ -1526,21 +1675,24 @@ UIMainChatWindow.prototype.addContacts = function(contactList){
 
 /**
  * Pre-Process then call method to display message in conversation windows
- *
- * @param {Array} messages
- * @param {Boolean} cancelIfNotExist
+ * 
+ * @param {Array}
+ *          messages
+ * @param {Boolean}
+ *          cancelIfNotExist
  */
-UIMainChatWindow.prototype.displayMessages = function(messages, cancelIfNotExist) {
+UIMainChatWindow.prototype.displayMessages = function(messages,
+    cancelIfNotExist) {
   try {
     if (messages.length > 1) {
       var lastSender = messages[0].from;
       var lastSenderPoint = 0;
-      for (var i=1; i<messages.length; i++) {
+      for ( var i = 1; i < messages.length; i++) {
         var msgObj = messages[i];
-        if (lastSender != msgObj.from || i == (messages.length -1)) {
+        if (lastSender != msgObj.from || i == (messages.length - 1)) {
           var buffer = '';
-          for (var j=lastSenderPoint; j<=i; j++) {
-            if (j<i) {
+          for ( var j = lastSenderPoint; j <= i; j++) {
+            if (j < i) {
               buffer += messages[j].body + '<br/>';
             } else {
               buffer += messages[j].body;
@@ -1551,7 +1703,8 @@ UIMainChatWindow.prototype.displayMessages = function(messages, cancelIfNotExist
             isGroupChat = true;
           }
           messages[lastSenderPoint].body = buffer;
-          this.UIChatWindow.displayMessage(messages[lastSenderPoint].from, messages[lastSenderPoint], isGroupChat);
+          this.UIChatWindow.displayMessage(messages[lastSenderPoint].from,
+              messages[lastSenderPoint], isGroupChat);
           lastSenderPoint = i;
           lastSender = msgObj.from;
         }
@@ -1564,7 +1717,7 @@ UIMainChatWindow.prototype.displayMessages = function(messages, cancelIfNotExist
       }
       this.UIChatWindow.displayMessage(msgObj.from, msgObj, isGroupChat);
     }
-  } catch(e) {
+  } catch (e) {
     window.jsconsole.error('Look up error! developer');
     window.jsconsole.dir(e);
   }
@@ -1573,23 +1726,28 @@ UIMainChatWindow.prototype.displayMessages = function(messages, cancelIfNotExist
 // -/-
 
 /**
- * Using Organization service to do fuzzy user search which match all user info fields.
- * {from} & {to} parameters used to page iterator.
- *
- * @param {String} question
- * @param {Integer} from
- * @param {Integer} to
+ * Using Organization service to do fuzzy user search which match all user info
+ * fields. {from} & {to} parameters used to page iterator.
+ * 
+ * @param {String}
+ *          question
+ * @param {Integer}
+ *          from
+ * @param {Integer}
+ *          to
  */
 UIMainChatWindow.prototype.orgFuzzySearchUser = function(question, from, to) {
   this.activeAction = this.ORG_FUZZY_SEARCH_USER_ACTION;
   question = question || '';
-  this.XMPPCommunicator.orgFuzzySearchUser(question, from, to, this.getAjaxHandler());
+  this.XMPPCommunicator.orgFuzzySearchUser(question, from, to, this
+      .getAjaxHandler());
 };
 
 /**
  * Using Organization service to search user by name
- *
- * @param {String} userName
+ * 
+ * @param {String}
+ *          userName
  */
 UIMainChatWindow.prototype.orgSearchUser = function(userName) {
   this.activeAction = this.ORG_GET_ALL_CONTACT_ACTION;
@@ -1598,28 +1756,32 @@ UIMainChatWindow.prototype.orgSearchUser = function(userName) {
 };
 
 /**
- * Get url from file exchange service to download file transfered after user click
- * accept file transfer link.
- *
- * @param {String} uuid user file exchange id to confirm.
+ * Get url from file exchange service to download file transfered after user
+ * click accept file transfer link.
+ * 
+ * @param {String}
+ *          uuid user file exchange id to confirm.
  */
 UIMainChatWindow.prototype.acceptSendFile = function(uuid) {
   this.activeAction = this.ACEPT_SEND_FILE_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  return this.XMPPCommunicator.acceptSendFile(userName, uuid, this.XMPPCommunicator.TRANSPORT_XMPP);
+  return this.XMPPCommunicator.acceptSendFile(userName, uuid,
+      this.XMPPCommunicator.TRANSPORT_XMPP);
 };
 
 UIMainChatWindow.prototype.denieSendFile = function(uuid) {
   this.activeAction = this.DENIAL_SEND_FILE_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.denieSendFile(userName, uuid, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.denieSendFile(userName, uuid,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 // -/-
 
 /**
  * A common Wrapper method using for event handle wrapper method.
- *
- * @param {String} callbackMethod
+ * 
+ * @param {String}
+ *          callbackMethod
  */
 UIMainChatWindow.prototype.wrapperMethod = function(callbackMethod) {
   if (callbackMethod) {
@@ -1631,21 +1793,24 @@ UIMainChatWindow.prototype.wrapperMethod = function(callbackMethod) {
 
 /**
  * Login to jabber server
- *
- * @param {String} userName
+ * 
+ * @param {String}
+ *          userName
  */
 UIMainChatWindow.prototype.jabberLogin = function(userName) {
   if (!userName || userName == 'null') {
     return false;
   }
-  // Register with on connection ready to wait for cometd connection become ready before try login.
+  // Register with on connection ready to wait for cometd connection become
+  // ready before try login.
   this.userNames['xmpp'] = userName;
   if (!eXo.cs.CSCometd.isConnected()) {
-	  eXo.cs.CSCometd.addOnConnectionReadyCallback(this.loginWrapper);
+    eXo.cs.CSCometd.addOnConnectionReadyCallback(this.loginWrapper);
     return;
   }
   this.activeAction = this.LOGIN_ACTION;
-  this.XMPPCommunicator.addTransport(this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.addTransport(this.XMPPCommunicator.TRANSPORT_XMPP, this
+      .getAjaxHandler());
   return false;
 };
 
@@ -1654,181 +1819,243 @@ UIMainChatWindow.prototype.jabberLogin = function(userName) {
  */
 UIMainChatWindow.prototype.jabberCleanBuddyList = function() {
   this.activeAction = this.CLEAN_BUDDY_LIST_ACTION;
-  this.XMPPCommunicator.cleanBuddyList(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.cleanBuddyList(
+      this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP],
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Remove an user from contact list
- *
- * @param {String} buddyId
+ * 
+ * @param {String}
+ *          buddyId
  */
 UIMainChatWindow.prototype.jabberRemoveUser = function(buddyId) {
   this.activeAction = this.REMOVE_USER_ACTION;
   try {
-    var tabId = this.UIChatWindow.getTabId(buddyId + '@' + this.serverInfo.mainServiceName);
+    var tabId = this.UIChatWindow.getTabId(buddyId + '@'
+        + this.serverInfo.mainServiceName);
     this.UIChatWindow.closeTab(tabId.id);
   } catch (e) {
   }
-  this.XMPPCommunicator.removeUser(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], buddyId, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.removeUser(
+      this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], buddyId,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Unsubscribe an user from contact list
- *
- * @param {String} buddyId
+ * 
+ * @param {String}
+ *          buddyId
  */
 UIMainChatWindow.prototype.jabberUnsubscriptUser = function(buddyId) {
   this.activeAction = this.UNSUBSCRIPT_BUDDY_ACTION;
-  this.XMPPCommunicator.unSubscribeUser(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], buddyId, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.unSubscribeUser(
+      this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], buddyId,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Use to change user's status
- *
- * @param {String} status
+ * 
+ * @param {String}
+ *          status
  */
 UIMainChatWindow.prototype.jabberSendStatus = function(status) {
   this.activeAction = this.SEND_STATUS_ACTION;
-  this.XMPPCommunicator.sendStatus(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(), status);
+  this.XMPPCommunicator.sendStatus(
+      this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP],
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(), status);
 };
 
 /**
  * Use to get history message between time range
- *
- * @param {String} targetPerson
- * @param {String} dateFormat
- * @param {String} dateFrom
- * @param {String} dateTo
- * @param {Boolean} isGroupChat
+ * 
+ * @param {String}
+ *          targetPerson
+ * @param {String}
+ *          dateFormat
+ * @param {String}
+ *          dateFrom
+ * @param {String}
+ *          dateTo
+ * @param {Boolean}
+ *          isGroupChat
  */
-UIMainChatWindow.prototype.jabberGetMessageHistory = function(targetPerson, dateFrom, dateTo, isGroupChat) {
+UIMainChatWindow.prototype.jabberGetMessageHistory = function(targetPerson,
+    dateFrom, dateTo, isGroupChat) {
   this.activeAction = this.GET_MESSAGE_HISTORY_ACTION;
-  this.XMPPCommunicator.getMessageHistory(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(), targetPerson, dateFrom, dateTo, isGroupChat);
+  this.XMPPCommunicator.getMessageHistory(
+      this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP],
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(),
+      targetPerson, dateFrom, dateTo, isGroupChat);
 };
 
 /**
  * Use to send private message
- *
- * @param {String} sendTo
- * @param {MessageObject} msg struct: {to:'buddy id', body:'message body'}
+ * 
+ * @param {String}
+ *          sendTo
+ * @param {MessageObject}
+ *          msg struct: {to:'buddy id', body:'message body'}
  */
 UIMainChatWindow.prototype.jabberSendMessage = function(sendTo, msg) {
   this.activeAction = this.SEND_MESSAGE_ACTION;
-  msg = {to: sendTo, body: msg};
-  var msgPackage = eXo.core.JSON.stringify(msg);//'{"to":"' + sendTo + '", "body":"' + msg + '"}';
-  this.XMPPCommunicator.sendMessage(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(), msgPackage);
+  msg = {
+    to : sendTo,
+    body : msg
+  };
+  var msgPackage = eXo.core.JSON.stringify(msg);// '{"to":"' + sendTo + '",
+                                                // "body":"' + msg + '"}';
+  this.XMPPCommunicator.sendMessage(
+      this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP],
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(), msgPackage);
 };
 
 /**
  * Use to send a group message
- *
- * @param {String} sendTo
- * @param {MessageObject} msg struct: {to:'buddy id', body:'message body'}
+ * 
+ * @param {String}
+ *          sendTo
+ * @param {MessageObject}
+ *          msg struct: {to:'buddy id', body:'message body'}
  */
 UIMainChatWindow.prototype.jabberSendRoomMessage = function(sendTo, msg) {
   this.activeAction = this.SEND_MESSAGE_ACTION;
-  msg = {to: sendTo, body: msg};
-  var msgPackage = eXo.core.JSON.stringify(msg);//'{"to":"' + sendTo + '", "body":"' + msg + '"}';
-  this.XMPPCommunicator.sendRoomMessage(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(), msgPackage);
+  msg = {
+    to : sendTo,
+    body : msg
+  };
+  var msgPackage = eXo.core.JSON.stringify(msg);// '{"to":"' + sendTo + '",
+                                                // "body":"' + msg + '"}';
+  this.XMPPCommunicator.sendRoomMessage(
+      this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP],
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(), msgPackage);
 };
 
 /**
  * Get subscribe request list
- */ 
+ */
 UIMainChatWindow.prototype.jabberGetSubscriptionRequests = function() {
   this.activeAction = this.GET_SUBSCRIPTION_REQUESTS_ACTION;
   this.isGetMsgInProcess = true;
-  this.XMPPCommunicator.getSubscriptionRequests(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.getSubscriptionRequests(
+      this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP],
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Use to get authorize to see status of another user
- *
- * @param {String} ask4SubUser
+ * 
+ * @param {String}
+ *          ask4SubUser
  */
 UIMainChatWindow.prototype.jabberAsk4Subscription = function(ask4SubUser) {
   this.activeAction = this.ASK_4_SUBSCRIPTION_ACTION;
-  this.XMPPCommunicator.askForSubscription(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], ask4SubUser, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.askForSubscription(
+      this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], ask4SubUser,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Add a new user to contact list
- *
- * @param {String} addUser
+ * 
+ * @param {String}
+ *          addUser
  */
 UIMainChatWindow.prototype.jabberAddUser = function(addUser) {
   this.activeAction = this.ADD_USER_ACTION;
-  this.XMPPCommunicator.addUser(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], addUser, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.addUser(
+      this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], addUser,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Confirm authorize request
- *
- * @param {String} subUser
+ * 
+ * @param {String}
+ *          subUser
  */
 UIMainChatWindow.prototype.jabberSendSubscription = function(subUser) {
   this.activeAction = this.SEND_SUBSCRIPTION_ACTION;
-  this.XMPPCommunicator.subscribeUser(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], subUser, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.subscribeUser(
+      this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], subUser,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Use to create a new chat room
- *
- * @param {String} roomName
+ * 
+ * @param {String}
+ *          roomName
  */
 UIMainChatWindow.prototype.jabberCreateRoom = function(roomName) {
   this.activeAction = this.CREATE_ROOM_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.createRoomchat(userName, userName, roomName, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.createRoomchat(userName, userName, roomName,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Use to send room's configuration
- *
- * @param {String} roomName
- * @param {String} roomConfigJson
+ * 
+ * @param {String}
+ *          roomName
+ * @param {String}
+ *          roomConfigJson
  */
-UIMainChatWindow.prototype.jabberSendConfigRoom = function(roomName, roomConfigJson) {
+UIMainChatWindow.prototype.jabberSendConfigRoom = function(roomName,
+    roomConfigJson) {
   this.activeAction = this.CONFIG_ROOM_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.sendConfigRoom(userName, roomName, roomConfigJson, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.sendConfigRoom(userName, roomName, roomConfigJson,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Use to get room's information such as: room name, jid, user joined list....
- *
- * @param {String} roomName
+ * 
+ * @param {String}
+ *          roomName
  */
 UIMainChatWindow.prototype.jabberGetRoomInfo = function(roomName) {
   this.activeAction = this.GET_ROOM_INFO_ACTION;
   this.activeParams = new Array(roomName);
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.getRoomInfo(userName, roomName, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.getRoomInfo(userName, roomName,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Use to get room's configuration
- *
- * @param {String} roomName
+ * 
+ * @param {String}
+ *          roomName
  */
 UIMainChatWindow.prototype.jabberGetRoomConfig = function(roomName) {
   this.activeAction = this.GET_ROOM_CONFIG_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.getRoomConfig(userName, roomName, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.getRoomConfig(userName, roomName,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Get current room created on the server list
- *
- * @param {Integer} from
- * @param {Integer} to
- * @param {String} sort have 2 values are: ASC, DASC
+ * 
+ * @param {Integer}
+ *          from
+ * @param {Integer}
+ *          to
+ * @param {String}
+ *          sort have 2 values are: ASC, DASC
  */
 UIMainChatWindow.prototype.jabberGetRoomList = function(from, to, sort) {
-  //this.jabberGetJoinedRoomList();
+  // this.jabberGetJoinedRoomList();
   this.activeAction = this.GET_ROOM_LIST_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.getRoomList(userName, from, to, sort, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.getRoomList(userName, from, to, sort,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
@@ -1837,94 +2064,121 @@ UIMainChatWindow.prototype.jabberGetRoomList = function(from, to, sort) {
 UIMainChatWindow.prototype.jabberGetJoinedRoomList = function() {
   this.activeAction = this.GET_JOINED_ROOM_LIST_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.getJoinedRoomList(userName, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.getJoinedRoomList(userName,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Use to manage room chat
- *
- * @param {String} roomName
- * @param {String} nickName
- * @param {String} role
- * @param {String} command
+ * 
+ * @param {String}
+ *          roomName
+ * @param {String}
+ *          nickName
+ * @param {String}
+ *          role
+ * @param {String}
+ *          command
  */
-UIMainChatWindow.prototype.jabberSetRoleRoom = function(roomName, nickName, role, command) {
+UIMainChatWindow.prototype.jabberSetRoleRoom = function(roomName, nickName,
+    role, command) {
   this.activeAction = this.SET_ROLE_ROOM_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.setRoleForRoom(userName, nickName, roomName, role, command, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler);
+  this.XMPPCommunicator.setRoleForRoom(userName, nickName, roomName, role,
+      command, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler);
 };
 
 /**
  * Use to kick an user out from a room chat
- *
- * @param {String} roomName
- * @param {String} nickName
- * @param {String} reason
+ * 
+ * @param {String}
+ *          roomName
+ * @param {String}
+ *          nickName
+ * @param {String}
+ *          reason
  */
-UIMainChatWindow.prototype.jabberKickUserFromRoom = function(roomName, nickName, reason) {
+UIMainChatWindow.prototype.jabberKickUserFromRoom = function(roomName,
+    nickName, reason) {
   this.activeAction = this.KICK_USER_FROM_ROOM_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.kickUserFromRoom(userName, nickName, roomName, reason, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler);
+  this.XMPPCommunicator.kickUserFromRoom(userName, nickName, roomName, reason,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler);
 };
 
 /**
  * Use to ban an user from a room chat
- *
- * @param {String} roomName
- * @param {String} nickName
- * @param {String} reason
+ * 
+ * @param {String}
+ *          roomName
+ * @param {String}
+ *          nickName
+ * @param {String}
+ *          reason
  */
-UIMainChatWindow.prototype.jabberBanUserFromRoom = function(roomName, nickName, reason) {
+UIMainChatWindow.prototype.jabberBanUserFromRoom = function(roomName, nickName,
+    reason) {
   this.activeAction = this.BAN_USER_FROM_ROOM_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.banUserFromRoom(userName, nickName, roomName, reason, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler);
+  this.XMPPCommunicator.banUserFromRoom(userName, nickName, roomName, reason,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler);
 };
 
 /**
  * Invite a new user to join room
- *
- * @param {String} inviter
- * @param {String} roomName
+ * 
+ * @param {String}
+ *          inviter
+ * @param {String}
+ *          roomName
  */
 UIMainChatWindow.prototype.jabberInviteJoinRoom = function(inviter, roomName) {
   this.activeAction = this.INVITE_JOIN_ROOM_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.inviteJoinRoom(userName, inviter, roomName, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.inviteJoinRoom(userName, inviter, roomName,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Confirm decline from invite to join a room chat
- *
- * @param {String} inviter
- * @param {String} roomName
+ * 
+ * @param {String}
+ *          inviter
+ * @param {String}
+ *          roomName
  */
 UIMainChatWindow.prototype.jabberDeclineJoinRoom = function(inviter, roomName) {
   this.activeAction = this.DECLINE_JOIN_ROOM_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.declineInviteJoinRoom(userName, inviter, roomName, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.declineInviteJoinRoom(userName, inviter, roomName,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
  * Use to join to a room chat
- *
- * @param {String} roomName
- * @param {Boolean} askPassword
+ * 
+ * @param {String}
+ *          roomName
+ * @param {Boolean}
+ *          askPassword
  */
 UIMainChatWindow.prototype.jabberJoinToRoom = function(roomName, askPassword) {
   var password = '';
   if (askPassword) {
-	if(askPassword == true){
-      password = window.prompt(this.ResourceBundle.chat_message_room_secret_key_to_access, '');
+    if (askPassword == true) {
+      password = window.prompt(
+          this.ResourceBundle.chat_message_room_secret_key_to_access, '');
       if (!password) {
         return;
       }
-	}else{
-	  password = askPassword;
-	}
+    } else {
+      password = askPassword;
+    }
   }
   this.activeAction = this.JOIN_TO_ROOM_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.joinToRoom(userName, roomName, password, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.joinToRoom(userName, roomName, password,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
@@ -1935,7 +2189,8 @@ UIMainChatWindow.prototype.jabberJoinToRoom = function(roomName, askPassword) {
 UIMainChatWindow.prototype.jabberLeaveFromRoom = function(roomName) {
   this.activeAction = this.LEAVE_FROM_ROOM_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.leaveFromRoom(userName, roomName, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.leaveFromRoom(userName, roomName,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 /**
@@ -1950,22 +2205,27 @@ UIMainChatWindow.prototype.jabberLogout = function(presencestatus) {
     window.clearInterval(this.checkAliveId);
     this.checkAliveId = false;
   }
-  if (window.parent &&
-      window.parent.eXo.communication.chatbar.webui.eXoChatLoader) {
-    window.parent.eXo.communication.chatbar.webui.eXoChatLoader.setChatWindowVisible(false);
+  if (window.parent
+      && window.parent.eXo.communication.chatbar.webui.eXoChatLoader) {
+    window.parent.eXo.communication.chatbar.webui.eXoChatLoader
+        .setChatWindowVisible(false);
   }
   if (!this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP]) {
-  	return;
+    return;
   }
   this.destroy();
   this.activeAction = this.LOGOUT_ACTION;
-  this.XMPPCommunicator.removeTransport(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(), presencestatus);
+  this.XMPPCommunicator.removeTransport(
+      this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP],
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler(),
+      presencestatus);
   return false;
 };
 
 UIMainChatWindow.prototype.jabberLoadJsResourceBundle = function(locale) {
   this.activeAction = this.LOAD_JS_RESOURCE_BUNDLE;
-  this.XMPPCommunicator.loadJsResourceBundle(locale, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.loadJsResourceBundle(locale,
+      this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 // -/-
@@ -1973,26 +2233,31 @@ UIMainChatWindow.prototype.jabberLoadJsResourceBundle = function(locale) {
 /**
  * Login to yahoo chat protocol
  */
-UIMainChatWindow.prototype.yahooLogin = function(nodeObj) {};
+UIMainChatWindow.prototype.yahooLogin = function(nodeObj) {
+};
 
 /**
  * Login to gtalk chat protocol
  */
-UIMainChatWindow.prototype.gtalkLogin = function(nodeObj) {};
+UIMainChatWindow.prototype.gtalkLogin = function(nodeObj) {
+};
 
 /**
  * Login to msg chat protocol
  */
-UIMainChatWindow.prototype.msnLogin = function(nodeObj) {};
+UIMainChatWindow.prototype.msnLogin = function(nodeObj) {
+};
 
 /**
  * Login to aim chat protocol
  */
-UIMainChatWindow.prototype.aimLogin = function(nodeObj) {};
+UIMainChatWindow.prototype.aimLogin = function(nodeObj) {
+};
 
 /**
  * Login to icq chat protocol
  */
-UIMainChatWindow.prototype.icqLogin = function(nodeObj) {};
+UIMainChatWindow.prototype.icqLogin = function(nodeObj) {
+};
 
 eXo.communication.chatbar.webui.UIMainChatWindow = new UIMainChatWindow();
