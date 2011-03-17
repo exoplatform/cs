@@ -81,6 +81,7 @@
 		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.Reminder.init("'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+ '","' + uicomponent.getCometdContextName() + '");') ;
 		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.portletId="' + uicomponent.id + '";') ;
 		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.settingTimezone = "'+ settingTimeZone +'" ;') ;
+		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.isSpace = "'+ uicomponent.getSpaceId() +'" ;') ;
 		%>
 	    <div class="CalendarWorkingWorkspace">
 		    <%uicomponent.renderChild(UIActionBar.class)%>
