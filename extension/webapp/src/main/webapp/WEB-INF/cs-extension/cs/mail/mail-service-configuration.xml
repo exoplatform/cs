@@ -6,11 +6,15 @@
     <key>org.exoplatform.mail.service.MailService</key>
     <type>org.exoplatform.mail.service.impl.MailServiceImpl</type>
 		<init-params>
-			<properties-param>
+			<object-param>
 				<name>leaveOnServer</name>
-				<property name="userAllowed" value="true"/>
-				<property name="isLeaveMessage" value="true"/>
-			</properties-param>
+	   		<description>option keep a copy of the message on the mail server after eXo Mail has downloaded the message</description>
+	   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+	     		<field name="name"><string>leaveOnServer</string></field>
+	     		<field name="userAllowed"><boolean>true</boolean></field>
+	     		<field name="defaultValue"><string>true</string></field>
+	   		</object>
+			</object-param>
 		</init-params>
   </component>    
   
