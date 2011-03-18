@@ -161,18 +161,12 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
 
   public void updateSelect(String selectField, String value) throws Exception {
     UIFormStringInput fieldInput = getUIStringInput(selectField) ;    
-    StringBuilder sb = new StringBuilder("") ;
-    if (!ContactUtils.isEmpty(fieldInput.getValue())) sb.append(fieldInput.getValue()) ;
-    if (sb.indexOf(value) == -1) {
-      if (sb.length() == 0) sb.append(value) ;
-      else sb.append("," + value) ;
-      fieldInput.setValue(sb.toString()) ;
-    }
+    ContactUtils.updateSelect(fieldInput, selectField, value);
   } 
   
   static  public class SaveActionListener extends EventListener<UISharedContactsForm> {
     @SuppressWarnings("unchecked")
-	public void execute(Event<UISharedContactsForm> event) throws Exception {
+  public void execute(Event<UISharedContactsForm> event) throws Exception {
       UISharedContactsForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
@@ -285,7 +279,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
         
         Map<String, String> editMapUsers = new LinkedHashMap<String, String>() ; 
         Map<String, String> editMapGroups = new LinkedHashMap<String, String>() ;
-        if (uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
+        if (uiForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).isChecked()) {
           for (String user : receiverUser.keySet()) editMapUsers.put(user, user) ;          
           editMapGroups.putAll(viewMapGroups) ;
         }
@@ -313,7 +307,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
             for (String edit : editPerGroup) newEditMapGroups.put(edit, edit) ; 
           
           // cs-1777
-          if (!uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
+          if (!uiForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).isChecked()) {
             for (String user : receiverUser.keySet()) newEditMapUsers.remove(user) ;
             if (!ContactUtils.isEmpty(groups)) {
               String[] arrayGroups = groups.split(",") ;
@@ -335,7 +329,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
             return ;
           }
         }
-      	String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
+        String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
         for (String user : receiverUserByGroup.keySet()) receiverUser.put(user, user) ;
         contactService.shareContact(username, contactIds, Arrays.asList(receiverUser.keySet().toArray(new String[] {}))) ; 
         //contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUserByGroup) ;
@@ -353,29 +347,6 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
     public void execute(Event<UISharedContactsForm> event) throws Exception {
       UISharedContactsForm uiForm = event.getSource() ;
       String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      /*
-      UIPopupAction childPopup = uiForm.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
-      UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 500) ;
-      uiGroupSelector.setType(permType) ;
-      uiGroupSelector.setSelectedGroups(null) ;      
-      if (permType.equals(UISelectComponent.TYPE_USER)) {
-        // add to fix bug cs 997
-        String users = uiForm.getUIStringInput(FIELD_USER).getValue() ;
-        uiForm.permissionUser_.clear() ;
-        if (!ContactUtils.isEmpty(users)) {
-          if (users.indexOf(",") < 0) uiForm.permissionUser_.put(users.trim(), users.trim()) ;
-          else {
-            for (String user : users.split(",")) uiForm.permissionUser_.put(user.trim(), user.trim()) ;              
-          }          
-        }
-        uiGroupSelector.setId("UIUserSelector") ;
-        uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
-      } else {
-        uiGroupSelector.setId("UIGroupSelector") ;
-        uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_GROUP}) ;
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;*/
-      
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       uiContainer.removeChild(UIPopupWindow.class) ;
       uiForm.removeChild(UIPopupWindow.class) ;
@@ -393,8 +364,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
         uiPopupWindow.setShow(true);
         uiPopupWindow.setWindowSize(740, 400) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;        
-      } else {     
-//      create group selector
+      } else {
         UIPopupWindow uiPopup = uiForm.addChild(UIPopupWindow.class, null, "UIPopupGroupSelector");
         uiPopup.setWindowSize(540, 0);
         UIGroupSelector uiGroup = uiForm.createUIComponent(UIGroupSelector.class, null, null);

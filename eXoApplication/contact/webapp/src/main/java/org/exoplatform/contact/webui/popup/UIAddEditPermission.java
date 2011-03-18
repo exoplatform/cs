@@ -158,7 +158,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       String reciever = event.getRequestContext().getRequestParameter(OBJECTID);
       UISharedForm shareForm = addEdit.getChild(UISharedForm.class);
       shareForm.setNew(false) ;
-      UIFormStringInput uiStringInput = shareForm.getUIStringInput(UISharedForm.FIELD_USER) ;
+      UIFormStringInput uiStringInput = shareForm.getUIStringInput(ContactUtils.FIELD_USER) ;
       uiStringInput.setValue(reciever) ;
       uiStringInput.setEditable(false) ;
       if (addEdit.isSharedGroup) {
@@ -166,14 +166,14 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             ContactUtils.getCurrentUser(), addEdit.groupId_) ;        
         shareForm.setGroup(group) ;
         if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(reciever)) {
-          shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(reciever) ;
-          shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(null) ;
-          shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
+          shareForm.getUIStringInput(ContactUtils.FIELD_GROUP).setValue(reciever) ;
+          shareForm.getUIStringInput(ContactUtils.FIELD_USER).setValue(null) ;
+          shareForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).setChecked(
               (group.getEditPermissionGroups() != null) && Arrays.asList(group.getEditPermissionGroups()).contains(reciever)) ;
         } else {
-          shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(reciever) ;
-          shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(null) ;
-          shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked((group.getEditPermissionUsers()
+          shareForm.getUIStringInput(ContactUtils.FIELD_USER).setValue(reciever) ;
+          shareForm.getUIStringInput(ContactUtils.FIELD_GROUP).setValue(null) ;
+          shareForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).setChecked((group.getEditPermissionUsers()
               != null) && Arrays.asList(group.getEditPermissionUsers()).contains(reciever + DataStorage.HYPHEN)) ;
         }
       } else {
@@ -181,14 +181,14 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             ContactUtils.getCurrentUser(), addEdit.contactId_) ;        
         shareForm.setContact(contact) ;
         if (contact.getViewPermissionGroups() != null && Arrays.asList(contact.getViewPermissionGroups()).contains(reciever)) {
-          shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(reciever) ;
-          shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(null) ;
-          shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
+          shareForm.getUIStringInput(ContactUtils.FIELD_GROUP).setValue(reciever) ;
+          shareForm.getUIStringInput(ContactUtils.FIELD_USER).setValue(null) ;
+          shareForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).setChecked(
               (contact.getEditPermissionGroups() != null) && Arrays.asList(contact.getEditPermissionGroups()).contains(reciever)) ;
         } else {
-          shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(reciever) ;
-          shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(null) ;
-          shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked((contact.getEditPermissionUsers()
+          shareForm.getUIStringInput(ContactUtils.FIELD_USER).setValue(reciever) ;
+          shareForm.getUIStringInput(ContactUtils.FIELD_GROUP).setValue(null) ;
+          shareForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).setChecked((contact.getEditPermissionUsers()
               != null) && Arrays.asList(contact.getEditPermissionUsers()).contains(reciever + DataStorage.HYPHEN)) ;
         }
       }
@@ -347,19 +347,19 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       }
       UISharedForm uiSharedForm = uiForm.getChild(UISharedForm.class) ;
       if (!uiSharedForm.isNew()) {
-        UIFormStringInput uiStringInput = uiSharedForm.getUIStringInput(UISharedForm.FIELD_USER) ;
+        UIFormStringInput uiStringInput = uiSharedForm.getUIStringInput(ContactUtils.FIELD_USER) ;
         if (uiStringInput.getValue() != null && uiStringInput.getValue().equals(remover)) {
-          uiStringInput = uiSharedForm.getUIStringInput(UISharedForm.FIELD_USER) ;
+          uiStringInput = uiSharedForm.getUIStringInput(ContactUtils.FIELD_USER) ;
           uiStringInput.setValue(null) ;
           uiStringInput.setEditable(true) ;
-          uiSharedForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(false) ;
+          uiSharedForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).setChecked(false) ;
           uiSharedForm.setNew(true) ;          
         } else {
-          uiStringInput = uiSharedForm.getUIStringInput(UISharedForm.FIELD_GROUP) ;  
+          uiStringInput = uiSharedForm.getUIStringInput(ContactUtils.FIELD_GROUP) ;  
           if (uiStringInput.getValue() != null && uiStringInput.getValue().equals(remover)) {
-            uiStringInput = uiSharedForm.getUIStringInput(UISharedForm.FIELD_GROUP) ;
+            uiStringInput = uiSharedForm.getUIStringInput(ContactUtils.FIELD_GROUP) ;
             uiStringInput.setValue(null) ;
-            uiSharedForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(false) ;
+            uiSharedForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).setChecked(false) ;
             uiSharedForm.setNew(true) ;          
           }
         }

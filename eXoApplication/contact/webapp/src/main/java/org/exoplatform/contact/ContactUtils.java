@@ -19,13 +19,11 @@ import java.util.ResourceBundle;
 
 import javax.jcr.RepositoryException;
 
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.DataStorage;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
-import org.exoplatform.contact.webui.UIAddressBooks;
-import org.exoplatform.contact.webui.UIContacts;
+import org.exoplatform.contact.webui.popup.UISelectComponent;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
@@ -39,8 +37,10 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.model.SelectItemOption;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputWithActions;
+import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 /**
  * Created by The eXo Platform SARL
@@ -58,6 +58,10 @@ public class ContactUtils {
 //can't use String.replaceAll() ;
   public static String[] specialString2 = {"?", "[", "(", "|", ")", "*", "\\", "+", "}", "{", "^", "$", "\""
     ,"!", "#", "%", "&", ":", ">", "<", "~", "`", "]", "'", "/", "-"} ;
+  final static public String FIELD_USER = "user".intern() ;
+  final static public String FIELD_GROUP = "group".intern() ;  
+  final static public String FIELD_EDIT_PERMISSION = "canEdit".intern() ;
+  
   
   public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
     return sharedUserId + " - " + addressName ;
@@ -268,5 +272,101 @@ public class ContactUtils {
     windowPopup.addMessage(new ApplicationMessage(messagekey, para, type)) ;
     return windowPopup;
   }
+  
+  public static UIFormInputWithActions initSelectPermissions(UIFormInputWithActions inputset) throws Exception {
+    inputset.addUIFormInput(new UIFormStringInput(FIELD_USER, FIELD_USER, null)) ;
+    List<ActionData> actionUser = new ArrayList<ActionData>() ;
+    actionUser = new ArrayList<ActionData>() ;
+    ActionData selectUserAction = new ActionData() ;
+    selectUserAction.setActionListener("SelectPermission") ;
+    selectUserAction.setActionName("SelectUser") ;    
+    selectUserAction.setActionType(ActionData.TYPE_ICON) ;
+    selectUserAction.setCssIconClass("SelectUserIcon") ;
+    selectUserAction.setActionParameter(UISelectComponent.TYPE_USER) ;
+    actionUser.add(selectUserAction) ;
+    inputset.setActionField(FIELD_USER, actionUser) ;
+    
+    UIFormStringInput groupField = new UIFormStringInput(FIELD_GROUP, FIELD_GROUP, null) ;
+    inputset.addUIFormInput(groupField) ;
+    List<ActionData> actionGroup = new ArrayList<ActionData>() ;
+    ActionData selectGroupAction = new ActionData() ;
+    selectGroupAction.setActionListener("SelectPermission") ;
+    selectGroupAction.setActionName("SelectGroup") ;    
+    selectGroupAction.setActionType(ActionData.TYPE_ICON) ;  
+    selectGroupAction.setCssIconClass("SelectGroupIcon") ;
+    selectGroupAction.setActionParameter(UISelectComponent.TYPE_GROUP) ;
+    actionGroup.add(selectGroupAction) ;
+    inputset.setActionField(FIELD_GROUP, actionGroup) ;    
+    inputset.addChild(new UIFormCheckBoxInput<Boolean>(FIELD_EDIT_PERMISSION, FIELD_EDIT_PERMISSION, null)) ;
+    return inputset;
+  }
+  
+  public static void updateSelect(UIFormStringInput fieldInput, String selectField, String value) throws Exception {
+    
+    
+    System.out.println("\n\n upppppppppp \n\n\n");
+    
+    StringBuilder sb = new StringBuilder("") ;
+    if (!ContactUtils.isEmpty(fieldInput.getValue())) sb.append(fieldInput.getValue()) ;
+    if (sb.indexOf(value) == -1) {
+      if (sb.length() == 0) sb.append(value) ;
+      else sb.append("," + value) ;
+      fieldInput.setValue(sb.toString()) ;
+    }
+  }
+  
+  public static AddressBook setViewPermissionAddress(AddressBook contactGroup, Map<String, String> receiveUsers, Map<String, String> receiveGroups) {
+    String[] viewPerUsers = contactGroup.getViewPermissionUsers() ;
+    Map<String, String> viewMapUsers = new LinkedHashMap<String, String>() ; 
+    if (viewPerUsers != null)
+      for (String view : viewPerUsers) viewMapUsers.put(view, view) ; 
+    for (String user : receiveUsers.keySet()) viewMapUsers.put(user, user) ;
+    contactGroup.setViewPermissionUsers(viewMapUsers.keySet().toArray(new String[] {})) ;
+    
+    String[] viewPerGroups = contactGroup.getViewPermissionGroups() ;
+    Map<String, String> viewMapGroups = new LinkedHashMap<String, String>() ; 
+    if (viewPerGroups != null)
+      for (String view : viewPerGroups) viewMapGroups.put(view, view) ; 
+    for (String user : receiveGroups.keySet()) viewMapGroups.put(user, user) ;
+    contactGroup.setViewPermissionGroups(viewMapGroups.keySet().toArray(new String[] {})) ;
+    return contactGroup;
+  }
+  
+  public static AddressBook removeEditPermissionAddress(AddressBook contactGroup, Map<String, String> receiveUsers, Map<String, String> receiveGroups) {
+    List<String> newPerUsers = new ArrayList<String>() ; 
+    if (contactGroup.getEditPermissionUsers() != null)
+      for (String edit : contactGroup.getEditPermissionUsers())
+        if(!receiveUsers.keySet().contains(edit)) {
+          newPerUsers.add(edit) ;
+      }
+    contactGroup.setEditPermissionUsers(newPerUsers.toArray(new String[newPerUsers.size()])) ;
+    
+    List<String> newPerGroups = new ArrayList<String>() ; 
+    if (contactGroup.getEditPermissionGroups() != null)
+      for (String edit : contactGroup.getEditPermissionGroups())
+        if(!receiveGroups.keySet().contains(edit)) {
+          newPerGroups.add(edit) ;
+      }
+    contactGroup.setEditPermissionGroups(newPerGroups.toArray(new String[newPerGroups.size()])) ; 
+    return contactGroup;
+  }
+  
+  public static AddressBook setEditPermissionAddress(AddressBook contactGroup, Map<String, String> receiveUsers, Map<String, String> receiveGroups) {
+    String[] editPerUsers = contactGroup.getEditPermissionUsers() ;
+    Map<String, String> editMapUsers = new LinkedHashMap<String, String>() ; 
+    if (editPerUsers != null)
+      for (String edit : editPerUsers) editMapUsers.put(edit, edit) ;
+    for (String user : receiveUsers.keySet()) editMapUsers.put(user, user) ;
+    contactGroup.setEditPermissionUsers(editMapUsers.keySet().toArray(new String[] {})) ;
+    
+    String[] editPerGroups = contactGroup.getEditPermissionGroups() ;
+    Map<String, String> editMapGroups = new LinkedHashMap<String, String>() ; 
+    if (editPerGroups != null)
+      for (String edit : editPerGroups) editMapGroups.put(edit, edit) ;
+    for (String group : receiveGroups.keySet()) editMapGroups.put(group, group) ;
+    contactGroup.setEditPermissionGroups(editMapGroups.keySet().toArray(new String[] {})) ;
+    return contactGroup;
+  }
+  
 }
 

@@ -113,20 +113,20 @@ public class UIPublicAddressPermission extends UIContainer implements UIPopupCom
       String reciever = event.getRequestContext().getRequestParameter(OBJECTID);
 
       UISelectPermissionsForm shareForm = addEdit.getChild(UISelectPermissionsForm.class);
-      UIFormStringInput uiStringInput = shareForm.getUIStringInput(UISelectPermissionsForm.FIELD_USER) ;
+      UIFormStringInput uiStringInput = shareForm.getUIStringInput(ContactUtils.FIELD_USER) ;
       uiStringInput.setValue(reciever) ;
       AddressBook group = ContactUtils.getContactService()
         .getPublicAddressBook(ContactUtils.getCurrentUser(), addEdit.groupId_) ;
       shareForm.setGroup(group) ;
       if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(reciever)) {
-        shareForm.getUIStringInput(UISelectPermissionsForm.FIELD_GROUP).setValue(reciever) ;
-        shareForm.getUIStringInput(UISelectPermissionsForm.FIELD_USER).setValue(null) ;
-        shareForm.getUIFormCheckBoxInput(UISelectPermissionsForm.FIELD_EDIT_PERMISSION).setChecked(
+        shareForm.getUIStringInput(ContactUtils.FIELD_GROUP).setValue(reciever) ;
+        shareForm.getUIStringInput(ContactUtils.FIELD_USER).setValue(null) ;
+        shareForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).setChecked(
             (group.getEditPermissionGroups() != null) && Arrays.asList(group.getEditPermissionGroups()).contains(reciever)) ;
       } else {
-        shareForm.getUIStringInput(UISelectPermissionsForm.FIELD_USER).setValue(reciever) ;
-        shareForm.getUIStringInput(UISelectPermissionsForm.FIELD_GROUP).setValue(null) ;
-        shareForm.getUIFormCheckBoxInput(UISelectPermissionsForm.FIELD_EDIT_PERMISSION).setChecked((group.getEditPermissionUsers()
+        shareForm.getUIStringInput(ContactUtils.FIELD_USER).setValue(reciever) ;
+        shareForm.getUIStringInput(ContactUtils.FIELD_GROUP).setValue(null) ;
+        shareForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).setChecked((group.getEditPermissionUsers()
             != null) && Arrays.asList(group.getEditPermissionUsers()).contains(reciever)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(shareForm) ;
