@@ -34,7 +34,7 @@
           <property name="job" value="org.exoplatform.calendar.service.ReminderJob"/>
           <property name="repeatCount" value="0"/>
           <property name="period" value="180000"/>     
-          <property name="startTime" value="+0"/>
+          <property name="startTime" value="+60000"/>
           <property name="endTime" value=""/>               
         </properties-param>
       </init-params>
@@ -52,8 +52,8 @@
           <property name="groupName" value="CollaborationSuite"/>
           <property name="job" value="org.exoplatform.calendar.service.PopupReminderJob"/>
           <property name="repeatCount" value="0"/>
-          <property name="period" value="6000"/>     
-          <property name="startTime" value="+0"/>
+          <property name="period" value="15000"/>     
+          <property name="startTime" value="+60000"/>
           <property name="endTime" value=""/>               
         </properties-param>
 				<properties-param>
