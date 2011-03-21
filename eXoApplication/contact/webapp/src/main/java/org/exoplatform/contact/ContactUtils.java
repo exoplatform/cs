@@ -4,9 +4,12 @@
  **************************************************************************/
 package org.exoplatform.contact;
 
+import java.io.ByteArrayInputStream;
+import java.io.OutputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -19,14 +22,24 @@ import java.util.ResourceBundle;
 
 import javax.jcr.RepositoryException;
 
+import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.impl.NewUserListener;
+import org.exoplatform.contact.webui.UIContactPortlet;
+import org.exoplatform.contact.webui.popup.PermissionData;
+import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.contact.webui.popup.UISelectComponent;
+import org.exoplatform.contact.webui.popup.UISelectPermissionsForm;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadResource;
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.organization.Group;
@@ -35,12 +48,20 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIGrid;
+import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.core.model.SelectItemOption;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
+import org.exoplatform.webui.organization.account.UIGroupSelector;
+import org.exoplatform.webui.organization.account.UIUserSelector;
 
 /**
  * Created by The eXo Platform SARL
@@ -61,7 +82,8 @@ public class ContactUtils {
   final static public String FIELD_USER = "user".intern() ;
   final static public String FIELD_GROUP = "group".intern() ;  
   final static public String FIELD_EDIT_PERMISSION = "canEdit".intern() ;
-  
+  final static public String NAME = "fileName".intern() ;
+  final static public String TYPE = "type".intern() ;
   
   public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
     return sharedUserId + " - " + addressName ;
@@ -302,10 +324,6 @@ public class ContactUtils {
   }
   
   public static void updateSelect(UIFormStringInput fieldInput, String selectField, String value) throws Exception {
-    
-    
-    System.out.println("\n\n upppppppppp \n\n\n");
-    
     StringBuilder sb = new StringBuilder("") ;
     if (!ContactUtils.isEmpty(fieldInput.getValue())) sb.append(fieldInput.getValue()) ;
     if (sb.indexOf(value) == -1) {
@@ -338,7 +356,7 @@ public class ContactUtils {
       for (String edit : contactGroup.getEditPermissionUsers())
         if(!receiveUsers.keySet().contains(edit)) {
           newPerUsers.add(edit) ;
-      }
+        }
     contactGroup.setEditPermissionUsers(newPerUsers.toArray(new String[newPerUsers.size()])) ;
     
     List<String> newPerGroups = new ArrayList<String>() ; 
@@ -346,7 +364,7 @@ public class ContactUtils {
       for (String edit : contactGroup.getEditPermissionGroups())
         if(!receiveGroups.keySet().contains(edit)) {
           newPerGroups.add(edit) ;
-      }
+        }
     contactGroup.setEditPermissionGroups(newPerGroups.toArray(new String[newPerGroups.size()])) ; 
     return contactGroup;
   }
@@ -366,6 +384,90 @@ public class ContactUtils {
     for (String group : receiveGroups.keySet()) editMapGroups.put(group, group) ;
     contactGroup.setEditPermissionGroups(editMapGroups.keySet().toArray(new String[] {})) ;
     return contactGroup;
+  }
+  
+  public static void selectPermissions(UIForm uiForm, Event<?> event) throws Exception {
+    String permType = event.getRequestContext().getRequestParameter(UIForm.OBJECTID) ;
+    UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+    uiContainer.removeChild(UIPopupWindow.class) ;
+    uiForm.removeChild(UIPopupWindow.class) ;
+    if (permType.equals(UISelectComponent.TYPE_USER)) {
+      UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;        
+      if (uiPopupWindow == null) {
+        uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
+      }
+      UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
+      uiUserSelector.setShowSearch(true);
+      uiUserSelector.setShowSearchUser(true) ;
+      uiUserSelector.setShowSearchGroup(true);
+
+      uiPopupWindow.setUIComponent(uiUserSelector);
+      uiPopupWindow.setShow(true);
+      uiPopupWindow.setWindowSize(740, 400) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;        
+    } else {
+      UIPopupWindow uiPopup = uiForm.addChild(UIPopupWindow.class, null, "UIPopupGroupSelector");
+      uiPopup.setWindowSize(540, 0);
+      UIGroupSelector uiGroup = uiForm.createUIComponent(UIGroupSelector.class, null, null);
+      uiPopup.setUIComponent(uiGroup);
+      uiGroup.setId("UIGroupSelector");
+      uiGroup.getChild(UITree.class).setId("TreeGroupSelector");
+      uiGroup.getChild(UIBreadcumbs.class).setId("BreadcumbsGroupSelector");
+      uiForm.getChild(UIPopupWindow.class).setShow(true);  
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ; 
+    }
+  }
+ 
+  public static void updateGroupGrid(UIContainer uiContainer, AddressBook group) throws Exception {
+    List<PermissionData> dataRow = new ArrayList<PermissionData>() ;
+    if(group.getViewPermissionUsers() != null) {
+      for(String username : group.getViewPermissionUsers() ) {
+        dataRow.add(new PermissionData(username, (group.getEditPermissionUsers()!= null && Arrays.asList(group.getEditPermissionUsers()).contains(username)))) ;
+      }
+    }
+    if(group.getViewPermissionGroups() != null) {
+      for(String groupId : group.getViewPermissionGroups() ) {
+        dataRow.add(new PermissionData(groupId, (group.getEditPermissionGroups()!= null && Arrays.asList(group.getEditPermissionGroups()).contains(groupId)))) ;
+      }
+    }
+    UIGrid permissionList = uiContainer.getChild(UIGrid.class) ;
+    int currentPage = 1 ;
+    try {
+      currentPage = permissionList.getUIPageIterator().getPageList().getCurrentPage() ;
+    } catch (NullPointerException e) { }
+    LazyPageList<PermissionData> pageList = new LazyPageList<PermissionData>(new ListAccessImpl<PermissionData>(PermissionData.class, dataRow), 10);
+    permissionList.getUIPageIterator().setPageList(pageList) ;
+    if (currentPage > 1 && currentPage <= permissionList.getUIPageIterator().getAvailablePage()) {
+      permissionList.getUIPageIterator().setCurrentPage(currentPage) ;
+    }
+    UISelectPermissionsForm uiSelectPermissionsForm = uiContainer.getChild(UISelectPermissionsForm.class);
+    if (uiSelectPermissionsForm!= null) uiSelectPermissionsForm.setGroup(group) ;
+  }
+  
+  public static void exportData(UIForm uiForm, Event<?> event,OutputStream out) throws Exception {
+    String exportFormat = uiForm.getUIFormSelectBox(ContactUtils.TYPE).getValue() ;
+    String fileName = uiForm.getUIStringInput(ContactUtils.NAME).getValue() ;
+    String contentType = null;
+    String extension = null;
+    if (exportFormat.equals("x-vcard")) {
+      contentType = "text/x-vcard";
+      extension = ".vcf";
+    }
+
+    ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
+    DownloadResource dresource = new InputStreamDownloadResource(is, contentType) ;
+    DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class) ;
+    if(fileName != null && fileName.length() > 0) {
+      if(fileName.length() > 4 && fileName.endsWith(extension) )
+        dresource.setDownloadName(fileName);
+      else 
+        dresource.setDownloadName(fileName + extension);
+    }else {
+      dresource.setDownloadName("eXoExported.vcf");
+    }
+    String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;      
+    event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;
+    uiForm.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
   }
   
 }

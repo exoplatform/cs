@@ -16,10 +16,7 @@
  */
 package org.exoplatform.contact.webui.popup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
@@ -121,8 +118,7 @@ public class UISelectPermissionsForm extends UIForm implements UIPopupComponent,
       String names = uiForm.getUIStringInput(ContactUtils.FIELD_USER).getValue() ;
       String groups = uiForm.getUIStringInput(ContactUtils.FIELD_GROUP).getValue() ;
       Map<String, String> receiveUsers = new LinkedHashMap<String, String>() ;
-      Map<String, String> receiveGroups = new LinkedHashMap<String, String>() ;
-      
+      Map<String, String> receiveGroups = new LinkedHashMap<String, String>() ;      
       if(ContactUtils.isEmpty(names) && ContactUtils.isEmpty(groups)) {        
         uiApp.addMessage(new ApplicationMessage("UISelectPermissionsForm.msg.empty-username", null,
             ApplicationMessage.WARNING)) ;
@@ -193,41 +189,14 @@ public class UISelectPermissionsForm extends UIForm implements UIPopupComponent,
       if(uiForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).isChecked()) {
         contactGroup = ContactUtils.setEditPermissionAddress(contactGroup, receiveUsers, receiveGroups);   
       } else {
-        if (contactGroup.getEditPermissionUsers() != null) {
-          List<String> oldPers = new ArrayList<String>() ;
-          oldPers.addAll(Arrays.asList(contactGroup.getEditPermissionUsers())) ;
-          for (String user : receiveUsers.keySet()) {
-            oldPers.remove(user) ;              
-          }
-          contactGroup.setEditPermissionUsers(oldPers.toArray(new String[] {})) ;            
-        }
-        if (contactGroup.getEditPermissionGroups() != null) {
-          List<String> oldPers = new ArrayList<String>() ;
-          oldPers.addAll(Arrays.asList(contactGroup.getEditPermissionGroups())) ;
-          for (String group : receiveGroups.keySet()) {
-            oldPers.remove(group) ;              
-          }
-          contactGroup.setEditPermissionGroups(oldPers.toArray(new String[] {})) ;            
-        }
+        ContactUtils.removeEditPermissionAddress(contactGroup, receiveUsers, receiveGroups);
       }
       contactGroup = ContactUtils.setViewPermissionAddress(contactGroup, receiveUsers, receiveGroups);
 
       if (!uiForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).isChecked()) {
         contactGroup = ContactUtils.removeEditPermissionAddress(contactGroup, receiveUsers, receiveGroups);             
       } else {
-        String[] editPerUsers = contactGroup.getEditPermissionUsers() ;
-        Map<String, String> editMapUsers = new LinkedHashMap<String, String>() ; 
-        if (editPerUsers != null)
-          for (String edit : editPerUsers) editMapUsers.put(edit, edit) ; 
-        for (String user : receiveUsers.keySet()) editMapUsers.put(user, user) ;
-        contactGroup.setEditPermissionUsers(editMapUsers.keySet().toArray(new String[] {})) ;
-        
-        String[] editPerGroups = contactGroup.getEditPermissionGroups() ;
-        Map<String, String> editMapGroups = new LinkedHashMap<String, String>() ; 
-        if (editPerGroups != null)
-          for (String edit : editPerGroups) editMapGroups.put(edit, edit) ; 
-        for (String user : receiveGroups.keySet()) editMapGroups.put(user, user) ;
-        contactGroup.setEditPermissionGroups(editMapGroups.keySet().toArray(new String[] {})) ;
+        ContactUtils.setEditPermissionAddress(contactGroup, receiveUsers, receiveGroups);
       }
 
       contactService.savePublicAddressBook(contactGroup, false) ;

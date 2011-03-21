@@ -16,7 +16,6 @@
  */
 package org.exoplatform.contact.webui.popup;
 
-import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -36,10 +35,6 @@ import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactContainer;
 import org.exoplatform.contact.webui.UIContactPortlet;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.download.DownloadResource;
-import org.exoplatform.download.DownloadService;
-import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -69,8 +64,6 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     }
 )
 public class UIExportForm extends UIForm implements UIPopupComponent{
-  final static private String NAME = "name".intern() ;
-  final static private String TYPE = "type".intern() ;
   private String selectedTag_     = null;
   private String selectedGroup = null;
   private UIPageIterator uiPageIterator_ ;
@@ -110,8 +103,8 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     for(String type : ContactUtils.getContactService().getImportExportType()) {
       options.add(new SelectItemOption<String>(type, type)) ;
     }
-    addUIFormInput(new UIFormStringInput(NAME, NAME, null).addValidator(MandatoryValidator.class)) ;
-    addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
+    addUIFormInput(new UIFormStringInput(ContactUtils.NAME, ContactUtils.NAME, null).addValidator(MandatoryValidator.class)) ;
+    addUIFormInput(new UIFormSelectBox(ContactUtils.TYPE, ContactUtils.TYPE, options)) ;
   }
   @SuppressWarnings("unchecked")
   public List<ContactData> getContacts() throws Exception { 
@@ -179,14 +172,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       String username = ContactUtils.getCurrentUser() ;
       ContactService contactService = ContactUtils.getContactService() ;
       
-      String exportFormat = uiForm.getUIFormSelectBox(UIExportForm.TYPE).getValue() ;
-      String fileName = uiForm.getUIStringInput(UIExportForm.NAME).getValue() ;
-    /*  if (ContactUtils.isEmpty(fileName)) {
-        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.filename-required", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ; 
-      }*/
+      String exportFormat = uiForm.getUIFormSelectBox(ContactUtils.TYPE).getValue() ;
       List<Contact> contacts = new ArrayList<Contact>() ;
       if (!ContactUtils.isEmpty(uiForm.getSelectedGroup())) {
         String[] address = uiForm.selectedGroup.split(Utils.SPLIT) ;
@@ -230,7 +216,6 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
             }            
           } else if (address[0].equals(DataStorage.SHARED)) {
             for(String contactId : contactIds.keySet()) {
-              //cs-2326
               Contact contact = contactService.getSharedContactAddressBook(username, contactId) ;
               if (contact != null)
                 contacts.add(contactService.getSharedContactAddressBook(username, contactId)) ;
@@ -261,27 +246,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       }
       
       OutputStream out = contactService.getContactImportExports(exportFormat).exportContact(username, contacts) ;
-      String contentType = null;
-      String extension = null;
-      if(exportFormat.equals("x-vcard")){
-        contentType = "text/x-vcard";
-        extension = ".vcf";
-      }
-      ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
-      DownloadResource dresource = new InputStreamDownloadResource(is, contentType) ;
-      DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class) ;
-      if(fileName != null && fileName.length() > 0) {
-        if(fileName.length() > 4 && fileName.endsWith(extension) )
-          dresource.setDownloadName(fileName);
-        else 
-          dresource.setDownloadName(fileName + extension);
-      }else {
-        dresource.setDownloadName("eXoExported.vcf");
-      }
-      String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
-      event.getRequestContext().getJavascriptManager()
-        .addJavascript("ajaxRedirect('" + downloadLink + "');") ;
-      uiContactPortlet.cancelAction() ;
+      ContactUtils.exportData(uiForm, event, out);
     }
   }
   

@@ -65,11 +65,11 @@
 				<table class="UIFormGrid">
 	      	<tr>
 	  	      <td class="FieldLabel"><%= _ctx.appRes("UIExportAddressBookForm.label.name") %></td>
-	  	      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.NAME))%></td>
+	  	      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(ContactUtils.NAME))%></td>
 	        </tr>
 	        <tr>
 	  	      <td class="FieldLabel"><%= _ctx.appRes("UIExportAddressBookForm.label.type") %></td>
-	  	      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.TYPE))%></td>
+	  	      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(ContactUtils.TYPE))%></td>
 	        </tr>
 	 			</table>
     	</div>

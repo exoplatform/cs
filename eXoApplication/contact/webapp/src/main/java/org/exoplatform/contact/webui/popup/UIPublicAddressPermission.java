@@ -18,15 +18,10 @@ package org.exoplatform.contact.webui.popup;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
-import org.exoplatform.commons.utils.LazyPageList;
-import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
@@ -82,29 +77,7 @@ public class UIPublicAddressPermission extends UIContainer implements UIPopupCom
   }
   
   public void updateGroupGrid(AddressBook group) throws Exception {
-    List<data> dataRow = new ArrayList<data>() ;
-    if(group.getViewPermissionUsers() != null) {
-      for(String username : group.getViewPermissionUsers() ) {
-        dataRow.add(new data(username, (group.getEditPermissionUsers()!= null && Arrays.asList(group.getEditPermissionUsers()).contains(username)))) ;
-      }
-    }
-    if(group.getViewPermissionGroups() != null) {
-      for(String groupId : group.getViewPermissionGroups() ) {
-        dataRow.add(new data(groupId, (group.getEditPermissionGroups()!= null && Arrays.asList(group.getEditPermissionGroups()).contains(groupId)))) ;
-      }
-    }
-    UIGrid permissionList = getChild(UIGrid.class) ;
-    int currentPage = 1 ;
-    try {
-      currentPage = permissionList.getUIPageIterator().getPageList().getCurrentPage() ;
-    } catch (NullPointerException e) { }
-    //ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
-    LazyPageList<data> pageList = new LazyPageList<data>(new ListAccessImpl<data>(data.class, dataRow), 10);
-    permissionList.getUIPageIterator().setPageList(pageList) ;
-    if (currentPage > 1 && currentPage <= permissionList.getUIPageIterator().getAvailablePage()) {
-      permissionList.getUIPageIterator().setCurrentPage(currentPage) ;
-    }
-    getChild(UISelectPermissionsForm.class).setGroup(group) ;
+    ContactUtils.updateGroupGrid((UIContainer)this, group);
   }
   
   static public class EditActionListener extends EventListener<UIPublicAddressPermission> {
@@ -173,30 +146,4 @@ public class UIPublicAddressPermission extends UIContainer implements UIPopupCom
     }
   }
   
-  public class data {
-    String viewPermission = null ;
-    String editPermission = null ;
-
-    public  String getViewPermission() {return viewPermission ;}
-    public  String getEditPermission() {
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      ResourceBundle res = context.getApplicationResourceBundle() ;
-      try {
-        if (editPermission != null && editPermission.equalsIgnoreCase("true")) {
-          return  res.getString("UIAddEditPermission.label.true");
-        } else {
-          return res.getString("UIAddEditPermission.label.false");
-        }
-      } catch (MissingResourceException e) {      
-        e.printStackTrace() ;
-        return editPermission ;
-      }
-    }
-      
-    public data(String username, boolean canEdit) throws Exception {
-      viewPermission = username.replaceFirst(DataStorage.HYPHEN, "") ;
-      String edit = String.valueOf(canEdit) ;
-      editPermission = edit.replaceFirst(DataStorage.HYPHEN, "") ;
-    }
-  }
 }

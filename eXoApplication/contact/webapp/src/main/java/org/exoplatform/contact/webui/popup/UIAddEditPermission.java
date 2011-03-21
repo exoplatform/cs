@@ -18,8 +18,6 @@ package org.exoplatform.contact.webui.popup;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import javax.jcr.PathNotFoundException;
 
@@ -39,7 +37,6 @@ import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -98,15 +95,15 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   }
     
   public void updateContactGrid(Contact contact) throws Exception {
-    List<data> dataRow = new ArrayList<data>() ;
+    List<PermissionData> dataRow = new ArrayList<PermissionData>() ;
     if(contact.getViewPermissionUsers() != null) {
       for(String username : contact.getViewPermissionUsers() ) {
-        dataRow.add(new data(username, (contact.getEditPermissionUsers()!= null && Arrays.asList(contact.getEditPermissionUsers()).contains(username)))) ;
+        dataRow.add(new PermissionData(username, (contact.getEditPermissionUsers()!= null && Arrays.asList(contact.getEditPermissionUsers()).contains(username)))) ;
       }
     }    
     if(contact.getViewPermissionGroups() != null) {
       for(String username : contact.getViewPermissionGroups() ) {
-        dataRow.add(new data(username, (contact.getEditPermissionGroups()!= null && Arrays.asList(contact.getEditPermissionGroups()).contains(username)))) ;
+        dataRow.add(new PermissionData(username, (contact.getEditPermissionGroups()!= null && Arrays.asList(contact.getEditPermissionGroups()).contains(username)))) ;
       }
     }
     
@@ -117,7 +114,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       currentPage = permissionList.getUIPageIterator().getPageList().getCurrentPage() ;
     } catch (NullPointerException e) { }
     //ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
-    LazyPageList<data> pageList = new LazyPageList<data>(new ListAccessImpl<data>(data.class, dataRow), 10); 
+    LazyPageList<PermissionData> pageList = new LazyPageList<PermissionData>(new ListAccessImpl<PermissionData>(PermissionData.class, dataRow), 10); 
     permissionList.getUIPageIterator().setPageList(pageList) ;
     if (currentPage > 1) {
       permissionList.getUIPageIterator().setCurrentPage(currentPage) ;
@@ -126,30 +123,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   }
   
   public void updateGroupGrid(AddressBook group) throws Exception {
-    List<data> dataRow = new ArrayList<data>() ;
-    if(group.getViewPermissionUsers() != null) {
-      for(String username : group.getViewPermissionUsers() ) {
-        dataRow.add(new data(username, (group.getEditPermissionUsers()!= null && Arrays.asList(group.getEditPermissionUsers()).contains(username)))) ;
-      }
-    }
-    if(group.getViewPermissionGroups() != null) {
-      for(String groupId : group.getViewPermissionGroups() ) {
-        dataRow.add(new data(groupId, (group.getEditPermissionGroups()!= null && Arrays.asList(group.getEditPermissionGroups()).contains(groupId)))) ;
-      }
-    }
-    UIGrid permissionList = getChild(UIGrid.class) ;
-//  cs-1702
-    int currentPage = 1 ;
-    try {
-      currentPage = permissionList.getUIPageIterator().getPageList().getCurrentPage() ;
-    } catch (NullPointerException e) { }
-    //ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
-    LazyPageList<data> pageList = new LazyPageList<data>(new ListAccessImpl<data>(data.class, dataRow), 10);
-    permissionList.getUIPageIterator().setPageList(pageList) ;
-    if (currentPage > 1 && currentPage <= permissionList.getUIPageIterator().getAvailablePage()) {
-      permissionList.getUIPageIterator().setCurrentPage(currentPage) ;
-    }
-    getChild(UISharedForm.class).setGroup(group) ;
+    ContactUtils.updateGroupGrid((UIContainer)this, group);
   }
 
   static public class EditActionListener extends EventListener<UIAddEditPermission> {
@@ -395,30 +369,5 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       }
     }
   }
-  public class data {
-    String viewPermission = null ;
-    String editPermission = null ;
-
-    public  String getViewPermission() {return viewPermission ;}
-    public  String getEditPermission() {
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      ResourceBundle res = context.getApplicationResourceBundle() ;
-      try {
-        if (editPermission != null && editPermission.equalsIgnoreCase("true")) {
-          return  res.getString("UIAddEditPermission.label.true");
-        } else {
-          return res.getString("UIAddEditPermission.label.false");
-        }
-      } catch (MissingResourceException e) {      
-        e.printStackTrace() ;
-        return editPermission ;
-      }
-    }
-      
-    public data(String username, boolean canEdit) throws Exception {
-      viewPermission = username.replaceFirst(DataStorage.HYPHEN, "") ;
-      String edit = String.valueOf(canEdit) ;
-      editPermission = edit.replaceFirst(DataStorage.HYPHEN, "") ;
-    }
-  }
+  
 }

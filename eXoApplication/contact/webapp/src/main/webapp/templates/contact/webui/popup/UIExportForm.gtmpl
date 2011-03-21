@@ -82,7 +82,7 @@
 			  <table class="UIFormGrid">
 			    <tr>
 			      <% 
-			      	field = uicomponent.getChildById(uicomponent.NAME) ;
+			      	field = uicomponent.getChildById(ContactUtils.NAME) ;
 			      	if (field != null) {
 			       %>
 			      <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.name") %></td>
@@ -91,7 +91,7 @@
 			    </tr>
 			    <tr>
 			      <% 
-			      	field = uicomponent.getChildById(uicomponent.TYPE) ;
+			      	field = uicomponent.getChildById(ContactUtils.TYPE) ;
 			      	if (field != null) {
 			       %>
 			      <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.type") %></td>

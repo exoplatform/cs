@@ -40,9 +40,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIPopupWindow;
-import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -146,14 +144,13 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       String names = uiForm.getUIStringInput(ContactUtils.FIELD_USER).getValue() ;
       String groups = uiForm.getUIStringInput(ContactUtils.FIELD_GROUP).getValue() ;
       Map<String, String> receiveUsers = new LinkedHashMap<String, String>() ;
-      Map<String, String> receiveGroups = new LinkedHashMap<String, String>() ;
-      
+      Map<String, String> receiveGroups = new LinkedHashMap<String, String>() ;      
       if(ContactUtils.isEmpty(names) && ContactUtils.isEmpty(groups)) {        
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.empty-username", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      } 
+      }
       String username = ContactUtils.getCurrentUser() ;
       OrganizationService organizationService = 
         (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
@@ -226,37 +223,18 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         AddressBook contactGroup = uiForm.group_ ;
         if(uiForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).isChecked()) {
           contactGroup = ContactUtils.setEditPermissionAddress(contactGroup, receiveUsers, receiveGroups);
-        } else { // cs-1570
-          if (contactGroup.getEditPermissionUsers() != null) {
-            List<String> oldPers = new ArrayList<String>() ;
-            oldPers.addAll(Arrays.asList(contactGroup.getEditPermissionUsers())) ;
-            for (String user : receiveUsers.keySet()) {
-              oldPers.remove(user) ;
-            }
-            contactGroup.setEditPermissionUsers(oldPers.toArray(new String[] {})) ;            
-          }
-          if (contactGroup.getEditPermissionGroups() != null) {
-            List<String> oldPers = new ArrayList<String>() ;
-            oldPers.addAll(Arrays.asList(contactGroup.getEditPermissionGroups())) ;
-            for (String group : receiveGroups.keySet()) {
-              oldPers.remove(group) ;
-            }
-            contactGroup.setEditPermissionGroups(oldPers.toArray(new String[] {})) ;            
-          }
+        } else {
+          ContactUtils.removeEditPermissionAddress(contactGroup, receiveUsers, receiveGroups);
         }
         if (uiForm.isNew_) {
           contactGroup = ContactUtils.setViewPermissionAddress(contactGroup, receiveUsers, receiveGroups);
           if (receiveUsers.size() > 0 ) {
             contactService.shareAddressBook(
                 username, contactGroup.getId(), Arrays.asList(receiveUsers.keySet().toArray(new String[] {}))) ;
-          }     
-          
-          // remove if  to fix bug cs-1449
-          //if (receiveUsersByGroups.size() > 0) {
-            contactService.shareAddressBook(
-                username, contactGroup.getId(), Arrays.asList(receiveUsersByGroups.keySet().toArray(new String[] {}))) ;
-          //}            
-        } else { // change permission
+          }
+          contactService.shareAddressBook(
+              username, contactGroup.getId(), Arrays.asList(receiveUsersByGroups.keySet().toArray(new String[] {}))) ;         
+        } else {
           if (!uiForm.getUIFormCheckBoxInput(ContactUtils.FIELD_EDIT_PERMISSION).isChecked()) {
             contactGroup = ContactUtils.removeEditPermissionAddress(contactGroup, receiveUsers, receiveGroups);             
           }
@@ -438,44 +416,16 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
 
   static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
-      UISharedForm uiForm = event.getSource() ;
-      if (!uiForm.isNew_) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      UISharedForm uiSharedForm = event.getSource() ;
+      if (!uiSharedForm.isNew_) {
+        UIApplication uiApp = uiSharedForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.cannot-change-username", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } 
-      String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      uiContainer.removeChild(UIPopupWindow.class) ;
-      uiForm.removeChild(UIPopupWindow.class) ;
-      if (permType.equals(UISelectComponent.TYPE_USER)) {
-        UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;        
-        if (uiPopupWindow == null) {
-          uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
-        }
-        UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
-        uiUserSelector.setShowSearch(true);
-        uiUserSelector.setShowSearchUser(true) ;
-        uiUserSelector.setShowSearchGroup(true);
-
-        uiPopupWindow.setUIComponent(uiUserSelector);
-        uiPopupWindow.setShow(true);
-        uiPopupWindow.setWindowSize(740, 400) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;        
-      } else {     
-//      create group selector
-        UIPopupWindow uiPopup = uiForm.addChild(UIPopupWindow.class, null, "UIPopupGroupSelector");
-        uiPopup.setWindowSize(540, 0);
-        UIGroupSelector uiGroup = uiForm.createUIComponent(UIGroupSelector.class, null, null);
-        uiPopup.setUIComponent(uiGroup);
-        uiGroup.setId("UIGroupSelector");
-        uiGroup.getChild(UITree.class).setId("TreeGroupSelector");
-        uiGroup.getChild(UIBreadcumbs.class).setId("BreadcumbsGroupSelector");
-        uiForm.getChild(UIPopupWindow.class).setShow(true);  
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ; 
-      }
+      UIForm uiForm = (UIForm)uiSharedForm ;
+      ContactUtils.selectPermissions(uiForm, event);
     }
   }
   

@@ -37,9 +37,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIPopupWindow;
-import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -154,8 +152,8 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
       return id ;
     }
   }
-
   public String[] getActions() { return new String[] { "Save", "Cancel" } ; }
+  
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
 
@@ -345,36 +343,9 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
   }
   static  public class SelectPermissionActionListener extends EventListener<UISharedContactsForm> {
     public void execute(Event<UISharedContactsForm> event) throws Exception {
-      UISharedContactsForm uiForm = event.getSource() ;
-      String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      uiContainer.removeChild(UIPopupWindow.class) ;
-      uiForm.removeChild(UIPopupWindow.class) ;
-      if (permType.equals(UISelectComponent.TYPE_USER)) {
-        UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;        
-        if (uiPopupWindow == null) {
-          uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
-        }
-        UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
-        uiUserSelector.setShowSearch(true);
-        uiUserSelector.setShowSearchUser(true) ;
-        uiUserSelector.setShowSearchGroup(true);
-
-        uiPopupWindow.setUIComponent(uiUserSelector);
-        uiPopupWindow.setShow(true);
-        uiPopupWindow.setWindowSize(740, 400) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;        
-      } else {
-        UIPopupWindow uiPopup = uiForm.addChild(UIPopupWindow.class, null, "UIPopupGroupSelector");
-        uiPopup.setWindowSize(540, 0);
-        UIGroupSelector uiGroup = uiForm.createUIComponent(UIGroupSelector.class, null, null);
-        uiPopup.setUIComponent(uiGroup);
-        uiGroup.setId("UIGroupSelector");
-        uiGroup.getChild(UITree.class).setId("TreeGroupSelector");
-        uiGroup.getChild(UIBreadcumbs.class).setId("BreadcumbsGroupSelector");
-        uiForm.getChild(UIPopupWindow.class).setShow(true);  
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ; 
-      }
+      UIForm uiForm = (UIForm)event.getSource() ;
+      ContactUtils.selectPermissions(uiForm, event);
+      
     }
   }
   
