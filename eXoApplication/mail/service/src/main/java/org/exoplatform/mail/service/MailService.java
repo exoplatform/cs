@@ -19,6 +19,7 @@ package org.exoplatform.mail.service;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.jcr.Node;
@@ -850,5 +851,7 @@ public interface MailService {
     public void setCurrentUserName(String username);
 
     public String getDelegatorUserName(String currentUserName, String accountId) throws Exception;
+    public void addPlugin(ComponentPlugin plugin) ;
+    public Map<String, MailSettingConfigPlugin> getSettingConfig();
 }
 

@@ -174,7 +174,7 @@ public class UIAccountSetting extends UIFormTabPane {
     
     UIFetchOptionsInputSet fetchOptionsInputSet = new UIFetchOptionsInputSet(TAB_FETCH_OPTIONS);
     fetchOptionsInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKMAIL_AUTO, null, null));
-    if (Utils.USER_ALLOWED) {
+    if (MailUtils.isUserAllowedLeaveOnServer()) {
       leaveOnServer_ = new UIFormCheckBoxInput<Boolean>(FIELD_LEAVE_ON_SERVER, null, null) ;
       fetchOptionsInputSet.addUIFormInput(leaveOnServer_);      
     }
@@ -403,7 +403,7 @@ public class UIAccountSetting extends UIFormTabPane {
     }
     uiIncomingInput.getUIFormSelectBox(FIELD_SERVER_TYPE).setValue(account.getProtocol()) ;
     uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto()) ;
-    if (Utils.USER_ALLOWED) {
+    if (MailUtils.isUserAllowedLeaveOnServer()) {
       uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).setChecked(Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER))) ;
     }
   } 
@@ -579,7 +579,7 @@ public class UIAccountSetting extends UIFormTabPane {
           acc.setCheckFromDate(null);
         }
       }
-      if (Utils.USER_ALLOWED) {
+      if (MailUtils.isUserAllowedLeaveOnServer()) {
         boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
         acc.setServerProperty(Utils.SVR_LEAVE_ON_SERVER, String.valueOf(leaveOnServer)) ;        
       }       

@@ -49,7 +49,7 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataStorage;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.cs.common.webui.UIPopupAction;
-import org.exoplatform.cs.common.webui.UIPopupActionContainer;
+import org.exoplatform.cs.common.webui.UIPopupActionContainer ;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Account;
@@ -567,5 +567,11 @@ public class MailUtils {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
     }
     
+    public static boolean isUserAllowedLeaveOnServer() throws Exception {
+      return getMailService().getSettingConfig().get(Utils.LEAVE_ON_SEVER).getMailSettingConfig().getUserAllowed();
+    }
+    public static boolean getDefaultValueLeaveOnServer() throws Exception {
+      return Boolean.parseBoolean(getMailService().getSettingConfig().get(Utils.LEAVE_ON_SEVER).getMailSettingConfig().getDefaultValue());
+    }
 }
 

@@ -12,17 +12,6 @@
  <component>
   	<key>org.exoplatform.mail.service.MailService</key>
   	<type>org.exoplatform.mail.service.impl.MailServiceImpl</type>
-		<init-params>
-			<object-param>
-				<name>leaveOnServer</name>
-	   		<description>option keep a copy of the message on the mail server after eXo Mail has downloaded the message</description>
-	   		<object type="org.exoplatform.mail.service.MailSettingConfig">
-	     		<field name="name"><string>leaveOnServer</string></field>
-	     		<field name="userAllowed"><boolean>true</boolean></field>
-	     		<field name="defaultValue"><string>true</string></field>
-	   		</object>
-			</object-param>
-		</init-params>
   </component>  
   <component>
     <key>org.exoplatform.services.log.LogConfigurationInitializer</key>
@@ -521,5 +510,25 @@
 	    </init-params>
 	  </component-plugin>	  	  	  	  
 	</external-component-plugins>
+	<external-component-plugins>
+  	<target-component>org.exoplatform.mail.service.MailService</target-component>
+ 		<component-plugin>   
+    	<name>cs.mail.service.settings</name>
+   		<set-method>addPlugin</set-method>
+      <type>org.exoplatform.mail.service.MailSettingConfigPlugin</type>
+    	<description>description</description>
+			<init-params>
+				<object-param>
+					<name>leaveOnServer</name>
+		   		<description>option keep a copy of the message on the mail server after eXo Mail has downloaded the message</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>leaveOnServer</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>true</string></field>
+		   		</object>
+				</object-param>
+			</init-params>
+  	</component-plugin>      
+  </external-component-plugins>
     <remove-configuration>org.exoplatform.services.transaction.ExoTransactionService</remove-configuration> 
 </configuration>

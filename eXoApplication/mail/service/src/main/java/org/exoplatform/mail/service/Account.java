@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -98,7 +99,8 @@ public class Account {
 
   public Account() {
     id = Utils.KEY_ACCOUNT + IdGenerator.generate() ;
-    setServerProperty(Utils.SVR_LEAVE_ON_SERVER, String.valueOf(Utils.IS_LEAVE_MESSAGE)) ;
+    MailService mService = (MailService)PortalContainer.getInstance().getComponentInstanceOfType(MailService.class) ;
+    setServerProperty(Utils.SVR_LEAVE_ON_SERVER, mService.getSettingConfig().get(Utils.LEAVE_ON_SEVER).getMailSettingConfig().getDefaultValue()) ;
   }
   
   /**

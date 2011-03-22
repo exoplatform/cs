@@ -307,12 +307,8 @@ public class Utils {
   public static final String EXO_PERMISSIONS = "exo:permissions".intern() ;
   public static final String READ_ONLY = "read".intern();
   public static final String SEND_RECIEVE = "send".intern();
-  
-  public static boolean USER_ALLOWED = false;
-  public static boolean IS_LEAVE_MESSAGE = false;
+
   public static final String LEAVE_ON_SEVER = "leaveOnServer".intern();
-  public static final String USERALLOWED = "userAllowed".intern();
-  public static final String DEFAULT_VALUE_SETTING = "defaultValue".intern();
   
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;

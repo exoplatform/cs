@@ -17,7 +17,6 @@
 package org.exoplatform.mail.service.impl;
 
 import java.io.InputStream;
-
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -88,7 +87,7 @@ import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.Info;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
-import org.exoplatform.mail.service.MailSettingConfig;
+import org.exoplatform.mail.service.MailSettingConfigPlugin;
 import org.exoplatform.mail.service.MailUpdateStorageEventListener;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
@@ -143,19 +142,17 @@ public class MailServiceImpl implements MailService, Startable {
   private String currentUser;
   
   private String folderStr = "";
+  Map<String,MailSettingConfigPlugin> settingPlugins = new HashMap<String, MailSettingConfigPlugin>();
   
-  public MailServiceImpl(InitParams params,NodeHierarchyCreator nodeHierarchyCreator,
+  public MailServiceImpl(InitParams initParams, NodeHierarchyCreator nodeHierarchyCreator,
                          JobSchedulerService schedulerService,
                          RepositoryService reposervice) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator, reposervice);
     emlImportExport_ = new EMLImportExport(storage_);
     checkingLog_ = new ConcurrentHashMap<String, CheckingInfo>();
     this.schedulerService_ = schedulerService;
-    MailSettingConfig objectParam = (MailSettingConfig)params.getObjectParam(Utils.LEAVE_ON_SEVER).getObject();
-    Utils.USER_ALLOWED = objectParam.getUserAllowed();
-    Utils.IS_LEAVE_MESSAGE = Boolean.parseBoolean(objectParam.getDefaultValue());
   }
-
+  
   public String getMailHierarchyNode() throws Exception {
     return storage_.getMailHierarchyNode();
 
@@ -2973,5 +2970,12 @@ public class MailServiceImpl implements MailService, Startable {
     return saved;
   }
   
+  public void addPlugin(ComponentPlugin plugin) {
+    if (plugin instanceof MailSettingConfigPlugin) {
+      MailSettingConfigPlugin mailConfigPlugin = (MailSettingConfigPlugin) plugin;
+      settingPlugins.put(mailConfigPlugin.getMailSettingConfig().getName(), mailConfigPlugin);
+    }
+  }
+  public Map<String, MailSettingConfigPlugin> getSettingConfig() { return settingPlugins; }
 }
 
