@@ -66,7 +66,7 @@
 						</div>
 					</td>
 					<td>
-						<div class="Title $cssClass" style="min-width:350px;text-align:center;">
+						<div class="Title $cssClass">
 						  <span>$currentDayName,
 						<%=uicomponent.renderDayViewInTitleBar("<a href=\"" + uicomponent.event("GotoDate",monthViewAction)+ "\">", "</a>", "<a href=\"" + uicomponent.event("GotoDate",yearViewAction) + "\">", "</a>"); %>
 						</span>
