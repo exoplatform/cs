@@ -4,8 +4,6 @@ import java.util.Map;
 
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.social.core.space.model.Space;
-import org.exoplatform.social.core.space.spi.SpaceService;
 import org.exoplatform.social.webui.activity.BaseUIActivity;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -44,32 +42,6 @@ public class ContactUIActivity extends BaseUIActivity {
    */
   public void setDisplayMoreInfo(boolean isDisplayMoreInfo) {
     this.isDisplayMoreInfo = isDisplayMoreInfo;
-  }
-
-  public String getUserFullName(String userId) {
-    return getOwnerIdentity().getProfile().getFullName();
-  }
-
-  public String getUserProfileUri(String userId) {
-    return getOwnerIdentity().getProfile().getUrl();
-  }
-
-  public String getUserAvatarImageSource(String userId) {
-    return getOwnerIdentity().getProfile().getAvatarUrl();
-  }
-  
-  public String getSpaceAvatarImageSource(String spaceIdentityId) {
-    try {
-      String spaceId = getOwnerIdentity().getRemoteId();
-      SpaceService spaceService = getApplicationComponent(SpaceService.class);
-      Space space = spaceService.getSpaceById(spaceId);
-      if (space != null) {
-        return space.getAvatarUrl();
-      }
-    } catch (Exception e) {
-      log.warn("Failed to getSpaceById: " + spaceIdentityId, e);
-    }
-    return null;
   }
   
   public String getJobTitle() {

@@ -48,6 +48,16 @@ public class ContactSpaceActivityPublisher extends ContactEventListener{
   public static final String CONTACT_ADD = "ContactAdd".intern();
   public static final String CONTACT_UPDATE = "ContactUpdate".intern();
   
+  private Map<String, String> makeActivityParams(Contact contact, String userName, String activityType) {
+    Map<String, String> params = new HashMap<String, String>();
+    params.put(EMAIL_KEY, contact.getEmailAddress() != null ? contact.getEmailAddress() : "");
+    params.put(FULL_NAME_KEY, contact.getFullName());
+    params.put(JOB_TITLE_KEY, contact.getJobTitle() != null ? contact.getJobTitle() : "");
+    params.put(PHONE_KEY, contact.getMobilePhone() != null ? contact.getMobilePhone() : "");
+    params.put(ACTIVITY_TYPE, activityType);
+    return params;
+  }
+  
   @Override
   public void saveContact(String username, Contact contact) {
     try {
@@ -56,26 +66,17 @@ public class ContactSpaceActivityPublisher extends ContactEventListener{
       if (addrBookId == null || addrBookId.indexOf(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX) < 0) {
         return;
       }
-      
       ExoSocialActivity activity = new ExoSocialActivityImpl();
       activity.setTitle(contact.getFullName());
       activity.setBody("");
-      
-      Map<String, String> params = new HashMap<String, String>();
-      params.put(EMAIL_KEY, contact.getEmailAddress() != null ? contact.getEmailAddress() : "");
-      params.put(FULL_NAME_KEY, contact.getFullName());
-      params.put(JOB_TITLE_KEY, contact.getJobTitle() != null ? contact.getJobTitle() : "");
-      params.put(PHONE_KEY, contact.getMobilePhone() != null ? contact.getMobilePhone() : "");
-      params.put(ACTIVITY_TYPE, CONTACT_ADD);
-      activity.setTemplateParams(params);
+      activity.setTemplateParams(makeActivityParams(contact, username, CONTACT_ADD));
       activity.setType(CONTACT_APP_ID);
-      
       
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class); 
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
       String spaceId = addrBookId.split(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX)[1]; 
       Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
-      activityM.recordActivity(spaceIdentity, activity);
+      activityM.saveActivity(spaceIdentity, activity);
     } catch (Exception e) {
       LOG.error("Can not record Activity for space when contact added " +e.getMessage());
     }
@@ -93,22 +94,14 @@ public class ContactSpaceActivityPublisher extends ContactEventListener{
       ExoSocialActivity activity = new ExoSocialActivityImpl();
       activity.setTitle(contact.getFullName());
       activity.setBody("");
-      
-      Map<String, String> params = new HashMap<String, String>();
-      params.put(EMAIL_KEY, contact.getEmailAddress() != null ? contact.getEmailAddress() : "");
-      params.put(FULL_NAME_KEY, contact.getFullName());
-      params.put(JOB_TITLE_KEY, contact.getJobTitle() != null ? contact.getJobTitle() : "");
-      params.put(PHONE_KEY, contact.getMobilePhone() != null ? contact.getMobilePhone() : "");
-      params.put(ACTIVITY_TYPE, CONTACT_UPDATE);
-      activity.setTemplateParams(params);
+      activity.setTemplateParams(makeActivityParams(contact, username, CONTACT_UPDATE));
       activity.setType(CONTACT_APP_ID);
-      
       
       IdentityManager indentityM = (IdentityManager) PortalContainer.getInstance().getComponentInstanceOfType(IdentityManager.class); 
       ActivityManager activityM = (ActivityManager) PortalContainer.getInstance().getComponentInstanceOfType(ActivityManager.class);
       String spaceId = addrBookId.split(ContactDataInitialize.ADDRESSBOOK_ID_PREFIX)[1]; 
       Identity spaceIdentity = indentityM.getOrCreateIdentity(SpaceIdentityProvider.NAME, spaceId, false);
-      activityM.recordActivity(spaceIdentity, activity);
+      activityM.saveActivity(spaceIdentity, activity);
     } catch (Exception e) {
       LOG.error("Can not record Activity for space when contact updated " +e.getMessage());
     }

@@ -1,12 +1,36 @@
 <%
+/*
+<!--
+
+    Copyright (C) 2003-2010 eXo Platform SAS.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Affero General Public License
+    as published by the Free Software Foundation; either version 3
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, see<http://www.gnu.org/licenses/>.
+
+-->
+*/
+%>
+<%
   import org.exoplatform.portal.webui.util.Util;
   import org.exoplatform.webui.form.UIFormTextAreaInput;
+  import org.exoplatform.social.webui.ResourceLinkProvider;
+  import org.exoplatform.social.core.space.model.Space;
+  import org.exoplatform.social.webui.Utils;
+  import org.exoplatform.social.core.service.LinkProvider;
   import org.exoplatform.cs.ext.impl.CalendarSpaceActivityPublisher;
   import org.exoplatform.calendar.service.CalendarEvent;
-  
 
   def pcontext = Util.getPortalRequestContext();
-  def jsManager = pcontext.getJavascriptManager();
   def labelActivityHasBeenDeleted = _ctx.appRes("UIActivity.label.Activity_Has_Been_Deleted");
   def activity = uicomponent.getActivity();
   def activityDeletable = uicomponent.isActivityDeletable();
@@ -15,10 +39,11 @@
 
 <% if (activity) { //process if not null
 
-  jsManager.importJavascript("eXo.social.Util", "/social-resources/javascript");
-  jsManager.importJavascript("eXo.social.PortalHttpRequest", "/social-resources/javascript");
-  jsManager.importJavascript("eXo.social.webui.UIForm", "/social-resources/javascript");
-  jsManager.importJavascript("eXo.social.webui.UIActivity", "/social-resources/javascript");
+  def jsManager = pcontext.getJavascriptManager();
+  jsManager.importJavascript("eXo.social.Util", ResourceLinkProvider.JAVASCRIPT_RESOURCE_URL);
+  jsManager.importJavascript("eXo.social.PortalHttpRequest", ResourceLinkProvider.JAVASCRIPT_RESOURCE_URL);
+  jsManager.importJavascript("eXo.social.webui.UIForm", ResourceLinkProvider.JAVASCRIPT_RESOURCE_URL);
+  jsManager.importJavascript("eXo.social.webui.UIActivity", ResourceLinkProvider.JAVASCRIPT_RESOURCE_URL);
 
   def labelComment = _ctx.appRes("UIActivity.label.Comment");
   def labelLike = _ctx.appRes("UIActivity.label.Like");
@@ -68,7 +93,7 @@
   jsManager.addOnLoadJavascript("initUIActivity${activity.id}");
   //make sures commentFormFocused is set to false to prevent any refresh to focus, only focus after post a comment
   uicomponent.setCommentFormFocused(false);
-  def activityUserName, activityUserProfileUri = "#", activityImageSource, activityContentBody, activityPostedTime;
+  def ownerName, ownerUri = "#", ownerAvatar, activityPostedTime;
   def commentFormBlockClass = "", listPeopleLikeBlockClass = "", listPeopleBGClass = "";
   if (!commentFormDisplayed) {
     commentFormBlockClass = "DisplayNone";
@@ -99,18 +124,20 @@
    listPeopleBGClass = "DisplayNone";
   }
 
-  activityContentTitle = activity.title;
   activityPostedTime = uicomponent.getPostedTimeString(_ctx, activity.postedTime);
-  def userId = activity.userId;
-  activityUserName = uicomponent.getUserFullName(userId);
 
-  if (uicomponent.isUserActivity(userId)) {
-    activityUserProfileUri = uicomponent.getUserProfileUri(userId);
-    activityImageSource = uicomponent.getUserAvatarImageSource(userId);
-    if (!activityImageSource) activityImageSource= "/social-resources/skin/ShareImages/activity/AvatarPeople.gif";
+  def ownerIdentity = uicomponent.ownerIdentity;
+  if (uicomponent.isUserActivity()) {
+    ownerUri = ownerIdentity.profile.url;
+    ownerAvatar = ownerIdentity.profile.avatarUrl;
+    ownerName = ownerIdentity.profile.fullName;
+    if (!ownerAvatar) ownerAvatar= ResourceLinkProvider.PROFILE_DEFAULT_AVATAR_URL;
   } else {
-    activityImageSource = uicomponent.getSpaceAvatarImageSource(userId);
-    if (!activityImageSource) activityImageSource = "/social-resources/skin/ShareImages/SpaceImages/SpaceLogoDefault_61x61.gif";
+    Space space = Utils.getSpaceService().getSpaceByPrettyName(ownerIdentity.remoteId);
+    ownerUri = LinkProvider.getSpaceUri(space.url);
+    ownerAvatar = space.avatarUrl;
+    ownerName = space.displayName;
+    if (!ownerAvatar) ownerAvatar = ResourceLinkProvider.SPACE_DEFAULT_AVATAR_URL;
   }
 %>
 
@@ -123,67 +150,67 @@
 
   <% uiform.begin() %>
   <div class="NormalBox clearfix">
-    <a class="Avatar" title="$activityUserName" href="$activityUserProfileUri">
-      <img title="$activityUserName" src="$activityImageSource" alt="$activityUserName" height="54px" width="56px">
+    <a class="Avatar" title="$ownerName" href="$ownerUri">
+      <img title="$ownerName" src="$ownerAvatar" alt="$ownerName">
     </a>
     <div class="ContentBox" id="ContextBox${activity.id}">
       <div class="TitleContent clearfix">
         <div class="Text">
-          <a title="$activityUserName" href="$activityUserProfileUri">$activityUserName</a>
+          <a title="$ownerName" href="$ownerUri">$ownerName</a>
         </div>
       <% if (activityDeletable) {%>
         <div onclick="<%= uicomponent.event("DeleteActivity", uicomponent.getId(), ""); %>" class="CloseContentBoxNormal" id="DeleteActivityButton${activity.id}"><span></span></div>
       <%}%>
       </div>
       <div class="Content">
-      <%
-        def labelEventAdded = "";
-        if (CalendarSpaceActivityPublisher.EVENT_ADDED.equals(uicomponent.getTypeOfEvent())) {
-          labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.event-add");
-        } else if (CalendarSpaceActivityPublisher.TASK_ADDED.equals(uicomponent.getTypeOfEvent())) {
-          labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.task-add");
-        } else if (CalendarSpaceActivityPublisher.EVENT_UPDATED.equals(uicomponent.getTypeOfEvent())) {
-          labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.event-update");
-        } else if (CalendarSpaceActivityPublisher.TASK_UPDATED.equals(uicomponent.getTypeOfEvent())) {
-          labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.task-update");
+          <%
+            def labelEventAdded = "";
+            if (CalendarSpaceActivityPublisher.EVENT_ADDED.equals(uicomponent.getTypeOfEvent())) {
+              labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.event-add");
+            } else if (CalendarSpaceActivityPublisher.TASK_ADDED.equals(uicomponent.getTypeOfEvent())) {
+              labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.task-add");
+            } else if (CalendarSpaceActivityPublisher.EVENT_UPDATED.equals(uicomponent.getTypeOfEvent())) {
+              labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.event-update");
+            } else if (CalendarSpaceActivityPublisher.TASK_UPDATED.equals(uicomponent.getTypeOfEvent())) {
+              labelEventAdded = _ctx.appRes("CalendarUIActivity.msg.task-update");
+            }
+        %>
+        <%= labelEventAdded.replace("{0}", uicomponent.getActivityParamValue(CalendarSpaceActivityPublisher.EVENT_SUMMARY_KEY)) %><br>
+        <div><a  style="cursor: pointer;" onclick="<%=uicomponent.event("MoreEventInfo");%>" id="MoreEventInfo${activity.id}"><span><%=_ctx.appRes("CalendarUIActivity.label.more-info")%></span></a></div>
+        
+        <% if (uicomponent.isDisplayMoreInfo()) { %>  
+        <% uicomponent.init(); %>
+        <div class="CommentBox">
+        <%=_ctx.appRes("CalendarUIActivity.msg.event.label.description") + uicomponent.getDescription();%> <br> 
+        <%=_ctx.appRes("CalendarUIActivity.msg.event.label.location") + uicomponent.getLocation();%> <br>
+        <%=_ctx.appRes("CalendarUIActivity.msg.event.label.start-time") + uicomponent.getEventStartTime(_ctx);%> <br>
+        <%=_ctx.appRes("CalendarUIActivity.msg.event.label.end-time") + uicomponent.getEventEndTime(_ctx);%> <br>
+        <% 
+        if (!uicomponent.isAnswered() && uicomponent.getTypeOfEvent().contains("Event")) { 
+        %>
+          <input type="button" onclick="<%=uicomponent.event("AcceptEvent", "true");%>" value="<%=_ctx.appRes("CalendarUIActivity.label.accept-invite")%>" class="CommentButton" id="AcceptButton${activity.id}" />
+          <input type="button" onclick="<%=uicomponent.event("AcceptEvent", "false");%>" value="<%=_ctx.appRes("CalendarUIActivity.label.refuse-invite")%>" class="CommentButton" id="RefuseButton${activity.id}" />
+        <% } else if (uicomponent.getTypeOfEvent().contains("Task")) { %>
+          <% if (!uicomponent.isTaskAssigned()) { %>
+            <input type="button" onclick="<%=uicomponent.event("AssignTask", "me");%>" value="<%=_ctx.appRes("CalendarUIActivity.label.assign-to-me")%>" class="CommentButton" id="AssignButton${activity.id}" />
+          <% } else { %>
+          <% if (!CalendarEvent.NEEDS_ACTION.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
+              <input type="button" onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.NEEDS_ACTION);%>" value="<%=_ctx.appRes("CalendarUIActivity.label.need-action")%>" class="CommentButton" id="NeedActionButton${activity.id}" />
+            <% }
+             if (!CalendarEvent.IN_PROCESS.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
+              <input type="button" onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.IN_PROCESS);%>" value="<%=_ctx.appRes("CalendarUIActivity.label.in-progress")%>" class="CommentButton" id="InProgressButton${activity.id}" />
+            <% }
+             if (!CalendarEvent.CANCELLED.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
+              <input type="button" onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.CANCELLED);%>" value="<%=_ctx.appRes("CalendarUIActivity.label.cancel")%>" class="CommentButton" id="CancelButton${activity.id}" />
+            <% }
+             if (!CalendarEvent.COMPLETED.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
+              <input type="button" onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.COMPLETED);%>" value="<%=_ctx.appRes("CalendarUIActivity.label.complete")%>" class="CommentButton" id="CompleteButton${activity.id}" />
+        <%     }
+          }
         }
-      %>
-      <%= labelEventAdded.replace("{0}", uicomponent.getActivityParamValue(CalendarSpaceActivityPublisher.EVENT_SUMMARY_KEY)) %><br>
-      <div><a  style="cursor: pointer;" onclick="<%=uicomponent.event("MoreEventInfo");%>" id="MoreEventInfo${activity.id}"><span><%=_ctx.appRes("CalendarUIActivity.label.more-info")%></span></a></div>
-      
-      <% if (uicomponent.isDisplayMoreInfo()) { %>  
-      <% uicomponent.init(); %>
-      <div class="CommentBox">
-      <%=_ctx.appRes("CalendarUIActivity.msg.event.label.description") + uicomponent.getDescription();%> <br> 
-      <%=_ctx.appRes("CalendarUIActivity.msg.event.label.location") + uicomponent.getLocation();%> <br>
-      <%=_ctx.appRes("CalendarUIActivity.msg.event.label.start-time") + uicomponent.getEventStartTime(_ctx);%> <br>
-      <%=_ctx.appRes("CalendarUIActivity.msg.event.label.end-time") + uicomponent.getEventEndTime(_ctx);%> <br>
-      <% 
-      if (!uicomponent.isAnswered() && uicomponent.getTypeOfEvent().contains("Event")) { 
-      %>
-        <input type="button" onclick="<%=uicomponent.event("AcceptEvent", "true");%>" value="<%=_ctx.appRes("CalendarUIActivity.label.accept-invite")%>" class="CommentButton" id="AcceptButton${activity.id}" />
-        <input type="button" onclick="<%=uicomponent.event("AcceptEvent", "false");%>" value="<%=_ctx.appRes("CalendarUIActivity.label.refuse-invite")%>" class="CommentButton" id="RefuseButton${activity.id}" />
-      <% } else if (uicomponent.getTypeOfEvent().contains("Task")) { %>
-        <% if (!uicomponent.isTaskAssigned()) { %>
-          <input type="button" onclick="<%=uicomponent.event("AssignTask", "me");%>" value="<%=_ctx.appRes("CalendarUIActivity.label.assign-to-me")%>" class="CommentButton" id="AssignButton${activity.id}" />
-        <% } else { %>
-        <% if (!CalendarEvent.NEEDS_ACTION.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
-            <input type="button" onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.NEEDS_ACTION);%>" value="<%=_ctx.appRes("CalendarUIActivity.label.need-action")%>" class="CommentButton" id="NeedActionButton${activity.id}" />
-          <% }
-           if (!CalendarEvent.IN_PROCESS.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
-            <input type="button" onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.IN_PROCESS);%>" value="<%=_ctx.appRes("CalendarUIActivity.label.in-progress")%>" class="CommentButton" id="InProgressButton${activity.id}" />
-          <% }
-           if (!CalendarEvent.CANCELLED.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
-            <input type="button" onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.CANCELLED);%>" value="<%=_ctx.appRes("CalendarUIActivity.label.cancel")%>" class="CommentButton" id="CancelButton${activity.id}" />
-          <% }
-           if (!CalendarEvent.COMPLETED.equalsIgnoreCase(uicomponent.getTaskStatus())) { %>
-            <input type="button" onclick="<%=uicomponent.event("SetTaskStatus", CalendarEvent.COMPLETED);%>" value="<%=_ctx.appRes("CalendarUIActivity.label.complete")%>" class="CommentButton" id="CompleteButton${activity.id}" />
-      <%     }
-        }
-      }
-      %>
-      </div>
-      <% } %>
+        %>
+    </div>
+    <% } %>
       </div>
       <div class="LinkCM">
         <span class="DateTime">$activityPostedTime *</span>
@@ -213,18 +240,15 @@
             <div class="Title">$labelLikes</div>
             <div class="$listPeopleLikeBlockClass">
             <%
-            //def personLikeFullName, personLikeProfileUri, personLikeAvatarImageSource;
-
             displayedIdentityLikes.each({
-              personLikeFullName = uicomponent.getUserFullName(it);
-              personLikeProfileUri = uicomponent.getUserProfileUri(it);
-              personLikeAvatarImageSource = uicomponent.getUserAvatarImageSource(it);
-              if (!personLikeAvatarImageSource) {
-                personLikeAvatarImageSource = "/social-resources/skin/ShareImages/activity/AvatarPeople.gif";
-              }
+              def id = Utils.getIdentityManager().getIdentity(it);
+              personLikeFullName = id.profile.fullName;
+              personLikeProfileUri = id.profile.url;
+              personLikeAvatarImageSource = id.profile.avatarUrl;
+              if (!personLikeAvatarImageSource) personLikeAvatarImageSource = ResourceLinkProvider.PROFILE_DEFAULT_AVATAR_URL;
               %>
                 <a class="AvatarPeopleBG" title="$personLikeFullName" href="$personLikeProfileUri">
-                  <img width="47px" height="47px" src="$personLikeAvatarImageSource" alt="$personLikeFullName" title="$personLikeFullName" />
+                  <img src="$personLikeAvatarImageSource" alt="$personLikeFullName" title="$personLikeFullName" />
                 </a>
              <% })%>
             </div>
@@ -271,24 +295,26 @@
       } else {
         commentContentClass = "";
       }
-      commenterFullName = uicomponent.getUserFullName(it.userId);
-      commenterProfileUri = uicomponent.getUserProfileUri(it.userId);
-      commenterImageSource = uicomponent.getUserAvatarImageSource(it.userId);
-      if (!commenterImageSource) {
-        commenterImageSource = "/social-resources/skin/ShareImages/activity/AvatarPeople.gif";
-      }
+
+      def id = Utils.getIdentityManager().getIdentity(it.userId);
+      commenterFullName = id.profile.fullName;
+      commenterProfileUri = id.profile.url;
+      commenterImageSource = id.profile.avatarUrl;
+      if (!commenterImageSource) commenterImageSource = ResourceLinkProvider.PROFILE_DEFAULT_AVATAR_URL;
       commentMessage = it.title;
       commentPostedTime = uicomponent.getPostedTimeString(_ctx, it.postedTime);
     %>
       <div id="CommentBlock${activity.id}" class="CommentBox clearfix">
         <a class="AvatarCM" title="$commenterFullName" href="$commenterProfileUri">
-          <img src="$commenterImageSource" alt="$commenterFullName" height="36px" width="38px">
+          <img src="$commenterImageSource" alt="$commenterFullName">
         </a>
         <div class="ContentBox">
           <div class="Content">
             <a href="$commenterProfileUri"><span class="Commenter">$commenterFullName<span></a><br />
+            <div class="ContentBlock">
               $commentMessage
-            <br/>
+              <br/>
+            </div>
           </div>
           <div class="LinkCM">
             <span class="DateTime">$commentPostedTime</span>
