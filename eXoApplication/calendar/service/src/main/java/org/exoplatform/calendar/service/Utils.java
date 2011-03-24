@@ -350,7 +350,7 @@ public class Utils {
   }
   
   public static boolean isExceptionOccurrence(CalendarEvent event) throws Exception {
-    return ((event.getIsExceptionOccurrence() != null && event.getIsExceptionOccurrence() == true) || (Utils.isEmpty(event.getRepeatType()) && !Utils.isEmpty(event.getRecurrenceId())));
+    return ((event.getIsExceptionOccurrence() != null && event.getIsExceptionOccurrence() == true));
   }
   
 }

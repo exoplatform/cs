@@ -1424,20 +1424,7 @@ public Attachment getAttachment(String attId) {
           }              
           //}
           calendarEvent.setLocation(location) ;
-          //calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
-          
-          /*if (uiForm.getEventRepeat()!=null && !CalendarEvent.RP_NOREPEAT.equals(uiForm.getEventRepeat())) {
-            if (!CalendarUtils.isEmpty(uiForm.getEventRepeatUntilValue())) {
-              Date until = uiForm.getEventRepeatUntilDate(calSetting.getDateFormat());
-              if (until.before(from)) {
-                // pop-up error message: until date must after from date
-                uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-repeat-until-before-from-date", null, ApplicationMessage.WARNING)) ;
-                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-                return;
-              }
-              calendarEvent.setRepeatUntilDate(until);
-            }   
-          }*/
+
           if (uiForm.getEventIsRepeat()) {
             if (repeatEvent != null) {
               // copy repeat properties from repeatEvent to calendarEvent
@@ -1498,7 +1485,8 @@ public Attachment getAttachment(String attId) {
                 }
               } 
               else {
-                calService.moveEvent(fromCal, toCal, fromType, toType, listEvent, username) ;
+                if (org.exoplatform.calendar.service.Utils.isExceptionOccurrence(calendarEvent_)) calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
+                else calService.moveEvent(fromCal, toCal, fromType, toType, listEvent, username) ;
               }
     
               // hung.hoang
