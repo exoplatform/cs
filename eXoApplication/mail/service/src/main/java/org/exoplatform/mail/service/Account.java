@@ -99,8 +99,7 @@ public class Account {
 
   public Account() {
     id = Utils.KEY_ACCOUNT + IdGenerator.generate() ;
-    MailService mService = (MailService)PortalContainer.getInstance().getComponentInstanceOfType(MailService.class) ;
-    setServerProperty(Utils.SVR_LEAVE_ON_SERVER, mService.getSettingConfig().get(Utils.LEAVE_ON_SEVER).getMailSettingConfig().getDefaultValue()) ;
+    setServerProperty(Utils.SVR_LEAVE_ON_SERVER, Utils.getLeaveOnServer()) ;
   }
   
   /**

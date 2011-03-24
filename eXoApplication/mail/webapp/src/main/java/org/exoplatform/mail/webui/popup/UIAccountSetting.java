@@ -133,8 +133,17 @@ public class UIAccountSetting extends UIFormTabPane {
     serverType.setEditable(false);
     serverType.setEnable(false);
     incomingInputSet.addUIFormInput(serverType) ;
-    incomingInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_SERVER, null, null).addValidator(MandatoryValidator.class));
-    incomingInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_PORT, null, null).addValidator(MandatoryValidator.class));
+    
+    UIFormStringInput incomingServer = new UIFormStringInput(FIELD_INCOMING_SERVER, null, null);
+    incomingServer.addValidator(MandatoryValidator.class);
+    if (!Utils.isUserAllowedInconmingServer()) incomingServer.setEnable(false);
+    incomingInputSet.addUIFormInput(incomingServer);
+    
+    UIFormStringInput incomingServerPort = new UIFormStringInput(FIELD_INCOMING_PORT, null, null);
+    incomingServerPort.addValidator(MandatoryValidator.class);
+    if (!Utils.isUserAllowedIncomingPort()) incomingServerPort.setEnable(false);
+    incomingInputSet.addUIFormInput(incomingServerPort);
+    
     incomingInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_ACCOUNT, null, null).addValidator(MandatoryValidator.class));
     UIFormStringInput passwordField = new UIFormStringInput(FIELD_INCOMING_PASSWORD, null, null) ;
     passwordField.setType(UIFormStringInput.PASSWORD_TYPE) ;
@@ -143,19 +152,43 @@ public class UIAccountSetting extends UIFormTabPane {
     incomingInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_IS_SAVE_PASSWORD, null, null));
     UIFormCheckBoxInput<Boolean> ssl = new UIFormCheckBoxInput<Boolean>(FIELD_IS_INCOMING_SSL, FIELD_IS_INCOMING_SSL, null);//getFieldIsSSL()
     UIFormSelectBox secureAuths = new UIFormSelectBox(FIELD_SECURE_AUTHENTICATION_INCOMING, null, getSecureAuthsValues()) ;
+    secureAuths.setValue(Utils.getIncomingSecureAuthentication());
+    if (!Utils.isUserAllowedIncomingSecureAuthentication()) {
+      ssl.setEnable(false);
+      secureAuths.setEnable(false);
+    }
    // ssl.setOnChange("ChangeSSL");
     //secureAuths.setOnChange("ChangeSSLType");
     UIFormSelectBox authMechanism = new UIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM, null, getAuthMechanismsValues()) ;
+    authMechanism.setValue(Utils.getIncomingAuthenticationMechanism());
+    if (!Utils.isUserAllowedIncomingAuthenticationMechanism()) {
+      authMechanism.setEnable(false);
+    }
     //authMechanism.setOnChange("ChangeAuthMechsIncoming");
     incomingInputSet.addUIFormInput(ssl);
     incomingInputSet.addUIFormInput(secureAuths);
     incomingInputSet.addUIFormInput(authMechanism);
     
     UIOutgoingInputSet outGoingInputSet = new UIOutgoingInputSet(TAB_OUTGOING);
-    outGoingInputSet.addUIFormInput(new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null).addValidator(MandatoryValidator.class));
-    outGoingInputSet.addUIFormInput(new UIFormStringInput(FIELD_OUTGOING_PORT, null, null).addValidator(MandatoryValidator.class));
+    
+    UIFormStringInput outgoingServer = new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null);
+    outgoingServer.addValidator(MandatoryValidator.class);
+    if (!Utils.isUserAllowedOutgoingServer()) outgoingServer.setEnable(false);
+    outGoingInputSet.addUIFormInput(outgoingServer);
+    
+    UIFormStringInput outgoingServerPort = new UIFormStringInput(FIELD_OUTGOING_PORT, null, null);
+    outgoingServerPort.addValidator(MandatoryValidator.class);
+    if (!Utils.isUserAllowedOutgoingPort()) outgoingServerPort.setEnable(false);
+    outGoingInputSet.addUIFormInput(outgoingServerPort);
+    
     UIFormCheckBoxInput<Boolean> outgoingssl = new UIFormCheckBoxInput<Boolean>(FIELD_IS_OUTGOING_SSL, FIELD_IS_OUTGOING_SSL, null);
     UIFormSelectBox secureAuthsOutgoing = new UIFormSelectBox(FIELD_SECURE_AUTHENTICATION_OUTGOING, null, getSecureAuthsValues()) ;
+    
+    secureAuthsOutgoing.setValue(Utils.getOutgoingSecureAuthentication());
+    if (!Utils.isUserAllowedOutgoingSecureAuthentication()) {
+      outgoingssl.setEnable(false);
+      secureAuthsOutgoing.setEnable(false);
+    }
     //secureAuthsOutgoing.setOnChange("ChangeOutgoingSSLType");
     //outgoingssl.setOnChange("ChangeOutgoingSSL"); 
     outGoingInputSet.addUIFormInput(outgoingssl);
@@ -168,15 +201,20 @@ public class UIAccountSetting extends UIFormTabPane {
     outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_USERNAME, null, null).addValidator(MandatoryValidator.class));
     outGoingInputSet.addUIFormInput(new UIFormStringInput(OUTGOING_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE).addValidator(MandatoryValidator.class));
     UIFormSelectBox authMechanismOutgoing = new UIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM_OUTGOING, null, getAuthMechanismsValues()) ;
-   // authMechanismOutgoing.setOnChange("ChangeAuthMechsOutgoing");
+    authMechanismOutgoing.setValue(Utils.getOutgoingAuthenticationMechanism());
+    if (!Utils.isUserAllowedOutgoingAuthenticationMechanism()) {
+      authMechanismOutgoing.setEnable(false);
+    }
+    
     outGoingInputSet.addUIFormInput(authMechanismOutgoing);
     outGoingInputSet.addUIFormInput(secureAuthsOutgoing);
     
     UIFetchOptionsInputSet fetchOptionsInputSet = new UIFetchOptionsInputSet(TAB_FETCH_OPTIONS);
     fetchOptionsInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKMAIL_AUTO, null, null));
-    if (MailUtils.isUserAllowedLeaveOnServer()) {
-      leaveOnServer_ = new UIFormCheckBoxInput<Boolean>(FIELD_LEAVE_ON_SERVER, null, null) ;
-      fetchOptionsInputSet.addUIFormInput(leaveOnServer_);      
+    leaveOnServer_ = new UIFormCheckBoxInput<Boolean>(FIELD_LEAVE_ON_SERVER, null, null) ;
+    fetchOptionsInputSet.addUIFormInput(leaveOnServer_);      
+    if (!Utils.isUserAllowedLeaveOnServer()) {
+      leaveOnServer_.setEnable(false);
     }
     UIFormCheckBoxInput<Boolean> checkFromDate = new UIFormCheckBoxInput<Boolean>(CHECK_FROM_DATE, CHECK_FROM_DATE, null);
     checkFromDate.setOnChange("CheckFromDate");
@@ -344,11 +382,11 @@ public class UIAccountSetting extends UIFormTabPane {
     uiIncomingInput.getUIStringInput(FIELD_INCOMING_PORT).setValue(account.getIncomingPort()) ;
     uiIncomingInput.getUIFormCheckBoxInput(FIELD_IS_INCOMING_SSL).setChecked(account.isIncomingSsl()) ;
     if(this.getFieldIsSSL()){
-      uiIncomingInput.getUIFormSelectBox(FIELD_SECURE_AUTHENTICATION_INCOMING).setEnable(true).setValue(account.getSecureAuthsIncoming());
-      uiIncomingInput.getUIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM).setEnable(true).setValue(account.getAuthMechsIncoming());
+      uiIncomingInput.getUIFormSelectBox(FIELD_SECURE_AUTHENTICATION_INCOMING).setValue(account.getSecureAuthsIncoming());
+      uiIncomingInput.getUIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM).setValue(account.getAuthMechsIncoming());
     }else{
-      uiIncomingInput.getUIFormSelectBox(FIELD_SECURE_AUTHENTICATION_INCOMING).setEnable(false).setValue(account.getSecureAuthsIncoming());
-      uiIncomingInput.getUIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM).setEnable(false).setValue(account.getAuthMechsIncoming());
+      uiIncomingInput.getUIFormSelectBox(FIELD_SECURE_AUTHENTICATION_INCOMING).setValue(account.getSecureAuthsIncoming());
+      uiIncomingInput.getUIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM).setValue(account.getAuthMechsIncoming());
     }
     
     uiIncomingInput.getUIStringInput(FIELD_INCOMING_ACCOUNT).setValue(account.getIncomingUser()) ;
@@ -378,11 +416,11 @@ public class UIAccountSetting extends UIFormTabPane {
     }
    
     if(getFieldOutgoingSSL()){
-      uiOutgoingInput.getUIFormSelectBox(FIELD_SECURE_AUTHENTICATION_OUTGOING).setEnable(true).setValue(account.getSecureAuthsOutgoing());
-      uiOutgoingInput.getUIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM_OUTGOING).setEnable(true).setValue(account.getAuthMechsOutgoing());
+      uiOutgoingInput.getUIFormSelectBox(FIELD_SECURE_AUTHENTICATION_OUTGOING).setValue(account.getSecureAuthsOutgoing());
+      uiOutgoingInput.getUIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM_OUTGOING).setValue(account.getAuthMechsOutgoing());
     }else{
-      uiOutgoingInput.getUIFormSelectBox(FIELD_SECURE_AUTHENTICATION_OUTGOING).setEnable(false).setValue(account.getSecureAuthsOutgoing());
-      uiOutgoingInput.getUIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM_OUTGOING).setEnable(false).setValue(account.getAuthMechsOutgoing());
+      uiOutgoingInput.getUIFormSelectBox(FIELD_SECURE_AUTHENTICATION_OUTGOING).setValue(account.getSecureAuthsOutgoing());
+      uiOutgoingInput.getUIFormSelectBox(FIELD_AUTHENTICATIONS_MECHANISM_OUTGOING).setValue(account.getAuthMechsOutgoing());
     }
 
     UIFormInputWithActions uifetchOptionsInput = getChildById(TAB_FETCH_OPTIONS) ;
@@ -403,9 +441,7 @@ public class UIAccountSetting extends UIFormTabPane {
     }
     uiIncomingInput.getUIFormSelectBox(FIELD_SERVER_TYPE).setValue(account.getProtocol()) ;
     uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto()) ;
-    if (MailUtils.isUserAllowedLeaveOnServer()) {
-      uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).setChecked(Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER))) ;
-    }
+    uifetchOptionsInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).setChecked(Boolean.valueOf(account.getServerProperties().get(Utils.SVR_LEAVE_ON_SERVER))) ;
   } 
   
   public String[] getActions() {return new String[]{"Save", "Cancel"};}
@@ -579,10 +615,10 @@ public class UIAccountSetting extends UIFormTabPane {
           acc.setCheckFromDate(null);
         }
       }
-      if (MailUtils.isUserAllowedLeaveOnServer()) {
+      if (Utils.isUserAllowedLeaveOnServer()) {
         boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
         acc.setServerProperty(Utils.SVR_LEAVE_ON_SERVER, String.valueOf(leaveOnServer)) ;        
-      }       
+      }
       try {
         mailSrv.updateAccount(username, acc) ;
         UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;

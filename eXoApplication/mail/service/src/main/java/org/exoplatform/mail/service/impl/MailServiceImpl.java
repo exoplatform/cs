@@ -2973,7 +2973,7 @@ public class MailServiceImpl implements MailService, Startable {
   public void addPlugin(ComponentPlugin plugin) {
     if (plugin instanceof MailSettingConfigPlugin) {
       MailSettingConfigPlugin mailConfigPlugin = (MailSettingConfigPlugin) plugin;
-      settingPlugins.put(mailConfigPlugin.getMailSettingConfig().getName(), mailConfigPlugin);
+      settingPlugins.put(mailConfigPlugin.getName(), mailConfigPlugin);
     }
   }
   public Map<String, MailSettingConfigPlugin> getSettingConfig() { return settingPlugins; }

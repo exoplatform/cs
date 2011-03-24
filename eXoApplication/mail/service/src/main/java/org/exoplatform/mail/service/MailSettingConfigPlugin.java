@@ -16,6 +16,9 @@
  */
 package org.exoplatform.mail.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 
@@ -27,23 +30,17 @@ import org.exoplatform.container.xml.InitParams;
  * Mar 16, 2011  
  */
 public class MailSettingConfigPlugin extends BaseComponentPlugin {
-  private MailSettingConfig mailSettingConfig;
+  private Map<String, MailSettingConfig>  mailSettingConfig = new HashMap<String, MailSettingConfig>();
   private String name ;
-  private boolean userAllowed ;
-  private String defaultValue ;
   
   public MailSettingConfigPlugin(InitParams initParams) {
-    mailSettingConfig = (MailSettingConfig)initParams.getObjectParam(Utils.LEAVE_ON_SEVER).getObject();
+    for (MailSettingConfig mConfig : initParams.getObjectParamValues(MailSettingConfig.class)) {
+      mailSettingConfig.put(mConfig.getName(), mConfig);
+    }
   }
   
-  public MailSettingConfig getMailSettingConfig() { return mailSettingConfig ; }
+  public Map<String, MailSettingConfig>  getMailSettingConfig() { return mailSettingConfig ; }
   
   public String getName() { return name ; }
   public void setName(String name_) { this.name = name_ ; }
-
-  public boolean getUserAllowed() { return userAllowed ; }
-  public void setUserAllowed(boolean b) { userAllowed = b ; }
-  
-  public String getDefaultValue() { return defaultValue ; }
-  public void setDefaultValue(String b) { defaultValue = b ; }
 }

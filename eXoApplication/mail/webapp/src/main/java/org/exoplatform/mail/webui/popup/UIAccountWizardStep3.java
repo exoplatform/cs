@@ -59,18 +59,39 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
     addChild(new UIFormSelectBox(FIELD_SERVERTYPE, null, getServerTypeValues())) ;
     UIFormSelectBox uiSelect = getUIFormSelectBox(FIELD_SERVERTYPE) ;
     uiSelect.setOnChange(UIAccountCreation.ACT_CHANGE_TYPE) ;
-    addChild(new UIFormStringInput(FIELD_INCOMING_SERVER, null, null).addValidator(MandatoryValidator.class)) ;
-    addChild(new UIFormStringInput(FIELD_INCOMINGPORT, null, null).addValidator(MandatoryValidator.class)) ;
+    
+    UIFormStringInput incomingServer = new UIFormStringInput(FIELD_INCOMING_SERVER, null, null);
+    incomingServer.setValue(Utils.getIncomingServer());
+    incomingServer.addValidator(MandatoryValidator.class);
+    incomingServer.setEnable(Utils.isUserAllowedInconmingServer());
+    addChild(incomingServer) ;
+    UIFormStringInput incomingPort = new UIFormStringInput(FIELD_INCOMINGPORT, null, null);
+    incomingPort.addValidator(MandatoryValidator.class);
+    incomingPort.setEnable(Utils.isUserAllowedIncomingPort());
+    incomingPort.setValue(Utils.getIncomingPort());
+    addChild(incomingPort) ;
     addChild(new UIFormCheckBoxInput<Boolean>(FIELD_USESSL, null,null)) ;
     UIFormCheckBoxInput uiCheckBox = getUIFormCheckBoxInput(FIELD_USESSL) ;
     uiCheckBox.setOnChange(UIAccountCreation.ACT_CHANGE_SSL) ;
-    uiCheckBox.setChecked(true);    
-    addChild(new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null).addValidator(MandatoryValidator.class)) ;
-    addChild(new UIFormStringInput(FIELD_OUTGOINGPORT, null, null).addValidator(MandatoryValidator.class)) ;
+    uiCheckBox.setChecked(Boolean.parseBoolean(Utils.getIncomingSecureAuthentication()));
+    uiCheckBox.setEnable(Utils.isUserAllowedIncomingSecureAuthentication());
+    
+    UIFormStringInput outServer = new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null);
+    outServer.addValidator(MandatoryValidator.class);
+    outServer.setEnable(Utils.isUserAllowedOutgoingServer());
+    outServer.setValue(Utils.getOutgoingServer());
+    addChild(outServer) ;
+    
+    UIFormStringInput outgoingPort = new UIFormStringInput(FIELD_OUTGOINGPORT, null, null);
+    outgoingPort.addValidator(MandatoryValidator.class);
+    outgoingPort.setValue(Utils.getOutgoingPort());
+    outgoingPort.setEnable(Utils.isUserAllowedOutgoingPort());
+    addChild(outgoingPort) ;
     addChild(new UIFormCheckBoxInput<Boolean>(FIELD_OUTGOING_SSL, null,null)) ;
     UIFormCheckBoxInput outgoingSsl = getUIFormCheckBoxInput(FIELD_OUTGOING_SSL) ;
     outgoingSsl.setOnChange(UIAccountCreation.ACT_CHANGE_OUTGOINGSSL) ;
-    outgoingSsl.setChecked(true);    
+    outgoingSsl.setEnable(Utils.isUserAllowedOutgoingSecureAuthentication());
+    outgoingSsl.setChecked(Boolean.parseBoolean(Utils.getOutgoingSecureAuthentication()));
     addChild(new UIFormStringInput(FIELD_STOREFOLDER, null,null).addValidator(MandatoryValidator.class)) ;
     setDefaultValue(uiSelect.getValue(), uiCheckBox.isChecked()) ;
     resetFields() ;
@@ -87,7 +108,9 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
     getUIStringInput(FIELD_INCOMINGPORT).setRendered(false);
     getUIStringInput(FIELD_OUTGOINGPORT).setRendered(false);
     getUIStringInput(FIELD_STOREFOLDER).setRendered(false);
-    if(serverType.equals(Utils.POP3)) {
+    getUIStringInput(FIELD_INCOMING_SERVER).setValue(Utils.getIncomingServer()) ;
+    getUIStringInput(FIELD_INCOMINGPORT).setValue(Utils.getIncomingPort()) ;
+    /*if(serverType.equals(Utils.POP3)) {
       getUIStringInput(FIELD_INCOMING_SERVER).setValue(UIAccountCreation.DEFAULT_POP_SERVER) ;
       if(isSSL) {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_POPSSL_PORT) ;
@@ -101,7 +124,7 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
       } else {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_IMAP_PORT) ;
       }
-    }
+    }*/
   }
 
   public boolean isFieldsValid() {
@@ -145,10 +168,10 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
   
   protected void resetFields(){
     reset() ;
-    setIncomingServer(UIAccountCreation.DEFAULT_IMAP_SERVER) ;
-    setIncomingPort(UIAccountCreation.DEFAULT_IMAPSSL_PORT) ;
-    setOutgoingServer(UIAccountCreation.DEFAULT_SMTP_SERVER) ;
-    setOutgoingPort(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
+    setIncomingServer(Utils.getIncomingServer()) ;
+    setIncomingPort(Utils.getIncomingPort()) ;
+    setOutgoingServer(Utils.getOutgoingServer()) ;
+    setOutgoingPort(Utils.getOutgoingPort()) ;
     setStoreFolder(UIAccountCreation.DEFAULT_SERVER_FOLDER) ;
   }
   protected void fillFields(String serverType, boolean isSsl, String incomingServer, String popPort,String outgoingServer, String smtpPort, boolean outgoingSsl, String storeFolder){

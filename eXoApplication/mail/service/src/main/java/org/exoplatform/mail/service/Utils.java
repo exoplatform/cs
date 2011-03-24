@@ -308,7 +308,16 @@ public class Utils {
   public static final String READ_ONLY = "read".intern();
   public static final String SEND_RECIEVE = "send".intern();
 
-  public static final String LEAVE_ON_SEVER = "leaveOnServer".intern();
+  private static final String SERVICE_SETTINGS_NAME = "cs.mail.service.settings".intern();
+  private static final String LEAVE_ON_SEVER = "leaveOnServer".intern();
+  private static final String INCOMING_SERVER = "incomingServer".intern();
+  private static final String OUTGOING_SEVER = "outgoingServer".intern();
+  private static final String INCOMING_SERVER_PORT = "incomingPort".intern();
+  private static final String OUTGOING_SEVER_PORT = "outgoingPort".intern();
+  private static final String INCOMING_SECURE_AUTHENTICATION = "incomingSecureAuthentication".intern();
+  private static final String INCOMING_AUTHENTICATION_MECHANISM = "incomingAuthenticationMechanism".intern();
+  private static final String OUTGOING_SECURE_AUTHENTICATION = "outgoingSecureAuthentication".intern();
+  private static final String OUTGOING_AUTHENTICATION_MECHANISM = "outgoingAuthenticationMechanism".intern();
   
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
@@ -751,5 +760,73 @@ public class Utils {
     file.setSize(attactNode.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
     file.setPath("/" + file.getWorkspace() + attactNode.getPath());
     return file;
+  }
+  
+  private static Map<String, MailSettingConfig> getSettingConfig() {
+    MailService mailService = (MailService)PortalContainer.getInstance().getComponentInstanceOfType(MailService.class) ;
+    return mailService.getSettingConfig().get(SERVICE_SETTINGS_NAME).getMailSettingConfig();
+  }
+  
+  public static boolean isUserAllowedLeaveOnServer() throws Exception {
+    return getSettingConfig().get(LEAVE_ON_SEVER).getUserAllowed();
+  }
+  public static String getLeaveOnServer() {
+    return getSettingConfig().get(LEAVE_ON_SEVER).getDefaultValue() ;    
+  }
+  
+  public static boolean isUserAllowedInconmingServer() throws Exception {
+    return getSettingConfig().get(INCOMING_SERVER).getUserAllowed();
+  }
+  public static String getIncomingServer() {
+    return getSettingConfig().get(INCOMING_SERVER).getDefaultValue();    
+  }
+  
+  public static boolean isUserAllowedIncomingPort() throws Exception {
+    return getSettingConfig().get(INCOMING_SERVER_PORT).getUserAllowed();
+  }
+  public static String getIncomingPort() {
+    return getSettingConfig().get(INCOMING_SERVER_PORT).getDefaultValue() ;    
+  }
+  
+  public static boolean isUserAllowedOutgoingServer() throws Exception {
+    return getSettingConfig().get(OUTGOING_SEVER).getUserAllowed();
+  }
+  public static String getOutgoingServer() {
+    return getSettingConfig().get(OUTGOING_SEVER).getDefaultValue();    
+  }
+  
+  public static boolean isUserAllowedOutgoingPort() throws Exception {
+    return getSettingConfig().get(OUTGOING_SEVER_PORT).getUserAllowed();
+  }
+  public static String getOutgoingPort() {
+    return getSettingConfig().get(OUTGOING_SEVER_PORT).getDefaultValue() ;    
+  }
+  
+  public static boolean isUserAllowedIncomingSecureAuthentication() throws Exception {
+    return getSettingConfig().get(INCOMING_SECURE_AUTHENTICATION).getUserAllowed();
+  }
+  public static String getIncomingSecureAuthentication() {
+    return getSettingConfig().get(INCOMING_SECURE_AUTHENTICATION).getDefaultValue();    
+  }
+  
+  public static boolean isUserAllowedIncomingAuthenticationMechanism() throws Exception {
+    return getSettingConfig().get(INCOMING_AUTHENTICATION_MECHANISM).getUserAllowed();
+  }
+  public static String getIncomingAuthenticationMechanism() {
+    return getSettingConfig().get(INCOMING_AUTHENTICATION_MECHANISM).getDefaultValue();    
+  }
+
+  public static boolean isUserAllowedOutgoingSecureAuthentication() throws Exception {
+    return getSettingConfig().get(OUTGOING_SECURE_AUTHENTICATION).getUserAllowed();
+  }
+  public static String getOutgoingSecureAuthentication() {
+    return getSettingConfig().get(OUTGOING_SECURE_AUTHENTICATION).getDefaultValue();    
+  }
+  
+  public static boolean isUserAllowedOutgoingAuthenticationMechanism() throws Exception {
+    return getSettingConfig().get(OUTGOING_AUTHENTICATION_MECHANISM).getUserAllowed();
+  }
+  public static String getOutgoingAuthenticationMechanism() {
+    return getSettingConfig().get(OUTGOING_AUTHENTICATION_MECHANISM).getDefaultValue();    
   }
 }

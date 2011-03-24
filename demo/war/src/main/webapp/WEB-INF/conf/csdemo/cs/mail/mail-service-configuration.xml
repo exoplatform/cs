@@ -34,6 +34,78 @@
 		     		<field name="defaultValue"><string>true</string></field>
 		   		</object>
 				</object-param>
+				<object-param>
+					<name>incomingServer</name>
+		   		<description>default incoming server to check for new mails.</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>incomingServer</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>imap.gmail.com</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>incomingPort</name>
+		   		<description>default port incoming server to check for new mails.</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>incomingPort</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>993</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>outgoingServer</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>outgoingServer</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>smtp.gmail.com</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>outgoingPort</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>outgoingPort</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>465</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>incomingSecureAuthentication</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>incomingSecureAuthentication</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>starttls</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>incomingAuthenticationMechanism</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>incomingAuthenticationMechanism</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>plain</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>outgoingSecureAuthentication</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>outgoingSecureAuthentication</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>starttls</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>outgoingAuthenticationMechanism</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>outgoingAuthenticationMechanism</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>plain</string></field>
+		   		</object>
+				</object-param>
 			</init-params>
   	</component-plugin>      
   </external-component-plugins>

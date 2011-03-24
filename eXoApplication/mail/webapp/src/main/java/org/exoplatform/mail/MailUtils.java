@@ -566,12 +566,5 @@ public class MailUtils {
       uiAddContactForm.setEmailField(email);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
     }
-    
-    public static boolean isUserAllowedLeaveOnServer() throws Exception {
-      return getMailService().getSettingConfig().get(Utils.LEAVE_ON_SEVER).getMailSettingConfig().getUserAllowed();
-    }
-    public static boolean getDefaultValueLeaveOnServer() throws Exception {
-      return Boolean.parseBoolean(getMailService().getSettingConfig().get(Utils.LEAVE_ON_SEVER).getMailSettingConfig().getDefaultValue());
-    }
 }
 
