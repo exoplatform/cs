@@ -314,8 +314,10 @@ public class Utils {
   private static final String OUTGOING_SEVER = "outgoingServer".intern();
   private static final String INCOMING_SERVER_PORT = "incomingPort".intern();
   private static final String OUTGOING_SEVER_PORT = "outgoingPort".intern();
+  private static final String ACCEPT_INCOMING_SECURE_AUTHENTICATION = "acceptIncomingSecureAuthentication".intern();
   private static final String INCOMING_SECURE_AUTHENTICATION = "incomingSecureAuthentication".intern();
   private static final String INCOMING_AUTHENTICATION_MECHANISM = "incomingAuthenticationMechanism".intern();
+  private static final String ACCEPT_OUTGOING_SECURE_AUTHENTICATION = "acceptOutgoingSecureAuthentication".intern();
   private static final String OUTGOING_SECURE_AUTHENTICATION = "outgoingSecureAuthentication".intern();
   private static final String OUTGOING_AUTHENTICATION_MECHANISM = "outgoingAuthenticationMechanism".intern();
   
@@ -802,6 +804,13 @@ public class Utils {
     return getSettingConfig().get(OUTGOING_SEVER_PORT).getDefaultValue() ;    
   }
   
+  public static boolean isUserAllowedAcceptIncomingSecureAuthentication() throws Exception {
+    return getSettingConfig().get(ACCEPT_INCOMING_SECURE_AUTHENTICATION).getUserAllowed();
+  }
+  public static String getAcceptIncomingSecureAuthentication() {
+    return getSettingConfig().get(ACCEPT_INCOMING_SECURE_AUTHENTICATION).getDefaultValue();    
+  }
+  
   public static boolean isUserAllowedIncomingSecureAuthentication() throws Exception {
     return getSettingConfig().get(INCOMING_SECURE_AUTHENTICATION).getUserAllowed();
   }
@@ -816,6 +825,13 @@ public class Utils {
     return getSettingConfig().get(INCOMING_AUTHENTICATION_MECHANISM).getDefaultValue();    
   }
 
+  public static boolean isUserAllowedAcceptOutgoingSecureAuthentication() throws Exception {
+    return getSettingConfig().get(ACCEPT_OUTGOING_SECURE_AUTHENTICATION).getUserAllowed();
+  }
+  public static String getAcceptOutgoingSecureAuthentication() {
+    return getSettingConfig().get(ACCEPT_OUTGOING_SECURE_AUTHENTICATION).getDefaultValue();    
+  }
+  
   public static boolean isUserAllowedOutgoingSecureAuthentication() throws Exception {
     return getSettingConfig().get(OUTGOING_SECURE_AUTHENTICATION).getUserAllowed();
   }

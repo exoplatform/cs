@@ -565,6 +565,15 @@
 		   		</object>
 				</object-param>
 				<object-param>
+					<name>acceptIncomingSecureAuthentication</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>acceptIncomingSecureAuthentication</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>true</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
 					<name>incomingSecureAuthentication</name>
 		   		<description>description</description>
 		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
@@ -580,6 +589,15 @@
 		     		<field name="name"><string>incomingAuthenticationMechanism</string></field>
 		     		<field name="userAllowed"><boolean>true</boolean></field>
 		     		<field name="defaultValue"><string>plain</string></field>
+		   		</object>
+				</object-param>
+				<object-param>
+					<name>acceptOutgoingSecureAuthentication</name>
+		   		<description>description</description>
+		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
+		     		<field name="name"><string>acceptOutgoingSecureAuthentication</string></field>
+		     		<field name="userAllowed"><boolean>true</boolean></field>
+		     		<field name="defaultValue"><string>true</string></field>
 		   		</object>
 				</object-param>
 				<object-param>

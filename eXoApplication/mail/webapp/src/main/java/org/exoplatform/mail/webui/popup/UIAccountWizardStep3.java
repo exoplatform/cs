@@ -73,8 +73,8 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
     addChild(new UIFormCheckBoxInput<Boolean>(FIELD_USESSL, null,null)) ;
     UIFormCheckBoxInput uiCheckBox = getUIFormCheckBoxInput(FIELD_USESSL) ;
     uiCheckBox.setOnChange(UIAccountCreation.ACT_CHANGE_SSL) ;
-    uiCheckBox.setChecked(Boolean.parseBoolean(Utils.getIncomingSecureAuthentication()));
-    uiCheckBox.setEnable(Utils.isUserAllowedIncomingSecureAuthentication());
+    uiCheckBox.setChecked(Boolean.parseBoolean(Utils.getAcceptIncomingSecureAuthentication()));
+    uiCheckBox.setEnable(Utils.isUserAllowedAcceptIncomingSecureAuthentication());
     
     UIFormStringInput outServer = new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null);
     outServer.addValidator(MandatoryValidator.class);
@@ -90,8 +90,8 @@ public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
     addChild(new UIFormCheckBoxInput<Boolean>(FIELD_OUTGOING_SSL, null,null)) ;
     UIFormCheckBoxInput outgoingSsl = getUIFormCheckBoxInput(FIELD_OUTGOING_SSL) ;
     outgoingSsl.setOnChange(UIAccountCreation.ACT_CHANGE_OUTGOINGSSL) ;
-    outgoingSsl.setEnable(Utils.isUserAllowedOutgoingSecureAuthentication());
-    outgoingSsl.setChecked(Boolean.parseBoolean(Utils.getOutgoingSecureAuthentication()));
+    outgoingSsl.setEnable(Utils.isUserAllowedAcceptOutgoingSecureAuthentication());
+    outgoingSsl.setChecked(Boolean.parseBoolean(Utils.getAcceptOutgoingSecureAuthentication()));
     addChild(new UIFormStringInput(FIELD_STOREFOLDER, null,null).addValidator(MandatoryValidator.class)) ;
     setDefaultValue(uiSelect.getValue(), uiCheckBox.isChecked()) ;
     resetFields() ;
