@@ -22,7 +22,6 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
-import javax.jcr.Value;
 
 import org.exoplatform.contact.service.impl.AddressBookNotFoundException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -111,30 +110,13 @@ public interface DataStorage {
   public Node getSharedContact(String userId) throws Exception;
 
   /**
-   * Convert an array of Value to array of String
-   * @param Val
-   * @return array of String objects
-   * @throws Exception
-   */
-  public String[] ValuesToStrings(Value[] Val) throws Exception;
-
-  /**
    * Load the public contact for a given username
    * @param userId username for which the corresponding contact will be loaded
    * @return the contact or null if the contact could not be loaded
    * @throws Exception
    */
   public Contact loadPublicContactByUser(String userId) throws Exception;
-
-  /**
-   * Get contact from contact node
-   * @param contactNode
-   * @param contactType
-   * @return Contact object
-   * @throws Exception
-   */
-  public Contact getContact(Node contactNode, String contactType) throws Exception;
-
+  
   /**
    * Get all contacts of a user
    * @param username
@@ -668,13 +650,6 @@ public interface DataStorage {
    * @throws Exception
    */
   public Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception;
-
-  /**
-   * Convert array of values to a String
-   * @param values
-   * @return String
-   */
-  public String valuesToString(Value[] values);
 
   /**
    * This method checks if the user has edit permission on a address book

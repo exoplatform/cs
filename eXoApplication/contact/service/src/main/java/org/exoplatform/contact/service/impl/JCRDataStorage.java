@@ -146,20 +146,7 @@ public class JCRDataStorage implements DataStorage {
         sharedHome.save();
         return sharedAddressBooksHome;
       }
-  }    
-  
-  /**
-   * {@inheritDoc}
-   */
-  public String [] ValuesToStrings(Value[] Val) throws Exception {
-    if(Val.length == 1) return new String[]{Val[0].getString()};
-    String[] Str = new String[Val.length];
-    for(int i = 0; i < Val.length; ++i) {
-      Str[i] = Val[i].getString();
-    }
-    return Str;
-  }
-  
+  }  
 
   /**
    * {@inheritDoc}
@@ -167,83 +154,11 @@ public class JCRDataStorage implements DataStorage {
   public Contact loadPublicContactByUser(String userId) throws Exception {
     try {
       Node contactHomeNode = getPersonalContactsHome(userId) ;
-      return getContact(contactHomeNode.getNode(userId), PUBLIC);
+      return Utils.getContact(contactHomeNode.getNode(userId), PUBLIC);
     } catch (PathNotFoundException e) {
       log.error("Public contact " + userId + " not found");
       return null ;
     } 
-  }  
-  
-  /**
-   * {@inheritDoc}
-   */
-  public Contact getContact(Node contactNode, String contactType) throws Exception {
-    Contact contact = new Contact();
-    contact.setContactType(contactType) ;
-    if(contactNode.hasProperty("exo:id")) contact.setId(contactNode.getProperty("exo:id").getString()) ;
-    if(contactNode.hasProperty("exo:fullName"))contact.setFullName(contactNode.getProperty("exo:fullName").getString());
-    if(contactNode.hasProperty("exo:firstName"))contact.setFirstName(contactNode.getProperty("exo:firstName").getString());
-    if(contactNode.hasProperty("exo:lastName"))contact.setLastName(contactNode.getProperty("exo:lastName").getString());
-    if(contactNode.hasProperty("exo:nickName"))contact.setNickName(contactNode.getProperty("exo:nickName").getString());
-    if(contactNode.hasProperty("exo:gender"))contact.setGender(contactNode.getProperty("exo:gender").getString());
-    if(contactNode.hasProperty("exo:birthday"))contact.setBirthday(contactNode.getProperty("exo:birthday").getDate().getTime());
-    if(contactNode.hasProperty("exo:jobTitle"))contact.setJobTitle(contactNode.getProperty("exo:jobTitle").getString());
-    if(contactNode.hasProperty("exo:emailAddress"))contact.setEmailAddress(valuesToString(contactNode.getProperty("exo:emailAddress").getValues()));
-    
-    if(contactNode.hasProperty("exo:exoId"))contact.setExoId(contactNode.getProperty("exo:exoId").getString());
-    if(contactNode.hasProperty("exo:googleId"))contact.setGoogleId(contactNode.getProperty("exo:googleId").getString());
-    if(contactNode.hasProperty("exo:msnId"))contact.setMsnId(contactNode.getProperty("exo:msnId").getString());
-    if(contactNode.hasProperty("exo:aolId"))contact.setAolId(contactNode.getProperty("exo:aolId").getString());
-    if(contactNode.hasProperty("exo:yahooId"))contact.setYahooId(contactNode.getProperty("exo:yahooId").getString());
-    if(contactNode.hasProperty("exo:icrId"))contact.setIcrId(contactNode.getProperty("exo:icrId").getString());
-    if(contactNode.hasProperty("exo:skypeId"))contact.setSkypeId(contactNode.getProperty("exo:skypeId").getString());
-    if(contactNode.hasProperty("exo:icqId"))contact.setIcqId(contactNode.getProperty("exo:icqId").getString());
-    
-    if(contactNode.hasProperty("exo:homeAddress"))contact.setHomeAddress(contactNode.getProperty("exo:homeAddress").getString());
-    if(contactNode.hasProperty("exo:homeCity"))contact.setHomeCity(contactNode.getProperty("exo:homeCity").getString());
-    if(contactNode.hasProperty("exo:homeState_province"))contact.setHomeState_province(contactNode.getProperty("exo:homeState_province").getString());
-    if(contactNode.hasProperty("exo:homePostalCode"))contact.setHomePostalCode(contactNode.getProperty("exo:homePostalCode").getString());
-    if(contactNode.hasProperty("exo:homeCountry"))contact.setHomeCountry(contactNode.getProperty("exo:homeCountry").getString());
-    if(contactNode.hasProperty("exo:homePhone1"))contact.setHomePhone1(contactNode.getProperty("exo:homePhone1").getString());
-    if(contactNode.hasProperty("exo:homePhone2"))contact.setHomePhone2(contactNode.getProperty("exo:homePhone2").getString());
-    if(contactNode.hasProperty("exo:homeFax"))contact.setHomeFax(contactNode.getProperty("exo:homeFax").getString());
-    if(contactNode.hasProperty("exo:personalSite"))contact.setPersonalSite(contactNode.getProperty("exo:personalSite").getString());
-    
-    if(contactNode.hasProperty("exo:workAddress"))contact.setWorkAddress(contactNode.getProperty("exo:workAddress").getString());
-    if(contactNode.hasProperty("exo:workCity"))contact.setWorkCity(contactNode.getProperty("exo:workCity").getString());
-    if(contactNode.hasProperty("exo:workState_province"))contact.setWorkStateProvince(contactNode.getProperty("exo:workState_province").getString());
-    if(contactNode.hasProperty("exo:workPostalCode"))contact.setWorkPostalCode(contactNode.getProperty("exo:workPostalCode").getString());
-    if(contactNode.hasProperty("exo:workCountry"))contact.setWorkCountry(contactNode.getProperty("exo:workCountry").getString());
-    if(contactNode.hasProperty("exo:workPhone1"))contact.setWorkPhone1(contactNode.getProperty("exo:workPhone1").getString());
-    if(contactNode.hasProperty("exo:workPhone2"))contact.setWorkPhone2(contactNode.getProperty("exo:workPhone2").getString());
-    if(contactNode.hasProperty("exo:workFax"))contact.setWorkFax(contactNode.getProperty("exo:workFax").getString());
-    if(contactNode.hasProperty("exo:mobilePhone"))contact.setMobilePhone(contactNode.getProperty("exo:mobilePhone").getString());
-    if(contactNode.hasProperty("exo:webPage"))contact.setWebPage(contactNode.getProperty("exo:webPage").getString());
-    if(contactNode.hasProperty("exo:note"))contact.setNote(contactNode.getProperty("exo:note").getString());
-    if(contactNode.hasProperty(PROP_ADDRESSBOOK_REFS))contact.setAddressBookIds(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()));
-    if(contactNode.hasProperty("exo:tags")) contact.setTags(ValuesToStrings(contactNode.getProperty("exo:tags").getValues()));
-    if(contactNode.hasProperty("exo:editPermissionUsers")) contact.setEditPermissionUsers(ValuesToStrings(contactNode.getProperty("exo:editPermissionUsers").getValues()));
-    if(contactNode.hasProperty("exo:viewPermissionUsers")) contact.setViewPermissionUsers(ValuesToStrings(contactNode.getProperty("exo:viewPermissionUsers").getValues()));
-    
-    if(contactNode.hasProperty("exo:editPermissionGroups")) contact.setEditPermissionGroups(ValuesToStrings(contactNode.getProperty("exo:editPermissionGroups").getValues()));
-    if(contactNode.hasProperty("exo:viewPermissionGroups")) contact.setViewPermissionGroups(ValuesToStrings(contactNode.getProperty("exo:viewPermissionGroups").getValues()));
-    
-    if(contactNode.hasProperty("exo:lastUpdated"))contact.setLastUpdated(contactNode.getProperty("exo:lastUpdated").getDate().getTime());
-    contact.setPath(contactNode.getPath()) ;
-    if(contactNode.hasNode("image")){
-      Node image = contactNode.getNode("image");
-      if (image.isNodeType("nt:file")) {
-        ContactAttachment file = new ContactAttachment() ;
-        file.setId(image.getPath()) ;
-        file.setMimeType(image.getNode("jcr:content").getProperty("jcr:mimeType").getString()) ;
-        file.setFileName(image.getName()) ;
-        file.setWorkspace(image.getSession().getWorkspace().getName()) ;
-        contact.setAttachment(file) ;
-      }
-    }
-    if(contactNode.hasProperty("exo:isOwner")) contact.setOwner(contactNode.getProperty("exo:isOwner").getBoolean());
-    if(contactNode.hasProperty("exo:ownerId")) contact.setOwnerId(contactNode.getProperty("exo:ownerId").getString());
-    return contact;
   }
 
   /**
@@ -256,7 +171,7 @@ public class JCRDataStorage implements DataStorage {
       Contact contact;
       while (iter.hasNext()) {
         Node contactNode = iter.nextNode();
-        contact = getContact(contactNode, PERSONAL);
+        contact = Utils.getContact(contactNode, PERSONAL);
         contacts.add(contact);
       }
       return contacts;
@@ -314,7 +229,7 @@ public class JCRDataStorage implements DataStorage {
   public Contact loadPersonalContact(String ownerUserId, String contactId) throws Exception {
       Node contactHomeNode = getPersonalContactsHome(ownerUserId);
       try {
-        return getContact(contactHomeNode.getNode(contactId), PERSONAL);
+        return Utils.getContact(contactHomeNode.getNode(contactId), PERSONAL);
       } catch (PathNotFoundException ex) {
         return null;
       }
@@ -388,7 +303,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       while (it.hasNext()) {
         Node contact = it.nextNode();
         try {
-          String emails = valuesToString(contact.getProperty("exo:emailAddress").getValues());
+          String emails = Utils.valuesToString(contact.getProperty("exo:emailAddress").getValues());
           if (!Utils.isEmpty(emails))
             address.add(emails.split(",")[0].split(";")[0]);
         } catch (PathNotFoundException e) { }
@@ -410,7 +325,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     while (it.hasNext()){
       Node contact = it.nextNode();
       try {
-        String emails = valuesToString(contact.getProperty("exo:emailAddress").getValues());
+        String emails = Utils.valuesToString(contact.getProperty("exo:emailAddress").getValues());
         if(!Utils.isEmpty(emails))
           address.add(emails.split(",")[0].split(";")[0]);
       } catch (PathNotFoundException e) {}
@@ -437,7 +352,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         while (it.hasNext()){
           Node contact = it.nextNode();
           try {
-            String emails = valuesToString(contact.getProperty("exo:emailAddress").getValues());
+            String emails = Utils.valuesToString(contact.getProperty("exo:emailAddress").getValues());
             if(!Utils.isEmpty(emails))
               address.add(emails.split(",")[0].split(";")[0]);
           } catch (PathNotFoundException e) {}
@@ -461,17 +376,17 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       contactGroup.setDescription(contactGroupNode.getProperty("exo:description").getString());
     if (contactGroupNode.hasProperty("exo:viewPermissionUsers"))
       contactGroup.setViewPermissionUsers(
-          ValuesToStrings(contactGroupNode.getProperty("exo:viewPermissionUsers").getValues())) ;
+          Utils.valuesToStringArray(contactGroupNode.getProperty("exo:viewPermissionUsers").getValues())) ;
     if (contactGroupNode.hasProperty("exo:editPermissionUsers"))
       contactGroup.setEditPermissionUsers(
-          ValuesToStrings(contactGroupNode.getProperty("exo:editPermissionUsers").getValues())) ;
+          Utils.valuesToStringArray(contactGroupNode.getProperty("exo:editPermissionUsers").getValues())) ;
     
     if (contactGroupNode.hasProperty("exo:viewPermissionGroups"))
       contactGroup.setViewPermissionGroups(
-          ValuesToStrings(contactGroupNode.getProperty("exo:viewPermissionGroups").getValues())) ;
+          Utils.valuesToStringArray(contactGroupNode.getProperty("exo:viewPermissionGroups").getValues())) ;
     if (contactGroupNode.hasProperty("exo:editPermissionGroups"))
       contactGroup.setEditPermissionGroups(
-          ValuesToStrings(contactGroupNode.getProperty("exo:editPermissionGroups").getValues())) ;
+          Utils.valuesToStringArray(contactGroupNode.getProperty("exo:editPermissionGroups").getValues())) ;
     return contactGroup;
   }
 
@@ -537,13 +452,13 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       Node addressBook = iter.nextNode();
       String id = Utils.decodeGroupId(addressBook.getProperty("exo:id").getString());
       if (addressBook.hasProperty("exo:viewPermissionUsers")) {
-        String[] viewUsers = ValuesToStrings(addressBook.getProperty("exo:viewPermissionUsers").getValues());
+        String[] viewUsers = Utils.valuesToStringArray(addressBook.getProperty("exo:viewPermissionUsers").getValues());
         if (viewUsers.length > 0 && Arrays.asList(viewUsers).contains(username)) {
           if (!addressBooks.contains(id)) addressBooks.add(id);
         }
       }
       if (addressBook.hasProperty("exo:viewPermissionGroups")) {        
-        String[] viewGroups = ValuesToStrings(addressBook.getProperty("exo:viewPermissionGroups").getValues());
+        String[] viewGroups = Utils.valuesToStringArray(addressBook.getProperty("exo:viewPermissionGroups").getValues());
         for (String viewGroup : viewGroups) {
           if (viewGroup.contains(Utils.COLON)) viewGroup = viewGroup.split(Utils.COLON)[0];
           if (groupIds.contains(viewGroup)) {
@@ -720,7 +635,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         contactNode = getPersonalContactsHome(username).getNode(contactId);
       }
       List<String> values = new ArrayList<String>(
-          Arrays.asList(ValuesToStrings(contactNode.getProperty(SHARED_PROP).getValues())));
+          Arrays.asList(Utils.valuesToStringArray(contactNode.getProperty(SHARED_PROP).getValues())));
       List<String> newValues = new ArrayList<String>(values) ;
       Node sharedContact = getSharedContact(removedUser) ;
       for (String value : values) {
@@ -730,13 +645,13 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         }
       }
       try {
-        String[] viewPer = ValuesToStrings(contactNode.getProperty("exo:viewPermissionUsers").getValues()) ;
+        String[] viewPer = Utils.valuesToStringArray(contactNode.getProperty("exo:viewPermissionUsers").getValues()) ;
         if (viewPer != null) {
           List<String> newViewPer = new ArrayList<String>() ;
           newViewPer.addAll(Arrays.asList(viewPer)) ;
           newViewPer.remove(removedUser + HYPHEN) ;
           contactNode.setProperty("exo:viewPermissionUsers", newViewPer.toArray(new String [] {})) ;      
-          String[] editPer = ValuesToStrings(contactNode.getProperty("exo:editPermissionUsers").getValues()) ;
+          String[] editPer = Utils.valuesToStringArray(contactNode.getProperty("exo:editPermissionUsers").getValues()) ;
           if (editPer != null) {
             List<String> newEditPer = new ArrayList<String>() ;
             newEditPer.addAll(Arrays.asList(editPer)) ;
@@ -756,7 +671,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
   public void unshareAddressBook(String username, String addressBookId, String removedUser) throws Exception {
     
       Node addressBookNode = getPersonalAddressBooksHome(username).getNode(addressBookId);
-      List<String> values = new ArrayList<String>(Arrays.asList(ValuesToStrings(addressBookNode.getProperty(SHARED_PROP)
+      List<String> values = new ArrayList<String>(Arrays.asList(Utils.valuesToStringArray(addressBookNode.getProperty(SHARED_PROP)
                                                                                                .getValues())));
       List<String> newValues = new ArrayList<String>(values);
 
@@ -770,7 +685,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
 
       String[] viewPer = null;
       try {
-        viewPer = ValuesToStrings(addressBookNode.getProperty("exo:viewPermissionUsers")
+        viewPer = Utils.valuesToStringArray(addressBookNode.getProperty("exo:viewPermissionUsers")
                                                  .getValues());
       } catch (PathNotFoundException e) {
       }
@@ -781,7 +696,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         addressBookNode.setProperty("exo:viewPermissionUsers", newViewPer.toArray(new String[] {}));
         String[] editPer = null;
         try {
-          editPer = ValuesToStrings(addressBookNode.getProperty("exo:editPermissionUsers")
+          editPer = Utils.valuesToStringArray(addressBookNode.getProperty("exo:editPermissionUsers")
                                                    .getValues());
         } catch (PathNotFoundException e) {
         }
@@ -916,10 +831,10 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
                                                                       addressNode.getProperty("exo:sharedUserId")
                                                                                  .getString());
           if (addressNode.hasProperty("exo:editPermissionUsers"))
-            sharedAddressBook.setEditPermissionUsers(ValuesToStrings(addressNode.getProperty("exo:editPermissionUsers")
+            sharedAddressBook.setEditPermissionUsers(Utils.valuesToStringArray(addressNode.getProperty("exo:editPermissionUsers")
                                                                                 .getValues()));
           if (addressNode.hasProperty("exo:editPermissionGroups"))
-            sharedAddressBook.setEditPermissionGroups(ValuesToStrings(addressNode.getProperty("exo:editPermissionGroups")
+            sharedAddressBook.setEditPermissionGroups(Utils.valuesToStringArray(addressNode.getProperty("exo:editPermissionGroups")
                                                                                  .getValues()));
           addressBooks.add(sharedAddressBook);
         } catch (Exception e) {
@@ -968,7 +883,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       try{
         Node contactNode = iter.nextProperty().getParent() ;   
         if(contactNode.getName().equals(contactId)) {
-          return getContact(contactNode, DataStorage.SHARED) ;
+          return Utils.getContact(contactNode, DataStorage.SHARED) ;
         }
       }catch(Exception e){
         e.printStackTrace() ;
@@ -987,7 +902,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     while(iter.hasNext()) {
       try{
         Node contactNode = iter.nextProperty().getParent() ;
-        sharedContacts.add(getContact(contactNode, SHARED)) ;
+        sharedContacts.add(Utils.getContact(contactNode, SHARED)) ;
       }catch(Exception e){
         e.printStackTrace() ;
       }
@@ -1062,8 +977,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       try {
         // cs-2073
         Node contactNode = contactHomeNode.getNode(contactId) ;
-        if (Arrays.asList(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
-            .contains(addressBook.getProperty("exo:id").getString())) return getContact(contactNode, DataStorage.SHARED) ;
+        if (Arrays.asList(Utils.valuesToStringArray(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
+            .contains(addressBook.getProperty("exo:id").getString())) return Utils.getContact(contactNode, DataStorage.SHARED) ;
       } catch (PathNotFoundException e) { }
     }
     return null ;
@@ -1304,7 +1219,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       it = result.getNodes();    
       
       while (it.hasNext()) {
-        Contact contact = getContact(it.nextNode(), PERSONAL) ;
+        Contact contact = Utils.getContact(it.nextNode(), PERSONAL) ;
         contacts.put(contact.getId(), contact);
       }
       
@@ -1319,7 +1234,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       result = query.execute();
       it = result.getNodes();    
       while (it.hasNext()) {
-        Contact contact = getContact(it.nextNode(), PUBLIC);
+        Contact contact = Utils.getContact(it.nextNode(), PUBLIC);
         if (contact.getId().equals(username)) contact.setContactType(PERSONAL) ;
         contacts.put(contact.getId(), contact);
       }
@@ -1332,8 +1247,8 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
           try{
             Node contactNode = iter.nextProperty().getParent() ;
             if (contactNode.hasProperty("exo:tags") && 
-                Arrays.asList(ValuesToStrings(contactNode.getProperty("exo:tags").getValues())).contains(tagId)) {
-              Contact contact = getContact(contactNode, SHARED) ;
+                Arrays.asList(Utils.valuesToStringArray(contactNode.getProperty("exo:tags").getValues())).contains(tagId)) {
+              Contact contact = Utils.getContact(contactNode, SHARED) ;
               contacts.put(contact.getId(), contact) ;
             }
           }catch(Exception e){
@@ -1360,7 +1275,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         result = query.execute();
         it = result.getNodes();    
         while (it.hasNext()) {
-          Contact contact = getContact(it.nextNode(), SHARED);
+          Contact contact = Utils.getContact(it.nextNode(), SHARED);
           if (Arrays.asList(contact.getAddressBookIds()).contains(addressBook.getProperty("exo:id").getString()))
             contacts.put(contact.getId(), contact) ;
         }
@@ -1406,7 +1321,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
               // loop all shared address books; faster if parameter is : List<contact>
               if(contacts.hasNode(contactId)) {
                 contactNode = contacts.getNode(contactId) ;
-                if (Arrays.asList(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
+                if (Arrays.asList(Utils.valuesToStringArray(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
                     .contains(addressBook.getProperty("exo:id").getString())) break ;
                 else {
                   contactNode = null ;
@@ -1485,7 +1400,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
               //cs-1962            
               if(contacts.hasNode(contactId)) {
                 contactNode = contacts.getNode(contactId) ;
-                if (Arrays.asList(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
+                if (Arrays.asList(Utils.valuesToStringArray(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
                     .contains(addressBook.getProperty("exo:id").getString())) break ;
                 else {
                   contactNode = null ;      
@@ -1521,7 +1436,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
     while (it.hasNext()) {
       Node contactNode = it.nextNode() ;
       if (contactNode.hasProperty("exo:tags")) {
-        String[] tagIds = ValuesToStrings(contactNode.getProperty("exo:tags").getValues()) ;
+        String[] tagIds = Utils.valuesToStringArray(contactNode.getProperty("exo:tags").getValues()) ;
         List<String> newTagIds = new ArrayList<String>() ;
         for (String id : tagIds) 
           if (!id.equals(tagId)) newTagIds.add(id) ;
@@ -1573,7 +1488,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
             try{
               Node contactNode = iter.nextProperty().getParent() ;
               if (contactNode.hasProperty("exo:tags")) {
-                String[] tagIds = ValuesToStrings(contactNode.getProperty("exo:tags").getValues()) ;
+                String[] tagIds = Utils.valuesToStringArray(contactNode.getProperty("exo:tags").getValues()) ;
                 List<String> newTagIds = new ArrayList<String>() ;
                 for (String id : tagIds) 
                   if (!id.equals(tagId)) newTagIds.add(id) ;
@@ -1640,7 +1555,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
               // loop all shared address books; faster if parameter is : List<contact>
               if(contacts.hasNode(contactId)) {
                 contactNode = contacts.getNode(contactId) ;
-                if (Arrays.asList(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
+                if (Arrays.asList(Utils.valuesToStringArray(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
                     .contains(addressBook.getProperty("exo:id").getString())) break; 
                 else {
                   contactNode = null ;
@@ -1686,7 +1601,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
         NodeIterator itpublic = query.execute().getNodes();
         while(itpublic.hasNext()) {
-          Contact contact = getContact(itpublic.nextNode(), PUBLIC) ;
+          Contact contact = Utils.getContact(itpublic.nextNode(), PUBLIC) ;
           contacts.put(contact.getId(), contact) ;
         }
       }
@@ -1700,7 +1615,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
         query = qm.createQuery(filter.getStatement(), Query.XPATH) ;      
         NodeIterator it = query.execute().getNodes() ; 
         while(it.hasNext()) {
-          Contact contact = getContact(it.nextNode(), PERSONAL) ;
+          Contact contact = Utils.getContact(it.nextNode(), PERSONAL) ;
           contacts.put(contact.getId(), contact) ; 
         }
       }
@@ -1730,7 +1645,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
             while(it.hasNext()) {
               Node contactNode = it.nextNode() ;
               if (sharedContactIds.contains(contactNode.getProperty("exo:id").getString())) {
-                Contact contact = getContact(contactNode, SHARED) ;
+                Contact contact = Utils.getContact(contactNode, SHARED) ;
                 
                 // add
                 if (!contacts.containsKey(contact.getId())) {
@@ -1766,7 +1681,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
           query = qm.createQuery(filter.getStatement(), Query.XPATH) ;  
           NodeIterator it = query.execute().getNodes() ;
           while(it.hasNext()) {
-            Contact contact = getContact(it.nextNode(), SHARED) ;
+            Contact contact = Utils.getContact(it.nextNode(), SHARED) ;
             contacts.put(contact.getId(), contact) ;
           }
         }
@@ -1896,7 +1811,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
   public void feedEmailResult(Map<String, String> emails, Node contactNode) throws Exception {
     String id = contactNode.getProperty("exo:id").getString();
     String fullName = contactNode.getProperty("exo:fullName").getString() ;
-    String emailAddresses = valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
+    String emailAddresses = Utils.valuesToString(contactNode.getProperty("exo:emailAddress").getValues());
     emails.put(id, fullName + Utils.SPLIT + emailAddresses) ;
   }
   
@@ -2182,7 +2097,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
       for (Contact contact : contacts) {
         if (destType.equals(PERSONAL)) {
           Node contactHomeNode = getPersonalContactsHome(username);
-          pastedContacts.add(getContact(saveCopyContact(contactHomeNode, contact, destAddress, destType), destType)) ; 
+          pastedContacts.add(Utils.getContact(saveCopyContact(contactHomeNode, contact, destAddress, destType), destType)) ; 
         } else if (destType.equals(SHARED)) {
           Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
           PropertyIterator iter = sharedAddressBookMock.getReferences() ;
@@ -2191,7 +2106,7 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
             addressBook = iter.nextProperty().getParent() ;
             if(addressBook.getName().equals(destAddress)) {
               Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
-              pastedContacts.add(getContact(saveCopyContact(contactHomeNode, contact, destAddress, destType), destType)) ;   
+              pastedContacts.add(Utils.getContact(saveCopyContact(contactHomeNode, contact, destAddress, destType), destType)) ;   
               break ;
             }
           }
@@ -2447,23 +2362,6 @@ public List<String> findEmailsByAddressBook(String username, String addressBookI
   
   public Node getNodeByPath(String nodePath, SessionProvider sessionProvider) throws Exception {
     return (Node) getSession(sessionProvider).getItem(nodePath);
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  public String valuesToString(Value[] values) {
-    if (values == null) return null;
-	  StringBuilder strs = new StringBuilder();
-    try {
-      for (Value value : values) {
-      	if(value.getString().trim().length() > 0) {
-	        if (strs.length() == 0) strs.append(value.getString());
-	        else strs.append(";" + value.getString());
-      	}
-      }
-    } catch (Exception e) {}
-    return strs.toString();
   }
   
   /**
