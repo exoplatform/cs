@@ -1189,6 +1189,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         e.printStackTrace() ;
       }     
       for (String s : sbAddress.toString().split(CalendarUtils.COMMA)) {
+        if (CalendarUtils.isEmpty(s)) continue;
         StringBuffer body = new StringBuffer(sbBody.toString());
         String eXoId = CalendarUtils.isEmpty(eXoIdMap.get(s)) ? "null":eXoIdMap.get(s);
         body.append("<tr>");
