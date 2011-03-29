@@ -641,6 +641,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       email.setRepeate(isEmailRepeat()) ;
       email.setRepeatInterval(Long.parseLong(getEmailRepeatInterVal())) ;
       email.setFromDateTime(fromDateTime) ;
+      email.setReminderOwner(CalendarUtils.getCurrentUser()) ;
       reminders.add(email) ;
     }
     if(getPopupReminder()) {

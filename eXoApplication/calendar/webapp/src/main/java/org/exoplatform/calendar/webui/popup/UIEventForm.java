@@ -807,6 +807,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         }
       }     
       email.setReminderType(Reminder.TYPE_EMAIL) ;
+      email.setReminderOwner(CalendarUtils.getCurrentUser());
       email.setAlarmBefore(Long.parseLong(getEmailRemindBefore())) ;
       StringBuffer sbAddress = new StringBuffer() ;
       for(String s : getEmailAddress().replaceAll(CalendarUtils.SEMICOLON, CalendarUtils.COMMA).split(CalendarUtils.COMMA)) {
@@ -1489,8 +1490,7 @@ public Attachment getAttachment(String attId) {
                 if (org.exoplatform.calendar.service.Utils.isExceptionOccurrence(calendarEvent_)) calService.updateOccurrenceEvent(fromCal, toCal, fromType, toType, listEvent, username);
                 else calService.moveEvent(fromCal, toCal, fromType, toType, listEvent, username) ;
               }
-    
-              // hung.hoang
+
               if(calendarView instanceof UIListContainer) {
                 UIListContainer uiListContainer = (UIListContainer)calendarView ;
                 if (uiListContainer.isDisplaySearchResult() && calendarEvent.getAttachment() != null) {

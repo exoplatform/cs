@@ -1578,13 +1578,20 @@ public class JCRDataStorage implements DataStorage {
     summary.append(cal.get(java.util.Calendar.MINUTE)).append(" - ") ;
     summary.append(cal.get(java.util.Calendar.DATE)).append("/") ;
     summary.append(cal.get(java.util.Calendar.MONTH) + 1).append("/") ;
-    summary.append(cal.get(java.util.Calendar.YEAR)).append("<br>") ;
+
+    String timezone = "";
+    try {
+      timezone = " (" + generateTimeZoneLabel(getCalendarSetting(reminder.getReminderOwner()).getTimeZone()) +")" ;      
+    } catch (NullPointerException ex) {
+      log.debug("reminder owner is null");
+    }
+    summary.append(cal.get(java.util.Calendar.YEAR)).append(timezone).append("<br>") ;
     cal.setTime(eventNode.getProperty(Utils.EXO_TO_DATE_TIME).getDate().getTime()) ;
     summary.append("To         : ").append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(":") ;
     summary.append(cal.get(java.util.Calendar.MINUTE)).append(" - ") ;
     summary.append(cal.get(java.util.Calendar.DATE)).append("/") ;
     summary.append(cal.get(java.util.Calendar.MONTH) + 1).append("/") ;
-    summary.append(cal.get(java.util.Calendar.YEAR)).append("<br>") ;
+    summary.append(cal.get(java.util.Calendar.YEAR)).append(timezone).append("<br>") ;
     reminderNode.setProperty(Utils.EXO_DESCRIPTION, summary.toString()) ;
     reminderNode.setProperty(Utils.EXO_SUMMARY, eventNode.getProperty(Utils.EXO_SUMMARY).getString()) ;
     if(!reminderFolder.isNew()) reminderFolder.save() ;
@@ -4462,4 +4469,28 @@ public class JCRDataStorage implements DataStorage {
     eventNode.setProperty(Utils.EXO_CALDAV_HREF, etag);
   }
  
+  private String generateTimeZoneLabel(String timeZoneID) {
+    String label = timeZoneID;
+    if(label.lastIndexOf("/") > 0 && label.toLowerCase().lastIndexOf("etc".toLowerCase()) < 0 && label.toLowerCase().lastIndexOf("system") < 0) {
+      TimeZone timeZone = TimeZone.getTimeZone(label) ;
+      int rawOffset = timeZone.getRawOffset() / 60000;
+      int hours = rawOffset / 60;
+      int minutes = Math.abs(rawOffset) % 60;
+      String hrStr = "";
+      if (Math.abs(hours) < 10) {
+        if (hours < 0) {
+          hrStr = "-0" + Math.abs(hours);
+        } else {
+          hrStr = "0" + Math.abs(hours);
+        }
+      } else {
+        hrStr = Integer.toString(hours);
+      }
+      String minStr = (minutes < 10) ? ("0" + Integer.toString(minutes)) : Integer.toString(minutes);
+      label = " GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : "") 
+      + hrStr + ":" + minStr + " - " + timeZoneID ;      
+    }
+    return label;
+  }
+  
 }
