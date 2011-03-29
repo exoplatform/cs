@@ -109,7 +109,7 @@ UICalendarPortlet.prototype.postCheck = function(response){
 UICalendarPortlet.prototype.checkPermission = function(eventObj){
 	var calId = eventObj.getAttribute("calid");
 	var calType = eventObj.getAttribute("calType");
-	var baseURL  = (eXo.calendar.restContext)?eXo.env.portal.context+ '/' + eXo.calendar.restContext +'/private/cs/calendar/checkPermission/':'portal/rest/private/cs/calendar/checkPermission/';
+	var baseURL  = (eXo.calendar.restContext)?eXo.env.portal.context+ '/' + eXo.calendar.restContext +'/cs/calendar/checkPermission/':'portal/rest/cs/calendar/checkPermission/';
 	var url = baseURL + eXo.cs.CSCometd.exoId +"/"+ calId +"/"+ calType +"/";
 	this.makeRequest(url,this.postCheck);
 };
@@ -2794,7 +2794,7 @@ eXo.calendar.EventTooltip = {
 		self.getContainer(evt);
 		self.overTimer = setTimeout(function(){
 			var url = eXo.env.portal.context + "/" + eXo.calendar.restContext;
-			url += "/private/cs/calendar/getevent/" + self.currentEvent.getAttribute("eventid");
+			url += "/cs/calendar/getevent/" + self.currentEvent.getAttribute("eventid");
 			self.makeRequest("GET",url);
 		},self.timer);
 	},

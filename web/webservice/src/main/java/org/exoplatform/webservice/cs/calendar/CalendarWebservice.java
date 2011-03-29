@@ -26,6 +26,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.annotation.security.RolesAllowed;
 import javax.jcr.PathNotFoundException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -74,9 +75,9 @@ import com.sun.syndication.io.XmlReader;
 
 
 
-@Path("/")
+@Path("/cs/calendar")
 public class CalendarWebservice implements ResourceContainer{
-  public final static String BASE_URL = "/private/cs/calendar".intern();
+  public final static String BASE_URL = "/cs/calendar".intern();
   public final static String BASE_RSS_URL = BASE_URL + "/feed".intern();
   public final static String BASE_EVENT_URL = BASE_URL + "/event".intern();
   final public static String BASE_URL_PUBLIC = "/cs/calendar/subscribe/".intern();
@@ -94,7 +95,8 @@ public class CalendarWebservice implements ResourceContainer{
    * @throws Exception
    */
   @GET
-  @Path("/private/cs/calendar/checkPermission/{username}/{calendarId}/{type}/")
+  @RolesAllowed("users")
+  @Path("/checkPermission/{username}/{calendarId}/{type}/")
   public Response checkPermission(@PathParam("username")
                                   String username, @PathParam("calendarId")
                                   String calendarId, @PathParam("type")
@@ -146,7 +148,8 @@ public class CalendarWebservice implements ResourceContainer{
    */
   @SuppressWarnings("unchecked")
   @GET
-  @Path("/private/cs/calendar/event/{username}/{eventFeedName}/")
+  @RolesAllowed("users")
+  @Path("/event/{username}/{eventFeedName}/")
   public Response event(@PathParam("username")
                         String username, @PathParam("eventFeedName")
                         String eventFeedName) throws Exception {
@@ -199,7 +202,8 @@ public class CalendarWebservice implements ResourceContainer{
    */
   @SuppressWarnings("unchecked")
   @GET
-  @Path("/private/cs/calendar/feed/{username}/{feedname}/{filename}/")
+  @RolesAllowed("users")
+  @Path("/feed/{username}/{feedname}/{filename}/")
   public Response feed(@PathParam("username")
                        String username, @PathParam("feedname")
                        String feedname, @PathParam("filename")
@@ -312,7 +316,7 @@ public class CalendarWebservice implements ResourceContainer{
    */
   @GET
   //@Produces("text/calendar")
-  @Path("/cs/calendar/subscribe/{username}/{calendarId}/{type}")
+  @Path("/subscribe/{username}/{calendarId}/{type}")
   public Response publicProcess(@PathParam("username")
                                 String username, @PathParam("calendarId")
                                 String calendarId, @PathParam("type")
@@ -366,8 +370,8 @@ public class CalendarWebservice implements ResourceContainer{
    * @throws Exception
    */
   @GET
-  //@Produces("text/calendar")
-  @Path("/private/cs/calendar/private/{username}/{calendarId}/{type}")
+  @RolesAllowed("users")
+  @Path("/private/{username}/{calendarId}/{type}")
   public Response privateProcess(@PathParam("username")
                                  String username, @PathParam("calendarId")
                                  String calendarId, @PathParam("type")
@@ -411,7 +415,8 @@ public class CalendarWebservice implements ResourceContainer{
    * @throws Exception : HTTPStatus.INTERNAL_ERROR , HTTPStatus.UNAUTHORIZED , HTTPStatus.NO_CONTENT
    */
   @GET
-  @Path("/private/cs/calendar/getissues/{currentdatetime}/{type}/{limit}")
+  @RolesAllowed("users")
+  @Path("/getissues/{currentdatetime}/{type}/{limit}")
   public Response upcomingEvent(@PathParam("currentdatetime")
                                 String currentdatetime, @PathParam("type")
                                 String type, @PathParam("limit")
@@ -468,7 +473,8 @@ public class CalendarWebservice implements ResourceContainer{
    * @return true/false
    */
   @GET
-  @Path("/private/cs/calendar/updatestatus/{taskid}")
+  @RolesAllowed("users")
+  @Path("/updatestatus/{taskid}")
   public Response updateStatus(@PathParam("taskid")
                                 String taskid) throws Exception {	  
 	  CacheControl cacheControl = new CacheControl();
@@ -487,7 +493,8 @@ public class CalendarWebservice implements ResourceContainer{
 	  }
   }
   @GET
-  @Path("/private/cs/calendar/getcalendars")
+  @RolesAllowed("users")
+  @Path("/getcalendars")
   public Response getCalendars() throws Exception{
 	  CacheControl cacheControl = new CacheControl();
 	  cacheControl.setNoCache(true);
@@ -505,7 +512,8 @@ public class CalendarWebservice implements ResourceContainer{
   }
   
   @GET
-  @Path("/private/cs/calendar/getevent/{eventid}")
+  @RolesAllowed("users")
+  @Path("/getevent/{eventid}")
   public Response getEvent(@PathParam("eventid") String eventid) throws Exception{
 	  CacheControl cacheControl = new CacheControl();
 	  cacheControl.setNoCache(true);
@@ -525,7 +533,7 @@ public class CalendarWebservice implements ResourceContainer{
   }
   
   @GET
-  @Path("/cs/calendar/invitation/{calendarId}/{calType}/{eventId}/{inviter}/{invitee}/{eXoId}/{answer}")
+  @Path("/invitation/{calendarId}/{calType}/{eventId}/{inviter}/{invitee}/{eXoId}/{answer}")
   public Response processInvitationReply(@PathParam("calendarId") 
                                          String calendarId, @PathParam("calType")
                                          String calType, @PathParam("eventId") 
