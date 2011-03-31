@@ -108,13 +108,7 @@ public class EventPageListQuery extends JCRPageList {
     iter_ = null;
   }
 
-  private CalendarEvent getEvent(Node eventNode) throws Exception {
-    CalendarEvent event = new CalendarEvent() ;
-    if (eventNode.getPath().contains(getPublicServiceHome())) {
-      event.setCalType(""+Utils.PUBLIC_TYPE);
-    } else if (eventNode.getPath().contains(getPrivateServiceHome())) {
-      event.setCalType("" + Utils.PRIVATE_TYPE);
-    } else event.setCalType("" + Utils.SHARED_TYPE);
+  public static CalendarEvent getEventFromNode(CalendarEvent event, Node eventNode, Node reminderFolder) throws Exception {
     if(eventNode.hasProperty(Utils.EXO_ID)) event.setId(eventNode.getProperty(Utils.EXO_ID).getString()) ;
     if(eventNode.hasProperty(Utils.EXO_CALENDAR_ID))event.setCalendarId(eventNode.getProperty(Utils.EXO_CALENDAR_ID).getString()) ;
     if(eventNode.hasProperty(Utils.EXO_SUMMARY)) event.setSummary(eventNode.getProperty(Utils.EXO_SUMMARY).getString()) ;
@@ -134,11 +128,9 @@ public class EventPageListQuery extends JCRPageList {
     if(eventNode.hasProperty(Utils.EXO_MESSAGE)) event.setMessage(eventNode.getProperty(Utils.EXO_MESSAGE).getString()) ;
     if(eventNode.hasProperty(Utils.EXO_DATE_MODIFIED)) event.setLastUpdatedTime(eventNode.getProperty(Utils.EXO_DATE_MODIFIED).getDate().getTime()) ;
     try {
-      event.setReminders(getReminders(eventNode)) ;
+      event.setReminders(getReminders(eventNode, reminderFolder)) ;
     }catch (Exception e) {
       e.printStackTrace() ;
-    } finally {
-      //systemSession.close() ;
     }
     event.setAttachment(getAttachments(eventNode)) ;
     if(eventNode.hasProperty(Utils.EXO_INVITATION)){
@@ -180,7 +172,17 @@ public class EventPageListQuery extends JCRPageList {
     return event ;
   }
   
-  public List<Attachment> getAttachments(Node eventNode) throws Exception {
+  private CalendarEvent getEvent(Node eventNode) throws Exception {
+    CalendarEvent event = new CalendarEvent() ;
+    if (eventNode.getPath().contains(getPublicServiceHome())) {
+      event.setCalType(""+Utils.PUBLIC_TYPE);
+    } else if (eventNode.getPath().contains(getPrivateServiceHome())) {
+      event.setCalType("" + Utils.PRIVATE_TYPE);
+    } else event.setCalType("" + Utils.SHARED_TYPE);
+    return getEventFromNode(event, eventNode, null) ;
+  }
+  
+  private static List<Attachment> getAttachments(Node eventNode) throws Exception {
     List<Attachment> attachments = new ArrayList<Attachment> () ;
     if(eventNode.hasNode(Utils.ATTACHMENT_NODE)) {
       Node attachHome = eventNode.getNode(Utils.ATTACHMENT_NODE) ;
@@ -227,10 +229,10 @@ public class EventPageListQuery extends JCRPageList {
     }*/
   }
 
-  private List<Reminder> getReminders(Node eventNode) throws Exception { if (true) return null;
+  public static List<Reminder> getReminders(Node eventNode, Node reminderFolder) throws Exception { if (true) return null;
     List<Reminder> reminders = new ArrayList<Reminder> () ; 
     Date fromDate = eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime() ;
-    Node reminderFolder = getReminderFolder(fromDate) ;
+    if (reminderFolder == null) return reminders;
     if(reminderFolder.hasNode(eventNode.getName())) {
       NodeIterator iter = reminderFolder.getNode(eventNode.getName()).getNodes() ;
       while(iter.hasNext()) {

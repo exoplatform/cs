@@ -17,7 +17,6 @@
 package org.exoplatform.calendar.service.impl;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -70,6 +69,7 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.DataStorage;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventPageList;
+import org.exoplatform.calendar.service.EventPageListQuery;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -1271,25 +1271,7 @@ public class JCRDataStorage implements DataStorage {
    */
   public CalendarEvent getEvent(Node eventNode) throws Exception {
     CalendarEvent event = new CalendarEvent() ;
-    if(eventNode.hasProperty(Utils.EXO_ID)) event.setId(eventNode.getProperty(Utils.EXO_ID).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_CALENDAR_ID))event.setCalendarId(eventNode.getProperty(Utils.EXO_CALENDAR_ID).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_SUMMARY)) event.setSummary(eventNode.getProperty(Utils.EXO_SUMMARY).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_EVENT_CATEGORYID)) event.setEventCategoryId(eventNode.getProperty(Utils.EXO_EVENT_CATEGORYID).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_EVENT_CATEGORY_NAME)) event.setEventCategoryName(eventNode.getProperty(Utils.EXO_EVENT_CATEGORY_NAME).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_LOCATION)) event.setLocation(eventNode.getProperty(Utils.EXO_LOCATION).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_TASK_DELEGATOR)) event.setTaskDelegator(eventNode.getProperty(Utils.EXO_TASK_DELEGATOR).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_REPEAT)) event.setRepeatType(eventNode.getProperty(Utils.EXO_REPEAT).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_DESCRIPTION)) event.setDescription(eventNode.getProperty(Utils.EXO_DESCRIPTION).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_FROM_DATE_TIME)) event.setFromDateTime(eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime()) ;
-    if(eventNode.hasProperty(Utils.EXO_TO_DATE_TIME)) event.setToDateTime(eventNode.getProperty(Utils.EXO_TO_DATE_TIME).getDate().getTime()) ;
-    if(eventNode.hasProperty(Utils.EXO_EVENT_TYPE)) event.setEventType(eventNode.getProperty(Utils.EXO_EVENT_TYPE).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_PRIORITY)) event.setPriority(eventNode.getProperty(Utils.EXO_PRIORITY).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_IS_PRIVATE)) event.setPrivate(eventNode.getProperty(Utils.EXO_IS_PRIVATE).getBoolean()) ;
-    if(eventNode.hasProperty(Utils.EXO_EVENT_STATE)) event.setEventState(eventNode.getProperty(Utils.EXO_EVENT_STATE).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_SEND_OPTION)) event.setSendOption(eventNode.getProperty(Utils.EXO_SEND_OPTION).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_MESSAGE)) event.setMessage(eventNode.getProperty(Utils.EXO_MESSAGE).getString()) ;
-    if(eventNode.hasProperty(Utils.EXO_DATE_MODIFIED)) event.setLastUpdatedTime(eventNode.getProperty(Utils.EXO_DATE_MODIFIED).getDate().getTime()) ;
-    
+    event = EventPageListQuery.getEventFromNode(event, eventNode, getReminderFolder(eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime()));    
     if (eventNode.hasProperty(Utils.EXO_RECURRENCE_ID)) event.setRecurrenceId(eventNode.getProperty(Utils.EXO_RECURRENCE_ID).getString());
     if (eventNode.hasProperty(Utils.EXO_IS_EXCEPTION)) event.setIsExceptionOccurrence(eventNode.getProperty(Utils.EXO_IS_EXCEPTION).getBoolean());
     if (eventNode.hasProperty(Utils.EXO_REPEAT_UNTIL)) event.setRepeatUntilDate(eventNode.getProperty(Utils.EXO_REPEAT_UNTIL).getDate().getTime());
@@ -1333,52 +1315,6 @@ public class JCRDataStorage implements DataStorage {
           byMonthDays[i] = values[i].getLong();
         }
         event.setRepeatByMonthDay(byMonthDays);
-      }
-    }
-    
-    
-    try {
-      event.setReminders(getReminders(eventNode)) ;
-    }catch (Exception e) {
-      e.printStackTrace() ;
-    } finally {
-      //systemSession.close() ;
-    }
-    event.setAttachment(getAttachments(eventNode)) ;
-    if(eventNode.hasProperty(Utils.EXO_INVITATION)){
-      Value[] values = eventNode.getProperty(Utils.EXO_INVITATION).getValues() ;
-      if(values.length == 1 ){      
-        event.setInvitation(new String[]{values[0].getString()}) ;
-      }else {
-        String[] invites = new String[values.length] ;
-        for(int i = 0; i < values.length; i ++) {
-          invites[i] = values[i].getString() ;
-        }
-        event.setInvitation(invites) ;
-      }
-    }
-    if(eventNode.hasProperty(Utils.EXO_PARTICIPANT)){
-      Value[] values = eventNode.getProperty(Utils.EXO_PARTICIPANT).getValues() ;
-      if(values.length == 1 ){      
-        event.setParticipant(new String[]{values[0].getString()}) ;
-      }else {
-        String[] participant = new String[values.length] ;
-        for(int i = 0; i < values.length; i ++) {
-          participant[i] = values[i].getString() ;
-        }
-        event.setParticipant(participant) ;
-      }
-    }
-    if(eventNode.hasProperty(Utils.EXO_PARTICIPANT_STATUS)){
-      Value[] values = eventNode.getProperty(Utils.EXO_PARTICIPANT_STATUS).getValues() ;
-      if(values.length == 1 ){      
-        event.setParticipantStatus(new String[]{values[0].getString()}) ;
-      }else {
-        String[] participantStatus = new String[values.length] ;
-        for(int i = 0; i < values.length; i ++) {
-          participantStatus[i] = values[i].getString() ;
-        }
-        event.setParticipantStatus(participantStatus) ;
       }
     }
     return event ;
@@ -1581,10 +1517,13 @@ public class JCRDataStorage implements DataStorage {
 
     String timezone = "";
     try {
-      timezone = " (" + generateTimeZoneLabel(getCalendarSetting(reminder.getReminderOwner()).getTimeZone()) +")" ;      
+       if (!Utils.isEmpty(reminder.getReminderOwner())) timezone = " (" + generateTimeZoneLabel(getCalendarSetting(reminder.getReminderOwner()).getTimeZone()) +")" ;      
     } catch (NullPointerException ex) {
       log.debug("reminder owner is null");
+    }catch (Exception e) {
+      e.printStackTrace();
     }
+    
     summary.append(cal.get(java.util.Calendar.YEAR)).append(timezone).append("<br>") ;
     cal.setTime(eventNode.getProperty(Utils.EXO_TO_DATE_TIME).getDate().getTime()) ;
     summary.append("To         : ").append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(":") ;
@@ -1758,36 +1697,6 @@ public class JCRDataStorage implements DataStorage {
   /**
    * {@inheritDoc}
    */
-  public List<Reminder> getReminders(Node eventNode) throws Exception {
-    List<Reminder> reminders = new ArrayList<Reminder> () ;
-    Date fromDate = eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime() ;
-    Node reminderFolder = getReminderFolder(fromDate) ;
-    if(reminderFolder.hasNode(eventNode.getName())) {
-      NodeIterator iter = reminderFolder.getNode(eventNode.getName()).getNodes() ;
-      while(iter.hasNext()) {
-        Node reminderNode = iter.nextNode() ;
-        if(reminderNode.isNodeType(Utils.EXO_REMINDER)) {
-          Reminder reminder = new Reminder() ;
-          reminder.setId(reminderNode.getName()) ;
-          if(reminderNode.hasProperty(Utils.EXO_OWNER))reminder.setReminderOwner(reminderNode.getProperty(Utils.EXO_OWNER).getString()) ; 
-          if(reminderNode.hasProperty(Utils.EXO_EVENT_ID)) reminder.setEventId(reminderNode.getProperty(Utils.EXO_EVENT_ID).getString()) ;
-          if(reminderNode.hasProperty(Utils.EXO_REMINDER_TYPE)) reminder.setReminderType(reminderNode.getProperty(Utils.EXO_REMINDER_TYPE).getString()) ;
-          if(reminderNode.hasProperty(Utils.EXO_ALARM_BEFORE))reminder.setAlarmBefore(reminderNode.getProperty(Utils.EXO_ALARM_BEFORE).getLong()) ;
-          if(reminderNode.hasProperty(Utils.EXO_EMAIL)) reminder.setEmailAddress(reminderNode.getProperty(Utils.EXO_EMAIL).getString()) ;
-          if(reminderNode.hasProperty(Utils.EXO_IS_REPEAT)) reminder.setRepeate(reminderNode.getProperty(Utils.EXO_IS_REPEAT).getBoolean()) ;
-          if(reminderNode.hasProperty(Utils.EXO_TIME_INTERVAL)) reminder.setRepeatInterval(reminderNode.getProperty(Utils.EXO_TIME_INTERVAL).getLong()) ;
-          if(reminderNode.hasProperty(Utils.EXO_DESCRIPTION)) reminder.setDescription(reminderNode.getProperty(Utils.EXO_DESCRIPTION).getString());
-          reminder.setFromDateTime(fromDate) ;
-          reminders.add(reminder) ;
-        }
-      }
-    }
-    return reminders ;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void addAttachment(Node eventNode, Attachment attachment, boolean isNew) throws Exception {
     Node attachHome ;
     Node attachNode ;
@@ -1823,38 +1732,6 @@ public class JCRDataStorage implements DataStorage {
     nodeContent.setProperty(Utils.JCR_DATA, attachment.getInputStream());
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public List<Attachment> getAttachments(Node eventNode) throws Exception {
-    List<Attachment> attachments = new ArrayList<Attachment> () ;
-    if(eventNode.hasNode(Utils.ATTACHMENT_NODE)) {
-      Node attachHome = eventNode.getNode(Utils.ATTACHMENT_NODE) ;
-      NodeIterator iter = attachHome.getNodes() ;
-      while(iter.hasNext()) {
-        Node attchmentNode = iter.nextNode() ;
-        if(attchmentNode.isNodeType(Utils.EXO_EVEN_TATTACHMENT)) {
-          Attachment attachment = new Attachment() ;
-          attachment.setId(attchmentNode.getPath()) ;
-          if(attchmentNode.hasProperty(Utils.EXO_FILE_NAME)) attachment.setName(attchmentNode.getProperty(Utils.EXO_FILE_NAME).getString()) ;
-          Node contentNode = attchmentNode.getNode(Utils.JCR_CONTENT) ; 
-          if(contentNode != null) {
-            if(contentNode.hasProperty(Utils.JCR_LASTMODIFIED)) attachment.setLastModified(contentNode.getProperty(Utils.JCR_LASTMODIFIED).getDate()) ;
-            if(contentNode.hasProperty(Utils.JCR_MIMETYPE)) attachment.setMimeType(contentNode.getProperty(Utils.JCR_MIMETYPE).getString()) ;
-            if(contentNode.hasProperty(Utils.JCR_DATA)) {
-              InputStream  inputStream = contentNode.getProperty(Utils.JCR_DATA).getStream() ;
-              attachment.setSize(inputStream.available()) ;
-              attachment.setInputStream(inputStream) ;
-            }
-          }
-          attachment.setWorkspace(attchmentNode.getSession().getWorkspace().getName()) ;
-          attachments.add(attachment) ;
-        }
-      }
-    }
-    return attachments ;
-  }
-  
   /**
    * {@inheritDoc}
    */
@@ -2732,6 +2609,23 @@ public class JCRDataStorage implements DataStorage {
     }
     return data ;
   }
+  
+  private void saveCalendarSettingColors(String user, Node calendarNode) throws Exception {
+    CalendarSetting calSetting = getCalendarSetting(getUserCalendarServiceHome(user)) ;
+    if(calSetting == null) calSetting = new CalendarSetting() ;
+    Map<String, String> map = new HashMap<String, String> () ;
+    for(String key : calSetting.getSharedCalendarsColors()) {
+      map.put(key.split(":")[0], key.split(":")[1]) ;
+    }
+    if(map.get(calendarNode.getProperty(Utils.EXO_ID).getString()) == null)
+      map.put(calendarNode.getProperty(Utils.EXO_ID).getString(), calendarNode.getProperty("exo:calendarColor").getString()) ;
+    List<String> calColors = new ArrayList<String>() ;
+    for(String key : map.keySet()) {
+      calColors.add(key + ":" +map.get(key)) ;
+    }
+    calSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
+    saveCalendarSetting(calSetting, user) ;
+  }
 
   /**
    * {@inheritDoc}
@@ -2754,20 +2648,7 @@ public class JCRDataStorage implements DataStorage {
     		valueList.add(value) ;
     	}
     	for(String user : receiverUsers) {
-    		CalendarSetting calSetting = getCalendarSetting(getUserCalendarServiceHome(user)) ;
-    		if(calSetting == null) calSetting = new CalendarSetting() ;
-    		Map<String, String> map = new HashMap<String, String> () ;
-    		for(String key : calSetting.getSharedCalendarsColors()) {
-    			map.put(key.split(":")[0], key.split(":")[1]) ;
-    		}
-    		if(map.get(calendarNode.getProperty(Utils.EXO_ID).getString()) == null)
-    			map.put(calendarNode.getProperty(Utils.EXO_ID).getString(), calendarNode.getProperty("exo:calendarColor").getString()) ;
-    		List<String> calColors = new ArrayList<String>() ;
-    		for(String key : map.keySet()) {
-    			calColors.add(key + ":" +map.get(key)) ;
-    		}
-    		calSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
-    		saveCalendarSetting(calSetting, user) ;
+    		saveCalendarSettingColors(user, calendarNode);
     		try {
     			userNode = sharedCalendarHome.getNode(user) ;
     		} catch (Exception e) {
@@ -3881,21 +3762,7 @@ public class JCRDataStorage implements DataStorage {
   public void confirmInvitation(String fromUserId, String toUserId,int calType, String calendarId, String eventId, int answer) throws Exception{
     try {
       Map<String, String> pars = new HashMap<String, String>() ;
-      CalendarEvent event = null ;
-      if( Calendar.TYPE_PRIVATE == calType) {
-        event = getUserEvent(fromUserId, calendarId, eventId) ;
-      } else  if(Calendar.TYPE_SHARED == calType)  {
-        List<String> calendarIds = new ArrayList<String>() ;
-        calendarIds.add(calendarId) ;
-        for(CalendarEvent calEvent : getSharedEventByCalendars(fromUserId, calendarIds)) {
-          if(calEvent.getId().equals(eventId)) {
-            event = calEvent ;
-            break ;
-          }
-        }
-      } else  if(Calendar.TYPE_PUBLIC == calType)  {
-        event = getGroupEvent(calendarId, eventId) ;
-      }
+      CalendarEvent event = getInvitationEvent(calType, calendarId, eventId, fromUserId);
       if(event != null) {
         if(event.getParticipant() != null) {
           for(String id : event.getParticipant()) {
@@ -3925,27 +3792,32 @@ public class JCRDataStorage implements DataStorage {
     }
   }
 
+  private CalendarEvent getInvitationEvent(int calType,String calendarId, String eventId, String fromUserId) throws Exception {
+    CalendarEvent event = null ;
+    if( Calendar.TYPE_PRIVATE == calType) {
+      event = getUserEvent(fromUserId, calendarId, eventId) ;
+    } else  if(Calendar.TYPE_SHARED == calType)  {
+      List<String> calendarIds = new ArrayList<String>() ;
+      calendarIds.add(calendarId) ;
+      for(CalendarEvent calEvent : getSharedEventByCalendars(fromUserId, calendarIds)) {
+        if(calEvent.getId().equals(eventId)) {
+          event = calEvent ;
+          break ;
+        }
+      }
+    } else  if(Calendar.TYPE_PUBLIC == calType)  {
+      event = getGroupEvent(calendarId, eventId) ;
+    }
+    return event;
+  }
+  
   /**
    * {@inheritDoc}
    */
   public void confirmInvitation(String fromUserId, String confirmingEmail, String confirmingUser,int calType, String calendarId, String eventId, int answer) throws Exception{
     try {
       Map<String, String> pars = new HashMap<String, String>() ;
-      CalendarEvent event = null ;
-      if( Calendar.TYPE_PRIVATE == calType) {
-        event = getUserEvent(fromUserId, calendarId, eventId) ;
-      } else  if(Calendar.TYPE_SHARED == calType)  {
-        List<String> calendarIds = new ArrayList<String>() ;
-        calendarIds.add(calendarId) ;
-        for(CalendarEvent calEvent : getSharedEventByCalendars(fromUserId, calendarIds)) {
-          if(calEvent.getId().equals(eventId)) {
-            event = calEvent ;
-            break ;
-          }
-        }
-      } else  if(Calendar.TYPE_PUBLIC == calType)  {
-        event = getGroupEvent(calendarId, eventId) ;
-      }
+      CalendarEvent event = getInvitationEvent(calType, calendarId, eventId, fromUserId);
       if(event != null) {
         if(event.getParticipantStatus() != null) {
           for(String parStatus : event.getParticipantStatus()) {
@@ -4125,20 +3997,7 @@ public class JCRDataStorage implements DataStorage {
   										Value value = values[i];
   										valueList.add(value) ;
   									}
-  									CalendarSetting calSetting = getCalendarSetting(getUserCalendarServiceHome(reciever)) ;
-  									if(calSetting == null) calSetting = new CalendarSetting() ;
-  									Map<String, String> map = new HashMap<String, String> () ;
-  									for(String key : calSetting.getSharedCalendarsColors()) {
-  										map.put(key.split(":")[0], key.split(":")[1]) ;
-  									}
-  									if(map.get(calendarNode.getProperty(Utils.EXO_ID).getString()) == null)
-  										map.put(calendarNode.getProperty(Utils.EXO_ID).getString(), calendarNode.getProperty("exo:calendarColor").getString()) ;
-  									List<String> calColors = new ArrayList<String>() ;
-  									for(String key : map.keySet()) {
-  										calColors.add(key + ":" +map.get(key)) ;
-  									}
-  									calSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
-  									saveCalendarSetting(calSetting, reciever) ;
+  									saveCalendarSettingColors(reciever, calendarNode);
   									try {
   										userNode = sharedCalendarHome.getNode(reciever) ;
   									} catch (Exception e) {

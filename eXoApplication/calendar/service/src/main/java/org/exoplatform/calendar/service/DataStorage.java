@@ -489,14 +489,6 @@ public interface DataStorage {
    */
   public Node getDateFolder(Node publicApp, Date date) throws Exception;
 
-  /**
-   * Get all reminder from event node
-   * @param eventNode the event node
-   * @return List of Reminder objects
-   * @throws Exception
-   */
-  public List<Reminder> getReminders(Node eventNode) throws Exception;
-
   /** 
    * Add an attachment to event
    * @param eventNode the event node
@@ -505,14 +497,6 @@ public interface DataStorage {
    * @throws Exception
    */
   public void addAttachment(Node eventNode, Attachment attachment, boolean isNew) throws Exception;
-
-  /**
-   * Get all attachments from event node
-   * @param eventNode the event node
-   * @return the list of Attachment objects
-   * @throws Exception
-   */
-  public List<Attachment> getAttachments(Node eventNode) throws Exception;
 
   /**
    * Save calendar setting of a user to JCR
