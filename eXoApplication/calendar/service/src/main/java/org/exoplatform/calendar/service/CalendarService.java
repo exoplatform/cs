@@ -23,7 +23,6 @@ import java.util.ResourceBundle;
 
 import javax.jcr.Node;
 
-import org.apache.commons.httpclient.Credentials;
 import org.exoplatform.calendar.service.impl.CalendarEventListener;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.quartz.JobDetail;

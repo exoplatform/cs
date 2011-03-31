@@ -339,22 +339,7 @@ public class JCRDataStorage implements DataStorage {
     }else {
       calendarNode = calendarHome.getNode(calendar.getId()) ;
     }    
-    calendarNode.setProperty(Utils.EXO_NAME, calendar.getName()) ;
-    calendarNode.setProperty(Utils.EXO_DESCRIPTION, calendar.getDescription()) ;
-    calendarNode.setProperty(Utils.EXO_CATEGORY_ID, calendar.getCategoryId()) ;
-    calendarNode.setProperty(Utils.EXO_VIEW_PERMISSIONS, calendar.getViewPermission()) ;
-    calendarNode.setProperty(Utils.EXO_EDIT_PERMISSIONS, calendar.getEditPermission()) ;    
-    calendarNode.setProperty(Utils.EXO_GROUPS, calendar.getGroups()) ;
-    calendarNode.setProperty(Utils.EXO_LOCALE, calendar.getLocale()) ;
-    calendarNode.setProperty(Utils.EXO_TIMEZONE, calendar.getTimeZone()) ;
-    calendarNode.setProperty(Utils.EXO_CALENDAR_COLOR, calendar.getCalendarColor()) ;
-    calendarNode.setProperty(Utils.EXO_CALENDAR_OWNER, calendar.getCalendarOwner()) ;
-    try {
-      calendarNode.setProperty(Utils.EXO_PUBLIC_URL, calendar.getPublicUrl());
-      calendarNode.setProperty(Utils.EXO_PRIVATE_URL, calendar.getPrivateUrl());
-    } catch (ConstraintViolationException e) {
-      log.debug("\n\n Need to add property definition in exo:calendar node type !", e);
-    }
+    setCalendarProperties(calendarNode, calendar);
     Session session = calendarHome.getSession() ;
     session.save() ;
     session.logout();
@@ -450,22 +435,7 @@ public class JCRDataStorage implements DataStorage {
     }else {
       calendarNode = calendarHome.getNode(calendar.getId()) ;
     }    
-    calendarNode.setProperty(Utils.EXO_NAME, calendar.getName()) ;
-    calendarNode.setProperty(Utils.EXO_DESCRIPTION, calendar.getDescription()) ;
-    calendarNode.setProperty(Utils.EXO_CATEGORY_ID, calendar.getCategoryId()) ;
-    calendarNode.setProperty(Utils.EXO_VIEW_PERMISSIONS, calendar.getViewPermission()) ;
-    calendarNode.setProperty(Utils.EXO_EDIT_PERMISSIONS, calendar.getEditPermission()) ;
-    calendarNode.setProperty(Utils.EXO_LOCALE, calendar.getLocale()) ;
-    calendarNode.setProperty(Utils.EXO_TIMEZONE, calendar.getTimeZone()) ;
-    calendarNode.setProperty(Utils.EXO_CALENDAR_OWNER, calendar.getCalendarOwner()) ;
-    calendarNode.setProperty(Utils.EXO_GROUPS, calendar.getGroups()) ;
-    calendarNode.setProperty(Utils.EXO_CALENDAR_COLOR, calendar.getCalendarColor()) ;
-    try {
-      calendarNode.setProperty(Utils.EXO_PUBLIC_URL, calendar.getPublicUrl());
-      calendarNode.setProperty(Utils.EXO_PRIVATE_URL, calendar.getPrivateUrl());
-    } catch (ConstraintViolationException e) {
-      log.debug("\n\n Need to add property definition in exo:calendar node type !", e);
-    }
+    setCalendarProperties(calendarNode, calendar);
     calendarHome.getSession().save() ;
     calendarHome.getSession().logout();
   }  
@@ -2609,8 +2579,10 @@ public class JCRDataStorage implements DataStorage {
     }
     return data ;
   }
-  
-  private void saveCalendarSettingColors(String user, Node calendarNode) throws Exception {
+
+
+
+  private List<Value> calculateSharedCalendar(String user, Node calendarNode, Value[] values, List<Value> valueList,Node sharedCalendarHome) throws Exception {
     CalendarSetting calSetting = getCalendarSetting(getUserCalendarServiceHome(user)) ;
     if(calSetting == null) calSetting = new CalendarSetting() ;
     Map<String, String> map = new HashMap<String, String> () ;
@@ -2625,6 +2597,33 @@ public class JCRDataStorage implements DataStorage {
     }
     calSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
     saveCalendarSetting(calSetting, user) ;
+    
+    Node userNode = null;
+    Session systemSession = sharedCalendarHome.getSession() ;
+    try {
+      userNode = sharedCalendarHome.getNode(user) ;
+    } catch (PathNotFoundException e) {
+      userNode = sharedCalendarHome.addNode(user, Utils.NT_UNSTRUCTURED) ;
+      if(userNode.canAddMixin(Utils.MIX_REFERENCEABLE)) {
+        userNode.addMixin(Utils.MIX_REFERENCEABLE) ;
+      } 
+    }
+    boolean isExist = false ; 
+    isExist = false;
+    for (int i = 0; i < values.length; i++) {
+      Value value = values[i];
+      String uuid = value.getString();
+      Node refNode = systemSession.getNodeByUUID(uuid);
+      if(refNode.getPath().equals(userNode.getPath())) {
+        isExist = true ;
+        break ;
+      }
+    }
+    if(!isExist) {
+      Value value2add = calendarNode.getSession().getValueFactory().createValue(userNode);
+      valueList.add(value2add) ;
+    }
+    return valueList;
   }
 
   /**
@@ -2639,49 +2638,20 @@ public class JCRDataStorage implements DataStorage {
     } else {
       calendarNode.addMixin(Utils.EXO_SHARED_MIXIN);     
     }
-    Session systemSession = sharedCalendarHome.getSession() ;
-    try {
-    	Node userNode ;
-    	List<Value> valueList = new ArrayList<Value>() ;
-    	for (int i = 0; i < values.length; i++) {
-    		Value value = values[i];
-    		valueList.add(value) ;
-    	}
-    	for(String user : receiverUsers) {
-    		saveCalendarSettingColors(user, calendarNode);
-    		try {
-    			userNode = sharedCalendarHome.getNode(user) ;
-    		} catch (Exception e) {
-    			userNode = sharedCalendarHome.addNode(user, Utils.NT_UNSTRUCTURED) ;
-    			if(userNode.canAddMixin(Utils.MIX_REFERENCEABLE)) {
-    				userNode.addMixin(Utils.MIX_REFERENCEABLE) ;
-    			} 
-    		}
-    		boolean isExist = false ; 
-    		isExist = false;
-    		for (int i = 0; i < values.length; i++) {
-    			Value value = values[i];
-    			String uuid = value.getString();
-    			Node refNode = systemSession.getNodeByUUID(uuid);
-    			if(refNode.getPath().equals(userNode.getPath())) {
-    				isExist = true ; 
-    				break ;
-    			}
-    		}
-    		if(!isExist) {
-    			Value value2add = calendarNode.getSession().getValueFactory().createValue(userNode);
-    			valueList.add(value2add) ;
-    		}      
-    	}
-    	if(valueList.size() > 0) {
-    		calendarNode.setProperty(Utils.EXO_SHARED_ID, valueList.toArray( new Value[valueList.size()]));
-    		calendarNode.save() ;
-    		sharedCalendarHome.getSession().save() ;
-    		calendarNode.getSession().save();
-    	}
-		} finally {
-			systemSession.logout() ;
-		}
+  	List<Value> valueList = new ArrayList<Value>() ;
+  	for (int i = 0; i < values.length; i++) {
+  		Value value = values[i];
+  		valueList.add(value) ;
+  	}
+  	for(String user : receiverUsers) {
+  	  valueList = calculateSharedCalendar(user, calendarNode, values, valueList,sharedCalendarHome);
+  	}
+  	if(valueList.size() > 0) {
+  		calendarNode.setProperty(Utils.EXO_SHARED_ID, valueList.toArray( new Value[valueList.size()]));
+  		calendarNode.save() ;
+  		sharedCalendarHome.getSession().save() ;
+  		calendarNode.getSession().save();
+  	}		
   }
 
   /**
@@ -2715,6 +2685,26 @@ public class JCRDataStorage implements DataStorage {
     return null ;
   }
   
+  private Node setCalendarProperties(Node calendarNode, Calendar calendar) throws Exception {
+    calendarNode.setProperty(Utils.EXO_NAME, calendar.getName()) ;
+    calendarNode.setProperty(Utils.EXO_DESCRIPTION, calendar.getDescription()) ;
+    calendarNode.setProperty(Utils.EXO_CATEGORY_ID, calendar.getCategoryId()) ;
+    calendarNode.setProperty(Utils.EXO_VIEW_PERMISSIONS, calendar.getViewPermission()) ;
+    calendarNode.setProperty(Utils.EXO_EDIT_PERMISSIONS, calendar.getEditPermission()) ;         
+    calendarNode.setProperty(Utils.EXO_GROUPS, calendar.getGroups()) ;
+    calendarNode.setProperty(Utils.EXO_LOCALE, calendar.getLocale()) ;
+    calendarNode.setProperty(Utils.EXO_TIMEZONE, calendar.getTimeZone()) ;
+    calendarNode.setProperty(Utils.EXO_CALENDAR_COLOR, calendar.getCalendarColor()) ;
+    calendarNode.setProperty(Utils.EXO_CALENDAR_OWNER, calendar.getCalendarOwner()) ;
+    try {
+      calendarNode.setProperty(Utils.EXO_PUBLIC_URL, calendar.getPublicUrl());
+      calendarNode.setProperty(Utils.EXO_PRIVATE_URL, calendar.getPrivateUrl());
+    } catch (ConstraintViolationException e) {
+      log.debug("\n\n Need to add property definition in exo:calendar node type !",e);
+    }
+    return calendarNode;
+  }
+  
   /**
    * {@inheritDoc}
    */
@@ -2735,22 +2725,7 @@ public class JCRDataStorage implements DataStorage {
               newValues.add(value) ;
             }
           }
-          calendarNode.setProperty(Utils.EXO_NAME, calendar.getName()) ;
-          calendarNode.setProperty(Utils.EXO_DESCRIPTION, calendar.getDescription()) ;
-          calendarNode.setProperty(Utils.EXO_CATEGORY_ID, calendar.getCategoryId()) ;
-          calendarNode.setProperty(Utils.EXO_VIEW_PERMISSIONS, calendar.getViewPermission()) ;
-          calendarNode.setProperty(Utils.EXO_EDIT_PERMISSIONS, calendar.getEditPermission()) ;         
-          calendarNode.setProperty(Utils.EXO_GROUPS, calendar.getGroups()) ;
-          calendarNode.setProperty(Utils.EXO_LOCALE, calendar.getLocale()) ;
-          calendarNode.setProperty(Utils.EXO_TIMEZONE, calendar.getTimeZone()) ;
-
-          try {
-            calendarNode.setProperty(Utils.EXO_PUBLIC_URL, calendar.getPublicUrl());
-            calendarNode.setProperty(Utils.EXO_PRIVATE_URL, calendar.getPrivateUrl());
-          } catch (ConstraintViolationException e) {
-            log.debug("\n\n Need to add property definition in exo:calendar node type !",e);
-          }
-
+          calendarNode = setCalendarProperties(calendarNode, calendar);
           CalendarSetting usCalSetting = getCalendarSetting(getUserCalendarServiceHome(username)) ;
           Map<String, String> map = new HashMap<String, String> () ;
           for(String key : usCalSetting.getSharedCalendarsColors()) {
@@ -2845,68 +2820,6 @@ public class JCRDataStorage implements DataStorage {
       }
     }
     return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void removeSharedCalendar(String username, String calendarId) throws Exception {
-    Node sharedCalendarHome = getSharedCalendarHome() ;
-    if(sharedCalendarHome.hasNode(username)) {
-      Node userNode = sharedCalendarHome.getNode(username) ;
-      String uuid = userNode.getProperty("jcr:uuid").getString() ;
-      PropertyIterator iter = userNode.getReferences() ;
-      Node calendar ;
-      CalendarSetting calSetting = getCalendarSetting(getUserCalendarServiceHome(username)) ;
-      Map<String, String> map = new HashMap<String, String>() ;
-      for(String key : calSetting.getSharedCalendarsColors()) {
-        map.put(key.split(":")[0], key.split(":")[1]) ;
-      }
-      List<Value> newValues = new ArrayList<Value>() ;
-      while(iter.hasNext()) {
-        calendar = iter.nextProperty().getParent() ;
-        if(calendar.getProperty(Utils.EXO_ID).getString().equals(calendarId)) {
-          map.remove(calendarId) ;
-          Value[] values = calendar.getProperty(Utils.EXO_SHARED_ID).getValues() ;
-          for(Value value : values){
-            if(!value.getString().equals(uuid)) {
-              newValues.add(value) ;
-            }
-          }
-          List<String> calColors = new ArrayList<String>() ;
-          for(String key : map.keySet()) {
-            calColors.add(key + ":" +map.get(key)) ;
-          }
-          calSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
-          saveCalendarSetting(calSetting, username) ;
-          calendar.setProperty(Utils.EXO_SHARED_ID, newValues.toArray(new Value[newValues.size()])) ;
-          List<String> viewPerms = new ArrayList<String>() ;
-          if(calendar.hasProperty(Utils.EXO_VIEW_PERMISSIONS)) {
-            Value[] viewValues = calendar.getProperty(Utils.EXO_VIEW_PERMISSIONS).getValues() ;
-            for(Value v : viewValues) {
-              if(v.getString() != null && !v.getString().equals(username)) viewPerms.add(v.getString()) ;
-            }
-          }
-          List<String> editPerms = new ArrayList<String>() ;
-          if(calendar.hasProperty(Utils.EXO_EDIT_PERMISSIONS)) {
-            Value[] editValues = calendar.getProperty(Utils.EXO_EDIT_PERMISSIONS).getValues() ;
-            for(Value v : editValues) {
-              if(v.getString() != null && !v.getString().equals(username)) editPerms.add(v.getString()) ;
-            }
-          }   
-          calendar.setProperty(Utils.EXO_VIEW_PERMISSIONS, viewPerms.toArray(new String[viewPerms.size()])) ;
-          calendar.setProperty(Utils.EXO_EDIT_PERMISSIONS, editPerms.toArray(new String[editPerms.size()])) ;
-          calendar.getSession().save() ;
-          calendar.refresh(true) ;
-          break ;
-        }
-      }
-      try {
-        removeFeed(username, calendarId) ;        
-      } catch (Exception e) {
-        e.printStackTrace() ;
-      }
-    }
   }
 
   /**
@@ -3990,38 +3903,12 @@ public class JCRDataStorage implements DataStorage {
   									} else {
   										calendarNode.addMixin(Utils.EXO_SHARED_MIXIN);     
   									}
-  									Session systemSession = sharedCalendarHome.getSession() ;
-  									Node userNode ;
   									List<Value> valueList = new ArrayList<Value>() ;
   									for (int i = 0; i < values.length; i++) {
   										Value value = values[i];
   										valueList.add(value) ;
   									}
-  									saveCalendarSettingColors(reciever, calendarNode);
-  									try {
-  										userNode = sharedCalendarHome.getNode(reciever) ;
-  									} catch (Exception e) {
-  										userNode = sharedCalendarHome.addNode(reciever, Utils.NT_UNSTRUCTURED) ;
-  										if(userNode.canAddMixin(Utils.MIX_REFERENCEABLE)) {
-  											userNode.addMixin(Utils.MIX_REFERENCEABLE) ;
-  										} 
-  									}
-  									boolean isExist = false ; 
-  									isExist = false;
-  									for (int i = 0; i < values.length; i++) {
-  										Value value = values[i];
-  										String uuid = value.getString();
-  										Node refNode = systemSession.getNodeByUUID(uuid);
-  										if(refNode.getPath().equals(userNode.getPath())) {
-  											isExist = true ; 
-  											break ;
-  										}
-  									}
-  									if(!isExist) {
-  										Value value2add = calendarNode.getSession().getValueFactory().createValue(userNode);
-  										valueList.add(value2add) ;
-  									}      
-  									
+  									valueList = calculateSharedCalendar(reciever, calendarNode, values, valueList,sharedCalendarHome);
   									if(valueList.size() > 0) {
   										calendarNode.setProperty(Utils.EXO_SHARED_ID, valueList.toArray( new Value[valueList.size()]));
   										calendarNode.save() ;
@@ -4041,6 +3928,69 @@ public class JCRDataStorage implements DataStorage {
 		} finally {
 			sharedHome.getSession().logout();
 		}
+  }
+  
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removeSharedCalendar(String username, String calendarId) throws Exception {
+    Node sharedCalendarHome = getSharedCalendarHome() ;
+    if(sharedCalendarHome.hasNode(username)) {
+      Node userNode = sharedCalendarHome.getNode(username) ;
+      String uuid = userNode.getProperty("jcr:uuid").getString() ;
+      PropertyIterator iter = userNode.getReferences() ;
+      Node calendar ;
+      CalendarSetting calSetting = getCalendarSetting(getUserCalendarServiceHome(username)) ;
+      Map<String, String> map = new HashMap<String, String>() ;
+      for(String key : calSetting.getSharedCalendarsColors()) {
+        map.put(key.split(":")[0], key.split(":")[1]) ;
+      }
+      List<Value> newValues = new ArrayList<Value>() ;
+      while(iter.hasNext()) {
+        calendar = iter.nextProperty().getParent() ;
+        if(calendar.getProperty(Utils.EXO_ID).getString().equals(calendarId)) {
+          map.remove(calendarId) ;
+          Value[] values = calendar.getProperty(Utils.EXO_SHARED_ID).getValues() ;
+          for(Value value : values){
+            if(!value.getString().equals(uuid)) {
+              newValues.add(value) ;
+            }
+          }
+          List<String> calColors = new ArrayList<String>() ;
+          for(String key : map.keySet()) {
+            calColors.add(key + ":" +map.get(key)) ;
+          }
+          calSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
+          saveCalendarSetting(calSetting, username) ;
+          calendar.setProperty(Utils.EXO_SHARED_ID, newValues.toArray(new Value[newValues.size()])) ;
+          List<String> viewPerms = new ArrayList<String>() ;
+          if(calendar.hasProperty(Utils.EXO_VIEW_PERMISSIONS)) {
+            Value[] viewValues = calendar.getProperty(Utils.EXO_VIEW_PERMISSIONS).getValues() ;
+            for(Value v : viewValues) {
+              if(v.getString() != null && !v.getString().equals(username)) viewPerms.add(v.getString()) ;
+            }
+          }
+          List<String> editPerms = new ArrayList<String>() ;
+          if(calendar.hasProperty(Utils.EXO_EDIT_PERMISSIONS)) {
+            Value[] editValues = calendar.getProperty(Utils.EXO_EDIT_PERMISSIONS).getValues() ;
+            for(Value v : editValues) {
+              if(v.getString() != null && !v.getString().equals(username)) editPerms.add(v.getString()) ;
+            }
+          }   
+          calendar.setProperty(Utils.EXO_VIEW_PERMISSIONS, viewPerms.toArray(new String[viewPerms.size()])) ;
+          calendar.setProperty(Utils.EXO_EDIT_PERMISSIONS, editPerms.toArray(new String[editPerms.size()])) ;
+          calendar.getSession().save() ;
+          calendar.refresh(true) ;
+          break ;
+        }
+      }
+      try {
+        removeFeed(username, calendarId) ;        
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
+    }
   }
   
   public void autoRemoveShareCalendar(String groupId, String username) throws Exception {
