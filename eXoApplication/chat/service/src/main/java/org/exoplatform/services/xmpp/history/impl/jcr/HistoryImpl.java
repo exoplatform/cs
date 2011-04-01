@@ -774,7 +774,7 @@ public class HistoryImpl implements Startable{
   private Node getConversationsNode(SessionProvider sessionProvider) {
     try {
       ManageableRepository repository = repositoryService.getCurrentRepository();
-      Session session = sessionProvider.getSession(wsName, repository);
+      Session session = repository.getSystemSession(wsName);
       return session.getRootNode().getNode(historyPath + "/" + CONVERSATIONS);
     } catch (Exception e) {
       e.printStackTrace();
@@ -789,7 +789,7 @@ public class HistoryImpl implements Startable{
   private Node getParticipantsNode(SessionProvider sessionProvider) {
     try {
       ManageableRepository repository = repositoryService.getCurrentRepository();
-      Session session = sessionProvider.getSession(wsName, repository);
+      Session session = repository.getSystemSession(wsName);
       return session.getRootNode().getNode(historyPath + "/" + PARTICIPANTS);
     } catch (Exception e) {
       e.printStackTrace();

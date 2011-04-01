@@ -31,12 +31,12 @@
     <org.exoplatform.core.version>2.4.0-Beta03</org.exoplatform.core.version>
     <org.exoplatform.ws.version>2.2.0-Beta03</org.exoplatform.ws.version>
     <org.exoplatform.jcr.version>1.14.0-Beta03</org.exoplatform.jcr.version>
-    <org.exoplatform.portal.version>3.2.0-PLF-SNAPSHOT</org.exoplatform.portal.version>
+    <org.exoplatform.portal.version>3.2.0-PLF-Beta2</org.exoplatform.portal.version>
     <org.exoplatform.ecms.version>2.2.0-Beta2-SNAPSHOT</org.exoplatform.ecms.version>    
     <gatein.wci.version>2.0.2-GA</gatein.wci.version>
     <exo.tool.framework.junit.version>1.2.0</exo.tool.framework.junit.version>
     <org.exoplatform.exopackage.version>1.1.0</org.exoplatform.exopackage.version>
-    <version.chromattic>1.0.4</version.chromattic>    
+    <version.chromattic>1.1.0-beta2</version.chromattic>    
      <!--commons dependencies-->
      <org.exoplatform.commons.version>1.1.0-Beta01-SNAPSHOT</org.exoplatform.commons.version>	      
      <!-- eXo extended service -->
@@ -112,7 +112,7 @@
      <org.gatein.shindig.version>1.0-r790473-Patch05</org.gatein.shindig.version>
     <org.gatein.wci.version>2.0.2-GA</org.gatein.wci.version>
     <net.sourceforge.nekohtml.version>1.9.9</net.sourceforge.nekohtml.version>
-    <org.reflext.version>1.0.0</org.reflext.version>
+    <org.reflext.version>1.1.0-beta12</org.reflext.version>
     <xerces.version>2.9.1</xerces.version>
     <commons-collections.version>3.2.1</commons-collections.version>
     <!-- ************** -->

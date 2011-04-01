@@ -74,32 +74,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.reflext</groupId>
-      <artifactId>reflext.api</artifactId>
-      <version>1.0.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.reflext</groupId>
-      <artifactId>reflext.spi</artifactId>
-      <version>1.0.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.reflext</groupId>
-      <artifactId>reflext.core</artifactId>
-      <version>1.0.0</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.chromattic</groupId>
-      <artifactId>chromattic.core</artifactId>
-      <version>${version.chromattic}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>org.exoplatform.jcr</groupId>
       <artifactId>exo.jcr.component.ext</artifactId>
       <version>${org.exoplatform.jcr.version}</version>

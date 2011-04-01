@@ -16,8 +16,10 @@
  */
 package org.exoplatform.services.xmpp.test;
 
-import org.exoplatform.commons.chromattic.ChromatticManager;
-import org.exoplatform.component.test.*;
+import org.exoplatform.component.test.AbstractKernelTest;
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.xmpp.userinfo.OrganizationUserInfoServiceImpl;
@@ -33,18 +35,14 @@ import org.exoplatform.services.xmpp.userinfo.UserInfo;
   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.organization-configuration.xml"),
   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.cs.eXoApplication.chat.service.test-configuration.xml"),
-  @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration1.xml"),
   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration2.xml")
 })
 public class UserInfoTest extends AbstractKernelTest {
-
-  protected ChromatticManager chromatticManager;
   
   private OrganizationUserInfoServiceImpl infoServiceImpl;
 
   protected void setUp() throws Exception {
     PortalContainer portalContainer = PortalContainer.getInstance();
-    chromatticManager = (ChromatticManager)portalContainer.getComponentInstanceOfType(ChromatticManager.class);
     if (System.getProperty("java.security.auth.login.config") == null)
       System.setProperty("java.security.auth.login.config",
                          "src/test/java/conf/login.conf");
@@ -67,7 +65,6 @@ public class UserInfoTest extends AbstractKernelTest {
   }
 
   protected void tearDown() throws Exception {
-    chromatticManager.getSynchronization().setSaveOnClose(false);
     end();
     super.tearDown();
   }
