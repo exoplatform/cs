@@ -837,11 +837,7 @@ public class JCRDataStorage implements DataStorage {
     return events;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public CalendarEvent getEvent(String username, String eventId) throws Exception {
-    Node calendarHome = getUserCalendarHome(username) ;
+  private CalendarEvent getEventById(Node calendarHome, String eventId) throws Exception {
     String queryString = new StringBuffer("/jcr:root" + calendarHome.getPath()
                                           + "//element(*,exo:calendarEvent)[@exo:id='").append(eventId)
                                           .append("']")
@@ -854,12 +850,15 @@ public class JCRDataStorage implements DataStorage {
     else return null ;
   }
   
-
   /**
    * {@inheritDoc}
    */
-  public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception {
+  public CalendarEvent getEvent(String username, String eventId) throws Exception {
     Node calendarHome = getUserCalendarHome(username) ;
+    return getEventById(calendarHome, eventId);
+  }
+  
+  private List<CalendarEvent> getEventsByType(Node calendarHome, int type, EventQuery eventQuery) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     eventQuery.setCalendarPath(calendarHome.getPath()) ;
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
@@ -869,11 +868,19 @@ public class JCRDataStorage implements DataStorage {
     CalendarEvent calEvent ;
     while(it.hasNext()) {
       calEvent = getEvent(it.nextNode()) ;
-      calEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
+      calEvent.setCalType(String.valueOf(type)) ;
       events.add(calEvent) ;
       if( eventQuery.getLimitedItems() == it.getPosition() ) break ;
     }
     return events ;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception {
+    Node calendarHome = getUserCalendarHome(username) ;
+    return getEventsByType(calendarHome, Calendar.TYPE_PRIVATE, eventQuery) ;
   }
 
   /**
@@ -1153,16 +1160,7 @@ public class JCRDataStorage implements DataStorage {
    */
   public CalendarEvent getGroupEvent(String eventId) throws Exception {
     Node calendarHome = getPublicCalendarHome();
-    String queryString = new StringBuffer("/jcr:root" + calendarHome.getPath()
-                                          + "//element(*,exo:calendarEvent)[@exo:id='").append(eventId)
-                                          .append("']")
-                                          .toString();
-    QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
-    Query query = qm.createQuery(queryString, Query.XPATH) ;
-    QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
-    if (it.hasNext()) return getEvent(it.nextNode()) ;
-    else return null ;
+    return getEventById(calendarHome, eventId);
   }
 
   /**
@@ -1185,19 +1183,7 @@ public class JCRDataStorage implements DataStorage {
    */
   public List<CalendarEvent> getPublicEvents(EventQuery eventQuery) throws Exception {
     Node calendarHome = getPublicCalendarHome() ;
-    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
-    eventQuery.setCalendarPath(calendarHome.getPath()) ;
-    QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
-    Query query = qm.createQuery(eventQuery.getQueryStatement(), eventQuery.getQueryType()) ;
-    QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
-    CalendarEvent calEvent ;
-    while(it.hasNext()) {
-      calEvent = getEvent(it.nextNode()) ;
-      calEvent.setCalType(String.valueOf(Calendar.TYPE_PUBLIC)) ;
-      events.add(calEvent) ;
-      if( eventQuery.getLimitedItems() == it.getPosition() ) break ;
-    }
+    List<CalendarEvent> events = getEventsByType(calendarHome, Calendar.TYPE_PUBLIC, eventQuery);
     calendarHome.getSession().logout();
     return events ;
   }
@@ -3999,14 +3985,14 @@ public class JCRDataStorage implements DataStorage {
       Node userNode = sharedCalendarHome.getNode(username) ;
       String uuid = userNode.getProperty("jcr:uuid").getString() ;
       PropertyIterator iter = userNode.getReferences() ;
-      Node calendar ;
       CalendarSetting calSetting = getCalendarSetting(getUserCalendarServiceHome(username)) ;
+      Node calendar ;
+      OrganizationService organizationService = 
+        (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class) ;
       Map<String, String> map = new HashMap<String, String>() ;
       for(String key : calSetting.getSharedCalendarsColors()) {
         map.put(key.split(":")[0], key.split(":")[1]) ;
       }
-      OrganizationService organizationService = 
-        (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class) ;
       while(iter.hasNext()) {
         calendar = iter.nextProperty().getParent() ;
         List<String> viewPers = new ArrayList<String>();

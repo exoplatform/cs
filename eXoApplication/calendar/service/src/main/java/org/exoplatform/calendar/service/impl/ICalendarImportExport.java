@@ -41,7 +41,6 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Dur;
-import net.fortuna.ical4j.model.NumberList;
 import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.ParameterList;
 import net.fortuna.ical4j.model.Property;
@@ -49,7 +48,6 @@ import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.Recur;
 import net.fortuna.ical4j.model.ValidationException;
 import net.fortuna.ical4j.model.WeekDay;
-import net.fortuna.ical4j.model.WeekDayList;
 import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
@@ -642,82 +640,8 @@ public class ICalendarImportExport implements CalendarImportExport{
             storage_.saveOccurrenceEvent(username, calendarId, exoEvent, true);
           }
           else {
-            // get properties about recurrence rule
             if (event.getProperty(Property.RRULE) != null && event.getProperty(Property.RECURRENCE_ID) == null) {
-              RRule rrule = (RRule) event.getProperty(Property.RRULE);
-              Recur recur = rrule.getRecur();
-              String repeatType = recur.getFrequency();
-              int interval = recur.getInterval();
-              if (interval < 1) interval = 1;
-              int count = recur.getCount();
-              net.fortuna.ical4j.model.Date until = recur.getUntil();
-                        
-              exoEvent.setRepeatInterval(interval);
-              if (count > 0) {
-                exoEvent.setRepeatCount(count);
-                exoEvent.setRepeatUntilDate(null);
-              }
-              else {
-                if (until != null) {
-                  Date repeatUntil = new Date(until.getTime());
-                  exoEvent.setRepeatUntilDate(repeatUntil);
-                  exoEvent.setRepeatCount(0);
-                } else {
-                  exoEvent.setRepeatCount(0);
-                  exoEvent.setRepeatUntilDate(null);
-                }
-              }
-      
-              if (Recur.DAILY.equals(repeatType)) exoEvent.setRepeatType(CalendarEvent.RP_DAILY);
-              else if (Recur.YEARLY.equals(repeatType)) exoEvent.setRepeatType(CalendarEvent.RP_YEARLY);
-              else {
-                if (Recur.WEEKLY.equals(repeatType)) {
-                  exoEvent.setRepeatType(CalendarEvent.RP_WEEKLY);
-                  WeekDayList weekDays = recur.getDayList();
-                  if (weekDays != null && weekDays.size() > 0) {
-                    String[] byDays = new String[weekDays.size()];
-                    for (int i = 0; i < byDays.length; i++) {
-                      WeekDay weekDay = (WeekDay) weekDays.get(i);
-                      String day = weekDay.getDay();
-                      int offset = weekDay.getOffset();
-                      if (offset != 0) byDays[i] = String.valueOf(offset) + day;
-                      else byDays[i] = day;
-                    }
-                    exoEvent.setRepeatByDay(byDays);
-                  } else {
-                    exoEvent.setRepeatByDay(null);
-                  }
-                } else {
-                  if (Recur.MONTHLY.equals(repeatType)) {
-                    exoEvent.setRepeatType(CalendarEvent.RP_MONTHLY);
-                    WeekDayList weekDays = recur.getDayList();
-                    if (weekDays != null && weekDays.size() > 0) {
-                      String[] byDays = new String[weekDays.size()];
-                      WeekDay weekDay;
-                      for (int i = 0; i < byDays.length; i++) {
-                        weekDay = (WeekDay) weekDays.get(i);
-                        String day = weekDay.getDay();
-                        int offset = weekDay.getOffset();
-                        if (offset != 0) byDays[i] = String.valueOf(offset) + day;
-                        else byDays[i] = day;
-                      }
-                      exoEvent.setRepeatByDay(byDays);
-                      exoEvent.setRepeatByMonthDay(null);
-                    } else {
-                      NumberList monthdays = recur.getMonthDayList();
-                      if (monthdays != null && monthdays.size() > 0) {
-                        long[] byMonthDays = new long[monthdays.size()];
-                        for (int i = 0; i < byMonthDays.length; i++) {
-                          int monthday = (int) (Integer) monthdays.get(i);
-                          byMonthDays[i] = monthday;
-                        }
-                        exoEvent.setRepeatByDay(null);
-                        exoEvent.setRepeatByMonthDay(byMonthDays);
-                      }
-                    }
-                  }
-                }
-              }
+              exoEvent = RemoteCalendarServiceImpl.calculateEvent(event, exoEvent);
               
               originalRecurrenceEvents.put(event.getUid().getValue(), exoEvent.getId());
               
