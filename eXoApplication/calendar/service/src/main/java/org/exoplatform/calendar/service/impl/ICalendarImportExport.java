@@ -16,7 +16,6 @@
  **/
 package org.exoplatform.calendar.service.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -522,27 +521,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         VEvent event = (VEvent)obj ;
         exoEvent = new CalendarEvent() ;
         try {
-          if(event.getProperty(Property.CATEGORIES) != null) {
-            EventCategory evCate = new EventCategory() ;
-            evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
-            try {
-              calService.saveEventCategory(username, evCate, true) ;
-            } catch(ItemExistsException e) { 
-              evCate = calService.getEventCategoryByName(username, evCate.getName());
-            } catch (Exception e) {
-              if (logger.isDebugEnabled()) {
-                logger.debug("Exception occurs when saving new event category '" + evCate.getName() + "' for iCalendar component: " + event.getUid(), e);
-              }
-            }
-            exoEvent.setEventCategoryId(evCate.getId()) ;
-            exoEvent.setEventCategoryName(evCate.getName()) ;
-          } 
-          exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
-          exoEvent.setCalendarId(calendarId) ;
-          if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
-          if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
-          if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
-          exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+          exoEvent = RemoteCalendarServiceImpl.generateEvent(event, exoEvent, username, calendarId);
   
           String sValue = "" ;
           String eValue = "" ;
@@ -573,38 +552,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           if(vFreeBusyData.get(event.getUid().getValue()) != null) {
             exoEvent.setEventState(CalendarEvent.ST_BUSY) ;
           }
-          if(event.getProperty(Utils.X_STATUS) != null) {
-            exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
-          }
-          if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
-          PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
-          if(!attendees.isEmpty()) {
-            String[] invitation = new String[attendees.size()] ;
-            for(int i = 0; i < attendees.size(); i ++) {
-              invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
-            }
-            exoEvent.setInvitation(invitation) ;
-          }
-  
-          try {
-            PropertyList dataList = event.getProperties(Property.ATTACH) ;
-            List<Attachment> attachments = new ArrayList<Attachment>() ;
-            for(Object o : dataList) {
-              Attach a = (Attach)o ;
-              Attachment att = new Attachment() ;
-              att.setName(a.getParameter(Parameter.CN).getValue())  ;
-              att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
-              InputStream in = new ByteArrayInputStream(a.getBinary()) ;
-              att.setSize(in.available());
-              att.setInputStream(in) ;
-              attachments.add(att) ;
-            }
-            if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
-          } catch (Exception e) {
-            if (logger.isDebugEnabled()) {
-              logger.debug("Exception occurs when importing attachments for iCalendar component: " + event.getUid(), e);
-            }
-          }
+          exoEvent = RemoteCalendarServiceImpl.setEventAttachment(event, exoEvent);
           
           if (event.getProperty(Property.RECURRENCE_ID) != null) {
             RecurrenceId recurId = (RecurrenceId) event.getProperty(Property.RECURRENCE_ID);
@@ -719,33 +667,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           if(vFreeBusyData.get(event.getUid().getValue()) != null) {
             exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
           }
-          if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
-          PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
-          if(!attendees.isEmpty()) {
-            String[] invitation = new String[attendees.size()] ;
-            for(int i = 0; i < attendees.size(); i ++) {
-              invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
-            }
-            exoEvent.setInvitation(invitation) ;
-          }
-
-          try {
-            PropertyList dataList = event.getProperties(Property.ATTACH) ;
-            List<Attachment> attachments = new ArrayList<Attachment>() ;
-            for(Object o : dataList) {
-              Attach a = (Attach)o ;
-              Attachment att = new Attachment() ;
-              att.setName(a.getParameter(Parameter.CN).getValue())  ;
-              att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
-              InputStream in = new ByteArrayInputStream(a.getBinary()) ;
-              att.setSize(in.available());
-              att.setInputStream(in) ;
-              attachments.add(att) ;
-            }
-            if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
-          } catch (Exception e) {
-            if (logger.isDebugEnabled()) logger.debug("Exception occurs when importing attachments for VTODO component", e);
-          }
+          exoEvent = RemoteCalendarServiceImpl.setTaskAttachment(event, exoEvent);
   
           switch (storage_.getTypeOfCalendar(username, calendarId)){
           case Utils.PRIVATE_TYPE:

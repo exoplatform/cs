@@ -620,29 +620,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         VEvent event = (VEvent)obj ;   
         if (isNew) exoEvent = new CalendarEvent();
         else exoEvent = storage_.getUserEvent(username, calendarId, eventId);
-        
-        if (event.getProperty(Property.CATEGORIES) != null) {
-          EventCategory evCate = new EventCategory() ;
-          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
-          try {
-            calService.saveEventCategory(username, evCate, true) ;
-          } catch (ItemExistsException e) { 
-            evCate = calService.getEventCategoryByName(username, evCate.getName());
-          } catch (Exception e) {
-            if (logger.isDebugEnabled()) {
-              logger.debug("Exception occurs when saving new event category '" + evCate.getName() + "' for CalDav event: " + event.getUid(), e);
-            }
-          }
-          exoEvent.setEventCategoryId(evCate.getId()) ;
-          exoEvent.setEventCategoryName(evCate.getName()) ;
-        }
-        
-        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
-        exoEvent.setCalendarId(calendarId) ;
-        if (event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
-        if (event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
-        if (event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
-        exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+        exoEvent = generateEvent(event, exoEvent, username, calendarId);
 
         String sValue = "" ;
         String eValue = "" ;
@@ -664,38 +642,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         }
         if (event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
         if (event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
-        if (event.getProperty(Utils.X_STATUS) != null) {
-          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
-        }
-        if (event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
-        PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
-        if (!attendees.isEmpty()) {
-          String[] invitation = new String[attendees.size()] ;
-          for(int i = 0; i < attendees.size(); i ++) {
-            invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
-          }
-          exoEvent.setInvitation(invitation) ;
-        }
-        try {
-          PropertyList dataList = event.getProperties(Property.ATTACH) ;
-          List<Attachment> attachments = new ArrayList<Attachment>() ;
-          for(Object o : dataList) {
-            Attach a = (Attach)o ;
-            Attachment att = new Attachment() ;
-            att.setName(a.getParameter(Parameter.CN).getValue())  ;
-            att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
-            InputStream in = new ByteArrayInputStream(a.getBinary()) ;
-            att.setSize(in.available());
-            att.setInputStream(in) ;
-            attachments.add(att) ;
-          }
-          if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
-        } catch (Exception e) {
-          if (logger.isDebugEnabled()) {
-            logger.debug("Exception occurs when importing attachments from iCalendar object for CalDav event: " + event.getUid(), e);
-          }
-        }
-        
+        exoEvent = setEventAttachment(event, exoEvent);
         if (event.getProperty(Property.RECURRENCE_ID) != null) {
           RecurrenceId recurId = (RecurrenceId) event.getProperty(Property.RECURRENCE_ID);
           exoEvent.setRecurrenceId(format.format(new Date(recurId.getDate().getTime())));
@@ -721,7 +668,7 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         }
         else {
           if (event.getProperty(Property.RRULE) != null && event.getProperty(Property.RECURRENCE_ID) == null) {
-            exoEvent = RemoteCalendarServiceImpl.calculateEvent(event, exoEvent);
+            exoEvent = calculateEvent(event, exoEvent);
             original = exoEvent;  
               
             List<String> excludeIds = new ArrayList<String>();
@@ -787,39 +734,107 @@ public class RemoteCalendarServiceImpl implements RemoteCalendarService {
         if (vFreeBusyData.get(event.getUid().getValue()) != null) {
           exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
         }
-        if (event.getProperty(Utils.X_STATUS) != null) {
+        if(event.getProperty(Utils.X_STATUS) != null) {
           exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
         }
-        if (event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
-        PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
-        if (!attendees.isEmpty()) {
-          String[] invitation = new String[attendees.size()] ;
-          for(int i = 0; i < attendees.size(); i ++) {
-            invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
-          }
-          exoEvent.setInvitation(invitation) ;
-        }
-        try {
-          PropertyList dataList = event.getProperties(Property.ATTACH) ;
-          List<Attachment> attachments = new ArrayList<Attachment>() ;
-          for(Object o : dataList) {
-            Attach a = (Attach)o ;
-            Attachment att = new Attachment() ;
-            att.setName(a.getParameter(Parameter.CN).getValue())  ;
-            att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
-            InputStream in = new ByteArrayInputStream(a.getBinary()) ;
-            att.setSize(in.available());
-            att.setInputStream(in) ;
-            attachments.add(att) ;
-          }
-          if (!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
-        } catch (Exception e) {
-          if (logger.isDebugEnabled()) logger.debug("Exception occurs when importing attachments from iCalendar object: " + event.getUid(), e);
-        }
+        exoEvent = setTaskAttachment(event, exoEvent);
         storage_.saveUserEvent(username, calendarId, exoEvent, isNew) ;
         storage_.setRemoteEvent(username, calendarId, exoEvent.getId(), href, etag);
       }
     }
+  }
+  
+  public static CalendarEvent generateEvent(VEvent event, CalendarEvent exoEvent,String username, String calendarId) throws Exception {
+    CalendarService calService = (CalendarService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(CalendarService.class);
+    if(event.getProperty(Property.CATEGORIES) != null) {
+      EventCategory evCate = new EventCategory() ;
+      evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
+      try {
+        calService.saveEventCategory(username, evCate, true) ;
+      } catch(ItemExistsException e) { 
+        evCate = calService.getEventCategoryByName(username, evCate.getName());
+      } catch (Exception e) {
+        if (logger.isDebugEnabled()) {
+          logger.debug("Exception occurs when saving new event category '" + evCate.getName() + "' for iCalendar component: " + event.getUid(), e);
+        }
+      }
+      exoEvent.setEventCategoryId(evCate.getId()) ;
+      exoEvent.setEventCategoryName(evCate.getName()) ;
+    } 
+    exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
+    exoEvent.setCalendarId(calendarId) ;
+    if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
+    if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
+    if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
+    exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+    return exoEvent;
+  }
+  
+  public static CalendarEvent setEventAttachment(VEvent event, CalendarEvent exoEvent) throws Exception {
+    if(event.getProperty(Utils.X_STATUS) != null) {
+      exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
+    }
+    if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
+    PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
+    if(!attendees.isEmpty()) {
+      String[] invitation = new String[attendees.size()] ;
+      for(int i = 0; i < attendees.size(); i ++) {
+        invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
+      }
+      exoEvent.setInvitation(invitation) ;
+    }
+    try {
+      PropertyList dataList = event.getProperties(Property.ATTACH) ;
+      List<Attachment> attachments = new ArrayList<Attachment>() ;
+      for(Object o : dataList) {
+        Attach a = (Attach)o ;
+        Attachment att = new Attachment() ;
+        att.setName(a.getParameter(Parameter.CN).getValue())  ;
+        att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
+        InputStream in = new ByteArrayInputStream(a.getBinary()) ;
+        att.setSize(in.available());
+        att.setInputStream(in) ;
+        attachments.add(att) ;
+      }
+      if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
+    } catch (Exception e) {
+      if (logger.isDebugEnabled()) {
+        logger.debug("Exception occurs when importing attachments for iCalendar component: " + event.getUid(), e);
+      }
+    }
+    return exoEvent;
+  }
+  
+  public static CalendarEvent setTaskAttachment(VToDo task, CalendarEvent exoEvent) throws Exception {
+    if(task.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(task.getClassification().getValue())) ;
+    PropertyList attendees = task.getProperties(Property.ATTENDEE) ;
+    if(!attendees.isEmpty()) {
+      String[] invitation = new String[attendees.size()] ;
+      for(int i = 0; i < attendees.size(); i ++) {
+        invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
+      }
+      exoEvent.setInvitation(invitation) ;
+    }
+    try {
+      PropertyList dataList = task.getProperties(Property.ATTACH) ;
+      List<Attachment> attachments = new ArrayList<Attachment>() ;
+      for(Object o : dataList) {
+        Attach a = (Attach)o ;
+        Attachment att = new Attachment() ;
+        att.setName(a.getParameter(Parameter.CN).getValue())  ;
+        att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
+        InputStream in = new ByteArrayInputStream(a.getBinary()) ;
+        att.setSize(in.available());
+        att.setInputStream(in) ;
+        attachments.add(att) ;
+      }
+      if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
+    } catch (Exception e) {
+      if (logger.isDebugEnabled()) {
+        logger.debug("Exception occurs when importing attachments for iCalendar component: " + task.getUid(), e);
+      }
+    }
+    return exoEvent;
   }
   
   public static CalendarEvent calculateEvent( VEvent event, CalendarEvent exoEvent) throws Exception {

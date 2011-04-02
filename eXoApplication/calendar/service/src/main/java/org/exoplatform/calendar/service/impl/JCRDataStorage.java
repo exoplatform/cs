@@ -681,7 +681,7 @@ public class JCRDataStorage implements DataStorage {
             }
 
           }catch (Exception e) {
-            e.printStackTrace() ;
+            if(log.isDebugEnabled()) log.debug(e);
           }
         }
       }
@@ -799,15 +799,13 @@ public class JCRDataStorage implements DataStorage {
                 }
             }
 
-          }catch (Exception e) {
-            e.printStackTrace() ;
+          } catch (Exception e) {
+            if(log.isDebugEnabled()) log.debug(e);
           }
         }
       }
     } catch (Exception e) {
-      e.printStackTrace() ;
-    } finally {
-      //systemSession.close() ;
+      if(log.isDebugEnabled()) log.debug(e);
     }
     return events ;
   }
@@ -896,7 +894,7 @@ public class JCRDataStorage implements DataStorage {
         Node reminderFolder = getReminderFolder(event.getFromDateTime()) ;
         saveEvent(calendarNode, event, reminderFolder, isNew) ;
       } catch (Exception e) {
-        e.printStackTrace() ;
+        if(log.isDebugEnabled()) log.debug(e);
       } finally {
         // systemSession.close() ;
       }
@@ -1107,7 +1105,7 @@ public class JCRDataStorage implements DataStorage {
         Node eventFolder = getEventFolder(event.getFromDateTime()) ;
         syncRemoveEvent(eventFolder, event.getId()) ;
       } catch (Exception e) {
-        e.printStackTrace() ;        
+        if(log.isDebugEnabled()) log.debug(e);     
       }
       removeReminder(eventNode) ;
       eventNode.remove() ;
@@ -1139,8 +1137,8 @@ public class JCRDataStorage implements DataStorage {
             else reminders.getSession().save() ;
           }
         }
-      }  catch (Exception e) {
-        e.printStackTrace() ;
+      } catch (Exception e) {
+        if(log.isDebugEnabled()) log.debug(e);
       }
     }
   } 
@@ -1310,8 +1308,8 @@ public class JCRDataStorage implements DataStorage {
       }
       try {
         removeReminder(eventNode) ; 
-      }catch (Exception e) {
-        e.printStackTrace() ;
+      } catch (Exception e) {
+        if(log.isDebugEnabled()) log.debug(e);
       } finally {
         //systemSession.close() ;
       }
@@ -1477,7 +1475,7 @@ public class JCRDataStorage implements DataStorage {
     } catch (NullPointerException ex) {
       log.debug("reminder owner is null");
     }catch (Exception e) {
-      e.printStackTrace();
+      if(log.isDebugEnabled()) log.debug(e);
     }
     
     summary.append(cal.get(java.util.Calendar.YEAR)).append(timezone).append("<br>") ;
@@ -1901,7 +1899,7 @@ public class JCRDataStorage implements DataStorage {
         return -1 ;
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if(log.isDebugEnabled()) log.debug(e);      
       return -1 ;
     }     
     return 1 ;
@@ -2034,7 +2032,6 @@ public class JCRDataStorage implements DataStorage {
         }
       }
     } catch (Exception e) {
-      e.printStackTrace();
       log.debug(e);
     }
     return feeds ;
@@ -2104,7 +2101,7 @@ public class JCRDataStorage implements DataStorage {
         return -1 ;
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if(log.isDebugEnabled()) log.debug(e);
       return -1 ;
     }  
     return 1 ;
@@ -2160,7 +2157,7 @@ public class JCRDataStorage implements DataStorage {
         return -1 ;
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if(log.isDebugEnabled()) log.debug(e);
       return -1 ;
     }  
     return 1 ;
@@ -2345,7 +2342,7 @@ public class JCRDataStorage implements DataStorage {
 
 
     } catch (Exception e) {
-      e.printStackTrace();
+      if(log.isDebugEnabled()) log.debug(e);
       return -1 ;
     }     
     return 1 ;
@@ -2399,7 +2396,7 @@ public class JCRDataStorage implements DataStorage {
         }
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if(log.isDebugEnabled()) log.debug(e);
     } finally {
       //TODO
       //systemSession.close() ;
@@ -4239,7 +4236,7 @@ public class JCRDataStorage implements DataStorage {
       return count;
     }
     catch (Exception e) {
-      e.printStackTrace();
+      if(log.isDebugEnabled()) log.debug(e);
       return 0;
     }
   }
