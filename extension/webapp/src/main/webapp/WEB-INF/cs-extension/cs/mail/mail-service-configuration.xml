@@ -23,7 +23,7 @@
     	<name>cs.mail.service.settings</name>
    		<set-method>addPlugin</set-method>
       <type>org.exoplatform.mail.service.MailSettingConfigPlugin</type>
-    	<description>description</description>
+    	<description>show or hide settings in account configuration form</description>
 			<init-params>
 				<object-param>
 					<name>leaveOnServer</name>
@@ -54,7 +54,7 @@
 				</object-param>
 				<object-param>
 					<name>outgoingServer</name>
-		   		<description>description</description>
+		   		<description>default outgoing server to send mails.</description>
 		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
 		     		<field name="name"><string>outgoingServer</string></field>
 		     		<field name="userAllowed"><boolean>true</boolean></field>
@@ -63,7 +63,7 @@
 				</object-param>
 				<object-param>
 					<name>outgoingPort</name>
-		   		<description>description</description>
+		   		<description>default outgoing port to send mails.</description>
 		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
 		     		<field name="name"><string>outgoingPort</string></field>
 		     		<field name="userAllowed"><boolean>true</boolean></field>
@@ -72,7 +72,7 @@
 				</object-param>
 				<object-param>
 					<name>acceptIncomingSecureAuthentication</name>
-		   		<description>description</description>
+		   		<description>accept secure authentication</description>
 		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
 		     		<field name="name"><string>acceptIncomingSecureAuthentication</string></field>
 		     		<field name="userAllowed"><boolean>true</boolean></field>
@@ -81,7 +81,7 @@
 				</object-param>
 				<object-param>
 					<name>incomingSecureAuthentication</name>
-		   		<description>description</description>
+		   		<description>type of incoming secure authentication</description>
 		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
 		     		<field name="name"><string>incomingSecureAuthentication</string></field>
 		     		<field name="userAllowed"><boolean>true</boolean></field>
@@ -90,7 +90,7 @@
 				</object-param>
 				<object-param>
 					<name>incomingAuthenticationMechanism</name>
-		   		<description>description</description>
+		   		<description>type of incoming authentication mechanism</description>
 		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
 		     		<field name="name"><string>incomingAuthenticationMechanism</string></field>
 		     		<field name="userAllowed"><boolean>true</boolean></field>
@@ -99,7 +99,7 @@
 				</object-param>
 				<object-param>
 					<name>acceptOutgoingSecureAuthentication</name>
-		   		<description>description</description>
+		   		<description>accept secure authentication</description>
 		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
 		     		<field name="name"><string>acceptOutgoingSecureAuthentication</string></field>
 		     		<field name="userAllowed"><boolean>true</boolean></field>
@@ -108,7 +108,7 @@
 				</object-param>
 				<object-param>
 					<name>outgoingSecureAuthentication</name>
-		   		<description>description</description>
+		   		<description>type of outgoing secure authentication</description>
 		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
 		     		<field name="name"><string>outgoingSecureAuthentication</string></field>
 		     		<field name="userAllowed"><boolean>true</boolean></field>
@@ -117,7 +117,7 @@
 				</object-param>
 				<object-param>
 					<name>outgoingAuthenticationMechanism</name>
-		   		<description>description</description>
+		   		<description>type of outgoing authentication mechanism</description>
 		   		<object type="org.exoplatform.mail.service.MailSettingConfig">
 		     		<field name="name"><string>outgoingAuthenticationMechanism</string></field>
 		     		<field name="userAllowed"><boolean>true</boolean></field>
